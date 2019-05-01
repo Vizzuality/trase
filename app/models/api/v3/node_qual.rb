@@ -2,12 +2,11 @@
 #
 # Table name: node_quals
 #
-#  id         :integer          not null, primary key
-#  node_id    :integer          not null
-#  qual_id    :integer          not null
-#  year       :integer
-#  value      :text             not null
-#  created_at :datetime         not null
+#  id                                     :integer          not null, primary key
+#  node_id                                :integer          not null
+#  qual_id                                :integer          not null
+#  year(Year; empty (NULL) for all years) :integer
+#  value(Textual value)                   :text             not null
 #
 # Indexes
 #

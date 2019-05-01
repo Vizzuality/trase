@@ -2,12 +2,10 @@
 #
 # Table name: qual_country_properties
 #
-#  id           :bigint(8)        not null, primary key
-#  tooltip_text :text             not null
-#  country_id   :bigint(8)        not null
-#  qual_id      :bigint(8)        not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  id                                                                                                                                                                                                                               :bigint(8)        not null, primary key
+#  tooltip_text(Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).) :text             not null
+#  country_id(Reference to country)                                                                                                                                                                                                 :bigint(8)        not null
+#  qual_id(Reference to qual)                                                                                                                                                                                                       :bigint(8)        not null
 #
 # Indexes
 #

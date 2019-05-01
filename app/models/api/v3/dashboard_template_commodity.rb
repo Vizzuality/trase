@@ -5,8 +5,6 @@
 #  id                    :bigint(8)        not null, primary key
 #  dashboard_template_id :integer
 #  commodity_id          :integer
-#  created_at            :datetime         not null
-#  updated_at            :datetime         not null
 #
 
 module Api

@@ -2,12 +2,11 @@
 #
 # Table name: node_inds
 #
-#  id         :integer          not null, primary key
-#  node_id    :integer          not null
-#  ind_id     :integer          not null
-#  year       :integer
-#  value      :float            not null
-#  created_at :datetime         not null
+#  id                                     :integer          not null, primary key
+#  node_id                                :integer          not null
+#  ind_id                                 :integer          not null
+#  year(Year; empty (NULL) for all years) :integer
+#  value(Numeric value)                   :float            not null
 #
 # Indexes
 #

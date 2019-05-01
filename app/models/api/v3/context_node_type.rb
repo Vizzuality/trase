@@ -2,11 +2,10 @@
 #
 # Table name: context_node_types
 #
-#  id              :integer          not null, primary key
-#  context_id      :integer          not null
-#  node_type_id    :integer          not null
-#  column_position :integer          not null
-#  created_at      :datetime         not null
+#  id                                                        :integer          not null, primary key
+#  context_id                                                :integer          not null
+#  node_type_id                                              :integer          not null
+#  column_position(Index of node of this type in flows.path) :integer          not null
 #
 # Indexes
 #

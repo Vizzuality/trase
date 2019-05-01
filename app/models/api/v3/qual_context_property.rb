@@ -2,12 +2,10 @@
 #
 # Table name: qual_context_properties
 #
-#  id           :bigint(8)        not null, primary key
-#  tooltip_text :text             not null
-#  context_id   :bigint(8)        not null
-#  qual_id      :bigint(8)        not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  id                                                                                                                                                                                      :bigint(8)        not null, primary key
+#  tooltip_text(Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).) :text             not null
+#  context_id(Reference to context)                                                                                                                                                        :bigint(8)        not null
+#  qual_id(Reference to qual)                                                                                                                                                              :bigint(8)        not null
 #
 # Indexes
 #

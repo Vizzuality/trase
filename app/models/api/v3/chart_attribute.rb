@@ -2,18 +2,16 @@
 #
 # Table name: chart_attributes
 #
-#  id            :integer          not null, primary key
-#  chart_id      :integer          not null
-#  position      :integer
-#  years         :integer          is an Array
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  display_name  :text
-#  legend_name   :text
-#  display_type  :text
-#  display_style :text
-#  state_average :boolean          default(FALSE), not null
-#  identifier    :text
+#  id                                                                                                                                            :integer          not null, primary key
+#  chart_id(Refence to chart)                                                                                                                    :integer          not null
+#  position(Display order in scope of chart)                                                                                                     :integer
+#  years(Array of years for which to show this attribute in scope of chart; empty (NULL) for all years)                                          :integer          is an Array
+#  display_name(Name of attribute for display in chart)                                                                                          :text
+#  legend_name(Legend title)                                                                                                                     :text
+#  display_type(Type of display, only used for trajectory deforestation plot in place profiles; e.g. area, line)                                 :text
+#  display_style(Style of display, only used for trajectory deforestation plot in place profiles; e.g. area-pink, area-black, line-dashed-black) :text
+#  state_average(Only used for trajectory deforestation plot in place profiles)                                                                  :boolean          default(FALSE), not null
+#  identifier(Identifier used to map this chart attribute to a part of code which contains calculation logic)                                    :text
 #
 # Indexes
 #

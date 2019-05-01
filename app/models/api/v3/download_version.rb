@@ -2,11 +2,10 @@
 #
 # Table name: download_versions
 #
-#  id         :integer          not null, primary key
-#  context_id :integer          not null
-#  symbol     :string           not null
-#  is_current :boolean          default(FALSE), not null
-#  created_at :datetime         not null
+#  id                                                                                 :integer          not null, primary key
+#  context_id                                                                         :integer          not null
+#  symbol(Version symbol (included in downloaded file name))                          :string           not null
+#  is_current(When set, use this version symbol for new downloads (only use for one)) :boolean          default(FALSE), not null
 #
 # Indexes
 #

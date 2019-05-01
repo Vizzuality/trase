@@ -2,9 +2,8 @@
 #
 # Table name: quals
 #
-#  id         :integer          not null, primary key
-#  name       :text             not null
-#  created_at :datetime         not null
+#  id                                                                                                                                          :integer          not null, primary key
+#  name(Attribute short name, e.g. ZERO_DEFORESTATION; those literals are referred to in code, therefore should not be changed without notice) :text             not null
 #
 # Indexes
 #

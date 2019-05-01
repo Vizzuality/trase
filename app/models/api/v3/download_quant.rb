@@ -2,13 +2,11 @@
 #
 # Table name: download_quants
 #
-#  id                    :integer          not null, primary key
-#  download_attribute_id :integer          not null
-#  quant_id              :integer          not null
-#  is_filter_enabled     :boolean          default(FALSE), not null
-#  filter_bands          :float            is an Array
-#  created_at            :datetime         not null
-#  updated_at            :datetime         not null
+#  id                                                                              :integer          not null, primary key
+#  download_attribute_id                                                           :integer          not null
+#  quant_id                                                                        :integer          not null
+#  is_filter_enabled(When set, enable selection of value ranges (advanced filter)) :boolean          default(FALSE), not null
+#  filter_bands(Array of value ranges to allow filtering by)                       :float            is an Array
 #
 # Indexes
 #

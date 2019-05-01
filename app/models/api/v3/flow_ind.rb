@@ -2,11 +2,10 @@
 #
 # Table name: flow_inds
 #
-#  id         :integer          not null, primary key
-#  flow_id    :integer          not null
-#  ind_id     :integer          not null
-#  value      :float            not null
-#  created_at :datetime         not null
+#  id                   :integer          not null, primary key
+#  flow_id              :integer          not null
+#  ind_id               :integer          not null
+#  value(Numeric value) :float            not null
 #
 # Indexes
 #

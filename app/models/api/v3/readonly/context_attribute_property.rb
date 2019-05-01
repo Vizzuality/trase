@@ -2,12 +2,12 @@
 #
 # Table name: context_attribute_properties_mv
 #
-#  id           :bigint(8)        primary key
-#  context_id   :bigint(8)
-#  tooltip_text :text
-#  qual_id      :bigint(8)
-#  ind_id       :bigint(8)
-#  quant_id     :bigint(8)
+#  id                               :bigint(8)        primary key
+#  context_id(Reference to context) :bigint(8)
+#  tooltip_text(Tooltip text)       :text
+#  qual_id(Reference to qual)       :bigint(8)
+#  ind_id(Reference to ind)         :bigint(8)
+#  quant_id(Reference to quant)     :bigint(8)
 #
 # Indexes
 #

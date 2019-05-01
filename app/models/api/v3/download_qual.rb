@@ -2,12 +2,10 @@
 #
 # Table name: download_quals
 #
-#  id                    :integer          not null, primary key
-#  download_attribute_id :integer          not null
-#  qual_id               :integer          not null
-#  is_filter_enabled     :boolean          default(FALSE), not null
-#  created_at            :datetime         not null
-#  updated_at            :datetime         not null
+#  id                                                                                 :integer          not null, primary key
+#  download_attribute_id                                                              :integer          not null
+#  qual_id                                                                            :integer          not null
+#  is_filter_enabled(When set, enable selection of discreet values (advanced filter)) :boolean          default(FALSE), not null
 #
 # Indexes
 #

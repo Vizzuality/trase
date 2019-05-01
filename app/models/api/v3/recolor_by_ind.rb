@@ -5,8 +5,6 @@
 #  id                      :integer          not null, primary key
 #  recolor_by_attribute_id :integer          not null
 #  ind_id                  :integer          not null
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
 #
 # Indexes
 #

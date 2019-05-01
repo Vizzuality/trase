@@ -6,8 +6,6 @@
 #  title       :text             not null
 #  page_url    :text             not null
 #  description :text             not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
 #
 
 module Content

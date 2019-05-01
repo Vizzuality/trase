@@ -2,16 +2,14 @@
 #
 # Table name: resize_by_attributes
 #
-#  id           :integer          not null, primary key
-#  context_id   :integer          not null
-#  group_number :integer          default(1), not null
-#  position     :integer          not null
-#  tooltip_text :text
-#  years        :integer          is an Array
-#  is_disabled  :boolean          default(FALSE), not null
-#  is_default   :boolean          default(FALSE), not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  id                                                                                                   :integer          not null, primary key
+#  context_id                                                                                           :integer          not null
+#  group_number(Group number)                                                                           :integer          default(1), not null
+#  position(Display order in scope of context and group number)                                         :integer          not null
+#  tooltip_text(Tooltip text)                                                                           :text
+#  years(Array of years for which to show this attribute in scope of chart; empty (NULL) for all years) :integer          is an Array
+#  is_disabled(When set, this attribute is not displayed)                                               :boolean          default(FALSE), not null
+#  is_default(When set, show this attribute by default)                                                 :boolean          default(FALSE), not null
 #
 # Indexes
 #

@@ -2,12 +2,10 @@
 #
 # Table name: database_validation_reports
 #
-#  id            :bigint(8)        not null, primary key
-#  report        :json             not null
-#  error_count   :integer          not null
-#  warning_count :integer          not null
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
+#  id                                            :bigint(8)        not null, primary key
+#  report(JSON structure with validation report) :json             not null
+#  error_count(Count of errors detected)         :integer          not null
+#  warning_count(Count of warnings detected)     :integer          not null
 #
 
 module Api
