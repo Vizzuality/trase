@@ -23,6 +23,13 @@ CREATE SCHEMA main;
 
 
 --
+-- Name: tool_tables; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA tool_tables;
+
+
+--
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -140,6 +147,13 @@ $$;
 --
 
 COMMENT ON FUNCTION public.bucket_index(buckets double precision[], value double precision) IS 'Given an n-element array of choropleth buckets and a positive value, returns index of bucket where value falls (1 to n + 1); else returns 0.';
+
+
+--
+-- Name: trase_server; Type: SERVER; Schema: -; Owner: -
+--
+
+-- suppressed CREATE SERVER
 
 
 SET default_tablespace = '';
@@ -1514,7 +1528,7 @@ UNION ALL
     ind_commodity_properties.ind_id,
     '-1'::integer AS quant_id
    FROM public.ind_commodity_properties
-  WITH DATA;
+  WITH NO DATA;
 
 
 --
@@ -1713,7 +1727,7 @@ UNION ALL
     ind_context_properties.ind_id,
     '-1'::integer AS quant_id
    FROM public.ind_context_properties
-  WITH DATA;
+  WITH NO DATA;
 
 
 --
@@ -1772,7 +1786,7 @@ CREATE TABLE public.context_node_type_properties (
     updated_at timestamp without time zone NOT NULL,
     is_choropleth_disabled boolean DEFAULT false NOT NULL,
     role character varying,
-    CONSTRAINT context_node_type_properties_role_check CHECK (((role)::text = ANY (ARRAY[('source'::character varying)::text, ('exporter'::character varying)::text, ('importer'::character varying)::text, ('destination'::character varying)::text])))
+    CONSTRAINT context_node_type_properties_role_check CHECK (((role)::text = ANY ((ARRAY['source'::character varying, 'exporter'::character varying, 'importer'::character varying, 'destination'::character varying])::text[])))
 );
 
 
@@ -2355,7 +2369,7 @@ UNION ALL
     ind_country_properties.ind_id,
     '-1'::integer AS quant_id
    FROM public.ind_country_properties
-  WITH DATA;
+  WITH NO DATA;
 
 
 --
