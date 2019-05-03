@@ -8,8 +8,8 @@
 #
 # Indexes
 #
-#  index_node_properties_on_node_id  (node_id)
-#  node_properties_node_id_key       (node_id) UNIQUE
+#  node_properties_node_id_idx  (node_id)
+#  node_properties_node_id_key  (node_id) UNIQUE
 #
 # Foreign Keys
 #

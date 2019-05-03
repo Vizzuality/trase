@@ -12,8 +12,8 @@
 #
 # Indexes
 #
-#  context_node_type_properties_context_node_type_id_key       (context_node_type_id) UNIQUE
-#  index_context_node_type_properties_on_context_node_type_id  (context_node_type_id)
+#  context_node_type_properties_context_node_type_id_idx  (context_node_type_id)
+#  context_node_type_properties_context_node_type_id_key  (context_node_type_id) UNIQUE
 #
 # Foreign Keys
 #

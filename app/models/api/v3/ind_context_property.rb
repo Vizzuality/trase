@@ -9,8 +9,8 @@
 #
 # Indexes
 #
-#  index_ind_context_properties_on_context_id  (context_id)
-#  index_ind_context_properties_on_ind_id      (ind_id)
+#  ind_context_properties_context_id_idx  (context_id)
+#  ind_context_properties_ind_id_idx      (ind_id)
 #
 # Foreign Keys
 #

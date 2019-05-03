@@ -6833,6 +6833,13 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON content.users USING b
 
 
 --
+-- Name: attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX attributes_mv_id_idx ON public.attributes_mv USING btree (id);
+
+
+--
 -- Name: attributes_mv_name_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6840,10 +6847,17 @@ CREATE UNIQUE INDEX attributes_mv_name_idx ON public.attributes_mv USING btree (
 
 
 --
--- Name: chart_attributes_chart_id_position_key; Type: INDEX; Schema: public; Owner: -
+-- Name: chart_attributes_chart_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX chart_attributes_chart_id_position_key ON public.chart_attributes USING btree (chart_id, "position") WHERE (identifier IS NULL);
+CREATE INDEX chart_attributes_chart_id_idx ON public.chart_attributes USING btree (chart_id);
+
+
+--
+-- Name: chart_attributes_chart_id_position_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX chart_attributes_chart_id_position_idx ON public.chart_attributes USING btree (chart_id, "position") WHERE (identifier IS NULL);
 
 
 --
@@ -6854,10 +6868,108 @@ CREATE UNIQUE INDEX chart_attributes_mv_id_idx ON public.chart_attributes_mv USI
 
 
 --
+-- Name: chart_quals_chart_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX chart_quals_chart_attribute_id_idx ON public.chart_quals USING btree (chart_attribute_id);
+
+
+--
+-- Name: chart_quals_qual_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX chart_quals_qual_id_idx ON public.chart_quals USING btree (qual_id);
+
+
+--
+-- Name: chart_quants_chart_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX chart_quants_chart_attribute_id_idx ON public.chart_quants USING btree (chart_attribute_id);
+
+
+--
+-- Name: chart_quants_quant_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX chart_quants_quant_id_idx ON public.chart_quants USING btree (quant_id);
+
+
+--
+-- Name: charts_parent_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX charts_parent_id_idx ON public.charts USING btree (parent_id);
+
+
+--
+-- Name: commodity_attribute_properties_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX commodity_attribute_properties_mv_id_idx ON public.commodity_attribute_properties_mv USING btree (id, commodity_id, qual_id, quant_id, ind_id);
+
+
+--
+-- Name: context_attribute_properties_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX context_attribute_properties_mv_id_idx ON public.context_attribute_properties_mv USING btree (context_id, qual_id, quant_id, ind_id);
+
+
+--
+-- Name: context_node_type_properties_context_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX context_node_type_properties_context_node_type_id_idx ON public.context_node_type_properties USING btree (context_node_type_id);
+
+
+--
+-- Name: context_node_types_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX context_node_types_context_id_idx ON public.context_node_types USING btree (context_id);
+
+
+--
 -- Name: context_node_types_mv_context_id_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX context_node_types_mv_context_id_node_type_id_idx ON public.context_node_types_mv USING btree (context_id, node_type_id);
+
+
+--
+-- Name: context_node_types_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX context_node_types_node_type_id_idx ON public.context_node_types USING btree (node_type_id);
+
+
+--
+-- Name: context_properties_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX context_properties_context_id_idx ON public.context_properties USING btree (context_id);
+
+
+--
+-- Name: contexts_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX contexts_commodity_id_idx ON public.contexts USING btree (commodity_id);
+
+
+--
+-- Name: contextual_layers_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX contextual_layers_context_id_idx ON public.contextual_layers USING btree (context_id);
+
+
+--
+-- Name: country_attribute_properties_mv_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX country_attribute_properties_mv_idx ON public.country_attribute_properties_mv USING btree (id, country_id, qual_id, quant_id, ind_id);
 
 
 --
@@ -7134,6 +7246,13 @@ CREATE UNIQUE INDEX dashboards_sources_unique_idx ON public.dashboards_sources_m
 
 
 --
+-- Name: database_updates_status_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX database_updates_status_idx ON public.database_updates USING btree (status) WHERE (status = 'STARTED'::text);
+
+
+--
 -- Name: download_attributes_mv_context_id_original_type_original_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7183,10 +7302,45 @@ CREATE INDEX download_flows_year_idx ON ONLY public.download_flows USING btree (
 
 
 --
+-- Name: download_quants_download_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_quants_download_attribute_id_idx ON public.download_quants USING btree (download_attribute_id);
+
+
+--
+-- Name: download_quants_quant_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_quants_quant_id_idx ON public.download_quants USING btree (quant_id);
+
+
+--
+-- Name: download_versions_context_id_is_current_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX download_versions_context_id_is_current_idx ON public.download_versions USING btree (context_id, is_current) WHERE (is_current IS TRUE);
+
+
+--
+-- Name: flow_inds_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX flow_inds_flow_id_idx ON public.flow_inds USING btree (flow_id);
+
+
+--
 -- Name: flow_inds_ind_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX flow_inds_ind_id_idx ON public.flow_inds USING btree (ind_id);
+
+
+--
+-- Name: flow_quals_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX flow_quals_flow_id_idx ON public.flow_quals USING btree (flow_id);
 
 
 --
@@ -7197,10 +7351,31 @@ CREATE INDEX flow_quals_qual_id_idx ON public.flow_quals USING btree (qual_id);
 
 
 --
+-- Name: flow_quants_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX flow_quants_flow_id_idx ON public.flow_quants USING btree (flow_id);
+
+
+--
 -- Name: flow_quants_quant_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX flow_quants_quant_id_idx ON public.flow_quants USING btree (quant_id);
+
+
+--
+-- Name: flows_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX flows_context_id_idx ON public.flows USING btree (context_id);
+
+
+--
+-- Name: flows_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX flows_context_id_year_idx ON public.flows USING btree (context_id, year);
 
 
 --
@@ -7225,381 +7400,45 @@ CREATE INDEX flows_mv_year_idx ON public.flows_mv USING btree (year);
 
 
 --
--- Name: index_attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: ind_commodity_properties_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_attributes_mv_id_idx ON public.attributes_mv USING btree (id);
+CREATE INDEX ind_commodity_properties_commodity_id_idx ON public.ind_commodity_properties USING btree (commodity_id);
 
 
 --
--- Name: index_chart_attributes_on_chart_id; Type: INDEX; Schema: public; Owner: -
+-- Name: ind_commodity_properties_ind_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_chart_attributes_on_chart_id ON public.chart_attributes USING btree (chart_id);
+CREATE INDEX ind_commodity_properties_ind_id_idx ON public.ind_commodity_properties USING btree (ind_id);
 
 
 --
--- Name: index_chart_quals_on_chart_attribute_id; Type: INDEX; Schema: public; Owner: -
+-- Name: ind_context_properties_context_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_chart_quals_on_chart_attribute_id ON public.chart_quals USING btree (chart_attribute_id);
+CREATE INDEX ind_context_properties_context_id_idx ON public.ind_context_properties USING btree (context_id);
 
 
 --
--- Name: index_chart_quals_on_qual_id; Type: INDEX; Schema: public; Owner: -
+-- Name: ind_context_properties_ind_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_chart_quals_on_qual_id ON public.chart_quals USING btree (qual_id);
+CREATE INDEX ind_context_properties_ind_id_idx ON public.ind_context_properties USING btree (ind_id);
 
 
 --
--- Name: index_chart_quants_on_chart_attribute_id; Type: INDEX; Schema: public; Owner: -
+-- Name: ind_country_properties_country_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_chart_quants_on_chart_attribute_id ON public.chart_quants USING btree (chart_attribute_id);
+CREATE INDEX ind_country_properties_country_id_idx ON public.ind_country_properties USING btree (country_id);
 
 
 --
--- Name: index_chart_quants_on_quant_id; Type: INDEX; Schema: public; Owner: -
+-- Name: ind_country_properties_ind_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_chart_quants_on_quant_id ON public.chart_quants USING btree (quant_id);
-
-
---
--- Name: index_charts_on_parent_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_charts_on_parent_id ON public.charts USING btree (parent_id);
-
-
---
--- Name: index_commodity_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_commodity_attribute_properties_mv_id ON public.commodity_attribute_properties_mv USING btree (id, commodity_id, qual_id, quant_id, ind_id);
-
-
---
--- Name: index_context_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_context_attribute_properties_mv_id ON public.context_attribute_properties_mv USING btree (context_id, qual_id, quant_id, ind_id);
-
-
---
--- Name: index_context_node_type_properties_on_context_node_type_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_context_node_type_properties_on_context_node_type_id ON public.context_node_type_properties USING btree (context_node_type_id);
-
-
---
--- Name: index_context_node_types_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_context_node_types_on_context_id ON public.context_node_types USING btree (context_id);
-
-
---
--- Name: index_context_node_types_on_node_type_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_context_node_types_on_node_type_id ON public.context_node_types USING btree (node_type_id);
-
-
---
--- Name: index_context_properties_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_context_properties_on_context_id ON public.context_properties USING btree (context_id);
-
-
---
--- Name: index_contexts_on_commodity_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_contexts_on_commodity_id ON public.contexts USING btree (commodity_id);
-
-
---
--- Name: index_contextual_layers_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_contextual_layers_on_context_id ON public.contextual_layers USING btree (context_id);
-
-
---
--- Name: index_country_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_country_attribute_properties_mv_id ON public.country_attribute_properties_mv USING btree (id, country_id, qual_id, quant_id, ind_id);
-
-
---
--- Name: index_database_updates_on_status; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_database_updates_on_status ON public.database_updates USING btree (status) WHERE (status = 'STARTED'::text);
-
-
---
--- Name: index_download_quants_on_download_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_download_quants_on_download_attribute_id ON public.download_quants USING btree (download_attribute_id);
-
-
---
--- Name: index_download_quants_on_quant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_download_quants_on_quant_id ON public.download_quants USING btree (quant_id);
-
-
---
--- Name: index_download_versions_on_context_id_and_is_current; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_download_versions_on_context_id_and_is_current ON public.download_versions USING btree (context_id, is_current) WHERE (is_current IS TRUE);
-
-
---
--- Name: index_flow_inds_on_flow_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_flow_inds_on_flow_id ON public.flow_inds USING btree (flow_id);
-
-
---
--- Name: index_flow_quals_on_flow_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_flow_quals_on_flow_id ON public.flow_quals USING btree (flow_id);
-
-
---
--- Name: index_flow_quants_on_flow_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_flow_quants_on_flow_id ON public.flow_quants USING btree (flow_id);
-
-
---
--- Name: index_flows_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_flows_on_context_id ON public.flows USING btree (context_id);
-
-
---
--- Name: index_flows_on_context_id_and_year; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_flows_on_context_id_and_year ON public.flows USING btree (context_id, year);
-
-
---
--- Name: index_ind_commodity_properties_on_commodity_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ind_commodity_properties_on_commodity_id ON public.ind_commodity_properties USING btree (commodity_id);
-
-
---
--- Name: index_ind_commodity_properties_on_ind_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ind_commodity_properties_on_ind_id ON public.ind_commodity_properties USING btree (ind_id);
-
-
---
--- Name: index_ind_context_properties_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ind_context_properties_on_context_id ON public.ind_context_properties USING btree (context_id);
-
-
---
--- Name: index_ind_context_properties_on_ind_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ind_context_properties_on_ind_id ON public.ind_context_properties USING btree (ind_id);
-
-
---
--- Name: index_ind_country_properties_on_country_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ind_country_properties_on_country_id ON public.ind_country_properties USING btree (country_id);
-
-
---
--- Name: index_ind_country_properties_on_ind_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ind_country_properties_on_ind_id ON public.ind_country_properties USING btree (ind_id);
-
-
---
--- Name: index_map_quants_on_map_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_map_quants_on_map_attribute_id ON public.map_quants USING btree (map_attribute_id);
-
-
---
--- Name: index_map_quants_on_quant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_map_quants_on_quant_id ON public.map_quants USING btree (quant_id);
-
-
---
--- Name: index_node_inds_on_node_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_node_inds_on_node_id ON public.node_inds USING btree (node_id);
-
-
---
--- Name: index_node_properties_on_node_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_node_properties_on_node_id ON public.node_properties USING btree (node_id);
-
-
---
--- Name: index_node_quals_on_node_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_node_quals_on_node_id ON public.node_quals USING btree (node_id);
-
-
---
--- Name: index_node_quants_on_node_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_node_quants_on_node_id ON public.node_quants USING btree (node_id);
-
-
---
--- Name: index_qual_commodity_properties_on_commodity_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_qual_commodity_properties_on_commodity_id ON public.qual_commodity_properties USING btree (commodity_id);
-
-
---
--- Name: index_qual_commodity_properties_on_qual_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_qual_commodity_properties_on_qual_id ON public.qual_commodity_properties USING btree (qual_id);
-
-
---
--- Name: index_qual_context_properties_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_qual_context_properties_on_context_id ON public.qual_context_properties USING btree (context_id);
-
-
---
--- Name: index_qual_context_properties_on_qual_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_qual_context_properties_on_qual_id ON public.qual_context_properties USING btree (qual_id);
-
-
---
--- Name: index_qual_country_properties_on_country_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_qual_country_properties_on_country_id ON public.qual_country_properties USING btree (country_id);
-
-
---
--- Name: index_qual_country_properties_on_qual_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_qual_country_properties_on_qual_id ON public.qual_country_properties USING btree (qual_id);
-
-
---
--- Name: index_quant_commodity_properties_on_commodity_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_quant_commodity_properties_on_commodity_id ON public.quant_commodity_properties USING btree (commodity_id);
-
-
---
--- Name: index_quant_commodity_properties_on_quant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_quant_commodity_properties_on_quant_id ON public.quant_commodity_properties USING btree (quant_id);
-
-
---
--- Name: index_quant_context_properties_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_quant_context_properties_on_context_id ON public.quant_context_properties USING btree (context_id);
-
-
---
--- Name: index_quant_context_properties_on_quant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_quant_context_properties_on_quant_id ON public.quant_context_properties USING btree (quant_id);
-
-
---
--- Name: index_quant_country_properties_on_country_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_quant_country_properties_on_country_id ON public.quant_country_properties USING btree (country_id);
-
-
---
--- Name: index_quant_country_properties_on_quant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_quant_country_properties_on_quant_id ON public.quant_country_properties USING btree (quant_id);
-
-
---
--- Name: index_quant_properties_on_quant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_quant_properties_on_quant_id ON public.quant_properties USING btree (quant_id);
-
-
---
--- Name: index_recolor_by_attributes_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_recolor_by_attributes_on_context_id ON public.recolor_by_attributes USING btree (context_id);
-
-
---
--- Name: index_resize_by_attributes_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_resize_by_attributes_on_context_id ON public.resize_by_attributes USING btree (context_id);
-
-
---
--- Name: index_resize_by_quants_on_quant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_resize_by_quants_on_quant_id ON public.resize_by_quants USING btree (quant_id);
-
-
---
--- Name: index_resize_by_quants_on_resize_by_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_resize_by_quants_on_resize_by_attribute_id ON public.resize_by_quants USING btree (resize_by_attribute_id);
+CREATE INDEX ind_country_properties_ind_id_idx ON public.ind_country_properties USING btree (ind_id);
 
 
 --
@@ -7610,6 +7449,20 @@ CREATE UNIQUE INDEX map_attributes_mv_id_idx ON public.map_attributes_mv USING b
 
 
 --
+-- Name: map_quants_map_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX map_quants_map_attribute_id_idx ON public.map_quants USING btree (map_attribute_id);
+
+
+--
+-- Name: map_quants_quant_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX map_quants_quant_id_idx ON public.map_quants USING btree (quant_id);
+
+
+--
 -- Name: node_inds_ind_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7617,10 +7470,38 @@ CREATE INDEX node_inds_ind_id_idx ON public.node_inds USING btree (ind_id);
 
 
 --
+-- Name: node_inds_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX node_inds_node_id_idx ON public.node_inds USING btree (node_id);
+
+
+--
+-- Name: node_properties_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX node_properties_node_id_idx ON public.node_properties USING btree (node_id);
+
+
+--
+-- Name: node_quals_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX node_quals_node_id_idx ON public.node_quals USING btree (node_id);
+
+
+--
 -- Name: node_quals_qual_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX node_quals_qual_id_idx ON public.node_quals USING btree (qual_id);
+
+
+--
+-- Name: node_quants_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX node_quants_node_id_idx ON public.node_quants USING btree (node_id);
 
 
 --
@@ -7659,10 +7540,115 @@ CREATE INDEX nodes_node_type_id_idx ON public.nodes USING btree (node_type_id);
 
 
 --
+-- Name: qual_commodity_properties_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX qual_commodity_properties_commodity_id_idx ON public.qual_commodity_properties USING btree (commodity_id);
+
+
+--
+-- Name: qual_commodity_properties_qual_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX qual_commodity_properties_qual_id_idx ON public.qual_commodity_properties USING btree (qual_id);
+
+
+--
+-- Name: qual_context_properties_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX qual_context_properties_context_id_idx ON public.qual_context_properties USING btree (context_id);
+
+
+--
+-- Name: qual_context_properties_qual_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX qual_context_properties_qual_id_idx ON public.qual_context_properties USING btree (qual_id);
+
+
+--
+-- Name: qual_country_properties_country_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX qual_country_properties_country_id_idx ON public.qual_country_properties USING btree (country_id);
+
+
+--
+-- Name: qual_country_properties_qual_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX qual_country_properties_qual_id_idx ON public.qual_country_properties USING btree (qual_id);
+
+
+--
+-- Name: quant_commodity_properties_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX quant_commodity_properties_commodity_id_idx ON public.quant_commodity_properties USING btree (commodity_id);
+
+
+--
+-- Name: quant_commodity_properties_quant_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX quant_commodity_properties_quant_id_idx ON public.quant_commodity_properties USING btree (quant_id);
+
+
+--
+-- Name: quant_context_properties_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX quant_context_properties_context_id_idx ON public.quant_context_properties USING btree (context_id);
+
+
+--
+-- Name: quant_context_properties_quant_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX quant_context_properties_quant_id_idx ON public.quant_context_properties USING btree (quant_id);
+
+
+--
+-- Name: quant_country_properties_country_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX quant_country_properties_country_id_idx ON public.quant_country_properties USING btree (country_id);
+
+
+--
+-- Name: quant_country_properties_quant_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX quant_country_properties_quant_id_idx ON public.quant_country_properties USING btree (quant_id);
+
+
+--
+-- Name: quant_properties_quant_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX quant_properties_quant_id_idx ON public.quant_properties USING btree (quant_id);
+
+
+--
+-- Name: recolor_by_attributes_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX recolor_by_attributes_context_id_idx ON public.recolor_by_attributes USING btree (context_id);
+
+
+--
 -- Name: recolor_by_attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX recolor_by_attributes_mv_id_idx ON public.recolor_by_attributes_mv USING btree (id);
+
+
+--
+-- Name: resize_by_attributes_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX resize_by_attributes_context_id_idx ON public.resize_by_attributes USING btree (context_id);
 
 
 --
@@ -7677,6 +7663,20 @@ CREATE INDEX resize_by_attributes_mv_context_id_attribute_id_idx ON public.resiz
 --
 
 CREATE UNIQUE INDEX resize_by_attributes_mv_id_idx ON public.resize_by_attributes_mv USING btree (id);
+
+
+--
+-- Name: resize_by_quants_quant_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX resize_by_quants_quant_id_idx ON public.resize_by_quants USING btree (quant_id);
+
+
+--
+-- Name: resize_by_quants_resize_by_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX resize_by_quants_resize_by_attribute_id_idx ON public.resize_by_quants USING btree (resize_by_attribute_id);
 
 
 --
@@ -8395,6 +8395,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190503103053'),
 ('20190503115752'),
 ('20190503123635'),
+('20190503175955'),
 ('20190513125050'),
 ('20190528091308');
 

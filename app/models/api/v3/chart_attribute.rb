@@ -16,8 +16,8 @@
 # Indexes
 #
 #  chart_attributes_chart_id_identifier_key  (chart_id,identifier) UNIQUE
-#  chart_attributes_chart_id_position_key    (chart_id,position) UNIQUE WHERE (identifier IS NULL)
-#  index_chart_attributes_on_chart_id        (chart_id)
+#  chart_attributes_chart_id_idx             (chart_id)
+#  chart_attributes_chart_id_position_idx    (chart_id,position) UNIQUE WHERE (identifier IS NULL)
 #
 # Foreign Keys
 #

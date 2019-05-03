@@ -11,7 +11,7 @@
 #
 # Indexes
 #
-#  index_context_attribute_properties_mv_id  (context_id,qual_id,quant_id,ind_id) UNIQUE
+#  context_attribute_properties_mv_id_idx  (context_id,qual_id,quant_id,ind_id) UNIQUE
 #
 
 module Api

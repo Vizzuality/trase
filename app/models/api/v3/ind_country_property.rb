@@ -9,8 +9,8 @@
 #
 # Indexes
 #
-#  index_ind_country_properties_on_country_id  (country_id)
-#  index_ind_country_properties_on_ind_id      (ind_id)
+#  ind_country_properties_country_id_idx  (country_id)
+#  ind_country_properties_ind_id_idx      (ind_id)
 #
 # Foreign Keys
 #

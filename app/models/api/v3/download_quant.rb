@@ -10,9 +10,9 @@
 #
 # Indexes
 #
+#  download_quants_download_attribute_id_idx           (download_attribute_id)
 #  download_quants_download_attribute_id_quant_id_key  (download_attribute_id,quant_id) UNIQUE
-#  index_download_quants_on_download_attribute_id      (download_attribute_id)
-#  index_download_quants_on_quant_id                   (quant_id)
+#  download_quants_quant_id_idx                        (quant_id)
 #
 # Foreign Keys
 #

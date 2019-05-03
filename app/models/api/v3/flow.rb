@@ -9,8 +9,8 @@
 #
 # Indexes
 #
-#  index_flows_on_context_id           (context_id)
-#  index_flows_on_context_id_and_year  (context_id,year)
+#  flows_context_id_idx       (context_id)
+#  flows_context_id_year_idx  (context_id,year)
 #
 # Foreign Keys
 #

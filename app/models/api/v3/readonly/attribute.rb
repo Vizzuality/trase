@@ -18,8 +18,8 @@
 #
 # Indexes
 #
-#  attributes_mv_name_idx      (name) UNIQUE
-#  index_attributes_mv_id_idx  (id) UNIQUE
+#  attributes_mv_id_idx    (id) UNIQUE
+#  attributes_mv_name_idx  (name) UNIQUE
 #
 
 module Api

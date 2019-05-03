@@ -11,7 +11,7 @@
 #
 # Indexes
 #
-#  index_commodity_attribute_properties_mv_id  (id,commodity_id,qual_id,quant_id,ind_id) UNIQUE
+#  commodity_attribute_properties_mv_id_idx  (id,commodity_id,qual_id,quant_id,ind_id) UNIQUE
 #
 
 module Api

@@ -14,8 +14,8 @@
 #
 # Indexes
 #
-#  index_quant_properties_on_quant_id  (quant_id)
-#  quant_properties_quant_id_key       (quant_id) UNIQUE
+#  quant_properties_quant_id_idx  (quant_id)
+#  quant_properties_quant_id_key  (quant_id) UNIQUE
 #
 # Foreign Keys
 #

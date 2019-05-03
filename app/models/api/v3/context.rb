@@ -10,8 +10,8 @@
 #
 # Indexes
 #
+#  contexts_commodity_id_idx             (commodity_id)
 #  contexts_country_id_commodity_id_key  (country_id,commodity_id) UNIQUE
-#  index_contexts_on_commodity_id        (commodity_id)
 #
 # Foreign Keys
 #

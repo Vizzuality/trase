@@ -10,7 +10,7 @@
 #
 # Indexes
 #
-#  index_node_quants_on_node_id           (node_id)
+#  node_quants_node_id_idx                (node_id)
 #  node_quants_node_id_quant_id_year_key  (node_id,quant_id,year) UNIQUE
 #  node_quants_quant_id_idx               (quant_id)
 #
