@@ -16,7 +16,6 @@
 #
 # Indexes
 #
-#  index_profiles_on_context_node_type_id  (context_node_type_id)
 #  profiles_context_node_type_id_name_key  (context_node_type_id,name) UNIQUE
 #
 # Foreign Keys

@@ -12,10 +12,6 @@
 #  image_file_size    :integer
 #  image_updated_at   :datetime
 #
-# Indexes
-#
-#  index_staff_members_on_staff_group_id  (staff_group_id)
-#
 # Foreign Keys
 #
 #  fk_rails_...  (staff_group_id => content.staff_groups.id) ON DELETE => cascade ON UPDATE => cascade

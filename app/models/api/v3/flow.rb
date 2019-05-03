@@ -11,7 +11,6 @@
 #
 #  index_flows_on_context_id           (context_id)
 #  index_flows_on_context_id_and_year  (context_id,year)
-#  index_flows_on_path                 (path)
 #
 # Foreign Keys
 #

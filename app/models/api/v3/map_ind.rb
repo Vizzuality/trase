@@ -8,8 +8,6 @@
 #
 # Indexes
 #
-#  index_map_inds_on_ind_id              (ind_id)
-#  index_map_inds_on_map_attribute_id    (map_attribute_id)
 #  map_inds_map_attribute_id_ind_id_key  (map_attribute_id,ind_id) UNIQUE
 #
 # Foreign Keys

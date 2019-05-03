@@ -11,7 +11,6 @@
 # Indexes
 #
 #  download_attributes_context_id_position_key  (context_id,position) UNIQUE
-#  index_download_attributes_on_context_id      (context_id)
 #
 # Foreign Keys
 #

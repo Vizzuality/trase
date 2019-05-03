@@ -21,8 +21,7 @@
 #
 # Indexes
 #
-#  chart_attributes_mv_chart_id_idx  (chart_id)
-#  chart_attributes_mv_id_idx        (id) UNIQUE
+#  chart_attributes_mv_id_idx  (id) UNIQUE
 #
 
 module Api

@@ -14,7 +14,6 @@
 #
 # Indexes
 #
-#  index_map_attributes_on_map_attribute_group_id      (map_attribute_group_id)
 #  map_attributes_map_attribute_group_id_position_key  (map_attribute_group_id,position) UNIQUE
 #
 # Foreign Keys

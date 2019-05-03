@@ -10,8 +10,6 @@
 # Indexes
 #
 #  download_quals_download_attribute_id_qual_id_key  (download_attribute_id,qual_id) UNIQUE
-#  index_download_quals_on_download_attribute_id     (download_attribute_id)
-#  index_download_quals_on_qual_id                   (qual_id)
 #
 # Foreign Keys
 #
