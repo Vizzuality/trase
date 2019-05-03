@@ -14,7 +14,6 @@
 #  charts_profile_id_parent_id_identifier_key  (profile_id,parent_id,identifier) UNIQUE
 #  charts_profile_id_parent_id_position_key    (profile_id,parent_id,position) UNIQUE
 #  index_charts_on_parent_id                   (parent_id)
-#  index_charts_on_profile_id                  (profile_id)
 #
 # Foreign Keys
 #

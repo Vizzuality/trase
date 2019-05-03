@@ -9,8 +9,7 @@
 #
 # Indexes
 #
-#  dashboards_attributes_mv_group_id_attribute_id_idx  (dashboards_attribute_group_id,attribute_id)
-#  dashboards_attributes_mv_id_idx                     (id) UNIQUE
+#  dashboards_attributes_mv_id_idx  (id) UNIQUE
 #
 
 module Api

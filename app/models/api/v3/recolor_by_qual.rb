@@ -8,8 +8,6 @@
 #
 # Indexes
 #
-#  index_recolor_by_quals_on_qual_id                     (qual_id)
-#  index_recolor_by_quals_on_recolor_by_attribute_id     (recolor_by_attribute_id)
 #  recolor_by_quals_recolor_by_attribute_id_qual_id_key  (recolor_by_attribute_id,qual_id) UNIQUE
 #
 # Foreign Keys

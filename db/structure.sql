@@ -23,8 +23,6 @@ CREATE SCHEMA main;
 
 
 --
-<<<<<<< HEAD
-=======
 -- Name: maintenance; Type: SCHEMA; Schema: -; Owner: -
 --
 
@@ -32,28 +30,6 @@ CREATE SCHEMA maintenance;
 
 
 --
--- Name: tool_tables; Type: SCHEMA; Schema: -; Owner: -
---
-
-CREATE SCHEMA tool_tables;
-
-
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
---
->>>>>>> Added view to simplify inspecting unused indexes
 -- Name: intarray; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -6843,13 +6819,6 @@ CREATE INDEX idx_ckeditor_assetable_type ON content.ckeditor_assets USING btree 
 
 
 --
--- Name: index_staff_members_on_staff_group_id; Type: INDEX; Schema: content; Owner: -
---
-
-CREATE INDEX index_staff_members_on_staff_group_id ON content.staff_members USING btree (staff_group_id);
-
-
---
 -- Name: index_users_on_email; Type: INDEX; Schema: content; Owner: -
 --
 
@@ -6878,13 +6847,6 @@ CREATE UNIQUE INDEX chart_attributes_chart_id_position_key ON public.chart_attri
 
 
 --
--- Name: chart_attributes_mv_chart_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX chart_attributes_mv_chart_id_idx ON public.chart_attributes_mv USING btree (chart_id);
-
-
---
 -- Name: chart_attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6896,13 +6858,6 @@ CREATE UNIQUE INDEX chart_attributes_mv_id_idx ON public.chart_attributes_mv USI
 --
 
 CREATE UNIQUE INDEX context_node_types_mv_context_id_node_type_id_idx ON public.context_node_types_mv USING btree (context_id, node_type_id);
-
-
---
--- Name: dashboards_attributes_mv_group_id_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_attributes_mv_group_id_attribute_id_idx ON public.dashboards_attributes_mv USING btree (dashboards_attribute_group_id, attribute_id);
 
 
 --
@@ -7277,31 +7232,10 @@ CREATE UNIQUE INDEX index_attributes_mv_id_idx ON public.attributes_mv USING btr
 
 
 --
--- Name: index_carto_layers_on_contextual_layer_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_carto_layers_on_contextual_layer_id ON public.carto_layers USING btree (contextual_layer_id);
-
-
---
 -- Name: index_chart_attributes_on_chart_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_chart_attributes_on_chart_id ON public.chart_attributes USING btree (chart_id);
-
-
---
--- Name: index_chart_inds_on_chart_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_chart_inds_on_chart_attribute_id ON public.chart_inds USING btree (chart_attribute_id);
-
-
---
--- Name: index_chart_inds_on_ind_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_chart_inds_on_ind_id ON public.chart_inds USING btree (ind_id);
 
 
 --
@@ -7337,13 +7271,6 @@ CREATE INDEX index_chart_quants_on_quant_id ON public.chart_quants USING btree (
 --
 
 CREATE INDEX index_charts_on_parent_id ON public.charts USING btree (parent_id);
-
-
---
--- Name: index_charts_on_profile_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_charts_on_profile_id ON public.charts USING btree (profile_id);
 
 
 --
@@ -7396,13 +7323,6 @@ CREATE INDEX index_contexts_on_commodity_id ON public.contexts USING btree (comm
 
 
 --
--- Name: index_contexts_on_country_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_contexts_on_country_id ON public.contexts USING btree (country_id);
-
-
---
 -- Name: index_contextual_layers_on_context_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7417,87 +7337,10 @@ CREATE UNIQUE INDEX index_country_attribute_properties_mv_id ON public.country_a
 
 
 --
--- Name: index_country_properties_on_country_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_country_properties_on_country_id ON public.country_properties USING btree (country_id);
-
-
---
--- Name: index_dashboards_attributes_on_dashboards_attribute_group_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_attributes_on_dashboards_attribute_group_id ON public.dashboards_attributes USING btree (dashboards_attribute_group_id);
-
-
---
--- Name: index_dashboards_inds_on_dashboards_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_inds_on_dashboards_attribute_id ON public.dashboards_inds USING btree (dashboards_attribute_id);
-
-
---
--- Name: index_dashboards_inds_on_ind_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_inds_on_ind_id ON public.dashboards_inds USING btree (ind_id);
-
-
---
--- Name: index_dashboards_quals_on_dashboards_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_quals_on_dashboards_attribute_id ON public.dashboards_quals USING btree (dashboards_attribute_id);
-
-
---
--- Name: index_dashboards_quals_on_qual_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_quals_on_qual_id ON public.dashboards_quals USING btree (qual_id);
-
-
---
--- Name: index_dashboards_quants_on_dashboards_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_quants_on_dashboards_attribute_id ON public.dashboards_quants USING btree (dashboards_attribute_id);
-
-
---
--- Name: index_dashboards_quants_on_quant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_quants_on_quant_id ON public.dashboards_quants USING btree (quant_id);
-
-
---
 -- Name: index_database_updates_on_status; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_database_updates_on_status ON public.database_updates USING btree (status) WHERE (status = 'STARTED'::text);
-
-
---
--- Name: index_download_attributes_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_download_attributes_on_context_id ON public.download_attributes USING btree (context_id);
-
-
---
--- Name: index_download_quals_on_download_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_download_quals_on_download_attribute_id ON public.download_quals USING btree (download_attribute_id);
-
-
---
--- Name: index_download_quals_on_qual_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_download_quals_on_qual_id ON public.download_quals USING btree (qual_id);
 
 
 --
@@ -7557,13 +7400,6 @@ CREATE INDEX index_flows_on_context_id_and_year ON public.flows USING btree (con
 
 
 --
--- Name: index_flows_on_path; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_flows_on_path ON public.flows USING btree (path);
-
-
---
 -- Name: index_ind_commodity_properties_on_commodity_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7603,41 +7439,6 @@ CREATE INDEX index_ind_country_properties_on_country_id ON public.ind_country_pr
 --
 
 CREATE INDEX index_ind_country_properties_on_ind_id ON public.ind_country_properties USING btree (ind_id);
-
-
---
--- Name: index_ind_properties_on_ind_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ind_properties_on_ind_id ON public.ind_properties USING btree (ind_id);
-
-
---
--- Name: index_map_attribute_groups_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_map_attribute_groups_on_context_id ON public.map_attribute_groups USING btree (context_id);
-
-
---
--- Name: index_map_attributes_on_map_attribute_group_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_map_attributes_on_map_attribute_group_id ON public.map_attributes USING btree (map_attribute_group_id);
-
-
---
--- Name: index_map_inds_on_ind_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_map_inds_on_ind_id ON public.map_inds USING btree (ind_id);
-
-
---
--- Name: index_map_inds_on_map_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_map_inds_on_map_attribute_id ON public.map_inds USING btree (map_attribute_id);
 
 
 --
@@ -7683,13 +7484,6 @@ CREATE INDEX index_node_quants_on_node_id ON public.node_quants USING btree (nod
 
 
 --
--- Name: index_profiles_on_context_node_type_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_profiles_on_context_node_type_id ON public.profiles USING btree (context_node_type_id);
-
-
---
 -- Name: index_qual_commodity_properties_on_commodity_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7729,13 +7523,6 @@ CREATE INDEX index_qual_country_properties_on_country_id ON public.qual_country_
 --
 
 CREATE INDEX index_qual_country_properties_on_qual_id ON public.qual_country_properties USING btree (qual_id);
-
-
---
--- Name: index_qual_properties_on_qual_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_qual_properties_on_qual_id ON public.qual_properties USING btree (qual_id);
 
 
 --
@@ -7795,34 +7582,6 @@ CREATE INDEX index_recolor_by_attributes_on_context_id ON public.recolor_by_attr
 
 
 --
--- Name: index_recolor_by_inds_on_ind_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_recolor_by_inds_on_ind_id ON public.recolor_by_inds USING btree (ind_id);
-
-
---
--- Name: index_recolor_by_inds_on_recolor_by_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_recolor_by_inds_on_recolor_by_attribute_id ON public.recolor_by_inds USING btree (recolor_by_attribute_id);
-
-
---
--- Name: index_recolor_by_quals_on_qual_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_recolor_by_quals_on_qual_id ON public.recolor_by_quals USING btree (qual_id);
-
-
---
--- Name: index_recolor_by_quals_on_recolor_by_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_recolor_by_quals_on_recolor_by_attribute_id ON public.recolor_by_quals USING btree (recolor_by_attribute_id);
-
-
---
 -- Name: index_resize_by_attributes_on_context_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7844,31 +7603,10 @@ CREATE INDEX index_resize_by_quants_on_resize_by_attribute_id ON public.resize_b
 
 
 --
--- Name: map_attributes_mv_context_id_is_disabled_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX map_attributes_mv_context_id_is_disabled_idx ON public.map_attributes_mv USING btree (context_id, is_disabled) WHERE (is_disabled IS FALSE);
-
-
---
 -- Name: map_attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX map_attributes_mv_id_idx ON public.map_attributes_mv USING btree (id);
-
-
---
--- Name: map_attributes_mv_map_attribute_group_id_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX map_attributes_mv_map_attribute_group_id_attribute_id_idx ON public.map_attributes_mv USING btree (map_attribute_group_id, attribute_id);
-
-
---
--- Name: map_attributes_mv_original_attribute_id_attribute_type_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX map_attributes_mv_original_attribute_id_attribute_type_idx ON public.map_attributes_mv USING btree (original_attribute_id, attribute_type);
 
 
 --
@@ -7918,13 +7656,6 @@ CREATE INDEX nodes_mv_name_idx ON public.nodes_mv USING gin (to_tsvector('simple
 --
 
 CREATE INDEX nodes_node_type_id_idx ON public.nodes USING btree (node_type_id);
-
-
---
--- Name: recolor_by_attributes_mv_context_id_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX recolor_by_attributes_mv_context_id_attribute_id ON public.recolor_by_attributes_mv USING btree (context_id, attribute_id);
 
 
 --
@@ -8663,6 +8394,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190429112751'),
 ('20190503103053'),
 ('20190503115752'),
+('20190503123635'),
 ('20190513125050'),
 ('20190528091308');
 
