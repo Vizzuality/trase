@@ -255,8 +255,11 @@ module Api
                 position + 1, @unknown_municipality_nodes_ids
               ]
             )
+            order_by_unknown_clause = Arel.sql(order_by_unknown_clause)
           end
-          order_clause = [order_by_unknown_clause, 'total DESC'].compact
+          order_clause = [
+            order_by_unknown_clause, 'total DESC'
+          ].compact
 
           query = basic_flows_query.
             select(select_clause).
