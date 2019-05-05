@@ -87,7 +87,7 @@ class HomeVideo extends React.PureComponent {
 
   play() {
     // we cannot schedule firing video later because initiating fullscreen won't work
-    // as it must be initiated by user guesture, that's why can only play video manually
+    // as it must be initiated by user gesture, that's why can only play video manually
     // when it's ready
     if (this.videoReady) {
       this.plyr.play();
