@@ -38,9 +38,7 @@ const methodProps = [
   }
 ];
 
-const callbackProps = ['onToggleMapLayerMenu'];
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(mapToVanilla(MapLegend, methodProps, callbackProps));
+)(mapToVanilla(MapLegend, methodProps, Object.keys(mapDispatchToProps)));
