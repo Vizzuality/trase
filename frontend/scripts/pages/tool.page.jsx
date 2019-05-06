@@ -16,13 +16,13 @@ import { Provider } from 'react-redux';
 
 import FlowContentContainer from 'containers/tool/tool-content.container';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
-import MapContextContainer from 'containers/tool/map-context.container';
 import MapContainer from 'containers/tool/map.container';
 import FiltersNav from 'react-components/nav/filters-nav/filters-nav.container';
 import TitlebarContainer from 'containers/tool/titlebar.container';
 import NodesTitlesContainer from 'containers/tool/nodesTitles.container';
 import ModalContainer from 'containers/tool/story-modal.container';
 import TooltipContainer from 'containers/shared/help-tooltip.container';
+import MapContextContainer from 'react-components/tool/map-context/map-context.container';
 import MapLegend from 'react-components/tool/map-legend/map-legend.container';
 import MapBasemaps from 'react-components/tool/map-basemaps/map-basemaps.container';
 import Sankey from 'react-components/tool/sankey/sankey.container';
@@ -50,7 +50,6 @@ export const mount = (root, store) => {
     new FlowContentContainer(store),
     new MapContainer(store),
     new MapDimensionsContainer(store),
-    new MapContextContainer(store),
     new TitlebarContainer(store),
     new NodesTitlesContainer(store),
     new TooltipContainer(store),
@@ -84,6 +83,13 @@ export const mount = (root, store) => {
 
   render(
     <Provider store={store}>
+      <MapContextContainer />
+    </Provider>,
+    document.querySelector('.js-map-context-items')
+  );
+
+  render(
+    <Provider store={store}>
       <>
         <MapLegend />
         <MapBasemaps />
@@ -102,6 +108,7 @@ export const unmount = () => {
   unmountComponentAtNode(document.getElementById('js-tool-nav-react'));
   unmountComponentAtNode(document.getElementById('js-columns-selector-react'));
   unmountComponentAtNode(document.getElementById('js-react-vanilla-bridge-container'));
+  unmountComponentAtNode(document.getElementById('js-map-context'));
   document.querySelector('body').classList.remove('-overflow-hidden');
   containers.forEach(container => container.remove());
 };
