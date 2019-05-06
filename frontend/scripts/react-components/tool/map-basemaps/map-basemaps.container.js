@@ -21,9 +21,7 @@ const methodProps = [
   { name: 'enableBasemapSelection', compared: ['disabled'], returned: ['disabled'] }
 ];
 
-const callbackProps = ['onMapBasemapSelected'];
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(mapToVanilla(MapBasemaps, methodProps, callbackProps));
+)(mapToVanilla(MapBasemaps, methodProps, Object.keys(mapDispatchToProps)));

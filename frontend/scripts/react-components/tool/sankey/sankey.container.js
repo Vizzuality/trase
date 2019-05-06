@@ -87,15 +87,7 @@ const methodProps = [
   }
 ];
 
-const callbackProps = [
-  'onNodeClicked',
-  'onNodeHighlighted',
-  'onExpandClick',
-  'onCollapseClick',
-  'onClearClick'
-];
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(mapToVanilla(Sankey, methodProps, callbackProps));
+)(mapToVanilla(Sankey, methodProps, Object.keys(mapDispatchToProps)));
