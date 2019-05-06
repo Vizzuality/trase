@@ -34,7 +34,7 @@ import {
   loadStoryModalTool,
   setToolLoaders
 } from 'react-components/tool/tool.thunks';
-import MapDimensionsContainer from 'containers/tool/map-dimensions.container';
+import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.container';
 
 import EventManager from 'utils/eventManager';
 
@@ -50,7 +50,6 @@ export const mount = (root, store) => {
   containers = [
     new FlowContentContainer(store),
     new MapContainer(store),
-    new MapDimensionsContainer(store),
     new TitlebarContainer(store),
     new NodesTitlesContainer(store),
     new TooltipContainer(store),
@@ -87,6 +86,13 @@ export const mount = (root, store) => {
       <CookieBanner />
     </Provider>,
     document.getElementById('cookie-banner')
+  );
+
+  render(
+    <Provider store={store}>
+      <MapDimensionsContainer />
+    </Provider>,
+    document.querySelector('.js-dimensions')
   );
 
   render(
