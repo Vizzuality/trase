@@ -5,6 +5,7 @@ import Link from 'redux-first-router-link';
 import debounce from 'lodash/debounce';
 import cx from 'classnames';
 import Heading from 'react-components/shared/heading/heading.component';
+import { ImgBackground } from 'react-components/shared/img';
 
 import './entrypoints.scss';
 
@@ -22,7 +23,8 @@ class Entrypoints extends React.PureComponent {
         text:
           'Follow trade flows to identify sourcing regions, profile supply chain risks and' +
           ' assess opportunities for sustainable production.',
-        className: '-mid'
+        className: '-supply-chain',
+        src: '/images/backgrounds/entrypoint-2@2x.jpg'
       },
       {
         link: { type: 'profileRoot' },
@@ -30,7 +32,8 @@ class Entrypoints extends React.PureComponent {
         text:
           'View the trade and sustainability profile of a particular' +
           ' company or production region.',
-        className: '-start'
+        className: '-profile',
+        src: '/images/backgrounds/entrypoint-1@2x.jpg'
       },
       {
         link: { type: 'tool', payload: { query: { state: { isMapVisible: true } } } },
@@ -38,7 +41,8 @@ class Entrypoints extends React.PureComponent {
         text:
           'Explore the sustainability of different production regions and identify risks and' +
           ' opportunities facing downstream buyers.',
-        className: '-end'
+        className: '-map',
+        src: '/images/backgrounds/entrypoint-3@2x.jpg'
       }
     ];
     this.getSliderRef = this.getSliderRef.bind(this);
@@ -87,10 +91,10 @@ class Entrypoints extends React.PureComponent {
 
     return this.entrypoints.map(slide => (
       <div key={slide.subtitle} className={grid}>
-        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
-        <div
+        <ImgBackground
           className={cx('entrypoint-slide', slide.className)}
           onClick={() => onClick(slide.link)}
+          src={slide.src}
         >
           <Link to={slide.link}>
             <div className="entrypoint-slide-content">
@@ -100,7 +104,7 @@ class Entrypoints extends React.PureComponent {
               <p className="entrypoint-text">{slide.text}</p>
             </div>
           </Link>
-        </div>
+        </ImgBackground>
       </div>
     ));
   }

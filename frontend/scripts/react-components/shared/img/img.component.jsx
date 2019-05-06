@@ -29,7 +29,15 @@ function Img(props) {
         return (
           <>
             <img ref={ref} alt={alt} sizes={sizes} srcSet={srcSetProp} src={srcProp} {...rest} />
-            {!inView && <a href={src}>{alt}</a>}
+            {!inView && (
+              <a
+                href={src}
+                style={{ visibility: 'hidden', position: 'absolute' }}
+                aria-hidden="true"
+              >
+                {alt}
+              </a>
+            )}
           </>
         );
       }}
