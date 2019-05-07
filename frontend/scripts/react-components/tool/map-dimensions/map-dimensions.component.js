@@ -28,10 +28,10 @@ export default class {
       dimension.addEventListener('click', this._onDimensionClicked.bind(this));
     });
     this.callbacks.onMapDimensionsLoaded();
-    this.toggleSidebarGroups(expandedMapSidebarGroupsIds);
+    this.toggleSidebarGroups({ expandedMapSidebarGroupsIds });
   }
 
-  selectMapDimensions(selectedMapDimensions) {
+  selectMapDimensions({ selectedMapDimensions }) {
     if (this.dimensions === undefined) {
       return;
     }
@@ -52,7 +52,7 @@ export default class {
     });
   }
 
-  toggleSidebarGroups(expandedMapSidebarGroupsIds) {
+  toggleSidebarGroups({ expandedMapSidebarGroupsIds }) {
     if (this.sidebarGroups === undefined) {
       return;
     }
@@ -62,8 +62,8 @@ export default class {
     });
   }
 
-  setVisibility(isVisible) {
-    this.el.classList.toggle('is-hidden', !isVisible);
+  setVisibility({ isCloroplethEnabled }) {
+    this.el.classList.toggle('is-hidden', !isCloroplethEnabled);
   }
 
   _onGroupTitleClicked(event) {
