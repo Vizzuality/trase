@@ -18,19 +18,27 @@ export default class {
   }
 
   selectNodes(data) {
-    this._update(
-      true,
-      data.nodesData,
-      data.recolorGroups,
-      data.currentQuant,
-      data.selectedYears,
-      data.selectedContextId
-    );
+    const {
+      nodesData,
+      recolorGroups,
+      currentQuant,
+      selectedYears,
+      selectedContextId,
+      highlightedNodesData
+    } = data;
+    this._update({
+      isSelect: true,
+      nodesData: nodesData || highlightedNodesData,
+      recolorGroups,
+      currentQuant,
+      selectedYears,
+      selectedContextId
+    });
   }
 
   highlightNode({
     isHighlight,
-    nodesData,
+    highlightedNodesData,
     recolorGroups,
     coordinates,
     currentQuant,
@@ -38,34 +46,34 @@ export default class {
     selectedContextId
   }) {
     this.tooltip.hide();
-    if (nodesData === undefined || !nodesData.length) {
+    if (highlightedNodesData === undefined || !highlightedNodesData.length) {
       return;
     }
     // if we have coordinates, request came from hover on map, so we have a tooltip and don't need to show pill
     // else show pill for sankey node
     if (coordinates !== undefined) {
-      this._showTooltip(nodesData, coordinates, currentQuant);
+      this._showTooltip(highlightedNodesData, coordinates, currentQuant);
     } else {
       this.el.classList.remove('is-hidden');
-      this._update(
-        !isHighlight,
-        nodesData,
+      this._update({
+        isSelect: !isHighlight,
+        nodesData: highlightedNodesData,
         recolorGroups,
         currentQuant,
         selectedYears,
         selectedContextId
-      );
+      });
     }
   }
 
-  _update(
+  _update({
     isSelect,
     nodesData,
     recolorGroups = null,
     currentQuant,
     selectedYears,
     selectedContextId
-  ) {
+  }) {
     this.clear.classList.toggle('is-hidden', !isSelect);
 
     Array.prototype.slice
