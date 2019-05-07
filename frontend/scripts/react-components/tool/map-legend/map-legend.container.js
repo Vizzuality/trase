@@ -35,6 +35,11 @@ const methodProps = [
     name: 'selectMapDimensions',
     compared: ['selectedMapDimensionsWarnings'],
     returned: ['selectedMapDimensionsWarnings']
+  },
+  {
+    name: 'highlightChoroplethBucket',
+    compared: ['currentHighlightedChoroplethBucket'],
+    returned: ['currentHighlightedChoroplethBucket']
   }
 ];
 
