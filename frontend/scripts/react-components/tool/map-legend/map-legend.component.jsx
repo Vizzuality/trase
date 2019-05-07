@@ -65,7 +65,7 @@ export default class {
     bucket.classList.toggle('-highlighted', true);
   }
 
-  selectMapDimensions(selectedMapDimensionsWarnings) {
+  selectMapDimensions({ selectedMapDimensionsWarnings }) {
     this.warningsContainer.classList.toggle('-visible', selectedMapDimensionsWarnings !== null);
     if (selectedMapDimensionsWarnings !== null) {
       this.warnings.innerHTML = selectedMapDimensionsWarnings;
