@@ -11,7 +11,16 @@ const mapStateToProps = state => ({
 });
 
 const methodProps = [
-  { name: 'buildLayers', compared: ['layers'], returned: ['layers', 'selectedMapContextualLayers'] }
+  {
+    name: 'buildLayers',
+    compared: ['layers'],
+    returned: ['layers', 'selectedMapContextualLayers']
+  },
+  {
+    name: 'selectContextualLayers',
+    compared: ['selectedMapContextualLayers'],
+    returned: ['selectedMapContextualLayers']
+  }
 ];
 
 const mapDispatchToProps = {
