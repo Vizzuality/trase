@@ -12,9 +12,10 @@ const isCloroplethEnabled = state => {
 const mapStateToProps = state => ({
   mapDimensionsGroups: state.tool.mapDimensionsGroups,
   expandedMapSidebarGroupsIds: state.tool.expandedMapSidebarGroupsIds,
-  selectMapDimensions: state.tool.selectedMapDimensions,
+  selectedMapDimensions: state.tool.selectedMapDimensions,
   toggleSidebarGroups: state.tool.expandedMapSidebarGroupsIds,
-  isCloroplethEnabled: isCloroplethEnabled(state)
+  isCloroplethEnabled: isCloroplethEnabled(state),
+  selectedColumnsIds: state.tool.selectedColumnsIds
 });
 
 const methodProps = [
@@ -22,6 +23,16 @@ const methodProps = [
     name: 'loadMapDimensions',
     compared: ['mapDimensionsGroups'],
     returned: ['mapDimensionsGroups', 'expandedMapSidebarGroupsIds']
+  },
+  {
+    name: 'selectMapDimensions',
+    compared: ['selectedMapDimensions'],
+    returned: ['selectedMapDimensions']
+  },
+  {
+    name: 'toggleSidebarGroups',
+    compared: ['expandedMapSidebarGroupsIds'],
+    returned: ['expandedMapSidebarGroupsIds']
   },
   {
     name: 'setVisibility',
