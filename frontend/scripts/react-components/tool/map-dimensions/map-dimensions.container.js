@@ -10,12 +10,12 @@ const isCloroplethEnabled = state => {
   return column ? !column.isChoroplethDisabled : true;
 };
 const mapStateToProps = state => ({
-  mapDimensionsGroups: state.tool.mapDimensionsGroups,
-  expandedMapSidebarGroupsIds: state.tool.expandedMapSidebarGroupsIds,
-  selectedMapDimensions: state.tool.selectedMapDimensions,
-  toggleSidebarGroups: state.tool.expandedMapSidebarGroupsIds,
+  mapDimensionsGroups: state.toolLayers.mapDimensionsGroups,
+  expandedMapSidebarGroupsIds: state.toolLayers.expandedMapSidebarGroupsIds,
+  selectedMapDimensions: state.toolLayers.selectedMapDimensions,
+  toggleSidebarGroups: state.toolLayers.expandedMapSidebarGroupsIds,
   isCloroplethEnabled: isCloroplethEnabled(state),
-  selectedColumnsIds: state.tool.selectedColumnsIds
+  selectedColumnsIds: state.toolLinks.selectedColumnsIds
 });
 
 const methodProps = [

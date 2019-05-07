@@ -4,10 +4,11 @@ import ToolContent from 'react-components/tool/tool-content/tool-content.compone
 import { resetSankey } from 'actions/tool.actions';
 
 const mapStateToProps = state => ({
-  isMapVisible: state.tool.isMapVisible,
+  isMapVisible: state.toolLayers.isMapVisible,
   isVisible: state.app.isMapLayerVisible,
-  loading: state.tool.links !== null && (state.tool.flowsLoading || state.tool.mapLoading),
-  hasError: state.tool.links === null && !state.tool.flowsLoading
+  loading:
+    state.toolLinks.links !== null && (state.toolLinks.flowsLoading || state.toolLayers.mapLoading),
+  hasError: state.toolLinks.links === null && !state.toolLinks.flowsLoading
 });
 
 const mapDispatchToProps = {

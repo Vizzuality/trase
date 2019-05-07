@@ -254,7 +254,10 @@ const toolLinksReducer = {
     });
   },
   [FILTER_LINKS_BY_NODES](state) {
-    const selectedNodesColumnsPos = getSelectedNodesColumnsPos(state);
+    const selectedNodesColumnsPos = getSelectedNodesColumnsPos({
+      toolLinks: state,
+      toolLayers: {}
+    });
     const selectedNodesAtColumns = getNodesAtColumns(
       state.selectedNodesIds,
       selectedNodesColumnsPos

@@ -43,7 +43,7 @@ const getNodesData = (
     let node = {};
 
     // get_nodes might still be loading at this point, in this case just skip adding metadata
-    if (nodesDictWithMeta) {
+    if (nodesDictWithMeta && selectedMapDimensions) {
       node = Object.assign(node, nodesDictWithMeta[nodeId]);
       // add metas from the map layers to the selected nodes data
       node.selectedMetas = compact([
@@ -66,14 +66,14 @@ const getNodesGeoIds = nodesData =>
     .filter(node => node.isGeo === true && typeof node.geoId !== 'undefined' && node.geoId !== null)
     .map(node => node.geoId);
 
-const getSelectedNodesIds = state => state.selectedNodesIds;
-const getHighlightedNodesIds = state => state.highlightedNodesIds;
-const getVisibleNodes = state => state.visibleNodes;
-const getNodesDictWithMeta = state => state.nodesDictWithMeta;
-const getSelectedMapDimensions = state => state.selectedMapDimensions;
-const getSelectedResizeBy = state => state.selectedResizeBy;
-const getNodesDict = state => state.nodesDict;
-const getChoropleth = state => state.choropleth;
+const getSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
+const getHighlightedNodesIds = state => state.toolLinks.highlightedNodesIds;
+const getVisibleNodes = state => state.toolLinks.visibleNodes;
+const getNodesDictWithMeta = state => state.toolLinks.nodesDictWithMeta;
+const getSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
+const getSelectedResizeBy = state => state.toolLinks.selectedResizeBy;
+const getNodesDict = state => state.toolLinks.nodesDict;
+const getChoropleth = state => state.toolLayers.choropleth;
 
 export const getSelectedNodesData = createSelector(
   [
@@ -87,7 +87,10 @@ export const getSelectedNodesData = createSelector(
   getNodesData
 );
 
-export const getSelectedNodesGeoIds = createSelector([getSelectedNodesData], getNodesGeoIds);
+export const getSelectedNodesGeoIds = createSelector(
+  [getSelectedNodesData],
+  getNodesGeoIds
+);
 
 export const getSelectedNodesColumnsPos = createSelector(
   [getSelectedNodesData],
@@ -106,7 +109,10 @@ export const getHighlightedNodesData = createSelector(
   getNodesData
 );
 
-export const getHighlightedNodesGeoIds = createSelector([getHighlightedNodesData], getNodesGeoIds);
+export const getHighlightedNodesGeoIds = createSelector(
+  [getHighlightedNodesData],
+  getNodesGeoIds
+);
 
 export const getCurrentHighlightedChoroplethBucket = createSelector(
   [getHighlightedNodesData, getChoropleth],

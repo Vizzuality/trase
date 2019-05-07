@@ -8,17 +8,17 @@ import {
 } from 'react-components/tool/tool.selectors';
 
 const mapStateToProps = state => {
-  const highlightedNodesData = getHighlightedNodesData(state.tool);
+  const highlightedNodesData = getHighlightedNodesData(state);
   return {
-    nodesData: getSelectedNodesData(state.tool),
-    recolorGroups: state.tool.recolorGroups,
-    currentQuant: state.tool.currentQuant,
+    nodesData: getSelectedNodesData(state),
+    recolorGroups: state.toolLinks.recolorGroups,
+    currentQuant: state.toolLinks.currentQuant,
     selectedYears: state.app.selectedYears,
     selectedContextId: state.app.selectedContext ? state.app.selectedContext.id : null,
     highlightedNodesData:
-      highlightedNodesData.length === 0 ? getSelectedNodesData(state.tool) : highlightedNodesData,
+      highlightedNodesData.length === 0 ? getSelectedNodesData(state) : highlightedNodesData,
     isHighlight: highlightedNodesData.length > 0,
-    coordinates: state.tool.highlightedNodeCoordinates
+    coordinates: state.toolLayers.highlightedNodeCoordinates
   };
 };
 

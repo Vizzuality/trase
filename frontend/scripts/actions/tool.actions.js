@@ -633,7 +633,7 @@ export function selectNode(param, isAggregated = false) {
   const ids = Array.isArray(param) ? param : [param];
   return (dispatch, getState) => {
     ids.forEach(nodeId => {
-      const { selectedNodesIds: currentSelectedNodesIds, expandedNodesIds } = getState().toolLayers;
+      const { selectedNodesIds: currentSelectedNodesIds, expandedNodesIds } = getState().toolLinks;
       const areNodesExpanded = !isEmpty(expandedNodesIds);
 
       if (isAggregated) {
@@ -705,22 +705,22 @@ export function selectExpandedNode(param) {
     const hasInvisibleNodes = ids.some(elem => !_isNodeVisible(getState, elem));
 
     if (hasInvisibleNodes) {
-      const { tool } = getState();
+      const { toolLinks } = getState();
       if (
-        tool.selectedNodesIds.length === ids.length &&
-        intesection(tool.selectedNodesIds, ids).length === ids.length
+        toolLinks.selectedNodesIds.length === ids.length &&
+        intesection(toolLinks.selectedNodesIds, ids).length === ids.length
       ) {
         dispatch(resetState());
       } else {
         const nodes = ids.map(nodeId => {
-          if (!tool.nodesDict[nodeId]) {
+          if (!toolLinks.nodesDict[nodeId]) {
             console.warn(`requested node ${nodeId} does not exist in nodesDict`);
           }
-          return tool.nodesDict[nodeId];
+          return toolLinks.nodesDict[nodeId];
         });
 
         nodes.forEach(node => {
-          if (!isNodeColumnVisible(node, tool.selectedColumnsIds)) {
+          if (!isNodeColumnVisible(node, toolLinks.selectedColumnsIds)) {
             dispatch(selectColumn(node.columnGroup, node.columnId, false));
           }
         });
@@ -824,7 +824,7 @@ export function loadLinkedGeoIDs() {
     const selectedNodesIds = state.toolLinks.selectedNodesIds;
 
     // when selection only contains geo nodes (column 0), we should not call get_linked_geoids
-    const selectedNodesColumnsPos = getSelectedNodesColumnsPos(state.toolLinks);
+    const selectedNodesColumnsPos = getSelectedNodesColumnsPos(state);
     const selectedNonGeoNodeIds = selectedNodesIds.filter(
       (nodeId, index) => selectedNodesColumnsPos[index] !== 0
     );
@@ -961,5 +961,5 @@ export function toggleMapSidebarGroup(id) {
 
 const _isNodeVisible = (getState, nodeId) =>
   getState()
-    .tool.visibleNodes.map(node => node.id)
+    .toolLinks.visibleNodes.map(node => node.id)
     .indexOf(nodeId) > -1;

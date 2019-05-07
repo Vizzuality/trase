@@ -8,7 +8,7 @@ const mapStateToProps = state => ({
   choroplethLegend: state.toolLayers.choroplethLegend,
   selectedMapDimensionsWarnings: state.toolLayers.selectedMapDimensionsWarnings,
   selectedMapContextualLayersData: state.toolLayers.selectedMapContextualLayersData,
-  currentHighlightedChoroplethBucket: getCurrentHighlightedChoroplethBucket(state.toolLinks)
+  currentHighlightedChoroplethBucket: getCurrentHighlightedChoroplethBucket(state)
 });
 
 const mapDispatchToProps = {
