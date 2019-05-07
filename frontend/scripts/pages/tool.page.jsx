@@ -15,14 +15,14 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 
 import FlowContentContainer from 'containers/tool/tool-content.container';
-import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import MapContainer from 'containers/tool/map.container';
-import FiltersNav from 'react-components/nav/filters-nav/filters-nav.container';
 import TitlebarContainer from 'containers/tool/titlebar.container';
-import NodesTitlesContainer from 'containers/tool/nodesTitles.container';
 import ModalContainer from 'containers/tool/story-modal.container';
 import TooltipContainer from 'containers/shared/help-tooltip.container';
 import CookieBanner from 'react-components/shared/cookie-banner';
+import FiltersNav from 'react-components/nav/filters-nav/filters-nav.container';
+import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
+import NodesTitlesContainer from 'react-components/tool/nodes-titles/nodes-titles.container';
 import MapContextContainer from 'react-components/tool/map-context/map-context.container';
 import MapLegend from 'react-components/tool/map-legend/map-legend.container';
 import MapBasemaps from 'react-components/tool/map-basemaps/map-basemaps.container';
@@ -51,7 +51,6 @@ export const mount = (root, store) => {
     new FlowContentContainer(store),
     new MapContainer(store),
     new TitlebarContainer(store),
-    new NodesTitlesContainer(store),
     new TooltipContainer(store),
     new ModalContainer(store)
   ];
@@ -100,6 +99,7 @@ export const mount = (root, store) => {
       <>
         <MapLegend />
         <MapBasemaps />
+        <NodesTitlesContainer />
         <Sankey />
       </>
     </Provider>,
