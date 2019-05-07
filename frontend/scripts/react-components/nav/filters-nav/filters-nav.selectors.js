@@ -15,12 +15,12 @@ const insertIf = (condition, item) => (condition ? [item] : []);
 const getCurrentPage = state => state.location.type;
 const getSelectedContext = state => state.app.selectedContext;
 const getSelectedYears = state => state.app.selectedYears;
-const getToolSelectedResizeBy = state => (state.tool ? state.tool.selectedResizeBy : {});
-const getToolRecolorBy = state => (state.tool ? state.tool.selectedRecolorBy : {});
-const getToolSelectedBiome = state => state.tool && state.tool.selectedBiomeFilter;
+const getToolSelectedResizeBy = state => (state.toolLinks ? state.toolLinks.selectedResizeBy : {});
+const getToolRecolorBy = state => (state.toolLinks ? state.toolLinks.selectedRecolorBy : {});
+const getToolSelectedBiome = state => state.toolLinks && state.toolLinks.selectedBiomeFilter;
 const getContextFilterBy = state => state.app.selectedContext && state.app.selectedContext.filterBy;
 const getAppTooltips = state => state.app.tooltips;
-const getToolDetailedView = state => state.tool && state.tool.detailedView;
+const getToolDetailedView = state => state.toolLinks && state.toolLinks.detailedView;
 const getToolResizeBys = state => state.app.selectedContext && state.app.selectedContext.resizeBy;
 
 export const getToolYearsProps = createStructuredSelector({

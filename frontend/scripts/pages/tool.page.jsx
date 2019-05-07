@@ -24,9 +24,9 @@ import TitlebarContainer from 'react-components/tool/titlebar/titlebar.container
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import NodesTitlesContainer from 'react-components/tool/nodes-titles/nodes-titles.container';
 import MapContextContainer from 'react-components/tool/map-context/map-context.container';
-import MapLegend from 'react-components/tool/map-legend/map-legend.container';
 import MapBasemaps from 'react-components/tool/map-basemaps/map-basemaps.container';
 import Sankey from 'react-components/tool/sankey/sankey.container';
+import MapLegend from 'react-components/tool/map-legend/map-legend.container';
 
 import {
   resizeSankeyTool,
@@ -48,8 +48,8 @@ export const mount = (root, store) => {
   // TODO remove this
   // In order to avoid adding loading states when not needed we check that the selectedContext
   // has indeed changed.
-  const { app, tool } = store.getState();
-  if ((app.selectedContext && app.selectedContext.id) !== tool.loadedFlowsContextId) {
+  const { app, toolLinks } = store.getState();
+  if ((app.selectedContext && app.selectedContext.id) !== toolLinks.loadedFlowsContextId) {
     setToolLoaders(store.dispatch);
   }
   loadDisclaimerTool(store.dispatch);
@@ -67,6 +67,13 @@ export const mount = (root, store) => {
       <ColumnsSelectorGroupContainer />
     </Provider>,
     document.getElementById('js-columns-selector-react')
+  );
+
+  render(
+    <Provider store={store}>
+      <CookieBanner />
+    </Provider>,
+    document.getElementById('cookie-banner')
   );
 
   render(
@@ -96,6 +103,7 @@ export const unmount = () => {
   evManager.clearEventListeners();
   unmountComponentAtNode(document.getElementById('js-tool-nav-react'));
   unmountComponentAtNode(document.getElementById('js-columns-selector-react'));
+  unmountComponentAtNode(document.getElementById('cookie-banner'));
   unmountComponentAtNode(document.getElementById('js-react-vanilla-bridge-container'));
   document.querySelector('body').classList.remove('-overflow-hidden');
 };

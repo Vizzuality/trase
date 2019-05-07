@@ -10,33 +10,33 @@ import getPageTitle from 'scripts/router/page-title';
 const removeEmptyParams = params => pickBy(params, param => typeof param !== 'undefined');
 
 const appStateToURLParams = state => {
-  if (isEmpty(state.app) || isEmpty(state.tool)) {
+  if (isEmpty(state.app) || isEmpty(state.toolLinks)) {
     return {};
   }
 
   return {
     selectedContextId: state.app.selectedContext ? state.app.selectedContext.id : null,
     selectedYears: state.app.selectedYears,
-    detailedView: state.tool.detailedView,
-    selectedNodesIds: state.tool.selectedNodesIds,
-    expandedNodesIds: state.tool.expandedNodesIds,
-    areNodesExpanded: state.tool.areNodesExpanded,
-    selectedColumnsIds: state.tool.selectedColumnsIds,
-    selectedMapDimensions: state.tool.selectedMapDimensions,
-    isMapVisible: state.tool.isMapVisible,
-    mapView: state.tool.mapView,
-    expandedMapSidebarGroupsIds: state.tool.expandedMapSidebarGroupsIds,
-    selectedMapContextualLayers: state.tool.selectedMapContextualLayers,
-    selectedMapBasemap: state.tool.selectedMapBasemap,
-    selectedResizeByName: state.tool.selectedResizeBy
-      ? state.tool.selectedResizeBy.name
-      : state.tool.selectedResizeByName,
-    selectedRecolorByName: state.tool.selectedRecolorBy
-      ? state.tool.selectedRecolorBy.name
-      : state.tool.selectedRecolorByName,
-    selectedBiomeFilterName: state.tool.selectedBiomeFilter
-      ? state.tool.selectedBiomeFilter.name
-      : state.tool.selectedBiomeFilterName
+    detailedView: state.toolLinks.detailedView,
+    selectedNodesIds: state.toolLinks.selectedNodesIds,
+    expandedNodesIds: state.toolLinks.expandedNodesIds,
+    areNodesExpanded: state.toolLinks.areNodesExpanded,
+    selectedColumnsIds: state.toolLinks.selectedColumnsIds,
+    selectedMapDimensions: state.toolLayers.selectedMapDimensions,
+    isMapVisible: state.toolLayers.isMapVisible,
+    mapView: state.toolLayers.mapView,
+    expandedMapSidebarGroupsIds: state.toolLayers.expandedMapSidebarGroupsIds,
+    selectedMapContextualLayers: state.toolLayers.selectedMapContextualLayers,
+    selectedMapBasemap: state.toolLayers.selectedMapBasemap,
+    selectedResizeByName: state.toolLinks.selectedResizeBy
+      ? state.toolLinks.selectedResizeBy.name
+      : state.toolLinks.selectedResizeByName,
+    selectedRecolorByName: state.toolLinks.selectedRecolorBy
+      ? state.toolLinks.selectedRecolorBy.name
+      : state.toolLinks.selectedRecolorByName,
+    selectedBiomeFilterName: state.toolLinks.selectedBiomeFilter
+      ? state.toolLinks.selectedBiomeFilter.name
+      : state.toolLinks.selectedBiomeFilterName
   };
 };
 

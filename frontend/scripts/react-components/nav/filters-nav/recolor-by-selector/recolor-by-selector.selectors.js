@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect';
 import { makeGetRecolorByItems } from 'selectors/indicators.selectors';
 
-const getSelectedRecolorBy = state => state.tool.selectedRecolorBy;
-const getRecolorGroups = state => state.tool.recolorGroups;
+const getSelectedRecolorBy = state => state.toolLinks.selectedRecolorBy;
+const getRecolorGroups = state => state.toolLinks.recolorGroups;
 const getSelectedContext = state => state.app.selectedContext;
 const getTooltips = state => state.app.tooltips;
 const getSelectedYears = state => state.app.selectedYears;

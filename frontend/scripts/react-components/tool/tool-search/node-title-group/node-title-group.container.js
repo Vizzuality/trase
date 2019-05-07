@@ -5,8 +5,8 @@ import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group/n
 import { getSelectedNodesData } from 'react-components/tool/tool.selectors';
 
 const mapStateToProps = state => {
-  const { recolorGroups } = state.tool;
-  const selectedNodesData = getSelectedNodesData(state.tool);
+  const { recolorGroups } = state.toolLinks;
+  const selectedNodesData = getSelectedNodesData(state.toolLinks);
   const nodes = selectedNodesData.map(node => ({
     id: node.id,
     recolorGroup: recolorGroups === null || !recolorGroups[node.id] ? -1 : recolorGroups[node.id],

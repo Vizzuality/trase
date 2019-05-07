@@ -5,7 +5,7 @@ import { getToolSearchNodes } from 'react-components/tool/tool-search/tool-searc
 
 const mapStateToProps = state => {
   const { selectedContext } = state.app;
-  const { selectedNodesIds, isSearchOpen, isMapVisible } = state.tool;
+  const { selectedNodesIds, isSearchOpen, isMapVisible } = state.toolLinks;
   const searchNodes = getToolSearchNodes(state);
   return {
     selectedNodesIds,

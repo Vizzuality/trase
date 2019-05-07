@@ -5,8 +5,8 @@ import { loadTooltip } from 'actions/app.actions';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 
 const isCloroplethEnabled = state => {
-  const firstColumnId = state.tool.selectedColumnsIds[0];
-  const column = state.tool.columns.find(c => c.id === firstColumnId);
+  const firstColumnId = state.toolLinks.selectedColumnsIds[0];
+  const column = state.toolLinks.columns.find(c => c.id === firstColumnId);
   return column ? !column.isChoroplethDisabled : true;
 };
 const mapStateToProps = state => ({

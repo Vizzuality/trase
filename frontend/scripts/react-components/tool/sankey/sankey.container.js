@@ -17,18 +17,18 @@ import {
 import Sankey from 'react-components/tool/sankey/sankey.component';
 
 const mapStateToProps = state => ({
-  links: state.tool.links,
+  links: state.toolLinks.links,
   isVisible: getIsVisible(state),
   isReExpand: getIsReExpand(state),
   sankeySize: state.app.sankeySize,
-  currentQuant: state.tool.currentQuant,
-  detailedView: state.tool.detailedView,
-  selectedNodesIds: state.tool.selectedNodesIds,
-  selectedRecolorBy: state.tool.selectedRecolorBy,
+  currentQuant: state.toolLinks.currentQuant,
+  detailedView: state.toolLinks.detailedView,
+  selectedNodesIds: state.toolLinks.selectedNodesIds,
+  selectedRecolorBy: state.toolLinks.selectedRecolorBy,
   hasExpandedNodesIds: getHasExpandedNodesIds(state),
-  highlightedNodesIds: state.tool.highlightedNodesIds,
-  visibleNodesByColumn: state.tool.visibleNodesByColumn,
-  nodesColoredAtColumn: state.tool.nodesColoredAtColumn,
+  highlightedNodesIds: state.toolLinks.highlightedNodesIds,
+  visibleNodesByColumn: state.toolLinks.visibleNodesByColumn,
+  nodesColoredAtColumn: state.toolLinks.nodesColoredAtColumn,
   lang: state.location.query && state.location.query.lang
 });
 

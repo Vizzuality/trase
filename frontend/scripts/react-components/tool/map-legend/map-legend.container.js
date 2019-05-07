@@ -5,10 +5,10 @@ import { getCurrentHighlightedChoroplethBucket } from 'react-components/tool/too
 import { toggleMapLayerMenu } from 'actions/app.actions';
 
 const mapStateToProps = state => ({
-  choroplethLegend: state.tool.choroplethLegend,
-  selectedMapDimensionsWarnings: state.tool.selectedMapDimensionsWarnings,
-  selectedMapContextualLayersData: state.tool.selectedMapContextualLayersData,
-  currentHighlightedChoroplethBucket: getCurrentHighlightedChoroplethBucket(state.tool)
+  choroplethLegend: state.toolLayers.choroplethLegend,
+  selectedMapDimensionsWarnings: state.toolLayers.selectedMapDimensionsWarnings,
+  selectedMapContextualLayersData: state.toolLayers.selectedMapContextualLayersData,
+  currentHighlightedChoroplethBucket: getCurrentHighlightedChoroplethBucket(state.toolLinks)
 });
 
 const mapDispatchToProps = {

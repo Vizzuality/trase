@@ -3,9 +3,9 @@ import flatten from 'lodash/flatten';
 import groupBy from 'lodash/groupBy';
 import isNodeColumnVisible from 'utils/isNodeColumnVisible';
 
-const getToolNodes = state => state.tool && state.tool.nodes;
-const getSelectedColumnsIds = state => state.tool && state.tool.selectedColumnsIds;
-const getNodesDict = state => state.tool && state.tool.nodesDict;
+const getToolNodes = state => state.toolLinks && state.toolLinks.nodes;
+const getSelectedColumnsIds = state => state.toolLinks && state.toolLinks.selectedColumnsIds;
+const getNodesDict = state => state.toolLinks && state.toolLinks.nodesDict;
 
 const getAllToolSearchNodes = createSelector(
   getToolNodes,

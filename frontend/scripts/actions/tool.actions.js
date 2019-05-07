@@ -121,7 +121,7 @@ const _setBiomeFilterAction = (biomeFilterName, state) => {
       {},
       currentContext.filterBy[0].nodes.find(filterBy => filterBy.name === biomeFilterName)
     );
-    const node = state.tool.nodesDict[selectedBiomeFilter.nodeId];
+    const node = state.toolLinks.nodesDict[selectedBiomeFilter.nodeId];
     selectedBiomeFilter.geoId = node && node.geoId;
   }
 
@@ -174,7 +174,7 @@ export function resetState(refilter = true) {
 // Resets sankey's params that may lead to no flows being returned from the API
 export function resetSankey() {
   return (dispatch, getState) => {
-    const { columns, expandedNodesIds } = getState().tool;
+    const { columns, expandedNodesIds } = getState().toolLinks;
     const { contexts, selectedContext } = getState().app;
     const areNodesExpanded = !isEmpty(expandedNodesIds);
     const currentContext = contexts.find(context => context.id === selectedContext.id);
@@ -254,7 +254,7 @@ export function selectColumn(columnIndex, columnId, reloadLinks = true) {
     const state = getState();
 
     // Action triggered but the column is already present - do nothing
-    if (state.tool.selectedColumnsIds.indexOf(columnId) !== -1) {
+    if (state.toolLinks.selectedColumnsIds.indexOf(columnId) !== -1) {
       return;
     }
 
@@ -264,23 +264,21 @@ export function selectColumn(columnIndex, columnId, reloadLinks = true) {
       columnId
     });
     const selectedNodesIds = getSelectedNodeIdsNotInColumnIndex(
-      state.tool.selectedNodesIds,
+      state.toolLinks.selectedNodesIds,
       columnIndex,
-      state.tool.nodesDict
+      state.toolLinks.nodesDict
     );
     dispatch(updateNodes(selectedNodesIds));
-    const selectedColumn = state.tool.columns.find(c => c.id === columnId);
-    if (
-      selectedColumn?.group === 0 &&
-      selectedColumn.isGeo &&
-      selectedColumn.isChoroplethDisabled
-    ) {
+    const selectedColumn = state.toolLinks.columns.find(c => c.id === columnId);
+    if (selectedColumn && selectedColumn.group === 0 && selectedColumn.isGeo && selectedColumn.isChoroplethDisabled) {
       dispatch(setMapDimensions([null, null]));
-      state.tool.expandedMapSidebarGroupsIds.forEach(id => dispatch(toggleMapSidebarGroup(id)));
-    } else if (selectedColumn.isChoroplethDisabled === false && selectedColumn.isGeo) {
+      state.toolLinks.expandedMapSidebarGroupsIds.forEach(id =>
+        dispatch(toggleMapSidebarGroup(id))
+      );
+    } else if (selectedColumn.isGeo && selectedColumn.isChoroplethDisabled === false) {
       const availableMapDimensions = _getAvailableMapDimensions(
-        state.tool.mapDimensions,
-        state.tool.selectedMapDimensions
+        state.toolLayers.mapDimensions,
+        state.toolLayers.selectedMapDimensions
       );
       dispatch(setMapDimensions(availableMapDimensions));
     }
@@ -333,7 +331,7 @@ export function loadNodes() {
     };
 
     const getMapBaseDataURL = getURLFromParams(GET_MAP_BASE_DATA_URL, params);
-    const selectedMapDimensions = getState().tool.selectedMapDimensions;
+    const selectedMapDimensions = getState().toolLayers.selectedMapDimensions;
 
     fetch(getMapBaseDataURL)
       .then(response => {
@@ -383,7 +381,7 @@ export function loadNodes() {
 
         dispatch({ type: SET_MAP_DIMENSIONS_DATA, payload });
 
-        const selectedBiomeFilter = getState().tool.selectedBiomeFilter;
+        const selectedBiomeFilter = getState().toolLinks.selectedBiomeFilter;
         if (selectedBiomeFilter && selectedBiomeFilter.nodeId) {
           dispatch(_setBiomeFilterAction(selectedBiomeFilter.name, getState()));
         }
@@ -416,13 +414,13 @@ export function loadLinks() {
       context_id: state.app.selectedContext.id,
       start_year: state.app.selectedYears[0],
       end_year: state.app.selectedYears[1],
-      include_columns: state.tool.selectedColumnsIds.join(','),
-      flow_quant: state.tool.selectedResizeBy.name,
-      locked_nodes: state.tool.selectedNodesIds
+      include_columns: state.toolLinks.selectedColumnsIds.join(','),
+      flow_quant: state.toolLinks.selectedResizeBy.name,
+      locked_nodes: state.toolLinks.selectedNodesIds
     };
-    const areNodesExpanded = !isEmpty(state.tool.expandedNodesIds);
+    const areNodesExpanded = !isEmpty(state.toolLinks.expandedNodesIds);
 
-    if (state.tool.detailedView === true) {
+    if (state.toolLinks.detailedView === true) {
       params.n_nodes = NUM_NODES_DETAILED;
     } else if (areNodesExpanded) {
       params.n_nodes = NUM_NODES_EXPANDED;
@@ -430,21 +428,21 @@ export function loadLinks() {
       params.n_nodes = NUM_NODES_SUMMARY;
     }
 
-    if (state.tool.selectedRecolorBy) {
-      if (state.tool.selectedRecolorBy.type === 'qual') {
-        params.flow_qual = state.tool.selectedRecolorBy.name;
-      } else if (state.tool.selectedRecolorBy.type === 'ind') {
-        params.flow_ind = state.tool.selectedRecolorBy.name;
+    if (state.toolLinks.selectedRecolorBy) {
+      if (state.toolLinks.selectedRecolorBy.type === 'qual') {
+        params.flow_qual = state.toolLinks.selectedRecolorBy.name;
+      } else if (state.toolLinks.selectedRecolorBy.type === 'ind') {
+        params.flow_ind = state.toolLinks.selectedRecolorBy.name;
       }
     }
 
-    const selectedBiomeFilter = state.tool.selectedBiomeFilter;
+    const selectedBiomeFilter = state.toolLinks.selectedBiomeFilter;
     if (selectedBiomeFilter && selectedBiomeFilter.name && selectedBiomeFilter.name !== 'none') {
       params.biome_filter_id = selectedBiomeFilter.nodeId;
     }
 
     if (areNodesExpanded) {
-      params.selected_nodes = state.tool.expandedNodesIds.join(',');
+      params.selected_nodes = state.toolLinks.expandedNodesIds.join(',');
     }
 
     const url = getURLFromParams(GET_FLOWS_URL, params);
@@ -473,12 +471,14 @@ export function loadLinks() {
         // if nodes were expanded and some of expanded nodes are not present anymore
         // re-expand nodes
         if (
-          !isEmpty(difference(getState().tool.expandedNodesIds, getState().tool.selectedNodesIds))
+          !isEmpty(
+            difference(getState().toolLinks.expandedNodesIds, getState().toolLinks.selectedNodesIds)
+          )
         ) {
           dispatch(expandNodeSelection());
         }
 
-        if (!isEmpty(getState().tool.selectedNodesIds)) {
+        if (!isEmpty(getState().toolLinks.selectedNodesIds)) {
           dispatch({
             type: FILTER_LINKS_BY_NODES
           });
@@ -493,7 +493,7 @@ export function loadLinks() {
 
 export function loadMapVectorData() {
   return (dispatch, getState) => {
-    const geoColumns = getState().tool.columns.filter(column => column.isGeo === true);
+    const geoColumns = getState().toolLinks.columns.filter(column => column.isGeo === true);
 
     const vectorMaps = geoColumns.map(geoColumn => {
       const vectorData = {
@@ -514,8 +514,8 @@ export function loadMapVectorData() {
             const geoJSON = topojsonFeature(topoJSON, topoJSON.objects[key]);
             setGeoJSONMeta(
               geoJSON,
-              getState().tool.nodesDict,
-              getState().tool.geoIdsDict,
+              getState().toolLayers.nodesDict,
+              getState().toolLayers.geoIdsDict,
               geoColumn.id
             );
             return {
@@ -603,7 +603,7 @@ export function setMapContextLayers(contextualLayers) {
           mapContextualLayers
         });
 
-        const { selectedMapContextualLayers } = getState().tool;
+        const { selectedMapContextualLayers } = getState().toolLayers;
 
         if (
           typeof selectedMapContextualLayers !== 'undefined' &&
@@ -633,7 +633,7 @@ export function selectNode(param, isAggregated = false) {
   const ids = Array.isArray(param) ? param : [param];
   return (dispatch, getState) => {
     ids.forEach(nodeId => {
-      const { selectedNodesIds: currentSelectedNodesIds, expandedNodesIds } = getState().tool;
+      const { selectedNodesIds: currentSelectedNodesIds, expandedNodesIds } = getState().toolLayers;
       const areNodesExpanded = !isEmpty(expandedNodesIds);
 
       if (isAggregated) {
@@ -688,8 +688,8 @@ export function selectNodeFromGeoId(geoId) {
   return (dispatch, getState) => {
     const nodeId = getNodeIdFromGeoId(
       geoId,
-      getState().tool.nodesDict,
-      getState().tool.selectedColumnsIds[0]
+      getState().toolLayers.nodesDict,
+      getState().toolLinks.selectedColumnsIds[0]
     );
 
     // node not in visible Nodes ---> expand node (same behavior as search)
@@ -725,7 +725,7 @@ export function selectExpandedNode(param) {
           }
         });
 
-        const currentSelectedNodesIds = getState().tool.selectedNodesIds;
+        const currentSelectedNodesIds = getState().toolLinks.selectedNodesIds;
         const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, ids);
 
         dispatch(updateNodes(selectedNodesIds));
@@ -753,7 +753,7 @@ export function highlightNode(nodeId, isAggregated, coordinates) {
 
 export function highlightNodeFromGeoId(geoId, coordinates) {
   return (dispatch, getState) => {
-    const { nodesDict, selectedColumnsIds, highlightedNodesIds } = getState().tool;
+    const { nodesDict, selectedColumnsIds, highlightedNodesIds } = getState().toolLinks;
 
     const nodeId = getNodeIdFromGeoId(geoId, nodesDict, selectedColumnsIds[0]);
     if (nodeId === null) {
@@ -772,7 +772,7 @@ export function expandNodeSelection() {
       type: EXPAND_NODE_SELECTION
     });
 
-    const { detailedView } = getState().tool;
+    const { detailedView } = getState().toolLinks;
 
     // if expanding, and if in detailed mode, toggle to overview mode
     if (detailedView) {
@@ -793,7 +793,7 @@ export function collapseNodeSelection() {
       type: COLLAPSE_NODE_SELECTION
     });
 
-    const { forcedOverview } = getState().tool;
+    const { forcedOverview } = getState().toolLinks;
 
     // if shrinking, and if overview was previously forced, go back to detailed
     if (forcedOverview) {
@@ -810,7 +810,7 @@ export function collapseNodeSelection() {
 
 export function navigateToProfile(nodeId, year, contextId) {
   return (dispatch, getState) => {
-    const node = getState().tool.nodesDict[nodeId];
+    const node = getState().toolLinks.nodesDict[nodeId];
     dispatch({
       type: 'profileNode',
       payload: { query: { nodeId, year, contextId }, profileType: node.profileType }
@@ -821,10 +821,10 @@ export function navigateToProfile(nodeId, year, contextId) {
 export function loadLinkedGeoIDs() {
   return (dispatch, getState) => {
     const state = getState();
-    const selectedNodesIds = state.tool.selectedNodesIds;
+    const selectedNodesIds = state.toolLinks.selectedNodesIds;
 
     // when selection only contains geo nodes (column 0), we should not call get_linked_geoids
-    const selectedNodesColumnsPos = getSelectedNodesColumnsPos(state.tool);
+    const selectedNodesColumnsPos = getSelectedNodesColumnsPos(state.toolLinks);
     const selectedNonGeoNodeIds = selectedNodesIds.filter(
       (nodeId, index) => selectedNodesColumnsPos[index] !== 0
     );
@@ -839,7 +839,7 @@ export function loadLinkedGeoIDs() {
       context_id: state.app.selectedContext.id,
       years: uniq([state.app.selectedYears[0], state.app.selectedYears[1]]),
       nodes_ids: selectedNodesIds,
-      target_column_id: state.tool.selectedColumnsIds[0]
+      target_column_id: state.toolLinks.selectedColumnsIds[0]
     };
     const url = getURLFromParams(GET_LINKED_GEO_IDS_URL, params);
 
@@ -900,7 +900,7 @@ export function setMapDimensions(uids) {
 export function loadMapChoropeth(getState, dispatch) {
   const state = getState();
 
-  const uids = state.tool.selectedMapDimensions;
+  const uids = state.toolLayers.selectedMapDimensions;
 
   if (compact(uids).length === 0) {
     dispatch({
@@ -911,7 +911,7 @@ export function loadMapChoropeth(getState, dispatch) {
   }
 
   const selectedMapDimensions = compact(uids).map(uid =>
-    state.tool.mapDimensions.find(dimension => dimension.uid === uid)
+    state.toolLayers.mapDimensions.find(dimension => dimension.uid === uid)
   );
 
   const params = {

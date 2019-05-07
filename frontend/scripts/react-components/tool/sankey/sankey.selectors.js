@@ -2,8 +2,8 @@ import { createSelector } from 'reselect';
 import isEqual from 'lodash/isEqual';
 import isEmpty from 'lodash/isEmpty';
 
-const getExpandedNodesIds = state => state.tool.expandedNodesIds;
-const getSelectedNodesIds = state => state.tool.selectedNodesIds;
+const getExpandedNodesIds = state => state.toolLinks.expandedNodesIds;
+const getSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 
 export const getIsVisible = createSelector(
   [getExpandedNodesIds, getSelectedNodesIds],
