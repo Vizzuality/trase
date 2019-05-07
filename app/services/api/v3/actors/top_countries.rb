@@ -25,6 +25,10 @@ module Api
           raise "#{attribute_name} attribute not found" unless attribute
 
           instance_variable_set("@#{attribute_name}_attribute", attribute)
+          instance_variable_set(
+            "@#{attribute_name}_chart_attribute",
+            @chart_config.named_chart_attribute(attribute_name)
+          )
         end
 
         # Top nodes (destinations) linked to this actor node across years
@@ -32,6 +36,9 @@ module Api
           @top_nodes_summary.call(
             @destination_node_type.name,
             @commodity_production_attribute
+          ).merge(
+            title: @chart_config.chart.title,
+            legend_title: @commodity_production_chart_attribute.legend_name
           )
         end
       end
