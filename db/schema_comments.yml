@@ -22,7 +22,7 @@ tables:
       - name: display_name
         comment: Name of attribute for display in chart
       - name: legend_name
-        comment: Legend title; you can use $commodity_name$, $company_name$ and $year$
+        comment: Legend title; you can use {{commodity_name}}, {{company_name}}, {{jurisdiction_name}} and {{year}}
       - name: display_type
         comment: Type of display, only used for trajectory deforestation plot in place profiles; e.g. area, line
       - name: display_style
@@ -135,7 +135,7 @@ tables:
       - name: identifier
         comment: Identifier used to map this chart to a part of code which contains calculation logic
       - name: title
-        comment: Title of chart for display; you can use $commodity_name$, $company_name$ and $year$
+        comment: Title of chart for display; you can use {{commodity_name}}, {{company_name}}, {{jurisdiction_name}} and {{year}}
       - name: position
         comment: Display order in scope of profile
   - name: commodities
