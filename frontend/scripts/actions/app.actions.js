@@ -1,7 +1,6 @@
 import isEmpty from 'lodash/isEmpty';
 import {
   GET_DISCLAIMER_URL,
-  GET_SITE_DIVE_URL,
   GET_NODES_WITH_SEARCH_URL,
   getURLFromParams
 } from 'utils/getURLFromParams';
@@ -137,29 +136,6 @@ export function toggleDropdown(dropdownId) {
   return {
     type: TOGGLE_DROPDOWN,
     dropdownId
-  };
-}
-
-export function displayStoryModal(storyId) {
-  return dispatch => {
-    fetch(`${getURLFromParams(GET_SITE_DIVE_URL)}/${storyId}`)
-      .then(resp => {
-        if (resp.ok) return resp.text();
-        throw new Error(resp.statusText);
-      })
-      .then(resp => JSON.parse(resp))
-      .then(({ data }) =>
-        dispatch({
-          type: DISPLAY_STORY_MODAL,
-          payload: {
-            visibility: true,
-            modalParams: data
-          }
-        })
-      )
-      .catch(err => {
-        console.error('Error loading site dive.', err);
-      });
   };
 }
 

@@ -1,4 +1,4 @@
-import { displayStoryModal, loadDisclaimer, resize } from 'actions/app.actions';
+import { loadDisclaimer, resize } from 'actions/app.actions';
 import {
   GET_COLUMNS,
   RESET_TOOL_LOADERS,
@@ -29,11 +29,6 @@ export const setToolLoaders = dispatch =>
 export const loadDisclaimerTool = dispatch => dispatch(loadDisclaimer());
 
 export const resizeSankeyTool = dispatch => dispatch(resize());
-
-export const loadStoryModalTool = (dispatch, getState) => {
-  const { query = {} } = getState().location;
-  return query.story && dispatch(displayStoryModal(query.story));
-};
 
 export const loadToolInitialData = (dispatch, getState) => {
   const state = getState();
