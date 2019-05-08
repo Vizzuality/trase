@@ -1,6 +1,6 @@
 /* eslint-disable no-shadow */
 import connect from 'base/connect';
-import ToolContent from 'components/tool/tool-content.component';
+// import ToolContent from 'components/tool/tool-content.component';
 import { resetSankey } from '../../actions/tool.actions';
 
 const mapMethodsToState = state => ({
@@ -15,7 +15,7 @@ const mapViewCallbacksToActions = () => ({
 });
 
 export default connect(
-  ToolContent,
+  // ToolContent,
   mapMethodsToState,
   mapViewCallbacksToActions
 );
