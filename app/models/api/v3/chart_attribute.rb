@@ -41,7 +41,10 @@ module Api
                 presence: true,
                 uniqueness: {scope: :chart},
                 if: proc { |chart_attr| chart_attr.identifier.blank? }
-      validates :identifier, uniqueness: {scope: :chart, allow_blank: true}
+      validates :identifier,
+                presence: true,
+                uniqueness: {scope: :chart},
+                if: proc { |chart_attr| chart_attr.position.blank? }
       validates_with OneAssociatedAttributeValidator,
                      attributes: [:chart_ind, :chart_qual, :chart_quant]
       validates_with AttributeAssociatedOnceValidator,
@@ -54,6 +57,7 @@ module Api
                      attribute: :chart_quant, scope: [:chart_id, :state_average],
                      if: :new_chart_quant_given?
 
+      before_save :nullify_empty_identifier
       after_commit :refresh_dependencies
 
       stringy_array :years
@@ -73,6 +77,12 @@ module Api
         Api::V3::ChartInd.distinct.pluck(:chart_attribute_id) +
           Api::V3::ChartQual.distinct.pluck(:chart_attribute_id) +
           Api::V3::ChartQuant.distinct.pluck(:chart_attribute_id)
+      end
+
+      private
+
+      def nullify_empty_identifier
+        self.identifier = nil if identifier.blank?
       end
     end
   end
