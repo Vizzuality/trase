@@ -17,17 +17,19 @@ export function mapToVanilla(VanillaComponent, methodProps, callbackProps) {
           this.instance.callbacks[callback] = this.props[callback];
         });
       }
-
-      if (this.instance.onCreated) {
-        this.instance.onCreated(this.props);
+      if (this.instance.onCreated) this.instance.onCreated(this.props);
+      if (!this.instance.onRemoved) {
+        console.error(
+          `Vanilla component ${
+            VanillaComponent.name
+          } doesn't implement unmount logic, possible memory leak`
+        );
       }
     }
 
     componentWillUnmount() {
       if (this.instance.onRemoved) {
         this.instance.onRemoved();
-      } else {
-        console.warn('Vanilla component doesnt implement unmount logic, possible memory leak');
       }
       this.instance = null;
     }

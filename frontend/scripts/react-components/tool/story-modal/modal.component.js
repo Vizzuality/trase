@@ -13,19 +13,22 @@ class ModalComponent {
       modalParams: null
     };
 
-    this._setVars();
-  }
-
-  _setVars() {
     this.el = document.querySelector('.js-modal');
     this.veil = document.querySelector('.js-veil');
+
+    this._setVisibility();
+    this.onVeilClick = () => this._toggleVisibility();
+  }
+
+  onRemoved() {
+    this.veil.removeEventListener('click', this.onVeilClick);
   }
 
   _setEventListeners() {
     const closeButton = this.el.querySelector('.js-close');
 
-    this.veil.addEventListener('click', () => this._toggleVisibility());
-    closeButton.addEventListener('click', () => this._toggleVisibility());
+    this.veil.addEventListener('click', this.onVeilClick);
+    closeButton.addEventListener('click', this.onVeilClick);
     document.onkeydown = e => this._onKeyDown(e);
   }
 
@@ -43,7 +46,8 @@ class ModalComponent {
     this.callbacks.onClose();
   }
 
-  getModal(modal) {
+  getModal({ modal }) {
+    console.log('modal', modal);
     if (isEqual(modal.modalParams, this.state.modalParams)) {
       Object.assign(this.state, { visibility: modal.visibility });
     } else {
@@ -60,7 +64,6 @@ class ModalComponent {
 
   render() {
     this.el.innerHTML = ModalTemplate({ data: this.state.modalParams });
-
     this._setEventListeners();
   }
 }
