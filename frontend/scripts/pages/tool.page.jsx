@@ -16,10 +16,10 @@ import { Provider } from 'react-redux';
 
 import MapContainer from 'containers/tool/map.container';
 import ModalContainer from 'containers/tool/story-modal.container';
-import TooltipContainer from 'containers/shared/help-tooltip.container';
 import CookieBanner from 'react-components/shared/cookie-banner';
 import FlowContentContainer from 'react-components/tool/tool-content/tool-content.container';
 import FiltersNav from 'react-components/nav/filters-nav/filters-nav.container';
+import TooltipContainer from 'react-components/tool/help-tooltip/help-tooltip.container';
 import TitlebarContainer from 'react-components/tool/titlebar/titlebar.container';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import NodesTitlesContainer from 'react-components/tool/nodes-titles/nodes-titles.container';
@@ -47,7 +47,7 @@ export const mount = (root, store) => {
     feedback: FeedbackMarkup()
   });
 
-  containers = [new MapContainer(store), new TooltipContainer(store), new ModalContainer(store)];
+  containers = [new MapContainer(store), new ModalContainer(store)];
 
   // TODO remove this
   // In order to avoid adding loading states when not needed we check that the selectedContext
@@ -98,6 +98,7 @@ export const mount = (root, store) => {
         <NodesTitlesContainer />
         <Sankey />
         <TitlebarContainer />
+        <TooltipContainer />
       </>
     </Provider>,
     document.getElementById('js-react-vanilla-bridge-container')
@@ -113,7 +114,6 @@ export const unmount = () => {
   unmountComponentAtNode(document.getElementById('js-columns-selector-react'));
   unmountComponentAtNode(document.getElementById('cookie-banner'));
   unmountComponentAtNode(document.getElementById('js-react-vanilla-bridge-container'));
-  unmountComponentAtNode(document.getElementById('js-map-context'));
   document.querySelector('body').classList.remove('-overflow-hidden');
   containers.forEach(container => container.remove());
 };
