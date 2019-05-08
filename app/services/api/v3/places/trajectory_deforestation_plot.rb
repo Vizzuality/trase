@@ -17,16 +17,8 @@ module Api
           @node = node
           @year = year
 
-          # This remains hardcoded, because it only makes sense
-          # for Brazil soy for now
-          @place_quals = Dictionary::PlaceQuals.new(@node, @year)
-          state_qual = @place_quals.get(NodeTypeName::STATE)
-          @state_name = state_qual && state_qual['value']
-          if @state_name.present?
-            @state_ranking = StateRanking.new(
-              @context, @node, @year, @state_name
-            )
-          end
+          initialize_state_ranking
+
           @chart_config = initialize_chart_config(
             :place, nil, :place_trajectory_deforestation
           )
@@ -47,19 +39,28 @@ module Api
 
         attr_reader :years, :chart_attributes
 
+        def initialize_state_ranking
+          # This remains hardcoded, because it only makes sense
+          # for Brazil soy for now
+          state_qual = Api::V3::Qual.find_by_name(NodeTypeName::STATE)
+          return unless state_qual
+
+          @values = Api::V3::NodeAttributeValuesPreloader.new(@node, @year)
+          state_name = @values.get(state_qual.simple_type, state_qual.id)
+          return unless state_name.present?
+
+          @state_ranking = StateRanking.new(@context, @node, @year, state_name)
+        end
+
         def initialize_min_max_year
           min_years = []
           max_years = []
           @chart_config.attributes.each do |attribute|
             min_max =
               if attribute.is_a? Api::V3::Quant
-                @node.temporal_place_quants.where(
-                  quant_id: attribute.id
-                )
+                @node.node_quants.where(quant_id: attribute.id)
               elsif attribute.is_a? Api::V3::Ind
-                @node.temporal_place_inds.where(
-                  ind_id: attribute.id
-                )
+                @node.node_inds.where(ind_id: attribute.id)
               end
             min_max = min_max.
               except(:select).
@@ -94,13 +95,9 @@ module Api
               attribute
             )
           elsif attribute.is_a? Api::V3::Quant
-            @node.temporal_place_quants.where(
-              quant_id: attribute_id
-            )
+            @node.node_quants.where(quant_id: attribute_id)
           elsif attribute.is_a? Api::V3::Ind
-            @node.temporal_place_inds.where(
-              ind_id: attribute_id
-            )
+            @node.node_inds.where(ind_id: attribute_id)
           end
         end
 
