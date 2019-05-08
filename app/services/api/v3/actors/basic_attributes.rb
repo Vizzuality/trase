@@ -143,7 +143,7 @@ module Api
         def summary_of_total_trade_volume(profile_type)
           if @trade_total_current_year_raw.zero?
             return "<span class=\"notranslate\">#{@node.name.humanize}</span> \
-            #{profile_type.first(-1)}d 0 tons of soy from \
+            #{profile_type.first(-1)}d 0 tons of #{@commodity_name} from \
             #{@context.country.name} in \
 <span class=\"notranslate\">#{@year}</span>."
           end
@@ -151,7 +151,7 @@ module Api
           text = "<span class=\"notranslate\">#{@node.name.humanize}</span> \
 was the \
 <span class=\"notranslate\">#{@trade_total_rank_in_country_formatted}</span>\
-largest #{profile_type} of soy from \
+largest #{profile_type} of #{@commodity_name} from \
           #{@context.country.name} in \
 <span class=\"notranslate\">#{@year}</span>, accounting for \
 <span class=\"notranslate\">#{@trade_total_current_year_formatted}</span>."
@@ -183,12 +183,13 @@ largest #{profile_type} of soy from \
 <span class=\"notranslate\">#{@source_municipalities_count_formatted}</span> \
 municipalities, or \
 <span class=\"notranslate\">#{@perc_municipalities_formatted}</span> \
-of the soy production municipalities."
+of the #{@commodity_name} production municipalities."
         end
 
         def summary_of_destinations(profile_type)
           if @perc_exports_formatted
-            " The main destination of the soy #{profile_type.first(-1)}d by \
+            " The main destination of the #{@commodity_name} \
+#{profile_type.first(-1)}d by \
 <span class=\"notranslate\">#{@node.name.humanize}</span> is \
 <span class=\"notranslate\">#{@main_destination_name.humanize}</span>, \
 accounting for \
@@ -199,6 +200,7 @@ accounting for \
         end
 
         def initialize_trade_volume_for_summary
+          @commodity_name = @context.commodity.name.downcase
           initialize_trade_total_current_year
           initialize_trade_total_difference
           initialize_trade_total_rank

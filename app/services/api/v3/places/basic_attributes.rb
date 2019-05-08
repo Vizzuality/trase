@@ -42,7 +42,7 @@ module Api
         def summary
           if @commodity_production.zero?
             return "<span class=\"notranslate\">#{@node.name.titleize}</span> \
-did not produce any soy in \
+did not produce any #{@commodity_name} in \
 <span class=\"notranslate\">#{@year}</span>."
           end
 
@@ -50,7 +50,7 @@ did not produce any soy in \
 <span class=\"notranslate\">#{@node.name.titleize}</span> produced \
 <span class=\"notranslate\">#{@commodity_production_formatted}</span> \
 <span class=\"notranslate\">#{@commodity_production_unit}</span> of \
-<span class=\"notranslate\">#{@context.commodity.name.downcase}</span> \
+<span class=\"notranslate\">#{@commodity_name}</span> \
 occupying a total of \
 <span class=\"notranslate\">#{@commodity_area_formatted}</span> \
 <span class=\"notranslate\">#{@commodity_area_unit}</span> of land."
@@ -149,6 +149,7 @@ occupying a total of \
         end
 
         def initialize_commodity_production
+          @commodity_name = @context.commodity.name.downcase
           commodity_production_attribute_value = attribute_value(
             @commodity_production_attribute
           )
@@ -283,7 +284,7 @@ occupying a total of \
 ranks <span class=\"notranslate\">#{country_ranking}</span> in \
 <span class=\"notranslate\">#{@context.country.name.capitalize}</span> \
 in \
-<span class=\"notranslate\">#{@context.commodity.name.downcase}</span> \
+<span class=\"notranslate\">#{@commodity_name}</span> \
 production#{state_ranking_text}."
         end
         # rubocop:enable Metrics/AbcSize
