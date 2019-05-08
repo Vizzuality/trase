@@ -1,8 +1,13 @@
 export default class {
-  onCreated() {
+  onCreated({ loading }) {
     this.onSankeyReset = this._resetSankey.bind(this);
 
     this._setVars();
+    this.showLoader({ loading });
+  }
+
+  onRemove() {
+    this.sankeyResetButton.removeEventListener('click', this.onSankeyReset);
   }
 
   _setVars() {

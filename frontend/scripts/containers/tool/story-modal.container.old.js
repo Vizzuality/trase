@@ -1,5 +1,5 @@
 import connect from 'base/connect';
-import ModalComponent from 'components/tool/modal.component';
+// import ModalComponent from 'components/tool/modal.component';
 import { closeStoryModal } from 'actions/app.actions';
 
 const mapMethodsToState = state => ({
@@ -11,7 +11,7 @@ const mapViewCallbacksToActions = () => ({
 });
 
 export default connect(
-  ModalComponent,
+  // ModalComponent,
   mapMethodsToState,
   mapViewCallbacksToActions
 );
