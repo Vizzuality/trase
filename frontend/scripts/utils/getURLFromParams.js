@@ -17,7 +17,6 @@ export const GET_DISCLAIMER_URL = 'GET_DISCLAIMER_URL';
 export const POST_SUBSCRIBE_NEWSLETTER_URL = 'POST_SUBSCRIBE_NEWSLETTER_URL';
 export const GET_TWEETS_URL = 'GET_TWEETS_URL';
 export const GET_POSTS_URL = 'GET_POSTS_URL';
-export const GET_SITE_DIVE_URL = 'GET_SITE_DIVE_URL';
 export const GET_TESTIMONIALS_URL = 'GET_TESTIMONIALS_URL';
 export const GET_MARKDOWN_CONTENT_URL = 'GET_MARKDOWN_CONTENT_URL';
 export const GET_TEAM_URL = 'GET_TEAM_URL';
@@ -51,7 +50,6 @@ const API_ENDPOINTS = {
   [GET_JSON_DATA_DOWNLOAD_FILE_URL]: { api: 3, endpoint: '/contexts/$context_id$/download.json' },
   [GET_LINKED_GEO_IDS_URL]: { api: 3, endpoint: '/contexts/$context_id$/linked_nodes' },
   [POST_SUBSCRIBE_NEWSLETTER_URL]: { api: 3, endpoint: '/newsletter_subscriptions' },
-  [GET_SITE_DIVE_URL]: { api: 'content', endpoint: '/site_dives' },
   [GET_POSTS_URL]: { api: 'content', endpoint: '/posts' },
   [GET_TWEETS_URL]: { api: 'content', endpoint: '/tweets' },
   [GET_DISCLAIMER_URL]: { api: 'local', endpoint: 'disclaimer.json' },
