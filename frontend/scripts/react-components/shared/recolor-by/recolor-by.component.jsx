@@ -59,7 +59,7 @@ class RecolorBy extends Component {
         data-test={`recolor-by-item-${kebabCase(recolorBy.label)}`}
         key={recolorBy.label}
       >
-        <Text size="md" weight="regular" className="recolor-by-item-title">
+        <Text as="span" size="md" weight="regular" className="recolor-by-item-title">
           {recolorBy.label}
           {recolorBy.description && <Tooltip constraint="window" text={recolorBy.description} />}
         </Text>
