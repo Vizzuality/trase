@@ -3,11 +3,11 @@ export default class {
     this.nodesTitles = document.querySelector('.js-nodes-titles');
   }
 
-  highlightNode(showTitles) {
+  highlightNode({ showTitles }) {
     this._toggle(showTitles);
   }
 
-  selectNodes(selectedNodesData) {
+  selectNodes({ selectedNodesData }) {
     this._toggle(selectedNodesData.length > 0);
   }
 
