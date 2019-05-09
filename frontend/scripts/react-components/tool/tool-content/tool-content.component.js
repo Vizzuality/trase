@@ -6,7 +6,7 @@ export default class {
     this.showLoader({ loading });
   }
 
-  onRemove() {
+  onRemoved() {
     this.sankeyResetButton.removeEventListener('click', this.onSankeyReset);
   }
 

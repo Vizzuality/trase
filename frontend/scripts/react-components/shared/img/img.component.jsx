@@ -6,17 +6,6 @@ function Img(props) {
   // srcSet is just using the first item, the idea is to pass it as it to the img element
   // and expose an ImgContextProvider that the users can use to pass their sizes media-queries
   const { as, alt, src, srcSet, sizes, ...rest } = props;
-  if (typeof alt === 'undefined' && NODE_ENV_DEV) {
-    console.warn(
-      "You're using an image without an alt text, this will harm SEO and accessibility."
-    );
-  }
-
-  if (!srcSet && NODE_ENV_DEV) {
-    console.warn(
-      "You're not providing a srcSet for responsive img alternatives, this will harm performance."
-    );
-  }
 
   return (
     <InView triggerOnce>

@@ -70,16 +70,10 @@ export const mount = (root, store) => {
 
   render(
     <Provider store={store}>
-      <MapDimensionsContainer />
-    </Provider>,
-    document.querySelector('.js-dimensions')
-  );
-
-  render(
-    <Provider store={store}>
       <>
         <MapContainer />
         <MapBasemaps />
+        <MapDimensionsContainer />
         <FlowContentContainer />
         <MapLegend />
         <MapContextContainer />
@@ -102,6 +96,5 @@ export const unmount = () => {
   unmountComponentAtNode(document.getElementById('js-tool-nav-react'));
   unmountComponentAtNode(document.getElementById('js-columns-selector-react'));
   unmountComponentAtNode(document.getElementById('js-react-vanilla-bridge-container'));
-  unmountComponentAtNode(document.getElementById('js-map-context'));
   document.querySelector('body').classList.remove('-overflow-hidden');
 };
