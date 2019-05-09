@@ -62,12 +62,12 @@ module Api
               original_attribute = @chart_config.named_attribute(name)
               next nil unless original_attribute
 
-              [
-                name,
-                @values.get(
-                  original_attribute.simple_type, original_attribute.id
-                )
-              ]
+              value = @values.get(
+                original_attribute.simple_type, original_attribute.id
+              )
+              next nil unless value
+
+              [name, value]
             end
           Hash[values.compact]
         end
