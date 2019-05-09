@@ -145,105 +145,7 @@ const methodProps = [
     returned: ['visibleNodes', 'mapVectorData']
   }
 ];
-
-// const mapMethodsToState = state => ({
-// showLoadedMap: {
-//   _comparedValue: state => state.tool.mapVectorData,
-//   _returnedValue: state => ({
-// mapVectorData: state.tool.mapVectorData,
-// currentPolygonType: state.tool.selectedColumnsIds,
-// selectedNodesGeoIds: getSelectedNodesGeoIds(state.tool),
-// recolorByNodeIds: state.tool.recolorByNodeIds,
-// choropleth: state.tool.choropleth,
-// linkedGeoIds: state.tool.linkedGeoIds,
-// defaultMapView: state.app.selectedContext ? state.app.selectedContext.map : null,
-// biomeFilter: state.tool.selectedBiomeFilter,
-// forceDefaultMapView: !state.tool.selectedNodesIds.length,
-// selectedGeoIds: getSelectedNodesGeoIds(state.tool),
-// highlightedGeoId: getHighlightedNodesGeoIds(state.tool)[0]
-//   })
-// },
-// selectPolygonType: {
-//   _comparedValue: state =>
-//     state.tool.selectedColumnsIds ? state.tool.selectedColumnsIds[0] : undefined,
-//   _returnedValue: state => ({
-//     selectedColumnsIds: state.tool.selectedColumnsIds,
-//     choropleth: state.tool.choropleth,
-//     biomeFilter: state.tool.selectedBiomeFilter,
-//     linkedGeoIds: state.tool.linkedGeoIds,
-//     defaultMapView: state.tool.selectedContext ? state.tool.selectedContext.map : null,
-//     forceDefaultMapView: !state.tool.selectedNodesIds.length
-//   })
-// },
-// selectPolygons: {
-//   _comparedValue: state => getSelectedNodesGeoIds(state.tool),
-//   _returnedValue: state => ({
-//     selectedGeoIds: getSelectedNodesGeoIds(state.tool),
-//     linkedGeoIds: state.tool.linkedGeoIds,
-//     defaultMapView: state.app.selectedContext ? state.app.selectedContext.map : null,
-//     forceDefaultMapView: !state.tool.selectedNodesIds.length
-//   })
-// },
-// highlightPolygon: {
-//   _comparedValue: state => getHighlightedNodesGeoIds(state.tool),
-//   _returnedValue: state => ({
-//     selectedGeoIds: getSelectedNodesGeoIds(state.tool),
-//     highlightedGeoId: getHighlightedNodesGeoIds(state.tool)[0]
-//   })
-// },
-// setChoropleth: {
-//   _comparedValue: state => state.tool.choropleth,
-//   _returnedValue: state => ({
-//     choropleth: state.tool.choropleth,
-//     selectedBiomeFilter: state.tool.selectedBiomeFilter,
-//     linkedGeoIds: state.tool.linkedGeoIds,
-//     defaultMapView: state.tool.selectedContext ? state.tool.selectedContext.map : null,
-//     forceDefaultMapView: !state.tool.selectedNodesIds.length
-//   })
-// },
-// loadContextLayers: state.tool.selectedMapContextualLayersData,
-// showLinkedGeoIds: {
-//   _comparedValue: state => state.tool.linkedGeoIds,
-//   _returnedValue: state => ({
-//     choropleth: state.tool.choropleth,
-//     selectedBiomeFilter: state.tool.selectedBiomeFilter,
-//     linkedGeoIds: state.tool.linkedGeoIds,
-//     selectedGeoIds: getSelectedNodesGeoIds(state.tool),
-//     defaultMapView: state.app.selectedContext ? state.app.selectedContext.map : null,
-//     forceDefaultMapView: !state.tool.selectedNodesIds.length
-//   })
-// },
-// invalidate: state.tool.isMapVisible,
-// setBasemap: {
-//   _comparedValue: state => getBasemap(state.tool),
-//   _returnedValue: state => ({
-// basemapId: getBasemap(state.tool),
-// choropleth: state.tool.choropleth,
-// selectedBiomeFilter: state.tool.selectedBiomeFilter,
-// linkedGeoIds: state.tool.linkedGeoIds,
-// defaultMapView: state.tool.selectedContext ? state.tool.selectedContext.map : null,
-// forceDefaultMapView: !state.tool.selectedNodesIds.length
-//   })
-// },
-// filterByBiome: {
-//   _comparedValue: state => state.tool.selectedBiomeFilter,
-//   _returnedValue: state => ({
-//     choropleth: state.tool.choropleth,
-//     selectedBiomeFilter: state.tool.selectedBiomeFilter,
-//     linkedGeoIds: state.tool.linkedGeoIds,
-//     defaultMapView: state.tool.selectedContext ? state.tool.selectedContext.map : null,
-//     forceDefaultMapView: !state.tool.selectedNodesIds.length
-//   })
-// },
-//   updatePointShadowLayer: {
-//     _comparedValue: state => state.tool.visibleNodes,
-//     _returnedValue: state => ({
-//       mapVectorData: state.tool.mapVectorData,
-//       visibleNodes: state.tool.visibleNodes
-//     })
-//   }
-// });
-
+this.setState();
 const mapDispatchToProps = {
   onPolygonClicked: geoId => selectNodeFromGeoId(geoId),
   onPolygonHighlighted: (geoId, coordinates) => highlightNodeFromGeoId(geoId, coordinates),
@@ -252,8 +154,7 @@ const mapDispatchToProps = {
   onMoveEnd: (latlng, zoom) => saveMapView(latlng, zoom)
 };
 
-export default console.log('hiiiii') ||
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(mapToVanilla(Map, methodProps, Object.keys(mapDispatchToProps)));
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(mapToVanilla(Map, methodProps, Object.keys(mapDispatchToProps)));
