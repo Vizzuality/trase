@@ -27,15 +27,6 @@ module Api
         class FlowPath < Api::V3::Readonly::BaseModel
           self.table_name = 'dashboards_flow_paths_mv'
 
-          def self.refresh_dependents(options = {})
-            [
-              Api::V3::Readonly::Dashboards::FlowAttribute,
-              Api::V3::Readonly::Dashboards::NodeAttribute
-            ].each do |mview_klass|
-              mview_klass.refresh(options.merge(skip_dependencies: true))
-            end
-          end
-
           def self.long_running?
             true
           end

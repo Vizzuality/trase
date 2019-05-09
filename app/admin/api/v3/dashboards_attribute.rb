@@ -8,7 +8,7 @@ ActiveAdmin.register Api::V3::DashboardsAttribute, as: 'DashboardsAttribute' do
     :dashboards_quant
   ]
 
-  permit_params :dashboards_attribute_group_id, :position, :chart_type,
+  permit_params :dashboards_attribute_group_id, :position,
                 :readonly_attribute_id
 
   after_action :clear_cache, only: [:create, :update, :destroy]
@@ -32,9 +32,6 @@ ActiveAdmin.register Api::V3::DashboardsAttribute, as: 'DashboardsAttribute' do
       input :position,
             required: true,
             hint: object.class.column_comment('position')
-      input :chart_type,
-            required: true,
-            hint: object.class.column_comment('chart_type')
     end
     f.actions
   end
@@ -43,7 +40,6 @@ ActiveAdmin.register Api::V3::DashboardsAttribute, as: 'DashboardsAttribute' do
     column :readonly_attribute_display_name
     column('Dashboards Attribute Group') { |attribute| attribute.dashboards_attribute_group&.name }
     column :position
-    column :chart_type
     actions
   end
 
@@ -52,7 +48,6 @@ ActiveAdmin.register Api::V3::DashboardsAttribute, as: 'DashboardsAttribute' do
       row :readonly_attribute_display_name
       row :dashboards_attribute_group
       row :position
-      row :chart_type
       row :created_at
       row :updated_at
     end

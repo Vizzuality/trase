@@ -222,8 +222,6 @@ tables:
   - name: dashboards_attributes
     comment: Attributes (inds/quals/quants) available in dashboards
     columns:
-      - name: chart_type
-        comment: Type of chart to use in dashboards
       - name: position
         comment: Display order in scope of group
   - name: dashboards_inds
@@ -519,25 +517,6 @@ materialized_views:
     columns:
       - name: attribute_id
         comment: References the unique id in attributes_mv.
-  - name: dashboards_flow_attributes_mv
-    comment: Materialized view which merges dashboards_attributes_mv and attributes_mv for attributes with values in flow_inds/quals/quants
-    columns:
-      - name: country_id
-        comment: References country id (via flows -> contexts) - for dashboards filtering
-      - name: commodity_id
-        comment: References commodity id (via flows -> contexts) - for dashboards filtering
-      - name: path
-        comment: Flow path
-      - name: attribute_id
-        comment: References the unique id in attributes_mv.
-      - name: display_name
-        comment: Attribute display name
-      - name: tooltip_text
-        comment: Attribute tooltip_text
-      - name: dashboards_attribute_group_id
-        comment: References group in dashboards_attribute_groups
-      - name: position
-        comment: Position within group
   - name: download_attributes_mv
     comment: Materialized view which merges download_quals and download_quants with download_attributes.
     columns:

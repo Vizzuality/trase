@@ -15,8 +15,7 @@ shared_context 'api v3 dashboards attributes' do
       dashboards_attribute = FactoryBot.create(
         :api_v3_dashboards_attribute,
         dashboards_attribute_group_id: api_v3_dashboards_attribute_group_environmental.id,
-        position: 1,
-        chart_type: 'line'
+        position: 1
       )
       FactoryBot.create(
         :api_v3_dashboards_qual,
@@ -39,8 +38,7 @@ shared_context 'api v3 dashboards attributes' do
       dashboards_attribute = FactoryBot.create(
         :api_v3_dashboards_attribute,
         dashboards_attribute_group_id: api_v3_dashboards_attribute_group_environmental.id,
-        position: 2,
-        chart_type: 'bar'
+        position: 2
       )
       FactoryBot.create(
         :api_v3_dashboards_ind,

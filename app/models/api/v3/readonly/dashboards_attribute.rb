@@ -5,9 +5,6 @@
 #  id                            :bigint(8)        primary key
 #  dashboards_attribute_group_id :bigint(8)
 #  position                      :integer
-#  chart_type                    :string
-#  created_at                    :datetime
-#  updated_at                    :datetime
 #  attribute_id                  :bigint(8)
 #
 # Indexes
@@ -30,15 +27,6 @@ module Api
 
         def self.refresh_dependencies(options = {})
           Api::V3::Readonly::Attribute.refresh(options.merge(skip_dependents: true))
-        end
-
-        def self.refresh_dependents(options = {})
-          [
-            Api::V3::Readonly::Dashboards::FlowAttribute,
-            Api::V3::Readonly::Dashboards::NodeAttribute
-          ].each do |mview_klass|
-            mview_klass.refresh(options.merge(skip_dependencies: true))
-          end
         end
       end
     end

@@ -872,84 +872,6 @@ paths:
                     items:
                       $ref: "#/components/schemas/DashboardsSearchNode"
 
-  /dashboards/attributes:
-    get:
-      tags:
-        - dashboards
-      summary: Attributes matching selected filters
-      parameters:
-        - $ref: "#/components/parameters/dashboards_destinations_ids"
-        - $ref: "#/components/parameters/dashboards_countries_ids"
-        - $ref: "#/components/parameters/dashboards_commodities_ids"
-        - $ref: "#/components/parameters/dashboards_sources_ids"
-        - $ref: "#/components/parameters/dashboards_companies_ids"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/DashboardsAttribute"
-                  meta:
-                    type: object
-                    properties:
-                      groups:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            id:
-                              type: integer
-                            name:
-                              type: string
-
-  /dashboards/chart_data:
-    get:
-      deprecated: true
-      tags:
-        - dashboards
-      summary: Data formatted for display in charts
-      parameters:
-        - $ref: "#/components/parameters/dashboards_destinations_ids"
-        - $ref: "#/components/parameters/dashboards_countries_ids"
-        - $ref: "#/components/parameters/dashboards_commodities_ids"
-        - $ref: "#/components/parameters/dashboards_sources_ids"
-        - $ref: "#/components/parameters/dashboards_companies_ids"
-        - $ref: "#/components/parameters/dashboards_attribute_id"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        x:
-                          description: Type defined in meta
-                        y1:
-                          description: Type defined in meta
-                  meta:
-                    type: object
-                    properties:
-                      xAxis:
-                        $ref: "#/components/schemas/DashboardsChartAxis"
-                      yAxis:
-                        $ref: "#/components/schemas/DashboardsChartAxis"
-                      x:
-                        $ref: "#/components/schemas/DashboardsChartValue"
-                      y1:
-                        $ref: "#/components/schemas/DashboardsChartValue"
-
   /dashboards/parametrised_charts:
     get:
       tags:
@@ -2462,25 +2384,6 @@ components:
                     type: array
                     items:
                       type: number
-    DashboardsChartValue:
-      type: object
-      properties:
-        type:
-          type: string
-          example: numeric,date,categoric
-        label:
-          type: string
-        tooltip:
-          type: object
-          properties:
-            prefix:
-              type: string
-              description: not used
-            format:
-              type: string
-              description: not used
-            suffix:
-              type: string
     DashboardsCommodity:
       type: object
       properties:
@@ -2537,24 +2440,6 @@ components:
           type: string
         countryId:
           type: integer
-    DashboardsAttribute:
-      type: object
-      properties:
-        id:
-          type: integer
-        displayName:
-          type: string
-        tooltipText:
-          type: string
-        groupId:
-          type: integer
-        chartType:
-          type: string
-          example: line, pie, bar, stacked_bar
-        isDisabled:
-          type: boolean
-        url:
-          type: string
     ParametrisedChart:
       type: object
       properties:
@@ -2647,17 +2532,6 @@ components:
         suffix:
           type: string
           example: t
-    DashboardsChartAxis:
-      type: object
-      properties:
-        label:
-          type: string
-        prefix:
-          type: string
-        format:
-          type: string
-        suffix:
-          type: string
     DashboardsEmptyXLegend:
       type: object
     DashboardsNcontXLegend:

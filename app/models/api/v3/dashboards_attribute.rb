@@ -5,7 +5,6 @@
 #  id                            :bigint(8)        not null, primary key
 #  dashboards_attribute_group_id :bigint(8)        not null
 #  position                      :integer          not null
-#  chart_type                    :string           not null
 #  created_at                    :datetime         not null
 #  updated_at                    :datetime         not null
 #
