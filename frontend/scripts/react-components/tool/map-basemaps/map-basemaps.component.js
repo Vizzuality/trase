@@ -2,14 +2,17 @@ import BasemapsTemplate from 'templates/tool/map/map-basemaps.ejs';
 import 'styles/components/tool/map/map-basemaps.scss';
 
 export default class MapBasemaps {
+  constructor() {
+    this.el = document.querySelector('.js-map-basemaps-items');
+    this.basemaps = [];
+    this.clickBasemap = e => this._onBasemapClicked(e);
+  }
+
   onCreated(props) {
     const { basemaps, disabled, activeBasemapId } = props;
-    this.el = document.querySelector('.js-map-basemaps-items');
-
     this.buildBasemaps({ basemaps });
     this.enableBasemapSelection({ disabled });
     this.selectBasemap({ activeBasemapId });
-    this.clickBasemap = e => this._onBasemapClicked(e);
   }
 
   onRemoved() {
