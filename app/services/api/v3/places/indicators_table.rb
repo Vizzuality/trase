@@ -17,19 +17,7 @@ module Api
           @node = node
           @year = year
 
-          # This remains hardcoded, because it only makes sense
-          # for Brazil soy for now
-          @place_quals = Dictionary::PlaceQuals.new(@node, @year)
-          state_qual = @place_quals.get(NodeTypeName::STATE)
-          @state_name = state_qual && state_qual['value']
-          if @state_name.present?
-            @state_ranking = StateRanking.new(
-              @context, @node, @year, @state_name
-            )
-          end
-
-          @place_quants = Dictionary::PlaceQuants.new(@node, @year)
-          @place_inds = Dictionary::PlaceInds.new(@node, @year)
+          initialize_state_ranking
         end
 
         def call
@@ -45,20 +33,26 @@ module Api
           end
         end
 
+        private
+
+        def initialize_state_ranking
+          # This remains hardcoded, because it only makes sense
+          # for Brazil soy for now
+          state_qual = Api::V3::Qual.find_by_name(NodeTypeName::STATE)
+          return unless state_qual
+
+          @values = Api::V3::NodeAttributeValuesPreloader.new(@node, @year)
+          state_name = @values.get(state_qual.simple_type, state_qual.id)
+          return unless state_name.present?
+
+          @state_ranking = StateRanking.new(@context, @node, @year, state_name)
+        end
+
         def indicators_group(chart_config)
           values = []
           ranking_scores = []
           chart_config.attributes.each do |attribute|
-            attribute_values =
-              if attribute.is_a? Api::V3::Quant
-                @place_quants
-              elsif attribute.is_a? Api::V3::Ind
-                @place_inds
-              end
-            attribute_value = attribute_values&.get(
-              attribute.name
-            )
-            value = attribute_value['value'] if attribute_value
+            value = @values.get(attribute.simple_type, attribute.id)
             values << value
             next unless @state_ranking.present?
 

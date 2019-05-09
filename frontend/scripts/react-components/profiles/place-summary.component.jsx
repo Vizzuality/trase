@@ -24,8 +24,8 @@ class PlaceSummary extends React.PureComponent {
         jurisdiction1GeoId,
         summary,
         area,
-        soyProduction,
-        soyArea,
+        commodityProduction,
+        commodityArea,
         jurisdictionName,
         jurisdictionGeoId
       } = {},
@@ -55,9 +55,9 @@ class PlaceSummary extends React.PureComponent {
         onYearChange
       }
     ];
-    const soyValue = formatValue(soyArea, 'area');
+    const commodityAreaValue = formatValue(commodityArea, 'area');
     const areaValue = formatValue(area, 'area');
-    const soyProductionValue = formatValue(soyProduction, 'tons');
+    const commodityProductionValue = formatValue(commodityProduction, 'tons');
 
     return (
       <React.Fragment>
@@ -175,7 +175,9 @@ class PlaceSummary extends React.PureComponent {
                 <div className="small-12 columns">
                   <TitleGroup titles={titles} on={onYearChange} />
                 </div>
-                {(areaValue !== '-' || soyValue !== '-' || soyProductionValue !== '-') && (
+                {(areaValue !== '-' ||
+                  commodityAreaValue !== '-' ||
+                  commodityProductionValue !== '-') && (
                   <div className="small-12 columns">
                     {areaValue !== '-' && (
                       <div className="stat-item">
@@ -186,7 +188,7 @@ class PlaceSummary extends React.PureComponent {
                         </div>
                       </div>
                     )}
-                    {soyValue !== '-' && (
+                    {commodityAreaValue !== '-' && (
                       <div className="stat-item">
                         <div className="legend">
                           {commodityName} land
@@ -195,20 +197,20 @@ class PlaceSummary extends React.PureComponent {
                             position="bottom"
                           />
                         </div>
-                        <div className="value">{soyValue}</div>
+                        <div className="value">{commodityAreaValue}</div>
                         <div className="unit">ha</div>
                       </div>
                     )}
-                    {soyProductionValue !== '-' && (
+                    {commodityProductionValue !== '-' && (
                       <div className="stat-item">
                         <div className="legend">
                           soy production
                           <HelpTooltip
-                            text={get(tooltips, 'profileNode.soyProduction')}
+                            text={get(tooltips, 'profileNode.commodityProduction')}
                             position="bottom"
                           />
                         </div>
-                        <div className="value">{soyProductionValue}</div>
+                        <div className="value">{commodityProductionValue}</div>
                         <div className="unit">t</div>
                       </div>
                     )}

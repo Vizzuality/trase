@@ -2339,12 +2339,10 @@ components:
               type: string
             area:
               type: number
-            soy_production:
+            commodity_production:
               type: number
-            soy_area:
+            commodity_area:
               type: string
-            soy_farmland:
-              type: number
     PlaceTopConsumerActors:
       type: object
       properties:
