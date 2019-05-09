@@ -47,7 +47,6 @@ class ModalComponent {
   }
 
   getModal({ modal }) {
-    console.log('modal', modal);
     if (isEqual(modal.modalParams, this.state.modalParams)) {
       Object.assign(this.state, { visibility: modal.visibility });
     } else {
