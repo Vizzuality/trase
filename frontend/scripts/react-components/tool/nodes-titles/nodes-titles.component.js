@@ -10,11 +10,24 @@ export default class {
     this.container = this.el.querySelector('.js-nodes-titles-container');
     this.clear = this.el.querySelector('.js-nodes-titles-clear');
     this.tooltip = new Tooltip('.js-node-tooltip');
+    this.nodeTitleLinks = [];
+    this.nodeTitleCloseButtons = [];
 
     this._onNodeTitleClickBound = this._onNodeTitleClick.bind(this);
     this._onNodeTitleCloseClickBound = this._onNodeTitleCloseClick.bind(this);
 
     this.clear.addEventListener('click', this.callbacks.onClearClick);
+  }
+
+  onRemoved() {
+    this.clear.removeEventListener('click', this.callbacks.onClearClick);
+    this.nodeTitleLinks.forEach(nodeTitle => {
+      nodeTitle.removeEventListener('click', this._onNodeTitleClickBound);
+    });
+
+    this.nodeTitleCloseButtons.forEach(closeButton => {
+      closeButton.removeEventListener('click', this._onNodeTitleCloseClickBound);
+    });
   }
 
   selectNodes(data) {
@@ -76,17 +89,23 @@ export default class {
   }) {
     this.clear.classList.toggle('is-hidden', !isSelect);
 
-    Array.prototype.slice
-      .call(document.querySelectorAll('.js-node-title.-link'), 0)
-      .forEach(nodeTitle => {
-        nodeTitle.removeEventListener('click', this._onNodeTitleClick);
-      });
+    this.nodeTitleLinks = Array.prototype.slice.call(
+      document.querySelectorAll('.js-node-title.-link'),
+      0
+    );
 
-    Array.prototype.slice
-      .call(document.querySelectorAll('.js-node-close'), 0)
-      .forEach(closeButton => {
-        closeButton.removeEventListener('click', this._onNodeTitleCloseClick);
-      });
+    this.nodeTitleLinks.forEach(nodeTitle => {
+      nodeTitle.removeEventListener('click', this._onNodeTitleClickBound);
+    });
+
+    this.nodeTitleCloseButtons = Array.prototype.slice.call(
+      document.querySelectorAll('.js-node-close'),
+      0
+    );
+
+    this.nodeTitleCloseButtons.forEach(closeButton => {
+      closeButton.removeEventListener('click', this._onNodeTitleCloseClickBound);
+    });
 
     const templateData = {
       contextId: selectedContextId,
@@ -126,17 +145,13 @@ export default class {
 
     this.container.innerHTML = NodeTitleTemplate(templateData);
 
-    Array.prototype.slice
-      .call(document.querySelectorAll('.js-node-title.-link'), 0)
-      .forEach(nodeTitle => {
-        nodeTitle.addEventListener('click', this._onNodeTitleClickBound);
-      });
+    this.nodeTitleLinks.forEach(nodeTitle => {
+      nodeTitle.addEventListener('click', this._onNodeTitleClickBound);
+    });
 
-    Array.prototype.slice
-      .call(document.querySelectorAll('.js-node-close'), 0)
-      .forEach(closeButton => {
-        closeButton.addEventListener('click', this._onNodeTitleCloseClickBound);
-      });
+    this.nodeTitleCloseButtons.forEach(closeButton => {
+      closeButton.addEventListener('click', this._onNodeTitleCloseClickBound);
+    });
   }
 
   _onNodeTitleClick(e) {

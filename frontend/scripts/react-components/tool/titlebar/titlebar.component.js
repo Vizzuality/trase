@@ -3,6 +3,10 @@ export default class {
     this.nodesTitles = document.querySelector('.js-nodes-titles');
   }
 
+  onRemoved() {
+    return false;
+  }
+
   highlightNode({ showTitles }) {
     this._toggle(showTitles);
   }

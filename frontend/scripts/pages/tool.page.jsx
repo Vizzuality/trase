@@ -78,16 +78,10 @@ export const mount = (root, store) => {
 
   render(
     <Provider store={store}>
-      <MapDimensionsContainer />
-    </Provider>,
-    document.querySelector('.js-dimensions')
-  );
-
-  render(
-    <Provider store={store}>
       <>
         <MapContainer />
         <MapBasemaps />
+        <MapDimensionsContainer />
         <FlowContentContainer />
         <MapLegend />
         <MapContextContainer />
