@@ -145,7 +145,7 @@ const methodProps = [
     returned: ['visibleNodes', 'mapVectorData']
   }
 ];
-this.setState();
+
 const mapDispatchToProps = {
   onPolygonClicked: geoId => selectNodeFromGeoId(geoId),
   onPolygonHighlighted: (geoId, coordinates) => highlightNodeFromGeoId(geoId, coordinates),

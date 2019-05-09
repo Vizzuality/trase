@@ -36,17 +36,25 @@ export default class {
 
     const worldBounds = L.latLngBounds(L.latLng(-89, -180), L.latLng(89, 180));
     this.map.setMaxBounds(worldBounds);
-    this.map.on('drag', () => {
-      this.map.panInsideBounds(worldBounds, { animate: false });
-    });
+    this.mapEvents = {
+      panInsideBounds: () => {
+        this.map.panInsideBounds(worldBounds, { animate: false });
+      },
+      updateAttribution: () => {
+        this._updateAttribution();
+      },
+      moveEnd: () => {
+        this.callbacks.onMoveEnd(this.map.getCenter(), this.map.getZoom());
+      },
+      zoomEnd: () => {
+        this._recalculatePointVolumeShadowRadius();
+      }
+    };
 
-    this.map.on('layeradd', () => this._updateAttribution());
-    this.map.on('dragend zoomend', () =>
-      this.callbacks.onMoveEnd(this.map.getCenter(), this.map.getZoom())
-    );
-    this.map.on('zoomend', () => {
-      this._recalculatePointVolumeShadowRadius();
-    });
+    this.map.on('drag', this.mapEvents.panInsideBounds);
+    this.map.on('layeradd', this.mapEvents.updateAttribution);
+    this.map.on('dragend zoomend', () => this.mapEvents.moveEnd);
+    this.map.on('zoomend', () => this.mapEvents.zoomEnd);
 
     this._setMapViewDebounced = debounce(this._setMapViewDebounced, 500);
 
@@ -56,16 +64,29 @@ export default class {
     });
     this.contextLayers = [];
     this.pointVolumeShadowLayer = null;
-
-    document.querySelector('.js-basemap-switcher').addEventListener('click', () => {
+    this.clickToggleMapLayerMenu = () => {
       this.callbacks.onToggleMapLayerMenu();
-    });
-    document.querySelector('.js-toggle-map').addEventListener('click', () => {
+    };
+    this.clickToggleMap = () => {
       this.callbacks.onToggleMap();
-    });
+    };
+    this.basemapSwitcher = document.querySelector('.js-basemap-switcher');
+    this.toggleMap = document.querySelector('.js-toggle-map');
+    this.basemapSwitcher.addEventListener('click', this.clickToggleMapLayerMenu);
+    this.toggleMap.addEventListener('click', this.clickToggleMap);
 
     this.attribution = document.querySelector('.js-map-attribution');
     this.attributionSource = document.querySelector('.leaflet-control-attribution');
+  }
+
+  onRemoved() {
+    this.basemapSwitcher.removeEventListener('click', this.clickToggleMapLayerMenu);
+    this.toggleMap.removeEventListener('click', this.clickToggleMap);
+
+    this.map.off('drag', this.mapEvents.panInsideBounds);
+    this.map.off('layeradd', this.mapEvents.updateAttribution);
+    this.map.off('dragend zoomend', () => this.mapEvents.moveEnd);
+    this.map.off('zoomend', () => this.mapEvents.zoomEnd);
   }
 
   setMapView({ mapView }) {
