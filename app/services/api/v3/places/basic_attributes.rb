@@ -38,20 +38,7 @@ module Api
         end
 
         def summary
-          if @commodity_production.zero?
-            return "<span class=\"notranslate\">#{@node.name.titleize}</span> \
-did not produce any #{@commodity_name} in \
-<span class=\"notranslate\">#{@year}</span>."
-          end
-
-          result = "In <span class=\"notranslate\">#{@year}</span>, \
-<span class=\"notranslate\">#{@node.name.titleize}</span> produced \
-<span class=\"notranslate\">#{@commodity_production_formatted}</span> \
-<span class=\"notranslate\">#{@commodity_production_unit}</span> of \
-<span class=\"notranslate\">#{@commodity_name}</span> \
-occupying a total of \
-<span class=\"notranslate\">#{@commodity_area_formatted}</span> \
-<span class=\"notranslate\">#{@commodity_area_unit}</span> of land."
+          result = summary_of_production
           result << summary_of_production_ranking
           result << summary_of_top_exporter_and_top_consumer
           result
@@ -67,8 +54,6 @@ occupying a total of \
           initialize_chart_config(:place, nil, :place_basic_attributes)
           NAMED_ATTRIBUTES.each do |attribute_name|
             attribute = @chart_config.named_attribute(attribute_name)
-            raise "#{attribute_name} attribute not found" unless attribute
-
             instance_variable_set("@#{attribute_name}_attribute", attribute)
           end
 
@@ -134,24 +119,26 @@ occupying a total of \
         end
 
         def initialize_area
-          @area = attribute_value(@area_attribute)
+          @area = @area_attribute && attribute_value(@area_attribute)
         end
 
         def initialize_commodity_production
           @commodity_name = @context.commodity.name.downcase
-          @commodity_production = attribute_value(
-            @commodity_production_attribute
-          )
+          if @commodity_production_attribute
+            @commodity_production = attribute_value(
+              @commodity_production_attribute
+            )
+            @commodity_production_unit = @commodity_production_attribute.unit
+          end
           return unless @commodity_production
 
           @commodity_production_formatted = helper.number_with_precision(
             @commodity_production, delimiter: ',', precision: 0
           )
-          @commodity_production_unit = @commodity_production_attribute.unit
         end
 
         def initialize_commodity_yield
-          @commodity_yield = attribute_value(
+          @commodity_yield = @commodity_yield_attribute && attribute_value(
             @commodity_yield_attribute
           )
         end
@@ -213,8 +200,29 @@ occupying a total of \
           )
         end
 
+        def summary_of_production
+          return '' unless @commodity_production
+
+          if @commodity_production.zero?
+            return "<span class=\"notranslate\">#{@node.name.titleize}</span> \
+did not produce any #{@commodity_name} in \
+<span class=\"notranslate\">#{@year}</span>."
+          end
+
+          "In <span class=\"notranslate\">#{@year}</span>, \
+<span class=\"notranslate\">#{@node.name.titleize}</span> produced \
+<span class=\"notranslate\">#{@commodity_production_formatted}</span> \
+<span class=\"notranslate\">#{@commodity_production_unit}</span> of \
+<span class=\"notranslate\">#{@commodity_name}</span> \
+occupying a total of \
+<span class=\"notranslate\">#{@commodity_area_formatted}</span> \
+<span class=\"notranslate\">#{@commodity_area_unit}</span> of land."
+        end
+
         # rubocop:disable Metrics/AbcSize
         def summary_of_production_ranking
+          return '' unless @commodity_production_attribute
+
           total_commodity_production = Api::V3::NodeQuant.
             for_context(@context.id).
             where(quant_id: @commodity_production_attribute.id, year: @year).
