@@ -1,8 +1,34 @@
 import MapDimensionsTemplate from 'templates/tool/map/map-dimensions.ejs';
 
 export default class {
-  onCreated() {
+  onCreated(props) {
+    const { mapDimensionsGroups, expandedMapSidebarGroupsIds } = props;
     this.el = document.querySelector('.js-dimensions');
+    this.sidebarGroups = [];
+    this.sidebarGroupsTitles = [];
+    this.dimensions = [];
+
+    this._onGroupTitleClicked = event => {
+      const id = event.currentTarget.parentNode.getAttribute('data-group-id');
+      this.callbacks.onToggleGroup(id);
+    };
+
+    this._onDimensionClicked = event => {
+      const uid = event.currentTarget.getAttribute('data-dimension-uid');
+      this.callbacks.onDimensionClick(uid);
+    };
+
+    this.loadMapDimensions({ mapDimensionsGroups, expandedMapSidebarGroupsIds });
+  }
+
+  onRemoved() {
+    this.sidebarGroupsTitles.forEach(sidebarGroupTitle => {
+      sidebarGroupTitle.removeEventListener('click', this._onGroupTitleClicked);
+    });
+
+    this.dimensions.forEach(dimension => {
+      dimension.removeEventListener('click', this._onDimensionClicked);
+    });
   }
 
   loadMapDimensions({ mapDimensionsGroups, expandedMapSidebarGroupsIds }) {
@@ -17,7 +43,7 @@ export default class {
       0
     );
     this.sidebarGroupsTitles.forEach(sidebarGroupTitle => {
-      sidebarGroupTitle.addEventListener('click', this._onGroupTitleClicked.bind(this));
+      sidebarGroupTitle.addEventListener('click', this._onGroupTitleClicked);
     });
 
     this.dimensions = Array.prototype.slice.call(
@@ -25,7 +51,7 @@ export default class {
       0
     );
     this.dimensions.forEach(dimension => {
-      dimension.addEventListener('click', this._onDimensionClicked.bind(this));
+      dimension.addEventListener('click', this._onDimensionClicked);
     });
     this.callbacks.onMapDimensionsLoaded();
     this.toggleSidebarGroups({ expandedMapSidebarGroupsIds });
@@ -64,15 +90,5 @@ export default class {
 
   setVisibility({ isCloroplethEnabled }) {
     this.el.classList.toggle('is-hidden', !isCloroplethEnabled);
-  }
-
-  _onGroupTitleClicked(event) {
-    const id = event.currentTarget.parentNode.getAttribute('data-group-id');
-    this.callbacks.onToggleGroup(id);
-  }
-
-  _onDimensionClicked(event) {
-    const uid = event.currentTarget.getAttribute('data-dimension-uid');
-    this.callbacks.onDimensionClick(uid);
   }
 }

@@ -51,12 +51,7 @@ export default class {
       }
     };
 
-    this.map.on('drag', this.mapEvents.panInsideBounds);
-    this.map.on('layeradd', this.mapEvents.updateAttribution);
-    this.map.on('dragend zoomend', () => this.mapEvents.moveEnd);
-    this.map.on('zoomend', () => this.mapEvents.zoomEnd);
-
-    this._setMapViewDebounced = debounce(this._setMapViewDebounced, 500);
+    this._setMapViewDebounced = debounce((latLng, zoom) => this.map.setView(latLng, zoom), 500);
 
     Object.keys(MAP_PANES).forEach(paneKey => {
       this.map.createPane(paneKey);
@@ -72,11 +67,20 @@ export default class {
     };
     this.basemapSwitcher = document.querySelector('.js-basemap-switcher');
     this.toggleMap = document.querySelector('.js-toggle-map');
-    this.basemapSwitcher.addEventListener('click', this.clickToggleMapLayerMenu);
-    this.toggleMap.addEventListener('click', this.clickToggleMap);
 
     this.attribution = document.querySelector('.js-map-attribution');
     this.attributionSource = document.querySelector('.leaflet-control-attribution');
+  }
+
+  onCreated(props) {
+    this.map.on('drag', this.mapEvents.panInsideBounds);
+    this.map.on('layeradd', this.mapEvents.updateAttribution);
+    this.map.on('dragend zoomend', this.mapEvents.moveEnd);
+    this.map.on('zoomend', this.mapEvents.zoomEnd);
+    this.basemapSwitcher.addEventListener('click', this.clickToggleMapLayerMenu);
+    this.toggleMap.addEventListener('click', this.clickToggleMap);
+
+    this.setBasemap(props);
   }
 
   onRemoved() {
@@ -85,18 +89,13 @@ export default class {
 
     this.map.off('drag', this.mapEvents.panInsideBounds);
     this.map.off('layeradd', this.mapEvents.updateAttribution);
-    this.map.off('dragend zoomend', () => this.mapEvents.moveEnd);
-    this.map.off('zoomend', () => this.mapEvents.zoomEnd);
+    this.map.off('dragend zoomend', this.mapEvents.moveEnd);
+    this.map.off('zoomend', this.mapEvents.zoomEnd);
   }
 
   setMapView({ mapView }) {
     if (mapView === null || mapView === undefined) return;
-
     this._setMapViewDebounced([mapView.latitude, mapView.longitude], mapView.zoom);
-  }
-
-  _setMapViewDebounced(latLng, zoom) {
-    this.map.setView(latLng, zoom);
   }
 
   setBasemap({
@@ -192,9 +191,8 @@ export default class {
     defaultMapView
   }) {
     this._outlinePolygons({ selectedGeoIds, highlightedGeoId });
-
     if (forceDefaultMapView === true) {
-      this.setMapView(defaultMapView);
+      this.setMapView({ mapView: defaultMapView });
     } else if (!linkedGeoIds || linkedGeoIds.length === 0) {
       this._fitBoundsToSelectedPolygons(selectedGeoIds);
     }
@@ -598,7 +596,7 @@ export default class {
     });
 
     if (forceDefaultMapView === true) {
-      this.setMapView(defaultMapView);
+      this.setMapView({ mapView: defaultMapView });
     } else if (linkedPolygons.length) {
       const bbox = turf_bbox({ type: 'FeatureCollection', features: linkedPolygons });
       // we use L's _getBoundsCenterZoom internal method + setView as fitBounds does not support a minZoom option
