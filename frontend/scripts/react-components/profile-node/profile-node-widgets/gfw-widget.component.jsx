@@ -9,7 +9,7 @@ import ReactIframeResizer from 'react-iframe-resizer-super';
 class GfwWidget extends React.PureComponent {
   renderSpinner() {
     return (
-      <div className="spinner-section">
+      <div className="section-placeholder">
         <ShrinkingSpinner className="-large" />
       </div>
     );

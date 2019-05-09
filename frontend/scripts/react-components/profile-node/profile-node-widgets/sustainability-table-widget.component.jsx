@@ -8,25 +8,10 @@ import {
   GET_NODE_SUMMARY_URL
 } from 'utils/getURLFromParams';
 import flatMap from 'lodash/flatMap';
-import addApostrophe from 'utils/addApostrophe';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
+import ProfileTitle from 'react-components/profiles/profile-title.component';
 
 class SustainabilityTableWidget extends React.PureComponent {
-  getTitle(nodeName) {
-    const { year, type } = this.props;
-    if (type === 'indicators') {
-      return 'Sustainability indicators';
-    }
-
-    return (
-      <span>
-        Deforestation risk associated with <span className="notranslate">{nodeName}</span>
-        {addApostrophe(nodeName)} top sourcing regions in{' '}
-        <span className="notranslate">{year}</span>:
-      </span>
-    );
-  }
-
   showLink(item) {
     return item.profile ? 'profileNode' : null;
   }
@@ -35,11 +20,13 @@ class SustainabilityTableWidget extends React.PureComponent {
     const {
       year,
       nodeId,
+      title,
       contextId,
       type,
       className,
       profileType,
       testId,
+      commodityName,
       targetPayload
     } = this.props;
     const params = { node_id: nodeId, context_id: contextId, year };
@@ -52,7 +39,7 @@ class SustainabilityTableWidget extends React.PureComponent {
         {({ data, loading, error }) => {
           if (loading) {
             return (
-              <div className="spinner-section" data-test="loading-section">
+              <div className="section-placeholder" data-test="loading-section">
                 <ShrinkingSpinner className="-large" />
               </div>
             );
@@ -62,7 +49,7 @@ class SustainabilityTableWidget extends React.PureComponent {
             // TODO: display a proper error message to the user
             console.error('Error loading sustainability table data for profile page', error);
             return (
-              <div className="spinner-section" data-test="loading-section">
+              <div className="section-placeholder" data-test="loading-section">
                 <ShrinkingSpinner className="-large" />
               </div>
             );
@@ -84,7 +71,7 @@ class SustainabilityTableWidget extends React.PureComponent {
             return null;
           }
 
-          const { nodeName } = data[GET_NODE_SUMMARY_URL];
+          const summary = data[GET_NODE_SUMMARY_URL];
           return (
             <section className={className} data-test={testId}>
               <div className="row">
@@ -94,7 +81,14 @@ class SustainabilityTableWidget extends React.PureComponent {
                     contextId={contextId}
                     type={type === 'indicators' ? 't_head_places' : 't_head_actors'}
                     data={data[mainQuery]}
-                    tabsTitle={this.getTitle(nodeName)}
+                    tabsTitle={
+                      <ProfileTitle
+                        template={title}
+                        summary={summary}
+                        year={year}
+                        commodityName={commodityName}
+                      />
+                    }
                     target={this.showLink}
                     targetPayload={targetPayload}
                     testId={`${testId}-multi`}
@@ -114,9 +108,11 @@ SustainabilityTableWidget.propTypes = {
   className: PropTypes.string,
   type: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
   nodeId: PropTypes.number.isRequired,
   contextId: PropTypes.number.isRequired,
   profileType: PropTypes.string.isRequired,
+  commodityName: PropTypes.string.isRequired,
   targetPayload: PropTypes.object.isRequired
 };
 

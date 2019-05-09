@@ -32,7 +32,7 @@ function Img(props) {
             {!inView && (
               <a
                 href={src}
-                style={{ visibility: 'hidden', position: 'absolute' }}
+                style={{ display: 'block', visibility: 'hidden', position: 'absolute' }}
                 aria-hidden="true"
               >
                 {alt}

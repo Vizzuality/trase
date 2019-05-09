@@ -21,7 +21,7 @@ class TopDestinationsWidget extends React.PureComponent {
     const tabs = [...data.tabs].reverse();
     const activeTab = tabs[activeTabIndex];
     const linesData = data[activeTab];
-    const { includedYears, buckets } = data;
+    const { includedYears, buckets, legendTitle } = data;
     const { lines, style, unit } = linesData;
 
     return {
@@ -31,6 +31,7 @@ class TopDestinationsWidget extends React.PureComponent {
       style,
       buckets,
       activeTab,
+      legendTitle,
       includedYears,
       profileType: linesData.profile_type
     };
@@ -40,6 +41,7 @@ class TopDestinationsWidget extends React.PureComponent {
 
   render() {
     const {
+      title,
       printMode,
       year,
       nodeId,
@@ -65,7 +67,7 @@ class TopDestinationsWidget extends React.PureComponent {
         {({ data, loading, error }) => {
           if (loading) {
             return (
-              <div className="spinner-section" data-test="loading-section">
+              <div className="section-placeholder" data-test="loading-section">
                 <ShrinkingSpinner className="-large" />
               </div>
             );
@@ -78,6 +80,7 @@ class TopDestinationsWidget extends React.PureComponent {
           }
 
           const {
+            legendTitle,
             includedYears,
             lines,
             unit,
@@ -92,8 +95,7 @@ class TopDestinationsWidget extends React.PureComponent {
             return null;
           }
 
-          const { nodeName, columnName } = data[GET_NODE_SUMMARY_URL];
-          const verb = columnName === 'EXPORTER' ? 'exported' : 'imported';
+          const summary = data[GET_NODE_SUMMARY_URL];
           return (
             <section className={className} data-test={testId}>
               <div className="row align-justify">
@@ -109,12 +111,11 @@ class TopDestinationsWidget extends React.PureComponent {
                     includedYears={includedYears}
                     lines={lines.slice(0, 5)}
                     unit={unit}
+                    title={title}
+                    summary={summary}
+                    commodityName={commodityName}
                     profileType={profileType}
                     style={style}
-                    nodeName={nodeName}
-                    commodityName={commodityName}
-                    columnName={columnName}
-                    verb={verb}
                     testId={`${testId}-chart`}
                   />
                 </div>
@@ -123,10 +124,10 @@ class TopDestinationsWidget extends React.PureComponent {
                     height={250}
                     year={year}
                     printMode={printMode}
-                    verb={verb}
                     buckets={buckets}
                     lines={lines}
-                    nodeName={nodeName}
+                    title={legendTitle}
+                    summary={summary}
                     testId={`${testId}-map`}
                     profileType={profileType}
                     countryName={countryName}
@@ -152,6 +153,7 @@ TopDestinationsWidget.propTypes = {
   commodityName: PropTypes.string,
   type: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
   nodeId: PropTypes.number.isRequired,
   contextId: PropTypes.number.isRequired,
   onLinkClick: PropTypes.func.isRequired
