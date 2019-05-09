@@ -702,7 +702,7 @@ export function selectNodeFromGeoId(geoId) {
 export function selectExpandedNode(param) {
   const ids = Array.isArray(param) ? param : [param];
   return (dispatch, getState) => {
-    const hasInvisibleNodes = ids.some(elem => !_isNodeVisible(getState, elem));
+    const hasInvisibleNodes = true; // ids.some(elem => !_isNodeVisible(getState, elem));
 
     if (hasInvisibleNodes) {
       const { toolLinks } = getState();

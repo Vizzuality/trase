@@ -1,5 +1,13 @@
 import compact from 'lodash/compact';
 import { createSelector } from 'reselect';
+import getVisibleNodesUtil from 'reducers/helpers/getVisibleNodes';
+import splitVisibleNodesByColumn from 'reducers/helpers/splitVisibleNodesByColumn';
+import sortVisibleNodes from 'reducers/helpers/sortVisibleNodes';
+import mergeLinks from 'reducers/helpers/mergeLinks';
+import filterLinks from 'reducers/helpers/filterLinks';
+import getNodesAtColumns from 'reducers/helpers/getNodesAtColumns';
+import getNodesColoredBySelection from 'reducers/helpers/getNodesColoredBySelection';
+import getNextRecolorGroups from 'reducers/helpers/getRecolorGroups';
 
 const getNodeSelectedMeta = (selectedMapDimension, node, selectedResizeByLabel, visibleNode) => {
   if (!node.meta || selectedMapDimension === null) {
@@ -68,12 +76,36 @@ const getNodesGeoIds = nodesData =>
 
 const getSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getHighlightedNodesIds = state => state.toolLinks.highlightedNodesIds;
-const getVisibleNodes = state => state.toolLinks.visibleNodes;
 const getNodesDictWithMeta = state => state.toolLinks.nodesDictWithMeta;
 const getSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
 const getSelectedResizeBy = state => state.toolLinks.selectedResizeBy;
 const getNodesDict = state => state.toolLinks.nodesDict;
+const getRawLinks = state => state.toolLinks.rawLinks;
+const getLinksMeta = state => state.toolLinks.linksMeta;
+const getSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getChoropleth = state => state.toolLayers.choropleth;
+const getUnmergedLinks = state => state.toolLinks.unmergedLinks;
+
+export const getVisibleNodes = createSelector(
+  [getRawLinks, getNodesDict, getLinksMeta, getSelectedColumnsIds],
+  (rawLinks, nodesDict, linksMeta, selectedColumnsIds) => {
+    if (!rawLinks || !nodesDict || !linksMeta || !selectedColumnsIds) {
+      return [];
+    }
+    return getVisibleNodesUtil(rawLinks, nodesDict, linksMeta, selectedColumnsIds);
+  }
+);
+
+export const getVisibleNodesByColumn = createSelector(
+  getVisibleNodes,
+  visibleNodes => {
+    if (!visibleNodes) {
+      return [];
+    }
+    const byColumn = splitVisibleNodesByColumn(visibleNodes);
+    return sortVisibleNodes(byColumn);
+  }
+);
 
 export const getSelectedNodesData = createSelector(
   [
@@ -95,6 +127,54 @@ export const getSelectedNodesGeoIds = createSelector(
 export const getSelectedNodesColumnsPos = createSelector(
   [getSelectedNodesData],
   selectedNodesData => selectedNodesData.map(node => node.columnGroup)
+);
+
+const getSelectedNodesAtColumns = createSelector(
+  [getSelectedNodesIds, getSelectedNodesColumnsPos],
+  (selectedNodesIds, selectedNodesColumnsPos) =>
+    getNodesAtColumns(selectedNodesIds, selectedNodesColumnsPos)
+);
+
+export const getNodesColored = createSelector(
+  getSelectedNodesAtColumns,
+  selectedNodesAtColumns => getNodesColoredBySelection(selectedNodesAtColumns)
+);
+
+export const getToolRecolorGroups = createSelector(
+  getNodesColored,
+  nodesColored => getNextRecolorGroups(nodesColored.nodesColoredBySelection)
+);
+
+export const getFilteredLinks = createSelector(
+  [
+    getUnmergedLinks,
+    getSelectedNodesAtColumns,
+    getNodesColored,
+    getSelectedNodesIds,
+    getToolRecolorGroups
+  ],
+  (unmergedLinks, selectedNodesAtColumns, nodesColored, selectedNodesIds, recolorGroups) => {
+    if (selectedNodesIds.length === 0) {
+      return null;
+    }
+    const { nodesColoredBySelection } = nodesColored;
+    return filterLinks(
+      unmergedLinks,
+      selectedNodesAtColumns,
+      nodesColoredBySelection,
+      recolorGroups
+    );
+  }
+);
+
+export const getMergedLinks = createSelector(
+  [getUnmergedLinks, getFilteredLinks],
+  (unmergedLinks, filteredLinks) => {
+    if (filteredLinks) {
+      return mergeLinks(filteredLinks);
+    }
+    return mergeLinks(unmergedLinks);
+  }
 );
 
 export const getHighlightedNodesData = createSelector(

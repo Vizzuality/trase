@@ -14,10 +14,15 @@ import {
   getIsReExpand,
   getHasExpandedNodesIds
 } from 'react-components/tool/sankey/sankey.selectors';
+import {
+  getVisibleNodesByColumn,
+  getMergedLinks,
+  getNodesColored
+} from 'react-components/tool/tool.selectors';
 import Sankey from 'react-components/tool/sankey/sankey.component';
 
 const mapStateToProps = state => ({
-  links: state.toolLinks.links,
+  links: getMergedLinks(state),
   isVisible: getIsVisible(state),
   isReExpand: getIsReExpand(state),
   sankeySize: state.app.sankeySize,
@@ -27,8 +32,8 @@ const mapStateToProps = state => ({
   selectedRecolorBy: state.toolLinks.selectedRecolorBy,
   hasExpandedNodesIds: getHasExpandedNodesIds(state),
   highlightedNodesIds: state.toolLinks.highlightedNodesIds,
-  visibleNodesByColumn: state.toolLinks.visibleNodesByColumn,
-  nodesColoredAtColumn: state.toolLinks.nodesColoredAtColumn,
+  visibleNodesByColumn: getVisibleNodesByColumn(state),
+  nodesColoredAtColumn: getNodesColored(state).nodesColoredAtColumn,
   lang: state.location.query && state.location.query.lang
 });
 

@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import './recolor-by-item-legend-summary.scss';
 
 function RecolorByNodeLegendSummary({ recolorGroups }) {
-  if (recolorGroups === undefined) {
+  if (!recolorGroups) {
     return null;
   }
 
   return (
     <div className="recolor-by-item-legend-summary">
-      {recolorGroups.map((color, key) => (
+      {Object.values(recolorGroups).map((color, key) => (
         <div key={key} className={`color -recolorgroup-${color}`} style={{ order: color }} />
       ))}
     </div>

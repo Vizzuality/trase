@@ -3,6 +3,7 @@ import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.compo
 import { selectNode, navigateToProfile, resetState } from 'actions/tool.actions';
 import NodesTitles from 'react-components/tool/nodes-titles/nodes-titles.component';
 import {
+  getToolRecolorGroups,
   getSelectedNodesData,
   getHighlightedNodesData
 } from 'react-components/tool/tool.selectors';
@@ -11,7 +12,7 @@ const mapStateToProps = state => {
   const highlightedNodesData = getHighlightedNodesData(state);
   return {
     nodesData: getSelectedNodesData(state),
-    recolorGroups: state.toolLinks.recolorGroups,
+    recolorGroups: getToolRecolorGroups(state),
     currentQuant: state.toolLinks.currentQuant,
     selectedYears: state.app.selectedYears,
     selectedContextId: state.app.selectedContext ? state.app.selectedContext.id : null,

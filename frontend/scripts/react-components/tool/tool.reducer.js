@@ -99,7 +99,6 @@ export const toolInitialState = {
   selectedRecolorBy: { type: 'none', name: 'none' },
   selectedResizeBy: { type: 'none', name: 'none' },
   unmergedLinks: [],
-  visibleNodes: [],
   visibleNodesByColumn: [],
   loadedFlowsContextId: null
 };

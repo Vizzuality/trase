@@ -2,7 +2,6 @@ import { createSelector } from 'reselect';
 import { makeGetRecolorByItems } from 'selectors/indicators.selectors';
 
 const getSelectedRecolorBy = state => state.toolLinks.selectedRecolorBy;
-const getRecolorGroups = state => state.toolLinks.recolorGroups;
 const getSelectedContext = state => state.app.selectedContext;
 const getTooltips = state => state.app.tooltips;
 const getSelectedYears = state => state.app.selectedYears;
@@ -24,7 +23,7 @@ const getSelectionRecolorBy = createSelector(
 export const getSelectedRecolorByValue = createSelector(
   [getSelectedRecolorBy, getSelectionRecolorBy],
   (selectedRecolorBy, selectionRecolorBy) => {
-    if (selectedRecolorBy.type === 'none') {
+    if (selectedRecolorBy.name === 'none') {
       return selectionRecolorBy;
     }
 
@@ -45,8 +44,3 @@ const getRecolorBy = createSelector(
 );
 
 export const getRecolorByOptions = makeGetRecolorByItems(getRecolorBy, getSelectedYears);
-
-export const getToolRecolorByGroups = createSelector(
-  getRecolorGroups,
-  recolorGroups => recolorGroups && recolorGroups.filter(c => c !== undefined)
-);

@@ -3,6 +3,7 @@
 import { toggleMap, toggleMapLayerMenu } from 'actions/app.actions';
 import { selectNodeFromGeoId, highlightNodeFromGeoId, saveMapView } from 'actions/tool.actions';
 import {
+  getVisibleNodes,
   getSelectedNodesGeoIds,
   getHighlightedNodesGeoIds
 } from 'react-components/tool/tool.selectors';
@@ -30,7 +31,7 @@ const mapStateToProps = state => ({
     : undefined,
   selectedMapContextualLayersData: state.toolLayers.selectedMapContextualLayersData,
   isMapVisible: state.toolLayers.isMapVisible,
-  visibleNodes: state.toolLinks.visibleNodes,
+  visibleNodes: getVisibleNodes(state),
   selectedBiomeFilter: state.toolLinks.selectedBiomeFilter,
   basemapId: getBasemap(state)
 });
