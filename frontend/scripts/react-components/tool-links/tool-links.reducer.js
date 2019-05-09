@@ -59,7 +59,8 @@ export const toolLinksInitialState = {
   unmergedLinks: [],
   visibleNodes: [],
   visibleNodesByColumn: [],
-  loadedFlowsContextId: null
+  loadedFlowsContextId: null,
+  isSearchOpen: false
 };
 
 const toolLinksReducer = {
@@ -319,6 +320,7 @@ const toolLinksReducerTypes = PropTypes => ({
   columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   currentQuant: PropTypes.object,
   detailedView: PropTypes.bool,
+  isSearchOpen: PropTypes.bool,
   expandedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   forcedOverview: PropTypes.bool,
   highlightedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,

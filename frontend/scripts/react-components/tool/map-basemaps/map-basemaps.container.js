@@ -7,8 +7,8 @@ import getBasemap, { shouldUseDefaultBasemap } from 'utils/getBasemap';
 
 const mapStateToProps = state => ({
   basemaps: BASEMAPS,
-  activeBasemapId: getBasemap(state.toolLayers),
-  disabled: shouldUseDefaultBasemap(state.toolLayers)
+  activeBasemapId: getBasemap(state),
+  disabled: shouldUseDefaultBasemap(state)
 });
 
 const mapDispatchToProps = {

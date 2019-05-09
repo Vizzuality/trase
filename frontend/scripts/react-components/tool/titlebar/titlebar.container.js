@@ -7,14 +7,14 @@ import {
 } from 'react-components/tool/tool.selectors';
 
 const mapStateToProps = state => {
-  const highlightedNodeData = getHighlightedNodesData(state.tool);
-  const selectedNodesData = getSelectedNodesData(state.tool);
+  const highlightedNodeData = getHighlightedNodesData(state);
+  const selectedNodesData = getSelectedNodesData(state);
   return {
     selectedNodesData,
     highlightedNodeData,
     showTitles:
       selectedNodesData.length > 0 ||
-      (!state.tool.highlightedNodeCoordinates && highlightedNodeData.length > 0)
+      (!state.toolLayers.highlightedNodeCoordinates && highlightedNodeData.length > 0)
   };
 };
 

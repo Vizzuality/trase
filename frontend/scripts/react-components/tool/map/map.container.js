@@ -12,25 +12,27 @@ import Map from 'react-components/tool/map/map.component';
 import getBasemap from 'utils/getBasemap';
 
 const mapStateToProps = state => ({
-  mapView: state.tool.mapView,
-  mapVectorData: state.tool.mapVectorData,
-  currentPolygonType: state.tool.selectedColumnsIds,
-  selectedNodesGeoIds: getSelectedNodesGeoIds(state.tool),
-  recolorByNodeIds: state.tool.recolorByNodeIds,
-  choropleth: state.tool.choropleth,
-  linkedGeoIds: state.tool.linkedGeoIds,
-  selectedGeoIds: getSelectedNodesGeoIds(state.tool),
-  highlightedGeoId: getHighlightedNodesGeoIds(state.tool)[0],
+  mapView: state.toolLayers.mapView,
+  mapVectorData: state.toolLayers.mapVectorData,
+  currentPolygonType: state.toolLinks.selectedColumnsIds,
+  selectedNodesGeoIds: getSelectedNodesGeoIds(state),
+  recolorByNodeIds: state.toolLinks.recolorByNodeIds,
+  choropleth: state.toolLayers.choropleth,
+  linkedGeoIds: state.toolLayers.linkedGeoIds,
+  selectedGeoIds: getSelectedNodesGeoIds(state),
+  highlightedGeoId: getHighlightedNodesGeoIds(state)[0],
   defaultMapView: state.app.selectedContext ? state.app.selectedContext.map : null,
-  biomeFilter: state.tool.selectedBiomeFilter,
-  forceDefaultMapView: !state.tool.selectedNodesIds.length,
-  selectedColumnsIds: state.tool.selectedColumnsIds,
-  selectedColumnId: state.tool.selectedColumnsIds ? state.tool.selectedColumnsIds[0] : undefined,
-  selectedMapContextualLayersData: state.tool.selectedMapContextualLayersData,
-  isMapVisible: state.tool.isMapVisible,
-  visibleNodes: state.tool.visibleNodes,
-  selectedBiomeFilter: state.tool.selectedBiomeFilter,
-  basemapId: getBasemap(state.tool)
+  biomeFilter: state.toolLinks.selectedBiomeFilter,
+  forceDefaultMapView: !state.toolLinks.selectedNodesIds.length,
+  selectedColumnsIds: state.toolLinks.selectedColumnsIds,
+  selectedColumnId: state.toolLinks.selectedColumnsIds
+    ? state.toolLinks.selectedColumnsIds[0]
+    : undefined,
+  selectedMapContextualLayersData: state.toolLayers.selectedMapContextualLayersData,
+  isMapVisible: state.toolLayers.isMapVisible,
+  visibleNodes: state.toolLinks.visibleNodes,
+  selectedBiomeFilter: state.toolLinks.selectedBiomeFilter,
+  basemapId: getBasemap(state)
 });
 
 const methodProps = [
