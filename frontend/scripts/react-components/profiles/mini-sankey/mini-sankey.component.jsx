@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { interpolateNumber as d3InterpolateNumber } from 'd3-interpolate';
 
-import formatValue from '../../../utils/formatValue';
-import wrapSVGText from '../../../utils/wrapSVGText';
-import { translateText } from '../../../utils/transifex';
-import Tooltip from '../../../components/shared/info-tooltip.component';
+import formatValue from 'utils/formatValue';
+import wrapSVGText from 'utils/wrapSVGText';
+import { translateText } from 'utils/transifex';
+import Tooltip from 'components/shared/info-tooltip.component';
 import Responsive from '../../shared/responsive.hoc';
 
 import './mini-sankey.scss';
