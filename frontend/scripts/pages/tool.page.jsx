@@ -14,7 +14,7 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 
-import MapContainer from 'containers/tool/map.container';
+import MapContainer from 'react-components/tool/map/map.container';
 import FlowContentContainer from 'react-components/tool/tool-content/tool-content.container';
 import FiltersNav from 'react-components/nav/filters-nav/filters-nav.container';
 import TooltipContainer from 'react-components/tool/help-tooltip/help-tooltip.container';
@@ -37,15 +37,12 @@ import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dim
 import EventManager from 'utils/eventManager';
 
 const evManager = new EventManager();
-let containers = [];
 
 export const mount = (root, store) => {
   root.innerHTML = ToolMarkup({
     search: SearchMarkup(),
     feedback: FeedbackMarkup()
   });
-
-  containers = [new MapContainer(store)];
 
   // TODO remove this
   // In order to avoid adding loading states when not needed we check that the selectedContext
@@ -81,10 +78,11 @@ export const mount = (root, store) => {
   render(
     <Provider store={store}>
       <>
+        <MapContainer />
+        <MapBasemaps />
         <FlowContentContainer />
         <MapLegend />
         <MapContextContainer />
-        <MapBasemaps />
         <NodesTitlesContainer />
         <Sankey />
         <TitlebarContainer />
@@ -106,5 +104,4 @@ export const unmount = () => {
   unmountComponentAtNode(document.getElementById('js-react-vanilla-bridge-container'));
   unmountComponentAtNode(document.getElementById('js-map-context'));
   document.querySelector('body').classList.remove('-overflow-hidden');
-  containers.forEach(container => container.remove());
 };
