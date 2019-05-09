@@ -10,9 +10,10 @@ import abbreviateNumber from 'utils/abbreviateNumber';
 export default class {
   onCreated() {
     this.el = document.querySelector('.js-map-legend');
-    this.el.addEventListener('click', () => {
+    this.toggleMapMenu = () => {
       this.callbacks.onToggleMapLayerMenu();
-    });
+    };
+    this.el.addEventListener('click', this.toggleMapMenu);
     this.choro = document.querySelector('.js-map-legend-choro');
     this.context = document.querySelector('.js-map-legend-context');
     this.map = document.querySelector('.c-map');
@@ -20,15 +21,28 @@ export default class {
     this.mapControlScale = document.querySelector('.leaflet-control-scale');
     this.warningsContainer = document.querySelector('.js-map-warnings-container');
     this.warnings = document.querySelector('.js-map-warnings');
-
-    const zoom = document.querySelector('.leaflet-control-zoom');
+    this.zoom = document.querySelector('.leaflet-control-zoom');
     const scale = document.querySelector('.leaflet-control-scale');
-    zoom.addEventListener('mouseenter', () => {
+
+    this.showScale = () => {
+      scale.classList.toggle('-visible', true);
+    };
+    this.hideScale = () => {
+      scale.classList.toggle('-visible', false);
+    };
+
+    this.zoom.addEventListener('mouseenter', () => {
       scale.classList.toggle('-visible', true);
     });
-    zoom.addEventListener('mouseleave', () => {
+    this.zoom.addEventListener('mouseleave', () => {
       scale.classList.toggle('-visible', false);
     });
+  }
+
+  onRemoved() {
+    this.zoom.removeEventListener('mouseenter', this.showScale);
+    this.zoom.removeEventListener('mouseleave', this.hideScale);
+    this.el.removeEventListener('click', this.toggleMapMenu);
   }
 
   updateChoroplethLegend({ choroplethLegend, selectedMapContextualLayersData }) {

@@ -3,7 +3,7 @@ import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.compo
 import { selectMapBasemap } from 'actions/tool.actions';
 import { BASEMAPS } from 'constants';
 import MapBasemaps from 'react-components/tool/map-basemaps/map-basemaps.component';
-import getBasemap, { shouldUseDefaultBasemap } from 'containers/helpers/getBasemap';
+import getBasemap, { shouldUseDefaultBasemap } from 'utils/getBasemap';
 
 const mapStateToProps = state => ({
   basemaps: BASEMAPS,

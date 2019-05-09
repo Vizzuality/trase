@@ -9,6 +9,13 @@ export default class MapBasemaps {
     this.buildBasemaps({ basemaps });
     this.enableBasemapSelection({ disabled });
     this.selectBasemap({ activeBasemapId });
+    this.clickBasemap = e => this._onBasemapClicked(e);
+  }
+
+  onRemoved() {
+    this.basemaps.forEach(basemap => {
+      basemap.removeEventListener('click', this.clickBasemap);
+    });
   }
 
   buildBasemaps({ basemaps }) {
@@ -19,7 +26,7 @@ export default class MapBasemaps {
       0
     );
     this.basemaps.forEach(basemap => {
-      basemap.addEventListener('click', e => this._onBasemapClicked(e));
+      basemap.addEventListener('click', this.clickBasemap);
     });
   }
 
