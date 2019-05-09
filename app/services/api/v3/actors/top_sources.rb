@@ -36,7 +36,6 @@ module Api
             @source_node_types.map(&:name),
             @commodity_production_attribute
           ).merge(
-            title: @chart_config.chart.title,
             legend_title: @commodity_production_chart_attribute.legend_name
           )
         end
