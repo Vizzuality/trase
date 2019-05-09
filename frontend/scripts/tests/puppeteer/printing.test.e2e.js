@@ -1,8 +1,13 @@
 /* eslint-disable no-console,import/no-extraneous-dependencies */
 
+import { Polly } from '@pollyjs/core';
+import PuppeteerAdapter from '@pollyjs/adapter-puppeteer';
+import FSPersister from '@pollyjs/persister-fs';
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
-import { CONTEXTS, PROFILE_NODE_ACTOR, PROFILE_NODE_PLACE } from './mocks';
-import { getRequestMockFn } from './utils';
+import { pollyConfig, handleUnnecesaryRequests } from './utils';
+
+Polly.register(PuppeteerAdapter);
+Polly.register(FSPersister);
 
 expect.extend({ toMatchImageSnapshot });
 
@@ -11,17 +16,23 @@ const TIMEOUT = 60000 || process.env.PUPETEER_TIMEOUT || 30000;
 
 jest.setTimeout(TIMEOUT);
 const { page } = global;
+const polly = new Polly('printing', pollyConfig(page));
+
+beforeAll(async () => {
+  await page.setRequestInterception(true);
+  const { server } = polly;
+  handleUnnecesaryRequests(server, BASE_URL);
+});
+
+afterAll(async () => {
+  await polly.flush();
+  await polly.stop();
+});
 
 const snapshotOptions = {
   failureThreshold: '0.05',
   failureThresholdType: 'percent'
 };
-
-beforeAll(async () => {
-  await page.setRequestInterception(true);
-  const mockRequests = await getRequestMockFn([CONTEXTS, PROFILE_NODE_ACTOR, PROFILE_NODE_PLACE]);
-  page.on('request', mockRequests);
-});
 
 describe('Prints the actor profile PDF correctly', () => {
   it('Prints actor profile - Full data', async () => {
