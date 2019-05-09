@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import capitalize from 'lodash/capitalize';
 import Line from 'react-components/profiles/line/line.component';
 import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
 import formatValue from 'utils/formatValue';
 import DropdownTabSwitcher from 'react-components/profiles/dropdown-tab-switcher/dropdown-tab-switcher.component';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import Heading from 'react-components/shared/heading/heading.component';
+import ProfileTitle from 'react-components/profiles/profile-title.component';
 
 const TranslatedLine = withTranslation(Line);
 
@@ -51,17 +51,17 @@ class TopDestinationsChart extends React.PureComponent {
   lineClassNameCallback = (lineIndex, lineDefaultStyle) => `${lineDefaultStyle} line-${lineIndex}`;
 
   getTitle() {
-    const { type, year, nodeName, verb, commodityName } = this.props;
-    const noun = {
-      actor_top_countries: 'destination countries',
-      actor_top_sources: 'sourcing regions'
-    }[type];
+    const { summary, year, title, commodityName } = this.props;
     return (
-      <React.Fragment>
-        Top {noun} of {commodityName} {verb} by{' '}
-        <span className="notranslate">{capitalize(nodeName)}</span> in{' '}
-        <span className="notranslate">{year}</span>:
-      </React.Fragment>
+      <>
+        <ProfileTitle
+          template={title}
+          summary={summary}
+          year={year}
+          commodityName={commodityName}
+        />
+        :
+      </>
     );
   }
 
@@ -134,19 +134,20 @@ TopDestinationsChart.propTypes = {
   tabs: PropTypes.array,
   testId: PropTypes.string,
   onChangeTab: PropTypes.func,
+  nodeName: PropTypes.string,
   onLinkClick: PropTypes.func,
   profileType: PropTypes.string,
-  commodityName: PropTypes.string,
-  contextId: PropTypes.number.isRequired,
-  verb: PropTypes.string.isRequired,
   lines: PropTypes.array.isRequired,
   type: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
   unit: PropTypes.string.isRequired,
   style: PropTypes.object.isRequired,
+  title: PropTypes.string.isRequired,
   height: PropTypes.number.isRequired,
-  nodeName: PropTypes.string,
-  includedYears: PropTypes.array.isRequired
+  summary: PropTypes.object.isRequired,
+  contextId: PropTypes.number.isRequired,
+  includedYears: PropTypes.array.isRequired,
+  commodityName: PropTypes.string.isRequired
 };
 
 export default TopDestinationsChart;

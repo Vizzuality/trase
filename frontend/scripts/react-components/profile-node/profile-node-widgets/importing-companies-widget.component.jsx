@@ -7,6 +7,7 @@ import Scatterplot from 'react-components/profiles/scatterplot/scatterplot.compo
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import formatValue from 'utils/formatValue';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
+import ProfileTitle from 'react-components/profiles/profile-title.component';
 
 class ImportingCompaniesWidget extends React.PureComponent {
   state = {
@@ -50,7 +51,7 @@ class ImportingCompaniesWidget extends React.PureComponent {
   };
 
   render() {
-    const { year, nodeId, contextId, printMode, commodityName, countryName, testId } = this.props;
+    const { year, nodeId, contextId, printMode, title, testId, commodityName } = this.props;
     const { tooltipConfig } = this.state;
     const params = { node_id: nodeId, context_id: contextId, year };
     return (
@@ -61,7 +62,7 @@ class ImportingCompaniesWidget extends React.PureComponent {
         {({ data, loading, error }) => {
           if (loading) {
             return (
-              <div className="spinner-section" data-test="loading-section">
+              <div className="section-placeholder" data-test="loading-section">
                 <ShrinkingSpinner className="-large" />
               </div>
             );
@@ -74,23 +75,30 @@ class ImportingCompaniesWidget extends React.PureComponent {
           }
 
           const { dimensionsX, companies } = data[GET_ACTOR_EXPORTING_COMPANIES];
-          const { nodeName, columnName } = data[GET_NODE_SUMMARY_URL];
-          const verb = columnName === 'EXPORTER' ? 'exporting' : 'importing';
+          const summary = data[GET_NODE_SUMMARY_URL];
           const dimensions = this.getDimensions(dimensionsX, companies);
 
           if (dimensions.length === 0) {
             return null;
           }
 
-          const title = `Comparing companies ${verb} ${commodityName} from ${countryName} in ${year}`;
-          const scatterplots = this.getScatterplots(dimensions, title);
+          const chartTitle = (
+            <ProfileTitle
+              template={title}
+              summary={data[GET_NODE_SUMMARY_URL]}
+              year={year}
+              commodityName={commodityName}
+            />
+          );
+
+          const scatterplots = this.getScatterplots(dimensions, chartTitle);
           return (
             <section className="c-scatterplot-container" data-test={testId}>
               <UnitsTooltip show={!!tooltipConfig} {...tooltipConfig} />
               <div className="row">
                 <div className="small-12 columns">
                   <div>
-                    {printMode && <h3 className="title">{title}</h3>}
+                    {printMode && <h3 className="title">{chartTitle}</h3>}
                     {scatterplots.map((plot, index) => (
                       <Scatterplot
                         key={index}
@@ -99,7 +107,7 @@ class ImportingCompaniesWidget extends React.PureComponent {
                         xDimension={dimensions}
                         xDimensionSelectedIndex={index}
                         testId={`${testId}-scatterplot`}
-                        node={{ id: nodeId, name: nodeName }}
+                        node={{ id: nodeId, name: summary.nodeName }}
                         year={year}
                         showTooltipCallback={this.onMouseMove(data[GET_ACTOR_EXPORTING_COMPANIES])}
                         hideTooltipCallback={this.onMouseLeave}
@@ -119,11 +127,11 @@ class ImportingCompaniesWidget extends React.PureComponent {
 ImportingCompaniesWidget.propTypes = {
   testId: PropTypes.string,
   printMode: PropTypes.bool,
-  countryName: PropTypes.string,
-  commodityName: PropTypes.string,
   year: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
   nodeId: PropTypes.number.isRequired,
-  contextId: PropTypes.number.isRequired
+  contextId: PropTypes.number.isRequired,
+  commodityName: PropTypes.string.isRequired
 };
 
 export default ImportingCompaniesWidget;

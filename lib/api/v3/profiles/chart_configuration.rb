@@ -33,6 +33,12 @@ module Api
           @attributes[idx]
         end
 
+        def named_chart_attribute(name)
+          @chart_attributes.find do |chart_attribute|
+            chart_attribute.identifier == name
+          end
+        end
+
         def named_node_types(name)
           result = []
           @chart_node_types.each.with_index do |chart_node_type, idx|

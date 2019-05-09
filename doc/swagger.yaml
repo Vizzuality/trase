@@ -2029,6 +2029,12 @@ components:
         data:
           type: object
           properties:
+            title:
+              type: string
+              example: Top destination countries of {{commodity_name}} exported by {{company_name}} in {{year}}
+            legend_title:
+              type: string
+              example: {{commodity_name}} exported in {{year}}
             included_years:
               type: array
               items:
@@ -2067,6 +2073,12 @@ components:
         data:
           type: object
           properties:
+            title:
+              type: string
+              example: Top sourcing regions of {{commodity_name}} exported by {{company_name}} in {{year}}
+            legend_title:
+              type: string
+              example: {{commodity_name}} exported in $year$
             included_years:
               type: array
               items:

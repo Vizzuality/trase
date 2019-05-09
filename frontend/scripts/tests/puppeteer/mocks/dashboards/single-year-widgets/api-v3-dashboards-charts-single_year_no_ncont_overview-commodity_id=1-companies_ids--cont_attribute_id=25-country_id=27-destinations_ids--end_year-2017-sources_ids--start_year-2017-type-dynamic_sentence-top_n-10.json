@@ -1,1 +1,0 @@
-{"data":[{"y0":114599167.987056}],"meta":{"xAxis":{},"yAxis":{"type":"number","label":"Trade volume","prefix":"","format":"","suffix":"t"},"x":{},"y0":{"label":"Trade volume","tooltip":{"prefix":"","format":"","suffix":"t"}},"info":{"node_type":null,"years":{"start_year":2017,"end_year":null},"top_n":null,"filter":{"cont_attribute":"Trade volume","ncont_attribute":null}}}}

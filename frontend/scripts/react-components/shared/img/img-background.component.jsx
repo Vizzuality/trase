@@ -27,7 +27,7 @@ function ImgBackground(props) {
             {React.createElement(as, currentProps, children)}
             {!inView && (
               <a
-                style={{ visibility: 'hidden', position: 'absolute' }}
+                style={{ display: 'block', visibility: 'hidden', position: 'absolute' }}
                 href={src}
                 aria-hidden="true"
               >

@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import formatValue from 'utils/formatValue';
-import { translateText } from 'utils/transifex';
 import ChoroLegend from 'react-components/profiles/choro-legend.component';
 import cx from 'classnames';
 import Map from 'react-components/profiles/map.component';
+import ProfileTitle from 'react-components/profiles/profile-title.component';
 
 class TopDestinationsMap extends React.PureComponent {
   state = { tooltipConfig: null };
@@ -69,7 +69,17 @@ class TopDestinationsMap extends React.PureComponent {
   }
 
   render() {
-    const { year, printMode, buckets, verb, activeTab, height, commodityName, testId } = this.props;
+    const {
+      year,
+      printMode,
+      buckets,
+      title,
+      summary,
+      activeTab,
+      height,
+      commodityName,
+      testId
+    } = this.props;
     const { tooltipConfig } = this.state;
     const width = activeTab ? 400 : '100%';
 
@@ -84,10 +94,14 @@ class TopDestinationsMap extends React.PureComponent {
           >
             <ChoroLegend
               testId={`${testId}-legend`}
-              title={[
-                translateText(`${commodityName} ${verb} in ${year}`),
-                translateText('(tonnes)')
-              ]}
+              title={
+                <ProfileTitle
+                  template={title}
+                  summary={summary}
+                  year={year}
+                  commodityName={commodityName}
+                />
+              }
               bucket={[buckets[0], ...buckets]}
             />
           </div>
@@ -117,14 +131,15 @@ TopDestinationsMap.propTypes = {
   nodeName: PropTypes.string,
   activeTab: PropTypes.string,
   profileType: PropTypes.string,
-  countryName: PropTypes.string,
-  commodityName: PropTypes.string,
-  verb: PropTypes.string.isRequired,
   lines: PropTypes.array.isRequired,
   year: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
   height: PropTypes.number.isRequired,
   buckets: PropTypes.array.isRequired,
-  includedYears: PropTypes.array.isRequired
+  summary: PropTypes.string.isRequired,
+  countryName: PropTypes.string.isRequired,
+  includedYears: PropTypes.array.isRequired,
+  commodityName: PropTypes.string.isRequired
 };
 
 export default TopDestinationsMap;
