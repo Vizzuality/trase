@@ -31,6 +31,7 @@ import {
   SET_MAP_DIMENSIONS_DATA,
   RESET_TOOL_LOADERS
 } from 'actions/tool.actions';
+
 import {
   LOAD_INITIAL_CONTEXT,
   SET_CONTEXT,
