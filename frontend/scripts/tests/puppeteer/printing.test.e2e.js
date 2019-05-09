@@ -1,4 +1,4 @@
-/* eslint-disable no-console */
+/* eslint-disable no-console,import/no-extraneous-dependencies */
 
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
 import { CONTEXTS, PROFILE_NODE_ACTOR, PROFILE_NODE_PLACE } from './mocks';
@@ -26,7 +26,7 @@ beforeAll(async () => {
 describe('Prints the actor profile PDF correctly', () => {
   it('Prints actor profile - Full data', async () => {
     await page.goto(
-      `${BASE_URL}/profile-actor?lang=en&nodeId=441&contextId=1&year=2015&print=true`
+      `${BASE_URL}/profile-actor?lang=en&nodeId=33624&contextId=1&year=2015&print=true`
     );
     const promises = [
       page.waitForSelector('[data-test=company-compare]'),
@@ -47,7 +47,7 @@ describe('Prints the actor profile PDF correctly', () => {
 
   it('Prints place profile PDF', async () => {
     await page.goto(
-      `${BASE_URL}/profile-place?lang=en&nodeId=2759&contextId=1&year=2015&print=true`
+      `${BASE_URL}/profile-place?lang=en&nodeId=10902&contextId=1&year=2015&print=true`
     );
     const promises = [
       page.waitForSelector('[data-test=sustainability-indicators]'),

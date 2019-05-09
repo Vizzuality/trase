@@ -13,19 +13,16 @@ export async function testRootSearch(page, expect, { nodeName, nodeType, profile
   expect(page.url().startsWith(`${BASE_URL}/profile-${profileType}`)).toBe(true);
 }
 
-export async function testProfileSpinners(page, expect) {
-  const loadingSectionSelector = '[data-test=loading-section]';
-
-  await page.waitForSelector(loadingSectionSelector);
-  const loadingSections = await page.$$(loadingSectionSelector);
-  expect(loadingSections.length).toBe(5);
-}
-
 export async function testProfileSummary(page, expect, { titles, profileType, titlesLength }) {
-  await page.waitForSelector(`[data-test=${profileType}-summary]`);
-  const titleGroup = await page.$eval('[data-test=title-group]', group => group.children.length);
-  const first = await page.$eval('[data-test=title-group-el-0]', title => title.textContent);
-  const second = await page.$eval('[data-test=title-group-el-1]', title => title.textContent);
+  await Promise.all([
+    page.waitForSelector(`[data-test=${profileType}-summary]`),
+    page.waitForSelector('[data-test=title-group-el-1]')
+  ]);
+  const [titleGroup, first, second] = await Promise.all([
+    page.$eval('[data-test=title-group]', group => group.children.length),
+    page.$eval('[data-test=title-group-el-0]', title => title.textContent),
+    page.$eval('[data-test=title-group-el-1]', title => title.textContent)
+  ]);
 
   expect(titleGroup).toBe(titlesLength);
   expect(first.toLowerCase()).toMatch(titles[0]);
@@ -48,19 +45,18 @@ export async function testProfileMultiTable(
   }
 ) {
   await page.waitForSelector(`[data-test=${testId}]`);
-  const tableTitle = await page.$eval(
-    `[data-test=${testId}-multi-switch-title]`,
-    el => el.textContent
-  );
-  const tabs = await page.$$(`[data-test=${testId}-multi-switch-item]`);
-  const columns = await page.$$eval(`[data-test=${testId}-multi-table-header-name]`, list => ({
-    length: list.length,
-    firstCol: list[0].textContent
-  }));
-  const rows = await page.$$eval(`[data-test=${testId}-multi-table-row]`, list => ({
-    length: list.length,
-    firstRow: list[0].textContent
-  }));
+  const [tableTitle, tabs, columns, rows] = await Promise.all([
+    await page.$eval(`[data-test=${testId}-multi-switch-title]`, el => el.textContent),
+    page.$$(`[data-test=${testId}-multi-switch-item]`),
+    page.$$eval(`[data-test=${testId}-multi-table-header-name]`, list => ({
+      length: list.length,
+      firstCol: list[0].textContent
+    })),
+    page.$$eval(`[data-test=${testId}-multi-table-row]`, list => ({
+      length: list.length,
+      firstRow: list[0].textContent
+    }))
+  ]);
 
   if (linkName) {
     const links = await page.$$eval(`[data-test=${testId}-multi-table-cell-link]`, list => ({
@@ -82,9 +78,14 @@ export async function testProfileMultiTable(
 }
 
 export async function testProfileMiniSankey(page, expect, { testId, title, flowsLength }) {
-  await page.waitForSelector(`[data-test=${testId}]`);
-  const miniSankeyTitle = await page.$eval(`[data-test=${testId}-title]`, el => el.textContent);
-  const miniSankeyFlows = await page.$$(`[data-test=${testId}-mini-sankey-flow]`, flows => flows);
+  await Promise.all([
+    page.waitForSelector(`[data-test=${testId}]`),
+    page.waitForSelector(`[data-test=${testId}-mini-sankey-flow]`)
+  ]);
+  const [miniSankeyTitle, miniSankeyFlows] = await Promise.all([
+    page.$eval(`[data-test=${testId}-title]`, el => el.textContent),
+    page.$$(`[data-test=${testId}-mini-sankey-flow]`, flows => flows)
+  ]);
 
   expect(miniSankeyTitle.toLowerCase()).toMatch(title);
   expect(miniSankeyFlows.length).toBe(flowsLength);

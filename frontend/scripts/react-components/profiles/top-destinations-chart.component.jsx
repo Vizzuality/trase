@@ -53,7 +53,15 @@ class TopDestinationsChart extends React.PureComponent {
   getTitle() {
     const { summary, year, title, commodityName } = this.props;
     return (
-      <ProfileTitle template={title} summary={summary} year={year} commodityName={commodityName} />
+      <>
+        <ProfileTitle
+          template={title}
+          summary={summary}
+          year={year}
+          commodityName={commodityName}
+        />
+        :
+      </>
     );
   }
 

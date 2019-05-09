@@ -9,6 +9,9 @@ import 'react-components/profiles/title-group/title-group.scss';
 
 class TitleGroup extends React.PureComponent {
   static renderPlainElement(title, i) {
+    if (!title.name) {
+      return null;
+    }
     return (
       <div key={title.label} className="title-group-element-container">
         <div className="title-group-element" key={title.label}>
@@ -19,7 +22,7 @@ class TitleGroup extends React.PureComponent {
             transform="uppercase"
             className="title-group-label"
           >
-            {title.label || '-'}
+            {title.label}
           </Text>
           <Heading
             size="lg"
@@ -27,7 +30,7 @@ class TitleGroup extends React.PureComponent {
             className="title-group-content"
             data-test={`title-group-el-${i}`}
           >
-            {title.name ? capitalize(title.name) : '-'}
+            {capitalize(title.name)}
           </Heading>
         </div>
       </div>
