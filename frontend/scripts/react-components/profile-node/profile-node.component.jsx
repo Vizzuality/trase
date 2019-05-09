@@ -99,6 +99,7 @@ class ProfileNode extends React.PureComponent {
             type={chart.identifier}
             contextId={context.id}
             onLinkClick={updateQueryParams}
+            countryName={context.countryName}
             commodityName={context.commodityName}
             testId={isCountries ? 'top-destination-countries' : 'top-sourcing-regions'}
           />
