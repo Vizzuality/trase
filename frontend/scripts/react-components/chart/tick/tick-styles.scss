@@ -8,4 +8,8 @@
   font-family: $font-family-1;
   text-anchor: end;
   letter-spacing: -0.7px;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
