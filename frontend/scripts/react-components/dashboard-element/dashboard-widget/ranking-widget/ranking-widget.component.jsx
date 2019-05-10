@@ -7,6 +7,7 @@ import Text from 'react-components/shared/text';
 import Heading from 'react-components/shared/heading';
 import capitalize from 'lodash/capitalize';
 import { format } from 'd3-format';
+import Link from 'redux-first-router-link';
 
 class RankingWidget extends PureComponent {
   state = { page: 0 };
@@ -18,13 +19,21 @@ class RankingWidget extends PureComponent {
   render() {
     const { data, config, pageSize } = this.props;
     const { page } = this.state;
-    const pageData = pageSize ? data.slice(page * pageSize, (page + 1) * pageSize) : data;
+    const dataWithUrl = data.map((d, i) => {
+      const node = config.yLabelsProfileInfo[i];
+      const lastYear = config.years.end_year || config.years.start_year;
+      const url = `/profile-${node.profile}?year=${lastYear}&nodeId=${node.id}`;
+      return { ...d, url };
+    });
+    const pageData = pageSize
+      ? dataWithUrl.slice(page * pageSize, (page + 1) * pageSize)
+      : dataWithUrl;
     const formatValue = format((config.yAxisLabel && config.yAxisLabel.format) || ',.2f');
 
     return (
       <div className="c-ranking-widget">
         <ul className="list">
-          {data.length > 0 &&
+          {dataWithUrl.length > 0 &&
             pageData.map((item, index) => (
               <li key={item.y} className="list-row">
                 <div className="list-item">
@@ -41,9 +50,17 @@ class RankingWidget extends PureComponent {
                         {index + 1 + pageSize * page}
                       </Text>
                     </div>
-                    <Heading as="span" size="lg" weight="bold" color="white" className="item-name">
-                      {capitalize(item.y)}
-                    </Heading>
+                    <Link to={item.url}>
+                      <Heading
+                        as="span"
+                        size="lg"
+                        weight="bold"
+                        color="white"
+                        className="item-name"
+                      >
+                        {capitalize(item.y)}
+                      </Heading>
+                    </Link>
                   </div>
                   <Text className="item-value" color="white" variant="mono" size="md">
                     {formatValue(item.x0)} {config.xAxisLabel && config.xAxisLabel.suffix}
