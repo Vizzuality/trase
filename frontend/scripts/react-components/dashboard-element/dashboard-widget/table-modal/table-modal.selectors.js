@@ -123,8 +123,12 @@ const getDataColumnNames = createSelector(
     const metaColumns = {
       ...meta
     };
-    const notColumnKeys = ['info', 'xAxis', 'yAxis'];
-    if (chartType === CHART_TYPES.horizontalBar || chartType === CHART_TYPES.horizontalStackedBar) {
+    const notColumnKeys = ['info', 'xAxis', 'yAxis', 'yLabelsProfileInfo', 'aggregates'];
+    if (
+      chartType === CHART_TYPES.horizontalBar ||
+      chartType === CHART_TYPES.horizontalStackedBar ||
+      chartType === CHART_TYPES.ranking
+    ) {
       notColumnKeys.push('y');
     } else {
       notColumnKeys.push('x');
@@ -167,7 +171,6 @@ export const getTableData = createSelector(
         if (_hasVariableColumn) {
           rowData.push(getVariableColumnData(item, column, meta));
         }
-
         rowData.push(item[column]);
         if (_hasNContIndicator) {
           rowData.push(nonContValue(item, column, meta, chartType, _hasMultipleYears));

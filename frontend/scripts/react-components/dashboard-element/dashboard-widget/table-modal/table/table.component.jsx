@@ -70,7 +70,9 @@ function Table(props) {
           return (
             <div style={style} className={cx('list-item', !(rowIndex % 2) && '-even')}>
               <Text align="center" size="md" as="span" variant="mono">
-                {item && formatFn ? formatFn(item) : item}
+                {formatFn && (item === 0 || item) && !Number.isNaN(parseFloat(item))
+                  ? formatFn(item)
+                  : item}
               </Text>
             </div>
           );
