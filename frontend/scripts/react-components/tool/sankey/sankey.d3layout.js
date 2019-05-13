@@ -52,7 +52,7 @@ const sankeyLayout = () => {
 
   sankeyLayoutState.links = () => links;
 
-  sankeyLayoutState.isReady = () => viewportWidth && columns && recolorBy;
+  sankeyLayoutState.isReady = () => viewportWidth && columns;
 
   sankeyLayoutState.relayout = () => {
     if (!sankeyLayoutState.isReady()) {
@@ -176,7 +176,7 @@ const sankeyLayout = () => {
       const tIdBY = stackedHeightsByNodeId.target[linkB.targetNodeId];
       const defaultSort = sIdAY - sIdBY || tIdAY - tIdBY;
 
-      if (recolorBy.name !== 'none') {
+      if (recolorBy) {
         // sorts alphabetically with quals, numerically with inds
         // TODO for quals use the order presented in the color by menu
         if (linkA.recolorBy === linkB.recolorBy) {

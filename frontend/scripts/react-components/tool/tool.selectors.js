@@ -1,5 +1,6 @@
 import compact from 'lodash/compact';
 import { createSelector } from 'reselect';
+import { makeGetSelectedResizeBy, makeGetSelectedRecolorBy } from 'selectors/indicators.selectors';
 import getVisibleNodesUtil from 'reducers/helpers/getVisibleNodes';
 import splitVisibleNodesByColumn from 'reducers/helpers/splitVisibleNodesByColumn';
 import sortVisibleNodes from 'reducers/helpers/sortVisibleNodes';
@@ -8,6 +9,38 @@ import filterLinks from 'reducers/helpers/filterLinks';
 import getNodesAtColumns from 'reducers/helpers/getNodesAtColumns';
 import getNodesColoredBySelection from 'reducers/helpers/getNodesColoredBySelection';
 import getNextRecolorGroups from 'reducers/helpers/getRecolorGroups';
+
+const getSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
+const getHighlightedNodesIds = state => state.toolLinks.highlightedNodesIds;
+const getNodesDictWithMeta = state => state.toolLinks.nodesDictWithMeta;
+const getSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
+const getNodesDict = state => state.toolLinks.nodesDict;
+const getRawLinks = state => state.toolLinks.rawLinks;
+const getLinksMeta = state => state.toolLinks.linksMeta;
+const getSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
+const getChoropleth = state => state.toolLayers.choropleth;
+const getUnmergedLinks = state => state.toolLinks.unmergedLinks;
+const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
+const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
+const getToolBiomeFilter = state => state.toolLinks.selectedBiomeFilter;
+const getSelectedContext = state => state.app.selectedContext;
+
+export const getSelectedResizeBy = makeGetSelectedResizeBy(getToolResizeBy, getSelectedContext);
+export const getSelectedRecolorBy = makeGetSelectedRecolorBy(getToolRecolorBy, getSelectedContext);
+
+export const getSelectedBiomeFilter = createSelector(
+  [getToolBiomeFilter, getSelectedContext],
+  (selectedBiomeFilter, selectedContext) => {
+    if (!selectedContext || !selectedContext.filterBy.length > 0) {
+      return { value: 'none' };
+    }
+    return (
+      selectedContext.filterBy[0].nodes.find(
+        filterBy => filterBy.name === selectedBiomeFilter?.name
+      ) || { value: 'none', name: 'none' }
+    );
+  }
+);
 
 const getNodeSelectedMeta = (selectedMapDimension, node, selectedResizeByLabel, visibleNode) => {
   if (!node.meta || selectedMapDimension === null) {
@@ -73,18 +106,6 @@ const getNodesGeoIds = nodesData =>
   nodesData
     .filter(node => node.isGeo === true && typeof node.geoId !== 'undefined' && node.geoId !== null)
     .map(node => node.geoId);
-
-const getSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
-const getHighlightedNodesIds = state => state.toolLinks.highlightedNodesIds;
-const getNodesDictWithMeta = state => state.toolLinks.nodesDictWithMeta;
-const getSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
-const getSelectedResizeBy = state => state.toolLinks.selectedResizeBy;
-const getNodesDict = state => state.toolLinks.nodesDict;
-const getRawLinks = state => state.toolLinks.rawLinks;
-const getLinksMeta = state => state.toolLinks.linksMeta;
-const getSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
-const getChoropleth = state => state.toolLayers.choropleth;
-const getUnmergedLinks = state => state.toolLinks.unmergedLinks;
 
 export const getVisibleNodes = createSelector(
   [getRawLinks, getNodesDict, getLinksMeta, getSelectedColumnsIds],

@@ -17,7 +17,8 @@ import {
 import {
   getVisibleNodesByColumn,
   getMergedLinks,
-  getNodesColored
+  getNodesColored,
+  getSelectedRecolorBy
 } from 'react-components/tool/tool.selectors';
 import Sankey from 'react-components/tool/sankey/sankey.component';
 
@@ -29,7 +30,7 @@ const mapStateToProps = state => ({
   currentQuant: state.toolLinks.currentQuant,
   detailedView: state.toolLinks.detailedView,
   selectedNodesIds: state.toolLinks.selectedNodesIds,
-  selectedRecolorBy: state.toolLinks.selectedRecolorBy,
+  selectedRecolorBy: getSelectedRecolorBy(state),
   hasExpandedNodesIds: getHasExpandedNodesIds(state),
   highlightedNodesIds: state.toolLinks.highlightedNodesIds,
   visibleNodesByColumn: getVisibleNodesByColumn(state),

@@ -30,7 +30,10 @@ import uniq from 'lodash/uniq';
 import isEmpty from 'lodash/isEmpty';
 import xor from 'lodash/xor';
 import { getCurrentContext } from 'reducers/helpers/contextHelper';
-import { getSelectedNodesColumnsPos } from 'react-components/tool/tool.selectors';
+import {
+  getSelectedNodesColumnsPos,
+  getSelectedResizeBy
+} from 'react-components/tool/tool.selectors';
 import pSettle from 'p-settle';
 
 export const RESET_SELECTION = 'RESET_SELECTION';
@@ -410,12 +413,13 @@ export function loadLinks() {
       type: SET_FLOWS_LOADING_STATE,
       payload: { loadedFlowsContextId: state.app.selectedContext.id }
     });
+    const selectedResizeBy = getSelectedResizeBy(state);
     const params = {
       context_id: state.app.selectedContext.id,
       start_year: state.app.selectedYears[0],
       end_year: state.app.selectedYears[1],
       include_columns: state.toolLinks.selectedColumnsIds.join(','),
-      flow_quant: state.toolLinks.selectedResizeBy.name,
+      flow_quant: selectedResizeBy.name,
       locked_nodes: state.toolLinks.selectedNodesIds
     };
     const areNodesExpanded = !isEmpty(state.toolLinks.expandedNodesIds);

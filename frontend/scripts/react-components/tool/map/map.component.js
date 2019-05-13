@@ -143,7 +143,7 @@ export default class {
     choropleth,
     linkedGeoIds,
     defaultMapView,
-    biomeFilter,
+    selectedBiomeFilter,
     forceDefaultMapView
   }) {
     this.polygonTypesLayers = {};
@@ -165,7 +165,7 @@ export default class {
       }
     });
 
-    this.selectPolygonType({ selectedColumnsIds: currentPolygonType, biomeFilter });
+    this.selectPolygonType({ selectedColumnsIds: currentPolygonType, selectedBiomeFilter });
     if (selectedNodesGeoIds) {
       this.selectPolygons({ selectedGeoIds: selectedNodesGeoIds, linkedGeoIds });
     }
@@ -175,7 +175,7 @@ export default class {
     if (choropleth) {
       this._drawChoroplethLayer(
         choropleth,
-        biomeFilter,
+        selectedBiomeFilter,
         linkedGeoIds,
         defaultMapView,
         forceDefaultMapView
@@ -270,7 +270,7 @@ export default class {
   selectPolygonType({
     selectedColumnsIds,
     choropleth,
-    biomeFilter,
+    selectedBiomeFilter,
     linkedGeoIds,
     defaultMapView,
     forceDefaultMapView
@@ -289,7 +289,7 @@ export default class {
       if (choropleth) {
         this._drawChoroplethLayer(
           choropleth,
-          biomeFilter,
+          selectedBiomeFilter,
           linkedGeoIds,
           defaultMapView,
           forceDefaultMapView

@@ -4,6 +4,7 @@ import { toggleMap, toggleMapLayerMenu } from 'actions/app.actions';
 import { selectNodeFromGeoId, highlightNodeFromGeoId, saveMapView } from 'actions/tool.actions';
 import {
   getVisibleNodes,
+  getSelectedBiomeFilter,
   getSelectedNodesGeoIds,
   getHighlightedNodesGeoIds
 } from 'react-components/tool/tool.selectors';
@@ -23,7 +24,6 @@ const mapStateToProps = state => ({
   selectedGeoIds: getSelectedNodesGeoIds(state),
   highlightedGeoId: getHighlightedNodesGeoIds(state)[0],
   defaultMapView: state.app.selectedContext ? state.app.selectedContext.map : null,
-  biomeFilter: state.toolLinks.selectedBiomeFilter,
   forceDefaultMapView: !state.toolLinks.selectedNodesIds.length,
   selectedColumnsIds: state.toolLinks.selectedColumnsIds,
   selectedColumnId: state.toolLinks.selectedColumnsIds
@@ -32,7 +32,7 @@ const mapStateToProps = state => ({
   selectedMapContextualLayersData: state.toolLayers.selectedMapContextualLayersData,
   isMapVisible: state.toolLayers.isMapVisible,
   visibleNodes: getVisibleNodes(state),
-  selectedBiomeFilter: state.toolLinks.selectedBiomeFilter,
+  selectedBiomeFilter: getSelectedBiomeFilter(state),
   basemapId: getBasemap(state)
 });
 
@@ -53,7 +53,7 @@ const methodProps = [
       'choropleth',
       'linkedGeoIds',
       'defaultMapView',
-      'biomeFilter',
+      'selectedBiomeFilter',
       'forceDefaultMapView'
     ]
   },
@@ -63,7 +63,7 @@ const methodProps = [
     returned: [
       'selectedColumnsIds',
       'choropleth',
-      'biomeFilter',
+      'selectedBiomeFilter',
       'linkedGeoIds',
       'defaultMapView',
       'forceDefaultMapView'

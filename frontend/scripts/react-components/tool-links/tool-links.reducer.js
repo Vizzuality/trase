@@ -17,15 +17,13 @@ import {
   COLLAPSE_NODE_SELECTION,
   RESET_TOOL_LOADERS
 } from 'actions/tool.actions';
-import { LOAD_INITIAL_CONTEXT, SET_CONTEXT } from 'actions/app.actions';
+import { SET_CONTEXT } from 'actions/app.actions';
 import groupBy from 'lodash/groupBy';
 import isEmpty from 'lodash/isEmpty';
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
 import getNodesDict from 'reducers/helpers/getNodesDict';
 import splitLinksByColumn from 'reducers/helpers/splitLinksByColumn';
-
-const defaultFilter = { value: 'none', name: 'none' };
 
 export const toolLinksInitialState = {
   columns: [],
@@ -40,11 +38,11 @@ export const toolLinksInitialState = {
   nodesDict: null,
   nodesDictWithMeta: {},
   recolorByNodeIds: [],
-  selectedBiomeFilter: { name: 'none', value: 'none' },
+  selectedBiomeFilter: null,
   selectedColumnsIds: [],
   selectedNodesIds: [],
-  selectedRecolorBy: { type: 'none', name: 'none' },
-  selectedResizeBy: { type: 'none', name: 'none' },
+  selectedRecolorBy: null,
+  selectedResizeBy: null,
   unmergedLinks: [],
   loadedFlowsContextId: null,
   isSearchOpen: false
@@ -57,29 +55,9 @@ const toolLinksReducer = {
         highlightedNodesIds: [],
         selectedNodesIds: [],
         expandedNodesIds: [],
-        selectedBiomeFilter: { value: 'none' },
+        selectedBiomeFilter: null,
         recolorByNodeIds: []
       });
-    });
-  },
-  [LOAD_INITIAL_CONTEXT](state, action) {
-    return immer(state, draft => {
-      const selectedContext = action.payload;
-      draft.selectedRecolorBy =
-        selectedContext.recolorBy.find(recolorBy => recolorBy.isDefault === true) || defaultFilter;
-
-      draft.selectedResizeBy = selectedContext.resizeBy.find(
-        resizeBy => resizeBy.isDefault === true
-      );
-
-      if (!selectedContext.filterBy.length > 0) {
-        draft.selectedBiomeFilter = { value: 'none' };
-      } else {
-        draft.selectedBiomeFilter =
-          selectedContext.filterBy[0].nodes.find(
-            filterBy => filterBy.name === state.selectedBiomeFilterName
-          ) || defaultFilter;
-      }
     });
   },
   [SET_CONTEXT](state, action) {
@@ -95,9 +73,9 @@ const toolLinksReducer = {
         selectedContext.filterBy.length > 0 && selectedContext.filterBy[0][0];
 
       Object.assign(draft, {
-        selectedRecolorBy: defaultRecolorBy || defaultFilter,
+        selectedRecolorBy: defaultRecolorBy || null,
         selectedResizeBy: defaultResizeBy,
-        selectedBiomeFilter: defaultBiomeFilterBy || defaultFilter,
+        selectedBiomeFilter: defaultBiomeFilterBy || null,
         detailedView: false,
         selectedNodesIds: [],
         expandedNodesIds: []
@@ -212,11 +190,9 @@ const toolLinksReducer = {
   [SELECT_COLUMN](state, action) {
     return immer(state, draft => {
       // TODO also update choropleth with default selected indicators
-      const selectedColumnsIds = [].concat(state.selectedColumnsIds);
-      if (selectedColumnsIds.indexOf(action.columnId) === -1) {
-        selectedColumnsIds[action.columnIndex] = action.columnId;
+      if (draft.selectedColumnsIds.indexOf(action.columnId) === -1) {
+        draft.selectedColumnsIds[action.columnIndex] = action.columnId;
       }
-      return Object.assign(draft, { selectedColumnsIds });
     });
   },
   [UPDATE_NODE_SELECTION](state, action) {
@@ -251,7 +227,7 @@ const toolLinksReducer = {
   },
   [RESET_TOOL_LOADERS](state) {
     return immer(state, draft => {
-      Object.assign(draft, { flowsLoading: true, mapLoading: true });
+      Object.assign(draft, { flowsLoading: true });
     });
   }
 };

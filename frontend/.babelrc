@@ -41,9 +41,6 @@
         "@babel/plugin-proposal-optional-chaining",
         ["@babel/plugin-proposal-class-properties", { "spec": true }],
         "@babel/plugin-transform-modules-commonjs",
-        ["@babel/transform-runtime", {
-          "corejs": 3
-        }],
         ["module-resolver", {
           "alias": {
             "scripts": "./scripts",

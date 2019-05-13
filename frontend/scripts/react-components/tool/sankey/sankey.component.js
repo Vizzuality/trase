@@ -179,11 +179,7 @@ export default class {
 
   _getLinkColor(link, selectedRecolorBy) {
     let classPath = 'sankey-link';
-    if (!selectedRecolorBy) {
-      return classPath;
-    }
-
-    if (selectedRecolorBy.name !== 'none') {
+    if (selectedRecolorBy) {
       if (link.recolorBy === null) {
         return classPath;
       }
@@ -326,7 +322,7 @@ export default class {
       }
     ];
 
-    if (this.currentSelectedRecolorBy && this.currentSelectedRecolorBy.name !== 'none') {
+    if (this.currentSelectedRecolorBy) {
       values.push({
         title: this.currentSelectedRecolorBy.label,
         value: this._getLinkValue(link)
