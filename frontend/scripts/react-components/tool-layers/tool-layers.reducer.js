@@ -15,15 +15,15 @@ import {
   TOGGLE_MAP_SIDEBAR_GROUP,
   SET_MAP_DIMENSIONS_DATA
 } from 'actions/tool.actions';
-import { LOAD_INITIAL_CONTEXT, SET_CONTEXT } from 'scripts/actions/app.actions';
-import isEqual from 'lodash/isEqual';
+import { SET_CONTEXT } from 'scripts/actions/app.actions';
 import keyBy from 'lodash/keyBy';
+import immer from 'immer';
 import createReducer from 'utils/createReducer';
 import getChoropleth from 'scripts/reducers/helpers/getChoropleth';
-import getMapDimensions from 'scripts/reducers/helpers/getMapDimensions';
 import { getMapDimensionsWarnings } from 'scripts/reducers/helpers/getMapDimensionsWarnings';
 import getNodesDict from 'scripts/reducers/helpers/getNodesDict';
 import setNodesMeta from 'scripts/reducers/helpers/setNodesMeta';
+import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 
 export const toolLayersInitialState = {
   nodesDict: null,
@@ -35,7 +35,7 @@ export const toolLayersInitialState = {
   isMapVisible: false,
   linkedGeoIds: [],
   mapContextualLayers: [],
-  mapDimensions: [],
+  mapDimensions: {},
   mapDimensionsGroups: [],
   mapLoading: true,
   mapVectorData: null,
@@ -48,211 +48,194 @@ export const toolLayersInitialState = {
 };
 
 const toolLayersReducer = {
-  [LOAD_INITIAL_CONTEXT](state, action) {
-    const selectedContext = action.payload;
-
-    // use current selectedMapContextualLayers, or use the context's default
-    let selectedMapContextualLayers = selectedContext.defaultContextLayers || undefined;
-    if (
-      state.selectedMapContextualLayers !== undefined &&
-      state.selectedMapContextualLayers !== null
-    ) {
-      selectedMapContextualLayers = state.selectedMapContextualLayers;
-    }
-
-    let selectedMapBasemap = selectedContext.defaultBasemap || 'satellite';
-    if (state.selectedMapBasemap !== undefined && state.selectedMapBasemap !== null) {
-      selectedMapBasemap = state.selectedMapBasemap;
-    }
-
-    // force state updates on the component
-    const mapView = state.mapView ? Object.assign({}, state.mapView) : selectedContext.map;
-
-    return Object.assign({}, state, {
-      selectedMapContextualLayers,
-      selectedMapBasemap,
-      mapView
-    });
-  },
-  [SET_CONTEXT](state, action) {
-    const selectedContext = action.payload;
-    if (!selectedContext) {
-      return Object.assign({}, state);
-    }
-
-    return Object.assign({}, state, {
-      selectedMapContextualLayers: selectedContext.defaultContextLayers || undefined,
-      selectedMapBasemap: selectedContext.defaultBasemap || 'satellite',
-      mapView: selectedContext.map
+  [SET_CONTEXT](state) {
+    return immer(state, draft => {
+      draft.mapView = null;
+      draft.selectedMapBasemap = null;
+      draft.selectedMapContextualLayers = null;
     });
   },
 
   [SET_MAP_LOADING_STATE](state) {
-    return Object.assign({}, state, { mapLoading: true });
+    return immer(state, draft => {
+      draft.mapLoading = true;
+    });
   },
 
   [SET_NODE_ATTRIBUTES](state, action) {
-    const nodesMeta = action.payload;
+    return immer(state, draft => {
+      const nodesMeta = action.payload;
 
-    // store dimension values in nodesDict as uid: dimensionValue
-    const nodesDictWithMeta = setNodesMeta(state.nodesDict, nodesMeta, state.mapDimensions);
+      // store dimension values in nodesDict as uid: dimensionValue
+      const nodesDictWithMeta = setNodesMeta(draft.nodesDict, nodesMeta, draft.mapDimensions);
 
-    const { choropleth, choroplethLegend } = getChoropleth(
-      state.selectedMapDimensions,
-      nodesDictWithMeta,
-      state.mapDimensions
-    );
+      const { choropleth, choroplethLegend } = getChoropleth(
+        draft.selectedMapDimensions,
+        nodesDictWithMeta,
+        state.mapDimensions
+      );
 
-    return Object.assign({}, state, {
-      nodesDictWithMeta,
-      choropleth,
-      choroplethLegend,
-      mapLoading: false
+      return Object.assign(draft, {
+        nodesDictWithMeta,
+        choropleth,
+        choroplethLegend,
+        mapLoading: false
+      });
     });
   },
   [SET_MAP_DIMENSIONS_DATA](state, action) {
-    const mapDimensionsMeta = action.payload.mapDimensionsMetaJSON;
-    const rawMapDimensions = mapDimensionsMeta.dimensions;
-    const mapDimensions = getMapDimensions(rawMapDimensions);
-
-    const mapDimensionsGroups = mapDimensionsMeta.dimensionGroups.map(group => ({
-      group,
-      dimensions: mapDimensions.filter(dimension => dimension.groupId === group.id)
-    }));
-
-    return Object.assign({}, state, {
-      mapDimensions,
-      mapDimensionsGroups
+    return immer(state, draft => {
+      const { dimensions, dimensionGroups } = action.payload.mapDimensionsMetaJSON;
+      dimensions.forEach(dimension => {
+        const uid = getNodeMetaUid(dimension.type, dimension.layerAttributeId);
+        draft.mapDimensions[uid] = dimension;
+        draft.mapDimensions[uid].uid = uid;
+      });
+      dimensionGroups.forEach((g, i) => {
+        const group = {
+          ...g,
+          dimensions: dimensions
+            .filter(dimension => dimension.groupId === g.id)
+            .map(dimension => getNodeMetaUid(dimension.type, dimension.layerAttributeId))
+        };
+        draft.mapDimensionsGroups[i] = group;
+      });
     });
   },
   [GET_LINKED_GEOIDS](state, action) {
-    const linkedGeoIds =
-      action.payload && action.payload.nodes && action.payload.nodes.length
-        ? action.payload.nodes.map(node => node.geoId)
-        : [];
-    if (isEqual(linkedGeoIds, state.linkedGeoIds)) {
-      return state;
-    }
-    return Object.assign({}, state, { linkedGeoIds });
+    return immer(state, draft => {
+      draft.linkedGeoIds =
+        action.payload?.nodes?.length > 0 ? action.payload.nodes.map(node => node.geoId) : [];
+    });
   },
 
   [HIGHLIGHT_NODE](state, action) {
-    return Object.assign({}, state, {
-      highlightedNodeCoordinates: action.coordinates
+    return immer(state, draft => {
+      draft.highlightedNodeCoordinates = action.coordinates;
     });
   },
   [GET_MAP_VECTOR_DATA](state, action) {
-    return Object.assign({}, state, { mapVectorData: action.mapVectorData });
+    return immer(state, draft => {
+      draft.mapVectorData = action.mapVectorData;
+    });
   },
   [GET_CONTEXT_LAYERS](state, action) {
-    return Object.assign({}, state, { mapContextualLayers: action.mapContextualLayers });
+    return immer(state, draft => {
+      draft.mapContextualLayers = action.mapContextualLayers;
+    });
   },
   [SET_MAP_DIMENSIONS_SELECTION](state, action) {
-    const { uids: selectedMapDimensions, selectedYears } = action.payload;
-    const { choropleth, choroplethLegend } = getChoropleth(
-      selectedMapDimensions,
-      state.nodesDictWithMeta,
-      state.mapDimensions
-    );
-    const selectedMapDimensionsWarnings = getMapDimensionsWarnings(
-      state.mapDimensions,
-      selectedMapDimensions,
-      selectedYears
-    );
+    return immer(state, draft => {
+      const { uids: selectedMapDimensions, selectedYears } = action.payload;
+      const { choropleth, choroplethLegend } = getChoropleth(
+        selectedMapDimensions,
+        draft.nodesDictWithMeta,
+        draft.mapDimensions
+      );
+      const selectedMapDimensionsWarnings = getMapDimensionsWarnings(
+        draft.mapDimensions,
+        selectedMapDimensions,
+        selectedYears
+      );
 
-    return {
-      ...state,
-      selectedMapDimensions,
-      selectedMapDimensionsWarnings,
-      choropleth,
-      choroplethLegend
-    };
+      Object.assign(draft, {
+        selectedMapDimensions,
+        selectedMapDimensionsWarnings,
+        choropleth,
+        choroplethLegend
+      });
+    });
   },
   [TOGGLE_MAP_DIMENSION](state, action) {
-    const selectedMapDimensions = state.selectedMapDimensions.slice();
-    const uidIndex = selectedMapDimensions.indexOf(action.payload.uid);
+    return immer(state, draft => {
+      const uidIndex = draft.selectedMapDimensions.indexOf(action.payload.uid);
 
-    if (uidIndex === -1) {
-      // dimension was not found: put it on a free slot
-      if (selectedMapDimensions[0] === null) {
-        selectedMapDimensions[0] = action.payload.uid;
-      } else if (selectedMapDimensions[1] === null) {
-        selectedMapDimensions[1] = action.payload.uid;
+      if (uidIndex === -1) {
+        // dimension was not found: put it on a free slot
+        if (draft.selectedMapDimensions[0] === null) {
+          draft.selectedMapDimensions[0] = action.payload.uid;
+        } else if (draft.selectedMapDimensions[1] === null) {
+          draft.selectedMapDimensions[1] = action.payload.uid;
+        } else {
+          return state;
+        }
       } else {
-        return state;
+        // dimension was found: remove it from selection
+        draft.selectedMapDimensions[uidIndex] = null;
       }
-    } else {
-      // dimension was found: remove it from selection
-      selectedMapDimensions[uidIndex] = null;
-    }
 
-    const { choropleth, choroplethLegend } = getChoropleth(
-      selectedMapDimensions,
-      state.nodesDictWithMeta,
-      state.mapDimensions
-    );
+      const { choropleth, choroplethLegend } = getChoropleth(
+        draft.selectedMapDimensions,
+        draft.nodesDictWithMeta,
+        draft.mapDimensions
+      );
 
-    const selectedMapDimensionsWarnings = getMapDimensionsWarnings(
-      state.mapDimensions,
-      selectedMapDimensions,
-      action.payload.selectedYears
-    );
-    return {
-      ...state,
-      selectedMapDimensions,
-      selectedMapDimensionsWarnings,
-      mapLoading: true,
-      choropleth,
-      choroplethLegend
-    };
+      const selectedMapDimensionsWarnings = getMapDimensionsWarnings(
+        draft.mapDimensions,
+        draft.selectedMapDimensions,
+        action.payload.selectedYears
+      );
+      return Object.assign(draft, {
+        selectedMapDimensionsWarnings,
+        mapLoading: true,
+        choropleth,
+        choroplethLegend
+      });
+    });
   },
   [SELECT_CONTEXTUAL_LAYERS](state, action) {
-    const mapContextualLayersDict = keyBy(state.mapContextualLayers, 'id');
-    const selectedMapContextualLayersData = action.contextualLayers.map(layerSlug =>
-      Object.assign({}, mapContextualLayersDict[layerSlug])
-    );
+    return immer(state, draft => {
+      const mapContextualLayersDict = keyBy(draft.mapContextualLayers, 'id');
+      const selectedMapContextualLayersData = action.contextualLayers.map(
+        layerSlug => mapContextualLayersDict[layerSlug]
+      );
 
-    return Object.assign({}, state, {
-      selectedMapContextualLayers: action.contextualLayers,
-      selectedMapContextualLayersData
+      return Object.assign(draft, {
+        selectedMapContextualLayers: action.contextualLayers,
+        selectedMapContextualLayersData
+      });
     });
   },
   [SELECT_BASEMAP](state, action) {
-    return Object.assign({}, state, { selectedMapBasemap: action.selectedMapBasemap });
+    return immer(state, draft => {
+      draft.selectedMapBasemap = action.selectedMapBasemap;
+    });
   },
   [TOGGLE_MAP](state, action) {
-    return Object.assign({}, state, {
-      isMapVisible: action.forceState !== null ? action.forceState : !state.isMapVisible
+    return immer(state, draft => {
+      draft.isMapVisible = action.forceState !== null ? action.forceState : !state.isMapVisible;
     });
   },
   [SAVE_MAP_VIEW](state, action) {
-    return Object.assign({}, state, {
-      mapView: {
+    return immer(state, draft => {
+      draft.mapView = {
         latitude: action.latlng.lat,
         longitude: action.latlng.lng,
         zoom: action.zoom
-      }
+      };
     });
   },
   [TOGGLE_MAP_SIDEBAR_GROUP](state, action) {
-    const expandedMapSidebarGroupsIds = state.expandedMapSidebarGroupsIds.slice();
-    const idIndex = expandedMapSidebarGroupsIds.indexOf(action.id);
-    if (idIndex === -1) {
-      expandedMapSidebarGroupsIds.push(action.id);
-    } else {
-      expandedMapSidebarGroupsIds.splice(idIndex, 1);
-    }
-    return Object.assign({}, state, { expandedMapSidebarGroupsIds });
+    return immer(state, draft => {
+      const idIndex = draft.expandedMapSidebarGroupsIds.indexOf(action.id);
+      if (idIndex === -1) {
+        draft.expandedMapSidebarGroupsIds.push(action.id);
+      } else {
+        draft.expandedMapSidebarGroupsIds.splice(idIndex, 1);
+      }
+    });
   },
   [GET_COLUMNS](state, action) {
-    const rawNodes = action.payload[0].data;
-    const columns = action.payload[1].data;
+    return immer(state, draft => {
+      const rawNodes = action.payload[0].data;
+      const columns = action.payload[1].data;
 
-    const { nodesDict, geoIdsDict } = getNodesDict(rawNodes, columns);
+      const { nodesDict, geoIdsDict } = getNodesDict(rawNodes, columns);
 
-    return Object.assign({}, state, {
-      nodesDict,
-      geoIdsDict
+      return Object.assign(draft, {
+        nodesDict,
+        geoIdsDict
+      });
     });
   }
 };
@@ -266,8 +249,8 @@ const toolLayersReducerTypes = PropTypes => ({
   isMapVisible: PropTypes.bool,
   linkedGeoIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   mapContextualLayers: PropTypes.arrayOf(PropTypes.object).isRequired,
-  mapDimensions: PropTypes.arrayOf(PropTypes.object).isRequired,
-  mapDimensionsGroups: PropTypes.arrayOf(PropTypes.object).isRequired,
+  mapDimensions: PropTypes.object.isRequired,
+  mapDimensionsGroups: PropTypes.object.isRequired,
   mapLoading: PropTypes.bool,
   mapVectorData: PropTypes.array,
   mapView: PropTypes.object,

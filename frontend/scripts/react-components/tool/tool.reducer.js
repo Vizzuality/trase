@@ -45,7 +45,6 @@ import createReducer from 'utils/createReducer';
 import { getSelectedNodesColumnsPos } from 'react-components/tool/tool.selectors';
 import filterLinks from 'scripts/reducers/helpers/filterLinks';
 import getChoropleth from 'scripts/reducers/helpers/getChoropleth';
-import getMapDimensions from 'scripts/reducers/helpers/getMapDimensions';
 import { getMapDimensionsWarnings } from 'scripts/reducers/helpers/getMapDimensionsWarnings';
 import getNodesAtColumns from 'scripts/reducers/helpers/getNodesAtColumns';
 import getNodesColoredBySelection from 'scripts/reducers/helpers/getNodesColoredBySelection';
@@ -278,16 +277,13 @@ const toolReducer = {
   },
   [SET_MAP_DIMENSIONS_DATA](state, action) {
     const mapDimensionsMeta = action.payload.mapDimensionsMetaJSON;
-    const rawMapDimensions = mapDimensionsMeta.dimensions;
-    const mapDimensions = getMapDimensions(rawMapDimensions);
 
     const mapDimensionsGroups = mapDimensionsMeta.dimensionGroups.map(group => ({
       group,
-      dimensions: mapDimensions.filter(dimension => dimension.groupId === group.id)
+      dimensions: mapDimensionsMeta.dimensions.filter(dimension => dimension.groupId === group.id)
     }));
 
     return Object.assign({}, state, {
-      mapDimensions,
       mapDimensionsGroups
     });
   },

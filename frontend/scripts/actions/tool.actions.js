@@ -20,7 +20,6 @@ import {
 import contextLayersCarto from 'named-maps/tool_named_maps_carto';
 import getNodeIdFromGeoId from 'actions/helpers/getNodeIdFromGeoId';
 import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
-import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsWarnings';
 import isNodeColumnVisible from 'utils/isNodeColumnVisible';
 import difference from 'lodash/difference';
@@ -135,9 +134,7 @@ const _setBiomeFilterAction = (biomeFilterName, state) => {
 };
 
 function _getAvailableMapDimensions(dimensions, selectedMapDimensions) {
-  const allAvailableMapDimensionsUids = dimensions.map(dimension =>
-    getNodeMetaUid(dimension.type, dimension.layerAttributeId)
-  );
+  const allAvailableMapDimensionsUids = Object.keys(dimensions);
   const selectedMapDimensionsSet = compact(selectedMapDimensions);
   // are all currently selected map dimensions available ?
   if (
@@ -148,10 +145,8 @@ function _getAvailableMapDimensions(dimensions, selectedMapDimensions) {
   }
 
   // use default map dimensions
-  const defaultMapDimensions = dimensions.filter(dimension => dimension.isDefault);
-  const uids = defaultMapDimensions.map(selectedDimension =>
-    getNodeMetaUid(selectedDimension.type, selectedDimension.layerAttributeId)
-  );
+  const defaultMapDimensions = Object.values(dimensions).filter(dimension => dimension.isDefault);
+  const uids = defaultMapDimensions.map(selectedDimension => selectedDimension.uid);
   return [uids[0] || null, uids[1] || null];
 }
 
@@ -275,7 +270,7 @@ export function selectColumn(columnIndex, columnId, reloadLinks = true) {
     const selectedColumn = state.toolLinks.columns.find(c => c.id === columnId);
     if (selectedColumn && selectedColumn.group === 0 && selectedColumn.isGeo && selectedColumn.isChoroplethDisabled) {
       dispatch(setMapDimensions([null, null]));
-      state.toolLinks.expandedMapSidebarGroupsIds.forEach(id =>
+      state.toolLayers.expandedMapSidebarGroupsIds.forEach(id =>
         dispatch(toggleMapSidebarGroup(id))
       );
     } else if (selectedColumn.isGeo && selectedColumn.isChoroplethDisabled === false) {
@@ -609,10 +604,7 @@ export function setMapContextLayers(contextualLayers) {
 
         const { selectedMapContextualLayers } = getState().toolLayers;
 
-        if (
-          typeof selectedMapContextualLayers !== 'undefined' &&
-          selectedMapContextualLayers.length
-        ) {
+        if (selectedMapContextualLayers && selectedMapContextualLayers.length) {
           dispatch({
             type: SELECT_CONTEXTUAL_LAYERS,
             contextualLayers: selectedMapContextualLayers
@@ -914,9 +906,7 @@ export function loadMapChoropeth(getState, dispatch) {
     return;
   }
 
-  const selectedMapDimensions = compact(uids).map(uid =>
-    state.toolLayers.mapDimensions.find(dimension => dimension.uid === uid)
-  );
+  const selectedMapDimensions = compact(uids).map(uid => state.toolLayers.mapDimensions[uid]);
 
   const params = {
     context_id: state.app.selectedContext.id,

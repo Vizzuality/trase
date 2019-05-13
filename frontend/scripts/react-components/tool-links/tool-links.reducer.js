@@ -36,14 +36,13 @@ export const toolLinksInitialState = {
   flowsLoading: true,
   nodes: [],
   nodesDict: null,
-  nodesDictWithMeta: {},
-  recolorByNodeIds: [],
   selectedBiomeFilter: null,
   selectedColumnsIds: [],
   selectedNodesIds: [],
   selectedRecolorBy: null,
   selectedResizeBy: null,
   unmergedLinks: [],
+  rawLinks: [],
   loadedFlowsContextId: null,
   isSearchOpen: false
 };
@@ -55,28 +54,18 @@ const toolLinksReducer = {
         highlightedNodesIds: [],
         selectedNodesIds: [],
         expandedNodesIds: [],
-        selectedBiomeFilter: null,
-        recolorByNodeIds: []
+        selectedBiomeFilter: null
       });
     });
   },
-  [SET_CONTEXT](state, action) {
+  [SET_CONTEXT](state) {
     return immer(state, draft => {
-      const selectedContext = action.payload;
-      const defaultRecolorBy = selectedContext.recolorBy.find(
-        recolorBy => recolorBy.isDefault === true
-      );
-      const defaultResizeBy = selectedContext.resizeBy.find(
-        resizeBy => resizeBy.isDefault === true
-      );
-      const defaultBiomeFilterBy =
-        selectedContext.filterBy.length > 0 && selectedContext.filterBy[0][0];
-
       Object.assign(draft, {
-        selectedRecolorBy: defaultRecolorBy || null,
-        selectedResizeBy: defaultResizeBy,
-        selectedBiomeFilter: defaultBiomeFilterBy || null,
+        selectedRecolorBy: null,
+        selectedResizeBy: null,
+        selectedBiomeFilter: null,
         detailedView: false,
+        highlightedNodesIds: [],
         selectedNodesIds: [],
         expandedNodesIds: []
       });
@@ -193,6 +182,8 @@ const toolLinksReducer = {
       if (draft.selectedColumnsIds.indexOf(action.columnId) === -1) {
         draft.selectedColumnsIds[action.columnIndex] = action.columnId;
       }
+      draft.rawLinks = [];
+      draft.unmergedLinks = [];
     });
   },
   [UPDATE_NODE_SELECTION](state, action) {
@@ -244,13 +235,12 @@ const toolLinksReducerTypes = PropTypes => ({
   flowsLoading: PropTypes.bool,
   nodes: PropTypes.arrayOf(PropTypes.object).isRequired,
   nodesDict: PropTypes.object,
-  nodesDictWithMeta: PropTypes.object.isRequired,
-  recolorByNodeIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedBiomeFilter: PropTypes.object,
   selectedColumnsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-  selectedRecolorBy: PropTypes.object.isRequired,
-  selectedResizeBy: PropTypes.object.isRequired,
+  selectedRecolorBy: PropTypes.object,
+  selectedResizeBy: PropTypes.object,
+  rawLinks: PropTypes.arrayOf(PropTypes.object),
   unmergedLinks: PropTypes.arrayOf(PropTypes.object).isRequired,
   loadedFlowsContextId: PropTypes.number
 });

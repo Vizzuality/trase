@@ -17,11 +17,8 @@ const generateColorScale = (baseColorScale, length) => {
 
 export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensions) {
   const uids = compact(selectedMapDimensionsUids);
-
-  const selectedMapDimensions = uids.map(uid =>
-    mapDimensions.find(dimension => dimension.uid === uid)
-  );
-
+  const selectedMapDimensions = uids.map(uid => mapDimensions[uid]);
+  
   if (!selectedMapDimensions.length) {
     return {
       choropleth: {},

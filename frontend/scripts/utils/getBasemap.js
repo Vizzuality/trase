@@ -8,6 +8,8 @@ const shouldUseDefaultBasemap = state =>
 export default state =>
   shouldUseDefaultBasemap(state)
     ? DEFAULT_BASEMAP_FOR_CHOROPLETH
-    : state.toolLayers.selectedMapBasemap;
+    : state.toolLayers.selectedMapBasemap ||
+      state.app.selectedContext?.defaultBasemap ||
+      'satellite';
 
 export { shouldUseDefaultBasemap };
