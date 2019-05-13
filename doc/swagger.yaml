@@ -2653,8 +2653,8 @@ components:
               description: not used
             suffix:
               type: string
-              example: ""
-              description: not used
+              example: "t"
+              description: Same unit as in yAxis
     DashboardsMetaInfo:
       type: object
       properties:

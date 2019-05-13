@@ -52,11 +52,8 @@ module Api
                   profile: profile_for_node_type_id(node['node_type_id'])
                 }
               end
-              @meta[:"y#{idx}"] = {
-                label: break_by,
-                profileInfo: profile_info,
-                tooltip: {prefix: '', format: '', suffix: ''}
-              }
+              @meta[:"y#{idx}"] = series_legend_meta(break_by, @cont_attribute).
+                merge(profileInfo: profile_info)
             end
 
             without_string_values = @data.map(&reject_strings)
