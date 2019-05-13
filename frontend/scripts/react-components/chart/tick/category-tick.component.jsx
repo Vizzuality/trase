@@ -2,16 +2,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import wrapSVGText from 'utils/wrapSVGText';
 import 'react-components/chart/tick/tick-styles.scss';
+import Tooltip from 'react-components/shared/tooltip';
 
-const renderText = tickValue => (
+const renderText = (tickValue, id) => (
   <>
-    <text className="tick-text">{wrapSVGText(tickValue, 10, 10, 15, 1)}</text>
-    {tickValue.length > 15 && <title>{tickValue}</title>}
+    <Tooltip
+      type="svg"
+      reference={wrapSVGText(tickValue, 10, 10, 15, 1)}
+      referenceClassName="tick-text"
+      destinationId={id}
+    >
+      {tickValue}
+    </Tooltip>
   </>
 );
 
 function CategoryTick(props) {
-  const { x, y, payload, nodeIds, config } = props;
+  const { x, y, payload, nodeIds, config, id } = props;
   const tickValue = payload && payload.value;
   const nodeId = nodeIds.find(n => n.y === tickValue);
   let lastYear;
@@ -28,7 +35,7 @@ function CategoryTick(props) {
           {renderText(tickValue)}
         </a>
       ) : (
-        renderText(tickValue)
+        renderText(tickValue, id)
       )}
     </g>
   );
@@ -39,7 +46,8 @@ CategoryTick.propTypes = {
   y: PropTypes.number,
   payload: PropTypes.shape({}),
   nodeIds: PropTypes.array,
-  config: PropTypes.shape({})
+  config: PropTypes.shape({}),
+  id: PropTypes.string
 };
 
 CategoryTick.defaultProps = {

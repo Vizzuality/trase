@@ -1,0 +1,12 @@
+@import 'styles/settings';
+@import 'styles/mixins';
+
+ .c-tooltip {
+  background-color: $charcoal-grey-toned-down;
+  padding: 10px;
+
+  .tooltip-text {
+    margin-bottom: 5px;
+    color: white;
+  }
+}

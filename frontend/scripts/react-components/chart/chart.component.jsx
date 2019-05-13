@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import kebabCase from 'lodash/kebabCase';
 
 import {
   Line,
@@ -26,7 +27,8 @@ class Chart extends PureComponent {
     className: PropTypes.string,
     handleMouseMove: PropTypes.func,
     handleMouseLeave: PropTypes.func,
-    testId: PropTypes.string
+    testId: PropTypes.string,
+    title: PropTypes.string
   };
 
   static defaultProps = {
@@ -36,7 +38,15 @@ class Chart extends PureComponent {
   };
 
   render() {
-    const { className, data, config, handleMouseMove, handleMouseLeave, testId } = this.props;
+    const {
+      className,
+      data,
+      config,
+      handleMouseMove,
+      handleMouseLeave,
+      testId,
+      title
+    } = this.props;
 
     const {
       margin = {},
@@ -74,8 +84,9 @@ class Chart extends PureComponent {
       };
     }
     const defaultMargin = { top: 20, right: 0, left: 100, bottom: 20 };
+    const id = `c-chart-${kebabCase(title)}`;
     return (
-      <div className={`c-chart ${className}`} style={{ height }} data-test={testId}>
+      <div className={`c-chart ${className}`} id={id} style={{ height }} data-test={testId}>
         <ResponsiveContainer>
           <CHART
             height={height}
@@ -115,7 +126,7 @@ class Chart extends PureComponent {
 
             {cartesianGrid && <CartesianGrid stroke="#536269" {...cartesianGrid} />}
             {CustomXAxis({ config, data })}
-            {CustomYAxis({ config, data })}
+            {CustomYAxis({ config, data, id })}
             {areas &&
               Object.keys(areas).map(key => (
                 <Area key={key} dataKey={key} dot={false} {...areas[key]} />

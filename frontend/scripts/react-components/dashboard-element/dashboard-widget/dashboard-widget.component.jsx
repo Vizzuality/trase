@@ -95,6 +95,7 @@ function DashboardWidget(props) {
               data={data}
               config={chartConfig}
               testId="widget-chart"
+              title={title}
             />
           </React.Fragment>
         );

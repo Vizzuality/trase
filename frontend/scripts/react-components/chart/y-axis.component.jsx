@@ -7,7 +7,7 @@ import ChartTick from 'react-components/chart/tick/tick.component';
 import CategoryTick from 'react-components/chart/tick/category-tick.component';
 import 'react-components/chart/chart-styles.scss';
 
-function CustomYAxis({ config, data }) {
+function CustomYAxis({ config, data, id }) {
   const { yAxis, unit, unitFormat, yKeys, yKey, yLabelsProfileInfo } = config;
   const nodeIds = yLabelsProfileInfo
     ? data.map((d, i) => ({ ...d, ...yLabelsProfileInfo[i] }))
@@ -21,7 +21,7 @@ function CustomYAxis({ config, data }) {
         tickMargin={15}
         dataKey={yKey || ''}
         {...yAxis}
-        tick={<CategoryTick config={config} nodeIds={nodeIds} />}
+        tick={<CategoryTick config={config} nodeIds={nodeIds} id={id} />}
       />
     );
   }
