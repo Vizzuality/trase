@@ -2,21 +2,34 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import wrapSVGText from 'utils/wrapSVGText';
 import 'react-components/chart/tick/tick-styles.scss';
-import Tooltip from 'react-components/shared/tooltip';
+
+const renderText = tickValue => (
+  <>
+    <text className="tick-text">{wrapSVGText(tickValue, 10, 10, 15, 1)}</text>
+    {tickValue.length > 15 && <title>{tickValue}</title>}
+  </>
+);
 
 function CategoryTick(props) {
-  const { x, y, payload } = props;
+  const { x, y, payload, nodeIds, config } = props;
   const tickValue = payload && payload.value;
+  const nodeId = nodeIds.find(n => n.y === tickValue);
+  let lastYear;
+  let url;
+  if (nodeId && nodeId.profile) {
+    lastYear = config.years.end_year || config.years.start_year;
+    url = `/profile-${nodeId.profile}?year=${lastYear}&nodeId=${nodeId.id}`;
+  }
+
   return (
     <g transform={`translate(${x},${y})`}>
-      <Tooltip
-        type="svg"
-        reference={wrapSVGText(tickValue, 10, 10, 15, 1)}
-        referenceClassName="tick-text"
-      >
-        {tickValue}
-      </Tooltip>
-      {tickValue.length > 15 && <title>{tickValue}</title>}
+      {url ? (
+        <a href={url} className="tick-text-link">
+          {renderText(tickValue)}
+        </a>
+      ) : (
+        renderText(tickValue)
+      )}
     </g>
   );
 }
@@ -24,7 +37,9 @@ function CategoryTick(props) {
 CategoryTick.propTypes = {
   x: PropTypes.number,
   y: PropTypes.number,
-  payload: PropTypes.shape({})
+  payload: PropTypes.shape({}),
+  nodeIds: PropTypes.array,
+  config: PropTypes.shape({})
 };
 
 CategoryTick.defaultProps = {
