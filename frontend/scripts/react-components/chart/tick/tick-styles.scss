@@ -9,3 +9,9 @@
   text-anchor: end;
   letter-spacing: -0.7px;
 }
+
+.tick-text-link {
+  &:hover {
+    text-decoration: underline;
+  }
+}

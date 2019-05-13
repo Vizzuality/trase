@@ -21,6 +21,7 @@ const mockChart = {
     { x0: 10159983.7617738, x1: 14592178.0078618, x2: 7494946.66825236, y: 'OTHER' }
   ],
   meta: {
+    info: { years: { start_year: 2012, end_year: 2015 } },
     yAxis: { type: 'category', label: 'LOGISTICS HUB', prefix: '', format: '', suffix: '' },
     xAxis: { type: 'number', label: 'Trade volume', prefix: '', format: '', suffix: 't' },
     y: { label: 'LOGISTICS HUB', tooltip: { prefix: '', format: '', suffix: '' } },
