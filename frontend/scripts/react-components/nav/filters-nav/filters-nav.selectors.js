@@ -1,6 +1,7 @@
 import { createSelector, createStructuredSelector } from 'reselect';
 import { getActiveParams } from 'react-components/logistics-map/logistics-map.selectors';
 import {
+  NAV_FILTER_TYPES,
   LOGISTICS_MAP_YEARS,
   LOGISTICS_MAP_HUBS,
   LOGISTICS_MAP_INSPECTION_LEVELS
@@ -8,7 +9,6 @@ import {
 import capitalize from 'lodash/capitalize';
 import { makeGetResizeByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
-import FiltersNav from 'react-components/nav/filters-nav/filters-nav.component';
 
 const insertIf = (condition, item) => (condition ? [item] : []);
 
@@ -154,7 +154,6 @@ export const getNavFilters = createSelector(
     logisticsMapsHubs,
     logisticsMapInspectionLevel
   ) => {
-    const { FILTER_TYPES } = FiltersNav;
     switch (page) {
       case 'tool':
         return {
@@ -162,32 +161,32 @@ export const getNavFilters = createSelector(
           showToolLinks: true,
           left: [
             {
-              type: FILTER_TYPES.contextSelector,
+              type: NAV_FILTER_TYPES.contextSelector,
               props: { selectedContext, id: 'contextSelector' }
             },
             ...insertIf(toolAdminLevel, {
-              type: FILTER_TYPES.dropdown,
+              type: NAV_FILTER_TYPES.dropdown,
               props: toolAdminLevel
             }),
             {
-              type: FILTER_TYPES.yearSelector,
+              type: NAV_FILTER_TYPES.yearSelector,
               props: { id: 'yearsSelector' }
             }
           ],
           right: [
-            { type: FILTER_TYPES.dropdown, props: toolResizeBy },
-            { type: FILTER_TYPES.recolorBySelector, props: { id: 'toolRecolorBy' } },
-            { type: FILTER_TYPES.dropdown, props: toolViewMode }
+            { type: NAV_FILTER_TYPES.dropdown, props: toolResizeBy },
+            { type: NAV_FILTER_TYPES.recolorBySelector, props: { id: 'toolRecolorBy' } },
+            { type: NAV_FILTER_TYPES.dropdown, props: toolViewMode }
           ]
         };
       case 'logisticsMap':
         return {
           showLogisticsMapDownload: true,
           left: [
-            { type: FILTER_TYPES.dropdown, props: logisticsMapsHubs },
-            { type: FILTER_TYPES.dropdown, props: logisticsMapsYears },
+            { type: NAV_FILTER_TYPES.dropdown, props: logisticsMapsHubs },
+            { type: NAV_FILTER_TYPES.dropdown, props: logisticsMapsYears },
             ...insertIf(logisticsMapInspectionLevel, {
-              type: FILTER_TYPES.dropdown,
+              type: NAV_FILTER_TYPES.dropdown,
               props: logisticsMapInspectionLevel
             })
           ]

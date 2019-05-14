@@ -3,6 +3,9 @@ require('dotenv').config({ silent: true });
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const PreloadWebpackPlugin = require('preload-webpack-plugin');
+const HtmlWebpackPreconnectPlugin = require('html-webpack-preconnect-plugin');
+
 /**
  * BundleAnalyzerPlugin allows profiling the webpack generated js, to help identify improvement points
  * If you want to enable it, uncomment the line bellow and ´new BundleAnalyzerPlugin()´ further down.
@@ -34,8 +37,14 @@ module.exports = {
       inject: 'body',
       DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true',
       icons: templates.icons,
-      head: templates.head
+      head: templates.head,
+      preconnect: [`https:${process.env.API_V3_URL}`, `http:${process.env.API_V3_URL}`]
     }),
+    new PreloadWebpackPlugin({
+      rel: 'preload',
+      include: 'allAssets'
+    }),
+    new HtmlWebpackPreconnectPlugin(),
     new webpack.DefinePlugin({
       NODE_ENV_DEV: process.env.NODE_ENV === 'development',
       DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true',

@@ -263,3 +263,10 @@ export const CHART_TYPES = {
   horizontalBar: 'horizontalBar',
   horizontalStackedBar: 'horizontalStackedBar'
 };
+
+export const NAV_FILTER_TYPES = {
+  contextSelector: 0,
+  yearSelector: 1,
+  dropdown: 2,
+  recolorBySelector: 3
+};
