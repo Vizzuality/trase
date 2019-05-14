@@ -8,33 +8,37 @@ import {
   getSelectedNodesGeoIds,
   getHighlightedNodesGeoIds
 } from 'react-components/tool/tool.selectors';
+import { getChoroplethOptions } from 'react-components/tool-layers/tool-layer.selectors';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 import { connect } from 'react-redux';
 import Map from 'react-components/tool/map/map.component';
 import getBasemap from 'utils/getBasemap';
 
-const mapStateToProps = state => ({
-  mapView: state.toolLayers.mapView,
-  mapVectorData: state.toolLayers.mapVectorData,
-  currentPolygonType: state.toolLinks.selectedColumnsIds,
-  selectedNodesGeoIds: getSelectedNodesGeoIds(state),
-  recolorByNodeIds: state.toolLinks.recolorByNodeIds,
-  choropleth: state.toolLayers.choropleth,
-  linkedGeoIds: state.toolLayers.linkedGeoIds,
-  selectedGeoIds: getSelectedNodesGeoIds(state),
-  highlightedGeoId: getHighlightedNodesGeoIds(state)[0],
-  defaultMapView: state.app.selectedContext ? state.app.selectedContext.map : null,
-  forceDefaultMapView: !state.toolLinks.selectedNodesIds.length,
-  selectedColumnsIds: state.toolLinks.selectedColumnsIds,
-  selectedColumnId: state.toolLinks.selectedColumnsIds
-    ? state.toolLinks.selectedColumnsIds[0]
-    : undefined,
-  selectedMapContextualLayersData: state.toolLayers.selectedMapContextualLayersData,
-  isMapVisible: state.toolLayers.isMapVisible,
-  visibleNodes: getVisibleNodes(state),
-  selectedBiomeFilter: getSelectedBiomeFilter(state),
-  basemapId: getBasemap(state)
-});
+const mapStateToProps = state => {
+  const { choropleth } = getChoroplethOptions(state);
+  return {
+    choropleth,
+    mapView: state.toolLayers.mapView,
+    mapVectorData: state.toolLayers.mapVectorData,
+    currentPolygonType: state.toolLinks.selectedColumnsIds,
+    selectedNodesGeoIds: getSelectedNodesGeoIds(state),
+    recolorByNodeIds: state.toolLinks.recolorByNodeIds,
+    linkedGeoIds: state.toolLayers.linkedGeoIds,
+    selectedGeoIds: getSelectedNodesGeoIds(state),
+    highlightedGeoId: getHighlightedNodesGeoIds(state)[0],
+    defaultMapView: state.app.selectedContext ? state.app.selectedContext.map : null,
+    forceDefaultMapView: !state.toolLinks.selectedNodesIds.length,
+    selectedColumnsIds: state.toolLinks.selectedColumnsIds,
+    selectedColumnId: state.toolLinks.selectedColumnsIds
+      ? state.toolLinks.selectedColumnsIds[0]
+      : undefined,
+    selectedMapContextualLayersData: state.toolLayers.selectedMapContextualLayersData,
+    isMapVisible: state.toolLayers.isMapVisible,
+    visibleNodes: getVisibleNodes(state),
+    selectedBiomeFilter: getSelectedBiomeFilter(state),
+    basemapId: getBasemap(state)
+  };
+};
 
 const methodProps = [
   {

@@ -18,7 +18,6 @@ const getNodesDict = state => state.toolLinks.nodesDict;
 const getRawLinks = state => state.toolLinks.rawLinks;
 const getLinksMeta = state => state.toolLinks.linksMeta;
 const getSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
-const getChoropleth = state => state.toolLayers.choropleth;
 const getUnmergedLinks = state => state.toolLinks.unmergedLinks;
 const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
 const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
@@ -213,19 +212,4 @@ export const getHighlightedNodesData = createSelector(
 export const getHighlightedNodesGeoIds = createSelector(
   [getHighlightedNodesData],
   getNodesGeoIds
-);
-
-export const getCurrentHighlightedChoroplethBucket = createSelector(
-  [getHighlightedNodesData, getChoropleth],
-  (highlightedNodesData, choropleth) => {
-    if (
-      highlightedNodesData.length === 1 &&
-      highlightedNodesData[0].geoId !== null &&
-      choropleth !== undefined
-    ) {
-      return choropleth[highlightedNodesData[0].geoId] || 'ch-default';
-    }
-
-    return undefined;
-  }
 );

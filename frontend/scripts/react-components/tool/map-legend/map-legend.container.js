@@ -1,15 +1,21 @@
 import { connect } from 'react-redux';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 import MapLegend from 'react-components/tool/map-legend/map-legend.component';
-import { getCurrentHighlightedChoroplethBucket } from 'react-components/tool/tool.selectors';
+import {
+  getCurrentHighlightedChoroplethBucket,
+  getChoroplethOptions
+} from 'react-components/tool-layers/tool-layer.selectors';
 import { toggleMapLayerMenu } from 'actions/app.actions';
 
-const mapStateToProps = state => ({
-  choroplethLegend: state.toolLayers.choroplethLegend,
-  selectedMapDimensionsWarnings: state.toolLayers.selectedMapDimensionsWarnings,
-  selectedMapContextualLayersData: state.toolLayers.selectedMapContextualLayersData,
-  currentHighlightedChoroplethBucket: getCurrentHighlightedChoroplethBucket(state)
-});
+const mapStateToProps = state => {
+  const { choroplethLegend } = getChoroplethOptions(state);
+  return {
+    choroplethLegend,
+    selectedMapDimensionsWarnings: state.toolLayers.selectedMapDimensionsWarnings,
+    selectedMapContextualLayersData: state.toolLayers.selectedMapContextualLayersData,
+    currentHighlightedChoroplethBucket: getCurrentHighlightedChoroplethBucket(state)
+  };
+};
 
 const mapDispatchToProps = {
   onToggleMapLayerMenu: toggleMapLayerMenu

@@ -19,16 +19,12 @@ import { SET_CONTEXT } from 'scripts/actions/app.actions';
 import keyBy from 'lodash/keyBy';
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
-import getChoropleth from 'scripts/reducers/helpers/getChoropleth';
-import { getMapDimensionsWarnings } from 'scripts/reducers/helpers/getMapDimensionsWarnings';
 import getNodesDict from 'scripts/reducers/helpers/getNodesDict';
 import setNodesMeta from 'scripts/reducers/helpers/setNodesMeta';
 import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 
 export const toolLayersInitialState = {
   nodesDict: null,
-  choropleth: {},
-  choroplethLegend: null,
   expandedMapSidebarGroupsIds: [],
   geoIdsDict: {},
   highlightedNodeCoordinates: null,
@@ -70,16 +66,8 @@ const toolLayersReducer = {
       // store dimension values in nodesDict as uid: dimensionValue
       const nodesDictWithMeta = setNodesMeta(draft.nodesDict, nodesMeta, draft.mapDimensions);
 
-      const { choropleth, choroplethLegend } = getChoropleth(
-        draft.selectedMapDimensions,
-        nodesDictWithMeta,
-        state.mapDimensions
-      );
-
       return Object.assign(draft, {
         nodesDictWithMeta,
-        choropleth,
-        choroplethLegend,
         mapLoading: false
       });
     });
@@ -127,24 +115,8 @@ const toolLayersReducer = {
   },
   [SET_MAP_DIMENSIONS_SELECTION](state, action) {
     return immer(state, draft => {
-      const { uids: selectedMapDimensions, selectedYears } = action.payload;
-      const { choropleth, choroplethLegend } = getChoropleth(
-        selectedMapDimensions,
-        draft.nodesDictWithMeta,
-        draft.mapDimensions
-      );
-      const selectedMapDimensionsWarnings = getMapDimensionsWarnings(
-        draft.mapDimensions,
-        selectedMapDimensions,
-        selectedYears
-      );
-
-      Object.assign(draft, {
-        selectedMapDimensions,
-        selectedMapDimensionsWarnings,
-        choropleth,
-        choroplethLegend
-      });
+      const { uids } = action.payload;
+      draft.selectedMapDimensions = uids;
     });
   },
   [TOGGLE_MAP_DIMENSION](state, action) {
@@ -157,31 +129,12 @@ const toolLayersReducer = {
           draft.selectedMapDimensions[0] = action.payload.uid;
         } else if (draft.selectedMapDimensions[1] === null) {
           draft.selectedMapDimensions[1] = action.payload.uid;
-        } else {
-          return state;
         }
+        draft.mapLoading = true;
       } else {
         // dimension was found: remove it from selection
         draft.selectedMapDimensions[uidIndex] = null;
       }
-
-      const { choropleth, choroplethLegend } = getChoropleth(
-        draft.selectedMapDimensions,
-        draft.nodesDictWithMeta,
-        draft.mapDimensions
-      );
-
-      const selectedMapDimensionsWarnings = getMapDimensionsWarnings(
-        draft.mapDimensions,
-        draft.selectedMapDimensions,
-        action.payload.selectedYears
-      );
-      return Object.assign(draft, {
-        selectedMapDimensionsWarnings,
-        mapLoading: true,
-        choropleth,
-        choroplethLegend
-      });
     });
   },
   [SELECT_CONTEXTUAL_LAYERS](state, action) {
@@ -242,8 +195,6 @@ const toolLayersReducer = {
 };
 
 const toolLayersReducerTypes = PropTypes => ({
-  choropleth: PropTypes.object.isRequired,
-  choroplethLegend: PropTypes.object,
   expandedMapSidebarGroupsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   geoIdsDict: PropTypes.object.isRequired,
   highlightedNodeCoordinates: PropTypes.object,
