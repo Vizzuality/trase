@@ -25,7 +25,6 @@ const renderTooltipContent = (isVisible, children) => (
 function Tooltip({ reference, children, destinationId }) {
   const [isVisible, setVisibility] = useState('hidden');
   const destinationElement = destinationId && document.querySelector(`#${destinationId}`);
-  console.log('d', destinationId, destinationElement);
   return (
     <Manager>
       <Reference>

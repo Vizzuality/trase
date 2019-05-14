@@ -66,8 +66,8 @@ class RankingWidget extends PureComponent {
                       </Text>
                     </div>
                     <Tooltip
-                      getReference={({ ref }) => (
-                        <Link to={item.url} ref={ref}>
+                      reference={
+                        <Link to={item.url}>
                           <Heading
                             as="span"
                             size="lg"
@@ -78,7 +78,7 @@ class RankingWidget extends PureComponent {
                             {capitalize(item.y)}
                           </Heading>
                         </Link>
-                      )}
+                      }
                     >
                       {this.renderTooltipContent()}
                     </Tooltip>
