@@ -922,7 +922,7 @@ COMMENT ON COLUMN public.chart_attributes.display_name IS 'Name of attribute for
 -- Name: COLUMN chart_attributes.legend_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.chart_attributes.legend_name IS 'Legend title';
+COMMENT ON COLUMN public.chart_attributes.legend_name IS 'Legend title; you can use {{commodity_name}}, {{company_name}}, {{jurisdiction_name}} and {{year}}';
 
 
 --
@@ -1287,7 +1287,7 @@ COMMENT ON COLUMN public.charts.identifier IS 'Identifier used to map this chart
 -- Name: COLUMN charts.title; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.charts.title IS 'Title of chart for display';
+COMMENT ON COLUMN public.charts.title IS 'Title of chart for display; you can use {{commodity_name}}, {{company_name}}, {{jurisdiction_name}} and {{year}}';
 
 
 --
