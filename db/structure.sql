@@ -1258,8 +1258,7 @@ CREATE TABLE public.charts (
     title text NOT NULL,
     "position" integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    chart_type character varying
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -8790,6 +8789,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190321122822'),
 ('20190321161913'),
 ('20190429104832'),
-('20190429112751');
+('20190429112751'),
+('20190513125050');
 
 
