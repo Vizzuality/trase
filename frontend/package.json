@@ -110,7 +110,6 @@
     "webpack-merge": "^4.2.1"
   },
   "dependencies": {
-    "@babel/plugin-transform-runtime": "^7.4.3",
     "@babel/runtime-corejs3": "^7.4.3",
     "@pollyjs/adapter-puppeteer": "^2.3.2",
     "@pollyjs/core": "^2.3.0",
