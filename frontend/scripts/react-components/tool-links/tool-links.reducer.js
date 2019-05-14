@@ -14,8 +14,7 @@ import {
   SHOW_LINKS_ERROR,
   UPDATE_NODE_SELECTION,
   EXPAND_NODE_SELECTION,
-  COLLAPSE_NODE_SELECTION,
-  RESET_TOOL_LOADERS
+  COLLAPSE_NODE_SELECTION
 } from 'actions/tool.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
 import groupBy from 'lodash/groupBy';
@@ -214,11 +213,6 @@ const toolLinksReducer = {
   [SET_SANKEY_SEARCH_VISIBILITY](state, action) {
     return immer(state, draft => {
       draft.isSearchOpen = action.searchVisibility;
-    });
-  },
-  [RESET_TOOL_LOADERS](state) {
-    return immer(state, draft => {
-      Object.assign(draft, { flowsLoading: true });
     });
   }
 };

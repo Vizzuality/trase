@@ -30,9 +30,7 @@ import Sankey from 'react-components/tool/sankey/sankey.container';
 import MapLegend from 'react-components/tool/map-legend/map-legend.container';
 
 import {
-  resizeSankeyTool,
-  loadDisclaimerTool,
-  setToolLoaders
+  resizeSankeyTool
 } from 'react-components/tool/tool.thunks';
 import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.container';
 
@@ -45,16 +43,6 @@ export const mount = (root, store) => {
     search: SearchMarkup(),
     feedback: FeedbackMarkup()
   });
-
-  // TODO remove this
-  // In order to avoid adding loading states when not needed we check that the selectedContext
-  // has indeed changed.
-  const { app, toolLinks } = store.getState();
-  if ((app.selectedContext && app.selectedContext.id) !== toolLinks.loadedFlowsContextId) {
-    setToolLoaders(store.dispatch);
-  }
-  loadDisclaimerTool(store.dispatch);
-  resizeSankeyTool(store.dispatch);
 
   render(
     <Provider store={store}>

@@ -80,7 +80,17 @@ export default class {
     this.basemapSwitcher.addEventListener('click', this.clickToggleMapLayerMenu);
     this.toggleMap.addEventListener('click', this.clickToggleMap);
 
+    this.setMapView(props);
     this.setBasemap(props);
+    this.showLoadedMap(props);
+    this.selectPolygons(props);
+    this.highlightPolygon(props);
+    this.selectPolygonType(props);
+    this.loadContextLayers(props);
+    this.setChoropleth(props);
+    this.showLinkedGeoIds(props);
+    this.filterByBiome(props);
+    this.updatePointShadowLayer(props);
   }
 
   onRemoved() {

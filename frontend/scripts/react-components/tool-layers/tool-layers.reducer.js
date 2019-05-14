@@ -44,7 +44,8 @@ export const toolLayersInitialState = {
   selectedMapBasemap: null,
   selectedMapContextualLayers: null,
   selectedMapDimensions: [null, null],
-  selectedMapDimensionsWarnings: null
+  selectedMapDimensionsWarnings: null,
+  selectedMapContextualLayersData: []
 };
 
 const toolLayersReducer = {
@@ -258,7 +259,8 @@ const toolLayersReducerTypes = PropTypes => ({
   selectedMapBasemap: PropTypes.string,
   selectedMapContextualLayers: PropTypes.array,
   selectedMapDimensions: PropTypes.array.isRequired,
-  selectedMapDimensionsWarnings: PropTypes.string
+  selectedMapDimensionsWarnings: PropTypes.string,
+  selectedMapContextualLayersData: PropTypes.array.isRequired
 });
 
 export default createReducer(toolLayersInitialState, toolLayersReducer, toolLayersReducerTypes);

@@ -19,7 +19,7 @@ import createReducer from 'utils/createReducer';
 import { SELECT_YEARS } from 'actions/tool.actions';
 
 const initialState = {
-  windowSize: [window.innerWidth, window.innerHeight],
+  sankeySize: [window.innerWidth, window.innerHeight],
   isMapLayerVisible: false,
   isAppMenuVisible: false,
   tooltipCheck: 0,
@@ -149,7 +149,7 @@ const appReducerTypes = PropTypes => ({
   initialSelectedContextIdFromURL: PropTypes.number,
   tooltips: PropTypes.object,
   tooltipCheck: PropTypes.number,
-  windowSize: PropTypes.arrayOf(PropTypes.number).isRequired,
+  sankeySize: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedYears: PropTypes.arrayOf(PropTypes.number).isRequired
 });
 

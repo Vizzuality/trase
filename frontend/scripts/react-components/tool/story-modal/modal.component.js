@@ -7,7 +7,7 @@ import 'styles/components/shared/modal.scss';
 import ModalTemplate from 'templates/shared/modal.ejs';
 
 class ModalComponent {
-  onCreated() {
+  constructor() {
     this.state = {
       visibility: false,
       modalParams: null
@@ -15,9 +15,11 @@ class ModalComponent {
 
     this.el = document.querySelector('.js-modal');
     this.veil = document.querySelector('.js-veil');
-
-    this._setVisibility();
     this.onVeilClick = () => this._toggleVisibility();
+  }
+
+  onCreated(props) {
+    this.getModal(props);
   }
 
   onRemoved() {

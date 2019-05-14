@@ -37,7 +37,6 @@ import pSettle from 'p-settle';
 
 export const RESET_SELECTION = 'RESET_SELECTION';
 export const GET_COLUMNS = 'GET_COLUMNS';
-export const RESET_TOOL_LOADERS = 'RESET_TOOL_LOADERS';
 export const SET_FLOWS_LOADING_STATE = 'SET_FLOWS_LOADING_STATE';
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
 export const GET_LINKS = 'GET_LINKS';
@@ -82,7 +81,7 @@ const _reloadLinks = (param, value, type, reloadLinks = true) => dispatch => {
 const _setRecolorByAction = (recolorBy, state) => {
   let selectedRecolorBy;
   if (recolorBy.value === 'none') {
-    selectedRecolorBy = { type: 'none', name: 'none' };
+    selectedRecolorBy = null;
   } else {
     const currentContext = getCurrentContext(state);
     selectedRecolorBy = currentContext.recolorBy.find(

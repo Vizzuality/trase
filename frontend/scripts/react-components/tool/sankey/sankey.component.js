@@ -20,8 +20,15 @@ export default class {
     this.onNodeClickedRequest = null;
   }
 
-  onCreated() {
+  onCreated(props) {
     this._build();
+    this.showLoadedLinks(props);
+    this.resizeViewport(props);
+    this.selectNodes(props);
+    this.toggleExpandActionButton(props);
+    this.toggleCollapseActionButton(props);
+    this.highlightNodes(props);
+    this.translateNodes(props);
   }
 
   onRemoved() {

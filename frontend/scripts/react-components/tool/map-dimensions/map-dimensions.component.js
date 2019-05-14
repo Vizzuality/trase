@@ -1,13 +1,14 @@
 import MapDimensionsTemplate from 'templates/tool/map/map-dimensions.ejs';
 
 export default class {
-  onCreated(props) {
-    const { mapDimensionsGroups, expandedMapSidebarGroupsIds } = props;
+  constructor() {
     this.el = document.querySelector('.js-dimensions');
     this.sidebarGroups = [];
     this.sidebarGroupsTitles = [];
     this.dimensions = [];
+  }
 
+  onCreated(props) {
     this._onGroupTitleClicked = event => {
       const id = event.currentTarget.parentNode.getAttribute('data-group-id');
       this.callbacks.onToggleGroup(id);
@@ -18,7 +19,10 @@ export default class {
       this.callbacks.onDimensionClick(uid);
     };
 
-    this.loadMapDimensions({ mapDimensionsGroups, expandedMapSidebarGroupsIds });
+    this.loadMapDimensions(props);
+    this.selectMapDimensions(props);
+    this.toggleSidebarGroups(props);
+    this.setVisibility(props);
   }
 
   onRemoved() {

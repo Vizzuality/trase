@@ -14,7 +14,12 @@ import loadBaseAppData from 'react-components/shared/app.thunks';
 import getTeam from 'react-components/team/team.thunks';
 import { loadDashboardTemplates } from 'react-components/dashboard-root/dashboard-root.thunks';
 import { redirectToExplore } from 'react-components/explore/explore.thunks';
-import { loadToolInitialData } from 'scripts/react-components/tool/tool.thunks';
+import {
+  loadToolInitialData,
+  resizeSankeyTool,
+  loadDisclaimerTool
+} from 'scripts/react-components/tool/tool.thunks';
+
 import getPageTitle from 'scripts/router/page-title';
 
 const pagesNotSupportedOnMobile = ['tool', 'map', 'data'];
@@ -48,7 +53,7 @@ export const routes = {
     path: '/flows',
     page: 'tool',
     title: getPageTitle,
-    thunk: loadPageData(loadToolInitialData)
+    thunk: loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool)
   },
   profileRoot: {
     path: '/profiles',

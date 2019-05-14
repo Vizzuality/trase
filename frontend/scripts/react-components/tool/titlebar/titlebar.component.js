@@ -1,6 +1,8 @@
 export default class {
-  onCreated() {
+  onCreated(props) {
     this.nodesTitles = document.querySelector('.js-nodes-titles');
+    this.selectNodes(props);
+    this.highlightNode(props);
   }
 
   onRemoved() {

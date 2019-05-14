@@ -30,7 +30,7 @@ const methodProps = [
     returned: ['nodesData', 'recolorGroups', 'currentQuant', 'selectedYears', 'selectedContextId']
   },
   {
-    name: 'selectNodes',
+    name: 'highlightNode',
     compared: ['highlightedNodesData'],
     returned: [
       'highlightedNodesData',

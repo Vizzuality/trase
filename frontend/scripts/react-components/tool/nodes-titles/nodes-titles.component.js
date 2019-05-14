@@ -5,7 +5,7 @@ import 'styles/components/tool/nodes-clear.scss';
 import Tooltip from 'components/shared/info-tooltip.component';
 
 export default class {
-  onCreated() {
+  constructor() {
     this.el = document.querySelector('.js-nodes-titles');
     this.container = this.el.querySelector('.js-nodes-titles-container');
     this.clear = this.el.querySelector('.js-nodes-titles-clear');
@@ -15,8 +15,12 @@ export default class {
 
     this._onNodeTitleClickBound = this._onNodeTitleClick.bind(this);
     this._onNodeTitleCloseClickBound = this._onNodeTitleCloseClick.bind(this);
+  }
 
+  onCreated(props) {
     this.clear.addEventListener('click', this.callbacks.onClearClick);
+    this.selectNodes(props);
+    this.highlightNode(props);
   }
 
   onRemoved() {
@@ -145,9 +149,19 @@ export default class {
 
     this.container.innerHTML = NodeTitleTemplate(templateData);
 
+    this.nodeTitleLinks = Array.prototype.slice.call(
+      document.querySelectorAll('.js-node-title.-link'),
+      0
+    );
+
     this.nodeTitleLinks.forEach(nodeTitle => {
       nodeTitle.addEventListener('click', this._onNodeTitleClickBound);
     });
+
+    this.nodeTitleCloseButtons = Array.prototype.slice.call(
+      document.querySelectorAll('.js-node-close'),
+      0
+    );
 
     this.nodeTitleCloseButtons.forEach(closeButton => {
       closeButton.addEventListener('click', this._onNodeTitleCloseClickBound);
