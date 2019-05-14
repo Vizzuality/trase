@@ -1,29 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, cloneElement } from 'react';
 import PropTypes from 'prop-types';
 import './tooltip.scss';
 import { Manager, Reference, Popper } from 'react-popper';
 import ReactDOM from 'react-dom';
-import Text from 'react-components/shared/text';
 
-function Tooltip({ reference, referenceClassName, children, type, destinationId }) {
+function Tooltip({ reference, children, type, destinationId }) {
   const [isVisible, setVisibility] = useState('hidden');
   if (type === 'html') return null; // TODO: html tooltip
   return (
     <Manager>
       <Reference>
-        {({ ref }) => (
-          <text
-            x="0"
-            y="3"
-            fill="#fff"
-            className={referenceClassName}
-            ref={ref}
-            onMouseEnter={() => setVisibility('visible')}
-            onMouseLeave={() => setVisibility('hidden')}
-          >
-            {reference}
-          </text>
-        )}
+        {({ ref }) =>
+          cloneElement(reference, {
+            ref,
+            onMouseEnter: () => setVisibility('visible'),
+            onMouseLeave: () => setVisibility('hidden')
+          })
+        }
       </Reference>
       {ReactDOM.createPortal(
         <Popper>
@@ -34,12 +27,8 @@ function Tooltip({ reference, referenceClassName, children, type, destinationId 
               className="c-tooltip"
               style={{ ...style, visibility: isVisible }}
             >
+              <div className="tooltip-text">{children}</div>
               <div ref={arrowProps.ref} style={arrowProps.style} />
-              <div className="tooltip-text">
-                <Text variant="mono" as="span" color="white" weight="bold">
-                  {children}
-                </Text>
-              </div>
             </div>
           )}
         </Popper>,
@@ -52,7 +41,6 @@ function Tooltip({ reference, referenceClassName, children, type, destinationId 
 Tooltip.propTypes = {
   type: PropTypes.string,
   reference: PropTypes.node.isRequired,
-  referenceClassName: PropTypes.string,
   children: PropTypes.node.isRequired,
   destinationId: PropTypes.string
 };

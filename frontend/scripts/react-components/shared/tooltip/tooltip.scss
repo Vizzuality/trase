@@ -4,9 +4,6 @@
  .c-tooltip {
   background-color: $charcoal-grey-toned-down;
   padding: 10px;
-
-  .tooltip-text {
-    margin-bottom: 5px;
-    color: white;
-  }
+  margin: 10px;
+  box-shadow: $box-shadow;
 }
