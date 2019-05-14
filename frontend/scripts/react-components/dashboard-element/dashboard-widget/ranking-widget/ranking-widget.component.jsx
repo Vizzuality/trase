@@ -8,6 +8,8 @@ import Heading from 'react-components/shared/heading';
 import capitalize from 'lodash/capitalize';
 import { format } from 'd3-format';
 import Link from 'redux-first-router-link';
+import Tooltip from 'react-components/shared/tooltip';
+import Icon from 'react-components/shared/icon';
 
 class RankingWidget extends PureComponent {
   state = { page: 0 };
@@ -15,6 +17,19 @@ class RankingWidget extends PureComponent {
   handlePageChange = pageChange => {
     this.setState(state => ({ page: state.page + pageChange }));
   };
+
+  renderTooltipContent() {
+    return (
+      <div className="tooltip-content">
+        <div className="go-to-profile-text">
+          <Text as="span" color="white">
+            Go to Profile
+          </Text>
+          <Icon icon="icon-external-link-plain" />
+        </div>
+      </div>
+    );
+  }
 
   render() {
     const { data, config, pageSize } = this.props;
@@ -50,17 +65,23 @@ class RankingWidget extends PureComponent {
                         {index + 1 + pageSize * page}
                       </Text>
                     </div>
-                    <Link to={item.url}>
-                      <Heading
-                        as="span"
-                        size="lg"
-                        weight="bold"
-                        color="white"
-                        className="item-name"
-                      >
-                        {capitalize(item.y)}
-                      </Heading>
-                    </Link>
+                    <Tooltip
+                      getReference={({ ref }) => (
+                        <Link to={item.url} ref={ref}>
+                          <Heading
+                            as="span"
+                            size="lg"
+                            weight="bold"
+                            color="white"
+                            className="item-name"
+                          >
+                            {capitalize(item.y)}
+                          </Heading>
+                        </Link>
+                      )}
+                    >
+                      {this.renderTooltipContent()}
+                    </Tooltip>
                   </div>
                   <Text className="item-value" color="white" variant="mono" size="md">
                     {formatValue(item.x0)} {config.xAxisLabel && config.xAxisLabel.suffix}

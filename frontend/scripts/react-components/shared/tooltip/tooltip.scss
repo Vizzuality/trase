@@ -6,4 +6,9 @@
   padding: 10px;
   margin: 10px;
   box-shadow: $box-shadow;
+  opacity: 1;
+
+  .tooltip-arrow {
+    @include caret($charcoal-grey-toned-down);
+  }
 }

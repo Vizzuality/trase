@@ -17,7 +17,7 @@ const renderText = (tickValue, id, url) =>
   tickValue.length <= 15 && !url ? (
     renderReference(tickValue)
   ) : (
-    <Tooltip type="svg" reference={renderReference(tickValue)} destinationId={id}>
+    <Tooltip reference={renderReference(tickValue)} destinationId={id}>
       <div className="tooltip-content">
         {tickValue.length > 15 && (
           <Text as="div" color="white" className="extended-tick-text">
