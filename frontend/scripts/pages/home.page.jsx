@@ -6,6 +6,7 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 import Home from 'react-components/home/home.container';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
+import CookieBanner from 'react-components/cookie-banner/cookie-banner.container';
 import Footer from 'react-components/shared/footer/footer.component';
 
 import 'styles/layouts/l-homepage.scss';
@@ -35,10 +36,15 @@ export const mount = (root, store) => {
     </Provider>,
     document.getElementById('footer')
   );
+  render(
+    <CookieBanner />,
+    document.getElementById('cookie-banner')
+  );
 };
 
 export const unmount = () => {
   unmountComponentAtNode(document.getElementById('page-react-root'));
   unmountComponentAtNode(document.getElementById('nav'));
   unmountComponentAtNode(document.getElementById('footer'));
+  unmountComponentAtNode(document.getElementById('cookie-banner'));
 };
