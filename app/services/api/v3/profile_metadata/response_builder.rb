@@ -8,9 +8,14 @@ module Api
         end
 
         def call
+          context_node_type = Api::V3::ContextNodeType.
+            find_by(
+              node_type_id: @node.node_type_id,
+              context_id: @context.id
+            )
+
           Api::V3::Profile.
-            joins(context_node_type: [node_type: :nodes]).
-            where('nodes.id' => @node.id).
+            where(context_node_type_id: context_node_type.id).
             includes(charts: :children).
             references(:charts).
             where('charts.parent_id IS NULL').

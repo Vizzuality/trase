@@ -922,7 +922,7 @@ COMMENT ON COLUMN public.chart_attributes.display_name IS 'Name of attribute for
 -- Name: COLUMN chart_attributes.legend_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.chart_attributes.legend_name IS 'Legend title';
+COMMENT ON COLUMN public.chart_attributes.legend_name IS 'Legend title; you can use {{commodity_name}}, {{company_name}}, {{jurisdiction_name}} and {{year}}';
 
 
 --
@@ -1258,8 +1258,7 @@ CREATE TABLE public.charts (
     title text NOT NULL,
     "position" integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    chart_type character varying
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1288,7 +1287,7 @@ COMMENT ON COLUMN public.charts.identifier IS 'Identifier used to map this chart
 -- Name: COLUMN charts.title; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.charts.title IS 'Title of chart for display';
+COMMENT ON COLUMN public.charts.title IS 'Title of chart for display; you can use {{commodity_name}}, {{company_name}}, {{jurisdiction_name}} and {{year}}';
 
 
 --
@@ -8790,6 +8789,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190321122822'),
 ('20190321161913'),
 ('20190429104832'),
-('20190429112751');
+('20190429112751'),
+('20190513125050');
 
 
