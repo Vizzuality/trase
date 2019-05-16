@@ -8,7 +8,10 @@ import {
   getSelectedNodesGeoIds,
   getHighlightedNodesGeoIds
 } from 'react-components/tool/tool.selectors';
-import { getChoroplethOptions } from 'react-components/tool-layers/tool-layer.selectors';
+import {
+  getChoroplethOptions,
+  getSelectedMapContextualLayersData
+} from 'react-components/tool-layers/tool-layer.selectors';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 import { connect } from 'react-redux';
 import Map from 'react-components/tool/map/map.component';
@@ -32,7 +35,7 @@ const mapStateToProps = state => {
     selectedColumnId: state.toolLinks.selectedColumnsIds
       ? state.toolLinks.selectedColumnsIds[0]
       : undefined,
-    selectedMapContextualLayersData: state.toolLayers.selectedMapContextualLayersData,
+    selectedMapContextualLayersData: getSelectedMapContextualLayersData(state),
     isMapVisible: state.toolLayers.isMapVisible,
     visibleNodes: getVisibleNodes(state),
     selectedBiomeFilter: getSelectedBiomeFilter(state),

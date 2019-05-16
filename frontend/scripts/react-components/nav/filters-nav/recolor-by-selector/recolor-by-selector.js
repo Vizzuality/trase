@@ -8,7 +8,7 @@ const mapStateToProps = state => ({
   recolorBys: getRecolorByOptions(state),
   recolorGroups: getToolRecolorGroups(state),
   selectedRecolorBy: getSelectedRecolorByValue(state),
-  tooltip: state.app.tooltips.sankey.nav.colorBy.main
+  tooltip: state.app.tooltips?.sankey.nav.colorBy.main
 });
 
 const mapDispatchToProps = dispatch => ({

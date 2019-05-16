@@ -2,7 +2,6 @@ import {
   GET_COLUMNS,
   GET_LINKS,
   HIGHLIGHT_NODE,
-  SET_FLOWS_LOADING_STATE,
   RESET_SELECTION,
   RESET_TOOL_STATE,
   SELECT_BIOME_FILTER,
@@ -31,7 +30,6 @@ export const toolLinksInitialState = {
   expandedNodesIds: [],
   forcedOverview: false,
   highlightedNodesIds: [],
-  initialDataLoading: false,
   flowsLoading: true,
   nodes: [],
   nodesDict: null,
@@ -117,15 +115,8 @@ const toolLinksReducer = {
       columns,
       nodes: rawNodes,
       nodesDict,
-      initialDataLoading: false,
       selectedColumnsIds
     });
-  },
-
-  [SET_FLOWS_LOADING_STATE](state, action) {
-    // TODO: remove this see tool.thunks.js
-    const { loadedFlowsContextId } = action.payload;
-    return { ...state, flowsLoading: true, loadedFlowsContextId };
   },
 
   [GET_LINKS](state, action) {
@@ -225,7 +216,6 @@ const toolLinksReducerTypes = PropTypes => ({
   expandedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   forcedOverview: PropTypes.bool,
   highlightedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-  initialDataLoading: PropTypes.bool,
   flowsLoading: PropTypes.bool,
   nodes: PropTypes.arrayOf(PropTypes.object).isRequired,
   nodesDict: PropTypes.object,

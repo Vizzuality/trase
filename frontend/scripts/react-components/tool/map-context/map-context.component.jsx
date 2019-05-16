@@ -32,9 +32,9 @@ export default class {
   }
 
   buildLayers({ layers, selectedMapContextualLayers }) {
-    this.items.innerHTML = ContextLayersTemplate({ layers });
+    this.items.innerHTML = ContextLayersTemplate({ layers: Object.values(layers) });
 
-    if (layers.length > 0) {
+    if (Object.values(layers).length > 0) {
       this.el.classList.remove('is-hidden');
     } else {
       this.el.classList.add('is-hidden');

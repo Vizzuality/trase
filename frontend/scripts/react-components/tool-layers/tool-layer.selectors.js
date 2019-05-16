@@ -6,6 +6,8 @@ import { getHighlightedNodesData } from 'react-components/tool/tool.selectors';
 const getMapDimensions = state => state.toolLayers.mapDimensions;
 const getSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
 const getNodesDictWithMeta = state => state.toolLayers.nodesDictWithMeta;
+const getMapContextualLayers = state => state.toolLayers.mapContextualLayers;
+const getSelectedMapContextualLayers = state => state.toolLayers.selectedMapContextualLayers;
 const getSelectedYears = state => state.app.selectedYears;
 
 export const getChoroplethOptions = createSelector(
@@ -32,5 +34,15 @@ export const getCurrentHighlightedChoroplethBucket = createSelector(
     }
 
     return undefined;
+  }
+);
+
+export const getSelectedMapContextualLayersData = createSelector(
+  [getSelectedMapContextualLayers, getMapContextualLayers],
+  (selectedMapContextualLayers, mapContextualLayers) => {
+    if (!selectedMapContextualLayers) {
+      return [];
+    }
+    return selectedMapContextualLayers.map(layer => mapContextualLayers[layer]);
   }
 );

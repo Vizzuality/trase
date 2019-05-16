@@ -12,11 +12,9 @@ import {
   SET_MAP_DIMENSIONS_SELECTION,
   TOGGLE_MAP,
   TOGGLE_MAP_DIMENSION,
-  TOGGLE_MAP_SIDEBAR_GROUP,
   SET_MAP_DIMENSIONS_DATA
 } from 'actions/tool.actions';
 import { SET_CONTEXT } from 'scripts/actions/app.actions';
-import keyBy from 'lodash/keyBy';
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
 import getNodesDict from 'scripts/reducers/helpers/getNodesDict';
@@ -25,7 +23,6 @@ import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 
 export const toolLayersInitialState = {
   nodesDict: null,
-  expandedMapSidebarGroupsIds: [],
   geoIdsDict: {},
   highlightedNodeCoordinates: null,
   isMapVisible: false,
@@ -40,17 +37,12 @@ export const toolLayersInitialState = {
   selectedMapBasemap: null,
   selectedMapContextualLayers: null,
   selectedMapDimensions: [null, null],
-  selectedMapDimensionsWarnings: null,
-  selectedMapContextualLayersData: []
+  selectedMapDimensionsWarnings: null
 };
 
 const toolLayersReducer = {
-  [SET_CONTEXT](state) {
-    return immer(state, draft => {
-      draft.mapView = null;
-      draft.selectedMapBasemap = null;
-      draft.selectedMapContextualLayers = null;
-    });
+  [SET_CONTEXT]() {
+    return toolLayersInitialState;
   },
 
   [SET_MAP_LOADING_STATE](state) {
@@ -81,13 +73,12 @@ const toolLayersReducer = {
         draft.mapDimensions[uid].uid = uid;
       });
       dimensionGroups.forEach((g, i) => {
-        const group = {
+        draft.mapDimensionsGroups[i] = {
           ...g,
           dimensions: dimensions
             .filter(dimension => dimension.groupId === g.id)
             .map(dimension => getNodeMetaUid(dimension.type, dimension.layerAttributeId))
         };
-        draft.mapDimensionsGroups[i] = group;
       });
     });
   },
@@ -110,7 +101,10 @@ const toolLayersReducer = {
   },
   [GET_CONTEXT_LAYERS](state, action) {
     return immer(state, draft => {
-      draft.mapContextualLayers = action.mapContextualLayers;
+      draft.mapContextualLayers = {};
+      action.mapContextualLayers.forEach(layer => {
+        draft.mapContextualLayers[layer.id] = layer;
+      });
     });
   },
   [SET_MAP_DIMENSIONS_SELECTION](state, action) {
@@ -139,15 +133,7 @@ const toolLayersReducer = {
   },
   [SELECT_CONTEXTUAL_LAYERS](state, action) {
     return immer(state, draft => {
-      const mapContextualLayersDict = keyBy(draft.mapContextualLayers, 'id');
-      const selectedMapContextualLayersData = action.contextualLayers.map(
-        layerSlug => mapContextualLayersDict[layerSlug]
-      );
-
-      return Object.assign(draft, {
-        selectedMapContextualLayers: action.contextualLayers,
-        selectedMapContextualLayersData
-      });
+      draft.selectedMapContextualLayers = action.contextualLayers;
     });
   },
   [SELECT_BASEMAP](state, action) {
@@ -169,16 +155,6 @@ const toolLayersReducer = {
       };
     });
   },
-  [TOGGLE_MAP_SIDEBAR_GROUP](state, action) {
-    return immer(state, draft => {
-      const idIndex = draft.expandedMapSidebarGroupsIds.indexOf(action.id);
-      if (idIndex === -1) {
-        draft.expandedMapSidebarGroupsIds.push(action.id);
-      } else {
-        draft.expandedMapSidebarGroupsIds.splice(idIndex, 1);
-      }
-    });
-  },
   [GET_COLUMNS](state, action) {
     return immer(state, draft => {
       const rawNodes = action.payload[0].data;
@@ -195,7 +171,6 @@ const toolLayersReducer = {
 };
 
 const toolLayersReducerTypes = PropTypes => ({
-  expandedMapSidebarGroupsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   geoIdsDict: PropTypes.object.isRequired,
   highlightedNodeCoordinates: PropTypes.object,
   isMapVisible: PropTypes.bool,
@@ -210,8 +185,7 @@ const toolLayersReducerTypes = PropTypes => ({
   selectedMapBasemap: PropTypes.string,
   selectedMapContextualLayers: PropTypes.array,
   selectedMapDimensions: PropTypes.array.isRequired,
-  selectedMapDimensionsWarnings: PropTypes.string,
-  selectedMapContextualLayersData: PropTypes.array.isRequired
+  selectedMapDimensionsWarnings: PropTypes.string
 });
 
 export default createReducer(toolLayersInitialState, toolLayersReducer, toolLayersReducerTypes);

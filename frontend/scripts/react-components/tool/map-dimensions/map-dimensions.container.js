@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import MapDimensions from 'react-components/tool/map-dimensions/map-dimensions.component';
-import { toggleMapSidebarGroup, toggleMapDimension } from 'actions/tool.actions';
+import { toggleMapDimension } from 'actions/tool.actions';
 import { loadTooltip } from 'actions/app.actions';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 
@@ -22,9 +22,7 @@ const isCloroplethEnabled = state => {
 };
 const mapStateToProps = state => ({
   mapDimensionsGroups: getLegacyMapDimensionsGroups(state),
-  expandedMapSidebarGroupsIds: state.toolLayers.expandedMapSidebarGroupsIds,
   selectedMapDimensions: state.toolLayers.selectedMapDimensions,
-  toggleSidebarGroups: state.toolLayers.expandedMapSidebarGroupsIds,
   isCloroplethEnabled: isCloroplethEnabled(state),
   selectedColumnsIds: state.toolLinks.selectedColumnsIds
 });
@@ -54,11 +52,10 @@ const methodProps = [
 
 const mapDispatchToProps = {
   onMapDimensionsLoaded: () => loadTooltip(),
-  onToggleGroup: id => toggleMapSidebarGroup(id),
   onDimensionClick: uid => toggleMapDimension(uid)
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(mapToVanilla(MapDimensions, methodProps, Object.keys(mapDispatchToProps)));
+)(mapToVanilla(MapDimensions, methodProps, [...Object.keys(mapDispatchToProps), 'onToggleGroup']));

@@ -37,7 +37,6 @@ import pSettle from 'p-settle';
 
 export const RESET_SELECTION = 'RESET_SELECTION';
 export const GET_COLUMNS = 'GET_COLUMNS';
-export const SET_FLOWS_LOADING_STATE = 'SET_FLOWS_LOADING_STATE';
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
 export const GET_LINKS = 'GET_LINKS';
 export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
@@ -62,7 +61,6 @@ export const EXPAND_NODE_SELECTION = 'EXPAND_NODE_SELECTION';
 export const COLLAPSE_NODE_SELECTION = 'COLLAPSE_NODE_SELECTION';
 export const GET_LINKED_GEOIDS = 'GET_LINKED_GEOIDS';
 export const SAVE_MAP_VIEW = 'SAVE_MAP_VIEW';
-export const TOGGLE_MAP_SIDEBAR_GROUP = 'TOGGLE_MAP_SIDEBAR_GROUP';
 export const SHOW_LINKS_ERROR = 'SHOW_LINKS_ERROR';
 export const RESET_TOOL_STATE = 'RESET_TOOL_STATE';
 export const SET_SANKEY_SEARCH_VISIBILITY = 'SET_SANKEY_SEARCH_VISIBILITY';
@@ -267,11 +265,13 @@ export function selectColumn(columnIndex, columnId, reloadLinks = true) {
     );
     dispatch(updateNodes(selectedNodesIds));
     const selectedColumn = state.toolLinks.columns.find(c => c.id === columnId);
-    if (selectedColumn && selectedColumn.group === 0 && selectedColumn.isGeo && selectedColumn.isChoroplethDisabled) {
+    if (
+      selectedColumn &&
+      selectedColumn.group === 0 &&
+      selectedColumn.isGeo &&
+      selectedColumn.isChoroplethDisabled
+    ) {
       dispatch(setMapDimensions([null, null]));
-      state.toolLayers.expandedMapSidebarGroupsIds.forEach(id =>
-        dispatch(toggleMapSidebarGroup(id))
-      );
     } else if (selectedColumn.isGeo && selectedColumn.isChoroplethDisabled === false) {
       const availableMapDimensions = _getAvailableMapDimensions(
         state.toolLayers.mapDimensions,
@@ -383,8 +383,8 @@ export function loadNodes() {
           dispatch(_setBiomeFilterAction(selectedBiomeFilter.name, getState()));
         }
 
-        const selectedGeoColumn = getState().tool.columns.find(column =>
-          getState().tool.selectedColumnsIds.some(id => id === column.id && column.isGeo)
+        const selectedGeoColumn = getState().toolLinks.columns.find(column =>
+          getState().toolLinks.selectedColumnsIds.some(id => id === column.id && column.isGeo)
         );
 
         if (selectedGeoColumn.isChoroplethDisabled === false) {
@@ -403,10 +403,6 @@ export function loadNodes() {
 export function loadLinks() {
   return (dispatch, getState) => {
     const state = getState();
-    dispatch({
-      type: SET_FLOWS_LOADING_STATE,
-      payload: { loadedFlowsContextId: state.app.selectedContext.id }
-    });
     const selectedResizeBy = getSelectedResizeBy(state);
     const params = {
       context_id: state.app.selectedContext.id,
@@ -942,13 +938,6 @@ export function selectMapBasemap(selectedMapBasemap) {
   return {
     type: SELECT_BASEMAP,
     selectedMapBasemap
-  };
-}
-
-export function toggleMapSidebarGroup(id) {
-  return {
-    type: TOGGLE_MAP_SIDEBAR_GROUP,
-    id: parseInt(id, 10)
   };
 }
 

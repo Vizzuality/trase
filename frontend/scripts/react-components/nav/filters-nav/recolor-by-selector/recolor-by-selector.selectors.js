@@ -16,7 +16,7 @@ const getSelectionRecolorBy = createSelector(
     groupNumber: -1,
     label: 'Selection',
     years: selectedYears,
-    description: tooltips.sankey.nav.colorBy.none
+    description: tooltips?.sankey.nav.colorBy.none
   })
 );
 

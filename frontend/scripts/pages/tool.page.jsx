@@ -24,15 +24,12 @@ import TitlebarContainer from 'react-components/tool/titlebar/titlebar.container
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import NodesTitlesContainer from 'react-components/tool/nodes-titles/nodes-titles.container';
 import MapContextContainer from 'react-components/tool/map-context/map-context.container';
-import MapLegend from 'react-components/tool/map-legend/map-legend.container';
 import MapBasemaps from 'react-components/tool/map-basemaps/map-basemaps.container';
 import Sankey from 'react-components/tool/sankey/sankey.container';
 import MapLegend from 'react-components/tool/map-legend/map-legend.container';
+import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.react';
 
-import {
-  resizeSankeyTool
-} from 'react-components/tool/tool.thunks';
-import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.container';
+import { resizeSankeyTool } from 'react-components/tool/tool.thunks';
 
 import EventManager from 'utils/eventManager';
 

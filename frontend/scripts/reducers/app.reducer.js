@@ -49,7 +49,7 @@ const isSankeyExpanded = state => state.isMapLayerVisible !== true && state.isMa
 
 const appReducer = {
   [LOAD_STATE_FROM_URL](state, action) {
-    return { ...state, initialDataLoading: true, ...action.payload.app };
+    return { ...state, ...action.payload.app };
   },
   [SET_SANKEY_SIZE](state) {
     if (isSankeyExpanded(state)) {
