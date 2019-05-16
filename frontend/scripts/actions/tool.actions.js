@@ -131,7 +131,7 @@ const _setBiomeFilterAction = (biomeFilterName, state) => {
   };
 };
 
-function _getAvailableMapDimensions(dimensions, selectedMapDimensions) {
+function _getAvailableMapDimensions(dimensions, selectedMapDimensions, selectedColumn) {
   const allAvailableMapDimensionsUids = dimensions.map(dimension =>
     getNodeMetaUid(dimension.type, dimension.layerAttributeId)
   );
@@ -149,7 +149,7 @@ function _getAvailableMapDimensions(dimensions, selectedMapDimensions) {
   const uids = defaultMapDimensions.map(selectedDimension =>
     getNodeMetaUid(selectedDimension.type, selectedDimension.layerAttributeId)
   );
-  return [uids[0] || null, uids[1] || null];
+  return [(!selectedColumn.isChoroplethDisabled && uids[0]) || null, uids[1] || null];
 }
 
 export function selectView(detailedView, reloadLinks) {
@@ -276,7 +276,8 @@ export function selectColumn(columnIndex, columnId, reloadLinks = true) {
     } else if (selectedColumn.isChoroplethDisabled === false) {
       const availableMapDimensions = _getAvailableMapDimensions(
         state.tool.mapDimensions,
-        state.tool.selectedMapDimensions
+        state.tool.selectedMapDimensions,
+        selectedColumn
       );
       dispatch(setMapDimensions(availableMapDimensions));
     }
@@ -330,6 +331,10 @@ export function loadNodes() {
 
     const getMapBaseDataURL = getURLFromParams(GET_MAP_BASE_DATA_URL, params);
     const selectedMapDimensions = getState().tool.selectedMapDimensions;
+
+    const columns = getState().tool.columns;
+    const selectedColumnsIds = getState().tool.selectedColumnsIds;
+    const firstSelectedColumn = columns.find(c => c.id === selectedColumnsIds[0]);
 
     fetch(getMapBaseDataURL)
       .then(response => {
@@ -386,7 +391,8 @@ export function loadNodes() {
 
         const availableMapDimensions = _getAvailableMapDimensions(
           payload.mapDimensionsMetaJSON.dimensions,
-          selectedMapDimensions
+          selectedMapDimensions,
+          firstSelectedColumn
         );
         dispatch(setMapDimensions(availableMapDimensions));
       });
