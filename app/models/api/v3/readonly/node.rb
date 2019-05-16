@@ -30,7 +30,10 @@ module Api
                         against: :name,
                         order_within_rank: :name,
                         using: {
-                          tsearch: {prefix: true}
+                          tsearch: {
+                            prefix: true,
+                            tsvector_column: :name_tsvector
+                          }
                         }
       end
     end
