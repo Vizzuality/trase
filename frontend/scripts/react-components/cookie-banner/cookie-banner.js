@@ -1,20 +1,20 @@
-export CookieBannerComponent from 'react-components/cookie-banner/cookie-banner.component';
-
-const acceptedCookieBanner = {
-  key: 'acceptedCookieBanner__TRASE_EARTH',
-  get() {
-    return localStorage.getItem(this.key);
-  },
-  set(key) {
-    return localStorage.setItem(this.key, key);
-  }
-};
+import CookieBannerComponent from 'react-components/cookie-banner/cookie-banner.component';
 
 const CookieBannerContainer = () => {
-  return acceptedCookieBanner.get(this.key) ? null :
-    CookieBannerComponent({
-      setAccepted: acceptedCookieBanner.set(Date.now())
-    });
-}
+  const key = 'acceptedCookieBanner__TRASE_EARTH';
+  const acceptedCookieBanner = {
+    get() {
+      return localStorage.getItem(key);
+    },
+    set(date) {
+      return localStorage.setItem(key, date);
+    }
+  };
+  return acceptedCookieBanner.get(key)
+    ? null
+    : CookieBannerComponent({
+        setAccepted: () => acceptedCookieBanner.set(Date.now())
+      });
+};
 
 export default CookieBannerContainer;
