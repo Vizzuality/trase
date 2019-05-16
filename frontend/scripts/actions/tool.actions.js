@@ -384,11 +384,19 @@ export function loadNodes() {
           dispatch(_setBiomeFilterAction(selectedBiomeFilter.name, getState()));
         }
 
-        const availableMapDimensions = _getAvailableMapDimensions(
-          payload.mapDimensionsMetaJSON.dimensions,
-          selectedMapDimensions
+        const selectedGeoColumn = getState().tool.columns.find(column =>
+          getState().tool.selectedColumnsIds.some(id => id === column.id && column.isGeo)
         );
-        dispatch(setMapDimensions(availableMapDimensions));
+
+        if (selectedGeoColumn.isChoroplethDisabled === false) {
+          const availableMapDimensions = _getAvailableMapDimensions(
+            payload.mapDimensionsMetaJSON.dimensions,
+            selectedMapDimensions
+          );
+          dispatch(setMapDimensions(availableMapDimensions));
+        } else {
+          dispatch(setMapDimensions([null, null]));
+        }
       });
   };
 }
