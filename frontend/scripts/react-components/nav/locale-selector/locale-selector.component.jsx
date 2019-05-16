@@ -5,19 +5,12 @@ import cx from 'classnames';
 
 import 'scripts/react-components/nav/locale-selector/locale-selector.scss';
 
-const { Transifex } = window;
-
 class LocaleSelector extends React.Component {
   constructor(props) {
     super(props);
-    let defaultLanguage = null;
-    if (typeof Transifex !== 'undefined') {
-      const code = Transifex.live.detectLanguage();
-      defaultLanguage = { code };
-    }
     this.state = {
       languages: [],
-      defaultLanguage
+      defaultLanguage: null
     };
 
     this.onSelectLang = this.onSelectLang.bind(this);
@@ -32,14 +25,14 @@ class LocaleSelector extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { defaultLanguage } = this.state;
-    if (defaultLanguage && prevState.defaultLanguage === null && defaultLanguage !== null) {
+    if (defaultLanguage && prevState.defaultLanguage === null) {
       this.props.onTranslate(defaultLanguage.code);
     }
   }
 
   onSelectLang(item, callback) {
-    if (typeof Transifex !== 'undefined') {
-      Transifex.live.translateTo(item.code);
+    if (typeof window.Transifex !== 'undefined') {
+      window.Transifex.live.translateTo(item.code);
       this.props.onTranslate(item.code);
     }
     // We call item's onClick to update Downshift's inner state after performing our custom logic.
@@ -56,11 +49,9 @@ class LocaleSelector extends React.Component {
 
     if (urlLanguage) {
       defaultLanguage = urlLanguage;
-    } else if (typeof Transifex !== 'undefined') {
-      const code = Transifex.live.detectLanguage();
+    } else if (typeof window.Transifex !== 'undefined') {
+      const code = window.Transifex.live.detectLanguage();
       defaultLanguage = languages.find(lang => lang.code === code) || { code };
-    } else {
-      defaultLanguage = languages.find(lang => lang.source);
     }
     if (defaultLanguage !== this.state.defaultLanguage) {
       this.setState({ defaultLanguage });
@@ -68,8 +59,8 @@ class LocaleSelector extends React.Component {
   }
 
   setLanguages() {
-    if (typeof Transifex !== 'undefined') {
-      const languages = Transifex.live.getAllLanguages() || [];
+    if (typeof window.Transifex !== 'undefined') {
+      const languages = window.Transifex.live.getAllLanguages() || [];
       this.setState({ languages });
     }
   }
