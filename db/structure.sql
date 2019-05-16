@@ -4577,7 +4577,8 @@ COMMENT ON COLUMN public.profiles.adm_2_topojson_root IS 'Path within the TopoJS
 CREATE MATERIALIZED VIEW public.nodes_mv AS
  SELECT nodes.id,
     nodes.main_id,
-    nodes.name,
+    btrim(nodes.name) AS name,
+    to_tsvector('simple'::regconfig, COALESCE(btrim(nodes.name), ''::text)) AS name_tsvector,
     node_types.name AS node_type,
     nodes_with_flows.context_id,
     profiles.name AS profile,
@@ -7526,10 +7527,10 @@ CREATE INDEX nodes_mv_context_id_idx ON public.nodes_mv USING btree (context_id)
 
 
 --
--- Name: nodes_mv_name_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: nodes_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX nodes_mv_name_idx ON public.nodes_mv USING gin (to_tsvector('simple'::regconfig, COALESCE(name, ''::text)));
+CREATE INDEX nodes_mv_name_tsvector_idx ON public.nodes_mv USING gin (name_tsvector);
 
 
 --
@@ -8397,6 +8398,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190503123635'),
 ('20190503175955'),
 ('20190513125050'),
+('20190516111644'),
 ('20190528091308');
 
 

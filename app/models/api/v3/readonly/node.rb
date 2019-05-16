@@ -5,6 +5,7 @@
 #  id             :integer          primary key
 #  main_id        :integer
 #  name           :text
+#  name_tsvector  :tsvector
 #  node_type      :text
 #  context_id     :integer
 #  profile        :text
@@ -14,7 +15,7 @@
 #
 #  nodes_mv_context_id_id_idx  (context_id,id) UNIQUE
 #  nodes_mv_context_id_idx     (context_id)
-#  nodes_mv_name_idx           (to_tsvector('simple'::regconfig, COALESCE(name, ''::text))) USING gin
+#  nodes_mv_name_tsvector_idx  (name_tsvector) USING gin
 #
 
 module Api
