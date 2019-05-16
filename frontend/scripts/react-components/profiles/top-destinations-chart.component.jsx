@@ -18,8 +18,9 @@ class TopDestinationsChart extends React.PureComponent {
   }
 
   onMouseMove = (location, x, y) => {
+    const { summary } = this.props;
     const text = `${
-      this.props.nodeName
+      summary.nodeName
     } > ${location.name.toUpperCase()}, ${location.date.getFullYear()}`;
     const title = 'Trade Volume';
     const unit = 't';
