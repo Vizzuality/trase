@@ -270,10 +270,14 @@ export function selectColumn(columnIndex, columnId, reloadLinks = true) {
     );
     dispatch(updateNodes(selectedNodesIds));
     const selectedColumn = state.tool.columns.find(c => c.id === columnId);
-    if (selectedColumn && selectedColumn.group === 0 && selectedColumn.isChoroplethDisabled) {
+    if (
+      selectedColumn?.group === 0 &&
+      selectedColumn.isGeo &&
+      selectedColumn.isChoroplethDisabled
+    ) {
       dispatch(setMapDimensions([null, null]));
       state.tool.expandedMapSidebarGroupsIds.forEach(id => dispatch(toggleMapSidebarGroup(id)));
-    } else if (selectedColumn.isChoroplethDisabled === false) {
+    } else if (selectedColumn.isChoroplethDisabled === false && selectedColumn.isGeo) {
       const availableMapDimensions = _getAvailableMapDimensions(
         state.tool.mapDimensions,
         state.tool.selectedMapDimensions
@@ -384,11 +388,19 @@ export function loadNodes() {
           dispatch(_setBiomeFilterAction(selectedBiomeFilter.name, getState()));
         }
 
-        const availableMapDimensions = _getAvailableMapDimensions(
-          payload.mapDimensionsMetaJSON.dimensions,
-          selectedMapDimensions
+        const selectedGeoColumn = getState().tool.columns.find(column =>
+          getState().tool.selectedColumnsIds.some(id => id === column.id && column.isGeo)
         );
-        dispatch(setMapDimensions(availableMapDimensions));
+
+        if (selectedGeoColumn.isChoroplethDisabled === false) {
+          const availableMapDimensions = _getAvailableMapDimensions(
+            payload.mapDimensionsMetaJSON.dimensions,
+            selectedMapDimensions
+          );
+          dispatch(setMapDimensions(availableMapDimensions));
+        } else {
+          dispatch(setMapDimensions([null, null]));
+        }
       });
   };
 }
