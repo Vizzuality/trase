@@ -51,7 +51,6 @@ class TopDestinationsMap extends React.PureComponent {
 
   getTopoJsonRoot() {
     const { activeTab, countryName } = this.props;
-    console.log(activeTab, countryName, this.props);
     if (activeTab) {
       return countryName && `${countryName.toUpperCase()}_${activeTab.toUpperCase()}`;
     }
