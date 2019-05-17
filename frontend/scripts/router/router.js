@@ -168,11 +168,20 @@ const config = {
   onAfterChange: (dispatch, getState, { action }) => {
     const currentLanguage = action.meta.location?.current?.query?.lang;
     const previousLanguage = action.meta.location?.prev?.query?.lang;
-    if (!currentLanguage) {
+    const addLanguageToUrl = lang => {
       const { location } = getState();
-      const query = { ...location.query, lang: previousLanguage || 'en' };
+      const query = { ...location.query, lang };
       const payload = { ...location.payload, query };
       dispatch(redirect({ type: location.type, payload }));
+    };
+
+    if (!currentLanguage && previousLanguage) {
+      addLanguageToUrl(previousLanguage);
+    } else if (!currentLanguage && !previousLanguage && typeof window.Transifex !== 'undefined') {
+      const lang = window.Transifex.live.detectLanguage();
+      if (lang) {
+        addLanguageToUrl(lang);
+      }
     }
   },
   restoreScroll: restoreScroll({
