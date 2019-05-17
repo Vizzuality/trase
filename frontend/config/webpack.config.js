@@ -20,7 +20,6 @@ const templates = require('./static.templates');
 
 module.exports = {
   entry: {
-    fetch: 'whatwg-fetch',
     main: path.join(srcPath, 'index')
   },
   output: {
