@@ -25,8 +25,8 @@ function CookieBanner({ setAccepted, accepted }) {
               for further details.
             </Text>
           </div>
-          <Button size="lg" weight="bold" color="white" onClick={setAccepted}>
-            Ok
+          <Button size="lg" weight="bold" color="gray-transparent" onClick={setAccepted}>
+            I agree
           </Button>
         </div>
       </div>

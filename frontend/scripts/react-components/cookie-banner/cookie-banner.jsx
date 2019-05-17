@@ -23,4 +23,4 @@ const CookieBannerContainer = () => {
   return <CookieBannerComponent setAccepted={() => setAccepted(true)} accepted={accepted} />;
 };
 
-export default console.log('hey', acceptedCookieBanner.get()) || CookieBannerContainer;
+export default CookieBannerContainer;
