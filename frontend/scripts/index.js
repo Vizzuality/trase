@@ -13,6 +13,7 @@ import router from './router/router';
 import routeSubscriber from './router/route-subscriber';
 import { register, unregister } from './worker';
 import { rootSaga } from './sagas';
+import { setTransifexLanguages } from './actions/app.actions';
 
 import 'styles/_base.scss';
 import 'styles/_texts.scss';
@@ -67,6 +68,14 @@ const store = createStore(
   undefined,
   composeEnhancers(router.enhancer, applyMiddleware(...middlewares))
 );
+
+window.onTransifexLoad = () => {
+  if (window.Transifex?.live) {
+    window.Transifex.live.onFetchLanguages(languages =>
+      store.dispatch(setTransifexLanguages(languages))
+    );
+  }
+};
 
 routeSubscriber(store);
 sagaMiddleware.run(rootSaga);

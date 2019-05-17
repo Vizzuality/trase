@@ -1,126 +1,75 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import cx from 'classnames';
 
 import 'scripts/react-components/nav/locale-selector/locale-selector.scss';
 
-class LocaleSelector extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      languages: [],
-      defaultLanguage: null
-    };
-
-    this.onSelectLang = this.onSelectLang.bind(this);
-    this.setDefaultLanguage = this.setDefaultLanguage.bind(this);
-    this.setLanguages = this.setLanguages.bind(this);
-  }
-
-  componentDidMount() {
-    this.setLanguages();
-    this.setDefaultLanguage();
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { defaultLanguage } = this.state;
-    if (defaultLanguage && prevState.defaultLanguage === null) {
-      this.props.onTranslate(defaultLanguage.code);
-    }
-  }
-
-  onSelectLang(item, callback) {
-    if (typeof window.Transifex !== 'undefined') {
-      window.Transifex.live.translateTo(item.code);
-      this.props.onTranslate(item.code);
-    }
-    // We call item's onClick to update Downshift's inner state after performing our custom logic.
-    // Normal approach would be to let the user click-trigger onClick and use Downshift onChange
-    // to perform translations. But this is not working correctly.
-    callback();
-  }
-
-  setDefaultLanguage() {
-    const { languages } = this.state;
-    const { urlLang } = this.props;
-    let defaultLanguage = null;
-    const urlLanguage = urlLang && languages.find(lang => lang.code === urlLang);
-
-    if (urlLanguage) {
-      defaultLanguage = urlLanguage;
-    } else if (typeof window.Transifex !== 'undefined') {
-      const code = window.Transifex.live.detectLanguage();
-      // check if code's different than null (in case no API key exists like in tests env)
-      if (code) {
-        defaultLanguage = languages.find(lang => lang.code === code) || { code };
+function LocaleSelector(props) {
+  useEffect(() => {
+    if (props.lang !== null) {
+      if (typeof window.Transifex !== 'undefined' && props.lang?.code) {
+        window.Transifex.live.translateTo(props.lang.code);
       }
     }
-    if (defaultLanguage !== this.state.defaultLanguage) {
-      this.setState({ defaultLanguage });
-    }
-  }
+  }, [props.lang]);
 
-  setLanguages() {
-    if (typeof window.Transifex !== 'undefined') {
-      const languages = window.Transifex.live.getAllLanguages() || [];
-      this.setState({ languages });
-    }
-  }
+  const onSelectLang = useCallback(
+    item => {
+      props.onTranslate(item.code);
+    },
+    [props]
+  );
 
-  render() {
-    const { languages, defaultLanguage } = this.state;
-
-    return (
-      languages.length > 0 && (
-        <Downshift initialSelectedItem={defaultLanguage} itemToString={i => i.code}>
-          {({ getItemProps, isOpen, toggleMenu, selectedItem, getToggleButtonProps }) => (
-            <div className={cx('c-locale-selector', { '-open': isOpen })}>
-              <button
-                {...getToggleButtonProps()}
-                className="locale-selector-selected-item"
-                onClick={toggleMenu}
-              >
-                {selectedItem.code}
-              </button>
-              {isOpen ? (
-                <ul className="locale-selector-menu">
-                  {languages
-                    .filter(lang => lang.code !== selectedItem.code)
-                    .map(lang => {
-                      /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
-                      // Downshift onChange makes weird stuff, pass downshift onClick as cb instead
-                      const { onClick, ...itemProps } = getItemProps({ item: lang });
-                      return (
-                        <li
-                          {...itemProps}
-                          key={lang.code}
-                          className="locale-selector-menu-item"
-                          onClick={e => this.onSelectLang(lang, () => onClick(e))}
-                        >
-                          {lang.code}
-                        </li>
-                      );
-                      /* eslint-enable */
-                    })}
-                </ul>
-              ) : null}
-            </div>
-          )}
-        </Downshift>
-      )
-    );
-  }
+  const { languages, lang } = props;
+  // we use key prop to force re-render.
+  // For some reason downshift won't update the selectedItem properly
+  return (
+    languages.length > 0 && (
+      <Downshift
+        key={lang.code}
+        selectedItem={lang}
+        itemToString={i => i?.code}
+        onChange={onSelectLang}
+      >
+        {({ selectedItem, getItemProps, isOpen, getToggleButtonProps, getMenuProps }) => (
+          <div className={cx('c-locale-selector', { '-open': isOpen })}>
+            <button
+              {...getToggleButtonProps({
+                className: 'locale-selector-selected-item'
+              })}
+            >
+              {selectedItem?.code}
+            </button>
+            {isOpen ? (
+              <ul {...getMenuProps({ className: 'locale-selector-menu' })}>
+                {languages
+                  .filter(l => l.code !== selectedItem?.code)
+                  .map((l, i) => (
+                    <li
+                      {...getItemProps({
+                        item: l,
+                        index: i,
+                        key: l.code,
+                        className: 'locale-selector-menu-item'
+                      })}
+                    >
+                      {l.code}
+                    </li>
+                  ))}
+              </ul>
+            ) : null}
+          </div>
+        )}
+      </Downshift>
+    )
+  );
 }
 
 LocaleSelector.propTypes = {
-  onTranslate: PropTypes.func,
-  urlLang: PropTypes.string
-};
-
-LocaleSelector.defaultProps = {
-  onTranslate: () => {},
-  urlLang: 'en'
+  lang: PropTypes.object,
+  languages: PropTypes.array.isRequired,
+  onTranslate: PropTypes.func.isRequired
 };
 
 export default LocaleSelector;

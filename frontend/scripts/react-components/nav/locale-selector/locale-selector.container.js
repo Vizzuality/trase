@@ -1,14 +1,19 @@
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { setLanguage } from 'scripts/actions/app.actions';
 import LocaleSelector from './locale-selector.component';
 
 const mapStateToProps = state => {
   const { query: { lang } = {} } = state.location;
-  return { urlLang: lang };
+  const { languages } = state.app;
+  const urlLang = languages.find(l => l.code === lang);
+  const sourceLang = languages.find(l => l.source);
+  return {
+    languages,
+    lang: urlLang || sourceLang || null
+  };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators({ onTranslate: setLanguage }, dispatch);
+const mapDispatchToProps = { onTranslate: setLanguage };
 
 export default connect(
   mapStateToProps,
