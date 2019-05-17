@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'redux-first-router-link';
 import { PropTypes } from 'prop-types';
 import Button from 'react-components/shared/button';
 import Text from 'react-components/shared/text';
 import 'react-components/cookie-banner/cookie-banner.scss';
-import cx from 'classnames';
 
-function CookieBanner({ setAccepted }) {
-  const [accepted, closeBanner] = useState(false);
-  alert(accepted);
-  return (
-    <div className={cx('c-cookie-banner', { removed: accepted })}>
+function CookieBanner({ setAccepted, accepted }) {
+  return accepted ? null : (
+    <div className="c-cookie-banner">
       <div className="row">
         <div className="cookie-content">
           <div className="cookie-text">
@@ -28,15 +25,7 @@ function CookieBanner({ setAccepted }) {
               for further details.
             </Text>
           </div>
-          <Button
-            size="lg"
-            weight="bold"
-            color="white"
-            onClick={() => {
-              closeBanner(true);
-              setAccepted();
-            }}
-          >
+          <Button size="lg" weight="bold" color="white" onClick={setAccepted}>
             Ok
           </Button>
         </div>
@@ -46,7 +35,8 @@ function CookieBanner({ setAccepted }) {
 }
 
 CookieBanner.propTypes = {
-  setAccepted: PropTypes.func.isRequired
+  setAccepted: PropTypes.func.isRequired,
+  accepted: PropTypes.bool
 };
 
 export default CookieBanner;
