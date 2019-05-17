@@ -5,6 +5,7 @@ import addApostrophe from 'utils/addApostrophe';
 import capitalize from 'lodash/capitalize';
 import Link from 'redux-first-router-link';
 import Img from 'react-components/shared/img';
+import { translateText } from 'utils/transifex';
 
 import './button-links.scss';
 
@@ -24,7 +25,7 @@ function ButtonLinks(props) {
           <a className="link-button -with-arrow js-link-profile" onClickCapture={scrollTo}>
             <Img alt="" src="/images/profiles/profile-main-option-1.svg" />
             <span className="js-link-button-name">
-              <span className="notranslate">{name ? capitalize(name) : '-'}</span>
+              <span className="notranslate">{name ? translateText(capitalize(name)) : '-'}</span>
               {addApostrophe(name)} PROFILE
             </span>
           </a>

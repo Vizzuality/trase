@@ -6,9 +6,6 @@ function ImgBackground(props) {
   // the idea is to provide a srcSet + sizes and grab one or another depending on the screen res
   // and expose an ImgContextProvider that the users can use to pass their media-queries
   const { as, alt: title, src, children, ...rest } = props;
-  if (typeof alt === 'undefined' && NODE_ENV_DEV) {
-    console.warn("You're using a background image without an alt text, this will hurt SEO");
-  }
 
   return (
     <InView triggerOnce>
