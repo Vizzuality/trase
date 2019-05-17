@@ -11,11 +11,11 @@ class TopDestinationsMap extends React.PureComponent {
   state = { tooltipConfig: null };
 
   onMouseMove = (geography, x, y) => {
-    const { year, includedYears, lines, nodeName, activeTab } = this.props;
+    const { year, includedYears, lines, summary, activeTab } = this.props;
     const searchKey = activeTab ? 'geoid' : 'iso2';
     const polygon = lines.find(c => geography.properties[searchKey] === c.geo_id);
     if (polygon) {
-      const text = `${polygon.name.toUpperCase()} > ${nodeName}`;
+      const text = `${polygon.name.toUpperCase()} > ${summary?.nodeName}`;
       const title = 'Trade Volume';
       const unit = 't';
       const yearIndex = includedYears.findIndex(ye => ye === year);
@@ -51,6 +51,7 @@ class TopDestinationsMap extends React.PureComponent {
 
   getTopoJsonRoot() {
     const { activeTab, countryName } = this.props;
+    console.log(activeTab, countryName, this.props);
     if (activeTab) {
       return countryName && `${countryName.toUpperCase()}_${activeTab.toUpperCase()}`;
     }
