@@ -27,13 +27,6 @@ class FiltersNav extends React.PureComponent {
     openLogisticsMapDownload: PropTypes.func
   };
 
-  static FILTER_TYPES = {
-    contextSelector: 0,
-    yearSelector: 1,
-    dropdown: 2,
-    recolorBySelector: 3
-  };
-
   FILTERS = [ContextSelector, YearsSelector, NavDropdownSelector, RecolorBySelector];
 
   state = {
