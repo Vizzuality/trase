@@ -51,7 +51,10 @@ class LocaleSelector extends React.Component {
       defaultLanguage = urlLanguage;
     } else if (typeof window.Transifex !== 'undefined') {
       const code = window.Transifex.live.detectLanguage();
-      defaultLanguage = languages.find(lang => lang.code === code) || { code };
+      // check if code's different than null (in case no API key exists like in tests env)
+      if (code) {
+        defaultLanguage = languages.find(lang => lang.code === code) || { code };
+      }
     }
     if (defaultLanguage !== this.state.defaultLanguage) {
       this.setState({ defaultLanguage });

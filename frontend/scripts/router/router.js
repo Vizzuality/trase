@@ -179,7 +179,9 @@ const config = {
       addLanguageToUrl(previousLanguage);
     } else if (!currentLanguage && !previousLanguage && typeof window.Transifex !== 'undefined') {
       const lang = window.Transifex.live.detectLanguage();
-      addLanguageToUrl(lang);
+      if (lang) {
+        addLanguageToUrl(lang);
+      }
     }
   },
   restoreScroll: restoreScroll({
