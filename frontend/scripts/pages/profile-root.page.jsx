@@ -9,7 +9,7 @@ import { Provider } from 'react-redux';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 
 import ProfileRoot from 'react-components/profile-root/profile-root.container';
-import CookieBanner from 'react-components/cookie-banner';
+import CookieBanner from 'react-components/shared/cookie-banner';
 
 export const mount = (root, store) => {
   root.innerHTML = BaseMarkup({

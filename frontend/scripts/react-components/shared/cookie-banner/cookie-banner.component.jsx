@@ -3,7 +3,7 @@ import Link from 'redux-first-router-link';
 import { PropTypes } from 'prop-types';
 import Button from 'react-components/shared/button';
 import Text from 'react-components/shared/text';
-import 'react-components/cookie-banner/cookie-banner.scss';
+import 'react-components/shared/cookie-banner/cookie-banner.scss';
 
 function CookieBanner({ setAccepted, accepted }) {
   return accepted ? null : (
