@@ -40,10 +40,7 @@ module.exports = {
       head: templates.head,
       preconnect: [`https:${process.env.API_V3_URL}`, `http:${process.env.API_V3_URL}`]
     }),
-    new PreloadWebpackPlugin({
-      rel: 'preload',
-      include: 'allAssets'
-    }),
+    new PreloadWebpackPlugin(),
     new HtmlWebpackPreconnectPlugin(),
     new webpack.DefinePlugin({
       NODE_ENV_DEV: process.env.NODE_ENV === 'development',
