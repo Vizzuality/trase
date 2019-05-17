@@ -12,7 +12,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import Footer from 'react-components/shared/footer/footer.component';
-import CookieBanner from 'react-components/cookie-banner';
+import CookieBanner from 'react-components/shared/cookie-banner';
 
 import DataPortalPage from 'react-components/data-portal/data-portal-page.container';
 

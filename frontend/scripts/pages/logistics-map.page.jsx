@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 import FiltersNav from 'react-components/nav/filters-nav/filters-nav.container';
 import LogisticsMap from 'react-components/logistics-map/logistics-map.container';
-import CookieBanner from 'react-components/cookie-banner';
+import CookieBanner from 'react-components/shared/cookie-banner';
 
 import 'styles/layouts/l-logistics-map.scss';
 import 'styles/components/shared/dropdown.scss';

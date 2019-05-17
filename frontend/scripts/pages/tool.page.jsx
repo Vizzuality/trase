@@ -26,7 +26,7 @@ import TitlebarContainer from 'containers/tool/titlebar.container';
 import NodesTitlesContainer from 'containers/tool/nodesTitles.container';
 import ModalContainer from 'containers/tool/story-modal.container';
 import TooltipContainer from 'containers/shared/help-tooltip.container';
-import CookieBanner from 'react-components/cookie-banner';
+import CookieBanner from 'react-components/shared/cookie-banner';
 
 import {
   resizeSankeyTool,

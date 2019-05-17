@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 import StaticContent from 'react-components/static-content/static-content.container';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import Footer from 'react-components/shared/footer/footer.component';
-import CookieBanner from 'react-components/cookie-banner';
+import CookieBanner from 'react-components/shared/cookie-banner';
 
 export const mount = (root, store, options) => {
   root.innerHTML = BaseMarkup({

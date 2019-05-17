@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import Explore from 'react-components/explore/explore.container';
-import CookieBanner from 'react-components/cookie-banner';
+import CookieBanner from 'react-components/shared/cookie-banner';
 
 import 'styles/layouts/l-explore.scss';
 import 'styles/components/shared/dropdown.scss';
