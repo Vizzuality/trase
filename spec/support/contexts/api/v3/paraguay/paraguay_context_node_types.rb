@@ -2,7 +2,7 @@ shared_context 'api v3 paraguay context node types' do
   include_context 'api v3 paraguay context'
   include_context 'api v3 node types'
 
-  let!(:api_v3_biome_context_node) do
+  let!(:api_v3_paraguay_biome_context_node) do
     cnt = Api::V3::ContextNodeType.where(
       context_id: api_v3_paraguay_context.id, node_type_id: api_v3_biome_node_type.id
     ).first

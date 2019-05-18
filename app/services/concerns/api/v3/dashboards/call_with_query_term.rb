@@ -13,7 +13,7 @@ module Api
             group(Arel.sql(tsrank)).
             where("name_tsvector @@ #{tsquery}").
             except(:order).
-            order(Arel.sql("#{tsrank} DESC"), name: :asc)
+            order(Arel.sql("#{tsrank} DESC"))
         end
       end
     end

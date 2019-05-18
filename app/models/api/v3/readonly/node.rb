@@ -28,7 +28,6 @@ module Api
         include PgSearch
         pg_search_scope :search_by_name,
                         against: :name,
-                        order_within_rank: :name,
                         using: {
                           tsearch: {
                             prefix: true,
