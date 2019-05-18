@@ -155,8 +155,6 @@ export const makeGetConfig = () =>
         tooltip: {
           ...defaultConfig.tooltip
         },
-        yLabelsProfileInfo: meta.yLabelsProfileInfo,
-        years: meta.info.years,
         yKeys,
         xKeys,
         colors
