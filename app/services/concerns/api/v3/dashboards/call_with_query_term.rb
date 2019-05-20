@@ -13,7 +13,15 @@ module Api
             group(Arel.sql(tsrank)).
             where("name_tsvector @@ #{tsquery}").
             except(:order).
-            order(Arel.sql("#{tsrank} DESC"))
+            order(
+              ActiveRecord::Base.send(
+                :sanitize_sql_for_order,
+                [
+                  Arel.sql("#{tsrank} DESC, levenshtein(name, ?), name"),
+                  query_term
+                ]
+              )
+            )
         end
       end
     end
