@@ -77,10 +77,3 @@
     display: block;
   }
 }
-
-.mobile-warning {
-  display: block;
-  @media screen and (min-width: $breakpoint-tablet) {
-    display: none;
-  }
-}

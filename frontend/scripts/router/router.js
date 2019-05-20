@@ -157,9 +157,9 @@ const config = {
     return route;
   },
   onBeforeChange: (dispatch, getState, { action }) => {
-    const isMobile = window.innerWidth <= BREAKPOINTS.small;
+    const isNarrowerThanDesktop = window.innerWidth <= BREAKPOINTS.tablet;
 
-    if (isMobile && pagesNotSupportedOnMobile.includes(action.type)) {
+    if (isNarrowerThanDesktop && pagesNotSupportedOnMobile.includes(action.type)) {
       return dispatch(redirect({ type: 'notSupportedOnMobile' }));
     }
 
