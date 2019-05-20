@@ -11,13 +11,12 @@ const renderText = tickValue => (
 );
 
 function CategoryTick(props) {
-  const { x, y, payload, nodeIds, config } = props;
-  const tickValue = payload && payload.value;
-  const nodeId = nodeIds.find(n => n.y === tickValue);
+  const { x, y, payload, nodeIds, info } = props;
+  const nodeId = nodeIds[payload.index];
   let lastYear;
   let url;
   if (nodeId && nodeId.profile) {
-    lastYear = config.years.end_year || config.years.start_year;
+    lastYear = info.years.end_year || info.years.start_year;
     url = `/profile-${nodeId.profile}?year=${lastYear}&nodeId=${nodeId.id}`;
   }
 
@@ -25,10 +24,10 @@ function CategoryTick(props) {
     <g transform={`translate(${x},${y})`}>
       {url ? (
         <a href={url} className="tick-text-link">
-          {renderText(tickValue)}
+          {renderText(payload.value)}
         </a>
       ) : (
-        renderText(tickValue)
+        renderText(payload.value)
       )}
     </g>
   );
@@ -37,9 +36,9 @@ function CategoryTick(props) {
 CategoryTick.propTypes = {
   x: PropTypes.number,
   y: PropTypes.number,
-  payload: PropTypes.shape({}),
+  payload: PropTypes.object,
   nodeIds: PropTypes.array,
-  config: PropTypes.shape({})
+  info: PropTypes.object
 };
 
 CategoryTick.defaultProps = {

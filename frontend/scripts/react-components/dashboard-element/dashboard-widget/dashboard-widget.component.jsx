@@ -77,7 +77,7 @@ function DashboardWidget(props) {
       case 'ranking':
         return (
           <div className="widget-centered">
-            <RankingWidget data={data} config={chartConfig} />
+            <RankingWidget data={data} meta={meta} config={chartConfig} />
           </div>
         );
       default:
@@ -93,6 +93,7 @@ function DashboardWidget(props) {
             <Chart
               className="widget-chart"
               data={data}
+              meta={meta}
               config={chartConfig}
               testId="widget-chart"
             />

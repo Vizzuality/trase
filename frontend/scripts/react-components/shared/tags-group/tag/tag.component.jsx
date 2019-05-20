@@ -41,7 +41,7 @@ function Tag(props) {
         '-spaced': spaced
       })}
     >
-      {part.value[0].name.toLowerCase()}
+      {part.value[0].name}
       {!isPartReadOnly && clearPanel && (
         <button
           key={`button${part.id}`}

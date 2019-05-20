@@ -83,11 +83,10 @@ export const getDynamicSentence = createSelector(
         const filteredValues = values.filter(i => i.nodeType === nodeType);
         return filteredValues.length > 0 ? filteredValues : null;
       }
-      return values;
+      return values.map(value => ({ ...value, name: `${value.name}`.toLowerCase() }));
     };
 
     const sourcesValue = getActivePanelItem('sources') || getActivePanelItem('countries');
-
     return [
       {
         panel: 'commodities',
