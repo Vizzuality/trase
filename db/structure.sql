@@ -30,6 +30,20 @@ CREATE SCHEMA maintenance;
 
 
 --
+-- Name: fuzzystrmatch; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION fuzzystrmatch; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION fuzzystrmatch IS 'determine similarities and distance between strings';
+
+
+--
 -- Name: intarray; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -8399,6 +8413,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190503175955'),
 ('20190513125050'),
 ('20190516111644'),
+('20190520093639'),
 ('20190528091308');
 
 
