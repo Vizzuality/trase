@@ -17,7 +17,11 @@ import { redirectToExplore } from 'react-components/explore/explore.thunks';
 import { loadToolInitialData } from 'scripts/react-components/tool/tool.thunks';
 import getPageTitle from 'scripts/router/page-title';
 
-const pagesNotSupportedOnMobile = ['tool', 'map', 'data'];
+const pagesSupportedLimit = {
+  data: 'small',
+  tool: 'tablet',
+  map: 'tablet'
+};
 
 // We await for all thunks using Promise.all, this makes the result then-able and allows us to
 // add an await solely to the thunks that need it.
@@ -157,9 +161,8 @@ const config = {
     return route;
   },
   onBeforeChange: (dispatch, getState, { action }) => {
-    const isNarrowerThanDesktop = window.innerWidth <= BREAKPOINTS.tablet;
-
-    if (isNarrowerThanDesktop && pagesNotSupportedOnMobile.includes(action.type)) {
+    const supportedLimit = pagesSupportedLimit[action.type];
+    if (supportedLimit && window.innerWidth <= BREAKPOINTS[supportedLimit]) {
       return dispatch(redirect({ type: 'notSupportedOnMobile' }));
     }
 
