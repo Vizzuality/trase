@@ -6,7 +6,7 @@ import AnimatedFlows from 'react-components/animated-flows/animated-flows.compon
 import HomeVideo from 'react-components/home/home-video/home-video.component';
 import Heading from 'react-components/shared/heading/heading.component';
 import InView from 'react-components/shared/in-view.component';
-import Img, { ImgBackground } from 'react-components/shared/img';
+import { ImgBackground } from 'react-components/shared/img';
 
 import './hero.scss';
 
@@ -61,7 +61,11 @@ class Hero extends React.Component {
             <div className="hero-content row align-middle">
               <div className="column small-12">
                 <div className="hero-logo-container">
-                  <Img src="/images/logos/new-logo-trase.svg" alt="TRASE" />
+                  <ImgBackground
+                    className="hero-trase-logo"
+                    src="/images/logos/new-logo-trase.svg"
+                    alt="TRASE"
+                  />
                 </div>
                 <h1 className="hero-title">Transparent supply chains for sustainable economies.</h1>
                 <div className="hero-play-container">

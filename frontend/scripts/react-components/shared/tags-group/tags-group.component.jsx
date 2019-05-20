@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Tag from 'react-components/shared/tags-group/tag';
 import Heading from 'react-components/shared/heading';
+import { translateText } from 'utils/transifex';
+
 import 'react-components/shared/tags-group/tags-group.scss';
 
 function TagsGroup(props) {
@@ -18,7 +20,7 @@ function TagsGroup(props) {
         color={color}
         className="tag-group-part notranslate"
       >
-        {part.prefix && `${part.prefix} `}
+        {part.prefix && translateText(`${part.prefix} `)}
         {part.value && <Tag {...props} part={part} />}
       </Heading>
     ))

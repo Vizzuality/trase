@@ -10,6 +10,7 @@ import { DASHBOARD_STEPS } from 'constants';
 import { getPanelId as getPanelName, singularize } from 'utils/dashboardPanel';
 import Heading from 'react-components/shared/heading/heading.component';
 import StepsTracker from 'react-components/shared/steps-tracker/steps-tracker.component';
+import { translateText } from 'utils/transifex';
 
 import 'scripts/react-components/dashboard-element/dashboard-panel/dashboard-panel.scss';
 
@@ -146,21 +147,21 @@ class DashboardPanel extends Component {
     if (step === DASHBOARD_STEPS.sources || step === DASHBOARD_STEPS.commodities) {
       return (
         <>
-          Choose one{' '}
+          {translateText('Choose one ')}{' '}
           <span className="dashboard-panel-sentence" data-test="dashboard-panel-sentence">
-            {singularize(getPanelName(step))}
+            {translateText(singularize(getPanelName(step)))}
           </span>
         </>
       );
     }
     return (
       <>
-        Choose one or several{' '}
+        {translateText('Choose one or several')}{' '}
         <span className="dashboard-panel-sentence" data-test="dashboard-panel-sentence">
-          {getPanelName(step)}
+          {translateText(getPanelName(step))}
         </span>
         {[DASHBOARD_STEPS.companies, DASHBOARD_STEPS.destinations].includes(step)
-          ? ' (Optional)'
+          ? ` ${translateText('(Optional)')}`
           : ''}
       </>
     );
@@ -190,7 +191,7 @@ class DashboardPanel extends Component {
             activeStep={step - 1}
           />
           <Heading className="dashboard-panel-title notranslate" align="center" size="lg">
-            {editMode ? 'Edit options' : this.renderTitleSentence()}
+            {editMode ? translateText('Edit options') : this.renderTitleSentence()}
           </Heading>
           {this.renderPanel()}
         </div>
