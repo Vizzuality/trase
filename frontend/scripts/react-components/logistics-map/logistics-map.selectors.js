@@ -21,6 +21,24 @@ const getCompanies = state => state.logisticsMap.companies || {};
 const getActiveCompanies = state => (state.location.query && state.location.query.companies) || [];
 const getLogisticsMapSearchTerm = state => state.logisticsMap.searchTerm;
 
+export const getBounds = createSelector(
+  [getSelectedCommodity],
+  commodity => {
+    const brazilBounds = {
+      bbox: [-77.783203125, -35.46066995149529, -29.794921874999996, 9.709057068618208]
+    };
+    const indonesiaBounds = {
+      bbox: [230.783203125, -35.46066995149529, -29.794921874999996, 9.709057068618208]
+    };
+    const bounds = {
+      soy: brazilBounds,
+      cattle: brazilBounds,
+      palmOil: indonesiaBounds
+    };
+    return bounds[commodity];
+  }
+);
+
 export const getActiveParams = createSelector(
   [getSelectedYear, getSelectedCommodity, getSelectedInspection, getActiveCompanies],
   (year, commodity, inspection, companies) => ({
