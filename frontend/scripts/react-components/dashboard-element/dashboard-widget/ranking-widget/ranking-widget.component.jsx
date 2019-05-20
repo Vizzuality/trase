@@ -41,12 +41,12 @@ class RankingWidget extends PureComponent {
     const pageData = pageSize
       ? dataWithUrl.slice(page * pageSize, (page + 1) * pageSize)
       : dataWithUrl;
-    const formatValue = format((config.yAxisLabel && config.yAxisLabel.format) || ',.6s');
+    const formatValue = format((config.yAxisLabel && config.yAxisLabel.format) || ',.3s');
 
     // property is snake_case
     // eslint-disable-next-line
     const totalValue = meta.aggregates?.total_value;
-    const formatTotal = format('.0s');
+    const formatTotal = format('.4s');
 
     return (
       <div className="c-ranking-widget">

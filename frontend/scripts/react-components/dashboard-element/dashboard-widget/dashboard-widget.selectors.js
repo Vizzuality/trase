@@ -5,6 +5,7 @@ import kebabCase from 'lodash/kebabCase';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
 import { CHART_TYPES } from 'constants';
 import camelCase from 'lodash/camelCase';
+import capitalize from 'lodash/capitalize';
 
 export const PARSED_CHART_TYPES = {
   bar_chart: CHART_TYPES.bar,
@@ -201,7 +202,7 @@ export const makeGetTitle = () =>
       let filterPart = '';
       const filterKey = meta.info.single_filter_key;
       if (filterKey) {
-        const name = meta.info.filter[filterKey][0].name;
+        const name = capitalize(meta.info.filter[filterKey][0].name);
         filterPart = `${getFilterPreposition(filterKey)} ${name}`;
       }
       return [topNPart, nodeTypePart, filterPart].filter(Boolean).join(' ');

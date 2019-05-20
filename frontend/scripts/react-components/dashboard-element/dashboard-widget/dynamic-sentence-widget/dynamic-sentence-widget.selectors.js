@@ -21,7 +21,7 @@ export const makeAddIndicatorsPartToSentence = () =>
       const indicatorNamePart = {
         id: 'indicator-name',
         prefix: '',
-        value: [{ name: yAxisLabel.text }],
+        value: [{ name: `${yAxisLabel.text}`.toLowerCase() }],
         transform: 'capitalize'
       };
 
@@ -30,7 +30,7 @@ export const makeAddIndicatorsPartToSentence = () =>
         prefix: 'was',
         value: [
           {
-            name: data[0].y0 ? `${format(',.2f')(data[0].y0)} ${yAxisLabel.suffix}` : 'N/A'
+            name: data[0].y0 ? `${format('.4s')(data[0].y0)} ${yAxisLabel.suffix}` : 'N/A'
           }
         ]
       };
@@ -38,7 +38,7 @@ export const makeAddIndicatorsPartToSentence = () =>
       const yearPart = selectedYears
         ? {
             id: 'year',
-            prefix: 'for',
+            prefix: 'in',
             value: [
               {
                 name:
