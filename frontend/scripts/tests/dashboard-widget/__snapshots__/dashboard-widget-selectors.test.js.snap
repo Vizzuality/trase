@@ -182,11 +182,6 @@ Object {
   },
   "yKey": "y",
   "yKeys": undefined,
-  "yLabelsProfileInfo": undefined,
-  "years": Object {
-    "end_year": 2015,
-    "start_year": 2012,
-  },
 }
 `;
 
@@ -285,10 +280,5 @@ Object {
   },
   "yKey": "y",
   "yKeys": undefined,
-  "yLabelsProfileInfo": undefined,
-  "years": Object {
-    "end_year": 2015,
-    "start_year": 2012,
-  },
 }
 `;
