@@ -26,14 +26,22 @@ module Api
         belongs_to :context
 
         include PgSearch
-        pg_search_scope :search_by_name,
-                        against: :name,
-                        using: {
-                          tsearch: {
-                            prefix: true,
-                            tsvector_column: :name_tsvector
-                          }
-                        }
+        pg_search_scope :search_by_name, lambda { |query|
+          {
+            query: query,
+            against: :name,
+            using: {
+              tsearch: {
+                prefix: true,
+                tsvector_column: :name_tsvector,
+                normalization: 2
+              }
+            },
+            order_within_rank: sanitize_sql_for_order(
+              [Arel.sql('levenshtein(name, ?), name'), query]
+            )
+          }
+        }
       end
     end
   end
