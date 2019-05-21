@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import addApostrophe from 'utils/addApostrophe';
 import capitalize from 'lodash/capitalize';
 import Link from 'redux-first-router-link';
+import Img from 'react-components/shared/img';
+import { translateText } from 'utils/transifex';
 
 import './button-links.scss';
 
@@ -21,9 +23,9 @@ function ButtonLinks(props) {
       <div className="row">
         <div className="small-4 columns">
           <a className="link-button -with-arrow js-link-profile" onClickCapture={scrollTo}>
-            <img alt="" src="/images/profiles/profile-main-option-1.svg" />
+            <Img alt="" src="/images/profiles/profile-main-option-1.svg" />
             <span className="js-link-button-name">
-              <span className="notranslate">{name ? capitalize(name) : '-'}</span>
+              <span className="notranslate">{name ? translateText(capitalize(name)) : '-'}</span>
               {addApostrophe(name)} PROFILE
             </span>
           </a>
@@ -46,7 +48,7 @@ function ButtonLinks(props) {
               }
             }}
           >
-            <img alt="" src="/images/profiles/profile-main-option-2.svg" />
+            <Img alt="" src="/images/profiles/profile-main-option-2.svg" />
             <span>MAP</span>
             <svg className="icon icon-external-link">
               <use xlinkHref="#icon-external-link" />
@@ -71,7 +73,7 @@ function ButtonLinks(props) {
               }
             }}
           >
-            <img alt="" src="/images/profiles/profile-main-option-3.svg" />
+            <Img alt="" src="/images/profiles/profile-main-option-3.svg" />
             <span>SUPPLY CHAIN</span>
             <svg className="icon icon-external-link">
               <use xlinkHref="#icon-external-link" />

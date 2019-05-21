@@ -2,14 +2,17 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const webpackBaseConfig = require('./webpack.config');
+const webpackIEConfig = require('./webpack.config.ie');
 
-module.exports = merge(webpackBaseConfig, {
+const main = merge(webpackBaseConfig, {
   mode: 'production',
   devtool: 'source-map',
   plugins: [
     new CleanWebpackPlugin(['dist']),
+    new MiniCssExtractPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
     new webpack.HashedModuleIdsPlugin(),
     new SWPrecacheWebpackPlugin({
@@ -22,11 +25,30 @@ module.exports = merge(webpackBaseConfig, {
   module: {
     rules: [
       {
-        test: /\.(jpe?g|png|gif|svg)$/,
-        loader: 'image-webpack-loader',
-        // This will apply the loader before the other ones
-        enforce: 'pre'
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: { sourceMap: true }
+          },
+          'postcss-loader'
+        ]
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: { sourceMap: true }
+          },
+          'postcss-loader',
+          'sass-loader'
+        ]
       }
     ]
   }
 });
+
+module.exports = [main, webpackIEConfig];

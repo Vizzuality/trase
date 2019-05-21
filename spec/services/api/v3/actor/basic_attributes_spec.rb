@@ -50,5 +50,61 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
         paraguay_exporter_values[:summary]
       ).to include('or <span class="notranslate">100%</span> of the soy production municipalities')
     end
+
+    context 'when difference in production from last year' do
+      let(:flow) {
+        FactoryBot.create(
+          :api_v3_flow,
+          context: api_v3_context,
+          path: [
+            api_v3_biome_node,
+            api_v3_state_node,
+            api_v3_municipality_node,
+            api_v3_logistics_hub_node,
+            api_v3_port1_node,
+            api_v3_exporter1_node,
+            api_v3_importer1_node,
+            api_v3_country_of_destination1_node
+          ].map(&:id),
+          year: 2014
+        )
+      }
+      it 'calculates increase from last year' do
+        FactoryBot.create(
+          :api_v3_flow_quant,
+          flow: flow,
+          quant: api_v3_volume,
+          value: 25
+        )
+        brazil_exporter_values = brazil_exporter_attributes.call
+        expect(
+          brazil_exporter_values[:summary]
+        ).to include('<span class="notranslate">200%</span> increase')
+      end
+      it 'calculates decrease from last year' do
+        FactoryBot.create(
+          :api_v3_flow_quant,
+          flow: flow,
+          quant: api_v3_volume,
+          value: 150
+        )
+        brazil_exporter_values = brazil_exporter_attributes.call
+        expect(
+          brazil_exporter_values[:summary]
+        ).to include('<span class="notranslate">50%</span> decrease')
+      end
+      it 'calculates no change' do
+        FactoryBot.create(
+          :api_v3_flow_quant,
+          flow: flow,
+          quant: api_v3_volume,
+          value: 75
+        )
+        brazil_exporter_values = brazil_exporter_attributes.call
+        expect(
+          brazil_exporter_values[:summary]
+        ).to include('no change from')
+      end
+    end
   end
 end

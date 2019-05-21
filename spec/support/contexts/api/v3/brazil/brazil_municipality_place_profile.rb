@@ -28,7 +28,8 @@ shared_context 'api v3 brazil municipality place profile' do
       chart_attribute = FactoryBot.create(
         :api_v3_chart_attribute,
         chart: api_v3_place_basic_attributes,
-        identifier: 'area'
+        identifier: 'area',
+        position: nil
       )
       FactoryBot.create(
         :api_v3_chart_quant,
@@ -50,7 +51,8 @@ shared_context 'api v3 brazil municipality place profile' do
       chart_attribute = FactoryBot.create(
         :api_v3_chart_attribute,
         chart: api_v3_place_basic_attributes,
-        identifier: 'commodity_farmland'
+        identifier: 'commodity_farmland',
+        position: nil
       )
       FactoryBot.create(
         :api_v3_chart_ind,
@@ -72,7 +74,8 @@ shared_context 'api v3 brazil municipality place profile' do
       chart_attribute = FactoryBot.create(
         :api_v3_chart_attribute,
         chart: api_v3_place_basic_attributes,
-        identifier: 'commodity_production'
+        identifier: 'commodity_production',
+        position: nil
       )
       FactoryBot.create(
         :api_v3_chart_quant,
@@ -94,7 +97,8 @@ shared_context 'api v3 brazil municipality place profile' do
       chart_attribute = FactoryBot.create(
         :api_v3_chart_attribute,
         chart: api_v3_place_basic_attributes,
-        identifier: 'commodity_yield'
+        identifier: 'commodity_yield',
+        position: nil
       )
       FactoryBot.create(
         :api_v3_chart_ind,
@@ -166,6 +170,7 @@ shared_context 'api v3 brazil municipality place profile' do
       chart_attribute = FactoryBot.create(
         :api_v3_chart_attribute,
         chart: api_v3_place_environmental_indicators,
+        identifier: nil,
         position: 0
       )
       FactoryBot.create(
@@ -204,6 +209,7 @@ shared_context 'api v3 brazil municipality place profile' do
       chart_attribute = FactoryBot.create(
         :api_v3_chart_attribute,
         chart: api_v3_place_socioeconomic_indicators,
+        identifier: nil,
         position: 0
       )
       FactoryBot.create(
@@ -242,6 +248,7 @@ shared_context 'api v3 brazil municipality place profile' do
       chart_attribute = FactoryBot.create(
         :api_v3_chart_attribute,
         chart: api_v3_place_agricultural_indicators,
+        identifier: nil,
         position: 0
       )
       FactoryBot.create(
@@ -280,6 +287,7 @@ shared_context 'api v3 brazil municipality place profile' do
       chart_attribute = FactoryBot.create(
         :api_v3_chart_attribute,
         chart: api_v3_place_territorial_governance,
+        identifier: nil,
         position: 0
       )
       FactoryBot.create(
@@ -320,6 +328,7 @@ shared_context 'api v3 brazil municipality place profile' do
         legend_name: 'Territorial<br/>Deforestation',
         display_type: 'area',
         display_style: 'area-black',
+        identifier: nil,
         position: 0
       )
       FactoryBot.create(

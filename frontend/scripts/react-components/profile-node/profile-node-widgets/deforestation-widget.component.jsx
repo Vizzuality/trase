@@ -5,11 +5,12 @@ import Line from 'react-components/profiles/line/line.component';
 import LineLegend from 'react-components/profiles/line/line-legend.component';
 import { GET_PLACE_DEFORESTATION_TRAJECTORY, GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
 
+import ProfileTitle from 'react-components/profiles/profile-title.component';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import Heading from 'react-components/shared/heading/heading.component';
 
 function DeforestationWidget(props) {
-  const { nodeId, contextId, year, testId } = props;
+  const { nodeId, contextId, year, testId, title, commodityName } = props;
   const params = { node_id: nodeId, context_id: contextId, year };
   return (
     <Widget
@@ -19,7 +20,7 @@ function DeforestationWidget(props) {
       {({ data, loading, error }) => {
         if (loading) {
           return (
-            <div className="spinner-section" data-test="loading-section">
+            <div className="section-placeholder" data-test="loading-section">
               <ShrinkingSpinner className="-large" />
             </div>
           );
@@ -29,7 +30,7 @@ function DeforestationWidget(props) {
           // TODO: display a proper error message to the user
           console.error('Error loading deforestation widget data for profile page', error);
           return (
-            <div className="spinner-section" data-test="loading-section">
+            <div className="section-placeholder" data-test="loading-section">
               <ShrinkingSpinner className="-large" />
             </div>
           );
@@ -52,8 +53,12 @@ function DeforestationWidget(props) {
                   as="h3"
                   data-test={`${testId}-title`}
                 >
-                  Deforestation trajectory of{' '}
-                  <span className="notranslate">{data[GET_NODE_SUMMARY_URL].jurisdictionName}</span>
+                  <ProfileTitle
+                    template={title}
+                    summary={data[GET_NODE_SUMMARY_URL]}
+                    year={year}
+                    commodityName={commodityName}
+                  />
                 </Heading>
                 <div className="c-line-container">
                   <div className="c-line">
@@ -87,9 +92,11 @@ function DeforestationWidget(props) {
 
 DeforestationWidget.propTypes = {
   testId: PropTypes.string,
+  title: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired,
-  contextId: PropTypes.number.isRequired
+  contextId: PropTypes.number.isRequired,
+  commodityName: PropTypes.string.isRequired
 };
 
 export default DeforestationWidget;

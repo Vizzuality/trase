@@ -1,28 +1,28 @@
 {
   "presets": [
-    ["@babel/env", {
-      "useBuiltIns": "entry"
+    ["@babel/preset-env", {
+      "useBuiltIns": "entry",
+      "corejs": 3
     }],
     "@babel/preset-react"
   ],
   "plugins": [
     "@babel/plugin-syntax-dynamic-import",
-    "@babel/plugin-syntax-object-rest-spread",
-    "@babel/plugin-transform-exponentiation-operator",
+    "@babel/plugin-proposal-optional-chaining",
     ["@babel/plugin-proposal-class-properties", { "spec": true }]
   ],
   "env": {
     "production": {
       "presets": [
-        ["@babel/env", {
-          "useBuiltIns": "entry"
+        ["@babel/preset-env", {
+          "useBuiltIns": "entry",
+          "corejs": 3
         }],
         "@babel/preset-react"
       ],
       "plugins": [
         "@babel/plugin-syntax-dynamic-import",
-        "@babel/plugin-syntax-object-rest-spread",
-        "@babel/plugin-transform-exponentiation-operator",
+        "@babel/plugin-proposal-optional-chaining",
         ["@babel/plugin-proposal-class-properties", { "spec": true }],
         "transform-react-remove-prop-types",
         "lodash"
@@ -30,18 +30,20 @@
     },
     "test": {
       "presets": [
-        ["@babel/env", {
-          "useBuiltIns": "entry"
+        ["@babel/preset-env", {
+          "useBuiltIns": "entry",
+          "corejs": 3
         }],
         "@babel/preset-react"
       ],
       "plugins": [
         "@babel/plugin-syntax-dynamic-import",
-        "@babel/plugin-syntax-object-rest-spread",
-        "@babel/plugin-transform-exponentiation-operator",
+        "@babel/plugin-proposal-optional-chaining",
         ["@babel/plugin-proposal-class-properties", { "spec": true }],
         "@babel/plugin-transform-modules-commonjs",
-        "@babel/plugin-transform-runtime",
+        ["@babel/transform-runtime", {
+          "corejs": 3
+        }],
         ["module-resolver", {
           "alias": {
             "scripts": "./scripts",
@@ -54,7 +56,8 @@
             "constants": "./scripts/constants",
             "router": "./scripts/router",
             "react-components": "./scripts/react-components",
-            "named-maps": "./scripts/named-maps"
+            "named-maps": "./scripts/named-maps",
+            "selectors": "./scripts/selectors"
           }
         }]
       ]

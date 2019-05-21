@@ -1,12 +1,6 @@
 @import 'styles/settings';
 
 .c-tags-group {
-  color: $charcoal-grey;
-  font-size: $font-size-medium;
-  font-family: $font-family-2;
-  font-weight: $font-weight-light;
-  letter-spacing: -0.4px;
-  line-height: 1.9;
   margin: 0 0 15px;
   max-width: 920px;
   text-align: center;
@@ -14,12 +8,8 @@
   .tags-group-item {
     display: inline-flex;
     position: relative;
-    align-items: center;
     height: 30px;
     padding: 0 6px 0 0;
-    font-size: 20px;
-    font-weight: $font-weight-bold;
-    text-transform: capitalize;
 
     &.-with-cross {
       padding: 0 13px 0 0;

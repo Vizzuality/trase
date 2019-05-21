@@ -1,8 +1,13 @@
-/* eslint-disable no-console */
+/* eslint-disable no-console,import/no-extraneous-dependencies */
 
+import { Polly } from '@pollyjs/core';
+import PuppeteerAdapter from '@pollyjs/adapter-puppeteer';
+import FSPersister from '@pollyjs/persister-fs';
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
-import { CONTEXTS, PROFILE_NODE_ACTOR, PROFILE_NODE_PLACE } from './mocks';
-import { getRequestMockFn } from './utils';
+import { pollyConfig, handleUnnecesaryRequests } from './utils';
+
+Polly.register(PuppeteerAdapter);
+Polly.register(FSPersister);
 
 expect.extend({ toMatchImageSnapshot });
 
@@ -11,27 +16,34 @@ const TIMEOUT = 60000 || process.env.PUPETEER_TIMEOUT || 30000;
 
 jest.setTimeout(TIMEOUT);
 const { page } = global;
+const polly = new Polly('printing', pollyConfig(page));
+
+beforeAll(async () => {
+  await page.setRequestInterception(true);
+  const { server } = polly;
+  handleUnnecesaryRequests(server, BASE_URL);
+});
+
+afterAll(async () => {
+  await polly.flush();
+  await polly.stop();
+});
 
 const snapshotOptions = {
   failureThreshold: '0.05',
   failureThresholdType: 'percent'
 };
 
-beforeAll(async () => {
-  await page.setRequestInterception(true);
-  const mockRequests = await getRequestMockFn([CONTEXTS, PROFILE_NODE_ACTOR, PROFILE_NODE_PLACE]);
-  page.on('request', mockRequests);
-});
-
 describe('Prints the actor profile PDF correctly', () => {
   it('Prints actor profile - Full data', async () => {
     await page.goto(
-      `${BASE_URL}/profile-actor?lang=en&nodeId=441&contextId=1&year=2015&print=true`
+      `${BASE_URL}/profile-actor?lang=en&nodeId=33624&contextId=1&year=2015&print=true`
     );
     const promises = [
       page.waitForSelector('[data-test=company-compare]'),
       page.waitForSelector('[data-test=top-destination-countries]'),
-      page.waitForSelector('[data-test=top-destination-countries-map-d3-polygon-colored]')
+      page.waitForSelector('[data-test=top-destination-countries-map-d3-polygon-colored]'),
+      page.waitForSelector('[data-test=top-sourcing-regions-map-d3-polygon-colored]')
     ];
     await Promise.all(promises);
     await page.emulateMedia('print');
@@ -46,7 +58,7 @@ describe('Prints the actor profile PDF correctly', () => {
 
   it('Prints place profile PDF', async () => {
     await page.goto(
-      `${BASE_URL}/profile-place?lang=en&nodeId=2759&contextId=1&year=2015&print=true`
+      `${BASE_URL}/profile-place?lang=en&nodeId=10902&contextId=1&year=2015&print=true`
     );
     const promises = [
       page.waitForSelector('[data-test=sustainability-indicators]'),

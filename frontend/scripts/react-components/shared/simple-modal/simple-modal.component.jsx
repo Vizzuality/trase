@@ -15,7 +15,7 @@ function SimpleModal(props) {
     >
       <div className="simple-modal-content">
         <div className="simple-modal-close">
-          <button onClick={props.onRequestClose}>
+          <button onClick={props.onRequestClose || props.onClickClose}>
             <span>close</span>
             <svg className="icon icon-close">
               <use xlinkHref="#icon-close" />
@@ -30,7 +30,9 @@ function SimpleModal(props) {
 
 SimpleModal.propTypes = {
   children: PropTypes.any,
+  contentClassName: PropTypes.string,
   className: PropTypes.string,
+  onClickClose: PropTypes.func,
   onRequestClose: PropTypes.func
 };
 

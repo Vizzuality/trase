@@ -1,0 +1,30 @@
+@import 'styles/settings';
+@import 'styles/mixins';
+
+.icon {
+  margin-left: 5px;
+}
+
+.icon-arrow,
+.icon-arrow-up {
+  position: absolute;
+  top: 0;
+  left: 7px;
+  @include simple-arrow($strong-pink);
+
+  &.color-white {
+    @include simple-arrow($white);
+  }
+
+  &.color-elephant {
+    @include simple-arrow($elephant);
+  }
+
+  &.direction-up {
+    &::after {
+      transform: translateY(calc(-50%)) rotate(225deg);
+    }
+  }
+}
+
+

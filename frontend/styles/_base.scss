@@ -4,42 +4,7 @@
 @import 'icons';
 @import 'print';
 @import 'components/shared/user-report-button';
-
-@font-face {
-  font-family: 'DecimaMonoPro';
-  font-weight: $font-weight-regular;
-  src: url('/fonts/DecimaMonoPro.woff2') format('woff2'),
-  url('/fonts/DecimaMonoPro.woff') format('woff'),
-  url('/fonts/DecimaMonoPro.otf') format('embedded-opentype'),
-  url('/fonts/DecimaMonoPro.otf');
-}
-
-@font-face {
-  font-family: 'DecimaMonoPro';
-  font-weight: $font-weight-bold;
-  src: url('/fonts/DecimaMonoPro-Bold.woff2') format('woff2'),
-  url('/fonts/DecimaMonoPro-Bold.woff') format('woff'),
-  url('/fonts/DecimaMonoPro-Bold.otf') format('embedded-opentype'),
-  url('/fonts/DecimaMonoPro-Bold.otf');
-}
-
-@font-face {
-  font-family: 'Merriweather';
-  font-weight: $font-weight-light;
-  src: url('/fonts/Merriweather-Light.ttf');
-}
-
-@font-face {
-  font-family: 'Merriweather';
-  font-weight: $font-weight-regular;
-  src: url('/fonts/Merriweather-Regular.ttf');
-}
-
-@font-face {
-  font-family: 'Merriweather';
-  font-weight: $font-weight-bold;
-  src: url('/fonts/Merriweather-Bold.ttf');
-}
+@import 'fonts';
 
 body {
   &.txlive-expanded {
@@ -62,10 +27,6 @@ body {
   @media screen and (min-width: $breakpoint-desktop) {
     padding: 0 $padding-wrap-desktop;
   }
-}
-
-.loading-wrapper {
-  display: block;
 }
 
 .row {

@@ -10,8 +10,7 @@
 #  position   :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
-#  chart_type :text
-
+#
 # Indexes
 #
 #  charts_profile_id_parent_id_identifier_key  (profile_id,parent_id,identifier) UNIQUE
@@ -46,6 +45,27 @@ module Api
       validate :parent_is_root
 
       after_commit :refresh_dependencies
+
+      def chart_type
+        case identifier
+        when 'actor_top_countries', 'actor_top_sources'
+          :line_chart_with_map
+        when
+          'actor_sustainability_table',
+          'place_environmental_indicators',
+          'place_socioeconomic_indicators',
+          'place_agricultural_indicators',
+          'place_territorial_governance',
+          'place_indicators_table'
+          :tabs_table
+        when 'actor_exporting_companies'
+          :scatterplot
+        when 'place_trajectory_deforestation'
+          :stacked_line_chart
+        when 'place_top_consumer_actors', 'place_top_consumer_countries'
+          :sankey
+        end
+      end
 
       def self.select_options
         Api::V3::Chart.includes(:profile).all.map do |chart|

@@ -40,25 +40,19 @@ $entrypoints-stacked-card-size: 360px;
       bottom: 0;
     }
 
-    &.-start {
-      background-image: url('/images/backgrounds/entrypoint-1@2x.jpg');
-
+    &.-profile {
       &::after {
         background-color: rgba($egg-shell, 0.15);
       }
     }
 
-    &.-mid {
-      background-image: url('/images/backgrounds/entrypoint-2@2x.jpg');
-
+    &.-supply-chain {
       &::after {
         background-color: rgba($light-gray, 0.15);
       }
     }
 
-    &.-end {
-      background-image: url('/images/backgrounds/entrypoint-3@2x.jpg');
-
+    &.-map {
       &::after {
         background-color: rgba($light-gray, 0.15);
       }

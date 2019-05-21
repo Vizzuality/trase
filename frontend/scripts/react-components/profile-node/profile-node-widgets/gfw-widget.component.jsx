@@ -3,19 +3,13 @@ import PropTypes from 'prop-types';
 import Widget from 'react-components/widgets/widget.component';
 import { GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
 import camelCase from 'lodash/camelCase';
-import cx from 'classnames';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
+import ReactIframeResizer from 'react-iframe-resizer-super';
 
 class GfwWidget extends React.PureComponent {
-  state = {
-    gladAlertsLoaded: false
-  };
-
-  loadGladAlerts = () => this.setState({ gladAlertsLoaded: true });
-
   renderSpinner() {
     return (
-      <div className="spinner-section">
+      <div className="section-placeholder">
         <ShrinkingSpinner className="-large" />
       </div>
     );
@@ -23,7 +17,6 @@ class GfwWidget extends React.PureComponent {
 
   render() {
     const { year, nodeId, contextId, profileType, renderIframes } = this.props;
-    const { gladAlertsLoaded } = this.state;
     const params = { node_id: nodeId, context_id: contextId, profile_type: profileType, year };
     const GADM_DICTIONARY_URL = '/BRAZIL_GADM_GEOID.json';
     return (
@@ -50,20 +43,22 @@ class GfwWidget extends React.PureComponent {
           if (match < 0.9) {
             return null;
           }
-
           return (
             <React.Fragment>
-              {!gladAlertsLoaded && this.renderSpinner()}
-              <section className={cx('gfw-widget-container', { 'is-hidden': !gladAlertsLoaded })}>
+              <section className="gfw-widget-container">
                 <div className="row align-center">
                   <div className="column small-10">
-                    <iframe
-                      width="100%"
-                      height="510"
-                      frameBorder="0"
-                      title="glad alerts"
-                      onLoad={this.loadGladAlerts}
+                    <ReactIframeResizer
+                      title={() => 'Glad alerts'}
                       src={`//${GFW_WIDGETS_BASE_URL}/embed/dashboards/country/${path}?widget=gladAlerts&trase=true`}
+                      style={{
+                        width: '100%',
+                        minHeight: 520
+                      }}
+                      iframeResizerOptions={{
+                        checkOrigin: false,
+                        log: false
+                      }}
                     />
                   </div>
                 </div>

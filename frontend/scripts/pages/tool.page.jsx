@@ -26,6 +26,7 @@ import TitlebarContainer from 'containers/tool/titlebar.container';
 import NodesTitlesContainer from 'containers/tool/nodesTitles.container';
 import ModalContainer from 'containers/tool/story-modal.container';
 import TooltipContainer from 'containers/shared/help-tooltip.container';
+import CookieBanner from 'react-components/shared/cookie-banner';
 
 import {
   resizeSankeyTool,
@@ -85,6 +86,13 @@ export const mount = (root, store) => {
     document.getElementById('js-columns-selector-react')
   );
 
+  render(
+    <Provider store={store}>
+      <CookieBanner />
+    </Provider>,
+    document.getElementById('cookie-banner')
+  );
+
   evManager.addEventListener(window, 'resize', () => resizeSankeyTool(store.dispatch));
   document.querySelector('body').classList.add('-overflow-hidden');
 };
@@ -93,6 +101,7 @@ export const unmount = () => {
   evManager.clearEventListeners();
   unmountComponentAtNode(document.getElementById('js-tool-nav-react'));
   unmountComponentAtNode(document.getElementById('js-columns-selector-react'));
+  unmountComponentAtNode(document.getElementById('cookie-banner'));
   document.querySelector('body').classList.remove('-overflow-hidden');
   containers.forEach(container => container.remove());
 };

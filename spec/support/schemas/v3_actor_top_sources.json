@@ -64,7 +64,7 @@
                   },
                   "geo_id": {
                     "$id": "/properties/data/properties/municipality/properties/lines/items/properties/geo_id",
-                    "type": "string",
+                    "type": ["string", "null"],
                     "title": "The Geo_id Schema ",
                     "default": "",
                     "examples": [
@@ -76,7 +76,7 @@
                     "type": "array",
                     "items": {
                       "$id": "/properties/data/properties/municipality/properties/lines/items/properties/values/items",
-                      "type": "number",
+                      "type": ["number", "null"],
                       "title": "The 0th Schema ",
                       "default": 0,
                       "examples": [

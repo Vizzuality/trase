@@ -32,12 +32,11 @@ module Api
             root: 'dimensionGroups'
           ).serializable_hash
 
-        serialized_layers =
-          ActiveModelSerializers::SerializableResource.new(
-            dimensions,
-            each_serializer: Api::V3::MapLayers::DimensionSerializer,
-            root: 'dimensions'
-          ).serializable_hash
+        serialized_layers = {
+          dimensions: dimensions.map do |dimension|
+            Api::V3::MapLayers::DimensionSerializer.call(dimension)
+          end
+        }
 
         render json: serialized_layer_groups.merge(serialized_layers).
           merge(serialized_contextual_layers)

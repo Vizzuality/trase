@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from 'react-components/shared/button/button.component';
 import Heading from 'react-components/shared/heading/heading.component';
+import { ImgBackground } from 'react-components/shared/img';
 
 import './dashboard-welcome.scss';
 
@@ -38,16 +39,13 @@ function DashboardWelcome(props) {
             <h3 className="dashboard-welcome-card-title">{card.title}</h3>
             <div className="dashboard-welcome-card-container">
               <p className="dashboard-welcome-card-text">{card.body}</p>
-              <div
-                className="dashboard-welcome-card-image"
-                style={{ backgroundImage: `url(${card.image})` }}
-              />
+              <ImgBackground className="dashboard-welcome-card-image" src={card.image} />
             </div>
           </div>
         ))}
       </div>
       <div className="dashboard-welcome-button-container">
-        <Button size="md" color="pink" onClick={onContinue}>
+        <Button size="md" color="pink" onClick={onContinue} testId="dashboard-welcome-button">
           Continue
         </Button>
       </div>

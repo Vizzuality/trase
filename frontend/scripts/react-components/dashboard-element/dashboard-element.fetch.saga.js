@@ -1,21 +1,34 @@
 import deburr from 'lodash/deburr';
-import { put, call, cancelled, delay } from 'redux-saga/effects';
+import pickBy from 'lodash/pickBy';
+import { put, call, cancelled, delay, select, fork } from 'redux-saga/effects';
 import isEmpty from 'lodash/isEmpty';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
+  setDashboardChartsLoading,
   getDashboardPanelParams,
   setDashboardPanelLoadingItems,
-  DASHBOARD_ELEMENT__SET_SEARCH_RESULTS
+  DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
+  DASHBOARD_ELEMENT__SET_CHARTS
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import {
   getURLFromParams,
   GET_DASHBOARD_OPTIONS_URL,
   GET_DASHBOARD_OPTIONS_TABS_URL,
-  GET_DASHBOARD_SEARCH_RESULTS_URL
+  GET_DASHBOARD_SEARCH_RESULTS_URL,
+  GET_DASHBOARD_PARAMETRISED_CHARTS_URL
 } from 'utils/getURLFromParams';
 import { fetchWithCancel } from './fetch-with-cancel';
+
+export function* setLoadingSpinner(timeout, action) {
+  try {
+    yield delay(timeout);
+    yield put(action);
+  } catch (e) {
+    console.error(e);
+  }
+}
 
 export function* getDashboardPanelData(dashboardElement, optionsType, options) {
   const { page, activeTab } = dashboardElement[`${dashboardElement.activePanelId}Panel`];
@@ -25,7 +38,7 @@ export function* getDashboardPanelData(dashboardElement, optionsType, options) {
     ...options
   });
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
-  yield put({
+  const task = yield fork(setLoadingSpinner, 750, {
     type: DASHBOARD_ELEMENT__SET_PANEL_DATA,
     payload: {
       key: optionsType,
@@ -38,6 +51,9 @@ export function* getDashboardPanelData(dashboardElement, optionsType, options) {
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
+    if (task.isRunning()) {
+      task.cancel();
+    }
     yield put({
       type: DASHBOARD_ELEMENT__SET_PANEL_DATA,
       payload: {
@@ -84,17 +100,12 @@ export function* getDashboardPanelSectionTabs(dashboardElement, optionsType) {
   }
 }
 
-export function* removeLoadingSpinner() {
-  yield delay(750);
-  yield put(setDashboardPanelLoadingItems(false));
-}
-
 export function* getMoreDashboardPanelData(dashboardElement, optionsType, activeTab, direction) {
   const { page } = dashboardElement[`${dashboardElement.activePanelId}Panel`];
   const params = getDashboardPanelParams(dashboardElement, optionsType, {
     page
   });
-  yield put(setDashboardPanelLoadingItems(true));
+  const task = yield fork(setLoadingSpinner, 350, setDashboardPanelLoadingItems(true));
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
@@ -108,17 +119,24 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType, active
         data: data.data
       }
     });
-    yield call(removeLoadingSpinner);
+    if (task.isRunning()) {
+      task.cancel();
+    } else {
+      yield call(setLoadingSpinner, 750, setDashboardPanelLoadingItems(false));
+    }
   } catch (e) {
     console.error('Error', e);
-    yield call(removeLoadingSpinner);
+    if (task.isRunning()) {
+      task.cancel();
+    } else {
+      yield call(setLoadingSpinner, 750, setDashboardPanelLoadingItems(false));
+    }
   } finally {
     if (yield cancelled()) {
       if (NODE_ENV_DEV) console.error('Cancelled', url);
       if (source) {
         source.cancel();
       }
-      yield call(removeLoadingSpinner);
     }
   }
 }
@@ -155,6 +173,49 @@ export function* fetchDashboardPanelSearchResults(dashboardElement, query) {
   } finally {
     if (yield cancelled()) {
       if (NODE_ENV_DEV) console.error('Cancelled', url);
+      if (source) {
+        source.cancel();
+      }
+    }
+  }
+}
+
+export function* fetchDashboardCharts() {
+  const dashboardElement = yield select(state => state.dashboardElement);
+  const {
+    countries_ids: countryId,
+    commodities_ids: commodityId,
+    ...options
+  } = getDashboardPanelParams(dashboardElement, null, { isOverview: true });
+  const params = pickBy(
+    {
+      ...options,
+      country_id: countryId,
+      commodity_id: commodityId,
+      cont_attribute_id: dashboardElement.selectedResizeBy,
+      ncont_attribute_id: dashboardElement.selectedRecolorBy,
+      start_year: dashboardElement.selectedYears[0],
+      end_year: dashboardElement.selectedYears[1]
+    },
+    x => !!x
+  );
+  const url = getURLFromParams(GET_DASHBOARD_PARAMETRISED_CHARTS_URL, params);
+
+  yield put(setDashboardChartsLoading(true));
+  const { source, fetchPromise } = fetchWithCancel(url);
+  try {
+    const { data } = yield call(fetchPromise);
+    yield put({
+      type: DASHBOARD_ELEMENT__SET_CHARTS,
+      payload: { charts: data.data }
+    });
+    yield call(setLoadingSpinner, 750, setDashboardChartsLoading(false));
+  } catch (e) {
+    console.error('Error', e);
+    yield call(setLoadingSpinner, 750, setDashboardChartsLoading(false));
+  } finally {
+    if (yield cancelled()) {
+      if (NODE_ENV_DEV) console.error('Cancelled', params);
       if (source) {
         source.cancel();
       }

@@ -31,9 +31,12 @@
 <meta property="og:image" content="http://trase.earth/card-image.png" />
 <title><%= title %></title>
 <meta name="description" content="<%= description %>">
-<style>.loading-wrapper {
-    display: none
-  }</style>
+<link rel="preload" as="font" href="/fonts/DecimaMonoPro.woff2" type="font/woff2" crossorigin>
+<link rel="preload" as="font" href="/fonts/DecimaMonoPro-Bold.woff2" type="font/woff2" crossorigin>
+<link rel="preload" as="font" href="/fonts/Merriweather-Light.woff2" type="font/woff2" crossorigin>
+<link rel="preload" as="font" href="/fonts/Merriweather-Regular.woff2" type="font/woff2" crossorigin>
+<link rel="preload" as="font" href="/fonts/Merriweather-Bold.woff2" type="font/woff2" crossorigin>
+
 <% if (!dev) { %>
 <!-- Google Analytics start -->
 <script>

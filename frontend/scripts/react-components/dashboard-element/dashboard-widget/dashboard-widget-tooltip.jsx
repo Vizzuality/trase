@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Text from 'react-components/shared/text';
+
+import 'react-components/dashboard-element/dashboard-widget/dashboard-widget-tooltip.scss';
 
 class DashboardWidgetTooltip extends React.PureComponent {
   static getTooltipValue(meta, dataKey, payload) {
@@ -30,7 +33,7 @@ class DashboardWidgetTooltip extends React.PureComponent {
       const { label } = meta[key];
       text = `${label} `;
     } else {
-      text = `${payload.x} `;
+      text = payload.y ? `${payload.y} ` : `${payload.x} `;
     }
     return text;
   }
@@ -39,21 +42,45 @@ class DashboardWidgetTooltip extends React.PureComponent {
     const { payload, meta } = this.props;
     return (
       <div className="c-dashboard-widget-tooltip">
-        {payload.map(item => (
-          <div className="dashboard-widget-key-item" key={item.name}>
-            <span
-              style={{
-                backgroundColor: item.color || (item.payload && item.payload.fill) || 'white'
-              }}
-            />
-            <p>
-              <span>
+        <div className="dashboard-widget-tooltip-header">
+          <Text
+            variant="mono"
+            as="span"
+            color="white"
+            weight="bold"
+            className="dashboard-widget-tooltip-unit"
+          >
+            {payload[0] && payload[0].unit}
+          </Text>
+        </div>
+        {[...payload].reverse().map(item => (
+          <div className="dashboard-widget-tooltip-item" key={item.name}>
+            <div>
+              <span
+                className="dashboard-widget-tooltip-color-line"
+                style={{
+                  backgroundColor: item.color || (item.payload && item.payload.fill) || 'white'
+                }}
+              />
+              <Text
+                variant="mono"
+                as="span"
+                color="white"
+                weight="bold"
+                className="dashboard-widget-tooltip-label"
+              >
                 {DashboardWidgetTooltip.getTooltipLabel(meta, item.dataKey, item.payload)}
-              </span>
-              <span className="key-item-value">
-                {DashboardWidgetTooltip.getTooltipValue(meta, item.dataKey, item.payload)}
-              </span>
-            </p>
+              </Text>
+            </div>
+            <Text
+              variant="mono"
+              as="span"
+              color="white"
+              weight="bold"
+              className="dashboard-widget-tooltip-value"
+            >
+              {DashboardWidgetTooltip.getTooltipValue(meta, item.dataKey, item.payload)}
+            </Text>
           </div>
         ))}
       </div>

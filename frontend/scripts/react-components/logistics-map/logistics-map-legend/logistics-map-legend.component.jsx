@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import startCase from 'lodash/startCase';
+import capitalize from 'lodash/capitalize';
 import Text from 'react-components/shared/text/text.component';
 import Heading from 'react-components/shared/heading/heading.component';
 import Toggle from 'react-components/shared/toggle/toggle.component';
@@ -38,7 +38,7 @@ class LogisticsMapLegend extends React.PureComponent {
         <ul className={cx(['logistics-map-legend-list', { '-closed': !open }])}>
           {layers.map(layer => (
             <li className="logistics-map-legend-list-item" key={layer.id}>
-              <Text>{startCase(layer.name)}</Text>
+              <Text>{capitalize(layer.name)}</Text>
               <div className="logistics-map-legend-item-controls">
                 <Toggle
                   id={layer.id}
@@ -46,8 +46,8 @@ class LogisticsMapLegend extends React.PureComponent {
                   checked={layer.active}
                   onChange={e => setLayerActive(layer.id, e.target.checked)}
                 />
-                {tooltips && tooltips[layer.name] && (
-                  <Tooltip text={tooltips[layer.name]} constraint="window" className="size-rg" />
+                {tooltips && tooltips[layer.id] && (
+                  <Tooltip text={tooltips[layer.id]} constraint="window" className="size-rg" />
                 )}
               </div>
             </li>

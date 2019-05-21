@@ -1,0 +1,128 @@
+@import 'styles/settings';
+
+$segment-width: 150px;
+$label-height: 25px;
+$circle-size: 32px;
+$item-height: $label-height + $circle-size;
+$circle-dot-size: $circle-size / 2;
+
+
+.c-steps-tracker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -$circle-dot-size;
+
+  .steps-tracker-item-wrapper {
+    width: $segment-width;
+    position: relative;
+
+    &:last-child {
+      width: $circle-size;
+    }
+
+    &.-active {
+      .steps-tracker-circle {
+        border: 2px solid $charcoal-grey;
+      }
+
+      .steps-tracker-segment {
+        opacity: 0.4;
+      }
+    }
+
+    &.-pending {
+      opacity: 0.4;
+
+      .steps-tracker-circle {
+        &::before,
+        &::after {
+          height: 2px;
+        }
+      }
+
+      &:last-child {
+        .steps-tracker-circle::after {
+          display: none;
+        }
+      }
+    }
+
+    &.-done {
+      .steps-tracker-segment {
+        height: 4px;
+      }
+
+      .steps-tracker-circle {
+        &::before, &::after {
+          height: 4px;
+        }
+      }
+
+      &:first-child {
+        .steps-tracker-circle::before {
+          display: none;
+        }
+      }
+    }
+
+  }
+
+  .steps-tracker-item {
+    position: relative;
+    width: $circle-size;
+    padding: $label-height 0 0;
+    height: $item-height;
+  }
+
+  .steps-tracker-label  {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    height: $label-height;
+    white-space: nowrap;
+  }
+
+  .steps-tracker-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: $circle-size;
+    width: $circle-size;
+    border-radius: 100%;
+
+    .steps-tracker-circle-dot {
+      height: $circle-dot-size;
+      width: $circle-dot-size;
+      background-color: $charcoal-grey;
+      border-radius: 100%;
+    }
+
+    &::before, &::after {
+      content: '';
+      position: absolute;
+      width: 50%;
+      background-color: $charcoal-grey;
+    }
+
+    &::before {
+      left: 0;
+    }
+
+    &::after {
+      right: 0;
+    }
+  }
+
+  .steps-tracker-segment {
+    position: absolute;
+    display: block;
+    top: calc((100% + #{$label-height}) / 2);
+    height: 2px;
+    background-color: $charcoal-grey;
+    transform: translateY(-50%);
+    width: calc(100% - #{$circle-size});
+    left: $circle-size;
+  }
+}

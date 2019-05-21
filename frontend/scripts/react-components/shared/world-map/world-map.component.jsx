@@ -137,11 +137,12 @@ class WorldMap extends React.PureComponent {
 
   render() {
     const { tooltipConfig } = this.state;
+    const { className } = this.props;
     return (
       <React.Fragment>
         <UnitsTooltip show={!!tooltipConfig} {...tooltipConfig} />
         <ComposableMap
-          className="c-world-map"
+          className={cx('c-world-map', className)}
           projection="robinson"
           style={{ width: '100%', height: 'auto' }}
           projectionConfig={{ scale: 145 }}
@@ -159,6 +160,7 @@ class WorldMap extends React.PureComponent {
 }
 
 WorldMap.propTypes = {
+  className: PropTypes.string,
   flows: PropTypes.array.isRequired,
   originCoordinates: PropTypes.array,
   originGeoId: PropTypes.string,

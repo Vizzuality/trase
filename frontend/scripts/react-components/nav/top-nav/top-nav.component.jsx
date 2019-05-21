@@ -6,6 +6,7 @@ import { NavLink } from 'redux-first-router-link';
 import NavLinks from 'react-components/nav/nav-links.component';
 import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
 import Search from 'react-components/nav/global-search/global-search.container';
+import Img from 'react-components/shared/img';
 import DownloadPdfLink from './download-pdf-link.component';
 
 import 'scripts/react-components/nav/top-nav/top-nav.scss';
@@ -48,7 +49,7 @@ class TopNav extends React.PureComponent {
   }
 
   renderDesktopMenu() {
-    const { links, printable, showLogo } = this.props;
+    const { links, printable, showLogo, onDownloadPDF } = this.props;
     const allLinks = [];
 
     if (showLogo) {
@@ -57,7 +58,7 @@ class TopNav extends React.PureComponent {
         page: 'home',
         linkClassName: 'top-nav-link -logo',
         linkActiveClassName: 'top-nav-link -logo',
-        children: <img src="/images/logos/logo-trase-nav.png" alt="trase" />
+        children: <Img src="/images/logos/logo-trase-nav.png" alt="trase" />
       });
     }
 
@@ -89,7 +90,7 @@ class TopNav extends React.PureComponent {
               </li>
               {printable && (
                 <li className="top-nav-item">
-                  <DownloadPdfLink />
+                  <DownloadPdfLink onClick={onDownloadPDF} />
                 </li>
               )}
             </ul>
@@ -120,7 +121,7 @@ class TopNav extends React.PureComponent {
                 to={{ type: 'home' }}
                 className={cx('top-nav-link', '-logo', { '-hide-when-on-top': !showLogo })}
               >
-                <img src="/images/logos/logo-trase-nav.png" alt="trase" />
+                <Img src="/images/logos/logo-trase-nav.png" alt="trase" />
               </NavLink>
             </li>
             <li className="top-nav-item -no-margin">
@@ -170,7 +171,8 @@ TopNav.propTypes = {
   showLogo: PropTypes.bool,
   printable: PropTypes.bool,
   className: PropTypes.string,
-  pageOffset: PropTypes.number
+  pageOffset: PropTypes.number,
+  onDownloadPDF: PropTypes.func
 };
 
 TopNav.defaultProps = {

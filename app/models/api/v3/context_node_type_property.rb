@@ -10,6 +10,7 @@
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #  is_choropleth_disabled :boolean          default(FALSE), not null
+#  role                   :string
 #
 # Indexes
 #
@@ -28,6 +29,18 @@ module Api
         0, 1, 2, 3
       ].freeze
 
+      SOURCE_ROLE = 'source'.freeze
+      EXPORTER_ROLE = 'exporter'.freeze
+      IMPORTER_ROLE = 'importer'.freeze
+      DESTINATION_ROLE = 'destination'.freeze
+
+      ROLES = [
+        SOURCE_ROLE, EXPORTER_ROLE, IMPORTER_ROLE, DESTINATION_ROLE
+      ].freeze
+
+      before_save :nilify_role,
+                  if: -> { role.blank? }
+
       belongs_to :context_node_type
 
       validates :context_node_type, presence: true, uniqueness: true
@@ -35,11 +48,22 @@ module Api
       validates :is_default, inclusion: {in: [true, false]}
       validates :is_geo_column, inclusion: {in: [true, false]}
       validates :is_choropleth_disabled, inclusion: {in: [true, false]}
+      validates :role, inclusion: ROLES, allow_nil: true, allow_blank: true
 
       def self.blue_foreign_keys
         [
           {name: :context_node_type_id, table_class: Api::V3::ContextNodeType}
         ]
+      end
+
+      def self.roles
+        ROLES
+      end
+
+      private
+
+      def nilify_role
+        self.role = nil
       end
     end
   end

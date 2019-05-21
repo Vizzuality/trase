@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Heading from 'react-components/shared/heading/heading.component';
+import { ImgBackground } from 'react-components/shared/img';
 
 import './card.scss';
 
@@ -47,12 +48,13 @@ class Card extends Component {
       translateUrl,
       Link,
       variant,
-      linkProps
+      linkProps,
+      testId
     } = this.props;
     const { dashedBox, dashedLine } = Card.renderDashedBox();
 
     return (
-      <div className={cx('c-card', variant, className)}>
+      <div className={cx('c-card', variant, className)} data-test={testId}>
         {variant === 'dashed' && dashedBox}
         <Link
           className="card-link"
@@ -62,7 +64,7 @@ class Card extends Component {
           tx-content={translateUrl ? 'translate_urls' : undefined}
           {...linkProps}
         >
-          <figure className="card-image" style={{ backgroundImage: `url(${imageUrl})` }} />
+          <ImgBackground as="figure" alt={title} className="card-image" src={imageUrl} />
           {variant === 'dashed' && dashedLine}
         </Link>
         <figcaption className="card-content">
@@ -104,6 +106,7 @@ Card.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string.isRequired,
   actionName: PropTypes.string.isRequired,
+  testId: PropTypes.string,
   variant: PropTypes.oneOf(['new', 'dashed'])
 };
 

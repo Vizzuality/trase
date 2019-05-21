@@ -39,6 +39,10 @@ module Api
       has_many :map_attributes, through: :map_attribute_groups
       has_many :flows
 
+      has_many :ind_context_properties
+      has_many :quant_context_properties
+      has_many :qual_context_properties
+
       delegate :is_default, to: :context_property
       delegate :is_disabled, to: :context_property
       delegate :is_subnational, to: :context_property
@@ -65,6 +69,29 @@ module Api
         context_node_types.find do |cnt|
           cnt.node_type.name == NodeTypeName::EXPORTER
         end
+      end
+
+      def biome_nodes
+        biome_context_node_type = context_node_types.
+          joins(:node_type).
+          find_by('node_types.name' => NodeTypeName::BIOME)
+        # Brazil - soy & Paraguay - soy only
+        return [] unless biome_context_node_type
+
+        biome_idx = biome_context_node_type.column_position + 1
+        Api::V3::Node.
+          select([:id, :name]).
+          joins(
+            "JOIN (
+              #{flows.select("path[#{biome_idx}] AS node_id").distinct.to_sql}
+            ) s ON s.node_id = nodes.id"
+          ).
+          where(
+            node_type_id: biome_context_node_type.node_type_id,
+            is_unknown: false
+          ).
+          where("name NOT LIKE 'OTHER%'").
+          order('nodes.name')
       end
 
       def self.select_options

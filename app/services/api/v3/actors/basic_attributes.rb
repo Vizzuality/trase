@@ -12,13 +12,11 @@ module Api
           @node = node
           @year = year
           @node_type_name = @node&.node_type&.name
-          @actor_quals = Dictionary::ActorQuals.new(@node, @year)
-          @actor_quants = Dictionary::ActorQuants.new(@node, @year)
-          @actor_inds = Dictionary::ActorInds.new(@node, @year)
           # Assumption: Volume is a special quant which always exists
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           raise 'Quant Volume not found' unless @volume_attribute.present?
 
+          @values = Api::V3::NodeAttributeValuesPreloader.new(@node, @year)
           initialize_chart_config(:actor, nil, :actor_basic_attributes)
           @source_node_type = @chart_config.named_node_type('source')
           raise 'Chart node type "source" not found' unless @source_node_type
@@ -39,7 +37,7 @@ module Api
             country_geo_id: @context&.country&.iso2
           }
 
-          @attributes = @attributes.merge initialize_dynamic_attributes
+          @attributes = @attributes.merge initialize_named_attributes
           initialize_top_nodes
           initialize_flow_stats_for_node
           @attributes[:summary] = summary
@@ -56,14 +54,22 @@ module Api
 
         private
 
-        def initialize_dynamic_attributes
-          dynamic_attributes = {}
-          [@actor_quals, @actor_quants, @actor_inds].each do |attribute_hash|
-            attribute_hash.each do |name, attribute|
-              dynamic_attributes[name.downcase] = attribute['value']
+        NAMED_ATTRIBUTES = %w(forest_500 zero_deforestation).freeze
+
+        def initialize_named_attributes
+          values =
+            NAMED_ATTRIBUTES.map do |name|
+              original_attribute = @chart_config.named_attribute(name)
+              next nil unless original_attribute
+
+              value = @values.get(
+                original_attribute.simple_type, original_attribute.id
+              )
+              next nil unless value
+
+              [name, value]
             end
-          end
-          dynamic_attributes
+          Hash[values.compact]
         end
 
         def initialize_top_nodes
@@ -143,7 +149,7 @@ module Api
         def summary_of_total_trade_volume(profile_type)
           if @trade_total_current_year_raw.zero?
             return "<span class=\"notranslate\">#{@node.name.humanize}</span> \
-            #{profile_type.first(-1)}d 0 tons of soy from \
+            #{profile_type.first(-1)}d 0 tons of #{@commodity_name} from \
             #{@context.country.name} in \
 <span class=\"notranslate\">#{@year}</span>."
           end
@@ -151,7 +157,7 @@ module Api
           text = "<span class=\"notranslate\">#{@node.name.humanize}</span> \
 was the \
 <span class=\"notranslate\">#{@trade_total_rank_in_country_formatted}</span>\
-largest #{profile_type} of soy from \
+largest #{profile_type} of #{@commodity_name} from \
           #{@context.country.name} in \
 <span class=\"notranslate\">#{@year}</span>, accounting for \
 <span class=\"notranslate\">#{@trade_total_current_year_formatted}</span>."
@@ -183,12 +189,13 @@ largest #{profile_type} of soy from \
 <span class=\"notranslate\">#{@source_municipalities_count_formatted}</span> \
 municipalities, or \
 <span class=\"notranslate\">#{@perc_municipalities_formatted}</span> \
-of the soy production municipalities."
+of the #{@commodity_name} production municipalities."
         end
 
         def summary_of_destinations(profile_type)
           if @perc_exports_formatted
-            " The main destination of the soy #{profile_type.first(-1)}d by \
+            " The main destination of the #{@commodity_name} \
+#{profile_type.first(-1)}d by \
 <span class=\"notranslate\">#{@node.name.humanize}</span> is \
 <span class=\"notranslate\">#{@main_destination_name.humanize}</span>, \
 accounting for \
@@ -199,6 +206,7 @@ accounting for \
         end
 
         def initialize_trade_volume_for_summary
+          @commodity_name = @context.commodity.name.downcase
           initialize_trade_total_current_year
           initialize_trade_total_difference
           initialize_trade_total_rank

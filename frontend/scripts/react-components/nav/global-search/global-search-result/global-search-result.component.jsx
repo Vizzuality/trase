@@ -49,7 +49,7 @@ class GlobalSearchResult extends Component {
                 }
               }
             }}
-            data-test={`${testId}-tool-link`}
+            testId={`${testId}-tool-link`}
           >
             Supply Chain
           </LinkButton>
@@ -72,7 +72,7 @@ class GlobalSearchResult extends Component {
                   }
                 }
               }}
-              data-test={`${testId}-map-link`}
+              testId={`${testId}-map-link`}
             >
               Map
             </LinkButton>
@@ -98,7 +98,7 @@ class GlobalSearchResult extends Component {
                     profileType: node.profile
                   }
                 }}
-                data-test={`${testId}-${node.nodeType}-link`.toLowerCase()}
+                testId={`${testId}-${node.nodeType}-link`.toLowerCase()}
               >
                 See {node.nodeType} profile
               </LinkButton>

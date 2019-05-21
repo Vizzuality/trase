@@ -13,12 +13,14 @@ import {
   SET_CONTEXT,
   LOAD_INITIAL_CONTEXT,
   LOAD_STATE_FROM_URL,
-  APP__SET_LOADING
+  APP__SET_LOADING,
+  APP__TRANSIFEX_LANGUAGES_LOADED
 } from 'actions/app.actions';
 import createReducer from 'utils/createReducer';
 import { SELECT_YEARS } from 'actions/tool.actions';
 
 const initialState = {
+  languages: [],
   windowSize: [window.innerWidth, window.innerHeight],
   isMapLayerVisible: false,
   isAppMenuVisible: false,
@@ -127,6 +129,10 @@ const appReducer = {
   },
   [SELECT_YEARS](state, action) {
     return { ...state, selectedYears: action.years };
+  },
+  [APP__TRANSIFEX_LANGUAGES_LOADED](state, action) {
+    const { languages } = action.payload;
+    return { ...state, languages };
   }
 };
 

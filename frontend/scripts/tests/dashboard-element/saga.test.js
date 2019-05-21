@@ -6,12 +6,10 @@ import {
   getSearchResults,
   onTabChange,
   onItemChange,
-  onFilterClear,
   onPageChange,
-  onStepChange
+  onChangePanel
 } from 'react-components/dashboard-element/dashboard-element.saga';
 import {
-  openIndicatorsStep,
   clearDashboardPanel,
   setDashboardPanelPage,
   setDashboardActivePanel,
@@ -19,10 +17,11 @@ import {
   getDashboardPanelSearchResults,
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
-  setDashboardPanelActiveItemWithSearch,
+  setDashboardPanelActiveItemsWithSearch,
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
-  DASHBOARD_ELEMENT__SET_ACTIVE_PANEL
+  DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
+  DASHBOARD_ELEMENT__CLEAR_PANELS
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import { getURLFromParams } from 'utils/getURLFromParams';
 import { fetchWithCancel } from 'react-components/dashboard-element/fetch-with-cancel';
@@ -79,7 +78,7 @@ describe('fetchDashboardPanelInitialData', () => {
   it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_TABS} if the current active panel is companies`, async () => {
     const dispatched = await recordSaga(
       fetchDashboardPanelInitialData,
-      setDashboardActivePanel('any'),
+      setDashboardActivePanel('commodities'),
       stateCompanies
     );
     expect(dispatched).toContainEqual({
@@ -96,17 +95,6 @@ describe('fetchDashboardPanelInitialData', () => {
       setDashboardActivePanel('sources'),
       baseState
     );
-    // Clears panel data
-    expect(dispatched).toContainEqual({
-      payload: {
-        key: 'countries',
-        data: null,
-        meta: null,
-        tab: null,
-        loading: true
-      },
-      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
-    });
     // Sets panel data for countries
     expect(dispatched).toContainEqual({
       payload: {
@@ -140,10 +128,10 @@ describe('fetchDashboardPanelInitialData', () => {
     expect(dispatched).toContainEqual({
       payload: {
         key: 'commodities',
-        data: null,
-        meta: null,
+        data,
+        meta,
         tab: null,
-        loading: true
+        loading: false
       },
       type: DASHBOARD_ELEMENT__SET_PANEL_DATA
     });
@@ -202,21 +190,10 @@ describe('onTabChange', () => {
       }
     }
   };
-  const searchAction = setDashboardPanelActiveItemWithSearch({ nodeTypeId: 3 }, 'sources');
+  const searchAction = setDashboardPanelActiveItemsWithSearch({ nodeTypeId: 3 }, 'sources');
 
   it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_DATA} if tab action is triggered`, async () => {
     const dispatched = await recordSaga(onTabChange, searchAction, differentTabChangeState);
-    // Clears data
-    expect(dispatched).toContainEqual({
-      payload: {
-        key: 'sources',
-        data: null,
-        meta: null,
-        tab: 3,
-        loading: true
-      },
-      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
-    });
     expect(dispatched).toContainEqual({
       payload: {
         key: 'sources',
@@ -312,114 +289,41 @@ describe('onItemChange', () => {
   });
 });
 
-describe('onFilterClear', () => {
+describe('onChangePanel', () => {
   const state = {
     dashboardElement: {
       ...baseState.dashboardElement,
-      activePanelId: 'sources',
-      sourcesPanel: {
-        ...baseState.dashboardElement.sourcesPanel,
-        activeTab: {
-          id: 2
-        },
-        page: 2
-      },
+      activePanelId: 'countries',
       countriesPanel: {
         ...baseState.dashboardElement.countriesPanel,
-        activeItems: {}
-      }
-    }
-  };
-  const sourcesStateWithActiveItem = {
-    dashboardElement: {
-      ...state.dashboardElement,
-      countriesPanel: {
-        ...state.dashboardElement.countriesPanel,
-        activeItems: { 5: { id: 5 } }
-      }
-    }
-  };
-  const companiesState = {
-    dashboardElement: {
-      ...state.dashboardElement,
-      activePanelId: 'companies',
-      companiesPanel: {
-        ...state.dashboardElement.companiesPanel,
         activeTab: {
           id: 1
-        }
+        },
+        activeItems: [{ id: 0 }]
+      },
+      commoditiesPanel: {
+        ...baseState.dashboardElement.commoditiesPanel,
+        activeTab: {
+          id: 1
+        },
+        activeItems: [{ id: 0 }]
+      },
+      companiesPanel: {
+        ...baseState.dashboardElement.companiesPanel,
+        activeTab: {
+          id: 1
+        },
+        activeItems: [{ id: 0 }]
       }
     }
   };
 
-  const clearAction = clearDashboardPanel('companies');
-  const clearAction2 = clearDashboardPanel('commodities');
-
-  it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_DATA} for countries if the active panel is sources and doesnt load sources`, async () => {
-    const dispatched = await recordSaga(onFilterClear, clearAction, state);
-    // Clears data
+  it(`dispatches ${DASHBOARD_ELEMENT__CLEAR_PANELS} with the subsequent panels if the panel is changed`, async () => {
+    const dispatched = await recordSaga(onChangePanel, clearDashboardPanel('commodities'), state);
+    const panelsToClear = ['destinations', 'companies'];
     expect(dispatched).toContainEqual({
-      payload: {
-        key: 'countries',
-        data: null,
-        meta: null,
-        tab: 2,
-        loading: true
-      },
-      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
-    });
-    expect(dispatched).not.toContainEqual({
-      type: DASHBOARD_ELEMENT__SET_PANEL_TABS,
-      payload: { data }
-    });
-    // Sets data
-    expect(dispatched).toContainEqual({
-      payload: {
-        key: 'countries',
-        data,
-        meta,
-        loading: false,
-        tab: 2
-      },
-      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
-    });
-  });
-
-  it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_DATA} for countries and ${DASHBOARD_ELEMENT__SET_PANEL_TABS} for sources too if countries activeItem exists`, async () => {
-    const dispatched = await recordSaga(onFilterClear, clearAction, sourcesStateWithActiveItem);
-    // Clears data
-    expect(dispatched).toContainEqual({
-      payload: {
-        key: 'countries',
-        data: null,
-        meta: null,
-        tab: 2,
-        loading: true
-      },
-      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
-    });
-    // Sets data
-    expect(dispatched).toContainEqual({
-      payload: {
-        key: 'countries',
-        data,
-        meta,
-        loading: false,
-        tab: 2
-      },
-      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
-    });
-    expect(dispatched).toContainEqual({
-      type: DASHBOARD_ELEMENT__SET_PANEL_TABS,
-      payload: { data }
-    });
-  });
-
-  it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_TABS} if is companies`, async () => {
-    const dispatched = await recordSaga(onFilterClear, clearAction2, companiesState);
-    expect(dispatched).toContainEqual({
-      type: DASHBOARD_ELEMENT__SET_PANEL_TABS,
-      payload: { data }
+      payload: { panels: panelsToClear },
+      type: DASHBOARD_ELEMENT__CLEAR_PANELS
     });
   });
 });
@@ -448,23 +352,6 @@ describe('onPageChange', () => {
         direction: 'forward'
       },
       type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA
-    });
-  });
-});
-
-describe('onStepChange', () => {
-  const stepChangeAction = openIndicatorsStep();
-  it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_DATA} to retrieve indicators data on step change`, async () => {
-    const dispatched = await recordSaga(onStepChange, stepChangeAction, baseState);
-    expect(dispatched).toContainEqual({
-      payload: {
-        key: 'indicators',
-        data,
-        meta,
-        tab: null,
-        loading: false
-      },
-      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
     });
   });
 });

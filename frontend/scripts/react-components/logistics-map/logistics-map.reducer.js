@@ -29,7 +29,7 @@ const logisticsMapReducer = {
 };
 
 const logisticsMapReducerTypes = PropTypes => {
-  const CompanyList = PropTypes.shape({ id: PropTypes.number, name: PropTypes.string });
+  const CompanyList = { id: PropTypes.number, name: PropTypes.string };
   return {
     companies: PropTypes.shape({
       soy: PropTypes.arrayOf(PropTypes.shape(CompanyList)),

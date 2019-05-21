@@ -7,11 +7,11 @@ import TopConsumersWidget from 'react-components/profile-node/profile-node-widge
 import ImportingCompaniesWidget from 'react-components/profile-node/profile-node-widgets/importing-companies-widget.component';
 import TopDestinationsWidget from 'react-components/profile-node/profile-node-widgets/top-destinations-widget.component';
 import GfwWidget from 'react-components/profile-node/profile-node-widgets/gfw-widget.component';
+import ErrorCatch from 'react-components/shared/error-catch.component';
+import Text from 'react-components/shared/text/text.component';
 import { smoothScroll } from 'utils/smoothScroll';
 import cx from 'classnames';
 import sortBy from 'lodash/sortBy';
-// sketchy polyfill
-const _requestIdleCallback = window.requestIdleCallback || window.setTimeout;
 
 class ProfileNode extends React.PureComponent {
   static propTypes = {
@@ -27,20 +27,25 @@ class ProfileNode extends React.PureComponent {
     updateQueryParams: PropTypes.func.isRequired
   };
 
+  // if requestIdleCallback is not supported (Edge, IE) we render the iframe immediately
   state = {
-    renderIframes: false
+    renderIframes: typeof window.requestIdleCallback === 'undefined'
   };
 
   componentDidMount() {
-    // http://www.aaronpeters.nl/blog/iframe-loading-techniques-performance
-    window.addEventListener('load', this.renderIframes, false);
-    if (document.readyState === 'complete') {
-      _requestIdleCallback(this.renderIframes);
+    if (window.requestIdleCallback) {
+      // http://www.aaronpeters.nl/blog/iframe-loading-techniques-performance
+      window.addEventListener('load', this.renderIframes, false);
+      if (document.readyState === 'complete') {
+        window.requestIdleCallback(this.renderIframes);
+      }
     }
   }
 
   componentWillUnmount() {
-    window.removeEventListener('load', this.renderIframes);
+    if (window.requestIdleCallback) {
+      window.removeEventListener('load', this.renderIframes);
+    }
   }
 
   getAnchorRef = ref => {
@@ -78,7 +83,6 @@ class ProfileNode extends React.PureComponent {
       profileMetadata,
       updateQueryParams
     } = this.props;
-
     switch (chart.chart_type) {
       case 'line_chart_with_map': {
         const isCountries = chart.identifier === 'actor_top_countries';
@@ -91,10 +95,11 @@ class ProfileNode extends React.PureComponent {
             year={year}
             nodeId={nodeId}
             key={chart.id}
+            title={chart.title}
             type={chart.identifier}
             contextId={context.id}
-            countryName={context.countryName}
             onLinkClick={updateQueryParams}
+            countryName={context.countryName}
             commodityName={context.commodityName}
             testId={isCountries ? 'top-destination-countries' : 'top-sourcing-regions'}
           />
@@ -113,7 +118,9 @@ class ProfileNode extends React.PureComponent {
             year={year}
             key={chart.id}
             nodeId={nodeId}
+            title={chart.title}
             contextId={context.id}
+            commodityName={context.commodityName}
             testId={isActor ? 'deforestation-risk' : 'sustainability-indicators'}
             targetPayload={{ profileType: isActor ? 'place' : 'actor' }}
           />
@@ -125,9 +132,9 @@ class ProfileNode extends React.PureComponent {
             year={year}
             key={chart.id}
             nodeId={nodeId}
+            title={chart.title}
             printMode={printMode}
             contextId={context.id}
-            countryName={context.countryName}
             commodityName={context.commodityName}
             testId="company-compare"
           />
@@ -138,7 +145,9 @@ class ProfileNode extends React.PureComponent {
             year={year}
             key={chart.id}
             nodeId={nodeId}
+            title={chart.title}
             contextId={context.id}
+            commodityName={context.commodityName}
             testId="deforestation-trajectory"
           />
         );
@@ -150,6 +159,7 @@ class ProfileNode extends React.PureComponent {
             type={type}
             key={chart.id}
             nodeId={nodeId}
+            title={chart.title}
             contextId={context.id}
             onLinkClick={updateQueryParams}
             commodityName={context.commodityName}
@@ -164,6 +174,7 @@ class ProfileNode extends React.PureComponent {
               year={year}
               nodeId={nodeId}
               context={context}
+              title={chart.title}
               tooltips={tooltips}
               printMode={printMode}
               scrollTo={this.scrollTo}
@@ -202,7 +213,20 @@ class ProfileNode extends React.PureComponent {
             </div>
           </div>
         )}
-        {ready && sortBy(profileMetadata.charts, 'position').map(this.renderChart)}
+        {ready &&
+          sortBy(profileMetadata.charts, 'position').map(chart => (
+            <ErrorCatch
+              renderFallback={() => (
+                <section className="section-placeholder">
+                  <Text variant="mono" size="md" weight="bold">
+                    Error!
+                  </Text>
+                </section>
+              )}
+            >
+              {this.renderChart(chart)}
+            </ErrorCatch>
+          ))}
         {ready &&
           profileType === 'place' &&
           GFW_WIDGETS_BASE_URL &&

@@ -1,0 +1,22 @@
+---
+name: Cache management
+menu: Backend
+---
+
+# Cache management
+
+## Varnish configuration
+
+We use Varnish in staging / production for caching. You need to configure your `/etc/varnish/default.vcl` file to support PURGE commands. Refer to `doc/varnish/varnish-minimum.vcl` for a minimum configuration file, or to `doc/varnish/varnish-recommended.vcl` for a more thorough setup.
+
+## Purging
+
+`rake cache:cleaner:clear_all` - clears all cache using a BAN
+
+## Warming
+
+`rake cache:warmer:run` - warms cache for heavy profile pages and node attributes
+
+We use `whenever` backed by cron to periodically warm the cache. Crontab is managed by the `whenever` gem using `config/schedule.rb`.
+
+[It is recommended](https://github.com/javan/whenever#rvm-integration) to set `rvm_trust_rvmrcs_flag=1` in `~/.rvmrc`.

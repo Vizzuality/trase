@@ -5,7 +5,12 @@ import {
   GET_TESTIMONIALS_URL
 } from 'utils/getURLFromParams';
 
+import { HOME_VIDEO } from 'constants';
+
 export const HOME__SET_CONTENT = 'HOME__SET_CONTENT';
+export const HOME__PLAY_VIDEO = 'HOME__PLAY_VIDEO';
+export const HOME__CLICK_ENTRYPOINT = 'HOME__CLICK_ENTRYPOINT';
+export const HOME__CLICK_NEXT_ENTRYPOINT = 'HOME__CLICK_NEXT_ENTRYPOINT';
 
 export const getHomeContent = (type, mock) => dispatch => {
   const content = {
@@ -25,3 +30,20 @@ export const getHomeContent = (type, mock) => dispatch => {
     )
     .catch(err => console.error(err));
 };
+
+export const playHomeVideo = videoId => {
+  const [lang] = Object.entries(HOME_VIDEO).find(entry => entry[1] === videoId);
+  return {
+    type: HOME__PLAY_VIDEO,
+    payload: lang
+  };
+};
+
+export const clickEntrypoint = link => ({
+  type: HOME__CLICK_ENTRYPOINT,
+  payload: link
+});
+
+export const clickNextEntrypoint = () => ({
+  type: HOME__CLICK_NEXT_ENTRYPOINT
+});

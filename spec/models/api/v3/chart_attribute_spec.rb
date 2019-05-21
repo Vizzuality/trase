@@ -16,10 +16,35 @@ RSpec.describe Api::V3::ChartAttribute, type: :model do
         position: api_v3_place_trajectory_deforestation_deforestation_v2.position
       )
     }
+    let(:non_duplicate_on_position) {
+      FactoryBot.build(
+        :api_v3_chart_attribute,
+        chart: api_v3_place_basic_attributes,
+        identifier: api_v3_place_basic_attributes_commodity_area.identifier + 'zonk',
+        position: nil
+      )
+    }
+    let(:duplicate_on_identifier) {
+      FactoryBot.build(
+        :api_v3_chart_attribute,
+        chart: api_v3_place_basic_attributes,
+        identifier: api_v3_place_basic_attributes_commodity_area.identifier,
+        position: nil
+      )
+    }
+    let(:non_duplicate_on_identifier) {
+      FactoryBot.build(
+        :api_v3_chart_attribute,
+        chart: api_v3_place_trajectory_deforestation,
+        identifier: '',
+        position: api_v3_place_trajectory_deforestation_deforestation_v2.position + 1
+      )
+    }
     let(:duplicate_on_quant) do
       chart_attribute = FactoryBot.build(
         :api_v3_chart_attribute,
         chart: api_v3_place_trajectory_deforestation,
+        identifier: nil,
         position: api_v3_place_trajectory_deforestation_deforestation_v2.position + 1,
         state_average: false
       )
@@ -34,6 +59,7 @@ RSpec.describe Api::V3::ChartAttribute, type: :model do
       chart_attribute = FactoryBot.create(
         :api_v3_chart_attribute,
         chart: api_v3_place_trajectory_deforestation,
+        identifier: nil,
         position: api_v3_place_trajectory_deforestation_deforestation_v2.position + 1,
         state_average: true
       )
@@ -47,8 +73,19 @@ RSpec.describe Api::V3::ChartAttribute, type: :model do
     it 'fails when chart missing' do
       expect(chart_attribute_without_chart).to have(1).error_on(:chart)
     end
-    it 'fails when chart + position taken' do
+    it 'fails when chart + position duplicate' do
       expect(duplicate_on_position).to have(1).errors_on(:position)
+    end
+    it 'is successful when chart + empty position duplicate' do
+      expect(non_duplicate_on_position).to have(0).errors_on(:position)
+      expect { non_duplicate_on_position.save! }.not_to raise_error
+    end
+    it 'fails when chart + identifier duplicate' do
+      expect(duplicate_on_identifier).to have(1).errors_on(:identifier)
+    end
+    it 'is successful when chart + empty identifier duplicate' do
+      expect(non_duplicate_on_identifier).to have(0).errors_on(:identifier)
+      expect { non_duplicate_on_identifier.save! }.not_to raise_error
     end
     it 'fails when same attribute associated more than once' do
       duplicate_on_quant.valid?
@@ -56,6 +93,10 @@ RSpec.describe Api::V3::ChartAttribute, type: :model do
     end
     it 'is successful when same attribute associated as state average' do
       expect(state_average_variant).to have(0).errors_on(:base)
+    end
+    it 'saves empty identifier as NULL' do
+      attribute = FactoryBot.create(:api_v3_chart_attribute, identifier: '')
+      expect(attribute.identifier).to be_nil
     end
   end
   describe :destroy_zombies do

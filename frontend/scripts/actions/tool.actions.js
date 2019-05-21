@@ -121,7 +121,8 @@ const _setBiomeFilterAction = (biomeFilterName, state) => {
       {},
       currentContext.filterBy[0].nodes.find(filterBy => filterBy.name === biomeFilterName)
     );
-    selectedBiomeFilter.geoId = state.tool.nodesDict[selectedBiomeFilter.nodeId].geoId;
+    const node = state.tool.nodesDict[selectedBiomeFilter.nodeId];
+    selectedBiomeFilter.geoId = node && node.geoId;
   }
 
   return {
@@ -129,6 +130,27 @@ const _setBiomeFilterAction = (biomeFilterName, state) => {
     payload: selectedBiomeFilter
   };
 };
+
+function _getAvailableMapDimensions(dimensions, selectedMapDimensions) {
+  const allAvailableMapDimensionsUids = dimensions.map(dimension =>
+    getNodeMetaUid(dimension.type, dimension.layerAttributeId)
+  );
+  const selectedMapDimensionsSet = compact(selectedMapDimensions);
+  // are all currently selected map dimensions available ?
+  if (
+    selectedMapDimensionsSet.length > 0 &&
+    difference(selectedMapDimensionsSet, allAvailableMapDimensionsUids).length === 0
+  ) {
+    return [...selectedMapDimensions];
+  }
+
+  // use default map dimensions
+  const defaultMapDimensions = dimensions.filter(dimension => dimension.isDefault);
+  const uids = defaultMapDimensions.map(selectedDimension =>
+    getNodeMetaUid(selectedDimension.type, selectedDimension.layerAttributeId)
+  );
+  return [uids[0] || null, uids[1] || null];
+}
 
 export function selectView(detailedView, reloadLinks) {
   return _reloadLinks('detailedView', detailedView, SELECT_VIEW, reloadLinks);
@@ -247,11 +269,20 @@ export function selectColumn(columnIndex, columnId, reloadLinks = true) {
       state.tool.nodesDict
     );
     dispatch(updateNodes(selectedNodesIds));
-
     const selectedColumn = state.tool.columns.find(c => c.id === columnId);
-    if (selectedColumn && selectedColumn.group === 0 && selectedColumn.isChoroplethDisabled) {
+    if (
+      selectedColumn?.group === 0 &&
+      selectedColumn.isGeo &&
+      selectedColumn.isChoroplethDisabled
+    ) {
       dispatch(setMapDimensions([null, null]));
       state.tool.expandedMapSidebarGroupsIds.forEach(id => dispatch(toggleMapSidebarGroup(id)));
+    } else if (selectedColumn.isChoroplethDisabled === false && selectedColumn.isGeo) {
+      const availableMapDimensions = _getAvailableMapDimensions(
+        state.tool.mapDimensions,
+        state.tool.selectedMapDimensions
+      );
+      dispatch(setMapDimensions(availableMapDimensions));
     }
 
     dispatch({
@@ -350,40 +381,25 @@ export function loadNodes() {
 
         dispatch(setMapContextLayers(payload.mapDimensionsMetaJSON.contextualLayers));
 
-        dispatch({
-          type: SET_MAP_DIMENSIONS_DATA,
-          payload
-        });
+        dispatch({ type: SET_MAP_DIMENSIONS_DATA, payload });
 
         const selectedBiomeFilter = getState().tool.selectedBiomeFilter;
         if (selectedBiomeFilter && selectedBiomeFilter.nodeId) {
           dispatch(_setBiomeFilterAction(selectedBiomeFilter.name, getState()));
         }
 
-        const allAvailableMapDimensionsUids = payload.mapDimensionsMetaJSON.dimensions.map(
-          dimension => getNodeMetaUid(dimension.type, dimension.layerAttributeId)
+        const selectedGeoColumn = getState().tool.columns.find(column =>
+          getState().tool.selectedColumnsIds.some(id => id === column.id && column.isGeo)
         );
-        const selectedMapDimensionsSet = compact(selectedMapDimensions);
 
-        // are all currently selected map dimensions available ?
-        if (
-          selectedMapDimensionsSet.length > 0 &&
-          difference(selectedMapDimensionsSet, allAvailableMapDimensionsUids).length === 0
-        ) {
-          dispatch(setMapDimensions(selectedMapDimensions.concat([])));
-        } else {
-          // use default map dimensions
-          const defaultMapDimensions = payload.mapDimensionsMetaJSON.dimensions.filter(
-            dimension => dimension.isDefault
+        if (selectedGeoColumn.isChoroplethDisabled === false) {
+          const availableMapDimensions = _getAvailableMapDimensions(
+            payload.mapDimensionsMetaJSON.dimensions,
+            selectedMapDimensions
           );
-          if (defaultMapDimensions !== undefined) {
-            const uids = defaultMapDimensions.map(selectedDimension =>
-              getNodeMetaUid(selectedDimension.type, selectedDimension.layerAttributeId)
-            );
-            if (uids[0] === undefined) uids[0] = null;
-            if (uids[1] === undefined) uids[1] = null;
-            dispatch(setMapDimensions(uids));
-          }
+          dispatch(setMapDimensions(availableMapDimensions));
+        } else {
+          dispatch(setMapDimensions([null, null]));
         }
       });
   };

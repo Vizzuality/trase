@@ -5,9 +5,11 @@
     "node": true,
     "jest/globals": true
   },
-  "plugins": ["react", "jest", "prettier"],
+  "plugins": ["react", "react-hooks", "jest", "prettier"],
   "extends": ["airbnb", "prettier"],
   "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
     "no-console": [
       1,
       {
@@ -54,6 +56,7 @@
     "NODE_ENV_DEV": true,
     "API_V3_URL": true,
     "ENABLE_DASHBOARDS": true,
+    "ENABLE_COOKIE_BANNER": true,
     "ENABLE_LOGISTICS_MAP": true,
     "ENABLE_LEGACY_TOOL_SEARCH": true,
     "DISABLE_MULTIPLE_CONTEXT_PROFILES": true,

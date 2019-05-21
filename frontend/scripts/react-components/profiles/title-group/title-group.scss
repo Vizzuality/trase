@@ -1,0 +1,45 @@
+@import 'styles/settings';
+
+.c-title-group {
+  display: flex;
+  flex-wrap: wrap;
+
+  .title-group-element-container {
+    display: inline-flex;
+    margin-bottom: 10px;
+
+    &:not(:last-child) {
+      margin-right: 41px;
+    }
+
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      &:first-child {
+        width: 100%;
+      }
+
+      &:not(:last-child) {
+        margin-right: 21px;
+      }
+    }
+  }
+
+  .title-group-element {
+    &:not(:last-child) {
+      margin-right: 41px;
+    }
+
+    .title-group-label {
+      display: block;
+    }
+
+    .title-group-content {
+      display: block;
+    }
+
+    @media screen and (min-width: $breakpoint-foundation-small) {
+      .title-group-content {
+        font-size: $font-size-huge;
+      }
+    }
+  }
+}

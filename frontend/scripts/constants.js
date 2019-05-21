@@ -203,12 +203,14 @@ export const DEFAULT_BASEMAP_FOR_CHOROPLETH = 'default';
 
 export const EXPLORE_COLUMN_LIST = [
   {
+    value: 'exporter',
     type: 'exporter',
     label: 'Top Exporting Companies',
     link: { type: 'profileNode', payload: { profileType: 'actor' } },
     fallbackText: 'exporting companies'
   },
   {
+    value: 'country',
     type: 'country',
     label: 'Top Sourcing Countries',
     fallbackText: 'sourcing countries'
@@ -230,13 +232,41 @@ export const MAX_SEARCH_RESULTS = 50;
 
 export const LOGISTICS_MAP_YEARS = Array.from({ length: 12 })
   .fill(2016)
-  .map((y, i) => ({ id: y - i, name: `${y - i}` }));
+  .map((y, i) => ({ value: y - i, label: `${y - i}` }));
 
-export const LOGISTICS_MAP_HUBS = [{ id: 'soy', name: 'Soy' }, { id: 'cattle', name: 'Cattle' }];
+export const LOGISTICS_MAP_HUBS = [
+  { value: 'soy', label: 'Soy' },
+  { value: 'cattle', label: 'Cattle' }
+];
 
 export const LOGISTICS_MAP_INSPECTION_LEVELS = [
-  { id: 'SIF', name: 'SIF' },
-  { id: 'SIE', name: 'SIE' },
-  { id: 'SIM', name: 'SIM' },
-  { id: 'UNKNOWN', name: 'Unknown' }
+  { value: 'SIF', label: 'SIF' },
+  { value: 'SIE', label: 'SIE' },
+  { value: 'SIM', label: 'SIM' },
+  { value: 'UNKNOWN', label: 'Unknown' }
 ];
+
+export const DASHBOARD_STEPS = {
+  welcome: 0,
+  sources: 1,
+  commodities: 2,
+  destinations: 3,
+  companies: 4
+};
+
+export const CHART_TYPES = {
+  bar: 'bar',
+  pie: 'pie',
+  ranking: 'ranking',
+  stackedBar: 'stackedBar',
+  dynamicSentence: 'dynamicSentence',
+  horizontalBar: 'horizontalBar',
+  horizontalStackedBar: 'horizontalStackedBar'
+};
+
+export const NAV_FILTER_TYPES = {
+  contextSelector: 0,
+  yearSelector: 1,
+  dropdown: 2,
+  recolorBySelector: 3
+};

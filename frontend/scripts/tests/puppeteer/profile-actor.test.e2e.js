@@ -1,28 +1,34 @@
 /* eslint-disable no-console */
 
-import { CONTEXTS, PROFILE_NODE_ACTOR } from './mocks';
-import { getRequestMockFn } from './utils';
-import { testProfileSpinners, testProfileSummary, testProfileMultiTable } from './shared';
+import { Polly } from '@pollyjs/core';
+import PuppeteerAdapter from '@pollyjs/adapter-puppeteer';
+import FSPersister from '@pollyjs/persister-fs';
+import { pollyConfig, handleUnnecesaryRequests } from './utils';
+import { testProfileSummary, testProfileMultiTable } from './shared';
+
+Polly.register(PuppeteerAdapter);
+Polly.register(FSPersister);
 
 const BASE_URL = 'http://0.0.0.0:8081';
 const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;
 
 jest.setTimeout(TIMEOUT);
 const { page } = global;
+const polly = new Polly('profile-actor', pollyConfig(page));
 
 beforeAll(async () => {
   await page.setRequestInterception(true);
-  const mockRequests = await getRequestMockFn([CONTEXTS, PROFILE_NODE_ACTOR]);
-  page.on('request', mockRequests);
-  await page.goto(`${BASE_URL}/profile-actor?lang=en&nodeId=441&contextId=1&year=2015`);
+  const { server } = polly;
+  handleUnnecesaryRequests(server, BASE_URL);
+  await page.goto(`${BASE_URL}/profile-actor?lang=en&nodeId=33624&contextId=1&year=2015`);
+});
+
+afterAll(async () => {
+  await polly.flush();
+  await polly.stop();
 });
 
 describe('Profile actor - Full data', () => {
-  it('All 5 widget sections attempt to load', async () => {
-    expect.assertions(1);
-    await testProfileSpinners(page, expect);
-  });
-
   it('Summary widget loads successfully', async () => {
     expect.assertions(3);
     await testProfileSummary(page, expect, {
@@ -43,7 +49,7 @@ describe('Profile actor - Full data', () => {
     const chartLines = await page.$$('[data-test=top-destination-countries-chart-d3-line-points]');
 
     expect(chartTitle.toLowerCase()).toMatch(
-      'top destination countries of soy imported by bunge in 2015'
+      'top destination countries of soy exported by bunge in 2015'
     );
     expect(chartLines.length).toBe(5);
   });
@@ -62,7 +68,7 @@ describe('Profile actor - Full data', () => {
     );
 
     expect(hasLegend).toBe(true);
-    expect(coloredMapPolygons.length).toBe(25);
+    expect(coloredMapPolygons.length).toBe(32);
   });
 
   it('Top sourcing regions chart loads successfully', async () => {
@@ -76,7 +82,7 @@ describe('Profile actor - Full data', () => {
     const chartLines = await page.$$('[data-test=top-sourcing-regions-chart-d3-line-points]');
 
     expect(chartTitle.toLowerCase()).toMatch(
-      'top sourcing regions of soy imported by bunge in 2015:'
+      'top sourcing regions of soy exported by bunge in 2015'
     );
     expect(chartLines.length).toBe(5);
   });
@@ -95,7 +101,7 @@ describe('Profile actor - Full data', () => {
     );
 
     expect(hasLegend).toBe(true);
-    expect(coloredMapPolygons.length).toBe(387);
+    expect(coloredMapPolygons.length).toBe(218);
   });
 
   it('Top sourcing regions switch changes map', async () => {
@@ -106,7 +112,7 @@ describe('Profile actor - Full data', () => {
     const municipalityPolygons = await page.$$(
       '[data-test=top-sourcing-regions-map-d3-polygon-colored]'
     );
-    expect(municipalityPolygons.length).toBe(387);
+    expect(municipalityPolygons.length).toBe(218);
 
     await page.click('[data-test=top-sourcing-regions-chart-switch-item][data-key=biome]');
     await page.waitForSelector('[data-test=top-sourcing-regions-map-d3-polygon-colored]');
@@ -122,11 +128,11 @@ describe('Profile actor - Full data', () => {
       rowsLength: 10,
       columnsLength: 3,
       linkName: '/profile-place',
-      linkQuery: { nodeId: '10793', year: '2015', contextId: '1' },
+      linkQuery: { nodeId: '10794', year: '2015', contextId: '1' },
       firstColumn: 'municipality',
       testId: 'deforestation-risk',
       firstRow: 'CAMPO NOVO DO PARECIS8999',
-      title: "deforestation risk associated with bunge's top sourcing regions in 2015:"
+      title: "deforestation risk associated with bunge's top sourcing regions in 2015"
     });
   });
 
@@ -141,8 +147,8 @@ describe('Profile actor - Full data', () => {
     const circles = await page.$$('[data-test=company-compare-scatterplot-circle]');
     const selectedCircles = await page.$$('[data-test=company-compare-scatterplot-circle-current]');
 
-    expect(title.toLowerCase()).toMatch('comparing companies importing soy from brazil in 2015');
-    expect(circles.length).toBe(341);
+    expect(title.toLowerCase()).toMatch('comparing companies exporting soy from brazil in 2015');
+    expect(circles.length).toBe(347);
     expect(selectedCircles.length).toBe(1);
   });
 });

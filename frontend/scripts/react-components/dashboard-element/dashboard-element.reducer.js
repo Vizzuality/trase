@@ -9,22 +9,25 @@ import {
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
   DASHBOARD_ELEMENT__CLEAR_PANEL,
-  DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
-  DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
+  DASHBOARD_ELEMENT__CLEAR_PANELS,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_PAGE,
   DASHBOARD_ELEMENT__SET_LOADING_ITEMS,
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
+  DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
+  DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
+  DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
+  DASHBOARD_ELEMENT__SET_CHARTS,
+  DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS,
+  DASHBOARD_ELEMENT__SET_CHARTS_LOADING
 } from './dashboard-element.actions';
 
 const initialState = {
   loading: false,
   data: {
-    indicators: [],
     countries: [],
     companies: {},
     sources: {},
@@ -34,7 +37,6 @@ const initialState = {
   meta: {},
   tabs: {},
   activePanelId: null,
-  activeIndicatorsList: [],
   countriesPanel: {
     page: 1,
     searchResults: [],
@@ -69,7 +71,12 @@ const initialState = {
     loadingItems: false,
     activeItems: {},
     activeTab: null
-  }
+  },
+  selectedYears: null,
+  selectedResizeBy: null,
+  selectedRecolorBy: null,
+  charts: [],
+  chartsLoading: false
 };
 
 const updateItems = (currentItems, newItem) => {
@@ -89,6 +96,15 @@ const updateItems = (currentItems, newItem) => {
   newItems.forEach(i => {
     itemsToAdd[i.id] = i;
   });
+
+  // check that item is of the same type
+  const currentType = Object.values(currentItems)[0] && Object.values(currentItems)[0].nodeType;
+  const incomingType = newItems[0] && newItems[0].nodeType;
+
+  if (currentType && currentType !== incomingType) {
+    return itemsToAdd; // clear old type otherwise
+  }
+
   return { ...currentItems, ...itemsToAdd };
 };
 
@@ -200,7 +216,6 @@ const dashboardElementReducer = {
     const activeItems = isEmpty(activeItem) ? {} : { [activeItem.id]: activeItem };
     return {
       ...state,
-      activeIndicatorsList: [],
       sourcesPanel: sourcesPanelState,
       [panelName]: {
         ...state[panelName],
@@ -213,7 +228,6 @@ const dashboardElementReducer = {
     const panelName = `${panel}Panel`;
     return {
       ...state,
-      activeIndicatorsList: [],
       sourcesPanel: state.sourcesPanel,
       [panelName]: {
         ...state[panelName],
@@ -237,36 +251,8 @@ const dashboardElementReducer = {
           ...clearedActiveTabData
         }
       },
-      activeIndicatorsList: [],
       [panelName]: {
         ...state[panelName],
-        activeTab,
-        page: initialState[panelName].page
-      }
-    };
-  },
-  [DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH](state, action) {
-    const { panel, activeItem } = action.payload;
-    const panelName = `${panel}Panel`;
-    const prevTab = state[panelName].activeTab;
-    const clearedActiveTabData =
-      prevTab && prevTab.id !== activeItem.nodeTypeId ? { [prevTab.id]: null } : {};
-    const activeTab =
-      state.tabs[panel] && state.tabs[panel].find(tab => tab.id === activeItem.nodeTypeId);
-
-    return {
-      ...state,
-      data: {
-        ...state.data,
-        [panel]: {
-          ...state.data[panel],
-          ...clearedActiveTabData
-        }
-      },
-      activeIndicatorsList: [],
-      [panelName]: {
-        ...state[panelName],
-        activeItems: { [activeItem.id]: activeItem },
         activeTab,
         page: initialState[panelName].page
       }
@@ -289,7 +275,6 @@ const dashboardElementReducer = {
           ...clearedActiveTabData
         }
       },
-      activeIndicatorsList: [],
       [panelName]: {
         ...state[panelName],
         activeItems: updateItems(state[panelName].activeItems, selectedItem),
@@ -313,18 +298,17 @@ const dashboardElementReducer = {
       countriesPanel: countriesState
     };
   },
-  [DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR](state, action) {
-    const { active } = action.payload;
+  [DASHBOARD_ELEMENT__CLEAR_PANELS](state, action) {
+    const { panels } = action.payload;
+    const removedPanels = {};
+    panels.forEach(panel => {
+      const panelName = `${panel}Panel`;
+      const { activeTab } = state[panelName];
+      removedPanels[panelName] = { ...initialState[panelName], activeTab };
+    });
     return {
       ...state,
-      activeIndicatorsList: [...state.activeIndicatorsList, active.id]
-    };
-  },
-  [DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR](state, action) {
-    const { toRemove } = action.payload;
-    return {
-      ...state,
-      activeIndicatorsList: state.activeIndicatorsList.filter(item => item !== toRemove.id)
+      ...removedPanels
     };
   },
   [DASHBOARD_ELEMENT__SET_SEARCH_RESULTS](state, action) {
@@ -341,6 +325,51 @@ const dashboardElementReducer = {
         searchResults: fuzzySearch(query, data)
       }
     };
+  },
+  [DASHBOARD_ELEMENT__SET_SELECTED_YEARS](state, action) {
+    const { years } = action.payload;
+    return {
+      ...state,
+      selectedYears: years
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY](state, action) {
+    const { indicator } = action.payload;
+    return {
+      ...state,
+      selectedResizeBy: indicator.attributeId
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY](state, action) {
+    const { indicator } = action.payload;
+    return {
+      ...state,
+      selectedRecolorBy: indicator.attributeId
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_CHARTS](state, action) {
+    const { charts: list } = action.payload;
+    const charts = list.filter(chart => !chart.url.includes('node_type_id=4'));
+    return {
+      ...state,
+      charts
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS](state, action) {
+    const { years, resizeBy, recolorBy } = action.payload;
+    return {
+      ...state,
+      selectedYears: years,
+      selectedResizeBy: resizeBy.attributeId,
+      selectedRecolorBy: recolorBy.attributeId
+    };
+  },
+  [DASHBOARD_ELEMENT__SET_CHARTS_LOADING](state, action) {
+    const { loading } = action.payload;
+    return {
+      ...state,
+      chartsLoading: loading
+    };
   }
 };
 
@@ -350,16 +379,14 @@ const dashboardElementReducerTypes = PropTypes => {
     searchResults: PropTypes.array,
     loadingItems: PropTypes.bool,
     activeItems: PropTypes.object,
-    activeTab: PropTypes.number
+    activeTab: PropTypes.object
   };
 
   return {
     meta: PropTypes.object.isRequired,
     tabs: PropTypes.object.isRequired,
     activePanelId: PropTypes.string,
-    activeIndicatorsList: PropTypes.array.isRequired,
     data: PropTypes.shape({
-      indicators: PropTypes.array.isRequired,
       countries: PropTypes.array.isRequired,
       companies: PropTypes.object.isRequired,
       sources: PropTypes.object.isRequired,
@@ -369,7 +396,11 @@ const dashboardElementReducerTypes = PropTypes => {
     sourcesPanel: PropTypes.shape(PanelTypes).isRequired,
     destinationsPanel: PropTypes.shape(PanelTypes).isRequired,
     companiesPanel: PropTypes.shape(PanelTypes).isRequired,
-    commoditiesPanel: PropTypes.shape(PanelTypes).isRequired
+    commoditiesPanel: PropTypes.shape(PanelTypes).isRequired,
+    selectedYears: PropTypes.arrayOf(PropTypes.number),
+    selectedResizeBy: PropTypes.string,
+    selectedRecolorBy: PropTypes.string,
+    chartsLoading: PanelTypes.bool
   };
 };
 

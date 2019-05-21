@@ -3,7 +3,8 @@ Dropdown
 ---
 import { PropsTable, Playground } from 'docz'
 import { State } from 'react-powerplug';
-import Dropdown from 'react-components/shared/dropdown';
+import Dropdown, { Context } from 'react-components/shared/dropdown';
+import Button from 'react-components/shared/button/button.component';
 import 'styles/_docz.scss';
 
 ## Dropdown
@@ -17,6 +18,7 @@ import 'styles/_docz.scss';
     }}>
     {({ state, setState }) => (
       <Dropdown
+        label="colors"
         options={state.options}
         value={state.value}
         onChange={value => setState({ value })}
@@ -25,7 +27,7 @@ import 'styles/_docz.scss';
   </State>
 </div>
 
-#### With 'caret' arrowType and position up
+#### Dropdown with variant="sentence"
 
 <div className="components-container -spaced -width-200">
   <State initial={{ options:
@@ -36,11 +38,32 @@ import 'styles/_docz.scss';
     }}>
     {({ state, setState }) => (
       <Dropdown
+        variant="sentence"
+        options={state.options}
+        value={state.value}
+        onChange={value => setState({ value })}
+      />
+    )}
+  </State>
+</div>
+
+#### With 'caret' arrowType and placement
+
+<div className="components-container -spaced -width-200">
+  <State initial={{ options:
+    [{ label: 'Blue', value: 'blue' },
+      { label: 'Red', value: 'red' },
+      { label: 'Green', value: 'green' }],
+      value: { label: 'Red', value: 'red' }
+    }}>
+    {({ state, setState }) => (
+      <Dropdown
+        label="colors"
         options={state.options}
         value={state.value}
         onChange={value => setState({ value })}
         arrowType='caret'
-        position="up"
+        placement="top"
       />
     )}
   </State>
@@ -57,6 +80,7 @@ import 'styles/_docz.scss';
     }}>
     {({ state, setState }) => (
       <Dropdown
+        label="colors"
         options={state.options}
         value={state.value}
         onChange={value => setState({ value })}
@@ -77,6 +101,7 @@ import 'styles/_docz.scss';
     }}>
     {({ state, setState }) => (
       <Dropdown
+        label="colors"
         options={state.options}
         value={state.value}
         onChange={value => setState({ value })}
@@ -98,6 +123,7 @@ import 'styles/_docz.scss';
     }}>
     {({ state, setState }) => (
       <Dropdown
+        label="colors"
         options={state.options}
         value={state.value}
         onChange={value => setState({ value })}
@@ -110,21 +136,91 @@ import 'styles/_docz.scss';
   </State>
 </div>
 
+#### With children
+
+Alternatively, the dropdown can accept a child component to render instead of a list of options.
+This cover more advanced use cases, where the content of the dropdown needs to be different. The dropdown exposes the options API via React Context.
+> The available props via Context are: **selectedItem, getItemProps, highlightedIndex, toggleMenu**.
+
+
+<div className="components-container -spaced -width-200">
+  <Dropdown
+    initialValue={{ value: 0, label: '0' }}
+  >
+    <div>
+      <Context.Consumer>
+        {({ toggleMenu, getItemProps, selectedItem }) => {
+          const { onClick } = getItemProps({
+            item: {
+              value: selectedItem.value + 1,
+              label: selectedItem.value + 1
+            }
+          });
+          return (
+            <div>
+              <Button color="charcoal" size="sm" onClick={onClick}>Add one</Button>
+              <Button color="gray"  size="sm" onClick={() => {}}>
+                No-Op
+              </Button>
+              <Button color="pink"  size="sm" onClick={toggleMenu}>
+                Close
+              </Button>
+            </div>
+          )
+        }}
+      </Context.Consumer>
+    </div>
+  </Dropdown>
+</div>
+
 <PropsTable of={Dropdown} />
 
 <Playground>
-  <State initial={{ options:
-    [{ label: 'Blue', value: 'blue' },
-      { label: 'Red', value: 'red' },
-      { label: 'Green', value: 'green' }],
-      value: { label: 'Red', value: 'red' }
-    }}>
-    {({ state, setState }) => (
-      <Dropdown
-        options={state.options}
-        value={state.value}
-        onChange={value => setState({ value })}
-      />
-    )}
-  </State>
+  <div className="components-container -spaced -width-200">
+    <State initial={{ options:
+      [{ label: 'Blue', value: 'blue' },
+        { label: 'Red', value: 'red' },
+        { label: 'Green', value: 'green' }],
+        value: { label: 'Red', value: 'red' }
+      }}>
+      {({ state, setState }) => (
+        <Dropdown
+          label="colors"
+          options={state.options}
+          value={state.value}
+          onChange={value => setState({ value })}
+        />
+      )}
+    </State>
+  </div>
+  
+  <div className="components-container -spaced -width-200">
+    <Dropdown
+      initialValue={{ value: 0, label: 0 }}
+    >
+      <div>
+        <Context.Consumer>
+          {({ toggleMenu, getItemProps, selectedItem }) => {
+            const { onClick } = getItemProps({
+              item: {
+                value: selectedItem.value + 1,
+                label: selectedItem.value + 1
+              }
+            });
+            return (
+              <div>
+                <Button color="charcoal" size="sm" onClick={onClick}>Add one</Button>
+                <Button color="gray"  size="sm" onClick={() => {}}>
+                  No-Op
+                </Button>
+                <Button color="pink"  size="sm" onClick={toggleMenu}>
+                  Close
+                </Button>
+              </div>
+            )
+          }}
+        </Context.Consumer>
+      </div>
+    </Dropdown>
+  </div>
 </Playground>

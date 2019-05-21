@@ -1,0 +1,23 @@
+@import 'styles/settings';
+
+.c-paginate {
+  &:not(.v-vertical) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    bottom: 42px;
+    left: 50%;
+    transform: translate(-50%, 50%);
+
+    .previous-button {
+      margin: 0 5px 0 0;
+    }
+  }
+
+  &.v-vertical {
+    .previous-button {
+      margin-bottom: 10px;
+    }
+  }
+}

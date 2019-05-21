@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { ImgBackground } from 'react-components/shared/img';
 
 import './author-footer.scss';
 
@@ -7,10 +8,7 @@ function AuthorFooter(props) {
   return (
     <div className="c-author-footer">
       <figcaption className="author-details">{props.details}</figcaption>
-      <figure
-        className="author-avatar"
-        style={{ backgroundImage: props.imageUrl && `url(${props.imageUrl})` }}
-      />
+      <ImgBackground as="figure" className="author-avatar" src={props.imageUrl} />
     </div>
   );
 }

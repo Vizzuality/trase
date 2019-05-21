@@ -18,24 +18,25 @@ const generateColorScale = (baseColorScale, length) => {
 export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensions) {
   const uids = compact(selectedMapDimensionsUids);
 
-  if (!uids.length || !mapDimensions.length) {
+  const selectedMapDimensions = uids.map(uid =>
+    mapDimensions.find(dimension => dimension.uid === uid)
+  );
+
+  if (!selectedMapDimensions.length) {
     return {
       choropleth: {},
       choroplethLegend: null
     };
   }
 
-  const selectedMapDimensions = uids.map(uid =>
-    mapDimensions.find(dimension => dimension.uid === uid)
-  );
   const selectedMapDimension = selectedMapDimensions[0];
   const uid = uids[0];
   const uidB = uids[1];
   const isBivariate = selectedMapDimensions.length === 2;
   const isEmpty = selectedMapDimensions.length === 0;
 
-  const bucket = selectedMapDimensions.map(
-    d => (isBivariate ? [...d.dualLayerBuckets] : [...d.singleLayerBuckets])
+  const bucket = selectedMapDimensions.map(d =>
+    isBivariate ? [...d.dualLayerBuckets] : [...d.singleLayerBuckets]
   );
 
   const colors = isBivariate

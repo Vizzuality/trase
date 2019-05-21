@@ -1,4 +1,7 @@
 /* eslint-disable global-require,import/no-extraneous-dependencies */
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
@@ -10,6 +13,7 @@ import router from './router/router';
 import routeSubscriber from './router/route-subscriber';
 import { register, unregister } from './worker';
 import { rootSaga } from './sagas';
+import { setTransifexLanguages } from './actions/app.actions';
 
 import 'styles/_base.scss';
 import 'styles/_texts.scss';
@@ -40,13 +44,6 @@ if (USE_SERVICE_WORKER) {
   unregister();
 }
 
-if (process.env.NODE_ENV !== 'production' && PERF_TEST) {
-  const React = require('react');
-  const { whyDidYouUpdate } = require('why-did-you-update');
-
-  whyDidYouUpdate(React);
-}
-
 if (REDUX_LOGGER_ENABLED) {
   const { createLogger } = require('redux-logger');
 
@@ -71,6 +68,14 @@ const store = createStore(
   undefined,
   composeEnhancers(router.enhancer, applyMiddleware(...middlewares))
 );
+
+window.onTransifexLoad = () => {
+  if (window.Transifex?.live) {
+    window.Transifex.live.onFetchLanguages(languages =>
+      store.dispatch(setTransifexLanguages(languages))
+    );
+  }
+};
 
 routeSubscriber(store);
 sagaMiddleware.run(rootSaga);

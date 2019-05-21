@@ -80,7 +80,7 @@ export const routes = {
     path: '/dashboards/:dashboardId',
     page: 'dashboard-element',
     title: getPageTitle,
-    thunk: loadPageData(getPostsContent)
+    thunk: loadPageData()
   },
   data: {
     path: '/data',
@@ -164,6 +164,20 @@ const config = {
     }
 
     return dispatchThunks(redirectToExplore)(dispatch, getState, { action });
+  },
+  onAfterChange: (dispatch, getState, { action }) => {
+    const currentLanguage = action.meta.location?.current?.query?.lang;
+    const previousLanguage = action.meta.location?.prev?.query?.lang;
+    const addLanguageToUrl = lang => {
+      const { location } = getState();
+      const query = { ...location.query, lang };
+      const payload = { ...location.payload, query };
+      dispatch(redirect({ type: location.type, payload }));
+    };
+
+    if (!currentLanguage && previousLanguage) {
+      addLanguageToUrl(previousLanguage);
+    }
   },
   restoreScroll: restoreScroll({
     shouldUpdateScroll: (prev, current) => {

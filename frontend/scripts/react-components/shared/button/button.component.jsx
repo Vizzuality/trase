@@ -1,16 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-
+import Icon from 'react-components/shared/icon';
 import './button.scss';
 
 // TODO: remove className prop, currently the application buttons are so fragmented
 //  that we need to provide a escape hatch.
 function Button(props) {
-  const { as, variant, color, size, weight, children, icon, iconPosition, ...rest } = props;
+  const { as, variant, color, size, weight, children, icon, iconPosition, testId, ...rest } = props;
   const buttonProps = {
     ...rest,
-    className: cx('c-button', variant, rest.className, {
+    'data-test': testId,
+    className: cx('c-button', rest.className, {
+      [`v-${variant}`]: variant,
       [`color-${color}`]: color,
       [`size-${size}`]: size,
       [`weight-${weight}`]: weight,
@@ -18,12 +20,6 @@ function Button(props) {
     }),
     type: as === 'button' ? as : undefined
   };
-
-  const iconComponent = (
-    <svg className={`icon ${icon}`} style={{ pointerEvents: 'none' }}>
-      <use xlinkHref={`#${icon}`} />
-    </svg>
-  );
 
   const shouldUseChildrenContainer =
     typeof children === 'string' ||
@@ -35,11 +31,17 @@ function Button(props) {
     </span>
   );
 
+  const iconColors = {
+    charcoal: 'white'
+  };
+
+  const renderIcon = icon && <Icon icon={icon} color={color && iconColors[color]} />;
+
   const childrenWithIcon = (
     <>
-      {icon && iconPosition === 'left' && iconComponent}
+      {icon && iconPosition === 'left' && renderIcon}
       {shouldUseChildrenContainer ? childrenWithContainer : children}
-      {icon && iconPosition === 'right' && iconComponent}
+      {icon && iconPosition === 'right' && renderIcon}
     </>
   );
 
@@ -60,6 +62,7 @@ Button.propTypes = {
   variant: PropTypes.string,
   className: PropTypes.string,
   iconPosition: PropTypes.string,
+  testId: PropTypes.string,
   as: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
 };
 

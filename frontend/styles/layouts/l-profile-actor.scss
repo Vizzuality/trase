@@ -8,7 +8,6 @@ $large-line-chart-width: 840px;
   min-height: 100vh;
   padding-top: calc(44px + #{$nav-height});
   background-color: $egg-shell;
-  line-height: 1.5;
 
   &.-error {
     position: relative;
@@ -18,6 +17,12 @@ $large-line-chart-width: 840px;
   @media print {
     padding: 0;
     background-color: $white;
+
+    .c-dropdown-component {
+      .dropdown-selected-item::after {
+        content: none;
+      }
+    }
 
     .c-tabs {
       .tab {
@@ -173,7 +178,7 @@ $large-line-chart-width: 840px;
     }
   }
 
-  .spinner-section {
+  .section-placeholder {
     display: flex;
     align-items: center;
     justify-content: center;

@@ -1,0 +1,277 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "required": [
+    "data",
+    "meta"
+  ],
+  "properties": {
+    "data": {
+      "$id": "#/properties/data",
+      "type": "array",
+      "items": {
+        "$id": "#/properties/data/items",
+        "type": "object",
+        "required": [
+          "y",
+          "x0"
+        ],
+        "properties": {
+          "y": {
+            "$id": "#/properties/data/items/properties/y",
+            "type": "string",
+            "pattern": "^(.*)$"
+          },
+          "x0": {
+            "$id": "#/properties/data/items/properties/x0",
+            "type": "number"
+          }
+        }
+      }
+    },
+    "meta": {
+      "$id": "#/properties/meta",
+      "type": "object",
+      "required": [
+        "yAxis",
+        "xAxis",
+        "y",
+        "x0",
+        "info"
+      ],
+      "properties": {
+        "yAxis": {
+          "$id": "#/properties/meta/properties/yAxis",
+          "type": "object",
+          "required": [
+            "type",
+            "label",
+            "prefix",
+            "format",
+            "suffix"
+          ],
+          "properties": {
+            "type": {
+              "$id": "#/properties/meta/properties/yAxis/properties/type",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "label": {
+              "$id": "#/properties/meta/properties/yAxis/properties/label",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "prefix": {
+              "$id": "#/properties/meta/properties/yAxis/properties/prefix",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "format": {
+              "$id": "#/properties/meta/properties/yAxis/properties/format",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "suffix": {
+              "$id": "#/properties/meta/properties/yAxis/properties/suffix",
+              "type": "string",
+              "pattern": "^(.*)$"
+            }
+          }
+        },
+        "xAxis": {
+          "$id": "#/properties/meta/properties/xAxis",
+          "type": "object",
+          "required": [
+            "type",
+            "label",
+            "prefix",
+            "format",
+            "suffix"
+          ],
+          "properties": {
+            "type": {
+              "$id": "#/properties/meta/properties/xAxis/properties/type",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "label": {
+              "$id": "#/properties/meta/properties/xAxis/properties/label",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "prefix": {
+              "$id": "#/properties/meta/properties/xAxis/properties/prefix",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "format": {
+              "$id": "#/properties/meta/properties/xAxis/properties/format",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "suffix": {
+              "$id": "#/properties/meta/properties/xAxis/properties/suffix",
+              "type": "string",
+              "pattern": "^(.*)$"
+            }
+          }
+        },
+        "y": {
+          "$id": "#/properties/meta/properties/y",
+          "type": "object",
+          "required": [
+            "label",
+            "tooltip"
+          ],
+          "properties": {
+            "label": {
+              "$id": "#/properties/meta/properties/y/properties/label",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "tooltip": {
+              "$id": "#/properties/meta/properties/y/properties/tooltip",
+              "type": "object",
+              "required": [
+                "prefix",
+                "format",
+                "suffix"
+              ],
+              "properties": {
+                "prefix": {
+                  "$id": "#/properties/meta/properties/y/properties/tooltip/properties/prefix",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                },
+                "format": {
+                  "$id": "#/properties/meta/properties/y/properties/tooltip/properties/format",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                },
+                "suffix": {
+                  "$id": "#/properties/meta/properties/y/properties/tooltip/properties/suffix",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                }
+              }
+            }
+          }
+        },
+        "x0": {
+          "$id": "#/properties/meta/properties/x0",
+          "type": "object",
+          "required": [
+            "label",
+            "tooltip"
+          ],
+          "properties": {
+            "label": {
+              "$id": "#/properties/meta/properties/x0/properties/label",
+              "type": "string",
+              "pattern": "^(.*)$"
+            },
+            "tooltip": {
+              "$id": "#/properties/meta/properties/x0/properties/tooltip",
+              "type": "object",
+              "required": [
+                "prefix",
+                "format",
+                "suffix"
+              ],
+              "properties": {
+                "prefix": {
+                  "$id": "#/properties/meta/properties/x0/properties/tooltip/properties/prefix",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                },
+                "format": {
+                  "$id": "#/properties/meta/properties/x0/properties/tooltip/properties/format",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                },
+                "suffix": {
+                  "$id": "#/properties/meta/properties/x0/properties/tooltip/properties/suffix",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                }
+              }
+            }
+          }
+        },
+        "info": {
+          "$id": "#/properties/meta/properties/info",
+          "type": "object",
+          "required": [
+            "node_type",
+            "years",
+            "top_n",
+            "filter"
+          ],
+          "properties": {
+            "node_type": {
+              "$id": "#/properties/meta/properties/info/properties/node_type",
+              "type": "string"
+            },
+            "years": {
+              "$id": "#/properties/meta/properties/info/properties/years",
+              "type": "object",
+              "required": [
+                "start_year",
+                "end_year"
+              ],
+              "properties": {
+                "start_year": {
+                  "$id": "#/properties/meta/properties/info/properties/years/properties/start_year",
+                  "type": "integer"
+                },
+                "end_year": {
+                  "$id": "#/properties/meta/properties/info/properties/years/properties/end_year",
+                  "type": "null"
+                }
+              }
+            },
+            "top_n": {
+              "$id": "#/properties/meta/properties/info/properties/top_n",
+              "type": "integer"
+            },
+            "filter": {
+              "$id": "#/properties/meta/properties/info/properties/filter",
+              "type": "object",
+              "required": [
+                "cont_attribute",
+                "ncont_attribute",
+                "sources",
+                "companies",
+                "destinations"
+              ],
+              "properties": {
+                "cont_attribute": {
+                  "$id": "#/properties/meta/properties/info/properties/filter/properties/cont_attribute",
+                  "type": "string"
+                },
+                "ncont_attribute": {
+                  "$id": "#/properties/meta/properties/info/properties/filter/properties/ncont_attribute",
+                  "type": ["string", "null"]
+                },
+                "sources": {
+                  "$id": "#/properties/meta/properties/info/properties/filter/properties/sources",
+                  "type": "array"
+                },
+                "companies": {
+                  "$id": "#/properties/meta/properties/info/properties/filter/properties/companies",
+                  "type": "array"
+                },
+                "destinations": {
+                  "$id": "#/properties/meta/properties/info/properties/filter/properties/destinations",
+                  "type": "array"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

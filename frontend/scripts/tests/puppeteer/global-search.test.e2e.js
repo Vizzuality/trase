@@ -62,7 +62,7 @@ describe('Profile Root search', () => {
   ])('navigate to sankey', async (nodeName, profileType, nodeType, contextId) => {
     const globalSearchToggleSelector = '[data-test=global-search-toggle]';
     const globalSearchInputSelector = '[data-test=global-search-input]';
-    const globalSearchResult = `[data-test=global-search-result-${nodeName}-${contextId}]`;
+    const globalSearchResult = `[data-test=global-search-result-${nodeName}-${contextId}-tool-link]`;
 
     await page.waitForSelector(globalSearchToggleSelector);
     await page.click(globalSearchToggleSelector);

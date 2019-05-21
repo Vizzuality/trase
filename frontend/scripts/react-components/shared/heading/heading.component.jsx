@@ -5,16 +5,33 @@ import cx from 'classnames';
 import './heading.scss';
 
 function Heading(props) {
-  const { as, variant, color, size, align, weight, children, ...rest } = props;
+  const {
+    as,
+    variant,
+    color,
+    size,
+    align,
+    weight,
+    children,
+    className,
+    transform,
+    ...rest
+  } = props;
 
   const headingProps = {
     ...rest,
-    className: cx('c-heading', variant, {
-      [`color-${color}`]: color,
-      [`size-${size}`]: size,
-      [`weight-${weight}`]: weight,
-      [`align-${align}`]: align
-    })
+    className: cx(
+      'c-heading',
+      variant,
+      {
+        [`color-${color}`]: color,
+        [`size-${size}`]: size,
+        [`weight-${weight}`]: weight,
+        [`text-align-${align}`]: align,
+        [`transform-${transform}`]: transform
+      },
+      className
+    )
   };
 
   return React.createElement(as, headingProps, children);
@@ -35,7 +52,9 @@ Heading.propTypes = {
   weight: PropTypes.string,
   children: PropTypes.node,
   variant: PropTypes.string,
-  as: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
+  transform: PropTypes.string,
+  as: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']),
+  className: PropTypes.string // Use just for positioning
 };
 
 export default Heading;

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
 import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
-import TitleGroup from 'react-components/profiles/title-group.component';
+import TitleGroup from 'react-components/profiles/title-group';
 import Map from 'react-components/profiles/map.component';
 import formatValue from 'utils/formatValue';
 
@@ -24,8 +24,8 @@ class PlaceSummary extends React.PureComponent {
         jurisdiction1GeoId,
         summary,
         area,
-        soyProduction,
-        soyArea,
+        commodityProduction,
+        commodityArea,
         jurisdictionName,
         jurisdictionGeoId
       } = {},
@@ -47,14 +47,17 @@ class PlaceSummary extends React.PureComponent {
       {
         dropdown: true,
         label: 'Year',
-        value: year,
-        valueList: (context.years ? [...context.years] : []).sort((a, b) => b - a),
-        onValueSelected: onYearChange
+        value: { label: `${year}`, value: year },
+        options: (context.years
+          ? context.years.map(_year => ({ label: `${_year}`, value: _year }))
+          : []
+        ).sort((a, b) => b.value - a.value),
+        onYearChange
       }
     ];
-    const soyValue = formatValue(soyArea, 'area');
+    const commodityAreaValue = formatValue(commodityArea, 'area');
     const areaValue = formatValue(area, 'area');
-    const soyProductionValue = formatValue(soyProduction, 'tons');
+    const commodityProductionValue = formatValue(commodityProduction, 'tons');
 
     return (
       <React.Fragment>
@@ -172,7 +175,9 @@ class PlaceSummary extends React.PureComponent {
                 <div className="small-12 columns">
                   <TitleGroup titles={titles} on={onYearChange} />
                 </div>
-                {(areaValue !== '-' || soyValue !== '-' || soyProductionValue !== '-') && (
+                {(areaValue !== '-' ||
+                  commodityAreaValue !== '-' ||
+                  commodityProductionValue !== '-') && (
                   <div className="small-12 columns">
                     {areaValue !== '-' && (
                       <div className="stat-item">
@@ -183,7 +188,7 @@ class PlaceSummary extends React.PureComponent {
                         </div>
                       </div>
                     )}
-                    {soyValue !== '-' && (
+                    {commodityAreaValue !== '-' && (
                       <div className="stat-item">
                         <div className="legend">
                           {commodityName} land
@@ -192,20 +197,20 @@ class PlaceSummary extends React.PureComponent {
                             position="bottom"
                           />
                         </div>
-                        <div className="value">{soyValue}</div>
+                        <div className="value">{commodityAreaValue}</div>
                         <div className="unit">ha</div>
                       </div>
                     )}
-                    {soyProductionValue !== '-' && (
+                    {commodityProductionValue !== '-' && (
                       <div className="stat-item">
                         <div className="legend">
                           soy production
                           <HelpTooltip
-                            text={get(tooltips, 'profileNode.soyProduction')}
+                            text={get(tooltips, 'profileNode.commodityProduction')}
                             position="bottom"
                           />
                         </div>
-                        <div className="value">{soyProductionValue}</div>
+                        <div className="value">{commodityProductionValue}</div>
                         <div className="unit">t</div>
                       </div>
                     )}

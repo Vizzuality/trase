@@ -4,22 +4,23 @@ import PropTypes from 'prop-types';
 import {
   clearDashboardPanel,
   setDashboardPanelPage,
-  setDashboardActivePanel,
   setDashboardPanelActiveTab,
   setDashboardPanelActiveItem,
   setDashboardPanelActiveItems,
   getDashboardPanelSearchResults,
-  setDashboardPanelActiveItemsWithSearch
+  setDashboardPanelActiveItemsWithSearch,
+  setDashboardActivePanel,
+  goToDashboard as goToDashboardFn
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.component';
 import {
   getActivePanelTabs,
-  getDirtyBlocks,
-  getDynamicSentence
+  getDynamicSentence,
+  getIsDisabled
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { getCountryNamesByCountryId } from 'reducers/app.selectors';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
   const {
     loading,
     activePanelId,
@@ -46,20 +47,21 @@ const mapStateToProps = state => {
     commoditiesPanel,
     countryNames: getCountryNamesByCountryId(state),
     tabs: getActivePanelTabs(state),
-    dirtyBlocks: getDirtyBlocks(state),
-    dynamicSentenceParts: getDynamicSentence(state)
+    dynamicSentenceParts: getDynamicSentence(state),
+    isDisabled: getIsDisabled(state, ownProps)
   };
 };
 
 const mapDispatchToProps = {
   getMoreItems: setDashboardPanelPage,
   clearActiveItems: clearDashboardPanel,
-  setActivePanel: setDashboardActivePanel,
   setActiveTab: setDashboardPanelActiveTab,
   setActiveItems: setDashboardPanelActiveItems,
   setActiveItem: setDashboardPanelActiveItem,
   getSearchResults: getDashboardPanelSearchResults,
-  setSearchResult: setDashboardPanelActiveItemsWithSearch
+  setSearchResult: setDashboardPanelActiveItemsWithSearch,
+  setActivePanel: setDashboardActivePanel,
+  goToDashboard: goToDashboardFn
 };
 
 class DashboardPanelContainer extends React.PureComponent {

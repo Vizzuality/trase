@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 
 import ProfileRoot from 'react-components/profile-root/profile-root.container';
+import CookieBanner from 'react-components/shared/cookie-banner';
 
 export const mount = (root, store) => {
   root.innerHTML = BaseMarkup({
@@ -28,9 +29,17 @@ export const mount = (root, store) => {
     </Provider>,
     document.getElementById('page-react-root')
   );
+
+  render(
+    <Provider store={store}>
+      <CookieBanner />
+    </Provider>,
+    document.getElementById('cookie-banner')
+  );
 };
 
 export const unmount = () => {
   unmountComponentAtNode(document.getElementById('nav'));
   unmountComponentAtNode(document.getElementById('page-react-root'));
+  unmountComponentAtNode(document.getElementById('cookie-banner'));
 };

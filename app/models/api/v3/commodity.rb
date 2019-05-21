@@ -19,6 +19,10 @@ module Api
       has_many :dashboard_template_commodities
       has_many :dashboard_templates, through: :dashboard_template_commodities
 
+      has_many :ind_commodity_properties
+      has_many :quant_commodity_properties
+      has_many :qual_commodity_properties
+
       validates :name, presence: true, uniqueness: true
 
       def self.import_key

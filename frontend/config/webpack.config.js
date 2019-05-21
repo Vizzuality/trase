@@ -3,12 +3,16 @@ require('dotenv').config({ silent: true });
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const PreloadWebpackPlugin = require('preload-webpack-plugin');
+const HtmlWebpackPreconnectPlugin = require('html-webpack-preconnect-plugin');
+
 /**
  * BundleAnalyzerPlugin allows profiling the webpack generated js, to help identify improvement points
  * If you want to enable it, uncomment the line bellow and ´new BundleAnalyzerPlugin()´ further down.
  */
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
+const isDev = process.env.NODE_ENV !== 'production';
 const srcPath = path.join(__dirname, '..', 'scripts');
 const DirectoryNamedWebpackPlugin = require('directory-named-webpack-plugin');
 
@@ -16,8 +20,7 @@ const templates = require('./static.templates');
 
 module.exports = {
   entry: {
-    fetch: 'whatwg-fetch',
-    main: ['@babel/polyfill', path.join(srcPath, 'index')]
+    main: path.join(srcPath, 'index')
   },
   output: {
     filename: '[name].[chunkhash].js',
@@ -33,14 +36,18 @@ module.exports = {
       inject: 'body',
       DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true',
       icons: templates.icons,
-      head: templates.head
+      head: templates.head,
+      preconnect: [`https:${process.env.API_V3_URL}`, `http:${process.env.API_V3_URL}`]
     }),
+    new PreloadWebpackPlugin(),
+    new HtmlWebpackPreconnectPlugin(),
     new webpack.DefinePlugin({
       NODE_ENV_DEV: process.env.NODE_ENV === 'development',
       DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true',
       SHOW_WORLD_MAP_IN_EXPLORE: process.env.SHOW_WORLD_MAP_IN_EXPLORE === 'true',
       ALWAYS_DISPLAY_DASHBOARD_INFO: process.env.ALWAYS_DISPLAY_DASHBOARD_INFO === 'true',
       ENABLE_DASHBOARDS: process.env.ENABLE_DASHBOARDS === 'true',
+      ENABLE_COOKIE_BANNER: process.env.ENABLE_COOKIE_BANNER === 'true',
       GFW_WIDGETS_BASE_URL: JSON.stringify(process.env.GFW_WIDGETS_BASE_URL),
       ENABLE_LOGISTICS_MAP: process.env.ENABLE_LOGISTICS_MAP === 'true',
       ENABLE_LEGACY_TOOL_SEARCH: process.env.ENABLE_LEGACY_TOOL_SEARCH === 'true',
@@ -81,6 +88,7 @@ module.exports = {
       base: path.resolve(srcPath, 'base'),
       store: path.resolve(srcPath, 'store'),
       router: path.resolve(srcPath, 'router'),
+      selectors: path.resolve(srcPath, 'selectors'),
       'lodash-es': 'lodash'
     },
     plugins: [
@@ -100,29 +108,14 @@ module.exports = {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        use: ['babel-loader', 'eslint-loader']
-      },
-      {
-        test: /\.css$/,
         use: [
-          'style-loader',
           {
-            loader: 'css-loader',
-            options: { minimize: process.env.NODE_ENV === 'production' }
+            loader: 'babel-loader',
+            options: {
+              cacheDirectory: isDev
+            }
           },
-          'postcss-loader'
-        ]
-      },
-      {
-        test: /\.scss$/,
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: { minimize: process.env.NODE_ENV === 'production' }
-          },
-          'postcss-loader',
-          'sass-loader'
+          'eslint-loader'
         ]
       },
       {

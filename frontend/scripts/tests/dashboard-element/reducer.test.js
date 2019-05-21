@@ -10,13 +10,22 @@ import {
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
   DASHBOARD_ELEMENT__CLEAR_PANEL,
-  DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
-  DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
+  DASHBOARD_ELEMENT__CLEAR_PANELS,
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
+  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
+  DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
+  setDashboardSelectedYears,
+  setDashboardSelectedResizeBy,
+  DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
+  DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
+  setDashboardSelectedRecolorBy,
+  DASHBOARD_ELEMENT__SET_CHARTS,
+  setDashboardCharts,
+  DASHBOARD_ELEMENT__SET_CHARTS_LOADING,
+  setDashboardChartsLoading,
+  DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS
 } from 'react-components/dashboard-element/dashboard-element.actions';
 
 describe(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL, () => {
@@ -408,7 +417,6 @@ test(DASHBOARD_ELEMENT__SET_ACTIVE_TAB, () => {
   };
   const state = {
     ...initialState,
-    activeIndicatorsList: [{ id: 0, name: 'some indicator' }, { id: 3, name: 'some indicator3' }],
     sourcesPanel: {
       ...initialState.sourcesPanel,
       activeTab: { id: 1, name: 'BIOME' },
@@ -422,7 +430,6 @@ test(DASHBOARD_ELEMENT__SET_ACTIVE_TAB, () => {
       ...state.data,
       sources: { 1: null }
     },
-    activeIndicatorsList: [],
     sourcesPanel: {
       ...state.sourcesPanel,
       activeTab: action.payload.activeTab,
@@ -509,39 +516,51 @@ describe(DASHBOARD_ELEMENT__CLEAR_PANEL, () => {
   });
 });
 
-test(DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR, () => {
-  const anotherIndicator = { id: 4, name: 'another indicator' };
+describe(DASHBOARD_ELEMENT__CLEAR_PANELS, () => {
   const state = {
     ...initialState,
-    activeIndicatorsList: [0]
-  };
-  const action = {
-    type: DASHBOARD_ELEMENT__ADD_ACTIVE_INDICATOR,
-    payload: {
-      active: anotherIndicator
+    countriesPanel: {
+      ...initialState.countriesPanel,
+      activeItems: [{ id: 1, name: 'some item' }],
+      activeTab: { id: 7, name: 'BIOME' },
+      page: 2
+    },
+    commoditiesPanel: {
+      ...initialState.commoditiesPanel,
+      activeItems: [{ id: 4, name: 'some item' }],
+      activeTab: { id: 1 },
+      page: 6
+    },
+    companiesPanel: {
+      ...initialState.companiesPanel,
+      activeItems: [{ id: 4, name: 'some item' }],
+      activeTab: { id: 7, name: 'IMPORTER' },
+      page: 5
     }
   };
-  const newState = reducer(state, action);
-  expect(newState).toEqual({
-    ...initialState,
-    activeIndicatorsList: [...state.activeIndicatorsList, anotherIndicator.id]
-  });
-});
 
-test(DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR, () => {
-  const someIndicator = { id: 4, name: 'some indicator' };
-  const action = {
-    type: DASHBOARD_ELEMENT__REMOVE_ACTIVE_INDICATOR,
-    payload: {
-      toRemove: someIndicator
-    }
-  };
-  const state = {
-    ...initialState,
-    activeIndicatorsList: [1, 3, 4]
-  };
-  const newState = reducer(state, action);
-  expect(newState).toEqual({ ...state, activeIndicatorsList: [1, 3] });
+  it('clears panels', () => {
+    const action = {
+      type: DASHBOARD_ELEMENT__CLEAR_PANELS,
+      payload: {
+        panels: ['companies', 'commodities']
+      }
+    };
+
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      countriesPanel: state.countriesPanel,
+      companiesPanel: {
+        ...initialState.companiesPanel,
+        activeTab: state.companiesPanel.activeTab
+      },
+      commoditiesPanel: {
+        ...initialState.companiesPanel,
+        activeTab: state.commoditiesPanel.activeTab
+      }
+    });
+  });
 });
 
 describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
@@ -621,7 +640,6 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, () => {
     };
     const state = {
       ...initialState,
-      activeIndicatorsList: [0, 1, 2],
       companiesPanel: {
         ...initialState.companiesPanel,
         page: 4
@@ -630,7 +648,6 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, () => {
     const newState = reducer(state, action);
     expect(newState).toEqual({
       ...state,
-      activeIndicatorsList: [],
       companiesPanel: {
         ...state.companiesPanel,
         activeItems: { [someItem.id]: someItem }
@@ -648,7 +665,6 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, () => {
     };
     const state = {
       ...initialState,
-      activeIndicatorsList: [0, 1, 2],
       countriesPanel: {
         activeItems: { 16: { id: 16, name: 'some-source-to-be-cleared' } }
       }
@@ -656,53 +672,12 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, () => {
     const newState = reducer(state, action);
     expect(newState).toEqual({
       ...state,
-      activeIndicatorsList: [],
       sourcesPanel: initialState.sourcesPanel,
       countriesPanel: {
         ...state.countriesPanel,
         activeItems: { [someItem.id]: someItem }
       }
     });
-  });
-});
-
-test(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH, () => {
-  const tabs = {
-    sources: [{ id: 3, name: 'MUNICIPALITY' }, { id: 1, name: 'BIOME' }],
-    companies: [{ id: 6, name: 'EXPORTER' }, { id: 7, name: 'IMPORTER' }]
-  };
-  const someItem = { id: 1, name: 'some item', nodeTypeId: 6 };
-  const action = {
-    type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM_WITH_SEARCH,
-    payload: {
-      panel: 'companies',
-      activeItem: someItem
-    }
-  };
-  const state = {
-    ...initialState,
-    tabs,
-    activeIndicatorsList: [1, 2, 3],
-    companiesPanel: {
-      ...initialState.companiesPanel,
-      activeTab: { id: 7, name: 'IMPORTER' },
-      page: 4
-    }
-  };
-  const newState = reducer(state, action);
-  expect(newState).toEqual({
-    ...state,
-    data: {
-      ...state.data,
-      companies: { 7: null }
-    },
-    activeIndicatorsList: [],
-    companiesPanel: {
-      ...state.companiesPanel,
-      activeItems: { [someItem.id]: someItem },
-      activeTab: tabs.companies[0],
-      page: initialState.companiesPanel.page
-    }
   });
 });
 
@@ -718,7 +693,6 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS, () => {
     };
     const state = {
       ...initialState,
-      activeIndicatorsList: [0, 1, 2],
       companiesPanel: {
         ...initialState.companiesPanel,
         page: 4
@@ -727,7 +701,6 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS, () => {
     const newState = reducer(state, action);
     expect(newState).toEqual({
       ...state,
-      activeIndicatorsList: [],
       companiesPanel: {
         ...state.companiesPanel,
         activeItems: { [someItem.id]: someItem }
@@ -752,7 +725,6 @@ test(DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH, () => {
   const state = {
     ...initialState,
     tabs,
-    activeIndicatorsList: [1, 2, 3],
     companiesPanel: {
       ...initialState.companiesPanel,
       activeTab: { id: 7, name: 'IMPORTER' },
@@ -766,12 +738,80 @@ test(DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH, () => {
       ...state.data,
       companies: { 7: null }
     },
-    activeIndicatorsList: [],
     companiesPanel: {
       ...state.companiesPanel,
       activeItems: { [someItem.id]: someItem },
       activeTab: tabs.companies[0],
       page: initialState.companiesPanel.page
     }
+  });
+});
+
+test(DASHBOARD_ELEMENT__SET_SELECTED_YEARS, () => {
+  const years = [2010, 2015];
+  const action = setDashboardSelectedYears(years);
+  const newState = reducer(initialState, action);
+  expect(newState).toEqual({
+    ...initialState,
+    selectedYears: years
+  });
+});
+
+test(DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY, () => {
+  const resizeBy = { attributeId: 0 };
+  const action = setDashboardSelectedResizeBy(resizeBy);
+  const newState = reducer(initialState, action);
+  expect(newState).toEqual({
+    ...initialState,
+    selectedResizeBy: resizeBy.attributeId
+  });
+});
+
+test(DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY, () => {
+  const recolorBy = { attributeId: 1 };
+  const action = setDashboardSelectedRecolorBy(recolorBy);
+  const newState = reducer(initialState, action);
+  expect(newState).toEqual({
+    ...initialState,
+    selectedRecolorBy: recolorBy.attributeId
+  });
+});
+
+test(DASHBOARD_ELEMENT__SET_CHARTS, () => {
+  const charts = [{ type: 'bar_chart', url: 'my_url' }];
+  const action = setDashboardCharts(charts);
+  const newState = reducer(initialState, action);
+  expect(newState).toEqual({
+    ...initialState,
+    charts
+  });
+});
+
+test(DASHBOARD_ELEMENT__SET_CHARTS_LOADING, () => {
+  const loading = true;
+  const action = setDashboardChartsLoading(loading);
+  const newState = reducer(initialState, action);
+  expect(newState).toEqual({
+    ...initialState,
+    chartsLoading: loading
+  });
+});
+
+test(DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS, () => {
+  const payload = {
+    years: [2010, 2015],
+    resizeBy: { attributeId: 0 },
+    recolorBy: { attributeId: 1 }
+  };
+  const action = {
+    type: DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS,
+    payload
+  };
+  const newState = reducer(initialState, action);
+  expect(newState).toEqual({
+    ...initialState,
+    selectedYears: payload.years,
+    selectedResizeBy: payload.resizeBy.attributeId,
+    selectedRecolorBy: payload.recolorBy.attributeId
   });
 });

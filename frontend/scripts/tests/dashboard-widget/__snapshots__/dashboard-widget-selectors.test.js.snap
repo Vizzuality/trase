@@ -1,0 +1,284 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Widget config parse selectors getColors return the colors using the default ramp 1`] = `
+Array [
+  "#ea6869",
+  "#ffeb8b",
+  "#2d586e",
+  "#007d29",
+  "#b4008a",
+  "#06ff67",
+  "#8339aa",
+  "#ffb700",
+  "#fc7839",
+  "#67caf1",
+  "#e1228c",
+]
+`;
+
+exports[`Widget config parse selectors getColors return the colors using the default ramp when chart type is sentence 1`] = `undefined`;
+
+exports[`Widget config parse selectors getColors returns the pie legend colors if the chartType is pie 1`] = `
+Array [
+  Object {
+    "color": "#C2E699",
+    "label": "Company commitment",
+  },
+  Object {
+    "color": "#e36845",
+    "label": "None",
+  },
+  Object {
+    "color": "#1D6837",
+    "label": "Soy Moratorium",
+  },
+]
+`;
+
+exports[`Widget config parse selectors getColors returns the zero deforestation commitment colors 1`] = `
+Array [
+  Object {
+    "color": "#C2E699",
+    "label": "Company commitment",
+  },
+  Object {
+    "color": "#e36845",
+    "label": "None",
+  },
+  Object {
+    "color": "#1D6837",
+    "label": "Soy Moratorium",
+  },
+]
+`;
+
+exports[`Widget config parse selectors getYKeys returns the default YKeys if there is no meta 1`] = `
+Object {
+  "bars": null,
+}
+`;
+
+exports[`Widget config parse selectors getYKeys returns the default yKeys when parsing horizontal charts 1`] = `undefined`;
+
+exports[`Widget config parse selectors getYKeys returns the parsed YKeys 1`] = `
+Object {
+  "bars": Object {
+    "x0": Object {
+      "fill": "#ea6869",
+      "interval": "preserveStartEnd",
+      "stroke": "#ea6869",
+    },
+    "x1": Object {
+      "fill": "#ffeb8b",
+      "interval": "preserveStartEnd",
+      "stroke": "#ffeb8b",
+    },
+    "x2": Object {
+      "fill": "#2d586e",
+      "interval": "preserveStartEnd",
+      "stroke": "#2d586e",
+    },
+    "y": Object {
+      "fill": "#007d29",
+      "interval": "preserveStartEnd",
+      "stroke": "#007d29",
+    },
+  },
+}
+`;
+
+exports[`Widget config parse selectors makeGetConfig Parses the config with recolor by 1`] = `
+Object {
+  "cartesianGrid": Object {
+    "strokeDasharray": "5 5",
+    "vertical": false,
+  },
+  "colors": Array [
+    Object {
+      "color": "#C2E699",
+      "label": "Company commitment",
+    },
+    Object {
+      "color": "#e36845",
+      "label": "None",
+    },
+    Object {
+      "color": "#1D6837",
+      "label": "Soy Moratorium",
+    },
+  ],
+  "layout": "vertical",
+  "parse": true,
+  "tooltip": Object {
+    "content": null,
+    "cursor": Object {
+      "opacity": 0,
+    },
+  },
+  "type": "bar",
+  "xAxis": Object {
+    "axisLine": false,
+    "interval": "preserveStartEnd",
+    "tick": Object {
+      "fill": "#ffffff",
+      "fontFamily": "DecimaMonoPro",
+      "fontSize": 14,
+    },
+    "tickLine": false,
+    "type": "number",
+  },
+  "xAxisLabel": Object {
+    "suffix": "t",
+    "text": "Trade volume",
+  },
+  "xKeys": Object {
+    "bars": Object {
+      "x0": Object {
+        "barSize": 10,
+        "fill": "#C2E699",
+        "interval": "preserveStartEnd",
+        "stroke": "#C2E699",
+      },
+      "x1": Object {
+        "barSize": 10,
+        "fill": "#e36845",
+        "interval": "preserveStartEnd",
+        "stroke": "#e36845",
+      },
+      "x2": Object {
+        "barSize": 10,
+        "fill": "#1D6837",
+        "interval": "preserveStartEnd",
+        "stroke": "#1D6837",
+      },
+    },
+  },
+  "xKeysAttributes": Object {
+    "bars": Object {
+      "barSize": 10,
+      "interval": "preserveStartEnd",
+    },
+  },
+  "yAxis": Object {
+    "axisLine": false,
+    "domain": Array [
+      0,
+      "auto",
+    ],
+    "interval": 0,
+    "tick": Object {
+      "fill": "#ffffff",
+      "fontFamily": "DecimaMonoPro",
+      "fontSize": 14,
+      "interval": 2,
+      "tickCount": 2,
+    },
+    "tickFormatter": [Function],
+    "type": "category",
+  },
+  "yAxisLabel": Object {
+    "suffix": "",
+    "text": "LOGISTICS HUB",
+  },
+  "yKey": "y",
+  "yKeys": undefined,
+}
+`;
+
+exports[`Widget config parse selectors makeGetConfig Parses the config without recolor by 1`] = `
+Object {
+  "cartesianGrid": Object {
+    "strokeDasharray": "5 5",
+    "vertical": false,
+  },
+  "colors": Array [
+    Object {
+      "color": "#ea6869",
+      "label": "Company commitment",
+    },
+    Object {
+      "color": "#ffeb8b",
+      "label": "None",
+    },
+    Object {
+      "color": "#2d586e",
+      "label": "Soy Moratorium",
+    },
+  ],
+  "layout": "vertical",
+  "parse": true,
+  "tooltip": Object {
+    "content": null,
+    "cursor": Object {
+      "opacity": 0,
+    },
+  },
+  "type": "bar",
+  "xAxis": Object {
+    "axisLine": false,
+    "interval": "preserveStartEnd",
+    "tick": Object {
+      "fill": "#ffffff",
+      "fontFamily": "DecimaMonoPro",
+      "fontSize": 14,
+    },
+    "tickLine": false,
+    "type": "number",
+  },
+  "xAxisLabel": Object {
+    "suffix": "t",
+    "text": "Trade volume",
+  },
+  "xKeys": Object {
+    "bars": Object {
+      "x0": Object {
+        "barSize": 10,
+        "fill": "#ea6869",
+        "interval": "preserveStartEnd",
+        "stroke": "#ea6869",
+      },
+      "x1": Object {
+        "barSize": 10,
+        "fill": "#ffeb8b",
+        "interval": "preserveStartEnd",
+        "stroke": "#ffeb8b",
+      },
+      "x2": Object {
+        "barSize": 10,
+        "fill": "#2d586e",
+        "interval": "preserveStartEnd",
+        "stroke": "#2d586e",
+      },
+    },
+  },
+  "xKeysAttributes": Object {
+    "bars": Object {
+      "barSize": 10,
+      "interval": "preserveStartEnd",
+    },
+  },
+  "yAxis": Object {
+    "axisLine": false,
+    "domain": Array [
+      0,
+      "auto",
+    ],
+    "interval": 0,
+    "tick": Object {
+      "fill": "#ffffff",
+      "fontFamily": "DecimaMonoPro",
+      "fontSize": 14,
+      "interval": 2,
+      "tickCount": 2,
+    },
+    "tickFormatter": [Function],
+    "type": "category",
+  },
+  "yAxisLabel": Object {
+    "suffix": "",
+    "text": "LOGISTICS HUB",
+  },
+  "yKey": "y",
+  "yKeys": undefined,
+}
+`;

@@ -1,19 +1,41 @@
 const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpackBaseConfig = require('./webpack.config');
 
 module.exports = merge(webpackBaseConfig, {
   mode: 'production',
   devtool: 'source-map',
-  plugins: [new webpack.optimize.ModuleConcatenationPlugin(), new webpack.HashedModuleIdsPlugin()],
+  plugins: [
+    new MiniCssExtractPlugin(),
+    new webpack.optimize.ModuleConcatenationPlugin(),
+    new webpack.HashedModuleIdsPlugin()
+  ],
   module: {
     rules: [
       {
-        test: /\.(jpe?g|png|gif|svg)$/,
-        loader: 'image-webpack-loader',
-        // This will apply the loader before the other ones
-        enforce: 'pre'
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: { sourceMap: true }
+          },
+          'postcss-loader'
+        ]
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: { sourceMap: true }
+          },
+          'postcss-loader',
+          'sass-loader'
+        ]
       }
     ]
   },
@@ -25,7 +47,7 @@ module.exports = merge(webpackBaseConfig, {
     proxy: [
       {
         context: ['/content', '/system'],
-        target: `http:${process.env.API_V3_URL}`
+        target: process.env.API_V3_URL
       }
     ]
   }

@@ -17,10 +17,10 @@ function CompaniesPanel(props) {
     setSearchResult,
     getSearchResults,
     nodeTypeRenderer,
-    onSelectNodeTypeTab,
     onSelectCompany,
-    activeNodeTypeTab,
-    activeCompany
+    activeCompany,
+    onSelectNodeTypeTab,
+    activeNodeTypeTab
   } = props;
   return (
     <React.Fragment>
@@ -72,18 +72,18 @@ function CompaniesPanel(props) {
 
 CompaniesPanel.propTypes = {
   companies: PropTypes.array,
-  tabs: PropTypes.array.isRequired,
   activeCompany: PropTypes.object,
   page: PropTypes.number.isRequired,
   loadingMoreItems: PropTypes.bool,
   loading: PropTypes.bool,
-  activeNodeTypeTab: PropTypes.object,
   getMoreItems: PropTypes.func.isRequired,
   setSearchResult: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
   onSelectCompany: PropTypes.func.isRequired,
   searchCompanies: PropTypes.array.isRequired,
   nodeTypeRenderer: PropTypes.func.isRequired,
+  tabs: PropTypes.array.isRequired,
+  activeNodeTypeTab: PropTypes.object,
   onSelectNodeTypeTab: PropTypes.func.isRequired
 };
 

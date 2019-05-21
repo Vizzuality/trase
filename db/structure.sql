@@ -485,7 +485,7 @@ COMMENT ON COLUMN public.ind_properties.unit_type IS 'Type of unit, e.g. score. 
 -- Name: COLUMN ind_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.ind_properties.tooltip_text IS 'Tooltip text';
+COMMENT ON COLUMN public.ind_properties.tooltip_text IS 'Generic tooltip text (lowest precedence)';
 
 
 --
@@ -578,7 +578,7 @@ COMMENT ON COLUMN public.qual_properties.display_name IS 'Name of attribute for 
 -- Name: COLUMN qual_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.qual_properties.tooltip_text IS 'Tooltip text';
+COMMENT ON COLUMN public.qual_properties.tooltip_text IS 'Generic tooltip text (lowest precedence)';
 
 
 --
@@ -658,7 +658,7 @@ COMMENT ON COLUMN public.quant_properties.unit_type IS 'Type of unit, e.g. count
 -- Name: COLUMN quant_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.quant_properties.tooltip_text IS 'Tooltip text';
+COMMENT ON COLUMN public.quant_properties.tooltip_text IS 'Generic tooltip text (lowest precedence)';
 
 
 --
@@ -922,7 +922,7 @@ COMMENT ON COLUMN public.chart_attributes.display_name IS 'Name of attribute for
 -- Name: COLUMN chart_attributes.legend_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.chart_attributes.legend_name IS 'Legend title';
+COMMENT ON COLUMN public.chart_attributes.legend_name IS 'Legend title; you can use {{commodity_name}}, {{company_name}}, {{jurisdiction_name}} and {{year}}';
 
 
 --
@@ -1258,8 +1258,7 @@ CREATE TABLE public.charts (
     title text NOT NULL,
     "position" integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    chart_type character varying
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1288,7 +1287,7 @@ COMMENT ON COLUMN public.charts.identifier IS 'Identifier used to map this chart
 -- Name: COLUMN charts.title; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.charts.title IS 'Title of chart for display';
+COMMENT ON COLUMN public.charts.title IS 'Title of chart for display; you can use {{commodity_name}}, {{company_name}}, {{jurisdiction_name}} and {{year}}';
 
 
 --
@@ -1362,6 +1361,404 @@ ALTER SEQUENCE public.commodities_id_seq OWNED BY public.commodities.id;
 
 
 --
+-- Name: ind_commodity_properties; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ind_commodity_properties (
+    id bigint NOT NULL,
+    tooltip_text text NOT NULL,
+    commodity_id bigint NOT NULL,
+    ind_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE ind_commodity_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.ind_commodity_properties IS 'Commodity specific properties for ind';
+
+
+--
+-- Name: COLUMN ind_commodity_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_commodity_properties.tooltip_text IS 'Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.';
+
+
+--
+-- Name: COLUMN ind_commodity_properties.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_commodity_properties.commodity_id IS 'Reference to commodity';
+
+
+--
+-- Name: COLUMN ind_commodity_properties.ind_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_commodity_properties.ind_id IS 'Reference to ind';
+
+
+--
+-- Name: qual_commodity_properties; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.qual_commodity_properties (
+    id bigint NOT NULL,
+    tooltip_text text NOT NULL,
+    commodity_id bigint NOT NULL,
+    qual_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE qual_commodity_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.qual_commodity_properties IS 'Commodity specific properties for qual';
+
+
+--
+-- Name: COLUMN qual_commodity_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_commodity_properties.tooltip_text IS 'Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.';
+
+
+--
+-- Name: COLUMN qual_commodity_properties.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_commodity_properties.commodity_id IS 'Reference to commodity';
+
+
+--
+-- Name: COLUMN qual_commodity_properties.qual_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_commodity_properties.qual_id IS 'Reference to qual';
+
+
+--
+-- Name: quant_commodity_properties; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.quant_commodity_properties (
+    id bigint NOT NULL,
+    tooltip_text text NOT NULL,
+    commodity_id bigint NOT NULL,
+    quant_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE quant_commodity_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.quant_commodity_properties IS 'Commodity specific properties for quant';
+
+
+--
+-- Name: COLUMN quant_commodity_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_commodity_properties.tooltip_text IS 'Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.';
+
+
+--
+-- Name: COLUMN quant_commodity_properties.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_commodity_properties.commodity_id IS 'Reference to commodity';
+
+
+--
+-- Name: COLUMN quant_commodity_properties.quant_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_commodity_properties.quant_id IS 'Reference to quant';
+
+
+--
+-- Name: commodity_attribute_properties_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.commodity_attribute_properties_mv AS
+ SELECT qual_commodity_properties.id,
+    qual_commodity_properties.commodity_id,
+    qual_commodity_properties.tooltip_text,
+    qual_commodity_properties.qual_id,
+    '-1'::integer AS ind_id,
+    '-1'::integer AS quant_id
+   FROM public.qual_commodity_properties
+UNION ALL
+ SELECT quant_commodity_properties.id,
+    quant_commodity_properties.commodity_id,
+    quant_commodity_properties.tooltip_text,
+    '-1'::integer AS qual_id,
+    '-1'::integer AS ind_id,
+    quant_commodity_properties.quant_id
+   FROM public.quant_commodity_properties
+UNION ALL
+ SELECT ind_commodity_properties.id,
+    ind_commodity_properties.commodity_id,
+    ind_commodity_properties.tooltip_text,
+    '-1'::integer AS qual_id,
+    ind_commodity_properties.ind_id,
+    '-1'::integer AS quant_id
+   FROM public.ind_commodity_properties
+  WITH DATA;
+
+
+--
+-- Name: MATERIALIZED VIEW commodity_attribute_properties_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.commodity_attribute_properties_mv IS 'Materialized view combining commodity specific properties for inds, quals and quants.';
+
+
+--
+-- Name: COLUMN commodity_attribute_properties_mv.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.commodity_attribute_properties_mv.commodity_id IS 'Reference to commodity';
+
+
+--
+-- Name: COLUMN commodity_attribute_properties_mv.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.commodity_attribute_properties_mv.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN commodity_attribute_properties_mv.qual_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.commodity_attribute_properties_mv.qual_id IS 'Reference to qual';
+
+
+--
+-- Name: COLUMN commodity_attribute_properties_mv.ind_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.commodity_attribute_properties_mv.ind_id IS 'Reference to ind';
+
+
+--
+-- Name: COLUMN commodity_attribute_properties_mv.quant_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.commodity_attribute_properties_mv.quant_id IS 'Reference to quant';
+
+
+--
+-- Name: ind_context_properties; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ind_context_properties (
+    id bigint NOT NULL,
+    tooltip_text text NOT NULL,
+    context_id bigint NOT NULL,
+    ind_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE ind_context_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.ind_context_properties IS 'Context specific properties for ind (like tooltip text)';
+
+
+--
+-- Name: COLUMN ind_context_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_context_properties.tooltip_text IS 'Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).';
+
+
+--
+-- Name: COLUMN ind_context_properties.context_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_context_properties.context_id IS 'Reference to context';
+
+
+--
+-- Name: COLUMN ind_context_properties.ind_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_context_properties.ind_id IS 'Reference to ind';
+
+
+--
+-- Name: qual_context_properties; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.qual_context_properties (
+    id bigint NOT NULL,
+    tooltip_text text NOT NULL,
+    context_id bigint NOT NULL,
+    qual_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE qual_context_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.qual_context_properties IS 'Context specific properties for qual (like tooltip text)';
+
+
+--
+-- Name: COLUMN qual_context_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_context_properties.tooltip_text IS 'Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).';
+
+
+--
+-- Name: COLUMN qual_context_properties.context_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_context_properties.context_id IS 'Reference to context';
+
+
+--
+-- Name: COLUMN qual_context_properties.qual_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_context_properties.qual_id IS 'Reference to qual';
+
+
+--
+-- Name: quant_context_properties; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.quant_context_properties (
+    id bigint NOT NULL,
+    tooltip_text text NOT NULL,
+    context_id bigint NOT NULL,
+    quant_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE quant_context_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.quant_context_properties IS 'Context specific properties for quant (like tooltip text)';
+
+
+--
+-- Name: COLUMN quant_context_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_context_properties.tooltip_text IS 'Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).';
+
+
+--
+-- Name: COLUMN quant_context_properties.context_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_context_properties.context_id IS 'Reference to context';
+
+
+--
+-- Name: COLUMN quant_context_properties.quant_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_context_properties.quant_id IS 'Reference to quant';
+
+
+--
+-- Name: context_attribute_properties_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.context_attribute_properties_mv AS
+ SELECT qual_context_properties.id,
+    qual_context_properties.context_id,
+    qual_context_properties.tooltip_text,
+    qual_context_properties.qual_id,
+    '-1'::integer AS ind_id,
+    '-1'::integer AS quant_id
+   FROM public.qual_context_properties
+UNION ALL
+ SELECT quant_context_properties.id,
+    quant_context_properties.context_id,
+    quant_context_properties.tooltip_text,
+    '-1'::integer AS qual_id,
+    '-1'::integer AS ind_id,
+    quant_context_properties.quant_id
+   FROM public.quant_context_properties
+UNION ALL
+ SELECT ind_context_properties.id,
+    ind_context_properties.context_id,
+    ind_context_properties.tooltip_text,
+    '-1'::integer AS qual_id,
+    ind_context_properties.ind_id,
+    '-1'::integer AS quant_id
+   FROM public.ind_context_properties
+  WITH DATA;
+
+
+--
+-- Name: MATERIALIZED VIEW context_attribute_properties_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.context_attribute_properties_mv IS 'Materialized view combining context specific properties for inds, quals and quants.';
+
+
+--
+-- Name: COLUMN context_attribute_properties_mv.context_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_attribute_properties_mv.context_id IS 'Reference to context';
+
+
+--
+-- Name: COLUMN context_attribute_properties_mv.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_attribute_properties_mv.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN context_attribute_properties_mv.qual_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_attribute_properties_mv.qual_id IS 'Reference to qual';
+
+
+--
+-- Name: COLUMN context_attribute_properties_mv.ind_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_attribute_properties_mv.ind_id IS 'Reference to ind';
+
+
+--
+-- Name: COLUMN context_attribute_properties_mv.quant_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_attribute_properties_mv.quant_id IS 'Reference to quant';
+
+
+--
 -- Name: context_node_type_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1373,7 +1770,9 @@ CREATE TABLE public.context_node_type_properties (
     is_geo_column boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    is_choropleth_disabled boolean DEFAULT false NOT NULL
+    is_choropleth_disabled boolean DEFAULT false NOT NULL,
+    role character varying,
+    CONSTRAINT context_node_type_properties_role_check CHECK (((role)::text = ANY (ARRAY[('source'::character varying)::text, ('exporter'::character varying)::text, ('importer'::character varying)::text, ('destination'::character varying)::text])))
 );
 
 
@@ -1803,6 +2202,205 @@ ALTER SEQUENCE public.countries_id_seq OWNED BY public.countries.id;
 
 
 --
+-- Name: ind_country_properties; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ind_country_properties (
+    id bigint NOT NULL,
+    tooltip_text text NOT NULL,
+    country_id bigint NOT NULL,
+    ind_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE ind_country_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.ind_country_properties IS 'Country specific properties for ind';
+
+
+--
+-- Name: COLUMN ind_country_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_country_properties.tooltip_text IS 'Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).';
+
+
+--
+-- Name: COLUMN ind_country_properties.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_country_properties.country_id IS 'Reference to country';
+
+
+--
+-- Name: COLUMN ind_country_properties.ind_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_country_properties.ind_id IS 'Reference to ind';
+
+
+--
+-- Name: qual_country_properties; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.qual_country_properties (
+    id bigint NOT NULL,
+    tooltip_text text NOT NULL,
+    country_id bigint NOT NULL,
+    qual_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE qual_country_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.qual_country_properties IS 'Country specific properties for qual';
+
+
+--
+-- Name: COLUMN qual_country_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_country_properties.tooltip_text IS 'Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).';
+
+
+--
+-- Name: COLUMN qual_country_properties.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_country_properties.country_id IS 'Reference to country';
+
+
+--
+-- Name: COLUMN qual_country_properties.qual_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_country_properties.qual_id IS 'Reference to qual';
+
+
+--
+-- Name: quant_country_properties; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.quant_country_properties (
+    id bigint NOT NULL,
+    tooltip_text text NOT NULL,
+    country_id bigint NOT NULL,
+    quant_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE quant_country_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.quant_country_properties IS 'Country specific properties for quant';
+
+
+--
+-- Name: COLUMN quant_country_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_country_properties.tooltip_text IS 'Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).';
+
+
+--
+-- Name: COLUMN quant_country_properties.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_country_properties.country_id IS 'Reference to country';
+
+
+--
+-- Name: COLUMN quant_country_properties.quant_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_country_properties.quant_id IS 'Reference to quant';
+
+
+--
+-- Name: country_attribute_properties_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.country_attribute_properties_mv AS
+ SELECT qual_country_properties.id,
+    qual_country_properties.country_id,
+    qual_country_properties.tooltip_text,
+    qual_country_properties.qual_id,
+    '-1'::integer AS ind_id,
+    '-1'::integer AS quant_id
+   FROM public.qual_country_properties
+UNION ALL
+ SELECT quant_country_properties.id,
+    quant_country_properties.country_id,
+    quant_country_properties.tooltip_text,
+    '-1'::integer AS qual_id,
+    '-1'::integer AS ind_id,
+    quant_country_properties.quant_id
+   FROM public.quant_country_properties
+UNION ALL
+ SELECT ind_country_properties.id,
+    ind_country_properties.country_id,
+    ind_country_properties.tooltip_text,
+    '-1'::integer AS qual_id,
+    ind_country_properties.ind_id,
+    '-1'::integer AS quant_id
+   FROM public.ind_country_properties
+  WITH DATA;
+
+
+--
+-- Name: MATERIALIZED VIEW country_attribute_properties_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.country_attribute_properties_mv IS 'Materialized view combining country specific properties for inds, quals and quants.';
+
+
+--
+-- Name: COLUMN country_attribute_properties_mv.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_attribute_properties_mv.country_id IS 'Reference to country';
+
+
+--
+-- Name: COLUMN country_attribute_properties_mv.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_attribute_properties_mv.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN country_attribute_properties_mv.qual_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_attribute_properties_mv.qual_id IS 'Reference to qual';
+
+
+--
+-- Name: COLUMN country_attribute_properties_mv.ind_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_attribute_properties_mv.ind_id IS 'Reference to ind';
+
+
+--
+-- Name: COLUMN country_attribute_properties_mv.quant_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_attribute_properties_mv.quant_id IS 'Reference to quant';
+
+
+--
 -- Name: country_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2131,7 +2729,6 @@ CREATE TABLE public.dashboards_attributes (
     id bigint NOT NULL,
     dashboards_attribute_group_id bigint NOT NULL,
     "position" integer NOT NULL,
-    chart_type character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -2149,13 +2746,6 @@ COMMENT ON TABLE public.dashboards_attributes IS 'Attributes (inds/quals/quants)
 --
 
 COMMENT ON COLUMN public.dashboards_attributes."position" IS 'Display order in scope of group';
-
-
---
--- Name: COLUMN dashboards_attributes.chart_type; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_attributes.chart_type IS 'Type of chart to use in dashboards';
 
 
 --
@@ -2245,9 +2835,6 @@ CREATE MATERIALIZED VIEW public.dashboards_attributes_mv AS
  SELECT da.id,
     da.dashboards_attribute_group_id,
     da."position",
-    da.chart_type,
-    da.created_at,
-    da.updated_at,
     a.id AS attribute_id
    FROM ((public.dashboards_inds di
      JOIN public.dashboards_attributes da ON ((da.id = di.dashboards_attribute_id)))
@@ -2256,9 +2843,6 @@ UNION ALL
  SELECT da.id,
     da.dashboards_attribute_group_id,
     da."position",
-    da.chart_type,
-    da.created_at,
-    da.updated_at,
     a.id AS attribute_id
    FROM ((public.dashboards_quals dq
      JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
@@ -2267,9 +2851,6 @@ UNION ALL
  SELECT da.id,
     da.dashboards_attribute_group_id,
     da."position",
-    da.chart_type,
-    da.created_at,
-    da.updated_at,
     a.id AS attribute_id
    FROM ((public.dashboards_quants dq
      JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
@@ -2392,9 +2973,8 @@ CREATE MATERIALIZED VIEW public.dashboards_flow_paths_mv AS
     cnt.column_position,
     cnt_props.column_group,
         CASE
-            WHEN (cnt_props.column_group = 0) THEN 'SOURCE'::text
-            WHEN (cnt_props.column_group = 3) THEN 'DESTINATION'::text
-            ELSE 'COMPANY'::text
+            WHEN (((cnt_props.role)::text = 'exporter'::text) OR ((cnt_props.role)::text = 'importer'::text)) THEN 'company'::character varying
+            ELSE cnt_props.role
         END AS category
    FROM (((((( SELECT flows.context_id,
             flows.id AS flow_id,
@@ -2407,7 +2987,7 @@ CREATE MATERIALIZED VIEW public.dashboards_flow_paths_mv AS
      JOIN public.node_types ON ((nodes.node_type_id = node_types.id)))
      JOIN public.context_node_types cnt ON (((node_types.id = cnt.node_type_id) AND (flow_paths.context_id = cnt.context_id))))
      JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
-  WHERE ((cnt_props.column_group = ANY (ARRAY[0, 3])) OR (node_types.name = ANY (ARRAY['COUNTRY'::text, 'IMPORTER'::text, 'EXPORTER'::text, 'TRADER'::text])))
+  WHERE (cnt_props.role IS NOT NULL)
   WITH NO DATA;
 
 
@@ -2442,7 +3022,7 @@ CREATE MATERIALIZED VIEW public.dashboards_companies_mv AS
     all_fp.node_id
    FROM (public.dashboards_flow_paths_mv all_fp
      JOIN public.dashboards_flow_paths_mv fp ON ((all_fp.flow_id = fp.flow_id)))
-  WHERE (fp.category = 'COMPANY'::text)
+  WHERE ((fp.category)::text = 'company'::text)
   GROUP BY fp.node_id, fp.node, fp.node_type_id, fp.node_type, all_fp.country_id, all_fp.commodity_id, all_fp.node_id
   WITH NO DATA;
 
@@ -2479,211 +3059,9 @@ CREATE MATERIALIZED VIEW public.dashboards_destinations_mv AS
     all_fp.node_id
    FROM (public.dashboards_flow_paths_mv all_fp
      JOIN public.dashboards_flow_paths_mv fp ON ((all_fp.flow_id = fp.flow_id)))
-  WHERE (fp.category = 'DESTINATION'::text)
+  WHERE ((fp.category)::text = 'destination'::text)
   GROUP BY fp.node_id, fp.node, fp.node_type_id, fp.node_type, all_fp.country_id, all_fp.commodity_id, all_fp.node_id
   WITH NO DATA;
-
-
---
--- Name: flow_inds; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.flow_inds (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    ind_id integer NOT NULL,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE flow_inds; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.flow_inds IS 'Values of inds for flow';
-
-
---
--- Name: COLUMN flow_inds.value; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.flow_inds.value IS 'Numeric value';
-
-
---
--- Name: flow_quals; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.flow_quals (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    qual_id integer NOT NULL,
-    value text NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE flow_quals; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.flow_quals IS 'Values of quals for flow';
-
-
---
--- Name: COLUMN flow_quals.value; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.flow_quals.value IS 'Textual value';
-
-
---
--- Name: flow_quants; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.flow_quants (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE flow_quants; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.flow_quants IS 'Values of quants for flow';
-
-
---
--- Name: COLUMN flow_quants.value; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.flow_quants.value IS 'Numeric value';
-
-
---
--- Name: dashboards_flow_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.dashboards_flow_attributes_mv AS
- SELECT DISTINCT contexts.country_id,
-    contexts.commodity_id,
-    flows.path,
-    a.id AS attribute_id,
-    a.display_name,
-    a.tooltip_text,
-    da.chart_type,
-    da.dashboards_attribute_group_id,
-    da."position"
-   FROM (((((public.flows
-     JOIN public.contexts ON ((flows.context_id = contexts.id)))
-     JOIN public.flow_inds ON ((flows.id = flow_inds.flow_id)))
-     JOIN public.dashboards_inds di ON ((flow_inds.ind_id = di.ind_id)))
-     JOIN public.dashboards_attributes da ON ((da.id = di.dashboards_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = di.ind_id) AND (a.original_type = 'Ind'::text))))
-  WHERE (a.display_name IS NOT NULL)
-UNION ALL
- SELECT DISTINCT contexts.country_id,
-    contexts.commodity_id,
-    flows.path,
-    a.id AS attribute_id,
-    a.display_name,
-    a.tooltip_text,
-    da.chart_type,
-    da.dashboards_attribute_group_id,
-    da."position"
-   FROM (((((public.flows
-     JOIN public.contexts ON ((flows.context_id = contexts.id)))
-     JOIN public.flow_quals ON ((flows.id = flow_quals.flow_id)))
-     JOIN public.dashboards_quals dq ON ((flow_quals.qual_id = dq.qual_id)))
-     JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = dq.qual_id) AND (a.original_type = 'Qual'::text))))
-  WHERE (a.display_name IS NOT NULL)
-UNION ALL
- SELECT DISTINCT contexts.country_id,
-    contexts.commodity_id,
-    flows.path,
-    a.id AS attribute_id,
-    a.display_name,
-    a.tooltip_text,
-    da.chart_type,
-    da.dashboards_attribute_group_id,
-    da."position"
-   FROM (((((public.flows
-     JOIN public.contexts ON ((flows.context_id = contexts.id)))
-     JOIN public.flow_quants ON ((flows.id = flow_quants.flow_id)))
-     JOIN public.dashboards_quants dq ON ((flow_quants.quant_id = dq.quant_id)))
-     JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = dq.quant_id) AND (a.original_type = 'Quant'::text))))
-  WHERE (a.display_name IS NOT NULL)
-  WITH NO DATA;
-
-
---
--- Name: MATERIALIZED VIEW dashboards_flow_attributes_mv; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON MATERIALIZED VIEW public.dashboards_flow_attributes_mv IS 'Materialized view which merges dashboards_attributes_mv and attributes_mv for attributes with values in flow_inds/quals/quants';
-
-
---
--- Name: COLUMN dashboards_flow_attributes_mv.country_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_flow_attributes_mv.country_id IS 'References country id (via flows -> contexts) - for dashboards filtering';
-
-
---
--- Name: COLUMN dashboards_flow_attributes_mv.commodity_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_flow_attributes_mv.commodity_id IS 'References commodity id (via flows -> contexts) - for dashboards filtering';
-
-
---
--- Name: COLUMN dashboards_flow_attributes_mv.path; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_flow_attributes_mv.path IS 'Flow path';
-
-
---
--- Name: COLUMN dashboards_flow_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_flow_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
-
-
---
--- Name: COLUMN dashboards_flow_attributes_mv.display_name; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_flow_attributes_mv.display_name IS 'Attribute display name';
-
-
---
--- Name: COLUMN dashboards_flow_attributes_mv.tooltip_text; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_flow_attributes_mv.tooltip_text IS 'Attribute tooltip_text';
-
-
---
--- Name: COLUMN dashboards_flow_attributes_mv.dashboards_attribute_group_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_flow_attributes_mv.dashboards_attribute_group_id IS 'References group in dashboards_attribute_groups';
-
-
---
--- Name: COLUMN dashboards_flow_attributes_mv."position"; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_flow_attributes_mv."position" IS 'Position within group';
 
 
 --
@@ -2703,157 +3081,6 @@ CREATE SEQUENCE public.dashboards_inds_id_seq
 --
 
 ALTER SEQUENCE public.dashboards_inds_id_seq OWNED BY public.dashboards_inds.id;
-
-
---
--- Name: node_inds; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.node_inds (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    ind_id integer NOT NULL,
-    year integer,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE node_inds; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.node_inds IS 'Values of inds for node';
-
-
---
--- Name: COLUMN node_inds.year; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_inds.year IS 'Year; empty (NULL) for all years';
-
-
---
--- Name: COLUMN node_inds.value; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_inds.value IS 'Numeric value';
-
-
---
--- Name: node_quals; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.node_quals (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    qual_id integer NOT NULL,
-    year integer,
-    value text NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE node_quals; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.node_quals IS 'Values of quals for node';
-
-
---
--- Name: COLUMN node_quals.year; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_quals.year IS 'Year; empty (NULL) for all years';
-
-
---
--- Name: COLUMN node_quals.value; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_quals.value IS 'Textual value';
-
-
---
--- Name: node_quants; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.node_quants (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    year integer,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE node_quants; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.node_quants IS 'Values of quants for node';
-
-
---
--- Name: COLUMN node_quants.year; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_quants.year IS 'Year; empty (NULL) for all years';
-
-
---
--- Name: COLUMN node_quants.value; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_quants.value IS 'Numeric value';
-
-
---
--- Name: dashboards_node_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.dashboards_node_attributes_mv AS
- SELECT DISTINCT node_inds.node_id,
-    a.id AS attribute_id,
-    a.display_name,
-    a.tooltip_text,
-    da.chart_type,
-    da.dashboards_attribute_group_id,
-    da."position"
-   FROM (((public.node_inds
-     JOIN public.dashboards_inds di ON ((node_inds.ind_id = di.ind_id)))
-     JOIN public.dashboards_attributes da ON ((da.id = di.dashboards_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = di.ind_id) AND (a.original_type = 'Ind'::text))))
-  WHERE (a.display_name IS NOT NULL)
-UNION ALL
- SELECT DISTINCT node_quals.node_id,
-    a.id AS attribute_id,
-    a.display_name,
-    a.tooltip_text,
-    da.chart_type,
-    da.dashboards_attribute_group_id,
-    da."position"
-   FROM (((public.node_quals
-     JOIN public.dashboards_quals dq ON ((node_quals.qual_id = dq.qual_id)))
-     JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = dq.qual_id) AND (a.original_type = 'Qual'::text))))
-  WHERE (a.display_name IS NOT NULL)
-UNION ALL
- SELECT DISTINCT node_quants.node_id,
-    a.id AS attribute_id,
-    a.display_name,
-    a.tooltip_text,
-    da.chart_type,
-    da.dashboards_attribute_group_id,
-    da."position"
-   FROM (((public.node_quants
-     JOIN public.dashboards_quants dq ON ((node_quants.quant_id = dq.quant_id)))
-     JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = dq.quant_id) AND (a.original_type = 'Quant'::text))))
-  WHERE (a.display_name IS NOT NULL)
-  WITH NO DATA;
 
 
 --
@@ -2895,6 +3122,41 @@ ALTER SEQUENCE public.dashboards_quants_id_seq OWNED BY public.dashboards_quants
 
 
 --
+-- Name: node_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.node_quals (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    qual_id integer NOT NULL,
+    year integer,
+    value text NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE node_quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.node_quals IS 'Values of quals for node';
+
+
+--
+-- Name: COLUMN node_quals.year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quals.year IS 'Year; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN node_quals.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quals.value IS 'Textual value';
+
+
+--
 -- Name: dashboards_sources_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -2914,7 +3176,7 @@ CREATE MATERIALIZED VIEW public.dashboards_sources_mv AS
      JOIN public.context_node_types_mv cnt_mv ON (((fp.node_type_id = cnt_mv.node_type_id) AND (fp.context_id = cnt_mv.context_id))))
      LEFT JOIN public.quals ON ((quals.name = cnt_mv.parent_node_type)))
      LEFT JOIN public.node_quals ON (((fp.node_id = node_quals.node_id) AND (quals.id = node_quals.qual_id))))
-  WHERE ((fp.category = 'SOURCE'::text) AND (all_fp.node_id <> fp.node_id))
+  WHERE (((fp.category)::text = 'source'::text) AND (all_fp.node_id <> fp.node_id))
   GROUP BY fp.node_id, fp.node, fp.node_type_id, fp.node_type, quals.name, node_quals.value, all_fp.country_id, all_fp.commodity_id, all_fp.node_id
   WITH NO DATA;
 
@@ -3262,6 +3524,60 @@ COMMENT ON MATERIALIZED VIEW public.flow_paths_mv IS 'Normalised flows';
 
 
 --
+-- Name: flow_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.flow_quals (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    qual_id integer NOT NULL,
+    value text NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE flow_quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.flow_quals IS 'Values of quals for flow';
+
+
+--
+-- Name: COLUMN flow_quals.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_quals.value IS 'Textual value';
+
+
+--
+-- Name: flow_quants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.flow_quants (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE flow_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.flow_quants IS 'Values of quants for flow';
+
+
+--
+-- Name: COLUMN flow_quants.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_quants.value IS 'Numeric value';
+
+
+--
 -- Name: download_flows_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -3462,6 +3778,33 @@ ALTER SEQUENCE public.download_versions_id_seq OWNED BY public.download_versions
 
 
 --
+-- Name: flow_inds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.flow_inds (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    ind_id integer NOT NULL,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE flow_inds; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.flow_inds IS 'Values of inds for flow';
+
+
+--
+-- Name: COLUMN flow_inds.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_inds.value IS 'Numeric value';
+
+
+--
 -- Name: flow_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -3535,6 +3878,63 @@ CREATE SEQUENCE public.flows_id_seq
 --
 
 ALTER SEQUENCE public.flows_id_seq OWNED BY public.flows.id;
+
+
+--
+-- Name: ind_commodity_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.ind_commodity_properties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ind_commodity_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.ind_commodity_properties_id_seq OWNED BY public.ind_commodity_properties.id;
+
+
+--
+-- Name: ind_context_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.ind_context_properties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ind_context_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.ind_context_properties_id_seq OWNED BY public.ind_context_properties.id;
+
+
+--
+-- Name: ind_country_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.ind_country_properties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: ind_country_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.ind_country_properties_id_seq OWNED BY public.ind_country_properties.id;
 
 
 --
@@ -3920,6 +4320,41 @@ ALTER SEQUENCE public.map_quants_id_seq OWNED BY public.map_quants.id;
 
 
 --
+-- Name: node_inds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.node_inds (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    ind_id integer NOT NULL,
+    year integer,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE node_inds; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.node_inds IS 'Values of inds for node';
+
+
+--
+-- Name: COLUMN node_inds.year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_inds.year IS 'Year; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN node_inds.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_inds.value IS 'Numeric value';
+
+
+--
 -- Name: node_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -3994,6 +4429,41 @@ CREATE SEQUENCE public.node_quals_id_seq
 --
 
 ALTER SEQUENCE public.node_quals_id_seq OWNED BY public.node_quals.id;
+
+
+--
+-- Name: node_quants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.node_quants (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    year integer,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE node_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.node_quants IS 'Values of quants for node';
+
+
+--
+-- Name: COLUMN node_quants.year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quants.year IS 'Year; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN node_quants.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quants.value IS 'Numeric value';
 
 
 --
@@ -4176,6 +4646,63 @@ ALTER SEQUENCE public.profiles_id_seq OWNED BY public.profiles.id;
 
 
 --
+-- Name: qual_commodity_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.qual_commodity_properties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: qual_commodity_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.qual_commodity_properties_id_seq OWNED BY public.qual_commodity_properties.id;
+
+
+--
+-- Name: qual_context_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.qual_context_properties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: qual_context_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.qual_context_properties_id_seq OWNED BY public.qual_context_properties.id;
+
+
+--
+-- Name: qual_country_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.qual_country_properties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: qual_country_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.qual_country_properties_id_seq OWNED BY public.qual_country_properties.id;
+
+
+--
 -- Name: qual_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -4211,6 +4738,63 @@ CREATE SEQUENCE public.quals_id_seq
 --
 
 ALTER SEQUENCE public.quals_id_seq OWNED BY public.quals.id;
+
+
+--
+-- Name: quant_commodity_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.quant_commodity_properties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: quant_commodity_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.quant_commodity_properties_id_seq OWNED BY public.quant_commodity_properties.id;
+
+
+--
+-- Name: quant_context_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.quant_context_properties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: quant_context_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.quant_context_properties_id_seq OWNED BY public.quant_context_properties.id;
+
+
+--
+-- Name: quant_country_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.quant_country_properties_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: quant_country_properties_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.quant_country_properties_id_seq OWNED BY public.quant_country_properties.id;
 
 
 --
@@ -4406,6 +4990,25 @@ COMMENT ON TABLE public.recolor_by_inds IS 'Inds available for recoloring (see r
 
 
 --
+-- Name: recolor_by_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.recolor_by_inds_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: recolor_by_inds_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.recolor_by_inds_id_seq OWNED BY public.recolor_by_inds.id;
+
+
+--
 -- Name: recolor_by_quals; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -4423,88 +5026,6 @@ CREATE TABLE public.recolor_by_quals (
 --
 
 COMMENT ON TABLE public.recolor_by_quals IS 'Quals available for recoloring (see recolor_by_attributes.)';
-
-
---
--- Name: recolor_by_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.recolor_by_attributes_mv AS
- SELECT ra.id,
-    ra.context_id,
-    ra.group_number,
-    ra."position",
-    ra.legend_type,
-    ra.legend_color_theme,
-    ra.interval_count,
-    ra.min_value,
-    ra.max_value,
-    ra.divisor,
-    ra.tooltip_text,
-    ra.years,
-    ra.is_disabled,
-    ra.is_default,
-    ra.created_at,
-    ra.updated_at,
-    a.id AS attribute_id
-   FROM ((public.recolor_by_inds rai
-     JOIN public.recolor_by_attributes ra ON ((ra.id = rai.recolor_by_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = rai.ind_id) AND (a.original_type = 'Ind'::text))))
-UNION ALL
- SELECT ra.id,
-    ra.context_id,
-    ra.group_number,
-    ra."position",
-    ra.legend_type,
-    ra.legend_color_theme,
-    ra.interval_count,
-    ra.min_value,
-    ra.max_value,
-    ra.divisor,
-    ra.tooltip_text,
-    ra.years,
-    ra.is_disabled,
-    ra.is_default,
-    ra.created_at,
-    ra.updated_at,
-    a.id AS attribute_id
-   FROM ((public.recolor_by_quals raq
-     JOIN public.recolor_by_attributes ra ON ((ra.id = raq.recolor_by_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = raq.qual_id) AND (a.original_type = 'Qual'::text))))
-  WITH NO DATA;
-
-
---
--- Name: MATERIALIZED VIEW recolor_by_attributes_mv; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON MATERIALIZED VIEW public.recolor_by_attributes_mv IS 'Materialized view which merges recolor_by_inds and recolor_by_quals with recolor_by_attributes.';
-
-
---
--- Name: COLUMN recolor_by_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.recolor_by_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
-
-
---
--- Name: recolor_by_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.recolor_by_inds_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: recolor_by_inds_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.recolor_by_inds_id_seq OWNED BY public.recolor_by_inds.id;
 
 
 --
@@ -5005,6 +5526,27 @@ ALTER TABLE ONLY public.flows ALTER COLUMN id SET DEFAULT nextval('public.flows_
 
 
 --
+-- Name: ind_commodity_properties id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_commodity_properties ALTER COLUMN id SET DEFAULT nextval('public.ind_commodity_properties_id_seq'::regclass);
+
+
+--
+-- Name: ind_context_properties id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_context_properties ALTER COLUMN id SET DEFAULT nextval('public.ind_context_properties_id_seq'::regclass);
+
+
+--
+-- Name: ind_country_properties id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_country_properties ALTER COLUMN id SET DEFAULT nextval('public.ind_country_properties_id_seq'::regclass);
+
+
+--
 -- Name: ind_properties id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -5096,6 +5638,27 @@ ALTER TABLE ONLY public.profiles ALTER COLUMN id SET DEFAULT nextval('public.pro
 
 
 --
+-- Name: qual_commodity_properties id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_commodity_properties ALTER COLUMN id SET DEFAULT nextval('public.qual_commodity_properties_id_seq'::regclass);
+
+
+--
+-- Name: qual_context_properties id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_context_properties ALTER COLUMN id SET DEFAULT nextval('public.qual_context_properties_id_seq'::regclass);
+
+
+--
+-- Name: qual_country_properties id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_country_properties ALTER COLUMN id SET DEFAULT nextval('public.qual_country_properties_id_seq'::regclass);
+
+
+--
 -- Name: qual_properties id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -5107,6 +5670,27 @@ ALTER TABLE ONLY public.qual_properties ALTER COLUMN id SET DEFAULT nextval('pub
 --
 
 ALTER TABLE ONLY public.quals ALTER COLUMN id SET DEFAULT nextval('public.quals_id_seq'::regclass);
+
+
+--
+-- Name: quant_commodity_properties id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_commodity_properties ALTER COLUMN id SET DEFAULT nextval('public.quant_commodity_properties_id_seq'::regclass);
+
+
+--
+-- Name: quant_context_properties id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_context_properties ALTER COLUMN id SET DEFAULT nextval('public.quant_context_properties_id_seq'::regclass);
+
+
+--
+-- Name: quant_country_properties id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_country_properties ALTER COLUMN id SET DEFAULT nextval('public.quant_country_properties_id_seq'::regclass);
 
 
 --
@@ -5156,6 +5740,83 @@ ALTER TABLE ONLY public.resize_by_attributes ALTER COLUMN id SET DEFAULT nextval
 --
 
 ALTER TABLE ONLY public.resize_by_quants ALTER COLUMN id SET DEFAULT nextval('public.resize_by_quants_id_seq'::regclass);
+
+
+--
+-- Name: recolor_by_attributes recolor_by_attributes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.recolor_by_attributes
+    ADD CONSTRAINT recolor_by_attributes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: recolor_by_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.recolor_by_attributes_mv AS
+ SELECT ra.id,
+    ra.context_id,
+    ra.group_number,
+    ra."position",
+    ra.legend_type,
+    ra.legend_color_theme,
+    ra.interval_count,
+    ra.min_value,
+    ra.max_value,
+    ra.divisor,
+    ra.tooltip_text,
+    ra.years,
+    ra.is_disabled,
+    ra.is_default,
+    ra.created_at,
+    ra.updated_at,
+    a.id AS attribute_id,
+    ARRAY[]::text[] AS legend
+   FROM ((public.recolor_by_inds rai
+     JOIN public.recolor_by_attributes ra ON ((ra.id = rai.recolor_by_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = rai.ind_id) AND (a.original_type = 'Ind'::text))))
+UNION ALL
+ SELECT ra.id,
+    ra.context_id,
+    ra.group_number,
+    ra."position",
+    ra.legend_type,
+    ra.legend_color_theme,
+    ra.interval_count,
+    ra.min_value,
+    ra.max_value,
+    ra.divisor,
+    ra.tooltip_text,
+    ra.years,
+    ra.is_disabled,
+    ra.is_default,
+    ra.created_at,
+    ra.updated_at,
+    a.id AS attribute_id,
+    array_agg(DISTINCT flow_quals.value) AS legend
+   FROM ((((public.recolor_by_quals raq
+     JOIN public.recolor_by_attributes ra ON ((ra.id = raq.recolor_by_attribute_id)))
+     JOIN public.attributes_mv a ON (((a.original_id = raq.qual_id) AND (a.original_type = 'Qual'::text))))
+     JOIN public.flow_quals ON ((flow_quals.qual_id = raq.qual_id)))
+     JOIN public.flows ON (((flow_quals.flow_id = flows.id) AND (flows.context_id = ra.context_id))))
+  WHERE (flow_quals.value !~~ 'UNKNOWN%'::text)
+  GROUP BY ra.id, a.id
+  WITH NO DATA;
+
+
+--
+-- Name: MATERIALIZED VIEW recolor_by_attributes_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.recolor_by_attributes_mv IS 'Materialized view which merges recolor_by_inds and recolor_by_quals with recolor_by_attributes.';
+
+
+--
+-- Name: COLUMN recolor_by_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
 
 
 --
@@ -5759,6 +6420,30 @@ ALTER TABLE ONLY public.flows
 
 
 --
+-- Name: ind_commodity_properties ind_commodity_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_commodity_properties
+    ADD CONSTRAINT ind_commodity_properties_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ind_context_properties ind_context_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_context_properties
+    ADD CONSTRAINT ind_context_properties_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ind_country_properties ind_country_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_country_properties
+    ADD CONSTRAINT ind_country_properties_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: ind_properties ind_properties_ind_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5959,6 +6644,30 @@ ALTER TABLE ONLY public.profiles
 
 
 --
+-- Name: qual_commodity_properties qual_commodity_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_commodity_properties
+    ADD CONSTRAINT qual_commodity_properties_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: qual_context_properties qual_context_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_context_properties
+    ADD CONSTRAINT qual_context_properties_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: qual_country_properties qual_country_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_country_properties
+    ADD CONSTRAINT qual_country_properties_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: qual_properties qual_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5988,6 +6697,30 @@ ALTER TABLE ONLY public.quals
 
 ALTER TABLE ONLY public.quals
     ADD CONSTRAINT quals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: quant_commodity_properties quant_commodity_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_commodity_properties
+    ADD CONSTRAINT quant_commodity_properties_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: quant_context_properties quant_context_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_context_properties
+    ADD CONSTRAINT quant_context_properties_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: quant_country_properties quant_country_properties_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_country_properties
+    ADD CONSTRAINT quant_country_properties_pkey PRIMARY KEY (id);
 
 
 --
@@ -6028,14 +6761,6 @@ ALTER TABLE ONLY public.quants
 
 ALTER TABLE ONLY public.recolor_by_attributes
     ADD CONSTRAINT recolor_by_attributes_context_id_group_number_position_key UNIQUE (context_id, group_number, "position");
-
-
---
--- Name: recolor_by_attributes recolor_by_attributes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.recolor_by_attributes
-    ADD CONSTRAINT recolor_by_attributes_pkey PRIMARY KEY (id);
 
 
 --
@@ -6615,6 +7340,20 @@ CREATE INDEX index_charts_on_profile_id ON public.charts USING btree (profile_id
 
 
 --
+-- Name: index_commodity_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_commodity_attribute_properties_mv_id ON public.commodity_attribute_properties_mv USING btree (id, commodity_id, qual_id, quant_id, ind_id);
+
+
+--
+-- Name: index_context_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_context_attribute_properties_mv_id ON public.context_attribute_properties_mv USING btree (context_id, qual_id, quant_id, ind_id);
+
+
+--
 -- Name: index_context_node_type_properties_on_context_node_type_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6661,6 +7400,13 @@ CREATE INDEX index_contexts_on_country_id ON public.contexts USING btree (countr
 --
 
 CREATE INDEX index_contextual_layers_on_context_id ON public.contextual_layers USING btree (context_id);
+
+
+--
+-- Name: index_country_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_country_attribute_properties_mv_id ON public.country_attribute_properties_mv USING btree (id, country_id, qual_id, quant_id, ind_id);
 
 
 --
@@ -6818,6 +7564,48 @@ CREATE INDEX index_flows_on_path ON public.flows USING btree (path);
 
 
 --
+-- Name: index_ind_commodity_properties_on_commodity_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ind_commodity_properties_on_commodity_id ON public.ind_commodity_properties USING btree (commodity_id);
+
+
+--
+-- Name: index_ind_commodity_properties_on_ind_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ind_commodity_properties_on_ind_id ON public.ind_commodity_properties USING btree (ind_id);
+
+
+--
+-- Name: index_ind_context_properties_on_context_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ind_context_properties_on_context_id ON public.ind_context_properties USING btree (context_id);
+
+
+--
+-- Name: index_ind_context_properties_on_ind_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ind_context_properties_on_ind_id ON public.ind_context_properties USING btree (ind_id);
+
+
+--
+-- Name: index_ind_country_properties_on_country_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ind_country_properties_on_country_id ON public.ind_country_properties USING btree (country_id);
+
+
+--
+-- Name: index_ind_country_properties_on_ind_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_ind_country_properties_on_ind_id ON public.ind_country_properties USING btree (ind_id);
+
+
+--
 -- Name: index_ind_properties_on_ind_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6902,10 +7690,94 @@ CREATE INDEX index_profiles_on_context_node_type_id ON public.profiles USING btr
 
 
 --
+-- Name: index_qual_commodity_properties_on_commodity_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_qual_commodity_properties_on_commodity_id ON public.qual_commodity_properties USING btree (commodity_id);
+
+
+--
+-- Name: index_qual_commodity_properties_on_qual_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_qual_commodity_properties_on_qual_id ON public.qual_commodity_properties USING btree (qual_id);
+
+
+--
+-- Name: index_qual_context_properties_on_context_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_qual_context_properties_on_context_id ON public.qual_context_properties USING btree (context_id);
+
+
+--
+-- Name: index_qual_context_properties_on_qual_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_qual_context_properties_on_qual_id ON public.qual_context_properties USING btree (qual_id);
+
+
+--
+-- Name: index_qual_country_properties_on_country_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_qual_country_properties_on_country_id ON public.qual_country_properties USING btree (country_id);
+
+
+--
+-- Name: index_qual_country_properties_on_qual_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_qual_country_properties_on_qual_id ON public.qual_country_properties USING btree (qual_id);
+
+
+--
 -- Name: index_qual_properties_on_qual_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_qual_properties_on_qual_id ON public.qual_properties USING btree (qual_id);
+
+
+--
+-- Name: index_quant_commodity_properties_on_commodity_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_quant_commodity_properties_on_commodity_id ON public.quant_commodity_properties USING btree (commodity_id);
+
+
+--
+-- Name: index_quant_commodity_properties_on_quant_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_quant_commodity_properties_on_quant_id ON public.quant_commodity_properties USING btree (quant_id);
+
+
+--
+-- Name: index_quant_context_properties_on_context_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_quant_context_properties_on_context_id ON public.quant_context_properties USING btree (context_id);
+
+
+--
+-- Name: index_quant_context_properties_on_quant_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_quant_context_properties_on_quant_id ON public.quant_context_properties USING btree (quant_id);
+
+
+--
+-- Name: index_quant_country_properties_on_country_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_quant_country_properties_on_country_id ON public.quant_country_properties USING btree (country_id);
+
+
+--
+-- Name: index_quant_country_properties_on_quant_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_quant_country_properties_on_quant_id ON public.quant_country_properties USING btree (quant_id);
 
 
 --
@@ -7133,6 +8005,14 @@ ALTER TABLE ONLY public.context_node_types
 
 
 --
+-- Name: ind_country_properties fk_rails_162974f66c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_country_properties
+    ADD CONSTRAINT fk_rails_162974f66c FOREIGN KEY (country_id) REFERENCES public.countries(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: download_attributes fk_rails_163b9bb8d8; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7213,6 +8093,22 @@ ALTER TABLE ONLY public.chart_inds
 
 
 --
+-- Name: quant_country_properties fk_rails_2cb9ec5128; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_country_properties
+    ADD CONSTRAINT fk_rails_2cb9ec5128 FOREIGN KEY (quant_id) REFERENCES public.quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: ind_context_properties fk_rails_2d523de840; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_context_properties
+    ADD CONSTRAINT fk_rails_2d523de840 FOREIGN KEY (ind_id) REFERENCES public.inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: flow_quants fk_rails_2dbc0a565f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7277,6 +8173,14 @@ ALTER TABLE ONLY public.map_inds
 
 
 --
+-- Name: qual_country_properties fk_rails_4d7c9be019; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_country_properties
+    ADD CONSTRAINT fk_rails_4d7c9be019 FOREIGN KEY (country_id) REFERENCES public.countries(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: node_properties fk_rails_4dcde982df; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7298,6 +8202,22 @@ ALTER TABLE ONLY public.dashboards_inds
 
 ALTER TABLE ONLY public.recolor_by_quals
     ADD CONSTRAINT fk_rails_5294e7fccd FOREIGN KEY (recolor_by_attribute_id) REFERENCES public.recolor_by_attributes(id) ON DELETE CASCADE;
+
+
+--
+-- Name: qual_context_properties fk_rails_58bc3d5bcf; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_context_properties
+    ADD CONSTRAINT fk_rails_58bc3d5bcf FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: ind_commodity_properties fk_rails_5c0dcf9d64; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_commodity_properties
+    ADD CONSTRAINT fk_rails_5c0dcf9d64 FOREIGN KEY (ind_id) REFERENCES public.inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7325,6 +8245,22 @@ ALTER TABLE ONLY public.chart_quants
 
 
 --
+-- Name: ind_context_properties fk_rails_6b25018f3c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_context_properties
+    ADD CONSTRAINT fk_rails_6b25018f3c FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: quant_context_properties fk_rails_6e05c978da; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_context_properties
+    ADD CONSTRAINT fk_rails_6e05c978da FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: flow_quals fk_rails_6e55ca4cbc; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7341,11 +8277,35 @@ ALTER TABLE ONLY public.ind_properties
 
 
 --
+-- Name: qual_commodity_properties fk_rails_721d9b2c40; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_commodity_properties
+    ADD CONSTRAINT fk_rails_721d9b2c40 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: charts fk_rails_805a6066ad; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.charts
     ADD CONSTRAINT fk_rails_805a6066ad FOREIGN KEY (parent_id) REFERENCES public.charts(id) ON DELETE CASCADE;
+
+
+--
+-- Name: quant_context_properties fk_rails_8c0d4513c3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_context_properties
+    ADD CONSTRAINT fk_rails_8c0d4513c3 FOREIGN KEY (quant_id) REFERENCES public.quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: quant_country_properties fk_rails_90fcd1e231; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_country_properties
+    ADD CONSTRAINT fk_rails_90fcd1e231 FOREIGN KEY (country_id) REFERENCES public.countries(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7370,6 +8330,14 @@ ALTER TABLE ONLY public.resize_by_attributes
 
 ALTER TABLE ONLY public.recolor_by_inds
     ADD CONSTRAINT fk_rails_93051274e4 FOREIGN KEY (ind_id) REFERENCES public.inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: quant_commodity_properties fk_rails_93e2577ebb; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_commodity_properties
+    ADD CONSTRAINT fk_rails_93e2577ebb FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7421,6 +8389,14 @@ ALTER TABLE ONLY public.charts
 
 
 --
+-- Name: ind_commodity_properties fk_rails_a8310a8e25; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_commodity_properties
+    ADD CONSTRAINT fk_rails_a8310a8e25 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: dashboards_quants fk_rails_b49efb2529; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7458,6 +8434,14 @@ ALTER TABLE ONLY public.flows
 
 ALTER TABLE ONLY public.resize_by_quants
     ADD CONSTRAINT fk_rails_c63dc992e3 FOREIGN KEY (quant_id) REFERENCES public.quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: qual_context_properties fk_rails_c67757078e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_context_properties
+    ADD CONSTRAINT fk_rails_c67757078e FOREIGN KEY (qual_id) REFERENCES public.quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7541,6 +8525,22 @@ ALTER TABLE ONLY public.chart_quants
 
 
 --
+-- Name: ind_country_properties fk_rails_e01a20acf1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ind_country_properties
+    ADD CONSTRAINT fk_rails_e01a20acf1 FOREIGN KEY (ind_id) REFERENCES public.inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: qual_commodity_properties fk_rails_e18327427d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_commodity_properties
+    ADD CONSTRAINT fk_rails_e18327427d FOREIGN KEY (qual_id) REFERENCES public.quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: download_quants fk_rails_e3b3c104f3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7570,6 +8570,14 @@ ALTER TABLE ONLY public.download_quals
 
 ALTER TABLE ONLY public.contexts
     ADD CONSTRAINT fk_rails_eea78f436e FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: quant_commodity_properties fk_rails_f026110265; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.quant_commodity_properties
+    ADD CONSTRAINT fk_rails_f026110265 FOREIGN KEY (quant_id) REFERENCES public.quants(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7610,6 +8618,14 @@ ALTER TABLE ONLY public.map_attributes
 
 ALTER TABLE ONLY public.node_inds
     ADD CONSTRAINT fk_rails_fe29817503 FOREIGN KEY (node_id) REFERENCES public.nodes(id) ON DELETE CASCADE;
+
+
+--
+-- Name: qual_country_properties fk_rails_fe3d71a6cc; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.qual_country_properties
+    ADD CONSTRAINT fk_rails_fe3d71a6cc FOREIGN KEY (qual_id) REFERENCES public.quals(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -7753,6 +8769,27 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190110094614'),
 ('20190110140539'),
 ('20190111121850'),
-('20190215113824');
+('20190215113824'),
+('20190228115321'),
+('20190228115345'),
+('20190228115409'),
+('20190301121434'),
+('20190301170044'),
+('20190301170114'),
+('20190301170138'),
+('20190301170523'),
+('20190301173716'),
+('20190301173748'),
+('20190301173808'),
+('20190301173824'),
+('20190308163938'),
+('20190318161140'),
+('20190320122547'),
+('20190320172713'),
+('20190321122822'),
+('20190321161913'),
+('20190429104832'),
+('20190429112751'),
+('20190513125050');
 
 
