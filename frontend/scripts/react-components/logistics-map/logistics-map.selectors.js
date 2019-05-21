@@ -24,18 +24,20 @@ const getLogisticsMapSearchTerm = state => state.logisticsMap.searchTerm;
 export const getBounds = createSelector(
   [getSelectedCommodity],
   commodity => {
-    const brazilBounds = {
-      bbox: [-77.783203125, -35.46066995149529, -29.794921874999996, 9.709057068618208]
-    };
-    const indonesiaBounds = {
-      bbox: [230.783203125, -35.46066995149529, -29.794921874999996, 9.709057068618208]
-    };
     const bounds = {
-      soy: brazilBounds,
-      cattle: brazilBounds,
-      palmOil: indonesiaBounds
+      brazil: {
+        bbox: [-77.783203125, -35.46066995149529, -29.794921874999996, 9.709057068618208]
+      },
+      indonesia: {
+        bbox: [94.77171235, -11.20856696, 141.01944439, 6.2744496]
+      }
     };
-    return bounds[commodity];
+    const commodityBounds = {
+      soy: bounds.brazil,
+      cattle: bounds.brazil,
+      palmOil: bounds.indonesia
+    };
+    return commodityBounds[commodity];
   }
 );
 
