@@ -45,11 +45,14 @@
 
   .item-name {
     line-height: 1.2;
+    max-height: 100%;
+    overflow: hidden;
   }
 
   .item-value {
-    min-width: 125px;
+    min-width: 185px;
     margin-left: 10px;
+    flex-shrink: 0;
   }
 
   .item-bubble {

@@ -31,6 +31,7 @@ export const LOAD_SEARCH_RESULTS = 'LOAD_SEARCH_RESULTS';
 export const SET_CONTEXTS = 'SET_CONTEXTS';
 export const SET_CONTEXT_IS_USER_SELECTED = 'SET_CONTEXT_IS_USER_SELECTED';
 export const APP__SET_LOADING = 'APP__SET_LOADING';
+export const APP__TRANSIFEX_LANGUAGES_LOADED = 'APP__TRANSIFEX_LANGUAGES_LOADED';
 
 export function selectInitialContextById(contextId) {
   return (dispatch, getState) => {
@@ -194,5 +195,12 @@ export function selectYears(years) {
       dispatch(loadNodes());
       dispatch(loadLinks());
     }
+  };
+}
+
+export function setTransifexLanguages(languages) {
+  return {
+    type: APP__TRANSIFEX_LANGUAGES_LOADED,
+    payload: { languages }
   };
 }

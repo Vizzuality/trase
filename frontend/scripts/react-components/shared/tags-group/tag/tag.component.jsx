@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Dropdown from 'react-components/shared/dropdown';
 import Heading from 'react-components/shared/heading';
+import { translateText } from 'utils/transifex';
 
 function Tag(props) {
   const {
@@ -41,7 +42,7 @@ function Tag(props) {
         '-spaced': spaced
       })}
     >
-      {part.value[0].name.toLowerCase()}
+      {translateText(part.value[0].name)}
       {!isPartReadOnly && clearPanel && (
         <button
           key={`button${part.id}`}

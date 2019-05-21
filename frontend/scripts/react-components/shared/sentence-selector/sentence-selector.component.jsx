@@ -5,6 +5,7 @@ import capitalize from 'lodash/capitalize';
 import cx from 'classnames';
 import Dropdown from 'react-components/shared/dropdown';
 import YearsSelector from 'react-components/nav/filters-nav/years-selector';
+import { translateText } from 'utils/transifex';
 
 import 'react-components/shared/sentence-selector/sentence-selector.scss';
 
@@ -106,12 +107,18 @@ class SentenceSelector extends React.PureComponent {
 
   renderChineseSentence({ countryNames, countryName, commodityName, commodityNames }) {
     const { selectedYears } = this.props;
+    const stringsToTranslate = [
+      `in the year${selectedYears[0] !== selectedYears[1] ? 's ' : ' '}`,
+      'from',
+      'of',
+      'What are the sustainability risks and opportunities associated with the trade'
+    ];
     return (
-      <div className="sentence-selector-text" key="chinese">
+      <div className="sentence-selector-text notranslate" key="chinese">
         <span className="hide-for-small">
-          in the year{selectedYears[0] !== selectedYears[1] ? 's ' : ' '}
+          {translateText(stringsToTranslate[0])}
           <YearsSelector variant="sentence" placement="bottom-end" />
-          from{' '}
+          {translateText(stringsToTranslate[1])}{' '}
           <Dropdown
             align="center"
             variant="sentence"
@@ -120,7 +127,7 @@ class SentenceSelector extends React.PureComponent {
             onChange={this.onSelectCountry}
             getItemClassName={this.getCountryClassName}
           />
-          of{' '}
+          {translateText(stringsToTranslate[2])}{' '}
           <Dropdown
             align="center"
             variant="sentence"
@@ -131,7 +138,7 @@ class SentenceSelector extends React.PureComponent {
           />
           <br className="hide-for-small" />
         </span>
-        What are the sustainability risks and opportunities associated with the trade
+        {translateText(stringsToTranslate[3])}
       </div>
     );
   }

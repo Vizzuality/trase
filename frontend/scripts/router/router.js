@@ -85,7 +85,7 @@ export const routes = {
     path: '/dashboards/:dashboardId',
     page: 'dashboard-element',
     title: getPageTitle,
-    thunk: loadPageData(getPostsContent)
+    thunk: loadPageData()
   },
   data: {
     path: '/data',
@@ -182,11 +182,6 @@ const config = {
 
     if (!currentLanguage && previousLanguage) {
       addLanguageToUrl(previousLanguage);
-    } else if (!currentLanguage && !previousLanguage && typeof window.Transifex !== 'undefined') {
-      const lang = window.Transifex.live.detectLanguage();
-      if (lang) {
-        addLanguageToUrl(lang);
-      }
     }
   },
   restoreScroll: restoreScroll({

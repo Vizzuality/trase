@@ -28,12 +28,20 @@
   }
 
   .hero-logo-container {
+    height: 38px;
     width: 210px;
+    background-size: contain;
+    background-repeat: no-repeat;
 
-    img {
-      @media screen and (max-width: $breakpoint-foundation-small) {
-        height: 34px;
-      }
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      height: 34px;
+    }
+
+    .hero-trase-logo {
+      height: 100%;
+      width: 100%;
+      background-size: contain;
+      background-repeat: no-repeat;
     }
   }
 

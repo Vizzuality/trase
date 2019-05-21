@@ -16,19 +16,37 @@ class RankingWidget extends PureComponent {
     this.setState(state => ({ page: state.page + pageChange }));
   };
 
+  renderItemName(item) {
+    const name = (
+      <Heading as="span" size="lg" weight="bold" color="white" className="item-name">
+        {capitalize(item.y)}
+      </Heading>
+    );
+    if (item.url) {
+      return <Link to={item.url}>{name}</Link>;
+    }
+
+    return name;
+  }
+
   render() {
-    const { data, config, pageSize } = this.props;
+    const { data, meta, config, pageSize } = this.props;
     const { page } = this.state;
     const dataWithUrl = data.map((d, i) => {
-      const node = config.yLabelsProfileInfo[i];
-      const lastYear = config.years.end_year || config.years.start_year;
-      const url = `/profile-${node.profile}?year=${lastYear}&nodeId=${node.id}`;
+      const node = meta.yLabelsProfileInfo[i];
+      const lastYear = meta.info.years.end_year || meta.info.years.start_year;
+      const url = node.profile && `/profile-${node.profile}?year=${lastYear}&nodeId=${node.id}`;
       return { ...d, url };
     });
     const pageData = pageSize
       ? dataWithUrl.slice(page * pageSize, (page + 1) * pageSize)
       : dataWithUrl;
-    const formatValue = format((config.yAxisLabel && config.yAxisLabel.format) || ',.2f');
+    const formatValue = format((config.yAxisLabel && config.yAxisLabel.format) || ',.3s');
+
+    // property is snake_case
+    // eslint-disable-next-line
+    const totalValue = meta.aggregates?.total_value;
+    const formatTotal = format('.4s');
 
     return (
       <div className="c-ranking-widget">
@@ -50,20 +68,11 @@ class RankingWidget extends PureComponent {
                         {index + 1 + pageSize * page}
                       </Text>
                     </div>
-                    <Link to={item.url}>
-                      <Heading
-                        as="span"
-                        size="lg"
-                        weight="bold"
-                        color="white"
-                        className="item-name"
-                      >
-                        {capitalize(item.y)}
-                      </Heading>
-                    </Link>
+                    {this.renderItemName(item)}
                   </div>
                   <Text className="item-value" color="white" variant="mono" size="md">
-                    {formatValue(item.x0)} {config.xAxisLabel && config.xAxisLabel.suffix}
+                    {formatValue(item.x0)} {config.xAxisLabel && config.xAxisLabel.suffix} /{' '}
+                    {formatTotal(totalValue.x0)} {config.xAxisLabel && config.xAxisLabel.suffix}
                   </Text>
                 </div>
               </li>
@@ -84,6 +93,7 @@ class RankingWidget extends PureComponent {
 
 RankingWidget.propTypes = {
   data: PropTypes.array.isRequired,
+  meta: PropTypes.object.isRequired,
   config: PropTypes.object.isRequired,
   pageSize: PropTypes.number
 };

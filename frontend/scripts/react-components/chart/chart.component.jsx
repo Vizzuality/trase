@@ -22,7 +22,8 @@ import 'react-components/chart/chart-styles.scss';
 class Chart extends PureComponent {
   static propTypes = {
     data: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    config: PropTypes.shape({}).isRequired,
+    meta: PropTypes.object,
+    config: PropTypes.object,
     className: PropTypes.string,
     handleMouseMove: PropTypes.func,
     handleMouseLeave: PropTypes.func,
@@ -36,7 +37,7 @@ class Chart extends PureComponent {
   };
 
   render() {
-    const { className, data, config, handleMouseMove, handleMouseLeave, testId } = this.props;
+    const { className, data, meta, config, handleMouseMove, handleMouseLeave, testId } = this.props;
 
     const {
       margin = {},
@@ -114,8 +115,8 @@ class Chart extends PureComponent {
             </defs>
 
             {cartesianGrid && <CartesianGrid stroke="#536269" {...cartesianGrid} />}
-            {CustomXAxis({ config, data })}
-            {CustomYAxis({ config, data })}
+            {CustomXAxis({ config, data, meta })}
+            {CustomYAxis({ config, data, meta })}
             {areas &&
               Object.keys(areas).map(key => (
                 <Area key={key} dataKey={key} dot={false} {...areas[key]} />
