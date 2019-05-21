@@ -106,7 +106,62 @@
 				</thead>
 				<tbody>
 					<tr>
-					 <td>node_quals</td>
+					 <td>node_quants</td>
+					 <td>Table</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;node_quants_id_seq&#39;::regclass)</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>nodes</td>
+					 <td>Table</td>
+					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>node_type_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>node_inds</td>
+					 <td>Table</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>inds</td>
+					 <td>Table</td>
+					 <td>unit</td>
+					 <td>text</td>
+					 <td>2147483647</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td><p>Unit in which values for this attribute are given</p></td>
+					</tr>
+					<tr>
+					 <td>download_versions</td>
+					 <td>Table</td>
+					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>symbol</td>
+					 <td>varchar</td>
+					 <td>2147483647</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td><p>Version symbol (included in downloaded file name)</p></td>
+					</tr>
+					<tr>
+					 <td>flow_inds</td>
 					 <td>Table</td>
 					 <td>created_at</td>
 					 <td>timestamp</td>
@@ -117,15 +172,59 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>inds</td>
+					 <td>contexts</td>
 					 <td>Table</td>
-					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>name</td>
-					 <td>text</td>
-					 <td>2147483647</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;contexts_id_seq&#39;::regclass)</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>flow_quants</td>
+					 <td>Table</td>
+					 <td>created_at</td>
+					 <td>timestamp</td>
+					 <td>29</td>
 					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>Attribute short name, e.g. FOREST_500; those literals are referred to in code, therefore should not be changed without notice</p></td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>contexts</td>
+					 <td>Table</td>
+					 <td>years</td>
+					 <td>_int4</td>
+					 <td>10</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td><p>Years for which country-commodity data is present; empty (NULL) for all years</p></td>
+					</tr>
+					<tr>
+					 <td>flow_quals</td>
+					 <td>Table</td>
+					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>flow_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>contexts</td>
+					 <td>Table</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>commodity_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
 					</tr>
 					<tr>
 					 <td>node_inds</td>
@@ -136,6 +235,138 @@
 					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>context_node_types</td>
+					 <td>Table</td>
+					 <td>created_at</td>
+					 <td>timestamp</td>
+					 <td>29</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>flow_inds</td>
+					 <td>Table</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>ind_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>contexts</td>
+					 <td>Table</td>
+					 <td>created_at</td>
+					 <td>timestamp</td>
+					 <td>29</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>context_node_types</td>
+					 <td>Table</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>context_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>node_quals</td>
+					 <td>Table</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;node_quals_id_seq&#39;::regclass)</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>context_node_types</td>
+					 <td>Table</td>
+					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>node_type_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>node_quants</td>
+					 <td>Table</td>
+					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>year</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td><p>Year; empty (NULL) for all years</p></td>
+					</tr>
+					<tr>
+					 <td>flow_quants</td>
+					 <td>Table</td>
+					 <td>value</td>
+					 <td>float8</td>
+					 <td>17</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td><p>Numeric value</p></td>
+					</tr>
+					<tr>
+					 <td>flow_inds</td>
+					 <td>Table</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;flow_inds_id_seq&#39;::regclass)</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>inds</td>
+					 <td>Table</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;inds_id_seq&#39;::regclass)</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>countries</td>
+					 <td>Table</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;countries_id_seq&#39;::regclass)</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>quals</td>
+					 <td>Table</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;quals_id_seq&#39;::regclass)</td>
 					 <td></td>
 					</tr>
 					<tr>
@@ -150,7 +381,29 @@
 					 <td><p>Country name</p></td>
 					</tr>
 					<tr>
-					 <td>node_quals</td>
+					 <td>download_versions</td>
+					 <td>Table</td>
+					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>is_current</td>
+					 <td>bool</td>
+					 <td>1</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>false</td>
+					 <td><p>When set, use this version symbol for new downloads (only use for one)</p></td>
+					</tr>
+					<tr>
+					 <td>node_inds</td>
+					 <td>Table</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>ind_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>flow_quals</td>
 					 <td>Table</td>
 					 <td>value</td>
 					 <td>text</td>
@@ -161,75 +414,20 @@
 					 <td><p>Textual value</p></td>
 					</tr>
 					<tr>
-					 <td>nodes</td>
-					 <td>Table</td>
-					 <td>main_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td><p>Node identifier from Main DB</p></td>
-					</tr>
-					<tr>
 					 <td>contexts</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>commodity_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>countries</td>
-					 <td>Table</td>
-					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>iso2</td>
-					 <td>text</td>
-					 <td>2147483647</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td><p>2-letter ISO code</p></td>
-					</tr>
-					<tr>
-					 <td>node_quals</td>
-					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>quants</td>
-					 <td>Table</td>
-					 <td>unit</td>
-					 <td>text</td>
-					 <td>2147483647</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td><p>Unit in which values for this attribute are given</p></td>
-					</tr>
-					<tr>
-					 <td>node_quants</td>
-					 <td>Table</td>
-					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>year</td>
+					 <td>default_year</td>
 					 <td>int4</td>
 					 <td>10</td>
 					 <td title='nullable'>√</td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>Year; empty (NULL) for all years</p></td>
+					 <td><p>Default year for this context</p></td>
 					</tr>
 					<tr>
-					 <td>flow_inds</td>
+					 <td>flow_quants</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>ind_id</td>
+					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>flow_id</td>
 					 <td>int4</td>
 					 <td>10</td>
 					 <td title=''></td>
@@ -249,37 +447,114 @@
 					 <td></td>
 					</tr>
 					<tr>
+					 <td>quants</td>
+					 <td>Table</td>
+					 <td>unit</td>
+					 <td>text</td>
+					 <td>2147483647</td>
+					 <td title='nullable'>√</td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td><p>Unit in which values for this attribute are given</p></td>
+					</tr>
+					<tr>
+					 <td>context_node_types</td>
+					 <td>Table</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;context_node_types_id_seq&#39;::regclass)</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>node_quals</td>
+					 <td>Table</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>quants</td>
+					 <td>Table</td>
+					 <td>created_at</td>
+					 <td>timestamp</td>
+					 <td>29</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>flow_quants</td>
+					 <td>Table</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
 					 <td>contexts</td>
 					 <td>Table</td>
-					 <td>default_year</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>country_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>node_quants</td>
+					 <td>Table</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>countries</td>
+					 <td>Table</td>
+					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>iso2</td>
+					 <td>text</td>
+					 <td>2147483647</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td><p>2-letter ISO code</p></td>
+					</tr>
+					<tr>
+					 <td>node_inds</td>
+					 <td>Table</td>
+					 <td>value</td>
+					 <td>float8</td>
+					 <td>17</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td><p>Numeric value</p></td>
+					</tr>
+					<tr>
+					 <td>nodes</td>
+					 <td>Table</td>
+					 <td>main_id</td>
 					 <td>int4</td>
 					 <td>10</td>
 					 <td title='nullable'>√</td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>Default year for this context</p></td>
-					</tr>
-					<tr>
-					 <td>inds</td>
-					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>29</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>flow_inds</td>
-					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>29</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
+					 <td><p>Node identifier from Main DB</p></td>
 					</tr>
 					<tr>
 					 <td>node_quals</td>
@@ -293,7 +568,7 @@
 					 <td><p>Year; empty (NULL) for all years</p></td>
 					</tr>
 					<tr>
-					 <td>flow_quals</td>
+					 <td>node_quals</td>
 					 <td>Table</td>
 					 <td>created_at</td>
 					 <td>timestamp</td>
@@ -304,25 +579,91 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>download_versions</td>
+					 <td>commodities</td>
 					 <td>Table</td>
-					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>symbol</td>
-					 <td>varchar</td>
-					 <td>2147483647</td>
+					 <td>created_at</td>
+					 <td>timestamp</td>
+					 <td>29</td>
 					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>Version symbol (included in downloaded file name)</p></td>
+					 <td></td>
 					</tr>
 					<tr>
-					 <td>node_quals</td>
+					 <td>node_inds</td>
 					 <td>Table</td>
 					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
 					 <td>serial</td>
 					 <td>10</td>
 					 <td title=''></td>
 					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;node_quals_id_seq&#39;::regclass)</td>
+					 <td>nextval(&#39;node_inds_id_seq&#39;::regclass)</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>download_versions</td>
+					 <td>Table</td>
+					 <td>created_at</td>
+					 <td>timestamp</td>
+					 <td>29</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>context_node_types</td>
+					 <td>Table</td>
+					 <td>column_position</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td><p>Index of node of this type in flows.path</p></td>
+					</tr>
+					<tr>
+					 <td>node_quants</td>
+					 <td>Table</td>
+					 <td>value</td>
+					 <td>float8</td>
+					 <td>17</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td><p>Numeric value</p></td>
+					</tr>
+					<tr>
+					 <td>node_quants</td>
+					 <td>Table</td>
+					 <td>created_at</td>
+					 <td>timestamp</td>
+					 <td>29</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>quals</td>
+					 <td>Table</td>
+					 <td>created_at</td>
+					 <td>timestamp</td>
+					 <td>29</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>null</td>
+					 <td></td>
+					</tr>
+					<tr>
+					 <td>flow_quants</td>
+					 <td>Table</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
+					 <td>10</td>
+					 <td title=''></td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;flow_quants_id_seq&#39;::regclass)</td>
 					 <td></td>
 					</tr>
 					<tr>
@@ -348,117 +689,18 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>context_node_types</td>
+					 <td>flow_inds</td>
 					 <td>Table</td>
-					 <td>column_position</td>
-					 <td>int4</td>
-					 <td>10</td>
+					 <td>value</td>
+					 <td>float8</td>
+					 <td>17</td>
 					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>Index of node of this type in flows.path</p></td>
+					 <td><p>Numeric value</p></td>
 					</tr>
 					<tr>
-					 <td>quants</td>
-					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>29</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>node_inds</td>
-					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>ind_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>node_quants</td>
-					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>29</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>contexts</td>
-					 <td>Table</td>
-					 <td>years</td>
-					 <td>_int4</td>
-					 <td>10</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td><p>Years for which country-commodity data is present; empty (NULL) for all years</p></td>
-					</tr>
-					<tr>
-					 <td>nodes</td>
-					 <td>Table</td>
-					 <td>name</td>
-					 <td>text</td>
-					 <td>2147483647</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td><p>Name of node</p></td>
-					</tr>
-					<tr>
-					 <td>node_inds</td>
-					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>nodes</td>
-					 <td>Table</td>
-					 <td>is_unknown</td>
-					 <td>bool</td>
-					 <td>1</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>false</td>
-					 <td><p>When set, node was not possible to identify</p></td>
-					</tr>
-					<tr>
-					 <td>flow_quals</td>
-					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;flow_quals_id_seq&#39;::regclass)</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>flow_quants</td>
-					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;flow_quants_id_seq&#39;::regclass)</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>quants</td>
+					 <td>inds</td>
 					 <td>Table</td>
 					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>name</td>
 					 <td>text</td>
@@ -466,40 +708,7 @@
 					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>Attribute short name, e.g. FOB; those literals are referred to in code, therefore should not be changed without notice</p></td>
-					</tr>
-					<tr>
-					 <td>node_quants</td>
-					 <td>Table</td>
-					 <td>value</td>
-					 <td>float8</td>
-					 <td>17</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td><p>Numeric value</p></td>
-					</tr>
-					<tr>
-					 <td>download_versions</td>
-					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>29</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>context_node_types</td>
-					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>29</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
+					 <td><p>Attribute short name, e.g. FOREST_500; those literals are referred to in code, therefore should not be changed without notice</p></td>
 					</tr>
 					<tr>
 					 <td>node_quants</td>
@@ -513,29 +722,18 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>flow_quants</td>
+					 <td>commodities</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
-					 <td>int4</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
 					 <td>10</td>
 					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;commodities_id_seq&#39;::regclass)</td>
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>flow_inds</td>
-					 <td>Table</td>
-					 <td>value</td>
-					 <td>float8</td>
-					 <td>17</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td><p>Numeric value</p></td>
-					</tr>
-					<tr>
-					 <td>countries</td>
+					 <td>flow_quals</td>
 					 <td>Table</td>
 					 <td>created_at</td>
 					 <td>timestamp</td>
@@ -548,73 +746,18 @@
 					<tr>
 					 <td>nodes</td>
 					 <td>Table</td>
-					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>node_type_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>node_quants</td>
-					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>inds</td>
-					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;inds_id_seq&#39;::regclass)</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>contexts</td>
-					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>29</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>inds</td>
-					 <td>Table</td>
-					 <td>unit</td>
+					 <td>geo_id</td>
 					 <td>text</td>
 					 <td>2147483647</td>
 					 <td title='nullable'>√</td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>Unit in which values for this attribute are given</p></td>
+					 <td><p>2-letter iso code in case of country nodes; other geo identifiers possible for other node types</p></td>
 					</tr>
 					<tr>
-					 <td>flow_quants</td>
+					 <td>flow_quals</td>
 					 <td>Table</td>
-					 <td>value</td>
-					 <td>float8</td>
-					 <td>17</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td><p>Numeric value</p></td>
-					</tr>
-					<tr>
-					 <td>flow_inds</td>
-					 <td>Table</td>
-					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>flow_id</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
 					 <td>int4</td>
 					 <td>10</td>
 					 <td title=''></td>
@@ -623,7 +766,7 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>quals</td>
+					 <td>nodes</td>
 					 <td>Table</td>
 					 <td>created_at</td>
 					 <td>timestamp</td>
@@ -645,70 +788,26 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>contexts</td>
+					 <td>quants</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>country_id</td>
-					 <td>int4</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
 					 <td>10</td>
 					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;quants_id_seq&#39;::regclass)</td>
 					 <td></td>
 					</tr>
 					<tr>
 					 <td>flow_quals</td>
 					 <td>Table</td>
-					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>flow_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>contexts</td>
-					 <td>Table</td>
 					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
 					 <td>serial</td>
 					 <td>10</td>
 					 <td title=''></td>
 					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;contexts_id_seq&#39;::regclass)</td>
+					 <td>nextval(&#39;flow_quals_id_seq&#39;::regclass)</td>
 					 <td></td>
-					</tr>
-					<tr>
-					 <td>context_node_types</td>
-					 <td>Table</td>
-					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>node_type_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>quals</td>
-					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;quals_id_seq&#39;::regclass)</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>node_inds</td>
-					 <td>Table</td>
-					 <td>value</td>
-					 <td>float8</td>
-					 <td>17</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td><p>Numeric value</p></td>
 					</tr>
 					<tr>
 					 <td>node_inds</td>
@@ -722,18 +821,29 @@
 					 <td><p>Year; empty (NULL) for all years</p></td>
 					</tr>
 					<tr>
-					 <td>flow_quants</td>
+					 <td>nodes</td>
 					 <td>Table</td>
-					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>flow_id</td>
-					 <td>int4</td>
-					 <td>10</td>
+					 <td>name</td>
+					 <td>text</td>
+					 <td>2147483647</td>
 					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td></td>
+					 <td><p>Name of node</p></td>
 					</tr>
 					<tr>
-					 <td>flow_quants</td>
+					 <td>nodes</td>
+					 <td>Table</td>
+					 <td>is_unknown</td>
+					 <td>bool</td>
+					 <td>1</td>
+					 <td title=''></td>
+					 <td title=''></td>
+					 <td>false</td>
+					 <td><p>When set, node was not possible to identify</p></td>
+					</tr>
+					<tr>
+					 <td>countries</td>
 					 <td>Table</td>
 					 <td>created_at</td>
 					 <td>timestamp</td>
@@ -744,55 +854,11 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>countries</td>
+					 <td>inds</td>
 					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;countries_id_seq&#39;::regclass)</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>commodities</td>
-					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;commodities_id_seq&#39;::regclass)</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>node_quals</td>
-					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>flow_quals</td>
-					 <td>Table</td>
-					 <td>value</td>
-					 <td>text</td>
-					 <td>2147483647</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td><p>Textual value</p></td>
-					</tr>
-					<tr>
-					 <td>flow_quals</td>
-					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
-					 <td>int4</td>
-					 <td>10</td>
+					 <td>created_at</td>
+					 <td>timestamp</td>
+					 <td>29</td>
 					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
@@ -810,53 +876,9 @@
 					 <td><p>Commodity name; unique across commodities</p></td>
 					</tr>
 					<tr>
-					 <td>node_inds</td>
+					 <td>node_quals</td>
 					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;node_inds_id_seq&#39;::regclass)</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>quants</td>
-					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
-					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;quants_id_seq&#39;::regclass)</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>nodes</td>
-					 <td>Table</td>
-					 <td>geo_id</td>
-					 <td>text</td>
-					 <td>2147483647</td>
-					 <td title='nullable'>√</td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td><p>2-letter iso code in case of country nodes; other geo identifiers possible for other node types</p></td>
-					</tr>
-					<tr>
-					 <td>download_versions</td>
-					 <td>Table</td>
-					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>is_current</td>
-					 <td>bool</td>
-					 <td>1</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>false</td>
-					 <td><p>When set, use this version symbol for new downloads (only use for one)</p></td>
-					</tr>
-					<tr>
-					 <td>context_node_types</td>
-					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>context_id</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
 					 <td>int4</td>
 					 <td>10</td>
 					 <td title=''></td>
@@ -865,59 +887,37 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>commodities</td>
+					 <td>quants</td>
 					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>29</td>
+					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>name</td>
+					 <td>text</td>
+					 <td>2147483647</td>
 					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>nodes</td>
-					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>29</td>
-					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
+					 <td><p>Attribute short name, e.g. FOB; those literals are referred to in code, therefore should not be changed without notice</p></td>
 					</tr>
 					<tr>
 					 <td>flow_inds</td>
 					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
+					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>flow_id</td>
+					 <td>int4</td>
 					 <td>10</td>
 					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;flow_inds_id_seq&#39;::regclass)</td>
+					 <td title=''></td>
+					 <td>null</td>
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>node_quants</td>
+					 <td>node_quals</td>
 					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
+					 <td>value</td>
+					 <td>text</td>
+					 <td>2147483647</td>
 					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;node_quants_id_seq&#39;::regclass)</td>
-					 <td></td>
-					</tr>
-					<tr>
-					 <td>context_node_types</td>
-					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
 					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;context_node_types_id_seq&#39;::regclass)</td>
-					 <td></td>
+					 <td>null</td>
+					 <td><p>Textual value</p></td>
 					</tr>
 								</tbody>
 				</table>				

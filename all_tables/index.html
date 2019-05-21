@@ -81,7 +81,7 @@
 			<div class="col-md-12">
 				<div class="callout callout-info">
 					<h4>SchemaSpy Analysis of trase_test</h4>
-					<p>Generated on Tue Feb 26 09:28 UTC 2019</p>
+					<p>Generated on Tue May 21 11:37 UTC 2019</p>
 				</div>
 			</div>
 		</div>
@@ -99,7 +99,7 @@
 				  <span class="info-box-icon bg-aqua"><i class="fa fa-table"></i></span>
 				  <div class="info-box-content">
 					  <span class="info-box-text">TABLES</span>
-					  <span class="info-box-number">60</span>
+					  <span class="info-box-number">69</span>
 				  </div>
 				  <!-- /.info-box-content -->
 			  </div>
@@ -125,7 +125,7 @@
 
 				  <div class="info-box-content">
 					  <span class="info-box-text">COLUMNS</span>
-					  <span class="info-box-number">408</span>
+					  <span class="info-box-number">462</span>
 				  </div>
 				  <!-- /.info-box-content -->
 			  </div>
@@ -138,7 +138,7 @@
 
 				  <div class="info-box-content">
 					  <span class="info-box-text">Constraints</span>
-					  <span class="info-box-number">66</span>
+					  <span class="info-box-number">84</span>
 				  </div>
 				  <!-- /.info-box-content -->
 			  </div>
@@ -178,7 +178,7 @@
 			  <span class="label label-primary pull-right"><i class="fa fa-cog fa-2x"></i></span>			  
 			</div><!-- /.box-header -->
 			<div class="box-body">
-			  <p>Database Type: PostgreSQL - 9.6.6</p>			  
+			  <p>Database Type: PostgreSQL - 10.7 (Ubuntu 10.7-1.pgdg16.04+1)</p>			  
 			</div><!-- /.box-body -->
 		</div>
 		<div class="box box-primary">		
@@ -310,7 +310,7 @@
 				  <td class="comment detail" style="display: table-cell;"><p>Attributes (inds/quals/quants) to display in a chart.</p></td>
 				  </tr>
 				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/quants.html">quants</a></td>
-				  <td class="detail" align="right">8</td>
+				  <td class="detail" align="right">11</td>
 				  <td class="detail" align="right">0</td>
 				  <td class="detail" align="right">4</td>
 				  <td class="detail" align="right">0</td>
@@ -349,13 +349,29 @@
 				  <td class="detail" align="right">Table</td>
 				  <td class="comment detail" style="display: table-cell;"><p>List of types of nodes in the system, e.g. MUNICIPALITY or EXPORTER. Those literals are referred to in code, therefore should not be changed without notice.</p></td>
 				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/countries.html">countries</a></td>
+				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/qual_country_properties.html">qual_country_properties</a></td>
+				  <td class="detail" align="right">0</td>
 				  <td class="detail" align="right">2</td>
+				  <td class="detail" align="right">6</td>
+				  <td class="detail" align="right">0</td>
+				  <td class="detail" align="right">Table</td>
+				  <td class="comment detail" style="display: table-cell;"><p>Country specific properties for qual</p></td>
+				  </tr>
+				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/countries.html">countries</a></td>
+				  <td class="detail" align="right">5</td>
 				  <td class="detail" align="right">0</td>
 				  <td class="detail" align="right">4</td>
 				  <td class="detail" align="right">0</td>
 				  <td class="detail" align="right">Table</td>
 				  <td class="comment detail" style="display: table-cell;"><p>Countries (source)</p></td>
+				  </tr>
+				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/qual_context_properties.html">qual_context_properties</a></td>
+				  <td class="detail" align="right">0</td>
+				  <td class="detail" align="right">2</td>
+				  <td class="detail" align="right">6</td>
+				  <td class="detail" align="right">0</td>
+				  <td class="detail" align="right">Table</td>
+				  <td class="comment detail" style="display: table-cell;"><p>Context specific properties for qual (like tooltip text)</p></td>
 				  </tr>
 				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/map_attribute_groups.html">map_attribute_groups</a></td>
 				  <td class="detail" align="right">1</td>
@@ -381,14 +397,6 @@
 				  <td class="detail" align="right">Table</td>
 				  <td class="comment detail" style="display: table-cell;"><p>Values of quants for flow</p></td>
 				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/download_quals.html">download_quals</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Quals to include in downloads (see download_attributes.)</p></td>
-				  </tr>
 				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/download_quants.html">download_quants</a></td>
 				  <td class="detail" align="right">0</td>
 				  <td class="detail" align="right">2</td>
@@ -397,6 +405,14 @@
 				  <td class="detail" align="right">Table</td>
 				  <td class="comment detail" style="display: table-cell;"><p>Quants to include in downloads (see download_attributes.)</p></td>
 				  </tr>
+				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/download_quals.html">download_quals</a></td>
+				  <td class="detail" align="right">0</td>
+				  <td class="detail" align="right">2</td>
+				  <td class="detail" align="right">6</td>
+				  <td class="detail" align="right">0</td>
+				  <td class="detail" align="right">Table</td>
+				  <td class="comment detail" style="display: table-cell;"><p>Quals to include in downloads (see download_attributes.)</p></td>
+				  </tr>
 				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/carto_layers.html">carto_layers</a></td>
 				  <td class="detail" align="right">0</td>
 				  <td class="detail" align="right">1</td>
@@ -404,6 +420,14 @@
 				  <td class="detail" align="right">0</td>
 				  <td class="detail" align="right">Table</td>
 				  <td class="comment detail" style="display: table-cell;"><p>Year-specific data layers defined in CartoDB used to display contextual layers.</p></td>
+				  </tr>
+				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/qual_commodity_properties.html">qual_commodity_properties</a></td>
+				  <td class="detail" align="right">0</td>
+				  <td class="detail" align="right">2</td>
+				  <td class="detail" align="right">6</td>
+				  <td class="detail" align="right">0</td>
+				  <td class="detail" align="right">Table</td>
+				  <td class="comment detail" style="display: table-cell;"><p>Commodity specific properties for qual</p></td>
 				  </tr>
 				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboard_template_destinations.html">dashboard_template_destinations</a></td>
 				  <td class="detail" align="right">0</td>
@@ -421,10 +445,18 @@
 				  <td class="detail" align="right">Table</td>
 				  <td class="comment detail" style="display: table-cell;"><p>Quants to display on map (see map_attributes.)</p></td>
 				  </tr>
+				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/ind_commodity_properties.html">ind_commodity_properties</a></td>
+				  <td class="detail" align="right">0</td>
+				  <td class="detail" align="right">2</td>
+				  <td class="detail" align="right">6</td>
+				  <td class="detail" align="right">0</td>
+				  <td class="detail" align="right">Table</td>
+				  <td class="comment detail" style="display: table-cell;"><p>Commodity specific properties for ind</p></td>
+				  </tr>
 				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/context_node_type_properties.html">context_node_type_properties</a></td>
 				  <td class="detail" align="right">0</td>
 				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">8</td>
+				  <td class="detail" align="right">9</td>
 				  <td class="detail" align="right">0</td>
 				  <td class="detail" align="right">Table</td>
 				  <td class="comment detail" style="display: table-cell;"></td>
@@ -557,8 +589,16 @@
 				  <td class="detail" align="right">Table</td>
 				  <td class="comment detail" style="display: table-cell;"></td>
 				  </tr>
+				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/ind_context_properties.html">ind_context_properties</a></td>
+				  <td class="detail" align="right">0</td>
+				  <td class="detail" align="right">2</td>
+				  <td class="detail" align="right">6</td>
+				  <td class="detail" align="right">0</td>
+				  <td class="detail" align="right">Table</td>
+				  <td class="comment detail" style="display: table-cell;"><p>Context specific properties for ind (like tooltip text)</p></td>
+				  </tr>
 				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/inds.html">inds</a></td>
-				  <td class="detail" align="right">7</td>
+				  <td class="detail" align="right">10</td>
 				  <td class="detail" align="right">0</td>
 				  <td class="detail" align="right">4</td>
 				  <td class="detail" align="right">0</td>
@@ -577,14 +617,14 @@
 				  <td class="detail" align="right">0</td>
 				  <td class="detail" align="right">0</td>
 				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">134</td>
+				  <td class="detail" align="right">156</td>
 				  <td class="detail" align="right">Table</td>
 				  <td class="comment detail" style="display: table-cell;"></td>
 				  </tr>
 				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboards_attributes.html">dashboards_attributes</a></td>
 				  <td class="detail" align="right">3</td>
 				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">6</td>
+				  <td class="detail" align="right">5</td>
 				  <td class="detail" align="right">0</td>
 				  <td class="detail" align="right">Table</td>
 				  <td class="comment detail" style="display: table-cell;"><p>Attributes (inds/quals/quants) available in dashboards</p></td>
@@ -613,6 +653,14 @@
 				  <td class="detail" align="right">Table</td>
 				  <td class="comment detail" style="display: table-cell;"><p>Keeping track of database update operations, also used to ensure only one update processed at a time</p></td>
 				  </tr>
+				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/quant_context_properties.html">quant_context_properties</a></td>
+				  <td class="detail" align="right">0</td>
+				  <td class="detail" align="right">2</td>
+				  <td class="detail" align="right">6</td>
+				  <td class="detail" align="right">0</td>
+				  <td class="detail" align="right">Table</td>
+				  <td class="comment detail" style="display: table-cell;"><p>Context specific properties for quant (like tooltip text)</p></td>
+				  </tr>
 				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/chart_node_types.html">chart_node_types</a></td>
 				  <td class="detail" align="right">0</td>
 				  <td class="detail" align="right">2</td>
@@ -628,6 +676,14 @@
 				  <td class="detail" align="right">0</td>
 				  <td class="detail" align="right">Table</td>
 				  <td class="comment detail" style="display: table-cell;"><p>Quals to display in a chart (see chart_attributes.)</p></td>
+				  </tr>
+				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/quant_country_properties.html">quant_country_properties</a></td>
+				  <td class="detail" align="right">0</td>
+				  <td class="detail" align="right">2</td>
+				  <td class="detail" align="right">6</td>
+				  <td class="detail" align="right">0</td>
+				  <td class="detail" align="right">Table</td>
+				  <td class="comment detail" style="display: table-cell;"><p>Country specific properties for quant</p></td>
 				  </tr>
 				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/database_validation_reports.html">database_validation_reports</a></td>
 				  <td class="detail" align="right">0</td>
@@ -646,7 +702,7 @@
 				  <td class="comment detail" style="display: table-cell;"><p>Quants available for recoloring (see resize_by_attributes.)</p></td>
 				  </tr>
 				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/contexts.html">contexts</a></td>
-				  <td class="detail" align="right">9</td>
+				  <td class="detail" align="right">12</td>
 				  <td class="detail" align="right">2</td>
 				  <td class="detail" align="right">6</td>
 				  <td class="detail" align="right">0</td>
@@ -669,6 +725,14 @@
 				  <td class="detail" align="right">Table</td>
 				  <td class="comment detail" style="display: table-cell;"><p>Values of quals for node</p></td>
 				  </tr>
+				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/ind_country_properties.html">ind_country_properties</a></td>
+				  <td class="detail" align="right">0</td>
+				  <td class="detail" align="right">2</td>
+				  <td class="detail" align="right">6</td>
+				  <td class="detail" align="right">0</td>
+				  <td class="detail" align="right">Table</td>
+				  <td class="comment detail" style="display: table-cell;"><p>Country specific properties for ind</p></td>
+				  </tr>
 				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/recolor_by_attributes.html">recolor_by_attributes</a></td>
 				  <td class="detail" align="right">2</td>
 				  <td class="detail" align="right">1</td>
@@ -678,15 +742,23 @@
 				  <td class="comment detail" style="display: table-cell;"><p>Attributes (inds/quals) available for recoloring.</p></td>
 				  </tr>
 				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/quals.html">quals</a></td>
-				  <td class="detail" align="right">7</td>
+				  <td class="detail" align="right">10</td>
 				  <td class="detail" align="right">0</td>
 				  <td class="detail" align="right">3</td>
 				  <td class="detail" align="right">0</td>
 				  <td class="detail" align="right">Table</td>
 				  <td class="comment detail" style="display: table-cell;"><p>Attributes classified as quals</p></td>
 				  </tr>
+				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/quant_commodity_properties.html">quant_commodity_properties</a></td>
+				  <td class="detail" align="right">0</td>
+				  <td class="detail" align="right">2</td>
+				  <td class="detail" align="right">6</td>
+				  <td class="detail" align="right">0</td>
+				  <td class="detail" align="right">Table</td>
+				  <td class="comment detail" style="display: table-cell;"><p>Commodity specific properties for quant</p></td>
+				  </tr>
 				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/commodities.html">commodities</a></td>
-				  <td class="detail" align="right">1</td>
+				  <td class="detail" align="right">4</td>
 				  <td class="detail" align="right">0</td>
 				  <td class="detail" align="right">3</td>
 				  <td class="detail" align="right">0</td>
