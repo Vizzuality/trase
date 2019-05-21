@@ -70,6 +70,7 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano-rvm'
   gem 'capistrano-passenger'
+  gem 'sitemap_generator'
 
   gem 'rubocop', require: false
   gem 'rbnacl', '>= 3.2', '< 5.0'

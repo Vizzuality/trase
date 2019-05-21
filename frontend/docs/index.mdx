@@ -204,6 +204,22 @@ To deploy, simply use:
 cap <staging|production> deploy
 ```
 
+## Sitemaps
+
+We are using [Sitemap generator](https://github.com/kjvarga/sitemap_generator).
+The sitemap config is located in config/sitemap.rb.
+To refresh the sitemap and ping Google and Bing bots use:
+
+```
+rake sitemap:refresh
+```
+To do it without pinging the bots:
+```
+rake sitemap:refresh:no_ping
+```
+
+The sitemap is refreshed automatically in each release.
+
 ## Git hooks
 
 This project includes a set of git hooks that you may find useful
