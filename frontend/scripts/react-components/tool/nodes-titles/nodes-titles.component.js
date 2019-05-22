@@ -37,6 +37,7 @@ export default class {
   selectNodes(data) {
     const {
       nodesData,
+      columns,
       recolorGroups,
       currentQuant,
       selectedYears,
@@ -46,6 +47,7 @@ export default class {
     this._update({
       isSelect: true,
       nodesData: nodesData || highlightedNodesData,
+      columns,
       recolorGroups,
       currentQuant,
       selectedYears,
@@ -55,6 +57,7 @@ export default class {
 
   highlightNode({
     isHighlight,
+    columns,
     highlightedNodesData,
     recolorGroups,
     coordinates,
@@ -75,6 +78,7 @@ export default class {
       this._update({
         isSelect: !isHighlight,
         nodesData: highlightedNodesData,
+        columns,
         recolorGroups,
         currentQuant,
         selectedYears,
@@ -86,6 +90,7 @@ export default class {
   _update({
     isSelect,
     nodesData,
+    columns,
     recolorGroups = null,
     currentQuant,
     selectedYears,
@@ -115,6 +120,7 @@ export default class {
       contextId: selectedContextId,
       year: selectedYears ? selectedYears[0] : null,
       nodes: nodesData.map(node => {
+        const column = columns[node.columnId];
         let renderedQuant;
         if (node.quant !== undefined) {
           renderedQuant = {
@@ -137,8 +143,8 @@ export default class {
           hasLink:
             node.isUnknown !== true &&
             node.isDomesticConsumption !== true &&
-            node.profileType !== undefined &&
-            node.profileType !== null,
+            column.profileType !== undefined &&
+            column.profileType !== null,
           selectedMetas: renderedMetas,
           renderedQuant
         });

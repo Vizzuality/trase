@@ -120,7 +120,7 @@ const _setBiomeFilterAction = (biomeFilterName, state) => {
       {},
       currentContext.filterBy[0].nodes.find(filterBy => filterBy.name === biomeFilterName)
     );
-    const node = state.toolLinks.nodesDict[selectedBiomeFilter.nodeId];
+    const node = state.toolLinks.data.nodes[selectedBiomeFilter.nodeId];
     selectedBiomeFilter.geoId = node && node.geoId;
   }
 
@@ -515,7 +515,7 @@ export function loadMapVectorData() {
             const geoJSON = topojsonFeature(topoJSON, topoJSON.objects[key]);
             setGeoJSONMeta(
               geoJSON,
-              getState().toolLayers.nodesDict,
+              getState().toolLinks.data.nodes,
               getState().toolLayers.geoIdsDict,
               geoColumn.id
             );
@@ -690,7 +690,7 @@ export function selectNodeFromGeoId(geoId) {
   return (dispatch, getState) => {
     const nodeId = getNodeIdFromGeoId(
       geoId,
-      getState().toolLayers.nodesDict,
+      getState().toolLinks.data.nodes,
       getState().toolLinks.selectedColumnsIds[0]
     );
 
@@ -715,10 +715,10 @@ export function selectExpandedNode(param) {
         dispatch(resetState());
       } else {
         const nodes = ids.map(nodeId => {
-          if (!toolLinks.nodesDict[nodeId]) {
-            console.warn(`requested node ${nodeId} does not exist in nodesDict`);
+          if (!toolLinks.data.nodes[nodeId]) {
+            console.warn(`requested node ${nodeId} does not exist in nodes`);
           }
-          return toolLinks.nodesDict[nodeId];
+          return toolLinks.data.nodes[nodeId];
         });
 
         nodes.forEach(node => {
@@ -816,7 +816,7 @@ export function collapseNodeSelection() {
 
 export function navigateToProfile(nodeId, year, contextId) {
   return (dispatch, getState) => {
-    const node = getState().toolLinks.nodesDict[nodeId];
+    const node = getState().toolLinks.data.nodes[nodeId];
     dispatch({
       type: 'profileNode',
       payload: { query: { nodeId, year, contextId }, profileType: node.profileType }

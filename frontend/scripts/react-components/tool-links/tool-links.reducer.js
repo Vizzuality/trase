@@ -9,6 +9,7 @@ import {
   SELECT_RECOLOR_BY,
   SELECT_RESIZE_BY,
   SELECT_VIEW,
+  SET_NODE_ATTRIBUTES,
   SET_SANKEY_SEARCH_VISIBILITY,
   SHOW_LINKS_ERROR,
   UPDATE_NODE_SELECTION,
@@ -20,12 +21,14 @@ import groupBy from 'lodash/groupBy';
 import isEmpty from 'lodash/isEmpty';
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
+import getNodesMetaUid from 'reducers/helpers/getNodeMetaUid';
 
 export const toolLinksInitialState = {
   data: {
     columns: null,
     nodes: {},
-    links: []
+    links: [],
+    nodeAttributes: null
   },
   currentQuant: null,
   detailedView: false,
@@ -140,6 +143,22 @@ const toolLinksReducer = {
       });
     });
   },
+  [SET_NODE_ATTRIBUTES](state, action) {
+    return immer(state, draft => {
+      draft.data.nodeAttributes = {};
+      action.payload.data.forEach(attribute => {
+        if (typeof draft.data.nodeAttributes[attribute.node_id] !== 'undefined') {
+          const uid = getNodesMetaUid(attribute.attribute_type, attribute.attribute_id);
+          draft.data.nodeAttributes[attribute.node_id][uid] = attribute;
+        } else {
+          const uid = getNodesMetaUid(attribute.attribute_type, attribute.attribute_id);
+          draft.data.nodeAttributes[attribute.node_id] = {
+            [uid]: attribute
+          };
+        }
+      });
+    });
+  },
   [SHOW_LINKS_ERROR](state) {
     return immer(state, draft => {
       Object.assign(draft, { links: null, flowsLoading: false });
@@ -211,7 +230,6 @@ const toolLinksReducer = {
 };
 
 const toolLinksReducerTypes = PropTypes => ({
-  columns: PropTypes.arrayOf(PropTypes.object).isRequired,
   currentQuant: PropTypes.object,
   detailedView: PropTypes.bool,
   isSearchOpen: PropTypes.bool,
@@ -219,7 +237,6 @@ const toolLinksReducerTypes = PropTypes => ({
   forcedOverview: PropTypes.bool,
   highlightedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   flowsLoading: PropTypes.bool,
-  nodesDict: PropTypes.object,
   selectedBiomeFilter: PropTypes.object,
   selectedColumnsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,

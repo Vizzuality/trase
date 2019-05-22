@@ -18,11 +18,9 @@ import { SET_CONTEXT } from 'scripts/actions/app.actions';
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
 import getNodesDict from 'scripts/reducers/helpers/getNodesDict';
-import setNodesMeta from 'scripts/reducers/helpers/setNodesMeta';
 import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 
 export const toolLayersInitialState = {
-  nodesDict: null,
   geoIdsDict: {},
   highlightedNodeCoordinates: null,
   isMapVisible: false,
@@ -33,7 +31,6 @@ export const toolLayersInitialState = {
   mapLoading: true,
   mapVectorData: null,
   mapView: null,
-  nodesDictWithMeta: {},
   selectedMapBasemap: null,
   selectedMapContextualLayers: null,
   selectedMapDimensions: [null, null],
@@ -51,17 +48,9 @@ const toolLayersReducer = {
     });
   },
 
-  [SET_NODE_ATTRIBUTES](state, action) {
+  [SET_NODE_ATTRIBUTES](state) {
     return immer(state, draft => {
-      const nodesMeta = action.payload;
-
-      // store dimension values in nodesDict as uid: dimensionValue
-      const nodesDictWithMeta = setNodesMeta(draft.nodesDict, nodesMeta, draft.mapDimensions);
-
-      return Object.assign(draft, {
-        nodesDictWithMeta,
-        mapLoading: false
-      });
+      draft.mapLoading = false;
     });
   },
   [SET_MAP_DIMENSIONS_DATA](state, action) {
@@ -160,10 +149,9 @@ const toolLayersReducer = {
       const rawNodes = action.payload[0].data;
       const columns = action.payload[1].data;
 
-      const { nodesDict, geoIdsDict } = getNodesDict(rawNodes, columns);
+      const { geoIdsDict } = getNodesDict(rawNodes, columns);
 
       return Object.assign(draft, {
-        nodesDict,
         geoIdsDict
       });
     });
@@ -181,7 +169,6 @@ const toolLayersReducerTypes = PropTypes => ({
   mapLoading: PropTypes.bool,
   mapVectorData: PropTypes.array,
   mapView: PropTypes.object,
-  nodesDictWithMeta: PropTypes.object.isRequired,
   selectedMapBasemap: PropTypes.string,
   selectedMapContextualLayers: PropTypes.array,
   selectedMapDimensions: PropTypes.array.isRequired,

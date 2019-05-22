@@ -12,6 +12,8 @@ const mapStateToProps = state => {
   const highlightedNodesData = getHighlightedNodesData(state);
   return {
     nodesData: getSelectedNodesData(state),
+    columns: state.toolLinks.data.columns,
+    attributes: state.toolLinks.attributes,
     recolorGroups: getToolRecolorGroups(state),
     currentQuant: state.toolLinks.currentQuant,
     selectedYears: state.app.selectedYears,
@@ -27,18 +29,28 @@ const methodProps = [
   {
     name: 'selectNodes',
     compared: ['nodesData'],
-    returned: ['nodesData', 'recolorGroups', 'currentQuant', 'selectedYears', 'selectedContextId']
+    returned: [
+      'nodesData',
+      'recolorGroups',
+      'currentQuant',
+      'selectedYears',
+      'selectedContextId',
+      'columns',
+      'attributes'
+    ]
   },
   {
     name: 'highlightNode',
     compared: ['highlightedNodesData'],
     returned: [
+      'columns',
       'highlightedNodesData',
       'isHighlight',
       'recolorGroups',
       'coordinates',
       'currentQuant',
       'selectedYears',
+      'attributes',
       'selectedContextId'
     ]
   }

@@ -29,7 +29,7 @@ export default [
       const nodeNames = [];
 
       action.ids.forEach(d => {
-        const node = state.toolLinks.nodesDict[d];
+        const node = state.toolLinks.data.nodes[d];
         if (typeof node !== 'undefined') {
           nodeNames.push(node.name);
         }

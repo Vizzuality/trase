@@ -13,7 +13,6 @@ import splitLinksByColumn from 'reducers/helpers/splitLinksByColumn';
 
 const getSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getHighlightedNodesIds = state => state.toolLinks.highlightedNodesIds;
-const getNodesDictWithMeta = state => state.toolLinks.nodesDictWithMeta;
 const getSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolLinks = state => state.toolLinks.data.links;
@@ -24,6 +23,7 @@ const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
 const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
 const getToolBiomeFilter = state => state.toolLinks.selectedBiomeFilter;
 const getSelectedContext = state => state.app.selectedContext;
+const getToolNodeAttributes = state => state.toolLinks.data.nodeAttributes;
 
 export const getSelectedResizeBy = makeGetSelectedResizeBy(getToolResizeBy, getSelectedContext);
 export const getSelectedRecolorBy = makeGetSelectedRecolorBy(getToolRecolorBy, getSelectedContext);
@@ -42,11 +42,17 @@ export const getSelectedBiomeFilter = createSelector(
   }
 );
 
-const getNodeSelectedMeta = (selectedMapDimension, node, selectedResizeByLabel, visibleNode) => {
-  if (!node.meta || selectedMapDimension === null) {
+const getNodeSelectedMeta = (
+  selectedMapDimension,
+  node,
+  attributes,
+  selectedResizeByLabel,
+  visibleNode
+) => {
+  if (!attributes || selectedMapDimension === null) {
     return null;
   }
-  const meta = node.meta[selectedMapDimension];
+  const meta = attributes[selectedMapDimension];
   if (meta && meta.name !== selectedResizeByLabel) {
     return meta;
   }
@@ -54,14 +60,14 @@ const getNodeSelectedMeta = (selectedMapDimension, node, selectedResizeByLabel, 
     meta &&
     visibleNode &&
     visibleNode.quant &&
-    meta.rawValue !== visibleNode.quant &&
+    meta.value !== visibleNode.quant &&
     NODE_ENV_DEV === true
   ) {
     // See https://basecamp.com/1756858/projects/12498794/todos/312319406
     console.warn(
       'Attempting to show different values two dimensions with the same name.',
       `ResizeBy: ${selectedResizeByLabel} with value ${visibleNode.quant}`,
-      `Map layer: ${meta.name} with value ${meta.rawValue}`
+      `Map layer: ${meta.name} with value ${meta.value}`
     );
   }
   return null;
@@ -71,7 +77,7 @@ const getNodesData = (
   nodesIds,
   visibleNodes,
   nodes,
-  nodesDictWithMeta,
+  nodesAttributes,
   selectedMapDimensions,
   selectedResizeBy
 ) => {
@@ -84,12 +90,25 @@ const getNodesData = (
     let node = {};
 
     // get_nodes might still be loading at this point, in this case just skip adding metadata
-    if (nodesDictWithMeta && selectedMapDimensions) {
-      node = Object.assign(node, nodesDictWithMeta[nodeId]);
+    if (nodes && selectedMapDimensions) {
+      const attributes = nodesAttributes[nodeId];
+      node = Object.assign(node, nodes[nodeId]);
       // add metas from the map layers to the selected nodes data
       node.selectedMetas = compact([
-        getNodeSelectedMeta(selectedMapDimensions[0], node, selectedResizeBy.label, visibleNode),
-        getNodeSelectedMeta(selectedMapDimensions[1], node, selectedResizeBy.label, visibleNode)
+        getNodeSelectedMeta(
+          selectedMapDimensions[0],
+          node,
+          attributes,
+          selectedResizeBy.label,
+          visibleNode
+        ),
+        getNodeSelectedMeta(
+          selectedMapDimensions[1],
+          node,
+          attributes,
+          selectedResizeBy.label,
+          visibleNode
+        )
       ]);
     }
 
@@ -133,7 +152,7 @@ export const getSelectedNodesData = createSelector(
     getSelectedNodesIds,
     getVisibleNodes,
     getToolNodes,
-    getNodesDictWithMeta,
+    getToolNodeAttributes,
     getSelectedMapDimensions,
     getSelectedResizeBy
   ],
@@ -213,7 +232,7 @@ export const getHighlightedNodesData = createSelector(
     getHighlightedNodesIds,
     getVisibleNodes,
     getToolNodes,
-    getNodesDictWithMeta,
+    getToolNodeAttributes,
     getSelectedMapDimensions,
     getSelectedResizeBy
   ],

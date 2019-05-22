@@ -3,15 +3,14 @@ import flatten from 'lodash/flatten';
 import groupBy from 'lodash/groupBy';
 import isNodeColumnVisible from 'utils/isNodeColumnVisible';
 
-const getToolNodes = state => state.toolLinks && state.toolLinks.nodes;
+const getToolNodes = state => state.toolLinks && state.toolLinks.data.nodes;
 const getSelectedColumnsIds = state => state.toolLinks && state.toolLinks.selectedColumnsIds;
-const getNodesDict = state => state.toolLinks && state.toolLinks.nodesDict;
 
 const getAllToolSearchNodes = createSelector(
   getToolNodes,
   nodes =>
     nodes &&
-    nodes.filter(
+    Object.values(nodes).filter(
       node =>
         node.hasFlows === true &&
         node.isAggregated !== true &&
@@ -26,13 +25,13 @@ const getGroupedNodes = createSelector(
 );
 
 export const getToolSearchNodes = createSelector(
-  [getGroupedNodes, getSelectedColumnsIds, getNodesDict],
-  (nodes, selectedColumnsIds, nodesDict) => {
+  [getGroupedNodes, getSelectedColumnsIds, getToolNodes],
+  (groupedNodes, selectedColumnsIds, nodes) => {
     const getNode = ([nA, nB]) => {
       if (nB) {
         if (
-          isNodeColumnVisible(nodesDict[nA.id], selectedColumnsIds) &&
-          isNodeColumnVisible(nodesDict[nB.id], selectedColumnsIds)
+          isNodeColumnVisible(nodes[nA.id], selectedColumnsIds) &&
+          isNodeColumnVisible(nodes[nB.id], selectedColumnsIds)
         ) {
           return {
             id: `${nA.id}_${nB.id}`,
@@ -48,6 +47,6 @@ export const getToolSearchNodes = createSelector(
       return nA;
     };
 
-    return flatten(nodes.map(groupedNodes => getNode(groupedNodes)));
+    return flatten(groupedNodes.map(group => getNode(group)));
   }
 );

@@ -5,15 +5,17 @@ import { getHighlightedNodesData } from 'react-components/tool/tool.selectors';
 
 const getMapDimensions = state => state.toolLayers.mapDimensions;
 const getSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
-const getNodesDictWithMeta = state => state.toolLayers.nodesDictWithMeta;
+const getToolNodes = state => state.toolLinks.data.nodes;
+const getToolColumns = state => state.toolLinks.data.columns;
 const getMapContextualLayers = state => state.toolLayers.mapContextualLayers;
 const getSelectedMapContextualLayers = state => state.toolLayers.selectedMapContextualLayers;
 const getSelectedYears = state => state.app.selectedYears;
+const getToolNodeAttributes = state => state.toolLinks.data.nodeAttributes;
 
 export const getChoroplethOptions = createSelector(
-  [getMapDimensions, getSelectedMapDimensions, getNodesDictWithMeta],
-  (mapDimensions, selectedMapDimensions, nodesDictWithMeta) =>
-    getChoropleth(selectedMapDimensions, nodesDictWithMeta, mapDimensions)
+  [getMapDimensions, getToolNodes, getToolNodeAttributes, getToolColumns, getSelectedMapDimensions],
+  (mapDimensions, nodes, attributes, columns, selectedMapDimensions) =>
+    getChoropleth(selectedMapDimensions, nodes, attributes, columns, mapDimensions)
 );
 
 export const getMapDimensionsWarnings = createSelector(

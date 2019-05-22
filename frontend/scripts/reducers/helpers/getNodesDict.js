@@ -9,14 +9,14 @@ export default function(rawNodes, columns /* , nodesMeta */) {
     const newNode = {
       id: node.id,
       columnId: parseInt(node.columnId, 10),
-      columnName: matchingColumn.name,
+      name: node.name,
+      geoId: node.geoId,
       type: matchingColumn.name,
+      isGeo: matchingColumn.isGeo,
+      columnName: matchingColumn.name,
       columnGroup: matchingColumn.group,
       isDefault: matchingColumn.isDefault,
-      isGeo: matchingColumn.isGeo,
-      name: node.name,
-      profileType: matchingColumn.profileType,
-      geoId: node.geoId
+      profileType: matchingColumn.profileType
     };
 
     if (node.isDomesticConsumption === true || node.isDomesticConsumption === 'true') {
