@@ -9,16 +9,16 @@ import filterLinks from 'reducers/helpers/filterLinks';
 import getNodesAtColumns from 'reducers/helpers/getNodesAtColumns';
 import getNodesColoredBySelection from 'reducers/helpers/getNodesColoredBySelection';
 import getNextRecolorGroups from 'reducers/helpers/getRecolorGroups';
+import splitLinksByColumn from 'reducers/helpers/splitLinksByColumn';
 
 const getSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getHighlightedNodesIds = state => state.toolLinks.highlightedNodesIds;
 const getNodesDictWithMeta = state => state.toolLinks.nodesDictWithMeta;
 const getSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
 const getNodesDict = state => state.toolLinks.nodesDict;
-const getRawLinks = state => state.toolLinks.rawLinks;
+const getToolLinks = state => state.toolLinks.data.links;
 const getLinksMeta = state => state.toolLinks.linksMeta;
 const getSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
-const getUnmergedLinks = state => state.toolLinks.unmergedLinks;
 const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
 const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
 const getToolBiomeFilter = state => state.toolLinks.selectedBiomeFilter;
@@ -107,12 +107,12 @@ const getNodesGeoIds = nodesData =>
     .map(node => node.geoId);
 
 export const getVisibleNodes = createSelector(
-  [getRawLinks, getNodesDict, getLinksMeta, getSelectedColumnsIds],
-  (rawLinks, nodesDict, linksMeta, selectedColumnsIds) => {
-    if (!rawLinks || !nodesDict || !linksMeta || !selectedColumnsIds) {
+  [getToolLinks, getNodesDict, getLinksMeta, getSelectedColumnsIds],
+  (links, nodesDict, linksMeta, selectedColumnsIds) => {
+    if (!links || !nodesDict || !linksMeta || !selectedColumnsIds) {
       return [];
     }
-    return getVisibleNodesUtil(rawLinks, nodesDict, linksMeta, selectedColumnsIds);
+    return getVisibleNodesUtil(links, nodesDict, linksMeta, selectedColumnsIds);
   }
 );
 
@@ -163,6 +163,11 @@ export const getNodesColored = createSelector(
 export const getToolRecolorGroups = createSelector(
   getNodesColored,
   nodesColored => getNextRecolorGroups(nodesColored.nodesColoredBySelection)
+);
+
+const getUnmergedLinks = createSelector(
+  [getToolLinks, getNodesDict, getSelectedRecolorBy],
+  (links, nodesDict, selectedRecolorBy) => splitLinksByColumn(links, nodesDict, selectedRecolorBy)
 );
 
 export const getFilteredLinks = createSelector(

@@ -21,9 +21,13 @@ import isEmpty from 'lodash/isEmpty';
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
 import getNodesDict from 'reducers/helpers/getNodesDict';
-import splitLinksByColumn from 'reducers/helpers/splitLinksByColumn';
 
 export const toolLinksInitialState = {
+  data: {
+    columns: {},
+    nodes: {},
+    links: []
+  },
   columns: [],
   currentQuant: null,
   detailedView: false,
@@ -31,15 +35,12 @@ export const toolLinksInitialState = {
   forcedOverview: false,
   highlightedNodesIds: [],
   flowsLoading: true,
-  nodes: [],
   nodesDict: null,
   selectedBiomeFilter: null,
   selectedColumnsIds: [],
   selectedNodesIds: [],
   selectedRecolorBy: null,
   selectedResizeBy: null,
-  unmergedLinks: [],
-  rawLinks: [],
   loadedFlowsContextId: null,
   isSearchOpen: false
 };
@@ -113,7 +114,6 @@ const toolLinksReducer = {
 
     return Object.assign({}, state, {
       columns,
-      nodes: rawNodes,
       nodesDict,
       selectedColumnsIds
     });
@@ -121,17 +121,15 @@ const toolLinksReducer = {
 
   [GET_LINKS](state, action) {
     return immer(state, draft => {
-      const rawLinks = action.jsonPayload.data;
+      const links = action.jsonPayload.data;
       const linksMeta = action.jsonPayload.include;
 
       const currentQuant = linksMeta.quant;
 
-      const unmergedLinks = splitLinksByColumn(rawLinks, draft.nodesDict, draft.selectedRecolorBy);
+      draft.data.links = links;
 
       return Object.assign(draft, {
-        rawLinks,
         linksMeta,
-        unmergedLinks,
         currentQuant,
         flowsLoading: false
       });
@@ -172,8 +170,7 @@ const toolLinksReducer = {
       if (draft.selectedColumnsIds.indexOf(action.columnId) === -1) {
         draft.selectedColumnsIds[action.columnIndex] = action.columnId;
       }
-      draft.rawLinks = [];
-      draft.unmergedLinks = [];
+      draft.data.links = [];
     });
   },
   [UPDATE_NODE_SELECTION](state, action) {
@@ -217,15 +214,12 @@ const toolLinksReducerTypes = PropTypes => ({
   forcedOverview: PropTypes.bool,
   highlightedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   flowsLoading: PropTypes.bool,
-  nodes: PropTypes.arrayOf(PropTypes.object).isRequired,
   nodesDict: PropTypes.object,
   selectedBiomeFilter: PropTypes.object,
   selectedColumnsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedRecolorBy: PropTypes.object,
   selectedResizeBy: PropTypes.object,
-  rawLinks: PropTypes.arrayOf(PropTypes.object),
-  unmergedLinks: PropTypes.arrayOf(PropTypes.object).isRequired,
   loadedFlowsContextId: PropTypes.number
 });
 

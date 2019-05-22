@@ -11,12 +11,9 @@ const mapStateToProps = state => ({
   tooltip: state.app.tooltips?.sankey.nav.colorBy.main
 });
 
-const mapDispatchToProps = dispatch => ({
-  onChange: recolorBy => {
-    recolorBy.value = recolorBy.name;
-    dispatch(selectRecolorBy(recolorBy));
-  }
-});
+const mapDispatchToProps = {
+  onChange: selectRecolorBy
+};
 
 export default connect(
   mapStateToProps,
