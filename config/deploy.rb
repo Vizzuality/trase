@@ -39,8 +39,6 @@ set :init_system, :systemd
 namespace :deploy do
   after :finishing, 'deploy:cleanup'
   after 'deploy:publishing', 'deploy:restart'
-
-  after :finishing, 'sitemap:refresh'
 end
 
 namespace :sidekiq do
@@ -55,7 +53,6 @@ namespace :sidekiq do
     end
   end
 end
-
 
 after 'deploy:starting', 'sidekiq:quiet'
 after 'deploy:reverted', 'sidekiq:restart'
