@@ -7,14 +7,16 @@ SitemapGenerator::Sitemap.create do
   add'/flows'
   add'/profiles'
 
-  place_ids = Api::V3::NodeType.where(name: ['MUNICIPALITY', 'LOGISTICS HUB'])).map {|z| z.id }
-  Api::V3::Node.where(node_type_id: place_ids, is_unknown: false).map(&:id).each do |nodeId|
-    add "/profile-place?nodeId=#{nodeId}&contextId=#{contextId}&year=#{year}"
-  end
-
-  actor_ids = Api::V3::NodeType.where(name: ['IMPORTER', 'EXPORTER'])).map {|z| z.id }
-    Api::V3::Node.where(node_type_id: actor_ids, is_unknown: false).map(&:id).each do |nodeId|
-    add "/profile-actor?nodeId=#{nodeId}&contextId=#{contextId}&year=#{year}"
+  contexts = Api::V3::Context.all;
+  contexts.each do |context|
+    context.years.each do |year|
+      Api::V3::Readonly::Node.where(profile: 'place').map(&:id).each do |nodeId|
+        add "/profile-place?nodeId=#{nodeId}&year=#{year}&contextId=#{context.id}"
+      end
+      Api::V3::Readonly::Node.where(profile: 'actor').map(&:id).each do |nodeId|
+        add "/profile-actor?nodeId=#{nodeId}&year=#{year}&contextId=#{context.id}"
+      end
+    end
   end
 
   add'/data'
