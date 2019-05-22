@@ -97,4 +97,4 @@ namespace :downloads do
   end
 end
 
-set :rvm_ruby_version, '2.4.2'
+set :rvm_ruby_version, '2.6.3'

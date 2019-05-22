@@ -72,6 +72,7 @@ group :development do
   gem 'capistrano-passenger'
 
   gem 'rubocop', require: false
+  gem 'rubocop-performance'
   gem 'rbnacl', '>= 3.2', '< 5.0'
   gem 'rbnacl-libsodium'
   gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
