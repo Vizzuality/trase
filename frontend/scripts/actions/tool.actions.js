@@ -173,7 +173,7 @@ export function resetSankey() {
     const { contexts, selectedContext } = getState().app;
     const areNodesExpanded = !isEmpty(expandedNodesIds);
     const currentContext = contexts.find(context => context.id === selectedContext.id);
-    const defaultColumns = columns.filter(column => column.isDefault);
+    const defaultColumns = columns ? Object.values(columns).filter(column => column.isDefault) : [];
     const defaultResizeBy =
       currentContext && currentContext.resizeBy.find(resizeBy => resizeBy.isDefault);
     const defaultRecolorBy =
@@ -261,10 +261,11 @@ export function selectColumn(columnIndex, columnId, reloadLinks = true) {
     const selectedNodesIds = getSelectedNodeIdsNotInColumnIndex(
       state.toolLinks.selectedNodesIds,
       columnIndex,
-      state.toolLinks.nodesDict
+      state.toolLinks.data.nodes,
+      state.toolLinks.data.columns
     );
     dispatch(updateNodes(selectedNodesIds));
-    const selectedColumn = state.toolLinks.columns.find(c => c.id === columnId);
+    const selectedColumn = state.toolLinks.data.columns && state.toolLinks.data.columns[columnId];
     if (
       selectedColumn &&
       selectedColumn.group === 0 &&
@@ -383,9 +384,12 @@ export function loadNodes() {
           dispatch(_setBiomeFilterAction(selectedBiomeFilter.name, getState()));
         }
 
-        const selectedGeoColumn = getState().toolLinks.columns.find(column =>
-          getState().toolLinks.selectedColumnsIds.some(id => id === column.id && column.isGeo)
-        );
+        const { columns } = getState().toolLinks.data;
+        const selectedGeoColumn =
+          columns &&
+          Object.values(columns).find(column =>
+            getState().toolLinks.selectedColumnsIds.some(id => id === column.id && column.isGeo)
+          );
 
         if (selectedGeoColumn.isChoroplethDisabled === false) {
           const availableMapDimensions = _getAvailableMapDimensions(
@@ -487,7 +491,10 @@ export function loadLinks() {
 
 export function loadMapVectorData() {
   return (dispatch, getState) => {
-    const geoColumns = getState().toolLinks.columns.filter(column => column.isGeo === true);
+    const { columns } = getState().toolLinks.data;
+    const geoColumns = columns
+      ? Object.values(columns).filter(column => column.isGeo === true)
+      : [];
 
     const vectorMaps = geoColumns.map(geoColumn => {
       const vectorData = {
@@ -611,8 +618,12 @@ export function setMapContextLayers(contextualLayers) {
 }
 
 // Get a list of selected node that are NOT part of the given column index
-function getSelectedNodeIdsNotInColumnIndex(currentSelectedNodesIds, columnIndex, nodesDict) {
-  return currentSelectedNodesIds.filter(nodeId => nodesDict[nodeId].columnGroup !== columnIndex);
+function getSelectedNodeIdsNotInColumnIndex(currentSelectedNodesIds, columnIndex, nodes, columns) {
+  return currentSelectedNodesIds.filter(nodeId => {
+    const node = nodes[nodeId];
+    const column = columns[node.columnId];
+    return column.group !== columnIndex;
+  });
 }
 
 // remove or add nodeIds from selectedNodesIds
@@ -744,9 +755,13 @@ export function highlightNode(nodeId, isAggregated, coordinates) {
 
 export function highlightNodeFromGeoId(geoId, coordinates) {
   return (dispatch, getState) => {
-    const { nodesDict, selectedColumnsIds, highlightedNodesIds } = getState().toolLinks;
+    const {
+      data: { nodes },
+      selectedColumnsIds,
+      highlightedNodesIds
+    } = getState().toolLinks;
 
-    const nodeId = getNodeIdFromGeoId(geoId, nodesDict, selectedColumnsIds[0]);
+    const nodeId = getNodeIdFromGeoId(geoId, nodes, selectedColumnsIds[0]);
     if (nodeId === null) {
       if (highlightedNodesIds.length) {
         dispatch(highlightNode(null));

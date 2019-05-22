@@ -10,13 +10,15 @@ function ColumnSelector({
   onColumnSelected,
   currentDropdown,
   group,
-  allColumns,
+  columns,
   selectedColumnsIds,
   nodesColoredAtColumn,
   recolorGroups
 }) {
   const id = `column${group}`;
-  const columnItems = allColumns.filter(column => column.group === group);
+  const columnItems = columns
+    ? Object.values(columns).filter(column => column.group === group)
+    : [];
   const selectedColumnItem = columnItems.filter(
     column => column.id === selectedColumnsIds[group]
   )[0];
@@ -62,7 +64,7 @@ function ColumnSelector({
 ColumnSelector.propTypes = {
   group: PropTypes.number,
   onToggle: PropTypes.func,
-  allColumns: PropTypes.array,
+  columns: PropTypes.object,
   recolorGroups: PropTypes.array,
   onColumnSelected: PropTypes.func,
   currentDropdown: PropTypes.string,

@@ -20,22 +20,19 @@ import groupBy from 'lodash/groupBy';
 import isEmpty from 'lodash/isEmpty';
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
-import getNodesDict from 'reducers/helpers/getNodesDict';
 
 export const toolLinksInitialState = {
   data: {
-    columns: {},
+    columns: null,
     nodes: {},
     links: []
   },
-  columns: [],
   currentQuant: null,
   detailedView: false,
   expandedNodesIds: [],
   forcedOverview: false,
   highlightedNodesIds: [],
   flowsLoading: true,
-  nodesDict: null,
   selectedBiomeFilter: null,
   selectedColumnsIds: [],
   selectedNodesIds: [],
@@ -70,52 +67,60 @@ const toolLinksReducer = {
     });
   },
   [GET_COLUMNS](state, action) {
-    const rawNodes = action.payload[0].data;
-    const columns = action.payload[1].data;
+    return immer(state, draft => {
+      const nodes = action.payload[0].data;
+      const columns = action.payload[1].data;
 
-    // context-dependant columns
-    const columnsByGroupObj = groupBy(columns, 'group');
-    const columnsByGroup = [0, 0, 0, 0]
-      .map((e, i) => columnsByGroupObj[i])
-      .filter(n => typeof n !== 'undefined');
+      // context-dependant columns
+      const columnsByGroupObj = groupBy(columns, 'group');
+      const columnsByGroup = [0, 0, 0, 0]
+        .map((e, i) => columnsByGroupObj[i])
+        .filter(n => typeof n !== 'undefined');
 
-    const selectedColumnsIds = [];
-    columnsByGroup.forEach((group, i) => {
-      const defaultColumn = group.find(g => g.isDefault === true).id;
-      if (state.selectedColumnsIds === undefined || state.selectedColumnsIds.length < 4) {
-        selectedColumnsIds.push(defaultColumn);
-      } else {
-        const currentColumnForGroup = state.selectedColumnsIds[i];
-        const columnId =
-          group.find(g => g.id === currentColumnForGroup) !== undefined
-            ? currentColumnForGroup
-            : defaultColumn;
-        selectedColumnsIds.push(columnId);
+      const selectedColumnsIds = [];
+      columnsByGroup.forEach((group, i) => {
+        const defaultColumn = group.find(g => g.isDefault === true).id;
+        if (state.selectedColumnsIds === undefined || state.selectedColumnsIds.length < 4) {
+          selectedColumnsIds.push(defaultColumn);
+        } else {
+          const currentColumnForGroup = state.selectedColumnsIds[i];
+          const columnId =
+            group.find(g => g.id === currentColumnForGroup) !== undefined
+              ? currentColumnForGroup
+              : defaultColumn;
+          selectedColumnsIds.push(columnId);
+        }
+      });
+
+      // if any selectedNode, make those columns visible (selected)
+      if (!isEmpty(state.selectedNodesIds)) {
+        state.selectedNodesIds
+          .map(id => draft.data.nodes[id])
+          .forEach(node => {
+            selectedColumnsIds[node.columnGroup] = node.columnId;
+          });
       }
-    });
 
-    const { nodesDict } = getNodesDict(rawNodes, columns);
+      // TODO the API should have the info on which file to load (if any) per column
+      const municipalitiesColumn = columns.find(column => column.name === 'MUNICIPALITY');
+      const logisticsHubColumn = columns.find(column => column.name === 'LOGISTICS HUB');
+      if (logisticsHubColumn && municipalitiesColumn) {
+        logisticsHubColumn.useGeometryFromColumnId = municipalitiesColumn.id;
+      }
 
-    // if any selectedNode, make those columns visible (selected)
-    if (!isEmpty(state.selectedNodesIds)) {
-      state.selectedNodesIds
-        .map(id => nodesDict[id])
-        .forEach(node => {
-          selectedColumnsIds[node.columnGroup] = node.columnId;
-        });
-    }
+      draft.data.nodes = nodes.reduce((acc, next) => {
+        acc[next.id] = next;
+        return acc;
+      }, {});
 
-    // TODO the API should have the info on which file to load (if any) per column
-    const municipalitiesColumn = columns.find(column => column.name === 'MUNICIPALITY');
-    const logisticsHubColumn = columns.find(column => column.name === 'LOGISTICS HUB');
-    if (logisticsHubColumn && municipalitiesColumn) {
-      logisticsHubColumn.useGeometryFromColumnId = municipalitiesColumn.id;
-    }
+      draft.data.columns = columns.reduce((acc, next) => {
+        acc[next.id] = next;
+        return acc;
+      }, {});
 
-    return Object.assign({}, state, {
-      columns,
-      nodesDict,
-      selectedColumnsIds
+      return Object.assign(draft, {
+        selectedColumnsIds
+      });
     });
   },
 

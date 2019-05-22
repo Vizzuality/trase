@@ -15,8 +15,9 @@ const getSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getHighlightedNodesIds = state => state.toolLinks.highlightedNodesIds;
 const getNodesDictWithMeta = state => state.toolLinks.nodesDictWithMeta;
 const getSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
-const getNodesDict = state => state.toolLinks.nodesDict;
+const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolLinks = state => state.toolLinks.data.links;
+const getToolColumns = state => state.toolLinks.data.columns;
 const getLinksMeta = state => state.toolLinks.linksMeta;
 const getSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
@@ -69,12 +70,12 @@ const getNodeSelectedMeta = (selectedMapDimension, node, selectedResizeByLabel, 
 const getNodesData = (
   nodesIds,
   visibleNodes,
-  nodesDict,
+  nodes,
   nodesDictWithMeta,
   selectedMapDimensions,
   selectedResizeBy
 ) => {
-  if (!nodesIds || !visibleNodes || !nodesDict) {
+  if (!nodesIds || !visibleNodes || !nodes) {
     return [];
   }
 
@@ -94,8 +95,8 @@ const getNodesData = (
 
     if (visibleNode) {
       node = Object.assign(node, visibleNode);
-    } else if (nodesDict[nodeId]) {
-      node = Object.assign(node, nodesDict[nodeId]);
+    } else if (nodes[nodeId]) {
+      node = Object.assign(node, nodes[nodeId]);
     }
 
     return node;
@@ -107,22 +108,22 @@ const getNodesGeoIds = nodesData =>
     .map(node => node.geoId);
 
 export const getVisibleNodes = createSelector(
-  [getToolLinks, getNodesDict, getLinksMeta, getSelectedColumnsIds],
-  (links, nodesDict, linksMeta, selectedColumnsIds) => {
-    if (!links || !nodesDict || !linksMeta || !selectedColumnsIds) {
+  [getToolLinks, getToolNodes, getLinksMeta, getSelectedColumnsIds],
+  (links, nodes, linksMeta, selectedColumnsIds) => {
+    if (!links || !nodes || !linksMeta || !selectedColumnsIds) {
       return [];
     }
-    return getVisibleNodesUtil(links, nodesDict, linksMeta, selectedColumnsIds);
+    return getVisibleNodesUtil(links, nodes, linksMeta, selectedColumnsIds);
   }
 );
 
 export const getVisibleNodesByColumn = createSelector(
-  getVisibleNodes,
-  visibleNodes => {
+  [getVisibleNodes, getToolColumns],
+  (visibleNodes, columns) => {
     if (!visibleNodes) {
       return [];
     }
-    const byColumn = splitVisibleNodesByColumn(visibleNodes);
+    const byColumn = splitVisibleNodesByColumn(visibleNodes, columns);
     return sortVisibleNodes(byColumn);
   }
 );
@@ -131,7 +132,7 @@ export const getSelectedNodesData = createSelector(
   [
     getSelectedNodesIds,
     getVisibleNodes,
-    getNodesDict,
+    getToolNodes,
     getNodesDictWithMeta,
     getSelectedMapDimensions,
     getSelectedResizeBy
@@ -145,8 +146,12 @@ export const getSelectedNodesGeoIds = createSelector(
 );
 
 export const getSelectedNodesColumnsPos = createSelector(
-  [getSelectedNodesData],
-  selectedNodesData => selectedNodesData.map(node => node.columnGroup)
+  [getSelectedNodesData, getToolColumns],
+  (selectedNodesData, columns) =>
+    selectedNodesData.map(({ columnId }) => {
+      const column = columns[columnId];
+      return column.group;
+    })
 );
 
 const getSelectedNodesAtColumns = createSelector(
@@ -166,8 +171,9 @@ export const getToolRecolorGroups = createSelector(
 );
 
 const getUnmergedLinks = createSelector(
-  [getToolLinks, getNodesDict, getSelectedRecolorBy],
-  (links, nodesDict, selectedRecolorBy) => splitLinksByColumn(links, nodesDict, selectedRecolorBy)
+  [getToolLinks, getToolNodes, getToolColumns, getSelectedRecolorBy],
+  (links, nodes, columns, selectedRecolorBy) =>
+    splitLinksByColumn(links, nodes, columns, selectedRecolorBy)
 );
 
 export const getFilteredLinks = createSelector(
@@ -206,7 +212,7 @@ export const getHighlightedNodesData = createSelector(
   [
     getHighlightedNodesIds,
     getVisibleNodes,
-    getNodesDict,
+    getToolNodes,
     getNodesDictWithMeta,
     getSelectedMapDimensions,
     getSelectedResizeBy

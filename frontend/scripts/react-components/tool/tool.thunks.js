@@ -13,7 +13,7 @@ export const resizeSankeyTool = dispatch => dispatch(resize());
 export const loadToolInitialData = (dispatch, getState) => {
   const state = getState();
 
-  if (!state.app.selectedContext || state.toolLinks.nodesDict) {
+  if (!state.app.selectedContext || state.toolLinks.data.links.length > 0) {
     return;
   }
 

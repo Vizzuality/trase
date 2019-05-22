@@ -5,7 +5,7 @@ import ColumnSelector from 'react-components/tool/column-selector/column-selecto
 import { getToolRecolorGroups } from 'react-components/tool/tool.selectors';
 
 const mapStateToProps = state => ({
-  allColumns: state.toolLinks.columns,
+  columns: state.toolLinks.data.columns,
   currentDropdown: state.app.currentDropdown,
   selectedColumnsIds: state.toolLinks.selectedColumnsIds,
   nodesColoredAtColumn: state.toolLinks.nodesColoredAtColumn,

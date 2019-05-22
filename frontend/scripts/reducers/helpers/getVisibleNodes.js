@@ -1,9 +1,9 @@
-const _setNodesMeta = (nodesDict, linksMeta) => {
+const _setNodesMeta = (nodes, linksMeta) => {
   const nodesDictWithMeta = {};
 
   linksMeta.nodeHeights.forEach(nodeHeight => {
     const nodeId = nodeHeight.id;
-    const node = Object.assign({}, nodesDict[nodeId]);
+    const node = Object.assign({}, nodes[nodeId]);
     node.height = nodeHeight.height;
     node.quant = nodeHeight.quant;
     nodesDictWithMeta[nodeId] = node;
@@ -12,11 +12,11 @@ const _setNodesMeta = (nodesDict, linksMeta) => {
   return nodesDictWithMeta;
 };
 
-export default function(links, nodesDict, linksMeta, columnIndexes) {
+export default function(links, nodes, linksMeta, columnIndexes) {
   const nodeIdsList = [];
-  const nodes = [];
+  const visibleNodes = [];
 
-  const nodesDictWithMeta = _setNodesMeta(nodesDict, linksMeta);
+  const nodesDictWithMeta = _setNodesMeta(nodes, linksMeta);
 
   links.forEach(link => {
     const pathNodeIds = link.path;
@@ -31,11 +31,11 @@ export default function(links, nodesDict, linksMeta, columnIndexes) {
         } else {
           const newNode = Object.assign({}, nodesDictWithMeta[nodeId]);
           newNode.id = nodeId;
-          nodes.push(newNode);
+          visibleNodes.push(newNode);
         }
       }
     });
   });
 
-  return nodes;
+  return visibleNodes;
 }
