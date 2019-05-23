@@ -23,18 +23,13 @@ const mapStateToProps = state => {
     choropleth,
     mapView: state.toolLayers.mapView,
     mapVectorData: state.toolLayers.data.mapVectorData,
-    currentPolygonType: state.toolLinks.selectedColumnsIds,
     selectedNodesGeoIds: getSelectedNodesGeoIds(state),
     recolorByNodeIds: state.toolLinks.recolorByNodeIds,
     linkedGeoIds: state.toolLayers.linkedGeoIds,
-    selectedGeoIds: getSelectedNodesGeoIds(state),
-    highlightedGeoId: getHighlightedNodesGeoIds(state)[0],
+    highlightedGeoIds: getHighlightedNodesGeoIds(state)[0],
     defaultMapView: state.app.selectedContext ? state.app.selectedContext.map : null,
-    forceDefaultMapView: !state.toolLinks.selectedNodesIds.length,
+    selectedNodesIdsLength: state.toolLinks.selectedNodesIds.length,
     selectedColumnsIds: state.toolLinks.selectedColumnsIds,
-    selectedColumnId: state.toolLinks.selectedColumnsIds
-      ? state.toolLinks.selectedColumnsIds[0]
-      : undefined,
     selectedMapContextualLayersData: getSelectedMapContextualLayersData(state),
     isMapVisible: state.toolLayers.isMapVisible,
     visibleNodes: getVisibleNodes(state),
@@ -46,62 +41,39 @@ const mapStateToProps = state => {
 const methodProps = [
   {
     name: 'setMapView',
-    compared: ['mapView'],
-    returned: ['mapView']
+    compared: ['mapView', 'selectedNodesIdsLength', 'defaultMapView'],
+    returned: ['mapView', 'selectedNodesIdsLength', 'defaultMapView']
   },
   {
     name: 'showLoadedMap',
     compared: ['mapVectorData'],
-    returned: [
-      'mapView',
-      'mapVectorData',
-      'currentPolygonType',
-      'selectedNodesGeoIds',
-      'choropleth',
-      'linkedGeoIds',
-      'defaultMapView',
-      'selectedBiomeFilter',
-      'forceDefaultMapView'
-    ]
+    returned: ['mapVectorData']
   },
   {
     name: 'selectPolygonType',
-    compared: ['selectedColumnId'],
-    returned: [
-      'selectedColumnsIds',
-      'choropleth',
-      'selectedBiomeFilter',
-      'linkedGeoIds',
-      'defaultMapView',
-      'forceDefaultMapView'
-    ]
+    compared: ['selectedColumnsIds', 'mapVectorData'],
+    returned: ['selectedColumnsIds']
   },
   {
     name: 'selectPolygons',
-    compared: ['selectedGeoIds'],
-    returned: [
-      'selectedGeoIds',
-      'linkedGeoIds',
-      'highlightedGeoId',
-      'forceDefaultMapView',
-      'defaultMapView'
-    ]
+    compared: ['selectedNodesGeoIds'],
+    returned: ['selectedNodesGeoIds', 'highlightedGeoIds']
   },
   {
     name: 'highlightPolygon',
-    compared: ['highlightedGeoId'],
-    returned: ['selectedGeoIds', 'highlightedGeoId']
+    compared: ['highlightedGeoIds'],
+    returned: ['selectedNodesGeoIds', 'highlightedGeoIds']
   },
   {
     name: 'setChoropleth',
-    compared: ['choropleth'],
-    returned: [
+    compared: [
       'choropleth',
       'selectedBiomeFilter',
       'linkedGeoIds',
       'defaultMapView',
-      'forceDefaultMapView'
-    ]
+      'mapVectorData'
+    ],
+    returned: ['choropleth', 'selectedBiomeFilter', 'linkedGeoIds', 'defaultMapView']
   },
   {
     name: 'loadContextLayers',
@@ -110,16 +82,8 @@ const methodProps = [
   },
   {
     name: 'showLinkedGeoIds',
-    compared: ['linkedGeoIds'],
-    returned: [
-      'choropleth',
-      'selectedBiomeFilter',
-      'linkedGeoIds',
-      'selectedGeoIds',
-      'defaultMapView',
-      // get back to context default map view if no nodes are selected
-      'forceDefaultMapView'
-    ]
+    compared: ['linkedGeoIds', 'selectedNodesGeoIds'],
+    returned: ['linkedGeoIds', 'selectedNodesGeoIds']
   },
   {
     name: 'invalidate',
@@ -129,29 +93,11 @@ const methodProps = [
   {
     name: 'setBasemap',
     compared: ['basemapId'],
-    returned: [
-      'basemapId',
-      'choropleth',
-      'selectedBiomeFilter',
-      'linkedGeoIds',
-      'defaultMapView',
-      'forceDefaultMapView'
-    ]
-  },
-  {
-    name: 'filterByBiome',
-    compared: ['selectedBiomeFilter'],
-    returned: [
-      'choropleth',
-      'selectedBiomeFilter',
-      'linkedGeoIds',
-      'defaultMapView',
-      'forceDefaultMapView'
-    ]
+    returned: ['basemapId']
   },
   {
     name: 'updatePointShadowLayer',
-    compared: ['visibleNodes'],
+    compared: ['visibleNodes', 'mapVectorData'],
     returned: ['visibleNodes', 'mapVectorData']
   }
 ];
