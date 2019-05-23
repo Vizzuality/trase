@@ -10,5 +10,7 @@ sandbox:
   :concurrency: 2
 production:
   :concurrency: 2
+dashboardsdemo:
+  :concurrency: 2
 :queues:
   - database
