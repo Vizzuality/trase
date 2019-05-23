@@ -87,6 +87,29 @@ const sidebarNav = [
   }
 ];
 
+if (ENABLE_COOKIE_BANNER) {
+  sidebarNav.push(
+    {
+      name: 'Privacy policy',
+      page: {
+        type: 'about',
+        payload: {
+          section: 'privacy-policy'
+        }
+      }
+    },
+    {
+      name: 'Cookie policy',
+      page: {
+        type: 'about',
+        payload: {
+          section: 'cookie-policy'
+        }
+      }
+    }
+  );
+}
+
 if (ENABLE_DASHBOARDS) {
   nav.splice(-3, 0, {
     name: 'Dashboards',
