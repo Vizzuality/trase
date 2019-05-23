@@ -141,7 +141,7 @@ export default class {
       contextId: selectedContextId,
       year: selectedYears ? selectedYears[0] : null,
       nodes: nodesData.map(node => {
-        const nodeHeight = nodeHeights[node.id];
+        const nodeHeight = nodeHeights && nodeHeights[node.id];
         const column = columns[node.columnId];
         let renderedQuant;
         if (nodeHeight) {
@@ -153,7 +153,7 @@ export default class {
         }
 
         let renderedMetas;
-        if (selectedMapDimensions.length > 0) {
+        if (attributes && selectedMapDimensions && selectedMapDimensions.length > 0) {
           renderedMetas = selectedMapDimensions
             .map(dimension => {
               const meta = getNodeMeta(dimension, node, attributes, selectedResizeBy);
@@ -227,7 +227,7 @@ export default class {
     selectedResizeBy
   }) {
     const node = nodesData[0];
-    const nodeHeight = nodeHeights[node.id];
+    const nodeHeight = nodeHeights && nodeHeights[node.id];
 
     if (!coordinates) {
       return;
@@ -235,7 +235,7 @@ export default class {
 
     let values = [];
 
-    if (selectedMapDimensions.length > 0) {
+    if (attributes && selectedMapDimensions && selectedMapDimensions.length > 0) {
       values = selectedMapDimensions
         .map(dimension => {
           const meta = getNodeMeta(dimension, node, attributes, selectedResizeBy);

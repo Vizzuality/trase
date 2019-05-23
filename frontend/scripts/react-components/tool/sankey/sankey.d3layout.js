@@ -20,6 +20,7 @@ const sankeyLayout = () => {
   let maxHeight;
   let recolorBy;
   let nodesColoredAtColumn;
+  let nodeHeights;
 
   // layout
   let linksColumnWidth;
@@ -34,6 +35,7 @@ const sankeyLayout = () => {
   };
 
   sankeyLayoutState.setLinksPayload = payload => {
+    nodeHeights = payload.nodeHeights;
     columns = payload.visibleNodesByColumn;
     links = payload.links;
     detailedView = payload.detailedView;
@@ -91,15 +93,16 @@ const sankeyLayout = () => {
       column.x = _getColumnX(i);
       let columnY = 0;
       column.values.forEach(node => {
+        const nodeHeight = nodeHeights && nodeHeights[node.id];
         node.x = column.x;
         node.y = columnY;
         if (detailedView === true) {
           node.renderedHeight = Math.max(
             DETAILED_VIEW_MIN_NODE_HEIGHT,
-            DETAILED_VIEW_SCALE * node.height
+            DETAILED_VIEW_SCALE * nodeHeight.height
           );
         } else {
-          node.renderedHeight = node.height * viewportHeight;
+          node.renderedHeight = nodeHeight.height * viewportHeight;
         }
         columnY += node.renderedHeight;
       });

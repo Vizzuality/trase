@@ -29,6 +29,7 @@ const mapStateToProps = state => ({
   sankeySize: state.app.sankeySize,
   currentQuant: state.toolLinks.currentQuant,
   detailedView: state.toolLinks.detailedView,
+  nodeHeights: state.toolLinks.data.nodeHeights,
   selectedNodesIds: state.toolLinks.selectedNodesIds,
   selectedRecolorBy: getSelectedRecolorBy(state),
   hasExpandedNodesIds: getHasExpandedNodesIds(state),
@@ -52,6 +53,7 @@ const methodProps = [
     compared: ['links'],
     returned: [
       'sankeySize',
+      'nodeHeights',
       'selectedRecolorBy',
       'currentQuant',
       'selectedNodesIds',
