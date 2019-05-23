@@ -28,8 +28,9 @@ const mapStateToProps = state => ({
 const methodProps = [
   {
     name: 'selectNodes',
-    compared: ['selectedNodesData'],
+    compared: ['selectedNodesData', 'highlightedNodesData'],
     returned: [
+      'highlightedNodesData',
       'nodeHeights',
       'selectedResizeBy',
       'attributes',

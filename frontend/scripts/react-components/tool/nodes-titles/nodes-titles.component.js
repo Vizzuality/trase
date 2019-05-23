@@ -44,13 +44,29 @@ export default class {
       recolorGroups,
       currentQuant,
       selectedYears,
-      selectedContextId
+      nodeHeights,
+      attributes,
+      selectedResizeBy,
+      selectedContextId,
+      highlightedNodesData
     } = data;
+
+    const hasHighlighted = highlightedNodesData.length > 0;
+    const nodesData = hasHighlighted ? highlightedNodesData : selectedNodesData;
+    if (nodesData.length > 0) {
+      this.el.classList.remove('is-hidden');
+    } else {
+      this.el.classList.add('is-hidden');
+    }
+
     this._update({
-      isSelect: true,
-      selectedMapDimensions,
-      nodesData: selectedNodesData,
+      isSelect: !hasHighlighted,
+      nodesData,
+      nodeHeights,
       columns,
+      attributes,
+      selectedResizeBy,
+      selectedMapDimensions,
       recolorGroups,
       currentQuant,
       selectedYears,
@@ -59,17 +75,12 @@ export default class {
   }
 
   highlightNode({
-    columns,
     attributes,
     nodeHeights,
     selectedMapDimensions,
     highlightedNodesData,
-    recolorGroups,
     coordinates,
     currentQuant,
-    selectedYears,
-    selectedNodesData,
-    selectedContextId,
     selectedResizeBy
   }) {
     this.tooltip.hide();
@@ -87,19 +98,6 @@ export default class {
         attributes,
         selectedResizeBy,
         selectedMapDimensions
-      });
-    } else {
-      this.el.classList.remove('is-hidden');
-      const hasHighlighted = highlightedNodesData.length > 0;
-      this._update({
-        isSelect: !hasHighlighted,
-        nodesData: hasHighlighted ? highlightedNodesData : selectedNodesData,
-        nodeHeights,
-        columns,
-        recolorGroups,
-        currentQuant,
-        selectedYears,
-        selectedContextId
       });
     }
   }
@@ -170,6 +168,7 @@ export default class {
         }
 
         return Object.assign({}, node, {
+          columnName: column.name,
           hasLink:
             node.isUnknown !== true &&
             node.isDomesticConsumption !== true &&
