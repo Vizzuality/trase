@@ -304,14 +304,14 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>download_quals</td>
+					 <td>download_quants</td>
 					 <td>Table</td>
-					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>download_attribute_id</td>
+					 <td>int4</td>
 					 <td>10</td>
 					 <td title=''></td>
-					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;download_quals_id_seq&#39;::regclass)</td>
+					 <td title=''></td>
+					 <td>null</td>
 					 <td></td>
 					</tr>
 					<tr>
@@ -370,15 +370,15 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>node_quals</td>
+					 <td>ind_country_properties</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
-					 <td>int4</td>
-					 <td>10</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>country_id</td>
+					 <td>int8</td>
+					 <td>19</td>
 					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td></td>
+					 <td><p>Reference to country</p></td>
 					</tr>
 					<tr>
 					 <td>resize_by_attributes</td>
@@ -425,9 +425,9 @@
 					 <td><p>Reference to country</p></td>
 					</tr>
 					<tr>
-					 <td>download_quants</td>
+					 <td>download_quals</td>
 					 <td>Table</td>
-					 <td>created_at</td>
+					 <td>updated_at</td>
 					 <td>timestamp</td>
 					 <td>29</td>
 					 <td title=''></td>
@@ -436,7 +436,7 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>download_quals</td>
+					 <td>download_quants</td>
 					 <td>Table</td>
 					 <td>created_at</td>
 					 <td>timestamp</td>
@@ -557,15 +557,15 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>ind_country_properties</td>
+					 <td>node_quals</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>ind_id</td>
-					 <td>int8</td>
-					 <td>19</td>
-					 <td title=''></td>
+					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>year</td>
+					 <td>int4</td>
+					 <td>10</td>
+					 <td title='nullable'>√</td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>Reference to ind</p></td>
+					 <td><p>Year; empty (NULL) for all years</p></td>
 					</tr>
 					<tr>
 					 <td>recolor_by_attributes</td>
@@ -590,15 +590,15 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>ind_country_properties</td>
+					 <td>node_quals</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>country_id</td>
-					 <td>int8</td>
-					 <td>19</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
+					 <td>int4</td>
+					 <td>10</td>
 					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>Reference to country</p></td>
+					 <td></td>
 					</tr>
 					<tr>
 					 <td>recolor_by_quals</td>
@@ -843,7 +843,7 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>download_quals</td>
+					 <td>download_quants</td>
 					 <td>Table</td>
 					 <td>updated_at</td>
 					 <td>timestamp</td>
@@ -1734,15 +1734,15 @@
 					 <td><p>Reference to context</p></td>
 					</tr>
 					<tr>
-					 <td>ind_country_properties</td>
+					 <td>node_quals</td>
 					 <td>Table</td>
-					 <td>created_at</td>
-					 <td>timestamp</td>
-					 <td>29</td>
+					 <td>value</td>
+					 <td>text</td>
+					 <td>2147483647</td>
 					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td></td>
+					 <td><p>Textual value</p></td>
 					</tr>
 					<tr>
 					 <td>context_properties</td>
@@ -1877,9 +1877,9 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>node_quals</td>
+					 <td>ind_country_properties</td>
 					 <td>Table</td>
-					 <td>created_at</td>
+					 <td>updated_at</td>
 					 <td>timestamp</td>
 					 <td>29</td>
 					 <td title=''></td>
@@ -1943,15 +1943,15 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>download_quals</td>
+					 <td>download_quants</td>
 					 <td>Table</td>
-					 <td>is_filter_enabled</td>
-					 <td>bool</td>
-					 <td>1</td>
+					 <td>filter_bands</td>
+					 <td>_float8</td>
+					 <td>17</td>
+					 <td title='nullable'>√</td>
 					 <td title=''></td>
-					 <td title=''></td>
-					 <td>false</td>
-					 <td><p>When set, enable selection of discreet values (advanced filter)</p></td>
+					 <td>null</td>
+					 <td><p>Array of value ranges to allow filtering by</p></td>
 					</tr>
 					<tr>
 					 <td>quant_properties</td>
@@ -2229,7 +2229,7 @@
 					 <td><p>Year; empty (NULL) for all years</p></td>
 					</tr>
 					<tr>
-					 <td>download_quants</td>
+					 <td>download_quals</td>
 					 <td>Table</td>
 					 <td>is_filter_enabled</td>
 					 <td>bool</td>
@@ -2237,7 +2237,7 @@
 					 <td title=''></td>
 					 <td title=''></td>
 					 <td>false</td>
-					 <td><p>When set, enable selection of value ranges (advanced filter)</p></td>
+					 <td><p>When set, enable selection of discreet values (advanced filter)</p></td>
 					</tr>
 					<tr>
 					 <td>charts</td>
@@ -2405,9 +2405,9 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>ind_country_properties</td>
+					 <td>node_quals</td>
 					 <td>Table</td>
-					 <td>updated_at</td>
+					 <td>created_at</td>
 					 <td>timestamp</td>
 					 <td>29</td>
 					 <td title=''></td>
@@ -2427,9 +2427,9 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>download_quants</td>
+					 <td>download_quals</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
 					 <td>int4</td>
 					 <td>10</td>
 					 <td title=''></td>
@@ -2515,14 +2515,14 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>node_quals</td>
+					 <td>ind_country_properties</td>
 					 <td>Table</td>
 					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
+					 <td>bigserial</td>
+					 <td>19</td>
 					 <td title=''></td>
 					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;node_quals_id_seq&#39;::regclass)</td>
+					 <td>nextval(&#39;ind_country_properties_id_seq&#39;::regclass)</td>
 					 <td></td>
 					</tr>
 					<tr>
@@ -2581,15 +2581,15 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>download_quals</td>
+					 <td>download_quants</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>qual_id</td>
-					 <td>int4</td>
-					 <td>10</td>
+					 <td>is_filter_enabled</td>
+					 <td>bool</td>
+					 <td>1</td>
 					 <td title=''></td>
 					 <td title=''></td>
-					 <td>null</td>
-					 <td></td>
+					 <td>false</td>
+					 <td><p>When set, enable selection of value ranges (advanced filter)</p></td>
 					</tr>
 					<tr>
 					 <td>qual_context_properties</td>
@@ -2933,15 +2933,15 @@
 					 <td><p>Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).</p></td>
 					</tr>
 					<tr>
-					 <td>node_quals</td>
+					 <td>ind_country_properties</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_id</td>
-					 <td>int4</td>
-					 <td>10</td>
+					 <td>tooltip_text</td>
+					 <td>text</td>
+					 <td>2147483647</td>
 					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td></td>
+					 <td><p>Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).</p></td>
 					</tr>
 					<tr>
 					 <td>quants</td>
@@ -3593,15 +3593,15 @@
 					 <td><p>Only used for trajectory deforestation plot in place profiles</p></td>
 					</tr>
 					<tr>
-					 <td>download_quants</td>
+					 <td>download_quals</td>
 					 <td>Table</td>
-					 <td>filter_bands</td>
-					 <td>_float8</td>
-					 <td>17</td>
-					 <td title='nullable'>√</td>
+					 <td>created_at</td>
+					 <td>timestamp</td>
+					 <td>29</td>
+					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>Array of value ranges to allow filtering by</p></td>
+					 <td></td>
 					</tr>
 					<tr>
 					 <td>resize_by_attributes</td>
@@ -3681,15 +3681,15 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>node_quals</td>
+					 <td>ind_country_properties</td>
 					 <td>Table</td>
-					 <td>value</td>
-					 <td>text</td>
-					 <td>2147483647</td>
+					 <td>created_at</td>
+					 <td>timestamp</td>
+					 <td>29</td>
 					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>Textual value</p></td>
+					 <td></td>
 					</tr>
 					<tr>
 					 <td>commodities</td>
@@ -3802,15 +3802,15 @@
 					 <td><p>Job ID, filled in when update started using a background job processor</p></td>
 					</tr>
 					<tr>
-					 <td>node_quals</td>
+					 <td>ind_country_properties</td>
 					 <td>Table</td>
-					 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i>year</td>
-					 <td>int4</td>
-					 <td>10</td>
-					 <td title='nullable'>√</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>ind_id</td>
+					 <td>int8</td>
+					 <td>19</td>
+					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>Year; empty (NULL) for all years</p></td>
+					 <td><p>Reference to ind</p></td>
 					</tr>
 					<tr>
 					 <td>download_attributes</td>
@@ -4099,15 +4099,15 @@
 					 <td><p>Display order in scope of context and group number</p></td>
 					</tr>
 					<tr>
-					 <td>ind_country_properties</td>
+					 <td>node_quals</td>
 					 <td>Table</td>
-					 <td>tooltip_text</td>
-					 <td>text</td>
-					 <td>2147483647</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>node_id</td>
+					 <td>int4</td>
+					 <td>10</td>
 					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
-					 <td><p>Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).</p></td>
+					 <td></td>
 					</tr>
 					<tr>
 					 <td>download_versions</td>
@@ -4495,14 +4495,14 @@
 					 <td><p>Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.</p></td>
 					</tr>
 					<tr>
-					 <td>download_quants</td>
+					 <td>download_quals</td>
 					 <td>Table</td>
 					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
 					 <td>serial</td>
 					 <td>10</td>
 					 <td title=''></td>
 					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;download_quants_id_seq&#39;::regclass)</td>
+					 <td>nextval(&#39;download_quals_id_seq&#39;::regclass)</td>
 					 <td></td>
 					</tr>
 					<tr>
@@ -4814,9 +4814,9 @@
 					 <td><p>When set, show this node type as default (only use for one)</p></td>
 					</tr>
 					<tr>
-					 <td>download_quals</td>
+					 <td>download_quants</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>download_attribute_id</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>quant_id</td>
 					 <td>int4</td>
 					 <td>10</td>
 					 <td title=''></td>
@@ -4946,7 +4946,7 @@
 					 <td><p>Reference to context</p></td>
 					</tr>
 					<tr>
-					 <td>download_quants</td>
+					 <td>download_quals</td>
 					 <td>Table</td>
 					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>download_attribute_id</td>
 					 <td>int4</td>
@@ -5023,14 +5023,14 @@
 					 <td><p>Reference to ind</p></td>
 					</tr>
 					<tr>
-					 <td>ind_country_properties</td>
+					 <td>node_quals</td>
 					 <td>Table</td>
 					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>bigserial</td>
-					 <td>19</td>
+					 <td>serial</td>
+					 <td>10</td>
 					 <td title=''></td>
 					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;ind_country_properties_id_seq&#39;::regclass)</td>
+					 <td>nextval(&#39;node_quals_id_seq&#39;::regclass)</td>
 					 <td></td>
 					</tr>
 					<tr>
@@ -5124,12 +5124,12 @@
 					<tr>
 					 <td>download_quants</td>
 					 <td>Table</td>
-					 <td>updated_at</td>
-					 <td>timestamp</td>
-					 <td>29</td>
+					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
+					 <td>serial</td>
+					 <td>10</td>
 					 <td title=''></td>
-					 <td title=''></td>
-					 <td>null</td>
+					 <td title='Automatically updated by the database'>√</td>
+					 <td>nextval(&#39;download_quants_id_seq&#39;::regclass)</td>
 					 <td></td>
 					</tr>
 					<tr>
