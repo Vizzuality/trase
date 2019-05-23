@@ -1,4 +1,3 @@
-import compact from 'lodash/compact';
 import { createSelector } from 'reselect';
 import { makeGetSelectedResizeBy, makeGetSelectedRecolorBy } from 'selectors/indicators.selectors';
 import getVisibleNodesUtil from 'reducers/helpers/getVisibleNodes';
@@ -13,17 +12,16 @@ import splitLinksByColumn from 'reducers/helpers/splitLinksByColumn';
 
 const getSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getHighlightedNodesIds = state => state.toolLinks.highlightedNodesIds;
-const getSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolColumns = state => state.toolLinks.data.columns;
-const getLinksMeta = state => state.toolLinks.linksMeta;
 const getSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
 const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
 const getToolBiomeFilter = state => state.toolLinks.selectedBiomeFilter;
 const getSelectedContext = state => state.app.selectedContext;
-const getToolNodeAttributes = state => state.toolLinks.data.nodeAttributes;
+const getSelectedMapDimensionsUids = state => state.toolLayers.selectedMapDimensions;
+const getMapDimensions = state => state.toolLayers.mapDimensions;
 
 export const getSelectedResizeBy = makeGetSelectedResizeBy(getToolResizeBy, getSelectedContext);
 export const getSelectedRecolorBy = makeGetSelectedRecolorBy(getToolRecolorBy, getSelectedContext);
@@ -42,97 +40,24 @@ export const getSelectedBiomeFilter = createSelector(
   }
 );
 
-const getNodeSelectedMeta = (
-  selectedMapDimension,
-  node,
-  attributes,
-  selectedResizeByLabel,
-  visibleNode
-) => {
-  if (!attributes || selectedMapDimension === null) {
-    return null;
-  }
-  const meta = attributes[selectedMapDimension];
-  if (meta && meta.name !== selectedResizeByLabel) {
-    return meta;
-  }
-  if (
-    meta &&
-    visibleNode &&
-    visibleNode.quant &&
-    meta.value !== visibleNode.quant &&
-    NODE_ENV_DEV === true
-  ) {
-    // See https://basecamp.com/1756858/projects/12498794/todos/312319406
-    console.warn(
-      'Attempting to show different values two dimensions with the same name.',
-      `ResizeBy: ${selectedResizeByLabel} with value ${visibleNode.quant}`,
-      `Map layer: ${meta.name} with value ${meta.value}`
-    );
-  }
-  return null;
-};
+export const getSelectedMapDimensions = createSelector(
+  [getSelectedMapDimensionsUids, getMapDimensions],
+  (selectedMapDimensionsIds, mapDimensions) =>
+    selectedMapDimensionsIds.filter(Boolean).map(uid => mapDimensions[uid])
+);
 
-const getNodesData = (
-  nodesIds,
-  visibleNodes,
-  nodes,
-  nodesAttributes,
-  selectedMapDimensions,
-  selectedResizeBy
-) => {
-  if (!nodesIds || !visibleNodes || !nodes) {
-    return [];
-  }
-
-  return nodesIds.map(nodeId => {
-    const visibleNode = visibleNodes.find(node => node.id === nodeId);
-    let node = {};
-
-    // get_nodes might still be loading at this point, in this case just skip adding metadata
-    if (nodes && selectedMapDimensions) {
-      const attributes = nodesAttributes[nodeId];
-      node = Object.assign(node, nodes[nodeId]);
-      // add metas from the map layers to the selected nodes data
-      node.selectedMetas = compact([
-        getNodeSelectedMeta(
-          selectedMapDimensions[0],
-          node,
-          attributes,
-          selectedResizeBy.label,
-          visibleNode
-        ),
-        getNodeSelectedMeta(
-          selectedMapDimensions[1],
-          node,
-          attributes,
-          selectedResizeBy.label,
-          visibleNode
-        )
-      ]);
-    }
-
-    if (visibleNode) {
-      node = Object.assign(node, visibleNode);
-    } else if (nodes[nodeId]) {
-      node = Object.assign(node, nodes[nodeId]);
-    }
-
-    return node;
-  });
-};
 const getNodesGeoIds = nodesData =>
   nodesData
     .filter(node => node.isGeo === true && typeof node.geoId !== 'undefined' && node.geoId !== null)
     .map(node => node.geoId);
 
 export const getVisibleNodes = createSelector(
-  [getToolLinks, getToolNodes, getLinksMeta, getSelectedColumnsIds],
-  (links, nodes, linksMeta, selectedColumnsIds) => {
-    if (!links || !nodes || !linksMeta || !selectedColumnsIds) {
+  [getToolLinks, getToolNodes, getSelectedColumnsIds],
+  (links, nodes, selectedColumnsIds) => {
+    if (!links || !nodes || !selectedColumnsIds) {
       return [];
     }
-    return getVisibleNodesUtil(links, nodes, linksMeta, selectedColumnsIds);
+    return getVisibleNodesUtil(links, nodes, selectedColumnsIds);
   }
 );
 
@@ -148,15 +73,8 @@ export const getVisibleNodesByColumn = createSelector(
 );
 
 export const getSelectedNodesData = createSelector(
-  [
-    getSelectedNodesIds,
-    getVisibleNodes,
-    getToolNodes,
-    getToolNodeAttributes,
-    getSelectedMapDimensions,
-    getSelectedResizeBy
-  ],
-  getNodesData
+  [getSelectedNodesIds, getToolNodes],
+  (selectedNodesIds, nodes) => selectedNodesIds.map(id => nodes[id])
 );
 
 export const getSelectedNodesGeoIds = createSelector(
@@ -228,15 +146,8 @@ export const getMergedLinks = createSelector(
 );
 
 export const getHighlightedNodesData = createSelector(
-  [
-    getHighlightedNodesIds,
-    getVisibleNodes,
-    getToolNodes,
-    getToolNodeAttributes,
-    getSelectedMapDimensions,
-    getSelectedResizeBy
-  ],
-  getNodesData
+  [getHighlightedNodesIds, getToolNodes],
+  (highlightedNodesIds, nodes) => highlightedNodesIds.map(id => nodes[id])
 );
 
 export const getHighlightedNodesGeoIds = createSelector(

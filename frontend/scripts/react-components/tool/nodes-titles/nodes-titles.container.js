@@ -3,34 +3,36 @@ import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.compo
 import { selectNode, navigateToProfile, resetState } from 'actions/tool.actions';
 import NodesTitles from 'react-components/tool/nodes-titles/nodes-titles.component';
 import {
+  getSelectedResizeBy,
+  getSelectedMapDimensions,
   getToolRecolorGroups,
   getSelectedNodesData,
   getHighlightedNodesData
 } from 'react-components/tool/tool.selectors';
 
-const mapStateToProps = state => {
-  const highlightedNodesData = getHighlightedNodesData(state);
-  return {
-    nodesData: getSelectedNodesData(state),
-    columns: state.toolLinks.data.columns,
-    attributes: state.toolLinks.attributes,
-    recolorGroups: getToolRecolorGroups(state),
-    currentQuant: state.toolLinks.currentQuant,
-    selectedYears: state.app.selectedYears,
-    selectedContextId: state.app.selectedContext ? state.app.selectedContext.id : null,
-    highlightedNodesData:
-      highlightedNodesData.length === 0 ? getSelectedNodesData(state) : highlightedNodesData,
-    isHighlight: highlightedNodesData.length > 0,
-    coordinates: state.toolLayers.highlightedNodeCoordinates
-  };
-};
+const mapStateToProps = state => ({
+  selectedResizeBy: getSelectedResizeBy(state),
+  selectedMapDimensions: getSelectedMapDimensions(state),
+  selectedNodesData: getSelectedNodesData(state),
+  columns: state.toolLinks.data.columns,
+  attributes: state.toolLinks.data.nodeAttributes,
+  recolorGroups: getToolRecolorGroups(state),
+  currentQuant: state.toolLinks.currentQuant,
+  selectedYears: state.app.selectedYears,
+  selectedContextId: state.app.selectedContext ? state.app.selectedContext.id : null,
+  highlightedNodesData: getHighlightedNodesData(state),
+  coordinates: state.toolLayers.highlightedNodeCoordinates
+});
 
 const methodProps = [
   {
     name: 'selectNodes',
-    compared: ['nodesData'],
+    compared: ['selectedNodesData'],
     returned: [
-      'nodesData',
+      'selectedResizeBy',
+      'attributes',
+      'selectedMapDimensions',
+      'selectedNodesData',
       'recolorGroups',
       'currentQuant',
       'selectedYears',
@@ -43,15 +45,17 @@ const methodProps = [
     name: 'highlightNode',
     compared: ['highlightedNodesData'],
     returned: [
+      'selectedResizeBy',
       'columns',
+      'selectedMapDimensions',
       'highlightedNodesData',
-      'isHighlight',
       'recolorGroups',
       'coordinates',
       'currentQuant',
       'selectedYears',
       'attributes',
-      'selectedContextId'
+      'selectedContextId',
+      'selectedNodesData'
     ]
   }
 ];

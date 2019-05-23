@@ -23,14 +23,14 @@
     <% if (node.renderedQuant) { %>
     <div class="node-title-column" >
         <div class="column-title" ><%= node.renderedQuant.name %></div >
-        <div class="column-content" ><%= node.renderedQuant.valueNice %><span
+        <div class="column-content" ><%= node.renderedQuant.value %><span
                     class="unit" ><%= node.renderedQuant.unit %></span ></div >
     </div >
     <% } %>
     <% if (node.selectedMetas) { node.selectedMetas.forEach(function(meta) { %>
     <div class="node-title-column" >
         <div class="column-title" ><%= meta.name %></div >
-        <div class="column-content" ><span class="value" ><%= meta.valueNice %></span >
+        <div class="column-content" ><span class="value" ><%= meta.value %></span >
             <% if (meta.unit) { %>
             <span class="unit" ><%= meta.unit %></span >
             <% } %>
@@ -57,14 +57,14 @@
     <% if (node.renderedQuant) { %>
     <div class="node-title-column" >
         <div class="column-title" ><%= node.renderedQuant.name %></div >
-        <div class="column-content" ><%= node.renderedQuant.valueNice %><span
+        <div class="column-content" ><%= node.renderedQuant.value %><span
                     class="unit" ><%= node.renderedQuant.unit %></span ></div >
     </div >
     <% } %>
     <% if (node.selectedMetas) { node.selectedMetas.forEach(function(meta) { %>
     <div class="node-title-column" >
         <div class="column-title" ><%= meta.name %></div >
-        <div class="column-content" ><span class="value" ><%= meta.valueNice %></span >
+        <div class="column-content" ><span class="value" ><%= meta.value %></span >
             <% if (meta.unit) { %>
             <span class="unit" ><%= meta.unit %></span >
             <% } %>

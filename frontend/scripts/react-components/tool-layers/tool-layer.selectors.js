@@ -30,7 +30,7 @@ export const getCurrentHighlightedChoroplethBucket = createSelector(
     if (
       highlightedNodesData.length === 1 &&
       highlightedNodesData[0].geoId !== null &&
-      choropleth !== undefined
+      typeof choropleth !== 'undefined'
     ) {
       return choropleth[highlightedNodesData[0].geoId] || 'ch-default';
     }

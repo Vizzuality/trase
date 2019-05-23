@@ -1,8 +1,10 @@
 import formatValue from 'utils/formatValue';
 import NodeTitleTemplate from 'templates/tool/nodeTitle.ejs';
+import Tooltip from 'components/shared/info-tooltip.component';
+import getNodeMeta from 'reducers/helpers/getNodeMeta';
+
 import 'scripts/react-components/tool/tool-search/node-title-group/node-title-group.scss';
 import 'styles/components/tool/nodes-clear.scss';
-import Tooltip from 'components/shared/info-tooltip.component';
 
 export default class {
   constructor() {
@@ -36,17 +38,18 @@ export default class {
 
   selectNodes(data) {
     const {
-      nodesData,
+      selectedNodesData,
       columns,
+      selectedMapDimensions,
       recolorGroups,
       currentQuant,
       selectedYears,
-      selectedContextId,
-      highlightedNodesData
+      selectedContextId
     } = data;
     this._update({
       isSelect: true,
-      nodesData: nodesData || highlightedNodesData,
+      selectedMapDimensions,
+      nodesData: selectedNodesData,
       columns,
       recolorGroups,
       currentQuant,
@@ -56,14 +59,17 @@ export default class {
   }
 
   highlightNode({
-    isHighlight,
     columns,
+    attributes,
+    selectedMapDimensions,
     highlightedNodesData,
     recolorGroups,
     coordinates,
     currentQuant,
     selectedYears,
-    selectedContextId
+    selectedNodesData,
+    selectedContextId,
+    selectedResizeBy
   }) {
     this.tooltip.hide();
     if (highlightedNodesData === undefined || !highlightedNodesData.length) {
@@ -72,12 +78,20 @@ export default class {
     // if we have coordinates, request came from hover on map, so we have a tooltip and don't need to show pill
     // else show pill for sankey node
     if (coordinates !== undefined) {
-      this._showTooltip(highlightedNodesData, coordinates, currentQuant);
+      this._showTooltip({
+        nodesData: highlightedNodesData,
+        coordinates,
+        currentQuant,
+        attributes,
+        selectedResizeBy,
+        selectedMapDimensions
+      });
     } else {
       this.el.classList.remove('is-hidden');
+      const hasHighlighted = highlightedNodesData.length > 0;
       this._update({
-        isSelect: !isHighlight,
-        nodesData: highlightedNodesData,
+        isSelect: !hasHighlighted,
+        nodesData: hasHighlighted ? highlightedNodesData : selectedNodesData,
         columns,
         recolorGroups,
         currentQuant,
@@ -91,6 +105,9 @@ export default class {
     isSelect,
     nodesData,
     columns,
+    attributes,
+    selectedResizeBy,
+    selectedMapDimensions,
     recolorGroups = null,
     currentQuant,
     selectedYears,
@@ -124,19 +141,27 @@ export default class {
         let renderedQuant;
         if (node.quant !== undefined) {
           renderedQuant = {
-            valueNice: formatValue(node.quant, currentQuant.name),
+            value: formatValue(node.quant, currentQuant.name),
             unit: currentQuant.unit,
             name: currentQuant.name
           };
         }
 
         let renderedMetas;
-        if (node.selectedMetas !== undefined) {
-          renderedMetas = node.selectedMetas.map(originalMeta => ({
-            valueNice: formatValue(originalMeta.rawValue, originalMeta.name),
-            name: originalMeta.name,
-            unit: originalMeta.unit
-          }));
+        if (selectedMapDimensions.length > 0) {
+          renderedMetas = selectedMapDimensions
+            .map(dimension => {
+              const meta = getNodeMeta(dimension, node, attributes, selectedResizeBy);
+              if (!meta) {
+                return null;
+              }
+              return {
+                name: dimension.name,
+                unit: dimension.unit,
+                value: formatValue(meta.value, dimension.name)
+              };
+            })
+            .filter(Boolean);
         }
 
         return Object.assign({}, node, {
@@ -187,23 +212,36 @@ export default class {
     this.callbacks.onCloseNodeClicked(parseInt(e.currentTarget.dataset.nodeId, 10));
   }
 
-  _showTooltip(nodesData, coordinates, currentQuant) {
+  _showTooltip({
+    nodesData,
+    coordinates,
+    currentQuant,
+    selectedMapDimensions,
+    attributes,
+    selectedResizeBy
+  }) {
     const node = nodesData[0];
 
-    if (node.selectedMetas === undefined || !coordinates) {
+    if (!coordinates) {
       return;
     }
 
     let values = [];
 
-    // map metas might not be loaded yet
-    if (node.selectedMetas !== undefined) {
-      values = node.selectedMetas
-        .map(meta => ({
-          title: meta.name,
-          unit: meta.unit,
-          value: formatValue(meta.rawValue, meta.name)
-        }))
+    if (selectedMapDimensions.length > 0) {
+      values = selectedMapDimensions
+        .map(dimension => {
+          const meta = getNodeMeta(dimension, node, attributes, selectedResizeBy);
+          if (!meta) {
+            return null;
+          }
+          return {
+            title: dimension.name,
+            unit: dimension.unit,
+            value: formatValue(meta.value, dimension.name)
+          };
+        })
+        .filter(Boolean)
         .concat(values);
     }
 
@@ -215,7 +253,6 @@ export default class {
         value: formatValue(node.quant, currentQuant.name)
       });
     }
-
     this.tooltip.show(coordinates.pageX, coordinates.pageY, node.name, values);
   }
 }
