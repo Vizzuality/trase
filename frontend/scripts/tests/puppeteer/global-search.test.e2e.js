@@ -102,6 +102,6 @@ describe('Profile Root search', () => {
     const url = page.url();
     const query = parse(url.split('?')[1]);
     expect(url.startsWith(`${BASE_URL}/flows`)).toBe(true);
-    expect(query.isMapVisible).toBe(true);
+    expect(JSON.parse(query.isMapVisible)).toBe(true);
   });
 });

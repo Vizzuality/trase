@@ -3,6 +3,7 @@ import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.compo
 import MapLegend from 'react-components/tool/map-legend/map-legend.component';
 import {
   getChoroplethOptions,
+  getMapDimensionsWarnings,
   getSelectedMapContextualLayersData,
   getCurrentHighlightedChoroplethBucket
 } from 'react-components/tool-layers/tool-layer.selectors';
@@ -12,7 +13,7 @@ const mapStateToProps = state => {
   const { choroplethLegend } = getChoroplethOptions(state);
   return {
     choroplethLegend,
-    selectedMapDimensionsWarnings: state.toolLayers.selectedMapDimensionsWarnings,
+    selectedMapDimensionsWarnings: getMapDimensionsWarnings(state),
     selectedMapContextualLayersData: getSelectedMapContextualLayersData(state),
     currentHighlightedChoroplethBucket: getCurrentHighlightedChoroplethBucket(state)
   };

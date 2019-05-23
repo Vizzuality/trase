@@ -1,6 +1,5 @@
 import chroma from 'chroma-js';
 import compact from 'lodash/compact';
-import filter from 'lodash/filter';
 import { CHOROPLETH_COLORS, CHOROPLETH_CLASS_ZERO } from 'constants';
 
 const _shortenTitle = title => {
@@ -43,12 +42,12 @@ export default function(selectedMapDimensionsUids, nodes, attributes, columns, m
         bucket[0].length + 1
       );
 
-  const geoNodes = filter(nodes, node => {
+  const geoNodesIds = Object.keys(nodes).filter(nodeId => {
+    const node = nodes[nodeId];
     const column = columns[node.columnId];
     return node.geoId !== undefined && node.geoId !== null && column.isGeo;
   });
 
-  const geoNodesIds = Object.keys(geoNodes);
   const choropleth = {};
 
   const choroplethLegend = {
@@ -59,7 +58,7 @@ export default function(selectedMapDimensionsUids, nodes, attributes, columns, m
   };
 
   geoNodesIds.forEach(nodeId => {
-    const node = geoNodes[nodeId];
+    const node = nodes[nodeId];
     let color = CHOROPLETH_COLORS.default_fill;
     const meta = attributes && attributes[nodeId];
 

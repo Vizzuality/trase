@@ -20,13 +20,18 @@ export const getChoroplethOptions = createSelector(
 
 export const getMapDimensionsWarnings = createSelector(
   [getMapDimensions, getSelectedMapDimensions, getSelectedYears],
-  (mapDimensions, selectedMapDimensions, selectedYears) =>
-    getMapDimensionsWarningsUtil(mapDimensions, selectedMapDimensions, selectedYears)
+  (mapDimensions, selectedMapDimensions, selectedYears) => {
+    if (selectedYears.length === 0) {
+      return null;
+    }
+    return getMapDimensionsWarningsUtil(mapDimensions, selectedMapDimensions, selectedYears);
+  }
 );
 
 export const getCurrentHighlightedChoroplethBucket = createSelector(
-  [getHighlightedNodesData, getChoropleth],
-  (highlightedNodesData, choropleth) => {
+  [getHighlightedNodesData, getChoroplethOptions],
+  (highlightedNodesData, choroplethOptions) => {
+    const { choropleth } = choroplethOptions;
     if (
       highlightedNodesData.length === 1 &&
       highlightedNodesData[0].geoId !== null &&

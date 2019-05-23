@@ -424,7 +424,7 @@ export default class {
         },
         click(event) {
           if (
-            event.target.disabled ||
+            (event.target.feature?.properties && !event.target.feature.properties.hasFlows) ||
             (event.target.classList && event.target.classList.contains('-disabled'))
           ) {
             return;
@@ -544,7 +544,6 @@ export default class {
           color,
           weight
         });
-        layer.disabled = !layer.feature.properties.hasFlows;
       }
 
       if (isLinked) {
