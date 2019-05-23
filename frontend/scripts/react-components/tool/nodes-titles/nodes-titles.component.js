@@ -233,7 +233,6 @@ export default class {
     }
 
     let values = [];
-
     if (attributes && selectedMapDimensions && selectedMapDimensions.length > 0) {
       values = selectedMapDimensions
         .map(dimension => {
@@ -247,8 +246,7 @@ export default class {
             value: formatValue(meta.value, dimension.name)
           };
         })
-        .filter(Boolean)
-        .concat(values);
+        .filter(Boolean);
     }
 
     // if node is visible in sankey, quant is available

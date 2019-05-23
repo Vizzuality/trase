@@ -15,6 +15,7 @@ const getHighlightedNodesIds = state => state.toolLinks.highlightedNodesIds;
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolColumns = state => state.toolLinks.data.columns;
+const getToolNodeHeights = state => state.toolLinks.data.nodeHeights;
 const getSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
 const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
@@ -62,13 +63,13 @@ export const getVisibleNodes = createSelector(
 );
 
 export const getVisibleNodesByColumn = createSelector(
-  [getVisibleNodes, getToolColumns],
-  (visibleNodes, columns) => {
+  [getVisibleNodes, getToolColumns, getToolNodeHeights],
+  (visibleNodes, columns, nodeHeights) => {
     if (!visibleNodes) {
       return [];
     }
     const byColumn = splitVisibleNodesByColumn(visibleNodes, columns);
-    return sortVisibleNodes(byColumn);
+    return sortVisibleNodes(byColumn, nodeHeights);
   }
 );
 
