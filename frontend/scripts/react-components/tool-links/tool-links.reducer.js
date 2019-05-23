@@ -28,6 +28,7 @@ export const toolLinksInitialState = {
     columns: null,
     nodes: {},
     links: [],
+    nodeHeights: null,
     nodeAttributes: null
   },
   currentQuant: null,
@@ -111,19 +112,17 @@ const toolLinksReducer = {
         logisticsHubColumn.useGeometryFromColumnId = municipalitiesColumn.id;
       }
 
-      draft.data.nodes = nodes.reduce((acc, next) => {
-        acc[next.id] = next;
-        return acc;
-      }, {});
-
-      draft.data.columns = columns.reduce((acc, next) => {
-        acc[next.id] = next;
-        return acc;
-      }, {});
-
-      return Object.assign(draft, {
-        selectedColumnsIds
+      draft.data.nodes = {};
+      nodes.forEach(node => {
+        draft.data.nodes[node.id] = node;
       });
+
+      draft.data.columns = {};
+      columns.forEach(column => {
+        draft.data.columns[column.id] = column;
+      });
+
+      draft.selectedColumnsIds = selectedColumnsIds;
     });
   },
 
@@ -132,15 +131,14 @@ const toolLinksReducer = {
       const links = action.jsonPayload.data;
       const linksMeta = action.jsonPayload.include;
 
-      const currentQuant = linksMeta.quant;
-
-      draft.data.links = links;
-
-      return Object.assign(draft, {
-        linksMeta,
-        currentQuant,
-        flowsLoading: false
+      draft.data.nodeHeights = {};
+      linksMeta.nodeHeights.forEach(nodeHeight => {
+        draft.data.nodeHeights[nodeHeight.id] = nodeHeight;
       });
+
+      draft.currentQuant = linksMeta.quant;
+      draft.data.links = links;
+      draft.flowsLoading = false;
     });
   },
   [SET_NODE_ATTRIBUTES](state, action) {

@@ -14,6 +14,7 @@ const mapStateToProps = state => ({
   selectedResizeBy: getSelectedResizeBy(state),
   selectedMapDimensions: getSelectedMapDimensions(state),
   selectedNodesData: getSelectedNodesData(state),
+  nodeHeights: state.toolLinks.data.nodeHeights,
   columns: state.toolLinks.data.columns,
   attributes: state.toolLinks.data.nodeAttributes,
   recolorGroups: getToolRecolorGroups(state),
@@ -29,6 +30,7 @@ const methodProps = [
     name: 'selectNodes',
     compared: ['selectedNodesData'],
     returned: [
+      'nodeHeights',
       'selectedResizeBy',
       'attributes',
       'selectedMapDimensions',
@@ -45,6 +47,7 @@ const methodProps = [
     name: 'highlightNode',
     compared: ['highlightedNodesData'],
     returned: [
+      'nodeHeights',
       'selectedResizeBy',
       'columns',
       'selectedMapDimensions',

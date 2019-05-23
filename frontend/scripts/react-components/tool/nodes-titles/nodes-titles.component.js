@@ -61,6 +61,7 @@ export default class {
   highlightNode({
     columns,
     attributes,
+    nodeHeights,
     selectedMapDimensions,
     highlightedNodesData,
     recolorGroups,
@@ -79,6 +80,7 @@ export default class {
     // else show pill for sankey node
     if (coordinates !== undefined) {
       this._showTooltip({
+        nodeHeights,
         nodesData: highlightedNodesData,
         coordinates,
         currentQuant,
@@ -92,6 +94,7 @@ export default class {
       this._update({
         isSelect: !hasHighlighted,
         nodesData: hasHighlighted ? highlightedNodesData : selectedNodesData,
+        nodeHeights,
         columns,
         recolorGroups,
         currentQuant,
@@ -106,6 +109,7 @@ export default class {
     nodesData,
     columns,
     attributes,
+    nodeHeights,
     selectedResizeBy,
     selectedMapDimensions,
     recolorGroups = null,
@@ -137,11 +141,12 @@ export default class {
       contextId: selectedContextId,
       year: selectedYears ? selectedYears[0] : null,
       nodes: nodesData.map(node => {
+        const nodeHeight = nodeHeights[node.id];
         const column = columns[node.columnId];
         let renderedQuant;
-        if (node.quant !== undefined) {
+        if (nodeHeight) {
           renderedQuant = {
-            value: formatValue(node.quant, currentQuant.name),
+            value: formatValue(nodeHeight.quant, currentQuant.name),
             unit: currentQuant.unit,
             name: currentQuant.name
           };
@@ -213,6 +218,7 @@ export default class {
   }
 
   _showTooltip({
+    nodeHeights,
     nodesData,
     coordinates,
     currentQuant,
@@ -221,6 +227,7 @@ export default class {
     selectedResizeBy
   }) {
     const node = nodesData[0];
+    const nodeHeight = nodeHeights[node.id];
 
     if (!coordinates) {
       return;
@@ -246,11 +253,11 @@ export default class {
     }
 
     // if node is visible in sankey, quant is available
-    if (node.quant !== undefined) {
+    if (nodeHeight) {
       values.push({
         title: currentQuant.name,
         unit: currentQuant.unit,
-        value: formatValue(node.quant, currentQuant.name)
+        value: formatValue(nodeHeight.quant, currentQuant.name)
       });
     }
     this.tooltip.show(coordinates.pageX, coordinates.pageY, node.name, values);

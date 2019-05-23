@@ -224,7 +224,7 @@ export default class {
       .attr('transform', node => `translate(0,${node.y})`)
       .classed('-is-aggregated', node => node.isAggregated)
       .classed('-is-domestic', node => node.isDomesticConsumption)
-      .classed('-is-alone-in-column', node => node.isAloneInColumn)
+      .classed('-is-alone-in-column', (node, i, list) => list.length === 1)
       .on('mouseenter', node => that._onNodeOver(d3_select(this), node.id, node.isAggregated))
       .on('mouseleave', () => {
         this._onNodeOut();
@@ -245,7 +245,7 @@ export default class {
     this.nodes.selectAll('text').remove();
     this._renderTitles(this.nodes);
 
-    this.nodes.classed('-is-alone-in-column', node => node.isAloneInColumn);
+    this.nodes.classed('-is-alone-in-column', (node, i, list) => list.length === 1);
 
     const nodesUpdate = this.nodes
       .transition()
