@@ -94,7 +94,7 @@ GEM
     annotate (2.7.4)
       activerecord (>= 3.2, < 6.0)
       rake (>= 10.4, < 13.0)
-    appsignal (2.7.1)
+    appsignal (2.9.7)
       rack
     arbre (1.1.1)
       activesupport (>= 3.0.0)
@@ -283,7 +283,7 @@ GEM
       arel (>= 6)
     public_suffix (3.0.3)
     puma (3.12.0)
-    rack (2.0.6)
+    rack (2.0.7)
     rack-cors (0.4.1)
     rack-protection (2.0.4)
       rack
