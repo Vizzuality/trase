@@ -22,7 +22,7 @@ const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
 const getToolBiomeFilter = state => state.toolLinks.selectedBiomeFilter;
 const getSelectedContext = state => state.app.selectedContext;
 const getSelectedMapDimensionsUids = state => state.toolLayers.selectedMapDimensions;
-const getMapDimensions = state => state.toolLayers.mapDimensions;
+const getMapDimensions = state => state.toolLayers.data.mapDimensions;
 
 export const getSelectedResizeBy = makeGetSelectedResizeBy(getToolResizeBy, getSelectedContext);
 export const getSelectedRecolorBy = makeGetSelectedRecolorBy(getToolRecolorBy, getSelectedContext);
@@ -47,9 +47,12 @@ export const getSelectedMapDimensions = createSelector(
     selectedMapDimensionsIds.filter(Boolean).map(uid => mapDimensions[uid])
 );
 
-const getNodesGeoIds = nodesData =>
+const getNodesGeoIds = (nodesData, columns) =>
   nodesData
-    .filter(node => node.isGeo === true && typeof node.geoId !== 'undefined' && node.geoId !== null)
+    .filter(node => {
+      const column = columns[node.columnId];
+      return column.isGeo === true && typeof node.geoId !== 'undefined' && node.geoId !== null;
+    })
     .map(node => node.geoId);
 
 export const getVisibleNodes = createSelector(
@@ -79,7 +82,7 @@ export const getSelectedNodesData = createSelector(
 );
 
 export const getSelectedNodesGeoIds = createSelector(
-  [getSelectedNodesData],
+  [getSelectedNodesData, getToolColumns],
   getNodesGeoIds
 );
 
@@ -152,6 +155,6 @@ export const getHighlightedNodesData = createSelector(
 );
 
 export const getHighlightedNodesGeoIds = createSelector(
-  [getHighlightedNodesData],
+  [getHighlightedNodesData, getToolColumns],
   getNodesGeoIds
 );

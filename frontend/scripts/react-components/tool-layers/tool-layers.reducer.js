@@ -1,5 +1,4 @@
 import {
-  GET_COLUMNS,
   GET_CONTEXT_LAYERS,
   GET_LINKED_GEOIDS,
   GET_MAP_VECTOR_DATA,
@@ -17,19 +16,19 @@ import {
 import { SET_CONTEXT } from 'scripts/actions/app.actions';
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
-import getNodesDict from 'scripts/reducers/helpers/getNodesDict';
 import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 
 export const toolLayersInitialState = {
-  geoIdsDict: {},
-  highlightedNodeCoordinates: null,
+  data: {
+    mapDimensions: {},
+    mapVectorData: null,
+    mapDimensionsGroups: [],
+    mapContextualLayers: []
+  },
+  highlightedNodeCoordinates: null, // TODO: this should be local state only used for map tooltip
   isMapVisible: false,
   linkedGeoIds: [],
-  mapContextualLayers: [],
-  mapDimensions: {},
-  mapDimensionsGroups: [],
   mapLoading: true,
-  mapVectorData: null,
   mapView: null,
   selectedMapBasemap: null,
   selectedMapContextualLayers: null,
@@ -56,13 +55,15 @@ const toolLayersReducer = {
   [SET_MAP_DIMENSIONS_DATA](state, action) {
     return immer(state, draft => {
       const { dimensions, dimensionGroups } = action.payload.mapDimensionsMetaJSON;
+      draft.data.mapDimensions = {};
       dimensions.forEach(dimension => {
         const uid = getNodeMetaUid(dimension.type, dimension.layerAttributeId);
-        draft.mapDimensions[uid] = dimension;
-        draft.mapDimensions[uid].uid = uid;
+        draft.data.mapDimensions[uid] = dimension;
+        draft.data.mapDimensions[uid].uid = uid;
       });
+      draft.data.mapDimensionsGroups = [];
       dimensionGroups.forEach((g, i) => {
-        draft.mapDimensionsGroups[i] = {
+        draft.data.mapDimensionsGroups[i] = {
           ...g,
           dimensions: dimensions
             .filter(dimension => dimension.groupId === g.id)
@@ -85,14 +86,14 @@ const toolLayersReducer = {
   },
   [GET_MAP_VECTOR_DATA](state, action) {
     return immer(state, draft => {
-      draft.mapVectorData = action.mapVectorData;
+      draft.data.mapVectorData = action.mapVectorData;
     });
   },
   [GET_CONTEXT_LAYERS](state, action) {
     return immer(state, draft => {
-      draft.mapContextualLayers = {};
+      draft.data.mapContextualLayers = {};
       action.mapContextualLayers.forEach(layer => {
-        draft.mapContextualLayers[layer.id] = layer;
+        draft.data.mapContextualLayers[layer.id] = layer;
       });
     });
   },
@@ -143,23 +144,10 @@ const toolLayersReducer = {
         zoom: action.zoom
       };
     });
-  },
-  [GET_COLUMNS](state, action) {
-    return immer(state, draft => {
-      const rawNodes = action.payload[0].data;
-      const columns = action.payload[1].data;
-
-      const { geoIdsDict } = getNodesDict(rawNodes, columns);
-
-      return Object.assign(draft, {
-        geoIdsDict
-      });
-    });
   }
 };
 
 const toolLayersReducerTypes = PropTypes => ({
-  geoIdsDict: PropTypes.object.isRequired,
   highlightedNodeCoordinates: PropTypes.object,
   isMapVisible: PropTypes.bool,
   linkedGeoIds: PropTypes.arrayOf(PropTypes.string).isRequired,

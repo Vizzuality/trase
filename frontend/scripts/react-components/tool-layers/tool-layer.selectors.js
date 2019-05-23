@@ -3,11 +3,11 @@ import getChoropleth from 'reducers/helpers/getChoropleth';
 import { getMapDimensionsWarnings as getMapDimensionsWarningsUtil } from 'scripts/reducers/helpers/getMapDimensionsWarnings';
 import { getHighlightedNodesData } from 'react-components/tool/tool.selectors';
 
-const getMapDimensions = state => state.toolLayers.mapDimensions;
+const getMapDimensions = state => state.toolLayers.data.mapDimensions;
 const getSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolColumns = state => state.toolLinks.data.columns;
-const getMapContextualLayers = state => state.toolLayers.mapContextualLayers;
+const getMapContextualLayers = state => state.toolLayers.data.mapContextualLayers;
 const getSelectedMapContextualLayers = state => state.toolLayers.selectedMapContextualLayers;
 const getSelectedYears = state => state.app.selectedYears;
 const getToolNodeAttributes = state => state.toolLinks.data.nodeAttributes;

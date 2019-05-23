@@ -7,10 +7,11 @@ import { getSelectedNodesData, getToolRecolorGroups } from 'react-components/too
 const mapStateToProps = state => {
   const recolorGroups = getToolRecolorGroups(state);
   const selectedNodesData = getSelectedNodesData(state);
+  const { columns } = state.toolLinks.data;
   const nodes = selectedNodesData.map(node => ({
     id: node.id,
     recolorGroup: recolorGroups === null || !recolorGroups[node.id] ? -1 : recolorGroups[node.id],
-    columns: [{ title: node.type, content: node.name }]
+    columns: [{ title: columns[node.columnId].name, content: node.name }]
   }));
   return {
     nodes

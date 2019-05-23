@@ -29,12 +29,12 @@ export const toolLinksInitialState = {
     nodes: {},
     links: [],
     nodeHeights: null,
-    nodeAttributes: null
+    nodeAttributes: null,
+    nodesByColumnGeoId: null
   },
   currentQuant: null,
   detailedView: false,
   expandedNodesIds: [],
-  forcedOverview: false,
   highlightedNodesIds: [],
   flowsLoading: true,
   selectedBiomeFilter: null,
@@ -42,7 +42,6 @@ export const toolLinksInitialState = {
   selectedNodesIds: [],
   selectedRecolorBy: null,
   selectedResizeBy: null,
-  loadedFlowsContextId: null,
   isSearchOpen: false
 };
 
@@ -96,14 +95,12 @@ const toolLinksReducer = {
         }
       });
 
-      // if any selectedNode, make those columns visible (selected)
-      if (!isEmpty(state.selectedNodesIds)) {
-        state.selectedNodesIds
-          .map(id => draft.data.nodes[id])
-          .forEach(node => {
-            selectedColumnsIds[node.columnGroup] = node.columnId;
-          });
-      }
+      draft.data.nodes = {};
+      draft.data.nodesByColumnGeoId = {};
+      nodes.forEach(node => {
+        draft.data.nodes[node.id] = node;
+        draft.data.nodesByColumnGeoId[`${node.columnId}-${node.geoId}`] = node.id;
+      });
 
       // TODO the API should have the info on which file to load (if any) per column
       const municipalitiesColumn = columns.find(column => column.name === 'MUNICIPALITY');
@@ -112,16 +109,20 @@ const toolLinksReducer = {
         logisticsHubColumn.useGeometryFromColumnId = municipalitiesColumn.id;
       }
 
-      draft.data.nodes = {};
-      nodes.forEach(node => {
-        draft.data.nodes[node.id] = node;
-      });
-
       draft.data.columns = {};
       columns.forEach(column => {
         draft.data.columns[column.id] = column;
       });
 
+      // if any selectedNode, make those columns visible (selected)
+      if (!isEmpty(state.selectedNodesIds)) {
+        state.selectedNodesIds
+          .map(id => draft.data.nodes[id])
+          .forEach(node => {
+            const column = draft.data.columns[node.columnId];
+            selectedColumnsIds[column.group] = node.columnId;
+          });
+      }
       draft.selectedColumnsIds = selectedColumnsIds;
     });
   },
@@ -143,18 +144,22 @@ const toolLinksReducer = {
   },
   [SET_NODE_ATTRIBUTES](state, action) {
     return immer(state, draft => {
-      draft.data.nodeAttributes = {};
-      action.payload.data.forEach(attribute => {
-        if (typeof draft.data.nodeAttributes[attribute.node_id] !== 'undefined') {
-          const uid = getNodesMetaUid(attribute.attribute_type, attribute.attribute_id);
-          draft.data.nodeAttributes[attribute.node_id][uid] = attribute;
-        } else {
-          const uid = getNodesMetaUid(attribute.attribute_type, attribute.attribute_id);
-          draft.data.nodeAttributes[attribute.node_id] = {
-            [uid]: attribute
-          };
-        }
-      });
+      if (action.payload?.data?.length > 0) {
+        draft.data.nodeAttributes = {};
+        action.payload.data.forEach(attribute => {
+          if (typeof draft.data.nodeAttributes[attribute.node_id] !== 'undefined') {
+            const uid = getNodesMetaUid(attribute.attribute_type, attribute.attribute_id);
+            draft.data.nodeAttributes[attribute.node_id][uid] = attribute;
+          } else {
+            const uid = getNodesMetaUid(attribute.attribute_type, attribute.attribute_id);
+            draft.data.nodeAttributes[attribute.node_id] = {
+              [uid]: attribute
+            };
+          }
+        });
+      } else {
+        draft.data.nodeAttributes = null;
+      }
     });
   },
   [SHOW_LINKS_ERROR](state) {
@@ -180,8 +185,7 @@ const toolLinksReducer = {
   [SELECT_VIEW](state, action) {
     return immer(state, draft => {
       Object.assign(draft, {
-        detailedView: action.detailedView,
-        forcedOverview: action.forcedOverview
+        detailedView: action.detailedView
       });
     });
   },
@@ -189,7 +193,7 @@ const toolLinksReducer = {
   [SELECT_COLUMN](state, action) {
     return immer(state, draft => {
       // TODO also update choropleth with default selected indicators
-      if (draft.selectedColumnsIds.indexOf(action.columnId) === -1) {
+      if (!draft.selectedColumnsIds.includes(action.columnId)) {
         draft.selectedColumnsIds[action.columnIndex] = action.columnId;
       }
       draft.data.links = [];
@@ -232,15 +236,13 @@ const toolLinksReducerTypes = PropTypes => ({
   detailedView: PropTypes.bool,
   isSearchOpen: PropTypes.bool,
   expandedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-  forcedOverview: PropTypes.bool,
   highlightedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   flowsLoading: PropTypes.bool,
   selectedBiomeFilter: PropTypes.object,
   selectedColumnsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedRecolorBy: PropTypes.object,
-  selectedResizeBy: PropTypes.object,
-  loadedFlowsContextId: PropTypes.number
+  selectedResizeBy: PropTypes.object
 });
 
 export default createReducer(toolLinksInitialState, toolLinksReducer, toolLinksReducerTypes);

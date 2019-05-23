@@ -7,7 +7,10 @@ import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.compo
 
 // There's an update infinite loop inside loadMapDimensions, so mapDimensionsGroups should always be memoized
 const getLegacyMapDimensionsGroups = createSelector(
-  [state => state.toolLayers.mapDimensionsGroups, state => state.toolLayers.mapDimensions],
+  [
+    state => state.toolLayers.data.mapDimensionsGroups,
+    state => state.toolLayers.data.mapDimensions
+  ],
   (groups, mapDimensions) =>
     groups.map(mapDimensionGroup => {
       const { dimensions, ...group } = mapDimensionGroup;

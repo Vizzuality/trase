@@ -198,8 +198,7 @@ export function resetSankey() {
 
     dispatch({
       type: SELECT_VIEW,
-      detailedView: false,
-      forcedOverview: true
+      detailedView: false
     });
 
     const state = getState();
@@ -275,7 +274,7 @@ export function selectColumn(columnIndex, columnId, reloadLinks = true) {
       dispatch(setMapDimensions([null, null]));
     } else if (selectedColumn.isGeo && selectedColumn.isChoroplethDisabled === false) {
       const availableMapDimensions = _getAvailableMapDimensions(
-        state.toolLayers.mapDimensions,
+        state.toolLayers.data.mapDimensions,
         state.toolLayers.selectedMapDimensions
       );
       dispatch(setMapDimensions(availableMapDimensions));
@@ -516,7 +515,7 @@ export function loadMapVectorData() {
             setGeoJSONMeta(
               geoJSON,
               getState().toolLinks.data.nodes,
-              getState().toolLayers.geoIdsDict,
+              getState().toolLinks.data.nodesByColumnGeoId,
               geoColumn.id
             );
             return {
@@ -722,8 +721,9 @@ export function selectExpandedNode(param) {
         });
 
         nodes.forEach(node => {
-          if (!isNodeColumnVisible(node, toolLinks.selectedColumnsIds)) {
-            dispatch(selectColumn(node.columnGroup, node.columnId, false));
+          const column = toolLinks.data.columns[node.columnId];
+          if (!isNodeColumnVisible(column, toolLinks.selectedColumnsIds)) {
+            dispatch(selectColumn(column.group, node.columnId, false));
           }
         });
 
@@ -784,8 +784,7 @@ export function expandNodeSelection() {
     if (detailedView) {
       dispatch({
         type: SELECT_VIEW,
-        detailedView: false,
-        forcedOverview: true
+        detailedView: false
       });
     }
 
@@ -794,21 +793,10 @@ export function expandNodeSelection() {
 }
 
 export function collapseNodeSelection() {
-  return (dispatch, getState) => {
+  return dispatch => {
     dispatch({
       type: COLLAPSE_NODE_SELECTION
     });
-
-    const { forcedOverview } = getState().toolLinks;
-
-    // if shrinking, and if overview was previously forced, go back to detailed
-    if (forcedOverview) {
-      dispatch({
-        type: SELECT_VIEW,
-        detailedView: true,
-        forcedOverview: false
-      });
-    }
 
     dispatch(loadLinks());
   };
@@ -910,13 +898,14 @@ export function loadMapChoropeth(getState, dispatch) {
 
   if (compact(uids).length === 0) {
     dispatch({
-      type: SET_NODE_ATTRIBUTES
+      type: SET_NODE_ATTRIBUTES,
+      payload: { data: [] }
     });
 
     return;
   }
 
-  const selectedMapDimensions = compact(uids).map(uid => state.toolLayers.mapDimensions[uid]);
+  const selectedMapDimensions = compact(uids).map(uid => state.toolLayers.data.mapDimensions[uid]);
 
   const params = {
     context_id: state.app.selectedContext.id,

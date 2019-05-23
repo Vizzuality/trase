@@ -6,7 +6,7 @@ import { loadTooltip } from 'actions/app.actions';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 
 const mapStateToProps = state => ({
-  layers: state.toolLayers.mapContextualLayers,
+  layers: state.toolLayers.data.mapContextualLayers,
   selectedMapContextualLayers: state.toolLayers.selectedMapContextualLayers
 });
 

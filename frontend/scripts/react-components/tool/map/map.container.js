@@ -22,7 +22,7 @@ const mapStateToProps = state => {
   return {
     choropleth,
     mapView: state.toolLayers.mapView,
-    mapVectorData: state.toolLayers.mapVectorData,
+    mapVectorData: state.toolLayers.data.mapVectorData,
     currentPolygonType: state.toolLinks.selectedColumnsIds,
     selectedNodesGeoIds: getSelectedNodesGeoIds(state),
     recolorByNodeIds: state.toolLinks.recolorByNodeIds,
