@@ -6,9 +6,7 @@ import ColumnSelector from 'react-components/tool/column-selector/column-selecto
 const mapStateToProps = state => ({
   allColumns: state.tool.columns,
   currentDropdown: state.app.currentDropdown,
-  selectedColumnsIds: state.tool.selectedColumnsIds,
-  nodesColoredAtColumn: state.tool.nodesColoredAtColumn,
-  recolorGroups: state.tool.recolorGroups && state.tool.recolorGroups.filter(c => c !== undefined)
+  selectedColumnsIds: state.tool.selectedColumnsIds
 });
 
 const mapDispatchToProps = dispatch => ({

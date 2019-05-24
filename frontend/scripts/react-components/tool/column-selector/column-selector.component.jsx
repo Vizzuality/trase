@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions,jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import FiltersDropdown from 'react-components/nav/filters-nav/filters-dropdown.component';
-import RecolorByNodeLegendSummary from 'react-components/shared/recolor-by/recolor-by-node-legend-summary';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
 
@@ -11,9 +10,7 @@ function ColumnSelector({
   currentDropdown,
   group,
   allColumns,
-  selectedColumnsIds,
-  nodesColoredAtColumn,
-  recolorGroups
+  selectedColumnsIds
 }) {
   const id = `column${group}`;
   const columnItems = allColumns.filter(column => column.group === group);
@@ -39,9 +36,6 @@ function ColumnSelector({
       <span className={cx('dropdown-title', { '-is-open': currentDropdown === id })}>
         {selectedColumnItem.name}
       </span>
-      {nodesColoredAtColumn === group && (
-        <RecolorByNodeLegendSummary recolorGroups={recolorGroups} />
-      )}
       <FiltersDropdown id={id} currentDropdown={currentDropdown} onClickOutside={onToggle}>
         <ul className="dropdown-list">
           {columnItems.map((columnItem, index) => (
@@ -63,11 +57,9 @@ ColumnSelector.propTypes = {
   group: PropTypes.number,
   onToggle: PropTypes.func,
   allColumns: PropTypes.array,
-  recolorGroups: PropTypes.array,
   onColumnSelected: PropTypes.func,
   currentDropdown: PropTypes.string,
-  selectedColumnsIds: PropTypes.array,
-  nodesColoredAtColumn: PropTypes.number
+  selectedColumnsIds: PropTypes.array
 };
 
 export default ColumnSelector;
