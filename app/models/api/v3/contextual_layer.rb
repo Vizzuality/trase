@@ -2,16 +2,14 @@
 #
 # Table name: contextual_layers
 #
-#  id           :integer          not null, primary key
-#  context_id   :integer          not null
-#  title        :text             not null
-#  identifier   :text             not null
-#  position     :integer          not null
-#  tooltip_text :text
-#  is_default   :boolean          default(FALSE), not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
-#  legend       :text
+#  id                                                  :integer          not null, primary key
+#  context_id                                          :integer          not null
+#  title(Title of layer for display)                   :text             not null
+#  identifier(Identifier of layer, e.g. brazil_biomes) :text             not null
+#  position(Display order in scope of context)         :integer          not null
+#  tooltip_text(Tooltip text)                          :text
+#  is_default(When set, show this layer by default)    :boolean          default(FALSE), not null
+#  legend(Legend as HTML snippet)                      :text
 #
 # Indexes
 #

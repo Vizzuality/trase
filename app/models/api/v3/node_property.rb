@@ -2,11 +2,9 @@
 #
 # Table name: node_properties
 #
-#  id                      :integer          not null, primary key
-#  node_id                 :integer          not null
-#  is_domestic_consumption :boolean          default(FALSE), not null
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
+#  id                                                       :integer          not null, primary key
+#  node_id                                                  :integer          not null
+#  is_domestic_consumption(When set, assume domestic trade) :boolean          default(FALSE), not null
 #
 # Indexes
 #

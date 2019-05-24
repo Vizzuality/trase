@@ -2,11 +2,10 @@
 #
 # Table name: flow_quals
 #
-#  id         :integer          not null, primary key
-#  flow_id    :integer          not null
-#  qual_id    :integer          not null
-#  value      :text             not null
-#  created_at :datetime         not null
+#  id                   :integer          not null, primary key
+#  flow_id              :integer          not null
+#  qual_id              :integer          not null
+#  value(Textual value) :text             not null
 #
 # Indexes
 #

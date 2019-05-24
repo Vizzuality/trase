@@ -2,11 +2,10 @@
 #
 # Table name: flows
 #
-#  id         :integer          not null, primary key
-#  context_id :integer          not null
-#  year       :integer          not null
-#  path       :integer          default([]), is an Array
-#  created_at :datetime         not null
+#  id                                                                                                                                                              :integer          not null, primary key
+#  context_id                                                                                                                                                      :integer          not null
+#  year(Year)                                                                                                                                                      :integer          not null
+#  path(Array of node ids which constitute the supply chain, where position of node in this array is linked to the value of column_position in context_node_types) :integer          default([]), is an Array
 #
 # Indexes
 #

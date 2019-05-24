@@ -2,9 +2,8 @@
 #
 # Table name: commodities
 #
-#  id         :integer          not null, primary key
-#  name       :text             not null
-#  created_at :datetime         not null
+#  id                                              :integer          not null, primary key
+#  name(Commodity name; unique across commodities) :text             not null
 #
 # Indexes
 #

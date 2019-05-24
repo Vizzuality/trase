@@ -2,12 +2,11 @@
 #
 # Table name: contexts
 #
-#  id           :integer          not null, primary key
-#  country_id   :integer          not null
-#  commodity_id :integer          not null
-#  years        :integer          is an Array
-#  default_year :integer
-#  created_at   :datetime         not null
+#  id                                                                                   :integer          not null, primary key
+#  country_id                                                                           :integer          not null
+#  commodity_id                                                                         :integer          not null
+#  years(Years for which country-commodity data is present; empty (NULL) for all years) :integer          is an Array
+#  default_year(Default year for this context)                                          :integer
 #
 # Indexes
 #

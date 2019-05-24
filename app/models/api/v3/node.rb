@@ -2,13 +2,12 @@
 #
 # Table name: nodes
 #
-#  id           :integer          not null, primary key
-#  node_type_id :integer          not null
-#  name         :text             not null
-#  geo_id       :text
-#  is_unknown   :boolean          default(FALSE), not null
-#  created_at   :datetime         not null
-#  main_id      :integer
+#  id                                                                                                      :integer          not null, primary key
+#  node_type_id                                                                                            :integer          not null
+#  name(Name of node)                                                                                      :text             not null
+#  geo_id(2-letter iso code in case of country nodes; other geo identifiers possible for other node types) :text
+#  is_unknown(When set, node was not possible to identify)                                                 :boolean          default(FALSE), not null
+#  main_id(Node identifier from Main DB)                                                                   :integer
 #
 # Indexes
 #

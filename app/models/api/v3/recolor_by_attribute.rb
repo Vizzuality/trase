@@ -2,22 +2,20 @@
 #
 # Table name: recolor_by_attributes
 #
-#  id                 :integer          not null, primary key
-#  context_id         :integer          not null
-#  group_number       :integer          default(1), not null
-#  position           :integer          not null
-#  legend_type        :text             not null
-#  legend_color_theme :text             not null
-#  interval_count     :integer
-#  min_value          :text
-#  max_value          :text
-#  divisor            :float
-#  tooltip_text       :text
-#  years              :integer          is an Array
-#  is_disabled        :boolean          default(FALSE), not null
-#  is_default         :boolean          default(FALSE), not null
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
+#  id                                                                                                    :integer          not null, primary key
+#  context_id                                                                                            :integer          not null
+#  group_number(Attributes are displayed grouped by their group number, with a separator between groups) :integer          default(1), not null
+#  position(Display order in scope of context and group number)                                          :integer          not null
+#  legend_type(Type of legend, e.g. linear)                                                              :text             not null
+#  legend_color_theme(Color theme of legend, e.g. red-blue)                                              :text             not null
+#  interval_count(For legends with min / max value, number of intervals of the legend)                   :integer
+#  min_value(Min value for the legend)                                                                   :text
+#  max_value(Max value for the legend)                                                                   :text
+#  divisor(Step between intervals for percentual legends)                                                :float
+#  tooltip_text(Tooltip text)                                                                            :text
+#  years(Array of years for which to show this attribute in scope of chart; empty (NULL) for all years)  :integer          is an Array
+#  is_disabled(When set, this attribute is not displayed)                                                :boolean          default(FALSE), not null
+#  is_default(When set, show this attribute by default)                                                  :boolean          default(FALSE), not null
 #
 # Indexes
 #

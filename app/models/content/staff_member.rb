@@ -11,8 +11,6 @@
 #  image_content_type :text
 #  image_file_size    :integer
 #  image_updated_at   :datetime
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
 #
 # Indexes
 #

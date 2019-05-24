@@ -2,17 +2,15 @@
 #
 # Table name: map_attributes
 #
-#  id                     :integer          not null, primary key
-#  map_attribute_group_id :integer          not null
-#  position               :integer          not null
-#  dual_layer_buckets     :float            default([]), not null, is an Array
-#  single_layer_buckets   :float            default([]), not null, is an Array
-#  color_scale            :text
-#  years                  :integer          is an Array
-#  is_disabled            :boolean          default(FALSE), not null
-#  is_default             :boolean          default(FALSE), not null
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
+#  id                                                                                                                 :integer          not null, primary key
+#  map_attribute_group_id                                                                                             :integer          not null
+#  position(Display order in scope of group)                                                                          :integer          not null
+#  dual_layer_buckets(Choropleth buckets for dual dimension choropleth)                                               :float            default([]), not null, is an Array
+#  single_layer_buckets(Choropleth buckets for single dimension choropleth)                                           :float            default([]), not null, is an Array
+#  color_scale(Choropleth colour scale, e.g. blue)                                                                    :text
+#  years(Years for which attribute is present; empty (NULL) for all years)                                            :integer          is an Array
+#  is_disabled(When set, this attribute is not displayed)                                                             :boolean          default(FALSE), not null
+#  is_default(When set, show this attribute by default. A maximum of 2 attributes per context may be set as default.) :boolean          default(FALSE), not null
 #
 # Indexes
 #

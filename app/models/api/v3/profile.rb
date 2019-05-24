@@ -2,19 +2,17 @@
 #
 # Table name: profiles
 #
-#  id                   :integer          not null, primary key
-#  context_node_type_id :integer          not null
-#  name                 :text
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#  main_topojson_path   :string
-#  main_topojson_root   :string
-#  adm_1_name           :string
-#  adm_1_topojson_path  :string
-#  adm_1_topojson_root  :string
-#  adm_2_name           :string
-#  adm_2_topojson_path  :string
-#  adm_2_topojson_root  :string
+#  id                                                                                                                                            :integer          not null, primary key
+#  context_node_type_id                                                                                                                          :integer          not null
+#  name(Profile name, either actor or place. One of restricted set of values.)                                                                   :text
+#  main_topojson_path(Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /)  :string
+#  main_topojson_root(Path within the TopoJSON file where geometries are contained)                                                              :string
+#  adm_1_name                                                                                                                                    :string
+#  adm_1_topojson_path(Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /) :string
+#  adm_1_topojson_root(Path within the TopoJSON file where geometries are contained)                                                             :string
+#  adm_2_name                                                                                                                                    :string
+#  adm_2_topojson_path(Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /) :string
+#  adm_2_topojson_root(Path within the TopoJSON file where geometries are contained)                                                             :string
 #
 # Indexes
 #

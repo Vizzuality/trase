@@ -2,15 +2,13 @@
 #
 # Table name: context_node_type_properties
 #
-#  id                     :integer          not null, primary key
-#  context_node_type_id   :integer          not null
-#  column_group           :integer          not null
-#  is_default             :boolean          default(FALSE), not null
-#  is_geo_column          :boolean          default(FALSE), not null
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  is_choropleth_disabled :boolean          default(FALSE), not null
-#  role                   :string
+#  id                                                                                      :integer          not null, primary key
+#  context_node_type_id                                                                    :integer          not null
+#  column_group(Zero-based number of sankey column in which to display nodes of this type) :integer          not null
+#  is_default(When set, show this node type as default (only use for one))                 :boolean          default(FALSE), not null
+#  is_geo_column(When set, show nodes on map)                                              :boolean          default(FALSE), not null
+#  is_choropleth_disabled(When set, do not display the map choropleth)                     :boolean          default(FALSE), not null
+#  role                                                                                    :string
 #
 # Indexes
 #

@@ -2,10 +2,10 @@
 #
 # Table name: dashboards_attributes_mv
 #
-#  id                            :bigint(8)        primary key
-#  dashboards_attribute_group_id :bigint(8)
-#  position                      :integer
-#  attribute_id                  :bigint(8)
+#  id                                                       :bigint(8)        primary key
+#  dashboards_attribute_group_id                            :bigint(8)
+#  position                                                 :integer
+#  attribute_id(References the unique id in attributes_mv.) :bigint(8)
 #
 # Indexes
 #

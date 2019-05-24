@@ -17,10 +17,16 @@ matrix:
       services:
         - postgresql
       addons:
-        postgresql: 10
+        postgresql: 11
       before_install:
+        - sudo apt-get update
+        - sudo apt-get --yes remove postgresql\*
+        - sudo apt-get install -y postgresql-11 postgresql-client-11
+        - sudo cp /etc/postgresql/{9.6,11}/main/pg_hba.conf
+        - sudo service postgresql restart 11
         - sudo apt-get install -y graphviz
       before_script:
+        - psql --version
         - bundle exec rake db:drop db:create db:structure:load RAILS_ENV=test
         - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
         - chmod +x ./cc-test-reporter

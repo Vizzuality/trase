@@ -2,10 +2,9 @@
 #
 # Table name: countries
 #
-#  id         :integer          not null, primary key
-#  name       :text             not null
-#  iso2       :text             not null
-#  created_at :datetime         not null
+#  id                      :integer          not null, primary key
+#  name(Country name)      :text             not null
+#  iso2(2-letter ISO code) :text             not null
 #
 # Indexes
 #

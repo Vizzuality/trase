@@ -11,7 +11,7 @@
 #  node_type       :text
 #  flow_id         :integer
 #  column_position :integer
-#  role            :string
+#  column_group    :integer
 #  category        :string
 #
 # Indexes
