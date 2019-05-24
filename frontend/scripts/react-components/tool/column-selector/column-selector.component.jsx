@@ -23,7 +23,7 @@ function ColumnSelector({
           options={columnItems.map(c => ({ label: c.name, value: c.id }))}
           value={{ value: selectedColumnItem.id, label: selectedColumnItem.name }}
           onChange={item => handleColumnSelected({ item })}
-          getCommodityClassName={() => 'dropdown-item'}
+          variant="column"
         />
       )}
     </div>
