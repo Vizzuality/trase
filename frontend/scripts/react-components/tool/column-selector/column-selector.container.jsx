@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { connect } from 'react-redux';
 import { selectColumn } from 'actions/tool.actions';
 import ColumnSelector from 'react-components/tool/column-selector/column-selector.component';
@@ -16,55 +16,35 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-class ColumnSelectorContainer extends React.PureComponent {
-  constructor({ allColumns, group, selectedColumnsIds }) {
-    super();
-    const columnItems = allColumns.filter(column => column.group === group);
-    this.state = {
-      columnItems,
-      selectedColumnItem: columnItems.filter(column => column.id === selectedColumnsIds[group])[0]
-    };
-  }
+function ColumnSelectorContainer({ allColumns, group, selectedColumnsIds, onColumnSelected }) {
+  const columnItems = useMemo(() => allColumns.filter(column => column.group === group), [
+    allColumns,
+    group
+  ]);
+  const selectedColumnItem = useMemo(
+    () => columnItems.filter(column => column.id === selectedColumnsIds[group])[0],
+    [columnItems, selectedColumnsIds, group]
+  );
 
-  setDropdownState(allColumns) {
-    const { group, selectedColumnsIds } = this.props;
-    const columnItems = allColumns.filter(column => column.group === group);
-    const selectedColumnItem = columnItems.filter(
-      column => column.id === selectedColumnsIds[group]
-    )[0];
-    this.setState({ selectedColumnItem, columnItems });
-  }
-
-  componentDidUpdate(prevProps) {
-    const { allColumns } = this.props;
-    if (prevProps.allColumns !== allColumns) this.setDropdownState(allColumns);
-  }
-
-  handleColumnSelected = ({ item }) => {
-    const { group, onColumnSelected } = this.props;
-    const { columnItems } = this.state;
-    const columnItem = columnItems.find(c => c.id === item.value);
-    onColumnSelected(group, columnItem.id);
-    this.setState({ selectedColumnItem: columnItem });
+  const handleColumnSelected = ({ item }) => {
+    const updatedColumnItem = columnItems.find(c => c.id === item.value);
+    onColumnSelected(group, updatedColumnItem.id);
   };
 
-  render() {
-    const { selectedColumnItem, columnItems } = this.state;
-    if (typeof selectedColumnItem === 'undefined') {
-      return null;
-    }
-
-    const hasSingleElement = columnItems.length <= 1;
-
-    return (
-      <ColumnSelector
-        hasSingleElement={hasSingleElement}
-        columnItems={columnItems}
-        selectedColumnItem={selectedColumnItem}
-        handleColumnSelected={this.handleColumnSelected}
-      />
-    );
+  if (typeof selectedColumnItem === 'undefined') {
+    return null;
   }
+
+  const hasSingleElement = columnItems.length <= 1;
+
+  return (
+    <ColumnSelector
+      hasSingleElement={hasSingleElement}
+      columnItems={columnItems}
+      selectedColumnItem={selectedColumnItem}
+      handleColumnSelected={handleColumnSelected}
+    />
+  );
 }
 
 ColumnSelectorContainer.propTypes = {
