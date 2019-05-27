@@ -26,6 +26,20 @@ class ColumnSelectorContainer extends React.PureComponent {
     };
   }
 
+  setDropdownState(allColumns) {
+    const { group, selectedColumnsIds } = this.props;
+    const columnItems = allColumns.filter(column => column.group === group);
+    const selectedColumnItem = columnItems.filter(
+      column => column.id === selectedColumnsIds[group]
+    )[0];
+    this.setState({ selectedColumnItem, columnItems });
+  }
+
+  componentDidUpdate(prevProps) {
+    const { allColumns } = this.props;
+    if (prevProps.allColumns !== allColumns) this.setDropdownState(allColumns);
+  }
+
   handleColumnSelected = ({ item }) => {
     const { group, onColumnSelected } = this.props;
     const { columnItems } = this.state;
