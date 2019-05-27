@@ -46,6 +46,7 @@ gem 'sidekiq-unique-jobs'
 gem 'whenever', require: false
 gem 'ransack'
 gem 'bootsnap'
+gem 'sitemap_generator'
 
 group :development, :test do
   gem 'byebug', platform: :mri
@@ -70,7 +71,6 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano-rvm'
   gem 'capistrano-passenger'
-  gem 'sitemap_generator'
 
   gem 'rubocop', require: false
   gem 'rubocop-performance'
