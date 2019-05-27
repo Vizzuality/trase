@@ -212,7 +212,7 @@ function Dropdown(props) {
     initialValue,
     itemToString
   } = props;
-
+  const unstyledVariants = ['column'];
   return (
     <Downshift
       initialSelectedItem={initialValue}
@@ -243,16 +243,17 @@ function Dropdown(props) {
           <Manager>
             <Reference>{p => renderButton({ ...p, getToggleButtonProps, inputValue })}</Reference>
             <Popper placement={placement} key={popperForceUpdateKey.current}>
-              {p =>
-                renderContent({
-                  ...p,
+              {p => {
+                const updatedP = unstyledVariants.includes(variant) ? { ...p, style: {} } : p;
+                return renderContent({
+                  ...updatedP,
                   selectedItem,
                   highlightedIndex,
                   getMenuProps,
                   getItemProps,
                   toggleMenu
-                })
-              }
+                });
+              }}
             </Popper>
           </Manager>
         </div>
