@@ -171,6 +171,15 @@ const Footer = () => (
                 Privacy policy
               </Link>
             </li>
+            <li className="separator"> · </li>
+            <li className="link-item">
+              <Link
+                className="title -mono-font"
+                to={{ type: 'about', payload: { section: 'cookie-policy' } }}
+              >
+                Cookie policy
+              </Link>
+            </li>
           </>
         )}
         <li className="separator"> · </li>
