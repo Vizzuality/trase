@@ -1,9 +1,10 @@
 import { DEFAULT_BASEMAP_FOR_CHOROPLETH } from 'constants';
+import { getSelectedMapDimensionsUids } from 'react-components/tool/tool.selectors';
 
-const shouldUseDefaultBasemap = state =>
-  state.toolLayers.selectedMapDimensions &&
-  state.toolLayers.selectedMapDimensions.length &&
-  state.toolLayers.selectedMapDimensions.filter(d => d !== null).length > 0;
+const shouldUseDefaultBasemap = state => {
+  const selectedMapDimensions = getSelectedMapDimensionsUids(state);
+  return selectedMapDimensions.filter(d => d !== null).length > 0;
+};
 
 export default state =>
   shouldUseDefaultBasemap(state)

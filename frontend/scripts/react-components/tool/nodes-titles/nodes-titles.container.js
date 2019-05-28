@@ -4,7 +4,7 @@ import { selectNode, navigateToProfile, resetState } from 'actions/tool.actions'
 import NodesTitles from 'react-components/tool/nodes-titles/nodes-titles.component';
 import {
   getSelectedResizeBy,
-  getSelectedMapDimensions,
+  getSelectedMapDimensionsData,
   getToolRecolorGroups,
   getSelectedNodesData,
   getHighlightedNodesData
@@ -12,7 +12,7 @@ import {
 
 const mapStateToProps = state => ({
   selectedResizeBy: getSelectedResizeBy(state),
-  selectedMapDimensions: getSelectedMapDimensions(state),
+  selectedMapDimensions: getSelectedMapDimensionsData(state),
   selectedNodesData: getSelectedNodesData(state),
   nodeHeights: state.toolLinks.data.nodeHeights,
   columns: state.toolLinks.data.columns,

@@ -4,6 +4,7 @@ import MapDimensions from 'react-components/tool/map-dimensions/map-dimensions.c
 import { toggleMapDimension } from 'actions/tool.actions';
 import { loadTooltip } from 'actions/app.actions';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
+import { getSelectedMapDimensionsUids } from 'react-components/tool/tool.selectors';
 
 // There's an update infinite loop inside loadMapDimensions, so mapDimensionsGroups should always be memoized
 const getLegacyMapDimensionsGroups = createSelector(
@@ -25,7 +26,7 @@ const isCloroplethEnabled = state => {
 };
 const mapStateToProps = state => ({
   mapDimensionsGroups: getLegacyMapDimensionsGroups(state),
-  selectedMapDimensions: state.toolLayers.selectedMapDimensions,
+  selectedMapDimensions: getSelectedMapDimensionsUids(state),
   isCloroplethEnabled: isCloroplethEnabled(state),
   selectedColumnsIds: state.toolLinks.selectedColumnsIds
 });

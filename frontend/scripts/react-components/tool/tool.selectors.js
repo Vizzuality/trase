@@ -21,8 +21,8 @@ const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
 const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
 const getToolBiomeFilter = state => state.toolLinks.selectedBiomeFilter;
 const getSelectedContext = state => state.app.selectedContext;
-const getSelectedMapDimensionsUids = state => state.toolLayers.selectedMapDimensions;
-const getMapDimensions = state => state.toolLayers.data.mapDimensions;
+const getToolSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
+const getToolMapDimensions = state => state.toolLayers.data.mapDimensions;
 
 export const getSelectedResizeBy = makeGetSelectedResizeBy(getToolResizeBy, getSelectedContext);
 export const getSelectedRecolorBy = makeGetSelectedRecolorBy(getToolRecolorBy, getSelectedContext);
@@ -41,8 +41,42 @@ export const getSelectedBiomeFilter = createSelector(
   }
 );
 
-export const getSelectedMapDimensions = createSelector(
-  [getSelectedMapDimensionsUids, getMapDimensions],
+const getSelectedGeoColumn = createSelector(
+  [getToolColumns, getSelectedColumnsIds],
+  (columns, selectedColumnsIds) =>
+    columns &&
+    Object.values(columns).find(column =>
+      selectedColumnsIds.some(id => id === column.id && column.isGeo)
+    )
+);
+
+export const getSelectedMapDimensionsUids = createSelector(
+  [getSelectedGeoColumn, getToolMapDimensions, getToolSelectedMapDimensions],
+  (selectedGeoColumn, mapDimensions, selectedMapDimensions) => {
+    if (selectedGeoColumn && selectedGeoColumn.isChoroplethDisabled === false) {
+      const allAvailableMapDimensionsUids = new Set(Object.keys(mapDimensions));
+      const selectedMapDimensionsSet = new Set(selectedMapDimensions);
+      const intersection = new Set(
+        [...selectedMapDimensionsSet].filter(x => allAvailableMapDimensionsUids.has(x))
+      );
+      // are all currently selected map dimensions available ?
+      if (selectedMapDimensionsSet.size > 0 && intersection.size === 2) {
+        return selectedMapDimensions;
+      }
+
+      // use default map dimensions
+      const uids = Object.values(mapDimensions)
+        .filter(dimension => dimension.isDefault)
+        .map(selectedDimension => selectedDimension.uid);
+      return [uids[0] || null, uids[1] || null];
+    }
+
+    return [null, null];
+  }
+);
+
+export const getSelectedMapDimensionsData = createSelector(
+  [getSelectedMapDimensionsUids, getToolMapDimensions],
   (selectedMapDimensionsIds, mapDimensions) =>
     selectedMapDimensionsIds.filter(Boolean).map(uid => mapDimensions[uid])
 );
@@ -59,7 +93,7 @@ export const getVisibleNodes = createSelector(
   [getToolLinks, getToolNodes, getSelectedColumnsIds],
   (links, nodes, selectedColumnsIds) => {
     if (!links || !nodes || !selectedColumnsIds) {
-      return [];
+      return null;
     }
     return getVisibleNodesUtil(links, nodes, selectedColumnsIds);
   }
@@ -113,8 +147,12 @@ export const getToolRecolorGroups = createSelector(
 
 const getUnmergedLinks = createSelector(
   [getToolLinks, getToolNodes, getToolColumns, getSelectedRecolorBy],
-  (links, nodes, columns, selectedRecolorBy) =>
-    splitLinksByColumn(links, nodes, columns, selectedRecolorBy)
+  (links, nodes, columns, selectedRecolorBy) => {
+    if (!links || !nodes || !columns) {
+      return null;
+    }
+    return splitLinksByColumn(links, nodes, columns, selectedRecolorBy);
+  }
 );
 
 export const getFilteredLinks = createSelector(
@@ -142,6 +180,10 @@ export const getFilteredLinks = createSelector(
 export const getMergedLinks = createSelector(
   [getUnmergedLinks, getFilteredLinks],
   (unmergedLinks, filteredLinks) => {
+    if (!unmergedLinks) {
+      return null;
+    }
+
     if (filteredLinks) {
       return mergeLinks(filteredLinks);
     }
@@ -151,7 +193,12 @@ export const getMergedLinks = createSelector(
 
 export const getHighlightedNodesData = createSelector(
   [getHighlightedNodesIds, getToolNodes],
-  (highlightedNodesIds, nodes) => highlightedNodesIds.map(id => nodes[id])
+  (highlightedNodesIds, nodes) => {
+    if (nodes) {
+      return highlightedNodesIds.map(id => nodes[id]).filter(Boolean);
+    }
+    return [];
+  }
 );
 
 export const getHighlightedNodesGeoIds = createSelector(
