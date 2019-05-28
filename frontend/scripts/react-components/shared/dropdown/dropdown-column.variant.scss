@@ -1,12 +1,11 @@
 @import 'styles/settings';
 
 .c-dropdown-component.v-column {
-  .dropdown-value {
-    padding: 0;
-    font-family: $font-family-1;
-    font-size: $font-size-regular;
-    letter-spacing: -0.5px;
-  }
+  width: 100%;
+  padding: 7px 5px;
+  background-color: $white;
+  box-shadow: $box-shadow;
+  border-radius: 4px;
 
   .dropdown-selected-item {
     padding: 0;
@@ -28,14 +27,6 @@
 
   .dropdown-menu {
     position: absolute;
-    width: 115%;
-    left: -6px;
-    top: 22px;
-  }
-
-  .item-label {
-    font-family: $font-family-1;
-    font-size: $font-size-regular;
-    letter-spacing: -0.5px;
+    top: 100%;
   }
 }

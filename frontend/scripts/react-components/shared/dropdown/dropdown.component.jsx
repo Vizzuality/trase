@@ -47,8 +47,12 @@ function Dropdown(props) {
   }, [props.options, props.children, content, updateContent]);
 
   function renderItem(item, index, highlightedIndex, getItemProps) {
-    const { readOnly, getItemClassName } = props;
+    const { readOnly, getItemClassName, variant } = props;
     const itemCustomClassName = getItemClassName && getItemClassName(item);
+    const itemTextProps =
+      {
+        column: { variant: 'mono', size: 'rg' }
+      }[variant] || {};
     return (
       <>
         {item.hasSeparator && <li className="dropdow-menu-separator" />}
@@ -72,7 +76,7 @@ function Dropdown(props) {
               <use xlinkHref={`#icon-${item.icon}`} />
             </svg>
           )}
-          <Text title={item.label} weight="regular" className="item-label">
+          <Text title={item.label} weight="regular" className="item-label" {...itemTextProps}>
             {item.label}
           </Text>
           {item.tooltip && (
@@ -120,7 +124,8 @@ function Dropdown(props) {
 
     const valueProps =
       {
-        mono: { variant: 'mono' }
+        mono: { variant: 'mono' },
+        column: { variant: 'mono', size: 'sm' }
       }[variant] || {};
 
     return (

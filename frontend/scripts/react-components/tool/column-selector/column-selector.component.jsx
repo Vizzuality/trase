@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions,jsx-a11y/no-static-element-interactions */
 import React from 'react';
-import cx from 'classnames';
 import PropTypes from 'prop-types';
 import Dropdown from 'react-components/shared/dropdown';
+import Text from 'react-components/shared/text';
 
 function ColumnSelector({
   hasSingleElement,
@@ -11,13 +11,11 @@ function ColumnSelector({
   handleColumnSelected
 }) {
   return (
-    <div
-      className={cx('js-dropdown c-dropdown -column-selector', {
-        '-hide-only-child': hasSingleElement
-      })}
-    >
+    <div className="js-dropdown c-dropdown">
       {hasSingleElement ? (
-        <span className="dropdown-title">{selectedColumnItem.name}</span>
+        <Text size="rg" align="center" variant="mono" weight="bold">
+          {selectedColumnItem.name}
+        </Text>
       ) : (
         <Dropdown
           options={columnItems.map(c => ({ label: c.name, value: c.id }))}
