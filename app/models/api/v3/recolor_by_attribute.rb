@@ -19,8 +19,8 @@
 #
 # Indexes
 #
-#  index_recolor_by_attributes_on_context_id                   (context_id)
 #  recolor_by_attributes_context_id_group_number_position_key  (context_id,group_number,position) UNIQUE
+#  recolor_by_attributes_context_id_idx                        (context_id)
 #
 # Foreign Keys
 #

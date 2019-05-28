@@ -12,8 +12,8 @@
 #
 # Indexes
 #
-#  context_properties_context_id_key       (context_id) UNIQUE
-#  index_context_properties_on_context_id  (context_id)
+#  context_properties_context_id_idx  (context_id)
+#  context_properties_context_id_key  (context_id) UNIQUE
 #
 # Foreign Keys
 #

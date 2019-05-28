@@ -13,8 +13,7 @@
 #
 # Indexes
 #
-#  index_qual_properties_on_qual_id  (qual_id)
-#  qual_properties_qual_id_key       (qual_id) UNIQUE
+#  qual_properties_qual_id_key  (qual_id) UNIQUE
 #
 # Foreign Keys
 #

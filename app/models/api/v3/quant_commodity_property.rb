@@ -9,8 +9,8 @@
 #
 # Indexes
 #
-#  index_quant_commodity_properties_on_commodity_id  (commodity_id)
-#  index_quant_commodity_properties_on_quant_id      (quant_id)
+#  quant_commodity_properties_commodity_id_idx  (commodity_id)
+#  quant_commodity_properties_quant_id_idx      (quant_id)
 #
 # Foreign Keys
 #

@@ -9,7 +9,6 @@
 # Indexes
 #
 #  dashboards_attributes_dashboards_attribute_group_id_position_ke  (dashboards_attribute_group_id,position) UNIQUE
-#  index_dashboards_attributes_on_dashboards_attribute_group_id     (dashboards_attribute_group_id)
 #
 # Foreign Keys
 #

@@ -14,8 +14,7 @@
 #
 # Indexes
 #
-#  ind_properties_ind_id_key       (ind_id) UNIQUE
-#  index_ind_properties_on_ind_id  (ind_id)
+#  ind_properties_ind_id_key  (ind_id) UNIQUE
 #
 # Foreign Keys
 #

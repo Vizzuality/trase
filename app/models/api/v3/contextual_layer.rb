@@ -14,8 +14,8 @@
 # Indexes
 #
 #  contextual_layers_context_id_identifier_key  (context_id,identifier) UNIQUE
+#  contextual_layers_context_id_idx             (context_id)
 #  contextual_layers_context_id_position_key    (context_id,position) UNIQUE
-#  index_contextual_layers_on_context_id        (context_id)
 #
 # Foreign Keys
 #

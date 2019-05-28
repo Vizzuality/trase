@@ -9,9 +9,9 @@
 #
 # Indexes
 #
+#  context_node_types_context_id_idx               (context_id)
 #  context_node_types_context_id_node_type_id_key  (context_id,node_type_id) UNIQUE
-#  index_context_node_types_on_context_id          (context_id)
-#  index_context_node_types_on_node_type_id        (node_type_id)
+#  context_node_types_node_type_id_idx             (node_type_id)
 #
 # Foreign Keys
 #

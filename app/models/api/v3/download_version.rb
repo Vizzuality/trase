@@ -9,8 +9,8 @@
 #
 # Indexes
 #
-#  download_versions_context_id_symbol_key               (context_id,symbol) UNIQUE
-#  index_download_versions_on_context_id_and_is_current  (context_id,is_current) UNIQUE WHERE (is_current IS TRUE)
+#  download_versions_context_id_is_current_idx  (context_id,is_current) UNIQUE WHERE (is_current IS TRUE)
+#  download_versions_context_id_symbol_key      (context_id,symbol) UNIQUE
 #
 # Foreign Keys
 #

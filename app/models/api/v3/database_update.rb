@@ -10,8 +10,8 @@
 #
 # Indexes
 #
-#  database_updates_jid_key          (jid) UNIQUE
-#  index_database_updates_on_status  (status) UNIQUE WHERE (status = 'STARTED'::text)
+#  database_updates_jid_key     (jid) UNIQUE
+#  database_updates_status_idx  (status) UNIQUE WHERE (status = 'STARTED'::text)
 #
 
 module Api

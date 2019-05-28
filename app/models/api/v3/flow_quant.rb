@@ -9,9 +9,9 @@
 #
 # Indexes
 #
+#  flow_quants_flow_id_idx           (flow_id)
 #  flow_quants_flow_id_quant_id_key  (flow_id,quant_id) UNIQUE
 #  flow_quants_quant_id_idx          (quant_id)
-#  index_flow_quants_on_flow_id      (flow_id)
 #
 # Foreign Keys
 #

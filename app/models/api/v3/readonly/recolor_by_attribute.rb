@@ -21,8 +21,7 @@
 #
 # Indexes
 #
-#  recolor_by_attributes_mv_context_id_attribute_id  (context_id,attribute_id)
-#  recolor_by_attributes_mv_id_idx                   (id) UNIQUE
+#  recolor_by_attributes_mv_id_idx  (id) UNIQUE
 #
 
 module Api

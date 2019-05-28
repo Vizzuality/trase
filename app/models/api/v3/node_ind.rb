@@ -10,8 +10,8 @@
 #
 # Indexes
 #
-#  index_node_inds_on_node_id         (node_id)
 #  node_inds_ind_id_idx               (ind_id)
+#  node_inds_node_id_idx              (node_id)
 #  node_inds_node_id_ind_id_year_key  (node_id,ind_id,year) UNIQUE
 #
 # Foreign Keys

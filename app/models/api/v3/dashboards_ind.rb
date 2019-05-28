@@ -9,8 +9,6 @@
 # Indexes
 #
 #  dashboards_inds_dashboards_attribute_id_ind_id_key  (dashboards_attribute_id,ind_id) UNIQUE
-#  index_dashboards_inds_on_dashboards_attribute_id    (dashboards_attribute_id)
-#  index_dashboards_inds_on_ind_id                     (ind_id)
 #
 # Foreign Keys
 #

@@ -11,7 +11,6 @@
 # Indexes
 #
 #  carto_layers_contextual_layer_id_identifier_key  (contextual_layer_id,identifier) UNIQUE
-#  index_carto_layers_on_contextual_layer_id        (contextual_layer_id)
 #
 # Foreign Keys
 #

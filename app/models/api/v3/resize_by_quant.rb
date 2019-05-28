@@ -8,8 +8,8 @@
 #
 # Indexes
 #
-#  index_resize_by_quants_on_quant_id                    (quant_id)
-#  index_resize_by_quants_on_resize_by_attribute_id      (resize_by_attribute_id)
+#  resize_by_quants_quant_id_idx                         (quant_id)
+#  resize_by_quants_resize_by_attribute_id_idx           (resize_by_attribute_id)
 #  resize_by_quants_resize_by_attribute_id_quant_id_key  (resize_by_attribute_id,quant_id) UNIQUE
 #
 # Foreign Keys

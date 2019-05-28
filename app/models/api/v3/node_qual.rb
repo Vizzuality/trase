@@ -10,7 +10,7 @@
 #
 # Indexes
 #
-#  index_node_quals_on_node_id          (node_id)
+#  node_quals_node_id_idx               (node_id)
 #  node_quals_node_id_qual_id_year_key  (node_id,qual_id,year) UNIQUE
 #  node_quals_qual_id_idx               (qual_id)
 #

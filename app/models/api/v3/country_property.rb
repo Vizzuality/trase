@@ -12,8 +12,7 @@
 #
 # Indexes
 #
-#  country_properties_country_id_key       (country_id) UNIQUE
-#  index_country_properties_on_country_id  (country_id)
+#  country_properties_country_id_key  (country_id) UNIQUE
 #
 # Foreign Keys
 #

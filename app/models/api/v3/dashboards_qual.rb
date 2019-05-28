@@ -9,8 +9,6 @@
 # Indexes
 #
 #  dashboards_quals_dashboards_attribute_id_qual_id_key  (dashboards_attribute_id,qual_id) UNIQUE
-#  index_dashboards_quals_on_dashboards_attribute_id     (dashboards_attribute_id)
-#  index_dashboards_quals_on_qual_id                     (qual_id)
 #
 # Foreign Keys
 #

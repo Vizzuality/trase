@@ -9,8 +9,8 @@
 #
 # Indexes
 #
-#  index_quant_context_properties_on_context_id  (context_id)
-#  index_quant_context_properties_on_quant_id    (quant_id)
+#  quant_context_properties_context_id_idx  (context_id)
+#  quant_context_properties_quant_id_idx    (quant_id)
 #
 # Foreign Keys
 #
