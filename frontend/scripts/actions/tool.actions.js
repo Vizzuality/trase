@@ -36,6 +36,7 @@ import {
 import pSettle from 'p-settle';
 
 export const RESET_SELECTION = 'RESET_SELECTION';
+export const SET_FLOWS_LOADING_STATE = 'SET_FLOWS_LOADING_STATE';
 export const GET_COLUMNS = 'GET_COLUMNS';
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
 export const GET_LINKS = 'GET_LINKS';
@@ -406,6 +407,7 @@ export function loadNodes() {
 
 export function loadLinks() {
   return (dispatch, getState) => {
+    dispatch({ type: SET_FLOWS_LOADING_STATE });
     const state = getState();
     const selectedResizeBy = getSelectedResizeBy(state);
     const params = {

@@ -10,6 +10,7 @@ import {
   SELECT_RESIZE_BY,
   SELECT_VIEW,
   SET_NODE_ATTRIBUTES,
+  SET_FLOWS_LOADING_STATE,
   SET_SANKEY_SEARCH_VISIBILITY,
   SHOW_LINKS_ERROR,
   UPDATE_NODE_SELECTION,
@@ -47,6 +48,9 @@ export const toolLinksInitialState = {
 };
 
 const toolLinksReducer = {
+  [SET_FLOWS_LOADING_STATE](state) {
+    return { ...state, flowsLoading: true };
+  },
   [RESET_SELECTION](state) {
     return immer(state, draft => {
       Object.assign(draft, {
