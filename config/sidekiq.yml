@@ -2,13 +2,17 @@ verbose: true
 logfile: ./log/sidekiq.log
 development:
   :concurrency: 2
-staging:
+production:
   :concurrency: 2
-demo:
+staging:
   :concurrency: 2
 sandbox:
   :concurrency: 2
-production:
+demo:
+  :concurrency: 2
+dashboardsdemo:
+  :concurrency: 2
+indonesiademo:
   :concurrency: 2
 :queues:
   - database

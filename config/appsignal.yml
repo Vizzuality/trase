@@ -32,6 +32,12 @@ default: &defaults
 
 # Configuration per environment, leave out an environment or set active
 # to false to not push metrics for that environment.
+development:
+  active: false
+
+test:
+  active: false
+
 production:
   <<: *defaults
   active: true
@@ -52,8 +58,6 @@ dashboardsdemo:
   <<: *defaults
   active: true
 
-development:
-  active: false
-
-test:
-  active: false
+indonesiademo:
+  <<: *defaults
+  active: true
