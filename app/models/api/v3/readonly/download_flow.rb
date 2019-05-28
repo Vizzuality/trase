@@ -54,6 +54,9 @@ module Api
           end
 
           def after_refresh(options = {})
+            Api::V3::Readonly::DownloadFlowsStats.refresh(
+              options.merge(skip_dependencies: true)
+            )
             Api::V3::Download::PrecomputedDownload.clear
             return if options[:skip_precompute]
 

@@ -3495,6 +3495,21 @@ PARTITION BY LIST (year);
 
 
 --
+-- Name: download_flows_stats_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.download_flows_stats_mv AS
+ SELECT download_flows.context_id,
+    download_flows.year,
+    download_flows.attribute_type,
+    download_flows.attribute_id,
+    count(*) AS count
+   FROM public.download_flows
+  GROUP BY download_flows.context_id, download_flows.year, download_flows.attribute_type, download_flows.attribute_id
+  WITH NO DATA;
+
+
+--
 -- Name: flow_quals; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -7151,6 +7166,13 @@ CREATE INDEX download_flows_path_idx ON ONLY public.download_flows USING btree (
 
 
 --
+-- Name: download_flows_stats_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX download_flows_stats_mv_id_idx ON public.download_flows_stats_mv USING btree (context_id, year, attribute_type, attribute_id);
+
+
+--
 -- Name: download_flows_year_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8725,6 +8747,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190410075223'),
 ('20190429104832'),
 ('20190429112751'),
-('20190513125050');
+('20190513125050'),
+('20190528091308');
 
 

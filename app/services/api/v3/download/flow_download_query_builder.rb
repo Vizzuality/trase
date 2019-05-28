@@ -27,19 +27,22 @@ module Api
               AND download_attributes_mv.original_type = download_flows.attribute_type
               AND download_attributes_mv.original_id = download_flows.attribute_id'
             ).where(context_id: @context.id)
+          @size_query = Api::V3::Readonly::DownloadFlowsStats.
+            where(context_id: @context.id)
           if (years = params[:years]).present?
             @query = @query.where(year: years)
+            @size_query = @size_query.where(year: years)
           end
           initialize_flow_path_filters(params.slice(:e_ids, :i_ids, :c_ids))
           initialize_attribute_filters(params[:filters])
         end
 
         def flat_query
-          FlowDownloadFlatQuery.new(@context, @download_attributes, @query)
+          FlowDownloadFlatQuery.new(@context, @download_attributes, @query, @size_query)
         end
 
         def pivot_query
-          FlowDownloadPivotQuery.new(@context, @download_attributes, @query)
+          FlowDownloadPivotQuery.new(@context, @download_attributes, @query, @size_query)
         end
 
         private
@@ -133,6 +136,17 @@ module Api
           @query = @query.where(
             query_parts.join(' OR '), *parameters
           )
+          if @attributes.any?
+            query_parts = []
+            parameters = []
+            @attributes.each do |attribute|
+              query_parts << 'attribute_type = ? AND attribute_id = ?'
+              parameters += [attribute.original_type, attribute.original_id]
+            end
+            @size_query = @size_query.where(
+              [query_parts.join(' OR '), *parameters]
+            )
+          end
         end
 
         def attribute_by_name(name)

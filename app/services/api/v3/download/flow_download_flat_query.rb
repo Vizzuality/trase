@@ -2,11 +2,12 @@ module Api
   module V3
     module Download
       class FlowDownloadFlatQuery
-        def initialize(context, download_attributes, base_query)
+        def initialize(context, download_attributes, base_query, size_query)
           @context = context
           @download_attributes = download_attributes
           initialize_path_column_names(@context.id)
           @base_query = base_query
+          @size_query = size_query
           initialize_query
         end
 
@@ -14,8 +15,9 @@ module Api
           @query
         end
 
+        # Calculating the total is too expensive, use an estimation instead
         def total
-          @base_query.count
+          @size_query.sum(:count)
         end
 
         MAX_SIZE = 500_000
