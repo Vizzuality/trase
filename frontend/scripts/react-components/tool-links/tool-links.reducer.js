@@ -34,6 +34,7 @@ export const toolLinksInitialState = {
   },
   currentQuant: null,
   detailedView: false,
+  forcedOverview: false,
   expandedNodesIds: [],
   highlightedNodesIds: [],
   flowsLoading: true,
@@ -52,6 +53,7 @@ const toolLinksReducer = {
         highlightedNodesIds: [],
         selectedNodesIds: [],
         expandedNodesIds: [],
+        forcedOverview: false,
         selectedBiomeFilter: null
       });
     });
@@ -185,7 +187,8 @@ const toolLinksReducer = {
   [SELECT_VIEW](state, action) {
     return immer(state, draft => {
       Object.assign(draft, {
-        detailedView: action.detailedView
+        detailedView: action.detailedView,
+        forcedOverview: action.forcedOverview
       });
     });
   },
@@ -235,6 +238,7 @@ const toolLinksReducerTypes = PropTypes => ({
   currentQuant: PropTypes.object,
   detailedView: PropTypes.bool,
   isSearchOpen: PropTypes.bool,
+  forcedOverview: PropTypes.bool,
   expandedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   highlightedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   flowsLoading: PropTypes.bool,

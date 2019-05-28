@@ -198,7 +198,8 @@ export function resetSankey() {
 
     dispatch({
       type: SELECT_VIEW,
-      detailedView: false
+      detailedView: false,
+      forcedOverview: true
     });
 
     const state = getState();
@@ -784,7 +785,8 @@ export function expandNodeSelection() {
     if (detailedView) {
       dispatch({
         type: SELECT_VIEW,
-        detailedView: false
+        detailedView: false,
+        forcedOverview: true
       });
     }
 
@@ -793,10 +795,21 @@ export function expandNodeSelection() {
 }
 
 export function collapseNodeSelection() {
-  return dispatch => {
+  return (dispatch, getState) => {
     dispatch({
       type: COLLAPSE_NODE_SELECTION
     });
+
+    const { forcedOverview } = getState().toolLinks;
+
+    // if shrinking, and if overview was previously forced, go back to detailed
+    if (forcedOverview) {
+      dispatch({
+        type: SELECT_VIEW,
+        detailedView: true,
+        forcedOverview: false
+      });
+    }
 
     dispatch(loadLinks());
   };

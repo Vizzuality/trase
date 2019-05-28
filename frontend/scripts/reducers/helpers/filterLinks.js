@@ -37,7 +37,6 @@ export default function(links, selectedNodesAtColumns, nodesColoredBySelection, 
       if (nodeIds && newLink) {
         const nodeId = nodeIds[0];
         newLink = { ...link };
-        // newLink.recolorGroup = nodesColoredBySelection.length - nodesColoredBySelection.indexOf(nodeId);
         newLink.recolorGroup = recolorGroups[nodeId];
       }
       filteredLinks.push(newLink);
