@@ -830,12 +830,13 @@ export function saveMapView(latlng, zoom) {
 
 export function toggleMapDimension(uid) {
   return (dispatch, getState) => {
-    const { selectedYears } = getState().app;
+    const state = getState();
+    const selectedMapDimensions = getSelectedMapDimensionsUids(state);
     dispatch({
       type: TOGGLE_MAP_DIMENSION,
       payload: {
         uid,
-        selectedYears
+        selectedMapDimensions
       }
     });
 

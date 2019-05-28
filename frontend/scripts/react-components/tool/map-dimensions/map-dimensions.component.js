@@ -20,7 +20,7 @@ export default class {
     };
 
     this.loadMapDimensions(props);
-    this.selectMapDimensions(props);
+    this.setMapDimensions(props);
     this.toggleSidebarGroups(props);
     this.setVisibility(props);
   }
@@ -61,10 +61,11 @@ export default class {
     this.toggleSidebarGroups({ expandedMapSidebarGroupsIds });
   }
 
-  selectMapDimensions({ selectedMapDimensions }) {
+  setMapDimensions({ selectedMapDimensions }) {
     if (this.dimensions === undefined) {
       return;
     }
+
     const isFull = selectedMapDimensions[0] !== null && selectedMapDimensions[1] !== null;
     this.dimensions.forEach(dimension => {
       const uid = dimension.getAttribute('data-dimension-uid');

@@ -98,13 +98,16 @@ const toolLayersReducer = {
   },
   [TOGGLE_MAP_DIMENSION](state, action) {
     return immer(state, draft => {
+      if (!draft.selectedMapDimensions) {
+        draft.selectedMapDimensions = [...action.payload.selectedMapDimensions];
+      }
       const uidIndex = draft.selectedMapDimensions.indexOf(action.payload.uid);
 
       if (uidIndex === -1) {
         // dimension was not found: put it on a free slot
-        if (draft.selectedMapDimensions[0] === null) {
+        if (!draft.selectedMapDimensions[0]) {
           draft.selectedMapDimensions[0] = action.payload.uid;
-        } else if (draft.selectedMapDimensions[1] === null) {
+        } else if (!draft.selectedMapDimensions[1]) {
           draft.selectedMapDimensions[1] = action.payload.uid;
         }
         draft.mapLoading = true;

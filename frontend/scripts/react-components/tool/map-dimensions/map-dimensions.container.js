@@ -38,7 +38,7 @@ const methodProps = [
     returned: ['mapDimensionsGroups', 'expandedMapSidebarGroupsIds']
   },
   {
-    name: 'selectMapDimensions',
+    name: 'setMapDimensions',
     compared: ['selectedMapDimensions'],
     returned: ['selectedMapDimensions']
   },

@@ -55,20 +55,27 @@ export const getSelectedMapDimensionsUids = createSelector(
   (selectedGeoColumn, mapDimensions, selectedMapDimensions) => {
     if (selectedGeoColumn && selectedGeoColumn.isChoroplethDisabled === false) {
       const allAvailableMapDimensionsUids = new Set(Object.keys(mapDimensions));
-      const selectedMapDimensionsSet = new Set(selectedMapDimensions);
+      const selectedMapDimensionsSet = new Set(selectedMapDimensions?.filter(Boolean));
       const intersection = new Set(
         [...selectedMapDimensionsSet].filter(x => allAvailableMapDimensionsUids.has(x))
       );
+
       // are all currently selected map dimensions available ?
-      if (selectedMapDimensionsSet.size > 0 && intersection.size === 2) {
+      if (
+        selectedMapDimensionsSet.size > 0 &&
+        intersection.size === selectedMapDimensionsSet.size
+      ) {
         return selectedMapDimensions;
       }
 
-      // use default map dimensions
-      const uids = Object.values(mapDimensions)
-        .filter(dimension => dimension.isDefault)
-        .map(selectedDimension => selectedDimension.uid);
-      return [uids[0] || null, uids[1] || null];
+      // use default map dimensions but only if selectedMapDimensions is null
+      // we want to allow the user to disable all selections
+      if (!selectedMapDimensions) {
+        const uids = Object.values(mapDimensions)
+          .filter(dimension => dimension.isDefault)
+          .map(selectedDimension => selectedDimension.uid);
+        return [uids[0] || null, uids[1] || null];
+      }
     }
 
     return [null, null];
