@@ -13,12 +13,12 @@ RSpec.describe Api::V3::Download::FlowDownloadFlatQuery do
     Api::V3::Readonly::DownloadFlow.refresh(sync: true)
   end
 
-  let(:query) {
-    Api::V3::Readonly::DownloadFlow.where(context_id: api_v3_context.id)
+  let(:query_builder) {
+    Api::V3::Download::FlowDownloadQueryBuilder.new(api_v3_context, {})
   }
 
   let(:flat_query) {
-    Api::V3::Download::FlowDownloadFlatQuery.new(api_v3_context, query)
+    query_builder.flat_query
   }
 
   describe :all do

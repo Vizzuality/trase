@@ -10,19 +10,21 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
     end
 
     before(:each) do
+      Api::V3::Readonly::Attribute.refresh(skip_dependencies: true, skip_dependents: true)
+      Api::V3::Readonly::DownloadAttribute.refresh(skip_dependencies: true, skip_dependents: true)
       Api::V3::Readonly::DownloadFlow.refresh(sync: true)
     end
 
     let(:flow1_potential_deforestation_row) {
       [
         2015,
-        'Nova Ubirata',
+        'NOVA UBIRATA',
         'MATO GROSSO',
         'AMAZONIA',
-        'Imbituba',
-        'Afg Brasil',
-        'Unknown Customer',
-        'Russian Federation',
+        'IMBITUBA',
+        'AFG BRASIL',
+        'UNKNOWN CUSTOMER',
+        'RUSSIAN FEDERATION',
         'DEFORESTATION',
         '10'
       ]
@@ -30,13 +32,13 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
     let(:flow1_zero_deforestation_row) {
       [
         2015,
-        'Nova Ubirata',
+        'NOVA UBIRATA',
         'MATO GROSSO',
         'AMAZONIA',
-        'Imbituba',
-        'Afg Brasil',
-        'Unknown Customer',
-        'Russian Federation',
+        'IMBITUBA',
+        'AFG BRASIL',
+        'UNKNOWN CUSTOMER',
+        'RUSSIAN FEDERATION',
         'ZERO DEFORESTATION',
         'no'
       ]
@@ -44,13 +46,13 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
     let(:flow2_potential_deforestation_row) {
       [
         2015,
-        'Nova Ubirata',
+        'NOVA UBIRATA',
         'MATO GROSSO',
         'AMAZONIA',
-        'Paranagua',
-        'Afg Brasil 2',
-        'Chinatex Grains & Oils Imp Exp Co',
-        'China',
+        'PARANAGUA',
+        'AFG BRASIL 2',
+        'CHINATEX GRAINS & OILS IMP EXP CO',
+        'CHINA',
         'DEFORESTATION',
         '5'
       ]
@@ -58,13 +60,13 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
     let(:flow2_zero_deforestation_row) {
       [
         2015,
-        'Nova Ubirata',
+        'NOVA UBIRATA',
         'MATO GROSSO',
         'AMAZONIA',
-        'Paranagua',
-        'Afg Brasil 2',
-        'Chinatex Grains & Oils Imp Exp Co',
-        'China',
+        'PARANAGUA',
+        'AFG BRASIL 2',
+        'CHINATEX GRAINS & OILS IMP EXP CO',
+        'CHINA',
         'ZERO DEFORESTATION',
         'yes'
       ]

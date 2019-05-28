@@ -2,10 +2,12 @@ module Api
   module V3
     module Download
       class FlowDownloadFlatQuery
-        def initialize(context, base_query)
+        def initialize(context, download_attributes, base_query, size_query)
           @context = context
+          @download_attributes = download_attributes
           initialize_path_column_names(@context.id)
           @base_query = base_query
+          @size_query = size_query
           initialize_query
         end
 
@@ -13,8 +15,15 @@ module Api
           @query
         end
 
+        # Calculating the total is too expensive, use an estimation instead
         def total
-          @base_query.count
+          @size_query.sum(:count)
+        end
+
+        MAX_SIZE = 500_000
+
+        def chunk_by_year?
+          total > MAX_SIZE
         end
 
         def years
@@ -29,7 +38,7 @@ module Api
 
         def initialize_query
           @query = @base_query.select(flat_select_columns).
-            order(:row_name, :attribute_type, :attribute_id)
+            order(:path, :attribute_type, :attribute_id)
         end
 
         def flat_select_columns
@@ -38,7 +47,7 @@ module Api
           ] + @path_columns +
             [
               "'#{commodity_type}'::TEXT AS \"TYPE\"",
-              'display_name AS "INDICATOR"',
+              'download_attributes_mv.display_name AS "INDICATOR"',
               'total AS "TOTAL"'
             ]
         end
@@ -60,7 +69,7 @@ module Api
             joins(:node_type).
             order(:column_position)
           context_column_positions = context_node_types.pluck(:column_position)
-          path_column_names = context_column_positions.map { |p| "name_#{p}" }
+          path_column_names = context_column_positions.map { |p| "jsonb_path->'#{p}'->'node'" }
           @path_column_aliases = context_node_types.
             pluck('node_types.name').
             map { |nt| "\"#{nt}\"" }
