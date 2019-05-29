@@ -12,6 +12,7 @@ import './dropdown.scss';
 import './dropdown-nav.variant.scss';
 import './dropdown-sentence.variant.scss';
 import './dropdown-profiles.variant.scss';
+import './dropdown-column.variant.scss';
 
 function Dropdown(props) {
   const listItemRef = useRef(null);
@@ -46,8 +47,12 @@ function Dropdown(props) {
   }, [props.options, props.children, content, updateContent]);
 
   function renderItem(item, index, highlightedIndex, getItemProps) {
-    const { readOnly, getItemClassName } = props;
+    const { readOnly, getItemClassName, variant } = props;
     const itemCustomClassName = getItemClassName && getItemClassName(item);
+    const itemTextProps =
+      {
+        column: { variant: 'mono', size: 'rg' }
+      }[variant] || {};
     return (
       <>
         {item.hasSeparator && <li className="dropdow-menu-separator" />}
@@ -71,7 +76,7 @@ function Dropdown(props) {
               <use xlinkHref={`#icon-${item.icon}`} />
             </svg>
           )}
-          <Text title={item.label} weight="regular" className="item-label">
+          <Text title={item.label} weight="regular" className="item-label" {...itemTextProps}>
             {item.label}
           </Text>
           {item.tooltip && (
@@ -119,7 +124,8 @@ function Dropdown(props) {
 
     const valueProps =
       {
-        mono: { variant: 'mono' }
+        mono: { variant: 'mono' },
+        column: { variant: 'mono', size: 'sm' }
       }[variant] || {};
 
     return (
@@ -211,7 +217,7 @@ function Dropdown(props) {
     initialValue,
     itemToString
   } = props;
-
+  const unstyledVariants = ['column'];
   return (
     <Downshift
       initialSelectedItem={initialValue}
@@ -242,16 +248,17 @@ function Dropdown(props) {
           <Manager>
             <Reference>{p => renderButton({ ...p, getToggleButtonProps, inputValue })}</Reference>
             <Popper placement={placement} key={popperForceUpdateKey.current}>
-              {p =>
-                renderContent({
-                  ...p,
+              {p => {
+                const updatedP = unstyledVariants.includes(variant) ? { ...p, style: {} } : p;
+                return renderContent({
+                  ...updatedP,
                   selectedItem,
                   highlightedIndex,
                   getMenuProps,
                   getItemProps,
                   toggleMenu
-                })
-              }
+                });
+              }}
             </Popper>
           </Manager>
         </div>
