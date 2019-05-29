@@ -11,7 +11,7 @@ function ColumnSelector({
   handleColumnSelected
 }) {
   return (
-    <div className="js-dropdown c-dropdown">
+    <div className="c-dropdown">
       {hasSingleElement ? (
         <Text size="rg" align="center" variant="mono" weight="bold">
           {selectedColumnItem.name}
