@@ -13,8 +13,7 @@ matrix:
   include:
     - language: ruby
       rvm:
-        - 2.4.2
-        - 2.5.3
+        - 2.6.3
       services:
         - postgresql
       addons:

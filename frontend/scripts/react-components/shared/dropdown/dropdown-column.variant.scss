@@ -1,0 +1,32 @@
+@import 'styles/settings';
+
+.c-dropdown-component.v-column {
+  width: 100%;
+  padding: 7px 5px;
+  background-color: $white;
+  box-shadow: $box-shadow;
+  border-radius: 4px;
+
+  .dropdown-selected-item {
+    padding: 0;
+
+    &::after {
+      border-color: $charcoal-grey-faded;
+      height: 7px;
+      width: 7px;
+    }
+  }
+
+  &.-open {
+    .dropdown-selected-item {
+      &::after {
+        transform: translateY(calc(-50% + 1px)) rotate(225deg)
+      }
+    }
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+  }
+}
