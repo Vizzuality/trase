@@ -20,8 +20,15 @@ export default class {
     this.onNodeClickedRequest = null;
   }
 
-  onCreated() {
+  onCreated(props) {
     this._build();
+    this.showLoadedLinks(props);
+    this.resizeViewport(props);
+    this.selectNodes(props);
+    this.toggleExpandActionButton(props);
+    this.toggleCollapseActionButton(props);
+    this.highlightNodes(props);
+    this.translateNodes(props);
   }
 
   onRemoved() {
@@ -179,11 +186,7 @@ export default class {
 
   _getLinkColor(link, selectedRecolorBy) {
     let classPath = 'sankey-link';
-    if (!selectedRecolorBy) {
-      return classPath;
-    }
-
-    if (selectedRecolorBy.name !== 'none') {
+    if (selectedRecolorBy) {
       if (link.recolorBy === null) {
         return classPath;
       }
@@ -221,7 +224,7 @@ export default class {
       .attr('transform', node => `translate(0,${node.y})`)
       .classed('-is-aggregated', node => node.isAggregated)
       .classed('-is-domestic', node => node.isDomesticConsumption)
-      .classed('-is-alone-in-column', node => node.isAloneInColumn)
+      .classed('-is-alone-in-column', (node, i, list) => list.length === 1)
       .on('mouseenter', node => that._onNodeOver(d3_select(this), node.id, node.isAggregated))
       .on('mouseleave', () => {
         this._onNodeOut();
@@ -242,7 +245,7 @@ export default class {
     this.nodes.selectAll('text').remove();
     this._renderTitles(this.nodes);
 
-    this.nodes.classed('-is-alone-in-column', node => node.isAloneInColumn);
+    this.nodes.classed('-is-alone-in-column', (node, i, list) => list.length === 1);
 
     const nodesUpdate = this.nodes
       .transition()
@@ -326,7 +329,7 @@ export default class {
       }
     ];
 
-    if (this.currentSelectedRecolorBy && this.currentSelectedRecolorBy.name !== 'none') {
+    if (this.currentSelectedRecolorBy) {
       values.push({
         title: this.currentSelectedRecolorBy.label,
         value: this._getLinkValue(link)

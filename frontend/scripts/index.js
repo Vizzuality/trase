@@ -7,7 +7,6 @@ import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 import rangeTouch from 'rangetouch';
 import analyticsMiddleware from 'analytics/middleware';
-import { toolUrlStateMiddleware } from 'utils/stateURL';
 import * as appReducers from 'store';
 import router from './router/router';
 import routeSubscriber from './router/route-subscriber';
@@ -22,13 +21,7 @@ import 'styles/_foundation.css';
 const sagaMiddleware = createSagaMiddleware();
 
 // analytics middleware has to be after router.middleware
-const middlewares = [
-  thunk,
-  sagaMiddleware,
-  router.middleware,
-  toolUrlStateMiddleware,
-  analyticsMiddleware
-];
+const middlewares = [thunk, sagaMiddleware, router.middleware, analyticsMiddleware];
 
 window.liveSettings = TRANSIFEX_API_KEY && {
   api_key: TRANSIFEX_API_KEY,

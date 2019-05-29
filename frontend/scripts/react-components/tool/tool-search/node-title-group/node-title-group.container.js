@@ -2,15 +2,16 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { selectNode } from 'actions/tool.actions';
 import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group/node-title-group.component';
-import { getSelectedNodesData } from 'react-components/tool/tool.selectors';
+import { getSelectedNodesData, getToolRecolorGroups } from 'react-components/tool/tool.selectors';
 
 const mapStateToProps = state => {
-  const { recolorGroups } = state.tool;
-  const selectedNodesData = getSelectedNodesData(state.tool);
+  const recolorGroups = getToolRecolorGroups(state);
+  const selectedNodesData = getSelectedNodesData(state);
+  const { columns } = state.toolLinks.data;
   const nodes = selectedNodesData.map(node => ({
     id: node.id,
     recolorGroup: recolorGroups === null || !recolorGroups[node.id] ? -1 : recolorGroups[node.id],
-    columns: [{ title: node.type, content: node.name }]
+    columns: [{ title: columns[node.columnId].name, content: node.name }]
   }));
   return {
     nodes

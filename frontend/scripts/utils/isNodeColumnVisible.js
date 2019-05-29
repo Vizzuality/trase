@@ -1,5 +1,4 @@
-export default (node, selectedColumnsIds = []) => {
-  const { columnGroup } = node;
-  const currentColumnAtPos = selectedColumnsIds[columnGroup];
-  return currentColumnAtPos === node.columnId;
+export default (column, selectedColumnsIds = []) => {
+  const currentColumnAtPos = selectedColumnsIds[column.group];
+  return currentColumnAtPos === column.id;
 };

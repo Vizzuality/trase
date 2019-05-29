@@ -1,9 +1,12 @@
 export default class {
-  onCreated({ loading }) {
+  onCreated(props) {
     this.onSankeyReset = this._resetSankey.bind(this);
 
     this._setVars();
-    this.showLoader({ loading });
+    this.showLoader(props);
+    this.toggleMapVisibility(props);
+    this.toggleMapLayersVisibility(props);
+    this.toggleError(props);
   }
 
   onRemoved() {

@@ -16,7 +16,7 @@ function mapStateToProps(state) {
   return {
     links: routerLinks.nav,
     filters: getNavFilters(state),
-    isMapVisible: state.tool && state.tool.isMapVisible,
+    isMapVisible: state.toolLayers && state.toolLayers.isMapVisible,
     currentDropdown: state.app.currentDropdown
   };
 }

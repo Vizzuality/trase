@@ -2,12 +2,14 @@ import { connect } from 'react-redux';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 import ToolContent from 'react-components/tool/tool-content/tool-content.component';
 import { resetSankey } from 'actions/tool.actions';
+import { getMergedLinks } from 'react-components/tool/tool.selectors';
 
 const mapStateToProps = state => ({
-  isMapVisible: state.tool.isMapVisible,
+  isMapVisible: state.toolLayers.isMapVisible,
   isVisible: state.app.isMapLayerVisible,
-  loading: state.tool.links !== null && (state.tool.flowsLoading || state.tool.mapLoading),
-  hasError: state.tool.links === null && !state.tool.flowsLoading
+  loading:
+    getMergedLinks(state) !== null && (state.toolLinks.flowsLoading || state.toolLayers.mapLoading),
+  hasError: getMergedLinks(state) === null && !state.toolLinks.flowsLoading
 });
 
 const mapDispatchToProps = {

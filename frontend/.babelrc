@@ -1,9 +1,6 @@
 {
   "presets": [
-    ["@babel/preset-env", {
-      "useBuiltIns": "entry",
-      "corejs": 3
-    }],
+    ["@babel/preset-env", { "useBuiltIns": "entry", "corejs": 3 }],
     "@babel/preset-react"
   ],
   "plugins": [
@@ -14,10 +11,7 @@
   "env": {
     "production": {
       "presets": [
-        ["@babel/preset-env", {
-          "useBuiltIns": "entry",
-          "corejs": 3
-        }],
+        ["@babel/preset-env", { "useBuiltIns": "entry", "corejs": 3 }],
         "@babel/preset-react"
       ],
       "plugins": [
@@ -30,10 +24,7 @@
     },
     "test": {
       "presets": [
-        ["@babel/preset-env", {
-          "useBuiltIns": "entry",
-          "corejs": 3
-        }],
+        ["@babel/preset-env", { "useBuiltIns": "entry", "corejs": 3 }],
         "@babel/preset-react"
       ],
       "plugins": [
@@ -41,25 +32,26 @@
         "@babel/plugin-proposal-optional-chaining",
         ["@babel/plugin-proposal-class-properties", { "spec": true }],
         "@babel/plugin-transform-modules-commonjs",
-        ["@babel/transform-runtime", {
-          "corejs": 3
-        }],
-        ["module-resolver", {
-          "alias": {
-            "scripts": "./scripts",
-            "actions": "./scripts/actions",
-            "utils": "./scripts/utils",
-            "reducers": "./scripts/reducers",
-            "store": "./scripts/store",
-            "components": "./scripts/components",
-            "containers": "./scripts/containers",
-            "constants": "./scripts/constants",
-            "router": "./scripts/router",
-            "react-components": "./scripts/react-components",
-            "named-maps": "./scripts/named-maps",
-            "selectors": "./scripts/selectors"
+        ["@babel/transform-runtime", { "corejs": 3 }],
+        [
+          "module-resolver",
+          {
+            "alias": {
+              "scripts": "./scripts",
+              "actions": "./scripts/actions",
+              "utils": "./scripts/utils",
+              "reducers": "./scripts/reducers",
+              "store": "./scripts/store",
+              "components": "./scripts/components",
+              "containers": "./scripts/containers",
+              "constants": "./scripts/constants",
+              "router": "./scripts/router",
+              "react-components": "./scripts/react-components",
+              "named-maps": "./scripts/named-maps",
+              "selectors": "./scripts/selectors"
+            }
           }
-        }]
+        ]
       ]
     }
   }

@@ -5,9 +5,9 @@ import ColumnSelector from 'react-components/tool/column-selector/column-selecto
 import PropTypes from 'prop-types';
 
 const mapStateToProps = state => ({
-  allColumns: state.tool.columns,
-  currentDropdown: state.app.currentDropdown,
-  selectedColumnsIds: state.tool.selectedColumnsIds
+  columns: Object.values(state.toolLinks.data.columns || {}),
+  selectedColumnsIds: state.toolLinks.selectedColumnsIds,
+  nodesColoredAtColumn: state.toolLinks.nodesColoredAtColumn
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -16,9 +16,9 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-function ColumnSelectorContainer({ allColumns, group, selectedColumnsIds, onColumnSelected }) {
-  const columnItems = useMemo(() => allColumns.filter(column => column.group === group), [
-    allColumns,
+function ColumnSelectorContainer({ columns, group, selectedColumnsIds, onColumnSelected }) {
+  const columnItems = useMemo(() => columns.filter(column => column.group === group), [
+    columns,
     group
   ]);
   const selectedColumnItem = useMemo(
@@ -49,7 +49,7 @@ function ColumnSelectorContainer({ allColumns, group, selectedColumnsIds, onColu
 
 ColumnSelectorContainer.propTypes = {
   group: PropTypes.number,
-  allColumns: PropTypes.array,
+  columns: PropTypes.array,
   selectedColumnsIds: PropTypes.array,
   onColumnSelected: PropTypes.func.isRequired
 };

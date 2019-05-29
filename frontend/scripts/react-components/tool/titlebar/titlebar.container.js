@@ -7,20 +7,19 @@ import {
 } from 'react-components/tool/tool.selectors';
 
 const mapStateToProps = state => {
-  const highlightedNodeData = getHighlightedNodesData(state.tool);
-  const selectedNodesData = getSelectedNodesData(state.tool);
+  const highlightedNodesData = getHighlightedNodesData(state);
+  const selectedNodesData = getSelectedNodesData(state);
   return {
     selectedNodesData,
-    highlightedNodeData,
     showTitles:
       selectedNodesData.length > 0 ||
-      (!state.tool.highlightedNodeCoordinates && highlightedNodeData.length > 0)
+      (!state.toolLayers.highlightedNodeCoordinates && highlightedNodesData.length > 0)
   };
 };
 
 const methodProps = [
   { name: 'selectNodes', compared: ['selectedNodesData'], returned: ['selectedNodesData'] },
-  { name: 'highlightNode', compared: ['highlightedNodeData'], returned: ['showTitles'] }
+  { name: 'highlightNode', compared: ['highlightedNodesData'], returned: ['showTitles'] }
 ];
 
 export default connect(

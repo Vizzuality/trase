@@ -1,6 +1,5 @@
 import chroma from 'chroma-js';
 import compact from 'lodash/compact';
-import filter from 'lodash/filter';
 import { CHOROPLETH_COLORS, CHOROPLETH_CLASS_ZERO } from 'constants';
 
 const _shortenTitle = title => {
@@ -15,12 +14,9 @@ const generateColorScale = (baseColorScale, length) => {
   return chroma.scale(baseColorScale).colors(length);
 };
 
-export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensions) {
+export default function(selectedMapDimensionsUids, nodes, attributes, columns, mapDimensions) {
   const uids = compact(selectedMapDimensionsUids);
-
-  const selectedMapDimensions = uids.map(uid =>
-    mapDimensions.find(dimension => dimension.uid === uid)
-  );
+  const selectedMapDimensions = uids.map(uid => mapDimensions[uid]);
 
   if (!selectedMapDimensions.length) {
     return {
@@ -46,11 +42,12 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
         bucket[0].length + 1
       );
 
-  const geoNodes = filter(
-    nodesDictWithMeta,
-    node => node.geoId !== undefined && node.geoId !== null && node.isGeo
-  );
-  const geoNodesIds = Object.keys(geoNodes);
+  const geoNodesIds = Object.keys(nodes).filter(nodeId => {
+    const node = nodes[nodeId];
+    const column = columns[node.columnId];
+    return node.geoId !== undefined && node.geoId !== null && column.isGeo;
+  });
+
   const choropleth = {};
 
   const choroplethLegend = {
@@ -61,25 +58,26 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
   };
 
   geoNodesIds.forEach(nodeId => {
-    const node = geoNodes[nodeId];
+    const node = nodes[nodeId];
     let color = CHOROPLETH_COLORS.default_fill;
+    const meta = attributes && attributes[nodeId];
 
     if (isEmpty) {
       color = CHOROPLETH_COLORS.default_fill;
-    } else if (!node.meta) {
+    } else if (!meta) {
       color = CHOROPLETH_COLORS.error_no_metadata; // no metadata on this node has been found (something missing in get_nodes)
     } else {
       let colorIndex;
 
       if (isBivariate) {
-        const nodeMetaA = node.meta[uid];
-        const nodeMetaB = node.meta[uidB];
+        const nodeMetaA = meta[uid];
+        const nodeMetaB = meta[uidB];
 
         if (!nodeMetaA || !nodeMetaB) {
           color = CHOROPLETH_COLORS.error_no_metadata_for_layer;
         } else {
-          const valueA = nodeMetaA.dualLayerBucket;
-          const valueB = nodeMetaB.dualLayerBucket;
+          const valueA = nodeMetaA.dual_layer_bucket;
+          const valueB = nodeMetaB.dual_layer_bucket;
 
           // use zero class only when both A and B values are zero
           if (valueA === 0 || valueB === 0) {
@@ -89,11 +87,11 @@ export default function(selectedMapDimensionsUids, nodesDictWithMeta, mapDimensi
           }
         }
       } else {
-        const nodeMeta = node.meta[uid];
+        const nodeMeta = meta[uid];
         if (!nodeMeta) {
           color = CHOROPLETH_COLORS.error_no_metadata_for_layer; // no metadata on this node has been found for this layer
         } else {
-          const value = nodeMeta.singleLayerBucket;
+          const value = nodeMeta.single_layer_bucket;
           if (value === 0) {
             color = CHOROPLETH_CLASS_ZERO;
           } else {

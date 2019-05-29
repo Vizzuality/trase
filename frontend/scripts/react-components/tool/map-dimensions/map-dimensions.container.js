@@ -1,21 +1,33 @@
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import MapDimensions from 'react-components/tool/map-dimensions/map-dimensions.component';
-import { toggleMapSidebarGroup, toggleMapDimension } from 'actions/tool.actions';
+import { toggleMapDimension } from 'actions/tool.actions';
 import { loadTooltip } from 'actions/app.actions';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 
+// There's an update infinite loop inside loadMapDimensions, so mapDimensionsGroups should always be memoized
+const getLegacyMapDimensionsGroups = createSelector(
+  [
+    state => state.toolLayers.data.mapDimensionsGroups,
+    state => state.toolLayers.data.mapDimensions
+  ],
+  (groups, mapDimensions) =>
+    groups.map(mapDimensionGroup => {
+      const { dimensions, ...group } = mapDimensionGroup;
+      return { group, dimensions: dimensions.map(uid => mapDimensions[uid]) };
+    })
+);
+
 const isCloroplethEnabled = state => {
-  const firstColumnId = state.tool.selectedColumnsIds[0];
-  const column = state.tool.columns.find(c => c.id === firstColumnId);
+  const firstColumnId = state.toolLinks.selectedColumnsIds[0];
+  const column = state.toolLinks.data.columns && state.toolLinks.data.columns[firstColumnId];
   return column ? !column.isChoroplethDisabled : true;
 };
 const mapStateToProps = state => ({
-  mapDimensionsGroups: state.tool.mapDimensionsGroups,
-  expandedMapSidebarGroupsIds: state.tool.expandedMapSidebarGroupsIds,
-  selectedMapDimensions: state.tool.selectedMapDimensions,
-  toggleSidebarGroups: state.tool.expandedMapSidebarGroupsIds,
+  mapDimensionsGroups: getLegacyMapDimensionsGroups(state),
+  selectedMapDimensions: state.toolLayers.selectedMapDimensions,
   isCloroplethEnabled: isCloroplethEnabled(state),
-  selectedColumnsIds: state.tool.selectedColumnsIds
+  selectedColumnsIds: state.toolLinks.selectedColumnsIds
 });
 
 const methodProps = [
@@ -43,11 +55,10 @@ const methodProps = [
 
 const mapDispatchToProps = {
   onMapDimensionsLoaded: () => loadTooltip(),
-  onToggleGroup: id => toggleMapSidebarGroup(id),
   onDimensionClick: uid => toggleMapDimension(uid)
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(mapToVanilla(MapDimensions, methodProps, Object.keys(mapDispatchToProps)));
+)(mapToVanilla(MapDimensions, methodProps, [...Object.keys(mapDispatchToProps), 'onToggleGroup']));

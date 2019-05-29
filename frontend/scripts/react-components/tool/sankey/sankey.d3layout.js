@@ -20,6 +20,7 @@ const sankeyLayout = () => {
   let maxHeight;
   let recolorBy;
   let nodesColoredAtColumn;
+  let nodeHeights;
 
   // layout
   let linksColumnWidth;
@@ -34,6 +35,7 @@ const sankeyLayout = () => {
   };
 
   sankeyLayoutState.setLinksPayload = payload => {
+    nodeHeights = payload.nodeHeights;
     columns = payload.visibleNodesByColumn;
     links = payload.links;
     detailedView = payload.detailedView;
@@ -52,7 +54,7 @@ const sankeyLayout = () => {
 
   sankeyLayoutState.links = () => links;
 
-  sankeyLayoutState.isReady = () => viewportWidth && columns && recolorBy;
+  sankeyLayoutState.isReady = () => viewportWidth && columns;
 
   sankeyLayoutState.relayout = () => {
     if (!sankeyLayoutState.isReady()) {
@@ -91,15 +93,16 @@ const sankeyLayout = () => {
       column.x = _getColumnX(i);
       let columnY = 0;
       column.values.forEach(node => {
+        const nodeHeight = nodeHeights && nodeHeights[node.id];
         node.x = column.x;
         node.y = columnY;
         if (detailedView === true) {
           node.renderedHeight = Math.max(
             DETAILED_VIEW_MIN_NODE_HEIGHT,
-            DETAILED_VIEW_SCALE * node.height
+            DETAILED_VIEW_SCALE * nodeHeight.height
           );
         } else {
-          node.renderedHeight = node.height * viewportHeight;
+          node.renderedHeight = nodeHeight.height * viewportHeight;
         }
         columnY += node.renderedHeight;
       });
@@ -176,7 +179,7 @@ const sankeyLayout = () => {
       const tIdBY = stackedHeightsByNodeId.target[linkB.targetNodeId];
       const defaultSort = sIdAY - sIdBY || tIdAY - tIdBY;
 
-      if (recolorBy.name !== 'none') {
+      if (recolorBy) {
         // sorts alphabetically with quals, numerically with inds
         // TODO for quals use the order presented in the color by menu
         if (linkA.recolorBy === linkB.recolorBy) {

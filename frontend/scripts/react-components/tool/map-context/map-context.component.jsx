@@ -3,11 +3,13 @@ import 'styles/components/shared/switcher.scss';
 import 'styles/components/tool/map/map-context.scss';
 
 export default class {
-  onCreated() {
+  constructor() {
     this.el = document.querySelector('.js-map-context');
     this.items = document.querySelector('.js-map-context-items');
     this.switchers = [];
+  }
 
+  onCreated(props) {
     this._onToggleSwitcher = e => {
       const switcher = e && e.currentTarget;
       if (!switcher) return;
@@ -18,6 +20,9 @@ export default class {
       const layers = this._getActivelayers();
       this.callbacks.onContextualLayerSelected(layers);
     };
+
+    this.buildLayers(props);
+    this.selectContextualLayers(props);
   }
 
   onRemoved() {
@@ -27,9 +32,9 @@ export default class {
   }
 
   buildLayers({ layers, selectedMapContextualLayers }) {
-    this.items.innerHTML = ContextLayersTemplate({ layers });
+    this.items.innerHTML = ContextLayersTemplate({ layers: Object.values(layers) });
 
-    if (layers.length > 0) {
+    if (Object.values(layers).length > 0) {
       this.el.classList.remove('is-hidden');
     } else {
       this.el.classList.add('is-hidden');

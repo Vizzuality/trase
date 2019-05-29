@@ -3,15 +3,15 @@ import flatten from 'lodash/flatten';
 import groupBy from 'lodash/groupBy';
 import isNodeColumnVisible from 'utils/isNodeColumnVisible';
 
-const getToolNodes = state => state.tool && state.tool.nodes;
-const getSelectedColumnsIds = state => state.tool && state.tool.selectedColumnsIds;
-const getNodesDict = state => state.tool && state.tool.nodesDict;
+const getToolNodes = state => state.toolLinks && state.toolLinks.data.nodes;
+const getToolColumns = state => state.toolLinks && state.toolLinks.data.columns;
+const getSelectedColumnsIds = state => state.toolLinks && state.toolLinks.selectedColumnsIds;
 
 const getAllToolSearchNodes = createSelector(
   getToolNodes,
   nodes =>
     nodes &&
-    nodes.filter(
+    Object.values(nodes).filter(
       node =>
         node.hasFlows === true &&
         node.isAggregated !== true &&
@@ -26,19 +26,19 @@ const getGroupedNodes = createSelector(
 );
 
 export const getToolSearchNodes = createSelector(
-  [getGroupedNodes, getSelectedColumnsIds, getNodesDict],
-  (nodes, selectedColumnsIds, nodesDict) => {
+  [getGroupedNodes, getSelectedColumnsIds, getToolNodes, getToolColumns],
+  (groupedNodes, selectedColumnsIds, nodes, columns) => {
     const getNode = ([nA, nB]) => {
       if (nB) {
         if (
-          isNodeColumnVisible(nodesDict[nA.id], selectedColumnsIds) &&
-          isNodeColumnVisible(nodesDict[nB.id], selectedColumnsIds)
+          isNodeColumnVisible(columns[nA.columnId], selectedColumnsIds) &&
+          isNodeColumnVisible(columns[nB.columnId], selectedColumnsIds)
         ) {
           return {
             id: `${nA.id}_${nB.id}`,
             name: nA.name,
             type: `${nA.type} & ${nB.type}`,
-            profileType: nA.profileType,
+            profileType: columns[nA.columnId].profileType,
             [nA.type.toLowerCase()]: nA,
             [nB.type.toLowerCase()]: nB
           };
@@ -48,6 +48,6 @@ export const getToolSearchNodes = createSelector(
       return nA;
     };
 
-    return flatten(nodes.map(groupedNodes => getNode(groupedNodes)));
+    return flatten(groupedNodes.map(group => getNode(group)));
   }
 );

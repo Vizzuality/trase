@@ -3,42 +3,63 @@ import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.compo
 import { selectNode, navigateToProfile, resetState } from 'actions/tool.actions';
 import NodesTitles from 'react-components/tool/nodes-titles/nodes-titles.component';
 import {
+  getSelectedResizeBy,
+  getSelectedMapDimensions,
+  getToolRecolorGroups,
   getSelectedNodesData,
   getHighlightedNodesData
 } from 'react-components/tool/tool.selectors';
 
-const mapStateToProps = state => {
-  const highlightedNodesData = getHighlightedNodesData(state.tool);
-  return {
-    nodesData: getSelectedNodesData(state.tool),
-    recolorGroups: state.tool.recolorGroups,
-    currentQuant: state.tool.currentQuant,
-    selectedYears: state.app.selectedYears,
-    selectedContextId: state.app.selectedContext ? state.app.selectedContext.id : null,
-    highlightedNodesData:
-      highlightedNodesData.length === 0 ? getSelectedNodesData(state.tool) : highlightedNodesData,
-    isHighlight: highlightedNodesData.length > 0,
-    coordinates: state.tool.highlightedNodeCoordinates
-  };
-};
+const mapStateToProps = state => ({
+  selectedResizeBy: getSelectedResizeBy(state),
+  selectedMapDimensions: getSelectedMapDimensions(state),
+  selectedNodesData: getSelectedNodesData(state),
+  nodeHeights: state.toolLinks.data.nodeHeights,
+  columns: state.toolLinks.data.columns,
+  attributes: state.toolLinks.data.nodeAttributes,
+  recolorGroups: getToolRecolorGroups(state),
+  currentQuant: state.toolLinks.currentQuant,
+  selectedYears: state.app.selectedYears,
+  selectedContextId: state.app.selectedContext ? state.app.selectedContext.id : null,
+  highlightedNodesData: getHighlightedNodesData(state),
+  coordinates: state.toolLayers.highlightedNodeCoordinates
+});
 
 const methodProps = [
   {
     name: 'selectNodes',
-    compared: ['nodesData'],
-    returned: ['nodesData', 'recolorGroups', 'currentQuant', 'selectedYears', 'selectedContextId']
-  },
-  {
-    name: 'selectNodes',
-    compared: ['highlightedNodesData'],
+    compared: ['selectedNodesData', 'highlightedNodesData'],
     returned: [
       'highlightedNodesData',
-      'isHighlight',
+      'nodeHeights',
+      'selectedResizeBy',
+      'attributes',
+      'selectedMapDimensions',
+      'selectedNodesData',
+      'recolorGroups',
+      'currentQuant',
+      'selectedYears',
+      'selectedContextId',
+      'columns',
+      'attributes'
+    ]
+  },
+  {
+    name: 'highlightNode',
+    compared: ['highlightedNodesData'],
+    returned: [
+      'nodeHeights',
+      'selectedResizeBy',
+      'columns',
+      'selectedMapDimensions',
+      'highlightedNodesData',
       'recolorGroups',
       'coordinates',
       'currentQuant',
       'selectedYears',
-      'selectedContextId'
+      'attributes',
+      'selectedContextId',
+      'selectedNodesData'
     ]
   }
 ];

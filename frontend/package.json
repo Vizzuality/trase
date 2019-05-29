@@ -136,6 +136,7 @@
     "find-parent": "^2.0.2",
     "highlight-words-core": "^1.2.0",
     "iframe-resizer": "^3.6.2",
+    "immer": "^3.1.1",
     "layer-manager": "1.14.7",
     "leaflet": "^1.5.1",
     "leaflet-utfgrid": "^0.3.0",

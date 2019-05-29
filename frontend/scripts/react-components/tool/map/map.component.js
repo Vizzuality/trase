@@ -23,6 +23,7 @@ export default class {
     this.canvasRender = !!document.createElement('canvas').getContext && USE_CANVAS_MAP;
 
     this.darkBasemap = false;
+    this.prevSelectedNodesIdsLength = null;
 
     const mapOptions = {
       zoomControl: false,
@@ -80,7 +81,16 @@ export default class {
     this.basemapSwitcher.addEventListener('click', this.clickToggleMapLayerMenu);
     this.toggleMap.addEventListener('click', this.clickToggleMap);
 
+    this.setMapView(props);
     this.setBasemap(props);
+    this.showLoadedMap(props);
+    this.selectPolygonType(props);
+    this.selectPolygons(props);
+    this.highlightPolygon(props);
+    this.loadContextLayers(props);
+    this.setChoropleth(props);
+    this.showLinkedGeoIds(props);
+    this.updatePointShadowLayer(props);
   }
 
   onRemoved() {
@@ -93,19 +103,34 @@ export default class {
     this.map.off('zoomend', this.mapEvents.zoomEnd);
   }
 
-  setMapView({ mapView }) {
-    if (mapView === null || mapView === undefined) return;
-    this._setMapViewDebounced([mapView.latitude, mapView.longitude], mapView.zoom);
+  setMapView({ mapView, selectedNodesIdsLength, defaultMapView }) {
+    if (!mapView && !defaultMapView) {
+      return;
+    }
+
+    let shouldResetView = false;
+
+    if (
+      this.prevSelectedNodesIdsLength !== null &&
+      this.prevSelectedNodesIdsLength !== selectedNodesIdsLength &&
+      selectedNodesIdsLength === 0
+    ) {
+      this.prevSelectedNodesIdsLength = selectedNodesIdsLength;
+      shouldResetView = true;
+    }
+
+    if (shouldResetView || !mapView) {
+      this._setMapViewDebounced(
+        [defaultMapView.latitude, defaultMapView.longitude],
+        defaultMapView.zoom
+      );
+    } else {
+      this.prevSelectedNodesIdsLength = selectedNodesIdsLength;
+      this._setMapViewDebounced([mapView.latitude, mapView.longitude], mapView.zoom);
+    }
   }
 
-  setBasemap({
-    basemapId,
-    choropleth,
-    selectedBiomeFilter,
-    linkedGeoIds,
-    defaultMapView,
-    forceDefaultMapView
-  }) {
+  setBasemap({ basemapId }) {
     if (basemapId === null) return;
 
     if (this.basemap) {
@@ -121,13 +146,6 @@ export default class {
     this.map.addLayer(this.basemap);
 
     this.darkBasemap = basemapOptions.dark === true;
-    this._drawChoroplethLayer(
-      choropleth,
-      selectedBiomeFilter,
-      linkedGeoIds,
-      defaultMapView,
-      forceDefaultMapView
-    );
 
     if (basemapOptions.labelsUrl !== undefined) {
       basemapOptions.pane = MAP_PANES.basemapLabels;
@@ -136,16 +154,7 @@ export default class {
     }
   }
 
-  showLoadedMap({
-    mapVectorData,
-    currentPolygonType,
-    selectedNodesGeoIds,
-    choropleth,
-    linkedGeoIds,
-    defaultMapView,
-    biomeFilter,
-    forceDefaultMapView
-  }) {
+  showLoadedMap({ mapVectorData }) {
     this.polygonTypesLayers = {};
     if (!mapVectorData) return;
 
@@ -164,42 +173,18 @@ export default class {
         ];
       }
     });
-
-    this.selectPolygonType({ selectedColumnsIds: currentPolygonType, biomeFilter });
-    if (selectedNodesGeoIds) {
-      this.selectPolygons({ selectedGeoIds: selectedNodesGeoIds, linkedGeoIds });
-    }
-
-    // under normal circumstances, choropleth (depends on loadNodes) and linkedGeoIds (depends on loadLinks)
-    // are not available yet, but this is just a fail-safe for race conditions
-    if (choropleth) {
-      this._drawChoroplethLayer(
-        choropleth,
-        biomeFilter,
-        linkedGeoIds,
-        defaultMapView,
-        forceDefaultMapView
-      );
-    }
   }
 
-  selectPolygons({
-    selectedGeoIds,
-    linkedGeoIds,
-    highlightedGeoId,
-    forceDefaultMapView,
-    defaultMapView
-  }) {
-    this._outlinePolygons({ selectedGeoIds, highlightedGeoId });
-    if (forceDefaultMapView === true) {
-      this.setMapView({ mapView: defaultMapView });
-    } else if (!linkedGeoIds || linkedGeoIds.length === 0) {
-      this._fitBoundsToSelectedPolygons(selectedGeoIds);
-    }
+  selectPolygons({ selectedNodesGeoIds, highlightedGeoIds }) {
+    this._outlinePolygons({ selectedNodesGeoIds, highlightedGeoIds });
   }
 
-  _fitBoundsToSelectedPolygons(selectedGeoIds) {
-    if (this.vectorOutline !== undefined && selectedGeoIds.length && this.currentPolygonTypeLayer) {
+  _fitBoundsToSelectedPolygons(selectedNodesGeoIds) {
+    if (
+      this.vectorOutline !== undefined &&
+      selectedNodesGeoIds.length &&
+      this.currentPolygonTypeLayer
+    ) {
       if (!this.currentPolygonTypeLayer.isPoint) {
         const bounds = this.vectorOutline.getBounds();
         const boundsCenterZoom = this.map._getBoundsCenterZoom(bounds);
@@ -211,12 +196,12 @@ export default class {
     }
   }
 
-  highlightPolygon({ selectedGeoIds, highlightedGeoId }) {
-    this._outlinePolygons({ selectedGeoIds, highlightedGeoId });
+  highlightPolygon({ selectedNodesGeoIds, highlightedGeoIds, linkedGeoIds }) {
+    this._outlinePolygons({ selectedNodesGeoIds, highlightedGeoIds, linkedGeoIds });
   }
 
-  _outlinePolygons({ selectedGeoIds, highlightedGeoId }) {
-    if (!this.currentPolygonTypeLayer || !selectedGeoIds) {
+  _outlinePolygons({ selectedNodesGeoIds, highlightedGeoIds }) {
+    if (!this.currentPolygonTypeLayer || !selectedNodesGeoIds) {
       return;
     }
 
@@ -224,7 +209,7 @@ export default class {
       this.map.removeLayer(this.vectorOutline);
     }
 
-    const selectedFeatures = selectedGeoIds.map(selectedGeoId => {
+    const selectedFeatures = selectedNodesGeoIds.map(selectedGeoId => {
       if (!selectedGeoId) return null;
       const originalPolygon = this.currentPolygonTypeLayer
         .getLayers()
@@ -232,14 +217,14 @@ export default class {
       return originalPolygon.feature;
     });
 
-    if (highlightedGeoId && selectedGeoIds.indexOf(highlightedGeoId) === -1) {
+    if (highlightedGeoIds && selectedNodesGeoIds.indexOf(highlightedGeoIds) === -1) {
       const highlightedPolygon = this.currentPolygonTypeLayer
         .getLayers()
-        .find(polygon => polygon.feature.properties.geoid === highlightedGeoId);
+        .find(polygon => polygon.feature.properties.geoid === highlightedGeoIds);
       if (highlightedPolygon !== undefined) {
         selectedFeatures.push(highlightedPolygon.feature);
       } else {
-        console.warn('no polygon found with geoId ', highlightedGeoId);
+        console.warn('no polygon found with geoId ', highlightedGeoIds);
       }
     }
 
@@ -256,7 +241,7 @@ export default class {
       const getClassName = feature => {
         const classes = [];
         if (this.currentPolygonTypeLayer.isPoint) classes.push('-point');
-        classes.push(feature.properties.geoid === highlightedGeoId ? '-highlighted' : '-selected');
+        classes.push(feature.properties.geoid === highlightedGeoIds ? '-highlighted' : '-selected');
         return classes.join(' ');
       };
       this.vectorOutline.setStyle(feature => ({
@@ -267,14 +252,7 @@ export default class {
     }
   }
 
-  selectPolygonType({
-    selectedColumnsIds,
-    choropleth,
-    biomeFilter,
-    linkedGeoIds,
-    defaultMapView,
-    forceDefaultMapView
-  }) {
+  selectPolygonType({ selectedColumnsIds }) {
     if (!this.polygonTypesLayers || !selectedColumnsIds.length) {
       return;
     }
@@ -286,15 +264,6 @@ export default class {
     this.currentPolygonTypeLayer = this.polygonTypesLayers[id];
     if (this.currentPolygonTypeLayer) {
       this.map.addLayer(this.currentPolygonTypeLayer);
-      if (choropleth) {
-        this._drawChoroplethLayer(
-          choropleth,
-          biomeFilter,
-          linkedGeoIds,
-          defaultMapView,
-          forceDefaultMapView
-        );
-      }
     }
   }
 
@@ -455,7 +424,7 @@ export default class {
         },
         click(event) {
           if (
-            event.target.disabled ||
+            (event.target.feature?.properties && !event.target.feature.properties.hasFlows) ||
             (event.target.classList && event.target.classList.contains('-disabled'))
           ) {
             return;
@@ -466,26 +435,14 @@ export default class {
     });
   }
 
-  setChoropleth({
-    choropleth,
-    selectedBiomeFilter,
-    linkedGeoIds,
-    defaultMapView,
-    forceDefaultMapView
-  }) {
+  setChoropleth({ choropleth, selectedBiomeFilter, linkedGeoIds, defaultMapView }) {
     if (!this.currentPolygonTypeLayer) {
       return;
     }
-    this._drawChoroplethLayer(
-      choropleth,
-      selectedBiomeFilter,
-      linkedGeoIds,
-      defaultMapView,
-      forceDefaultMapView
-    );
+    this._drawChoroplethLayer(choropleth, selectedBiomeFilter, linkedGeoIds, defaultMapView);
   }
 
-  _drawChoroplethLayer(choropleth, biome, linkedGeoIds, defaultMapView, forceDefaultMapView) {
+  _drawChoroplethLayer(choropleth, biome, linkedGeoIds, defaultMapView) {
     if (!this.currentPolygonTypeLayer) return;
 
     const linkedPolygons = [];
@@ -587,7 +544,6 @@ export default class {
           color,
           weight
         });
-        layer.disabled = !layer.feature.properties.hasFlows;
       }
 
       if (isLinked) {
@@ -595,9 +551,7 @@ export default class {
       }
     });
 
-    if (forceDefaultMapView === true) {
-      this.setMapView({ mapView: defaultMapView });
-    } else if (linkedPolygons.length) {
+    if (linkedPolygons.length) {
       const bbox = turf_bbox({ type: 'FeatureCollection', features: linkedPolygons });
       // we use L's _getBoundsCenterZoom internal method + setView as fitBounds does not support a minZoom option
       const bounds = L.latLngBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
@@ -609,24 +563,9 @@ export default class {
     }
   }
 
-  showLinkedGeoIds({
-    choropleth,
-    selectedBiomeFilter,
-    linkedGeoIds,
-    selectedGeoIds,
-    defaultMapView,
-    forceDefaultMapView
-  }) {
-    this._drawChoroplethLayer(
-      choropleth,
-      selectedBiomeFilter,
-      linkedGeoIds,
-      defaultMapView,
-      forceDefaultMapView
-    );
-
-    if (!forceDefaultMapView && linkedGeoIds.length === 0) {
-      this._fitBoundsToSelectedPolygons(selectedGeoIds);
+  showLinkedGeoIds({ linkedGeoIds, selectedNodesGeoIds }) {
+    if (linkedGeoIds.length === 0) {
+      this._fitBoundsToSelectedPolygons(selectedNodesGeoIds);
     }
   }
 
@@ -657,22 +596,6 @@ export default class {
     window.setTimeout(() => {
       window.clearInterval(interval);
     }, 3000);
-  }
-
-  filterByBiome({
-    choropleth,
-    selectedBiomeFilter,
-    linkedGeoIds,
-    defaultMapView,
-    forceDefaultMapView
-  }) {
-    this._drawChoroplethLayer(
-      choropleth,
-      selectedBiomeFilter,
-      linkedGeoIds,
-      defaultMapView,
-      forceDefaultMapView
-    );
   }
 
   updatePointShadowLayer({ mapVectorData, visibleNodes }) {

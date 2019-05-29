@@ -21,7 +21,7 @@ import { SELECT_YEARS } from 'actions/tool.actions';
 
 const initialState = {
   languages: [],
-  windowSize: [window.innerWidth, window.innerHeight],
+  sankeySize: [window.innerWidth, window.innerHeight],
   isMapLayerVisible: false,
   isAppMenuVisible: false,
   tooltipCheck: 0,
@@ -51,7 +51,7 @@ const isSankeyExpanded = state => state.isMapLayerVisible !== true && state.isMa
 
 const appReducer = {
   [LOAD_STATE_FROM_URL](state, action) {
-    return { ...state, initialDataLoading: true, ...action.payload.app };
+    return { ...state, ...action.payload.app };
   },
   [SET_SANKEY_SIZE](state) {
     if (isSankeyExpanded(state)) {
@@ -155,7 +155,7 @@ const appReducerTypes = PropTypes => ({
   initialSelectedContextIdFromURL: PropTypes.number,
   tooltips: PropTypes.object,
   tooltipCheck: PropTypes.number,
-  windowSize: PropTypes.arrayOf(PropTypes.number).isRequired,
+  sankeySize: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedYears: PropTypes.arrayOf(PropTypes.number).isRequired
 });
 

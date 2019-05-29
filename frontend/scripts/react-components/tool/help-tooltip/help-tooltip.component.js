@@ -5,7 +5,7 @@ import 'scripts/react-components/shared/help-tooltip/help-tooltip.scss';
 export default class {
   onCreated() {
     this.tooltips = [];
-    this._loadTooltip();
+    this.checkTooltip();
   }
 
   onRemoved() {

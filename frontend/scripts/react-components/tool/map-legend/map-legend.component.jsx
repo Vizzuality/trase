@@ -8,11 +8,8 @@ import 'styles/components/tool/map/map-legend.scss';
 import abbreviateNumber from 'utils/abbreviateNumber';
 
 export default class {
-  onCreated() {
+  constructor() {
     this.el = document.querySelector('.js-map-legend');
-    this.toggleMapMenu = () => {
-      this.callbacks.onToggleMapLayerMenu();
-    };
     this.el.addEventListener('click', this.toggleMapMenu);
     this.choro = document.querySelector('.js-map-legend-choro');
     this.context = document.querySelector('.js-map-legend-context');
@@ -37,6 +34,17 @@ export default class {
     this.zoom.addEventListener('mouseleave', () => {
       scale.classList.toggle('-visible', false);
     });
+  }
+
+  onCreated(props) {
+    this.toggleMapMenu = () => {
+      this.callbacks.onToggleMapLayerMenu();
+    };
+    this.updateChoroplethLegend(props);
+    this.updateContextLegend(props);
+    this.highlightChoroplethBucket(props);
+    this.selectMapDimensions(props);
+    this.highlightChoroplethBucket(props);
   }
 
   onRemoved() {

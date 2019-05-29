@@ -1,25 +1,19 @@
 import { connect } from 'react-redux';
 import { selectRecolorBy } from 'actions/tool.actions';
+import { getToolRecolorGroups } from 'react-components/tool/tool.selectors';
 import RecolorBySelector from './recolor-by.component';
-import {
-  getSelectedRecolorByValue,
-  getRecolorByOptions,
-  getToolRecolorByGroups
-} from './recolor-by-selector.selectors';
+import { getSelectedRecolorByValue, getRecolorByOptions } from './recolor-by-selector.selectors';
 
 const mapStateToProps = state => ({
   recolorBys: getRecolorByOptions(state),
-  recolorGroups: getToolRecolorByGroups(state),
+  recolorGroups: getToolRecolorGroups(state),
   selectedRecolorBy: getSelectedRecolorByValue(state),
   tooltip: state.app.tooltips?.sankey.nav.colorBy.main
 });
 
-const mapDispatchToProps = dispatch => ({
-  onChange: recolorBy => {
-    recolorBy.value = recolorBy.name;
-    dispatch(selectRecolorBy(recolorBy));
-  }
-});
+const mapDispatchToProps = {
+  onChange: selectRecolorBy
+};
 
 export default connect(
   mapStateToProps,

@@ -9,23 +9,25 @@ import {
 import capitalize from 'lodash/capitalize';
 import { makeGetResizeByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
+import {
+  getSelectedResizeBy as getToolResizeBy,
+  getSelectedRecolorBy as getToolRecolorBy,
+  getSelectedBiomeFilter as getToolSelectedBiome
+} from 'react-components/tool/tool.selectors';
 
 const insertIf = (condition, item) => (condition ? [item] : []);
 
 const getCurrentPage = state => state.location.type;
 const getSelectedContext = state => state.app.selectedContext;
 const getSelectedYears = state => state.app.selectedYears;
-const getToolSelectedResizeBy = state => (state.tool ? state.tool.selectedResizeBy : {});
-const getToolRecolorBy = state => (state.tool ? state.tool.selectedRecolorBy : {});
-const getToolSelectedBiome = state => state.tool && state.tool.selectedBiomeFilter;
 const getContextFilterBy = state => state.app.selectedContext && state.app.selectedContext.filterBy;
 const getAppTooltips = state => state.app.tooltips;
-const getToolDetailedView = state => state.tool && state.tool.detailedView;
+const getToolDetailedView = state => state.toolLinks && state.toolLinks.detailedView;
 const getToolResizeBys = state => state.app.selectedContext && state.app.selectedContext.resizeBy;
 
 export const getToolYearsProps = createStructuredSelector({
   selectedYears: getSelectedYears,
-  years: makeGetAvailableYears(getToolSelectedResizeBy, getToolRecolorBy, getSelectedContext)
+  years: makeGetAvailableYears(getToolResizeBy, getToolRecolorBy, getSelectedContext)
 });
 
 export const getToolAdminLevelProps = createSelector(
@@ -52,11 +54,7 @@ export const getToolAdminLevelProps = createSelector(
 );
 
 export const getToolResizeByProps = createSelector(
-  [
-    getAppTooltips,
-    getToolSelectedResizeBy,
-    makeGetResizeByItems(getToolResizeBys, getSelectedYears)
-  ],
+  [getAppTooltips, getToolResizeBy, makeGetResizeByItems(getToolResizeBys, getSelectedYears)],
   (tooltips, selectedResizeBy, items) => ({
     options: items,
     label: 'Resize by',
@@ -65,9 +63,13 @@ export const getToolResizeByProps = createSelector(
     size: 'rg',
     clip: false,
     weight: 'regular',
-    value: { value: selectedResizeBy.name, label: selectedResizeBy.label || '' },
+    value: selectedResizeBy && {
+      value: selectedResizeBy.name,
+      label: selectedResizeBy.label || ''
+    },
     tooltip: tooltips && tooltips.sankey.nav.resizeBy.main,
-    titleTooltip: tooltips && tooltips.sankey.nav.resizeBy[selectedResizeBy.name]
+    titleTooltip:
+      tooltips && selectedResizeBy && tooltips.sankey.nav.resizeBy[selectedResizeBy.name]
   })
 );
 

@@ -5,7 +5,7 @@ import ColumnSelector from 'react-components/tool/column-selector/column-selecto
 import 'react-components/tool/columns-selector-group/columns-selector-group.scss';
 
 function ColumnsSelectorGroup({ sankeySize, columns }) {
-  if (sankeySize === undefined || (columns && columns.length === 0)) {
+  if (sankeySize === undefined || !columns) {
     return null;
   }
 
@@ -23,7 +23,7 @@ function ColumnsSelectorGroup({ sankeySize, columns }) {
 
 ColumnsSelectorGroup.propTypes = {
   sankeySize: PropTypes.array,
-  columns: PropTypes.array
+  columns: PropTypes.object
 };
 
 export default ColumnsSelectorGroup;

@@ -29,7 +29,7 @@ export default [
       const nodeNames = [];
 
       action.ids.forEach(d => {
-        const node = state.tool.nodesDict[d];
+        const node = state.toolLinks.data.nodes[d];
         if (typeof node !== 'undefined') {
           nodeNames.push(node.name);
         }
@@ -72,7 +72,8 @@ export default [
     type: SELECT_COLUMN,
     category: 'Sankey',
     action: 'Select column',
-    getPayload: (action, state) => state.tool.columns.find(col => col.id === action.columnId).name
+    getPayload: (action, state) =>
+      state.toolLinks.columns.find(col => col.id === action.columnId).name
   },
   {
     type: TOGGLE_MAP,

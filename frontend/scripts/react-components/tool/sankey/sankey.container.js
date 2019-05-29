@@ -14,21 +14,28 @@ import {
   getIsReExpand,
   getHasExpandedNodesIds
 } from 'react-components/tool/sankey/sankey.selectors';
+import {
+  getVisibleNodesByColumn,
+  getMergedLinks,
+  getNodesColored,
+  getSelectedRecolorBy
+} from 'react-components/tool/tool.selectors';
 import Sankey from 'react-components/tool/sankey/sankey.component';
 
 const mapStateToProps = state => ({
-  links: state.tool.links,
+  links: getMergedLinks(state),
   isVisible: getIsVisible(state),
   isReExpand: getIsReExpand(state),
   sankeySize: state.app.sankeySize,
-  currentQuant: state.tool.currentQuant,
-  detailedView: state.tool.detailedView,
-  selectedNodesIds: state.tool.selectedNodesIds,
-  selectedRecolorBy: state.tool.selectedRecolorBy,
+  currentQuant: state.toolLinks.currentQuant,
+  detailedView: state.toolLinks.detailedView,
+  nodeHeights: state.toolLinks.data.nodeHeights,
+  selectedNodesIds: state.toolLinks.selectedNodesIds,
+  selectedRecolorBy: getSelectedRecolorBy(state),
   hasExpandedNodesIds: getHasExpandedNodesIds(state),
-  highlightedNodesIds: state.tool.highlightedNodesIds,
-  visibleNodesByColumn: state.tool.visibleNodesByColumn,
-  nodesColoredAtColumn: state.tool.nodesColoredAtColumn,
+  highlightedNodesIds: state.toolLinks.highlightedNodesIds,
+  visibleNodesByColumn: getVisibleNodesByColumn(state),
+  nodesColoredAtColumn: getNodesColored(state).nodesColoredAtColumn,
   lang: state.location.query && state.location.query.lang
 });
 
@@ -46,6 +53,7 @@ const methodProps = [
     compared: ['links'],
     returned: [
       'sankeySize',
+      'nodeHeights',
       'selectedRecolorBy',
       'currentQuant',
       'selectedNodesIds',

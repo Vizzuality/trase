@@ -20,7 +20,6 @@ import {
 import contextLayersCarto from 'named-maps/tool_named_maps_carto';
 import getNodeIdFromGeoId from 'actions/helpers/getNodeIdFromGeoId';
 import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
-import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsWarnings';
 import isNodeColumnVisible from 'utils/isNodeColumnVisible';
 import difference from 'lodash/difference';
@@ -30,13 +29,15 @@ import uniq from 'lodash/uniq';
 import isEmpty from 'lodash/isEmpty';
 import xor from 'lodash/xor';
 import { getCurrentContext } from 'reducers/helpers/contextHelper';
-import { getSelectedNodesColumnsPos } from 'react-components/tool/tool.selectors';
+import {
+  getSelectedNodesColumnsPos,
+  getSelectedResizeBy
+} from 'react-components/tool/tool.selectors';
 import pSettle from 'p-settle';
 
 export const RESET_SELECTION = 'RESET_SELECTION';
-export const GET_COLUMNS = 'GET_COLUMNS';
-export const RESET_TOOL_LOADERS = 'RESET_TOOL_LOADERS';
 export const SET_FLOWS_LOADING_STATE = 'SET_FLOWS_LOADING_STATE';
+export const GET_COLUMNS = 'GET_COLUMNS';
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
 export const GET_LINKS = 'GET_LINKS';
 export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
@@ -61,7 +62,6 @@ export const EXPAND_NODE_SELECTION = 'EXPAND_NODE_SELECTION';
 export const COLLAPSE_NODE_SELECTION = 'COLLAPSE_NODE_SELECTION';
 export const GET_LINKED_GEOIDS = 'GET_LINKED_GEOIDS';
 export const SAVE_MAP_VIEW = 'SAVE_MAP_VIEW';
-export const TOGGLE_MAP_SIDEBAR_GROUP = 'TOGGLE_MAP_SIDEBAR_GROUP';
 export const SHOW_LINKS_ERROR = 'SHOW_LINKS_ERROR';
 export const RESET_TOOL_STATE = 'RESET_TOOL_STATE';
 export const SET_SANKEY_SEARCH_VISIBILITY = 'SET_SANKEY_SEARCH_VISIBILITY';
@@ -80,7 +80,7 @@ const _reloadLinks = (param, value, type, reloadLinks = true) => dispatch => {
 const _setRecolorByAction = (recolorBy, state) => {
   let selectedRecolorBy;
   if (recolorBy.value === 'none') {
-    selectedRecolorBy = { type: 'none', name: 'none' };
+    selectedRecolorBy = null;
   } else {
     const currentContext = getCurrentContext(state);
     selectedRecolorBy = currentContext.recolorBy.find(
@@ -121,7 +121,7 @@ const _setBiomeFilterAction = (biomeFilterName, state) => {
       {},
       currentContext.filterBy[0].nodes.find(filterBy => filterBy.name === biomeFilterName)
     );
-    const node = state.tool.nodesDict[selectedBiomeFilter.nodeId];
+    const node = state.toolLinks.data.nodes[selectedBiomeFilter.nodeId];
     selectedBiomeFilter.geoId = node && node.geoId;
   }
 
@@ -132,9 +132,7 @@ const _setBiomeFilterAction = (biomeFilterName, state) => {
 };
 
 function _getAvailableMapDimensions(dimensions, selectedMapDimensions) {
-  const allAvailableMapDimensionsUids = dimensions.map(dimension =>
-    getNodeMetaUid(dimension.type, dimension.layerAttributeId)
-  );
+  const allAvailableMapDimensionsUids = Object.keys(dimensions);
   const selectedMapDimensionsSet = compact(selectedMapDimensions);
   // are all currently selected map dimensions available ?
   if (
@@ -145,10 +143,8 @@ function _getAvailableMapDimensions(dimensions, selectedMapDimensions) {
   }
 
   // use default map dimensions
-  const defaultMapDimensions = dimensions.filter(dimension => dimension.isDefault);
-  const uids = defaultMapDimensions.map(selectedDimension =>
-    getNodeMetaUid(selectedDimension.type, selectedDimension.layerAttributeId)
-  );
+  const defaultMapDimensions = Object.values(dimensions).filter(dimension => dimension.isDefault);
+  const uids = defaultMapDimensions.map(selectedDimension => selectedDimension.uid);
   return [uids[0] || null, uids[1] || null];
 }
 
@@ -174,11 +170,11 @@ export function resetState(refilter = true) {
 // Resets sankey's params that may lead to no flows being returned from the API
 export function resetSankey() {
   return (dispatch, getState) => {
-    const { columns, expandedNodesIds } = getState().tool;
+    const { columns, expandedNodesIds } = getState().toolLinks;
     const { contexts, selectedContext } = getState().app;
     const areNodesExpanded = !isEmpty(expandedNodesIds);
     const currentContext = contexts.find(context => context.id === selectedContext.id);
-    const defaultColumns = columns.filter(column => column.isDefault);
+    const defaultColumns = columns ? Object.values(columns).filter(column => column.isDefault) : [];
     const defaultResizeBy =
       currentContext && currentContext.resizeBy.find(resizeBy => resizeBy.isDefault);
     const defaultRecolorBy =
@@ -254,7 +250,7 @@ export function selectColumn(columnIndex, columnId, reloadLinks = true) {
     const state = getState();
 
     // Action triggered but the column is already present - do nothing
-    if (state.tool.selectedColumnsIds.indexOf(columnId) !== -1) {
+    if (state.toolLinks.selectedColumnsIds.indexOf(columnId) !== -1) {
       return;
     }
 
@@ -264,23 +260,24 @@ export function selectColumn(columnIndex, columnId, reloadLinks = true) {
       columnId
     });
     const selectedNodesIds = getSelectedNodeIdsNotInColumnIndex(
-      state.tool.selectedNodesIds,
+      state.toolLinks.selectedNodesIds,
       columnIndex,
-      state.tool.nodesDict
+      state.toolLinks.data.nodes,
+      state.toolLinks.data.columns
     );
     dispatch(updateNodes(selectedNodesIds));
-    const selectedColumn = state.tool.columns.find(c => c.id === columnId);
+    const selectedColumn = state.toolLinks.data.columns && state.toolLinks.data.columns[columnId];
     if (
-      selectedColumn?.group === 0 &&
+      selectedColumn &&
+      selectedColumn.group === 0 &&
       selectedColumn.isGeo &&
       selectedColumn.isChoroplethDisabled
     ) {
       dispatch(setMapDimensions([null, null]));
-      state.tool.expandedMapSidebarGroupsIds.forEach(id => dispatch(toggleMapSidebarGroup(id)));
-    } else if (selectedColumn.isChoroplethDisabled === false && selectedColumn.isGeo) {
+    } else if (selectedColumn.isGeo && selectedColumn.isChoroplethDisabled === false) {
       const availableMapDimensions = _getAvailableMapDimensions(
-        state.tool.mapDimensions,
-        state.tool.selectedMapDimensions
+        state.toolLayers.data.mapDimensions,
+        state.toolLayers.selectedMapDimensions
       );
       dispatch(setMapDimensions(availableMapDimensions));
     }
@@ -333,7 +330,7 @@ export function loadNodes() {
     };
 
     const getMapBaseDataURL = getURLFromParams(GET_MAP_BASE_DATA_URL, params);
-    const selectedMapDimensions = getState().tool.selectedMapDimensions;
+    const selectedMapDimensions = getState().toolLayers.selectedMapDimensions;
 
     fetch(getMapBaseDataURL)
       .then(response => {
@@ -383,14 +380,17 @@ export function loadNodes() {
 
         dispatch({ type: SET_MAP_DIMENSIONS_DATA, payload });
 
-        const selectedBiomeFilter = getState().tool.selectedBiomeFilter;
+        const selectedBiomeFilter = getState().toolLinks.selectedBiomeFilter;
         if (selectedBiomeFilter && selectedBiomeFilter.nodeId) {
           dispatch(_setBiomeFilterAction(selectedBiomeFilter.name, getState()));
         }
 
-        const selectedGeoColumn = getState().tool.columns.find(column =>
-          getState().tool.selectedColumnsIds.some(id => id === column.id && column.isGeo)
-        );
+        const { columns } = getState().toolLinks.data;
+        const selectedGeoColumn =
+          columns &&
+          Object.values(columns).find(column =>
+            getState().toolLinks.selectedColumnsIds.some(id => id === column.id && column.isGeo)
+          );
 
         if (selectedGeoColumn.isChoroplethDisabled === false) {
           const availableMapDimensions = _getAvailableMapDimensions(
@@ -407,22 +407,20 @@ export function loadNodes() {
 
 export function loadLinks() {
   return (dispatch, getState) => {
+    dispatch({ type: SET_FLOWS_LOADING_STATE });
     const state = getState();
-    dispatch({
-      type: SET_FLOWS_LOADING_STATE,
-      payload: { loadedFlowsContextId: state.app.selectedContext.id }
-    });
+    const selectedResizeBy = getSelectedResizeBy(state);
     const params = {
       context_id: state.app.selectedContext.id,
       start_year: state.app.selectedYears[0],
       end_year: state.app.selectedYears[1],
-      include_columns: state.tool.selectedColumnsIds.join(','),
-      flow_quant: state.tool.selectedResizeBy.name,
-      locked_nodes: state.tool.selectedNodesIds
+      include_columns: state.toolLinks.selectedColumnsIds.join(','),
+      flow_quant: selectedResizeBy.name,
+      locked_nodes: state.toolLinks.selectedNodesIds
     };
-    const areNodesExpanded = !isEmpty(state.tool.expandedNodesIds);
+    const areNodesExpanded = !isEmpty(state.toolLinks.expandedNodesIds);
 
-    if (state.tool.detailedView === true) {
+    if (state.toolLinks.detailedView === true) {
       params.n_nodes = NUM_NODES_DETAILED;
     } else if (areNodesExpanded) {
       params.n_nodes = NUM_NODES_EXPANDED;
@@ -430,21 +428,21 @@ export function loadLinks() {
       params.n_nodes = NUM_NODES_SUMMARY;
     }
 
-    if (state.tool.selectedRecolorBy) {
-      if (state.tool.selectedRecolorBy.type === 'qual') {
-        params.flow_qual = state.tool.selectedRecolorBy.name;
-      } else if (state.tool.selectedRecolorBy.type === 'ind') {
-        params.flow_ind = state.tool.selectedRecolorBy.name;
+    if (state.toolLinks.selectedRecolorBy) {
+      if (state.toolLinks.selectedRecolorBy.type === 'qual') {
+        params.flow_qual = state.toolLinks.selectedRecolorBy.name;
+      } else if (state.toolLinks.selectedRecolorBy.type === 'ind') {
+        params.flow_ind = state.toolLinks.selectedRecolorBy.name;
       }
     }
 
-    const selectedBiomeFilter = state.tool.selectedBiomeFilter;
+    const selectedBiomeFilter = state.toolLinks.selectedBiomeFilter;
     if (selectedBiomeFilter && selectedBiomeFilter.name && selectedBiomeFilter.name !== 'none') {
       params.biome_filter_id = selectedBiomeFilter.nodeId;
     }
 
     if (areNodesExpanded) {
-      params.selected_nodes = state.tool.expandedNodesIds.join(',');
+      params.selected_nodes = state.toolLinks.expandedNodesIds.join(',');
     }
 
     const url = getURLFromParams(GET_FLOWS_URL, params);
@@ -473,12 +471,14 @@ export function loadLinks() {
         // if nodes were expanded and some of expanded nodes are not present anymore
         // re-expand nodes
         if (
-          !isEmpty(difference(getState().tool.expandedNodesIds, getState().tool.selectedNodesIds))
+          !isEmpty(
+            difference(getState().toolLinks.expandedNodesIds, getState().toolLinks.selectedNodesIds)
+          )
         ) {
           dispatch(expandNodeSelection());
         }
 
-        if (!isEmpty(getState().tool.selectedNodesIds)) {
+        if (!isEmpty(getState().toolLinks.selectedNodesIds)) {
           dispatch({
             type: FILTER_LINKS_BY_NODES
           });
@@ -493,7 +493,10 @@ export function loadLinks() {
 
 export function loadMapVectorData() {
   return (dispatch, getState) => {
-    const geoColumns = getState().tool.columns.filter(column => column.isGeo === true);
+    const { columns } = getState().toolLinks.data;
+    const geoColumns = columns
+      ? Object.values(columns).filter(column => column.isGeo === true)
+      : [];
 
     const vectorMaps = geoColumns.map(geoColumn => {
       const vectorData = {
@@ -514,8 +517,8 @@ export function loadMapVectorData() {
             const geoJSON = topojsonFeature(topoJSON, topoJSON.objects[key]);
             setGeoJSONMeta(
               geoJSON,
-              getState().tool.nodesDict,
-              getState().tool.geoIdsDict,
+              getState().toolLinks.data.nodes,
+              getState().toolLinks.data.nodesByColumnGeoId,
               geoColumn.id
             );
             return {
@@ -603,12 +606,9 @@ export function setMapContextLayers(contextualLayers) {
           mapContextualLayers
         });
 
-        const { selectedMapContextualLayers } = getState().tool;
+        const { selectedMapContextualLayers } = getState().toolLayers;
 
-        if (
-          typeof selectedMapContextualLayers !== 'undefined' &&
-          selectedMapContextualLayers.length
-        ) {
+        if (selectedMapContextualLayers && selectedMapContextualLayers.length) {
           dispatch({
             type: SELECT_CONTEXTUAL_LAYERS,
             contextualLayers: selectedMapContextualLayers
@@ -620,8 +620,12 @@ export function setMapContextLayers(contextualLayers) {
 }
 
 // Get a list of selected node that are NOT part of the given column index
-function getSelectedNodeIdsNotInColumnIndex(currentSelectedNodesIds, columnIndex, nodesDict) {
-  return currentSelectedNodesIds.filter(nodeId => nodesDict[nodeId].columnGroup !== columnIndex);
+function getSelectedNodeIdsNotInColumnIndex(currentSelectedNodesIds, columnIndex, nodes, columns) {
+  return currentSelectedNodesIds.filter(nodeId => {
+    const node = nodes[nodeId];
+    const column = columns[node.columnId];
+    return column.group !== columnIndex;
+  });
 }
 
 // remove or add nodeIds from selectedNodesIds
@@ -633,7 +637,7 @@ export function selectNode(param, isAggregated = false) {
   const ids = Array.isArray(param) ? param : [param];
   return (dispatch, getState) => {
     ids.forEach(nodeId => {
-      const { selectedNodesIds: currentSelectedNodesIds, expandedNodesIds } = getState().tool;
+      const { selectedNodesIds: currentSelectedNodesIds, expandedNodesIds } = getState().toolLinks;
       const areNodesExpanded = !isEmpty(expandedNodesIds);
 
       if (isAggregated) {
@@ -688,8 +692,8 @@ export function selectNodeFromGeoId(geoId) {
   return (dispatch, getState) => {
     const nodeId = getNodeIdFromGeoId(
       geoId,
-      getState().tool.nodesDict,
-      getState().tool.selectedColumnsIds[0]
+      getState().toolLinks.data.nodes,
+      getState().toolLinks.selectedColumnsIds[0]
     );
 
     // node not in visible Nodes ---> expand node (same behavior as search)
@@ -702,30 +706,31 @@ export function selectNodeFromGeoId(geoId) {
 export function selectExpandedNode(param) {
   const ids = Array.isArray(param) ? param : [param];
   return (dispatch, getState) => {
-    const hasInvisibleNodes = ids.some(elem => !_isNodeVisible(getState, elem));
+    const hasInvisibleNodes = true; // ids.some(elem => !_isNodeVisible(getState, elem));
 
     if (hasInvisibleNodes) {
-      const { tool } = getState();
+      const { toolLinks } = getState();
       if (
-        tool.selectedNodesIds.length === ids.length &&
-        intesection(tool.selectedNodesIds, ids).length === ids.length
+        toolLinks.selectedNodesIds.length === ids.length &&
+        intesection(toolLinks.selectedNodesIds, ids).length === ids.length
       ) {
         dispatch(resetState());
       } else {
         const nodes = ids.map(nodeId => {
-          if (!tool.nodesDict[nodeId]) {
-            console.warn(`requested node ${nodeId} does not exist in nodesDict`);
+          if (!toolLinks.data.nodes[nodeId]) {
+            console.warn(`requested node ${nodeId} does not exist in nodes`);
           }
-          return tool.nodesDict[nodeId];
+          return toolLinks.data.nodes[nodeId];
         });
 
         nodes.forEach(node => {
-          if (!isNodeColumnVisible(node, tool.selectedColumnsIds)) {
-            dispatch(selectColumn(node.columnGroup, node.columnId, false));
+          const column = toolLinks.data.columns[node.columnId];
+          if (!isNodeColumnVisible(column, toolLinks.selectedColumnsIds)) {
+            dispatch(selectColumn(column.group, node.columnId, false));
           }
         });
 
-        const currentSelectedNodesIds = getState().tool.selectedNodesIds;
+        const currentSelectedNodesIds = getState().toolLinks.selectedNodesIds;
         const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, ids);
 
         dispatch(updateNodes(selectedNodesIds));
@@ -753,9 +758,13 @@ export function highlightNode(nodeId, isAggregated, coordinates) {
 
 export function highlightNodeFromGeoId(geoId, coordinates) {
   return (dispatch, getState) => {
-    const { nodesDict, selectedColumnsIds, highlightedNodesIds } = getState().tool;
+    const {
+      data: { nodes },
+      selectedColumnsIds,
+      highlightedNodesIds
+    } = getState().toolLinks;
 
-    const nodeId = getNodeIdFromGeoId(geoId, nodesDict, selectedColumnsIds[0]);
+    const nodeId = getNodeIdFromGeoId(geoId, nodes, selectedColumnsIds[0]);
     if (nodeId === null) {
       if (highlightedNodesIds.length) {
         dispatch(highlightNode(null));
@@ -772,7 +781,7 @@ export function expandNodeSelection() {
       type: EXPAND_NODE_SELECTION
     });
 
-    const { detailedView } = getState().tool;
+    const { detailedView } = getState().toolLinks;
 
     // if expanding, and if in detailed mode, toggle to overview mode
     if (detailedView) {
@@ -793,7 +802,7 @@ export function collapseNodeSelection() {
       type: COLLAPSE_NODE_SELECTION
     });
 
-    const { forcedOverview } = getState().tool;
+    const { forcedOverview } = getState().toolLinks;
 
     // if shrinking, and if overview was previously forced, go back to detailed
     if (forcedOverview) {
@@ -810,7 +819,7 @@ export function collapseNodeSelection() {
 
 export function navigateToProfile(nodeId, year, contextId) {
   return (dispatch, getState) => {
-    const node = getState().tool.nodesDict[nodeId];
+    const node = getState().toolLinks.data.nodes[nodeId];
     dispatch({
       type: 'profileNode',
       payload: { query: { nodeId, year, contextId }, profileType: node.profileType }
@@ -821,10 +830,10 @@ export function navigateToProfile(nodeId, year, contextId) {
 export function loadLinkedGeoIDs() {
   return (dispatch, getState) => {
     const state = getState();
-    const selectedNodesIds = state.tool.selectedNodesIds;
+    const selectedNodesIds = state.toolLinks.selectedNodesIds;
 
     // when selection only contains geo nodes (column 0), we should not call get_linked_geoids
-    const selectedNodesColumnsPos = getSelectedNodesColumnsPos(state.tool);
+    const selectedNodesColumnsPos = getSelectedNodesColumnsPos(state);
     const selectedNonGeoNodeIds = selectedNodesIds.filter(
       (nodeId, index) => selectedNodesColumnsPos[index] !== 0
     );
@@ -839,7 +848,7 @@ export function loadLinkedGeoIDs() {
       context_id: state.app.selectedContext.id,
       years: uniq([state.app.selectedYears[0], state.app.selectedYears[1]]),
       nodes_ids: selectedNodesIds,
-      target_column_id: state.tool.selectedColumnsIds[0]
+      target_column_id: state.toolLinks.selectedColumnsIds[0]
     };
     const url = getURLFromParams(GET_LINKED_GEO_IDS_URL, params);
 
@@ -900,19 +909,18 @@ export function setMapDimensions(uids) {
 export function loadMapChoropeth(getState, dispatch) {
   const state = getState();
 
-  const uids = state.tool.selectedMapDimensions;
+  const uids = state.toolLayers.selectedMapDimensions;
 
   if (compact(uids).length === 0) {
     dispatch({
-      type: SET_NODE_ATTRIBUTES
+      type: SET_NODE_ATTRIBUTES,
+      payload: { data: [] }
     });
 
     return;
   }
 
-  const selectedMapDimensions = compact(uids).map(uid =>
-    state.tool.mapDimensions.find(dimension => dimension.uid === uid)
-  );
+  const selectedMapDimensions = compact(uids).map(uid => state.toolLayers.data.mapDimensions[uid]);
 
   const params = {
     context_id: state.app.selectedContext.id,
@@ -952,14 +960,7 @@ export function selectMapBasemap(selectedMapBasemap) {
   };
 }
 
-export function toggleMapSidebarGroup(id) {
-  return {
-    type: TOGGLE_MAP_SIDEBAR_GROUP,
-    id: parseInt(id, 10)
-  };
-}
-
 const _isNodeVisible = (getState, nodeId) =>
   getState()
-    .tool.visibleNodes.map(node => node.id)
+    .toolLinks.visibleNodes.map(node => node.id)
     .indexOf(nodeId) > -1;

@@ -11,9 +11,7 @@ export const makeGetAvailableYears = (
     (selectedResizeBy, selectedRecolorBy, selectedContext) => {
       const availableContextYears = selectedContext && selectedContext.years;
       const availableResizeByYears =
-        selectedResizeBy.years && selectedResizeBy.years.length > 0
-          ? selectedResizeBy.years
-          : availableContextYears;
+        selectedResizeBy?.years?.length > 0 ? selectedResizeBy.years : availableContextYears;
 
       // if selectedRecolorBy isnt available in a certain context we don't filter years by recolor by
       let availableRecolorByYears = availableResizeByYears;

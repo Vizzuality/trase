@@ -9,10 +9,9 @@ export default class MapBasemaps {
   }
 
   onCreated(props) {
-    const { basemaps, disabled, activeBasemapId } = props;
-    this.buildBasemaps({ basemaps });
-    this.enableBasemapSelection({ disabled });
-    this.selectBasemap({ activeBasemapId });
+    this.buildBasemaps(props);
+    this.enableBasemapSelection(props);
+    this.selectBasemap(props);
   }
 
   onRemoved() {

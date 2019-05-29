@@ -3,95 +3,77 @@
 import { toggleMap, toggleMapLayerMenu } from 'actions/app.actions';
 import { selectNodeFromGeoId, highlightNodeFromGeoId, saveMapView } from 'actions/tool.actions';
 import {
+  getVisibleNodes,
+  getSelectedBiomeFilter,
   getSelectedNodesGeoIds,
   getHighlightedNodesGeoIds
 } from 'react-components/tool/tool.selectors';
+import {
+  getChoroplethOptions,
+  getSelectedMapContextualLayersData
+} from 'react-components/tool-layers/tool-layer.selectors';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 import { connect } from 'react-redux';
 import Map from 'react-components/tool/map/map.component';
 import getBasemap from 'utils/getBasemap';
 
-const mapStateToProps = state => ({
-  mapView: state.tool.mapView,
-  mapVectorData: state.tool.mapVectorData,
-  currentPolygonType: state.tool.selectedColumnsIds,
-  selectedNodesGeoIds: getSelectedNodesGeoIds(state.tool),
-  recolorByNodeIds: state.tool.recolorByNodeIds,
-  choropleth: state.tool.choropleth,
-  linkedGeoIds: state.tool.linkedGeoIds,
-  selectedGeoIds: getSelectedNodesGeoIds(state.tool),
-  highlightedGeoId: getHighlightedNodesGeoIds(state.tool)[0],
-  defaultMapView: state.app.selectedContext ? state.app.selectedContext.map : null,
-  biomeFilter: state.tool.selectedBiomeFilter,
-  forceDefaultMapView: !state.tool.selectedNodesIds.length,
-  selectedColumnsIds: state.tool.selectedColumnsIds,
-  selectedColumnId: state.tool.selectedColumnsIds ? state.tool.selectedColumnsIds[0] : undefined,
-  selectedMapContextualLayersData: state.tool.selectedMapContextualLayersData,
-  isMapVisible: state.tool.isMapVisible,
-  visibleNodes: state.tool.visibleNodes,
-  selectedBiomeFilter: state.tool.selectedBiomeFilter,
-  basemapId: getBasemap(state.tool)
-});
+const mapStateToProps = state => {
+  const { choropleth } = getChoroplethOptions(state);
+  return {
+    choropleth,
+    mapView: state.toolLayers.mapView,
+    mapVectorData: state.toolLayers.data.mapVectorData,
+    selectedNodesGeoIds: getSelectedNodesGeoIds(state),
+    recolorByNodeIds: state.toolLinks.recolorByNodeIds,
+    linkedGeoIds: state.toolLayers.linkedGeoIds,
+    highlightedGeoIds: getHighlightedNodesGeoIds(state)[0],
+    defaultMapView: state.app.selectedContext ? state.app.selectedContext.map : null,
+    selectedNodesIdsLength: state.toolLinks.selectedNodesIds.length,
+    selectedColumnsIds: state.toolLinks.selectedColumnsIds,
+    selectedMapContextualLayersData: getSelectedMapContextualLayersData(state),
+    isMapVisible: state.toolLayers.isMapVisible,
+    visibleNodes: getVisibleNodes(state),
+    selectedBiomeFilter: getSelectedBiomeFilter(state),
+    basemapId: getBasemap(state)
+  };
+};
 
 const methodProps = [
   {
     name: 'setMapView',
-    compared: ['mapView'],
-    returned: ['mapView']
+    compared: ['mapView', 'selectedNodesIdsLength', 'defaultMapView'],
+    returned: ['mapView', 'selectedNodesIdsLength', 'defaultMapView']
   },
   {
     name: 'showLoadedMap',
     compared: ['mapVectorData'],
-    returned: [
-      'mapView',
-      'mapVectorData',
-      'currentPolygonType',
-      'selectedNodesGeoIds',
-      'choropleth',
-      'linkedGeoIds',
-      'defaultMapView',
-      'biomeFilter',
-      'forceDefaultMapView'
-    ]
+    returned: ['mapVectorData']
   },
   {
     name: 'selectPolygonType',
-    compared: ['selectedColumnId'],
-    returned: [
-      'selectedColumnsIds',
-      'choropleth',
-      'biomeFilter',
-      'linkedGeoIds',
-      'defaultMapView',
-      'forceDefaultMapView'
-    ]
+    compared: ['selectedColumnsIds', 'mapVectorData'],
+    returned: ['selectedColumnsIds']
   },
   {
     name: 'selectPolygons',
-    compared: ['selectedGeoIds'],
-    returned: [
-      'selectedGeoIds',
-      'linkedGeoIds',
-      'highlightedGeoId',
-      'forceDefaultMapView',
-      'defaultMapView'
-    ]
+    compared: ['selectedNodesGeoIds'],
+    returned: ['selectedNodesGeoIds', 'highlightedGeoIds']
   },
   {
     name: 'highlightPolygon',
-    compared: ['highlightedGeoId'],
-    returned: ['selectedGeoIds', 'highlightedGeoId']
+    compared: ['highlightedGeoIds'],
+    returned: ['selectedNodesGeoIds', 'highlightedGeoIds']
   },
   {
     name: 'setChoropleth',
-    compared: ['choropleth'],
-    returned: [
+    compared: [
       'choropleth',
       'selectedBiomeFilter',
       'linkedGeoIds',
       'defaultMapView',
-      'forceDefaultMapView'
-    ]
+      'mapVectorData'
+    ],
+    returned: ['choropleth', 'selectedBiomeFilter', 'linkedGeoIds', 'defaultMapView']
   },
   {
     name: 'loadContextLayers',
@@ -100,16 +82,8 @@ const methodProps = [
   },
   {
     name: 'showLinkedGeoIds',
-    compared: ['linkedGeoIds'],
-    returned: [
-      'choropleth',
-      'selectedBiomeFilter',
-      'linkedGeoIds',
-      'selectedGeoIds',
-      'defaultMapView',
-      // get back to context default map view if no nodes are selected
-      'forceDefaultMapView'
-    ]
+    compared: ['linkedGeoIds', 'selectedNodesGeoIds'],
+    returned: ['linkedGeoIds', 'selectedNodesGeoIds']
   },
   {
     name: 'invalidate',
@@ -119,29 +93,11 @@ const methodProps = [
   {
     name: 'setBasemap',
     compared: ['basemapId'],
-    returned: [
-      'basemapId',
-      'choropleth',
-      'selectedBiomeFilter',
-      'linkedGeoIds',
-      'defaultMapView',
-      'forceDefaultMapView'
-    ]
-  },
-  {
-    name: 'filterByBiome',
-    compared: ['selectedBiomeFilter'],
-    returned: [
-      'choropleth',
-      'selectedBiomeFilter',
-      'linkedGeoIds',
-      'defaultMapView',
-      'forceDefaultMapView'
-    ]
+    returned: ['basemapId']
   },
   {
     name: 'updatePointShadowLayer',
-    compared: ['visibleNodes'],
+    compared: ['visibleNodes', 'mapVectorData'],
     returned: ['visibleNodes', 'mapVectorData']
   }
 ];

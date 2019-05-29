@@ -1,11 +1,13 @@
 import formatValue from 'utils/formatValue';
 import NodeTitleTemplate from 'templates/tool/nodeTitle.ejs';
+import Tooltip from 'components/shared/info-tooltip.component';
+import getNodeMeta from 'reducers/helpers/getNodeMeta';
+
 import 'scripts/react-components/tool/tool-search/node-title-group/node-title-group.scss';
 import 'styles/components/tool/nodes-clear.scss';
-import Tooltip from 'components/shared/info-tooltip.component';
 
 export default class {
-  onCreated() {
+  constructor() {
     this.el = document.querySelector('.js-nodes-titles');
     this.container = this.el.querySelector('.js-nodes-titles-container');
     this.clear = this.el.querySelector('.js-nodes-titles-clear');
@@ -15,8 +17,12 @@ export default class {
 
     this._onNodeTitleClickBound = this._onNodeTitleClick.bind(this);
     this._onNodeTitleCloseClickBound = this._onNodeTitleCloseClick.bind(this);
+  }
 
+  onCreated(props) {
     this.clear.addEventListener('click', this.callbacks.onClearClick);
+    this.selectNodes(props);
+    this.highlightNode(props);
   }
 
   onRemoved() {
@@ -32,16 +38,35 @@ export default class {
 
   selectNodes(data) {
     const {
-      nodesData,
+      selectedNodesData,
+      columns,
+      selectedMapDimensions,
       recolorGroups,
       currentQuant,
       selectedYears,
+      nodeHeights,
+      attributes,
+      selectedResizeBy,
       selectedContextId,
       highlightedNodesData
     } = data;
+
+    const hasHighlighted = highlightedNodesData.length > 0;
+    const nodesData = hasHighlighted ? highlightedNodesData : selectedNodesData;
+    if (nodesData.length > 0) {
+      this.el.classList.remove('is-hidden');
+    } else {
+      this.el.classList.add('is-hidden');
+    }
+
     this._update({
-      isSelect: true,
-      nodesData: nodesData || highlightedNodesData,
+      isSelect: !hasHighlighted,
+      nodesData,
+      nodeHeights,
+      columns,
+      attributes,
+      selectedResizeBy,
+      selectedMapDimensions,
       recolorGroups,
       currentQuant,
       selectedYears,
@@ -50,13 +75,13 @@ export default class {
   }
 
   highlightNode({
-    isHighlight,
+    attributes,
+    nodeHeights,
+    selectedMapDimensions,
     highlightedNodesData,
-    recolorGroups,
     coordinates,
     currentQuant,
-    selectedYears,
-    selectedContextId
+    selectedResizeBy
   }) {
     this.tooltip.hide();
     if (highlightedNodesData === undefined || !highlightedNodesData.length) {
@@ -65,16 +90,14 @@ export default class {
     // if we have coordinates, request came from hover on map, so we have a tooltip and don't need to show pill
     // else show pill for sankey node
     if (coordinates !== undefined) {
-      this._showTooltip(highlightedNodesData, coordinates, currentQuant);
-    } else {
-      this.el.classList.remove('is-hidden');
-      this._update({
-        isSelect: !isHighlight,
+      this._showTooltip({
+        nodeHeights,
         nodesData: highlightedNodesData,
-        recolorGroups,
+        coordinates,
         currentQuant,
-        selectedYears,
-        selectedContextId
+        attributes,
+        selectedResizeBy,
+        selectedMapDimensions
       });
     }
   }
@@ -82,6 +105,11 @@ export default class {
   _update({
     isSelect,
     nodesData,
+    columns,
+    attributes,
+    nodeHeights,
+    selectedResizeBy,
+    selectedMapDimensions,
     recolorGroups = null,
     currentQuant,
     selectedYears,
@@ -111,30 +139,41 @@ export default class {
       contextId: selectedContextId,
       year: selectedYears ? selectedYears[0] : null,
       nodes: nodesData.map(node => {
+        const nodeHeight = nodeHeights && nodeHeights[node.id];
+        const column = columns[node.columnId];
         let renderedQuant;
-        if (node.quant !== undefined) {
+        if (nodeHeight) {
           renderedQuant = {
-            valueNice: formatValue(node.quant, currentQuant.name),
+            value: formatValue(nodeHeight.quant, currentQuant.name),
             unit: currentQuant.unit,
             name: currentQuant.name
           };
         }
 
         let renderedMetas;
-        if (node.selectedMetas !== undefined) {
-          renderedMetas = node.selectedMetas.map(originalMeta => ({
-            valueNice: formatValue(originalMeta.rawValue, originalMeta.name),
-            name: originalMeta.name,
-            unit: originalMeta.unit
-          }));
+        if (attributes && selectedMapDimensions && selectedMapDimensions.length > 0) {
+          renderedMetas = selectedMapDimensions
+            .map(dimension => {
+              const meta = getNodeMeta(dimension, node, attributes, selectedResizeBy);
+              if (!meta) {
+                return null;
+              }
+              return {
+                name: dimension.name,
+                unit: dimension.unit,
+                value: formatValue(meta.value, dimension.name)
+              };
+            })
+            .filter(Boolean);
         }
 
         return Object.assign({}, node, {
+          columnName: column.name,
           hasLink:
             node.isUnknown !== true &&
             node.isDomesticConsumption !== true &&
-            node.profileType !== undefined &&
-            node.profileType !== null,
+            column.profileType !== undefined &&
+            column.profileType !== null,
           selectedMetas: renderedMetas,
           renderedQuant
         });
@@ -145,9 +184,19 @@ export default class {
 
     this.container.innerHTML = NodeTitleTemplate(templateData);
 
+    this.nodeTitleLinks = Array.prototype.slice.call(
+      document.querySelectorAll('.js-node-title.-link'),
+      0
+    );
+
     this.nodeTitleLinks.forEach(nodeTitle => {
       nodeTitle.addEventListener('click', this._onNodeTitleClickBound);
     });
+
+    this.nodeTitleCloseButtons = Array.prototype.slice.call(
+      document.querySelectorAll('.js-node-close'),
+      0
+    );
 
     this.nodeTitleCloseButtons.forEach(closeButton => {
       closeButton.addEventListener('click', this._onNodeTitleCloseClickBound);
@@ -167,35 +216,47 @@ export default class {
     this.callbacks.onCloseNodeClicked(parseInt(e.currentTarget.dataset.nodeId, 10));
   }
 
-  _showTooltip(nodesData, coordinates, currentQuant) {
+  _showTooltip({
+    nodeHeights,
+    nodesData,
+    coordinates,
+    currentQuant,
+    selectedMapDimensions,
+    attributes,
+    selectedResizeBy
+  }) {
     const node = nodesData[0];
+    const nodeHeight = nodeHeights && nodeHeights[node.id];
 
-    if (node.selectedMetas === undefined || !coordinates) {
+    if (!coordinates) {
       return;
     }
 
     let values = [];
-
-    // map metas might not be loaded yet
-    if (node.selectedMetas !== undefined) {
-      values = node.selectedMetas
-        .map(meta => ({
-          title: meta.name,
-          unit: meta.unit,
-          value: formatValue(meta.rawValue, meta.name)
-        }))
-        .concat(values);
+    if (attributes && selectedMapDimensions && selectedMapDimensions.length > 0) {
+      values = selectedMapDimensions
+        .map(dimension => {
+          const meta = getNodeMeta(dimension, node, attributes, selectedResizeBy);
+          if (!meta) {
+            return null;
+          }
+          return {
+            title: dimension.name,
+            unit: dimension.unit,
+            value: formatValue(meta.value, dimension.name)
+          };
+        })
+        .filter(Boolean);
     }
 
     // if node is visible in sankey, quant is available
-    if (node.quant !== undefined) {
+    if (nodeHeight) {
       values.push({
         title: currentQuant.name,
         unit: currentQuant.unit,
-        value: formatValue(node.quant, currentQuant.name)
+        value: formatValue(nodeHeight.quant, currentQuant.name)
       });
     }
-
     this.tooltip.show(coordinates.pageX, coordinates.pageY, node.name, values);
   }
 }
