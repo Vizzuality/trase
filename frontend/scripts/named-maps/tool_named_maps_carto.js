@@ -24,6 +24,22 @@ module.exports = {
     brazil_defor_alerts: {
       uid: 'brazil_defor_alerts__production',
       layergroupid: 'p2cs-sei@c4807a94@9495c323e40ff63e0c59e0fc6ffbebcd:1538401614852'
+    },
+    paraguay_ecoregions_2018_11_14: {
+      uid: 'paraguay_ecoregions_2018_11_14__production',
+      layergroupid: 'p2cs-sei@8bc16e3e@920a70ce8cd9698d474541a13571868e:1543380503816'
+    },
+    paraguay_protected_areas_2018_11_14: {
+      uid: 'paraguay_protected_areas_2018_11_14__production',
+      layergroupid: 'p2cs-sei@7fb7d231@e3a7e457c532b2340f2fa76d05c84160:1542212474275'
+    },
+    paraguay_indigenous_areas_2018_11_14: {
+      uid: 'paraguay_indigenous_areas_2018_11_14__production',
+      layergroupid: 'p2cs-sei@93c53b34@286bbb73f3bcdfa206205acef80ec835:1542212565695'
+    },
+    py_deforestation_2013_2017_20190131: {
+      uid: 'py_deforestation_2013_2017_20190131__production',
+      layergroupid: 'p2cs-sei@9d6ad933@07588ca1af7caf72f3f838cdac1cac8f:1548926222884'
     }
   },
   development: {
