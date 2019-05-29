@@ -337,7 +337,7 @@
 					 <td><p>Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).</p></td>
 					</tr>
 					<tr>
-					 <td>dashboard_template_commodities</td>
+					 <td>chart_inds</td>
 					 <td>Table</td>
 					 <td>updated_at</td>
 					 <td>timestamp</td>
@@ -359,7 +359,7 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>dashboard_template_commodities</td>
+					 <td>chart_inds</td>
 					 <td>Table</td>
 					 <td>created_at</td>
 					 <td>timestamp</td>
@@ -1030,12 +1030,12 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>chart_inds</td>
+					 <td>dashboard_template_commodities</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>ind_id</td>
+					 <td>commodity_id</td>
 					 <td>int4</td>
 					 <td>10</td>
-					 <td title=''></td>
+					 <td title='nullable'>√</td>
 					 <td title=''></td>
 					 <td>null</td>
 					 <td></td>
@@ -2394,12 +2394,12 @@
 					 <td><p>Style of display, only used for trajectory deforestation plot in place profiles; e.g. area-pink, area-black, line-dashed-black</p></td>
 					</tr>
 					<tr>
-					 <td>dashboard_template_commodities</td>
+					 <td>chart_inds</td>
 					 <td>Table</td>
-					 <td>dashboard_template_id</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>chart_attribute_id</td>
 					 <td>int4</td>
 					 <td>10</td>
-					 <td title='nullable'>√</td>
+					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
 					 <td></td>
@@ -2658,12 +2658,12 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>dashboard_template_commodities</td>
+					 <td>chart_inds</td>
 					 <td>Table</td>
-					 <td>commodity_id</td>
+					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>ind_id</td>
 					 <td>int4</td>
 					 <td>10</td>
-					 <td title='nullable'>√</td>
+					 <td title=''></td>
 					 <td title=''></td>
 					 <td>null</td>
 					 <td></td>
@@ -3329,7 +3329,7 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>chart_inds</td>
+					 <td>dashboard_template_commodities</td>
 					 <td>Table</td>
 					 <td>updated_at</td>
 					 <td>timestamp</td>
@@ -4066,12 +4066,12 @@
 					 <td><p>When set, node was not possible to identify</p></td>
 					</tr>
 					<tr>
-					 <td>chart_inds</td>
+					 <td>dashboard_template_commodities</td>
 					 <td>Table</td>
-					 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>chart_attribute_id</td>
+					 <td>dashboard_template_id</td>
 					 <td>int4</td>
 					 <td>10</td>
-					 <td title=''></td>
+					 <td title='nullable'>√</td>
 					 <td title=''></td>
 					 <td>null</td>
 					 <td></td>
@@ -4341,14 +4341,14 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>dashboard_template_commodities</td>
+					 <td>chart_inds</td>
 					 <td>Table</td>
 					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>bigserial</td>
-					 <td>19</td>
+					 <td>serial</td>
+					 <td>10</td>
 					 <td title=''></td>
 					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;dashboard_template_commodities_id_seq&#39;::regclass)</td>
+					 <td>nextval(&#39;chart_inds_id_seq&#39;::regclass)</td>
 					 <td></td>
 					</tr>
 					<tr>
@@ -4737,14 +4737,14 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>chart_inds</td>
+					 <td>dashboard_template_commodities</td>
 					 <td>Table</td>
 					 <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i>id</td>
-					 <td>serial</td>
-					 <td>10</td>
+					 <td>bigserial</td>
+					 <td>19</td>
 					 <td title=''></td>
 					 <td title='Automatically updated by the database'>√</td>
-					 <td>nextval(&#39;chart_inds_id_seq&#39;::regclass)</td>
+					 <td>nextval(&#39;dashboard_template_commodities_id_seq&#39;::regclass)</td>
 					 <td></td>
 					</tr>
 					<tr>
@@ -4891,7 +4891,7 @@
 					 <td></td>
 					</tr>
 					<tr>
-					 <td>chart_inds</td>
+					 <td>dashboard_template_commodities</td>
 					 <td>Table</td>
 					 <td>created_at</td>
 					 <td>timestamp</td>
