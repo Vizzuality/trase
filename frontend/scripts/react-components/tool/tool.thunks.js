@@ -1,10 +1,10 @@
 import { loadDisclaimer, resize } from 'actions/app.actions';
-import { GET_COLUMNS, loadMapVectorData, loadNodes, loadLinks } from 'scripts/actions/tool.actions';
-import {
-  GET_COLUMNS_URL,
-  GET_ALL_NODES_URL,
-  getURLFromParams
-} from 'scripts/utils/getURLFromParams';
+// import {
+//   loadMapVectorData,
+//   loadNodes,
+//   loadLinks
+// } from 'react-components/tool/tool.actions';
+import { getToolNodesAndColumns } from 'react-components/tool-links/tool-links.actions';
 
 export const loadDisclaimerTool = dispatch => dispatch(loadDisclaimer());
 
@@ -17,22 +17,11 @@ export const loadToolInitialData = (dispatch, getState) => {
     return;
   }
 
-  const params = {
-    context_id: state.app.selectedContext.id
-  };
-  const allNodesURL = getURLFromParams(GET_ALL_NODES_URL, params);
-  const columnsURL = getURLFromParams(GET_COLUMNS_URL, params);
-  const promises = [allNodesURL, columnsURL].map(url => fetch(url).then(resp => resp.json()));
-  dispatch(loadNodes());
+  dispatch(getToolNodesAndColumns());
+  // dispatch(loadNodes());
 
-  Promise.all(promises).then(payload => {
-    // TODO do not wait for end of all promises/use another .all call
-    dispatch({
-      type: GET_COLUMNS,
-      payload
-    });
-
-    dispatch(loadLinks());
-    dispatch(loadMapVectorData());
-  });
+  // Promise.all(promises).then(([nodesResponse, columnsResponse]) => {
+  //   dispatch(loadLinks());
+  //   dispatch(loadMapVectorData());
+  // });
 };

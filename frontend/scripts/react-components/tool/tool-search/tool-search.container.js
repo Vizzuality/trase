@@ -1,4 +1,4 @@
-import { selectExpandedNode, setSankeySearchVisibility } from 'actions/tool.actions';
+import { selectExpandedNode, setSankeySearchVisibility } from 'react-components/tool/tool.actions';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.component';
 import { connect } from 'react-redux';
 import { getToolSearchNodes } from 'react-components/tool/tool-search/tool-search.selectors';

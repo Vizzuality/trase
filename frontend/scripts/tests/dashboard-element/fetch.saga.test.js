@@ -1,6 +1,6 @@
 import { initialState } from 'react-components/dashboard-element/dashboard-element.reducer';
 import { cancelled } from 'redux-saga/effects';
-import { fetchWithCancel } from 'react-components/dashboard-element/fetch-with-cancel';
+import { fetchWithCancel } from 'utils/saga-utils';
 
 import {
   getDashboardPanelData,

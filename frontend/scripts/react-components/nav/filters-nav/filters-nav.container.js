@@ -10,7 +10,7 @@ import {
   setLogisticsMapActiveModal,
   selectLogisticsMapInspectionLevel
 } from 'react-components/logistics-map/logistics-map.actions';
-import { selectBiomeFilter, selectResizeBy, selectView } from 'actions/tool.actions';
+import { selectBiomeFilter, selectResizeBy, selectView } from 'react-components/tool/tool.actions';
 
 function mapStateToProps(state) {
   return {

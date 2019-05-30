@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 import ToolContent from 'react-components/tool/tool-content/tool-content.component';
-import { resetSankey } from 'actions/tool.actions';
+import { resetSankey } from 'react-components/tool/tool.actions';
 import { getMergedLinks } from 'react-components/tool/tool.selectors';
 
 const mapStateToProps = state => ({

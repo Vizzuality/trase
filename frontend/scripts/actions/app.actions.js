@@ -10,7 +10,7 @@ import {
   SELECT_YEARS,
   loadNodes,
   loadLinks
-} from 'scripts/actions/tool.actions';
+} from 'react-components/tool/tool.actions';
 import { getContextById } from 'scripts/reducers/helpers/contextHelper';
 import getPageTitle from 'scripts/router/page-title';
 import { redirect } from 'redux-first-router';

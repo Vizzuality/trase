@@ -11,7 +11,7 @@ import {
   TOGGLE_MAP,
   TOGGLE_MAP_DIMENSION,
   SET_MAP_DIMENSIONS_DATA
-} from 'actions/tool.actions';
+} from 'react-components/tool/tool.actions';
 import { SET_CONTEXT } from 'scripts/actions/app.actions';
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
