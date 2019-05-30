@@ -5193,6 +5193,42 @@ ALTER SEQUENCE public.resize_by_quants_id_seq OWNED BY public.resize_by_quants.i
 
 
 --
+-- Name: sankey_nodes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.sankey_nodes_mv AS
+ SELECT nodes.id,
+    nodes.main_id,
+    nodes.name,
+    nodes.geo_id,
+        CASE
+            WHEN context_node_type_properties.is_geo_column THEN "substring"(nodes.geo_id, 1, 2)
+            ELSE NULL::text
+        END AS source_country_iso2,
+    NULLIF(node_properties.is_domestic_consumption, false) AS is_domestic_consumption,
+    NULLIF(nodes.is_unknown, false) AS is_unknown,
+    nodes.node_type_id,
+    node_types.name AS node_type,
+    profiles.name AS profile_type,
+        CASE
+            WHEN ((nodes_with_flows.node_id IS NOT NULL) OR (nodes.name = 'OTHER'::text)) THEN true
+            ELSE false
+        END AS has_flows,
+    (upper(btrim(nodes.name)) = 'OTHER'::text) AS is_aggregated,
+    context_node_types.context_id
+   FROM ((((((public.nodes
+     JOIN public.node_properties ON ((node_properties.node_id = nodes.id)))
+     JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
+     JOIN public.context_node_types ON ((context_node_types.node_type_id = node_types.id)))
+     JOIN public.context_node_type_properties ON ((context_node_type_properties.context_node_type_id = context_node_types.id)))
+     LEFT JOIN public.profiles ON ((profiles.context_node_type_id = context_node_types.id)))
+     LEFT JOIN ( SELECT DISTINCT unnest(flows.path) AS node_id,
+            flows.context_id
+           FROM public.flows) nodes_with_flows ON (((nodes_with_flows.node_id = nodes.id) AND (nodes_with_flows.context_id = context_node_types.context_id))))
+  WITH NO DATA;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -7695,6 +7731,20 @@ CREATE INDEX resize_by_quants_resize_by_attribute_id_idx ON public.resize_by_qua
 
 
 --
+-- Name: sankey_nodes_mv_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX sankey_nodes_mv_context_id_id_idx ON public.sankey_nodes_mv USING btree (context_id, id);
+
+
+--
+-- Name: sankey_nodes_mv_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX sankey_nodes_mv_node_type_id_idx ON public.sankey_nodes_mv USING btree (node_type_id);
+
+
+--
 -- Name: staff_members fk_rails_6ad8424ffc; Type: FK CONSTRAINT; Schema: content; Owner: -
 --
 
@@ -8414,6 +8464,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190513125050'),
 ('20190516111644'),
 ('20190520093639'),
-('20190528091308');
+('20190528091308'),
+('20190529153223');
 
 

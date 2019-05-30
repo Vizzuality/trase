@@ -15,23 +15,22 @@ module Api
         private
 
         def initialize_query
-          nodes_with_flows = Api::V3::Flow.
-            select('DISTINCT(UNNEST(path)) AS node_id').
-            where(context_id: @context.id)
-
-          Api::V3::Node.
-            select('
-                   nodes.id, nodes.main_id, nodes.name, geo_id, nodes.node_type_id AS column_id,
-                   NULLIF(node_properties.is_domestic_consumption, FALSE) AS is_domestic_consumption, NULLIF(nodes.is_unknown, FALSE) AS is_unknown,
-                   node_types.name AS type, profiles.name::TEXT AS profile_type,
-                   CASE WHEN nodes_with_flows.node_id IS NOT NULL OR nodes.name = \'OTHER\' THEN true ELSE false END AS has_flows
-                   ').
-            joins(:node_property).
-            joins(node_type: :context_node_types).
-            joins('LEFT JOIN profiles ON profiles.context_node_type_id = context_node_types.id').
-            joins("LEFT OUTER JOIN (#{nodes_with_flows.to_sql}) nodes_with_flows ON nodes_with_flows.node_id = nodes.id").
-            where('nodes_with_flows.node_id IS NOT NULL OR SUBSTRING(geo_id FROM 1 FOR 2) = ? OR nodes.name = \'OTHER\' ', @context.country.iso2).
-            where('context_node_types.context_id' => @context.id)
+          Api::V3::Readonly::SankeyNode.
+            select([
+              :id,
+              :main_id,
+              :name,
+              :geo_id,
+              :is_domestic_consumption,
+              :is_unknown,
+              :node_type_id,
+              :node_type,
+              :profile_type,
+              :has_flows,
+              :is_aggregated
+            ]).
+            where(context_id: @context.id).
+            where('has_flows OR source_country_iso2 = ?', @context.country.iso2)
         end
       end
     end
