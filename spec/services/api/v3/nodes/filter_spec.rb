@@ -30,4 +30,20 @@ RSpec.describe Api::V3::Nodes::Filter do
       )
     end
   end
+
+  context 'when filtered by nodes' do
+    let(:result) {
+      Api::V3::Nodes::Filter.new(
+        api_v3_context, {nodes_ids: [api_v3_municipality_node.id]}
+      ).call
+    }
+
+    it 'returns selected municipality only' do
+      expect(result.pluck(:id)).to match_array(
+        Api::V3::Node.where(
+          id: api_v3_municipality_node.id
+        ).pluck(:id)
+      )
+    end
+  end
 end
