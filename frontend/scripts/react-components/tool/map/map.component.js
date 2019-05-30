@@ -365,7 +365,7 @@ export default class {
     return topoLayer;
   }
 
-  _createPointVolumeShadowLayer(geoJSON, visibleNodes) {
+  _createPointVolumeShadowLayer(geoJSON, visibleNodes, nodeHeights) {
     const style = {
       smoothFactor: 0.9,
       stroke: false,
@@ -377,15 +377,19 @@ export default class {
       pane: MAP_PANES.vectorBelow,
       style,
       pointToLayer: (feature, latlng) => {
+        if (!visibleNodes) {
+          return null;
+        }
         const node = visibleNodes.find(n => n.geoId === feature.properties.geoid);
         // node is not visible bail
         if (!node) return null;
 
-        feature.properties.nodeHeight = node.height;
+        const nodeHeight = nodeHeights[node.id];
+        feature.properties.nodeHeight = nodeHeight.height;
 
         return L.circleMarker(latlng, {
           pane: MAP_PANES.vectorBelow,
-          radius: this._calculatePointVolumeShadowRadius(node.height)
+          radius: this._calculatePointVolumeShadowRadius(nodeHeight.height)
         });
       }
     });
@@ -598,7 +602,7 @@ export default class {
     }, 3000);
   }
 
-  updatePointShadowLayer({ mapVectorData, visibleNodes }) {
+  updatePointShadowLayer({ mapVectorData, visibleNodes, nodeHeights }) {
     if (!mapVectorData) return;
 
     if (this.pointVolumeShadowLayer) {
@@ -611,7 +615,8 @@ export default class {
 
     this.pointVolumeShadowLayer = this._createPointVolumeShadowLayer(
       polygonTypeLayer.geoJSON,
-      visibleNodes
+      visibleNodes,
+      nodeHeights
     );
     this.map.addLayer(this.pointVolumeShadowLayer);
   }

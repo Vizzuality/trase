@@ -30,6 +30,7 @@ const mapStateToProps = state => {
     selectedNodesGeoIds: getSelectedNodesGeoIds(state),
     recolorByNodeIds: state.toolLinks.recolorByNodeIds,
     linkedGeoIds: state.toolLayers.linkedGeoIds,
+    nodeHeights: state.toolLinks.data.nodeHeights,
     highlightedGeoIds: getHighlightedNodesGeoIds(state)[0],
     defaultMapView: state.app.selectedContext ? state.app.selectedContext.map : null,
     selectedNodesIdsLength: state.toolLinks.selectedNodesIds.length,
@@ -102,7 +103,7 @@ const methodProps = [
   {
     name: 'updatePointShadowLayer',
     compared: ['visibleNodes', 'mapVectorData'],
-    returned: ['visibleNodes', 'mapVectorData']
+    returned: ['visibleNodes', 'mapVectorData', 'nodeHeights']
   }
 ];
 
