@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
-import { selectNode, navigateToProfile, resetState } from 'actions/tool.actions';
+import { selectNode, navigateToProfile, resetState } from 'react-components/tool/tool.actions';
 import NodesTitles from 'react-components/tool/nodes-titles/nodes-titles.component';
 import {
   getSelectedResizeBy,

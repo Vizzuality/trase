@@ -9,7 +9,7 @@ import {
   SELECT_YEARS,
   TOGGLE_MAP,
   UPDATE_NODE_SELECTION
-} from 'actions/tool.actions';
+} from 'react-components/tool/tool.actions';
 
 export default [
   {

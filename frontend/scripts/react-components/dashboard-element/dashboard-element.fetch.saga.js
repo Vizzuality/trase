@@ -1,6 +1,6 @@
 import deburr from 'lodash/deburr';
 import pickBy from 'lodash/pickBy';
-import { put, call, cancelled, delay, select, fork } from 'redux-saga/effects';
+import { put, call, cancelled, select, fork } from 'redux-saga/effects';
 import isEmpty from 'lodash/isEmpty';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
@@ -19,16 +19,7 @@ import {
   GET_DASHBOARD_SEARCH_RESULTS_URL,
   GET_DASHBOARD_PARAMETRISED_CHARTS_URL
 } from 'utils/getURLFromParams';
-import { fetchWithCancel } from './fetch-with-cancel';
-
-export function* setLoadingSpinner(timeout, action) {
-  try {
-    yield delay(timeout);
-    yield put(action);
-  } catch (e) {
-    console.error(e);
-  }
-}
+import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
 
 export function* getDashboardPanelData(dashboardElement, optionsType, options) {
   const { page, activeTab } = dashboardElement[`${dashboardElement.activePanelId}Panel`];

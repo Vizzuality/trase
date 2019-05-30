@@ -17,7 +17,7 @@ import {
   APP__TRANSIFEX_LANGUAGES_LOADED
 } from 'actions/app.actions';
 import createReducer from 'utils/createReducer';
-import { SELECT_YEARS } from 'actions/tool.actions';
+import { SELECT_YEARS } from 'react-components/tool/tool.actions';
 
 const initialState = {
   languages: [],

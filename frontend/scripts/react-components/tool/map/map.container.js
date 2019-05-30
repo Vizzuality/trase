@@ -1,7 +1,11 @@
 /* eslint-disable no-shadow */
 // see sankey.container for details on how to use those containers
 import { toggleMap, toggleMapLayerMenu } from 'actions/app.actions';
-import { selectNodeFromGeoId, highlightNodeFromGeoId, saveMapView } from 'actions/tool.actions';
+import {
+  selectNodeFromGeoId,
+  highlightNodeFromGeoId,
+  saveMapView
+} from 'react-components/tool/tool.actions';
 import {
   getVisibleNodes,
   getSelectedBiomeFilter,
@@ -26,6 +30,7 @@ const mapStateToProps = state => {
     selectedNodesGeoIds: getSelectedNodesGeoIds(state),
     recolorByNodeIds: state.toolLinks.recolorByNodeIds,
     linkedGeoIds: state.toolLayers.linkedGeoIds,
+    nodeHeights: state.toolLinks.data.nodeHeights,
     highlightedGeoIds: getHighlightedNodesGeoIds(state)[0],
     defaultMapView: state.app.selectedContext ? state.app.selectedContext.map : null,
     selectedNodesIdsLength: state.toolLinks.selectedNodesIds.length,
@@ -98,7 +103,7 @@ const methodProps = [
   {
     name: 'updatePointShadowLayer',
     compared: ['visibleNodes', 'mapVectorData'],
-    returned: ['visibleNodes', 'mapVectorData']
+    returned: ['visibleNodes', 'mapVectorData', 'nodeHeights']
   }
 ];
 

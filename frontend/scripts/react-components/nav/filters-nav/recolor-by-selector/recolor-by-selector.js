@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectRecolorBy } from 'actions/tool.actions';
+import { selectRecolorBy } from 'react-components/tool/tool.actions';
 import { getToolRecolorGroups } from 'react-components/tool/tool.selectors';
 import RecolorBySelector from './recolor-by.component';
 import { getSelectedRecolorByValue, getRecolorByOptions } from './recolor-by-selector.selectors';

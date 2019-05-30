@@ -8,7 +8,7 @@ import {
   collapseNodeSelection,
   expandNodeSelection,
   resetState
-} from 'actions/tool.actions';
+} from 'react-components/tool/tool.actions';
 import {
   getIsVisible,
   getIsReExpand,

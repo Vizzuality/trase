@@ -9,8 +9,6 @@ import {
   YEARS_DISABLED_UNAVAILABLE
 } from 'constants';
 import {
-  GET_ALL_NODES_URL,
-  GET_COLUMNS_URL,
   GET_FLOWS_URL,
   GET_LINKED_GEO_IDS_URL,
   GET_MAP_BASE_DATA_URL,
@@ -36,9 +34,9 @@ import {
 } from 'react-components/tool/tool.selectors';
 import pSettle from 'p-settle';
 
+import { TOOL_LINKS__SET_FLOWS_LOADING } from 'react-components/tool-links/tool-links.actions';
+
 export const RESET_SELECTION = 'RESET_SELECTION';
-export const SET_FLOWS_LOADING_STATE = 'SET_FLOWS_LOADING_STATE';
-export const GET_COLUMNS = 'GET_COLUMNS';
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
 export const GET_LINKS = 'GET_LINKS';
 export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
@@ -260,35 +258,6 @@ export function selectColumn(columnIndex, columnId, reloadLinks = true) {
   };
 }
 
-export function loadToolDataForCurrentContext() {
-  return (dispatch, getState) => {
-    const state = getState();
-
-    if (!state.app.selectedContext) {
-      return;
-    }
-
-    const params = {
-      context_id: state.app.selectedContext.id
-    };
-    const allNodesURL = getURLFromParams(GET_ALL_NODES_URL, params);
-    const columnsURL = getURLFromParams(GET_COLUMNS_URL, params);
-    const promises = [allNodesURL, columnsURL].map(url => fetch(url).then(resp => resp.json()));
-    dispatch(loadNodes());
-
-    Promise.all(promises).then(payload => {
-      // TODO do not wait for end of all promises/use another .all call
-      dispatch({
-        type: GET_COLUMNS,
-        payload
-      });
-
-      dispatch(loadLinks());
-      dispatch(loadMapVectorData());
-    });
-  };
-}
-
 export function loadNodes() {
   return (dispatch, getState) => {
     const params = {
@@ -358,7 +327,7 @@ export function loadNodes() {
 
 export function loadLinks() {
   return (dispatch, getState) => {
-    dispatch({ type: SET_FLOWS_LOADING_STATE });
+    dispatch({ type: TOOL_LINKS__SET_FLOWS_LOADING, payload: { loading: true } });
     const state = getState();
     const selectedResizeBy = getSelectedResizeBy(state);
     const params = {

@@ -1,4 +1,5 @@
 import axios, { CancelToken } from 'axios';
+import { put, delay } from 'redux-saga/effects';
 
 export function fetchWithCancel(url) {
   const source = CancelToken.source();
@@ -9,4 +10,13 @@ export function fetchWithCancel(url) {
     });
 
   return { fetchPromise, source };
+}
+
+export function* setLoadingSpinner(timeout, action) {
+  try {
+    yield delay(timeout);
+    yield put(action);
+  } catch (e) {
+    console.error(e);
+  }
 }

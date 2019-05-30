@@ -24,7 +24,7 @@ import {
   DASHBOARD_ELEMENT__CLEAR_PANELS
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import { getURLFromParams } from 'utils/getURLFromParams';
-import { fetchWithCancel } from 'react-components/dashboard-element/fetch-with-cancel';
+import { fetchWithCancel } from 'utils/saga-utils';
 import { recordSaga } from '../utils/record-saga';
 
 jest.mock('utils/getURLFromParams', () => ({

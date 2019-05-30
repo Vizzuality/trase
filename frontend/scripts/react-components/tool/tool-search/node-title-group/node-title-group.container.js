@@ -1,6 +1,6 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { selectNode } from 'actions/tool.actions';
+import { selectNode } from 'react-components/tool/tool.actions';
 import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group/node-title-group.component';
 import { getSelectedNodesData, getToolRecolorGroups } from 'react-components/tool/tool.selectors';
 

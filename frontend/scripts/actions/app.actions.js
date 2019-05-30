@@ -4,13 +4,7 @@ import {
   GET_NODES_WITH_SEARCH_URL,
   getURLFromParams
 } from 'utils/getURLFromParams';
-import {
-  TOGGLE_MAP,
-  loadToolDataForCurrentContext,
-  SELECT_YEARS,
-  loadNodes,
-  loadLinks
-} from 'scripts/actions/tool.actions';
+import { TOGGLE_MAP, SELECT_YEARS, loadNodes, loadLinks } from 'react-components/tool/tool.actions';
 import { getContextById } from 'scripts/reducers/helpers/contextHelper';
 import getPageTitle from 'scripts/router/page-title';
 import { redirect } from 'redux-first-router';
@@ -63,10 +57,6 @@ export function selectContextById(contextId) {
     });
 
     dispatch(setContextIsUserSelected(true));
-
-    if (getState().location.type === 'tool') {
-      dispatch(loadToolDataForCurrentContext());
-    }
 
     document.title = getPageTitle(getState());
   };

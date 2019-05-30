@@ -1,5 +1,4 @@
 import {
-  GET_COLUMNS,
   GET_LINKS,
   HIGHLIGHT_NODE,
   RESET_SELECTION,
@@ -10,13 +9,16 @@ import {
   SELECT_RESIZE_BY,
   SELECT_VIEW,
   SET_NODE_ATTRIBUTES,
-  SET_FLOWS_LOADING_STATE,
   SET_SANKEY_SEARCH_VISIBILITY,
   SHOW_LINKS_ERROR,
   UPDATE_NODE_SELECTION,
   EXPAND_NODE_SELECTION,
   COLLAPSE_NODE_SELECTION
-} from 'actions/tool.actions';
+} from 'react-components/tool/tool.actions';
+import {
+  TOOL_LINKS__SET_FLOWS_LOADING,
+  TOOL_LINKS__SET_NODES_AND_COLUMNS
+} from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
 import groupBy from 'lodash/groupBy';
 import isEmpty from 'lodash/isEmpty';
@@ -38,7 +40,7 @@ export const toolLinksInitialState = {
   forcedOverview: false,
   expandedNodesIds: [],
   highlightedNodesIds: [],
-  flowsLoading: true,
+  flowsLoading: true, // TODO: remove this, should not be true by default.
   selectedBiomeFilter: null,
   selectedColumnsIds: [],
   selectedNodesIds: [],
@@ -48,8 +50,11 @@ export const toolLinksInitialState = {
 };
 
 const toolLinksReducer = {
-  [SET_FLOWS_LOADING_STATE](state) {
-    return { ...state, flowsLoading: true };
+  [TOOL_LINKS__SET_FLOWS_LOADING](state, action) {
+    const { loading } = action.payload;
+    return immer(state, draft => {
+      draft.flowsLoading = loading;
+    });
   },
   [RESET_SELECTION](state) {
     return immer(state, draft => {
@@ -77,10 +82,10 @@ const toolLinksReducer = {
       });
     });
   },
-  [GET_COLUMNS](state, action) {
+
+  [TOOL_LINKS__SET_NODES_AND_COLUMNS](state, action) {
     return immer(state, draft => {
-      const nodes = action.payload[0].data;
-      const columns = action.payload[1].data;
+      const { nodes, columns } = action.payload;
 
       // context-dependant columns
       const columnsByGroupObj = groupBy(columns, 'group');

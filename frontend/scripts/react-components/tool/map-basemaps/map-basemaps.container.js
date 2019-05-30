@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
-import { selectMapBasemap } from 'actions/tool.actions';
+import { selectMapBasemap } from 'react-components/tool/tool.actions';
 import { BASEMAPS } from 'constants';
 import MapBasemaps from 'react-components/tool/map-basemaps/map-basemaps.component';
 import getBasemap, { shouldUseDefaultBasemap } from 'utils/getBasemap';
