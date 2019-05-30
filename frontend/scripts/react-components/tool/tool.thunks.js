@@ -13,7 +13,7 @@ export const resizeSankeyTool = dispatch => dispatch(resize());
 export const loadToolInitialData = (dispatch, getState) => {
   const state = getState();
 
-  if (!state.app.selectedContext || state.toolLinks.data.links.length > 0) {
+  if (!state.app.selectedContext || state.toolLinks.data.links) {
     return;
   }
 
@@ -23,6 +23,7 @@ export const loadToolInitialData = (dispatch, getState) => {
   const allNodesURL = getURLFromParams(GET_ALL_NODES_URL, params);
   const columnsURL = getURLFromParams(GET_COLUMNS_URL, params);
   const promises = [allNodesURL, columnsURL].map(url => fetch(url).then(resp => resp.json()));
+  dispatch(loadNodes());
 
   Promise.all(promises).then(payload => {
     // TODO do not wait for end of all promises/use another .all call
@@ -32,7 +33,6 @@ export const loadToolInitialData = (dispatch, getState) => {
     });
 
     dispatch(loadLinks());
-    dispatch(loadNodes());
     dispatch(loadMapVectorData());
   });
 };

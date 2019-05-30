@@ -30,6 +30,7 @@ import isEmpty from 'lodash/isEmpty';
 import xor from 'lodash/xor';
 import { getCurrentContext } from 'reducers/helpers/contextHelper';
 import {
+  getSelectedMapDimensionsUids,
   getSelectedNodesColumnsPos,
   getSelectedResizeBy
 } from 'react-components/tool/tool.selectors';
@@ -53,7 +54,6 @@ export const SELECT_VIEW = 'SELECT_VIEW';
 export const SELECT_COLUMN = 'SELECT_COLUMN';
 export const GET_MAP_VECTOR_DATA = 'GET_MAP_VECTOR_DATA';
 export const GET_CONTEXT_LAYERS = 'GET_CONTEXT_LAYERS';
-export const SET_MAP_DIMENSIONS_SELECTION = 'SET_MAP_DIMENSIONS_SELECTION';
 export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
 export const SELECT_CONTEXTUAL_LAYERS = 'SELECT_CONTEXTUAL_LAYERS';
 export const SELECT_BASEMAP = 'SELECT_BASEMAP';
@@ -130,23 +130,6 @@ const _setBiomeFilterAction = (biomeFilterName, state) => {
     payload: selectedBiomeFilter
   };
 };
-
-function _getAvailableMapDimensions(dimensions, selectedMapDimensions) {
-  const allAvailableMapDimensionsUids = Object.keys(dimensions);
-  const selectedMapDimensionsSet = compact(selectedMapDimensions);
-  // are all currently selected map dimensions available ?
-  if (
-    selectedMapDimensionsSet.length > 0 &&
-    difference(selectedMapDimensionsSet, allAvailableMapDimensionsUids).length === 0
-  ) {
-    return [...selectedMapDimensions];
-  }
-
-  // use default map dimensions
-  const defaultMapDimensions = Object.values(dimensions).filter(dimension => dimension.isDefault);
-  const uids = defaultMapDimensions.map(selectedDimension => selectedDimension.uid);
-  return [uids[0] || null, uids[1] || null];
-}
 
 export function selectView(detailedView, reloadLinks) {
   return _reloadLinks('detailedView', detailedView, SELECT_VIEW, reloadLinks);
@@ -266,21 +249,6 @@ export function selectColumn(columnIndex, columnId, reloadLinks = true) {
       state.toolLinks.data.columns
     );
     dispatch(updateNodes(selectedNodesIds));
-    const selectedColumn = state.toolLinks.data.columns && state.toolLinks.data.columns[columnId];
-    if (
-      selectedColumn &&
-      selectedColumn.group === 0 &&
-      selectedColumn.isGeo &&
-      selectedColumn.isChoroplethDisabled
-    ) {
-      dispatch(setMapDimensions([null, null]));
-    } else if (selectedColumn.isGeo && selectedColumn.isChoroplethDisabled === false) {
-      const availableMapDimensions = _getAvailableMapDimensions(
-        state.toolLayers.data.mapDimensions,
-        state.toolLayers.selectedMapDimensions
-      );
-      dispatch(setMapDimensions(availableMapDimensions));
-    }
 
     dispatch({
       type: FILTER_LINKS_BY_NODES
@@ -306,6 +274,7 @@ export function loadToolDataForCurrentContext() {
     const allNodesURL = getURLFromParams(GET_ALL_NODES_URL, params);
     const columnsURL = getURLFromParams(GET_COLUMNS_URL, params);
     const promises = [allNodesURL, columnsURL].map(url => fetch(url).then(resp => resp.json()));
+    dispatch(loadNodes());
 
     Promise.all(promises).then(payload => {
       // TODO do not wait for end of all promises/use another .all call
@@ -315,7 +284,6 @@ export function loadToolDataForCurrentContext() {
       });
 
       dispatch(loadLinks());
-      dispatch(loadNodes());
       dispatch(loadMapVectorData());
     });
   };
@@ -330,7 +298,6 @@ export function loadNodes() {
     };
 
     const getMapBaseDataURL = getURLFromParams(GET_MAP_BASE_DATA_URL, params);
-    const selectedMapDimensions = getState().toolLayers.selectedMapDimensions;
 
     fetch(getMapBaseDataURL)
       .then(response => {
@@ -384,23 +351,7 @@ export function loadNodes() {
         if (selectedBiomeFilter && selectedBiomeFilter.nodeId) {
           dispatch(_setBiomeFilterAction(selectedBiomeFilter.name, getState()));
         }
-
-        const { columns } = getState().toolLinks.data;
-        const selectedGeoColumn =
-          columns &&
-          Object.values(columns).find(column =>
-            getState().toolLinks.selectedColumnsIds.some(id => id === column.id && column.isGeo)
-          );
-
-        if (selectedGeoColumn.isChoroplethDisabled === false) {
-          const availableMapDimensions = _getAvailableMapDimensions(
-            payload.mapDimensionsMetaJSON.dimensions,
-            selectedMapDimensions
-          );
-          dispatch(setMapDimensions(availableMapDimensions));
-        } else {
-          dispatch(setMapDimensions([null, null]));
-        }
+        loadMapChoropeth(getState, dispatch);
       });
   };
 }
@@ -551,6 +502,7 @@ export function loadMapVectorData() {
         type: GET_MAP_VECTOR_DATA,
         mapVectorData
       });
+      loadMapChoropeth(getState, dispatch);
     });
   };
 }
@@ -878,27 +830,13 @@ export function saveMapView(latlng, zoom) {
 
 export function toggleMapDimension(uid) {
   return (dispatch, getState) => {
-    const { selectedYears } = getState().app;
+    const state = getState();
+    const selectedMapDimensions = getSelectedMapDimensionsUids(state);
     dispatch({
       type: TOGGLE_MAP_DIMENSION,
       payload: {
         uid,
-        selectedYears
-      }
-    });
-
-    loadMapChoropeth(getState, dispatch);
-  };
-}
-
-export function setMapDimensions(uids) {
-  return (dispatch, getState) => {
-    const selectedYears = getState().app.selectedYears;
-    dispatch({
-      type: SET_MAP_DIMENSIONS_SELECTION,
-      payload: {
-        uids,
-        selectedYears
+        selectedMapDimensions
       }
     });
 
@@ -909,9 +847,9 @@ export function setMapDimensions(uids) {
 export function loadMapChoropeth(getState, dispatch) {
   const state = getState();
 
-  const uids = state.toolLayers.selectedMapDimensions;
+  const uids = getSelectedMapDimensionsUids(state);
 
-  if (compact(uids).length === 0) {
+  if (new Set(uids.filter(Boolean)).size === 0) {
     dispatch({
       type: SET_NODE_ATTRIBUTES,
       payload: { data: [] }

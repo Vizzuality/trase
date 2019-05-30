@@ -1,5 +1,4 @@
 import chroma from 'chroma-js';
-import compact from 'lodash/compact';
 import { CHOROPLETH_COLORS, CHOROPLETH_CLASS_ZERO } from 'constants';
 
 const _shortenTitle = title => {
@@ -15,7 +14,7 @@ const generateColorScale = (baseColorScale, length) => {
 };
 
 export default function(selectedMapDimensionsUids, nodes, attributes, columns, mapDimensions) {
-  const uids = compact(selectedMapDimensionsUids);
+  const uids = [...new Set(selectedMapDimensionsUids.filter(Boolean))];
   const selectedMapDimensions = uids.map(uid => mapDimensions[uid]);
 
   if (!selectedMapDimensions.length) {

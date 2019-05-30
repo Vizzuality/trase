@@ -1,10 +1,12 @@
 import { createSelector } from 'reselect';
 import getChoropleth from 'reducers/helpers/getChoropleth';
 import { getMapDimensionsWarnings as getMapDimensionsWarningsUtil } from 'scripts/reducers/helpers/getMapDimensionsWarnings';
-import { getHighlightedNodesData } from 'react-components/tool/tool.selectors';
+import {
+  getHighlightedNodesData,
+  getSelectedMapDimensionsUids
+} from 'react-components/tool/tool.selectors';
 
 const getMapDimensions = state => state.toolLayers.data.mapDimensions;
-const getSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolColumns = state => state.toolLinks.data.columns;
 const getMapContextualLayers = state => state.toolLayers.data.mapContextualLayers;
@@ -13,13 +15,19 @@ const getSelectedYears = state => state.app.selectedYears;
 const getToolNodeAttributes = state => state.toolLinks.data.nodeAttributes;
 
 export const getChoroplethOptions = createSelector(
-  [getMapDimensions, getToolNodes, getToolNodeAttributes, getToolColumns, getSelectedMapDimensions],
-  (mapDimensions, nodes, attributes, columns, selectedMapDimensions) =>
+  [
+    getSelectedMapDimensionsUids,
+    getToolNodes,
+    getToolNodeAttributes,
+    getToolColumns,
+    getMapDimensions
+  ],
+  (selectedMapDimensions, nodes, attributes, columns, mapDimensions) =>
     getChoropleth(selectedMapDimensions, nodes, attributes, columns, mapDimensions)
 );
 
 export const getMapDimensionsWarnings = createSelector(
-  [getMapDimensions, getSelectedMapDimensions, getSelectedYears],
+  [getMapDimensions, getSelectedMapDimensionsUids, getSelectedYears],
   (mapDimensions, selectedMapDimensions, selectedYears) => {
     if (selectedYears.length === 0) {
       return null;

@@ -8,7 +8,6 @@ import {
   SAVE_MAP_VIEW,
   SELECT_BASEMAP,
   SELECT_CONTEXTUAL_LAYERS,
-  SET_MAP_DIMENSIONS_SELECTION,
   TOGGLE_MAP,
   TOGGLE_MAP_DIMENSION,
   SET_MAP_DIMENSIONS_DATA
@@ -28,11 +27,11 @@ export const toolLayersInitialState = {
   highlightedNodeCoordinates: null, // TODO: this should be local state only used for map tooltip
   isMapVisible: false,
   linkedGeoIds: [],
-  mapLoading: true,
+  mapLoading: false,
   mapView: null,
   selectedMapBasemap: null,
   selectedMapContextualLayers: null,
-  selectedMapDimensions: [null, null],
+  selectedMapDimensions: null,
   selectedMapDimensionsWarnings: null
 };
 
@@ -97,21 +96,18 @@ const toolLayersReducer = {
       });
     });
   },
-  [SET_MAP_DIMENSIONS_SELECTION](state, action) {
-    return immer(state, draft => {
-      const { uids } = action.payload;
-      draft.selectedMapDimensions = uids;
-    });
-  },
   [TOGGLE_MAP_DIMENSION](state, action) {
     return immer(state, draft => {
+      if (!draft.selectedMapDimensions) {
+        draft.selectedMapDimensions = [...action.payload.selectedMapDimensions];
+      }
       const uidIndex = draft.selectedMapDimensions.indexOf(action.payload.uid);
 
       if (uidIndex === -1) {
         // dimension was not found: put it on a free slot
-        if (draft.selectedMapDimensions[0] === null) {
+        if (!draft.selectedMapDimensions[0]) {
           draft.selectedMapDimensions[0] = action.payload.uid;
-        } else if (draft.selectedMapDimensions[1] === null) {
+        } else if (!draft.selectedMapDimensions[1]) {
           draft.selectedMapDimensions[1] = action.payload.uid;
         }
         draft.mapLoading = true;

@@ -27,8 +27,8 @@ import getNodesMetaUid from 'reducers/helpers/getNodeMetaUid';
 export const toolLinksInitialState = {
   data: {
     columns: null,
-    nodes: {},
-    links: [],
+    nodes: null,
+    links: null,
     nodeHeights: null,
     nodeAttributes: null,
     nodesByColumnGeoId: null
@@ -71,7 +71,9 @@ const toolLinksReducer = {
         detailedView: false,
         highlightedNodesIds: [],
         selectedNodesIds: [],
-        expandedNodesIds: []
+        expandedNodesIds: [],
+        flowsLoading: true,
+        data: toolLinksInitialState.data
       });
     });
   },
