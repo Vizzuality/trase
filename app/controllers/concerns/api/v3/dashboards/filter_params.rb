@@ -3,6 +3,7 @@ module Api
     module Dashboards
       module FilterParams
         extend ActiveSupport::Concern
+        include Api::V3::ParamHelpers
 
         private
 
@@ -32,14 +33,6 @@ module Api
             destinations_ids: cs_string_to_int_array(params[:destinations_ids]),
             node_types_ids: cs_string_to_int_array(params[:node_types_ids])
           }
-        end
-
-        def string_to_int(str)
-          str&.to_i
-        end
-
-        def cs_string_to_int_array(str)
-          str&.split(',')&.map(&:to_i) || []
         end
       end
     end
