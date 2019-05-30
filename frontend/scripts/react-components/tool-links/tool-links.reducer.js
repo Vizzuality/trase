@@ -40,7 +40,7 @@ export const toolLinksInitialState = {
   forcedOverview: false,
   expandedNodesIds: [],
   highlightedNodesIds: [],
-  flowsLoading: false,
+  flowsLoading: true, // TODO: remove this, should not be true by default.
   selectedBiomeFilter: null,
   selectedColumnsIds: [],
   selectedNodesIds: [],
@@ -50,8 +50,11 @@ export const toolLinksInitialState = {
 };
 
 const toolLinksReducer = {
-  [TOOL_LINKS__SET_FLOWS_LOADING](state) {
-    return { ...state, flowsLoading: true };
+  [TOOL_LINKS__SET_FLOWS_LOADING](state, action) {
+    const { loading } = action.payload;
+    return immer(state, draft => {
+      draft.flowsLoading = loading;
+    });
   },
   [RESET_SELECTION](state) {
     return immer(state, draft => {

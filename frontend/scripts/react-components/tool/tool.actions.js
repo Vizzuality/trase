@@ -9,7 +9,6 @@ import {
   YEARS_DISABLED_UNAVAILABLE
 } from 'constants';
 import {
-  GET_COLUMNS_URL,
   GET_FLOWS_URL,
   GET_LINKED_GEO_IDS_URL,
   GET_MAP_BASE_DATA_URL,
@@ -259,35 +258,6 @@ export function selectColumn(columnIndex, columnId, reloadLinks = true) {
   };
 }
 
-export function loadToolDataForCurrentContext() {
-  return (dispatch, getState) => {
-    const state = getState();
-
-    if (!state.app.selectedContext) {
-      // return;
-    }
-
-    // const params = {
-    //   context_id: state.app.selectedContext.id
-    // };
-    //
-    // const columnsURL = getURLFromParams(GET_COLUMNS_URL, params);
-    // const promises = [allNodesURL, columnsURL].map(url => fetch(url).then(resp => resp.json()));
-    // dispatch(loadNodes());
-    //
-    // Promise.all(promises).then(payload => {
-    //   // TODO do not wait for end of all promises/use another .all call
-    //   dispatch({
-    //     type: GET_COLUMNS,
-    //     payload
-    //   });
-    //
-    //   dispatch(loadLinks());
-    //   dispatch(loadMapVectorData());
-    // });
-  };
-}
-
 export function loadNodes() {
   return (dispatch, getState) => {
     const params = {
@@ -357,7 +327,7 @@ export function loadNodes() {
 
 export function loadLinks() {
   return (dispatch, getState) => {
-    dispatch({ type: TOOL_LINKS__SET_FLOWS_LOADING });
+    dispatch({ type: TOOL_LINKS__SET_FLOWS_LOADING, payload: { loading: true } });
     const state = getState();
     const selectedResizeBy = getSelectedResizeBy(state);
     const params = {
