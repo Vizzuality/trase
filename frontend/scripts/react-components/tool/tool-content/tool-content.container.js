@@ -7,8 +7,7 @@ import { getMergedLinks } from 'react-components/tool/tool.selectors';
 const mapStateToProps = state => ({
   isMapVisible: state.toolLayers.isMapVisible,
   isVisible: state.app.isMapLayerVisible,
-  loading:
-    getMergedLinks(state) !== null && (state.toolLinks.flowsLoading || state.toolLayers.mapLoading),
+  loading: state.toolLinks.flowsLoading || state.toolLayers.mapLoading,
   hasError: getMergedLinks(state) === null && !state.toolLinks.flowsLoading
 });
 
