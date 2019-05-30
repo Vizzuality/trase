@@ -15,8 +15,12 @@ export default class {
     };
 
     this._onDimensionClicked = event => {
-      const uid = event.currentTarget.getAttribute('data-dimension-uid');
-      this.callbacks.onDimensionClick(uid);
+      const dimension = event.currentTarget;
+      const uid = dimension.getAttribute('data-dimension-uid');
+      const isEnabled = !dimension.classList.contains('-disabled');
+      if (isEnabled) {
+        this.callbacks.onDimensionClick(uid);
+      }
     };
 
     this.loadMapDimensions(props);
