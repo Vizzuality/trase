@@ -2,12 +2,12 @@
 #
 # Table name: charts
 #
-#  id                                                                                                :integer          not null, primary key
-#  profile_id                                                                                        :integer          not null
-#  parent_id(Self-reference to parent used to define complex charts, e.g. table with values in tabs) :integer
-#  identifier(Identifier used to map this chart to a part of code which contains calculation logic)  :text             not null
-#  title(Title of chart for display)                                                                 :text             not null
-#  position(Display order in scope of profile)                                                       :integer          not null
+#  id                                                                                                                      :integer          not null, primary key
+#  profile_id                                                                                                              :integer          not null
+#  parent_id(Self-reference to parent used to define complex charts, e.g. table with values in tabs)                       :integer
+#  identifier(Identifier used to map this chart to a part of code which contains calculation logic)                        :text             not null
+#  title(Title of chart for display; you can use {{commodity_name}}, {{company_name}}, {{jurisdiction_name}} and {{year}}) :text             not null
+#  position(Display order in scope of profile)                                                                             :integer          not null
 #
 # Indexes
 #
