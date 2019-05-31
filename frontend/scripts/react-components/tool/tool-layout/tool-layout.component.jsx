@@ -53,7 +53,6 @@ const ToolLayout = ({ store }) => {
             <MapContextContainer />
             <NodesTitlesContainer />
             <Sankey />
-            <TitlebarContainer />
             <TooltipContainer />
             <ModalContainer />
 
@@ -94,14 +93,14 @@ const ToolLayout = ({ store }) => {
                 <div className="map-sidebar-group c-map-context js-map-context is-hidden">
                   <div className="map-sidebar-group-title">Contextual layers</div>
                   <ul className="map-sidebar-group-items js-map-context-items">
-                    {/* <!-- this is rendered by map-context.component --> */}
+                    {/* this is rendered by map-context.component */}
                   </ul>
                 </div>
 
                 <div className="map-sidebar-group c-map-basemaps">
                   <div className="map-sidebar-group-title">Basemaps</div>
                   <ul className="map-sidebar-group-items js-map-basemaps-items">
-                    {/* <!-- this is rendered by map-context.component --> */}
+                    {/* this is rendered by map-context.component */}
                   </ul>
                 </div>
               </div>
@@ -129,7 +128,7 @@ const ToolLayout = ({ store }) => {
                   </div>
                 </div>
                 <div className="js-map-attribution c-map-attribution">
-                  {/* <!-- this is rendered by map.component --> */}
+                  {/* this is rendered by map.component */}
                 </div>
               </div>
 
@@ -198,19 +197,7 @@ const ToolLayout = ({ store }) => {
                 </div>
               </div>
 
-              <div className="c-titlebar">
-                <div className="c-node-title-group js-nodes-titles">
-                  <div className="js-nodes-titles-container" />
-                  <div className="c-nodes-clear js-nodes-titles-clear is-hidden">
-                    <div className="button icon-button">
-                      <svg className="icon">
-                        <use xlinkHref="#icon-close" />
-                      </svg>
-                    </div>
-                    <div className="button text-button js-text-button">clear selection</div>
-                  </div>
-                </div>
-              </div>
+              <TitlebarContainer />
             </div>
             <CookieBanner />
           </div>
