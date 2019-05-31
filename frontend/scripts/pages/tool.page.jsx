@@ -1,9 +1,5 @@
 /* eslint-disable no-new */
 
-import ToolMarkup from 'html/tool.ejs';
-import SearchMarkup from 'html/includes/_search.ejs';
-import FeedbackMarkup from 'html/includes/_feedback.ejs';
-
 import 'styles/layouts/l-tool.scss';
 import 'styles/components/shared/veil.scss';
 import 'styles/components/shared/spinner.scss';
@@ -14,6 +10,7 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 
+import ToolLayout from 'react-components/tool/tool-layout';
 import CookieBanner from 'react-components/shared/cookie-banner';
 import MapContainer from 'react-components/tool/map/map.container';
 import FlowContentContainer from 'react-components/tool/tool-content/tool-content.container';
@@ -36,10 +33,7 @@ import EventManager from 'utils/eventManager';
 const evManager = new EventManager();
 
 export const mount = (root, store) => {
-  root.innerHTML = ToolMarkup({
-    search: SearchMarkup(),
-    feedback: FeedbackMarkup()
-  });
+  render(<ToolLayout />, root);
 
   render(
     <Provider store={store}>
