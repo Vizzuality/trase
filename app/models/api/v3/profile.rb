@@ -66,6 +66,7 @@ module Api
 
       def refresh_dependents
         Api::V3::Readonly::Node.refresh
+        Api::V3::Readonly::Context.refresh
       end
     end
   end

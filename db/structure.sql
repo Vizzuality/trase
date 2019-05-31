@@ -2088,6 +2088,171 @@ ALTER SEQUENCE public.contexts_id_seq OWNED BY public.contexts.id;
 
 
 --
+-- Name: countries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.countries (
+    id integer NOT NULL,
+    name text NOT NULL,
+    iso2 text NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE countries; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.countries IS 'Countries (source)';
+
+
+--
+-- Name: COLUMN countries.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.countries.name IS 'Country name';
+
+
+--
+-- Name: COLUMN countries.iso2; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.countries.iso2 IS '2-letter ISO code';
+
+
+--
+-- Name: profiles; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.profiles (
+    id integer NOT NULL,
+    context_node_type_id integer NOT NULL,
+    name text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    main_topojson_path character varying,
+    main_topojson_root character varying,
+    adm_1_name character varying,
+    adm_1_topojson_path character varying,
+    adm_1_topojson_root character varying,
+    adm_2_name character varying,
+    adm_2_topojson_path character varying,
+    adm_2_topojson_root character varying,
+    CONSTRAINT profiles_name_check CHECK ((name = ANY (ARRAY['actor'::text, 'place'::text])))
+);
+
+
+--
+-- Name: TABLE profiles; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.profiles IS 'Context-specific profiles';
+
+
+--
+-- Name: COLUMN profiles.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.name IS 'Profile name, either actor or place. One of restricted set of values.';
+
+
+--
+-- Name: COLUMN profiles.main_topojson_path; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.main_topojson_path IS 'Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /';
+
+
+--
+-- Name: COLUMN profiles.main_topojson_root; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.main_topojson_root IS 'Path within the TopoJSON file where geometries are contained';
+
+
+--
+-- Name: COLUMN profiles.adm_1_topojson_path; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.adm_1_topojson_path IS 'Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /';
+
+
+--
+-- Name: COLUMN profiles.adm_1_topojson_root; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.adm_1_topojson_root IS 'Path within the TopoJSON file where geometries are contained';
+
+
+--
+-- Name: COLUMN profiles.adm_2_topojson_path; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.adm_2_topojson_path IS 'Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /';
+
+
+--
+-- Name: COLUMN profiles.adm_2_topojson_root; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.adm_2_topojson_root IS 'Path within the TopoJSON file where geometries are contained';
+
+
+--
+-- Name: contexts_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.contexts_mv AS
+ WITH context_node_types_with_props AS (
+         SELECT context_node_types.context_id,
+            context_node_types.node_type_id,
+            context_node_types.column_position,
+            node_types.name AS node_type,
+            context_node_type_properties.role,
+            context_node_type_properties.column_group,
+            context_node_type_properties.is_default
+           FROM ((public.context_node_types
+             JOIN public.context_node_type_properties ON ((context_node_types.id = context_node_type_properties.context_node_type_id)))
+             JOIN public.node_types ON ((context_node_types.node_type_id = node_types.id)))
+        )
+ SELECT contexts.id,
+    contexts.country_id,
+    contexts.commodity_id,
+    contexts.years,
+    contexts.default_year,
+    commodities.name AS commodity_name,
+    countries.name AS country_name,
+    countries.iso2,
+    context_properties.default_basemap,
+    context_properties.is_disabled,
+    context_properties.is_default,
+    context_properties.is_subnational,
+    context_properties.is_highlighted,
+    COALESCE((contexts_with_profiles.id IS NOT NULL), false) AS has_profiles,
+    node_types_by_role.node_types_by_role,
+    context_node_types_agg.node_types_by_name,
+    context_node_types_agg.node_types
+   FROM ((((((public.contexts
+     JOIN public.commodities ON ((contexts.commodity_id = commodities.id)))
+     JOIN public.countries ON ((contexts.country_id = countries.id)))
+     JOIN public.context_properties ON ((context_properties.context_id = contexts.id)))
+     JOIN ( SELECT context_node_types_with_props.context_id,
+            jsonb_object_agg(context_node_types_with_props.role, context_node_types_with_props.node_type_id) AS node_types_by_role
+           FROM context_node_types_with_props
+          WHERE (context_node_types_with_props.role IS NOT NULL)
+          GROUP BY context_node_types_with_props.context_id) node_types_by_role ON ((node_types_by_role.context_id = contexts.id)))
+     JOIN ( SELECT context_node_types_with_props.context_id,
+            jsonb_object_agg(context_node_types_with_props.node_type, context_node_types_with_props.node_type_id) AS node_types_by_name,
+            jsonb_agg(jsonb_build_object('node_type_id'::text, context_node_types_with_props.node_type_id, 'is_default'::text, context_node_types_with_props.is_default, 'column_group'::text, context_node_types_with_props.column_group, 'role'::text, context_node_types_with_props.role, 'node_type'::text, context_node_types_with_props.node_type) ORDER BY context_node_types_with_props.column_position) AS node_types
+           FROM context_node_types_with_props
+          GROUP BY context_node_types_with_props.context_id) context_node_types_agg ON ((context_node_types_agg.context_id = contexts.id)))
+     LEFT JOIN ( SELECT DISTINCT context_node_types.context_id AS id
+           FROM (public.context_node_types
+             JOIN public.profiles ON ((context_node_types.id = profiles.context_node_type_id)))) contexts_with_profiles ON ((contexts_with_profiles.id = contexts.id)))
+  WITH NO DATA;
+
+
+--
 -- Name: contextual_layers; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2171,39 +2336,6 @@ CREATE SEQUENCE public.contextual_layers_id_seq
 --
 
 ALTER SEQUENCE public.contextual_layers_id_seq OWNED BY public.contextual_layers.id;
-
-
---
--- Name: countries; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.countries (
-    id integer NOT NULL,
-    name text NOT NULL,
-    iso2 text NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE countries; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.countries IS 'Countries (source)';
-
-
---
--- Name: COLUMN countries.name; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.countries.name IS 'Country name';
-
-
---
--- Name: COLUMN countries.iso2; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.countries.iso2 IS '2-letter ISO code';
 
 
 --
@@ -4504,84 +4636,6 @@ CREATE SEQUENCE public.nodes_id_seq
 --
 
 ALTER SEQUENCE public.nodes_id_seq OWNED BY public.nodes.id;
-
-
---
--- Name: profiles; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.profiles (
-    id integer NOT NULL,
-    context_node_type_id integer NOT NULL,
-    name text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    main_topojson_path character varying,
-    main_topojson_root character varying,
-    adm_1_name character varying,
-    adm_1_topojson_path character varying,
-    adm_1_topojson_root character varying,
-    adm_2_name character varying,
-    adm_2_topojson_path character varying,
-    adm_2_topojson_root character varying,
-    CONSTRAINT profiles_name_check CHECK ((name = ANY (ARRAY['actor'::text, 'place'::text])))
-);
-
-
---
--- Name: TABLE profiles; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.profiles IS 'Context-specific profiles';
-
-
---
--- Name: COLUMN profiles.name; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.profiles.name IS 'Profile name, either actor or place. One of restricted set of values.';
-
-
---
--- Name: COLUMN profiles.main_topojson_path; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.profiles.main_topojson_path IS 'Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /';
-
-
---
--- Name: COLUMN profiles.main_topojson_root; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.profiles.main_topojson_root IS 'Path within the TopoJSON file where geometries are contained';
-
-
---
--- Name: COLUMN profiles.adm_1_topojson_path; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.profiles.adm_1_topojson_path IS 'Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /';
-
-
---
--- Name: COLUMN profiles.adm_1_topojson_root; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.profiles.adm_1_topojson_root IS 'Path within the TopoJSON file where geometries are contained';
-
-
---
--- Name: COLUMN profiles.adm_2_topojson_path; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.profiles.adm_2_topojson_path IS 'Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /';
-
-
---
--- Name: COLUMN profiles.adm_2_topojson_root; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.profiles.adm_2_topojson_root IS 'Path within the TopoJSON file where geometries are contained';
 
 
 --
@@ -7010,6 +7064,13 @@ CREATE INDEX contexts_commodity_id_idx ON public.contexts USING btree (commodity
 
 
 --
+-- Name: contexts_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX contexts_mv_id_idx ON public.contexts_mv USING btree (id);
+
+
+--
 -- Name: contextual_layers_context_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8465,6 +8526,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190516111644'),
 ('20190520093639'),
 ('20190528091308'),
-('20190529153223');
+('20190529153223'),
+('20190530140625');
 
 

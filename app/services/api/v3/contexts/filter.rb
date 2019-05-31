@@ -3,16 +3,15 @@ module Api
     module Contexts
       class Filter
         def call
-          Api::V3::Context.
+          Api::V3::Readonly::Context.
             includes(
-              :country, :commodity, :context_property,
+              :context_node_types,
+              country: :country_property,
               readonly_recolor_by_attributes: :readonly_attribute,
-              readonly_resize_by_attributes: :readonly_attribute,
-              context_node_types: [:node_type, :profile]
-            ).
-            references(:context_property).
-            where('NOT context_properties.is_disabled').
-            select(&:is_visible?)
+              readonly_resize_by_attributes: :readonly_attribute
+            ).where(
+              "node_types_by_role->'exporter' IS NOT NULL AND node_types_by_role->'destination' IS NOT NULL"
+            )
         end
       end
     end

@@ -2,21 +2,24 @@ module Api
   module V3
     module Contexts
       class ContextSerializer < ActiveModel::Serializer
-        attributes :id, :is_default, :is_disabled, :years, :default_year,
-                   :country_id, :commodity_id, :default_basemap, :is_subnational, :is_highlighted
+        attributes :id,
+                   :is_default,
+                   :is_disabled,
+                   :years,
+                   :default_year,
+                   :country_id,
+                   :country_name,
+                   :commodity_id,
+                   :commodity_name,
+                   :default_basemap,
+                   :is_subnational,
+                   :is_highlighted,
+                   :has_profiles
 
         has_many :readonly_recolor_by_attributes,
                  serializer: RecolorByAttributeSerializer, key: :recolor_by
         has_many :readonly_resize_by_attributes,
                  serializer: ResizeByAttributeSerializer, key: :resize_by
-
-        attribute :country_name do
-          object.country.name
-        end
-
-        attribute :has_profiles do
-          object.profiles.any?
-        end
 
         attribute :map do
           {
@@ -26,13 +29,9 @@ module Api
           }
         end
 
-        attribute :commodity_name do
-          object.commodity.name
-        end
-
         attribute :filter_by do
           nodes = object.biome_nodes
-          next [] unless nodes.any?
+          next [] if nodes.length.zero?
 
           [
             {
@@ -52,9 +51,20 @@ module Api
             geo_id: object.country.iso2,
             annotation_position_x_pos: object.country.annotation_position_x_pos,
             annotation_position_y_pos: object.country.annotation_position_y_pos,
-            country_column_id: object.country_context_node_type&.node_type_id,
-            exporter_column_id: object.exporter_context_node_type&.node_type_id
+            country_column_id: object['node_types_by_name'][NodeTypeName::COUNTRY],
+            exporter_column_id: object['node_types_by_name'][NodeTypeName::EXPORTER]
           }
+        end
+
+        attribute :default_columns do
+          object['node_types'].map do |node_type_props|
+            next unless node_type_props['is_default']
+
+            {
+              id: node_type_props['node_type_id'],
+              group: node_type_props['column_group']
+            }
+          end.compact
         end
       end
     end
