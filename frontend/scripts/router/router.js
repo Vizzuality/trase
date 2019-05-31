@@ -22,7 +22,11 @@ import {
 
 import getPageTitle from 'scripts/router/page-title';
 
-const pagesNotSupportedOnMobile = ['tool', 'map', 'data'];
+const pagesSupportedLimit = {
+  data: 'small',
+  tool: 'tablet',
+  map: 'tablet'
+};
 
 // We await for all thunks using Promise.all, this makes the result then-able and allows us to
 // add an await solely to the thunks that need it.
@@ -162,9 +166,8 @@ const config = {
     return route;
   },
   onBeforeChange: (dispatch, getState, { action }) => {
-    const isMobile = window.innerWidth <= BREAKPOINTS.small;
-
-    if (isMobile && pagesNotSupportedOnMobile.includes(action.type)) {
+    const supportedLimit = pagesSupportedLimit[action.type];
+    if (supportedLimit && window.innerWidth <= BREAKPOINTS[supportedLimit]) {
       return dispatch(redirect({ type: 'notSupportedOnMobile' }));
     }
 
