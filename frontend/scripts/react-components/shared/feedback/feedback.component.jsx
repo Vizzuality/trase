@@ -1,11 +1,11 @@
 import React from 'react';
 import Icon from 'react-components/shared/icon';
-// TODO: Use this component to replace all feedback templates and move styles to this folder
+import 'react-components/shared/feedback/feedback.scss';
 
 export default () =>
   window._urq ? (
-    <button className="user-report-feedback" onClick={() => window._urq.push(['Feedback_Open'])}>
-      <Icon icon="icon-bulb" color="white" />
+    <button className="c-feedback" onClick={() => window._urq.push(['Feedback_Open'])}>
+      <Icon icon="icon-bulb" color="white" size="lg" />
       <span className="feedback-label">Feedback</span>
     </button>
   ) : null;
