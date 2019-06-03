@@ -3,6 +3,7 @@ module Api
   module V3
     class YellowTable < BaseModel
       include Api::V3::Import::YellowTableHelpers
+      include Api::V3::NullifyBlankValues
       self.abstract_class = true
     end
   end
