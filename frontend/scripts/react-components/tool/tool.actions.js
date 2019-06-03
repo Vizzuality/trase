@@ -28,6 +28,7 @@ import isEmpty from 'lodash/isEmpty';
 import xor from 'lodash/xor';
 import { getCurrentContext } from 'reducers/helpers/contextHelper';
 import {
+  getSelectedColumnsIds,
   getSelectedMapDimensionsUids,
   getSelectedNodesColumnsPos,
   getSelectedResizeBy
@@ -151,8 +152,10 @@ export function resetState(refilter = true) {
 // Resets sankey's params that may lead to no flows being returned from the API
 export function resetSankey() {
   return (dispatch, getState) => {
-    const { columns, expandedNodesIds } = getState().toolLinks;
-    const { contexts, selectedContext } = getState().app;
+    const state = getState();
+    const { columns, expandedNodesIds } = state.toolLinks;
+    const { contexts, selectedContext } = state.app;
+    const selectedColumnsIds = getSelectedColumnsIds(state);
     const areNodesExpanded = !isEmpty(expandedNodesIds);
     const currentContext = contexts.find(context => context.id === selectedContext.id);
     const defaultColumns = columns ? Object.values(columns).filter(column => column.isDefault) : [];
@@ -169,8 +172,11 @@ export function resetSankey() {
     defaultColumns.forEach(defaultColumn => {
       dispatch({
         type: SELECT_COLUMN,
-        columnIndex: defaultColumn.group,
-        columnId: defaultColumn.id
+        payload: {
+          currentColumnsIds: selectedColumnsIds,
+          columnIndex: defaultColumn.group,
+          columnId: defaultColumn.id
+        }
       });
     });
 
@@ -183,8 +189,6 @@ export function resetSankey() {
       detailedView: false,
       forcedOverview: true
     });
-
-    const state = getState();
 
     if (defaultRecolorBy) {
       dispatch(_setRecolorByAction({ value: defaultRecolorBy[0].name }, state));
@@ -229,16 +233,20 @@ export function selectRecolorBy(recolorBy) {
 export function selectColumn(columnIndex, columnId, reloadLinks = true) {
   return (dispatch, getState) => {
     const state = getState();
+    const selectedColumnsIds = getSelectedColumnsIds(state);
 
     // Action triggered but the column is already present - do nothing
-    if (state.toolLinks.selectedColumnsIds.indexOf(columnId) !== -1) {
+    if (selectedColumnsIds.indexOf(columnId) !== -1) {
       return;
     }
 
     dispatch({
       type: SELECT_COLUMN,
-      columnIndex,
-      columnId
+      payload: {
+        columnId,
+        columnIndex,
+        currentColumnsIds: selectedColumnsIds
+      }
     });
     const selectedNodesIds = getSelectedNodeIdsNotInColumnIndex(
       state.toolLinks.selectedNodesIds,
@@ -329,12 +337,13 @@ export function loadLinks() {
   return (dispatch, getState) => {
     dispatch({ type: TOOL_LINKS__SET_FLOWS_LOADING, payload: { loading: true } });
     const state = getState();
+    const selectedColumnsIds = getSelectedColumnsIds(state);
     const selectedResizeBy = getSelectedResizeBy(state);
     const params = {
       context_id: state.app.selectedContext.id,
       start_year: state.app.selectedYears[0],
       end_year: state.app.selectedYears[1],
-      include_columns: state.toolLinks.selectedColumnsIds.join(','),
+      include_columns: selectedColumnsIds.join(','),
       flow_quant: selectedResizeBy.name,
       locked_nodes: state.toolLinks.selectedNodesIds
     };
@@ -611,10 +620,12 @@ export function setSankeySearchVisibility(searchVisibility) {
 
 export function selectNodeFromGeoId(geoId) {
   return (dispatch, getState) => {
+    const state = getState();
+    const selectedColumnsIds = getSelectedColumnsIds(state);
     const nodeId = getNodeIdFromGeoId(
       geoId,
       getState().toolLinks.data.nodes,
-      getState().toolLinks.selectedColumnsIds[0]
+      selectedColumnsIds[0]
     );
 
     // node not in visible Nodes ---> expand node (same behavior as search)
@@ -630,7 +641,9 @@ export function selectExpandedNode(param) {
     const hasInvisibleNodes = true; // ids.some(elem => !_isNodeVisible(getState, elem));
 
     if (hasInvisibleNodes) {
-      const { toolLinks } = getState();
+      const state = getState();
+      const { toolLinks } = state;
+      const selectedColumnsIds = getSelectedColumnsIds(state);
       if (
         toolLinks.selectedNodesIds.length === ids.length &&
         intesection(toolLinks.selectedNodesIds, ids).length === ids.length
@@ -646,7 +659,7 @@ export function selectExpandedNode(param) {
 
         nodes.forEach(node => {
           const column = toolLinks.data.columns[node.columnId];
-          if (!isNodeColumnVisible(column, toolLinks.selectedColumnsIds)) {
+          if (!isNodeColumnVisible(column, selectedColumnsIds)) {
             dispatch(selectColumn(column.group, node.columnId, false));
           }
         });
@@ -679,11 +692,12 @@ export function highlightNode(nodeId, isAggregated, coordinates) {
 
 export function highlightNodeFromGeoId(geoId, coordinates) {
   return (dispatch, getState) => {
+    const state = getState();
+    const selectedColumnsIds = getSelectedColumnsIds(state);
     const {
       data: { nodes },
-      selectedColumnsIds,
       highlightedNodesIds
-    } = getState().toolLinks;
+    } = state.toolLinks;
 
     const nodeId = getNodeIdFromGeoId(geoId, nodes, selectedColumnsIds[0]);
     if (nodeId === null) {
@@ -751,6 +765,7 @@ export function navigateToProfile(nodeId, year, contextId) {
 export function loadLinkedGeoIDs() {
   return (dispatch, getState) => {
     const state = getState();
+    const selectedColumnsIds = getSelectedColumnsIds(state);
     const selectedNodesIds = state.toolLinks.selectedNodesIds;
 
     // when selection only contains geo nodes (column 0), we should not call get_linked_geoids
@@ -769,7 +784,7 @@ export function loadLinkedGeoIDs() {
       context_id: state.app.selectedContext.id,
       years: uniq([state.app.selectedYears[0], state.app.selectedYears[1]]),
       nodes_ids: selectedNodesIds,
-      target_column_id: state.toolLinks.selectedColumnsIds[0]
+      target_column_id: selectedColumnsIds[0]
     };
     const url = getURLFromParams(GET_LINKED_GEO_IDS_URL, params);
 

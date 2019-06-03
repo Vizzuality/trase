@@ -73,7 +73,7 @@ export default [
     category: 'Sankey',
     action: 'Select column',
     getPayload: (action, state) =>
-      state.toolLinks.columns.find(col => col.id === action.columnId).name
+      state.toolLinks.columns.find(col => col.id === action.payload.columnId).name
   },
   {
     type: TOGGLE_MAP,

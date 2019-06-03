@@ -1,9 +1,9 @@
 import { put, call, cancelled, fork } from 'redux-saga/effects';
 import { GET_COLUMNS_URL, GET_ALL_NODES_URL, getURLFromParams } from 'utils/getURLFromParams';
 import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
-import { setToolFlowsLoading, setToolNodesAndColumns } from './tool-links.actions';
+import { setToolFlowsLoading, setToolLinksAndColumns, setToolNodes } from './tool-links.actions';
 
-export function* getToolNodesAndColumnsData(selectedContext) {
+export function* getToolLinksAndColumnsData(selectedContext) {
   const params = {
     context_id: selectedContext.id
   };
@@ -18,7 +18,8 @@ export function* getToolNodesAndColumnsData(selectedContext) {
     if (task.isRunning()) {
       task.cancel();
     }
-    yield put(setToolNodesAndColumns(nodesResponse.data, columnsResponse.data));
+    yield put(setToolLinksAndColumns(null, columnsResponse.data));
+    yield put(setToolNodes(nodesResponse.data));
   } catch (e) {
     console.error('Error', e);
   } finally {

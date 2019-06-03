@@ -1,6 +1,7 @@
 export const TOOL_LINKS__SET_FLOWS_LOADING = 'TOOL_LINKS__SET_FLOWS_LOADING';
-export const TOOL_LINKS__GET_NODES_AND_COLUMNS = 'TOOL_LINKS__GET_NODES_AND_COLUMNS';
-export const TOOL_LINKS__SET_NODES_AND_COLUMNS = 'TOOL_LINKS__SET_NODES_AND_COLUMNS';
+export const TOOL_LINKS__GET_LINKS_AND_COLUMNS = 'TOOL_LINKS__GET_LINKS_AND_COLUMNS';
+export const TOOL_LINKS__SET_LINKS_AND_COLUMNS = 'TOOL_LINKS__SET_LINKS_AND_COLUMNS';
+export const TOOL_LINKS_SET_NODES = 'TOOL_LINKS_SET_NODES';
 
 export function setToolFlowsLoading(loading) {
   return {
@@ -9,15 +10,22 @@ export function setToolFlowsLoading(loading) {
   };
 }
 
-export function getToolNodesAndColumns() {
+export function getToolLinksAndColumns() {
   return {
-    type: TOOL_LINKS__GET_NODES_AND_COLUMNS
+    type: TOOL_LINKS__GET_LINKS_AND_COLUMNS
   };
 }
 
-export function setToolNodesAndColumns(nodes, columns) {
+export function setToolLinksAndColumns(links, columns) {
   return {
-    type: TOOL_LINKS__SET_NODES_AND_COLUMNS,
-    payload: { nodes, columns }
+    type: TOOL_LINKS__SET_LINKS_AND_COLUMNS,
+    payload: { links, columns }
+  };
+}
+
+export function setToolNodes(nodes) {
+  return {
+    type: TOOL_LINKS_SET_NODES,
+    payload: { nodes }
   };
 }

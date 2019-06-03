@@ -1,6 +1,6 @@
 import { loadDisclaimer, resize } from 'actions/app.actions';
 import { loadNodes } from 'react-components/tool/tool.actions';
-import { getToolNodesAndColumns } from 'react-components/tool-links/tool-links.actions';
+import { getToolLinksAndColumns } from 'react-components/tool-links/tool-links.actions';
 
 export const loadDisclaimerTool = dispatch => dispatch(loadDisclaimer());
 
@@ -13,6 +13,6 @@ export const loadToolInitialData = (dispatch, getState) => {
     return;
   }
 
-  dispatch(getToolNodesAndColumns());
+  dispatch(getToolLinksAndColumns());
   dispatch(loadNodes());
 };
