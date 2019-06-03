@@ -1,5 +1,4 @@
 import {
-  GET_LINKS,
   HIGHLIGHT_NODE,
   RESET_SELECTION,
   RESET_TOOL_STATE,
@@ -17,8 +16,10 @@ import {
 } from 'react-components/tool/tool.actions';
 import {
   TOOL_LINKS_SET_NODES,
+  TOOL_LINKS_SET_MORE_NODES,
   TOOL_LINKS__SET_FLOWS_LOADING,
-  TOOL_LINKS__SET_LINKS_AND_COLUMNS
+  TOOL_LINKS__SET_COLUMNS,
+  TOOL_LINKS_SET_LINKS
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
 import immer from 'immer';
@@ -39,7 +40,7 @@ export const toolLinksInitialState = {
   forcedOverview: false,
   expandedNodesIds: [],
   highlightedNodesIds: [],
-  flowsLoading: true, // TODO: remove this, should not be true by default.
+  flowsLoading: false, // TODO: remove this, should not be true by default.
   selectedBiomeFilter: null,
   selectedColumnsIds: null,
   selectedNodesIds: [],
@@ -77,14 +78,13 @@ const toolLinksReducer = {
         highlightedNodesIds: [],
         selectedNodesIds: [],
         expandedNodesIds: [],
-        flowsLoading: true,
         selectedColumnsIds: null,
         data: toolLinksInitialState.data
       });
     });
   },
 
-  [TOOL_LINKS__SET_LINKS_AND_COLUMNS](state, action) {
+  [TOOL_LINKS__SET_COLUMNS](state, action) {
     return immer(state, draft => {
       const { columns } = action.payload;
 
@@ -116,10 +116,21 @@ const toolLinksReducer = {
     });
   },
 
-  [GET_LINKS](state, action) {
+  [TOOL_LINKS_SET_MORE_NODES](state, action) {
+    const { nodes } = action.payload;
     return immer(state, draft => {
-      const links = action.jsonPayload.data;
-      const linksMeta = action.jsonPayload.include;
+      nodes.forEach(node => {
+        if (!draft.data.nodes[node.id]) {
+          draft.data.nodes[node.id] = node;
+          draft.data.nodesByColumnGeoId[`${node.columnId}-${node.geoId}`] = node.id;
+        }
+      });
+    });
+  },
+
+  [TOOL_LINKS_SET_LINKS](state, action) {
+    return immer(state, draft => {
+      const { links, linksMeta } = action.payload;
 
       draft.data.nodeHeights = {};
       linksMeta.nodeHeights.forEach(nodeHeight => {
@@ -128,7 +139,6 @@ const toolLinksReducer = {
 
       draft.currentQuant = linksMeta.quant;
       draft.data.links = links;
-      draft.flowsLoading = false;
     });
   },
   [SET_NODE_ATTRIBUTES](state, action) {

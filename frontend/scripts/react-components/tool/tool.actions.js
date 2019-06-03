@@ -35,11 +35,13 @@ import {
 } from 'react-components/tool/tool.selectors';
 import pSettle from 'p-settle';
 
-import { TOOL_LINKS__SET_FLOWS_LOADING } from 'react-components/tool-links/tool-links.actions';
+import {
+  setToolLinks,
+  setToolFlowsLoading
+} from 'react-components/tool-links/tool-links.actions';
 
 export const RESET_SELECTION = 'RESET_SELECTION';
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
-export const GET_LINKS = 'GET_LINKS';
 export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
 export const SET_MAP_DIMENSIONS_DATA = 'SET_MAP_DIMENSIONS_DATA';
 export const UPDATE_NODE_SELECTION = 'UPDATE_NODE_SELECTION';
@@ -335,7 +337,7 @@ export function loadNodes() {
 
 export function loadLinks() {
   return (dispatch, getState) => {
-    dispatch({ type: TOOL_LINKS__SET_FLOWS_LOADING, payload: { loading: true } });
+    dispatch(setToolFlowsLoading(true));
     const state = getState();
     const selectedColumnsIds = getSelectedColumnsIds(state);
     const selectedResizeBy = getSelectedResizeBy(state);
@@ -391,11 +393,7 @@ export function loadLinks() {
           });
           return;
         }
-
-        dispatch({
-          type: GET_LINKS,
-          jsonPayload
-        });
+        dispatch(setToolLinks(jsonPayload.data, jsonPayload.include));
 
         // if nodes were expanded and some of expanded nodes are not present anymore
         // re-expand nodes
@@ -415,6 +413,7 @@ export function loadLinks() {
 
         // load related geoIds to show on the map
         dispatch(loadLinkedGeoIDs());
+        dispatch(setToolFlowsLoading(false));
       })
       .catch(console.error);
   };

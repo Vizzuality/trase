@@ -39,7 +39,7 @@ export const getSelectedColumnsIds = createSelector(
     if (selectedColumnsIds) {
       return selectedColumnsIds;
     }
-    if (!columns || !selectedContext) {
+    if (!columns && !selectedContext) {
       return [];
     }
 
@@ -132,7 +132,7 @@ export const getVisibleNodes = createSelector(
 export const getVisibleNodesByColumn = createSelector(
   [getVisibleNodes, getToolColumns, getToolNodeHeights],
   (visibleNodes, columns, nodeHeights) => {
-    if (!visibleNodes) {
+    if (!visibleNodes || !columns) {
       return [];
     }
     const byColumn = splitVisibleNodesByColumn(visibleNodes, columns);

@@ -28,6 +28,10 @@ const getGroupedNodes = createSelector(
 export const getToolSearchNodes = createSelector(
   [getGroupedNodes, getSelectedColumnsIds, getToolNodes, getToolColumns],
   (groupedNodes, selectedColumnsIds, nodes, columns) => {
+    if (!nodes || !columns) {
+      return [];
+    }
+
     const getNode = ([nA, nB]) => {
       if (nB) {
         if (
