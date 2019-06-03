@@ -5,8 +5,6 @@
 #  id                 :bigint(8)        not null, primary key
 #  title              :text             not null
 #  description        :text             not null
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
 #  image_file_name    :string
 #  image_content_type :string
 #  image_file_size    :integer

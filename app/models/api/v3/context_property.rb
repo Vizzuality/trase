@@ -2,20 +2,18 @@
 #
 # Table name: context_properties
 #
-#  id              :integer          not null, primary key
-#  context_id      :integer          not null
-#  default_basemap :text
-#  is_disabled     :boolean          default(FALSE), not null
-#  is_default      :boolean          default(FALSE), not null
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  is_subnational  :boolean          default(FALSE), not null
-#  is_highlighted  :boolean
+#  id                                                                                  :integer          not null, primary key
+#  context_id                                                                          :integer          not null
+#  default_basemap(Default basemap for this context, e.g. satellite)                   :text
+#  is_disabled(When set, do not show this context)                                     :boolean          default(FALSE), not null
+#  is_default(When set, show this context as default (only use for one))               :boolean          default(FALSE), not null
+#  is_subnational(When set, show indication that sub-national level data is available) :boolean          default(FALSE), not null
+#  is_highlighted(When set, shows the context on the context picker suggestions)       :boolean
 #
 # Indexes
 #
-#  context_properties_context_id_key       (context_id) UNIQUE
-#  index_context_properties_on_context_id  (context_id)
+#  context_properties_context_id_idx  (context_id)
+#  context_properties_context_id_key  (context_id) UNIQUE
 #
 # Foreign Keys
 #
@@ -41,10 +39,16 @@ module Api
       validates :is_highlighted, inclusion: {in: [true, false]}
       validates :default_basemap, inclusion: {in: DEFAULT_BASEMAP, allow_blank: true}
 
+      after_commit :refresh_dependents
+
       def self.blue_foreign_keys
         [
           {name: :context_id, table_class: Api::V3::Context}
         ]
+      end
+
+      def refresh_dependents
+        Api::V3::Readonly::Context.refresh
       end
     end
   end

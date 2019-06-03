@@ -2,22 +2,20 @@
 #
 # Table name: quant_properties
 #
-#  id                           :integer          not null, primary key
-#  quant_id                     :integer          not null
-#  display_name                 :text             not null
-#  unit_type                    :text
-#  tooltip_text                 :text
-#  is_visible_on_place_profile  :boolean          default(FALSE), not null
-#  is_visible_on_actor_profile  :boolean          default(FALSE), not null
-#  is_temporal_on_place_profile :boolean          default(FALSE), not null
-#  is_temporal_on_actor_profile :boolean          default(FALSE), not null
-#  created_at                   :datetime         not null
-#  updated_at                   :datetime         not null
+#  id                                                                              :integer          not null, primary key
+#  quant_id                                                                        :integer          not null
+#  display_name(Name of attribute for display)                                     :text             not null
+#  unit_type(Type of unit, e.g. count. One of restricted set of values.)           :text
+#  tooltip_text(Generic tooltip text (lowest precedence))                          :text
+#  is_visible_on_place_profile(Whether to display this attribute on place profile) :boolean          default(FALSE), not null
+#  is_visible_on_actor_profile(Whether to display this attribute on actor profile) :boolean          default(FALSE), not null
+#  is_temporal_on_place_profile                                                    :boolean          default(FALSE), not null
+#  is_temporal_on_actor_profile                                                    :boolean          default(FALSE), not null
 #
 # Indexes
 #
-#  index_quant_properties_on_quant_id  (quant_id)
-#  quant_properties_quant_id_key       (quant_id) UNIQUE
+#  quant_properties_quant_id_idx  (quant_id)
+#  quant_properties_quant_id_key  (quant_id) UNIQUE
 #
 # Foreign Keys
 #

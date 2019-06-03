@@ -2,17 +2,15 @@
 #
 # Table name: ind_context_properties
 #
-#  id           :bigint(8)        not null, primary key
-#  tooltip_text :text             not null
-#  context_id   :bigint(8)        not null
-#  ind_id       :bigint(8)        not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  id                                                                                                                                                                                      :bigint(8)        not null, primary key
+#  tooltip_text(Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).) :text             not null
+#  context_id(Reference to context)                                                                                                                                                        :bigint(8)        not null
+#  ind_id(Reference to ind)                                                                                                                                                                :bigint(8)        not null
 #
 # Indexes
 #
-#  index_ind_context_properties_on_context_id  (context_id)
-#  index_ind_context_properties_on_ind_id      (ind_id)
+#  ind_context_properties_context_id_idx  (context_id)
+#  ind_context_properties_ind_id_idx      (ind_id)
 #
 # Foreign Keys
 #

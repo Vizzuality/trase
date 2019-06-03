@@ -5,6 +5,7 @@
 #  id             :integer          primary key
 #  main_id        :integer
 #  name           :text
+#  name_tsvector  :tsvector
 #  node_type      :text
 #  context_id     :integer
 #  profile        :text
@@ -14,7 +15,7 @@
 #
 #  nodes_mv_context_id_id_idx  (context_id,id) UNIQUE
 #  nodes_mv_context_id_idx     (context_id)
-#  nodes_mv_name_idx           (to_tsvector('simple'::regconfig, COALESCE(name, ''::text))) USING gin
+#  nodes_mv_name_tsvector_idx  (name_tsvector) USING gin
 #
 
 module Api
@@ -25,12 +26,22 @@ module Api
         belongs_to :context
 
         include PgSearch
-        pg_search_scope :search_by_name,
-                        against: :name,
-                        order_within_rank: :name,
-                        using: {
-                          tsearch: {prefix: true}
-                        }
+        pg_search_scope :search_by_name, lambda { |query|
+          {
+            query: query,
+            against: :name,
+            using: {
+              tsearch: {
+                prefix: true,
+                tsvector_column: :name_tsvector,
+                normalization: 2
+              }
+            },
+            order_within_rank: sanitize_sql_for_order(
+              [Arel.sql('levenshtein(name, ?), name'), query]
+            )
+          }
+        }
       end
     end
   end

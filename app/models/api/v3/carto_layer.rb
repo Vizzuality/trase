@@ -2,18 +2,15 @@
 #
 # Table name: carto_layers
 #
-#  id                  :integer          not null, primary key
-#  contextual_layer_id :integer          not null
-#  identifier          :text             not null
-#  years               :integer          is an Array
-#  created_at          :datetime         not null
-#  updated_at          :datetime         not null
-#  raster_url          :string
+#  id                                                                                                                :integer          not null, primary key
+#  contextual_layer_id                                                                                               :integer          not null
+#  identifier(Identifier of the CartoDB named map, e.g. brazil_biomes; unique in scope of contextual layer)          :text             not null
+#  years(Array of years for which to show this carto layer in scope of contextual layer; empty (NULL) for all years) :integer          is an Array
+#  raster_url(Url of raster layer)                                                                                   :string
 #
 # Indexes
 #
 #  carto_layers_contextual_layer_id_identifier_key  (contextual_layer_id,identifier) UNIQUE
-#  index_carto_layers_on_contextual_layer_id        (contextual_layer_id)
 #
 # Foreign Keys
 #

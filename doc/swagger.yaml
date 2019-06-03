@@ -299,6 +299,8 @@ paths:
       summary: All nodes for a context
       parameters:
         - $ref: "#/components/parameters/context_id_path_param"
+        - $ref: "#/components/parameters/node_types_ids"
+        - $ref: "#/components/parameters/nodes_ids"
       responses:
         "200":
           description: OK
@@ -718,7 +720,7 @@ paths:
         - $ref: "#/components/parameters/dashboards_commodities_ids"
         - $ref: "#/components/parameters/dashboards_companies_ids"
         - $ref: "#/components/parameters/dashboards_destinations_ids"
-        - $ref: "#/components/parameters/dashboards_node_type_ids"
+        - $ref: "#/components/parameters/node_types_ids"
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
@@ -746,7 +748,7 @@ paths:
         - $ref: "#/components/parameters/dashboards_commodities_ids"
         - $ref: "#/components/parameters/dashboards_sources_ids"
         - $ref: "#/components/parameters/dashboards_companies_ids"
-        - $ref: "#/components/parameters/dashboards_node_type_ids"
+        - $ref: "#/components/parameters/node_types_ids"
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
@@ -773,7 +775,7 @@ paths:
         - $ref: "#/components/parameters/dashboards_commodities_ids"
         - $ref: "#/components/parameters/dashboards_sources_ids"
         - $ref: "#/components/parameters/dashboards_destinations_ids"
-        - $ref: "#/components/parameters/dashboards_node_type_ids"
+        - $ref: "#/components/parameters/node_types_ids"
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
@@ -801,7 +803,7 @@ paths:
         - $ref: "#/components/parameters/dashboards_commodities_ids"
         - $ref: "#/components/parameters/dashboards_sources_ids"
         - $ref: "#/components/parameters/dashboards_companies_ids"
-        - $ref: "#/components/parameters/dashboards_node_type_ids"
+        - $ref: "#/components/parameters/node_types_ids"
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
@@ -828,7 +830,7 @@ paths:
         - $ref: "#/components/parameters/dashboards_commodities_ids"
         - $ref: "#/components/parameters/dashboards_sources_ids"
         - $ref: "#/components/parameters/dashboards_companies_ids"
-        - $ref: "#/components/parameters/dashboards_node_type_ids"
+        - $ref: "#/components/parameters/node_types_ids"
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
@@ -856,7 +858,7 @@ paths:
         - $ref: "#/components/parameters/dashboards_commodities_ids"
         - $ref: "#/components/parameters/dashboards_sources_ids"
         - $ref: "#/components/parameters/dashboards_companies_ids"
-        - $ref: "#/components/parameters/dashboards_node_type_ids"
+        - $ref: "#/components/parameters/node_types_ids"
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
@@ -1386,6 +1388,20 @@ components:
       required: false
       schema:
         type: integer
+    node_types_ids:
+      name: node_types_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    nodes_ids:
+      name: nodes_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
     dashboards_country_id:
       name: country_id
       in: query
@@ -1428,13 +1444,6 @@ components:
         type: string
     dashboards_destinations_ids:
       name: destinations_ids
-      in: query
-      description: String with comma-separated numeric ids
-      required: false
-      schema:
-        type: string
-    dashboards_node_type_ids:
-      name: node_types_ids
       in: query
       description: String with comma-separated numeric ids
       required: false
@@ -1534,6 +1543,17 @@ components:
           type: array
           items:
             type: string
+        defaultColumns:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 3
+              group:
+                type: integer
+                example: 0
         map:
           type: object
           properties:
@@ -2031,10 +2051,10 @@ components:
           properties:
             title:
               type: string
-              example: Top destination countries of {{commodity_name}} exported by {{company_name}} in {{year}}
+              example: "Top destination countries of {{commodity_name}} exported by {{company_name}} in {{year}}"
             legend_title:
               type: string
-              example: {{commodity_name}} exported in {{year}}
+              example: "{{commodity_name}} exported in {{year}}"
             included_years:
               type: array
               items:
@@ -2075,10 +2095,10 @@ components:
           properties:
             title:
               type: string
-              example: Top sourcing regions of {{commodity_name}} exported by {{company_name}} in {{year}}
+              example: "Top sourcing regions of {{commodity_name}} exported by {{company_name}} in {{year}}"
             legend_title:
               type: string
-              example: {{commodity_name}} exported in $year$
+              example: "{{commodity_name}} exported in $year$"
             included_years:
               type: array
               items:

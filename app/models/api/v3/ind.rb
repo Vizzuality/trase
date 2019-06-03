@@ -2,10 +2,9 @@
 #
 # Table name: inds
 #
-#  id         :integer          not null, primary key
-#  name       :text             not null
-#  unit       :text
-#  created_at :datetime         not null
+#  id                                                                                                                                  :integer          not null, primary key
+#  name(Attribute short name, e.g. FOREST_500; those literals are referred to in code, therefore should not be changed without notice) :text             not null
+#  unit(Unit in which values for this attribute are given)                                                                             :text
 #
 # Indexes
 #

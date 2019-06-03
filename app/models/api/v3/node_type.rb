@@ -2,9 +2,8 @@
 #
 # Table name: node_types
 #
-#  id         :integer          not null, primary key
-#  name       :text             not null
-#  created_at :datetime         not null
+#  id                                                                          :integer          not null, primary key
+#  name(Name of node type, spelt in capital letters; unique across node types) :text             not null
 #
 # Indexes
 #

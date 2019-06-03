@@ -5,6 +5,10 @@ RSpec.describe 'Nodes', type: :request do
   include_context 'api v3 brazil flows'
 
   describe 'GET /api/v3/contexts/:context_id/nodes' do
+    before(:each) do
+      Api::V3::Readonly::SankeyNode.refresh(sync: true)
+    end
+
     it 'has the correct response structure' do
       get "/api/v3/contexts/#{api_v3_context.id}/nodes"
 

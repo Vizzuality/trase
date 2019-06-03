@@ -12,6 +12,7 @@
   }
 
   .contain-logos-footer {
+    overflow: hidden;
 
     .contain-logos {
       width: 100%;
@@ -38,6 +39,7 @@
         align-items: center;
         justify-content: center;
         min-height: 75px;
+        flex-wrap: wrap;
 
         &:not(:first-of-type) {
           margin: 16px 0 0;
@@ -135,17 +137,24 @@
 
   .contain-link-list {
     margin-top: 54px;
+    overflow: hidden;
 
     .links-list {
       display: flex;
       justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
 
       .separator {
         display: inline-flex;
         align-items: center;
         margin: 0 8px;
 
-        color: $gray;
+        color: $charcoal-grey;
+      }
+
+      .link-item {
+        flex-shrink: 0;
       }
     }
   }

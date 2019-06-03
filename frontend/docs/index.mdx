@@ -21,10 +21,9 @@ While technically independent, the frontend application is heavily dependent on 
 ## Requirements
 
 ### API
-- Ruby 2.6.3
-- Rails 5.1+
-- PostgreSQL 10.6+ with `intarray`, `tablefunc` and `postgres_fdw` extensions
+- Ruby 2.6.3 and RubyGems (recommended installation via rvm)
 - [Bundler](http://bundler.io/)
+- PostgreSQL 11 with `intarray`, `tablefunc` and `postgres_fdw` extensions
 - redis >= 3
 - wget
 - cron
@@ -204,6 +203,22 @@ To deploy, simply use:
 cap <staging|production> deploy
 ```
 
+## Sitemaps
+
+We are using [Sitemap generator](https://github.com/kjvarga/sitemap_generator).
+The sitemap config is located in config/sitemap.rb.
+To refresh the sitemap and ping Google and Bing bots use:
+
+```
+rake sitemap:refresh
+```
+To do it without pinging the bots:
+```
+rake sitemap:refresh:no_ping
+```
+
+The sitemap is refreshed automatically in each release.
+
 ## Git hooks
 
 This project includes a set of git hooks that you may find useful
@@ -222,6 +237,7 @@ To enable then, simply execute once: `bin/git/init-hooks`
 - [full schema](https://vizzuality.github.io/trase/all_tables/)
 - ["blue tables" schema](https://vizzuality.github.io/trase/blue_tables/index.html)
 - [how to regenerate docs](docs-backend-automated-documentation)
+- [Models snapshot](public/docs/erd.pdf)
 
 #### More
 - [Cache management](docs-backend-cache-management)

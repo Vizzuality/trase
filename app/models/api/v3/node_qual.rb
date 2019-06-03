@@ -2,16 +2,15 @@
 #
 # Table name: node_quals
 #
-#  id         :integer          not null, primary key
-#  node_id    :integer          not null
-#  qual_id    :integer          not null
-#  year       :integer
-#  value      :text             not null
-#  created_at :datetime         not null
+#  id                                     :integer          not null, primary key
+#  node_id                                :integer          not null
+#  qual_id                                :integer          not null
+#  year(Year; empty (NULL) for all years) :integer
+#  value(Textual value)                   :text             not null
 #
 # Indexes
 #
-#  index_node_quals_on_node_id          (node_id)
+#  node_quals_node_id_idx               (node_id)
 #  node_quals_node_id_qual_id_year_key  (node_id,qual_id,year) UNIQUE
 #  node_quals_qual_id_idx               (qual_id)
 #

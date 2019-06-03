@@ -38,6 +38,9 @@ test:
   # It doesn't make sense to report to New Relic from automated test runs.
   monitor_mode: false
 
+production:
+  <<: *default_settings
+
 staging:
   <<: *default_settings
   app_name: Trase (Staging)
@@ -54,5 +57,6 @@ dashboardsdemo:
   <<: *default_settings
   app_name: Trase (Dashboards demo)
 
-production:
+indonesiademo:
   <<: *default_settings
+  app_name: Trase (Indonesia demo)

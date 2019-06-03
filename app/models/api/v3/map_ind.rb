@@ -5,13 +5,9 @@
 #  id               :integer          not null, primary key
 #  map_attribute_id :integer          not null
 #  ind_id           :integer          not null
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
 #
 # Indexes
 #
-#  index_map_inds_on_ind_id              (ind_id)
-#  index_map_inds_on_map_attribute_id    (map_attribute_id)
 #  map_inds_map_attribute_id_ind_id_key  (map_attribute_id,ind_id) UNIQUE
 #
 # Foreign Keys

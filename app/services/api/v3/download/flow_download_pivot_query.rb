@@ -7,7 +7,11 @@ module Api
         end
 
         def total
-          pivot(@base_query.select(pivot_select_columns)).except(:select).count
+          if !@download_attributes.empty?
+            super / @download_attributes.size
+          else
+            0
+          end
         end
 
         def by_year(year)
@@ -18,31 +22,25 @@ module Api
 
         def initialize_query
           @query = @base_query.select(pivot_select_columns).
-            order(:row_name)
+            order(:path)
         end
 
         def pivot_select_columns
           [
-            'row_name',
+            'path',
             'year AS "YEAR"'
           ] + @path_columns +
             [
               "'#{commodity_type}'::TEXT AS \"TYPE\"",
-              'display_name',
+              'download_attributes_mv.display_name',
               'total'
             ]
         end
 
-        def initialize_categories_names(query)
-          @categories = query.
-            except(:select).
-            select('display_name').
-            except(:group).
-            group(:display_name).
-            except(:order).
-            order(:display_name)
+        def initialize_categories_names
+          @categories = @download_attributes.select(:display_name)
           @categories_names_quoted = @categories.map do |c|
-            '"' + c['display_name'] + '"'
+            '"' + c.display_name + '"'
           end
           @categories_names_with_type = @categories_names_quoted.map do |cn|
             cn + ' text'
@@ -59,7 +57,7 @@ module Api
 
         def crosstab_columns
           [
-            'row_name INT[]',
+            'path INT[]',
             '"YEAR" int'
           ] + @path_crosstab_columns + [
             '"TYPE" text'
@@ -67,7 +65,7 @@ module Api
         end
 
         def pivot(query)
-          initialize_categories_names(query)
+          initialize_categories_names
 
           source_sql = query.to_sql.gsub("'", "''")
           categories_sql = @categories.to_sql.gsub("'", "''")

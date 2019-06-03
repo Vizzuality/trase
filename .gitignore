@@ -57,3 +57,5 @@ frontend/gis/cartodb/cartodb-config.json
 frontend/scripts/coverage
 frontend/docs/dist
 frontend/package-lock.json
+
+public/sitemap*

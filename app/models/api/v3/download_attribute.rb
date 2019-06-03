@@ -2,18 +2,15 @@
 #
 # Table name: download_attributes
 #
-#  id           :integer          not null, primary key
-#  context_id   :integer          not null
-#  position     :integer          not null
-#  display_name :text             not null
-#  years        :integer          is an Array
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  id                                                                      :integer          not null, primary key
+#  context_id                                                              :integer          not null
+#  position(Display order in scope of context)                             :integer          not null
+#  display_name(Name of attribute for display in downloads)                :text             not null
+#  years(Years for which attribute is present; empty (NULL) for all years) :integer          is an Array
 #
 # Indexes
 #
 #  download_attributes_context_id_position_key  (context_id,position) UNIQUE
-#  index_download_attributes_on_context_id      (context_id)
 #
 # Foreign Keys
 #

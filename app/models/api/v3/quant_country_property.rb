@@ -2,17 +2,15 @@
 #
 # Table name: quant_country_properties
 #
-#  id           :bigint(8)        not null, primary key
-#  tooltip_text :text             not null
-#  country_id   :bigint(8)        not null
-#  quant_id     :bigint(8)        not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  id                                                                                                                                                                                                                               :bigint(8)        not null, primary key
+#  tooltip_text(Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).) :text             not null
+#  country_id(Reference to country)                                                                                                                                                                                                 :bigint(8)        not null
+#  quant_id(Reference to quant)                                                                                                                                                                                                     :bigint(8)        not null
 #
 # Indexes
 #
-#  index_quant_country_properties_on_country_id  (country_id)
-#  index_quant_country_properties_on_quant_id    (quant_id)
+#  quant_country_properties_country_id_idx  (country_id)
+#  quant_country_properties_quant_id_idx    (quant_id)
 #
 # Foreign Keys
 #

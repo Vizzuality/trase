@@ -2,19 +2,17 @@
 #
 # Table name: download_quants
 #
-#  id                    :integer          not null, primary key
-#  download_attribute_id :integer          not null
-#  quant_id              :integer          not null
-#  is_filter_enabled     :boolean          default(FALSE), not null
-#  filter_bands          :float            is an Array
-#  created_at            :datetime         not null
-#  updated_at            :datetime         not null
+#  id                                                                              :integer          not null, primary key
+#  download_attribute_id                                                           :integer          not null
+#  quant_id                                                                        :integer          not null
+#  is_filter_enabled(When set, enable selection of value ranges (advanced filter)) :boolean          default(FALSE), not null
+#  filter_bands(Array of value ranges to allow filtering by)                       :float            is an Array
 #
 # Indexes
 #
+#  download_quants_download_attribute_id_idx           (download_attribute_id)
 #  download_quants_download_attribute_id_quant_id_key  (download_attribute_id,quant_id) UNIQUE
-#  index_download_quants_on_download_attribute_id      (download_attribute_id)
-#  index_download_quants_on_quant_id                   (quant_id)
+#  download_quants_quant_id_idx                        (quant_id)
 #
 # Foreign Keys
 #

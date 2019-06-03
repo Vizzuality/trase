@@ -2,16 +2,13 @@
 #
 # Table name: dashboards_attributes
 #
-#  id                            :bigint(8)        not null, primary key
-#  dashboards_attribute_group_id :bigint(8)        not null
-#  position                      :integer          not null
-#  created_at                    :datetime         not null
-#  updated_at                    :datetime         not null
+#  id                                        :bigint(8)        not null, primary key
+#  dashboards_attribute_group_id             :bigint(8)        not null
+#  position(Display order in scope of group) :integer          not null
 #
 # Indexes
 #
 #  dashboards_attributes_dashboards_attribute_group_id_position_ke  (dashboards_attribute_group_id,position) UNIQUE
-#  index_dashboards_attributes_on_dashboards_attribute_group_id     (dashboards_attribute_group_id)
 #
 # Foreign Keys
 #

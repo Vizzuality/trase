@@ -2,16 +2,13 @@
 #
 # Table name: map_attribute_groups
 #
-#  id         :integer          not null, primary key
-#  context_id :integer          not null
-#  name       :text             not null
-#  position   :integer          not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id                                          :integer          not null, primary key
+#  context_id                                  :integer          not null
+#  name(Name for display)                      :text             not null
+#  position(Display order in scope of context) :integer          not null
 #
 # Indexes
 #
-#  index_map_attribute_groups_on_context_id      (context_id)
 #  map_attribute_groups_context_id_position_key  (context_id,position) UNIQUE
 #
 # Foreign Keys

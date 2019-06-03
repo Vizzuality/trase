@@ -5,7 +5,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'rails', '~> 5.2.2.1'
+gem 'rails', '~> 5.2.3'
 gem 'pg', '~> 0.18'
 gem 'scenic'
 gem 'pg_csv'
@@ -46,6 +46,7 @@ gem 'sidekiq-unique-jobs'
 gem 'whenever', require: false
 gem 'ransack'
 gem 'bootsnap'
+gem 'sitemap_generator'
 
 group :development, :test do
   gem 'byebug', platform: :mri
@@ -71,8 +72,8 @@ group :development do
   gem 'capistrano-rvm'
   gem 'capistrano-passenger'
 
-  gem 'rubocop', require: false
-  gem 'rubocop-performance'
+  gem 'rubocop', '~> 0.67.0', require: false
+  gem 'rubocop-performance', require: false
   gem 'rbnacl', '>= 3.2', '< 5.0'
   gem 'rbnacl-libsodium'
   gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'

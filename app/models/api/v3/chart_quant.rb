@@ -5,14 +5,12 @@
 #  id                 :integer          not null, primary key
 #  chart_attribute_id :integer          not null
 #  quant_id           :integer          not null
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
 #
 # Indexes
 #
+#  chart_quants_chart_attribute_id_idx           (chart_attribute_id)
 #  chart_quants_chart_attribute_id_quant_id_key  (chart_attribute_id,quant_id) UNIQUE
-#  index_chart_quants_on_chart_attribute_id      (chart_attribute_id)
-#  index_chart_quants_on_quant_id                (quant_id)
+#  chart_quants_quant_id_idx                     (quant_id)
 #
 # Foreign Keys
 #

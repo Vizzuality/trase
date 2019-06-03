@@ -5,13 +5,9 @@
 #  id                      :integer          not null, primary key
 #  recolor_by_attribute_id :integer          not null
 #  ind_id                  :integer          not null
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
 #
 # Indexes
 #
-#  index_recolor_by_inds_on_ind_id                     (ind_id)
-#  index_recolor_by_inds_on_recolor_by_attribute_id    (recolor_by_attribute_id)
 #  recolor_by_inds_recolor_by_attribute_id_ind_id_key  (recolor_by_attribute_id,ind_id) UNIQUE
 #
 # Foreign Keys

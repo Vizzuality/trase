@@ -2,20 +2,17 @@
 #
 # Table name: country_properties
 #
-#  id                        :integer          not null, primary key
-#  country_id                :integer          not null
-#  latitude                  :float            not null
-#  longitude                 :float            not null
-#  zoom                      :integer          not null
-#  created_at                :datetime         not null
-#  updated_at                :datetime         not null
-#  annotation_position_x_pos :float
-#  annotation_position_y_pos :float
+#  id                                                                                                                :integer          not null, primary key
+#  country_id                                                                                                        :integer          not null
+#  latitude(Country latitide)                                                                                        :float            not null
+#  longitude(Country longitude)                                                                                      :float            not null
+#  zoom(Zoom level (0-18))                                                                                           :integer          not null
+#  annotation_position_x_pos(X position (in coordinates) where the country's label is displayed on the explore page) :float
+#  annotation_position_y_pos(Y position (in coordinates) where the country's label is displayed on the explore page) :float
 #
 # Indexes
 #
-#  country_properties_country_id_key       (country_id) UNIQUE
-#  index_country_properties_on_country_id  (country_id)
+#  country_properties_country_id_key  (country_id) UNIQUE
 #
 # Foreign Keys
 #

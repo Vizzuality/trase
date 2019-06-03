@@ -2,17 +2,16 @@
 #
 # Table name: flow_quants
 #
-#  id         :integer          not null, primary key
-#  flow_id    :integer          not null
-#  quant_id   :integer          not null
-#  value      :float            not null
-#  created_at :datetime         not null
+#  id                   :integer          not null, primary key
+#  flow_id              :integer          not null
+#  quant_id             :integer          not null
+#  value(Numeric value) :float            not null
 #
 # Indexes
 #
+#  flow_quants_flow_id_idx           (flow_id)
 #  flow_quants_flow_id_quant_id_key  (flow_id,quant_id) UNIQUE
 #  flow_quants_quant_id_idx          (quant_id)
-#  index_flow_quants_on_flow_id      (flow_id)
 #
 # Foreign Keys
 #
