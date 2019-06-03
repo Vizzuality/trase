@@ -39,10 +39,16 @@ module Api
       validates :is_highlighted, inclusion: {in: [true, false]}
       validates :default_basemap, inclusion: {in: DEFAULT_BASEMAP, allow_blank: true}
 
+      after_commit :refresh_dependents
+
       def self.blue_foreign_keys
         [
           {name: :context_id, table_class: Api::V3::Context}
         ]
+      end
+
+      def refresh_dependents
+        Api::V3::Readonly::Context.refresh
       end
     end
   end

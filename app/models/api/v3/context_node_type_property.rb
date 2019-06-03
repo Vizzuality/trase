@@ -38,6 +38,7 @@ module Api
 
       before_save :nilify_role,
                   if: -> { role.blank? }
+      # TODO: there should be only one default per group
 
       belongs_to :context_node_type
 
@@ -48,10 +49,16 @@ module Api
       validates :is_choropleth_disabled, inclusion: {in: [true, false]}
       validates :role, inclusion: ROLES, allow_nil: true, allow_blank: true
 
+      after_commit :refresh_dependents
+
       def self.blue_foreign_keys
         [
           {name: :context_node_type_id, table_class: Api::V3::ContextNodeType}
         ]
+      end
+
+      def refresh_dependents
+        Api::V3::Readonly::Context.refresh
       end
 
       def self.roles

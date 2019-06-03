@@ -11,6 +11,8 @@ RSpec.describe 'Get contexts', type: :request do
     Api::V3::Readonly::DownloadAttribute.refresh(sync: true, skip_dependencies: true)
     Api::V3::Readonly::ResizeByAttribute.refresh(sync: true, skip_dependencies: true)
     Api::V3::Readonly::RecolorByAttribute.refresh(sync: true, skip_dependencies: true)
+    Api::V3::Readonly::Context.refresh(sync: true)
+    Api::V3::Readonly::Node.refresh(sync: true)
   end
 
   describe 'GET /api/v3/contexts' do

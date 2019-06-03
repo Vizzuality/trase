@@ -102,6 +102,7 @@ module Api
         def refresh_materialized_views_now
           # synchronously, with dependencies
           [
+            Api::V3::Readonly::Context,
             Api::V3::Readonly::Attribute,
             Api::V3::Readonly::Node,
             Api::V3::Readonly::SankeyNode,
