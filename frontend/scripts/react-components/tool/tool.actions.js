@@ -35,10 +35,7 @@ import {
 } from 'react-components/tool/tool.selectors';
 import pSettle from 'p-settle';
 
-import {
-  setToolLinks,
-  setToolFlowsLoading
-} from 'react-components/tool-links/tool-links.actions';
+import { setToolLinks, setToolFlowsLoading } from 'react-components/tool-links/tool-links.actions';
 
 export const RESET_SELECTION = 'RESET_SELECTION';
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
@@ -46,7 +43,6 @@ export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
 export const SET_MAP_DIMENSIONS_DATA = 'SET_MAP_DIMENSIONS_DATA';
 export const UPDATE_NODE_SELECTION = 'UPDATE_NODE_SELECTION';
 export const HIGHLIGHT_NODE = 'HIGHLIGHT_NODE';
-export const FILTER_LINKS_BY_NODES = 'FILTER_LINKS_BY_NODES';
 export const SELECT_BIOME_FILTER = 'SELECT_BIOME_FILTER';
 export const SELECT_YEARS = 'SELECT_YEARS';
 export const SELECT_RESIZE_BY = 'SELECT_RESIZE_BY';
@@ -136,16 +132,11 @@ export function selectView(detailedView, reloadLinks) {
   return _reloadLinks('detailedView', detailedView, SELECT_VIEW, reloadLinks);
 }
 
-export function resetState(refilter = true) {
+export function resetState() {
   return dispatch => {
     dispatch({
       type: RESET_SELECTION
     });
-    if (refilter === true) {
-      dispatch({
-        type: FILTER_LINKS_BY_NODES
-      });
-    }
     selectView(false, true);
     dispatch(loadLinks());
   };
@@ -203,9 +194,6 @@ export function resetSankey() {
     dispatch({
       type: RESET_SELECTION
     });
-    dispatch({
-      type: FILTER_LINKS_BY_NODES
-    });
 
     dispatch(loadLinks());
   };
@@ -214,25 +202,22 @@ export function resetSankey() {
 export function selectBiomeFilter(biomeFilter) {
   return (dispatch, getState) => {
     dispatch(_setBiomeFilterAction(biomeFilter, getState()));
-    dispatch(loadLinks());
   };
 }
 
 export function selectResizeBy(resizeByName) {
   return (dispatch, getState) => {
     dispatch(_setResizeByAction(resizeByName, getState()));
-    dispatch(loadLinks());
   };
 }
 
 export function selectRecolorBy(recolorBy) {
   return (dispatch, getState) => {
     dispatch(_setRecolorByAction(recolorBy, getState()));
-    dispatch(loadLinks());
   };
 }
 
-export function selectColumn(columnIndex, columnId, reloadLinks = true) {
+export function selectColumn(columnIndex, columnId) {
   return (dispatch, getState) => {
     const state = getState();
     const selectedColumnsIds = getSelectedColumnsIds(state);
@@ -257,14 +242,6 @@ export function selectColumn(columnIndex, columnId, reloadLinks = true) {
       state.toolLinks.data.columns
     );
     dispatch(updateNodes(selectedNodesIds));
-
-    dispatch({
-      type: FILTER_LINKS_BY_NODES
-    });
-
-    if (reloadLinks) {
-      dispatch(loadLinks());
-    }
   };
 }
 
@@ -403,12 +380,6 @@ export function loadLinks() {
           )
         ) {
           dispatch(expandNodeSelection());
-        }
-
-        if (!isEmpty(getState().toolLinks.selectedNodesIds)) {
-          dispatch({
-            type: FILTER_LINKS_BY_NODES
-          });
         }
 
         // load related geoIds to show on the map
@@ -585,11 +556,6 @@ export function selectNode(param, isAggregated = false) {
 
         // send to state the new node selection
         dispatch(updateNodes(selectedNodesIds));
-
-        // refilter links by selected nodes
-        dispatch({
-          type: FILTER_LINKS_BY_NODES
-        });
       }
     });
     if (!isAggregated) {
@@ -725,8 +691,6 @@ export function expandNodeSelection() {
         forcedOverview: true
       });
     }
-
-    dispatch(loadLinks());
   };
 }
 
@@ -746,8 +710,6 @@ export function collapseNodeSelection() {
         forcedOverview: false
       });
     }
-
-    dispatch(loadLinks());
   };
 }
 

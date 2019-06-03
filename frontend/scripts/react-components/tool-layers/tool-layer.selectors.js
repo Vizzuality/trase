@@ -22,8 +22,13 @@ export const getChoroplethOptions = createSelector(
     getToolColumns,
     getMapDimensions
   ],
-  (selectedMapDimensions, nodes, attributes, columns, mapDimensions) =>
-    getChoropleth(selectedMapDimensions, nodes, attributes, columns, mapDimensions)
+  (selectedMapDimensions, nodes, attributes, columns, mapDimensions) => {
+    if (!nodes || !attributes || !columns) {
+      return { choropleth: {}, choroplethLegend: null };
+    }
+
+    return getChoropleth(selectedMapDimensions, nodes, attributes, columns, mapDimensions);
+  }
 );
 
 export const getMapDimensionsWarnings = createSelector(

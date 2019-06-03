@@ -129,7 +129,7 @@ const sankeyLayout = () => {
   // compute links y and y deltas (later used by sankey.link generator)
   // will be called at each relayouting (user clicks nodes, user scrolls, etc)
   const _computeLinksCoords = () => {
-    if (links.length === 0) {
+    if (links.length === 0 || columns.length === 0) {
       return;
     }
     // source and target are dicts (nodeIds are keys) containing the cumulated height of all links for each node
@@ -194,7 +194,7 @@ const sankeyLayout = () => {
           recolorBySort =
             recolorBy.type === 'ind'
               ? linkA.recolorBy - linkB.recolorBy
-              : linkA.recolorBy.charCodeAt(0) - linkB.recolorBy.charCodeAt(0);
+              : `${linkA.recolorBy}`.charCodeAt(0) - `${linkB.recolorBy}`.charCodeAt(0);
         }
         return recolorBySort;
       }

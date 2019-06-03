@@ -110,6 +110,34 @@ export function* getToolNodesByLink(selectedContext) {
   }
 }
 
+export function* getMoreToolNodesByLink(selectedContext) {
+  const {
+    data: { links, nodes }
+  } = yield select(state => state.toolLinks);
+  const nodesInLinkPaths = Object.values(links).flatMap(link => link.path);
+  const existingNodes = new Set(Object.keys(nodes));
+  const difference = new Set(nodesInLinkPaths.filter(x => !existingNodes.has(x)));
+
+  // we only want to fetch the missing nodes
+  const nodesIds = Array.from(difference).join(',');
+  const params = { context_id: selectedContext.id, nodes_ids: nodesIds };
+  const url = getURLFromParams(GET_ALL_NODES_URL, params);
+  const { source, fetchPromise } = fetchWithCancel(url);
+  try {
+    const { data } = yield call(fetchPromise);
+    yield put(setMoreToolNodes(data.data));
+  } catch (e) {
+    console.error('Error', e);
+  } finally {
+    if (yield cancelled()) {
+      if (NODE_ENV_DEV) console.error('Cancelled');
+      if (source) {
+        source.cancel();
+      }
+    }
+  }
+}
+
 export function* getToolGeoColumnNodes(selectedContext) {
   const selectedColumnsIds = yield select(getSelectedColumnsIds);
 

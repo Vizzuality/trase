@@ -15,11 +15,11 @@ import {
   COLLAPSE_NODE_SELECTION
 } from 'react-components/tool/tool.actions';
 import {
-  TOOL_LINKS_SET_NODES,
-  TOOL_LINKS_SET_MORE_NODES,
+  TOOL_LINKS__SET_NODES,
+  TOOL_LINKS__SET_MORE_NODES,
   TOOL_LINKS__SET_FLOWS_LOADING,
   TOOL_LINKS__SET_COLUMNS,
-  TOOL_LINKS_SET_LINKS
+  TOOL_LINKS__SET_LINKS
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
 import immer from 'immer';
@@ -104,7 +104,7 @@ const toolLinksReducer = {
     });
   },
 
-  [TOOL_LINKS_SET_NODES](state, action) {
+  [TOOL_LINKS__SET_NODES](state, action) {
     const { nodes } = action.payload;
     return immer(state, draft => {
       draft.data.nodes = {};
@@ -116,7 +116,7 @@ const toolLinksReducer = {
     });
   },
 
-  [TOOL_LINKS_SET_MORE_NODES](state, action) {
+  [TOOL_LINKS__SET_MORE_NODES](state, action) {
     const { nodes } = action.payload;
     return immer(state, draft => {
       nodes.forEach(node => {
@@ -128,7 +128,7 @@ const toolLinksReducer = {
     });
   },
 
-  [TOOL_LINKS_SET_LINKS](state, action) {
+  [TOOL_LINKS__SET_LINKS](state, action) {
     return immer(state, draft => {
       const { links, linksMeta } = action.payload;
 
