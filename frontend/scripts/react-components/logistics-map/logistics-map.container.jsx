@@ -5,7 +5,8 @@ import {
   getLogisticsMapLayers,
   getActiveLayers,
   getActiveParams,
-  getBounds
+  getBounds,
+  getBorder
 } from 'react-components/logistics-map/logistics-map.selectors';
 import {
   setLogisticsMapActiveModal,
@@ -21,6 +22,7 @@ class LogisticsMapContainer extends React.PureComponent {
     layers: PropTypes.array,
     tooltips: PropTypes.object,
     bounds: PropTypes.object,
+    border: PropTypes.object,
     commodity: PropTypes.string,
     activeLayers: PropTypes.array,
     activeModal: PropTypes.string,
@@ -100,7 +102,8 @@ class LogisticsMapContainer extends React.PureComponent {
       commodity,
       tooltips,
       activeModal,
-      bounds
+      bounds,
+      border
     } = this.props;
     const { mapPopUp } = this.state;
 
@@ -110,6 +113,7 @@ class LogisticsMapContainer extends React.PureComponent {
         tooltips={tooltips}
         mapPopUp={mapPopUp}
         bounds={bounds}
+        border={border}
         commodity={commodity}
         activeModal={activeModal}
         activeLayers={activeLayers}
@@ -131,6 +135,7 @@ const mapStateToProps = state => {
     activeLayers: getActiveLayers(state),
     layers: getLogisticsMapLayers(state),
     bounds: getBounds(state),
+    border: getBorder(state),
     activeModal: state.logisticsMap.activeModal,
     tooltips: state.app.tooltips ? state.app.tooltips.logisticsMap : {}
   };

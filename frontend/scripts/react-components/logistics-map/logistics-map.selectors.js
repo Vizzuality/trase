@@ -1,6 +1,8 @@
 import deburr from 'lodash/deburr';
 import { createSelector, defaultMemoize } from 'reselect';
 import templates from 'react-components/logistics-map/logistics-map-layers';
+import BRAZIL_COUNTRY from 'react-components/logistics-map/BRAZIL_COUNTRY.json';
+import INDONESIA_COUNTRY from 'react-components/logistics-map/INDONESIA_COUNTRY.json';
 
 export const defaultLayersIds = {
   soy: ['crushing_facilities', 'refining_facilities', 'storage_facilities'],
@@ -39,6 +41,25 @@ export const getBounds = createSelector(
     };
     return commodityBounds[commodity];
   }
+);
+
+export const getBorder = createSelector(
+  [getSelectedCommodity],
+  commodity => ({
+    provider: 'leaflet',
+    layerConfig: {
+      type: 'geoJSON',
+      body: commodity === 'soy' || commodity === 'cattle' ? BRAZIL_COUNTRY : INDONESIA_COUNTRY,
+      options: {
+        style: {
+          weight: 1,
+          color: '#34444C',
+          opacity: 0.2,
+          fill: false
+        }
+      }
+    }
+  })
 );
 
 export const getActiveParams = createSelector(
