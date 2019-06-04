@@ -3,7 +3,7 @@ import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/da
 import DashboardWidgetTooltip from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-tooltip';
 import { format } from 'd3-format';
 
-const meta = {
+export const meta = {
   xAxis: {
     label: 'Year',
     prefix: '',
@@ -43,6 +43,14 @@ const meta = {
       suffix: ''
     }
   },
+  x0: {
+    label: 'Trade Volume',
+    tooltip: {
+      prefix: '',
+      format: '',
+      suffix: 't'
+    }
+  },
   x1: {
     label: 'Trade Volume',
     tooltip: {
@@ -58,7 +66,37 @@ const meta = {
       format: '',
       suffix: 't'
     }
-  }
+  },
+  info: {
+    node_type: null,
+    years: {
+      start_year: 2017,
+      end_year: null
+    },
+    top_n: null,
+    filter: {
+      cont_attribute: 'Trade volume',
+      ncont_attribute: null,
+      sources: [],
+      companies: [],
+      destinations: []
+    },
+    single_filter_key: null
+  },
+  aggregates: { total_value: { x0: 100 } },
+  yLabelsProfileInfo: [
+    { profile: 'actor' },
+    { profile: 'actor' },
+    { profile: 'actor' },
+    { profile: 'actor' },
+    { profile: 'actor' },
+    { profile: 'actor' },
+    { profile: 'actor' },
+    { profile: 'actor' },
+    { profile: 'actor' },
+    { profile: 'actor' },
+    { profile: 'actor' }
+  ]
 };
 
 const tooltip = {
