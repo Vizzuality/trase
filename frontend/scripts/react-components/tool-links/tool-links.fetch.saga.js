@@ -116,7 +116,12 @@ export function* getMoreToolNodesByLink(selectedContext) {
   } = yield select(state => state.toolLinks);
   const nodesInLinkPaths = Object.values(links).flatMap(link => link.path);
   const existingNodes = new Set(Object.keys(nodes));
-  const difference = new Set(nodesInLinkPaths.filter(x => !existingNodes.has(x)));
+  const difference = new Set(nodesInLinkPaths.filter(x => !existingNodes.has(`${x}`)));
+
+  if (difference.size === 0) {
+    if (NODE_ENV_DEV) console.log('All necessary nodes have been downloaded');
+    return;
+  }
 
   // we only want to fetch the missing nodes
   const nodesIds = Array.from(difference).join(',');

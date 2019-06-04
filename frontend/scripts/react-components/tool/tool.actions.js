@@ -19,7 +19,6 @@ import contextLayersCarto from 'named-maps/tool_named_maps_carto';
 import getNodeIdFromGeoId from 'actions/helpers/getNodeIdFromGeoId';
 import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
 import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsWarnings';
-import isNodeColumnVisible from 'utils/isNodeColumnVisible';
 import difference from 'lodash/difference';
 import intesection from 'lodash/intersection';
 import compact from 'lodash/compact';
@@ -62,17 +61,6 @@ export const SAVE_MAP_VIEW = 'SAVE_MAP_VIEW';
 export const SHOW_LINKS_ERROR = 'SHOW_LINKS_ERROR';
 export const RESET_TOOL_STATE = 'RESET_TOOL_STATE';
 export const SET_SANKEY_SEARCH_VISIBILITY = 'SET_SANKEY_SEARCH_VISIBILITY';
-
-const _reloadLinks = (param, value, type, reloadLinks = true) => dispatch => {
-  const action = {
-    type
-  };
-  action[param] = value;
-  dispatch(action);
-  if (reloadLinks) {
-    dispatch(loadLinks());
-  }
-};
 
 const _setRecolorByAction = (recolorBy, state) => {
   let selectedRecolorBy;
@@ -128,8 +116,11 @@ const _setBiomeFilterAction = (biomeFilterName, state) => {
   };
 };
 
-export function selectView(detailedView, reloadLinks) {
-  return _reloadLinks('detailedView', detailedView, SELECT_VIEW, reloadLinks);
+export function selectView(detailedView) {
+  return {
+    type: SELECT_VIEW,
+    detailedView
+  };
 }
 
 export function resetState() {
@@ -137,8 +128,7 @@ export function resetState() {
     dispatch({
       type: RESET_SELECTION
     });
-    selectView(false, true);
-    dispatch(loadLinks());
+    dispatch(selectView(false));
   };
 }
 
@@ -235,13 +225,6 @@ export function selectColumn(columnIndex, columnId) {
         currentColumnsIds: selectedColumnsIds
       }
     });
-    const selectedNodesIds = getSelectedNodeIdsNotInColumnIndex(
-      state.toolLinks.selectedNodesIds,
-      columnIndex,
-      state.toolLinks.data.nodes,
-      state.toolLinks.data.columns
-    );
-    dispatch(updateNodes(selectedNodesIds));
   };
 }
 
@@ -519,15 +502,6 @@ export function setMapContextLayers(contextualLayers) {
   };
 }
 
-// Get a list of selected node that are NOT part of the given column index
-function getSelectedNodeIdsNotInColumnIndex(currentSelectedNodesIds, columnIndex, nodes, columns) {
-  return currentSelectedNodesIds.filter(nodeId => {
-    const node = nodes[nodeId];
-    const column = columns[node.columnId];
-    return column.group !== columnIndex;
-  });
-}
-
 // remove or add nodeIds from selectedNodesIds
 function getSelectedNodeIds(currentSelectedNodesIds, changedNodeIds) {
   return xor(currentSelectedNodesIds, changedNodeIds);
@@ -608,27 +582,12 @@ export function selectExpandedNode(param) {
     if (hasInvisibleNodes) {
       const state = getState();
       const { toolLinks } = state;
-      const selectedColumnsIds = getSelectedColumnsIds(state);
       if (
         toolLinks.selectedNodesIds.length === ids.length &&
         intesection(toolLinks.selectedNodesIds, ids).length === ids.length
       ) {
         dispatch(resetState());
       } else {
-        const nodes = ids.map(nodeId => {
-          if (!toolLinks.data.nodes[nodeId]) {
-            console.warn(`requested node ${nodeId} does not exist in nodes`);
-          }
-          return toolLinks.data.nodes[nodeId];
-        });
-
-        nodes.forEach(node => {
-          const column = toolLinks.data.columns[node.columnId];
-          if (!isNodeColumnVisible(column, selectedColumnsIds)) {
-            dispatch(selectColumn(column.group, node.columnId, false));
-          }
-        });
-
         const currentSelectedNodesIds = getState().toolLinks.selectedNodesIds;
         const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, ids);
 

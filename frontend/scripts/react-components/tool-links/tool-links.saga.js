@@ -7,7 +7,9 @@ import {
   SELECT_RESIZE_BY,
   SELECT_BIOME_FILTER,
   COLLAPSE_NODE_SELECTION,
-  EXPAND_NODE_SELECTION
+  EXPAND_NODE_SELECTION,
+  SELECT_COLUMN,
+  SELECT_VIEW
 } from 'react-components/tool/tool.actions';
 import { TOOL_LINKS__GET_COLUMNS, setToolFlowsLoading } from './tool-links.actions';
 import {
@@ -24,14 +26,13 @@ function* fetchToolColumns() {
     const {
       app: { selectedContext }
     } = state;
-
     yield put(setToolFlowsLoading(true));
     yield fork(getToolColumnsData, selectedContext);
     yield call(getToolLinksData);
     yield fork(getToolNodesByLink, selectedContext);
-    yield fork(getToolGeoColumnNodes, selectedContext);
+    yield call(getToolGeoColumnNodes, selectedContext);
 
-    // TODO: remove this calls, just here to split the refactor in stages
+    // TODO: remove this call, just here to split the refactor in stages
     yield put(loadMapVectorData());
 
     yield fork(setLoadingSpinner, 150, setToolFlowsLoading(false));
@@ -49,6 +50,8 @@ function* fetchLinks() {
   }
   yield takeLatest(
     [
+      SELECT_COLUMN,
+      SELECT_VIEW,
       SELECT_RECOLOR_BY,
       SELECT_RESIZE_BY,
       SELECT_BIOME_FILTER,

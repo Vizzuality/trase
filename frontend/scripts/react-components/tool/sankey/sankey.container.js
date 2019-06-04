@@ -50,7 +50,7 @@ const mapDispatchToProps = {
 const methodProps = [
   {
     name: 'showLoadedLinks',
-    compared: ['links'],
+    compared: ['links', 'visibleNodesByColumn'],
     returned: [
       'sankeySize',
       'nodeHeights',

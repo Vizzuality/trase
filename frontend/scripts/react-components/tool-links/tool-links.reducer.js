@@ -59,12 +59,11 @@ const toolLinksReducer = {
   [RESET_SELECTION](state) {
     return immer(state, draft => {
       Object.assign(draft, {
-        highlightedNodesIds: [],
-        selectedNodesIds: [],
-        expandedNodesIds: [],
-        forcedOverview: false,
-        selectedBiomeFilter: null,
-        selectedColumnsIds: null
+        highlightedNodesIds: toolLinksInitialState.highlightedNodesIds,
+        selectedNodesIds: toolLinksInitialState.selectedNodesIds,
+        expandedNodesIds: toolLinksInitialState.expandedNodesIds,
+        forcedOverview: toolLinksInitialState.forcedOverview,
+        selectedBiomeFilter: toolLinksInitialState.selectedBiomeFilter
       });
     });
   },
@@ -120,6 +119,12 @@ const toolLinksReducer = {
     const { nodes } = action.payload;
     return immer(state, draft => {
       nodes.forEach(node => {
+        if (!draft.data.nodes) {
+          draft.data.nodes = {};
+        }
+        if (!draft.data.nodesByColumnGeoId) {
+          draft.data.nodesByColumnGeoId = {};
+        }
         if (!draft.data.nodes[node.id]) {
           draft.data.nodes[node.id] = node;
           draft.data.nodesByColumnGeoId[`${node.columnId}-${node.geoId}`] = node.id;
@@ -201,6 +206,12 @@ const toolLinksReducer = {
         draft.selectedColumnsIds[columnIndex] = columnId;
       }
       draft.data.links = [];
+
+      draft.selectedNodesIds = state.selectedNodesIds.filter(nodeId => {
+        const node = draft.nodes[nodeId];
+        const column = draft.columns[node.columnId];
+        return column.group !== columnIndex;
+      });
     });
   },
   [UPDATE_NODE_SELECTION](state, action) {
