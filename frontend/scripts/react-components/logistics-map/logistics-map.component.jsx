@@ -28,7 +28,7 @@ function LogisticsMap(props) {
     layers,
     tooltips,
     mapPopUp,
-    commodity,
+    heading,
     openModal,
     closeModal,
     activeModal,
@@ -38,7 +38,6 @@ function LogisticsMap(props) {
     getCurrentPopUp
   } = props;
   const Tooltip = p => <UnitsTooltip {...p.data} />;
-  const heading = commodity === 'soy' ? 'soy facilities' : 'slaughterhouses';
   return (
     <div className="l-logistics-map">
       <div className="c-logistics-map">
@@ -83,7 +82,7 @@ LogisticsMap.propTypes = {
   tooltips: PropTypes.object,
   closeModal: PropTypes.func,
   buildEvents: PropTypes.func,
-  commodity: PropTypes.string,
+  heading: PropTypes.string,
   activeModal: PropTypes.string,
   activeLayers: PropTypes.array,
   bounds: PropTypes.object,

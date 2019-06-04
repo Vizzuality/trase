@@ -15,13 +15,24 @@ export const defaultLayersIds = {
 };
 
 const getSelectedCommodity = state =>
-  (state.location.query && state.location.query.commodity) || 'soy';
+  INDONESIA_LOGISTICS_MAP_ACTIVE
+    ? 'palmOil'
+    : (state.location.query && state.location.query.commodity) || 'soy';
+
 const getSelectedYear = state => (state.location.query && state.location.query.year) || 2016;
 const getSelectedInspection = state => state.location.query && state.location.query.inspection;
 const getActiveLayersIds = state => state.location.query && state.location.query.layers;
 const getCompanies = state => state.logisticsMap.companies || {};
 const getActiveCompanies = state => (state.location.query && state.location.query.companies) || [];
 const getLogisticsMapSearchTerm = state => state.logisticsMap.searchTerm;
+
+export const getHeading = createSelector(
+  [getSelectedCommodity],
+  commodity => {
+    if (INDONESIA_LOGISTICS_MAP_ACTIVE) return 'mills';
+    return commodity === 'soy' ? 'soy facilities' : 'slaughterhouses';
+  }
+);
 
 export const getBounds = createSelector(
   [getSelectedCommodity],
