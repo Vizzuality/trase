@@ -234,9 +234,11 @@ export const LOGISTICS_MAP_YEARS = Array.from({ length: 12 })
   .fill(2016)
   .map((y, i) => ({ value: y - i, label: `${y - i}` }));
 
-export const LOGISTICS_MAP_HUBS = INDONESIA_LOGISTICS_MAP_ACTIVE
-  ? [{ value: 'palmOil', label: 'Palm oil' }]
-  : [{ value: 'soy', label: 'Soy' }, { value: 'cattle', label: 'Cattle' }];
+export const LOGISTICS_MAP_HUBS = [
+  { value: 'soy', label: 'Soy' },
+  { value: 'cattle', label: 'Cattle' },
+  { value: 'palmOil', label: 'Palm oil' }
+];
 
 export const LOGISTICS_MAP_INSPECTION_LEVELS = [
   { value: 'SIF', label: 'SIF' },

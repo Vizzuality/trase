@@ -29,7 +29,7 @@ const getLogisticsMapSearchTerm = state => state.logisticsMap.searchTerm;
 export const getHeading = createSelector(
   [getSelectedCommodity],
   commodity => {
-    if (INDONESIA_LOGISTICS_MAP_ACTIVE) return 'mills';
+    if (commodity === 'palmOil') return 'mills';
     return commodity === 'soy' ? 'soy facilities' : 'slaughterhouses';
   }
 );
