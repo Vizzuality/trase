@@ -7,44 +7,7 @@ import Heading from 'react-components/shared/heading/heading.component';
 
 import 'react-components/logistics-map/logistics-map-download/logistics-map-download.scss';
 
-function LogisticsMapDownload(props) {
-  const { close, layers } = props;
-  return (
-    <LogisticsMapModal
-      heading="Download"
-      content={
-        <div className="c-logistics-map-download">
-          <div className="row">
-            <div className="column small-12">
-              <Heading as="h3" weight="bold">
-                Soy
-              </Heading>
-            </div>
-            {layers.soy.map(LogisticsMapDownload.mapLayerToLink)}
-          </div>
-
-          <div className="row">
-            <div className="column small-12">
-              <Heading as="h3" weight="bold">
-                Cattle
-              </Heading>
-            </div>
-            {layers.cattle.map(LogisticsMapDownload.mapLayerToLink)}
-          </div>
-        </div>
-      }
-      footer={
-        <>
-          <Button size="md" color="pink" onClick={close}>
-            Close
-          </Button>
-        </>
-      }
-    />
-  );
-}
-
-LogisticsMapDownload.mapLayerToLink = layer => (
+const mapLayerToLink = layer => (
   <div className="column small-12 medium-6" key={layer.name}>
     <Button
       as="a"
@@ -60,6 +23,60 @@ LogisticsMapDownload.mapLayerToLink = layer => (
     </Button>
   </div>
 );
+
+const renderLayers = layers => {
+  console.log('l', layers);
+  if (layers.palmOil) {
+    return (
+      <div className="row">
+        <div className="column small-12">
+          <Heading as="h3" weight="bold">
+            Palm Oil
+          </Heading>
+        </div>
+        {layers.palmOil.map(mapLayerToLink)}
+      </div>
+    );
+  }
+  return (
+    <>
+      <div className="row">
+        <div className="column small-12">
+          <Heading as="h3" weight="bold">
+            Soy
+          </Heading>
+        </div>
+        {layers.soy.map(mapLayerToLink)}
+      </div>
+
+      <div className="row">
+        <div className="column small-12">
+          <Heading as="h3" weight="bold">
+            Cattle
+          </Heading>
+        </div>
+        {layers.cattle.map(mapLayerToLink)}
+      </div>
+    </>
+  );
+};
+
+function LogisticsMapDownload(props) {
+  const { close, layers } = props;
+  return (
+    <LogisticsMapModal
+      heading="Download"
+      content={<div className="c-logistics-map-download">{renderLayers(layers)}</div>}
+      footer={
+        <>
+          <Button size="md" color="pink" onClick={close}>
+            Close
+          </Button>
+        </>
+      }
+    />
+  );
+}
 
 LogisticsMapDownload.propTypes = {
   close: PropTypes.func.isRequired,

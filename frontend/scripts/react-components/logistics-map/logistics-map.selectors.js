@@ -16,9 +16,7 @@ export const defaultLayersIds = {
 };
 
 const getSelectedCommodity = state =>
-  INDONESIA_LOGISTICS_MAP_ACTIVE
-    ? 'palmOil'
-    : (state.location.query && state.location.query.commodity) || 'soy';
+  INDONESIA_LOGISTICS_MAP_ACTIVE ? 'palmOil' : state?.location?.query?.commodity || 'soy';
 
 const getSelectedYear = state => (state.location.query && state.location.query.year) || 2016;
 const getSelectedInspection = state => state.location.query && state.location.query.inspection;
