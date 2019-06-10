@@ -30,7 +30,7 @@ import { recordSaga } from '../utils/record-saga';
 jest.mock('utils/getURLFromParams', () => ({
   getURLFromParams: jest.fn()
 }));
-jest.mock('react-components/dashboard-element/fetch-with-cancel', () => ({
+jest.mock('utils/saga-utils', () => ({
   fetchWithCancel: jest.fn()
 }));
 const someUrl = 'http://trase.earth';

@@ -9,7 +9,7 @@ import {
 } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
 import { getURLFromParams } from 'utils/getURLFromParams';
 
-jest.mock('react-components/dashboard-element/fetch-with-cancel', () => ({
+jest.mock('utils/saga-utils', () => ({
   fetchWithCancel: jest.fn()
 }));
 
