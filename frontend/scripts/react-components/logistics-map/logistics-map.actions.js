@@ -55,7 +55,7 @@ export const getLogisticsMapCompanies = () => (dispatch, getState) => {
     cattle:
       'select distinct company FROM brazil_slaughterhouses_simple_2018_09_18 order by company asc',
     palmOil:
-      'select distinct parent_co as companies FROM indonesia_mills_31012019 order by companies asc'
+      'select distinct parent_co as company FROM indonesia_mills_31012019 order by company asc'
   };
   const url = `https://${CARTO_ACCOUNT}.carto.com/api/v1/sql?q=${queries[commodity]}`;
   if (!logisticsMap.companies[commodity]) {

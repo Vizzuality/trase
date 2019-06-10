@@ -18,6 +18,39 @@ import LogisticsMap from 'react-components/logistics-map/logistics-map.component
 import formatValue from 'utils/formatValue';
 import capitalize from 'lodash/capitalize';
 
+const getItems = (data, commodity) => {
+  switch (commodity) {
+    case 'palmOil':
+      return [
+        { title: 'Company', value: data.parent_co },
+        { title: 'Name', value: data.mill_name },
+        { title: 'UHUCSB Id', value: data.uhucsb_id },
+        { title: 'UML Id', value: data.uml_id },
+        { title: 'Active', value: data.active ? 'Active' : 'Inactive' }
+      ];
+
+    case 'soy':
+      return [
+        { title: 'Company', value: data.company },
+        { title: 'Municipality', value: data.municipality },
+        {
+          title: `Capacity (${commodity})`,
+          value: formatValue(data.capacity, 'Trade volume'),
+          unit: 't'
+        }
+      ];
+
+    default:
+      return [
+        { title: 'Company', value: data.company },
+        { title: 'State', value: data.state },
+        { title: 'Municipality', value: data.municipality },
+        { title: 'Subclass', value: data.subclass },
+        { title: 'Inspection level', value: data.inspection_level }
+      ];
+  }
+};
+
 class LogisticsMapContainer extends React.PureComponent {
   static propTypes = {
     layers: PropTypes.array,
@@ -60,27 +93,21 @@ class LogisticsMapContainer extends React.PureComponent {
       crushing_facilities: 'Crushing Facility',
       refining_facilities: 'Refinery',
       storage_facilities: 'Silo',
-      indonesia_mills: 'Mill'
+      mills: 'Mill'
     }[layer.id];
-    const items = [
-      { title: 'Company', value: data.company },
-      { title: 'Municipality', value: data.municipality }
-    ];
-    if (commodity === 'soy') {
-      items.push({
-        title: `Capacity (${commodity})`,
-        value: formatValue(data.capacity, 'Trade volume'),
-        unit: 't'
-      });
-    } else {
-      items.splice(-1, 0, { title: 'State', value: data.state });
-      items.push(
-        { title: 'Subclass', value: data.subclass },
-        { title: 'Inspection level', value: data.inspection_level }
-      );
+    if (commodity === 'cattle') {
       text = capitalize(layer.name);
     }
-    const mapPopUp = { ...e, data: { x, y, text, show, items } };
+    const mapPopUp = {
+      ...e,
+      data: {
+        x,
+        y,
+        text,
+        show,
+        items: getItems(data, commodity)
+      }
+    };
     this.setState(() => ({ mapPopUp }));
   };
 
