@@ -89,4 +89,5 @@ export async function testProfileMiniSankey(page, expect, { testId, title, flows
 
   expect(miniSankeyTitle.toLowerCase()).toMatch(title);
   expect(miniSankeyFlows.length).toBe(flowsLength);
+  await Promise.resolve();
 }
