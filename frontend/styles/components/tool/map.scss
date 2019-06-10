@@ -170,10 +170,10 @@ $map-btn-height: 32px;
 
       @include simple-arrow($white);
 
-      &:after {
-        right: initial;
-        top: initial;
-        transform: rotateZ(-45deg);
+      &::after {
+        top: 50%;
+        left: calc(50% - 4px);
+        transform: translate(-1px, -50%) rotateZ(-45deg);
       }
     }
 
@@ -191,7 +191,8 @@ $map-btn-height: 32px;
 
     .-toggle-map {
       &::after {
-        transform: rotateZ(135deg);
+        top: 50%;
+        transform: translate(-1px, -50%) rotateZ(135deg);
         left: calc(50% - 2px);
       }
     }
