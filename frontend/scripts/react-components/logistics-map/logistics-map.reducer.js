@@ -8,7 +8,8 @@ import {
 const initialState = {
   companies: {
     soy: null,
-    cattle: null
+    cattle: null,
+    palmOil: null
   },
   activeModal: null
 };

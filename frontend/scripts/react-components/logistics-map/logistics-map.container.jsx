@@ -59,7 +59,8 @@ class LogisticsMapContainer extends React.PureComponent {
     let text = {
       crushing_facilities: 'Crushing Facility',
       refining_facilities: 'Refinery',
-      storage_facilities: 'Silo'
+      storage_facilities: 'Silo',
+      indonesia_mills: 'Mill'
     }[layer.id];
     const items = [
       { title: 'Company', value: data.company },

@@ -46,16 +46,18 @@ export const getLogisticsMapCompanies = () => (dispatch, getState) => {
     location: { query = {} }
   } = getState();
 
-  const { commodity = 'soy' } = query;
+  const defaultCommodity = INDONESIA_LOGISTICS_MAP_ACTIVE ? 'palmOil' : 'soy';
+  const { commodity = defaultCommodity } = query;
 
   const queries = {
     soy:
       'select distinct company from (SELECT company FROM brazil_crushing_facilities union all select company from brazil_storage_facilities_sample union all select company from brazil_refining_facilities) as companies order by company asc',
     cattle:
-      'select distinct company FROM brazil_slaughterhouses_simple_2018_09_18 order by company asc'
+      'select distinct company FROM brazil_slaughterhouses_simple_2018_09_18 order by company asc',
+    palmOil:
+      'select distinct parent_co as companies FROM indonesia_mills_31012019 order by companies asc'
   };
   const url = `https://${CARTO_ACCOUNT}.carto.com/api/v1/sql?q=${queries[commodity]}`;
-
   if (!logisticsMap.companies[commodity]) {
     fetch(url)
       .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
@@ -73,7 +75,6 @@ export const setCompanyActive = (companyName, active) => (dispatch, getState) =>
   const { query = {} } = getState().location;
   const { companies = [] } = query;
   let newCompanies;
-
   if (active) {
     newCompanies = [...companies, companyName];
   } else {
