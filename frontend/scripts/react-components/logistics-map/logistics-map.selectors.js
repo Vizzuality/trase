@@ -146,7 +146,6 @@ export const getActiveLayers = createSelector(
   [getActiveLayersIds, getLogisticsMapLayers, getActiveDefaultLayersIds],
   (layersIds, layers, activeDefaultLayersIds) => {
     const currentLayers = layersIds || activeDefaultLayersIds;
-    console.log('layers', layers, currentLayers);
     return layers.filter(layer => !!currentLayers.includes(layer.id));
   }
 );
