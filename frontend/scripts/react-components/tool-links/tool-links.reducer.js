@@ -6,7 +6,6 @@ import {
   SELECT_COLUMN,
   SELECT_RECOLOR_BY,
   SELECT_RESIZE_BY,
-  SELECT_VIEW,
   SET_NODE_ATTRIBUTES,
   SET_SANKEY_SEARCH_VISIBILITY,
   SHOW_LINKS_ERROR,
@@ -19,7 +18,8 @@ import {
   TOOL_LINKS__SET_MORE_NODES,
   TOOL_LINKS__SET_FLOWS_LOADING,
   TOOL_LINKS__SET_COLUMNS,
-  TOOL_LINKS__SET_LINKS
+  TOOL_LINKS__SET_LINKS,
+  TOOL_LINKS__SELECT_VIEW
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
 import immer from 'immer';
@@ -186,12 +186,11 @@ const toolLinksReducer = {
       draft.selectedResizeBy = action.payload;
     });
   },
-  [SELECT_VIEW](state, action) {
+  [TOOL_LINKS__SELECT_VIEW](state, action) {
     return immer(state, draft => {
-      Object.assign(draft, {
-        detailedView: action.detailedView,
-        forcedOverview: action.forcedOverview
-      });
+      const { detailedView, forcedOverview } = action.payload;
+      draft.detailedView = detailedView;
+      draft.forcedOverview = forcedOverview;
     });
   },
 

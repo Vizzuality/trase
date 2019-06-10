@@ -110,22 +110,32 @@ export function* getToolNodesByLink(selectedContext) {
   }
 }
 
-export function* getMoreToolNodesByLink(selectedContext) {
-  const {
-    data: { links, nodes }
-  } = yield select(state => state.toolLinks);
-  const nodesInLinkPaths = Object.values(links).flatMap(link => link.path);
-  const existingNodes = new Set(Object.keys(nodes));
-  const difference = new Set(nodesInLinkPaths.filter(x => !existingNodes.has(`${x}`)));
+export function* getMoreToolNodesByLink(selectedContext, fetchAllNodes) {
+  let nodesIds; let nodeTypesIds;
+  if (!fetchAllNodes) {
+    const {
+      data: { links, nodes }
+    } = yield select(state => state.toolLinks);
+    const nodesInLinkPaths = Object.values(links).flatMap(link => link.path);
+    const existingNodes = new Set(Object.keys(nodes));
+    const difference = new Set(nodesInLinkPaths.filter(x => !existingNodes.has(`${x}`)));
 
-  if (difference.size === 0) {
-    if (NODE_ENV_DEV) console.log('All necessary nodes have been downloaded');
-    return;
+    if (difference.size === 0) {
+      if (NODE_ENV_DEV) console.log('All necessary nodes have been downloaded');
+      return;
+    }
+    // we only want to fetch the missing nodes
+    nodesIds = Array.from(difference).join(',');
+  } else {
+    const selectedColumnsIds = yield select(getSelectedColumnsIds);
+    nodeTypesIds = selectedColumnsIds.join(',');
   }
 
-  // we only want to fetch the missing nodes
-  const nodesIds = Array.from(difference).join(',');
-  const params = { context_id: selectedContext.id, nodes_ids: nodesIds };
+  const params = {
+    context_id: selectedContext.id,
+    nodes_ids: nodesIds,
+    node_types_ids: nodeTypesIds
+  };
   const url = getURLFromParams(GET_ALL_NODES_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);
   try {

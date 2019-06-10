@@ -4,6 +4,7 @@ export const TOOL_LINKS__SET_COLUMNS = 'TOOL_LINKS__SET_COLUMNS';
 export const TOOL_LINKS__SET_NODES = 'TOOL_LINKS__SET_NODES';
 export const TOOL_LINKS__SET_MORE_NODES = 'TOOL_LINKS__SET_MORE_NODES';
 export const TOOL_LINKS__SET_LINKS = 'TOOL_LINKS__SET_LINKS';
+export const TOOL_LINKS__SELECT_VIEW = 'TOOL_LINKS__SELECT_VIEW';
 
 export function setToolFlowsLoading(loading) {
   return {
@@ -43,5 +44,15 @@ export function setToolLinks(links, linksMeta) {
   return {
     type: TOOL_LINKS__SET_LINKS,
     payload: { links, linksMeta }
+  };
+}
+
+export function selectView(detailedView, forcedOverview) {
+  return {
+    type: TOOL_LINKS__SELECT_VIEW,
+    payload: {
+      detailedView,
+      forcedOverview
+    }
   };
 }

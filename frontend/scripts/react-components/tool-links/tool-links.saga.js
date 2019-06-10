@@ -10,10 +10,13 @@ import {
   COLLAPSE_NODE_SELECTION,
   EXPAND_NODE_SELECTION,
   SELECT_COLUMN,
-  SELECT_VIEW,
   SELECT_YEARS
 } from 'react-components/tool/tool.actions';
-import { TOOL_LINKS__GET_COLUMNS, setToolFlowsLoading } from './tool-links.actions';
+import {
+  TOOL_LINKS__SELECT_VIEW,
+  TOOL_LINKS__GET_COLUMNS,
+  setToolFlowsLoading
+} from './tool-links.actions';
 import {
   getToolColumnsData,
   getToolLinksData,
@@ -44,18 +47,19 @@ function* fetchToolColumns() {
 }
 
 function* fetchLinks() {
-  function* performFetch() {
+  function* performFetch(action) {
     const { selectedContext } = yield select(state => state.app);
+    const fetchAllNodes = action.type === TOOL_LINKS__SELECT_VIEW && action.payload.detailedView;
     yield put(setToolFlowsLoading(true));
     yield call(getToolLinksData);
-    yield call(getMoreToolNodesByLink, selectedContext);
+    yield call(getMoreToolNodesByLink, selectedContext, fetchAllNodes);
     yield put(setToolFlowsLoading(false));
   }
   yield takeLatest(
     [
       SELECT_YEARS,
       SELECT_COLUMN,
-      SELECT_VIEW,
+      TOOL_LINKS__SELECT_VIEW,
       SELECT_RECOLOR_BY,
       SELECT_RESIZE_BY,
       SELECT_BIOME_FILTER,

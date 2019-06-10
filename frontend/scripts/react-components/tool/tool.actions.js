@@ -33,7 +33,11 @@ import {
 } from 'react-components/tool/tool.selectors';
 import pSettle from 'p-settle';
 
-import { setToolLinks, setToolFlowsLoading } from 'react-components/tool-links/tool-links.actions';
+import {
+  setToolLinks,
+  setToolFlowsLoading,
+  selectView
+} from 'react-components/tool-links/tool-links.actions';
 
 export const RESET_SELECTION = 'RESET_SELECTION';
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
@@ -45,7 +49,6 @@ export const SELECT_BIOME_FILTER = 'SELECT_BIOME_FILTER';
 export const SELECT_YEARS = 'SELECT_YEARS';
 export const SELECT_RESIZE_BY = 'SELECT_RESIZE_BY';
 export const SELECT_RECOLOR_BY = 'SELECT_RECOLOR_BY';
-export const SELECT_VIEW = 'SELECT_VIEW';
 export const SELECT_COLUMN = 'SELECT_COLUMN';
 export const GET_MAP_VECTOR_DATA = 'GET_MAP_VECTOR_DATA';
 export const GET_CONTEXT_LAYERS = 'GET_CONTEXT_LAYERS';
@@ -95,13 +98,6 @@ const _setResizeByAction = (resizeByName, state) => {
   };
 };
 
-export function selectView(detailedView) {
-  return {
-    type: SELECT_VIEW,
-    detailedView
-  };
-}
-
 export function resetState() {
   return dispatch => {
     dispatch({
@@ -147,11 +143,7 @@ export function resetSankey() {
       dispatch(collapseNodeSelection());
     }
 
-    dispatch({
-      type: SELECT_VIEW,
-      detailedView: false,
-      forcedOverview: true
-    });
+    dispatch(selectView(false, true));
 
     if (defaultRecolorBy) {
       dispatch(_setRecolorByAction({ value: defaultRecolorBy[0].name }, state));
@@ -665,11 +657,7 @@ export function expandNodeSelection() {
 
     // if expanding, and if in detailed mode, toggle to overview mode
     if (detailedView) {
-      dispatch({
-        type: SELECT_VIEW,
-        detailedView: false,
-        forcedOverview: true
-      });
+      dispatch(selectView(false, true));
     }
   };
 }
@@ -684,11 +672,7 @@ export function collapseNodeSelection() {
 
     // if shrinking, and if overview was previously forced, go back to detailed
     if (forcedOverview) {
-      dispatch({
-        type: SELECT_VIEW,
-        detailedView: true,
-        forcedOverview: false
-      });
+      dispatch(selectView(true, false));
     }
   };
 }

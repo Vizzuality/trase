@@ -5,11 +5,11 @@ import {
   SELECT_CONTEXTUAL_LAYERS,
   SELECT_RECOLOR_BY,
   SELECT_RESIZE_BY,
-  SELECT_VIEW,
   SELECT_YEARS,
   TOGGLE_MAP,
   UPDATE_NODE_SELECTION
 } from 'react-components/tool/tool.actions';
+import { TOOL_LINKS__SELECT_VIEW } from 'react-components/tool-links/tool-links.actions';
 
 export default [
   {
@@ -63,7 +63,7 @@ export default [
     getPayload: action => action.payload.name
   },
   {
-    type: SELECT_VIEW,
+    type: TOOL_LINKS__SELECT_VIEW,
     action: 'Select view',
     category: 'Sankey',
     getPayload: action => (action.detailedView ? 'detailed' : 'overview')
