@@ -236,7 +236,8 @@ export const LOGISTICS_MAP_YEARS = Array.from({ length: 12 })
 
 export const LOGISTICS_MAP_HUBS = [
   { value: 'soy', label: 'Soy' },
-  { value: 'cattle', label: 'Cattle' }
+  { value: 'cattle', label: 'Cattle' },
+  { value: 'palmOil', label: 'Palm oil' }
 ];
 
 export const LOGISTICS_MAP_INSPECTION_LEVELS = [
