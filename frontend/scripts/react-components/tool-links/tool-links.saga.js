@@ -2,6 +2,7 @@ import { select, all, call, fork, put, takeLatest } from 'redux-saga/effects';
 import { SET_CONTEXT } from 'actions/app.actions';
 import { setLoadingSpinner } from 'utils/saga-utils';
 import {
+  loadNodes,
   loadMapVectorData,
   SELECT_RECOLOR_BY,
   SELECT_RESIZE_BY,
@@ -9,7 +10,8 @@ import {
   COLLAPSE_NODE_SELECTION,
   EXPAND_NODE_SELECTION,
   SELECT_COLUMN,
-  SELECT_VIEW
+  SELECT_VIEW,
+  SELECT_YEARS
 } from 'react-components/tool/tool.actions';
 import { TOOL_LINKS__GET_COLUMNS, setToolFlowsLoading } from './tool-links.actions';
 import {
@@ -29,11 +31,12 @@ function* fetchToolColumns() {
     yield put(setToolFlowsLoading(true));
     yield fork(getToolColumnsData, selectedContext);
     yield call(getToolLinksData);
-    yield fork(getToolNodesByLink, selectedContext);
+    yield call(getToolNodesByLink, selectedContext);
     yield call(getToolGeoColumnNodes, selectedContext);
 
     // TODO: remove this call, just here to split the refactor in stages
     yield put(loadMapVectorData());
+    yield put(loadNodes());
 
     yield fork(setLoadingSpinner, 150, setToolFlowsLoading(false));
   }
@@ -50,6 +53,7 @@ function* fetchLinks() {
   }
   yield takeLatest(
     [
+      SELECT_YEARS,
       SELECT_COLUMN,
       SELECT_VIEW,
       SELECT_RECOLOR_BY,

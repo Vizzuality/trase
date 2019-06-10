@@ -21,7 +21,6 @@ const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
 const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
 const getToolBiomeFilter = state => state.toolLinks.selectedBiomeFilter;
 const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
-const getToolFlowsLoading = state => state.toolLinks.flowsLoading;
 const getToolSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
 const getToolMapDimensions = state => state.toolLayers.data.mapDimensions;
 
@@ -121,9 +120,9 @@ const getNodesGeoIds = (nodesData, columns) =>
     .map(node => node.geoId);
 
 export const getVisibleNodes = createSelector(
-  [getToolLinks, getToolNodes, getSelectedColumnsIds, getToolFlowsLoading],
-  (links, nodes, selectedColumnsIds, flowsLoading) => {
-    if (!links || !nodes || !selectedColumnsIds || flowsLoading) {
+  [getToolLinks, getToolNodes, getSelectedColumnsIds],
+  (links, nodes, selectedColumnsIds) => {
+    if (!links || !nodes || !selectedColumnsIds) {
       return null;
     }
     return getVisibleNodesUtil(links, nodes, selectedColumnsIds);

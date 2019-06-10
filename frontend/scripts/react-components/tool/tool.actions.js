@@ -25,7 +25,6 @@ import compact from 'lodash/compact';
 import uniq from 'lodash/uniq';
 import isEmpty from 'lodash/isEmpty';
 import xor from 'lodash/xor';
-import { getCurrentContext } from 'reducers/helpers/contextHelper';
 import {
   getSelectedColumnsIds,
   getSelectedMapDimensionsUids,
@@ -67,8 +66,8 @@ const _setRecolorByAction = (recolorBy, state) => {
   if (recolorBy.value === 'none') {
     selectedRecolorBy = null;
   } else {
-    const currentContext = getCurrentContext(state);
-    selectedRecolorBy = currentContext.recolorBy.find(
+    const { selectedContext } = state.app;
+    selectedRecolorBy = selectedContext.recolorBy.find(
       contextRecolorBy => contextRecolorBy.name === recolorBy.name
     );
   }
@@ -84,8 +83,8 @@ const _setResizeByAction = (resizeByName, state) => {
   if (resizeByName === 'none') {
     selectedResizeBy = { name: 'none' };
   } else {
-    const currentContext = getCurrentContext(state);
-    selectedResizeBy = currentContext.resizeBy.find(
+    const { selectedContext } = state.app;
+    selectedResizeBy = selectedContext.resizeBy.find(
       contextResizeBy => contextResizeBy.name === resizeByName
     );
   }
@@ -93,26 +92,6 @@ const _setResizeByAction = (resizeByName, state) => {
   return {
     type: SELECT_RESIZE_BY,
     payload: selectedResizeBy
-  };
-};
-
-const _setBiomeFilterAction = (biomeFilterName, state) => {
-  let selectedBiomeFilter;
-  if (biomeFilterName === 'none') {
-    selectedBiomeFilter = { value: 'none', name: 'none' };
-  } else {
-    const currentContext = getCurrentContext(state);
-    selectedBiomeFilter = Object.assign(
-      {},
-      currentContext.filterBy[0].nodes.find(filterBy => filterBy.name === biomeFilterName)
-    );
-    const node = state.toolLinks.data.nodes[selectedBiomeFilter.nodeId];
-    selectedBiomeFilter.geoId = node && node.geoId;
-  }
-
-  return {
-    type: SELECT_BIOME_FILTER,
-    payload: selectedBiomeFilter
   };
 };
 
@@ -132,6 +111,7 @@ export function resetState() {
   };
 }
 
+// TODO: test to see when this is needed.
 // Resets sankey's params that may lead to no flows being returned from the API
 export function resetSankey() {
   return (dispatch, getState) => {
@@ -189,21 +169,66 @@ export function resetSankey() {
   };
 }
 
-export function selectBiomeFilter(biomeFilter) {
+export function selectBiomeFilter(biomeFilterName) {
   return (dispatch, getState) => {
-    dispatch(_setBiomeFilterAction(biomeFilter, getState()));
+    let selectedBiomeFilter;
+    if (biomeFilterName === 'none') {
+      selectedBiomeFilter = { value: 'none', name: 'none' };
+    } else {
+      const {
+        app: { selectedContext },
+        toolLinks
+      } = getState();
+      selectedBiomeFilter = Object.assign(
+        {},
+        selectedContext.filterBy[0].nodes.find(filterBy => filterBy.name === biomeFilterName)
+      );
+      const node = toolLinks.data.nodes[selectedBiomeFilter.nodeId];
+      selectedBiomeFilter.geoId = node && node.geoId;
+    }
+
+    dispatch({
+      type: SELECT_BIOME_FILTER,
+      payload: selectedBiomeFilter
+    });
   };
 }
 
 export function selectResizeBy(resizeByName) {
   return (dispatch, getState) => {
-    dispatch(_setResizeByAction(resizeByName, getState()));
+    let selectedResizeBy;
+    if (resizeByName === 'none') {
+      selectedResizeBy = { name: 'none' };
+    } else {
+      const { selectedContext } = getState().app;
+      selectedResizeBy = selectedContext.resizeBy.find(
+        contextResizeBy => contextResizeBy.name === resizeByName
+      );
+    }
+
+    dispatch({
+      type: SELECT_RESIZE_BY,
+      payload: selectedResizeBy
+    });
   };
 }
 
 export function selectRecolorBy(recolorBy) {
   return (dispatch, getState) => {
-    dispatch(_setRecolorByAction(recolorBy, getState()));
+    let selectedRecolorBy;
+    if (recolorBy.value === 'none') {
+      selectedRecolorBy = null;
+    } else {
+      const { selectedContext } = getState().app;
+      selectedRecolorBy = selectedContext.recolorBy.find(
+        contextRecolorBy => contextRecolorBy.name === recolorBy.name
+      );
+    }
+
+    dispatch({
+      type: SELECT_RECOLOR_BY,
+      payload: selectedRecolorBy
+    });
   };
 }
 
@@ -286,11 +311,7 @@ export function loadNodes() {
 
         dispatch({ type: SET_MAP_DIMENSIONS_DATA, payload });
 
-        const selectedBiomeFilter = getState().toolLinks.selectedBiomeFilter;
-        if (selectedBiomeFilter && selectedBiomeFilter.nodeId) {
-          dispatch(_setBiomeFilterAction(selectedBiomeFilter.name, getState()));
-        }
-        loadMapChoropeth(getState, dispatch);
+        loadMapChoropleth(getState, dispatch);
       });
   };
 }
@@ -433,7 +454,7 @@ export function loadMapVectorData() {
         type: GET_MAP_VECTOR_DATA,
         mapVectorData
       });
-      loadMapChoropeth(getState, dispatch);
+      loadMapChoropleth(getState, dispatch);
     });
   };
 }
@@ -744,11 +765,11 @@ export function toggleMapDimension(uid) {
       }
     });
 
-    loadMapChoropeth(getState, dispatch);
+    loadMapChoropleth(getState, dispatch);
   };
 }
 
-export function loadMapChoropeth(getState, dispatch) {
+export function loadMapChoropleth(getState, dispatch) {
   const state = getState();
 
   const uids = getSelectedMapDimensionsUids(state);

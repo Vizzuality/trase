@@ -4,7 +4,7 @@ import {
   GET_NODES_WITH_SEARCH_URL,
   getURLFromParams
 } from 'utils/getURLFromParams';
-import { TOGGLE_MAP, SELECT_YEARS, loadNodes, loadLinks } from 'react-components/tool/tool.actions';
+import { TOGGLE_MAP, SELECT_YEARS, loadNodes } from 'react-components/tool/tool.actions';
 import { getContextById } from 'scripts/reducers/helpers/contextHelper';
 import getPageTitle from 'scripts/router/page-title';
 import { redirect } from 'redux-first-router';
@@ -183,7 +183,6 @@ export function selectYears(years) {
     });
     if (location.type === 'tool') {
       dispatch(loadNodes());
-      dispatch(loadLinks());
     }
   };
 }
