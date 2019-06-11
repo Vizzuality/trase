@@ -5,12 +5,12 @@ import {
   SELECT_RECOLOR_BY,
   SELECT_RESIZE_BY,
   SELECT_YEARS,
-  TOGGLE_MAP,
-  UPDATE_NODE_SELECTION
+  TOGGLE_MAP
 } from 'react-components/tool/tool.actions';
 import {
   TOOL_LINKS__SELECT_VIEW,
-  TOOL_LINKS__SELECT_COLUMN
+  TOOL_LINKS__SELECT_COLUMN,
+  TOOL_LINKS__SET_SELECTED_NODES
 } from 'react-components/tool-links/tool-links.actions';
 
 export default [
@@ -24,7 +24,7 @@ export default [
     }
   },
   {
-    type: UPDATE_NODE_SELECTION,
+    type: TOOL_LINKS__SET_SELECTED_NODES,
     category: 'Sankey',
     action: 'Update node selection',
     getPayload: (action, state) => {

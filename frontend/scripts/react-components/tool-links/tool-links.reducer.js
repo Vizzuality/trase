@@ -6,8 +6,7 @@ import {
   SELECT_RECOLOR_BY,
   SELECT_RESIZE_BY,
   SET_NODE_ATTRIBUTES,
-  SHOW_LINKS_ERROR,
-  UPDATE_NODE_SELECTION
+  SHOW_LINKS_ERROR
 } from 'react-components/tool/tool.actions';
 import {
   TOOL_LINKS__SET_NODES,
@@ -19,7 +18,8 @@ import {
   TOOL_LINKS__SET_IS_SEARCH_OPEN,
   TOOL_LINKS__COLLAPSE_SANKEY,
   TOOL_LINKS__EXPAND_SANKEY,
-  TOOL_LINKS__SELECT_COLUMN
+  TOOL_LINKS__SELECT_COLUMN,
+  TOOL_LINKS__SET_SELECTED_NODES
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
 import immer from 'immer';
@@ -213,9 +213,9 @@ const toolLinksReducer = {
       });
     });
   },
-  [UPDATE_NODE_SELECTION](state, action) {
+  [TOOL_LINKS__SET_SELECTED_NODES](state, action) {
     return immer(state, draft => {
-      draft.selectedNodesIds = action.ids;
+      draft.selectedNodesIds = action.payload.selectedNodesIds;
     });
   },
   [HIGHLIGHT_NODE](state, action) {

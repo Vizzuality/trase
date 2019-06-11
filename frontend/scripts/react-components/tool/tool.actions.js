@@ -28,14 +28,14 @@ import {
   selectView,
   collapseSankey,
   expandSankey,
-  selectColumn
+  selectColumn,
+  setSelectedNodes
 } from 'react-components/tool-links/tool-links.actions';
 
 export const RESET_SELECTION = 'RESET_SELECTION';
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
 export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
 export const SET_MAP_DIMENSIONS_DATA = 'SET_MAP_DIMENSIONS_DATA';
-export const UPDATE_NODE_SELECTION = 'UPDATE_NODE_SELECTION';
 export const HIGHLIGHT_NODE = 'HIGHLIGHT_NODE';
 export const SELECT_BIOME_FILTER = 'SELECT_BIOME_FILTER';
 export const SELECT_YEARS = 'SELECT_YEARS';
@@ -406,7 +406,7 @@ export function selectNode(param, isAggregated = false) {
         const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, [nodeId]);
 
         // send to state the new node selection
-        dispatch(updateNodes(selectedNodesIds));
+        dispatch(setSelectedNodes(selectedNodesIds));
       }
     });
     if (!isAggregated) {
@@ -414,15 +414,6 @@ export function selectNode(param, isAggregated = false) {
       return dispatch(loadLinkedGeoIDs());
     }
     return undefined;
-  };
-}
-
-export function updateNodes(selectedNodesIds) {
-  return dispatch => {
-    dispatch({
-      type: UPDATE_NODE_SELECTION,
-      ids: selectedNodesIds
-    });
   };
 }
 
@@ -460,7 +451,7 @@ export function selectExpandedNode(param) {
         const currentSelectedNodesIds = getState().toolLinks.selectedNodesIds;
         const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, ids);
 
-        dispatch(updateNodes(selectedNodesIds));
+        dispatch(setSelectedNodes(selectedNodesIds));
         dispatch(expandSankey());
       }
     } else {
