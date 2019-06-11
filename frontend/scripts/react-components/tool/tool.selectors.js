@@ -28,13 +28,7 @@ export const getSelectedResizeBy = makeGetSelectedResizeBy(getToolResizeBy, getS
 export const getSelectedRecolorBy = makeGetSelectedRecolorBy(getToolRecolorBy, getSelectedContext);
 
 export const getSelectedColumnsIds = createSelector(
-  [
-    getSelectedContext,
-    getToolColumns,
-    getToolSelectedColumnsIds,
-    getSelectedNodesIds,
-    getToolNodes
-  ],
+  [getSelectedContext, getToolColumns, getToolSelectedColumnsIds],
   (selectedContext, columns, selectedColumnsIds) => {
     if (selectedColumnsIds && selectedColumnsIds.length === selectedContext.defaultColumns.length) {
       return selectedColumnsIds;
