@@ -30,7 +30,7 @@ export default [
     getPayload: (action, state) => {
       const nodeNames = [];
 
-      action.ids.forEach(d => {
+      action.payload.nodeIds.forEach(d => {
         const node = state.toolLinks.data.nodes[d];
         if (typeof node !== 'undefined') {
           nodeNames.push(node.name);
@@ -68,7 +68,7 @@ export default [
     type: TOOL_LINKS__SELECT_VIEW,
     action: 'Select view',
     category: 'Sankey',
-    getPayload: action => (action.detailedView ? 'detailed' : 'overview')
+    getPayload: action => (action.payload.detailedView ? 'detailed' : 'overview')
   },
   {
     type: TOOL_LINKS__SELECT_COLUMN,
