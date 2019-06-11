@@ -1,13 +1,16 @@
 ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
   belongs_to :context, parent_class: Api::V3::Context
 
+  include ActiveAdmin::SortableTable # creates the controller action which handles the sorting
+  config.sort_order = '' # overriding scoped_collection to sort by 2 columns
+
   includes [
     {context: [:country, :commodity]},
     :resize_by_quant
   ]
 
-  permit_params :context_id, :group_number, :position, :tooltip_text,
-                :years_str, :is_disabled, :is_default, :readonly_attribute_id
+  permit_params :context_id, :group_number, :tooltip_text, :years_str,
+                :is_disabled, :is_default, :readonly_attribute_id
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -17,6 +20,10 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
     end
 
     before_action { @page_title = "#{parent.country.name} #{parent.commodity.name} resize by attributes" }
+
+    def scoped_collection
+      super.reorder(group_number: :asc, position: :asc)
+    end
 
     def create
       super do |success, _failure|
@@ -39,8 +46,6 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
                                     label: 'Resize By Property'
       input :group_number, required: true,
                            hint: object.class.column_comment('group_number')
-      input :position, required: true,
-                       hint: object.class.column_comment('position')
       input :tooltip_text, as: :string,
                            hint: object.class.column_comment('tooltip_text')
       input :years_str, label: 'Years',
@@ -63,6 +68,10 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
     column :is_disabled
     column :is_default
     actions
+    handle_column(
+      move_to_top_url: ->(ra) { move_to_top_admin_context_resize_by_attribute_path(ra.context, ra) },
+      sort_url: ->(ra) { sort_admin_context_resize_by_attribute_path(ra.context, ra) }
+    )
   end
 
   show do

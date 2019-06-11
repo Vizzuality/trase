@@ -19,8 +19,7 @@
 #
 # Indexes
 #
-#  recolor_by_attributes_context_id_group_number_position_key  (context_id,group_number,position) UNIQUE
-#  recolor_by_attributes_context_id_idx                        (context_id)
+#  recolor_by_attributes_context_id_idx  (context_id)
 #
 # Foreign Keys
 #
@@ -58,9 +57,6 @@ module Api
 
       validates :context, presence: true
       validates :group_number, presence: true
-      validates :position,
-                presence: true,
-                uniqueness: {scope: [:context, :group_number]}
       validates :legend_type, presence: true, inclusion: {in: LEGEND_TYPE}
       validates :legend_color_theme,
                 presence: true,
@@ -92,6 +88,7 @@ module Api
 
       stringy_array :years
       manage_associated_attributes [:recolor_by_ind, :recolor_by_qual]
+      acts_as_list scope: [:context_id, :group_number]
 
       def self.blue_foreign_keys
         [

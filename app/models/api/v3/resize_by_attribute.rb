@@ -13,8 +13,7 @@
 #
 # Indexes
 #
-#  resize_by_attributes_context_id_group_number_position_key  (context_id,group_number,position) UNIQUE
-#  resize_by_attributes_context_id_idx                        (context_id)
+#  resize_by_attributes_context_id_idx  (context_id)
 #
 # Foreign Keys
 #
@@ -26,15 +25,13 @@ module Api
     class ResizeByAttribute < YellowTable
       include Api::V3::StringyArray
       include Api::V3::AssociatedAttributes
+      include Api::V3::EnsureGroupNumberPresent
 
       belongs_to :context
       has_one :resize_by_quant, autosave: true
 
       validates :context, presence: true
       validates :group_number, presence: true
-      validates :position,
-                presence: true,
-                uniqueness: {scope: [:context, :group_number]}
       validates :is_disabled, inclusion: {in: [true, false]}
       validates :is_default, inclusion: {in: [true, false]}
       validates_with OneAssociatedAttributeValidator,
@@ -47,6 +44,7 @@ module Api
 
       stringy_array :years
       manage_associated_attributes [:resize_by_quant]
+      acts_as_list scope: [:context_id, :group_number]
 
       def self.blue_foreign_keys
         [

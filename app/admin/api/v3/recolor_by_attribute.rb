@@ -1,15 +1,18 @@
 ActiveAdmin.register Api::V3::RecolorByAttribute, as: 'RecolorByAttribute' do
   belongs_to :context, parent_class: Api::V3::Context
 
+  include ActiveAdmin::SortableTable # creates the controller action which handles the sorting
+  config.sort_order = '' # overriding scoped_collection to sort by 2 columns
+
   includes [
     {context: [:country, :commodity]},
     :recolor_by_ind,
     :recolor_by_qual
   ]
 
-  permit_params :context_id, :group_number, :position, :legend_type,
-                :legend_color_theme, :interval_count, :min_value, :max_value,
-                :divisor, :tooltip_text, :years_str, :is_disabled, :is_default,
+  permit_params :context_id, :group_number, :legend_type, :legend_color_theme,
+                :interval_count, :min_value, :max_value, :divisor,
+                :tooltip_text, :years_str, :is_disabled, :is_default,
                 :readonly_attribute_id
 
   after_action :clear_cache, only: [:create, :update, :destroy]
@@ -20,6 +23,10 @@ ActiveAdmin.register Api::V3::RecolorByAttribute, as: 'RecolorByAttribute' do
     end
 
     before_action { @page_title = "#{parent.country.name} #{parent.commodity.name} recolor by attributes" }
+
+    def scoped_collection
+      super.reorder(group_number: :asc, position: :asc)
+    end
 
     def create
       super do |success, _failure|
@@ -42,8 +49,6 @@ ActiveAdmin.register Api::V3::RecolorByAttribute, as: 'RecolorByAttribute' do
                                     label: 'Recolor By Property'
       input :group_number, required: true,
                            hint: object.class.column_comment('group_number')
-      input :position, required: true,
-                       hint: object.class.column_comment('position')
       input :legend_type, required: true, as: :select,
                           collection: Api::V3::RecolorByAttribute::LEGEND_TYPE,
                           hint: object.class.column_comment('legend_type')
@@ -80,6 +85,10 @@ ActiveAdmin.register Api::V3::RecolorByAttribute, as: 'RecolorByAttribute' do
     column :is_disabled
     column :is_default
     actions
+    handle_column(
+      move_to_top_url: ->(ra) { move_to_top_admin_context_recolor_by_attribute_path(ra.context, ra) },
+      sort_url: ->(ra) { sort_admin_context_recolor_by_attribute_path(ra.context, ra) }
+    )
   end
 
   show do
