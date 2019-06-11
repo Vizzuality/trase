@@ -207,8 +207,8 @@ const toolLinksReducer = {
       draft.data.links = [];
 
       draft.selectedNodesIds = state.selectedNodesIds.filter(nodeId => {
-        const node = draft.nodes[nodeId];
-        const column = draft.columns[node.columnId];
+        const node = draft.data.nodes[nodeId];
+        const column = draft.data.columns[node.columnId];
         return column.group !== columnIndex;
       });
     });
