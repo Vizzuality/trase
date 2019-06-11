@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Feedback from 'react-components/shared/feedback';
 import 'styles/components/tool/map/map-basemaps.scss';
 import CookieBanner from 'react-components/shared/cookie-banner';
-import { Provider } from 'react-redux';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import FiltersNav from 'react-components/nav/filters-nav/filters-nav.container';
 import MapContainer from 'react-components/tool/map/map.container';
@@ -17,7 +16,6 @@ import MapBasemaps from 'react-components/tool/map-basemaps/map-basemaps.contain
 import Sankey from 'react-components/tool/sankey/sankey.container';
 import MapLegend from 'react-components/tool/map-legend/map-legend.container';
 import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.react';
-import { resizeSankeyTool } from 'react-components/tool/tool.thunks';
 import EventManager from 'utils/eventManager';
 
 import 'styles/layouts/l-tool.scss';
@@ -160,15 +158,15 @@ const renderSankey = () => (
   </div>
 );
 
-const ToolLayout = ({ store }) => {
+const Tool = ({ resizeSankeyTool }) => {
   useEffect(() => {
-    evManager.addEventListener(window, 'resize', () => resizeSankeyTool(store.dispatch));
+    evManager.addEventListener(window, 'resize', resizeSankeyTool);
     document.querySelector('body').classList.add('-overflow-hidden');
     return () => {
       evManager.clearEventListeners();
       document.querySelector('body').classList.remove('-overflow-hidden');
     };
-  }, [store.dispatch]);
+  });
 
   const renderVainillaComponents = () => (
     <>
@@ -186,49 +184,45 @@ const ToolLayout = ({ store }) => {
   );
 
   return (
-    <Provider store={store}>
-      <div>
-        <div className="js-node-tooltip c-info-tooltip" />
-        <div className="js-sankey-tooltip c-info-tooltip" />
-        <div className="loading-wrapper">
-          <div className="l-tool">
-            {renderVainillaComponents()}
+    <div>
+      <div className="js-node-tooltip c-info-tooltip" />
+      <div className="js-sankey-tooltip c-info-tooltip" />
+      <div className="l-tool">
+        {renderVainillaComponents()}
 
-            <nav className="tool-nav">
-              <FiltersNav />
-            </nav>
+        <nav className="tool-nav">
+          <FiltersNav />
+        </nav>
 
-            <div className="-hidden-on-mobile">
-              <div className="veil js-veil" />
-              <div className="c-modal js-modal" />
-            </div>
-
-            {renderSankeyError()}
-
-            <div className="js-tool-content flow-content">
-              <div className="js-tool-loading tool-loading">
-                <div className="veil sankey-veil" />
-                <div className="c-spinner" />
-              </div>
-
-              <div className="js-map-view-veil sankey-veil veil is-hidden" />
-              {renderMapSidebar()}
-              {renderMap()}
-              <ColumnsSelectorGroupContainer />
-              {renderSankey()}
-              <TitlebarContainer />
-            </div>
-            <CookieBanner />
-          </div>
-          <Feedback />
+        <div className="-hidden-on-mobile">
+          <div className="veil js-veil" />
+          <div className="c-modal js-modal" />
         </div>
+
+        {renderSankeyError()}
+
+        <div className="js-tool-content flow-content">
+          <div className="js-tool-loading tool-loading">
+            <div className="veil sankey-veil" />
+            <div className="c-spinner" />
+          </div>
+
+          <div className="js-map-view-veil sankey-veil veil is-hidden" />
+          {renderMapSidebar()}
+          {renderMap()}
+          <ColumnsSelectorGroupContainer />
+          {renderSankey()}
+          <TitlebarContainer />
+        </div>
+        <CookieBanner />
       </div>
-    </Provider>
+      <Feedback />
+    </div>
   );
 };
 
-ToolLayout.propTypes = {
-  store: PropTypes.object
+Tool.propTypes = {
+  resizeSankeyTool: PropTypes.func.isRequired
 };
 
-export default ToolLayout;
+export default Tool;

@@ -1,7 +1,17 @@
 import React from 'react';
-import { render } from 'react-dom';
-import ToolLayout from 'react-components/tool/tool-layout';
+import { render, unmountComponentAtNode } from 'react-dom';
+import Tool from 'react-components/tool';
+import { Provider } from 'react-redux';
 
 export const mount = (root, store) => {
-  render(<ToolLayout store={store} />, root);
+  render(
+    <Provider store={store}>
+      <Tool />
+    </Provider>,
+    root
+  );
+};
+
+export const unmount = () => {
+  unmountComponentAtNode(document.getElementById('app-root-container'));
 };
