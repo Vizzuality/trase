@@ -15,6 +15,18 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
     def clear_cache
       clear_cache_for_regexp('/api/v3/contexts')
     end
+
+    def create
+      super do |success, _failure|
+        success.html { redirect_to admin_context_resize_by_attributes_path(parent) }
+      end
+    end
+
+    def update
+      super do |success, _failure|
+        success.html { redirect_to admin_context_resize_by_attributes_path(parent) }
+      end
+    end
   end
 
   form do |f|
