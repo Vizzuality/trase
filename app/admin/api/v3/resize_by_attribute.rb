@@ -55,9 +55,11 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
 
   index do
     column('Resize By Property', sortable: true, &:readonly_attribute_display_name)
+    column :group_number
     column :position
-    column :tooltip_text
-    column :years
+    column :tooltip_text do |ra|
+      truncate(ra.tooltip_text, length: 25)
+    end
     column :is_disabled
     column :is_default
     actions
