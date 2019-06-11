@@ -217,13 +217,15 @@ export default class MapComponent {
       this.map.removeLayer(this.vectorOutline);
     }
 
-    const selectedFeatures = selectedNodesGeoIds.map(selectedGeoId => {
-      if (!selectedGeoId) return null;
-      const originalPolygon = this.currentPolygonTypeLayer
-        .getLayers()
-        .find(polygon => polygon.feature.properties.geoid === selectedGeoId);
-      return originalPolygon.feature;
-    });
+    const selectedFeatures = selectedNodesGeoIds
+      .map(selectedGeoId => {
+        if (!selectedGeoId) return null;
+        const originalPolygon = this.currentPolygonTypeLayer
+          .getLayers()
+          .find(polygon => polygon.feature.properties.geoid === selectedGeoId);
+        return originalPolygon ? originalPolygon.feature : null;
+      })
+      .filter(Boolean);
 
     if (highlightedGeoIds && selectedNodesGeoIds.indexOf(highlightedGeoIds) === -1) {
       const highlightedPolygon = this.currentPolygonTypeLayer

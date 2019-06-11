@@ -1,10 +1,13 @@
 import { all, fork, takeLatest, select } from 'redux-saga/effects';
 import {
+  TOOL_LINKS__GET_COLUMNS,
   TOOL_LINKS__SET_SELECTED_NODES,
   TOOL_LINKS__CLEAR_SANKEY,
   TOOL_LINKS__SELECT_COLUMN
 } from 'react-components/tool-links/tool-links.actions';
-import { getLinkedGeoIds } from './tool-layers.fetch.saga';
+import { SET_CONTEXT } from 'actions/app.actions';
+import { SELECT_YEARS } from 'react-components/tool/tool.actions';
+import { getLinkedGeoIds, getMapDimensions } from './tool-layers.fetch.saga';
 
 function* fetchLinkedGeoIds() {
   function* getGeoIds(action) {
@@ -27,7 +30,14 @@ function* fetchLinkedGeoIds() {
   );
 }
 
+function* fetchMapDimensions() {
+  function* performFetch() {
+    yield fork(getMapDimensions);
+  }
+  yield takeLatest([TOOL_LINKS__GET_COLUMNS, SET_CONTEXT, SELECT_YEARS], performFetch);
+}
+
 export default function* toolLayersSaga() {
-  const sagas = [fetchLinkedGeoIds];
+  const sagas = [fetchMapDimensions, fetchLinkedGeoIds];
   yield all(sagas.map(saga => fork(saga)));
 }
