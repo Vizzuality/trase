@@ -27,7 +27,8 @@ import {
   setIsSearchOpen,
   selectView,
   collapseSankey,
-  expandSankey
+  expandSankey,
+  selectColumn
 } from 'react-components/tool-links/tool-links.actions';
 
 export const RESET_SELECTION = 'RESET_SELECTION';
@@ -40,7 +41,6 @@ export const SELECT_BIOME_FILTER = 'SELECT_BIOME_FILTER';
 export const SELECT_YEARS = 'SELECT_YEARS';
 export const SELECT_RESIZE_BY = 'SELECT_RESIZE_BY';
 export const SELECT_RECOLOR_BY = 'SELECT_RECOLOR_BY';
-export const SELECT_COLUMN = 'SELECT_COLUMN';
 export const GET_MAP_VECTOR_DATA = 'GET_MAP_VECTOR_DATA';
 export const GET_CONTEXT_LAYERS = 'GET_CONTEXT_LAYERS';
 export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
@@ -102,7 +102,6 @@ export function resetSankey() {
     const state = getState();
     const { columns, expandedNodesIds } = state.toolLinks;
     const { contexts, selectedContext } = state.app;
-    const selectedColumnsIds = getSelectedColumnsIds(state);
     const areNodesExpanded = !isEmpty(expandedNodesIds);
     const currentContext = contexts.find(context => context.id === selectedContext.id);
     const defaultColumns = columns ? Object.values(columns).filter(column => column.isDefault) : [];
@@ -117,14 +116,7 @@ export function resetSankey() {
     });
 
     defaultColumns.forEach(defaultColumn => {
-      dispatch({
-        type: SELECT_COLUMN,
-        payload: {
-          currentColumnsIds: selectedColumnsIds,
-          columnIndex: defaultColumn.group,
-          columnId: defaultColumn.id
-        }
-      });
+      dispatch(selectColumn(defaultColumn.group, defaultColumn.id));
     });
 
     if (areNodesExpanded) {
@@ -206,28 +198,6 @@ export function selectRecolorBy(recolorBy) {
     dispatch({
       type: SELECT_RECOLOR_BY,
       payload: selectedRecolorBy
-    });
-  };
-}
-
-export function selectColumn(columnIndex, columnId) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const selectedColumnsIds = getSelectedColumnsIds(state);
-
-    // TODO: ehhh? code smell?
-    // Action triggered but the column is already present - do nothing
-    if (selectedColumnsIds.indexOf(columnId) !== -1) {
-      return;
-    }
-
-    dispatch({
-      type: SELECT_COLUMN,
-      payload: {
-        columnId,
-        columnIndex,
-        currentColumnsIds: selectedColumnsIds
-      }
     });
   };
 }

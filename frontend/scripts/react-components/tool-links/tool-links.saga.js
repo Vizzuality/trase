@@ -7,10 +7,10 @@ import {
   SELECT_RECOLOR_BY,
   SELECT_RESIZE_BY,
   SELECT_BIOME_FILTER,
-  SELECT_COLUMN,
   SELECT_YEARS
 } from 'react-components/tool/tool.actions';
 import {
+  TOOL_LINKS__SELECT_COLUMN,
   TOOL_LINKS__SELECT_VIEW,
   TOOL_LINKS__GET_COLUMNS,
   TOOL_LINKS__EXPAND_SANKEY,
@@ -59,7 +59,7 @@ function* fetchLinks() {
   yield takeLatest(
     [
       SELECT_YEARS,
-      SELECT_COLUMN,
+      TOOL_LINKS__SELECT_COLUMN,
       TOOL_LINKS__SELECT_VIEW,
       SELECT_RECOLOR_BY,
       SELECT_RESIZE_BY,

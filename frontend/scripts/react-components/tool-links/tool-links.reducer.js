@@ -3,7 +3,6 @@ import {
   RESET_SELECTION,
   RESET_TOOL_STATE,
   SELECT_BIOME_FILTER,
-  SELECT_COLUMN,
   SELECT_RECOLOR_BY,
   SELECT_RESIZE_BY,
   SET_NODE_ATTRIBUTES,
@@ -19,7 +18,8 @@ import {
   TOOL_LINKS__SELECT_VIEW,
   TOOL_LINKS__SET_IS_SEARCH_OPEN,
   TOOL_LINKS__COLLAPSE_SANKEY,
-  TOOL_LINKS__EXPAND_SANKEY
+  TOOL_LINKS__EXPAND_SANKEY,
+  TOOL_LINKS__SELECT_COLUMN
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
 import immer from 'immer';
@@ -194,11 +194,11 @@ const toolLinksReducer = {
     });
   },
 
-  [SELECT_COLUMN](state, action) {
+  [TOOL_LINKS__SELECT_COLUMN](state, action) {
     return immer(state, draft => {
-      const { currentColumnsIds, columnId, columnIndex } = action.payload;
+      const { columnId, columnIndex } = action.payload;
       if (!draft.selectedColumnsIds) {
-        draft.selectedColumnsIds = [...currentColumnsIds];
+        draft.selectedColumnsIds = [];
       }
       // TODO also update choropleth with default selected indicators
       if (!draft.selectedColumnsIds.includes(columnId)) {

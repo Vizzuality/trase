@@ -36,15 +36,18 @@ export const getSelectedColumnsIds = createSelector(
     getToolNodes
   ],
   (selectedContext, columns, selectedColumnsIds) => {
-    if (selectedColumnsIds) {
+    if (selectedColumnsIds && selectedColumnsIds.length === selectedContext.defaultColumns.length) {
       return selectedColumnsIds;
     }
     if (!columns && !selectedContext) {
       return [];
     }
-
     return selectedContext.defaultColumns.reduce((acc, column) => {
-      acc[column.group] = column.id;
+      let id = column.id;
+      if (selectedColumnsIds && selectedColumnsIds[column.group]) {
+        id = selectedColumnsIds[column.group];
+      }
+      acc[column.group] = id;
       return acc;
     }, []);
   }

@@ -8,6 +8,7 @@ export const TOOL_LINKS__SELECT_VIEW = 'TOOL_LINKS__SELECT_VIEW';
 export const TOOL_LINKS__SET_IS_SEARCH_OPEN = 'TOOL_LINKS__SET_IS_SEARCH_OPEN';
 export const TOOL_LINKS__COLLAPSE_SANKEY = 'TOOL_LINKS__COLLAPSE_SANKEY';
 export const TOOL_LINKS__EXPAND_SANKEY = 'TOOL_LINKS__EXPAND_SANKEY';
+export const TOOL_LINKS__SELECT_COLUMN = 'TOOL_LINKS__SELECT_COLUMN';
 
 export function setToolFlowsLoading(loading) {
   return {
@@ -76,5 +77,15 @@ export function collapseSankey() {
 export function expandSankey() {
   return {
     type: TOOL_LINKS__EXPAND_SANKEY
+  };
+}
+
+export function selectColumn(columnIndex, columnId) {
+  return {
+    type: TOOL_LINKS__SELECT_COLUMN,
+    payload: {
+      columnId,
+      columnIndex
+    }
   };
 }

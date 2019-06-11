@@ -1,7 +1,6 @@
 import { TOGGLE_MAP_LAYERS_MENU, SET_CONTEXT } from 'actions/app.actions';
 import {
   SELECT_BIOME_FILTER,
-  SELECT_COLUMN,
   SELECT_CONTEXTUAL_LAYERS,
   SELECT_RECOLOR_BY,
   SELECT_RESIZE_BY,
@@ -9,7 +8,10 @@ import {
   TOGGLE_MAP,
   UPDATE_NODE_SELECTION
 } from 'react-components/tool/tool.actions';
-import { TOOL_LINKS__SELECT_VIEW } from 'react-components/tool-links/tool-links.actions';
+import {
+  TOOL_LINKS__SELECT_VIEW,
+  TOOL_LINKS__SELECT_COLUMN
+} from 'react-components/tool-links/tool-links.actions';
 
 export default [
   {
@@ -69,7 +71,7 @@ export default [
     getPayload: action => (action.detailedView ? 'detailed' : 'overview')
   },
   {
-    type: SELECT_COLUMN,
+    type: TOOL_LINKS__SELECT_COLUMN,
     category: 'Sankey',
     action: 'Select column',
     getPayload: (action, state) =>
