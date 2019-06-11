@@ -23,7 +23,8 @@ const getLegacyMapDimensionsGroups = createSelector(
 );
 
 const isCloroplethEnabled = state => {
-  const firstColumnId = getSelectedColumnsIds(state);
+  const selectedColumnsIds = getSelectedColumnsIds(state);
+  const firstColumnId = selectedColumnsIds[0];
   const column = state.toolLinks.data.columns && state.toolLinks.data.columns[firstColumnId];
   return column ? !column.isChoroplethDisabled : true;
 };
