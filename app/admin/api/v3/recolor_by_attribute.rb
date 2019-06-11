@@ -19,6 +19,8 @@ ActiveAdmin.register Api::V3::RecolorByAttribute, as: 'RecolorByAttribute' do
       clear_cache_for_regexp('/api/v3/contexts')
     end
 
+    before_action { @page_title = "#{parent.country.name} #{parent.commodity.name} recolor by attributes" }
+
     def create
       super do |success, _failure|
         success.html { redirect_to admin_context_recolor_by_attributes_path(parent) }
