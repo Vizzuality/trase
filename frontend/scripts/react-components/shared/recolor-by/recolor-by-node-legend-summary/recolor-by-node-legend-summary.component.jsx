@@ -18,7 +18,7 @@ function RecolorByNodeLegendSummary({ recolorGroups }) {
 }
 
 RecolorByNodeLegendSummary.propTypes = {
-  recolorGroups: PropTypes.array
+  recolorGroups: PropTypes.object
 };
 
 export default RecolorByNodeLegendSummary;
