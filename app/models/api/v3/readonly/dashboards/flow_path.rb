@@ -27,8 +27,12 @@ module Api
         class FlowPath < Api::V3::Readonly::BaseModel
           self.table_name = 'dashboards_flow_paths_mv'
 
-          def self.long_running?
-            true
+          class << self
+            protected
+
+            def long_running?
+              true
+            end
           end
         end
       end

@@ -37,7 +37,7 @@ module Api
             TablePartitionsWorker.perform_async
           end
 
-          private
+          protected
 
           def long_running?
             true

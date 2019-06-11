@@ -100,7 +100,7 @@ module Api
       end
 
       def refresh_dependents
-        Api::V3::Readonly::RecolorByAttribute.refresh
+        Api::V3::Readonly::RecolorByAttribute.refresh(skip_dependencies: true)
       end
 
       private_class_method def self.active_ids
