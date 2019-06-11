@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 import Feedback from 'react-components/shared/feedback';
 import 'styles/components/tool/map/map-basemaps.scss';
@@ -46,8 +47,13 @@ const renderMapSidebar = () => (
   </div>
 );
 
-const renderMap = () => (
-  <div className="js-map-container c-map is-absolute">
+const renderMap = ({ loading, isMapVisible }) => (
+  <div
+    className={cx('js-map-container c-map is-absolute', {
+      '-smooth-transition': !loading,
+      '-fullscreen': isMapVisible
+    })}
+  >
     <div id="js-map" className="c-map-leaflet" />
     <div className="btn-map -toggle-map js-toggle-map" />
     <div className="js-map-warnings-container map-warnings">
@@ -75,8 +81,8 @@ const renderMap = () => (
   </div>
 );
 
-const renderSankeyError = () => (
-  <div className="js-sankey-error is-hidden">
+const renderSankeyError = ({ hasError }) => (
+  <div className={cx('js-sankey-error', { 'is-hidden': !hasError })}>
     <div className="veil -with-menu -below-nav" />
     <div className="c-modal -below-nav">
       <div className="content -auto-height">
@@ -117,8 +123,8 @@ const renderExpandButton = () => (
   </div>
 );
 
-const renderSankey = () => (
-  <div className="c-sankey is-absolute js-sankey">
+const renderSankey = ({ loading }) => (
+  <div className={cx('c-sankey is-absolute js-sankey', { '-smooth-transition': !loading })}>
     <div className="js-sankey-scroll-container sankey-scroll-container">
       <svg className="js-sankey-canvas sankey">
         <defs>
@@ -158,7 +164,7 @@ const renderSankey = () => (
   </div>
 );
 
-const Tool = ({ resizeSankeyTool }) => {
+function Tool({ resizeSankeyTool, loading, isMapVisible, isVisible, hasError }) {
   useEffect(() => {
     evManager.addEventListener(window, 'resize', resizeSankeyTool);
     document.querySelector('body').classList.add('-overflow-hidden');
@@ -199,19 +205,26 @@ const Tool = ({ resizeSankeyTool }) => {
           <div className="c-modal js-modal" />
         </div>
 
-        {renderSankeyError()}
+        {renderSankeyError({ hasError })}
 
-        <div className="js-tool-content flow-content">
-          <div className="js-tool-loading tool-loading">
+        <div
+          className={cx('tool-loading', 'js-tool-content  flow-content', {
+            '-center-map': isMapVisible,
+            open: isVisible
+          })}
+        >
+          <div className={cx('tool-loading', { 'is-visible': loading })}>
             <div className="veil sankey-veil" />
             <div className="c-spinner" />
           </div>
 
-          <div className="js-map-view-veil sankey-veil veil is-hidden" />
+          <div
+            className={cx('js-map-view-veil sankey-veil veil', { 'is-hidden': !isMapVisible })}
+          />
           {renderMapSidebar()}
-          {renderMap()}
+          {renderMap({ loading, isMapVisible })}
           <ColumnsSelectorGroupContainer />
-          {renderSankey()}
+          {renderSankey({ loading })}
           <TitlebarContainer />
         </div>
         <CookieBanner />
@@ -219,9 +232,13 @@ const Tool = ({ resizeSankeyTool }) => {
       <Feedback />
     </div>
   );
-};
+}
 
 Tool.propTypes = {
+  isMapVisible: PropTypes.bool,
+  isVisible: PropTypes.bool,
+  hasError: PropTypes.bool,
+  loading: PropTypes.bool,
   resizeSankeyTool: PropTypes.func.isRequired
 };
 
