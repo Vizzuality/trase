@@ -52,6 +52,8 @@ module Api
         ]
       end
 
+      private
+
       def refresh_dependents
         Api::V3::Readonly::ResizeByAttribute.refresh(skip_dependencies: true)
       end

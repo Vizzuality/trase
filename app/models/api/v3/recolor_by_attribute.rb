@@ -31,6 +31,7 @@ module Api
     class RecolorByAttribute < YellowTable
       include Api::V3::StringyArray
       include Api::V3::AssociatedAttributes
+      include Api::V3::EnsureGroupNumberPresent
 
       LEGEND_TYPE = %w(
         qual
@@ -95,6 +96,8 @@ module Api
           {name: :context_id, table_class: Api::V3::Context}
         ]
       end
+
+      private
 
       def refresh_dependents
         Api::V3::Readonly::RecolorByAttribute.refresh(skip_dependencies: true)
