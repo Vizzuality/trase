@@ -7,15 +7,16 @@ import {
   SELECT_RECOLOR_BY,
   SELECT_RESIZE_BY,
   SELECT_BIOME_FILTER,
-  COLLAPSE_NODE_SELECTION,
-  EXPAND_NODE_SELECTION,
   SELECT_COLUMN,
   SELECT_YEARS
 } from 'react-components/tool/tool.actions';
 import {
   TOOL_LINKS__SELECT_VIEW,
   TOOL_LINKS__GET_COLUMNS,
-  setToolFlowsLoading
+  TOOL_LINKS__EXPAND_SANKEY,
+  TOOL_LINKS__COLLAPSE_SANKEY,
+  setToolFlowsLoading,
+  selectView
 } from './tool-links.actions';
 import {
   getToolColumnsData,
@@ -63,14 +64,46 @@ function* fetchLinks() {
       SELECT_RECOLOR_BY,
       SELECT_RESIZE_BY,
       SELECT_BIOME_FILTER,
-      COLLAPSE_NODE_SELECTION,
-      EXPAND_NODE_SELECTION
+      TOOL_LINKS__COLLAPSE_SANKEY,
+      TOOL_LINKS__EXPAND_SANKEY
     ],
     performFetch
   );
 }
 
+function* checkForceOverviewOnCollapse() {
+  function* onCollapse() {
+    const { forcedOverview } = yield select(state => state.toolLinks);
+
+    // if shrinking, and if overview was previously forced, go back to detailed
+    if (forcedOverview) {
+      yield put(selectView(true, false));
+    }
+  }
+  yield takeLatest([TOOL_LINKS__COLLAPSE_SANKEY], onCollapse);
+}
+
+// TODO: talk about this feature, I don't like it
+//  I would prefer to show the expanded nodes in a detailed view. If that's not an option then,
+//  the view mode selector should be disabled when forceOverview === true
+function* checkForceOverviewOnExpand() {
+  function* onExpand() {
+    const { detailedView } = yield select(state => state.toolLinks);
+
+    // if expanding, and if in detailed mode, toggle to overview mode
+    if (detailedView) {
+      yield put(selectView(false, true));
+    }
+  }
+  yield takeLatest([TOOL_LINKS__EXPAND_SANKEY], onExpand);
+}
+
 export default function* toolLinksSaga() {
-  const sagas = [fetchToolColumns, fetchLinks];
+  const sagas = [
+    fetchLinks,
+    fetchToolColumns,
+    checkForceOverviewOnCollapse,
+    checkForceOverviewOnExpand
+  ];
   yield all(sagas.map(saga => fork(saga)));
 }

@@ -23,7 +23,7 @@ export default class ToolSearch extends Component {
     isMapVisible: PropTypes.bool,
     defaultYear: PropTypes.number,
     selectedNodesIds: PropTypes.array,
-    setSankeySearchVisibility: PropTypes.func
+    setIsSearchOpen: PropTypes.func
   };
 
   static isValidChar(key) {
@@ -66,12 +66,12 @@ export default class ToolSearch extends Component {
 
   onOpenClicked = e => {
     if (e) e.stopPropagation();
-    this.props.setSankeySearchVisibility(true);
+    this.props.setIsSearchOpen(true);
   };
 
   onCloseClicked = e => {
     if (e) e.stopPropagation();
-    this.props.setSankeySearchVisibility(false);
+    this.props.setIsSearchOpen(false);
   };
 
   onSelected = selectedItem => {

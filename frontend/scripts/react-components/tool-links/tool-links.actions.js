@@ -5,6 +5,9 @@ export const TOOL_LINKS__SET_NODES = 'TOOL_LINKS__SET_NODES';
 export const TOOL_LINKS__SET_MORE_NODES = 'TOOL_LINKS__SET_MORE_NODES';
 export const TOOL_LINKS__SET_LINKS = 'TOOL_LINKS__SET_LINKS';
 export const TOOL_LINKS__SELECT_VIEW = 'TOOL_LINKS__SELECT_VIEW';
+export const TOOL_LINKS__SET_IS_SEARCH_OPEN = 'TOOL_LINKS__SET_IS_SEARCH_OPEN';
+export const TOOL_LINKS__COLLAPSE_SANKEY = 'TOOL_LINKS__COLLAPSE_SANKEY';
+export const TOOL_LINKS__EXPAND_SANKEY = 'TOOL_LINKS__EXPAND_SANKEY';
 
 export function setToolFlowsLoading(loading) {
   return {
@@ -54,5 +57,24 @@ export function selectView(detailedView, forcedOverview) {
       detailedView,
       forcedOverview
     }
+  };
+}
+
+export function setIsSearchOpen(isSearchOpen) {
+  return {
+    type: TOOL_LINKS__SET_IS_SEARCH_OPEN,
+    payload: { isSearchOpen }
+  };
+}
+
+export function collapseSankey() {
+  return {
+    type: TOOL_LINKS__COLLAPSE_SANKEY
+  };
+}
+
+export function expandSankey() {
+  return {
+    type: TOOL_LINKS__EXPAND_SANKEY
   };
 }

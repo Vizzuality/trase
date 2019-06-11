@@ -1,4 +1,5 @@
-import { selectExpandedNode, setSankeySearchVisibility } from 'react-components/tool/tool.actions';
+import { selectExpandedNode } from 'react-components/tool/tool.actions';
+import { setIsSearchOpen } from 'react-components/tool-links/tool-links.actions';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.component';
 import { connect } from 'react-redux';
 import { getToolSearchNodes } from 'react-components/tool/tool-search/tool-search.selectors';
@@ -19,7 +20,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   onAddNode: selectExpandedNode,
-  setSankeySearchVisibility
+  setIsSearchOpen
 };
 
 export default connect(

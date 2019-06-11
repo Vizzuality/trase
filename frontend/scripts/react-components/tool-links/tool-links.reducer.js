@@ -7,11 +7,8 @@ import {
   SELECT_RECOLOR_BY,
   SELECT_RESIZE_BY,
   SET_NODE_ATTRIBUTES,
-  SET_SANKEY_SEARCH_VISIBILITY,
   SHOW_LINKS_ERROR,
-  UPDATE_NODE_SELECTION,
-  EXPAND_NODE_SELECTION,
-  COLLAPSE_NODE_SELECTION
+  UPDATE_NODE_SELECTION
 } from 'react-components/tool/tool.actions';
 import {
   TOOL_LINKS__SET_NODES,
@@ -19,7 +16,10 @@ import {
   TOOL_LINKS__SET_FLOWS_LOADING,
   TOOL_LINKS__SET_COLUMNS,
   TOOL_LINKS__SET_LINKS,
-  TOOL_LINKS__SELECT_VIEW
+  TOOL_LINKS__SELECT_VIEW,
+  TOOL_LINKS__SET_IS_SEARCH_OPEN,
+  TOOL_LINKS__COLLAPSE_SANKEY,
+  TOOL_LINKS__EXPAND_SANKEY
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
 import immer from 'immer';
@@ -40,7 +40,7 @@ export const toolLinksInitialState = {
   forcedOverview: false,
   expandedNodesIds: [],
   highlightedNodesIds: [],
-  flowsLoading: false, // TODO: remove this, should not be true by default.
+  flowsLoading: false,
   selectedBiomeFilter: null,
   selectedColumnsIds: null,
   selectedNodesIds: [],
@@ -223,12 +223,12 @@ const toolLinksReducer = {
       draft.highlightedNodesIds = action.ids;
     });
   },
-  [COLLAPSE_NODE_SELECTION](state) {
+  [TOOL_LINKS__COLLAPSE_SANKEY](state) {
     return immer(state, draft => {
       draft.expandedNodesIds = [];
     });
   },
-  [EXPAND_NODE_SELECTION](state) {
+  [TOOL_LINKS__EXPAND_SANKEY](state) {
     return immer(state, draft => {
       draft.expandedNodesIds = state.selectedNodesIds;
     });
@@ -238,9 +238,9 @@ const toolLinksReducer = {
       Object.assign(draft, toolLinksInitialState, action.payload);
     });
   },
-  [SET_SANKEY_SEARCH_VISIBILITY](state, action) {
+  [TOOL_LINKS__SET_IS_SEARCH_OPEN](state, action) {
     return immer(state, draft => {
-      draft.isSearchOpen = action.searchVisibility;
+      draft.isSearchOpen = action.payload.isSearchOpen;
     });
   }
 };

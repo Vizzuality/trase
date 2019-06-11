@@ -1,15 +1,7 @@
 /* eslint-disable no-use-before-define */
 import { feature as topojsonFeature } from 'topojson';
+import { CARTO_NAMED_MAPS_BASE_URL, YEARS_INCOMPLETE, YEARS_DISABLED_UNAVAILABLE } from 'constants';
 import {
-  CARTO_NAMED_MAPS_BASE_URL,
-  NUM_NODES_DETAILED,
-  NUM_NODES_EXPANDED,
-  NUM_NODES_SUMMARY,
-  YEARS_INCOMPLETE,
-  YEARS_DISABLED_UNAVAILABLE
-} from 'constants';
-import {
-  GET_FLOWS_URL,
   GET_LINKED_GEO_IDS_URL,
   GET_MAP_BASE_DATA_URL,
   GET_NODE_ATTRIBUTES_URL,
@@ -19,7 +11,6 @@ import contextLayersCarto from 'named-maps/tool_named_maps_carto';
 import getNodeIdFromGeoId from 'actions/helpers/getNodeIdFromGeoId';
 import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
 import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsWarnings';
-import difference from 'lodash/difference';
 import intesection from 'lodash/intersection';
 import compact from 'lodash/compact';
 import uniq from 'lodash/uniq';
@@ -28,15 +19,15 @@ import xor from 'lodash/xor';
 import {
   getSelectedColumnsIds,
   getSelectedMapDimensionsUids,
-  getSelectedNodesColumnsPos,
-  getSelectedResizeBy
+  getSelectedNodesColumnsPos
 } from 'react-components/tool/tool.selectors';
 import pSettle from 'p-settle';
 
 import {
-  setToolLinks,
-  setToolFlowsLoading,
-  selectView
+  setIsSearchOpen,
+  selectView,
+  collapseSankey,
+  expandSankey
 } from 'react-components/tool-links/tool-links.actions';
 
 export const RESET_SELECTION = 'RESET_SELECTION';
@@ -56,13 +47,10 @@ export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
 export const SELECT_CONTEXTUAL_LAYERS = 'SELECT_CONTEXTUAL_LAYERS';
 export const SELECT_BASEMAP = 'SELECT_BASEMAP';
 export const TOGGLE_MAP = 'TOGGLE_MAP';
-export const EXPAND_NODE_SELECTION = 'EXPAND_NODE_SELECTION';
-export const COLLAPSE_NODE_SELECTION = 'COLLAPSE_NODE_SELECTION';
 export const GET_LINKED_GEOIDS = 'GET_LINKED_GEOIDS';
 export const SAVE_MAP_VIEW = 'SAVE_MAP_VIEW';
 export const SHOW_LINKS_ERROR = 'SHOW_LINKS_ERROR';
 export const RESET_TOOL_STATE = 'RESET_TOOL_STATE';
-export const SET_SANKEY_SEARCH_VISIBILITY = 'SET_SANKEY_SEARCH_VISIBILITY';
 
 const _setRecolorByAction = (recolorBy, state) => {
   let selectedRecolorBy;
@@ -140,7 +128,7 @@ export function resetSankey() {
     });
 
     if (areNodesExpanded) {
-      dispatch(collapseNodeSelection());
+      dispatch(collapseSankey());
     }
 
     dispatch(selectView(false, true));
@@ -156,8 +144,6 @@ export function resetSankey() {
     dispatch({
       type: RESET_SELECTION
     });
-
-    dispatch(loadLinks());
   };
 }
 
@@ -229,6 +215,7 @@ export function selectColumn(columnIndex, columnId) {
     const state = getState();
     const selectedColumnsIds = getSelectedColumnsIds(state);
 
+    // TODO: ehhh? code smell?
     // Action triggered but the column is already present - do nothing
     if (selectedColumnsIds.indexOf(columnId) !== -1) {
       return;
@@ -308,84 +295,6 @@ export function loadNodes() {
   };
 }
 
-export function loadLinks() {
-  return (dispatch, getState) => {
-    dispatch(setToolFlowsLoading(true));
-    const state = getState();
-    const selectedColumnsIds = getSelectedColumnsIds(state);
-    const selectedResizeBy = getSelectedResizeBy(state);
-    const params = {
-      context_id: state.app.selectedContext.id,
-      start_year: state.app.selectedYears[0],
-      end_year: state.app.selectedYears[1],
-      include_columns: selectedColumnsIds.join(','),
-      flow_quant: selectedResizeBy.name,
-      locked_nodes: state.toolLinks.selectedNodesIds
-    };
-    const areNodesExpanded = !isEmpty(state.toolLinks.expandedNodesIds);
-
-    if (state.toolLinks.detailedView === true) {
-      params.n_nodes = NUM_NODES_DETAILED;
-    } else if (areNodesExpanded) {
-      params.n_nodes = NUM_NODES_EXPANDED;
-    } else {
-      params.n_nodes = NUM_NODES_SUMMARY;
-    }
-
-    if (state.toolLinks.selectedRecolorBy) {
-      if (state.toolLinks.selectedRecolorBy.type === 'qual') {
-        params.flow_qual = state.toolLinks.selectedRecolorBy.name;
-      } else if (state.toolLinks.selectedRecolorBy.type === 'ind') {
-        params.flow_ind = state.toolLinks.selectedRecolorBy.name;
-      }
-    }
-
-    const selectedBiomeFilter = state.toolLinks.selectedBiomeFilter;
-    if (selectedBiomeFilter && selectedBiomeFilter.name && selectedBiomeFilter.name !== 'none') {
-      params.biome_filter_id = selectedBiomeFilter.nodeId;
-    }
-
-    if (areNodesExpanded) {
-      params.selected_nodes = state.toolLinks.expandedNodesIds.join(',');
-    }
-
-    const url = getURLFromParams(GET_FLOWS_URL, params);
-
-    fetch(url)
-      .then(response => {
-        if (response.status === 404) {
-          return null;
-        }
-        return response.json();
-      })
-      .then(jsonPayload => {
-        if (jsonPayload.data === undefined || !jsonPayload.data.length) {
-          console.error('server returned empty flows/link list, with params:', params);
-          dispatch({
-            type: SHOW_LINKS_ERROR
-          });
-          return;
-        }
-        dispatch(setToolLinks(jsonPayload.data, jsonPayload.include));
-
-        // if nodes were expanded and some of expanded nodes are not present anymore
-        // re-expand nodes
-        if (
-          !isEmpty(
-            difference(getState().toolLinks.expandedNodesIds, getState().toolLinks.selectedNodesIds)
-          )
-        ) {
-          dispatch(expandNodeSelection());
-        }
-
-        // load related geoIds to show on the map
-        dispatch(loadLinkedGeoIDs());
-        dispatch(setToolFlowsLoading(false));
-      })
-      .catch(console.error);
-  };
-}
-
 export function loadMapVectorData() {
   return (dispatch, getState) => {
     const { columns } = getState().toolLinks.data;
@@ -451,19 +360,6 @@ export function loadMapVectorData() {
   };
 }
 
-export function resetContextLayers() {
-  return dispatch => {
-    dispatch({
-      type: GET_CONTEXT_LAYERS,
-      mapContextualLayers: []
-    });
-    dispatch({
-      type: SELECT_CONTEXTUAL_LAYERS,
-      contextualLayers: []
-    });
-  };
-}
-
 export function setMapContextLayers(contextualLayers) {
   return (dispatch, getState) => {
     const mapContextualLayers = contextualLayers.map(layer => {
@@ -481,8 +377,6 @@ export function setMapContextLayers(contextualLayers) {
       }
       return contextLayer;
     });
-
-    resetContextLayers();
 
     Promise.all(
       mapContextualLayers
@@ -528,7 +422,7 @@ export function selectNode(param, isAggregated = false) {
       const areNodesExpanded = !isEmpty(expandedNodesIds);
 
       if (isAggregated) {
-        dispatch(setSankeySearchVisibility(true));
+        dispatch(setIsSearchOpen(true));
       } else {
         // we are unselecting the node that is currently expanded: just shrink it and bail
         if (
@@ -536,7 +430,7 @@ export function selectNode(param, isAggregated = false) {
           currentSelectedNodesIds.length === 1 &&
           currentSelectedNodesIds.indexOf(nodeId) > -1
         ) {
-          dispatch(collapseNodeSelection());
+          dispatch(collapseSankey());
         }
 
         const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, [nodeId]);
@@ -560,14 +454,6 @@ export function updateNodes(selectedNodesIds) {
       ids: selectedNodesIds
     });
   };
-}
-
-export function setSankeySearchVisibility(searchVisibility) {
-  return dispatch =>
-    dispatch({
-      type: SET_SANKEY_SEARCH_VISIBILITY,
-      searchVisibility
-    });
 }
 
 export function selectNodeFromGeoId(geoId) {
@@ -605,7 +491,7 @@ export function selectExpandedNode(param) {
         const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, ids);
 
         dispatch(updateNodes(selectedNodesIds));
-        dispatch(expandNodeSelection());
+        dispatch(expandSankey());
       }
     } else {
       dispatch(selectNode(ids, false));
@@ -643,36 +529,6 @@ export function highlightNodeFromGeoId(geoId, coordinates) {
       }
     } else {
       dispatch(highlightNode(nodeId, false, coordinates));
-    }
-  };
-}
-
-export function expandNodeSelection() {
-  return (dispatch, getState) => {
-    dispatch({
-      type: EXPAND_NODE_SELECTION
-    });
-
-    const { detailedView } = getState().toolLinks;
-
-    // if expanding, and if in detailed mode, toggle to overview mode
-    if (detailedView) {
-      dispatch(selectView(false, true));
-    }
-  };
-}
-
-export function collapseNodeSelection() {
-  return (dispatch, getState) => {
-    dispatch({
-      type: COLLAPSE_NODE_SELECTION
-    });
-
-    const { forcedOverview } = getState().toolLinks;
-
-    // if shrinking, and if overview was previously forced, go back to detailed
-    if (forcedOverview) {
-      dispatch(selectView(true, false));
     }
   };
 }
