@@ -29,14 +29,14 @@ import {
   collapseSankey,
   expandSankey,
   selectColumn,
-  setSelectedNodes
+  setSelectedNodes,
+  highlightNode,
+  clearSankey
 } from 'react-components/tool-links/tool-links.actions';
 
-export const RESET_SELECTION = 'RESET_SELECTION';
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
 export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
 export const SET_MAP_DIMENSIONS_DATA = 'SET_MAP_DIMENSIONS_DATA';
-export const HIGHLIGHT_NODE = 'HIGHLIGHT_NODE';
 export const SELECT_BIOME_FILTER = 'SELECT_BIOME_FILTER';
 export const SELECT_YEARS = 'SELECT_YEARS';
 export const SELECT_RESIZE_BY = 'SELECT_RESIZE_BY';
@@ -86,15 +86,6 @@ const _setResizeByAction = (resizeByName, state) => {
   };
 };
 
-export function resetState() {
-  return dispatch => {
-    dispatch({
-      type: RESET_SELECTION
-    });
-    dispatch(selectView(false));
-  };
-}
-
 // TODO: test to see when this is needed.
 // Resets sankey's params that may lead to no flows being returned from the API
 export function resetSankey() {
@@ -133,9 +124,7 @@ export function resetSankey() {
 
     dispatch(_setResizeByAction(defaultResizeBy.name, state));
 
-    dispatch({
-      type: RESET_SELECTION
-    });
+    dispatch(clearSankey());
   };
 }
 
@@ -446,7 +435,7 @@ export function selectExpandedNode(param) {
         toolLinks.selectedNodesIds.length === ids.length &&
         intesection(toolLinks.selectedNodesIds, ids).length === ids.length
       ) {
-        dispatch(resetState());
+        dispatch(clearSankey());
       } else {
         const currentSelectedNodesIds = getState().toolLinks.selectedNodesIds;
         const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, ids);
@@ -460,36 +449,22 @@ export function selectExpandedNode(param) {
   };
 }
 
-export function highlightNode(nodeId, isAggregated, coordinates) {
-  return dispatch => {
-    if (isAggregated) {
-      return;
-    }
-
-    dispatch({
-      ids: compact([nodeId]),
-      type: HIGHLIGHT_NODE,
-      coordinates
-    });
-  };
-}
-
 export function highlightNodeFromGeoId(geoId, coordinates) {
   return (dispatch, getState) => {
     const state = getState();
     const selectedColumnsIds = getSelectedColumnsIds(state);
     const {
       data: { nodes },
-      highlightedNodesIds
+      highlightedNodeId
     } = state.toolLinks;
 
     const nodeId = getNodeIdFromGeoId(geoId, nodes, selectedColumnsIds[0]);
     if (nodeId === null) {
-      if (highlightedNodesIds.length) {
+      if (highlightedNodeId) {
         dispatch(highlightNode(null));
       }
     } else {
-      dispatch(highlightNode(nodeId, false, coordinates));
+      dispatch(highlightNode(nodeId, coordinates));
     }
   };
 }

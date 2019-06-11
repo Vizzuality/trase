@@ -3,7 +3,6 @@ import {
   GET_LINKED_GEOIDS,
   GET_MAP_VECTOR_DATA,
   SET_NODE_ATTRIBUTES,
-  HIGHLIGHT_NODE,
   SET_MAP_LOADING_STATE,
   SAVE_MAP_VIEW,
   SELECT_BASEMAP,
@@ -12,6 +11,7 @@ import {
   TOGGLE_MAP_DIMENSION,
   SET_MAP_DIMENSIONS_DATA
 } from 'react-components/tool/tool.actions';
+import { TOOL_LINKS__HIGHLIGHT_NODE } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'scripts/actions/app.actions';
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
@@ -78,7 +78,7 @@ const toolLayersReducer = {
     });
   },
 
-  [HIGHLIGHT_NODE](state, action) {
+  [TOOL_LINKS__HIGHLIGHT_NODE](state, action) {
     return immer(state, draft => {
       draft.highlightedNodeCoordinates = action.coordinates;
     });

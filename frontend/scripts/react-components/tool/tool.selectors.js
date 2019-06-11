@@ -12,7 +12,7 @@ import splitLinksByColumn from 'reducers/helpers/splitLinksByColumn';
 
 const getSelectedContext = state => state.app.selectedContext;
 const getSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
-const getHighlightedNodesIds = state => state.toolLinks.highlightedNodesIds;
+const getHighlightedNodeIds = state => state.toolLinks.highlightedNodeId;
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolColumns = state => state.toolLinks.data.columns;
@@ -225,10 +225,10 @@ export const getMergedLinks = createSelector(
 );
 
 export const getHighlightedNodesData = createSelector(
-  [getHighlightedNodesIds, getToolNodes],
-  (highlightedNodesIds, nodes) => {
-    if (nodes) {
-      return highlightedNodesIds.map(id => nodes[id]).filter(Boolean);
+  [getHighlightedNodeIds, getToolNodes],
+  (highlightedNodeId, nodes) => {
+    if (nodes && highlightedNodeId) {
+      return [nodes[highlightedNodeId]];
     }
     return [];
   }

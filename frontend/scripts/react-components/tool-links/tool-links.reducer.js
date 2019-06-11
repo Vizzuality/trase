@@ -1,6 +1,4 @@
 import {
-  HIGHLIGHT_NODE,
-  RESET_SELECTION,
   RESET_TOOL_STATE,
   SELECT_BIOME_FILTER,
   SELECT_RECOLOR_BY,
@@ -9,6 +7,8 @@ import {
   SHOW_LINKS_ERROR
 } from 'react-components/tool/tool.actions';
 import {
+  TOOL_LINKS__CLEAR_SANKEY,
+  TOOL_LINKS__HIGHLIGHT_NODE,
   TOOL_LINKS__SET_NODES,
   TOOL_LINKS__SET_MORE_NODES,
   TOOL_LINKS__SET_FLOWS_LOADING,
@@ -39,7 +39,7 @@ export const toolLinksInitialState = {
   detailedView: false,
   forcedOverview: false,
   expandedNodesIds: [],
-  highlightedNodesIds: [],
+  highlightedNodeId: null,
   flowsLoading: false,
   selectedBiomeFilter: null,
   selectedColumnsIds: null,
@@ -56,12 +56,13 @@ const toolLinksReducer = {
       draft.flowsLoading = loading;
     });
   },
-  [RESET_SELECTION](state) {
+  [TOOL_LINKS__CLEAR_SANKEY](state) {
     return immer(state, draft => {
       Object.assign(draft, {
-        highlightedNodesIds: toolLinksInitialState.highlightedNodesIds,
+        highlightedNodeId: toolLinksInitialState.highlightedNodeId,
         selectedNodesIds: toolLinksInitialState.selectedNodesIds,
         expandedNodesIds: toolLinksInitialState.expandedNodesIds,
+        detailedView: toolLinksInitialState.detailedView,
         forcedOverview: toolLinksInitialState.forcedOverview,
         selectedBiomeFilter: toolLinksInitialState.selectedBiomeFilter
       });
@@ -70,14 +71,14 @@ const toolLinksReducer = {
   [SET_CONTEXT](state) {
     return immer(state, draft => {
       Object.assign(draft, {
-        selectedRecolorBy: null,
-        selectedResizeBy: null,
-        selectedBiomeFilter: null,
-        detailedView: false,
-        highlightedNodesIds: [],
-        selectedNodesIds: [],
-        expandedNodesIds: [],
-        selectedColumnsIds: null,
+        selectedRecolorBy: toolLinksInitialState.selectedRecolorBy,
+        selectedResizeBy: toolLinksInitialState.selectedResizeBy,
+        selectedBiomeFilter: toolLinksInitialState.selectedBiomeFilter,
+        detailedView: toolLinksInitialState.detailedView,
+        highlightedNodeId: toolLinksInitialState.highlightedNodeId,
+        selectedNodesIds: toolLinksInitialState.selectedNodesIds,
+        expandedNodesIds: toolLinksInitialState.expandedNodesIds,
+        selectedColumnsIds: toolLinksInitialState.selectedColumnsIds,
         data: toolLinksInitialState.data
       });
     });
@@ -218,9 +219,9 @@ const toolLinksReducer = {
       draft.selectedNodesIds = action.payload.selectedNodesIds;
     });
   },
-  [HIGHLIGHT_NODE](state, action) {
+  [TOOL_LINKS__HIGHLIGHT_NODE](state, action) {
     return immer(state, draft => {
-      draft.highlightedNodesIds = action.ids;
+      draft.highlightedNodeId = action.payload.nodeId;
     });
   },
   [TOOL_LINKS__COLLAPSE_SANKEY](state) {
@@ -251,7 +252,7 @@ const toolLinksReducerTypes = PropTypes => ({
   isSearchOpen: PropTypes.bool,
   forcedOverview: PropTypes.bool,
   expandedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-  highlightedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
+  highlightedNodeId: PropTypes.number,
   flowsLoading: PropTypes.bool,
   selectedBiomeFilter: PropTypes.object,
   selectedColumnsIds: PropTypes.arrayOf(PropTypes.number).isRequired,

@@ -10,6 +10,8 @@ export const TOOL_LINKS__COLLAPSE_SANKEY = 'TOOL_LINKS__COLLAPSE_SANKEY';
 export const TOOL_LINKS__EXPAND_SANKEY = 'TOOL_LINKS__EXPAND_SANKEY';
 export const TOOL_LINKS__SELECT_COLUMN = 'TOOL_LINKS__SELECT_COLUMN';
 export const TOOL_LINKS__SET_SELECTED_NODES = 'TOOL_LINKS__SET_SELECTED_NODES';
+export const TOOL_LINKS__HIGHLIGHT_NODE = 'TOOL_LINKS__HIGHLIGHT_NODE';
+export const TOOL_LINKS__CLEAR_SANKEY = 'TOOL_LINKS__CLEAR_SANKEY';
 
 export function setToolFlowsLoading(loading) {
   return {
@@ -97,5 +99,21 @@ export function setSelectedNodes(selectedNodesIds) {
       type: TOOL_LINKS__SET_SELECTED_NODES,
       payload: { selectedNodesIds }
     });
+  };
+}
+
+export function highlightNode(nodeId, coordinates) {
+  return {
+    type: TOOL_LINKS__HIGHLIGHT_NODE,
+    payload: {
+      coordinates,
+      nodeId
+    }
+  };
+}
+
+export function clearSankey() {
+  return {
+    type: TOOL_LINKS__CLEAR_SANKEY
   };
 }

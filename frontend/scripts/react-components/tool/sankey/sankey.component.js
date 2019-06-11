@@ -95,10 +95,10 @@ export default class {
     this.expandActionButton.classList.toggle('-re-expand', isReExpand);
   }
 
-  highlightNodes({ highlightedNodesIds }) {
+  highlightNodes({ highlightedNodeId }) {
     this.sankeyColumns
       .selectAll('.sankey-node')
-      .classed('-highlighted', node => highlightedNodesIds.indexOf(node.id) > -1);
+      .classed('-highlighted', node => highlightedNodeId === node.id);
   }
 
   _relayout({ selectedRecolorBy, currentQuant, selectedNodesIds }) {
@@ -312,7 +312,9 @@ export default class {
   }
 
   _onNodeOver(selection, nodeId, isAggregated) {
-    this.callbacks.onNodeHighlighted(nodeId, isAggregated);
+    if (!isAggregated) {
+      this.callbacks.onNodeHighlighted(nodeId);
+    }
   }
 
   _onNodeOut() {
