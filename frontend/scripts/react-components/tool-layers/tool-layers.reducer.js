@@ -1,6 +1,5 @@
 import {
   GET_CONTEXT_LAYERS,
-  GET_LINKED_GEOIDS,
   GET_MAP_VECTOR_DATA,
   SET_NODE_ATTRIBUTES,
   SET_MAP_LOADING_STATE,
@@ -11,6 +10,7 @@ import {
   TOGGLE_MAP_DIMENSION,
   SET_MAP_DIMENSIONS_DATA
 } from 'react-components/tool/tool.actions';
+import { TOOL_LAYERS__SET_LINKED_GEOIDS } from 'react-components/tool-layers/tool-layers.actions';
 import { TOOL_LINKS__HIGHLIGHT_NODE } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'scripts/actions/app.actions';
 import immer from 'immer';
@@ -71,7 +71,7 @@ const toolLayersReducer = {
       });
     });
   },
-  [GET_LINKED_GEOIDS](state, action) {
+  [TOOL_LAYERS__SET_LINKED_GEOIDS](state, action) {
     return immer(state, draft => {
       draft.linkedGeoIds =
         action.payload?.nodes?.length > 0 ? action.payload.nodes.map(node => node.geoId) : [];

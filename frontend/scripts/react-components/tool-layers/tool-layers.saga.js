@@ -1,6 +1,6 @@
-import { all, fork, put, takeLatest, select } from 'redux-saga/effects';
-import { loadLinkedGeoIDs } from 'react-components/tool/tool.actions';
+import { all, fork, takeLatest, select } from 'redux-saga/effects';
 import { TOOL_LINKS__SET_SELECTED_NODES } from 'react-components/tool-links/tool-links.actions';
+import { getLinkedGeoIds } from './tool-layers.fetch.saga';
 
 function* fetchinkedGeoIds() {
   function* getGeoIds(action) {
@@ -9,7 +9,7 @@ function* fetchinkedGeoIds() {
     const isAggregated = nodeIds.every(id => nodes[id].isAggregated);
     if (!isAggregated) {
       // load related geoIds to show on the map
-      yield put(loadLinkedGeoIDs());
+      yield fork(getLinkedGeoIds);
     }
   }
 

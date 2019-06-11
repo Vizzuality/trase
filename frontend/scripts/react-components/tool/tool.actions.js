@@ -2,7 +2,6 @@
 import { feature as topojsonFeature } from 'topojson';
 import { CARTO_NAMED_MAPS_BASE_URL, YEARS_INCOMPLETE, YEARS_DISABLED_UNAVAILABLE } from 'constants';
 import {
-  GET_LINKED_GEO_IDS_URL,
   GET_MAP_BASE_DATA_URL,
   GET_NODE_ATTRIBUTES_URL,
   getURLFromParams
@@ -13,13 +12,11 @@ import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
 import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsWarnings';
 import intesection from 'lodash/intersection';
 import compact from 'lodash/compact';
-import uniq from 'lodash/uniq';
 import isEmpty from 'lodash/isEmpty';
 import xor from 'lodash/xor';
 import {
   getSelectedColumnsIds,
-  getSelectedMapDimensionsUids,
-  getSelectedNodesColumnsPos
+  getSelectedMapDimensionsUids
 } from 'react-components/tool/tool.selectors';
 import pSettle from 'p-settle';
 
@@ -46,7 +43,6 @@ export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
 export const SELECT_CONTEXTUAL_LAYERS = 'SELECT_CONTEXTUAL_LAYERS';
 export const SELECT_BASEMAP = 'SELECT_BASEMAP';
 export const TOGGLE_MAP = 'TOGGLE_MAP';
-export const GET_LINKED_GEOIDS = 'GET_LINKED_GEOIDS';
 export const SAVE_MAP_VIEW = 'SAVE_MAP_VIEW';
 export const SHOW_LINKS_ERROR = 'SHOW_LINKS_ERROR';
 export const RESET_TOOL_STATE = 'RESET_TOOL_STATE';
@@ -437,48 +433,6 @@ export function navigateToProfile(nodeId, year, contextId) {
       type: 'profileNode',
       payload: { query: { nodeId, year, contextId }, profileType: node.profileType }
     });
-  };
-}
-
-export function loadLinkedGeoIDs() {
-  return (dispatch, getState) => {
-    const state = getState();
-    const selectedColumnsIds = getSelectedColumnsIds(state);
-    const selectedNodesIds = state.toolLinks.selectedNodesIds;
-
-    // when selection only contains geo nodes (column 0), we should not call get_linked_geoids
-    const selectedNodesColumnsPos = getSelectedNodesColumnsPos(state);
-    const selectedNonGeoNodeIds = selectedNodesIds.filter(
-      (nodeId, index) => selectedNodesColumnsPos[index] !== 0
-    );
-    if (selectedNonGeoNodeIds.length === 0) {
-      dispatch({
-        type: GET_LINKED_GEOIDS,
-        payload: []
-      });
-      return undefined;
-    }
-    const params = {
-      context_id: state.app.selectedContext.id,
-      years: uniq([state.app.selectedYears[0], state.app.selectedYears[1]]),
-      nodes_ids: selectedNodesIds,
-      target_column_id: selectedColumnsIds[0]
-    };
-    const url = getURLFromParams(GET_LINKED_GEO_IDS_URL, params);
-
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status >= 200 && xhr.status < 400) {
-        dispatch({
-          type: GET_LINKED_GEOIDS,
-          payload: JSON.parse(xhr.response)
-        });
-      }
-    };
-
-    xhr.send();
-    return xhr;
   };
 }
 

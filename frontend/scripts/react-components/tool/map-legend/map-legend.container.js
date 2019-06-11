@@ -6,7 +6,7 @@ import {
   getMapDimensionsWarnings,
   getSelectedMapContextualLayersData,
   getCurrentHighlightedChoroplethBucket
-} from 'react-components/tool-layers/tool-layer.selectors';
+} from 'react-components/tool-layers/tool-layers.selectors';
 import { toggleMapLayerMenu } from 'actions/app.actions';
 
 const mapStateToProps = state => {
