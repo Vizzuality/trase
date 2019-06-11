@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
-  menu parent: 'Sankey'
+  belongs_to :context, parent_class: Api::V3::Context
 
   includes [
     {context: [:country, :commodity]},
@@ -23,8 +23,6 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
       input :readonly_attribute_id, as: :select, collection: Api::V3::Readonly::Attribute.
         select_options,
                                     label: 'Resize By Property'
-      input :context, as: :select, required: true,
-                      collection: Api::V3::Context.select_options
       input :group_number, required: true,
                            hint: object.class.column_comment('group_number')
       input :position, required: true,
@@ -43,8 +41,6 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
 
   index do
     column('Resize By Property', sortable: true, &:readonly_attribute_display_name)
-    column('Country') { |property| property.context&.country&.name }
-    column('Commodity') { |property| property.context&.commodity&.name }
     column :position
     column :tooltip_text
     column :years
@@ -71,7 +67,6 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
     end
   end
 
-  filter :context, collection: -> { Api::V3::Context.select_options }
   filter :is_disabled
   filter :is_default
 end

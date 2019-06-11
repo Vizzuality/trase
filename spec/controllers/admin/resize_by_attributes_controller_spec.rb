@@ -13,7 +13,9 @@ RSpec.describe Admin::ResizeByAttributesController, type: :controller do
     }
     it 'clears cache' do
       expect(controller).to receive(:clear_cache_for_regexp)
-      post :create, params: {api_v3_resize_by_attribute: valid_attributes}
+      post :create, params: {
+        context_id: context.id, api_v3_resize_by_attribute: valid_attributes
+      }
     end
   end
 end

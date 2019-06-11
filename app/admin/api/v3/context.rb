@@ -1,33 +1,40 @@
+# This is not an editable resource, but useful to define in order to have
+# nested resource routes.
 ActiveAdmin.register Api::V3::Context, as: 'Context' do
   menu priority: 2
 
   config.filters = false
 
-  after_action :clear_cache, only: [:create, :update, :destroy]
+  includes [
+    :country,
+    :commodity,
+    :resize_by_attributes,
+    :recolor_by_attributes,
+    :top_profiles
+  ]
 
-  controller do
-    def clear_cache
-      clear_cache_for_regexp('/api/v3/contexts')
-    end
-
-    def scoped_collection
-      super.includes(:country)
-      super.includes(:commodity)
-    end
-  end
+  actions :index, :show
 
   index do
-    columns do
-      column do
-        panel 'Contexts' do
-          ul do
-            Api::V3::Readonly::Context.all.map do |context|
-              li link_to([context.country_name, context.commodity_name].join(' / '), admin_context_path(context.id))
-            end
-          end
-        end
-      end
+    column('Country') do |context|
+      context&.country&.name
     end
+    column('Commodity') do |context|
+      context&.commodity&.name
+    end
+    column 'Resize by' do |context|
+      link_to "#{context.resize_by_attributes.length} attributes",
+              admin_context_resize_by_attributes_path(context)
+    end
+    column 'Recolor by' do |context|
+      link_to "#{context.recolor_by_attributes.length} attributes",
+              admin_context_recolor_by_attributes_path(context)
+    end
+    column 'Top profiles' do |context|
+      link_to "#{context.top_profiles.length} top profiles",
+              admin_context_top_profiles_path(context)
+    end
+    actions
   end
 
   show do
@@ -35,8 +42,11 @@ ActiveAdmin.register Api::V3::Context, as: 'Context' do
       row('Country') { |property| property.country&.name }
       row('Commodity') { |property| property.commodity&.name }
       row :created_at
-      row :updated_at
+      row('Resize by attributes') { |context| link_to('Resize by attributes', admin_context_resize_by_attributes_path(context)) }
+      row('Recolor by attributes') { |context| link_to('Recolor by attributes', admin_context_recolor_by_attributes_path(context)) }
       row('Top profiles') { |property| link_to('Top profiles', admin_context_top_profiles_path(context_id: property.id)) }
     end
   end
+
+  config.filters = false
 end
