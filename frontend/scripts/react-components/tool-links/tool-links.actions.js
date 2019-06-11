@@ -1,3 +1,5 @@
+import castArray from 'lodash/castArray';
+
 export const TOOL_LINKS__SET_FLOWS_LOADING = 'TOOL_LINKS__SET_FLOWS_LOADING';
 export const TOOL_LINKS__GET_COLUMNS = 'TOOL_LINKS__GET_COLUMNS';
 export const TOOL_LINKS__SET_COLUMNS = 'TOOL_LINKS__SET_COLUMNS';
@@ -9,9 +11,9 @@ export const TOOL_LINKS__SET_IS_SEARCH_OPEN = 'TOOL_LINKS__SET_IS_SEARCH_OPEN';
 export const TOOL_LINKS__COLLAPSE_SANKEY = 'TOOL_LINKS__COLLAPSE_SANKEY';
 export const TOOL_LINKS__EXPAND_SANKEY = 'TOOL_LINKS__EXPAND_SANKEY';
 export const TOOL_LINKS__SELECT_COLUMN = 'TOOL_LINKS__SELECT_COLUMN';
-export const TOOL_LINKS__SET_SELECTED_NODES = 'TOOL_LINKS__SET_SELECTED_NODES';
 export const TOOL_LINKS__HIGHLIGHT_NODE = 'TOOL_LINKS__HIGHLIGHT_NODE';
 export const TOOL_LINKS__CLEAR_SANKEY = 'TOOL_LINKS__CLEAR_SANKEY';
+export const TOOL_LINKS__SET_SELECTED_NODES = 'TOOL_LINKS__SET_SELECTED_NODES';
 
 export function setToolFlowsLoading(loading) {
   return {
@@ -93,15 +95,6 @@ export function selectColumn(columnIndex, columnId) {
   };
 }
 
-export function setSelectedNodes(selectedNodesIds) {
-  return dispatch => {
-    dispatch({
-      type: TOOL_LINKS__SET_SELECTED_NODES,
-      payload: { selectedNodesIds }
-    });
-  };
-}
-
 export function highlightNode(nodeId, coordinates) {
   return {
     type: TOOL_LINKS__HIGHLIGHT_NODE,
@@ -115,5 +108,13 @@ export function highlightNode(nodeId, coordinates) {
 export function clearSankey() {
   return {
     type: TOOL_LINKS__CLEAR_SANKEY
+  };
+}
+
+export function selectNodes(ids) {
+  const nodeIds = castArray(ids);
+  return {
+    type: TOOL_LINKS__SET_SELECTED_NODES,
+    payload: { nodeIds }
   };
 }

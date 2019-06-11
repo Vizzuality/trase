@@ -16,10 +16,6 @@ const placeNodeText = node =>
   `translate(0,${-7 + node.renderedHeight / 2 - (node.label.length - 1) * 7})`;
 
 export default class {
-  constructor() {
-    this.onNodeClickedRequest = null;
-  }
-
   onCreated(props) {
     this._build();
     this.showLoadedLinks(props);
@@ -229,10 +225,7 @@ export default class {
       .on('mouseleave', () => {
         this._onNodeOut();
       })
-      .on('click', node => {
-        if (this.onNodeClickedRequest) this.onNodeClickedRequest.abort();
-        this.onNodeClickedRequest = this.callbacks.onNodeClicked(node.id, node.isAggregated);
-      });
+      .on('click', node => this.callbacks.onNodeClicked(node.id, node.isAggregated));
 
     nodesEnter
       .append('rect')

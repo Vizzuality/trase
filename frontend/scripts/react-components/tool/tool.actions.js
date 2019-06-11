@@ -24,12 +24,11 @@ import {
 import pSettle from 'p-settle';
 
 import {
-  setIsSearchOpen,
   selectView,
   collapseSankey,
   expandSankey,
   selectColumn,
-  setSelectedNodes,
+  selectNodes,
   highlightNode,
   clearSankey
 } from 'react-components/tool-links/tool-links.actions';
@@ -368,44 +367,6 @@ export function setMapContextLayers(contextualLayers) {
   };
 }
 
-// remove or add nodeIds from selectedNodesIds
-function getSelectedNodeIds(currentSelectedNodesIds, changedNodeIds) {
-  return xor(currentSelectedNodesIds, changedNodeIds);
-}
-
-export function selectNode(param, isAggregated = false) {
-  const ids = Array.isArray(param) ? param : [param];
-  return (dispatch, getState) => {
-    ids.forEach(nodeId => {
-      const { selectedNodesIds: currentSelectedNodesIds, expandedNodesIds } = getState().toolLinks;
-      const areNodesExpanded = !isEmpty(expandedNodesIds);
-
-      if (isAggregated) {
-        dispatch(setIsSearchOpen(true));
-      } else {
-        // we are unselecting the node that is currently expanded: just shrink it and bail
-        if (
-          areNodesExpanded &&
-          currentSelectedNodesIds.length === 1 &&
-          currentSelectedNodesIds.indexOf(nodeId) > -1
-        ) {
-          dispatch(collapseSankey());
-        }
-
-        const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, [nodeId]);
-
-        // send to state the new node selection
-        dispatch(setSelectedNodes(selectedNodesIds));
-      }
-    });
-    if (!isAggregated) {
-      // load related geoIds to show on the map
-      return dispatch(loadLinkedGeoIDs());
-    }
-    return undefined;
-  };
-}
-
 export function selectNodeFromGeoId(geoId) {
   return (dispatch, getState) => {
     const state = getState();
@@ -438,13 +399,13 @@ export function selectExpandedNode(param) {
         dispatch(clearSankey());
       } else {
         const currentSelectedNodesIds = getState().toolLinks.selectedNodesIds;
-        const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, ids);
+        const selectedNodesIds = xor(currentSelectedNodesIds, ids);
 
-        dispatch(setSelectedNodes(selectedNodesIds));
+        dispatch(selectNodes(selectedNodesIds));
         dispatch(expandSankey());
       }
     } else {
-      dispatch(selectNode(ids, false));
+      dispatch(selectNodes(ids, false));
     }
   };
 }

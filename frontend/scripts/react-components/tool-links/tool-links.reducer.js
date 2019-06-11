@@ -25,6 +25,7 @@ import { SET_CONTEXT } from 'actions/app.actions';
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
 import getNodesMetaUid from 'reducers/helpers/getNodeMetaUid';
+import xor from 'lodash/xor';
 
 export const toolLinksInitialState = {
   data: {
@@ -216,7 +217,32 @@ const toolLinksReducer = {
   },
   [TOOL_LINKS__SET_SELECTED_NODES](state, action) {
     return immer(state, draft => {
-      draft.selectedNodesIds = action.payload.selectedNodesIds;
+      const { nodeIds } = action.payload;
+      let hasChanged = false;
+      let newSelectedNodes = [...draft.selectedNodesIds];
+      nodeIds.forEach(nodeId => {
+        const areNodesExpanded = draft.expandedNodesIds.length > 0;
+        const node = draft.data.nodes[nodeId];
+        if (node.isAggregated) {
+          draft.isSearchOpen = true;
+        } else {
+          hasChanged = true;
+          if (
+            areNodesExpanded &&
+            draft.selectedNodesIds.length === 1 &&
+            draft.selectedNodesIds.indexOf(nodeId) > -1
+          ) {
+            // we are unselecting the node that is currently expanded: shrink sankey and continue to unselecting node
+            draft.expandedNodesIds = [];
+          }
+
+          newSelectedNodes = xor(newSelectedNodes, [nodeId]);
+        }
+      });
+      if (hasChanged) {
+        // save to state the new node selection
+        draft.selectedNodesIds = newSelectedNodes;
+      }
     });
   },
   [TOOL_LINKS__HIGHLIGHT_NODE](state, action) {

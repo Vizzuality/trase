@@ -2,12 +2,12 @@
 import { connect } from 'react-redux';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 
-import { selectNode } from 'react-components/tool/tool.actions';
 import {
   collapseSankey,
   expandSankey,
   highlightNode,
-  clearSankey
+  clearSankey,
+  selectNodes
 } from 'react-components/tool-links/tool-links.actions';
 import {
   getIsVisible,
@@ -40,7 +40,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  onNodeClicked: selectNode,
+  onNodeClicked: selectNodes,
   onNodeHighlighted: highlightNode,
   onExpandClick: expandSankey,
   onCollapseClick: collapseSankey,
