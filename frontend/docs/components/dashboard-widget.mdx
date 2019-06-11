@@ -1,7 +1,7 @@
 ---
 name: Dashboard widget
+menu: Components
 ---
-
 import { PropsTable, Playground } from 'docz'
 import { State } from 'react-powerplug';
 import DashboardWidget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.component';
@@ -12,7 +12,7 @@ import dataPie from './mock-data/dashboard-widget-data-pie';
 import dynamicSentenceData from './mock-data/dashboard-widget-dynamic-sentence-data';
 import rankingData from './mock-data/dashboard-widget-ranking-data';
 import dynamicSentenceParts from './mock-data/dashboard-widget-dynamic-sentence-parts';
-import config from './mock-data/dashboard-widget-config-mock';
+import config, { meta } from './mock-data/dashboard-widget-config-mock';
 import 'styles/_docz.scss';
 
 ## Dashboard widget
@@ -21,44 +21,53 @@ import 'styles/_docz.scss';
   <DashboardWidget
     title={'Line Chart'}
     data={data}
+    meta={meta}
     chartConfig={config.line}
   />
   <DashboardWidget
     title={'Bar Chart'}
     data={data}
+    meta={meta}
     chartConfig={config.bar}
   />
   <DashboardWidget
     title={'Stacked bar Chart'}
     data={data}
+    meta={meta}
     chartConfig={config.stackedBar}
   />
   <DashboardWidget
     title={'Horizontal bar Chart'}
     data={horizontalData}
+    meta={meta}
     chartConfig={config.horizontalBar}
   />
   <DashboardWidget
     title={'Horizontal stacked bar Chart'}
     data={horizontalMultipleData}
+    meta={meta}
     chartConfig={config.horizontalStackedBar}
   />
   <DashboardWidget
     title={'Pie Chart'}
     data={dataPie}
+    meta={meta}
     chartConfig={config.pie}
   />
-  <DashboardWidget
+  {/* TODO: We are missing a provider or pass the store through a context for this two widgets */}
+  {/* <DashboardWidget
     title={'Dynamic sentence'}
     data={dynamicSentenceData}
+    meta={meta}
     dynamicSentenceParts={dynamicSentenceParts}
     chartConfig={config.dynamicSentence}
   />
   <DashboardWidget
     title={'Ranking'}
     data={rankingData}
+    meta={meta}
     chartConfig={config.ranking}
-  />
+  /> */}
   <DashboardWidget
     loading={true}
     title={'Loading chart'}
@@ -75,6 +84,7 @@ import 'styles/_docz.scss';
     <DashboardWidget
       title={'Pie Chart'}
       data={dataPie}
+      meta={meta}
       chartConfig={config.pie}
     />
   </div>
