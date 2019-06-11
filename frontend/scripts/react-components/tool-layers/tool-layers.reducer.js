@@ -80,7 +80,7 @@ const toolLayersReducer = {
 
   [TOOL_LINKS__HIGHLIGHT_NODE](state, action) {
     return immer(state, draft => {
-      draft.highlightedNodeCoordinates = action.coordinates;
+      draft.highlightedNodeCoordinates = action.payload.coordinates;
     });
   },
   [GET_MAP_VECTOR_DATA](state, action) {
