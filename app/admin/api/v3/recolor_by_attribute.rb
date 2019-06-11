@@ -77,13 +77,108 @@ ActiveAdmin.register Api::V3::RecolorByAttribute, as: 'RecolorByAttribute' do
 
   index do
     column('Recolor By Property', sortable: true, &:readonly_attribute_display_name)
-    column :group_number
-    column :position
-    column :tooltip_text do |ra|
-      truncate(ra.tooltip_text, length: 25)
+    column('Group', :group_number) do |ra|
+      activator_id = "activator_api_v3_recolor_by_attribute_#{ra.id}_group_number"
+      div(id: activator_id, class: 'best_in_place_activator', title: 'Click to edit') do
+        best_in_place(
+          ra,
+          :group_number,
+          as: :input,
+          url: admin_context_recolor_by_attribute_path(ra.context, ra),
+          activator: "##{activator_id}"
+        )
+      end
     end
-    column :is_disabled
-    column :is_default
+    column('Legend', :legend_type) do |ra|
+      activator_id = "activator_api_v3_recolor_by_attribute_#{ra.id}_legend_type"
+      div(id: activator_id, class: 'best_in_place_activator', title: 'Click to edit') do
+        best_in_place(
+          ra,
+          :legend_type,
+          as: :select,
+          collection: Api::V3::RecolorByAttribute::LEGEND_TYPE.map { |lt| [lt, lt] },
+          url: admin_context_recolor_by_attribute_path(ra.context, ra),
+          activator: "##{activator_id}"
+        )
+      end
+    end
+    column('Color theme', :legend_color_theme) do |ra|
+      activator_id = "activator_api_v3_recolor_by_attribute_#{ra.id}_legend_color_theme"
+      div(id: activator_id, class: 'best_in_place_activator', title: 'Click to edit') do
+        best_in_place(
+          ra,
+          :legend_color_theme,
+          as: :select,
+          collection: Api::V3::RecolorByAttribute::LEGEND_COLOR_THEME.map { |lt| [lt, lt] },
+          url: admin_context_recolor_by_attribute_path(ra.context, ra),
+          activator: "##{activator_id}"
+        )
+      end
+    end
+    column('Interval', :interval_count) do |ra|
+      activator_id = "activator_api_v3_recolor_by_attribute_#{ra.id}_interval_count"
+      div(id: activator_id, class: 'best_in_place_activator', title: 'Click to edit') do
+        best_in_place(
+          ra,
+          :interval_count,
+          as: :input,
+          url: admin_context_recolor_by_attribute_path(ra.context, ra),
+          activator: "##{activator_id}"
+        )
+      end
+    end
+    column('Min', :min_value) do |ra|
+      activator_id = "activator_api_v3_recolor_by_attribute_#{ra.id}_min_value"
+      div(id: activator_id, class: 'best_in_place_activator', title: 'Click to edit') do
+        best_in_place(
+          ra,
+          :min_value,
+          as: :input,
+          url: admin_context_recolor_by_attribute_path(ra.context, ra),
+          activator: "##{activator_id}"
+        )
+      end
+    end
+    column('Max', :max_value) do |ra|
+      activator_id = "activator_api_v3_recolor_by_attribute_#{ra.id}_max_value"
+      div(id: activator_id, class: 'best_in_place_activator', title: 'Click to edit') do
+        best_in_place(
+          ra,
+          :max_value,
+          as: :input,
+          url: admin_context_recolor_by_attribute_path(ra.context, ra),
+          activator: "##{activator_id}"
+        )
+      end
+    end
+    column :divisor do |ra|
+      activator_id = "activator_api_v3_recolor_by_attribute_#{ra.id}_divisor"
+      div(id: activator_id, class: 'best_in_place_activator', title: 'Click to edit') do
+        best_in_place(
+          ra,
+          :divisor,
+          as: :input,
+          url: admin_context_recolor_by_attribute_path(ra.context, ra),
+          activator: "##{activator_id}"
+        )
+      end
+    end
+    column :tooltip_text do |ra|
+      activator_id = "activator_api_v3_recolor_by_attribute_#{ra.id}_tooltip_text"
+      div(id: activator_id, class: 'best_in_place_activator', title: 'Click to edit') do
+        best_in_place(
+          ra,
+          :tooltip_text,
+          as: :textarea,
+          url: admin_context_recolor_by_attribute_path(ra.context, ra),
+          activator: "##{activator_id}",
+          ok_button: 'Save',
+          cancel_button: 'Cancel'
+        )
+      end
+    end
+    toggle_bool_column :is_disabled
+    toggle_bool_column :is_default
     actions
     handle_column(
       move_to_top_url: ->(ra) { move_to_top_admin_context_recolor_by_attribute_path(ra.context, ra) },

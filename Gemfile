@@ -33,6 +33,7 @@ gem 'inherited_resources', github: 'activeadmin/inherited_resources'
 gem 'activeadmin_addons'
 gem 'acts_as_list'
 gem 'activeadmin_sortable_table'
+gem 'best_in_place'
 
 gem 'ckeditor', git: 'https://github.com/galetahub/ckeditor.git'
 gem 'paperclip', '~> 5.2.0'

@@ -60,13 +60,34 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
 
   index do
     column('Resize By Property', sortable: true, &:readonly_attribute_display_name)
-    column :group_number
-    column :position
-    column :tooltip_text do |ra|
-      truncate(ra.tooltip_text, length: 25)
+    column('Group', :group_number) do |ra|
+      activator_id = "activator_api_v3_resize_by_attribute_#{ra.id}_group_number"
+      div(id: activator_id, class: 'best_in_place_activator', title: 'Click to edit') do
+        best_in_place(
+          ra,
+          :group_number,
+          as: :input,
+          url: admin_context_resize_by_attribute_path(ra.context, ra),
+          activator: "##{activator_id}"
+        )
+      end
     end
-    column :is_disabled
-    column :is_default
+    column :tooltip_text do |ra|
+      activator_id = "activator_api_v3_resize_by_attribute_#{ra.id}_tooltip_text"
+      div(id: activator_id, class: 'best_in_place_activator', title: 'Click to edit') do
+        best_in_place(
+          ra,
+          :tooltip_text,
+          as: :textarea,
+          url: admin_context_resize_by_attribute_path(ra.context, ra),
+          activator: "##{activator_id}",
+          ok_button: 'Save',
+          cancel_button: 'Cancel'
+        )
+      end
+    end
+    toggle_bool_column :is_disabled
+    toggle_bool_column :is_default
     actions
     handle_column(
       move_to_top_url: ->(ra) { move_to_top_admin_context_resize_by_attribute_path(ra.context, ra) },

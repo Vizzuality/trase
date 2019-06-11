@@ -30,3 +30,25 @@
 
 @import 'activeadmin/simplemde';
 @import 'activeadmin_sortable_table';
+
+#index_table_resize_by_attributes .col-resize_by_property {
+  max-width: 10em;
+  word-wrap: break-word;
+}
+
+#index_table_resize_by_attributes .col-tooltip_text {
+  min-width: 20em;
+}
+
+#index_table_recolor_by_attributes .col-recolor_by_property {
+  max-width: 10em;
+  word-wrap: break-word;
+}
+
+#index_table_recolor_by_attributes .col-tooltip_text {
+  min-width: 20em;
+}
+
+.best_in_place_activator {
+  cursor: pointer;
+}
