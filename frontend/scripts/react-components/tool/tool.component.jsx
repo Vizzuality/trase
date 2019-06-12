@@ -15,12 +15,12 @@ import MapContextContainer from 'react-components/tool/map-context/map-context.c
 import MapBasemaps from 'react-components/tool/map-basemaps/map-basemaps.container';
 import Sankey from 'react-components/tool/sankey/sankey.container';
 import MapLegend from 'react-components/tool/map-legend/map-legend.container';
+import Spinner from 'react-components/tool/spinner';
 import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.react';
 import EventManager from 'utils/eventManager';
 
 import 'styles/layouts/l-tool.scss';
 import 'styles/components/shared/veil.scss';
-import 'styles/components/shared/spinner.scss';
 import 'styles/components/shared/dropdown.scss';
 import 'styles/components/tool/map/map-sidebar.scss';
 
@@ -219,6 +219,7 @@ function Tool({ resizeSankeyTool, loading, isMapVisible, isVisible, hasError, re
         >
           <div className={cx('tool-loading', { 'is-visible': loading })}>
             <div className="veil sankey-veil" />
+            <Spinner />
             <div className="c-spinner" />
           </div>
 
