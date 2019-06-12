@@ -1,5 +1,4 @@
 import {
-  GET_LINKS,
   HIGHLIGHT_NODE,
   RESET_SELECTION,
   RESET_TOOL_STATE,
@@ -7,7 +6,6 @@ import {
   SELECT_COLUMN,
   SELECT_RECOLOR_BY,
   SELECT_RESIZE_BY,
-  SELECT_VIEW,
   SET_NODE_ATTRIBUTES,
   SET_SANKEY_SEARCH_VISIBILITY,
   SHOW_LINKS_ERROR,
@@ -16,12 +14,14 @@ import {
   COLLAPSE_NODE_SELECTION
 } from 'react-components/tool/tool.actions';
 import {
+  TOOL_LINKS__SET_NODES,
+  TOOL_LINKS__SET_MORE_NODES,
   TOOL_LINKS__SET_FLOWS_LOADING,
-  TOOL_LINKS__SET_NODES_AND_COLUMNS
+  TOOL_LINKS__SET_COLUMNS,
+  TOOL_LINKS__SET_LINKS,
+  TOOL_LINKS__SELECT_VIEW
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
-import groupBy from 'lodash/groupBy';
-import isEmpty from 'lodash/isEmpty';
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
 import getNodesMetaUid from 'reducers/helpers/getNodeMetaUid';
@@ -40,9 +40,9 @@ export const toolLinksInitialState = {
   forcedOverview: false,
   expandedNodesIds: [],
   highlightedNodesIds: [],
-  flowsLoading: true, // TODO: remove this, should not be true by default.
+  flowsLoading: false, // TODO: remove this, should not be true by default.
   selectedBiomeFilter: null,
-  selectedColumnsIds: [],
+  selectedColumnsIds: null,
   selectedNodesIds: [],
   selectedRecolorBy: null,
   selectedResizeBy: null,
@@ -59,11 +59,11 @@ const toolLinksReducer = {
   [RESET_SELECTION](state) {
     return immer(state, draft => {
       Object.assign(draft, {
-        highlightedNodesIds: [],
-        selectedNodesIds: [],
-        expandedNodesIds: [],
-        forcedOverview: false,
-        selectedBiomeFilter: null
+        highlightedNodesIds: toolLinksInitialState.highlightedNodesIds,
+        selectedNodesIds: toolLinksInitialState.selectedNodesIds,
+        expandedNodesIds: toolLinksInitialState.expandedNodesIds,
+        forcedOverview: toolLinksInitialState.forcedOverview,
+        selectedBiomeFilter: toolLinksInitialState.selectedBiomeFilter
       });
     });
   },
@@ -77,43 +77,15 @@ const toolLinksReducer = {
         highlightedNodesIds: [],
         selectedNodesIds: [],
         expandedNodesIds: [],
-        flowsLoading: true,
+        selectedColumnsIds: null,
         data: toolLinksInitialState.data
       });
     });
   },
 
-  [TOOL_LINKS__SET_NODES_AND_COLUMNS](state, action) {
+  [TOOL_LINKS__SET_COLUMNS](state, action) {
     return immer(state, draft => {
-      const { nodes, columns } = action.payload;
-
-      // context-dependant columns
-      const columnsByGroupObj = groupBy(columns, 'group');
-      const columnsByGroup = [0, 0, 0, 0]
-        .map((e, i) => columnsByGroupObj[i])
-        .filter(n => typeof n !== 'undefined');
-
-      const selectedColumnsIds = [];
-      columnsByGroup.forEach((group, i) => {
-        const defaultColumn = group.find(g => g.isDefault === true).id;
-        if (state.selectedColumnsIds === undefined || state.selectedColumnsIds.length < 4) {
-          selectedColumnsIds.push(defaultColumn);
-        } else {
-          const currentColumnForGroup = state.selectedColumnsIds[i];
-          const columnId =
-            group.find(g => g.id === currentColumnForGroup) !== undefined
-              ? currentColumnForGroup
-              : defaultColumn;
-          selectedColumnsIds.push(columnId);
-        }
-      });
-
-      draft.data.nodes = {};
-      draft.data.nodesByColumnGeoId = {};
-      nodes.forEach(node => {
-        draft.data.nodes[node.id] = node;
-        draft.data.nodesByColumnGeoId[`${node.columnId}-${node.geoId}`] = node.id;
-      });
+      const { columns } = action.payload;
 
       // TODO the API should have the info on which file to load (if any) per column
       const municipalitiesColumn = columns.find(column => column.name === 'MUNICIPALITY');
@@ -127,23 +99,43 @@ const toolLinksReducer = {
         draft.data.columns[column.id] = column;
       });
 
-      // if any selectedNode, make those columns visible (selected)
-      if (!isEmpty(state.selectedNodesIds)) {
-        state.selectedNodesIds
-          .map(id => draft.data.nodes[id])
-          .forEach(node => {
-            const column = draft.data.columns[node.columnId];
-            selectedColumnsIds[column.group] = node.columnId;
-          });
-      }
-      draft.selectedColumnsIds = selectedColumnsIds;
+      // TODO: if any selectedNode, make those columns visible (selected)
     });
   },
 
-  [GET_LINKS](state, action) {
+  [TOOL_LINKS__SET_NODES](state, action) {
+    const { nodes } = action.payload;
     return immer(state, draft => {
-      const links = action.jsonPayload.data;
-      const linksMeta = action.jsonPayload.include;
+      draft.data.nodes = {};
+      draft.data.nodesByColumnGeoId = {};
+      nodes.forEach(node => {
+        draft.data.nodes[node.id] = node;
+        draft.data.nodesByColumnGeoId[`${node.columnId}-${node.geoId}`] = node.id;
+      });
+    });
+  },
+
+  [TOOL_LINKS__SET_MORE_NODES](state, action) {
+    const { nodes } = action.payload;
+    return immer(state, draft => {
+      nodes.forEach(node => {
+        if (!draft.data.nodes) {
+          draft.data.nodes = {};
+        }
+        if (!draft.data.nodesByColumnGeoId) {
+          draft.data.nodesByColumnGeoId = {};
+        }
+        if (!draft.data.nodes[node.id]) {
+          draft.data.nodes[node.id] = node;
+          draft.data.nodesByColumnGeoId[`${node.columnId}-${node.geoId}`] = node.id;
+        }
+      });
+    });
+  },
+
+  [TOOL_LINKS__SET_LINKS](state, action) {
+    return immer(state, draft => {
+      const { links, linksMeta } = action.payload;
 
       draft.data.nodeHeights = {};
       linksMeta.nodeHeights.forEach(nodeHeight => {
@@ -152,7 +144,6 @@ const toolLinksReducer = {
 
       draft.currentQuant = linksMeta.quant;
       draft.data.links = links;
-      draft.flowsLoading = false;
     });
   },
   [SET_NODE_ATTRIBUTES](state, action) {
@@ -195,22 +186,31 @@ const toolLinksReducer = {
       draft.selectedResizeBy = action.payload;
     });
   },
-  [SELECT_VIEW](state, action) {
+  [TOOL_LINKS__SELECT_VIEW](state, action) {
     return immer(state, draft => {
-      Object.assign(draft, {
-        detailedView: action.detailedView,
-        forcedOverview: action.forcedOverview
-      });
+      const { detailedView, forcedOverview } = action.payload;
+      draft.detailedView = detailedView;
+      draft.forcedOverview = forcedOverview;
     });
   },
 
   [SELECT_COLUMN](state, action) {
     return immer(state, draft => {
+      const { currentColumnsIds, columnId, columnIndex } = action.payload;
+      if (!draft.selectedColumnsIds) {
+        draft.selectedColumnsIds = [...currentColumnsIds];
+      }
       // TODO also update choropleth with default selected indicators
-      if (!draft.selectedColumnsIds.includes(action.columnId)) {
-        draft.selectedColumnsIds[action.columnIndex] = action.columnId;
+      if (!draft.selectedColumnsIds.includes(columnId)) {
+        draft.selectedColumnsIds[columnIndex] = columnId;
       }
       draft.data.links = [];
+
+      draft.selectedNodesIds = state.selectedNodesIds.filter(nodeId => {
+        const node = draft.data.nodes[nodeId];
+        const column = draft.data.columns[node.columnId];
+        return column.group !== columnIndex;
+      });
     });
   },
   [UPDATE_NODE_SELECTION](state, action) {

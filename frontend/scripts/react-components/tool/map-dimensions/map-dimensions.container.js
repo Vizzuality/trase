@@ -4,7 +4,10 @@ import MapDimensions from 'react-components/tool/map-dimensions/map-dimensions.c
 import { toggleMapDimension } from 'react-components/tool/tool.actions';
 import { loadTooltip } from 'actions/app.actions';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
-import { getSelectedMapDimensionsUids } from 'react-components/tool/tool.selectors';
+import {
+  getSelectedMapDimensionsUids,
+  getSelectedColumnsIds
+} from 'react-components/tool/tool.selectors';
 
 // There's an update infinite loop inside loadMapDimensions, so mapDimensionsGroups should always be memoized
 const getLegacyMapDimensionsGroups = createSelector(
@@ -20,7 +23,7 @@ const getLegacyMapDimensionsGroups = createSelector(
 );
 
 const isCloroplethEnabled = state => {
-  const firstColumnId = state.toolLinks.selectedColumnsIds[0];
+  const firstColumnId = getSelectedColumnsIds(state);
   const column = state.toolLinks.data.columns && state.toolLinks.data.columns[firstColumnId];
   return column ? !column.isChoroplethDisabled : true;
 };
@@ -28,7 +31,7 @@ const mapStateToProps = state => ({
   mapDimensionsGroups: getLegacyMapDimensionsGroups(state),
   selectedMapDimensions: getSelectedMapDimensionsUids(state),
   isCloroplethEnabled: isCloroplethEnabled(state),
-  selectedColumnsIds: state.toolLinks.selectedColumnsIds
+  selectedColumnsIds: getSelectedColumnsIds(state)
 });
 
 const methodProps = [

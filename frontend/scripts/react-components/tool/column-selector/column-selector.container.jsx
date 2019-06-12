@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import { selectColumn } from 'react-components/tool/tool.actions';
 import ColumnSelector from 'react-components/tool/column-selector/column-selector.component';
 import PropTypes from 'prop-types';
+import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
 
 const mapStateToProps = state => ({
   columns: Object.values(state.toolLinks.data.columns || {}),
-  selectedColumnsIds: state.toolLinks.selectedColumnsIds,
+  selectedColumnsIds: getSelectedColumnsIds(state),
   nodesColoredAtColumn: state.toolLinks.nodesColoredAtColumn
 });
 

@@ -9,7 +9,6 @@ import {
   getURLFromParams,
   GET_CONTEXTS_URL
 } from 'scripts/utils/getURLFromParams';
-import { getCurrentContext } from 'scripts/reducers/helpers/contextHelper';
 
 function loadTooltipsPromise(dispatch, getState) {
   const { app } = getState();
@@ -66,7 +65,8 @@ function loadContextsPromise(dispatch, getState) {
 
       const state = getState();
 
-      const currentContext = getCurrentContext(state);
+      const currentContext =
+        state.app.selectedContext || state.app.contexts.find(ctx => ctx.isDefault);
 
       dispatch(selectInitialContextById(currentContext.id));
     });

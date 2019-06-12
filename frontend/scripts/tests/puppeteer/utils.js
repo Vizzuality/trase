@@ -95,7 +95,8 @@ export const pollyConfig = page => ({
       recordingsDir: path.join(__dirname, '__recordings__')
     }
   },
-  recordIfMissing: true,
+  recordIfMissing:
+    typeof process.env.JEST_CI !== 'undefined' ? !JSON.parse(process.env.JEST_CI) : true,
   matchRequestsBy: {
     method: false,
     headers: false,

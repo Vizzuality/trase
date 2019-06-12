@@ -174,7 +174,7 @@ RecolorBy.propTypes = {
   weight: PropTypes.string,
   variant: PropTypes.string,
   tooltip: PropTypes.string,
-  recolorGroups: PropTypes.array,
+  recolorGroups: PropTypes.object,
   onChange: PropTypes.func.isRequired,
   selectedRecolorBy: PropTypes.object.isRequired,
   recolorBys: PropTypes.array.isRequired

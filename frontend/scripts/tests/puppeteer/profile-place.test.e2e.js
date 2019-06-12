@@ -80,11 +80,11 @@ describe('Profile place - Full data', () => {
     });
   });
 
-  test('Top importer companies widget loads successfully', async () => {
+  test('Top importing companies widget loads successfully', async () => {
     expect.assertions(2);
     await testProfileMiniSankey(page, expect, {
       testId: 'top-importers',
-      title: 'top importer countries of sorriso soy in 2015',
+      title: 'top importing countries of soy from sorriso in 2015',
       flowsLength: 10
     });
   });

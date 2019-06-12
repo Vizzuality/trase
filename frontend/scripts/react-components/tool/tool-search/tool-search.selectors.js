@@ -2,10 +2,10 @@ import { createSelector } from 'reselect';
 import flatten from 'lodash/flatten';
 import groupBy from 'lodash/groupBy';
 import isNodeColumnVisible from 'utils/isNodeColumnVisible';
+import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
 
 const getToolNodes = state => state.toolLinks && state.toolLinks.data.nodes;
 const getToolColumns = state => state.toolLinks && state.toolLinks.data.columns;
-const getSelectedColumnsIds = state => state.toolLinks && state.toolLinks.selectedColumnsIds;
 
 const getAllToolSearchNodes = createSelector(
   getToolNodes,
@@ -28,6 +28,10 @@ const getGroupedNodes = createSelector(
 export const getToolSearchNodes = createSelector(
   [getGroupedNodes, getSelectedColumnsIds, getToolNodes, getToolColumns],
   (groupedNodes, selectedColumnsIds, nodes, columns) => {
+    if (!nodes || !columns) {
+      return [];
+    }
+
     const getNode = ([nA, nB]) => {
       if (nB) {
         if (

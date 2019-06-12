@@ -10,22 +10,45 @@ import getNodesColoredBySelection from 'reducers/helpers/getNodesColoredBySelect
 import getNextRecolorGroups from 'reducers/helpers/getRecolorGroups';
 import splitLinksByColumn from 'reducers/helpers/splitLinksByColumn';
 
+const getSelectedContext = state => state.app.selectedContext;
 const getSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getHighlightedNodesIds = state => state.toolLinks.highlightedNodesIds;
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolColumns = state => state.toolLinks.data.columns;
 const getToolNodeHeights = state => state.toolLinks.data.nodeHeights;
-const getSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
 const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
 const getToolBiomeFilter = state => state.toolLinks.selectedBiomeFilter;
-const getSelectedContext = state => state.app.selectedContext;
+const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getToolSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
 const getToolMapDimensions = state => state.toolLayers.data.mapDimensions;
 
 export const getSelectedResizeBy = makeGetSelectedResizeBy(getToolResizeBy, getSelectedContext);
 export const getSelectedRecolorBy = makeGetSelectedRecolorBy(getToolRecolorBy, getSelectedContext);
+
+export const getSelectedColumnsIds = createSelector(
+  [
+    getSelectedContext,
+    getToolColumns,
+    getToolSelectedColumnsIds,
+    getSelectedNodesIds,
+    getToolNodes
+  ],
+  (selectedContext, columns, selectedColumnsIds) => {
+    if (selectedColumnsIds) {
+      return selectedColumnsIds;
+    }
+    if (!columns && !selectedContext) {
+      return [];
+    }
+
+    return selectedContext.defaultColumns.reduce((acc, column) => {
+      acc[column.group] = column.id;
+      return acc;
+    }, []);
+  }
+);
 
 export const getSelectedBiomeFilter = createSelector(
   [getToolBiomeFilter, getSelectedContext],
@@ -109,7 +132,7 @@ export const getVisibleNodes = createSelector(
 export const getVisibleNodesByColumn = createSelector(
   [getVisibleNodes, getToolColumns, getToolNodeHeights],
   (visibleNodes, columns, nodeHeights) => {
-    if (!visibleNodes) {
+    if (!visibleNodes || !columns) {
       return [];
     }
     const byColumn = splitVisibleNodesByColumn(visibleNodes, columns);

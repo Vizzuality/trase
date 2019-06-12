@@ -10,6 +10,7 @@ import {
   getVisibleNodes,
   getSelectedBiomeFilter,
   getSelectedNodesGeoIds,
+  getSelectedColumnsIds,
   getHighlightedNodesGeoIds
 } from 'react-components/tool/tool.selectors';
 import {
@@ -34,7 +35,7 @@ const mapStateToProps = state => {
     highlightedGeoIds: getHighlightedNodesGeoIds(state)[0],
     defaultMapView: state.app.selectedContext ? state.app.selectedContext.map : null,
     selectedNodesIdsLength: state.toolLinks.selectedNodesIds.length,
-    selectedColumnsIds: state.toolLinks.selectedColumnsIds,
+    selectedColumnsIds: getSelectedColumnsIds(state),
     selectedMapContextualLayersData: getSelectedMapContextualLayersData(state),
     isMapVisible: state.toolLayers.isMapVisible,
     visibleNodes: getVisibleNodes(state),
