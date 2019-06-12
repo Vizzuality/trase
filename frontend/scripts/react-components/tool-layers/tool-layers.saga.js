@@ -1,4 +1,4 @@
-import { all, fork, takeLatest, select } from 'redux-saga/effects';
+import { all, fork, takeLatest } from 'redux-saga/effects';
 import {
   TOOL_LINKS__GET_COLUMNS,
   TOOL_LINKS__SET_SELECTED_NODES,
@@ -10,18 +10,8 @@ import { SELECT_YEARS } from 'react-components/tool/tool.actions';
 import { getLinkedGeoIds, getMapDimensions } from './tool-layers.fetch.saga';
 
 function* fetchLinkedGeoIds() {
-  function* getGeoIds(action) {
-    if (action.type === TOOL_LINKS__SET_SELECTED_NODES) {
-      const { nodeIds } = action.payload;
-      const { nodes } = yield select(state => state.toolLinks.data);
-      const isAggregated = nodeIds.every(id => nodes[id].isAggregated);
-      if (!isAggregated) {
-        // load related geoIds to show on the map
-        yield fork(getLinkedGeoIds);
-      }
-    } else {
-      yield fork(getLinkedGeoIds);
-    }
+  function* getGeoIds() {
+    yield fork(getLinkedGeoIds);
   }
 
   yield takeLatest(
@@ -33,6 +23,8 @@ function* fetchLinkedGeoIds() {
 function* fetchMapDimensions() {
   function* performFetch() {
     yield fork(getMapDimensions);
+    // TODO
+    // loadMapChoropleth()
   }
   yield takeLatest([TOOL_LINKS__GET_COLUMNS, SET_CONTEXT, SELECT_YEARS], performFetch);
 }

@@ -1,15 +1,10 @@
 /* eslint-disable no-use-before-define */
 import { feature as topojsonFeature } from 'topojson';
-import { CARTO_NAMED_MAPS_BASE_URL, YEARS_INCOMPLETE, YEARS_DISABLED_UNAVAILABLE } from 'constants';
-import {
-  GET_MAP_BASE_DATA_URL,
-  GET_NODE_ATTRIBUTES_URL,
-  getURLFromParams
-} from 'utils/getURLFromParams';
+import { CARTO_NAMED_MAPS_BASE_URL } from 'constants';
+import { GET_NODE_ATTRIBUTES_URL, getURLFromParams } from 'utils/getURLFromParams';
 import contextLayersCarto from 'named-maps/tool_named_maps_carto';
 import getNodeIdFromGeoId from 'actions/helpers/getNodeIdFromGeoId';
 import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
-import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsWarnings';
 import intesection from 'lodash/intersection';
 import compact from 'lodash/compact';
 import isEmpty from 'lodash/isEmpty';
@@ -32,7 +27,6 @@ import {
 
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
 export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
-export const SET_MAP_DIMENSIONS_DATA = 'SET_MAP_DIMENSIONS_DATA';
 export const SELECT_BIOME_FILTER = 'SELECT_BIOME_FILTER';
 export const SELECT_YEARS = 'SELECT_YEARS';
 export const SELECT_RESIZE_BY = 'SELECT_RESIZE_BY';
@@ -183,69 +177,6 @@ export function selectRecolorBy(recolorBy) {
       type: SELECT_RECOLOR_BY,
       payload: selectedRecolorBy
     });
-  };
-}
-
-export function loadNodes() {
-  return (dispatch, getState) => {
-    const params = {
-      context_id: getState().app.selectedContext.id,
-      start_year: getState().app.selectedYears[0],
-      end_year: getState().app.selectedYears[1]
-    };
-
-    const getMapBaseDataURL = getURLFromParams(GET_MAP_BASE_DATA_URL, params);
-
-    fetch(getMapBaseDataURL)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        return Promise.reject(new Error(response.statusText));
-      })
-      .then(jsonPayload => {
-        const payload = {
-          mapDimensionsMetaJSON: jsonPayload
-        };
-
-        const [startYear, endYear] = getState().app.selectedYears;
-        const allSelectedYears = Array(endYear - startYear + 1)
-          .fill(startYear)
-          .map((year, index) => year + index);
-
-        payload.mapDimensionsMetaJSON.dimensions.forEach(dimension => {
-          const allYearsCovered =
-            dimension.years === null ||
-            dimension.years.length === 0 ||
-            allSelectedYears.every(year => dimension.years.includes(year));
-          const yearsWithDataToDisplay = intesection(dimension.years, allSelectedYears);
-          if (
-            !allYearsCovered &&
-            allSelectedYears.length > 1 &&
-            yearsWithDataToDisplay.length > 0
-          ) {
-            dimension.disabledYearRangeReason = YEARS_INCOMPLETE;
-            dimension.disabledYearRangeReasonText = getSingleMapDimensionWarning(
-              dimension.disabledYearRangeReason,
-              yearsWithDataToDisplay,
-              dimension.years
-            );
-          } else if (!allYearsCovered) {
-            dimension.disabledYearRangeReason = YEARS_DISABLED_UNAVAILABLE;
-            dimension.disabledYearRangeReasonText = getSingleMapDimensionWarning(
-              dimension.disabledYearRangeReason,
-              yearsWithDataToDisplay,
-              dimension.years
-            );
-          }
-        });
-
-        dispatch(setMapContextLayers(payload.mapDimensionsMetaJSON.contextualLayers));
-
-        dispatch({ type: SET_MAP_DIMENSIONS_DATA, payload });
-
-        loadMapChoropleth(getState, dispatch);
-      });
   };
 }
 
