@@ -12,15 +12,20 @@ const acceptedCookieBanner = {
 };
 
 const CookieBannerContainer = () => {
-  const [accepted, setAccepted] = useState(acceptedCookieBanner.get());
+  const [acceptedTimeStamp, setAccepted] = useState(acceptedCookieBanner.get());
 
   useEffect(() => {
-    if (!acceptedCookieBanner.get() && accepted === true) {
+    if (!acceptedCookieBanner.get() && acceptedTimeStamp) {
       acceptedCookieBanner.set(Date.now());
     }
-  }, [accepted]);
+  }, [acceptedTimeStamp]);
 
-  return <CookieBannerComponent setAccepted={() => setAccepted(true)} accepted={accepted} />;
+  return (
+    <CookieBannerComponent
+      setAccepted={() => setAccepted(true)}
+      acceptedTimeStamp={acceptedTimeStamp}
+    />
+  );
 };
 
 export default CookieBannerContainer;

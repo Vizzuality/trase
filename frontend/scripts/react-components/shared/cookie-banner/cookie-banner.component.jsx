@@ -5,8 +5,8 @@ import Button from 'react-components/shared/button';
 import Text from 'react-components/shared/text';
 import 'react-components/shared/cookie-banner/cookie-banner.scss';
 
-function CookieBanner({ setAccepted, accepted }) {
-  return accepted || !ENABLE_COOKIE_BANNER ? null : (
+function CookieBanner({ setAccepted, acceptedTimeStamp }) {
+  return acceptedTimeStamp || !ENABLE_COOKIE_BANNER ? null : (
     <div className="c-cookie-banner">
       <div className="row">
         <div className="cookie-content">
@@ -36,7 +36,7 @@ function CookieBanner({ setAccepted, accepted }) {
 
 CookieBanner.propTypes = {
   setAccepted: PropTypes.func.isRequired,
-  accepted: PropTypes.bool
+  acceptedTimeStamp: PropTypes.string
 };
 
 export default CookieBanner;
