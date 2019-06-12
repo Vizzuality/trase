@@ -12,7 +12,7 @@ ActiveAdmin.register Api::V3::RecolorByAttribute, as: 'RecolorByAttribute' do
 
   permit_params :context_id, :group_number, :legend_type, :legend_color_theme,
                 :interval_count, :min_value, :max_value, :divisor,
-                :tooltip_text, :years_str, :is_disabled, :is_default,
+                :tooltip_text, :is_disabled, :is_default,
                 :readonly_attribute_id
 
   after_action :clear_cache, only: [:create, :update, :destroy]
@@ -65,8 +65,6 @@ ActiveAdmin.register Api::V3::RecolorByAttribute, as: 'RecolorByAttribute' do
             hint: object.class.column_comment('divisor')
       input :tooltip_text, as: :string,
                            hint: object.class.column_comment('tooltip_text')
-      input :years_str, label: 'Years',
-                        hint: (object.class.column_comment('years') || '') + ' (comma-separated list)'
       input :is_disabled, as: :boolean, required: true,
                           hint: object.class.column_comment('is_disabled')
       input :is_default, as: :boolean, required: true,

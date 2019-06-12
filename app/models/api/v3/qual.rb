@@ -15,6 +15,8 @@ module Api
     class Qual < BlueTable
       has_one :qual_property
       has_many :node_quals
+      has_many :flow_quals
+      has_many :flows, through: :flow_quals
       has_many :qual_context_properties
       has_many :qual_commodity_properties
       has_many :qual_country_properties

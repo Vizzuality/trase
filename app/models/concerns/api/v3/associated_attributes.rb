@@ -42,26 +42,31 @@ module Api
         self.readonly_attribute = Api::V3::Readonly::Attribute.find_by_id(id)
       end
 
+      def readonly_attribute
+        return @readonly_attribute if defined?(@readonly_attribute)
+
+        @readonly_attribute = original_attribute&.readonly_attribute
+      end
+
+      def original_attribute
+        return @original_attribute if defined?(@original_attribute)
+
+        @original_attribute = find_original_attribute
+      end
+
       private
 
       def associated_attributes
         self.class.instance_variable_get(:@associated_attributes)
       end
 
-      def readonly_attribute
-        @readonly_attribute || (@readonly_attribute = find_readonly_attribute)
-      end
-
       # iterates over declared associated attributes
       # returns the first actual associated attribute found
-      def find_readonly_attribute
+      def find_original_attribute
         assoc_attr_names_with_types.detect do |attr_name, attr_type|
-          # no good way to preload this
-          readonly_attribute = Api::V3::Readonly::Attribute.where(
-            original_id: send(attr_name)&.send(:"#{attr_type}_id"),
-            original_type: attr_type.capitalize
-          ).first
-          break readonly_attribute if readonly_attribute.present?
+          original_attribute = send(attr_name)&.send(attr_type)
+          break original_attribute if original_attribute.present?
+
           false
         end
       end

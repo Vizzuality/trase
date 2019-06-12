@@ -85,6 +85,7 @@ module Api
                      attribute: :recolor_by_qual,
                      if: :new_recolor_by_qual_given?
 
+      after_create :set_years
       after_commit :refresh_dependents
 
       stringy_array :years
@@ -101,6 +102,12 @@ module Api
 
       def refresh_dependents
         Api::V3::Readonly::RecolorByAttribute.refresh(skip_dependencies: true)
+      end
+
+      def set_years
+        FlowAttributeAvailableYearsUpdateWorker.perform_async(
+          self.class.name, id, context_id
+        )
       end
 
       private_class_method def self.active_ids

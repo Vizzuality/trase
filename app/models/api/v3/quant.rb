@@ -16,6 +16,8 @@ module Api
     class Quant < BlueTable
       has_one :quant_property
       has_many :node_quants
+      has_many :flow_quants
+      has_many :flows, through: :flow_quants
       has_many :quant_context_properties
       has_many :quant_commodity_properties
       has_many :quant_country_properties

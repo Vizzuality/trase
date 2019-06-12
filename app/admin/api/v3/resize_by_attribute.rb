@@ -9,8 +9,9 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
     :resize_by_quant
   ]
 
-  permit_params :context_id, :group_number, :tooltip_text, :years_str,
-                :is_disabled, :is_default, :readonly_attribute_id
+  permit_params :context_id, :group_number,
+                :tooltip_text, :is_disabled, :is_default,
+                :readonly_attribute_id
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -48,8 +49,6 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
                            hint: object.class.column_comment('group_number')
       input :tooltip_text, as: :string,
                            hint: object.class.column_comment('tooltip_text')
-      input :years_str, label: 'Years',
-                        hint: (object.class.column_comment('years') || '') + ' (comma-separated list)'
       input :is_disabled, as: :boolean, required: true,
                           hint: object.class.column_comment('is_disabled')
       input :is_default, as: :boolean, required: true,
