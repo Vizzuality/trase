@@ -867,7 +867,7 @@ export function selectMapBasemap(selectedMapBasemap) {
   };
 }
 
-const _isNodeVisible = (getState, nodeId) =>
-  getState()
-    .toolLinks.visibleNodes.map(node => node.id)
-    .indexOf(nodeId) > -1;
+// const _isNodeVisible = (getState, nodeId) =>
+//   getState()
+//     .toolLinks.visibleNodes.map(node => node.id)
+//     .indexOf(nodeId) > -1;
