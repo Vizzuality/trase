@@ -6,7 +6,7 @@ import { getMergedLinks } from 'react-components/tool/tool.selectors';
 
 const mapDispatchToProps = dispatch => ({
   resizeSankeyTool: () => resizeSankeyTool(dispatch),
-  resetSankey: () => resetSankey()
+  resetSankey
 });
 
 const mapStateToProps = state => ({

@@ -7,7 +7,6 @@ import CookieBanner from 'react-components/shared/cookie-banner';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import FiltersNav from 'react-components/nav/filters-nav/filters-nav.container';
 import MapContainer from 'react-components/tool/map/map.container';
-import FlowContentContainer from 'react-components/tool/tool-content/tool-content.container';
 import TooltipContainer from 'react-components/tool/help-tooltip/help-tooltip.container';
 import ModalContainer from 'react-components/tool/story-modal/story-modal.container';
 import TitlebarContainer from 'react-components/tool/titlebar/titlebar.container';
@@ -47,9 +46,11 @@ const renderMapSidebar = () => (
   </div>
 );
 
+// TODO: Move all this renders to their folder when we replace them with react components
+// eslint-disable-next-line react/prop-types
 const renderMap = ({ loading, isMapVisible }) => (
   <div
-    className={cx('js-map-container c-map is-absolute', {
+    className={cx('c-map is-absolute', {
       '-smooth-transition': !loading,
       '-fullscreen': isMapVisible
     })}
@@ -81,15 +82,18 @@ const renderMap = ({ loading, isMapVisible }) => (
   </div>
 );
 
-const renderSankeyError = ({ hasError }) => (
-  <div className={cx('js-sankey-error', { 'is-hidden': !hasError })}>
+// eslint-disable-next-line react/prop-types
+const renderSankeyError = ({ hasError, resetSankey }) => (
+  <div className={cx({ 'is-hidden': !hasError })}>
     <div className="veil -with-menu -below-nav" />
     <div className="c-modal -below-nav">
       <div className="content -auto-height">
         The current selection produced no results. This may be due to data not being available for
         the current configuration or due to an error in loading the data. Please change your
         selection or reset the tool to its default settings.
-        <button className="c-button js-sankey-reset">reset</button>
+        <button className="c-button" onClick={resetSankey}>
+          reset
+        </button>
       </div>
     </div>
   </div>
@@ -123,6 +127,7 @@ const renderExpandButton = () => (
   </div>
 );
 
+// eslint-disable-next-line react/prop-types
 const renderSankey = ({ loading }) => (
   <div className={cx('c-sankey is-absolute js-sankey', { '-smooth-transition': !loading })}>
     <div className="js-sankey-scroll-container sankey-scroll-container">
@@ -164,7 +169,7 @@ const renderSankey = ({ loading }) => (
   </div>
 );
 
-function Tool({ resizeSankeyTool, loading, isMapVisible, isVisible, hasError }) {
+function Tool({ resizeSankeyTool, loading, isMapVisible, isVisible, hasError, resetSankey }) {
   useEffect(() => {
     evManager.addEventListener(window, 'resize', resizeSankeyTool);
     document.querySelector('body').classList.add('-overflow-hidden');
@@ -179,7 +184,6 @@ function Tool({ resizeSankeyTool, loading, isMapVisible, isVisible, hasError }) 
       <MapContainer />
       <MapBasemaps />
       <MapDimensionsContainer />
-      <FlowContentContainer />
       <MapLegend />
       <MapContextContainer />
       <NodesTitlesContainer />
@@ -205,10 +209,10 @@ function Tool({ resizeSankeyTool, loading, isMapVisible, isVisible, hasError }) 
           <div className="c-modal js-modal" />
         </div>
 
-        {renderSankeyError({ hasError })}
+        {renderSankeyError({ hasError, resetSankey })}
 
         <div
-          className={cx('tool-loading', 'js-tool-content  flow-content', {
+          className={cx('flow-content', {
             '-center-map': isMapVisible,
             open: isVisible
           })}
@@ -218,9 +222,7 @@ function Tool({ resizeSankeyTool, loading, isMapVisible, isVisible, hasError }) 
             <div className="c-spinner" />
           </div>
 
-          <div
-            className={cx('js-map-view-veil sankey-veil veil', { 'is-hidden': !isMapVisible })}
-          />
+          <div className={cx('sankey-veil veil', { 'is-hidden': !isMapVisible })} />
           {renderMapSidebar()}
           {renderMap({ loading, isMapVisible })}
           <ColumnsSelectorGroupContainer />
@@ -239,7 +241,8 @@ Tool.propTypes = {
   isVisible: PropTypes.bool,
   hasError: PropTypes.bool,
   loading: PropTypes.bool,
-  resizeSankeyTool: PropTypes.func.isRequired
+  resizeSankeyTool: PropTypes.func.isRequired,
+  resetSankey: PropTypes.func.isRequired
 };
 
 export default Tool;
