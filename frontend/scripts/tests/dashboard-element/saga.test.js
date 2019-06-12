@@ -24,15 +24,13 @@ import {
   DASHBOARD_ELEMENT__CLEAR_PANELS
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import { getURLFromParams } from 'utils/getURLFromParams';
-import { fetchWithCancel } from 'utils/saga-utils';
+import fetchWithCancel from 'utils/fetchWithCancel';
 import { recordSaga } from '../utils/record-saga';
 
 jest.mock('utils/getURLFromParams', () => ({
   getURLFromParams: jest.fn()
 }));
-jest.mock('react-components/dashboard-element/fetch-with-cancel', () => ({
-  fetchWithCancel: jest.fn()
-}));
+jest.mock('utils/fetchWithCancel', () => jest.fn());
 const someUrl = 'http://trase.earth';
 getURLFromParams.mockImplementation(() => someUrl);
 const sourceMock = { cancel: jest.fn() };

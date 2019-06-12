@@ -19,7 +19,8 @@ import {
   GET_DASHBOARD_SEARCH_RESULTS_URL,
   GET_DASHBOARD_PARAMETRISED_CHARTS_URL
 } from 'utils/getURLFromParams';
-import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
+import { setLoadingSpinner } from 'utils/saga-utils';
+import fetchWithCancel from 'utils/fetchWithCancel';
 
 export function* getDashboardPanelData(dashboardElement, optionsType, options) {
   const { page, activeTab } = dashboardElement[`${dashboardElement.activePanelId}Panel`];

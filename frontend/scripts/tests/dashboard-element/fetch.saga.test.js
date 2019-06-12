@@ -1,7 +1,6 @@
 import { initialState } from 'react-components/dashboard-element/dashboard-element.reducer';
 import { cancelled } from 'redux-saga/effects';
-import { fetchWithCancel } from 'utils/saga-utils';
-
+import fetchWithCancel from 'utils/fetchWithCancel';
 import {
   getDashboardPanelData,
   getDashboardPanelSectionTabs,
@@ -9,10 +8,7 @@ import {
 } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
 import { getURLFromParams } from 'utils/getURLFromParams';
 
-jest.mock('react-components/dashboard-element/fetch-with-cancel', () => ({
-  fetchWithCancel: jest.fn()
-}));
-
+jest.mock('utils/fetchWithCancel', () => jest.fn());
 jest.mock('utils/getURLFromParams', () => ({
   getURLFromParams: jest.fn()
 }));
