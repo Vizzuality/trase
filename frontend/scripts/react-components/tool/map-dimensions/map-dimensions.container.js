@@ -31,7 +31,7 @@ const isCloroplethEnabled = state => {
 const mapStateToProps = state => ({
   mapDimensionsGroups: getLegacyMapDimensionsGroups(state),
   selectedMapDimensions: getSelectedMapDimensionsUids(state),
-  isCloroplethEnabled: isCloroplethEnabled(state),
+  isChoroplethEnabled: isCloroplethEnabled(state),
   selectedColumnsIds: getSelectedColumnsIds(state)
 });
 
@@ -43,7 +43,7 @@ const methodProps = [
   },
   {
     name: 'setMapDimensions',
-    compared: ['selectedMapDimensions'],
+    compared: ['selectedMapDimensions', 'mapDimensionsGroups'],
     returned: ['selectedMapDimensions']
   },
   {
@@ -54,7 +54,7 @@ const methodProps = [
   {
     name: 'setVisibility',
     compared: ['selectedColumnsIds'],
-    returned: ['isCloroplethEnabled']
+    returned: ['isChoroplethEnabled']
   }
 ];
 
