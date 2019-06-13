@@ -22,10 +22,10 @@ const getItems = (data, commodity) => {
   switch (commodity) {
     case 'palmOil':
       return [
-        { title: 'Company', value: data.parent_co },
+        { title: 'Mill ID', value: data.mill_id },
+        { title: 'Company', value: data.company },
         { title: 'Name', value: data.mill_name },
-        { title: 'UHUCSB Id', value: data.uhucsb_id },
-        { title: 'UML Id', value: data.uml_id },
+        { title: 'World Resources Institute Universal Mill List ID', value: data.uml_id || 'N/A' },
         { title: 'Active', value: data.active ? 'Active' : 'Inactive' }
       ];
 

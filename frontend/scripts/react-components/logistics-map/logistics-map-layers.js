@@ -170,15 +170,15 @@ export default {
         {
           type: 'cartodb',
           options: {
-            sql: `SELECT * FROM "${CARTO_ACCOUNT}".indonesia_mills_31012019 {{where}}`,
+            sql: `SELECT * FROM "${CARTO_ACCOUNT}".indonesia_mills_20190613 {{where}}`,
             cartocss: `#layer { marker-width: 7; marker-fill: #EA6869; marker-fill-opacity: 0.9; marker-allow-overlap: true; marker-line-width: 1; marker-line-color: #FFFFFF; marker-line-opacity: 1; } #layer[zoom>7] { marker-line-width: 0.5; marker-fill: #EA6869; marker-file: url('${MARKERS_URL}/crushing-icon-v2.svg'); marker-width: 24; }`,
             cartocss_version: '2.3.0',
-            interactivity: ['mill_name', 'parent_co', 'active', 'uhucsb_id', 'uml_id']
+            interactivity: ['mill_id', 'mill_name', 'company', 'active', 'uml_id']
           }
         }
       ],
-      sql_config: [{ type: 'where', key: 'parent_co', name: 'companies' }],
-      downloadUrl: `https://${CARTO_ACCOUNT}.carto.com/api/v2/sql?filename=indonesia_mills_31012019&q=SELECT * FROM "${CARTO_ACCOUNT}".indonesia_mills_31012019&format=csv`
+      sql_config: [{ type: 'where', key: 'company', name: 'companies' }],
+      downloadUrl: `https://${CARTO_ACCOUNT}.carto.com/api/v2/sql?filename=indonesia_mills_20190613&q=SELECT * FROM "${CARTO_ACCOUNT}".indonesia_mills_20190613&format=csv`
     }
   ]
 };
