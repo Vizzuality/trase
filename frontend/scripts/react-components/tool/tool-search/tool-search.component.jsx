@@ -3,12 +3,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import deburr from 'lodash/deburr';
-import sortBy from 'lodash/sortBy';
-import { defaultMemoize } from 'reselect';
-import fuzzySearch from 'utils/fuzzySearch';
 import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group/node-title-group.container';
 import SearchResult from 'react-components/tool/tool-search/tool-search-result/tool-search-result.component';
-import { MAX_SEARCH_RESULTS } from 'constants';
 
 import 'scripts/react-components/tool/tool-search/tool-search.scss';
 import 'scripts/react-components/tool/tool-search/tool-search-result/tool-search-result.scss';
@@ -23,7 +19,8 @@ export default class ToolSearch extends Component {
     isMapVisible: PropTypes.bool,
     defaultYear: PropTypes.number,
     selectedNodesIds: PropTypes.array,
-    setIsSearchOpen: PropTypes.func
+    setIsSearchOpen: PropTypes.func,
+    onInputValueChange: PropTypes.func
   };
 
   static isValidChar(key) {
@@ -38,7 +35,7 @@ export default class ToolSearch extends Component {
       .map(n => parseInt(n, 10));
   }
 
-  state = { charPressedCount: 0 };
+  state = { charPressedCount: 0, inputValue: '' };
 
   componentDidMount() {
     document.addEventListener('keydown', this.onKeydown);
@@ -114,33 +111,26 @@ export default class ToolSearch extends Component {
     this.setState(state => ({ charPressedCount: state.charPressedCount - 1 }));
   };
 
+  onInputValueChange = value => {
+    this.setState({ inputValue: value });
+    this.debouncedInputValueChange(value);
+  };
+
+  debouncedInputValueChange = value => {
+    const { contextId } = this.props;
+    this.props.onInputValueChange(value, contextId);
+  };
+
+  onDownshiftStateChange = state => {
+    if (state.inputValue !== undefined) {
+      this.onInputValueChange(state.inputValue);
+    }
+  };
+
   isNodeSelected = node => {
     const ids = ToolSearch.getNodeIds(node);
     return ids.every(id => this.props.selectedNodesIds.includes(id));
   };
-
-  // eslint-disable-next-line
-  LEGACY_getSearchNodes(query) {
-    const { nodes = [] } = this.props;
-    return sortBy(
-      nodes.filter(i => {
-        if (!query) return true;
-        const item = deburr(i.name.toLowerCase());
-        return item.includes(query.toLowerCase());
-      }),
-      item => item.name
-    ).slice(0, MAX_SEARCH_RESULTS);
-  }
-
-  getSearchNodes = defaultMemoize(query => {
-    const { nodes = [] } = this.props;
-
-    if (ENABLE_LEGACY_TOOL_SEARCH) {
-      return this.LEGACY_getSearchNodes(query);
-    }
-
-    return fuzzySearch(query, nodes).slice(0, MAX_SEARCH_RESULTS);
-  });
 
   render() {
     const {
@@ -149,8 +139,11 @@ export default class ToolSearch extends Component {
       selectedNodesIds = [],
       isMapVisible,
       contextId,
-      defaultYear
+      defaultYear,
+      nodes
     } = this.props;
+
+    const { inputValue: stateInput } = this.state;
 
     if (isSearchOpen === false) {
       return (
@@ -173,6 +166,8 @@ export default class ToolSearch extends Component {
             itemToString={i => (i === null ? '' : i.name)}
             onSelect={this.onSelected}
             ref={this.setDownshiftRef}
+            selectedItem={stateInput}
+            onStateChange={this.onDownshiftStateChange}
           >
             {({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => (
               <div className="search-container" onClick={e => e.stopPropagation()}>
@@ -192,9 +187,9 @@ export default class ToolSearch extends Component {
                 </div>
                 {isOpen && (
                   <ul className="search-results">
-                    {this.getSearchNodes(inputValue).map((item, row) => (
+                    {nodes.map((item, row) => (
                       <SearchResult
-                        key={item.id + item.type}
+                        key={`${item.id} + ${item.contextId}`}
                         value={inputValue}
                         isHighlighted={row === highlightedIndex}
                         isMapVisible={isMapVisible}

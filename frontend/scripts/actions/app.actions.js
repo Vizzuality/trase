@@ -143,9 +143,12 @@ export const setLanguage = lang => (dispatch, getState) => {
   return dispatch(redirect({ type: location.type, payload }));
 };
 
-export function loadSearchResults(searchTerm) {
+export function loadSearchResults(searchTerm, contextId) {
   return dispatch => {
-    const url = `${getURLFromParams(GET_NODES_WITH_SEARCH_URL)}?query=${searchTerm}`;
+    const contextIdParam = contextId ? `&context_id=${contextId}` : '';
+    const url = `${getURLFromParams(
+      GET_NODES_WITH_SEARCH_URL
+    )}?query=${searchTerm}${contextIdParam}`;
 
     if (isEmpty(searchTerm)) {
       dispatch(resetSearchResults());
