@@ -8,8 +8,8 @@ import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
 import intesection from 'lodash/intersection';
 import compact from 'lodash/compact';
 import isEmpty from 'lodash/isEmpty';
-import xor from 'lodash/xor';
 import {
+  getVisibleNodes,
   getSelectedColumnsIds,
   getSelectedMapDimensionsUids
 } from 'react-components/tool/tool.selectors';
@@ -314,25 +314,22 @@ export function selectNodeFromGeoId(geoId) {
 export function selectExpandedNode(param) {
   const ids = Array.isArray(param) ? param : [param];
   return (dispatch, getState) => {
-    const hasInvisibleNodes = true; // ids.some(elem => !_isNodeVisible(getState, elem));
+    const state = getState();
+    const { toolLinks } = state;
+    const visibleNodes = getVisibleNodes(state);
+    const visibleNodesById = visibleNodes.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
+    const hasInvisibleNodes = ids.some(id => !visibleNodesById[id]);
 
-    if (hasInvisibleNodes) {
-      const state = getState();
-      const { toolLinks } = state;
-      if (
-        toolLinks.selectedNodesIds.length === ids.length &&
-        intesection(toolLinks.selectedNodesIds, ids).length === ids.length
-      ) {
-        dispatch(clearSankey());
-      } else {
-        const currentSelectedNodesIds = getState().toolLinks.selectedNodesIds;
-        const selectedNodesIds = xor(currentSelectedNodesIds, ids);
-
-        dispatch(selectNodes(selectedNodesIds));
-        dispatch(expandSankey());
-      }
+    if (
+      toolLinks.selectedNodesIds.length === ids.length &&
+      intesection(toolLinks.selectedNodesIds, ids).length === ids.length
+    ) {
+      dispatch(clearSankey());
+    } else if (hasInvisibleNodes) {
+      dispatch(selectNodes(ids));
+      dispatch(expandSankey());
     } else {
-      dispatch(selectNodes(ids, false));
+      dispatch(selectNodes(ids));
     }
   };
 }
@@ -448,8 +445,3 @@ export function selectMapBasemap(selectedMapBasemap) {
     selectedMapBasemap
   };
 }
-
-const _isNodeVisible = (getState, nodeId) =>
-  getState()
-    .toolLinks.visibleNodes.map(node => node.id)
-    .indexOf(nodeId) > -1;

@@ -230,7 +230,7 @@ const toolLinksReducer = {
           if (
             areNodesExpanded &&
             draft.selectedNodesIds.length === 1 &&
-            draft.selectedNodesIds.indexOf(nodeId) > -1
+            draft.selectedNodesIds.includes(nodeId)
           ) {
             // we are unselecting the node that is currently expanded: shrink sankey and continue to unselecting node
             draft.expandedNodesIds = [];
