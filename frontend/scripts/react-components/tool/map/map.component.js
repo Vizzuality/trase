@@ -127,14 +127,15 @@ export default class MapComponent {
         defaultMapView.zoom
       );
     } else {
-      this.prevSelectedNodesIdsLength = selectedNodesIdsLength;
       if (
         mapView.latitude !== defaultMapView.latitude ||
         mapView.longitude !== defaultMapView.longitude ||
-        mapView.zoom !== defaultMapView.zoom
+        mapView.zoom !== defaultMapView.zoom ||
+        this.prevSelectedNodesIdsLength === null
       ) {
         this._setMapViewDebounced([mapView.latitude, mapView.longitude], mapView.zoom);
       }
+      this.prevSelectedNodesIdsLength = selectedNodesIdsLength;
     }
   }
 

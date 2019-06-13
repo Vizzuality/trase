@@ -50,7 +50,7 @@ export default [
     type: SELECT_YEARS,
     action: 'Select years',
     category: 'Sankey',
-    getPayload: action => action.years.join(',')
+    getPayload: action => action.payload.years.join(',')
   },
   {
     type: SELECT_RECOLOR_BY,

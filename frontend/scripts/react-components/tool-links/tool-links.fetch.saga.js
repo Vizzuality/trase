@@ -156,7 +156,6 @@ export function* getMoreToolNodesByLink(selectedContext, fetchAllNodes) {
 export function* getToolGeoColumnNodes(selectedContext) {
   const selectedColumnsIds = yield select(getSelectedColumnsIds);
 
-  // const geoColumnId = selectedColumnsIds.find(id => columns[id] && columns[id].isGeo);
   // TODO: this is not the best way to read the geoColumn,
   //  the backend should provide it within contexts.defaultColumns
   const geoColumnId = selectedColumnsIds[0];

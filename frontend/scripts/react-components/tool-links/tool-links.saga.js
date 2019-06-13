@@ -48,6 +48,11 @@ function* fetchToolColumns() {
 
 function* fetchLinks() {
   function* performFetch(action) {
+    const page = yield select(state => state.location.type);
+    if (page !== 'tool') {
+      return;
+    }
+
     const { selectedContext } = yield select(state => state.app);
     const fetchAllNodes = action.type === TOOL_LINKS__SELECT_VIEW && action.payload.detailedView;
     yield put(setToolFlowsLoading(true));

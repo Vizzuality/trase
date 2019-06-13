@@ -92,7 +92,7 @@ export function resetSankey() {
 
     dispatch({
       type: SELECT_YEARS,
-      years: [currentContext.defaultYear, currentContext.defaultYear]
+      payload: { years: [currentContext.defaultYear, currentContext.defaultYear] }
     });
 
     defaultColumns.forEach(defaultColumn => {
@@ -240,7 +240,7 @@ export function loadMapVectorData() {
         type: GET_MAP_VECTOR_DATA,
         mapVectorData
       });
-      loadMapChoropleth(getState, dispatch);
+      dispatch(loadMapChoropleth());
     });
   };
 }
@@ -387,48 +387,52 @@ export function toggleMapDimension(uid) {
       }
     });
 
-    loadMapChoropleth(getState, dispatch);
+    dispatch(loadMapChoropleth());
   };
 }
 
-export function loadMapChoropleth(getState, dispatch) {
-  const state = getState();
+export function loadMapChoropleth() {
+  return (dispatch, getState) => {
+    const state = getState();
 
-  const uids = getSelectedMapDimensionsUids(state);
+    const uids = getSelectedMapDimensionsUids(state);
 
-  if (new Set(uids.filter(Boolean)).size === 0) {
-    dispatch({
-      type: SET_NODE_ATTRIBUTES,
-      payload: { data: [] }
-    });
-
-    return;
-  }
-
-  const selectedMapDimensions = compact(uids).map(uid => state.toolLayers.data.mapDimensions[uid]);
-
-  const params = {
-    context_id: state.app.selectedContext.id,
-    start_year: state.app.selectedYears[0],
-    end_year: state.app.selectedYears[1],
-    layer_ids: selectedMapDimensions.map(layer => layer.id)
-  };
-
-  const getNodesURL = getURLFromParams(GET_NODE_ATTRIBUTES_URL, params);
-
-  fetch(getNodesURL)
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      return Promise.reject(new Error(response.statusText));
-    })
-    .then(payload => {
+    if (new Set(uids.filter(Boolean)).size === 0) {
       dispatch({
         type: SET_NODE_ATTRIBUTES,
-        payload
+        payload: { data: [] }
       });
-    });
+
+      return;
+    }
+
+    const selectedMapDimensions = compact(uids).map(
+      uid => state.toolLayers.data.mapDimensions[uid]
+    );
+
+    const params = {
+      context_id: state.app.selectedContext.id,
+      start_year: state.app.selectedYears[0],
+      end_year: state.app.selectedYears[1],
+      layer_ids: selectedMapDimensions.map(layer => layer.id)
+    };
+
+    const getNodesURL = getURLFromParams(GET_NODE_ATTRIBUTES_URL, params);
+
+    fetch(getNodesURL)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        return Promise.reject(new Error(response.statusText));
+      })
+      .then(payload => {
+        dispatch({
+          type: SET_NODE_ATTRIBUTES,
+          payload
+        });
+      });
+  };
 }
 
 export function selectContextualLayers(contextualLayers) {
