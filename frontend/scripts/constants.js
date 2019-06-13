@@ -272,3 +272,5 @@ export const NAV_FILTER_TYPES = {
   dropdown: 2,
   recolorBySelector: 3
 };
+
+export const DONT_SERIALIZE = 'NO_CEREAL_RYAN_GOSLING';

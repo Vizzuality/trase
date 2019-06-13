@@ -1,4 +1,5 @@
-import { createSelector } from 'reselect';
+import { DONT_SERIALIZE } from 'constants';
+import { createSelector, createStructuredSelector } from 'reselect';
 import { makeGetSelectedResizeBy, makeGetSelectedRecolorBy } from 'selectors/indicators.selectors';
 import getVisibleNodesUtil from 'reducers/helpers/getVisibleNodes';
 import splitVisibleNodesByColumn from 'reducers/helpers/splitVisibleNodesByColumn';
@@ -237,3 +238,18 @@ export const getHighlightedNodesGeoIds = createSelector(
   [getHighlightedNodesData, getToolColumns],
   getNodesGeoIds
 );
+
+// eslint-disable-next-line
+const URL_selectedNodesIds = createSelector(
+  [getSelectedNodesIds],
+  selectedNodesIds => {
+    if (selectedNodesIds.length > 0) {
+      return selectedNodesIds.join(',');
+    }
+    return DONT_SERIALIZE;
+  }
+);
+
+export const getToolUrlProps = createStructuredSelector({
+  selectedNodesIds: URL_selectedNodesIds
+});
