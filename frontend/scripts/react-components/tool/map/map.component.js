@@ -449,7 +449,7 @@ export default class MapComponent {
   }
 
   setChoropleth({ choropleth, selectedBiomeFilter, linkedGeoIds, defaultMapView }) {
-    if (!this.currentPolygonTypeLayer || Object.keys(choropleth).length === 0) {
+    if (!this.currentPolygonTypeLayer) {
       return;
     }
     this._drawChoroplethLayer(choropleth, selectedBiomeFilter, linkedGeoIds, defaultMapView);
