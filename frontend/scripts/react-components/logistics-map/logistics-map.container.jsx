@@ -4,7 +4,10 @@ import { connect } from 'react-redux';
 import {
   getLogisticsMapLayers,
   getActiveLayers,
-  getActiveParams
+  getActiveParams,
+  getBounds,
+  getBorder,
+  getHeading
 } from 'react-components/logistics-map/logistics-map.selectors';
 import {
   setLogisticsMapActiveModal,
@@ -19,6 +22,9 @@ class LogisticsMapContainer extends React.PureComponent {
   static propTypes = {
     layers: PropTypes.array,
     tooltips: PropTypes.object,
+    bounds: PropTypes.object,
+    border: PropTypes.object,
+    heading: PropTypes.string,
     commodity: PropTypes.string,
     activeLayers: PropTypes.array,
     activeModal: PropTypes.string,
@@ -29,10 +35,6 @@ class LogisticsMapContainer extends React.PureComponent {
 
   state = {
     mapPopUp: null
-  };
-
-  bounds = {
-    bbox: [-77.783203125, -35.46066995149529, -29.794921874999996, 9.709057068618208]
   };
 
   currentPopUp = null;
@@ -95,7 +97,16 @@ class LogisticsMapContainer extends React.PureComponent {
   closeModal = () => this.props.setLogisticsMapActiveModal(null);
 
   render() {
-    const { activeLayers, layers, setLayerActive, commodity, tooltips, activeModal } = this.props;
+    const {
+      activeLayers,
+      layers,
+      setLayerActive,
+      heading,
+      tooltips,
+      activeModal,
+      bounds,
+      border
+    } = this.props;
     const { mapPopUp } = this.state;
 
     return (
@@ -103,8 +114,9 @@ class LogisticsMapContainer extends React.PureComponent {
         layers={layers}
         tooltips={tooltips}
         mapPopUp={mapPopUp}
-        bounds={this.bounds}
-        commodity={commodity}
+        bounds={bounds}
+        border={border}
+        heading={heading}
         activeModal={activeModal}
         activeLayers={activeLayers}
         closeModal={this.closeModal}
@@ -124,6 +136,9 @@ const mapStateToProps = state => {
     activeYear,
     activeLayers: getActiveLayers(state),
     layers: getLogisticsMapLayers(state),
+    heading: getHeading(state),
+    bounds: getBounds(state),
+    border: getBorder(state),
     activeModal: state.logisticsMap.activeModal,
     tooltips: state.app.tooltips ? state.app.tooltips.logisticsMap : {}
   };

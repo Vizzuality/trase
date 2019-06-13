@@ -110,7 +110,9 @@ const getLogisticsMapHubsProps = createSelector(
   activeParams => ({
     label: 'Logistics Hub',
     id: 'logisticsMapHub',
-    options: LOGISTICS_MAP_HUBS,
+    options: LOGISTICS_MAP_HUBS.filter(hub =>
+      INDONESIA_LOGISTICS_MAP_ACTIVE ? hub.value === 'palmOil' : hub.value !== 'palmOil'
+    ),
     value: LOGISTICS_MAP_HUBS.find(commodity => commodity.value === activeParams.commodity)
   })
 );
@@ -118,7 +120,7 @@ const getLogisticsMapHubsProps = createSelector(
 const getLogisticsMapInspectionLevelProps = createSelector(
   [getActiveParams],
   activeParams => {
-    if (activeParams.commodity === 'soy') {
+    if (activeParams.commodity !== 'cattle') {
       return null;
     }
 

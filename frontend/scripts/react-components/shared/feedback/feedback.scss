@@ -1,4 +1,6 @@
-.user-report-feedback {
+@import 'styles/settings';
+
+.c-feedback {
   position: fixed;
   display: flex;
   align-items: center;
@@ -19,12 +21,6 @@
 
   @media print {
     display: none;
-  }
-
-  .icon {
-    height: 28px;
-    width: 28px;
-    fill: $white;
   }
 
   .feedback-label {

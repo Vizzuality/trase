@@ -1,6 +1,8 @@
 import deburr from 'lodash/deburr';
 import { createSelector, defaultMemoize } from 'reselect';
 import templates from 'react-components/logistics-map/logistics-map-layers';
+import BRAZIL_COUNTRY from 'react-components/logistics-map/BRAZIL_COUNTRY.json';
+import INDONESIA_COUNTRY from 'react-components/logistics-map/INDONESIA_COUNTRY.json';
 
 export const defaultLayersIds = {
   soy: ['crushing_facilities', 'refining_facilities', 'storage_facilities'],
@@ -13,13 +15,63 @@ export const defaultLayersIds = {
 };
 
 const getSelectedCommodity = state =>
-  (state.location.query && state.location.query.commodity) || 'soy';
+  INDONESIA_LOGISTICS_MAP_ACTIVE
+    ? 'palmOil'
+    : (state.location.query && state.location.query.commodity) || 'soy';
+
 const getSelectedYear = state => (state.location.query && state.location.query.year) || 2016;
 const getSelectedInspection = state => state.location.query && state.location.query.inspection;
 const getActiveLayersIds = state => state.location.query && state.location.query.layers;
 const getCompanies = state => state.logisticsMap.companies || {};
 const getActiveCompanies = state => (state.location.query && state.location.query.companies) || [];
 const getLogisticsMapSearchTerm = state => state.logisticsMap.searchTerm;
+
+export const getHeading = createSelector(
+  [getSelectedCommodity],
+  commodity => {
+    if (commodity === 'palmOil') return 'mills';
+    return commodity === 'soy' ? 'soy facilities' : 'slaughterhouses';
+  }
+);
+
+export const getBounds = createSelector(
+  [getSelectedCommodity],
+  commodity => {
+    const bounds = {
+      brazil: {
+        bbox: [-77.783203125, -35.46066995149529, -29.794921874999996, 9.709057068618208]
+      },
+      indonesia: {
+        bbox: [94.77171235, -11.20856696, 141.01944439, 6.2744496]
+      }
+    };
+    const commodityBounds = {
+      soy: bounds.brazil,
+      cattle: bounds.brazil,
+      palmOil: bounds.indonesia
+    };
+    return commodityBounds[commodity];
+  }
+);
+
+export const getBorder = createSelector(
+  [getSelectedCommodity],
+  commodity => ({
+    provider: 'leaflet',
+    layerConfig: {
+      type: 'geoJSON',
+      body: commodity === 'soy' || commodity === 'cattle' ? BRAZIL_COUNTRY : INDONESIA_COUNTRY,
+      options: {
+        style: {
+          weight: 1,
+          color: '#34444C',
+          opacity: 0.2,
+          fill: false
+        }
+      }
+    }
+  })
+);
 
 export const getActiveParams = createSelector(
   [getSelectedYear, getSelectedCommodity, getSelectedInspection, getActiveCompanies],

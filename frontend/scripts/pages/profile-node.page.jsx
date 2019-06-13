@@ -1,5 +1,5 @@
 import BaseMarkup from 'html/base.ejs';
-import FeedbackMarkup from 'html/includes/_feedback.ejs';
+import Feedback from 'react-components/shared/feedback';
 
 import 'styles/layouts/l-profile-actor.scss';
 import 'styles/layouts/l-profile-place.scss';
@@ -19,9 +19,7 @@ import Footer from 'scripts/react-components/shared/footer/footer.component';
 import CookieBanner from 'react-components/shared/cookie-banner';
 
 export const mount = (root, store) => {
-  root.innerHTML = BaseMarkup({
-    feedback: FeedbackMarkup()
-  });
+  root.innerHTML = BaseMarkup();
 
   render(
     <Provider store={store}>
@@ -40,9 +38,11 @@ export const mount = (root, store) => {
   render(
     <Provider store={store}>
       <Footer />
+      <Feedback />
     </Provider>,
     document.getElementById('footer')
   );
+
   if (!store.getState().location?.query?.print) {
     render(
       <Provider store={store}>
