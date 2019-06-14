@@ -139,7 +139,7 @@ export const getVisibleNodesByColumn = createSelector(
 
 export const getSelectedNodesData = createSelector(
   [getSelectedNodesIds, getToolNodes],
-  (selectedNodesIds, nodes) => selectedNodesIds.map(id => nodes[id])
+  (selectedNodesIds, nodes) => selectedNodesIds.map(id => nodes[id]).filter(Boolean)
 );
 
 export const getSelectedNodesGeoIds = createSelector(

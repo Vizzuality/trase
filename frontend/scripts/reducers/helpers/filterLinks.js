@@ -34,7 +34,7 @@ export default function(links, selectedNodesAtColumns, nodesColoredBySelection, 
     if (linkPasses) {
       const nodeIds = intersection(link.originalPath, nodesColoredBySelection);
       let newLink = link;
-      if (nodeIds && newLink) {
+      if (nodeIds && nodeIds[0] && newLink) {
         const nodeId = nodeIds[0];
         newLink = { ...link };
         newLink.recolorGroup = recolorGroups[nodeId];

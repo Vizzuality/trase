@@ -1,4 +1,4 @@
-import { selectExpandedNode } from 'react-components/tool/tool.actions';
+import { selectSearchNode } from 'react-components/tool/tool.actions';
 import { setIsSearchOpen } from 'react-components/tool-links/tool-links.actions';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.component';
 import { connect } from 'react-redux';
@@ -20,7 +20,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  onAddNode: selectExpandedNode,
+  onAddNode: selectSearchNode,
   setIsSearchOpen,
   onInputValueChange: loadSearchResults
 };

@@ -4,7 +4,8 @@ import {
   SELECT_RECOLOR_BY,
   SELECT_RESIZE_BY,
   SET_NODE_ATTRIBUTES,
-  SHOW_LINKS_ERROR
+  SHOW_LINKS_ERROR,
+  SET_SELECTED_NODES_BY_SEARCH
 } from 'react-components/tool/tool.actions';
 import {
   TOOL_LINKS__CLEAR_SANKEY,
@@ -213,6 +214,22 @@ const toolLinksReducer = {
         const column = draft.data.columns[node.columnId];
         return column.group !== columnIndex;
       });
+    });
+  },
+  [SET_SELECTED_NODES_BY_SEARCH](state, action) {
+    return immer(state, draft => {
+      const { ids } = action.payload;
+      const areNodesExpanded = draft.expandedNodesIds.length > 0;
+      if (
+        areNodesExpanded &&
+        draft.selectedNodesIds.length === 1 &&
+        draft.selectedNodesIds.includes(ids)
+      ) {
+        // we are unselecting the node that is currently expanded: shrink sankey and continue to unselecting node
+        draft.expandedNodesIds = [];
+      }
+
+      draft.selectedNodesIds = xor(draft.selectedNodesIds, ids);
     });
   },
   [TOOL_LINKS__SET_SELECTED_NODES](state, action) {
