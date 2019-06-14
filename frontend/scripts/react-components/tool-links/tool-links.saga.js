@@ -1,5 +1,5 @@
 import { select, all, call, fork, put, takeLatest } from 'redux-saga/effects';
-import { SET_CONTEXT } from 'actions/app.actions';
+import { SET_CONTEXT, LOAD_INITIAL_CONTEXT } from 'actions/app.actions';
 import { setLoadingSpinner } from 'utils/saga-utils';
 import {
   loadMapVectorData,
@@ -30,8 +30,14 @@ function* fetchToolColumns() {
   function* performFetch() {
     const state = yield select();
     const {
-      app: { selectedContext }
+      app: { selectedContext },
+      location: { type: page }
     } = state;
+
+    if (page !== 'tool' || selectedContext === null) {
+      return;
+    }
+
     yield put(setToolFlowsLoading(true));
     yield fork(getToolColumnsData, selectedContext);
     yield call(getToolLinksData);
@@ -43,7 +49,7 @@ function* fetchToolColumns() {
 
     yield fork(setLoadingSpinner, 150, setToolFlowsLoading(false));
   }
-  yield takeLatest([TOOL_LINKS__GET_COLUMNS, SET_CONTEXT], performFetch);
+  yield takeLatest([LOAD_INITIAL_CONTEXT, TOOL_LINKS__GET_COLUMNS, SET_CONTEXT], performFetch);
 }
 
 function* fetchLinks() {

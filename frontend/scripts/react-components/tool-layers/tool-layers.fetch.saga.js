@@ -58,8 +58,7 @@ export function* getLinkedGeoIds() {
   }
 }
 
-export function* getMapDimensions() {
-  const { selectedContext, selectedYears } = yield select(state => state.app);
+export function* getMapDimensions(selectedContext, selectedYears) {
   const params = {
     context_id: selectedContext.id,
     start_year: selectedYears[0],
