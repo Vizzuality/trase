@@ -149,7 +149,7 @@ export const getSelectedNodesData = createSelector(
   [getToolSelectedNodesIds, getToolNodes],
   (selectedNodesIds, nodes) => {
     if (nodes) {
-      return selectedNodesIds.map(id => nodes[id]).filter(Boolean);;
+      return selectedNodesIds.map(id => nodes[id]).filter(Boolean);
     }
     return [];
   }

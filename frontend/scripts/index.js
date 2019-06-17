@@ -59,7 +59,7 @@ const reducers = combineReducers({
 });
 
 const params = qs.parse(window.location.search, { arrayFormat: 'bracket', parseNumbers: true });
-console.log(params);
+
 const store = createStore(
   reducers,
   {
@@ -68,7 +68,7 @@ const store = createStore(
       selectedNodesIds: params.selectedNodesIds || [],
       selectedColumnsIds: params.selectedColumnsIds || null,
       expandedNodesIds: params.expandedNodesIds || [],
-      detailedView: params.detailedView || false
+      detailedView: params.detailedView ? JSON.parse(params.detailedView) : false
     }
   },
   composeEnhancers(router.enhancer, applyMiddleware(...middlewares))
