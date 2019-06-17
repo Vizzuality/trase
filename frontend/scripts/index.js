@@ -8,6 +8,8 @@ import createSagaMiddleware from 'redux-saga';
 import rangeTouch from 'rangetouch';
 import analyticsMiddleware from 'analytics/middleware';
 import * as appReducers from 'store';
+import { toolLinksInitialState } from 'react-components/tool-links/tool-links.reducer';
+import qs from 'query-string';
 import router from './router/router';
 import routeSubscriber from './router/route-subscriber';
 import { register, unregister } from './worker';
@@ -56,9 +58,19 @@ const reducers = combineReducers({
   location: router.reducer
 });
 
+const params = qs.parse(window.location.search, { arrayFormat: 'bracket', parseNumbers: true });
+
 const store = createStore(
   reducers,
-  undefined,
+  {
+    toolLinks: {
+      ...toolLinksInitialState,
+      selectedNodesIds: params.selectedNodesIds || [],
+      selectedColumnsIds: params.selectedColumnsIds || null,
+      expandedNodesIds: params.expandedNodesIds || [],
+      detailedView: params.detailedView || false
+    }
+  },
   composeEnhancers(router.enhancer, applyMiddleware(...middlewares))
 );
 

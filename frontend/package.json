@@ -145,7 +145,7 @@
     "p-settle": "^2.1.0",
     "plyr": "^3.4.7",
     "prop-types": "^15.7.2",
-    "qs": "^6.7.0",
+    "query-string": "^6.7.0",
     "rangetouch": "^1.0.5",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",

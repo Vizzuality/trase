@@ -1,5 +1,5 @@
 import { getURLFromParams } from 'utils/getURLFromParams';
-import qs from 'qs';
+import qs from 'query-string';
 import sortBy from 'lodash/sortBy';
 
 export const WIDGETS__INIT_ENDPOINT = 'WIDGETS__INIT_ENDPOINT';
@@ -17,7 +17,7 @@ export function prepareWidget(endpoints, { endpoint, params, raw }) {
     if (raw) {
       url = endpoint;
       if (params) {
-        const search = qs.stringify(params, { encodeValuesOnly: true });
+        const search = qs.stringify(params, { arrayFormat: 'bracket' });
         url = endpoint.includes('?') ? `${endpoint}&${search}` : `${endpoint}?${search}`;
       }
     } else {

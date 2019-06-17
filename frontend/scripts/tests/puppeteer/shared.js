@@ -1,4 +1,4 @@
-import qs from 'qs';
+import qs from 'query-string';
 
 const BASE_URL = 'http://0.0.0.0:8081';
 
@@ -66,7 +66,7 @@ export async function testProfileMultiTable(
 
     expect(links.length).toBe(rowsLength);
     expect(links.firstLink.split('?')[0]).toMatch(BASE_URL + linkName);
-    expect(qs.parse(links.firstLink.split('?')[1])).toEqual(linkQuery);
+    expect(qs.parse(links.firstLink)).toEqual(linkQuery);
   }
 
   expect(tableTitle.toLowerCase()).toMatch(title);

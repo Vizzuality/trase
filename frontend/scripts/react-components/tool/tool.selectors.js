@@ -1,4 +1,3 @@
-import { DONT_SERIALIZE } from 'constants';
 import { createSelector, createStructuredSelector } from 'reselect';
 import { makeGetSelectedResizeBy, makeGetSelectedRecolorBy } from 'selectors/indicators.selectors';
 import getVisibleNodesUtil from 'reducers/helpers/getVisibleNodes';
@@ -12,7 +11,7 @@ import getNextRecolorGroups from 'reducers/helpers/getRecolorGroups';
 import splitLinksByColumn from 'reducers/helpers/splitLinksByColumn';
 
 const getSelectedContext = state => state.app.selectedContext;
-const getSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
+const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getHighlightedNodeIds = state => state.toolLinks.highlightedNodeId;
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolLinks = state => state.toolLinks.data.links;
@@ -22,6 +21,9 @@ const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
 const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
 const getToolBiomeFilter = state => state.toolLinks.selectedBiomeFilter;
 const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
+const getToolExpandedNodesIds = state => state.toolLinks.expandedNodesIds;
+const getToolDetailedView = state => state.toolLinks.detailedView;
+
 const getToolSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
 const getToolMapDimensions = state => state.toolLayers.data.mapDimensions;
 
@@ -31,9 +33,14 @@ export const getSelectedRecolorBy = makeGetSelectedRecolorBy(getToolRecolorBy, g
 export const getSelectedColumnsIds = createSelector(
   [getSelectedContext, getToolColumns, getToolSelectedColumnsIds],
   (selectedContext, columns, selectedColumnsIds) => {
-    if (selectedColumnsIds && selectedColumnsIds.length === selectedContext.defaultColumns.length) {
+    if (
+      selectedColumnsIds &&
+      selectedContext &&
+      selectedColumnsIds.length === selectedContext.defaultColumns.length
+    ) {
       return selectedColumnsIds;
     }
+
     if (!columns && !selectedContext) {
       return [];
     }
@@ -139,10 +146,10 @@ export const getVisibleNodesByColumn = createSelector(
 );
 
 export const getSelectedNodesData = createSelector(
-  [getSelectedNodesIds, getToolNodes],
+  [getToolSelectedNodesIds, getToolNodes],
   (selectedNodesIds, nodes) => {
     if (nodes) {
-      return selectedNodesIds.map(id => nodes[id]).filter(Boolean);
+      return selectedNodesIds.map(id => nodes[id]).filter(Boolean);;
     }
     return [];
   }
@@ -163,7 +170,7 @@ export const getSelectedNodesColumnsPos = createSelector(
 );
 
 const getSelectedNodesAtColumns = createSelector(
-  [getSelectedNodesIds, getSelectedNodesColumnsPos],
+  [getToolSelectedNodesIds, getSelectedNodesColumnsPos],
   (selectedNodesIds, selectedNodesColumnsPos) =>
     getNodesAtColumns(selectedNodesIds, selectedNodesColumnsPos)
 );
@@ -193,7 +200,7 @@ export const getFilteredLinks = createSelector(
     getUnmergedLinks,
     getSelectedNodesAtColumns,
     getNodesColored,
-    getSelectedNodesIds,
+    getToolSelectedNodesIds,
     getToolRecolorGroups
   ],
   (unmergedLinks, selectedNodesAtColumns, nodesColored, selectedNodesIds, recolorGroups) => {
@@ -239,17 +246,12 @@ export const getHighlightedNodesGeoIds = createSelector(
   getNodesGeoIds
 );
 
-// eslint-disable-next-line
-const URL_selectedNodesIds = createSelector(
-  [getSelectedNodesIds],
-  selectedNodesIds => {
-    if (selectedNodesIds.length > 0) {
-      return selectedNodesIds.join(',');
-    }
-    return DONT_SERIALIZE;
-  }
-);
-
 export const getToolUrlProps = createStructuredSelector({
-  selectedNodesIds: URL_selectedNodesIds
+  selectedNodesIds: getToolSelectedNodesIds,
+  selectedColumnsIds: getToolSelectedColumnsIds,
+  expandedNodesIds: getToolExpandedNodesIds,
+  detailedView: getToolDetailedView
+  // selectedResizeBy: getSelectedResizeBy,
+  // selectedRecolorBy: getSelectedRecolorBy,
+  // selectedBiomeFilter: getSelectedBiomeFilter
 });

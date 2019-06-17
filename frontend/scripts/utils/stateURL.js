@@ -1,7 +1,7 @@
 /* eslint-disable */
 import isEmpty from 'lodash/isEmpty';
 import pickBy from 'lodash/pickBy';
-import qs from 'qs';
+import qs from 'query-string';
 import { LOAD_STATE_FROM_URL } from 'scripts/actions/app.actions';
 import { getContextById } from 'scripts/reducers/helpers/contextHelper';
 import getPageTitle from 'scripts/router/page-title';
@@ -124,7 +124,7 @@ export const decodeStateFromURL = state => {
 };
 
 export const parse = url => {
-  const params = qs.parse(url, { arrayLimit: 1000 });
+  const params = qs.parse(url, { arrayFormat: 'bracket', parseNumbers: true });
   if (params.state) {
     return decodeStateFromURL(params.state);
   }
@@ -132,7 +132,7 @@ export const parse = url => {
 };
 
 export const stringify = params => {
-  return qs.stringify(params, { encodeValuesOnly: true });
+  return qs.stringify(params, { arrayFormat: 'bracket' });
 };
 
 const stateToURLObject = (state, location) => {

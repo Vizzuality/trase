@@ -1,5 +1,5 @@
 import trim from 'lodash/trim';
-import qs from 'qs';
+import qs from 'query-string';
 
 export const GET_CONTEXTS_URL = 'GET_CONTEXTS_URL';
 export const GET_TOOLTIPS_URL = 'GET_TOOLTIPS_URL';
@@ -150,7 +150,7 @@ export function getURLForV3(endpoint, paramsArg = {}) {
   const params = Object.assign({}, paramsArg);
 
   const apiEndpoint = replaceURLParams(endpoint, params);
-  const queryParams = qs.stringify(params, { arrayFormat: 'brackets', encodeValuesOnly: true });
+  const queryParams = qs.stringify(params, { arrayFormat: 'bracket' });
 
   return `${API_V3_URL}${apiEndpoint}${queryParams.length > 0 ? `?${queryParams}` : ''}`;
 }
