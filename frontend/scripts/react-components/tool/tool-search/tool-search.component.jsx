@@ -143,7 +143,7 @@ export default class ToolSearch extends Component {
       nodes
     } = this.props;
 
-    const { inputValue: stateInput } = this.state;
+    const { inputValue } = this.state;
 
     if (isSearchOpen === false) {
       return (
@@ -166,10 +166,9 @@ export default class ToolSearch extends Component {
             itemToString={i => (i === null ? '' : i.name)}
             onSelect={this.onSelected}
             ref={this.setDownshiftRef}
-            selectedItem={stateInput}
             onStateChange={this.onDownshiftStateChange}
           >
-            {({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => (
+            {({ getInputProps, getItemProps, isOpen, highlightedIndex }) => (
               <div className="search-container" onClick={e => e.stopPropagation()}>
                 <div className="search-bar">
                   <div style={{ overflow: selectedNodesIds.length > 3 ? 'auto' : 'inherit' }}>
