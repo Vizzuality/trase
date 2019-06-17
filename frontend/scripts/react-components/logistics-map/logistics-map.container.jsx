@@ -158,10 +158,9 @@ class LogisticsMapContainer extends React.PureComponent {
 }
 
 const mapStateToProps = state => {
-  const { year: activeYear, commodity } = getActiveParams(state);
+  const { commodity } = getActiveParams(state);
   return {
     commodity,
-    activeYear,
     activeLayers: getActiveLayers(state),
     layers: getLogisticsMapLayers(state),
     heading: getHeading(state),
