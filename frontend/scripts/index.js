@@ -59,7 +59,7 @@ const reducers = combineReducers({
 });
 
 const params = qs.parse(window.location.search, { arrayFormat: 'bracket', parseNumbers: true });
-
+console.log(params);
 const store = createStore(
   reducers,
   {

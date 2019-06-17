@@ -52,6 +52,24 @@ function* fetchToolColumns() {
   yield takeLatest([LOAD_INITIAL_CONTEXT, TOOL_LINKS__GET_COLUMNS, SET_CONTEXT], performFetch);
 }
 
+function* fetchToolGeoColumnNodes() {
+  function* performFetch(action) {
+    const {
+      app: { selectedContext },
+      toolLinks: {
+        data: { columns }
+      }
+    } = yield select(state => state);
+    const { columnId } = action.payload;
+
+    if (columns[columnId] && columns[columnId].isGeo) {
+      yield fork(getToolGeoColumnNodes, selectedContext);
+    }
+  }
+
+  yield takeLatest([TOOL_LINKS__SELECT_COLUMN], performFetch);
+}
+
 function* fetchLinks() {
   function* performFetch(action) {
     const page = yield select(state => state.location.type);
@@ -113,6 +131,7 @@ export default function* toolLinksSaga() {
   const sagas = [
     fetchLinks,
     fetchToolColumns,
+    fetchToolGeoColumnNodes,
     checkForceOverviewOnCollapse,
     checkForceOverviewOnExpand
   ];

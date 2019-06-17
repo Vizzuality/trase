@@ -42,7 +42,14 @@ function* fetchMapDimensions() {
     yield put(loadMapChoropleth());
   }
   yield takeLatest(
-    [LOAD_INITIAL_CONTEXT, TOOL_LINKS__GET_COLUMNS, SET_CONTEXT, SELECT_YEARS],
+    [
+      LOAD_INITIAL_CONTEXT,
+      TOOL_LINKS__GET_COLUMNS,
+      SET_CONTEXT,
+      SELECT_YEARS,
+      TOOL_LINKS__SELECT_COLUMN,
+      TOOL_LINKS__CLEAR_SANKEY
+    ],
     performFetch
   );
 }

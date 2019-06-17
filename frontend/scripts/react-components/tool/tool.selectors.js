@@ -248,7 +248,7 @@ export const getHighlightedNodesGeoIds = createSelector(
 
 export const getToolUrlProps = createStructuredSelector({
   selectedNodesIds: getToolSelectedNodesIds,
-  selectedColumnsIds: getToolSelectedColumnsIds,
+  selectedColumnsIds: getSelectedColumnsIds,
   expandedNodesIds: getToolExpandedNodesIds,
   detailedView: getToolDetailedView
   // selectedResizeBy: getSelectedResizeBy,
