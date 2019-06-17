@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
-import { selectNode, navigateToProfile, resetState } from 'react-components/tool/tool.actions';
+import { navigateToProfile } from 'react-components/tool/tool.actions';
+import { clearSankey, selectNodes } from 'react-components/tool-links/tool-links.actions';
 import NodesTitles from 'react-components/tool/nodes-titles/nodes-titles.component';
 import {
   getSelectedResizeBy,
@@ -65,9 +66,9 @@ const methodProps = [
 ];
 
 const mapDispatchToProps = {
-  onCloseNodeClicked: id => selectNode(id),
-  onProfileLinkClicked: (id, year, contextId) => navigateToProfile(id, year, contextId),
-  onClearClick: () => resetState()
+  onCloseNodeClicked: selectNodes,
+  onProfileLinkClicked: navigateToProfile,
+  onClearClick: clearSankey
 };
 
 export default connect(

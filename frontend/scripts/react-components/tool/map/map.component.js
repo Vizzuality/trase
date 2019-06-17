@@ -18,7 +18,9 @@ import 'styles/components/tool/map/map-choropleth.scss';
 
 const POINT_RADIUS = 4;
 
-export default class {
+export default class MapComponent {
+  static DEBUG = false;
+
   constructor() {
     this.canvasRender = !!document.createElement('canvas').getContext && USE_CANVAS_MAP;
 
@@ -42,7 +44,7 @@ export default class {
         this.map.panInsideBounds(worldBounds, { animate: false });
       },
       updateAttribution: () => {
-        this._updateAttribution();
+        this.attribution.innerHTML = this.attributionSource.innerHTML;
       },
       moveEnd: () => {
         this.callbacks.onMoveEnd(this.map.getCenter(), this.map.getZoom());
@@ -125,8 +127,15 @@ export default class {
         defaultMapView.zoom
       );
     } else {
+      if (
+        mapView.latitude !== defaultMapView.latitude ||
+        mapView.longitude !== defaultMapView.longitude ||
+        mapView.zoom !== defaultMapView.zoom ||
+        this.prevSelectedNodesIdsLength === null
+      ) {
+        this._setMapViewDebounced([mapView.latitude, mapView.longitude], mapView.zoom);
+      }
       this.prevSelectedNodesIdsLength = selectedNodesIdsLength;
-      this._setMapViewDebounced([mapView.latitude, mapView.longitude], mapView.zoom);
     }
   }
 
@@ -209,13 +218,15 @@ export default class {
       this.map.removeLayer(this.vectorOutline);
     }
 
-    const selectedFeatures = selectedNodesGeoIds.map(selectedGeoId => {
-      if (!selectedGeoId) return null;
-      const originalPolygon = this.currentPolygonTypeLayer
-        .getLayers()
-        .find(polygon => polygon.feature.properties.geoid === selectedGeoId);
-      return originalPolygon.feature;
-    });
+    const selectedFeatures = selectedNodesGeoIds
+      .map(selectedGeoId => {
+        if (!selectedGeoId) return null;
+        const originalPolygon = this.currentPolygonTypeLayer
+          .getLayers()
+          .find(polygon => polygon.feature.properties.geoid === selectedGeoId);
+        return originalPolygon ? originalPolygon.feature : null;
+      })
+      .filter(Boolean);
 
     if (highlightedGeoIds && selectedNodesGeoIds.indexOf(highlightedGeoIds) === -1) {
       const highlightedPolygon = this.currentPolygonTypeLayer
@@ -291,8 +302,6 @@ export default class {
     if (forceZoom && this.map.getZoom() < forceZoom) {
       this.map.setZoom(forceZoom);
     }
-
-    this._updateAttribution();
   }
 
   _createRasterLayer(rasterUrl) {
@@ -447,8 +456,6 @@ export default class {
   }
 
   _drawChoroplethLayer(choropleth, biome, linkedGeoIds, defaultMapView) {
-    if (!this.currentPolygonTypeLayer) return;
-
     const linkedPolygons = [];
     const hasLinkedGeoIds = linkedGeoIds.length > 0;
     const hasChoroplethLayersEnabled = Object.values(choropleth).length > 0;
@@ -571,10 +578,6 @@ export default class {
     if (linkedGeoIds.length === 0) {
       this._fitBoundsToSelectedPolygons(selectedNodesGeoIds);
     }
-  }
-
-  _updateAttribution() {
-    this.attribution.innerHTML = this.attributionSource.innerHTML;
   }
 
   invalidate() {

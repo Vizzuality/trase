@@ -16,10 +16,6 @@ const placeNodeText = node =>
   `translate(0,${-7 + node.renderedHeight / 2 - (node.label.length - 1) * 7})`;
 
 export default class {
-  constructor() {
-    this.onNodeClickedRequest = null;
-  }
-
   onCreated(props) {
     this._build();
     this.showLoadedLinks(props);
@@ -95,10 +91,10 @@ export default class {
     this.expandActionButton.classList.toggle('-re-expand', isReExpand);
   }
 
-  highlightNodes({ highlightedNodesIds }) {
+  highlightNodes({ highlightedNodeId }) {
     this.sankeyColumns
       .selectAll('.sankey-node')
-      .classed('-highlighted', node => highlightedNodesIds.indexOf(node.id) > -1);
+      .classed('-highlighted', node => highlightedNodeId === node.id);
   }
 
   _relayout({ selectedRecolorBy, currentQuant, selectedNodesIds }) {
@@ -229,10 +225,7 @@ export default class {
       .on('mouseleave', () => {
         this._onNodeOut();
       })
-      .on('click', node => {
-        if (this.onNodeClickedRequest) this.onNodeClickedRequest.abort();
-        this.onNodeClickedRequest = this.callbacks.onNodeClicked(node.id, node.isAggregated);
-      });
+      .on('click', node => this.callbacks.onNodeClicked(node.id, node.isAggregated));
 
     nodesEnter
       .append('rect')
@@ -312,7 +305,9 @@ export default class {
   }
 
   _onNodeOver(selection, nodeId, isAggregated) {
-    this.callbacks.onNodeHighlighted(nodeId, isAggregated);
+    if (!isAggregated) {
+      this.callbacks.onNodeHighlighted(nodeId);
+    }
   }
 
   _onNodeOut() {

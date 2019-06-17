@@ -3,12 +3,12 @@ import { connect } from 'react-redux';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 
 import {
-  selectNode,
+  collapseSankey,
+  expandSankey,
   highlightNode,
-  collapseNodeSelection,
-  expandNodeSelection,
-  resetState
-} from 'react-components/tool/tool.actions';
+  clearSankey,
+  selectNodes
+} from 'react-components/tool-links/tool-links.actions';
 import {
   getIsVisible,
   getIsReExpand,
@@ -33,18 +33,18 @@ const mapStateToProps = state => ({
   selectedNodesIds: state.toolLinks.selectedNodesIds,
   selectedRecolorBy: getSelectedRecolorBy(state),
   hasExpandedNodesIds: getHasExpandedNodesIds(state),
-  highlightedNodesIds: state.toolLinks.highlightedNodesIds,
+  highlightedNodeId: state.toolLinks.highlightedNodeId,
   visibleNodesByColumn: getVisibleNodesByColumn(state),
   nodesColoredAtColumn: getNodesColored(state).nodesColoredAtColumn,
   lang: state.location.query && state.location.query.lang
 });
 
 const mapDispatchToProps = {
-  onNodeClicked: selectNode,
+  onNodeClicked: selectNodes,
   onNodeHighlighted: highlightNode,
-  onExpandClick: expandNodeSelection,
-  onCollapseClick: collapseNodeSelection,
-  onClearClick: resetState
+  onExpandClick: expandSankey,
+  onCollapseClick: collapseSankey,
+  onClearClick: clearSankey
 };
 
 const methodProps = [
@@ -85,8 +85,8 @@ const methodProps = [
   },
   {
     name: 'highlightNodes',
-    compared: ['highlightedNodesIds'],
-    returned: ['highlightedNodesIds']
+    compared: ['highlightedNodeId'],
+    returned: ['highlightedNodeId']
   },
   {
     name: 'translateNodes',

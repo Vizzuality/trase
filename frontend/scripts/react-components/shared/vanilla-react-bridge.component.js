@@ -49,6 +49,9 @@ export function mapToVanilla(VanillaComponent, methodProps, callbackProps) {
             }),
             {}
           );
+          if (VanillaComponent.DEBUG) {
+            console.log(VanillaComponent.name, method, props);
+          }
           fn.call(this.instance, props);
         }
       });

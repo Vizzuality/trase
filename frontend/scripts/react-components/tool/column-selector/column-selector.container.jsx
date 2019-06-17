@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { connect } from 'react-redux';
-import { selectColumn } from 'react-components/tool/tool.actions';
+import { selectColumn } from 'react-components/tool-links/tool-links.actions';
 import ColumnSelector from 'react-components/tool/column-selector/column-selector.component';
 import PropTypes from 'prop-types';
 import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
@@ -11,11 +11,9 @@ const mapStateToProps = state => ({
   nodesColoredAtColumn: state.toolLinks.nodesColoredAtColumn
 });
 
-const mapDispatchToProps = dispatch => ({
-  onColumnSelected: (columnIndex, columnId) => {
-    dispatch(selectColumn(columnIndex, columnId));
-  }
-});
+const mapDispatchToProps = {
+  onColumnSelected: selectColumn
+};
 
 function ColumnSelectorContainer({ columns, group, selectedColumnsIds, onColumnSelected }) {
   const columnItems = useMemo(() => columns.filter(column => column.group === group), [

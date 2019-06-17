@@ -1,30 +1,31 @@
 import {
-  HIGHLIGHT_NODE,
-  RESET_SELECTION,
   RESET_TOOL_STATE,
   SELECT_BIOME_FILTER,
-  SELECT_COLUMN,
   SELECT_RECOLOR_BY,
   SELECT_RESIZE_BY,
   SET_NODE_ATTRIBUTES,
-  SET_SANKEY_SEARCH_VISIBILITY,
-  SHOW_LINKS_ERROR,
-  UPDATE_NODE_SELECTION,
-  EXPAND_NODE_SELECTION,
-  COLLAPSE_NODE_SELECTION
+  SHOW_LINKS_ERROR
 } from 'react-components/tool/tool.actions';
 import {
+  TOOL_LINKS__CLEAR_SANKEY,
+  TOOL_LINKS__HIGHLIGHT_NODE,
   TOOL_LINKS__SET_NODES,
   TOOL_LINKS__SET_MORE_NODES,
   TOOL_LINKS__SET_FLOWS_LOADING,
   TOOL_LINKS__SET_COLUMNS,
   TOOL_LINKS__SET_LINKS,
-  TOOL_LINKS__SELECT_VIEW
+  TOOL_LINKS__SELECT_VIEW,
+  TOOL_LINKS__SET_IS_SEARCH_OPEN,
+  TOOL_LINKS__COLLAPSE_SANKEY,
+  TOOL_LINKS__EXPAND_SANKEY,
+  TOOL_LINKS__SELECT_COLUMN,
+  TOOL_LINKS__SET_SELECTED_NODES
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
 import getNodesMetaUid from 'reducers/helpers/getNodeMetaUid';
+import xor from 'lodash/xor';
 
 export const toolLinksInitialState = {
   data: {
@@ -39,8 +40,8 @@ export const toolLinksInitialState = {
   detailedView: false,
   forcedOverview: false,
   expandedNodesIds: [],
-  highlightedNodesIds: [],
-  flowsLoading: false, // TODO: remove this, should not be true by default.
+  highlightedNodeId: null,
+  flowsLoading: false,
   selectedBiomeFilter: null,
   selectedColumnsIds: null,
   selectedNodesIds: [],
@@ -56,12 +57,13 @@ const toolLinksReducer = {
       draft.flowsLoading = loading;
     });
   },
-  [RESET_SELECTION](state) {
+  [TOOL_LINKS__CLEAR_SANKEY](state) {
     return immer(state, draft => {
       Object.assign(draft, {
-        highlightedNodesIds: toolLinksInitialState.highlightedNodesIds,
+        highlightedNodeId: toolLinksInitialState.highlightedNodeId,
         selectedNodesIds: toolLinksInitialState.selectedNodesIds,
         expandedNodesIds: toolLinksInitialState.expandedNodesIds,
+        detailedView: toolLinksInitialState.detailedView,
         forcedOverview: toolLinksInitialState.forcedOverview,
         selectedBiomeFilter: toolLinksInitialState.selectedBiomeFilter
       });
@@ -70,14 +72,14 @@ const toolLinksReducer = {
   [SET_CONTEXT](state) {
     return immer(state, draft => {
       Object.assign(draft, {
-        selectedRecolorBy: null,
-        selectedResizeBy: null,
-        selectedBiomeFilter: null,
-        detailedView: false,
-        highlightedNodesIds: [],
-        selectedNodesIds: [],
-        expandedNodesIds: [],
-        selectedColumnsIds: null,
+        selectedRecolorBy: toolLinksInitialState.selectedRecolorBy,
+        selectedResizeBy: toolLinksInitialState.selectedResizeBy,
+        selectedBiomeFilter: toolLinksInitialState.selectedBiomeFilter,
+        detailedView: toolLinksInitialState.detailedView,
+        highlightedNodeId: toolLinksInitialState.highlightedNodeId,
+        selectedNodesIds: toolLinksInitialState.selectedNodesIds,
+        expandedNodesIds: toolLinksInitialState.expandedNodesIds,
+        selectedColumnsIds: toolLinksInitialState.selectedColumnsIds,
         data: toolLinksInitialState.data
       });
     });
@@ -194,11 +196,11 @@ const toolLinksReducer = {
     });
   },
 
-  [SELECT_COLUMN](state, action) {
+  [TOOL_LINKS__SELECT_COLUMN](state, action) {
     return immer(state, draft => {
-      const { currentColumnsIds, columnId, columnIndex } = action.payload;
+      const { columnId, columnIndex } = action.payload;
       if (!draft.selectedColumnsIds) {
-        draft.selectedColumnsIds = [...currentColumnsIds];
+        draft.selectedColumnsIds = [];
       }
       // TODO also update choropleth with default selected indicators
       if (!draft.selectedColumnsIds.includes(columnId)) {
@@ -213,22 +215,47 @@ const toolLinksReducer = {
       });
     });
   },
-  [UPDATE_NODE_SELECTION](state, action) {
+  [TOOL_LINKS__SET_SELECTED_NODES](state, action) {
     return immer(state, draft => {
-      draft.selectedNodesIds = action.ids;
+      const { nodeIds } = action.payload;
+      let hasChanged = false;
+      let newSelectedNodes = [...draft.selectedNodesIds];
+      nodeIds.forEach(nodeId => {
+        const areNodesExpanded = draft.expandedNodesIds.length > 0;
+        const node = draft.data.nodes[nodeId];
+        if (node.isAggregated) {
+          draft.isSearchOpen = true;
+        } else {
+          hasChanged = true;
+          if (
+            areNodesExpanded &&
+            draft.selectedNodesIds.length === 1 &&
+            draft.selectedNodesIds.includes(nodeId)
+          ) {
+            // we are unselecting the node that is currently expanded: shrink sankey and continue to unselecting node
+            draft.expandedNodesIds = [];
+          }
+
+          newSelectedNodes = xor(newSelectedNodes, [nodeId]);
+        }
+      });
+      if (hasChanged) {
+        // save to state the new node selection
+        draft.selectedNodesIds = newSelectedNodes;
+      }
     });
   },
-  [HIGHLIGHT_NODE](state, action) {
+  [TOOL_LINKS__HIGHLIGHT_NODE](state, action) {
     return immer(state, draft => {
-      draft.highlightedNodesIds = action.ids;
+      draft.highlightedNodeId = action.payload.nodeId;
     });
   },
-  [COLLAPSE_NODE_SELECTION](state) {
+  [TOOL_LINKS__COLLAPSE_SANKEY](state) {
     return immer(state, draft => {
       draft.expandedNodesIds = [];
     });
   },
-  [EXPAND_NODE_SELECTION](state) {
+  [TOOL_LINKS__EXPAND_SANKEY](state) {
     return immer(state, draft => {
       draft.expandedNodesIds = state.selectedNodesIds;
     });
@@ -238,9 +265,9 @@ const toolLinksReducer = {
       Object.assign(draft, toolLinksInitialState, action.payload);
     });
   },
-  [SET_SANKEY_SEARCH_VISIBILITY](state, action) {
+  [TOOL_LINKS__SET_IS_SEARCH_OPEN](state, action) {
     return immer(state, draft => {
-      draft.isSearchOpen = action.searchVisibility;
+      draft.isSearchOpen = action.payload.isSearchOpen;
     });
   }
 };
@@ -251,7 +278,7 @@ const toolLinksReducerTypes = PropTypes => ({
   isSearchOpen: PropTypes.bool,
   forcedOverview: PropTypes.bool,
   expandedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-  highlightedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
+  highlightedNodeId: PropTypes.number,
   flowsLoading: PropTypes.bool,
   selectedBiomeFilter: PropTypes.object,
   selectedColumnsIds: PropTypes.arrayOf(PropTypes.number).isRequired,

@@ -128,7 +128,7 @@ const appReducer = {
     return { ...state, loading: { contexts, tooltips } };
   },
   [SELECT_YEARS](state, action) {
-    return { ...state, selectedYears: action.years };
+    return { ...state, selectedYears: action.payload.years };
   },
   [APP__TRANSIFEX_LANGUAGES_LOADED](state, action) {
     const { languages } = action.payload;

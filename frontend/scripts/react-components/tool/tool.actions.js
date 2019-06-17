@@ -1,68 +1,45 @@
 /* eslint-disable no-use-before-define */
 import { feature as topojsonFeature } from 'topojson';
-import {
-  CARTO_NAMED_MAPS_BASE_URL,
-  NUM_NODES_DETAILED,
-  NUM_NODES_EXPANDED,
-  NUM_NODES_SUMMARY,
-  YEARS_INCOMPLETE,
-  YEARS_DISABLED_UNAVAILABLE
-} from 'constants';
-import {
-  GET_FLOWS_URL,
-  GET_LINKED_GEO_IDS_URL,
-  GET_MAP_BASE_DATA_URL,
-  GET_NODE_ATTRIBUTES_URL,
-  getURLFromParams
-} from 'utils/getURLFromParams';
+import { CARTO_NAMED_MAPS_BASE_URL } from 'constants';
+import { GET_NODE_ATTRIBUTES_URL, getURLFromParams } from 'utils/getURLFromParams';
 import contextLayersCarto from 'named-maps/tool_named_maps_carto';
 import getNodeIdFromGeoId from 'actions/helpers/getNodeIdFromGeoId';
 import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
-import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsWarnings';
-import difference from 'lodash/difference';
 import intesection from 'lodash/intersection';
 import compact from 'lodash/compact';
-import uniq from 'lodash/uniq';
 import isEmpty from 'lodash/isEmpty';
-import xor from 'lodash/xor';
 import {
+  getVisibleNodes,
   getSelectedColumnsIds,
-  getSelectedMapDimensionsUids,
-  getSelectedNodesColumnsPos,
-  getSelectedResizeBy
+  getSelectedMapDimensionsUids
 } from 'react-components/tool/tool.selectors';
 import pSettle from 'p-settle';
 
 import {
-  setToolLinks,
-  setToolFlowsLoading,
-  selectView
+  selectView,
+  collapseSankey,
+  expandSankey,
+  selectColumn,
+  selectNodes,
+  highlightNode,
+  clearSankey
 } from 'react-components/tool-links/tool-links.actions';
 
-export const RESET_SELECTION = 'RESET_SELECTION';
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
 export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
-export const SET_MAP_DIMENSIONS_DATA = 'SET_MAP_DIMENSIONS_DATA';
-export const UPDATE_NODE_SELECTION = 'UPDATE_NODE_SELECTION';
-export const HIGHLIGHT_NODE = 'HIGHLIGHT_NODE';
 export const SELECT_BIOME_FILTER = 'SELECT_BIOME_FILTER';
 export const SELECT_YEARS = 'SELECT_YEARS';
 export const SELECT_RESIZE_BY = 'SELECT_RESIZE_BY';
 export const SELECT_RECOLOR_BY = 'SELECT_RECOLOR_BY';
-export const SELECT_COLUMN = 'SELECT_COLUMN';
 export const GET_MAP_VECTOR_DATA = 'GET_MAP_VECTOR_DATA';
 export const GET_CONTEXT_LAYERS = 'GET_CONTEXT_LAYERS';
 export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
 export const SELECT_CONTEXTUAL_LAYERS = 'SELECT_CONTEXTUAL_LAYERS';
 export const SELECT_BASEMAP = 'SELECT_BASEMAP';
 export const TOGGLE_MAP = 'TOGGLE_MAP';
-export const EXPAND_NODE_SELECTION = 'EXPAND_NODE_SELECTION';
-export const COLLAPSE_NODE_SELECTION = 'COLLAPSE_NODE_SELECTION';
-export const GET_LINKED_GEOIDS = 'GET_LINKED_GEOIDS';
 export const SAVE_MAP_VIEW = 'SAVE_MAP_VIEW';
 export const SHOW_LINKS_ERROR = 'SHOW_LINKS_ERROR';
 export const RESET_TOOL_STATE = 'RESET_TOOL_STATE';
-export const SET_SANKEY_SEARCH_VISIBILITY = 'SET_SANKEY_SEARCH_VISIBILITY';
 
 const _setRecolorByAction = (recolorBy, state) => {
   let selectedRecolorBy;
@@ -98,15 +75,6 @@ const _setResizeByAction = (resizeByName, state) => {
   };
 };
 
-export function resetState() {
-  return dispatch => {
-    dispatch({
-      type: RESET_SELECTION
-    });
-    dispatch(selectView(false));
-  };
-}
-
 // TODO: test to see when this is needed.
 // Resets sankey's params that may lead to no flows being returned from the API
 export function resetSankey() {
@@ -114,7 +82,6 @@ export function resetSankey() {
     const state = getState();
     const { columns, expandedNodesIds } = state.toolLinks;
     const { contexts, selectedContext } = state.app;
-    const selectedColumnsIds = getSelectedColumnsIds(state);
     const areNodesExpanded = !isEmpty(expandedNodesIds);
     const currentContext = contexts.find(context => context.id === selectedContext.id);
     const defaultColumns = columns ? Object.values(columns).filter(column => column.isDefault) : [];
@@ -125,22 +92,15 @@ export function resetSankey() {
 
     dispatch({
       type: SELECT_YEARS,
-      years: [currentContext.defaultYear, currentContext.defaultYear]
+      payload: { years: [currentContext.defaultYear, currentContext.defaultYear] }
     });
 
     defaultColumns.forEach(defaultColumn => {
-      dispatch({
-        type: SELECT_COLUMN,
-        payload: {
-          currentColumnsIds: selectedColumnsIds,
-          columnIndex: defaultColumn.group,
-          columnId: defaultColumn.id
-        }
-      });
+      dispatch(selectColumn(defaultColumn.group, defaultColumn.id));
     });
 
     if (areNodesExpanded) {
-      dispatch(collapseNodeSelection());
+      dispatch(collapseSankey());
     }
 
     dispatch(selectView(false, true));
@@ -153,11 +113,7 @@ export function resetSankey() {
 
     dispatch(_setResizeByAction(defaultResizeBy.name, state));
 
-    dispatch({
-      type: RESET_SELECTION
-    });
-
-    dispatch(loadLinks());
+    dispatch(clearSankey());
   };
 }
 
@@ -224,168 +180,6 @@ export function selectRecolorBy(recolorBy) {
   };
 }
 
-export function selectColumn(columnIndex, columnId) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const selectedColumnsIds = getSelectedColumnsIds(state);
-
-    // Action triggered but the column is already present - do nothing
-    if (selectedColumnsIds.indexOf(columnId) !== -1) {
-      return;
-    }
-
-    dispatch({
-      type: SELECT_COLUMN,
-      payload: {
-        columnId,
-        columnIndex,
-        currentColumnsIds: selectedColumnsIds
-      }
-    });
-  };
-}
-
-export function loadNodes() {
-  return (dispatch, getState) => {
-    const params = {
-      context_id: getState().app.selectedContext.id,
-      start_year: getState().app.selectedYears[0],
-      end_year: getState().app.selectedYears[1]
-    };
-
-    const getMapBaseDataURL = getURLFromParams(GET_MAP_BASE_DATA_URL, params);
-
-    fetch(getMapBaseDataURL)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        return Promise.reject(new Error(response.statusText));
-      })
-      .then(jsonPayload => {
-        const payload = {
-          mapDimensionsMetaJSON: jsonPayload
-        };
-
-        const [startYear, endYear] = getState().app.selectedYears;
-        const allSelectedYears = Array(endYear - startYear + 1)
-          .fill(startYear)
-          .map((year, index) => year + index);
-
-        payload.mapDimensionsMetaJSON.dimensions.forEach(dimension => {
-          const allYearsCovered =
-            dimension.years === null ||
-            dimension.years.length === 0 ||
-            allSelectedYears.every(year => dimension.years.includes(year));
-          const yearsWithDataToDisplay = intesection(dimension.years, allSelectedYears);
-          if (
-            !allYearsCovered &&
-            allSelectedYears.length > 1 &&
-            yearsWithDataToDisplay.length > 0
-          ) {
-            dimension.disabledYearRangeReason = YEARS_INCOMPLETE;
-            dimension.disabledYearRangeReasonText = getSingleMapDimensionWarning(
-              dimension.disabledYearRangeReason,
-              yearsWithDataToDisplay,
-              dimension.years
-            );
-          } else if (!allYearsCovered) {
-            dimension.disabledYearRangeReason = YEARS_DISABLED_UNAVAILABLE;
-            dimension.disabledYearRangeReasonText = getSingleMapDimensionWarning(
-              dimension.disabledYearRangeReason,
-              yearsWithDataToDisplay,
-              dimension.years
-            );
-          }
-        });
-
-        dispatch(setMapContextLayers(payload.mapDimensionsMetaJSON.contextualLayers));
-
-        dispatch({ type: SET_MAP_DIMENSIONS_DATA, payload });
-
-        loadMapChoropleth(getState, dispatch);
-      });
-  };
-}
-
-export function loadLinks() {
-  return (dispatch, getState) => {
-    dispatch(setToolFlowsLoading(true));
-    const state = getState();
-    const selectedColumnsIds = getSelectedColumnsIds(state);
-    const selectedResizeBy = getSelectedResizeBy(state);
-    const params = {
-      context_id: state.app.selectedContext.id,
-      start_year: state.app.selectedYears[0],
-      end_year: state.app.selectedYears[1],
-      include_columns: selectedColumnsIds.join(','),
-      flow_quant: selectedResizeBy.name,
-      locked_nodes: state.toolLinks.selectedNodesIds
-    };
-    const areNodesExpanded = !isEmpty(state.toolLinks.expandedNodesIds);
-
-    if (state.toolLinks.detailedView === true) {
-      params.n_nodes = NUM_NODES_DETAILED;
-    } else if (areNodesExpanded) {
-      params.n_nodes = NUM_NODES_EXPANDED;
-    } else {
-      params.n_nodes = NUM_NODES_SUMMARY;
-    }
-
-    if (state.toolLinks.selectedRecolorBy) {
-      if (state.toolLinks.selectedRecolorBy.type === 'qual') {
-        params.flow_qual = state.toolLinks.selectedRecolorBy.name;
-      } else if (state.toolLinks.selectedRecolorBy.type === 'ind') {
-        params.flow_ind = state.toolLinks.selectedRecolorBy.name;
-      }
-    }
-
-    const selectedBiomeFilter = state.toolLinks.selectedBiomeFilter;
-    if (selectedBiomeFilter && selectedBiomeFilter.name && selectedBiomeFilter.name !== 'none') {
-      params.biome_filter_id = selectedBiomeFilter.nodeId;
-    }
-
-    if (areNodesExpanded) {
-      params.selected_nodes = state.toolLinks.expandedNodesIds.join(',');
-    }
-
-    const url = getURLFromParams(GET_FLOWS_URL, params);
-
-    fetch(url)
-      .then(response => {
-        if (response.status === 404) {
-          return null;
-        }
-        return response.json();
-      })
-      .then(jsonPayload => {
-        if (jsonPayload.data === undefined || !jsonPayload.data.length) {
-          console.error('server returned empty flows/link list, with params:', params);
-          dispatch({
-            type: SHOW_LINKS_ERROR
-          });
-          return;
-        }
-        dispatch(setToolLinks(jsonPayload.data, jsonPayload.include));
-
-        // if nodes were expanded and some of expanded nodes are not present anymore
-        // re-expand nodes
-        if (
-          !isEmpty(
-            difference(getState().toolLinks.expandedNodesIds, getState().toolLinks.selectedNodesIds)
-          )
-        ) {
-          dispatch(expandNodeSelection());
-        }
-
-        // load related geoIds to show on the map
-        dispatch(loadLinkedGeoIDs());
-        dispatch(setToolFlowsLoading(false));
-      })
-      .catch(console.error);
-  };
-}
-
 export function loadMapVectorData() {
   return (dispatch, getState) => {
     const { columns } = getState().toolLinks.data;
@@ -446,20 +240,7 @@ export function loadMapVectorData() {
         type: GET_MAP_VECTOR_DATA,
         mapVectorData
       });
-      loadMapChoropleth(getState, dispatch);
-    });
-  };
-}
-
-export function resetContextLayers() {
-  return dispatch => {
-    dispatch({
-      type: GET_CONTEXT_LAYERS,
-      mapContextualLayers: []
-    });
-    dispatch({
-      type: SELECT_CONTEXTUAL_LAYERS,
-      contextualLayers: []
+      dispatch(loadMapChoropleth());
     });
   };
 }
@@ -481,8 +262,6 @@ export function setMapContextLayers(contextualLayers) {
       }
       return contextLayer;
     });
-
-    resetContextLayers();
 
     Promise.all(
       mapContextualLayers
@@ -515,61 +294,6 @@ export function setMapContextLayers(contextualLayers) {
   };
 }
 
-// remove or add nodeIds from selectedNodesIds
-function getSelectedNodeIds(currentSelectedNodesIds, changedNodeIds) {
-  return xor(currentSelectedNodesIds, changedNodeIds);
-}
-
-export function selectNode(param, isAggregated = false) {
-  const ids = Array.isArray(param) ? param : [param];
-  return (dispatch, getState) => {
-    ids.forEach(nodeId => {
-      const { selectedNodesIds: currentSelectedNodesIds, expandedNodesIds } = getState().toolLinks;
-      const areNodesExpanded = !isEmpty(expandedNodesIds);
-
-      if (isAggregated) {
-        dispatch(setSankeySearchVisibility(true));
-      } else {
-        // we are unselecting the node that is currently expanded: just shrink it and bail
-        if (
-          areNodesExpanded &&
-          currentSelectedNodesIds.length === 1 &&
-          currentSelectedNodesIds.indexOf(nodeId) > -1
-        ) {
-          dispatch(collapseNodeSelection());
-        }
-
-        const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, [nodeId]);
-
-        // send to state the new node selection
-        dispatch(updateNodes(selectedNodesIds));
-      }
-    });
-    if (!isAggregated) {
-      // load related geoIds to show on the map
-      return dispatch(loadLinkedGeoIDs());
-    }
-    return undefined;
-  };
-}
-
-export function updateNodes(selectedNodesIds) {
-  return dispatch => {
-    dispatch({
-      type: UPDATE_NODE_SELECTION,
-      ids: selectedNodesIds
-    });
-  };
-}
-
-export function setSankeySearchVisibility(searchVisibility) {
-  return dispatch =>
-    dispatch({
-      type: SET_SANKEY_SEARCH_VISIBILITY,
-      searchVisibility
-    });
-}
-
 export function selectNodeFromGeoId(geoId) {
   return (dispatch, getState) => {
     const state = getState();
@@ -590,40 +314,23 @@ export function selectNodeFromGeoId(geoId) {
 export function selectExpandedNode(param) {
   const ids = Array.isArray(param) ? param : [param];
   return (dispatch, getState) => {
-    const hasInvisibleNodes = true; // ids.some(elem => !_isNodeVisible(getState, elem));
+    const state = getState();
+    const { toolLinks } = state;
+    const visibleNodes = getVisibleNodes(state);
+    const visibleNodesById = visibleNodes.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
+    const hasInvisibleNodes = ids.some(id => !visibleNodesById[id]);
 
-    if (hasInvisibleNodes) {
-      const state = getState();
-      const { toolLinks } = state;
-      if (
-        toolLinks.selectedNodesIds.length === ids.length &&
-        intesection(toolLinks.selectedNodesIds, ids).length === ids.length
-      ) {
-        dispatch(resetState());
-      } else {
-        const currentSelectedNodesIds = getState().toolLinks.selectedNodesIds;
-        const selectedNodesIds = getSelectedNodeIds(currentSelectedNodesIds, ids);
-
-        dispatch(updateNodes(selectedNodesIds));
-        dispatch(expandNodeSelection());
-      }
+    if (
+      toolLinks.selectedNodesIds.length === ids.length &&
+      intesection(toolLinks.selectedNodesIds, ids).length === ids.length
+    ) {
+      dispatch(clearSankey());
+    } else if (hasInvisibleNodes) {
+      dispatch(selectNodes(ids));
+      dispatch(expandSankey());
     } else {
-      dispatch(selectNode(ids, false));
+      dispatch(selectNodes(ids));
     }
-  };
-}
-
-export function highlightNode(nodeId, isAggregated, coordinates) {
-  return dispatch => {
-    if (isAggregated) {
-      return;
-    }
-
-    dispatch({
-      ids: compact([nodeId]),
-      type: HIGHLIGHT_NODE,
-      coordinates
-    });
   };
 }
 
@@ -633,46 +340,16 @@ export function highlightNodeFromGeoId(geoId, coordinates) {
     const selectedColumnsIds = getSelectedColumnsIds(state);
     const {
       data: { nodes },
-      highlightedNodesIds
+      highlightedNodeId
     } = state.toolLinks;
 
     const nodeId = getNodeIdFromGeoId(geoId, nodes, selectedColumnsIds[0]);
     if (nodeId === null) {
-      if (highlightedNodesIds.length) {
+      if (highlightedNodeId) {
         dispatch(highlightNode(null));
       }
     } else {
-      dispatch(highlightNode(nodeId, false, coordinates));
-    }
-  };
-}
-
-export function expandNodeSelection() {
-  return (dispatch, getState) => {
-    dispatch({
-      type: EXPAND_NODE_SELECTION
-    });
-
-    const { detailedView } = getState().toolLinks;
-
-    // if expanding, and if in detailed mode, toggle to overview mode
-    if (detailedView) {
-      dispatch(selectView(false, true));
-    }
-  };
-}
-
-export function collapseNodeSelection() {
-  return (dispatch, getState) => {
-    dispatch({
-      type: COLLAPSE_NODE_SELECTION
-    });
-
-    const { forcedOverview } = getState().toolLinks;
-
-    // if shrinking, and if overview was previously forced, go back to detailed
-    if (forcedOverview) {
-      dispatch(selectView(true, false));
+      dispatch(highlightNode(nodeId, coordinates));
     }
   };
 }
@@ -684,48 +361,6 @@ export function navigateToProfile(nodeId, year, contextId) {
       type: 'profileNode',
       payload: { query: { nodeId, year, contextId }, profileType: node.profileType }
     });
-  };
-}
-
-export function loadLinkedGeoIDs() {
-  return (dispatch, getState) => {
-    const state = getState();
-    const selectedColumnsIds = getSelectedColumnsIds(state);
-    const selectedNodesIds = state.toolLinks.selectedNodesIds;
-
-    // when selection only contains geo nodes (column 0), we should not call get_linked_geoids
-    const selectedNodesColumnsPos = getSelectedNodesColumnsPos(state);
-    const selectedNonGeoNodeIds = selectedNodesIds.filter(
-      (nodeId, index) => selectedNodesColumnsPos[index] !== 0
-    );
-    if (selectedNonGeoNodeIds.length === 0) {
-      dispatch({
-        type: GET_LINKED_GEOIDS,
-        payload: []
-      });
-      return undefined;
-    }
-    const params = {
-      context_id: state.app.selectedContext.id,
-      years: uniq([state.app.selectedYears[0], state.app.selectedYears[1]]),
-      nodes_ids: selectedNodesIds,
-      target_column_id: selectedColumnsIds[0]
-    };
-    const url = getURLFromParams(GET_LINKED_GEO_IDS_URL, params);
-
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState === XMLHttpRequest.DONE && xhr.status >= 200 && xhr.status < 400) {
-        dispatch({
-          type: GET_LINKED_GEOIDS,
-          payload: JSON.parse(xhr.response)
-        });
-      }
-    };
-
-    xhr.send();
-    return xhr;
   };
 }
 
@@ -749,48 +384,52 @@ export function toggleMapDimension(uid) {
       }
     });
 
-    loadMapChoropleth(getState, dispatch);
+    dispatch(loadMapChoropleth());
   };
 }
 
-export function loadMapChoropleth(getState, dispatch) {
-  const state = getState();
+export function loadMapChoropleth() {
+  return (dispatch, getState) => {
+    const state = getState();
 
-  const uids = getSelectedMapDimensionsUids(state);
+    const uids = getSelectedMapDimensionsUids(state);
 
-  if (new Set(uids.filter(Boolean)).size === 0) {
-    dispatch({
-      type: SET_NODE_ATTRIBUTES,
-      payload: { data: [] }
-    });
-
-    return;
-  }
-
-  const selectedMapDimensions = compact(uids).map(uid => state.toolLayers.data.mapDimensions[uid]);
-
-  const params = {
-    context_id: state.app.selectedContext.id,
-    start_year: state.app.selectedYears[0],
-    end_year: state.app.selectedYears[1],
-    layer_ids: selectedMapDimensions.map(layer => layer.id)
-  };
-
-  const getNodesURL = getURLFromParams(GET_NODE_ATTRIBUTES_URL, params);
-
-  fetch(getNodesURL)
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      return Promise.reject(new Error(response.statusText));
-    })
-    .then(payload => {
+    if (new Set(uids.filter(Boolean)).size === 0) {
       dispatch({
         type: SET_NODE_ATTRIBUTES,
-        payload
+        payload: { data: [] }
       });
-    });
+
+      return;
+    }
+
+    const selectedMapDimensions = compact(uids).map(
+      uid => state.toolLayers.data.mapDimensions[uid]
+    );
+
+    const params = {
+      context_id: state.app.selectedContext.id,
+      start_year: state.app.selectedYears[0],
+      end_year: state.app.selectedYears[1],
+      layer_ids: selectedMapDimensions.map(layer => layer.id)
+    };
+
+    const getNodesURL = getURLFromParams(GET_NODE_ATTRIBUTES_URL, params);
+
+    fetch(getNodesURL)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        return Promise.reject(new Error(response.statusText));
+      })
+      .then(payload => {
+        dispatch({
+          type: SET_NODE_ATTRIBUTES,
+          payload
+        });
+      });
+  };
 }
 
 export function selectContextualLayers(contextualLayers) {
@@ -806,8 +445,3 @@ export function selectMapBasemap(selectedMapBasemap) {
     selectedMapBasemap
   };
 }
-
-// const _isNodeVisible = (getState, nodeId) =>
-//   getState()
-//     .toolLinks.visibleNodes.map(node => node.id)
-//     .indexOf(nodeId) > -1;

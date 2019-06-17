@@ -154,7 +154,7 @@ export default class {
         if (attributes && selectedMapDimensions && selectedMapDimensions.length > 0) {
           renderedMetas = selectedMapDimensions
             .map(dimension => {
-              const meta = getNodeMeta(dimension, node, attributes, selectedResizeBy);
+              const meta = getNodeMeta(dimension, node, attributes, selectedResizeBy, nodeHeights);
               if (!meta) {
                 return null;
               }
@@ -236,7 +236,7 @@ export default class {
     if (attributes && selectedMapDimensions && selectedMapDimensions.length > 0) {
       values = selectedMapDimensions
         .map(dimension => {
-          const meta = getNodeMeta(dimension, node, attributes, selectedResizeBy);
+          const meta = getNodeMeta(dimension, node, attributes, selectedResizeBy, nodeHeights);
           if (!meta) {
             return null;
           }

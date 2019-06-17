@@ -12,7 +12,7 @@ import splitLinksByColumn from 'reducers/helpers/splitLinksByColumn';
 
 const getSelectedContext = state => state.app.selectedContext;
 const getSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
-const getHighlightedNodesIds = state => state.toolLinks.highlightedNodesIds;
+const getHighlightedNodeIds = state => state.toolLinks.highlightedNodeId;
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolColumns = state => state.toolLinks.data.columns;
@@ -28,23 +28,20 @@ export const getSelectedResizeBy = makeGetSelectedResizeBy(getToolResizeBy, getS
 export const getSelectedRecolorBy = makeGetSelectedRecolorBy(getToolRecolorBy, getSelectedContext);
 
 export const getSelectedColumnsIds = createSelector(
-  [
-    getSelectedContext,
-    getToolColumns,
-    getToolSelectedColumnsIds,
-    getSelectedNodesIds,
-    getToolNodes
-  ],
+  [getSelectedContext, getToolColumns, getToolSelectedColumnsIds],
   (selectedContext, columns, selectedColumnsIds) => {
-    if (selectedColumnsIds) {
+    if (selectedColumnsIds && selectedColumnsIds.length === selectedContext.defaultColumns.length) {
       return selectedColumnsIds;
     }
     if (!columns && !selectedContext) {
       return [];
     }
-
     return selectedContext.defaultColumns.reduce((acc, column) => {
-      acc[column.group] = column.id;
+      let id = column.id;
+      if (selectedColumnsIds && selectedColumnsIds[column.group]) {
+        id = selectedColumnsIds[column.group];
+      }
+      acc[column.group] = id;
       return acc;
     }, []);
   }
@@ -222,10 +219,10 @@ export const getMergedLinks = createSelector(
 );
 
 export const getHighlightedNodesData = createSelector(
-  [getHighlightedNodesIds, getToolNodes],
-  (highlightedNodesIds, nodes) => {
-    if (nodes) {
-      return highlightedNodesIds.map(id => nodes[id]).filter(Boolean);
+  [getHighlightedNodeIds, getToolNodes],
+  (highlightedNodeId, nodes) => {
+    if (nodes && highlightedNodeId) {
+      return [nodes[highlightedNodeId]];
     }
     return [];
   }

@@ -23,14 +23,15 @@ const getLegacyMapDimensionsGroups = createSelector(
 );
 
 const isCloroplethEnabled = state => {
-  const firstColumnId = getSelectedColumnsIds(state);
+  const selectedColumnsIds = getSelectedColumnsIds(state);
+  const firstColumnId = selectedColumnsIds[0];
   const column = state.toolLinks.data.columns && state.toolLinks.data.columns[firstColumnId];
   return column ? !column.isChoroplethDisabled : true;
 };
 const mapStateToProps = state => ({
   mapDimensionsGroups: getLegacyMapDimensionsGroups(state),
   selectedMapDimensions: getSelectedMapDimensionsUids(state),
-  isCloroplethEnabled: isCloroplethEnabled(state),
+  isChoroplethEnabled: isCloroplethEnabled(state),
   selectedColumnsIds: getSelectedColumnsIds(state)
 });
 
@@ -42,7 +43,7 @@ const methodProps = [
   },
   {
     name: 'setMapDimensions',
-    compared: ['selectedMapDimensions'],
+    compared: ['selectedMapDimensions', 'mapDimensionsGroups'],
     returned: ['selectedMapDimensions']
   },
   {
@@ -53,7 +54,7 @@ const methodProps = [
   {
     name: 'setVisibility',
     compared: ['selectedColumnsIds'],
-    returned: ['isCloroplethEnabled']
+    returned: ['isChoroplethEnabled']
   }
 ];
 

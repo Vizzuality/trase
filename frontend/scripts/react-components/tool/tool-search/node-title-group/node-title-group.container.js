@@ -1,6 +1,5 @@
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { selectNode } from 'react-components/tool/tool.actions';
+import { selectNodes } from 'react-components/tool-links/tool-links.actions';
 import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group/node-title-group.component';
 import { getSelectedNodesData, getToolRecolorGroups } from 'react-components/tool/tool.selectors';
 
@@ -18,13 +17,9 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      onClose: nodeId => selectNode(nodeId)
-    },
-    dispatch
-  );
+const mapDispatchToProps = {
+  onClose: selectNodes
+};
 
 export default connect(
   mapStateToProps,

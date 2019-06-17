@@ -7,7 +7,6 @@ import {
 } from 'utils/getURLFromParams';
 import { fetchWithCancel } from 'utils/saga-utils';
 import { getSelectedColumnsIds, getSelectedResizeBy } from 'react-components/tool/tool.selectors';
-import isEmpty from 'lodash/isEmpty';
 import { NUM_NODES_DETAILED, NUM_NODES_EXPANDED, NUM_NODES_SUMMARY } from 'constants';
 import { setToolColumns, setToolLinks, setToolNodes, setMoreToolNodes } from './tool-links.actions';
 
@@ -23,7 +22,7 @@ export function* getToolLinksData() {
     flow_quant: selectedResizeBy.name,
     locked_nodes: state.toolLinks.selectedNodesIds
   };
-  const areNodesExpanded = !isEmpty(state.toolLinks.expandedNodesIds);
+  const areNodesExpanded = state.toolLinks.expandedNodesIds.length > 0;
 
   if (state.toolLinks.detailedView === true) {
     params.n_nodes = NUM_NODES_DETAILED;
@@ -111,7 +110,8 @@ export function* getToolNodesByLink(selectedContext) {
 }
 
 export function* getMoreToolNodesByLink(selectedContext, fetchAllNodes) {
-  let nodesIds; let nodeTypesIds;
+  let nodesIds;
+  let nodeTypesIds;
   if (!fetchAllNodes) {
     const {
       data: { links, nodes }
@@ -156,7 +156,6 @@ export function* getMoreToolNodesByLink(selectedContext, fetchAllNodes) {
 export function* getToolGeoColumnNodes(selectedContext) {
   const selectedColumnsIds = yield select(getSelectedColumnsIds);
 
-  // const geoColumnId = selectedColumnsIds.find(id => columns[id] && columns[id].isGeo);
   // TODO: this is not the best way to read the geoColumn,
   //  the backend should provide it within contexts.defaultColumns
   const geoColumnId = selectedColumnsIds[0];

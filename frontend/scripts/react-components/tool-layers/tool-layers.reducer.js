@@ -1,17 +1,19 @@
 import {
   GET_CONTEXT_LAYERS,
-  GET_LINKED_GEOIDS,
   GET_MAP_VECTOR_DATA,
   SET_NODE_ATTRIBUTES,
-  HIGHLIGHT_NODE,
   SET_MAP_LOADING_STATE,
   SAVE_MAP_VIEW,
   SELECT_BASEMAP,
   SELECT_CONTEXTUAL_LAYERS,
   TOGGLE_MAP,
-  TOGGLE_MAP_DIMENSION,
-  SET_MAP_DIMENSIONS_DATA
+  TOGGLE_MAP_DIMENSION
 } from 'react-components/tool/tool.actions';
+import {
+  TOOL_LAYERS__SET_LINKED_GEOIDS,
+  TOOL_LAYERS__SET_MAP_DIMENSIONS
+} from 'react-components/tool-layers/tool-layers.actions';
+import { TOOL_LINKS__HIGHLIGHT_NODE } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'scripts/actions/app.actions';
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
@@ -51,9 +53,9 @@ const toolLayersReducer = {
       draft.mapLoading = false;
     });
   },
-  [SET_MAP_DIMENSIONS_DATA](state, action) {
+  [TOOL_LAYERS__SET_MAP_DIMENSIONS](state, action) {
     return immer(state, draft => {
-      const { dimensions, dimensionGroups } = action.payload.mapDimensionsMetaJSON;
+      const { dimensions, dimensionGroups } = action.payload;
       draft.data.mapDimensions = {};
       dimensions.forEach(dimension => {
         const uid = getNodeMetaUid(dimension.type, dimension.layerAttributeId);
@@ -71,16 +73,16 @@ const toolLayersReducer = {
       });
     });
   },
-  [GET_LINKED_GEOIDS](state, action) {
+  [TOOL_LAYERS__SET_LINKED_GEOIDS](state, action) {
     return immer(state, draft => {
       draft.linkedGeoIds =
         action.payload?.nodes?.length > 0 ? action.payload.nodes.map(node => node.geoId) : [];
     });
   },
 
-  [HIGHLIGHT_NODE](state, action) {
+  [TOOL_LINKS__HIGHLIGHT_NODE](state, action) {
     return immer(state, draft => {
-      draft.highlightedNodeCoordinates = action.coordinates;
+      draft.highlightedNodeCoordinates = action.payload.coordinates;
     });
   },
   [GET_MAP_VECTOR_DATA](state, action) {
