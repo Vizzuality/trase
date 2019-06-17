@@ -7,13 +7,13 @@ import {
   saveMapView
 } from 'react-components/tool/tool.actions';
 import {
-  getVisibleNodes,
   getSelectedBiomeFilter,
-  getSelectedNodesGeoIds,
-  getSelectedColumnsIds,
-  getHighlightedNodesGeoIds
+  getSelectedColumnsIds
 } from 'react-components/tool/tool.selectors';
+import { getVisibleNodes } from 'react-components/tool-links/tool-links.selectors';
 import {
+  getSelectedNodesGeoIds,
+  getHighlightedNodesGeoIds,
   getChoroplethOptions,
   getSelectedMapContextualLayersData
 } from 'react-components/tool-layers/tool-layers.selectors';

@@ -8,11 +8,9 @@ import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
 import intesection from 'lodash/intersection';
 import compact from 'lodash/compact';
 import isEmpty from 'lodash/isEmpty';
-import {
-  getVisibleNodes,
-  getSelectedColumnsIds,
-  getSelectedMapDimensionsUids
-} from 'react-components/tool/tool.selectors';
+import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
+import { getVisibleNodes } from 'react-components/tool-links/tool-links.selectors';
+import { getSelectedMapDimensionsUids } from 'react-components/tool-layers/tool-layers.selectors';
 import pSettle from 'p-settle';
 
 import {

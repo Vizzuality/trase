@@ -3,16 +3,83 @@ import getChoropleth from 'reducers/helpers/getChoropleth';
 import { getMapDimensionsWarnings as getMapDimensionsWarningsUtil } from 'scripts/reducers/helpers/getMapDimensionsWarnings';
 import {
   getHighlightedNodesData,
-  getSelectedMapDimensionsUids
+  getSelectedColumnsIds,
+  getSelectedNodesData
 } from 'react-components/tool/tool.selectors';
 
-const getMapDimensions = state => state.toolLayers.data.mapDimensions;
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolColumns = state => state.toolLinks.data.columns;
 const getMapContextualLayers = state => state.toolLayers.data.mapContextualLayers;
 const getSelectedMapContextualLayers = state => state.toolLayers.selectedMapContextualLayers;
 const getSelectedYears = state => state.app.selectedYears;
 const getToolNodeAttributes = state => state.toolLinks.data.nodeAttributes;
+const getToolSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
+const getToolMapDimensions = state => state.toolLayers.data.mapDimensions;
+
+const getNodesGeoIds = (nodesData, columns) =>
+  nodesData
+    .filter(node => {
+      const column = columns[node.columnId];
+      return column.isGeo === true && typeof node.geoId !== 'undefined' && node.geoId !== null;
+    })
+    .map(node => node.geoId);
+
+export const getSelectedNodesGeoIds = createSelector(
+  [getSelectedNodesData, getToolColumns],
+  getNodesGeoIds
+);
+
+export const getHighlightedNodesGeoIds = createSelector(
+  [getHighlightedNodesData, getToolColumns],
+  getNodesGeoIds
+);
+
+const getSelectedGeoColumn = createSelector(
+  [getToolColumns, getSelectedColumnsIds],
+  (columns, selectedColumnsIds) =>
+    columns &&
+    Object.values(columns).find(column =>
+      selectedColumnsIds.some(id => id === column.id && column.isGeo)
+    )
+);
+
+export const getSelectedMapDimensionsUids = createSelector(
+  [getSelectedGeoColumn, getToolMapDimensions, getToolSelectedMapDimensions],
+  (selectedGeoColumn, mapDimensions, selectedMapDimensions) => {
+    if (selectedGeoColumn && selectedGeoColumn.isChoroplethDisabled === false) {
+      const allAvailableMapDimensionsUids = new Set(Object.keys(mapDimensions));
+      const selectedMapDimensionsSet = new Set(selectedMapDimensions?.filter(Boolean));
+      const intersection = new Set(
+        [...selectedMapDimensionsSet].filter(x => allAvailableMapDimensionsUids.has(x))
+      );
+
+      // are all currently selected map dimensions available ?
+      if (
+        selectedMapDimensionsSet.size > 0 &&
+        intersection.size === selectedMapDimensionsSet.size
+      ) {
+        return selectedMapDimensions;
+      }
+
+      // use default map dimensions but only if selectedMapDimensions is null
+      // we want to allow the user to disable all selections
+      if (!selectedMapDimensions) {
+        const uids = Object.values(mapDimensions)
+          .filter(dimension => dimension.isDefault)
+          .map(selectedDimension => selectedDimension.uid);
+        return [uids[0] || null, uids[1] || null];
+      }
+    }
+
+    return [null, null];
+  }
+);
+
+export const getSelectedMapDimensionsData = createSelector(
+  [getSelectedMapDimensionsUids, getToolMapDimensions],
+  (selectedMapDimensionsIds, mapDimensions) =>
+    selectedMapDimensionsIds.filter(Boolean).map(uid => mapDimensions[uid])
+);
 
 export const getChoroplethOptions = createSelector(
   [
@@ -20,7 +87,7 @@ export const getChoroplethOptions = createSelector(
     getToolNodes,
     getToolNodeAttributes,
     getToolColumns,
-    getMapDimensions
+    getToolMapDimensions
   ],
   (selectedMapDimensions, nodes, attributes, columns, mapDimensions) => {
     if (!nodes || !attributes || !columns) {
@@ -32,7 +99,7 @@ export const getChoroplethOptions = createSelector(
 );
 
 export const getMapDimensionsWarnings = createSelector(
-  [getMapDimensions, getSelectedMapDimensionsUids, getSelectedYears],
+  [getToolMapDimensions, getSelectedMapDimensionsUids, getSelectedYears],
   (mapDimensions, selectedMapDimensions, selectedYears) => {
     if (selectedYears.length === 0) {
       return null;

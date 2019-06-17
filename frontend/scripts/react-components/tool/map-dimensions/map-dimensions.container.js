@@ -4,10 +4,8 @@ import MapDimensions from 'react-components/tool/map-dimensions/map-dimensions.c
 import { toggleMapDimension } from 'react-components/tool/tool.actions';
 import { loadTooltip } from 'actions/app.actions';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
-import {
-  getSelectedMapDimensionsUids,
-  getSelectedColumnsIds
-} from 'react-components/tool/tool.selectors';
+import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
+import { getSelectedMapDimensionsUids } from 'react-components/tool-layers/tool-layers.selectors';
 
 // There's an update infinite loop inside loadMapDimensions, so mapDimensionsGroups should always be memoized
 const getLegacyMapDimensionsGroups = createSelector(

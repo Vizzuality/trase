@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 import { selectNodes } from 'react-components/tool-links/tool-links.actions';
 import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group/node-title-group.component';
-import { getSelectedNodesData, getToolRecolorGroups } from 'react-components/tool/tool.selectors';
+import { getSelectedNodesData } from 'react-components/tool/tool.selectors';
+import { getToolRecolorGroups } from 'react-components/tool-links/tool-links.selectors';
 
 const mapStateToProps = state => {
   const recolorGroups = getToolRecolorGroups(state);

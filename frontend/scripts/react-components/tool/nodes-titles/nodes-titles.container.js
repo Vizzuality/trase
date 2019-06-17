@@ -5,11 +5,11 @@ import { clearSankey, selectNodes } from 'react-components/tool-links/tool-links
 import NodesTitles from 'react-components/tool/nodes-titles/nodes-titles.component';
 import {
   getSelectedResizeBy,
-  getSelectedMapDimensionsData,
-  getToolRecolorGroups,
   getSelectedNodesData,
   getHighlightedNodesData
 } from 'react-components/tool/tool.selectors';
+import { getToolRecolorGroups } from 'react-components/tool-links/tool-links.selectors';
+import { getSelectedMapDimensionsData } from 'react-components/tool-layers/tool-layers.selectors';
 
 const mapStateToProps = state => ({
   selectedResizeBy: getSelectedResizeBy(state),

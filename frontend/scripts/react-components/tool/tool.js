@@ -1,10 +1,16 @@
+import { createSelector } from 'reselect';
 import ToolComponent from 'react-components/tool/tool.component';
 import { connect } from 'react-redux';
 import { resizeSankeyTool } from 'react-components/tool/tool.thunks';
-import { getToolUrlProps } from 'react-components/tool/tool.selectors';
+import { getToolLinksUrlProps } from 'react-components/tool-links/tool-links.selectors';
+
+const getUrlProps = createSelector(
+  [getToolLinksUrlProps],
+  toolLinks => ({ ...toolLinks })
+);
 
 const mapStateToProps = state => ({
-  urlProps: getToolUrlProps(state)
+  urlProps: getUrlProps(state)
 });
 
 const mapDispatchToProps = dispatch => ({

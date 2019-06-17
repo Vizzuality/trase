@@ -5,10 +5,8 @@ import {
   GET_MAP_BASE_DATA_URL
 } from 'utils/getURLFromParams';
 import { fetchWithCancel } from 'utils/saga-utils';
-import {
-  getSelectedColumnsIds,
-  getSelectedNodesColumnsPos
-} from 'react-components/tool/tool.selectors';
+import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
+import { getSelectedNodesColumnsPos } from 'react-components/tool-links/tool-links.selectors';
 import {
   setMapDimensions,
   setLinkedGeoIds
