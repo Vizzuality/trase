@@ -230,12 +230,16 @@ const toolLinksReducer = {
       results.forEach(result => {
         const column = columns.find(c => c.name === result.nodeType);
         const { selectedColumnsIds } = draft;
-        if (
+        const needsColumnChange =
           (column.isDefault === false && !selectedColumnsIds) ||
           (column.isDefault === false && !selectedColumnsIds[column.group]) ||
-          (selectedColumnsIds && selectedColumnsIds[column.group] !== column.id)
-        ) {
-          draft.selectedColumnsIds.splice(column.group, 1, column.id);
+          (selectedColumnsIds && selectedColumnsIds[column.group] !== column.id);
+        if (needsColumnChange) {
+          if (selectedColumnsIds) {
+            draft.selectedColumnsIds.splice(column.group, 1, column.id);
+          } else {
+            draft.selectedColumnsIds = [column.id];
+          }
         }
       });
 
