@@ -11,9 +11,7 @@ export const deserialize = ({ props, params, initialState = {}, urlPropHandlers 
     return {
       ...acc,
       [prop]:
-        typeof params[prop] !== 'undefined'
-          ? getParsedValue(params[prop], DONT_SERIALIZE)
-          : initialState[prop]
+        typeof params[prop] !== 'undefined' ? getParsedValue(params[prop]) : initialState[prop]
     };
   }, initialState);
 

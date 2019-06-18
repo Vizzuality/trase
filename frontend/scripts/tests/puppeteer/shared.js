@@ -66,7 +66,7 @@ export async function testProfileMultiTable(
 
     expect(links.length).toBe(rowsLength);
     expect(links.firstLink.split('?')[0]).toMatch(BASE_URL + linkName);
-    expect(qs.parse(links.firstLink)).toEqual(linkQuery);
+    expect(qs.parse(links.firstLink.split('?')[1])).toEqual(linkQuery);
   }
 
   expect(tableTitle.toLowerCase()).toMatch(title);

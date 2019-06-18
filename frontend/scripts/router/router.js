@@ -1,7 +1,6 @@
 import { connectRoutes, NOT_FOUND, redirect, replace } from 'redux-first-router';
 import restoreScroll from 'redux-first-router-restore-scroll';
-import { parse, stringify } from 'utils/stateURL';
-
+import qs from 'query-string';
 import { BREAKPOINTS } from 'constants';
 import {
   getPostsContent,
@@ -149,8 +148,8 @@ const config = {
   basename: '/',
   notFoundPath: '/404',
   querySerializer: {
-    parse,
-    stringify
+    parse: url => qs.parse(url, { arrayFormat: 'bracket', parseNumbers: true }),
+    stringify: params => qs.stringify(params, { arrayFormat: 'bracket' })
   },
   title: state => {
     const route = routes[state.location.type];

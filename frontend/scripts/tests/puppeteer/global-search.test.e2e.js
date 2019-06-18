@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { parse } from 'utils/stateURL';
+import qs from 'query-string';
 import { CONTEXTS, GLOBAL_SEARCH } from './mocks';
 import { getRequestMockFn } from './utils';
 
@@ -49,7 +49,7 @@ describe('Profile Root search', () => {
       page.waitForNavigation({ waitUntil: 'domcontentloaded' })
     ]);
     const url = page.url();
-    const query = parse(url.split('?')[1]);
+    const query = qs.parse(url.split('?')[1]);
     expect(url.startsWith(`${BASE_URL}/profile-${profileType}`)).toBe(true);
     expect(query.year).toBe('2017');
     expect(query.contextId).toBe(contextId.toString());
@@ -100,7 +100,7 @@ describe('Profile Root search', () => {
       page.waitForNavigation({ waitUntil: 'domcontentloaded' })
     ]);
     const url = page.url();
-    const query = parse(url.split('?')[1]);
+    const query = qs.parse(url.split('?')[1]);
     expect(url.startsWith(`${BASE_URL}/flows`)).toBe(true);
     expect(JSON.parse(query.isMapVisible)).toBe(true);
   });
