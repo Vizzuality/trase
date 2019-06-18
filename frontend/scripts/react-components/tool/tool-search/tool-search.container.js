@@ -20,7 +20,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  onAddNode: selectSearchNode,
+  onAddResult: selectSearchNode,
   setIsSearchOpen,
   onInputValueChange: loadSearchResults
 };

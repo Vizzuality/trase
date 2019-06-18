@@ -12,7 +12,7 @@ import 'scripts/react-components/tool/tool-search/tool-search-result/tool-search
 export default class ToolSearch extends Component {
   static propTypes = {
     nodes: PropTypes.array,
-    onAddNode: PropTypes.func,
+    onAddResult: PropTypes.func,
     contextId: PropTypes.number,
     className: PropTypes.string,
     isSearchOpen: PropTypes.bool,
@@ -26,6 +26,15 @@ export default class ToolSearch extends Component {
   static isValidChar(key) {
     const deburredKey = deburr(key);
     return /^([a-z]|[A-Z]){1}$/.test(deburredKey);
+  }
+
+  static getNodeResults(selectedItem) {
+    const nodeTypes = selectedItem.nodeType.split(' & ');
+    const ids = ToolSearch.getNodeIds(selectedItem);
+    return nodeTypes.map((nodeType, i) => ({
+      nodeType,
+      id: ids[i]
+    }));
   }
 
   static getNodeIds(selectedItem) {
@@ -71,6 +80,14 @@ export default class ToolSearch extends Component {
     this.props.setIsSearchOpen(false);
   };
 
+  addResult = item => {
+    const { onAddResult, selectedNodesIds } = this.props;
+    const results = ToolSearch.getNodeResults(item);
+    // Select only the results in the IMPORTER_EXPORTER pair that are not already selected
+    const notSelectedResults = results.filter(result => !selectedNodesIds.includes(result.id));
+    onAddResult(notSelectedResults);
+  };
+
   onSelected = selectedItem => {
     if (!selectedItem) return;
 
@@ -79,22 +96,13 @@ export default class ToolSearch extends Component {
       return;
     }
 
-    const ids = ToolSearch.getNodeIds(selectedItem);
-    this.props.onAddNode(ids);
+    this.addResult(selectedItem);
     this.onCloseClicked();
   };
 
-  onAddNode = (e, item) => {
-    const { onAddNode, selectedNodesIds } = this.props;
+  handleClickAdd = (e, item) => {
     if (e) e.stopPropagation();
-    const splittedIds = ToolSearch.getNodeIds(item);
-
-    // Select only the results in the IMPORTER_EXPORTER pair that are not already selected
-    const results = splittedIds
-      .filter(id => !selectedNodesIds.includes(id))
-      .map(id => ({ id, nodeType: item.nodeType }));
-
-    onAddNode(results);
+    this.addResult(item);
     this.downshift.reset();
     this.input.focus();
   };
@@ -205,7 +213,7 @@ export default class ToolSearch extends Component {
                         selected={this.isNodeSelected(item)}
                         importerNotSelected={item.importer && !this.isNodeSelected(item.importer)}
                         exporterNotSelected={item.exporter && !this.isNodeSelected(item.exporter)}
-                        onClickAdd={this.onAddNode}
+                        onClickAdd={this.handleClickAdd}
                       />
                     ))}
                   </ul>
