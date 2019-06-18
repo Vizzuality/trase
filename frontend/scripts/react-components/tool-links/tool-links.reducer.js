@@ -223,12 +223,12 @@ const toolLinksReducer = {
   },
   [SET_SELECTED_NODES_BY_SEARCH](state, action) {
     return immer(state, draft => {
-      const { nodes } = action.payload;
-      const ids = nodes.map(n => n.id);
+      const { results } = action.payload;
+      const ids = results.map(n => n.id);
 
       const columns = Object.values(draft.data.columns || {});
-      nodes.forEach(node => {
-        const column = columns.find(c => c.name === node.nodeType);
+      results.forEach(result => {
+        const column = columns.find(c => c.name === result.nodeType);
         const { selectedColumnsIds } = draft;
         if (
           (column.isDefault === false && !selectedColumnsIds) ||

@@ -5,8 +5,8 @@ import { expandSankey } from 'react-components/tool-links/tool-links.actions';
 
 function* checkExpandNode() {
   function* performCheckexpandNode({ payload }) {
-    const { nodes } = payload;
-    const ids = nodes.map(n => n.id);
+    const { results } = payload;
+    const ids = results.map(n => n.id);
     const state = yield select();
     const visibleNodes = getVisibleNodes(state);
     const visibleNodesById = visibleNodes.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});

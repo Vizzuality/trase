@@ -87,10 +87,14 @@ export default class ToolSearch extends Component {
   onAddNode = (e, item) => {
     const { onAddNode, selectedNodesIds } = this.props;
     if (e) e.stopPropagation();
-    const ids = ToolSearch.getNodeIds(item)
+    const splittedIds = ToolSearch.getNodeIds(item);
+
+    // Select only the results in the IMPORTER_EXPORTER pair that are not already selected
+    const results = splittedIds
       .filter(id => !selectedNodesIds.includes(id))
       .map(id => ({ id, nodeType: item.nodeType }));
-    onAddNode(ids);
+
+    onAddNode(results);
     this.downshift.reset();
     this.input.focus();
   };
