@@ -12,15 +12,12 @@ const defaultStringify = (value, DONT_SERIALIZE) => {
 
 function UrlSerializer(props) {
   const { query, urlProps, urlPropHandlers, serializer, DONT_SERIALIZE } = props;
-  // don't add query as dependency cause
-  // we don't care of external query params,
-  // that's responsibility of the externals
-  // eslint-disable react-hooks/exhaustive-deps
+
   useEffect(() => {
     let removedProps;
     const stringifiedProps = mapValues(urlProps, (value, key) =>
       urlPropHandlers[key]
-        ? urlPropHandlers[key].stringify(value)
+        ? urlPropHandlers[key].stringify(value, DONT_SERIALIZE)
         : defaultStringify(value, DONT_SERIALIZE)
     );
     const finalUrlProps = pickBy(stringifiedProps, prop => prop !== DONT_SERIALIZE);

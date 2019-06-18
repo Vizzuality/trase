@@ -1,6 +1,8 @@
-import { createSelector } from 'reselect';
+import { createSelector, createStructuredSelector } from 'reselect';
 
 const getContexts = state => state.app.contexts;
+const getSelectedYears = state => state.app.selectedYears;
+const getSelectedContext = state => state.app.selectedContext;
 
 export const getCountryNamesByCountryId = createSelector(
   [getContexts],
@@ -13,3 +15,8 @@ export const getCountryNamesByCountryId = createSelector(
       {}
     )
 );
+
+export const getAppUrlProps = createStructuredSelector({
+  selectedYears: getSelectedYears,
+  selectedContext: getSelectedContext
+});

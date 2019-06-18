@@ -3,12 +3,8 @@ import {
   SET_CONTEXTS,
   selectInitialContextById,
   APP__SET_LOADING
-} from 'scripts/actions/app.actions';
-import {
-  GET_TOOLTIPS_URL,
-  getURLFromParams,
-  GET_CONTEXTS_URL
-} from 'scripts/utils/getURLFromParams';
+} from 'actions/app.actions';
+import { GET_TOOLTIPS_URL, getURLFromParams, GET_CONTEXTS_URL } from 'utils/getURLFromParams';
 
 function loadTooltipsPromise(dispatch, getState) {
   const { app } = getState();

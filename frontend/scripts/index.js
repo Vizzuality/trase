@@ -8,8 +8,14 @@ import createSagaMiddleware from 'redux-saga';
 import rangeTouch from 'rangetouch';
 import analyticsMiddleware from 'analytics/middleware';
 import * as appReducers from 'store';
-import { toolLinksInitialState } from 'react-components/tool-links/tool-links.reducer';
+
 import qs from 'query-string';
+import { deserialize } from 'react-components/shared/url-serializer/url-serializer';
+import toolLinksInitialState from 'react-components/tool-links/tool-links.initial-state';
+import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-links.serializers';
+import appInitialState from 'reducers/app.initial-state';
+import * as AppUrlPropHandlers from 'reducers/app.serializers';
+
 import router from './router/router';
 import routeSubscriber from './router/route-subscriber';
 import { register, unregister } from './worker';
@@ -63,13 +69,18 @@ const params = qs.parse(window.location.search, { arrayFormat: 'bracket', parseN
 const store = createStore(
   reducers,
   {
-    toolLinks: {
-      ...toolLinksInitialState,
-      selectedNodesIds: params.selectedNodesIds || [],
-      selectedColumnsIds: params.selectedColumnsIds || null,
-      expandedNodesIds: params.expandedNodesIds || [],
-      detailedView: params.detailedView ? JSON.parse(params.detailedView) : false
-    }
+    app: deserialize({
+      params,
+      initialState: appInitialState,
+      urlPropHandlers: AppUrlPropHandlers,
+      props: ['selectedContext', 'selectedYears']
+    }),
+    toolLinks: deserialize({
+      params,
+      initialState: toolLinksInitialState,
+      urlPropHandlers: ToolLinksUrlPropHandlers,
+      props: ['selectedNodesIds', 'selectedColumnsIds', 'expandedNodesIds', 'detailedView']
+    })
   },
   composeEnhancers(router.enhancer, applyMiddleware(...middlewares))
 );

@@ -1,0 +1,26 @@
+export default {
+  languages: [],
+  sankeySize: [window.innerWidth, window.innerHeight],
+  isMapLayerVisible: false,
+  isAppMenuVisible: false,
+  tooltipCheck: 0,
+  tooltips: null,
+  contextIsUserSelected: !SHOW_WORLD_MAP_IN_EXPLORE,
+  currentDropdown: null,
+  modal: {
+    visibility: false,
+    modalParams: null
+  },
+  search: {
+    term: '',
+    isLoading: false,
+    results: []
+  },
+  selectedContext: null,
+  contexts: [],
+  loading: {
+    contexts: false,
+    tooltips: false
+  },
+  selectedYears: []
+};

@@ -10,7 +10,7 @@ import {
 } from 'react-components/home/home.thunks';
 import withSidebarNavLayout from 'react-components/nav/sidebar-nav/with-sidebar-nav-layout.hoc';
 import getPageStaticContent from 'react-components/static-content/static-content.thunks';
-import loadBaseAppData from 'react-components/shared/app.thunks';
+import loadBaseAppData from 'reducers/app.thunks';
 import getTeam from 'react-components/team/team.thunks';
 import { loadDashboardTemplates } from 'react-components/dashboard-root/dashboard-root.thunks';
 import { redirectToExplore } from 'react-components/explore/explore.thunks';

@@ -18,34 +18,7 @@ import {
 } from 'actions/app.actions';
 import createReducer from 'utils/createReducer';
 import { SELECT_YEARS } from 'react-components/tool/tool.actions';
-
-const initialState = {
-  languages: [],
-  sankeySize: [window.innerWidth, window.innerHeight],
-  isMapLayerVisible: false,
-  isAppMenuVisible: false,
-  tooltipCheck: 0,
-  tooltips: null,
-  contextIsUserSelected: !SHOW_WORLD_MAP_IN_EXPLORE,
-  currentDropdown: null,
-  modal: {
-    visibility: false,
-    modalParams: null
-  },
-  search: {
-    term: '',
-    isLoading: false,
-    results: []
-  },
-  selectedContext: null,
-  initialSelectedContextIdFromURL: null, // IMPORTANT: this should only be used to load context by id from the URL
-  contexts: [],
-  loading: {
-    contexts: false,
-    tooltips: false
-  },
-  selectedYears: []
-};
+import initialState from './app.initial-state';
 
 const isSankeyExpanded = state => state.isMapLayerVisible !== true && state.isMapVisible !== true;
 
@@ -152,7 +125,6 @@ const appReducerTypes = PropTypes => ({
     results: PropTypes.arrayOf(PropTypes.object).isRequired
   }).isRequired,
   selectedContext: PropTypes.object,
-  initialSelectedContextIdFromURL: PropTypes.number,
   tooltips: PropTypes.object,
   tooltipCheck: PropTypes.number,
   sankeySize: PropTypes.arrayOf(PropTypes.number).isRequired,

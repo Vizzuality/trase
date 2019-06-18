@@ -27,29 +27,7 @@ import immer from 'immer';
 import createReducer from 'utils/createReducer';
 import getNodesMetaUid from 'reducers/helpers/getNodeMetaUid';
 import xor from 'lodash/xor';
-
-export const toolLinksInitialState = {
-  data: {
-    columns: null,
-    nodes: null,
-    links: null,
-    nodeHeights: null,
-    nodeAttributes: null,
-    nodesByColumnGeoId: null
-  },
-  currentQuant: null,
-  detailedView: false,
-  forcedOverview: false,
-  highlightedNodeId: null,
-  flowsLoading: false,
-  selectedBiomeFilter: null,
-  selectedColumnsIds: null,
-  expandedNodesIds: [],
-  selectedNodesIds: [],
-  selectedRecolorBy: null,
-  selectedResizeBy: null,
-  isSearchOpen: false
-};
+import toolLinksInitialState from './tool-links.initial-state';
 
 const toolLinksReducer = {
   [TOOL_LINKS__SET_FLOWS_LOADING](state, action) {
