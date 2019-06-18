@@ -27,7 +27,7 @@ import immer from 'immer';
 import createReducer from 'utils/createReducer';
 import getNodesMetaUid from 'reducers/helpers/getNodeMetaUid';
 import xor from 'lodash/xor';
-import { deserialize } from 'react-components/shared/url-serializer/url-serializer';
+import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-links.serializers';
 import toolLinksInitialState from './tool-links.initial-state';
 
@@ -36,7 +36,7 @@ const toolLinksReducer = {
     if (action.payload?.serializer) {
       const newState = deserialize({
         params: action.payload.serializer,
-        initialState: toolLinksInitialState,
+        state: toolLinksInitialState,
         urlPropHandlers: ToolLinksUrlPropHandlers,
         props: ['selectedNodesIds', 'selectedColumnsIds', 'expandedNodesIds', 'detailedView']
       });

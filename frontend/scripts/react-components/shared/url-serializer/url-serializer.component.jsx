@@ -14,8 +14,8 @@ export const deserialize = ({ props, params, state = {}, urlPropHandlers = {} })
     };
   }, state);
 
-const defaultStringify = value => {
-  if ((typeof value !== 'boolean' && isEmpty(value)) || !value) {
+const defaultStringify = (value, DONT_SERIALIZE) => {
+  if ((typeof value === 'object' && isEmpty(value)) || (!value && value !== 0)) {
     return DONT_SERIALIZE;
   }
   return value;

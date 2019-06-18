@@ -16,7 +16,7 @@ import {
 } from 'actions/app.actions';
 import createReducer from 'utils/createReducer';
 import { SELECT_YEARS } from 'react-components/tool/tool.actions';
-import { deserialize } from 'react-components/shared/url-serializer/url-serializer';
+import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import initialState from './app.initial-state';
 
 const isSankeyExpanded = state => state.isMapLayerVisible !== true && state.isMapVisible !== true;
@@ -31,7 +31,7 @@ const appReducer = {
       const baseState = shouldResetYears ? { ...state, selectedYears: null } : state;
       const newState = deserialize({
         params: action.payload.serializer,
-        initialState: baseState,
+        state: baseState,
         props: ['selectedContextId', 'selectedYears']
       });
       return newState;
