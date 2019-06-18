@@ -9,7 +9,7 @@ describe('test prepareWidget helper function', () => {
   const someEndpoint = 'someEndpoint';
   const rawEndpoint = 'https://trase.earth/data';
   const someKey = 'id0_namesomeName';
-  const someParams = { name: 'someName', id: 0 };
+  const someParams = { id: 0, name: 'someName' };
   const someUrl = 'http://trase.earth';
   const someEndpoints = {
     [someEndpoint]: {
@@ -55,7 +55,7 @@ describe('test prepareWidget helper function', () => {
     expect(result).toEqual({
       cacheMiss: true,
       key: someKey,
-      url: `${rawEndpoint}?name=someName&id=0`
+      url: `${rawEndpoint}?id=0&name=someName`
     });
   });
 
@@ -68,7 +68,7 @@ describe('test prepareWidget helper function', () => {
     expect(result).toEqual({
       cacheMiss: true,
       key: someKey,
-      url: `${rawEndpoint}?type=advanced&name=someName&id=0`
+      url: `${rawEndpoint}?type=advanced&id=0&name=someName`
     });
   });
 });
