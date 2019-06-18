@@ -3,9 +3,8 @@ import { COUNTRIES_COORDINATES } from 'scripts/countries';
 import bbox from '@turf/bbox';
 import lineString from 'turf-linestring';
 import { getTopNodesKey } from 'react-components/explore/explore.actions';
+import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 
-const getSelectedContext = state => state.app.selectedContext;
-const getSelectedYears = state => state.app.selectedYears;
 const getTopNodes = state => state.explore.topNodes;
 
 export const getOriginGeoId = createSelector(

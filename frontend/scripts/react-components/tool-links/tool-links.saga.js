@@ -8,6 +8,7 @@ import {
   SELECT_BIOME_FILTER,
   SELECT_YEARS
 } from 'react-components/tool/tool.actions';
+import { getSelectedContext } from 'reducers/app.selectors';
 import {
   TOOL_LINKS__SELECT_COLUMN,
   TOOL_LINKS__SELECT_VIEW,
@@ -30,9 +31,9 @@ function* fetchToolColumns() {
   function* performFetch() {
     const state = yield select();
     const {
-      app: { selectedContext },
       location: { type: page }
     } = state;
+    const selectedContext = yield select(getSelectedContext);
 
     if (page !== 'tool' || selectedContext === null) {
       return;
@@ -55,11 +56,11 @@ function* fetchToolColumns() {
 function* fetchToolGeoColumnNodes() {
   function* performFetch(action) {
     const {
-      app: { selectedContext },
       toolLinks: {
         data: { columns }
       }
     } = yield select(state => state);
+    const selectedContext = yield select(getSelectedContext);
     const { columnId } = action.payload;
 
     if (columns[columnId] && columns[columnId].isGeo) {

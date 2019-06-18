@@ -6,11 +6,8 @@ import {
   TOOL_LINKS__SELECT_COLUMN
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT, LOAD_INITIAL_CONTEXT } from 'actions/app.actions';
-import {
-  SELECT_YEARS,
-  loadMapChoropleth,
-  SET_SELECTED_NODES_BY_SEARCH
-} from 'react-components/tool/tool.actions';
+import { SELECT_YEARS, loadMapChoropleth, SET_SELECTED_NODES_BY_SEARCH } from 'react-components/tool/tool.actions';
+import { getSelectedYears, getSelectedContext } from 'reducers/app.selectors';
 import { getLinkedGeoIds, getMapDimensions } from './tool-layers.fetch.saga';
 
 function* fetchLinkedGeoIds() {
@@ -31,7 +28,8 @@ function* fetchLinkedGeoIds() {
 
 function* fetchMapDimensions() {
   function* performFetch() {
-    const { selectedContext, selectedYears } = yield select(state => state.app);
+    const selectedYears = yield select(getSelectedYears);
+    const selectedContext = yield select(getSelectedContext);
     const page = yield select(state => state.location.type);
     if (page !== 'tool' || selectedContext === null) {
       return;

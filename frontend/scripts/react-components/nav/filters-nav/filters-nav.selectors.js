@@ -9,6 +9,7 @@ import {
 import capitalize from 'lodash/capitalize';
 import { makeGetResizeByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
+import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 import {
   getSelectedResizeBy as getToolResizeBy,
   getSelectedRecolorBy as getToolRecolorBy,
@@ -18,8 +19,6 @@ import {
 const insertIf = (condition, item) => (condition ? [item] : []);
 
 const getCurrentPage = state => state.location.type;
-const getSelectedContext = state => state.app.selectedContext;
-const getSelectedYears = state => state.app.selectedYears;
 const getContextFilterBy = state => state.app.selectedContext && state.app.selectedContext.filterBy;
 const getAppTooltips = state => state.app.tooltips;
 const getToolDetailedView = state => state.toolLinks && state.toolLinks.detailedView;

@@ -15,14 +15,16 @@ import intesection from 'lodash/intersection';
 import { YEARS_DISABLED_UNAVAILABLE, YEARS_INCOMPLETE } from 'constants';
 import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsWarnings';
 import { setMapContextLayers } from 'react-components/tool/tool.actions';
+import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 
 export function* getLinkedGeoIds() {
   const {
-    toolLinks: { selectedNodesIds },
-    app
+    toolLinks: { selectedNodesIds }
   } = yield select();
   const selectedColumnsIds = yield select(getSelectedColumnsIds);
   const selectedNodesColumnsPos = yield select(getSelectedNodesColumnsPos);
+  const selectedYears = yield select(getSelectedYears);
+  const selectedContext = yield select(getSelectedContext);
 
   const selectedNonGeoNodeIds = selectedNodesIds.filter(
     (nodeId, index) => selectedNodesColumnsPos[index] !== 0
@@ -33,8 +35,8 @@ export function* getLinkedGeoIds() {
     return;
   }
   const params = {
-    context_id: app.selectedContext.id,
-    years: Array.from(new Set([app.selectedYears[0], app.selectedYears[1]])),
+    context_id: selectedContext.id,
+    years: Array.from(new Set([selectedYears[0], selectedYears[1]])),
     nodes_ids: selectedNodesIds,
     target_column_id: selectedColumnsIds[0]
   };

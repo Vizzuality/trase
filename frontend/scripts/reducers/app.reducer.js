@@ -18,11 +18,26 @@ import {
 } from 'actions/app.actions';
 import createReducer from 'utils/createReducer';
 import { SELECT_YEARS } from 'react-components/tool/tool.actions';
+import { deserialize } from 'react-components/shared/url-serializer/url-serializer';
+import * as AppUrlPropHandlers from 'reducers/app.serializers';
 import initialState from './app.initial-state';
 
 const isSankeyExpanded = state => state.isMapLayerVisible !== true && state.isMapVisible !== true;
 
 const appReducer = {
+  tool(state, action) {
+    if (action.payload?.serializer) {
+      const newState = deserialize({
+        params: action.payload.serializer,
+        initialState: state,
+        urlPropHandlers: AppUrlPropHandlers,
+        props: ['selectedContext', 'selectedYears']
+      });
+      console.log(action, newState);
+      return newState;
+    }
+    return state;
+  },
   [LOAD_STATE_FROM_URL](state, action) {
     return { ...state, ...action.payload.app };
   },

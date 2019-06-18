@@ -5,7 +5,6 @@ import {
   getURLFromParams
 } from 'utils/getURLFromParams';
 import { TOGGLE_MAP, SELECT_YEARS } from 'react-components/tool/tool.actions';
-import { getContextById } from 'scripts/reducers/helpers/contextHelper';
 import getPageTitle from 'scripts/router/page-title';
 import { redirect } from 'redux-first-router';
 
@@ -27,19 +26,6 @@ export const SET_CONTEXT_IS_USER_SELECTED = 'SET_CONTEXT_IS_USER_SELECTED';
 export const APP__SET_LOADING = 'APP__SET_LOADING';
 export const APP__TRANSIFEX_LANGUAGES_LOADED = 'APP__TRANSIFEX_LANGUAGES_LOADED';
 
-export function selectInitialContextById(contextId) {
-  return (dispatch, getState) => {
-    const selectedContext = getContextById(getState(), contextId);
-
-    dispatch({
-      type: LOAD_INITIAL_CONTEXT,
-      payload: selectedContext
-    });
-
-    document.title = getPageTitle(getState());
-  };
-}
-
 export function setContextIsUserSelected(contextIsUserSelected) {
   return {
     type: SET_CONTEXT_IS_USER_SELECTED,
@@ -49,11 +35,9 @@ export function setContextIsUserSelected(contextIsUserSelected) {
 
 export function selectContextById(contextId) {
   return (dispatch, getState) => {
-    const selectedContext = getContextById(getState(), contextId);
-
     dispatch({
       type: SET_CONTEXT,
-      payload: selectedContext
+      payload: { id: contextId }
     });
 
     dispatch(setContextIsUserSelected(true));

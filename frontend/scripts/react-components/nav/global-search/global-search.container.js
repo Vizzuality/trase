@@ -23,13 +23,11 @@ const mapDispatchToProps = dispatch =>
         dispatch({
           type: 'tool',
           payload: {
-            query: {
-              state: {
-                isMapVisible: false,
-                selectedContextId: item.contextId,
-                selectedNodesIds: item.nodes.map(i => i.id),
-                expandedNodesIds: item.nodes.map(i => i.id)
-              }
+            serializer: {
+              isMapVisible: false,
+              selectedContext: item.contextId,
+              selectedNodesIds: item.nodes.map(i => i.id),
+              expandedNodesIds: item.nodes.map(i => i.id)
             }
           }
         })

@@ -11,6 +11,7 @@ import isEmpty from 'lodash/isEmpty';
 import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
 import { getVisibleNodes } from 'react-components/tool-links/tool-links.selectors';
 import { getSelectedMapDimensionsUids } from 'react-components/tool-layers/tool-layers.selectors';
+import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 import pSettle from 'p-settle';
 
 import {
@@ -45,7 +46,7 @@ const _setRecolorByAction = (recolorBy, state) => {
   if (recolorBy.value === 'none') {
     selectedRecolorBy = null;
   } else {
-    const { selectedContext } = state.app;
+    const selectedContext = getSelectedContext(state);
     selectedRecolorBy = selectedContext.recolorBy.find(
       contextRecolorBy => contextRecolorBy.name === recolorBy.name
     );
@@ -62,7 +63,7 @@ const _setResizeByAction = (resizeByName, state) => {
   if (resizeByName === 'none') {
     selectedResizeBy = { name: 'none' };
   } else {
-    const { selectedContext } = state.app;
+    const selectedContext = getSelectedContext(state);
     selectedResizeBy = selectedContext.resizeBy.find(
       contextResizeBy => contextResizeBy.name === resizeByName
     );
@@ -79,8 +80,9 @@ const _setResizeByAction = (resizeByName, state) => {
 export function resetSankey() {
   return (dispatch, getState) => {
     const state = getState();
+    const selectedContext = getSelectedContext(state);
     const { columns, expandedNodesIds } = state.toolLinks;
-    const { contexts, selectedContext } = state.app;
+    const { contexts } = state.app;
     const areNodesExpanded = !isEmpty(expandedNodesIds);
     const currentContext = contexts.find(context => context.id === selectedContext.id);
     const defaultColumns = columns ? Object.values(columns).filter(column => column.isDefault) : [];
@@ -122,10 +124,9 @@ export function selectBiomeFilter(biomeFilterName) {
     if (biomeFilterName === 'none') {
       selectedBiomeFilter = { value: 'none', name: 'none' };
     } else {
-      const {
-        app: { selectedContext },
-        toolLinks
-      } = getState();
+      const state = getState();
+      const selectedContext = getSelectedContext(state);
+      const { toolLinks } = state;
       selectedBiomeFilter = Object.assign(
         {},
         selectedContext.filterBy[0].nodes.find(filterBy => filterBy.name === biomeFilterName)
@@ -147,7 +148,7 @@ export function selectResizeBy(resizeByName) {
     if (resizeByName === 'none') {
       selectedResizeBy = { name: 'none' };
     } else {
-      const { selectedContext } = getState().app;
+      const selectedContext = getSelectedContext(getState());
       selectedResizeBy = selectedContext.resizeBy.find(
         contextResizeBy => contextResizeBy.name === resizeByName
       );
@@ -166,7 +167,7 @@ export function selectRecolorBy(recolorBy) {
     if (recolorBy.value === 'none') {
       selectedRecolorBy = null;
     } else {
-      const { selectedContext } = getState().app;
+      const selectedContext = getSelectedContext(getState());
       selectedRecolorBy = selectedContext.recolorBy.find(
         contextRecolorBy => contextRecolorBy.name === recolorBy.name
       );
@@ -193,7 +194,8 @@ export function loadMapVectorData() {
         useGeometryFromColumnId: geoColumn.useGeometryFromColumnId
       };
       if (geoColumn.useGeometryFromColumnId === undefined) {
-        const countryName = getState().app.selectedContext.countryName;
+        const selectedContext = getSelectedContext(getState());
+        const countryName = selectedContext.countryName;
         const vectorLayerURL = `vector_layers/${countryName}_${geoColumn.name.replace(
           / /g,
           '_'
@@ -413,10 +415,13 @@ export function loadMapChoropleth() {
       uid => state.toolLayers.data.mapDimensions[uid]
     );
 
+    const selectedContext = getSelectedContext(state);
+    const selectedYears = getSelectedYears(state);
+
     const params = {
-      context_id: state.app.selectedContext.id,
-      start_year: state.app.selectedYears[0],
-      end_year: state.app.selectedYears[1],
+      context_id: selectedContext.id,
+      start_year: selectedYears[0],
+      end_year: selectedYears[1],
       layer_ids: selectedMapDimensions.map(layer => layer.id)
     };
 

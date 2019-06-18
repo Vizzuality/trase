@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { makeGetSelectedResizeBy, makeGetSelectedRecolorBy } from 'selectors/indicators.selectors';
+import { getSelectedContext } from 'reducers/app.selectors';
 
-const getSelectedContext = state => state.app.selectedContext;
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolColumns = state => state.toolLinks.data.columns;

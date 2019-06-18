@@ -6,12 +6,12 @@ import {
   getSelectedColumnsIds,
   getSelectedNodesData
 } from 'react-components/tool/tool.selectors';
+import { getSelectedYears } from 'reducers/app.selectors';
 
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolColumns = state => state.toolLinks.data.columns;
 const getMapContextualLayers = state => state.toolLayers.data.mapContextualLayers;
 const getSelectedMapContextualLayers = state => state.toolLayers.selectedMapContextualLayers;
-const getSelectedYears = state => state.app.selectedYears;
 const getToolNodeAttributes = state => state.toolLinks.data.nodeAttributes;
 const getToolSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
 const getToolMapDimensions = state => state.toolLayers.data.mapDimensions;

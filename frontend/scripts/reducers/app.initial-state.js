@@ -17,10 +17,10 @@ export default {
     results: []
   },
   selectedContext: null,
+  selectedYears: null,
   contexts: [],
   loading: {
     contexts: false,
     tooltips: false
-  },
-  selectedYears: []
+  }
 };
