@@ -5,8 +5,12 @@ import {
   TOOL_LINKS__CLEAR_SANKEY,
   TOOL_LINKS__SELECT_COLUMN
 } from 'react-components/tool-links/tool-links.actions';
-import { SET_CONTEXT, LOAD_INITIAL_CONTEXT } from 'actions/app.actions';
-import { SELECT_YEARS, loadMapChoropleth, SET_SELECTED_NODES_BY_SEARCH } from 'react-components/tool/tool.actions';
+import { SET_CONTEXT, SET_CONTEXTS } from 'actions/app.actions';
+import {
+  SELECT_YEARS,
+  loadMapChoropleth,
+  SET_SELECTED_NODES_BY_SEARCH
+} from 'react-components/tool/tool.actions';
 import { getSelectedYears, getSelectedContext } from 'reducers/app.selectors';
 import { getLinkedGeoIds, getMapDimensions } from './tool-layers.fetch.saga';
 
@@ -41,7 +45,7 @@ function* fetchMapDimensions() {
   }
   yield takeLatest(
     [
-      LOAD_INITIAL_CONTEXT,
+      SET_CONTEXTS,
       TOOL_LINKS__GET_COLUMNS,
       SET_CONTEXT,
       SELECT_YEARS,

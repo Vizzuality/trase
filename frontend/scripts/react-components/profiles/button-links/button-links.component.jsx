@@ -41,7 +41,7 @@ function ButtonLinks(props) {
                   selectedNodesIds: [nodeId],
                   expandedNodesIds: [nodeId],
                   selectedYears: [year, year],
-                  selectedContext: contextId
+                  selectedContextId: contextId
                 }
               }
             }}

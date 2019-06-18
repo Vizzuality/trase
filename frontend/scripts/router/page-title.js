@@ -1,6 +1,8 @@
 import capitalize from 'lodash/capitalize';
+import { getSelectedContext } from 'reducers/app.selectors';
 
 export default function(state) {
+  const selectedContext = getSelectedContext(state);
   switch (state.location.type) {
     case 'about':
       return 'TRASE - About TRASE';
@@ -12,23 +14,23 @@ export default function(state) {
     case 'profileNode':
       return 'TRASE - Profiles';
     case 'tool':
-      if (!state.app.selectedContext) {
+      if (!selectedContext) {
         if (state.toolLayers.isMapVisible) {
           return 'TRASE - Map';
         }
         return 'TRASE - Supply Chain';
       }
 
-      return `TRASE - ${capitalize(state.app.selectedContext.countryName)} ${capitalize(
-        state.app.selectedContext.commodityName
+      return `TRASE - ${capitalize(selectedContext.countryName)} ${capitalize(
+        selectedContext.commodityName
       )}`;
     case 'explore':
-      if (!state.app.selectedContext || !state.app.contextIsUserSelected) {
+      if (!selectedContext || !state.app.contextIsUserSelected) {
         return 'TRASE - Explore';
       }
 
-      return `TRASE - ${capitalize(state.app.selectedContext.countryName)} ${capitalize(
-        state.app.selectedContext.commodityName
+      return `TRASE - ${capitalize(selectedContext.countryName)} ${capitalize(
+        selectedContext.commodityName
       )}`;
     default:
       return 'TRASE';

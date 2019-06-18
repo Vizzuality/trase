@@ -19,10 +19,18 @@ import {
 const insertIf = (condition, item) => (condition ? [item] : []);
 
 const getCurrentPage = state => state.location.type;
-const getContextFilterBy = state => state.app.selectedContext && state.app.selectedContext.filterBy;
 const getAppTooltips = state => state.app.tooltips;
 const getToolDetailedView = state => state.toolLinks && state.toolLinks.detailedView;
-const getToolResizeBys = state => state.app.selectedContext && state.app.selectedContext.resizeBy;
+
+const getContextFilterBy = createSelector(
+  getSelectedContext,
+  selectedContext => selectedContext && selectedContext.filterBy
+);
+
+const getToolResizeBys = createSelector(
+  getSelectedContext,
+  selectedContext => selectedContext && selectedContext.resizeBy
+);
 
 export const getToolYearsProps = createStructuredSelector({
   selectedYears: getSelectedYears,

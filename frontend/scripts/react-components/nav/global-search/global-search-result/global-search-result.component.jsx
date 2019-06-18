@@ -41,7 +41,7 @@ class GlobalSearchResult extends Component {
               payload: {
                 serializer: {
                   isMapVisible: false,
-                  selectedContext: item.contextId,
+                  selectedContextId: item.contextId,
                   selectedNodesIds: item.nodes.map(i => i.id),
                   expandedNodesIds: item.nodes.map(i => i.id)
                 }
@@ -62,7 +62,7 @@ class GlobalSearchResult extends Component {
                 payload: {
                   serializer: {
                     isMapVisible: true,
-                    selectedContext: item.contextId,
+                    selectedContextId: item.contextId,
                     selectedNodesIds: item.nodes.map(i => i.id),
                     expandedNodesIds: item.nodes.map(i => i.id)
                   }

@@ -8,8 +8,6 @@ import { TOGGLE_MAP, SELECT_YEARS } from 'react-components/tool/tool.actions';
 import getPageTitle from 'scripts/router/page-title';
 import { redirect } from 'redux-first-router';
 
-export const LOAD_STATE_FROM_URL = 'LOAD_STATE_FROM_URL';
-export const LOAD_INITIAL_CONTEXT = 'LOAD_INITIAL_CONTEXT';
 export const SET_CONTEXT = 'SET_CONTEXT';
 export const DISPLAY_STORY_MODAL = 'DISPLAY_STORY_MODAL';
 export const LOAD_TOOLTIP = 'LOAD_TOOLTIP';
@@ -37,7 +35,7 @@ export function selectContextById(contextId) {
   return (dispatch, getState) => {
     dispatch({
       type: SET_CONTEXT,
-      payload: { id: contextId }
+      payload: contextId
     });
 
     dispatch(setContextIsUserSelected(true));

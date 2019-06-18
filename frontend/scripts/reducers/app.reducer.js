@@ -11,15 +11,12 @@ import {
   SET_CONTEXTS,
   SET_CONTEXT_IS_USER_SELECTED,
   SET_CONTEXT,
-  LOAD_INITIAL_CONTEXT,
-  LOAD_STATE_FROM_URL,
   APP__SET_LOADING,
   APP__TRANSIFEX_LANGUAGES_LOADED
 } from 'actions/app.actions';
 import createReducer from 'utils/createReducer';
 import { SELECT_YEARS } from 'react-components/tool/tool.actions';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer';
-import * as AppUrlPropHandlers from 'reducers/app.serializers';
 import initialState from './app.initial-state';
 
 const isSankeyExpanded = state => state.isMapLayerVisible !== true && state.isMapVisible !== true;
@@ -27,19 +24,19 @@ const isSankeyExpanded = state => state.isMapLayerVisible !== true && state.isMa
 const appReducer = {
   tool(state, action) {
     if (action.payload?.serializer) {
+      const shouldResetYears =
+        action.payload.serializer.selectedContextId &&
+        action.payload.serializer.selectedContextId !== state.selectedContextId;
+
+      const baseState = shouldResetYears ? { ...state, selectedYears: null } : state;
       const newState = deserialize({
         params: action.payload.serializer,
-        initialState: state,
-        urlPropHandlers: AppUrlPropHandlers,
-        props: ['selectedContext', 'selectedYears']
+        initialState: baseState,
+        props: ['selectedContextId', 'selectedYears']
       });
-      console.log(action, newState);
       return newState;
     }
     return state;
-  },
-  [LOAD_STATE_FROM_URL](state, action) {
-    return { ...state, ...action.payload.app };
   },
   [SET_SANKEY_SIZE](state) {
     if (isSankeyExpanded(state)) {
@@ -95,20 +92,7 @@ const appReducer = {
     return Object.assign({}, state, { contextIsUserSelected: action.payload });
   },
   [SET_CONTEXT](state, action) {
-    const selectedContext = action.payload;
-    const selectedYears = [selectedContext.defaultYear, selectedContext.defaultYear];
-
-    return { ...state, selectedYears, selectedContext };
-  },
-  [LOAD_INITIAL_CONTEXT](state, action) {
-    const selectedContext = action.payload;
-
-    const selectedYears =
-      state.selectedYears.length > 0
-        ? state.selectedYears
-        : [selectedContext.defaultYear, selectedContext.defaultYear];
-
-    return { ...state, selectedYears, selectedContext };
+    return { ...state, selectedYears: null, selectedContextId: action.payload };
   },
   [APP__SET_LOADING](state, action) {
     const { contexts: contextsLoading, tooltips: tooltipsLoading } = state.loading;

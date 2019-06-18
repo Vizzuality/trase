@@ -1,6 +1,7 @@
 import { connectRoutes, NOT_FOUND, redirect, replace } from 'redux-first-router';
 import restoreScroll from 'redux-first-router-restore-scroll';
 import qs from 'query-string';
+
 import { BREAKPOINTS } from 'constants';
 import {
   getPostsContent,

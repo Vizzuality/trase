@@ -16,7 +16,7 @@ export default {
     isLoading: false,
     results: []
   },
-  selectedContext: null,
+  selectedContextId: null,
   selectedYears: null,
   contexts: [],
   loading: {
