@@ -64,31 +64,31 @@ function ToolSearchResult({
   return (
     <li {...itemProps} className={cx('c-search-result', { '-highlighted': isHighlighted })}>
       <div className="search-node-text-container">
-        <span className="search-node-type">{item.type}</span>
+        <span className="search-node-type">{item.nodeType}</span>
         <span className="search-node-name">
           <HighlightTextFragments text={item.name} highlight={value} />
         </span>
       </div>
       <div className="search-node-actions-container">
         {buttonList}
-        {item.profileType &&
-          item.type.split(' & ').map(type => (
+        {item.profile &&
+          item.nodeType.split(' & ').map(nodeType => (
             <LinkButton
               className="-medium-large"
-              key={item.name + type}
+              key={item.name + nodeType}
               to={{
                 type: 'profileNode',
                 payload: {
-                  profileType: item.profileType,
+                  profileType: item.profile,
                   query: {
                     contextId,
                     year: defaultYear,
-                    nodeId: (item[type.toLowerCase()] || item).id
+                    nodeId: (item[nodeType.toLowerCase()] || item).id
                   }
                 }
               }}
             >
-              {type} profile
+              {nodeType} profile
             </LinkButton>
           ))}
       </div>
