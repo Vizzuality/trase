@@ -87,7 +87,9 @@ export default class ToolSearch extends Component {
   onAddNode = (e, item) => {
     const { onAddNode, selectedNodesIds } = this.props;
     if (e) e.stopPropagation();
-    const ids = ToolSearch.getNodeIds(item).filter(id => !selectedNodesIds.includes(id));
+    const ids = ToolSearch.getNodeIds(item)
+      .filter(id => !selectedNodesIds.includes(id))
+      .map(id => ({ id, nodeType: item.nodeType }));
     onAddNode(ids);
     this.downshift.reset();
     this.input.focus();

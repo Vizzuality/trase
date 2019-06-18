@@ -209,16 +209,36 @@ const toolLinksReducer = {
       }
       draft.data.links = [];
 
-      draft.selectedNodesIds = state.selectedNodesIds.filter(nodeId => {
+      const isInColumn = nodeId => {
         const node = draft.data.nodes[nodeId];
+        // The node could come from the search or URL and not be in the state yet
+        if (!node) return true;
         const column = draft.data.columns[node.columnId];
         return column.group !== columnIndex;
-      });
+      };
+
+      draft.selectedNodesIds = state.selectedNodesIds.filter(isInColumn);
+      draft.expandedNodesIds = state.expandedNodesIds.filter(isInColumn);
     });
   },
   [SET_SELECTED_NODES_BY_SEARCH](state, action) {
     return immer(state, draft => {
-      const { ids } = action.payload;
+      const { nodes } = action.payload;
+      const ids = nodes.map(n => n.id);
+
+      const columns = Object.values(draft.data.columns || {});
+      nodes.forEach(node => {
+        const column = columns.find(c => c.name === node.nodeType);
+        const { selectedColumnsIds } = draft;
+        if (
+          (column.isDefault === false && !selectedColumnsIds) ||
+          (column.isDefault === false && !selectedColumnsIds[column.group]) ||
+          (selectedColumnsIds && selectedColumnsIds[column.group] !== column.id)
+        ) {
+          draft.selectedColumnsIds.splice(column.group, 1, column.id);
+        }
+      });
+
       const areNodesExpanded = draft.expandedNodesIds.length > 0;
       if (
         areNodesExpanded &&

@@ -335,10 +335,10 @@ export function selectExpandedNode(param) {
   };
 }
 
-export function selectSearchNode(ids) {
+export function selectSearchNode(nodes) {
   return {
     type: SET_SELECTED_NODES_BY_SEARCH,
-    payload: { ids }
+    payload: { nodes }
   };
 }
 
