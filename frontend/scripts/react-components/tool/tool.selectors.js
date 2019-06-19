@@ -17,7 +17,7 @@ export const getSelectedRecolorBy = makeGetSelectedRecolorBy(getToolRecolorBy, g
 export const getSelectedBiomeFilter = createSelector(
   [getToolBiomeFilter, getSelectedContext],
   (selectedBiomeFilter, selectedContext) => {
-    if (!selectedContext || !selectedContext.filterBy.length > 0) {
+    if (!selectedContext || selectedContext.filterBy.length === 0) {
       return { value: 'none' };
     }
     return (

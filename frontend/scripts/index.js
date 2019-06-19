@@ -10,7 +10,7 @@ import analyticsMiddleware from 'analytics/middleware';
 import * as appReducers from 'store';
 
 import qs from 'query-string';
-import { deserialize } from 'react-components/shared/url-serializer/url-serializer';
+import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import toolLinksInitialState from 'react-components/tool-links/tool-links.initial-state';
 import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-links.serializers';
 import appInitialState from 'reducers/app.initial-state';
@@ -71,13 +71,13 @@ const store = createStore(
   {
     app: deserialize({
       params,
-      initialState: appInitialState,
+      state: appInitialState,
       urlPropHandlers: AppUrlPropHandlers,
       props: ['selectedContext', 'selectedYears']
     }),
     toolLinks: deserialize({
       params,
-      initialState: toolLinksInitialState,
+      state: toolLinksInitialState,
       urlPropHandlers: ToolLinksUrlPropHandlers,
       props: ['selectedNodesIds', 'selectedColumnsIds', 'expandedNodesIds', 'detailedView']
     })

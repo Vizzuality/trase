@@ -3,7 +3,18 @@ import pickBy from 'lodash/pickBy';
 import mapValues from 'lodash/mapValues';
 import isEmpty from 'lodash/isEmpty';
 
-const defaultStringify = (value, DONT_SERIALIZE) => {
+export const DONT_SERIALIZE = 'NO_CEREAL_RYAN_GOSLING';
+
+export const deserialize = ({ props, params, state = {}, urlPropHandlers = {} }) =>
+  props.reduce((acc, prop) => {
+    const getParsedValue = urlPropHandlers[prop] ? urlPropHandlers[prop].parse : x => x;
+    return {
+      ...acc,
+      [prop]: typeof params[prop] !== 'undefined' ? getParsedValue(params[prop]) : state[prop]
+    };
+  }, state);
+
+const defaultStringify = value => {
   if ((typeof value !== 'boolean' && isEmpty(value)) || !value) {
     return DONT_SERIALIZE;
   }
@@ -11,14 +22,14 @@ const defaultStringify = (value, DONT_SERIALIZE) => {
 };
 
 function UrlSerializer(props) {
-  const { query, urlProps, urlPropHandlers, serializer, DONT_SERIALIZE } = props;
+  const { query, urlProps, urlPropHandlers, serializer } = props;
 
   useEffect(() => {
     let removedProps;
     const stringifiedProps = mapValues(urlProps, (value, key) =>
       urlPropHandlers[key]
         ? urlPropHandlers[key].stringify(value, DONT_SERIALIZE)
-        : defaultStringify(value, DONT_SERIALIZE)
+        : defaultStringify(value)
     );
     const finalUrlProps = pickBy(stringifiedProps, prop => prop !== DONT_SERIALIZE);
     const finalKeys = new Set(Object.keys(finalUrlProps));
@@ -28,7 +39,7 @@ function UrlSerializer(props) {
       removedProps = originalKeys.filter(key => !finalKeys.has(key));
     }
     serializer(query, finalUrlProps, removedProps);
-  }, [DONT_SERIALIZE, query, serializer, urlPropHandlers, urlProps]);
+  }, [query, serializer, urlPropHandlers, urlProps]);
 
   return null;
 }
