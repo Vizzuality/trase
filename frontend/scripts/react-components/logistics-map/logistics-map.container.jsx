@@ -18,6 +18,39 @@ import LogisticsMap from 'react-components/logistics-map/logistics-map.component
 import formatValue from 'utils/formatValue';
 import capitalize from 'lodash/capitalize';
 
+const getItems = (data, commodity) => {
+  switch (commodity) {
+    case 'palmOil':
+      return [
+        { title: 'Mill ID', value: data.mill_id },
+        { title: 'Company', value: data.company },
+        { title: 'Name', value: data.mill_name },
+        { title: 'World Resources Institute Universal Mill List ID', value: data.uml_id || 'N/A' },
+        { title: 'Active', value: data.active ? 'Active' : 'Inactive' }
+      ];
+
+    case 'soy':
+      return [
+        { title: 'Company', value: data.company },
+        { title: 'Municipality', value: data.municipality },
+        {
+          title: `Capacity (${commodity})`,
+          value: formatValue(data.capacity, 'Trade volume'),
+          unit: 't'
+        }
+      ];
+
+    default:
+      return [
+        { title: 'Company', value: data.company },
+        { title: 'State', value: data.state },
+        { title: 'Municipality', value: data.municipality },
+        { title: 'Subclass', value: data.subclass },
+        { title: 'Inspection level', value: data.inspection_level }
+      ];
+  }
+};
+
 class LogisticsMapContainer extends React.PureComponent {
   static propTypes = {
     layers: PropTypes.array,
@@ -59,27 +92,22 @@ class LogisticsMapContainer extends React.PureComponent {
     let text = {
       crushing_facilities: 'Crushing Facility',
       refining_facilities: 'Refinery',
-      storage_facilities: 'Silo'
+      storage_facilities: 'Silo',
+      mills: 'Mill'
     }[layer.id];
-    const items = [
-      { title: 'Company', value: data.company },
-      { title: 'Municipality', value: data.municipality }
-    ];
-    if (commodity === 'soy') {
-      items.push({
-        title: `Capacity (${commodity})`,
-        value: formatValue(data.capacity, 'Trade volume'),
-        unit: 't'
-      });
-    } else {
-      items.splice(-1, 0, { title: 'State', value: data.state });
-      items.push(
-        { title: 'Subclass', value: data.subclass },
-        { title: 'Inspection level', value: data.inspection_level }
-      );
+    if (commodity === 'cattle') {
       text = capitalize(layer.name);
     }
-    const mapPopUp = { ...e, data: { x, y, text, show, items } };
+    const mapPopUp = {
+      ...e,
+      data: {
+        x,
+        y,
+        text,
+        show,
+        items: getItems(data, commodity)
+      }
+    };
     this.setState(() => ({ mapPopUp }));
   };
 
@@ -130,10 +158,9 @@ class LogisticsMapContainer extends React.PureComponent {
 }
 
 const mapStateToProps = state => {
-  const { year: activeYear, commodity } = getActiveParams(state);
+  const { commodity } = getActiveParams(state);
   return {
     commodity,
-    activeYear,
     activeLayers: getActiveLayers(state),
     layers: getLogisticsMapLayers(state),
     heading: getHeading(state),
