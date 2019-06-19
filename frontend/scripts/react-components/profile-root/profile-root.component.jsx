@@ -8,7 +8,27 @@ import Img from 'react-components/shared/img';
 
 import 'scripts/react-components/profile-root/profile-root.scss';
 
+const renderNewProfiles = props => {
+  console.log(props);
+  return (
+    <div className="l-profile-root-new">
+      <div className="c-profile-root">
+        <div className="row column">
+          <div className="profile-root-search-container row align-center">
+            <div className="column small-12 medium-9 large-6">
+              <div className="profile-root-heading-container">
+                <div className="profile-root-heading-wrapper">Hey there</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const ProfileRoot = props => {
+  if (NEW_PROFILES_PAGE) return renderNewProfiles(props);
   const { errorMessage, activeContext, getContextsWithProfilePages } = props;
   return (
     <div className="l-profile-root">
