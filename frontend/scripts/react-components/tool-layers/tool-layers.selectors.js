@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector, createStructuredSelector } from 'reselect';
 import getChoropleth from 'reducers/helpers/getChoropleth';
 import { getMapDimensionsWarnings as getMapDimensionsWarningsUtil } from 'scripts/reducers/helpers/getMapDimensionsWarnings';
 import {
@@ -10,11 +10,14 @@ import { getSelectedYears } from 'reducers/app.selectors';
 
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolColumns = state => state.toolLinks.data.columns;
-const getMapContextualLayers = state => state.toolLayers.data.mapContextualLayers;
-const getSelectedMapContextualLayers = state => state.toolLayers.selectedMapContextualLayers;
 const getToolNodeAttributes = state => state.toolLinks.data.nodeAttributes;
-const getToolSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
 const getToolMapDimensions = state => state.toolLayers.data.mapDimensions;
+const getMapContextualLayers = state => state.toolLayers.data.mapContextualLayers;
+const getToolSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
+const getSelectedMapContextualLayers = state => state.toolLayers.selectedMapContextualLayers;
+const getMapView = state => state.toolLayers.mapView;
+const getIsMapVisible = state => state.toolLayers.isMapVisible;
+const getSelectedMapBasemap = state => state.toolLayers.selectedMapBasemap;
 
 const getNodesGeoIds = (nodesData, columns) =>
   nodesData
@@ -130,6 +133,14 @@ export const getSelectedMapContextualLayersData = createSelector(
     if (!selectedMapContextualLayers) {
       return [];
     }
-    return selectedMapContextualLayers.map(layer => mapContextualLayers[layer]);
+    return selectedMapContextualLayers.map(layer => mapContextualLayers[layer]).filter(Boolean);
   }
 );
+
+export const getToolLayersUrlProps = createStructuredSelector({
+  mapView: getMapView,
+  isMapVisible: getIsMapVisible,
+  selectedMapBasemap: getSelectedMapBasemap,
+  selectedMapDimensions: getToolSelectedMapDimensions,
+  selectedMapContextualLayers: getSelectedMapContextualLayers
+});

@@ -51,8 +51,8 @@ const methodProps = [
   },
   {
     name: 'setVisibility',
-    compared: ['selectedColumnsIds'],
-    returned: ['isChoroplethEnabled']
+    compared: ['isCloroplethEnabled'],
+    returned: ['isCloroplethEnabled']
   }
 ];
 

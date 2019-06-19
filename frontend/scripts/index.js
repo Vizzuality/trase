@@ -14,6 +14,8 @@ import { deserialize } from 'react-components/shared/url-serializer/url-serializ
 import toolLinksInitialState from 'react-components/tool-links/tool-links.initial-state';
 import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-links.serializers';
 import appInitialState from 'reducers/app.initial-state';
+import toolLayersInitialState from 'react-components/tool-layers/tool-layers.initial-state';
+import * as ToolLayersUrlPropHandlers from 'react-components/tool-layers/tool-layers.serializers';
 
 import router from './router/router';
 import routeSubscriber from './router/route-subscriber';
@@ -78,6 +80,18 @@ const store = createStore(
       state: toolLinksInitialState,
       urlPropHandlers: ToolLinksUrlPropHandlers,
       props: ['selectedNodesIds', 'selectedColumnsIds', 'expandedNodesIds', 'detailedView']
+    }),
+    toolLayers: deserialize({
+      params,
+      state: toolLayersInitialState,
+      urlPropHandlers: ToolLayersUrlPropHandlers,
+      props: [
+        'mapView',
+        'isMapVisible',
+        'selectedMapBasemap',
+        'selectedMapContextualLayers',
+        'selectedMapDimensions'
+      ]
     })
   },
   composeEnhancers(router.enhancer, applyMiddleware(...middlewares))

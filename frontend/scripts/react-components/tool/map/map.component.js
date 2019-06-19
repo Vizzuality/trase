@@ -128,6 +128,7 @@ export default class MapComponent {
       );
     } else {
       if (
+        (mapView && !defaultMapView) ||
         mapView.latitude !== defaultMapView.latitude ||
         mapView.longitude !== defaultMapView.longitude ||
         mapView.zoom !== defaultMapView.zoom ||
@@ -284,7 +285,6 @@ export default class MapComponent {
     });
 
     let forceZoom = 0;
-
     selectedMapContextualLayersData.forEach((layerData, i) => {
       // TODO: implement multi-year support
       const cartoData = layerData.cartoLayers[0];
