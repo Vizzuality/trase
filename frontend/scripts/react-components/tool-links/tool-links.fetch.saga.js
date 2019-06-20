@@ -1,7 +1,6 @@
 import { put, call, cancelled, fork } from 'redux-saga/effects';
 import { GET_COLUMNS_URL, GET_ALL_NODES_URL, getURLFromParams } from 'utils/getURLFromParams';
-import { setLoadingSpinner } from 'utils/saga-utils';
-import fetchWithCancel from 'utils/fetchWithCancel';
+import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
 import { setToolFlowsLoading, setToolNodesAndColumns } from './tool-links.actions';
 
 export function* getToolNodesAndColumnsData(selectedContext) {
