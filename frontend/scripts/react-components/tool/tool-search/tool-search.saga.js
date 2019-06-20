@@ -7,8 +7,7 @@ function* checkExpandNode() {
   function* performCheckexpandNode({ payload }) {
     const { results } = payload;
     const ids = results.map(n => n.id);
-    const state = yield select();
-    const visibleNodes = getVisibleNodes(state);
+    const visibleNodes = yield select(getVisibleNodes);
     const visibleNodesById = visibleNodes.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
     const hasInvisibleNodes = ids.some(id => !visibleNodesById[id]);
     if (hasInvisibleNodes) {
