@@ -31,12 +31,14 @@ export const mount = (root, store) => {
     document.getElementById('page-react-root')
   );
 
-  render(
-    <Provider store={store}>
-      <Footer />
-    </Provider>,
-    document.getElementById('footer')
-  );
+  if (NEW_PROFILES_PAGE) {
+    render(
+      <Provider store={store}>
+        <Footer />
+      </Provider>,
+      document.getElementById('footer')
+    );
+  }
 
   render(
     <Provider store={store}>
@@ -50,4 +52,7 @@ export const unmount = () => {
   unmountComponentAtNode(document.getElementById('nav'));
   unmountComponentAtNode(document.getElementById('page-react-root'));
   unmountComponentAtNode(document.getElementById('cookie-banner'));
+  if (NEW_PROFILES_PAGE) {
+    unmountComponentAtNode(document.getElementById('footer'));
+  }
 };

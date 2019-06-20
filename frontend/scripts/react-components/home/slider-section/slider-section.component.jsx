@@ -81,22 +81,23 @@ class SliderSection extends React.PureComponent {
     const { visiblePages, currentSlide } = this.state;
     const smallScreen = visiblePages === 1;
     const numColumns = slides.length <= visiblePages && visiblePages < 3 ? 6 : 4;
+    const headingProps = {
+      as: 'h3',
+      variant: 'mono',
+      color: variant === 'profiles' ? 'grey' : 'pink',
+      size: 'sm'
+    };
+    if (variant === 'profiles') headingProps.weight = 'bold';
 
     if (slides.length === 0) return null;
+
     return (
       <section className={cx('c-slider-section', className)}>
         <div
           className={cx('row', 'slider-wrapper', { '-auto-width': slides.length < visiblePages })}
         >
           <div className="column small-12">
-            <Heading
-              as="h3"
-              variant="mono"
-              color={variant === 'profiles' ? 'black' : 'pink'}
-              size="sm"
-            >
-              {name}
-            </Heading>
+            <Heading {...headingProps}>{name}</Heading>
           </div>
           <Siema
             perPage={this.mediaQueries}

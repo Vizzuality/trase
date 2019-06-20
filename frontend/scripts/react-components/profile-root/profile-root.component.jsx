@@ -11,12 +11,12 @@ import SliderSection from 'react-components/home/slider-section/slider-section.c
 
 import 'scripts/react-components/profile-root/profile-root.scss';
 
-const renderNewProfiles = ({ cardsInfo }) => (
-  <div className="l-profile-root-new">
-    <div className="c-profile-root-new">
+const renderProfiles = ({ cardsInfo }) => (
+  <div className="l-profile-root">
+    <div className="c-profile-root">
       <div className="row column">
         <div className="profile-root-search-container">
-          <Heading size="xl" align="center" weigth="bold">
+          <Heading size="xl" align="center">
             Explore the trade activities of countries, regions or traders
           </Heading>
           <div className="profile-root-actions">
@@ -34,7 +34,7 @@ const renderNewProfiles = ({ cardsInfo }) => (
               }
             />
           </div>
-          <div>
+          <div className="profile-root-slider">
             <SliderSection name="Top profiles" slides={cardsInfo} variant="profiles" />
           </div>
         </div>
@@ -43,17 +43,17 @@ const renderNewProfiles = ({ cardsInfo }) => (
   </div>
 );
 
-renderNewProfiles.propTypes = {
+renderProfiles.propTypes = {
   cardsInfo: PropTypes.array
 };
 
 const ProfileRoot = props => {
-  if (NEW_PROFILES_PAGE) return renderNewProfiles(props);
+  if (NEW_PROFILES_PAGE) return renderProfiles(props);
   const { errorMessage, activeContext, getContextsWithProfilePages } = props;
   return (
-    <div className="l-profile-root">
+    <div className="l-profile-root-legacy">
       {!errorMessage && (
-        <div className="c-profile-root">
+        <div className="c-profile-root-legacy">
           <div className="row column">
             <div className="profile-root-search-container row align-center">
               <div className="column small-12 medium-9 large-6">

@@ -1,6 +1,6 @@
 @import 'styles/settings';
 
-.c-profile-root-new {
+.c-profile-root {
   overflow: hidden;
 
   .profile-root-search-container {
@@ -19,10 +19,6 @@
     }
 
     text-align: center;
-  }
-
-  .browse-button {
-    width: 270px;
   }
 
   .profile-search {
@@ -52,9 +48,13 @@
       }
     }
   }
+
+  .profile-root-slider {
+    margin-top: 50px;
+  }
 }
 
-.c-profile-root {
+.c-profile-root-legacy {
 
   .profile-root-context-selector {
     position: relative;
