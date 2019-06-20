@@ -38,6 +38,7 @@ module Api
       validates_with AttributeAssociatedOnceValidator,
                      attribute: :download_quant, if: :new_download_quant_given?
 
+      after_create :set_years
       after_commit :refresh_dependents
 
       stringy_array :years
@@ -52,6 +53,12 @@ module Api
       def refresh_dependents
         Api::V3::Readonly::DownloadAttribute.refresh
         Api::V3::Readonly::DownloadFlow.refresh(skip_dependencies: true)
+      end
+
+      def set_years
+        FlowAttributeAvailableYearsUpdateWorker.perform_async(
+          self.class.name, id, context_id
+        )
       end
 
       private_class_method def self.active_ids
