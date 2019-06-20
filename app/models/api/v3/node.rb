@@ -35,6 +35,7 @@ module Api
 
       has_many :dashboard_template_sources
       has_many :dashboard_templates, through: :dashboard_template_sources
+      has_many :top_profiles
 
       scope :place_nodes, -> {
         includes(:node_type).where(

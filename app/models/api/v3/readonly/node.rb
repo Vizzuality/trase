@@ -42,6 +42,12 @@ module Api
             )
           }
         }
+
+        def self.select_options
+          select(:id, :name, :node_type).order(:name).map do |node|
+            ["#{node.name} (#{node.node_type})", node.id]
+          end
+        end
       end
     end
   end

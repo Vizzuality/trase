@@ -5292,6 +5292,36 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: top_profiles; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.top_profiles (
+    id bigint NOT NULL,
+    context_id bigint NOT NULL,
+    node_id bigint NOT NULL
+);
+
+
+--
+-- Name: top_profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.top_profiles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: top_profiles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.top_profiles_id_seq OWNED BY public.top_profiles.id;
+
+
+--
 -- Name: ckeditor_assets id; Type: DEFAULT; Schema: content; Owner: -
 --
 
@@ -5814,6 +5844,13 @@ ALTER TABLE ONLY public.resize_by_attributes ALTER COLUMN id SET DEFAULT nextval
 --
 
 ALTER TABLE ONLY public.resize_by_quants ALTER COLUMN id SET DEFAULT nextval('public.resize_by_quants_id_seq'::regclass);
+
+
+--
+-- Name: top_profiles id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.top_profiles ALTER COLUMN id SET DEFAULT nextval('public.top_profiles_id_seq'::regclass);
 
 
 --
@@ -6910,6 +6947,14 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: top_profiles top_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.top_profiles
+    ADD CONSTRAINT top_profiles_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: idx_ckeditor_assetable; Type: INDEX; Schema: content; Owner: -
 --
 
@@ -7554,6 +7599,20 @@ CREATE INDEX ind_country_properties_ind_id_idx ON public.ind_country_properties 
 
 
 --
+-- Name: index_top_profiles_on_context_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_top_profiles_on_context_id ON public.top_profiles USING btree (context_id);
+
+
+--
+-- Name: index_top_profiles_on_node_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_top_profiles_on_node_id ON public.top_profiles USING btree (node_id);
+
+
+--
 -- Name: map_attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7811,6 +7870,14 @@ CREATE INDEX sankey_nodes_mv_node_type_id_idx ON public.sankey_nodes_mv USING bt
 
 ALTER TABLE ONLY content.staff_members
     ADD CONSTRAINT fk_rails_6ad8424ffc FOREIGN KEY (staff_group_id) REFERENCES content.staff_groups(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: top_profiles fk_rails_02381b1a96; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.top_profiles
+    ADD CONSTRAINT fk_rails_02381b1a96 FOREIGN KEY (context_id) REFERENCES public.contexts(id);
 
 
 --
@@ -8422,6 +8489,14 @@ ALTER TABLE ONLY public.download_quals
 
 
 --
+-- Name: top_profiles fk_rails_eb02423c0e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.top_profiles
+    ADD CONSTRAINT fk_rails_eb02423c0e FOREIGN KEY (node_id) REFERENCES public.nodes(id);
+
+
+--
 -- Name: contexts fk_rails_eea78f436e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8527,6 +8602,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190520093639'),
 ('20190528091308'),
 ('20190529153223'),
-('20190530140625');
+('20190530140625'),
+('20190618131945');
 
 

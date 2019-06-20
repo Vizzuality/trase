@@ -48,6 +48,7 @@ module Api
             table_class: Api::V3::Node,
             yellow_tables: [
               Api::V3::NodeProperty,
+              Api::V3::TopProfile,
               Api::V3::DashboardTemplateSource,
               Api::V3::DashboardTemplateCompany,
               Api::V3::DashboardTemplateDestination
