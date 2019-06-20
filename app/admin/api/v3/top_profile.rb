@@ -3,6 +3,20 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
   permit_params :context_id, :node_id
   config.filters = false
 
+  controller do
+    def create
+      super do |success, _failure|
+        success.html { redirect_to admin_context_top_profiles_path(parent) }
+      end
+    end
+
+    def update
+      super do |success, _failure|
+        success.html { redirect_to admin_context_top_profiles_path(parent) }
+      end
+    end
+  end
+
   index do
     column('Node name') { |property| property&.node&.name }
     actions
