@@ -79,7 +79,13 @@ const store = createStore(
       params,
       state: toolLinksInitialState,
       urlPropHandlers: ToolLinksUrlPropHandlers,
-      props: ['selectedNodesIds', 'selectedColumnsIds', 'expandedNodesIds', 'detailedView']
+      props: [
+        'selectedNodesIds',
+        'selectedColumnsIds',
+        'expandedNodesIds',
+        'detailedView',
+        'selectedRecolorByName'
+      ]
     }),
     toolLayers: deserialize({
       params,

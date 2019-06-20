@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { makeGetRecolorByItems } from 'selectors/indicators.selectors';
-import { getSelectedRecolorBy } from 'react-components/tool/tool.selectors';
+import { getSelectedRecolorBy } from 'react-components/tool-links/tool-links.selectors';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 
 const getTooltips = state => state.app.tooltips;

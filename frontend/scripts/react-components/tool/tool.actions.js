@@ -20,7 +20,8 @@ import {
   selectColumn,
   selectNodes,
   highlightNode,
-  clearSankey
+  clearSankey,
+  selectRecolorBy
 } from 'react-components/tool-links/tool-links.actions';
 
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
@@ -28,7 +29,6 @@ export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
 export const SELECT_BIOME_FILTER = 'SELECT_BIOME_FILTER';
 export const SELECT_YEARS = 'SELECT_YEARS';
 export const SELECT_RESIZE_BY = 'SELECT_RESIZE_BY';
-export const SELECT_RECOLOR_BY = 'SELECT_RECOLOR_BY';
 export const GET_MAP_VECTOR_DATA = 'GET_MAP_VECTOR_DATA';
 export const GET_CONTEXT_LAYERS = 'GET_CONTEXT_LAYERS';
 export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
@@ -39,23 +39,6 @@ export const SAVE_MAP_VIEW = 'SAVE_MAP_VIEW';
 export const SHOW_LINKS_ERROR = 'SHOW_LINKS_ERROR';
 export const RESET_TOOL_STATE = 'RESET_TOOL_STATE';
 export const SET_SELECTED_NODES_BY_SEARCH = 'SET_SELECTED_NODES_BY_SEARCH';
-
-const _setRecolorByAction = (recolorBy, state) => {
-  let selectedRecolorBy;
-  if (recolorBy.value === 'none') {
-    selectedRecolorBy = null;
-  } else {
-    const selectedContext = getSelectedContext(state);
-    selectedRecolorBy = selectedContext.recolorBy.find(
-      contextRecolorBy => contextRecolorBy.name === recolorBy.name
-    );
-  }
-
-  return {
-    type: SELECT_RECOLOR_BY,
-    payload: selectedRecolorBy
-  };
-};
 
 const _setResizeByAction = (resizeByName, state) => {
   let selectedResizeBy;
@@ -105,10 +88,10 @@ export function resetSankey() {
 
     dispatch(selectView(false, true));
 
-    if (defaultRecolorBy) {
-      dispatch(_setRecolorByAction({ value: defaultRecolorBy[0].name }, state));
+    if (defaultRecolorBy && defaultRecolorBy[0]) {
+      dispatch(selectRecolorBy(defaultRecolorBy[0].name));
     } else {
-      dispatch(_setRecolorByAction({ value: 'none' }, state));
+      dispatch(selectRecolorBy(null));
     }
 
     dispatch(_setResizeByAction(defaultResizeBy.name, state));
@@ -156,25 +139,6 @@ export function selectResizeBy(resizeByName) {
     dispatch({
       type: SELECT_RESIZE_BY,
       payload: selectedResizeBy
-    });
-  };
-}
-
-export function selectRecolorBy(recolorBy) {
-  return (dispatch, getState) => {
-    let selectedRecolorBy;
-    if (recolorBy.value === 'none') {
-      selectedRecolorBy = null;
-    } else {
-      const selectedContext = getSelectedContext(getState());
-      selectedRecolorBy = selectedContext.recolorBy.find(
-        contextRecolorBy => contextRecolorBy.name === recolorBy.name
-      );
-    }
-
-    dispatch({
-      type: SELECT_RECOLOR_BY,
-      payload: selectedRecolorBy
     });
   };
 }

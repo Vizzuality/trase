@@ -3,7 +3,6 @@ import { SET_CONTEXT, SET_CONTEXTS } from 'actions/app.actions';
 import { setLoadingSpinner } from 'utils/saga-utils';
 import {
   loadMapVectorData,
-  SELECT_RECOLOR_BY,
   SELECT_RESIZE_BY,
   SELECT_BIOME_FILTER,
   SELECT_YEARS
@@ -17,6 +16,7 @@ import {
   TOOL_LINKS__EXPAND_SANKEY,
   TOOL_LINKS__COLLAPSE_SANKEY,
   TOOL_LINKS__CLEAR_SANKEY,
+  TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
   setToolFlowsLoading,
   selectView
 } from './tool-links.actions';
@@ -96,14 +96,14 @@ function* fetchLinks() {
     [
       SELECT_YEARS,
       SELECT_RESIZE_BY,
-      SELECT_RECOLOR_BY,
       SELECT_BIOME_FILTER,
       TOOL_LINKS__SELECT_VIEW,
       TOOL_LINKS__CLEAR_SANKEY,
       TOOL_LINKS__SELECT_COLUMN,
       TOOL_LINKS__EXPAND_SANKEY,
       TOOL_LINKS__COLLAPSE_SANKEY,
-      TOOL_LINKS__SET_SELECTED_NODES
+      TOOL_LINKS__SET_SELECTED_NODES,
+      TOOL_LINKS__SET_SELECTED_RECOLOR_BY
     ],
     performFetch
   );

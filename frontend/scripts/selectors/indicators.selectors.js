@@ -47,15 +47,3 @@ export const makeGetSelectedResizeBy = (getResizeBy, getSelectedContext) =>
       return selectedResizeBy;
     }
   );
-
-export const makeGetSelectedRecolorBy = (getRecolorBy, getSelectedContext) =>
-  createSelector(
-    [getRecolorBy, getSelectedContext],
-    (selectedRecolorBy, context) => {
-      if (!selectedRecolorBy && context) {
-        return context.recolorBy.find(recolorBy => recolorBy.isDefault === true);
-      }
-
-      return selectedRecolorBy;
-    }
-  );

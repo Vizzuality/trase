@@ -18,7 +18,7 @@ export default {
   selectedColumnsIds: null,
   expandedNodesIds: [],
   selectedNodesIds: [],
-  selectedRecolorBy: null,
+  selectedRecolorByName: null,
   selectedResizeBy: null,
   isSearchOpen: false
 };

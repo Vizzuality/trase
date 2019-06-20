@@ -9,6 +9,7 @@ import { fetchWithCancel } from 'utils/saga-utils';
 import { getSelectedColumnsIds, getSelectedResizeBy } from 'react-components/tool/tool.selectors';
 import { NUM_NODES_DETAILED, NUM_NODES_EXPANDED, NUM_NODES_SUMMARY } from 'constants';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedRecolorBy } from 'react-components/tool-links/tool-links.selectors';
 import { setToolColumns, setToolLinks, setToolNodes, setMoreToolNodes } from './tool-links.actions';
 
 export function* getToolLinksData() {
@@ -17,6 +18,7 @@ export function* getToolLinksData() {
   const selectedContext = yield select(getSelectedContext);
   const selectedColumnsIds = yield select(getSelectedColumnsIds);
   const selectedResizeBy = yield select(getSelectedResizeBy);
+  const selectedRecolorBy = yield select(getSelectedRecolorBy);
   if (!selectedResizeBy) {
     return;
   }
@@ -38,11 +40,11 @@ export function* getToolLinksData() {
     params.n_nodes = NUM_NODES_SUMMARY;
   }
 
-  if (state.toolLinks.selectedRecolorBy) {
-    if (state.toolLinks.selectedRecolorBy.type === 'qual') {
-      params.flow_qual = state.toolLinks.selectedRecolorBy.name;
-    } else if (state.toolLinks.selectedRecolorBy.type === 'ind') {
-      params.flow_ind = state.toolLinks.selectedRecolorBy.name;
+  if (selectedRecolorBy) {
+    if (selectedRecolorBy.type === 'qual') {
+      params.flow_qual = selectedRecolorBy.name;
+    } else if (selectedRecolorBy.type === 'ind') {
+      params.flow_ind = selectedRecolorBy.name;
     }
   }
 

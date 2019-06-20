@@ -8,12 +8,8 @@ import splitLinksByColumn from 'reducers/helpers/splitLinksByColumn';
 import splitVisibleNodesByColumn from 'reducers/helpers/splitVisibleNodesByColumn';
 import sortVisibleNodes from 'reducers/helpers/sortVisibleNodes';
 import getVisibleNodesUtil from 'reducers/helpers/getVisibleNodes';
-
-import {
-  getSelectedColumnsIds,
-  getSelectedNodesData,
-  getSelectedRecolorBy
-} from 'react-components/tool/tool.selectors';
+import { getSelectedColumnsIds, getSelectedNodesData } from 'react-components/tool/tool.selectors';
+import { getSelectedContext } from 'reducers/app.selectors';
 
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolNodes = state => state.toolLinks.data.nodes;
@@ -22,7 +18,23 @@ const getToolNodeHeights = state => state.toolLinks.data.nodeHeights;
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getToolExpandedNodesIds = state => state.toolLinks.expandedNodesIds;
 const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
+const getToolRecolorByName = state => state.toolLinks.selectedRecolorByName;
 const getToolDetailedView = state => state.toolLinks.detailedView;
+
+export const getSelectedRecolorBy = createSelector(
+  [getToolRecolorByName, getSelectedContext],
+  (selectedRecolorByName, selectedContext) => {
+    if (!selectedRecolorByName && !selectedContext) {
+      return selectedRecolorByName;
+    }
+
+    if (!selectedRecolorByName && selectedContext) {
+      return selectedContext.recolorBy.find(recolorBy => recolorBy.isDefault === true);
+    }
+
+    return selectedContext.recolorBy.find(recolorBy => recolorBy.name === selectedRecolorByName);
+  }
+);
 
 export const getVisibleNodes = createSelector(
   [getToolLinks, getToolNodes, getSelectedColumnsIds],
@@ -120,8 +132,8 @@ export const getToolLinksUrlProps = createStructuredSelector({
   selectedNodesIds: getToolSelectedNodesIds,
   selectedColumnsIds: getToolSelectedColumnsIds,
   expandedNodesIds: getToolExpandedNodesIds,
-  detailedView: getToolDetailedView
+  detailedView: getToolDetailedView,
   // selectedResizeBy: getSelectedResizeBy,
-  // selectedRecolorBy: getSelectedRecolorBy,
+  selectedRecolorByName: getToolRecolorByName
   // selectedBiomeFilter: getSelectedBiomeFilter
 });

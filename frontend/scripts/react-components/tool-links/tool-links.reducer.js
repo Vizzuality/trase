@@ -1,7 +1,6 @@
 import {
   RESET_TOOL_STATE,
   SELECT_BIOME_FILTER,
-  SELECT_RECOLOR_BY,
   SELECT_RESIZE_BY,
   SET_NODE_ATTRIBUTES,
   SHOW_LINKS_ERROR,
@@ -20,7 +19,8 @@ import {
   TOOL_LINKS__COLLAPSE_SANKEY,
   TOOL_LINKS__EXPAND_SANKEY,
   TOOL_LINKS__SELECT_COLUMN,
-  TOOL_LINKS__SET_SELECTED_NODES
+  TOOL_LINKS__SET_SELECTED_NODES,
+  TOOL_LINKS__SET_SELECTED_RECOLOR_BY
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
 import immer from 'immer';
@@ -38,7 +38,13 @@ const toolLinksReducer = {
         params: action.payload.serializerParams,
         state: toolLinksInitialState,
         urlPropHandlers: ToolLinksUrlPropHandlers,
-        props: ['selectedNodesIds', 'selectedColumnsIds', 'expandedNodesIds', 'detailedView']
+        props: [
+          'selectedNodesIds',
+          'selectedColumnsIds',
+          'expandedNodesIds',
+          'detailedView',
+          'selectedRecolorByName'
+        ]
       });
       return newState;
     }
@@ -65,7 +71,7 @@ const toolLinksReducer = {
   [SET_CONTEXT](state) {
     return immer(state, draft => {
       Object.assign(draft, {
-        selectedRecolorBy: toolLinksInitialState.selectedRecolorBy,
+        selectedRecolorByName: toolLinksInitialState.selectedRecolorByName,
         selectedResizeBy: toolLinksInitialState.selectedResizeBy,
         selectedBiomeFilter: toolLinksInitialState.selectedBiomeFilter,
         detailedView: toolLinksInitialState.detailedView,
@@ -171,9 +177,9 @@ const toolLinksReducer = {
       draft.selectedBiomeFilter = action.payload;
     });
   },
-  [SELECT_RECOLOR_BY](state, action) {
+  [TOOL_LINKS__SET_SELECTED_RECOLOR_BY](state, action) {
     return immer(state, draft => {
-      draft.selectedRecolorBy = action.payload;
+      draft.selectedRecolorByName = action.payload.name;
     });
   },
   [SELECT_RESIZE_BY](state, action) {
@@ -320,7 +326,7 @@ const toolLinksReducerTypes = PropTypes => ({
   selectedBiomeFilter: PropTypes.object,
   selectedColumnsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-  selectedRecolorBy: PropTypes.object,
+  selectedRecolorByName: PropTypes.object,
   selectedResizeBy: PropTypes.object
 });
 

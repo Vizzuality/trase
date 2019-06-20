@@ -12,9 +12,9 @@ import { makeGetAvailableYears } from 'selectors/years.selectors';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 import {
   getSelectedResizeBy as getToolResizeBy,
-  getSelectedRecolorBy as getToolRecolorBy,
   getSelectedBiomeFilter as getToolSelectedBiome
 } from 'react-components/tool/tool.selectors';
+import { getSelectedRecolorBy as getToolRecolorBy } from 'react-components/tool-links/tool-links.selectors';
 
 const insertIf = (condition, item) => (condition ? [item] : []);
 

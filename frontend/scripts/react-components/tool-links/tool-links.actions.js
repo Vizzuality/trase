@@ -14,6 +14,7 @@ export const TOOL_LINKS__SELECT_COLUMN = 'TOOL_LINKS__SELECT_COLUMN';
 export const TOOL_LINKS__HIGHLIGHT_NODE = 'TOOL_LINKS__HIGHLIGHT_NODE';
 export const TOOL_LINKS__CLEAR_SANKEY = 'TOOL_LINKS__CLEAR_SANKEY';
 export const TOOL_LINKS__SET_SELECTED_NODES = 'TOOL_LINKS__SET_SELECTED_NODES';
+export const TOOL_LINKS__SET_SELECTED_RECOLOR_BY = 'TOOL_LINKS__SET_SELECTED_RECOLOR_BY';
 
 export function setToolFlowsLoading(loading) {
   return {
@@ -116,5 +117,12 @@ export function selectNodes(ids) {
   return {
     type: TOOL_LINKS__SET_SELECTED_NODES,
     payload: { nodeIds }
+  };
+}
+
+export function selectRecolorBy(name) {
+  return {
+    type: TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
+    payload: { name }
   };
 }
