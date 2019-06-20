@@ -1,6 +1,6 @@
 import { initialState } from 'react-components/dashboard-element/dashboard-element.reducer';
 import { cancelled } from 'redux-saga/effects';
-import { fetchWithCancel } from 'utils/saga-utils';
+import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
 
 import {
   getDashboardPanelData,
@@ -9,8 +9,9 @@ import {
 } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
 import { getURLFromParams } from 'utils/getURLFromParams';
 
-jest.mock('react-components/dashboard-element/fetch-with-cancel', () => ({
-  fetchWithCancel: jest.fn()
+jest.mock('utils/saga-utils', () => ({
+  fetchWithCancel: jest.fn(),
+  setLoadingSpinner: jest.fn()
 }));
 
 jest.mock('utils/getURLFromParams', () => ({
@@ -49,6 +50,7 @@ const someUrl = 'http://trase.earth';
 const sourceMock = { cancel: jest.fn() };
 getURLFromParams.mockImplementation(() => someUrl);
 fetchWithCancel.mockImplementation(() => ({ source: sourceMock, fetchPromise: () => {} }));
+setLoadingSpinner.mockImplementation(() => {});
 
 const optionsType = 'companies';
 const query = 'Bra';
