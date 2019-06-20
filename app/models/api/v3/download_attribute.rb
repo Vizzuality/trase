@@ -22,6 +22,7 @@ module Api
     class DownloadAttribute < YellowTable
       include Api::V3::StringyArray
       include Api::V3::AssociatedAttributes
+      include Api::V3::EnsurePositionPresent
 
       belongs_to :context
       has_one :download_qual, autosave: true
