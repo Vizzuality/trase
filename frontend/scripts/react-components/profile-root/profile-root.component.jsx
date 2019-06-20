@@ -5,7 +5,6 @@ import ContextSelector from 'react-components/shared/context-selector/context-se
 import ErrorMessage from 'react-components/profile-root/error-message/error-message.component';
 import cx from 'classnames';
 import Img from 'react-components/shared/img';
-import Heading from 'react-components/shared/heading';
 import Button from 'react-components/shared/button';
 import SliderSection from 'react-components/home/slider-section/slider-section.component';
 
@@ -16,9 +15,9 @@ const renderProfiles = ({ cardsInfo }) => (
     <div className="c-profile-root">
       <div className="row column">
         <div className="profile-root-search-container">
-          <Heading size="xl" align="center">
+          <h2 className="profile-root-description">
             Explore the trade activities of countries, regions or traders
-          </Heading>
+          </h2>
           <div className="profile-root-actions">
             <Button color="pink" icon="icon-browse" className="browse-button" size="rg">
               Browse places or traders
