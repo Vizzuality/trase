@@ -10,6 +10,7 @@ import {
 } from 'react-components/tool/tool.actions';
 import { getSelectedContext } from 'reducers/app.selectors';
 import {
+  TOOL_LINKS__SET_SELECTED_NODES,
   TOOL_LINKS__SELECT_COLUMN,
   TOOL_LINKS__SELECT_VIEW,
   TOOL_LINKS__GET_COLUMNS,
@@ -78,6 +79,12 @@ function* fetchLinks() {
       return;
     }
 
+    const { selectedNodesIds } = yield select(state => state.toolLinks);
+
+    if (action.type === TOOL_LINKS__SET_SELECTED_NODES && selectedNodesIds.length !== 0) {
+      return;
+    }
+
     const selectedContext = yield select(getSelectedContext);
     const fetchAllNodes = action.type === TOOL_LINKS__SELECT_VIEW && action.payload.detailedView;
     yield put(setToolFlowsLoading(true));
@@ -95,7 +102,8 @@ function* fetchLinks() {
       TOOL_LINKS__CLEAR_SANKEY,
       TOOL_LINKS__SELECT_COLUMN,
       TOOL_LINKS__EXPAND_SANKEY,
-      TOOL_LINKS__COLLAPSE_SANKEY
+      TOOL_LINKS__COLLAPSE_SANKEY,
+      TOOL_LINKS__SET_SELECTED_NODES
     ],
     performFetch
   );
