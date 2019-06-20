@@ -238,7 +238,8 @@ const toolLinksReducer = {
           if (selectedColumnsIds) {
             draft.selectedColumnsIds.splice(column.group, 1, column.id);
           } else {
-            draft.selectedColumnsIds = [column.id];
+            draft.selectedColumnsIds = [];
+            draft.selectedColumnsIds[column.group] = column.id;
           }
         }
       });
