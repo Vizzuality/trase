@@ -39,7 +39,7 @@ class GlobalSearchResult extends Component {
             to={{
               type: 'tool',
               payload: {
-                serializer: {
+                serializerParams: {
                   isMapVisible: false,
                   selectedContextId: item.contextId,
                   selectedNodesIds: item.nodes.map(i => i.id),
@@ -60,7 +60,7 @@ class GlobalSearchResult extends Component {
               to={{
                 type: 'tool',
                 payload: {
-                  serializer: {
+                  serializerParams: {
                     isMapVisible: true,
                     selectedContextId: item.contextId,
                     selectedNodesIds: item.nodes.map(i => i.id),

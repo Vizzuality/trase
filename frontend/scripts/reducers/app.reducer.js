@@ -23,14 +23,14 @@ const isSankeyExpanded = state => state.isMapLayerVisible !== true && state.isMa
 
 const appReducer = {
   tool(state, action) {
-    if (action.payload?.serializer) {
+    if (action.payload?.serializerParams) {
       const shouldResetYears =
-        action.payload.serializer.selectedContextId &&
-        action.payload.serializer.selectedContextId !== state.selectedContextId;
+        action.payload.serializerParams.selectedContextId &&
+        action.payload.serializerParams.selectedContextId !== state.selectedContextId;
 
       const baseState = shouldResetYears ? { ...state, selectedYears: null } : state;
       const newState = deserialize({
-        params: action.payload.serializer,
+        params: action.payload.serializerParams,
         state: baseState,
         props: ['selectedContextId', 'selectedYears']
       });

@@ -23,7 +23,7 @@ const mapDispatchToProps = dispatch =>
         dispatch({
           type: 'tool',
           payload: {
-            serializer: {
+            serializerParams: {
               isMapVisible: false,
               selectedContextId: item.contextId,
               selectedNodesIds: item.nodes.map(i => i.id),

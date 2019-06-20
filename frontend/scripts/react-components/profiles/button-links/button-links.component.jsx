@@ -36,7 +36,7 @@ function ButtonLinks(props) {
             to={{
               type: 'tool',
               payload: {
-                serializer: {
+                serializerParams: {
                   isMapVisible: true,
                   selectedNodesIds: [nodeId],
                   expandedNodesIds: [nodeId],
@@ -59,7 +59,7 @@ function ButtonLinks(props) {
             to={{
               type: 'tool',
               payload: {
-                serializer: {
+                serializerParams: {
                   isMapVisible: false,
                   selectedNodesIds: [nodeId],
                   expandedNodesIds: [nodeId],

@@ -18,6 +18,7 @@ import MapLegend from 'react-components/tool/map-legend/map-legend.container';
 import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.react';
 import EventManager from 'utils/eventManager';
 import UrlSerializer from 'react-components/shared/url-serializer';
+import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-links.serializers';
 
 import 'styles/layouts/l-tool.scss';
 import 'styles/components/shared/veil.scss';
@@ -228,7 +229,7 @@ const Tool = props => {
   return (
     <div>
       {render}
-      <UrlSerializer urlProps={urlProps} />
+      <UrlSerializer urlProps={urlProps} urlPropHandlers={ToolLinksUrlPropHandlers} />
     </div>
   );
 };

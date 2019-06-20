@@ -21,6 +21,7 @@ const getToolColumns = state => state.toolLinks.data.columns;
 const getToolNodeHeights = state => state.toolLinks.data.nodeHeights;
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getToolExpandedNodesIds = state => state.toolLinks.expandedNodesIds;
+const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getToolDetailedView = state => state.toolLinks.detailedView;
 
 export const getVisibleNodes = createSelector(
@@ -117,7 +118,7 @@ export const getMergedLinks = createSelector(
 
 export const getToolLinksUrlProps = createStructuredSelector({
   selectedNodesIds: getToolSelectedNodesIds,
-  selectedColumnsIds: getSelectedColumnsIds,
+  selectedColumnsIds: getToolSelectedColumnsIds,
   expandedNodesIds: getToolExpandedNodesIds,
   detailedView: getToolDetailedView
   // selectedResizeBy: getSelectedResizeBy,

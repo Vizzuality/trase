@@ -3,14 +3,14 @@ const nav = [
     name: 'Supply Chain',
     page: {
       type: 'tool',
-      payload: { serializer: { isMapVisible: false } }
+      payload: { serializerParams: { isMapVisible: false } }
     }
   },
   {
     name: 'Map',
     page: {
       type: 'tool',
-      payload: { serializer: { isMapVisible: true } }
+      payload: { serializerParams: { isMapVisible: true } }
     }
   },
   {

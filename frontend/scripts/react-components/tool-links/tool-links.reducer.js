@@ -33,9 +33,9 @@ import toolLinksInitialState from './tool-links.initial-state';
 
 const toolLinksReducer = {
   tool(state, action) {
-    if (action.payload?.serializer) {
+    if (action.payload?.serializerParams) {
       const newState = deserialize({
-        params: action.payload.serializer,
+        params: action.payload.serializerParams,
         state: toolLinksInitialState,
         urlPropHandlers: ToolLinksUrlPropHandlers,
         props: ['selectedNodesIds', 'selectedColumnsIds', 'expandedNodesIds', 'detailedView']
