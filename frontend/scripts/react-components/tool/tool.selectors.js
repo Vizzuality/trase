@@ -139,7 +139,12 @@ export const getVisibleNodesByColumn = createSelector(
 
 export const getSelectedNodesData = createSelector(
   [getSelectedNodesIds, getToolNodes],
-  (selectedNodesIds, nodes) => selectedNodesIds.map(id => nodes[id])
+  (selectedNodesIds, nodes) => {
+    if (nodes) {
+      return selectedNodesIds.map(id => nodes[id]).filter(Boolean);
+    }
+    return [];
+  }
 );
 
 export const getSelectedNodesGeoIds = createSelector(
@@ -191,7 +196,7 @@ export const getFilteredLinks = createSelector(
     getToolRecolorGroups
   ],
   (unmergedLinks, selectedNodesAtColumns, nodesColored, selectedNodesIds, recolorGroups) => {
-    if (selectedNodesIds.length === 0) {
+    if (selectedNodesIds.length === 0 || unmergedLinks === null) {
       return null;
     }
     const { nodesColoredBySelection } = nodesColored;

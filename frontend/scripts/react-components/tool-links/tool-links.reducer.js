@@ -4,7 +4,8 @@ import {
   SELECT_RECOLOR_BY,
   SELECT_RESIZE_BY,
   SET_NODE_ATTRIBUTES,
-  SHOW_LINKS_ERROR
+  SHOW_LINKS_ERROR,
+  SET_SELECTED_NODES_BY_SEARCH
 } from 'react-components/tool/tool.actions';
 import {
   TOOL_LINKS__CLEAR_SANKEY,
@@ -208,11 +209,52 @@ const toolLinksReducer = {
       }
       draft.data.links = [];
 
-      draft.selectedNodesIds = state.selectedNodesIds.filter(nodeId => {
+      const isInColumn = nodeId => {
         const node = draft.data.nodes[nodeId];
+        // The node could come from the search or URL and not be in the state yet
+        if (!node) return true;
         const column = draft.data.columns[node.columnId];
         return column.group !== columnIndex;
+      };
+
+      draft.selectedNodesIds = state.selectedNodesIds.filter(isInColumn);
+      draft.expandedNodesIds = state.expandedNodesIds.filter(isInColumn);
+    });
+  },
+  [SET_SELECTED_NODES_BY_SEARCH](state, action) {
+    return immer(state, draft => {
+      const { results } = action.payload;
+      const ids = results.map(n => n.id);
+
+      const columns = Object.values(draft.data.columns || {});
+      results.forEach(result => {
+        const column = columns.find(c => c.name === result.nodeType);
+        const { selectedColumnsIds } = draft;
+        const needsColumnChange =
+          (column.isDefault === false && !selectedColumnsIds) ||
+          (column.isDefault === false && !selectedColumnsIds[column.group]) ||
+          (selectedColumnsIds && selectedColumnsIds[column.group] !== column.id);
+        if (needsColumnChange) {
+          if (selectedColumnsIds) {
+            draft.selectedColumnsIds.splice(column.group, 1, column.id);
+          } else {
+            draft.selectedColumnsIds = [];
+            draft.selectedColumnsIds[column.group] = column.id;
+          }
+        }
       });
+
+      const areNodesExpanded = draft.expandedNodesIds.length > 0;
+      if (
+        areNodesExpanded &&
+        draft.selectedNodesIds.length === 1 &&
+        draft.selectedNodesIds.includes(ids)
+      ) {
+        // we are unselecting the node that is currently expanded: shrink sankey and continue to unselecting node
+        draft.expandedNodesIds = [];
+      }
+
+      draft.selectedNodesIds = xor(draft.selectedNodesIds, ids);
     });
   },
   [TOOL_LINKS__SET_SELECTED_NODES](state, action) {

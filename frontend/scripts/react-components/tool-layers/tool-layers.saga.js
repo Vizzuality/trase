@@ -6,7 +6,11 @@ import {
   TOOL_LINKS__SELECT_COLUMN
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT, LOAD_INITIAL_CONTEXT } from 'actions/app.actions';
-import { SELECT_YEARS, loadMapChoropleth } from 'react-components/tool/tool.actions';
+import {
+  SELECT_YEARS,
+  loadMapChoropleth,
+  SET_SELECTED_NODES_BY_SEARCH
+} from 'react-components/tool/tool.actions';
 import { getLinkedGeoIds, getMapDimensions } from './tool-layers.fetch.saga';
 
 function* fetchLinkedGeoIds() {
@@ -15,7 +19,12 @@ function* fetchLinkedGeoIds() {
   }
 
   yield takeLatest(
-    [TOOL_LINKS__SET_SELECTED_NODES, TOOL_LINKS__CLEAR_SANKEY, TOOL_LINKS__SELECT_COLUMN],
+    [
+      TOOL_LINKS__SET_SELECTED_NODES,
+      TOOL_LINKS__CLEAR_SANKEY,
+      TOOL_LINKS__SELECT_COLUMN,
+      SET_SELECTED_NODES_BY_SEARCH
+    ],
     getGeoIds
   );
 }

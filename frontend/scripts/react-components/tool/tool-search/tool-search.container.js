@@ -1,26 +1,28 @@
-import { selectExpandedNode } from 'react-components/tool/tool.actions';
+import { selectSearchNode } from 'react-components/tool/tool.actions';
 import { setIsSearchOpen } from 'react-components/tool-links/tool-links.actions';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.component';
 import { connect } from 'react-redux';
-import { getToolSearchNodes } from 'react-components/tool/tool-search/tool-search.selectors';
+import { getSearchResults } from 'react-components/tool/tool-search/tool-search.selectors';
+import { loadSearchResults } from 'actions/app.actions';
 
 const mapStateToProps = state => {
   const { selectedContext } = state.app;
   const { selectedNodesIds, isSearchOpen, isMapVisible } = state.toolLinks;
-  const searchNodes = getToolSearchNodes(state);
+  const searchResults = getSearchResults(state);
   return {
     selectedNodesIds,
     isSearchOpen,
     isMapVisible,
-    nodes: searchNodes,
+    nodes: searchResults,
     contextId: selectedContext && selectedContext.id,
     defaultYear: selectedContext && selectedContext.defaultYear
   };
 };
 
 const mapDispatchToProps = {
-  onAddNode: selectExpandedNode,
-  setIsSearchOpen
+  onAddResult: selectSearchNode,
+  setIsSearchOpen,
+  onInputValueChange: loadSearchResults
 };
 
 export default connect(

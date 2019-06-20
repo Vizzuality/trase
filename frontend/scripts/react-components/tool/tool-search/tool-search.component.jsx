@@ -3,12 +3,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import deburr from 'lodash/deburr';
-import sortBy from 'lodash/sortBy';
-import { defaultMemoize } from 'reselect';
-import fuzzySearch from 'utils/fuzzySearch';
 import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group/node-title-group.container';
 import SearchResult from 'react-components/tool/tool-search/tool-search-result/tool-search-result.component';
-import { MAX_SEARCH_RESULTS } from 'constants';
 
 import 'scripts/react-components/tool/tool-search/tool-search.scss';
 import 'scripts/react-components/tool/tool-search/tool-search-result/tool-search-result.scss';
@@ -16,19 +12,29 @@ import 'scripts/react-components/tool/tool-search/tool-search-result/tool-search
 export default class ToolSearch extends Component {
   static propTypes = {
     nodes: PropTypes.array,
-    onAddNode: PropTypes.func,
+    onAddResult: PropTypes.func,
     contextId: PropTypes.number,
     className: PropTypes.string,
     isSearchOpen: PropTypes.bool,
     isMapVisible: PropTypes.bool,
     defaultYear: PropTypes.number,
     selectedNodesIds: PropTypes.array,
-    setIsSearchOpen: PropTypes.func
+    setIsSearchOpen: PropTypes.func,
+    onInputValueChange: PropTypes.func
   };
 
   static isValidChar(key) {
     const deburredKey = deburr(key);
     return /^([a-z]|[A-Z]){1}$/.test(deburredKey);
+  }
+
+  static getNodeResults(selectedItem) {
+    const nodeTypes = selectedItem.nodeType.split(' & ');
+    const ids = ToolSearch.getNodeIds(selectedItem);
+    return nodeTypes.map((nodeType, i) => ({
+      nodeType,
+      id: ids[i]
+    }));
   }
 
   static getNodeIds(selectedItem) {
@@ -38,7 +44,7 @@ export default class ToolSearch extends Component {
       .map(n => parseInt(n, 10));
   }
 
-  state = { charPressedCount: 0 };
+  state = { charPressedCount: 0, inputValue: '' };
 
   componentDidMount() {
     document.addEventListener('keydown', this.onKeydown);
@@ -74,6 +80,14 @@ export default class ToolSearch extends Component {
     this.props.setIsSearchOpen(false);
   };
 
+  addResult = item => {
+    const { onAddResult, selectedNodesIds } = this.props;
+    const results = ToolSearch.getNodeResults(item);
+    // Select only the results in the IMPORTER_EXPORTER pair that are not already selected
+    const notSelectedResults = results.filter(result => !selectedNodesIds.includes(result.id));
+    onAddResult(notSelectedResults);
+  };
+
   onSelected = selectedItem => {
     if (!selectedItem) return;
 
@@ -82,16 +96,13 @@ export default class ToolSearch extends Component {
       return;
     }
 
-    const ids = ToolSearch.getNodeIds(selectedItem);
-    this.props.onAddNode(ids);
+    this.addResult(selectedItem);
     this.onCloseClicked();
   };
 
-  onAddNode = (e, item) => {
-    const { onAddNode, selectedNodesIds } = this.props;
+  handleClickAdd = (e, item) => {
     if (e) e.stopPropagation();
-    const ids = ToolSearch.getNodeIds(item).filter(id => !selectedNodesIds.includes(id));
-    onAddNode(ids);
+    this.addResult(item);
     this.downshift.reset();
     this.input.focus();
   };
@@ -114,33 +125,26 @@ export default class ToolSearch extends Component {
     this.setState(state => ({ charPressedCount: state.charPressedCount - 1 }));
   };
 
+  onInputValueChange = value => {
+    this.setState({ inputValue: value });
+    this.debouncedInputValueChange(value);
+  };
+
+  debouncedInputValueChange = value => {
+    const { contextId } = this.props;
+    this.props.onInputValueChange(value, contextId);
+  };
+
+  onDownshiftStateChange = state => {
+    if (state.inputValue !== undefined) {
+      this.onInputValueChange(state.inputValue);
+    }
+  };
+
   isNodeSelected = node => {
     const ids = ToolSearch.getNodeIds(node);
     return ids.every(id => this.props.selectedNodesIds.includes(id));
   };
-
-  // eslint-disable-next-line
-  LEGACY_getSearchNodes(query) {
-    const { nodes = [] } = this.props;
-    return sortBy(
-      nodes.filter(i => {
-        if (!query) return true;
-        const item = deburr(i.name.toLowerCase());
-        return item.includes(query.toLowerCase());
-      }),
-      item => item.name
-    ).slice(0, MAX_SEARCH_RESULTS);
-  }
-
-  getSearchNodes = defaultMemoize(query => {
-    const { nodes = [] } = this.props;
-
-    if (ENABLE_LEGACY_TOOL_SEARCH) {
-      return this.LEGACY_getSearchNodes(query);
-    }
-
-    return fuzzySearch(query, nodes).slice(0, MAX_SEARCH_RESULTS);
-  });
 
   render() {
     const {
@@ -149,8 +153,11 @@ export default class ToolSearch extends Component {
       selectedNodesIds = [],
       isMapVisible,
       contextId,
-      defaultYear
+      defaultYear,
+      nodes
     } = this.props;
+
+    const { inputValue } = this.state;
 
     if (isSearchOpen === false) {
       return (
@@ -173,8 +180,9 @@ export default class ToolSearch extends Component {
             itemToString={i => (i === null ? '' : i.name)}
             onSelect={this.onSelected}
             ref={this.setDownshiftRef}
+            onStateChange={this.onDownshiftStateChange}
           >
-            {({ getInputProps, getItemProps, isOpen, inputValue, highlightedIndex }) => (
+            {({ getInputProps, getItemProps, isOpen, highlightedIndex }) => (
               <div className="search-container" onClick={e => e.stopPropagation()}>
                 <div className="search-bar">
                   <div style={{ overflow: selectedNodesIds.length > 3 ? 'auto' : 'inherit' }}>
@@ -192,9 +200,9 @@ export default class ToolSearch extends Component {
                 </div>
                 {isOpen && (
                   <ul className="search-results">
-                    {this.getSearchNodes(inputValue).map((item, row) => (
+                    {nodes.map((item, row) => (
                       <SearchResult
-                        key={item.id + item.type}
+                        key={`${item.id} + ${item.contextId}`}
                         value={inputValue}
                         isHighlighted={row === highlightedIndex}
                         isMapVisible={isMapVisible}
@@ -205,7 +213,7 @@ export default class ToolSearch extends Component {
                         selected={this.isNodeSelected(item)}
                         importerNotSelected={item.importer && !this.isNodeSelected(item.importer)}
                         exporterNotSelected={item.exporter && !this.isNodeSelected(item.exporter)}
-                        onClickAdd={this.onAddNode}
+                        onClickAdd={this.handleClickAdd}
                       />
                     ))}
                   </ul>

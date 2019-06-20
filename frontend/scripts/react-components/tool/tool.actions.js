@@ -40,6 +40,7 @@ export const TOGGLE_MAP = 'TOGGLE_MAP';
 export const SAVE_MAP_VIEW = 'SAVE_MAP_VIEW';
 export const SHOW_LINKS_ERROR = 'SHOW_LINKS_ERROR';
 export const RESET_TOOL_STATE = 'RESET_TOOL_STATE';
+export const SET_SELECTED_NODES_BY_SEARCH = 'SET_SELECTED_NODES_BY_SEARCH';
 
 const _setRecolorByAction = (recolorBy, state) => {
   let selectedRecolorBy;
@@ -331,6 +332,13 @@ export function selectExpandedNode(param) {
     } else {
       dispatch(selectNodes(ids));
     }
+  };
+}
+
+export function selectSearchNode(results) {
+  return {
+    type: SET_SELECTED_NODES_BY_SEARCH,
+    payload: { results }
   };
 }
 
