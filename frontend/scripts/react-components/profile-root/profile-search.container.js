@@ -9,14 +9,15 @@ import SearchInput from 'react-components/shared/search-input/search-input.compo
 function mapStateToProps(state) {
   return {
     items: state.profileRoot.search.results,
-    isLoading: state.profileRoot.search.isLoading
+    isLoading: state.profileRoot.search.isLoading,
+    contexts: state.app.contexts
   };
 }
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      onSelect: goToNodeProfilePage,
+      onSelect: node => goToNodeProfilePage(node, '2017'),
       onSearchTermChange: searchNodeWithTerm
     },
     dispatch

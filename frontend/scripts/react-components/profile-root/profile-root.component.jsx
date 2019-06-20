@@ -76,6 +76,7 @@ renderLegacyProfiles.propTypes = {
 };
 
 const ProfileRoot = props => {
+
   const nodeTypeRenderer = node => {
     const { contexts } = props;
     const context = contexts.find(c => c.id === node.contextId);

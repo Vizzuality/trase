@@ -5,7 +5,7 @@ export const SET_PROFILE_SEARCH_TERM = 'SET_PROFILE_SEARCH_TERM';
 export const LOAD_PROFILE_SEARCH_RESULTS = 'LOAD_PROFILE_SEARCH_RESULTS';
 export const SET_PROFILE_ROOT_ERROR_MESSAGE = 'SET_PROFILE_ROOT_ERROR_MESSAGE';
 
-export const goToNodeProfilePage = (node, { year }) => dispatch =>
+export const goToNodeProfilePageLegacy = (node, { year }) => dispatch =>
   dispatch({
     type: 'profileNode',
     payload: {
@@ -13,6 +13,19 @@ export const goToNodeProfilePage = (node, { year }) => dispatch =>
         nodeId: node.id,
         contextId: node.contextId,
         year
+      },
+      profileType: node.profile
+    }
+  });
+
+export const goToNodeProfilePage = (node, defaultYear) => dispatch =>
+  dispatch({
+    type: 'profileNode',
+    payload: {
+      query: {
+        nodeId: node.id,
+        contextId: node.contextId,
+        year: defaultYear
       },
       profileType: node.profile
     }

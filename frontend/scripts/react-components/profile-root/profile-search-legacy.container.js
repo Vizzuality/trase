@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import {
-  goToNodeProfilePage,
+  goToNodeProfilePageLegacy,
   searchNodeWithTermLegacy
 } from 'react-components/profile-root/profile-root.actions';
 import SearchInput from 'react-components/shared/search-input/search-input.component';
@@ -34,7 +34,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      onSelect: goToNodeProfilePage,
+      onSelect: goToNodeProfilePageLegacy,
       onSearchTermChange: searchNodeWithTermLegacy
     },
     dispatch
