@@ -155,5 +155,11 @@ module.exports = {
       uid: 'col_departments__demo',
       layergroupid: 'p2cs-sei@ac7a49be@5ae47ae98e8070dbc3983e87100857c9:1525368093739'
     }
+  },
+  indonesiademo: {
+    id_provinces: {
+      uid: 'id_provinces__indonesiademo',
+      layergroupid: 'p2cs-sei@31274b67@3f435dd170b19c94f677d474bcd298e4:1560524731493'
+    }
   }
 };
