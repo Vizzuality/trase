@@ -12,6 +12,7 @@ import {
 } from 'react-components/tool/tool.selectors';
 import { getVisibleNodes } from 'react-components/tool-links/tool-links.selectors';
 import {
+  getMapView,
   getSelectedNodesGeoIds,
   getHighlightedNodesGeoIds,
   getChoroplethOptions,
@@ -28,7 +29,7 @@ const mapStateToProps = state => {
   const selectedContext = getSelectedContext(state);
   return {
     choropleth,
-    mapView: state.toolLayers.mapView,
+    mapView: getMapView(state),
     mapVectorData: state.toolLayers.data.mapVectorData,
     selectedNodesGeoIds: getSelectedNodesGeoIds(state),
     recolorByNodeIds: state.toolLinks.recolorByNodeIds,
