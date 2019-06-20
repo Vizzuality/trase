@@ -5,26 +5,46 @@ import ContextSelector from 'react-components/shared/context-selector/context-se
 import ErrorMessage from 'react-components/profile-root/error-message/error-message.component';
 import cx from 'classnames';
 import Img from 'react-components/shared/img';
+import Heading from 'react-components/shared/heading';
+import Button from 'react-components/shared/button';
+import SliderSection from 'react-components/home/slider-section/slider-section.component';
 
 import 'scripts/react-components/profile-root/profile-root.scss';
 
-const renderNewProfiles = props => {
-  console.log(props);
-  return (
-    <div className="l-profile-root-new">
-      <div className="c-profile-root">
-        <div className="row column">
-          <div className="profile-root-search-container row align-center">
-            <div className="column small-12 medium-9 large-6">
-              <div className="profile-root-heading-container">
-                <div className="profile-root-heading-wrapper">Hey there</div>
-              </div>
-            </div>
+const renderNewProfiles = ({ cardsInfo }) => (
+  <div className="l-profile-root-new">
+    <div className="c-profile-root-new">
+      <div className="row column">
+        <div className="profile-root-search-container">
+          <Heading size="xl" align="center" weigth="bold">
+            Explore the trade activities of countries, regions or traders
+          </Heading>
+          <div className="profile-root-actions">
+            <Button color="pink" icon="icon-browse" className="browse-button" size="rg">
+              Browse places or traders
+            </Button>
+            <ProfileSearch
+              testId="profile-root"
+              className="profile-search"
+              resultClassName="profile-search-result"
+              placeholderSmall="Search"
+              placeholder="Search places or traders"
+              getResultTestId={item =>
+                `search-result-${item.nodeType.toLowerCase()}-${item.name.toLowerCase()}`
+              }
+            />
+          </div>
+          <div>
+            <SliderSection name="Top profiles" slides={cardsInfo} variant="profiles" />
           </div>
         </div>
       </div>
     </div>
-  );
+  </div>
+);
+
+renderNewProfiles.propTypes = {
+  cardsInfo: PropTypes.array
 };
 
 const ProfileRoot = props => {

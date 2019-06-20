@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 
 import ProfileRoot from 'react-components/profile-root/profile-root.container';
+import Footer from 'scripts/react-components/shared/footer/footer.component';
 import CookieBanner from 'react-components/shared/cookie-banner';
 
 export const mount = (root, store) => {
@@ -28,6 +29,13 @@ export const mount = (root, store) => {
       <ProfileRoot />
     </Provider>,
     document.getElementById('page-react-root')
+  );
+
+  render(
+    <Provider store={store}>
+      <Footer />
+    </Provider>,
+    document.getElementById('footer')
   );
 
   render(

@@ -77,7 +77,7 @@ class SliderSection extends React.PureComponent {
   }
 
   render() {
-    const { className, name, slides } = this.props;
+    const { className, name, slides, variant } = this.props;
     const { visiblePages, currentSlide } = this.state;
     const smallScreen = visiblePages === 1;
     const numColumns = slides.length <= visiblePages && visiblePages < 3 ? 6 : 4;
@@ -89,7 +89,12 @@ class SliderSection extends React.PureComponent {
           className={cx('row', 'slider-wrapper', { '-auto-width': slides.length < visiblePages })}
         >
           <div className="column small-12">
-            <Heading as="h3" variant="mono" color="pink" size="sm">
+            <Heading
+              as="h3"
+              variant="mono"
+              color={variant === 'profiles' ? 'black' : 'pink'}
+              size="sm"
+            >
               {name}
             </Heading>
           </div>
@@ -146,7 +151,8 @@ class SliderSection extends React.PureComponent {
 SliderSection.propTypes = {
   className: PropTypes.string,
   name: PropTypes.string.isRequired,
-  slides: PropTypes.array.isRequired
+  slides: PropTypes.array.isRequired,
+  variant: PropTypes.string
 };
 
 export default SliderSection;

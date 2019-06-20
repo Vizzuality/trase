@@ -1,5 +1,59 @@
 @import 'styles/settings';
 
+.c-profile-root-new {
+  overflow: hidden;
+
+  .profile-root-search-container {
+    padding: 90px 0;
+
+    @media only screen and (max-width: $breakpoint-foundation-small) {
+      padding: 60px 0;
+    }
+  }
+
+  .profile-root-actions {
+    margin-top: 70px;
+
+    @media only screen and (max-width: $breakpoint-foundation-small) {
+      margin-top: 50px;
+    }
+
+    text-align: center;
+  }
+
+  .browse-button {
+    width: 270px;
+  }
+
+  .profile-search {
+    display: inline-block;
+    vertical-align: bottom;
+    height: 45px;
+    width: 270px;
+
+    margin-left: 30px;
+    margin-top: 0;
+
+    @media only screen and (max-width: $breakpoint-foundation-small) {
+      margin-left: 0;
+      margin-top: 30px;
+    }
+
+    .search-input-results {
+      max-height: 345px;
+      z-index: 0;
+    }
+
+    .profile-search-result {
+      padding: 14px 15px;
+
+      .search-input-item-name {
+        font-size: 17px;
+      }
+    }
+  }
+}
+
 .c-profile-root {
 
   .profile-root-context-selector {

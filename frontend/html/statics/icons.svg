@@ -253,10 +253,18 @@
   <title>pen</title>
   <path d="M16.2 7l-15.6 15.6c-0.4 0.4-0.6 0.8-0.6 1.4v6c0 1.2 0.8 2 2 2h6c0.6 0 1-0.2 1.4-0.6l15.6-15.6-8.8-8.8zM31.4 6.6l-6-6c-0.8-0.8-2-0.8-2.8 0l-3.6 3.6 8.8 8.8 3.6-3.6c0.8-0.8 0.8-2 0-2.8z"></path>
 </symbol>
-  <symbol id="icon-table" viewBox="0 0 44 32">
-    <title>table</title>
-    <path d="M0 0v32h43.636v-32h-43.636zM2.909 8.727h17.455v8.727h-17.455v-8.727zM23.273 8.727h17.455v8.727h-17.455v-8.727zM2.909 20.364h17.455v8.727h-17.455v-8.727zM23.273 20.364h17.455v8.727h-17.455v-8.727z"></path>
-  </symbol>
+<symbol id="icon-table" viewBox="0 0 44 32">
+  <title>table</title>
+  <path d="M0 0v32h43.636v-32h-43.636zM2.909 8.727h17.455v8.727h-17.455v-8.727zM23.273 8.727h17.455v8.727h-17.455v-8.727zM2.909 20.364h17.455v8.727h-17.455v-8.727zM23.273 20.364h17.455v8.727h-17.455v-8.727z"></path>
+</symbol>
+<symbol id="icon-browse" viewBox="0 0 18 18">
+  <title>browse</title>
+  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g id="profile-1c" transform="translate(-584.000000, -275.000000)" stroke="#F6F6F6" stroke-width="2">
+        <path d="M585.587646,276.582127 L590.837786,292.18038 L593.802745,285.165349 L601.258281,281.795955 L585.587646,276.582127 Z" id="Path-2"></path>
+    </g>
+  </g>
+</symbol>
 </defs>
 </svg>
 </div>
