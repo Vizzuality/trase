@@ -16,7 +16,8 @@ import {
   getSelectedNodesGeoIds,
   getHighlightedNodesGeoIds,
   getChoroplethOptions,
-  getSelectedMapContextualLayersData
+  getSelectedMapContextualLayersData,
+  getShouldFitBoundsSelectedPolygons
 } from 'react-components/tool-layers/tool-layers.selectors';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 import { connect } from 'react-redux';
@@ -30,6 +31,7 @@ const mapStateToProps = state => {
   return {
     choropleth,
     mapView: getMapView(state),
+    shouldFitBoundsSelectedPolygons: getShouldFitBoundsSelectedPolygons(state),
     mapVectorData: state.toolLayers.data.mapVectorData,
     selectedNodesGeoIds: getSelectedNodesGeoIds(state),
     recolorByNodeIds: state.toolLinks.recolorByNodeIds,
@@ -108,6 +110,11 @@ const methodProps = [
     name: 'updatePointShadowLayer',
     compared: ['visibleNodes', 'mapVectorData'],
     returned: ['visibleNodes', 'mapVectorData', 'nodeHeights']
+  },
+  {
+    name: 'fitBoundsSelectedGeoPolygons',
+    compared: ['selectedNodesGeoIds', 'shouldFitBoundsSelectedPolygons'],
+    returned: ['selectedNodesGeoIds', 'shouldFitBoundsSelectedPolygons']
   }
 ];
 

@@ -156,6 +156,12 @@ export const getMapView = createSelector(
   }
 );
 
+export const getShouldFitBoundsSelectedPolygons = createSelector(
+  [getSelectedNodesGeoIds, getSelectedNodesData],
+  (selectedNodesGeoIds, selectedNodesData) =>
+    selectedNodesGeoIds.length === selectedNodesData.length
+);
+
 export const getToolLayersUrlProps = createStructuredSelector({
   mapView: getMapView,
   isMapVisible: getIsMapVisible,
