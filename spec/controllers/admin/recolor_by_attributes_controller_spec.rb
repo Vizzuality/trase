@@ -23,6 +23,22 @@ RSpec.describe Admin::RecolorByAttributesController, type: :controller do
       }
       expect(response).to redirect_to(admin_context_recolor_by_attributes_path(context))
     end
+    context 'managing download attribute' do
+      it 'is_downloadable = true' do
+        expect_any_instance_of(Api::V3::ManageDownloadAttribute).to receive(:call).with('true', 'AAA')
+        post :create, params: {
+          context_id: context.id,
+          api_v3_recolor_by_attribute: valid_attributes.merge(is_downloadable: 'true', download_name: 'AAA')
+        }
+      end
+      it 'is_downloadable = false' do
+        expect_any_instance_of(Api::V3::ManageDownloadAttribute).to receive(:call).with('false', nil)
+        post :create, params: {
+          context_id: context.id,
+          api_v3_recolor_by_attribute: valid_attributes.merge(is_downloadable: 'false')
+        }
+      end
+    end
   end
 
   describe 'PUT update' do
@@ -48,6 +64,24 @@ RSpec.describe Admin::RecolorByAttributesController, type: :controller do
         context_id: context.id, id: recolor_by_attribute.id, api_v3_recolor_by_attribute: valid_attributes
       }
       expect(response).to redirect_to(admin_context_recolor_by_attributes_path(context))
+    end
+    context 'managing download attribute' do
+      it 'is_downloadable = true' do
+        expect_any_instance_of(Api::V3::ManageDownloadAttribute).to receive(:call).with('true', 'AAA')
+        put :update, params: {
+          context_id: context.id,
+          id: recolor_by_attribute.id,
+          api_v3_recolor_by_attribute: valid_attributes.merge(is_downloadable: 'true', download_name: 'AAA')
+        }
+      end
+      it 'is_downloadable = false' do
+        expect_any_instance_of(Api::V3::ManageDownloadAttribute).to receive(:call).with('false', nil)
+        put :update, params: {
+          context_id: context.id,
+          id: recolor_by_attribute.id,
+          api_v3_recolor_by_attribute: valid_attributes.merge(is_downloadable: 'false')
+        }
+      end
     end
   end
 end

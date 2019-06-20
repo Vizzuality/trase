@@ -32,6 +32,7 @@ module Api
       include Api::V3::StringyArray
       include Api::V3::AssociatedAttributes
       include Api::V3::EnsureGroupNumberPresent
+      include Api::V3::IsDownloadable
 
       LEGEND_TYPE = %w(
         qual

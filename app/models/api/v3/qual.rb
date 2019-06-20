@@ -33,6 +33,12 @@ module Api
         'qual'
       end
 
+      def download_original_attribute(context)
+        Api::V3::DownloadQual.
+          joins(:download_attribute).
+          find_by('download_attributes.context_id' => context.id, qual_id: id)
+      end
+
       def self.select_options
         order(:name).map { |qual| [qual.name, qual.id] }
       end

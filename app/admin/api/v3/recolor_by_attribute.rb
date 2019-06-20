@@ -13,6 +13,7 @@ ActiveAdmin.register Api::V3::RecolorByAttribute, as: 'RecolorByAttribute' do
   permit_params :context_id, :group_number, :legend_type, :legend_color_theme,
                 :interval_count, :min_value, :max_value, :divisor,
                 :tooltip_text, :is_disabled, :is_default,
+                :is_downloadable, :download_name,
                 :readonly_attribute_id
 
   after_action :clear_cache, only: [:create, :update, :destroy]
@@ -29,15 +30,37 @@ ActiveAdmin.register Api::V3::RecolorByAttribute, as: 'RecolorByAttribute' do
     end
 
     def create
+      isolate_download_attribute_params
       super do |success, _failure|
-        success.html { redirect_to admin_context_recolor_by_attributes_path(parent) }
+        success.html do
+          manage_download_attribute
+          redirect_to admin_context_recolor_by_attributes_path(parent)
+        end
       end
     end
 
+    # this action serves both the in place json update and the html update
     def update
+      isolate_download_attribute_params
       super do |success, _failure|
-        success.html { redirect_to admin_context_recolor_by_attributes_path(parent) }
+        success.json { manage_download_attribute }
+        success.html do
+          manage_download_attribute
+          redirect_to admin_context_recolor_by_attributes_path(parent)
+        end
       end
+    end
+
+    def isolate_download_attribute_params
+      ra_params = params['api_v3_recolor_by_attribute']
+      @is_downloadable = ra_params.delete('is_downloadable')
+      @download_name = ra_params.delete('download_name')
+    end
+
+    def manage_download_attribute
+      Api::V3::ManageDownloadAttribute.new(
+        @context, resource.original_attribute
+      ).call(@is_downloadable, @download_name)
     end
   end
 
@@ -65,10 +88,14 @@ ActiveAdmin.register Api::V3::RecolorByAttribute, as: 'RecolorByAttribute' do
             hint: object.class.column_comment('divisor')
       input :tooltip_text, as: :string,
                            hint: object.class.column_comment('tooltip_text')
-      input :is_disabled, as: :boolean, required: true,
-                          hint: object.class.column_comment('is_disabled')
-      input :is_default, as: :boolean, required: true,
-                         hint: object.class.column_comment('is_default')
+      input :is_disabled,
+            as: :boolean,
+            hint: object.class.column_comment('is_disabled')
+      input :is_default,
+            as: :boolean,
+            hint: object.class.column_comment('is_default')
+      input :download_name,
+            hint: 'If provided, attribute will be available for download with this name in column header'
     end
     f.actions
   end
@@ -177,6 +204,7 @@ ActiveAdmin.register Api::V3::RecolorByAttribute, as: 'RecolorByAttribute' do
     end
     toggle_bool_column :is_disabled
     toggle_bool_column :is_default
+    toggle_bool_column :is_downloadable
     actions
     handle_column(
       move_to_top_url: ->(ra) { move_to_top_admin_context_recolor_by_attribute_path(ra.context, ra) },

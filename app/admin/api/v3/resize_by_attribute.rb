@@ -9,8 +9,9 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
     :resize_by_quant
   ]
 
-  permit_params :context_id, :group_number,
-                :tooltip_text, :is_disabled, :is_default,
+  permit_params :context_id, :group_number, :tooltip_text,
+                :is_disabled, :is_default,
+                :is_downloadable, :download_name,
                 :readonly_attribute_id
 
   after_action :clear_cache, only: [:create, :update, :destroy]
@@ -27,15 +28,37 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
     end
 
     def create
+      isolate_download_attribute_params
       super do |success, _failure|
-        success.html { redirect_to admin_context_resize_by_attributes_path(parent) }
+        success.html do
+          manage_download_attribute
+          redirect_to admin_context_resize_by_attributes_path(parent)
+        end
       end
     end
 
+    # this action serves both the in place json update and the html update
     def update
+      isolate_download_attribute_params
       super do |success, _failure|
-        success.html { redirect_to admin_context_resize_by_attributes_path(parent) }
+        success.json { manage_download_attribute }
+        success.html do
+          manage_download_attribute
+          redirect_to admin_context_resize_by_attributes_path(parent)
+        end
       end
+    end
+
+    def isolate_download_attribute_params
+      ra_params = params['api_v3_resize_by_attribute']
+      @is_downloadable = ra_params.delete('is_downloadable')
+      @download_name = ra_params.delete('download_name')
+    end
+
+    def manage_download_attribute
+      Api::V3::ManageDownloadAttribute.new(
+        @context, resource.original_attribute
+      ).call(@is_downloadable, @download_name)
     end
   end
 
@@ -49,10 +72,15 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
                            hint: object.class.column_comment('group_number')
       input :tooltip_text, as: :string,
                            hint: object.class.column_comment('tooltip_text')
-      input :is_disabled, as: :boolean, required: true,
-                          hint: object.class.column_comment('is_disabled')
-      input :is_default, as: :boolean, required: true,
-                         hint: object.class.column_comment('is_default')
+      input :is_disabled,
+            as: :boolean,
+            hint: object.class.column_comment('is_disabled')
+      input :is_default,
+            as: :boolean,
+            hint: object.class.column_comment('is_default')
+      input :is_downloadable,
+            as: :boolean
+      input :download_name
     end
     f.actions
   end
@@ -87,6 +115,8 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
     end
     toggle_bool_column :is_disabled
     toggle_bool_column :is_default
+    toggle_bool_column :is_downloadable
+
     actions
     handle_column(
       move_to_top_url: ->(ra) { move_to_top_admin_context_resize_by_attribute_path(ra.context, ra) },
@@ -107,6 +137,8 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
       row('Years', &:years_str)
       row :is_disabled
       row :is_default
+      row :is_downloadable
+      row :download_name
       row :created_at
       row :updated_at
     end
