@@ -17,12 +17,12 @@ function mapStateToProps(state) {
     : null;
 
   const cardsInfo = [{}, {}, {}, {}]; // Just mocking
-
   return {
     activeContext,
     getContextsWithProfilePages,
     errorMessage: state.profileRoot.errorMessage,
-    cardsInfo
+    cardsInfo,
+    contexts
   };
 }
 

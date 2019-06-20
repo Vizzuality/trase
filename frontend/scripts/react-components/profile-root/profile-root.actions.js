@@ -25,10 +25,50 @@ export function resetProfileSearchResults() {
   };
 }
 
-export const searchNodeWithTerm = (searchTerm, { contextId }) => dispatch => {
+export const searchNodeWithTermLegacy = (searchTerm, { contextId }) => dispatch => {
   const nodeResultsURL = getURLFromParams(GET_NODES_WITH_SEARCH_URL, {
     query: searchTerm,
     context_id: contextId,
+    profile_only: true
+  });
+
+  if (isEmpty(searchTerm)) {
+    dispatch(resetProfileSearchResults());
+    return;
+  }
+
+  dispatch({
+    type: SET_PROFILE_SEARCH_TERM,
+    payload: { term: searchTerm, isLoading: true }
+  });
+
+  fetch(nodeResultsURL)
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      }
+      return Promise.reject(new Error(response.statusText));
+    })
+    .then(results => {
+      if (!results) return;
+
+      dispatch({
+        type: LOAD_PROFILE_SEARCH_RESULTS,
+        payload: results.data
+      });
+    })
+    .catch(reason => {
+      console.error('Error loading profile search nodes', reason);
+      dispatch({
+        type: SET_PROFILE_ROOT_ERROR_MESSAGE,
+        payload: { errorMessage: reason.message }
+      });
+    });
+};
+
+export const searchNodeWithTerm = searchTerm => dispatch => {
+  const nodeResultsURL = getURLFromParams(GET_NODES_WITH_SEARCH_URL, {
+    query: searchTerm,
     profile_only: true
   });
 

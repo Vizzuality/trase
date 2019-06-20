@@ -43,9 +43,14 @@
       margin-top: 30px;
     }
 
+    .search-input-field {
+      font-size: $font-size-x-regular;
+      text-transform: uppercase;
+    }
+
     .search-input-results {
       max-height: 345px;
-      z-index: 0;
+      text-align: left;
     }
 
     .profile-search-result {
