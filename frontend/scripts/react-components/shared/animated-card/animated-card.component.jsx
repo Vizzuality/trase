@@ -20,7 +20,6 @@ function AnimatedCard(props) {
     linkProps,
     testId
   } = props;
-  console.log(props);
   return (
     <div className={cx('c-animated-card', className)} data-test={testId}>
       <Link
