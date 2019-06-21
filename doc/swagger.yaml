@@ -291,7 +291,43 @@ paths:
                     profile:
                       type: string
                       example: actor
-
+  /top_profiles:
+    get:
+      tags:
+        - top_profile
+      parameters:
+        - name: context_id
+          in: query
+          required: false
+          description: If provided, limit results to top profiles of a given context
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    contextId:
+                      type: integer
+                    nodeId:
+                      type: integer
+                    year:
+                      type: integer
+                    profileType:
+                      type: string
+                      example: actor
+                    summary:
+                      type: string
+                    photoUrl:
+                      type: string
+                    nodeName:
+                      type: string
+                      example: CARGILL
   "/contexts/{context_id}/nodes":
     get:
       tags:
