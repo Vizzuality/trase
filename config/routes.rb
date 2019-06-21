@@ -30,6 +30,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v3 do
+      resources :top_profiles, only: [:index]
       resources :contexts, only: [:index] do
         resources :map_layers, only: [:index]
         resources :columns, only: [:index]
@@ -58,7 +59,6 @@ Rails.application.routes.draw do
         resources :download, only: [:index], as: :download
         resources :linked_nodes, only: [:index], controller: :linked_nodes
         resources :top_nodes, only: [:index]
-        resources :top_profiles, only: [:index]
       end
       resources :nodes, only: [] do
         get :search, on: :collection, controller: :nodes_search, action: :index
