@@ -16,7 +16,7 @@ module Api
           @context = context
           @node = node
           @year = year
-
+          @values = Api::V3::NodeAttributeValuesPreloader.new(@node, @year)
           initialize_state_ranking
         end
 
@@ -41,7 +41,6 @@ module Api
           state_qual = Api::V3::Qual.find_by_name(NodeTypeName::STATE)
           return unless state_qual
 
-          @values = Api::V3::NodeAttributeValuesPreloader.new(@node, @year)
           state_name = @values.get(state_qual.simple_type, state_qual.id)
           return unless state_name.present?
 
