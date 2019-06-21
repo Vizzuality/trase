@@ -31,6 +31,20 @@ CREATE SCHEMA maintenance;
 
 
 --
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+--
 -- Name: fuzzystrmatch; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -56,6 +70,20 @@ CREATE EXTENSION IF NOT EXISTS intarray WITH SCHEMA public;
 --
 
 COMMENT ON EXTENSION intarray IS 'functions, operators, and index support for 1-D arrays of integers';
+
+
+--
+-- Name: pg_stat_statements; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pg_stat_statements WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION pg_stat_statements; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION pg_stat_statements IS 'track execution statistics of all SQL statements executed';
 
 
 --
@@ -136,6 +164,13 @@ $$;
 COMMENT ON FUNCTION public.bucket_index(buckets double precision[], value double precision) IS 'Given an n-element array of choropleth buckets and a positive value, returns index of bucket where value falls (1 to n + 1); else returns 0.';
 
 
+--
+-- Name: trase_server; Type: SERVER; Schema: -; Owner: -
+--
+
+-- suppressed CREATE SERVER
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -165,7 +200,6 @@ CREATE TABLE content.ckeditor_assets (
 --
 
 CREATE SEQUENCE content.ckeditor_assets_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -236,7 +270,6 @@ CREATE TABLE content.posts (
 --
 
 CREATE SEQUENCE content.posts_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -270,7 +303,6 @@ CREATE TABLE content.site_dives (
 --
 
 CREATE SEQUENCE content.site_dives_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -418,7 +450,6 @@ CREATE TABLE content.users (
 --
 
 CREATE SEQUENCE content.users_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -483,6 +514,55 @@ CREATE TABLE public.ind_properties (
 
 
 --
+-- Name: COLUMN ind_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_properties.display_name IS 'Name of attribute for display';
+
+
+--
+-- Name: COLUMN ind_properties.unit_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_properties.unit_type IS 'Type of unit, e.g. score. One of restricted set of values.';
+
+
+--
+-- Name: COLUMN ind_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_properties.tooltip_text IS 'Generic tooltip text (lowest precedence)';
+
+
+--
+-- Name: COLUMN ind_properties.is_visible_on_place_profile; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_properties.is_visible_on_place_profile IS 'Whether to display this attribute on place profile';
+
+
+--
+-- Name: COLUMN ind_properties.is_visible_on_actor_profile; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_properties.is_visible_on_actor_profile IS 'Whether to display this attribute on actor profile';
+
+
+--
+-- Name: COLUMN ind_properties.is_temporal_on_place_profile; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_properties.is_temporal_on_place_profile IS 'Whether attribute has temporal data on place profile';
+
+
+--
+-- Name: COLUMN ind_properties.is_temporal_on_actor_profile; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_properties.is_temporal_on_actor_profile IS 'Whether attribute has temporal data on actor profile';
+
+
+--
 -- Name: inds; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -492,6 +572,27 @@ CREATE TABLE public.inds (
     unit text,
     created_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE inds; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.inds IS 'Attributes classified as inds';
+
+
+--
+-- Name: COLUMN inds.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.inds.name IS 'Attribute short name, e.g. FOREST_500; those literals are referred to in code, therefore should not be changed without notice';
+
+
+--
+-- Name: COLUMN inds.unit; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.inds.unit IS 'Unit in which values for this attribute are given';
 
 
 --
@@ -513,6 +614,34 @@ CREATE TABLE public.qual_properties (
 
 
 --
+-- Name: COLUMN qual_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_properties.display_name IS 'Name of attribute for display';
+
+
+--
+-- Name: COLUMN qual_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_properties.tooltip_text IS 'Generic tooltip text (lowest precedence)';
+
+
+--
+-- Name: COLUMN qual_properties.is_visible_on_place_profile; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_properties.is_visible_on_place_profile IS 'Whether to display this attribute on place profile';
+
+
+--
+-- Name: COLUMN qual_properties.is_visible_on_actor_profile; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_properties.is_visible_on_actor_profile IS 'Whether to display this attribute on actor profile';
+
+
+--
 -- Name: quals; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -521,6 +650,20 @@ CREATE TABLE public.quals (
     name text NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.quals IS 'Attributes classified as quals';
+
+
+--
+-- Name: COLUMN quals.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quals.name IS 'Attribute short name, e.g. ZERO_DEFORESTATION; those literals are referred to in code, therefore should not be changed without notice';
 
 
 --
@@ -544,6 +687,41 @@ CREATE TABLE public.quant_properties (
 
 
 --
+-- Name: COLUMN quant_properties.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_properties.display_name IS 'Name of attribute for display';
+
+
+--
+-- Name: COLUMN quant_properties.unit_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_properties.unit_type IS 'Type of unit, e.g. count. One of restricted set of values.';
+
+
+--
+-- Name: COLUMN quant_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_properties.tooltip_text IS 'Generic tooltip text (lowest precedence)';
+
+
+--
+-- Name: COLUMN quant_properties.is_visible_on_place_profile; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_properties.is_visible_on_place_profile IS 'Whether to display this attribute on place profile';
+
+
+--
+-- Name: COLUMN quant_properties.is_visible_on_actor_profile; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_properties.is_visible_on_actor_profile IS 'Whether to display this attribute on actor profile';
+
+
+--
 -- Name: quants; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -553,6 +731,27 @@ CREATE TABLE public.quants (
     unit text,
     created_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.quants IS 'Attributes classified as quants';
+
+
+--
+-- Name: COLUMN quants.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quants.name IS 'Attribute short name, e.g. FOB; those literals are referred to in code, therefore should not be changed without notice';
+
+
+--
+-- Name: COLUMN quants.unit; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quants.unit IS 'Unit in which values for this attribute are given';
 
 
 --
@@ -588,7 +787,7 @@ CREATE MATERIALIZED VIEW public.attributes_mv AS
            FROM (public.quants
              LEFT JOIN public.quant_properties qp ON ((qp.quant_id = quants.id)))
         UNION ALL
-         SELECT 'Ind'::text,
+         SELECT 'Ind'::text AS text,
             inds.id,
             inds.name,
             ip.display_name,
@@ -599,25 +798,53 @@ CREATE MATERIALIZED VIEW public.attributes_mv AS
             ip.is_visible_on_place_profile,
             ip.is_temporal_on_actor_profile,
             ip.is_temporal_on_place_profile,
-            'AVG'::text
+            'AVG'::text AS text
            FROM (public.inds
              LEFT JOIN public.ind_properties ip ON ((ip.ind_id = inds.id)))
         UNION ALL
-         SELECT 'Qual'::text,
+         SELECT 'Qual'::text AS text,
             quals.id,
             quals.name,
             qp.display_name,
-            NULL::text,
-            NULL::text,
+            NULL::text AS text,
+            NULL::text AS text,
             qp.tooltip_text,
             qp.is_visible_on_actor_profile,
             qp.is_visible_on_place_profile,
             qp.is_temporal_on_actor_profile,
             qp.is_temporal_on_place_profile,
-            NULL::text
+            NULL::text AS text
            FROM (public.quals
              LEFT JOIN public.qual_properties qp ON ((qp.qual_id = quals.id)))) s
   WITH NO DATA;
+
+
+--
+-- Name: MATERIALIZED VIEW attributes_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.attributes_mv IS 'Materialized view which merges inds, quals and quants.';
+
+
+--
+-- Name: COLUMN attributes_mv.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.attributes_mv.id IS 'The unique id is a sequential number which is generated at REFRESH and therefore not fixed.';
+
+
+--
+-- Name: COLUMN attributes_mv.original_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.attributes_mv.original_type IS 'Type of the original entity (Ind / Qual / Quant)';
+
+
+--
+-- Name: COLUMN attributes_mv.original_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.attributes_mv.original_id IS 'Id from the original table (inds / quals / quants)';
 
 
 --
@@ -636,11 +863,38 @@ CREATE TABLE public.carto_layers (
 
 
 --
+-- Name: TABLE carto_layers; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.carto_layers IS 'Year-specific data layers defined in CartoDB used to display contextual layers.';
+
+
+--
+-- Name: COLUMN carto_layers.identifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.carto_layers.identifier IS 'Identifier of the CartoDB named map, e.g. brazil_biomes; unique in scope of contextual layer';
+
+
+--
+-- Name: COLUMN carto_layers.years; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.carto_layers.years IS 'Array of years for which to show this carto layer in scope of contextual layer; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN carto_layers.raster_url; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.carto_layers.raster_url IS 'Url of raster layer';
+
+
+--
 -- Name: carto_layers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.carto_layers_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -676,11 +930,80 @@ CREATE TABLE public.chart_attributes (
 
 
 --
+-- Name: TABLE chart_attributes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.chart_attributes IS 'Attributes (inds/quals/quants) to display in a chart.';
+
+
+--
+-- Name: COLUMN chart_attributes.chart_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes.chart_id IS 'Refence to chart';
+
+
+--
+-- Name: COLUMN chart_attributes."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes."position" IS 'Display order in scope of chart';
+
+
+--
+-- Name: COLUMN chart_attributes.years; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes.years IS 'Array of years for which to show this attribute in scope of chart; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN chart_attributes.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes.display_name IS 'Name of attribute for display in chart';
+
+
+--
+-- Name: COLUMN chart_attributes.legend_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes.legend_name IS 'Legend title; you can use {{commodity_name}}, {{company_name}}, {{jurisdiction_name}} and {{year}}';
+
+
+--
+-- Name: COLUMN chart_attributes.display_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes.display_type IS 'Type of display, only used for trajectory deforestation plot in place profiles; e.g. area, line';
+
+
+--
+-- Name: COLUMN chart_attributes.display_style; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes.display_style IS 'Style of display, only used for trajectory deforestation plot in place profiles; e.g. area-pink, area-black, line-dashed-black';
+
+
+--
+-- Name: COLUMN chart_attributes.state_average; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes.state_average IS 'Only used for trajectory deforestation plot in place profiles';
+
+
+--
+-- Name: COLUMN chart_attributes.identifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes.identifier IS 'Identifier used to map this chart attribute to a part of code which contains calculation logic';
+
+
+--
 -- Name: chart_attributes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.chart_attributes_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -709,6 +1032,13 @@ CREATE TABLE public.chart_inds (
 
 
 --
+-- Name: TABLE chart_inds; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.chart_inds IS 'Inds to display in a chart (see chart_attributes.)';
+
+
+--
 -- Name: chart_quals; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -722,6 +1052,13 @@ CREATE TABLE public.chart_quals (
 
 
 --
+-- Name: TABLE chart_quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.chart_quals IS 'Quals to display in a chart (see chart_attributes.)';
+
+
+--
 -- Name: chart_quants; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -732,6 +1069,13 @@ CREATE TABLE public.chart_quants (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE chart_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.chart_quants IS 'Quants to display in a chart (see chart_attributes.)';
 
 
 --
@@ -808,11 +1152,24 @@ UNION ALL
 
 
 --
+-- Name: MATERIALIZED VIEW chart_attributes_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.chart_attributes_mv IS 'Materialized view which merges chart_inds, chart_quals and chart_quants with chart_attributes.';
+
+
+--
+-- Name: COLUMN chart_attributes_mv.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_attributes_mv.display_name IS 'If absent in chart_attributes this is pulled from attributes_mv.';
+
+
+--
 -- Name: chart_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.chart_inds_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -844,6 +1201,41 @@ CREATE TABLE public.chart_node_types (
 
 
 --
+-- Name: TABLE chart_node_types; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.chart_node_types IS 'Node types to display in a chart.';
+
+
+--
+-- Name: COLUMN chart_node_types.chart_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_node_types.chart_id IS 'Refence to chart';
+
+
+--
+-- Name: COLUMN chart_node_types.node_type_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_node_types.node_type_id IS 'Refence to node type';
+
+
+--
+-- Name: COLUMN chart_node_types.identifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_node_types.identifier IS 'Identifier used to map this chart node type to a part of code which contains calculation logic';
+
+
+--
+-- Name: COLUMN chart_node_types."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.chart_node_types."position" IS 'Display order in scope of chart; required when more than one';
+
+
+--
 -- Name: chart_node_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -867,7 +1259,6 @@ ALTER SEQUENCE public.chart_node_types_id_seq OWNED BY public.chart_node_types.i
 --
 
 CREATE SEQUENCE public.chart_quals_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -887,7 +1278,6 @@ ALTER SEQUENCE public.chart_quals_id_seq OWNED BY public.chart_quals.id;
 --
 
 CREATE SEQUENCE public.chart_quants_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -919,11 +1309,45 @@ CREATE TABLE public.charts (
 
 
 --
+-- Name: TABLE charts; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.charts IS 'Charts on profile pages.';
+
+
+--
+-- Name: COLUMN charts.parent_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.charts.parent_id IS 'Self-reference to parent used to define complex charts, e.g. table with values in tabs';
+
+
+--
+-- Name: COLUMN charts.identifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.charts.identifier IS 'Identifier used to map this chart to a part of code which contains calculation logic';
+
+
+--
+-- Name: COLUMN charts.title; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.charts.title IS 'Title of chart for display; you can use {{commodity_name}}, {{company_name}}, {{jurisdiction_name}} and {{year}}';
+
+
+--
+-- Name: COLUMN charts."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.charts."position" IS 'Display order in scope of profile';
+
+
+--
 -- Name: charts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.charts_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -950,11 +1374,24 @@ CREATE TABLE public.commodities (
 
 
 --
+-- Name: TABLE commodities; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.commodities IS 'Commodities in supply chains, such as soy or beef';
+
+
+--
+-- Name: COLUMN commodities.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.commodities.name IS 'Commodity name; unique across commodities';
+
+
+--
 -- Name: commodities_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.commodities_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -984,6 +1421,34 @@ CREATE TABLE public.ind_commodity_properties (
 
 
 --
+-- Name: TABLE ind_commodity_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.ind_commodity_properties IS 'Commodity specific properties for ind';
+
+
+--
+-- Name: COLUMN ind_commodity_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_commodity_properties.tooltip_text IS 'Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.';
+
+
+--
+-- Name: COLUMN ind_commodity_properties.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_commodity_properties.commodity_id IS 'Reference to commodity';
+
+
+--
+-- Name: COLUMN ind_commodity_properties.ind_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_commodity_properties.ind_id IS 'Reference to ind';
+
+
+--
 -- Name: qual_commodity_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -998,6 +1463,34 @@ CREATE TABLE public.qual_commodity_properties (
 
 
 --
+-- Name: TABLE qual_commodity_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.qual_commodity_properties IS 'Commodity specific properties for qual';
+
+
+--
+-- Name: COLUMN qual_commodity_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_commodity_properties.tooltip_text IS 'Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.';
+
+
+--
+-- Name: COLUMN qual_commodity_properties.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_commodity_properties.commodity_id IS 'Reference to commodity';
+
+
+--
+-- Name: COLUMN qual_commodity_properties.qual_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_commodity_properties.qual_id IS 'Reference to qual';
+
+
+--
 -- Name: quant_commodity_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1009,6 +1502,34 @@ CREATE TABLE public.quant_commodity_properties (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE quant_commodity_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.quant_commodity_properties IS 'Commodity specific properties for quant';
+
+
+--
+-- Name: COLUMN quant_commodity_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_commodity_properties.tooltip_text IS 'Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.';
+
+
+--
+-- Name: COLUMN quant_commodity_properties.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_commodity_properties.commodity_id IS 'Reference to commodity';
+
+
+--
+-- Name: COLUMN quant_commodity_properties.quant_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_commodity_properties.quant_id IS 'Reference to quant';
 
 
 --
@@ -1043,6 +1564,48 @@ UNION ALL
 
 
 --
+-- Name: MATERIALIZED VIEW commodity_attribute_properties_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.commodity_attribute_properties_mv IS 'Materialized view combining commodity specific properties for inds, quals and quants.';
+
+
+--
+-- Name: COLUMN commodity_attribute_properties_mv.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.commodity_attribute_properties_mv.commodity_id IS 'Reference to commodity';
+
+
+--
+-- Name: COLUMN commodity_attribute_properties_mv.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.commodity_attribute_properties_mv.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN commodity_attribute_properties_mv.qual_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.commodity_attribute_properties_mv.qual_id IS 'Reference to qual';
+
+
+--
+-- Name: COLUMN commodity_attribute_properties_mv.ind_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.commodity_attribute_properties_mv.ind_id IS 'Reference to ind';
+
+
+--
+-- Name: COLUMN commodity_attribute_properties_mv.quant_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.commodity_attribute_properties_mv.quant_id IS 'Reference to quant';
+
+
+--
 -- Name: ind_context_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1054,6 +1617,34 @@ CREATE TABLE public.ind_context_properties (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE ind_context_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.ind_context_properties IS 'Context specific properties for ind (like tooltip text)';
+
+
+--
+-- Name: COLUMN ind_context_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_context_properties.tooltip_text IS 'Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).';
+
+
+--
+-- Name: COLUMN ind_context_properties.context_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_context_properties.context_id IS 'Reference to context';
+
+
+--
+-- Name: COLUMN ind_context_properties.ind_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_context_properties.ind_id IS 'Reference to ind';
 
 
 --
@@ -1071,6 +1662,34 @@ CREATE TABLE public.qual_context_properties (
 
 
 --
+-- Name: TABLE qual_context_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.qual_context_properties IS 'Context specific properties for qual (like tooltip text)';
+
+
+--
+-- Name: COLUMN qual_context_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_context_properties.tooltip_text IS 'Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).';
+
+
+--
+-- Name: COLUMN qual_context_properties.context_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_context_properties.context_id IS 'Reference to context';
+
+
+--
+-- Name: COLUMN qual_context_properties.qual_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_context_properties.qual_id IS 'Reference to qual';
+
+
+--
 -- Name: quant_context_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1082,6 +1701,34 @@ CREATE TABLE public.quant_context_properties (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE quant_context_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.quant_context_properties IS 'Context specific properties for quant (like tooltip text)';
+
+
+--
+-- Name: COLUMN quant_context_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_context_properties.tooltip_text IS 'Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).';
+
+
+--
+-- Name: COLUMN quant_context_properties.context_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_context_properties.context_id IS 'Reference to context';
+
+
+--
+-- Name: COLUMN quant_context_properties.quant_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_context_properties.quant_id IS 'Reference to quant';
 
 
 --
@@ -1116,6 +1763,48 @@ UNION ALL
 
 
 --
+-- Name: MATERIALIZED VIEW context_attribute_properties_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.context_attribute_properties_mv IS 'Materialized view combining context specific properties for inds, quals and quants.';
+
+
+--
+-- Name: COLUMN context_attribute_properties_mv.context_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_attribute_properties_mv.context_id IS 'Reference to context';
+
+
+--
+-- Name: COLUMN context_attribute_properties_mv.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_attribute_properties_mv.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN context_attribute_properties_mv.qual_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_attribute_properties_mv.qual_id IS 'Reference to qual';
+
+
+--
+-- Name: COLUMN context_attribute_properties_mv.ind_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_attribute_properties_mv.ind_id IS 'Reference to ind';
+
+
+--
+-- Name: COLUMN context_attribute_properties_mv.quant_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_attribute_properties_mv.quant_id IS 'Reference to quant';
+
+
+--
 -- Name: context_node_type_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1129,8 +1818,36 @@ CREATE TABLE public.context_node_type_properties (
     updated_at timestamp without time zone NOT NULL,
     is_choropleth_disabled boolean DEFAULT false NOT NULL,
     role character varying,
-    CONSTRAINT context_node_type_properties_role_check CHECK (((role)::text = ANY ((ARRAY['source'::character varying, 'exporter'::character varying, 'importer'::character varying, 'destination'::character varying])::text[])))
+    CONSTRAINT context_node_type_properties_role_check CHECK (((role)::text = ANY (ARRAY[('source'::character varying)::text, ('exporter'::character varying)::text, ('importer'::character varying)::text, ('destination'::character varying)::text])))
 );
+
+
+--
+-- Name: COLUMN context_node_type_properties.column_group; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_node_type_properties.column_group IS 'Zero-based number of sankey column in which to display nodes of this type';
+
+
+--
+-- Name: COLUMN context_node_type_properties.is_default; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_node_type_properties.is_default IS 'When set, show this node type as default (only use for one)';
+
+
+--
+-- Name: COLUMN context_node_type_properties.is_geo_column; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_node_type_properties.is_geo_column IS 'When set, show nodes on map';
+
+
+--
+-- Name: COLUMN context_node_type_properties.is_choropleth_disabled; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_node_type_properties.is_choropleth_disabled IS 'When set, do not display the map choropleth';
 
 
 --
@@ -1138,7 +1855,6 @@ CREATE TABLE public.context_node_type_properties (
 --
 
 CREATE SEQUENCE public.context_node_type_properties_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1167,11 +1883,24 @@ CREATE TABLE public.context_node_types (
 
 
 --
+-- Name: TABLE context_node_types; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.context_node_types IS 'Node types represented in supply chains per context. The value of column_position is interpreted as position in flows.path.';
+
+
+--
+-- Name: COLUMN context_node_types.column_position; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_node_types.column_position IS 'Index of node of this type in flows.path';
+
+
+--
 -- Name: context_node_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.context_node_types_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1195,6 +1924,20 @@ CREATE TABLE public.node_types (
     name text NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE node_types; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.node_types IS 'List of types of nodes in the system, e.g. MUNICIPALITY or EXPORTER. Those literals are referred to in code, therefore should not be changed without notice.';
+
+
+--
+-- Name: COLUMN node_types.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_types.name IS 'Name of node type, spelt in capital letters; unique across node types';
 
 
 --
@@ -1252,11 +1995,52 @@ CREATE TABLE public.context_properties (
 
 
 --
+-- Name: TABLE context_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.context_properties IS 'Visualisation properties of a context (one row per context)';
+
+
+--
+-- Name: COLUMN context_properties.default_basemap; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_properties.default_basemap IS 'Default basemap for this context, e.g. satellite';
+
+
+--
+-- Name: COLUMN context_properties.is_disabled; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_properties.is_disabled IS 'When set, do not show this context';
+
+
+--
+-- Name: COLUMN context_properties.is_default; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_properties.is_default IS 'When set, show this context as default (only use for one)';
+
+
+--
+-- Name: COLUMN context_properties.is_subnational; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_properties.is_subnational IS 'When set, show indication that sub-national level data is available';
+
+
+--
+-- Name: COLUMN context_properties.is_highlighted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_properties.is_highlighted IS 'When set, shows the context on the context picker suggestions';
+
+
+--
 -- Name: context_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.context_properties_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1286,11 +2070,31 @@ CREATE TABLE public.contexts (
 
 
 --
+-- Name: TABLE contexts; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.contexts IS 'Country-commodity combinations.';
+
+
+--
+-- Name: COLUMN contexts.years; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.contexts.years IS 'Years for which country-commodity data is present; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN contexts.default_year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.contexts.default_year IS 'Default year for this context';
+
+
+--
 -- Name: contexts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.contexts_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1318,6 +2122,27 @@ CREATE TABLE public.countries (
 
 
 --
+-- Name: TABLE countries; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.countries IS 'Countries (source)';
+
+
+--
+-- Name: COLUMN countries.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.countries.name IS 'Country name';
+
+
+--
+-- Name: COLUMN countries.iso2; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.countries.iso2 IS '2-letter ISO code';
+
+
+--
 -- Name: profiles; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1337,6 +2162,62 @@ CREATE TABLE public.profiles (
     adm_2_topojson_root character varying,
     CONSTRAINT profiles_name_check CHECK ((name = ANY (ARRAY['actor'::text, 'place'::text])))
 );
+
+
+--
+-- Name: TABLE profiles; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.profiles IS 'Context-specific profiles';
+
+
+--
+-- Name: COLUMN profiles.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.name IS 'Profile name, either actor or place. One of restricted set of values.';
+
+
+--
+-- Name: COLUMN profiles.main_topojson_path; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.main_topojson_path IS 'Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /';
+
+
+--
+-- Name: COLUMN profiles.main_topojson_root; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.main_topojson_root IS 'Path within the TopoJSON file where geometries are contained';
+
+
+--
+-- Name: COLUMN profiles.adm_1_topojson_path; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.adm_1_topojson_path IS 'Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /';
+
+
+--
+-- Name: COLUMN profiles.adm_1_topojson_root; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.adm_1_topojson_root IS 'Path within the TopoJSON file where geometries are contained';
+
+
+--
+-- Name: COLUMN profiles.adm_2_topojson_path; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.adm_2_topojson_path IS 'Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /';
+
+
+--
+-- Name: COLUMN profiles.adm_2_topojson_root; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.adm_2_topojson_root IS 'Path within the TopoJSON file where geometries are contained';
 
 
 --
@@ -1412,11 +2293,59 @@ CREATE TABLE public.contextual_layers (
 
 
 --
+-- Name: TABLE contextual_layers; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.contextual_layers IS 'Additional layers shown on map coming from CartoDB';
+
+
+--
+-- Name: COLUMN contextual_layers.title; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.contextual_layers.title IS 'Title of layer for display';
+
+
+--
+-- Name: COLUMN contextual_layers.identifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.contextual_layers.identifier IS 'Identifier of layer, e.g. brazil_biomes';
+
+
+--
+-- Name: COLUMN contextual_layers."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.contextual_layers."position" IS 'Display order in scope of context';
+
+
+--
+-- Name: COLUMN contextual_layers.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.contextual_layers.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN contextual_layers.is_default; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.contextual_layers.is_default IS 'When set, show this layer by default';
+
+
+--
+-- Name: COLUMN contextual_layers.legend; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.contextual_layers.legend IS 'Legend as HTML snippet';
+
+
+--
 -- Name: contextual_layers_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.contextual_layers_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1436,7 +2365,6 @@ ALTER SEQUENCE public.contextual_layers_id_seq OWNED BY public.contextual_layers
 --
 
 CREATE SEQUENCE public.countries_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1466,6 +2394,34 @@ CREATE TABLE public.ind_country_properties (
 
 
 --
+-- Name: TABLE ind_country_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.ind_country_properties IS 'Country specific properties for ind';
+
+
+--
+-- Name: COLUMN ind_country_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_country_properties.tooltip_text IS 'Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).';
+
+
+--
+-- Name: COLUMN ind_country_properties.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_country_properties.country_id IS 'Reference to country';
+
+
+--
+-- Name: COLUMN ind_country_properties.ind_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.ind_country_properties.ind_id IS 'Reference to ind';
+
+
+--
 -- Name: qual_country_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1480,6 +2436,34 @@ CREATE TABLE public.qual_country_properties (
 
 
 --
+-- Name: TABLE qual_country_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.qual_country_properties IS 'Country specific properties for qual';
+
+
+--
+-- Name: COLUMN qual_country_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_country_properties.tooltip_text IS 'Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).';
+
+
+--
+-- Name: COLUMN qual_country_properties.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_country_properties.country_id IS 'Reference to country';
+
+
+--
+-- Name: COLUMN qual_country_properties.qual_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.qual_country_properties.qual_id IS 'Reference to qual';
+
+
+--
 -- Name: quant_country_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1491,6 +2475,34 @@ CREATE TABLE public.quant_country_properties (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE quant_country_properties; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.quant_country_properties IS 'Country specific properties for quant';
+
+
+--
+-- Name: COLUMN quant_country_properties.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_country_properties.tooltip_text IS 'Country-specific tooltips are the second-most specific tooltips that can be defined after context-specific tooltips; in absence of a country-specific tooltip, a commodity-specific tooltip will be used (if any).';
+
+
+--
+-- Name: COLUMN quant_country_properties.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_country_properties.country_id IS 'Reference to country';
+
+
+--
+-- Name: COLUMN quant_country_properties.quant_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.quant_country_properties.quant_id IS 'Reference to quant';
 
 
 --
@@ -1525,6 +2537,48 @@ UNION ALL
 
 
 --
+-- Name: MATERIALIZED VIEW country_attribute_properties_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.country_attribute_properties_mv IS 'Materialized view combining country specific properties for inds, quals and quants.';
+
+
+--
+-- Name: COLUMN country_attribute_properties_mv.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_attribute_properties_mv.country_id IS 'Reference to country';
+
+
+--
+-- Name: COLUMN country_attribute_properties_mv.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_attribute_properties_mv.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN country_attribute_properties_mv.qual_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_attribute_properties_mv.qual_id IS 'Reference to qual';
+
+
+--
+-- Name: COLUMN country_attribute_properties_mv.ind_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_attribute_properties_mv.ind_id IS 'Reference to ind';
+
+
+--
+-- Name: COLUMN country_attribute_properties_mv.quant_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_attribute_properties_mv.quant_id IS 'Reference to quant';
+
+
+--
 -- Name: country_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1542,11 +2596,45 @@ CREATE TABLE public.country_properties (
 
 
 --
+-- Name: COLUMN country_properties.latitude; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_properties.latitude IS 'Country latitide';
+
+
+--
+-- Name: COLUMN country_properties.longitude; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_properties.longitude IS 'Country longitude';
+
+
+--
+-- Name: COLUMN country_properties.zoom; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_properties.zoom IS 'Zoom level (0-18)';
+
+
+--
+-- Name: COLUMN country_properties.annotation_position_x_pos; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_properties.annotation_position_x_pos IS 'X position (in coordinates) where the country''s label is displayed on the explore page';
+
+
+--
+-- Name: COLUMN country_properties.annotation_position_y_pos; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.country_properties.annotation_position_y_pos IS 'Y position (in coordinates) where the country''s label is displayed on the explore page';
+
+
+--
 -- Name: country_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.country_properties_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -1772,6 +2860,27 @@ CREATE TABLE public.dashboards_attribute_groups (
 
 
 --
+-- Name: TABLE dashboards_attribute_groups; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.dashboards_attribute_groups IS 'Groups attributes (inds/quals/quants) to display on dashboards wizard';
+
+
+--
+-- Name: COLUMN dashboards_attribute_groups.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_attribute_groups.name IS 'Name for display';
+
+
+--
+-- Name: COLUMN dashboards_attribute_groups."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_attribute_groups."position" IS 'Display order';
+
+
+--
 -- Name: dashboards_attribute_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -1801,6 +2910,20 @@ CREATE TABLE public.dashboards_attributes (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE dashboards_attributes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.dashboards_attributes IS 'Attributes (inds/quals/quants) available in dashboards';
+
+
+--
+-- Name: COLUMN dashboards_attributes."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_attributes."position" IS 'Display order in scope of group';
 
 
 --
@@ -1836,6 +2959,13 @@ CREATE TABLE public.dashboards_inds (
 
 
 --
+-- Name: TABLE dashboards_inds; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.dashboards_inds IS 'Inds available in dashboards (see dashboards_attributes.)';
+
+
+--
 -- Name: dashboards_quals; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1849,6 +2979,13 @@ CREATE TABLE public.dashboards_quals (
 
 
 --
+-- Name: TABLE dashboards_quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.dashboards_quals IS 'Quals available in dashboards (see dashboards_attributes.)';
+
+
+--
 -- Name: dashboards_quants; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1859,6 +2996,13 @@ CREATE TABLE public.dashboards_quants (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE dashboards_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.dashboards_quants IS 'Quants available in dashboards (see dashboards_attributes.)';
 
 
 --
@@ -1893,6 +3037,20 @@ UNION ALL
 
 
 --
+-- Name: MATERIALIZED VIEW dashboards_attributes_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.dashboards_attributes_mv IS 'Materialized view which merges dashboards_inds, dashboards_quals and dashboards_quants with dashboards_attributes.';
+
+
+--
+-- Name: COLUMN dashboards_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+
+
+--
 -- Name: flows; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1904,6 +3062,27 @@ CREATE TABLE public.flows (
     created_at timestamp without time zone NOT NULL,
     CONSTRAINT flows_path_length_check CHECK ((public.icount(path) > 3))
 );
+
+
+--
+-- Name: TABLE flows; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.flows IS 'Flows of commodities through nodes';
+
+
+--
+-- Name: COLUMN flows.year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flows.year IS 'Year';
+
+
+--
+-- Name: COLUMN flows.path; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flows.path IS 'Array of node ids which constitute the supply chain, where position of node in this array is linked to the value of column_position in context_node_types';
 
 
 --
@@ -1919,6 +3098,41 @@ CREATE TABLE public.nodes (
     created_at timestamp without time zone NOT NULL,
     main_id integer
 );
+
+
+--
+-- Name: TABLE nodes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.nodes IS 'Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains';
+
+
+--
+-- Name: COLUMN nodes.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.name IS 'Name of node';
+
+
+--
+-- Name: COLUMN nodes.geo_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.geo_id IS '2-letter iso code in case of country nodes; other geo identifiers possible for other node types';
+
+
+--
+-- Name: COLUMN nodes.is_unknown; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.is_unknown IS 'When set, node was not possible to identify';
+
+
+--
+-- Name: COLUMN nodes.main_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.main_id IS 'Node identifier from Main DB';
 
 
 --
@@ -2100,6 +3314,27 @@ CREATE TABLE public.node_quals (
 
 
 --
+-- Name: TABLE node_quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.node_quals IS 'Values of quals for node';
+
+
+--
+-- Name: COLUMN node_quals.year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quals.year IS 'Year; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN node_quals.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quals.value IS 'Textual value';
+
+
+--
 -- Name: dashboards_sources_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -2141,6 +3376,41 @@ CREATE TABLE public.database_updates (
 
 
 --
+-- Name: TABLE database_updates; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.database_updates IS 'Keeping track of database update operations, also used to ensure only one update processed at a time';
+
+
+--
+-- Name: COLUMN database_updates.stats; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.database_updates.stats IS 'JSON structure with information on row counts for all tables before / after update';
+
+
+--
+-- Name: COLUMN database_updates.jid; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.database_updates.jid IS 'Job ID, filled in when update started using a background job processor';
+
+
+--
+-- Name: COLUMN database_updates.status; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.database_updates.status IS 'STARTED (only one at a time), FINISHED or FAILED';
+
+
+--
+-- Name: COLUMN database_updates.error; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.database_updates.error IS 'Exception message for failed updates';
+
+
+--
 -- Name: database_updates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -2171,6 +3441,34 @@ CREATE TABLE public.database_validation_reports (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE database_validation_reports; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.database_validation_reports IS 'Keeping track of database validation operations';
+
+
+--
+-- Name: COLUMN database_validation_reports.report; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.database_validation_reports.report IS 'JSON structure with validation report';
+
+
+--
+-- Name: COLUMN database_validation_reports.error_count; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.database_validation_reports.error_count IS 'Count of errors detected';
+
+
+--
+-- Name: COLUMN database_validation_reports.warning_count; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.database_validation_reports.warning_count IS 'Count of warnings detected';
 
 
 --
@@ -2208,11 +3506,38 @@ CREATE TABLE public.download_attributes (
 
 
 --
+-- Name: TABLE download_attributes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.download_attributes IS 'Attributes (quals/quants) available for download.';
+
+
+--
+-- Name: COLUMN download_attributes."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.download_attributes."position" IS 'Display order in scope of context';
+
+
+--
+-- Name: COLUMN download_attributes.display_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.download_attributes.display_name IS 'Name of attribute for display in downloads';
+
+
+--
+-- Name: COLUMN download_attributes.years; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.download_attributes.years IS 'Years for which attribute is present; empty (NULL) for all years';
+
+
+--
 -- Name: download_attributes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.download_attributes_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2242,6 +3567,20 @@ CREATE TABLE public.download_quals (
 
 
 --
+-- Name: TABLE download_quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.download_quals IS 'Quals to include in downloads (see download_attributes.)';
+
+
+--
+-- Name: COLUMN download_quals.is_filter_enabled; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.download_quals.is_filter_enabled IS 'When set, enable selection of discreet values (advanced filter)';
+
+
+--
 -- Name: download_quants; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2254,6 +3593,27 @@ CREATE TABLE public.download_quants (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE download_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.download_quants IS 'Quants to include in downloads (see download_attributes.)';
+
+
+--
+-- Name: COLUMN download_quants.is_filter_enabled; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.download_quants.is_filter_enabled IS 'When set, enable selection of value ranges (advanced filter)';
+
+
+--
+-- Name: COLUMN download_quants.filter_bands; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.download_quants.filter_bands IS 'Array of value ranges to allow filtering by';
 
 
 --
@@ -2292,6 +3652,20 @@ UNION ALL
 
 
 --
+-- Name: MATERIALIZED VIEW download_attributes_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.download_attributes_mv IS 'Materialized view which merges download_quals and download_quants with download_attributes.';
+
+
+--
+-- Name: COLUMN download_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.download_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+
+
+--
 -- Name: download_flows; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2310,6 +3684,126 @@ CREATE TABLE public.download_flows (
     sort text
 )
 PARTITION BY LIST (year);
+
+
+--
+-- Name: download_flows_2003; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2003 PARTITION OF public.download_flows
+FOR VALUES IN ('2003');
+
+
+--
+-- Name: download_flows_2004; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2004 PARTITION OF public.download_flows
+FOR VALUES IN ('2004');
+
+
+--
+-- Name: download_flows_2005; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2005 PARTITION OF public.download_flows
+FOR VALUES IN ('2005');
+
+
+--
+-- Name: download_flows_2006; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2006 PARTITION OF public.download_flows
+FOR VALUES IN ('2006');
+
+
+--
+-- Name: download_flows_2007; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2007 PARTITION OF public.download_flows
+FOR VALUES IN ('2007');
+
+
+--
+-- Name: download_flows_2008; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2008 PARTITION OF public.download_flows
+FOR VALUES IN ('2008');
+
+
+--
+-- Name: download_flows_2009; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2009 PARTITION OF public.download_flows
+FOR VALUES IN ('2009');
+
+
+--
+-- Name: download_flows_2010; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2010 PARTITION OF public.download_flows
+FOR VALUES IN ('2010');
+
+
+--
+-- Name: download_flows_2011; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2011 PARTITION OF public.download_flows
+FOR VALUES IN ('2011');
+
+
+--
+-- Name: download_flows_2012; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2012 PARTITION OF public.download_flows
+FOR VALUES IN ('2012');
+
+
+--
+-- Name: download_flows_2013; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2013 PARTITION OF public.download_flows
+FOR VALUES IN ('2013');
+
+
+--
+-- Name: download_flows_2014; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2014 PARTITION OF public.download_flows
+FOR VALUES IN ('2014');
+
+
+--
+-- Name: download_flows_2015; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2015 PARTITION OF public.download_flows
+FOR VALUES IN ('2015');
+
+
+--
+-- Name: download_flows_2016; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2016 PARTITION OF public.download_flows
+FOR VALUES IN ('2016');
+
+
+--
+-- Name: download_flows_2017; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2017 PARTITION OF public.download_flows
+FOR VALUES IN ('2017');
 
 
 --
@@ -2341,6 +3835,20 @@ CREATE TABLE public.flow_quals (
 
 
 --
+-- Name: TABLE flow_quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.flow_quals IS 'Values of quals for flow';
+
+
+--
+-- Name: COLUMN flow_quals.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_quals.value IS 'Textual value';
+
+
+--
 -- Name: flow_quants; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2351,6 +3859,20 @@ CREATE TABLE public.flow_quants (
     value double precision NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE flow_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.flow_quants IS 'Values of quants for flow';
+
+
+--
+-- Name: COLUMN flow_quants.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_quants.value IS 'Numeric value';
 
 
 --
@@ -2410,9 +3932,9 @@ CREATE VIEW public.download_flows_v AS
         UNION ALL
          SELECT f_1.flow_id,
             f_1.quant_id,
-            'Quant'::text,
+            'Quant'::text AS text,
             f_1.value,
-            NULL::text,
+            NULL::text AS text,
             q.name,
             q.unit
            FROM (public.flow_quants f_1
@@ -2426,7 +3948,6 @@ CREATE VIEW public.download_flows_v AS
 --
 
 CREATE SEQUENCE public.download_quals_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2446,7 +3967,6 @@ ALTER SEQUENCE public.download_quals_id_seq OWNED BY public.download_quals.id;
 --
 
 CREATE SEQUENCE public.download_quants_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2475,11 +3995,31 @@ CREATE TABLE public.download_versions (
 
 
 --
+-- Name: TABLE download_versions; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.download_versions IS 'Versions of data downloads';
+
+
+--
+-- Name: COLUMN download_versions.symbol; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.download_versions.symbol IS 'Version symbol (included in downloaded file name)';
+
+
+--
+-- Name: COLUMN download_versions.is_current; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.download_versions.is_current IS 'When set, use this version symbol for new downloads (only use for one)';
+
+
+--
 -- Name: download_versions_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.download_versions_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2508,11 +4048,24 @@ CREATE TABLE public.flow_inds (
 
 
 --
+-- Name: TABLE flow_inds; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.flow_inds IS 'Values of inds for flow';
+
+
+--
+-- Name: COLUMN flow_inds.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_inds.value IS 'Numeric value';
+
+
+--
 -- Name: flow_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.flow_inds_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2532,7 +4085,6 @@ ALTER SEQUENCE public.flow_inds_id_seq OWNED BY public.flow_inds.id;
 --
 
 CREATE SEQUENCE public.flow_quals_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2552,7 +4104,6 @@ ALTER SEQUENCE public.flow_quals_id_seq OWNED BY public.flow_quals.id;
 --
 
 CREATE SEQUENCE public.flow_quants_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2572,7 +4123,6 @@ ALTER SEQUENCE public.flow_quants_id_seq OWNED BY public.flow_quants.id;
 --
 
 CREATE SEQUENCE public.flows_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2649,7 +4199,6 @@ ALTER SEQUENCE public.ind_country_properties_id_seq OWNED BY public.ind_country_
 --
 
 CREATE SEQUENCE public.ind_properties_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2669,7 +4218,6 @@ ALTER SEQUENCE public.ind_properties_id_seq OWNED BY public.ind_properties.id;
 --
 
 CREATE SEQUENCE public.inds_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2699,11 +4247,31 @@ CREATE TABLE public.map_attribute_groups (
 
 
 --
+-- Name: TABLE map_attribute_groups; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.map_attribute_groups IS 'Groups attributes (inds/quals/quants) to display on map';
+
+
+--
+-- Name: COLUMN map_attribute_groups.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attribute_groups.name IS 'Name for display';
+
+
+--
+-- Name: COLUMN map_attribute_groups."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attribute_groups."position" IS 'Display order in scope of context';
+
+
+--
 -- Name: map_attribute_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.map_attribute_groups_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2738,11 +4306,66 @@ CREATE TABLE public.map_attributes (
 
 
 --
+-- Name: TABLE map_attributes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.map_attributes IS 'Attributes (inds/quants) to display on map';
+
+
+--
+-- Name: COLUMN map_attributes."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes."position" IS 'Display order in scope of group';
+
+
+--
+-- Name: COLUMN map_attributes.dual_layer_buckets; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes.dual_layer_buckets IS 'Choropleth buckets for dual dimension choropleth';
+
+
+--
+-- Name: COLUMN map_attributes.single_layer_buckets; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes.single_layer_buckets IS 'Choropleth buckets for single dimension choropleth';
+
+
+--
+-- Name: COLUMN map_attributes.color_scale; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes.color_scale IS 'Choropleth colour scale, e.g. blue';
+
+
+--
+-- Name: COLUMN map_attributes.years; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes.years IS 'Years for which attribute is present; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN map_attributes.is_disabled; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes.is_disabled IS 'When set, this attribute is not displayed';
+
+
+--
+-- Name: COLUMN map_attributes.is_default; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes.is_default IS 'When set, show this attribute by default. A maximum of 2 attributes per context may be set as default.';
+
+
+--
 -- Name: map_attributes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.map_attributes_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2771,6 +4394,13 @@ CREATE TABLE public.map_inds (
 
 
 --
+-- Name: TABLE map_inds; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.map_inds IS 'Inds to display on map (see map_attributes.)';
+
+
+--
 -- Name: map_quants; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2781,6 +4411,13 @@ CREATE TABLE public.map_quants (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
+
+
+--
+-- Name: TABLE map_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.map_quants IS 'Quants to display on map (see map_attributes.)';
 
 
 --
@@ -2839,11 +4476,73 @@ UNION ALL
 
 
 --
+-- Name: MATERIALIZED VIEW map_attributes_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.map_attributes_mv IS 'Materialized view which merges map_inds and map_quants with map_attributes.';
+
+
+--
+-- Name: COLUMN map_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+
+
+--
+-- Name: COLUMN map_attributes_mv.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_mv.name IS 'Display name of the ind/quant';
+
+
+--
+-- Name: COLUMN map_attributes_mv.attribute_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_mv.attribute_type IS 'Type of the attribute (ind/quant)';
+
+
+--
+-- Name: COLUMN map_attributes_mv.unit; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_mv.unit IS 'Name of the attribute''s unit';
+
+
+--
+-- Name: COLUMN map_attributes_mv.description; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_mv.description IS 'Attribute''s description';
+
+
+--
+-- Name: COLUMN map_attributes_mv.aggregate_method; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_mv.aggregate_method IS 'The method used to aggregate the data';
+
+
+--
+-- Name: COLUMN map_attributes_mv.original_attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_mv.original_attribute_id IS 'The attribute''s original id';
+
+
+--
+-- Name: COLUMN map_attributes_mv.context_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.map_attributes_mv.context_id IS 'References the context';
+
+
+--
 -- Name: map_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.map_inds_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2863,7 +4562,6 @@ ALTER SEQUENCE public.map_inds_id_seq OWNED BY public.map_inds.id;
 --
 
 CREATE SEQUENCE public.map_quants_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2893,11 +4591,31 @@ CREATE TABLE public.node_inds (
 
 
 --
+-- Name: TABLE node_inds; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.node_inds IS 'Values of inds for node';
+
+
+--
+-- Name: COLUMN node_inds.year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_inds.year IS 'Year; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN node_inds.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_inds.value IS 'Numeric value';
+
+
+--
 -- Name: node_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.node_inds_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2926,11 +4644,17 @@ CREATE TABLE public.node_properties (
 
 
 --
+-- Name: COLUMN node_properties.is_domestic_consumption; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_properties.is_domestic_consumption IS 'When set, assume domestic trade';
+
+
+--
 -- Name: node_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.node_properties_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2950,7 +4674,6 @@ ALTER SEQUENCE public.node_properties_id_seq OWNED BY public.node_properties.id;
 --
 
 CREATE SEQUENCE public.node_quals_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -2980,11 +4703,31 @@ CREATE TABLE public.node_quants (
 
 
 --
+-- Name: TABLE node_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.node_quants IS 'Values of quants for node';
+
+
+--
+-- Name: COLUMN node_quants.year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quants.year IS 'Year; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN node_quants.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quants.value IS 'Numeric value';
+
+
+--
 -- Name: node_quants_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.node_quants_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3004,7 +4747,6 @@ ALTER SEQUENCE public.node_quants_id_seq OWNED BY public.node_quants.id;
 --
 
 CREATE SEQUENCE public.node_types_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3024,7 +4766,6 @@ ALTER SEQUENCE public.node_types_id_seq OWNED BY public.node_types.id;
 --
 
 CREATE SEQUENCE public.nodes_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3070,7 +4811,6 @@ CREATE MATERIALIZED VIEW public.nodes_mv AS
 --
 
 CREATE SEQUENCE public.profiles_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3147,7 +4887,6 @@ ALTER SEQUENCE public.qual_country_properties_id_seq OWNED BY public.qual_countr
 --
 
 CREATE SEQUENCE public.qual_properties_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3167,7 +4906,6 @@ ALTER SEQUENCE public.qual_properties_id_seq OWNED BY public.qual_properties.id;
 --
 
 CREATE SEQUENCE public.quals_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3244,7 +4982,6 @@ ALTER SEQUENCE public.quant_country_properties_id_seq OWNED BY public.quant_coun
 --
 
 CREATE SEQUENCE public.quant_properties_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3264,7 +5001,6 @@ ALTER SEQUENCE public.quant_properties_id_seq OWNED BY public.quant_properties.i
 --
 
 CREATE SEQUENCE public.quants_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3304,11 +5040,101 @@ CREATE TABLE public.recolor_by_attributes (
 
 
 --
+-- Name: TABLE recolor_by_attributes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.recolor_by_attributes IS 'Attributes (inds/quals) available for recoloring.';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.group_number; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.group_number IS 'Attributes are displayed grouped by their group number, with a separator between groups';
+
+
+--
+-- Name: COLUMN recolor_by_attributes."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes."position" IS 'Display order in scope of context and group number';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.legend_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.legend_type IS 'Type of legend, e.g. linear';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.legend_color_theme; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.legend_color_theme IS 'Color theme of legend, e.g. red-blue';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.interval_count; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.interval_count IS 'For legends with min / max value, number of intervals of the legend';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.min_value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.min_value IS 'Min value for the legend';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.max_value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.max_value IS 'Max value for the legend';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.divisor; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.divisor IS 'Step between intervals for percentual legends';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.years; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.years IS 'Array of years for which to show this attribute in scope of chart; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.is_disabled; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.is_disabled IS 'When set, this attribute is not displayed';
+
+
+--
+-- Name: COLUMN recolor_by_attributes.is_default; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes.is_default IS 'When set, show this attribute by default';
+
+
+--
 -- Name: recolor_by_attributes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.recolor_by_attributes_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3337,11 +5163,17 @@ CREATE TABLE public.recolor_by_inds (
 
 
 --
+-- Name: TABLE recolor_by_inds; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.recolor_by_inds IS 'Inds available for recoloring (see recolor_by_attributes.)';
+
+
+--
 -- Name: recolor_by_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.recolor_by_inds_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3370,11 +5202,17 @@ CREATE TABLE public.recolor_by_quals (
 
 
 --
+-- Name: TABLE recolor_by_quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.recolor_by_quals IS 'Quals available for recoloring (see recolor_by_attributes.)';
+
+
+--
 -- Name: recolor_by_quals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.recolor_by_quals_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3408,11 +5246,59 @@ CREATE TABLE public.resize_by_attributes (
 
 
 --
+-- Name: TABLE resize_by_attributes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.resize_by_attributes IS 'Attributes (quants) available for resizing.';
+
+
+--
+-- Name: COLUMN resize_by_attributes.group_number; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.resize_by_attributes.group_number IS 'Group number';
+
+
+--
+-- Name: COLUMN resize_by_attributes."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.resize_by_attributes."position" IS 'Display order in scope of context and group number';
+
+
+--
+-- Name: COLUMN resize_by_attributes.tooltip_text; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.resize_by_attributes.tooltip_text IS 'Tooltip text';
+
+
+--
+-- Name: COLUMN resize_by_attributes.years; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.resize_by_attributes.years IS 'Array of years for which to show this attribute in scope of chart; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN resize_by_attributes.is_disabled; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.resize_by_attributes.is_disabled IS 'When set, this attribute is not displayed';
+
+
+--
+-- Name: COLUMN resize_by_attributes.is_default; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.resize_by_attributes.is_default IS 'When set, show this attribute by default';
+
+
+--
 -- Name: resize_by_attributes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.resize_by_attributes_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -3441,6 +5327,13 @@ CREATE TABLE public.resize_by_quants (
 
 
 --
+-- Name: TABLE resize_by_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.resize_by_quants IS 'Quants available for recoloring (see resize_by_attributes.)';
+
+
+--
 -- Name: resize_by_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -3463,11 +5356,24 @@ CREATE MATERIALIZED VIEW public.resize_by_attributes_mv AS
 
 
 --
+-- Name: MATERIALIZED VIEW resize_by_attributes_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.resize_by_attributes_mv IS 'Materialized view which merges resize_by_quants with resize_by_attributes.';
+
+
+--
+-- Name: COLUMN resize_by_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.resize_by_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+
+
+--
 -- Name: resize_by_quants_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
 CREATE SEQUENCE public.resize_by_quants_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -4153,6 +6059,20 @@ UNION ALL
   WHERE (flow_quals.value !~~ 'UNKNOWN%'::text)
   GROUP BY ra.id, a.id
   WITH NO DATA;
+
+
+--
+-- Name: MATERIALIZED VIEW recolor_by_attributes_mv; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON MATERIALIZED VIEW public.recolor_by_attributes_mv IS 'Materialized view which merges recolor_by_inds and recolor_by_quals with recolor_by_attributes.';
+
+
+--
+-- Name: COLUMN recolor_by_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.recolor_by_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
 
 
 --
@@ -5656,10 +7576,24 @@ CREATE INDEX download_flows_attribute_type_attribute_id_idx ON ONLY public.downl
 
 
 --
+-- Name: download_flows_2003_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2003_attribute_type_attribute_id_idx ON public.download_flows_2003 USING btree (attribute_type, attribute_id);
+
+
+--
 -- Name: download_flows_context_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX download_flows_context_id_idx ON ONLY public.download_flows USING btree (context_id);
+
+
+--
+-- Name: download_flows_2003_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2003_context_id_idx ON public.download_flows_2003 USING btree (context_id);
 
 
 --
@@ -5670,10 +7604,10 @@ CREATE INDEX download_flows_path_idx ON ONLY public.download_flows USING btree (
 
 
 --
--- Name: download_flows_stats_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: download_flows_2003_path_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX download_flows_stats_mv_id_idx ON public.download_flows_stats_mv USING btree (context_id, year, attribute_type, attribute_id);
+CREATE INDEX download_flows_2003_path_idx ON public.download_flows_2003 USING btree (path);
 
 
 --
@@ -5681,6 +7615,412 @@ CREATE UNIQUE INDEX download_flows_stats_mv_id_idx ON public.download_flows_stat
 --
 
 CREATE INDEX download_flows_year_idx ON ONLY public.download_flows USING btree (year);
+
+
+--
+-- Name: download_flows_2003_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2003_year_idx ON public.download_flows_2003 USING btree (year);
+
+
+--
+-- Name: download_flows_2004_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2004_attribute_type_attribute_id_idx ON public.download_flows_2004 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2004_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2004_context_id_idx ON public.download_flows_2004 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2004_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2004_path_idx ON public.download_flows_2004 USING btree (path);
+
+
+--
+-- Name: download_flows_2004_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2004_year_idx ON public.download_flows_2004 USING btree (year);
+
+
+--
+-- Name: download_flows_2005_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2005_attribute_type_attribute_id_idx ON public.download_flows_2005 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2005_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2005_context_id_idx ON public.download_flows_2005 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2005_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2005_path_idx ON public.download_flows_2005 USING btree (path);
+
+
+--
+-- Name: download_flows_2005_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2005_year_idx ON public.download_flows_2005 USING btree (year);
+
+
+--
+-- Name: download_flows_2006_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2006_attribute_type_attribute_id_idx ON public.download_flows_2006 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2006_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2006_context_id_idx ON public.download_flows_2006 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2006_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2006_path_idx ON public.download_flows_2006 USING btree (path);
+
+
+--
+-- Name: download_flows_2006_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2006_year_idx ON public.download_flows_2006 USING btree (year);
+
+
+--
+-- Name: download_flows_2007_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2007_attribute_type_attribute_id_idx ON public.download_flows_2007 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2007_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2007_context_id_idx ON public.download_flows_2007 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2007_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2007_path_idx ON public.download_flows_2007 USING btree (path);
+
+
+--
+-- Name: download_flows_2007_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2007_year_idx ON public.download_flows_2007 USING btree (year);
+
+
+--
+-- Name: download_flows_2008_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2008_attribute_type_attribute_id_idx ON public.download_flows_2008 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2008_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2008_context_id_idx ON public.download_flows_2008 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2008_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2008_path_idx ON public.download_flows_2008 USING btree (path);
+
+
+--
+-- Name: download_flows_2008_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2008_year_idx ON public.download_flows_2008 USING btree (year);
+
+
+--
+-- Name: download_flows_2009_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2009_attribute_type_attribute_id_idx ON public.download_flows_2009 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2009_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2009_context_id_idx ON public.download_flows_2009 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2009_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2009_path_idx ON public.download_flows_2009 USING btree (path);
+
+
+--
+-- Name: download_flows_2009_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2009_year_idx ON public.download_flows_2009 USING btree (year);
+
+
+--
+-- Name: download_flows_2010_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2010_attribute_type_attribute_id_idx ON public.download_flows_2010 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2010_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2010_context_id_idx ON public.download_flows_2010 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2010_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2010_path_idx ON public.download_flows_2010 USING btree (path);
+
+
+--
+-- Name: download_flows_2010_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2010_year_idx ON public.download_flows_2010 USING btree (year);
+
+
+--
+-- Name: download_flows_2011_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2011_attribute_type_attribute_id_idx ON public.download_flows_2011 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2011_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2011_context_id_idx ON public.download_flows_2011 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2011_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2011_path_idx ON public.download_flows_2011 USING btree (path);
+
+
+--
+-- Name: download_flows_2011_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2011_year_idx ON public.download_flows_2011 USING btree (year);
+
+
+--
+-- Name: download_flows_2012_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2012_attribute_type_attribute_id_idx ON public.download_flows_2012 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2012_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2012_context_id_idx ON public.download_flows_2012 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2012_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2012_path_idx ON public.download_flows_2012 USING btree (path);
+
+
+--
+-- Name: download_flows_2012_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2012_year_idx ON public.download_flows_2012 USING btree (year);
+
+
+--
+-- Name: download_flows_2013_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2013_attribute_type_attribute_id_idx ON public.download_flows_2013 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2013_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2013_context_id_idx ON public.download_flows_2013 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2013_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2013_path_idx ON public.download_flows_2013 USING btree (path);
+
+
+--
+-- Name: download_flows_2013_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2013_year_idx ON public.download_flows_2013 USING btree (year);
+
+
+--
+-- Name: download_flows_2014_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2014_attribute_type_attribute_id_idx ON public.download_flows_2014 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2014_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2014_context_id_idx ON public.download_flows_2014 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2014_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2014_path_idx ON public.download_flows_2014 USING btree (path);
+
+
+--
+-- Name: download_flows_2014_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2014_year_idx ON public.download_flows_2014 USING btree (year);
+
+
+--
+-- Name: download_flows_2015_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2015_attribute_type_attribute_id_idx ON public.download_flows_2015 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2015_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2015_context_id_idx ON public.download_flows_2015 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2015_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2015_path_idx ON public.download_flows_2015 USING btree (path);
+
+
+--
+-- Name: download_flows_2015_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2015_year_idx ON public.download_flows_2015 USING btree (year);
+
+
+--
+-- Name: download_flows_2016_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2016_attribute_type_attribute_id_idx ON public.download_flows_2016 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2016_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2016_context_id_idx ON public.download_flows_2016 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2016_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2016_path_idx ON public.download_flows_2016 USING btree (path);
+
+
+--
+-- Name: download_flows_2016_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2016_year_idx ON public.download_flows_2016 USING btree (year);
+
+
+--
+-- Name: download_flows_2017_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2017_attribute_type_attribute_id_idx ON public.download_flows_2017 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2017_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2017_context_id_idx ON public.download_flows_2017 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2017_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2017_path_idx ON public.download_flows_2017 USING btree (path);
+
+
+--
+-- Name: download_flows_2017_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2017_year_idx ON public.download_flows_2017 USING btree (year);
+
+
+--
+-- Name: download_flows_stats_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX download_flows_stats_mv_id_idx ON public.download_flows_stats_mv USING btree (context_id, year, attribute_type, attribute_id);
 
 
 --
@@ -5901,13 +8241,6 @@ CREATE INDEX node_quants_node_id_idx ON public.node_quants USING btree (node_id)
 
 
 --
--- Name: node_quants_quant_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX node_quants_quant_id_idx ON public.node_quants USING btree (quant_id);
-
-
---
 -- Name: nodes_mv_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6090,6 +8423,426 @@ CREATE INDEX sankey_nodes_mv_node_type_id_idx ON public.sankey_nodes_mv USING bt
 
 
 --
+-- Name: download_flows_2003_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2003_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2003_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2003_context_id_idx;
+
+
+--
+-- Name: download_flows_2003_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2003_path_idx;
+
+
+--
+-- Name: download_flows_2003_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2003_year_idx;
+
+
+--
+-- Name: download_flows_2004_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2004_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2004_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2004_context_id_idx;
+
+
+--
+-- Name: download_flows_2004_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2004_path_idx;
+
+
+--
+-- Name: download_flows_2004_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2004_year_idx;
+
+
+--
+-- Name: download_flows_2005_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2005_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2005_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2005_context_id_idx;
+
+
+--
+-- Name: download_flows_2005_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2005_path_idx;
+
+
+--
+-- Name: download_flows_2005_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2005_year_idx;
+
+
+--
+-- Name: download_flows_2006_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2006_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2006_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2006_context_id_idx;
+
+
+--
+-- Name: download_flows_2006_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2006_path_idx;
+
+
+--
+-- Name: download_flows_2006_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2006_year_idx;
+
+
+--
+-- Name: download_flows_2007_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2007_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2007_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2007_context_id_idx;
+
+
+--
+-- Name: download_flows_2007_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2007_path_idx;
+
+
+--
+-- Name: download_flows_2007_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2007_year_idx;
+
+
+--
+-- Name: download_flows_2008_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2008_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2008_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2008_context_id_idx;
+
+
+--
+-- Name: download_flows_2008_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2008_path_idx;
+
+
+--
+-- Name: download_flows_2008_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2008_year_idx;
+
+
+--
+-- Name: download_flows_2009_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2009_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2009_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2009_context_id_idx;
+
+
+--
+-- Name: download_flows_2009_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2009_path_idx;
+
+
+--
+-- Name: download_flows_2009_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2009_year_idx;
+
+
+--
+-- Name: download_flows_2010_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2010_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2010_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2010_context_id_idx;
+
+
+--
+-- Name: download_flows_2010_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2010_path_idx;
+
+
+--
+-- Name: download_flows_2010_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2010_year_idx;
+
+
+--
+-- Name: download_flows_2011_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2011_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2011_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2011_context_id_idx;
+
+
+--
+-- Name: download_flows_2011_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2011_path_idx;
+
+
+--
+-- Name: download_flows_2011_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2011_year_idx;
+
+
+--
+-- Name: download_flows_2012_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2012_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2012_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2012_context_id_idx;
+
+
+--
+-- Name: download_flows_2012_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2012_path_idx;
+
+
+--
+-- Name: download_flows_2012_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2012_year_idx;
+
+
+--
+-- Name: download_flows_2013_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2013_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2013_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2013_context_id_idx;
+
+
+--
+-- Name: download_flows_2013_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2013_path_idx;
+
+
+--
+-- Name: download_flows_2013_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2013_year_idx;
+
+
+--
+-- Name: download_flows_2014_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2014_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2014_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2014_context_id_idx;
+
+
+--
+-- Name: download_flows_2014_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2014_path_idx;
+
+
+--
+-- Name: download_flows_2014_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2014_year_idx;
+
+
+--
+-- Name: download_flows_2015_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2015_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2015_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2015_context_id_idx;
+
+
+--
+-- Name: download_flows_2015_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2015_path_idx;
+
+
+--
+-- Name: download_flows_2015_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2015_year_idx;
+
+
+--
+-- Name: download_flows_2016_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2016_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2016_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2016_context_id_idx;
+
+
+--
+-- Name: download_flows_2016_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2016_path_idx;
+
+
+--
+-- Name: download_flows_2016_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2016_year_idx;
+
+
+--
+-- Name: download_flows_2017_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2017_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2017_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2017_context_id_idx;
+
+
+--
+-- Name: download_flows_2017_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2017_path_idx;
+
+
+--
+-- Name: download_flows_2017_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2017_year_idx;
+
+
+--
 -- Name: staff_members fk_rails_6ad8424ffc; Type: FK CONSTRAINT; Schema: content; Owner: -
 --
 
@@ -6258,14 +9011,6 @@ ALTER TABLE ONLY public.ind_context_properties
 
 
 --
--- Name: flow_quants fk_rails_2dbc0a565f; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.flow_quants
-    ADD CONSTRAINT fk_rails_2dbc0a565f FOREIGN KEY (flow_id) REFERENCES public.flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
 -- Name: map_quants fk_rails_308b5b45f7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6407,14 +9152,6 @@ ALTER TABLE ONLY public.ind_context_properties
 
 ALTER TABLE ONLY public.quant_context_properties
     ADD CONSTRAINT fk_rails_6e05c978da FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: flow_quals fk_rails_6e55ca4cbc; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.flow_quals
-    ADD CONSTRAINT fk_rails_6e55ca4cbc FOREIGN KEY (flow_id) REFERENCES public.flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
