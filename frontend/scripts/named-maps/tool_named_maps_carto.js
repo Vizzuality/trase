@@ -90,6 +90,10 @@ module.exports = {
     py_deforestation_2013_2017_20190131: {
       uid: 'py_deforestation_2013_2017_20190131__development',
       layergroupid: 'p2cs-sei@c8b99dd7@cbb68d33432adf3f69b686127104af27:1548926222884'
+    },
+    id_provinces: {
+      uid: 'id_provinces__development',
+      layergroupid: 'p2cs-sei@083d0ae4@3b599909380f1dc1a6af506f9bcd5756:1560524731493'
     }
   },
   sandbox: {
