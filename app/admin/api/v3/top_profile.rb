@@ -4,16 +4,7 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
   config.filters = false
 
   # before creating add summary, year and profile_type to top profile record
-  before_create do |top_profile|
-    profile_type = top_profile.node.node_type.context_node_types.find_by(context_id: top_profile.context_id).profile.name
-    top_profile.profile_type = profile_type
-    year = top_profile.context.years.max
-    top_profile.year = year
-    service = "Api::V3::#{profile_type.pluralize.capitalize}::BasicAttributes".constantize
-    top_profile.summary = service.new(
-      top_profile.context, top_profile.node, year
-    ).call[:summary]
-  end
+  before_create :derive_top_profile_details
 
   controller do
     def create
@@ -26,6 +17,17 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
       super do |success, _failure|
         success.html { redirect_to admin_context_top_profiles_path(parent) }
       end
+    end
+
+    def derive_top_profile_details(top_profile)
+      profile_type = top_profile.node.node_type.context_node_types.find_by(context_id: top_profile.context_id).profile.name
+      top_profile.profile_type = profile_type
+      year = top_profile.context.years.max
+      top_profile.year = year
+      service = "Api::V3::#{profile_type.pluralize.capitalize}::BasicAttributes".constantize
+      top_profile.summary = service.new(
+        top_profile.context, top_profile.node, year
+      ).call[:summary]
     end
   end
 
