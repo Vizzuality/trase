@@ -16,7 +16,36 @@ function mapStateToProps(state) {
       })
     : null;
 
-  const cardsInfo = [{}, {}, {}, {}]; // Just mocking
+  const cardsInfo = [
+    {
+      title: 'Bunge',
+      subtitle:
+        'Bunge did not produce any soy in 2017. With less than 0& of any soy of the total production, it ranks in Brazil in soy production and 33rd in the state of Rondonia',
+      category: 'exporter',
+      imageUrl: 'https://imgplaceholder.com/420x320/ff7f7f/333333/fa-image'
+    },
+    {
+      title: 'China',
+      subtitle:
+        'Bunge did not produce any soy in 2017. With less than 0& of any soy of the total production, it ranks in Brazil in soy production and 33rd in the state of Rondonia',
+      category: 'importing country',
+      imageUrl: 'https://imgplaceholder.com/420x320/ff7f7f/333333/fa-image'
+    },
+    {
+      title: 'Brazil',
+      subtitle:
+        'Bunge did not produce any soy in 2017. With less than 0& of any soy of the total production, it ranks in Brazil in soy production and 33rd in the state of Rondonia',
+      category: 'source',
+      imageUrl: 'https://imgplaceholder.com/420x320/ff7f7f/333333/fa-image'
+    },
+    {
+      title: 'Cargil',
+      subtitle:
+        'Bunge did not produce any soy in 2017. With less than 0& of any soy of the total production, it ranks in Brazil in soy production and 33rd in the state of Rondonia',
+      category: 'importer',
+      imageUrl: 'https://imgplaceholder.com/420x320/ff7f7f/333333/fa-image'
+    }
+  ]; // Just mocking
   return {
     activeContext,
     getContextsWithProfilePages,
