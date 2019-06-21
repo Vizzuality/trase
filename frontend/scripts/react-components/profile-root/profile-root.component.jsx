@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ProfileSearchLegacy from 'react-components/profile-root/profile-search-legacy.container';
 import ProfileSearch from 'react-components/profile-root/profile-search.container';
+import ProfileSelector from 'react-components/shared/profile-selector';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
 import ErrorMessage from 'react-components/profile-root/error-message/error-message.component';
 import cx from 'classnames';
@@ -86,41 +87,51 @@ const ProfileRoot = props => {
     `search-result-${item.nodeType.toLowerCase()}-${item.name.toLowerCase()}`;
 
   if (!NEW_PROFILES_PAGE) return renderLegacyProfiles(props);
-  const { cardsInfo } = props;
+  const { cardsInfo, openModal } = props;
   return (
-    <div className="l-profile-root">
-      <div className="c-profile-root">
-        <div className="row column">
-          <div className="profile-root-search-container">
-            <h2 className="profile-root-description">
-              Explore the trade activities of countries, regions or traders
-            </h2>
-            <div className="profile-root-actions">
-              <Button color="pink" icon="icon-browse" className="browse-button" size="rg">
-                Browse places or traders
-              </Button>
-              <ProfileSearch
-                testId="profile-root"
-                className="profile-search"
-                placeholderSmall="Search"
-                placeholder="Search places or traders"
-                getResultTestId={getResultTestId}
-                nodeTypeRenderer={nodeTypeRenderer}
-              />
-            </div>
-            <div className="profile-root-slider">
-              <SliderSection name="Top profiles" slides={cardsInfo} variant="profiles" />
+    <React.Fragment>
+      <div className="l-profile-root">
+        <div className="c-profile-root">
+          <div className="row column">
+            <div className="profile-root-search-container">
+              <h2 className="profile-root-description">
+                Explore the trade activities of countries, regions or traders
+              </h2>
+              <div className="profile-root-actions">
+                <Button
+                  color="pink"
+                  icon="icon-browse"
+                  className="browse-button"
+                  size="rg"
+                  onClick={openModal}
+                >
+                  Browse places or traders
+                </Button>
+                <ProfileSearch
+                  testId="profile-root"
+                  className="profile-search"
+                  placeholderSmall="Search"
+                  placeholder="Search places or traders"
+                  getResultTestId={getResultTestId}
+                  nodeTypeRenderer={nodeTypeRenderer}
+                />
+              </div>
+              <div className="profile-root-slider">
+                <SliderSection name="Top profiles" slides={cardsInfo} variant="profiles" />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <ProfileSelector />
+    </React.Fragment>
   );
 };
 
 ProfileRoot.propTypes = {
   cardsInfo: PropTypes.array,
-  contexts: PropTypes.array
+  contexts: PropTypes.array,
+  openModal: PropTypes.func.isRequired
 };
 
 export default ProfileRoot;
