@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import ProfileRoot from 'react-components/profile-root/profile-root.component';
 import { getContextsWithProfilePages } from 'react-components/profile-root/profile-root.selectors';
+import { openModal } from 'react-components/shared/profile-selector/profile-selector.actions';
 
 function mapStateToProps(state) {
   const { contexts, selectedContext } = state.app;
@@ -55,4 +56,11 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(ProfileRoot);
+const mapDispatchToProps = {
+  openModal
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ProfileRoot);

@@ -255,6 +255,11 @@ export const DASHBOARD_STEPS = {
   companies: 4
 };
 
+export const PROFILE_STEPS = {
+  nodes: 0,
+  commodities: 1
+};
+
 export const CHART_TYPES = {
   bar: 'bar',
   pie: 'pie',
