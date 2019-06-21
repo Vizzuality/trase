@@ -3,6 +3,18 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
   permit_params :context_id, :node_id
   config.filters = false
 
+  # before creating add summary, year and profile_type to top profile record
+  before_create do |top_profile|
+    profile_type = top_profile.node.node_type.context_node_types.find_by(context_id: top_profile.context_id).profile.name
+    top_profile.profile_type = profile_type
+    year = top_profile.context.years.max
+    top_profile.year = year
+    service = "Api::V3::#{profile_type.pluralize.capitalize}::BasicAttributes".constantize
+    top_profile.summary = service.new(
+      top_profile.context, top_profile.node, year
+    ).call[:summary]
+  end
+
   controller do
     def create
       super do |success, _failure|
@@ -19,6 +31,7 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
 
   index do
     column('Node name') { |property| property&.node&.name }
+    column('Node type') { |property| property&.node&.node_type }
     actions
   end
 
@@ -45,6 +58,10 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
       row('Country') { |property| property&.context&.country&.name }
       row('Commodity') { |property| property&.context&.commodity&.name }
       row('Node name') { |property| property&.node&.name }
+      row('Node type') { |property| property&.node&.node_type }
+      row('Profile type') { |property| property&.profile_type }
+      row('Year') { |property| property&.year }
+      row('Summary') { |property| property&.summary }
     end
   end
 end

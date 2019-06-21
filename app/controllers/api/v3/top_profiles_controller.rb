@@ -1,10 +1,17 @@
 module Api
   module V3
     class TopProfilesController < ApiController
-      def index
-        @top_profiles = Api::V3::TopProfile.where(context_id: params[:context_id])
+      skip_before_action :load_context
 
-        render json: @top_profiles, root: 'data',
+      def index
+        top_profiles =
+          if params[:context_id].present?
+            Api::V3::TopProfile.where(context_id: params[:context_id])
+          else
+            Api::V3::TopProfile.all
+          end
+
+        render json: top_profiles, root: 'data',
                each_serializer: Api::V3::TopProfilesSerializer
       end
     end

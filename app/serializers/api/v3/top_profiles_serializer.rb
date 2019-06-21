@@ -1,26 +1,12 @@
 module Api
   module V3
     class TopProfilesSerializer < ActiveModel::Serializer
-      attributes :context_id, :node_id
-      attribute :profile_type
+      attributes :context_id, :node_id, :profile_type, :year, :summary
       attribute :photo_url
-      attribute :year
-      attribute :summary
+      attribute :node_name
 
-      def profile_type
-        object.node.node_type.context_node_types.find_by(context_id: object.context_id).profile.name
-      end
-
-      def year
-        object.context.years.max
-      end
-
-      def summary
-        service =
-          "Api::V3::#{profile_type.pluralize.capitalize}::BasicAttributes".constantize
-        service.new(
-          object.context, object.node, year
-        ).call[:summary]
+      def node_name
+        object.node.name
       end
 
       def photo_url
