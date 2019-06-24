@@ -4791,12 +4791,15 @@ CREATE MATERIALIZED VIEW public.nodes_mv AS
     to_tsvector('simple'::regconfig, COALESCE(btrim(nodes.name), ''::text)) AS name_tsvector,
     node_types.name AS node_type,
     nodes_with_flows.context_id,
+    nodes_with_flows.years,
     profiles.name AS profile,
     context_properties.is_subnational
    FROM ((((((public.nodes
-     JOIN ( SELECT DISTINCT unnest(flows.path) AS node_id,
-            flows.context_id
-           FROM public.flows) nodes_with_flows ON ((nodes.id = nodes_with_flows.node_id)))
+     JOIN ( SELECT unnest(flows.path) AS node_id,
+            flows.context_id,
+            array_agg(DISTINCT flows.year ORDER BY flows.year) AS years
+           FROM public.flows
+          GROUP BY (unnest(flows.path)), flows.context_id) nodes_with_flows ON ((nodes.id = nodes_with_flows.node_id)))
      JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
      JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
      JOIN public.context_node_types ON (((context_node_types.node_type_id = node_types.id) AND (context_node_types.context_id = nodes_with_flows.context_id))))
@@ -9567,6 +9570,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190530140625'),
 ('20190618131945'),
 ('20190621101736'),
+('20190624114103'),
 ('20190625110206');
 
 

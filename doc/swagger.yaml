@@ -283,6 +283,7 @@ paths:
                       type: integer
                     name:
                       type: string
+                      example: SORRISO
                     nodeType:
                       type: string
                       example: EXPORTER
@@ -290,7 +291,12 @@ paths:
                       type: integer
                     profile:
                       type: string
-                      example: actor
+                      example: place
+                    years:
+                      type: array
+                      items:
+                        type: integer
+                      example: [2013, 2014, 2015]
   /top_profiles:
     get:
       tags:
