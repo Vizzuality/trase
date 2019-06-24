@@ -1,6 +1,15 @@
 @import 'styles/settings';
 
 .c-profile-panel {
-  width: 820px;
+  width: 560px;
+
+  @media screen and (min-width: $breakpoint-tablet) {
+    width: 1000px;
+  }
+
   padding: 30px 0;
+
+  .profile-panel-switch {
+    margin-top: 20px;
+  }
 }

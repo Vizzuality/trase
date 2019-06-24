@@ -9,14 +9,13 @@ import './block-switch.scss';
 class BlockSwitch extends React.PureComponent {
   static propTypes = {
     className: PropTypes.string,
-    dirtyBlocks: PropTypes.object,
     activeBlockId: PropTypes.string,
     blocks: PropTypes.array.isRequired,
     selectBlock: PropTypes.func.isRequired
   };
 
   render() {
-    const { className, blocks, activeBlockId, selectBlock, dirtyBlocks } = this.props;
+    const { className, blocks, activeBlockId, selectBlock } = this.props;
 
     return (
       <div className={cx('c-block-switch', className)}>
@@ -27,8 +26,7 @@ class BlockSwitch extends React.PureComponent {
             <button
               key={block.id}
               className={cx('block-switch-element', {
-                '-active': isActive,
-                '-dirty': dirtyBlocks && dirtyBlocks[block.id]
+                '-active': isActive
               })}
               onClick={() => selectBlock(block.id)}
               disabled={isActive}
