@@ -27,7 +27,7 @@ module Api
         sql = <<~SQL
           SELECT table_name
           FROM information_schema.tables
-          WHERE table_schema = 'public' AND table_name ~ 'download_flows_\d+'
+          WHERE table_schema = 'public' AND table_name ~ 'download_flows_\\d+'
         SQL
         result = execute(sql)
         result.each do |row|
