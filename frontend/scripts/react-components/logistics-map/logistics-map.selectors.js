@@ -1,5 +1,5 @@
 import deburr from 'lodash/deburr';
-import { createSelector, defaultMemoize } from 'reselect';
+import { createSelector } from 'reselect';
 import templates from 'react-components/logistics-map/logistics-map-layers';
 import BRAZIL_COUNTRY from 'react-components/logistics-map/BRAZIL_COUNTRY.json';
 import INDONESIA_COUNTRY from 'react-components/logistics-map/INDONESIA_COUNTRY.json';
@@ -11,13 +11,12 @@ export const defaultLayersIds = {
     'unconfirmed_slaughterhouse_multifunctional_facility',
     'probable_slaughterhouse',
     'unconfirmed_slaughterhouse'
-  ]
+  ],
+  palmOil: ['mills']
 };
 
 const getSelectedCommodity = state =>
-  INDONESIA_LOGISTICS_MAP_ACTIVE
-    ? 'palmOil'
-    : (state.location.query && state.location.query.commodity) || 'soy';
+  INDONESIA_LOGISTICS_MAP_ACTIVE ? 'palmOil' : state?.location?.query?.commodity || 'soy';
 
 const getSelectedYear = state => (state.location.query && state.location.query.year) || 2016;
 const getSelectedInspection = state => state.location.query && state.location.query.inspection;
@@ -29,7 +28,7 @@ const getLogisticsMapSearchTerm = state => state.logisticsMap.searchTerm;
 export const getHeading = createSelector(
   [getSelectedCommodity],
   commodity => {
-    if (commodity === 'palmOil') return 'mills';
+    if (commodity === 'palmOil') return 'palm oil facilities';
     return commodity === 'soy' ? 'soy facilities' : 'slaughterhouses';
   }
 );
@@ -83,10 +82,15 @@ export const getActiveParams = createSelector(
   })
 );
 
+const getSelectedTemplates = createSelector(
+  [getSelectedCommodity],
+  commodity => (commodity === 'palmOil' ? templates.indonesia : templates.brazil)
+);
+
 export const getLogisticsMapLayers = createSelector(
-  [getActiveLayersIds, getActiveParams],
-  (layersIds, activeParams) =>
-    templates
+  [getActiveLayersIds, getActiveParams, getSelectedTemplates],
+  (layersIds, activeParams, selectedTemplates) =>
+    selectedTemplates
       .filter(template => activeParams.commodity === template.commodity)
       .map(template => ({
         name: template.leyendName,
@@ -158,18 +162,20 @@ export const getCurrentSearchedCompanies = createSelector(
     })
 );
 
-export const getLogisticsMapDownloadUrls = defaultMemoize(() =>
-  templates.reduce(
-    (acc, template) => ({
-      ...acc,
-      [template.commodity]: [
-        ...(acc[template.commodity] || []),
-        {
-          name: template.leyendName,
-          downloadUrl: template.downloadUrl
-        }
-      ]
-    }),
-    {}
-  )
+export const getLogisticsMapDownloadUrls = createSelector(
+  [getSelectedTemplates],
+  selectedTemplates =>
+    selectedTemplates.reduce(
+      (acc, template) => ({
+        ...acc,
+        [template.commodity]: [
+          ...(acc[template.commodity] || []),
+          {
+            name: template.leyendName,
+            downloadUrl: template.downloadUrl
+          }
+        ]
+      }),
+      {}
+    )
 );
