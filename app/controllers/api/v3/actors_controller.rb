@@ -50,7 +50,7 @@ module Api
 
       def load_node
         ensure_required_param_present(:actor_id)
-        @node = Api::V3::Node.actor_nodes.find(params[:actor_id])
+        @node = Api::V3::Node.actor_nodes(@context).find(params[:actor_id])
       end
     end
   end

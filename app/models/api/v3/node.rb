@@ -37,25 +37,21 @@ module Api
       has_many :dashboard_templates, through: :dashboard_template_sources
       has_many :top_profiles
 
-      scope :place_nodes, -> {
-        includes(:node_type).where(
-          'node_types.name' => Api::V3::NodeType::PLACES
-        )
-      }
+      def self.place_nodes(context)
+        nodes_by_profile_type(context, :place)
+      end
 
-      scope :actor_nodes, -> {
-        includes(:node_type).where(
-          'node_types.name' => Api::V3::NodeType::ACTORS
-        )
-      }
+      def self.actor_nodes(context)
+        nodes_by_profile_type(context, :actor)
+      end
 
-      scope :biomes, -> {
-        includes(:node_type).where('node_types.name' => NodeTypeName::BIOME)
-      }
-
-      scope :states, -> {
-        includes(:node_type).where('node_types.name' => NodeTypeName::STATE)
-      }
+      def self.nodes_by_profile_type(context, profile_type)
+        joins(node_type: {context_node_types: :profile}).
+          where(
+            'context_node_types.context_id' => context.id,
+            'profiles.name' => profile_type
+          )
+      end
 
       def stringify
         name + ' - ' + node_type.name + ' - ' + node_type&.context_node_types&.first&.context&.country&.name + ' ' + node_type&.context_node_types&.first&.context&.commodity&.name
