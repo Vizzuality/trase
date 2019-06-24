@@ -277,3 +277,9 @@ export const NAV_FILTER_TYPES = {
   dropdown: 2,
   recolorBySelector: 3
 };
+
+export const PROFILE_TYPES = {
+  sources: 'sources',
+  importing: 'importing-countries',
+  traders: 'traders'
+};
