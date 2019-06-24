@@ -6,7 +6,7 @@ RSpec.describe Admin::ContextsController, type: :controller do
   describe 'GET index' do
     it 'returns 200' do
       get :index
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 end

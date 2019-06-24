@@ -16,19 +16,6 @@ module Api
       has_many :context_node_types
       has_many :nodes
 
-      PLACES = [
-        NodeTypeName::MUNICIPALITY,
-        NodeTypeName::LOGISTICS_HUB,
-        NodeTypeName::BIOME,
-        NodeTypeName::STATE,
-        NodeTypeName::DEPARTMENT
-      ].freeze
-
-      ACTORS = [
-        NodeTypeName::EXPORTER,
-        NodeTypeName::IMPORTER
-      ].freeze
-
       def self.node_index_for_name(context, node_type_name)
         zero_based_idx = ContextNodeType.
           joins(:node_type).
