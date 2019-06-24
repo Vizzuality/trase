@@ -31,7 +31,7 @@ ProfilePanel.propTypes = {
   step: PropTypes.number,
   setProfileType: PropTypes.func.isRequired,
   profileType: PropTypes.string,
-  blocks: PropTypes.string
+  blocks: PropTypes.array
 };
 
 export default ProfilePanel;
