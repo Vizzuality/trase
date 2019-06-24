@@ -3,7 +3,7 @@
 .c-profile-panel {
   width: 560px;
 
-  @media screen and (min-width: $breakpoint-tablet) {
+  @media screen and (min-width: $breakpoint-laptop) {
     width: 1000px;
   }
 
