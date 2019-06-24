@@ -30,6 +30,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v3 do
+      resources :top_profiles, only: [:index]
       resources :contexts, only: [:index] do
         resources :map_layers, only: [:index]
         resources :columns, only: [:index]

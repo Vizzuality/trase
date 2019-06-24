@@ -5,6 +5,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -27,6 +28,20 @@ CREATE SCHEMA main;
 --
 
 CREATE SCHEMA maintenance;
+
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
@@ -147,6 +162,13 @@ $$;
 --
 
 COMMENT ON FUNCTION public.bucket_index(buckets double precision[], value double precision) IS 'Given an n-element array of choropleth buckets and a positive value, returns index of bucket where value falls (1 to n + 1); else returns 0.';
+
+
+--
+-- Name: trase_server; Type: SERVER; Schema: -; Owner: -
+--
+
+-- suppressed CREATE SERVER
 
 
 SET default_tablespace = '';
@@ -3665,6 +3687,126 @@ PARTITION BY LIST (year);
 
 
 --
+-- Name: download_flows_2003; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2003 PARTITION OF public.download_flows
+FOR VALUES IN ('2003');
+
+
+--
+-- Name: download_flows_2004; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2004 PARTITION OF public.download_flows
+FOR VALUES IN ('2004');
+
+
+--
+-- Name: download_flows_2005; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2005 PARTITION OF public.download_flows
+FOR VALUES IN ('2005');
+
+
+--
+-- Name: download_flows_2006; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2006 PARTITION OF public.download_flows
+FOR VALUES IN ('2006');
+
+
+--
+-- Name: download_flows_2007; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2007 PARTITION OF public.download_flows
+FOR VALUES IN ('2007');
+
+
+--
+-- Name: download_flows_2008; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2008 PARTITION OF public.download_flows
+FOR VALUES IN ('2008');
+
+
+--
+-- Name: download_flows_2009; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2009 PARTITION OF public.download_flows
+FOR VALUES IN ('2009');
+
+
+--
+-- Name: download_flows_2010; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2010 PARTITION OF public.download_flows
+FOR VALUES IN ('2010');
+
+
+--
+-- Name: download_flows_2011; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2011 PARTITION OF public.download_flows
+FOR VALUES IN ('2011');
+
+
+--
+-- Name: download_flows_2012; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2012 PARTITION OF public.download_flows
+FOR VALUES IN ('2012');
+
+
+--
+-- Name: download_flows_2013; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2013 PARTITION OF public.download_flows
+FOR VALUES IN ('2013');
+
+
+--
+-- Name: download_flows_2014; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2014 PARTITION OF public.download_flows
+FOR VALUES IN ('2014');
+
+
+--
+-- Name: download_flows_2015; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2015 PARTITION OF public.download_flows
+FOR VALUES IN ('2015');
+
+
+--
+-- Name: download_flows_2016; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2016 PARTITION OF public.download_flows
+FOR VALUES IN ('2016');
+
+
+--
+-- Name: download_flows_2017; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2017 PARTITION OF public.download_flows
+FOR VALUES IN ('2017');
+
+
+--
 -- Name: download_flows_stats_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -5298,7 +5440,10 @@ CREATE TABLE public.schema_migrations (
 CREATE TABLE public.top_profiles (
     id bigint NOT NULL,
     context_id bigint NOT NULL,
-    node_id bigint NOT NULL
+    node_id bigint NOT NULL,
+    summary text,
+    year integer,
+    profile_type character varying
 );
 
 
@@ -7431,10 +7576,24 @@ CREATE INDEX download_flows_attribute_type_attribute_id_idx ON ONLY public.downl
 
 
 --
+-- Name: download_flows_2003_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2003_attribute_type_attribute_id_idx ON public.download_flows_2003 USING btree (attribute_type, attribute_id);
+
+
+--
 -- Name: download_flows_context_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX download_flows_context_id_idx ON ONLY public.download_flows USING btree (context_id);
+
+
+--
+-- Name: download_flows_2003_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2003_context_id_idx ON public.download_flows_2003 USING btree (context_id);
 
 
 --
@@ -7445,10 +7604,10 @@ CREATE INDEX download_flows_path_idx ON ONLY public.download_flows USING btree (
 
 
 --
--- Name: download_flows_stats_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: download_flows_2003_path_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX download_flows_stats_mv_id_idx ON public.download_flows_stats_mv USING btree (context_id, year, attribute_type, attribute_id);
+CREATE INDEX download_flows_2003_path_idx ON public.download_flows_2003 USING btree (path);
 
 
 --
@@ -7456,6 +7615,412 @@ CREATE UNIQUE INDEX download_flows_stats_mv_id_idx ON public.download_flows_stat
 --
 
 CREATE INDEX download_flows_year_idx ON ONLY public.download_flows USING btree (year);
+
+
+--
+-- Name: download_flows_2003_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2003_year_idx ON public.download_flows_2003 USING btree (year);
+
+
+--
+-- Name: download_flows_2004_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2004_attribute_type_attribute_id_idx ON public.download_flows_2004 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2004_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2004_context_id_idx ON public.download_flows_2004 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2004_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2004_path_idx ON public.download_flows_2004 USING btree (path);
+
+
+--
+-- Name: download_flows_2004_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2004_year_idx ON public.download_flows_2004 USING btree (year);
+
+
+--
+-- Name: download_flows_2005_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2005_attribute_type_attribute_id_idx ON public.download_flows_2005 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2005_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2005_context_id_idx ON public.download_flows_2005 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2005_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2005_path_idx ON public.download_flows_2005 USING btree (path);
+
+
+--
+-- Name: download_flows_2005_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2005_year_idx ON public.download_flows_2005 USING btree (year);
+
+
+--
+-- Name: download_flows_2006_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2006_attribute_type_attribute_id_idx ON public.download_flows_2006 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2006_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2006_context_id_idx ON public.download_flows_2006 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2006_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2006_path_idx ON public.download_flows_2006 USING btree (path);
+
+
+--
+-- Name: download_flows_2006_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2006_year_idx ON public.download_flows_2006 USING btree (year);
+
+
+--
+-- Name: download_flows_2007_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2007_attribute_type_attribute_id_idx ON public.download_flows_2007 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2007_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2007_context_id_idx ON public.download_flows_2007 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2007_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2007_path_idx ON public.download_flows_2007 USING btree (path);
+
+
+--
+-- Name: download_flows_2007_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2007_year_idx ON public.download_flows_2007 USING btree (year);
+
+
+--
+-- Name: download_flows_2008_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2008_attribute_type_attribute_id_idx ON public.download_flows_2008 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2008_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2008_context_id_idx ON public.download_flows_2008 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2008_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2008_path_idx ON public.download_flows_2008 USING btree (path);
+
+
+--
+-- Name: download_flows_2008_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2008_year_idx ON public.download_flows_2008 USING btree (year);
+
+
+--
+-- Name: download_flows_2009_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2009_attribute_type_attribute_id_idx ON public.download_flows_2009 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2009_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2009_context_id_idx ON public.download_flows_2009 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2009_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2009_path_idx ON public.download_flows_2009 USING btree (path);
+
+
+--
+-- Name: download_flows_2009_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2009_year_idx ON public.download_flows_2009 USING btree (year);
+
+
+--
+-- Name: download_flows_2010_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2010_attribute_type_attribute_id_idx ON public.download_flows_2010 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2010_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2010_context_id_idx ON public.download_flows_2010 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2010_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2010_path_idx ON public.download_flows_2010 USING btree (path);
+
+
+--
+-- Name: download_flows_2010_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2010_year_idx ON public.download_flows_2010 USING btree (year);
+
+
+--
+-- Name: download_flows_2011_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2011_attribute_type_attribute_id_idx ON public.download_flows_2011 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2011_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2011_context_id_idx ON public.download_flows_2011 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2011_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2011_path_idx ON public.download_flows_2011 USING btree (path);
+
+
+--
+-- Name: download_flows_2011_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2011_year_idx ON public.download_flows_2011 USING btree (year);
+
+
+--
+-- Name: download_flows_2012_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2012_attribute_type_attribute_id_idx ON public.download_flows_2012 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2012_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2012_context_id_idx ON public.download_flows_2012 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2012_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2012_path_idx ON public.download_flows_2012 USING btree (path);
+
+
+--
+-- Name: download_flows_2012_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2012_year_idx ON public.download_flows_2012 USING btree (year);
+
+
+--
+-- Name: download_flows_2013_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2013_attribute_type_attribute_id_idx ON public.download_flows_2013 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2013_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2013_context_id_idx ON public.download_flows_2013 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2013_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2013_path_idx ON public.download_flows_2013 USING btree (path);
+
+
+--
+-- Name: download_flows_2013_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2013_year_idx ON public.download_flows_2013 USING btree (year);
+
+
+--
+-- Name: download_flows_2014_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2014_attribute_type_attribute_id_idx ON public.download_flows_2014 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2014_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2014_context_id_idx ON public.download_flows_2014 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2014_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2014_path_idx ON public.download_flows_2014 USING btree (path);
+
+
+--
+-- Name: download_flows_2014_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2014_year_idx ON public.download_flows_2014 USING btree (year);
+
+
+--
+-- Name: download_flows_2015_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2015_attribute_type_attribute_id_idx ON public.download_flows_2015 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2015_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2015_context_id_idx ON public.download_flows_2015 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2015_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2015_path_idx ON public.download_flows_2015 USING btree (path);
+
+
+--
+-- Name: download_flows_2015_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2015_year_idx ON public.download_flows_2015 USING btree (year);
+
+
+--
+-- Name: download_flows_2016_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2016_attribute_type_attribute_id_idx ON public.download_flows_2016 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2016_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2016_context_id_idx ON public.download_flows_2016 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2016_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2016_path_idx ON public.download_flows_2016 USING btree (path);
+
+
+--
+-- Name: download_flows_2016_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2016_year_idx ON public.download_flows_2016 USING btree (year);
+
+
+--
+-- Name: download_flows_2017_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2017_attribute_type_attribute_id_idx ON public.download_flows_2017 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2017_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2017_context_id_idx ON public.download_flows_2017 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2017_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2017_path_idx ON public.download_flows_2017 USING btree (path);
+
+
+--
+-- Name: download_flows_2017_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2017_year_idx ON public.download_flows_2017 USING btree (year);
+
+
+--
+-- Name: download_flows_stats_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX download_flows_stats_mv_id_idx ON public.download_flows_stats_mv USING btree (context_id, year, attribute_type, attribute_id);
 
 
 --
@@ -7676,13 +8241,6 @@ CREATE INDEX node_quants_node_id_idx ON public.node_quants USING btree (node_id)
 
 
 --
--- Name: node_quants_quant_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX node_quants_quant_id_idx ON public.node_quants USING btree (quant_id);
-
-
---
 -- Name: nodes_mv_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7865,6 +8423,426 @@ CREATE INDEX sankey_nodes_mv_node_type_id_idx ON public.sankey_nodes_mv USING bt
 
 
 --
+-- Name: download_flows_2003_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2003_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2003_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2003_context_id_idx;
+
+
+--
+-- Name: download_flows_2003_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2003_path_idx;
+
+
+--
+-- Name: download_flows_2003_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2003_year_idx;
+
+
+--
+-- Name: download_flows_2004_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2004_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2004_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2004_context_id_idx;
+
+
+--
+-- Name: download_flows_2004_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2004_path_idx;
+
+
+--
+-- Name: download_flows_2004_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2004_year_idx;
+
+
+--
+-- Name: download_flows_2005_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2005_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2005_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2005_context_id_idx;
+
+
+--
+-- Name: download_flows_2005_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2005_path_idx;
+
+
+--
+-- Name: download_flows_2005_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2005_year_idx;
+
+
+--
+-- Name: download_flows_2006_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2006_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2006_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2006_context_id_idx;
+
+
+--
+-- Name: download_flows_2006_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2006_path_idx;
+
+
+--
+-- Name: download_flows_2006_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2006_year_idx;
+
+
+--
+-- Name: download_flows_2007_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2007_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2007_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2007_context_id_idx;
+
+
+--
+-- Name: download_flows_2007_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2007_path_idx;
+
+
+--
+-- Name: download_flows_2007_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2007_year_idx;
+
+
+--
+-- Name: download_flows_2008_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2008_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2008_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2008_context_id_idx;
+
+
+--
+-- Name: download_flows_2008_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2008_path_idx;
+
+
+--
+-- Name: download_flows_2008_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2008_year_idx;
+
+
+--
+-- Name: download_flows_2009_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2009_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2009_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2009_context_id_idx;
+
+
+--
+-- Name: download_flows_2009_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2009_path_idx;
+
+
+--
+-- Name: download_flows_2009_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2009_year_idx;
+
+
+--
+-- Name: download_flows_2010_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2010_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2010_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2010_context_id_idx;
+
+
+--
+-- Name: download_flows_2010_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2010_path_idx;
+
+
+--
+-- Name: download_flows_2010_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2010_year_idx;
+
+
+--
+-- Name: download_flows_2011_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2011_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2011_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2011_context_id_idx;
+
+
+--
+-- Name: download_flows_2011_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2011_path_idx;
+
+
+--
+-- Name: download_flows_2011_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2011_year_idx;
+
+
+--
+-- Name: download_flows_2012_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2012_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2012_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2012_context_id_idx;
+
+
+--
+-- Name: download_flows_2012_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2012_path_idx;
+
+
+--
+-- Name: download_flows_2012_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2012_year_idx;
+
+
+--
+-- Name: download_flows_2013_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2013_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2013_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2013_context_id_idx;
+
+
+--
+-- Name: download_flows_2013_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2013_path_idx;
+
+
+--
+-- Name: download_flows_2013_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2013_year_idx;
+
+
+--
+-- Name: download_flows_2014_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2014_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2014_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2014_context_id_idx;
+
+
+--
+-- Name: download_flows_2014_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2014_path_idx;
+
+
+--
+-- Name: download_flows_2014_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2014_year_idx;
+
+
+--
+-- Name: download_flows_2015_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2015_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2015_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2015_context_id_idx;
+
+
+--
+-- Name: download_flows_2015_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2015_path_idx;
+
+
+--
+-- Name: download_flows_2015_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2015_year_idx;
+
+
+--
+-- Name: download_flows_2016_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2016_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2016_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2016_context_id_idx;
+
+
+--
+-- Name: download_flows_2016_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2016_path_idx;
+
+
+--
+-- Name: download_flows_2016_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2016_year_idx;
+
+
+--
+-- Name: download_flows_2017_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2017_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2017_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2017_context_id_idx;
+
+
+--
+-- Name: download_flows_2017_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2017_path_idx;
+
+
+--
+-- Name: download_flows_2017_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2017_year_idx;
+
+
+--
 -- Name: staff_members fk_rails_6ad8424ffc; Type: FK CONSTRAINT; Schema: content; Owner: -
 --
 
@@ -8033,14 +9011,6 @@ ALTER TABLE ONLY public.ind_context_properties
 
 
 --
--- Name: flow_quants fk_rails_2dbc0a565f; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.flow_quants
-    ADD CONSTRAINT fk_rails_2dbc0a565f FOREIGN KEY (flow_id) REFERENCES public.flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
 -- Name: map_quants fk_rails_308b5b45f7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8182,14 +9152,6 @@ ALTER TABLE ONLY public.ind_context_properties
 
 ALTER TABLE ONLY public.quant_context_properties
     ADD CONSTRAINT fk_rails_6e05c978da FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: flow_quals fk_rails_6e55ca4cbc; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.flow_quals
-    ADD CONSTRAINT fk_rails_6e55ca4cbc FOREIGN KEY (flow_id) REFERENCES public.flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -8603,6 +9565,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190528091308'),
 ('20190529153223'),
 ('20190530140625'),
-('20190618131945');
+('20190618131945'),
+('20190621101736');
 
 

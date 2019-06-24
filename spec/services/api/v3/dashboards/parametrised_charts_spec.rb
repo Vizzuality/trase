@@ -86,7 +86,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
       end
     }
     it 'returns expected chart types' do
-      expect(chart_types).to eq(expected_chart_types)
+      expect(chart_types).to match_array(expected_chart_types)
     end
   end
 
@@ -121,7 +121,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
       end
     }
     it 'returns expected chart types' do
-      expect(chart_types).to eq(expected_chart_types)
+      expect(chart_types).to match_array(expected_chart_types)
     end
   end
 
@@ -156,7 +156,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
       end
     }
     it 'returns expected chart types' do
-      expect(chart_types).to eq(expected_chart_types)
+      expect(chart_types).to match_array(expected_chart_types)
     end
   end
 
@@ -193,7 +193,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
     }
 
     it 'returns expected chart types' do
-      expect(chart_types).to eq(expected_chart_types)
+      expect(chart_types).to match_array(expected_chart_types)
     end
   end
 
@@ -256,7 +256,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts do
     }
 
     it 'returns expected chart types' do
-      expect(chart_types).to eq(expected_chart_types)
+      expect(chart_types).to match_array(expected_chart_types)
     end
   end
 end
