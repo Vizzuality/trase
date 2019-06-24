@@ -3,6 +3,7 @@ import { PROFILE_STEPS } from 'constants';
 export const PROFILES__SET_MORE_PANEL_DATA = 'PROFILES__SET_MORE_PANEL_DATA';
 export const PROFILES__SET_PANEL_DATA = 'PROFILES__SET_PANEL_DATA';
 export const PROFILES__SET_ACTIVE_STEP = 'PROFILES__SET_ACTIVE_PANEL';
+export const PROFILES__SET_ACTIVE_PROFILE_TYPE = 'PROFILES__SET_ACTIVE_PROFILE_TYPE';
 export const PROFILES__SET_ACTIVE_ITEM = 'PROFILES__SET_ACTIVE_ITEM';
 export const PROFILES__SET_ACTIVE_ITEMS = 'PROFILES__SET_ACTIVE_ITEMS';
 export const PROFILES__SET_ACTIVE_TAB = 'PROFILES__SET_ACTIVE_TAB';
@@ -39,6 +40,12 @@ export const setProfilesActiveStep = activeStep => ({
   type: PROFILES__SET_ACTIVE_STEP,
   payload: {
     activeStep
+  }
+});
+export const setProfilesProfileType = activeProfileType => ({
+  type: PROFILES__SET_ACTIVE_PROFILE_TYPE,
+  payload: {
+    activeProfileType
   }
 });
 
