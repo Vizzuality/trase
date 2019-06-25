@@ -18,16 +18,26 @@ function mapStateToProps(state) {
         return ctx.id === selectedContext.id;
       })
     : null;
-
-  const parsedTopProfiles = state.profileRoot.topProfiles?.map(profile => ({
-    title: profile.nodeName,
-    subtitle: profile.summary,
-    category: profile.profileType,
-    imageUrl: profile.photoUrl,
-    href: `/profile-${profile.profileType}?nodeId=${profile.nodeId}&contextId=${
-      profile.contextId
-    }&year=${profile.year}`
-  }));
+  const parsedTopProfiles = state.profileRoot.topProfiles?.map(profile => {
+    const { nodeId, year, contextId, nodeName, summary, profileType, photoUrl } = profile;
+    return {
+      title: nodeName,
+      subtitle: summary,
+      category: profileType,
+      imageUrl: photoUrl,
+      to: {
+        type: 'profileNode',
+        payload: {
+          query: {
+            nodeId,
+            year,
+            contextId
+          },
+          profileType
+        }
+      }
+    };
+  });
 
   return {
     activeContext,

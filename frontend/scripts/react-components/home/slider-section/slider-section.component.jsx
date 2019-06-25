@@ -8,6 +8,7 @@ import QuoteCard from 'react-components/shared/quote-card/quote-card.component';
 import debounce from 'lodash/debounce';
 import { DOCUMENT_POST_TYPES } from 'constants';
 import Heading from 'react-components/shared/heading/heading.component';
+import Link from 'redux-first-router-link';
 
 import './slider-section.scss';
 
@@ -85,8 +86,9 @@ class SliderSection extends React.PureComponent {
           {...slide}
           linkProps={{
             target: '_self',
-            href: slide.href
+            to: slide.to
           }}
+          Link={Link}
           parseHtml
         />
       );
