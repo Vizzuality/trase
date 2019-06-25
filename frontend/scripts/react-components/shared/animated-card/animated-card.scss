@@ -1,0 +1,74 @@
+@import 'styles/settings';
+
+$slide-height: 430px;
+$content-height-collapsed: 100px;
+
+.c-animated-card {
+  .card-link {
+    width: 100%;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+
+    height: $slide-height;
+    box-shadow: $box-shadow;
+
+    .card-image {
+      position: relative;
+      height: 100%;
+      width: 100%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .card-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: flex-start;
+      width: 100%;
+      height: $content-height-collapsed;
+      padding: 20px;
+      background-color: $light-gray;
+      transition: height 350ms ease-out;
+      will-change: height;
+
+      @media screen and (max-width: $breakpoint-foundation-small) {
+        height: $slide-height;
+        max-height: $slide-height;
+      }
+
+      .card-details-container {
+        overflow: hidden;
+      }
+
+      .card-title {
+        margin-top: 5px;
+      }
+
+      .cards-details-text-container {
+        max-height: calc(100% - 52px);
+        overflow: auto;
+      }
+    }
+
+    &:hover {
+      .card-image::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+      }
+
+      .card-content {
+        height: $slide-height;
+        max-height: $slide-height;
+      }
+    }
+  }
+}

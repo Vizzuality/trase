@@ -10,6 +10,7 @@ function Text(props) {
     variant,
     color,
     size,
+    lineHeight,
     align,
     weight,
     children,
@@ -23,6 +24,7 @@ function Text(props) {
       'c-text',
       variant,
       {
+        [`line-height-${lineHeight}`]: lineHeight,
         [`color-${color}`]: color,
         [`size-${size}`]: size,
         [`weight-${weight}`]: weight,
@@ -45,6 +47,7 @@ Text.defaultProps = {
 
 Text.propTypes = {
   size: PropTypes.string,
+  lineHeight: PropTypes.string,
   align: PropTypes.string,
   color: PropTypes.string,
   weight: PropTypes.string,
