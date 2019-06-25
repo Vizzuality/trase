@@ -8855,7 +8855,7 @@ ALTER TABLE ONLY content.staff_members
 --
 
 ALTER TABLE ONLY public.top_profiles
-    ADD CONSTRAINT fk_rails_02381b1a96 FOREIGN KEY (context_id) REFERENCES public.contexts(id);
+    ADD CONSTRAINT fk_rails_02381b1a96 FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -9455,7 +9455,7 @@ ALTER TABLE ONLY public.download_quals
 --
 
 ALTER TABLE ONLY public.top_profiles
-    ADD CONSTRAINT fk_rails_eb02423c0e FOREIGN KEY (node_id) REFERENCES public.nodes(id);
+    ADD CONSTRAINT fk_rails_eb02423c0e FOREIGN KEY (node_id) REFERENCES public.nodes(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -9566,6 +9566,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190529153223'),
 ('20190530140625'),
 ('20190618131945'),
-('20190621101736');
+('20190621101736'),
+('20190625110206');
 
 

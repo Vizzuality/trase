@@ -35,7 +35,12 @@ module Api
 
       def self.yellow_foreign_keys
         [
-          {name: :chart_id, table_class: Api::V3::Chart},
+          {name: :chart_id, table_class: Api::V3::Chart}
+        ]
+      end
+
+      def self.blue_foreign_keys
+        [
           {name: :node_type_id, table_class: Api::V3::NodeType}
         ]
       end
