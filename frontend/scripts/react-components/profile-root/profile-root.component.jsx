@@ -80,6 +80,7 @@ const ProfileRoot = props => {
   const nodeTypeRenderer = node => {
     const { contexts } = props;
     const context = contexts.find(c => c.id === node.contextId);
+    if (!context) return node.nodeType;
     return `${node.nodeType} - ${context.commodityName} - ${context.countryName}`;
   };
 
@@ -87,7 +88,7 @@ const ProfileRoot = props => {
     `search-result-${item.nodeType.toLowerCase()}-${item.name.toLowerCase()}`;
 
   if (!NEW_PROFILES_PAGE) return renderLegacyProfiles(props);
-  const { cardsInfo, openModal } = props;
+  const { topProfiles, openModal } = props;
   return (
     <div className="l-profile-root">
       <div className="c-profile-root">
@@ -127,7 +128,7 @@ const ProfileRoot = props => {
 };
 
 ProfileRoot.propTypes = {
-  cardsInfo: PropTypes.array,
+  topProfiles: PropTypes.array,
   contexts: PropTypes.array,
   openModal: PropTypes.func.isRequired
 };

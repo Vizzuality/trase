@@ -82,10 +82,12 @@ class SliderSection extends React.PureComponent {
     if (variant === 'profiles') {
       return (
         <AnimatedCard
-          title={slide.title}
-          subtitle={slide.subtitle}
-          category={slide.category}
-          imageUrl={slide.imageUrl}
+          {...slide}
+          linkProps={{
+            target: '_self',
+            href: slide.href
+          }}
+          parseHtml
         />
       );
     }

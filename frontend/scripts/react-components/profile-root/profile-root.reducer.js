@@ -3,7 +3,8 @@ import fuzzySearch from 'utils/fuzzySearch';
 import {
   LOAD_PROFILE_SEARCH_RESULTS,
   SET_PROFILE_ROOT_ERROR_MESSAGE,
-  SET_PROFILE_SEARCH_TERM
+  SET_PROFILE_SEARCH_TERM,
+  SET_TOP_PROFILES
 } from 'react-components/profile-root/profile-root.actions';
 
 const initialState = {
@@ -12,10 +13,14 @@ const initialState = {
     isLoading: false,
     results: []
   },
+  topProfiles: null,
   errorMessage: null
 };
 
 const profileRootReducer = {
+  [SET_TOP_PROFILES](state, action) {
+    return { ...state, topProfiles: action.payload };
+  },
   [SET_PROFILE_SEARCH_TERM](state, action) {
     return { ...state, search: { ...state.search, ...action.payload } };
   },

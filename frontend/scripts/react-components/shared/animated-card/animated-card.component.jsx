@@ -18,7 +18,8 @@ function AnimatedCard(props) {
     translateUrl,
     Link,
     linkProps,
-    testId
+    testId,
+    parseHtml
   } = props;
   return (
     <div className={cx('c-animated-card', className)} data-test={testId}>
@@ -48,7 +49,7 @@ function AnimatedCard(props) {
                 className="card-title"
                 lineHeight="lg"
               >
-                {subtitle}
+                {parseHtml ? <div dangerouslySetInnerHTML={{ __html: subtitle }} /> : subtitle}
               </Text>
             </div>
           </div>
@@ -72,7 +73,8 @@ AnimatedCard.propTypes = {
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string.isRequired,
   category: PropTypes.string.isRequired,
-  testId: PropTypes.string
+  testId: PropTypes.string,
+  parseHtml: PropTypes.bool
 };
 
 export default AnimatedCard;

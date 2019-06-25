@@ -2,6 +2,7 @@ import trim from 'lodash/trim';
 import qs from 'query-string';
 
 export const GET_CONTEXTS_URL = 'GET_CONTEXTS_URL';
+export const GET_TOP_PROFILES = 'GET_TOP_PROFILES';
 export const GET_TOOLTIPS_URL = 'GET_TOOLTIPS_URL';
 export const GET_ALL_NODES_URL = 'GET_ALL_NODES_URL';
 export const GET_NODES_WITH_SEARCH_URL = 'GET_NODES_WITH_SEARCH_URL';
@@ -125,6 +126,10 @@ const API_ENDPOINTS = {
   [GET_DASHBOARD_PARAMETRISED_CHARTS_URL]: {
     api: 3,
     endpoint: '/dashboards/parametrised_charts'
+  },
+  [GET_TOP_PROFILES]: {
+    api: 3,
+    endpoint: '/top_profiles'
   }
 };
 
