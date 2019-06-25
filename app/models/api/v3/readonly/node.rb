@@ -8,6 +8,7 @@
 #  name_tsvector  :tsvector
 #  node_type      :text
 #  context_id     :integer
+#  years          :integer          is an Array
 #  profile        :text
 #  is_subnational :boolean
 #
