@@ -104,6 +104,7 @@ export default class {
 
         return Object.assign({}, node, {
           hasLink:
+            !DISABLE_PROFILES &&
             node.isUnknown !== true &&
             node.isDomesticConsumption !== true &&
             node.profileType !== undefined &&

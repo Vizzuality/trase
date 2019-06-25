@@ -72,6 +72,7 @@ function ToolSearchResult({
       <div className="search-node-actions-container">
         {buttonList}
         {item.profileType &&
+          !DISABLE_PROFILES &&
           item.type.split(' & ').map(type => (
             <LinkButton
               className="-medium-large"

@@ -45,6 +45,9 @@ class Entrypoints extends React.PureComponent {
         src: '/images/backgrounds/entrypoint-3@2x.jpg'
       }
     ];
+    if (DISABLE_PROFILES) {
+      this.entrypoints.splice(1, 1);
+    }
     this.getSliderRef = this.getSliderRef.bind(this);
     this.onClickPrev = this.onClickPrev.bind(this);
     this.onClickNext = this.onClickNext.bind(this);
@@ -116,11 +119,11 @@ class Entrypoints extends React.PureComponent {
         <Siema loop={false} perPage={2.15} ref={this.getSliderRef} onChange={this.onSlideChange}>
           {this.renderEntrypoints('column small-6')}
         </Siema>
-        {currentSlide > 0 && (
+        {currentSlide > 0 && this.entrypoints.length > 2 && (
           <button className="entrypoint-button -prev" onClick={this.onClickPrev} />
         )}
 
-        {currentSlide === 0 && (
+        {currentSlide === 0 && this.entrypoints.length > 2 && (
           <button className="entrypoint-button -next" onClick={this.onClickNext} />
         )}
       </React.Fragment>

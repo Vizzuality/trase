@@ -8,6 +8,7 @@ import SentenceSelector from 'react-components/shared/sentence-selector/sentence
 import Entrypoints from 'react-components/home/entrypoints/entrypoints.component';
 import Button from 'react-components/shared/button/button.component';
 import InView from 'react-components/shared/in-view.component';
+import cx from 'classnames';
 
 import 'scripts/react-components/home/homepage.scss';
 
@@ -43,7 +44,7 @@ class Home extends React.PureComponent {
             homeVideo={homeVideo}
             onPlayVideo={onPlayVideo}
           />
-          <div className="homepage-entrypoints">
+          <div className={cx('homepage-entrypoints', { '-hide-profiles': DISABLE_PROFILES })}>
             <Entrypoints onClickNext={clickNextEntrypoint} onClick={clickEntrypoint} />
           </div>
           <InView triggerOnce>

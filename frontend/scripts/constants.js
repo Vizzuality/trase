@@ -206,7 +206,7 @@ export const EXPLORE_COLUMN_LIST = [
     value: 'exporter',
     type: 'exporter',
     label: 'Top Exporting Companies',
-    link: { type: 'profileNode', payload: { profileType: 'actor' } },
+    link: !DISABLE_PROFILES && { type: 'profileNode', payload: { profileType: 'actor' } },
     fallbackText: 'exporting companies'
   },
   {
