@@ -32,10 +32,10 @@ $content-height-collapsed: 100px;
       align-items: flex-start;
       width: 100%;
       height: $content-height-collapsed;
-      max-height: $content-height-collapsed;
       padding: 20px;
       background-color: $light-gray;
-      transition: max-height 0.4s ease-in;
+      transition: height 350ms ease-out;
+      will-change: height;
 
       @media screen and (max-width: $breakpoint-foundation-small) {
         height: $slide-height;
@@ -49,10 +49,15 @@ $content-height-collapsed: 100px;
       .card-title {
         margin-top: 5px;
       }
+
+      .cards-details-text-container {
+        max-height: calc(100% - 52px);
+        overflow: auto;
+      }
     }
 
     &:hover {
-      .card-image:after {
+      .card-image::after {
         content: '';
         position: absolute;
         width: 100%;

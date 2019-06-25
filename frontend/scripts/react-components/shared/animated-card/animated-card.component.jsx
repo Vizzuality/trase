@@ -39,16 +39,18 @@ function AnimatedCard(props) {
             <Heading as="h3" color="grey" size="lg" weight="bold">
               {title}
             </Heading>
-            <Text
-              color="grey"
-              size="lg"
-              weight="light"
-              transform="capitalize"
-              className="card-title"
-              lineHeight="lg"
-            >
-              {subtitle}
-            </Text>
+            <div className="cards-details-text-container">
+              <Text
+                color="grey"
+                size="lg"
+                weight="light"
+                transform="capitalize"
+                className="card-title"
+                lineHeight="lg"
+              >
+                {subtitle}
+              </Text>
+            </div>
           </div>
         </figcaption>
       </Link>

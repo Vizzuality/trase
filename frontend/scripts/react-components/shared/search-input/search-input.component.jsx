@@ -119,8 +119,7 @@ class SearchInput extends PureComponent {
     const { searchOptions, onSelect } = this.props;
     return (
       <Downshift
-        onSelect={node => onSelect(node, searchOptions)}
-        stateReducer={this.stateReducer}
+        onChange={node => onSelect(node, searchOptions)}
         itemToString={i => (i === null ? '' : i.name)}
         onInputValueChange={term => this.onInputValueChange(term, searchOptions)}
       >
