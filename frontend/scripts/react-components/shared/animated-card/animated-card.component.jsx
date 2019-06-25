@@ -31,7 +31,7 @@ function AnimatedCard(props) {
         tx-content={translateUrl ? 'translate_urls' : undefined}
         {...linkProps}
       >
-        <ImgBackground as="figure" alt={title} className="card-image" src={imageUrl} />
+        <ImgBackground as="figure" alt={title} className="card-image" src={[imageUrl]} />
         <figcaption className="card-content">
           <div className="card-details-container">
             <Heading as="h4" variant="mono" color="pink" size="sm" weight="bold">
@@ -42,6 +42,7 @@ function AnimatedCard(props) {
             </Heading>
             <div className="cards-details-text-container">
               <Text
+                as="span"
                 color="grey"
                 size="lg"
                 weight="light"
