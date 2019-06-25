@@ -21,9 +21,11 @@ import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.compo
 import { connect } from 'react-redux';
 import Map from 'react-components/tool/map/map.component';
 import getBasemap from 'utils/getBasemap';
+import { getSelectedContext } from 'reducers/app.selectors';
 
 const mapStateToProps = state => {
   const { choropleth } = getChoroplethOptions(state);
+  const selectedContext = getSelectedContext(state);
   return {
     choropleth,
     mapView: state.toolLayers.mapView,
@@ -33,7 +35,7 @@ const mapStateToProps = state => {
     linkedGeoIds: state.toolLayers.linkedGeoIds,
     nodeHeights: state.toolLinks.data.nodeHeights,
     highlightedGeoIds: getHighlightedNodesGeoIds(state)[0],
-    defaultMapView: state.app.selectedContext ? state.app.selectedContext.map : null,
+    defaultMapView: selectedContext ? selectedContext.map : null,
     selectedNodesIdsLength: state.toolLinks.selectedNodesIds.length,
     selectedColumnsIds: getSelectedColumnsIds(state),
     selectedMapContextualLayersData: getSelectedMapContextualLayersData(state),

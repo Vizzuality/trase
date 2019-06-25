@@ -1,5 +1,5 @@
 import { select, all, call, fork, put, takeLatest } from 'redux-saga/effects';
-import { SET_CONTEXT, LOAD_INITIAL_CONTEXT } from 'actions/app.actions';
+import { SET_CONTEXT, SET_CONTEXTS } from 'actions/app.actions';
 import { setLoadingSpinner } from 'utils/saga-utils';
 import {
   loadMapVectorData,
@@ -8,6 +8,7 @@ import {
   SELECT_BIOME_FILTER,
   SELECT_YEARS
 } from 'react-components/tool/tool.actions';
+import { getSelectedContext } from 'reducers/app.selectors';
 import {
   TOOL_LINKS__SELECT_COLUMN,
   TOOL_LINKS__SELECT_VIEW,
@@ -30,9 +31,9 @@ function* fetchToolColumns() {
   function* performFetch() {
     const state = yield select();
     const {
-      app: { selectedContext },
       location: { type: page }
     } = state;
+    const selectedContext = yield select(getSelectedContext);
 
     if (page !== 'tool' || selectedContext === null) {
       return;
@@ -49,17 +50,17 @@ function* fetchToolColumns() {
 
     yield fork(setLoadingSpinner, 150, setToolFlowsLoading(false));
   }
-  yield takeLatest([LOAD_INITIAL_CONTEXT, TOOL_LINKS__GET_COLUMNS, SET_CONTEXT], performFetch);
+  yield takeLatest([SET_CONTEXTS, TOOL_LINKS__GET_COLUMNS, SET_CONTEXT], performFetch);
 }
 
 function* fetchToolGeoColumnNodes() {
   function* performFetch(action) {
     const {
-      app: { selectedContext },
       toolLinks: {
         data: { columns }
       }
     } = yield select(state => state);
+    const selectedContext = yield select(getSelectedContext);
     const { columnId } = action.payload;
 
     if (columns[columnId] && columns[columnId].isGeo) {
@@ -77,7 +78,7 @@ function* fetchLinks() {
       return;
     }
 
-    const { selectedContext } = yield select(state => state.app);
+    const selectedContext = yield select(getSelectedContext);
     const fetchAllNodes = action.type === TOOL_LINKS__SELECT_VIEW && action.payload.detailedView;
     yield put(setToolFlowsLoading(true));
     yield call(getToolLinksData);

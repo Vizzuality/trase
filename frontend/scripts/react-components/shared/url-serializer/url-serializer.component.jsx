@@ -15,7 +15,7 @@ export const deserialize = ({ props, params, state = {}, urlPropHandlers = {} })
   }, state);
 
 const defaultStringify = value => {
-  if ((typeof value !== 'boolean' && isEmpty(value)) || !value) {
+  if ((typeof value === 'object' && isEmpty(value)) || (!value && value !== 0)) {
     return DONT_SERIALIZE;
   }
   return value;
@@ -27,7 +27,7 @@ function UrlSerializer(props) {
   useEffect(() => {
     let removedProps;
     const stringifiedProps = mapValues(urlProps, (value, key) =>
-      urlPropHandlers[key]
+      urlPropHandlers[key] && urlPropHandlers[key].stringify
         ? urlPropHandlers[key].stringify(value, DONT_SERIALIZE)
         : defaultStringify(value)
     );

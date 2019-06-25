@@ -1,10 +1,9 @@
 import { createSelector } from 'reselect';
 import { makeGetRecolorByItems } from 'selectors/indicators.selectors';
 import { getSelectedRecolorBy } from 'react-components/tool/tool.selectors';
+import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 
-const getSelectedContext = state => state.app.selectedContext;
 const getTooltips = state => state.app.tooltips;
-const getSelectedYears = state => state.app.selectedYears;
 
 const getSelectionRecolorBy = createSelector(
   [getTooltips, getSelectedYears],

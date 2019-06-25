@@ -14,7 +14,6 @@ import { deserialize } from 'react-components/shared/url-serializer/url-serializ
 import toolLinksInitialState from 'react-components/tool-links/tool-links.initial-state';
 import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-links.serializers';
 import appInitialState from 'reducers/app.initial-state';
-import * as AppUrlPropHandlers from 'reducers/app.serializers';
 
 import router from './router/router';
 import routeSubscriber from './router/route-subscriber';
@@ -72,8 +71,7 @@ const store = createStore(
     app: deserialize({
       params,
       state: appInitialState,
-      urlPropHandlers: AppUrlPropHandlers,
-      props: ['selectedContext', 'selectedYears']
+      props: ['selectedContextId', 'selectedYears']
     }),
     toolLinks: deserialize({
       params,

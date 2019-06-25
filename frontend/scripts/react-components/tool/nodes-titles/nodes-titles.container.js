@@ -10,21 +10,26 @@ import {
 } from 'react-components/tool/tool.selectors';
 import { getToolRecolorGroups } from 'react-components/tool-links/tool-links.selectors';
 import { getSelectedMapDimensionsData } from 'react-components/tool-layers/tool-layers.selectors';
+import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 
-const mapStateToProps = state => ({
-  selectedResizeBy: getSelectedResizeBy(state),
-  selectedMapDimensions: getSelectedMapDimensionsData(state),
-  selectedNodesData: getSelectedNodesData(state),
-  nodeHeights: state.toolLinks.data.nodeHeights,
-  columns: state.toolLinks.data.columns,
-  attributes: state.toolLinks.data.nodeAttributes,
-  recolorGroups: getToolRecolorGroups(state),
-  currentQuant: state.toolLinks.currentQuant,
-  selectedYears: state.app.selectedYears,
-  selectedContextId: state.app.selectedContext ? state.app.selectedContext.id : null,
-  highlightedNodesData: getHighlightedNodesData(state),
-  coordinates: state.toolLayers.highlightedNodeCoordinates
-});
+const mapStateToProps = state => {
+  const selectedContext = getSelectedContext(state);
+  const selectedYears = getSelectedYears(state);
+  return {
+    selectedYears,
+    selectedResizeBy: getSelectedResizeBy(state),
+    selectedMapDimensions: getSelectedMapDimensionsData(state),
+    selectedNodesData: getSelectedNodesData(state),
+    nodeHeights: state.toolLinks.data.nodeHeights,
+    columns: state.toolLinks.data.columns,
+    attributes: state.toolLinks.data.nodeAttributes,
+    recolorGroups: getToolRecolorGroups(state),
+    currentQuant: state.toolLinks.currentQuant,
+    selectedContextId: selectedContext ? selectedContext.id : null,
+    highlightedNodesData: getHighlightedNodesData(state),
+    coordinates: state.toolLayers.highlightedNodeCoordinates
+  };
+};
 
 const methodProps = [
   {

@@ -38,6 +38,12 @@ export const toolLayersInitialState = {
 };
 
 const toolLayersReducer = {
+  tool(state, action) {
+    if (action.payload?.serializerParams) {
+      return { ...state, mapView: null };
+    }
+    return state;
+  },
   [SET_CONTEXT]() {
     return toolLayersInitialState;
   },

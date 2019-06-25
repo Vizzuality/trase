@@ -8,16 +8,22 @@ import {
 import { fetchWithCancel } from 'utils/saga-utils';
 import { getSelectedColumnsIds, getSelectedResizeBy } from 'react-components/tool/tool.selectors';
 import { NUM_NODES_DETAILED, NUM_NODES_EXPANDED, NUM_NODES_SUMMARY } from 'constants';
+import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 import { setToolColumns, setToolLinks, setToolNodes, setMoreToolNodes } from './tool-links.actions';
 
 export function* getToolLinksData() {
   const state = yield select();
+  const selectedYears = yield select(getSelectedYears);
+  const selectedContext = yield select(getSelectedContext);
   const selectedColumnsIds = yield select(getSelectedColumnsIds);
   const selectedResizeBy = yield select(getSelectedResizeBy);
+  if (!selectedResizeBy) {
+    return;
+  }
   const params = {
-    context_id: state.app.selectedContext.id,
-    start_year: state.app.selectedYears[0],
-    end_year: state.app.selectedYears[1],
+    context_id: selectedContext.id,
+    start_year: selectedYears[0],
+    end_year: selectedYears[1],
     include_columns: selectedColumnsIds.join(','),
     flow_quant: selectedResizeBy.name,
     locked_nodes: state.toolLinks.selectedNodesIds

@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash/sortBy';
+import { getSelectedContext } from 'reducers/app.selectors';
 
-const getSelectedContext = state => state.app.selectedContext;
 const getContexts = state => state.app.contexts;
 
 export const getSelectedCommodityPairs = createSelector(

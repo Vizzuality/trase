@@ -16,11 +16,11 @@ export default {
     isLoading: false,
     results: []
   },
-  selectedContext: null,
+  selectedContextId: null,
+  selectedYears: null,
   contexts: [],
   loading: {
     contexts: false,
     tooltips: false
-  },
-  selectedYears: []
+  }
 };
