@@ -10,7 +10,8 @@ function mapStateToProps(state) {
   return {
     items: state.profileRoot.search.results,
     isLoading: state.profileRoot.search.isLoading,
-    contexts: state.app.contexts
+    contexts: state.app.contexts,
+    variant: 'slim'
   };
 }
 

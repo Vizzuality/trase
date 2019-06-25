@@ -76,7 +76,6 @@ renderLegacyProfiles.propTypes = {
 };
 
 const ProfileRoot = props => {
-
   const nodeTypeRenderer = node => {
     const { contexts } = props;
     const context = contexts.find(c => c.id === node.contextId);
@@ -103,7 +102,6 @@ const ProfileRoot = props => {
               <ProfileSearch
                 testId="profile-root"
                 className="profile-search"
-                resultClassName="profile-search-result"
                 placeholderSmall="Search"
                 placeholder="Search places or traders"
                 getResultTestId={getResultTestId}

@@ -30,35 +30,12 @@
   }
 
   .profile-search {
-    display: inline-block;
-    vertical-align: bottom;
-    height: 45px;
-    width: 270px;
-
     margin-left: 30px;
     margin-top: 0;
 
     @media only screen and (max-width: $breakpoint-foundation-small) {
       margin-left: 0;
       margin-top: 30px;
-    }
-
-    .search-input-field {
-      font-size: $font-size-x-regular;
-      text-transform: uppercase;
-    }
-
-    .search-input-results {
-      max-height: 345px;
-      text-align: left;
-    }
-
-    .profile-search-result {
-      padding: 14px 15px;
-
-      .search-input-item-name {
-        font-size: 17px;
-      }
     }
   }
 
