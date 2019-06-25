@@ -25,7 +25,7 @@ function UnitsTooltip(props) {
     };
   }, [x, y]);
 
-  const visibility = show && position ? 'visible' : 'hidden';
+  const visibility = show ? 'visible' : 'hidden';
 
   return (
     <div
