@@ -4,23 +4,8 @@ import { getSelectedContext } from 'reducers/app.selectors';
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolColumns = state => state.toolLinks.data.columns;
-const getToolBiomeFilter = state => state.toolLinks.selectedBiomeFilter;
 const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getHighlightedNodeIds = state => state.toolLinks.highlightedNodeId;
-
-export const getSelectedBiomeFilter = createSelector(
-  [getToolBiomeFilter, getSelectedContext],
-  (selectedBiomeFilter, selectedContext) => {
-    if (!selectedContext || selectedContext.filterBy.length === 0) {
-      return { value: 'none' };
-    }
-    return (
-      selectedContext.filterBy[0].nodes.find(
-        filterBy => filterBy.name === selectedBiomeFilter?.name
-      ) || { value: 'none', name: 'none' }
-    );
-  }
-);
 
 export const getSelectedColumnsIds = createSelector(
   [getSelectedContext, getToolColumns, getToolSelectedColumnsIds],

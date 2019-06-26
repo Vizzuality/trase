@@ -1,6 +1,5 @@
 import { TOGGLE_MAP_LAYERS_MENU, SET_CONTEXT } from 'actions/app.actions';
 import {
-  SELECT_BIOME_FILTER,
   SELECT_CONTEXTUAL_LAYERS,
   SELECT_YEARS,
   TOGGLE_MAP
@@ -10,7 +9,8 @@ import {
   TOOL_LINKS__SELECT_COLUMN,
   TOOL_LINKS__SET_SELECTED_NODES,
   TOOL_LINKS__SET_SELECTED_RESIZE_BY,
-  TOOL_LINKS__SET_SELECTED_RECOLOR_BY
+  TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
+  TOOL_LINKS__SET_SELECTED_BIOME_FILTER
 } from 'react-components/tool-links/tool-links.actions';
 
 export default [
@@ -41,7 +41,7 @@ export default [
     }
   },
   {
-    type: SELECT_BIOME_FILTER,
+    type: TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
     category: 'Sankey',
     action: 'Update biome filter',
     getPayload: action => action.biomeFilter

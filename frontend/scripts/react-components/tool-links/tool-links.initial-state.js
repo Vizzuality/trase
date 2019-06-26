@@ -14,11 +14,11 @@ export default {
   forcedOverview: false,
   highlightedNodeId: null,
   flowsLoading: false,
-  selectedBiomeFilter: null,
   selectedColumnsIds: null,
   expandedNodesIds: [],
   selectedNodesIds: [],
   selectedRecolorByName: null,
   selectedResizeByName: null,
+  selectedBiomeFilterName: null,
   isSearchOpen: false
 };

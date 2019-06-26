@@ -16,6 +16,7 @@ export const TOOL_LINKS__CLEAR_SANKEY = 'TOOL_LINKS__CLEAR_SANKEY';
 export const TOOL_LINKS__SET_SELECTED_NODES = 'TOOL_LINKS__SET_SELECTED_NODES';
 export const TOOL_LINKS__SET_SELECTED_RECOLOR_BY = 'TOOL_LINKS__SET_SELECTED_RECOLOR_BY';
 export const TOOL_LINKS__SET_SELECTED_RESIZE_BY = 'TOOL_LINKS__SET_SELECTED_RESIZE_BY';
+export const TOOL_LINKS__SET_SELECTED_BIOME_FILTER = 'TOOL_LINKS__SET_SELECTED_BIOME_FILTER';
 
 export function setToolFlowsLoading(loading) {
   return {
@@ -131,6 +132,13 @@ export function selectRecolorBy(name) {
 export function selectResizeBy(name) {
   return {
     type: TOOL_LINKS__SET_SELECTED_RESIZE_BY,
+    payload: { name }
+  };
+}
+
+export function selectBiomeFilter(name) {
+  return {
+    type: TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
     payload: { name }
   };
 }

@@ -85,7 +85,8 @@ const store = createStore(
         'expandedNodesIds',
         'detailedView',
         'selectedResizeByName',
-        'selectedRecolorByName'
+        'selectedRecolorByName',
+        'selectedBiomeFilterName'
       ]
     }),
     toolLayers: deserialize({

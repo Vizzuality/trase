@@ -20,12 +20,13 @@ const getToolExpandedNodesIds = state => state.toolLinks.expandedNodesIds;
 const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getToolRecolorByName = state => state.toolLinks.selectedRecolorByName;
 const getToolResizeByName = state => state.toolLinks.selectedResizeByName;
+const getToolBiomeFilterName = state => state.toolLinks.selectedBiomeFilterName;
 const getToolDetailedView = state => state.toolLinks.detailedView;
 
 export const getSelectedResizeBy = createSelector(
   [getToolResizeByName, getSelectedContext],
   (selectedResizeByName, selectedContext) => {
-    if (!selectedResizeByName || !selectedContext) {
+    if (!selectedContext) {
       return null;
     }
 
@@ -40,7 +41,7 @@ export const getSelectedResizeBy = createSelector(
 export const getSelectedRecolorBy = createSelector(
   [getToolRecolorByName, getSelectedContext],
   (selectedRecolorByName, selectedContext) => {
-    if (!selectedRecolorByName || !selectedContext) {
+    if (!selectedContext) {
       return null;
     }
 
@@ -49,6 +50,24 @@ export const getSelectedRecolorBy = createSelector(
     }
 
     return selectedContext.recolorBy.find(recolorBy => recolorBy.name === selectedRecolorByName);
+  }
+);
+
+export const getSelectedBiomeFilter = createSelector(
+  [getToolBiomeFilterName, getSelectedContext, getToolNodes],
+  (selectedBiomeFilterName, selectedContext, nodes) => {
+    if (!selectedBiomeFilterName || !selectedContext || selectedContext.filterBy.length === 0) {
+      return null;
+    }
+
+    const biomeFilter = selectedContext.filterBy[0].nodes.find(
+      filterBy => filterBy.name === selectedBiomeFilterName
+    );
+
+    // TODO add the geoId from the backend
+    const biomeFilterNode = biomeFilter && nodes && nodes[biomeFilter.nodeId];
+
+    return { ...biomeFilter, geoId: biomeFilterNode && biomeFilterNode.geoId };
   }
 );
 
@@ -150,6 +169,6 @@ export const getToolLinksUrlProps = createStructuredSelector({
   expandedNodesIds: getToolExpandedNodesIds,
   detailedView: getToolDetailedView,
   selectedResizeByName: getToolResizeByName,
-  selectedRecolorByName: getToolRecolorByName
-  // selectedBiomeFilter: getSelectedBiomeFilter
+  selectedRecolorByName: getToolRecolorByName,
+  selectedBiomeFilterName: getToolBiomeFilterName
 });

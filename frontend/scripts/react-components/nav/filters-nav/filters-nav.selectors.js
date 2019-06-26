@@ -10,10 +10,10 @@ import capitalize from 'lodash/capitalize';
 import { makeGetResizeByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
-import { getSelectedBiomeFilter as getToolSelectedBiome } from 'react-components/tool/tool.selectors';
 import {
   getSelectedResizeBy as getToolResizeBy,
-  getSelectedRecolorBy as getToolRecolorBy
+  getSelectedRecolorBy as getToolRecolorBy,
+  getSelectedBiomeFilter as getToolSelectedBiome
 } from 'react-components/tool-links/tool-links.selectors';
 
 const insertIf = (condition, item) => (condition ? [item] : []);
@@ -52,10 +52,9 @@ export const getToolAdminLevelProps = createSelector(
           .filter(node => node.name !== (selectedFilter && selectedFilter.name))
           .map(node => ({ ...node, value: node.name, label: capitalize(node.name) }))
       ],
-      value:
-        typeof selectedFilter !== 'undefined' && selectedFilter.value !== 'none'
-          ? { ...selectedFilter, label: capitalize(selectedFilter.name) }
-          : { label: 'All', value: 'All' }
+      value: selectedFilter
+        ? { ...selectedFilter, label: capitalize(selectedFilter.name) }
+        : { label: 'All', value: 'All' }
     };
   }
 );

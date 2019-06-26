@@ -27,7 +27,6 @@ import {
 
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
 export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
-export const SELECT_BIOME_FILTER = 'SELECT_BIOME_FILTER';
 export const SELECT_YEARS = 'SELECT_YEARS';
 export const GET_MAP_VECTOR_DATA = 'GET_MAP_VECTOR_DATA';
 export const GET_CONTEXT_LAYERS = 'GET_CONTEXT_LAYERS';
@@ -80,30 +79,6 @@ export function resetSankey() {
     dispatch(selectResizeBy(defaultResizeBy.name));
 
     dispatch(clearSankey());
-  };
-}
-
-export function selectBiomeFilter(biomeFilterName) {
-  return (dispatch, getState) => {
-    let selectedBiomeFilter;
-    if (biomeFilterName === 'none') {
-      selectedBiomeFilter = { value: 'none', name: 'none' };
-    } else {
-      const state = getState();
-      const selectedContext = getSelectedContext(state);
-      const { toolLinks } = state;
-      selectedBiomeFilter = Object.assign(
-        {},
-        selectedContext.filterBy[0].nodes.find(filterBy => filterBy.name === biomeFilterName)
-      );
-      const node = toolLinks.data.nodes[selectedBiomeFilter.nodeId];
-      selectedBiomeFilter.geoId = node && node.geoId;
-    }
-
-    dispatch({
-      type: SELECT_BIOME_FILTER,
-      payload: selectedBiomeFilter
-    });
   };
 }
 

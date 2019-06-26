@@ -6,11 +6,11 @@ import {
   highlightNodeFromGeoId,
   saveMapView
 } from 'react-components/tool/tool.actions';
+import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
 import {
-  getSelectedBiomeFilter,
-  getSelectedColumnsIds
-} from 'react-components/tool/tool.selectors';
-import { getVisibleNodes } from 'react-components/tool-links/tool-links.selectors';
+  getVisibleNodes,
+  getSelectedBiomeFilter
+} from 'react-components/tool-links/tool-links.selectors';
 import {
   getMapView,
   getSelectedNodesGeoIds,

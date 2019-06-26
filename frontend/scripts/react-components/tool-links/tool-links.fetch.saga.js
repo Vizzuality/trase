@@ -11,7 +11,8 @@ import { NUM_NODES_DETAILED, NUM_NODES_EXPANDED, NUM_NODES_SUMMARY } from 'const
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 import {
   getSelectedResizeBy,
-  getSelectedRecolorBy
+  getSelectedRecolorBy,
+  getSelectedBiomeFilter
 } from 'react-components/tool-links/tool-links.selectors';
 import { setToolColumns, setToolLinks, setToolNodes, setMoreToolNodes } from './tool-links.actions';
 
@@ -22,6 +23,7 @@ export function* getToolLinksData() {
   const selectedColumnsIds = yield select(getSelectedColumnsIds);
   const selectedResizeBy = yield select(getSelectedResizeBy);
   const selectedRecolorBy = yield select(getSelectedRecolorBy);
+  const selectedBiomeFilter = yield select(getSelectedBiomeFilter);
   if (!selectedResizeBy) {
     return;
   }
@@ -51,7 +53,6 @@ export function* getToolLinksData() {
     }
   }
 
-  const selectedBiomeFilter = state.toolLinks.selectedBiomeFilter;
   if (selectedBiomeFilter && selectedBiomeFilter.name && selectedBiomeFilter.name !== 'none') {
     params.biome_filter_id = selectedBiomeFilter.nodeId;
   }
@@ -101,6 +102,7 @@ export function* getToolNodesByLink(selectedContext) {
   const {
     data: { links }
   } = yield select(state => state.toolLinks);
+
   const nodesIds = Array.from(new Set(Object.values(links).flatMap(link => link.path))).join(',');
   const params = { context_id: selectedContext.id, nodes_ids: nodesIds };
   const url = getURLFromParams(GET_ALL_NODES_URL, params);
