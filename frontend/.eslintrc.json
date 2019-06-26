@@ -56,6 +56,7 @@
     "NODE_ENV_DEV": true,
     "API_V3_URL": true,
     "ENABLE_DASHBOARDS": true,
+    "DISABLE_PROFILES": true,
     "ENABLE_COOKIE_BANNER": true,
     "ENABLE_LOGISTICS_MAP": true,
     "INDONESIA_LOGISTICS_MAP_ACTIVE": true,

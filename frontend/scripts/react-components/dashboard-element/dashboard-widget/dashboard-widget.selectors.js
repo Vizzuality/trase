@@ -6,6 +6,7 @@ import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/da
 import { CHART_TYPES } from 'constants';
 import camelCase from 'lodash/camelCase';
 import capitalize from 'lodash/capitalize';
+import { getDashboardsContext } from 'react-components/dashboard-element/dashboard-element.selectors';
 
 export const PARSED_CHART_TYPES = {
   bar_chart: CHART_TYPES.bar,
@@ -132,8 +133,8 @@ export const getXKeys = createSelector(
 export const makeGetChartType = () => getChartType;
 export const makeGetConfig = () =>
   createSelector(
-    [getMeta, getYKeys, getXKeys, getColors, getDefaultConfig],
-    (meta, yKeys, xKeys, colors, defaultConfig) => {
+    [getMeta, getYKeys, getXKeys, getColors, getDefaultConfig, getDashboardsContext],
+    (meta, yKeys, xKeys, colors, defaultConfig, dashboardContext) => {
       if (!meta) return defaultConfig;
       const config = {
         ...defaultConfig,
@@ -158,7 +159,10 @@ export const makeGetConfig = () =>
         },
         yKeys,
         xKeys,
-        colors
+        colors,
+        dashboardMeta: {
+          context: dashboardContext
+        }
       };
       return config;
     }

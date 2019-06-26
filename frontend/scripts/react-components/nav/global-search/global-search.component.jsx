@@ -62,7 +62,9 @@ export default class GlobalSearch extends Component {
 
   onItemSelected(item) {
     this.onCloseClicked();
-    this.props.onItemSelected(item);
+    if (item) {
+      this.props.onItemSelected(item);
+    }
   }
 
   onDownshiftStateChange(state) {

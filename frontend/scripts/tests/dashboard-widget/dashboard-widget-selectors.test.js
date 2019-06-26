@@ -6,6 +6,40 @@ import {
 } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.selectors';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
 
+const defaultState = {
+  app: {
+    contexts: [
+      {
+        id: 1,
+        isDefault: true,
+        defaultYear: 2017,
+        countryId: 27,
+        countryName: 'BRAZIL',
+        commodityId: 1,
+        commodityName: 'SOY'
+      }
+    ]
+  },
+  dashboardElement: {
+    countriesPanel: {
+      activeItems: {
+        '27': {
+          id: 27,
+          name: 'BRAZIL'
+        }
+      }
+    },
+    commoditiesPanel: {
+      activeItems: {
+        '1': {
+          id: 1,
+          name: 'SOY'
+        }
+      }
+    }
+  }
+};
+
 const mockChart = {
   data: [
     { x0: 2878667.2818, x1: 6737450.485456, x2: 55881.97, y: 'UNKNOWN' },
@@ -137,14 +171,14 @@ describe('Widget config parse selectors', () => {
   // makeGetConfig is a function that returns the selector just to be able to memoize the selector result
   describe('makeGetConfig', () => {
     it('returns the defaultConfig if there is no meta', () => {
-      expect(makeGetConfig()(null, { meta: null, selectedRecolorBy: null })).toEqual(
+      expect(makeGetConfig()(defaultState, { meta: null, selectedRecolorBy: null })).toEqual(
         CHART_CONFIG.bar
       );
     });
 
     it('Parses the config with recolor by', () => {
       expect(
-        makeGetConfig()(null, {
+        makeGetConfig()(defaultState, {
           data: mockChart.data,
           meta: mockChart.meta,
           chartType: 'horizontal_bar_chart',
@@ -155,7 +189,7 @@ describe('Widget config parse selectors', () => {
 
     it('Parses the config without recolor by', () => {
       expect(
-        makeGetConfig()(null, {
+        makeGetConfig()(defaultState, {
           data: mockChart.data,
           meta: mockChart.meta,
           chartType: 'horizontal_bar_chart',
