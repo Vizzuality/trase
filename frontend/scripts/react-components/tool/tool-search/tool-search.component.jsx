@@ -33,7 +33,8 @@ export default class ToolSearch extends Component {
     const ids = ToolSearch.getNodeIds(selectedItem);
     return nodeTypes.map((nodeType, i) => ({
       nodeType,
-      id: ids[i]
+      id: ids[i],
+      contextId: selectedItem.contextId
     }));
   }
 

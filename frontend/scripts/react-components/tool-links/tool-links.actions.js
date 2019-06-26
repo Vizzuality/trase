@@ -1,5 +1,7 @@
 import castArray from 'lodash/castArray';
 
+import { getURLFromParams, GET_ALL_NODES_URL } from 'utils/getURLFromParams';
+
 export const TOOL_LINKS__SET_FLOWS_LOADING = 'TOOL_LINKS__SET_FLOWS_LOADING';
 export const TOOL_LINKS__GET_COLUMNS = 'TOOL_LINKS__GET_COLUMNS';
 export const TOOL_LINKS__SET_COLUMNS = 'TOOL_LINKS__SET_COLUMNS';
@@ -155,5 +157,16 @@ export function setNoLinksFound(noLinksFound) {
 export function resetSankey() {
   return {
     type: TOOL_LINKS_RESET_SANKEY
+  };
+}
+
+export function getNodes(contextId, nodesIds) {
+  return dispatch => {
+    const params = { context_id: contextId, nodes_ids: nodesIds.join(',') };
+    const url = getURLFromParams(GET_ALL_NODES_URL, params);
+    fetch(url)
+      .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
+      .then(resp => dispatch(setToolNodes(resp.data)))
+      .catch(error => console.error(error));
   };
 }

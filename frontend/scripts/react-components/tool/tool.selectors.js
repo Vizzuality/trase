@@ -45,7 +45,7 @@ export const getSelectedNodesData = createSelector(
 export const getHighlightedNodesData = createSelector(
   [getHighlightedNodeIds, getToolNodes],
   (highlightedNodeId, nodes) => {
-    if (nodes && highlightedNodeId) {
+    if (nodes && highlightedNodeId && nodes[highlightedNodeId]) {
       return [nodes[highlightedNodeId]];
     }
     return [];
