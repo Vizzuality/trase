@@ -141,7 +141,7 @@ export const getMapView = createSelector(
   [getToolMapView, getSelectedContext],
   (mapView, selectedContext) => {
     if (!mapView || !selectedContext) {
-      return mapView;
+      return null;
     }
 
     if (
