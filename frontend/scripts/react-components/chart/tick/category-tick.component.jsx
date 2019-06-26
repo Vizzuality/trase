@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import wrapSVGText from 'utils/wrapSVGText';
+import Link from 'redux-first-router-link';
 import 'react-components/chart/tick/tick-styles.scss';
 
 const renderText = tickValue => (
@@ -30,9 +31,9 @@ function CategoryTick(props) {
   return (
     <g transform={`translate(${x},${y})`}>
       {url ? (
-        <a href={url} className="tick-text-link">
+        <Link to={url} className="tick-text-link">
           {renderText(payload.value)}
-        </a>
+        </Link>
       ) : (
         renderText(payload.value)
       )}
