@@ -276,6 +276,9 @@ const toolLinksReducer = {
       if (hasChanged) {
         // save to state the new node selection
         draft.selectedNodesIds = newSelectedNodes;
+        if (newSelectedNodes.length === 0) {
+          draft.expandedNodesIds = [];
+        }
       }
     });
   },

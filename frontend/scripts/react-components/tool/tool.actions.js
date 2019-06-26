@@ -5,7 +5,6 @@ import { GET_NODE_ATTRIBUTES_URL, getURLFromParams } from 'utils/getURLFromParam
 import contextLayersCarto from 'named-maps/tool_named_maps_carto';
 import getNodeIdFromGeoId from 'actions/helpers/getNodeIdFromGeoId';
 import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
-import intesection from 'lodash/intersection';
 import compact from 'lodash/compact';
 import isEmpty from 'lodash/isEmpty';
 import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
@@ -320,13 +319,11 @@ export function selectExpandedNode(param) {
     const visibleNodes = getVisibleNodes(state);
     const visibleNodesById = visibleNodes.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
     const hasInvisibleNodes = ids.some(id => !visibleNodesById[id]);
+    const isRemovingANodeWhileExpanded =
+      toolLinks.expandedNodesIds.length > 0 &&
+      ids.some(id => toolLinks.selectedNodesIds.includes(id));
 
-    if (
-      toolLinks.selectedNodesIds.length === ids.length &&
-      intesection(toolLinks.selectedNodesIds, ids).length === ids.length
-    ) {
-      dispatch(clearSankey());
-    } else if (hasInvisibleNodes) {
+    if (hasInvisibleNodes || isRemovingANodeWhileExpanded) {
       dispatch(selectNodes(ids));
       dispatch(expandSankey());
     } else {

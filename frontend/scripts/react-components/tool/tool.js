@@ -4,13 +4,22 @@ import { connect } from 'react-redux';
 import { resizeSankeyTool } from 'react-components/tool/tool.thunks';
 import { getToolLinksUrlProps } from 'react-components/tool-links/tool-links.selectors';
 import { getAppUrlProps } from 'reducers/app.selectors';
+import { getToolLayersUrlProps } from 'react-components/tool-layers/tool-layers.selectors';
+import * as ToolLayersUrlPropHandlers from 'react-components/tool-layers/tool-layers.serializers';
+import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-links.serializers';
 
 const getUrlProps = createSelector(
-  [getToolLinksUrlProps, getAppUrlProps],
-  (toolLinks, app) => ({ ...toolLinks, ...app })
+  [getToolLinksUrlProps, getAppUrlProps, getToolLayersUrlProps],
+  (toolLinks, app, toolLayers) => ({ ...toolLinks, ...app, ...toolLayers })
 );
 
+const urlPropHandlers = {
+  ...ToolLayersUrlPropHandlers,
+  ...ToolLinksUrlPropHandlers
+};
+
 const mapStateToProps = state => ({
+  urlPropHandlers,
   urlProps: getUrlProps(state)
 });
 

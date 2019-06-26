@@ -18,7 +18,6 @@ import MapLegend from 'react-components/tool/map-legend/map-legend.container';
 import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.react';
 import EventManager from 'utils/eventManager';
 import UrlSerializer from 'react-components/shared/url-serializer';
-import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-links.serializers';
 
 import 'styles/layouts/l-tool.scss';
 import 'styles/components/shared/veil.scss';
@@ -176,7 +175,7 @@ const renderVainillaComponents = () => (
 );
 
 const Tool = props => {
-  const { resizeSankeyTool, urlProps } = props;
+  const { resizeSankeyTool, urlProps, urlPropHandlers } = props;
   useEffect(() => {
     evManager.addEventListener(window, 'resize', resizeSankeyTool);
     document.querySelector('body').classList.add('-overflow-hidden');
@@ -229,13 +228,14 @@ const Tool = props => {
   return (
     <div>
       {render}
-      <UrlSerializer urlProps={urlProps} urlPropHandlers={ToolLinksUrlPropHandlers} />
+      <UrlSerializer urlProps={urlProps} urlPropHandlers={urlPropHandlers} />
     </div>
   );
 };
 
 Tool.propTypes = {
   resizeSankeyTool: PropTypes.func.isRequired,
+  urlPropHandlers: PropTypes.object,
   urlProps: PropTypes.object
 };
 

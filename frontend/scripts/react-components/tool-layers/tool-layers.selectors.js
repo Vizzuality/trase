@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector, createStructuredSelector } from 'reselect';
 import getChoropleth from 'reducers/helpers/getChoropleth';
 import { getMapDimensionsWarnings as getMapDimensionsWarningsUtil } from 'scripts/reducers/helpers/getMapDimensionsWarnings';
 import {
@@ -6,15 +6,18 @@ import {
   getSelectedColumnsIds,
   getSelectedNodesData
 } from 'react-components/tool/tool.selectors';
-import { getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedYears, getSelectedContext } from 'reducers/app.selectors';
 
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolColumns = state => state.toolLinks.data.columns;
-const getMapContextualLayers = state => state.toolLayers.data.mapContextualLayers;
-const getSelectedMapContextualLayers = state => state.toolLayers.selectedMapContextualLayers;
 const getToolNodeAttributes = state => state.toolLinks.data.nodeAttributes;
-const getToolSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
 const getToolMapDimensions = state => state.toolLayers.data.mapDimensions;
+const getMapContextualLayers = state => state.toolLayers.data.mapContextualLayers;
+const getToolSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
+const getSelectedMapContextualLayers = state => state.toolLayers.selectedMapContextualLayers;
+const getToolMapView = state => state.toolLayers.mapView;
+const getIsMapVisible = state => state.toolLayers.isMapVisible;
+const getSelectedMapBasemap = state => state.toolLayers.selectedMapBasemap;
 
 const getNodesGeoIds = (nodesData, columns) =>
   nodesData
@@ -130,6 +133,39 @@ export const getSelectedMapContextualLayersData = createSelector(
     if (!selectedMapContextualLayers) {
       return [];
     }
-    return selectedMapContextualLayers.map(layer => mapContextualLayers[layer]);
+    return selectedMapContextualLayers.map(layer => mapContextualLayers[layer]).filter(Boolean);
   }
 );
+
+export const getMapView = createSelector(
+  [getToolMapView, getSelectedContext],
+  (mapView, selectedContext) => {
+    if (!mapView || !selectedContext) {
+      return null;
+    }
+
+    if (
+      mapView.latitude === selectedContext.map.latitude &&
+      mapView.longitude === selectedContext.map.longitude &&
+      mapView.zoom === selectedContext.map.zoom
+    ) {
+      return null;
+    }
+
+    return mapView;
+  }
+);
+
+export const getShouldFitBoundsSelectedPolygons = createSelector(
+  [getSelectedNodesGeoIds, getSelectedNodesData],
+  (selectedNodesGeoIds, selectedNodesData) =>
+    selectedNodesGeoIds.length === selectedNodesData.length
+);
+
+export const getToolLayersUrlProps = createStructuredSelector({
+  mapView: getMapView,
+  isMapVisible: getIsMapVisible,
+  selectedMapBasemap: getSelectedMapBasemap,
+  selectedMapDimensions: getToolSelectedMapDimensions,
+  selectedMapContextualLayers: getSelectedMapContextualLayers
+});
