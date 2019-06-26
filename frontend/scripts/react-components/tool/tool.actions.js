@@ -6,7 +6,6 @@ import contextLayersCarto from 'named-maps/tool_named_maps_carto';
 import getNodeIdFromGeoId from 'actions/helpers/getNodeIdFromGeoId';
 import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
 import compact from 'lodash/compact';
-import isEmpty from 'lodash/isEmpty';
 import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
 import { getVisibleNodes } from 'react-components/tool-links/tool-links.selectors';
 import { getSelectedMapDimensionsUids } from 'react-components/tool-layers/tool-layers.selectors';
@@ -14,15 +13,9 @@ import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 import pSettle from 'p-settle';
 
 import {
-  selectView,
-  collapseSankey,
   expandSankey,
-  selectColumn,
   selectNodes,
-  highlightNode,
-  clearSankey,
-  selectRecolorBy,
-  selectResizeBy
+  highlightNode
 } from 'react-components/tool-links/tool-links.actions';
 
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
@@ -38,49 +31,6 @@ export const SAVE_MAP_VIEW = 'SAVE_MAP_VIEW';
 export const SHOW_LINKS_ERROR = 'SHOW_LINKS_ERROR';
 export const RESET_TOOL_STATE = 'RESET_TOOL_STATE';
 export const SET_SELECTED_NODES_BY_SEARCH = 'SET_SELECTED_NODES_BY_SEARCH';
-
-// TODO: test to see when this is needed.
-// Resets sankey's params that may lead to no flows being returned from the API
-export function resetSankey() {
-  return (dispatch, getState) => {
-    const state = getState();
-    const selectedContext = getSelectedContext(state);
-    const { columns, expandedNodesIds } = state.toolLinks;
-    const { contexts } = state.app;
-    const areNodesExpanded = !isEmpty(expandedNodesIds);
-    const currentContext = contexts.find(context => context.id === selectedContext.id);
-    const defaultColumns = columns ? Object.values(columns).filter(column => column.isDefault) : [];
-    const defaultResizeBy =
-      currentContext && currentContext.resizeBy.find(resizeBy => resizeBy.isDefault);
-    const defaultRecolorBy =
-      currentContext && currentContext.recolorBy.find(recolorBy => recolorBy.isDefault);
-
-    dispatch({
-      type: SELECT_YEARS,
-      payload: { years: [currentContext.defaultYear, currentContext.defaultYear] }
-    });
-
-    defaultColumns.forEach(defaultColumn => {
-      dispatch(selectColumn(defaultColumn.group, defaultColumn.id));
-    });
-
-    if (areNodesExpanded) {
-      dispatch(collapseSankey());
-    }
-
-    dispatch(selectView(false, true));
-
-    if (defaultRecolorBy && defaultRecolorBy[0]) {
-      dispatch(selectRecolorBy(defaultRecolorBy[0].name));
-    } else {
-      dispatch(selectRecolorBy(null));
-    }
-
-    dispatch(selectResizeBy(defaultResizeBy.name));
-
-    dispatch(clearSankey());
-  };
-}
 
 export function loadMapVectorData() {
   return (dispatch, getState) => {

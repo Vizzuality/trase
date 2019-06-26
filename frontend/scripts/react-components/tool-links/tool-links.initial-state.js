@@ -20,5 +20,6 @@ export default {
   selectedRecolorByName: null,
   selectedResizeByName: null,
   selectedBiomeFilterName: null,
-  isSearchOpen: false
+  isSearchOpen: false,
+  noLinksFound: false
 };

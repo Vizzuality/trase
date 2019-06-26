@@ -12,11 +12,13 @@ import {
   TOOL_LINKS__SET_FLOWS_LOADING,
   TOOL_LINKS__SET_COLUMNS,
   TOOL_LINKS__SET_LINKS,
+  TOOL_LINKS_RESET_SANKEY,
   TOOL_LINKS__SELECT_VIEW,
   TOOL_LINKS__SET_IS_SEARCH_OPEN,
   TOOL_LINKS__COLLAPSE_SANKEY,
   TOOL_LINKS__EXPAND_SANKEY,
   TOOL_LINKS__SELECT_COLUMN,
+  TOOL_LINKS_SET_NO_LINKS_FOUND,
   TOOL_LINKS__SET_SELECTED_NODES,
   TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
   TOOL_LINKS__SET_SELECTED_RESIZE_BY,
@@ -56,6 +58,22 @@ const toolLinksReducer = {
     const { loading } = action.payload;
     return immer(state, draft => {
       draft.flowsLoading = loading;
+    });
+  },
+  [TOOL_LINKS_RESET_SANKEY](state) {
+    return immer(state, draft => {
+      Object.assign(draft, {
+        noLinksFound: toolLinksInitialState.noLinksFound,
+        selectedRecolorByName: toolLinksInitialState.selectedRecolorByName,
+        selectedResizeByName: toolLinksInitialState.selectedResizeByName,
+        selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
+        detailedView: toolLinksInitialState.detailedView,
+        forcedOverview: toolLinksInitialState.forcedOverview,
+        highlightedNodeId: toolLinksInitialState.highlightedNodeId,
+        selectedNodesIds: toolLinksInitialState.selectedNodesIds,
+        expandedNodesIds: toolLinksInitialState.expandedNodesIds,
+        selectedColumnsIds: toolLinksInitialState.selectedColumnsIds
+      });
     });
   },
   [TOOL_LINKS__CLEAR_SANKEY](state) {
@@ -313,6 +331,11 @@ const toolLinksReducer = {
   [TOOL_LINKS__SET_IS_SEARCH_OPEN](state, action) {
     return immer(state, draft => {
       draft.isSearchOpen = action.payload.isSearchOpen;
+    });
+  },
+  [TOOL_LINKS_SET_NO_LINKS_FOUND](state, action) {
+    return immer(state, draft => {
+      draft.noLinksFound = action.payload.noLinksFound;
     });
   }
 };

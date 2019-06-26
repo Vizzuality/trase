@@ -44,7 +44,7 @@ export default [
     type: TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
     category: 'Sankey',
     action: 'Update biome filter',
-    getPayload: action => action.biomeFilter
+    getPayload: action => action.payload.name
   },
   {
     type: SELECT_YEARS,

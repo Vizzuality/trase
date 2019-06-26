@@ -16,6 +16,7 @@ import {
 } from 'actions/app.actions';
 import createReducer from 'utils/createReducer';
 import { SELECT_YEARS } from 'react-components/tool/tool.actions';
+import { TOOL_LINKS_RESET_SANKEY } from 'react-components/tool-links/tool-links.actions';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import initialState from './app.initial-state';
 
@@ -105,6 +106,9 @@ const appReducer = {
   [APP__TRANSIFEX_LANGUAGES_LOADED](state, action) {
     const { languages } = action.payload;
     return { ...state, languages };
+  },
+  [TOOL_LINKS_RESET_SANKEY](state) {
+    return { ...state, selectedYears: initialState.selectedYears };
   }
 };
 

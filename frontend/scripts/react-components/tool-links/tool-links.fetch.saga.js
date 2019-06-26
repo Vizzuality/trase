@@ -14,7 +14,13 @@ import {
   getSelectedRecolorBy,
   getSelectedBiomeFilter
 } from 'react-components/tool-links/tool-links.selectors';
-import { setToolColumns, setToolLinks, setToolNodes, setMoreToolNodes } from './tool-links.actions';
+import {
+  setToolColumns,
+  setToolLinks,
+  setToolNodes,
+  setMoreToolNodes,
+  setNoLinksFound
+} from './tool-links.actions';
 
 export function* getToolLinksData() {
   const state = yield select();
@@ -68,7 +74,10 @@ export function* getToolLinksData() {
     const { data } = yield call(fetchPromise);
     yield put(setToolLinks(data.data, data.include));
   } catch (e) {
-    console.error('Error', e);
+    if (e.response?.data?.error === 'No flows found') {
+      console.error('Error', e.response.data);
+      yield put(setNoLinksFound(true));
+    }
   } finally {
     if (yield cancelled()) {
       if (NODE_ENV_DEV) console.error('Cancelled');
