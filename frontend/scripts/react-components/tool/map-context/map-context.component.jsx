@@ -22,7 +22,6 @@ export default class {
     };
 
     this.buildLayers(props);
-    this.selectContextualLayers(props);
   }
 
   onRemoved() {
@@ -55,11 +54,7 @@ export default class {
     if (this.switchers === undefined) {
       return;
     }
-    if (
-      selectedMapContextualLayers !== undefined &&
-      selectedMapContextualLayers !== null &&
-      selectedMapContextualLayers.length
-    ) {
+    if (selectedMapContextualLayers?.length > 0) {
       this._setActiveContextualLayers({ selectedMapContextualLayers });
     }
   }
@@ -67,9 +62,12 @@ export default class {
   _setActiveContextualLayers({ selectedMapContextualLayers }) {
     selectedMapContextualLayers.forEach(layerSlug => {
       this.switchers.forEach(switcher => {
-        if (switcher.getAttribute('data-layer-slug') !== layerSlug) return;
-        switcher.closest('.js-map-context-item').classList.add('-selected');
-        switcher.classList.add('-enabled');
+        const switcherSlug = switcher.getAttribute('data-layer-slug');
+        // make sure ids parsed as numbers match switcherSlug
+        if (switcherSlug && switcherSlug.toString() === layerSlug.toString()) {
+          switcher.closest('.js-map-context-item').classList.add('-selected');
+          switcher.classList.add('-enabled');
+        }
       });
     });
   }

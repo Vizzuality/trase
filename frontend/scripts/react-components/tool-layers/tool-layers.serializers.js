@@ -45,3 +45,15 @@ export const selectedMapDimensions = {
     );
   }
 };
+
+export const selectedMapContextualLayers = {
+  stringify(prop, DONT_SERIALIZE) {
+    if (!prop || prop.length === 0) {
+      return DONT_SERIALIZE;
+    }
+    return prop.join(',');
+  },
+  parse(param) {
+    return param.toString().split(',');
+  }
+};
