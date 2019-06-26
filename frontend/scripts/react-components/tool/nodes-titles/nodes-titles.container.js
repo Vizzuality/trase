@@ -4,11 +4,13 @@ import { navigateToProfile } from 'react-components/tool/tool.actions';
 import { clearSankey, selectNodes } from 'react-components/tool-links/tool-links.actions';
 import NodesTitles from 'react-components/tool/nodes-titles/nodes-titles.component';
 import {
-  getSelectedResizeBy,
   getSelectedNodesData,
   getHighlightedNodesData
 } from 'react-components/tool/tool.selectors';
-import { getToolRecolorGroups } from 'react-components/tool-links/tool-links.selectors';
+import {
+  getSelectedResizeBy,
+  getToolRecolorGroups
+} from 'react-components/tool-links/tool-links.selectors';
 import { getSelectedMapDimensionsData } from 'react-components/tool-layers/tool-layers.selectors';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 

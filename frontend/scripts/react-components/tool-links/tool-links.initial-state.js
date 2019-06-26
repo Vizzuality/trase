@@ -19,6 +19,6 @@ export default {
   expandedNodesIds: [],
   selectedNodesIds: [],
   selectedRecolorByName: null,
-  selectedResizeBy: null,
+  selectedResizeByName: null,
   isSearchOpen: false
 };

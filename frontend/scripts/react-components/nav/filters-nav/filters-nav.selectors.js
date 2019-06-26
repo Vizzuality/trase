@@ -10,11 +10,11 @@ import capitalize from 'lodash/capitalize';
 import { makeGetResizeByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedBiomeFilter as getToolSelectedBiome } from 'react-components/tool/tool.selectors';
 import {
   getSelectedResizeBy as getToolResizeBy,
-  getSelectedBiomeFilter as getToolSelectedBiome
-} from 'react-components/tool/tool.selectors';
-import { getSelectedRecolorBy as getToolRecolorBy } from 'react-components/tool-links/tool-links.selectors';
+  getSelectedRecolorBy as getToolRecolorBy
+} from 'react-components/tool-links/tool-links.selectors';
 
 const insertIf = (condition, item) => (condition ? [item] : []);
 

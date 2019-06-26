@@ -84,6 +84,7 @@ const store = createStore(
         'selectedColumnsIds',
         'expandedNodesIds',
         'detailedView',
+        'selectedResizeByName',
         'selectedRecolorByName'
       ]
     }),

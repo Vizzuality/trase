@@ -2,7 +2,6 @@ import { TOGGLE_MAP_LAYERS_MENU, SET_CONTEXT } from 'actions/app.actions';
 import {
   SELECT_BIOME_FILTER,
   SELECT_CONTEXTUAL_LAYERS,
-  SELECT_RESIZE_BY,
   SELECT_YEARS,
   TOGGLE_MAP
 } from 'react-components/tool/tool.actions';
@@ -10,6 +9,7 @@ import {
   TOOL_LINKS__SELECT_VIEW,
   TOOL_LINKS__SELECT_COLUMN,
   TOOL_LINKS__SET_SELECTED_NODES,
+  TOOL_LINKS__SET_SELECTED_RESIZE_BY,
   TOOL_LINKS__SET_SELECTED_RECOLOR_BY
 } from 'react-components/tool-links/tool-links.actions';
 
@@ -59,7 +59,7 @@ export default [
     getPayload: action => action.payload.name
   },
   {
-    type: SELECT_RESIZE_BY,
+    type: TOOL_LINKS__SET_SELECTED_RESIZE_BY,
     action: 'Select resize by',
     category: 'Sankey',
     getPayload: action => action.payload.name

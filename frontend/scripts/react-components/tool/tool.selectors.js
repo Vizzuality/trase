@@ -1,16 +1,12 @@
 import { createSelector } from 'reselect';
-import { makeGetSelectedResizeBy } from 'selectors/indicators.selectors';
 import { getSelectedContext } from 'reducers/app.selectors';
 
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolColumns = state => state.toolLinks.data.columns;
-const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
 const getToolBiomeFilter = state => state.toolLinks.selectedBiomeFilter;
 const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getHighlightedNodeIds = state => state.toolLinks.highlightedNodeId;
-
-export const getSelectedResizeBy = makeGetSelectedResizeBy(getToolResizeBy, getSelectedContext);
 
 export const getSelectedBiomeFilter = createSelector(
   [getToolBiomeFilter, getSelectedContext],

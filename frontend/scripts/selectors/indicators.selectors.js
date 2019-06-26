@@ -35,15 +35,3 @@ export const makeGetRecolorByItems = (getRecolorBy, getSelectedYears) =>
         return { ...filter, isDisabled, value: filter.name };
       })
   );
-
-export const makeGetSelectedResizeBy = (getResizeBy, getSelectedContext) =>
-  createSelector(
-    [getResizeBy, getSelectedContext],
-    (selectedResizeBy, context) => {
-      if (!selectedResizeBy && context) {
-        return context.resizeBy.find(resizeBy => resizeBy.isDefault === true);
-      }
-
-      return selectedResizeBy;
-    }
-  );

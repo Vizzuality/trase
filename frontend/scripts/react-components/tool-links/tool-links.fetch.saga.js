@@ -6,10 +6,13 @@ import {
   GET_ALL_NODES_URL
 } from 'utils/getURLFromParams';
 import { fetchWithCancel } from 'utils/saga-utils';
-import { getSelectedColumnsIds, getSelectedResizeBy } from 'react-components/tool/tool.selectors';
+import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
 import { NUM_NODES_DETAILED, NUM_NODES_EXPANDED, NUM_NODES_SUMMARY } from 'constants';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
-import { getSelectedRecolorBy } from 'react-components/tool-links/tool-links.selectors';
+import {
+  getSelectedResizeBy,
+  getSelectedRecolorBy
+} from 'react-components/tool-links/tool-links.selectors';
 import { setToolColumns, setToolLinks, setToolNodes, setMoreToolNodes } from './tool-links.actions';
 
 export function* getToolLinksData() {

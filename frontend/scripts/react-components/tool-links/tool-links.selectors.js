@@ -19,13 +19,29 @@ const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getToolExpandedNodesIds = state => state.toolLinks.expandedNodesIds;
 const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getToolRecolorByName = state => state.toolLinks.selectedRecolorByName;
+const getToolResizeByName = state => state.toolLinks.selectedResizeByName;
 const getToolDetailedView = state => state.toolLinks.detailedView;
+
+export const getSelectedResizeBy = createSelector(
+  [getToolResizeByName, getSelectedContext],
+  (selectedResizeByName, selectedContext) => {
+    if (!selectedResizeByName || !selectedContext) {
+      return null;
+    }
+
+    if (!selectedResizeByName && selectedContext) {
+      return selectedContext.resizeBy.find(resizeBy => resizeBy.isDefault === true);
+    }
+
+    return selectedContext.resizeBy.find(resizeBy => resizeBy.name === selectedResizeByName);
+  }
+);
 
 export const getSelectedRecolorBy = createSelector(
   [getToolRecolorByName, getSelectedContext],
   (selectedRecolorByName, selectedContext) => {
-    if (!selectedRecolorByName && !selectedContext) {
-      return selectedRecolorByName;
+    if (!selectedRecolorByName || !selectedContext) {
+      return null;
     }
 
     if (!selectedRecolorByName && selectedContext) {
@@ -133,7 +149,7 @@ export const getToolLinksUrlProps = createStructuredSelector({
   selectedColumnsIds: getToolSelectedColumnsIds,
   expandedNodesIds: getToolExpandedNodesIds,
   detailedView: getToolDetailedView,
-  // selectedResizeBy: getSelectedResizeBy,
+  selectedResizeByName: getToolResizeByName,
   selectedRecolorByName: getToolRecolorByName
   // selectedBiomeFilter: getSelectedBiomeFilter
 });

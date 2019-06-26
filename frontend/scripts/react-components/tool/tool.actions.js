@@ -21,14 +21,14 @@ import {
   selectNodes,
   highlightNode,
   clearSankey,
-  selectRecolorBy
+  selectRecolorBy,
+  selectResizeBy
 } from 'react-components/tool-links/tool-links.actions';
 
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
 export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
 export const SELECT_BIOME_FILTER = 'SELECT_BIOME_FILTER';
 export const SELECT_YEARS = 'SELECT_YEARS';
-export const SELECT_RESIZE_BY = 'SELECT_RESIZE_BY';
 export const GET_MAP_VECTOR_DATA = 'GET_MAP_VECTOR_DATA';
 export const GET_CONTEXT_LAYERS = 'GET_CONTEXT_LAYERS';
 export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
@@ -39,23 +39,6 @@ export const SAVE_MAP_VIEW = 'SAVE_MAP_VIEW';
 export const SHOW_LINKS_ERROR = 'SHOW_LINKS_ERROR';
 export const RESET_TOOL_STATE = 'RESET_TOOL_STATE';
 export const SET_SELECTED_NODES_BY_SEARCH = 'SET_SELECTED_NODES_BY_SEARCH';
-
-const _setResizeByAction = (resizeByName, state) => {
-  let selectedResizeBy;
-  if (resizeByName === 'none') {
-    selectedResizeBy = { name: 'none' };
-  } else {
-    const selectedContext = getSelectedContext(state);
-    selectedResizeBy = selectedContext.resizeBy.find(
-      contextResizeBy => contextResizeBy.name === resizeByName
-    );
-  }
-
-  return {
-    type: SELECT_RESIZE_BY,
-    payload: selectedResizeBy
-  };
-};
 
 // TODO: test to see when this is needed.
 // Resets sankey's params that may lead to no flows being returned from the API
@@ -94,7 +77,7 @@ export function resetSankey() {
       dispatch(selectRecolorBy(null));
     }
 
-    dispatch(_setResizeByAction(defaultResizeBy.name, state));
+    dispatch(selectResizeBy(defaultResizeBy.name));
 
     dispatch(clearSankey());
   };
@@ -120,25 +103,6 @@ export function selectBiomeFilter(biomeFilterName) {
     dispatch({
       type: SELECT_BIOME_FILTER,
       payload: selectedBiomeFilter
-    });
-  };
-}
-
-export function selectResizeBy(resizeByName) {
-  return (dispatch, getState) => {
-    let selectedResizeBy;
-    if (resizeByName === 'none') {
-      selectedResizeBy = { name: 'none' };
-    } else {
-      const selectedContext = getSelectedContext(getState());
-      selectedResizeBy = selectedContext.resizeBy.find(
-        contextResizeBy => contextResizeBy.name === resizeByName
-      );
-    }
-
-    dispatch({
-      type: SELECT_RESIZE_BY,
-      payload: selectedResizeBy
     });
   };
 }

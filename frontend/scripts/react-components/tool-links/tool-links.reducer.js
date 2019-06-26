@@ -1,7 +1,6 @@
 import {
   RESET_TOOL_STATE,
   SELECT_BIOME_FILTER,
-  SELECT_RESIZE_BY,
   SET_NODE_ATTRIBUTES,
   SHOW_LINKS_ERROR,
   SET_SELECTED_NODES_BY_SEARCH
@@ -20,7 +19,8 @@ import {
   TOOL_LINKS__EXPAND_SANKEY,
   TOOL_LINKS__SELECT_COLUMN,
   TOOL_LINKS__SET_SELECTED_NODES,
-  TOOL_LINKS__SET_SELECTED_RECOLOR_BY
+  TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
+  TOOL_LINKS__SET_SELECTED_RESIZE_BY
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
 import immer from 'immer';
@@ -43,6 +43,7 @@ const toolLinksReducer = {
           'selectedColumnsIds',
           'expandedNodesIds',
           'detailedView',
+          'selectedResizeByName',
           'selectedRecolorByName'
         ]
       });
@@ -72,7 +73,7 @@ const toolLinksReducer = {
     return immer(state, draft => {
       Object.assign(draft, {
         selectedRecolorByName: toolLinksInitialState.selectedRecolorByName,
-        selectedResizeBy: toolLinksInitialState.selectedResizeBy,
+        selectedResizeByName: toolLinksInitialState.selectedResizeByName,
         selectedBiomeFilter: toolLinksInitialState.selectedBiomeFilter,
         detailedView: toolLinksInitialState.detailedView,
         highlightedNodeId: toolLinksInitialState.highlightedNodeId,
@@ -182,9 +183,9 @@ const toolLinksReducer = {
       draft.selectedRecolorByName = action.payload.name;
     });
   },
-  [SELECT_RESIZE_BY](state, action) {
+  [TOOL_LINKS__SET_SELECTED_RESIZE_BY](state, action) {
     return immer(state, draft => {
-      draft.selectedResizeBy = action.payload;
+      draft.selectedResizeByName = action.payload.name;
     });
   },
   [TOOL_LINKS__SELECT_VIEW](state, action) {
@@ -326,8 +327,8 @@ const toolLinksReducerTypes = PropTypes => ({
   selectedBiomeFilter: PropTypes.object,
   selectedColumnsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-  selectedRecolorByName: PropTypes.object,
-  selectedResizeBy: PropTypes.object
+  selectedRecolorByName: PropTypes.string,
+  selectedResizeByName: PropTypes.string
 });
 
 export default createReducer(toolLinksInitialState, toolLinksReducer, toolLinksReducerTypes);
