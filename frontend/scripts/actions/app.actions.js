@@ -127,7 +127,10 @@ export const setLanguage = lang => (dispatch, getState) => {
 
 export function loadSearchResults(searchTerm, contextId) {
   return dispatch => {
-    const url = getURLFromParams(GET_NODES_WITH_SEARCH_URL, { query: searchTerm, contextId });
+    const url = getURLFromParams(GET_NODES_WITH_SEARCH_URL, {
+      query: searchTerm,
+      context_id: contextId
+    });
     if (isEmpty(searchTerm)) {
       dispatch(resetSearchResults());
       return;
