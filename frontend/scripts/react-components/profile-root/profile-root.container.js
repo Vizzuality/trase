@@ -19,11 +19,11 @@ function mapStateToProps(state) {
       })
     : null;
   const parsedTopProfiles = state.profileRoot.topProfiles?.map(profile => {
-    const { nodeId, year, contextId, nodeName, summary, profileType, photoUrl } = profile;
+    const { nodeId, year, contextId, nodeName, nodeType, summary, profileType, photoUrl } = profile;
     return {
       title: nodeName,
       subtitle: summary,
-      category: profileType,
+      category: nodeType,
       imageUrl: photoUrl,
       to: {
         type: 'profileNode',
