@@ -14,7 +14,7 @@ import {
   getSelectedResizeBy as getToolResizeBy,
   getSelectedRecolorBy as getToolRecolorBy,
   getSelectedBiomeFilter as getToolSelectedBiome
-} from 'react-components/tool/tool.selectors';
+} from 'react-components/tool-links/tool-links.selectors';
 
 const insertIf = (condition, item) => (condition ? [item] : []);
 
@@ -52,10 +52,9 @@ export const getToolAdminLevelProps = createSelector(
           .filter(node => node.name !== (selectedFilter && selectedFilter.name))
           .map(node => ({ ...node, value: node.name, label: capitalize(node.name) }))
       ],
-      value:
-        typeof selectedFilter !== 'undefined' && selectedFilter.value !== 'none'
-          ? { ...selectedFilter, label: capitalize(selectedFilter.name) }
-          : { label: 'All', value: 'All' }
+      value: selectedFilter
+        ? { ...selectedFilter, label: capitalize(selectedFilter.name) }
+        : { label: 'All', value: 'All' }
     };
   }
 );

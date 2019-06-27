@@ -1,32 +1,11 @@
 import { createSelector } from 'reselect';
-import { makeGetSelectedResizeBy, makeGetSelectedRecolorBy } from 'selectors/indicators.selectors';
 import { getSelectedContext } from 'reducers/app.selectors';
 
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolColumns = state => state.toolLinks.data.columns;
-const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
-const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
-const getToolBiomeFilter = state => state.toolLinks.selectedBiomeFilter;
 const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getHighlightedNodeIds = state => state.toolLinks.highlightedNodeId;
-
-export const getSelectedResizeBy = makeGetSelectedResizeBy(getToolResizeBy, getSelectedContext);
-export const getSelectedRecolorBy = makeGetSelectedRecolorBy(getToolRecolorBy, getSelectedContext);
-
-export const getSelectedBiomeFilter = createSelector(
-  [getToolBiomeFilter, getSelectedContext],
-  (selectedBiomeFilter, selectedContext) => {
-    if (!selectedContext || selectedContext.filterBy.length === 0) {
-      return { value: 'none' };
-    }
-    return (
-      selectedContext.filterBy[0].nodes.find(
-        filterBy => filterBy.name === selectedBiomeFilter?.name
-      ) || { value: 'none', name: 'none' }
-    );
-  }
-);
 
 export const getSelectedColumnsIds = createSelector(
   [getSelectedContext, getToolColumns, getToolSelectedColumnsIds],

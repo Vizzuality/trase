@@ -79,7 +79,15 @@ const store = createStore(
       params,
       state: toolLinksInitialState,
       urlPropHandlers: ToolLinksUrlPropHandlers,
-      props: ['selectedNodesIds', 'selectedColumnsIds', 'expandedNodesIds', 'detailedView']
+      props: [
+        'selectedNodesIds',
+        'selectedColumnsIds',
+        'expandedNodesIds',
+        'detailedView',
+        'selectedResizeByName',
+        'selectedRecolorByName',
+        'selectedBiomeFilterName'
+      ]
     }),
     toolLayers: deserialize({
       params,

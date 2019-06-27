@@ -14,11 +14,11 @@ import {
   getIsReExpand,
   getHasExpandedNodesIds
 } from 'react-components/tool/sankey/sankey.selectors';
-import { getSelectedRecolorBy } from 'react-components/tool/tool.selectors';
 import {
   getVisibleNodesByColumn,
   getMergedLinks,
-  getNodesColored
+  getNodesColored,
+  getSelectedRecolorBy
 } from 'react-components/tool-links/tool-links.selectors';
 import Sankey from 'react-components/tool/sankey/sankey.component';
 
