@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Siema from 'react-siema';
 import cx from 'classnames';
 import Card from 'react-components/shared/card/card.component';
+import AnimatedCard from 'react-components/shared/animated-card/animated-card.component';
 import QuoteCard from 'react-components/shared/quote-card/quote-card.component';
 import debounce from 'lodash/debounce';
 import { DOCUMENT_POST_TYPES } from 'constants';
@@ -76,22 +77,60 @@ class SliderSection extends React.PureComponent {
     this.slider = ref;
   }
 
+  renderCard(slide) {
+    const { variant } = this.props;
+    if (variant === 'profiles') {
+      return (
+        <AnimatedCard
+          title={slide.title}
+          subtitle={slide.subtitle}
+          category={slide.category}
+          imageUrl={slide.imageUrl}
+        />
+      );
+    }
+
+    return slide.quote ? (
+      <QuoteCard
+        quote={slide.quote}
+        name={slide.authorName}
+        title={slide.authorTitle}
+        imageUrl={slide.imageUrl}
+      />
+    ) : (
+      <Card
+        translateUrl
+        title={slide.title}
+        subtitle={slide.category}
+        imageUrl={slide.imageUrl}
+        linkUrl={slide.completePostUrl}
+        actionName={SliderSection.getActionName(slide.category)}
+      />
+    );
+  }
+
   render() {
-    const { className, name, slides } = this.props;
+    const { className, name, slides, variant } = this.props;
     const { visiblePages, currentSlide } = this.state;
     const smallScreen = visiblePages === 1;
     const numColumns = slides.length <= visiblePages && visiblePages < 3 ? 6 : 4;
+    const headingProps = {
+      as: 'h3',
+      variant: 'mono',
+      color: variant === 'profiles' ? 'grey' : 'pink',
+      size: 'sm'
+    };
+    if (variant === 'profiles') headingProps.weight = 'bold';
 
     if (slides.length === 0) return null;
+
     return (
       <section className={cx('c-slider-section', className)}>
         <div
           className={cx('row', 'slider-wrapper', { '-auto-width': slides.length < visiblePages })}
         >
           <div className="column small-12">
-            <Heading as="h3" variant="mono" color="pink" size="sm">
-              {name}
-            </Heading>
+            <Heading {...headingProps}>{name}</Heading>
           </div>
           <Siema
             perPage={this.mediaQueries}
@@ -105,23 +144,7 @@ class SliderSection extends React.PureComponent {
                 key={slide.title || slide.quote}
                 className={`column small-12 medium-${numColumns}`}
               >
-                {slide.quote ? (
-                  <QuoteCard
-                    quote={slide.quote}
-                    name={slide.authorName}
-                    title={slide.authorTitle}
-                    imageUrl={slide.imageUrl}
-                  />
-                ) : (
-                  <Card
-                    translateUrl
-                    title={slide.title}
-                    subtitle={slide.category}
-                    imageUrl={slide.imageUrl}
-                    linkUrl={slide.completePostUrl}
-                    actionName={SliderSection.getActionName(slide.category)}
-                  />
-                )}
+                {this.renderCard(slide)}
               </div>
             ))}
           </Siema>
@@ -146,7 +169,8 @@ class SliderSection extends React.PureComponent {
 SliderSection.propTypes = {
   className: PropTypes.string,
   name: PropTypes.string.isRequired,
-  slides: PropTypes.array.isRequired
+  slides: PropTypes.array.isRequired,
+  variant: PropTypes.string
 };
 
 export default SliderSection;
