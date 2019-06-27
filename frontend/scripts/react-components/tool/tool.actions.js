@@ -15,8 +15,7 @@ import pSettle from 'p-settle';
 import {
   expandSankey,
   selectNodes,
-  highlightNode,
-  getNodes
+  highlightNode
 } from 'react-components/tool-links/tool-links.actions';
 
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
@@ -187,16 +186,9 @@ export function selectExpandedNode(param) {
 }
 
 export function selectSearchNode(results) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const missingNodes = results.filter(result => !state.toolLinks.data.nodes[result.id]);
-    if (missingNodes.length > 0) {
-      dispatch(getNodes(missingNodes[0].contextId, missingNodes.map(n => n.id)));
-    }
-    dispatch({
-      type: SET_SELECTED_NODES_BY_SEARCH,
-      payload: { results }
-    });
+  return {
+    type: SET_SELECTED_NODES_BY_SEARCH,
+    payload: { results }
   };
 }
 

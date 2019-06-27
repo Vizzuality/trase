@@ -19,7 +19,8 @@ import {
   setToolLinks,
   setToolNodes,
   setMoreToolNodes,
-  setNoLinksFound
+  setNoLinksFound,
+  setMissingLockedNodes
 } from './tool-links.actions';
 
 export function* getToolLinksData() {
@@ -187,6 +188,29 @@ export function* getToolGeoColumnNodes(selectedContext) {
   try {
     const { data } = yield call(fetchPromise);
     yield put(setMoreToolNodes(data.data));
+  } catch (e) {
+    console.error('Error', e);
+  } finally {
+    if (yield cancelled()) {
+      if (NODE_ENV_DEV) console.error('Cancelled');
+      if (source) {
+        source.cancel();
+      }
+    }
+  }
+}
+
+export function* getMissingLockedNodes(nodesIds) {
+  const selectedContext = yield select(getSelectedContext);
+  const params = {
+    context_id: selectedContext.id,
+    nodes_ids: nodesIds.join(',')
+  };
+  const url = getURLFromParams(GET_ALL_NODES_URL, params);
+  const { source, fetchPromise } = fetchWithCancel(url);
+  try {
+    const { data } = yield call(fetchPromise);
+    yield put(setMissingLockedNodes(data.data));
   } catch (e) {
     console.error('Error', e);
   } finally {

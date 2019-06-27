@@ -1,7 +1,5 @@
 import castArray from 'lodash/castArray';
 
-import { getURLFromParams, GET_ALL_NODES_URL } from 'utils/getURLFromParams';
-
 export const TOOL_LINKS__SET_FLOWS_LOADING = 'TOOL_LINKS__SET_FLOWS_LOADING';
 export const TOOL_LINKS__GET_COLUMNS = 'TOOL_LINKS__GET_COLUMNS';
 export const TOOL_LINKS__SET_COLUMNS = 'TOOL_LINKS__SET_COLUMNS';
@@ -21,6 +19,7 @@ export const TOOL_LINKS__SET_SELECTED_RESIZE_BY = 'TOOL_LINKS__SET_SELECTED_RESI
 export const TOOL_LINKS__SET_SELECTED_BIOME_FILTER = 'TOOL_LINKS__SET_SELECTED_BIOME_FILTER';
 export const TOOL_LINKS_SET_NO_LINKS_FOUND = 'TOOL_LINKS_SET_NO_LINKS_FOUND';
 export const TOOL_LINKS_RESET_SANKEY = 'TOOL_LINKS_RESET_SANKEY';
+export const TOOL_LINKS__SET_MISSING_LOCKED_NODES = 'TOOL_LINKS__SET_MISSING_LOCKED_NODES';
 
 export function setToolFlowsLoading(loading) {
   return {
@@ -160,13 +159,9 @@ export function resetSankey() {
   };
 }
 
-export function getNodes(contextId, nodesIds) {
-  return dispatch => {
-    const params = { context_id: contextId, nodes_ids: nodesIds.join(',') };
-    const url = getURLFromParams(GET_ALL_NODES_URL, params);
-    fetch(url)
-      .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
-      .then(resp => dispatch(setToolNodes(resp.data)))
-      .catch(error => console.error(error));
+export function setMissingLockedNodes(nodes) {
+  return {
+    type: TOOL_LINKS__SET_MISSING_LOCKED_NODES,
+    payload: { nodes }
   };
 }
