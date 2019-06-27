@@ -129,6 +129,11 @@ export const handleUnnecesaryRequests = (server, BASE_URL) => {
     res.json({});
   });
 
+  server.any('http://live-detector.svc.transifex.net/').intercept((_, res) => {
+    res.sendStatus(200);
+    res.json({});
+  });
+
   server.any('https://tag.userreport.com/whoami').intercept((_, res) => {
     res.sendStatus(200);
     res.json({});
