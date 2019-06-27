@@ -22,7 +22,8 @@ import {
   TOOL_LINKS__SET_SELECTED_NODES,
   TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
   TOOL_LINKS__SET_SELECTED_RESIZE_BY,
-  TOOL_LINKS__SET_SELECTED_BIOME_FILTER
+  TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
+  TOOL_LINKS__SET_MISSING_LOCKED_NODES
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
 import immer from 'immer';
@@ -32,6 +33,24 @@ import xor from 'lodash/xor';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-links.serializers';
 import toolLinksInitialState from './tool-links.initial-state';
+
+function setMoreNodes(state, action) {
+  const { nodes } = action.payload;
+  return immer(state, draft => {
+    nodes.forEach(node => {
+      if (!draft.data.nodes) {
+        draft.data.nodes = {};
+      }
+      if (!draft.data.nodesByColumnGeoId) {
+        draft.data.nodesByColumnGeoId = {};
+      }
+      if (!draft.data.nodes[node.id]) {
+        draft.data.nodes[node.id] = node;
+        draft.data.nodesByColumnGeoId[`${node.columnId}-${node.geoId}`] = node.id;
+      }
+    });
+  });
+}
 
 const toolLinksReducer = {
   tool(state, action) {
@@ -136,23 +155,9 @@ const toolLinksReducer = {
     });
   },
 
-  [TOOL_LINKS__SET_MORE_NODES](state, action) {
-    const { nodes } = action.payload;
-    return immer(state, draft => {
-      nodes.forEach(node => {
-        if (!draft.data.nodes) {
-          draft.data.nodes = {};
-        }
-        if (!draft.data.nodesByColumnGeoId) {
-          draft.data.nodesByColumnGeoId = {};
-        }
-        if (!draft.data.nodes[node.id]) {
-          draft.data.nodes[node.id] = node;
-          draft.data.nodesByColumnGeoId[`${node.columnId}-${node.geoId}`] = node.id;
-        }
-      });
-    });
-  },
+  [TOOL_LINKS__SET_MORE_NODES]: setMoreNodes,
+
+  [TOOL_LINKS__SET_MISSING_LOCKED_NODES]: setMoreNodes,
 
   [TOOL_LINKS__SET_LINKS](state, action) {
     return immer(state, draft => {

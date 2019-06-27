@@ -11,6 +11,8 @@ import {
   TOOL_LINKS__EXPAND_SANKEY,
   TOOL_LINKS__COLLAPSE_SANKEY,
   TOOL_LINKS__CLEAR_SANKEY,
+  TOOL_LINKS__SET_NODES,
+  TOOL_LINKS__SET_MORE_NODES,
   TOOL_LINKS__SET_SELECTED_RESIZE_BY,
   TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
   TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
@@ -22,6 +24,7 @@ import {
   getToolColumnsData,
   getToolLinksData,
   getToolNodesByLink,
+  getMissingLockedNodes,
   getToolGeoColumnNodes,
   getMoreToolNodesByLink
 } from './tool-links.fetch.saga';
@@ -135,10 +138,29 @@ function* checkForceOverviewOnExpand() {
   yield takeLatest([TOOL_LINKS__EXPAND_SANKEY], onExpand);
 }
 
+function* fetchMissingLockedNodes() {
+  function* performFetch() {
+    const {
+      selectedNodesIds,
+      expandedNodesIds,
+      data: { nodes }
+    } = yield select(state => state.toolLinks);
+    const lockedNodes = new Set([...selectedNodesIds, expandedNodesIds]);
+    const missingNodes = Array.from(lockedNodes).filter(lockedNode => !nodes[lockedNode]);
+
+    if (missingNodes.length > 0) {
+      yield fork(getMissingLockedNodes, missingNodes);
+    }
+  }
+
+  yield takeLatest([TOOL_LINKS__SET_NODES, TOOL_LINKS__SET_MORE_NODES], performFetch);
+}
+
 export default function* toolLinksSaga() {
   const sagas = [
     fetchLinks,
     fetchToolColumns,
+    fetchMissingLockedNodes,
     fetchToolGeoColumnNodes,
     checkForceOverviewOnCollapse,
     checkForceOverviewOnExpand
