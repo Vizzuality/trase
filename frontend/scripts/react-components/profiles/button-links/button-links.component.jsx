@@ -1,33 +1,20 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
-import addApostrophe from 'utils/addApostrophe';
-import capitalize from 'lodash/capitalize';
 import Link from 'redux-first-router-link';
 import Img from 'react-components/shared/img';
-import { translateText } from 'utils/transifex';
 
 import './button-links.scss';
 
 function ButtonLinks(props) {
-  const {
-    year,
-    nodeId,
-    contextId,
-    data: { nodeName, jurisdictionName },
-    scrollTo
-  } = props;
-  const name = nodeName || jurisdictionName;
+  const { year, nodeId, contextId } = props;
   return (
     <div className="c-button-links hide-for-small">
       <div className="row">
         <div className="small-4 columns">
-          <a className="link-button -with-arrow js-link-profile" onClickCapture={scrollTo}>
-            <Img alt="" src="/images/profiles/profile-main-option-1.svg" />
-            <span className="js-link-button-name">
-              <span className="notranslate">{name ? translateText(capitalize(name)) : '-'}</span>
-              {addApostrophe(name)} PROFILE
-            </span>
+          <a className="link-button js-link-profile">
+            <Img title="go to dashboard" src="/images/profiles/profile-main-option-1.svg" />
+            <span className="js-link-button-name">WORLD IMPACT</span>
           </a>
         </div>
         <div className="small-4 columns">
@@ -46,8 +33,9 @@ function ButtonLinks(props) {
               }
             }}
           >
-            <Img alt="" src="/images/profiles/profile-main-option-2.svg" />
-            <span>MAP</span>
+            <span>LOCATION</span>
+            <span>GO TO MAP</span>
+            <Img title="Go to map" src="/images/profiles/profile-main-option-2.svg" />
             <svg className="icon icon-external-link">
               <use xlinkHref="#icon-external-link" />
             </svg>
@@ -70,7 +58,7 @@ function ButtonLinks(props) {
             }}
           >
             <Img alt="" src="/images/profiles/profile-main-option-3.svg" />
-            <span>SUPPLY CHAIN</span>
+            <span>CONNECTIONS</span>
             <svg className="icon icon-external-link">
               <use xlinkHref="#icon-external-link" />
             </svg>
@@ -82,11 +70,9 @@ function ButtonLinks(props) {
 }
 
 ButtonLinks.propTypes = {
-  data: PropTypes.any,
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired,
-  contextId: PropTypes.number.isRequired,
-  scrollTo: PropTypes.func.isRequired
+  contextId: PropTypes.number.isRequired
 };
 
 export default ButtonLinks;

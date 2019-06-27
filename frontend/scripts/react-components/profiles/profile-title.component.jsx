@@ -50,7 +50,7 @@ function ProfileTitle(props) {
 }
 
 ProfileTitle.propTypes = {
-  template: PropTypes.string.isRequired,
+  template: PropTypes.string,
   summary: PropTypes.object.isRequired
 };
 
