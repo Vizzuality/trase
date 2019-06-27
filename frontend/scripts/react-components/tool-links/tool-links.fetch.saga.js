@@ -6,18 +6,37 @@ import {
   GET_ALL_NODES_URL
 } from 'utils/getURLFromParams';
 import { fetchWithCancel } from 'utils/saga-utils';
-import { getSelectedColumnsIds, getSelectedResizeBy } from 'react-components/tool/tool.selectors';
+import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
 import { NUM_NODES_DETAILED, NUM_NODES_EXPANDED, NUM_NODES_SUMMARY } from 'constants';
-import { setToolColumns, setToolLinks, setToolNodes, setMoreToolNodes } from './tool-links.actions';
+import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import {
+  getSelectedResizeBy,
+  getSelectedRecolorBy,
+  getSelectedBiomeFilter
+} from 'react-components/tool-links/tool-links.selectors';
+import {
+  setToolColumns,
+  setToolLinks,
+  setToolNodes,
+  setMoreToolNodes,
+  setNoLinksFound
+} from './tool-links.actions';
 
 export function* getToolLinksData() {
   const state = yield select();
+  const selectedYears = yield select(getSelectedYears);
+  const selectedContext = yield select(getSelectedContext);
   const selectedColumnsIds = yield select(getSelectedColumnsIds);
   const selectedResizeBy = yield select(getSelectedResizeBy);
+  const selectedRecolorBy = yield select(getSelectedRecolorBy);
+  const selectedBiomeFilter = yield select(getSelectedBiomeFilter);
+  if (!selectedResizeBy) {
+    return;
+  }
   const params = {
-    context_id: state.app.selectedContext.id,
-    start_year: state.app.selectedYears[0],
-    end_year: state.app.selectedYears[1],
+    context_id: selectedContext.id,
+    start_year: selectedYears[0],
+    end_year: selectedYears[1],
     include_columns: selectedColumnsIds.join(','),
     flow_quant: selectedResizeBy.name,
     locked_nodes: state.toolLinks.selectedNodesIds
@@ -32,15 +51,14 @@ export function* getToolLinksData() {
     params.n_nodes = NUM_NODES_SUMMARY;
   }
 
-  if (state.toolLinks.selectedRecolorBy) {
-    if (state.toolLinks.selectedRecolorBy.type === 'qual') {
-      params.flow_qual = state.toolLinks.selectedRecolorBy.name;
-    } else if (state.toolLinks.selectedRecolorBy.type === 'ind') {
-      params.flow_ind = state.toolLinks.selectedRecolorBy.name;
+  if (selectedRecolorBy) {
+    if (selectedRecolorBy.type === 'qual') {
+      params.flow_qual = selectedRecolorBy.name;
+    } else if (selectedRecolorBy.type === 'ind') {
+      params.flow_ind = selectedRecolorBy.name;
     }
   }
 
-  const selectedBiomeFilter = state.toolLinks.selectedBiomeFilter;
   if (selectedBiomeFilter && selectedBiomeFilter.name && selectedBiomeFilter.name !== 'none') {
     params.biome_filter_id = selectedBiomeFilter.nodeId;
   }
@@ -56,7 +74,10 @@ export function* getToolLinksData() {
     const { data } = yield call(fetchPromise);
     yield put(setToolLinks(data.data, data.include));
   } catch (e) {
-    console.error('Error', e);
+    if (e.response?.data?.error === 'No flows found') {
+      console.error('Error', e.response.data);
+      yield put(setNoLinksFound(true));
+    }
   } finally {
     if (yield cancelled()) {
       if (NODE_ENV_DEV) console.error('Cancelled');
@@ -90,6 +111,7 @@ export function* getToolNodesByLink(selectedContext) {
   const {
     data: { links }
   } = yield select(state => state.toolLinks);
+
   const nodesIds = Array.from(new Set(Object.values(links).flatMap(link => link.path))).join(',');
   const params = { context_id: selectedContext.id, nodes_ids: nodesIds };
   const url = getURLFromParams(GET_ALL_NODES_URL, params);

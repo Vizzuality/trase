@@ -8,6 +8,15 @@ import createSagaMiddleware from 'redux-saga';
 import rangeTouch from 'rangetouch';
 import analyticsMiddleware from 'analytics/middleware';
 import * as appReducers from 'store';
+
+import qs from 'query-string';
+import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
+import toolLinksInitialState from 'react-components/tool-links/tool-links.initial-state';
+import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-links.serializers';
+import appInitialState from 'reducers/app.initial-state';
+import toolLayersInitialState from 'react-components/tool-layers/tool-layers.initial-state';
+import * as ToolLayersUrlPropHandlers from 'react-components/tool-layers/tool-layers.serializers';
+
 import router from './router/router';
 import routeSubscriber from './router/route-subscriber';
 import { register, unregister } from './worker';
@@ -56,9 +65,43 @@ const reducers = combineReducers({
   location: router.reducer
 });
 
+const params = qs.parse(window.location.search, { arrayFormat: 'bracket', parseNumbers: true });
+
 const store = createStore(
   reducers,
-  undefined,
+  {
+    app: deserialize({
+      params,
+      state: appInitialState,
+      props: ['selectedContextId', 'selectedYears']
+    }),
+    toolLinks: deserialize({
+      params,
+      state: toolLinksInitialState,
+      urlPropHandlers: ToolLinksUrlPropHandlers,
+      props: [
+        'selectedNodesIds',
+        'selectedColumnsIds',
+        'expandedNodesIds',
+        'detailedView',
+        'selectedResizeByName',
+        'selectedRecolorByName',
+        'selectedBiomeFilterName'
+      ]
+    }),
+    toolLayers: deserialize({
+      params,
+      state: toolLayersInitialState,
+      urlPropHandlers: ToolLayersUrlPropHandlers,
+      props: [
+        'mapView',
+        'isMapVisible',
+        'selectedMapBasemap',
+        'selectedMapContextualLayers',
+        'selectedMapDimensions'
+      ]
+    })
+  },
   composeEnhancers(router.enhancer, applyMiddleware(...middlewares))
 );
 

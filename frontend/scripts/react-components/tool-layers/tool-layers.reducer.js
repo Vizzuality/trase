@@ -18,26 +18,29 @@ import { SET_CONTEXT } from 'scripts/actions/app.actions';
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
 import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
-
-export const toolLayersInitialState = {
-  data: {
-    mapDimensions: {},
-    mapVectorData: null,
-    mapDimensionsGroups: [],
-    mapContextualLayers: []
-  },
-  highlightedNodeCoordinates: null, // TODO: this should be local state only used for map tooltip
-  isMapVisible: false,
-  linkedGeoIds: [],
-  mapLoading: false,
-  mapView: null,
-  selectedMapBasemap: null,
-  selectedMapContextualLayers: null,
-  selectedMapDimensions: null,
-  selectedMapDimensionsWarnings: null
-};
+import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
+import * as ToolLayersUrlPropHandlers from 'react-components/tool-layers/tool-layers.serializers';
+import toolLayersInitialState from './tool-layers.initial-state';
 
 const toolLayersReducer = {
+  tool(state, action) {
+    if (action.payload?.serializerParams) {
+      const newState = deserialize({
+        params: action.payload.serializerParams,
+        state: { ...state, mapView: null },
+        urlPropHandlers: ToolLayersUrlPropHandlers,
+        props: [
+          'mapView',
+          'isMapVisible',
+          'selectedMapBasemap',
+          'selectedMapContextualLayers',
+          'selectedMapDimensions'
+        ]
+      });
+      return newState;
+    }
+    return state;
+  },
   [SET_CONTEXT]() {
     return toolLayersInitialState;
   },
@@ -157,8 +160,7 @@ const toolLayersReducerTypes = PropTypes => ({
   mapView: PropTypes.object,
   selectedMapBasemap: PropTypes.string,
   selectedMapContextualLayers: PropTypes.array,
-  selectedMapDimensions: PropTypes.array.isRequired,
-  selectedMapDimensionsWarnings: PropTypes.string
+  selectedMapDimensions: PropTypes.array.isRequired
 });
 
 export default createReducer(toolLayersInitialState, toolLayersReducer, toolLayersReducerTypes);

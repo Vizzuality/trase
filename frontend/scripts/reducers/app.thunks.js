@@ -1,14 +1,6 @@
-import {
-  SET_TOOLTIPS,
-  SET_CONTEXTS,
-  selectInitialContextById,
-  APP__SET_LOADING
-} from 'scripts/actions/app.actions';
-import {
-  GET_TOOLTIPS_URL,
-  getURLFromParams,
-  GET_CONTEXTS_URL
-} from 'scripts/utils/getURLFromParams';
+import { SET_TOOLTIPS, SET_CONTEXTS, APP__SET_LOADING } from 'actions/app.actions';
+import { GET_TOOLTIPS_URL, getURLFromParams, GET_CONTEXTS_URL } from 'utils/getURLFromParams';
+import getPageTitle from 'router/page-title';
 
 function loadTooltipsPromise(dispatch, getState) {
   const { app } = getState();
@@ -63,12 +55,7 @@ function loadContextsPromise(dispatch, getState) {
         payload: contexts
       });
 
-      const state = getState();
-
-      const currentContext =
-        state.app.selectedContext || state.app.contexts.find(ctx => ctx.isDefault);
-
-      dispatch(selectInitialContextById(currentContext.id));
+      document.title = getPageTitle(getState());
     });
 }
 

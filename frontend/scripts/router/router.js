@@ -1,6 +1,6 @@
 import { connectRoutes, NOT_FOUND, redirect, replace } from 'redux-first-router';
 import restoreScroll from 'redux-first-router-restore-scroll';
-import { parse, stringify } from 'utils/stateURL';
+import qs from 'query-string';
 
 import { BREAKPOINTS } from 'constants';
 import {
@@ -10,7 +10,7 @@ import {
 } from 'react-components/home/home.thunks';
 import withSidebarNavLayout from 'react-components/nav/sidebar-nav/with-sidebar-nav-layout.hoc';
 import getPageStaticContent from 'react-components/static-content/static-content.thunks';
-import loadBaseAppData from 'react-components/shared/app.thunks';
+import loadBaseAppData from 'reducers/app.thunks';
 import getTeam from 'react-components/team/team.thunks';
 import { loadDashboardTemplates } from 'react-components/dashboard-root/dashboard-root.thunks';
 import { redirectToExplore } from 'react-components/explore/explore.thunks';
@@ -149,8 +149,8 @@ const config = {
   basename: '/',
   notFoundPath: '/404',
   querySerializer: {
-    parse,
-    stringify
+    parse: url => qs.parse(url, { arrayFormat: 'bracket', parseNumbers: true }),
+    stringify: params => qs.stringify(params, { arrayFormat: 'bracket' })
   },
   title: state => {
     const route = routes[state.location.type];

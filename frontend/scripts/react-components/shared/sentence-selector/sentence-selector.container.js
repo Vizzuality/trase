@@ -7,20 +7,23 @@ import {
   getSelectedCommodityPairs,
   getSelectedCountryPairs
 } from 'react-components/shared/sentence-selector/sentence-selector.selectors';
+import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 
 function mapStateToProps(state) {
   const { query: { lang } = {} } = state.location;
   const contexts = getSortedContexts(state);
+  const selectedContext = getSelectedContext(state);
+  const selectedYears = getSelectedYears(state);
   const selectedCountryPairs = getSelectedCountryPairs(state);
   const selectedCommodityPairs = getSelectedCommodityPairs(state);
 
   return {
     lang,
     contexts,
+    selectedYears,
+    selectedContext,
     selectedCountryPairs,
-    selectedCommodityPairs,
-    selectedYears: state.app.selectedYears,
-    selectedContext: state.app.selectedContext
+    selectedCommodityPairs
   };
 }
 

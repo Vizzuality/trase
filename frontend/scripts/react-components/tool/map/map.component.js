@@ -128,6 +128,7 @@ export default class MapComponent {
       );
     } else {
       if (
+        (mapView && !defaultMapView) ||
         mapView.latitude !== defaultMapView.latitude ||
         mapView.longitude !== defaultMapView.longitude ||
         mapView.zoom !== defaultMapView.zoom ||
@@ -284,7 +285,6 @@ export default class MapComponent {
     });
 
     let forceZoom = 0;
-
     selectedMapContextualLayersData.forEach((layerData, i) => {
       // TODO: implement multi-year support
       const cartoData = layerData.cartoLayers[0];
@@ -571,6 +571,14 @@ export default class MapComponent {
         boundsCenterZoom.zoom = Math.max(boundsCenterZoom.zoom, defaultMapView.zoom);
       }
       this._setMapViewDebounced(boundsCenterZoom.center, boundsCenterZoom.zoom);
+    }
+  }
+
+  // this should only be called when only geo columns are selected
+  // this is to fit bounds in the polygons without filtering the choropleth by calling showLinkedGeoIds
+  fitBoundsSelectedGeoPolygons({ selectedNodesGeoIds, shouldFitBoundsSelectedPolygons }) {
+    if (shouldFitBoundsSelectedPolygons) {
+      this._fitBoundsToSelectedPolygons(selectedNodesGeoIds);
     }
   }
 

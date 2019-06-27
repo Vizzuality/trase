@@ -1,8 +1,5 @@
 import {
   RESET_TOOL_STATE,
-  SELECT_BIOME_FILTER,
-  SELECT_RECOLOR_BY,
-  SELECT_RESIZE_BY,
   SET_NODE_ATTRIBUTES,
   SHOW_LINKS_ERROR,
   SET_SELECTED_NODES_BY_SEARCH
@@ -15,47 +12,68 @@ import {
   TOOL_LINKS__SET_FLOWS_LOADING,
   TOOL_LINKS__SET_COLUMNS,
   TOOL_LINKS__SET_LINKS,
+  TOOL_LINKS_RESET_SANKEY,
   TOOL_LINKS__SELECT_VIEW,
   TOOL_LINKS__SET_IS_SEARCH_OPEN,
   TOOL_LINKS__COLLAPSE_SANKEY,
   TOOL_LINKS__EXPAND_SANKEY,
   TOOL_LINKS__SELECT_COLUMN,
-  TOOL_LINKS__SET_SELECTED_NODES
+  TOOL_LINKS_SET_NO_LINKS_FOUND,
+  TOOL_LINKS__SET_SELECTED_NODES,
+  TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
+  TOOL_LINKS__SET_SELECTED_RESIZE_BY,
+  TOOL_LINKS__SET_SELECTED_BIOME_FILTER
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
 import getNodesMetaUid from 'reducers/helpers/getNodeMetaUid';
 import xor from 'lodash/xor';
-
-export const toolLinksInitialState = {
-  data: {
-    columns: null,
-    nodes: null,
-    links: null,
-    nodeHeights: null,
-    nodeAttributes: null,
-    nodesByColumnGeoId: null
-  },
-  currentQuant: null,
-  detailedView: false,
-  forcedOverview: false,
-  expandedNodesIds: [],
-  highlightedNodeId: null,
-  flowsLoading: false,
-  selectedBiomeFilter: null,
-  selectedColumnsIds: null,
-  selectedNodesIds: [],
-  selectedRecolorBy: null,
-  selectedResizeBy: null,
-  isSearchOpen: false
-};
+import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
+import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-links.serializers';
+import toolLinksInitialState from './tool-links.initial-state';
 
 const toolLinksReducer = {
+  tool(state, action) {
+    if (action.payload?.serializerParams) {
+      const newState = deserialize({
+        params: action.payload.serializerParams,
+        state: toolLinksInitialState,
+        urlPropHandlers: ToolLinksUrlPropHandlers,
+        props: [
+          'selectedNodesIds',
+          'selectedColumnsIds',
+          'expandedNodesIds',
+          'detailedView',
+          'selectedResizeByName',
+          'selectedRecolorByName',
+          'selectedBiomeFilterName'
+        ]
+      });
+      return newState;
+    }
+    return state;
+  },
   [TOOL_LINKS__SET_FLOWS_LOADING](state, action) {
     const { loading } = action.payload;
     return immer(state, draft => {
       draft.flowsLoading = loading;
+    });
+  },
+  [TOOL_LINKS_RESET_SANKEY](state) {
+    return immer(state, draft => {
+      Object.assign(draft, {
+        noLinksFound: toolLinksInitialState.noLinksFound,
+        selectedRecolorByName: toolLinksInitialState.selectedRecolorByName,
+        selectedResizeByName: toolLinksInitialState.selectedResizeByName,
+        selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
+        detailedView: toolLinksInitialState.detailedView,
+        forcedOverview: toolLinksInitialState.forcedOverview,
+        highlightedNodeId: toolLinksInitialState.highlightedNodeId,
+        selectedNodesIds: toolLinksInitialState.selectedNodesIds,
+        expandedNodesIds: toolLinksInitialState.expandedNodesIds,
+        selectedColumnsIds: toolLinksInitialState.selectedColumnsIds
+      });
     });
   },
   [TOOL_LINKS__CLEAR_SANKEY](state) {
@@ -66,16 +84,16 @@ const toolLinksReducer = {
         expandedNodesIds: toolLinksInitialState.expandedNodesIds,
         detailedView: toolLinksInitialState.detailedView,
         forcedOverview: toolLinksInitialState.forcedOverview,
-        selectedBiomeFilter: toolLinksInitialState.selectedBiomeFilter
+        selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName
       });
     });
   },
   [SET_CONTEXT](state) {
     return immer(state, draft => {
       Object.assign(draft, {
-        selectedRecolorBy: toolLinksInitialState.selectedRecolorBy,
-        selectedResizeBy: toolLinksInitialState.selectedResizeBy,
-        selectedBiomeFilter: toolLinksInitialState.selectedBiomeFilter,
+        selectedRecolorByName: toolLinksInitialState.selectedRecolorByName,
+        selectedResizeByName: toolLinksInitialState.selectedResizeByName,
+        selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
         detailedView: toolLinksInitialState.detailedView,
         highlightedNodeId: toolLinksInitialState.highlightedNodeId,
         selectedNodesIds: toolLinksInitialState.selectedNodesIds,
@@ -174,19 +192,19 @@ const toolLinksReducer = {
       Object.assign(draft, { links: null, flowsLoading: false });
     });
   },
-  [SELECT_BIOME_FILTER](state, action) {
+  [TOOL_LINKS__SET_SELECTED_BIOME_FILTER](state, action) {
     return immer(state, draft => {
-      draft.selectedBiomeFilter = action.payload;
+      draft.selectedBiomeFilterName = action.payload.name;
     });
   },
-  [SELECT_RECOLOR_BY](state, action) {
+  [TOOL_LINKS__SET_SELECTED_RECOLOR_BY](state, action) {
     return immer(state, draft => {
-      draft.selectedRecolorBy = action.payload;
+      draft.selectedRecolorByName = action.payload.name;
     });
   },
-  [SELECT_RESIZE_BY](state, action) {
+  [TOOL_LINKS__SET_SELECTED_RESIZE_BY](state, action) {
     return immer(state, draft => {
-      draft.selectedResizeBy = action.payload;
+      draft.selectedResizeByName = action.payload.name;
     });
   },
   [TOOL_LINKS__SELECT_VIEW](state, action) {
@@ -284,6 +302,9 @@ const toolLinksReducer = {
       if (hasChanged) {
         // save to state the new node selection
         draft.selectedNodesIds = newSelectedNodes;
+        if (newSelectedNodes.length === 0) {
+          draft.expandedNodesIds = [];
+        }
       }
     });
   },
@@ -311,6 +332,11 @@ const toolLinksReducer = {
     return immer(state, draft => {
       draft.isSearchOpen = action.payload.isSearchOpen;
     });
+  },
+  [TOOL_LINKS_SET_NO_LINKS_FOUND](state, action) {
+    return immer(state, draft => {
+      draft.noLinksFound = action.payload.noLinksFound;
+    });
   }
 };
 
@@ -322,11 +348,11 @@ const toolLinksReducerTypes = PropTypes => ({
   expandedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   highlightedNodeId: PropTypes.number,
   flowsLoading: PropTypes.bool,
-  selectedBiomeFilter: PropTypes.object,
+  selectedBiomeFilterName: PropTypes.string,
   selectedColumnsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-  selectedRecolorBy: PropTypes.object,
-  selectedResizeBy: PropTypes.object
+  selectedRecolorByName: PropTypes.string,
+  selectedResizeByName: PropTypes.string
 });
 
 export default createReducer(toolLinksInitialState, toolLinksReducer, toolLinksReducerTypes);

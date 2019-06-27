@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Feedback from 'react-components/shared/feedback';
 import 'styles/components/tool/map/map-basemaps.scss';
@@ -17,6 +17,7 @@ import Sankey from 'react-components/tool/sankey/sankey.container';
 import MapLegend from 'react-components/tool/map-legend/map-legend.container';
 import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.react';
 import EventManager from 'utils/eventManager';
+import UrlSerializer from 'react-components/shared/url-serializer';
 
 import 'styles/layouts/l-tool.scss';
 import 'styles/components/shared/veil.scss';
@@ -158,7 +159,23 @@ const renderSankey = () => (
   </div>
 );
 
-const Tool = ({ resizeSankeyTool }) => {
+const renderVainillaComponents = () => (
+  <>
+    <MapContainer />
+    <MapBasemaps />
+    <MapDimensionsContainer />
+    <FlowContentContainer />
+    <MapLegend />
+    <MapContextContainer />
+    <NodesTitlesContainer />
+    <Sankey />
+    <TooltipContainer />
+    <ModalContainer />
+  </>
+);
+
+const Tool = props => {
+  const { resizeSankeyTool, urlProps, urlPropHandlers } = props;
   useEffect(() => {
     evManager.addEventListener(window, 'resize', resizeSankeyTool);
     document.querySelector('body').classList.add('-overflow-hidden');
@@ -166,63 +183,60 @@ const Tool = ({ resizeSankeyTool }) => {
       evManager.clearEventListeners();
       document.querySelector('body').classList.remove('-overflow-hidden');
     };
-  });
+  }, [resizeSankeyTool]);
 
-  const renderVainillaComponents = () => (
-    <>
-      <MapContainer />
-      <MapBasemaps />
-      <MapDimensionsContainer />
-      <FlowContentContainer />
-      <MapLegend />
-      <MapContextContainer />
-      <NodesTitlesContainer />
-      <Sankey />
-      <TooltipContainer />
-      <ModalContainer />
-    </>
+  const render = useMemo(
+    () => (
+      <>
+        <div className="js-node-tooltip c-info-tooltip" />
+        <div className="js-sankey-tooltip c-info-tooltip" />
+        <div className="l-tool">
+          {renderVainillaComponents()}
+
+          <nav className="tool-nav">
+            <FiltersNav />
+          </nav>
+
+          <div className="-hidden-on-mobile">
+            <div className="veil js-veil" />
+            <div className="c-modal js-modal" />
+          </div>
+
+          {renderSankeyError()}
+
+          <div className="js-tool-content flow-content">
+            <div className="js-tool-loading tool-loading">
+              <div className="veil sankey-veil" />
+              <div className="c-spinner" />
+            </div>
+
+            <div className="js-map-view-veil sankey-veil veil is-hidden" />
+            {renderMapSidebar()}
+            {renderMap()}
+            <ColumnsSelectorGroupContainer />
+            {renderSankey()}
+            <TitlebarContainer />
+          </div>
+          <CookieBanner />
+        </div>
+        <Feedback />
+      </>
+    ),
+    []
   );
 
   return (
     <div>
-      <div className="js-node-tooltip c-info-tooltip" />
-      <div className="js-sankey-tooltip c-info-tooltip" />
-      <div className="l-tool">
-        {renderVainillaComponents()}
-
-        <nav className="tool-nav">
-          <FiltersNav />
-        </nav>
-
-        <div className="-hidden-on-mobile">
-          <div className="veil js-veil" />
-          <div className="c-modal js-modal" />
-        </div>
-
-        {renderSankeyError()}
-
-        <div className="js-tool-content flow-content">
-          <div className="js-tool-loading tool-loading">
-            <div className="veil sankey-veil" />
-            <div className="c-spinner" />
-          </div>
-
-          <div className="js-map-view-veil sankey-veil veil is-hidden" />
-          {renderMapSidebar()}
-          {renderMap()}
-          <ColumnsSelectorGroupContainer />
-          {renderSankey()}
-          <TitlebarContainer />
-        </div>
-        <CookieBanner />
-      </div>
-      <Feedback />
+      {render}
+      <UrlSerializer urlProps={urlProps} urlPropHandlers={urlPropHandlers} />
     </div>
   );
 };
 
 Tool.propTypes = {
-  resizeSankeyTool: PropTypes.func.isRequired
+  resizeSankeyTool: PropTypes.func.isRequired,
+  urlPropHandlers: PropTypes.object,
+  urlProps: PropTypes.object
 };
 
 export default Tool;

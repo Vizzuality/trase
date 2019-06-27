@@ -11,47 +11,33 @@ import {
   SET_CONTEXTS,
   SET_CONTEXT_IS_USER_SELECTED,
   SET_CONTEXT,
-  LOAD_INITIAL_CONTEXT,
-  LOAD_STATE_FROM_URL,
   APP__SET_LOADING,
   APP__TRANSIFEX_LANGUAGES_LOADED
 } from 'actions/app.actions';
 import createReducer from 'utils/createReducer';
 import { SELECT_YEARS } from 'react-components/tool/tool.actions';
-
-const initialState = {
-  languages: [],
-  sankeySize: [window.innerWidth, window.innerHeight],
-  isMapLayerVisible: false,
-  isAppMenuVisible: false,
-  tooltipCheck: 0,
-  tooltips: null,
-  contextIsUserSelected: !SHOW_WORLD_MAP_IN_EXPLORE,
-  currentDropdown: null,
-  modal: {
-    visibility: false,
-    modalParams: null
-  },
-  search: {
-    term: '',
-    isLoading: false,
-    results: []
-  },
-  selectedContext: null,
-  initialSelectedContextIdFromURL: null, // IMPORTANT: this should only be used to load context by id from the URL
-  contexts: [],
-  loading: {
-    contexts: false,
-    tooltips: false
-  },
-  selectedYears: []
-};
+import { TOOL_LINKS_RESET_SANKEY } from 'react-components/tool-links/tool-links.actions';
+import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
+import initialState from './app.initial-state';
 
 const isSankeyExpanded = state => state.isMapLayerVisible !== true && state.isMapVisible !== true;
 
 const appReducer = {
-  [LOAD_STATE_FROM_URL](state, action) {
-    return { ...state, ...action.payload.app };
+  tool(state, action) {
+    if (action.payload?.serializerParams) {
+      const shouldResetYears =
+        action.payload.serializerParams.selectedContextId &&
+        action.payload.serializerParams.selectedContextId !== state.selectedContextId;
+
+      const baseState = shouldResetYears ? { ...state, selectedYears: null } : state;
+      const newState = deserialize({
+        params: action.payload.serializerParams,
+        state: baseState,
+        props: ['selectedContextId', 'selectedYears']
+      });
+      return newState;
+    }
+    return state;
   },
   [SET_SANKEY_SIZE](state) {
     if (isSankeyExpanded(state)) {
@@ -107,20 +93,7 @@ const appReducer = {
     return Object.assign({}, state, { contextIsUserSelected: action.payload });
   },
   [SET_CONTEXT](state, action) {
-    const selectedContext = action.payload;
-    const selectedYears = [selectedContext.defaultYear, selectedContext.defaultYear];
-
-    return { ...state, selectedYears, selectedContext };
-  },
-  [LOAD_INITIAL_CONTEXT](state, action) {
-    const selectedContext = action.payload;
-
-    const selectedYears =
-      state.selectedYears.length > 0
-        ? state.selectedYears
-        : [selectedContext.defaultYear, selectedContext.defaultYear];
-
-    return { ...state, selectedYears, selectedContext };
+    return { ...state, selectedYears: null, selectedContextId: action.payload };
   },
   [APP__SET_LOADING](state, action) {
     const { contexts: contextsLoading, tooltips: tooltipsLoading } = state.loading;
@@ -133,6 +106,9 @@ const appReducer = {
   [APP__TRANSIFEX_LANGUAGES_LOADED](state, action) {
     const { languages } = action.payload;
     return { ...state, languages };
+  },
+  [TOOL_LINKS_RESET_SANKEY](state) {
+    return { ...state, selectedYears: initialState.selectedYears };
   }
 };
 
@@ -152,7 +128,6 @@ const appReducerTypes = PropTypes => ({
     results: PropTypes.arrayOf(PropTypes.object).isRequired
   }).isRequired,
   selectedContext: PropTypes.object,
-  initialSelectedContextIdFromURL: PropTypes.number,
   tooltips: PropTypes.object,
   tooltipCheck: PropTypes.number,
   sankeySize: PropTypes.arrayOf(PropTypes.number).isRequired,

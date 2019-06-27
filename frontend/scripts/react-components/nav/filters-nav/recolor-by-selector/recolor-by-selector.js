@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import { selectRecolorBy } from 'react-components/tool/tool.actions';
-import { getToolRecolorGroups } from 'react-components/tool/tool.selectors';
+import { selectRecolorBy } from 'react-components/tool-links/tool-links.actions';
+import { getToolRecolorGroups } from 'react-components/tool-links/tool-links.selectors';
 import RecolorBySelector from './recolor-by.component';
 import { getSelectedRecolorByValue, getRecolorByOptions } from './recolor-by-selector.selectors';
 
@@ -12,7 +12,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  onChange: selectRecolorBy
+  onChange: recolorBy => selectRecolorBy(recolorBy.name)
 };
 
 export default connect(

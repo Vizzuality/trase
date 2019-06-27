@@ -19,7 +19,7 @@ import {
   getMergedLinks,
   getNodesColored,
   getSelectedRecolorBy
-} from 'react-components/tool/tool.selectors';
+} from 'react-components/tool-links/tool-links.selectors';
 import Sankey from 'react-components/tool/sankey/sankey.component';
 
 const mapStateToProps = state => ({

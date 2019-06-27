@@ -5,32 +5,22 @@ import { GET_NODE_ATTRIBUTES_URL, getURLFromParams } from 'utils/getURLFromParam
 import contextLayersCarto from 'named-maps/tool_named_maps_carto';
 import getNodeIdFromGeoId from 'actions/helpers/getNodeIdFromGeoId';
 import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
-import intesection from 'lodash/intersection';
 import compact from 'lodash/compact';
-import isEmpty from 'lodash/isEmpty';
-import {
-  getVisibleNodes,
-  getSelectedColumnsIds,
-  getSelectedMapDimensionsUids
-} from 'react-components/tool/tool.selectors';
+import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
+import { getVisibleNodes } from 'react-components/tool-links/tool-links.selectors';
+import { getSelectedMapDimensionsUids } from 'react-components/tool-layers/tool-layers.selectors';
+import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 import pSettle from 'p-settle';
 
 import {
-  selectView,
-  collapseSankey,
   expandSankey,
-  selectColumn,
   selectNodes,
-  highlightNode,
-  clearSankey
+  highlightNode
 } from 'react-components/tool-links/tool-links.actions';
 
 export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
 export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
-export const SELECT_BIOME_FILTER = 'SELECT_BIOME_FILTER';
 export const SELECT_YEARS = 'SELECT_YEARS';
-export const SELECT_RESIZE_BY = 'SELECT_RESIZE_BY';
-export const SELECT_RECOLOR_BY = 'SELECT_RECOLOR_BY';
 export const GET_MAP_VECTOR_DATA = 'GET_MAP_VECTOR_DATA';
 export const GET_CONTEXT_LAYERS = 'GET_CONTEXT_LAYERS';
 export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
@@ -41,145 +31,6 @@ export const SAVE_MAP_VIEW = 'SAVE_MAP_VIEW';
 export const SHOW_LINKS_ERROR = 'SHOW_LINKS_ERROR';
 export const RESET_TOOL_STATE = 'RESET_TOOL_STATE';
 export const SET_SELECTED_NODES_BY_SEARCH = 'SET_SELECTED_NODES_BY_SEARCH';
-
-const _setRecolorByAction = (recolorBy, state) => {
-  let selectedRecolorBy;
-  if (recolorBy.value === 'none') {
-    selectedRecolorBy = null;
-  } else {
-    const { selectedContext } = state.app;
-    selectedRecolorBy = selectedContext.recolorBy.find(
-      contextRecolorBy => contextRecolorBy.name === recolorBy.name
-    );
-  }
-
-  return {
-    type: SELECT_RECOLOR_BY,
-    payload: selectedRecolorBy
-  };
-};
-
-const _setResizeByAction = (resizeByName, state) => {
-  let selectedResizeBy;
-  if (resizeByName === 'none') {
-    selectedResizeBy = { name: 'none' };
-  } else {
-    const { selectedContext } = state.app;
-    selectedResizeBy = selectedContext.resizeBy.find(
-      contextResizeBy => contextResizeBy.name === resizeByName
-    );
-  }
-
-  return {
-    type: SELECT_RESIZE_BY,
-    payload: selectedResizeBy
-  };
-};
-
-// TODO: test to see when this is needed.
-// Resets sankey's params that may lead to no flows being returned from the API
-export function resetSankey() {
-  return (dispatch, getState) => {
-    const state = getState();
-    const { columns, expandedNodesIds } = state.toolLinks;
-    const { contexts, selectedContext } = state.app;
-    const areNodesExpanded = !isEmpty(expandedNodesIds);
-    const currentContext = contexts.find(context => context.id === selectedContext.id);
-    const defaultColumns = columns ? Object.values(columns).filter(column => column.isDefault) : [];
-    const defaultResizeBy =
-      currentContext && currentContext.resizeBy.find(resizeBy => resizeBy.isDefault);
-    const defaultRecolorBy =
-      currentContext && currentContext.recolorBy.find(recolorBy => recolorBy.isDefault);
-
-    dispatch({
-      type: SELECT_YEARS,
-      payload: { years: [currentContext.defaultYear, currentContext.defaultYear] }
-    });
-
-    defaultColumns.forEach(defaultColumn => {
-      dispatch(selectColumn(defaultColumn.group, defaultColumn.id));
-    });
-
-    if (areNodesExpanded) {
-      dispatch(collapseSankey());
-    }
-
-    dispatch(selectView(false, true));
-
-    if (defaultRecolorBy) {
-      dispatch(_setRecolorByAction({ value: defaultRecolorBy[0].name }, state));
-    } else {
-      dispatch(_setRecolorByAction({ value: 'none' }, state));
-    }
-
-    dispatch(_setResizeByAction(defaultResizeBy.name, state));
-
-    dispatch(clearSankey());
-  };
-}
-
-export function selectBiomeFilter(biomeFilterName) {
-  return (dispatch, getState) => {
-    let selectedBiomeFilter;
-    if (biomeFilterName === 'none') {
-      selectedBiomeFilter = { value: 'none', name: 'none' };
-    } else {
-      const {
-        app: { selectedContext },
-        toolLinks
-      } = getState();
-      selectedBiomeFilter = Object.assign(
-        {},
-        selectedContext.filterBy[0].nodes.find(filterBy => filterBy.name === biomeFilterName)
-      );
-      const node = toolLinks.data.nodes[selectedBiomeFilter.nodeId];
-      selectedBiomeFilter.geoId = node && node.geoId;
-    }
-
-    dispatch({
-      type: SELECT_BIOME_FILTER,
-      payload: selectedBiomeFilter
-    });
-  };
-}
-
-export function selectResizeBy(resizeByName) {
-  return (dispatch, getState) => {
-    let selectedResizeBy;
-    if (resizeByName === 'none') {
-      selectedResizeBy = { name: 'none' };
-    } else {
-      const { selectedContext } = getState().app;
-      selectedResizeBy = selectedContext.resizeBy.find(
-        contextResizeBy => contextResizeBy.name === resizeByName
-      );
-    }
-
-    dispatch({
-      type: SELECT_RESIZE_BY,
-      payload: selectedResizeBy
-    });
-  };
-}
-
-export function selectRecolorBy(recolorBy) {
-  return (dispatch, getState) => {
-    let selectedRecolorBy;
-    if (recolorBy.value === 'none') {
-      selectedRecolorBy = null;
-    } else {
-      const { selectedContext } = getState().app;
-      selectedRecolorBy = selectedContext.recolorBy.find(
-        contextRecolorBy => contextRecolorBy.name === recolorBy.name
-      );
-    }
-
-    dispatch({
-      type: SELECT_RECOLOR_BY,
-      payload: selectedRecolorBy
-    });
-  };
-}
 
 export function loadMapVectorData() {
   return (dispatch, getState) => {
@@ -195,7 +46,8 @@ export function loadMapVectorData() {
         useGeometryFromColumnId: geoColumn.useGeometryFromColumnId
       };
       if (geoColumn.useGeometryFromColumnId === undefined) {
-        const countryName = getState().app.selectedContext.countryName;
+        const selectedContext = getSelectedContext(getState());
+        const countryName = selectedContext.countryName;
         const vectorLayerURL = `vector_layers/${countryName}_${geoColumn.name.replace(
           / /g,
           '_'
@@ -320,13 +172,11 @@ export function selectExpandedNode(param) {
     const visibleNodes = getVisibleNodes(state);
     const visibleNodesById = visibleNodes.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
     const hasInvisibleNodes = ids.some(id => !visibleNodesById[id]);
+    const isRemovingANodeWhileExpanded =
+      toolLinks.expandedNodesIds.length > 0 &&
+      ids.some(id => toolLinks.selectedNodesIds.includes(id));
 
-    if (
-      toolLinks.selectedNodesIds.length === ids.length &&
-      intesection(toolLinks.selectedNodesIds, ids).length === ids.length
-    ) {
-      dispatch(clearSankey());
-    } else if (hasInvisibleNodes) {
+    if (hasInvisibleNodes || isRemovingANodeWhileExpanded) {
       dispatch(selectNodes(ids));
       dispatch(expandSankey());
     } else {
@@ -415,10 +265,13 @@ export function loadMapChoropleth() {
       uid => state.toolLayers.data.mapDimensions[uid]
     );
 
+    const selectedContext = getSelectedContext(state);
+    const selectedYears = getSelectedYears(state);
+
     const params = {
-      context_id: state.app.selectedContext.id,
-      start_year: state.app.selectedYears[0],
-      end_year: state.app.selectedYears[1],
+      context_id: selectedContext.id,
+      start_year: selectedYears[0],
+      end_year: selectedYears[1],
       layer_ids: selectedMapDimensions.map(layer => layer.id)
     };
 

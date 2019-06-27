@@ -6,34 +6,39 @@ import {
   highlightNodeFromGeoId,
   saveMapView
 } from 'react-components/tool/tool.actions';
+import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
 import {
   getVisibleNodes,
-  getSelectedBiomeFilter,
-  getSelectedNodesGeoIds,
-  getSelectedColumnsIds,
-  getHighlightedNodesGeoIds
-} from 'react-components/tool/tool.selectors';
+  getSelectedBiomeFilter
+} from 'react-components/tool-links/tool-links.selectors';
 import {
+  getMapView,
+  getSelectedNodesGeoIds,
+  getHighlightedNodesGeoIds,
   getChoroplethOptions,
-  getSelectedMapContextualLayersData
+  getSelectedMapContextualLayersData,
+  getShouldFitBoundsSelectedPolygons
 } from 'react-components/tool-layers/tool-layers.selectors';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 import { connect } from 'react-redux';
 import Map from 'react-components/tool/map/map.component';
 import getBasemap from 'utils/getBasemap';
+import { getSelectedContext } from 'reducers/app.selectors';
 
 const mapStateToProps = state => {
   const { choropleth } = getChoroplethOptions(state);
+  const selectedContext = getSelectedContext(state);
   return {
     choropleth,
-    mapView: state.toolLayers.mapView,
+    mapView: getMapView(state),
+    shouldFitBoundsSelectedPolygons: getShouldFitBoundsSelectedPolygons(state),
     mapVectorData: state.toolLayers.data.mapVectorData,
     selectedNodesGeoIds: getSelectedNodesGeoIds(state),
     recolorByNodeIds: state.toolLinks.recolorByNodeIds,
     linkedGeoIds: state.toolLayers.linkedGeoIds,
     nodeHeights: state.toolLinks.data.nodeHeights,
     highlightedGeoIds: getHighlightedNodesGeoIds(state)[0],
-    defaultMapView: state.app.selectedContext ? state.app.selectedContext.map : null,
+    defaultMapView: selectedContext ? selectedContext.map : null,
     selectedNodesIdsLength: state.toolLinks.selectedNodesIds.length,
     selectedColumnsIds: getSelectedColumnsIds(state),
     selectedMapContextualLayersData: getSelectedMapContextualLayersData(state),
@@ -105,6 +110,11 @@ const methodProps = [
     name: 'updatePointShadowLayer',
     compared: ['visibleNodes', 'mapVectorData'],
     returned: ['visibleNodes', 'mapVectorData', 'nodeHeights']
+  },
+  {
+    name: 'fitBoundsSelectedGeoPolygons',
+    compared: ['selectedNodesGeoIds', 'shouldFitBoundsSelectedPolygons'],
+    returned: ['selectedNodesGeoIds', 'shouldFitBoundsSelectedPolygons']
   }
 ];
 

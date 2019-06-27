@@ -1,9 +1,11 @@
-import { createSelector } from 'reselect';
+import { createSelector, createStructuredSelector } from 'reselect';
 
-const getContexts = state => state.app.contexts;
+const getAppContexts = state => state.app.contexts;
+const getAppSelectedYears = state => state.app.selectedYears;
+const getAppSelectedContextId = state => state.app.selectedContextId;
 
 export const getCountryNamesByCountryId = createSelector(
-  [getContexts],
+  [getAppContexts],
   contexts =>
     contexts.reduce(
       (acc, next) => ({
@@ -13,3 +15,38 @@ export const getCountryNamesByCountryId = createSelector(
       {}
     )
 );
+
+export const getSelectedContext = createSelector(
+  [getAppContexts, getAppSelectedContextId],
+  (contexts, selectedContextId) => {
+    if (!contexts) {
+      return { id: selectedContextId };
+    }
+
+    if (selectedContextId === null) {
+      return contexts.find(ctx => ctx.isDefault);
+    }
+
+    return contexts.find(ctx => ctx.id === selectedContextId);
+  }
+);
+
+export const getSelectedYears = createSelector(
+  [getSelectedContext, getAppSelectedYears],
+  (selectedContext, selectedYears) => {
+    if (!selectedContext && !selectedYears) {
+      return [];
+    }
+
+    if (selectedYears) {
+      return selectedYears;
+    }
+
+    return [selectedContext.defaultYear, selectedContext.defaultYear];
+  }
+);
+
+export const getAppUrlProps = createStructuredSelector({
+  selectedYears: getAppSelectedYears,
+  selectedContextId: getAppSelectedContextId
+});

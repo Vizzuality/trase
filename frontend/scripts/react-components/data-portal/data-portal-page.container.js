@@ -4,14 +4,18 @@ import { trackDataDownloadFormLoaded, trackDownload } from 'analytics/analytics.
 import { connect } from 'react-redux';
 import { selectContextById } from 'actions/app.actions';
 import DataPortalPage from 'react-components/data-portal/data-portal-page.component';
+import { getSelectedContext } from 'reducers/app.selectors';
 
-const mapStateToProps = state => ({
-  contexts: state.app.contexts,
-  selectedContext: state.app.contextIsUserSelected ? state.app.selectedContext : null,
-  exporters: state.data.exporters,
-  consumptionCountries: state.data.consumptionCountries,
-  indicators: state.data.indicators
-});
+const mapStateToProps = state => {
+  const selectedContext = getSelectedContext(state);
+  return {
+    contexts: state.app.contexts,
+    selectedContext: state.app.contextIsUserSelected ? selectedContext : null,
+    exporters: state.data.exporters,
+    consumptionCountries: state.data.consumptionCountries,
+    indicators: state.data.indicators
+  };
+};
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(

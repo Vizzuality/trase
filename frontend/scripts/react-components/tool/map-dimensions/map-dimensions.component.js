@@ -97,7 +97,7 @@ export default class {
     });
   }
 
-  setVisibility({ isCloroplethEnabled }) {
-    this.el.classList.toggle('is-hidden', !isCloroplethEnabled);
+  setVisibility({ isChoroplethEnabled }) {
+    this.el.classList.toggle('is-hidden', !isChoroplethEnabled);
   }
 }

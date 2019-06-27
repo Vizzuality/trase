@@ -48,7 +48,7 @@ export default class {
     this.el.classList.toggle('-open', isVisible);
   }
 
-  toggleError({ hasError }) {
-    this.sankeyError.classList.toggle('is-hidden', !hasError);
+  toggleError({ noLinksFound }) {
+    this.sankeyError.classList.toggle('is-hidden', !noLinksFound);
   }
 }
