@@ -297,7 +297,7 @@ paths:
                       items:
                         type: integer
                       example: [2013, 2014, 2015]
-  /top_profiles:
+  "/contexts/{context_id}/top_profiles":
     get:
       tags:
         - top_profile
@@ -334,6 +334,9 @@ paths:
                     nodeName:
                       type: string
                       example: CARGILL
+                    nodeType:
+                      type: string
+                      example: EXPORTER
   "/contexts/{context_id}/nodes":
     get:
       tags:

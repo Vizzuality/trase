@@ -4,14 +4,13 @@ module Api
       skip_before_action :load_context
 
       def index
-        top_profiles =
-          if params[:context_id].present?
-            Api::V3::TopProfile.where(context_id: params[:context_id])
-          else
-            Api::V3::TopProfile.all
-          end
+        top_profiles = Api::V3::TopProfile.includes(node: :node_type)
+        if params[:context_id].present?
+          top_profiles = top_profiles.where(context_id: params[:context_id])
+        end
 
-        render json: top_profiles, root: 'data',
+        render json: top_profiles,
+               root: 'data',
                each_serializer: Api::V3::TopProfilesSerializer
       end
     end
