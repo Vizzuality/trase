@@ -45,12 +45,14 @@ $large-line-chart-width: 840px;
   }
 
   .c-overall-info {
-
     .stat-item {
       .value {
+        margin-top: 5px;
+
         .icon {
           width: 16px;
           height: 17px;
+          margin-left: 0;
           margin-top: 5px;
         }
       }

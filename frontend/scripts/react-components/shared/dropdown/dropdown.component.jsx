@@ -118,7 +118,7 @@ function Dropdown(props) {
 
     const labelProps =
       {
-        profiles: { size: 'rg', color: 'grey-faded' },
+        profiles: { size: 'rg', color: 'grey' },
         nav: { color: 'grey-faded' }
       }[variant] || {};
 

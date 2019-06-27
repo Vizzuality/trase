@@ -18,7 +18,7 @@ class TitleGroup extends React.PureComponent {
           <Text
             as="span"
             variant="mono"
-            color="grey-faded"
+            color="grey"
             transform="uppercase"
             className="title-group-label"
           >
@@ -46,7 +46,6 @@ class TitleGroup extends React.PureComponent {
           data-test={`title-group-el-${i}`}
         >
           <Dropdown
-            size="lg"
             variant="profiles"
             label={title.label}
             options={title.options}

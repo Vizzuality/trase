@@ -3,6 +3,7 @@
 .c-title-group {
   display: flex;
   flex-wrap: wrap;
+  margin-top: 40px;
 
   .title-group-element-container {
     display: inline-flex;
@@ -38,7 +39,8 @@
 
     @media screen and (min-width: $breakpoint-foundation-small) {
       .title-group-content {
-        font-size: $font-size-huge;
+        margin-top: 3px;
+        font-size: $font-size-big;
       }
     }
   }
