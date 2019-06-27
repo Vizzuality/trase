@@ -4,7 +4,7 @@ import { expandSankey } from 'react-components/tool-links/tool-links.actions';
 import { getVisibleNodes } from 'react-components/tool-links/tool-links.selectors';
 
 function* checkExpandNode() {
-  function* performCheckexpandNode({ payload }) {
+  function* performCheckExpandNode({ payload }) {
     const { results } = payload;
     const ids = results.map(n => n.id);
     const visibleNodes = yield select(getVisibleNodes);
@@ -15,7 +15,7 @@ function* checkExpandNode() {
     }
   }
 
-  yield takeLatest([SET_SELECTED_NODES_BY_SEARCH], performCheckexpandNode);
+  yield takeLatest([SET_SELECTED_NODES_BY_SEARCH], performCheckExpandNode);
 }
 
 export default function* toolSearchSaga() {
