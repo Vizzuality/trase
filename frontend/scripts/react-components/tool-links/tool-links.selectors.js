@@ -94,11 +94,16 @@ export const getVisibleNodesByColumn = createSelector(
 
 export const getSelectedNodesColumnsPos = createSelector(
   [getSelectedNodesData, getToolColumns],
-  (selectedNodesData, columns) =>
-    selectedNodesData.map(({ columnId }) => {
+  (selectedNodesData, columns) => {
+    if (!columns) {
+      return [];
+    }
+
+    return selectedNodesData.map(({ columnId }) => {
       const column = columns[columnId];
       return column.group;
-    })
+    });
+  }
 );
 
 const getSelectedNodesAtColumns = createSelector(
