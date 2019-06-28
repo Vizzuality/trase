@@ -13,7 +13,7 @@ import 'scripts/react-components/shared/search-input/search-input.scss';
 const SEARCH_DEBOUNCE_RATE_IN_MS = 400;
 
 class SearchInput extends PureComponent {
-  static VARIANTS = ['bordered'];
+  static VARIANTS = ['bordered', 'slim'];
 
   onInputValueChange = debounce(
     (...params) => this.props.onSearchTermChange && this.props.onSearchTermChange(...params),
@@ -119,8 +119,7 @@ class SearchInput extends PureComponent {
     const { searchOptions, onSelect } = this.props;
     return (
       <Downshift
-        onSelect={node => onSelect(node, searchOptions)}
-        stateReducer={this.stateReducer}
+        onChange={node => onSelect(node, searchOptions)}
         itemToString={i => (i === null ? '' : i.name)}
         onInputValueChange={term => this.onInputValueChange(term, searchOptions)}
       >

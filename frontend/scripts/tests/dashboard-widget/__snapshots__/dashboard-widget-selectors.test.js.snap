@@ -107,6 +107,17 @@ Object {
       "label": "Soy Moratorium",
     },
   ],
+  "dashboardMeta": Object {
+    "context": Object {
+      "commodityId": 1,
+      "commodityName": "SOY",
+      "countryId": 27,
+      "countryName": "BRAZIL",
+      "defaultYear": 2017,
+      "id": 1,
+      "isDefault": true,
+    },
+  },
   "layout": "vertical",
   "parse": true,
   "tooltip": Object {
@@ -205,6 +216,17 @@ Object {
       "label": "Soy Moratorium",
     },
   ],
+  "dashboardMeta": Object {
+    "context": Object {
+      "commodityId": 1,
+      "commodityName": "SOY",
+      "countryId": 27,
+      "countryName": "BRAZIL",
+      "defaultYear": 2017,
+      "id": 1,
+      "isDefault": true,
+    },
+  },
   "layout": "vertical",
   "parse": true,
   "tooltip": Object {

@@ -75,7 +75,7 @@ class GlobalSearchResult extends Component {
           )}
 
           {item.nodes
-            .filter(n => n.profile)
+            .filter(n => n.profile && !DISABLE_PROFILES)
             .map(node => (
               <LinkButton
                 onMouseEnter={this.onMouseEnter}

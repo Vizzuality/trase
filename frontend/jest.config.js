@@ -11,7 +11,8 @@ module.exports = {
     NODE_ENV_DEV: false,
     USE_PLAIN_URL_STATE: true,
     ENABLE_LEGACY_TOOL_SEARCH: false,
-    INDONESIA_LOGISTICS_MAP_ACTIVE: false
+    INDONESIA_LOGISTICS_MAP_ACTIVE: false,
+    DISABLE_PROFILES: false
   },
   collectCoverage: process.env.JEST_CI && JSON.parse(process.env.JEST_CI),
   collectCoverageFrom: ['**/*.js'],

@@ -119,7 +119,8 @@ const getLogisticsMapHubsProps = createSelector(
     options: LOGISTICS_MAP_HUBS.filter(hub =>
       INDONESIA_LOGISTICS_MAP_ACTIVE ? hub.value === 'palmOil' : hub.value !== 'palmOil'
     ),
-    value: LOGISTICS_MAP_HUBS.find(commodity => commodity.value === activeParams.commodity)
+    value: LOGISTICS_MAP_HUBS.find(commodity => commodity.value === activeParams.commodity),
+    isDisabled: activeParams.commodity === 'palmOil'
   })
 );
 
@@ -194,7 +195,10 @@ export const getNavFilters = createSelector(
           showLogisticsMapDownload: true,
           left: [
             { type: NAV_FILTER_TYPES.dropdown, props: logisticsMapsHubs },
-            { type: NAV_FILTER_TYPES.dropdown, props: logisticsMapsYears },
+            ...insertIf(!INDONESIA_LOGISTICS_MAP_ACTIVE, {
+              type: NAV_FILTER_TYPES.dropdown,
+              props: logisticsMapsYears
+            }),
             ...insertIf(logisticsMapInspectionLevel, {
               type: NAV_FILTER_TYPES.dropdown,
               props: logisticsMapInspectionLevel

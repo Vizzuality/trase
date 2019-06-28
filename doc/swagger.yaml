@@ -283,6 +283,7 @@ paths:
                       type: integer
                     name:
                       type: string
+                      example: SORRISO
                     nodeType:
                       type: string
                       example: EXPORTER
@@ -290,8 +291,52 @@ paths:
                       type: integer
                     profile:
                       type: string
+                      example: place
+                    years:
+                      type: array
+                      items:
+                        type: integer
+                      example: [2013, 2014, 2015]
+  "/contexts/{context_id}/top_profiles":
+    get:
+      tags:
+        - top_profile
+      parameters:
+        - name: context_id
+          in: query
+          required: false
+          description: If provided, limit results to top profiles of a given context
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    contextId:
+                      type: integer
+                    nodeId:
+                      type: integer
+                    year:
+                      type: integer
+                    profileType:
+                      type: string
                       example: actor
-
+                    summary:
+                      type: string
+                    photoUrl:
+                      type: string
+                    nodeName:
+                      type: string
+                      example: CARGILL
+                    nodeType:
+                      type: string
+                      example: EXPORTER
   "/contexts/{context_id}/nodes":
     get:
       tags:

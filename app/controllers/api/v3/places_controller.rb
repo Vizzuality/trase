@@ -50,7 +50,7 @@ module Api
 
       def load_node
         ensure_required_param_present(:place_id)
-        @node = Api::V3::Node.place_nodes.find(params[:place_id])
+        @node = Api::V3::Node.place_nodes(@context).find(params[:place_id])
       end
     end
   end
