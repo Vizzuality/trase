@@ -26,17 +26,18 @@ function LinksWidget(props) {
           return null;
         }
 
+        const name =
+          data.GET_NODE_SUMMARY_URL.nodeName || data.GET_NODE_SUMMARY_URL.jurisdictionName;
+
         return (
-          <React.Fragment>
-            <div className="columns">
-              <div className="row">
-                <Heading as="h3" weight="bold" variant="mono" size="md">
-                  Explore other information relevant to {data.GET_NODE_SUMMARY_URL.nodeName}
-                </Heading>
-              </div>
-              <ButtonLinks year={year} nodeId={nodeId} contextId={contextId} />
+          <section className="c-links-widget columns">
+            <div className="row">
+              <Heading as="h3" weight="bold" variant="mono" size="md">
+                Explore other information relevant to {name}
+              </Heading>
             </div>
-          </React.Fragment>
+            <ButtonLinks year={year} nodeId={nodeId} contextId={contextId} />
+          </section>
         );
       }}
     </Widget>
