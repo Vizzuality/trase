@@ -10,7 +10,6 @@ import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
 import { getVisibleNodes } from 'react-components/tool-links/tool-links.selectors';
 import { getSelectedMapDimensionsUids } from 'react-components/tool-layers/tool-layers.selectors';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
-import pSettle from 'p-settle';
 
 import {
   expandSankey,
@@ -73,25 +72,38 @@ export function loadMapVectorData() {
       return Promise.resolve(vectorData);
     });
 
-    pSettle(vectorMaps).then(results => {
-      const mapVectorData = results
-        .map(res => {
-          if (res.isFulfilled && !res.isRejected) {
-            return {
-              ...res.value,
+    const layerLoaded = new Promise(resolve => {
+      let totalLayers = vectorMaps.length;
+      const layers = [];
+      vectorMaps.forEach((layerPromise, index) =>
+        layerPromise
+          .then(res => {
+            totalLayers--;
+            layers[index] = {
+              ...res,
               isPoint:
-                !!res.value.geoJSON &&
-                !!res.value.geoJSON.features.length &&
-                res.value.geoJSON.features[0].geometry.type === 'Point'
+                !!res.geoJSON &&
+                !!res.geoJSON.features.length &&
+                res.geoJSON.features[0].geometry.type === 'Point'
             };
-          }
-          console.warn('missing vector layer file', res.reason);
-          return null;
-        })
-        .filter(item => item !== null);
+            if (totalLayers === 0) {
+              resolve(layers.filter(Boolean));
+            }
+          })
+          .catch(err => {
+            totalLayers--;
+            console.warn('missing vector layer file', err);
+            if (totalLayers === 0) {
+              resolve(layers.filter(Boolean));
+            }
+          })
+      );
+    });
+
+    layerLoaded.then(layers => {
       dispatch({
         type: GET_MAP_VECTOR_DATA,
-        mapVectorData
+        mapVectorData: layers
       });
       dispatch(loadMapChoropleth());
     });

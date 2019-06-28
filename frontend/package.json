@@ -142,7 +142,6 @@
     "leaflet-utfgrid": "^0.3.0",
     "lodash": "^4.17.11",
     "node-sass": "^4.10.0",
-    "p-settle": "^2.1.0",
     "plyr": "^3.4.7",
     "prop-types": "^15.7.2",
     "query-string": "^6.7.0",
