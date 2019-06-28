@@ -13,7 +13,7 @@ const BASE_URL = 'http://0.0.0.0:8081';
 
 jest.setTimeout(TIMEOUT);
 const { page } = global;
-const polly = new Polly('printing', pollyConfig(page));
+const polly = new Polly('profile-root', pollyConfig(page));
 
 beforeAll(async () => {
   await page.setRequestInterception(true);
@@ -36,8 +36,7 @@ describe('Profile Root search', () => {
 
     expect.assertions(1);
 
-    await testRootSearch(page, expect, { nodeName, nodeType, profileType });
-    return Promise.resolve();
+    await testRootSearch(page, { nodeName, nodeType, profileType });
   });
 
   it('search for municipality', async () => {
@@ -49,7 +48,7 @@ describe('Profile Root search', () => {
 
     expect.assertions(1);
 
-    await testRootSearch(page, expect, { nodeName, nodeType, profileType });
+    await testRootSearch(page, { nodeName, nodeType, profileType });
     return Promise.resolve();
   });
 });

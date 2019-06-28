@@ -2,7 +2,7 @@ import qs from 'query-string';
 
 const BASE_URL = 'http://0.0.0.0:8081';
 
-export async function testRootSearch(page, expect, { nodeName, nodeType, profileType }) {
+export async function testRootSearch(page, { nodeName, nodeType, profileType }) {
   const profileSearchInputSelector = '[data-test=profile-root-search-input-field-lg]';
 
   await page.waitForSelector(profileSearchInputSelector);
@@ -10,10 +10,12 @@ export async function testRootSearch(page, expect, { nodeName, nodeType, profile
   await page.type(profileSearchInputSelector, nodeName);
   await page.waitForSelector(`[data-test=search-result-${nodeType}-${nodeName}]`);
   await page.click(`[data-test=search-result-${nodeType}-${nodeName}]`);
-  expect(page.url().startsWith(`${BASE_URL}/profile-${profileType}`)).toBe(true);
+  await page.waitFor(1000);
+  const url = page.url();
+  expect(url.startsWith(`${BASE_URL}/profile-${profileType}`)).toBe(true);
 }
 
-export async function testProfileSummary(page, expect, { titles, profileType, titlesLength }) {
+export async function testProfileSummary(page, { titles, profileType, titlesLength }) {
   await Promise.all([
     page.waitForSelector(`[data-test=${profileType}-summary]`),
     page.waitForSelector('[data-test=title-group-el-1]')
@@ -31,7 +33,6 @@ export async function testProfileSummary(page, expect, { titles, profileType, ti
 
 export async function testProfileMultiTable(
   page,
-  expect,
   {
     testId,
     title,
@@ -77,7 +78,7 @@ export async function testProfileMultiTable(
   expect(rows.firstRow).toMatch(firstRow);
 }
 
-export async function testProfileMiniSankey(page, expect, { testId, title, flowsLength }) {
+export async function testProfileMiniSankey(page, { testId, title, flowsLength }) {
   await Promise.all([
     page.waitForSelector(`[data-test=${testId}]`),
     page.waitForSelector(`[data-test=${testId}-mini-sankey-flow]`)
