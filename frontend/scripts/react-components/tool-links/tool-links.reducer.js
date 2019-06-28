@@ -256,7 +256,9 @@ const toolLinksReducer = {
         const needsColumnChange =
           (column.isDefault === false && !selectedColumnsIds) ||
           (column.isDefault === false && !selectedColumnsIds[column.group]) ||
-          (selectedColumnsIds && selectedColumnsIds[column.group] !== column.id);
+          (selectedColumnsIds &&
+            selectedColumnsIds[column.group] &&
+            selectedColumnsIds[column.group] !== column.id);
         if (needsColumnChange) {
           if (selectedColumnsIds) {
             draft.selectedColumnsIds.splice(column.group, 1, column.id);
