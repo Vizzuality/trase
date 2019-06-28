@@ -1,9 +1,11 @@
 import { connect } from 'react-redux';
 import ProfileRoot from 'react-components/profile-root/profile-root.component';
 import { getContextsWithProfilePages } from 'react-components/profile-root/profile-root.selectors';
+import { getSelectedContext } from 'reducers/app.selectors';
 
 function mapStateToProps(state) {
-  const { contexts, selectedContext } = state.app;
+  const selectedContext = getSelectedContext(state);
+  const { contexts } = state.app;
   const selectorContexts = getContextsWithProfilePages(contexts);
 
   // we make sure the globally selected context is available in the selectorContexts

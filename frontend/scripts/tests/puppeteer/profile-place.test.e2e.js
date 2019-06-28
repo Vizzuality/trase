@@ -30,7 +30,7 @@ afterAll(async () => {
 describe('Profile place - Full data', () => {
   test('Summary widget loads successfully', async () => {
     expect.assertions(3);
-    await testProfileSummary(page, expect, {
+    await testProfileSummary(page, {
       titles: ['sorriso', 'soy'],
       profileType: 'place',
       titlesLength: 3
@@ -40,7 +40,7 @@ describe('Profile place - Full data', () => {
   test('Sustainability indicators widget loads successfully', async () => {
     expect.assertions(6);
 
-    await testProfileMultiTable(page, expect, {
+    await testProfileMultiTable(page, {
       tabsLength: 4,
       rowsLength: 4,
       columnsLength: 2,
@@ -73,18 +73,18 @@ describe('Profile place - Full data', () => {
 
   test('Top traders widget loads successfully', async () => {
     expect.assertions(2);
-    await testProfileMiniSankey(page, expect, {
+    await testProfileMiniSankey(page, {
       testId: 'top-traders',
       title: 'top traders of soy in sorriso in 2015',
       flowsLength: 8
     });
   });
 
-  test('Top importer companies widget loads successfully', async () => {
+  test('Top importing companies widget loads successfully', async () => {
     expect.assertions(2);
-    await testProfileMiniSankey(page, expect, {
+    await testProfileMiniSankey(page, {
       testId: 'top-importers',
-      title: 'top importer countries of sorriso soy in 2015',
+      title: 'top importing countries of soy from sorriso in 2015',
       flowsLength: 10
     });
   });

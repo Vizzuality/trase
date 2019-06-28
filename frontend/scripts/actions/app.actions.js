@@ -1,23 +1,13 @@
 import isEmpty from 'lodash/isEmpty';
 import {
   GET_DISCLAIMER_URL,
-  GET_SITE_DIVE_URL,
   GET_NODES_WITH_SEARCH_URL,
   getURLFromParams
 } from 'utils/getURLFromParams';
-import {
-  TOGGLE_MAP,
-  loadToolDataForCurrentContext,
-  SELECT_YEARS,
-  loadNodes,
-  loadLinks
-} from 'scripts/actions/tool.actions';
-import { getContextById } from 'scripts/reducers/helpers/contextHelper';
+import { TOGGLE_MAP, SELECT_YEARS } from 'react-components/tool/tool.actions';
 import getPageTitle from 'scripts/router/page-title';
 import { redirect } from 'redux-first-router';
 
-export const LOAD_STATE_FROM_URL = 'LOAD_STATE_FROM_URL';
-export const LOAD_INITIAL_CONTEXT = 'LOAD_INITIAL_CONTEXT';
 export const SET_CONTEXT = 'SET_CONTEXT';
 export const DISPLAY_STORY_MODAL = 'DISPLAY_STORY_MODAL';
 export const LOAD_TOOLTIP = 'LOAD_TOOLTIP';
@@ -34,19 +24,6 @@ export const SET_CONTEXT_IS_USER_SELECTED = 'SET_CONTEXT_IS_USER_SELECTED';
 export const APP__SET_LOADING = 'APP__SET_LOADING';
 export const APP__TRANSIFEX_LANGUAGES_LOADED = 'APP__TRANSIFEX_LANGUAGES_LOADED';
 
-export function selectInitialContextById(contextId) {
-  return (dispatch, getState) => {
-    const selectedContext = getContextById(getState(), contextId);
-
-    dispatch({
-      type: LOAD_INITIAL_CONTEXT,
-      payload: selectedContext
-    });
-
-    document.title = getPageTitle(getState());
-  };
-}
-
 export function setContextIsUserSelected(contextIsUserSelected) {
   return {
     type: SET_CONTEXT_IS_USER_SELECTED,
@@ -56,18 +33,12 @@ export function setContextIsUserSelected(contextIsUserSelected) {
 
 export function selectContextById(contextId) {
   return (dispatch, getState) => {
-    const selectedContext = getContextById(getState(), contextId);
-
     dispatch({
       type: SET_CONTEXT,
-      payload: selectedContext
+      payload: contextId
     });
 
     dispatch(setContextIsUserSelected(true));
-
-    if (getState().location.type === 'tool') {
-      dispatch(loadToolDataForCurrentContext());
-    }
 
     document.title = getPageTitle(getState());
   };
@@ -140,29 +111,6 @@ export function toggleDropdown(dropdownId) {
   };
 }
 
-export function displayStoryModal(storyId) {
-  return dispatch => {
-    fetch(`${getURLFromParams(GET_SITE_DIVE_URL)}/${storyId}`)
-      .then(resp => {
-        if (resp.ok) return resp.text();
-        throw new Error(resp.statusText);
-      })
-      .then(resp => JSON.parse(resp))
-      .then(({ data }) =>
-        dispatch({
-          type: DISPLAY_STORY_MODAL,
-          payload: {
-            visibility: true,
-            modalParams: data
-          }
-        })
-      )
-      .catch(err => {
-        console.error('Error loading site dive.', err);
-      });
-  };
-}
-
 export function resetSearchResults() {
   return {
     type: SET_SEARCH_TERM,
@@ -177,10 +125,12 @@ export const setLanguage = lang => (dispatch, getState) => {
   return dispatch(redirect({ type: location.type, payload }));
 };
 
-export function loadSearchResults(searchTerm) {
+export function loadSearchResults(searchTerm, contextId) {
   return dispatch => {
-    const url = `${getURLFromParams(GET_NODES_WITH_SEARCH_URL)}?query=${searchTerm}`;
-
+    const url = getURLFromParams(GET_NODES_WITH_SEARCH_URL, {
+      query: searchTerm,
+      context_id: contextId
+    });
     if (isEmpty(searchTerm)) {
       dispatch(resetSearchResults());
       return;
@@ -209,16 +159,9 @@ export function loadSearchResults(searchTerm) {
 }
 
 export function selectYears(years) {
-  return (dispatch, getState) => {
-    const { location } = getState();
-    dispatch({
-      type: SELECT_YEARS,
-      years
-    });
-    if (location.type === 'tool') {
-      dispatch(loadNodes());
-      dispatch(loadLinks());
-    }
+  return {
+    type: SELECT_YEARS,
+    payload: { years }
   };
 }
 

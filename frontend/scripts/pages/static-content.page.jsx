@@ -1,7 +1,6 @@
 /* eslint-disable max-len,no-new */
 
 import BaseMarkup from 'html/base.ejs';
-import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
@@ -11,11 +10,10 @@ import StaticContent from 'react-components/static-content/static-content.contai
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import Footer from 'react-components/shared/footer/footer.component';
 import CookieBanner from 'react-components/shared/cookie-banner';
+import Feedback from 'react-components/shared/feedback';
 
 export const mount = (root, store, options) => {
-  root.innerHTML = BaseMarkup({
-    feedback: FeedbackMarkup()
-  });
+  root.innerHTML = BaseMarkup();
 
   render(
     <Provider store={store}>
@@ -34,6 +32,7 @@ export const mount = (root, store, options) => {
   render(
     <Provider store={store}>
       <Footer />
+      <Feedback />
     </Provider>,
     document.getElementById('footer')
   );

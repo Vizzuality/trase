@@ -31,7 +31,7 @@ afterAll(async () => {
 describe('Profile actor - Full data', () => {
   it('Summary widget loads successfully', async () => {
     expect.assertions(3);
-    await testProfileSummary(page, expect, {
+    await testProfileSummary(page, {
       titles: ['bunge', 'brazil'],
       profileType: 'actor',
       titlesLength: 4
@@ -123,7 +123,7 @@ describe('Profile actor - Full data', () => {
   it('Deforestation risk widget loads successfully', async () => {
     expect.assertions(9);
 
-    await testProfileMultiTable(page, expect, {
+    await testProfileMultiTable(page, {
       tabsLength: 2,
       rowsLength: 10,
       columnsLength: 3,

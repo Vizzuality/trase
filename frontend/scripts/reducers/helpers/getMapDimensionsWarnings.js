@@ -16,7 +16,7 @@ const getMapDimensionsWarnings = (
   selectedMapDimensionsUids,
   [startYear, endYear]
 ) => {
-  const dimensions = mapDimensions.filter(
+  const dimensions = Object.values(mapDimensions).filter(
     d =>
       selectedMapDimensionsUids.indexOf(d.uid) > -1 &&
       typeof d.disabledYearRangeReason !== 'undefined'

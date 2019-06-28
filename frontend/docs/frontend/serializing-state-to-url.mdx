@@ -1,0 +1,97 @@
+---
+name: Serializing state to url
+menu: Frontend
+---
+
+# Serializing state to url
+
+## State flow
+
+```txt
+A: Reads search from the url and parses it into query params object.
+B: Apply custom deserializers and extract them as initial state to each reducer/state slice.
+C: Renders <UrlSerializer /> with the props that the component expects to serialize.
+D: Applies custom serializers.
+E: Calls the serialize function (router agnostic) with the current query, the serialized props and the props to remove.
+F: URL renders state.
+
+
+
+                  +------------+
+                  |            |
+                  |     B      |
+                  +-----+------+
+                        |
+                        |
++-------------+         |       +---------------+    +----------+
+|             |         |       |               |    |          |   +----+
+|      A      +---------+-------+       C       +----+    E     +---+  F |
+|             |                 |               |    |          |   +----+
++-------------+                 +-------+-------+    +----------+
+                                        |
+                                        |
+                                        |
+                                        |
+                                 +------+-----+
+                                 |            |
+                                 |     D      |
+                                 +------------+
+
+
+```
+
+## Reading state from URL into the store (deserialization)
+
+We create the `preloadedState` using the `deserialize` method.
+
+### deserialize
+
+This method expects a configuration object with the following signature:
+
+```js
+const deserializeConfig = {
+  props: Array,
+  params: Object,
+  state: Object,
+  urlPropHandlers: {
+    [propName]: {
+      parse: value => parsedValue,
+      stringify: (value, DONT_SERIALIZE) => stringifiedValue
+    }
+  }
+};
+```
+
+- **params:** Query params, obtained by parsing the current url search string. To do this we use the `query-string` lib and we pass the search using the window object `window.location.search`.
+  However, the deserialize method doesnt care about where the initial query params come, thus making it possible to work with server side rendering.
+- **initialState:** Object containing the initial state of the state slice where the props we're deserializing live.
+- **urlPropHandlers:** Object containing keys with props that need custom parse handlers. Each key's value should be an object with a property function named `parse`.
+- **props:** Array containing the prop names to read from the url and save into the state slice.
+
+## Rendering state to the URL
+
+We render a `<UrlSerializer />` component in the page we wish to serialize state. We pass the props that we want to serialize as `urlProps` using selectors and provide `urlPropHandlers` to customise the serialization.
+
+### Passing props to the component
+
+To pass the state we want to serialize we create a selector per reducer, which returns an object that has the name of the prop to serialize and the current value.
+
+```js
+const urlProps = { [propName]: propValue };
+```
+
+### Applying custom serialization
+
+To apply special treatment to a particular prop we need to define a url prop handler. This handler is the same used in the parse stage to apply a custom parse function. In this case we need to add the `stringify` method.
+
+### Saving stringified values into the URL
+
+To save values into the URL the `<UrlSerializer />` calls the `serialize` method that's passed as prop.
+This way the serialization is agnostic of the state management and the router solutions.
+This function will receive the current query params, the updated version and the props that have been removed. The `deserialize` method has the following signature:
+
+```js
+const serialize = (query: Object, urlProps: Object, removedProps?: Array) => void
+```
+
+Currently we're leveraging _Redux-First-Router's_ `redirect` method to update the state, but could work with any other mechanism such as `window.location.replace` method.

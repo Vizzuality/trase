@@ -6,9 +6,11 @@ import {
   getOriginCoordinates,
   getWorldMapFlows
 } from 'react-components/shared/world-map/world-map.selectors';
+import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 
 const mapStateToProps = state => {
-  const { selectedContext, selectedYears } = state.app;
+  const selectedYears = getSelectedYears(state);
+  const selectedContext = getSelectedContext(state);
 
   const originGeoId = getOriginGeoId(state);
   const originCoordinates = getOriginCoordinates(state);

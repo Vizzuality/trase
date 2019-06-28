@@ -1,6 +1,6 @@
 import { connectRoutes, NOT_FOUND, redirect, replace } from 'redux-first-router';
 import restoreScroll from 'redux-first-router-restore-scroll';
-import { parse, stringify } from 'utils/stateURL';
+import qs from 'query-string';
 
 import { BREAKPOINTS } from 'constants';
 import {
@@ -10,14 +10,23 @@ import {
 } from 'react-components/home/home.thunks';
 import withSidebarNavLayout from 'react-components/nav/sidebar-nav/with-sidebar-nav-layout.hoc';
 import getPageStaticContent from 'react-components/static-content/static-content.thunks';
-import loadBaseAppData from 'react-components/shared/app.thunks';
+import loadBaseAppData from 'reducers/app.thunks';
 import getTeam from 'react-components/team/team.thunks';
 import { loadDashboardTemplates } from 'react-components/dashboard-root/dashboard-root.thunks';
 import { redirectToExplore } from 'react-components/explore/explore.thunks';
-import { loadToolInitialData } from 'scripts/react-components/tool/tool.thunks';
+import {
+  loadToolInitialData,
+  resizeSankeyTool,
+  loadDisclaimerTool
+} from 'scripts/react-components/tool/tool.thunks';
+
 import getPageTitle from 'scripts/router/page-title';
 
-const pagesNotSupportedOnMobile = ['tool', 'map', 'data'];
+const pagesSupportedLimit = {
+  data: 'small',
+  tool: 'tablet',
+  map: 'tablet'
+};
 
 // We await for all thunks using Promise.all, this makes the result then-able and allows us to
 // add an await solely to the thunks that need it.
@@ -48,7 +57,7 @@ export const routes = {
     path: '/flows',
     page: 'tool',
     title: getPageTitle,
-    thunk: loadPageData(loadToolInitialData)
+    thunk: loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool)
   },
   profileRoot: {
     path: '/profiles',
@@ -140,8 +149,8 @@ const config = {
   basename: '/',
   notFoundPath: '/404',
   querySerializer: {
-    parse,
-    stringify
+    parse: url => qs.parse(url, { arrayFormat: 'bracket', parseNumbers: true }),
+    stringify: params => qs.stringify(params, { arrayFormat: 'bracket' })
   },
   title: state => {
     const route = routes[state.location.type];
@@ -157,9 +166,8 @@ const config = {
     return route;
   },
   onBeforeChange: (dispatch, getState, { action }) => {
-    const isMobile = window.innerWidth <= BREAKPOINTS.small;
-
-    if (isMobile && pagesNotSupportedOnMobile.includes(action.type)) {
+    const supportedLimit = pagesSupportedLimit[action.type];
+    if (supportedLimit && window.innerWidth <= BREAKPOINTS[supportedLimit]) {
       return dispatch(redirect({ type: 'notSupportedOnMobile' }));
     }
 

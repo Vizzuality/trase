@@ -16,26 +16,11 @@ module.exports = merge(webpackBaseConfig, {
     rules: [
       {
         test: /\.css$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: { sourceMap: true }
-          },
-          'postcss-loader'
-        ]
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
       },
       {
         test: /\.scss$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: { sourceMap: true }
-          },
-          'postcss-loader',
-          'sass-loader'
-        ]
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', 'sass-loader']
       }
     ]
   },
@@ -43,6 +28,7 @@ module.exports = merge(webpackBaseConfig, {
     contentBase: path.join(__dirname, '..', 'public'),
     port: 8081,
     host: '0.0.0.0',
+    liveReload: false,
     historyApiFallback: true,
     proxy: [
       {

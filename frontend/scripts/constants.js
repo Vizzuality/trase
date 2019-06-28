@@ -225,7 +225,8 @@ export const HOME_VIDEO = {
 };
 
 export const BREAKPOINTS = {
-  small: 640
+  small: 640,
+  tablet: 768
 };
 
 export const MAX_SEARCH_RESULTS = 50;

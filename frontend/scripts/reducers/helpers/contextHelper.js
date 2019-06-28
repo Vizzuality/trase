@@ -14,13 +14,3 @@ export const getContextById = (state, contextId) => {
 
   return selectedContext;
 };
-
-export const getCurrentContext = state =>
-  getContextById(
-    state,
-    state.app.selectedContext
-      ? state.app.selectedContext.id
-      : state.app.initialSelectedContextIdFromURL
-  );
-export const getDefaultContext = state =>
-  state.app.contexts.find(context => context.isDefault === true);

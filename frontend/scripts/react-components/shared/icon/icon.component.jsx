@@ -5,7 +5,7 @@ import cx from 'classnames';
 import './icon.scss';
 
 function Icon(props) {
-  const { icon, color } = props;
+  const { icon, color, size } = props;
   switch (icon) {
     case 'icon-arrow':
       return <span className={cx('icon', icon, { [`color-${color}`]: color })} />;
@@ -13,7 +13,10 @@ function Icon(props) {
       return <span className={cx('icon', icon, { [`color-${color}`]: color }, 'direction-up')} />;
     default:
       return (
-        <svg className={`icon ${icon}`} style={{ pointerEvents: 'none' }}>
+        <svg
+          className={cx(`icon ${icon}`, { [`color-${color}`]: color, [`size-${size}`]: size })}
+          style={{ pointerEvents: 'none' }}
+        >
           <use xlinkHref={`#${icon}`} />
         </svg>
       );
@@ -22,7 +25,8 @@ function Icon(props) {
 
 Icon.propTypes = {
   icon: PropTypes.string.isRequired,
-  color: PropTypes.string
+  color: PropTypes.string,
+  size: PropTypes.string
 };
 
 export default Icon;

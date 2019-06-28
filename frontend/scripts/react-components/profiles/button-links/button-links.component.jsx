@@ -36,14 +36,12 @@ function ButtonLinks(props) {
             to={{
               type: 'tool',
               payload: {
-                query: {
-                  state: {
-                    isMapVisible: true,
-                    selectedNodesIds: [nodeId],
-                    expandedNodesIds: [nodeId],
-                    selectedYears: [year, year],
-                    selectedContextId: contextId
-                  }
+                serializerParams: {
+                  isMapVisible: true,
+                  selectedNodesIds: [nodeId],
+                  expandedNodesIds: [nodeId],
+                  selectedYears: [year, year],
+                  selectedContextId: contextId
                 }
               }
             }}
@@ -61,14 +59,12 @@ function ButtonLinks(props) {
             to={{
               type: 'tool',
               payload: {
-                query: {
-                  state: {
-                    isMapVisible: false,
-                    selectedNodesIds: [nodeId],
-                    expandedNodesIds: [nodeId],
-                    selectedYears: [year, year],
-                    selectedContextId: contextId
-                  }
+                serializerParams: {
+                  isMapVisible: false,
+                  selectedNodesIds: [nodeId],
+                  expandedNodesIds: [nodeId],
+                  selectedYears: [year, year],
+                  selectedContext: contextId
                 }
               }
             }}

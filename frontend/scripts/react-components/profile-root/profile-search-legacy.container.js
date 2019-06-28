@@ -5,8 +5,10 @@ import {
   searchNodeWithTermLegacy
 } from 'react-components/profile-root/profile-root.actions';
 import SearchInput from 'react-components/shared/search-input/search-input.component';
+import { getSelectedContext } from 'reducers/app.selectors';
 
 function mapStateToProps(state) {
+  const selectedContext = getSelectedContext(state);
   const getProfilesContextId = () => {
     if (DISABLE_MULTIPLE_CONTEXT_PROFILES) {
       const singleContextProfile = state.app.contexts.find(
@@ -16,11 +18,11 @@ function mapStateToProps(state) {
       return singleContextProfile ? singleContextProfile.id : null;
     }
 
-    return state.app.selectedContext ? state.app.selectedContext.id : null;
+    return selectedContext ? selectedContext.id : null;
   };
 
   const searchOptions = {
-    year: state.app.selectedContext ? state.app.selectedContext.defaultYear : null,
+    year: selectedContext ? selectedContext.defaultYear : null,
     contextId: getProfilesContextId()
   };
   return {

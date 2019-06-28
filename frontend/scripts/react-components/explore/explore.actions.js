@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import { getURLFromParams, GET_TOP_NODES_URL } from 'utils/getURLFromParams';
+import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 
 export const EXPLORE__SET_TOP_COUNTRIES = 'EXPLORE__SET_TOP_COUNTRIES';
 export const EXPLORE__SET_TOP_EXPORTERS = 'EXPLORE__SET_TOP_EXPORTERS';
@@ -13,8 +14,9 @@ export const setExploreTopNodes = columnType => (dispatch, getState) => {
   if (!columnType) return null;
 
   const state = getState();
-  const { selectedContext } = state.app;
-  let columnId; let type;
+  const selectedContext = getSelectedContext(state);
+  let columnId;
+  let type;
 
   switch (columnType) {
     case 'exporter':
@@ -38,9 +40,7 @@ export const setExploreTopNodes = columnType => (dispatch, getState) => {
     return null;
   }
 
-  const {
-    selectedYears: [start_year, end_year]
-  } = state.app;
+  const [start_year, end_year] = getSelectedYears(state);
   const { topNodes } = state.explore;
   const params = {
     start_year,

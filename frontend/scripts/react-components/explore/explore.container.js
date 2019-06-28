@@ -6,10 +6,12 @@ import {
   setSelectedTableColumnType
 } from 'react-components/explore/explore.actions';
 import { selectContextById } from 'actions/app.actions';
+import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 import Explore from './explore.component';
 
 const mapStateToProps = state => {
-  const { selectedContext, selectedYears } = state.app;
+  const selectedContext = getSelectedContext(state);
+  const selectedYears = getSelectedYears(state);
   const { topNodes, selectedTableColumnType, loading: loadingDict } = state.explore;
   const topNodesKey = selectedContext
     ? getTopNodesKey(selectedContext.id, selectedTableColumnType, ...selectedYears)

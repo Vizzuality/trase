@@ -1,13 +1,13 @@
 // break down links into simple src - target binomes
-export default function(rawLinks, nodesDict, selectedRecolorBy) {
+export default function(rawLinks, nodes, columns, selectedRecolorBy) {
   const links = [];
   rawLinks.forEach(link => {
     const path = link.path;
     for (let i = 0; i < path.length - 1; i++) {
       const sourceNodeId = path[i];
       const targetNodeId = path[i + 1];
-      const sourceNode = nodesDict[sourceNodeId];
-      const targetNode = nodesDict[targetNodeId];
+      const sourceNode = nodes[sourceNodeId];
+      const targetNode = nodes[targetNodeId];
 
       let recolorBy = null;
       if (link.qual !== undefined && link.qual !== null) {
@@ -26,11 +26,14 @@ export default function(rawLinks, nodesDict, selectedRecolorBy) {
         return;
       }
 
+      const sourceColumn = columns[sourceNode.columnId];
+      const targetColumn = columns[targetNode.columnId];
+
       links.push({
         sourceNodeId,
         targetNodeId,
-        sourceColumnPosition: sourceNode.columnGroup,
-        targetColumnPosition: targetNode.columnGroup,
+        sourceColumnPosition: sourceColumn.group,
+        targetColumnPosition: targetColumn.group,
         sourceNodeName: sourceNode.name,
         targetNodeName: targetNode.name,
         height: link.height,
