@@ -47,14 +47,14 @@ export const getToolAdminLevelProps = createSelector(
       id: 'toolAdminLevel',
       clip: false,
       options: [
-        { value: 'none', label: 'All' },
+        { value: null, label: 'All' },
         ...adminLevel.nodes
           .filter(node => node.name !== (selectedFilter && selectedFilter.name))
           .map(node => ({ ...node, value: node.name, label: capitalize(node.name) }))
       ],
       value: selectedFilter
         ? { ...selectedFilter, label: capitalize(selectedFilter.name) }
-        : { label: 'All', value: 'All' }
+        : { label: 'All', value: null }
     };
   }
 );
