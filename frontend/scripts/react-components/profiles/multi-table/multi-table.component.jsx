@@ -4,7 +4,7 @@ import cx from 'classnames';
 import PropTypes from 'prop-types';
 import isFunction from 'lodash/isFunction';
 
-import Table from 'react-components/profiles/table/table.component';
+import ProfilesTable from 'react-components/profiles/table/table.component';
 import DropdownTabSwitcher from '../dropdown-tab-switcher/dropdown-tab-switcher.component';
 
 import './multi-table.scss';
@@ -53,7 +53,7 @@ class MultiTable extends Component {
               {elem.name}
             </div>
             <div className={cx({ '-tab-hidden': index !== selectedTableIndex })}>
-              <Table
+              <ProfilesTable
                 data={elem}
                 type={type}
                 target={isFunction(target) ? target(elem) : target}

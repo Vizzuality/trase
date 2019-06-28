@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import cx from 'classnames';
 import Link from 'redux-first-router-link';
 import PropTypes from 'prop-types';
+import Icon from 'react-components/shared/icon';
 
 import formatValue from 'utils/formatValue';
 import { UNITLESS_UNITS } from 'constants';
@@ -10,7 +11,7 @@ import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component
 
 import 'react-components/profiles/table/area-table.scss';
 
-class Table extends Component {
+class ProfilesTable extends Component {
   renderPlacesTableHeader() {
     const { data, testId } = this.props;
 
@@ -100,7 +101,20 @@ class Table extends Component {
         query: { year, contextId, nodeId: id }
       }
     });
+    const hasLink = value =>
+      value !== null &&
+      target !== null &&
+      typeof value.value !== 'number' &&
+      value.id !== undefined;
 
+    const renderLink = (value, children) => (
+      <Link className="node-link" to={linkTo(value.id)} data-test={`${testId}-cell-link`}>
+        {children}
+      </Link>
+    );
+
+    const formattedValue = (value, valueIndex) =>
+      formatValue(value.value, data.included_columns[valueIndex].name);
     return (
       <tbody>
         {data.rows.map((row, rowIndex) => (
@@ -119,29 +133,27 @@ class Table extends Component {
                   '_text-align-right': valueIndex > 0 || row.is_total === true
                 })}
               >
-                {value === null && <span className="unit">N/A</span>}
-                {value !== null && (
-                  <span
-                    className={`${valueIndex > 0 ? 'unit' : 'node-name'}`}
-                    data-unit={rowIndex === 0 ? data.included_columns[valueIndex].unit : null}
-                  >
-                    {formatValue(value.value, data.included_columns[valueIndex].name)}
-                  </span>
-                )}
                 {value !== null &&
-                  target !== null &&
-                  typeof value.value !== 'number' &&
-                  value.id !== undefined && (
-                    <Link
-                      className="node-link"
-                      to={linkTo(value.id)}
-                      data-test={`${testId}-cell-link`}
-                    >
-                      <svg className="icon icon-check">
-                        <use xlinkHref="#icon-outside-link" />
-                      </svg>
-                    </Link>
+                  hasLink(value) &&
+                  renderLink(
+                    value,
+                    <Icon icon="icon-outside-link" className="icon-outside-link" />
                   )}
+                {value === null && <span>N/A</span>}
+                {value !== null && (
+                  <>
+                    <span className="node-name">
+                      {hasLink(value)
+                        ? renderLink(value, formattedValue(value, valueIndex))
+                        : formattedValue(value, valueIndex)}
+                    </span>
+                    {valueIndex > 0 && (
+                      <span className="unit">
+                        {rowIndex === 0 ? data.included_columns[valueIndex].unit : null}
+                      </span>
+                    )}
+                  </>
+                )}
               </td>
             ))}
           </tr>
@@ -201,7 +213,7 @@ class Table extends Component {
   }
 }
 
-Table.propTypes = {
+ProfilesTable.propTypes = {
   data: PropTypes.object,
   type: PropTypes.string,
   target: PropTypes.string,
@@ -211,4 +223,4 @@ Table.propTypes = {
   contextId: PropTypes.number.isRequired
 };
 
-export default Table;
+export default ProfilesTable;
