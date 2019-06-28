@@ -140,7 +140,7 @@ export default class {
       year: selectedYears ? selectedYears[0] : null,
       nodes: nodesData.map(node => {
         const nodeHeight = nodeHeights && nodeHeights[node.id];
-        const column = columns[node.columnId];
+        const column = columns && columns[node.columnId];
         let renderedQuant;
         if (nodeHeight) {
           renderedQuant = {
@@ -168,12 +168,12 @@ export default class {
         }
 
         return Object.assign({}, node, {
-          columnName: column.name,
+          columnName: column?.name,
           hasLink:
             node.isUnknown !== true &&
             node.isDomesticConsumption !== true &&
-            column.profileType !== undefined &&
-            column.profileType !== null,
+            column?.profileType !== undefined &&
+            column?.profileType !== null,
           selectedMetas: renderedMetas,
           renderedQuant
         });
