@@ -19,13 +19,17 @@ const getToolMapView = state => state.toolLayers.mapView;
 const getIsMapVisible = state => state.toolLayers.isMapVisible;
 const getSelectedMapBasemap = state => state.toolLayers.selectedMapBasemap;
 
-const getNodesGeoIds = (nodesData, columns) =>
-  nodesData
-    .filter(node => {
-      const column = columns[node.columnId];
-      return column.isGeo === true && typeof node.geoId !== 'undefined' && node.geoId !== null;
-    })
-    .map(node => node.geoId);
+const getNodesGeoIds = (nodesData, columns) => {
+  if (columns) {
+    return nodesData
+      .filter(node => {
+        const column = columns[node.columnId];
+        return column.isGeo === true && typeof node.geoId !== 'undefined' && node.geoId !== null;
+      })
+      .map(node => node.geoId);
+  }
+  return [];
+};
 
 export const getSelectedNodesGeoIds = createSelector(
   [getSelectedNodesData, getToolColumns],
