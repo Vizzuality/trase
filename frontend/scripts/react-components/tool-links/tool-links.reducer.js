@@ -1,9 +1,4 @@
-import {
-  RESET_TOOL_STATE,
-  SET_NODE_ATTRIBUTES,
-  SHOW_LINKS_ERROR,
-  SET_SELECTED_NODES_BY_SEARCH
-} from 'react-components/tool/tool.actions';
+import { SET_NODE_ATTRIBUTES } from 'react-components/tool/tool.actions';
 import {
   TOOL_LINKS__CLEAR_SANKEY,
   TOOL_LINKS__HIGHLIGHT_NODE,
@@ -22,7 +17,8 @@ import {
   TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
   TOOL_LINKS__SET_SELECTED_RESIZE_BY,
   TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
-  TOOL_LINKS__SET_MISSING_LOCKED_NODES
+  TOOL_LINKS__SET_MISSING_LOCKED_NODES,
+  SET_SELECTED_NODES_BY_SEARCH
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
 import immer from 'immer';
@@ -176,11 +172,6 @@ const toolLinksReducer = {
       }
     });
   },
-  [SHOW_LINKS_ERROR](state) {
-    return immer(state, draft => {
-      Object.assign(draft, { links: null, flowsLoading: false });
-    });
-  },
   [TOOL_LINKS__SET_SELECTED_BIOME_FILTER](state, action) {
     return immer(state, draft => {
       draft.selectedBiomeFilterName = action.payload.name;
@@ -312,11 +303,6 @@ const toolLinksReducer = {
   [TOOL_LINKS__EXPAND_SANKEY](state) {
     return immer(state, draft => {
       draft.expandedNodesIds = state.selectedNodesIds;
-    });
-  },
-  [RESET_TOOL_STATE](state, action) {
-    return immer(state, draft => {
-      Object.assign(draft, toolLinksInitialState, action.payload);
     });
   },
   [TOOL_LINKS__SET_IS_SEARCH_OPEN](state, action) {

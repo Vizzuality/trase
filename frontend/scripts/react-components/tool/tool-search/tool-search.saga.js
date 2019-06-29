@@ -1,6 +1,8 @@
-import { SET_SELECTED_NODES_BY_SEARCH } from 'react-components/tool/tool.actions';
 import { all, fork, takeLatest, select, put } from 'redux-saga/effects';
-import { expandSankey } from 'react-components/tool-links/tool-links.actions';
+import {
+  expandSankey,
+  SET_SELECTED_NODES_BY_SEARCH
+} from 'react-components/tool-links/tool-links.actions';
 import { getVisibleNodes } from 'react-components/tool-links/tool-links.selectors';
 
 function* checkExpandNode() {
