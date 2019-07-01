@@ -4,13 +4,16 @@ const BASE_URL = 'http://0.0.0.0:8081';
 
 export async function testRootSearch(page, { nodeName, nodeType, profileType }) {
   const profileSearchInputSelector = '[data-test=profile-root-search-input-field-lg]';
-
   await page.waitForSelector(profileSearchInputSelector);
   await page.click(profileSearchInputSelector);
   await page.type(profileSearchInputSelector, nodeName);
   await page.waitForSelector(`[data-test=search-result-${nodeType}-${nodeName}]`);
+  const waitForNavigation = page.waitForNavigation({
+    waitUntil: 'networkidle2'
+  });
   await page.click(`[data-test=search-result-${nodeType}-${nodeName}]`);
-  await page.waitFor(1000);
+  await waitForNavigation;
+
   const url = page.url();
   expect(url.startsWith(`${BASE_URL}/profile-${profileType}`)).toBe(true);
 }
