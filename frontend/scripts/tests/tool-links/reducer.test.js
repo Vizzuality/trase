@@ -326,16 +326,36 @@ describe(TOOL_LINKS__SELECT_COLUMN, () => {
 });
 
 describe(SET_SELECTED_NODES_BY_SEARCH, () => {
-  xit('selects 2 nodes belonging to a column selected by default, with no previously selected or expanded nodes', () => {
+  it('selects 2 nodes belonging to a column selected by default, with no previously selected or expanded nodes', () => {
     const results = [{ id: 0, nodeType: 'EXPORTER' }, { id: 1, nodeType: 'IMPORTER' }];
+    const state = {
+      ...initialState,
+      data: {
+        ...initialState.data,
+        columns: {
+          3: { group: 1, name: 'EXPORTER', isDefault: true },
+          4: { group: 2, name: 'IMPORTER', isDefault: true }
+        }
+      }
+    };
     const action = selectSearchNode(results);
-    const newState = reducer(initialState, action);
+    const newState = reducer(state, action);
     expect(newState).toMatchSnapshot();
   });
 
-  xit('deselects 2 nodes belonging to a column selected by default, with no expanded nodes', () => {
+  it('deselects 2 nodes belonging to a column selected by default, with no expanded nodes', () => {
     const results = [{ id: 0, nodeType: 'EXPORTER' }, { id: 1, nodeType: 'IMPORTER' }];
-    const state = { ...initialState, selectedNodesIds: [0, 1] };
+    const state = {
+      ...initialState,
+      selectedNodesIds: [0, 1],
+      data: {
+        ...initialState.data,
+        columns: {
+          3: { group: 1, name: 'EXPORTER', isDefault: true },
+          4: { group: 2, name: 'IMPORTER', isDefault: true }
+        }
+      }
+    };
     const action = selectSearchNode(results);
     const newState = reducer(state, action);
     expect(newState).toMatchSnapshot();

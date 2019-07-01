@@ -105,6 +105,83 @@ Object {
 }
 `;
 
+exports[`SET_SELECTED_NODES_BY_SEARCH deselects 2 nodes belonging to a column selected by default, with no expanded nodes 1`] = `
+Object {
+  "currentQuant": null,
+  "data": Object {
+    "columns": Object {
+      "3": Object {
+        "group": 1,
+        "isDefault": true,
+        "name": "EXPORTER",
+      },
+      "4": Object {
+        "group": 2,
+        "isDefault": true,
+        "name": "IMPORTER",
+      },
+    },
+    "links": null,
+    "nodeAttributes": null,
+    "nodeHeights": null,
+    "nodes": null,
+    "nodesByColumnGeoId": null,
+  },
+  "detailedView": false,
+  "expandedNodesIds": Array [],
+  "flowsLoading": false,
+  "forcedOverview": false,
+  "highlightedNodeId": null,
+  "isSearchOpen": false,
+  "noLinksFound": false,
+  "selectedBiomeFilterName": null,
+  "selectedColumnsIds": null,
+  "selectedNodesIds": Array [],
+  "selectedRecolorByName": null,
+  "selectedResizeByName": null,
+}
+`;
+
+exports[`SET_SELECTED_NODES_BY_SEARCH selects 2 nodes belonging to a column selected by default, with no previously selected or expanded nodes 1`] = `
+Object {
+  "currentQuant": null,
+  "data": Object {
+    "columns": Object {
+      "3": Object {
+        "group": 1,
+        "isDefault": true,
+        "name": "EXPORTER",
+      },
+      "4": Object {
+        "group": 2,
+        "isDefault": true,
+        "name": "IMPORTER",
+      },
+    },
+    "links": null,
+    "nodeAttributes": null,
+    "nodeHeights": null,
+    "nodes": null,
+    "nodesByColumnGeoId": null,
+  },
+  "detailedView": false,
+  "expandedNodesIds": Array [],
+  "flowsLoading": false,
+  "forcedOverview": false,
+  "highlightedNodeId": null,
+  "isSearchOpen": false,
+  "noLinksFound": false,
+  "selectedBiomeFilterName": null,
+  "selectedColumnsIds": null,
+  "selectedNodesIds": Array [
+    0,
+    1,
+  ],
+  "selectedRecolorByName": null,
+  "selectedResizeByName": null,
+}
+`;
+
 exports[`TOOL_LINKS__CLEAR_SANKEY 1`] = `
 Object {
   "currentQuant": null,
