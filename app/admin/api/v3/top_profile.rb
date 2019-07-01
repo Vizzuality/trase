@@ -11,7 +11,7 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
     def clear_cache
       clear_cache_for_regexp('/api/v3/contexts')
     end
-    
+
     def create
       super do |success, _failure|
         success.html { redirect_to admin_context_top_profiles_path(parent) }
