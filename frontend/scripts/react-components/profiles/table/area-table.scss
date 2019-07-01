@@ -87,14 +87,20 @@
             }
           }
 
-          .node-link > .icon-outside-link {
-            margin: 0 10px 0 0;
-            fill: rgba($charcoal-grey, .2);
-            vertical-align: text-bottom;
-            cursor: pointer;
+          .node-link {
+            .icon-outside-link {
+              margin: 0 10px 0 0;
+              vertical-align: text-bottom;
+              cursor: pointer;
+              fill: rgba($charcoal-grey, .2);
+            }
 
             &:hover {
-              fill: $charcoal-grey;
+              text-decoration: underline;
+
+              .icon-outside-link {
+                fill: $charcoal-grey;
+              }
             }
           }
 

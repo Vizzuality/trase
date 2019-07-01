@@ -109,6 +109,7 @@ class ProfilesTable extends Component {
 
     const renderLink = (value, children) => (
       <Link className="node-link" to={linkTo(value.id)} data-test={`${testId}-cell-link`}>
+        <Icon icon="icon-outside-link" className="icon-outside-link" />
         {children}
       </Link>
     );
@@ -133,12 +134,6 @@ class ProfilesTable extends Component {
                   '_text-align-right': valueIndex > 0 || row.is_total === true
                 })}
               >
-                {value !== null &&
-                  hasLink(value) &&
-                  renderLink(
-                    value,
-                    <Icon icon="icon-outside-link" className="icon-outside-link" />
-                  )}
                 {value === null && <span>N/A</span>}
                 {value !== null && (
                   <>
