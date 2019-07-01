@@ -89,42 +89,40 @@ const ProfileRoot = props => {
   if (!NEW_PROFILES_PAGE) return renderLegacyProfiles(props);
   const { cardsInfo, openModal } = props;
   return (
-    <React.Fragment>
-      <div className="l-profile-root">
-        <div className="c-profile-root">
-          <div className="row column">
-            <div className="profile-root-search-container">
-              <h2 className="profile-root-description">
-                Explore the trade activities of countries, regions or traders
-              </h2>
-              <div className="profile-root-actions">
-                <Button
-                  color="pink"
-                  icon="icon-browse"
-                  className="browse-button"
-                  size="rg"
-                  onClick={openModal}
-                >
-                  Browse places or traders
-                </Button>
-                <ProfileSearch
-                  testId="profile-root"
-                  className="profile-search"
-                  placeholderSmall="Search"
-                  placeholder="Search places or traders"
-                  getResultTestId={getResultTestId}
-                  nodeTypeRenderer={nodeTypeRenderer}
-                />
-              </div>
-              <div className="profile-root-slider">
-                <SliderSection name="Top profiles" slides={cardsInfo} variant="profiles" />
-              </div>
+    <div className="l-profile-root">
+      <div className="c-profile-root">
+        <div className="row column">
+          <div className="profile-root-search-container">
+            <h2 className="profile-root-description">
+              Explore the trade activities of countries, regions or traders
+            </h2>
+            <div className="profile-root-actions">
+              <Button
+                color="pink"
+                icon="icon-browse"
+                className="browse-button"
+                size="rg"
+                onClick={openModal}
+              >
+                Browse places or traders
+              </Button>
+              <ProfileSearch
+                testId="profile-root"
+                className="profile-search"
+                placeholderSmall="Search"
+                placeholder="Search places or traders"
+                getResultTestId={getResultTestId}
+                nodeTypeRenderer={nodeTypeRenderer}
+              />
+            </div>
+            <div className="profile-root-slider">
+              <SliderSection name="Top profiles" slides={cardsInfo} variant="profiles" />
             </div>
           </div>
         </div>
       </div>
       <ProfileSelector />
-    </React.Fragment>
+    </div>
   );
 };
 

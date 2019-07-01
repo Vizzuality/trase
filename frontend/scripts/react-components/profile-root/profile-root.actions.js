@@ -18,18 +18,17 @@ export const goToNodeProfilePageLegacy = (node, { year }) => dispatch =>
     }
   });
 
-export const goToNodeProfilePage = (node, defaultYear) => dispatch =>
-  dispatch({
-    type: 'profileNode',
-    payload: {
-      query: {
-        nodeId: node.id,
-        contextId: node.contextId,
-        year: defaultYear
-      },
-      profileType: node.profile
-    }
-  });
+export const goToNodeProfilePage = (node, defaultYear) => ({
+  type: 'profileNode',
+  payload: {
+    query: {
+      nodeId: node.id,
+      contextId: node.contextId,
+      year: defaultYear
+    },
+    profileType: node.profile
+  }
+});
 
 export function resetProfileSearchResults() {
   return {

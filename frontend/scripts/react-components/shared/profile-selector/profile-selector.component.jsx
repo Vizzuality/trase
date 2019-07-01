@@ -11,7 +11,7 @@ function ProfilesSelectorModal(props) {
     activeStep === PROFILE_STEPS.commodities ? onClose : () => setStep(activeStep + 1);
   const isOpen = activeStep !== null;
   return (
-    <SimpleModal isOpen={isOpen} onClickClose={onClose}>
+    <SimpleModal isOpen={isOpen} onRequestClose={onClose}>
       <ProfilePanel
         step={activeStep}
         onContinue={onContinue}
