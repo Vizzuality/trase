@@ -40,7 +40,9 @@ class ActorSummary extends React.PureComponent {
       <div className="c-overall-info" data-test="actor-summary">
         <div className="row">
           <div className="small-12 columns">
-            <h2 className="profiles-title">{capitalize(nodeName)}</h2>
+            <h2 className="profiles-title" data-test="profiles-title">
+              {capitalize(nodeName)}
+            </h2>
           </div>
         </div>
         <div className="row">
