@@ -5,8 +5,13 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
 
   # before creating add summary, year and profile_type to top profile record
   before_create :derive_top_profile_details
+  after_action :clear_cache, only: [:create, :update, :destroy]
 
   controller do
+    def clear_cache
+      clear_cache_for_regexp('/api/v3/top_profiles')
+    end
+
     def create
       super do |success, _failure|
         success.html { redirect_to admin_context_top_profiles_path(parent) }
