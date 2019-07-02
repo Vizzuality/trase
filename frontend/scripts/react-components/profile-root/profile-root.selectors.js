@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
+import shuffle from 'lodash/shuffle';
 
+const getAppContexts = state => state.app.contexts;
 const getTopProfiles = state => state.profileRoot.topProfiles;
 
 export const getContextsWithProfilePages = createSelector(
@@ -8,10 +10,11 @@ export const getContextsWithProfilePages = createSelector(
 );
 
 export const getParsedTopProfiles = createSelector(
-  getTopProfiles,
-  profiles => {
-    if (!profiles) return [];
-    return profiles.map(profile => {
+  [getTopProfiles, getAppContexts],
+  (profiles, contexts) => {
+    if (!profiles || !contexts) return [];
+    const contextsById = contexts.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
+    const cards = profiles.map(profile => {
       const {
         nodeId,
         year,
@@ -22,10 +25,11 @@ export const getParsedTopProfiles = createSelector(
         profileType,
         photoUrl
       } = profile;
+      const context = contextsById[contextId];
       return {
         title: nodeName,
         subtitle: summary,
-        category: nodeType,
+        category: `${context.countryName} ${context.commodityName} · ${nodeType}`,
         imageUrl: photoUrl,
         to: {
           type: 'profileNode',
@@ -40,5 +44,7 @@ export const getParsedTopProfiles = createSelector(
         }
       };
     });
+
+    return shuffle(cards);
   }
 );
