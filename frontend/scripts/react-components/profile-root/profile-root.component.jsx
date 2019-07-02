@@ -127,6 +127,10 @@ const ProfileRoot = props => {
   );
 };
 
+ProfileRoot.defaultProps = {
+  topProfiles: []
+};
+
 ProfileRoot.propTypes = {
   topProfiles: PropTypes.array,
   contexts: PropTypes.array,
