@@ -58,13 +58,8 @@ export const searchNodeWithTermLegacy = (searchTerm, { contextId }) => dispatch 
   });
 
   axios(nodeResultsURL)
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      return Promise.reject(new Error(response.statusText));
-    })
-    .then(results => {
+    .then(res => {
+      const results = res.data;
       if (!results) return;
 
       dispatch({
@@ -97,14 +92,9 @@ export const searchNodeWithTerm = searchTerm => dispatch => {
     payload: { term: searchTerm, isLoading: true }
   });
 
-  fetch(nodeResultsURL)
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      return Promise.reject(new Error(response.statusText));
-    })
-    .then(results => {
+  axios(nodeResultsURL)
+    .then(res => {
+      const results = res.data;
       if (!results) return;
 
       dispatch({
@@ -123,14 +113,9 @@ export const searchNodeWithTerm = searchTerm => dispatch => {
 
 export const getTopProfiles = () => dispatch => {
   const topProfilesURL = getURLFromParams(GET_TOP_PROFILES);
-  fetch(topProfilesURL)
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      return Promise.reject(new Error(response.statusText));
-    })
-    .then(results => {
+  axios(topProfilesURL)
+    .then(res => {
+      const results = res.data;
       if (!results) return;
       dispatch({
         type: SET_TOP_PROFILES,

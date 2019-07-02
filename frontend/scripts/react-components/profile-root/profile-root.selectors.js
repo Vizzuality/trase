@@ -1,16 +1,16 @@
 import { createSelector } from 'reselect';
 
+const getTopProfiles = state => state.profileRoot.topProfiles;
+
 export const getContextsWithProfilePages = createSelector(
   [x => x],
   contexts => contexts.filter(ctx => ctx.hasProfiles)
 );
 
-const getTopProfiles = state => state.profileRoot.topProfiles || null;
-
 export const getParsedTopProfiles = createSelector(
   getTopProfiles,
   profiles => {
-    if (!profiles) return null;
+    if (!profiles) return [];
     return profiles.map(profile => {
       const {
         nodeId,
