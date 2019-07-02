@@ -256,6 +256,11 @@ export const DASHBOARD_STEPS = {
   companies: 4
 };
 
+export const PROFILE_STEPS = {
+  nodes: 0,
+  commodities: 1
+};
+
 export const CHART_TYPES = {
   bar: 'bar',
   pie: 'pie',
@@ -271,4 +276,10 @@ export const NAV_FILTER_TYPES = {
   yearSelector: 1,
   dropdown: 2,
   recolorBySelector: 3
+};
+
+export const PROFILE_TYPES = {
+  sources: 'sources',
+  importing: 'importing-countries',
+  traders: 'traders'
 };
