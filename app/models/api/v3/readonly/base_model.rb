@@ -35,7 +35,7 @@ module Api
             MaterializedViewRefreshWorker.perform_async(name, options)
           end
 
-          private
+          protected
 
           def long_running?
             false

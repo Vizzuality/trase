@@ -28,11 +28,9 @@ module Api
                  association: :map_attributes,
                  link: :index
           checks :has_at_least_one,
-                 association: :recolor_by_attributes,
-                 link: :index
+                 association: :recolor_by_attributes
           checks :has_at_least_one,
-                 association: :resize_by_attributes,
-                 link: :index
+                 association: :resize_by_attributes
           checks :has_at_least_one,
                  association: :contextual_layers,
                  link: :index

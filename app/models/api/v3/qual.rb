@@ -15,6 +15,8 @@ module Api
     class Qual < BlueTable
       has_one :qual_property
       has_many :node_quals
+      has_many :flow_quals
+      has_many :flows, through: :flow_quals
       has_many :qual_context_properties
       has_many :qual_commodity_properties
       has_many :qual_country_properties
@@ -29,6 +31,12 @@ module Api
 
       def simple_type
         'qual'
+      end
+
+      def download_original_attribute(context)
+        Api::V3::DownloadQual.
+          joins(:download_attribute).
+          find_by('download_attributes.context_id' => context.id, qual_id: id)
       end
 
       def self.select_options

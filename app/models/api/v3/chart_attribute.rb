@@ -30,6 +30,8 @@ module Api
       include Api::V3::StringyArray
       include Api::V3::AssociatedAttributes
 
+      NORMALIZABLE_ATTRIBUTES = [:identifier].freeze
+
       belongs_to :chart, optional: false
       has_one :chart_ind, autosave: true
       has_one :chart_qual, autosave: true
@@ -55,7 +57,6 @@ module Api
                      attribute: :chart_quant, scope: [:chart_id, :state_average],
                      if: :new_chart_quant_given?
 
-      before_save :nullify_empty_identifier
       after_commit :refresh_dependencies
 
       stringy_array :years
@@ -75,12 +76,6 @@ module Api
         Api::V3::ChartInd.distinct.pluck(:chart_attribute_id) +
           Api::V3::ChartQual.distinct.pluck(:chart_attribute_id) +
           Api::V3::ChartQuant.distinct.pluck(:chart_attribute_id)
-      end
-
-      private
-
-      def nullify_empty_identifier
-        self.identifier = nil if identifier.blank?
       end
     end
   end

@@ -16,6 +16,8 @@ module Api
     class Quant < BlueTable
       has_one :quant_property
       has_many :node_quants
+      has_many :flow_quants
+      has_many :flows, through: :flow_quants
       has_many :quant_context_properties
       has_many :quant_commodity_properties
       has_many :quant_country_properties
@@ -30,6 +32,12 @@ module Api
 
       def simple_type
         'quant'
+      end
+
+      def download_original_attribute(context)
+        Api::V3::DownloadQuant.
+          joins(:download_attribute).
+          find_by('download_attributes.context_id' => context.id, quant_id: id)
       end
 
       def self.select_options

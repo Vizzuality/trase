@@ -37,8 +37,16 @@ module Api
         delegate :original_type, to: :readonly_attribute
         delegate :original_id, to: :readonly_attribute
 
-        def self.refresh_dependencies(options = {})
-          Api::V3::Readonly::Attribute.refresh(options.merge(skip_dependents: true))
+        class << self
+          protected
+
+          def long_running?
+            true
+          end
+
+          def refresh_dependencies(options = {})
+            Api::V3::Readonly::Attribute.refresh(options.merge(skip_dependents: true))
+          end
         end
       end
     end

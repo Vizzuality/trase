@@ -7015,14 +7015,6 @@ ALTER TABLE ONLY public.quants
 
 
 --
--- Name: recolor_by_attributes recolor_by_attributes_context_id_group_number_position_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.recolor_by_attributes
-    ADD CONSTRAINT recolor_by_attributes_context_id_group_number_position_key UNIQUE (context_id, group_number, "position");
-
-
---
 -- Name: recolor_by_inds recolor_by_inds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7052,14 +7044,6 @@ ALTER TABLE ONLY public.recolor_by_quals
 
 ALTER TABLE ONLY public.recolor_by_quals
     ADD CONSTRAINT recolor_by_quals_recolor_by_attribute_id_qual_id_key UNIQUE (recolor_by_attribute_id, qual_id);
-
-
---
--- Name: resize_by_attributes resize_by_attributes_context_id_group_number_position_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.resize_by_attributes
-    ADD CONSTRAINT resize_by_attributes_context_id_group_number_position_key UNIQUE (context_id, group_number, "position");
 
 
 --
@@ -9568,9 +9552,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190528091308'),
 ('20190529153223'),
 ('20190530140625'),
+('20190611224257'),
 ('20190618131945'),
 ('20190621101736'),
 ('20190624114103'),
 ('20190625110206');
+
 
 

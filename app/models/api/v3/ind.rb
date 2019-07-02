@@ -16,6 +16,8 @@ module Api
     class Ind < BlueTable
       has_one :ind_property
       has_many :node_inds
+      has_many :flow_inds
+      has_many :flows, through: :flow_inds
       has_many :ind_context_properties
       has_many :ind_commodity_properties
       has_many :ind_country_properties
