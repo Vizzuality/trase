@@ -1,5 +1,6 @@
 import { GET_NODES_WITH_SEARCH_URL, getURLFromParams } from 'utils/getURLFromParams';
 import isEmpty from 'lodash/isEmpty';
+import axios from 'axios';
 
 export const SET_PROFILE_SEARCH_TERM = 'SET_PROFILE_SEARCH_TERM';
 export const LOAD_PROFILE_SEARCH_RESULTS = 'LOAD_PROFILE_SEARCH_RESULTS';
@@ -56,7 +57,7 @@ export const searchNodeWithTermLegacy = (searchTerm, { contextId }) => dispatch 
     payload: { term: searchTerm, isLoading: true }
   });
 
-  fetch(nodeResultsURL)
+  axios(nodeResultsURL)
     .then(response => {
       if (response.ok) {
         return response.json();

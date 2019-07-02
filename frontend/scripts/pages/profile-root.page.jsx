@@ -10,13 +10,9 @@ import ProfileRoot from 'react-components/profile-root/profile-root.container';
 import Footer from 'scripts/react-components/shared/footer/footer.component';
 import CookieBanner from 'react-components/shared/cookie-banner';
 import Feedback from 'react-components/shared/feedback';
-import { loadTopNodes } from 'react-components/profile-root/profile-root.thunks';
 
 export const mount = (root, store) => {
   root.innerHTML = BaseMarkup();
-
-  loadTopNodes(store.dispatch, store.getState);
-
   render(
     <Provider store={store}>
       <TopNav />
