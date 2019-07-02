@@ -178,6 +178,6 @@ describe('Dashboards flow', () => {
     await page.waitForSelector(biomeWidgetChart);
     const biomeMultiYearWidgets = await page.$$(biomeWidgetChart);
 
-    expect(biomeMultiYearWidgets.length).toBe(5);
+    expect(biomeMultiYearWidgets.length).toBe(7);
   });
 });

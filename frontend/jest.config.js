@@ -9,6 +9,7 @@ module.exports = {
   moduleDirectories: ['node_modules'],
   globals: {
     NODE_ENV_DEV: false,
+    NODE_ENV_TEST: true,
     USE_PLAIN_URL_STATE: true,
     ENABLE_LEGACY_TOOL_SEARCH: false,
     INDONESIA_LOGISTICS_MAP_ACTIVE: false,

@@ -43,6 +43,7 @@ module.exports = {
     new HtmlWebpackPreconnectPlugin(),
     new webpack.DefinePlugin({
       NODE_ENV_DEV: process.env.NODE_ENV === 'development',
+      NODE_ENV_TEST: process.env.NODE_ENV_TEST === 'true',
       DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true',
       SHOW_WORLD_MAP_IN_EXPLORE: process.env.SHOW_WORLD_MAP_IN_EXPLORE === 'true',
       ALWAYS_DISPLAY_DASHBOARD_INFO: process.env.ALWAYS_DISPLAY_DASHBOARD_INFO === 'true',
