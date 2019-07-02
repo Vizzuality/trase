@@ -9,7 +9,7 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
 
   controller do
     def clear_cache
-      clear_cache_for_regexp('/api/v3/contexts')
+      clear_cache_for_regexp('/api/v3/top_profiles')
     end
 
     def create
