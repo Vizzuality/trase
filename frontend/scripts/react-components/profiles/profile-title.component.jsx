@@ -36,11 +36,11 @@ function ProfileTitle(props) {
     if (i > 0) {
       if (hasMustache) {
         return (
-          <>
+          <React.Fragment key={`mustache-spacer${part}-${i}`}>
             {' '}
             {mustache}
             {}
-          </>
+          </React.Fragment>
         );
       }
       return ` ${part}`;

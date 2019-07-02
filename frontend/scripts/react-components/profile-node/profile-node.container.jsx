@@ -14,8 +14,13 @@ class ProfileNodeContainer extends React.PureComponent {
 
   render() {
     const { context, nodeId } = this.props;
+
     return (
-      <Widget query={[GET_PROFILE_METADATA]} params={[{ context_id: context.id, node_id: nodeId }]}>
+      <Widget
+        key={nodeId}
+        query={[GET_PROFILE_METADATA]}
+        params={[{ context_id: context.id, node_id: nodeId }]}
+      >
         {({ data = {}, loading, error }) => (
           <ProfileNode
             {...this.props}

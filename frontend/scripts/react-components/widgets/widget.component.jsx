@@ -1,9 +1,11 @@
-import React from 'react';
+import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { getWidgetData, getWidgetState } from 'react-components/widgets/widgets.actions';
-import isEqual from 'lodash/isEqual';
+import {
+  getWidgetData as getWidgetDataFn,
+  getWidgetState
+} from 'react-components/widgets/widgets.actions';
 
 const mapStateToProps = (state, { query, params }) => {
   const { endpoints } = state.widgets;
@@ -14,51 +16,52 @@ const mapStateToProps = (state, { query, params }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => bindActionCreators({ getWidgetData }, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators({ getWidgetData: getWidgetDataFn }, dispatch);
 
-class Widget extends React.PureComponent {
-  static propTypes = {
-    raw: PropTypes.array,
-    params: PropTypes.array,
-    widget: PropTypes.shape({
-      data: PropTypes.any,
-      error: PropTypes.any,
-      loading: PropTypes.bool
-    }),
-    query: PropTypes.array.isRequired,
-    // eslint-disable-next-line react/no-unused-prop-types
-    getWidgetData: PropTypes.func.isRequired,
-    children: PropTypes.func.isRequired
-  };
+function Widget(props) {
+  const { widget, children, query, params, raw, getWidgetData } = props;
+  const sources = useRef([]);
 
-  static defaultProps = {
-    widget: {
-      data: {},
-      error: null,
-      loading: true
-    },
-    raw: []
-  };
-
-  componentDidMount() {
-    const { query, params, raw } = this.props;
-    query.forEach((endpoint, i) => this.props.getWidgetData(endpoint, params[i], raw[i]));
-  }
-
-  componentDidUpdate(prev) {
-    const { query, params, raw } = this.props;
+  useEffect(() => {
+    const currentSources = sources.current;
     query.forEach((endpoint, i) => {
-      if (prev.query[i] !== query[i] || !isEqual(params[i], prev.params[i])) {
-        this.props.getWidgetData(endpoint, params[i], raw[i]);
+      const source = getWidgetData(endpoint, params[i], raw[i]);
+      if (source) {
+        sources.current.push(source);
       }
     });
-  }
 
-  render() {
-    const { widget, children } = this.props;
-    return children(widget);
-  }
+    return () => {
+      currentSources.forEach(source => source.cancel());
+    };
+  }, [query, params, raw, getWidgetData]);
+
+  return children(widget);
 }
+
+Widget.defaultProps = {
+  widget: {
+    data: {},
+    error: null,
+    loading: true
+  },
+  raw: []
+};
+
+Widget.propTypes = {
+  raw: PropTypes.array,
+  params: PropTypes.array,
+  widget: PropTypes.shape({
+    data: PropTypes.any,
+    error: PropTypes.any,
+    loading: PropTypes.bool
+  }),
+  query: PropTypes.array.isRequired,
+  // eslint-disable-next-line react/no-unused-prop-types
+  getWidgetData: PropTypes.func.isRequired,
+  children: PropTypes.func.isRequired
+};
 
 export default connect(
   mapStateToProps,

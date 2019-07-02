@@ -9,7 +9,7 @@ export function fetchWithCancel(url) {
       cancelToken: source.token
     });
 
-  return { fetchPromise, source };
+  return { fetchPromise, source, isCancel: axios.isCancel };
 }
 
 export function* setLoadingSpinner(timeout, action) {

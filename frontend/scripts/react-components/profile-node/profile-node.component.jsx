@@ -82,13 +82,13 @@ class ProfileNode extends React.PureComponent {
         const isCountries = chart.identifier === 'actor_top_countries';
         return (
           <TopDestinationsWidget
+            key={chart.id}
             className={cx('page-break-inside-avoid', {
               'c-top-map ': isCountries,
               'c-top-municipalities': !isCountries
             })}
             year={year}
             nodeId={nodeId}
-            key={chart.id}
             title={chart.title}
             type={chart.identifier}
             contextId={context.id}
@@ -103,6 +103,7 @@ class ProfileNode extends React.PureComponent {
         const isActor = profileType === 'actor';
         return (
           <SustainabilityTableWidget
+            key={chart.id}
             type={isActor ? 'risk' : 'indicators'}
             profileType={profileType}
             className={cx('c-profiles-table', {
@@ -110,7 +111,6 @@ class ProfileNode extends React.PureComponent {
               'score-table': !isActor
             })}
             year={year}
-            key={chart.id}
             nodeId={nodeId}
             title={chart.title}
             contextId={context.id}
@@ -123,8 +123,8 @@ class ProfileNode extends React.PureComponent {
       case 'scatterplot':
         return (
           <ImportingCompaniesWidget
-            year={year}
             key={chart.id}
+            year={year}
             nodeId={nodeId}
             title={chart.title}
             printMode={printMode}
@@ -136,8 +136,8 @@ class ProfileNode extends React.PureComponent {
       case 'stacked_line_chart':
         return (
           <DeforestationWidget
-            year={year}
             key={chart.id}
+            year={year}
             nodeId={nodeId}
             title={chart.title}
             contextId={context.id}
@@ -149,9 +149,9 @@ class ProfileNode extends React.PureComponent {
         const type = chart.identifier === 'place_top_consumer_actors' ? 'actor' : 'place';
         return (
           <TopConsumersWidget
+            key={chart.id}
             year={year}
             type={type}
-            key={chart.id}
             nodeId={nodeId}
             title={chart.title}
             contextId={context.id}
@@ -165,6 +165,7 @@ class ProfileNode extends React.PureComponent {
         return (
           <React.Fragment key={chart.id}>
             <SummaryWidget
+              key={chart.id}
               year={year}
               nodeId={nodeId}
               context={context}
@@ -209,6 +210,7 @@ class ProfileNode extends React.PureComponent {
         {ready &&
           sortBy(profileMetadata.charts, 'position').map(chart => (
             <ErrorCatch
+              key={`${year}_${context.id}_${profileType}_${chart.identifier}_${chart.id}`}
               renderFallback={() => (
                 <section className="section-placeholder">
                   <Text variant="mono" size="md" weight="bold">
