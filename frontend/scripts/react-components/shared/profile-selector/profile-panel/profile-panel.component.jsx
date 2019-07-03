@@ -26,7 +26,10 @@ function ProfilePanel(props) {
       return (
         <div className="c-profile-panel">
           <Heading align="center" size="md" weight="light">
-            Choose the profile you want to see
+            Choose the{' '}
+            <Heading as="span" size="md" weight="bold">
+              type of profile
+            </Heading>
           </Heading>
           <div className="row align-center profile-panel-content">
             <BlockSwitch
@@ -42,8 +45,9 @@ function ProfilePanel(props) {
       return (
         <div className="c-profile-panel">
           <Heading align="center" size="md" weight="light">
-            Choose one{' '}
+            Choose one
             <Heading as="span" size="md" weight="bold">
+              {' '}
               commodity
             </Heading>
           </Heading>
