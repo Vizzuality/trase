@@ -28,7 +28,7 @@ module Api
     class TopProfile < YellowTable
       belongs_to :context
       belongs_to :node
-      belongs_to :top_profile_image
+      belongs_to :top_profile_image, optional: true
 
       def self.blue_foreign_keys
         [
