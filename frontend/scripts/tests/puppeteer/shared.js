@@ -11,8 +11,10 @@ export async function testRootSearch(page, { nodeName, nodeType, profileType }) 
   const waitForNavigation = page.waitForNavigation({
     waitUntil: 'networkidle2'
   });
+  await page.waitFor(500);
   await page.click(`[data-test=search-result-${nodeType}-${nodeName}]`);
   await waitForNavigation;
+  await page.waitFor(1000);
 
   const url = page.url();
   expect(url.startsWith(`${BASE_URL}/profile-${profileType}`)).toBe(true);
