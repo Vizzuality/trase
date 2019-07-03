@@ -156,8 +156,9 @@ class DashboardPanel extends Component {
     }
     return (
       <>
-        {translateText('Choose one or several')}{' '}
+        {translateText('Choose one or several')}
         <span className="dashboard-panel-sentence" data-test="dashboard-panel-sentence">
+          {' '}
           {translateText(getPanelName(step))}
         </span>
         {[DASHBOARD_STEPS.companies, DASHBOARD_STEPS.destinations].includes(step)
