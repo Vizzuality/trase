@@ -6,6 +6,7 @@ import BlockSwitch from 'react-components/shared/block-switch/block-switch.compo
 import Heading from 'react-components/shared/heading';
 import ProfilePanelFooter from 'react-components/shared/profile-selector/profile-panel/profile-panel-footer.component';
 import CommoditiesPanel from 'react-components/dashboard-element/dashboard-panel/commodities-panel.component';
+import isEmpty from 'lodash/isEmpty';
 
 function ProfilePanel(props) {
   const {
@@ -27,14 +28,13 @@ function ProfilePanel(props) {
           <Heading align="center" size="md" weight="light">
             Choose the profile you want to see
           </Heading>
-          <div className="row align-center">
+          <div className="row align-center profile-panel-content">
             <BlockSwitch
               blocks={blocks}
               selectBlock={item => setProfilesActiveItem(item, 'types')}
               activeBlockId={profileType}
-              className="profile-panel-switch"
             />
-            <ProfilePanelFooter onBack={onBack} onContinue={onContinue} />
+            <ProfilePanelFooter onBack={onBack} onContinue={onContinue} isDisabled={!profileType} />
           </div>
         </div>
       );
@@ -42,9 +42,12 @@ function ProfilePanel(props) {
       return (
         <div className="c-profile-panel">
           <Heading align="center" size="md" weight="light">
-            Choose one commodity
+            Choose one{' '}
+            <Heading as="span" size="md" weight="bold">
+              commodity
+            </Heading>
           </Heading>
-          <div className="row align-center">
+          <div className="row align-center profile-panel-content">
             <CommoditiesPanel
               page={commoditiesPanel.page}
               getMoreItems={setProfilesPage}
@@ -54,7 +57,11 @@ function ProfilePanel(props) {
               onSelectCommodity={item => setProfilesActiveItem(item, 'commodities')}
               activeCommodity={commoditiesPanel.activeItems}
             />
-            <ProfilePanelFooter onBack={onBack} onContinue={onContinue} />
+            <ProfilePanelFooter
+              onBack={onBack}
+              onContinue={onContinue}
+              isDisabled={isEmpty(commoditiesPanel.activeItems)}
+            />
           </div>
         </div>
       );
