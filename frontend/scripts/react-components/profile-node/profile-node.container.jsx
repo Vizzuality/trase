@@ -9,7 +9,7 @@ import ProfileNode from 'react-components/profile-node/profile-node.component';
 class ProfileNodeContainer extends React.PureComponent {
   static propTypes = {
     context: PropTypes.object,
-    nodeId: PropTypes.string
+    nodeId: PropTypes.number
   };
 
   render() {

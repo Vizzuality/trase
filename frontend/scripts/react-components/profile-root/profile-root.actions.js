@@ -1,9 +1,12 @@
 import { GET_NODES_WITH_SEARCH_URL, getURLFromParams } from 'utils/getURLFromParams';
 import isEmpty from 'lodash/isEmpty';
+import axios from 'axios';
 
 export const SET_PROFILE_SEARCH_TERM = 'SET_PROFILE_SEARCH_TERM';
 export const LOAD_PROFILE_SEARCH_RESULTS = 'LOAD_PROFILE_SEARCH_RESULTS';
 export const SET_PROFILE_ROOT_ERROR_MESSAGE = 'SET_PROFILE_ROOT_ERROR_MESSAGE';
+export const GET_TOP_PROFILES = 'GET_TOP_PROFILES';
+export const SET_TOP_PROFILES = 'SET_TOP_PROFILES';
 
 export const goToNodeProfilePageLegacy = (node, { year }) => dispatch =>
   dispatch({
@@ -54,14 +57,9 @@ export const searchNodeWithTermLegacy = (searchTerm, { contextId }) => dispatch 
     payload: { term: searchTerm, isLoading: true }
   });
 
-  fetch(nodeResultsURL)
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      return Promise.reject(new Error(response.statusText));
-    })
-    .then(results => {
+  axios(nodeResultsURL)
+    .then(res => {
+      const results = res.data;
       if (!results) return;
 
       dispatch({
@@ -94,14 +92,9 @@ export const searchNodeWithTerm = searchTerm => dispatch => {
     payload: { term: searchTerm, isLoading: true }
   });
 
-  fetch(nodeResultsURL)
-    .then(response => {
-      if (response.ok) {
-        return response.json();
-      }
-      return Promise.reject(new Error(response.statusText));
-    })
-    .then(results => {
+  axios(nodeResultsURL)
+    .then(res => {
+      const results = res.data;
       if (!results) return;
 
       dispatch({
@@ -114,6 +107,28 @@ export const searchNodeWithTerm = searchTerm => dispatch => {
       dispatch({
         type: SET_PROFILE_ROOT_ERROR_MESSAGE,
         payload: { errorMessage: reason.message }
+      });
+    });
+};
+
+export const getTopProfiles = () => dispatch => {
+  const topProfilesURL = getURLFromParams(GET_TOP_PROFILES);
+  axios(topProfilesURL)
+    .then(res => {
+      const results = res.data;
+      if (!results) return;
+      dispatch({
+        type: SET_TOP_PROFILES,
+        payload: results.data
+      });
+    })
+    .catch(reason => {
+      console.error('Error loading top profiles', reason);
+      dispatch({
+        type: SET_PROFILE_ROOT_ERROR_MESSAGE,
+        payload: {
+          errorMessage: reason.message
+        }
       });
     });
 };
