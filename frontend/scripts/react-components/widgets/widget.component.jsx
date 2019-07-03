@@ -26,14 +26,19 @@ function Widget(props) {
   useEffect(() => {
     const currentSources = sources.current;
     query.forEach((endpoint, i) => {
-      const source = getWidgetData(endpoint, params[i], raw[i]);
-      if (source) {
-        sources.current.push(source);
+      const getCancelPolicy = getWidgetData(endpoint, params[i], raw[i]);
+      if (getCancelPolicy) {
+        sources.current.push(getCancelPolicy);
       }
     });
 
     return () => {
-      currentSources.forEach(source => source.cancel());
+      currentSources.forEach(getCancelPolicy => {
+        const cancelPolicy = getCancelPolicy();
+        if (cancelPolicy.shouldCancel) {
+          cancelPolicy.source.cancel();
+        }
+      });
     };
   }, [query, params, raw, getWidgetData]);
 

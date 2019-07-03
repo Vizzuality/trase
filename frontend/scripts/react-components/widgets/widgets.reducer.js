@@ -3,14 +3,13 @@ import camelCase from 'lodash/camelCase';
 import {
   WIDGETS__INIT_ENDPOINT,
   WIDGETS__SET_ENDPOINT_DATA,
-  WIDGETS__SET_ENDPOINT_ERROR,
-  WIDGETS__SET_ENDPOINT_ABORTED
+  WIDGETS__SET_ENDPOINT_ERROR
 } from './widgets.actions';
 
 export const initialState = {
   endpoints: {
     /**
-     * { [endpoint]: { key, data, error, loading, aborted } }
+     * { [endpoint]: { key, data, error, loading } }
      */
   }
 };
@@ -19,7 +18,6 @@ export const defaultEndpoint = key => ({
   data: null,
   loading: true,
   error: null,
-  aborted: false,
   key
 });
 
@@ -63,20 +61,6 @@ const widgetsReducer = {
           error,
           aborted: false,
           loading: false
-        }
-      }
-    };
-  },
-  [WIDGETS__SET_ENDPOINT_ABORTED](state, action) {
-    const { endpoint, aborted } = action.payload;
-    return {
-      ...state,
-      endpoints: {
-        ...state.endpoints,
-        [endpoint]: {
-          ...defaultEndpoint,
-          ...state.endpoints[endpoint],
-          aborted
         }
       }
     };

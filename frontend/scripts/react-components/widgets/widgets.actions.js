@@ -6,7 +6,6 @@ import { fetchWithCancel } from 'utils/saga-utils';
 export const WIDGETS__INIT_ENDPOINT = 'WIDGETS__INIT_ENDPOINT';
 export const WIDGETS__SET_ENDPOINT_DATA = 'WIDGETS__SET_ENDPOINT_DATA';
 export const WIDGETS__SET_ENDPOINT_ERROR = 'WIDGETS__SET_ENDPOINT_ERROR';
-export const WIDGETS__SET_ENDPOINT_ABORTED = 'WIDGETS__SET_ENDPOINT_ABORTED';
 
 export function prepareWidget(endpoints, { endpoint, params, raw }) {
   const key = sortBy(Object.entries(params || { noParams: true }), entry => entry[0])
@@ -15,21 +14,18 @@ export function prepareWidget(endpoints, { endpoint, params, raw }) {
   let url = null;
   const current = endpoints[endpoint];
   const cacheMiss = typeof current === 'undefined' || current.key !== key;
-  const aborted = current?.aborted;
 
-  if (cacheMiss || aborted) {
-    if (raw) {
-      url = endpoint;
-      if (params) {
-        const search = qs.stringify(params, { arrayFormat: 'bracket' });
-        url = endpoint.includes('?') ? `${endpoint}&${search}` : `${endpoint}?${search}`;
-      }
-    } else {
-      url = getURLFromParams(endpoint, params);
+  if (raw) {
+    url = endpoint;
+    if (params) {
+      const search = qs.stringify(params, { arrayFormat: 'bracket' });
+      url = endpoint.includes('?') ? `${endpoint}&${search}` : `${endpoint}?${search}`;
     }
+  } else {
+    url = getURLFromParams(endpoint, params);
   }
 
-  return { key, cacheMiss, url, aborted };
+  return { key, url, cacheMiss };
 }
 
 export function getWidgetState(query, endpoints) {
@@ -56,41 +52,40 @@ export function getWidgetState(query, endpoints) {
 
 export const getWidgetData = (endpoint, params, raw) => (dispatch, getState) => {
   const { endpoints } = getState().widgets;
-  const { cacheMiss, key, url, aborted } = prepareWidget(endpoints, { endpoint, params, raw });
-  if (cacheMiss || aborted) {
-    if (cacheMiss) {
-      dispatch({
-        type: WIDGETS__INIT_ENDPOINT,
-        payload: { endpoint, key }
-      });
-    }
-
-    const { fetchPromise, source, isCancel } = fetchWithCancel(url);
-
-    fetchPromise()
-      .then(res =>
-        dispatch({
-          type: WIDGETS__SET_ENDPOINT_DATA,
-          payload: { ...res.data, endpoint }
-        })
-      )
-      .catch(error => {
-        if (isCancel(error)) {
-          if (NODE_ENV_DEV) console.warn('Cancel', url);
-          dispatch({
-            type: WIDGETS__SET_ENDPOINT_ABORTED,
-            payload: { endpoint, aborted: true }
-          });
-        } else {
-          dispatch({
-            type: WIDGETS__SET_ENDPOINT_ERROR,
-            payload: { endpoint, error }
-          });
-        }
-      });
-
-    return source;
+  const { cacheMiss, key, url } = prepareWidget(endpoints, { endpoint, params, raw });
+  if (cacheMiss) {
+    dispatch({
+      type: WIDGETS__INIT_ENDPOINT,
+      payload: { endpoint, key }
+    });
   }
 
-  return null;
+  const { fetchPromise, source, isCancel } = fetchWithCancel(url);
+
+  const cancelPolicy = {
+    source,
+    shouldCancel: true
+  };
+
+  fetchPromise()
+    .then(res => {
+      cancelPolicy.shouldCancel = false;
+      dispatch({
+        type: WIDGETS__SET_ENDPOINT_DATA,
+        payload: { ...res.data, endpoint }
+      });
+    })
+    .catch(error => {
+      if (isCancel(error)) {
+        if (NODE_ENV_DEV) console.warn('Cancel', endpoint);
+      } else {
+        cancelPolicy.shouldCancel = false;
+        dispatch({
+          type: WIDGETS__SET_ENDPOINT_ERROR,
+          payload: { endpoint, error }
+        });
+      }
+    });
+
+  return () => cancelPolicy;
 };
