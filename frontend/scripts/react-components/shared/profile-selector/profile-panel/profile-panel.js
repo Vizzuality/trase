@@ -1,7 +1,10 @@
 import { connect } from 'react-redux';
 import ProfilePanelComponent from 'react-components/shared/profile-selector/profile-panel/profile-panel.component';
-import { setProfilesProfileType } from 'react-components/shared/profile-selector/profile-selector.actions';
 import { PROFILE_TYPES } from 'constants';
+import {
+  setProfilesPage,
+  setProfilesActiveItem
+} from 'react-components/shared/profile-selector/profile-selector.actions';
 
 const blocks = [
   {
@@ -25,12 +28,16 @@ const blocks = [
 ];
 
 const mapStateToProps = state => ({
-  profileType: state.profileSelector.activeProfileType,
-  blocks
+  profileType: state.profileSelector.panels.types.activeItems.type,
+  blocks,
+  commoditiesPanel: state.profileSelector.panels.commodities,
+  data: state.profileSelector.data,
+  loading: state.profileSelector.loading
 });
 
 const mapDispatchToProps = {
-  setProfileType: setProfilesProfileType
+  setProfilesPage,
+  setProfilesActiveItem
 };
 
 export default connect(

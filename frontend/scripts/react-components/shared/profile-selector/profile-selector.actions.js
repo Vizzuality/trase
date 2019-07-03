@@ -2,8 +2,7 @@ import { PROFILE_STEPS } from 'constants';
 
 export const PROFILES__SET_MORE_PANEL_DATA = 'PROFILES__SET_MORE_PANEL_DATA';
 export const PROFILES__SET_PANEL_DATA = 'PROFILES__SET_PANEL_DATA';
-export const PROFILES__SET_ACTIVE_STEP = 'PROFILES__SET_ACTIVE_PANEL';
-export const PROFILES__SET_ACTIVE_PROFILE_TYPE = 'PROFILES__SET_ACTIVE_PROFILE_TYPE';
+export const PROFILES__SET_ACTIVE_STEP = 'PROFILES__SET_ACTIVE_STEP';
 export const PROFILES__SET_ACTIVE_ITEM = 'PROFILES__SET_ACTIVE_ITEM';
 export const PROFILES__SET_ACTIVE_ITEMS = 'PROFILES__SET_ACTIVE_ITEMS';
 export const PROFILES__SET_ACTIVE_TAB = 'PROFILES__SET_ACTIVE_TAB';
@@ -32,7 +31,7 @@ export const goToNodeProfilePage = (node, defaultYear) => dispatch =>
 export const openModal = () => ({
   type: PROFILES__SET_ACTIVE_STEP,
   payload: {
-    activeStep: PROFILE_STEPS.nodes
+    activeStep: PROFILE_STEPS.types
   }
 });
 
@@ -40,12 +39,6 @@ export const setProfilesActiveStep = activeStep => ({
   type: PROFILES__SET_ACTIVE_STEP,
   payload: {
     activeStep
-  }
-});
-export const setProfilesProfileType = activeProfileType => ({
-  type: PROFILES__SET_ACTIVE_PROFILE_TYPE,
-  payload: {
-    activeProfileType
   }
 });
 
@@ -116,3 +109,21 @@ export const getProfilesSearchResults = query => ({
     query
   }
 });
+
+export const getProfilesParams = (state, optionsType, options = {}) => {
+  const { panels } = state;
+  const { commodities } = panels;
+  const { page } = options;
+
+  const activeItemParams = panel => Object.keys(panel.activeItems).join();
+  const params = {
+    page,
+    options_type: optionsType
+  };
+  const currentStep = PROFILE_STEPS[optionsType];
+  if (currentStep > PROFILE_STEPS.commodities) {
+    params.commodities_ids = activeItemParams(commodities);
+  }
+
+  return params;
+};

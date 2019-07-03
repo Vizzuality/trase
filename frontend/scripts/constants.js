@@ -257,7 +257,7 @@ export const DASHBOARD_STEPS = {
 };
 
 export const PROFILE_STEPS = {
-  nodes: 0,
+  types: 0,
   commodities: 1
 };
 
