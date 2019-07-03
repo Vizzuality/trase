@@ -2,15 +2,20 @@ import { put, call, cancelled, fork } from 'redux-saga/effects';
 import getPanelName from 'utils/getProfilePanelName';
 import {
   PROFILES__SET_PANEL_DATA,
+  PROFILES__SET_PANEL_TABS,
   getProfilesParams
 } from 'react-components/shared/profile-selector/profile-selector.actions';
-import { getURLFromParams, GET_DASHBOARD_OPTIONS_URL } from 'utils/getURLFromParams';
+import {
+  getURLFromParams,
+  GET_DASHBOARD_OPTIONS_URL,
+  GET_DASHBOARD_OPTIONS_TABS_URL
+} from 'utils/getURLFromParams';
 import { PROFILE_STEPS } from 'constants';
 import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
 
-export function* getProfilesData(profileSelector, optionsType, options) {
+export function* getProfilesData(profileSelector, subPanelName, options) {
   if (!profileSelector.activeStep || profileSelector.activeStep === PROFILE_STEPS.types) return;
-  const panelName = getPanelName(profileSelector.activeStep);
+  const panelName = subPanelName || getPanelName(profileSelector.activeStep);
   const { page, activeTab } = profileSelector.panels[panelName];
   const tab = activeTab && activeTab.id;
   const params = getProfilesParams(profileSelector, panelName, {
@@ -96,3 +101,27 @@ export function* getProfilesData(profileSelector, optionsType, options) {
 //     }
 //   }
 // }
+
+export function* getProfilesTabs(profileSelector, optionsType) {
+  const params = getProfilesParams(profileSelector, optionsType);
+  const url = getURLFromParams(GET_DASHBOARD_OPTIONS_TABS_URL, params);
+  const { source, fetchPromise } = fetchWithCancel(url);
+  try {
+    const { data } = yield call(fetchPromise);
+    yield put({
+      type: PROFILES__SET_PANEL_TABS,
+      payload: {
+        data: data.data
+      }
+    });
+  } catch (e) {
+    console.error('Error', e);
+  } finally {
+    if (yield cancelled()) {
+      if (NODE_ENV_DEV) console.error('Cancelled', url);
+      if (source) {
+        source.cancel();
+      }
+    }
+  }
+}
