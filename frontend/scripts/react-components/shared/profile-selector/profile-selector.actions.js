@@ -74,17 +74,10 @@ export const setProfilesActiveTab = (activeTab, panel) => ({
   }
 });
 
-export const clearDashboardPanel = panel => ({
+export const clearProfilesPanel = panel => ({
   type: PROFILES__CLEAR_PANEL,
   payload: {
     panel
-  }
-});
-
-export const clearDashboardPanels = panels => ({
-  type: PROFILES__CLEAR_PANELS,
-  payload: {
-    panels
   }
 });
 
@@ -112,17 +105,24 @@ export const getProfilesSearchResults = query => ({
 
 export const getProfilesParams = (state, optionsType, options = {}) => {
   const { panels } = state;
-  const { commodities } = panels;
+  const { sources } = panels;
   const { page } = options;
-
-  const activeItemParams = panel => Object.keys(panel.activeItems).join();
+  const sourcesTab = sources.activeTab && sources.activeTab.id;
+  // const companiesTab = companies.activeTab && companies.activeTab.id;
+  const nodeTypesIds = {
+    sources: sourcesTab
+    // companies: companiesTab
+  }[optionsType];
+  // const activeItemParams = panel => Object.keys(panel.activeItems).join();
   const params = {
     page,
-    options_type: optionsType
+    options_type: optionsType,
+    node_types_ids: nodeTypesIds
   };
   const currentStep = PROFILE_STEPS[optionsType];
-  if (currentStep > PROFILE_STEPS.commodities) {
-    params.commodities_ids = activeItemParams(commodities);
+
+  if (currentStep > PROFILE_STEPS.profiles) {
+    // params.commodities_ids = activeItemParams(commodities);
   }
 
   return params;

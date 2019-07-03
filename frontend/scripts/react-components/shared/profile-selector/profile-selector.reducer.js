@@ -7,11 +7,17 @@ import {
   PROFILES__SET_LOADING_ITEMS,
   PROFILES__SET_PANEL_TABS,
   PROFILES__SET_ACTIVE_ITEM,
-  PROFILES__SET_SEARCH_RESULTS
+  PROFILES__SET_ACTIVE_ITEMS,
+  PROFILES__SET_SEARCH_RESULTS,
+  PROFILES__CLEAR_PANEL,
+  PROFILES__SET_ACTIVE_TAB,
+  PROFILES__SET_ACTIVE_ITEMS_WITH_SEARCH
 } from 'react-components/shared/profile-selector/profile-selector.actions';
 import isEmpty from 'lodash/isEmpty';
 import fuzzySearch from 'utils/fuzzySearch';
 import getPanelName from 'utils/getProfilePanelName';
+import updateItems from 'utils/updatePanelItems';
+import { PROFILE_STEPS } from 'constants';
 
 const initialState = {
   activeStep: null,
@@ -26,11 +32,43 @@ const initialState = {
       loadingItems: false,
       activeItems: {},
       activeTab: null
+    },
+    countries: {
+      page: 1,
+      searchResults: [],
+      loadingItems: false,
+      activeItems: {},
+      activeTab: null
+    },
+    sources: {
+      page: 1,
+      searchResults: [],
+      loadingItems: false,
+      activeItems: {},
+      activeTab: null
+    },
+    destinations: {
+      page: 1,
+      searchResults: [],
+      loadingItems: false,
+      activeItems: {},
+      activeTab: null
+    },
+    companies: {
+      page: 1,
+      searchResults: [],
+      loadingItems: false,
+      activeItems: {},
+      activeTab: null
     }
   },
   data: {
-    commodities: []
-  }
+    commodities: [],
+    countries: [],
+    sources: []
+  },
+  meta: {},
+  tabs: {}
 };
 
 const profileRootReducer = {
@@ -115,7 +153,10 @@ const profileRootReducer = {
     const { data } = action.payload;
     const getSection = n => n.section && n.section.toLowerCase();
     const tabs = data.reduce((acc, next) => ({ ...acc, [getSection(next)]: next.tabs }), {});
-    const panelName = getPanelName(state.activeStep);
+    const panelName =
+      state.activeStep === PROFILE_STEPS.profiles
+        ? state.panels.types.activeItems.type
+        : getPanelName(state.activeStep);
     const activePanelTabs = tabs[state.activeStep];
     const firstTab = activePanelTabs && activePanelTabs[0];
     const existingTab =
@@ -131,7 +172,7 @@ const profileRootReducer = {
         [panelName]: {
           ...state.panels[panelName],
           activeTab: existingTab || firstTab,
-          page: initialState[panelName].page
+          page: initialState.panels[panelName].page
         }
       }
     };
@@ -155,6 +196,61 @@ const profileRootReducer = {
       }
     };
   },
+  [PROFILES__SET_ACTIVE_ITEMS](state, action) {
+    const { panel, activeItems: selectedItem } = action.payload;
+    return {
+      ...state,
+      sourcesPanel: state.sourcesPanel,
+      panels: {
+        ...state.panels,
+        [panel]: {
+          ...state.panels[panel],
+          activeItems: updateItems(state[panel].activeItems, selectedItem)
+        }
+      }
+    };
+  },
+  [PROFILES__CLEAR_PANEL](state, action) {
+    const { panel } = action.payload;
+    const { activeTab } = state.panels[panel];
+    const shouldResetCountries = ['countries', 'sources'].includes(panel);
+    const countriesState = shouldResetCountries
+      ? initialState.panels.countries
+      : state.panels.countries;
+
+    return {
+      ...state,
+      panels: {
+        ...state.panels,
+        [panel]: { ...initialState[panel], activeTab },
+        countries: countriesState
+      }
+    };
+  },
+  [PROFILES__SET_ACTIVE_TAB](state, action) {
+    const { panel, activeTab } = action.payload;
+    const prevTab = state[panel].activeTab;
+    const clearedActiveTabData =
+      prevTab && prevTab.id !== activeTab.id ? { [prevTab.id]: null } : {};
+    return {
+      ...state,
+      data: {
+        ...state.data,
+        [panel]: {
+          ...state.data[panel],
+          ...clearedActiveTabData
+        }
+      },
+      panels: {
+        ...state.panels,
+        [panel]: {
+          ...state.panels[panel],
+          activeTab,
+          page: initialState.panels[panel].page
+        }
+      }
+    };
+  },
   [PROFILES__SET_SEARCH_RESULTS](state, action) {
     const { data, query } = action.payload;
     let panelName = getPanelName(state.activeStep);
@@ -168,6 +264,33 @@ const profileRootReducer = {
         [panelName]: {
           ...state.panels[panelName],
           searchResults: fuzzySearch(query, data)
+        }
+      }
+    };
+  },
+  [PROFILES__SET_ACTIVE_ITEMS_WITH_SEARCH](state, action) {
+    const { panel, activeItems: selectedItem } = action.payload;
+    const prevTab = state.panels[panel].activeTab;
+    const clearedActiveTabData = prevTab ? { [prevTab.id]: null } : {};
+    const activeTab =
+      state.tabs[panel] && state.tabs[panel].find(tab => tab.id === selectedItem.nodeTypeId);
+
+    return {
+      ...state,
+      data: {
+        ...state.data,
+        [panel]: {
+          ...state.data[panel],
+          ...clearedActiveTabData
+        }
+      },
+      panels: {
+        ...state.panels,
+        [panel]: {
+          ...state.panels[panel],
+          activeItems: updateItems(state.panels[panel].activeItems, selectedItem),
+          activeTab,
+          page: initialState.panels[panel].page
         }
       }
     };
