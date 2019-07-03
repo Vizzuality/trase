@@ -1,0 +1,14 @@
+@import 'styles/settings';
+
+.c-profile-panel-footer {
+  padding: 20px 0 20px;
+
+  .profile-panel-back-button {
+    border: 0;
+    padding: 15px 20px;
+    color: $charcoal-grey;
+    font-family: $font-family-1;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+}
