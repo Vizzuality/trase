@@ -17,7 +17,7 @@ function ProfilesSelectorModal(props) {
     <SimpleModal isOpen={isOpen} onRequestClose={onClose}>
       <div className="c-profile-selector">
         <StepsTracker
-          steps={['Type', 'Commodity'].map(label => ({ label }))}
+          steps={['Type', 'Profile', 'Commodity'].map(label => ({ label }))}
           activeStep={activeStep}
         />
         <ProfilePanel
