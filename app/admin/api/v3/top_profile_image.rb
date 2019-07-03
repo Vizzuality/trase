@@ -1,6 +1,14 @@
 ActiveAdmin.register Api::V3::TopProfileImage, as: 'Top Profile Image' do
   permit_params :commodity_id, :profile_type, :image
 
+  controller do
+    def create
+      super do |success, _failure|
+        success.html { redirect_to admin_top_profile_images_path }
+      end
+    end
+  end
+
   index do
     column('Commodity') { |top_profile_image| top_profile_image&.commodity&.name }
     column('Profile type') { |top_profile_image| top_profile_image&.profile_type }

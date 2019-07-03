@@ -67,7 +67,9 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
         available_top_profile_images: available_top_profile_images,
         top_profile_image_id: resource.top_profile_image_id,
         node_name: resource.node.name,
-        node_type: resource.node.node_type.name
+        node_type: resource.node.node_type.name,
+        commodity: resource.context.commodity.name,
+        profile_type: resource.profile_type
       }
     else
       inputs do

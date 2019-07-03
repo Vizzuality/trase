@@ -1,13 +1,19 @@
-<h2>Assign image to top profile <%= node_name %> - <%= node_type %></h2>
+<h2>Assign image to top profile <%= node_name %> - <%= node_type %> (commodity: <%= commodity %>, profile type: <%= profile_type %>)</h2>
 <br>
-<%= form_for resource, url: api_v3_top_profiles_path do |f| %>
-  <% available_top_profile_images.each do |top_profile_image| %>
-    <div style="margin-bottom: 15px;">
-      <%= image_tag top_profile_image.image.url(:small) %>
-      <%= radio_button_tag "resource[top_profile_image_id]", top_profile_image.id, (top_profile_image.id == top_profile_image_id) %>
+<% if available_top_profile_images.length > 0 %>
+  <%= form_for resource, url: api_v3_top_profiles_path do |f| %>
+    <% available_top_profile_images.each do |top_profile_image| %>
+      <div style="margin-bottom: 15px;">
+        <%= image_tag top_profile_image.image.url(:small) %>
+        <%= radio_button_tag "resource[top_profile_image_id]", top_profile_image.id, (top_profile_image.id == top_profile_image_id) %>
+      </div>
+    <% end %>
+    <div style="margin-bottom: 30px; margin-top: 30px;">
+      <%= f.submit "Update Top profile" %>
     </div>
   <% end %>
-  <div style="margin-bottom: 30px; margin-top: 30px;">
-    <%= f.submit "Update Top profile" %>
-  </div>
+<% else %>
+  <p>There are no images left in the pool for that top profile.</p>
+  <p>Images are filtered by top profile's commodity (here: <b><%= commodity %></b>) and its profile type (here: <b><%= profile_type %></b>).</p>
+  <p>To browse all top profile images click <%= link_to 'here', admin_top_profile_images_path %>.</p>
 <% end %>
