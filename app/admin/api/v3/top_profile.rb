@@ -57,11 +57,11 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
 
     f.semantic_errors
     if params[:action] == 'edit'
-      available_top_profile_images = 
+      available_top_profile_images =
         Api::V3::TopProfileImage.includes(:top_profiles).where(
           commodity_id: resource.context.commodity_id,
           profile_type: resource.profile_type,
-          top_profiles: { top_profile_image_id: nil }
+          top_profiles: {top_profile_image_id: nil}
         )
       render partial: 'admin/form_select_top_profile_images', locals: {
         available_top_profile_images: available_top_profile_images,
