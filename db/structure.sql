@@ -5,7 +5,6 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
-SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -28,20 +27,6 @@ CREATE SCHEMA main;
 --
 
 CREATE SCHEMA maintenance;
-
-
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
@@ -162,13 +147,6 @@ $$;
 --
 
 COMMENT ON FUNCTION public.bucket_index(buckets double precision[], value double precision) IS 'Given an n-element array of choropleth buckets and a positive value, returns index of bucket where value falls (1 to n + 1); else returns 0.';
-
-
---
--- Name: trase_server; Type: SERVER; Schema: -; Owner: -
---
-
--- suppressed CREATE SERVER
 
 
 SET default_tablespace = '';
@@ -4214,6 +4192,127 @@ ALTER SEQUENCE public.ind_properties_id_seq OWNED BY public.ind_properties.id;
 
 
 --
+-- Name: node_inds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.node_inds (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    ind_id integer NOT NULL,
+    year integer,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE node_inds; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.node_inds IS 'Values of inds for node';
+
+
+--
+-- Name: COLUMN node_inds.year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_inds.year IS 'Year; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN node_inds.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_inds.value IS 'Numeric value';
+
+
+--
+-- Name: ind_values_meta_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.ind_values_meta_mv AS
+ WITH flow_paths AS (
+         SELECT DISTINCT unnest(flows.path) AS node_id,
+            flows.context_id
+           FROM public.flows
+        ), nodes AS (
+         SELECT nodes.id,
+            nodes.node_type_id,
+            fp.context_id
+           FROM (flow_paths fp
+             JOIN public.nodes ON ((fp.node_id = nodes.id)))
+        ), node_values AS (
+         SELECT node_inds.ind_id,
+            nodes.context_id,
+            contexts.country_id,
+            contexts.commodity_id,
+            array_agg(DISTINCT nodes.node_type_id ORDER BY nodes.node_type_id) AS node_types_ids,
+            array_agg(DISTINCT node_inds.year ORDER BY node_inds.year) AS years
+           FROM ((public.node_inds
+             JOIN nodes ON ((node_inds.node_id = nodes.id)))
+             JOIN public.contexts ON ((nodes.context_id = contexts.id)))
+          GROUP BY node_inds.ind_id, CUBE(nodes.node_type_id, nodes.context_id, contexts.country_id, contexts.commodity_id)
+        ), node_values_by_context AS (
+         SELECT node_values.ind_id,
+            jsonb_object_agg(node_values.context_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
+           FROM node_values
+          WHERE ((node_values.commodity_id IS NULL) AND (node_values.country_id IS NULL) AND (node_values.context_id IS NOT NULL))
+          GROUP BY node_values.ind_id
+        ), node_values_by_country AS (
+         SELECT node_values.ind_id,
+            jsonb_object_agg(node_values.country_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
+           FROM node_values
+          WHERE ((node_values.commodity_id IS NULL) AND (node_values.country_id IS NOT NULL) AND (node_values.context_id IS NULL))
+          GROUP BY node_values.ind_id
+        ), node_values_by_commodity AS (
+         SELECT node_values.ind_id,
+            jsonb_object_agg(node_values.commodity_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
+           FROM node_values
+          WHERE ((node_values.commodity_id IS NOT NULL) AND (node_values.country_id IS NULL) AND (node_values.context_id IS NULL))
+          GROUP BY node_values.ind_id
+        ), flow_values AS (
+         SELECT flow_inds.ind_id,
+            flows.context_id,
+            contexts.country_id,
+            contexts.commodity_id,
+            array_agg(DISTINCT flows.year ORDER BY flows.year) AS years
+           FROM ((public.flow_inds
+             JOIN public.flows ON ((flow_inds.flow_id = flows.id)))
+             JOIN public.contexts ON ((flows.context_id = contexts.id)))
+          GROUP BY flow_inds.ind_id, CUBE(flows.context_id, contexts.country_id, contexts.commodity_id)
+        ), flow_values_by_context AS (
+         SELECT flow_values.ind_id,
+            jsonb_object_agg(flow_values.context_id, jsonb_build_object('years', flow_values.years)) AS flow_values
+           FROM flow_values
+          WHERE ((flow_values.commodity_id IS NULL) AND (flow_values.country_id IS NULL) AND (flow_values.context_id IS NOT NULL))
+          GROUP BY flow_values.ind_id
+        ), flow_values_by_country AS (
+         SELECT flow_values.ind_id,
+            jsonb_object_agg(flow_values.country_id, jsonb_build_object('years', flow_values.years)) AS flow_values
+           FROM flow_values
+          WHERE ((flow_values.commodity_id IS NULL) AND (flow_values.country_id IS NOT NULL) AND (flow_values.context_id IS NULL))
+          GROUP BY flow_values.ind_id
+        ), flow_values_by_commodity AS (
+         SELECT flow_values.ind_id,
+            jsonb_object_agg(flow_values.commodity_id, jsonb_build_object('years', flow_values.years)) AS flow_values
+           FROM flow_values
+          WHERE ((flow_values.commodity_id IS NOT NULL) AND (flow_values.country_id IS NULL) AND (flow_values.context_id IS NULL))
+          GROUP BY flow_values.ind_id
+        )
+ SELECT inds.id AS ind_id,
+    jsonb_build_object('context', nv1.node_values, 'country', nv2.node_values, 'commodity', nv3.node_values) AS node_values,
+    jsonb_build_object('context', fv1.flow_values, 'country', fv2.flow_values, 'commodity', fv3.flow_values) AS flow_values
+   FROM ((((((public.inds
+     LEFT JOIN node_values_by_context nv1 ON ((nv1.ind_id = inds.id)))
+     LEFT JOIN node_values_by_country nv2 ON ((nv2.ind_id = inds.id)))
+     LEFT JOIN node_values_by_commodity nv3 ON ((nv3.ind_id = inds.id)))
+     LEFT JOIN flow_values_by_context fv1 ON ((fv1.ind_id = inds.id)))
+     LEFT JOIN flow_values_by_country fv2 ON ((fv2.ind_id = inds.id)))
+     LEFT JOIN flow_values_by_commodity fv3 ON ((fv3.ind_id = inds.id)))
+  WITH NO DATA;
+
+
+--
 -- Name: inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -4577,41 +4676,6 @@ ALTER SEQUENCE public.map_quants_id_seq OWNED BY public.map_quants.id;
 
 
 --
--- Name: node_inds; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.node_inds (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    ind_id integer NOT NULL,
-    year integer,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE node_inds; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.node_inds IS 'Values of inds for node';
-
-
---
--- Name: COLUMN node_inds.year; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_inds.year IS 'Year; empty (NULL) for all years';
-
-
---
--- Name: COLUMN node_inds.value; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_inds.value IS 'Numeric value';
-
-
---
 -- Name: node_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -4905,6 +4969,92 @@ ALTER SEQUENCE public.qual_properties_id_seq OWNED BY public.qual_properties.id;
 
 
 --
+-- Name: qual_values_meta_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.qual_values_meta_mv AS
+ WITH flow_paths AS (
+         SELECT DISTINCT unnest(flows.path) AS node_id,
+            flows.context_id
+           FROM public.flows
+        ), nodes AS (
+         SELECT nodes.id,
+            nodes.node_type_id,
+            fp.context_id
+           FROM (flow_paths fp
+             JOIN public.nodes ON ((fp.node_id = nodes.id)))
+        ), node_values AS (
+         SELECT node_quals.qual_id,
+            nodes.context_id,
+            contexts.country_id,
+            contexts.commodity_id,
+            array_agg(DISTINCT nodes.node_type_id ORDER BY nodes.node_type_id) AS node_types_ids,
+            array_agg(DISTINCT node_quals.year ORDER BY node_quals.year) AS years
+           FROM ((public.node_quals
+             JOIN nodes ON ((node_quals.node_id = nodes.id)))
+             JOIN public.contexts ON ((nodes.context_id = contexts.id)))
+          GROUP BY node_quals.qual_id, CUBE(nodes.node_type_id, nodes.context_id, contexts.country_id, contexts.commodity_id)
+        ), node_values_by_context AS (
+         SELECT node_values.qual_id,
+            jsonb_object_agg(node_values.context_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
+           FROM node_values
+          WHERE ((node_values.commodity_id IS NULL) AND (node_values.country_id IS NULL) AND (node_values.context_id IS NOT NULL))
+          GROUP BY node_values.qual_id
+        ), node_values_by_country AS (
+         SELECT node_values.qual_id,
+            jsonb_object_agg(node_values.country_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
+           FROM node_values
+          WHERE ((node_values.commodity_id IS NULL) AND (node_values.country_id IS NOT NULL) AND (node_values.context_id IS NULL))
+          GROUP BY node_values.qual_id
+        ), node_values_by_commodity AS (
+         SELECT node_values.qual_id,
+            jsonb_object_agg(node_values.commodity_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
+           FROM node_values
+          WHERE ((node_values.commodity_id IS NOT NULL) AND (node_values.country_id IS NULL) AND (node_values.context_id IS NULL))
+          GROUP BY node_values.qual_id
+        ), flow_values AS (
+         SELECT flow_quals.qual_id,
+            flows.context_id,
+            contexts.country_id,
+            contexts.commodity_id,
+            array_agg(DISTINCT flows.year ORDER BY flows.year) AS years
+           FROM ((public.flow_quals
+             JOIN public.flows ON ((flow_quals.flow_id = flows.id)))
+             JOIN public.contexts ON ((flows.context_id = contexts.id)))
+          GROUP BY flow_quals.qual_id, CUBE(flows.context_id, contexts.country_id, contexts.commodity_id)
+        ), flow_values_by_context AS (
+         SELECT flow_values.qual_id,
+            jsonb_object_agg(flow_values.context_id, jsonb_build_object('years', flow_values.years)) AS flow_values
+           FROM flow_values
+          WHERE ((flow_values.commodity_id IS NULL) AND (flow_values.country_id IS NULL) AND (flow_values.context_id IS NOT NULL))
+          GROUP BY flow_values.qual_id
+        ), flow_values_by_country AS (
+         SELECT flow_values.qual_id,
+            jsonb_object_agg(flow_values.country_id, jsonb_build_object('years', flow_values.years)) AS flow_values
+           FROM flow_values
+          WHERE ((flow_values.commodity_id IS NULL) AND (flow_values.country_id IS NOT NULL) AND (flow_values.context_id IS NULL))
+          GROUP BY flow_values.qual_id
+        ), flow_values_by_commodity AS (
+         SELECT flow_values.qual_id,
+            jsonb_object_agg(flow_values.commodity_id, jsonb_build_object('years', flow_values.years)) AS flow_values
+           FROM flow_values
+          WHERE ((flow_values.commodity_id IS NOT NULL) AND (flow_values.country_id IS NULL) AND (flow_values.context_id IS NULL))
+          GROUP BY flow_values.qual_id
+        )
+ SELECT quals.id AS qual_id,
+    jsonb_build_object('context', nv1.node_values, 'country', nv2.node_values, 'commodity', nv3.node_values) AS node_values,
+    jsonb_build_object('context', fv1.flow_values, 'country', fv2.flow_values, 'commodity', fv3.flow_values) AS flow_values
+   FROM ((((((public.quals
+     LEFT JOIN node_values_by_context nv1 ON ((nv1.qual_id = quals.id)))
+     LEFT JOIN node_values_by_country nv2 ON ((nv2.qual_id = quals.id)))
+     LEFT JOIN node_values_by_commodity nv3 ON ((nv3.qual_id = quals.id)))
+     LEFT JOIN flow_values_by_context fv1 ON ((fv1.qual_id = quals.id)))
+     LEFT JOIN flow_values_by_country fv2 ON ((fv2.qual_id = quals.id)))
+     LEFT JOIN flow_values_by_commodity fv3 ON ((fv3.qual_id = quals.id)))
+  WITH NO DATA;
+
+
+--
 -- Name: quals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -4997,6 +5147,92 @@ CREATE SEQUENCE public.quant_properties_id_seq
 --
 
 ALTER SEQUENCE public.quant_properties_id_seq OWNED BY public.quant_properties.id;
+
+
+--
+-- Name: quant_values_meta_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.quant_values_meta_mv AS
+ WITH flow_paths AS (
+         SELECT DISTINCT unnest(flows.path) AS node_id,
+            flows.context_id
+           FROM public.flows
+        ), nodes AS (
+         SELECT nodes.id,
+            nodes.node_type_id,
+            fp.context_id
+           FROM (flow_paths fp
+             JOIN public.nodes ON ((fp.node_id = nodes.id)))
+        ), node_values AS (
+         SELECT node_quants.quant_id,
+            nodes.context_id,
+            contexts.country_id,
+            contexts.commodity_id,
+            array_agg(DISTINCT nodes.node_type_id ORDER BY nodes.node_type_id) AS node_types_ids,
+            array_agg(DISTINCT node_quants.year ORDER BY node_quants.year) AS years
+           FROM ((public.node_quants
+             JOIN nodes ON ((node_quants.node_id = nodes.id)))
+             JOIN public.contexts ON ((nodes.context_id = contexts.id)))
+          GROUP BY node_quants.quant_id, CUBE(nodes.node_type_id, nodes.context_id, contexts.country_id, contexts.commodity_id)
+        ), node_values_by_context AS (
+         SELECT node_values.quant_id,
+            jsonb_object_agg(node_values.context_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
+           FROM node_values
+          WHERE ((node_values.commodity_id IS NULL) AND (node_values.country_id IS NULL) AND (node_values.context_id IS NOT NULL))
+          GROUP BY node_values.quant_id
+        ), node_values_by_country AS (
+         SELECT node_values.quant_id,
+            jsonb_object_agg(node_values.country_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
+           FROM node_values
+          WHERE ((node_values.commodity_id IS NULL) AND (node_values.country_id IS NOT NULL) AND (node_values.context_id IS NULL))
+          GROUP BY node_values.quant_id
+        ), node_values_by_commodity AS (
+         SELECT node_values.quant_id,
+            jsonb_object_agg(node_values.commodity_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
+           FROM node_values
+          WHERE ((node_values.commodity_id IS NOT NULL) AND (node_values.country_id IS NULL) AND (node_values.context_id IS NULL))
+          GROUP BY node_values.quant_id
+        ), flow_values AS (
+         SELECT flow_quants.quant_id,
+            flows.context_id,
+            contexts.country_id,
+            contexts.commodity_id,
+            array_agg(DISTINCT flows.year ORDER BY flows.year) AS years
+           FROM ((public.flow_quants
+             JOIN public.flows ON ((flow_quants.flow_id = flows.id)))
+             JOIN public.contexts ON ((flows.context_id = contexts.id)))
+          GROUP BY flow_quants.quant_id, CUBE(flows.context_id, contexts.country_id, contexts.commodity_id)
+        ), flow_values_by_context AS (
+         SELECT flow_values.quant_id,
+            jsonb_object_agg(flow_values.context_id, jsonb_build_object('years', flow_values.years)) AS flow_values
+           FROM flow_values
+          WHERE ((flow_values.commodity_id IS NULL) AND (flow_values.country_id IS NULL) AND (flow_values.context_id IS NOT NULL))
+          GROUP BY flow_values.quant_id
+        ), flow_values_by_country AS (
+         SELECT flow_values.quant_id,
+            jsonb_object_agg(flow_values.country_id, jsonb_build_object('years', flow_values.years)) AS flow_values
+           FROM flow_values
+          WHERE ((flow_values.commodity_id IS NULL) AND (flow_values.country_id IS NOT NULL) AND (flow_values.context_id IS NULL))
+          GROUP BY flow_values.quant_id
+        ), flow_values_by_commodity AS (
+         SELECT flow_values.quant_id,
+            jsonb_object_agg(flow_values.commodity_id, jsonb_build_object('years', flow_values.years)) AS flow_values
+           FROM flow_values
+          WHERE ((flow_values.commodity_id IS NOT NULL) AND (flow_values.country_id IS NULL) AND (flow_values.context_id IS NULL))
+          GROUP BY flow_values.quant_id
+        )
+ SELECT quants.id AS quant_id,
+    jsonb_build_object('context', nv1.node_values, 'country', nv2.node_values, 'commodity', nv3.node_values) AS node_values,
+    jsonb_build_object('context', fv1.flow_values, 'country', fv2.flow_values, 'commodity', fv3.flow_values) AS flow_values
+   FROM ((((((public.quants
+     LEFT JOIN node_values_by_context nv1 ON ((nv1.quant_id = quants.id)))
+     LEFT JOIN node_values_by_country nv2 ON ((nv2.quant_id = quants.id)))
+     LEFT JOIN node_values_by_commodity nv3 ON ((nv3.quant_id = quants.id)))
+     LEFT JOIN flow_values_by_context fv1 ON ((fv1.quant_id = quants.id)))
+     LEFT JOIN flow_values_by_country fv2 ON ((fv2.quant_id = quants.id)))
+     LEFT JOIN flow_values_by_commodity fv3 ON ((fv3.quant_id = quants.id)))
+  WITH NO DATA;
 
 
 --
@@ -8200,6 +8436,13 @@ CREATE INDEX ind_country_properties_ind_id_idx ON public.ind_country_properties 
 
 
 --
+-- Name: ind_values_meta_mv_ind_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX ind_values_meta_mv_ind_id_idx ON public.ind_values_meta_mv USING btree (ind_id);
+
+
+--
 -- Name: index_top_profile_images_on_commodity_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8361,6 +8604,13 @@ CREATE INDEX qual_country_properties_qual_id_idx ON public.qual_country_properti
 
 
 --
+-- Name: qual_values_meta_mv_qual_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX qual_values_meta_mv_qual_id_idx ON public.qual_values_meta_mv USING btree (qual_id);
+
+
+--
 -- Name: quant_commodity_properties_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8407,6 +8657,13 @@ CREATE INDEX quant_country_properties_quant_id_idx ON public.quant_country_prope
 --
 
 CREATE INDEX quant_properties_quant_id_idx ON public.quant_properties USING btree (quant_id);
+
+
+--
+-- Name: quant_values_meta_mv_quant_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX quant_values_meta_mv_quant_id_idx ON public.quant_values_meta_mv USING btree (quant_id);
 
 
 --
@@ -9636,6 +9893,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190621101736'),
 ('20190624114103'),
 ('20190625110206'),
+('20190701120240'),
 ('20190701165705'),
 ('20190701172702'),
 ('20190702090231'),
