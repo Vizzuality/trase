@@ -122,6 +122,8 @@ function ProfilePanel(props) {
               onSelectCommodity={item => setProfilesActiveItem(item, 'commodities')}
               activeCommodity={commoditiesPanel.activeItems}
             />
+          </div>
+          <div className="row align-center profile-panel-footer">
             <ProfilePanelFooter onBack={onBack} onContinue={onContinue} isDisabled={isDisabled} />
           </div>
         </div>

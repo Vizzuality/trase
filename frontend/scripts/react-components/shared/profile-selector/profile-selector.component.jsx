@@ -18,7 +18,7 @@ function ProfilesSelectorModal(props) {
       <div className="c-profile-selector">
         <StepsTracker
           steps={['Type', 'Profile', 'Commodity'].map(label => ({ label }))}
-          activeStep={activeStep}
+          activeStep={activeStep || 0}
         />
         <ProfilePanel
           step={activeStep}

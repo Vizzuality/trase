@@ -21,7 +21,6 @@ import { PROFILE_STEPS } from 'constants';
 
 const initialState = {
   activeStep: null,
-  activeProfileType: null,
   panels: {
     types: {
       activeItems: {}
@@ -298,7 +297,11 @@ const profileRootReducer = {
 };
 
 const profileSelectorReducerTypes = PropTypes => ({
-  activeStep: PropTypes.string
+  activeStep: PropTypes.number,
+  panels: PropTypes.object,
+  data: PropTypes.object,
+  meta: PropTypes.object,
+  tabs: PropTypes.object
 });
 
 export default createReducer(initialState, profileRootReducer, profileSelectorReducerTypes);
