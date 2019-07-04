@@ -1,3 +1,5 @@
+# Module responsible for deriving details from top profile
+# and assigning them to the new record
 module Api
   module V3
     module TopProfiles
