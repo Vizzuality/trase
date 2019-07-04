@@ -105,7 +105,7 @@ class ProfileNode extends React.PureComponent {
           <SustainabilityTableWidget
             type={isActor ? 'risk' : 'indicators'}
             profileType={profileType}
-            className={cx('c-area-table', {
+            className={cx('c-profiles-table', {
               'page-break-inside-avoid': isActor,
               'score-table': !isActor
             })}

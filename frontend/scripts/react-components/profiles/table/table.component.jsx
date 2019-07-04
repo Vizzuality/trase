@@ -9,7 +9,7 @@ import formatValue from 'utils/formatValue';
 import { UNITLESS_UNITS } from 'constants';
 import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 
-import 'react-components/profiles/table/area-table.scss';
+import 'react-components/profiles/table/profiles-table.scss';
 
 class ProfilesTable extends Component {
   renderPlacesTableHeader() {
@@ -108,10 +108,13 @@ class ProfilesTable extends Component {
       value.id !== undefined;
 
     const renderLink = (value, children) => (
-      <Link className="node-link" to={linkTo(value.id)} data-test={`${testId}-cell-link`}>
-        <Icon icon="icon-outside-link" className="icon-outside-link" />
-        {children}
-      </Link>
+      <>
+        <Link className="node-link" to={linkTo(value.id)} data-test={`${testId}-cell-link`}>
+          <Icon icon="icon-outside-link" className="icon-outside-link" />
+          {children}
+        </Link>
+        <span className="only-for-print">{children}</span>
+      </>
     );
 
     const formattedValue = (value, valueIndex) =>

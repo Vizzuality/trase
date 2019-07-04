@@ -2,10 +2,8 @@
 @import 'styles/settings';
 
 .profiles-title {
-  @media screen and (min-width: $breakpoint-foundation-small) {
-    font-family: $font-family-2;
-    font-size: $font-size-huge;
-    color: $charcoal-grey;
-    font-weight: bold;
-  }
+  font-family: $font-family-2;
+  font-size: $font-size-huge;
+  color: $charcoal-grey;
+  font-weight: bold;
 }
