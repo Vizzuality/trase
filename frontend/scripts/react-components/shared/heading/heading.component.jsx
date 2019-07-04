@@ -53,7 +53,7 @@ Heading.propTypes = {
   children: PropTypes.node,
   variant: PropTypes.string,
   transform: PropTypes.string,
-  as: PropTypes.oneOf([PropTypes.string, PropTypes.element]),
+  as: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   className: PropTypes.string // Use just for positioning
 };
 
