@@ -6,7 +6,7 @@ module Api
 
         def available_years
           object.readonly_attribute&.years
-        rescue ActiveRecord::RecordNotFound => e
+        rescue ActiveRecord::RecordNotFound
           nil
         end
       end
