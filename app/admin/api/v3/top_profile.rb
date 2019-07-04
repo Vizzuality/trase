@@ -42,6 +42,13 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
   index do
     column('Node name') { |property| property&.node&.name }
     column('Node type') { |property| property&.node&.node_type }
+    column('Image') do |property|
+      if property.top_profile_image.nil?
+        'No image assigned'
+      else
+        image_tag property&.top_profile_image&.image&.url(:small)
+      end
+    end
     actions
   end
 
