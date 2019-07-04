@@ -25,14 +25,7 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
     end
 
     def derive_top_profile_details(top_profile)
-      profile_type = top_profile.node.node_type.context_node_types.find_by(context_id: top_profile.context_id).profile.name
-      top_profile.profile_type = profile_type
-      year = Api::V3::Readonly::Node.find(top_profile.node.id).years.max
-      top_profile.year = year
-      service = "Api::V3::#{profile_type.pluralize.capitalize}::BasicAttributes".constantize
-      top_profile.summary = service.new(
-        top_profile.context, top_profile.node, year
-      ).call[:summary]
+      Api::V3::TopProfiles::DeriveTopProfileDetails.call(top_profile)
     end
   end
 
