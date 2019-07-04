@@ -44,7 +44,7 @@ const initialState = {
       searchResults: [],
       loadingItems: false,
       activeItems: {},
-      activeTab: null
+      activeTab: 0
     },
     destinations: {
       page: 1,

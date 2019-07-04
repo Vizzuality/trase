@@ -103,26 +103,19 @@ export const getProfilesSearchResults = query => ({
   }
 });
 
-export const getProfilesParams = (state, optionsType, options = {}) => {
+export const getProfilesParams = (state, step, options = {}) => {
   const { panels } = state;
-  const { sources } = panels;
+  const { countries } = panels;
   const { page } = options;
-  const sourcesTab = sources.activeTab && sources.activeTab.id;
-  // const companiesTab = companies.activeTab && companies.activeTab.id;
-  const nodeTypesIds = {
-    sources: sourcesTab
-    // companies: companiesTab
-  }[optionsType];
-  // const activeItemParams = panel => Object.keys(panel.activeItems).join();
+  const activeItemParams = panel => Object.keys(panel.activeItems).join();
   const params = {
     page,
-    options_type: optionsType,
-    node_types_ids: nodeTypesIds
+    options_type: step,
+    node_types_ids: panels[step].activeTab?.id
   };
-  const currentStep = PROFILE_STEPS[optionsType];
 
-  if (currentStep > PROFILE_STEPS.profiles) {
-    // params.commodities_ids = activeItemParams(commodities);
+  if (step === 'sources') {
+    params.countries_ids = activeItemParams(countries);
   }
 
   return params;
