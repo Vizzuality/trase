@@ -1,4 +1,4 @@
-import { select, all, call, fork, put, takeLatest } from 'redux-saga/effects';
+import { select, all, call, fork, put, takeLatest, cancel } from 'redux-saga/effects';
 import { SET_CONTEXT, SET_CONTEXTS } from 'actions/app.actions';
 import { setLoadingSpinner } from 'utils/saga-utils';
 import { loadMapVectorData, SELECT_YEARS } from 'react-components/tool/tool.actions';
@@ -41,7 +41,7 @@ function* fetchToolColumns() {
       return;
     }
 
-    yield put(setToolFlowsLoading(true));
+    const task = yield fork(setLoadingSpinner, 750, setToolFlowsLoading(true));
     yield fork(getToolColumnsData, selectedContext);
     yield call(getToolLinksData);
     yield call(getToolNodesByLink, selectedContext);
@@ -50,7 +50,11 @@ function* fetchToolColumns() {
     // TODO: remove this call, just here to split the refactor in stages
     yield put(loadMapVectorData());
 
-    yield fork(setLoadingSpinner, 150, setToolFlowsLoading(false));
+    if (task.isRunning()) {
+      yield cancel(task);
+    } else {
+      yield fork(setLoadingSpinner, 350, setToolFlowsLoading(false));
+    }
   }
   yield takeLatest([SET_CONTEXTS, TOOL_LINKS__GET_COLUMNS, SET_CONTEXT], performFetch);
 }
@@ -88,10 +92,14 @@ function* fetchLinks() {
 
     const selectedContext = yield select(getSelectedContext);
     const fetchAllNodes = action.type === TOOL_LINKS__SELECT_VIEW && action.payload.detailedView;
-    yield put(setToolFlowsLoading(true));
+    const task = yield fork(setLoadingSpinner, 2000, setToolFlowsLoading(true));
     yield call(getToolLinksData);
     yield call(getMoreToolNodesByLink, selectedContext, fetchAllNodes);
-    yield put(setToolFlowsLoading(false));
+    if (task.isRunning()) {
+      yield cancel(task);
+    } else {
+      yield fork(setLoadingSpinner, 350, setToolFlowsLoading(false));
+    }
   }
   yield takeLatest(
     [
