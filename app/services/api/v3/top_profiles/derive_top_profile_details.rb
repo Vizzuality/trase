@@ -15,15 +15,27 @@ module Api
         end
 
         def call
+          assign_profile_type
+          assign_year
+          assign_summary
+        end
+
+        private
+
+        def assign_profile_type
           top_profile.profile_type = profile_type
+        end
+
+        def assign_year
           top_profile.year = year
+        end
+
+        def assign_summary
           service = "Api::V3::#{profile_type.pluralize.capitalize}::BasicAttributes".constantize
           top_profile.summary = service.new(
             top_profile.context, node, year
           ).call[:summary]
         end
-
-        private
 
         def node
           top_profile.node
