@@ -17,7 +17,7 @@ export function* getProfilesData(profileSelector, subPanelName, options) {
   if (!profileSelector.activeStep || profileSelector.activeStep === PROFILE_STEPS.types) return;
   const panelName = subPanelName || getPanelName(profileSelector.activeStep);
   const { page, activeTab } = profileSelector.panels[panelName];
-  const tab = activeTab && activeTab.id;
+  const tab = activeTab?.id;
   const params = getProfilesParams(profileSelector, panelName, {
     page,
     ...options
