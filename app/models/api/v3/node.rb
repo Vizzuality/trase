@@ -77,6 +77,8 @@ module Api
 
       def readonly_attribute
         Api::V3::Readonly::Node.find(id)
+      rescue ActiveRecord::RecordNotFound
+        nil
       end
     end
   end
