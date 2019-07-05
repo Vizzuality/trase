@@ -44,7 +44,7 @@ const initialState = {
       searchResults: [],
       loadingItems: false,
       activeItems: {},
-      activeTab: 0
+      activeTab: null
     },
     destinations: {
       page: 1,
@@ -156,13 +156,11 @@ const profileRootReducer = {
       state.activeStep === PROFILE_STEPS.profiles
         ? state.panels.types.activeItems.type
         : getPanelName(state.activeStep);
-    const activePanelTabs = tabs[state.activeStep];
+    const activePanelTabs = tabs[panelName];
     const firstTab = activePanelTabs && activePanelTabs[0];
     const existingTab =
       activePanelTabs &&
-      activePanelTabs.find(
-        tab => tab.id === (state[panelName].activeTab && state[panelName].activeTab.id)
-      );
+      activePanelTabs.find(tab => tab.id === state.panels[panelName].activeTab?.id);
     return {
       ...state,
       tabs,
@@ -226,26 +224,53 @@ const profileRootReducer = {
       }
     };
   },
+  //   [DASHBOARD_ELEMENT__SET_ACTIVE_TAB](state, action) {
+  //   const { panel, activeTab } = action.payload;
+  //   const panelName = `${panel}Panel`;
+  //   const prevTab = state[panelName].activeTab;
+  //   const clearedActiveTabData =
+  //     prevTab && prevTab.id !== activeTab.id ? { [prevTab.id]: null } : {};
+
+  //   return {
+  //     ...state,
+  //     data: {
+  //       ...state.data,
+  //       [panel]: {
+  //         ...state.data[panel],
+  //         ...clearedActiveTabData
+  //       }
+  //     },
+  //     [panelName]: {
+  //       ...state[panelName],
+  //       activeTab,
+  //       page: initialState[panelName].page
+  //     }
+  //   };
+  // },
   [PROFILES__SET_ACTIVE_TAB](state, action) {
     const { panel, activeTab } = action.payload;
-    const prevTab = state[panel].activeTab;
+    let activePanel = panel;
+    if (panel === 'profiles') {
+      activePanel = state.panels.types.activeItems.type;
+    }
+    const prevTab = state.panels[activePanel].activeTab;
     const clearedActiveTabData =
       prevTab && prevTab.id !== activeTab.id ? { [prevTab.id]: null } : {};
     return {
       ...state,
       data: {
         ...state.data,
-        [panel]: {
-          ...state.data[panel],
+        [activePanel]: {
+          ...state.data[activePanel],
           ...clearedActiveTabData
         }
       },
       panels: {
         ...state.panels,
-        [panel]: {
-          ...state.panels[panel],
+        [activePanel]: {
+          ...state.panels[activePanel],
           activeTab,
-          page: initialState.panels[panel].page
+          page: initialState.panels[activePanel].page
         }
       }
     };
