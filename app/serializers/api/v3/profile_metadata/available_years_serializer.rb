@@ -5,9 +5,11 @@ module Api
         attributes :available_years
 
         def available_years
-          object.readonly_attribute&.years
-        rescue ActiveRecord::RecordNotFound
-          nil
+          if object.readonly_attribute
+            object.readonly_attribute.years
+          else
+            nil
+          end
         end
       end
     end
