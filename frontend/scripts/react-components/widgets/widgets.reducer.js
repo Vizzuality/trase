@@ -43,7 +43,6 @@ const widgetsReducer = {
           ...state.endpoints[endpoint],
           data: parseObject(data),
           meta: parseObject(meta),
-          aborted: false,
           loading: false
         }
       }
@@ -59,7 +58,6 @@ const widgetsReducer = {
           ...defaultEndpoint,
           ...state.endpoints[endpoint],
           error,
-          aborted: false,
           loading: false
         }
       }
