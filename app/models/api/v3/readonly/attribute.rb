@@ -29,6 +29,8 @@ module Api
         self.table_name = 'attributes_mv'
         self.primary_key = 'id'
 
+        delegate :values_meta, to: :original_attribute
+
         def self.select_options
           order(:display_name).map do |a|
             ["#{a.display_name} (#{a.name})", a.id]
@@ -45,6 +47,14 @@ module Api
           ].each do |mview_klass|
             mview_klass.refresh(options.merge(skip_dependencies: true))
           end
+        end
+
+        def original_attribute
+          "Api::V3::#{original_type}".constantize.find(original_id)
+        end
+
+        def node_values_meta_per_context(context)
+          values_meta.node_values.dig('context', context.id.to_s)
         end
 
         # Used in dashbooards to determine whether values are present in flows
@@ -83,8 +93,9 @@ module Api
           quant? || ind?
         end
 
-        def temporal?
-          is_temporal_on_actor_profile? || is_temporal_on_place_profile?
+        def temporal?(context)
+          meta = node_values_meta_per_context(context)
+          meta['years'].any?
         end
 
         # overrides aggregate_method

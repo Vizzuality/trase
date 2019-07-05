@@ -92,6 +92,8 @@ Rails.application.routes.draw do
           resources :multi_year_no_ncont_overview, only: [:index]
           resources :multi_year_no_ncont_node_type_view, only: [:index]
           resources :multi_year_ncont_overview, only: [:index]
+          resources :single_year_node_values_overview, only: [:index]
+          resources :multi_year_node_values_overview, only: [:index]
         end
         resources :parametrised_charts, only: [:index]
       end

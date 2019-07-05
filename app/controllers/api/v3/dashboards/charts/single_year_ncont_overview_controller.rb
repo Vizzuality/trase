@@ -3,7 +3,7 @@ module Api
     module Dashboards
       module Charts
         class SingleYearNcontOverviewController < ApiController
-          include FilterParams
+          include ChartParams
           skip_before_action :load_context
 
           def index
@@ -14,7 +14,7 @@ module Api
             ensure_required_param_present(:ncont_attribute_id)
 
             render json: SingleYearNcontOverview.new(
-              ChartParameters.new(chart_params)
+              ChartParameters::FlowValues.new(flow_values_chart_params)
             ).call
           end
         end

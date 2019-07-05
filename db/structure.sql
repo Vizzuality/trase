@@ -4251,7 +4251,7 @@ CREATE MATERIALIZED VIEW public.ind_values_meta_mv AS
            FROM ((public.node_inds
              JOIN nodes ON ((node_inds.node_id = nodes.id)))
              JOIN public.contexts ON ((nodes.context_id = contexts.id)))
-          GROUP BY node_inds.ind_id, CUBE(nodes.node_type_id, nodes.context_id, contexts.country_id, contexts.commodity_id)
+          GROUP BY node_inds.ind_id, GROUPING SETS ((nodes.context_id), (contexts.country_id), (contexts.commodity_id))
         ), node_values_by_context AS (
          SELECT node_values.ind_id,
             jsonb_object_agg(node_values.context_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
@@ -4279,7 +4279,7 @@ CREATE MATERIALIZED VIEW public.ind_values_meta_mv AS
            FROM ((public.flow_inds
              JOIN public.flows ON ((flow_inds.flow_id = flows.id)))
              JOIN public.contexts ON ((flows.context_id = contexts.id)))
-          GROUP BY flow_inds.ind_id, CUBE(flows.context_id, contexts.country_id, contexts.commodity_id)
+          GROUP BY flow_inds.ind_id, GROUPING SETS ((flows.context_id), (contexts.country_id), (contexts.commodity_id))
         ), flow_values_by_context AS (
          SELECT flow_values.ind_id,
             jsonb_object_agg(flow_values.context_id, jsonb_build_object('years', flow_values.years)) AS flow_values
@@ -4993,7 +4993,7 @@ CREATE MATERIALIZED VIEW public.qual_values_meta_mv AS
            FROM ((public.node_quals
              JOIN nodes ON ((node_quals.node_id = nodes.id)))
              JOIN public.contexts ON ((nodes.context_id = contexts.id)))
-          GROUP BY node_quals.qual_id, CUBE(nodes.node_type_id, nodes.context_id, contexts.country_id, contexts.commodity_id)
+          GROUP BY node_quals.qual_id, GROUPING SETS ((nodes.context_id), (contexts.country_id), (contexts.commodity_id))
         ), node_values_by_context AS (
          SELECT node_values.qual_id,
             jsonb_object_agg(node_values.context_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
@@ -5021,7 +5021,7 @@ CREATE MATERIALIZED VIEW public.qual_values_meta_mv AS
            FROM ((public.flow_quals
              JOIN public.flows ON ((flow_quals.flow_id = flows.id)))
              JOIN public.contexts ON ((flows.context_id = contexts.id)))
-          GROUP BY flow_quals.qual_id, CUBE(flows.context_id, contexts.country_id, contexts.commodity_id)
+          GROUP BY flow_quals.qual_id, GROUPING SETS ((flows.context_id), (contexts.country_id), (contexts.commodity_id))
         ), flow_values_by_context AS (
          SELECT flow_values.qual_id,
             jsonb_object_agg(flow_values.context_id, jsonb_build_object('years', flow_values.years)) AS flow_values
@@ -5174,7 +5174,7 @@ CREATE MATERIALIZED VIEW public.quant_values_meta_mv AS
            FROM ((public.node_quants
              JOIN nodes ON ((node_quants.node_id = nodes.id)))
              JOIN public.contexts ON ((nodes.context_id = contexts.id)))
-          GROUP BY node_quants.quant_id, CUBE(nodes.node_type_id, nodes.context_id, contexts.country_id, contexts.commodity_id)
+          GROUP BY node_quants.quant_id, GROUPING SETS ((nodes.context_id), (contexts.country_id), (contexts.commodity_id))
         ), node_values_by_context AS (
          SELECT node_values.quant_id,
             jsonb_object_agg(node_values.context_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
@@ -5202,7 +5202,7 @@ CREATE MATERIALIZED VIEW public.quant_values_meta_mv AS
            FROM ((public.flow_quants
              JOIN public.flows ON ((flow_quants.flow_id = flows.id)))
              JOIN public.contexts ON ((flows.context_id = contexts.id)))
-          GROUP BY flow_quants.quant_id, CUBE(flows.context_id, contexts.country_id, contexts.commodity_id)
+          GROUP BY flow_quants.quant_id, GROUPING SETS ((flows.context_id), (contexts.country_id), (contexts.commodity_id))
         ), flow_values_by_context AS (
          SELECT flow_values.quant_id,
             jsonb_object_agg(flow_values.context_id, jsonb_build_object('years', flow_values.years)) AS flow_values

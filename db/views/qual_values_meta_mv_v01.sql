@@ -19,7 +19,12 @@ WITH flow_paths AS (
     node_quals
   JOIN nodes ON node_quals.node_id = nodes.id
   JOIN contexts ON nodes.context_id = contexts.id
-  GROUP BY qual_id, CUBE(node_type_id, context_id, country_id, commodity_id)
+  GROUP BY qual_id,
+    GROUPING SETS (
+      (context_id),
+      (country_id),
+      (commodity_id)
+    )
 ), node_values_by_context AS (
   SELECT
     qual_id,
@@ -58,7 +63,12 @@ WITH flow_paths AS (
     flow_quals
   JOIN flows ON flow_quals.flow_id = flows.id
   JOIN contexts ON flows.context_id = contexts.id
-  GROUP BY qual_id, CUBE(context_id, country_id, commodity_id)
+  GROUP BY qual_id,
+    GROUPING SETS (
+      (context_id),
+      (country_id),
+      (commodity_id)
+    )
 ), flow_values_by_context AS (
   SELECT
     qual_id,

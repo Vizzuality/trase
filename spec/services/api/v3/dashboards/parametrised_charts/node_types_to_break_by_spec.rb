@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::V3::Dashboards::NodeTypesToBreakBy do
+RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy do
   include_context 'api v3 node types'
 
   let(:context) { FactoryBot.create(:api_v3_context) }
@@ -52,7 +52,7 @@ RSpec.describe Api::V3::Dashboards::NodeTypesToBreakBy do
       }
 
       let(:node_types_to_break_by) {
-        Api::V3::Dashboards::NodeTypesToBreakBy.new(
+        Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy.new(
           context,
           [api_v3_biome_node_type.id],
           [api_v3_exporter_node_type.id, api_v3_importer_node_type.id],
@@ -80,7 +80,7 @@ RSpec.describe Api::V3::Dashboards::NodeTypesToBreakBy do
       }
 
       let(:node_types_to_break_by) {
-        Api::V3::Dashboards::NodeTypesToBreakBy.new(
+        Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy.new(
           context,
           [],
           [api_v3_exporter_node_type.id, api_v3_importer_node_type.id],
@@ -115,7 +115,7 @@ RSpec.describe Api::V3::Dashboards::NodeTypesToBreakBy do
       }
 
       let(:node_types_to_break_by) {
-        Api::V3::Dashboards::NodeTypesToBreakBy.new(
+        Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy.new(
           context,
           [api_v3_biome_node_type.id],
           [api_v3_exporter_node_type.id],
@@ -133,7 +133,7 @@ RSpec.describe Api::V3::Dashboards::NodeTypesToBreakBy do
 
     context 'when national context without importer node' do
       let(:node_types_to_break_by) {
-        Api::V3::Dashboards::NodeTypesToBreakBy.new(
+        Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy.new(
           context,
           [],
           [api_v3_exporter_node_type.id],

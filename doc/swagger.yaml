@@ -1383,7 +1383,92 @@ paths:
                                 example: 'OTHER'
                       info:
                         $ref: "#/components/schemas/DashboardsMetaInfo"
-
+  /dashboards/charts/single_year_node_values_overview:
+    get:
+      tags:
+        - dashboards
+        - charts
+      summary: Data formatted for display in the overview chart for single year, single node selection, attribute with node values (dynamic sentence)
+      parameters:
+        - $ref: "#/components/parameters/dashboards_country_id"
+        - $ref: "#/components/parameters/dashboards_commodity_id"
+        - $ref: "#/components/parameters/dashboards_cont_attribute_id"
+        - $ref: "#/components/parameters/node_id_req_query_param"
+        - $ref: "#/components/parameters/start_year_req_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        y0:
+                          type: number
+                          example: 17250.1
+                  meta:
+                    type: object
+                    properties:
+                      xAxis:
+                        $ref: "#/components/schemas/DashboardsEmptyXAxis"
+                      yAxis:
+                        $ref: "#/components/schemas/DashboardsYAxis"
+                      x:
+                        $ref: "#/components/schemas/DashboardsEmptyXLegend"
+                      y0:
+                        $ref: "#/components/schemas/DashboardsYLegend"
+                      info:
+                        $ref: "#/components/schemas/DashboardsMetaInfoNodeValues"
+  /dashboards/charts/multi_year_node_values_overview:
+    get:
+      tags:
+        - dashboards
+        - charts
+      summary: Data formatted for display in the overview chart for single year, single node selection, attribute with node values (dynamic sentence)
+      parameters:
+        - $ref: "#/components/parameters/dashboards_country_id"
+        - $ref: "#/components/parameters/dashboards_commodity_id"
+        - $ref: "#/components/parameters/dashboards_cont_attribute_id"
+        - $ref: "#/components/parameters/node_id_req_query_param"
+        - $ref: "#/components/parameters/start_year_req_query_param"
+        - $ref: "#/components/parameters/end_year_req_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          type: number
+                          example: 2017
+                        y0:
+                          type: number
+                          example: 17250.1
+                  meta:
+                    type: object
+                    properties:
+                      xAxis:
+                        $ref: "#/components/schemas/DashboardsYearXAxis"
+                      yAxis:
+                        $ref: "#/components/schemas/DashboardsYAxis"
+                      x:
+                        $ref: "#/components/schemas/DashboardsYearXLegend"
+                      y0:
+                        $ref: "#/components/schemas/DashboardsYLegend"
+                      info:
+                        $ref: "#/components/schemas/DashboardsMetaInfoNodeValues"
 servers:
   - url: https://trase.earth/api/v3
 components:
@@ -1431,6 +1516,13 @@ components:
       name: end_year
       in: query
       required: false
+      schema:
+        type: integer
+    node_id_req_query_param:
+      name: node_id
+      in: query
+      description: Node id
+      required: true
       schema:
         type: integer
     node_types_ids:
@@ -1525,7 +1617,7 @@ components:
     dashboards_node_type_id:
       name: node_type_id
       in: query
-      description: Node type is
+      description: Node type id
       required: true
       schema:
         type: integer
@@ -2807,3 +2899,42 @@ components:
           example: 'destinations'
           nullable: true
           description: 'one of [sources|companies|destinations] or null'
+
+    DashboardsMetaInfoNodeValues:
+      type: object
+      properties:
+        years:
+          type: object
+          properties:
+            start_year:
+              type: integer
+              example: 2017
+            end_year:
+              type: integer
+              example: 2017
+        temporal:
+          type: boolean
+          example: false
+          description: 'if false, attribute does not have values per year'
+        filter:
+          type: object
+          properties:
+            cont_attribute:
+              type: string
+              example: 'Trade volume'
+            node:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                node_type_id:
+                  type: integer
+                node_type:
+                  type: string
+                profile:
+                  type: string
+                  example: 'place'
+                  nullable: true
+                  description: 'place or null'

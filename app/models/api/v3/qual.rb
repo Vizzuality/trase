@@ -14,6 +14,7 @@ module Api
   module V3
     class Qual < BlueTable
       has_one :qual_property
+      has_one :qual_values_meta, class_name: 'Api::V3::Readonly::QualValuesMeta'
       has_many :node_quals
       has_many :flow_quals
       has_many :flows, through: :flow_quals
@@ -22,6 +23,8 @@ module Api
       has_many :qual_country_properties
 
       delegate :display_name, to: :qual_property, allow_nil: true
+      alias_method :values_meta, :qual_values_meta
+      alias_method :node_values, :node_quals
 
       def readonly_attribute
         Api::V3::Readonly::Attribute.

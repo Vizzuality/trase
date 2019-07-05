@@ -15,6 +15,7 @@ module Api
   module V3
     class Quant < BlueTable
       has_one :quant_property
+      has_one :quant_values_meta, class_name: 'Api::V3::Readonly::QuantValuesMeta'
       has_many :node_quants
       has_many :flow_quants
       has_many :flows, through: :flow_quants
@@ -23,6 +24,8 @@ module Api
       has_many :quant_country_properties
 
       delegate :display_name, to: :quant_property, allow_nil: true
+      alias_method :values_meta, :quant_values_meta
+      alias_method :node_values, :node_quants
 
       def readonly_attribute
         Api::V3::Readonly::Attribute.
