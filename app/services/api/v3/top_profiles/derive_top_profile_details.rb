@@ -43,12 +43,16 @@ module Api
           top_profile.node
         end
 
+        def readonly_node
+          Api::V3::Readonly::Node.find(node.id)
+        end
+
         def profile_type
-          node.node_type.context_node_types.find_by(context_id: top_profile.context_id).profile.name
+          readonly_node.profile
         end
 
         def year
-          Api::V3::Readonly::Node.find(node.id).years.max
+          readonly_node.years.max
         end
       end
     end
