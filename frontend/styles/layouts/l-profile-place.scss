@@ -29,10 +29,6 @@
     }
   }
 
-  .c-links-widget {
-    margin-top: 40px;
-  }
-
   section:nth-of-type(2n-1) {
     background-color: rgba($white, .3);
   }
@@ -72,22 +68,16 @@
     }
   }
 
-  .c-button-links {
-    padding: 49px 0 46px;
+  .c-links-widget {
+    padding-top: 40px;
+    padding-bottom: 40px;
 
-    > .row .columns {
-      margin-bottom: 10px;
+    .links-widget-title {
+      margin-bottom: 20px;
     }
 
     @media print {
       display: none;
-    }
-
-    @media (min-width: $breakpoint-foundation-small)
-       and (max-width: $breakpoint-foundation-medium) {
-      > .row .columns:not(:last-child) {
-        padding-right: 0;
-      }
     }
   }
 

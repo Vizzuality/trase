@@ -69,20 +69,14 @@ $large-line-chart-width: 840px;
 
   .c-links-widget {
     padding-top: 40px;
-  }
+    padding-bottom: 40px;
 
-  .c-button-links {
-    padding: 40px 0 46px;
+    .links-widget-title {
+      margin-bottom: 20px;
+    }
 
     @media print {
       display: none;
-    }
-
-    @media screen and (min-width: $breakpoint-foundation-small)
-                  and (max-width: $breakpoint-foundation-medium) {
-      > .row .columns:not(:last-child) {
-        padding-right: 0;
-      }
     }
   }
 

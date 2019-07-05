@@ -24,8 +24,8 @@ function LinksWidget(props) {
           data.GET_NODE_SUMMARY_URL.nodeName || data.GET_NODE_SUMMARY_URL.jurisdictionName;
 
         return (
-          <section className="c-links-widget columns">
-            <div className="row">
+          <section className="c-links-widget">
+            <div className="row links-widget-title columns">
               <Heading as="h3" weight="bold" variant="mono" size="md">
                 Explore other information relevant to {translateText(name)}
               </Heading>

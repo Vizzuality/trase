@@ -9,12 +9,7 @@
 
     @media screen and (min-width: $breakpoint-foundation-small) {
       &:first-child {
-        padding-left: 0;
         padding-bottom: 0;
-      }
-
-      &:last-child {
-        padding-right: 0;
       }
     }
   }
