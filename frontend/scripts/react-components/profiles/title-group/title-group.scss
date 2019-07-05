@@ -10,7 +10,7 @@
     margin-bottom: 10px;
 
     &:not(:last-child) {
-      margin-right: 41px;
+      margin-right: 40px;
     }
 
     @media screen and (max-width: $breakpoint-foundation-small) {
@@ -19,29 +19,14 @@
       }
 
       &:not(:last-child) {
-        margin-right: 21px;
+        margin-right: 20px;
       }
     }
   }
 
   .title-group-element {
     &:not(:last-child) {
-      margin-right: 41px;
-    }
-
-    .title-group-label {
-      display: block;
-    }
-
-    .title-group-content {
-      display: block;
-    }
-
-    @media screen and (min-width: $breakpoint-foundation-small) {
-      .title-group-content {
-        margin-top: 3px;
-        font-size: $font-size-big;
-      }
+      margin-right: 40px;
     }
   }
 }

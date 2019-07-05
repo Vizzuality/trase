@@ -1,12 +1,10 @@
-@import '../../../../styles/settings';
-@import '../../../../styles/mixins';
+@import 'styles/settings';
+@import 'styles/mixins';
 
 .c-dropdown-tab-switcher {
   .tab-switcher {
     display: flex;
     flex-direction: column;
-
-    margin-bottom: 30px;
     font-family: $font-family-1;
     font-size: $font-size-x-regular;
     font-weight: bold;
@@ -23,6 +21,10 @@
 
     .tab-switcher-title {
       margin-bottom: 30px;
+
+      @media print {
+        margin-bottom: 0;
+      }
     }
   }
 

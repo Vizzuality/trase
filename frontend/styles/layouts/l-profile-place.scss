@@ -5,7 +5,6 @@
   min-height: 100vh;
   padding-top: calc(54px + #{$nav-height});
   background-color: $egg-shell;
-  line-height: 1.5;
 
   &.-error {
     position: relative;

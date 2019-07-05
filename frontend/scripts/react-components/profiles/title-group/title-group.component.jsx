@@ -47,6 +47,7 @@ class TitleGroup extends React.PureComponent {
         >
           <Dropdown
             variant="profiles"
+            size="lg"
             label={title.label}
             options={title.options}
             onChange={item => title.onYearChange(item.value)}
