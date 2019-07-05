@@ -48,6 +48,11 @@ export const handleUnnecesaryRequests = (server, BASE_URL) => {
     res.json({});
   });
 
+  server.any('https://cdn.plyr.io/*').intercept((_, res) => {
+    res.sendStatus(200);
+    res.json({});
+  });
+
   server.any('http://live-detector.svc.transifex.net/').intercept((_, res) => {
     res.sendStatus(200);
     res.json({});

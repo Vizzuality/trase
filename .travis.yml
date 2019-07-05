@@ -5,8 +5,10 @@ env:
     - API_V3_URL=http://0.0.0.0:3000
     - PORT=3000
     - JEST_CI=true
+    - NODE_ENV_TEST=true
     - USE_PLAIN_URL_STATE=true
     - GFW_WIDGETS_BASE_URL=
+    - NODE_ENV=test
     - SURGE_LOGIN=trase.vizzuality@gmail.com
     - SURGE_TOKEN=$SURGE_TOKEN # Set in the settings page of your repository, as a secure variable
 matrix:

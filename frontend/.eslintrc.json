@@ -54,6 +54,7 @@
   },
   "globals": {
     "NODE_ENV_DEV": true,
+    "NODE_ENV_TEST": true,
     "API_V3_URL": true,
     "ENABLE_DASHBOARDS": true,
     "DISABLE_PROFILES": true,

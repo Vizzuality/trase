@@ -1,4 +1,5 @@
 import qs from 'query-string';
+import last from 'lodash/last';
 
 const BASE_URL = 'http://0.0.0.0:8081';
 
@@ -11,29 +12,42 @@ export async function testRootSearch(page, { nodeName, nodeType, profileType }) 
   const waitForNavigation = page.waitForNavigation({
     waitUntil: 'networkidle2'
   });
-  await page.waitFor(500);
   await page.click(`[data-test=search-result-${nodeType}-${nodeName}]`);
   await waitForNavigation;
-  await page.waitFor(1000);
 
   const url = page.url();
   expect(url.startsWith(`${BASE_URL}/profile-${profileType}`)).toBe(true);
 }
 
-export async function testProfileSummary(page, { titles, profileType, titlesLength }) {
-  await Promise.all([
+export async function testProfileSummary(page, { title, params, profileType, titlesLength }) {
+  const waitPromises = [
     page.waitForSelector(`[data-test=${profileType}-summary]`),
     page.waitForSelector('[data-test=title-group-el-1]')
-  ]);
-  const [titleGroup, first, second] = await Promise.all([
-    page.$eval('[data-test=title-group]', group => group.children.length),
-    page.$eval('[data-test=title-group-el-0]', title => title.textContent),
-    page.$eval('[data-test=title-group-el-1]', title => title.textContent)
-  ]);
+  ];
 
-  expect(titleGroup).toBe(titlesLength);
-  expect(first.toLowerCase()).toMatch(titles[0]);
-  expect(second.toLowerCase()).toMatch(titles[1]);
+  const contentPromises = [page.$eval('[data-test=title-group]', group => group.children.length)];
+
+  params.forEach((p, i) => {
+    contentPromises.push(page.$eval(`[data-test=title-group-el-${i}]`, param => param.textContent));
+  });
+
+  if (title) {
+    waitPromises.push(page.waitForSelector('[data-test=profiles-title]'));
+    contentPromises.push(page.$eval('[data-test=profiles-title]', t => t.textContent));
+  }
+
+  await Promise.all(waitPromises);
+  const promiseResult = await Promise.all(contentPromises);
+
+  if (title) {
+    expect(last(promiseResult)).toBe(title);
+  }
+
+  expect(promiseResult[0]).toBe(titlesLength);
+
+  params.forEach((p, i) => {
+    expect(promiseResult[i + 1].toLowerCase()).toMatch(params[i]);
+  });
 }
 
 export async function testProfileMultiTable(

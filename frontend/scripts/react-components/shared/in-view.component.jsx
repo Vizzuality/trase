@@ -2,7 +2,7 @@ import React from 'react';
 import { InView } from 'react-intersection-observer';
 
 function InViewFallback(props) {
-  if ('IntersectionObserver' in window && process.env.NODE_ENV !== 'test') {
+  if ('IntersectionObserver' in window && !NODE_ENV_TEST) {
     return <InView {...props} />;
   }
 

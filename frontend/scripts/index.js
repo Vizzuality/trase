@@ -113,5 +113,6 @@ window.onTransifexLoad = () => {
   }
 };
 
-routeSubscriber(store);
 sagaMiddleware.run(rootSaga);
+routeSubscriber(store);
+router.initialDispatch();
