@@ -5,11 +5,7 @@ module Api
         attributes :available_years
 
         def available_years
-          if object.readonly_attribute
-            object.readonly_attribute.years
-          else
-            nil
-          end
+          object.readonly_attribute&.years
         end
       end
     end
