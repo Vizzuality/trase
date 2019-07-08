@@ -46,6 +46,7 @@ function ProfileStepPanel(props) {
             onSelectSourceValue={item => setProfilesActiveItem(item, 'sources')}
             nodeTypeRenderer={node => node.nodeType || 'Country of Production'}
             sources={data.sources[sourcesPanel.activeTab && sourcesPanel.activeTab.id] || []}
+            sourcesRequired
           />
         </>
       );
