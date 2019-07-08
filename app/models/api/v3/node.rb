@@ -74,6 +74,12 @@ module Api
           {name: :node_type_id, table_class: Api::V3::NodeType}
         ]
       end
+
+      def readonly_attribute
+        Api::V3::Readonly::Node.find(id)
+      rescue ActiveRecord::RecordNotFound
+        nil
+      end
     end
   end
 end

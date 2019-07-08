@@ -8,11 +8,24 @@ module Api
           @context, @node
         ).call
 
-        render json: @result,
-               root: 'data',
-               serializer: Api::V3::ProfileMetadata::ProfileSerializer,
-               include: {charts: :children},
-               key_transform: :underscore
+        serialized_profile_metadata =
+          ActiveModelSerializers::SerializableResource.new(
+            @result,
+            serializer: Api::V3::ProfileMetadata::ProfileSerializer,
+            key_transform: :underscore,
+            root: 'data',
+            include: {charts: :children}
+          ).serializable_hash
+
+        serialized_available_years =
+          ActiveModelSerializers::SerializableResource.new(
+            @node,
+            root: 'data',
+            serializer: Api::V3::ProfileMetadata::AvailableYearsSerializer,
+            key_transform: :underscore
+          ).serializable_hash
+
+        render json: {data: serialized_profile_metadata[:data].merge(serialized_available_years[:data])}
       end
 
       private
