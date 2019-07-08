@@ -1,19 +1,23 @@
 import { put, call, cancelled, fork, select } from 'redux-saga/effects';
-import getPanelStepName from 'utils/getProfilePanelName';
+import getPanelStepName, { getPanelName } from 'utils/getProfilePanelName';
 import {
   PROFILES__SET_PANEL_DATA,
   PROFILES__SET_PANEL_TABS,
   PROFILES__SET_MORE_PANEL_DATA,
+  PROFILES__SET_SEARCH_RESULTS,
   getProfilesParams,
   setProfilesLoadingItems
 } from 'react-components/shared/profile-selector/profile-selector.actions';
 import {
   getURLFromParams,
   GET_DASHBOARD_OPTIONS_URL,
-  GET_DASHBOARD_OPTIONS_TABS_URL
+  GET_DASHBOARD_OPTIONS_TABS_URL,
+  GET_DASHBOARD_SEARCH_RESULTS_URL
 } from 'utils/getURLFromParams';
 import { PROFILE_STEPS } from 'constants';
 import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
+import isEmpty from 'lodash/isEmpty';
+import deburr from 'lodash/deburr';
 
 export function* getProfilesData(subPanelName) {
   const profileSelector = yield select(state => state.profileSelector);
@@ -110,6 +114,42 @@ export function* getProfilesTabs(optionsType) {
     yield put({
       type: PROFILES__SET_PANEL_TABS,
       payload: {
+        data: data.data
+      }
+    });
+  } catch (e) {
+    console.error('Error', e);
+  } finally {
+    if (yield cancelled()) {
+      if (NODE_ENV_DEV) console.error('Cancelled', url);
+      if (source) {
+        source.cancel();
+      }
+    }
+  }
+}
+
+export function* fetchProfileSearchResults(profileSelector, query) {
+  if (!query) return;
+  let panelName = getPanelName(profileSelector);
+  if (panelName === 'sources' && isEmpty(profileSelector.panels.countries.activeItems)) {
+    panelName = 'countries';
+  }
+  // eslint-ignore-next-line
+  const { node_types_ids: excluded, ...filters } = getProfilesParams(profileSelector, panelName);
+  const params = {
+    ...filters,
+    q: deburr(query)
+  };
+  const url = getURLFromParams(GET_DASHBOARD_SEARCH_RESULTS_URL, params);
+
+  const { source, fetchPromise } = fetchWithCancel(url);
+  try {
+    const { data } = yield call(fetchPromise);
+    yield put({
+      type: PROFILES__SET_SEARCH_RESULTS,
+      payload: {
+        query,
         data: data.data
       }
     });
