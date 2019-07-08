@@ -10,7 +10,8 @@ import {
   PROFILES__SET_SEARCH_RESULTS,
   PROFILES__CLEAR_PANEL,
   PROFILES__SET_ACTIVE_TAB,
-  PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH
+  PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH,
+  PROFILES__CLEAR_PANELS
 } from 'react-components/shared/profile-selector/profile-selector.actions';
 import isEmpty from 'lodash/isEmpty';
 import fuzzySearch from 'utils/fuzzySearch';
@@ -195,7 +196,7 @@ const profileRootReducer = {
       ...state,
       panels: {
         ...state.panels,
-        [panel]: { ...initialState[panel], activeTab },
+        [panel]: { ...initialState.panels[panel], activeTab },
         countries: countriesState
       }
     };
@@ -242,6 +243,24 @@ const profileRootReducer = {
           ...state.panels[panelName],
           searchResults: fuzzySearch(query, data)
         }
+      }
+    };
+  },
+  [PROFILES__CLEAR_PANELS](state, action) {
+    const { panels } = action.payload;
+    const removedPanels = {};
+    panels.forEach(panel => {
+      const { activeTab } = state.panels[panel];
+      removedPanels[panel] = {
+        ...initialState.panels[panel],
+        activeTab
+      };
+    });
+    return {
+      ...state,
+      panels: {
+        ...state.panels,
+        ...removedPanels
       }
     };
   },

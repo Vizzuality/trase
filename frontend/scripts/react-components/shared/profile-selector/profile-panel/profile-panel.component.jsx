@@ -27,6 +27,11 @@ function ProfilePanel(props) {
     tabs,
     loading
   } = props;
+  const singularTypes = {
+    sources: 'Source',
+    'importing countries': 'Importing country',
+    traders: 'Trader'
+  };
   switch (step) {
     case PROFILE_STEPS.types:
       return (
@@ -52,7 +57,7 @@ function ProfilePanel(props) {
           <Heading align="center" size="md" weight="light">
             Choose the{' '}
             <Heading as="span" size="md" weight="bold">
-              {profileType} profile
+              {singularTypes[profileType]} profile
             </Heading>
           </Heading>
           <div className="row profile-panel-content">
