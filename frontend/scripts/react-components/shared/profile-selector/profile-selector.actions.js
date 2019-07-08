@@ -4,7 +4,6 @@ export const PROFILES__SET_MORE_PANEL_DATA = 'PROFILES__SET_MORE_PANEL_DATA';
 export const PROFILES__SET_PANEL_DATA = 'PROFILES__SET_PANEL_DATA';
 export const PROFILES__SET_ACTIVE_STEP = 'PROFILES__SET_ACTIVE_STEP';
 export const PROFILES__SET_ACTIVE_ITEM = 'PROFILES__SET_ACTIVE_ITEM';
-export const PROFILES__SET_ACTIVE_ITEMS = 'PROFILES__SET_ACTIVE_ITEMS';
 export const PROFILES__SET_ACTIVE_TAB = 'PROFILES__SET_ACTIVE_TAB';
 export const PROFILES__CLEAR_PANEL = 'PROFILES__CLEAR_PANEL';
 export const PROFILES__CLEAR_PANELS = 'PROFILES__CLEAR_PANELS';
@@ -52,14 +51,6 @@ export const setProfilesActiveItem = (activeItem, panel) => ({
 
 export const setProfilesActiveItemsWithSearch = (activeItems, panel) => ({
   type: PROFILES__SET_ACTIVE_ITEMS_WITH_SEARCH,
-  payload: {
-    panel,
-    activeItems
-  }
-});
-
-export const setProfilesActiveItems = (activeItems, panel) => ({
-  type: PROFILES__SET_ACTIVE_ITEMS,
   payload: {
     panel,
     activeItems

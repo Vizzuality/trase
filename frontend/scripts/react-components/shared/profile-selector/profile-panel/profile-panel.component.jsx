@@ -14,7 +14,6 @@ function ProfilePanel(props) {
   const {
     step,
     setProfilesActiveItem,
-    setProfilesActiveItems,
     clearProfilesPanel,
     getSearchResults,
     setProfilesSearchResult,
@@ -38,7 +37,8 @@ function ProfilePanel(props) {
       case PROFILE_STEPS.types:
         return !profileType;
       case PROFILE_STEPS.profiles: {
-        const panelName = profileType === 'sources' ? 'countriesPanel' : `${profileType}Panel`;
+        // As we dont have a country profile page the requisite is the sourcesPanel selection
+        const panelName = `${profileType}Panel`;
         return panels[panelName] && isEmpty(panels[panelName].activeItems);
       }
       case PROFILE_STEPS.commodities:
@@ -83,7 +83,6 @@ function ProfilePanel(props) {
               profileType={profileType}
               panelName={getPanelName(step)}
               setProfilesActiveItem={setProfilesActiveItem}
-              setProfilesActiveItems={setProfilesActiveItems}
               setProfilesActiveTab={setProfilesActiveTab}
               clearProfilesPanel={clearProfilesPanel}
               getSearchResults={getSearchResults}
@@ -136,7 +135,6 @@ function ProfilePanel(props) {
 ProfilePanel.propTypes = {
   step: PropTypes.number,
   setProfilesActiveItem: PropTypes.func.isRequired,
-  setProfilesActiveItems: PropTypes.func.isRequired,
   clearProfilesPanel: PropTypes.func.isRequired,
   setProfilesActiveTab: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,

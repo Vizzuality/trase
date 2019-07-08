@@ -2,7 +2,6 @@ import { take, takeLatest, select, all, fork, cancel } from 'redux-saga/effects'
 import {
   PROFILES__SET_ACTIVE_STEP,
   PROFILES__SET_ACTIVE_ITEM,
-  PROFILES__SET_ACTIVE_ITEMS,
   PROFILES__SET_ACTIVE_ITEMS_WITH_SEARCH,
   PROFILES__SET_ACTIVE_TAB,
   PROFILES__SET_PANEL_TABS,
@@ -90,7 +89,7 @@ export function* onItemChange(action) {
 }
 
 function* fetchDataOnItemChange() {
-  yield takeLatest([PROFILES__SET_ACTIVE_ITEM, PROFILES__SET_ACTIVE_ITEMS], onItemChange);
+  yield takeLatest([PROFILES__SET_ACTIVE_ITEM], onItemChange);
 }
 
 /**

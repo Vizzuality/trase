@@ -7,7 +7,6 @@ import {
   PROFILES__SET_LOADING_ITEMS,
   PROFILES__SET_PANEL_TABS,
   PROFILES__SET_ACTIVE_ITEM,
-  PROFILES__SET_ACTIVE_ITEMS,
   PROFILES__SET_SEARCH_RESULTS,
   PROFILES__CLEAR_PANEL,
   PROFILES__SET_ACTIVE_TAB,
@@ -90,12 +89,9 @@ const profileRootReducer = {
   [PROFILES__SET_PANEL_DATA](state, action) {
     const { panelName, data, meta, tab, loading } = action.payload;
     const initialData = initialState.data[panelName];
-    let newData;
-    if (Array.isArray(initialData)) {
-      newData = data || initialData;
-    } else {
-      newData = tab ? { ...state.data[panelName], [tab]: data } : initialData;
-    }
+    const newData = tab
+      ? { ...state.data[panelName], [tab]: data || initialData }
+      : data || initialData;
     return {
       ...state,
       loading,
@@ -193,20 +189,6 @@ const profileRootReducer = {
       }
     };
   },
-  [PROFILES__SET_ACTIVE_ITEMS](state, action) {
-    const { panel, activeItems: selectedItem } = action.payload;
-    return {
-      ...state,
-      sourcesPanel: state.sourcesPanel,
-      panels: {
-        ...state.panels,
-        [panel]: {
-          ...state.panels[panel],
-          activeItems: updateItems(state[panel].activeItems, selectedItem)
-        }
-      }
-    };
-  },
   [PROFILES__CLEAR_PANEL](state, action) {
     const { panel } = action.payload;
     const { activeTab } = state.panels[panel];
@@ -224,29 +206,6 @@ const profileRootReducer = {
       }
     };
   },
-  //   [DASHBOARD_ELEMENT__SET_ACTIVE_TAB](state, action) {
-  //   const { panel, activeTab } = action.payload;
-  //   const panelName = `${panel}Panel`;
-  //   const prevTab = state[panelName].activeTab;
-  //   const clearedActiveTabData =
-  //     prevTab && prevTab.id !== activeTab.id ? { [prevTab.id]: null } : {};
-
-  //   return {
-  //     ...state,
-  //     data: {
-  //       ...state.data,
-  //       [panel]: {
-  //         ...state.data[panel],
-  //         ...clearedActiveTabData
-  //       }
-  //     },
-  //     [panelName]: {
-  //       ...state[panelName],
-  //       activeTab,
-  //       page: initialState[panelName].page
-  //     }
-  //   };
-  // },
   [PROFILES__SET_ACTIVE_TAB](state, action) {
     const { panel, activeTab } = action.payload;
     let activePanel = panel;
