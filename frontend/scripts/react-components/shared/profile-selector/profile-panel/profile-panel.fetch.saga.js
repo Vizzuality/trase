@@ -1,5 +1,5 @@
 import { put, call, cancelled, fork, select } from 'redux-saga/effects';
-import getPanelName from 'utils/getProfilePanelName';
+import getPanelStepName from 'utils/getProfilePanelName';
 import {
   PROFILES__SET_PANEL_DATA,
   PROFILES__SET_PANEL_TABS,
@@ -18,7 +18,7 @@ import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
 export function* getProfilesData(subPanelName) {
   const profileSelector = yield select(state => state.profileSelector);
   if (!profileSelector.activeStep || profileSelector.activeStep === PROFILE_STEPS.types) return;
-  const panelName = subPanelName || getPanelName(profileSelector.activeStep);
+  const panelName = subPanelName || getPanelStepName(profileSelector.activeStep);
   const { page, activeTab } = profileSelector.panels[panelName];
   const tab = activeTab?.id;
   const params = getProfilesParams(profileSelector, panelName, { page });
@@ -61,11 +61,9 @@ export function* getProfilesData(subPanelName) {
   }
 }
 
-export function* getMoreProfilesData(dashboardElement, optionsType, activeTab, direction) {
-  const { page } = dashboardElement[`${dashboardElement.activePanelId}Panel`];
-  const params = getProfilesParams(dashboardElement, optionsType, {
-    page
-  });
+export function* getMoreProfilesData(profileSelector, panelName, activeTab, direction) {
+  const { page } = profileSelector.panels[panelName];
+  const params = getProfilesParams(profileSelector, panelName, { page });
   const task = yield fork(setLoadingSpinner, 350, setProfilesLoadingItems(true));
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);
@@ -74,7 +72,7 @@ export function* getMoreProfilesData(dashboardElement, optionsType, activeTab, d
     yield put({
       type: PROFILES__SET_MORE_PANEL_DATA,
       payload: {
-        key: optionsType,
+        key: panelName,
         tab: activeTab && activeTab.id,
         direction,
         data: data.data

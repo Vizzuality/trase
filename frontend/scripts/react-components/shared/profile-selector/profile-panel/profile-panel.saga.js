@@ -13,7 +13,7 @@ import {
   getProfilesTabs,
   getMoreProfilesData
 } from 'react-components/shared/profile-selector/profile-panel/profile-panel.fetch.saga';
-import getPanelName from 'utils/getProfilePanelName';
+import getPanelStepName, { getPanelName } from 'utils/getProfilePanelName';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 
@@ -58,13 +58,18 @@ export function* fetchDataOnPanelChange() {
   while (true) {
     const activePanel = yield take(PROFILES__SET_ACTIVE_STEP);
     const { activeStep } = activePanel.payload;
-    const panelName = getPanelName(activeStep);
+    const panelName = getPanelStepName(activeStep);
     const newPanelState = yield select(state => state.profileSelector);
     const changes = hasChanged(newPanelState);
     if (changes) {
       loaded = [previousPanelState.activeStep];
     }
-    if (!previousPanelState || !loaded.includes(panelName)) {
+
+    if (
+      !previousPanelState ||
+      (previousPanelState.data[activeStep] && previousPanelState.data[activeStep].length === 0) ||
+      !loaded.includes(panelName)
+    ) {
       if (task !== null) {
         yield cancel(task);
       }
@@ -120,15 +125,9 @@ function* fetchDataOnTabChange() {
 export function* onPageChange(action) {
   const { direction } = action.payload;
   const { profileSelector } = yield select();
-  const panelName = getPanelName(profileSelector.activeStep);
-  const { activeTab } = profileSelector[panelName];
-  yield fork(
-    getMoreProfilesData,
-    profileSelector,
-    profileSelector.activePanelId,
-    activeTab,
-    direction
-  );
+  const panelName = getPanelName(profileSelector);
+  const { activeTab } = profileSelector.panels[panelName];
+  yield fork(getMoreProfilesData, profileSelector, panelName, activeTab, direction);
 }
 
 function* fetchDataOnPageChange() {
