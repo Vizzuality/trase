@@ -56,9 +56,30 @@ if (REDUX_LOGGER_ENABLED) {
   middlewares.push(loggerMiddleware);
 }
 
-const composeEnhancers =
-  (process.env.NODE_ENV === 'development' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
-  compose;
+const reduxDevTools =
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+    maxAge: 10,
+    stateSanitizer: state => ({
+      ...state,
+      toolLinks: {
+        ...state.toolLinks,
+        data: 'NOT_SERIALIZED'
+      },
+      toolLayers: {
+        ...state.toolLayers,
+        data: 'NOT_SERIALIZED'
+      },
+      dashboardElement: {
+        ...state.dashboardElement,
+        data: 'NOT_SERIALIZED'
+      },
+      widgets: 'NOT_SERIALIZED',
+      staticContent: 'NOT_SERIALIZED'
+    })
+  });
+
+const composeEnhancers = (process.env.NODE_ENV === 'development' && reduxDevTools) || compose;
 
 const reducers = combineReducers({
   ...appReducers,

@@ -3,7 +3,7 @@ export default {
     mapDimensions: {},
     mapVectorData: null,
     mapDimensionsGroups: [],
-    mapContextualLayers: []
+    mapContextualLayers: {}
   },
   highlightedNodeCoordinates: null, // TODO: this should be local state only used for map tooltip
   isMapVisible: false,

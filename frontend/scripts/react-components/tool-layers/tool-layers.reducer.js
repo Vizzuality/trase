@@ -149,18 +149,20 @@ const toolLayersReducer = {
 };
 
 const toolLayersReducerTypes = PropTypes => ({
+  data: PropTypes.shape({
+    mapDimensions: PropTypes.object.isRequired,
+    mapVectorData: PropTypes.array,
+    mapDimensionsGroups: PropTypes.array.isRequired,
+    mapContextualLayers: PropTypes.object.isRequired
+  }).isRequired,
   highlightedNodeCoordinates: PropTypes.object,
   isMapVisible: PropTypes.bool,
   linkedGeoIds: PropTypes.arrayOf(PropTypes.string).isRequired,
-  mapContextualLayers: PropTypes.arrayOf(PropTypes.object).isRequired,
-  mapDimensions: PropTypes.object.isRequired,
-  mapDimensionsGroups: PropTypes.object.isRequired,
   mapLoading: PropTypes.bool,
-  mapVectorData: PropTypes.array,
   mapView: PropTypes.object,
   selectedMapBasemap: PropTypes.string,
   selectedMapContextualLayers: PropTypes.array,
-  selectedMapDimensions: PropTypes.array.isRequired
+  selectedMapDimensions: PropTypes.array
 });
 
 export default createReducer(toolLayersInitialState, toolLayersReducer, toolLayersReducerTypes);
