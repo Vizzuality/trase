@@ -6,7 +6,6 @@ import SourcesPanel from 'react-components/dashboard-element/dashboard-panel/sou
 function ProfileStepPanel(props) {
   const {
     setProfilesActiveItem,
-    setProfilesActiveItems,
     clearProfilesPanel,
     setProfilesActiveTab,
     getSearchResults,
@@ -42,9 +41,9 @@ function ProfileStepPanel(props) {
             activeSourceTab={sourcesPanel.activeTab}
             activeSourceItem={sourcesPanel.activeItems}
             onSelectCountry={item => setProfilesActiveItem(item, 'countries')}
-            onSelectSourceTab={item => setProfilesActiveTab(item, panelName)}
-            setSearchResult={item => setSearchResult(item, panelName)}
-            onSelectSourceValue={item => setProfilesActiveItems(item, panelName)}
+            onSelectSourceTab={item => setProfilesActiveTab(item, 'sources')}
+            setSearchResult={item => setSearchResult(item, 'sources')}
+            onSelectSourceValue={item => setProfilesActiveItem(item, 'sources')}
             nodeTypeRenderer={node => node.nodeType || 'Country of Production'}
             sources={data.sources[sourcesPanel.activeTab && sourcesPanel.activeTab.id] || []}
           />
@@ -57,7 +56,6 @@ function ProfileStepPanel(props) {
 
 ProfileStepPanel.propTypes = {
   setProfilesActiveItem: PropTypes.func.isRequired,
-  setProfilesActiveItems: PropTypes.func.isRequired,
   clearProfilesPanel: PropTypes.func.isRequired,
   setProfilesActiveTab: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,

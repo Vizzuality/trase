@@ -4,7 +4,6 @@ import { PROFILE_TYPES } from 'constants';
 import {
   setProfilesPage,
   setProfilesActiveItem,
-  setProfilesActiveItems,
   clearProfilesPanel,
   setProfilesActiveTab,
   getProfilesSearchResults,
@@ -47,7 +46,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   setProfilesPage,
   setProfilesActiveItem,
-  setProfilesActiveItems,
   clearProfilesPanel,
   getSearchResults: getProfilesSearchResults,
   setProfilesSearchResult: setProfilesActiveItemsWithSearch,
