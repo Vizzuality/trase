@@ -1,10 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import Feedback from 'react-components/shared/feedback';
 import 'styles/components/tool/map/map-basemaps.scss';
-import CookieBanner from 'react-components/shared/cookie-banner';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
-import FiltersNav from 'react-components/nav/filters-nav/filters-nav.container';
 import MapContainer from 'react-components/tool/map/map.container';
 import FlowContentContainer from 'react-components/tool/tool-content/tool-content.container';
 import TooltipContainer from 'react-components/tool/help-tooltip/help-tooltip.container';
@@ -193,10 +190,6 @@ const Tool = props => {
         <div className="l-tool">
           {renderVainillaComponents()}
 
-          <nav className="tool-nav">
-            <FiltersNav />
-          </nav>
-
           <div className="-hidden-on-mobile">
             <div className="veil js-veil" />
             <div className="c-modal js-modal" />
@@ -217,9 +210,7 @@ const Tool = props => {
             {renderSankey()}
             <TitlebarContainer />
           </div>
-          <CookieBanner />
         </div>
-        <Feedback />
       </>
     ),
     []

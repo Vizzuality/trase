@@ -348,6 +348,15 @@ const toolLinksReducer = {
 };
 
 const toolLinksReducerTypes = PropTypes => ({
+  data: PropTypes.shape({
+    columns: PropTypes.object,
+    nodes: PropTypes.object,
+    links: PropTypes.array,
+    nodeHeights: PropTypes.object,
+    nodeAttributes: PropTypes.object,
+    nodesByColumnGeoId: PropTypes.object
+  }).isRequired,
+  noLinksFound: PropTypes.bool,
   currentQuant: PropTypes.object,
   detailedView: PropTypes.bool,
   isSearchOpen: PropTypes.bool,
@@ -356,7 +365,7 @@ const toolLinksReducerTypes = PropTypes => ({
   highlightedNodeId: PropTypes.number,
   flowsLoading: PropTypes.bool,
   selectedBiomeFilterName: PropTypes.string,
-  selectedColumnsIds: PropTypes.arrayOf(PropTypes.number).isRequired,
+  selectedColumnsIds: PropTypes.arrayOf(PropTypes.number),
   selectedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedRecolorByName: PropTypes.string,
   selectedResizeByName: PropTypes.string

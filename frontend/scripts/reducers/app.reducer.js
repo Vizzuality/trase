@@ -131,7 +131,7 @@ const appReducerTypes = PropTypes => ({
   tooltips: PropTypes.object,
   tooltipCheck: PropTypes.number,
   sankeySize: PropTypes.arrayOf(PropTypes.number).isRequired,
-  selectedYears: PropTypes.arrayOf(PropTypes.number).isRequired
+  selectedYears: PropTypes.arrayOf(PropTypes.number)
 });
 
 export default createReducer(initialState, appReducer, appReducerTypes);

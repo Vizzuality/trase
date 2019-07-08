@@ -10,7 +10,6 @@ import abbreviateNumber from 'utils/abbreviateNumber';
 export default class {
   constructor() {
     this.el = document.querySelector('.js-map-legend');
-    this.el.addEventListener('click', this.toggleMapMenu);
     this.choro = document.querySelector('.js-map-legend-choro');
     this.context = document.querySelector('.js-map-legend-context');
     this.map = document.querySelector('.c-map');
@@ -45,6 +44,7 @@ export default class {
     this.highlightChoroplethBucket(props);
     this.selectMapDimensions(props);
     this.highlightChoroplethBucket(props);
+    this.el.addEventListener('click', this.toggleMapMenu);
   }
 
   onRemoved() {
