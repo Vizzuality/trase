@@ -7,7 +7,7 @@ import {
   clearProfilesPanel,
   setProfilesActiveTab,
   getProfilesSearchResults,
-  setProfilesActiveItemsWithSearch
+  setProfilesActiveItemWithSearch
 } from 'react-components/shared/profile-selector/profile-selector.actions';
 import { getActivePanelTabs } from 'react-components/shared/profile-selector/profile-panel/profile-panel.selectors';
 
@@ -49,7 +49,7 @@ const mapDispatchToProps = {
   setProfilesActiveItem,
   clearProfilesPanel,
   getSearchResults: getProfilesSearchResults,
-  setProfilesSearchResult: setProfilesActiveItemsWithSearch,
+  setProfilesSearchResult: setProfilesActiveItemWithSearch,
   getMoreItems: setProfilesPage,
   setProfilesActiveTab
 };

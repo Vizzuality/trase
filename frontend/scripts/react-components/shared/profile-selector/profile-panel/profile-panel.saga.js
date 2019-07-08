@@ -2,16 +2,18 @@ import { take, takeLatest, select, all, fork, cancel } from 'redux-saga/effects'
 import {
   PROFILES__SET_ACTIVE_STEP,
   PROFILES__SET_ACTIVE_ITEM,
-  PROFILES__SET_ACTIVE_ITEMS_WITH_SEARCH,
+  PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH,
   PROFILES__SET_ACTIVE_TAB,
   PROFILES__SET_PANEL_TABS,
-  PROFILES__SET_PANEL_PAGE
+  PROFILES__SET_PANEL_PAGE,
+  PROFILES__GET_SEARCH_RESULTS
 } from 'react-components/shared/profile-selector/profile-selector.actions';
 import { PROFILE_STEPS } from 'constants';
 import {
   getProfilesData,
   getProfilesTabs,
-  getMoreProfilesData
+  getMoreProfilesData,
+  fetchProfileSearchResults
 } from 'react-components/shared/profile-selector/profile-panel/profile-panel.fetch.saga';
 import getPanelStepName, { getPanelName } from 'utils/getProfilePanelName';
 import isEmpty from 'lodash/isEmpty';
@@ -114,7 +116,7 @@ export function* onTabChange() {
 
 function* fetchDataOnTabChange() {
   yield takeLatest(
-    [PROFILES__SET_ACTIVE_ITEMS_WITH_SEARCH, PROFILES__SET_ACTIVE_TAB, PROFILES__SET_PANEL_TABS],
+    [PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH, PROFILES__SET_ACTIVE_TAB, PROFILES__SET_PANEL_TABS],
     onTabChange
   );
 }
@@ -134,12 +136,27 @@ function* fetchDataOnPageChange() {
   yield takeLatest(PROFILES__SET_PANEL_PAGE, onPageChange);
 }
 
+/**
+ * Reads the query from the DASHBOARD_ELEMENT__GET_SEARCH_RESULTS action
+ * and calls fetchProfileSearchResults to fetch the data.
+ */
+export function* getSearchResults(action) {
+  const profileSelector = yield select(state => state.profileSelector);
+  const { query } = action.payload;
+  yield fork(fetchProfileSearchResults, profileSelector, query);
+}
+
+function* fetchDataOnSearch() {
+  yield takeLatest(PROFILES__GET_SEARCH_RESULTS, getSearchResults);
+}
+
 export default function* profilePanelSaga() {
   const sagas = [
     fetchDataOnPanelChange,
     fetchDataOnItemChange,
     fetchDataOnTabChange,
-    fetchDataOnPageChange
+    fetchDataOnPageChange,
+    fetchDataOnSearch
   ];
   yield all(sagas.map(saga => fork(saga)));
 }

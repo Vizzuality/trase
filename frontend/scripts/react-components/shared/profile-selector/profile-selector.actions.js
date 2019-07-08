@@ -12,7 +12,7 @@ export const PROFILES__SET_PANEL_PAGE = 'PROFILES__SET_PANEL_PAGE';
 export const PROFILES__SET_LOADING_ITEMS = 'PROFILES__SET_LOADING_ITEMS';
 export const PROFILES__GET_SEARCH_RESULTS = 'PROFILES__GET_SEARCH_RESULTS';
 export const PROFILES__SET_SEARCH_RESULTS = 'PROFILES__SET_SEARCH_RESULTS';
-export const PROFILES__SET_ACTIVE_ITEMS_WITH_SEARCH = 'PROFILES__SET_ACTIVE_ITEMS_WITH_SEARCH';
+export const PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH = 'PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH';
 
 export const goToNodeProfilePage = (node, defaultYear) => dispatch =>
   dispatch({
@@ -49,8 +49,8 @@ export const setProfilesActiveItem = (activeItem, panel) => ({
   }
 });
 
-export const setProfilesActiveItemsWithSearch = (activeItems, panel) => ({
-  type: PROFILES__SET_ACTIVE_ITEMS_WITH_SEARCH,
+export const setProfilesActiveItemWithSearch = (activeItems, panel) => ({
+  type: PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH,
   payload: {
     panel,
     activeItems

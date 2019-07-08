@@ -10,12 +10,11 @@ import {
   PROFILES__SET_SEARCH_RESULTS,
   PROFILES__CLEAR_PANEL,
   PROFILES__SET_ACTIVE_TAB,
-  PROFILES__SET_ACTIVE_ITEMS_WITH_SEARCH
+  PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH
 } from 'react-components/shared/profile-selector/profile-selector.actions';
 import isEmpty from 'lodash/isEmpty';
 import fuzzySearch from 'utils/fuzzySearch';
 import getPanelStepName, { getPanelName } from 'utils/getProfilePanelName';
-import updateItems from 'utils/updatePanelItems';
 
 const initialState = {
   activeStep: null,
@@ -231,8 +230,8 @@ const profileRootReducer = {
   },
   [PROFILES__SET_SEARCH_RESULTS](state, action) {
     const { data, query } = action.payload;
-    let panelName = getPanelStepName(state.activeStep);
-    if (state.activeStep === 'sources' && isEmpty(state.panels.countries.activeItems)) {
+    let panelName = getPanelName(state);
+    if (panelName === 'sources' && isEmpty(state.panels.countries.activeItems)) {
       panelName = 'countries';
     }
     return {
@@ -246,13 +245,12 @@ const profileRootReducer = {
       }
     };
   },
-  [PROFILES__SET_ACTIVE_ITEMS_WITH_SEARCH](state, action) {
+  [PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH](state, action) {
     const { panel, activeItems: selectedItem } = action.payload;
     const prevTab = state.panels[panel].activeTab;
     const clearedActiveTabData = prevTab ? { [prevTab.id]: null } : {};
     const activeTab =
       state.tabs[panel] && state.tabs[panel].find(tab => tab.id === selectedItem.nodeTypeId);
-
     return {
       ...state,
       data: {
@@ -266,7 +264,7 @@ const profileRootReducer = {
         ...state.panels,
         [panel]: {
           ...state.panels[panel],
-          activeItems: updateItems(state.panels[panel].activeItems, selectedItem),
+          activeItems: { [selectedItem.id]: selectedItem },
           activeTab,
           page: initialState.panels[panel].page
         }
