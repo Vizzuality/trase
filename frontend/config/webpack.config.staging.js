@@ -2,6 +2,10 @@ const path = require('path');
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const env = require('../env.test');
+
+Object.assign(process.env, env);
+
 const webpackBaseConfig = require('./webpack.config');
 
 module.exports = merge(webpackBaseConfig, {
@@ -10,7 +14,11 @@ module.exports = merge(webpackBaseConfig, {
   plugins: [
     new MiniCssExtractPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin(),
-    new webpack.HashedModuleIdsPlugin()
+    new webpack.HashedModuleIdsPlugin(),
+    new webpack.DefinePlugin({
+      ...env,
+      NODE_ENV: 'production'
+    })
   ],
   module: {
     rules: [
@@ -33,7 +41,7 @@ module.exports = merge(webpackBaseConfig, {
     proxy: [
       {
         context: ['/content', '/system'],
-        target: process.env.API_V3_URL
+        target: env.API_V3_URL
       }
     ]
   }

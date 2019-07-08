@@ -19,9 +19,9 @@ describe('test prepareWidget helper function', () => {
 
   getURLFromParams.mockImplementation(() => someUrl);
 
-  it('should return if there is a cache hit', () => {
+  it('should return false if there is a cache hit', () => {
     const result = prepareWidget(someEndpoints, { endpoint: someEndpoint, params: someParams });
-    expect(result).toEqual({ cacheMiss: false, key: someKey, url: null });
+    expect(result).toEqual({ cacheMiss: false, key: someKey, url: someUrl });
   });
 
   it('should return a url if endpoint is undefined', () => {
