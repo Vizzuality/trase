@@ -30,10 +30,6 @@ ActiveAdmin.register Api::V3::Context, as: 'Context' do
       link_to "#{context.recolor_by_attributes.length} attributes",
               admin_context_recolor_by_attributes_path(context)
     end
-    column 'Top profiles' do |context|
-      link_to "#{context.top_profiles.length} top profiles",
-              admin_context_top_profiles_path(context)
-    end
     actions
   end
 
@@ -44,12 +40,13 @@ ActiveAdmin.register Api::V3::Context, as: 'Context' do
       row :created_at
       row('Resize by attributes') { |context| link_to('Resize by attributes', admin_context_resize_by_attributes_path(context)) }
       row('Recolor by attributes') { |context| link_to('Recolor by attributes', admin_context_recolor_by_attributes_path(context)) }
-      row('Top profiles') { |property| link_to('Top profiles', admin_context_top_profiles_path(context_id: property.id)) }
     end
   end
 
   config.filters = false
 end
+
+# Contexts under a second tab - Profiles
 
 ActiveAdmin.register Api::V3::Context, as: 'Top Profiles For Context' do
   menu parent: 'Profiles', priority: 2
