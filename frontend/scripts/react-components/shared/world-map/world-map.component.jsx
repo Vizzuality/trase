@@ -12,21 +12,26 @@ import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.co
 import cx from 'classnames';
 import formatValue from 'utils/formatValue';
 import xor from 'lodash/xor';
+import greatCircle from '@turf/great-circle';
+import { geoPath } from 'd3-geo';
+import projections from 'react-simple-maps/lib/projections';
 
 import 'scripts/react-components/shared/world-map/world-map.scss';
 
 class WorldMap extends React.PureComponent {
-  static buildCurves(start, end, arc) {
-    const x0 = start[0];
-    const x1 = end[0];
-    const y0 = start[1];
-    const y1 = end[1];
-    const curve = {
-      forceUp: `${x1} ${y0}`,
-      forceDown: `${x0} ${y1}`
-    }[arc.curveStyle];
-
-    return `M ${start.join(' ')} Q ${curve} ${end.join(' ')}`;
+  static buildCurves(s, e, line) {
+    const arc = greatCircle(line.coordinates.start, line.coordinates.end, { offset: 100 });
+    const projection = projections(
+      800,
+      450,
+      {
+        scale: 145
+      },
+      'robinson'
+    );
+    const pathMaker = geoPath().projection(projection);
+    const path = pathMaker(arc);
+    return path;
   }
 
   static isDestinationCountry(iso, countries) {
@@ -147,7 +152,7 @@ class WorldMap extends React.PureComponent {
           style={{ width: '100%', height: 'auto' }}
           projectionConfig={{ scale: 145 }}
         >
-          <ZoomableGroup disablePanning center={[20, 0]}>
+          <ZoomableGroup center={[0, 0]}>
             <Geographies geography="/vector_layers/WORLD.topo.json" disableOptimization>
               {this.renderGeographies}
             </Geographies>

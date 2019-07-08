@@ -1,7 +1,5 @@
 import { createSelector } from 'reselect';
 import { COUNTRIES_COORDINATES } from 'scripts/countries';
-import bbox from '@turf/bbox';
-import lineString from 'turf-linestring';
 import { getTopNodesKey } from 'react-components/explore/explore.actions';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 
@@ -55,25 +53,6 @@ export const getWorldMapFlows = createSelector(
       console.warn('World map flows are missing geoids. Check your database.');
     }
 
-    const [minX, , maxX] = bbox(lineString(contextFlowsWithCoordinates.map(f => f.coordinates)));
-    const medianX = (maxX + minX) / 2;
-    const originLeftOfBbox = originCoordinates[0] < medianX;
-    const pointOfControl = {
-      x: originLeftOfBbox ? minX - 10 : maxX + 10
-    };
-
-    const getCurveStyle = destination => {
-      if (destination[0] < pointOfControl.x) {
-        // left
-        return 'forceDown';
-      }
-      // right
-      return 'forceUp';
-    };
-
-    return contextFlowsWithCoordinates.map(destination => ({
-      ...destination,
-      curveStyle: getCurveStyle(destination.coordinates)
-    }));
+    return contextFlowsWithCoordinates;
   }
 );
