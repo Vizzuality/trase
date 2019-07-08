@@ -4,10 +4,11 @@ import SimpleModal from 'react-components/shared/simple-modal/simple-modal.compo
 import { PROFILE_STEPS } from 'constants';
 import ProfilePanel from 'react-components/shared/profile-selector/profile-panel';
 import StepsTracker from 'react-components/shared/steps-tracker';
+import ProfilePanelFooter from 'react-components/shared/profile-selector/profile-panel/profile-panel-footer.component';
 import 'react-components/shared/profile-selector/profile-selector.scss';
 
 function ProfilesSelectorModal(props) {
-  const { activeStep, onClose, setStep } = props;
+  const { activeStep, onClose, setStep, isDisabled } = props;
   const showBackButton = activeStep > PROFILE_STEPS.types;
   const goToProfiles = onClose; // TODO: Go to profiles page
   const onContinue =
@@ -16,14 +17,17 @@ function ProfilesSelectorModal(props) {
   return (
     <SimpleModal isOpen={isOpen} onRequestClose={onClose}>
       <div className="c-profile-selector">
-        <StepsTracker
-          steps={['Type', 'Profile', 'Commodity'].map(label => ({ label }))}
-          activeStep={activeStep || 0}
-        />
-        <ProfilePanel
-          step={activeStep}
-          onContinue={onContinue}
+        <div className="profile-content">
+          <StepsTracker
+            steps={['Type', 'Profile', 'Commodity'].map(label => ({ label }))}
+            activeStep={activeStep || 0}
+          />
+          <ProfilePanel step={activeStep} />
+        </div>
+        <ProfilePanelFooter
           onBack={showBackButton ? () => setStep(activeStep - 1) : undefined}
+          onContinue={onContinue}
+          isDisabled={isDisabled}
         />
       </div>
     </SimpleModal>
@@ -32,6 +36,7 @@ function ProfilesSelectorModal(props) {
 
 ProfilesSelectorModal.propTypes = {
   activeStep: PropTypes.number,
+  isDisabled: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   setStep: PropTypes.func.isRequired
 };

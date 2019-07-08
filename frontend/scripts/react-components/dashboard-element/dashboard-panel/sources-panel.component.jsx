@@ -7,6 +7,7 @@ import Tabs from 'react-components/shared/tabs/tabs.component';
 import Text from 'react-components/shared/text/text.component';
 import capitalize from 'lodash/capitalize';
 import Accordion from '../../shared/accordion/accordion.component';
+import 'react-components/dashboard-element/dashboard-panel/sources-panel.scss';
 
 function SourcesPanel(props) {
   const {
@@ -38,9 +39,9 @@ function SourcesPanel(props) {
   const activeCountryName =
     hasActiveCountryItems && capitalize(Object.values(activeCountryItem)[0].name);
   return (
-    <React.Fragment>
+    <div className="c-sources-panel">
       <GridList
-        className="dashboard-panel-pill-list"
+        className="sources-panel-pill-list"
         height={Math.min(200, Math.ceil(countries.length / 5) * 50)}
         width={950}
         columnWidth={190}
@@ -64,13 +65,13 @@ function SourcesPanel(props) {
           defaultValue={Object.keys(activeSourceItem).length > 0 || sourcesOpen}
           onToggle={toggleSourcesOpen}
         >
-          <Text color="grey-faded" className="dashboard-panel-sources-subtitle">
+          <Text color="grey-faded" className="sources-panel-sources-subtitle">
             You can choose several places of the same category:
           </Text>
           <SearchInput
             variant="bordered"
             size="sm"
-            className="dashboard-panel-search"
+            className="sources-panel-search"
             items={searchSources}
             placeholder="Search place"
             onSelect={item => (!item.nodeType ? onSelectCountry(item) : setSearchResult(item))}
@@ -85,7 +86,7 @@ function SourcesPanel(props) {
             getTabId={item => item.id}
           >
             <GridList
-              className="dashboard-panel-pill-list"
+              className="sources-panel-pill-list"
               items={sources}
               height={sources.length > 5 ? 200 : 50}
               width={950}
@@ -109,7 +110,7 @@ function SourcesPanel(props) {
           </Tabs>
         </Accordion>
       )}
-    </React.Fragment>
+    </div>
   );
 }
 
