@@ -1,4 +1,4 @@
-import { take, takeLatest, select, all, fork, cancel } from 'redux-saga/effects';
+import { take, takeLatest, select, all, fork, cancel, put } from 'redux-saga/effects';
 import {
   PROFILES__SET_ACTIVE_STEP,
   PROFILES__SET_ACTIVE_ITEM,
@@ -6,7 +6,8 @@ import {
   PROFILES__SET_ACTIVE_TAB,
   PROFILES__SET_PANEL_TABS,
   PROFILES__SET_PANEL_PAGE,
-  PROFILES__GET_SEARCH_RESULTS
+  PROFILES__GET_SEARCH_RESULTS,
+  PROFILES__CLEAR_PANELS
 } from 'react-components/shared/profile-selector/profile-selector.actions';
 import { PROFILE_STEPS } from 'constants';
 import {
@@ -104,13 +105,11 @@ function* fetchDataOnItemChange() {
  */
 export function* onTabChange() {
   const { profileSelector } = yield select();
-  const activePanel = profileSelector.activeStep;
-  const activeType =
-    activePanel === PROFILE_STEPS.profiles && profileSelector.panels.types.activeItems.type;
-  const { activeTab } = profileSelector.panels[activeType] || {};
+  const panelName = getPanelName(profileSelector);
+  const { activeTab } = profileSelector.panels[panelName] || {};
   const currentTabId = activeTab && activeTab.id;
   if (!profileSelector.data.sources[currentTabId]) {
-    yield fork(getProfilesData, activeType);
+    yield fork(getProfilesData, panelName);
   }
 }
 
@@ -137,6 +136,44 @@ function* fetchDataOnPageChange() {
 }
 
 /**
+ * Listens to actions that remove or clear panel items and deletes all subsequent selections if the panel is changed
+ */
+
+export function* onChangePanel(action) {
+  const { panel } = action.payload;
+  const profileSelector = yield select(state => state.profileSelector);
+  let panelsToClear = [];
+  switch (panel) {
+    case 'types':
+      panelsToClear = ['companies', 'countries', 'sources', 'commodities'];
+      break;
+    case 'countries':
+      panelsToClear = ['sources', 'commodities'];
+      break;
+    case 'sources':
+    case 'companies':
+      panelsToClear = ['commodities'];
+      break;
+    default:
+      break;
+  }
+
+  panelsToClear = panelsToClear.filter(p => !isEmpty(profileSelector.panels[p].activeItems));
+  if (panelsToClear.length > 0) {
+    yield put({
+      type: PROFILES__CLEAR_PANELS,
+      payload: {
+        panels: panelsToClear
+      }
+    });
+  }
+}
+
+function* clearSubsequentPanels() {
+  yield takeLatest([PROFILES__SET_ACTIVE_ITEM], onChangePanel);
+}
+
+/**
  * Reads the query from the DASHBOARD_ELEMENT__GET_SEARCH_RESULTS action
  * and calls fetchProfileSearchResults to fetch the data.
  */
@@ -156,7 +193,8 @@ export default function* profilePanelSaga() {
     fetchDataOnItemChange,
     fetchDataOnTabChange,
     fetchDataOnPageChange,
-    fetchDataOnSearch
+    fetchDataOnSearch,
+    clearSubsequentPanels
   ];
   yield all(sagas.map(saga => fork(saga)));
 }

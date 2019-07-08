@@ -96,7 +96,7 @@ export const getProfilesSearchResults = query => ({
 
 export const getProfilesParams = (state, step, options = {}) => {
   const { panels } = state;
-  const { countries } = panels;
+  const { countries, sources, companies } = panels;
   const { page } = options;
   const activeItemParams = panel => Object.keys(panel.activeItems).join();
   const params = {
@@ -107,6 +107,16 @@ export const getProfilesParams = (state, step, options = {}) => {
 
   if (step === 'sources') {
     params.countries_ids = activeItemParams(countries);
+  }
+  if (step === 'commodities') {
+    if (sources) {
+      params.sources_ids = activeItemParams(sources);
+    } else if (countries) {
+      params.countries_ids = activeItemParams(countries);
+    }
+    if (companies) {
+      params.companies_ids = activeItemParams(companies);
+    }
   }
 
   return params;
