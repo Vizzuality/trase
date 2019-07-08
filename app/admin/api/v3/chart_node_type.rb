@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::ChartNodeType, as: 'ChartNodeType' do
-  menu parent: 'Profiles', priority: 4
+  menu parent: 'Profiles', priority: 6
 
   includes [chart: {profile: {context_node_type: [:context, :node_type]}}]
 

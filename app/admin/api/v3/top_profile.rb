@@ -1,6 +1,6 @@
 ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
   belongs_to :context, class_name: 'Api::V3::Context'
-  permit_params :context_id, :node_id
+  permit_params :context_id, :node_id, :top_profile_image_id
   config.filters = false
 
   # before creating add summary, year and profile_type to top profile record
@@ -14,31 +14,34 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
 
     def create
       super do |success, _failure|
-        success.html { redirect_to admin_context_top_profiles_path(parent) }
+        success.html { redirect_to edit_admin_context_top_profile_path(resource.context_id, resource.id) }
       end
     end
 
     def update
+      top_profile_image_id = params[:resource][:top_profile_image_id].to_i
+      resource.top_profile_image_id = top_profile_image_id
+      resource.save
       super do |success, _failure|
         success.html { redirect_to admin_context_top_profiles_path(parent) }
       end
     end
 
     def derive_top_profile_details(top_profile)
-      profile_type = top_profile.node.node_type.context_node_types.find_by(context_id: top_profile.context_id).profile.name
-      top_profile.profile_type = profile_type
-      year = top_profile.context.years.max
-      top_profile.year = year
-      service = "Api::V3::#{profile_type.pluralize.capitalize}::BasicAttributes".constantize
-      top_profile.summary = service.new(
-        top_profile.context, top_profile.node, year
-      ).call[:summary]
+      Api::V3::TopProfiles::DeriveTopProfileDetails.call(top_profile)
     end
   end
 
   index do
     column('Node name') { |property| property&.node&.name }
     column('Node type') { |property| property&.node&.node_type }
+    column('Image') do |property|
+      if property.top_profile_image.nil?
+        'No image assigned'
+      else
+        image_tag property&.top_profile_image&.image&.url(:small)
+      end
+    end
     actions
   end
 
@@ -53,11 +56,28 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
       select_options
 
     f.semantic_errors
-    inputs do
-      input :node, as: :select, required: true,
-                   collection: available_nodes
+    if params[:action] == 'edit'
+      available_top_profile_images =
+        Api::V3::TopProfileImage.includes(:top_profiles).where(
+          commodity_id: resource.context.commodity_id,
+          profile_type: resource.profile_type,
+          top_profiles: {top_profile_image_id: nil}
+        )
+      render partial: 'admin/form_select_top_profile_images', locals: {
+        available_top_profile_images: available_top_profile_images,
+        top_profile_image_id: resource.top_profile_image_id,
+        node_name: resource.node.name,
+        node_type: resource.node.node_type.name,
+        commodity: resource.context.commodity.name,
+        profile_type: resource.profile_type
+      }
+    else
+      inputs do
+        input :node, as: :select, required: true,
+                     collection: available_nodes
+        f.actions
+      end
     end
-    f.actions
   end
 
   show do

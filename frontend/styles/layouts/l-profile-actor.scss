@@ -45,12 +45,14 @@ $large-line-chart-width: 840px;
   }
 
   .c-overall-info {
-
     .stat-item {
       .value {
+        margin-top: 5px;
+
         .icon {
           width: 16px;
           height: 17px;
+          margin-left: 0;
           margin-top: 5px;
         }
       }
@@ -65,18 +67,16 @@ $large-line-chart-width: 840px;
     }
   }
 
-  .c-button-links {
-    padding: 49px 0 46px;
+  .c-links-widget {
+    padding-top: 40px;
+    padding-bottom: 40px;
+
+    .links-widget-title {
+      margin-bottom: 20px;
+    }
 
     @media print {
       display: none;
-    }
-
-    @media screen and (min-width: $breakpoint-foundation-small)
-                  and (max-width: $breakpoint-foundation-medium) {
-      > .row .columns:not(:last-child) {
-        padding-right: 0;
-      }
     }
   }
 

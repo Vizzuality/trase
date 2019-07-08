@@ -11,7 +11,6 @@ import kebabCase from 'lodash/kebabCase';
 import './dropdown.scss';
 import './dropdown-nav.variant.scss';
 import './dropdown-sentence.variant.scss';
-import './dropdown-profiles.variant.scss';
 import './dropdown-column.variant.scss';
 
 function Dropdown(props) {
@@ -118,7 +117,7 @@ function Dropdown(props) {
 
     const labelProps =
       {
-        profiles: { size: 'rg', color: 'grey-faded' },
+        profiles: { size: 'rg', color: 'grey' },
         nav: { color: 'grey-faded' }
       }[variant] || {};
 

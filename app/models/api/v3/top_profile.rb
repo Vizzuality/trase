@@ -2,19 +2,25 @@
 #
 # Table name: top_profiles
 #
-#  id         :bigint(8)        not null, primary key
-#  context_id :bigint(8)        not null
-#  node_id    :bigint(8)        not null
+#  id                   :bigint(8)        not null, primary key
+#  context_id           :bigint(8)        not null
+#  node_id              :bigint(8)        not null
+#  summary              :text
+#  year                 :integer
+#  profile_type         :string
+#  top_profile_image_id :bigint(8)
 #
 # Indexes
 #
-#  index_top_profiles_on_context_id  (context_id)
-#  index_top_profiles_on_node_id     (node_id)
+#  index_top_profiles_on_context_id            (context_id)
+#  index_top_profiles_on_node_id               (node_id)
+#  index_top_profiles_on_top_profile_image_id  (top_profile_image_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (context_id => contexts.id)
-#  fk_rails_...  (node_id => nodes.id)
+#  fk_rails_...  (context_id => contexts.id) ON DELETE => cascade ON UPDATE => cascade
+#  fk_rails_...  (node_id => nodes.id) ON DELETE => cascade ON UPDATE => cascade
+#  fk_rails_...  (top_profile_image_id => top_profile_images.id)
 #
 
 module Api
@@ -22,6 +28,7 @@ module Api
     class TopProfile < YellowTable
       belongs_to :context
       belongs_to :node
+      belongs_to :top_profile_image, optional: true
 
       def self.blue_foreign_keys
         [

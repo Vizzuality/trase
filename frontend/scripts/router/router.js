@@ -149,6 +149,7 @@ export const routes = {
 const config = {
   basename: '/',
   notFoundPath: '/404',
+  initialDispatch: false,
   querySerializer: {
     parse: url => qs.parse(url, { arrayFormat: 'bracket', parseNumbers: true }),
     stringify: params => qs.stringify(params, { arrayFormat: 'bracket' })

@@ -54,6 +54,7 @@
   },
   "globals": {
     "NODE_ENV_DEV": true,
+    "ENABLE_INTERSECTION_OBSERVER": true,
     "API_V3_URL": true,
     "ENABLE_DASHBOARDS": true,
     "DISABLE_PROFILES": true,
@@ -75,7 +76,6 @@
     "PERF_TEST": true,
     "REDUX_LOGGER_ENABLED": true,
     "USE_CANVAS_MAP": true,
-    "USE_PLAIN_URL_STATE": true,
     "USE_SERVICE_WORKER": true,
     "NAMED_MAPS_ENV": true,
     "GFW_WIDGETS_BASE_URL": true,

@@ -25,7 +25,6 @@ const mapLayerToLink = layer => (
 );
 
 const renderLayers = layers => {
-  console.log('l', layers);
   if (layers.palmOil) {
     return (
       <div className="row">

@@ -1,7 +1,7 @@
 @import '../../../../styles/settings';
 @import '../../../../styles/mixins';
 
-.c-area-table {
+.c-profiles-table {
   padding: 56px 0 42px 0;
 
   > .title {
@@ -81,21 +81,26 @@
 
           .node-link {
             display: inline-flex;
-            position: absolute;
 
             @media print {
               display: none;
             }
           }
 
-          .node-link > .icon {
-            margin: 0 0 0 8px;
-            cursor: pointer;
-            fill: rgba($charcoal-grey, .2);
-            vertical-align: text-bottom;
+          .node-link {
+            .icon-outside-link {
+              margin: 0 10px 0 0;
+              vertical-align: text-bottom;
+              cursor: pointer;
+              fill: rgba($charcoal-grey, .2);
+            }
 
             &:hover {
-              fill: $charcoal-grey;
+              text-decoration: underline;
+
+              .icon-outside-link {
+                fill: $charcoal-grey;
+              }
             }
           }
 
@@ -109,25 +114,11 @@
           min-width: 70px;
 
           > .unit {
-
-            &::after {
-              display: flex;
-              position: absolute;
-              right: 0;
-              top: 0;
-              transform: translateX(100%);
-
-              color: rgba($charcoal-grey, .6);
-              content: attr(data-unit);
-            }
+            color: rgba($charcoal-grey, .6);
           }
         }
       }
     }
-  }
-
-  .icon-check {
-    fill: rgba($charcoal-grey, 0.2);
   }
 
   .table-container {

@@ -31,7 +31,7 @@ describe('Profile place - Full data', () => {
   test('Summary widget loads successfully', async () => {
     expect.assertions(3);
     await testProfileSummary(page, {
-      titles: ['sorriso', 'soy'],
+      params: ['sorriso', 'soy'],
       profileType: 'place',
       titlesLength: 3
     });

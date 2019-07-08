@@ -5437,6 +5437,39 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: top_profile_images; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.top_profile_images (
+    id bigint NOT NULL,
+    commodity_id bigint,
+    image_file_name character varying,
+    image_content_type character varying,
+    profile_type character varying,
+    image_file_size integer
+);
+
+
+--
+-- Name: top_profile_images_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.top_profile_images_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: top_profile_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.top_profile_images_id_seq OWNED BY public.top_profile_images.id;
+
+
+--
 -- Name: top_profiles; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -5446,7 +5479,8 @@ CREATE TABLE public.top_profiles (
     node_id bigint NOT NULL,
     summary text,
     year integer,
-    profile_type character varying
+    profile_type character varying,
+    top_profile_image_id bigint
 );
 
 
@@ -5992,6 +6026,13 @@ ALTER TABLE ONLY public.resize_by_attributes ALTER COLUMN id SET DEFAULT nextval
 --
 
 ALTER TABLE ONLY public.resize_by_quants ALTER COLUMN id SET DEFAULT nextval('public.resize_by_quants_id_seq'::regclass);
+
+
+--
+-- Name: top_profile_images id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.top_profile_images ALTER COLUMN id SET DEFAULT nextval('public.top_profile_images_id_seq'::regclass);
 
 
 --
@@ -7079,6 +7120,14 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: top_profile_images top_profile_images_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.top_profile_images
+    ADD CONSTRAINT top_profile_images_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: top_profiles top_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8151,6 +8200,13 @@ CREATE INDEX ind_country_properties_ind_id_idx ON public.ind_country_properties 
 
 
 --
+-- Name: index_top_profile_images_on_commodity_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_top_profile_images_on_commodity_id ON public.top_profile_images USING btree (commodity_id);
+
+
+--
 -- Name: index_top_profiles_on_context_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8162,6 +8218,13 @@ CREATE INDEX index_top_profiles_on_context_id ON public.top_profiles USING btree
 --
 
 CREATE INDEX index_top_profiles_on_node_id ON public.top_profiles USING btree (node_id);
+
+
+--
+-- Name: index_top_profiles_on_top_profile_image_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_top_profiles_on_top_profile_image_id ON public.top_profiles USING btree (top_profile_image_id);
 
 
 --
@@ -8974,6 +9037,14 @@ ALTER TABLE ONLY public.recolor_by_inds
 
 
 --
+-- Name: top_profile_images fk_rails_29f1862b03; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.top_profile_images
+    ADD CONSTRAINT fk_rails_29f1862b03 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id);
+
+
+--
 -- Name: chart_inds fk_rails_2c8eebb539; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9470,6 +9541,14 @@ ALTER TABLE ONLY public.chart_node_types
 
 
 --
+-- Name: top_profiles fk_rails_f4a644ec90; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.top_profiles
+    ADD CONSTRAINT fk_rails_f4a644ec90 FOREIGN KEY (top_profile_image_id) REFERENCES public.top_profile_images(id);
+
+
+--
 -- Name: dashboards_inds fk_rails_f4e97b1eab; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9556,7 +9635,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190618131945'),
 ('20190621101736'),
 ('20190624114103'),
-('20190625110206');
-
+('20190625110206'),
+('20190701165705'),
+('20190701172702'),
+('20190702090231'),
+('20190702112018'),
+('20190702132100');
 
 

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ActorSummary from 'react-components/profiles/actor-summary.component';
 import PlaceSummary from 'react-components/profiles/place-summary.component';
-import ButtonLinks from 'react-components/profiles/button-links/button-links.component';
 import Widget from 'react-components/widgets/widget.component';
 import { GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
@@ -15,7 +14,6 @@ function SummaryWidget(props) {
     context,
     profileType,
     onYearChange,
-    scrollTo,
     tooltips,
     profileMetadata
   } = props;
@@ -60,13 +58,6 @@ function SummaryWidget(props) {
                 profileMetadata={profileMetadata}
               />
             )}
-            <ButtonLinks
-              year={year}
-              nodeId={nodeId}
-              scrollTo={scrollTo}
-              contextId={context.id}
-              data={data[GET_NODE_SUMMARY_URL]}
-            />
           </React.Fragment>
         );
       }}
@@ -80,7 +71,6 @@ SummaryWidget.propTypes = {
   tooltips: PropTypes.object,
   profileMetadata: PropTypes.object,
   year: PropTypes.number.isRequired,
-  scrollTo: PropTypes.func.isRequired,
   nodeId: PropTypes.number.isRequired,
   onYearChange: PropTypes.func.isRequired,
   profileType: PropTypes.string.isRequired

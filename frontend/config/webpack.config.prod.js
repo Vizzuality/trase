@@ -1,3 +1,4 @@
+require('dotenv').config({ silent: true });
 const webpack = require('webpack');
 const merge = require('webpack-merge');
 const CleanWebpackPlugin = require('clean-webpack-plugin');

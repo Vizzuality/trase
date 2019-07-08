@@ -228,7 +228,7 @@ config.namespace :admin do |admin|
     menu.add label: 'Content', priority: 2
     menu.add label: 'Database', priority: 4
     menu.add label: 'General', priority: 5
-    menu.add label: 'Map', priority: 6
+    menu.add label: 'Sankey & Map', priority: 6
     menu.add label: 'Data Download', priority: 7
     menu.add label: 'Dashboards', priority: 8
     menu.add label: 'Profiles', priority: 9

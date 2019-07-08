@@ -1,0 +1,27 @@
+// IMPORTANT: update .travis.yml when adding new stuff
+// DON'T ADD SECRETS HERE
+
+module.exports = {
+  PORT: 3000,
+  API_V3_URL: '//0.0.0.0:3000',
+  NAMED_MAPS_ENV: 'development',
+  GFW_WIDGETS_BASE_URL: undefined,
+  NODE_ENV_DEV: false,
+
+  // feature flags
+  USE_SERVICE_WORKER: true,
+  USE_CANVAS_MAP: true,
+  ALWAYS_DISPLAY_DASHBOARD_INFO: true,
+  DATA_DOWNLOAD_ENABLED: true,
+  DATA_FORM_ENABLED: true,
+  ENABLE_DASHBOARDS: true,
+  DISABLE_PROFILES: false,
+  ENABLE_LOGISTICS_MAP: true,
+  ENABLE_LEGACY_TOOL_SEARCH: false,
+  SHOW_WORLD_MAP_IN_EXPLORE: false,
+  DISABLE_MULTIPLE_CONTEXT_PROFILES: false,
+  ENABLE_COOKIE_BANNER: true,
+  INDONESIA_LOGISTICS_MAP_ACTIVE: false,
+  NEW_PROFILES_PAGE: true,
+  ENABLE_INTERSECTION_OBSERVER: false
+};

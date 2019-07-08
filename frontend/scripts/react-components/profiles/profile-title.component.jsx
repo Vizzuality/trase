@@ -36,11 +36,11 @@ function ProfileTitle(props) {
     if (i > 0) {
       if (hasMustache) {
         return (
-          <>
+          <React.Fragment key={`mustache-spacer${part}-${i}`}>
             {' '}
             {mustache}
             {}
-          </>
+          </React.Fragment>
         );
       }
       return ` ${part}`;
@@ -50,7 +50,7 @@ function ProfileTitle(props) {
 }
 
 ProfileTitle.propTypes = {
-  template: PropTypes.string.isRequired,
+  template: PropTypes.string,
   summary: PropTypes.object.isRequired
 };
 

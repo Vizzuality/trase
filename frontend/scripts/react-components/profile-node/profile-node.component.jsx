@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SummaryWidget from 'react-components/profile-node/profile-node-widgets/summary-widget.component';
+import LinksWidget from 'react-components/profile-node/profile-node-widgets/links-widget.component';
 import SustainabilityTableWidget from 'react-components/profile-node/profile-node-widgets/sustainability-table-widget.component';
 import DeforestationWidget from 'react-components/profile-node/profile-node-widgets/deforestation-widget.component';
 import TopConsumersWidget from 'react-components/profile-node/profile-node-widgets/top-consumers-widget.component';
@@ -8,8 +9,7 @@ import ImportingCompaniesWidget from 'react-components/profile-node/profile-node
 import TopDestinationsWidget from 'react-components/profile-node/profile-node-widgets/top-destinations-widget.component';
 import GfwWidget from 'react-components/profile-node/profile-node-widgets/gfw-widget.component';
 import ErrorCatch from 'react-components/shared/error-catch.component';
-import Text from 'react-components/shared/text/text.component';
-import { smoothScroll } from 'utils/smoothScroll';
+import Text from 'react-components/shared/text';
 import cx from 'classnames';
 import sortBy from 'lodash/sortBy';
 
@@ -52,12 +52,6 @@ class ProfileNode extends React.PureComponent {
     this.anchor = ref;
   };
 
-  scrollTo = () => {
-    if (this.anchor) {
-      smoothScroll(this.anchor, 500);
-    }
-  };
-
   onYearChange = year => this.updateQuery('year', year);
 
   updateQuery(key, value) {
@@ -72,7 +66,7 @@ class ProfileNode extends React.PureComponent {
 
   renderIframes = () => this.setState({ renderIframes: true });
 
-  renderChart = chart => {
+  renderSection = chart => {
     const {
       year,
       nodeId,
@@ -88,13 +82,13 @@ class ProfileNode extends React.PureComponent {
         const isCountries = chart.identifier === 'actor_top_countries';
         return (
           <TopDestinationsWidget
+            key={chart.id}
             className={cx('page-break-inside-avoid', {
               'c-top-map ': isCountries,
               'c-top-municipalities': !isCountries
             })}
             year={year}
             nodeId={nodeId}
-            key={chart.id}
             title={chart.title}
             type={chart.identifier}
             contextId={context.id}
@@ -109,14 +103,14 @@ class ProfileNode extends React.PureComponent {
         const isActor = profileType === 'actor';
         return (
           <SustainabilityTableWidget
+            key={chart.id}
             type={isActor ? 'risk' : 'indicators'}
             profileType={profileType}
-            className={cx('c-area-table', {
+            className={cx('c-profiles-table', {
               'page-break-inside-avoid': isActor,
               'score-table': !isActor
             })}
             year={year}
-            key={chart.id}
             nodeId={nodeId}
             title={chart.title}
             contextId={context.id}
@@ -129,8 +123,8 @@ class ProfileNode extends React.PureComponent {
       case 'scatterplot':
         return (
           <ImportingCompaniesWidget
-            year={year}
             key={chart.id}
+            year={year}
             nodeId={nodeId}
             title={chart.title}
             printMode={printMode}
@@ -142,8 +136,8 @@ class ProfileNode extends React.PureComponent {
       case 'stacked_line_chart':
         return (
           <DeforestationWidget
-            year={year}
             key={chart.id}
+            year={year}
             nodeId={nodeId}
             title={chart.title}
             contextId={context.id}
@@ -155,9 +149,9 @@ class ProfileNode extends React.PureComponent {
         const type = chart.identifier === 'place_top_consumer_actors' ? 'actor' : 'place';
         return (
           <TopConsumersWidget
+            key={chart.id}
             year={year}
             type={type}
-            key={chart.id}
             nodeId={nodeId}
             title={chart.title}
             contextId={context.id}
@@ -171,13 +165,13 @@ class ProfileNode extends React.PureComponent {
         return (
           <React.Fragment key={chart.id}>
             <SummaryWidget
+              key={chart.id}
               year={year}
               nodeId={nodeId}
               context={context}
               title={chart.title}
               tooltips={tooltips}
               printMode={printMode}
-              scrollTo={this.scrollTo}
               profileType={profileType}
               profileMetadata={profileMetadata}
               onYearChange={this.onYearChange}
@@ -216,6 +210,7 @@ class ProfileNode extends React.PureComponent {
         {ready &&
           sortBy(profileMetadata.charts, 'position').map(chart => (
             <ErrorCatch
+              key={`${year}_${context.id}_${profileType}_${chart.identifier}_${chart.id}`}
               renderFallback={() => (
                 <section className="section-placeholder">
                   <Text variant="mono" size="md" weight="bold">
@@ -224,7 +219,7 @@ class ProfileNode extends React.PureComponent {
                 </section>
               )}
             >
-              {this.renderChart(chart)}
+              {this.renderSection(chart)}
             </ErrorCatch>
           ))}
         {ready &&
@@ -239,6 +234,14 @@ class ProfileNode extends React.PureComponent {
               profileType={profileType}
             />
           )}
+        {ready && (
+          <LinksWidget
+            year={year}
+            nodeId={nodeId}
+            contextId={context.id}
+            profileType={profileType}
+          />
+        )}
       </div>
     );
   }
