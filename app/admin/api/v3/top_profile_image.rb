@@ -1,4 +1,5 @@
 ActiveAdmin.register Api::V3::TopProfileImage, as: 'Top Profile Image' do
+  menu parent: 'Profiles', priority: 3
   permit_params :commodity_id, :profile_type, :image
 
   controller do

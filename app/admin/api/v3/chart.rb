@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::Chart, as: 'Chart' do
-  menu parent: 'Profiles', priority: 2
+  menu parent: 'Profiles', priority: 4
 
   permit_params :profile_id, :parent_id, :identifier, :title, :position
 

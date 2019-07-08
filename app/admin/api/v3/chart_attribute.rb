@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::ChartAttribute, as: 'ChartAttribute' do
-  menu parent: 'Profiles', priority: 3
+  menu parent: 'Profiles', priority: 5
 
   includes [
     :chart,
