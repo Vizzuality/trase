@@ -8,7 +8,7 @@ import ProfilePanelFooter from 'react-components/shared/profile-selector/profile
 import CommoditiesPanel from 'react-components/dashboard-element/dashboard-panel/commodities-panel.component';
 import isEmpty from 'lodash/isEmpty';
 import ProfileStepPanel from 'react-components/shared/profile-selector/profile-panel/profile-step-panel.component';
-import getPanelName from 'utils/getProfilePanelName';
+import getPanelStepName from 'utils/getProfilePanelName';
 
 function ProfilePanel(props) {
   const {
@@ -81,7 +81,7 @@ function ProfilePanel(props) {
           <div className="row profile-panel-content">
             <ProfileStepPanel
               profileType={profileType}
-              panelName={getPanelName(step)}
+              panelName={getPanelStepName(step)}
               setProfilesActiveItem={setProfilesActiveItem}
               setProfilesActiveTab={setProfilesActiveTab}
               clearProfilesPanel={clearProfilesPanel}

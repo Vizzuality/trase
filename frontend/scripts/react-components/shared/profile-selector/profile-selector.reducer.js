@@ -14,9 +14,8 @@ import {
 } from 'react-components/shared/profile-selector/profile-selector.actions';
 import isEmpty from 'lodash/isEmpty';
 import fuzzySearch from 'utils/fuzzySearch';
-import getPanelName from 'utils/getProfilePanelName';
+import getPanelStepName, { getPanelName } from 'utils/getProfilePanelName';
 import updateItems from 'utils/updatePanelItems';
-import { PROFILE_STEPS } from 'constants';
 
 const initialState = {
   activeStep: null,
@@ -63,7 +62,8 @@ const initialState = {
   data: {
     commodities: [],
     countries: [],
-    sources: []
+    sources: [],
+    companies: []
   },
   meta: {},
   tabs: {}
@@ -78,8 +78,7 @@ const profileRootReducer = {
     };
   },
   [PROFILES__SET_PANEL_PAGE](state, action) {
-    const { activeStep } = state;
-    const panelName = getPanelName(activeStep);
+    const panelName = getPanelName(state);
     const { page } = action.payload;
     return {
       ...state,
@@ -102,7 +101,6 @@ const profileRootReducer = {
   [PROFILES__SET_MORE_PANEL_DATA](state, action) {
     const { key, data, tab, direction } = action.payload;
     const panelName = key;
-
     if (data.length === 0) {
       return {
         ...state,
@@ -110,7 +108,7 @@ const profileRootReducer = {
           ...state.panels,
           [panelName]: {
             ...state.panels[panelName],
-            page: state[panelName].page - 1
+            page: state.panels[panelName].page - 1
           }
         }
       };
@@ -132,7 +130,7 @@ const profileRootReducer = {
   },
   [PROFILES__SET_LOADING_ITEMS](state, action) {
     const { loadingItems } = action.payload;
-    const panelName = getPanelName(state.activeStep);
+    const panelName = getPanelStepName(state.activeStep);
     return {
       ...state,
       panels: {
@@ -148,10 +146,7 @@ const profileRootReducer = {
     const { data } = action.payload;
     const getSection = n => n.section && n.section.toLowerCase();
     const tabs = data.reduce((acc, next) => ({ ...acc, [getSection(next)]: next.tabs }), {});
-    const panelName =
-      state.activeStep === PROFILE_STEPS.profiles
-        ? state.panels.types.activeItems.type
-        : getPanelName(state.activeStep);
+    const panelName = getPanelName(state);
     const activePanelTabs = tabs[panelName];
     const firstTab = activePanelTabs && activePanelTabs[0];
     const existingTab =
@@ -236,7 +231,7 @@ const profileRootReducer = {
   },
   [PROFILES__SET_SEARCH_RESULTS](state, action) {
     const { data, query } = action.payload;
-    let panelName = getPanelName(state.activeStep);
+    let panelName = getPanelStepName(state.activeStep);
     if (state.activeStep === 'sources' && isEmpty(state.panels.countries.activeItems)) {
       panelName = 'countries';
     }
