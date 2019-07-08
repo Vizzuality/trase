@@ -15,8 +15,7 @@ module Api
       end
 
       def photo_url
-        # placeholder image
-        'https://imgplaceholder.com/420x320/ff7f7f/333333/fa-image'
+        object&.top_profile_image&.image&.url
       end
     end
   end
