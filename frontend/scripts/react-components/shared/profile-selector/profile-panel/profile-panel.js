@@ -36,9 +36,7 @@ const blocks = [
 const mapStateToProps = state => ({
   profileType: state.profileSelector.panels.types.activeItems.type,
   blocks,
-  commoditiesPanel: state.profileSelector.panels.commodities,
-  sourcesPanel: state.profileSelector.panels.sources,
-  countriesPanel: state.profileSelector.panels.countries,
+  panels: state.profileSelector.panels,
   data: state.profileSelector.data,
   loading: state.profileSelector.loading,
   tabs: getActivePanelTabs(state)

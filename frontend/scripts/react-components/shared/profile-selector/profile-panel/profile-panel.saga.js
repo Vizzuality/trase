@@ -9,7 +9,6 @@ import {
   PROFILES__GET_SEARCH_RESULTS,
   PROFILES__CLEAR_PANELS
 } from 'react-components/shared/profile-selector/profile-selector.actions';
-import { PROFILE_STEPS } from 'constants';
 import {
   getProfilesData,
   getProfilesTabs,
@@ -20,24 +19,20 @@ import getPanelStepName, { getPanelName } from 'utils/getProfilePanelName';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 
-export function* fetchProfilesInitialData(activePanel) {
-  const state = yield select();
-  const { profileSelector } = state;
-  if (activePanel === PROFILE_STEPS.types) return;
-  const activeType =
-    activePanel === PROFILE_STEPS.profiles && profileSelector.panels.types.activeItems.type;
-  if (activeType) {
-    if (activeType === 'sources') {
-      yield fork(getProfilesData, 'countries');
-      // Fetch regions
-      if (!isEmpty(profileSelector.panels.countries.activeItems)) {
-        yield fork(getProfilesData, 'sources');
-      }
-    } else {
-      yield fork(getProfilesData, activeType);
+export function* fetchProfilesInitialData() {
+  const profileSelector = yield select(state => state.profileSelector);
+  const panelName = getPanelName(profileSelector);
+  if (panelName === 'types') return;
+  if (panelName === 'sources') {
+    yield fork(getProfilesData, 'countries');
+    // Fetch regions
+    if (!isEmpty(profileSelector.panels.countries.activeItems)) {
+      yield fork(getProfilesData, 'sources');
     }
+  } else if (panelName === 'companies') {
+    yield fork(getProfilesTabs, 'companies');
   } else {
-    yield fork(getProfilesData);
+    yield fork(getProfilesData, panelName);
   }
 }
 
@@ -50,12 +45,9 @@ export function* fetchDataOnPanelChange() {
   let task = null;
   const hasChanged = panel => {
     if (!previousPanelState) return false;
-    return (
-      !isEqual(
-        panel.panels.commodities.activeItems,
-        previousPanelState.panels.commodities.activeItems
-      ) ||
-      !isEqual(panel.panels.countries.activeItems, previousPanelState.panels.countries.activeItems)
+    return !isEqual(
+      panel.panels.countries.activeItems,
+      previousPanelState.panels.countries.activeItems
     );
   };
   while (true) {

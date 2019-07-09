@@ -1,0 +1,16 @@
+@import 'styles/settings';
+
+.c-companies-panel {
+  .companies-panel-search {
+    margin: 0 0 25px 0;
+  }
+
+  .companies-panel-pill-list {
+    margin-bottom: 39px;
+    overflow-x: hidden !important;
+  }
+
+  .companies-panel-companies-subtitle {
+    margin-bottom: 20px;
+  }
+}

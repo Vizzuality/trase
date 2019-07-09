@@ -1,5 +1,5 @@
 import { put, call, cancelled, fork, select } from 'redux-saga/effects';
-import getPanelStepName, { getPanelName } from 'utils/getProfilePanelName';
+import { getPanelName } from 'utils/getProfilePanelName';
 import {
   PROFILES__SET_PANEL_DATA,
   PROFILES__SET_PANEL_TABS,
@@ -19,10 +19,9 @@ import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
 import isEmpty from 'lodash/isEmpty';
 import deburr from 'lodash/deburr';
 
-export function* getProfilesData(subPanelName) {
+export function* getProfilesData(panelName) {
   const profileSelector = yield select(state => state.profileSelector);
   if (!profileSelector.activeStep || profileSelector.activeStep === PROFILE_STEPS.types) return;
-  const panelName = subPanelName || getPanelStepName(profileSelector.activeStep);
   const { page, activeTab } = profileSelector.panels[panelName];
   const tab = activeTab?.id;
   const params = getProfilesParams(profileSelector, panelName, { page });

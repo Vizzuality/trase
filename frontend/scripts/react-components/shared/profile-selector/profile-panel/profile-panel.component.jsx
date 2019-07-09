@@ -20,9 +20,7 @@ function ProfilePanel(props) {
     profileType,
     blocks,
     setProfilesPage,
-    commoditiesPanel,
-    sourcesPanel,
-    countriesPanel,
+    panels,
     data,
     tabs,
     loading
@@ -73,8 +71,7 @@ function ProfilePanel(props) {
               data={data}
               loading={loading}
               tabs={tabs}
-              countriesPanel={countriesPanel}
-              sourcesPanel={sourcesPanel}
+              panels={panels}
             />
           </div>
         </div>
@@ -92,13 +89,13 @@ function ProfilePanel(props) {
           </Heading>
           <div className="row profile-panel-content">
             <CommoditiesPanel
-              page={commoditiesPanel.page}
+              page={panels.commodities.page}
               getMoreItems={setProfilesPage}
-              loadingMoreItems={commoditiesPanel.loadingItems}
+              loadingMoreItems={panels.commodities.loadingItems}
               loading={loading}
               commodities={data.commodities}
               onSelectCommodity={item => setProfilesActiveItem(item, 'commodities')}
-              activeCommodity={commoditiesPanel.activeItems}
+              activeCommodity={panels.commodities.activeItems}
             />
           </div>
         </div>
@@ -120,9 +117,7 @@ ProfilePanel.propTypes = {
   profileType: PropTypes.string,
   blocks: PropTypes.array,
   setProfilesPage: PropTypes.func.isRequired,
-  commoditiesPanel: PropTypes.object,
-  sourcesPanel: PropTypes.object,
-  countriesPanel: PropTypes.object,
+  panels: PropTypes.object,
   data: PropTypes.object,
   loading: PropTypes.bool
 };
