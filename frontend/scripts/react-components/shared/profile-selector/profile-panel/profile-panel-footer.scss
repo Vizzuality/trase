@@ -1,12 +1,17 @@
 @import 'styles/settings';
 
 .c-profile-panel-footer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   border-top: 1px solid $medium-gray;
   padding: 20px 0 20px;
   margin-bottom: 20px;
+  text-align: center;
+
+  .profile-panel-footer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+  }
 
   .profile-panel-back-button {
     border: 0;
