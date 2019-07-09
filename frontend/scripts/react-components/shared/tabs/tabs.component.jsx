@@ -14,35 +14,39 @@ function Tabs(props) {
     selectedTab,
     testId,
     getTabId,
-    color
+    color,
+    extraDropdown
   } = props;
   const isSelected = item => getTabId(item) === selectedTab;
   return (
     <div className="c-tabs">
       <div className="tabs-container">
-        {tabs.map((item, index) => (
-          <button
-            key={index}
-            className={cx('tab', {
-              '-selected': isSelected(item),
-              [color]: !!color
-            })}
-            data-key={item}
-            onClick={() => onSelectTab(item, index)}
-            data-test={`${testId}-item`}
-            disabled={isSelected(item)}
-          >
-            <Text
-              as="span"
-              color={isSelected(item) ? color : 'grey'}
-              weight="bold"
-              size="rg"
-              variant="mono"
+        <div className="tabs-options">
+          {tabs.map((item, index) => (
+            <button
+              key={index}
+              className={cx('tab', {
+                '-selected': isSelected(item),
+                [color]: !!color
+              })}
+              data-key={item}
+              onClick={() => onSelectTab(item, index)}
+              data-test={`${testId}-item`}
+              disabled={isSelected(item)}
             >
-              {itemTabRenderer ? itemTabRenderer(item, index) : item}
-            </Text>
-          </button>
-        ))}
+              <Text
+                as="span"
+                color={isSelected(item) ? color : 'grey'}
+                weight="bold"
+                size="rg"
+                variant="mono"
+              >
+                {itemTabRenderer ? itemTabRenderer(item, index) : item}
+              </Text>
+            </button>
+          ))}
+        </div>
+        {extraDropdown}
       </div>
       {children && <div className="tabs-content">{children}</div>}
     </div>
@@ -63,6 +67,7 @@ Tabs.propTypes = {
   children: PropTypes.any,
   onSelectTab: PropTypes.func.isRequired,
   color: PropTypes.string,
+  extraDropdown: PropTypes.node,
   selectedTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 

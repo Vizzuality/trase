@@ -13,4 +13,9 @@
   .companies-panel-companies-subtitle {
     margin-bottom: 20px;
   }
+
+  .companies-panel-tabs-container {
+    display: flex;
+    justify-content: space-between;
+  }
 }

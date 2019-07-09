@@ -5,10 +5,9 @@ import SourcesPanel from 'react-components/dashboard-element/dashboard-panel/sou
 import CompaniesPanel from 'react-components/dashboard-element/dashboard-panel/companies-panel.component';
 import addApostrophe from 'utils/addApostrophe';
 import Dropdown from 'react-components/shared/dropdown';
+import Text from 'react-components/shared/text';
 import isEmpty from 'lodash/isEmpty';
-
-const countryNameNodeTypeRenderer = node =>
-  `${node.countryName + addApostrophe(node.countryName)} ${node.nodeType}`;
+import 'react-components/shared/profile-selector/profile-panel/profile-step-panel.scss';
 
 function ProfileStepPanel(props) {
   const {
@@ -60,32 +59,44 @@ function ProfileStepPanel(props) {
       const countryCompanies = data.companies[selectedCountry?.value || 0];
       const companiesOptions =
         (countryCompanies && countryCompanies[(companies.activeTab?.id)]) || [];
+      const getCountryName = node => data.countries.find(c => c.id === node.countryId)?.name;
+      const countryNameNodeTypeRenderer = node => {
+        const countryName = getCountryName(node);
+        return `${countryName + addApostrophe(countryName)} ${node.nodeType}`;
+      };
+
       return (
-        <>
-          <Dropdown
-            options={options}
-            value={selectedCountry}
-            onChange={item =>
-              setProfilesActiveItem(data.countries.find(i => i.id === item.value), 'countries')
-            }
-          />
-          <CompaniesPanel
-            tabs={tabs}
-            onSelectNodeTypeTab={item => setProfilesActiveTab(item, 'companies')}
-            page={companies.page}
-            getMoreItems={getMoreItems}
-            searchCompanies={companies.searchResults}
-            nodeTypeRenderer={countryNameNodeTypeRenderer}
-            setSearchResult={item => setSearchResult(item, 'companies')}
-            getSearchResults={getSearchResults}
-            loadingMoreItems={companies.loadingItems}
-            loading={loading}
-            companies={companiesOptions}
-            onSelectCompany={item => setProfilesActiveItem(item, 'companies')}
-            activeNodeTypeTab={companies.activeTab}
-            activeCompany={companies.activeItems}
-          />
-        </>
+        <CompaniesPanel
+          extraDropdown={
+            <div className="profile-panel-dropdown-container">
+              <Text as="span" color="grey-faded" weight="bold">
+                country:
+              </Text>
+              <Dropdown
+                variant="panel"
+                options={options}
+                value={selectedCountry}
+                onChange={item =>
+                  setProfilesActiveItem(data.countries.find(i => i.id === item.value), 'countries')
+                }
+              />
+            </div>
+          }
+          tabs={tabs}
+          onSelectNodeTypeTab={item => setProfilesActiveTab(item, 'companies')}
+          page={companies.page}
+          getMoreItems={getMoreItems}
+          searchCompanies={companies.searchResults}
+          nodeTypeRenderer={countryNameNodeTypeRenderer}
+          setSearchResult={item => setSearchResult(item, 'companies')}
+          getSearchResults={getSearchResults}
+          loadingMoreItems={companies.loadingItems}
+          loading={loading}
+          companies={companiesOptions}
+          onSelectCompany={item => setProfilesActiveItem(item, 'companies')}
+          activeNodeTypeTab={companies.activeTab}
+          activeCompany={companies.activeItems}
+        />
       );
     }
     default:

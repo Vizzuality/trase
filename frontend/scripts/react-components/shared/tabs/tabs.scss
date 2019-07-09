@@ -3,6 +3,11 @@
 .c-tabs {
   .tabs-container {
     display: flex;
+    justify-content: space-between;
+  }
+
+  .tabs-options {
+    display: flex;
     margin: 0 0 25px 0;
   }
 
