@@ -45,15 +45,6 @@ export const getDynamicSentence = createSelector(
         value: Object.values(panels.companies.activeItems)
       });
     }
-
-    if (!isEmpty(panels.commodities.activeItems)) {
-      dynamicParts.push({
-        panel: 'commodities',
-        id: 'commodities',
-        prefix: 'for',
-        value: Object.values(panels.commodities.activeItems)
-      });
-    }
     return dynamicParts;
   }
 );
