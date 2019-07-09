@@ -30,6 +30,7 @@ export function* fetchProfilesInitialData() {
       yield fork(getProfilesData, 'sources');
     }
   } else if (panelName === 'companies') {
+    yield fork(getProfilesData, 'countries');
     yield fork(getProfilesTabs, 'companies');
   } else {
     yield fork(getProfilesData, panelName);

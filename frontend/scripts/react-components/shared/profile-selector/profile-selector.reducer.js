@@ -88,13 +88,26 @@ const profileRootReducer = {
   [PROFILES__SET_PANEL_DATA](state, action) {
     const { panelName, data, meta, tab, loading } = action.payload;
     const initialData = initialState.data[panelName];
-    const newData = tab
-      ? { ...state.data[panelName], [tab]: data || initialData }
-      : data || initialData;
+    let updatedData = data || initialData;
+    if (panelName === 'companies') {
+      const selectedCountry = Object.values(state.panels.countries.activeItems);
+      const selectedCountryId =
+        (selectedCountry && selectedCountry[0] && selectedCountry[0].id) ||
+        state.data.countries[0].id;
+      updatedData = {
+        ...state.data[panelName],
+        [selectedCountryId]: {
+          ...state.data[panelName][selectedCountryId],
+          [tab]: data || initialData
+        }
+      };
+    } else if (tab) {
+      updatedData = { ...state.data[panelName], [tab]: data || initialData };
+    }
     return {
       ...state,
       loading,
-      data: { ...state.data, [panelName]: newData },
+      data: { ...state.data, [panelName]: updatedData },
       meta: { ...state.meta, [panelName]: meta }
     };
   },

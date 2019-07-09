@@ -104,9 +104,10 @@ export const getProfilesParams = (state, step, options = {}) => {
     node_types_ids: panels[step].activeTab?.id
   };
 
-  if (step === 'sources') {
+  if (step === 'sources' || step === 'companies') {
     params.countries_ids = activeItemParams(countries);
   }
+
   if (step === 'commodities') {
     if (sources) {
       params.sources_ids = activeItemParams(sources);
