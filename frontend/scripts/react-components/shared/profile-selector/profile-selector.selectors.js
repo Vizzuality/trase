@@ -23,3 +23,37 @@ export const getIsDisabled = createSelector(
     }
   }
 );
+
+export const getDynamicSentence = createSelector(
+  [getPanels],
+  panels => {
+    if (!panels) return [];
+    if (Object.values(panels).every(p => isEmpty(p.activeItems))) return [];
+    const dynamicParts = [];
+    if (!isEmpty(panels.sources.activeItems)) {
+      dynamicParts.push({
+        panel: 'sources',
+        id: 'sources',
+        prefix: 'See the',
+        value: Object.values(panels.sources.activeItems)
+      });
+    } else if (!isEmpty(panels.companies.activeItems)) {
+      dynamicParts.push({
+        panel: 'sources',
+        id: 'sources',
+        prefix: 'See the',
+        value: Object.values(panels.companies.activeItems)
+      });
+    }
+
+    if (!isEmpty(panels.commodities.activeItems)) {
+      dynamicParts.push({
+        panel: 'commodities',
+        id: 'commodities',
+        prefix: 'for',
+        value: Object.values(panels.commodities.activeItems)
+      });
+    }
+    return dynamicParts;
+  }
+);

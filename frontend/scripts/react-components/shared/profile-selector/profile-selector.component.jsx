@@ -8,7 +8,7 @@ import ProfilePanelFooter from 'react-components/shared/profile-selector/profile
 import 'react-components/shared/profile-selector/profile-selector.scss';
 
 function ProfilesSelectorModal(props) {
-  const { activeStep, onClose, setStep, isDisabled } = props;
+  const { activeStep, onClose, setStep, isDisabled, dynamicSentenceParts } = props;
   const showBackButton = activeStep > PROFILE_STEPS.types;
   const goToProfiles = onClose; // TODO: Go to profiles page
   const onContinue =
@@ -28,6 +28,8 @@ function ProfilesSelectorModal(props) {
           onBack={showBackButton ? () => setStep(activeStep - 1) : undefined}
           onContinue={onContinue}
           isDisabled={isDisabled}
+          step={activeStep}
+          dynamicSentenceParts={dynamicSentenceParts}
         />
       </div>
     </SimpleModal>
@@ -38,7 +40,8 @@ ProfilesSelectorModal.propTypes = {
   activeStep: PropTypes.number,
   isDisabled: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
-  setStep: PropTypes.func.isRequired
+  setStep: PropTypes.func.isRequired,
+  dynamicSentenceParts: PropTypes.array
 };
 
 export default ProfilesSelectorModal;
