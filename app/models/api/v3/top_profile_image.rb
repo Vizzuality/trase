@@ -24,7 +24,7 @@ module Api
       PROFILE_TYPES = %w(actor place).freeze
 
       belongs_to :commodity
-      has_many :top_profiles, dependent: :destroy
+      has_many :top_profiles, dependent: :nullify
       has_attached_file :image, styles: {small: '320x320>', large: '640x640>'}
       validates_attachment_content_type :image, content_type: /\Aimage\/.*\z/
       validates :profile_type, inclusion: PROFILE_TYPES
