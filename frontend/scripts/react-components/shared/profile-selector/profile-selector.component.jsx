@@ -8,11 +8,10 @@ import ProfilePanelFooter from 'react-components/shared/profile-selector/profile
 import 'react-components/shared/profile-selector/profile-selector.scss';
 
 function ProfilesSelectorModal(props) {
-  const { activeStep, onClose, setStep, isDisabled, dynamicSentenceParts } = props;
+  const { activeStep, onClose, setStep, isDisabled, dynamicSentenceParts, goToProfile } = props;
   const showBackButton = activeStep > PROFILE_STEPS.types;
-  const goToProfiles = onClose; // TODO: Go to profiles page
   const onContinue =
-    activeStep === PROFILE_STEPS.commodities ? goToProfiles : () => setStep(activeStep + 1);
+    activeStep === PROFILE_STEPS.commodities ? goToProfile : () => setStep(activeStep + 1);
   const isOpen = activeStep !== null;
   return (
     <SimpleModal isOpen={isOpen} onRequestClose={onClose}>
@@ -41,6 +40,7 @@ ProfilesSelectorModal.propTypes = {
   isDisabled: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   setStep: PropTypes.func.isRequired,
+  goToProfile: PropTypes.func.isRequired,
   dynamicSentenceParts: PropTypes.array
 };
 

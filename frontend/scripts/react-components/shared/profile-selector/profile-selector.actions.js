@@ -1,3 +1,6 @@
+import { redirect } from 'redux-first-router';
+import isEmpty from 'lodash/isEmpty';
+
 import { PROFILE_STEPS } from 'constants';
 
 export const PROFILES__SET_MORE_PANEL_DATA = 'PROFILES__SET_MORE_PANEL_DATA';
@@ -85,6 +88,27 @@ export const setProfilesLoadingItems = loadingItems => ({
     loadingItems
   }
 });
+export const goToProfile = () => (dispatch, getState) => {
+  const { profileSelector } = getState();
+  const hasCompanies = !isEmpty(profileSelector.panels.companies.activeItems);
+  const profileSelection = hasCompanies
+    ? Object.values(profileSelector.panels.companies.activeItems)[0]
+    : Object.values(profileSelector.panels.sources.activeItems)[0];
+  const profileType = hasCompanies ? 'actor' : 'place';
+  dispatch(
+    redirect({
+      type: 'profileNode',
+      payload: {
+        profileType,
+        query: {
+          // contextId: profileSelection.countryId,
+          // year: profileSelection.year,
+          nodeId: profileSelection.id
+        }
+      }
+    })
+  );
+};
 
 export const getProfilesSearchResults = query => ({
   type: PROFILES__GET_SEARCH_RESULTS,
