@@ -637,7 +637,7 @@ paths:
   /dashboards/commodities:
     get:
       tags:
-        - dashboards
+        - "dashboards filters"
       summary: Commodities matching selected filters
       parameters:
         - $ref: "#/components/parameters/dashboards_commodities_ids"
@@ -661,7 +661,7 @@ paths:
   /dashboards/commodities/search:
     get:
       tags:
-        - dashboards
+        - "dashboards search"
       summary: Commodities matching selected filters with full text search
       parameters:
         - $ref: "#/components/parameters/query"
@@ -686,7 +686,7 @@ paths:
   /dashboards/countries:
     get:
       tags:
-        - dashboards
+        - "dashboards filters"
       summary: Countries matching selected filters
       parameters:
         - $ref: "#/components/parameters/dashboards_countries_ids"
@@ -732,7 +732,7 @@ paths:
   /dashboards/countries/search:
     get:
       tags:
-        - dashboards
+        - "dashboards search"
       summary: Countries matching selected filters with full text search
       parameters:
         - $ref: "#/components/parameters/query"
@@ -757,7 +757,7 @@ paths:
   /dashboards/sources:
     get:
       tags:
-        - dashboards
+        - "dashboards filters"
       summary: Sources matching selected filters
       parameters:
         - $ref: "#/components/parameters/dashboards_sources_ids"
@@ -784,7 +784,7 @@ paths:
   /dashboards/sources/search:
     get:
       tags:
-        - dashboards
+        - "dashboards search"
       summary: Sources matching selected filters with full text search
       parameters:
         - $ref: "#/components/parameters/query"
@@ -812,7 +812,7 @@ paths:
   /dashboards/companies:
     get:
       tags:
-        - dashboards
+        - "dashboards filters"
       summary: Companies matching selected filters
       parameters:
         - $ref: "#/components/parameters/dashboards_companies_ids"
@@ -839,7 +839,7 @@ paths:
   /dashboards/companies/search:
     get:
       tags:
-        - dashboards
+        - "dashboards search"
       summary: Companies matching selected filters with full text search
       parameters:
         - $ref: "#/components/parameters/query"
@@ -867,7 +867,7 @@ paths:
   /dashboards/destinations:
     get:
       tags:
-        - dashboards
+        - "dashboards filters"
       summary: Destinations matching selected filters
       parameters:
         - $ref: "#/components/parameters/dashboards_destinations_ids"
@@ -894,7 +894,7 @@ paths:
   /dashboards/destinations/search:
     get:
       tags:
-        - dashboards
+        - "dashboards search"
       summary: Destinations matching selected filters with full text search
       parameters:
         - $ref: "#/components/parameters/query"
@@ -919,10 +919,48 @@ paths:
                     items:
                       $ref: "#/components/schemas/DashboardsSearchNode"
 
+  /dashboards/filter_meta:
+    get:
+      tags:
+        - "dashboards filters"
+      summary: Meta data to render filter panel sections
+      parameters:
+        - $ref: "#/components/parameters/dashboards_countries_ids"
+        - $ref: "#/components/parameters/dashboards_commodities_ids"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        section:
+                          type: string
+                          example: 'SOURCES'
+                        tabs:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                example: 1
+                              name:
+                                type: string
+                                example: 'DEPARTMENT'
+                              profileType:
+                                type: string
+                                example: 'place'
   /dashboards/parametrised_charts:
     get:
       tags:
-        - dashboards
+        - "dashboards charts"
       summary: Dynamic chart types matching selected filters
       parameters:
         - $ref: "#/components/parameters/dashboards_country_id"
@@ -950,8 +988,7 @@ paths:
   /dashboards/charts/single_year_no_ncont_overview:
     get:
       tags:
-        - dashboards
-        - charts
+        - "dashboards charts"
       summary: Data formatted for display in the overview chart for single year, no
         non-continuous attribute selection (dynamic sentence)
       parameters:
@@ -995,8 +1032,7 @@ paths:
   /dashboards/charts/single_year_ncont_overview:
     get:
       tags:
-        - dashboards
-        - charts
+        - "dashboards charts"
       summary: Data formatted for display in the overview chart for single year,
         non-continuous attribute selection (donut chart per value of non-continuous indicator)
       parameters:
@@ -1044,8 +1080,7 @@ paths:
   /dashboards/charts/multi_year_no_ncont_overview:
     get:
       tags:
-        - dashboards
-        - charts
+        - "dashboards charts"
       summary: Data formatted for display in the overview chart for multi year, no
         non-continuous attribute selection (bar chart per year)
       parameters:
@@ -1093,8 +1128,7 @@ paths:
   /dashboards/charts/multi_year_ncont_overview:
     get:
       tags:
-        - dashboards
-        - charts
+        - "dashboards charts"
       summary: Data formatted for display in the overview chart for multi year,
         non-continuous attribute selection (stacked bar chart per year per value of non-continuous indicator
       parameters:
@@ -1181,8 +1215,7 @@ paths:
   /dashboards/charts/single_year_no_ncont_node_type_view:
     get:
       tags:
-        - dashboards
-        - charts
+        - "dashboards charts"
       summary: Data formatted for display in the chart per node, for single year, no
         non-continuous attribute selection (horizontal bar chart)
       parameters:
@@ -1231,8 +1264,7 @@ paths:
   /dashboards/charts/single_year_ncont_node_type_view:
     get:
       tags:
-        - dashboards
-        - charts
+        - "dashboards charts"
       summary: Data formatted for display in the chart per node, for single year,
         non-continuous attribute selection (horizontal stacked bar chart)
       parameters:
@@ -1310,8 +1342,7 @@ paths:
   /dashboards/charts/multi_year_no_ncont_node_type_view:
     get:
       tags:
-        - dashboards
-        - charts
+        - "dashboards charts"
       summary: Data formatted for display in the chart per node, for multi year,
         no non-continuous attribute selection (stacked bar chart per year per top nodes)
       parameters:
