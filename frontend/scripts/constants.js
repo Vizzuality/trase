@@ -287,3 +287,4 @@ export const PROFILE_TYPES = {
 };
 
 export const DEFAULT_DASHBOARD_UNIT_FORMAT = '.4~s';
+export const PROFILE_TRADERS_DEFAULT_COUNTRY_NAME = 'BRAZIL';
