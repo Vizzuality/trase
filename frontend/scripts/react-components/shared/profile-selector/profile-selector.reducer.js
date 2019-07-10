@@ -15,7 +15,7 @@ import {
 } from 'react-components/shared/profile-selector/profile-selector.actions';
 import isEmpty from 'lodash/isEmpty';
 import fuzzySearch from 'utils/fuzzySearch';
-import getPanelStepName, { getPanelName } from 'utils/getProfilePanelName';
+import { getPanelName } from 'utils/getProfilePanelName';
 
 const initialState = {
   activeStep: null,
@@ -143,7 +143,7 @@ const profileRootReducer = {
   },
   [PROFILES__SET_LOADING_ITEMS](state, action) {
     const { loadingItems } = action.payload;
-    const panelName = getPanelStepName(state.activeStep);
+    const panelName = getPanelName(state);
     return {
       ...state,
       panels: {
