@@ -110,10 +110,14 @@ export function* getProfilesTabs(optionsType) {
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
+    const filteredData = data.data.map(section => ({
+      ...section,
+      tabs: section.tabs.filter(t => t.profileType)
+    }));
     yield put({
       type: PROFILES__SET_PANEL_TABS,
       payload: {
-        data: data.data
+        data: filteredData
       }
     });
   } catch (e) {
