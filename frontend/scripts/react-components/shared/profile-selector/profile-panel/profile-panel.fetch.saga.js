@@ -121,8 +121,8 @@ export function* getProfilesTabs(optionsType) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled', url);
       if (source) {
+        if (NODE_ENV_DEV) console.error('Cancelled', url);
         source.cancel();
       }
     }

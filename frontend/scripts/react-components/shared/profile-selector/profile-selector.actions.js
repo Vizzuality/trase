@@ -14,18 +14,17 @@ export const PROFILES__GET_SEARCH_RESULTS = 'PROFILES__GET_SEARCH_RESULTS';
 export const PROFILES__SET_SEARCH_RESULTS = 'PROFILES__SET_SEARCH_RESULTS';
 export const PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH = 'PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH';
 
-export const goToNodeProfilePage = (node, defaultYear) => dispatch =>
-  dispatch({
-    type: 'profileNode',
-    payload: {
-      query: {
-        nodeId: node.id,
-        contextId: node.contextId,
-        year: defaultYear
-      },
-      profileType: node.profile
-    }
-  });
+export const goToNodeProfilePage = (node, defaultYear) => ({
+  type: 'profileNode',
+  payload: {
+    query: {
+      nodeId: node.id,
+      contextId: node.contextId,
+      year: defaultYear
+    },
+    profileType: node.profile
+  }
+});
 
 export const openModal = () => ({
   type: PROFILES__SET_ACTIVE_STEP,
