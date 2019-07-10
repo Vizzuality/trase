@@ -6,8 +6,7 @@ import CompaniesPanel from 'react-components/dashboard-element/dashboard-panel/c
 import addApostrophe from 'utils/addApostrophe';
 import Dropdown from 'react-components/shared/dropdown';
 import Text from 'react-components/shared/text';
-import isEmpty from 'lodash/isEmpty';
-import 'react-components/shared/profile-selector/profile-panel/profile-step-panel.scss';
+import 'react-components/shared/profile-selector/profile-panel/profile-step-panel/profile-step-panel.scss';
 
 function ProfileStepPanel(props) {
   const {
@@ -15,7 +14,7 @@ function ProfileStepPanel(props) {
     clearProfilesPanel,
     setProfilesActiveTab,
     getSearchResults,
-    setSearchResult,
+    setProfilesSearchResult,
     getMoreItems,
     panels,
     data,
@@ -43,7 +42,7 @@ function ProfileStepPanel(props) {
           activeSourceItem={sources.activeItems}
           onSelectCountry={item => setProfilesActiveItem(item, 'countries')}
           onSelectSourceTab={item => setProfilesActiveTab(item, 'sources')}
-          setSearchResult={item => setSearchResult(item, 'sources')}
+          setSearchResult={item => setProfilesSearchResult(item, 'sources')}
           onSelectSourceValue={item => setProfilesActiveItem(item, 'sources')}
           nodeTypeRenderer={node => node.nodeType || 'Country of Production'}
           sources={data.sources[sources.activeTab && sources.activeTab.id] || []}
@@ -53,12 +52,14 @@ function ProfileStepPanel(props) {
     case 'companies': {
       const toOption = d => ({ label: d.name, value: d.id });
       const options = data.countries?.map(toOption);
-      const selectedCountry = !isEmpty(countries.activeItems)
-        ? toOption(Object.values(countries.activeItems)[0])
-        : options[0];
-      const countryCompanies = data.companies[selectedCountry?.value || 0];
+      const activeCountry = Object.values(countries.activeItems)[0];
+      if (!activeCountry) return null;
+      const selectedCountry = toOption(activeCountry);
+
+      const countryCompanies = data.companies[(selectedCountry?.value)];
       const companiesOptions =
         (countryCompanies && countryCompanies[(companies.activeTab?.id)]) || [];
+
       const getCountryName = node => data.countries.find(c => c.id === node.countryId)?.name;
       const countryNameNodeTypeRenderer = node => {
         const countryName = getCountryName(node);
@@ -88,7 +89,7 @@ function ProfileStepPanel(props) {
           getMoreItems={getMoreItems}
           searchCompanies={companies.searchResults}
           nodeTypeRenderer={countryNameNodeTypeRenderer}
-          setSearchResult={item => setSearchResult(item, 'companies')}
+          setSearchResult={item => setProfilesSearchResult(item, 'companies')}
           getSearchResults={getSearchResults}
           loadingMoreItems={companies.loadingItems}
           loading={loading}
@@ -109,7 +110,7 @@ ProfileStepPanel.propTypes = {
   clearProfilesPanel: PropTypes.func.isRequired,
   setProfilesActiveTab: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
-  setSearchResult: PropTypes.func.isRequired,
+  setProfilesSearchResult: PropTypes.func.isRequired,
   getMoreItems: PropTypes.func.isRequired,
   panels: PropTypes.object,
   profileType: PropTypes.string,

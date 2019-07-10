@@ -4,7 +4,7 @@ import SimpleModal from 'react-components/shared/simple-modal/simple-modal.compo
 import { PROFILE_STEPS } from 'constants';
 import ProfilePanel from 'react-components/shared/profile-selector/profile-panel';
 import StepsTracker from 'react-components/shared/steps-tracker';
-import ProfilePanelFooter from 'react-components/shared/profile-selector/profile-panel/profile-panel-footer.component';
+import ProfilePanelFooter from 'react-components/shared/profile-selector/profile-panel-footer';
 import 'react-components/shared/profile-selector/profile-selector.scss';
 
 function ProfilesSelectorModal(props) {

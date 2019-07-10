@@ -3,13 +3,8 @@ import ProfilePanelComponent from 'react-components/shared/profile-selector/prof
 import { PROFILE_TYPES } from 'constants';
 import {
   setProfilesPage,
-  setProfilesActiveItem,
-  clearProfilesPanel,
-  setProfilesActiveTab,
-  getProfilesSearchResults,
-  setProfilesActiveItemWithSearch
+  setProfilesActiveItem
 } from 'react-components/shared/profile-selector/profile-selector.actions';
-import { getActivePanelTabs } from 'react-components/shared/profile-selector/profile-panel/profile-panel.selectors';
 
 // Importing countries panel is not ready yet
 const blocks = [
@@ -38,18 +33,12 @@ const mapStateToProps = state => ({
   blocks,
   panels: state.profileSelector.panels,
   data: state.profileSelector.data,
-  loading: state.profileSelector.loading,
-  tabs: getActivePanelTabs(state)
+  loading: state.profileSelector.loading
 });
 
 const mapDispatchToProps = {
-  setProfilesPage,
   setProfilesActiveItem,
-  clearProfilesPanel,
-  getSearchResults: getProfilesSearchResults,
-  setProfilesSearchResult: setProfilesActiveItemWithSearch,
-  getMoreItems: setProfilesPage,
-  setProfilesActiveTab
+  setProfilesPage
 };
 
 export default connect(

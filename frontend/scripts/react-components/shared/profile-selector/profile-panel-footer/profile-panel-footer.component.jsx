@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import 'react-components/shared/profile-selector/profile-panel/profile-panel-footer.scss';
+import 'react-components/shared/profile-selector/profile-panel-footer/profile-panel-footer.scss';
 import Text from 'react-components/shared/text';
 import Button from 'react-components/shared/button';
 import TagsGroup from 'react-components/shared/tags-group';
