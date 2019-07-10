@@ -89,22 +89,31 @@ export const setProfilesLoadingItems = loadingItems => ({
   }
 });
 export const goToProfile = () => (dispatch, getState) => {
-  const { profileSelector } = getState();
+  const { profileSelector, app } = getState();
+  const { contexts } = app;
   const hasCompanies = !isEmpty(profileSelector.panels.companies.activeItems);
+  const profileType = hasCompanies ? 'actor' : 'place';
   const profileSelection = hasCompanies
     ? Object.values(profileSelector.panels.companies.activeItems)[0]
     : Object.values(profileSelector.panels.sources.activeItems)[0];
-  const profileType = hasCompanies ? 'actor' : 'place';
+  const query = {
+    nodeId: profileSelection.id
+  };
+  const commodity = Object.values(profileSelector.panels.commodities.activeItems)[0];
+  if (commodity) {
+    const country = Object.values(profileSelector.panels.countries.activeItems)[0];
+    const contextId = contexts.find(
+      c => c.countryId === country.id && c.commodityId === commodity.id
+    )?.id;
+    if (contextId) query.contextId = contextId;
+  }
+
   dispatch(
     redirect({
       type: 'profileNode',
       payload: {
         profileType,
-        query: {
-          // contextId: profileSelection.countryId,
-          // year: profileSelection.year,
-          nodeId: profileSelection.id
-        }
+        query
       }
     })
   );
