@@ -23,6 +23,19 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy do
     )
   }
 
+  let(:biome_node) {
+    FactoryBot.create(:api_v3_node, node_type: api_v3_biome_node_type)
+  }
+  let(:exporter_node) {
+    FactoryBot.create(:api_v3_node, node_type: api_v3_exporter_node_type)
+  }
+  let(:importer_node) {
+    FactoryBot.create(:api_v3_node, node_type: api_v3_importer_node_type)
+  }
+  let(:country_node) {
+    FactoryBot.create(:api_v3_node, node_type: api_v3_country_node_type)
+  }
+
   describe 'selected_node_types' do
     context 'when subnational context with importer node' do
       let!(:source_node_type) {
@@ -41,7 +54,6 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy do
           :api_v3_context_node_type_property, context_node_type: cnt, column_group: 0, role: 'source'
         )
       }
-
       let!(:importer_node_type) {
         cnt = FactoryBot.create(
           :api_v3_context_node_type, context: context, node_type: api_v3_importer_node_type
@@ -54,13 +66,11 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy do
       let(:node_types_to_break_by) {
         Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy.new(
           context,
-          [api_v3_biome_node_type.id],
-          [api_v3_exporter_node_type.id, api_v3_importer_node_type.id],
-          [api_v3_country_node_type.id]
+          [biome_node, exporter_node, importer_node, country_node]
         )
       }
       it 'returns available node types to break by' do
-        expect(node_types_to_break_by.selected_node_types).to eq([
+        expect(node_types_to_break_by.selected_node_types).to match_array([
           api_v3_biome_node_type,
           api_v3_exporter_node_type,
           api_v3_importer_node_type,
@@ -82,13 +92,11 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy do
       let(:node_types_to_break_by) {
         Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy.new(
           context,
-          [],
-          [api_v3_exporter_node_type.id, api_v3_importer_node_type.id],
-          [api_v3_country_node_type.id]
+          [exporter_node, importer_node, country_node]
         )
       }
       it 'returns available node types to break by' do
-        expect(node_types_to_break_by.selected_node_types).to eq([
+        expect(node_types_to_break_by.selected_node_types).to match_array([
           api_v3_exporter_node_type,
           api_v3_importer_node_type,
           api_v3_country_node_type
@@ -117,13 +125,11 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy do
       let(:node_types_to_break_by) {
         Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy.new(
           context,
-          [api_v3_biome_node_type.id],
-          [api_v3_exporter_node_type.id],
-          [api_v3_country_node_type.id]
+          [biome_node, exporter_node, country_node]
         )
       }
       it 'returns available node types to break by' do
-        expect(node_types_to_break_by.selected_node_types).to eq([
+        expect(node_types_to_break_by.selected_node_types).to match_array([
           api_v3_biome_node_type,
           api_v3_exporter_node_type,
           api_v3_country_node_type
@@ -135,13 +141,11 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy do
       let(:node_types_to_break_by) {
         Api::V3::Dashboards::ParametrisedCharts::NodeTypesToBreakBy.new(
           context,
-          [],
-          [api_v3_exporter_node_type.id],
-          [api_v3_country_node_type.id]
+          [exporter_node, country_node]
         )
       }
       it 'returns available node types to break by' do
-        expect(node_types_to_break_by.selected_node_types).to eq([
+        expect(node_types_to_break_by.selected_node_types).to match_array([
           api_v3_exporter_node_type,
           api_v3_country_node_type
         ])

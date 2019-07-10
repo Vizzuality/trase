@@ -197,6 +197,60 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
     end
   end
 
+  context 'when multiple years, non-cont indicator, 1 exporter' do
+    let(:overview_parameters) {
+      mandatory_parameters.merge(multi_year).merge(
+        ncont_attribute_id: ncont_attribute.id
+      )
+    }
+    let(:parameters) {
+      overview_parameters.
+        merge(no_flow_path_filters).
+        merge(
+          companies_ids: [
+            api_v3_exporter1_node.id
+          ]
+        )
+    }
+    let(:simplified_expected_chart_types) {
+      [
+        {
+          source: :multi_year_ncont_overview,
+          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::STACKED_BAR_CHART,
+          x: :year,
+          break_by: :ncont_attribute
+        },
+        {
+          source: :multi_year_ncont_overview,
+          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::STACKED_BAR_CHART,
+          x: :year,
+          break_by: :ncont_attribute,
+          node_type_id: api_v3_exporter_node_type.id,
+          companies_ids: [api_v3_exporter1_node.id],
+          single_filter_key: :companies
+        }
+      ] + [
+        api_v3_biome_node_type,
+        api_v3_state_node_type,
+        api_v3_municipality_node_type,
+        api_v3_importer_node_type,
+        api_v3_country_node_type
+      ].map do |node_type|
+        {
+          source: :multi_year_no_ncont_node_type_view,
+          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::STACKED_BAR_CHART,
+          x: :year,
+          break_by: :node_type,
+          node_type_id: node_type.id
+        }
+      end
+    }
+
+    it 'returns expected chart types' do
+      expect(chart_types).to match_array(expected_chart_types)
+    end
+  end
+
   context 'when multiple years, non-cont indicator, 2 exporters' do
     let(:overview_parameters) {
       mandatory_parameters.merge(multi_year).merge(
@@ -243,6 +297,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_state_node_type,
         api_v3_municipality_node_type,
         api_v3_importer_node_type,
+        api_v3_exporter_node_type,
         api_v3_country_node_type
       ].map do |node_type|
         {

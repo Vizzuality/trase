@@ -41,9 +41,6 @@ module Api
             @sources_ids = @chart_params.sources_ids
             @companies_ids = @chart_params.companies_ids
             @destinations_ids = @chart_params.destinations_ids
-            nodes = Api::V3::Node.find(
-              @sources_ids + @companies_ids + @destinations_ids
-            )
             @sources = nodes.select do |node|
               @sources_ids.include? node.id
             end
@@ -55,18 +52,18 @@ module Api
             end
           end
 
+          def nodes
+            return @nodes if defined?(@nodes)
+
+            @nodes = Api::V3::Node.find(
+              @sources_ids + @companies_ids + @destinations_ids
+            )
+          end
+
           def initialize_node_types
-            source_node_types_ids = @sources.map(&:node_type_id).uniq
-            company_node_types_ids = @companies.map(&:node_type_id).uniq
-            destination_node_types_ids = @destinations.map(&:node_type_id).uniq
             node_types_to_break_by =
-              NodeTypesToBreakBy.new(
-                @context,
-                source_node_types_ids,
-                company_node_types_ids,
-                destination_node_types_ids
-              )
-            @unselected_node_types = node_types_to_break_by.unselected_node_types
+              NodeTypesToBreakBy.new(@context, nodes)
+            @node_types_for_comparisons = node_types_to_break_by.node_types_for_comparisons
             @selected_node_types = node_types_to_break_by.selected_node_types
           end
 
@@ -81,7 +78,7 @@ module Api
 
           def single_year_no_ncont_charts
             parametrised_charts = [single_year_no_ncont_overview] +
-              @unselected_node_types.map do |node_type|
+              @node_types_for_comparisons.map do |node_type|
                 single_year_no_ncont_node_type_view(node_type)
               end
             parametrised_charts.map { |chart| all_params.merge(chart) }
@@ -114,7 +111,7 @@ module Api
 
           def single_year_ncont_charts
             parametrised_charts = [single_year_ncont_overview] +
-              @unselected_node_types.map do |node_type|
+              @node_types_for_comparisons.map do |node_type|
                 single_year_ncont_node_type_view(node_type)
               end
             parametrised_charts.map { |chart| all_params.merge(chart) }
@@ -140,7 +137,7 @@ module Api
 
           def multi_year_no_ncont_charts
             parametrised_charts = [multi_year_no_ncont_overview] +
-              @unselected_node_types.map do |node_type|
+              @node_types_for_comparisons.map do |node_type|
                 multi_year_no_ncont_node_type_view(node_type)
               end
             parametrised_charts.map { |chart| all_params.merge(chart) }
@@ -180,7 +177,7 @@ module Api
               )
             end
 
-            charts_per_node_type = @unselected_node_types.map do |node_type|
+            charts_per_node_type = @node_types_for_comparisons.map do |node_type|
               multi_year_no_ncont_node_type_view(node_type)
             end
             parametrised_charts += charts_per_node_type.map do |chart|
