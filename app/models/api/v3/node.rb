@@ -37,22 +37,6 @@ module Api
       has_many :dashboard_templates, through: :dashboard_template_sources
       has_many :top_profiles
 
-      def self.place_nodes(context)
-        nodes_by_profile_type(context, :place)
-      end
-
-      def self.actor_nodes(context)
-        nodes_by_profile_type(context, :actor)
-      end
-
-      def self.nodes_by_profile_type(context, profile_type)
-        joins(node_type: {context_node_types: :profile}).
-          where(
-            'context_node_types.context_id' => context.id,
-            'profiles.name' => profile_type
-          )
-      end
-
       def stringify
         name + ' - ' + node_type.name + ' - ' + node_type&.context_node_types&.first&.context&.country&.name + ' ' + node_type&.context_node_types&.first&.context&.commodity&.name
       end
