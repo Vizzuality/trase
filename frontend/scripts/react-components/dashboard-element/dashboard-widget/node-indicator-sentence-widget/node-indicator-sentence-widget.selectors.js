@@ -17,7 +17,6 @@ export const makeGetNodeIndicatorSentenceParts = () =>
         temporal,
         filter: { node }
       } = meta.info;
-      console.log(node);
 
       const nodeNamePart = {
         id: 'node-name',

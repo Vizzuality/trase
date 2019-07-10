@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import omitBy from 'lodash/omitBy';
 import sortBy from 'lodash/sortBy';
 import kebabCase from 'lodash/kebabCase';
+import addApostrophe from 'utils/addApostrophe';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
 import { CHART_TYPES } from 'constants';
 import camelCase from 'lodash/camelCase';
@@ -20,6 +21,7 @@ export const PARSED_CHART_TYPES = {
 
 const getMeta = (state, { meta }) => meta || null;
 const getData = (state, { data }) => data || null;
+const getSelectorConfig = (state, props, config) => config || null;
 const getChartType = (state, { chartType, meta }) => {
   if (chartType) {
     const type = PARSED_CHART_TYPES[chartType];
@@ -204,14 +206,20 @@ const getFilterPreposition = filterKey => {
 
 export const makeGetTitle = () =>
   createSelector(
-    [getMeta],
-    meta => {
+    [getMeta, getSelectorConfig],
+    (meta, config) => {
       if (!meta || !meta.info) return '';
       // adding 1 to the top_n to count in "other" aggregation
       const topNPart = meta.info.top_n ? `Top ${meta.info.top_n + 1}` : null;
-      const nodeTypePart = meta.info.node_type
-        ? getNodeTypeName(getPluralNodeType(meta.info.node_type))
-        : 'Selection overview';
+      let nodeTypePart = 'Selection overview';
+      const nodeFilter = meta.info?.filter?.node;
+      if (meta.info.node_type) {
+        nodeTypePart = getNodeTypeName(getPluralNodeType(meta.info.node_type));
+      } else if (nodeFilter) {
+        nodeTypePart = `${capitalize(nodeFilter.name)}${addApostrophe(
+          nodeFilter.name
+        )} regional indicators: ${config?.yAxisLabel.text}`;
+      }
       let filterPart = '';
       const filterKey = meta.info.single_filter_key;
       if (filterKey) {
