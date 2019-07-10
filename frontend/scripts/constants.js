@@ -268,7 +268,8 @@ export const CHART_TYPES = {
   stackedBar: 'stackedBar',
   dynamicSentence: 'dynamicSentence',
   horizontalBar: 'horizontalBar',
-  horizontalStackedBar: 'horizontalStackedBar'
+  horizontalStackedBar: 'horizontalStackedBar',
+  nodeIndicatorSentence: 'nodeIndicatorSentence'
 };
 
 export const NAV_FILTER_TYPES = {
@@ -283,3 +284,5 @@ export const PROFILE_TYPES = {
   importing: 'importing-countries',
   traders: 'traders'
 };
+
+export const DEFAULT_DASHBOARD_UNIT_FORMAT = '.4~s';

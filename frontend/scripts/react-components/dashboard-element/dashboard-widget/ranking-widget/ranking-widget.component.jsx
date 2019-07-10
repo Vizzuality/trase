@@ -1,13 +1,14 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-
-import 'react-components/dashboard-element/dashboard-widget/ranking-widget/ranking-widget-styles.scss';
+import { DEFAULT_DASHBOARD_UNIT_FORMAT } from 'constants';
+import Link from 'redux-first-router-link';
+import { format } from 'd3-format';
+import capitalize from 'lodash/capitalize';
 import Paginate from 'react-components/shared/paginate';
 import Text from 'react-components/shared/text';
 import Heading from 'react-components/shared/heading';
-import capitalize from 'lodash/capitalize';
-import { format } from 'd3-format';
-import Link from 'redux-first-router-link';
+
+import 'react-components/dashboard-element/dashboard-widget/ranking-widget/ranking-widget-styles.scss';
 
 class RankingWidget extends PureComponent {
   state = { page: 0 };
@@ -54,7 +55,7 @@ class RankingWidget extends PureComponent {
     // property is snake_case
     // eslint-disable-next-line
     const totalValue = meta.aggregates?.total_value;
-    const formatTotal = format('.4s');
+    const formatTotal = format(DEFAULT_DASHBOARD_UNIT_FORMAT);
 
     return (
       <div className="c-ranking-widget">

@@ -20,7 +20,16 @@ export const PARSED_CHART_TYPES = {
 
 const getMeta = (state, { meta }) => meta || null;
 const getData = (state, { data }) => data || null;
-const getChartType = (state, { chartType }) => (chartType ? PARSED_CHART_TYPES[chartType] : null);
+const getChartType = (state, { chartType, meta }) => {
+  if (chartType) {
+    const type = PARSED_CHART_TYPES[chartType];
+    if (type === CHART_TYPES.dynamicSentence && typeof meta?.info?.filter?.node !== 'undefined') {
+      return CHART_TYPES.nodeIndicatorSentence;
+    }
+    return type;
+  }
+  return null;
+};
 const getSelectedRecolorBy = (state, props) => props.selectedRecolorBy;
 
 export const getDefaultConfig = createSelector(
