@@ -8,18 +8,17 @@ export const SET_PROFILE_ROOT_ERROR_MESSAGE = 'SET_PROFILE_ROOT_ERROR_MESSAGE';
 export const GET_TOP_PROFILES = 'GET_TOP_PROFILES';
 export const SET_TOP_PROFILES = 'SET_TOP_PROFILES';
 
-export const goToNodeProfilePageLegacy = (node, { year }) => dispatch =>
-  dispatch({
-    type: 'profileNode',
-    payload: {
-      query: {
-        nodeId: node.id,
-        contextId: node.contextId,
-        year
-      },
-      profileType: node.profile
-    }
-  });
+export const goToNodeProfilePageLegacy = (node, { year }) => ({
+  type: 'profileNode',
+  payload: {
+    query: {
+      nodeId: node.id,
+      contextId: node.contextId,
+      year
+    },
+    profileType: node.profile
+  }
+});
 
 export const goToNodeProfilePage = (node, defaultYear) => ({
   type: 'profileNode',
