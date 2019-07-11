@@ -91,7 +91,7 @@ export const getLogisticsMapLayers = createSelector(
   [getActiveLayersIds, getActiveParams, getSelectedTemplates],
   (layersIds, activeParams, selectedTemplates) =>
     selectedTemplates
-      .filter(template => activeParams.commodity === template.commodity)
+      .filter(template => template.layers && activeParams.commodity === template.commodity)
       .map(template => ({
         name: template.leyendName,
         opacity: 1,
@@ -165,17 +165,19 @@ export const getCurrentSearchedCompanies = createSelector(
 export const getLogisticsMapDownloadUrls = createSelector(
   [getSelectedTemplates],
   selectedTemplates =>
-    selectedTemplates.reduce(
-      (acc, template) => ({
-        ...acc,
-        [template.commodity]: [
-          ...(acc[template.commodity] || []),
-          {
-            name: template.leyendName,
-            downloadUrl: template.downloadUrl
-          }
-        ]
-      }),
-      {}
-    )
+    selectedTemplates
+      .filter(template => template.downloadUrl)
+      .reduce(
+        (acc, template) => ({
+          ...acc,
+          [template.commodity]: [
+            ...(acc[template.commodity] || []),
+            {
+              name: template.leyendName,
+              downloadUrl: template.downloadUrl
+            }
+          ]
+        }),
+        {}
+      )
 );
