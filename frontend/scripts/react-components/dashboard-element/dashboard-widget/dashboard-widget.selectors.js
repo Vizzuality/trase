@@ -21,7 +21,6 @@ export const PARSED_CHART_TYPES = {
 
 const getMeta = (state, { meta }) => meta || null;
 const getData = (state, { data }) => data || null;
-const getSelectorConfig = (state, props, config) => config || null;
 const getChartType = (state, { chartType, meta }) => {
   if (chartType) {
     const type = PARSED_CHART_TYPES[chartType];
@@ -206,7 +205,7 @@ const getFilterPreposition = filterKey => {
 
 export const makeGetTitle = () =>
   createSelector(
-    [getMeta, getSelectorConfig],
+    [getMeta, makeGetConfig()],
     (meta, config) => {
       if (!meta || !meta.info) return '';
       // adding 1 to the top_n to count in "other" aggregation

@@ -15,15 +15,12 @@ const makeMapStateToProps = () => {
   const getDashboardWidgetsConfig = makeGetConfig();
   const getChartType = makeGetChartType();
   const getTitle = makeGetTitle();
-  const mapStateToProps = (state, props) => {
-    const config = getDashboardWidgetsConfig(state, props);
-    return {
-      config,
-      chartType: getChartType(state, props),
-      title: getTitle(state, props, config),
-      chartsLoading: state.dashboardElement.chartsLoading
-    };
-  };
+  const mapStateToProps = (state, props) => ({
+    config: getDashboardWidgetsConfig(state, props),
+    chartType: getChartType(state, props),
+    title: getTitle(state, props),
+    chartsLoading: state.dashboardElement.chartsLoading
+  });
   return mapStateToProps;
 };
 
