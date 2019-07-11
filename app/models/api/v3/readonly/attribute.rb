@@ -54,6 +54,8 @@ module Api
         end
 
         def node_values_meta_per_context(context)
+          return unless values_meta.present?
+
           values_meta.node_values.dig('context', context.id.to_s)
         end
 
