@@ -46,6 +46,11 @@ $slide-height: 430px;
         transition: max-height 350ms ease-out;
         will-change: max-height;
 
+        @media screen and (max-width: $breakpoint-foundation-small - 1) {
+          max-height: 100%;
+          margin-bottom: 20px;
+        }
+
         .cards-text {
           overflow: auto;
         }
