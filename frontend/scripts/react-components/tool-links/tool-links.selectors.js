@@ -162,7 +162,7 @@ export const getMergedLinks = createSelector(
     }
 
     if (filteredLinks) {
-      return mergeLinks(filteredLinks);
+      return mergeLinks(filteredLinks, true);
     }
     return mergeLinks(unmergedLinks);
   }
