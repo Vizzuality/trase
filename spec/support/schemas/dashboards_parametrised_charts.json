@@ -4,13 +4,13 @@
   "$id": "http://example.com/root.json",
   "type": "object",
   "required": [
-    "data"
+    "data",
+    "meta"
   ],
   "properties": {
     "data": {
       "$id": "#/properties/data",
       "type": "array",
-      "title": "The Data Schema",
       "items": {
         "$id": "#/properties/data/items",
         "type": "object",
@@ -22,20 +22,156 @@
           "type": {
             "$id": "#/properties/data/items/properties/type",
             "type": "string",
-            "default": "",
-            "examples": [
-              "bar_chart"
-            ],
             "pattern": "^(.*)$"
           },
           "url": {
             "$id": "#/properties/data/items/properties/url",
             "type": "string",
-            "default": "",
-            "examples": [
-              "http://localhost:3000/api/v3/dashboards/chart_data?chart_type=bar_chart&commodity_id=1&cont_attribute_id=1&country_id=27&start_year=2015&x=year&y=cont_attribute&y_id=1"
-            ],
             "pattern": "^(.*)$"
+          }
+        }
+      }
+    },
+    "meta": {
+      "$id": "#/properties/meta",
+      "type": "object",
+      "required": [
+        "groupings"
+      ],
+      "properties": {
+        "groupings": {
+          "$id": "#/properties/meta/properties/groupings",
+          "type": "object",
+          "required": [
+            "0"
+          ],
+          "properties": {
+            "0": {
+              "$id": "#/properties/meta/properties/groupings/properties/0",
+              "type": "object",
+              "required": [
+                "id",
+                "options",
+                "defaultChartId"
+              ],
+              "properties": {
+                "id": {
+                  "$id": "#/properties/meta/properties/groupings/properties/0/properties/id",
+                  "type": "integer"
+                },
+                "options": {
+                  "$id": "#/properties/meta/properties/groupings/properties/0/properties/options",
+                  "type": "array",
+                  "items": {
+                    "$id": "#/properties/meta/properties/groupings/properties/0/properties/options/items",
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "label"
+                    ],
+                    "properties": {
+                      "id": {
+                        "$id": "#/properties/meta/properties/groupings/properties/0/properties/options/items/properties/id",
+                        "type": "integer"
+                      },
+                      "label": {
+                        "$id": "#/properties/meta/properties/groupings/properties/0/properties/options/items/properties/label",
+                        "type": "string",
+                        "pattern": "^(.*)$"
+                      }
+                    }
+                  }
+                },
+                "defaultChartId": {
+                  "$id": "#/properties/meta/properties/groupings/properties/0/properties/defaultChartId",
+                  "type": "integer"
+                }
+              }
+            },
+            "1": {
+              "$id": "#/properties/meta/properties/groupings/properties/1",
+              "type": "object",
+              "required": [
+                "id",
+                "options",
+                "defaultChartId"
+              ],
+              "properties": {
+                "id": {
+                  "$id": "#/properties/meta/properties/groupings/properties/1/properties/id",
+                  "type": "integer"
+                },
+                "options": {
+                  "$id": "#/properties/meta/properties/groupings/properties/1/properties/options",
+                  "type": "array",
+                  "items": {
+                    "$id": "#/properties/meta/properties/groupings/properties/1/properties/options/items",
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "label"
+                    ],
+                    "properties": {
+                      "id": {
+                        "$id": "#/properties/meta/properties/groupings/properties/1/properties/options/items/properties/id",
+                        "type": "integer"
+                      },
+                      "label": {
+                        "$id": "#/properties/meta/properties/groupings/properties/1/properties/options/items/properties/label",
+                        "type": "string",
+                        "pattern": "^(.*)$"
+                      }
+                    }
+                  }
+                },
+                "defaultChartId": {
+                  "$id": "#/properties/meta/properties/groupings/properties/1/properties/defaultChartId",
+                  "type": "integer"
+                }
+              }
+            },
+            "2": {
+              "$id": "#/properties/meta/properties/groupings/properties/2",
+              "type": "object",
+              "required": [
+                "id",
+                "options",
+                "defaultChartId"
+              ],
+              "properties": {
+                "id": {
+                  "$id": "#/properties/meta/properties/groupings/properties/2/properties/id",
+                  "type": "integer"
+                },
+                "options": {
+                  "$id": "#/properties/meta/properties/groupings/properties/2/properties/options",
+                  "type": "array",
+                  "items": {
+                    "$id": "#/properties/meta/properties/groupings/properties/2/properties/options/items",
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "label"
+                    ],
+                    "properties": {
+                      "id": {
+                        "$id": "#/properties/meta/properties/groupings/properties/2/properties/options/items/properties/id",
+                        "type": "integer"
+                      },
+                      "label": {
+                        "$id": "#/properties/meta/properties/groupings/properties/2/properties/options/items/properties/label",
+                        "type": "string",
+                        "pattern": "^(.*)$"
+                      }
+                    }
+                  }
+                },
+                "defaultChartId": {
+                  "$id": "#/properties/meta/properties/groupings/properties/2/properties/defaultChartId",
+                  "type": "integer"
+                }
+              }
+            }
           }
         }
       }

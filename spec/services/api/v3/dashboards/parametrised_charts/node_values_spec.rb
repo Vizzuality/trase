@@ -69,7 +69,8 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeValuesCharts do
         merge(single_year).
         merge(
           cont_attribute_id: force_labour_attribute.id,
-          node_id: api_v3_municipality_node.id
+          node_id: api_v3_municipality_node.id,
+          node_type_id: api_v3_municipality_node.node_type_id
         )
     }
     let(:simplified_expected_chart_types) {
@@ -77,7 +78,9 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeValuesCharts do
         {
           source: :single_year_node_values_overview,
           type: Api::V3::Dashboards::ParametrisedCharts::NodeValuesCharts::DYNAMIC_SENTENCE,
-          x: nil
+          x: nil,
+          grouping_key: :node_id,
+          grouping_label: force_labour_attribute.display_name
         }
       ]
     }
@@ -97,7 +100,8 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeValuesCharts do
         merge(multi_year).
         merge(
           cont_attribute_id: force_labour_attribute.id,
-          node_id: api_v3_municipality_node.id
+          node_id: api_v3_municipality_node.id,
+          node_type_id: api_v3_municipality_node.node_type_id
         )
     }
     let(:simplified_expected_chart_types) {
@@ -105,7 +109,9 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeValuesCharts do
         {
           source: :multi_year_node_values_overview,
           type: Api::V3::Dashboards::ParametrisedCharts::NodeValuesCharts::BAR_CHART,
-          x: :year
+          x: :year,
+          grouping_key: :node_id,
+          grouping_label: force_labour_attribute.display_name
         }
       ]
     }

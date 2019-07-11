@@ -206,7 +206,9 @@ module Api
                 merge(
                   multi_year_ncont_node_type_view(node_type)
                 ).merge(
-                  single_filter_key: nodes_ids_param_name.to_s.sub(/_ids$/, '').to_sym
+                  single_filter_key: nodes_ids_param_name.to_s.sub(/_ids$/, '').to_sym,
+                  grouping_key: :cont_attribute_id,
+                  grouping_label: node.name
                 )
             end.compact
           end

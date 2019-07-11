@@ -108,7 +108,13 @@ module Api
           end
 
           def node_attribute_chart(node, attribute, is_temporal)
-            chart = {cont_attribute_id: attribute.id, node_id: node.id}
+            chart = {
+              cont_attribute_id: attribute.id,
+              node_id: node.id,
+              node_type_id: node.node_type_id,
+              grouping_key: :node_id,
+              grouping_label: attribute.display_name
+            }
             # if it's not a temporal attribute, bar chart makes no sense
             chart = chart.merge(single_year_chart) unless is_temporal
             chart
