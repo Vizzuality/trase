@@ -1,8 +1,6 @@
 @import 'styles/settings';
 
 $slide-height: 430px;
-$content-height-collapsed: 82px;
-$card-min-height: 200px;
 
 .c-animated-card {
   .card-link {
@@ -15,50 +13,47 @@ $card-min-height: 200px;
     box-shadow: $box-shadow;
     overflow: hidden;
 
-    .card-image {
-      position: relative;
-      height: calc(100% - #{$content-height-collapsed});
-      width: 100%;
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center;
-      transition: height 350ms ease-out;
-      will-change: height;
-    }
-
-    .card-content {
+    .card-details-container {
+      display: flex;
+      flex-direction: column;
       position: absolute;
       bottom: 0;
       width: 100%;
-      min-height: $card-min-height;
-      max-height: 100%;
-      padding: 20px;
+      height: $slide-height;
+      max-height: $slide-height;
       background-color: $light-gray;
-      transform: translateY(calc(100% - #{$content-height-collapsed}));
-      transition: transform 350ms ease-out;
+      overflow: auto;
 
-      @media screen and (max-width: $breakpoint-foundation-small) {
-        height: $slide-height;
-        max-height: $slide-height;
+
+      .card-image {
+        position: relative;
+        width: 100%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        flex: 1;
       }
 
-      .card-details-container {
-        overflow: hidden;
-      }
-
-      .card-title {
-        margin-top: 5px;
+      .card-details-title {
+        padding: 20px;
+        flex: 0;
       }
 
       .cards-details-text-container {
-        max-height: calc(#{$slide-height} - #{$content-height-collapsed});
-        overflow: auto;
+        flex: 0;
+        max-height: 0;
+        padding: 0 20px;
+        transition: max-height 350ms ease-out;
+        will-change: max-height;
+
+        .cards-text {
+          overflow: auto;
+        }
       }
     }
 
     &:hover {
       .card-image {
-        height: calc(100% - #{$card-min-height});
         &::after {
           content: '';
           position: absolute;
@@ -68,8 +63,9 @@ $card-min-height: 200px;
         }
       }
 
-      .card-content {
-        transform: translateY(0);
+      .cards-details-text-container {
+        max-height: 100%;
+        margin-bottom: 20px;
       }
     }
   }

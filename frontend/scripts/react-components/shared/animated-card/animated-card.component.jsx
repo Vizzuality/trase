@@ -31,30 +31,31 @@ function AnimatedCard(props) {
         tx-content={translateUrl ? 'translate_urls' : undefined}
         {...linkProps}
       >
-        <ImgBackground as="figure" alt={title} className="card-image" src={imageUrl} />
-        <figcaption className="card-content">
-          <div className="card-details-container">
+        <div className="card-details-container">
+          <ImgBackground as="figure" alt={title} className="card-image" src={[imageUrl]} />
+          <figcaption className="card-details-title">
             <Heading as="h4" variant="mono" color="pink" size="sm" weight="bold">
               {category}
             </Heading>
             <Heading as="h3" color="grey" size="lg" weight="bold">
               {title}
             </Heading>
-            <div className="cards-details-text-container">
+          </figcaption>
+          <div className="cards-details-text-container">
+            <div className="cards-text">
               <Text
                 as="span"
                 color="grey"
                 size="lg"
                 weight="light"
                 transform="capitalize"
-                className="card-title"
                 lineHeight="lg"
               >
                 {parseHtml ? <div dangerouslySetInnerHTML={{ __html: subtitle }} /> : subtitle}
               </Text>
             </div>
           </div>
-        </figcaption>
+        </div>
       </Link>
     </div>
   );
