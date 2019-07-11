@@ -227,7 +227,9 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
           break_by: :ncont_attribute,
           node_type_id: api_v3_exporter_node_type.id,
           companies_ids: [api_v3_exporter1_node.id],
-          single_filter_key: :companies
+          single_filter_key: :companies,
+          grouping_key: :cont_attribute_id,
+          grouping_label: api_v3_exporter1_node.name
         },
         {
           source: :multi_year_ncont_overview,
@@ -236,7 +238,9 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
           break_by: :ncont_attribute,
           node_type_id: api_v3_exporter_node_type.id,
           companies_ids: [api_v3_other_exporter_node.id],
-          single_filter_key: :companies
+          single_filter_key: :companies,
+          grouping_key: :cont_attribute_id,
+          grouping_label: api_v3_other_exporter_node.name
         }
       ] + [
         api_v3_biome_node_type,

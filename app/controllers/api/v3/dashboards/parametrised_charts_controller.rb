@@ -12,10 +12,12 @@ module Api
 
           parametrised_charts = ParametrisedCharts::List.new(
             ChartParameters::FlowValues.new(flow_values_chart_params)
-          ).call
+          )
+          parametrised_charts.call
 
-          render json: parametrised_charts,
+          render json: parametrised_charts.data,
                  root: 'data',
+                 meta: parametrised_charts.meta,
                  each_serializer: Api::V3::Dashboards::ParametrisedChartSerializer,
                  url: proc { |options|
                    send(
