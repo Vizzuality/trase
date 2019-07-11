@@ -30,11 +30,20 @@ module Api
       belongs_to :node
       belongs_to :top_profile_image, optional: true
 
+      validates :node, presence: true
+      validates :context, presence: true
+
+      before_create :derive_top_profile_details
+
       def self.blue_foreign_keys
         [
           {name: :context_id, table_class: Api::V3::Context},
           {name: :node_id, table_class: Api::V3::Node}
         ]
+      end
+
+      def derive_top_profile_details
+        Api::V3::TopProfiles::DeriveTopProfileDetails.call(self)
       end
     end
   end

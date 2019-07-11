@@ -2,26 +2,31 @@ require 'rails_helper'
 
 RSpec.describe Admin::TopProfilesController, type: :controller do
   render_views
+
+  include_context 'api v3 brazil flows'
+  include_context 'api v3 brazil exporter actor profile'
+
   let(:user) { FactoryBot.create(:user) }
   before { sign_in user }
-  before :each do
-    allow(controller).to receive(:derive_top_profile_details).and_return(true)
-  end
 
-  let(:context) { FactoryBot.create(:api_v3_context) }
-  let(:node) { FactoryBot.create(:api_v3_node) }
-  let(:top_profile) { FactoryBot.create(:api_v3_top_profile) }
+  let(:context) { api_v3_context }
+  let(:node) { api_v3_exporter1_node }
+  # let(:top_profile) { FactoryBot.create(:api_v3_top_profile) }
 
   describe 'POST create' do
-    subject { Api::V3::TopProfile.new(context: context, node: node) }
+    before(:each) do
+      Api::V3::Readonly::Node.refresh(sync: true)
+      Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
+      Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
+    end
 
     let(:top_profile) {
       FactoryBot.create(
-        :api_v3_top_profile, context: context, node: FactoryBot.create(:api_v3_node)
+        :api_v3_top_profile, context: context, node: node
       )
     }
     let(:valid_attributes) {
-      {context_id: context.id, node_id: FactoryBot.create(:api_v3_node).id}
+      {context_id: context.id, node_id: node.id}
     }
     it 'redirects to index' do
       post :create, params: {
@@ -31,7 +36,7 @@ RSpec.describe Admin::TopProfilesController, type: :controller do
     end
 
     it 'renders index' do
-      get :index, params: { context_id: context.id, id: top_profile.id }
+      get :index, params: {context_id: context.id, id: top_profile.id}
       expect(response).to render_template(:index)
     end
 
@@ -41,15 +46,21 @@ RSpec.describe Admin::TopProfilesController, type: :controller do
     end
 
     it 'renders index' do
-      get :new, params: { context_id: context.id }
+      get :new, params: {context_id: context.id}
       expect(response).to render_template(:new)
     end
   end
 
   describe 'PUT update' do
+    before(:each) do
+      Api::V3::Readonly::Node.refresh(sync: true)
+      Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
+      Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
+    end
+
     let(:top_profile) {
       FactoryBot.create(
-        :api_v3_top_profile, context: context, node: FactoryBot.create(:api_v3_node)
+        :api_v3_top_profile, context: context, node: node
       )
     }
     let(:top_profile_image) {
@@ -59,7 +70,7 @@ RSpec.describe Admin::TopProfilesController, type: :controller do
       )
     }
     let(:valid_attributes) {
-      {context_id: context.id, node_id: FactoryBot.create(:api_v3_node).id}
+      {context_id: context.id, node_id: node.id}
     }
     it 'redirects to index' do
       put :update, params: {
