@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::Dashboards::CompaniesController, type: :controller do
   include_context 'api v3 brazil flows quants'
+  include_context 'api v3 paraguay flows quants'
 
   before(:each) do
     Api::V3::Readonly::Dashboards::FlowPath.refresh(sync: true, skip_dependents: true)
@@ -24,9 +25,9 @@ RSpec.describe Api::V3::Dashboards::CompaniesController, type: :controller do
     let(:all_results_alphabetically) {
       [
         api_v3_exporter1_node,
+        api_v3_importer1_node,
         api_v3_other_exporter_node,
-        api_v3_other_importer_node,
-        api_v3_importer1_node
+        api_v3_other_importer_node
       ]
     }
 
@@ -52,6 +53,17 @@ RSpec.describe Api::V3::Dashboards::CompaniesController, type: :controller do
     it 'accepts per_page' do
       get :index, params: {countries_ids: api_v3_brazil.id, per_page: per_page}
       expect(assigns(:collection).size).to eq(per_page)
+    end
+
+    context 'when profile_only' do
+      include_context 'api v3 brazil exporter actor profile'
+
+      it 'returns companies with profiles' do
+        get :index, params: {profile_only: true}
+        expect(assigns(:collection).map(&:id)).to eq(
+          [api_v3_exporter1_node.id, api_v3_importer1_node.id]
+        )
+      end
     end
   end
 end

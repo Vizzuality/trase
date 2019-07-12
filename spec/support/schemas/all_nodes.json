@@ -43,7 +43,7 @@
           },
           "isUnknown": {
             "id": "/properties/data/items/properties/isUnknown",
-            "type": "null"
+            "type": ["boolean", "null"]
           },
           "name": {
             "id": "/properties/data/items/properties/name",

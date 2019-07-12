@@ -645,6 +645,7 @@ paths:
         - $ref: "#/components/parameters/dashboards_sources_ids"
         - $ref: "#/components/parameters/dashboards_companies_ids"
         - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/profile_only"
       responses:
         "200":
           description: OK
@@ -694,6 +695,7 @@ paths:
         - $ref: "#/components/parameters/dashboards_sources_ids"
         - $ref: "#/components/parameters/dashboards_companies_ids"
         - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/profile_only"
       responses:
         "200":
           description: OK
@@ -766,6 +768,7 @@ paths:
         - $ref: "#/components/parameters/dashboards_companies_ids"
         - $ref: "#/components/parameters/dashboards_destinations_ids"
         - $ref: "#/components/parameters/node_types_ids"
+        - $ref: "#/components/parameters/profile_only"
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
@@ -821,6 +824,7 @@ paths:
         - $ref: "#/components/parameters/dashboards_sources_ids"
         - $ref: "#/components/parameters/dashboards_destinations_ids"
         - $ref: "#/components/parameters/node_types_ids"
+        - $ref: "#/components/parameters/profile_only"
         - $ref: "#/components/parameters/page"
         - $ref: "#/components/parameters/per_page"
       responses:
@@ -1659,6 +1663,13 @@ components:
       required: false
       schema:
         type: integer
+    profile_only:
+      name: profile_only
+      in: query
+      description: Only include results with nodes that have profiles
+      required: false
+      schema:
+        type: boolean
     page:
       name: page
       in: query
