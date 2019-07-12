@@ -1,5 +1,6 @@
 /* eslint-disable camelcase,import/no-extraneous-dependencies,no-use-before-define */
 import uniqBy from 'lodash/uniqBy';
+import sortBy from 'lodash/sortBy';
 import wrapSVGText from 'utils/wrapSVGText';
 import { NUM_COLUMNS, DETAILED_VIEW_MIN_NODE_HEIGHT, DETAILED_VIEW_SCALE } from 'scripts/constants';
 import { interpolateNumber as d3_interpolateNumber } from 'd3-interpolate';
@@ -172,59 +173,44 @@ const sankeyLayout = () => {
 
     // sort links by node source and target y positions
     // TODO move sorting to reducer
-    links.sort((linkA, linkB) => {
-      const sIdAY = stackedHeightsByNodeId.source[linkA.sourceNodeId];
-      const sIdBY = stackedHeightsByNodeId.source[linkB.sourceNodeId];
-      const tIdAY = stackedHeightsByNodeId.target[linkA.targetNodeId];
-      const tIdBY = stackedHeightsByNodeId.target[linkB.targetNodeId];
-      const defaultSort = sIdAY - sIdBY || tIdAY - tIdBY;
+    const logs = [];
+    links = sortBy(links, linkA => {
+      // const sIdAY = stackedHeightsByNodeId.source[linkA.sourceNodeId];
+      // const tIdAY = stackedHeightsByNodeId.target[linkA.targetNodeId];
+      const defaultSort = linkA.quant; // sIdAY * tIdAY;
 
       if (recolorBy) {
         // sorts alphabetically with quals, numerically with inds
         // TODO for quals use the order presented in the color by menu
-        if (linkA.recolorBy === linkB.recolorBy) {
-          return defaultSort;
+        if (linkA.recolorBy !== null) {
+          return linkA.recolorBy;
         }
-        let recolorBySort;
-        if (linkA.recolorBy === null) {
-          recolorBySort = 1;
-        } else if (linkB.recolorBy === null) {
-          recolorBySort = -1;
-        } else {
-          recolorBySort =
-            recolorBy.type === 'ind'
-              ? linkA.recolorBy - linkB.recolorBy
-              : `${linkA.recolorBy}`.charCodeAt(0) - `${linkB.recolorBy}`.charCodeAt(0);
-        }
-        return recolorBySort;
       }
       if (links[0] && links[0].recolorGroup !== undefined) {
         // When using a recolorGroup
         // For columns outside of adjacent columns, links should be sorted by the original *y order of recolored nodes*
         // (mapped to recolor groups before sorting, see recolorGroupsOrderedByY bit above)
         // Columns directly adjacent to the column where nodes are selected
-        // are sorted by y coords (source or target, depedning on if column is at the left or the right of the selected colun).
+        // are sorted by y coords (source or target, depending on if column is at the left or the right of the selected colun).
         if (
-          linkA.sourceColumnPosition > nodesColoredAtColumn ||
+          linkA.sourceColumnPosition >= nodesColoredAtColumn ||
           linkA.targetColumnPosition < nodesColoredAtColumn
         ) {
-          const recolorGroupsYA = recolorGroupsOrderedByY.indexOf(linkA.recolorGroup);
-          const recolorGroupsYB = recolorGroupsOrderedByY.indexOf(linkB.recolorGroup);
-          return recolorGroupsYA === recolorGroupsYB
-            ? defaultSort
-            : recolorGroupsYA - recolorGroupsYB;
+          const baseLog = (base, num) => Math.log(num) / Math.log(base);
+          const recolorGroupIndex = recolorGroupsOrderedByY.indexOf(linkA.recolorGroup) + 2;
+          const value = baseLog(recolorGroupIndex ** (10 * recolorGroupIndex), defaultSort);
+          logs.push({
+            value: parseInt(value * 10000, 10),
+            params: `${10 ** recolorGroupIndex}, ${defaultSort}`,
+            group: recolorGroupsOrderedByY.indexOf(linkA.recolorGroup),
+            link: `${linkA.sourceNodeName} - ${linkA.targetNodeName}`
+          });
+          return -value;
         }
-        if (linkA.targetColumnPosition <= nodesColoredAtColumn) {
-          return tIdAY - tIdBY || sIdAY - sIdBY;
-        }
-        if (linkA.sourceColumnPosition >= nodesColoredAtColumn) {
-          return sIdAY - sIdBY || tIdAY - tIdBY;
-        }
-
-        return defaultSort;
       }
       return defaultSort;
     });
+    console.table(logs);
 
     links.forEach(link => {
       link.width = linksColumnWidth;
