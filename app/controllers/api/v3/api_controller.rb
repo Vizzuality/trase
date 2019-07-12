@@ -15,13 +15,6 @@ module Api
         @context = Api::V3::Context.find(params[:context_id])
       end
 
-      def set_year
-        @year = params[:year]&.to_i
-        return if @year.present?
-        raise ActionController::ParameterMissing,
-              'Required param year missing'
-      end
-
       def ensure_required_param_present(param_symbol)
         return if params[param_symbol].present?
         raise ActionController::ParameterMissing,

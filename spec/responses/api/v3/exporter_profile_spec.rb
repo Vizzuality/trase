@@ -12,6 +12,7 @@ RSpec.describe 'Exporter profile', type: :request do
   include_context 'api v3 brazil exporter actor profile'
 
   before(:each) do
+    Api::V3::Readonly::Node.refresh(sync: true, skip_dependencies: true)
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
   end
@@ -34,7 +35,7 @@ RSpec.describe 'Exporter profile', type: :request do
       ].each do |non_exporter_node|
         get "/api/v3/contexts/#{api_v3_context.id}/actors/#{non_exporter_node.id}/basic_attributes"
         expect(@response).to have_http_status(:not_found)
-        expect(JSON.parse(@response.body)['error']).to match("Couldn't find Api::V3::Node with")
+        expect(JSON.parse(@response.body)['error']).to match("Couldn't find Api::V3::Readonly::Node with")
       end
     end
 
