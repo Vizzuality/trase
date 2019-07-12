@@ -8,6 +8,7 @@
 #  iso2          :text
 #  commodity_id  :integer
 #  node_id       :integer
+#  profile       :text
 #
 # Indexes
 #
