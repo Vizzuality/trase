@@ -171,10 +171,12 @@ const sankeyLayout = () => {
       recolorGroupsOrderedByY = coloredColumnLinks.map(l => l.recolorGroup);
     }
 
+    // for debugging purposes uncomment next line
+    const logsDebug = false; // [];
+
     // sort links by node source and target y positions
-    // TODO move sorting to reducer
-    const logs = [];
     links = sortBy(links, linkA => {
+      const baseLog = (base, num) => Math.log(num) / Math.log(base);
       // const sIdAY = stackedHeightsByNodeId.source[linkA.sourceNodeId];
       // const tIdAY = stackedHeightsByNodeId.target[linkA.targetNodeId];
       const defaultSort = linkA.quant; // sIdAY * tIdAY;
@@ -183,8 +185,12 @@ const sankeyLayout = () => {
         // sorts alphabetically with quals, numerically with inds
         // TODO for quals use the order presented in the color by menu
         if (linkA.recolorBy !== null) {
+          if (recolorBy.type === 'ind') {
+            return -baseLog(linkA.recolorBy ** (10 * linkA.recolorBy), defaultSort);
+          }
           return linkA.recolorBy;
         }
+        return defaultSort;
       }
       if (links[0] && links[0].recolorGroup !== undefined) {
         // When using a recolorGroup
@@ -196,21 +202,25 @@ const sankeyLayout = () => {
           linkA.sourceColumnPosition >= nodesColoredAtColumn ||
           linkA.targetColumnPosition < nodesColoredAtColumn
         ) {
-          const baseLog = (base, num) => Math.log(num) / Math.log(base);
           const recolorGroupIndex = recolorGroupsOrderedByY.indexOf(linkA.recolorGroup) + 2;
           const value = baseLog(recolorGroupIndex ** (10 * recolorGroupIndex), defaultSort);
-          logs.push({
-            value: parseInt(value * 10000, 10),
-            params: `${10 ** recolorGroupIndex}, ${defaultSort}`,
-            group: recolorGroupsOrderedByY.indexOf(linkA.recolorGroup),
-            link: `${linkA.sourceNodeName} - ${linkA.targetNodeName}`
-          });
+          if (logsDebug) {
+            const logRow = {
+              value,
+              originalRecolorGroupIndex: recolorGroupIndex - 2,
+              recolorGroupIndex,
+              link: `${linkA.sourceNodeName} - ${linkA.targetNodeName}`
+            };
+            logsDebug.push(logRow);
+          }
           return -value;
         }
       }
       return defaultSort;
     });
-    console.table(logs);
+    if (logsDebug && NODE_ENV_DEV) {
+      console.table(logsDebug);
+    }
 
     links.forEach(link => {
       link.width = linksColumnWidth;
