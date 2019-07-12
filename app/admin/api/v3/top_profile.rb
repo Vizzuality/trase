@@ -3,8 +3,6 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
   permit_params :context_id, :node_id, :top_profile_image_id
   config.filters = false
 
-  # before creating add summary, year and profile_type to top profile record
-  before_create :derive_top_profile_details
   after_action :clear_cache, only: [:create, :update, :destroy]
 
   controller do
@@ -25,10 +23,6 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
       super do |success, _failure|
         success.html { redirect_to admin_context_top_profiles_path(parent) }
       end
-    end
-
-    def derive_top_profile_details(top_profile)
-      Api::V3::TopProfiles::DeriveTopProfileDetails.call(top_profile)
     end
   end
 
