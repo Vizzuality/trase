@@ -127,7 +127,10 @@ module Api
             Api::V3::Readonly::Dashboards::Destination,
             Api::V3::Readonly::ContextAttributeProperty,
             Api::V3::Readonly::CountryAttributeProperty,
-            Api::V3::Readonly::CommodityAttributeProperty
+            Api::V3::Readonly::CommodityAttributeProperty,
+            Api::V3::Readonly::QuantValuesMeta,
+            Api::V3::Readonly::IndValuesMeta,
+            Api::V3::Readonly::QualValuesMeta
           ].each { |mview| mview.refresh(sync: true, skip_dependencies: true) }
         end
 

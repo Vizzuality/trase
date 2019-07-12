@@ -15,6 +15,7 @@ module Api
   module V3
     class Ind < BlueTable
       has_one :ind_property
+      has_one :ind_values_meta, class_name: 'Api::V3::Readonly::IndValuesMeta'
       has_many :node_inds
       has_many :flow_inds
       has_many :flows, through: :flow_inds
@@ -23,6 +24,8 @@ module Api
       has_many :ind_country_properties
 
       delegate :display_name, to: :ind_property, allow_nil: true
+      alias_method :values_meta, :ind_values_meta
+      alias_method :node_values, :node_inds
 
       def readonly_attribute
         Api::V3::Readonly::Attribute.

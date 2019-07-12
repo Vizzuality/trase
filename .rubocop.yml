@@ -43,6 +43,9 @@ Metrics/LineLength:
     - 'app/services/api/v3/actors/**/*'
     - 'app/services/api/v3/places/**/*'
 
+Style/Alias:
+  Enabled: false
+
 Style/AndOr:
   Enabled: false
 
@@ -75,6 +78,9 @@ Style/MixinUsage:
     - 'lib/tasks/db_doc.rake'
 
 Style/PercentLiteralDelimiters:
+  Enabled: false
+
+Style/PerlBackrefs:
   Enabled: false
 
 Style/RegexpLiteral:

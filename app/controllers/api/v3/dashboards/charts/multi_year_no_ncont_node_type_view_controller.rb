@@ -3,7 +3,7 @@ module Api
     module Dashboards
       module Charts
         class MultiYearNoNcontNodeTypeViewController < ApiController
-          include FilterParams
+          include ChartParams
           skip_before_action :load_context
 
           DEFAULT_TOP_N = 20
@@ -18,7 +18,7 @@ module Api
             ensure_required_param_set(:top_n, DEFAULT_TOP_N)
 
             render json: MultiYearNoNcontNodeTypeView.new(
-              ChartParameters.new(chart_params)
+              ChartParameters::FlowValues.new(flow_values_chart_params)
             ).call
           end
         end
