@@ -15,7 +15,12 @@ module Api
       end
 
       def photo_url
-        object&.top_profile_image&.image&.url
+        if object.top_profile_image
+          object.top_profile_image.image.url
+        else
+          top_profile = Api::V3::TopProfile.includes(:context).find(object.id)
+          Api::V3::TopProfiles::GetMatchingImage.call(top_profile)
+        end
       end
     end
   end
