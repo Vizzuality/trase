@@ -2,7 +2,7 @@
 import uniqBy from 'lodash/uniqBy';
 import wrapSVGText from 'utils/wrapSVGText';
 import { interpolateNumber as d3_interpolateNumber } from 'd3-interpolate';
-import { sortFlows } from 'react-components/tool/sankey/sankey.utils';
+import { sortFlows } from 'react-components/tool/sankey/sort-flows';
 import { NUM_COLUMNS, DETAILED_VIEW_MIN_NODE_HEIGHT, DETAILED_VIEW_SCALE } from 'scripts/constants';
 import { translateText } from 'utils/transifex';
 

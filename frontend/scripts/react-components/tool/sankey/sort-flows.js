@@ -7,7 +7,7 @@ import sortBy from 'lodash/sortBy';
 // This can expressed as: Log(recolorGroup, quant size)
 const baseLog = (base, num) => Math.log(num) / Math.log(base);
 
-function sortFlowsBySelectedRecolorBy(link, defaultSort, recolorBy, logsDebug) {
+export function sortFlowsBySelectedRecolorBy(link, recolorBy, logsDebug) {
   // sorts alphabetically with quals, numerically with inds
   // TODO for quals use the order presented in the color by menu
   if (recolorBy.type === 'ind') {
@@ -19,7 +19,7 @@ function sortFlowsBySelectedRecolorBy(link, defaultSort, recolorBy, logsDebug) {
       // Because we're using logarithms, and recolor groups as bases, we need to ensure that the min value of the base is 2.
       // That's why we're adding 2 to the originalRecolorGroupIndex.
       const base = link.recolorBy + 2;
-      const value = baseLog(base ** (10 * base), defaultSort);
+      const value = baseLog(base ** (10 * base), link.quant);
       if (logsDebug) {
         const logRow = {
           value,
@@ -36,7 +36,7 @@ function sortFlowsBySelectedRecolorBy(link, defaultSort, recolorBy, logsDebug) {
 
     const value = baseLog(
       lastPossibleBaseWithBuffer ** (10 * lastPossibleBaseWithBuffer),
-      defaultSort
+      link.quant
     );
     if (logsDebug) {
       const logRow = {
@@ -51,12 +51,11 @@ function sortFlowsBySelectedRecolorBy(link, defaultSort, recolorBy, logsDebug) {
   if (recolorBy.type === 'qual') {
     return link.recolorBy;
   }
-  return defaultSort;
+  return link.quant;
 }
 
-function sortFlowsBySelectionRecolorGroup(
+export function sortFlowsBySelectionRecolorGroup(
   link,
-  defaultSort,
   { nodesColoredAtColumn, recolorGroupsOrderedByY },
   logsDebug
 ) {
@@ -70,7 +69,7 @@ function sortFlowsBySelectionRecolorGroup(
     const originalRecolorGroupIndex = recolorGroupsOrderedByY.indexOf(link.recolorGroup);
     const recolorGroupIndex = originalRecolorGroupIndex + 2;
 
-    const value = baseLog(recolorGroupIndex ** (10 * recolorGroupIndex), defaultSort);
+    const value = baseLog(recolorGroupIndex ** (10 * recolorGroupIndex), link.quant);
     if (logsDebug) {
       const logRow = {
         value,
@@ -82,7 +81,7 @@ function sortFlowsBySelectionRecolorGroup(
     }
     return -value;
   }
-  return defaultSort;
+  return link.quant;
 }
 
 export function sortFlows(links, recolorBy, recolorGroupOptions) {
@@ -93,17 +92,16 @@ export function sortFlows(links, recolorBy, recolorGroupOptions) {
     // all flows from all columns are mixed in the same array,
     // this is fine because the sankey knows in which segment and node to paint each.
     // This allows us to sort by quant size, and lets us show the biggest flows at that top of each node.
-    const defaultSort = link.quant;
 
     if (recolorBy) {
-      return sortFlowsBySelectedRecolorBy(link, defaultSort, recolorBy, logsDebug);
+      return sortFlowsBySelectedRecolorBy(link, recolorBy, logsDebug);
     }
 
     // this is used when selecting nodes and no recolorby is active
     if (links[0] && links[0].recolorGroup !== undefined) {
-      return sortFlowsBySelectionRecolorGroup(link, defaultSort, recolorGroupOptions, logsDebug);
+      return sortFlowsBySelectionRecolorGroup(link, recolorGroupOptions, logsDebug);
     }
-    return defaultSort;
+    return link.quant;
   });
 
   if (logsDebug && NODE_ENV_DEV) {
