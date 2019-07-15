@@ -270,13 +270,13 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       [
         {
           source: :multi_year_ncont_overview,
-          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::BAR_CHART,
+          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::STACKED_BAR_CHART,
           x: :year,
           break_by: :ncont_attribute
         },
         {
           source: :multi_year_ncont_overview,
-          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::BAR_CHART,
+          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::STACKED_BAR_CHART,
           x: :year,
           break_by: :ncont_attribute,
           node_type_id: api_v3_exporter_node_type.id,
@@ -285,7 +285,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         },
         {
           source: :multi_year_ncont_overview,
-          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::BAR_CHART,
+          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::STACKED_BAR_CHART,
           x: :year,
           break_by: :ncont_attribute,
           node_type_id: api_v3_exporter_node_type.id,
@@ -302,7 +302,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
       ].map do |node_type|
         {
           source: :multi_year_no_ncont_node_type_view,
-          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::BAR_CHART,
+          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::STACKED_BAR_CHART,
           x: :year,
           break_by: :node_type,
           node_type_id: node_type.id
