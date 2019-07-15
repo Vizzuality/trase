@@ -32,7 +32,11 @@ module Api
 
       def load_node
         ensure_required_param_present(:id)
-        @node = Api::V3::Node.find(params[:id])
+
+        node_in_mv = Api::V3::Readonly::Node.
+          where(context_id: @context.id, profile: ['actor', 'place']).
+          find(params[:id])
+        @node = Api::V3::Node.find(node_in_mv.id)
       end
     end
   end
