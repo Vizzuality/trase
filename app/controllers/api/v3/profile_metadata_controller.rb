@@ -34,7 +34,7 @@ module Api
         ensure_required_param_present(:id)
 
         node_in_mv = Api::V3::Readonly::Node.
-          where(context_id: @context.id, profile: ['actor', 'place']).
+          where(context_id: @context.id, profile: %w[actor place]).
           find(params[:id])
         @node = Api::V3::Node.find(node_in_mv.id)
       end
