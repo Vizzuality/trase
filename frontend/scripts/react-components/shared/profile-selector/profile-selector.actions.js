@@ -8,7 +8,6 @@ export const PROFILES__SET_PANEL_DATA = 'PROFILES__SET_PANEL_DATA';
 export const PROFILES__SET_ACTIVE_STEP = 'PROFILES__SET_ACTIVE_STEP';
 export const PROFILES__SET_ACTIVE_ITEM = 'PROFILES__SET_ACTIVE_ITEM';
 export const PROFILES__SET_ACTIVE_TAB = 'PROFILES__SET_ACTIVE_TAB';
-export const PROFILES__CLEAR_PANEL = 'PROFILES__CLEAR_PANEL';
 export const PROFILES__CLEAR_PANELS = 'PROFILES__CLEAR_PANELS';
 export const PROFILES__SET_PANEL_TABS = 'PROFILES__SET_PANEL_TABS';
 export const PROFILES__SET_PANEL_PAGE = 'PROFILES__SET_PANEL_PAGE';
@@ -59,13 +58,6 @@ export const setProfilesActiveTab = (activeTab, panel) => ({
   payload: {
     panel,
     activeTab
-  }
-});
-
-export const clearProfilesPanel = panel => ({
-  type: PROFILES__CLEAR_PANEL,
-  payload: {
-    panel
   }
 });
 

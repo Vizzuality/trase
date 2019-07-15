@@ -3,7 +3,6 @@ import ProfileStepPanelComponent from 'react-components/shared/profile-selector/
 import {
   setProfilesPage,
   setProfilesActiveItem,
-  clearProfilesPanel,
   setProfilesActiveTab,
   getProfilesSearchResults,
   setProfilesActiveItemWithSearch
@@ -21,7 +20,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   setProfilesPage,
   setProfilesActiveItem,
-  clearProfilesPanel,
   getSearchResults: getProfilesSearchResults,
   setProfilesSearchResult: setProfilesActiveItemWithSearch,
   getMoreItems: setProfilesPage,

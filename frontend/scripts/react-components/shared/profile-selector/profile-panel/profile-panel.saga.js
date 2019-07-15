@@ -146,7 +146,7 @@ function* fetchDataOnPageChange() {
  * Listens to actions that remove or clear panel items and deletes all subsequent selections if the panel is changed
  */
 
-export function* onChangePanel(action) {
+export function* onChangeItem(action) {
   const { panel } = action.payload;
   const profileSelector = yield select(state => state.profileSelector);
   let panelsToClear = [];
@@ -155,7 +155,7 @@ export function* onChangePanel(action) {
       panelsToClear = ['companies', 'countries', 'sources', 'commodities'];
       break;
     case 'countries':
-      panelsToClear = ['sources', 'commodities'];
+      panelsToClear = ['sources', 'commodities', 'companies'];
       break;
     case 'sources':
     case 'companies':
@@ -177,7 +177,7 @@ export function* onChangePanel(action) {
 }
 
 function* clearSubsequentPanels() {
-  yield takeLatest([PROFILES__SET_ACTIVE_ITEM], onChangePanel);
+  yield takeLatest([PROFILES__SET_ACTIVE_ITEM], onChangeItem);
 }
 
 /**

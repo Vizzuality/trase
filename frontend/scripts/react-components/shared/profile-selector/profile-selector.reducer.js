@@ -8,7 +8,6 @@ import {
   PROFILES__SET_PANEL_TABS,
   PROFILES__SET_ACTIVE_ITEM,
   PROFILES__SET_SEARCH_RESULTS,
-  PROFILES__CLEAR_PANEL,
   PROFILES__SET_ACTIVE_TAB,
   PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH,
   PROFILES__CLEAR_PANELS
@@ -205,34 +204,17 @@ const profileRootReducer = {
     let activeItems = {};
     if (panel === 'types') {
       activeItems = { type: activeItem };
-    } else if (!isEmpty(activeItem)) {
-      activeItems = { [activeItem.id]: activeItem };
+    } else {
+      const isAlreadySelected = !!state.panels[panel].activeItems[activeItem.id];
+      if (!isAlreadySelected) {
+        activeItems = { [activeItem.id]: activeItem };
+      }
     }
     return {
       ...state,
       panels: {
         ...state.panels,
-        [panel]: {
-          ...state.panels[panel],
-          activeItems
-        }
-      }
-    };
-  },
-  [PROFILES__CLEAR_PANEL](state, action) {
-    const { panel } = action.payload;
-    const { activeTab } = state.panels[panel];
-    const shouldResetCountries = ['countries', 'sources'].includes(panel);
-    const countriesState = shouldResetCountries
-      ? initialState.panels.countries
-      : state.panels.countries;
-
-    return {
-      ...state,
-      panels: {
-        ...state.panels,
-        [panel]: { ...initialState.panels[panel], activeTab },
-        countries: countriesState
+        [panel]: { ...state.panels[panel], activeItems }
       }
     };
   },

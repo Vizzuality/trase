@@ -11,7 +11,6 @@ import 'react-components/shared/profile-selector/profile-panel/profile-step-pane
 function ProfileStepPanel(props) {
   const {
     setProfilesActiveItem,
-    clearProfilesPanel,
     setProfilesActiveTab,
     getSearchResults,
     setProfilesSearchResult,
@@ -20,7 +19,6 @@ function ProfileStepPanel(props) {
     data,
     loading,
     profileType,
-    panelName,
     tabs
   } = props;
   const { sources, countries, companies } = panels;
@@ -36,7 +34,6 @@ function ProfileStepPanel(props) {
           searchSources={!countries.activeItems ? countries.searchResults : sources.searchResults}
           getSearchResults={getSearchResults}
           loadingMoreItems={sources.loadingItems}
-          clearItems={() => clearProfilesPanel(panelName)}
           activeCountryItem={countries.activeItems}
           activeSourceTab={sources.activeTab}
           activeSourceItem={sources.activeItems}
@@ -107,7 +104,6 @@ function ProfileStepPanel(props) {
 
 ProfileStepPanel.propTypes = {
   setProfilesActiveItem: PropTypes.func.isRequired,
-  clearProfilesPanel: PropTypes.func.isRequired,
   setProfilesActiveTab: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
   setProfilesSearchResult: PropTypes.func.isRequired,
@@ -115,7 +111,6 @@ ProfileStepPanel.propTypes = {
   panels: PropTypes.object,
   profileType: PropTypes.string,
   tabs: PropTypes.array,
-  panelName: PropTypes.string.isRequired,
   data: PropTypes.object,
   loading: PropTypes.bool
 };
