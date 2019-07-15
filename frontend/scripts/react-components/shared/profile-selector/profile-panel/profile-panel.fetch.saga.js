@@ -25,7 +25,7 @@ export function* getProfilesData(panelName) {
   const { page, activeTab } = profileSelector.panels[panelName];
   const tab = activeTab?.id;
   const params = getProfilesParams(profileSelector, panelName, { page });
-  const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
+  const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, { ...params, profile_only: true });
   const task = yield fork(setLoadingSpinner, 750, {
     type: PROFILES__SET_PANEL_DATA,
     payload: {
@@ -68,7 +68,7 @@ export function* getMoreProfilesData(profileSelector, panelName, activeTab, dire
   const { page } = profileSelector.panels[panelName];
   const params = getProfilesParams(profileSelector, panelName, { page });
   const task = yield fork(setLoadingSpinner, 350, setProfilesLoadingItems(true));
-  const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
+  const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, { ...params, profile_only: true });
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
@@ -106,7 +106,7 @@ export function* getMoreProfilesData(profileSelector, panelName, activeTab, dire
 export function* getProfilesTabs(optionsType) {
   const profileSelector = yield select(state => state.profileSelector);
   const params = getProfilesParams(profileSelector, optionsType);
-  const url = getURLFromParams(GET_DASHBOARD_OPTIONS_TABS_URL, params);
+  const url = getURLFromParams(GET_DASHBOARD_OPTIONS_TABS_URL, { ...params, profile_only: true });
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
@@ -144,7 +144,7 @@ export function* fetchProfileSearchResults(profileSelector, query) {
     ...filters,
     q: deburr(query)
   };
-  const url = getURLFromParams(GET_DASHBOARD_SEARCH_RESULTS_URL, params);
+  const url = getURLFromParams(GET_DASHBOARD_SEARCH_RESULTS_URL, { ...params, profile_only: true });
 
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
