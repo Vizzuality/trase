@@ -24,6 +24,13 @@ export const openModal = () => ({
   }
 });
 
+export const closeModal = () => ({
+  type: PROFILES__SET_ACTIVE_STEP,
+  payload: {
+    activeStep: null
+  }
+});
+
 export const setProfilesActiveStep = activeStep => ({
   type: PROFILES__SET_ACTIVE_STEP,
   payload: {
@@ -105,6 +112,7 @@ export const goToProfile = () => (dispatch, getState) => {
       }
     })
   );
+  dispatch(closeModal());
 };
 
 export const getProfilesSearchResults = query => ({
