@@ -93,7 +93,7 @@ export function* fetchDataOnPanelChange() {
 }
 
 /**
- * Listens to DASHBOARD_ELEMENT__SET_ACTIVE_ITEM and requests the tabs data every time a new country has been selected.
+ * Listens to PROFILES__SET_ACTIVE_ITEM and requests the tabs data every time a new country has been selected.
  */
 export function* onItemChange(action) {
   const { panel, activeItem } = action.payload;
@@ -152,10 +152,10 @@ export function* onChangeItem(action) {
   let panelsToClear = [];
   switch (panel) {
     case 'types':
-      panelsToClear = ['companies', 'countries', 'sources', 'commodities'];
+      panelsToClear = ['countries', 'sources', 'companies', 'commodities'];
       break;
     case 'countries':
-      panelsToClear = ['sources', 'commodities', 'companies'];
+      panelsToClear = ['sources', 'companies', 'commodities'];
       break;
     case 'sources':
     case 'companies':
@@ -181,8 +181,8 @@ function* clearSubsequentPanels() {
 }
 
 /**
- * Reads the query from the DASHBOARD_ELEMENT__GET_SEARCH_RESULTS action
- * and calls fetchProfileSearchResults to fetch the data.
+ * Reads the query from the PROFILES__GET_SEARCH_RESULTS action
+ * and calls getSearchResults to fetch the data.
  */
 export function* getSearchResults(action) {
   const profileSelector = yield select(state => state.profileSelector);

@@ -1,4 +1,3 @@
-import { redirect } from 'redux-first-router';
 import isEmpty from 'lodash/isEmpty';
 
 import { PROFILE_STEPS } from 'constants';
@@ -94,16 +93,7 @@ export const goToProfile = () => (dispatch, getState) => {
     )?.id;
     if (contextId) query.contextId = contextId;
   }
-
-  dispatch(
-    redirect({
-      type: 'profileNode',
-      payload: {
-        profileType,
-        query
-      }
-    })
-  );
+  dispatch({ type: 'profileNode', payload: { profileType, query } });
   dispatch(closeModal());
 };
 
