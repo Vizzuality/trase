@@ -112,8 +112,7 @@ const profileRootReducer = {
     };
   },
   [PROFILES__SET_MORE_PANEL_DATA](state, action) {
-    const { key, data, tab, direction } = action.payload;
-    const panelName = key;
+    const { key: panelName, data, tab, direction } = action.payload;
     if (data.length === 0) {
       return {
         ...state,
@@ -127,18 +126,41 @@ const profileRootReducer = {
       };
     }
 
-    const oldData = tab ? state.data[key][tab] : state.data[key];
+    let oldData = state.data[panelName];
+    let selectedCountryId = null;
+    if (panelName === 'companies') {
+      const selectedCountry = Object.values(state.panels.countries.activeItems);
+      selectedCountryId =
+        (selectedCountry && selectedCountry[0] && selectedCountry[0].id) ||
+        state.data.countries[0].id;
+
+      oldData = state.data[panelName][selectedCountryId][tab];
+    } else if (tab) {
+      oldData = state.data[panelName][tab];
+    }
+
     let together;
     if (direction === 'backward' && data.length > 0) {
       together = [...data, ...oldData];
     } else if (direction === 'forward' && data.length > 0) {
       together = [...oldData, ...data];
     }
-    const newData = tab ? { ...state.data[key], [tab]: together } : together;
 
+    let newData = together;
+    if (panelName === 'companies') {
+      newData = {
+        ...state.data[panelName],
+        [selectedCountryId]: {
+          ...state.data[panelName][selectedCountryId],
+          [tab]: together
+        }
+      };
+    } else if (tab) {
+      newData = { ...state.data[panelName], [tab]: together };
+    }
     return {
       ...state,
-      data: { ...state.data, [key]: newData }
+      data: { ...state.data, [panelName]: newData }
     };
   },
   [PROFILES__SET_LOADING_ITEMS](state, action) {
