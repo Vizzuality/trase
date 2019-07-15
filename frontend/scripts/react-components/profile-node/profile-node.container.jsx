@@ -36,18 +36,21 @@ class ProfileNodeContainer extends React.PureComponent {
 
 function mapStateToProps(state) {
   const {
-    query: { year, nodeId, print, contextId = 1 } = {},
+    query: { year: selectedYear, nodeId, print, contextId = 1 } = {},
     payload: { profileType }
   } = state.location;
   const { tooltips, contexts } = state.app;
   const ctxId = contextId && parseInt(contextId, 10);
   const context = contexts.find(ctx => ctx.id === ctxId) || { id: ctxId };
+  const year = selectedYear
+    ? parseInt(selectedYear, 10)
+    : context.years && context.years[context.years.length - 1];
   return {
     tooltips,
     context,
     profileType,
     printMode: print && JSON.parse(print),
-    year: parseInt(year, 10),
+    year,
     nodeId: parseInt(nodeId, 10)
   };
 }
