@@ -60,12 +60,13 @@ module Api
             )
           end
 
-          def comparison_view?
-            nodes.size > 1
+          def comparison_view?(node_type)
+            same_node_type_elements_count = nodes.pluck(:node_type_id).count(node_type.id)
+            same_node_type_elements_count > 1
           end
 
-          def get_correct_chart_type(default_chart_type)
-            comparison_view? ? BAR_CHART : default_chart_type
+          def get_correct_chart_type(node_type, default_chart_type)
+            comparison_view?(node_type) ? HORIZONTAL_BAR_CHART : default_chart_type
           end
 
           def initialize_node_types
@@ -95,7 +96,7 @@ module Api
           def single_year_no_ncont_overview
             {
               source: :single_year_no_ncont_overview,
-              type: get_correct_chart_type(DYNAMIC_SENTENCE),
+              type: DYNAMIC_SENTENCE,
               x: nil
             }
           end
@@ -103,7 +104,7 @@ module Api
           def single_year_no_ncont_node_type_view(node_type)
             {
               source: :single_year_no_ncont_node_type_view,
-              type: get_correct_chart_type(SingleYearCharts::ChartType.call(
+              type: get_correct_chart_type(node_type, SingleYearCharts::ChartType.call(
                                              data: SingleYearCharts::PrepareData.call(
                                                chart_params: @chart_params,
                                                top_n: TOP_N,
@@ -128,7 +129,7 @@ module Api
           def single_year_ncont_overview
             {
               source: :single_year_ncont_overview,
-              type: get_correct_chart_type(DONUT_CHART),
+              type: DONUT_CHART,
               x: :ncont_attribute
             }
           end
@@ -136,7 +137,7 @@ module Api
           def single_year_ncont_node_type_view(node_type)
             {
               source: :single_year_ncont_node_type_view,
-              type: get_correct_chart_type(HORIZONTAL_STACKED_BAR_CHART),
+              type: HORIZONTAL_STACKED_BAR_CHART,
               x: :node_type,
               break_by: :ncont_attribute,
               node_type_id: node_type.id
@@ -162,7 +163,7 @@ module Api
           def multi_year_no_ncont_node_type_view(node_type)
             {
               source: :multi_year_no_ncont_node_type_view,
-              type: get_correct_chart_type(STACKED_BAR_CHART),
+              type: STACKED_BAR_CHART,
               x: :year,
               break_by: :node_type,
               node_type_id: node_type.id
@@ -219,7 +220,7 @@ module Api
           def multi_year_ncont_overview
             {
               source: :multi_year_ncont_overview,
-              type: get_correct_chart_type(STACKED_BAR_CHART),
+              type: STACKED_BAR_CHART,
               x: :year,
               break_by: :ncont_attribute
             }
@@ -228,7 +229,7 @@ module Api
           def multi_year_ncont_node_type_view(node_type)
             {
               source: :multi_year_ncont_overview,
-              type: get_correct_chart_type(STACKED_BAR_CHART),
+              type: STACKED_BAR_CHART,
               x: :year,
               break_by: :ncont_attribute,
               node_type_id: node_type.id
