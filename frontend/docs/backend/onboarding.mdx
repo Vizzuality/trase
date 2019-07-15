@@ -64,8 +64,9 @@ Permits to customize the analysis.
 - Models can inherit from two main classes: blue tables and yellow tables.
     * Blue tables are core static information like nodes and flows, which comes directly from the source database and is not updated within Trase (during a data update, the content of these tables is replaced with new versions)
     * Yellow tables are configuration data, e.g. which indicators to show in the resize by dropdown, which can be updated via the CMS. Those are typical writable tables, so the models contain validations, callbacks and so on on.
-- links to schema here http://trase.surge.sh/#documentation
-- Materialised views are readonly models in app/models/readonly and they often provide a bridge between blue and yellow tables, to make queries faster and simpler
+- The full schema can be found [here](https://vizzuality.github.io/trase/all_tables/index.html). On the following [link](https://vizzuality.github.io/trase/all_tables/relationships.html) you can also find a diagram.
+- The blue tables schema can be found [here](https://vizzuality.github.io/trase/blue_tables/index.html). On the following [link](https://vizzuality.github.io/trase/blue_tables/relationships.html) you can also find a diagram.
+- Materialised views are readonly models in `app/models/readonly` and they often provide a bridge between blue and yellow tables, to make queries faster and simpler.
 
 ## Admin panel
 
@@ -77,10 +78,10 @@ Permits to customize the analysis.
 - The app/admin contains the needed code for the administration page
 
 ## Different instances of the tool:
-- trase.earth - production
-- staging.trase.earth - primary staging instance
-- sandbox.trase.earth - data integration instance
-- [demo|dashboardsdemo|indonesiademo].trase.earth - other demo sites which either present a specific dataset or a specific new feature
+- [trase.earth](trase.earth) - production
+- [staging.trase.earth](staging.trase.earth) - primary staging instance
+- [sandbox.trase.earth](sandbox.trase.earth) - data integration instance
+- [[demo](demo.trase.earth)|[dashboardsdemo](dashboardsdemo.trase.earth)|[indonesiademo](indonesiademo.trase.earth).trase.earth - other demo sites which either present a specific dataset or a specific new feature
 
 ## Process for contributing to trase:
 - Pick a task from PT
