@@ -7,6 +7,7 @@
 #  name_tsvector :tsvector
 #  node_type_id  :integer
 #  node_type     :text
+#  profile       :text
 #  country_id    :integer
 #  commodity_id  :integer
 #  node_id       :integer

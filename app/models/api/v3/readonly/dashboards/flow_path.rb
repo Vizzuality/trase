@@ -13,6 +13,7 @@
 #  column_position :integer
 #  column_group    :integer
 #  category        :string
+#  profile         :text
 #
 # Indexes
 #

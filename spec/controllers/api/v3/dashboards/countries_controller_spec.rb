@@ -30,5 +30,14 @@ RSpec.describe Api::V3::Dashboards::CountriesController, type: :controller do
         [api_v3_brazil.id, api_v3_paraguay.id]
       )
     end
+
+    context 'when profile_only' do
+      include_context 'api v3 brazil municipality place profile'
+
+      it 'returns countries where nodes have profiles' do
+        get :index, params: {profile_only: true}
+        expect(assigns(:collection).map(&:id)).to eq([api_v3_brazil.id])
+      end
+    end
   end
 end

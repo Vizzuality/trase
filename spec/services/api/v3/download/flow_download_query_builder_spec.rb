@@ -23,7 +23,7 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
         'AMAZONIA',
         'IMBITUBA',
         'AFG BRASIL',
-        'UNKNOWN CUSTOMER',
+        'AGROGRAIN',
         'RUSSIAN FEDERATION',
         'DEFORESTATION',
         '10'
@@ -37,7 +37,7 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
         'AMAZONIA',
         'IMBITUBA',
         'AFG BRASIL',
-        'UNKNOWN CUSTOMER',
+        'AGROGRAIN',
         'RUSSIAN FEDERATION',
         'ZERO DEFORESTATION',
         'no'

@@ -14,7 +14,8 @@ module Api
             sources_ids: cs_string_to_int_array(params[:sources_ids]),
             companies_ids: cs_string_to_int_array(params[:companies_ids]),
             destinations_ids: cs_string_to_int_array(params[:destinations_ids]),
-            node_types_ids: cs_string_to_int_array(params[:node_types_ids])
+            node_types_ids: cs_string_to_int_array(params[:node_types_ids]),
+            profile_only: ActiveModel::Type::Boolean.new.cast(params[:profile_only])
           }
         end
       end
