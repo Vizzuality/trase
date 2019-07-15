@@ -1,8 +1,9 @@
 /* eslint-disable camelcase,import/no-extraneous-dependencies,no-use-before-define */
 import uniqBy from 'lodash/uniqBy';
 import wrapSVGText from 'utils/wrapSVGText';
-import { NUM_COLUMNS, DETAILED_VIEW_MIN_NODE_HEIGHT, DETAILED_VIEW_SCALE } from 'scripts/constants';
 import { interpolateNumber as d3_interpolateNumber } from 'd3-interpolate';
+import { sortFlows } from 'react-components/tool/sankey/sort-flows';
+import { NUM_COLUMNS, DETAILED_VIEW_MIN_NODE_HEIGHT, DETAILED_VIEW_SCALE } from 'scripts/constants';
 import { translateText } from 'utils/transifex';
 
 const sankeyLayout = () => {
@@ -170,61 +171,8 @@ const sankeyLayout = () => {
       recolorGroupsOrderedByY = coloredColumnLinks.map(l => l.recolorGroup);
     }
 
-    // sort links by node source and target y positions
-    // TODO move sorting to reducer
-    links.sort((linkA, linkB) => {
-      const sIdAY = stackedHeightsByNodeId.source[linkA.sourceNodeId];
-      const sIdBY = stackedHeightsByNodeId.source[linkB.sourceNodeId];
-      const tIdAY = stackedHeightsByNodeId.target[linkA.targetNodeId];
-      const tIdBY = stackedHeightsByNodeId.target[linkB.targetNodeId];
-      const defaultSort = sIdAY - sIdBY || tIdAY - tIdBY;
-
-      if (recolorBy) {
-        // sorts alphabetically with quals, numerically with inds
-        // TODO for quals use the order presented in the color by menu
-        if (linkA.recolorBy === linkB.recolorBy) {
-          return defaultSort;
-        }
-        let recolorBySort;
-        if (linkA.recolorBy === null) {
-          recolorBySort = 1;
-        } else if (linkB.recolorBy === null) {
-          recolorBySort = -1;
-        } else {
-          recolorBySort =
-            recolorBy.type === 'ind'
-              ? linkA.recolorBy - linkB.recolorBy
-              : `${linkA.recolorBy}`.charCodeAt(0) - `${linkB.recolorBy}`.charCodeAt(0);
-        }
-        return recolorBySort;
-      }
-      if (links[0] && links[0].recolorGroup !== undefined) {
-        // When using a recolorGroup
-        // For columns outside of adjacent columns, links should be sorted by the original *y order of recolored nodes*
-        // (mapped to recolor groups before sorting, see recolorGroupsOrderedByY bit above)
-        // Columns directly adjacent to the column where nodes are selected
-        // are sorted by y coords (source or target, depedning on if column is at the left or the right of the selected colun).
-        if (
-          linkA.sourceColumnPosition > nodesColoredAtColumn ||
-          linkA.targetColumnPosition < nodesColoredAtColumn
-        ) {
-          const recolorGroupsYA = recolorGroupsOrderedByY.indexOf(linkA.recolorGroup);
-          const recolorGroupsYB = recolorGroupsOrderedByY.indexOf(linkB.recolorGroup);
-          return recolorGroupsYA === recolorGroupsYB
-            ? defaultSort
-            : recolorGroupsYA - recolorGroupsYB;
-        }
-        if (linkA.targetColumnPosition <= nodesColoredAtColumn) {
-          return tIdAY - tIdBY || sIdAY - sIdBY;
-        }
-        if (linkA.sourceColumnPosition >= nodesColoredAtColumn) {
-          return sIdAY - sIdBY || tIdAY - tIdBY;
-        }
-
-        return defaultSort;
-      }
-      return defaultSort;
-    });
+    // sort links by node source, target y positions and recolorby group
+    links = sortFlows(links, recolorBy, { nodesColoredAtColumn, recolorGroupsOrderedByY });
 
     links.forEach(link => {
       link.width = linksColumnWidth;

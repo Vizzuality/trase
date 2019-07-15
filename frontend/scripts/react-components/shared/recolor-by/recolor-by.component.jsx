@@ -137,7 +137,9 @@ class RecolorBy extends Component {
       color,
       weight
     } = this.props;
-    const hasZeroOrSingleElement = recolorBys.length < 1;
+    const hasZeroOrSingleElement =
+      recolorBys.length === 0 ||
+      (recolorBys.length === 1 && recolorBys[0].value === selectedRecolorBy.value);
     return (
       <Dropdown
         size={size}
