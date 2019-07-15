@@ -105,14 +105,14 @@ module Api
             {
               source: :single_year_no_ncont_node_type_view,
               type: get_correct_chart_type(node_type, SingleYearCharts::ChartType.call(
-                                             data: SingleYearCharts::PrepareData.call(
-                                               chart_params: @chart_params,
-                                               top_n: TOP_N,
-                                               node_type_idx: Api::V3::NodeType.node_index_for_id(@context, node_type.id),
-                                               type: :no_ncont
-                                             ),
-                                             default_chart_type: HORIZONTAL_BAR_CHART
-                                           )),
+                                                        data: SingleYearCharts::PrepareData.call(
+                                                          chart_params: @chart_params,
+                                                          top_n: TOP_N,
+                                                          node_type_idx: Api::V3::NodeType.node_index_for_id(@context, node_type.id),
+                                                          type: :no_ncont
+                                                        ),
+                                                        default_chart_type: HORIZONTAL_BAR_CHART
+                                                      )),
               x: :node_type,
               node_type_id: node_type.id
             }
