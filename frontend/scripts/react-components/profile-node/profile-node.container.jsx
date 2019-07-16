@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { GET_PROFILE_METADATA } from 'utils/getURLFromParams';
+import { openModal } from 'react-components/shared/profile-selector/profile-selector.actions';
 import Widget from 'react-components/widgets/widget.component';
 import ProfileNode from 'react-components/profile-node/profile-node.component';
 
@@ -63,7 +64,8 @@ const updateQueryParams = (profileType, query) => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      updateQueryParams
+      updateQueryParams,
+      openModal
     },
     dispatch
   );
