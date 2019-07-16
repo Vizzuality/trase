@@ -11,6 +11,21 @@
       margin-bottom: 5px;
     }
 
+    > .value {
+      display: inline-block;
+      color: $charcoal-grey;
+      font-family: $font-family-1;
+      font-size: $font-size-medium;
+      letter-spacing: -1px;
+    }
+
+    > .unit {
+      display: inline-block;
+      color: rgba($charcoal-grey, .6);
+      font-family: $font-family-1;
+      font-size: $font-size-medium;
+    }
+
     @media screen and (max-width: $breakpoint-foundation-small) {
       margin-top: 15px;
     }
