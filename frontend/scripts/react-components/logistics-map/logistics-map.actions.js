@@ -51,7 +51,7 @@ export const getLogisticsMapCompanies = () => (dispatch, getState) => {
 
   const queries = {
     soy:
-      'select distinct company from (SELECT company FROM brazil_crushing_facilities union all select company from brazil_storage_facilities_sample union all select company from brazil_refining_facilities) as companies order by company asc',
+      'select distinct company from (SELECT company FROM brazil_crushing_facilities union all select company from brazil_storage_facilities union all select company from brazil_refining_facilities) as companies order by company asc',
     cattle:
       'select distinct company FROM brazil_slaughterhouses_simple_2018_09_18 order by company asc',
     palmOil: 'select distinct company FROM indonesia_mills_20190613 order by company asc'
