@@ -60,6 +60,15 @@ module Api
             )
           end
 
+          def comparison_view?(node_type)
+            same_node_type_elements_count = nodes.pluck(:node_type_id).count(node_type.id)
+            same_node_type_elements_count > 1
+          end
+
+          def get_correct_chart_type(node_type, default_chart_type)
+            comparison_view?(node_type) ? HORIZONTAL_BAR_CHART : default_chart_type
+          end
+
           def initialize_node_types
             node_types_to_break_by =
               NodeTypesToBreakBy.new(@context, nodes)
@@ -95,15 +104,15 @@ module Api
           def single_year_no_ncont_node_type_view(node_type)
             {
               source: :single_year_no_ncont_node_type_view,
-              type: SingleYearCharts::ChartType.call(
-                data: SingleYearCharts::PrepareData.call(
-                  chart_params: @chart_params,
-                  top_n: TOP_N,
-                  node_type_idx: Api::V3::NodeType.node_index_for_id(@context, node_type.id),
-                  type: :no_ncont
-                ),
-                default_chart_type: HORIZONTAL_BAR_CHART
-              ),
+              type: get_correct_chart_type(node_type, SingleYearCharts::ChartType.call(
+                                                        data: SingleYearCharts::PrepareData.call(
+                                                          chart_params: @chart_params,
+                                                          top_n: TOP_N,
+                                                          node_type_idx: Api::V3::NodeType.node_index_for_id(@context, node_type.id),
+                                                          type: :no_ncont
+                                                        ),
+                                                        default_chart_type: HORIZONTAL_BAR_CHART
+                                                      )),
               x: :node_type,
               node_type_id: node_type.id
             }
