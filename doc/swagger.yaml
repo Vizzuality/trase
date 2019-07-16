@@ -1215,7 +1215,7 @@ paths:
                                 example: '5.0'
                       info:
                         $ref: "#/components/schemas/DashboardsMetaInfo"
-                            
+
   /dashboards/charts/single_year_no_ncont_node_type_view:
     get:
       tags:
@@ -1842,6 +1842,8 @@ components:
               nodeId:
                 type: integer
               name:
+                type: string
+              geoId:
                 type: string
 
     Column:
