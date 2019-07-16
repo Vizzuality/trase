@@ -11,6 +11,7 @@
 #  years          :integer          is an Array
 #  profile        :text
 #  is_subnational :boolean
+#  geo_id         :text
 #
 # Indexes
 #
