@@ -117,7 +117,11 @@ module Api
           end
 
           def top_nodes_break_by_values
-            top_nodes.map { |r| r['name'] } + [OTHER]
+            selected_nodes = @chart_parameters.sources_ids + @chart_parameters.companies_ids + @chart_parameters.destinations_ids
+            selected_node_types = selected_nodes.map { |id| Api::V3::Node.includes(:node_type).find(id).node_type.id }
+            is_current_node_type_in_selected_node_types = selected_node_types.include?(@node_type_idx)
+            array = is_current_node_type_in_selected_node_types ? [] : [OTHER]
+            top_nodes.map { |r| r['name'] } + array
           end
 
           def top_nodes_break_by_values_map
