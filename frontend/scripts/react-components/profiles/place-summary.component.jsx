@@ -81,10 +81,13 @@ function PlaceSummary(props) {
             <Text variant="mono" color="grey-faded" transform="uppercase" className="legend">
               Area
             </Text>
-            <div className="value">{areaValue}</div>
-            <div className="unit">
+            <Text as="span" variant="mono" size="lg" weight="bold">
+              {areaValue}
+            </Text>
+            <Text as="span" variant="mono" size="lg" weight="bold">
+              {' '}
               km<sup>2</sup>
-            </div>
+            </Text>
           </div>
         )}
         {commodityAreaValue !== '-' && (
@@ -93,8 +96,13 @@ function PlaceSummary(props) {
               {commodityName} land
               <HelpTooltip text={get(tooltips, 'profileNode.soyLand')} position="bottom" />
             </Text>
-            <div className="value">{commodityAreaValue}</div>
-            <div className="unit">ha</div>
+            <Text as="span" variant="mono" size="lg" weight="bold">
+              {commodityAreaValue}
+            </Text>
+            <Text as="span" variant="mono" size="lg" weight="bold">
+              {' '}
+              ha
+            </Text>
           </div>
         )}
         {commodityProductionValue !== '-' && (
@@ -106,8 +114,13 @@ function PlaceSummary(props) {
                 position="bottom"
               />
             </Text>
-            <div className="value">{commodityProductionValue}</div>
-            <div className="unit">t</div>
+            <Text as="span" variant="mono" size="lg" weight="bold">
+              {commodityProductionValue}
+            </Text>
+            <Text as="span" variant="mono" size="lg" weight="bold">
+              {' '}
+              t
+            </Text>
           </div>
         )}
       </div>
