@@ -56,7 +56,7 @@ export default {
         {
           type: 'cartodb',
           options: {
-            sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_storage_facilities_sample {{where}}`,
+            sql: `SELECT * FROM "${CARTO_ACCOUNT}".brazil_storage_facilities {{where}}`,
             cartocss: `#layer { marker-width: 7; marker-fill: #F6CF71; marker-fill-opacity: 0.9; marker-allow-overlap: true;  marker-line-color: #FFFFFF; marker-line-width: 1; marker-line-opacity: 1; } #layer[zoom>4] { marker-line-width: 0.5; marker-fill: #F6CF71; marker-file: url('${MARKERS_URL}/storage-icon-v2.svg'); marker-width: ramp([capacity], range(15, 26), quantiles(7)); }`,
             cartocss_version: '2.3.0',
             interactivity: ['company', 'municipality', 'capacity']
@@ -64,7 +64,7 @@ export default {
         }
       ],
       sql_config: [{ type: 'where', key: 'company', name: 'companies' }],
-      downloadUrl: `https://${CARTO_ACCOUNT}.carto.com/api/v2/sql?filename=storage_facilities&q=SELECT * FROM "${CARTO_ACCOUNT}".brazil_storage_facilities_sample&format=csv`
+      downloadUrl: `https://${CARTO_ACCOUNT}.carto.com/api/v2/sql?filename=storage_facilities&q=SELECT * FROM "${CARTO_ACCOUNT}".brazil_storage_facilities&format=csv`
     },
     {
       version: '0.0.1',
