@@ -17,9 +17,14 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
       Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
       Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
     end
-    let(:brazil_exporter_attributes) { Api::V3::Actors::BasicAttributes.new(api_v3_context, api_v3_exporter1_node, 2015) }
-    let(:brazil_importer_attributes) { Api::V3::Actors::BasicAttributes.new(api_v3_context, api_v3_importer1_node, 2015) }
-    let(:paraguay_exporter_attributes) { Api::V3::Actors::BasicAttributes.new(api_v3_paraguay_context, api_v3_paraguay_exporter_node, 2015) }
+    let!(:brazil_exporter_attributes) { Api::V3::Actors::BasicAttributes.new(api_v3_context, api_v3_exporter1_node, 2015) }
+    let!(:brazil_importer_attributes) { Api::V3::Actors::BasicAttributes.new(api_v3_context, api_v3_importer1_node, 2015) }
+    let!(:paraguay_exporter_attributes) { Api::V3::Actors::BasicAttributes.new(api_v3_paraguay_context, api_v3_paraguay_exporter_node, 2015) }
+
+    it 'check header parameters' do
+      attrs = paraguay_exporter_attributes.call
+      expect(attrs['zero_deforestation']).not_to eql nil
+    end
 
     it 'uses context specific quant values for production percentage calculation' do
       brazil_exporter_values = brazil_exporter_attributes.call

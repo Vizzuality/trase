@@ -38,6 +38,7 @@ module Api
           }
 
           @attributes = @attributes.merge initialize_named_attributes
+          @attributes = @attributes.merge initialize_header_attributes
           initialize_top_nodes
           initialize_flow_stats_for_node
           @attributes[:summary] = summary
@@ -68,6 +69,25 @@ module Api
               next nil unless value
 
               [name, value]
+            end
+          Hash[values.compact]
+        end
+
+        def initialize_header_attributes
+          values =
+            NAMED_ATTRIBUTES.map do |name|
+              chart_attribute =
+                @chart_config.attributes.select { |attribute| attribute == name }.first
+              next nil unless chart_attribute
+
+              [
+                chart_attribute.identifier,
+                {
+                  name: chart_attribute.display_name,
+                  unit: chart_attribute.unit,
+                  tooltip: chart_attribute.tooltip_text
+                }
+              ]
             end
           Hash[values.compact]
         end
