@@ -141,7 +141,8 @@
                     "type": "object",
                     "required": [
                       "name",
-                      "nodeId"
+                      "nodeId",
+                      "geoId"
                     ],
                     "properties": {
                       "name": {
@@ -152,6 +153,10 @@
                       "nodeId": {
                         "$id": "#/properties/data/items/properties/filterBy/items/properties/nodes/items/properties/nodeId",
                         "type": "integer"
+                      },
+                      "geoId": {
+                        "$id": "#/properties/data/items/properties/filterBy/items/properties/nodes/items/properties/geoId",
+                        "type": "string"
                       }
                     }
                   }
@@ -269,16 +274,25 @@
                 },
                 "intervalCount": {
                   "$id": "#/properties/data/items/properties/recolorBy/items/properties/intervalCount",
-                  "type": ["integer", "null"]
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
                 },
                 "minValue": {
                   "$id": "#/properties/data/items/properties/recolorBy/items/properties/minValue",
-                  "type": ["string", "null"],
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "pattern": "^(.*)$"
                 },
                 "maxValue": {
                   "$id": "#/properties/data/items/properties/recolorBy/items/properties/maxValue",
-                  "type": ["string", "null"],
+                  "type": [
+                    "string",
+                    "null"
+                  ],
                   "pattern": "^(.*)$"
                 },
                 "divisor": {

@@ -43,7 +43,7 @@ module Api
 
           # Brazil - soy & Paraguay - soy only
           Api::V3::Readonly::Node.
-            select([:id, :name]).
+            select([:id, :name, :geo_id]).
             where(context_id: id, node_type: NodeTypeName::BIOME).
             order(:name)
         end

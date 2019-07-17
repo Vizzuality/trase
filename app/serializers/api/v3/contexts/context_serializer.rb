@@ -39,7 +39,8 @@ module Api
               nodes: nodes.map do |node|
                 {
                   name: node.name,
-                  node_id: node.id
+                  node_id: node.id,
+                  geo_id: node.geo_id
                 }
               end
             }

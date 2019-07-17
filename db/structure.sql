@@ -5,6 +5,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -4868,7 +4869,8 @@ CREATE MATERIALIZED VIEW public.nodes_mv AS
     nodes_with_flows.context_id,
     nodes_with_flows.years,
     profiles.name AS profile,
-    context_properties.is_subnational
+    context_properties.is_subnational,
+    nodes.geo_id
    FROM ((((((public.nodes
      JOIN ( SELECT unnest(flows.path) AS node_id,
             flows.context_id,
@@ -9911,6 +9913,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190702112018'),
 ('20190702132100'),
 ('20190711133915'),
-('20190712115644');
+('20190712115644'),
+('20190716085538');
 
 
