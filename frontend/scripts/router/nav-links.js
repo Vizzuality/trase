@@ -1,4 +1,4 @@
-const nav = [
+let nav = [
   {
     name: 'Supply Chain',
     page: {
@@ -16,6 +16,14 @@ const nav = [
   {
     name: 'Profiles',
     page: 'profileRoot'
+  },
+  {
+    name: 'Dashboards',
+    page: 'dashboardRoot'
+  },
+  {
+    name: 'Logistics Map',
+    page: 'logisticsMap'
   },
   {
     name: 'Yearbook',
@@ -111,21 +119,15 @@ if (ENABLE_COOKIE_BANNER) {
 }
 
 if (DISABLE_PROFILES) {
-  nav.splice(2, 1);
+  nav = nav.filter(route => route.page !== 'profileRoot');
 }
 
-if (ENABLE_DASHBOARDS) {
-  nav.splice(-3, 0, {
-    name: 'Dashboards',
-    page: 'dashboardRoot'
-  });
+if (!ENABLE_DASHBOARDS) {
+  nav = nav.filter(route => route.page !== 'dashboardRoot');
 }
 
-if (ENABLE_LOGISTICS_MAP) {
-  nav.splice(-4, 0, {
-    name: 'Logistics Map',
-    page: 'logisticsMap'
-  });
+if (!ENABLE_LOGISTICS_MAP) {
+  nav = nav.filter(route => route.page !== 'logisticsMap');
 }
 
 export default {
