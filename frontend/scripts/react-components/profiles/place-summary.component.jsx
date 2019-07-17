@@ -128,7 +128,7 @@ function PlaceSummary(props) {
 
   return (
     <React.Fragment>
-      <div className="c-overall-info page-break-inside-avoid">
+      <div className="c-overall-info page-break-inside-avoid" data-test="place-summary">
         <div className="row">
           <div className="small-12 medium-9 columns">
             <SummaryTitle name={jurisdictionName} openModal={openModal} />

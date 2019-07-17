@@ -29,11 +29,11 @@ afterAll(async () => {
 
 describe('Profile place - Full data', () => {
   test('Summary widget loads successfully', async () => {
-    expect.assertions(3);
+    expect.assertions(6);
     await testProfileSummary(page, {
-      params: ['sorriso', 'soy'],
+      params: ['soy', '2015', 'brazil', 'cerrado', 'mato grosso'],
       profileType: 'place',
-      titlesLength: 3
+      titlesLength: 5
     });
   });
 

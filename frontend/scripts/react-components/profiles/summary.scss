@@ -14,5 +14,9 @@
   .profiles-selector-button {
     vertical-align: text-bottom;
     margin-top: 20px;
+
+    @media print {
+      display: none;
+    }
   }
 }
