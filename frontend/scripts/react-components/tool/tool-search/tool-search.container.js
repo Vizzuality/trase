@@ -15,8 +15,7 @@ const mapStateToProps = state => {
     isSearchOpen,
     isMapVisible,
     nodes: searchResults,
-    contextId: selectedContext && selectedContext.id,
-    defaultYear: selectedContext && selectedContext.defaultYear
+    contextId: selectedContext && selectedContext.id
   };
 };
 

@@ -224,12 +224,12 @@ export function highlightNodeFromGeoId(geoId, coordinates) {
   };
 }
 
-export function navigateToProfile(nodeId, year, contextId) {
+export function navigateToProfile(nodeId, contextId) {
   return (dispatch, getState) => {
     const node = getState().toolLinks.data.nodes[nodeId];
     dispatch({
       type: 'profileNode',
-      payload: { query: { nodeId, year, contextId }, profileType: node.profileType }
+      payload: { query: { nodeId, contextId }, profileType: node.profileType }
     });
   };
 }

@@ -19,9 +19,9 @@ class ActorSummary extends React.PureComponent {
       onYearChange,
       openModal,
       context,
+      profileMetadata: { availableYears },
       data: { nodeName, columnName, summary, forest500, zeroDeforestation } = {}
     } = this.props;
-
     const { commodityName, countryName } = context;
     const titles = [
       { name: columnName, label: 'Activity' },
@@ -31,8 +31,8 @@ class ActorSummary extends React.PureComponent {
         dropdown: true,
         label: 'Year',
         value: { label: `${year}`, value: year },
-        options: (context.years
-          ? context.years.map(_year => ({ label: `${_year}`, value: _year }))
+        options: (availableYears
+          ? availableYears.map(_year => ({ label: `${_year}`, value: _year }))
           : []
         ).sort((a, b) => b.value - a.value),
         onYearChange
@@ -141,6 +141,7 @@ ActorSummary.propTypes = {
   printMode: PropTypes.bool,
   tooltips: PropTypes.object,
   context: PropTypes.object,
+  profileMetadata: PropTypes.object,
   openModal: PropTypes.func.isRequired,
   onYearChange: PropTypes.func.isRequired
 };

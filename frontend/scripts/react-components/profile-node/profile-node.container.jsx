@@ -10,11 +10,12 @@ import ProfileNode from 'react-components/profile-node/profile-node.component';
 class ProfileNodeContainer extends React.PureComponent {
   static propTypes = {
     context: PropTypes.object,
-    nodeId: PropTypes.number
+    nodeId: PropTypes.number,
+    selectedYear: PropTypes.number
   };
 
   render() {
-    const { context, nodeId } = this.props;
+    const { context, nodeId, selectedYear } = this.props;
 
     return (
       <Widget
@@ -22,14 +23,21 @@ class ProfileNodeContainer extends React.PureComponent {
         query={[GET_PROFILE_METADATA]}
         params={[{ context_id: context.id, node_id: nodeId }]}
       >
-        {({ data = {}, loading, error }) => (
-          <ProfileNode
-            {...this.props}
-            errorMetadata={error}
-            loadingMetadata={loading}
-            profileMetadata={data[GET_PROFILE_METADATA]}
-          />
-        )}
+        {({ data = {}, loading, error }) => {
+          const profileMetadata = data[GET_PROFILE_METADATA];
+          const { availableYears } = profileMetadata || {};
+          const year =
+            selectedYear || (availableYears && availableYears[availableYears.length - 1]);
+          return (
+            <ProfileNode
+              {...this.props}
+              errorMetadata={error}
+              loadingMetadata={loading}
+              profileMetadata={profileMetadata}
+              year={year}
+            />
+          );
+        }}
       </Widget>
     );
   }
@@ -43,15 +51,12 @@ function mapStateToProps(state) {
   const { tooltips, contexts } = state.app;
   const ctxId = contextId && parseInt(contextId, 10);
   const context = contexts.find(ctx => ctx.id === ctxId) || { id: ctxId };
-  const year = selectedYear
-    ? parseInt(selectedYear, 10)
-    : context.years && context.years[context.years.length - 1];
   return {
+    selectedYear,
     tooltips,
     context,
     profileType,
     printMode: print && JSON.parse(print),
-    year,
     nodeId: parseInt(nodeId, 10)
   };
 }

@@ -29,7 +29,7 @@ function PlaceSummary(props) {
       jurisdiction1: stateName,
       jurisdiction2: biomeName
     } = {},
-    profileMetadata: { mainTopojsonPath, mainTopojsonRoot } = {}
+    profileMetadata: { mainTopojsonPath, mainTopojsonRoot, availableYears } = {}
   } = props;
 
   const { commodityName } = context;
@@ -39,8 +39,8 @@ function PlaceSummary(props) {
       dropdown: true,
       label: 'Year',
       value: { label: `${year}`, value: year },
-      options: (context.years
-        ? context.years.map(_year => ({ label: `${_year}`, value: _year }))
+      options: (availableYears
+        ? availableYears.map(_year => ({ label: `${_year}`, value: _year }))
         : []
       ).sort((a, b) => b.value - a.value),
       onYearChange
@@ -73,8 +73,7 @@ function PlaceSummary(props) {
   );
 
   const renderStats = () =>
-    console.log(areaValue, commodityAreaValue, commodityProductionValue) ||
-    ((areaValue !== '-' || commodityAreaValue !== '-' || commodityProductionValue !== '-') && (
+    (areaValue !== '-' || commodityAreaValue !== '-' || commodityProductionValue !== '-') && (
       <div className="small-12">
         {areaValue !== '-' && (
           <div className="stat-item">
@@ -124,7 +123,7 @@ function PlaceSummary(props) {
           </div>
         )}
       </div>
-    ));
+    );
 
   return (
     <React.Fragment>

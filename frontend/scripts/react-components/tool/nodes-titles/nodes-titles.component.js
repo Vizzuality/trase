@@ -206,7 +206,6 @@ export default class {
   _onNodeTitleClick(e) {
     this.callbacks.onProfileLinkClicked(
       parseInt(e.currentTarget.dataset.nodeId, 10),
-      parseInt(e.currentTarget.dataset.year, 10),
       parseInt(e.currentTarget.dataset.contextId, 10)
     );
   }
