@@ -15,9 +15,5 @@
   .profiles-selector-button {
     vertical-align: bottom;
     margin-top: 20px;
-
-    @media screen and (min-width: $breakpoint-foundation-medium) {
-      margin-top: 0;
-    }
   }
 }

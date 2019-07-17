@@ -5,9 +5,9 @@ import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
 import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import TitleGroup from 'react-components/profiles/title-group';
+import SummaryTitle from 'react-components/profiles/summary-title.component';
 import Map from 'react-components/profiles/map.component';
 import Text from 'react-components/shared/text';
-import Button from 'react-components/shared/button';
 import formatValue from 'utils/formatValue';
 
 function PlaceSummary(props) {
@@ -131,19 +131,7 @@ function PlaceSummary(props) {
       <div className="c-overall-info page-break-inside-avoid">
         <div className="row">
           <div className="small-12 medium-9 columns">
-            <div className="profiles-title-container">
-              <h2 className="profiles-title" data-test="profiles-title">
-                {capitalize(jurisdictionName)}
-              </h2>
-              <Button
-                size="sm"
-                color="pink-transparent"
-                className="profiles-selector-button"
-                onClick={openModal}
-              >
-                Change profile
-              </Button>
-            </div>
+            <SummaryTitle name={jurisdictionName} openModal={openModal} />
             <TitleGroup titles={titles} on={onYearChange} />
             {renderStats()}
           </div>

@@ -3,11 +3,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import get from 'lodash/get';
-import capitalize from 'lodash/capitalize';
+import SummaryTitle from 'react-components/profiles/summary-title.component';
 import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import TitleGroup from 'react-components/profiles/title-group';
 import Text from 'react-components/shared/text';
-import Button from 'react-components/shared/button';
 import 'react-components/profiles/summary.scss';
 
 class ActorSummary extends React.PureComponent {
@@ -42,19 +41,7 @@ class ActorSummary extends React.PureComponent {
       <div className="c-overall-info" data-test="actor-summary">
         <div className="row">
           <div className="small-12 columns">
-            <div className="profiles-title-container">
-              <h2 className="profiles-title" data-test="profiles-title">
-                {capitalize(nodeName)}
-              </h2>
-              <Button
-                size="sm"
-                color="pink-transparent"
-                className="profiles-selector-button"
-                onClick={openModal}
-              >
-                Change profile
-              </Button>
-            </div>
+            <SummaryTitle name={nodeName} openModal={openModal} />
           </div>
         </div>
         <div className="row">
