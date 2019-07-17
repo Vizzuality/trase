@@ -7,6 +7,7 @@ import SummaryTitle from 'react-components/profiles/summary-title.component';
 import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import TitleGroup from 'react-components/profiles/title-group';
 import Text from 'react-components/shared/text';
+import Icon from 'react-components/shared/icon';
 import 'react-components/profiles/summary.scss';
 
 class ActorSummary extends React.PureComponent {
@@ -52,7 +53,7 @@ class ActorSummary extends React.PureComponent {
             {typeof forest500 !== 'undefined' && (
               <div className="stat-item">
                 <div className="legend">
-                  <Text transtorm="uppercase" variant="mono" as="span">
+                  <Text transform="uppercase" variant="mono" as="span">
                     Forest 500 score
                   </Text>
                   <span id="forest-500-tooltip">
@@ -64,16 +65,19 @@ class ActorSummary extends React.PureComponent {
                 </div>
                 <div className="value forest-500-score">
                   {Array.from({ length: 5 }).map((_, index) => (
-                    <svg className="icon circle-icon" key={`circle${index}`}>
-                      <use xlinkHref={`#icon-circle-${forest500 > index ? 'filled' : 'empty'}`} />
-                    </svg>
+                    <Icon
+                      color="grey"
+                      className="circle-icon"
+                      key={`circle${index}`}
+                      icon={`icon-circle-${forest500 > index ? 'filled' : 'empty'}`}
+                    />
                   ))}
                 </div>
               </div>
             )}
             {typeof zeroDeforestation !== 'undefined' && (
               <div className="stat-item">
-                <Text transtorm="uppercase" variant="mono" as="div">
+                <Text transform="uppercase" variant="mono" as="div" className="legend">
                   ZERO DEFORESTATION COMMITMENT
                   <span>
                     <HelpTooltip
@@ -84,17 +88,29 @@ class ActorSummary extends React.PureComponent {
                 </Text>
                 {zeroDeforestation.toLowerCase() !== 'none' ? (
                   <div className="value">
-                    <svg className="icon icon-check">
-                      <use xlinkHref="#icon-check-circle" />
-                    </svg>
-                    {zeroDeforestation}
+                    <Icon color="grey" icon="icon-check-circle" className="icon-check-circle" />
+                    <Text
+                      transform="uppercase"
+                      variant="mono"
+                      as="span"
+                      weight="bold"
+                      className="stats-text"
+                    >
+                      {zeroDeforestation}
+                    </Text>
                   </div>
                 ) : (
                   <div className="value">
-                    <svg className="icon icon-no">
-                      <use xlinkHref="#icon-no-circle" />
-                    </svg>
-                    None
+                    <Icon color="grey" icon="icon-no-circle" className="icon-no" />
+                    <Text
+                      transform="uppercase"
+                      variant="mono"
+                      as="span"
+                      weight="bold"
+                      className="stats-text"
+                    >
+                      NONE
+                    </Text>
                   </div>
                 )}
               </div>
@@ -103,7 +119,15 @@ class ActorSummary extends React.PureComponent {
           <div
             className={cx('small-12', 'columns', { 'large-12': printMode, 'large-10': !printMode })}
           >
-            <p className="summary" dangerouslySetInnerHTML={{ __html: summary }} />
+            <Text
+              variant="serif"
+              size="md"
+              weigth="light"
+              lineHeight="lg"
+              color="grey"
+              className="summary"
+              dangerouslySetInnerHTML={{ __html: summary }}
+            />
           </div>
         </div>
       </div>

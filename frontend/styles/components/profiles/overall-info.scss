@@ -19,11 +19,6 @@
   .summary {
     margin-top: 24px;
     margin-bottom: 40px;
-    font-family: $font-family-2;
-    font-size: $font-size-xx-regular;
-    font-weight: 300;
-    line-height: 2;
-    color: $charcoal-grey;
 
     @media screen and (max-width: $breakpoint-foundation-small) {
       font-size: $font-size-x-regular;

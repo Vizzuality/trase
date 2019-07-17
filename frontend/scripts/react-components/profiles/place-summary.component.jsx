@@ -139,7 +139,15 @@ function PlaceSummary(props) {
         </div>
         <div className="row">
           <div className="small-12 columns">
-            <p className="summary" dangerouslySetInnerHTML={{ __html: summary }} />
+            <Text
+              variant="serif"
+              size="md"
+              weigth="light"
+              lineHeight="lg"
+              color="grey"
+              className="summary"
+              dangerouslySetInnerHTML={{ __html: summary }}
+            />
           </div>
         </div>
       </div>

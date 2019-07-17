@@ -12,10 +12,11 @@ function SummaryTitle(props) {
         {capitalize(name)}
       </h2>
       <Button
-        size="sm"
+        size="xs"
         color="pink-transparent"
         className="profiles-selector-button"
         onClick={openModal}
+        variant="slim"
       >
         Change profile
       </Button>

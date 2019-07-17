@@ -2,7 +2,6 @@
 @import 'styles/settings';
 
 .profiles-title-container {
-
   .profiles-title {
     font-family: $font-family-2;
     font-size: $font-size-huge;
@@ -13,7 +12,7 @@
   }
 
   .profiles-selector-button {
-    vertical-align: bottom;
+    vertical-align: text-bottom;
     margin-top: 20px;
   }
 }

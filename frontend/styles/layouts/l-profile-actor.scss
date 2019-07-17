@@ -59,11 +59,18 @@ $large-line-chart-width: 840px;
     }
 
     .forest-500-score {
-      font-size: 0!important;
-
       .icon:not(:last-child) {
-        margin-right: 4px;
+        margin-right: 6px;
       }
+    }
+
+    .icon-check-circle {
+      margin-left: 0 0 0 5px;
+    }
+
+    .stats-text {
+      margin-left: 5px;
+      vertical-align: text-top;
     }
   }
 
