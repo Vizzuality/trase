@@ -2,17 +2,16 @@
 #
 # Table name: flow_quals
 #
-#  id         :integer          not null, primary key
-#  flow_id    :integer          not null
-#  qual_id    :integer          not null
-#  value      :text             not null
-#  created_at :datetime         not null
+#  id                   :integer          not null, primary key
+#  flow_id              :integer          not null
+#  qual_id              :integer          not null
+#  value(Textual value) :text             not null
 #
 # Indexes
 #
+#  flow_quals_flow_id_idx          (flow_id)
 #  flow_quals_flow_id_qual_id_key  (flow_id,qual_id) UNIQUE
 #  flow_quals_qual_id_idx          (qual_id)
-#  index_flow_quals_on_flow_id     (flow_id)
 #
 # Foreign Keys
 #

@@ -2,18 +2,16 @@
 #
 # Table name: database_updates
 #
-#  id         :bigint(8)        not null, primary key
-#  stats      :json
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
-#  jid        :text
-#  status     :text             default("STARTED"), not null
-#  error      :text
+#  id                                                                                        :bigint(8)        not null, primary key
+#  stats(JSON structure with information on row counts for all tables before / after update) :json
+#  jid(Job ID, filled in when update started using a background job processor)               :text
+#  status(STARTED (only one at a time), FINISHED or FAILED)                                  :text             default("STARTED"), not null
+#  error(Exception message for failed updates)                                               :text
 #
 # Indexes
 #
-#  database_updates_jid_key          (jid) UNIQUE
-#  index_database_updates_on_status  (status) UNIQUE WHERE (status = 'STARTED'::text)
+#  database_updates_jid_key     (jid) UNIQUE
+#  database_updates_status_idx  (status) UNIQUE WHERE (status = 'STARTED'::text)
 #
 
 module Api

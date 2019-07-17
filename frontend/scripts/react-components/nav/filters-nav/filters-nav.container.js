@@ -10,13 +10,17 @@ import {
   setLogisticsMapActiveModal,
   selectLogisticsMapInspectionLevel
 } from 'react-components/logistics-map/logistics-map.actions';
-import { selectBiomeFilter, selectResizeBy, selectView } from 'actions/tool.actions';
+import {
+  selectResizeBy,
+  selectBiomeFilter,
+  selectView
+} from 'react-components/tool-links/tool-links.actions';
 
 function mapStateToProps(state) {
   return {
     links: routerLinks.nav,
     filters: getNavFilters(state),
-    isMapVisible: state.tool && state.tool.isMapVisible,
+    isMapVisible: state.toolLayers && state.toolLayers.isMapVisible,
     currentDropdown: state.app.currentDropdown
   };
 }

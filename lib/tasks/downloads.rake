@@ -1,6 +1,6 @@
 namespace :downloads do
   desc 'Clear pre-computed bulk downloads'
-  task refresh: :environment do
+  task clear: :environment do
     Api::V3::Download::PrecomputedDownload.clear
   end
 

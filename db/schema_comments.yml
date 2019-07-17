@@ -522,10 +522,6 @@ materialized_views:
     columns:
       - name: attribute_id
         comment: References the unique id in attributes_mv.
-  - name: download_flows_mv
-    comment: Combines data from flow_paths_mv and download_attributes_values_mv in a structure that can be directly used to generate data downloads.
-  - name: flow_paths_mv
-    comment: Normalised flows
   - name: map_attributes_mv
     comment: Materialized view which merges map_inds and map_quants with map_attributes.
     columns:

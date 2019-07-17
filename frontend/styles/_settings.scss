@@ -35,6 +35,7 @@ $font-size-huge: 48px;
 
 // Line height
 $line-height-regular: 16px;
+$line-height-lg: 31px;
 
 // Breakpoints
 $breakpoint-mobile:  425px;
@@ -136,6 +137,7 @@ $recolorby-stars-red-blue-5: #246AB6;
 
 $recolorby-qual-thematic-company-commitment: #C2E699;
 $recolorby-qual-thematic-soy-moratorium: #1D6837;
+$recolorby-qual-thematic-company-ndpe-commitment: #1D6837;
 $recolorby-qual-thematic-none: #e36845;
 
 
@@ -190,6 +192,7 @@ $recolorby-colors:
         $recolorby-stars-red-blue-3,
         $recolorby-stars-red-blue-4,
         $recolorby-stars-red-blue-5,
+        $recolorby-qual-thematic-company-ndpe-commitment,
         $recolorby-qual-thematic-company-commitment,
         $recolorby-qual-thematic-soy-moratorium,
         $recolorby-qual-thematic-none,
@@ -240,6 +243,7 @@ $recolorby-colors-names:
         '-recolorby-stars-red-blue-3',
         '-recolorby-stars-red-blue-4',
         '-recolorby-stars-red-blue-5',
+        '-recolorby-qual-thematic-company-ndpe-commitment',
         '-recolorby-qual-thematic-company-commitment',
         '-recolorby-qual-thematic-soy-moratorium',
         '-recolorby-qual-thematic-none',

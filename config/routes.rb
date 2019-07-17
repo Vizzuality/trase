@@ -30,6 +30,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v3 do
+      resources :top_profiles, only: [:index]
       resources :contexts, only: [:index] do
         resources :map_layers, only: [:index]
         resources :columns, only: [:index]
@@ -91,6 +92,8 @@ Rails.application.routes.draw do
           resources :multi_year_no_ncont_overview, only: [:index]
           resources :multi_year_no_ncont_node_type_view, only: [:index]
           resources :multi_year_ncont_overview, only: [:index]
+          resources :single_year_node_values_overview, only: [:index]
+          resources :multi_year_node_values_overview, only: [:index]
         end
         resources :parametrised_charts, only: [:index]
       end

@@ -2,16 +2,14 @@
 #
 # Table name: node_properties
 #
-#  id                      :integer          not null, primary key
-#  node_id                 :integer          not null
-#  is_domestic_consumption :boolean          default(FALSE), not null
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
+#  id                                                       :integer          not null, primary key
+#  node_id                                                  :integer          not null
+#  is_domestic_consumption(When set, assume domestic trade) :boolean          default(FALSE), not null
 #
 # Indexes
 #
-#  index_node_properties_on_node_id  (node_id)
-#  node_properties_node_id_key       (node_id) UNIQUE
+#  node_properties_node_id_idx  (node_id)
+#  node_properties_node_id_key  (node_id) UNIQUE
 #
 # Foreign Keys
 #
@@ -35,6 +33,7 @@ module Api
 
       def refresh_dependents
         Api::V3::Readonly::Node.refresh
+        Api::V3::Readonly::SankeyNode.refresh
       end
 
       def self.insert_missing_node_properties

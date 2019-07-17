@@ -2,13 +2,12 @@
 #
 # Table name: nodes
 #
-#  id           :integer          not null, primary key
-#  node_type_id :integer          not null
-#  name         :text             not null
-#  geo_id       :text
-#  is_unknown   :boolean          default(FALSE), not null
-#  created_at   :datetime         not null
-#  main_id      :integer
+#  id                                                                                                      :integer          not null, primary key
+#  node_type_id                                                                                            :integer          not null
+#  name(Name of node)                                                                                      :text             not null
+#  geo_id(2-letter iso code in case of country nodes; other geo identifiers possible for other node types) :text
+#  is_unknown(When set, node was not possible to identify)                                                 :boolean          default(FALSE), not null
+#  main_id(Node identifier from Main DB)                                                                   :integer
 #
 # Indexes
 #
@@ -36,26 +35,7 @@ module Api
 
       has_many :dashboard_template_sources
       has_many :dashboard_templates, through: :dashboard_template_sources
-
-      scope :place_nodes, -> {
-        includes(:node_type).where(
-          'node_types.name' => Api::V3::NodeType::PLACES
-        )
-      }
-
-      scope :actor_nodes, -> {
-        includes(:node_type).where(
-          'node_types.name' => Api::V3::NodeType::ACTORS
-        )
-      }
-
-      scope :biomes, -> {
-        includes(:node_type).where('node_types.name' => NodeTypeName::BIOME)
-      }
-
-      scope :states, -> {
-        includes(:node_type).where('node_types.name' => NodeTypeName::STATE)
-      }
+      has_many :top_profiles
 
       def stringify
         name + ' - ' + node_type.name + ' - ' + node_type&.context_node_types&.first&.context&.country&.name + ' ' + node_type&.context_node_types&.first&.context&.commodity&.name
@@ -77,6 +57,12 @@ module Api
         [
           {name: :node_type_id, table_class: Api::V3::NodeType}
         ]
+      end
+
+      def readonly_attribute
+        Api::V3::Readonly::Node.find(id)
+      rescue ActiveRecord::RecordNotFound
+        nil
       end
     end
   end

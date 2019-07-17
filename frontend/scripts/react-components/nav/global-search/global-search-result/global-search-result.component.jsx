@@ -39,13 +39,11 @@ class GlobalSearchResult extends Component {
             to={{
               type: 'tool',
               payload: {
-                query: {
-                  state: {
-                    isMapVisible: false,
-                    selectedContextId: item.contextId,
-                    selectedNodesIds: item.nodes.map(i => i.id),
-                    expandedNodesIds: item.nodes.map(i => i.id)
-                  }
+                serializerParams: {
+                  isMapVisible: false,
+                  selectedContextId: item.contextId,
+                  selectedNodesIds: item.nodes.map(i => i.id),
+                  expandedNodesIds: item.nodes.map(i => i.id)
                 }
               }
             }}
@@ -62,13 +60,11 @@ class GlobalSearchResult extends Component {
               to={{
                 type: 'tool',
                 payload: {
-                  query: {
-                    state: {
-                      isMapVisible: true,
-                      selectedContextId: item.contextId,
-                      selectedNodesIds: item.nodes.map(i => i.id),
-                      expandedNodesIds: item.nodes.map(i => i.id)
-                    }
+                  serializerParams: {
+                    isMapVisible: true,
+                    selectedContextId: item.contextId,
+                    selectedNodesIds: item.nodes.map(i => i.id),
+                    expandedNodesIds: item.nodes.map(i => i.id)
                   }
                 }
               }}
@@ -79,7 +75,7 @@ class GlobalSearchResult extends Component {
           )}
 
           {item.nodes
-            .filter(n => n.profile)
+            .filter(n => n.profile && !DISABLE_PROFILES)
             .map(node => (
               <LinkButton
                 onMouseEnter={this.onMouseEnter}

@@ -1,31 +1,3 @@
-engines:
-  rubocop:
-    enabled: true
-  brakeman:
-    enabled: true
-  bundler-audit:
-    enabled: true
-  duplication:
-    enabled: true
-    exclude_paths:
-      - app/controllers/
-      - app/admin/api/v3/
-      - app/models/actor_attributes.rb
-      - app/models/place_attributes.rb
-      - app/models/node.rb
-      - app/models/node_ind.rb
-      - app/models/node_qual.rb
-      - app/models/node_quant.rb
-      - app/models/flow_stats_for_node.rb
-      - app/models/node_type.rb
-    config:
-      languages:
-      - ruby:
-  apexmetrics:
-    enabled: true
-  reek:
-    enabled: true
-
 version: '2' # required to adjust maintainability checks
 checks:
   argument-count:
@@ -59,13 +31,37 @@ checks:
     config:
       threshold: # language-specific defaults. an override will affect all languages.
 
-ratings:
-  paths:
-  - app/**
-  - lib/**
-  - "**.rb"
-exclude_paths:
-- spec/**/*
+plugins:
+  rubocop:
+    enabled: true
+    channel: rubocop-0-67
+  brakeman:
+    enabled: true
+  bundler-audit:
+    enabled: true
+  duplication:
+    enabled: true
+    exclude_paths:
+      - app/controllers/
+      - app/admin/api/v3/
+      - app/models/actor_attributes.rb
+      - app/models/place_attributes.rb
+      - app/models/node.rb
+      - app/models/node_ind.rb
+      - app/models/node_qual.rb
+      - app/models/node_quant.rb
+      - app/models/flow_stats_for_node.rb
+      - app/models/node_type.rb
+    config:
+      languages:
+      - ruby:
+  apexmetrics:
+    enabled: true
+  reek:
+    enabled: true
+
+exclude_patterns:
+- "db/**/*"
+- "lib/db_helpers/**/*" # db helpers, mostly temporary
+- "spec/**/*"
 - "**/vendor/**/*"
-- db/**/*
-- 'lib/db_helpers/**/*' # db helpers, mostly temporary

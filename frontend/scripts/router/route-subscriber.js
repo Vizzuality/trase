@@ -20,7 +20,9 @@ export default function routeSubscriber(store) {
         case 'teamMember':
           return import(`../react-components/team/team-member/team-member.container`);
         case 'about':
-          return import(`../react-components/static-content/markdown-renderer/markdown-renderer.container`);
+          return import(
+            `../react-components/static-content/markdown-renderer/markdown-renderer.container`
+          );
         default: {
           const error = new Error(
             `You're trying to load a layout (${layout}) of a page (${type}) that doesnt support it`
@@ -35,7 +37,10 @@ export default function routeSubscriber(store) {
     }
 
     resetPage() {
-      if (this.page && this.page.unmount) this.page.unmount(this.root, store);
+      if (this.page && this.page.unmount) {
+        this.page.unmount(this.root, store);
+        this.page = null;
+      }
     }
 
     onRouteChange({ routesMap, type } = {}) {
@@ -44,20 +49,30 @@ export default function routeSubscriber(store) {
         this.resetPage();
         this.filename = filename;
         // eslint-disable-next-line space-in-parens
-        import(/* webpackChunkName: "[request]" */
-        `../pages/${this.filename}.page.jsx`).then(page => {
-          this.page = page;
+        const loadPagePromise = import(
+          /* webpackChunkName: "[request]" */
+          `../pages/${this.filename}.page.jsx`
+        );
+
+        Promise.all([this.filename, loadPagePromise]).then(([name, page]) => {
+          if (name !== this.filename) {
+            // a new page has started loading, do nothing
+            return;
+          }
           if (typeof layout !== 'undefined') {
             this.loadDynamicLayouts(type, layout)
-              .then(component =>
-                this.page.mount(this.root, store, { component: layout(component.default) })
-              )
+              .then(component => {
+                page.mount(this.root, store, { component: layout(component.default) });
+                this.page = page;
+              })
               .catch(err => {
                 console.error(err);
-                this.page.mount(this.root, store);
+                page.mount(this.root, store);
+                this.page = page;
               });
           } else {
-            this.page.mount(this.root, store);
+            page.mount(this.root, store);
+            this.page = page;
           }
         });
       }

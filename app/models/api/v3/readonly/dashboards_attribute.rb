@@ -2,15 +2,14 @@
 #
 # Table name: dashboards_attributes_mv
 #
-#  id                            :bigint(8)        primary key
-#  dashboards_attribute_group_id :bigint(8)
-#  position                      :integer
-#  attribute_id                  :bigint(8)
+#  id                                                       :bigint(8)        primary key
+#  dashboards_attribute_group_id                            :bigint(8)
+#  position                                                 :integer
+#  attribute_id(References the unique id in attributes_mv.) :bigint(8)
 #
 # Indexes
 #
-#  dashboards_attributes_mv_group_id_attribute_id_idx  (dashboards_attribute_group_id,attribute_id)
-#  dashboards_attributes_mv_id_idx                     (id) UNIQUE
+#  dashboards_attributes_mv_id_idx  (id) UNIQUE
 #
 
 module Api

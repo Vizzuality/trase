@@ -1,82 +1,67 @@
 {
-  "$id": "http://example.com/example.json",
-  "type": "object",
   "definitions": {},
   "$schema": "http://json-schema.org/draft-06/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "required": [
+    "data"
+  ],
   "properties": {
     "data": {
-      "$id": "/properties/data",
+      "$id": "#/properties/data",
       "type": "array",
       "items": {
-        "$id": "/properties/data/items",
+        "$id": "#/properties/data/items",
         "type": "object",
+        "required": [
+          "id",
+          "mainId",
+          "name",
+          "nodeType",
+          "contextId",
+          "profile",
+          "isSubnational",
+          "years"
+        ],
         "properties": {
           "id": {
-            "$id": "/properties/data/items/properties/id",
-            "type": "integer",
-            "title": "The Id Schema ",
-            "default": 0,
-            "examples": [
-              6035
-            ]
+            "$id": "#/properties/data/items/properties/id",
+            "type": "integer"
           },
           "mainId": {
-            "$id": "/properties/data/items/properties/mainId",
-            "type": [
-              "integer",
-              "null"
-            ],
-            "title": "The Main Id Schema ",
-            "default": null,
-            "examples": [
-              6035
-            ]
+            "$id": "#/properties/data/items/properties/mainId",
+            "type": ["integer", "null"]
           },
           "name": {
-            "$id": "/properties/data/items/properties/name",
+            "$id": "#/properties/data/items/properties/name",
             "type": "string",
-            "title": "The Name Schema ",
-            "default": "",
-            "examples": [
-              "SHARIKAT AL-AKKAD LEL TEJARAT AL-AMMEH"
-            ]
+            "pattern": "^(.*)$"
           },
           "nodeType": {
-            "$id": "/properties/data/items/properties/nodeType",
+            "$id": "#/properties/data/items/properties/nodeType",
             "type": "string",
-            "title": "The Nodetype Schema ",
-            "default": "",
-            "examples": [
-              "IMPORTER"
-            ]
+            "pattern": "^(.*)$"
           },
           "contextId": {
-            "$id": "/properties/data/items/properties/contextId",
-            "type": "integer",
-            "title": "The Contextid Schema ",
-            "default": 0,
-            "examples": [
-              3
-            ]
+            "$id": "#/properties/data/items/properties/contextId",
+            "type": "integer"
           },
           "profile": {
-            "$id": "/properties/data/items/properties/profile",
-            "type": "null",
-            "title": "The Profile Schema ",
-            "default": null,
-            "examples": [
-              null
-            ]
+            "$id": "#/properties/data/items/properties/profile",
+            "type": ["string", "null"],
+            "pattern": "^(.*)$"
           },
           "isSubnational": {
-            "$id": "/properties/data/items/properties/isSubnational",
-            "type": "boolean",
-            "title": "The isSubnational Schema ",
-            "default": false,
-            "examples": [
-              true,
-              false
-            ]
+            "$id": "#/properties/data/items/properties/isSubnational",
+            "type": "boolean"
+          },
+          "years": {
+            "$id": "#/properties/data/items/properties/years",
+            "type": "array",
+            "items": {
+              "$id": "#/properties/data/items/properties/years/items",
+              "type": "integer"
+            }
           }
         }
       }

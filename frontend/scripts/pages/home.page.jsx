@@ -1,5 +1,4 @@
 import BaseMarkup from 'html/base.ejs';
-import FeedbackMarkup from 'html/includes/_feedback.ejs';
 
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
@@ -8,13 +7,12 @@ import Home from 'react-components/home/home.container';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import CookieBanner from 'react-components/shared/cookie-banner';
 import Footer from 'react-components/shared/footer/footer.component';
+import Feedback from 'react-components/shared/feedback';
 
 import 'styles/layouts/l-homepage.scss';
 
 export const mount = (root, store) => {
-  root.innerHTML = BaseMarkup({
-    feedback: FeedbackMarkup()
-  });
+  root.innerHTML = BaseMarkup();
 
   render(
     <Provider store={store}>
@@ -33,6 +31,7 @@ export const mount = (root, store) => {
   render(
     <Provider store={store}>
       <Footer />
+      <Feedback />
     </Provider>,
     document.getElementById('footer')
   );

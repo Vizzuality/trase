@@ -5,6 +5,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -23,17 +24,24 @@ CREATE SCHEMA main;
 
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
+-- Name: maintenance; Type: SCHEMA; Schema: -; Owner: -
 --
 
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+CREATE SCHEMA maintenance;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
+-- Name: fuzzystrmatch; Type: EXTENSION; Schema: -; Owner: -
 --
 
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+CREATE EXTENSION IF NOT EXISTS fuzzystrmatch WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION fuzzystrmatch; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION fuzzystrmatch IS 'determine similarities and distance between strings';
 
 
 --
@@ -433,6 +441,23 @@ CREATE SEQUENCE content.users_id_seq
 --
 
 ALTER SEQUENCE content.users_id_seq OWNED BY content.users.id;
+
+
+--
+-- Name: unused_indexes; Type: VIEW; Schema: maintenance; Owner: -
+--
+
+CREATE VIEW maintenance.unused_indexes AS
+ SELECT s.schemaname,
+    s.relname AS tablename,
+    s.indexrelname AS indexname,
+    pg_relation_size((s.indexrelid)::regclass) AS index_size
+   FROM (pg_stat_user_indexes s
+     JOIN pg_index i ON ((s.indexrelid = i.indexrelid)))
+  WHERE ((s.idx_scan = 0) AND (0 <> ALL ((i.indkey)::smallint[])) AND (NOT i.indisunique) AND (NOT (EXISTS ( SELECT 1
+           FROM pg_constraint c
+          WHERE (c.conindid = s.indexrelid)))))
+  ORDER BY (pg_relation_size((s.indexrelid)::regclass)) DESC;
 
 
 --
@@ -1514,7 +1539,7 @@ UNION ALL
     ind_commodity_properties.ind_id,
     '-1'::integer AS quant_id
    FROM public.ind_commodity_properties
-  WITH DATA;
+  WITH NO DATA;
 
 
 --
@@ -1713,7 +1738,7 @@ UNION ALL
     ind_context_properties.ind_id,
     '-1'::integer AS quant_id
    FROM public.ind_context_properties
-  WITH DATA;
+  WITH NO DATA;
 
 
 --
@@ -2064,6 +2089,171 @@ ALTER SEQUENCE public.contexts_id_seq OWNED BY public.contexts.id;
 
 
 --
+-- Name: countries; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.countries (
+    id integer NOT NULL,
+    name text NOT NULL,
+    iso2 text NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE countries; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.countries IS 'Countries (source)';
+
+
+--
+-- Name: COLUMN countries.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.countries.name IS 'Country name';
+
+
+--
+-- Name: COLUMN countries.iso2; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.countries.iso2 IS '2-letter ISO code';
+
+
+--
+-- Name: profiles; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.profiles (
+    id integer NOT NULL,
+    context_node_type_id integer NOT NULL,
+    name text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    main_topojson_path character varying,
+    main_topojson_root character varying,
+    adm_1_name character varying,
+    adm_1_topojson_path character varying,
+    adm_1_topojson_root character varying,
+    adm_2_name character varying,
+    adm_2_topojson_path character varying,
+    adm_2_topojson_root character varying,
+    CONSTRAINT profiles_name_check CHECK ((name = ANY (ARRAY['actor'::text, 'place'::text])))
+);
+
+
+--
+-- Name: TABLE profiles; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.profiles IS 'Context-specific profiles';
+
+
+--
+-- Name: COLUMN profiles.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.name IS 'Profile name, either actor or place. One of restricted set of values.';
+
+
+--
+-- Name: COLUMN profiles.main_topojson_path; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.main_topojson_path IS 'Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /';
+
+
+--
+-- Name: COLUMN profiles.main_topojson_root; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.main_topojson_root IS 'Path within the TopoJSON file where geometries are contained';
+
+
+--
+-- Name: COLUMN profiles.adm_1_topojson_path; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.adm_1_topojson_path IS 'Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /';
+
+
+--
+-- Name: COLUMN profiles.adm_1_topojson_root; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.adm_1_topojson_root IS 'Path within the TopoJSON file where geometries are contained';
+
+
+--
+-- Name: COLUMN profiles.adm_2_topojson_path; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.adm_2_topojson_path IS 'Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /';
+
+
+--
+-- Name: COLUMN profiles.adm_2_topojson_root; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.profiles.adm_2_topojson_root IS 'Path within the TopoJSON file where geometries are contained';
+
+
+--
+-- Name: contexts_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.contexts_mv AS
+ WITH context_node_types_with_props AS (
+         SELECT context_node_types.context_id,
+            context_node_types.node_type_id,
+            context_node_types.column_position,
+            node_types.name AS node_type,
+            context_node_type_properties.role,
+            context_node_type_properties.column_group,
+            context_node_type_properties.is_default
+           FROM ((public.context_node_types
+             JOIN public.context_node_type_properties ON ((context_node_types.id = context_node_type_properties.context_node_type_id)))
+             JOIN public.node_types ON ((context_node_types.node_type_id = node_types.id)))
+        )
+ SELECT contexts.id,
+    contexts.country_id,
+    contexts.commodity_id,
+    contexts.years,
+    contexts.default_year,
+    commodities.name AS commodity_name,
+    countries.name AS country_name,
+    countries.iso2,
+    context_properties.default_basemap,
+    context_properties.is_disabled,
+    context_properties.is_default,
+    context_properties.is_subnational,
+    context_properties.is_highlighted,
+    COALESCE((contexts_with_profiles.id IS NOT NULL), false) AS has_profiles,
+    node_types_by_role.node_types_by_role,
+    context_node_types_agg.node_types_by_name,
+    context_node_types_agg.node_types
+   FROM ((((((public.contexts
+     JOIN public.commodities ON ((contexts.commodity_id = commodities.id)))
+     JOIN public.countries ON ((contexts.country_id = countries.id)))
+     JOIN public.context_properties ON ((context_properties.context_id = contexts.id)))
+     JOIN ( SELECT context_node_types_with_props.context_id,
+            jsonb_object_agg(context_node_types_with_props.role, context_node_types_with_props.node_type_id) AS node_types_by_role
+           FROM context_node_types_with_props
+          WHERE (context_node_types_with_props.role IS NOT NULL)
+          GROUP BY context_node_types_with_props.context_id) node_types_by_role ON ((node_types_by_role.context_id = contexts.id)))
+     JOIN ( SELECT context_node_types_with_props.context_id,
+            jsonb_object_agg(context_node_types_with_props.node_type, context_node_types_with_props.node_type_id) AS node_types_by_name,
+            jsonb_agg(jsonb_build_object('node_type_id'::text, context_node_types_with_props.node_type_id, 'is_default'::text, context_node_types_with_props.is_default, 'column_group'::text, context_node_types_with_props.column_group, 'role'::text, context_node_types_with_props.role, 'node_type'::text, context_node_types_with_props.node_type) ORDER BY context_node_types_with_props.column_position) AS node_types
+           FROM context_node_types_with_props
+          GROUP BY context_node_types_with_props.context_id) context_node_types_agg ON ((context_node_types_agg.context_id = contexts.id)))
+     LEFT JOIN ( SELECT DISTINCT context_node_types.context_id AS id
+           FROM (public.context_node_types
+             JOIN public.profiles ON ((context_node_types.id = profiles.context_node_type_id)))) contexts_with_profiles ON ((contexts_with_profiles.id = contexts.id)))
+  WITH NO DATA;
+
+
+--
 -- Name: contextual_layers; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2147,39 +2337,6 @@ CREATE SEQUENCE public.contextual_layers_id_seq
 --
 
 ALTER SEQUENCE public.contextual_layers_id_seq OWNED BY public.contextual_layers.id;
-
-
---
--- Name: countries; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.countries (
-    id integer NOT NULL,
-    name text NOT NULL,
-    iso2 text NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE countries; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.countries IS 'Countries (source)';
-
-
---
--- Name: COLUMN countries.name; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.countries.name IS 'Country name';
-
-
---
--- Name: COLUMN countries.iso2; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.countries.iso2 IS '2-letter ISO code';
 
 
 --
@@ -2355,7 +2512,7 @@ UNION ALL
     ind_country_properties.ind_id,
     '-1'::integer AS quant_id
    FROM public.ind_country_properties
-  WITH DATA;
+  WITH NO DATA;
 
 
 --
@@ -2908,6 +3065,26 @@ COMMENT ON COLUMN public.flows.path IS 'Array of node ids which constitute the s
 
 
 --
+-- Name: node_properties; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.node_properties (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    is_domestic_consumption boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: COLUMN node_properties.is_domestic_consumption; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_properties.is_domestic_consumption IS 'When set, assume domestic trade';
+
+
+--
 -- Name: nodes; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2975,8 +3152,12 @@ CREATE MATERIALIZED VIEW public.dashboards_flow_paths_mv AS
         CASE
             WHEN (((cnt_props.role)::text = 'exporter'::text) OR ((cnt_props.role)::text = 'importer'::text)) THEN 'company'::character varying
             ELSE cnt_props.role
-        END AS category
-   FROM (((((( SELECT flows.context_id,
+        END AS category,
+        CASE
+            WHEN ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text)) THEN p.name
+            ELSE NULL::text
+        END AS profile
+   FROM (((((((( SELECT flows.context_id,
             flows.id AS flow_id,
             a.node_id,
             a."position"
@@ -2984,9 +3165,11 @@ CREATE MATERIALIZED VIEW public.dashboards_flow_paths_mv AS
             LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) flow_paths
      JOIN public.contexts ON ((flow_paths.context_id = contexts.id)))
      JOIN public.nodes ON ((flow_paths.node_id = nodes.id)))
+     JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
      JOIN public.node_types ON ((nodes.node_type_id = node_types.id)))
      JOIN public.context_node_types cnt ON (((node_types.id = cnt.node_type_id) AND (flow_paths.context_id = cnt.context_id))))
      JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
+     LEFT JOIN public.profiles p ON ((p.context_node_type_id = cnt.id)))
   WHERE (cnt_props.role IS NOT NULL)
   WITH NO DATA;
 
@@ -3000,10 +3183,11 @@ CREATE MATERIALIZED VIEW public.dashboards_commodities_mv AS
     btrim(commodities.name) AS name,
     to_tsvector('simple'::regconfig, COALESCE(btrim(commodities.name), ''::text)) AS name_tsvector,
     fp.country_id,
-    fp.node_id
+    fp.node_id,
+    fp.profile
    FROM (public.dashboards_flow_paths_mv fp
      JOIN public.commodities ON ((commodities.id = fp.commodity_id)))
-  GROUP BY fp.commodity_id, commodities.name, fp.country_id, fp.node_id
+  GROUP BY fp.commodity_id, commodities.name, fp.country_id, fp.node_id, fp.profile
   WITH NO DATA;
 
 
@@ -3017,13 +3201,14 @@ CREATE MATERIALIZED VIEW public.dashboards_companies_mv AS
     to_tsvector('simple'::regconfig, COALESCE(btrim(fp.node), ''::text)) AS name_tsvector,
     fp.node_type_id,
     fp.node_type,
+    fp.profile,
     all_fp.country_id,
     all_fp.commodity_id,
     all_fp.node_id
    FROM (public.dashboards_flow_paths_mv all_fp
      JOIN public.dashboards_flow_paths_mv fp ON ((all_fp.flow_id = fp.flow_id)))
   WHERE ((fp.category)::text = 'company'::text)
-  GROUP BY fp.node_id, fp.node, fp.node_type_id, fp.node_type, all_fp.country_id, all_fp.commodity_id, all_fp.node_id
+  GROUP BY fp.node_id, fp.node, fp.node_type_id, fp.node_type, fp.profile, all_fp.country_id, all_fp.commodity_id, all_fp.node_id
   WITH NO DATA;
 
 
@@ -3037,10 +3222,11 @@ CREATE MATERIALIZED VIEW public.dashboards_countries_mv AS
     to_tsvector('simple'::regconfig, COALESCE(btrim(countries.name), ''::text)) AS name_tsvector,
     countries.iso2,
     fp.commodity_id,
-    fp.node_id
+    fp.node_id,
+    fp.profile
    FROM (public.dashboards_flow_paths_mv fp
      JOIN public.countries ON ((countries.id = fp.country_id)))
-  GROUP BY fp.country_id, countries.name, countries.iso2, fp.commodity_id, fp.node_id
+  GROUP BY fp.country_id, countries.name, countries.iso2, fp.commodity_id, fp.node_id, fp.profile
   WITH NO DATA;
 
 
@@ -3054,13 +3240,14 @@ CREATE MATERIALIZED VIEW public.dashboards_destinations_mv AS
     to_tsvector('simple'::regconfig, COALESCE(btrim(fp.node), ''::text)) AS name_tsvector,
     fp.node_type_id,
     fp.node_type,
+    fp.profile,
     all_fp.country_id,
     all_fp.commodity_id,
     all_fp.node_id
    FROM (public.dashboards_flow_paths_mv all_fp
      JOIN public.dashboards_flow_paths_mv fp ON ((all_fp.flow_id = fp.flow_id)))
   WHERE ((fp.category)::text = 'destination'::text)
-  GROUP BY fp.node_id, fp.node, fp.node_type_id, fp.node_type, all_fp.country_id, all_fp.commodity_id, all_fp.node_id
+  GROUP BY fp.node_id, fp.node, fp.node_type_id, fp.node_type, fp.profile, all_fp.country_id, all_fp.commodity_id, all_fp.node_id
   WITH NO DATA;
 
 
@@ -3166,6 +3353,7 @@ CREATE MATERIALIZED VIEW public.dashboards_sources_mv AS
     to_tsvector('simple'::regconfig, COALESCE(btrim(fp.node), ''::text)) AS name_tsvector,
     fp.node_type_id,
     fp.node_type,
+    fp.profile,
     quals.name AS parent_node_type,
     node_quals.value AS parent_name,
     all_fp.country_id,
@@ -3177,7 +3365,7 @@ CREATE MATERIALIZED VIEW public.dashboards_sources_mv AS
      LEFT JOIN public.quals ON ((quals.name = cnt_mv.parent_node_type)))
      LEFT JOIN public.node_quals ON (((fp.node_id = node_quals.node_id) AND (quals.id = node_quals.qual_id))))
   WHERE (((fp.category)::text = 'source'::text) AND (all_fp.node_id <> fp.node_id))
-  GROUP BY fp.node_id, fp.node, fp.node_type_id, fp.node_type, quals.name, node_quals.value, all_fp.country_id, all_fp.commodity_id, all_fp.node_id
+  GROUP BY fp.node_id, fp.node, fp.node_type_id, fp.node_type, fp.profile, quals.name, node_quals.value, all_fp.country_id, all_fp.commodity_id, all_fp.node_id
   WITH NO DATA;
 
 
@@ -3450,7 +3638,9 @@ CREATE MATERIALIZED VIEW public.download_attributes_mv AS
     da.years,
     da.created_at,
     da.updated_at,
-    a.id AS attribute_id
+    a.id AS attribute_id,
+    a.original_type,
+    a.original_id
    FROM ((public.download_quants daq
      JOIN public.download_attributes da ON ((da.id = daq.download_attribute_id)))
      JOIN public.attributes_mv a ON (((a.original_id = daq.quant_id) AND (a.original_type = 'Quant'::text))))
@@ -3462,7 +3652,9 @@ UNION ALL
     da.years,
     da.created_at,
     da.updated_at,
-    a.id AS attribute_id
+    a.id AS attribute_id,
+    a.original_type,
+    a.original_id
    FROM ((public.download_quals daq
      JOIN public.download_attributes da ON ((da.id = daq.download_attribute_id)))
      JOIN public.attributes_mv a ON (((a.original_id = daq.qual_id) AND (a.original_type = 'Qual'::text))))
@@ -3484,43 +3676,159 @@ COMMENT ON COLUMN public.download_attributes_mv.attribute_id IS 'References the 
 
 
 --
--- Name: flow_paths_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+-- Name: download_flows; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE MATERIALIZED VIEW public.flow_paths_mv AS
- SELECT f.node_id,
-    n.geo_id,
-        CASE
-            WHEN (cn.node_type_name = ANY (ARRAY['COUNTRY OF PRODUCTION'::text, 'BIOME'::text, 'LOGISTICS HUB'::text, 'STATE'::text])) THEN upper(n.name)
-            ELSE initcap(n.name)
-        END AS name,
-    cn.node_type_name,
-    cn.column_position,
-    f.id AS flow_id,
-    f.year,
-    f.context_id
-   FROM ((( SELECT flows.id,
-            flows.year,
-            a.node_id,
-            a."position",
-            flows.context_id
-           FROM public.flows,
-            LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) f
-     JOIN ( SELECT cnt.context_id,
-            cnt.column_position,
-            cnt.node_type_id,
-            node_types.name AS node_type_name
-           FROM (public.context_node_types cnt
-             JOIN public.node_types ON ((node_types.id = cnt.node_type_id)))) cn ON (((f."position" = (cn.column_position + 1)) AND (f.context_id = cn.context_id))))
-     JOIN public.nodes n ON ((n.id = f.node_id)))
+CREATE TABLE public.download_flows (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    jsonb_path jsonb,
+    attribute_type text,
+    attribute_id integer,
+    attribute_name text,
+    text_values text,
+    sum numeric,
+    total text,
+    sort text
+)
+PARTITION BY LIST (year);
+
+
+--
+-- Name: download_flows_2003; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2003 PARTITION OF public.download_flows
+FOR VALUES IN ('2003');
+
+
+--
+-- Name: download_flows_2004; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2004 PARTITION OF public.download_flows
+FOR VALUES IN ('2004');
+
+
+--
+-- Name: download_flows_2005; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2005 PARTITION OF public.download_flows
+FOR VALUES IN ('2005');
+
+
+--
+-- Name: download_flows_2006; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2006 PARTITION OF public.download_flows
+FOR VALUES IN ('2006');
+
+
+--
+-- Name: download_flows_2007; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2007 PARTITION OF public.download_flows
+FOR VALUES IN ('2007');
+
+
+--
+-- Name: download_flows_2008; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2008 PARTITION OF public.download_flows
+FOR VALUES IN ('2008');
+
+
+--
+-- Name: download_flows_2009; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2009 PARTITION OF public.download_flows
+FOR VALUES IN ('2009');
+
+
+--
+-- Name: download_flows_2010; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2010 PARTITION OF public.download_flows
+FOR VALUES IN ('2010');
+
+
+--
+-- Name: download_flows_2011; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2011 PARTITION OF public.download_flows
+FOR VALUES IN ('2011');
+
+
+--
+-- Name: download_flows_2012; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2012 PARTITION OF public.download_flows
+FOR VALUES IN ('2012');
+
+
+--
+-- Name: download_flows_2013; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2013 PARTITION OF public.download_flows
+FOR VALUES IN ('2013');
+
+
+--
+-- Name: download_flows_2014; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2014 PARTITION OF public.download_flows
+FOR VALUES IN ('2014');
+
+
+--
+-- Name: download_flows_2015; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2015 PARTITION OF public.download_flows
+FOR VALUES IN ('2015');
+
+
+--
+-- Name: download_flows_2016; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2016 PARTITION OF public.download_flows
+FOR VALUES IN ('2016');
+
+
+--
+-- Name: download_flows_2017; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.download_flows_2017 PARTITION OF public.download_flows
+FOR VALUES IN ('2017');
+
+
+--
+-- Name: download_flows_stats_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.download_flows_stats_mv AS
+ SELECT download_flows.context_id,
+    download_flows.year,
+    download_flows.attribute_type,
+    download_flows.attribute_id,
+    count(*) AS count
+   FROM public.download_flows
+  GROUP BY download_flows.context_id, download_flows.year, download_flows.attribute_type, download_flows.attribute_id
   WITH NO DATA;
-
-
---
--- Name: MATERIALIZED VIEW flow_paths_mv; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON MATERIALIZED VIEW public.flow_paths_mv IS 'Normalised flows';
 
 
 --
@@ -3578,112 +3886,71 @@ COMMENT ON COLUMN public.flow_quants.value IS 'Numeric value';
 
 
 --
--- Name: download_flows_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+-- Name: flows_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
-CREATE MATERIALIZED VIEW public.download_flows_mv AS
- SELECT ARRAY[f_0.context_id, (f_0.year)::integer, f_0.node_id, f_1.node_id, f_2.node_id, f_3.node_id, f_4.node_id, f_5.node_id, f_6.node_id, f_7.node_id, f_0.flow_id] AS row_name,
-    f_0.flow_id AS id,
-    f_0.context_id,
-    f_0.year,
-    f_0.name AS name_0,
-    f_1.name AS name_1,
-    f_2.name AS name_2,
-    f_3.name AS name_3,
-    f_4.name AS name_4,
-    f_5.name AS name_5,
-    f_6.name AS name_6,
-    f_7.name AS name_7,
-    f_0.node_id AS node_id_0,
-    f_1.node_id AS node_id_1,
-    f_2.node_id AS node_id_2,
-    f_3.node_id AS node_id_3,
-    f_4.node_id AS node_id_4,
-    f_5.node_id AS node_id_5,
-    f_6.node_id AS node_id_6,
-    f_7.node_id AS node_id_7,
-        CASE
-            WHEN (f_5.node_type_name = 'EXPORTER'::text) THEN f_5.node_id
-            WHEN (f_2.node_type_name = 'EXPORTER'::text) THEN f_2.node_id
-            WHEN (f_2.node_type_name = 'TRADER'::text) THEN f_2.node_id
-            WHEN (f_1.node_type_name = 'EXPORTER'::text) THEN f_1.node_id
-            ELSE NULL::integer
-        END AS exporter_node_id,
-        CASE
-            WHEN (f_6.node_type_name = 'IMPORTER'::text) THEN f_6.node_id
-            WHEN (f_3.node_type_name = 'IMPORTER'::text) THEN f_3.node_id
-            WHEN (f_2.node_type_name = 'IMPORTER'::text) THEN f_2.node_id
-            ELSE NULL::integer
-        END AS importer_node_id,
-        CASE
-            WHEN (f_7.node_type_name = 'COUNTRY'::text) THEN f_7.node_id
-            WHEN (f_4.node_type_name = 'COUNTRY'::text) THEN f_4.node_id
-            WHEN (f_3.node_type_name = 'COUNTRY'::text) THEN f_3.node_id
-            ELSE NULL::integer
-        END AS country_node_id,
-    fi.attribute_type,
-    fi.attribute_id,
-    fi.name AS attribute_name,
-    fi.name_with_unit AS attribute_name_with_unit,
-    fi.display_name,
-    string_agg(fi.text_value, ' / '::text) AS text_values,
-    sum(fi.numeric_value) AS sum,
-        CASE
-            WHEN (fi.attribute_type = 'Qual'::text) THEN string_agg(fi.text_value, ' / '::text)
-            ELSE (sum(fi.numeric_value))::text
-        END AS total
-   FROM ((((((((public.flow_paths_mv f_0
-     JOIN public.flow_paths_mv f_1 ON (((f_1.flow_id = f_0.flow_id) AND (f_1.column_position = 1))))
-     JOIN public.flow_paths_mv f_2 ON (((f_2.flow_id = f_0.flow_id) AND (f_2.column_position = 2))))
-     JOIN public.flow_paths_mv f_3 ON (((f_3.flow_id = f_0.flow_id) AND (f_3.column_position = 3))))
-     LEFT JOIN public.flow_paths_mv f_4 ON (((f_4.flow_id = f_0.flow_id) AND (f_4.column_position = 4))))
-     LEFT JOIN public.flow_paths_mv f_5 ON (((f_5.flow_id = f_0.flow_id) AND (f_5.column_position = 5))))
-     LEFT JOIN public.flow_paths_mv f_6 ON (((f_6.flow_id = f_0.flow_id) AND (f_6.column_position = 6))))
-     LEFT JOIN public.flow_paths_mv f_7 ON (((f_7.flow_id = f_0.flow_id) AND (f_7.column_position = 7))))
-     JOIN ( SELECT f.flow_id,
-            f.qual_id AS attribute_id,
-            'Qual'::text AS attribute_type,
-            NULL::double precision AS numeric_value,
-            f.value AS text_value,
-            q.name,
-            NULL::text AS unit,
-            q.name AS name_with_unit,
-            da.display_name,
-            da.context_id
-           FROM (((public.flow_quals f
-             JOIN public.quals q ON ((f.qual_id = q.id)))
-             JOIN public.download_quals dq ON ((dq.qual_id = q.id)))
-             JOIN public.download_attributes da ON ((dq.download_attribute_id = da.id)))
-          GROUP BY f.flow_id, f.qual_id, f.value, q.name, da.display_name, da.context_id
-        UNION ALL
-         SELECT f.flow_id,
-            f.quant_id,
-            'Quant'::text,
-            f.value,
-            NULL::text,
-            q.name,
-            q.unit,
-                CASE
-                    WHEN (q.unit IS NULL) THEN q.name
-                    ELSE (((q.name || ' ('::text) || q.unit) || ')'::text)
-                END AS "case",
-            da.display_name,
-            da.context_id
-           FROM (((public.flow_quants f
-             JOIN public.quants q ON ((f.quant_id = q.id)))
-             JOIN public.download_quants dq ON ((dq.quant_id = q.id)))
-             JOIN public.download_attributes da ON ((dq.download_attribute_id = da.id)))
-          GROUP BY f.flow_id, f.quant_id, f.value, q.name, q.unit, da.display_name, da.context_id) fi ON (((f_0.flow_id = fi.flow_id) AND (f_0.context_id = fi.context_id))))
-  WHERE (f_0.column_position = 0)
-  GROUP BY f_0.flow_id, f_0.context_id, f_0.year, f_0.name, f_0.node_id, f_1.name, f_1.node_id, f_1.node_type_name, f_2.name, f_2.node_id, f_2.node_type_name, f_3.name, f_3.node_id, f_3.node_type_name, f_4.name, f_4.node_id, f_4.node_type_name, f_5.name, f_5.node_id, f_5.node_type_name, f_6.name, f_6.node_id, f_6.node_type_name, f_7.name, f_7.node_id, f_7.node_type_name, fi.attribute_type, fi.attribute_id, fi.name, fi.name_with_unit, fi.display_name
+CREATE MATERIALIZED VIEW public.flows_mv AS
+ SELECT flow_nodes.id,
+    flow_nodes.context_id,
+    flow_nodes.year,
+    array_agg(nodes.id ORDER BY cnt.column_position) AS path,
+    jsonb_object_agg(cnt.column_position, jsonb_build_object('node_id', nodes.id, 'node', nodes.name, 'node_type_id', cnt.node_type_id, 'node_type', node_types.name, 'is_unknown', nodes.is_unknown) ORDER BY cnt.column_position) AS jsonb_path
+   FROM (((( SELECT flows.id,
+            flows.context_id,
+            flows.year,
+            a.node_id,
+            (a."position" - 1) AS column_position
+           FROM public.flows,
+            LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) flow_nodes
+     JOIN public.nodes ON ((flow_nodes.node_id = nodes.id)))
+     JOIN public.context_node_types cnt ON (((flow_nodes.context_id = cnt.context_id) AND (flow_nodes.column_position = cnt.column_position))))
+     JOIN public.node_types ON ((cnt.node_type_id = node_types.id)))
+  GROUP BY flow_nodes.id, flow_nodes.context_id, flow_nodes.year
   WITH NO DATA;
 
 
 --
--- Name: MATERIALIZED VIEW download_flows_mv; Type: COMMENT; Schema: public; Owner: -
+-- Name: download_flows_v; Type: VIEW; Schema: public; Owner: -
 --
 
-COMMENT ON MATERIALIZED VIEW public.download_flows_mv IS 'Combines data from flow_paths_mv and download_attributes_values_mv in a structure that can be directly used to generate data downloads.';
+CREATE VIEW public.download_flows_v AS
+ SELECT f.id,
+    f.context_id,
+    f.year,
+    f.path,
+    f.jsonb_path,
+    fi.original_type,
+    fi.original_id,
+    fi.name AS attribute_name,
+    string_agg(fi.text_value, ' / '::text) AS text_values,
+    sum(fi.numeric_value) AS sum,
+        CASE
+            WHEN (fi.original_type = 'Qual'::text) THEN string_agg(fi.text_value, ' / '::text)
+            ELSE (sum(fi.numeric_value))::text
+        END AS total
+   FROM (public.flows_mv f
+     JOIN ( SELECT f_1.flow_id,
+            f_1.qual_id AS original_id,
+            'Qual'::text AS original_type,
+            NULL::double precision AS numeric_value,
+            f_1.value AS text_value,
+            q.name,
+            NULL::text AS unit
+           FROM (public.flow_quals f_1
+             JOIN public.quals q ON ((f_1.qual_id = q.id)))
+          GROUP BY f_1.flow_id, f_1.qual_id, f_1.value, q.name
+        UNION ALL
+         SELECT f_1.flow_id,
+            f_1.quant_id,
+            'Quant'::text AS text,
+            f_1.value,
+            NULL::text AS text,
+            q.name,
+            q.unit
+           FROM (public.flow_quants f_1
+             JOIN public.quants q ON ((f_1.quant_id = q.id)))
+          GROUP BY f_1.flow_id, f_1.quant_id, f_1.value, q.name, q.unit) fi ON ((f.id = fi.flow_id)))
+  GROUP BY f.id, f.context_id, f.year, f.path, f.jsonb_path, fi.original_type, fi.original_id, fi.name;
 
 
 --
@@ -3954,6 +4221,127 @@ CREATE SEQUENCE public.ind_properties_id_seq
 --
 
 ALTER SEQUENCE public.ind_properties_id_seq OWNED BY public.ind_properties.id;
+
+
+--
+-- Name: node_inds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.node_inds (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    ind_id integer NOT NULL,
+    year integer,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE node_inds; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.node_inds IS 'Values of inds for node';
+
+
+--
+-- Name: COLUMN node_inds.year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_inds.year IS 'Year; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN node_inds.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_inds.value IS 'Numeric value';
+
+
+--
+-- Name: ind_values_meta_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.ind_values_meta_mv AS
+ WITH flow_paths AS (
+         SELECT DISTINCT unnest(flows.path) AS node_id,
+            flows.context_id
+           FROM public.flows
+        ), nodes AS (
+         SELECT nodes.id,
+            nodes.node_type_id,
+            fp.context_id
+           FROM (flow_paths fp
+             JOIN public.nodes ON ((fp.node_id = nodes.id)))
+        ), node_values AS (
+         SELECT node_inds.ind_id,
+            nodes.context_id,
+            contexts.country_id,
+            contexts.commodity_id,
+            array_agg(DISTINCT nodes.node_type_id ORDER BY nodes.node_type_id) AS node_types_ids,
+            array_agg(DISTINCT node_inds.year ORDER BY node_inds.year) AS years
+           FROM ((public.node_inds
+             JOIN nodes ON ((node_inds.node_id = nodes.id)))
+             JOIN public.contexts ON ((nodes.context_id = contexts.id)))
+          GROUP BY node_inds.ind_id, GROUPING SETS ((nodes.context_id), (contexts.country_id), (contexts.commodity_id))
+        ), node_values_by_context AS (
+         SELECT node_values.ind_id,
+            jsonb_object_agg(node_values.context_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
+           FROM node_values
+          WHERE ((node_values.commodity_id IS NULL) AND (node_values.country_id IS NULL) AND (node_values.context_id IS NOT NULL))
+          GROUP BY node_values.ind_id
+        ), node_values_by_country AS (
+         SELECT node_values.ind_id,
+            jsonb_object_agg(node_values.country_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
+           FROM node_values
+          WHERE ((node_values.commodity_id IS NULL) AND (node_values.country_id IS NOT NULL) AND (node_values.context_id IS NULL))
+          GROUP BY node_values.ind_id
+        ), node_values_by_commodity AS (
+         SELECT node_values.ind_id,
+            jsonb_object_agg(node_values.commodity_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
+           FROM node_values
+          WHERE ((node_values.commodity_id IS NOT NULL) AND (node_values.country_id IS NULL) AND (node_values.context_id IS NULL))
+          GROUP BY node_values.ind_id
+        ), flow_values AS (
+         SELECT flow_inds.ind_id,
+            flows.context_id,
+            contexts.country_id,
+            contexts.commodity_id,
+            array_agg(DISTINCT flows.year ORDER BY flows.year) AS years
+           FROM ((public.flow_inds
+             JOIN public.flows ON ((flow_inds.flow_id = flows.id)))
+             JOIN public.contexts ON ((flows.context_id = contexts.id)))
+          GROUP BY flow_inds.ind_id, GROUPING SETS ((flows.context_id), (contexts.country_id), (contexts.commodity_id))
+        ), flow_values_by_context AS (
+         SELECT flow_values.ind_id,
+            jsonb_object_agg(flow_values.context_id, jsonb_build_object('years', flow_values.years)) AS flow_values
+           FROM flow_values
+          WHERE ((flow_values.commodity_id IS NULL) AND (flow_values.country_id IS NULL) AND (flow_values.context_id IS NOT NULL))
+          GROUP BY flow_values.ind_id
+        ), flow_values_by_country AS (
+         SELECT flow_values.ind_id,
+            jsonb_object_agg(flow_values.country_id, jsonb_build_object('years', flow_values.years)) AS flow_values
+           FROM flow_values
+          WHERE ((flow_values.commodity_id IS NULL) AND (flow_values.country_id IS NOT NULL) AND (flow_values.context_id IS NULL))
+          GROUP BY flow_values.ind_id
+        ), flow_values_by_commodity AS (
+         SELECT flow_values.ind_id,
+            jsonb_object_agg(flow_values.commodity_id, jsonb_build_object('years', flow_values.years)) AS flow_values
+           FROM flow_values
+          WHERE ((flow_values.commodity_id IS NOT NULL) AND (flow_values.country_id IS NULL) AND (flow_values.context_id IS NULL))
+          GROUP BY flow_values.ind_id
+        )
+ SELECT inds.id AS ind_id,
+    jsonb_build_object('context', nv1.node_values, 'country', nv2.node_values, 'commodity', nv3.node_values) AS node_values,
+    jsonb_build_object('context', fv1.flow_values, 'country', fv2.flow_values, 'commodity', fv3.flow_values) AS flow_values
+   FROM ((((((public.inds
+     LEFT JOIN node_values_by_context nv1 ON ((nv1.ind_id = inds.id)))
+     LEFT JOIN node_values_by_country nv2 ON ((nv2.ind_id = inds.id)))
+     LEFT JOIN node_values_by_commodity nv3 ON ((nv3.ind_id = inds.id)))
+     LEFT JOIN flow_values_by_context fv1 ON ((fv1.ind_id = inds.id)))
+     LEFT JOIN flow_values_by_country fv2 ON ((fv2.ind_id = inds.id)))
+     LEFT JOIN flow_values_by_commodity fv3 ON ((fv3.ind_id = inds.id)))
+  WITH NO DATA;
 
 
 --
@@ -4320,41 +4708,6 @@ ALTER SEQUENCE public.map_quants_id_seq OWNED BY public.map_quants.id;
 
 
 --
--- Name: node_inds; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.node_inds (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    ind_id integer NOT NULL,
-    year integer,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE node_inds; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.node_inds IS 'Values of inds for node';
-
-
---
--- Name: COLUMN node_inds.year; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_inds.year IS 'Year; empty (NULL) for all years';
-
-
---
--- Name: COLUMN node_inds.value; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_inds.value IS 'Numeric value';
-
-
---
 -- Name: node_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -4371,26 +4724,6 @@ CREATE SEQUENCE public.node_inds_id_seq
 --
 
 ALTER SEQUENCE public.node_inds_id_seq OWNED BY public.node_inds.id;
-
-
---
--- Name: node_properties; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.node_properties (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    is_domestic_consumption boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: COLUMN node_properties.is_domestic_consumption; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_properties.is_domestic_consumption IS 'When set, assume domestic trade';
 
 
 --
@@ -4524,99 +4857,26 @@ ALTER SEQUENCE public.nodes_id_seq OWNED BY public.nodes.id;
 
 
 --
--- Name: profiles; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.profiles (
-    id integer NOT NULL,
-    context_node_type_id integer NOT NULL,
-    name text,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    main_topojson_path character varying,
-    main_topojson_root character varying,
-    adm_1_name character varying,
-    adm_1_topojson_path character varying,
-    adm_1_topojson_root character varying,
-    adm_2_name character varying,
-    adm_2_topojson_path character varying,
-    adm_2_topojson_root character varying,
-    CONSTRAINT profiles_name_check CHECK ((name = ANY (ARRAY['actor'::text, 'place'::text])))
-);
-
-
---
--- Name: TABLE profiles; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.profiles IS 'Context-specific profiles';
-
-
---
--- Name: COLUMN profiles.name; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.profiles.name IS 'Profile name, either actor or place. One of restricted set of values.';
-
-
---
--- Name: COLUMN profiles.main_topojson_path; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.profiles.main_topojson_path IS 'Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /';
-
-
---
--- Name: COLUMN profiles.main_topojson_root; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.profiles.main_topojson_root IS 'Path within the TopoJSON file where geometries are contained';
-
-
---
--- Name: COLUMN profiles.adm_1_topojson_path; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.profiles.adm_1_topojson_path IS 'Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /';
-
-
---
--- Name: COLUMN profiles.adm_1_topojson_root; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.profiles.adm_1_topojson_root IS 'Path within the TopoJSON file where geometries are contained';
-
-
---
--- Name: COLUMN profiles.adm_2_topojson_path; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.profiles.adm_2_topojson_path IS 'Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /';
-
-
---
--- Name: COLUMN profiles.adm_2_topojson_root; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.profiles.adm_2_topojson_root IS 'Path within the TopoJSON file where geometries are contained';
-
-
---
 -- Name: nodes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
 CREATE MATERIALIZED VIEW public.nodes_mv AS
  SELECT nodes.id,
     nodes.main_id,
-    nodes.name,
+    btrim(nodes.name) AS name,
+    to_tsvector('simple'::regconfig, COALESCE(btrim(nodes.name), ''::text)) AS name_tsvector,
     node_types.name AS node_type,
     nodes_with_flows.context_id,
+    nodes_with_flows.years,
     profiles.name AS profile,
-    context_properties.is_subnational
+    context_properties.is_subnational,
+    nodes.geo_id
    FROM ((((((public.nodes
-     JOIN ( SELECT DISTINCT unnest(flows.path) AS node_id,
-            flows.context_id
-           FROM public.flows) nodes_with_flows ON ((nodes.id = nodes_with_flows.node_id)))
+     JOIN ( SELECT unnest(flows.path) AS node_id,
+            flows.context_id,
+            array_agg(DISTINCT flows.year ORDER BY flows.year) AS years
+           FROM public.flows
+          GROUP BY (unnest(flows.path)), flows.context_id) nodes_with_flows ON ((nodes.id = nodes_with_flows.node_id)))
      JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
      JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
      JOIN public.context_node_types ON (((context_node_types.node_type_id = node_types.id) AND (context_node_types.context_id = nodes_with_flows.context_id))))
@@ -4722,6 +4982,92 @@ ALTER SEQUENCE public.qual_properties_id_seq OWNED BY public.qual_properties.id;
 
 
 --
+-- Name: qual_values_meta_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.qual_values_meta_mv AS
+ WITH flow_paths AS (
+         SELECT DISTINCT unnest(flows.path) AS node_id,
+            flows.context_id
+           FROM public.flows
+        ), nodes AS (
+         SELECT nodes.id,
+            nodes.node_type_id,
+            fp.context_id
+           FROM (flow_paths fp
+             JOIN public.nodes ON ((fp.node_id = nodes.id)))
+        ), node_values AS (
+         SELECT node_quals.qual_id,
+            nodes.context_id,
+            contexts.country_id,
+            contexts.commodity_id,
+            array_agg(DISTINCT nodes.node_type_id ORDER BY nodes.node_type_id) AS node_types_ids,
+            array_agg(DISTINCT node_quals.year ORDER BY node_quals.year) AS years
+           FROM ((public.node_quals
+             JOIN nodes ON ((node_quals.node_id = nodes.id)))
+             JOIN public.contexts ON ((nodes.context_id = contexts.id)))
+          GROUP BY node_quals.qual_id, GROUPING SETS ((nodes.context_id), (contexts.country_id), (contexts.commodity_id))
+        ), node_values_by_context AS (
+         SELECT node_values.qual_id,
+            jsonb_object_agg(node_values.context_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
+           FROM node_values
+          WHERE ((node_values.commodity_id IS NULL) AND (node_values.country_id IS NULL) AND (node_values.context_id IS NOT NULL))
+          GROUP BY node_values.qual_id
+        ), node_values_by_country AS (
+         SELECT node_values.qual_id,
+            jsonb_object_agg(node_values.country_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
+           FROM node_values
+          WHERE ((node_values.commodity_id IS NULL) AND (node_values.country_id IS NOT NULL) AND (node_values.context_id IS NULL))
+          GROUP BY node_values.qual_id
+        ), node_values_by_commodity AS (
+         SELECT node_values.qual_id,
+            jsonb_object_agg(node_values.commodity_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
+           FROM node_values
+          WHERE ((node_values.commodity_id IS NOT NULL) AND (node_values.country_id IS NULL) AND (node_values.context_id IS NULL))
+          GROUP BY node_values.qual_id
+        ), flow_values AS (
+         SELECT flow_quals.qual_id,
+            flows.context_id,
+            contexts.country_id,
+            contexts.commodity_id,
+            array_agg(DISTINCT flows.year ORDER BY flows.year) AS years
+           FROM ((public.flow_quals
+             JOIN public.flows ON ((flow_quals.flow_id = flows.id)))
+             JOIN public.contexts ON ((flows.context_id = contexts.id)))
+          GROUP BY flow_quals.qual_id, GROUPING SETS ((flows.context_id), (contexts.country_id), (contexts.commodity_id))
+        ), flow_values_by_context AS (
+         SELECT flow_values.qual_id,
+            jsonb_object_agg(flow_values.context_id, jsonb_build_object('years', flow_values.years)) AS flow_values
+           FROM flow_values
+          WHERE ((flow_values.commodity_id IS NULL) AND (flow_values.country_id IS NULL) AND (flow_values.context_id IS NOT NULL))
+          GROUP BY flow_values.qual_id
+        ), flow_values_by_country AS (
+         SELECT flow_values.qual_id,
+            jsonb_object_agg(flow_values.country_id, jsonb_build_object('years', flow_values.years)) AS flow_values
+           FROM flow_values
+          WHERE ((flow_values.commodity_id IS NULL) AND (flow_values.country_id IS NOT NULL) AND (flow_values.context_id IS NULL))
+          GROUP BY flow_values.qual_id
+        ), flow_values_by_commodity AS (
+         SELECT flow_values.qual_id,
+            jsonb_object_agg(flow_values.commodity_id, jsonb_build_object('years', flow_values.years)) AS flow_values
+           FROM flow_values
+          WHERE ((flow_values.commodity_id IS NOT NULL) AND (flow_values.country_id IS NULL) AND (flow_values.context_id IS NULL))
+          GROUP BY flow_values.qual_id
+        )
+ SELECT quals.id AS qual_id,
+    jsonb_build_object('context', nv1.node_values, 'country', nv2.node_values, 'commodity', nv3.node_values) AS node_values,
+    jsonb_build_object('context', fv1.flow_values, 'country', fv2.flow_values, 'commodity', fv3.flow_values) AS flow_values
+   FROM ((((((public.quals
+     LEFT JOIN node_values_by_context nv1 ON ((nv1.qual_id = quals.id)))
+     LEFT JOIN node_values_by_country nv2 ON ((nv2.qual_id = quals.id)))
+     LEFT JOIN node_values_by_commodity nv3 ON ((nv3.qual_id = quals.id)))
+     LEFT JOIN flow_values_by_context fv1 ON ((fv1.qual_id = quals.id)))
+     LEFT JOIN flow_values_by_country fv2 ON ((fv2.qual_id = quals.id)))
+     LEFT JOIN flow_values_by_commodity fv3 ON ((fv3.qual_id = quals.id)))
+  WITH NO DATA;
+
+
+--
 -- Name: quals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -4814,6 +5160,92 @@ CREATE SEQUENCE public.quant_properties_id_seq
 --
 
 ALTER SEQUENCE public.quant_properties_id_seq OWNED BY public.quant_properties.id;
+
+
+--
+-- Name: quant_values_meta_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.quant_values_meta_mv AS
+ WITH flow_paths AS (
+         SELECT DISTINCT unnest(flows.path) AS node_id,
+            flows.context_id
+           FROM public.flows
+        ), nodes AS (
+         SELECT nodes.id,
+            nodes.node_type_id,
+            fp.context_id
+           FROM (flow_paths fp
+             JOIN public.nodes ON ((fp.node_id = nodes.id)))
+        ), node_values AS (
+         SELECT node_quants.quant_id,
+            nodes.context_id,
+            contexts.country_id,
+            contexts.commodity_id,
+            array_agg(DISTINCT nodes.node_type_id ORDER BY nodes.node_type_id) AS node_types_ids,
+            array_agg(DISTINCT node_quants.year ORDER BY node_quants.year) AS years
+           FROM ((public.node_quants
+             JOIN nodes ON ((node_quants.node_id = nodes.id)))
+             JOIN public.contexts ON ((nodes.context_id = contexts.id)))
+          GROUP BY node_quants.quant_id, GROUPING SETS ((nodes.context_id), (contexts.country_id), (contexts.commodity_id))
+        ), node_values_by_context AS (
+         SELECT node_values.quant_id,
+            jsonb_object_agg(node_values.context_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
+           FROM node_values
+          WHERE ((node_values.commodity_id IS NULL) AND (node_values.country_id IS NULL) AND (node_values.context_id IS NOT NULL))
+          GROUP BY node_values.quant_id
+        ), node_values_by_country AS (
+         SELECT node_values.quant_id,
+            jsonb_object_agg(node_values.country_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
+           FROM node_values
+          WHERE ((node_values.commodity_id IS NULL) AND (node_values.country_id IS NOT NULL) AND (node_values.context_id IS NULL))
+          GROUP BY node_values.quant_id
+        ), node_values_by_commodity AS (
+         SELECT node_values.quant_id,
+            jsonb_object_agg(node_values.commodity_id, jsonb_build_object('years', node_values.years, 'node_types_ids', node_values.node_types_ids)) AS node_values
+           FROM node_values
+          WHERE ((node_values.commodity_id IS NOT NULL) AND (node_values.country_id IS NULL) AND (node_values.context_id IS NULL))
+          GROUP BY node_values.quant_id
+        ), flow_values AS (
+         SELECT flow_quants.quant_id,
+            flows.context_id,
+            contexts.country_id,
+            contexts.commodity_id,
+            array_agg(DISTINCT flows.year ORDER BY flows.year) AS years
+           FROM ((public.flow_quants
+             JOIN public.flows ON ((flow_quants.flow_id = flows.id)))
+             JOIN public.contexts ON ((flows.context_id = contexts.id)))
+          GROUP BY flow_quants.quant_id, GROUPING SETS ((flows.context_id), (contexts.country_id), (contexts.commodity_id))
+        ), flow_values_by_context AS (
+         SELECT flow_values.quant_id,
+            jsonb_object_agg(flow_values.context_id, jsonb_build_object('years', flow_values.years)) AS flow_values
+           FROM flow_values
+          WHERE ((flow_values.commodity_id IS NULL) AND (flow_values.country_id IS NULL) AND (flow_values.context_id IS NOT NULL))
+          GROUP BY flow_values.quant_id
+        ), flow_values_by_country AS (
+         SELECT flow_values.quant_id,
+            jsonb_object_agg(flow_values.country_id, jsonb_build_object('years', flow_values.years)) AS flow_values
+           FROM flow_values
+          WHERE ((flow_values.commodity_id IS NULL) AND (flow_values.country_id IS NOT NULL) AND (flow_values.context_id IS NULL))
+          GROUP BY flow_values.quant_id
+        ), flow_values_by_commodity AS (
+         SELECT flow_values.quant_id,
+            jsonb_object_agg(flow_values.commodity_id, jsonb_build_object('years', flow_values.years)) AS flow_values
+           FROM flow_values
+          WHERE ((flow_values.commodity_id IS NOT NULL) AND (flow_values.country_id IS NULL) AND (flow_values.context_id IS NULL))
+          GROUP BY flow_values.quant_id
+        )
+ SELECT quants.id AS quant_id,
+    jsonb_build_object('context', nv1.node_values, 'country', nv2.node_values, 'commodity', nv3.node_values) AS node_values,
+    jsonb_build_object('context', fv1.flow_values, 'country', fv2.flow_values, 'commodity', fv3.flow_values) AS flow_values
+   FROM ((((((public.quants
+     LEFT JOIN node_values_by_context nv1 ON ((nv1.quant_id = quants.id)))
+     LEFT JOIN node_values_by_country nv2 ON ((nv2.quant_id = quants.id)))
+     LEFT JOIN node_values_by_commodity nv3 ON ((nv3.quant_id = quants.id)))
+     LEFT JOIN flow_values_by_context fv1 ON ((fv1.quant_id = quants.id)))
+     LEFT JOIN flow_values_by_country fv2 ON ((fv2.quant_id = quants.id)))
+     LEFT JOIN flow_values_by_commodity fv3 ON ((fv3.quant_id = quants.id)))
+  WITH NO DATA;
 
 
 --
@@ -5209,12 +5641,115 @@ ALTER SEQUENCE public.resize_by_quants_id_seq OWNED BY public.resize_by_quants.i
 
 
 --
+-- Name: sankey_nodes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.sankey_nodes_mv AS
+ SELECT nodes.id,
+    nodes.main_id,
+    nodes.name,
+    nodes.geo_id,
+        CASE
+            WHEN context_node_type_properties.is_geo_column THEN "substring"(nodes.geo_id, 1, 2)
+            ELSE NULL::text
+        END AS source_country_iso2,
+    NULLIF(node_properties.is_domestic_consumption, false) AS is_domestic_consumption,
+    NULLIF(nodes.is_unknown, false) AS is_unknown,
+    nodes.node_type_id,
+    node_types.name AS node_type,
+    profiles.name AS profile_type,
+        CASE
+            WHEN ((nodes_with_flows.node_id IS NOT NULL) OR (nodes.name = 'OTHER'::text)) THEN true
+            ELSE false
+        END AS has_flows,
+    (upper(btrim(nodes.name)) = 'OTHER'::text) AS is_aggregated,
+    context_node_types.context_id
+   FROM ((((((public.nodes
+     JOIN public.node_properties ON ((node_properties.node_id = nodes.id)))
+     JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
+     JOIN public.context_node_types ON ((context_node_types.node_type_id = node_types.id)))
+     JOIN public.context_node_type_properties ON ((context_node_type_properties.context_node_type_id = context_node_types.id)))
+     LEFT JOIN public.profiles ON ((profiles.context_node_type_id = context_node_types.id)))
+     LEFT JOIN ( SELECT DISTINCT unnest(flows.path) AS node_id,
+            flows.context_id
+           FROM public.flows) nodes_with_flows ON (((nodes_with_flows.node_id = nodes.id) AND (nodes_with_flows.context_id = context_node_types.context_id))))
+  WITH NO DATA;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.schema_migrations (
     version character varying NOT NULL
 );
+
+
+--
+-- Name: top_profile_images; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.top_profile_images (
+    id bigint NOT NULL,
+    commodity_id bigint,
+    image_file_name character varying,
+    image_content_type character varying,
+    profile_type character varying,
+    image_file_size integer
+);
+
+
+--
+-- Name: top_profile_images_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.top_profile_images_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: top_profile_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.top_profile_images_id_seq OWNED BY public.top_profile_images.id;
+
+
+--
+-- Name: top_profiles; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.top_profiles (
+    id bigint NOT NULL,
+    context_id bigint NOT NULL,
+    node_id bigint NOT NULL,
+    summary text,
+    year integer,
+    profile_type character varying,
+    top_profile_image_id bigint
+);
+
+
+--
+-- Name: top_profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.top_profiles_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: top_profiles_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.top_profiles_id_seq OWNED BY public.top_profiles.id;
 
 
 --
@@ -5740,6 +6275,20 @@ ALTER TABLE ONLY public.resize_by_attributes ALTER COLUMN id SET DEFAULT nextval
 --
 
 ALTER TABLE ONLY public.resize_by_quants ALTER COLUMN id SET DEFAULT nextval('public.resize_by_quants_id_seq'::regclass);
+
+
+--
+-- Name: top_profile_images id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.top_profile_images ALTER COLUMN id SET DEFAULT nextval('public.top_profile_images_id_seq'::regclass);
+
+
+--
+-- Name: top_profiles id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.top_profiles ALTER COLUMN id SET DEFAULT nextval('public.top_profiles_id_seq'::regclass);
 
 
 --
@@ -6756,14 +7305,6 @@ ALTER TABLE ONLY public.quants
 
 
 --
--- Name: recolor_by_attributes recolor_by_attributes_context_id_group_number_position_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.recolor_by_attributes
-    ADD CONSTRAINT recolor_by_attributes_context_id_group_number_position_key UNIQUE (context_id, group_number, "position");
-
-
---
 -- Name: recolor_by_inds recolor_by_inds_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6793,14 +7334,6 @@ ALTER TABLE ONLY public.recolor_by_quals
 
 ALTER TABLE ONLY public.recolor_by_quals
     ADD CONSTRAINT recolor_by_quals_recolor_by_attribute_id_qual_id_key UNIQUE (recolor_by_attribute_id, qual_id);
-
-
---
--- Name: resize_by_attributes resize_by_attributes_context_id_group_number_position_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.resize_by_attributes
-    ADD CONSTRAINT resize_by_attributes_context_id_group_number_position_key UNIQUE (context_id, group_number, "position");
 
 
 --
@@ -6836,6 +7369,22 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
+-- Name: top_profile_images top_profile_images_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.top_profile_images
+    ADD CONSTRAINT top_profile_images_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: top_profiles top_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.top_profiles
+    ADD CONSTRAINT top_profiles_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: idx_ckeditor_assetable; Type: INDEX; Schema: content; Owner: -
 --
 
@@ -6847,13 +7396,6 @@ CREATE INDEX idx_ckeditor_assetable ON content.ckeditor_assets USING btree (asse
 --
 
 CREATE INDEX idx_ckeditor_assetable_type ON content.ckeditor_assets USING btree (assetable_type, type, assetable_id);
-
-
---
--- Name: index_staff_members_on_staff_group_id; Type: INDEX; Schema: content; Owner: -
---
-
-CREATE INDEX index_staff_members_on_staff_group_id ON content.staff_members USING btree (staff_group_id);
 
 
 --
@@ -6871,6 +7413,13 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON content.users USING b
 
 
 --
+-- Name: attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX attributes_mv_id_idx ON public.attributes_mv USING btree (id);
+
+
+--
 -- Name: attributes_mv_name_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6878,17 +7427,17 @@ CREATE UNIQUE INDEX attributes_mv_name_idx ON public.attributes_mv USING btree (
 
 
 --
--- Name: chart_attributes_chart_id_position_key; Type: INDEX; Schema: public; Owner: -
+-- Name: chart_attributes_chart_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX chart_attributes_chart_id_position_key ON public.chart_attributes USING btree (chart_id, "position") WHERE (identifier IS NULL);
+CREATE INDEX chart_attributes_chart_id_idx ON public.chart_attributes USING btree (chart_id);
 
 
 --
--- Name: chart_attributes_mv_chart_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: chart_attributes_chart_id_position_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX chart_attributes_mv_chart_id_idx ON public.chart_attributes_mv USING btree (chart_id);
+CREATE UNIQUE INDEX chart_attributes_chart_id_position_idx ON public.chart_attributes USING btree (chart_id, "position") WHERE (identifier IS NULL);
 
 
 --
@@ -6899,6 +7448,69 @@ CREATE UNIQUE INDEX chart_attributes_mv_id_idx ON public.chart_attributes_mv USI
 
 
 --
+-- Name: chart_quals_chart_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX chart_quals_chart_attribute_id_idx ON public.chart_quals USING btree (chart_attribute_id);
+
+
+--
+-- Name: chart_quals_qual_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX chart_quals_qual_id_idx ON public.chart_quals USING btree (qual_id);
+
+
+--
+-- Name: chart_quants_chart_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX chart_quants_chart_attribute_id_idx ON public.chart_quants USING btree (chart_attribute_id);
+
+
+--
+-- Name: chart_quants_quant_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX chart_quants_quant_id_idx ON public.chart_quants USING btree (quant_id);
+
+
+--
+-- Name: charts_parent_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX charts_parent_id_idx ON public.charts USING btree (parent_id);
+
+
+--
+-- Name: commodity_attribute_properties_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX commodity_attribute_properties_mv_id_idx ON public.commodity_attribute_properties_mv USING btree (id, commodity_id, qual_id, quant_id, ind_id);
+
+
+--
+-- Name: context_attribute_properties_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX context_attribute_properties_mv_id_idx ON public.context_attribute_properties_mv USING btree (context_id, qual_id, quant_id, ind_id);
+
+
+--
+-- Name: context_node_type_properties_context_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX context_node_type_properties_context_node_type_id_idx ON public.context_node_type_properties USING btree (context_node_type_id);
+
+
+--
+-- Name: context_node_types_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX context_node_types_context_id_idx ON public.context_node_types USING btree (context_id);
+
+
+--
 -- Name: context_node_types_mv_context_id_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6906,10 +7518,45 @@ CREATE UNIQUE INDEX context_node_types_mv_context_id_node_type_id_idx ON public.
 
 
 --
--- Name: dashboards_attributes_mv_group_id_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: context_node_types_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_attributes_mv_group_id_attribute_id_idx ON public.dashboards_attributes_mv USING btree (dashboards_attribute_group_id, attribute_id);
+CREATE INDEX context_node_types_node_type_id_idx ON public.context_node_types USING btree (node_type_id);
+
+
+--
+-- Name: context_properties_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX context_properties_context_id_idx ON public.context_properties USING btree (context_id);
+
+
+--
+-- Name: contexts_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX contexts_commodity_id_idx ON public.contexts USING btree (commodity_id);
+
+
+--
+-- Name: contexts_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX contexts_mv_id_idx ON public.contexts_mv USING btree (id);
+
+
+--
+-- Name: contextual_layers_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX contextual_layers_context_id_idx ON public.contextual_layers USING btree (context_id);
+
+
+--
+-- Name: country_attribute_properties_mv_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX country_attribute_properties_mv_idx ON public.country_attribute_properties_mv USING btree (id, country_id, qual_id, quant_id, ind_id);
 
 
 --
@@ -7186,10 +7833,17 @@ CREATE UNIQUE INDEX dashboards_sources_unique_idx ON public.dashboards_sources_m
 
 
 --
--- Name: download_attributes_mv_context_id_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: database_updates_status_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX download_attributes_mv_context_id_attribute_id_idx ON public.download_attributes_mv USING btree (context_id, attribute_id);
+CREATE UNIQUE INDEX database_updates_status_idx ON public.database_updates USING btree (status) WHERE (status = 'STARTED'::text);
+
+
+--
+-- Name: download_attributes_mv_context_id_original_type_original_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_attributes_mv_context_id_original_type_original_id_idx ON public.download_attributes_mv USING btree (context_id, original_type, original_id);
 
 
 --
@@ -7200,45 +7854,486 @@ CREATE UNIQUE INDEX download_attributes_mv_id_idx ON public.download_attributes_
 
 
 --
--- Name: download_flows_mv_attribute_type_attribute_id_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: download_flows_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX download_flows_mv_attribute_type_attribute_id_id_idx ON public.download_flows_mv USING btree (attribute_type, attribute_id, id);
-
-
---
--- Name: download_flows_mv_context_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX download_flows_mv_context_id_idx ON public.download_flows_mv USING btree (context_id);
+CREATE INDEX download_flows_attribute_type_attribute_id_idx ON ONLY public.download_flows USING btree (attribute_type, attribute_id);
 
 
 --
--- Name: download_flows_mv_country_node_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: download_flows_2003_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX download_flows_mv_country_node_id_idx ON public.download_flows_mv USING btree (country_node_id);
-
-
---
--- Name: download_flows_mv_exporter_node_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX download_flows_mv_exporter_node_id_idx ON public.download_flows_mv USING btree (exporter_node_id);
+CREATE INDEX download_flows_2003_attribute_type_attribute_id_idx ON public.download_flows_2003 USING btree (attribute_type, attribute_id);
 
 
 --
--- Name: download_flows_mv_importer_node_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: download_flows_context_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX download_flows_mv_importer_node_id_idx ON public.download_flows_mv USING btree (importer_node_id);
+CREATE INDEX download_flows_context_id_idx ON ONLY public.download_flows USING btree (context_id);
 
 
 --
--- Name: download_flows_mv_row_name_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: download_flows_2003_context_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX download_flows_mv_row_name_attribute_type_attribute_id_idx ON public.download_flows_mv USING btree (row_name, attribute_type, attribute_id);
+CREATE INDEX download_flows_2003_context_id_idx ON public.download_flows_2003 USING btree (context_id);
+
+
+--
+-- Name: download_flows_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_path_idx ON ONLY public.download_flows USING btree (path);
+
+
+--
+-- Name: download_flows_2003_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2003_path_idx ON public.download_flows_2003 USING btree (path);
+
+
+--
+-- Name: download_flows_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_year_idx ON ONLY public.download_flows USING btree (year);
+
+
+--
+-- Name: download_flows_2003_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2003_year_idx ON public.download_flows_2003 USING btree (year);
+
+
+--
+-- Name: download_flows_2004_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2004_attribute_type_attribute_id_idx ON public.download_flows_2004 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2004_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2004_context_id_idx ON public.download_flows_2004 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2004_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2004_path_idx ON public.download_flows_2004 USING btree (path);
+
+
+--
+-- Name: download_flows_2004_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2004_year_idx ON public.download_flows_2004 USING btree (year);
+
+
+--
+-- Name: download_flows_2005_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2005_attribute_type_attribute_id_idx ON public.download_flows_2005 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2005_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2005_context_id_idx ON public.download_flows_2005 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2005_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2005_path_idx ON public.download_flows_2005 USING btree (path);
+
+
+--
+-- Name: download_flows_2005_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2005_year_idx ON public.download_flows_2005 USING btree (year);
+
+
+--
+-- Name: download_flows_2006_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2006_attribute_type_attribute_id_idx ON public.download_flows_2006 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2006_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2006_context_id_idx ON public.download_flows_2006 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2006_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2006_path_idx ON public.download_flows_2006 USING btree (path);
+
+
+--
+-- Name: download_flows_2006_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2006_year_idx ON public.download_flows_2006 USING btree (year);
+
+
+--
+-- Name: download_flows_2007_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2007_attribute_type_attribute_id_idx ON public.download_flows_2007 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2007_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2007_context_id_idx ON public.download_flows_2007 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2007_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2007_path_idx ON public.download_flows_2007 USING btree (path);
+
+
+--
+-- Name: download_flows_2007_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2007_year_idx ON public.download_flows_2007 USING btree (year);
+
+
+--
+-- Name: download_flows_2008_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2008_attribute_type_attribute_id_idx ON public.download_flows_2008 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2008_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2008_context_id_idx ON public.download_flows_2008 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2008_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2008_path_idx ON public.download_flows_2008 USING btree (path);
+
+
+--
+-- Name: download_flows_2008_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2008_year_idx ON public.download_flows_2008 USING btree (year);
+
+
+--
+-- Name: download_flows_2009_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2009_attribute_type_attribute_id_idx ON public.download_flows_2009 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2009_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2009_context_id_idx ON public.download_flows_2009 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2009_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2009_path_idx ON public.download_flows_2009 USING btree (path);
+
+
+--
+-- Name: download_flows_2009_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2009_year_idx ON public.download_flows_2009 USING btree (year);
+
+
+--
+-- Name: download_flows_2010_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2010_attribute_type_attribute_id_idx ON public.download_flows_2010 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2010_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2010_context_id_idx ON public.download_flows_2010 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2010_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2010_path_idx ON public.download_flows_2010 USING btree (path);
+
+
+--
+-- Name: download_flows_2010_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2010_year_idx ON public.download_flows_2010 USING btree (year);
+
+
+--
+-- Name: download_flows_2011_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2011_attribute_type_attribute_id_idx ON public.download_flows_2011 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2011_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2011_context_id_idx ON public.download_flows_2011 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2011_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2011_path_idx ON public.download_flows_2011 USING btree (path);
+
+
+--
+-- Name: download_flows_2011_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2011_year_idx ON public.download_flows_2011 USING btree (year);
+
+
+--
+-- Name: download_flows_2012_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2012_attribute_type_attribute_id_idx ON public.download_flows_2012 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2012_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2012_context_id_idx ON public.download_flows_2012 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2012_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2012_path_idx ON public.download_flows_2012 USING btree (path);
+
+
+--
+-- Name: download_flows_2012_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2012_year_idx ON public.download_flows_2012 USING btree (year);
+
+
+--
+-- Name: download_flows_2013_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2013_attribute_type_attribute_id_idx ON public.download_flows_2013 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2013_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2013_context_id_idx ON public.download_flows_2013 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2013_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2013_path_idx ON public.download_flows_2013 USING btree (path);
+
+
+--
+-- Name: download_flows_2013_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2013_year_idx ON public.download_flows_2013 USING btree (year);
+
+
+--
+-- Name: download_flows_2014_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2014_attribute_type_attribute_id_idx ON public.download_flows_2014 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2014_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2014_context_id_idx ON public.download_flows_2014 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2014_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2014_path_idx ON public.download_flows_2014 USING btree (path);
+
+
+--
+-- Name: download_flows_2014_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2014_year_idx ON public.download_flows_2014 USING btree (year);
+
+
+--
+-- Name: download_flows_2015_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2015_attribute_type_attribute_id_idx ON public.download_flows_2015 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2015_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2015_context_id_idx ON public.download_flows_2015 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2015_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2015_path_idx ON public.download_flows_2015 USING btree (path);
+
+
+--
+-- Name: download_flows_2015_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2015_year_idx ON public.download_flows_2015 USING btree (year);
+
+
+--
+-- Name: download_flows_2016_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2016_attribute_type_attribute_id_idx ON public.download_flows_2016 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2016_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2016_context_id_idx ON public.download_flows_2016 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2016_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2016_path_idx ON public.download_flows_2016 USING btree (path);
+
+
+--
+-- Name: download_flows_2016_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2016_year_idx ON public.download_flows_2016 USING btree (year);
+
+
+--
+-- Name: download_flows_2017_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2017_attribute_type_attribute_id_idx ON public.download_flows_2017 USING btree (attribute_type, attribute_id);
+
+
+--
+-- Name: download_flows_2017_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2017_context_id_idx ON public.download_flows_2017 USING btree (context_id);
+
+
+--
+-- Name: download_flows_2017_path_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2017_path_idx ON public.download_flows_2017 USING btree (path);
+
+
+--
+-- Name: download_flows_2017_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_flows_2017_year_idx ON public.download_flows_2017 USING btree (year);
+
+
+--
+-- Name: download_flows_stats_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX download_flows_stats_mv_id_idx ON public.download_flows_stats_mv USING btree (context_id, year, attribute_type, attribute_id);
+
+
+--
+-- Name: download_quants_download_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_quants_download_attribute_id_idx ON public.download_quants USING btree (download_attribute_id);
+
+
+--
+-- Name: download_quants_quant_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX download_quants_quant_id_idx ON public.download_quants USING btree (quant_id);
+
+
+--
+-- Name: download_versions_context_id_is_current_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX download_versions_context_id_is_current_idx ON public.download_versions USING btree (context_id, is_current) WHERE (is_current IS TRUE);
+
+
+--
+-- Name: flow_inds_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX flow_inds_flow_id_idx ON public.flow_inds USING btree (flow_id);
 
 
 --
@@ -7249,10 +8344,24 @@ CREATE INDEX flow_inds_ind_id_idx ON public.flow_inds USING btree (ind_id);
 
 
 --
+-- Name: flow_quals_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX flow_quals_flow_id_idx ON public.flow_quals USING btree (flow_id);
+
+
+--
 -- Name: flow_quals_qual_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX flow_quals_qual_id_idx ON public.flow_quals USING btree (qual_id);
+
+
+--
+-- Name: flow_quants_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX flow_quants_flow_id_idx ON public.flow_quants USING btree (flow_id);
 
 
 --
@@ -7263,591 +8372,115 @@ CREATE INDEX flow_quants_quant_id_idx ON public.flow_quants USING btree (quant_i
 
 
 --
--- Name: index_attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: flows_context_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_attributes_mv_id_idx ON public.attributes_mv USING btree (id);
+CREATE INDEX flows_context_id_idx ON public.flows USING btree (context_id);
 
 
 --
--- Name: index_carto_layers_on_contextual_layer_id; Type: INDEX; Schema: public; Owner: -
+-- Name: flows_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_carto_layers_on_contextual_layer_id ON public.carto_layers USING btree (contextual_layer_id);
+CREATE INDEX flows_context_id_year_idx ON public.flows USING btree (context_id, year);
 
 
 --
--- Name: index_chart_attributes_on_chart_id; Type: INDEX; Schema: public; Owner: -
+-- Name: flows_mv_context_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_chart_attributes_on_chart_id ON public.chart_attributes USING btree (chart_id);
+CREATE INDEX flows_mv_context_id_idx ON public.flows_mv USING btree (context_id);
 
 
 --
--- Name: index_chart_inds_on_chart_attribute_id; Type: INDEX; Schema: public; Owner: -
+-- Name: flows_mv_unique_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_chart_inds_on_chart_attribute_id ON public.chart_inds USING btree (chart_attribute_id);
+CREATE UNIQUE INDEX flows_mv_unique_idx ON public.flows_mv USING btree (id);
 
 
 --
--- Name: index_chart_inds_on_ind_id; Type: INDEX; Schema: public; Owner: -
+-- Name: flows_mv_year_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_chart_inds_on_ind_id ON public.chart_inds USING btree (ind_id);
+CREATE INDEX flows_mv_year_idx ON public.flows_mv USING btree (year);
 
 
 --
--- Name: index_chart_quals_on_chart_attribute_id; Type: INDEX; Schema: public; Owner: -
+-- Name: ind_commodity_properties_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_chart_quals_on_chart_attribute_id ON public.chart_quals USING btree (chart_attribute_id);
+CREATE INDEX ind_commodity_properties_commodity_id_idx ON public.ind_commodity_properties USING btree (commodity_id);
 
 
 --
--- Name: index_chart_quals_on_qual_id; Type: INDEX; Schema: public; Owner: -
+-- Name: ind_commodity_properties_ind_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_chart_quals_on_qual_id ON public.chart_quals USING btree (qual_id);
+CREATE INDEX ind_commodity_properties_ind_id_idx ON public.ind_commodity_properties USING btree (ind_id);
 
 
 --
--- Name: index_chart_quants_on_chart_attribute_id; Type: INDEX; Schema: public; Owner: -
+-- Name: ind_context_properties_context_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_chart_quants_on_chart_attribute_id ON public.chart_quants USING btree (chart_attribute_id);
+CREATE INDEX ind_context_properties_context_id_idx ON public.ind_context_properties USING btree (context_id);
 
 
 --
--- Name: index_chart_quants_on_quant_id; Type: INDEX; Schema: public; Owner: -
+-- Name: ind_context_properties_ind_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_chart_quants_on_quant_id ON public.chart_quants USING btree (quant_id);
+CREATE INDEX ind_context_properties_ind_id_idx ON public.ind_context_properties USING btree (ind_id);
 
 
 --
--- Name: index_charts_on_parent_id; Type: INDEX; Schema: public; Owner: -
+-- Name: ind_country_properties_country_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_charts_on_parent_id ON public.charts USING btree (parent_id);
+CREATE INDEX ind_country_properties_country_id_idx ON public.ind_country_properties USING btree (country_id);
 
 
 --
--- Name: index_charts_on_profile_id; Type: INDEX; Schema: public; Owner: -
+-- Name: ind_country_properties_ind_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_charts_on_profile_id ON public.charts USING btree (profile_id);
+CREATE INDEX ind_country_properties_ind_id_idx ON public.ind_country_properties USING btree (ind_id);
 
 
 --
--- Name: index_commodity_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
+-- Name: ind_values_meta_mv_ind_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_commodity_attribute_properties_mv_id ON public.commodity_attribute_properties_mv USING btree (id, commodity_id, qual_id, quant_id, ind_id);
+CREATE UNIQUE INDEX ind_values_meta_mv_ind_id_idx ON public.ind_values_meta_mv USING btree (ind_id);
 
 
 --
--- Name: index_context_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_top_profile_images_on_commodity_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_context_attribute_properties_mv_id ON public.context_attribute_properties_mv USING btree (context_id, qual_id, quant_id, ind_id);
+CREATE INDEX index_top_profile_images_on_commodity_id ON public.top_profile_images USING btree (commodity_id);
 
 
 --
--- Name: index_context_node_type_properties_on_context_node_type_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_top_profiles_on_context_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_context_node_type_properties_on_context_node_type_id ON public.context_node_type_properties USING btree (context_node_type_id);
+CREATE INDEX index_top_profiles_on_context_id ON public.top_profiles USING btree (context_id);
 
 
 --
--- Name: index_context_node_types_on_context_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_top_profiles_on_node_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_context_node_types_on_context_id ON public.context_node_types USING btree (context_id);
+CREATE INDEX index_top_profiles_on_node_id ON public.top_profiles USING btree (node_id);
 
 
 --
--- Name: index_context_node_types_on_node_type_id; Type: INDEX; Schema: public; Owner: -
+-- Name: index_top_profiles_on_top_profile_image_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_context_node_types_on_node_type_id ON public.context_node_types USING btree (node_type_id);
-
-
---
--- Name: index_context_properties_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_context_properties_on_context_id ON public.context_properties USING btree (context_id);
-
-
---
--- Name: index_contexts_on_commodity_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_contexts_on_commodity_id ON public.contexts USING btree (commodity_id);
-
-
---
--- Name: index_contexts_on_country_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_contexts_on_country_id ON public.contexts USING btree (country_id);
-
-
---
--- Name: index_contextual_layers_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_contextual_layers_on_context_id ON public.contextual_layers USING btree (context_id);
-
-
---
--- Name: index_country_attribute_properties_mv_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_country_attribute_properties_mv_id ON public.country_attribute_properties_mv USING btree (id, country_id, qual_id, quant_id, ind_id);
-
-
---
--- Name: index_country_properties_on_country_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_country_properties_on_country_id ON public.country_properties USING btree (country_id);
-
-
---
--- Name: index_dashboards_attributes_on_dashboards_attribute_group_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_attributes_on_dashboards_attribute_group_id ON public.dashboards_attributes USING btree (dashboards_attribute_group_id);
-
-
---
--- Name: index_dashboards_inds_on_dashboards_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_inds_on_dashboards_attribute_id ON public.dashboards_inds USING btree (dashboards_attribute_id);
-
-
---
--- Name: index_dashboards_inds_on_ind_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_inds_on_ind_id ON public.dashboards_inds USING btree (ind_id);
-
-
---
--- Name: index_dashboards_quals_on_dashboards_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_quals_on_dashboards_attribute_id ON public.dashboards_quals USING btree (dashboards_attribute_id);
-
-
---
--- Name: index_dashboards_quals_on_qual_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_quals_on_qual_id ON public.dashboards_quals USING btree (qual_id);
-
-
---
--- Name: index_dashboards_quants_on_dashboards_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_quants_on_dashboards_attribute_id ON public.dashboards_quants USING btree (dashboards_attribute_id);
-
-
---
--- Name: index_dashboards_quants_on_quant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_dashboards_quants_on_quant_id ON public.dashboards_quants USING btree (quant_id);
-
-
---
--- Name: index_database_updates_on_status; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_database_updates_on_status ON public.database_updates USING btree (status) WHERE (status = 'STARTED'::text);
-
-
---
--- Name: index_download_attributes_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_download_attributes_on_context_id ON public.download_attributes USING btree (context_id);
-
-
---
--- Name: index_download_quals_on_download_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_download_quals_on_download_attribute_id ON public.download_quals USING btree (download_attribute_id);
-
-
---
--- Name: index_download_quals_on_qual_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_download_quals_on_qual_id ON public.download_quals USING btree (qual_id);
-
-
---
--- Name: index_download_quants_on_download_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_download_quants_on_download_attribute_id ON public.download_quants USING btree (download_attribute_id);
-
-
---
--- Name: index_download_quants_on_quant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_download_quants_on_quant_id ON public.download_quants USING btree (quant_id);
-
-
---
--- Name: index_download_versions_on_context_id_and_is_current; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_download_versions_on_context_id_and_is_current ON public.download_versions USING btree (context_id, is_current) WHERE (is_current IS TRUE);
-
-
---
--- Name: index_flow_inds_on_flow_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_flow_inds_on_flow_id ON public.flow_inds USING btree (flow_id);
-
-
---
--- Name: index_flow_paths_mv_on_flow_id_and_column_position; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_flow_paths_mv_on_flow_id_and_column_position ON public.flow_paths_mv USING btree (flow_id, column_position);
-
-
---
--- Name: index_flow_quals_on_flow_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_flow_quals_on_flow_id ON public.flow_quals USING btree (flow_id);
-
-
---
--- Name: index_flow_quants_on_flow_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_flow_quants_on_flow_id ON public.flow_quants USING btree (flow_id);
-
-
---
--- Name: index_flows_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_flows_on_context_id ON public.flows USING btree (context_id);
-
-
---
--- Name: index_flows_on_context_id_and_year; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_flows_on_context_id_and_year ON public.flows USING btree (context_id, year);
-
-
---
--- Name: index_flows_on_path; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_flows_on_path ON public.flows USING btree (path);
-
-
---
--- Name: index_ind_commodity_properties_on_commodity_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ind_commodity_properties_on_commodity_id ON public.ind_commodity_properties USING btree (commodity_id);
-
-
---
--- Name: index_ind_commodity_properties_on_ind_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ind_commodity_properties_on_ind_id ON public.ind_commodity_properties USING btree (ind_id);
-
-
---
--- Name: index_ind_context_properties_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ind_context_properties_on_context_id ON public.ind_context_properties USING btree (context_id);
-
-
---
--- Name: index_ind_context_properties_on_ind_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ind_context_properties_on_ind_id ON public.ind_context_properties USING btree (ind_id);
-
-
---
--- Name: index_ind_country_properties_on_country_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ind_country_properties_on_country_id ON public.ind_country_properties USING btree (country_id);
-
-
---
--- Name: index_ind_country_properties_on_ind_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ind_country_properties_on_ind_id ON public.ind_country_properties USING btree (ind_id);
-
-
---
--- Name: index_ind_properties_on_ind_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_ind_properties_on_ind_id ON public.ind_properties USING btree (ind_id);
-
-
---
--- Name: index_map_attribute_groups_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_map_attribute_groups_on_context_id ON public.map_attribute_groups USING btree (context_id);
-
-
---
--- Name: index_map_attributes_on_map_attribute_group_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_map_attributes_on_map_attribute_group_id ON public.map_attributes USING btree (map_attribute_group_id);
-
-
---
--- Name: index_map_inds_on_ind_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_map_inds_on_ind_id ON public.map_inds USING btree (ind_id);
-
-
---
--- Name: index_map_inds_on_map_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_map_inds_on_map_attribute_id ON public.map_inds USING btree (map_attribute_id);
-
-
---
--- Name: index_map_quants_on_map_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_map_quants_on_map_attribute_id ON public.map_quants USING btree (map_attribute_id);
-
-
---
--- Name: index_map_quants_on_quant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_map_quants_on_quant_id ON public.map_quants USING btree (quant_id);
-
-
---
--- Name: index_node_inds_on_node_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_node_inds_on_node_id ON public.node_inds USING btree (node_id);
-
-
---
--- Name: index_node_properties_on_node_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_node_properties_on_node_id ON public.node_properties USING btree (node_id);
-
-
---
--- Name: index_node_quals_on_node_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_node_quals_on_node_id ON public.node_quals USING btree (node_id);
-
-
---
--- Name: index_node_quants_on_node_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_node_quants_on_node_id ON public.node_quants USING btree (node_id);
-
-
---
--- Name: index_profiles_on_context_node_type_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_profiles_on_context_node_type_id ON public.profiles USING btree (context_node_type_id);
-
-
---
--- Name: index_qual_commodity_properties_on_commodity_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_qual_commodity_properties_on_commodity_id ON public.qual_commodity_properties USING btree (commodity_id);
-
-
---
--- Name: index_qual_commodity_properties_on_qual_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_qual_commodity_properties_on_qual_id ON public.qual_commodity_properties USING btree (qual_id);
-
-
---
--- Name: index_qual_context_properties_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_qual_context_properties_on_context_id ON public.qual_context_properties USING btree (context_id);
-
-
---
--- Name: index_qual_context_properties_on_qual_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_qual_context_properties_on_qual_id ON public.qual_context_properties USING btree (qual_id);
-
-
---
--- Name: index_qual_country_properties_on_country_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_qual_country_properties_on_country_id ON public.qual_country_properties USING btree (country_id);
-
-
---
--- Name: index_qual_country_properties_on_qual_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_qual_country_properties_on_qual_id ON public.qual_country_properties USING btree (qual_id);
-
-
---
--- Name: index_qual_properties_on_qual_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_qual_properties_on_qual_id ON public.qual_properties USING btree (qual_id);
-
-
---
--- Name: index_quant_commodity_properties_on_commodity_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_quant_commodity_properties_on_commodity_id ON public.quant_commodity_properties USING btree (commodity_id);
-
-
---
--- Name: index_quant_commodity_properties_on_quant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_quant_commodity_properties_on_quant_id ON public.quant_commodity_properties USING btree (quant_id);
-
-
---
--- Name: index_quant_context_properties_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_quant_context_properties_on_context_id ON public.quant_context_properties USING btree (context_id);
-
-
---
--- Name: index_quant_context_properties_on_quant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_quant_context_properties_on_quant_id ON public.quant_context_properties USING btree (quant_id);
-
-
---
--- Name: index_quant_country_properties_on_country_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_quant_country_properties_on_country_id ON public.quant_country_properties USING btree (country_id);
-
-
---
--- Name: index_quant_country_properties_on_quant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_quant_country_properties_on_quant_id ON public.quant_country_properties USING btree (quant_id);
-
-
---
--- Name: index_quant_properties_on_quant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_quant_properties_on_quant_id ON public.quant_properties USING btree (quant_id);
-
-
---
--- Name: index_recolor_by_attributes_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_recolor_by_attributes_on_context_id ON public.recolor_by_attributes USING btree (context_id);
-
-
---
--- Name: index_recolor_by_inds_on_ind_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_recolor_by_inds_on_ind_id ON public.recolor_by_inds USING btree (ind_id);
-
-
---
--- Name: index_recolor_by_inds_on_recolor_by_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_recolor_by_inds_on_recolor_by_attribute_id ON public.recolor_by_inds USING btree (recolor_by_attribute_id);
-
-
---
--- Name: index_recolor_by_quals_on_qual_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_recolor_by_quals_on_qual_id ON public.recolor_by_quals USING btree (qual_id);
-
-
---
--- Name: index_recolor_by_quals_on_recolor_by_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_recolor_by_quals_on_recolor_by_attribute_id ON public.recolor_by_quals USING btree (recolor_by_attribute_id);
-
-
---
--- Name: index_resize_by_attributes_on_context_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_resize_by_attributes_on_context_id ON public.resize_by_attributes USING btree (context_id);
-
-
---
--- Name: index_resize_by_quants_on_quant_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_resize_by_quants_on_quant_id ON public.resize_by_quants USING btree (quant_id);
-
-
---
--- Name: index_resize_by_quants_on_resize_by_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_resize_by_quants_on_resize_by_attribute_id ON public.resize_by_quants USING btree (resize_by_attribute_id);
-
-
---
--- Name: map_attributes_mv_context_id_is_disabled_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX map_attributes_mv_context_id_is_disabled_idx ON public.map_attributes_mv USING btree (context_id, is_disabled) WHERE (is_disabled IS FALSE);
+CREATE INDEX index_top_profiles_on_top_profile_image_id ON public.top_profiles USING btree (top_profile_image_id);
 
 
 --
@@ -7858,17 +8491,17 @@ CREATE UNIQUE INDEX map_attributes_mv_id_idx ON public.map_attributes_mv USING b
 
 
 --
--- Name: map_attributes_mv_map_attribute_group_id_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: map_quants_map_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX map_attributes_mv_map_attribute_group_id_attribute_id_idx ON public.map_attributes_mv USING btree (map_attribute_group_id, attribute_id);
+CREATE INDEX map_quants_map_attribute_id_idx ON public.map_quants USING btree (map_attribute_id);
 
 
 --
--- Name: map_attributes_mv_original_attribute_id_attribute_type_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: map_quants_quant_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX map_attributes_mv_original_attribute_id_attribute_type_idx ON public.map_attributes_mv USING btree (original_attribute_id, attribute_type);
+CREATE INDEX map_quants_quant_id_idx ON public.map_quants USING btree (quant_id);
 
 
 --
@@ -7879,6 +8512,27 @@ CREATE INDEX node_inds_ind_id_idx ON public.node_inds USING btree (ind_id);
 
 
 --
+-- Name: node_inds_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX node_inds_node_id_idx ON public.node_inds USING btree (node_id);
+
+
+--
+-- Name: node_properties_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX node_properties_node_id_idx ON public.node_properties USING btree (node_id);
+
+
+--
+-- Name: node_quals_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX node_quals_node_id_idx ON public.node_quals USING btree (node_id);
+
+
+--
 -- Name: node_quals_qual_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7886,10 +8540,10 @@ CREATE INDEX node_quals_qual_id_idx ON public.node_quals USING btree (qual_id);
 
 
 --
--- Name: node_quants_quant_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: node_quants_node_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX node_quants_quant_id_idx ON public.node_quants USING btree (quant_id);
+CREATE INDEX node_quants_node_id_idx ON public.node_quants USING btree (node_id);
 
 
 --
@@ -7907,10 +8561,10 @@ CREATE INDEX nodes_mv_context_id_idx ON public.nodes_mv USING btree (context_id)
 
 
 --
--- Name: nodes_mv_name_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: nodes_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX nodes_mv_name_idx ON public.nodes_mv USING gin (to_tsvector('simple'::regconfig, COALESCE(name, ''::text)));
+CREATE INDEX nodes_mv_name_tsvector_idx ON public.nodes_mv USING gin (name_tsvector);
 
 
 --
@@ -7921,10 +8575,115 @@ CREATE INDEX nodes_node_type_id_idx ON public.nodes USING btree (node_type_id);
 
 
 --
--- Name: recolor_by_attributes_mv_context_id_attribute_id; Type: INDEX; Schema: public; Owner: -
+-- Name: qual_commodity_properties_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX recolor_by_attributes_mv_context_id_attribute_id ON public.recolor_by_attributes_mv USING btree (context_id, attribute_id);
+CREATE INDEX qual_commodity_properties_commodity_id_idx ON public.qual_commodity_properties USING btree (commodity_id);
+
+
+--
+-- Name: qual_commodity_properties_qual_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX qual_commodity_properties_qual_id_idx ON public.qual_commodity_properties USING btree (qual_id);
+
+
+--
+-- Name: qual_context_properties_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX qual_context_properties_context_id_idx ON public.qual_context_properties USING btree (context_id);
+
+
+--
+-- Name: qual_context_properties_qual_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX qual_context_properties_qual_id_idx ON public.qual_context_properties USING btree (qual_id);
+
+
+--
+-- Name: qual_country_properties_country_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX qual_country_properties_country_id_idx ON public.qual_country_properties USING btree (country_id);
+
+
+--
+-- Name: qual_country_properties_qual_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX qual_country_properties_qual_id_idx ON public.qual_country_properties USING btree (qual_id);
+
+
+--
+-- Name: qual_values_meta_mv_qual_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX qual_values_meta_mv_qual_id_idx ON public.qual_values_meta_mv USING btree (qual_id);
+
+
+--
+-- Name: quant_commodity_properties_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX quant_commodity_properties_commodity_id_idx ON public.quant_commodity_properties USING btree (commodity_id);
+
+
+--
+-- Name: quant_commodity_properties_quant_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX quant_commodity_properties_quant_id_idx ON public.quant_commodity_properties USING btree (quant_id);
+
+
+--
+-- Name: quant_context_properties_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX quant_context_properties_context_id_idx ON public.quant_context_properties USING btree (context_id);
+
+
+--
+-- Name: quant_context_properties_quant_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX quant_context_properties_quant_id_idx ON public.quant_context_properties USING btree (quant_id);
+
+
+--
+-- Name: quant_country_properties_country_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX quant_country_properties_country_id_idx ON public.quant_country_properties USING btree (country_id);
+
+
+--
+-- Name: quant_country_properties_quant_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX quant_country_properties_quant_id_idx ON public.quant_country_properties USING btree (quant_id);
+
+
+--
+-- Name: quant_properties_quant_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX quant_properties_quant_id_idx ON public.quant_properties USING btree (quant_id);
+
+
+--
+-- Name: quant_values_meta_mv_quant_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX quant_values_meta_mv_quant_id_idx ON public.quant_values_meta_mv USING btree (quant_id);
+
+
+--
+-- Name: recolor_by_attributes_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX recolor_by_attributes_context_id_idx ON public.recolor_by_attributes USING btree (context_id);
 
 
 --
@@ -7932,6 +8691,13 @@ CREATE INDEX recolor_by_attributes_mv_context_id_attribute_id ON public.recolor_
 --
 
 CREATE UNIQUE INDEX recolor_by_attributes_mv_id_idx ON public.recolor_by_attributes_mv USING btree (id);
+
+
+--
+-- Name: resize_by_attributes_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX resize_by_attributes_context_id_idx ON public.resize_by_attributes USING btree (context_id);
 
 
 --
@@ -7949,11 +8715,467 @@ CREATE UNIQUE INDEX resize_by_attributes_mv_id_idx ON public.resize_by_attribute
 
 
 --
+-- Name: resize_by_quants_quant_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX resize_by_quants_quant_id_idx ON public.resize_by_quants USING btree (quant_id);
+
+
+--
+-- Name: resize_by_quants_resize_by_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX resize_by_quants_resize_by_attribute_id_idx ON public.resize_by_quants USING btree (resize_by_attribute_id);
+
+
+--
+-- Name: sankey_nodes_mv_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX sankey_nodes_mv_context_id_id_idx ON public.sankey_nodes_mv USING btree (context_id, id);
+
+
+--
+-- Name: sankey_nodes_mv_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX sankey_nodes_mv_node_type_id_idx ON public.sankey_nodes_mv USING btree (node_type_id);
+
+
+--
+-- Name: download_flows_2003_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2003_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2003_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2003_context_id_idx;
+
+
+--
+-- Name: download_flows_2003_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2003_path_idx;
+
+
+--
+-- Name: download_flows_2003_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2003_year_idx;
+
+
+--
+-- Name: download_flows_2004_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2004_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2004_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2004_context_id_idx;
+
+
+--
+-- Name: download_flows_2004_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2004_path_idx;
+
+
+--
+-- Name: download_flows_2004_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2004_year_idx;
+
+
+--
+-- Name: download_flows_2005_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2005_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2005_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2005_context_id_idx;
+
+
+--
+-- Name: download_flows_2005_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2005_path_idx;
+
+
+--
+-- Name: download_flows_2005_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2005_year_idx;
+
+
+--
+-- Name: download_flows_2006_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2006_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2006_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2006_context_id_idx;
+
+
+--
+-- Name: download_flows_2006_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2006_path_idx;
+
+
+--
+-- Name: download_flows_2006_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2006_year_idx;
+
+
+--
+-- Name: download_flows_2007_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2007_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2007_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2007_context_id_idx;
+
+
+--
+-- Name: download_flows_2007_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2007_path_idx;
+
+
+--
+-- Name: download_flows_2007_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2007_year_idx;
+
+
+--
+-- Name: download_flows_2008_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2008_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2008_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2008_context_id_idx;
+
+
+--
+-- Name: download_flows_2008_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2008_path_idx;
+
+
+--
+-- Name: download_flows_2008_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2008_year_idx;
+
+
+--
+-- Name: download_flows_2009_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2009_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2009_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2009_context_id_idx;
+
+
+--
+-- Name: download_flows_2009_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2009_path_idx;
+
+
+--
+-- Name: download_flows_2009_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2009_year_idx;
+
+
+--
+-- Name: download_flows_2010_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2010_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2010_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2010_context_id_idx;
+
+
+--
+-- Name: download_flows_2010_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2010_path_idx;
+
+
+--
+-- Name: download_flows_2010_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2010_year_idx;
+
+
+--
+-- Name: download_flows_2011_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2011_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2011_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2011_context_id_idx;
+
+
+--
+-- Name: download_flows_2011_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2011_path_idx;
+
+
+--
+-- Name: download_flows_2011_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2011_year_idx;
+
+
+--
+-- Name: download_flows_2012_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2012_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2012_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2012_context_id_idx;
+
+
+--
+-- Name: download_flows_2012_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2012_path_idx;
+
+
+--
+-- Name: download_flows_2012_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2012_year_idx;
+
+
+--
+-- Name: download_flows_2013_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2013_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2013_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2013_context_id_idx;
+
+
+--
+-- Name: download_flows_2013_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2013_path_idx;
+
+
+--
+-- Name: download_flows_2013_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2013_year_idx;
+
+
+--
+-- Name: download_flows_2014_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2014_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2014_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2014_context_id_idx;
+
+
+--
+-- Name: download_flows_2014_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2014_path_idx;
+
+
+--
+-- Name: download_flows_2014_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2014_year_idx;
+
+
+--
+-- Name: download_flows_2015_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2015_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2015_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2015_context_id_idx;
+
+
+--
+-- Name: download_flows_2015_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2015_path_idx;
+
+
+--
+-- Name: download_flows_2015_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2015_year_idx;
+
+
+--
+-- Name: download_flows_2016_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2016_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2016_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2016_context_id_idx;
+
+
+--
+-- Name: download_flows_2016_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2016_path_idx;
+
+
+--
+-- Name: download_flows_2016_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2016_year_idx;
+
+
+--
+-- Name: download_flows_2017_attribute_type_attribute_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_attribute_type_attribute_id_idx ATTACH PARTITION public.download_flows_2017_attribute_type_attribute_id_idx;
+
+
+--
+-- Name: download_flows_2017_context_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_context_id_idx ATTACH PARTITION public.download_flows_2017_context_id_idx;
+
+
+--
+-- Name: download_flows_2017_path_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_path_idx ATTACH PARTITION public.download_flows_2017_path_idx;
+
+
+--
+-- Name: download_flows_2017_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.download_flows_year_idx ATTACH PARTITION public.download_flows_2017_year_idx;
+
+
+--
 -- Name: staff_members fk_rails_6ad8424ffc; Type: FK CONSTRAINT; Schema: content; Owner: -
 --
 
 ALTER TABLE ONLY content.staff_members
     ADD CONSTRAINT fk_rails_6ad8424ffc FOREIGN KEY (staff_group_id) REFERENCES content.staff_groups(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: top_profiles fk_rails_02381b1a96; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.top_profiles
+    ADD CONSTRAINT fk_rails_02381b1a96 FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -8085,6 +9307,14 @@ ALTER TABLE ONLY public.recolor_by_inds
 
 
 --
+-- Name: top_profile_images fk_rails_29f1862b03; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.top_profile_images
+    ADD CONSTRAINT fk_rails_29f1862b03 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id);
+
+
+--
 -- Name: chart_inds fk_rails_2c8eebb539; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8106,14 +9336,6 @@ ALTER TABLE ONLY public.quant_country_properties
 
 ALTER TABLE ONLY public.ind_context_properties
     ADD CONSTRAINT fk_rails_2d523de840 FOREIGN KEY (ind_id) REFERENCES public.inds(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: flow_quants fk_rails_2dbc0a565f; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.flow_quants
-    ADD CONSTRAINT fk_rails_2dbc0a565f FOREIGN KEY (flow_id) REFERENCES public.flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -8258,14 +9480,6 @@ ALTER TABLE ONLY public.ind_context_properties
 
 ALTER TABLE ONLY public.quant_context_properties
     ADD CONSTRAINT fk_rails_6e05c978da FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: flow_quals fk_rails_6e55ca4cbc; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.flow_quals
-    ADD CONSTRAINT fk_rails_6e55ca4cbc FOREIGN KEY (flow_id) REFERENCES public.flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -8565,6 +9779,14 @@ ALTER TABLE ONLY public.download_quals
 
 
 --
+-- Name: top_profiles fk_rails_eb02423c0e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.top_profiles
+    ADD CONSTRAINT fk_rails_eb02423c0e FOREIGN KEY (node_id) REFERENCES public.nodes(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: contexts fk_rails_eea78f436e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8586,6 +9808,14 @@ ALTER TABLE ONLY public.quant_commodity_properties
 
 ALTER TABLE ONLY public.chart_node_types
     ADD CONSTRAINT fk_rails_f043b3c463 FOREIGN KEY (node_type_id) REFERENCES public.node_types(id) ON DELETE CASCADE;
+
+
+--
+-- Name: top_profiles fk_rails_f4a644ec90; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.top_profiles
+    ADD CONSTRAINT fk_rails_f4a644ec90 FOREIGN KEY (top_profile_image_id) REFERENCES public.top_profile_images(id);
 
 
 --
@@ -8635,140 +9865,6 @@ ALTER TABLE ONLY public.qual_country_properties
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20170217085928'),
-('20170308111306'),
-('20170314095630'),
-('20170314113737'),
-('20170314115226'),
-('20170314115306'),
-('20170316135218'),
-('20170323090506'),
-('20170323121305'),
-('20170506225529'),
-('20170526080738'),
-('20170526095950'),
-('20170526103500'),
-('20170526131332'),
-('20170613120932'),
-('20170614111428'),
-('20170630134124'),
-('20170821081055'),
-('20170824111857'),
-('20170829074711'),
-('20170918133625'),
-('20170918134156'),
-('20170921125513'),
-('20170925102834'),
-('20170929120908'),
-('20171002093637'),
-('20171002102750'),
-('20171004102919'),
-('20171006161620'),
-('20171006171936'),
-('20171011112259'),
-('20171011121102'),
-('20171011121557'),
-('20171011121700'),
-('20171012103851'),
-('20171012104354'),
-('20171012110946'),
-('20171012112442'),
-('20171012124235'),
-('20171012130125'),
-('20171013081306'),
-('20171013094155'),
-('20171013095055'),
-('20171013101825'),
-('20171013103931'),
-('20171013104602'),
-('20171018093008'),
-('20171020091710'),
-('20171020125731'),
-('20171020133529'),
-('20171101111009'),
-('20171106114656'),
-('20171106121710'),
-('20171106123358'),
-('20171115091532'),
-('20171115144320'),
-('20171116101949'),
-('20171117115459'),
-('20171117120322'),
-('20171130103917'),
-('20171212113051'),
-('20171214162643'),
-('20171219125633'),
-('20180109085838'),
-('20180110111533'),
-('20180111085256'),
-('20180111124938'),
-('20180112112907'),
-('20180116112807'),
-('20180119094345'),
-('20180123130300'),
-('20180123132607'),
-('20180126140843'),
-('20180202093906'),
-('20180205092759'),
-('20180207133151'),
-('20180207133331'),
-('20180212120524'),
-('20180221144544'),
-('20180223141212'),
-('20180226094007'),
-('20180313091306'),
-('20180320141501'),
-('20180326095318'),
-('20180326101002'),
-('20180327111929'),
-('20180403155328'),
-('20180410065335'),
-('20180412074237'),
-('20180416125150'),
-('20180522102950'),
-('20180522135640'),
-('20180808114630'),
-('20180817125528'),
-('20180817130807'),
-('20180822093443'),
-('20180827134927'),
-('20180917124246'),
-('20180921103012'),
-('20180924112256'),
-('20180924112257'),
-('20180924112258'),
-('20180924112259'),
-('20180924112260'),
-('20180924112261'),
-('20180926084643'),
-('20180928122607'),
-('20181001105332'),
-('20181002105509'),
-('20181002105912'),
-('20181003063720'),
-('20181004075142'),
-('20181005063834'),
-('20181005063841'),
-('20181005063849'),
-('20181005063856'),
-('20181005063909'),
-('20181005064856'),
-('20181008101006'),
-('20181009102913'),
-('20181011103455'),
-('20181017053240'),
-('20181019222226'),
-('20181019232447'),
-('20181116144800'),
-('20181119104937'),
-('20181119105000'),
-('20181119105010'),
-('20181119105022'),
-('20181207143449'),
-('20181210215622'),
-('20190110094614'),
-('20190110140539'),
-('20190111121850'),
 ('20190215113824'),
 ('20190228115321'),
 ('20190228115345'),
@@ -8788,8 +9884,36 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190320172713'),
 ('20190321122822'),
 ('20190321161913'),
+('20190403153118'),
+('20190403153119'),
+('20190403153135'),
+('20190409190106'),
+('20190410075223'),
 ('20190429104832'),
 ('20190429112751'),
-('20190513125050');
+('20190503103053'),
+('20190503115752'),
+('20190503123635'),
+('20190503175955'),
+('20190513125050'),
+('20190516111644'),
+('20190520093639'),
+('20190528091308'),
+('20190529153223'),
+('20190530140625'),
+('20190611224257'),
+('20190618131945'),
+('20190621101736'),
+('20190624114103'),
+('20190625110206'),
+('20190701120240'),
+('20190701165705'),
+('20190701172702'),
+('20190702090231'),
+('20190702112018'),
+('20190702132100'),
+('20190711133915'),
+('20190712115644'),
+('20190716085538');
 
 

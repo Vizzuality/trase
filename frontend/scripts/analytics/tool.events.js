@@ -1,15 +1,17 @@
 import { TOGGLE_MAP_LAYERS_MENU, SET_CONTEXT } from 'actions/app.actions';
 import {
-  SELECT_BIOME_FILTER,
-  SELECT_COLUMN,
   SELECT_CONTEXTUAL_LAYERS,
-  SELECT_RECOLOR_BY,
-  SELECT_RESIZE_BY,
-  SELECT_VIEW,
   SELECT_YEARS,
-  TOGGLE_MAP,
-  UPDATE_NODE_SELECTION
-} from 'actions/tool.actions';
+  TOGGLE_MAP
+} from 'react-components/tool/tool.actions';
+import {
+  TOOL_LINKS__SELECT_VIEW,
+  TOOL_LINKS__SELECT_COLUMN,
+  TOOL_LINKS__SET_SELECTED_NODES,
+  TOOL_LINKS__SET_SELECTED_RESIZE_BY,
+  TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
+  TOOL_LINKS__SET_SELECTED_BIOME_FILTER
+} from 'react-components/tool-links/tool-links.actions';
 
 export default [
   {
@@ -22,14 +24,14 @@ export default [
     }
   },
   {
-    type: UPDATE_NODE_SELECTION,
+    type: TOOL_LINKS__SET_SELECTED_NODES,
     category: 'Sankey',
     action: 'Update node selection',
     getPayload: (action, state) => {
       const nodeNames = [];
 
-      action.ids.forEach(d => {
-        const node = state.tool.nodesDict[d];
+      action.payload.nodeIds.forEach(d => {
+        const node = state.toolLinks.data.nodes[d];
         if (typeof node !== 'undefined') {
           nodeNames.push(node.name);
         }
@@ -39,40 +41,40 @@ export default [
     }
   },
   {
-    type: SELECT_BIOME_FILTER,
+    type: TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
     category: 'Sankey',
     action: 'Update biome filter',
-    getPayload: action => action.biomeFilter
+    getPayload: action => action.payload.name
   },
   {
     type: SELECT_YEARS,
     action: 'Select years',
     category: 'Sankey',
-    getPayload: action => action.years.join(',')
+    getPayload: action => action.payload.years.join(',')
   },
   {
-    type: SELECT_RECOLOR_BY,
+    type: TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
     action: 'Select recolor by',
     category: 'Sankey',
     getPayload: action => action.payload.name
   },
   {
-    type: SELECT_RESIZE_BY,
+    type: TOOL_LINKS__SET_SELECTED_RESIZE_BY,
     action: 'Select resize by',
     category: 'Sankey',
     getPayload: action => action.payload.name
   },
   {
-    type: SELECT_VIEW,
+    type: TOOL_LINKS__SELECT_VIEW,
     action: 'Select view',
     category: 'Sankey',
-    getPayload: action => (action.detailedView ? 'detailed' : 'overview')
+    getPayload: action => (action.payload.detailedView ? 'detailed' : 'overview')
   },
   {
-    type: SELECT_COLUMN,
+    type: TOOL_LINKS__SELECT_COLUMN,
     category: 'Sankey',
     action: 'Select column',
-    getPayload: (action, state) => state.tool.columns.find(col => col.id === action.columnId).name
+    getPayload: (action, state) => state.toolLinks.data.columns[action.payload.columnId].name
   },
   {
     type: TOGGLE_MAP,

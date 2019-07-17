@@ -1,372 +1,409 @@
 {
-  "$schema": "http://json-schema.org/draft-06/schema#",
-  "additionalProperties": false,
   "definitions": {},
-  "id": "http://example.com/example.json",
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "required": [
+    "data"
+  ],
   "properties": {
     "data": {
-      "id": "/properties/data",
+      "$id": "#/properties/data",
+      "type": "array",
       "items": {
-        "additionalProperties": false,
-        "id": "/properties/data/items",
+        "$id": "#/properties/data/items",
+        "type": "object",
+        "required": [
+          "id",
+          "isDefault",
+          "isDisabled",
+          "years",
+          "defaultYear",
+          "countryId",
+          "countryName",
+          "commodityId",
+          "commodityName",
+          "defaultBasemap",
+          "isSubnational",
+          "isHighlighted",
+          "hasProfiles",
+          "map",
+          "filterBy",
+          "worldMap",
+          "defaultColumns",
+          "recolorBy",
+          "resizeBy"
+        ],
         "properties": {
-          "commodityId": {
-            "id": "/properties/data/items/properties/commodityId",
-            "type": "integer"
-          },
-          "commodityName": {
-            "id": "/properties/data/items/properties/commodityName",
-            "type": "string"
-          },
-          "countryId": {
-            "id": "/properties/data/items/properties/countryId",
-            "type": "integer"
-          },
-          "countryName": {
-            "id": "/properties/data/items/properties/countryName",
-            "type": "string"
-          },
-          "defaultBasemap": {
-            "id": "/properties/data/items/properties/defaultBasemap",
-            "type": [
-              "string",
-              "null"
-            ]
-          },
-          "hasProfiles": {
-            "id": "/properties/data/items/properties/hasProfiles",
-            "type": "boolean"
-          },
-          "defaultYear": {
-            "id": "/properties/data/items/properties/defaultYear",
-            "type": "integer"
-          },
-          "filterBy": {
-            "id": "/properties/data/items/properties/filterBy",
-            "items": {
-              "additionalProperties": false,
-              "id": "/properties/data/items/properties/filterBy/items",
-              "properties": {
-                "name": {
-                  "id": "/properties/data/items/properties/filterBy/items/properties/name",
-                  "type": "string"
-                },
-                "nodes": {
-                  "id": "/properties/data/items/properties/filterBy/items/properties/nodes",
-                  "items": {
-                    "additionalProperties": false,
-                    "id": "/properties/data/items/properties/filterBy/items/properties/nodes/items",
-                    "properties": {
-                      "name": {
-                        "id": "/properties/data/items/properties/filterBy/items/properties/nodes/items/properties/name",
-                        "type": "string"
-                      },
-                      "nodeId": {
-                        "id": "/properties/data/items/properties/filterBy/items/properties/nodes/items/properties/nodeId",
-                        "type": "integer"
-                      }
-                    },
-                    "required": [
-                      "nodeId",
-                      "name"
-                    ],
-                    "type": "object"
-                  },
-                  "minItems": 1,
-                  "type": "array"
-                }
-              },
-              "required": [
-                "nodes",
-                "name"
-              ],
-              "type": "object"
-            },
-            "type": "array"
-          },
           "id": {
-            "id": "/properties/data/items/properties/id",
+            "$id": "#/properties/data/items/properties/id",
             "type": "integer"
           },
           "isDefault": {
-            "id": "/properties/data/items/properties/isDefault",
-            "type": "boolean"
-          },
-          "isSubnational": {
-            "id": "/properties/data/items/properties/isSubnational",
-            "type": "boolean"
-          },
-          "isHighlighted": {
-            "id": "/properties/data/items/properties/isHighlighted",
+            "$id": "#/properties/data/items/properties/isDefault",
             "type": "boolean"
           },
           "isDisabled": {
-            "id": "/properties/data/items/properties/isDisabled",
+            "$id": "#/properties/data/items/properties/isDisabled",
+            "type": "boolean"
+          },
+          "years": {
+            "$id": "#/properties/data/items/properties/years",
+            "type": "array",
+            "items": {
+              "$id": "#/properties/data/items/properties/years/items",
+              "type": "integer"
+            }
+          },
+          "defaultYear": {
+            "$id": "#/properties/data/items/properties/defaultYear",
+            "type": "integer"
+          },
+          "countryId": {
+            "$id": "#/properties/data/items/properties/countryId",
+            "type": "integer"
+          },
+          "countryName": {
+            "$id": "#/properties/data/items/properties/countryName",
+            "type": "string",
+            "pattern": "^(.*)$"
+          },
+          "commodityId": {
+            "$id": "#/properties/data/items/properties/commodityId",
+            "type": "integer"
+          },
+          "commodityName": {
+            "$id": "#/properties/data/items/properties/commodityName",
+            "type": "string",
+            "pattern": "^(.*)$"
+          },
+          "defaultBasemap": {
+            "$id": "#/properties/data/items/properties/defaultBasemap",
+            "type": "string",
+            "pattern": "^(.*)$"
+          },
+          "isSubnational": {
+            "$id": "#/properties/data/items/properties/isSubnational",
+            "type": "boolean"
+          },
+          "isHighlighted": {
+            "$id": "#/properties/data/items/properties/isHighlighted",
+            "type": "boolean"
+          },
+          "hasProfiles": {
+            "$id": "#/properties/data/items/properties/hasProfiles",
             "type": "boolean"
           },
           "map": {
-            "additionalProperties": false,
-            "id": "/properties/data/items/properties/map",
-            "properties": {
-              "latitude": {
-                "id": "/properties/data/items/properties/map/properties/latitude",
-                "type": "number"
-              },
-              "longitude": {
-                "id": "/properties/data/items/properties/map/properties/longitude",
-                "type": "number"
-              },
-              "zoom": {
-                "id": "/properties/data/items/properties/map/properties/zoom",
-                "type": "integer"
-              }
-            },
+            "$id": "#/properties/data/items/properties/map",
+            "type": "object",
             "required": [
               "latitude",
               "longitude",
               "zoom"
             ],
-            "type": "object"
+            "properties": {
+              "latitude": {
+                "$id": "#/properties/data/items/properties/map/properties/latitude",
+                "type": "number"
+              },
+              "longitude": {
+                "$id": "#/properties/data/items/properties/map/properties/longitude",
+                "type": "number"
+              },
+              "zoom": {
+                "$id": "#/properties/data/items/properties/map/properties/zoom",
+                "type": "integer"
+              }
+            }
+          },
+          "filterBy": {
+            "$id": "#/properties/data/items/properties/filterBy",
+            "type": "array",
+            "items": {
+              "$id": "#/properties/data/items/properties/filterBy/items",
+              "type": "object",
+              "required": [
+                "name",
+                "nodes"
+              ],
+              "properties": {
+                "name": {
+                  "$id": "#/properties/data/items/properties/filterBy/items/properties/name",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                },
+                "nodes": {
+                  "$id": "#/properties/data/items/properties/filterBy/items/properties/nodes",
+                  "type": "array",
+                  "items": {
+                    "$id": "#/properties/data/items/properties/filterBy/items/properties/nodes/items",
+                    "type": "object",
+                    "required": [
+                      "name",
+                      "nodeId",
+                      "geoId"
+                    ],
+                    "properties": {
+                      "name": {
+                        "$id": "#/properties/data/items/properties/filterBy/items/properties/nodes/items/properties/name",
+                        "type": "string",
+                        "pattern": "^(.*)$"
+                      },
+                      "nodeId": {
+                        "$id": "#/properties/data/items/properties/filterBy/items/properties/nodes/items/properties/nodeId",
+                        "type": "integer"
+                      },
+                      "geoId": {
+                        "$id": "#/properties/data/items/properties/filterBy/items/properties/nodes/items/properties/geoId",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "worldMap": {
-            "additionalProperties": false,
-            "id": "/properties/data/items/properties/worldMap",
+            "$id": "#/properties/data/items/properties/worldMap",
+            "type": "object",
+            "required": [
+              "geoId",
+              "annotationPositionXPos",
+              "annotationPositionYPos",
+              "countryColumnId",
+              "exporterColumnId"
+            ],
             "properties": {
-              "countryColumnId": {
-                "id": "/properties/data/items/properties/worldMap/properties/countryColumnId",
-                "type": "integer"
-              },
-              "exporterColumnId": {
-                "id": "/properties/data/items/properties/worldMap/properties/exporterColumnId",
-                "type": "integer"
-              },
               "geoId": {
-                "id": "/properties/data/items/properties/map/properties/geoId",
-                "type": "string"
+                "$id": "#/properties/data/items/properties/worldMap/properties/geoId",
+                "type": "string",
+                "pattern": "^(.*)$"
               },
               "annotationPositionXPos": {
-                "id": "/properties/data/items/properties/map/properties/annotationPositionXPos",
+                "$id": "#/properties/data/items/properties/worldMap/properties/annotationPositionXPos",
                 "type": "number"
               },
               "annotationPositionYPos": {
-                "id": "/properties/data/items/properties/map/properties/annotationPositionYPos",
+                "$id": "#/properties/data/items/properties/worldMap/properties/annotationPositionYPos",
                 "type": "number"
+              },
+              "countryColumnId": {
+                "$id": "#/properties/data/items/properties/worldMap/properties/countryColumnId",
+                "type": "integer"
+              },
+              "exporterColumnId": {
+                "$id": "#/properties/data/items/properties/worldMap/properties/exporterColumnId",
+                "type": "integer"
               }
-            },
-            "required": [
-              "countryColumnId",
-              "exporterColumnId",
-              "geoId",
-              "annotationPositionYPos",
-              "annotationPositionYPos"
-            ]
+            }
+          },
+          "defaultColumns": {
+            "$id": "#/properties/data/items/properties/defaultColumns",
+            "type": "array",
+            "items": {
+              "$id": "#/properties/data/items/properties/defaultColumns/items",
+              "type": "object",
+              "required": [
+                "id",
+                "group"
+              ],
+              "properties": {
+                "id": {
+                  "$id": "#/properties/data/items/properties/defaultColumns/items/properties/id",
+                  "type": "integer"
+                },
+                "group": {
+                  "$id": "#/properties/data/items/properties/defaultColumns/items/properties/group",
+                  "type": "integer"
+                }
+              }
+            }
           },
           "recolorBy": {
-            "id": "/properties/data/items/properties/recolorBy",
+            "$id": "#/properties/data/items/properties/recolorBy",
+            "type": "array",
             "items": {
-              "additionalProperties": false,
-              "id": "/properties/data/items/properties/recolorBy/items",
+              "$id": "#/properties/data/items/properties/recolorBy/items",
+              "type": "object",
+              "required": [
+                "isDefault",
+                "isDisabled",
+                "groupNumber",
+                "position",
+                "legendType",
+                "legendColorTheme",
+                "intervalCount",
+                "minValue",
+                "maxValue",
+                "divisor",
+                "name",
+                "years",
+                "attributeId",
+                "label",
+                "description",
+                "type",
+                "nodes"
+              ],
               "properties": {
-                "description": {
-                  "id": "/properties/data/items/properties/recolorBy/items/properties/description",
-                  "type": "string"
-                },
-                "divisor": {
-                  "id": "/properties/data/items/properties/recolorBy/items/properties/divisor",
-                  "type": [
-                    "null",
-                    "number"
-                  ]
-                },
-                "groupNumber": {
-                  "id": "/properties/data/items/properties/recolorBy/items/properties/groupNumber",
-                  "type": "integer"
-                },
-                "intervalCount": {
-                  "id": "/properties/data/items/properties/recolorBy/items/properties/intervalCount",
-                  "type": "null"
-                },
                 "isDefault": {
-                  "id": "/properties/data/items/properties/recolorBy/items/properties/isDefault",
+                  "$id": "#/properties/data/items/properties/recolorBy/items/properties/isDefault",
                   "type": "boolean"
                 },
                 "isDisabled": {
-                  "id": "/properties/data/items/properties/recolorBy/items/properties/isDisabled",
+                  "$id": "#/properties/data/items/properties/recolorBy/items/properties/isDisabled",
                   "type": "boolean"
                 },
-                "years": {
-                  "id": "/properties/data/items/properties/recolorBy/items/properties/years",
-                  "type": ["array", "null"],
-                  "items": {
-                    "id": "/properties/data/items/properties/recolorBy/items/properties/years/items",
-                    "type": "integer"
-                  }
+                "groupNumber": {
+                  "$id": "#/properties/data/items/properties/recolorBy/items/properties/groupNumber",
+                  "type": "integer"
                 },
-                "label": {
-                  "id": "/properties/data/items/properties/recolorBy/items/properties/label",
-                  "type": "string"
-                },
-                "legendColorTheme": {
-                  "id": "/properties/data/items/properties/recolorBy/items/properties/legendColorTheme",
-                  "type": "string"
+                "position": {
+                  "$id": "#/properties/data/items/properties/recolorBy/items/properties/position",
+                  "type": "integer"
                 },
                 "legendType": {
-                  "id": "/properties/data/items/properties/recolorBy/items/properties/legendType",
-                  "type": "string"
+                  "$id": "#/properties/data/items/properties/recolorBy/items/properties/legendType",
+                  "type": "string",
+                  "pattern": "^(.*)$"
                 },
-                "maxValue": {
-                  "id": "/properties/data/items/properties/recolorBy/items/properties/maxValue",
-                  "type": ["number", "string", "null"]
+                "legendColorTheme": {
+                  "$id": "#/properties/data/items/properties/recolorBy/items/properties/legendColorTheme",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                },
+                "intervalCount": {
+                  "$id": "#/properties/data/items/properties/recolorBy/items/properties/intervalCount",
+                  "type": [
+                    "integer",
+                    "null"
+                  ]
                 },
                 "minValue": {
-                  "id": "/properties/data/items/properties/recolorBy/items/properties/minValue",
-                  "type": ["number", "string", "null"]
+                  "$id": "#/properties/data/items/properties/recolorBy/items/properties/minValue",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "maxValue": {
+                  "$id": "#/properties/data/items/properties/recolorBy/items/properties/maxValue",
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "pattern": "^(.*)$"
+                },
+                "divisor": {
+                  "$id": "#/properties/data/items/properties/recolorBy/items/properties/divisor",
+                  "type": "null"
                 },
                 "name": {
-                  "id": "/properties/data/items/properties/recolorBy/items/properties/name",
-                  "type": "string"
-                },
-                "nodes": {
-                  "id": "/properties/data/items/properties/recolorBy/items/properties/nodes",
-                  "items": {
-                    "description": "This accepts anything, as long as it's valid JSON.",
-                    "title": "Empty Object"
-                  },
-                  "type": "array"
-                },
-                "position": {
-                  "id": "/properties/data/items/properties/recolorBy/items/properties/position",
-                  "type": "integer"
-                },
-                "type": {
-                  "id": "/properties/data/items/properties/recolorBy/items/properties/type",
-                  "type": "string"
-                },
-                "attributeId": {
-                  "id": "/properties/data/items/properties/recolorBy/items/properties/attributeId",
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "divisor",
-                "type",
-                "isDisabled",
-                "description",
-                "groupNumber",
-                "intervalCount",
-                "label",
-                "legendType",
-                "position",
-                "maxValue",
-                "legendColorTheme",
-                "minValue",
-                "nodes",
-                "isDefault",
-                "name",
-                "years",
-                "attributeId"
-              ],
-              "type": "object"
-            },
-            "type": "array"
-          },
-          "resizeBy": {
-            "id": "/properties/data/items/properties/resizeBy",
-            "items": {
-              "additionalProperties": false,
-              "id": "/properties/data/items/properties/resizeBy/items",
-              "properties": {
-                "description": {
-                  "id": "/properties/data/items/properties/resizeBy/items/properties/description",
-                  "type": "string"
-                },
-                "groupNumber": {
-                  "id": "/properties/data/items/properties/resizeBy/items/properties/groupNumber",
-                  "type": "integer"
-                },
-                "isDefault": {
-                  "id": "/properties/data/items/properties/resizeBy/items/properties/isDefault",
-                  "type": "boolean"
-                },
-                "isDisabled": {
-                  "id": "/properties/data/items/properties/resizeBy/items/properties/isDisabled",
-                  "type": "boolean"
+                  "$id": "#/properties/data/items/properties/recolorBy/items/properties/name",
+                  "type": "string",
+                  "pattern": "^(.*)$"
                 },
                 "years": {
-                  "id": "/properties/data/items/properties/resizeBy/items/properties/years",
-                  "type": ["array", "null"],
+                  "$id": "#/properties/data/items/properties/recolorBy/items/properties/years",
+                  "type": "array",
                   "items": {
-                    "id": "/properties/data/items/properties/resizeBy/items/properties/years/items",
+                    "$id": "#/properties/data/items/properties/recolorBy/items/properties/years/items",
                     "type": "integer"
                   }
                 },
-                "label": {
-                  "id": "/properties/data/items/properties/resizeBy/items/properties/label",
-                  "type": "string"
-                },
-                "name": {
-                  "id": "/properties/data/items/properties/resizeBy/items/properties/name",
-                  "type": "string"
-                },
-                "position": {
-                  "id": "/properties/data/items/properties/resizeBy/items/properties/position",
-                  "type": "integer"
-                },
                 "attributeId": {
-                  "id": "/properties/data/items/properties/resizeBy/items/properties/attributeId",
+                  "$id": "#/properties/data/items/properties/recolorBy/items/properties/attributeId",
                   "type": "integer"
+                },
+                "label": {
+                  "$id": "#/properties/data/items/properties/recolorBy/items/properties/label",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                },
+                "description": {
+                  "$id": "#/properties/data/items/properties/recolorBy/items/properties/description",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                },
+                "type": {
+                  "$id": "#/properties/data/items/properties/recolorBy/items/properties/type",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                },
+                "nodes": {
+                  "$id": "#/properties/data/items/properties/recolorBy/items/properties/nodes",
+                  "type": "array"
                 }
-              },
+              }
+            }
+          },
+          "resizeBy": {
+            "$id": "#/properties/data/items/properties/resizeBy",
+            "type": "array",
+            "items": {
+              "$id": "#/properties/data/items/properties/resizeBy/items",
+              "type": "object",
               "required": [
-                "name",
+                "isDefault",
                 "isDisabled",
                 "groupNumber",
-                "label",
                 "position",
-                "isDefault",
-                "description",
+                "name",
                 "years",
-                "attributeId"
+                "attributeId",
+                "label",
+                "description"
               ],
-              "type": "object"
-            },
-            "type": "array"
-          },
-          "years": {
-            "id": "/properties/data/items/properties/years",
-            "items": {
-              "id": "/properties/data/items/properties/years/items",
-              "type": "integer"
-            },
-            "minItems": 1,
-            "type": "array"
+              "properties": {
+                "isDefault": {
+                  "$id": "#/properties/data/items/properties/resizeBy/items/properties/isDefault",
+                  "type": "boolean"
+                },
+                "isDisabled": {
+                  "$id": "#/properties/data/items/properties/resizeBy/items/properties/isDisabled",
+                  "type": "boolean"
+                },
+                "groupNumber": {
+                  "$id": "#/properties/data/items/properties/resizeBy/items/properties/groupNumber",
+                  "type": "integer"
+                },
+                "position": {
+                  "$id": "#/properties/data/items/properties/resizeBy/items/properties/position",
+                  "type": "integer"
+                },
+                "name": {
+                  "$id": "#/properties/data/items/properties/resizeBy/items/properties/name",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                },
+                "years": {
+                  "$id": "#/properties/data/items/properties/resizeBy/items/properties/years",
+                  "type": "array",
+                  "items": {
+                    "$id": "#/properties/data/items/properties/resizeBy/items/properties/years/items",
+                    "type": "integer"
+                  }
+                },
+                "attributeId": {
+                  "$id": "#/properties/data/items/properties/resizeBy/items/properties/attributeId",
+                  "type": "integer"
+                },
+                "label": {
+                  "$id": "#/properties/data/items/properties/resizeBy/items/properties/label",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                },
+                "description": {
+                  "$id": "#/properties/data/items/properties/resizeBy/items/properties/description",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                }
+              }
+            }
           }
-        },
-        "required": [
-          "worldMap",
-          "recolorBy",
-          "map",
-          "commodityId",
-          "countryId",
-          "defaultYear",
-          "isDisabled",
-          "defaultBasemap",
-          "years",
-          "countryName",
-          "filterBy",
-          "commodityName",
-          "resizeBy",
-          "id",
-          "isDefault"
-        ],
-        "type": "object"
-      },
-      "minItems": 1,
-      "type": "array"
+        }
+      }
     }
-  },
-  "required": [
-    "data"
-  ],
-  "type": "object"
+  }
 }

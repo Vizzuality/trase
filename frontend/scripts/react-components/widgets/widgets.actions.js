@@ -1,6 +1,7 @@
 import { getURLFromParams } from 'utils/getURLFromParams';
-import qs from 'qs';
+import qs from 'query-string';
 import sortBy from 'lodash/sortBy';
+import { fetchWithCancel } from 'utils/saga-utils';
 
 export const WIDGETS__INIT_ENDPOINT = 'WIDGETS__INIT_ENDPOINT';
 export const WIDGETS__SET_ENDPOINT_DATA = 'WIDGETS__SET_ENDPOINT_DATA';
@@ -11,21 +12,20 @@ export function prepareWidget(endpoints, { endpoint, params, raw }) {
     .map(([name, value]) => `${name}${value}`)
     .join('_');
   let url = null;
-  const cacheMiss = typeof endpoints[endpoint] === 'undefined' || endpoints[endpoint].key !== key;
+  const current = endpoints[endpoint];
+  const cacheMiss = typeof current === 'undefined' || current.key !== key;
 
-  if (cacheMiss) {
-    if (raw) {
-      url = endpoint;
-      if (params) {
-        const search = qs.stringify(params, { encodeValuesOnly: true });
-        url = endpoint.includes('?') ? `${endpoint}&${search}` : `${endpoint}?${search}`;
-      }
-    } else {
-      url = getURLFromParams(endpoint, params);
+  if (raw) {
+    url = endpoint;
+    if (params) {
+      const search = qs.stringify(params, { arrayFormat: 'bracket' });
+      url = endpoint.includes('?') ? `${endpoint}&${search}` : `${endpoint}?${search}`;
     }
+  } else {
+    url = getURLFromParams(endpoint, params);
   }
 
-  return { key, cacheMiss, url };
+  return { key, url, cacheMiss };
 }
 
 export function getWidgetState(query, endpoints) {
@@ -58,20 +58,34 @@ export const getWidgetData = (endpoint, params, raw) => (dispatch, getState) => 
       type: WIDGETS__INIT_ENDPOINT,
       payload: { endpoint, key }
     });
+  }
 
-    fetch(url)
-      .then(res => (res.ok ? res.json() : Promise.reject(res)))
-      .then(res =>
-        dispatch({
-          type: WIDGETS__SET_ENDPOINT_DATA,
-          payload: { ...res, endpoint }
-        })
-      )
-      .catch(error =>
+  const { fetchPromise, source, isCancel } = fetchWithCancel(url);
+
+  const cancelPolicy = {
+    source,
+    shouldCancel: true
+  };
+
+  fetchPromise()
+    .then(res => {
+      cancelPolicy.shouldCancel = false;
+      dispatch({
+        type: WIDGETS__SET_ENDPOINT_DATA,
+        payload: { ...res.data, endpoint }
+      });
+    })
+    .catch(error => {
+      if (isCancel(error)) {
+        if (NODE_ENV_DEV) console.warn('Cancel', endpoint);
+      } else {
+        cancelPolicy.shouldCancel = false;
         dispatch({
           type: WIDGETS__SET_ENDPOINT_ERROR,
           payload: { endpoint, error }
-        })
-      );
-  }
+        });
+      }
+    });
+
+  return () => cancelPolicy;
 };

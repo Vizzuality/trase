@@ -2,16 +2,15 @@
 #
 # Table name: download_versions
 #
-#  id         :integer          not null, primary key
-#  context_id :integer          not null
-#  symbol     :string           not null
-#  is_current :boolean          default(FALSE), not null
-#  created_at :datetime         not null
+#  id                                                                                 :integer          not null, primary key
+#  context_id                                                                         :integer          not null
+#  symbol(Version symbol (included in downloaded file name))                          :string           not null
+#  is_current(When set, use this version symbol for new downloads (only use for one)) :boolean          default(FALSE), not null
 #
 # Indexes
 #
-#  download_versions_context_id_symbol_key               (context_id,symbol) UNIQUE
-#  index_download_versions_on_context_id_and_is_current  (context_id,is_current) UNIQUE WHERE (is_current IS TRUE)
+#  download_versions_context_id_is_current_idx  (context_id,is_current) UNIQUE WHERE (is_current IS TRUE)
+#  download_versions_context_id_symbol_key      (context_id,symbol) UNIQUE
 #
 # Foreign Keys
 #

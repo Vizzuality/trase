@@ -1,37 +1,57 @@
-import qs from 'qs';
+import qs from 'query-string';
+import last from 'lodash/last';
 
 const BASE_URL = 'http://0.0.0.0:8081';
 
-export async function testRootSearch(page, expect, { nodeName, nodeType, profileType }) {
+export async function testRootSearch(page, { nodeName, nodeType, profileType }) {
   const profileSearchInputSelector = '[data-test=profile-root-search-input-field-lg]';
-
   await page.waitForSelector(profileSearchInputSelector);
   await page.click(profileSearchInputSelector);
   await page.type(profileSearchInputSelector, nodeName);
   await page.waitForSelector(`[data-test=search-result-${nodeType}-${nodeName}]`);
+  const waitForNavigation = page.waitForNavigation({
+    waitUntil: 'networkidle2'
+  });
   await page.click(`[data-test=search-result-${nodeType}-${nodeName}]`);
-  expect(page.url().startsWith(`${BASE_URL}/profile-${profileType}`)).toBe(true);
+  await waitForNavigation;
+
+  const url = page.url();
+  expect(url.startsWith(`${BASE_URL}/profile-${profileType}`)).toBe(true);
 }
 
-export async function testProfileSummary(page, expect, { titles, profileType, titlesLength }) {
-  await Promise.all([
+export async function testProfileSummary(page, { title, params, profileType, titlesLength }) {
+  const waitPromises = [
     page.waitForSelector(`[data-test=${profileType}-summary]`),
     page.waitForSelector('[data-test=title-group-el-1]')
-  ]);
-  const [titleGroup, first, second] = await Promise.all([
-    page.$eval('[data-test=title-group]', group => group.children.length),
-    page.$eval('[data-test=title-group-el-0]', title => title.textContent),
-    page.$eval('[data-test=title-group-el-1]', title => title.textContent)
-  ]);
+  ];
 
-  expect(titleGroup).toBe(titlesLength);
-  expect(first.toLowerCase()).toMatch(titles[0]);
-  expect(second.toLowerCase()).toMatch(titles[1]);
+  const contentPromises = [page.$eval('[data-test=title-group]', group => group.children.length)];
+
+  params.forEach((p, i) => {
+    contentPromises.push(page.$eval(`[data-test=title-group-el-${i}]`, param => param.textContent));
+  });
+
+  if (title) {
+    waitPromises.push(page.waitForSelector('[data-test=profiles-title]'));
+    contentPromises.push(page.$eval('[data-test=profiles-title]', t => t.textContent));
+  }
+
+  await Promise.all(waitPromises);
+  const promiseResult = await Promise.all(contentPromises);
+
+  if (title) {
+    expect(last(promiseResult)).toBe(title);
+  }
+
+  expect(promiseResult[0]).toBe(titlesLength);
+
+  params.forEach((p, i) => {
+    expect(promiseResult[i + 1].toLowerCase()).toMatch(params[i]);
+  });
 }
 
 export async function testProfileMultiTable(
   page,
-  expect,
   {
     testId,
     title,
@@ -77,7 +97,7 @@ export async function testProfileMultiTable(
   expect(rows.firstRow).toMatch(firstRow);
 }
 
-export async function testProfileMiniSankey(page, expect, { testId, title, flowsLength }) {
+export async function testProfileMiniSankey(page, { testId, title, flowsLength }) {
   await Promise.all([
     page.waitForSelector(`[data-test=${testId}]`),
     page.waitForSelector(`[data-test=${testId}-mini-sankey-flow]`)
@@ -89,4 +109,5 @@ export async function testProfileMiniSankey(page, expect, { testId, title, flows
 
   expect(miniSankeyTitle.toLowerCase()).toMatch(title);
   expect(miniSankeyFlows.length).toBe(flowsLength);
+  await Promise.resolve();
 }

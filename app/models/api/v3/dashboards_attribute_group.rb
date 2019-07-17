@@ -2,11 +2,9 @@
 #
 # Table name: dashboards_attribute_groups
 #
-#  id         :bigint(8)        not null, primary key
-#  name       :text             not null
-#  position   :integer          not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id                      :bigint(8)        not null, primary key
+#  name(Name for display)  :text             not null
+#  position(Display order) :integer          not null
 #
 # Indexes
 #

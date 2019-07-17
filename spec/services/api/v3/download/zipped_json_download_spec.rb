@@ -14,16 +14,16 @@ RSpec.describe Api::V3::Download::ZippedJsonDownload do
     Api::V3::Readonly::DownloadFlow.refresh(sync: true)
   end
 
-  let(:query) {
-    Api::V3::Readonly::DownloadFlow.where(context_id: api_v3_context.id)
+  let(:query_builder) {
+    Api::V3::Download::FlowDownloadQueryBuilder.new(api_v3_context, {})
   }
 
   let(:flat_query) {
-    Api::V3::Download::FlowDownloadFlatQuery.new(api_v3_context, query)
+    query_builder.flat_query
   }
 
   let(:pivot_query) {
-    Api::V3::Download::FlowDownloadPivotQuery.new(api_v3_context, query)
+    query_builder.pivot_query
   }
 
   let(:flat_download) {
@@ -57,7 +57,7 @@ RSpec.describe Api::V3::Download::ZippedJsonDownload do
 
     context 'when max rows exceeded' do
       before(:each) do
-        stub_const('Api::V3::Download::ZippedDownload::MAX_SIZE', 1)
+        stub_const('Api::V3::Download::FlowDownloadFlatQuery::MAX_SIZE', 1)
       end
 
       it 'chunks flat data files' do

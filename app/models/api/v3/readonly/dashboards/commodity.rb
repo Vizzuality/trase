@@ -7,6 +7,7 @@
 #  name_tsvector :tsvector
 #  country_id    :integer
 #  node_id       :integer
+#  profile       :text
 #
 # Indexes
 #

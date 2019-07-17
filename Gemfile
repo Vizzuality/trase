@@ -5,7 +5,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'rails', '~> 5.2.2.1'
+gem 'rails', '~> 5.2.3'
 gem 'pg', '~> 0.18'
 gem 'scenic'
 gem 'pg_csv'
@@ -31,6 +31,9 @@ gem 'activeadmin', '~> 1.3.1'
 gem 'activeadmin_simplemde'
 gem 'inherited_resources', github: 'activeadmin/inherited_resources'
 gem 'activeadmin_addons'
+gem 'acts_as_list'
+gem 'activeadmin_sortable_table'
+gem 'best_in_place'
 
 gem 'ckeditor', git: 'https://github.com/galetahub/ckeditor.git'
 gem 'paperclip', '~> 5.2.0'
@@ -46,6 +49,7 @@ gem 'sidekiq-unique-jobs'
 gem 'whenever', require: false
 gem 'ransack'
 gem 'bootsnap'
+gem 'sitemap_generator'
 
 group :development, :test do
   gem 'byebug', platform: :mri
@@ -71,7 +75,8 @@ group :development do
   gem 'capistrano-rvm'
   gem 'capistrano-passenger'
 
-  gem 'rubocop', require: false
+  gem 'rubocop', '~> 0.67.0', require: false
+  gem 'rubocop-performance', require: false
   gem 'rbnacl', '>= 3.2', '< 5.0'
   gem 'rbnacl-libsodium'
   gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'

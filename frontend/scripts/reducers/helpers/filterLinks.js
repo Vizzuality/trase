@@ -1,4 +1,3 @@
-import cloneDeep from 'lodash/cloneDeep';
 import intersection from 'lodash/intersection';
 
 // keep link if path passes test:
@@ -33,14 +32,15 @@ export default function(links, selectedNodesAtColumns, nodesColoredBySelection, 
     const link = links[i];
     const linkPasses = filterPath(link.originalPath, selectedNodesAtColumns);
     if (linkPasses) {
-      const clonedLink = cloneDeep(link);
       const nodeIds = intersection(link.originalPath, nodesColoredBySelection);
-      if (nodeIds && clonedLink) {
+      let newLink = link;
+
+      if (nodeIds && nodeIds[0] && newLink) {
         const nodeId = nodeIds[0];
-        // clonedLink.recolorGroup = nodesColoredBySelection.length - nodesColoredBySelection.indexOf(nodeId);
-        clonedLink.recolorGroup = recolorGroups[nodeId];
+        newLink = { ...link };
+        newLink.recolorGroup = recolorGroups[nodeId];
       }
-      filteredLinks.push(clonedLink);
+      filteredLinks.push(newLink);
     }
   }
 

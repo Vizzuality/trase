@@ -90,6 +90,10 @@ module.exports = {
     py_deforestation_2013_2017_20190131: {
       uid: 'py_deforestation_2013_2017_20190131__development',
       layergroupid: 'p2cs-sei@c8b99dd7@cbb68d33432adf3f69b686127104af27:1548926222884'
+    },
+    id_provinces: {
+      uid: 'id_provinces__development',
+      layergroupid: 'p2cs-sei@083d0ae4@3b599909380f1dc1a6af506f9bcd5756:1560524731493'
     }
   },
   sandbox: {
@@ -154,6 +158,12 @@ module.exports = {
     col_departments: {
       uid: 'col_departments__demo',
       layergroupid: 'p2cs-sei@ac7a49be@5ae47ae98e8070dbc3983e87100857c9:1525368093739'
+    }
+  },
+  indonesiademo: {
+    id_provinces: {
+      uid: 'id_provinces__indonesiademo',
+      layergroupid: 'p2cs-sei@31274b67@3f435dd170b19c94f677d474bcd298e4:1560524731493'
     }
   }
 };

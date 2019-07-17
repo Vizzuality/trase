@@ -9,13 +9,18 @@ import ProfileNode from 'react-components/profile-node/profile-node.component';
 class ProfileNodeContainer extends React.PureComponent {
   static propTypes = {
     context: PropTypes.object,
-    nodeId: PropTypes.string
+    nodeId: PropTypes.number
   };
 
   render() {
     const { context, nodeId } = this.props;
+
     return (
-      <Widget query={[GET_PROFILE_METADATA]} params={[{ context_id: context.id, node_id: nodeId }]}>
+      <Widget
+        key={nodeId}
+        query={[GET_PROFILE_METADATA]}
+        params={[{ context_id: context.id, node_id: nodeId }]}
+      >
         {({ data = {}, loading, error }) => (
           <ProfileNode
             {...this.props}

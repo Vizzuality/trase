@@ -1,13 +1,12 @@
-export default (geoId, nodesDict, selectedGeoColumnId) => {
+export default (geoId, nodes, selectedGeoColumnId) => {
   if (geoId === undefined || geoId === null) {
     return null;
   }
 
   // node should match geoId obv, but also columnId
   // (needed because municip and logistics hubs have the same geoIds)
-  const selectedNodeId = Object.keys(nodesDict).find(
-    nodeId =>
-      nodesDict[nodeId].geoId === geoId && selectedGeoColumnId === nodesDict[nodeId].columnId
+  const selectedNodeId = Object.keys(nodes).find(
+    nodeId => nodes[nodeId].geoId === geoId && selectedGeoColumnId === nodes[nodeId].columnId
   );
 
   if (selectedNodeId === undefined) return null;

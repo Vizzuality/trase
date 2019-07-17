@@ -2,17 +2,15 @@
 #
 # Table name: quant_commodity_properties
 #
-#  id           :bigint(8)        not null, primary key
-#  tooltip_text :text             not null
-#  commodity_id :bigint(8)        not null
-#  quant_id     :bigint(8)        not null
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  id                                                                                                                                                                                                                          :bigint(8)        not null, primary key
+#  tooltip_text(Commodity-specific tooltips are the third-most specific tooltips that can be defined after context and country-specific tooltips; in absence of a commodity-specific tooltip, a generic tooltip will be used.) :text             not null
+#  commodity_id(Reference to commodity)                                                                                                                                                                                        :bigint(8)        not null
+#  quant_id(Reference to quant)                                                                                                                                                                                                :bigint(8)        not null
 #
 # Indexes
 #
-#  index_quant_commodity_properties_on_commodity_id  (commodity_id)
-#  index_quant_commodity_properties_on_quant_id      (quant_id)
+#  quant_commodity_properties_commodity_id_idx  (commodity_id)
+#  quant_commodity_properties_quant_id_idx      (quant_id)
 #
 # Foreign Keys
 #

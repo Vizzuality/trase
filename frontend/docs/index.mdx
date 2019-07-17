@@ -21,10 +21,9 @@ While technically independent, the frontend application is heavily dependent on 
 ## Requirements
 
 ### API
-- Ruby 2.4.2
-- Rails 5.1+
-- PostgreSQL 10.6+ with `intarray`, `tablefunc` and `postgres_fdw` extensions
+- Ruby 2.6.3 and RubyGems (recommended installation via rvm)
 - [Bundler](http://bundler.io/)
+- PostgreSQL 11 with `intarray`, `tablefunc` and `postgres_fdw` extensions
 - redis >= 3
 - wget
 - cron
@@ -129,7 +128,6 @@ DATA_FORM_ENDPOINT: end point to send form values in Data page
 PDF_DOWNLOAD_URL: end point to download a PDF snapshot of the page
 PERF_TEST: when set to true, enables performance evaluation mode. Only supported outside of production environments. See https://github.com/garbles/why-did-you-update for more info.
 REDUX_LOGGER_ENABLED: when set to true, enables logging redux actions on the browser's console. Only supported outside of production environments.
-USE_PLAIN_URL_STATE: when set to true, enables saving the sankey's state as a plain serialized string. Use "false" on production environments, ot use base64 encoding
 USE_CANVAS_MAP: if set to true, may use a <canvas> to render the map's choropleth layer. Actual usage may also depend on browser support.
 SHOW_WORLD_MAP_IN_EXPLORE: if set to true, explore section will have the 2 step behavior. Setting it to false will only show the context-specific step.
 ENABLE_DASHBOARDS: if set to true, the dashboards section will be visible to end users.
@@ -138,10 +136,12 @@ CARTO_ACCOUNT: name of the carto account where the named maps layers are hosted.
 CARTO_TOKEN: token to authenticate into carto for the named maps creation.
 NAMED_MAPS_ENV: named maps environment to use inside the app.
 ENABLE_LOGISTICS_MAP: if set to true, the logistics map section will be visible to end users.
+INDONESIA_LOGISTICS_MAP_ACTIVE: if set to true, only Indonesia data will be shown in the logistics map.
 GFW_WIDGETS_BASE_URL: URL to load GFW widgets from. You probably want to use `www.globalforestwatch.org` here.
 ENABLE_LEGACY_TOOL_SEARCH: if set to false the search algorithm in the tool will use `indexOf(query)` instead of fuzzy search.
 DISABLE_MULTIPLE_CONTEXT_PROFILES: if set to true, only Brazil-Soy will be available at the profiles page -->
-ENABLE_COOKIE_BANNER: if true, the cookie banner will appear for first time users
+ENABLE_COOKIE_BANNER: if true, the cookie banner will appear for first time users.
+DISABLE_PROFILES: if set to true, the profiles section will not be visible to end users.
 ```
 
 If you are using the included development server, you can set those variables in the `.env` file (use the included `.env.sample` as an example)
@@ -204,6 +204,22 @@ To deploy, simply use:
 cap <staging|production> deploy
 ```
 
+## Sitemaps
+
+We are using [Sitemap generator](https://github.com/kjvarga/sitemap_generator).
+The sitemap config is located in config/sitemap.rb.
+To refresh the sitemap and ping Google and Bing bots use:
+
+```
+rake sitemap:refresh
+```
+To do it without pinging the bots:
+```
+rake sitemap:refresh:no_ping
+```
+
+The sitemap is refreshed automatically in each release.
+
 ## Git hooks
 
 This project includes a set of git hooks that you may find useful
@@ -222,6 +238,7 @@ To enable then, simply execute once: `bin/git/init-hooks`
 - [full schema](https://vizzuality.github.io/trase/all_tables/)
 - ["blue tables" schema](https://vizzuality.github.io/trase/blue_tables/index.html)
 - [how to regenerate docs](docs-backend-automated-documentation)
+- [Models snapshot](public/docs/erd.pdf)
 
 #### More
 - [Cache management](docs-backend-cache-management)
@@ -267,7 +284,8 @@ It will be served on localhost:8081
 - If asked for login use trase.vizzuality@gmail.com
 
 #### More
-- [Generating CARTO maps](docs-backend-generating-carto-maps)
+- [Generating CARTO maps](docs-frontend-generating-carto-maps)
+- [Serializing state to url](docs-frontend-serializing-state-to-url)
 
 ## LICENSE
 

@@ -5,8 +5,9 @@ module Api
       module Charts
         class MultiYearNcontOverview
           include Api::V3::Dashboards::Charts::Helpers
+          include Api::V3::Dashboards::Charts::FlowValuesHelpers
 
-          # @param chart_parameters [Api::V3::Dashboards::ChartParameters]
+          # @param chart_parameters [Api::V3::Dashboards::ChartParameters::FlowValues]
           def initialize(chart_parameters)
             @chart_parameters = chart_parameters
             @cont_attribute = chart_parameters.cont_attribute

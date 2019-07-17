@@ -7,14 +7,12 @@ export default function(links, userecolorGroups) {
     return [];
   }
 
-  for (let i = 0; i < links.length; i++) {
-    const link = links[i];
-
+  links.forEach(link => {
     let key = `${link.sourceNodeId}-${link.targetNodeId}`;
 
     if (link.recolorBy !== null) {
       key = `${key}--${link.recolorBy}`;
-    } else if (userecolorGroups === true) {
+    } else if (userecolorGroups) {
       key = `${key}-colourGroup${link.recolorGroup}`;
     }
 
@@ -26,7 +24,7 @@ export default function(links, userecolorGroups) {
       dict[key].height += link.height;
       dict[key].quant += link.quant;
     }
-  }
+  });
 
   return mergedLinks;
 }

@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::Dashboards::SourcesController, type: :controller do
   include_context 'api v3 brazil flows quants'
+  include_context 'api v3 paraguay flows quants'
 
   before(:each) do
     Api::V3::Readonly::Dashboards::FlowPath.refresh(sync: true, skip_dependents: true)
@@ -51,6 +52,19 @@ RSpec.describe Api::V3::Dashboards::SourcesController, type: :controller do
         countries_ids: [api_v3_brazil.id].join(','), per_page: per_page
       }
       expect(assigns(:collection).size).to eq(per_page)
+    end
+
+    context 'when profile_only' do
+      include_context 'api v3 brazil municipality place profile'
+
+      it 'returns sources with profiles' do
+        get :index, params: {
+          countries_ids: [api_v3_brazil.id].join(','),
+          sources_ids: api_v3_municipality_node.id,
+          profile_only: true
+        }
+        expect(assigns(:collection).map(&:id)).to eq([api_v3_municipality_node.id])
+      end
     end
   end
 end

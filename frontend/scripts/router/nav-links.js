@@ -1,21 +1,29 @@
-const nav = [
+let nav = [
   {
     name: 'Supply Chain',
     page: {
       type: 'tool',
-      payload: { query: { state: { isMapVisible: false } } }
+      payload: { serializerParams: { isMapVisible: false } }
     }
   },
   {
     name: 'Map',
     page: {
       type: 'tool',
-      payload: { query: { state: { isMapVisible: true } } }
+      payload: { serializerParams: { isMapVisible: true } }
     }
   },
   {
     name: 'Profiles',
     page: 'profileRoot'
+  },
+  {
+    name: 'Dashboards',
+    page: 'dashboardRoot'
+  },
+  {
+    name: 'Logistics Map',
+    page: 'logisticsMap'
   },
   {
     name: 'Yearbook',
@@ -87,18 +95,39 @@ const sidebarNav = [
   }
 ];
 
-if (ENABLE_DASHBOARDS) {
-  nav.splice(-3, 0, {
-    name: 'Dashboards',
-    page: 'dashboardRoot'
-  });
+if (ENABLE_COOKIE_BANNER) {
+  sidebarNav.push(
+    {
+      name: 'Privacy policy',
+      page: {
+        type: 'about',
+        payload: {
+          section: 'privacy-policy'
+        }
+      }
+    },
+    {
+      name: 'Cookie policy',
+      page: {
+        type: 'about',
+        payload: {
+          section: 'cookie-policy'
+        }
+      }
+    }
+  );
 }
 
-if (ENABLE_LOGISTICS_MAP) {
-  nav.splice(-4, 0, {
-    name: 'Logistics Map',
-    page: 'logisticsMap'
-  });
+if (DISABLE_PROFILES) {
+  nav = nav.filter(route => route.page !== 'profileRoot');
+}
+
+if (!ENABLE_DASHBOARDS) {
+  nav = nav.filter(route => route.page !== 'dashboardRoot');
+}
+
+if (!ENABLE_LOGISTICS_MAP) {
+  nav = nav.filter(route => route.page !== 'logisticsMap');
 }
 
 export default {

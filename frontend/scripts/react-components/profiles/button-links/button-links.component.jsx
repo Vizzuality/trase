@@ -1,83 +1,77 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
-import addApostrophe from 'utils/addApostrophe';
-import capitalize from 'lodash/capitalize';
 import Link from 'redux-first-router-link';
 import Img from 'react-components/shared/img';
-import { translateText } from 'utils/transifex';
+import Heading from 'react-components/shared/heading';
+import Text from 'react-components/shared/text';
+import Icon from 'react-components/shared/icon';
 
 import './button-links.scss';
 
 function ButtonLinks(props) {
-  const {
-    year,
-    nodeId,
-    contextId,
-    data: { nodeName, jurisdictionName },
-    scrollTo
-  } = props;
-  const name = nodeName || jurisdictionName;
+  const { year, nodeId, contextId } = props;
   return (
-    <div className="c-button-links hide-for-small">
-      <div className="row">
-        <div className="small-4 columns">
-          <a className="link-button -with-arrow js-link-profile" onClickCapture={scrollTo}>
-            <Img alt="" src="/images/profiles/profile-main-option-1.svg" />
-            <span className="js-link-button-name">
-              <span className="notranslate">{name ? translateText(capitalize(name)) : '-'}</span>
-              {addApostrophe(name)} PROFILE
-            </span>
-          </a>
-        </div>
-        <div className="small-4 columns">
+    <div className="c-button-links">
+      <div className="row button-links-row">
+        <div className="columns small-12 medium-6 link-container">
           <Link
             className="link-button"
             to={{
               type: 'tool',
               payload: {
-                query: {
-                  state: {
-                    isMapVisible: true,
-                    selectedNodesIds: [nodeId],
-                    expandedNodesIds: [nodeId],
-                    selectedYears: [year, year],
-                    selectedContextId: contextId
-                  }
+                serializerParams: {
+                  isMapVisible: true,
+                  selectedNodesIds: [nodeId],
+                  expandedNodesIds: [nodeId],
+                  selectedYears: [year, year],
+                  selectedContextId: contextId
                 }
               }
             }}
           >
-            <Img alt="" src="/images/profiles/profile-main-option-2.svg" />
-            <span>MAP</span>
-            <svg className="icon icon-external-link">
-              <use xlinkHref="#icon-external-link" />
-            </svg>
+            <div>
+              <Heading weight="bold" as="h4" variant="mono" size="rg">
+                LOCATION IMPACT
+              </Heading>
+              <div className="link-text">
+                <Text variant="mono" color="grey-faded" size="md" as="span">
+                  GO TO MAP
+                </Text>
+                <Icon icon="icon-external-link" color="elephant" />
+              </div>
+            </div>
+            <Img title="Go to map" src="/images/profiles/profile-main-option-2.svg" />
           </Link>
         </div>
-        <div className="small-4 columns">
+        <div className="columns small-12 medium-6 link-container">
           <Link
             className="link-button"
             to={{
               type: 'tool',
               payload: {
-                query: {
-                  state: {
-                    isMapVisible: false,
-                    selectedNodesIds: [nodeId],
-                    expandedNodesIds: [nodeId],
-                    selectedYears: [year, year],
-                    selectedContextId: contextId
-                  }
+                serializerParams: {
+                  isMapVisible: false,
+                  selectedNodesIds: [nodeId],
+                  expandedNodesIds: [nodeId],
+                  selectedYears: [year, year],
+                  selectedContextId: contextId
                 }
               }
             }}
           >
-            <Img alt="" src="/images/profiles/profile-main-option-3.svg" />
-            <span>SUPPLY CHAIN</span>
-            <svg className="icon icon-external-link">
-              <use xlinkHref="#icon-external-link" />
-            </svg>
+            <div>
+              <Heading weight="bold" as="h4" variant="mono" size="rg">
+                CONNECTIONS
+              </Heading>
+              <div className="link-text">
+                <Text variant="mono" color="grey-faded" size="md" as="span">
+                  GO TO SUPPLY CHAIN
+                </Text>
+                <Icon icon="icon-external-link" color="elephant" />
+              </div>
+            </div>
+            <Img title="Go to supply chain" src="/images/profiles/profile-main-option-3.svg" />
           </Link>
         </div>
       </div>
@@ -86,11 +80,9 @@ function ButtonLinks(props) {
 }
 
 ButtonLinks.propTypes = {
-  data: PropTypes.any,
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired,
-  contextId: PropTypes.number.isRequired,
-  scrollTo: PropTypes.func.isRequired
+  contextId: PropTypes.number.isRequired
 };
 
 export default ButtonLinks;

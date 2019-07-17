@@ -8,6 +8,7 @@ import Spinner from 'react-components/shared/shrinking-spinner/shrinking-spinner
 import DashboardWidgetLabel from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-label.component';
 import DashboardWidgetLegend from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-legend/dashboard-widget-legend.component';
 import DynamicSentenceWidget from 'react-components/dashboard-element/dashboard-widget/dynamic-sentence-widget';
+import NodeIndicatorSentenceWidget from 'react-components/dashboard-element/dashboard-widget/node-indicator-sentence-widget';
 import RankingWidget from 'react-components/dashboard-element/dashboard-widget/ranking-widget';
 import ErrorCatch from 'react-components/shared/error-catch.component';
 import Text from 'react-components/shared/text';
@@ -68,6 +69,12 @@ function DashboardWidget(props) {
     }
 
     switch (chartConfig.type) {
+      case 'nodeIndicatorSentence':
+        return (
+          <div className="dynamic-sentence-widget">
+            <NodeIndicatorSentenceWidget data={data} meta={meta} config={chartConfig} />
+          </div>
+        );
       case 'sentence':
         return (
           <div className="dynamic-sentence-widget">

@@ -30,9 +30,10 @@ afterAll(async () => {
 
 describe('Profile actor - Full data', () => {
   it('Summary widget loads successfully', async () => {
-    expect.assertions(3);
-    await testProfileSummary(page, expect, {
-      titles: ['bunge', 'brazil'],
+    expect.assertions(5);
+    await testProfileSummary(page, {
+      title: 'Bunge',
+      params: ['exporter', 'soy', 'brazil'],
       profileType: 'actor',
       titlesLength: 4
     });
@@ -123,7 +124,7 @@ describe('Profile actor - Full data', () => {
   it('Deforestation risk widget loads successfully', async () => {
     expect.assertions(9);
 
-    await testProfileMultiTable(page, expect, {
+    await testProfileMultiTable(page, {
       tabsLength: 2,
       rowsLength: 10,
       columnsLength: 3,
@@ -131,7 +132,7 @@ describe('Profile actor - Full data', () => {
       linkQuery: { nodeId: '10794', year: '2015', contextId: '1' },
       firstColumn: 'municipality',
       testId: 'deforestation-risk',
-      firstRow: 'CAMPO NOVO DO PARECIS8999',
+      firstRow: 'CAMPO NOVO DO PARECIS89ha99ha',
       title: "deforestation risk associated with bunge's top sourcing regions in 2015"
     });
   });

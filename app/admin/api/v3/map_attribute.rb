@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::MapAttribute, as: 'MapAttribute' do
-  menu parent: 'Map', priority: 2
+  menu parent: 'Sankey & Map', priority: 3
 
   includes [
     {map_attribute_group: {context: [:country, :commodity]}},

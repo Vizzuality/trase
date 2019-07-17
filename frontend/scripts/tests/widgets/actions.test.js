@@ -9,7 +9,7 @@ describe('test prepareWidget helper function', () => {
   const someEndpoint = 'someEndpoint';
   const rawEndpoint = 'https://trase.earth/data';
   const someKey = 'id0_namesomeName';
-  const someParams = { name: 'someName', id: 0 };
+  const someParams = { id: 0, name: 'someName' };
   const someUrl = 'http://trase.earth';
   const someEndpoints = {
     [someEndpoint]: {
@@ -19,9 +19,9 @@ describe('test prepareWidget helper function', () => {
 
   getURLFromParams.mockImplementation(() => someUrl);
 
-  it('should return if there is a cache hit', () => {
+  it('should return false if there is a cache hit', () => {
     const result = prepareWidget(someEndpoints, { endpoint: someEndpoint, params: someParams });
-    expect(result).toEqual({ cacheMiss: false, key: someKey, url: null });
+    expect(result).toEqual({ cacheMiss: false, key: someKey, url: someUrl });
   });
 
   it('should return a url if endpoint is undefined', () => {
@@ -55,7 +55,7 @@ describe('test prepareWidget helper function', () => {
     expect(result).toEqual({
       cacheMiss: true,
       key: someKey,
-      url: `${rawEndpoint}?name=someName&id=0`
+      url: `${rawEndpoint}?id=0&name=someName`
     });
   });
 
@@ -68,7 +68,7 @@ describe('test prepareWidget helper function', () => {
     expect(result).toEqual({
       cacheMiss: true,
       key: someKey,
-      url: `${rawEndpoint}?type=advanced&name=someName&id=0`
+      url: `${rawEndpoint}?type=advanced&id=0&name=someName`
     });
   });
 });

@@ -9,23 +9,32 @@ import {
 import capitalize from 'lodash/capitalize';
 import { makeGetResizeByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
+import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import {
+  getSelectedResizeBy as getToolResizeBy,
+  getSelectedRecolorBy as getToolRecolorBy,
+  getSelectedBiomeFilter as getToolSelectedBiome
+} from 'react-components/tool-links/tool-links.selectors';
 
 const insertIf = (condition, item) => (condition ? [item] : []);
 
 const getCurrentPage = state => state.location.type;
-const getSelectedContext = state => state.app.selectedContext;
-const getSelectedYears = state => state.app.selectedYears;
-const getToolSelectedResizeBy = state => (state.tool ? state.tool.selectedResizeBy : {});
-const getToolRecolorBy = state => (state.tool ? state.tool.selectedRecolorBy : {});
-const getToolSelectedBiome = state => state.tool && state.tool.selectedBiomeFilter;
-const getContextFilterBy = state => state.app.selectedContext && state.app.selectedContext.filterBy;
 const getAppTooltips = state => state.app.tooltips;
-const getToolDetailedView = state => state.tool && state.tool.detailedView;
-const getToolResizeBys = state => state.app.selectedContext && state.app.selectedContext.resizeBy;
+const getToolDetailedView = state => state.toolLinks && state.toolLinks.detailedView;
+
+const getContextFilterBy = createSelector(
+  getSelectedContext,
+  selectedContext => selectedContext && selectedContext.filterBy
+);
+
+const getToolResizeBys = createSelector(
+  getSelectedContext,
+  selectedContext => selectedContext && selectedContext.resizeBy
+);
 
 export const getToolYearsProps = createStructuredSelector({
   selectedYears: getSelectedYears,
-  years: makeGetAvailableYears(getToolSelectedResizeBy, getToolRecolorBy, getSelectedContext)
+  years: makeGetAvailableYears(getToolResizeBy, getToolRecolorBy, getSelectedContext)
 });
 
 export const getToolAdminLevelProps = createSelector(
@@ -38,25 +47,20 @@ export const getToolAdminLevelProps = createSelector(
       id: 'toolAdminLevel',
       clip: false,
       options: [
-        { value: 'none', label: 'All' },
+        { value: null, label: 'All' },
         ...adminLevel.nodes
           .filter(node => node.name !== (selectedFilter && selectedFilter.name))
           .map(node => ({ ...node, value: node.name, label: capitalize(node.name) }))
       ],
-      value:
-        typeof selectedFilter !== 'undefined' && selectedFilter.value !== 'none'
-          ? { ...selectedFilter, label: capitalize(selectedFilter.name) }
-          : { label: 'All', value: 'All' }
+      value: selectedFilter
+        ? { ...selectedFilter, label: capitalize(selectedFilter.name) }
+        : { label: 'All', value: null }
     };
   }
 );
 
 export const getToolResizeByProps = createSelector(
-  [
-    getAppTooltips,
-    getToolSelectedResizeBy,
-    makeGetResizeByItems(getToolResizeBys, getSelectedYears)
-  ],
+  [getAppTooltips, getToolResizeBy, makeGetResizeByItems(getToolResizeBys, getSelectedYears)],
   (tooltips, selectedResizeBy, items) => ({
     options: items,
     label: 'Resize by',
@@ -65,9 +69,14 @@ export const getToolResizeByProps = createSelector(
     size: 'rg',
     clip: false,
     weight: 'regular',
-    value: { value: selectedResizeBy.name, label: selectedResizeBy.label || '' },
+    value: selectedResizeBy && {
+      value: selectedResizeBy.name,
+      label: selectedResizeBy.label || ''
+    },
+    isDisabled: items.length === 1 && selectedResizeBy?.name === items[0].name,
     tooltip: tooltips && tooltips.sankey.nav.resizeBy.main,
-    titleTooltip: tooltips && tooltips.sankey.nav.resizeBy[selectedResizeBy.name]
+    titleTooltip:
+      tooltips && selectedResizeBy && tooltips.sankey.nav.resizeBy[selectedResizeBy.name]
   })
 );
 
@@ -108,15 +117,18 @@ const getLogisticsMapHubsProps = createSelector(
   activeParams => ({
     label: 'Logistics Hub',
     id: 'logisticsMapHub',
-    options: LOGISTICS_MAP_HUBS,
-    value: LOGISTICS_MAP_HUBS.find(commodity => commodity.value === activeParams.commodity)
+    options: LOGISTICS_MAP_HUBS.filter(hub =>
+      INDONESIA_LOGISTICS_MAP_ACTIVE ? hub.value === 'palmOil' : hub.value !== 'palmOil'
+    ),
+    value: LOGISTICS_MAP_HUBS.find(commodity => commodity.value === activeParams.commodity),
+    isDisabled: activeParams.commodity === 'palmOil'
   })
 );
 
 const getLogisticsMapInspectionLevelProps = createSelector(
   [getActiveParams],
   activeParams => {
-    if (activeParams.commodity === 'soy') {
+    if (activeParams.commodity !== 'cattle') {
       return null;
     }
 
@@ -184,7 +196,10 @@ export const getNavFilters = createSelector(
           showLogisticsMapDownload: true,
           left: [
             { type: NAV_FILTER_TYPES.dropdown, props: logisticsMapsHubs },
-            { type: NAV_FILTER_TYPES.dropdown, props: logisticsMapsYears },
+            ...insertIf(!INDONESIA_LOGISTICS_MAP_ACTIVE, {
+              type: NAV_FILTER_TYPES.dropdown,
+              props: logisticsMapsYears
+            }),
             ...insertIf(logisticsMapInspectionLevel, {
               type: NAV_FILTER_TYPES.dropdown,
               props: logisticsMapInspectionLevel

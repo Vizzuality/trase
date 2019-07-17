@@ -5,14 +5,10 @@
 #  id                      :bigint(8)        not null, primary key
 #  dashboards_attribute_id :bigint(8)        not null
 #  quant_id                :bigint(8)        not null
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
 #
 # Indexes
 #
 #  dashboards_quants_dashboards_attribute_id_quant_id_key  (dashboards_attribute_id,quant_id) UNIQUE
-#  index_dashboards_quants_on_dashboards_attribute_id      (dashboards_attribute_id)
-#  index_dashboards_quants_on_quant_id                     (quant_id)
 #
 # Foreign Keys
 #

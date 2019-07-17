@@ -5,7 +5,6 @@
   min-height: 100vh;
   padding-top: calc(54px + #{$nav-height});
   background-color: $egg-shell;
-  line-height: 1.5;
 
   &.-error {
     position: relative;
@@ -68,22 +67,16 @@
     }
   }
 
-  .c-button-links {
-    padding: 49px 0 46px;
+  .c-links-widget {
+    padding-top: 40px;
+    padding-bottom: 40px;
 
-    > .row .columns {
-      margin-bottom: 10px;
+    .links-widget-title {
+      margin-bottom: 20px;
     }
 
     @media print {
       display: none;
-    }
-
-    @media (min-width: $breakpoint-foundation-small)
-       and (max-width: $breakpoint-foundation-medium) {
-      > .row .columns:not(:last-child) {
-        padding-right: 0;
-      }
     }
   }
 

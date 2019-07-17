@@ -18,17 +18,20 @@ test:
   <<: *default
   database: trase_test
 
+production:
+  <<: *default
+
 staging:
-  <<: *default
-
-dashboardsdemo:
-  <<: *default
-
-demo:
   <<: *default
 
 sandbox:
   <<: *default
 
-production:
+demo:
+  <<: *default
+
+dashboardsdemo:
+  <<: *default
+
+indonesiademo:
   <<: *default

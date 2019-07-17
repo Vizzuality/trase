@@ -1,6 +1,11 @@
 @import 'styles/settings';
 
-.l-profile-root {
+.l-profile-root-legacy {
   background-color: $light-gray;
+  padding: $nav-height 0 0;
+}
+
+.l-profile-root {
+  background-color: $egg-shell;
   padding: $nav-height 0 0;
 }

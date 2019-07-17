@@ -2,17 +2,16 @@
 #
 # Table name: node_inds
 #
-#  id         :integer          not null, primary key
-#  node_id    :integer          not null
-#  ind_id     :integer          not null
-#  year       :integer
-#  value      :float            not null
-#  created_at :datetime         not null
+#  id                                     :integer          not null, primary key
+#  node_id                                :integer          not null
+#  ind_id                                 :integer          not null
+#  year(Year; empty (NULL) for all years) :integer
+#  value(Numeric value)                   :float            not null
 #
 # Indexes
 #
-#  index_node_inds_on_node_id         (node_id)
 #  node_inds_ind_id_idx               (ind_id)
+#  node_inds_node_id_idx              (node_id)
 #  node_inds_node_id_ind_id_year_key  (node_id,ind_id,year) UNIQUE
 #
 # Foreign Keys

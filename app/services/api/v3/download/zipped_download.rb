@@ -72,11 +72,8 @@ module Api
           raise NotImplementedError
         end
 
-        MAX_SIZE = 500_000
-
         def with_chunked_query
-          total = @query.total
-          if total < MAX_SIZE
+          if !@query.chunk_by_year?
             yield(@query.all, nil)
           else
             @query.years.each do |year|

@@ -2,20 +2,18 @@
 #
 # Table name: context_node_type_properties
 #
-#  id                     :integer          not null, primary key
-#  context_node_type_id   :integer          not null
-#  column_group           :integer          not null
-#  is_default             :boolean          default(FALSE), not null
-#  is_geo_column          :boolean          default(FALSE), not null
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  is_choropleth_disabled :boolean          default(FALSE), not null
-#  role                   :string
+#  id                                                                                      :integer          not null, primary key
+#  context_node_type_id                                                                    :integer          not null
+#  column_group(Zero-based number of sankey column in which to display nodes of this type) :integer          not null
+#  is_default(When set, show this node type as default (only use for one))                 :boolean          default(FALSE), not null
+#  is_geo_column(When set, show nodes on map)                                              :boolean          default(FALSE), not null
+#  is_choropleth_disabled(When set, do not display the map choropleth)                     :boolean          default(FALSE), not null
+#  role                                                                                    :string
 #
 # Indexes
 #
-#  context_node_type_properties_context_node_type_id_key       (context_node_type_id) UNIQUE
-#  index_context_node_type_properties_on_context_node_type_id  (context_node_type_id)
+#  context_node_type_properties_context_node_type_id_idx  (context_node_type_id)
+#  context_node_type_properties_context_node_type_id_key  (context_node_type_id) UNIQUE
 #
 # Foreign Keys
 #
@@ -40,6 +38,7 @@ module Api
 
       before_save :nilify_role,
                   if: -> { role.blank? }
+      # TODO: there should be only one default per group
 
       belongs_to :context_node_type
 
@@ -50,10 +49,17 @@ module Api
       validates :is_choropleth_disabled, inclusion: {in: [true, false]}
       validates :role, inclusion: ROLES, allow_nil: true, allow_blank: true
 
+      after_commit :refresh_dependents
+
       def self.blue_foreign_keys
         [
           {name: :context_node_type_id, table_class: Api::V3::ContextNodeType}
         ]
+      end
+
+      def refresh_dependents
+        Api::V3::Readonly::Context.refresh
+        Api::V3::Readonly::SankeyNode.refresh
       end
 
       def self.roles

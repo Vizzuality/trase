@@ -26,7 +26,7 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontOverview do
   }
 
   let(:chart_parameters) {
-    Api::V3::Dashboards::ChartParameters.new(parameters_hash)
+    Api::V3::Dashboards::ChartParameters::FlowValues.new(parameters_hash)
   }
 
   let(:result) {

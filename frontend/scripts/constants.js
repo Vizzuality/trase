@@ -206,7 +206,7 @@ export const EXPLORE_COLUMN_LIST = [
     value: 'exporter',
     type: 'exporter',
     label: 'Top Exporting Companies',
-    link: { type: 'profileNode', payload: { profileType: 'actor' } },
+    link: !DISABLE_PROFILES && { type: 'profileNode', payload: { profileType: 'actor' } },
     fallbackText: 'exporting companies'
   },
   {
@@ -225,7 +225,8 @@ export const HOME_VIDEO = {
 };
 
 export const BREAKPOINTS = {
-  small: 640
+  small: 640,
+  tablet: 768
 };
 
 export const MAX_SEARCH_RESULTS = 50;
@@ -236,7 +237,8 @@ export const LOGISTICS_MAP_YEARS = Array.from({ length: 12 })
 
 export const LOGISTICS_MAP_HUBS = [
   { value: 'soy', label: 'Soy' },
-  { value: 'cattle', label: 'Cattle' }
+  { value: 'cattle', label: 'Cattle' },
+  { value: 'palmOil', label: 'Palm oil' }
 ];
 
 export const LOGISTICS_MAP_INSPECTION_LEVELS = [
@@ -254,6 +256,11 @@ export const DASHBOARD_STEPS = {
   companies: 4
 };
 
+export const PROFILE_STEPS = {
+  nodes: 0,
+  commodities: 1
+};
+
 export const CHART_TYPES = {
   bar: 'bar',
   pie: 'pie',
@@ -261,7 +268,8 @@ export const CHART_TYPES = {
   stackedBar: 'stackedBar',
   dynamicSentence: 'dynamicSentence',
   horizontalBar: 'horizontalBar',
-  horizontalStackedBar: 'horizontalStackedBar'
+  horizontalStackedBar: 'horizontalStackedBar',
+  nodeIndicatorSentence: 'nodeIndicatorSentence'
 };
 
 export const NAV_FILTER_TYPES = {
@@ -270,3 +278,11 @@ export const NAV_FILTER_TYPES = {
   dropdown: 2,
   recolorBySelector: 3
 };
+
+export const PROFILE_TYPES = {
+  sources: 'sources',
+  importing: 'importing-countries',
+  traders: 'traders'
+};
+
+export const DEFAULT_DASHBOARD_UNIT_FORMAT = '.4~s';

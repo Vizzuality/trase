@@ -175,7 +175,7 @@ function Explore(props) {
               color="pink"
               size="lg"
               className="explore-link-to-tool"
-              to={{ type: 'tool', payload: redirectQuery && { query: { state: redirectQuery } } }}
+              to={{ type: 'tool', payload: redirectQuery && { serializerParams: redirectQuery } }}
             >
               {getCallToAction(redirectQuery)}
             </Button>

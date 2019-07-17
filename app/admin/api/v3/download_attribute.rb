@@ -23,8 +23,6 @@ ActiveAdmin.register Api::V3::DownloadAttribute, as: 'DownloadAttribute' do
                        hint: object.class.column_comment('position')
       input :display_name, required: true, as: :string,
                            hint: object.class.column_comment('display_name')
-      input :years_str, label: 'Years',
-                        hint: (object.class.column_comment('years') || '') + ' (comma-separated list)'
     end
     f.actions
   end

@@ -2,21 +2,18 @@
 #
 # Table name: charts
 #
-#  id         :integer          not null, primary key
-#  profile_id :integer          not null
-#  parent_id  :integer
-#  identifier :text             not null
-#  title      :text             not null
-#  position   :integer          not null
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id                                                                                                                      :integer          not null, primary key
+#  profile_id                                                                                                              :integer          not null
+#  parent_id(Self-reference to parent used to define complex charts, e.g. table with values in tabs)                       :integer
+#  identifier(Identifier used to map this chart to a part of code which contains calculation logic)                        :text             not null
+#  title(Title of chart for display; you can use {{commodity_name}}, {{company_name}}, {{jurisdiction_name}} and {{year}}) :text             not null
+#  position(Display order in scope of profile)                                                                             :integer          not null
 #
 # Indexes
 #
+#  charts_parent_id_idx                        (parent_id)
 #  charts_profile_id_parent_id_identifier_key  (profile_id,parent_id,identifier) UNIQUE
 #  charts_profile_id_parent_id_position_key    (profile_id,parent_id,position) UNIQUE
-#  index_charts_on_parent_id                   (parent_id)
-#  index_charts_on_profile_id                  (profile_id)
 #
 # Foreign Keys
 #

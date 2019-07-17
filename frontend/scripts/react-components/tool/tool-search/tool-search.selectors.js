@@ -1,51 +1,39 @@
 import { createSelector } from 'reselect';
-import flatten from 'lodash/flatten';
+import fuzzySearch from 'utils/fuzzySearch';
 import groupBy from 'lodash/groupBy';
-import isNodeColumnVisible from 'utils/isNodeColumnVisible';
+import flatten from 'lodash/flatten';
 
-const getToolNodes = state => state.tool && state.tool.nodes;
-const getSelectedColumnsIds = state => state.tool && state.tool.selectedColumnsIds;
-const getNodesDict = state => state.tool && state.tool.nodesDict;
+const getAppSearch = state => state.app.search;
 
-const getAllToolSearchNodes = createSelector(
-  getToolNodes,
-  nodes =>
-    nodes &&
-    nodes.filter(
-      node =>
-        node.hasFlows === true &&
-        node.isAggregated !== true &&
-        node.isUnknown !== true &&
-        node.isDomesticConsumption !== true
-    )
+const filterSearch = createSelector(
+  [getAppSearch],
+  search => fuzzySearch(search.term, search.results)
 );
 
 const getGroupedNodes = createSelector(
-  [getAllToolSearchNodes],
-  allNodes => Object.values(groupBy(allNodes, 'mainNodeId'))
+  [filterSearch],
+  allNodes => Object.values(groupBy(allNodes, 'mainId'))
 );
 
-export const getToolSearchNodes = createSelector(
-  [getGroupedNodes, getSelectedColumnsIds, getNodesDict],
-  (nodes, selectedColumnsIds, nodesDict) => {
-    const getNode = ([nA, nB]) => {
-      if (nB) {
-        if (
-          isNodeColumnVisible(nodesDict[nA.id], selectedColumnsIds) &&
-          isNodeColumnVisible(nodesDict[nB.id], selectedColumnsIds)
-        ) {
+export const getSearchResults = createSelector(
+  [getGroupedNodes],
+  nodes => {
+    const getNode = ([nodeA, nodeB]) => {
+      if (nodeB) {
+        const nodeTypes = [nodeA, nodeB].map(n => n.nodeType);
+        if (nodeTypes.includes('IMPORTER') && nodeTypes.includes('EXPORTER')) {
           return {
-            id: `${nA.id}_${nB.id}`,
-            name: nA.name,
-            type: `${nA.type} & ${nB.type}`,
-            profileType: nA.profileType,
-            [nA.type.toLowerCase()]: nA,
-            [nB.type.toLowerCase()]: nB
+            id: `${nodeA.id}_${nodeB.id}`,
+            name: nodeA.name,
+            nodeType: 'IMPORTER & EXPORTER',
+            profile: nodeA.profile,
+            [nodeA.nodeType.toLowerCase()]: nodeA,
+            [nodeB.nodeType.toLowerCase()]: nodeB
           };
         }
-        return [nA, nB];
+        return [nodeA, nodeB];
       }
-      return nA;
+      return nodeA;
     };
 
     return flatten(nodes.map(groupedNodes => getNode(groupedNodes)));

@@ -1,5 +1,3 @@
-require('dotenv').config({ silent: true });
-
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -43,15 +41,19 @@ module.exports = {
     new HtmlWebpackPreconnectPlugin(),
     new webpack.DefinePlugin({
       NODE_ENV_DEV: process.env.NODE_ENV === 'development',
+      ENABLE_INTERSECTION_OBSERVER: process.env.ENABLE_INTERSECTION_OBSERVER === 'true',
       DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true',
       SHOW_WORLD_MAP_IN_EXPLORE: process.env.SHOW_WORLD_MAP_IN_EXPLORE === 'true',
       ALWAYS_DISPLAY_DASHBOARD_INFO: process.env.ALWAYS_DISPLAY_DASHBOARD_INFO === 'true',
       ENABLE_DASHBOARDS: process.env.ENABLE_DASHBOARDS === 'true',
+      DISABLE_PROFILES: process.env.DISABLE_PROFILES === 'true',
       ENABLE_COOKIE_BANNER: process.env.ENABLE_COOKIE_BANNER === 'true',
       GFW_WIDGETS_BASE_URL: JSON.stringify(process.env.GFW_WIDGETS_BASE_URL),
       ENABLE_LOGISTICS_MAP: process.env.ENABLE_LOGISTICS_MAP === 'true',
+      INDONESIA_LOGISTICS_MAP_ACTIVE: process.env.INDONESIA_LOGISTICS_MAP_ACTIVE === 'true',
       ENABLE_LEGACY_TOOL_SEARCH: process.env.ENABLE_LEGACY_TOOL_SEARCH === 'true',
       DISABLE_MULTIPLE_CONTEXT_PROFILES: process.env.DISABLE_MULTIPLE_CONTEXT_PROFILES === 'true',
+      NEW_PROFILES_PAGE: process.env.NEW_PROFILES_PAGE === 'true',
       API_V3_URL: JSON.stringify(process.env.API_V3_URL),
       API_V2_URL: JSON.stringify(process.env.API_V2_URL),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
@@ -61,7 +63,6 @@ module.exports = {
       PERF_TEST: process.env.PERF_TEST === 'true',
       REDUX_LOGGER_ENABLED: process.env.REDUX_LOGGER_ENABLED === 'true',
       USE_CANVAS_MAP: process.env.USE_CANVAS_MAP === 'true',
-      USE_PLAIN_URL_STATE: process.env.USE_PLAIN_URL_STATE === 'true',
       USE_SERVICE_WORKER: process.env.USE_SERVICE_WORKER === 'true',
       TRANSIFEX_API_KEY: JSON.stringify(process.env.TRANSIFEX_API_KEY),
       HOME_VIDEO_ID: JSON.stringify(process.env.HOME_VIDEO_ID),

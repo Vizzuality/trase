@@ -5,10 +5,11 @@ module Api
       module Charts
         class MultiYearNoNcontNodeTypeView
           include Api::V3::Dashboards::Charts::Helpers
+          include Api::V3::Dashboards::Charts::FlowValuesHelpers
 
           OTHER = 'OTHER'.freeze
 
-          # @param chart_parameters [Api::V3::Dashboards::ChartParameters]
+          # @param chart_parameters [Api::V3::Dashboards::ChartParameters::FlowValues]
           def initialize(chart_parameters)
             @chart_parameters = chart_parameters
             @cont_attribute = chart_parameters.cont_attribute
@@ -116,7 +117,11 @@ module Api
           end
 
           def top_nodes_break_by_values
-            top_nodes.map { |r| r['name'] } + [OTHER]
+            selected_nodes = @chart_parameters.sources_ids + @chart_parameters.companies_ids + @chart_parameters.destinations_ids
+            selected_node_types = selected_nodes.map { |id| Api::V3::Node.includes(:node_type).find(id).node_type.id }
+            is_current_node_type_in_selected_node_types = selected_node_types.include?(@node_type_idx)
+            array = is_current_node_type_in_selected_node_types ? [] : [OTHER]
+            top_nodes.map { |r| r['name'] } + array
           end
 
           def top_nodes_break_by_values_map

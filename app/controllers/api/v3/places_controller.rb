@@ -1,12 +1,12 @@
 module Api
   module V3
     class PlacesController < ApiController
+      include Api::V3::ProfileHelpers
+
       before_action :load_node
       before_action :set_year
 
       def basic_attributes
-        ensure_required_param_present(:year)
-
         @result = Api::V3::Places::BasicAttributes.new(
           @context, @node, @year
         ).call
@@ -48,9 +48,11 @@ module Api
 
       private
 
-      def load_node
+      def load_readonly_node
         ensure_required_param_present(:place_id)
-        @node = Api::V3::Node.place_nodes.find(params[:place_id])
+        @readonly_node = Api::V3::Readonly::Node.
+          where(context_id: @context.id, profile: 'place').
+          find(params[:place_id])
       end
     end
   end

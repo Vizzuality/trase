@@ -59,7 +59,7 @@ class RecolorBy extends Component {
         data-test={`recolor-by-item-${kebabCase(recolorBy.label)}`}
         key={recolorBy.label}
       >
-        <Text size="md" weight="regular" className="recolor-by-item-title">
+        <Text as="span" size="md" weight="regular" className="recolor-by-item-title">
           {recolorBy.label}
           {recolorBy.description && <Tooltip constraint="window" text={recolorBy.description} />}
         </Text>
@@ -137,7 +137,9 @@ class RecolorBy extends Component {
       color,
       weight
     } = this.props;
-    const hasZeroOrSingleElement = recolorBys.length < 1;
+    const hasZeroOrSingleElement =
+      recolorBys.length === 0 ||
+      (recolorBys.length === 1 && recolorBys[0].value === selectedRecolorBy.value);
     return (
       <Dropdown
         size={size}
@@ -174,7 +176,7 @@ RecolorBy.propTypes = {
   weight: PropTypes.string,
   variant: PropTypes.string,
   tooltip: PropTypes.string,
-  recolorGroups: PropTypes.array,
+  recolorGroups: PropTypes.object,
   onChange: PropTypes.func.isRequired,
   selectedRecolorBy: PropTypes.object.isRequired,
   recolorBys: PropTypes.array.isRequired

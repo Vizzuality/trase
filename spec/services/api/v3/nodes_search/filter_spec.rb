@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::V3::NodesSearch::Filter do
   include_context 'api v3 brazil flows'
   include_context 'api v3 paraguay flows'
+  include_context 'api v3 brazil soy goias flows'
 
   describe :call do
     before(:each) do
@@ -24,8 +25,7 @@ RSpec.describe Api::V3::NodesSearch::Filter do
       ).to match_array([
         api_v3_paraguay_exporter_node,
         api_v3_paraguay_biome_node,
-        api_v3_logistics_hub_node,
-        api_v3_importer1_node
+        api_v3_logistics_hub_node
       ].map(&:name))
     end
 
@@ -44,6 +44,11 @@ RSpec.describe Api::V3::NodesSearch::Filter do
       expect(
         nodes.map(&:name)
       ).to include(api_v3_municipality_node.name)
+    end
+
+    it 'exact match is on top' do
+      nodes = filter.call('GOIAS', nil, true)
+      expect(nodes.first.name).to eq(api_v3_municipality_goias.name)
     end
   end
 end

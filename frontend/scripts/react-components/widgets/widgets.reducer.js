@@ -14,7 +14,12 @@ export const initialState = {
   }
 };
 
-export const defaultEndpoint = key => ({ data: null, loading: true, error: null, key });
+export const defaultEndpoint = key => ({
+  data: null,
+  loading: true,
+  error: null,
+  key
+});
 
 const widgetsReducer = {
   [WIDGETS__INIT_ENDPOINT](state, action) {

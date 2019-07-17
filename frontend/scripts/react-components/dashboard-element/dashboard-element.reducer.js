@@ -400,7 +400,7 @@ const dashboardElementReducerTypes = PropTypes => {
     selectedYears: PropTypes.arrayOf(PropTypes.number),
     selectedResizeBy: PropTypes.string,
     selectedRecolorBy: PropTypes.string,
-    chartsLoading: PanelTypes.bool
+    chartsLoading: PropTypes.bool
   };
 };
 

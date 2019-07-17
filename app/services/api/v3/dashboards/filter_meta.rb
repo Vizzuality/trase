@@ -39,7 +39,11 @@ module Api
               }
             ].map do |section|
               section[:tabs] = section[:tabs].map do |tab|
-                {id: tab.node_type_id, name: tab.node_type_name}
+                {
+                  id: tab.node_type_id,
+                  name: tab.node_type_name,
+                  profileType: tab.profile_type
+                }
               end
               section
             end
@@ -51,12 +55,15 @@ module Api
         def initialize_query
           @query = Api::V3::ContextNodeType.
             joins(:context, :node_type, :context_node_type_property).
+            left_joins(:profile).
             select(
               'node_types.name AS node_type_name',
-              'node_types.id AS node_type_id'
+              'node_types.id AS node_type_id',
+              'profiles.name AS profile_type'
             ).group(
               'node_types.name',
-              'node_types.id'
+              'node_types.id',
+              'profiles.name'
             )
 
           if @countries_ids.any?

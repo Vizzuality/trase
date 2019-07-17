@@ -5,14 +5,12 @@
 #  id               :integer          not null, primary key
 #  map_attribute_id :integer          not null
 #  quant_id         :integer          not null
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
 #
 # Indexes
 #
-#  index_map_quants_on_map_attribute_id      (map_attribute_id)
-#  index_map_quants_on_quant_id              (quant_id)
+#  map_quants_map_attribute_id_idx           (map_attribute_id)
 #  map_quants_map_attribute_id_quant_id_key  (map_attribute_id,quant_id) UNIQUE
+#  map_quants_quant_id_idx                   (quant_id)
 #
 # Foreign Keys
 #

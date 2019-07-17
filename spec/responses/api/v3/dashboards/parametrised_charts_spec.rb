@@ -4,10 +4,41 @@ RSpec.describe 'ParametrisedCharts', type: :request do
   include_context 'api v3 brazil context node types'
   include_context 'api v3 brazil recolor by attributes'
   include_context 'api v3 brazil resize by attributes'
+  include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil flows inds'
+  include_context 'api v3 brazil municipality qual values'
+  include_context 'api v3 dashboards attributes'
+
+  let!(:another_municipality) {
+    municipality = FactoryBot.create(
+      :api_v3_node, node_type: api_v3_municipality_node_type
+    )
+    FactoryBot.create(
+      :api_v3_flow,
+      context: api_v3_context,
+      path: [
+        api_v3_biome_node,
+        api_v3_state_node,
+        municipality,
+        api_v3_logistics_hub_node,
+        api_v3_port1_node,
+        api_v3_exporter1_node,
+        api_v3_importer1_node,
+        api_v3_country_of_destination1_node
+      ].map(&:id),
+      year: 2015
+    )
+    FactoryBot.create(
+      :api_v3_node_qual, node: municipality, qual: api_v3_zero_deforestation
+    )
+    municipality
+  }
 
   describe 'GET /api/v3/dashboards/parametrised_charts' do
     before(:each) do
       Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
+      Api::V3::Readonly::QualValuesMeta.refresh(sync: true, skip_dependents: true)
+      Api::V3::Readonly::IndValuesMeta.refresh(sync: true, skip_dependents: true)
       Api::V3::Readonly::ResizeByAttribute.refresh(sync: true, skip_dependents: true)
       Api::V3::Readonly::RecolorByAttribute.refresh(sync: true, skip_dependents: true)
     end
@@ -72,7 +103,13 @@ RSpec.describe 'ParametrisedCharts', type: :request do
       get '/api/v3/dashboards/parametrised_charts', params: {
         country_id: api_v3_brazil.id,
         commodity_id: api_v3_soy.id,
-        cont_attribute_id: api_v3_volume.readonly_attribute.id
+        cont_attribute_id: api_v3_volume.readonly_attribute.id,
+        ncont_attribute_id: api_v3_forest_500.readonly_attribute.id,
+        sources_ids: [api_v3_municipality_node.id, another_municipality.id].join(','),
+        companies_ids: api_v3_exporter1_node.id,
+        destinations_ids: nil,
+        start_year: 2015,
+        end_year: 2016
       }
 
       expect(@response).to have_http_status(:ok)

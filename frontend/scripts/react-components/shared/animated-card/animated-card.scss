@@ -1,0 +1,76 @@
+@import 'styles/settings';
+
+$slide-height: 430px;
+$content-height-collapsed: 82px;
+$card-min-height: 200px;
+
+.c-animated-card {
+  .card-link {
+    width: 100%;
+    display: block;
+    cursor: pointer;
+    position: relative;
+
+    height: $slide-height;
+    box-shadow: $box-shadow;
+    overflow: hidden;
+
+    .card-image {
+      position: relative;
+      height: calc(100% - #{$content-height-collapsed});
+      width: 100%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      transition: height 350ms ease-out;
+      will-change: height;
+    }
+
+    .card-content {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      min-height: $card-min-height;
+      max-height: 100%;
+      padding: 20px;
+      background-color: $light-gray;
+      transform: translateY(calc(100% - #{$content-height-collapsed}));
+      transition: transform 350ms ease-out;
+
+      @media screen and (max-width: $breakpoint-foundation-small) {
+        height: $slide-height;
+        max-height: $slide-height;
+      }
+
+      .card-details-container {
+        overflow: hidden;
+      }
+
+      .card-title {
+        margin-top: 5px;
+      }
+
+      .cards-details-text-container {
+        max-height: calc(#{$slide-height} - #{$content-height-collapsed});
+        overflow: auto;
+      }
+    }
+
+    &:hover {
+      .card-image {
+        height: calc(100% - #{$card-min-height});
+        &::after {
+          content: '';
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.4);
+        }
+      }
+
+      .card-content {
+        transform: translateY(0);
+      }
+    }
+  }
+}

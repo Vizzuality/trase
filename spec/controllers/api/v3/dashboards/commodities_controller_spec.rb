@@ -28,5 +28,14 @@ RSpec.describe Api::V3::Dashboards::CommoditiesController, type: :controller do
       get :index, params: {commodities_ids: api_v3_soy.id.to_s}
       expect(assigns(:collection).map(&:id)).to eq([api_v3_soy.id])
     end
+
+    context 'when profile_only' do
+      include_context 'api v3 brazil municipality place profile'
+
+      it 'returns commodities where nodes have profiles' do
+        get :index, params: {profile_only: true}
+        expect(assigns(:collection).map(&:id)).to eq([api_v3_soy.id])
+      end
+    end
   end
 end

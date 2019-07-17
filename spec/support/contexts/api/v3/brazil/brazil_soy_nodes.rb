@@ -152,12 +152,12 @@ shared_context 'api v3 brazil soy nodes' do
 
   let!(:api_v3_importer1_node) do
     node = Api::V3::Node.where(
-      name: 'UNKNOWN CUSTOMER', node_type_id: api_v3_importer_node_type.id
+      name: 'AGROGRAIN', node_type_id: api_v3_importer_node_type.id
     ).first
     unless node
       node = FactoryBot.create(
         :api_v3_node,
-        name: 'UNKNOWN CUSTOMER',
+        name: 'AGROGRAIN',
         node_type: api_v3_importer_node_type
       )
       FactoryBot.create(

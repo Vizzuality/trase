@@ -1,5 +1,5 @@
 ActiveAdmin.register Api::V3::ContextualLayer, as: 'ContextualLayer' do
-  menu parent: 'Map', priority: 3
+  menu parent: 'Sankey & Map', priority: 4
 
   permit_params :context_id, :title, :identifier, :position,
                 :tooltip_text, :legend, :is_default

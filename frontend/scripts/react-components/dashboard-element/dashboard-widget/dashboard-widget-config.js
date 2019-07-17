@@ -215,6 +215,10 @@ export default {
     type: 'sentence',
     parse: false
   },
+  nodeIndicatorSentence: {
+    type: 'nodeIndicatorSentence',
+    parse: false
+  },
   ranking: {
     type: 'ranking',
     parse: false

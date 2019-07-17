@@ -2,27 +2,24 @@
 #
 # Table name: recolor_by_attributes
 #
-#  id                 :integer          not null, primary key
-#  context_id         :integer          not null
-#  group_number       :integer          default(1), not null
-#  position           :integer          not null
-#  legend_type        :text             not null
-#  legend_color_theme :text             not null
-#  interval_count     :integer
-#  min_value          :text
-#  max_value          :text
-#  divisor            :float
-#  tooltip_text       :text
-#  years              :integer          is an Array
-#  is_disabled        :boolean          default(FALSE), not null
-#  is_default         :boolean          default(FALSE), not null
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
+#  id                                                                                                    :integer          not null, primary key
+#  context_id                                                                                            :integer          not null
+#  group_number(Attributes are displayed grouped by their group number, with a separator between groups) :integer          default(1), not null
+#  position(Display order in scope of context and group number)                                          :integer          not null
+#  legend_type(Type of legend, e.g. linear)                                                              :text             not null
+#  legend_color_theme(Color theme of legend, e.g. red-blue)                                              :text             not null
+#  interval_count(For legends with min / max value, number of intervals of the legend)                   :integer
+#  min_value(Min value for the legend)                                                                   :text
+#  max_value(Max value for the legend)                                                                   :text
+#  divisor(Step between intervals for percentual legends)                                                :float
+#  tooltip_text(Tooltip text)                                                                            :text
+#  years(Array of years for which to show this attribute in scope of chart; empty (NULL) for all years)  :integer          is an Array
+#  is_disabled(When set, this attribute is not displayed)                                                :boolean          default(FALSE), not null
+#  is_default(When set, show this attribute by default)                                                  :boolean          default(FALSE), not null
 #
 # Indexes
 #
-#  index_recolor_by_attributes_on_context_id                   (context_id)
-#  recolor_by_attributes_context_id_group_number_position_key  (context_id,group_number,position) UNIQUE
+#  recolor_by_attributes_context_id_idx  (context_id)
 #
 # Foreign Keys
 #
@@ -34,6 +31,8 @@ module Api
     class RecolorByAttribute < YellowTable
       include Api::V3::StringyArray
       include Api::V3::AssociatedAttributes
+      include Api::V3::EnsureGroupNumberPresent
+      include Api::V3::IsDownloadable
 
       LEGEND_TYPE = %w(
         qual
@@ -60,9 +59,6 @@ module Api
 
       validates :context, presence: true
       validates :group_number, presence: true
-      validates :position,
-                presence: true,
-                uniqueness: {scope: [:context, :group_number]}
       validates :legend_type, presence: true, inclusion: {in: LEGEND_TYPE}
       validates :legend_color_theme,
                 presence: true,
@@ -90,10 +86,12 @@ module Api
                      attribute: :recolor_by_qual,
                      if: :new_recolor_by_qual_given?
 
+      after_create :set_years
       after_commit :refresh_dependents
 
       stringy_array :years
       manage_associated_attributes [:recolor_by_ind, :recolor_by_qual]
+      acts_as_list scope: [:context_id, :group_number]
 
       def self.blue_foreign_keys
         [
@@ -101,8 +99,16 @@ module Api
         ]
       end
 
+      private
+
       def refresh_dependents
-        Api::V3::Readonly::RecolorByAttribute.refresh
+        Api::V3::Readonly::RecolorByAttribute.refresh(skip_dependencies: true)
+      end
+
+      def set_years
+        FlowAttributeAvailableYearsUpdateWorker.perform_async(
+          self.class.name, id, context_id
+        )
       end
 
       private_class_method def self.active_ids

@@ -57,7 +57,12 @@ class FiltersNav extends React.PureComponent {
 
   renderInToolLinks() {
     const { links, openMap, openSankey, isMapVisible } = this.props;
-    const [supplyChainLink, mapLink] = links;
+    const supplyChainLink = links.find(
+      link => link.page?.type === 'tool' && !link.page?.payload?.serializerParams?.isMapVisible
+    );
+    const mapLink = links.find(
+      link => link.page?.type === 'tool' && link.page?.payload?.serializerParams?.isMapVisible
+    );
     return (
       <ul className="filters-nav-submenu-list">
         <li className="filters-nav-item">

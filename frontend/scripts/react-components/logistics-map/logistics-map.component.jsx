@@ -16,7 +16,6 @@ import LogisticsMapLegend from 'react-components/logistics-map/logistics-map-leg
 import LogisticsMapPanel from 'react-components/logistics-map/logistics-map-panel/logistics-map-panel.container';
 import LogisticsMapBar from 'react-components/logistics-map/logistics-map-bar/logistics-map-bar.container';
 import LogisticsMapDownload from 'react-components/logistics-map/logistics-map-download/logistics-map-download.container';
-import BRAZIL_COUNTRY from 'react-components/logistics-map/BRAZIL_COUNTRY.json';
 
 import 'vizzuality-components/dist/map.css';
 import 'leaflet/dist/leaflet.css';
@@ -25,10 +24,11 @@ import 'scripts/react-components/logistics-map/logistics-map.scss';
 function LogisticsMap(props) {
   const {
     bounds,
+    border,
     layers,
     tooltips,
     mapPopUp,
-    commodity,
+    heading,
     openModal,
     closeModal,
     activeModal,
@@ -38,7 +38,6 @@ function LogisticsMap(props) {
     getCurrentPopUp
   } = props;
   const Tooltip = p => <UnitsTooltip {...p.data} />;
-  const heading = commodity === 'soy' ? 'soy facilities' : 'slaughterhouses';
   return (
     <div className="l-logistics-map">
       <div className="c-logistics-map">
@@ -53,7 +52,7 @@ function LogisticsMap(props) {
                 {activeLayers.map(layer => (
                   <Layer key={layer.id} {...layer} events={buildEvents(layer)} />
                 ))}
-                <Layer {...LogisticsMap.BRAZIL_BORDER} />
+                <Layer {...border} />
               </LayerManager>
               <MapPopup map={map} {...mapPopUp} onReady={getCurrentPopUp}>
                 <Tooltip />
@@ -76,21 +75,6 @@ function LogisticsMap(props) {
     </div>
   );
 }
-LogisticsMap.BRAZIL_BORDER = {
-  provider: 'leaflet',
-  layerConfig: {
-    type: 'geoJSON',
-    body: BRAZIL_COUNTRY,
-    options: {
-      style: {
-        weight: 1,
-        color: '#34444C',
-        opacity: 0.2,
-        fill: false
-      }
-    }
-  }
-};
 
 LogisticsMap.propTypes = {
   layers: PropTypes.array,
@@ -98,10 +82,11 @@ LogisticsMap.propTypes = {
   tooltips: PropTypes.object,
   closeModal: PropTypes.func,
   buildEvents: PropTypes.func,
-  commodity: PropTypes.string,
+  heading: PropTypes.string,
   activeModal: PropTypes.string,
   activeLayers: PropTypes.array,
   bounds: PropTypes.object,
+  border: PropTypes.object,
   getCurrentPopUp: PropTypes.func.isRequired,
   setLayerActive: PropTypes.func.isRequired,
   mapPopUp: PropTypes.object

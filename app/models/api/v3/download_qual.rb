@@ -2,18 +2,14 @@
 #
 # Table name: download_quals
 #
-#  id                    :integer          not null, primary key
-#  download_attribute_id :integer          not null
-#  qual_id               :integer          not null
-#  is_filter_enabled     :boolean          default(FALSE), not null
-#  created_at            :datetime         not null
-#  updated_at            :datetime         not null
+#  id                                                                                 :integer          not null, primary key
+#  download_attribute_id                                                              :integer          not null
+#  qual_id                                                                            :integer          not null
+#  is_filter_enabled(When set, enable selection of discreet values (advanced filter)) :boolean          default(FALSE), not null
 #
 # Indexes
 #
 #  download_quals_download_attribute_id_qual_id_key  (download_attribute_id,qual_id) UNIQUE
-#  index_download_quals_on_download_attribute_id     (download_attribute_id)
-#  index_download_quals_on_qual_id                   (qual_id)
 #
 # Foreign Keys
 #

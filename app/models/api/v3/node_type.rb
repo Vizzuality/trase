@@ -2,9 +2,8 @@
 #
 # Table name: node_types
 #
-#  id         :integer          not null, primary key
-#  name       :text             not null
-#  created_at :datetime         not null
+#  id                                                                          :integer          not null, primary key
+#  name(Name of node type, spelt in capital letters; unique across node types) :text             not null
 #
 # Indexes
 #
@@ -16,19 +15,6 @@ module Api
     class NodeType < BlueTable
       has_many :context_node_types
       has_many :nodes
-
-      PLACES = [
-        NodeTypeName::MUNICIPALITY,
-        NodeTypeName::LOGISTICS_HUB,
-        NodeTypeName::BIOME,
-        NodeTypeName::STATE,
-        NodeTypeName::DEPARTMENT
-      ].freeze
-
-      ACTORS = [
-        NodeTypeName::EXPORTER,
-        NodeTypeName::IMPORTER
-      ].freeze
 
       def self.node_index_for_name(context, node_type_name)
         zero_based_idx = ContextNodeType.

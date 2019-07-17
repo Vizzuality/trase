@@ -1,7 +1,8 @@
 import trim from 'lodash/trim';
-import qs from 'qs';
+import qs from 'query-string';
 
 export const GET_CONTEXTS_URL = 'GET_CONTEXTS_URL';
+export const GET_TOP_PROFILES = 'GET_TOP_PROFILES';
 export const GET_TOOLTIPS_URL = 'GET_TOOLTIPS_URL';
 export const GET_ALL_NODES_URL = 'GET_ALL_NODES_URL';
 export const GET_NODES_WITH_SEARCH_URL = 'GET_NODES_WITH_SEARCH_URL';
@@ -17,7 +18,6 @@ export const GET_DISCLAIMER_URL = 'GET_DISCLAIMER_URL';
 export const POST_SUBSCRIBE_NEWSLETTER_URL = 'POST_SUBSCRIBE_NEWSLETTER_URL';
 export const GET_TWEETS_URL = 'GET_TWEETS_URL';
 export const GET_POSTS_URL = 'GET_POSTS_URL';
-export const GET_SITE_DIVE_URL = 'GET_SITE_DIVE_URL';
 export const GET_TESTIMONIALS_URL = 'GET_TESTIMONIALS_URL';
 export const GET_MARKDOWN_CONTENT_URL = 'GET_MARKDOWN_CONTENT_URL';
 export const GET_TEAM_URL = 'GET_TEAM_URL';
@@ -51,7 +51,6 @@ const API_ENDPOINTS = {
   [GET_JSON_DATA_DOWNLOAD_FILE_URL]: { api: 3, endpoint: '/contexts/$context_id$/download.json' },
   [GET_LINKED_GEO_IDS_URL]: { api: 3, endpoint: '/contexts/$context_id$/linked_nodes' },
   [POST_SUBSCRIBE_NEWSLETTER_URL]: { api: 3, endpoint: '/newsletter_subscriptions' },
-  [GET_SITE_DIVE_URL]: { api: 'content', endpoint: '/site_dives' },
   [GET_POSTS_URL]: { api: 'content', endpoint: '/posts' },
   [GET_TWEETS_URL]: { api: 'content', endpoint: '/tweets' },
   [GET_DISCLAIMER_URL]: { api: 'local', endpoint: 'disclaimer.json' },
@@ -127,6 +126,10 @@ const API_ENDPOINTS = {
   [GET_DASHBOARD_PARAMETRISED_CHARTS_URL]: {
     api: 3,
     endpoint: '/dashboards/parametrised_charts'
+  },
+  [GET_TOP_PROFILES]: {
+    api: 3,
+    endpoint: '/top_profiles'
   }
 };
 
@@ -152,7 +155,7 @@ export function getURLForV3(endpoint, paramsArg = {}) {
   const params = Object.assign({}, paramsArg);
 
   const apiEndpoint = replaceURLParams(endpoint, params);
-  const queryParams = qs.stringify(params, { arrayFormat: 'brackets', encodeValuesOnly: true });
+  const queryParams = qs.stringify(params, { arrayFormat: 'bracket' });
 
   return `${API_V3_URL}${apiEndpoint}${queryParams.length > 0 ? `?${queryParams}` : ''}`;
 }

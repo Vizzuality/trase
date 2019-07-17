@@ -2,18 +2,15 @@
 #
 # Table name: download_attributes
 #
-#  id           :integer          not null, primary key
-#  context_id   :integer          not null
-#  position     :integer          not null
-#  display_name :text             not null
-#  years        :integer          is an Array
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  id                                                                      :integer          not null, primary key
+#  context_id                                                              :integer          not null
+#  position(Display order in scope of context)                             :integer          not null
+#  display_name(Name of attribute for display in downloads)                :text             not null
+#  years(Years for which attribute is present; empty (NULL) for all years) :integer          is an Array
 #
 # Indexes
 #
 #  download_attributes_context_id_position_key  (context_id,position) UNIQUE
-#  index_download_attributes_on_context_id      (context_id)
 #
 # Foreign Keys
 #
@@ -25,6 +22,7 @@ module Api
     class DownloadAttribute < YellowTable
       include Api::V3::StringyArray
       include Api::V3::AssociatedAttributes
+      include Api::V3::EnsurePositionPresent
 
       belongs_to :context
       has_one :download_qual, autosave: true
@@ -40,6 +38,7 @@ module Api
       validates_with AttributeAssociatedOnceValidator,
                      attribute: :download_quant, if: :new_download_quant_given?
 
+      after_create :set_years
       after_commit :refresh_dependents
 
       stringy_array :years
@@ -54,6 +53,12 @@ module Api
       def refresh_dependents
         Api::V3::Readonly::DownloadAttribute.refresh
         Api::V3::Readonly::DownloadFlow.refresh(skip_dependencies: true)
+      end
+
+      def set_years
+        FlowAttributeAvailableYearsUpdateWorker.perform_async(
+          self.class.name, id, context_id
+        )
       end
 
       private_class_method def self.active_ids

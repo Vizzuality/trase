@@ -2,14 +2,12 @@
 #
 # Table name: chart_node_types
 #
-#  id           :bigint(8)        not null, primary key
-#  chart_id     :bigint(8)
-#  node_type_id :bigint(8)
-#  identifier   :text
-#  position     :integer
-#  is_total     :boolean          default(FALSE)
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  id                                                                                                         :bigint(8)        not null, primary key
+#  chart_id(Refence to chart)                                                                                 :bigint(8)
+#  node_type_id(Refence to node type)                                                                         :bigint(8)
+#  identifier(Identifier used to map this chart node type to a part of code which contains calculation logic) :text
+#  position(Display order in scope of chart; required when more than one)                                     :integer
+#  is_total                                                                                                   :boolean          default(FALSE)
 #
 # Indexes
 #
@@ -17,8 +15,8 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (chart_id => charts.id)
-#  fk_rails_...  (node_type_id => node_types.id)
+#  fk_rails_...  (chart_id => charts.id) ON DELETE => cascade
+#  fk_rails_...  (node_type_id => node_types.id) ON DELETE => cascade
 #
 module Api
   module V3
@@ -37,7 +35,12 @@ module Api
 
       def self.yellow_foreign_keys
         [
-          {name: :chart_id, table_class: Api::V3::Chart},
+          {name: :chart_id, table_class: Api::V3::Chart}
+        ]
+      end
+
+      def self.blue_foreign_keys
+        [
           {name: :node_type_id, table_class: Api::V3::NodeType}
         ]
       end
