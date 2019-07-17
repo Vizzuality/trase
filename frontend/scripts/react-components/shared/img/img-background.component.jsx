@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import InView from 'react-components/shared/in-view.component';
 
 function ImgBackground(props) {
-  // the idea is to provide a srcSet + sizes and grab one or another depending on the screen res
+  // TODO: the idea is to provide a srcSet + sizes and grab one or another depending on the screen res
   // and expose an ImgContextProvider that the users can use to pass their media-queries
   const { as, alt: title, src, children, ...rest } = props;
 
@@ -44,7 +44,7 @@ ImgBackground.defaultProps = {
 
 ImgBackground.propTypes = {
   alt: PropTypes.string,
-  src: PropTypes.array,
+  src: PropTypes.string,
   children: PropTypes.any,
   as: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
 };
