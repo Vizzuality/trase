@@ -144,7 +144,7 @@
 				 <td></td>
 				</tr>
 				<tr>
-				 <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="flow_id">flow_id</span></td>
+				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i><span id="flow_id">flow_id</span></td>
 				 <td>int4</td>
 				 <td>10</td>
 				 <td title=''></td>
@@ -156,14 +156,6 @@
 				 </td>
 				 <td>
 				  <table border='0' cellspacing='0' cellpadding='0'>
-				   <tr>
-					<td title="flow_quants.flow_id references flows.id via fk_rails_2dbc0a565f">
-						<a href='flows.html'>flows</a><span class='relatedKey'>.id</span>
-					</td>
-					<td class="constraint detail">
-						fk_rails_2dbc0a565f <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
-					</td>
-				   </tr>
 				  </table>					 
 				 </td>
 				 <td></td>
@@ -262,6 +254,12 @@
 				  <td>id</td>
 				 </tr>				 
 				 <tr>
+				  <td title='Indexed'>flow_quants_flow_id_idx</td>
+				  <td>Performance</td>
+				  <td><span title='Ascending'>Asc</span></td>
+				  <td>flow_id</td>
+				 </tr>				 
+				 <tr>
 				  <td class='uniqueKey' title='Unique Key'><i class='icon ion-key iconkey'></i> flow_quants_flow_id_quant_id_key</td>
 				  <td>Must be unique</td>
 				  <td><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
@@ -272,12 +270,6 @@
 				  <td>Performance</td>
 				  <td><span title='Ascending'>Asc</span></td>
 				  <td>quant_id</td>
-				 </tr>				 
-				 <tr>
-				  <td title='Indexed'>index_flow_quants_on_flow_id</td>
-				  <td>Performance</td>
-				  <td><span title='Ascending'>Asc</span></td>
-				  <td>flow_id</td>
 				 </tr>				 
 				</tbody>
 				</table>   			  
@@ -306,31 +298,26 @@
             <div class="tab-content no-padding">            
 				<div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="flow_quants.html" title="flow_quants" alt="" coords="205,71,504,287">
-<area shape="rect" id="node2" href="flows.html" title="flows" alt="" coords="5,5,161,211">
-<area shape="rect" id="node3" href="quants.html" title="quants" alt="" coords="10,228,157,375">
+<area shape="rect" id="node1" href="flow_quants.html" title="flow_quants" alt="" coords="196,5,495,221">
+<area shape="rect" id="node2" href="quants.html" title="quants" alt="" coords="5,67,152,213">
 </map>
 
 					<a name='diagram'><img id='oneDegreeImg' src='../diagrams/flow_quants.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							
 				</div>
 				<div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="chart_quants.html" title="chart_quants" alt="" coords="481,321,678,409">
-<area shape="rect" id="node2" href="quants.html" title="quants" alt="" coords="219,529,366,676">
-<area shape="rect" id="node3" href="dashboards_quants.html" title="dashboards_quants" alt="" coords="455,427,704,515">
-<area shape="rect" id="node4" href="download_quants.html" title="download_quants" alt="" coords="463,532,695,620">
-<area shape="rect" id="node5" href="flow_inds.html" title="flow_inds" alt="" coords="496,1397,663,1485">
-<area shape="rect" id="node6" href="flows.html" title="flows" alt="" coords="215,1224,371,1429">
-<area shape="rect" id="node9" href="contexts.html" title="contexts" alt="" coords="5,1139,171,1227">
-<area shape="rect" id="node7" href="flow_quals.html" title="flow_quals" alt="" coords="491,1292,667,1380">
-<area shape="rect" id="node8" href="flow_quants.html" title="flow_quants" alt="" coords="430,1059,729,1275">
-<area shape="rect" id="node10" href="map_quants.html" title="map_quants" alt="" coords="484,637,675,725">
-<area shape="rect" id="node11" href="node_quants.html" title="node_quants" alt="" coords="482,743,677,831">
-<area shape="rect" id="node12" href="quant_commodity_properties.html" title="quant_commodity_properties" alt="" coords="415,848,744,936">
-<area shape="rect" id="node13" href="quant_context_properties.html" title="quant_context_properties" alt="" coords="429,953,730,1041">
-<area shape="rect" id="node14" href="quant_country_properties.html" title="quant_country_properties" alt="" coords="429,5,729,93">
-<area shape="rect" id="node15" href="quant_properties.html" title="quant_properties" alt="" coords="465,111,694,199">
-<area shape="rect" id="node16" href="resize_by_quants.html" title="resize_by_quants" alt="" coords="464,216,695,304">
+<area shape="rect" id="node1" href="chart_quants.html" title="chart_quants" alt="" coords="262,5,459,93">
+<area shape="rect" id="node2" href="quants.html" title="quants" alt="" coords="5,657,152,804">
+<area shape="rect" id="node3" href="dashboards_quants.html" title="dashboards_quants" alt="" coords="236,111,485,199">
+<area shape="rect" id="node4" href="download_quants.html" title="download_quants" alt="" coords="245,216,477,304">
+<area shape="rect" id="node5" href="flow_quants.html" title="flow_quants" alt="" coords="211,321,510,537">
+<area shape="rect" id="node6" href="map_quants.html" title="map_quants" alt="" coords="265,555,456,643">
+<area shape="rect" id="node7" href="node_quants.html" title="node_quants" alt="" coords="263,660,458,748">
+<area shape="rect" id="node8" href="quant_commodity_properties.html" title="quant_commodity_properties" alt="" coords="196,765,525,853">
+<area shape="rect" id="node9" href="quant_context_properties.html" title="quant_context_properties" alt="" coords="210,871,511,959">
+<area shape="rect" id="node10" href="quant_country_properties.html" title="quant_country_properties" alt="" coords="211,976,511,1064">
+<area shape="rect" id="node11" href="quant_properties.html" title="quant_properties" alt="" coords="246,1081,475,1169">
+<area shape="rect" id="node12" href="resize_by_quants.html" title="resize_by_quants" alt="" coords="245,1187,476,1275">
 </map>
 
 					<a name='diagram'><img id='twodegreesDegreeImg' src='../diagrams/flow_quants.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							

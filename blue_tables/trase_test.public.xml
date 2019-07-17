@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<database name="trase_test" schema="public" type="PostgreSQL - 10.7 (Ubuntu 10.7-1.pgdg16.04+1)">
+<database name="trase_test" schema="public" type="PostgreSQL - 11.4 (Ubuntu 11.4-1.pgdg16.04+1)">
    <tables>
       <table name="commodities" numRows="0" remarks="Commodities in supply chains, such as soy or beef" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('commodities_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
@@ -27,14 +27,14 @@
          <index name="context_node_types_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
+         <index name="context_node_types_context_id_idx" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
          <index name="context_node_types_context_id_node_type_id_key" unique="true">
             <column ascending="true" name="context_id"/>
             <column ascending="true" name="node_type_id"/>
          </index>
-         <index name="index_context_node_types_on_context_id" unique="false">
-            <column ascending="true" name="context_id"/>
-         </index>
-         <index name="index_context_node_types_on_node_type_id" unique="false">
+         <index name="context_node_types_node_type_id_idx" unique="false">
             <column ascending="true" name="node_type_id"/>
          </index>
       </table>
@@ -56,15 +56,12 @@
          <index name="contexts_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
+         <index name="contexts_commodity_id_idx" unique="false">
+            <column ascending="true" name="commodity_id"/>
+         </index>
          <index name="contexts_country_id_commodity_id_key" unique="true">
             <column ascending="true" name="country_id"/>
             <column ascending="true" name="commodity_id"/>
-         </index>
-         <index name="index_contexts_on_commodity_id" unique="false">
-            <column ascending="true" name="commodity_id"/>
-         </index>
-         <index name="index_contexts_on_country_id" unique="false">
-            <column ascending="true" name="country_id"/>
          </index>
       </table>
       <table name="countries" numRows="0" remarks="Countries (source)" schema="public" type="TABLE">
@@ -94,13 +91,13 @@
          <index name="download_versions_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
+         <index name="download_versions_context_id_is_current_idx" unique="true">
+            <column ascending="true" name="context_id"/>
+            <column ascending="true" name="is_current"/>
+         </index>
          <index name="download_versions_context_id_symbol_key" unique="true">
             <column ascending="true" name="context_id"/>
             <column ascending="true" name="symbol"/>
-         </index>
-         <index name="index_download_versions_on_context_id_and_is_current" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="is_current"/>
          </index>
       </table>
       <table name="flow_inds" numRows="0" remarks="Values of inds for flow" schema="public" type="TABLE">
@@ -115,15 +112,15 @@
          <index name="flow_inds_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
+         <index name="flow_inds_flow_id_idx" unique="false">
+            <column ascending="true" name="flow_id"/>
+         </index>
          <index name="flow_inds_flow_id_ind_id_key" unique="true">
             <column ascending="true" name="flow_id"/>
             <column ascending="true" name="ind_id"/>
          </index>
          <index name="flow_inds_ind_id_idx" unique="false">
             <column ascending="true" name="ind_id"/>
-         </index>
-         <index name="index_flow_inds_on_flow_id" unique="false">
-            <column ascending="true" name="flow_id"/>
          </index>
       </table>
       <table name="flow_quals" numRows="0" remarks="Values of quals for flow" schema="public" type="TABLE">
@@ -138,15 +135,15 @@
          <index name="flow_quals_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
+         <index name="flow_quals_flow_id_idx" unique="false">
+            <column ascending="true" name="flow_id"/>
+         </index>
          <index name="flow_quals_flow_id_qual_id_key" unique="true">
             <column ascending="true" name="flow_id"/>
             <column ascending="true" name="qual_id"/>
          </index>
          <index name="flow_quals_qual_id_idx" unique="false">
             <column ascending="true" name="qual_id"/>
-         </index>
-         <index name="index_flow_quals_on_flow_id" unique="false">
-            <column ascending="true" name="flow_id"/>
          </index>
       </table>
       <table name="flow_quants" numRows="0" remarks="Values of quants for flow" schema="public" type="TABLE">
@@ -161,15 +158,15 @@
          <index name="flow_quants_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
+         <index name="flow_quants_flow_id_idx" unique="false">
+            <column ascending="true" name="flow_id"/>
+         </index>
          <index name="flow_quants_flow_id_quant_id_key" unique="true">
             <column ascending="true" name="flow_id"/>
             <column ascending="true" name="quant_id"/>
          </index>
          <index name="flow_quants_quant_id_idx" unique="false">
             <column ascending="true" name="quant_id"/>
-         </index>
-         <index name="index_flow_quants_on_flow_id" unique="false">
-            <column ascending="true" name="flow_id"/>
          </index>
       </table>
       <table name="inds" numRows="0" remarks="Attributes classified as inds" schema="public" type="TABLE">
@@ -203,11 +200,11 @@
          <index name="node_inds_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_node_inds_on_node_id" unique="false">
-            <column ascending="true" name="node_id"/>
-         </index>
          <index name="node_inds_ind_id_idx" unique="false">
             <column ascending="true" name="ind_id"/>
+         </index>
+         <index name="node_inds_node_id_idx" unique="false">
+            <column ascending="true" name="node_id"/>
          </index>
          <index name="node_inds_node_id_ind_id_year_key" unique="true">
             <column ascending="true" name="node_id"/>
@@ -230,7 +227,7 @@
          <index name="node_quals_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_node_quals_on_node_id" unique="false">
+         <index name="node_quals_node_id_idx" unique="false">
             <column ascending="true" name="node_id"/>
          </index>
          <index name="node_quals_node_id_qual_id_year_key" unique="true">
@@ -257,16 +254,13 @@
          <index name="node_quants_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_node_quants_on_node_id" unique="false">
+         <index name="node_quants_node_id_idx" unique="false">
             <column ascending="true" name="node_id"/>
          </index>
          <index name="node_quants_node_id_quant_id_year_key" unique="true">
             <column ascending="true" name="node_id"/>
             <column ascending="true" name="quant_id"/>
             <column ascending="true" name="year"/>
-         </index>
-         <index name="node_quants_quant_id_idx" unique="false">
-            <column ascending="true" name="quant_id"/>
          </index>
       </table>
       <table name="nodes" numRows="0" remarks="Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains" schema="public" type="TABLE">

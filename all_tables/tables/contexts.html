@@ -231,6 +231,14 @@
 						fk_rails_91f952a39c <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
 					</td>
 				   </tr>
+				   <tr>
+					<td title="top_profiles.context_id references contexts.id via fk_rails_02381b1a96">
+						<a href='top_profiles.html'>top_profiles</a><span class='relatedKey'>.context_id</span>
+					</td>
+					<td class="constraint detail">
+						fk_rails_02381b1a96 <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
+					</td>
+				   </tr>
 				  </table>				 
 				 </td>
 				 <td>
@@ -375,22 +383,16 @@
 				  <td>id</td>
 				 </tr>				 
 				 <tr>
-				  <td class='uniqueKey' title='Unique Key'><i class='icon ion-key iconkey'></i> contexts_country_id_commodity_id_key</td>
-				  <td>Must be unique</td>
-				  <td><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
-				  <td>country_id + commodity_id</td>
-				 </tr>				 
-				 <tr>
-				  <td title='Indexed'>index_contexts_on_commodity_id</td>
+				  <td title='Indexed'>contexts_commodity_id_idx</td>
 				  <td>Performance</td>
 				  <td><span title='Ascending'>Asc</span></td>
 				  <td>commodity_id</td>
 				 </tr>				 
 				 <tr>
-				  <td title='Indexed'>index_contexts_on_country_id</td>
-				  <td>Performance</td>
-				  <td><span title='Ascending'>Asc</span></td>
-				  <td>country_id</td>
+				  <td class='uniqueKey' title='Unique Key'><i class='icon ion-key iconkey'></i> contexts_country_id_commodity_id_key</td>
+				  <td>Must be unique</td>
+				  <td><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
+				  <td>country_id + commodity_id</td>
 				 </tr>				 
 				</tbody>
 				</table>   			  
@@ -420,64 +422,66 @@
 				<div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
 <area shape="rect" id="node1" href="context_node_types.html" title="context_node_types" alt="" coords="625,5,881,181">
-<area shape="rect" id="node2" href="contexts.html" title="contexts" alt="" coords="244,1140,559,1385">
-<area shape="rect" id="node4" href="commodities.html" title="commodities" alt="" coords="5,1268,200,1415">
-<area shape="rect" id="node5" href="countries.html" title="countries" alt="" coords="19,1104,186,1251">
+<area shape="rect" id="node2" href="contexts.html" title="contexts" alt="" coords="244,1221,559,1467">
+<area shape="rect" id="node4" href="commodities.html" title="commodities" alt="" coords="5,1349,200,1496">
+<area shape="rect" id="node5" href="countries.html" title="countries" alt="" coords="19,1185,186,1332">
 <area shape="rect" id="node3" href="context_properties.html" title="context_properties" alt="" coords="630,199,877,345">
 <area shape="rect" id="node6" href="contextual_layers.html" title="contextual_layers" alt="" coords="635,363,871,568">
 <area shape="rect" id="node7" href="download_attributes.html" title="download_attributes" alt="" coords="625,585,882,761">
 <area shape="rect" id="node8" href="download_versions.html" title="download_versions" alt="" coords="631,779,875,984">
-<area shape="rect" id="node9" href="flows.html" title="flows" alt="" coords="675,1001,831,1207">
-<area shape="rect" id="node10" href="ind_context_properties.html" title="ind_context_properties" alt="" coords="614,1224,893,1400">
-<area shape="rect" id="node11" href="map_attribute_groups.html" title="map_attribute_groups" alt="" coords="618,1417,889,1593">
-<area shape="rect" id="node12" href="qual_context_properties.html" title="qual_context_properties" alt="" coords="609,1611,897,1787">
-<area shape="rect" id="node13" href="quant_context_properties.html" title="quant_context_properties" alt="" coords="603,1804,904,1980">
-<area shape="rect" id="node14" href="recolor_by_attributes.html" title="recolor_by_attributes" alt="" coords="621,1997,885,2203">
-<area shape="rect" id="node15" href="resize_by_attributes.html" title="resize_by_attributes" alt="" coords="625,2220,881,2425">
+<area shape="rect" id="node9" href="flows.html" title="flows" alt="" coords="675,1001,831,1177">
+<area shape="rect" id="node10" href="ind_context_properties.html" title="ind_context_properties" alt="" coords="614,1195,893,1371">
+<area shape="rect" id="node11" href="map_attribute_groups.html" title="map_attribute_groups" alt="" coords="618,1388,889,1564">
+<area shape="rect" id="node12" href="qual_context_properties.html" title="qual_context_properties" alt="" coords="609,1581,897,1757">
+<area shape="rect" id="node13" href="quant_context_properties.html" title="quant_context_properties" alt="" coords="603,1775,904,1951">
+<area shape="rect" id="node14" href="recolor_by_attributes.html" title="recolor_by_attributes" alt="" coords="621,1968,885,2115">
+<area shape="rect" id="node15" href="resize_by_attributes.html" title="resize_by_attributes" alt="" coords="625,2132,881,2279">
+<area shape="rect" id="node16" href="top_profiles.html" title="top_profiles" alt="" coords="636,2296,871,2501">
 </map>
 
 					<a name='diagram'><img id='oneDegreeImg' src='../diagrams/contexts.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							
 				</div>
 				<div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="carto_layers.html" title="carto_layers" alt="" coords="1027,111,1218,199">
-<area shape="rect" id="node2" href="contextual_layers.html" title="contextual_layers" alt="" coords="638,79,874,284">
-<area shape="rect" id="node5" href="contexts.html" title="contexts" alt="" coords="244,1012,559,1257">
-<area shape="rect" id="node3" href="context_node_type_properties.html" title="context_node_type_properties" alt="" coords="953,2577,1292,2665">
-<area shape="rect" id="node4" href="context_node_types.html" title="context_node_types" alt="" coords="628,2504,884,2680">
-<area shape="rect" id="node6" href="node_types.html" title="node_types" alt="" coords="309,2509,493,2597">
-<area shape="rect" id="node8" href="commodities.html" title="commodities" alt="" coords="5,1172,200,1319">
-<area shape="rect" id="node9" href="countries.html" title="countries" alt="" coords="19,2428,186,2575">
-<area shape="rect" id="node7" href="context_properties.html" title="context_properties" alt="" coords="633,1675,879,1821">
-<area shape="rect" id="node10" href="country_properties.html" title="country_properties" alt="" coords="279,2615,524,2703">
-<area shape="rect" id="node11" href="download_attributes.html" title="download_attributes" alt="" coords="627,1081,885,1257">
-<area shape="rect" id="node12" href="download_quals.html" title="download_quals" alt="" coords="1013,1203,1232,1291">
-<area shape="rect" id="node13" href="quals.html" title="quals" alt="" coords="683,1569,829,1657">
-<area shape="rect" id="node14" href="download_quants.html" title="download_quants" alt="" coords="1007,636,1239,724">
-<area shape="rect" id="node15" href="quants.html" title="quants" alt="" coords="683,560,829,648">
-<area shape="rect" id="node16" href="download_versions.html" title="download_versions" alt="" coords="634,665,878,871">
-<area shape="rect" id="node17" href="flow_inds.html" title="flow_inds" alt="" coords="1039,1604,1206,1692">
-<area shape="rect" id="node18" href="flows.html" title="flows" alt="" coords="678,1347,834,1552">
-<area shape="rect" id="node19" href="inds.html" title="inds" alt="" coords="328,2327,475,2415">
-<area shape="rect" id="node20" href="flow_quals.html" title="flow_quals" alt="" coords="1035,1487,1211,1575">
-<area shape="rect" id="node21" href="flow_quants.html" title="flow_quants" alt="" coords="1028,748,1217,836">
-<area shape="rect" id="node22" href="ind_commodity_properties.html" title="ind_commodity_properties" alt="" coords="603,2327,909,2415">
-<area shape="rect" id="node23" href="ind_context_properties.html" title="ind_context_properties" alt="" coords="617,2133,895,2309">
-<area shape="rect" id="node24" href="ind_country_properties.html" title="ind_country_properties" alt="" coords="617,2697,895,2785">
-<area shape="rect" id="node25" href="map_attribute_groups.html" title="map_attribute_groups" alt="" coords="621,888,891,1064">
-<area shape="rect" id="node26" href="map_attributes.html" title="map_attributes" alt="" coords="1015,891,1230,979">
-<area shape="rect" id="node27" href="profiles.html" title="profiles" alt="" coords="1045,2472,1201,2560">
-<area shape="rect" id="node28" href="qual_commodity_properties.html" title="qual_commodity_properties" alt="" coords="965,1357,1281,1445">
-<area shape="rect" id="node29" href="qual_context_properties.html" title="qual_context_properties" alt="" coords="979,1716,1267,1892">
-<area shape="rect" id="node30" href="qual_country_properties.html" title="qual_country_properties" alt="" coords="979,2297,1266,2385">
-<area shape="rect" id="node31" href="quant_commodity_properties.html" title="quant_commodity_properties" alt="" coords="958,5,1287,93">
-<area shape="rect" id="node32" href="quant_context_properties.html" title="quant_context_properties" alt="" coords="972,299,1273,475">
-<area shape="rect" id="node33" href="quant_country_properties.html" title="quant_country_properties" alt="" coords="973,999,1273,1087">
-<area shape="rect" id="node34" href="recolor_by_attributes.html" title="recolor_by_attributes" alt="" coords="624,1911,888,2116">
-<area shape="rect" id="node35" href="recolor_by_inds.html" title="recolor_by_inds" alt="" coords="1015,2053,1231,2141">
-<area shape="rect" id="node36" href="recolor_by_quals.html" title="recolor_by_quals" alt="" coords="1009,1912,1236,2000">
-<area shape="rect" id="node37" href="resize_by_attributes.html" title="resize_by_attributes" alt="" coords="628,337,884,543">
-<area shape="rect" id="node38" href="resize_by_quants.html" title="resize_by_quants" alt="" coords="1007,527,1238,615">
+<area shape="rect" id="node1" href="carto_layers.html" title="carto_layers" alt="" coords="1050,1259,1241,1347">
+<area shape="rect" id="node2" href="contextual_layers.html" title="contextual_layers" alt="" coords="649,1256,885,1461">
+<area shape="rect" id="node5" href="contexts.html" title="contexts" alt="" coords="244,1809,559,2055">
+<area shape="rect" id="node3" href="context_node_type_properties.html" title="context_node_type_properties" alt="" coords="976,2859,1315,2947">
+<area shape="rect" id="node4" href="context_node_types.html" title="context_node_types" alt="" coords="639,2803,895,2979">
+<area shape="rect" id="node6" href="node_types.html" title="node_types" alt="" coords="11,2752,195,2840">
+<area shape="rect" id="node8" href="commodities.html" title="commodities" alt="" coords="5,1871,200,2017">
+<area shape="rect" id="node9" href="countries.html" title="countries" alt="" coords="19,283,186,429">
+<area shape="rect" id="node7" href="context_properties.html" title="context_properties" alt="" coords="644,2059,891,2205">
+<area shape="rect" id="node10" href="country_properties.html" title="country_properties" alt="" coords="279,5,524,93">
+<area shape="rect" id="node11" href="download_attributes.html" title="download_attributes" alt="" coords="639,2223,896,2399">
+<area shape="rect" id="node12" href="download_quals.html" title="download_quals" alt="" coords="1036,2100,1255,2188">
+<area shape="rect" id="node13" href="quals.html" title="quals" alt="" coords="328,395,475,483">
+<area shape="rect" id="node14" href="download_quants.html" title="download_quants" alt="" coords="1029,3033,1261,3121">
+<area shape="rect" id="node15" href="quants.html" title="quants" alt="" coords="328,3152,475,3240">
+<area shape="rect" id="node16" href="download_versions.html" title="download_versions" alt="" coords="645,1479,889,1684">
+<area shape="rect" id="node17" href="flow_inds.html" title="flow_inds" alt="" coords="1062,517,1229,605">
+<area shape="rect" id="node18" href="flows.html" title="flows" alt="" coords="689,957,845,1133">
+<area shape="rect" id="node19" href="inds.html" title="inds" alt="" coords="328,147,475,235">
+<area shape="rect" id="node20" href="ind_commodity_properties.html" title="ind_commodity_properties" alt="" coords="614,183,921,271">
+<area shape="rect" id="node21" href="ind_context_properties.html" title="ind_context_properties" alt="" coords="628,571,907,747">
+<area shape="rect" id="node22" href="ind_country_properties.html" title="ind_country_properties" alt="" coords="629,5,906,93">
+<area shape="rect" id="node23" href="map_attribute_groups.html" title="map_attribute_groups" alt="" coords="632,1865,903,2041">
+<area shape="rect" id="node24" href="map_attributes.html" title="map_attributes" alt="" coords="1038,1868,1253,1956">
+<area shape="rect" id="node25" href="nodes.html" title="nodes" alt="" coords="323,2680,479,2768">
+<area shape="rect" id="node26" href="profiles.html" title="profiles" alt="" coords="1067,2753,1223,2841">
+<area shape="rect" id="node27" href="qual_commodity_properties.html" title="qual_commodity_properties" alt="" coords="609,465,925,553">
+<area shape="rect" id="node28" href="qual_context_properties.html" title="qual_context_properties" alt="" coords="623,764,911,940">
+<area shape="rect" id="node29" href="qual_country_properties.html" title="qual_country_properties" alt="" coords="624,288,911,376">
+<area shape="rect" id="node30" href="quant_commodity_properties.html" title="quant_commodity_properties" alt="" coords="603,3261,932,3349">
+<area shape="rect" id="node31" href="quant_context_properties.html" title="quant_context_properties" alt="" coords="617,2996,918,3172">
+<area shape="rect" id="node32" href="quant_country_properties.html" title="quant_country_properties" alt="" coords="617,1151,917,1239">
+<area shape="rect" id="node33" href="recolor_by_attributes.html" title="recolor_by_attributes" alt="" coords="635,1701,899,1848">
+<area shape="rect" id="node34" href="recolor_by_inds.html" title="recolor_by_inds" alt="" coords="1037,667,1253,755">
+<area shape="rect" id="node35" href="recolor_by_quals.html" title="recolor_by_quals" alt="" coords="1032,1535,1259,1623">
+<area shape="rect" id="node36" href="resize_by_attributes.html" title="resize_by_attributes" alt="" coords="639,2416,895,2563">
+<area shape="rect" id="node37" href="resize_by_quants.html" title="resize_by_quants" alt="" coords="1030,3172,1261,3260">
+<area shape="rect" id="node38" href="top_profile_images.html" title="top_profile_images" alt="" coords="280,2344,523,2432">
+<area shape="rect" id="node39" href="top_profiles.html" title="top_profiles" alt="" coords="650,2580,885,2785">
 </map>
 
 					<a name='diagram'><img id='twodegreesDegreeImg' src='../diagrams/contexts.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							

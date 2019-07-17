@@ -143,22 +143,6 @@
 						fk_rails_0a8bdfaf25 <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
 					</td>
 				   </tr>
-				   <tr>
-					<td title="flow_quals.flow_id references flows.id via fk_rails_6e55ca4cbc">
-						<a href='flow_quals.html'>flow_quals</a><span class='relatedKey'>.flow_id</span>
-					</td>
-					<td class="constraint detail">
-						fk_rails_6e55ca4cbc <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
-					</td>
-				   </tr>
-				   <tr>
-					<td title="flow_quants.flow_id references flows.id via fk_rails_2dbc0a565f">
-						<a href='flow_quants.html'>flow_quants</a><span class='relatedKey'>.flow_id</span>
-					</td>
-					<td class="constraint detail">
-						fk_rails_2dbc0a565f <span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span>
-					</td>
-				   </tr>
 				  </table>				 
 				 </td>
 				 <td>
@@ -210,7 +194,7 @@
 				 <td><p>Year</p></td>
 				</tr>
 				<tr>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i><span id="path">path</span></td>
+				 <td><span id="path">path</span></td>
 				 <td>_int4</td>
 				 <td>10</td>
 				 <td title='nullable'>√</td>
@@ -278,22 +262,16 @@
 				  <td>id</td>
 				 </tr>				 
 				 <tr>
-				  <td title='Indexed'>index_flows_on_context_id</td>
+				  <td title='Indexed'>flows_context_id_idx</td>
 				  <td>Performance</td>
 				  <td><span title='Ascending'>Asc</span></td>
 				  <td>context_id</td>
 				 </tr>				 
 				 <tr>
-				  <td title='Indexed'>index_flows_on_context_id_and_year</td>
+				  <td title='Indexed'>flows_context_id_year_idx</td>
 				  <td>Performance</td>
 				  <td><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
 				  <td>context_id + year</td>
-				 </tr>				 
-				 <tr>
-				  <td title='Indexed'>index_flows_on_path</td>
-				  <td>Performance</td>
-				  <td><span title='Ascending'>Asc</span></td>
-				  <td>path</td>
 				 </tr>				 
 				</tbody>
 				</table>   			  
@@ -322,38 +300,33 @@
             <div class="tab-content no-padding">            
 				<div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="flow_inds.html" title="flow_inds" alt="" coords="563,5,730,181">
-<area shape="rect" id="node2" href="flows.html" title="flows" alt="" coords="223,225,508,441">
-<area shape="rect" id="node5" href="contexts.html" title="contexts" alt="" coords="5,257,179,433">
-<area shape="rect" id="node3" href="flow_quals.html" title="flow_quals" alt="" coords="559,199,735,375">
-<area shape="rect" id="node4" href="flow_quants.html" title="flow_quants" alt="" coords="552,392,741,568">
+<area shape="rect" id="node1" href="flow_inds.html" title="flow_inds" alt="" coords="552,5,719,181">
+<area shape="rect" id="node2" href="flows.html" title="flows" alt="" coords="223,32,508,248">
+<area shape="rect" id="node3" href="contexts.html" title="contexts" alt="" coords="5,64,179,240">
 </map>
 
 					<a name='diagram'><img id='oneDegreeImg' src='../diagrams/flows.1degree.png' usemap='#oneDegreeRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							
 				</div>
 				<div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="context_node_types.html" title="context_node_types" alt="" coords="476,721,732,809">
-<area shape="rect" id="node2" href="contexts.html" title="contexts" alt="" coords="244,772,417,948">
-<area shape="rect" id="node4" href="commodities.html" title="commodities" alt="" coords="5,871,200,959">
-<area shape="rect" id="node5" href="countries.html" title="countries" alt="" coords="19,765,186,853">
-<area shape="rect" id="node3" href="context_properties.html" title="context_properties" alt="" coords="481,827,727,915">
-<area shape="rect" id="node6" href="contextual_layers.html" title="contextual_layers" alt="" coords="486,1037,722,1125">
-<area shape="rect" id="node7" href="download_attributes.html" title="download_attributes" alt="" coords="475,1284,733,1372">
-<area shape="rect" id="node8" href="download_versions.html" title="download_versions" alt="" coords="482,1425,726,1513">
-<area shape="rect" id="node9" href="flow_inds.html" title="flow_inds" alt="" coords="858,827,1025,1003">
-<area shape="rect" id="node10" href="flows.html" title="flows" alt="" coords="461,172,747,388">
-<area shape="rect" id="node11" href="inds.html" title="inds" alt="" coords="531,1143,677,1231">
-<area shape="rect" id="node12" href="flow_quals.html" title="flow_quals" alt="" coords="853,133,1029,309">
-<area shape="rect" id="node13" href="quals.html" title="quals" alt="" coords="531,67,677,155">
-<area shape="rect" id="node14" href="flow_quants.html" title="flow_quants" alt="" coords="847,569,1036,745">
-<area shape="rect" id="node15" href="quants.html" title="quants" alt="" coords="531,932,677,1020">
-<area shape="rect" id="node16" href="ind_context_properties.html" title="ind_context_properties" alt="" coords="802,1335,1081,1423">
-<area shape="rect" id="node17" href="map_attribute_groups.html" title="map_attribute_groups" alt="" coords="469,405,739,493">
-<area shape="rect" id="node18" href="qual_context_properties.html" title="qual_context_properties" alt="" coords="797,5,1085,93">
-<area shape="rect" id="node19" href="quant_context_properties.html" title="quant_context_properties" alt="" coords="791,1147,1092,1235">
-<area shape="rect" id="node20" href="recolor_by_attributes.html" title="recolor_by_attributes" alt="" coords="472,511,736,599">
-<area shape="rect" id="node21" href="resize_by_attributes.html" title="resize_by_attributes" alt="" coords="476,616,732,704">
+<area shape="rect" id="node1" href="context_node_types.html" title="context_node_types" alt="" coords="484,5,740,93">
+<area shape="rect" id="node2" href="contexts.html" title="contexts" alt="" coords="244,831,417,1007">
+<area shape="rect" id="node4" href="commodities.html" title="commodities" alt="" coords="5,929,200,1017">
+<area shape="rect" id="node5" href="countries.html" title="countries" alt="" coords="19,824,186,912">
+<area shape="rect" id="node3" href="context_properties.html" title="context_properties" alt="" coords="489,111,735,199">
+<area shape="rect" id="node6" href="contextual_layers.html" title="contextual_layers" alt="" coords="494,216,730,304">
+<area shape="rect" id="node7" href="download_attributes.html" title="download_attributes" alt="" coords="483,321,741,409">
+<area shape="rect" id="node8" href="download_versions.html" title="download_versions" alt="" coords="490,427,734,515">
+<area shape="rect" id="node9" href="flow_inds.html" title="flow_inds" alt="" coords="863,540,1029,716">
+<area shape="rect" id="node10" href="flows.html" title="flows" alt="" coords="469,532,755,748">
+<area shape="rect" id="node11" href="inds.html" title="inds" alt="" coords="539,765,685,853">
+<area shape="rect" id="node12" href="ind_context_properties.html" title="ind_context_properties" alt="" coords="807,800,1085,888">
+<area shape="rect" id="node13" href="map_attribute_groups.html" title="map_attribute_groups" alt="" coords="477,907,747,995">
+<area shape="rect" id="node14" href="qual_context_properties.html" title="qual_context_properties" alt="" coords="468,1012,756,1100">
+<area shape="rect" id="node15" href="quant_context_properties.html" title="quant_context_properties" alt="" coords="461,1117,763,1205">
+<area shape="rect" id="node16" href="recolor_by_attributes.html" title="recolor_by_attributes" alt="" coords="480,1223,744,1311">
+<area shape="rect" id="node17" href="resize_by_attributes.html" title="resize_by_attributes" alt="" coords="484,1328,740,1416">
+<area shape="rect" id="node18" href="top_profiles.html" title="top_profiles" alt="" coords="519,1433,705,1521">
 </map>
 
 					<a name='diagram'><img id='twodegreesDegreeImg' src='../diagrams/flows.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							

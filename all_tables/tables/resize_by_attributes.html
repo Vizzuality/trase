@@ -177,7 +177,7 @@
 				 <td></td>
 				</tr>
 				<tr>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i><span id="group_number">group_number</span></td>
+				 <td><span id="group_number">group_number</span></td>
 				 <td>int4</td>
 				 <td>10</td>
 				 <td title=''></td>
@@ -194,7 +194,7 @@
 				 <td><p>Group number</p></td>
 				</tr>
 				<tr>
-				 <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i><span id="position">position</span></td>
+				 <td><span id="position">position</span></td>
 				 <td>int4</td>
 				 <td>10</td>
 				 <td title=''></td>
@@ -347,16 +347,10 @@
 				  <td>id</td>
 				 </tr>				 
 				 <tr>
-				  <td title='Indexed'>index_resize_by_attributes_on_context_id</td>
+				  <td title='Indexed'>resize_by_attributes_context_id_idx</td>
 				  <td>Performance</td>
 				  <td><span title='Ascending'>Asc</span></td>
 				  <td>context_id</td>
-				 </tr>				 
-				 <tr>
-				  <td class='uniqueKey' title='Unique Key'><i class='icon ion-key iconkey'></i> resize_by_attributes_context_id_group_number_position_key</td>
-				  <td>Must be unique</td>
-				  <td><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
-				  <td>context_id + group_number + position</td>
 				 </tr>				 
 				</tbody>
 				</table>   			  
@@ -395,9 +389,9 @@
 				<div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">					
 					<map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
 <area shape="rect" id="node1" href="context_node_types.html" title="context_node_types" alt="" coords="527,385,783,473">
-<area shape="rect" id="node2" href="contexts.html" title="contexts" alt="" coords="244,857,417,1033">
-<area shape="rect" id="node4" href="commodities.html" title="commodities" alt="" coords="5,956,200,1044">
-<area shape="rect" id="node5" href="countries.html" title="countries" alt="" coords="19,851,186,939">
+<area shape="rect" id="node2" href="contexts.html" title="contexts" alt="" coords="244,909,417,1085">
+<area shape="rect" id="node4" href="commodities.html" title="commodities" alt="" coords="5,1008,200,1096">
+<area shape="rect" id="node5" href="countries.html" title="countries" alt="" coords="19,903,186,991">
 <area shape="rect" id="node3" href="context_properties.html" title="context_properties" alt="" coords="532,491,779,579">
 <area shape="rect" id="node6" href="contextual_layers.html" title="contextual_layers" alt="" coords="537,596,773,684">
 <area shape="rect" id="node7" href="download_attributes.html" title="download_attributes" alt="" coords="527,701,784,789">
@@ -411,6 +405,7 @@
 <area shape="rect" id="node15" href="recolor_by_attributes.html" title="recolor_by_attributes" alt="" coords="523,1475,787,1563">
 <area shape="rect" id="node16" href="resize_by_attributes.html" title="resize_by_attributes" alt="" coords="461,5,849,368">
 <area shape="rect" id="node17" href="resize_by_quants.html" title="resize_by_quants" alt="" coords="921,560,1167,736">
+<area shape="rect" id="node18" href="top_profiles.html" title="top_profiles" alt="" coords="563,1580,748,1668">
 </map>
 
 					<a name='diagram'><img id='twodegreesDegreeImg' src='../diagrams/resize_by_attributes.2degrees.png' usemap='#twoDegreesRelationshipsDiagram' class='diagram' border='0' alt='' align='left'></a>							

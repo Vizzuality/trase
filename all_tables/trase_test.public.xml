@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<database name="trase_test" schema="public" type="PostgreSQL - 10.7 (Ubuntu 10.7-1.pgdg16.04+1)">
+<database name="trase_test" schema="public" type="PostgreSQL - 11.4 (Ubuntu 11.4-1.pgdg16.04+1)">
    <tables>
       <table name="ar_internal_metadata" numRows="1" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="key" nullable="false" remarks="" size="2147483647" type="varchar"/>
@@ -29,9 +29,6 @@
             <column ascending="true" name="contextual_layer_id"/>
             <column ascending="true" name="identifier"/>
          </index>
-         <index name="index_carto_layers_on_contextual_layer_id" unique="false">
-            <column ascending="true" name="contextual_layer_id"/>
-         </index>
       </table>
       <table name="chart_attributes" numRows="0" remarks="Attributes (inds/quals/quants) to display in a chart." schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('chart_attributes_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
@@ -60,12 +57,12 @@
             <column ascending="true" name="chart_id"/>
             <column ascending="true" name="identifier"/>
          </index>
-         <index name="chart_attributes_chart_id_position_key" unique="true">
+         <index name="chart_attributes_chart_id_idx" unique="false">
+            <column ascending="true" name="chart_id"/>
+         </index>
+         <index name="chart_attributes_chart_id_position_idx" unique="true">
             <column ascending="true" name="chart_id"/>
             <column ascending="true" name="position"/>
-         </index>
-         <index name="index_chart_attributes_on_chart_id" unique="false">
-            <column ascending="true" name="chart_id"/>
          </index>
       </table>
       <table name="chart_inds" numRows="0" remarks="Inds to display in a chart (see chart_attributes.)" schema="public" type="TABLE">
@@ -84,12 +81,6 @@
          </index>
          <index name="chart_inds_chart_attribute_id_ind_id_key" unique="true">
             <column ascending="true" name="chart_attribute_id"/>
-            <column ascending="true" name="ind_id"/>
-         </index>
-         <index name="index_chart_inds_on_chart_attribute_id" unique="false">
-            <column ascending="true" name="chart_attribute_id"/>
-         </index>
-         <index name="index_chart_inds_on_ind_id" unique="false">
             <column ascending="true" name="ind_id"/>
          </index>
       </table>
@@ -130,14 +121,14 @@
          <index name="chart_quals_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
+         <index name="chart_quals_chart_attribute_id_idx" unique="false">
+            <column ascending="true" name="chart_attribute_id"/>
+         </index>
          <index name="chart_quals_chart_attribute_id_qual_id_key" unique="true">
             <column ascending="true" name="chart_attribute_id"/>
             <column ascending="true" name="qual_id"/>
          </index>
-         <index name="index_chart_quals_on_chart_attribute_id" unique="false">
-            <column ascending="true" name="chart_attribute_id"/>
-         </index>
-         <index name="index_chart_quals_on_qual_id" unique="false">
+         <index name="chart_quals_qual_id_idx" unique="false">
             <column ascending="true" name="qual_id"/>
          </index>
       </table>
@@ -155,14 +146,14 @@
          <index name="chart_quants_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
+         <index name="chart_quants_chart_attribute_id_idx" unique="false">
+            <column ascending="true" name="chart_attribute_id"/>
+         </index>
          <index name="chart_quants_chart_attribute_id_quant_id_key" unique="true">
             <column ascending="true" name="chart_attribute_id"/>
             <column ascending="true" name="quant_id"/>
          </index>
-         <index name="index_chart_quants_on_chart_attribute_id" unique="false">
-            <column ascending="true" name="chart_attribute_id"/>
-         </index>
-         <index name="index_chart_quants_on_quant_id" unique="false">
+         <index name="chart_quants_quant_id_idx" unique="false">
             <column ascending="true" name="quant_id"/>
          </index>
       </table>
@@ -187,6 +178,9 @@
          <index name="charts_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
+         <index name="charts_parent_id_idx" unique="false">
+            <column ascending="true" name="parent_id"/>
+         </index>
          <index name="charts_profile_id_parent_id_identifier_key" unique="true">
             <column ascending="true" name="profile_id"/>
             <column ascending="true" name="parent_id"/>
@@ -197,12 +191,6 @@
             <column ascending="true" name="parent_id"/>
             <column ascending="true" name="position"/>
          </index>
-         <index name="index_charts_on_parent_id" unique="false">
-            <column ascending="true" name="parent_id"/>
-         </index>
-         <index name="index_charts_on_profile_id" unique="false">
-            <column ascending="true" name="profile_id"/>
-         </index>
       </table>
       <table name="commodities" numRows="0" remarks="Commodities in supply chains, such as soy or beef" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('commodities_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
@@ -210,6 +198,7 @@
             <child column="commodity_id" foreignKey="fk_rails_a8310a8e25" implied="false" onDeleteCascade="true" schema="public" table="ind_commodity_properties"/>
             <child column="commodity_id" foreignKey="fk_rails_721d9b2c40" implied="false" onDeleteCascade="true" schema="public" table="qual_commodity_properties"/>
             <child column="commodity_id" foreignKey="fk_rails_93e2577ebb" implied="false" onDeleteCascade="true" schema="public" table="quant_commodity_properties"/>
+            <child column="commodity_id" foreignKey="fk_rails_29f1862b03" implied="false" onDeleteCascade="false" schema="public" table="top_profile_images"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="Commodity name; unique across commodities" size="2147483647" type="text"/>
          <column autoUpdated="false" digits="6" id="2" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
@@ -237,10 +226,10 @@
          <index name="context_node_type_properties_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="context_node_type_properties_context_node_type_id_key" unique="true">
+         <index name="context_node_type_properties_context_node_type_id_idx" unique="false">
             <column ascending="true" name="context_node_type_id"/>
          </index>
-         <index name="index_context_node_type_properties_on_context_node_type_id" unique="false">
+         <index name="context_node_type_properties_context_node_type_id_key" unique="true">
             <column ascending="true" name="context_node_type_id"/>
          </index>
       </table>
@@ -261,14 +250,14 @@
          <index name="context_node_types_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
+         <index name="context_node_types_context_id_idx" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
          <index name="context_node_types_context_id_node_type_id_key" unique="true">
             <column ascending="true" name="context_id"/>
             <column ascending="true" name="node_type_id"/>
          </index>
-         <index name="index_context_node_types_on_context_id" unique="false">
-            <column ascending="true" name="context_id"/>
-         </index>
-         <index name="index_context_node_types_on_node_type_id" unique="false">
+         <index name="context_node_types_node_type_id_idx" unique="false">
             <column ascending="true" name="node_type_id"/>
          </index>
       </table>
@@ -288,10 +277,10 @@
          <index name="context_properties_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="context_properties_context_id_key" unique="true">
+         <index name="context_properties_context_id_idx" unique="false">
             <column ascending="true" name="context_id"/>
          </index>
-         <index name="index_context_properties_on_context_id" unique="false">
+         <index name="context_properties_context_id_key" unique="true">
             <column ascending="true" name="context_id"/>
          </index>
       </table>
@@ -309,6 +298,7 @@
             <child column="context_id" foreignKey="fk_rails_6e05c978da" implied="false" onDeleteCascade="true" schema="public" table="quant_context_properties"/>
             <child column="context_id" foreignKey="fk_rails_15a713c884" implied="false" onDeleteCascade="true" schema="public" table="recolor_by_attributes"/>
             <child column="context_id" foreignKey="fk_rails_91f952a39c" implied="false" onDeleteCascade="true" schema="public" table="resize_by_attributes"/>
+            <child column="context_id" foreignKey="fk_rails_02381b1a96" implied="false" onDeleteCascade="true" schema="public" table="top_profiles"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="country_id" nullable="false" remarks="" size="10" type="int4">
             <parent column="id" foreignKey="fk_rails_d9e59d1113" implied="false" onDeleteCascade="true" schema="public" table="countries"/>
@@ -323,15 +313,12 @@
          <index name="contexts_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
+         <index name="contexts_commodity_id_idx" unique="false">
+            <column ascending="true" name="commodity_id"/>
+         </index>
          <index name="contexts_country_id_commodity_id_key" unique="true">
             <column ascending="true" name="country_id"/>
             <column ascending="true" name="commodity_id"/>
-         </index>
-         <index name="index_contexts_on_commodity_id" unique="false">
-            <column ascending="true" name="commodity_id"/>
-         </index>
-         <index name="index_contexts_on_country_id" unique="false">
-            <column ascending="true" name="country_id"/>
          </index>
       </table>
       <table name="contextual_layers" numRows="0" remarks="Additional layers shown on map coming from CartoDB" schema="public" type="TABLE">
@@ -357,12 +344,12 @@
             <column ascending="true" name="context_id"/>
             <column ascending="true" name="identifier"/>
          </index>
+         <index name="contextual_layers_context_id_idx" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
          <index name="contextual_layers_context_id_position_key" unique="true">
             <column ascending="true" name="context_id"/>
             <column ascending="true" name="position"/>
-         </index>
-         <index name="index_contextual_layers_on_context_id" unique="false">
-            <column ascending="true" name="context_id"/>
          </index>
       </table>
       <table name="countries" numRows="0" remarks="Countries (source)" schema="public" type="TABLE">
@@ -401,9 +388,6 @@
             <column ascending="true" name="id"/>
          </index>
          <index name="country_properties_country_id_key" unique="true">
-            <column ascending="true" name="country_id"/>
-         </index>
-         <index name="index_country_properties_on_country_id" unique="false">
             <column ascending="true" name="country_id"/>
          </index>
       </table>
@@ -514,9 +498,6 @@
             <column ascending="true" name="dashboards_attribute_group_id"/>
             <column ascending="true" name="position"/>
          </index>
-         <index name="index_dashboards_attributes_on_dashboards_attribute_group_id" unique="false">
-            <column ascending="true" name="dashboards_attribute_group_id"/>
-         </index>
       </table>
       <table name="dashboards_inds" numRows="0" remarks="Inds available in dashboards (see dashboards_attributes.)" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('dashboards_inds_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="19" type="bigserial"/>
@@ -534,12 +515,6 @@
          </index>
          <index name="dashboards_inds_dashboards_attribute_id_ind_id_key" unique="true">
             <column ascending="true" name="dashboards_attribute_id"/>
-            <column ascending="true" name="ind_id"/>
-         </index>
-         <index name="index_dashboards_inds_on_dashboards_attribute_id" unique="false">
-            <column ascending="true" name="dashboards_attribute_id"/>
-         </index>
-         <index name="index_dashboards_inds_on_ind_id" unique="false">
             <column ascending="true" name="ind_id"/>
          </index>
       </table>
@@ -561,12 +536,6 @@
             <column ascending="true" name="dashboards_attribute_id"/>
             <column ascending="true" name="qual_id"/>
          </index>
-         <index name="index_dashboards_quals_on_dashboards_attribute_id" unique="false">
-            <column ascending="true" name="dashboards_attribute_id"/>
-         </index>
-         <index name="index_dashboards_quals_on_qual_id" unique="false">
-            <column ascending="true" name="qual_id"/>
-         </index>
       </table>
       <table name="dashboards_quants" numRows="0" remarks="Quants available in dashboards (see dashboards_attributes.)" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('dashboards_quants_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="19" type="bigserial"/>
@@ -586,12 +555,6 @@
             <column ascending="true" name="dashboards_attribute_id"/>
             <column ascending="true" name="quant_id"/>
          </index>
-         <index name="index_dashboards_quants_on_dashboards_attribute_id" unique="false">
-            <column ascending="true" name="dashboards_attribute_id"/>
-         </index>
-         <index name="index_dashboards_quants_on_quant_id" unique="false">
-            <column ascending="true" name="quant_id"/>
-         </index>
       </table>
       <table name="database_updates" numRows="0" remarks="Keeping track of database update operations, also used to ensure only one update processed at a time" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('database_updates_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="19" type="bigserial"/>
@@ -608,7 +571,7 @@
          <index name="database_updates_jid_key" unique="true">
             <column ascending="true" name="jid"/>
          </index>
-         <index name="index_database_updates_on_status" unique="true">
+         <index name="database_updates_status_idx" unique="true">
             <column ascending="true" name="status"/>
          </index>
       </table>
@@ -645,9 +608,451 @@
             <column ascending="true" name="context_id"/>
             <column ascending="true" name="position"/>
          </index>
-         <index name="index_download_attributes_on_context_id" unique="false">
+      </table>
+      <table name="download_flows" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="year" nullable="true" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="jsonb_path" nullable="true" remarks="" size="2147483647" type="jsonb"/>
+         <column autoUpdated="false" digits="0" id="5" name="attribute_type" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="attribute_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="attribute_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="8" name="text_values" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="9" name="sum" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="10" name="total" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="11" name="sort" nullable="true" remarks="" size="2147483647" type="text"/>
+         <index name="download_flows_attribute_type_attribute_id_idx" unique="false">
+            <column ascending="true" name="attribute_type"/>
+            <column ascending="true" name="attribute_id"/>
+         </index>
+         <index name="download_flows_context_id_idx" unique="false">
             <column ascending="true" name="context_id"/>
          </index>
+         <index name="download_flows_path_idx" unique="false">
+            <column ascending="true" name="path"/>
+         </index>
+         <index name="download_flows_year_idx" unique="false">
+            <column ascending="true" name="year"/>
+         </index>
+      </table>
+      <table name="download_flows_2003" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="year" nullable="true" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="jsonb_path" nullable="true" remarks="" size="2147483647" type="jsonb"/>
+         <column autoUpdated="false" digits="0" id="5" name="attribute_type" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="attribute_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="attribute_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="8" name="text_values" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="9" name="sum" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="10" name="total" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="11" name="sort" nullable="true" remarks="" size="2147483647" type="text"/>
+         <index name="download_flows_2003_attribute_type_attribute_id_idx" unique="false">
+            <column ascending="true" name="attribute_type"/>
+            <column ascending="true" name="attribute_id"/>
+         </index>
+         <index name="download_flows_2003_context_id_idx" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
+         <index name="download_flows_2003_path_idx" unique="false">
+            <column ascending="true" name="path"/>
+         </index>
+         <index name="download_flows_2003_year_idx" unique="false">
+            <column ascending="true" name="year"/>
+         </index>
+      </table>
+      <table name="download_flows_2004" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="year" nullable="true" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="jsonb_path" nullable="true" remarks="" size="2147483647" type="jsonb"/>
+         <column autoUpdated="false" digits="0" id="5" name="attribute_type" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="attribute_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="attribute_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="8" name="text_values" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="9" name="sum" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="10" name="total" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="11" name="sort" nullable="true" remarks="" size="2147483647" type="text"/>
+         <index name="download_flows_2004_attribute_type_attribute_id_idx" unique="false">
+            <column ascending="true" name="attribute_type"/>
+            <column ascending="true" name="attribute_id"/>
+         </index>
+         <index name="download_flows_2004_context_id_idx" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
+         <index name="download_flows_2004_path_idx" unique="false">
+            <column ascending="true" name="path"/>
+         </index>
+         <index name="download_flows_2004_year_idx" unique="false">
+            <column ascending="true" name="year"/>
+         </index>
+      </table>
+      <table name="download_flows_2005" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="year" nullable="true" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="jsonb_path" nullable="true" remarks="" size="2147483647" type="jsonb"/>
+         <column autoUpdated="false" digits="0" id="5" name="attribute_type" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="attribute_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="attribute_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="8" name="text_values" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="9" name="sum" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="10" name="total" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="11" name="sort" nullable="true" remarks="" size="2147483647" type="text"/>
+         <index name="download_flows_2005_attribute_type_attribute_id_idx" unique="false">
+            <column ascending="true" name="attribute_type"/>
+            <column ascending="true" name="attribute_id"/>
+         </index>
+         <index name="download_flows_2005_context_id_idx" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
+         <index name="download_flows_2005_path_idx" unique="false">
+            <column ascending="true" name="path"/>
+         </index>
+         <index name="download_flows_2005_year_idx" unique="false">
+            <column ascending="true" name="year"/>
+         </index>
+      </table>
+      <table name="download_flows_2006" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="year" nullable="true" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="jsonb_path" nullable="true" remarks="" size="2147483647" type="jsonb"/>
+         <column autoUpdated="false" digits="0" id="5" name="attribute_type" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="attribute_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="attribute_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="8" name="text_values" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="9" name="sum" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="10" name="total" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="11" name="sort" nullable="true" remarks="" size="2147483647" type="text"/>
+         <index name="download_flows_2006_attribute_type_attribute_id_idx" unique="false">
+            <column ascending="true" name="attribute_type"/>
+            <column ascending="true" name="attribute_id"/>
+         </index>
+         <index name="download_flows_2006_context_id_idx" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
+         <index name="download_flows_2006_path_idx" unique="false">
+            <column ascending="true" name="path"/>
+         </index>
+         <index name="download_flows_2006_year_idx" unique="false">
+            <column ascending="true" name="year"/>
+         </index>
+      </table>
+      <table name="download_flows_2007" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="year" nullable="true" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="jsonb_path" nullable="true" remarks="" size="2147483647" type="jsonb"/>
+         <column autoUpdated="false" digits="0" id="5" name="attribute_type" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="attribute_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="attribute_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="8" name="text_values" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="9" name="sum" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="10" name="total" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="11" name="sort" nullable="true" remarks="" size="2147483647" type="text"/>
+         <index name="download_flows_2007_attribute_type_attribute_id_idx" unique="false">
+            <column ascending="true" name="attribute_type"/>
+            <column ascending="true" name="attribute_id"/>
+         </index>
+         <index name="download_flows_2007_context_id_idx" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
+         <index name="download_flows_2007_path_idx" unique="false">
+            <column ascending="true" name="path"/>
+         </index>
+         <index name="download_flows_2007_year_idx" unique="false">
+            <column ascending="true" name="year"/>
+         </index>
+      </table>
+      <table name="download_flows_2008" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="year" nullable="true" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="jsonb_path" nullable="true" remarks="" size="2147483647" type="jsonb"/>
+         <column autoUpdated="false" digits="0" id="5" name="attribute_type" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="attribute_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="attribute_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="8" name="text_values" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="9" name="sum" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="10" name="total" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="11" name="sort" nullable="true" remarks="" size="2147483647" type="text"/>
+         <index name="download_flows_2008_attribute_type_attribute_id_idx" unique="false">
+            <column ascending="true" name="attribute_type"/>
+            <column ascending="true" name="attribute_id"/>
+         </index>
+         <index name="download_flows_2008_context_id_idx" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
+         <index name="download_flows_2008_path_idx" unique="false">
+            <column ascending="true" name="path"/>
+         </index>
+         <index name="download_flows_2008_year_idx" unique="false">
+            <column ascending="true" name="year"/>
+         </index>
+      </table>
+      <table name="download_flows_2009" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="year" nullable="true" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="jsonb_path" nullable="true" remarks="" size="2147483647" type="jsonb"/>
+         <column autoUpdated="false" digits="0" id="5" name="attribute_type" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="attribute_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="attribute_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="8" name="text_values" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="9" name="sum" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="10" name="total" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="11" name="sort" nullable="true" remarks="" size="2147483647" type="text"/>
+         <index name="download_flows_2009_attribute_type_attribute_id_idx" unique="false">
+            <column ascending="true" name="attribute_type"/>
+            <column ascending="true" name="attribute_id"/>
+         </index>
+         <index name="download_flows_2009_context_id_idx" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
+         <index name="download_flows_2009_path_idx" unique="false">
+            <column ascending="true" name="path"/>
+         </index>
+         <index name="download_flows_2009_year_idx" unique="false">
+            <column ascending="true" name="year"/>
+         </index>
+      </table>
+      <table name="download_flows_2010" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="year" nullable="true" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="jsonb_path" nullable="true" remarks="" size="2147483647" type="jsonb"/>
+         <column autoUpdated="false" digits="0" id="5" name="attribute_type" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="attribute_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="attribute_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="8" name="text_values" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="9" name="sum" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="10" name="total" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="11" name="sort" nullable="true" remarks="" size="2147483647" type="text"/>
+         <index name="download_flows_2010_attribute_type_attribute_id_idx" unique="false">
+            <column ascending="true" name="attribute_type"/>
+            <column ascending="true" name="attribute_id"/>
+         </index>
+         <index name="download_flows_2010_context_id_idx" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
+         <index name="download_flows_2010_path_idx" unique="false">
+            <column ascending="true" name="path"/>
+         </index>
+         <index name="download_flows_2010_year_idx" unique="false">
+            <column ascending="true" name="year"/>
+         </index>
+      </table>
+      <table name="download_flows_2011" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="year" nullable="true" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="jsonb_path" nullable="true" remarks="" size="2147483647" type="jsonb"/>
+         <column autoUpdated="false" digits="0" id="5" name="attribute_type" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="attribute_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="attribute_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="8" name="text_values" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="9" name="sum" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="10" name="total" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="11" name="sort" nullable="true" remarks="" size="2147483647" type="text"/>
+         <index name="download_flows_2011_attribute_type_attribute_id_idx" unique="false">
+            <column ascending="true" name="attribute_type"/>
+            <column ascending="true" name="attribute_id"/>
+         </index>
+         <index name="download_flows_2011_context_id_idx" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
+         <index name="download_flows_2011_path_idx" unique="false">
+            <column ascending="true" name="path"/>
+         </index>
+         <index name="download_flows_2011_year_idx" unique="false">
+            <column ascending="true" name="year"/>
+         </index>
+      </table>
+      <table name="download_flows_2012" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="year" nullable="true" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="jsonb_path" nullable="true" remarks="" size="2147483647" type="jsonb"/>
+         <column autoUpdated="false" digits="0" id="5" name="attribute_type" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="attribute_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="attribute_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="8" name="text_values" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="9" name="sum" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="10" name="total" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="11" name="sort" nullable="true" remarks="" size="2147483647" type="text"/>
+         <index name="download_flows_2012_attribute_type_attribute_id_idx" unique="false">
+            <column ascending="true" name="attribute_type"/>
+            <column ascending="true" name="attribute_id"/>
+         </index>
+         <index name="download_flows_2012_context_id_idx" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
+         <index name="download_flows_2012_path_idx" unique="false">
+            <column ascending="true" name="path"/>
+         </index>
+         <index name="download_flows_2012_year_idx" unique="false">
+            <column ascending="true" name="year"/>
+         </index>
+      </table>
+      <table name="download_flows_2013" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="year" nullable="true" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="jsonb_path" nullable="true" remarks="" size="2147483647" type="jsonb"/>
+         <column autoUpdated="false" digits="0" id="5" name="attribute_type" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="attribute_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="attribute_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="8" name="text_values" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="9" name="sum" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="10" name="total" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="11" name="sort" nullable="true" remarks="" size="2147483647" type="text"/>
+         <index name="download_flows_2013_attribute_type_attribute_id_idx" unique="false">
+            <column ascending="true" name="attribute_type"/>
+            <column ascending="true" name="attribute_id"/>
+         </index>
+         <index name="download_flows_2013_context_id_idx" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
+         <index name="download_flows_2013_path_idx" unique="false">
+            <column ascending="true" name="path"/>
+         </index>
+         <index name="download_flows_2013_year_idx" unique="false">
+            <column ascending="true" name="year"/>
+         </index>
+      </table>
+      <table name="download_flows_2014" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="year" nullable="true" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="jsonb_path" nullable="true" remarks="" size="2147483647" type="jsonb"/>
+         <column autoUpdated="false" digits="0" id="5" name="attribute_type" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="attribute_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="attribute_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="8" name="text_values" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="9" name="sum" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="10" name="total" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="11" name="sort" nullable="true" remarks="" size="2147483647" type="text"/>
+         <index name="download_flows_2014_attribute_type_attribute_id_idx" unique="false">
+            <column ascending="true" name="attribute_type"/>
+            <column ascending="true" name="attribute_id"/>
+         </index>
+         <index name="download_flows_2014_context_id_idx" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
+         <index name="download_flows_2014_path_idx" unique="false">
+            <column ascending="true" name="path"/>
+         </index>
+         <index name="download_flows_2014_year_idx" unique="false">
+            <column ascending="true" name="year"/>
+         </index>
+      </table>
+      <table name="download_flows_2015" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="year" nullable="true" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="jsonb_path" nullable="true" remarks="" size="2147483647" type="jsonb"/>
+         <column autoUpdated="false" digits="0" id="5" name="attribute_type" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="attribute_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="attribute_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="8" name="text_values" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="9" name="sum" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="10" name="total" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="11" name="sort" nullable="true" remarks="" size="2147483647" type="text"/>
+         <index name="download_flows_2015_attribute_type_attribute_id_idx" unique="false">
+            <column ascending="true" name="attribute_type"/>
+            <column ascending="true" name="attribute_id"/>
+         </index>
+         <index name="download_flows_2015_context_id_idx" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
+         <index name="download_flows_2015_path_idx" unique="false">
+            <column ascending="true" name="path"/>
+         </index>
+         <index name="download_flows_2015_year_idx" unique="false">
+            <column ascending="true" name="year"/>
+         </index>
+      </table>
+      <table name="download_flows_2016" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="year" nullable="true" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="jsonb_path" nullable="true" remarks="" size="2147483647" type="jsonb"/>
+         <column autoUpdated="false" digits="0" id="5" name="attribute_type" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="attribute_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="attribute_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="8" name="text_values" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="9" name="sum" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="10" name="total" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="11" name="sort" nullable="true" remarks="" size="2147483647" type="text"/>
+         <index name="download_flows_2016_attribute_type_attribute_id_idx" unique="false">
+            <column ascending="true" name="attribute_type"/>
+            <column ascending="true" name="attribute_id"/>
+         </index>
+         <index name="download_flows_2016_context_id_idx" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
+         <index name="download_flows_2016_path_idx" unique="false">
+            <column ascending="true" name="path"/>
+         </index>
+         <index name="download_flows_2016_year_idx" unique="false">
+            <column ascending="true" name="year"/>
+         </index>
+      </table>
+      <table name="download_flows_2017" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="year" nullable="true" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="jsonb_path" nullable="true" remarks="" size="2147483647" type="jsonb"/>
+         <column autoUpdated="false" digits="0" id="5" name="attribute_type" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="attribute_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="attribute_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="8" name="text_values" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="9" name="sum" nullable="true" remarks="" size="131089" type="numeric"/>
+         <column autoUpdated="false" digits="0" id="10" name="total" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="11" name="sort" nullable="true" remarks="" size="2147483647" type="text"/>
+         <index name="download_flows_2017_attribute_type_attribute_id_idx" unique="false">
+            <column ascending="true" name="attribute_type"/>
+            <column ascending="true" name="attribute_id"/>
+         </index>
+         <index name="download_flows_2017_context_id_idx" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
+         <index name="download_flows_2017_path_idx" unique="false">
+            <column ascending="true" name="path"/>
+         </index>
+         <index name="download_flows_2017_year_idx" unique="false">
+            <column ascending="true" name="year"/>
+         </index>
+      </table>
+      <table name="download_flows_v" numRows="0" remarks="" schema="public" type="VIEW" viewSql=" SELECT f.id,&#10;    f.context_id,&#10;    f.year,&#10;    f.path,&#10;    f.jsonb_path,&#10;    fi.original_type,&#10;    fi.original_id,&#10;    fi.name AS attribute_name,&#10;    string_agg(fi.text_value, ' / '::text) AS text_values,&#10;    sum(fi.numeric_value) AS sum,&#10;        CASE&#10;            WHEN (fi.original_type = 'Qual'::text) THEN string_agg(fi.text_value, ' / '::text)&#10;            ELSE (sum(fi.numeric_value))::text&#10;        END AS total&#10;   FROM (flows_mv f&#10;     JOIN ( SELECT f_1.flow_id,&#10;            f_1.qual_id AS original_id,&#10;            'Qual'::text AS original_type,&#10;            NULL::double precision AS numeric_value,&#10;            f_1.value AS text_value,&#10;            q.name,&#10;            NULL::text AS unit&#10;           FROM (flow_quals f_1&#10;             JOIN quals q ON ((f_1.qual_id = q.id)))&#10;          GROUP BY f_1.flow_id, f_1.qual_id, f_1.value, q.name&#10;        UNION ALL&#10;         SELECT f_1.flow_id,&#10;            f_1.quant_id,&#10;            'Quant'::text AS text,&#10;            f_1.value,&#10;            NULL::text AS text,&#10;            q.name,&#10;            q.unit&#10;           FROM (flow_quants f_1&#10;             JOIN quants q ON ((f_1.quant_id = q.id)))&#10;          GROUP BY f_1.flow_id, f_1.quant_id, f_1.value, q.name, q.unit) fi ON ((f.id = fi.flow_id)))&#10;  GROUP BY f.id, f.context_id, f.year, f.path, f.jsonb_path, fi.original_type, fi.original_id, fi.name;">
+         <column autoUpdated="false" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="year" nullable="true" remarks="" size="5" type="int2"/>
+         <column autoUpdated="false" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="jsonb_path" nullable="true" remarks="" size="2147483647" type="jsonb"/>
+         <column autoUpdated="false" digits="0" id="5" name="original_type" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="6" name="original_id" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="7" name="attribute_name" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="8" name="text_values" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="17" id="9" name="sum" nullable="true" remarks="" size="17" type="float8"/>
+         <column autoUpdated="false" digits="0" id="10" name="total" nullable="true" remarks="" size="2147483647" type="text"/>
       </table>
       <table name="download_quals" numRows="0" remarks="Quals to include in downloads (see download_attributes.)" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('download_quals_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
@@ -668,12 +1073,6 @@
             <column ascending="true" name="download_attribute_id"/>
             <column ascending="true" name="qual_id"/>
          </index>
-         <index name="index_download_quals_on_download_attribute_id" unique="false">
-            <column ascending="true" name="download_attribute_id"/>
-         </index>
-         <index name="index_download_quals_on_qual_id" unique="false">
-            <column ascending="true" name="qual_id"/>
-         </index>
       </table>
       <table name="download_quants" numRows="0" remarks="Quants to include in downloads (see download_attributes.)" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('download_quants_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
@@ -691,14 +1090,14 @@
          <index name="download_quants_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
+         <index name="download_quants_download_attribute_id_idx" unique="false">
+            <column ascending="true" name="download_attribute_id"/>
+         </index>
          <index name="download_quants_download_attribute_id_quant_id_key" unique="true">
             <column ascending="true" name="download_attribute_id"/>
             <column ascending="true" name="quant_id"/>
          </index>
-         <index name="index_download_quants_on_download_attribute_id" unique="false">
-            <column ascending="true" name="download_attribute_id"/>
-         </index>
-         <index name="index_download_quants_on_quant_id" unique="false">
+         <index name="download_quants_quant_id_idx" unique="false">
             <column ascending="true" name="quant_id"/>
          </index>
       </table>
@@ -714,13 +1113,13 @@
          <index name="download_versions_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
+         <index name="download_versions_context_id_is_current_idx" unique="true">
+            <column ascending="true" name="context_id"/>
+            <column ascending="true" name="is_current"/>
+         </index>
          <index name="download_versions_context_id_symbol_key" unique="true">
             <column ascending="true" name="context_id"/>
             <column ascending="true" name="symbol"/>
-         </index>
-         <index name="index_download_versions_on_context_id_and_is_current" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="is_current"/>
          </index>
       </table>
       <table name="flow_inds" numRows="0" remarks="Values of inds for flow" schema="public" type="TABLE">
@@ -737,6 +1136,9 @@
          <index name="flow_inds_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
+         <index name="flow_inds_flow_id_idx" unique="false">
+            <column ascending="true" name="flow_id"/>
+         </index>
          <index name="flow_inds_flow_id_ind_id_key" unique="true">
             <column ascending="true" name="flow_id"/>
             <column ascending="true" name="ind_id"/>
@@ -744,15 +1146,10 @@
          <index name="flow_inds_ind_id_idx" unique="false">
             <column ascending="true" name="ind_id"/>
          </index>
-         <index name="index_flow_inds_on_flow_id" unique="false">
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="flow_quals" numRows="0" remarks="Values of quals for flow" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('flow_quals_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
-         <column autoUpdated="false" digits="0" id="1" name="flow_id" nullable="false" remarks="" size="10" type="int4">
-            <parent column="id" foreignKey="fk_rails_6e55ca4cbc" implied="false" onDeleteCascade="true" schema="public" table="flows"/>
-         </column>
+         <column autoUpdated="false" digits="0" id="1" name="flow_id" nullable="false" remarks="" size="10" type="int4"/>
          <column autoUpdated="false" digits="0" id="2" name="qual_id" nullable="false" remarks="" size="10" type="int4">
             <parent column="id" foreignKey="fk_rails_917b9da2b8" implied="false" onDeleteCascade="true" schema="public" table="quals"/>
          </column>
@@ -762,6 +1159,9 @@
          <index name="flow_quals_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
+         <index name="flow_quals_flow_id_idx" unique="false">
+            <column ascending="true" name="flow_id"/>
+         </index>
          <index name="flow_quals_flow_id_qual_id_key" unique="true">
             <column ascending="true" name="flow_id"/>
             <column ascending="true" name="qual_id"/>
@@ -769,15 +1169,10 @@
          <index name="flow_quals_qual_id_idx" unique="false">
             <column ascending="true" name="qual_id"/>
          </index>
-         <index name="index_flow_quals_on_flow_id" unique="false">
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="flow_quants" numRows="0" remarks="Values of quants for flow" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('flow_quants_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
-         <column autoUpdated="false" digits="0" id="1" name="flow_id" nullable="false" remarks="" size="10" type="int4">
-            <parent column="id" foreignKey="fk_rails_2dbc0a565f" implied="false" onDeleteCascade="true" schema="public" table="flows"/>
-         </column>
+         <column autoUpdated="false" digits="0" id="1" name="flow_id" nullable="false" remarks="" size="10" type="int4"/>
          <column autoUpdated="false" digits="0" id="2" name="quant_id" nullable="false" remarks="" size="10" type="int4">
             <parent column="id" foreignKey="fk_rails_a48f7b74d0" implied="false" onDeleteCascade="true" schema="public" table="quants"/>
          </column>
@@ -787,6 +1182,9 @@
          <index name="flow_quants_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
+         <index name="flow_quants_flow_id_idx" unique="false">
+            <column ascending="true" name="flow_id"/>
+         </index>
          <index name="flow_quants_flow_id_quant_id_key" unique="true">
             <column ascending="true" name="flow_id"/>
             <column ascending="true" name="quant_id"/>
@@ -794,15 +1192,10 @@
          <index name="flow_quants_quant_id_idx" unique="false">
             <column ascending="true" name="quant_id"/>
          </index>
-         <index name="index_flow_quants_on_flow_id" unique="false">
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="flows" numRows="0" remarks="Flows of commodities through nodes" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('flows_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="flow_id" foreignKey="fk_rails_0a8bdfaf25" implied="false" onDeleteCascade="true" schema="public" table="flow_inds"/>
-            <child column="flow_id" foreignKey="fk_rails_6e55ca4cbc" implied="false" onDeleteCascade="true" schema="public" table="flow_quals"/>
-            <child column="flow_id" foreignKey="fk_rails_2dbc0a565f" implied="false" onDeleteCascade="true" schema="public" table="flow_quants"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="false" remarks="" size="10" type="int4">
             <parent column="id" foreignKey="fk_rails_c33db455e5" implied="false" onDeleteCascade="true" schema="public" table="contexts"/>
@@ -814,15 +1207,12 @@
          <index name="flows_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_flows_on_context_id" unique="false">
+         <index name="flows_context_id_idx" unique="false">
             <column ascending="true" name="context_id"/>
          </index>
-         <index name="index_flows_on_context_id_and_year" unique="false">
+         <index name="flows_context_id_year_idx" unique="false">
             <column ascending="true" name="context_id"/>
             <column ascending="true" name="year"/>
-         </index>
-         <index name="index_flows_on_path" unique="false">
-            <column ascending="true" name="path"/>
          </index>
       </table>
       <table name="ind_commodity_properties" numRows="0" remarks="Commodity specific properties for ind" schema="public" type="TABLE">
@@ -840,10 +1230,10 @@
          <index name="ind_commodity_properties_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_ind_commodity_properties_on_commodity_id" unique="false">
+         <index name="ind_commodity_properties_commodity_id_idx" unique="false">
             <column ascending="true" name="commodity_id"/>
          </index>
-         <index name="index_ind_commodity_properties_on_ind_id" unique="false">
+         <index name="ind_commodity_properties_ind_id_idx" unique="false">
             <column ascending="true" name="ind_id"/>
          </index>
       </table>
@@ -862,10 +1252,10 @@
          <index name="ind_context_properties_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_ind_context_properties_on_context_id" unique="false">
+         <index name="ind_context_properties_context_id_idx" unique="false">
             <column ascending="true" name="context_id"/>
          </index>
-         <index name="index_ind_context_properties_on_ind_id" unique="false">
+         <index name="ind_context_properties_ind_id_idx" unique="false">
             <column ascending="true" name="ind_id"/>
          </index>
       </table>
@@ -884,10 +1274,10 @@
          <index name="ind_country_properties_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_ind_country_properties_on_country_id" unique="false">
+         <index name="ind_country_properties_country_id_idx" unique="false">
             <column ascending="true" name="country_id"/>
          </index>
-         <index name="index_ind_country_properties_on_ind_id" unique="false">
+         <index name="ind_country_properties_ind_id_idx" unique="false">
             <column ascending="true" name="ind_id"/>
          </index>
       </table>
@@ -910,9 +1300,6 @@
             <column ascending="true" name="id"/>
          </index>
          <index name="ind_properties_ind_id_key" unique="true">
-            <column ascending="true" name="ind_id"/>
-         </index>
-         <index name="index_ind_properties_on_ind_id" unique="false">
             <column ascending="true" name="ind_id"/>
          </index>
       </table>
@@ -955,9 +1342,6 @@
          <index name="map_attribute_groups_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_map_attribute_groups_on_context_id" unique="false">
-            <column ascending="true" name="context_id"/>
-         </index>
          <index name="map_attribute_groups_context_id_position_key" unique="true">
             <column ascending="true" name="context_id"/>
             <column ascending="true" name="position"/>
@@ -984,9 +1368,6 @@
          <index name="map_attributes_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_map_attributes_on_map_attribute_group_id" unique="false">
-            <column ascending="true" name="map_attribute_group_id"/>
-         </index>
          <index name="map_attributes_map_attribute_group_id_position_key" unique="true">
             <column ascending="true" name="map_attribute_group_id"/>
             <column ascending="true" name="position"/>
@@ -1005,12 +1386,6 @@
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="map_inds_pkey" unique="true">
             <column ascending="true" name="id"/>
-         </index>
-         <index name="index_map_inds_on_ind_id" unique="false">
-            <column ascending="true" name="ind_id"/>
-         </index>
-         <index name="index_map_inds_on_map_attribute_id" unique="false">
-            <column ascending="true" name="map_attribute_id"/>
          </index>
          <index name="map_inds_map_attribute_id_ind_id_key" unique="true">
             <column ascending="true" name="map_attribute_id"/>
@@ -1031,14 +1406,14 @@
          <index name="map_quants_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_map_quants_on_map_attribute_id" unique="false">
+         <index name="map_quants_map_attribute_id_idx" unique="false">
             <column ascending="true" name="map_attribute_id"/>
-         </index>
-         <index name="index_map_quants_on_quant_id" unique="false">
-            <column ascending="true" name="quant_id"/>
          </index>
          <index name="map_quants_map_attribute_id_quant_id_key" unique="true">
             <column ascending="true" name="map_attribute_id"/>
+            <column ascending="true" name="quant_id"/>
+         </index>
+         <index name="map_quants_quant_id_idx" unique="false">
             <column ascending="true" name="quant_id"/>
          </index>
       </table>
@@ -1057,11 +1432,11 @@
          <index name="node_inds_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_node_inds_on_node_id" unique="false">
-            <column ascending="true" name="node_id"/>
-         </index>
          <index name="node_inds_ind_id_idx" unique="false">
             <column ascending="true" name="ind_id"/>
+         </index>
+         <index name="node_inds_node_id_idx" unique="false">
+            <column ascending="true" name="node_id"/>
          </index>
          <index name="node_inds_node_id_ind_id_year_key" unique="true">
             <column ascending="true" name="node_id"/>
@@ -1081,7 +1456,7 @@
          <index name="node_properties_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_node_properties_on_node_id" unique="false">
+         <index name="node_properties_node_id_idx" unique="false">
             <column ascending="true" name="node_id"/>
          </index>
          <index name="node_properties_node_id_key" unique="true">
@@ -1103,7 +1478,7 @@
          <index name="node_quals_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_node_quals_on_node_id" unique="false">
+         <index name="node_quals_node_id_idx" unique="false">
             <column ascending="true" name="node_id"/>
          </index>
          <index name="node_quals_node_id_qual_id_year_key" unique="true">
@@ -1130,16 +1505,13 @@
          <index name="node_quants_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_node_quants_on_node_id" unique="false">
+         <index name="node_quants_node_id_idx" unique="false">
             <column ascending="true" name="node_id"/>
          </index>
          <index name="node_quants_node_id_quant_id_year_key" unique="true">
             <column ascending="true" name="node_id"/>
             <column ascending="true" name="quant_id"/>
             <column ascending="true" name="year"/>
-         </index>
-         <index name="node_quants_quant_id_idx" unique="false">
-            <column ascending="true" name="quant_id"/>
          </index>
       </table>
       <table name="node_types" numRows="0" remarks="List of types of nodes in the system, e.g. MUNICIPALITY or EXPORTER. Those literals are referred to in code, therefore should not be changed without notice." schema="public" type="TABLE">
@@ -1164,6 +1536,7 @@
             <child column="node_id" foreignKey="fk_rails_4dcde982df" implied="false" onDeleteCascade="true" schema="public" table="node_properties"/>
             <child column="node_id" foreignKey="fk_rails_14ebb50b5a" implied="false" onDeleteCascade="true" schema="public" table="node_quals"/>
             <child column="node_id" foreignKey="fk_rails_dd544b3e59" implied="false" onDeleteCascade="true" schema="public" table="node_quants"/>
+            <child column="node_id" foreignKey="fk_rails_eb02423c0e" implied="false" onDeleteCascade="true" schema="public" table="top_profiles"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="node_type_id" nullable="false" remarks="" size="10" type="int4">
             <parent column="id" foreignKey="fk_rails_37e87445f7" implied="false" onDeleteCascade="true" schema="public" table="node_types"/>
@@ -1228,9 +1601,6 @@
          <index name="profiles_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_profiles_on_context_node_type_id" unique="false">
-            <column ascending="true" name="context_node_type_id"/>
-         </index>
          <index name="profiles_context_node_type_id_name_key" unique="true">
             <column ascending="true" name="context_node_type_id"/>
             <column ascending="true" name="name"/>
@@ -1251,10 +1621,10 @@
          <index name="qual_commodity_properties_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_qual_commodity_properties_on_commodity_id" unique="false">
+         <index name="qual_commodity_properties_commodity_id_idx" unique="false">
             <column ascending="true" name="commodity_id"/>
          </index>
-         <index name="index_qual_commodity_properties_on_qual_id" unique="false">
+         <index name="qual_commodity_properties_qual_id_idx" unique="false">
             <column ascending="true" name="qual_id"/>
          </index>
       </table>
@@ -1273,10 +1643,10 @@
          <index name="qual_context_properties_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_qual_context_properties_on_context_id" unique="false">
+         <index name="qual_context_properties_context_id_idx" unique="false">
             <column ascending="true" name="context_id"/>
          </index>
-         <index name="index_qual_context_properties_on_qual_id" unique="false">
+         <index name="qual_context_properties_qual_id_idx" unique="false">
             <column ascending="true" name="qual_id"/>
          </index>
       </table>
@@ -1295,10 +1665,10 @@
          <index name="qual_country_properties_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_qual_country_properties_on_country_id" unique="false">
+         <index name="qual_country_properties_country_id_idx" unique="false">
             <column ascending="true" name="country_id"/>
          </index>
-         <index name="index_qual_country_properties_on_qual_id" unique="false">
+         <index name="qual_country_properties_qual_id_idx" unique="false">
             <column ascending="true" name="qual_id"/>
          </index>
       </table>
@@ -1318,9 +1688,6 @@
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="qual_properties_pkey" unique="true">
             <column ascending="true" name="id"/>
-         </index>
-         <index name="index_qual_properties_on_qual_id" unique="false">
-            <column ascending="true" name="qual_id"/>
          </index>
          <index name="qual_properties_qual_id_key" unique="true">
             <column ascending="true" name="qual_id"/>
@@ -1364,10 +1731,10 @@
          <index name="quant_commodity_properties_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_quant_commodity_properties_on_commodity_id" unique="false">
+         <index name="quant_commodity_properties_commodity_id_idx" unique="false">
             <column ascending="true" name="commodity_id"/>
          </index>
-         <index name="index_quant_commodity_properties_on_quant_id" unique="false">
+         <index name="quant_commodity_properties_quant_id_idx" unique="false">
             <column ascending="true" name="quant_id"/>
          </index>
       </table>
@@ -1386,10 +1753,10 @@
          <index name="quant_context_properties_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_quant_context_properties_on_context_id" unique="false">
+         <index name="quant_context_properties_context_id_idx" unique="false">
             <column ascending="true" name="context_id"/>
          </index>
-         <index name="index_quant_context_properties_on_quant_id" unique="false">
+         <index name="quant_context_properties_quant_id_idx" unique="false">
             <column ascending="true" name="quant_id"/>
          </index>
       </table>
@@ -1408,10 +1775,10 @@
          <index name="quant_country_properties_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_quant_country_properties_on_country_id" unique="false">
+         <index name="quant_country_properties_country_id_idx" unique="false">
             <column ascending="true" name="country_id"/>
          </index>
-         <index name="index_quant_country_properties_on_quant_id" unique="false">
+         <index name="quant_country_properties_quant_id_idx" unique="false">
             <column ascending="true" name="quant_id"/>
          </index>
       </table>
@@ -1433,7 +1800,7 @@
          <index name="quant_properties_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_quant_properties_on_quant_id" unique="false">
+         <index name="quant_properties_quant_id_idx" unique="false">
             <column ascending="true" name="quant_id"/>
          </index>
          <index name="quant_properties_quant_id_key" unique="true">
@@ -1491,13 +1858,8 @@
          <index name="recolor_by_attributes_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_recolor_by_attributes_on_context_id" unique="false">
+         <index name="recolor_by_attributes_context_id_idx" unique="false">
             <column ascending="true" name="context_id"/>
-         </index>
-         <index name="recolor_by_attributes_context_id_group_number_position_key" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="group_number"/>
-            <column ascending="true" name="position"/>
          </index>
       </table>
       <table name="recolor_by_inds" numRows="0" remarks="Inds available for recoloring (see recolor_by_attributes.)" schema="public" type="TABLE">
@@ -1513,12 +1875,6 @@
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="recolor_by_inds_pkey" unique="true">
             <column ascending="true" name="id"/>
-         </index>
-         <index name="index_recolor_by_inds_on_ind_id" unique="false">
-            <column ascending="true" name="ind_id"/>
-         </index>
-         <index name="index_recolor_by_inds_on_recolor_by_attribute_id" unique="false">
-            <column ascending="true" name="recolor_by_attribute_id"/>
          </index>
          <index name="recolor_by_inds_recolor_by_attribute_id_ind_id_key" unique="true">
             <column ascending="true" name="recolor_by_attribute_id"/>
@@ -1538,12 +1894,6 @@
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="recolor_by_quals_pkey" unique="true">
             <column ascending="true" name="id"/>
-         </index>
-         <index name="index_recolor_by_quals_on_qual_id" unique="false">
-            <column ascending="true" name="qual_id"/>
-         </index>
-         <index name="index_recolor_by_quals_on_recolor_by_attribute_id" unique="false">
-            <column ascending="true" name="recolor_by_attribute_id"/>
          </index>
          <index name="recolor_by_quals_recolor_by_attribute_id_qual_id_key" unique="true">
             <column ascending="true" name="recolor_by_attribute_id"/>
@@ -1569,13 +1919,8 @@
          <index name="resize_by_attributes_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_resize_by_attributes_on_context_id" unique="false">
+         <index name="resize_by_attributes_context_id_idx" unique="false">
             <column ascending="true" name="context_id"/>
-         </index>
-         <index name="resize_by_attributes_context_id_group_number_position_key" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="group_number"/>
-            <column ascending="true" name="position"/>
          </index>
       </table>
       <table name="resize_by_quants" numRows="0" remarks="Quants available for recoloring (see resize_by_attributes.)" schema="public" type="TABLE">
@@ -1592,10 +1937,10 @@
          <index name="resize_by_quants_pkey" unique="true">
             <column ascending="true" name="id"/>
          </index>
-         <index name="index_resize_by_quants_on_quant_id" unique="false">
+         <index name="resize_by_quants_quant_id_idx" unique="false">
             <column ascending="true" name="quant_id"/>
          </index>
-         <index name="index_resize_by_quants_on_resize_by_attribute_id" unique="false">
+         <index name="resize_by_quants_resize_by_attribute_id_idx" unique="false">
             <column ascending="true" name="resize_by_attribute_id"/>
          </index>
          <index name="resize_by_quants_resize_by_attribute_id_quant_id_key" unique="true">
@@ -1603,11 +1948,58 @@
             <column ascending="true" name="quant_id"/>
          </index>
       </table>
-      <table name="schema_migrations" numRows="156" remarks="" schema="public" type="TABLE">
+      <table name="schema_migrations" numRows="50" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="version" nullable="false" remarks="" size="2147483647" type="varchar"/>
          <primaryKey column="version" sequenceNumberInPK="1"/>
          <index name="schema_migrations_pkey" unique="true">
             <column ascending="true" name="version"/>
+         </index>
+      </table>
+      <table name="top_profile_images" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('top_profile_images_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="19" type="bigserial">
+            <child column="top_profile_image_id" foreignKey="fk_rails_f4a644ec90" implied="false" onDeleteCascade="false" schema="public" table="top_profiles"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="commodity_id" nullable="true" remarks="" size="19" type="int8">
+            <parent column="id" foreignKey="fk_rails_29f1862b03" implied="false" onDeleteCascade="false" schema="public" table="commodities"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="image_file_name" nullable="true" remarks="" size="2147483647" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="3" name="image_content_type" nullable="true" remarks="" size="2147483647" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="4" name="profile_type" nullable="true" remarks="" size="2147483647" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="5" name="image_file_size" nullable="true" remarks="" size="10" type="int4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="top_profile_images_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="index_top_profile_images_on_commodity_id" unique="false">
+            <column ascending="true" name="commodity_id"/>
+         </index>
+      </table>
+      <table name="top_profiles" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('top_profiles_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="19" type="bigserial"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="false" remarks="" size="19" type="int8">
+            <parent column="id" foreignKey="fk_rails_02381b1a96" implied="false" onDeleteCascade="true" schema="public" table="contexts"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="node_id" nullable="false" remarks="" size="19" type="int8">
+            <parent column="id" foreignKey="fk_rails_eb02423c0e" implied="false" onDeleteCascade="true" schema="public" table="nodes"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="summary" nullable="true" remarks="" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="4" name="year" nullable="true" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="5" name="profile_type" nullable="true" remarks="" size="2147483647" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="6" name="top_profile_image_id" nullable="true" remarks="" size="19" type="int8">
+            <parent column="id" foreignKey="fk_rails_f4a644ec90" implied="false" onDeleteCascade="false" schema="public" table="top_profile_images"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="top_profiles_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="index_top_profiles_on_context_id" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
+         <index name="index_top_profiles_on_node_id" unique="false">
+            <column ascending="true" name="node_id"/>
+         </index>
+         <index name="index_top_profiles_on_top_profile_image_id" unique="false">
+            <column ascending="true" name="top_profile_image_id"/>
          </index>
       </table>
    </tables>
