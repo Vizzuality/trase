@@ -74,7 +74,7 @@ const initialState = {
   selectedYears: null,
   selectedResizeBy: null,
   selectedRecolorBy: null,
-  charts: [],
+  charts: null,
   chartsLoading: false
 };
 
@@ -318,11 +318,13 @@ const dashboardElementReducer = {
     };
   },
   [DASHBOARD_ELEMENT__SET_CHARTS](state, action) {
-    const { charts: list } = action.payload;
-    const charts = list.filter(chart => !chart.url.includes('node_type_id=4'));
+    const { charts } = action.payload;
     return {
       ...state,
-      charts
+      charts: {
+        ...charts,
+        data: charts.data.filter(chart => !chart.url.includes('node_type_id=4'))
+      }
     };
   },
   [DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS](state, action) {

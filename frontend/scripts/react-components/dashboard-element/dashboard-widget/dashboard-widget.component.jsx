@@ -13,11 +13,24 @@ import RankingWidget from 'react-components/dashboard-element/dashboard-widget/r
 import ErrorCatch from 'react-components/shared/error-catch.component';
 import Text from 'react-components/shared/text';
 import Heading from 'react-components/shared/heading';
+import Dropdown from 'react-components/shared/dropdown';
 
 import 'react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
 
 function DashboardWidget(props) {
-  const { loading, error, data, meta, chartType, chartConfig, title, trackOpenTableView } = props;
+  const {
+    loading,
+    error,
+    data,
+    meta,
+    chartType,
+    chartConfig,
+    title,
+    setActiveChart,
+    groupingOptions,
+    trackOpenTableView,
+    groupingActiveItem
+  } = props;
   const renderError = errorMessage => (
     <Text color="white" weight="bold" variant="mono" size="lg" className="widget-centered">
       {errorMessage}
@@ -114,6 +127,17 @@ function DashboardWidget(props) {
       <div className="widget-title-container">
         <Heading as="h3" color="white">
           {title}
+          {groupingOptions && (
+            <Dropdown
+              size="rg"
+              color="white"
+              weight="light"
+              variant="sentence"
+              options={groupingOptions}
+              value={groupingActiveItem}
+              onChange={item => setActiveChart(item.value)}
+            />
+          )}
         </Heading>
         {renderWidgetActions()}
       </div>
@@ -140,7 +164,10 @@ DashboardWidget.propTypes = {
   loading: PropTypes.bool,
   trackOpenTableView: PropTypes.func,
   chartConfig: PropTypes.object,
-  chartType: PropTypes.string
+  chartType: PropTypes.string,
+  setActiveChart: PropTypes.func,
+  groupingOptions: PropTypes.array,
+  groupingActiveItem: PropTypes.object
 };
 
 export default DashboardWidget;

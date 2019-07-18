@@ -6,7 +6,8 @@ import DashboardElement from 'react-components/dashboard-element/dashboard-eleme
 import {
   getDirtyBlocks,
   getDynamicSentence,
-  getDashboardFiltersProps
+  getDashboardFiltersProps,
+  getDashboardGroupedCharts
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { getPanelId } from 'utils/dashboardPanel';
 import {
@@ -22,7 +23,7 @@ const mapStateToProps = state => {
   const dirtyBlocks = getDirtyBlocks(state);
   return {
     dirtyBlocks,
-    charts: state.dashboardElement.charts,
+    groupedCharts: getDashboardGroupedCharts(state),
     filters: getDashboardFiltersProps(state),
     dynamicSentenceParts: getDynamicSentence(state),
     showModalOnStart: !(dirtyBlocks.countries && dirtyBlocks.commodities)
@@ -44,7 +45,7 @@ const mapDispatchToProps = dispatch =>
 
 class DashboardElementContainer extends React.Component {
   static propTypes = {
-    charts: PropTypes.array,
+    groupedCharts: PropTypes.object,
     filters: PropTypes.object,
     dirtyBlocks: PropTypes.object,
     showModalOnStart: PropTypes.bool,
@@ -103,7 +104,7 @@ class DashboardElementContainer extends React.Component {
   render() {
     const { step, modalOpen, editMode } = this.state;
     const {
-      charts,
+      groupedCharts,
       goToRoot,
       dynamicSentenceParts,
       dirtyBlocks,
@@ -115,7 +116,7 @@ class DashboardElementContainer extends React.Component {
     return (
       <DashboardElement
         step={step}
-        charts={charts}
+        groupedCharts={groupedCharts}
         filters={filters}
         editMode={editMode}
         goToRoot={goToRoot}

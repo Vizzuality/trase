@@ -18,7 +18,7 @@ import 'react-components/dashboard-element/dashboard-element.scss';
 
 class DashboardElement extends React.PureComponent {
   static propTypes = {
-    charts: PropTypes.array,
+    groupedCharts: PropTypes.object,
     dirtyBlocks: PropTypes.object,
     step: PropTypes.number.isRequired,
     setStep: PropTypes.func.isRequired,
@@ -92,9 +92,8 @@ class DashboardElement extends React.PureComponent {
   }
 
   renderWidgets() {
-    const { charts, filters } = this.props;
-
-    return charts.map((chart, widgetIndex) => (
+    const { groupedCharts, filters } = this.props;
+    return groupedCharts.charts.map((chart, widgetIndex) => (
       <InView triggerOnce>
         {({ ref, inView }) => (
           <div
@@ -105,9 +104,9 @@ class DashboardElement extends React.PureComponent {
           >
             {(widgetIndex < 2 || inView) && (
               <DashboardWidget
-                url={chart.url}
-                chartType={chart.type}
+                chart={chart}
                 selectedRecolorBy={filters.selectedRecolorBy}
+                grouping={groupedCharts.groupings[chart.groupingId]}
               />
             )}
           </div>
@@ -118,7 +117,7 @@ class DashboardElement extends React.PureComponent {
 
   render() {
     const {
-      charts,
+      groupedCharts,
       modalOpen,
       goToRoot,
       filters,
@@ -128,7 +127,6 @@ class DashboardElement extends React.PureComponent {
       setSelectedRecolorBy
     } = this.props;
 
-    const hasCharts = charts.length > 0;
     return (
       <div className="l-dashboard-element">
         <div className="c-dashboard-element">
@@ -215,9 +213,9 @@ class DashboardElement extends React.PureComponent {
                 </div>
               </section>
               <section className="dashboard-element-widgets">
-                <div className={cx('row', { '-equal-height -flex-end': hasCharts })}>
-                  {hasCharts && this.renderWidgets()}
-                  {!hasCharts && (
+                <div className={cx('row', { '-equal-height -flex-end': groupedCharts })}>
+                  {groupedCharts && this.renderWidgets()}
+                  {!groupedCharts && (
                     <div className="column small-12">
                       <div className="dashboard-element-fallback">
                         <Text

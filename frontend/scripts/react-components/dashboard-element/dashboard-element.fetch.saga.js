@@ -198,7 +198,7 @@ export function* fetchDashboardCharts() {
     const { data } = yield call(fetchPromise);
     yield put({
       type: DASHBOARD_ELEMENT__SET_CHARTS,
-      payload: { charts: data.data }
+      payload: { charts: data }
     });
     yield call(setLoadingSpinner, 750, setDashboardChartsLoading(false));
   } catch (e) {
