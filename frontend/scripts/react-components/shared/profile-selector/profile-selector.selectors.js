@@ -48,7 +48,7 @@ export const getDynamicSentence = createSelector(
 
     if (dynamicParts.length > 0) {
       dynamicParts.push({
-        prefix: 'profiles'
+        prefix: 'profile'
       });
     }
 
