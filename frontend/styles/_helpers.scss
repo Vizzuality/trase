@@ -25,13 +25,13 @@
 }
 
 .hide-for-small {
-  @media screen and (max-width: $breakpoint-foundation-small - 1) {
+  @media (max-width: $breakpoint-foundation-small - 1) {
     display: none !important;
   }
 }
 
 .show-for-small {
-  @media screen and (min-width: $breakpoint-foundation-small) {
+  @media (min-width: $breakpoint-foundation-small) {
     display: none !important;
   }
 }
