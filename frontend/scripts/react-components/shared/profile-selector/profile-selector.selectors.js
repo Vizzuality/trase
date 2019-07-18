@@ -39,12 +39,19 @@ export const getDynamicSentence = createSelector(
       });
     } else if (!isEmpty(panels.companies.activeItems)) {
       dynamicParts.push({
-        panel: 'sources',
-        id: 'sources',
+        panel: 'companies',
+        id: 'companies',
         prefix: 'See the',
         value: Object.values(panels.companies.activeItems)
       });
     }
+
+    if (dynamicParts.length > 0) {
+      dynamicParts.push({
+        prefix: 'profiles'
+      });
+    }
+
     return dynamicParts;
   }
 );

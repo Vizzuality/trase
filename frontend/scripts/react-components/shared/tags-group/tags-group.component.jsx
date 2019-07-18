@@ -7,7 +7,7 @@ import { translateText } from 'utils/transifex';
 import 'react-components/shared/tags-group/tags-group.scss';
 
 function TagsGroup(props) {
-  const { as, tags, color, suffix } = props;
+  const { as, tags, color } = props;
   return React.createElement(
     as,
     { className: 'c-tags-group' },
@@ -25,17 +25,6 @@ function TagsGroup(props) {
           {part.value && <Tag {...props} part={part} />}
         </Heading>
       ))}
-      {suffix && tags.length > 0 && (
-        <Heading
-          as="span"
-          size="md"
-          align="center"
-          color={color}
-          className="tag-group-part notranslate"
-        >
-          {translateText(suffix)}
-        </Heading>
-      )}
     </>
   );
 }
@@ -43,7 +32,6 @@ function TagsGroup(props) {
 TagsGroup.propTypes = {
   color: PropTypes.string,
   tags: PropTypes.array.isRequired,
-  suffix: PropTypes.string,
   as: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
 };
 
