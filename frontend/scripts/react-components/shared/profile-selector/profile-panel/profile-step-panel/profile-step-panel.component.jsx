@@ -34,7 +34,7 @@ function ProfileStepPanel(props) {
           searchSources={!countries.activeItems ? countries.searchResults : sources.searchResults}
           getSearchResults={getSearchResults}
           loadingMoreItems={sources.loadingItems}
-          activeCountryItem={countries.activeItems}
+          activeCountryItems={countries.activeItems}
           activeSourceTab={sources.activeTab}
           activeSourceItem={sources.activeItems}
           onSelectCountry={item => setProfilesActiveItem(item, 'countries')}
@@ -97,7 +97,7 @@ function ProfileStepPanel(props) {
             companies={companiesOptions}
             onSelectCompany={item => setProfilesActiveItem(item, 'companies')}
             activeNodeTypeTab={companies.activeTab}
-            activeCompany={companies.activeItems}
+            activeCompanies={companies.activeItems}
           />
         )
       );

@@ -19,7 +19,7 @@ function SourcesPanel(props) {
     loading,
     setSearchResult,
     getSearchResults,
-    activeCountryItem,
+    activeCountryItems,
     sources,
     countries,
     onSelectCountry,
@@ -34,10 +34,10 @@ function SourcesPanel(props) {
   const [sourcesOpen, changeSourcesOpen] = useState(sourcesRequired);
   const toggleSourcesOpen = () => changeSourcesOpen(!sourcesOpen);
 
-  const hasActiveCountryItems = Object.keys(activeCountryItem).length > 0;
+  const hasActiveCountryItems = Object.keys(activeCountryItems).length > 0;
   const showJurisdictions = hasActiveCountryItems && tabs.length > 0;
   const activeCountryName =
-    hasActiveCountryItems && capitalize(Object.values(activeCountryItem)[0].name);
+    hasActiveCountryItems && capitalize(Object.values(activeCountryItems)[0].name);
   return (
     <div className="c-sources-panel">
       <GridList
@@ -53,7 +53,7 @@ function SourcesPanel(props) {
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={!!activeCountryItem[itemProps.item && itemProps.item.id]}
+            isActive={!!activeCountryItems[itemProps.item && itemProps.item.id]}
             enableItem={onSelectCountry}
             disableItem={() => onSelectCountry({})}
           />
@@ -124,7 +124,7 @@ SourcesPanel.propTypes = {
   page: PropTypes.number.isRequired,
   activeSourceTab: PropTypes.object,
   activeSourceItem: PropTypes.object,
-  activeCountryItem: PropTypes.object,
+  activeCountryItems: PropTypes.object,
   getMoreItems: PropTypes.func.isRequired,
   searchSources: PropTypes.array.isRequired,
   onSelectCountry: PropTypes.func.isRequired,

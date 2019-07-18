@@ -81,7 +81,7 @@ class DashboardPanel extends Component {
             getSearchResults={getSearchResults}
             loadingMoreItems={sourcesPanel.loadingItems}
             clearItems={() => clearActiveItems(activePanelId)}
-            activeCountryItem={countriesPanel.activeItems}
+            activeCountryItems={countriesPanel.activeItems}
             activeSourceTab={sourcesPanel.activeTab}
             activeSourceItem={sourcesPanel.activeItems}
             onSelectCountry={item => setActiveItem(item, 'countries')}
@@ -101,7 +101,7 @@ class DashboardPanel extends Component {
             loading={loading}
             commodities={commodities}
             onSelectCommodity={item => setActiveItem(item, activePanelId)}
-            activeCommodity={commoditiesPanel.activeItems}
+            activeCommodities={commoditiesPanel.activeItems}
           />
         );
       case DASHBOARD_STEPS.destinations:
@@ -115,7 +115,7 @@ class DashboardPanel extends Component {
             onSelectDestinationValue={item => setActiveItems(item, activePanelId)}
             loadingMoreItems={destinationsPanel.loadingItems}
             loading={loading}
-            activeDestination={destinationsPanel.activeItems}
+            activeDestinations={destinationsPanel.activeItems}
           />
         );
       case DASHBOARD_STEPS.companies:
@@ -134,7 +134,7 @@ class DashboardPanel extends Component {
             companies={companies[companiesPanel.activeTab && companiesPanel.activeTab.id] || []}
             onSelectCompany={item => setActiveItems(item, activePanelId)}
             activeNodeTypeTab={companiesPanel.activeTab}
-            activeCompany={companiesPanel.activeItems}
+            activeCompanies={companiesPanel.activeItems}
           />
         );
       default:

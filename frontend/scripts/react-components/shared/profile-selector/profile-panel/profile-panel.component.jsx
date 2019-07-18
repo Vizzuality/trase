@@ -76,7 +76,7 @@ function ProfilePanel(props) {
               loading={loading}
               commodities={data.commodities}
               onSelectCommodity={item => setProfilesActiveItem(item, 'commodities')}
-              activeCommodity={panels.commodities.activeItems}
+              activeCommodities={panels.commodities.activeItems}
             />
           </div>
         </div>

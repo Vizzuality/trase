@@ -19,7 +19,7 @@ function CompaniesPanel(props) {
     getSearchResults,
     nodeTypeRenderer,
     onSelectCompany,
-    activeCompany,
+    activeCompanies,
     onSelectNodeTypeTab,
     activeNodeTypeTab,
     actionComponent
@@ -61,7 +61,7 @@ function CompaniesPanel(props) {
             {itemProps => (
               <GridListItem
                 {...itemProps}
-                isActive={!!activeCompany[itemProps.item && itemProps.item.id]}
+                isActive={!!activeCompanies[itemProps.item && itemProps.item.id]}
                 enableItem={onSelectCompany}
                 disableItem={onSelectCompany}
               />
@@ -75,7 +75,7 @@ function CompaniesPanel(props) {
 
 CompaniesPanel.propTypes = {
   companies: PropTypes.array,
-  activeCompany: PropTypes.object,
+  activeCompanies: PropTypes.object,
   page: PropTypes.number.isRequired,
   loadingMoreItems: PropTypes.bool,
   loading: PropTypes.bool,
