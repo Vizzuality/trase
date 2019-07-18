@@ -1,5 +1,5 @@
-# config valid only for current version of Capistrano
-lock '3.7.1'
+# config valid for current version and patch releases of Capistrano
+lock '~> 3.11.0'
 
 set :application, 'trase'
 set :repo_url, 'git@github.com:Vizzuality/trase.git'
@@ -29,7 +29,14 @@ append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/syst
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
-set :keep_releases, 5
+# Default value for local_user is ENV['USER']
+# set :local_user, -> { `git config user.name`.chomp }
+
+# Default value for keep_releases is 5
+# set :keep_releases, 5
+
+# Uncomment the following to require manually verifying the host key before first deploy.
+# set :ssh_options, verify_host_key: :secure
 
 set :yarn_target_path, -> { release_path.join('frontend') } # default not set
 set :yarn_flags, ''

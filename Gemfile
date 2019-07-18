@@ -69,8 +69,8 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'capistrano-yarn'
-  gem 'capistrano', '3.7.1'
-  gem 'capistrano-rails'
+  gem 'capistrano', '~> 3.11', require: false
+  gem 'capistrano-rails', '~> 1.4', require: false
   gem 'capistrano-bundler'
   gem 'capistrano-rvm'
   gem 'capistrano-passenger'
