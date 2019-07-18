@@ -14,7 +14,7 @@ function SummaryTitle(props) {
       <Button
         size="xs"
         color="pink-transparent"
-        className="profiles-selector-button"
+        className="profiles-selector-button hide-for-small"
         onClick={openModal}
         variant="slim"
       >

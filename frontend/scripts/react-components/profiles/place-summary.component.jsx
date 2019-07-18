@@ -129,12 +129,15 @@ function PlaceSummary(props) {
     <React.Fragment>
       <div className="c-overall-info page-break-inside-avoid" data-test="place-summary">
         <div className="row">
+          <div className="small-12 show-for-small profile-map-mobile">
+            {renderMunicipalityMap()}
+          </div>
           <div className="small-12 medium-9 columns">
             <SummaryTitle name={jurisdictionName} openModal={openModal} />
             <TitleGroup titles={titles} on={onYearChange} />
             {renderStats()}
           </div>
-          <div className="small-12 medium-3 columns">{renderMunicipalityMap()}</div>
+          <div className="small-12 medium-3 columns hide-for-small">{renderMunicipalityMap()}</div>
         </div>
         <div className="row">
           <div className="small-12 columns">
