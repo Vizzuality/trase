@@ -72,10 +72,15 @@ export function* fetchDataOnPanelChange() {
       loaded = [previousPanelState.activeStep];
     }
 
+    const newPanelName = getPanelName(newPanelState);
+    const enterCompaniesPanelWithoutCountry =
+      newPanelName === 'companies' && isEmpty(newPanelState.panels.countries.activeItems);
+
     if (
       !previousPanelState ||
       (previousPanelState.data[activeStep] && previousPanelState.data[activeStep].length === 0) ||
-      !loaded.includes(panelName)
+      !loaded.includes(panelName) ||
+      enterCompaniesPanelWithoutCountry
     ) {
       if (task !== null) {
         yield cancel(task);
