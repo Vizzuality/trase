@@ -22,7 +22,7 @@ function CompaniesPanel(props) {
     activeCompany,
     onSelectNodeTypeTab,
     activeNodeTypeTab,
-    extraDropdown
+    actionComponent
   } = props;
   return (
     <div className="c-companies-panel">
@@ -42,7 +42,7 @@ function CompaniesPanel(props) {
         selectedTab={activeNodeTypeTab && activeNodeTypeTab.id}
         itemTabRenderer={i => i.name}
         getTabId={item => item.id}
-        extraDropdown={extraDropdown}
+        actionComponent={actionComponent}
       >
         {activeNodeTypeTab && (
           <GridList
@@ -88,7 +88,7 @@ CompaniesPanel.propTypes = {
   tabs: PropTypes.array.isRequired,
   activeNodeTypeTab: PropTypes.object,
   onSelectNodeTypeTab: PropTypes.func.isRequired,
-  extraDropdown: PropTypes.node
+  actionComponent: PropTypes.node
 };
 
 CompaniesPanel.defaultProps = {

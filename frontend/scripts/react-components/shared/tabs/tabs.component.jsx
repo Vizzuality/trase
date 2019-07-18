@@ -15,7 +15,7 @@ function Tabs(props) {
     testId,
     getTabId,
     color,
-    extraDropdown
+    actionComponent
   } = props;
   const isSelected = item => getTabId(item) === selectedTab;
   return (
@@ -46,7 +46,7 @@ function Tabs(props) {
             </button>
           ))}
         </div>
-        {extraDropdown}
+        {actionComponent}
       </div>
       {children && <div className="tabs-content">{children}</div>}
     </div>
@@ -67,7 +67,7 @@ Tabs.propTypes = {
   children: PropTypes.any,
   onSelectTab: PropTypes.func.isRequired,
   color: PropTypes.string,
-  extraDropdown: PropTypes.node,
+  actionComponent: PropTypes.node,
   selectedTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
 };
 

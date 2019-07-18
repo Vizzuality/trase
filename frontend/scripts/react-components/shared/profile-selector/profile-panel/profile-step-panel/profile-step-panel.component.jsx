@@ -64,37 +64,42 @@ function ProfileStepPanel(props) {
       };
 
       return (
-        <CompaniesPanel
-          extraDropdown={
-            <div className="profile-panel-dropdown-container">
-              <Text as="span" color="grey-faded" weight="bold">
-                country:
-              </Text>
-              <Dropdown
-                variant="panel"
-                options={options}
-                value={selectedCountry}
-                onChange={item =>
-                  setProfilesActiveItem(data.countries.find(i => i.id === item.value), 'countries')
-                }
-              />
-            </div>
-          }
-          tabs={tabs}
-          onSelectNodeTypeTab={item => setProfilesActiveTab(item, 'companies')}
-          page={companies.page}
-          getMoreItems={getMoreItems}
-          searchCompanies={companies.searchResults}
-          nodeTypeRenderer={countryNameNodeTypeRenderer}
-          setSearchResult={item => setProfilesSearchResult(item, 'companies')}
-          getSearchResults={getSearchResults}
-          loadingMoreItems={companies.loadingItems}
-          loading={loading}
-          companies={companiesOptions}
-          onSelectCompany={item => setProfilesActiveItem(item, 'companies')}
-          activeNodeTypeTab={companies.activeTab}
-          activeCompany={companies.activeItems}
-        />
+        tabs.length > 0 && (
+          <CompaniesPanel
+            actionComponent={
+              <div className="profile-panel-dropdown-container">
+                <Text as="span" color="grey-faded" weight="bold">
+                  country:
+                </Text>
+                <Dropdown
+                  variant="panel"
+                  options={options}
+                  value={selectedCountry}
+                  onChange={item =>
+                    setProfilesActiveItem(
+                      data.countries.find(i => i.id === item.value),
+                      'countries'
+                    )
+                  }
+                />
+              </div>
+            }
+            tabs={tabs}
+            onSelectNodeTypeTab={item => setProfilesActiveTab(item, 'companies')}
+            page={companies.page}
+            getMoreItems={getMoreItems}
+            searchCompanies={companies.searchResults}
+            nodeTypeRenderer={countryNameNodeTypeRenderer}
+            setSearchResult={item => setProfilesSearchResult(item, 'companies')}
+            getSearchResults={getSearchResults}
+            loadingMoreItems={companies.loadingItems}
+            loading={loading}
+            companies={companiesOptions}
+            onSelectCompany={item => setProfilesActiveItem(item, 'companies')}
+            activeNodeTypeTab={companies.activeTab}
+            activeCompany={companies.activeItems}
+          />
+        )
       );
     }
     default:
