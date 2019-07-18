@@ -18,7 +18,6 @@ import {
 import getPanelStepName, { getPanelName } from 'utils/getProfilePanelName';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
-import { PROFILE_TRADERS_DEFAULT_COUNTRY_NAME } from 'constants';
 
 export function* fetchProfilesInitialData() {
   const profileSelector = yield select(state => state.profileSelector);
@@ -34,9 +33,7 @@ export function* fetchProfilesInitialData() {
     yield call(getProfilesData, 'countries');
     const updatedProfileSelector = yield select(state => state.profileSelector);
     if (isEmpty(updatedProfileSelector.panels.countries.activeItems)) {
-      const defaultCountry = updatedProfileSelector.data.countries.find(
-        c => c.name === PROFILE_TRADERS_DEFAULT_COUNTRY_NAME
-      );
+      const defaultCountry = updatedProfileSelector.data.countries[0];
       yield put({
         type: PROFILES__SET_ACTIVE_ITEM,
         payload: {
