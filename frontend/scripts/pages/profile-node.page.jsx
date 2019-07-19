@@ -35,15 +35,15 @@ export const mount = (root, store) => {
     document.getElementById('page-react-root')
   );
 
-  render(
-    <Provider store={store}>
-      <Footer />
-      <Feedback />
-    </Provider>,
-    document.getElementById('footer')
-  );
-
   if (!store.getState().location?.query?.print) {
+    render(
+      <Provider store={store}>
+        <Footer />
+        <Feedback />
+      </Provider>,
+      document.getElementById('footer')
+    );
+
     render(
       <Provider store={store}>
         <CookieBanner />
@@ -53,9 +53,11 @@ export const mount = (root, store) => {
   }
 };
 
-export const unmount = () => {
+export const unmount = (root, store) => {
   unmountComponentAtNode(document.getElementById('nav'));
-  unmountComponentAtNode(document.getElementById('footer'));
   unmountComponentAtNode(document.getElementById('page-react-root'));
-  unmountComponentAtNode(document.getElementById('cookie-banner'));
+  if (!store.getState().location?.query?.print) {
+    unmountComponentAtNode(document.getElementById('footer'));
+    unmountComponentAtNode(document.getElementById('cookie-banner'));
+  }
 };

@@ -94,6 +94,7 @@ class ActorSummary extends React.PureComponent {
                       variant="mono"
                       as="span"
                       weight="bold"
+                      size="lg"
                       className="stats-text"
                     >
                       {zeroDeforestation}
