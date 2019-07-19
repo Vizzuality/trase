@@ -33,7 +33,7 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
       if property.top_profile_image.nil?
         'No image assigned'
       else
-        image_tag property&.top_profile_image&.image&.url(:small)
+        image_tag property&.top_profile_image&.image_url(:small)
       end
     end
     actions
