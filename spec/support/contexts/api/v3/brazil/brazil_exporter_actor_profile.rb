@@ -46,6 +46,8 @@ shared_context 'api v3 brazil exporter actor profile' do
   end
 
   let!(:api_v3_exporter_basic_attributes_zero_deforestation) do
+    return unless defined?(api_v3_zero_deforestation)
+
     chart_attribute = Api::V3::ChartQual.
       includes(:chart_attribute).
       where(
@@ -68,6 +70,8 @@ shared_context 'api v3 brazil exporter actor profile' do
   end
 
   let!(:api_v3_exporter_basic_attributes_zero_deforestation_property) do
+    return unless defined?(api_v3_zero_deforestation)
+
     qual_context_property = Api::V3::QualContextProperty.
       where(
         context_id: api_v3_context.id,
@@ -85,6 +89,8 @@ shared_context 'api v3 brazil exporter actor profile' do
   end
 
   let!(:api_v3_exporter_basic_attributes_forest_500) do
+    return unless defined?(api_v3_forest_500)
+
     chart_attribute = Api::V3::ChartInd.
       includes(:chart_attribute).
       where(
@@ -107,6 +113,8 @@ shared_context 'api v3 brazil exporter actor profile' do
   end
 
   let!(:api_v3_exporter_basic_attributes_forest_500_property) do
+    return unless defined?(api_v3_forest_500)
+
     ind_context_property = Api::V3::IndContextProperty.
       where(
         context_id: api_v3_context.id,
