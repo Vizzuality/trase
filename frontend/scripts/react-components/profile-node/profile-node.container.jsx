@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { GET_PROFILE_METADATA } from 'utils/getURLFromParams';
+import { openModal } from 'react-components/shared/profile-selector/profile-selector.actions';
 import Widget from 'react-components/widgets/widget.component';
 import ProfileNode from 'react-components/profile-node/profile-node.component';
 
@@ -36,18 +37,21 @@ class ProfileNodeContainer extends React.PureComponent {
 
 function mapStateToProps(state) {
   const {
-    query: { year, nodeId, print, contextId = 1 } = {},
+    query: { year: selectedYear, nodeId, print, contextId = 1 } = {},
     payload: { profileType }
   } = state.location;
   const { tooltips, contexts } = state.app;
   const ctxId = contextId && parseInt(contextId, 10);
   const context = contexts.find(ctx => ctx.id === ctxId) || { id: ctxId };
+  const year = selectedYear
+    ? parseInt(selectedYear, 10)
+    : context.years && context.years[context.years.length - 1];
   return {
     tooltips,
     context,
     profileType,
     printMode: print && JSON.parse(print),
-    year: parseInt(year, 10),
+    year,
     nodeId: parseInt(nodeId, 10)
   };
 }
@@ -60,7 +64,8 @@ const updateQueryParams = (profileType, query) => ({
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      updateQueryParams
+      updateQueryParams,
+      openModal
     },
     dispatch
   );

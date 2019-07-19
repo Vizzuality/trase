@@ -257,8 +257,9 @@ export const DASHBOARD_STEPS = {
 };
 
 export const PROFILE_STEPS = {
-  nodes: 0,
-  commodities: 1
+  types: 0,
+  profiles: 1,
+  commodities: 2
 };
 
 export const CHART_TYPES = {
@@ -281,8 +282,8 @@ export const NAV_FILTER_TYPES = {
 
 export const PROFILE_TYPES = {
   sources: 'sources',
-  importing: 'importing-countries',
-  traders: 'traders'
+  importing: 'destinations',
+  traders: 'companies'
 };
 
 export const DEFAULT_DASHBOARD_UNIT_FORMAT = '.4~s';

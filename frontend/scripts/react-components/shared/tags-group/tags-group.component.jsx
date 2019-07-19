@@ -11,19 +11,21 @@ function TagsGroup(props) {
   return React.createElement(
     as,
     { className: 'c-tags-group' },
-    tags.map(part => (
-      <Heading
-        as="span"
-        size="md"
-        align="center"
-        key={part.id}
-        color={color}
-        className="tag-group-part notranslate"
-      >
-        {part.prefix && translateText(`${part.prefix} `)}
-        {part.value && <Tag {...props} part={part} />}
-      </Heading>
-    ))
+    <>
+      {tags.map(part => (
+        <Heading
+          as="span"
+          size="md"
+          align="center"
+          key={part.id}
+          color={color}
+          className="tag-group-part notranslate"
+        >
+          {part.prefix && translateText(`${part.prefix} `)}
+          {part.value && <Tag {...props} part={part} />}
+        </Heading>
+      ))}
+    </>
   );
 }
 

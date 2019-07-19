@@ -15,7 +15,8 @@ function SummaryWidget(props) {
     profileType,
     onYearChange,
     tooltips,
-    profileMetadata
+    profileMetadata,
+    openModal
   } = props;
   const params = { node_id: nodeId, context_id: context.id, profile_type: profileType, year };
   return (
@@ -45,6 +46,7 @@ function SummaryWidget(props) {
                 onYearChange={onYearChange}
                 data={data[GET_NODE_SUMMARY_URL]}
                 context={context}
+                openModal={openModal}
               />
             )}
             {profileType === 'place' && (
@@ -56,6 +58,7 @@ function SummaryWidget(props) {
                 data={data[GET_NODE_SUMMARY_URL]}
                 context={context}
                 profileMetadata={profileMetadata}
+                openModal={openModal}
               />
             )}
           </React.Fragment>
@@ -73,6 +76,7 @@ SummaryWidget.propTypes = {
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired,
   onYearChange: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
   profileType: PropTypes.string.isRequired
 };
 

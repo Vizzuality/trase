@@ -6,6 +6,7 @@ import capitalize from 'lodash/capitalize';
 import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import TitleGroup from 'react-components/profiles/title-group';
 import Map from 'react-components/profiles/map.component';
+import Button from 'react-components/shared/button';
 import formatValue from 'utils/formatValue';
 
 class PlaceSummary extends React.PureComponent {
@@ -15,6 +16,7 @@ class PlaceSummary extends React.PureComponent {
       tooltips,
       onYearChange,
       context,
+      openModal,
       data: {
         columnName,
         countryName,
@@ -174,6 +176,14 @@ class PlaceSummary extends React.PureComponent {
               <div className="row">
                 <div className="small-12 columns">
                   <TitleGroup titles={titles} on={onYearChange} />
+                  <Button
+                    size="sm"
+                    color="pink-transparent"
+                    className="profiles-selector-button"
+                    onClick={openModal}
+                  >
+                    Change profile
+                  </Button>
                 </div>
                 {(areaValue !== '-' ||
                   commodityAreaValue !== '-' ||
@@ -234,6 +244,7 @@ PlaceSummary.propTypes = {
   context: PropTypes.object,
   tooltips: PropTypes.object,
   onYearChange: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
   profileMetadata: PropTypes.object.isRequired
 };
 

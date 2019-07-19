@@ -4,6 +4,7 @@ import SearchInput from 'react-components/shared/search-input/search-input.compo
 import GridList from 'react-components/shared/grid-list/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import Tabs from 'react-components/shared/tabs/tabs.component';
+import 'react-components/dashboard-element/dashboard-panel/companies-panel.scss';
 
 function CompaniesPanel(props) {
   const {
@@ -18,16 +19,17 @@ function CompaniesPanel(props) {
     getSearchResults,
     nodeTypeRenderer,
     onSelectCompany,
-    activeCompany,
+    activeCompanies,
     onSelectNodeTypeTab,
-    activeNodeTypeTab
+    activeNodeTypeTab,
+    actionComponent
   } = props;
   return (
-    <React.Fragment>
+    <div className="c-companies-panel">
       <SearchInput
         variant="bordered"
         size="sm"
-        className="dashboard-panel-search"
+        className="companies-panel-search"
         items={searchCompanies}
         placeholder="Search company"
         onSelect={setSearchResult}
@@ -40,10 +42,11 @@ function CompaniesPanel(props) {
         selectedTab={activeNodeTypeTab && activeNodeTypeTab.id}
         itemTabRenderer={i => i.name}
         getTabId={item => item.id}
+        actionComponent={actionComponent}
       >
         {activeNodeTypeTab && (
           <GridList
-            className="dashboard-panel-pill-list"
+            className="companies-panel-pill-list"
             items={companies}
             height={companies.length > 5 ? 200 : 50}
             width={950}
@@ -58,7 +61,7 @@ function CompaniesPanel(props) {
             {itemProps => (
               <GridListItem
                 {...itemProps}
-                isActive={!!activeCompany[itemProps.item && itemProps.item.id]}
+                isActive={!!activeCompanies[itemProps.item && itemProps.item.id]}
                 enableItem={onSelectCompany}
                 disableItem={onSelectCompany}
               />
@@ -66,13 +69,13 @@ function CompaniesPanel(props) {
           </GridList>
         )}
       </Tabs>
-    </React.Fragment>
+    </div>
   );
 }
 
 CompaniesPanel.propTypes = {
   companies: PropTypes.array,
-  activeCompany: PropTypes.object,
+  activeCompanies: PropTypes.object,
   page: PropTypes.number.isRequired,
   loadingMoreItems: PropTypes.bool,
   loading: PropTypes.bool,
@@ -84,7 +87,8 @@ CompaniesPanel.propTypes = {
   nodeTypeRenderer: PropTypes.func.isRequired,
   tabs: PropTypes.array.isRequired,
   activeNodeTypeTab: PropTypes.object,
-  onSelectNodeTypeTab: PropTypes.func.isRequired
+  onSelectNodeTypeTab: PropTypes.func.isRequired,
+  actionComponent: PropTypes.node
 };
 
 CompaniesPanel.defaultProps = {

@@ -5,7 +5,7 @@ const getAppContexts = state => state.app.contexts;
 const getTopProfiles = state => state.profileRoot.topProfiles;
 
 export const getContextsWithProfilePages = createSelector(
-  [x => x],
+  getAppContexts,
   contexts => contexts.filter(ctx => ctx.hasProfiles)
 );
 

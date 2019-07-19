@@ -7,6 +7,7 @@ import capitalize from 'lodash/capitalize';
 import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import TitleGroup from 'react-components/profiles/title-group';
 import Text from 'react-components/shared/text';
+import Button from 'react-components/shared/button';
 import 'react-components/profiles/summary.scss';
 
 class ActorSummary extends React.PureComponent {
@@ -16,6 +17,7 @@ class ActorSummary extends React.PureComponent {
       tooltips,
       printMode,
       onYearChange,
+      openModal,
       context,
       data: { nodeName, columnName, summary, forest500, zeroDeforestation } = {}
     } = this.props;
@@ -40,9 +42,19 @@ class ActorSummary extends React.PureComponent {
       <div className="c-overall-info" data-test="actor-summary">
         <div className="row">
           <div className="small-12 columns">
-            <h2 className="profiles-title" data-test="profiles-title">
-              {capitalize(nodeName)}
-            </h2>
+            <div className="profiles-title-container">
+              <h2 className="profiles-title" data-test="profiles-title">
+                {capitalize(nodeName)}
+              </h2>
+              <Button
+                size="sm"
+                color="pink-transparent"
+                className="profiles-selector-button"
+                onClick={openModal}
+              >
+                Change profile
+              </Button>
+            </div>
           </div>
         </div>
         <div className="row">
@@ -118,6 +130,7 @@ ActorSummary.propTypes = {
   printMode: PropTypes.bool,
   tooltips: PropTypes.object,
   context: PropTypes.object,
+  openModal: PropTypes.func.isRequired,
   onYearChange: PropTypes.func.isRequired
 };
 
