@@ -2,7 +2,12 @@ module Api
   module V3
     module Actors
       class BasicAttributes
+        include ActiveSupport::Configurable
         include Api::V3::Profiles::AttributesInitializer
+
+        config_accessor :get_tooltip do
+          Api::V3::Profiles::GetTooltipPerAttribute
+        end
 
         # @param context [Api::V3::Context]
         # @param node [Api::V3::Node]
@@ -38,7 +43,6 @@ module Api
           }
 
           @attributes = @attributes.merge initialize_named_attributes
-          @attributes = @attributes.merge initialize_header_attributes
           initialize_top_nodes
           initialize_flow_stats_for_node
           @attributes[:summary] = summary
@@ -58,38 +62,34 @@ module Api
         NAMED_ATTRIBUTES = %w(forest_500 zero_deforestation).freeze
 
         def initialize_named_attributes
-          values =
-            NAMED_ATTRIBUTES.map do |name|
-              original_attribute = @chart_config.named_attribute(name)
-              next nil unless original_attribute
+          values = {header_attributes: {}}
+          NAMED_ATTRIBUTES.map do |name|
+            original_attribute = @chart_config.named_attribute(name)
+            next nil unless original_attribute
 
-              value = @values.get(
-                original_attribute.simple_type, original_attribute.id
-              )
-              next nil unless value
+            value = @values.get(
+              original_attribute.simple_type, original_attribute.id
+            )
+            next nil unless value
 
-              [name, value]
-            end
-          Hash[values.compact]
+            values[name.to_sym] = value
+
+            chart_attribute = @chart_config.named_chart_attribute(name)
+            values[:header_attributes][chart_attribute.identifier.to_sym] =
+              header_attributes(chart_attribute)
+          end
+          values
         end
 
-        def initialize_header_attributes
-          values =
-            NAMED_ATTRIBUTES.map do |name|
-              chart_attribute =
-                @chart_config.attributes.select { |attribute| attribute == name }.first
-              next nil unless chart_attribute
-
-              [
-                chart_attribute.identifier,
-                {
-                  name: chart_attribute.display_name,
-                  unit: chart_attribute.unit,
-                  tooltip: chart_attribute.tooltip_text
-                }
-              ]
-            end
-          Hash[values.compact]
+        def header_attributes(attribute)
+          {
+            name: attribute.display_name,
+            unit: attribute.unit,
+            tooltip: get_tooltip.call(
+              ro_chart_attribute: attribute,
+              context: @context
+            )
+          }
         end
 
         def initialize_top_nodes
