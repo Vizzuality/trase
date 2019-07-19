@@ -77,10 +77,6 @@ module Api
         end
 
         def initialize_attributes
-          puts 'INITIALIZE ATTRIBUTES'
-          pp @chart
-          pp @chart.chart_attributes
-          pp @chart.readonly_chart_attributes
           chart_attributes = @chart.readonly_chart_attributes.order(:position)
           @attributes = chart_attributes.map(&:original_attribute)
           @chart_attributes =
