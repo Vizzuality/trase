@@ -216,7 +216,7 @@ export const makeGetGroupingActiveItem = () =>
     (grouping, activeChartId) => {
       if (activeChartId && grouping) {
         const item = grouping.options.find(option => option.id === activeChartId);
-        return { ...item, value: item.id };
+        return { ...item, value: item.id, label: capitalize(item.label) };
       }
       return null;
     }
@@ -227,7 +227,11 @@ export const makeGetGroupingOptions = () =>
     [getGrouping],
     grouping => {
       if (grouping) {
-        return grouping.options.map(option => ({ ...option, value: option.id }));
+        return grouping.options.map(option => ({
+          ...option,
+          value: option.id,
+          label: capitalize(option.label)
+        }));
       }
       return null;
     }
@@ -246,12 +250,12 @@ export const makeGetTitle = () =>
         nodeTypePart = getNodeTypeName(getPluralNodeType(meta.info.node_type));
       } else if (nodeFilter) {
         const label = activeChartGrouping ? '' : config?.yAxisLabel.text;
-        nodeTypePart = `${capitalize(nodeFilter.name)}${addApostrophe(nodeFilter.name)}: ${label}`;
+        nodeTypePart = `${capitalize(nodeFilter.name)}${addApostrophe(nodeFilter.name)} ${label}`;
       }
       let filterPart = '';
       const filterKey = meta.info.single_filter_key;
       if (filterKey) {
-        const name = capitalize(meta.info.filter[filterKey][0].name);
+        const name = activeChartGrouping ? '' : capitalize(meta.info.filter[filterKey][0].name);
         filterPart = `${getFilterPreposition(filterKey)} ${name}`;
       }
       return [topNPart, nodeTypePart, filterPart].filter(Boolean).join(' ');

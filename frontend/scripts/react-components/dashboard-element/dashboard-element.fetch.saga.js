@@ -190,6 +190,9 @@ export function* fetchDashboardCharts() {
     },
     x => !!x
   );
+  if (!params.commodity_id || !params.country_id || !params.start_year || !params.end_year) {
+    return;
+  }
   const url = getURLFromParams(GET_DASHBOARD_PARAMETRISED_CHARTS_URL, params);
 
   yield put(setDashboardChartsLoading(true));
