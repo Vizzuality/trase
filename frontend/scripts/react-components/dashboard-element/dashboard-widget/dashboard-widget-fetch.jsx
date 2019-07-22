@@ -18,7 +18,6 @@ function DashboardWidgetFetch(props) {
 
   const activeChart = useMemo(() => {
     if (hasGrouping) {
-      console.log(activeChartId);
       return chart.items[activeChartId];
     }
     return chart;
