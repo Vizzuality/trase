@@ -52,6 +52,7 @@ RSpec.describe Api::V3::Places::BasicAttributes do
         area =
           chart_attributes.find_by(identifier: 'area')
         expect(attrs[:area]).not_to eql nil
+        expect(header_attributes[:area][:value]).to eql(attrs[:area])
         expect(header_attributes[:area][:name]).to eql(
           area.display_name
         )
@@ -67,6 +68,9 @@ RSpec.describe Api::V3::Places::BasicAttributes do
         commodity_production =
           chart_attributes.find_by(identifier: 'commodity_production')
         expect(attrs[:commodity_production]).not_to eql nil
+        expect(header_attributes[:commodity_production][:value]).to eql(
+          attrs[:commodity_production]
+        )
         expect(header_attributes[:commodity_production][:name]).to eql(
           commodity_production.display_name
         )
@@ -79,6 +83,9 @@ RSpec.describe Api::V3::Places::BasicAttributes do
       end
 
       it 'check header commodity area parameters' do
+        expect(header_attributes[:commodity_area][:value]).to eql(
+          attrs[:value]
+        )
         expect(header_attributes[:commodity_area][:name]).to eql(
           "#{api_v3_context.commodity.name.downcase} land"
         )

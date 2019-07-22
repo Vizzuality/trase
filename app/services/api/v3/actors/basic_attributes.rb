@@ -76,17 +76,21 @@ module Api
 
             chart_attribute = @chart_config.named_chart_attribute(name)
             values[:header_attributes][chart_attribute.identifier.to_sym] =
-              header_attributes(chart_attribute)
+              header_attributes(original_attribute, chart_attribute)
           end
           values
         end
 
-        def header_attributes(attribute)
+        def header_attributes(attribute, chart_attribute)
+          puts 'HEADER ATTRIBUTES'
+          pp attribute
+          pp chart_attribute
           {
-            name: attribute.display_name,
-            unit: attribute.unit,
+            value: @values.get(attribute.simple_type, attribute.id),
+            name: chart_attribute.display_name,
+            unit: chart_attribute.unit,
             tooltip: get_tooltip.call(
-              ro_chart_attribute: attribute,
+              ro_chart_attribute: chart_attribute,
               context: @context
             )
           }

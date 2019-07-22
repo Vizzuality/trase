@@ -123,6 +123,10 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
         zero_deforestation =
           chart_attributes.find_by(identifier: 'zero_deforestation')
         expect(attrs[:zero_deforestation]).not_to eql nil
+
+        expect(header_attributes[:zero_deforestation][:value]).to eql(
+          attrs[:zero_deforestation]
+        )
         expect(header_attributes[:zero_deforestation][:name]).to eql(
           zero_deforestation.display_name
         )

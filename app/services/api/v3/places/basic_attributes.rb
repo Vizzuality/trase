@@ -182,6 +182,7 @@ module Api
             commodity_attributes[:commodity_area] = @commodity_area_formatted
           end
           commodity_attributes[:header_attributes][:commodity_area] = {
+            value: @commodity_area_formatted,
             name: "#{@commodity_name} land",
             unit: 'ha',
             tooltip: 'Area of land used to grow soybeans'
@@ -193,6 +194,7 @@ module Api
         def header_attributes(attribute_name)
           attribute = @chart_config.named_chart_attribute(attribute_name)
           {
+            value: instance_variable_get("@#{attribute_name}"),
             name: attribute.display_name,
             unit: attribute.unit,
             tooltip: get_tooltip.call(
