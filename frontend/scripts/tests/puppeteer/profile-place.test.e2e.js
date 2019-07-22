@@ -90,7 +90,7 @@ describe('Profile place - Full data', () => {
     });
   });
 
-  test('Place profile screenshot - Mobile', async () => {
+  xtest('Place profile screenshot - Mobile', async () => {
     await page.setViewport({
       width: 375,
       height: 667,

@@ -145,7 +145,7 @@ describe('Profile actor - Full data', () => {
     expect(selectedCircles.length).toBe(1);
   });
 
-  it('Actor profile screenshot - Mobile', async () => {
+  xit('Actor profile screenshot - Mobile', async () => {
     await page.setViewport({
       width: 375,
       height: 667,
