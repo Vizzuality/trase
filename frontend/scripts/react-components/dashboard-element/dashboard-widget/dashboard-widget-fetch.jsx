@@ -7,22 +7,22 @@ import { PARSED_CHART_TYPES } from './dashboard-widget.selectors';
 
 function DashboardWidgetFetch(props) {
   const { chart, grouping, dynamicSentenceParts, selectedRecolorBy } = props;
-  const [activeChartId, setActiveChart] = useState(grouping?.defaultChartId || null);
+  const hasGrouping = typeof grouping?.defaultChartId !== 'undefined';
 
+  const [activeChartId, setActiveChartId] = useState(hasGrouping ? grouping.defaultChartId : null);
   useEffect(() => {
-    if (!chart || !grouping) {
-      setActiveChart(null);
-    } else if (grouping.defaultChartId !== activeChartId) {
-      setActiveChart(grouping.defaultChartId);
+    if (hasGrouping) {
+      setActiveChartId(grouping.defaultChartId);
     }
-  }, [activeChartId, chart, grouping, setActiveChart]);
+  }, [grouping, hasGrouping]);
 
   const activeChart = useMemo(() => {
-    if (activeChartId) {
+    if (hasGrouping) {
+      console.log(activeChartId);
       return chart.items[activeChartId];
     }
     return chart;
-  }, [activeChartId, chart]);
+  }, [activeChartId, chart, hasGrouping]);
 
   const chartUrl = useMemo(() => {
     if (activeChart) {
@@ -53,7 +53,7 @@ function DashboardWidgetFetch(props) {
           data={sortBy(data && data[chartUrl], 'x')}
           dynamicSentenceParts={dynamicSentenceParts}
           activeChartId={activeChartId}
-          setActiveChart={setActiveChart}
+          setActiveChartId={setActiveChartId}
           grouping={grouping}
         />
       )}

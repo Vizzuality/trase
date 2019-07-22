@@ -26,7 +26,7 @@ function DashboardWidget(props) {
     chartType,
     chartConfig,
     title,
-    setActiveChart,
+    setActiveChartId,
     groupingOptions,
     trackOpenTableView,
     groupingActiveItem
@@ -127,15 +127,16 @@ function DashboardWidget(props) {
       <div className="widget-title-container">
         <Heading as="h3" color="white">
           {title}
-          {groupingOptions && (
+          {groupingOptions && title && (
             <Dropdown
               size="rg"
+              showSelected
               color="white"
               weight="light"
               variant="sentence"
               options={groupingOptions}
               value={groupingActiveItem}
-              onChange={item => setActiveChart(item.value)}
+              onChange={item => setActiveChartId(item.value)}
             />
           )}
         </Heading>
@@ -165,7 +166,7 @@ DashboardWidget.propTypes = {
   trackOpenTableView: PropTypes.func,
   chartConfig: PropTypes.object,
   chartType: PropTypes.string,
-  setActiveChart: PropTypes.func,
+  setActiveChartId: PropTypes.func,
   groupingOptions: PropTypes.array,
   groupingActiveItem: PropTypes.object
 };
