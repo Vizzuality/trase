@@ -556,7 +556,7 @@ describe(DASHBOARD_ELEMENT__CLEAR_PANELS, () => {
         activeTab: state.companiesPanel.activeTab
       },
       commoditiesPanel: {
-        ...initialState.companiesPanel,
+        ...initialState.commoditiesPanel,
         activeTab: state.commoditiesPanel.activeTab
       }
     });
