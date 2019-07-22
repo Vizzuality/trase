@@ -1,3 +1,3 @@
 import { BREAKPOINTS } from 'constants';
 
-export default window.innerWidth <= BREAKPOINTS.small;
+export default () => window.innerWidth <= BREAKPOINTS.small;

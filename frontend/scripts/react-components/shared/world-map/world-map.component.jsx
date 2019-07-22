@@ -95,7 +95,7 @@ class WorldMap extends React.PureComponent {
 
   renderGeographies = (geographies, projection) => {
     const { flows, originGeoId } = this.state;
-    const mouseInteractionProps = isMobile
+    const mouseInteractionProps = isMobile()
       ? {}
       : {
           onMouseMove: this.onMouseMove,
@@ -121,7 +121,7 @@ class WorldMap extends React.PureComponent {
 
   renderLines = () => {
     const { originCoordinates, flows } = this.state;
-    const mouseInteractionProps = isMobile
+    const mouseInteractionProps = isMobile()
       ? {}
       : {
           onMouseMove: this.onMouseMove,

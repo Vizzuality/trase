@@ -83,7 +83,7 @@ class TopDestinationsChart extends React.PureComponent {
       testId
     } = this.props;
     const { tooltipConfig } = this.state;
-    const heightStyle = isMobile ? { minHeigh: height } : { height };
+    const heightStyle = isMobile() ? { minHeigh: height } : { height };
     return (
       <React.Fragment>
         <UnitsTooltip show={!!tooltipConfig} {...tooltipConfig} />
