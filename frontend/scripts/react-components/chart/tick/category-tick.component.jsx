@@ -12,19 +12,17 @@ const renderText = tickValue => (
 );
 
 function CategoryTick(props) {
-  const { x, y, payload, nodeIds, info, config } = props;
+  const { x, y, payload, nodeIds, config } = props;
   const {
     dashboardMeta: { context }
   } = config;
   const node = nodeIds[payload.index];
-  let lastYear;
   let url;
   if (node && node.profile && !DISABLE_PROFILES) {
-    lastYear = info.years.end_year || info.years.start_year;
     url = {
       type: 'profileNode',
       payload: { profileType: node.profile },
-      query: { nodeId: node.id, year: lastYear, contextId: context.id }
+      query: { nodeId: node.id, contextId: context.id }
     };
   }
 
@@ -46,7 +44,6 @@ CategoryTick.propTypes = {
   y: PropTypes.number,
   payload: PropTypes.object,
   nodeIds: PropTypes.array,
-  info: PropTypes.object,
   config: PropTypes.object
 };
 

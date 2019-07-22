@@ -1,16 +1,23 @@
-/* eslint-disable no-console */
+/* eslint-disable no-console,import/no-extraneous-dependencies */
 
 import { Polly } from '@pollyjs/core';
 import PuppeteerAdapter from '@pollyjs/adapter-puppeteer';
 import FSPersister from '@pollyjs/persister-fs';
+import { toMatchImageSnapshot } from 'jest-image-snapshot';
 import { pollyConfig, handleUnnecesaryRequests } from './utils';
 import { testProfileSummary, testProfileMultiTable } from './shared';
+
+expect.extend({ toMatchImageSnapshot });
 
 Polly.register(PuppeteerAdapter);
 Polly.register(FSPersister);
 
 const BASE_URL = 'http://0.0.0.0:8081';
 const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;
+const snapshotOptions = {
+  failureThreshold: '0.05',
+  failureThresholdType: 'percent'
+};
 
 jest.setTimeout(TIMEOUT);
 const { page } = global;
@@ -30,7 +37,6 @@ afterAll(async () => {
 
 describe('Profile actor - Full data', () => {
   it('Summary widget loads successfully', async () => {
-    expect.assertions(5);
     await testProfileSummary(page, {
       title: 'Bunge',
       params: ['exporter', 'soy', 'brazil'],
@@ -40,8 +46,6 @@ describe('Profile actor - Full data', () => {
   });
 
   it('Top destination countries chart loads successfully', async () => {
-    expect.assertions(2);
-
     await page.waitForSelector('[data-test=top-destination-countries]');
     const chartTitle = await page.$eval(
       '[data-test=top-destination-countries-chart-title]',
@@ -56,8 +60,6 @@ describe('Profile actor - Full data', () => {
   });
 
   it('Top destination countries map loads successfully', async () => {
-    expect.assertions(2);
-
     await page.waitForSelector('[data-test=top-destination-countries-map]');
     const hasLegend = await page.$eval(
       '[data-test=top-destination-countries-map-legend]',
@@ -73,8 +75,6 @@ describe('Profile actor - Full data', () => {
   });
 
   it('Top sourcing regions chart loads successfully', async () => {
-    expect.assertions(2);
-
     await page.waitForSelector('[data-test=top-sourcing-regions]');
     const chartTitle = await page.$eval(
       '[data-test=top-sourcing-regions-chart-switch-title]',
@@ -89,8 +89,6 @@ describe('Profile actor - Full data', () => {
   });
 
   it('Top sourcing regions map loads successfully', async () => {
-    expect.assertions(2);
-
     await page.waitForSelector('[data-test=top-sourcing-regions-map]');
     const hasLegend = await page.$eval(
       '[data-test=top-sourcing-regions-map-legend]',
@@ -106,8 +104,6 @@ describe('Profile actor - Full data', () => {
   });
 
   it('Top sourcing regions switch changes map', async () => {
-    expect.assertions(2);
-
     await page.waitForSelector('[data-test=top-sourcing-regions-chart-switch]');
     await page.waitForSelector('[data-test=top-sourcing-regions-map-d3-polygon-colored]');
     const municipalityPolygons = await page.$$(
@@ -122,8 +118,6 @@ describe('Profile actor - Full data', () => {
   });
 
   it('Deforestation risk widget loads successfully', async () => {
-    expect.assertions(9);
-
     await testProfileMultiTable(page, {
       tabsLength: 2,
       rowsLength: 10,
@@ -138,8 +132,6 @@ describe('Profile actor - Full data', () => {
   });
 
   it('Company compare scatterplot loads successfully', async () => {
-    expect.assertions(3);
-
     await page.waitForSelector('[data-test=company-compare]');
     const title = await page.$eval(
       '[data-test=company-compare-scatterplot-switch-title]',
@@ -151,5 +143,28 @@ describe('Profile actor - Full data', () => {
     expect(title.toLowerCase()).toMatch('comparing companies exporting soy from brazil in 2015');
     expect(circles.length).toBe(347);
     expect(selectedCircles.length).toBe(1);
+  });
+
+  xit('Actor profile screenshot - Mobile', async () => {
+    await page.setViewport({
+      width: 375,
+      height: 667,
+      isMobile: true,
+      hasTouch: true
+    });
+
+    await page.addStyleTag({
+      content: `
+      [data-test=cookie-banner] { display: none !important; }
+    `
+    });
+
+    const screenshot = await page.screenshot({
+      fullPage: true
+    });
+    expect(screenshot).toMatchImageSnapshot({
+      customSnapshotIdentifier: 'profile-actor-MOBILE',
+      ...snapshotOptions
+    });
   });
 });

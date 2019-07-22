@@ -36,12 +36,11 @@ class RankingWidget extends PureComponent {
     const { context } = config.dashboardMeta;
     const dataWithUrl = data.map((d, i) => {
       const node = meta.yLabelsProfileInfo[i];
-      const lastYear = meta.info.years.end_year || meta.info.years.start_year;
       const url = node.profile &&
         !DISABLE_PROFILES && {
           type: 'profileNode',
           payload: {
-            query: { nodeId: node.id, year: lastYear, contextId: context.id },
+            query: { nodeId: node.id, contextId: context.id },
             profileType: node.profile
           }
         };

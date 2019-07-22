@@ -7,10 +7,6 @@
   bottom: 0;
   background-color: $light-gray;
 
-  @media print {
-    display: none;
-  }
-
   .contain-logos-footer {
     overflow: hidden;
 

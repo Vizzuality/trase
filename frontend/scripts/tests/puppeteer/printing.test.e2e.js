@@ -51,7 +51,7 @@ describe('Prints the actor profile PDF correctly', () => {
       fullPage: true
     });
     expect(screenshot).toMatchImageSnapshot({
-      customSnapshotIdentifier: 'profile-actor',
+      customSnapshotIdentifier: 'profile-actor-PDF',
       ...snapshotOptions
     });
   });
@@ -72,7 +72,7 @@ describe('Prints the actor profile PDF correctly', () => {
       fullPage: true
     });
     expect(screenshot).toMatchImageSnapshot({
-      customSnapshotIdentifier: 'profile-place',
+      customSnapshotIdentifier: 'profile-place-PDF',
       ...snapshotOptions
     });
   });

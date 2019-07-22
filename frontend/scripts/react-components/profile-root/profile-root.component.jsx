@@ -101,7 +101,7 @@ const ProfileRoot = props => {
               <Button
                 color="pink"
                 icon="icon-browse"
-                className="browse-button"
+                className="browse-button hide-for-small"
                 size="rg"
                 onClick={openModal}
               >

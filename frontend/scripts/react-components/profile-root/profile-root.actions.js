@@ -20,13 +20,12 @@ export const goToNodeProfilePageLegacy = (node, { year }) => ({
   }
 });
 
-export const goToNodeProfilePage = (node, defaultYear) => ({
+export const goToNodeProfilePage = node => ({
   type: 'profileNode',
   payload: {
     query: {
       nodeId: node.id,
-      contextId: node.contextId,
-      year: defaultYear
+      contextId: node.contextId
     },
     profileType: node.profile
   }

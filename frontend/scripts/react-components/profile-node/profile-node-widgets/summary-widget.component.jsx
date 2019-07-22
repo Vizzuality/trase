@@ -45,6 +45,7 @@ function SummaryWidget(props) {
                 printMode={printMode}
                 onYearChange={onYearChange}
                 data={data[GET_NODE_SUMMARY_URL]}
+                profileMetadata={profileMetadata}
                 context={context}
                 openModal={openModal}
               />
