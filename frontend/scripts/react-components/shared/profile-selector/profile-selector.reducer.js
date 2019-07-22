@@ -131,7 +131,7 @@ const profileRootReducer = {
         (selectedCountry && selectedCountry[0] && selectedCountry[0].id) ||
         state.data.countries[0].id;
 
-      oldData = state.data[panelName][selectedCountryId][tab];
+      oldData = state.data.companies[selectedCountryId][tab];
     } else if (tab) {
       oldData = state.data[panelName][tab];
     }
