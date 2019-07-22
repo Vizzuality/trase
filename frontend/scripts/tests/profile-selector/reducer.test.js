@@ -10,7 +10,10 @@ import {
   PROFILES__SET_LOADING_ITEMS,
   PROFILES__SET_PANEL_TABS,
   PROFILES__SET_ACTIVE_TAB,
-  PROFILES__CLEAR_PANELS
+  PROFILES__CLEAR_PANELS,
+  PROFILES__SET_SEARCH_RESULTS,
+  PROFILES__SET_ACTIVE_ITEM,
+  PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH
 } from 'react-components/shared/profile-selector/profile-selector.actions';
 
 const activeTypePanel = panel => ({ types: { activeItems: { type: panel } } });
@@ -492,7 +495,7 @@ describe(PROFILES__CLEAR_PANELS, () => {
       ...state,
       panels: {
         ...state.panels,
-        countries: state.countries,
+        countries: state.panels.countries,
         companies: {
           ...initialState.panels.companies,
           activeTab: state.panels.companies.activeTab
@@ -506,255 +509,186 @@ describe(PROFILES__CLEAR_PANELS, () => {
   });
 });
 
-// describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
-//   const someResults = [
-//     { id: 0, name: 'some result' },
-//     { id: 2, name: 'some result2' },
-//     { id: 3, name: 'some result_3' }
-//   ];
-//   const action = {
-//     type: DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
-//     payload: {
-//       query: 'some result',
-//       data: someResults
-//     }
-//   };
-//   const someFuzzySearchResults = someResults.map((res, i) => ({ ...res, _distance: i }));
-//   const searchResults = ENABLE_LEGACY_TOOL_SEARCH ? someResults : someFuzzySearchResults;
-//   it('sets results in a panel with a single entity (not sources)', () => {
-//     const state = {
-//       ...initialState,
-//       activePanelId: 'destinations'
-//     };
-//     const newState = reducer(state, action);
-//     expect(newState).toEqual({
-//       ...state,
-//       destinationsPanel: {
-//         ...state.destinationsPanel,
-//         searchResults
-//       }
-//     });
-//   });
+describe(PROFILES__SET_SEARCH_RESULTS, () => {
+  const someResults = [
+    { id: 0, name: 'some result' },
+    { id: 2, name: 'some result2' },
+    { id: 3, name: 'some result_3' }
+  ];
+  const action = {
+    type: PROFILES__SET_SEARCH_RESULTS,
+    payload: {
+      query: 'some result',
+      data: someResults
+    }
+  };
+  const someFuzzySearchResults = someResults.map((res, i) => ({ ...res, _distance: i }));
+  const searchResults = ENABLE_LEGACY_TOOL_SEARCH ? someResults : someFuzzySearchResults;
+  it('sets results in a panel with a single entity (not sources)', () => {
+    const state = {
+      ...initialState,
+      activeStep: PROFILE_STEPS.profiles,
+      panels: {
+        ...activeTypePanel('companies')
+      }
+    };
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      panels: {
+        ...state.panels,
+        companies: {
+          ...state.panels.companies,
+          searchResults
+        }
+      }
+    });
+  });
 
-//   it('sets results in sourcePanel when a country is selected', () => {
-//     const state = {
-//       ...initialState,
-//       activePanelId: 'sources',
-//       countriesPanel: {
-//         ...initialState.countriesPanel,
-//         activeItems: { id: 0, name: 'brazil' }
-//       }
-//     };
-//     const newState = reducer(state, action);
-//     expect(newState).toEqual({
-//       ...state,
-//       sourcesPanel: {
-//         ...state.sourcesPanel,
-//         searchResults
-//       }
-//     });
-//   });
+  it('sets results in sourcePanel when a country is selected', () => {
+    const state = {
+      ...initialState,
+      activeStep: PROFILE_STEPS.profiles,
+      panels: {
+        ...initialState.panels,
+        ...activeTypePanel('sources'),
+        countries: {
+          ...initialState.panels.countries,
+          activeItems: { id: 0, name: 'brazil' }
+        }
+      }
+    };
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      panels: {
+        ...state.panels,
+        sources: {
+          ...state.panels.sources,
+          searchResults
+        }
+      }
+    });
+  });
 
-//   it('sets results in sourcePanel when a country is not selected', () => {
-//     const state = {
-//       ...initialState,
-//       activePanelId: 'sources'
-//     };
-//     const newState = reducer(state, action);
-//     expect(newState).toEqual({
-//       ...state,
-//       countriesPanel: {
-//         ...state.countriesPanel,
-//         searchResults
-//       }
-//     });
-//   });
-// });
+  it('sets results in countriesPanel when a country is not selected', () => {
+    const state = {
+      ...initialState,
+      activeStep: PROFILE_STEPS.profiles,
+      panels: {
+        ...initialState.panels,
+        ...activeTypePanel('sources')
+      }
+    };
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      panels: {
+        ...state.panels,
+        countries: {
+          ...state.panels.countries,
+          searchResults
+        }
+      }
+    });
+  });
+});
 
-// describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, () => {
-//   const someItem = { id: 1, name: 'some item' };
-//   it('Sets an active item in a single entity panel', () => {
-//     const action = {
-//       type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
-//       payload: {
-//         panel: 'companies',
-//         activeItem: someItem
-//       }
-//     };
-//     const state = {
-//       ...initialState,
-//       companiesPanel: {
-//         ...initialState.companiesPanel,
-//         page: 4
-//       }
-//     };
-//     const newState = reducer(state, action);
-//     expect(newState).toEqual({
-//       ...state,
-//       companiesPanel: {
-//         ...state.companiesPanel,
-//         activeItems: { [someItem.id]: someItem }
-//       }
-//     });
-//   });
+describe(PROFILES__SET_ACTIVE_ITEM, () => {
+  const someItem = { id: 1, name: 'some item' };
+  it('Sets an active item in a panel (not types)', () => {
+    const action = {
+      type: PROFILES__SET_ACTIVE_ITEM,
+      payload: {
+        panel: 'companies',
+        activeItem: someItem
+      }
+    };
+    const state = {
+      ...initialState,
+      panels: {
+        ...initialState.panels,
+        companies: {
+          ...initialState.panels.companies,
+          page: 4
+        }
+      }
+    };
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      panels: {
+        ...state.panels,
+        companies: {
+          ...state.panels.companies,
+          activeItems: { [someItem.id]: someItem }
+        }
+      }
+    });
+  });
 
-//   it('Clears the current sources when selecting a country in the sources panel', () => {
-//     const action = {
-//       type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
-//       payload: {
-//         panel: 'countries',
-//         activeItem: someItem
-//       }
-//     };
-//     const state = {
-//       ...initialState,
-//       countriesPanel: {
-//         activeItems: { 16: { id: 16, name: 'some-source-to-be-cleared' } }
-//       }
-//     };
-//     const newState = reducer(state, action);
-//     expect(newState).toEqual({
-//       ...state,
-//       sourcesPanel: initialState.sourcesPanel,
-//       countriesPanel: {
-//         ...state.countriesPanel,
-//         activeItems: { [someItem.id]: someItem }
-//       }
-//     });
-//   });
-// });
+  it('Sets an active item in types panel', () => {
+    const action = {
+      type: PROFILES__SET_ACTIVE_ITEM,
+      payload: {
+        panel: 'types',
+        activeItem: 'panelName'
+      }
+    };
+    const newState = reducer(initialState, action);
+    expect(newState).toEqual({
+      ...initialState,
+      panels: {
+        ...initialState.panels,
+        types: {
+          ...initialState.panels.types,
+          activeItems: { type: 'panelName' }
+        }
+      }
+    });
+  });
+});
 
-// describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS, () => {
-//   const someItem = { id: 1, name: 'some item' };
-//   it('sets active item in a multiple entity panel', () => {
-//     const action = {
-//       type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
-//       payload: {
-//         panel: 'companies',
-//         activeItems: someItem
-//       }
-//     };
-//     const state = {
-//       ...initialState,
-//       companiesPanel: {
-//         ...initialState.companiesPanel,
-//         page: 4
-//       }
-//     };
-//     const newState = reducer(state, action);
-//     expect(newState).toEqual({
-//       ...state,
-//       companiesPanel: {
-//         ...state.companiesPanel,
-//         activeItems: { [someItem.id]: someItem }
-//       }
-//     });
-//   });
-// });
-
-// test(DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH, () => {
-//   const tabs = {
-//     sources: [{ id: 3, name: 'MUNICIPALITY' }, { id: 1, name: 'BIOME' }],
-//     companies: [{ id: 6, name: 'EXPORTER' }, { id: 7, name: 'IMPORTER' }]
-//   };
-//   const someItem = { id: 1, name: 'some item', nodeTypeId: 6 };
-//   const action = {
-//     type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
-//     payload: {
-//       panel: 'companies',
-//       activeItems: someItem
-//     }
-//   };
-//   const state = {
-//     ...initialState,
-//     tabs,
-//     companiesPanel: {
-//       ...initialState.companiesPanel,
-//       activeTab: { id: 7, name: 'IMPORTER' },
-//       page: 4
-//     }
-//   };
-//   const newState = reducer(state, action);
-//   expect(newState).toEqual({
-//     ...state,
-//     data: {
-//       ...state.data,
-//       companies: { 7: null }
-//     },
-//     companiesPanel: {
-//       ...state.companiesPanel,
-//       activeItems: { [someItem.id]: someItem },
-//       activeTab: tabs.companies[0],
-//       page: initialState.companiesPanel.page
-//     }
-//   });
-// });
-
-// test(DASHBOARD_ELEMENT__SET_SELECTED_YEARS, () => {
-//   const years = [2010, 2015];
-//   const action = setDashboardSelectedYears(years);
-//   const newState = reducer(initialState, action);
-//   expect(newState).toEqual({
-//     ...initialState,
-//     selectedYears: years
-//   });
-// });
-
-// test(DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY, () => {
-//   const resizeBy = { attributeId: 0 };
-//   const action = setDashboardSelectedResizeBy(resizeBy);
-//   const newState = reducer(initialState, action);
-//   expect(newState).toEqual({
-//     ...initialState,
-//     selectedResizeBy: resizeBy.attributeId
-//   });
-// });
-
-// test(DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY, () => {
-//   const recolorBy = { attributeId: 1 };
-//   const action = setDashboardSelectedRecolorBy(recolorBy);
-//   const newState = reducer(initialState, action);
-//   expect(newState).toEqual({
-//     ...initialState,
-//     selectedRecolorBy: recolorBy.attributeId
-//   });
-// });
-
-// test(DASHBOARD_ELEMENT__SET_CHARTS, () => {
-//   const charts = [{ type: 'bar_chart', url: 'my_url' }];
-//   const action = setDashboardCharts(charts);
-//   const newState = reducer(initialState, action);
-//   expect(newState).toEqual({
-//     ...initialState,
-//     charts
-//   });
-// });
-
-// test(DASHBOARD_ELEMENT__SET_CHARTS_LOADING, () => {
-//   const loading = true;
-//   const action = setDashboardChartsLoading(loading);
-//   const newState = reducer(initialState, action);
-//   expect(newState).toEqual({
-//     ...initialState,
-//     chartsLoading: loading
-//   });
-// });
-
-// test(DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS, () => {
-//   const payload = {
-//     years: [2010, 2015],
-//     resizeBy: { attributeId: 0 },
-//     recolorBy: { attributeId: 1 }
-//   };
-//   const action = {
-//     type: DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS,
-//     payload
-//   };
-//   const newState = reducer(initialState, action);
-//   expect(newState).toEqual({
-//     ...initialState,
-//     selectedYears: payload.years,
-//     selectedResizeBy: payload.resizeBy.attributeId,
-//     selectedRecolorBy: payload.recolorBy.attributeId
-//   });
-// });
+test(PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH, () => {
+  const tabs = {
+    sources: [{ id: 3, name: 'MUNICIPALITY' }, { id: 1, name: 'BIOME' }],
+    companies: [{ id: 6, name: 'EXPORTER' }, { id: 7, name: 'IMPORTER' }]
+  };
+  const someItem = { id: 1, name: 'some item', nodeTypeId: 6 };
+  const action = {
+    type: PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH,
+    payload: {
+      panel: 'companies',
+      activeItems: someItem
+    }
+  };
+  const state = {
+    ...initialState,
+    tabs,
+    panels: {
+      ...initialState.panels,
+      companies: {
+        ...initialState.panels.companies,
+        activeTab: { id: 7, name: 'IMPORTER' },
+        page: 4
+      }
+    }
+  };
+  const newState = reducer(state, action);
+  expect(newState).toEqual({
+    ...state,
+    data: {
+      ...state.data,
+      companies: { 7: null }
+    },
+    panels: {
+      ...state.panels,
+      companies: {
+        ...state.panels.companies,
+        activeItems: { [someItem.id]: someItem },
+        activeTab: tabs.companies[0],
+        page: initialState.panels.companies.page
+      }
+    }
+  });
+});
