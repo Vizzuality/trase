@@ -262,6 +262,9 @@
             <column ascending="true" name="quant_id"/>
             <column ascending="true" name="year"/>
          </index>
+         <index name="node_quants_quant_id_idx" unique="false">
+            <column ascending="true" name="quant_id"/>
+         </index>
       </table>
       <table name="nodes" numRows="0" remarks="Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('nodes_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">

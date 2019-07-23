@@ -1149,7 +1149,9 @@
       </table>
       <table name="flow_quals" numRows="0" remarks="Values of quals for flow" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('flow_quals_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
-         <column autoUpdated="false" digits="0" id="1" name="flow_id" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="flow_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_6e55ca4cbc" implied="false" onDeleteCascade="true" schema="public" table="flows"/>
+         </column>
          <column autoUpdated="false" digits="0" id="2" name="qual_id" nullable="false" remarks="" size="10" type="int4">
             <parent column="id" foreignKey="fk_rails_917b9da2b8" implied="false" onDeleteCascade="true" schema="public" table="quals"/>
          </column>
@@ -1172,7 +1174,9 @@
       </table>
       <table name="flow_quants" numRows="0" remarks="Values of quants for flow" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('flow_quants_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
-         <column autoUpdated="false" digits="0" id="1" name="flow_id" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="1" name="flow_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_2dbc0a565f" implied="false" onDeleteCascade="true" schema="public" table="flows"/>
+         </column>
          <column autoUpdated="false" digits="0" id="2" name="quant_id" nullable="false" remarks="" size="10" type="int4">
             <parent column="id" foreignKey="fk_rails_a48f7b74d0" implied="false" onDeleteCascade="true" schema="public" table="quants"/>
          </column>
@@ -1196,6 +1200,8 @@
       <table name="flows" numRows="0" remarks="Flows of commodities through nodes" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('flows_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
             <child column="flow_id" foreignKey="fk_rails_0a8bdfaf25" implied="false" onDeleteCascade="true" schema="public" table="flow_inds"/>
+            <child column="flow_id" foreignKey="fk_rails_6e55ca4cbc" implied="false" onDeleteCascade="true" schema="public" table="flow_quals"/>
+            <child column="flow_id" foreignKey="fk_rails_2dbc0a565f" implied="false" onDeleteCascade="true" schema="public" table="flow_quants"/>
          </column>
          <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="false" remarks="" size="10" type="int4">
             <parent column="id" foreignKey="fk_rails_c33db455e5" implied="false" onDeleteCascade="true" schema="public" table="contexts"/>
@@ -1512,6 +1518,9 @@
             <column ascending="true" name="node_id"/>
             <column ascending="true" name="quant_id"/>
             <column ascending="true" name="year"/>
+         </index>
+         <index name="node_quants_quant_id_idx" unique="false">
+            <column ascending="true" name="quant_id"/>
          </index>
       </table>
       <table name="node_types" numRows="0" remarks="List of types of nodes in the system, e.g. MUNICIPALITY or EXPORTER. Those literals are referred to in code, therefore should not be changed without notice." schema="public" type="TABLE">

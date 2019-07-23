@@ -42,6 +42,8 @@ map_inds
 ind_country_properties
 ind_context_properties
 ind_commodity_properties
+flow_quants
+flow_quals
 flow_inds
 download_quants
 download_quals
@@ -56,8 +58,6 @@ quant_properties
 qual_properties
 node_properties
 ind_properties
-flow_quants
-flow_quals
 download_versions
 country_properties
 context_properties
@@ -65,11 +65,11 @@ context_node_type_properties
 carto_layers
 top_profile_images
 resize_by_attributes
-flows
 contextual_layers
 recolor_by_attributes
 map_attributes
 download_attributes
+flows
 dashboards_attributes
 chart_attributes
 nodes
