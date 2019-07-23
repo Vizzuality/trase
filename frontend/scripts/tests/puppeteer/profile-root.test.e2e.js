@@ -34,19 +34,14 @@ describe('Profile Root search', () => {
     const nodeType = 'importer';
     const profileType = 'actor';
 
-    expect.assertions(1);
-
     await testRootSearch(page, { nodeName, nodeType, profileType });
   });
 
   it('search for municipality', async () => {
-    await page.goto(`${BASE_URL}/profiles`);
-
+    await page.goto(`${BASE_URL}/profiles`, { waitUntil: 'networkidle2', timeout: 0 });
     const nodeName = 'sorriso';
     const nodeType = 'municipality';
     const profileType = 'place';
-
-    expect.assertions(1);
 
     await testRootSearch(page, { nodeName, nodeType, profileType });
     return Promise.resolve();

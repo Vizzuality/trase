@@ -9,12 +9,10 @@ export async function testRootSearch(page, { nodeName, nodeType, profileType }) 
   await page.click(profileSearchInputSelector);
   await page.type(profileSearchInputSelector, nodeName);
   await page.waitForSelector(`[data-test=search-result-${nodeType}-${nodeName}]`);
-  const waitForNavigation = page.waitForNavigation({
-    waitUntil: 'networkidle2'
-  });
-  await page.click(`[data-test=search-result-${nodeType}-${nodeName}]`);
-  await waitForNavigation;
-
+  await Promise.all([
+    page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 0 }),
+    page.click(`[data-test=search-result-${nodeType}-${nodeName}]`)
+  ]);
   const url = page.url();
   expect(url.startsWith(`${BASE_URL}/profile-${profileType}`)).toBe(true);
 }

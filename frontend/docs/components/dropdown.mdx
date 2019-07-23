@@ -48,6 +48,26 @@ import 'styles/_docz.scss';
   </State>
 </div>
 
+#### Dropdown with variant="panel"
+
+<div className="components-container -spaced -width-200">
+  <State initial={{ options:
+    [{ label: 'Blue', value: 'blue' },
+      { label: 'Red', value: 'red' },
+      { label: 'Green', value: 'green' }],
+      value: { label: 'Red', value: 'red' }
+    }}>
+    {({ state, setState }) => (
+      <Dropdown
+        variant="panel"
+        options={state.options}
+        value={state.value}
+        onChange={value => setState({ value })}
+      />
+    )}
+  </State>
+</div>
+
 #### With 'caret' arrowType and placement
 
 <div className="components-container -spaced -width-200">

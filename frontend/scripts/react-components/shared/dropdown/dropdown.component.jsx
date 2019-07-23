@@ -12,6 +12,7 @@ import './dropdown.scss';
 import './dropdown-nav.variant.scss';
 import './dropdown-sentence.variant.scss';
 import './dropdown-column.variant.scss';
+import './dropdown-panel.variant.scss';
 
 function Dropdown(props) {
   const listItemRef = useRef(null);
@@ -124,7 +125,8 @@ function Dropdown(props) {
     const valueProps =
       {
         mono: { variant: 'mono' },
-        column: { variant: 'mono', size: 'sm' }
+        column: { variant: 'mono', size: 'sm' },
+        panel: { size: 'rg', variant: 'mono', transform: 'uppercase' }
       }[variant] || {};
 
     return (

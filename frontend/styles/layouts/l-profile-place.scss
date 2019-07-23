@@ -3,7 +3,7 @@
 .l-profile-place {
   position: relative;
   min-height: 100vh;
-  padding-top: calc(54px + #{$nav-height});
+  padding-top: calc(44px + #{$nav-height});
   background-color: $egg-shell;
 
   &.-error {
@@ -56,14 +56,6 @@
           padding-left: 1.25rem;
         }
       }
-    }
-  }
-
-  .c-overall-info {
-    margin-top: 47px;
-
-    @media screen and (max-width: $breakpoint-foundation-small) {
-      margin-top: 0;
     }
   }
 

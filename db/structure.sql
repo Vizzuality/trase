@@ -947,7 +947,7 @@ COMMENT ON COLUMN public.chart_attributes.display_name IS 'Name of attribute for
 -- Name: COLUMN chart_attributes.legend_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.chart_attributes.legend_name IS 'Legend title; you can use {{commodity_name}}, {{company_name}}, {{jurisdiction_name}} and {{year}}';
+COMMENT ON COLUMN public.chart_attributes.legend_name IS 'Legend title';
 
 
 --
@@ -1312,7 +1312,7 @@ COMMENT ON COLUMN public.charts.identifier IS 'Identifier used to map this chart
 -- Name: COLUMN charts.title; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.charts.title IS 'Title of chart for display; you can use {{commodity_name}}, {{company_name}}, {{jurisdiction_name}} and {{year}}';
+COMMENT ON COLUMN public.charts.title IS 'Title of chart for display';
 
 
 --
@@ -3016,20 +3016,6 @@ UNION ALL
 
 
 --
--- Name: MATERIALIZED VIEW dashboards_attributes_mv; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON MATERIALIZED VIEW public.dashboards_attributes_mv IS 'Materialized view which merges dashboards_inds, dashboards_quals and dashboards_quants with dashboards_attributes.';
-
-
---
--- Name: COLUMN dashboards_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
-
-
---
 -- Name: flows; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3662,20 +3648,6 @@ UNION ALL
 
 
 --
--- Name: MATERIALIZED VIEW download_attributes_mv; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON MATERIALIZED VIEW public.download_attributes_mv IS 'Materialized view which merges download_quals and download_quants with download_attributes.';
-
-
---
--- Name: COLUMN download_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.download_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
-
-
---
 -- Name: download_flows; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3700,120 +3672,315 @@ PARTITION BY LIST (year);
 -- Name: download_flows_2003; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.download_flows_2003 PARTITION OF public.download_flows
-FOR VALUES IN ('2003');
+CREATE TABLE public.download_flows_2003 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    jsonb_path jsonb,
+    attribute_type text,
+    attribute_id integer,
+    attribute_name text,
+    text_values text,
+    sum numeric,
+    total text,
+    sort text
+);
+ALTER TABLE ONLY public.download_flows ATTACH PARTITION public.download_flows_2003 FOR VALUES IN ('2003');
 
 
 --
 -- Name: download_flows_2004; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.download_flows_2004 PARTITION OF public.download_flows
-FOR VALUES IN ('2004');
+CREATE TABLE public.download_flows_2004 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    jsonb_path jsonb,
+    attribute_type text,
+    attribute_id integer,
+    attribute_name text,
+    text_values text,
+    sum numeric,
+    total text,
+    sort text
+);
+ALTER TABLE ONLY public.download_flows ATTACH PARTITION public.download_flows_2004 FOR VALUES IN ('2004');
 
 
 --
 -- Name: download_flows_2005; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.download_flows_2005 PARTITION OF public.download_flows
-FOR VALUES IN ('2005');
+CREATE TABLE public.download_flows_2005 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    jsonb_path jsonb,
+    attribute_type text,
+    attribute_id integer,
+    attribute_name text,
+    text_values text,
+    sum numeric,
+    total text,
+    sort text
+);
+ALTER TABLE ONLY public.download_flows ATTACH PARTITION public.download_flows_2005 FOR VALUES IN ('2005');
 
 
 --
 -- Name: download_flows_2006; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.download_flows_2006 PARTITION OF public.download_flows
-FOR VALUES IN ('2006');
+CREATE TABLE public.download_flows_2006 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    jsonb_path jsonb,
+    attribute_type text,
+    attribute_id integer,
+    attribute_name text,
+    text_values text,
+    sum numeric,
+    total text,
+    sort text
+);
+ALTER TABLE ONLY public.download_flows ATTACH PARTITION public.download_flows_2006 FOR VALUES IN ('2006');
 
 
 --
 -- Name: download_flows_2007; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.download_flows_2007 PARTITION OF public.download_flows
-FOR VALUES IN ('2007');
+CREATE TABLE public.download_flows_2007 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    jsonb_path jsonb,
+    attribute_type text,
+    attribute_id integer,
+    attribute_name text,
+    text_values text,
+    sum numeric,
+    total text,
+    sort text
+);
+ALTER TABLE ONLY public.download_flows ATTACH PARTITION public.download_flows_2007 FOR VALUES IN ('2007');
 
 
 --
 -- Name: download_flows_2008; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.download_flows_2008 PARTITION OF public.download_flows
-FOR VALUES IN ('2008');
+CREATE TABLE public.download_flows_2008 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    jsonb_path jsonb,
+    attribute_type text,
+    attribute_id integer,
+    attribute_name text,
+    text_values text,
+    sum numeric,
+    total text,
+    sort text
+);
+ALTER TABLE ONLY public.download_flows ATTACH PARTITION public.download_flows_2008 FOR VALUES IN ('2008');
 
 
 --
 -- Name: download_flows_2009; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.download_flows_2009 PARTITION OF public.download_flows
-FOR VALUES IN ('2009');
+CREATE TABLE public.download_flows_2009 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    jsonb_path jsonb,
+    attribute_type text,
+    attribute_id integer,
+    attribute_name text,
+    text_values text,
+    sum numeric,
+    total text,
+    sort text
+);
+ALTER TABLE ONLY public.download_flows ATTACH PARTITION public.download_flows_2009 FOR VALUES IN ('2009');
 
 
 --
 -- Name: download_flows_2010; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.download_flows_2010 PARTITION OF public.download_flows
-FOR VALUES IN ('2010');
+CREATE TABLE public.download_flows_2010 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    jsonb_path jsonb,
+    attribute_type text,
+    attribute_id integer,
+    attribute_name text,
+    text_values text,
+    sum numeric,
+    total text,
+    sort text
+);
+ALTER TABLE ONLY public.download_flows ATTACH PARTITION public.download_flows_2010 FOR VALUES IN ('2010');
 
 
 --
 -- Name: download_flows_2011; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.download_flows_2011 PARTITION OF public.download_flows
-FOR VALUES IN ('2011');
+CREATE TABLE public.download_flows_2011 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    jsonb_path jsonb,
+    attribute_type text,
+    attribute_id integer,
+    attribute_name text,
+    text_values text,
+    sum numeric,
+    total text,
+    sort text
+);
+ALTER TABLE ONLY public.download_flows ATTACH PARTITION public.download_flows_2011 FOR VALUES IN ('2011');
 
 
 --
 -- Name: download_flows_2012; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.download_flows_2012 PARTITION OF public.download_flows
-FOR VALUES IN ('2012');
+CREATE TABLE public.download_flows_2012 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    jsonb_path jsonb,
+    attribute_type text,
+    attribute_id integer,
+    attribute_name text,
+    text_values text,
+    sum numeric,
+    total text,
+    sort text
+);
+ALTER TABLE ONLY public.download_flows ATTACH PARTITION public.download_flows_2012 FOR VALUES IN ('2012');
 
 
 --
 -- Name: download_flows_2013; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.download_flows_2013 PARTITION OF public.download_flows
-FOR VALUES IN ('2013');
+CREATE TABLE public.download_flows_2013 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    jsonb_path jsonb,
+    attribute_type text,
+    attribute_id integer,
+    attribute_name text,
+    text_values text,
+    sum numeric,
+    total text,
+    sort text
+);
+ALTER TABLE ONLY public.download_flows ATTACH PARTITION public.download_flows_2013 FOR VALUES IN ('2013');
 
 
 --
 -- Name: download_flows_2014; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.download_flows_2014 PARTITION OF public.download_flows
-FOR VALUES IN ('2014');
+CREATE TABLE public.download_flows_2014 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    jsonb_path jsonb,
+    attribute_type text,
+    attribute_id integer,
+    attribute_name text,
+    text_values text,
+    sum numeric,
+    total text,
+    sort text
+);
+ALTER TABLE ONLY public.download_flows ATTACH PARTITION public.download_flows_2014 FOR VALUES IN ('2014');
 
 
 --
 -- Name: download_flows_2015; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.download_flows_2015 PARTITION OF public.download_flows
-FOR VALUES IN ('2015');
+CREATE TABLE public.download_flows_2015 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    jsonb_path jsonb,
+    attribute_type text,
+    attribute_id integer,
+    attribute_name text,
+    text_values text,
+    sum numeric,
+    total text,
+    sort text
+);
+ALTER TABLE ONLY public.download_flows ATTACH PARTITION public.download_flows_2015 FOR VALUES IN ('2015');
 
 
 --
 -- Name: download_flows_2016; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.download_flows_2016 PARTITION OF public.download_flows
-FOR VALUES IN ('2016');
+CREATE TABLE public.download_flows_2016 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    jsonb_path jsonb,
+    attribute_type text,
+    attribute_id integer,
+    attribute_name text,
+    text_values text,
+    sum numeric,
+    total text,
+    sort text
+);
+ALTER TABLE ONLY public.download_flows ATTACH PARTITION public.download_flows_2016 FOR VALUES IN ('2016');
 
 
 --
 -- Name: download_flows_2017; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.download_flows_2017 PARTITION OF public.download_flows
-FOR VALUES IN ('2017');
+CREATE TABLE public.download_flows_2017 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    jsonb_path jsonb,
+    attribute_type text,
+    attribute_id integer,
+    attribute_name text,
+    text_values text,
+    sum numeric,
+    total text,
+    sort text
+);
+ALTER TABLE ONLY public.download_flows ATTACH PARTITION public.download_flows_2017 FOR VALUES IN ('2017');
 
 
 --
@@ -8547,6 +8714,13 @@ CREATE INDEX node_quants_node_id_idx ON public.node_quants USING btree (node_id)
 
 
 --
+-- Name: node_quants_quant_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX node_quants_quant_id_idx ON public.node_quants USING btree (quant_id);
+
+
+--
 -- Name: nodes_mv_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -9339,6 +9513,14 @@ ALTER TABLE ONLY public.ind_context_properties
 
 
 --
+-- Name: flow_quants fk_rails_2dbc0a565f; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.flow_quants
+    ADD CONSTRAINT fk_rails_2dbc0a565f FOREIGN KEY (flow_id) REFERENCES public.flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: map_quants fk_rails_308b5b45f7; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9480,6 +9662,14 @@ ALTER TABLE ONLY public.ind_context_properties
 
 ALTER TABLE ONLY public.quant_context_properties
     ADD CONSTRAINT fk_rails_6e05c978da FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: flow_quals fk_rails_6e55ca4cbc; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.flow_quals
+    ADD CONSTRAINT fk_rails_6e55ca4cbc FOREIGN KEY (flow_id) REFERENCES public.flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

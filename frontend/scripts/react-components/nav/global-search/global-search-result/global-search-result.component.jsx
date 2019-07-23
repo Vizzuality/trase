@@ -88,7 +88,6 @@ class GlobalSearchResult extends Component {
                   payload: {
                     query: {
                       nodeId: node.id,
-                      year: item.defaultYear,
                       contextId: item.contextId
                     },
                     profileType: node.profile

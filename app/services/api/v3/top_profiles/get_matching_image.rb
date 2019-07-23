@@ -5,15 +5,17 @@ module Api
     module TopProfiles
       class GetMatchingImage
         attr_reader :top_profile
+        attr_reader :size
 
         class << self
-          def call(top_profile)
-            new(top_profile).call
+          def call(top_profile, size)
+            new(top_profile, size).call
           end
         end
 
-        def initialize(top_profile)
+        def initialize(top_profile, size)
           @top_profile = top_profile
+          @size = size
         end
 
         def call
@@ -27,9 +29,9 @@ module Api
           orphan_images = matching_images.
             where(top_profiles: {top_profile_image: nil})
           duplicates_inevitable = orphan_images.empty?
-          return matching_images.sample.image.url if duplicates_inevitable
+          return matching_images.sample.image.url(size) if duplicates_inevitable
 
-          orphan_images.sample.image.url
+          orphan_images.sample.image.url(size)
         end
       end
     end

@@ -40,7 +40,8 @@
     "react/jsx-tag-spacing": 0,
     "react/jsx-wrap-multilines": 0,
     "import/prefer-default-export": 0, // DON'T REMOVE AGAIN PLZ *cries*
-    "react/sort-comp": 0 // DON'T REMOVE AGAIN PLZ *cries again*
+    "react/sort-comp": 0, // DON'T REMOVE AGAIN PLZ *cries again*
+    "react/prop-types": "warn"
   },
   "parser": "babel-eslint",
   "parserOptions": {

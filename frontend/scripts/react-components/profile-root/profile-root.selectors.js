@@ -5,7 +5,7 @@ const getAppContexts = state => state.app.contexts;
 const getTopProfiles = state => state.profileRoot.topProfiles;
 
 export const getContextsWithProfilePages = createSelector(
-  [x => x],
+  getAppContexts,
   contexts => contexts.filter(ctx => ctx.hasProfiles)
 );
 
@@ -15,16 +15,7 @@ export const getParsedTopProfiles = createSelector(
     if (!profiles || !contexts) return [];
     const contextsById = contexts.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
     const cards = profiles.map(profile => {
-      const {
-        nodeId,
-        year,
-        contextId,
-        nodeName,
-        nodeType,
-        summary,
-        profileType,
-        photoUrl
-      } = profile;
+      const { nodeId, contextId, nodeName, nodeType, summary, profileType, photoUrl } = profile;
       const context = contextsById[contextId];
       return {
         title: nodeName,
@@ -36,7 +27,6 @@ export const getParsedTopProfiles = createSelector(
           payload: {
             query: {
               nodeId,
-              year,
               contextId
             },
             profileType

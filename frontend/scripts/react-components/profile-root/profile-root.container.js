@@ -9,8 +9,7 @@ import { openModal } from 'react-components/shared/profile-selector/profile-sele
 
 function mapStateToProps(state) {
   const selectedContext = getSelectedContext(state);
-  const { contexts } = state.app;
-  const selectorContexts = getContextsWithProfilePages(contexts);
+  const selectorContexts = getContextsWithProfilePages(state);
 
   // we make sure the globally selected context is available in the selectorContexts
   const activeContext = selectedContext
@@ -24,10 +23,10 @@ function mapStateToProps(state) {
 
   return {
     activeContext,
-    getContextsWithProfilePages,
+    selectContexts: contexts => contexts.filter(ctx => ctx.hasProfiles),
     errorMessage: state.profileRoot.errorMessage,
     topProfiles: getParsedTopProfiles(state),
-    contexts
+    contexts: state.app.contexts
   };
 }
 

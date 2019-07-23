@@ -1,15 +1,22 @@
-/* eslint-disable no-console */
+/* eslint-disable no-console,import/no-extraneous-dependencies */
 import { Polly } from '@pollyjs/core';
 import PuppeteerAdapter from '@pollyjs/adapter-puppeteer';
 import FSPersister from '@pollyjs/persister-fs';
+import { toMatchImageSnapshot } from 'jest-image-snapshot';
 import { pollyConfig, handleUnnecesaryRequests } from './utils';
 import { testProfileSummary, testProfileMultiTable, testProfileMiniSankey } from './shared';
+
+expect.extend({ toMatchImageSnapshot });
 
 Polly.register(PuppeteerAdapter);
 Polly.register(FSPersister);
 
 const BASE_URL = 'http://0.0.0.0:8081';
 const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;
+const snapshotOptions = {
+  failureThreshold: '0.05',
+  failureThresholdType: 'percent'
+};
 
 jest.setTimeout(TIMEOUT);
 const { page } = global;
@@ -29,17 +36,14 @@ afterAll(async () => {
 
 describe('Profile place - Full data', () => {
   test('Summary widget loads successfully', async () => {
-    expect.assertions(3);
     await testProfileSummary(page, {
-      params: ['sorriso', 'soy'],
+      params: ['soy', '2015', 'brazil', 'cerrado', 'mato grosso'],
       profileType: 'place',
-      titlesLength: 3
+      titlesLength: 5
     });
   });
 
   test('Sustainability indicators widget loads successfully', async () => {
-    expect.assertions(6);
-
     await testProfileMultiTable(page, {
       tabsLength: 4,
       rowsLength: 4,
@@ -54,7 +58,6 @@ describe('Profile place - Full data', () => {
   test(
     'Deforestation trajectory widget loads successfully',
     async () => {
-      expect.assertions(4);
       await page.waitForSelector('[data-test=deforestation-trajectory]');
       const title = await page.$eval(
         '[data-test=deforestation-trajectory-title]',
@@ -72,7 +75,6 @@ describe('Profile place - Full data', () => {
   );
 
   test('Top traders widget loads successfully', async () => {
-    expect.assertions(2);
     await testProfileMiniSankey(page, {
       testId: 'top-traders',
       title: 'top traders of soy in sorriso in 2015',
@@ -81,11 +83,33 @@ describe('Profile place - Full data', () => {
   });
 
   test('Top importing companies widget loads successfully', async () => {
-    expect.assertions(2);
     await testProfileMiniSankey(page, {
       testId: 'top-importers',
       title: 'top importing countries of soy from sorriso in 2015',
       flowsLength: 10
+    });
+  });
+
+  xtest('Place profile screenshot - Mobile', async () => {
+    await page.setViewport({
+      width: 375,
+      height: 667,
+      isMobile: true,
+      hasTouch: true
+    });
+
+    await page.addStyleTag({
+      content: `
+      [data-test=cookie-banner] { display: none !important; }
+    `
+    });
+
+    const screenshot = await page.screenshot({
+      fullPage: true
+    });
+    expect(screenshot).toMatchImageSnapshot({
+      customSnapshotIdentifier: 'profile-place-MOBILE',
+      ...snapshotOptions
     });
   });
 });

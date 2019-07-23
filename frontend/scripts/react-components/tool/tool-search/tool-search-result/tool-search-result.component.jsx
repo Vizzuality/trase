@@ -16,7 +16,6 @@ function ToolSearchResult({
   isHighlighted,
   item,
   contextId,
-  defaultYear,
   isMapVisible
 }) {
   const buttonList = [];
@@ -83,7 +82,6 @@ function ToolSearchResult({
                   profileType: item.profile,
                   query: {
                     contextId,
-                    year: defaultYear,
                     nodeId: (item[nodeType.toLowerCase()] || item).id
                   }
                 }
@@ -105,7 +103,6 @@ ToolSearchResult.propTypes = {
   itemProps: PropTypes.object,
   isMapVisible: PropTypes.bool,
   isHighlighted: PropTypes.bool,
-  defaultYear: PropTypes.number,
   exporterNotSelected: PropTypes.bool,
   importerNotSelected: PropTypes.bool,
   contextId: PropTypes.number.isRequired

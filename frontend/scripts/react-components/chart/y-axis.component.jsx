@@ -21,7 +21,7 @@ function CustomYAxis({ config, data, meta }) {
         tickMargin={15}
         dataKey={yKey || ''}
         {...yAxis}
-        tick={<CategoryTick config={config} nodeIds={nodeIds} info={meta.info} />}
+        tick={<CategoryTick config={config} nodeIds={nodeIds} />}
       />
     );
   }

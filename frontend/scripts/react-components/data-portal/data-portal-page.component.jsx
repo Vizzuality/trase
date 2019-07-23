@@ -68,6 +68,16 @@ class DataContent extends Component {
     if (selectedContext) {
       onContextSelected(selectedContext.id);
     }
+
+    if (!DATA_DOWNLOAD_ENABLED) {
+      document.querySelector('body').classList.add('-overflow-hidden');
+    }
+  }
+
+  componentWillUnmount() {
+    if (!DATA_DOWNLOAD_ENABLED) {
+      document.querySelector('body').classList.remove('-overflow-hidden');
+    }
   }
 
   onDownloadButtonClicked() {

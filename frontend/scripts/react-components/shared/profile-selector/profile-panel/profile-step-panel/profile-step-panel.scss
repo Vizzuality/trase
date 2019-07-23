@@ -1,0 +1,11 @@
+@import 'styles/settings';
+
+.profile-panel-dropdown-container {
+  margin-right: 10px;
+
+  .c-dropdown-component {
+    display: inline-block;
+    width: 160px;
+    margin-left: 15px
+  }
+}

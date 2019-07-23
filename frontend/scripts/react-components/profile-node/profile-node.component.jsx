@@ -7,6 +7,7 @@ import DeforestationWidget from 'react-components/profile-node/profile-node-widg
 import TopConsumersWidget from 'react-components/profile-node/profile-node-widgets/top-consumers-widget.component';
 import ImportingCompaniesWidget from 'react-components/profile-node/profile-node-widgets/importing-companies-widget.component';
 import TopDestinationsWidget from 'react-components/profile-node/profile-node-widgets/top-destinations-widget.component';
+import ProfileSelector from 'react-components/shared/profile-selector';
 import GfwWidget from 'react-components/profile-node/profile-node-widgets/gfw-widget.component';
 import ErrorCatch from 'react-components/shared/error-catch.component';
 import Text from 'react-components/shared/text';
@@ -24,7 +25,8 @@ class ProfileNode extends React.PureComponent {
     nodeId: PropTypes.number.isRequired,
     profileType: PropTypes.string.isRequired,
     loadingMetadata: PropTypes.bool.isRequired,
-    updateQueryParams: PropTypes.func.isRequired
+    updateQueryParams: PropTypes.func.isRequired,
+    openModal: PropTypes.func.isRequired
   };
 
   // if requestIdleCallback is not supported (Edge, IE) we render the iframe immediately
@@ -75,7 +77,8 @@ class ProfileNode extends React.PureComponent {
       printMode,
       profileType,
       profileMetadata,
-      updateQueryParams
+      updateQueryParams,
+      openModal
     } = this.props;
     switch (chart.chart_type) {
       case 'line_chart_with_map': {
@@ -175,8 +178,10 @@ class ProfileNode extends React.PureComponent {
               profileType={profileType}
               profileMetadata={profileMetadata}
               onYearChange={this.onYearChange}
+              openModal={openModal}
             />
             <div className="profile-content-anchor" ref={this.getAnchorRef} />
+            <ProfileSelector />
           </React.Fragment>
         );
     }

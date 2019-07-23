@@ -8,27 +8,7 @@
     margin-right: 20px;
 
     > .legend {
-      color: $charcoal-grey;
-      font-family: $font-family-1;
-      font-size: $font-size-x-regular;
-      font-weight: $font-weight-bold;
-      letter-spacing: -.6px;
-      text-transform: uppercase;
-    }
-
-    > .value {
-      display: inline-block;
-      color: $charcoal-grey;
-      font-family: $font-family-1;
-      font-size: $font-size-medium;
-      letter-spacing: -1px;
-    }
-
-    > .unit {
-      display: inline-block;
-      color: rgba($charcoal-grey, .6);
-      font-family: $font-family-1;
-      font-size: $font-size-medium;
+      margin-bottom: 5px;
     }
 
     @media screen and (max-width: $breakpoint-foundation-small) {
@@ -39,11 +19,6 @@
   .summary {
     margin-top: 24px;
     margin-bottom: 40px;
-    font-family: $font-family-2;
-    font-size: $font-size-xx-regular;
-    font-weight: 300;
-    line-height: 2;
-    color: $charcoal-grey;
 
     @media screen and (max-width: $breakpoint-foundation-small) {
       font-size: $font-size-x-regular;

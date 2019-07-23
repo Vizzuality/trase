@@ -13,7 +13,7 @@ import SliderSection from 'react-components/home/slider-section/slider-section.c
 import 'scripts/react-components/profile-root/profile-root.scss';
 
 const renderLegacyProfiles = props => {
-  const { errorMessage, activeContext, getContextsWithProfilePages } = props;
+  const { errorMessage, activeContext, selectContexts } = props;
   return (
     <div className="l-profile-root-legacy">
       {!errorMessage && (
@@ -24,7 +24,7 @@ const renderLegacyProfiles = props => {
                 <div className="profile-root-heading-container">
                   <div className="profile-root-heading-wrapper">
                     <ContextSelector
-                      selectContexts={getContextsWithProfilePages}
+                      selectContexts={selectContexts}
                       selectedContext={activeContext}
                       className={cx('profile-root-context-selector', {
                         '-readonly': DISABLE_MULTIPLE_CONTEXT_PROFILES
@@ -73,7 +73,7 @@ const renderLegacyProfiles = props => {
 renderLegacyProfiles.propTypes = {
   errorMessage: PropTypes.string,
   activeContext: PropTypes.object,
-  getContextsWithProfilePages: PropTypes.func.isRequired
+  selectContexts: PropTypes.func.isRequired
 };
 
 const ProfileRoot = props => {
@@ -101,7 +101,7 @@ const ProfileRoot = props => {
               <Button
                 color="pink"
                 icon="icon-browse"
-                className="browse-button"
+                className="browse-button hide-for-small"
                 size="rg"
                 onClick={openModal}
               >

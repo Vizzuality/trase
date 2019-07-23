@@ -12,6 +12,7 @@ import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.co
 import cx from 'classnames';
 import formatValue from 'utils/formatValue';
 import xor from 'lodash/xor';
+import isMobile from 'utils/isMobile';
 
 import 'scripts/react-components/shared/world-map/world-map.scss';
 
@@ -94,6 +95,12 @@ class WorldMap extends React.PureComponent {
 
   renderGeographies = (geographies, projection) => {
     const { flows, originGeoId } = this.state;
+    const mouseInteractionProps = isMobile()
+      ? {}
+      : {
+          onMouseMove: this.onMouseMove,
+          onMouseLeave: this.onMouseLeave
+        };
     return geographies.map(
       geography =>
         geography.properties.iso2 !== 'AQ' && (
@@ -106,8 +113,7 @@ class WorldMap extends React.PureComponent {
             )}
             geography={geography}
             projection={projection}
-            onMouseMove={this.onMouseMove}
-            onMouseLeave={this.onMouseLeave}
+            {...mouseInteractionProps}
           />
         )
     );
@@ -115,7 +121,12 @@ class WorldMap extends React.PureComponent {
 
   renderLines = () => {
     const { originCoordinates, flows } = this.state;
-
+    const mouseInteractionProps = isMobile()
+      ? {}
+      : {
+          onMouseMove: this.onMouseMove,
+          onMouseLeave: this.onMouseLeave
+        };
     return flows.map(flow => (
       <Line
         key={flow.geoId}
@@ -129,8 +140,7 @@ class WorldMap extends React.PureComponent {
         }}
         buildPath={WorldMap.buildCurves}
         strokeWidth={flow.strokeWidth}
-        onMouseMove={this.onMouseMove}
-        onMouseLeave={this.onMouseLeave}
+        {...mouseInteractionProps}
       />
     ));
   };
