@@ -7,15 +7,12 @@ import DropdownTabSwitcher from 'react-components/profiles/dropdown-tab-switcher
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import Heading from 'react-components/shared/heading/heading.component';
 import ProfileTitle from 'react-components/profiles/profile-title.component';
+import isMobile from 'utils/isMobile';
 
 const TranslatedLine = withTranslation(Line);
 
 class TopDestinationsChart extends React.PureComponent {
   state = { tooltipConfig: null };
-
-  static getIsMobile() {
-    return window.innerWidth <= 640; // value needs to match with entrypoints.scss variable
-  }
 
   onMouseMove = (location, x, y) => {
     const { summary } = this.props;
@@ -86,7 +83,7 @@ class TopDestinationsChart extends React.PureComponent {
       testId
     } = this.props;
     const { tooltipConfig } = this.state;
-    const heightStyle = TopDestinationsChart.getIsMobile() ? { minHeigh: height } : { height };
+    const heightStyle = isMobile() ? { minHeigh: height } : { height };
     return (
       <React.Fragment>
         <UnitsTooltip show={!!tooltipConfig} {...tooltipConfig} />
