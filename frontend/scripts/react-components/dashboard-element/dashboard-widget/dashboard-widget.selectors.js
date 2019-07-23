@@ -224,14 +224,13 @@ export const makeGetGroupingActiveItem = () =>
 
 export const makeGetGroupingOptions = () =>
   createSelector(
-    [getGrouping, getActiveChartId],
-    (grouping, activeChartId) => {
+    [getGrouping],
+    grouping => {
       if (grouping) {
         return sortBy(grouping.options, ['label']).map(option => ({
           ...option,
           value: option.id,
-          label: capitalize(option.label),
-          isDisabled: option.id === activeChartId
+          label: capitalize(option.label)
         }));
       }
       return null;
