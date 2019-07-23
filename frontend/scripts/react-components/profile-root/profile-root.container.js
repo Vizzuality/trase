@@ -23,7 +23,7 @@ function mapStateToProps(state) {
 
   return {
     activeContext,
-    getContextsWithProfilePages,
+    selectContexts: contexts => contexts.filter(ctx => ctx.hasProfiles),
     errorMessage: state.profileRoot.errorMessage,
     topProfiles: getParsedTopProfiles(state),
     contexts: state.app.contexts
