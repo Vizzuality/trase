@@ -2,6 +2,7 @@ import createReducer from 'utils/createReducer';
 import fuzzySearch from 'utils/fuzzySearch';
 import isEmpty from 'lodash/isEmpty';
 import updateItems from 'utils/updatePanelItems';
+import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
@@ -24,63 +25,20 @@ import {
   DASHBOARD_ELEMENT__SET_CHARTS_LOADING,
   DASHBOARD_ELEMENT__EDIT_DASHBOARD
 } from './dashboard-element.actions';
-
-const initialState = {
-  loading: false,
-  editMode: false,
-  data: {
-    countries: [],
-    companies: {},
-    sources: {},
-    destinations: [],
-    commodities: []
-  },
-  meta: {},
-  tabs: {},
-  activePanelId: null,
-  countriesPanel: {
-    page: 1,
-    searchResults: [],
-    loadingItems: false,
-    activeItems: {},
-    activeTab: null
-  },
-  sourcesPanel: {
-    page: 1,
-    searchResults: [],
-    loadingItems: false,
-    activeItems: {},
-    activeTab: null
-  },
-  destinationsPanel: {
-    page: 1,
-    searchResults: [],
-    loadingItems: false,
-    activeItems: {},
-    activeTab: null
-  },
-  companiesPanel: {
-    page: 1,
-    searchResults: [],
-    loadingItems: false,
-    activeItems: {},
-    activeTab: null
-  },
-  commoditiesPanel: {
-    page: 1,
-    searchResults: [],
-    loadingItems: false,
-    activeItems: {},
-    activeTab: null
-  },
-  selectedYears: null,
-  selectedResizeBy: null,
-  selectedRecolorBy: null,
-  charts: null,
-  chartsLoading: false
-};
+import initialState from './dashboard-element.initial-state';
 
 const dashboardElementReducer = {
+  dashboardElement(state, action) {
+    if (action.payload?.serializerParams) {
+      const newState = deserialize({
+        params: action.payload.serializerParams,
+        state: initialState,
+        props: ['selectedYears', 'selectedResizeBy', 'selectedRecolorBy']
+      });
+      return newState;
+    }
+    return state;
+  },
   [DASHBOARD_ELEMENT__SET_ACTIVE_PANEL](state, action) {
     const { activePanelId } = action.payload;
     const prevActivePanelId = state.activePanelId;

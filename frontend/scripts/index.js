@@ -16,6 +16,7 @@ import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-link
 import appInitialState from 'reducers/app.initial-state';
 import toolLayersInitialState from 'react-components/tool-layers/tool-layers.initial-state';
 import * as ToolLayersUrlPropHandlers from 'react-components/tool-layers/tool-layers.serializers';
+import dashboardElementInitialState from 'react-components/dashboard-element/dashboard-element.initial-state';
 
 import router from './router/router';
 import routeSubscriber from './router/route-subscriber';
@@ -121,6 +122,11 @@ const store = createStore(
         'selectedMapContextualLayers',
         'selectedMapDimensions'
       ]
+    }),
+    dashboardElement: deserialize({
+      params,
+      state: dashboardElementInitialState,
+      props: ['selectedYears', 'selectedResizeBy', 'selectedRecolorBy']
     })
   },
   composeEnhancers(router.enhancer, applyMiddleware(...middlewares))

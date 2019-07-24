@@ -326,3 +326,10 @@ export const getDashboardGroupedCharts = createSelector(
     };
   }
 );
+
+export const getDashboardElementUrlProps = createStructuredSelector({
+  selectedYears: getDashboardSelectedYears,
+  selectedResizeBy: getSelectedResizeBy,
+  selectedRecolorBy: getSelectedRecolorBy
+});
+
