@@ -778,7 +778,23 @@ test(DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY, () => {
 });
 
 test(DASHBOARD_ELEMENT__SET_CHARTS, () => {
-  const charts = [{ type: 'bar_chart', url: 'my_url' }];
+  const charts = {
+    data: [{ type: 'bar_chart', url: 'my_url' }],
+    meta: {
+      groupings: {
+        0: {
+          id: 0,
+          options: [{ id: 7, label: 'Number of environmental embargoes' }],
+          defaultChartId: 7
+        },
+        1: {
+          id: 1,
+          options: [{ id: 8, label: 'Number of environmental embargoes' }],
+          defaultChartId: 8
+        }
+      }
+    }
+  };
   const action = setDashboardCharts(charts);
   const newState = reducer(initialState, action);
   expect(newState).toEqual({

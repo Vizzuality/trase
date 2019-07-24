@@ -74,7 +74,7 @@ const initialState = {
   selectedYears: null,
   selectedResizeBy: null,
   selectedRecolorBy: null,
-  charts: [],
+  charts: null,
   chartsLoading: false
 };
 
@@ -318,11 +318,15 @@ const dashboardElementReducer = {
     };
   },
   [DASHBOARD_ELEMENT__SET_CHARTS](state, action) {
-    const { charts: list } = action.payload;
-    const charts = list.filter(chart => !chart.url.includes('node_type_id=4'));
+    const { charts } = action.payload;
+    // FIXME: this is a temporary hotfix, should be disabled on the backend side
+    const IS_NOT_LOGISTIC_HUB_CHART = chart => !chart.url.includes('node_type_id=4');
     return {
       ...state,
-      charts
+      charts: {
+        ...charts,
+        data: charts.data.filter(IS_NOT_LOGISTIC_HUB_CHART)
+      }
     };
   },
   [DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS](state, action) {

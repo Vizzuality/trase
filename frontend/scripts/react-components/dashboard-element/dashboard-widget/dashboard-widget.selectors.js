@@ -21,7 +21,14 @@ export const PARSED_CHART_TYPES = {
 
 const getMeta = (state, { meta }) => meta || null;
 const getData = (state, { data }) => data || null;
-const getChartType = (state, { chartType, meta }) => {
+const getGrouping = (state, { grouping }) => grouping || null;
+const getActiveChartId = (state, { activeChartId }) => {
+  if (typeof activeChartId !== 'undefined' && activeChartId !== null) {
+    return activeChartId;
+  }
+  return null;
+};
+export const getChartType = (state, { chartType, meta }) => {
   if (chartType) {
     const type = PARSED_CHART_TYPES[chartType];
     if (type === CHART_TYPES.dynamicSentence && typeof meta?.info?.filter?.node !== 'undefined') {
@@ -31,6 +38,7 @@ const getChartType = (state, { chartType, meta }) => {
   }
   return null;
 };
+
 const getSelectedRecolorBy = (state, props) => props.selectedRecolorBy;
 
 export const getDefaultConfig = createSelector(
@@ -140,7 +148,6 @@ export const getXKeys = createSelector(
   }
 );
 
-export const makeGetChartType = () => getChartType;
 export const makeGetConfig = () =>
   createSelector(
     [getMeta, getYKeys, getXKeys, getColors, getDefaultConfig, getDashboardsContext],
@@ -203,10 +210,37 @@ const getFilterPreposition = filterKey => {
   }
 };
 
+export const makeGetGroupingActiveItem = () =>
+  createSelector(
+    [getGrouping, getActiveChartId],
+    (grouping, activeChartId) => {
+      if (activeChartId && grouping) {
+        const item = grouping.options.find(option => option.id === activeChartId);
+        return { ...item, value: item.id, label: capitalize(item.label) };
+      }
+      return null;
+    }
+  );
+
+export const makeGetGroupingOptions = () =>
+  createSelector(
+    [getGrouping],
+    grouping => {
+      if (grouping) {
+        return sortBy(grouping.options, ['label']).map(option => ({
+          ...option,
+          value: option.id,
+          label: capitalize(option.label)
+        }));
+      }
+      return null;
+    }
+  );
+
 export const makeGetTitle = () =>
   createSelector(
-    [getMeta, makeGetConfig()],
-    (meta, config) => {
+    [getMeta, makeGetGroupingActiveItem(), makeGetConfig()],
+    (meta, activeChartGrouping, config) => {
       if (!meta || !meta.info) return '';
       // adding 1 to the top_n to count in "other" aggregation
       const topNPart = meta.info.top_n ? `Top ${meta.info.top_n + 1}` : null;
@@ -215,14 +249,13 @@ export const makeGetTitle = () =>
       if (meta.info.node_type) {
         nodeTypePart = getNodeTypeName(getPluralNodeType(meta.info.node_type));
       } else if (nodeFilter) {
-        nodeTypePart = `${capitalize(nodeFilter.name)}${addApostrophe(
-          nodeFilter.name
-        )} regional indicators: ${config?.yAxisLabel.text}`;
+        const label = activeChartGrouping ? '' : config?.yAxisLabel.text;
+        nodeTypePart = `${capitalize(nodeFilter.name)}${addApostrophe(nodeFilter.name)} ${label}`;
       }
       let filterPart = '';
       const filterKey = meta.info.single_filter_key;
       if (filterKey) {
-        const name = capitalize(meta.info.filter[filterKey][0].name);
+        const name = activeChartGrouping ? '' : capitalize(meta.info.filter[filterKey][0].name);
         filterPart = `${getFilterPreposition(filterKey)} ${name}`;
       }
       return [topNPart, nodeTypePart, filterPart].filter(Boolean).join(' ');

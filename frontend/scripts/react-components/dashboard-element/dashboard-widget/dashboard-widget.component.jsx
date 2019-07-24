@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import kebabCase from 'lodash/kebabCase';
 import Chart from 'react-components/chart';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 import TableModal from 'react-components/dashboard-element/dashboard-widget/table-modal';
@@ -13,11 +14,24 @@ import RankingWidget from 'react-components/dashboard-element/dashboard-widget/r
 import ErrorCatch from 'react-components/shared/error-catch.component';
 import Text from 'react-components/shared/text';
 import Heading from 'react-components/shared/heading';
+import Dropdown from 'react-components/shared/dropdown';
 
 import 'react-components/dashboard-element/dashboard-widget/dashboard-widget.scss';
 
 function DashboardWidget(props) {
-  const { loading, error, data, meta, chartType, chartConfig, title, trackOpenTableView } = props;
+  const {
+    loading,
+    error,
+    data,
+    meta,
+    chartType,
+    chartConfig,
+    title,
+    setActiveChartId,
+    groupingOptions,
+    trackOpenTableView,
+    groupingActiveItem
+  } = props;
   const renderError = errorMessage => (
     <Text color="white" weight="bold" variant="mono" size="lg" className="widget-centered">
       {errorMessage}
@@ -114,6 +128,19 @@ function DashboardWidget(props) {
       <div className="widget-title-container">
         <Heading as="h3" color="white">
           {title}
+          {groupingOptions && title && (
+            <Dropdown
+              size="rg"
+              showSelected
+              color="white"
+              weight="light"
+              variant="sentence"
+              options={groupingOptions}
+              value={groupingActiveItem}
+              label={`${title}-${kebabCase(groupingActiveItem.label)}`}
+              onChange={item => setActiveChartId(item.value)}
+            />
+          )}
         </Heading>
         {renderWidgetActions()}
       </div>
@@ -140,7 +167,10 @@ DashboardWidget.propTypes = {
   loading: PropTypes.bool,
   trackOpenTableView: PropTypes.func,
   chartConfig: PropTypes.object,
-  chartType: PropTypes.string
+  chartType: PropTypes.string,
+  setActiveChartId: PropTypes.func,
+  groupingOptions: PropTypes.array,
+  groupingActiveItem: PropTypes.object
 };
 
 export default DashboardWidget;
