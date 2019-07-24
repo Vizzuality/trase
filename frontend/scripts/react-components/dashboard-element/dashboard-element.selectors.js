@@ -57,7 +57,8 @@ export const getDirtyBlocks = createSelector(
 const getPanelActiveItems = (panel, data) => {
   const hasTabs = !Array.isArray(data);
   if (
-    isEmpty(data) ||
+    (hasTabs && Object.keys(data).length === 0) ||
+    (!hasTabs && data.length === 0) ||
     panel.activeItems.length === 0 ||
     (hasTabs && !panel.activeTab) ||
     (hasTabs && !data[panel.activeTab.id])
@@ -192,12 +193,14 @@ export const getIsDisabled = createSelector(
 );
 
 export const getDashboardsContext = createSelector(
-  [getCountriesPanel, getCommoditiesPanel, getAppContexts],
-  (countriesPanel, commoditiesPanel, contexts) => {
-    const { name: countryName } = Object.values(countriesPanel.activeItems)[0] || {};
-    const { name: commodityName } = Object.values(commoditiesPanel.activeItems)[0] || {};
+  [getCountriesActiveItems, getCommoditiesActiveItems, getAppContexts],
+  (countriesActiveItems, commoditiesActiveItems, contexts) => {
+    const [{ name: countryName } = {}] = countriesActiveItems || [];
+    const [{ name: commodityName } = {}] = commoditiesActiveItems || [];
     const context = contexts.find(
-      ctx => ctx.countryName === countryName && ctx.commodityName === commodityName
+      ctx =>
+        `${ctx.countryName}`.toLowerCase() === `${countryName}`.toLowerCase() &&
+        `${ctx.commodityName}`.toLowerCase() === `${commodityName}`.toLowerCase()
     );
 
     return context || null;
@@ -234,7 +237,7 @@ const getDashboardContextRecolorBy = createSelector(
   }
 );
 
-const getDashboardSelectedResizeBy = createSelector(
+export const getDashboardSelectedResizeBy = createSelector(
   [getSelectedResizeBy, getDashboardContextResizeBy],
   (selectedResizeBy, contextResizeByItems) => {
     if (!contextResizeByItems) {
@@ -253,7 +256,7 @@ const getDashboardSelectedResizeBy = createSelector(
   }
 );
 
-const getDashboardSelectedRecolorBy = createSelector(
+export const getDashboardSelectedRecolorBy = createSelector(
   [getSelectedRecolorBy, getDashboardContextRecolorBy],
   (selectedRecolorBy, contextRecolorByItems) => {
     if (!selectedRecolorBy || contextRecolorByItems.length === 0) {
@@ -263,7 +266,7 @@ const getDashboardSelectedRecolorBy = createSelector(
   }
 );
 
-const getDashboardSelectedYears = createSelector(
+export const getDashboardSelectedYears = createSelector(
   [
     getSelectedYears,
     getDashboardsContext,
@@ -275,7 +278,7 @@ const getDashboardSelectedYears = createSelector(
   ],
   (selectedYears, context, availableYears) => {
     if (!selectedYears && !context) {
-      return [null, null];
+      return [];
     }
 
     if (context && !selectedYears) {
@@ -294,7 +297,7 @@ const getDashboardSelectedYears = createSelector(
       return [intersectedYears[0], intersectedYears[intersectedYears.length - 1]];
     }
 
-    return [null, null];
+    return [];
   }
 );
 
