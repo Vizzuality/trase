@@ -190,6 +190,7 @@ class DashboardPanel extends Component {
               label => ({ label })
             )}
             activeStep={step - 1}
+            onSelectStep={() => {}}
           />
           <Heading className="dashboard-panel-title notranslate" align="center" size="lg">
             {editMode ? translateText('Edit options') : this.renderTitleSentence()}
