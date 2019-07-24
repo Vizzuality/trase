@@ -43,7 +43,7 @@ function DestinationsPanel(props) {
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={!!activeDestinations[itemProps.item && itemProps.item.id]}
+            isActive={activeDestinations.includes(itemProps.item?.id)}
             enableItem={onSelectDestinationValue}
             disableItem={onSelectDestinationValue}
           />

@@ -53,7 +53,7 @@ function SourcesPanel(props) {
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={!!activeCountryItems[itemProps.item && itemProps.item.id]}
+            isActive={activeCountryItems.includes(itemProps.item?.id)}
             enableItem={onSelectCountry}
             disableItem={() => onSelectCountry({})}
           />
@@ -101,7 +101,7 @@ function SourcesPanel(props) {
               {itemProps => (
                 <GridListItem
                   {...itemProps}
-                  isActive={!!activeSourceItem[itemProps.item && itemProps.item.id]}
+                  isActive={activeSourceItem.includes(itemProps.item?.id)}
                   enableItem={onSelectSourceValue}
                   disableItem={onSelectSourceValue}
                 />
