@@ -55,6 +55,7 @@ class DashboardElement extends React.PureComponent {
         onContinue={onContinue}
         dirtyBlocks={dirtyBlocks}
         onBack={showBackButton ? () => setStep(step - 1) : undefined}
+        setStep={setStep}
       />
     );
   }

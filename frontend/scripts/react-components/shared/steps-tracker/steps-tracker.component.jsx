@@ -9,11 +9,11 @@ function StepsTracker(props) {
   const { steps, activeStep, onSelectStep } = props;
 
   const ItemComponent = itemProps =>
-    onSelectStep ? (
+    onSelectStep && !itemProps.isActive ? (
       <a
         role="button"
         tabIndex={-1}
-        onClick={() => onSelectStep(itemProps.step.label)}
+        onClick={() => onSelectStep(itemProps.stepIndex + 1)}
         {...itemProps}
       >
         {itemProps.children}
@@ -26,17 +26,18 @@ function StepsTracker(props) {
     <div className="c-steps-tracker">
       {steps.map((step, i) => {
         const isDone = i < activeStep;
+        const isActive = i === activeStep;
         return (
           <div
             key={step.label}
             className={cx('steps-tracker-item-wrapper', {
               '-pending': !onSelectStep && i > activeStep,
               '-done': isDone,
-              '-selectable': !isDone && onSelectStep,
-              '-active': i === activeStep
+              '-selectable': onSelectStep,
+              '-active': isActive
             })}
           >
-            <ItemComponent step={step} className="steps-tracker-item">
+            <ItemComponent stepIndex={i} isActive={isActive} className="steps-tracker-item">
               <div className="steps-tracker-label">
                 <Text as="span" variant="mono" transform="uppercase" weight="bold">
                   {step.label}

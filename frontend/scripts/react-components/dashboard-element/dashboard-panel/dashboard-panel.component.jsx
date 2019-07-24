@@ -175,13 +175,14 @@ class DashboardPanel extends Component {
       setActiveItems,
       onContinue,
       onBack,
+      setStep,
       goToDashboard,
       dirtyBlocks,
       dynamicSentenceParts,
       step,
       isDisabled
     } = this.props;
-
+    const selectStepProp = editMode ? { onSelectStep: selectedStep => setStep(selectedStep) } : {};
     return (
       <div className="c-dashboard-panel">
         <div ref={this.containerRef} className="dashboard-panel-content">
@@ -190,7 +191,7 @@ class DashboardPanel extends Component {
               label => ({ label })
             )}
             activeStep={step - 1}
-            onSelectStep={() => {}}
+            {...selectStepProp}
           />
           <Heading className="dashboard-panel-title notranslate" align="center" size="lg">
             {editMode ? translateText('Edit options') : this.renderTitleSentence()}
@@ -231,6 +232,7 @@ DashboardPanel.propTypes = {
   dynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
   onBack: PropTypes.func,
+  setStep: PropTypes.func.isRequired,
   setActiveTab: PropTypes.func.isRequired,
   setActiveItems: PropTypes.func.isRequired,
   setActiveItem: PropTypes.func.isRequired,
