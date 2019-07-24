@@ -43,7 +43,7 @@ export const getDashboardPanelParams = (state, optionsType, options = {}) => {
     sources: sourcesTab,
     companies: companiesTab
   }[optionsType];
-  const activeItemParams = panel => Object.keys(panel.activeItems).join();
+  const activeItemParams = panel => panel.activeItems.join();
   const params = {
     page,
     options_type: optionsType,

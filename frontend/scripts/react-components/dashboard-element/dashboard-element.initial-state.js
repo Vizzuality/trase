@@ -15,35 +15,35 @@ export default {
     page: 1,
     searchResults: [],
     loadingItems: false,
-    activeItems: {},
+    activeItems: [],
     activeTab: null
   },
   sourcesPanel: {
     page: 1,
     searchResults: [],
     loadingItems: false,
-    activeItems: {},
+    activeItems: [],
     activeTab: null
   },
   destinationsPanel: {
     page: 1,
     searchResults: [],
     loadingItems: false,
-    activeItems: {},
+    activeItems: [],
     activeTab: null
   },
   companiesPanel: {
     page: 1,
     searchResults: [],
     loadingItems: false,
-    activeItems: {},
+    activeItems: [],
     activeTab: null
   },
   commoditiesPanel: {
     page: 1,
     searchResults: [],
     loadingItems: false,
-    activeItems: {},
+    activeItems: [],
     activeTab: null
   },
   selectedYears: null,
