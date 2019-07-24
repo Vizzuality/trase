@@ -578,7 +578,9 @@ export default class MapComponent {
   // this is to fit bounds in the polygons without filtering the choropleth by calling showLinkedGeoIds
   fitBoundsSelectedGeoPolygons({ selectedNodesGeoIds, shouldFitBoundsSelectedPolygons }) {
     if (shouldFitBoundsSelectedPolygons) {
-      this._fitBoundsToSelectedPolygons(selectedNodesGeoIds);
+      setTimeout(() => {
+        this._fitBoundsToSelectedPolygons(selectedNodesGeoIds);
+      }, 0);
     }
   }
 
