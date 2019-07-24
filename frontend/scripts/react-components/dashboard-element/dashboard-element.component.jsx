@@ -56,6 +56,7 @@ class DashboardElement extends React.PureComponent {
         dirtyBlocks={dirtyBlocks}
         onBack={showBackButton ? () => setStep(step - 1) : undefined}
         setStep={setStep}
+        closeModal={closeModal}
       />
     );
   }
