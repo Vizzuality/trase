@@ -8,7 +8,8 @@ import {
   getDynamicSentence,
   getDashboardFiltersProps,
   getDashboardGroupedCharts,
-  getEditMode
+  getEditMode,
+  getDashboardElementUrlProps
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { getPanelId } from 'utils/dashboardPanel';
 import {
@@ -28,7 +29,8 @@ const mapStateToProps = state => {
     filters: getDashboardFiltersProps(state),
     dynamicSentenceParts: getDynamicSentence(state),
     showModalOnStart: !(dirtyBlocks.countries && dirtyBlocks.commodities),
-    editMode: getEditMode(state)
+    editMode: getEditMode(state),
+    urlProps: getDashboardElementUrlProps(state)
   };
 };
 
@@ -49,6 +51,7 @@ class DashboardElementContainer extends React.Component {
   static propTypes = {
     groupedCharts: PropTypes.object,
     filters: PropTypes.object,
+    urlProps: PropTypes.object,
     dirtyBlocks: PropTypes.object,
     showModalOnStart: PropTypes.bool,
     goToRoot: PropTypes.func.isRequired,
@@ -110,6 +113,7 @@ class DashboardElementContainer extends React.Component {
     const {
       groupedCharts,
       goToRoot,
+      urlProps,
       dynamicSentenceParts,
       dirtyBlocks,
       filters,
@@ -129,6 +133,7 @@ class DashboardElementContainer extends React.Component {
         setStep={this.updateStep}
         closeModal={this.closeModal}
         reopenPanel={this.reopenPanel}
+        urlProps={urlProps}
         dynamicSentenceParts={dynamicSentenceParts}
         setSelectedYears={setSelectedYears}
         setSelectedResizeBy={setSelectedResizeBy}

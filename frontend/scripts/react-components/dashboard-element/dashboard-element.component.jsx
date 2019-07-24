@@ -10,6 +10,7 @@ import Dropdown from 'react-components/shared/dropdown';
 import YearsRangeDropdown from 'react-components/shared/years-range-dropdown';
 import Text from 'react-components/shared/text';
 import DashboardWidget from 'react-components/dashboard-element/dashboard-widget';
+import UrlSerializer from 'react-components/shared/url-serializer';
 import InView from 'react-components/shared/in-view.component';
 import cx from 'classnames';
 import { DASHBOARD_STEPS } from 'constants';
@@ -19,6 +20,7 @@ import 'react-components/dashboard-element/dashboard-element.scss';
 class DashboardElement extends React.PureComponent {
   static propTypes = {
     groupedCharts: PropTypes.object,
+    urlProps: PropTypes.object,
     dirtyBlocks: PropTypes.object,
     step: PropTypes.number.isRequired,
     setStep: PropTypes.func.isRequired,
@@ -123,6 +125,7 @@ class DashboardElement extends React.PureComponent {
       modalOpen,
       goToRoot,
       filters,
+      urlProps,
       reopenPanel,
       setSelectedYears,
       setSelectedResizeBy,
@@ -244,6 +247,7 @@ class DashboardElement extends React.PureComponent {
             </>
           )}
         </div>
+        <UrlSerializer urlProps={urlProps} />
       </div>
     );
   }
