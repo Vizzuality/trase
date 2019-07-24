@@ -1,7 +1,6 @@
 import deburr from 'lodash/deburr';
 import pickBy from 'lodash/pickBy';
 import { put, call, cancelled, select, fork } from 'redux-saga/effects';
-import isEmpty from 'lodash/isEmpty';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
@@ -12,6 +11,11 @@ import {
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
   DASHBOARD_ELEMENT__SET_CHARTS
 } from 'react-components/dashboard-element/dashboard-element.actions';
+import {
+  getDashboardSelectedYears,
+  getDashboardSelectedResizeBy,
+  getDashboardSelectedRecolorBy
+} from 'react-components/dashboard-element/dashboard-element.selectors';
 import {
   getURLFromParams,
   GET_DASHBOARD_OPTIONS_URL,
@@ -135,7 +139,7 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType, active
 export function* fetchDashboardPanelSearchResults(dashboardElement, query) {
   if (!query) return;
   let optionsType = dashboardElement.activePanelId;
-  if (optionsType === 'sources' && isEmpty(dashboardElement.countriesPanel.activeItems)) {
+  if (optionsType === 'sources' && dashboardElement.countriesPanel.activeItems.length === 0) {
     optionsType = 'countries';
   }
   // eslint-ignore-next-line
@@ -172,6 +176,9 @@ export function* fetchDashboardPanelSearchResults(dashboardElement, query) {
 }
 
 export function* fetchDashboardCharts() {
+  const selectedResizeBy = yield select(getDashboardSelectedResizeBy);
+  const selectedRecolorBy = yield select(getDashboardSelectedRecolorBy);
+  const selectedYears = yield select(getDashboardSelectedYears);
   const dashboardElement = yield select(state => state.dashboardElement);
   const {
     countries_ids: countryId,
@@ -183,10 +190,10 @@ export function* fetchDashboardCharts() {
       ...options,
       country_id: countryId,
       commodity_id: commodityId,
-      cont_attribute_id: dashboardElement.selectedResizeBy,
-      ncont_attribute_id: dashboardElement.selectedRecolorBy,
-      start_year: dashboardElement.selectedYears[0],
-      end_year: dashboardElement.selectedYears[1]
+      cont_attribute_id: selectedResizeBy?.attributeId,
+      ncont_attribute_id: selectedRecolorBy?.attributeId,
+      start_year: selectedYears[0],
+      end_year: selectedYears[1]
     },
     x => !!x
   );
