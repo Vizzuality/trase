@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import kebabCase from 'lodash/kebabCase';
 import Chart from 'react-components/chart';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 import TableModal from 'react-components/dashboard-element/dashboard-widget/table-modal';
@@ -136,6 +137,7 @@ function DashboardWidget(props) {
               variant="sentence"
               options={groupingOptions}
               value={groupingActiveItem}
+              label={`${title}-${kebabCase(groupingActiveItem.label)}`}
               onChange={item => setActiveChartId(item.value)}
             />
           )}

@@ -20,6 +20,7 @@ function GridListItem(props) {
   } = props;
   if (!item) return <b style={style} />;
   const onClick = isActive && disableItem ? disableItem : enableItem;
+  const testId = item.name && item.name.split(' ').join('-');
   return (
     <React.Fragment>
       <div style={style} className="c-grid-list-item">
@@ -35,7 +36,7 @@ function GridListItem(props) {
                 '-has-info': !!tooltip,
                 '-clickable': isActive && !disableItem
               })}
-              data-test={`grid-list-item-button-${item.name}`}
+              data-test={`grid-list-item-button-${testId}`}
             >
               <span>{item.name}</span>
             </button>
