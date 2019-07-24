@@ -1,7 +1,6 @@
 import createReducer from 'utils/createReducer';
 import fuzzySearch from 'utils/fuzzySearch';
-import isEmpty from 'lodash/isEmpty';
-import updateItems from 'utils/updatePanelItems';
+import xor from 'lodash/xor';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
@@ -146,7 +145,7 @@ const dashboardElementReducer = {
     const panelName = `${panel}Panel`;
     const sourcesPanelState =
       panel === 'countries' ? initialState.sourcesPanel : state.sourcesPanel;
-    const activeItems = isEmpty(activeItem) ? {} : { [activeItem.id]: activeItem };
+    const activeItems = activeItem ? [activeItem.id] : state[panelName].activeItems;
     return {
       ...state,
       sourcesPanel: sourcesPanelState,
@@ -159,12 +158,13 @@ const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS](state, action) {
     const { panel, activeItems: selectedItem } = action.payload;
     const panelName = `${panel}Panel`;
+    const activeItems = xor(state[panelName].activeItems, [selectedItem.id]);
     return {
       ...state,
       sourcesPanel: state.sourcesPanel,
       [panelName]: {
         ...state[panelName],
-        activeItems: updateItems(state[panelName].activeItems, selectedItem)
+        activeItems
       }
     };
   },
@@ -210,7 +210,7 @@ const dashboardElementReducer = {
       },
       [panelName]: {
         ...state[panelName],
-        activeItems: updateItems(state[panelName].activeItems, selectedItem),
+        activeItems: xor(state[panelName].activeItems, [selectedItem.id]),
         activeTab,
         page: initialState[panelName].page
       }
@@ -247,7 +247,7 @@ const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_SEARCH_RESULTS](state, action) {
     const { data, query } = action.payload;
     let panel = state.activePanelId;
-    if (state.activePanelId === 'sources' && isEmpty(state.countriesPanel.activeItems)) {
+    if (state.activePanelId === 'sources' && state.countriesPanel.activeItems.length === 0) {
       panel = 'countries';
     }
     const panelName = `${panel}Panel`;
@@ -315,7 +315,7 @@ const dashboardElementReducerTypes = PropTypes => {
     page: PropTypes.number,
     searchResults: PropTypes.array,
     loadingItems: PropTypes.bool,
-    activeItems: PropTypes.object,
+    activeItems: PropTypes.array,
     activeTab: PropTypes.object
   };
 

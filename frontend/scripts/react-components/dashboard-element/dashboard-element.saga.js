@@ -167,7 +167,7 @@ export function* onChangePanel(action) {
 
   const panelsToClear = nextPanels
     .map(p => ({ name: p, items: dashboardElement[`${p}Panel`].activeItems }))
-    .filter(p => !isEmpty(p.items))
+    .filter(p => p.items.length > 0)
     .map(p => p.name);
 
   if (panelsToClear.length > 0) {
@@ -225,8 +225,8 @@ function* updateIndicatorsOnItemChange() {
   const { dashboardElement } = yield select();
 
   const contextSelected =
-    !isEmpty(dashboardElement.countriesPanel.activeItems) &&
-    !isEmpty(dashboardElement.commoditiesPanel.activeItems);
+    dashboardElement.countriesPanel.activeItems.length > 0 &&
+    dashboardElement.commoditiesPanel.activeItems.length > 0;
 
   if (contextSelected) {
     const filters = yield select(getDashboardFiltersProps);
