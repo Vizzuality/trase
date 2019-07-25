@@ -34,10 +34,8 @@ function SourcesPanel(props) {
   const [sourcesOpen, changeSourcesOpen] = useState(sourcesRequired);
   const toggleSourcesOpen = () => changeSourcesOpen(!sourcesOpen);
 
-  const hasActiveCountryItems = Object.keys(activeCountryItems).length > 0;
-  const showJurisdictions = hasActiveCountryItems && tabs.length > 0;
-  const activeCountryName =
-    hasActiveCountryItems && capitalize(Object.values(activeCountryItems)[0].name);
+  const showJurisdictions = activeCountryItems && tabs.length > 0;
+  const activeCountryName = activeCountryItems && capitalize(activeCountryItems[0].name);
   return (
     <div className="c-sources-panel">
       <GridList
@@ -48,21 +46,23 @@ function SourcesPanel(props) {
         rowHeight={50}
         columnCount={5}
         items={countries}
-        loading={!hasActiveCountryItems && loading}
+        loading={!activeCountryItems && loading}
       >
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={activeCountryItems.includes(itemProps.item?.id)}
+            isActive={
+              activeCountryItems && activeCountryItems.find(i => i.id === itemProps.item?.id)
+            }
             enableItem={onSelectCountry}
-            disableItem={() => onSelectCountry({})}
+            disableItem={() => onSelectCountry(null)}
           />
         )}
       </GridList>
       {showJurisdictions && (
         <Accordion
           title={`${activeCountryName} regions${sourcesRequired ? '' : ' (Optional)'}`}
-          defaultValue={Object.keys(activeSourceItem).length > 0 || sourcesOpen}
+          defaultValue={activeSourceItem.length > 0 || sourcesOpen}
           onToggle={toggleSourcesOpen}
         >
           <Text color="grey-faded" className="sources-panel-sources-subtitle">
@@ -123,8 +123,8 @@ SourcesPanel.propTypes = {
   loadingMoreItems: PropTypes.bool,
   page: PropTypes.number.isRequired,
   activeSourceTab: PropTypes.object,
-  activeSourceItem: PropTypes.object,
-  activeCountryItems: PropTypes.object,
+  activeSourceItem: PropTypes.array,
+  activeCountryItems: PropTypes.array,
   getMoreItems: PropTypes.func.isRequired,
   searchSources: PropTypes.array.isRequired,
   onSelectCountry: PropTypes.func.isRequired,

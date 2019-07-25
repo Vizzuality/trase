@@ -17,7 +17,7 @@ import appInitialState from 'reducers/app.initial-state';
 import toolLayersInitialState from 'react-components/tool-layers/tool-layers.initial-state';
 import * as ToolLayersUrlPropHandlers from 'react-components/tool-layers/tool-layers.serializers';
 import dashboardElementInitialState from 'react-components/dashboard-element/dashboard-element.initial-state';
-
+import * as DashboardElementUrlPropHandlers from 'react-components/dashboard-element/dashboard-element.serializers';
 import router from './router/router';
 import routeSubscriber from './router/route-subscriber';
 import { register, unregister } from './worker';
@@ -126,7 +126,14 @@ const store = createStore(
     dashboardElement: deserialize({
       params,
       state: dashboardElementInitialState,
-      props: ['selectedYears', 'selectedResizeBy', 'selectedRecolorBy']
+      urlPropHandlers: DashboardElementUrlPropHandlers,
+      props: [
+        'selectedYears',
+        'selectedResizeBy',
+        'selectedRecolorBy',
+        'countriesPanel',
+        'commoditiesPanel'
+      ]
     })
   },
   composeEnhancers(router.enhancer, applyMiddleware(...middlewares))

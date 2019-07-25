@@ -25,6 +25,7 @@ import {
   DASHBOARD_ELEMENT__EDIT_DASHBOARD
 } from './dashboard-element.actions';
 import initialState from './dashboard-element.initial-state';
+import * as DashboardElementUrlPropHandlers from './dashboard-element.serializers';
 
 const dashboardElementReducer = {
   dashboardElement(state, action) {
@@ -32,7 +33,14 @@ const dashboardElementReducer = {
       const newState = deserialize({
         params: action.payload.serializerParams,
         state: initialState,
-        props: ['selectedYears', 'selectedResizeBy', 'selectedRecolorBy']
+        urlPropHandlers: DashboardElementUrlPropHandlers,
+        props: [
+          'selectedYears',
+          'selectedResizeBy',
+          'selectedRecolorBy',
+          'countriesPanel',
+          'commoditiesPanel'
+        ]
       });
       return newState;
     }
@@ -145,7 +153,7 @@ const dashboardElementReducer = {
     const panelName = `${panel}Panel`;
     const sourcesPanelState =
       panel === 'countries' ? initialState.sourcesPanel : state.sourcesPanel;
-    const activeItems = activeItem ? [activeItem.id] : state[panelName].activeItems;
+    const activeItems = activeItem ? [activeItem.id] : initialState[panelName].activeItems;
     return {
       ...state,
       sourcesPanel: sourcesPanelState,
@@ -158,7 +166,8 @@ const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS](state, action) {
     const { panel, activeItems: selectedItem } = action.payload;
     const panelName = `${panel}Panel`;
-    const activeItems = xor(state[panelName].activeItems, [selectedItem.id]);
+    const items = Array.isArray(selectedItem) ? selectedItem.map(i => i.id) : [selectedItem.id];
+    const activeItems = xor(state[panelName].activeItems, items);
     return {
       ...state,
       sourcesPanel: state.sourcesPanel,
