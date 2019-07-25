@@ -4,9 +4,10 @@ import { put, call, cancelled, select, fork } from 'redux-saga/effects';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
-  DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
   setDashboardChartsLoading,
   getDashboardPanelParams,
+  setMoreDashboardPanelData,
+  setMissingDashboardPanelItems,
   setDashboardPanelLoadingItems,
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
   DASHBOARD_ELEMENT__SET_CHARTS
@@ -26,7 +27,8 @@ import {
 import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
 
 export function* getDashboardPanelData(dashboardElement, optionsType, options) {
-  const { page, activeTab } = dashboardElement[`${dashboardElement.activePanelId}Panel`];
+  const panelId = dashboardElement.activePanelId;
+  const { page, activeTab } = dashboardElement[`${panelId}Panel`];
   const tab = activeTab && activeTab.id;
   const params = getDashboardPanelParams(dashboardElement, optionsType, {
     page,
@@ -80,7 +82,8 @@ export function* getDashboardPanelSectionTabs(dashboardElement, optionsType) {
     yield put({
       type: DASHBOARD_ELEMENT__SET_PANEL_TABS,
       payload: {
-        data: data.data
+        data: data.data,
+        key: optionsType
       }
     });
   } catch (e) {
@@ -97,23 +100,50 @@ export function* getDashboardPanelSectionTabs(dashboardElement, optionsType) {
 
 export function* getMoreDashboardPanelData(dashboardElement, optionsType, activeTab, direction) {
   const { page } = dashboardElement[`${dashboardElement.activePanelId}Panel`];
-  const params = getDashboardPanelParams(dashboardElement, optionsType, {
-    page
-  });
+  const params = getDashboardPanelParams(dashboardElement, optionsType, { page });
   const task = yield fork(setLoadingSpinner, 350, setDashboardPanelLoadingItems(true));
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
-    yield put({
-      type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
-      payload: {
-        key: optionsType,
-        tab: activeTab && activeTab.id,
+    yield put(
+      setMoreDashboardPanelData({
         direction,
-        data: data.data
+        data: data.data,
+        key: optionsType,
+        tab: activeTab && activeTab.id
+      })
+    );
+    if (task.isRunning()) {
+      task.cancel();
+    } else {
+      yield call(setLoadingSpinner, 750, setDashboardPanelLoadingItems(false));
+    }
+  } catch (e) {
+    console.error('Error', e);
+    if (task.isRunning()) {
+      task.cancel();
+    } else {
+      yield call(setLoadingSpinner, 750, setDashboardPanelLoadingItems(false));
+    }
+  } finally {
+    if (yield cancelled()) {
+      if (NODE_ENV_DEV) console.error('Cancelled', url);
+      if (source) {
+        source.cancel();
       }
-    });
+    }
+  }
+}
+
+export function* getMissingDashboardPanelItems(dashboardElement, optionsType, activeTab, options) {
+  const params = getDashboardPanelParams(dashboardElement, optionsType, options);
+  const task = yield fork(setLoadingSpinner, 350, setDashboardPanelLoadingItems(true));
+  const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
+  const { source, fetchPromise } = fetchWithCancel(url);
+  try {
+    const { data } = yield call(fetchPromise);
+    yield put(setMissingDashboardPanelItems(optionsType, data.data, activeTab));
     if (task.isRunning()) {
       task.cancel();
     } else {

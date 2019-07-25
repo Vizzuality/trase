@@ -134,7 +134,6 @@ export const getDynamicSentence = createSelector(
       : `Your dashboard will include ${commoditiesPanelSentence}`;
     const capitalizeCommodities = editMode ? { transform: 'capitalize' } : {};
     const sourcesValues = panelsValues.sources || panelsValues.countries;
-    console.log(sourcesValues);
     return [
       {
         panel: 'commodities',

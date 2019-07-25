@@ -1,4 +1,4 @@
-import { take, select, all, fork, put, takeLatest, cancel } from 'redux-saga/effects';
+import { take, select, all, fork, put, takeLatest, cancel, takeEvery } from 'redux-saga/effects';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import {
@@ -15,17 +15,63 @@ import {
   DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
   DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
   DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
-  DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS
+  DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS,
+  DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
+  DASHBOARD_ELEMENT__SET_MISSING_DATA
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import {
+  getMissingDashboardPanelItems,
   getDashboardPanelSectionTabs,
   getDashboardPanelData,
   getMoreDashboardPanelData,
   fetchDashboardPanelSearchResults,
   fetchDashboardCharts
 } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
-import { getDashboardFiltersProps } from 'react-components/dashboard-element/dashboard-element.selectors';
+import {
+  getDashboardFiltersProps,
+  getDashboardPanelsValues
+} from 'react-components/dashboard-element/dashboard-element.selectors';
 import { DASHBOARD_STEPS } from 'constants';
+
+export function* fetchMissingDashboardPanelItems() {
+  function* fetchMissingItems() {
+    const panelsValues = yield select(getDashboardPanelsValues);
+    const dashboardElement = yield select(state => state.dashboardElement);
+
+    if (panelsValues.countries === null && dashboardElement.countriesPanel.activeItems.length > 0) {
+      yield fork(getMissingDashboardPanelItems, dashboardElement, 'countries', null, {
+        isOverview: true
+      });
+    }
+
+    if (
+      panelsValues.commodities === null &&
+      dashboardElement.commoditiesPanel.activeItems.length > 0
+    ) {
+      yield fork(getMissingDashboardPanelItems, dashboardElement, 'commodities', null, {
+        isOverview: true
+      });
+    }
+  }
+
+  yield takeLatest('dashboardElement', fetchMissingItems);
+}
+
+export function* onMissingItemDownload(action) {
+  const { key } = action.payload;
+  const { dashboardElement } = yield select();
+  if (key === 'countries') {
+    yield fork(getDashboardPanelSectionTabs, dashboardElement, 'sources');
+  }
+
+  if (key === 'companies') {
+    yield fork(getDashboardPanelSectionTabs, dashboardElement, 'companies');
+  }
+}
+
+function* fetchDataMissingItemDownload() {
+  yield takeEvery([DASHBOARD_ELEMENT__SET_MISSING_DATA], onMissingItemDownload);
+}
 
 /**
  * Should receive the DASHBOARD_ELEMENT__SET_ACTIVE_PANEL action and depending on which panel it is on fetch the necessary data.
@@ -149,7 +195,11 @@ export function* onItemChange(action) {
 
 function* fetchDataOnItemChange() {
   yield takeLatest(
-    [DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS],
+    [
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
+      DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA
+    ],
     onItemChange
   );
 }
@@ -271,6 +321,7 @@ function* fetchChartsOnItemChange() {
     [
       DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
       DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
+      DASHBOARD_ELEMENT__SET_MISSING_DATA,
       DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
     ],
     updateIndicatorsOnItemChange
@@ -286,7 +337,9 @@ export default function* dashboardElementSaga() {
     fetchDataOnPageChange,
     fetchDataOnSearch,
     fetchChartsOnIndicatorsChange,
-    fetchChartsOnItemChange
+    fetchChartsOnItemChange,
+    fetchMissingDashboardPanelItems,
+    fetchDataMissingItemDownload
   ];
   yield all(sagas.map(saga => fork(saga)));
 }

@@ -22,7 +22,8 @@ import {
   DASHBOARD_ELEMENT__SET_CHARTS,
   DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS,
   DASHBOARD_ELEMENT__SET_CHARTS_LOADING,
-  DASHBOARD_ELEMENT__EDIT_DASHBOARD
+  DASHBOARD_ELEMENT__EDIT_DASHBOARD,
+  DASHBOARD_ELEMENT__SET_MISSING_DATA
 } from './dashboard-element.actions';
 import initialState from './dashboard-element.initial-state';
 import * as DashboardElementUrlPropHandlers from './dashboard-element.serializers';
@@ -115,6 +116,18 @@ const dashboardElementReducer = {
       data: { ...state.data, [key]: newData }
     };
   },
+  [DASHBOARD_ELEMENT__SET_MISSING_DATA](state, action) {
+    const { key, data, tab } = action.payload;
+
+    const oldData = tab ? state.data[key][tab] : state.data[key];
+    const together = [...oldData, ...data];
+    const newData = tab ? { ...state.data[key], [tab]: together } : together;
+
+    return {
+      ...state,
+      data: { ...state.data, [key]: newData }
+    };
+  },
   [DASHBOARD_ELEMENT__SET_LOADING_ITEMS](state, action) {
     const { loadingItems } = action.payload;
     const panelName = `${state.activePanelId}Panel`;
@@ -127,23 +140,15 @@ const dashboardElementReducer = {
     };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_TABS](state, action) {
-    const { data } = action.payload;
+    const { data, key } = action.payload;
     const getSection = n => n.section && n.section.toLowerCase();
     const tabs = data.reduce((acc, next) => ({ ...acc, [getSection(next)]: next.tabs }), {});
-    const panelName = `${state.activePanelId}Panel`;
-    const activePanelTabs = tabs[state.activePanelId];
-    const firstTab = activePanelTabs && activePanelTabs[0];
-    const existingTab =
-      activePanelTabs &&
-      activePanelTabs.find(
-        tab => tab.id === (state[panelName].activeTab && state[panelName].activeTab.id)
-      );
+    const panelName = `${key}Panel`;
     return {
       ...state,
       tabs,
       [panelName]: {
         ...state[panelName],
-        activeTab: existingTab || firstTab,
         page: initialState[panelName].page
       }
     };
