@@ -86,7 +86,7 @@ describe('Dashboards flow', () => {
       dashboardPanelSentenceSelector,
       el => el.textContent
     );
-    expect(destinationsSectionTitle).toMatch('destinations');
+    expect(destinationsSectionTitle).toMatch('import countries');
     const destinationsButtonsSelector = '[data-test=grid-list-item-button]';
     await page.waitForSelector(destinationsButtonsSelector);
     const destinationsButtons = await page.$$(destinationsButtonsSelector);
