@@ -7,8 +7,8 @@ import CommoditiesPanel from 'react-components/dashboard-element/dashboard-panel
 import DashboardModalFooter from 'react-components/dashboard-element/dashboard-modal-footer/dashboard-modal-footer.component';
 import addApostrophe from 'utils/addApostrophe';
 import { DASHBOARD_STEPS } from 'constants';
-import { getPanelId as getPanelName, singularize } from 'utils/dashboardPanel';
-import Heading from 'react-components/shared/heading/heading.component';
+import { getPanelLabel, singularize } from 'utils/dashboardPanel';
+import Heading from 'react-components/shared/heading';
 import StepsTracker from 'react-components/shared/steps-tracker/steps-tracker.component';
 import { translateText } from 'utils/transifex';
 
@@ -148,22 +148,34 @@ class DashboardPanel extends Component {
       return (
         <>
           {translateText('Choose one ')}{' '}
-          <span className="dashboard-panel-sentence" data-test="dashboard-panel-sentence">
-            {translateText(singularize(getPanelName(step)))}
-          </span>
+          <Heading
+            size="lg"
+            as="span"
+            className="dashboard-panel-sentence"
+            data-test="dashboard-panel-sentence"
+          >
+            {translateText(singularize(getPanelLabel(step)))}
+          </Heading>
         </>
       );
     }
     return (
       <>
+        {[DASHBOARD_STEPS.companies, DASHBOARD_STEPS.destinations].includes(step) ? (
+          <Heading size="lg" as="span" weight="bold">{`${translateText('(Optional)')} `}</Heading>
+        ) : (
+          ''
+        )}
         {translateText('Choose one or several')}
-        <span className="dashboard-panel-sentence" data-test="dashboard-panel-sentence">
+        <Heading
+          size="lg"
+          as="span"
+          className="dashboard-panel-sentence"
+          data-test="dashboard-panel-sentence"
+        >
           {' '}
-          {translateText(getPanelName(step))}
-        </span>
-        {[DASHBOARD_STEPS.companies, DASHBOARD_STEPS.destinations].includes(step)
-          ? ` ${translateText('(Optional)')}`
-          : ''}
+          {translateText(getPanelLabel(step))}
+        </Heading>
       </>
     );
   }
@@ -205,7 +217,7 @@ class DashboardPanel extends Component {
             {...selectStepProp}
           />
           <Heading className="dashboard-panel-title notranslate" align="center" size="lg">
-            {editMode ? translateText('Edit options') : this.renderTitleSentence()}
+            {this.renderTitleSentence()}
           </Heading>
           {this.renderPanel()}
         </div>
