@@ -66,7 +66,8 @@ function Table(props) {
       >
         {({ rowIndex, columnIndex, style }) => {
           const formatFn = headers[columnIndex].format && d3Format(headers[columnIndex].format);
-          const item = sortedData[rowIndex][columnIndex];
+          const cell = sortedData[rowIndex][columnIndex];
+          const item = cell !== null ? cell : 'n/a';
           return (
             <div style={style} className={cx('list-item', !(rowIndex % 2) && '-even')}>
               <Text align="center" size="md" as="span" variant="mono">
