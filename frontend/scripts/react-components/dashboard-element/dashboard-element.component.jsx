@@ -45,7 +45,7 @@ class DashboardElement extends React.PureComponent {
     const { step, setStep, editMode, closeModal, dirtyBlocks } = this.props;
     const showBackButton = step > DASHBOARD_STEPS.sources;
     const onContinue = step === DASHBOARD_STEPS.companies ? closeModal : () => setStep(step + 1);
-    if (step === DASHBOARD_STEPS.welcome) {
+    if (step === DASHBOARD_STEPS.welcome && !editMode) {
       return <DashboardWelcome onContinue={() => setStep(step + 1)} />;
     }
     return (
@@ -146,7 +146,7 @@ class DashboardElement extends React.PureComponent {
                         color="gray"
                         variant="icon"
                         className="dashboard-edit-button"
-                        onClick={() => reopenPanel(DASHBOARD_STEPS.sources)}
+                        onClick={() => reopenPanel()}
                       >
                         <svg className="icon icon-pen">
                           <use xlinkHref="#icon-pen" />

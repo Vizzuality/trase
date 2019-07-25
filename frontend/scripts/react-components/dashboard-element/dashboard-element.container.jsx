@@ -96,9 +96,9 @@ class DashboardElementContainer extends React.Component {
     this.setState({ modalOpen: false });
   };
 
-  reopenPanel = step => {
+  reopenPanel = () => {
     this.props.editDashboard();
-    this.setState({ step, modalOpen: true });
+    this.setState({ step: 0, modalOpen: true });
   };
 
   updateStep = step => this.setState({ step });

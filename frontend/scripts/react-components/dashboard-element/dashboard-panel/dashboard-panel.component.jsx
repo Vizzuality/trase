@@ -144,6 +144,17 @@ class DashboardPanel extends Component {
 
   renderTitleSentence() {
     const { step } = this.props;
+    if (step === DASHBOARD_STEPS.welcome) {
+      return (
+        <>
+          {translateText('Choose the ')}
+          <Heading size="lg" as="span" weight="bold" className="dashboard-panel-sentence">
+            {translateText('step ')}
+          </Heading>
+          {translateText('you want to edit')}
+        </>
+      );
+    }
     if (step === DASHBOARD_STEPS.sources || step === DASHBOARD_STEPS.commodities) {
       return (
         <>
@@ -206,6 +217,8 @@ class DashboardPanel extends Component {
       editMode && mandatoryFieldsSelected
         ? { onSelectStep: selectedStep => setStep(selectedStep) }
         : {};
+    // if (step === DASHBOARD_STEPS.welcome) return 'Hola';
+
     return (
       <div className="c-dashboard-panel">
         <div ref={this.containerRef} className="dashboard-panel-content">

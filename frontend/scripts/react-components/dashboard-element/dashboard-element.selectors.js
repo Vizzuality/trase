@@ -145,6 +145,7 @@ export const getIsDisabled = createSelector(
   (dynamicSentence, step) => {
     if (dynamicSentence.length === 0 || typeof step === 'undefined') return true;
     const currentPanel = getPanelName(step);
+    if (currentPanel === 'welcome') return false;
     const currentSentencePart = dynamicSentence.find(p => p.panel === currentPanel);
     if (!currentSentencePart.optional && !currentSentencePart.value) return true;
     return false;
