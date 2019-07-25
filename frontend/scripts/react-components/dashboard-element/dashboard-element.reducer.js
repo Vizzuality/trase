@@ -21,11 +21,13 @@ import {
   DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
   DASHBOARD_ELEMENT__SET_CHARTS,
   DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS,
-  DASHBOARD_ELEMENT__SET_CHARTS_LOADING
+  DASHBOARD_ELEMENT__SET_CHARTS_LOADING,
+  DASHBOARD_ELEMENT__EDIT_DASHBOARD
 } from './dashboard-element.actions';
 
 const initialState = {
   loading: false,
+  editMode: false,
   data: {
     countries: [],
     companies: {},
@@ -94,6 +96,9 @@ const dashboardElementReducer = {
       activePanelId,
       [prevPanelName]: prevPanelState
     };
+  },
+  [DASHBOARD_ELEMENT__EDIT_DASHBOARD](state) {
+    return { ...state, editMode: true };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_PAGE](state, action) {
     const { activePanelId } = state;
