@@ -113,7 +113,7 @@ const getDestinationsActiveItems = createSelector(
   getPanelActiveItems
 );
 
-const getDashboardPanelsValues = createStructuredSelector({
+export const getDashboardPanelsValues = createStructuredSelector({
   countries: getCountriesActiveItems,
   sources: getSourcesActiveItems,
   commodities: getCommoditiesActiveItems,
