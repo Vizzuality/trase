@@ -244,7 +244,8 @@ export const getDashboardSelectedResizeBy = createSelector(
   [getSelectedResizeBy, getDashboardContextResizeBy],
   (selectedResizeBy, contextResizeByItems) => {
     if (!contextResizeByItems) {
-      return { label: 'Select an Indicator', value: null };
+      const attributeId = selectedResizeBy || null;
+      return { label: 'Select an Indicator', value: attributeId, attributeId };
     }
 
     const itemIncludedInContext = contextResizeByItems.find(
@@ -262,8 +263,9 @@ export const getDashboardSelectedResizeBy = createSelector(
 export const getDashboardSelectedRecolorBy = createSelector(
   [getSelectedRecolorBy, getDashboardContextRecolorBy],
   (selectedRecolorBy, contextRecolorByItems) => {
-    if (!selectedRecolorBy || contextRecolorByItems.length === 0) {
-      return { label: 'Select an Indicator', value: null, attributeId: null };
+    if (contextRecolorByItems.length === 0) {
+      const attributeId = selectedRecolorBy || null;
+      return { label: 'Select an Indicator', value: attributeId, attributeId };
     }
     return contextRecolorByItems.find(item => item.attributeId === selectedRecolorBy) || null;
   }
@@ -300,7 +302,7 @@ export const getDashboardSelectedYears = createSelector(
       return [intersectedYears[0], intersectedYears[intersectedYears.length - 1]];
     }
 
-    return [];
+    return selectedYears;
   }
 );
 
@@ -367,7 +369,8 @@ export const getDashboardGroupedCharts = createSelector(
 export const getDashboardElementUrlProps = createStructuredSelector({
   countriesPanel: getCountriesPanel,
   commoditiesPanel: getCommoditiesPanel,
+  destinationsPanel: getDestinationsPanel,
   selectedYears: getDashboardSelectedYears,
-  selectedResizeBy: getSelectedResizeBy,
-  selectedRecolorBy: getSelectedRecolorBy
+  selectedResizeBy: getDashboardSelectedResizeBy,
+  selectedRecolorBy: getDashboardSelectedRecolorBy
 });

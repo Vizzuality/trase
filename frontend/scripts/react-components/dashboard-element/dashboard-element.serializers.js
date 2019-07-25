@@ -20,4 +20,19 @@ export const countriesPanel = activeItemsSerializer;
 export const sourcesPanel = activeItemsSerializer;
 export const commoditiesPanel = activeItemsSerializer;
 export const destinationsPanel = activeItemsSerializer;
-export const companiePanel = activeItemsSerializer;
+export const companiesPanel = activeItemsSerializer;
+
+const indicatorsSerializer = {
+  stringify(prop, DONT_SERIALIZE) {
+    if (!prop) {
+      return DONT_SERIALIZE;
+    }
+    return prop.attributeId;
+  },
+  parse(param) {
+    return param;
+  }
+};
+
+export const selectedResizeBy = indicatorsSerializer;
+export const selectedRecolorBy = indicatorsSerializer;

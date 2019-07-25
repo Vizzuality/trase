@@ -132,7 +132,9 @@ const store = createStore(
         'selectedResizeBy',
         'selectedRecolorBy',
         'countriesPanel',
-        'commoditiesPanel'
+        'commoditiesPanel',
+        'destinationsPanel',
+        'companiesPanel'
       ]
     })
   },
