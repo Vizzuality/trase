@@ -172,10 +172,8 @@ class DashboardPanel extends Component {
     }
     return (
       <>
-        {[DASHBOARD_STEPS.companies, DASHBOARD_STEPS.destinations].includes(step) ? (
+        {[DASHBOARD_STEPS.companies, DASHBOARD_STEPS.destinations].includes(step) && (
           <Heading size="lg" as="span" weight="bold">{`${translateText('(Optional)')} `}</Heading>
-        ) : (
-          ''
         )}
         {translateText('Choose one or several')}
         <Heading
@@ -217,7 +215,6 @@ class DashboardPanel extends Component {
       editMode && mandatoryFieldsSelected
         ? { onSelectStep: selectedStep => setStep(selectedStep) }
         : {};
-    // if (step === DASHBOARD_STEPS.welcome) return 'Hola';
 
     return (
       <div className="c-dashboard-panel">
