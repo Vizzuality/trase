@@ -10,16 +10,11 @@ function StepsTracker(props) {
 
   const ItemComponent = itemProps =>
     onSelectStep && !itemProps.isActive ? (
-      <a
-        role="button"
-        tabIndex={-1}
-        onClick={() => onSelectStep(itemProps.stepIndex + 1)}
-        {...itemProps}
-      >
+      <button onClick={() => onSelectStep(itemProps.stepIndex + 1)} className={itemProps.className}>
         {itemProps.children}
-      </a>
+      </button>
     ) : (
-      <div {...itemProps}>{itemProps.children}</div>
+      <div className={itemProps.className}>{itemProps.children}</div>
     );
 
   return (
