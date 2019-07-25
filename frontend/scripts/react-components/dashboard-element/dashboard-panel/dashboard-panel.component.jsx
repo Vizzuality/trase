@@ -208,7 +208,7 @@ class DashboardPanel extends Component {
     } = this.props;
 
     const handleGoToDashboard = () => {
-      goToDashboard();
+      goToDashboard({ dirtyBlocks, dynamicSentenceParts });
       closeModal();
     };
 
