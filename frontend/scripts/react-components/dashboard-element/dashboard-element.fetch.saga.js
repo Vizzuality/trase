@@ -227,6 +227,7 @@ export function* fetchDashboardCharts() {
     },
     x => !!x
   );
+
   if (!params.commodity_id || !params.country_id || !params.start_year || !params.end_year) {
     return;
   }

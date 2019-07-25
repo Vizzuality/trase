@@ -40,7 +40,9 @@ const dashboardElementReducer = {
           'selectedResizeBy',
           'selectedRecolorBy',
           'countriesPanel',
-          'commoditiesPanel'
+          'commoditiesPanel',
+          'destinationsPanel',
+          'companiesPanel'
         ]
       });
       return newState;

@@ -1,4 +1,14 @@
-import { take, select, all, fork, put, takeLatest, cancel, takeEvery } from 'redux-saga/effects';
+import {
+  take,
+  select,
+  all,
+  fork,
+  put,
+  takeLatest,
+  cancel,
+  takeEvery,
+  takeLeading
+} from 'redux-saga/effects';
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import {
@@ -34,10 +44,12 @@ import {
 import { DASHBOARD_STEPS } from 'constants';
 
 export function* fetchMissingDashboardPanelItems() {
-  function* fetchMissingItems() {
+  function* fetchMissingItems(action) {
+    if (action?.meta?.location?.kind === 'redirect') {
+      return;
+    }
     const panelsValues = yield select(getDashboardPanelsValues);
     const dashboardElement = yield select(state => state.dashboardElement);
-
     if (panelsValues.countries === null && dashboardElement.countriesPanel.activeItems.length > 0) {
       yield fork(getMissingDashboardPanelItems, dashboardElement, 'countries', null, {
         isOverview: true
@@ -52,9 +64,18 @@ export function* fetchMissingDashboardPanelItems() {
         isOverview: true
       });
     }
+
+    if (
+      panelsValues.destinations === null &&
+      dashboardElement.destinationsPanel.activeItems.length > 0
+    ) {
+      yield fork(getMissingDashboardPanelItems, dashboardElement, 'destinations', null, {
+        isOverview: true
+      });
+    }
   }
 
-  yield takeLatest('dashboardElement', fetchMissingItems);
+  yield takeLeading('dashboardElement', fetchMissingItems);
 }
 
 export function* onMissingItemDownload(action) {
@@ -165,7 +186,7 @@ export function* onTabChange(action) {
   const { activeTab } = dashboardElement[panelName] || {};
   const activePanelId = panel || dashboardElement.activePanelId;
   const currentTabId = activeTab && activeTab.id;
-  if (!dashboardElement.data.sources[currentTabId]) {
+  if (dashboardElement.activePanelId && !dashboardElement.data.sources[currentTabId]) {
     yield fork(getDashboardPanelData, dashboardElement, activePanelId);
   }
 }
@@ -277,7 +298,6 @@ function* updateIndicatorsOnItemChange() {
   const contextSelected =
     dashboardElement.countriesPanel.activeItems.length > 0 &&
     dashboardElement.commoditiesPanel.activeItems.length > 0;
-
   if (contextSelected) {
     const filters = yield select(getDashboardFiltersProps);
     let years = dashboardElement.selectedYears;
