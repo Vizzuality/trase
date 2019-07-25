@@ -56,6 +56,7 @@ export const getDirtyBlocks = createSelector(
 
 const getPanelActiveItems = (panel, data) => {
   const hasTabs = !Array.isArray(data);
+
   if (
     (hasTabs && Object.keys(data).length === 0) ||
     (!hasTabs && data.length === 0) ||
@@ -67,12 +68,14 @@ const getPanelActiveItems = (panel, data) => {
   }
   const list = hasTabs ? data[panel.activeTab.id] : data;
   const dict = list.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
-  return panel.activeItems
+  const items = panel.activeItems
     .map(id => dict[id] && { ...dict[id], name: dict[id].name.toLowerCase() })
     .filter(Boolean);
+
+  return items.length > 0 ? items : null;
 };
 
-const getCountriesActiveItems = createSelector(
+export const getCountriesActiveItems = createSelector(
   [getCountriesPanel, getCountriesData],
   getPanelActiveItems
 );
@@ -131,6 +134,7 @@ export const getDynamicSentence = createSelector(
       : `Your dashboard will include ${commoditiesPanelSentence}`;
     const capitalizeCommodities = editMode ? { transform: 'capitalize' } : {};
     const sourcesValues = panelsValues.sources || panelsValues.countries;
+    console.log(sourcesValues);
     return [
       {
         panel: 'commodities',
@@ -362,6 +366,8 @@ export const getDashboardGroupedCharts = createSelector(
 );
 
 export const getDashboardElementUrlProps = createStructuredSelector({
+  countriesPanel: getCountriesPanel,
+  commoditiesPanel: getCommoditiesPanel,
   selectedYears: getDashboardSelectedYears,
   selectedResizeBy: getSelectedResizeBy,
   selectedRecolorBy: getSelectedRecolorBy

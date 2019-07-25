@@ -62,7 +62,8 @@ class DashboardPanel extends Component {
       commoditiesPanel,
       setSearchResult,
       loading,
-      step
+      step,
+      countriesActiveItems
     } = this.props;
     switch (step) {
       case DASHBOARD_STEPS.sources:
@@ -81,7 +82,7 @@ class DashboardPanel extends Component {
             getSearchResults={getSearchResults}
             loadingMoreItems={sourcesPanel.loadingItems}
             clearItems={() => clearActiveItems(activePanelId)}
-            activeCountryItems={countriesPanel.activeItems}
+            activeCountryItems={countriesActiveItems}
             activeSourceTab={sourcesPanel.activeTab}
             activeSourceItem={sourcesPanel.activeItems}
             onSelectCountry={item => setActiveItem(item, 'countries')}
@@ -251,6 +252,7 @@ class DashboardPanel extends Component {
 
 DashboardPanel.propTypes = {
   tabs: PropTypes.array,
+  onBack: PropTypes.func,
   sources: PropTypes.object,
   countries: PropTypes.array,
   dirtyBlocks: PropTypes.array,
@@ -259,13 +261,16 @@ DashboardPanel.propTypes = {
   goToDashboard: PropTypes.func,
   commodities: PropTypes.array,
   activePanelId: PropTypes.string,
+  step: PropTypes.number.isRequired,
   loading: PropTypes.bool.isRequired,
   commoditiesPanel: PropTypes.object,
+  setStep: PropTypes.func.isRequired,
   editMode: PropTypes.bool.isRequired,
+  isDisabled: PropTypes.bool.isRequired,
   dynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
-  onBack: PropTypes.func,
-  setStep: PropTypes.func.isRequired,
+  closeModal: PropTypes.func.isRequired,
+  countriesActiveItems: PropTypes.array,
   setActiveTab: PropTypes.func.isRequired,
   setActiveItems: PropTypes.func.isRequired,
   setActiveItem: PropTypes.func.isRequired,
@@ -276,10 +281,7 @@ DashboardPanel.propTypes = {
   getSearchResults: PropTypes.func.isRequired,
   companiesPanel: PropTypes.object.isRequired,
   countriesPanel: PropTypes.object.isRequired,
-  destinationsPanel: PropTypes.object.isRequired,
-  step: PropTypes.number.isRequired,
-  isDisabled: PropTypes.bool.isRequired,
-  closeModal: PropTypes.func.isRequired
+  destinationsPanel: PropTypes.object.isRequired
 };
 
 export default DashboardPanel;

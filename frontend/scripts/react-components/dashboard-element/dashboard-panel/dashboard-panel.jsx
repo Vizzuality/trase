@@ -15,7 +15,8 @@ import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/d
 import {
   getActivePanelTabs,
   getDynamicSentence,
-  getIsDisabled
+  getIsDisabled,
+  getCountriesActiveItems
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { getCountryNamesByCountryId } from 'reducers/app.selectors';
 
@@ -44,10 +45,11 @@ const mapStateToProps = (state, ownProps) => {
     destinationsPanel,
     companiesPanel,
     commoditiesPanel,
-    countryNames: getCountryNamesByCountryId(state),
     tabs: getActivePanelTabs(state),
+    isDisabled: getIsDisabled(state, ownProps),
     dynamicSentenceParts: getDynamicSentence(state),
-    isDisabled: getIsDisabled(state, ownProps)
+    countryNames: getCountryNamesByCountryId(state),
+    countriesActiveItems: getCountriesActiveItems(state)
   };
 };
 

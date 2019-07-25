@@ -59,7 +59,7 @@ DestinationsPanel.propTypes = {
   loadingMoreItems: PropTypes.bool,
   loading: PropTypes.bool,
   searchDestinations: PropTypes.array,
-  activeDestinations: PropTypes.object,
+  activeDestinations: PropTypes.array,
   getMoreItems: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
   onSelectDestinationValue: PropTypes.func.isRequired
