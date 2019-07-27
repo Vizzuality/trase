@@ -12,26 +12,12 @@ import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.co
 import cx from 'classnames';
 import formatValue from 'utils/formatValue';
 import xor from 'lodash/xor';
-import greatCircle from '@turf/great-circle';
-import { geoPath } from 'd3-geo';
-import projections from 'react-simple-maps/lib/projections';
 
 import 'scripts/react-components/shared/world-map/world-map.scss';
 
 class WorldMap extends React.PureComponent {
-  static buildCurves(s, e, line) {
-    const arc = greatCircle(line.coordinates.start, line.coordinates.end, { offset: 100 });
-    const projection = projections(
-      800,
-      450,
-      {
-        scale: 145
-      },
-      'robinson'
-    );
-    const pathMaker = geoPath().projection(projection);
-    const path = pathMaker(arc);
-    return path;
+  static buildCurves(start, end, line) {
+    return line.arc;
   }
 
   static isDestinationCountry(iso, countries) {
@@ -149,10 +135,10 @@ class WorldMap extends React.PureComponent {
         <ComposableMap
           className={cx('c-world-map', className)}
           projection="robinson"
-          style={{ width: '100%', height: 'auto' }}
+          style={{ width: '100%', height: 410 }}
           projectionConfig={{ scale: 145 }}
         >
-          <ZoomableGroup center={[0, 0]}>
+          <ZoomableGroup center={[20, 0]}>
             <Geographies geography="/vector_layers/WORLD.topo.json" disableOptimization>
               {this.renderGeographies}
             </Geographies>
