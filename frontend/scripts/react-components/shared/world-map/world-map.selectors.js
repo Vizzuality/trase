@@ -63,7 +63,7 @@ function buildCustomArc(originCoords, destinationCoords) {
 }
 
 function buildGreatCircleArc(originCoords, destinationCoords) {
-  const arc = greatCircle(originCoords, destinationCoords, { offset: 100 });
+  const arc = greatCircle(originCoords, destinationCoords, { offset: 100, npoints: 50 });
   if (arc.geometry.type === 'MultiLineString') {
     return buildCustomArc(originCoords, destinationCoords);
   }
