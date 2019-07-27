@@ -26,8 +26,17 @@ $circle-dot-size: $circle-size / 2;
         border: 2px solid $charcoal-grey;
       }
 
-      .steps-tracker-segment {
-        opacity: 0.4;
+      &:not(.-selectable) {
+        .steps-tracker-segment {
+          opacity: 0.4;
+        }
+      }
+
+      .steps-tracker-circle {
+        &::before,
+        &::after {
+          display: none;
+        }
       }
     }
 
@@ -66,22 +75,65 @@ $circle-dot-size: $circle-size / 2;
       }
     }
 
-  }
+    &.-selectable {
+      &:not(.-done) {
+        .steps-tracker-circle {
+          &::before,
+          &::after {
+            height: 2px;
+          }
+        }
+      }
 
-  .steps-tracker-item {
-    position: relative;
-    width: $circle-size;
-    padding: $label-height 0 0;
-    height: $item-height;
-  }
+      &:first-child {
+        .steps-tracker-circle::before {
+          display: none;
+        }
+      }
 
-  .steps-tracker-label  {
-    position: absolute;
-    left: 50%;
-    top: 0;
-    transform: translateX(-50%);
-    height: $label-height;
-    white-space: nowrap;
+      &:last-child {
+        .steps-tracker-circle::after {
+          display: none;
+        }
+      }
+    }
+
+    .steps-tracker-item {
+      position: relative;
+      display: block;
+      width: $circle-size;
+      padding: $label-height 0 0;
+      height: $item-height;
+    }
+
+    .steps-tracker-label  {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      height: $label-height;
+      white-space: nowrap;
+    }
+
+    &.-selectable:not(.-active) {
+      .steps-tracker-item {
+        cursor: pointer;
+        outline: none;
+
+        &:hover {
+          .steps-tracker-circle-dot {
+            height: $circle-dot-size + 4px;
+            width: $circle-dot-size + 4px;
+          }
+
+          .steps-tracker-label  {
+            > span {
+              font-size: $font-size-x-regular + 1px;
+            }
+          }
+        }
+      }
+    }
   }
 
   .steps-tracker-circle {

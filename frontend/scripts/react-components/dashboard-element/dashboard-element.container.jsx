@@ -7,7 +7,8 @@ import {
   getDirtyBlocks,
   getDynamicSentence,
   getDashboardFiltersProps,
-  getDashboardGroupedCharts
+  getDashboardGroupedCharts,
+  getEditMode
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { getPanelId } from 'utils/dashboardPanel';
 import {
@@ -26,7 +27,8 @@ const mapStateToProps = state => {
     groupedCharts: getDashboardGroupedCharts(state),
     filters: getDashboardFiltersProps(state),
     dynamicSentenceParts: getDynamicSentence(state),
-    showModalOnStart: !(dirtyBlocks.countries && dirtyBlocks.commodities)
+    showModalOnStart: !(dirtyBlocks.countries && dirtyBlocks.commodities),
+    editMode: getEditMode(state)
   };
 };
 
@@ -55,7 +57,8 @@ class DashboardElementContainer extends React.Component {
     setSelectedYears: PropTypes.func.isRequired,
     setSelectedResizeBy: PropTypes.func.isRequired,
     setSelectedRecolorBy: PropTypes.func.isRequired,
-    setDashboardActivePanel: PropTypes.func.isRequired
+    setDashboardActivePanel: PropTypes.func.isRequired,
+    editMode: PropTypes.bool
   };
 
   hasVisitedBefore = {
@@ -70,7 +73,6 @@ class DashboardElementContainer extends React.Component {
 
   state = {
     modalOpen: this.props.showModalOnStart,
-    editMode: false,
     step: this.hasVisitedBefore.get() ? DASHBOARD_STEPS.sources : DASHBOARD_STEPS.welcome
   };
 
@@ -94,15 +96,16 @@ class DashboardElementContainer extends React.Component {
     this.setState({ modalOpen: false });
   };
 
-  reopenPanel = step => {
+  reopenPanel = () => {
     this.props.editDashboard();
-    this.setState({ step, editMode: true, modalOpen: true });
+    this.setState({ step: 0, modalOpen: true });
   };
 
   updateStep = step => this.setState({ step });
 
   render() {
-    const { step, modalOpen, editMode } = this.state;
+    const { editMode } = this.props;
+    const { step, modalOpen } = this.state;
     const {
       groupedCharts,
       goToRoot,

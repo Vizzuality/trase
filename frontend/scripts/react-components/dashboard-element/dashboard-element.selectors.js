@@ -2,10 +2,12 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import isEmpty from 'lodash/isEmpty';
 import intersection from 'lodash/intersection';
 import range from 'lodash/range';
+import capitalize from 'lodash/capitalize';
 import { getPanelId as getPanelName } from 'utils/dashboardPanel';
 import { makeGetResizeByItems, makeGetRecolorByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
 
+export const getEditMode = state => state.dashboardElement.editMode;
 const getCountriesPanel = state => state.dashboardElement.countriesPanel;
 const getSourcesPanel = state => state.dashboardElement.sourcesPanel;
 const getDestinationsPanel = state => state.dashboardElement.destinationsPanel;
@@ -51,7 +53,8 @@ export const getDynamicSentence = createSelector(
     getSourcesPanel,
     getDestinationsPanel,
     getCompaniesPanel,
-    getCommoditiesPanel
+    getCommoditiesPanel,
+    getEditMode
   ],
   (
     dirtyBlocks,
@@ -59,7 +62,8 @@ export const getDynamicSentence = createSelector(
     sourcesPanel,
     destinationsPanel,
     companiesPanel,
-    commoditiesPanel
+    commoditiesPanel,
+    editMode
   ) => {
     if (Object.values(dirtyBlocks).every(block => !block)) {
       return [];
@@ -88,14 +92,18 @@ export const getDynamicSentence = createSelector(
     };
 
     const sourcesValue = getActivePanelItem('sources') || getActivePanelItem('countries');
+    const commoditiesPanelSentence = `${getActivePanelItem('commodities') ? '' : 'commodities'}`;
+    const commoditiesPrefix = editMode
+      ? capitalize(commoditiesPanelSentence)
+      : `Your dashboard will include ${commoditiesPanelSentence}`;
+    const capitalizeCommodities = editMode ? { transform: 'capitalize' } : {};
     return [
       {
         panel: 'commodities',
         id: 'commodities',
-        prefix: `Your dashboard will include ${
-          getActivePanelItem('commodities') ? '' : 'commodities'
-        }`,
-        value: getActivePanelItem('commodities')
+        prefix: commoditiesPrefix,
+        value: getActivePanelItem('commodities'),
+        ...capitalizeCommodities
       },
       {
         panel: 'sources',
@@ -137,6 +145,9 @@ export const getIsDisabled = createSelector(
   (dynamicSentence, step) => {
     if (dynamicSentence.length === 0 || typeof step === 'undefined') return true;
     const currentPanel = getPanelName(step);
+    if (currentPanel === 'welcome') {
+      return false;
+    }
     const currentSentencePart = dynamicSentence.find(p => p.panel === currentPanel);
     if (!currentSentencePart.optional && !currentSentencePart.value) return true;
     return false;

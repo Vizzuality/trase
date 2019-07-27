@@ -75,6 +75,9 @@ export function* fetchDataOnPanelChange() {
   while (true) {
     const activePanel = yield take(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL);
     const { activePanelId } = activePanel.payload;
+    if (activePanelId === 'welcome') {
+      return;
+    }
     const newPanelState = yield select(state => state.dashboardElement);
     const changes = hasChanged(newPanelState);
     if (changes) {
