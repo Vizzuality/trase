@@ -86,8 +86,9 @@ class DashboardElementContainer extends React.Component {
     const { step } = this.state;
     if (step !== prevState.step) {
       const { setDashboardActivePanel } = this.props;
-      if (step !== DASHBOARD_STEPS.indicators) {
-        setDashboardActivePanel(getPanelId(step));
+      const panelId = getPanelId(step);
+      if (panelId !== null) {
+        setDashboardActivePanel(panelId);
       }
     }
   }

@@ -9,7 +9,6 @@ import {
   setDashboardPanelActiveItems,
   getDashboardPanelSearchResults,
   setDashboardPanelActiveItemsWithSearch,
-  setDashboardActivePanel,
   goToDashboard as goToDashboardFn
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.component';
@@ -60,7 +59,6 @@ const mapDispatchToProps = {
   setActiveItem: setDashboardPanelActiveItem,
   getSearchResults: getDashboardPanelSearchResults,
   setSearchResult: setDashboardPanelActiveItemsWithSearch,
-  setActivePanel: setDashboardActivePanel,
   goToDashboard: goToDashboardFn
 };
 

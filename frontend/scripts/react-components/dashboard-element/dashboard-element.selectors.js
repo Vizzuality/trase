@@ -3,12 +3,12 @@ import isEmpty from 'lodash/isEmpty';
 import intersection from 'lodash/intersection';
 import range from 'lodash/range';
 import capitalize from 'lodash/capitalize';
-import { getPanelId as getPanelName } from 'utils/dashboardPanel';
+import { getPanelId } from 'utils/dashboardPanel';
 import { makeGetResizeByItems, makeGetRecolorByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
 
-export const getEditMode = state => state.dashboardElement.editMode;
 const getCountriesPanel = state => state.dashboardElement.countriesPanel;
+
 const getSourcesPanel = state => state.dashboardElement.sourcesPanel;
 const getDestinationsPanel = state => state.dashboardElement.destinationsPanel;
 const getCompaniesPanel = state => state.dashboardElement.companiesPanel;
@@ -23,6 +23,8 @@ const getSelectedYears = state => state.dashboardElement.selectedYears;
 const getSelectedResizeBy = state => state.dashboardElement.selectedResizeBy;
 const getSelectedRecolorBy = state => state.dashboardElement.selectedRecolorBy;
 const getDashboardCharts = state => state.dashboardElement.charts;
+
+export const getEditMode = state => state.dashboardElement.editMode;
 
 export const getActivePanelTabs = createSelector(
   [getActiveDashboardPanel, getDashboardPanelTabs],
@@ -143,13 +145,17 @@ export const getDynamicSentence = createSelector(
 export const getIsDisabled = createSelector(
   [getDynamicSentence, (state, ownProps) => ownProps.step],
   (dynamicSentence, step) => {
-    if (dynamicSentence.length === 0 || typeof step === 'undefined') return true;
-    const currentPanel = getPanelName(step);
-    if (currentPanel === 'welcome') {
+    if (dynamicSentence.length === 0 || typeof step === 'undefined') {
+      return true;
+    }
+    const currentPanel = getPanelId(step);
+    if (currentPanel === null) {
       return false;
     }
     const currentSentencePart = dynamicSentence.find(p => p.panel === currentPanel);
-    if (!currentSentencePart.optional && !currentSentencePart.value) return true;
+    if (!currentSentencePart.optional && !currentSentencePart.value) {
+      return true;
+    }
     return false;
   }
 );
