@@ -24,7 +24,7 @@ export const companiesPanel = activeItemsSerializer;
 
 const indicatorsSerializer = {
   stringify(prop, DONT_SERIALIZE) {
-    if (!prop) {
+    if (!prop || !prop.attributeId) {
       return DONT_SERIALIZE;
     }
     return prop.attributeId;

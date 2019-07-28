@@ -27,6 +27,7 @@ import {
   DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
   DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS,
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
+  DASHBOARD_ELEMENT__GET_MISSING_DATA,
   DASHBOARD_ELEMENT__SET_MISSING_DATA
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import {
@@ -75,7 +76,7 @@ export function* fetchMissingDashboardPanelItems() {
     }
   }
 
-  yield takeLeading('dashboardElement', fetchMissingItems);
+  yield takeLeading(DASHBOARD_ELEMENT__GET_MISSING_DATA, fetchMissingItems);
 }
 
 export function* onMissingItemDownload(action) {

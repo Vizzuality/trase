@@ -26,6 +26,7 @@ export const DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS =
 export const DASHBOARD_ELEMENT__SET_CHARTS_LOADING = 'DASHBOARD_ELEMENT__SET_CHARTS_LOADING';
 export const DASHBOARD_ELEMENT__EDIT_DASHBOARD = 'DASHBOARD_ELEMENT__EDIT_DASHBOARD';
 export const DASHBOARD_ELEMENT__GO_TO_DASHBOARD = 'DASHBOARD_ELEMENT__GO_TO_DASHBOARD';
+export const DASHBOARD_ELEMENT__GET_MISSING_DATA = 'DASHBOARD_ELEMENT__GET_MISSING_DATA';
 export const DASHBOARD_ELEMENT__SET_MISSING_DATA = 'DASHBOARD_ELEMENT__SET_MISSING_DATA';
 
 export const getDashboardPanelParams = (state, optionsType, options = {}) => {
@@ -167,4 +168,8 @@ export const setMoreDashboardPanelData = ({ key, tab, data, direction }) => ({
 export const setMissingDashboardPanelItems = (key, data, tab) => ({
   type: DASHBOARD_ELEMENT__SET_MISSING_DATA,
   payload: { key, tab, data }
+});
+
+export const getDashboardMissingPanelItems = () => ({
+  type: DASHBOARD_ELEMENT__GET_MISSING_DATA
 });

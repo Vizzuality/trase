@@ -198,12 +198,10 @@ export const getIsDisabled = createSelector(
 export const getDashboardsContext = createSelector(
   [getCountriesActiveItems, getCommoditiesActiveItems, getAppContexts],
   (countriesActiveItems, commoditiesActiveItems, contexts) => {
-    const [{ name: countryName } = {}] = countriesActiveItems || [];
-    const [{ name: commodityName } = {}] = commoditiesActiveItems || [];
+    const [{ id: countryId } = {}] = countriesActiveItems || [];
+    const [{ id: commodityId } = {}] = commoditiesActiveItems || [];
     const context = contexts.find(
-      ctx =>
-        `${ctx.countryName}`.toLowerCase() === `${countryName}`.toLowerCase() &&
-        `${ctx.commodityName}`.toLowerCase() === `${commodityName}`.toLowerCase()
+      ctx => ctx.countryId === countryId && ctx.commodityId === commodityId
     );
 
     return context || null;
@@ -217,16 +215,16 @@ const getDashboardContextResizeBy = createSelector(
 
 const getDashboardContextRecolorBy = createSelector(
   getDashboardsContext,
-  getSelectedYears,
-  (context, selectedYears) => {
+  context => {
     if (!context) return [];
     const emptyOption = {
       position: 0,
       groupNumber: -1,
       label: 'No selection',
       name: 'none',
-      years: selectedYears || [],
-      value: null
+      years: [],
+      value: null,
+      attributeId: null
     };
     const contextRecolorByList = context.recolorBy.filter(
       item => !['LR_DEFICIT_PERC_PRIVATE_LAND', 'SMALLHOLDERS'].includes(item.name)
@@ -263,11 +261,11 @@ export const getDashboardSelectedResizeBy = createSelector(
 export const getDashboardSelectedRecolorBy = createSelector(
   [getSelectedRecolorBy, getDashboardContextRecolorBy],
   (selectedRecolorBy, contextRecolorByItems) => {
+    const attributeId = selectedRecolorBy || null;
     if (contextRecolorByItems.length === 0) {
-      const attributeId = selectedRecolorBy || null;
       return { label: 'Select an Indicator', value: attributeId, attributeId };
     }
-    return contextRecolorByItems.find(item => item.attributeId === selectedRecolorBy) || null;
+    return contextRecolorByItems.find(item => item.attributeId === attributeId) || null;
   }
 );
 
@@ -366,11 +364,24 @@ export const getDashboardGroupedCharts = createSelector(
   }
 );
 
+const getURLDashboardSelectedYears = createSelector(
+  [getDashboardSelectedYears, getDashboardsContext],
+  (selectedYears, dashboardContext) => {
+    if (
+      selectedYears[0] === dashboardContext?.defaultYear &&
+      selectedYears[1] === dashboardContext?.defaultYear
+    ) {
+      return null;
+    }
+    return selectedYears;
+  }
+);
+
 export const getDashboardElementUrlProps = createStructuredSelector({
   countriesPanel: getCountriesPanel,
   commoditiesPanel: getCommoditiesPanel,
   destinationsPanel: getDestinationsPanel,
-  selectedYears: getDashboardSelectedYears,
+  selectedYears: getURLDashboardSelectedYears,
   selectedResizeBy: getDashboardSelectedResizeBy,
   selectedRecolorBy: getDashboardSelectedRecolorBy
 });
