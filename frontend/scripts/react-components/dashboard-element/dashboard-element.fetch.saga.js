@@ -138,24 +138,14 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType, active
 
 export function* getMissingDashboardPanelItems(dashboardElement, optionsType, activeTab, options) {
   const params = getDashboardPanelParams(dashboardElement, optionsType, options);
-  const task = yield fork(setLoadingSpinner, 350, setDashboardPanelLoadingItems(true));
+  yield put(setDashboardChartsLoading(true));
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
     yield put(setMissingDashboardPanelItems(optionsType, data.data, activeTab));
-    if (task.isRunning()) {
-      task.cancel();
-    } else {
-      yield call(setLoadingSpinner, 750, setDashboardPanelLoadingItems(false));
-    }
   } catch (e) {
     console.error('Error', e);
-    if (task.isRunning()) {
-      task.cancel();
-    } else {
-      yield call(setLoadingSpinner, 750, setDashboardPanelLoadingItems(false));
-    }
   } finally {
     if (yield cancelled()) {
       if (NODE_ENV_DEV) console.error('Cancelled', url);
@@ -163,6 +153,7 @@ export function* getMissingDashboardPanelItems(dashboardElement, optionsType, ac
         source.cancel();
       }
     }
+    yield put(setDashboardChartsLoading(false));
   }
 }
 
