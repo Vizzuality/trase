@@ -4,7 +4,7 @@ import sortBy from 'lodash/sortBy';
 import kebabCase from 'lodash/kebabCase';
 import addApostrophe from 'utils/addApostrophe';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
-import { CHART_TYPES } from 'constants';
+import { CHART_TYPES, NODE_TYPE_PANELS } from 'constants';
 import camelCase from 'lodash/camelCase';
 import capitalize from 'lodash/capitalize';
 import { getDashboardsContext } from 'react-components/dashboard-element/dashboard-element.selectors';
@@ -197,19 +197,6 @@ const getPluralNodeType = nodeType => {
 const getNodeTypeName = pluralNodeType =>
   pluralNodeType === 'countries' ? 'importing countries' : pluralNodeType;
 
-const getFilterPreposition = filterKey => {
-  switch (filterKey) {
-    case 'companies':
-      return 'of';
-    case 'destinations':
-      return 'to';
-    case 'sources':
-      return 'in';
-    default:
-      return '';
-  }
-};
-
 export const makeGetGroupingActiveItem = () =>
   createSelector(
     [getGrouping, getActiveChartId],
@@ -243,21 +230,36 @@ export const makeGetTitle = () =>
     (meta, activeChartGrouping, config) => {
       if (!meta || !meta.info) return '';
       // adding 1 to the top_n to count in "other" aggregation
-      const topNPart = meta.info.top_n ? `Top ${meta.info.top_n + 1}` : null;
+      let topNPart = meta.info.top_n ? `Top ${meta.info.top_n + 1}` : null;
       let nodeTypePart = 'Selection overview';
       const nodeFilter = meta.info?.filter?.node;
-      if (meta.info.node_type) {
-        nodeTypePart = getNodeTypeName(getPluralNodeType(meta.info.node_type));
+      const nodeType = meta.info.node_type;
+      if (nodeType) {
+        nodeTypePart = getNodeTypeName(getPluralNodeType(nodeType));
       } else if (nodeFilter) {
         const label = activeChartGrouping ? '' : config?.yAxisLabel.text;
         nodeTypePart = `${capitalize(nodeFilter.name)}${addApostrophe(nodeFilter.name)} ${label}`;
       }
+
       let filterPart = '';
       const filterKey = meta.info.single_filter_key;
       if (filterKey) {
         const name = activeChartGrouping ? '' : capitalize(meta.info.filter[filterKey][0].name);
-        filterPart = `${getFilterPreposition(filterKey)} ${name}`;
+        filterPart = `of ${name}`;
       }
+
+      const nodeStep = NODE_TYPE_PANELS[nodeType];
+      const isNodeComparison =
+        meta.info.filter &&
+        meta.info.filter[nodeStep] &&
+        meta.info.filter[nodeStep].length &&
+        meta.info.filter[nodeStep].map(f => f.node_type === nodeType).filter(Boolean).length > 1;
+      if (isNodeComparison) {
+        topNPart = null;
+        nodeTypePart = capitalize(nodeTypePart);
+        filterPart = 'comparison';
+      }
+
       return [topNPart, nodeTypePart, filterPart].filter(Boolean).join(' ');
     }
   );

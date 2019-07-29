@@ -287,3 +287,12 @@ export const PROFILE_TYPES = {
 };
 
 export const DEFAULT_DASHBOARD_UNIT_FORMAT = '.4~s';
+
+export const NODE_TYPE_PANELS = {
+  IMPORTER: 'companies',
+  EXPORTER: 'companies',
+  BIOME: 'sources',
+  STATE: 'sources',
+  MUNICIPALITY: 'sources',
+  COUNTRY: 'destinations'
+};
