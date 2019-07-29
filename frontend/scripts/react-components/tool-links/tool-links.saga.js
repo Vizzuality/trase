@@ -43,9 +43,9 @@ function* fetchToolColumns() {
 
     const task = yield fork(setLoadingSpinner, 750, setToolFlowsLoading(true));
     yield fork(getToolColumnsData, selectedContext);
+    yield fork(getToolGeoColumnNodes, selectedContext);
     yield call(getToolLinksData);
     yield call(getToolNodesByLink, selectedContext);
-    yield call(getToolGeoColumnNodes, selectedContext);
 
     // TODO: remove this call, just here to split the refactor in stages
     yield put(loadMapVectorData());

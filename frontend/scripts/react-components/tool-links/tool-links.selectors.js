@@ -54,20 +54,15 @@ export const getSelectedRecolorBy = createSelector(
 );
 
 export const getSelectedBiomeFilter = createSelector(
-  [getToolBiomeFilterName, getSelectedContext, getToolNodes],
-  (selectedBiomeFilterName, selectedContext, nodes) => {
+  [getToolBiomeFilterName, getSelectedContext],
+  (selectedBiomeFilterName, selectedContext) => {
     if (!selectedBiomeFilterName || !selectedContext || selectedContext.filterBy.length === 0) {
       return null;
     }
 
-    const biomeFilter = selectedContext.filterBy[0].nodes.find(
+    return selectedContext.filterBy[0].nodes.find(
       filterBy => filterBy.name === selectedBiomeFilterName
     );
-
-    // TODO add the geoId from the backend
-    const biomeFilterNode = biomeFilter && nodes && nodes[biomeFilter.nodeId];
-
-    return { ...biomeFilter, geoId: biomeFilterNode && biomeFilterNode.geoId };
   }
 );
 
