@@ -412,14 +412,14 @@ test(DASHBOARD_ELEMENT__SET_ACTIVE_TAB, () => {
     type: DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
     payload: {
       panel: 'sources',
-      activeTab: { id: 3, name: 'MUNICIPALITY' }
+      activeTab: 3
     }
   };
   const state = {
     ...initialState,
     sourcesPanel: {
       ...initialState.sourcesPanel,
-      activeTab: { id: 1, name: 'BIOME' },
+      activeTab: 1,
       page: 4
     }
   };

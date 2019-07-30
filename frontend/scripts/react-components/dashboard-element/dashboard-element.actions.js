@@ -38,8 +38,8 @@ export const getDashboardPanelParams = (state, optionsType, options = {}) => {
     commoditiesPanel
   } = state;
   const { page, isOverview } = options;
-  const sourcesTab = sourcesPanel.activeTab && sourcesPanel.activeTab.id;
-  const companiesTab = companiesPanel.activeTab && companiesPanel.activeTab.id;
+  const sourcesTab = sourcesPanel.activeTab;
+  const companiesTab = companiesPanel.activeTab;
 
   const nodeTypesIds = {
     sources: sourcesTab,

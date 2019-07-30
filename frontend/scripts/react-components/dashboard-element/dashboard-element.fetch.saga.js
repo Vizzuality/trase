@@ -29,7 +29,7 @@ import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
 export function* getDashboardPanelData(dashboardElement, optionsType, options) {
   const panelId = dashboardElement.activePanelId;
   const { page, activeTab } = dashboardElement[`${panelId}Panel`];
-  const tab = activeTab && activeTab.id;
+  const tab = activeTab;
   const params = getDashboardPanelParams(dashboardElement, optionsType, {
     page,
     ...options
@@ -111,7 +111,7 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType, active
         direction,
         data: data.data,
         key: optionsType,
-        tab: activeTab && activeTab.id
+        tab: activeTab
       })
     );
     if (task.isRunning()) {
@@ -143,6 +143,7 @@ export function* getMissingDashboardPanelItems(dashboardElement, optionsType, ac
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
+
     yield put(setMissingDashboardPanelItems(optionsType, data.data, activeTab));
   } catch (e) {
     console.error('Error', e);

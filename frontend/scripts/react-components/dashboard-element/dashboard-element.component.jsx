@@ -99,10 +99,10 @@ class DashboardElement extends React.PureComponent {
   renderWidgets() {
     const { groupedCharts, filters } = this.props;
     return groupedCharts.charts.map((chart, widgetIndex) => (
-      <InView triggerOnce>
+      <InView triggerOnce key={chart.id}>
         {({ ref, inView }) => (
           <div
-            key={chart.id}
+            key={`${chart.id}-widget`}
             className="column small-12 medium-6"
             data-test="dashboard-widget-container"
             ref={ref}
