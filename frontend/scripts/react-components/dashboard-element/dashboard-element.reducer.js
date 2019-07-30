@@ -92,7 +92,7 @@ const dashboardElementReducer = {
     };
   },
   [DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA](state, action) {
-    const { key, data, tab, direction } = action.payload;
+    const { key, data, tab } = action.payload;
     const panelName = `${key}Panel`;
 
     if (data.length === 0) {
@@ -106,12 +106,11 @@ const dashboardElementReducer = {
     }
 
     const oldData = tab ? state.data[key][tab] : state.data[key];
-    let together;
-    if (direction === 'backward' && data.length > 0) {
-      together = [...data, ...oldData];
-    } else if (direction === 'forward' && data.length > 0) {
-      together = [...oldData, ...data];
-    }
+
+    // in case we preloaded some items, we make sure to avoid duplicates
+    const dataMap = data.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
+
+    const together = [...oldData.filter(item => !dataMap[item.id]), ...data];
     const newData = tab ? { ...state.data[key], [tab]: together } : together;
 
     return {
@@ -144,7 +143,11 @@ const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_PANEL_TABS](state, action) {
     const { data, key } = action.payload;
     const getSection = n => n.section && n.section.toLowerCase();
-    const tabs = data.reduce((acc, next) => ({ ...acc, [getSection(next)]: next.tabs }), {});
+    const panelTabs = data.filter(item => getSection(item) === key);
+    const tabs = panelTabs.reduce(
+      (acc, next) => ({ ...acc, [getSection(next)]: next.tabs }),
+      state.tabs
+    );
     const panelName = `${key}Panel`;
     return {
       ...state,
