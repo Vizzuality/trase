@@ -203,8 +203,7 @@ describe(DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA, () => {
       payload: {
         tab: null,
         data: moreData,
-        key: 'commodities',
-        direction: 'forward'
+        key: 'commodities'
       }
     };
     const state = {
@@ -230,8 +229,7 @@ describe(DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA, () => {
       payload: {
         tab: 1,
         data: moreData,
-        key: 'sources',
-        direction: 'forward'
+        key: 'sources'
       }
     };
     const state = {
@@ -263,8 +261,7 @@ describe(DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA, () => {
       payload: {
         tab: 1,
         data: [],
-        key: 'commodities',
-        direction: 'forward'
+        key: 'commodities'
       }
     };
     const state = {

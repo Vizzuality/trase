@@ -111,9 +111,9 @@ export const clearDashboardPanels = panels => ({
   payload: { panels }
 });
 
-export const setDashboardPanelPage = (page, direction) => ({
+export const setDashboardPanelPage = page => ({
   type: DASHBOARD_ELEMENT__SET_PANEL_PAGE,
-  payload: { page, direction }
+  payload: { page }
 });
 
 export const setDashboardPanelLoadingItems = loadingItems => ({
@@ -160,9 +160,9 @@ export const goToDashboard = payload => ({
   payload
 });
 
-export const setMoreDashboardPanelData = ({ key, tab, data, direction }) => ({
+export const setMoreDashboardPanelData = ({ key, tab, data }) => ({
   type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
-  payload: { data, key, direction, tab }
+  payload: { data, key, tab }
 });
 
 export const setMissingDashboardPanelItems = (key, data, tab) => ({

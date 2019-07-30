@@ -44,6 +44,11 @@ import {
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { DASHBOARD_STEPS } from 'constants';
 
+const hasActiveItems = (_state, panelId) => {
+  const panel = _state[`${panelId}Panel`];
+  return panel.activeItems.length > 0;
+};
+
 export function* fetchMissingDashboardPanelItems() {
   function* fetchMissingItems(action) {
     if (action?.meta?.location?.kind === 'redirect') {
@@ -120,17 +125,28 @@ export function* fetchDashboardPanelInitialData(action) {
   const state = yield select();
   const { dashboardElement } = state;
 
+  const tab = dashboardElement[`${activePanelId}Panel`].activeTab;
+
   // avoid dispatching getDashboardPanelData through getDashboardPanelSectionTabs for companies
   if (dashboardElement.activePanelId === 'companies') {
     yield fork(getDashboardPanelSectionTabs, dashboardElement, activePanelId);
   } else if (activePanelId === 'sources') {
-    yield fork(getDashboardPanelData, dashboardElement, 'countries');
+    const countriesSaga = hasActiveItems(dashboardElement, 'countries')
+      ? getMoreDashboardPanelData
+      : getDashboardPanelData;
+    yield fork(countriesSaga, dashboardElement, 'countries');
     // Fetch regions
-    if (!isEmpty(dashboardElement.countriesPanel.activeItems)) {
-      yield fork(getDashboardPanelData, dashboardElement, activePanelId);
+    if (dashboardElement.countriesPanel.activeItems.length > 0) {
+      const sourcesSaga = hasActiveItems(dashboardElement, activePanelId)
+        ? getMoreDashboardPanelData
+        : getDashboardPanelData;
+      yield fork(sourcesSaga, dashboardElement, activePanelId, tab);
     }
   } else {
-    yield fork(getDashboardPanelData, dashboardElement, activePanelId);
+    const saga = hasActiveItems(dashboardElement, activePanelId)
+      ? getMoreDashboardPanelData
+      : getDashboardPanelData;
+    yield fork(saga, dashboardElement, activePanelId, tab);
   }
 }
 
@@ -138,18 +154,19 @@ export function* fetchDashboardPanelInitialData(action) {
  * Checks if the activeItem in one of the panels has changed, if it has changed it fetches the panel data.
  */
 export function* fetchDataOnPanelChange() {
+  const panelsOrder = ['sources', 'commodities', 'destinations', 'companies'];
   let loaded = [];
   let previousPanelState = null;
   let task = null;
-  const hasChanged = panel => {
-    if (!previousPanelState) return false;
-    return (
-      panel.sourcesPanel.activeItems !== previousPanelState.sourcesPanel.activeItems ||
+  const hasChangedAt = panel => {
+    if (!previousPanelState) return -1;
+    return [
       panel.countriesPanel.activeItems !== previousPanelState.countriesPanel.activeItems ||
-      panel.commoditiesPanel.activeItems !== previousPanelState.commoditiesPanel.activeItems ||
-      panel.companiesPanel.activeItems !== previousPanelState.companiesPanel.activeItems ||
-      panel.destinationsPanel.activeItems !== previousPanelState.destinationsPanel.activeItems
-    );
+        panel.sourcesPanel.activeItems !== previousPanelState.sourcesPanel.activeItems,
+      panel.commoditiesPanel.activeItems !== previousPanelState.commoditiesPanel.activeItems,
+      panel.destinationsPanel.activeItems !== previousPanelState.destinationsPanel.activeItems,
+      panel.companiesPanel.activeItems !== previousPanelState.companiesPanel.activeItems
+    ].findIndex(value => value === true);
   };
 
   while (true) {
@@ -157,9 +174,9 @@ export function* fetchDataOnPanelChange() {
     const { activePanelId } = activePanel.payload;
 
     const newPanelState = yield select(state => state.dashboardElement);
-    const changes = hasChanged(newPanelState);
-    if (changes) {
-      loaded = [previousPanelState.activePanelId];
+    const changedAt = hasChangedAt(newPanelState);
+    if (changedAt !== -1) {
+      loaded = panelsOrder.slice(0, changedAt + 1);
     }
 
     if (!previousPanelState || !loaded.includes(activePanelId)) {
@@ -275,8 +292,7 @@ function* clearSubsequentPanels() {
 /**
  * Listens to DASHBOARD_ELEMENT__SET_PANEL_PAGE and fetches the data for the next page.
  */
-export function* onPageChange(action) {
-  const { direction } = action.payload;
+export function* onPageChange() {
   const { dashboardElement } = yield select();
   const panelName = `${dashboardElement.activePanelId}Panel`;
   const { activeTab } = dashboardElement[panelName];
@@ -284,8 +300,7 @@ export function* onPageChange(action) {
     getMoreDashboardPanelData,
     dashboardElement,
     dashboardElement.activePanelId,
-    activeTab,
-    direction
+    activeTab
   );
 }
 

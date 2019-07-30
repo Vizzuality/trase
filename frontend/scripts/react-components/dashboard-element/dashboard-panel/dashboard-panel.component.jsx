@@ -212,10 +212,6 @@ class DashboardPanel extends Component {
     };
 
     const mandatoryFieldsSelected = dirtyBlocks.countries && dirtyBlocks.commodities;
-    const selectStepProp =
-      editMode && mandatoryFieldsSelected
-        ? { onSelectStep: selectedStep => setStep(selectedStep) }
-        : {};
 
     return (
       <div className="c-dashboard-panel">
@@ -225,7 +221,7 @@ class DashboardPanel extends Component {
               label => ({ label })
             )}
             activeStep={step - 1}
-            {...selectStepProp}
+            onSelectStep={editMode && mandatoryFieldsSelected ? setStep : undefined}
           />
           <Heading className="dashboard-panel-title notranslate" align="center" size="lg">
             {this.renderTitleSentence()}

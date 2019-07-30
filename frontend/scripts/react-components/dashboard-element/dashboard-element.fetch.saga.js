@@ -98,7 +98,7 @@ export function* getDashboardPanelSectionTabs(dashboardElement, optionsType) {
   }
 }
 
-export function* getMoreDashboardPanelData(dashboardElement, optionsType, activeTab, direction) {
+export function* getMoreDashboardPanelData(dashboardElement, optionsType, activeTab) {
   const { page } = dashboardElement[`${dashboardElement.activePanelId}Panel`];
   const params = getDashboardPanelParams(dashboardElement, optionsType, { page });
   const task = yield fork(setLoadingSpinner, 350, setDashboardPanelLoadingItems(true));
@@ -108,7 +108,6 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType, active
     const { data } = yield call(fetchPromise);
     yield put(
       setMoreDashboardPanelData({
-        direction,
         data: data.data,
         key: optionsType,
         tab: activeTab
@@ -116,15 +115,11 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType, active
     );
     if (task.isRunning()) {
       task.cancel();
-    } else {
-      yield call(setLoadingSpinner, 750, setDashboardPanelLoadingItems(false));
     }
   } catch (e) {
     console.error('Error', e);
     if (task.isRunning()) {
       task.cancel();
-    } else {
-      yield call(setLoadingSpinner, 750, setDashboardPanelLoadingItems(false));
     }
   } finally {
     if (yield cancelled()) {
@@ -133,6 +128,7 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType, active
         source.cancel();
       }
     }
+    yield call(setLoadingSpinner, 750, setDashboardPanelLoadingItems(false));
   }
 }
 
@@ -143,7 +139,6 @@ export function* getMissingDashboardPanelItems(dashboardElement, optionsType, ac
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
-
     yield put(setMissingDashboardPanelItems(optionsType, data.data, activeTab));
   } catch (e) {
     console.error('Error', e);
