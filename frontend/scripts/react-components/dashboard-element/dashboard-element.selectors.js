@@ -62,11 +62,11 @@ const getPanelActiveItems = (panel, data) => {
     (!hasTabs && data.length === 0) ||
     panel.activeItems.length === 0 ||
     (hasTabs && !panel.activeTab) ||
-    (hasTabs && !data[panel.activeTab.id])
+    (hasTabs && !data[panel.activeTab])
   ) {
     return null;
   }
-  const list = hasTabs ? data[panel.activeTab.id] : data;
+  const list = hasTabs ? data[panel.activeTab] : data;
   const dict = list.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
   const items = panel.activeItems
     .map(id => dict[id] && { ...dict[id], name: dict[id].name.toLowerCase() })
@@ -127,7 +127,6 @@ export const getDynamicSentence = createSelector(
     if (Object.values(dirtyBlocks).every(block => !block)) {
       return [];
     }
-
     const commoditiesPanelSentence = `${panelsValues.commodities ? '' : 'commodities'}`;
     const commoditiesPrefix = editMode
       ? capitalize(commoditiesPanelSentence)
@@ -379,6 +378,7 @@ const getURLDashboardSelectedYears = createSelector(
 
 export const getDashboardElementUrlProps = createStructuredSelector({
   countriesPanel: getCountriesPanel,
+  sourcesPanel: getSourcesPanel,
   commoditiesPanel: getCommoditiesPanel,
   destinationsPanel: getDestinationsPanel,
   selectedYears: getURLDashboardSelectedYears,

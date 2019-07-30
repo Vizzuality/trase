@@ -39,7 +39,7 @@ function CompaniesPanel(props) {
       <Tabs
         tabs={tabs}
         onSelectTab={onSelectNodeTypeTab}
-        selectedTab={activeNodeTypeTab && activeNodeTypeTab.id}
+        selectedTab={activeNodeTypeTab}
         itemTabRenderer={i => i.name}
         getTabId={item => item.id}
         actionComponent={actionComponent}
@@ -86,7 +86,7 @@ CompaniesPanel.propTypes = {
   searchCompanies: PropTypes.array.isRequired,
   nodeTypeRenderer: PropTypes.func.isRequired,
   tabs: PropTypes.array.isRequired,
-  activeNodeTypeTab: PropTypes.object,
+  activeNodeTypeTab: PropTypes.number,
   onSelectNodeTypeTab: PropTypes.func.isRequired,
   actionComponent: PropTypes.node
 };

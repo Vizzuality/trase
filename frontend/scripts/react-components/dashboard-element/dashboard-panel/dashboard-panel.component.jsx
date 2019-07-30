@@ -86,11 +86,11 @@ class DashboardPanel extends Component {
             activeSourceTab={sourcesPanel.activeTab}
             activeSourceItem={sourcesPanel.activeItems}
             onSelectCountry={item => setActiveItem(item, 'countries')}
-            onSelectSourceTab={item => setActiveTab(item, activePanelId)}
+            onSelectSourceTab={item => setActiveTab(item?.id, activePanelId)}
             setSearchResult={item => setSearchResult(item, activePanelId)}
             onSelectSourceValue={item => setActiveItems(item, activePanelId)}
             nodeTypeRenderer={DashboardPanel.sourcesNodeTypeRenderer}
-            sources={sources[sourcesPanel.activeTab && sourcesPanel.activeTab.id] || []}
+            sources={sources[sourcesPanel.activeTab] || []}
           />
         );
       case DASHBOARD_STEPS.commodities:
@@ -123,7 +123,7 @@ class DashboardPanel extends Component {
         return (
           <CompaniesPanel
             tabs={tabs}
-            onSelectNodeTypeTab={item => setActiveTab(item, activePanelId)}
+            onSelectNodeTypeTab={item => setActiveTab(item?.id, activePanelId)}
             page={companiesPanel.page}
             getMoreItems={getMoreItems}
             searchCompanies={companiesPanel.searchResults}
@@ -132,7 +132,7 @@ class DashboardPanel extends Component {
             getSearchResults={getSearchResults}
             loadingMoreItems={companiesPanel.loadingItems}
             loading={loading}
-            companies={companies[companiesPanel.activeTab && companiesPanel.activeTab.id] || []}
+            companies={companies[companiesPanel.activeTab] || []}
             onSelectCompany={item => setActiveItems(item, activePanelId)}
             activeNodeTypeTab={companiesPanel.activeTab}
             activeCompanies={companiesPanel.activeItems}

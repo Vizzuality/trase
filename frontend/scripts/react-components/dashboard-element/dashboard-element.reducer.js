@@ -40,6 +40,7 @@ const dashboardElementReducer = {
           'selectedResizeBy',
           'selectedRecolorBy',
           'countriesPanel',
+          'sourcesPanel',
           'commoditiesPanel',
           'destinationsPanel',
           'companiesPanel'
@@ -120,9 +121,8 @@ const dashboardElementReducer = {
   },
   [DASHBOARD_ELEMENT__SET_MISSING_DATA](state, action) {
     const { key, data, tab } = action.payload;
-
     const oldData = tab ? state.data[key][tab] : state.data[key];
-    const together = [...oldData, ...data];
+    const together = oldData ? [...oldData, ...data] : data;
     const newData = tab ? { ...state.data[key], [tab]: together } : together;
 
     return {
@@ -188,8 +188,7 @@ const dashboardElementReducer = {
     const { panel, activeTab } = action.payload;
     const panelName = `${panel}Panel`;
     const prevTab = state[panelName].activeTab;
-    const clearedActiveTabData =
-      prevTab && prevTab.id !== activeTab.id ? { [prevTab.id]: null } : {};
+    const clearedActiveTabData = prevTab !== activeTab ? { [prevTab]: null } : {};
 
     return {
       ...state,
@@ -211,7 +210,7 @@ const dashboardElementReducer = {
     const { panel, activeItems: selectedItem } = action.payload;
     const panelName = `${panel}Panel`;
     const prevTab = state[panelName].activeTab;
-    const clearedActiveTabData = prevTab ? { [prevTab.id]: null } : {};
+    const clearedActiveTabData = prevTab ? { [prevTab]: null } : {};
     const activeTab =
       state.tabs[panel] && state.tabs[panel].find(tab => tab.id === selectedItem.nodeTypeId);
 
@@ -332,7 +331,7 @@ const dashboardElementReducerTypes = PropTypes => {
     searchResults: PropTypes.array,
     loadingItems: PropTypes.bool,
     activeItems: PropTypes.array,
-    activeTab: PropTypes.object
+    activeTab: PropTypes.number
   };
 
   return {

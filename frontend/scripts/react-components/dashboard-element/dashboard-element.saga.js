@@ -57,6 +57,18 @@ export function* fetchMissingDashboardPanelItems() {
       });
     }
 
+    if (panelsValues.sources === null && dashboardElement.sourcesPanel.activeItems.length > 0) {
+      yield fork(
+        getMissingDashboardPanelItems,
+        dashboardElement,
+        'sources',
+        dashboardElement.sourcesPanel.activeTab,
+        {
+          isOverview: true
+        }
+      );
+    }
+
     if (
       panelsValues.commodities === null &&
       dashboardElement.commoditiesPanel.activeItems.length > 0
@@ -186,8 +198,7 @@ export function* onTabChange(action) {
   const { dashboardElement } = yield select();
   const { activeTab } = dashboardElement[panelName] || {};
   const activePanelId = panel || dashboardElement.activePanelId;
-  const currentTabId = activeTab && activeTab.id;
-  if (dashboardElement.activePanelId && !dashboardElement.data.sources[currentTabId]) {
+  if (dashboardElement.activePanelId && !dashboardElement.data.sources[activeTab]) {
     yield fork(getDashboardPanelData, dashboardElement, activePanelId);
   }
 }

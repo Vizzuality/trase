@@ -81,7 +81,7 @@ function SourcesPanel(props) {
           <Tabs
             tabs={tabs}
             onSelectTab={onSelectSourceTab}
-            selectedTab={activeSourceTab && activeSourceTab.id}
+            selectedTab={activeSourceTab}
             itemTabRenderer={i => i.name}
             getTabId={item => item.id}
           >
@@ -122,7 +122,7 @@ SourcesPanel.propTypes = {
   nodeTypeRenderer: PropTypes.func,
   loadingMoreItems: PropTypes.bool,
   page: PropTypes.number.isRequired,
-  activeSourceTab: PropTypes.object,
+  activeSourceTab: PropTypes.number,
   activeSourceItem: PropTypes.array,
   activeCountryItems: PropTypes.array,
   getMoreItems: PropTypes.func.isRequired,
