@@ -25,6 +25,7 @@ const mapStateToProps = state => {
   const dirtyBlocks = getDirtyBlocks(state);
   return {
     dirtyBlocks,
+    loading: state.dashboardElement.loading,
     groupedCharts: getDashboardGroupedCharts(state),
     filters: getDashboardFiltersProps(state),
     dynamicSentenceParts: getDynamicSentence(state),
@@ -49,10 +50,12 @@ const mapDispatchToProps = dispatch =>
 
 class DashboardElementContainer extends React.Component {
   static propTypes = {
-    groupedCharts: PropTypes.object,
+    editMode: PropTypes.bool,
+    loading: PropTypes.bool,
     filters: PropTypes.object,
     urlProps: PropTypes.object,
     dirtyBlocks: PropTypes.object,
+    groupedCharts: PropTypes.object,
     showModalOnStart: PropTypes.bool,
     goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
@@ -60,8 +63,7 @@ class DashboardElementContainer extends React.Component {
     setSelectedYears: PropTypes.func.isRequired,
     setSelectedResizeBy: PropTypes.func.isRequired,
     setSelectedRecolorBy: PropTypes.func.isRequired,
-    setDashboardActivePanel: PropTypes.func.isRequired,
-    editMode: PropTypes.bool
+    setDashboardActivePanel: PropTypes.func.isRequired
   };
 
   hasVisitedBefore = {
@@ -111,6 +113,7 @@ class DashboardElementContainer extends React.Component {
     const { editMode } = this.props;
     const { step, modalOpen } = this.state;
     const {
+      loading,
       groupedCharts,
       goToRoot,
       urlProps,
@@ -124,16 +127,17 @@ class DashboardElementContainer extends React.Component {
     return (
       <DashboardElement
         step={step}
-        groupedCharts={groupedCharts}
+        loading={loading}
         filters={filters}
+        urlProps={urlProps}
         editMode={editMode}
         goToRoot={goToRoot}
         modalOpen={modalOpen}
         dirtyBlocks={dirtyBlocks}
         setStep={this.updateStep}
         closeModal={this.closeModal}
+        groupedCharts={groupedCharts}
         reopenPanel={this.reopenPanel}
-        urlProps={urlProps}
         dynamicSentenceParts={dynamicSentenceParts}
         setSelectedYears={setSelectedYears}
         setSelectedResizeBy={setSelectedResizeBy}

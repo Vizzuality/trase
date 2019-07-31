@@ -10,7 +10,6 @@ function CompaniesPanel(props) {
   const {
     tabs,
     page,
-    loadingMoreItems,
     loading,
     searchCompanies,
     companies,
@@ -55,7 +54,6 @@ function CompaniesPanel(props) {
             columnCount={5}
             getMoreItems={getMoreItems}
             page={page}
-            loadingMoreItems={loadingMoreItems}
             loading={loading}
           >
             {itemProps => (
@@ -77,7 +75,6 @@ CompaniesPanel.propTypes = {
   companies: PropTypes.array,
   activeCompanies: PropTypes.object,
   page: PropTypes.number.isRequired,
-  loadingMoreItems: PropTypes.bool,
   loading: PropTypes.bool,
   getMoreItems: PropTypes.func.isRequired,
   setSearchResult: PropTypes.func.isRequired,

@@ -9,7 +9,6 @@ function DestinationsPanel(props) {
     page,
     searchDestinations,
     destinations,
-    loadingMoreItems,
     loading,
     getSearchResults,
     activeDestinations,
@@ -37,7 +36,6 @@ function DestinationsPanel(props) {
         columnCount={5}
         page={page}
         getMoreItems={getMoreItems}
-        loadingMoreItems={loadingMoreItems}
         loading={loading}
       >
         {itemProps => (
@@ -56,7 +54,6 @@ function DestinationsPanel(props) {
 DestinationsPanel.propTypes = {
   destinations: PropTypes.array,
   page: PropTypes.number.isRequired,
-  loadingMoreItems: PropTypes.bool,
   loading: PropTypes.bool,
   searchDestinations: PropTypes.array,
   activeDestinations: PropTypes.array,

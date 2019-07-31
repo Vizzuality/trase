@@ -49,6 +49,5 @@ export default {
   selectedYears: null,
   selectedResizeBy: null,
   selectedRecolorBy: null,
-  charts: null,
-  chartsLoading: false
+  charts: null
 };

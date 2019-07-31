@@ -20,6 +20,7 @@ import 'react-components/dashboard-element/dashboard-element.scss';
 
 class DashboardElement extends React.PureComponent {
   static propTypes = {
+    loading: PropTypes.bool,
     groupedCharts: PropTypes.object,
     urlProps: PropTypes.object,
     dirtyBlocks: PropTypes.object,
@@ -64,23 +65,27 @@ class DashboardElement extends React.PureComponent {
     );
   }
 
+  renderPlaceholder() {
+    return (
+      <section className="dashboard-element-placeholder">
+        <div className="row">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="column small-12 medium-6">
+              <b className="dashboard-element-placeholder-item" />
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
   renderDashboardModal() {
     const { editMode, goToRoot, modalOpen, closeModal, dirtyBlocks } = this.props;
     const canProceed = dirtyBlocks.countries && dirtyBlocks.commodities;
     const onClose = editMode && canProceed ? closeModal : goToRoot;
     return (
       <React.Fragment>
-        {modalOpen && (
-          <section className="dashboard-element-placeholder">
-            <div className="row">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="column small-12 medium-6">
-                  <b className="dashboard-element-placeholder-item" />
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+        {modalOpen && this.renderPlaceholder()}
         <SimpleModal isOpen={modalOpen} onClickClose={onClose}>
           {this.renderStep()}
         </SimpleModal>
@@ -122,6 +127,7 @@ class DashboardElement extends React.PureComponent {
 
   render() {
     const {
+      loading,
       groupedCharts,
       modalOpen,
       goToRoot,
@@ -218,33 +224,37 @@ class DashboardElement extends React.PureComponent {
                   </div>
                 </div>
               </section>
-              <section className="dashboard-element-widgets">
-                <div className={cx('row', { '-equal-height -flex-end': groupedCharts })}>
-                  {groupedCharts && this.renderWidgets()}
-                  {!groupedCharts && (
-                    <div className="column small-12">
-                      <div className="dashboard-element-fallback">
-                        <Text
-                          color="white"
-                          size="md"
-                          align="center"
-                          className="dashboard-element-fallback-text"
-                        >
-                          Your dashboard has no selection.
-                        </Text>
-                        <Button
-                          color="gray-transparent"
-                          size="medium"
-                          className="dashboard-element-fallback-button"
-                          onClick={goToRoot}
-                        >
-                          Go Back
-                        </Button>
+              {!groupedCharts && loading ? (
+                this.renderPlaceholder()
+              ) : (
+                <section className="dashboard-element-widgets">
+                  <div className={cx('row', { '-equal-height -flex-end': groupedCharts })}>
+                    {groupedCharts && this.renderWidgets()}
+                    {!groupedCharts && (
+                      <div className="column small-12">
+                        <div className="dashboard-element-fallback">
+                          <Text
+                            color="white"
+                            size="md"
+                            align="center"
+                            className="dashboard-element-fallback-text"
+                          >
+                            Your dashboard has no selection.
+                          </Text>
+                          <Button
+                            color="gray-transparent"
+                            size="medium"
+                            className="dashboard-element-fallback-button"
+                            onClick={goToRoot}
+                          >
+                            Go Back
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              </section>
+                    )}
+                  </div>
+                </section>
+              )}
             </>
           )}
         </div>

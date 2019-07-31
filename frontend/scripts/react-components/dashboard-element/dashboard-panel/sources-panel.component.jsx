@@ -15,7 +15,6 @@ function SourcesPanel(props) {
     page,
     getMoreItems,
     searchSources,
-    loadingMoreItems,
     loading,
     setSearchResult,
     getSearchResults,
@@ -95,7 +94,6 @@ function SourcesPanel(props) {
               columnCount={5}
               page={page}
               getMoreItems={getMoreItems}
-              loadingMoreItems={loadingMoreItems}
               loading={loading}
             >
               {itemProps => (
@@ -120,7 +118,6 @@ SourcesPanel.propTypes = {
   countries: PropTypes.array,
   tabs: PropTypes.array.isRequired,
   nodeTypeRenderer: PropTypes.func,
-  loadingMoreItems: PropTypes.bool,
   page: PropTypes.number.isRequired,
   activeSourceTab: PropTypes.number,
   activeSourceItem: PropTypes.array,

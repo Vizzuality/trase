@@ -21,15 +21,38 @@ import {
   DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
   DASHBOARD_ELEMENT__SET_CHARTS,
   DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS,
-  DASHBOARD_ELEMENT__SET_CHARTS_LOADING,
   DASHBOARD_ELEMENT__EDIT_DASHBOARD,
-  DASHBOARD_ELEMENT__SET_MISSING_DATA
+  DASHBOARD_ELEMENT__SET_MISSING_DATA,
+  DASHBOARD_ELEMENT__SET_LOADING
 } from './dashboard-element.actions';
 import initialState from './dashboard-element.initial-state';
 import * as DashboardElementUrlPropHandlers from './dashboard-element.serializers';
 
 const dashboardElementReducer = {
   dashboardElement(state, action) {
+    const {
+      data: {
+        countries: countriesData,
+        sources: sourcesData,
+        commodities: commoditiesData,
+        destinations: destinationsData,
+        companies: companiesData
+      },
+      countriesPanel: { activeItems: countriesItems },
+      sourcesPanel: { activeItems: sourcesItems, activeTab: sourcesTab },
+      commoditiesPanel: { activeItems: commoditiesItems },
+      destinationsPanel: { activeItems: destinationsItems },
+      companiesPanel: { activeItems: companiesItems, activeTab: companiesTab }
+    } = state;
+    const isLoading =
+      (countriesItems.length > 0 && countriesData.length === 0) ||
+      (sourcesItems.length > 0 &&
+        (!sourcesData[sourcesTab] || sourcesData[sourcesTab].length === 0)) ||
+      (commoditiesItems.length > 0 && commoditiesData.length === 0) ||
+      (destinationsItems.length > 0 && destinationsData.length === 0) ||
+      (companiesItems.length > 0 &&
+        (!companiesData[companiesTab] || companiesData[companiesTab].length === 0));
+
     if (action.payload?.serializerParams) {
       const newState = deserialize({
         params: action.payload.serializerParams,
@@ -46,9 +69,10 @@ const dashboardElementReducer = {
           'companiesPanel'
         ]
       });
+      newState.loading = isLoading;
       return newState;
     }
-    return state;
+    return { ...state, loading: isLoading };
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_PANEL](state, action) {
     const { activePanelId } = action.payload;
@@ -76,7 +100,7 @@ const dashboardElementReducer = {
     return { ...state, [panelName]: { ...state[panelName], page } };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_DATA](state, action) {
-    const { key, data, meta, tab, loading } = action.payload;
+    const { key, data, meta, tab } = action.payload;
     const initialData = initialState.data[key];
     let newData;
     if (Array.isArray(initialData)) {
@@ -86,7 +110,6 @@ const dashboardElementReducer = {
     }
     return {
       ...state,
-      loading,
       data: { ...state.data, [key]: newData },
       meta: { ...state.meta, [key]: meta }
     };
@@ -130,8 +153,8 @@ const dashboardElementReducer = {
     };
   },
   [DASHBOARD_ELEMENT__SET_LOADING_ITEMS](state, action) {
-    const { loadingItems } = action.payload;
-    const panelName = `${state.activePanelId}Panel`;
+    const { loadingItems, panelId } = action.payload;
+    const panelName = `${panelId}Panel`;
     return {
       ...state,
       [panelName]: {
@@ -319,12 +342,9 @@ const dashboardElementReducer = {
       selectedRecolorBy: recolorBy.attributeId
     };
   },
-  [DASHBOARD_ELEMENT__SET_CHARTS_LOADING](state, action) {
+  [DASHBOARD_ELEMENT__SET_LOADING](state, action) {
     const { loading } = action.payload;
-    return {
-      ...state,
-      chartsLoading: loading
-    };
+    return { ...state, loading };
   }
 };
 
@@ -340,6 +360,7 @@ const dashboardElementReducerTypes = PropTypes => {
   return {
     meta: PropTypes.object.isRequired,
     tabs: PropTypes.object.isRequired,
+    loading: PropTypes.bool,
     activePanelId: PropTypes.string,
     data: PropTypes.shape({
       countries: PropTypes.array.isRequired,
@@ -354,8 +375,7 @@ const dashboardElementReducerTypes = PropTypes => {
     commoditiesPanel: PropTypes.shape(PanelTypes).isRequired,
     selectedYears: PropTypes.arrayOf(PropTypes.number),
     selectedResizeBy: PropTypes.string,
-    selectedRecolorBy: PropTypes.string,
-    chartsLoading: PropTypes.bool
+    selectedRecolorBy: PropTypes.string
   };
 };
 

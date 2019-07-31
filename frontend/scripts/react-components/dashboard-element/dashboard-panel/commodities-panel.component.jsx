@@ -4,15 +4,7 @@ import GridList from 'react-components/shared/grid-list/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 
 function CommoditiesPanel(props) {
-  const {
-    loadingMoreItems,
-    loading,
-    commodities,
-    activeCommodities,
-    onSelectCommodity,
-    getMoreItems,
-    page
-  } = props;
+  const { loading, commodities, activeCommodities, onSelectCommodity, getMoreItems, page } = props;
   return (
     <React.Fragment>
       <GridList
@@ -25,7 +17,6 @@ function CommoditiesPanel(props) {
         columnCount={5}
         getMoreItems={getMoreItems}
         page={page}
-        loadingMoreItems={loadingMoreItems}
         loading={loading}
       >
         {itemProps => (
@@ -43,7 +34,6 @@ function CommoditiesPanel(props) {
 
 CommoditiesPanel.propTypes = {
   commodities: PropTypes.array,
-  loadingMoreItems: PropTypes.bool,
   loading: PropTypes.bool,
   page: PropTypes.number.isRequired,
   activeCommodities: PropTypes.object,

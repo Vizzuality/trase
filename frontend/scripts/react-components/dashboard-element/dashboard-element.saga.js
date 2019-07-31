@@ -3,6 +3,7 @@ import {
   select,
   all,
   fork,
+  call,
   put,
   takeLatest,
   cancel,
@@ -12,6 +13,7 @@ import {
 import isEmpty from 'lodash/isEmpty';
 import isEqual from 'lodash/isEqual';
 import {
+  setDashboardLoading,
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
@@ -56,21 +58,26 @@ export function* fetchMissingDashboardPanelItems() {
     }
     const panelsValues = yield select(getDashboardPanelsValues);
     const dashboardElement = yield select(state => state.dashboardElement);
+    const tasks = [];
     if (panelsValues.countries === null && dashboardElement.countriesPanel.activeItems.length > 0) {
-      yield fork(getMissingDashboardPanelItems, dashboardElement, 'countries', null, {
-        isOverview: true
-      });
+      tasks.push(
+        call(getMissingDashboardPanelItems, dashboardElement, 'countries', null, {
+          isOverview: true
+        })
+      );
     }
 
     if (panelsValues.sources === null && dashboardElement.sourcesPanel.activeItems.length > 0) {
-      yield fork(
-        getMissingDashboardPanelItems,
-        dashboardElement,
-        'sources',
-        dashboardElement.sourcesPanel.activeTab,
-        {
-          isOverview: true
-        }
+      tasks.push(
+        call(
+          getMissingDashboardPanelItems,
+          dashboardElement,
+          'sources',
+          dashboardElement.sourcesPanel.activeTab,
+          {
+            isOverview: true
+          }
+        )
       );
     }
 
@@ -78,19 +85,26 @@ export function* fetchMissingDashboardPanelItems() {
       panelsValues.commodities === null &&
       dashboardElement.commoditiesPanel.activeItems.length > 0
     ) {
-      yield fork(getMissingDashboardPanelItems, dashboardElement, 'commodities', null, {
-        isOverview: true
-      });
+      tasks.push(
+        call(getMissingDashboardPanelItems, dashboardElement, 'commodities', null, {
+          isOverview: true
+        })
+      );
     }
 
     if (
       panelsValues.destinations === null &&
       dashboardElement.destinationsPanel.activeItems.length > 0
     ) {
-      yield fork(getMissingDashboardPanelItems, dashboardElement, 'destinations', null, {
-        isOverview: true
-      });
+      tasks.push(
+        call(getMissingDashboardPanelItems, dashboardElement, 'destinations', null, {
+          isOverview: true
+        })
+      );
     }
+
+    yield all(tasks);
+    yield put(setDashboardLoading(false));
   }
 
   yield takeLeading(DASHBOARD_ELEMENT__GET_MISSING_DATA, fetchMissingItems);
