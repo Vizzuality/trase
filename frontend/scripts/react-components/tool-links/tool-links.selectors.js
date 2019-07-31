@@ -10,6 +10,7 @@ import sortVisibleNodes from 'reducers/helpers/sortVisibleNodes';
 import getVisibleNodesUtil from 'reducers/helpers/getVisibleNodes';
 import { getSelectedColumnsIds, getSelectedNodesData } from 'react-components/tool/tool.selectors';
 import { getSelectedContext } from 'reducers/app.selectors';
+import { NUM_COLUMNS } from 'constants';
 
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolNodes = state => state.toolLinks.data.nodes;
@@ -72,7 +73,9 @@ export const getVisibleNodes = createSelector(
     if (!links || !nodes || !selectedColumnsIds) {
       return null;
     }
-    return getVisibleNodesUtil(links, nodes, selectedColumnsIds);
+    const visibleNodes = getVisibleNodesUtil(links, nodes, selectedColumnsIds);
+    const visibleColumns = new Set(visibleNodes.map(node => node.columnId));
+    return visibleColumns.size === NUM_COLUMNS ? visibleNodes : null;
   }
 );
 

@@ -177,7 +177,11 @@ export function* getMoreToolNodesByLink(selectedContext, fetchAllNodes) {
 }
 
 export function* getToolGeoColumnNodes(selectedContext) {
-  const geoColumnId = selectedContext.defaultColumns[0].id;
+  const selectedColumnsIds = yield select(getSelectedColumnsIds);
+
+  // TODO: this is not the best way to read the geoColumn,
+  //  the backend should provide it within contexts.defaultColumns
+  const geoColumnId = selectedColumnsIds[0];
   const params = { context_id: selectedContext.id, node_types_ids: geoColumnId };
   const url = getURLFromParams(GET_ALL_NODES_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);
