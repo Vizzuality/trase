@@ -149,7 +149,7 @@ class WorldMap extends React.PureComponent {
           projectionConfig={{ scale: 145 }}
         >
           <ZoomableGroup center={[20, 0]}>
-            <Geographies geography="/vector_layers/WORLD.topo.json" disableOptimization>
+            <Geographies geography="/vector_layers/WORLD.topo.json" cacheId="geography-world">
               {this.renderGeographies}
             </Geographies>
             <Lines>{this.renderLines()}</Lines>
