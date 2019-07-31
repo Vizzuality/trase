@@ -63,21 +63,7 @@ module Api
                 height: format('%0.6f', (value / @total_height)).to_f,
                 quant: format('%0.6f', value).to_f
               }
-            end,
-            quant: {
-              id: @resize_quant.id,
-              name: @resize_quant.display_name,
-              unit: @resize_quant.unit
-            },
-            ind: @recolor_ind && {
-              id: @recolor_ind.id,
-              name: @recolor_ind.display_name,
-              unit: @recolor_ind.unit
-            },
-            qual: @recolor_qual && {
-              id: @recolor_qual.id,
-              name: @recolor_qual.display_name
-            }
+            end
           }
         end
 
