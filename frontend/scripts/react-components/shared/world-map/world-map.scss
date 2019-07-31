@@ -26,6 +26,10 @@
     stroke-linecap: round;
     outline: 0;
     pointer-events: visibleStroke;
+
+    &:hover {
+      stroke: $charcoal-grey;
+    }
   }
 
   .world-map-annotation-text {
