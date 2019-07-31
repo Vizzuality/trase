@@ -61,7 +61,6 @@ class DashboardPanel extends Component {
       commodities,
       commoditiesPanel,
       setSearchResult,
-      loading,
       step,
       countriesActiveItems
     } = this.props;
@@ -70,7 +69,6 @@ class DashboardPanel extends Component {
         return (
           <SourcesPanel
             tabs={tabs}
-            loading={loading}
             countries={countries}
             page={sourcesPanel.page}
             getMoreItems={getMoreItems}
@@ -80,7 +78,7 @@ class DashboardPanel extends Component {
                 : sourcesPanel.searchResults
             }
             getSearchResults={getSearchResults}
-            loadingMoreItems={sourcesPanel.loadingItems}
+            loading={sourcesPanel.loadingItems}
             clearItems={() => clearActiveItems(activePanelId)}
             activeCountryItems={countriesActiveItems}
             activeSourceTab={sourcesPanel.activeTab}
@@ -98,8 +96,7 @@ class DashboardPanel extends Component {
           <CommoditiesPanel
             page={commoditiesPanel.page}
             getMoreItems={getMoreItems}
-            loadingMoreItems={commoditiesPanel.loadingItems}
-            loading={loading}
+            loading={commoditiesPanel.loadingItems}
             commodities={commodities}
             onSelectCommodity={item => setActiveItem(item, activePanelId)}
             activeCommodities={commoditiesPanel.activeItems}
@@ -114,8 +111,7 @@ class DashboardPanel extends Component {
             searchDestinations={destinationsPanel.searchResults}
             destinations={destinations}
             onSelectDestinationValue={item => setActiveItems(item, activePanelId)}
-            loadingMoreItems={destinationsPanel.loadingItems}
-            loading={loading}
+            loading={destinationsPanel.loadingItems}
             activeDestinations={destinationsPanel.activeItems}
           />
         );
@@ -130,8 +126,7 @@ class DashboardPanel extends Component {
             nodeTypeRenderer={DashboardPanel.countryNameNodeTypeRenderer}
             setSearchResult={item => setSearchResult(item, activePanelId)}
             getSearchResults={getSearchResults}
-            loadingMoreItems={companiesPanel.loadingItems}
-            loading={loading}
+            loading={companiesPanel.loadingItems}
             companies={companies[companiesPanel.activeTab] || []}
             onSelectCompany={item => setActiveItems(item, activePanelId)}
             activeNodeTypeTab={companiesPanel.activeTab}
@@ -258,7 +253,6 @@ DashboardPanel.propTypes = {
   commodities: PropTypes.array,
   activePanelId: PropTypes.string,
   step: PropTypes.number.isRequired,
-  loading: PropTypes.bool.isRequired,
   commoditiesPanel: PropTypes.object,
   setStep: PropTypes.func.isRequired,
   editMode: PropTypes.bool.isRequired,
