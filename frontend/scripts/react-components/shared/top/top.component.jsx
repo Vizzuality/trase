@@ -75,7 +75,8 @@ Top.propTypes = {
   targetLink: PropTypes.object,
   unit: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    format: PropTypes.func.isRequired
+    format: PropTypes.func.isRequired,
+    value: PropTypes.string
   }).isRequired
 };
 

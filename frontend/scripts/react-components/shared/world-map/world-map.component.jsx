@@ -17,17 +17,8 @@ import isMobile from 'utils/isMobile';
 import 'scripts/react-components/shared/world-map/world-map.scss';
 
 class WorldMap extends React.PureComponent {
-  static buildCurves(start, end, arc) {
-    const x0 = start[0];
-    const x1 = end[0];
-    const y0 = start[1];
-    const y1 = end[1];
-    const curve = {
-      forceUp: `${x1} ${y0}`,
-      forceDown: `${x0} ${y1}`
-    }[arc.curveStyle];
-
-    return `M ${start.join(' ')} Q ${curve} ${end.join(' ')}`;
+  static buildCurves(start, end, line) {
+    return line.arc;
   }
 
   static isDestinationCountry(iso, countries) {
@@ -154,10 +145,10 @@ class WorldMap extends React.PureComponent {
         <ComposableMap
           className={cx('c-world-map', className)}
           projection="robinson"
-          style={{ width: '100%', height: 'auto' }}
+          style={{ width: '100%', height: 410 }}
           projectionConfig={{ scale: 145 }}
         >
-          <ZoomableGroup disablePanning center={[20, 0]}>
+          <ZoomableGroup center={[20, 0]}>
             <Geographies geography="/vector_layers/WORLD.topo.json" disableOptimization>
               {this.renderGeographies}
             </Geographies>
