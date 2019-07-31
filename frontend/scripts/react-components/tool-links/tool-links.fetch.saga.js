@@ -18,7 +18,6 @@ import {
   setToolColumns,
   setToolLinks,
   setToolNodes,
-  setMoreToolNodes,
   setNoLinksFound,
   setMissingLockedNodes
 } from './tool-links.actions';
@@ -108,33 +107,10 @@ export function* getToolColumnsData(selectedContext) {
   }
 }
 
-export function* getToolNodesByLink(selectedContext) {
-  const {
-    data: { links }
-  } = yield select(state => state.toolLinks);
-
-  const nodesIds = Array.from(new Set(Object.values(links).flatMap(link => link.path))).join(',');
-  const params = { context_id: selectedContext.id, nodes_ids: nodesIds };
-  const url = getURLFromParams(GET_ALL_NODES_URL, params);
-  const { source, fetchPromise } = fetchWithCancel(url);
-  try {
-    const { data } = yield call(fetchPromise);
-    yield put(setToolNodes(data.data));
-  } catch (e) {
-    console.error('Error', e);
-  } finally {
-    if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled');
-      if (source) {
-        source.cancel();
-      }
-    }
-  }
-}
-
-export function* getMoreToolNodesByLink(selectedContext, fetchAllNodes) {
+export function* getToolNodesByLink(selectedContext, fetchAllNodes) {
   let nodesIds;
   let nodeTypesIds;
+
   if (!fetchAllNodes) {
     const {
       data: { links, nodes }
@@ -163,7 +139,7 @@ export function* getMoreToolNodesByLink(selectedContext, fetchAllNodes) {
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
-    yield put(setMoreToolNodes(data.data));
+    yield put(setToolNodes(data.data));
   } catch (e) {
     console.error('Error', e);
   } finally {
@@ -187,7 +163,7 @@ export function* getToolGeoColumnNodes(selectedContext) {
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
-    yield put(setMoreToolNodes(data.data));
+    yield put(setToolNodes(data.data));
   } catch (e) {
     console.error('Error', e);
   } finally {

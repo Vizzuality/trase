@@ -4,7 +4,6 @@ export const TOOL_LINKS__SET_FLOWS_LOADING = 'TOOL_LINKS__SET_FLOWS_LOADING';
 export const TOOL_LINKS__GET_COLUMNS = 'TOOL_LINKS__GET_COLUMNS';
 export const TOOL_LINKS__SET_COLUMNS = 'TOOL_LINKS__SET_COLUMNS';
 export const TOOL_LINKS__SET_NODES = 'TOOL_LINKS__SET_NODES';
-export const TOOL_LINKS__SET_MORE_NODES = 'TOOL_LINKS__SET_MORE_NODES';
 export const TOOL_LINKS__SET_LINKS = 'TOOL_LINKS__SET_LINKS';
 export const TOOL_LINKS__SELECT_VIEW = 'TOOL_LINKS__SELECT_VIEW';
 export const TOOL_LINKS__SET_IS_SEARCH_OPEN = 'TOOL_LINKS__SET_IS_SEARCH_OPEN';
@@ -44,13 +43,6 @@ export function setToolColumns(columns) {
 export function setToolNodes(nodes) {
   return {
     type: TOOL_LINKS__SET_NODES,
-    payload: { nodes }
-  };
-}
-
-export function setMoreToolNodes(nodes) {
-  return {
-    type: TOOL_LINKS__SET_MORE_NODES,
     payload: { nodes }
   };
 }
