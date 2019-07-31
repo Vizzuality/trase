@@ -82,9 +82,6 @@ module Api
         end
 
         def header_attributes(attribute, chart_attribute)
-          puts 'HEADER ATTRIBUTES'
-          pp attribute
-          pp chart_attribute
           {
             value: @values.get(attribute.simple_type, attribute.id),
             name: chart_attribute.display_name,
