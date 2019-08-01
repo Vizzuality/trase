@@ -56,7 +56,6 @@ export const getDirtyBlocks = createSelector(
 
 const getPanelActiveItems = (panel, data) => {
   const hasTabs = !Array.isArray(data);
-
   if (
     (hasTabs && Object.keys(data).length === 0) ||
     (!hasTabs && data.length === 0) ||

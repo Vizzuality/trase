@@ -1,3 +1,4 @@
+import initialState from 'react-components/dashboard-element/dashboard-element.initial-state';
 import { getTableHeaders } from 'react-components/dashboard-element/dashboard-widget/table-modal/table-modal.selectors';
 import { meta, data } from './table-modal-mocks';
 
@@ -5,14 +6,19 @@ describe('Table widget selectors', () => {
   describe('getTableHeaders', () => {
     const state = {
       dashboardElement: {
+        ...initialState,
+        data: {
+          ...initialState.data,
+          countries: [{ id: 0, name: 'Country Name' }],
+          commodities: [{ id: 0, name: 'Commodity Name' }]
+        },
         countriesPanel: {
-          activeItems: { 0: { name: 'Country Name' } }
+          ...initialState.countriesPanel,
+          activeItems: [0]
         },
         commoditiesPanel: {
-          activeItems: { 0: { name: 'Commodity Name' } }
-        },
-        sourcesPanel: {
-          activeItems: null
+          ...initialState.commoditiesPanel,
+          activeItems: [0]
         }
       }
     };

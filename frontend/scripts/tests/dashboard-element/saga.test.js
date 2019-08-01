@@ -1,5 +1,5 @@
 import { take, fork } from 'redux-saga/effects';
-import { initialState } from 'react-components/dashboard-element/dashboard-element.reducer';
+import initialState from 'react-components/dashboard-element/dashboard-element.initial-state';
 import {
   fetchDataOnPanelChange,
   fetchDashboardPanelInitialData,
@@ -42,9 +42,6 @@ const response = {
   data: {
     data: {
       hello: 1
-    },
-    meta: {
-      hello: 2
     }
   }
 };
@@ -56,15 +53,18 @@ fetchWithCancel.mockImplementation(() => ({
 setLoadingSpinner.mockImplementation(() => {});
 
 const data = response.data.data;
-const meta = response.data.meta;
 
 const baseState = {
   dashboardElement: {
     ...initialState,
-    activePanelId: 'countries',
+    data: {
+      ...initialState.data,
+      countries: [{ id: 6, name: 'Brazil' }]
+    },
+    activePanelId: 'sources',
     countriesPanel: {
       ...initialState.countriesPanel,
-      activeItems: { 6: { id: 6, name: 'Brazil' } }
+      activeItems: [6]
     }
   }
 };
@@ -80,18 +80,19 @@ describe('fetchDashboardPanelInitialData', () => {
   it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_TABS} if the current active panel is companies`, async () => {
     const dispatched = await recordSaga(
       fetchDashboardPanelInitialData,
-      setDashboardActivePanel('commodities'),
+      setDashboardActivePanel('companies'),
       stateCompanies
     );
     expect(dispatched).toContainEqual({
       payload: {
-        data
+        data,
+        key: 'companies'
       },
       type: DASHBOARD_ELEMENT__SET_PANEL_TABS
     });
   });
 
-  it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_DATA} for countries and sources if selected panel is sources`, async () => {
+  it(`dispatches ${DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA} for countries and ${DASHBOARD_ELEMENT__SET_PANEL_DATA}  sources if selected panel is sources`, async () => {
     const dispatched = await recordSaga(
       fetchDashboardPanelInitialData,
       setDashboardActivePanel('sources'),
@@ -102,20 +103,16 @@ describe('fetchDashboardPanelInitialData', () => {
       payload: {
         key: 'countries',
         data,
-        meta,
-        tab: null,
-        loading: false
+        tab: null
       },
-      type: DASHBOARD_ELEMENT__SET_PANEL_DATA
+      type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA
     });
     // Sets panel data for regions
     expect(dispatched).toContainEqual({
       payload: {
         key: 'sources',
         data,
-        meta,
-        tab: null,
-        loading: false
+        tab: null
       },
       type: DASHBOARD_ELEMENT__SET_PANEL_DATA
     });
@@ -131,9 +128,7 @@ describe('fetchDashboardPanelInitialData', () => {
       payload: {
         key: 'commodities',
         data,
-        meta,
-        tab: null,
-        loading: false
+        tab: null
       },
       type: DASHBOARD_ELEMENT__SET_PANEL_DATA
     });
@@ -172,9 +167,7 @@ describe('onTabChange', () => {
       },
       sourcesPanel: {
         ...baseState.dashboardElement.sourcesPanel,
-        activeTab: {
-          id: 3
-        }
+        activeTab: 3
       },
       activePanelId: 'sources'
     }
@@ -200,8 +193,6 @@ describe('onTabChange', () => {
       payload: {
         key: 'sources',
         data,
-        meta,
-        loading: false,
         tab: 3
       },
       type: DASHBOARD_ELEMENT__SET_PANEL_DATA
@@ -214,7 +205,6 @@ describe('onTabChange', () => {
       payload: {
         key: 'sources',
         data,
-        meta,
         loading: false,
         tab: 3
       },
@@ -256,20 +246,21 @@ describe('onItemChange', () => {
       },
       sourcesPanel: {
         ...state.dashboardElement.sourcesPanel,
-        activeItems: { 2: { id: 2 } }
+        activeItems: [2]
       }
     }
   };
 
-  const changeToCountriesAction = setDashboardPanelActiveItem({ 5: { id: 5 } }, 'countries');
-  const changeToSourcesAction = setDashboardPanelActiveItem({ 2: { id: 2 } }, 'sources');
+  const changeToCountriesAction = setDashboardPanelActiveItem({ id: 5 }, 'countries');
+  const changeToSourcesAction = setDashboardPanelActiveItem({ id: 2 }, 'sources');
 
-  it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_TABS} if we select countries`, async () => {
+  it(`dispatches ${DASHBOARD_ELEMENT__SET_PANEL_TABS} for sources if we select countries`, async () => {
     const dispatched = await recordSaga(onItemChange, changeToCountriesAction, state);
 
     expect(dispatched).toContainEqual({
       payload: {
-        data
+        data,
+        key: 'sources'
       },
       type: DASHBOARD_ELEMENT__SET_PANEL_TABS
     });
@@ -282,7 +273,6 @@ describe('onItemChange', () => {
       payload: {
         key: 'sources',
         data,
-        meta,
         loading: false,
         tab: 2
       },
@@ -350,8 +340,7 @@ describe('onPageChange', () => {
       payload: {
         key: 'sources',
         data,
-        tab: 2,
-        direction: 'forward'
+        tab: { id: 2 }
       },
       type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA
     });

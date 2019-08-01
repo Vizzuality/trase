@@ -41,8 +41,7 @@ export function* getDashboardPanelData(dashboardElement, optionsType, options) {
     payload: {
       key: optionsType,
       tab,
-      data: null,
-      meta: null
+      data: null
     }
   });
   const { source, fetchPromise } = fetchWithCancel(url);
@@ -56,8 +55,7 @@ export function* getDashboardPanelData(dashboardElement, optionsType, options) {
       payload: {
         key: optionsType,
         tab,
-        data: data.data,
-        meta: data.meta
+        data: data.data
       }
     });
   } catch (e) {
@@ -98,7 +96,7 @@ export function* getDashboardPanelSectionTabs(dashboardElement, optionsType) {
   }
 }
 
-export function* getMoreDashboardPanelData(dashboardElement, optionsType, activeTab) {
+export function* getMoreDashboardPanelData(dashboardElement, optionsType, activeTab = null) {
   const { page } = dashboardElement[`${dashboardElement.activePanelId}Panel`];
   const params = getDashboardPanelParams(dashboardElement, optionsType, { page });
   const task = yield fork(
