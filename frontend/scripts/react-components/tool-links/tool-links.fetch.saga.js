@@ -107,10 +107,9 @@ export function* getToolColumnsData(selectedContext) {
   }
 }
 
-export function* getToolNodesByLink(selectedContext, fetchAllNodes) {
+export function* getToolNodesByLink(selectedContext, { fetchAllNodes, replaceData }) {
   let nodesIds;
   let nodeTypesIds;
-
   if (!fetchAllNodes) {
     const {
       data: { links, nodes }
@@ -139,7 +138,7 @@ export function* getToolNodesByLink(selectedContext, fetchAllNodes) {
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
-    yield put(setToolNodes(data.data));
+    yield put(setToolNodes(data.data, replaceData));
   } catch (e) {
     console.error('Error', e);
   } finally {

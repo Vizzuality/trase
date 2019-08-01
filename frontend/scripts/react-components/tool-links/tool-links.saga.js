@@ -28,7 +28,7 @@ import {
 } from './tool-links.fetch.saga';
 
 function* fetchToolColumns() {
-  function* performFetch() {
+  function* performFetch(action) {
     const state = yield select();
     const {
       location: { type: page }
@@ -38,12 +38,12 @@ function* fetchToolColumns() {
     if (page !== 'tool' || selectedContext === null) {
       return;
     }
-
+    const replaceData = [SET_CONTEXT, SET_CONTEXTS].includes(action.type);
     const task = yield fork(setLoadingSpinner, 750, setToolFlowsLoading(true));
     yield fork(getToolColumnsData, selectedContext);
     yield fork(getToolGeoColumnNodes, selectedContext);
     yield call(getToolLinksData);
-    yield call(getToolNodesByLink, selectedContext);
+    yield call(getToolNodesByLink, selectedContext, { replaceData });
 
     // TODO: remove this call, just here to split the refactor in stages
     yield put(loadMapVectorData());
@@ -92,7 +92,7 @@ function* fetchLinks() {
     const fetchAllNodes = action.type === TOOL_LINKS__SELECT_VIEW && action.payload.detailedView;
     const task = yield fork(setLoadingSpinner, 2000, setToolFlowsLoading(true));
     yield call(getToolLinksData);
-    yield call(getToolNodesByLink, selectedContext, fetchAllNodes);
+    yield call(getToolNodesByLink, selectedContext, { fetchAllNodes });
     if (task.isRunning()) {
       yield cancel(task);
     } else {
