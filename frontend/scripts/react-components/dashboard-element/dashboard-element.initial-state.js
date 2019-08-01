@@ -8,7 +8,6 @@ export default {
     destinations: [],
     commodities: []
   },
-  meta: {},
   tabs: {},
   activePanelId: null,
   countriesPanel: {

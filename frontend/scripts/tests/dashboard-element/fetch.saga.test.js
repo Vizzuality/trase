@@ -1,4 +1,4 @@
-import { initialState } from 'react-components/dashboard-element/dashboard-element.reducer';
+import initialState from 'react-components/dashboard-element/dashboard-element.initial-state';
 import { cancelled } from 'redux-saga/effects';
 import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
 
@@ -21,7 +21,7 @@ jest.mock('utils/getURLFromParams', () => ({
 const dashboardElement = {
   ...initialState,
   data: {
-    indicators: [],
+    ...initialState.data,
     countries: [
       {
         id: 23,
@@ -29,20 +29,13 @@ const dashboardElement = {
       }
     ]
   },
-  meta: {},
   tabs: {
     sources: [{ id: 1, name: 'BIOME' }]
   },
   activePanelId: 'sources',
   sourcesPanel: {
-    page: 1,
-    searchResults: [],
-    loadingItems: false,
-    activeItems: {},
-    activeTab: {
-      id: 1,
-      name: 'BIOME'
-    }
+    ...initialState.sourcesPanel,
+    activeTab: 1
   }
 };
 
@@ -61,6 +54,7 @@ describe('getDashboardPanelData', () => {
 
   it('Cancels if the fetch is cancelled', () => {
     const generator = getDashboardPanelData(dashboardElement, optionsType);
+    generator.next();
     generator.next();
     generator.next();
     expect(generator.return().value).toEqual(cancelled());

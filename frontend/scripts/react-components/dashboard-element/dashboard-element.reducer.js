@@ -99,7 +99,7 @@ const dashboardElementReducer = {
     return { ...state, [panelName]: { ...state[panelName], page } };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_DATA](state, action) {
-    const { key, data, meta, tab } = action.payload;
+    const { key, data, tab } = action.payload;
     const initialData = initialState.data[key];
     let newData;
     if (Array.isArray(initialData)) {
@@ -109,8 +109,7 @@ const dashboardElementReducer = {
     }
     return {
       ...state,
-      data: { ...state.data, [key]: newData },
-      meta: { ...state.meta, [key]: meta }
+      data: { ...state.data, [key]: newData }
     };
   },
   [DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA](state, action) {
@@ -369,7 +368,6 @@ const dashboardElementReducerTypes = PropTypes => {
   };
 
   return {
-    meta: PropTypes.object.isRequired,
     tabs: PropTypes.object.isRequired,
     loading: PropTypes.bool,
     activePanelId: PropTypes.string,

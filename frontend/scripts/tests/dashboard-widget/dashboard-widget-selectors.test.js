@@ -1,3 +1,4 @@
+import initialState from 'react-components/dashboard-element/dashboard-element.initial-state';
 import {
   getDefaultConfig,
   getYKeys,
@@ -5,6 +6,16 @@ import {
   makeGetConfig
 } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.selectors';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
+
+const country = {
+  id: 27,
+  name: 'BRAZIL'
+};
+
+const commodity = {
+  id: 1,
+  name: 'SOY'
+};
 
 const defaultState = {
   app: {
@@ -21,21 +32,19 @@ const defaultState = {
     ]
   },
   dashboardElement: {
+    ...initialState,
+    data: {
+      ...initialState.data,
+      countries: [country],
+      commodities: [commodity]
+    },
     countriesPanel: {
-      activeItems: {
-        '27': {
-          id: 27,
-          name: 'BRAZIL'
-        }
-      }
+      ...initialState.countriesPanel,
+      activeItems: [country.id]
     },
     commoditiesPanel: {
-      activeItems: {
-        '1': {
-          id: 1,
-          name: 'SOY'
-        }
-      }
+      ...initialState.commoditiesPanel,
+      activeItems: [commodity.id]
     }
   }
 };
