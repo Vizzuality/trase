@@ -393,6 +393,7 @@ export const getDashboardElementUrlProps = createStructuredSelector({
   sourcesPanel: getSourcesPanel,
   commoditiesPanel: getCommoditiesPanel,
   destinationsPanel: getDestinationsPanel,
+  companiesPanel: getCompaniesPanel,
   selectedYears: getURLDashboardSelectedYears,
   selectedResizeBy: getURLDashboardSelectedResizeBy,
   selectedRecolorBy: getDashboardSelectedRecolorBy

@@ -98,6 +98,20 @@ export function* fetchMissingDashboardPanelItems() {
       );
     }
 
+    if (panelsValues.companies === null && dashboardElement.companiesPanel.activeItems.length > 0) {
+      tasks.push(
+        call(
+          getMissingDashboardPanelItems,
+          dashboardElement,
+          'companies',
+          dashboardElement.companiesPanel.activeTab,
+          {
+            isOverview: true
+          }
+        )
+      );
+    }
+
     yield all(tasks);
     yield put(setDashboardLoading(false));
   }
