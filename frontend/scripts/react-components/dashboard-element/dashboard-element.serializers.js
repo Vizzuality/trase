@@ -49,7 +49,7 @@ export const countriesPanel = activeItemsSerializer;
 export const sourcesPanel = activeItemTabSerializer;
 export const commoditiesPanel = activeItemsSerializer;
 export const destinationsPanel = activeItemsSerializer;
-export const companiesPanel = activeItemsSerializer;
+export const companiesPanel = activeItemTabSerializer;
 
 const indicatorsSerializer = {
   stringify(prop, DONT_SERIALIZE) {
