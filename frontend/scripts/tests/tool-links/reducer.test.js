@@ -2,7 +2,6 @@ import initialState from 'react-components/tool-links/tool-links.initial-state';
 import reducer from 'react-components/tool-links/tool-links.reducer';
 import {
   TOOL_LINKS__SET_FLOWS_LOADING,
-  TOOL_LINKS__GET_COLUMNS,
   TOOL_LINKS__SET_COLUMNS,
   TOOL_LINKS__SET_NODES,
   TOOL_LINKS__SET_MORE_NODES,
@@ -32,7 +31,6 @@ import {
   selectRecolorBy,
   selectBiomeFilter,
   setToolFlowsLoading,
-  getToolColumns,
   resetSankey,
   clearSankey,
   setToolColumns,
@@ -48,12 +46,6 @@ import { SET_CONTEXT } from 'actions/app.actions';
 
 test(TOOL_LINKS__SET_FLOWS_LOADING, () => {
   const action = setToolFlowsLoading(true);
-  const newState = reducer(initialState, action);
-  expect(newState).toMatchSnapshot();
-});
-
-test(TOOL_LINKS__GET_COLUMNS, () => {
-  const action = getToolColumns(true);
   const newState = reducer(initialState, action);
   expect(newState).toMatchSnapshot();
 });
