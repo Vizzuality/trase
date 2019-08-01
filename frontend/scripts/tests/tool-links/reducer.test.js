@@ -1,23 +1,26 @@
 import initialState from 'react-components/tool-links/tool-links.initial-state';
 import reducer from 'react-components/tool-links/tool-links.reducer';
 import {
-  TOOL_LINKS_SET_NO_LINKS_FOUND,
-  TOOL_LINKS__SET_IS_SEARCH_OPEN,
-  TOOL_LINKS__EXPAND_SANKEY,
-  TOOL_LINKS__COLLAPSE_SANKEY,
-  TOOL_LINKS__HIGHLIGHT_NODE,
-  TOOL_LINKS__SELECT_VIEW,
-  TOOL_LINKS__SET_SELECTED_RESIZE_BY,
-  TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
-  TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
   TOOL_LINKS__SET_FLOWS_LOADING,
-  TOOL_LINKS_RESET_SANKEY,
-  TOOL_LINKS__CLEAR_SANKEY,
+  TOOL_LINKS__GET_COLUMNS,
   TOOL_LINKS__SET_COLUMNS,
+  TOOL_LINKS__SET_NODES,
   TOOL_LINKS__SET_MORE_NODES,
   TOOL_LINKS__SET_MISSING_LOCKED_NODES,
   TOOL_LINKS__SET_LINKS,
+  TOOL_LINKS__SELECT_VIEW,
+  TOOL_LINKS__SET_IS_SEARCH_OPEN,
+  TOOL_LINKS__COLLAPSE_SANKEY,
+  TOOL_LINKS__EXPAND_SANKEY,
   TOOL_LINKS__SELECT_COLUMN,
+  TOOL_LINKS__HIGHLIGHT_NODE,
+  TOOL_LINKS__CLEAR_SANKEY,
+  TOOL_LINKS__SET_SELECTED_NODES,
+  TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
+  TOOL_LINKS__SET_SELECTED_RESIZE_BY,
+  TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
+  TOOL_LINKS_SET_NO_LINKS_FOUND,
+  TOOL_LINKS_RESET_SANKEY,
   SET_SELECTED_NODES_BY_SEARCH,
   setNoLinksFound,
   setIsSearchOpen,
@@ -29,6 +32,7 @@ import {
   selectRecolorBy,
   selectBiomeFilter,
   setToolFlowsLoading,
+  getToolColumns,
   resetSankey,
   clearSankey,
   setToolColumns,
@@ -36,64 +40,11 @@ import {
   setMissingLockedNodes,
   setToolLinks,
   selectColumn,
-  selectSearchNode
+  selectNodes,
+  selectSearchNode,
+  setToolNodes
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
-import { SET_NODE_ATTRIBUTES } from 'react-components/tool/tool.actions';
-
-test(TOOL_LINKS_SET_NO_LINKS_FOUND, () => {
-  const action = setNoLinksFound(true);
-  const newState = reducer(initialState, action);
-  expect(newState).toMatchSnapshot();
-});
-
-test(TOOL_LINKS__SET_IS_SEARCH_OPEN, () => {
-  const action = setIsSearchOpen(true);
-  const newState = reducer(initialState, action);
-  expect(newState).toMatchSnapshot();
-});
-
-test(TOOL_LINKS__EXPAND_SANKEY, () => {
-  const action = expandSankey();
-  const newState = reducer(initialState, action);
-  expect(newState).toMatchSnapshot();
-});
-
-test(TOOL_LINKS__COLLAPSE_SANKEY, () => {
-  const action = collapseSankey();
-  const newState = reducer(initialState, action);
-  expect(newState).toMatchSnapshot();
-});
-
-test(TOOL_LINKS__HIGHLIGHT_NODE, () => {
-  const action = highlightNode(1234);
-  const newState = reducer(initialState, action);
-  expect(newState).toMatchSnapshot();
-});
-
-test(TOOL_LINKS__SELECT_VIEW, () => {
-  const action = selectView(true, true);
-  const newState = reducer(initialState, action);
-  expect(newState).toMatchSnapshot();
-});
-
-test(TOOL_LINKS__SET_SELECTED_RESIZE_BY, () => {
-  const action = selectResizeBy('MY_RESIZE_BY');
-  const newState = reducer(initialState, action);
-  expect(newState).toMatchSnapshot();
-});
-
-test(TOOL_LINKS__SET_SELECTED_RECOLOR_BY, () => {
-  const action = selectRecolorBy('MY_RECOLOR_BY');
-  const newState = reducer(initialState, action);
-  expect(newState).toMatchSnapshot();
-});
-
-test(TOOL_LINKS__SET_SELECTED_BIOME_FILTER, () => {
-  const action = selectBiomeFilter('MY_BIOME');
-  const newState = reducer(initialState, action);
-  expect(newState).toMatchSnapshot();
-});
 
 test(TOOL_LINKS__SET_FLOWS_LOADING, () => {
   const action = setToolFlowsLoading(true);
@@ -101,65 +52,9 @@ test(TOOL_LINKS__SET_FLOWS_LOADING, () => {
   expect(newState).toMatchSnapshot();
 });
 
-test(TOOL_LINKS_RESET_SANKEY, () => {
-  const action = resetSankey();
-  const state = {
-    ...initialState,
-    noLinksFound: true,
-    selectedRecolorByName: 'MY_RECOLOR_BY',
-    selectedResizeByName: 'MY_RESIZE_BY',
-    selectedBiomeFilterName: 'MY_BIOME',
-    detailedView: true,
-    forcedOverview: true,
-    highlightedNodeId: 1234,
-    selectedNodesIds: [1234, 5678],
-    expandedNodesIds: [1234, 5678, 9101],
-    selectedColumnsIds: [null, 3]
-  };
-  const newState = reducer(state, action);
-  expect(newState).toMatchSnapshot();
-});
-
-test(TOOL_LINKS__CLEAR_SANKEY, () => {
-  const action = clearSankey();
-  const state = {
-    ...initialState,
-    selectedBiomeFilterName: 'MY_BIOME',
-    detailedView: true,
-    forcedOverview: true,
-    highlightedNodeId: 1234,
-    selectedNodesIds: [1234, 5678],
-    expandedNodesIds: [1234, 5678, 9101]
-  };
-  const newState = reducer(state, action);
-  expect(newState).toMatchSnapshot();
-});
-
-test(SET_CONTEXT, () => {
-  const action = {
-    type: SET_CONTEXT,
-    payload: 1
-  };
-  const state = {
-    ...initialState,
-    selectedRecolorByName: 'MY_RECOLOR_BY',
-    selectedResizeByName: 'MY_RESIZE_BY',
-    selectedBiomeFilterName: 'MY_BIOME',
-    detailedView: true,
-    highlightedNodeId: 1234,
-    selectedNodesIds: [1234, 5678],
-    expandedNodesIds: [1234, 5678, 9101],
-    selectedColumnsIds: [null, 3],
-    data: {
-      columns: {},
-      nodes: {},
-      links: {},
-      nodeHeights: {},
-      nodeAttributes: {},
-      nodesByColumnGeoId: {}
-    }
-  };
-  const newState = reducer(state, action);
+test(TOOL_LINKS__GET_COLUMNS, () => {
+  const action = getToolColumns(true);
+  const newState = reducer(initialState, action);
   expect(newState).toMatchSnapshot();
 });
 
@@ -170,6 +65,13 @@ test(TOOL_LINKS__SET_COLUMNS, () => {
     { id: 3, name: 'BIOMES' }
   ];
   const action = setToolColumns(columns);
+  const newState = reducer(initialState, action);
+  expect(newState).toMatchSnapshot();
+});
+
+test(TOOL_LINKS__SET_NODES, () => {
+  const nodes = [{ id: 1, columnId: 3 }, { id: 2, columnId: 2 }, { id: 3, columnId: 8 }];
+  const action = setToolNodes(nodes);
   const newState = reducer(initialState, action);
   expect(newState).toMatchSnapshot();
 });
@@ -227,37 +129,28 @@ test(TOOL_LINKS__SET_LINKS, () => {
   expect(newState).toMatchSnapshot();
 });
 
-describe(SET_NODE_ATTRIBUTES, () => {
-  it('adds node attributes', () => {
-    const attributes = [
-      { node_id: 1, attribute_id: 'SOY_DEFORESTATION', attribute_type: 'quant' },
-      { node_id: 1, attribute_id: 'SMALLHOLDER_DOMINANCE', attribute_type: 'ind' },
-      { node_id: 2, attribute_id: 'SMALLHOLDER_DOMINANCE', attribute_type: 'ind' },
-      { node_id: 3, attribute_id: 'SMALLHOLDER_DOMINANCE', attribute_type: 'ind' }
-    ];
-    const action = {
-      type: SET_NODE_ATTRIBUTES,
-      payload: { data: attributes }
-    };
-    const newState = reducer(initialState, action);
-    expect(newState).toMatchSnapshot();
-  });
+test(TOOL_LINKS__SELECT_VIEW, () => {
+  const action = selectView(true, true);
+  const newState = reducer(initialState, action);
+  expect(newState).toMatchSnapshot();
+});
 
-  it('removes node attributes', () => {
-    const state = {
-      ...initialState,
-      data: {
-        ...initialState.data,
-        nodeAttributes: {}
-      }
-    };
-    const action = {
-      type: SET_NODE_ATTRIBUTES,
-      payload: { data: [] }
-    };
-    const newState = reducer(state, action);
-    expect(newState).toMatchSnapshot();
-  });
+test(TOOL_LINKS__SET_IS_SEARCH_OPEN, () => {
+  const action = setIsSearchOpen(true);
+  const newState = reducer(initialState, action);
+  expect(newState).toMatchSnapshot();
+});
+
+test(TOOL_LINKS__COLLAPSE_SANKEY, () => {
+  const action = collapseSankey();
+  const newState = reducer(initialState, action);
+  expect(newState).toMatchSnapshot();
+});
+
+test(TOOL_LINKS__EXPAND_SANKEY, () => {
+  const action = expandSankey();
+  const newState = reducer(initialState, action);
+  expect(newState).toMatchSnapshot();
 });
 
 describe(TOOL_LINKS__SELECT_COLUMN, () => {
@@ -323,6 +216,114 @@ describe(TOOL_LINKS__SELECT_COLUMN, () => {
     const newState = reducer(state, action);
     expect(newState).toMatchSnapshot();
   });
+});
+
+test(TOOL_LINKS__HIGHLIGHT_NODE, () => {
+  const action = highlightNode(1234);
+  const newState = reducer(initialState, action);
+  expect(newState).toMatchSnapshot();
+});
+
+test(TOOL_LINKS__CLEAR_SANKEY, () => {
+  const action = clearSankey();
+  const state = {
+    ...initialState,
+    selectedBiomeFilterName: 'MY_BIOME',
+    detailedView: true,
+    forcedOverview: true,
+    highlightedNodeId: 1234,
+    selectedNodesIds: [1234, 5678],
+    expandedNodesIds: [1234, 5678, 9101]
+  };
+  const newState = reducer(state, action);
+  expect(newState).toMatchSnapshot();
+});
+
+test(TOOL_LINKS__SET_SELECTED_NODES, () => {
+  const action = selectNodes([1234, 5678]);
+  const state = {
+    ...initialState,
+    data: {
+      ...initialState.data,
+      nodes: {
+        1234: { columnId: 4 },
+        5678: { columnId: 5 }
+      }
+    }
+  };
+  const newState = reducer(state, action);
+  expect(newState).toMatchSnapshot();
+});
+
+test(TOOL_LINKS__SET_SELECTED_RECOLOR_BY, () => {
+  const action = selectRecolorBy('MY_RECOLOR_BY');
+  const newState = reducer(initialState, action);
+  expect(newState).toMatchSnapshot();
+});
+
+test(TOOL_LINKS__SET_SELECTED_RESIZE_BY, () => {
+  const action = selectResizeBy('MY_RESIZE_BY');
+  const newState = reducer(initialState, action);
+  expect(newState).toMatchSnapshot();
+});
+
+test(TOOL_LINKS__SET_SELECTED_BIOME_FILTER, () => {
+  const action = selectBiomeFilter('MY_BIOME');
+  const newState = reducer(initialState, action);
+  expect(newState).toMatchSnapshot();
+});
+
+test(TOOL_LINKS_SET_NO_LINKS_FOUND, () => {
+  const action = setNoLinksFound(true);
+  const newState = reducer(initialState, action);
+  expect(newState).toMatchSnapshot();
+});
+
+test(TOOL_LINKS_RESET_SANKEY, () => {
+  const action = resetSankey();
+  const state = {
+    ...initialState,
+    noLinksFound: true,
+    selectedRecolorByName: 'MY_RECOLOR_BY',
+    selectedResizeByName: 'MY_RESIZE_BY',
+    selectedBiomeFilterName: 'MY_BIOME',
+    detailedView: true,
+    forcedOverview: true,
+    highlightedNodeId: 1234,
+    selectedNodesIds: [1234, 5678],
+    expandedNodesIds: [1234, 5678, 9101],
+    selectedColumnsIds: [null, 3]
+  };
+  const newState = reducer(state, action);
+  expect(newState).toMatchSnapshot();
+});
+
+test(SET_CONTEXT, () => {
+  const action = {
+    type: SET_CONTEXT,
+    payload: 1
+  };
+  const state = {
+    ...initialState,
+    selectedRecolorByName: 'MY_RECOLOR_BY',
+    selectedResizeByName: 'MY_RESIZE_BY',
+    selectedBiomeFilterName: 'MY_BIOME',
+    detailedView: true,
+    highlightedNodeId: 1234,
+    selectedNodesIds: [1234, 5678],
+    expandedNodesIds: [1234, 5678, 9101],
+    selectedColumnsIds: [null, 3],
+    data: {
+      columns: {},
+      nodes: {},
+      links: {},
+      nodeHeights: {},
+      nodeAttributes: {},
+      nodesByColumnGeoId: {}
+    }
+  };
+  const newState = reducer(state, action);
+  expect(newState).toMatchSnapshot();
 });
 
 describe(SET_SELECTED_NODES_BY_SEARCH, () => {
