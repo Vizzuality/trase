@@ -17,7 +17,7 @@ module Api
 
         # Calculating the total is too expensive, use an estimation instead
         def total
-          @size_query.sum(:count)
+          @size_query.sum('count::INT')
         end
 
         MAX_SIZE = 500_000

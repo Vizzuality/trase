@@ -11,7 +11,6 @@ RSpec.describe Api::V3::Download::FlowDownloadFlatQuery do
 
   before(:each) do
     Api::V3::Readonly::DownloadFlow.refresh(sync: true)
-    Api::V3::Readonly::DownloadFlowsStats.refresh(sync: true, skip_dependencies: true)
   end
 
   let(:query_builder) {
@@ -32,7 +31,8 @@ RSpec.describe Api::V3::Download::FlowDownloadFlatQuery do
     it 'returns sum of quants' do
       results = flat_query.all
       flow2_deforestation = results.find do |r|
-        r['INDICATOR'] == 'DEFORESTATION' && r['IMPORTER'] == api_v3_importer2_node.name
+        r['INDICATOR'] == 'DEFORESTATION' &&
+          r['IMPORTER'] == api_v3_importer2_node.name
       end
       expect(flow2_deforestation['TOTAL']).to eq('15')
     end
@@ -40,15 +40,16 @@ RSpec.describe Api::V3::Download::FlowDownloadFlatQuery do
     it 'returns distinct values of quals' do
       results = flat_query.all
       flow2_zero_deforestation = results.find do |r|
-        r['INDICATOR'] == 'ZERO DEFORESTATION' && r['IMPORTER'] == api_v3_importer2_node.name
+        r['INDICATOR'] == 'ZERO DEFORESTATION' &&
+          r['IMPORTER'] == api_v3_importer2_node.name
       end
       expect(flow2_zero_deforestation['TOTAL']).to eq('yes')
     end
   end
 
   describe :total do
-    it 'returns count of flows per year' do
-      expect(flat_query.total).to eq(2)
+    it 'returns count of flows per year per attribute' do
+      expect(flat_query.total).to eq(4)
     end
   end
 end
