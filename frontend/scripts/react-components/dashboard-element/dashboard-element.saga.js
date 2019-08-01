@@ -222,8 +222,18 @@ export function* onTabChange(action) {
   const { panel } = action.payload;
   const { dashboardElement } = yield select();
   const activePanelId = panel || dashboardElement.activePanelId;
-  if (dashboardElement.activePanelId) {
-    yield fork(getDashboardPanelData, dashboardElement, activePanelId);
+  const activeTab =
+    dashboardElement[`${activePanelId}Panel`] &&
+    dashboardElement[`${activePanelId}Panel`].activeTab;
+  if (activePanelId && activeTab) {
+    if (
+      dashboardElement.data[panel][activeTab] &&
+      dashboardElement.data[panel][activeTab].length > 0
+    ) {
+      yield fork(getMoreDashboardPanelData, dashboardElement, activePanelId, activeTab);
+    } else {
+      yield fork(getDashboardPanelData, dashboardElement, activePanelId);
+    }
   }
 }
 
