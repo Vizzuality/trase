@@ -228,7 +228,8 @@ const dashboardElementReducer = {
       [panelName]: {
         ...state[panelName],
         activeTab,
-        page: initialState[panelName].page
+        page: initialState[panelName].page,
+        activeItems: initialState[panelName].activeItems
       }
     };
   },
