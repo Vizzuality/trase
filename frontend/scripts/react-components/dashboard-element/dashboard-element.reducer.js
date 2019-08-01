@@ -238,7 +238,7 @@ const dashboardElementReducer = {
 
     const activeTabObj =
       state.tabs[panel] && state.tabs[panel].find(tab => tab.id === selectedItem.nodeTypeId);
-    const activeTab = activeTabObj?.id;
+    const activeTab = activeTabObj?.id || null;
 
     const prevTab = state[panelName].activeTab;
     const clearedActiveTabData = prevTab && prevTab !== activeTab ? { [prevTab]: null } : {};
@@ -248,7 +248,7 @@ const dashboardElementReducer = {
         ? xor(state[panelName].activeItems, [selectedItem.id])
         : [selectedItem.id];
 
-    const oldData = activeTab ? state.data[panel][activeTab] || [] : state.data;
+    const oldData = (activeTab ? state.data[panel][activeTab] : state.data[panel]) || [];
     const dataMap = oldData.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
     let together = oldData;
     if (!dataMap[selectedItem.id]) {

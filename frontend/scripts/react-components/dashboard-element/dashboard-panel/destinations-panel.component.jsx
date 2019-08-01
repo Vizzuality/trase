@@ -7,6 +7,7 @@ import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.
 function DestinationsPanel(props) {
   const {
     page,
+    setSearchResult,
     searchDestinations,
     destinations,
     loading,
@@ -23,7 +24,7 @@ function DestinationsPanel(props) {
         className="dashboard-panel-search"
         items={searchDestinations}
         placeholder="Search place"
-        onSelect={onSelectDestinationValue}
+        onSelect={setSearchResult}
         onSearchTermChange={getSearchResults}
       />
       <GridList
@@ -59,6 +60,7 @@ DestinationsPanel.propTypes = {
   activeDestinations: PropTypes.array,
   getMoreItems: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
+  setSearchResult: PropTypes.func.isRequired,
   onSelectDestinationValue: PropTypes.func.isRequired
 };
 

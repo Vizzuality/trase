@@ -108,6 +108,7 @@ class DashboardPanel extends Component {
             page={destinationsPanel.page}
             getMoreItems={getMoreItems}
             getSearchResults={getSearchResults}
+            setSearchResult={item => setSearchResult(item, activePanelId)}
             searchDestinations={destinationsPanel.searchResults}
             destinations={destinations}
             onSelectDestinationValue={item => setActiveItems(item, activePanelId)}
