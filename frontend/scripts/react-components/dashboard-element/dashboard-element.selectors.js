@@ -215,7 +215,7 @@ const getDashboardContextResizeBy = createSelector(
 const getDashboardContextRecolorBy = createSelector(
   getDashboardsContext,
   context => {
-    if (!context) return [];
+    if (!context) return null;
     const emptyOption = {
       position: 0,
       groupNumber: -1,
@@ -233,7 +233,7 @@ const getDashboardContextRecolorBy = createSelector(
       return contextRecolorByList.concat(emptyOption);
     }
 
-    return contextRecolorByList;
+    return contextRecolorByList.length > 0 ? contextRecolorByList : null;
   }
 );
 
@@ -260,11 +260,10 @@ export const getDashboardSelectedResizeBy = createSelector(
 export const getDashboardSelectedRecolorBy = createSelector(
   [getSelectedRecolorBy, getDashboardContextRecolorBy],
   (selectedRecolorBy, contextRecolorByItems) => {
-    const attributeId = selectedRecolorBy || null;
-    if (contextRecolorByItems.length === 0) {
-      return { label: 'Select an Indicator', value: attributeId, attributeId };
+    if (!contextRecolorByItems) {
+      return null;
     }
-    return contextRecolorByItems.find(item => item.attributeId === attributeId) || null;
+    return contextRecolorByItems.find(item => item.attributeId === selectedRecolorBy) || null;
   }
 );
 
@@ -376,12 +375,25 @@ const getURLDashboardSelectedYears = createSelector(
   }
 );
 
+const getURLDashboardSelectedResizeBy = createSelector(
+  [getDashboardSelectedResizeBy, getDashboardsContext],
+  (selectedResizeBy, dashboardContext) => {
+    const defaultResizeBy = dashboardContext?.resizeBy.find(
+      item => item.attributeId === selectedResizeBy.attributeId
+    );
+    if (defaultResizeBy?.isDefault) {
+      return null;
+    }
+    return selectedResizeBy;
+  }
+);
+
 export const getDashboardElementUrlProps = createStructuredSelector({
   countriesPanel: getCountriesPanel,
   sourcesPanel: getSourcesPanel,
   commoditiesPanel: getCommoditiesPanel,
   destinationsPanel: getDestinationsPanel,
   selectedYears: getURLDashboardSelectedYears,
-  selectedResizeBy: getDashboardSelectedResizeBy,
+  selectedResizeBy: getURLDashboardSelectedResizeBy,
   selectedRecolorBy: getDashboardSelectedRecolorBy
 });

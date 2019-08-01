@@ -20,7 +20,6 @@ import {
   DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
   DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
   DASHBOARD_ELEMENT__SET_CHARTS,
-  DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS,
   DASHBOARD_ELEMENT__EDIT_DASHBOARD,
   DASHBOARD_ELEMENT__SET_MISSING_DATA,
   DASHBOARD_ELEMENT__SET_LOADING
@@ -87,7 +86,7 @@ const dashboardElementReducer = {
     return {
       ...state,
       activePanelId,
-      [prevPanelName]: prevPanelState
+      ...(prevActivePanelId ? { [prevPanelName]: prevPanelState } : {})
     };
   },
   [DASHBOARD_ELEMENT__EDIT_DASHBOARD](state) {
@@ -214,7 +213,7 @@ const dashboardElementReducer = {
     const { panel, activeTab } = action.payload;
     const panelName = `${panel}Panel`;
     const prevTab = state[panelName].activeTab;
-    const clearedActiveTabData = prevTab !== activeTab ? { [prevTab]: null } : {};
+    const clearedActiveTabData = prevTab && prevTab !== activeTab ? { [prevTab]: null } : {};
 
     return {
       ...state,
@@ -236,24 +235,44 @@ const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH](state, action) {
     const { panel, activeItems: selectedItem } = action.payload;
     const panelName = `${panel}Panel`;
-    const prevTab = state[panelName].activeTab;
-    const clearedActiveTabData = prevTab ? { [prevTab]: null } : {};
-    const activeTab =
+
+    const activeTabObj =
       state.tabs[panel] && state.tabs[panel].find(tab => tab.id === selectedItem.nodeTypeId);
+    const activeTab = activeTabObj?.id;
+
+    const prevTab = state[panelName].activeTab;
+    const clearedActiveTabData = prevTab && prevTab !== activeTab ? { [prevTab]: null } : {};
+
+    const activeItems =
+      activeTab === prevTab
+        ? xor(state[panelName].activeItems, [selectedItem.id])
+        : [selectedItem.id];
+
+    const oldData = activeTab ? state.data[panel][activeTab] || [] : state.data;
+    const dataMap = oldData.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
+    let together = oldData;
+    if (!dataMap[selectedItem.id]) {
+      together = [selectedItem, ...oldData];
+    }
+    const newData = activeTab
+      ? {
+          ...state.data[panel],
+          ...clearedActiveTabData,
+          [activeTab]: together
+        }
+      : together;
 
     return {
       ...state,
       data: {
         ...state.data,
-        [panel]: {
-          ...state.data[panel],
-          ...clearedActiveTabData
-        }
+        [panel]: newData
       },
       [panelName]: {
         ...state[panelName],
-        activeItems: xor(state[panelName].activeItems, [selectedItem.id]),
+        activeItems,
         activeTab,
+        searchResults: [],
         page: initialState[panelName].page
       }
     };
@@ -332,15 +351,6 @@ const dashboardElementReducer = {
         ...charts,
         data: charts.data.filter(IS_NOT_LOGISTIC_HUB_CHART)
       }
-    };
-  },
-  [DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS](state, action) {
-    const { years, resizeBy, recolorBy } = action.payload;
-    return {
-      ...state,
-      selectedYears: years,
-      selectedResizeBy: resizeBy.attributeId,
-      selectedRecolorBy: recolorBy.attributeId
     };
   },
   [DASHBOARD_ELEMENT__SET_LOADING](state, action) {

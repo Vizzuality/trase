@@ -11,7 +11,6 @@ import {
   takeLeading
 } from 'redux-saga/effects';
 import isEmpty from 'lodash/isEmpty';
-import isEqual from 'lodash/isEqual';
 import {
   setDashboardLoading,
   DASHBOARD_ELEMENT__CLEAR_PANEL,
@@ -27,7 +26,6 @@ import {
   DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
   DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
   DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
-  DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS,
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
   DASHBOARD_ELEMENT__GET_MISSING_DATA,
   DASHBOARD_ELEMENT__SET_MISSING_DATA
@@ -40,10 +38,7 @@ import {
   fetchDashboardPanelSearchResults,
   fetchDashboardCharts
 } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
-import {
-  getDashboardFiltersProps,
-  getDashboardPanelsValues
-} from 'react-components/dashboard-element/dashboard-element.selectors';
+import { getDashboardPanelsValues } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { DASHBOARD_STEPS } from 'constants';
 
 const hasActiveItems = (_state, panelId) => {
@@ -225,11 +220,9 @@ function* fetchDataOnSearch() {
  */
 export function* onTabChange(action) {
   const { panel } = action.payload;
-  const panelName = `${panel}Panel`;
   const { dashboardElement } = yield select();
-  const { activeTab } = dashboardElement[panelName] || {};
   const activePanelId = panel || dashboardElement.activePanelId;
-  if (dashboardElement.activePanelId && !dashboardElement.data.sources[activeTab]) {
+  if (dashboardElement.activePanelId) {
     yield fork(getDashboardPanelData, dashboardElement, activePanelId);
   }
 }
@@ -340,39 +333,6 @@ function* updateIndicatorsOnItemChange() {
     dashboardElement.countriesPanel.activeItems.length > 0 &&
     dashboardElement.commoditiesPanel.activeItems.length > 0;
   if (contextSelected) {
-    const filters = yield select(getDashboardFiltersProps);
-    let years = dashboardElement.selectedYears;
-    let resizeBy = { attributeId: dashboardElement.selectedResizeBy };
-    let recolorBy = { attribute: dashboardElement.selectedRecolorBy };
-    let hasChanged = false;
-
-    if (
-      dashboardElement.selectedYears === null ||
-      !isEqual(dashboardElement.selectedYears, filters.selectedYears)
-    ) {
-      years = filters.selectedYears;
-      hasChanged = true;
-    }
-
-    if (
-      dashboardElement.selectedResizeBy === null ||
-      dashboardElement.selectedResizeBy !== filters.selectedResizeBy.attributeId
-    ) {
-      resizeBy = filters.selectedResizeBy;
-      hasChanged = true;
-    }
-
-    if (dashboardElement.selectedRecolorBy !== null && filters.recolorBy.length === 0) {
-      recolorBy = filters.selectedRecolorBy;
-      hasChanged = true;
-    }
-
-    if (hasChanged && resizeBy && years[0]) {
-      yield put({
-        type: DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS,
-        payload: { years, resizeBy, recolorBy }
-      });
-    }
     yield fork(fetchDashboardCharts);
   }
 }

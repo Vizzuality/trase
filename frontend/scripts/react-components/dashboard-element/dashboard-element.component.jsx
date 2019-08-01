@@ -184,7 +184,7 @@ class DashboardElement extends React.PureComponent {
                         value={filters.selectedResizeBy}
                       />
                     </div>
-                    {filters.recolorBy.length > 0 && (
+                    {filters.recolorBy?.length > 0 && (
                       <div className="dashboard-filter">
                         <RecolorBy
                           color="white"
