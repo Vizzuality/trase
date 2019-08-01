@@ -100,6 +100,23 @@ shared_context 'api v3 brazil two flows' do
       year: 2015
     )
   end
+  let!(:api_v3_flow2_cp) do
+    FactoryBot.create(
+      :api_v3_flow,
+      context: api_v3_context,
+      path: [
+        api_v3_biome_node,
+        api_v3_state_node,
+        api_v3_municipality_node,
+        api_v3_logistics_hub_node,
+        api_v3_port2_node,
+        api_v3_exporter2_node,
+        api_v3_importer2_node,
+        api_v3_country_of_destination2_node
+      ].map(&:id),
+      year: 2015
+    )
+  end
 
   let!(:api_v3_flow1_potential_soy_deforestation_v2) do
     FactoryBot.create(
@@ -129,6 +146,22 @@ shared_context 'api v3 brazil two flows' do
     FactoryBot.create(
       :api_v3_flow_qual,
       flow: api_v3_flow2,
+      qual: api_v3_zero_deforestation,
+      value: 'yes'
+    )
+  end
+  let!(:api_v3_flow2_cp_potential_soy_deforestation_v2) do
+    FactoryBot.create(
+      :api_v3_flow_quant,
+      flow: api_v3_flow2_cp,
+      quant: api_v3_deforestation_v2,
+      value: 10
+    )
+  end
+  let!(:api_v3_flow2_cp_zero_deforestation) do
+    FactoryBot.create(
+      :api_v3_flow_qual,
+      flow: api_v3_flow2_cp,
       qual: api_v3_zero_deforestation,
       value: 'yes'
     )
