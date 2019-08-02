@@ -115,7 +115,7 @@ export function* getToolNodesByLink(selectedContext, { fetchAllNodes, replaceDat
       data: { links, nodes }
     } = yield select(state => state.toolLinks);
     const nodesInLinkPaths = Object.values(links).flatMap(link => link.path);
-    const existingNodes = new Set(Object.keys(nodes));
+    const existingNodes = new Set(Object.keys(nodes || {}));
     const difference = new Set(nodesInLinkPaths.filter(x => !existingNodes.has(`${x}`)));
 
     if (difference.size === 0) {
