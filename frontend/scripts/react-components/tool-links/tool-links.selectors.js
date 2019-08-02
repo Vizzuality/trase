@@ -10,6 +10,7 @@ import sortVisibleNodes from 'reducers/helpers/sortVisibleNodes';
 import getVisibleNodesUtil from 'reducers/helpers/getVisibleNodes';
 import { getSelectedColumnsIds, getSelectedNodesData } from 'react-components/tool/tool.selectors';
 import { getSelectedContext } from 'reducers/app.selectors';
+import { NUM_COLUMNS } from 'constants';
 
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolNodes = state => state.toolLinks.data.nodes;
@@ -54,20 +55,15 @@ export const getSelectedRecolorBy = createSelector(
 );
 
 export const getSelectedBiomeFilter = createSelector(
-  [getToolBiomeFilterName, getSelectedContext, getToolNodes],
-  (selectedBiomeFilterName, selectedContext, nodes) => {
+  [getToolBiomeFilterName, getSelectedContext],
+  (selectedBiomeFilterName, selectedContext) => {
     if (!selectedBiomeFilterName || !selectedContext || selectedContext.filterBy.length === 0) {
       return null;
     }
 
-    const biomeFilter = selectedContext.filterBy[0].nodes.find(
+    return selectedContext.filterBy[0].nodes.find(
       filterBy => filterBy.name === selectedBiomeFilterName
     );
-
-    // TODO add the geoId from the backend
-    const biomeFilterNode = biomeFilter && nodes && nodes[biomeFilter.nodeId];
-
-    return { ...biomeFilter, geoId: biomeFilterNode && biomeFilterNode.geoId };
   }
 );
 
@@ -77,7 +73,9 @@ export const getVisibleNodes = createSelector(
     if (!links || !nodes || !selectedColumnsIds) {
       return null;
     }
-    return getVisibleNodesUtil(links, nodes, selectedColumnsIds);
+    const visibleNodes = getVisibleNodesUtil(links, nodes, selectedColumnsIds);
+    const visibleColumns = new Set(visibleNodes.map(node => node.columnId));
+    return visibleColumns.size === NUM_COLUMNS ? visibleNodes : null;
   }
 );
 

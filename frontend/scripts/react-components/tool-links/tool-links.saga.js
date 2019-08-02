@@ -12,7 +12,6 @@ import {
   TOOL_LINKS__COLLAPSE_SANKEY,
   TOOL_LINKS__CLEAR_SANKEY,
   TOOL_LINKS__SET_NODES,
-  TOOL_LINKS__SET_MORE_NODES,
   TOOL_LINKS__SET_SELECTED_RESIZE_BY,
   TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
   TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
@@ -25,12 +24,11 @@ import {
   getToolLinksData,
   getToolNodesByLink,
   getMissingLockedNodes,
-  getToolGeoColumnNodes,
-  getMoreToolNodesByLink
+  getToolGeoColumnNodes
 } from './tool-links.fetch.saga';
 
 function* fetchToolColumns() {
-  function* performFetch() {
+  function* performFetch(action) {
     const state = yield select();
     const {
       location: { type: page }
@@ -40,12 +38,12 @@ function* fetchToolColumns() {
     if (page !== 'tool' || selectedContext === null) {
       return;
     }
-
+    const replaceData = [SET_CONTEXT, SET_CONTEXTS].includes(action.type);
     const task = yield fork(setLoadingSpinner, 750, setToolFlowsLoading(true));
     yield fork(getToolColumnsData, selectedContext);
+    yield fork(getToolGeoColumnNodes, selectedContext);
     yield call(getToolLinksData);
-    yield call(getToolNodesByLink, selectedContext);
-    yield call(getToolGeoColumnNodes, selectedContext);
+    yield call(getToolNodesByLink, selectedContext, { replaceData });
 
     // TODO: remove this call, just here to split the refactor in stages
     yield put(loadMapVectorData());
@@ -94,7 +92,7 @@ function* fetchLinks() {
     const fetchAllNodes = action.type === TOOL_LINKS__SELECT_VIEW && action.payload.detailedView;
     const task = yield fork(setLoadingSpinner, 2000, setToolFlowsLoading(true));
     yield call(getToolLinksData);
-    yield call(getMoreToolNodesByLink, selectedContext, fetchAllNodes);
+    yield call(getToolNodesByLink, selectedContext, { fetchAllNodes });
     if (task.isRunning()) {
       yield cancel(task);
     } else {
@@ -161,7 +159,7 @@ function* fetchMissingLockedNodes() {
     }
   }
 
-  yield takeLatest([TOOL_LINKS__SET_NODES, TOOL_LINKS__SET_MORE_NODES], performFetch);
+  yield takeLatest([TOOL_LINKS__SET_NODES], performFetch);
 }
 
 export default function* toolLinksSaga() {

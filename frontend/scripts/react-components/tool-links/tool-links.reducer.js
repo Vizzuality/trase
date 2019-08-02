@@ -8,7 +8,6 @@ import {
   TOOL_LINKS__CLEAR_SANKEY,
   TOOL_LINKS__HIGHLIGHT_NODE,
   TOOL_LINKS__SET_NODES,
-  TOOL_LINKS__SET_MORE_NODES,
   TOOL_LINKS__SET_FLOWS_LOADING,
   TOOL_LINKS__SET_COLUMNS,
   TOOL_LINKS__SET_LINKS,
@@ -34,14 +33,14 @@ import { deserialize } from 'react-components/shared/url-serializer/url-serializ
 import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-links.serializers';
 import toolLinksInitialState from './tool-links.initial-state';
 
-function setMoreNodes(state, action) {
-  const { nodes } = action.payload;
+function setNodes(state, action) {
+  const { nodes, replaceData } = action.payload;
   return immer(state, draft => {
     nodes.forEach(node => {
-      if (!draft.data.nodes) {
+      if (!draft.data.nodes || replaceData) {
         draft.data.nodes = {};
       }
-      if (!draft.data.nodesByColumnGeoId) {
+      if (!draft.data.nodesByColumnGeoId || replaceData) {
         draft.data.nodesByColumnGeoId = {};
       }
       if (!draft.data.nodes[node.id]) {
@@ -142,22 +141,9 @@ const toolLinksReducer = {
       // TODO: if any selectedNode, make those columns visible (selected)
     });
   },
+  [TOOL_LINKS__SET_NODES]: setNodes,
 
-  [TOOL_LINKS__SET_NODES](state, action) {
-    const { nodes } = action.payload;
-    return immer(state, draft => {
-      draft.data.nodes = {};
-      draft.data.nodesByColumnGeoId = {};
-      nodes.forEach(node => {
-        draft.data.nodes[node.id] = node;
-        draft.data.nodesByColumnGeoId[`${node.columnId}-${node.geoId}`] = node.id;
-      });
-    });
-  },
-
-  [TOOL_LINKS__SET_MORE_NODES]: setMoreNodes,
-
-  [TOOL_LINKS__SET_MISSING_LOCKED_NODES]: setMoreNodes,
+  [TOOL_LINKS__SET_MISSING_LOCKED_NODES]: setNodes,
 
   [TOOL_LINKS__SET_LINKS](state, action) {
     return immer(state, draft => {
