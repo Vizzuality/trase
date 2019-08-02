@@ -214,7 +214,6 @@ const toolLinksReducer = {
         const column = draft.data.columns[node.columnId];
         return column.group !== columnIndex;
       };
-
       draft.selectedNodesIds = state.selectedNodesIds.filter(isInColumn);
       draft.expandedNodesIds = state.expandedNodesIds.filter(isInColumn);
     });
@@ -248,7 +247,7 @@ const toolLinksReducer = {
       if (
         areNodesExpanded &&
         draft.selectedNodesIds.length === 1 &&
-        draft.selectedNodesIds.includes(ids)
+        ids.includes(draft.selectedNodesIds[0])
       ) {
         // we are unselecting the node that is currently expanded: shrink sankey and continue to unselecting node
         draft.expandedNodesIds = [];

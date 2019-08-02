@@ -354,8 +354,42 @@ describe(SET_SELECTED_NODES_BY_SEARCH, () => {
     expect(newState).toMatchSnapshot();
   });
 
+  it('selects 2 nodes belonging to a column not selected by default, with no expanded nodes', () => {
+    const results = [{ id: 5, nodeType: 'EXPORTER' }, { id: 6, nodeType: 'IMPORTER' }];
+    const state = {
+      ...initialState,
+      selectedColumnsIds: [9, 8],
+      data: {
+        ...initialState.data,
+        columns: {
+          3: { id: 3, group: 1, name: 'EXPORTER' },
+          4: { id: 4, group: 0, name: 'IMPORTER' }
+        }
+      }
+    };
+    const action = selectSearchNode(results);
+    const newState = reducer(state, action);
+    expect(newState).toMatchSnapshot();
+  });
+
+  it('deselect the only selected node that is also expanded', () => {
+    const results = [{ id: 1, nodeType: 'EXPORTER' }];
+    const state = {
+      ...initialState,
+      selectedNodesIds: [1],
+      expandedNodesIds: [1],
+      data: {
+        ...initialState.data,
+        columns: {
+          3: { group: 1, name: 'EXPORTER', isDefault: true }
+        }
+      }
+    };
+    const action = selectSearchNode(results);
+    const newState = reducer(state, action);
+    expect(newState).toMatchSnapshot();
+  });
+
   // TODO:
-  // - select 2 nodes that are in a column that is not selected by default and needs changing the column
-  // - deselect a the only selected node that is also expanded
   // - REGRESSION TEST: selectedColumnsIds = [empty, 2, empty, empty] and select a node that has column group === 4 and column.isDefault === true
 });

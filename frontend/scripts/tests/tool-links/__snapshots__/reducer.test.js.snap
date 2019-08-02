@@ -26,6 +26,78 @@ Object {
 }
 `;
 
+exports[`SET_SELECTED_NODES_BY_SEARCH REGRESSION TEST: selects 2 nodes belonging to a column not selected by default, with no expanded nodes 1`] = `
+Object {
+  "currentQuant": null,
+  "data": Object {
+    "columns": Object {
+      "6": Object {
+        "group": 3,
+        "id": 6,
+        "isDefault": true,
+        "name": "EXPORTER",
+      },
+    },
+    "links": null,
+    "nodeAttributes": null,
+    "nodeHeights": null,
+    "nodes": null,
+    "nodesByColumnGeoId": null,
+  },
+  "detailedView": false,
+  "expandedNodesIds": Array [],
+  "flowsLoading": false,
+  "forcedOverview": false,
+  "highlightedNodeId": null,
+  "isSearchOpen": false,
+  "noLinksFound": false,
+  "selectedBiomeFilterName": null,
+  "selectedColumnsIds": Array [
+    null,
+    2,
+    null,
+    null,
+  ],
+  "selectedNodesIds": Array [
+    5,
+  ],
+  "selectedRecolorByName": null,
+  "selectedResizeByName": null,
+}
+`;
+
+exports[`SET_SELECTED_NODES_BY_SEARCH deselect the only selected node that is also expanded 1`] = `
+Object {
+  "currentQuant": null,
+  "data": Object {
+    "columns": Object {
+      "3": Object {
+        "group": 1,
+        "isDefault": true,
+        "name": "EXPORTER",
+      },
+    },
+    "links": null,
+    "nodeAttributes": null,
+    "nodeHeights": null,
+    "nodes": null,
+    "nodesByColumnGeoId": null,
+  },
+  "detailedView": false,
+  "expandedNodesIds": Array [],
+  "flowsLoading": false,
+  "forcedOverview": false,
+  "highlightedNodeId": null,
+  "isSearchOpen": false,
+  "noLinksFound": false,
+  "selectedBiomeFilterName": null,
+  "selectedColumnsIds": null,
+  "selectedNodesIds": Array [],
+  "selectedRecolorByName": null,
+  "selectedResizeByName": null,
+}
+`;
+
 exports[`SET_SELECTED_NODES_BY_SEARCH deselects 2 nodes belonging to a column selected by default, with no expanded nodes 1`] = `
 Object {
   "currentQuant": null,
@@ -58,6 +130,49 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
+  "selectedRecolorByName": null,
+  "selectedResizeByName": null,
+}
+`;
+
+exports[`SET_SELECTED_NODES_BY_SEARCH selects 2 nodes belonging to a column not selected by default, with no expanded nodes 1`] = `
+Object {
+  "currentQuant": null,
+  "data": Object {
+    "columns": Object {
+      "3": Object {
+        "group": 1,
+        "id": 3,
+        "name": "EXPORTER",
+      },
+      "4": Object {
+        "group": 0,
+        "id": 4,
+        "name": "IMPORTER",
+      },
+    },
+    "links": null,
+    "nodeAttributes": null,
+    "nodeHeights": null,
+    "nodes": null,
+    "nodesByColumnGeoId": null,
+  },
+  "detailedView": false,
+  "expandedNodesIds": Array [],
+  "flowsLoading": false,
+  "forcedOverview": false,
+  "highlightedNodeId": null,
+  "isSearchOpen": false,
+  "noLinksFound": false,
+  "selectedBiomeFilterName": null,
+  "selectedColumnsIds": Array [
+    4,
+    3,
+  ],
+  "selectedNodesIds": Array [
+    5,
+    6,
+  ],
   "selectedRecolorByName": null,
   "selectedResizeByName": null,
 }
@@ -156,32 +271,6 @@ Object {
 `;
 
 exports[`TOOL_LINKS__EXPAND_SANKEY 1`] = `
-Object {
-  "currentQuant": null,
-  "data": Object {
-    "columns": null,
-    "links": null,
-    "nodeAttributes": null,
-    "nodeHeights": null,
-    "nodes": null,
-    "nodesByColumnGeoId": null,
-  },
-  "detailedView": false,
-  "expandedNodesIds": Array [],
-  "flowsLoading": false,
-  "forcedOverview": false,
-  "highlightedNodeId": null,
-  "isSearchOpen": false,
-  "noLinksFound": false,
-  "selectedBiomeFilterName": null,
-  "selectedColumnsIds": null,
-  "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
-}
-`;
-
-exports[`TOOL_LINKS__GET_COLUMNS 1`] = `
 Object {
   "currentQuant": null,
   "data": Object {
