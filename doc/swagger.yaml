@@ -2224,6 +2224,31 @@ components:
               type: number
             summary:
               type: string
+            header_attributes:
+              type: object
+              properties:
+                zero_deforestation:
+                  type: object
+                  properties:
+                    value:
+                      type: string
+                    name:
+                      type: string
+                    unit:
+                      type: string
+                    tooltip:
+                      type: string
+                forest_500:
+                  type: object
+                  properties:
+                    value:
+                      type: string
+                    name:
+                      type: string
+                    unit:
+                      type: string
+                    tooltip:
+                      type: string
     ActorTopCountries:
       type: object
       properties:
@@ -2478,6 +2503,42 @@ components:
               type: number
             commodity_area:
               type: string
+            header_attributes:
+              type: object
+              properties:
+                area:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    value:
+                      type: string
+                    unit:
+                      type: string
+                    tooltip:
+                      type: string
+                commodity_area:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    value:
+                      type: string
+                    unit:
+                      type: string
+                    tooltip:
+                      type: string
+                commodity_production:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    value:
+                      type: string
+                    unit:
+                      type: string
+                    tooltip:
+                      type: string
     PlaceTopConsumerActors:
       type: object
       properties:

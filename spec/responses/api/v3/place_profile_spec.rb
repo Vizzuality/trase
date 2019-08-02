@@ -8,6 +8,9 @@ RSpec.describe 'Place profile', type: :request do
   include_context 'api v3 brazil municipality place profile'
 
   before(:each) do
+    Api::V3::Readonly::CommodityAttributeProperty.refresh
+    Api::V3::Readonly::CountryAttributeProperty.refresh
+    Api::V3::Readonly::ContextAttributeProperty.refresh
     Api::V3::Readonly::Node.refresh(sync: true, skip_dependencies: true)
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
