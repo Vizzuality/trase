@@ -184,9 +184,14 @@ const dashboardElementReducer = {
     const panelName = `${panel}Panel`;
     const sourcesPanelState =
       panel === 'countries' ? initialState.sourcesPanel : state.sourcesPanel;
+    const sourcesData = panel === 'countries' ? initialState.data.sources : state.data.sources;
     const activeItems = activeItem ? [activeItem.id] : initialState[panelName].activeItems;
     return {
       ...state,
+      data: {
+        ...state.data,
+        sources: sourcesData
+      },
       sourcesPanel: sourcesPanelState,
       [panelName]: {
         ...state[panelName],
@@ -195,34 +200,28 @@ const dashboardElementReducer = {
     };
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS](state, action) {
-    const { panel, activeItems: selectedItem } = action.payload;
+    const { panel, activeItems } = action.payload;
     const panelName = `${panel}Panel`;
-    const items = Array.isArray(selectedItem) ? selectedItem.map(i => i.id) : [selectedItem.id];
-    const activeItems = xor(state[panelName].activeItems, items);
+    const selectedItems = Array.isArray(activeItems) ? activeItems : [activeItems];
+    const items = selectedItems.map(i => i.id);
+    const activeTab = state.tabs[panel]
+      ? state.tabs[panel].find(tab => tab.name === selectedItems[0].nodeType).id
+      : null;
     return {
       ...state,
-      sourcesPanel: state.sourcesPanel,
       [panelName]: {
         ...state[panelName],
-        activeItems
+        activeTab,
+        activeItems: xor(state[panelName].activeItems, items)
       }
     };
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_TAB](state, action) {
     const { panel, activeTab } = action.payload;
     const panelName = `${panel}Panel`;
-    const prevTab = state[panelName].activeTab;
-    const clearedActiveTabData = prevTab && prevTab !== activeTab ? { [prevTab]: null } : {};
 
     return {
       ...state,
-      data: {
-        ...state.data,
-        [panel]: {
-          ...state.data[panel],
-          ...clearedActiveTabData
-        }
-      },
       [panelName]: {
         ...state[panelName],
         activeTab,

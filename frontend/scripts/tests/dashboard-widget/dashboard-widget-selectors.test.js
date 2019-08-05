@@ -17,6 +17,14 @@ const commodity = {
   name: 'SOY'
 };
 
+const recolorByZeroDeforestationCommitment = {
+  label: 'Zero Deforestation Commitment (Exporter)',
+  legendColorTheme: 'thematic',
+  legendType: 'qual',
+  type: 'qual',
+  attributeId: 1
+};
+
 const defaultState = {
   app: {
     contexts: [
@@ -27,7 +35,8 @@ const defaultState = {
         countryId: 27,
         countryName: 'BRAZIL',
         commodityId: 1,
-        commodityName: 'SOY'
+        commodityName: 'SOY',
+        recolorBy: [recolorByZeroDeforestationCommitment]
       }
     ]
   },
@@ -46,6 +55,14 @@ const defaultState = {
       ...initialState.commoditiesPanel,
       activeItems: [commodity.id]
     }
+  }
+};
+
+const zdcRecolorByState = {
+  ...defaultState,
+  dashboardElement: {
+    ...defaultState.dashboardElement,
+    selectedRecolorBy: 1
   }
 };
 
@@ -74,13 +91,6 @@ const mockChart = {
   }
 };
 
-const recolorByZeroDeforestationCommitment = {
-  label: 'Zero Deforestation Commitment (Exporter)',
-  legendColorTheme: 'thematic',
-  legendType: 'qual',
-  type: 'qual'
-};
-
 const notSelectedRecolorBy = { value: null, name: 'none' };
 
 describe('Widget config parse selectors', () => {
@@ -96,12 +106,12 @@ describe('Widget config parse selectors', () => {
   describe('getYKeys', () => {
     it('returns the default YKeys if there is no meta', () => {
       expect(
-        getYKeys(null, { meta: null, selectedRecolorBy: null, chartType: 'bar_chart' })
+        getYKeys(defaultState, { meta: null, selectedRecolorBy: null, chartType: 'bar_chart' })
       ).toMatchSnapshot();
     });
     it('returns the parsed YKeys', () => {
       expect(
-        getYKeys(null, {
+        getYKeys(defaultState, {
           meta: mockChart.meta,
           selectedRecolorBy: notSelectedRecolorBy,
           chartType: 'bar_chart'
@@ -110,7 +120,7 @@ describe('Widget config parse selectors', () => {
     });
     it('returns the default yKeys when parsing horizontal charts', () => {
       expect(
-        getYKeys(null, {
+        getYKeys(defaultState, {
           meta: mockChart.meta,
           selectedRecolorBy: notSelectedRecolorBy,
           chartType: 'horizontal_bar_chart'
@@ -122,13 +132,17 @@ describe('Widget config parse selectors', () => {
   describe('getColors', () => {
     it('return the colors using the default ramp', () => {
       expect(
-        getColors(null, { meta: null, chartType: 'bar_chart', selectedRecolorBy: null })
+        getColors(defaultState, { meta: null, chartType: 'bar_chart', selectedRecolorBy: null })
       ).toMatchSnapshot();
     });
 
     it('return the colors using the default ramp when chart type is sentence', () => {
       expect(
-        getColors(null, { meta: null, chartType: 'dynamic_sentence', selectedRecolorBy: null })
+        getColors(defaultState, {
+          meta: null,
+          chartType: 'dynamic_sentence',
+          selectedRecolorBy: null
+        })
       ).toMatchSnapshot();
     });
 
@@ -157,7 +171,7 @@ describe('Widget config parse selectors', () => {
       };
 
       expect(
-        getColors(null, {
+        getColors(zdcRecolorByState, {
           data: pie.data,
           meta: pie.meta,
           chartType: 'donut_chart',
@@ -168,7 +182,7 @@ describe('Widget config parse selectors', () => {
 
     it('returns the zero deforestation commitment colors', () => {
       expect(
-        getColors(null, {
+        getColors(zdcRecolorByState, {
           meta: mockChart.meta,
           chartType: 'horizontal_bar_chart',
           selectedRecolorBy: recolorByZeroDeforestationCommitment
@@ -187,7 +201,7 @@ describe('Widget config parse selectors', () => {
 
     it('Parses the config with recolor by', () => {
       expect(
-        makeGetConfig()(defaultState, {
+        makeGetConfig()(zdcRecolorByState, {
           data: mockChart.data,
           meta: mockChart.meta,
           chartType: 'horizontal_bar_chart',

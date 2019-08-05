@@ -10,7 +10,6 @@ import {
   takeEvery,
   takeLeading
 } from 'redux-saga/effects';
-import isEmpty from 'lodash/isEmpty';
 import {
   setDashboardLoading,
   DASHBOARD_ELEMENT__CLEAR_PANEL,
@@ -18,7 +17,6 @@ import {
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
-  DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_PAGE,
   DASHBOARD_ELEMENT__GET_SEARCH_RESULTS,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
@@ -26,9 +24,9 @@ import {
   DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
   DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
   DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
-  DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
   DASHBOARD_ELEMENT__GET_MISSING_DATA,
-  DASHBOARD_ELEMENT__SET_MISSING_DATA
+  DASHBOARD_ELEMENT__SET_MISSING_DATA,
+  DASHBOARD_ELEMENT__SET_PANEL_TABS
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import {
   getMissingDashboardPanelItems,
@@ -38,7 +36,11 @@ import {
   fetchDashboardPanelSearchResults,
   fetchDashboardCharts
 } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
-import { getDashboardPanelsValues } from 'react-components/dashboard-element/dashboard-element.selectors';
+import {
+  getSourcesActiveTab,
+  getCompaniesActiveTab,
+  getDashboardPanelsValues
+} from 'react-components/dashboard-element/dashboard-element.selectors';
 import { DASHBOARD_STEPS } from 'constants';
 
 const hasActiveItems = (_state, panelId) => {
@@ -47,10 +49,7 @@ const hasActiveItems = (_state, panelId) => {
 };
 
 export function* fetchMissingDashboardPanelItems() {
-  function* fetchMissingItems(action) {
-    if (action?.meta?.location?.kind === 'redirect') {
-      return;
-    }
+  function* fetchMissingItems() {
     const panelsValues = yield select(getDashboardPanelsValues);
     const dashboardElement = yield select(state => state.dashboardElement);
     const tasks = [];
@@ -148,11 +147,19 @@ export function* fetchDashboardPanelInitialData(action) {
   const state = yield select();
   const { dashboardElement } = state;
 
-  const tab = dashboardElement[`${activePanelId}Panel`].activeTab;
+  function* fetchTabPanelData(selector) {
+    const tab = yield select(selector);
 
-  // avoid dispatching getDashboardPanelData through getDashboardPanelSectionTabs for companies
+    if (hasActiveItems(dashboardElement, activePanelId)) {
+      yield fork(getMoreDashboardPanelData, dashboardElement, activePanelId, tab);
+    } else {
+      yield fork(getDashboardPanelData, dashboardElement, activePanelId, tab);
+    }
+  }
+
   if (dashboardElement.activePanelId === 'companies') {
     yield fork(getDashboardPanelSectionTabs, dashboardElement, activePanelId);
+    yield fork(fetchTabPanelData, getCompaniesActiveTab);
   } else if (activePanelId === 'sources') {
     const countriesSaga = hasActiveItems(dashboardElement, 'countries')
       ? getMoreDashboardPanelData
@@ -160,16 +167,10 @@ export function* fetchDashboardPanelInitialData(action) {
     yield fork(countriesSaga, dashboardElement, 'countries');
     // Fetch regions
     if (dashboardElement.countriesPanel.activeItems.length > 0) {
-      const sourcesSaga = hasActiveItems(dashboardElement, activePanelId)
-        ? getMoreDashboardPanelData
-        : getDashboardPanelData;
-      yield fork(sourcesSaga, dashboardElement, activePanelId, tab);
+      yield fork(fetchTabPanelData, getSourcesActiveTab);
     }
   } else {
-    const saga = hasActiveItems(dashboardElement, activePanelId)
-      ? getMoreDashboardPanelData
-      : getDashboardPanelData;
-    yield fork(saga, dashboardElement, activePanelId, tab);
+    yield fork(getDashboardPanelData, dashboardElement, activePanelId);
   }
 }
 
@@ -229,6 +230,30 @@ export function* getSearchResults(action) {
 function* fetchDataOnSearch() {
   yield takeLatest(DASHBOARD_ELEMENT__GET_SEARCH_RESULTS, getSearchResults);
 }
+
+export function* fetchDataOnTabsFetch() {
+  function* onTabsFetch(action) {
+    const { key } = action.payload;
+    const { dashboardElement } = yield select();
+    let activeTabSelector;
+    if (key === 'sources') {
+      activeTabSelector = getSourcesActiveTab;
+    }
+    if (key === 'companies') {
+      activeTabSelector = getCompaniesActiveTab;
+    }
+
+    const activeTab = yield select(activeTabSelector);
+    if (
+      !dashboardElement.data[key][activeTab] ||
+      dashboardElement.data[key][activeTab].length === 0
+    ) {
+      yield fork(getDashboardPanelData, dashboardElement, key, activeTab);
+    }
+  }
+
+  yield takeLatest([DASHBOARD_ELEMENT__SET_PANEL_TABS], onTabsFetch);
+}
 /**
  * Fetches the data for the activeTab if the data hasn't been loaded.
  */
@@ -236,9 +261,15 @@ export function* onTabChange(action) {
   const { panel } = action.payload;
   const { dashboardElement } = yield select();
   const activePanelId = panel || dashboardElement.activePanelId;
-  const activeTab =
-    dashboardElement[`${activePanelId}Panel`] &&
-    dashboardElement[`${activePanelId}Panel`].activeTab;
+  let activeTabSelector = null;
+  if (activePanelId === 'sources') {
+    activeTabSelector = getSourcesActiveTab;
+  }
+  if (activePanelId === 'companies') {
+    activeTabSelector = getCompaniesActiveTab;
+  }
+  const activeTab = activeTabSelector && (yield select(activeTabSelector));
+
   if (activePanelId && activeTab) {
     if (
       dashboardElement.data[panel][activeTab] &&
@@ -246,18 +277,14 @@ export function* onTabChange(action) {
     ) {
       yield fork(getMoreDashboardPanelData, dashboardElement, activePanelId, activeTab);
     } else {
-      yield fork(getDashboardPanelData, dashboardElement, activePanelId);
+      yield fork(getDashboardPanelData, dashboardElement, activePanelId, activeTab);
     }
   }
 }
 
 function* fetchDataOnTabChange() {
   yield takeLatest(
-    [
-      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
-      DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
-      DASHBOARD_ELEMENT__SET_PANEL_TABS
-    ],
+    [DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH, DASHBOARD_ELEMENT__SET_ACTIVE_TAB],
     onTabChange
   );
 }
@@ -269,18 +296,14 @@ export function* onItemChange(action) {
   const { panel, activeItem } = action.payload;
   const { dashboardElement } = yield select();
   // for now, we just need to recalculate the tabs when selecting a new country
-  if (panel === 'countries' && !isEmpty(activeItem)) {
+  if (panel === 'countries' && activeItem) {
     yield fork(getDashboardPanelSectionTabs, dashboardElement, 'sources');
   }
 }
 
 function* fetchDataOnItemChange() {
   yield takeLatest(
-    [
-      DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
-      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
-      DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA
-    ],
+    [DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS],
     onItemChange
   );
 }
@@ -364,6 +387,8 @@ function* updateIndicatorsOnItemChange() {
 function* fetchChartsOnItemChange() {
   yield takeLatest(
     [
+      DASHBOARD_ELEMENT__CLEAR_PANEL,
+      DASHBOARD_ELEMENT__CLEAR_PANELS,
       DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
       DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
       DASHBOARD_ELEMENT__SET_MISSING_DATA,
@@ -376,6 +401,7 @@ function* fetchChartsOnItemChange() {
 export default function* dashboardElementSaga() {
   const sagas = [
     fetchDataOnPanelChange,
+    fetchDataOnTabsFetch,
     fetchDataOnTabChange,
     fetchDataOnItemChange,
     clearSubsequentPanels,
