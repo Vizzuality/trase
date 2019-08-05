@@ -25,7 +25,7 @@ function SourcesPanel(props) {
     onSelectSourceTab,
     nodeTypeRenderer,
     onSelectSourceValue,
-    activeSourceTab,
+    sourcesActiveTab,
     activeSourceItem,
     sourcesRequired
   } = props;
@@ -80,7 +80,7 @@ function SourcesPanel(props) {
           <Tabs
             tabs={tabs}
             onSelectTab={onSelectSourceTab}
-            selectedTab={activeSourceTab}
+            selectedTab={sourcesActiveTab}
             itemTabRenderer={i => i.name}
             getTabId={item => item.id}
           >
@@ -119,7 +119,7 @@ SourcesPanel.propTypes = {
   tabs: PropTypes.array.isRequired,
   nodeTypeRenderer: PropTypes.func,
   page: PropTypes.number.isRequired,
-  activeSourceTab: PropTypes.number,
+  sourcesActiveTab: PropTypes.number,
   activeSourceItem: PropTypes.array,
   activeCountryItems: PropTypes.array,
   getMoreItems: PropTypes.func.isRequired,

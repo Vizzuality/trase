@@ -363,7 +363,7 @@ test(DASHBOARD_ELEMENT__SET_ACTIVE_TAB, () => {
     ...state,
     data: {
       ...state.data,
-      sources: { 1: null }
+      sources: {}
     },
     sourcesPanel: {
       ...state.sourcesPanel,

@@ -57,6 +57,8 @@ describe('getDashboardPanelData', () => {
     generator.next();
     generator.next();
     generator.next();
+    generator.next();
+
     expect(generator.return().value).toEqual(cancelled());
     generator.next(true);
     expect(sourceMock.cancel).toBeCalled();
@@ -66,6 +68,7 @@ describe('getDashboardPanelData', () => {
 describe('getDashboardPanelSectionTabs', () => {
   it('Cancels if the fetch is cancelled', () => {
     const generator = getDashboardPanelSectionTabs(dashboardElement, optionsType);
+    generator.next();
     generator.next();
     expect(generator.return().value).toEqual(cancelled());
     generator.next(true);
@@ -77,7 +80,9 @@ describe('getMoreDashboardPanelData', () => {
   it('Cancels if the fetch is cancelled', () => {
     const generator = fetchDashboardPanelSearchResults(dashboardElement, query);
     generator.next();
-    expect(generator.return().value).toEqual(cancelled());
+    generator.next({});
+    const cancel = generator.return().value;
+    expect(cancel).toEqual(cancelled());
     generator.next(true);
     expect(sourceMock.cancel).toBeCalled();
   });
@@ -87,6 +92,7 @@ describe('fetchDashboardPanelSearchResults', () => {
   it('Cancels if the fetch is cancelled', () => {
     const generator = fetchDashboardPanelSearchResults(dashboardElement, query);
     generator.next();
+    generator.next({});
     expect(generator.return().value).toEqual(cancelled());
     generator.next(true);
     expect(sourceMock.cancel).toBeCalled();

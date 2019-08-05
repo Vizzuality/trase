@@ -1,5 +1,3 @@
-import { DASHBOARD_STEPS } from 'constants';
-
 export const DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_PANEL = 'DASHBOARD_ELEMENT__SET_ACTIVE_PANEL';
@@ -26,53 +24,6 @@ export const DASHBOARD_ELEMENT__GO_TO_DASHBOARD = 'DASHBOARD_ELEMENT__GO_TO_DASH
 export const DASHBOARD_ELEMENT__GET_MISSING_DATA = 'DASHBOARD_ELEMENT__GET_MISSING_DATA';
 export const DASHBOARD_ELEMENT__SET_MISSING_DATA = 'DASHBOARD_ELEMENT__SET_MISSING_DATA';
 export const DASHBOARD_ELEMENT__SET_LOADING = 'DASHBOARD_ELEMENT__SET_LOADING';
-
-export const getDashboardPanelParams = (state, optionsType, options = {}) => {
-  const {
-    countriesPanel,
-    sourcesPanel,
-    companiesPanel,
-    destinationsPanel,
-    commoditiesPanel
-  } = state;
-  const { page, isOverview } = options;
-  const sourcesTab = sourcesPanel.activeTab;
-  const companiesTab = companiesPanel.activeTab;
-
-  const nodeTypesIds = {
-    sources: sourcesTab,
-    companies: companiesTab
-  }[optionsType];
-  const activeItemParams = panel => panel.activeItems.join();
-  const params = {
-    page,
-    options_type: optionsType,
-    node_types_ids: nodeTypesIds
-  };
-  const currentStep = DASHBOARD_STEPS[optionsType];
-  if (currentStep === DASHBOARD_STEPS.sources) {
-    params.countries_ids = activeItemParams(countriesPanel);
-  }
-
-  if (currentStep > DASHBOARD_STEPS.sources || isOverview) {
-    params.countries_ids = activeItemParams(countriesPanel);
-    params.sources_ids = activeItemParams(sourcesPanel);
-  }
-
-  if (currentStep > DASHBOARD_STEPS.commodities || isOverview) {
-    params.commodities_ids = activeItemParams(commoditiesPanel);
-  }
-
-  if (currentStep > DASHBOARD_STEPS.destinations || isOverview) {
-    params.destinations_ids = activeItemParams(destinationsPanel);
-  }
-
-  if (currentStep > DASHBOARD_STEPS.companies || isOverview) {
-    params.companies_ids = activeItemParams(companiesPanel);
-  }
-
-  return params;
-};
 
 export const setDashboardActivePanel = activePanelId => ({
   type: DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,

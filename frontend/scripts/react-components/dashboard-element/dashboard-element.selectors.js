@@ -20,10 +20,7 @@ const getDestinationsPanel = state => state.dashboardElement.destinationsPanel;
 const getCompaniesPanel = state => state.dashboardElement.companiesPanel;
 const getCommoditiesPanel = state => state.dashboardElement.commoditiesPanel;
 const getDashboardPanelTabs = state => state.dashboardElement.tabs;
-const getActiveDashboardPanel = state => {
-  const { activePanelId, ...restState } = state.dashboardElement;
-  return { id: activePanelId, ...restState[`${activePanelId}Panel`] };
-};
+
 const getAppContexts = state => state.app.contexts;
 const getSelectedYears = state => state.dashboardElement.selectedYears;
 const getSelectedResizeBy = state => state.dashboardElement.selectedResizeBy;
@@ -32,9 +29,35 @@ const getDashboardCharts = state => state.dashboardElement.charts;
 
 export const getEditMode = state => state.dashboardElement.editMode;
 
-export const getActivePanelTabs = createSelector(
-  [getActiveDashboardPanel, getDashboardPanelTabs],
-  (panel, tabs) => tabs[panel.id] || []
+export const getSourcesTabs = createSelector(
+  [getDashboardPanelTabs],
+  tabs => tabs.sources || []
+);
+
+export const getCompaniesTabs = createSelector(
+  [getDashboardPanelTabs],
+  tabs => tabs.companies || []
+);
+
+const getPanelActiveTab = (panel, tabs, panelId) => {
+  const panelTabs = tabs[panelId];
+  if (panel.activeTab) {
+    return panel.activeTab;
+  }
+  if (panelTabs?.length > 0) {
+    return panelTabs[0].id;
+  }
+  return null;
+};
+
+export const getSourcesActiveTab = createSelector(
+  [getSourcesPanel, getDashboardPanelTabs, () => 'sources'],
+  getPanelActiveTab
+);
+
+export const getCompaniesActiveTab = createSelector(
+  [getCompaniesPanel, getDashboardPanelTabs, () => 'companies'],
+  getPanelActiveTab
 );
 
 export const getDirtyBlocks = createSelector(
@@ -224,6 +247,7 @@ const getDashboardContextRecolorBy = createSelector(
       value: null,
       attributeId: null
     };
+    // TODO: handle this indicators by bucketing either here or preferably in backend
     const contextRecolorByList = context.recolorBy.filter(
       item => !['LR_DEFICIT_PERC_PRIVATE_LAND', 'SMALLHOLDERS'].includes(item.name)
     );
@@ -262,7 +286,16 @@ export const getDashboardSelectedRecolorBy = createSelector(
     if (!contextRecolorByItems) {
       return null;
     }
-    return contextRecolorByItems.find(item => item.attributeId === selectedRecolorBy) || null;
+
+    const contextSelectedRecolorBy = contextRecolorByItems.find(
+      item => item.attributeId === selectedRecolorBy
+    );
+
+    if (contextSelectedRecolorBy) {
+      return contextSelectedRecolorBy;
+    }
+
+    return contextRecolorByItems.find(item => item.attributeId === null);
   }
 );
 

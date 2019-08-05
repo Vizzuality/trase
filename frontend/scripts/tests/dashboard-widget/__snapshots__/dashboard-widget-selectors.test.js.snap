@@ -116,6 +116,15 @@ Object {
       "defaultYear": 2017,
       "id": 1,
       "isDefault": true,
+      "recolorBy": Array [
+        Object {
+          "attributeId": 1,
+          "label": "Zero Deforestation Commitment (Exporter)",
+          "legendColorTheme": "thematic",
+          "legendType": "qual",
+          "type": "qual",
+        },
+      ],
     },
   },
   "layout": "vertical",
@@ -225,6 +234,15 @@ Object {
       "defaultYear": 2017,
       "id": 1,
       "isDefault": true,
+      "recolorBy": Array [
+        Object {
+          "attributeId": 1,
+          "label": "Zero Deforestation Commitment (Exporter)",
+          "legendColorTheme": "thematic",
+          "legendType": "qual",
+          "type": "qual",
+        },
+      ],
     },
   },
   "layout": "vertical",

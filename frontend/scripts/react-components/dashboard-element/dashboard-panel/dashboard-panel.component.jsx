@@ -42,7 +42,7 @@ class DashboardPanel extends Component {
 
   renderPanel() {
     const {
-      tabs,
+      step,
       getMoreItems,
       activePanelId,
       countriesPanel,
@@ -61,14 +61,17 @@ class DashboardPanel extends Component {
       commodities,
       commoditiesPanel,
       setSearchResult,
-      step,
+      sourcesTabs,
+      companiesTabs,
+      sourcesActiveTab,
+      companiesActiveTab,
       countriesActiveItems
     } = this.props;
     switch (step) {
       case DASHBOARD_STEPS.sources:
         return (
           <SourcesPanel
-            tabs={tabs}
+            tabs={sourcesTabs}
             countries={countries}
             page={sourcesPanel.page}
             getMoreItems={getMoreItems}
@@ -81,14 +84,14 @@ class DashboardPanel extends Component {
             loading={sourcesPanel.loadingItems}
             clearItems={() => clearActiveItems(activePanelId)}
             activeCountryItems={countriesActiveItems}
-            activeSourceTab={sourcesPanel.activeTab}
+            sourcesActiveTab={sourcesActiveTab}
             activeSourceItem={sourcesPanel.activeItems}
             onSelectCountry={item => setActiveItem(item, 'countries')}
             onSelectSourceTab={item => setActiveTab(item?.id, activePanelId)}
             setSearchResult={item => setSearchResult(item, activePanelId)}
             onSelectSourceValue={item => setActiveItems(item, activePanelId)}
             nodeTypeRenderer={DashboardPanel.sourcesNodeTypeRenderer}
-            sources={sources[sourcesPanel.activeTab] || []}
+            sources={sources[sourcesActiveTab] || []}
           />
         );
       case DASHBOARD_STEPS.commodities:
@@ -119,7 +122,7 @@ class DashboardPanel extends Component {
       case DASHBOARD_STEPS.companies:
         return (
           <CompaniesPanel
-            tabs={tabs}
+            tabs={companiesTabs}
             onSelectNodeTypeTab={item => setActiveTab(item?.id, activePanelId)}
             page={companiesPanel.page}
             getMoreItems={getMoreItems}
@@ -128,9 +131,9 @@ class DashboardPanel extends Component {
             setSearchResult={item => setSearchResult(item, activePanelId)}
             getSearchResults={getSearchResults}
             loading={companiesPanel.loadingItems}
-            companies={companies[companiesPanel.activeTab] || []}
+            companies={companies[companiesActiveTab] || []}
             onSelectCompany={item => setActiveItems(item, activePanelId)}
-            activeNodeTypeTab={companiesPanel.activeTab}
+            activeNodeTypeTab={companiesActiveTab}
             activeCompanies={companiesPanel.activeItems}
           />
         );
@@ -243,10 +246,13 @@ class DashboardPanel extends Component {
 }
 
 DashboardPanel.propTypes = {
-  tabs: PropTypes.array,
   onBack: PropTypes.func,
   sources: PropTypes.object,
   countries: PropTypes.array,
+  sourcesTabs: PropTypes.array,
+  companiesTabs: PropTypes.array,
+  sourcesActiveTab: PropTypes.number,
+  companiesActiveTab: PropTypes.number,
   dirtyBlocks: PropTypes.array,
   companies: PropTypes.object,
   getMoreItems: PropTypes.func,
