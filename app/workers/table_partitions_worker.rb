@@ -7,7 +7,11 @@ class TablePartitionsWorker
                   run_lock_expiration: 150, # 2.5 mins
                   log_duplicate_payload: true
 
-  def perform
-    Api::V3::TablePartitions.create
+  # @param options
+  # @option options [Boolean] :skip_dependencies skip refreshing
+  # @option options [Boolean] :skip_dependents skip refreshing
+  # @option options [Boolean] :skip_precompute skip precomputing downloads
+  def perform(options)
+    Api::V3::Readonly::DownloadFlow.refresh_now(options.symbolize_keys)
   end
 end

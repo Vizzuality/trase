@@ -26,6 +26,18 @@ RSpec.describe Api::V3::Download::FlowDownloadPivotQuery do
       results = pivot_query.all
       expect(results[0]['DEFORESTATION']).to eq('10')
     end
+
+    it 'returns sum of quant values' do
+      Api::V3::Readonly::DownloadFlow.refresh(sync: true)
+      results = pivot_query.all
+      expect(results[1]['DEFORESTATION']).to eq('15')
+    end
+
+    it 'returns sum of qual values' do
+      Api::V3::Readonly::DownloadFlow.refresh(sync: true)
+      results = pivot_query.all
+      expect(results[1]['ZERO DEFORESTATION']).to eq('yes')
+    end
   end
 
   describe :total do

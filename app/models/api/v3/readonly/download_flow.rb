@@ -2,7 +2,6 @@
 #
 # Table name: download_flows
 #
-#  id             :integer          primary key
 #  context_id     :integer
 #  year           :integer
 #  path           :integer          is an Array
@@ -25,6 +24,10 @@ module Api
         self.table_name = 'download_flows'
 
         class << self
+          # @param options
+          # @option options [Boolean] :skip_dependencies skip refreshing
+          # @option options [Boolean] :skip_dependents skip refreshing
+          # @option options [Boolean] :skip_precompute skip precomputing downloads
           def refresh_now(options = {})
             refresh_dependencies(options) unless options[:skip_dependencies]
             Api::V3::TablePartitions.create
@@ -32,9 +35,13 @@ module Api
             refresh_dependents(options) unless options[:skip_dependents]
           end
 
+          # @param options
+          # @option options [Boolean] :skip_dependencies skip refreshing
+          # @option options [Boolean] :skip_dependents skip refreshing
+          # @option options [Boolean] :skip_precompute skip precomputing downloads
           # this materialized view takes a long time to refresh
-          def refresh_later(_options = {})
-            TablePartitionsWorker.perform_async
+          def refresh_later(options = {})
+            TablePartitionsWorker.perform_async(options)
           end
 
           protected

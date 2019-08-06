@@ -54,7 +54,7 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
         'CHINATEX GRAINS & OILS IMP EXP CO',
         'CHINA',
         'DEFORESTATION',
-        '5'
+        '15'
       ]
     }
     let(:flow2_zero_deforestation_row) {
@@ -101,12 +101,12 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
         api_v3_context,
         filters: [
           {name: api_v3_zero_deforestation.name, op: 'eq', val: 'yes'},
-          {name: api_v3_deforestation_v2.name, op: 'gt', val: '5'}
+          {name: api_v3_deforestation_v2.name, op: 'gt', val: '10'}
         ]
       )
 
       expected = [
-        flow1_potential_deforestation_row,
+        flow2_potential_deforestation_row,
         flow2_zero_deforestation_row
       ]
       actual = query_to_row(qb.flat_query)
