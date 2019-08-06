@@ -27,7 +27,6 @@ module Api
 
         def pivot_select_columns
           [
-            'rank() OVER (ORDER BY path, year)::int AS rn',
             'path',
             'year AS "YEAR"'
           ] + @path_columns +
@@ -58,7 +57,6 @@ module Api
 
         def crosstab_columns
           [
-            'rn int',
             'path INT[]',
             '"YEAR" int'
           ] + @path_crosstab_columns + [
