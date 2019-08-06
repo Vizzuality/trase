@@ -2031,31 +2031,6 @@ components:
                     type: number
                   quant:
                     type: number
-            quant:
-              type: object
-              properties:
-                id:
-                  type: integer
-                name:
-                  type: string
-                unit:
-                  type: string
-            ind:
-              type: object
-              properties:
-                id:
-                  type: integer
-                name:
-                  type: string
-                unit:
-                  type: string
-            qual:
-              type: object
-              properties:
-                id:
-                  type: integer
-                name:
-                  type: string
 
     TopNodes:
       type: object

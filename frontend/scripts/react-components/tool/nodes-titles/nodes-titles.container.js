@@ -26,7 +26,6 @@ const mapStateToProps = state => {
     columns: state.toolLinks.data.columns,
     attributes: state.toolLinks.data.nodeAttributes,
     recolorGroups: getToolRecolorGroups(state),
-    currentQuant: state.toolLinks.currentQuant,
     selectedContextId: selectedContext ? selectedContext.id : null,
     highlightedNodesData: getHighlightedNodesData(state),
     coordinates: state.toolLayers.highlightedNodeCoordinates
@@ -45,7 +44,6 @@ const methodProps = [
       'selectedMapDimensions',
       'selectedNodesData',
       'recolorGroups',
-      'currentQuant',
       'selectedYears',
       'selectedContextId',
       'columns',
@@ -63,7 +61,6 @@ const methodProps = [
       'highlightedNodesData',
       'recolorGroups',
       'coordinates',
-      'currentQuant',
       'selectedYears',
       'attributes',
       'selectedContextId',

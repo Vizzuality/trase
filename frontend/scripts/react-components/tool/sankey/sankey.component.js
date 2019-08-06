@@ -65,7 +65,7 @@ export default class {
       return;
     }
 
-    this._render(linksPayload.selectedRecolorBy, linksPayload.currentQuant);
+    this._render(linksPayload.selectedRecolorBy, linksPayload.selectedResizeBy);
 
     this.selectNodes(linksPayload);
   }
@@ -97,9 +97,9 @@ export default class {
       .classed('-highlighted', node => highlightedNodeId === node.id);
   }
 
-  _relayout({ selectedRecolorBy, currentQuant, selectedNodesIds }) {
+  _relayout({ selectedRecolorBy, selectedResizeBy, selectedNodesIds }) {
     if (this.layout.relayout()) {
-      this._render(selectedRecolorBy, currentQuant);
+      this._render(selectedRecolorBy, selectedResizeBy);
       this._repositionExpandButton(selectedNodesIds);
     }
   }
@@ -200,7 +200,7 @@ export default class {
     return classPath;
   }
 
-  _render(selectedRecolorBy, currentQuant) {
+  _render(selectedRecolorBy, selectedResizeBy) {
     const cols = this.layout.columns();
     if (cols.length === 0) return;
     this.sankeyColumns.data(cols);
@@ -261,7 +261,7 @@ export default class {
       .attr('d', this.layout.link());
 
     this.currentSelectedRecolorBy = selectedRecolorBy;
-    this.currentQuant = currentQuant;
+    this.selectedResizeBy = selectedResizeBy;
 
     // enter
     links
@@ -318,9 +318,9 @@ export default class {
     const title = `${link.sourceNodeName} > ${link.targetNodeName}`;
     const values = [
       {
-        title: this.currentQuant.name,
-        unit: this.currentQuant.unit,
-        value: formatValue(link.quant, this.currentQuant.name)
+        title: this.selectedResizeBy.label,
+        unit: this.selectedResizeBy.unit,
+        value: formatValue(link.quant, this.selectedResizeBy.label)
       }
     ];
 

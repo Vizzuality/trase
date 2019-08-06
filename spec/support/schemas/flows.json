@@ -91,62 +91,6 @@
               }
             }
           }
-        },
-        "quant": {
-          "$id": "/properties/include/properties/quant",
-          "type": "object",
-          "properties": {
-            "id": {
-              "$id": "/properties/include/properties/quant/properties/id",
-              "type": "integer",
-              "title": "The Id Schema.",
-              "description": "An explanation about the purpose of this instance.",
-              "default": 0,
-              "examples": [
-                22
-              ]
-            },
-            "name": {
-              "$id": "/properties/include/properties/quant/properties/name",
-              "type": "string",
-              "title": "The Name Schema.",
-              "description": "An explanation about the purpose of this instance.",
-              "default": "",
-              "examples": [
-                "Trade volume"
-              ]
-            },
-            "unit": {
-              "$id": "/properties/include/properties/quant/properties/unit",
-              "type": "string",
-              "title": "The Unit Schema.",
-              "description": "An explanation about the purpose of this instance.",
-              "default": "",
-              "examples": [
-                "Tn"
-              ]
-            }
-          }
-        },
-        "ind": {
-          "$id": "/properties/include/properties/ind",
-          "type": "null",
-          "title": "The Ind Schema.",
-          "description": "An explanation about the purpose of this instance.",
-          "default": null,
-          "examples": [
-            null
-          ]
-        },
-        "qual": {
-          "$id": "/properties/include/properties/qual",
-          "type": "null",
-          "title": "The Qual Schema.",
-          "description": "An explanation about the purpose of this instance.",
-          "default": null,
-          "examples": [
-            null
-          ]
         }
       }
     }

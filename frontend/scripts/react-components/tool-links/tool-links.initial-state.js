@@ -9,7 +9,6 @@ export default {
     nodeAttributes: null,
     nodesByColumnGeoId: null
   },
-  currentQuant: null,
   detailedView: false,
   forcedOverview: false,
   highlightedNodeId: null,
