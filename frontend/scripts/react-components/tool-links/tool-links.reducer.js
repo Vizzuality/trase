@@ -153,8 +153,6 @@ const toolLinksReducer = {
       linksMeta.nodeHeights.forEach(nodeHeight => {
         draft.data.nodeHeights[nodeHeight.id] = nodeHeight;
       });
-
-      draft.currentQuant = linksMeta.quant;
       draft.data.links = links;
     });
   },
@@ -343,7 +341,6 @@ const toolLinksReducerTypes = PropTypes => ({
     nodesByColumnGeoId: PropTypes.object
   }).isRequired,
   noLinksFound: PropTypes.bool,
-  currentQuant: PropTypes.object,
   detailedView: PropTypes.bool,
   isSearchOpen: PropTypes.bool,
   forcedOverview: PropTypes.bool,

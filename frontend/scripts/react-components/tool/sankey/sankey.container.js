@@ -18,6 +18,7 @@ import {
   getVisibleNodesByColumn,
   getMergedLinks,
   getNodesColored,
+  getSelectedResizeBy,
   getSelectedRecolorBy
 } from 'react-components/tool-links/tool-links.selectors';
 import Sankey from 'react-components/tool/sankey/sankey.component';
@@ -27,7 +28,7 @@ const mapStateToProps = state => ({
   isVisible: getIsVisible(state),
   isReExpand: getIsReExpand(state),
   sankeySize: state.app.sankeySize,
-  currentQuant: state.toolLinks.currentQuant,
+  selectedResizeBy: getSelectedResizeBy(state),
   detailedView: state.toolLinks.detailedView,
   nodeHeights: state.toolLinks.data.nodeHeights,
   selectedNodesIds: state.toolLinks.selectedNodesIds,
@@ -55,7 +56,7 @@ const methodProps = [
       'sankeySize',
       'nodeHeights',
       'selectedRecolorBy',
-      'currentQuant',
+      'selectedResizeBy',
       'selectedNodesIds',
       'links',
       'detailedView',
@@ -66,7 +67,7 @@ const methodProps = [
   {
     name: 'resizeViewport',
     compared: ['sankeySize'],
-    returned: ['sankeySize', 'selectedRecolorBy', 'currentQuant', 'selectedNodesIds']
+    returned: ['sankeySize', 'selectedRecolorBy', 'selectedResizeBy', 'selectedNodesIds']
   },
   {
     name: 'selectNodes',
@@ -91,7 +92,7 @@ const methodProps = [
   {
     name: 'translateNodes',
     compared: ['lang'],
-    returned: ['currentQuant', 'selectedRecolorBy', 'selectedNodesIds']
+    returned: ['selectedResizeBy', 'selectedRecolorBy', 'selectedNodesIds']
   }
 ];
 
