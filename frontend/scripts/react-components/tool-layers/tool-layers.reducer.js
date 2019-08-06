@@ -83,7 +83,7 @@ const toolLayersReducer = {
   },
   [GET_MAP_VECTOR_DATA](state, action) {
     return immer(state, draft => {
-      draft.data.mapVectorData = action.mapVectorData;
+      draft.data.mapVectorData = action.payload.mapVectorData;
     });
   },
   [GET_CONTEXT_LAYERS](state, action) {
@@ -97,6 +97,7 @@ const toolLayersReducer = {
   },
   [TOGGLE_MAP_DIMENSION](state, action) {
     return immer(state, draft => {
+      console.log('do,', action.payload.selectedMapDimensions);
       if (!draft.selectedMapDimensions) {
         draft.selectedMapDimensions = [...action.payload.selectedMapDimensions];
       }
@@ -118,12 +119,12 @@ const toolLayersReducer = {
   },
   [SELECT_CONTEXTUAL_LAYERS](state, action) {
     return immer(state, draft => {
-      draft.selectedMapContextualLayers = action.contextualLayers;
+      draft.selectedMapContextualLayers = action.payload.contextualLayers;
     });
   },
   [SELECT_BASEMAP](state, action) {
     return immer(state, draft => {
-      draft.selectedMapBasemap = action.selectedMapBasemap;
+      draft.selectedMapBasemap = action.payload.selectedMapBasemap;
     });
   },
   [TOGGLE_MAP](state, action) {

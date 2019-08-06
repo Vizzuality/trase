@@ -26,6 +26,102 @@ Object {
 }
 `;
 
+exports[`GET_MAP_VECTOR_DATA 1`] = `
+Object {
+  "data": Object {
+    "mapContextualLayers": Array [],
+    "mapDimensions": Object {},
+    "mapDimensionsGroups": Array [],
+    "mapVectorData": Array [
+      Object {
+        "id": 10,
+        "identifier": "landcover",
+        "isDefault": false,
+        "title": "Land cover",
+      },
+    ],
+  },
+  "highlightedNodeCoordinates": null,
+  "isMapVisible": false,
+  "linkedGeoIds": Array [],
+  "mapLoading": false,
+  "mapView": null,
+  "selectedMapBasemap": null,
+  "selectedMapContextualLayers": null,
+  "selectedMapDimensions": null,
+}
+`;
+
+exports[`SAVE_MAP_VIEW 1`] = `
+Object {
+  "data": Object {
+    "mapContextualLayers": Array [],
+    "mapDimensions": Object {},
+    "mapDimensionsGroups": Array [],
+    "mapVectorData": null,
+  },
+  "highlightedNodeCoordinates": null,
+  "isMapVisible": false,
+  "linkedGeoIds": Array [],
+  "mapLoading": false,
+  "mapView": Object {
+    "latitude": -34.397,
+    "longitude": 150.644,
+    "zoom": 2,
+  },
+  "selectedMapBasemap": null,
+  "selectedMapContextualLayers": null,
+  "selectedMapDimensions": null,
+}
+`;
+
+exports[`SELECT_BASEMAP 1`] = `
+Object {
+  "data": Object {
+    "mapContextualLayers": Array [],
+    "mapDimensions": Object {},
+    "mapDimensionsGroups": Array [],
+    "mapVectorData": null,
+  },
+  "highlightedNodeCoordinates": null,
+  "isMapVisible": false,
+  "linkedGeoIds": Array [],
+  "mapLoading": false,
+  "mapView": null,
+  "selectedMapBasemap": Object {
+    "id": 10,
+  },
+  "selectedMapContextualLayers": null,
+  "selectedMapDimensions": null,
+}
+`;
+
+exports[`SELECT_CONTEXTUAL_LAYERS 1`] = `
+Object {
+  "data": Object {
+    "mapContextualLayers": Array [],
+    "mapDimensions": Object {},
+    "mapDimensionsGroups": Array [],
+    "mapVectorData": null,
+  },
+  "highlightedNodeCoordinates": null,
+  "isMapVisible": false,
+  "linkedGeoIds": Array [],
+  "mapLoading": false,
+  "mapView": null,
+  "selectedMapBasemap": null,
+  "selectedMapContextualLayers": Array [
+    Object {
+      "id": 10,
+      "identifier": "landcover",
+      "isDefault": false,
+      "title": "Land cover",
+    },
+  ],
+  "selectedMapDimensions": null,
+}
+`;
+
 exports[`SET_NODE_ATTRIBUTES 1`] = `
 Object {
   "data": Object {
@@ -42,6 +138,109 @@ Object {
   "selectedMapBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
+}
+`;
+
+exports[`TOGGLE_MAP Forces the map visibility to the forceState value 1`] = `
+Object {
+  "data": Object {
+    "mapContextualLayers": Array [],
+    "mapDimensions": Object {},
+    "mapDimensionsGroups": Array [],
+    "mapVectorData": null,
+  },
+  "highlightedNodeCoordinates": null,
+  "isMapVisible": false,
+  "linkedGeoIds": Array [],
+  "mapLoading": false,
+  "mapView": null,
+  "selectedMapBasemap": null,
+  "selectedMapContextualLayers": null,
+  "selectedMapDimensions": null,
+}
+`;
+
+exports[`TOGGLE_MAP Toggles the map visibility if forceState is null 1`] = `
+Object {
+  "data": Object {
+    "mapContextualLayers": Array [],
+    "mapDimensions": Object {},
+    "mapDimensionsGroups": Array [],
+    "mapVectorData": null,
+  },
+  "highlightedNodeCoordinates": null,
+  "isMapVisible": true,
+  "linkedGeoIds": Array [],
+  "mapLoading": false,
+  "mapView": null,
+  "selectedMapBasemap": null,
+  "selectedMapContextualLayers": null,
+  "selectedMapDimensions": null,
+}
+`;
+
+exports[`TOGGLE_MAP_DIMENSION Add a map dimension if the dimension is not selected 1`] = `
+Object {
+  "data": Object {
+    "mapContextualLayers": Array [],
+    "mapDimensions": Object {},
+    "mapDimensionsGroups": Array [],
+    "mapVectorData": null,
+  },
+  "highlightedNodeCoordinates": null,
+  "isMapVisible": false,
+  "linkedGeoIds": Array [],
+  "mapLoading": true,
+  "mapView": null,
+  "selectedMapBasemap": null,
+  "selectedMapContextualLayers": null,
+  "selectedMapDimensions": Array [
+    "quant90",
+  ],
+}
+`;
+
+exports[`TOGGLE_MAP_DIMENSION Add a map dimension in the second slot if the dimension is not selected 1`] = `
+Object {
+  "data": Object {
+    "mapContextualLayers": Array [],
+    "mapDimensions": Object {},
+    "mapDimensionsGroups": Array [],
+    "mapVectorData": null,
+  },
+  "highlightedNodeCoordinates": null,
+  "isMapVisible": false,
+  "linkedGeoIds": Array [],
+  "mapLoading": true,
+  "mapView": null,
+  "selectedMapBasemap": null,
+  "selectedMapContextualLayers": null,
+  "selectedMapDimensions": Array [
+    "NotEmpty",
+    "quant90",
+  ],
+}
+`;
+
+exports[`TOGGLE_MAP_DIMENSION Remove map dimension if the dimension is selected 1`] = `
+Object {
+  "data": Object {
+    "mapContextualLayers": Array [],
+    "mapDimensions": Object {},
+    "mapDimensionsGroups": Array [],
+    "mapVectorData": null,
+  },
+  "highlightedNodeCoordinates": null,
+  "isMapVisible": false,
+  "linkedGeoIds": Array [],
+  "mapLoading": false,
+  "mapView": null,
+  "selectedMapBasemap": null,
+  "selectedMapContextualLayers": null,
+  "selectedMapDimensions": Array [
+    "quant95",
+    null,
+  ],
 }
 `;
 

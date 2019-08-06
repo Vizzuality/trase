@@ -99,7 +99,9 @@ export function loadMapVectorData() {
     layerLoaded.then(layers => {
       dispatch({
         type: GET_MAP_VECTOR_DATA,
-        mapVectorData: layers
+        payload: {
+          mapVectorData: layers
+        }
       });
       dispatch(loadMapChoropleth());
     });
@@ -147,7 +149,7 @@ export function setMapContextLayers(contextualLayers) {
         if (selectedMapContextualLayers && selectedMapContextualLayers.length) {
           dispatch({
             type: SELECT_CONTEXTUAL_LAYERS,
-            contextualLayers: selectedMapContextualLayers
+            payload: { contextualLayers: selectedMapContextualLayers }
           });
         }
       }
@@ -297,13 +299,13 @@ export function loadMapChoropleth() {
 export function selectContextualLayers(contextualLayers) {
   return {
     type: SELECT_CONTEXTUAL_LAYERS,
-    contextualLayers
+    payload: { contextualLayers }
   };
 }
 
 export function selectMapBasemap(selectedMapBasemap) {
   return {
     type: SELECT_BASEMAP,
-    selectedMapBasemap
+    payload: { selectedMapBasemap }
   };
 }
