@@ -1,5 +1,5 @@
-import qs from 'query-string';
 import last from 'lodash/last';
+import parseURL from 'utils/parseURL';
 
 const BASE_URL = 'http://0.0.0.0:8081';
 
@@ -84,7 +84,7 @@ export async function testProfileMultiTable(
 
     expect(links.length).toBe(rowsLength);
     expect(links.firstLink.split('?')[0]).toMatch(BASE_URL + linkName);
-    expect(qs.parse(links.firstLink.split('?')[1])).toEqual(linkQuery);
+    expect(parseURL(links.firstLink.split('?')[1])).toEqual(linkQuery);
   }
 
   expect(tableTitle.toLowerCase()).toMatch(title);

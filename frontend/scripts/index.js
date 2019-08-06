@@ -1,7 +1,7 @@
 /* eslint-disable global-require,import/no-extraneous-dependencies */
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-
+import parseURL from 'utils/parseURL';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
@@ -9,7 +9,6 @@ import rangeTouch from 'rangetouch';
 import analyticsMiddleware from 'analytics/middleware';
 import * as appReducers from 'store';
 
-import qs from 'query-string';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import toolLinksInitialState from 'react-components/tool-links/tool-links.initial-state';
 import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-links.serializers';
@@ -87,8 +86,7 @@ const reducers = combineReducers({
   location: router.reducer
 });
 
-const params = qs.parse(window.location.search, { arrayFormat: 'bracket', parseNumbers: true });
-
+const params = parseURL(window.location.search);
 const store = createStore(
   reducers,
   {

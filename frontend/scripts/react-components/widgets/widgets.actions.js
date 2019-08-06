@@ -1,5 +1,5 @@
 import { getURLFromParams } from 'utils/getURLFromParams';
-import qs from 'query-string';
+import qs from 'qs';
 import sortBy from 'lodash/sortBy';
 import { fetchWithCancel } from 'utils/saga-utils';
 
@@ -18,7 +18,7 @@ export function prepareWidget(endpoints, { endpoint, params, raw }) {
   if (raw) {
     url = endpoint;
     if (params) {
-      const search = qs.stringify(params, { arrayFormat: 'bracket' });
+      const search = qs.stringify(params, { arrayFormat: 'brackets' });
       url = endpoint.includes('?') ? `${endpoint}&${search}` : `${endpoint}?${search}`;
     }
   } else {
