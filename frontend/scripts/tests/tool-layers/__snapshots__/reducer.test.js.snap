@@ -1,0 +1,125 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`GET_CONTEXT_LAYERS 1`] = `
+Object {
+  "data": Object {
+    "mapContextualLayers": Object {
+      "10": Object {
+        "id": 10,
+        "identifier": "landcover",
+        "isDefault": false,
+        "title": "Land cover",
+      },
+    },
+    "mapDimensions": Object {},
+    "mapDimensionsGroups": Array [],
+    "mapVectorData": null,
+  },
+  "highlightedNodeCoordinates": null,
+  "isMapVisible": false,
+  "linkedGeoIds": Array [],
+  "mapLoading": false,
+  "mapView": null,
+  "selectedMapBasemap": null,
+  "selectedMapContextualLayers": null,
+  "selectedMapDimensions": null,
+}
+`;
+
+exports[`SET_NODE_ATTRIBUTES 1`] = `
+Object {
+  "data": Object {
+    "mapContextualLayers": Array [],
+    "mapDimensions": Object {},
+    "mapDimensionsGroups": Array [],
+    "mapVectorData": null,
+  },
+  "highlightedNodeCoordinates": null,
+  "isMapVisible": false,
+  "linkedGeoIds": Array [],
+  "mapLoading": false,
+  "mapView": null,
+  "selectedMapBasemap": null,
+  "selectedMapContextualLayers": null,
+  "selectedMapDimensions": null,
+}
+`;
+
+exports[`TOOL_LAYERS__SET_LINKED_GEOIDS sets in linkedGeoIds an array of the nodes geoIds 1`] = `
+Object {
+  "data": Object {
+    "mapContextualLayers": Array [],
+    "mapDimensions": Object {},
+    "mapDimensionsGroups": Array [],
+    "mapVectorData": null,
+  },
+  "highlightedNodeCoordinates": null,
+  "isMapVisible": false,
+  "linkedGeoIds": Array [
+    "BR-123-23",
+  ],
+  "mapLoading": false,
+  "mapView": null,
+  "selectedMapBasemap": null,
+  "selectedMapContextualLayers": null,
+  "selectedMapDimensions": null,
+}
+`;
+
+exports[`TOOL_LAYERS__SET_LINKED_GEOIDS sets in linkedGeoIds an empty array if there are no nodes 1`] = `
+Object {
+  "data": Object {
+    "mapContextualLayers": Array [],
+    "mapDimensions": Object {},
+    "mapDimensionsGroups": Array [],
+    "mapVectorData": null,
+  },
+  "highlightedNodeCoordinates": null,
+  "isMapVisible": false,
+  "linkedGeoIds": Array [],
+  "mapLoading": false,
+  "mapView": null,
+  "selectedMapBasemap": null,
+  "selectedMapContextualLayers": null,
+  "selectedMapDimensions": null,
+}
+`;
+
+exports[`TOOL_LAYERS__SET_MAP_DIMENSIONS 1`] = `
+Object {
+  "data": Object {
+    "mapContextualLayers": Array [],
+    "mapDimensions": Object {
+      "quant11": Object {
+        "groupId": 3,
+        "layerAttributeId": 11,
+        "type": "quant",
+        "uid": "quant11",
+      },
+    },
+    "mapDimensionsGroups": Array [
+      Object {
+        "dimensions": Array [
+          "quant11",
+        ],
+        "id": 3,
+        "name": "Agricultural indicators",
+      },
+      Object {
+        "dimensions": Array [],
+        "id": 1,
+        "name": "Environmental indicators",
+      },
+    ],
+    "mapVectorData": null,
+  },
+  "highlightedNodeCoordinates": null,
+  "isMapVisible": false,
+  "linkedGeoIds": Array [],
+  "mapLoading": false,
+  "mapView": null,
+  "selectedMapBasemap": null,
+  "selectedMapContextualLayers": null,
+  "selectedMapDimensions": null,
+}
+`;

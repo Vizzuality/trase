@@ -2,7 +2,6 @@ import {
   GET_CONTEXT_LAYERS,
   GET_MAP_VECTOR_DATA,
   SET_NODE_ATTRIBUTES,
-  SET_MAP_LOADING_STATE,
   SAVE_MAP_VIEW,
   SELECT_BASEMAP,
   SELECT_CONTEXTUAL_LAYERS,
@@ -43,12 +42,6 @@ const toolLayersReducer = {
   },
   [SET_CONTEXT]() {
     return toolLayersInitialState;
-  },
-
-  [SET_MAP_LOADING_STATE](state) {
-    return immer(state, draft => {
-      draft.mapLoading = true;
-    });
   },
 
   [SET_NODE_ATTRIBUTES](state) {
@@ -95,8 +88,9 @@ const toolLayersReducer = {
   },
   [GET_CONTEXT_LAYERS](state, action) {
     return immer(state, draft => {
+      const { mapContextualLayers } = action.payload;
       draft.data.mapContextualLayers = {};
-      action.mapContextualLayers.forEach(layer => {
+      mapContextualLayers.forEach(layer => {
         draft.data.mapContextualLayers[layer.id] = layer;
       });
     });

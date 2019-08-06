@@ -26,18 +26,64 @@ Object {
 }
 `;
 
-exports[`SET_SELECTED_NODES_BY_SEARCH REGRESSION TEST: selects 2 nodes belonging to a column not selected by default, with no expanded nodes 1`] = `
+exports[`SET_NODE_ATTRIBUTES adds node attributes 1`] = `
 Object {
   "currentQuant": null,
   "data": Object {
-    "columns": Object {
-      "6": Object {
-        "group": 3,
-        "id": 6,
-        "isDefault": true,
-        "name": "EXPORTER",
+    "columns": null,
+    "links": null,
+    "nodeAttributes": Object {
+      "1": Object {
+        "indSMALLHOLDER_DOMINANCE": Object {
+          "attribute_id": "SMALLHOLDER_DOMINANCE",
+          "attribute_type": "ind",
+          "node_id": 1,
+        },
+        "quantSOY_DEFORESTATION": Object {
+          "attribute_id": "SOY_DEFORESTATION",
+          "attribute_type": "quant",
+          "node_id": 1,
+        },
+      },
+      "2": Object {
+        "indSMALLHOLDER_DOMINANCE": Object {
+          "attribute_id": "SMALLHOLDER_DOMINANCE",
+          "attribute_type": "ind",
+          "node_id": 2,
+        },
+      },
+      "3": Object {
+        "indSMALLHOLDER_DOMINANCE": Object {
+          "attribute_id": "SMALLHOLDER_DOMINANCE",
+          "attribute_type": "ind",
+          "node_id": 3,
+        },
       },
     },
+    "nodeHeights": null,
+    "nodes": null,
+    "nodesByColumnGeoId": null,
+  },
+  "detailedView": false,
+  "expandedNodesIds": Array [],
+  "flowsLoading": false,
+  "forcedOverview": false,
+  "highlightedNodeId": null,
+  "isSearchOpen": false,
+  "noLinksFound": false,
+  "selectedBiomeFilterName": null,
+  "selectedColumnsIds": null,
+  "selectedNodesIds": Array [],
+  "selectedRecolorByName": null,
+  "selectedResizeByName": null,
+}
+`;
+
+exports[`SET_NODE_ATTRIBUTES removes node attributes 1`] = `
+Object {
+  "currentQuant": null,
+  "data": Object {
+    "columns": null,
     "links": null,
     "nodeAttributes": null,
     "nodeHeights": null,
@@ -52,15 +98,8 @@ Object {
   "isSearchOpen": false,
   "noLinksFound": false,
   "selectedBiomeFilterName": null,
-  "selectedColumnsIds": Array [
-    null,
-    2,
-    null,
-    null,
-  ],
-  "selectedNodesIds": Array [
-    5,
-  ],
+  "selectedColumnsIds": null,
+  "selectedNodesIds": Array [],
   "selectedRecolorByName": null,
   "selectedResizeByName": null,
 }

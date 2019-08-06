@@ -17,7 +17,6 @@ import {
   highlightNode
 } from 'react-components/tool-links/tool-links.actions';
 
-export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
 export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
 export const SELECT_YEARS = 'SELECT_YEARS';
 export const GET_MAP_VECTOR_DATA = 'GET_MAP_VECTOR_DATA';
@@ -134,13 +133,13 @@ export function setMapContextLayers(contextualLayers) {
       // this is just about reinstanciating named maps, you know, because CARTO
       dispatch({
         type: GET_CONTEXT_LAYERS,
-        mapContextualLayers
+        payload: { mapContextualLayers }
       });
 
       if (typeof contextualLayers !== 'undefined' && contextualLayers.length) {
         dispatch({
           type: GET_CONTEXT_LAYERS,
-          mapContextualLayers
+          payload: { mapContextualLayers }
         });
 
         const { selectedMapContextualLayers } = getState().toolLayers;

@@ -42,6 +42,7 @@ import {
   selectSearchNode,
   setToolNodes
 } from 'react-components/tool-links/tool-links.actions';
+import { SET_NODE_ATTRIBUTES } from 'react-components/tool/tool.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
 
 test(TOOL_LINKS__SET_FLOWS_LOADING, () => {
@@ -392,4 +393,37 @@ describe(SET_SELECTED_NODES_BY_SEARCH, () => {
 
   // TODO:
   // - REGRESSION TEST: selectedColumnsIds = [empty, 2, empty, empty] and select a node that has column group === 4 and column.isDefault === true
+});
+
+describe(SET_NODE_ATTRIBUTES, () => {
+  it('adds node attributes', () => {
+    const attributes = [
+      { node_id: 1, attribute_id: 'SOY_DEFORESTATION', attribute_type: 'quant' },
+      { node_id: 1, attribute_id: 'SMALLHOLDER_DOMINANCE', attribute_type: 'ind' },
+      { node_id: 2, attribute_id: 'SMALLHOLDER_DOMINANCE', attribute_type: 'ind' },
+      { node_id: 3, attribute_id: 'SMALLHOLDER_DOMINANCE', attribute_type: 'ind' }
+    ];
+    const action = {
+      type: SET_NODE_ATTRIBUTES,
+      payload: { data: attributes }
+    };
+    const newState = reducer(initialState, action);
+    expect(newState).toMatchSnapshot();
+  });
+
+  it('removes node attributes', () => {
+    const state = {
+      ...initialState,
+      data: {
+        ...initialState.data,
+        nodeAttributes: {}
+      }
+    };
+    const action = {
+      type: SET_NODE_ATTRIBUTES,
+      payload: { data: [] }
+    };
+    const newState = reducer(state, action);
+    expect(newState).toMatchSnapshot();
+  });
 });
