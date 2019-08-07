@@ -7,6 +7,25 @@
   align-items: flex-start;
   padding: 0 10px 10px 0;
 
+  &.v-white {
+    .grid-list-item-button {
+      background-color: $white;
+      border: 1px solid $charcoal-grey-faded-a-lot;
+
+      &:hover {
+        background-color: $charcoal-grey;
+
+        > span {
+          color: $white;
+        }
+      }
+
+      > span {
+        text-transform: uppercase;
+      }
+    }
+  }
+
   .grid-list-item-heading {
     color: $charcoal-grey;
     font-family: $font-family-2;
