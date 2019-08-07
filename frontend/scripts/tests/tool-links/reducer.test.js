@@ -4,7 +4,6 @@ import {
   TOOL_LINKS__SET_FLOWS_LOADING,
   TOOL_LINKS__SET_COLUMNS,
   TOOL_LINKS__SET_NODES,
-  TOOL_LINKS__SET_MORE_NODES,
   TOOL_LINKS__SET_MISSING_LOCKED_NODES,
   TOOL_LINKS__SET_LINKS,
   TOOL_LINKS__SELECT_VIEW,
@@ -34,7 +33,6 @@ import {
   resetSankey,
   clearSankey,
   setToolColumns,
-  setMoreToolNodes,
   setMissingLockedNodes,
   setToolLinks,
   selectColumn,
@@ -69,19 +67,13 @@ test(TOOL_LINKS__SET_NODES, () => {
   expect(newState).toMatchSnapshot();
 });
 
-describe(`Test ${TOOL_LINKS__SET_MORE_NODES} and ${TOOL_LINKS__SET_MISSING_LOCKED_NODES}`, () => {
-  const testSetMoreNodes = (actionCreator, state) => () => {
-    const nodes = [
-      { id: 1, columnId: 3, geoId: 'BR-1234' },
-      { id: 2, columnId: 2, geoId: 'BR-4567' },
-      { id: 3, columnId: 8, geoId: 'BR-8901' }
-    ];
-    const action = actionCreator(nodes);
-    const newState = reducer(state, action);
-    expect(newState).toMatchSnapshot();
-  };
-
-  const existingNodes = {
+describe(`Test ${TOOL_LINKS__SET_MISSING_LOCKED_NODES}`, () => {
+  const nodes = [
+    { id: 1, columnId: 3, geoId: 'BR-1234' },
+    { id: 2, columnId: 2, geoId: 'BR-4567' },
+    { id: 3, columnId: 8, geoId: 'BR-8901' }
+  ];
+  const existingNodesState = {
     ...initialState,
     data: {
       ...initialState.data,
@@ -95,23 +87,16 @@ describe(`Test ${TOOL_LINKS__SET_MORE_NODES} and ${TOOL_LINKS__SET_MISSING_LOCKE
       }
     }
   };
-
-  it(
-    `${TOOL_LINKS__SET_MORE_NODES} with initial state`,
-    testSetMoreNodes(setMoreToolNodes, initialState)
-  );
-  it(
-    `${TOOL_LINKS__SET_MISSING_LOCKED_NODES} with initial state`,
-    testSetMoreNodes(setMissingLockedNodes, initialState)
-  );
-  it(
-    `${TOOL_LINKS__SET_MORE_NODES} with existing nodes`,
-    testSetMoreNodes(setMoreToolNodes, existingNodes)
-  );
-  it(
-    `${TOOL_LINKS__SET_MISSING_LOCKED_NODES} with existing nodes`,
-    testSetMoreNodes(setMissingLockedNodes, existingNodes)
-  );
+  it(`${TOOL_LINKS__SET_MISSING_LOCKED_NODES} with initial state`, () => {
+    const action = setMissingLockedNodes(nodes);
+    const newState = reducer(initialState, action);
+    expect(newState).toMatchSnapshot();
+  });
+  it(`${TOOL_LINKS__SET_MISSING_LOCKED_NODES} with existing nodes`, () => {
+    const action = setMissingLockedNodes(nodes);
+    const newState = reducer(existingNodesState, action);
+    expect(newState).toMatchSnapshot();
+  });
 });
 
 test(TOOL_LINKS__SET_LINKS, () => {

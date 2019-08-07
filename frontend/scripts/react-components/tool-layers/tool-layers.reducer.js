@@ -97,7 +97,6 @@ const toolLayersReducer = {
   },
   [TOGGLE_MAP_DIMENSION](state, action) {
     return immer(state, draft => {
-      console.log('do,', action.payload.selectedMapDimensions);
       if (!draft.selectedMapDimensions) {
         draft.selectedMapDimensions = [...action.payload.selectedMapDimensions];
       }
