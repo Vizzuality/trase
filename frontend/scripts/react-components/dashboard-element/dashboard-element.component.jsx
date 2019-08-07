@@ -83,11 +83,9 @@ class DashboardElement extends React.PureComponent {
     const canProceed = dirtyBlocks.countries && dirtyBlocks.commodities;
     const onClose = editMode && canProceed ? closeModal : goToRoot;
     return (
-      <React.Fragment>
-        <SimpleModal isOpen={modalOpen} onClickClose={onClose}>
-          {this.renderStep()}
-        </SimpleModal>
-      </React.Fragment>
+      <SimpleModal isOpen={modalOpen} onClickClose={onClose}>
+        {this.renderStep()}
+      </SimpleModal>
     );
   }
 
