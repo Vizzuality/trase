@@ -5,7 +5,7 @@ export default params => {
   const isANumber = n => !isArray(n) && !Number.isNaN(parseFloat(n));
   const isInteger = n => n % 1 === 0;
 
-  const parsedParams = qs.parse(params, { ignoreQueryPrefix: true });
+  const parsedParams = qs.parse(params, { ignoreQueryPrefix: true, arrayLimit: 500 });
   const parsedNumbersInParams = { ...parsedParams };
   Object.keys(parsedParams).forEach(key => {
     const value = parsedParams[key];
