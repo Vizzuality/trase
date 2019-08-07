@@ -78,23 +78,37 @@ export const getDirtyBlocks = createSelector(
 );
 
 const getPanelActiveItems = (panel, data) => {
-  const hasTabs = !Array.isArray(data);
-  if (
-    (hasTabs && Object.keys(data).length === 0) ||
-    (!hasTabs && data.length === 0) ||
-    panel.activeItems.length === 0 ||
-    (hasTabs && !panel.activeTab) ||
-    (hasTabs && !data[panel.activeTab])
-  ) {
+  if (data.length === 0 || panel.activeItems.length === 0) {
     return null;
   }
-  const list = hasTabs ? data[panel.activeTab] : data;
-  const dict = list.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
+  const dict = data.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
   const items = panel.activeItems
     .map(id => dict[id] && { ...dict[id], name: dict[id].name.toLowerCase() })
     .filter(Boolean);
 
   return items.length > 0 ? items : null;
+};
+
+const getPanelActiveTabItems = (panel, data) => {
+  if (
+    Object.keys(data).length === 0 ||
+    panel.activeItems.length === 0 ||
+    !panel.activeTab ||
+    !data[panel.activeTab]
+  ) {
+    return null;
+  }
+  const list = data[panel.activeTab];
+  const dict = list.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
+  const items = panel.activeItems
+    .map(id => dict[id] && { ...dict[id], name: dict[id].name.toLowerCase() })
+    .filter(Boolean);
+
+  if (items.length > 0) {
+    return items;
+  }
+
+  return null;
 };
 
 export const getCountriesActiveItems = createSelector(
@@ -104,7 +118,7 @@ export const getCountriesActiveItems = createSelector(
 
 const getSourcesActiveItems = createSelector(
   [getSourcesPanel, getSourcesData],
-  getPanelActiveItems
+  getPanelActiveTabItems
 );
 
 const getCommoditiesActiveItems = createSelector(
@@ -114,20 +128,7 @@ const getCommoditiesActiveItems = createSelector(
 
 const getCompaniesActiveItems = createSelector(
   [getCompaniesPanel, getCompaniesData],
-  (panel, data) => {
-    const activeItems = getPanelActiveItems(panel, data);
-    if (!activeItems) {
-      return null;
-    }
-    return activeItems.reduce((acc, next) => {
-      const nodeType = `${next.nodeType}`.toLowerCase();
-      const items = acc[nodeType] || [];
-      return {
-        ...acc,
-        [nodeType]: [...items, next]
-      };
-    }, {});
-  }
+  getPanelActiveTabItems
 );
 
 const getDestinationsActiveItems = createSelector(
@@ -172,17 +173,9 @@ export const getDynamicSentence = createSelector(
       },
       {
         panel: 'companies',
-        id: 'exporting-companies',
-        prefix: panelsValues.companies?.exporter ? 'exported by' : '',
-        value: panelsValues.companies?.exporter,
-        optional: true,
-        transform: 'capitalize'
-      },
-      {
-        panel: 'companies',
-        id: 'importing-companies',
-        prefix: panelsValues.companies?.importer ? 'imported by' : '',
-        value: panelsValues.companies?.importer,
+        id: 'companies',
+        prefix: panelsValues.companies ? 'traded by' : '',
+        value: panelsValues.companies,
         optional: true,
         transform: 'capitalize'
       },
