@@ -203,7 +203,12 @@ export function* fetchDataOnPanelChange() {
       loaded = panelsOrder.slice(0, changedAt + 1);
     }
 
-    if (!previousPanelState || !loaded.includes(activePanelId)) {
+    const newPanelData = newPanelState.data[activePanelId];
+    const isEmpty = Array.isArray(newPanelState)
+      ? newPanelData.length === 0
+      : Object.keys(newPanelData).length === 0;
+
+    if (!previousPanelState || !loaded.includes(activePanelId) || isEmpty) {
       if (task !== null) {
         yield cancel(task);
       }
