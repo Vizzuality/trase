@@ -90,6 +90,6 @@ export default [
     type: SELECT_CONTEXTUAL_LAYERS,
     action: 'Select contextual layers',
     category: 'Sankey',
-    getPayload: action => action.contextualLayers.join(', ')
+    getPayload: action => action.payload.contextualLayers.join(', ')
   }
 ];

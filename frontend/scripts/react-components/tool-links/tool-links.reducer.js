@@ -1,9 +1,4 @@
-import {
-  RESET_TOOL_STATE,
-  SET_NODE_ATTRIBUTES,
-  SHOW_LINKS_ERROR,
-  SET_SELECTED_NODES_BY_SEARCH
-} from 'react-components/tool/tool.actions';
+import { SET_NODE_ATTRIBUTES } from 'react-components/tool/tool.actions';
 import {
   TOOL_LINKS__CLEAR_SANKEY,
   TOOL_LINKS__HIGHLIGHT_NODE,
@@ -22,7 +17,8 @@ import {
   TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
   TOOL_LINKS__SET_SELECTED_RESIZE_BY,
   TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
-  TOOL_LINKS__SET_MISSING_LOCKED_NODES
+  TOOL_LINKS__SET_MISSING_LOCKED_NODES,
+  TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
 import immer from 'immer';
@@ -176,11 +172,6 @@ const toolLinksReducer = {
       }
     });
   },
-  [SHOW_LINKS_ERROR](state) {
-    return immer(state, draft => {
-      Object.assign(draft, { links: null, flowsLoading: false });
-    });
-  },
   [TOOL_LINKS__SET_SELECTED_BIOME_FILTER](state, action) {
     return immer(state, draft => {
       draft.selectedBiomeFilterName = action.payload.name;
@@ -223,12 +214,11 @@ const toolLinksReducer = {
         const column = draft.data.columns[node.columnId];
         return column.group !== columnIndex;
       };
-
       draft.selectedNodesIds = state.selectedNodesIds.filter(isInColumn);
       draft.expandedNodesIds = state.expandedNodesIds.filter(isInColumn);
     });
   },
-  [SET_SELECTED_NODES_BY_SEARCH](state, action) {
+  [TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH](state, action) {
     return immer(state, draft => {
       const { results } = action.payload;
       const ids = results.map(n => n.id);
@@ -257,7 +247,7 @@ const toolLinksReducer = {
       if (
         areNodesExpanded &&
         draft.selectedNodesIds.length === 1 &&
-        draft.selectedNodesIds.includes(ids)
+        ids.includes(draft.selectedNodesIds[0])
       ) {
         // we are unselecting the node that is currently expanded: shrink sankey and continue to unselecting node
         draft.expandedNodesIds = [];
@@ -312,11 +302,6 @@ const toolLinksReducer = {
   [TOOL_LINKS__EXPAND_SANKEY](state) {
     return immer(state, draft => {
       draft.expandedNodesIds = state.selectedNodesIds;
-    });
-  },
-  [RESET_TOOL_STATE](state, action) {
-    return immer(state, draft => {
-      Object.assign(draft, toolLinksInitialState, action.payload);
     });
   },
   [TOOL_LINKS__SET_IS_SEARCH_OPEN](state, action) {

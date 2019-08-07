@@ -2,7 +2,6 @@ import {
   GET_CONTEXT_LAYERS,
   GET_MAP_VECTOR_DATA,
   SET_NODE_ATTRIBUTES,
-  SET_MAP_LOADING_STATE,
   SAVE_MAP_VIEW,
   SELECT_BASEMAP,
   SELECT_CONTEXTUAL_LAYERS,
@@ -45,12 +44,6 @@ const toolLayersReducer = {
     return toolLayersInitialState;
   },
 
-  [SET_MAP_LOADING_STATE](state) {
-    return immer(state, draft => {
-      draft.mapLoading = true;
-    });
-  },
-
   [SET_NODE_ATTRIBUTES](state) {
     return immer(state, draft => {
       draft.mapLoading = false;
@@ -90,13 +83,14 @@ const toolLayersReducer = {
   },
   [GET_MAP_VECTOR_DATA](state, action) {
     return immer(state, draft => {
-      draft.data.mapVectorData = action.mapVectorData;
+      draft.data.mapVectorData = action.payload.mapVectorData;
     });
   },
   [GET_CONTEXT_LAYERS](state, action) {
     return immer(state, draft => {
+      const { mapContextualLayers } = action.payload;
       draft.data.mapContextualLayers = {};
-      action.mapContextualLayers.forEach(layer => {
+      mapContextualLayers.forEach(layer => {
         draft.data.mapContextualLayers[layer.id] = layer;
       });
     });
@@ -124,12 +118,12 @@ const toolLayersReducer = {
   },
   [SELECT_CONTEXTUAL_LAYERS](state, action) {
     return immer(state, draft => {
-      draft.selectedMapContextualLayers = action.contextualLayers;
+      draft.selectedMapContextualLayers = action.payload.contextualLayers;
     });
   },
   [SELECT_BASEMAP](state, action) {
     return immer(state, draft => {
-      draft.selectedMapBasemap = action.selectedMapBasemap;
+      draft.selectedMapBasemap = action.payload.selectedMapBasemap;
     });
   },
   [TOGGLE_MAP](state, action) {
