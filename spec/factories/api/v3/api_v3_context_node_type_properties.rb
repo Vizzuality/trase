@@ -6,6 +6,6 @@ FactoryBot.define do
     is_default { false }
     is_geo_column { true }
     is_choropleth_disabled { false }
-    prefix { |n| "prefix#{n}" }
+    sequence(:prefix) { |n| "prefix#{n}" }
   end
 end
