@@ -1,0 +1,19 @@
+@import 'styles/settings';
+
+.c-tool-selector {
+  margin-top: $nav-height;
+
+  .grid-list {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+
+    .c-grid-list-item {
+      width: 120px;
+    }
+  }
+
+  .tool-selector-title {
+    padding-top: 20px;
+  }
+}
