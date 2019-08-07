@@ -379,9 +379,22 @@ describe(TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH, () => {
     const newState = reducer(state, action);
     expect(newState).toMatchSnapshot();
   });
-
-  // TODO:
-  // - REGRESSION TEST: selectedColumnsIds = [empty, 2, empty, empty] and select a node that has column group === 4 and column.isDefault === true
+  it('select a item in a column with empty selectedColumnId and isDefault === true', () => {
+    const results = [{ id: 1, nodeType: 'EXPORTER' }];
+    const state = {
+      ...initialState,
+      selectedColumnsIds: [null, 2, null, null],
+      data: {
+        ...initialState.data,
+        columns: {
+          3: { group: 3, name: 'EXPORTER', isDefault: true }
+        }
+      }
+    };
+    const action = selectSearchNode(results);
+    const newState = reducer(state, action);
+    expect(newState).toMatchSnapshot();
+  });
 });
 
 describe(SET_NODE_ATTRIBUTES, () => {

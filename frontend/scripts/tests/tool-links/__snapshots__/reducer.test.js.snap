@@ -672,6 +672,44 @@ Object {
 }
 `;
 
+exports[`TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH select a item in a column with empty selectedColumnId and isDefault === true 1`] = `
+Object {
+  "data": Object {
+    "columns": Object {
+      "3": Object {
+        "group": 3,
+        "isDefault": true,
+        "name": "EXPORTER",
+      },
+    },
+    "links": null,
+    "nodeAttributes": null,
+    "nodeHeights": null,
+    "nodes": null,
+    "nodesByColumnGeoId": null,
+  },
+  "detailedView": false,
+  "expandedNodesIds": Array [],
+  "flowsLoading": false,
+  "forcedOverview": false,
+  "highlightedNodeId": null,
+  "isSearchOpen": false,
+  "noLinksFound": false,
+  "selectedBiomeFilterName": null,
+  "selectedColumnsIds": Array [
+    null,
+    2,
+    null,
+    null,
+  ],
+  "selectedNodesIds": Array [
+    1,
+  ],
+  "selectedRecolorByName": null,
+  "selectedResizeByName": null,
+}
+`;
+
 exports[`TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH selects 2 nodes belonging to a column not selected by default, with no expanded nodes 1`] = `
 Object {
   "data": Object {
