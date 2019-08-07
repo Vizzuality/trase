@@ -102,7 +102,7 @@ Object {
 }
 `;
 
-exports[`SET_SELECTED_NODES_BY_SEARCH deselect the only selected node that is also expanded 1`] = `
+exports[`TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH deselect the only selected node that is also expanded 1`] = `
 Object {
   "data": Object {
     "columns": Object {
@@ -133,7 +133,7 @@ Object {
 }
 `;
 
-exports[`SET_SELECTED_NODES_BY_SEARCH deselects 2 nodes belonging to a column selected by default, with no expanded nodes 1`] = `
+exports[`TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH deselects 2 nodes belonging to a column selected by default, with no expanded nodes 1`] = `
 Object {
   "data": Object {
     "columns": Object {
@@ -169,7 +169,7 @@ Object {
 }
 `;
 
-exports[`SET_SELECTED_NODES_BY_SEARCH selects 2 nodes belonging to a column not selected by default, with no expanded nodes 1`] = `
+exports[`TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH selects 2 nodes belonging to a column not selected by default, with no expanded nodes 1`] = `
 Object {
   "data": Object {
     "columns": Object {
@@ -211,7 +211,7 @@ Object {
 }
 `;
 
-exports[`SET_SELECTED_NODES_BY_SEARCH selects 2 nodes belonging to a column selected by default, with no previously selected or expanded nodes 1`] = `
+exports[`TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH selects 2 nodes belonging to a column selected by default, with no previously selected or expanded nodes 1`] = `
 Object {
   "data": Object {
     "columns": Object {

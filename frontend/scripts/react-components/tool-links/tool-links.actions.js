@@ -19,7 +19,7 @@ export const TOOL_LINKS__SET_SELECTED_BIOME_FILTER = 'TOOL_LINKS__SET_SELECTED_B
 export const TOOL_LINKS_SET_NO_LINKS_FOUND = 'TOOL_LINKS_SET_NO_LINKS_FOUND';
 export const TOOL_LINKS_RESET_SANKEY = 'TOOL_LINKS_RESET_SANKEY';
 export const TOOL_LINKS__SET_MISSING_LOCKED_NODES = 'TOOL_LINKS__SET_MISSING_LOCKED_NODES';
-export const SET_SELECTED_NODES_BY_SEARCH = 'SET_SELECTED_NODES_BY_SEARCH';
+export const TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH = 'TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH';
 
 export function setToolFlowsLoading(loading) {
   return {
@@ -161,7 +161,7 @@ export function setMissingLockedNodes(nodes) {
 
 export function selectSearchNode(results) {
   return {
-    type: SET_SELECTED_NODES_BY_SEARCH,
+    type: TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH,
     payload: { results }
   };
 }

@@ -19,7 +19,7 @@ import {
   TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
   TOOL_LINKS_SET_NO_LINKS_FOUND,
   TOOL_LINKS_RESET_SANKEY,
-  SET_SELECTED_NODES_BY_SEARCH,
+  TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH,
   setNoLinksFound,
   setIsSearchOpen,
   expandSankey,
@@ -304,7 +304,7 @@ test(SET_CONTEXT, () => {
   expect(newState).toMatchSnapshot();
 });
 
-describe(SET_SELECTED_NODES_BY_SEARCH, () => {
+describe(TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH, () => {
   it('selects 2 nodes belonging to a column selected by default, with no previously selected or expanded nodes', () => {
     const results = [{ id: 0, nodeType: 'EXPORTER' }, { id: 1, nodeType: 'IMPORTER' }];
     const state = {

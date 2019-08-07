@@ -4,7 +4,7 @@ import {
   TOOL_LINKS__SET_SELECTED_NODES,
   TOOL_LINKS__CLEAR_SANKEY,
   TOOL_LINKS__SELECT_COLUMN,
-  SET_SELECTED_NODES_BY_SEARCH
+  TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT, SET_CONTEXTS } from 'actions/app.actions';
 import {
@@ -25,7 +25,7 @@ function* fetchLinkedGeoIds() {
       TOOL_LINKS__SET_SELECTED_NODES,
       TOOL_LINKS__CLEAR_SANKEY,
       TOOL_LINKS__SELECT_COLUMN,
-      SET_SELECTED_NODES_BY_SEARCH,
+      TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH,
       SET_NODE_ATTRIBUTES
     ],
     getGeoIds

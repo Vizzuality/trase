@@ -18,7 +18,7 @@ import {
   TOOL_LINKS__SET_SELECTED_RESIZE_BY,
   TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
   TOOL_LINKS__SET_MISSING_LOCKED_NODES,
-  SET_SELECTED_NODES_BY_SEARCH
+  TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
 import immer from 'immer';
@@ -218,7 +218,7 @@ const toolLinksReducer = {
       draft.expandedNodesIds = state.expandedNodesIds.filter(isInColumn);
     });
   },
-  [SET_SELECTED_NODES_BY_SEARCH](state, action) {
+  [TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH](state, action) {
     return immer(state, draft => {
       const { results } = action.payload;
       const ids = results.map(n => n.id);
