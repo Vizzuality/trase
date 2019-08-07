@@ -5,6 +5,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -1796,6 +1797,7 @@ CREATE TABLE public.context_node_type_properties (
     updated_at timestamp without time zone NOT NULL,
     is_choropleth_disabled boolean DEFAULT false NOT NULL,
     role character varying,
+    prefix text,
     CONSTRAINT context_node_type_properties_role_check CHECK (((role)::text = ANY (ARRAY[('source'::character varying)::text, ('exporter'::character varying)::text, ('importer'::character varying)::text, ('destination'::character varying)::text])))
 );
 
@@ -3819,9 +3821,9 @@ CREATE VIEW public.download_flows_v AS
         UNION ALL
          SELECT f_1.flow_id,
             f_1.quant_id,
-            'Quant'::text,
+            'Quant'::text AS text,
             f_1.value,
-            NULL::text,
+            NULL::text AS text,
             q.name,
             q.unit
            FROM (public.flow_quants f_1
@@ -8976,6 +8978,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190712115644'),
 ('20190716085538'),
 ('20190722152438'),
-('20190801121907');
+('20190801121907'),
+('20190807095141');
 
 
