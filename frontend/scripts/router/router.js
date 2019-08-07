@@ -58,9 +58,11 @@ export const routes = {
   },
   tool: {
     path: '/flows',
-    page: 'tool',
+    page: ENABLE_REDESIGN_PAGES ? 'tool-selector' : 'tool',
     title: getPageTitle,
-    thunk: loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool)
+    thunk: ENABLE_REDESIGN_PAGES
+      ? loadPageData()
+      : loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool)
   },
   profileRoot: {
     path: '/profiles',
