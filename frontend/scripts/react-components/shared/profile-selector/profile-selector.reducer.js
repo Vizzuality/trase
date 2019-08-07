@@ -16,7 +16,7 @@ import isEmpty from 'lodash/isEmpty';
 import fuzzySearch from 'utils/fuzzySearch';
 import { getPanelName } from 'utils/getProfilePanelName';
 
-const initialState = {
+export const initialState = {
   activeStep: null,
   panels: {
     types: {
@@ -64,7 +64,6 @@ const initialState = {
     sources: [],
     companies: []
   },
-  meta: {},
   tabs: {}
 };
 
@@ -85,7 +84,7 @@ const profileRootReducer = {
     };
   },
   [PROFILES__SET_PANEL_DATA](state, action) {
-    const { panelName, data, meta, tab, loading } = action.payload;
+    const { panelName, data, tab, loading } = action.payload;
     const initialData = initialState.data[panelName];
     let updatedData = data || initialData;
     if (panelName === 'companies') {
@@ -106,8 +105,7 @@ const profileRootReducer = {
     return {
       ...state,
       loading,
-      data: { ...state.data, [panelName]: updatedData },
-      meta: { ...state.meta, [panelName]: meta }
+      data: { ...state.data, [panelName]: updatedData }
     };
   },
   [PROFILES__SET_MORE_PANEL_DATA](state, action) {
@@ -133,7 +131,7 @@ const profileRootReducer = {
         (selectedCountry && selectedCountry[0] && selectedCountry[0].id) ||
         state.data.countries[0].id;
 
-      oldData = state.data[panelName][selectedCountryId][tab];
+      oldData = state.data.companies[selectedCountryId][tab];
     } else if (tab) {
       oldData = state.data[panelName][tab];
     }
@@ -313,7 +311,6 @@ const profileSelectorReducerTypes = PropTypes => ({
   activeStep: PropTypes.number,
   panels: PropTypes.object,
   data: PropTypes.object,
-  meta: PropTypes.object,
   tabs: PropTypes.object
 });
 

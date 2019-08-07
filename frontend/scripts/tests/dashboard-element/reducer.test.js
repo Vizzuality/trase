@@ -556,7 +556,7 @@ describe(DASHBOARD_ELEMENT__CLEAR_PANELS, () => {
         activeTab: state.companiesPanel.activeTab
       },
       commoditiesPanel: {
-        ...initialState.companiesPanel,
+        ...initialState.commoditiesPanel,
         activeTab: state.commoditiesPanel.activeTab
       }
     });
@@ -612,7 +612,7 @@ describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
     });
   });
 
-  it('sets results in sourcePanel when a country is not selected', () => {
+  it('sets results in countriesPanel when a country is not selected', () => {
     const state = {
       ...initialState,
       activePanelId: 'sources'

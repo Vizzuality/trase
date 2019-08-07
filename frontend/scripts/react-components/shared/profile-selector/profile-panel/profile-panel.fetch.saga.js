@@ -32,7 +32,6 @@ export function* getProfilesData(panelName) {
       panelName,
       tab,
       data: null,
-      meta: null,
       loading: true
     }
   });
@@ -48,7 +47,6 @@ export function* getProfilesData(panelName) {
         panelName,
         tab,
         data: data.data,
-        meta: data.meta,
         loading: false
       }
     });
