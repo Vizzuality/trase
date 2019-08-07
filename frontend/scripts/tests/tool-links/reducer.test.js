@@ -61,7 +61,11 @@ test(TOOL_LINKS__SET_COLUMNS, () => {
 });
 
 test(TOOL_LINKS__SET_NODES, () => {
-  const nodes = [{ id: 1, columnId: 3 }, { id: 2, columnId: 2 }, { id: 3, columnId: 8 }];
+  const nodes = [
+    { id: 1, columnId: 3, geoId: 'BR-1234' },
+    { id: 2, columnId: 2, geoId: 'BR-4567' },
+    { id: 3, columnId: 8, geoId: 'BR-8901' }
+  ];
   const action = setToolNodes(nodes);
   const newState = reducer(initialState, action);
   expect(newState).toMatchSnapshot();
@@ -384,9 +388,7 @@ describe(SET_NODE_ATTRIBUTES, () => {
   it('adds node attributes', () => {
     const attributes = [
       { node_id: 1, attribute_id: 'SOY_DEFORESTATION', attribute_type: 'quant' },
-      { node_id: 1, attribute_id: 'SMALLHOLDER_DOMINANCE', attribute_type: 'ind' },
-      { node_id: 2, attribute_id: 'SMALLHOLDER_DOMINANCE', attribute_type: 'ind' },
-      { node_id: 3, attribute_id: 'SMALLHOLDER_DOMINANCE', attribute_type: 'ind' }
+      { node_id: 1, attribute_id: 'SMALLHOLDER_DOMINANCE', attribute_type: 'ind' }
     ];
     const action = {
       type: SET_NODE_ATTRIBUTES,

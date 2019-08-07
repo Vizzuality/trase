@@ -43,20 +43,6 @@ Object {
           "node_id": 1,
         },
       },
-      "2": Object {
-        "indSMALLHOLDER_DOMINANCE": Object {
-          "attribute_id": "SMALLHOLDER_DOMINANCE",
-          "attribute_type": "ind",
-          "node_id": 2,
-        },
-      },
-      "3": Object {
-        "indSMALLHOLDER_DOMINANCE": Object {
-          "attribute_id": "SMALLHOLDER_DOMINANCE",
-          "attribute_type": "ind",
-          "node_id": 3,
-        },
-      },
     },
     "nodeHeights": null,
     "nodes": null,
@@ -97,154 +83,6 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
-}
-`;
-
-exports[`TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH deselect the only selected node that is also expanded 1`] = `
-Object {
-  "data": Object {
-    "columns": Object {
-      "3": Object {
-        "group": 1,
-        "isDefault": true,
-        "name": "EXPORTER",
-      },
-    },
-    "links": null,
-    "nodeAttributes": null,
-    "nodeHeights": null,
-    "nodes": null,
-    "nodesByColumnGeoId": null,
-  },
-  "detailedView": false,
-  "expandedNodesIds": Array [],
-  "flowsLoading": false,
-  "forcedOverview": false,
-  "highlightedNodeId": null,
-  "isSearchOpen": false,
-  "noLinksFound": false,
-  "selectedBiomeFilterName": null,
-  "selectedColumnsIds": null,
-  "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
-}
-`;
-
-exports[`TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH deselects 2 nodes belonging to a column selected by default, with no expanded nodes 1`] = `
-Object {
-  "data": Object {
-    "columns": Object {
-      "3": Object {
-        "group": 1,
-        "isDefault": true,
-        "name": "EXPORTER",
-      },
-      "4": Object {
-        "group": 2,
-        "isDefault": true,
-        "name": "IMPORTER",
-      },
-    },
-    "links": null,
-    "nodeAttributes": null,
-    "nodeHeights": null,
-    "nodes": null,
-    "nodesByColumnGeoId": null,
-  },
-  "detailedView": false,
-  "expandedNodesIds": Array [],
-  "flowsLoading": false,
-  "forcedOverview": false,
-  "highlightedNodeId": null,
-  "isSearchOpen": false,
-  "noLinksFound": false,
-  "selectedBiomeFilterName": null,
-  "selectedColumnsIds": null,
-  "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
-}
-`;
-
-exports[`TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH selects 2 nodes belonging to a column not selected by default, with no expanded nodes 1`] = `
-Object {
-  "data": Object {
-    "columns": Object {
-      "3": Object {
-        "group": 1,
-        "id": 3,
-        "name": "EXPORTER",
-      },
-      "4": Object {
-        "group": 0,
-        "id": 4,
-        "name": "IMPORTER",
-      },
-    },
-    "links": null,
-    "nodeAttributes": null,
-    "nodeHeights": null,
-    "nodes": null,
-    "nodesByColumnGeoId": null,
-  },
-  "detailedView": false,
-  "expandedNodesIds": Array [],
-  "flowsLoading": false,
-  "forcedOverview": false,
-  "highlightedNodeId": null,
-  "isSearchOpen": false,
-  "noLinksFound": false,
-  "selectedBiomeFilterName": null,
-  "selectedColumnsIds": Array [
-    4,
-    3,
-  ],
-  "selectedNodesIds": Array [
-    5,
-    6,
-  ],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
-}
-`;
-
-exports[`TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH selects 2 nodes belonging to a column selected by default, with no previously selected or expanded nodes 1`] = `
-Object {
-  "data": Object {
-    "columns": Object {
-      "3": Object {
-        "group": 1,
-        "isDefault": true,
-        "name": "EXPORTER",
-      },
-      "4": Object {
-        "group": 2,
-        "isDefault": true,
-        "name": "IMPORTER",
-      },
-    },
-    "links": null,
-    "nodeAttributes": null,
-    "nodeHeights": null,
-    "nodes": null,
-    "nodesByColumnGeoId": null,
-  },
-  "detailedView": false,
-  "expandedNodesIds": Array [],
-  "flowsLoading": false,
-  "forcedOverview": false,
-  "highlightedNodeId": null,
-  "isSearchOpen": false,
-  "noLinksFound": false,
-  "selectedBiomeFilterName": null,
-  "selectedColumnsIds": null,
-  "selectedNodesIds": Array [
-    0,
-    1,
-  ],
   "selectedRecolorByName": null,
   "selectedResizeByName": null,
 }
@@ -672,21 +510,24 @@ Object {
     "nodes": Object {
       "1": Object {
         "columnId": 3,
+        "geoId": "BR-1234",
         "id": 1,
       },
       "2": Object {
         "columnId": 2,
+        "geoId": "BR-4567",
         "id": 2,
       },
       "3": Object {
         "columnId": 8,
+        "geoId": "BR-8901",
         "id": 3,
       },
     },
     "nodesByColumnGeoId": Object {
-      "2-undefined": 2,
-      "3-undefined": 1,
-      "8-undefined": 3,
+      "2-BR-4567": 2,
+      "3-BR-1234": 1,
+      "8-BR-8901": 3,
     },
   },
   "detailedView": false,
@@ -758,6 +599,154 @@ Object {
   "selectedNodesIds": Array [
     1234,
     5678,
+  ],
+  "selectedRecolorByName": null,
+  "selectedResizeByName": null,
+}
+`;
+
+exports[`TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH deselect the only selected node that is also expanded 1`] = `
+Object {
+  "data": Object {
+    "columns": Object {
+      "3": Object {
+        "group": 1,
+        "isDefault": true,
+        "name": "EXPORTER",
+      },
+    },
+    "links": null,
+    "nodeAttributes": null,
+    "nodeHeights": null,
+    "nodes": null,
+    "nodesByColumnGeoId": null,
+  },
+  "detailedView": false,
+  "expandedNodesIds": Array [],
+  "flowsLoading": false,
+  "forcedOverview": false,
+  "highlightedNodeId": null,
+  "isSearchOpen": false,
+  "noLinksFound": false,
+  "selectedBiomeFilterName": null,
+  "selectedColumnsIds": null,
+  "selectedNodesIds": Array [],
+  "selectedRecolorByName": null,
+  "selectedResizeByName": null,
+}
+`;
+
+exports[`TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH deselects 2 nodes belonging to a column selected by default, with no expanded nodes 1`] = `
+Object {
+  "data": Object {
+    "columns": Object {
+      "3": Object {
+        "group": 1,
+        "isDefault": true,
+        "name": "EXPORTER",
+      },
+      "4": Object {
+        "group": 2,
+        "isDefault": true,
+        "name": "IMPORTER",
+      },
+    },
+    "links": null,
+    "nodeAttributes": null,
+    "nodeHeights": null,
+    "nodes": null,
+    "nodesByColumnGeoId": null,
+  },
+  "detailedView": false,
+  "expandedNodesIds": Array [],
+  "flowsLoading": false,
+  "forcedOverview": false,
+  "highlightedNodeId": null,
+  "isSearchOpen": false,
+  "noLinksFound": false,
+  "selectedBiomeFilterName": null,
+  "selectedColumnsIds": null,
+  "selectedNodesIds": Array [],
+  "selectedRecolorByName": null,
+  "selectedResizeByName": null,
+}
+`;
+
+exports[`TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH selects 2 nodes belonging to a column not selected by default, with no expanded nodes 1`] = `
+Object {
+  "data": Object {
+    "columns": Object {
+      "3": Object {
+        "group": 1,
+        "id": 3,
+        "name": "EXPORTER",
+      },
+      "4": Object {
+        "group": 0,
+        "id": 4,
+        "name": "IMPORTER",
+      },
+    },
+    "links": null,
+    "nodeAttributes": null,
+    "nodeHeights": null,
+    "nodes": null,
+    "nodesByColumnGeoId": null,
+  },
+  "detailedView": false,
+  "expandedNodesIds": Array [],
+  "flowsLoading": false,
+  "forcedOverview": false,
+  "highlightedNodeId": null,
+  "isSearchOpen": false,
+  "noLinksFound": false,
+  "selectedBiomeFilterName": null,
+  "selectedColumnsIds": Array [
+    4,
+    3,
+  ],
+  "selectedNodesIds": Array [
+    5,
+    6,
+  ],
+  "selectedRecolorByName": null,
+  "selectedResizeByName": null,
+}
+`;
+
+exports[`TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH selects 2 nodes belonging to a column selected by default, with no previously selected or expanded nodes 1`] = `
+Object {
+  "data": Object {
+    "columns": Object {
+      "3": Object {
+        "group": 1,
+        "isDefault": true,
+        "name": "EXPORTER",
+      },
+      "4": Object {
+        "group": 2,
+        "isDefault": true,
+        "name": "IMPORTER",
+      },
+    },
+    "links": null,
+    "nodeAttributes": null,
+    "nodeHeights": null,
+    "nodes": null,
+    "nodesByColumnGeoId": null,
+  },
+  "detailedView": false,
+  "expandedNodesIds": Array [],
+  "flowsLoading": false,
+  "forcedOverview": false,
+  "highlightedNodeId": null,
+  "isSearchOpen": false,
+  "noLinksFound": false,
+  "selectedBiomeFilterName": null,
+  "selectedColumnsIds": null,
+  "selectedNodesIds": Array [
+    0,
+    1,
   ],
   "selectedRecolorByName": null,
   "selectedResizeByName": null,
