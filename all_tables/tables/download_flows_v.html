@@ -111,23 +111,6 @@
 				</thead>
 				<tbody>
 				<tr>
-				 <td><span id="id">id</span></td>
-				 <td>int4</td>
-				 <td>10</td>
-				 <td title='nullable'>√</td>
-				 <td title=''></td>
-				 <td>null</td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>				 
-				 </td>
-				 <td>
-				  <table border='0' cellspacing='0' cellpadding='0'>
-				  </table>					 
-				 </td>
-				 <td></td>
-				</tr>
-				<tr>
 				 <td><span id="context_id">context_id</span></td>
 				 <td>int4</td>
 				 <td>10</td>
@@ -299,7 +282,7 @@
 				</tr>
 								</tbody>
 				</table>
-				<p title='11 columns'>Table contained <span id="recordNumber">0</span> rows<p/>
+				<p title='10 columns'>Table contained <span id="recordNumber">0</span> rows<p/>
 			</div>
 		</div>
 		<div class="box box-primary">		
@@ -315,7 +298,7 @@
 			  </div>
 			</div>	
 			<div class="box-body">
-				<textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT f.id,&#10;    f.context_id,&#10;    f.year,&#10;    f.path,&#10;    f.jsonb_path,&#10;    fi.original_type,&#10;    fi.original_id,&#10;    fi.name AS attribute_name,&#10;    string_agg(fi.text_value, &#39; / &#39;::text) AS text_values,&#10;    sum(fi.numeric_value) AS sum,&#10;        CASE&#10;            WHEN (fi.original_type = &#39;Qual&#39;::text) THEN string_agg(fi.text_value, &#39; / &#39;::text)&#10;            ELSE (sum(fi.numeric_value))::text&#10;        END AS total&#10;   FROM (flows_mv f&#10;     JOIN ( SELECT f_1.flow_id,&#10;            f_1.qual_id AS original_id,&#10;            &#39;Qual&#39;::text AS original_type,&#10;            NULL::double precision AS numeric_value,&#10;            f_1.value AS text_value,&#10;            q.name,&#10;            NULL::text AS unit&#10;           FROM (flow_quals f_1&#10;             JOIN quals q ON ((f_1.qual_id = q.id)))&#10;          GROUP BY f_1.flow_id, f_1.qual_id, f_1.value, q.name&#10;        UNION ALL&#10;         SELECT f_1.flow_id,&#10;            f_1.quant_id,&#10;            &#39;Quant&#39;::text AS text,&#10;            f_1.value,&#10;            NULL::text AS text,&#10;            q.name,&#10;            q.unit&#10;           FROM (flow_quants f_1&#10;             JOIN quants q ON ((f_1.quant_id = q.id)))&#10;          GROUP BY f_1.flow_id, f_1.quant_id, f_1.value, q.name, q.unit) fi ON ((f.id = fi.flow_id)))&#10;  GROUP BY f.id, f.context_id, f.year, f.path, f.jsonb_path, fi.original_type, fi.original_id, fi.name;</textarea>
+				<textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT f.context_id,&#10;    f.year,&#10;    f.path,&#10;    f.jsonb_path,&#10;    fi.original_type,&#10;    fi.original_id,&#10;    fi.name AS attribute_name,&#10;    string_agg(fi.text_value, &#39; / &#39;::text) AS text_values,&#10;    sum(fi.numeric_value) AS sum,&#10;        CASE&#10;            WHEN (fi.original_type = &#39;Qual&#39;::text) THEN string_agg(DISTINCT fi.text_value, &#39; / &#39;::text)&#10;            ELSE (sum(fi.numeric_value))::text&#10;        END AS total&#10;   FROM (flows_mv f&#10;     JOIN ( SELECT f_1.flow_id,&#10;            f_1.qual_id AS original_id,&#10;            &#39;Qual&#39;::text AS original_type,&#10;            NULL::double precision AS numeric_value,&#10;            f_1.value AS text_value,&#10;            q.name,&#10;            NULL::text AS unit&#10;           FROM (flow_quals f_1&#10;             JOIN quals q ON ((f_1.qual_id = q.id)))&#10;          GROUP BY f_1.flow_id, f_1.qual_id, f_1.value, q.name&#10;        UNION ALL&#10;         SELECT f_1.flow_id,&#10;            f_1.quant_id,&#10;            &#39;Quant&#39;::text AS text,&#10;            f_1.value,&#10;            NULL::text AS text,&#10;            q.name,&#10;            q.unit&#10;           FROM (flow_quants f_1&#10;             JOIN quants q ON ((f_1.quant_id = q.id)))&#10;          GROUP BY f_1.flow_id, f_1.quant_id, f_1.value, q.name, q.unit) fi ON ((f.id = fi.flow_id)))&#10;  GROUP BY f.context_id, f.year, f.path, f.jsonb_path, fi.original_type, fi.original_id, fi.name;</textarea>
 				<div style="padding-top: 5px;"><hr></div>
 				<div class="box box-solid">
 					<div class="box-header with-border">
@@ -327,8 +310,8 @@
 					  <ul class="list-unstyled">
 						<li><a href="flow_quals.html">flow_quals</a></li>
 						<li><a href="quals.html">quals</a></li>
-						<li><a href="quants.html">quants</a></li>
 						<li><a href="flow_quants.html">flow_quants</a></li>
+						<li><a href="quants.html">quants</a></li>
 					  </ul>
 					</div>
 					<!-- /.box-body -->
