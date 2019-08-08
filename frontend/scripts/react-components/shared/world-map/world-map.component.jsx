@@ -64,16 +64,20 @@ const WorldMap = ({
 
   const mouseInteractionProps = useMemo(() => {
     const onMouseMove = (geometry, e) => {
+      const totalValue = flows.reduce((a, b) => a + b.value, 0);
       const geoId = geometry.properties ? geometry.properties.iso2 : geometry.geoId;
       if (isDestinationCountry(geoId, flows)) {
-        const x = e.clientX + 10;
-        const y = e.clientY + window.scrollY + 10;
-        const text = geometry.name || geometry.properties.name;
-        const title = 'Trade Volume';
-        const unit = 't';
         const volume = geometry.value || (flows.find(flow => flow.geoId === geoId) || {}).value;
-        const value = formatValue(volume, 'tons');
-        const updatedTooltipConfig = { x, y, text, items: [{ title, value, unit }] };
+        const percentage = (volume / totalValue) * 100;
+        const updatedTooltipConfig = {
+          x: e.clientX + 10,
+          y: e.clientY + window.scrollY + 10,
+          text: geometry.name || geometry.properties.name,
+          items: [
+            { title: 'Trade Volume', value: formatValue(volume, 'tons'), unit: 't' },
+            { value: Math.round(percentage * 10) / 10, unit: '%' }
+          ]
+        };
         setTooltipConfig(updatedTooltipConfig);
       }
     };
