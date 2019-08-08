@@ -27,8 +27,7 @@ ActiveAdmin.register Api::V3::ContextNodeTypeProperty, as: 'ContextNodeTypePrope
       input :is_choropleth_disabled, as: :boolean, required: true,
                                      hint: object.class.column_comment('is_choropleth_disabled')
       input :role, as: :select, collection: Api::V3::ContextNodeTypeProperty.roles, required: false
-      input :prefix, required: true, as: :string,
-                     hint: object.class.column_comment('prefix')
+      input :prefix, as: :string, hint: object.class.column_comment('prefix')
     end
     f.actions
   end

@@ -17,7 +17,7 @@ RSpec.describe Api::V3::ContextNodeTypeProperty, type: :model do
     }
     let(:property_without_prefix) {
       FactoryBot.build(
-        :api_v3_context_node_type_property, prefix: nil
+        :api_v3_context_node_type_property, role: :exporter, prefix: nil
       )
     }
     it 'fails when context node type missing' do

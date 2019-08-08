@@ -43,7 +43,9 @@ module Api
 
       belongs_to :context_node_type
 
-      validates :prefix, presence: true
+      validates :prefix,
+                presence: true,
+                if: proc { |record| record.role.present? }
       validates :context_node_type, presence: true, uniqueness: true
       validates :column_group, presence: true, inclusion: COLUMN_GROUP
       validates :is_default, inclusion: {in: [true, false]}
