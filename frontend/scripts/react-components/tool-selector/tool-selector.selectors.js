@@ -45,8 +45,6 @@ export const getCommodityName = createSelector(
   [getCommodities, getActiveCommodityId],
   (commodities, commodityId) => {
     if (!commodityId || !commodities || !commodities.length) return null;
-    console.log('com', commodities);
-
     return commodities.find(c => c.id === commodityId).name;
   }
 );
@@ -54,7 +52,6 @@ export const getCommodityName = createSelector(
 export const getCountryName = createSelector(
   [getCountries, getActiveCountryId],
   (countries, countryId) => {
-    console.log('c', countries);
     if (!countryId || !countries || !countries.length) return null;
     return countries.find(c => c.id === countryId).name;
   }
