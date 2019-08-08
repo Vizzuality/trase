@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import uniqBy from 'lodash/uniqBy';
 
-const getContexts = state => state.app.contexts;
+export const getContexts = state => state.app.contexts || null;
 const getActiveCommodityId = state => state.toolSelector.activeCommodityId;
 const getActiveCountryId = state => state.toolSelector.activeCountryId;
 
@@ -41,19 +41,19 @@ const getCountries = createSelector(
   }
 );
 
-export const getCommodityName = createSelector(
+export const getCommodity = createSelector(
   [getCommodities, getActiveCommodityId],
   (commodities, commodityId) => {
     if (!commodityId || !commodities || !commodities.length) return null;
-    return commodities.find(c => c.id === commodityId).name;
+    return commodities.find(c => c.id === commodityId);
   }
 );
 
-export const getCountryName = createSelector(
+export const getCountry = createSelector(
   [getCountries, getActiveCountryId],
   (countries, countryId) => {
     if (!countryId || !countries || !countries.length) return null;
-    return countries.find(c => c.id === countryId).name;
+    return countries.find(c => c.id === countryId);
   }
 );
 

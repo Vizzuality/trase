@@ -6,8 +6,21 @@ import greatCircle from '@turf/great-circle';
 import { geoPath } from 'd3-geo';
 import projections from 'react-simple-maps/lib/projections';
 import { getTopNodesKey } from 'react-components/explore/explore.actions';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import {
+  getSelectedContext as getAppSelectedContext,
+  getSelectedYears
+} from 'reducers/app.selectors';
 
+const getIsToolSelector = (state, { toolSelector }) => toolSelector;
+const getHighlightedContext = (state, { highlightedContext }) => highlightedContext;
+const getSelectedContext = createSelector(
+  [getIsToolSelector, getHighlightedContext, getAppSelectedContext],
+  (isToolSelector, highlightedContext, appSelectedContext) => {
+    if (highlightedContext) return highlightedContext;
+    if (isToolSelector) return null;
+    return appSelectedContext;
+  }
+);
 const getTopNodes = state => state.explore.topNodes;
 
 const worldMapProjection = projections(800, 450, { scale: 145 }, 'robinson');

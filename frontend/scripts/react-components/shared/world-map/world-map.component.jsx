@@ -37,8 +37,8 @@ const MapGeographies = ({ geographies, flows, originGeoId, projection, mouseInte
             />
           )
       ),
-      // We dont want the projection function to force new renders
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+    // We dont want the projection function to force new renders
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [geographies, flows, originGeoId, mouseInteractionProps]
   );
 
@@ -53,20 +53,14 @@ const WorldMap = ({
 }) => {
   const [tooltipConfig, setTooltipConfig] = useState(null);
   const buildCurves = (start, end, line) => line.arc;
-
-  useEffect(() => {
-    if (flows.length === 0 && selectedContext && selectedYears) {
-      getTopNodes();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   useEffect(() => {
     if (!selectedContext) {
       return;
     }
-    getTopNodes();
-  }, [selectedContext, selectedYears, getTopNodes]);
+    if (flows.length === 0 && selectedYears) {
+      getTopNodes(selectedContext);
+    }
+  }, [selectedContext, selectedYears, getTopNodes, flows.length]);
 
   const mouseInteractionProps = useMemo(() => {
     const onMouseMove = (geometry, e) => {
