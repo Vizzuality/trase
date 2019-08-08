@@ -4,7 +4,7 @@ import {
 } from 'react-components/tool-selector/tool-selector.actions';
 import createReducer from 'utils/createReducer';
 
-const initialState = {
+export const initialState = {
   activeCommodityId: null,
   activeCountryId: null
 };
