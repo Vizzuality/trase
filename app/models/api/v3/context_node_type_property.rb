@@ -9,6 +9,7 @@
 #  is_geo_column(When set, show nodes on map)                                              :boolean          default(FALSE), not null
 #  is_choropleth_disabled(When set, do not display the map choropleth)                     :boolean          default(FALSE), not null
 #  role                                                                                    :string
+#  prefix                                                                                  :text
 #
 # Indexes
 #
@@ -42,6 +43,9 @@ module Api
 
       belongs_to :context_node_type
 
+      validates :prefix,
+                presence: true,
+                if: proc { |record| record.role.present? }
       validates :context_node_type, presence: true, uniqueness: true
       validates :column_group, presence: true, inclusion: COLUMN_GROUP
       validates :is_default, inclusion: {in: [true, false]}

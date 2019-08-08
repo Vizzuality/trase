@@ -2,7 +2,7 @@ ActiveAdmin.register Api::V3::ContextNodeTypeProperty, as: 'ContextNodeTypePrope
   menu parent: 'General', priority: 3
 
   permit_params :context_node_type_id, :column_group, :is_default,
-                :is_geo_column, :is_choropleth_disabled, :role
+                :is_geo_column, :is_choropleth_disabled, :role, :prefix
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -27,6 +27,7 @@ ActiveAdmin.register Api::V3::ContextNodeTypeProperty, as: 'ContextNodeTypePrope
       input :is_choropleth_disabled, as: :boolean, required: true,
                                      hint: object.class.column_comment('is_choropleth_disabled')
       input :role, as: :select, collection: Api::V3::ContextNodeTypeProperty.roles, required: false
+      input :prefix, as: :string, hint: object.class.column_comment('prefix')
     end
     f.actions
   end
@@ -40,6 +41,7 @@ ActiveAdmin.register Api::V3::ContextNodeTypeProperty, as: 'ContextNodeTypePrope
     column :is_geo_column
     column :is_choropleth_disabled
     column :role
+    column :prefix
     actions
   end
 
@@ -54,6 +56,7 @@ ActiveAdmin.register Api::V3::ContextNodeTypeProperty, as: 'ContextNodeTypePrope
       row :is_geo_column
       row :is_choropleth_disabled
       row :role
+      row :prefix
       row :created_at
       row :updated_at
     end
