@@ -361,12 +361,17 @@ describe('fetchDataOnPanelChange', () => {
   });
 
   it(`doesn't call fetchDashboardPanelInitialData on second visit to panel`, () => {
+    const secondState = {
+      ...baseState.dashboardElement,
+      data: {
+        ...baseState.dashboardElement.data,
+        companies: { 2: { id: 'someData' } }
+      }
+    };
     generator.next();
     generator.next(action);
     // saga calls fetchDashboardPanelInitialData
-    expect(generator.next(baseState.dashboardElement).value).toEqual(
-      take(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL)
-    );
+    expect(generator.next(secondState).value).toEqual(take(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL));
   });
 
   it(`calls fetchDashboardPanelInitialData when an item has changed`, () => {
