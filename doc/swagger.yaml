@@ -961,6 +961,9 @@ paths:
                               profileType:
                                 type: string
                                 example: 'place'
+                              prefix:
+                                type: string
+                                example: 'imported from'
   /dashboards/parametrised_charts:
     get:
       tags:
