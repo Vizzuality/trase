@@ -10,11 +10,11 @@ export const EXPLORE__SET_SELECTED_TABLE_COLUMN_TYPE = 'EXPLORE__SET_SELECTED_TA
 export const getTopNodesKey = (ctx, col, start, end) =>
   ctx && col && start && end ? `CTX${ctx}_COL${col}_START${start}_END${end}` : null;
 
-export const setExploreTopNodes = columnType => (dispatch, getState) => {
+export const setExploreTopNodes = (columnType, context) => (dispatch, getState) => {
   if (!columnType) return null;
 
   const state = getState();
-  const selectedContext = getSelectedContext(state);
+  const selectedContext = context || getSelectedContext(state);
   let columnId;
   let type;
 

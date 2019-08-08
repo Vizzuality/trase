@@ -8,13 +8,13 @@ import {
 } from 'react-components/shared/world-map/world-map.selectors';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 
-const mapStateToProps = state => {
-  const selectedYears = getSelectedYears(state);
-  const selectedContext = getSelectedContext(state);
-
-  const originGeoId = getOriginGeoId(state);
-  const originCoordinates = getOriginCoordinates(state);
-  const flows = getWorldMapFlows(state);
+const mapStateToProps = (state, ownProps) => {
+  const { highlightedContext } = ownProps;
+  const selectedYears = getSelectedYears(state, ownProps);
+  const selectedContext = highlightedContext || getSelectedContext(state, ownProps);
+  const originGeoId = getOriginGeoId(state, ownProps);
+  const originCoordinates = getOriginCoordinates(state, ownProps);
+  const flows = getWorldMapFlows(state, ownProps);
 
   return {
     flows,
@@ -26,7 +26,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  getTopNodes: () => setExploreTopNodes('country')
+  getTopNodes: selectedContext => setExploreTopNodes('country', selectedContext)
 };
 
 export default connect(
