@@ -83,9 +83,8 @@ export const goToProfile = () => (dispatch, getState) => {
   const commodity = profileSelector.panels.commodities.activeItems[0];
   if (commodity) {
     const country = profileSelector.panels.countries.activeItems[0];
-    const contextId = contexts.find(
-      c => c.countryId === country.id && c.commodityId === commodity.id
-    )?.id;
+    const contextId = contexts.find(c => c.countryId === country && c.commodityId === commodity)
+      ?.id;
     if (contextId) {
       query.contextId = contextId;
     }

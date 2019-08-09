@@ -15,7 +15,6 @@ import {
   fetchProfileSearchResults
 } from 'react-components/shared/profile-selector/profile-panel/profile-panel.fetch.saga';
 import { getPanelName } from 'utils/getProfilePanelName';
-import isEmpty from 'lodash/isEmpty';
 import {
   getCompaniesActiveTab,
   getSourcesActiveTab
@@ -26,14 +25,10 @@ export function* fetchProfilesInitialData() {
   const panelName = getPanelName(profileSelector);
   if (panelName === 'type') return;
   if (panelName === 'sources') {
-    if (!isEmpty(profileSelector.data.sources)) {
-      return;
-    }
     yield fork(getProfilesData, 'countries');
     // Fetch regions
     if (profileSelector.panels.countries.activeItems.length > 0) {
-      const tab = yield select(getSourcesActiveTab);
-      yield fork(getProfilesData, 'sources', tab);
+      yield fork(getProfilesTabs, 'sources');
     }
   } else if (panelName === 'companies') {
     yield call(getProfilesData, 'countries');
@@ -78,13 +73,17 @@ export function* fetchDataOnTabsFetch() {
     const activeTab = yield select(activeTabSelector);
     if (activeTab) {
       if (key === 'companies') {
-        const activeCountry = profileSelector.panels.countries.activeItems[0];
-        if (
-          (activeCountry && !profileSelector.data[key][activeCountry]) ||
-          !profileSelector.data[key][activeCountry][activeTab] ||
-          profileSelector.data[key][activeCountry][activeTab].length === 0
-        ) {
-          yield fork(getProfilesData, key, activeTab);
+        const activeCountry =
+          profileSelector.panels.countries.activeItems[0] ||
+          (profileSelector.data.countries[0] && profileSelector.data.countries[0].id);
+        if (activeCountry) {
+          if (
+            !profileSelector.data[key][activeCountry] ||
+            !profileSelector.data[key][activeCountry][activeTab] ||
+            profileSelector.data[key][activeCountry][activeTab].length === 0
+          ) {
+            yield fork(getProfilesData, key, activeTab);
+          }
         }
       } else if (
         !profileSelector.data[key][activeTab] ||
