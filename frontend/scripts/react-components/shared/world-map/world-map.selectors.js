@@ -10,9 +10,11 @@ import {
   getSelectedContext as getAppSelectedContext,
   getSelectedYears
 } from 'reducers/app.selectors';
+import { getContexts } from 'react-components/tool-selector/tool-selector.selectors';
 
 const getIsToolSelector = (state, { toolSelector }) => toolSelector;
 const getHighlightedContext = (state, { highlightedContext }) => highlightedContext;
+const getHighlightedCountryIds = (state, { highlightedCountryIds }) => highlightedCountryIds;
 const getSelectedContext = createSelector(
   [getIsToolSelector, getHighlightedContext, getAppSelectedContext],
   (isToolSelector, highlightedContext, appSelectedContext) => {
@@ -117,5 +119,19 @@ export const getWorldMapFlows = createSelector(
       ...flow,
       arc: buildGreatCircleArc(originCoordinates, flow.coordinates)
     }));
+  }
+);
+
+export const getHighlightedCountriesIso = createSelector(
+  [getHighlightedCountryIds, getContexts],
+  (highlightedCountryIds, contexts) => {
+    if (!highlightedCountryIds || !highlightedCountryIds.length) return null;
+    const countryGeoIds = [];
+    contexts.forEach(c => {
+      if (highlightedCountryIds.includes(c.countryId)) {
+        countryGeoIds.push(c.worldMap.geoId);
+      }
+    });
+    return countryGeoIds;
   }
 );

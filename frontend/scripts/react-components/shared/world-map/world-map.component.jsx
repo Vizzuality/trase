@@ -17,7 +17,14 @@ import 'scripts/react-components/shared/world-map/world-map.scss';
 
 const isDestinationCountry = (iso, countries) => countries.map(f => f.geoId).includes(iso);
 
-const MapGeographies = ({ geographies, flows, originGeoId, projection, mouseInteractionProps }) =>
+const MapGeographies = ({
+  geographies,
+  flows,
+  originGeoId,
+  projection,
+  mouseInteractionProps,
+  highlightedCountriesIso
+}) =>
   useMemo(
     () =>
       geographies.map(
@@ -28,7 +35,12 @@ const MapGeographies = ({ geographies, flows, originGeoId, projection, mouseInte
               cacheId={`geography-world${geography.properties.cartodb_id}`}
               className={cx(
                 'world-map-geography',
-                { '-dark': isDestinationCountry(geography.properties.iso2, flows) },
+                {
+                  '-dark':
+                    isDestinationCountry(geography.properties.iso2, flows) ||
+                    (highlightedCountriesIso &&
+                      highlightedCountriesIso.includes(geography.properties.iso2))
+                },
                 { '-pink': originGeoId === geography.properties.iso2 }
               )}
               geography={geography}
@@ -39,7 +51,7 @@ const MapGeographies = ({ geographies, flows, originGeoId, projection, mouseInte
       ),
     // We dont want the projection function to force new renders
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [geographies, flows, originGeoId, mouseInteractionProps]
+    [geographies, flows, originGeoId, mouseInteractionProps, highlightedCountriesIso]
   );
 
 const WorldMap = ({
@@ -49,6 +61,7 @@ const WorldMap = ({
   getTopNodes,
   originGeoId,
   originCoordinates,
+  highlightedCountriesIso,
   className
 }) => {
   const [tooltipConfig, setTooltipConfig] = useState(null);
@@ -124,6 +137,7 @@ const WorldMap = ({
                 originGeoId={originGeoId}
                 projection={projection}
                 mouseInteractionProps={mouseInteractionProps}
+                highlightedCountriesIso={highlightedCountriesIso}
               />
             )}
           </Geographies>
@@ -141,6 +155,7 @@ WorldMap.propTypes = {
   originGeoId: PropTypes.string,
   selectedContext: PropTypes.object,
   selectedYears: PropTypes.array,
+  highlightedCountriesIso: PropTypes.array,
   getTopNodes: PropTypes.func.isRequired
 };
 

@@ -4,11 +4,13 @@ import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.
 import PropTypes from 'prop-types';
 import TopCards from 'react-components/tool-selector/top-cards';
 import WorldMap from 'react-components/shared/world-map/world-map.container';
-
+import uniq from 'lodash/uniq';
+import { TOOL_SELECTOR_STEPS } from 'constants';
 import 'react-components/tool-selector/tool-selector.scss';
 
 function ToolSelector({ items, step, setCommodity, setCountry, commodity, country, contexts }) {
   const [context, setContext] = useState(null);
+  const [countriesIdsToHighlight, setHighlightedCountries] = useState(null);
   const findContext = countryId =>
     countryId
       ? contexts.find(c => c.countryId === countryId && c.commodityId === commodity.id)
@@ -21,14 +23,21 @@ function ToolSelector({ items, step, setCommodity, setCountry, commodity, countr
       </Heading>
     );
   };
-  const setItemFunction = step === 0 ? setCommodity : setCountry;
-  const onHover = item => (step === 0 ? () => {} : setContext(findContext(item?.id)));
+  const setItemFunction = step === TOOL_SELECTOR_STEPS.selectCommodity ? setCommodity : setCountry;
+  const findContextCountries = commodityId =>
+    !commodityId
+      ? null
+      : uniq(contexts.filter(c => c.commodityId === commodityId).map(c => c.countryId));
+  const onHover = item =>
+    step === TOOL_SELECTOR_STEPS.selectCommodity
+      ? setHighlightedCountries(findContextCountries(item?.id))
+      : setContext(findContext(item?.id));
   return (
     <div className="c-tool-selector">
       <div className="row columns">{renderTitle()}</div>
       <div className="row columns">
         <div className="grid-list">
-          {step < 2 &&
+          {step < TOOL_SELECTOR_STEPS.selected &&
             items.map(item => (
               <GridListItem
                 item={item}
@@ -40,7 +49,13 @@ function ToolSelector({ items, step, setCommodity, setCountry, commodity, countr
         </div>
       </div>
       <div className="row columns">
-        <WorldMap toolSelector highlightedContext={context} />
+        <WorldMap
+          toolSelector
+          highlightedContext={context}
+          highlightedCountryIds={
+            step === TOOL_SELECTOR_STEPS.selectCommodity && countriesIdsToHighlight
+          }
+        />
       </div>
       <div className="row columns">
         <TopCards
