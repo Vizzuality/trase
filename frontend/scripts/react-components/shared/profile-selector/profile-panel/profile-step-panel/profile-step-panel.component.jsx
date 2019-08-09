@@ -54,7 +54,7 @@ function ProfileStepPanel(props) {
     case 'companies': {
       const toOption = d => ({ label: d.name, value: d.id });
       const options = data.countries?.map(toOption);
-      const activeCountry = countriesActiveItems && countriesActiveItems[0];
+      const activeCountry = (countriesActiveItems && countriesActiveItems[0]) || data.countries[0];
 
       if (!activeCountry || companiesTabs.length === 0)
         return <ShrinkingSpinner className="-large" />;

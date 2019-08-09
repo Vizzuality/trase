@@ -95,6 +95,7 @@ export const getDynamicSentence = createSelector(
         panel: 'sources',
         id: 'sources',
         prefix: 'See the',
+        transform: 'capitalize',
         value: sourcesActiveItems
       });
     } else if (profileType === 'companies' && companiesActiveItems.length > 0) {
@@ -102,6 +103,7 @@ export const getDynamicSentence = createSelector(
         panel: 'companies',
         id: 'companies',
         prefix: 'See the',
+        transform: 'capitalize',
         value: companiesActiveItems
       });
     }

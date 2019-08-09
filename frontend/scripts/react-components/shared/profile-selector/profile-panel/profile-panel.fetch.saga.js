@@ -44,7 +44,7 @@ function* getProfilesParams(step, options = {}) {
   };
 
   if (step === 'sources' || step === 'companies') {
-    params.countries_ids = countries.activeItems[0] || data.countries[0];
+    params.countries_ids = countries.activeItems[0] || (data.countries[0] && data.countries[0].id);
   }
 
   if (step === 'commodities') {
