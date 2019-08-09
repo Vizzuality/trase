@@ -67,7 +67,7 @@ describe('getDashboardPanelData', () => {
 
 describe('getDashboardPanelSectionTabs', () => {
   it('Cancels if the fetch is cancelled', () => {
-    const generator = getDashboardPanelSectionTabs(dashboardElement, optionsType);
+    const generator = getDashboardPanelSectionTabs(optionsType);
     generator.next();
     generator.next();
     expect(generator.return().value).toEqual(cancelled());

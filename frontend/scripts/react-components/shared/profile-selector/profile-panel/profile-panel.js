@@ -29,7 +29,7 @@ const blocks = [
 ];
 
 const mapStateToProps = state => ({
-  profileType: state.profileSelector.panels.types.activeItems.type,
+  profileType: state.profileSelector.panels.type,
   blocks,
   panels: state.profileSelector.panels,
   data: state.profileSelector.data,

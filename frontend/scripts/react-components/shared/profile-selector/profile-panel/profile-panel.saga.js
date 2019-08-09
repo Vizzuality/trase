@@ -1,13 +1,11 @@
-import { take, takeLatest, select, all, fork, cancel, put, call } from 'redux-saga/effects';
+import { takeLatest, select, all, fork, put, call } from 'redux-saga/effects';
 import {
   PROFILES__SET_ACTIVE_STEP,
   PROFILES__SET_ACTIVE_ITEM,
   PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH,
   PROFILES__SET_ACTIVE_TAB,
-  PROFILES__SET_PANEL_TABS,
   PROFILES__SET_PANEL_PAGE,
-  PROFILES__GET_SEARCH_RESULTS,
-  PROFILES__CLEAR_PANELS
+  PROFILES__GET_SEARCH_RESULTS
 } from 'react-components/shared/profile-selector/profile-selector.actions';
 import {
   getProfilesData,
@@ -15,24 +13,34 @@ import {
   getMoreProfilesData,
   fetchProfileSearchResults
 } from 'react-components/shared/profile-selector/profile-panel/profile-panel.fetch.saga';
-import getPanelStepName, { getPanelName } from 'utils/getProfilePanelName';
+import { getPanelName } from 'utils/getProfilePanelName';
 import isEmpty from 'lodash/isEmpty';
-import isEqual from 'lodash/isEqual';
+import {
+  getCompaniesActiveTab,
+  getSourcesActiveTab
+} from 'react-components/shared/profile-selector/profile-selector.selectors';
 
 export function* fetchProfilesInitialData() {
   const profileSelector = yield select(state => state.profileSelector);
   const panelName = getPanelName(profileSelector);
-  if (panelName === 'types') return;
+  if (panelName === 'type') return;
   if (panelName === 'sources') {
+    if (!isEmpty(profileSelector.data.sources)) {
+      return;
+    }
     yield fork(getProfilesData, 'countries');
     // Fetch regions
-    if (!isEmpty(profileSelector.panels.countries.activeItems)) {
-      yield fork(getProfilesData, 'sources');
+    if (profileSelector.panels.countries.activeItems.length > 0) {
+      const tab = yield select(getSourcesActiveTab);
+      yield fork(getProfilesData, 'sources', tab);
     }
   } else if (panelName === 'companies') {
+    if (!isEmpty(profileSelector.data.companies)) {
+      return;
+    }
     yield call(getProfilesData, 'countries');
     const updatedProfileSelector = yield select(state => state.profileSelector);
-    if (isEmpty(updatedProfileSelector.panels.countries.activeItems)) {
+    if (updatedProfileSelector.panels.countries.activeItems.length === 0) {
       const defaultCountry = updatedProfileSelector.data.countries[0];
       yield put({
         type: PROFILES__SET_ACTIVE_ITEM,
@@ -48,50 +56,8 @@ export function* fetchProfilesInitialData() {
   }
 }
 
-/**
- * Checks if the activeItem in one of the panels has changed, if it has changed it fetches the panel data.
- */
 export function* fetchDataOnPanelChange() {
-  let loaded = [];
-  let previousPanelState = null;
-  let task = null;
-  const hasChanged = panel => {
-    if (!previousPanelState) return false;
-    return !isEqual(
-      panel.panels.countries.activeItems,
-      previousPanelState.panels.countries.activeItems
-    );
-  };
-  while (true) {
-    const activePanel = yield take(PROFILES__SET_ACTIVE_STEP);
-    const { activeStep } = activePanel.payload;
-    const panelName = getPanelStepName(activeStep);
-    const newPanelState = yield select(state => state.profileSelector);
-    const changes = hasChanged(newPanelState);
-    if (changes) {
-      loaded = [previousPanelState.activeStep];
-    }
-
-    const newPanelName = getPanelName(newPanelState);
-    const enterCompaniesPanelWithoutCountry =
-      newPanelName === 'companies' && isEmpty(newPanelState.panels.countries.activeItems);
-
-    if (
-      !previousPanelState ||
-      (previousPanelState.data[activeStep] && previousPanelState.data[activeStep].length === 0) ||
-      !loaded.includes(panelName) ||
-      enterCompaniesPanelWithoutCountry
-    ) {
-      if (task !== null) {
-        yield cancel(task);
-      }
-      task = yield fork(fetchProfilesInitialData, activeStep);
-      if (!loaded.includes(panelName)) {
-        loaded.push(panelName);
-      }
-    }
-    previousPanelState = newPanelState;
-  }
+  yield takeLatest(PROFILES__SET_ACTIVE_STEP, fetchProfilesInitialData);
 }
 
 /**
@@ -99,9 +65,9 @@ export function* fetchDataOnPanelChange() {
  */
 export function* onItemChange(action) {
   const { panel, activeItem } = action.payload;
-  // for now, we just need to recalculate the tabs when selecting a new country
-  if (panel === 'countries' && !isEmpty(activeItem)) {
+  if (panel === 'countries' && activeItem) {
     yield fork(getProfilesTabs, 'sources');
+    yield fork(getProfilesTabs, 'companies');
   }
 }
 
@@ -115,71 +81,62 @@ function* fetchDataOnItemChange() {
 export function* onTabChange() {
   const { profileSelector } = yield select();
   const panelName = getPanelName(profileSelector);
-  const { activeTab } = profileSelector.panels[panelName] || {};
-  const currentTabId = activeTab && activeTab.id;
-  if (!profileSelector.data.sources[currentTabId]) {
-    yield fork(getProfilesData, panelName);
+  let activeTabSelector = null;
+  if (panelName === 'sources') {
+    activeTabSelector = getSourcesActiveTab;
+  }
+  if (panelName === 'companies') {
+    activeTabSelector = getCompaniesActiveTab;
+  }
+  const activeTab = activeTabSelector && (yield select(activeTabSelector));
+
+  if (panelName && activeTab) {
+    if (panelName === 'companies') {
+      const activeCountry = profileSelector.panels.countries.activeItems[0];
+      if (
+        activeCountry &&
+        profileSelector.data[panelName][activeCountry] &&
+        profileSelector.data[panelName][activeCountry][activeTab] &&
+        profileSelector.data[panelName][activeCountry][activeTab].length > 0
+      ) {
+        yield fork(getMoreProfilesData, panelName, activeTab);
+      } else {
+        yield fork(getProfilesData, panelName, activeTab);
+      }
+    } else if (
+      profileSelector.data[panelName][activeTab] &&
+      profileSelector.data[panelName][activeTab].length > 0
+    ) {
+      yield fork(getMoreProfilesData, panelName, activeTab);
+    } else {
+      yield fork(getProfilesData, panelName, activeTab);
+    }
   }
 }
 
 function* fetchDataOnTabChange() {
-  yield takeLatest(
-    [PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH, PROFILES__SET_ACTIVE_TAB, PROFILES__SET_PANEL_TABS],
-    onTabChange
-  );
+  yield takeLatest([PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH, PROFILES__SET_ACTIVE_TAB], onTabChange);
 }
 
 /**
  * Listens to PROFILES__SET_PANEL_PAGE and fetches the data for the next page.
  */
-export function* onPageChange(action) {
-  const { direction } = action.payload;
+export function* onPageChange() {
   const { profileSelector } = yield select();
   const panelName = getPanelName(profileSelector);
-  const { activeTab } = profileSelector.panels[panelName];
-  yield fork(getMoreProfilesData, profileSelector, panelName, activeTab, direction);
+  let activeTabSelector = null;
+  if (panelName === 'sources') {
+    activeTabSelector = getSourcesActiveTab;
+  }
+  if (panelName === 'companies') {
+    activeTabSelector = getCompaniesActiveTab;
+  }
+  const activeTab = activeTabSelector && (yield select(activeTabSelector));
+  yield fork(getMoreProfilesData, profileSelector, panelName, activeTab);
 }
 
 function* fetchDataOnPageChange() {
   yield takeLatest(PROFILES__SET_PANEL_PAGE, onPageChange);
-}
-
-/**
- * Listens to actions that remove or clear panel items and deletes all subsequent selections if the panel is changed
- */
-
-export function* onChangeItem(action) {
-  const { panel } = action.payload;
-  const profileSelector = yield select(state => state.profileSelector);
-  let panelsToClear = [];
-  switch (panel) {
-    case 'types':
-      panelsToClear = ['countries', 'sources', 'companies', 'commodities'];
-      break;
-    case 'countries':
-      panelsToClear = ['sources', 'companies', 'commodities'];
-      break;
-    case 'sources':
-    case 'companies':
-      panelsToClear = ['commodities'];
-      break;
-    default:
-      break;
-  }
-
-  panelsToClear = panelsToClear.filter(p => !isEmpty(profileSelector.panels[p].activeItems));
-  if (panelsToClear.length > 0) {
-    yield put({
-      type: PROFILES__CLEAR_PANELS,
-      payload: {
-        panels: panelsToClear
-      }
-    });
-  }
-}
-
-function* clearSubsequentPanels() {
-  yield takeLatest([PROFILES__SET_ACTIVE_ITEM], onChangeItem);
 }
 
 /**
@@ -202,8 +159,7 @@ export default function* profilePanelSaga() {
     fetchDataOnItemChange,
     fetchDataOnTabChange,
     fetchDataOnPageChange,
-    fetchDataOnSearch,
-    clearSubsequentPanels
+    fetchDataOnSearch
   ];
   yield all(sagas.map(saga => fork(saga)));
 }

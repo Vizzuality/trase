@@ -120,13 +120,12 @@ export function* fetchMissingDashboardPanelItems() {
 
 export function* onMissingItemDownload(action) {
   const { key } = action.payload;
-  const { dashboardElement } = yield select();
   if (key === 'countries') {
-    yield fork(getDashboardPanelSectionTabs, dashboardElement, 'sources');
+    yield fork(getDashboardPanelSectionTabs, 'sources');
   }
 
   if (key === 'companies') {
-    yield fork(getDashboardPanelSectionTabs, dashboardElement, 'companies');
+    yield fork(getDashboardPanelSectionTabs, 'companies');
   }
 }
 
@@ -158,7 +157,7 @@ export function* fetchDashboardPanelInitialData(action) {
   }
 
   if (dashboardElement.activePanelId === 'companies') {
-    yield fork(getDashboardPanelSectionTabs, dashboardElement, activePanelId);
+    yield fork(getDashboardPanelSectionTabs, activePanelId);
     yield fork(fetchTabPanelData, getCompaniesActiveTab);
   } else if (activePanelId === 'sources') {
     const countriesSaga = hasActiveItems(dashboardElement, 'countries')
@@ -299,10 +298,9 @@ function* fetchDataOnTabChange() {
  */
 export function* onItemChange(action) {
   const { panel, activeItem } = action.payload;
-  const { dashboardElement } = yield select();
   // for now, we just need to recalculate the tabs when selecting a new country
   if (panel === 'countries' && activeItem) {
-    yield fork(getDashboardPanelSectionTabs, dashboardElement, 'sources');
+    yield fork(getDashboardPanelSectionTabs, 'sources');
   }
 }
 
@@ -342,7 +340,8 @@ function* clearSubsequentPanels() {
     [
       DASHBOARD_ELEMENT__CLEAR_PANEL,
       DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
-      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
     ],
     onChangePanel
   );
