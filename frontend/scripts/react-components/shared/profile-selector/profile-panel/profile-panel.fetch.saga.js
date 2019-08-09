@@ -24,7 +24,10 @@ import {
 
 function* getProfilesParams(step, options = {}) {
   const state = yield select();
-  const { countries, sources, companies } = state.profileSelector.panels;
+  const {
+    panels: { countries, sources, companies },
+    data
+  } = state.profileSelector;
   const { page } = options;
   const sourcesTab = getSourcesActiveTab(state);
   const companiesTab = getCompaniesActiveTab(state);
@@ -41,7 +44,7 @@ function* getProfilesParams(step, options = {}) {
   };
 
   if (step === 'sources' || step === 'companies') {
-    params.countries_ids = activeItemParams(countries);
+    params.countries_ids = countries.activeItems[0] || data.countries[0];
   }
 
   if (step === 'commodities') {

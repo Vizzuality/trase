@@ -1,5 +1,6 @@
-import { takeLatest, select, all, fork, put, call } from 'redux-saga/effects';
+import { takeLatest, select, all, fork, call } from 'redux-saga/effects';
 import {
+  PROFILES__SET_PANEL_TABS,
   PROFILES__SET_ACTIVE_STEP,
   PROFILES__SET_ACTIVE_ITEM,
   PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH,
@@ -35,21 +36,7 @@ export function* fetchProfilesInitialData() {
       yield fork(getProfilesData, 'sources', tab);
     }
   } else if (panelName === 'companies') {
-    if (!isEmpty(profileSelector.data.companies)) {
-      return;
-    }
     yield call(getProfilesData, 'countries');
-    const updatedProfileSelector = yield select(state => state.profileSelector);
-    if (updatedProfileSelector.panels.countries.activeItems.length === 0) {
-      const defaultCountry = updatedProfileSelector.data.countries[0];
-      yield put({
-        type: PROFILES__SET_ACTIVE_ITEM,
-        payload: {
-          panel: 'countries',
-          activeItem: defaultCountry
-        }
-      });
-    }
     yield fork(getProfilesTabs, 'companies');
   } else {
     yield fork(getProfilesData, panelName);
@@ -65,14 +52,50 @@ export function* fetchDataOnPanelChange() {
  */
 export function* onItemChange(action) {
   const { panel, activeItem } = action.payload;
+  const { profileSelector } = yield select();
+  const panelName = getPanelName(profileSelector);
   if (panel === 'countries' && activeItem) {
-    yield fork(getProfilesTabs, 'sources');
-    yield fork(getProfilesTabs, 'companies');
+    yield fork(getProfilesTabs, panelName);
   }
 }
 
 function* fetchDataOnItemChange() {
   yield takeLatest([PROFILES__SET_ACTIVE_ITEM], onItemChange);
+}
+
+export function* fetchDataOnTabsFetch() {
+  function* onTabsFetch(action) {
+    const { key } = action.payload;
+    const { profileSelector } = yield select();
+    let activeTabSelector;
+    if (key === 'sources') {
+      activeTabSelector = getSourcesActiveTab;
+    }
+    if (key === 'companies') {
+      activeTabSelector = getCompaniesActiveTab;
+    }
+
+    const activeTab = yield select(activeTabSelector);
+    if (activeTab) {
+      if (key === 'companies') {
+        const activeCountry = profileSelector.panels.countries.activeItems[0];
+        if (
+          (activeCountry && !profileSelector.data[key][activeCountry]) ||
+          !profileSelector.data[key][activeCountry][activeTab] ||
+          profileSelector.data[key][activeCountry][activeTab].length === 0
+        ) {
+          yield fork(getProfilesData, key, activeTab);
+        }
+      } else if (
+        !profileSelector.data[key][activeTab] ||
+        profileSelector.data[key][activeTab].length === 0
+      ) {
+        yield fork(getProfilesData, key, activeTab);
+      }
+    }
+  }
+
+  yield takeLatest([PROFILES__SET_PANEL_TABS], onTabsFetch);
 }
 
 /**
@@ -90,7 +113,7 @@ export function* onTabChange() {
   }
   const activeTab = activeTabSelector && (yield select(activeTabSelector));
 
-  if (panelName && activeTab) {
+  if (activeTab) {
     if (panelName === 'companies') {
       const activeCountry = profileSelector.panels.countries.activeItems[0];
       if (
@@ -99,7 +122,7 @@ export function* onTabChange() {
         profileSelector.data[panelName][activeCountry][activeTab] &&
         profileSelector.data[panelName][activeCountry][activeTab].length > 0
       ) {
-        yield fork(getMoreProfilesData, panelName, activeTab);
+        yield fork(getMoreProfilesData, profileSelector, panelName, activeTab);
       } else {
         yield fork(getProfilesData, panelName, activeTab);
       }
@@ -107,7 +130,7 @@ export function* onTabChange() {
       profileSelector.data[panelName][activeTab] &&
       profileSelector.data[panelName][activeTab].length > 0
     ) {
-      yield fork(getMoreProfilesData, panelName, activeTab);
+      yield fork(getMoreProfilesData, profileSelector, panelName, activeTab);
     } else {
       yield fork(getProfilesData, panelName, activeTab);
     }
@@ -155,6 +178,7 @@ function* fetchDataOnSearch() {
 
 export default function* profilePanelSaga() {
   const sagas = [
+    fetchDataOnTabsFetch,
     fetchDataOnPanelChange,
     fetchDataOnItemChange,
     fetchDataOnTabChange,

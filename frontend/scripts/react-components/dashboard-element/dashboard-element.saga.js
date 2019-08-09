@@ -352,8 +352,14 @@ function* clearSubsequentPanels() {
  */
 export function* onPageChange() {
   const { dashboardElement } = yield select();
-  const panelName = `${dashboardElement.activePanelId}Panel`;
-  const { activeTab } = dashboardElement[panelName];
+  let activeTabSelector = null;
+  if (dashboardElement.activePanelId === 'sources') {
+    activeTabSelector = getSourcesActiveTab;
+  }
+  if (dashboardElement.activePanelId === 'companies') {
+    activeTabSelector = getCompaniesActiveTab;
+  }
+  const activeTab = activeTabSelector && (yield select(activeTabSelector));
   yield fork(
     getMoreDashboardPanelData,
     dashboardElement,

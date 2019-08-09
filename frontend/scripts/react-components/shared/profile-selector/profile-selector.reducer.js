@@ -158,7 +158,7 @@ const profileRootReducer = {
       }
 
       if (panel === 'countries') {
-        draft.panels.companies.activeTab = initialState.panels.companies;
+        draft.panels.companies = initialState.panels.companies;
         draft.panels.sources = initialState.panels.sources;
       }
 
