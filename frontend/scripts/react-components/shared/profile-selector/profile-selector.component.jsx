@@ -9,7 +9,7 @@ import 'react-components/shared/profile-selector/profile-selector.scss';
 
 function ProfilesSelectorModal(props) {
   const { activeStep, onClose, setStep, isDisabled, dynamicSentenceParts, goToProfile } = props;
-  const showBackButton = activeStep > PROFILE_STEPS.types;
+  const showBackButton = activeStep > PROFILE_STEPS.type;
   const onContinue =
     activeStep === PROFILE_STEPS.commodities ? goToProfile : () => setStep(activeStep + 1);
   const isOpen = activeStep !== null;

@@ -10,7 +10,6 @@ import {
   PROFILES__SET_LOADING_ITEMS,
   PROFILES__SET_PANEL_TABS,
   PROFILES__SET_ACTIVE_TAB,
-  PROFILES__CLEAR_PANELS,
   PROFILES__SET_SEARCH_RESULTS,
   PROFILES__SET_ACTIVE_ITEM,
   PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH
@@ -454,58 +453,6 @@ test(PROFILES__SET_ACTIVE_TAB, () => {
         page: initialState.panels.sources.page
       }
     }
-  });
-});
-
-describe(PROFILES__CLEAR_PANELS, () => {
-  const state = {
-    ...initialState,
-    panels: {
-      countries: {
-        ...initialState.panels.countries,
-        activeItems: [{ id: 1, name: 'some item' }],
-        activeTab: { id: 7, name: 'BIOME' },
-        page: 2
-      },
-      commodities: {
-        ...initialState.panels.commodities,
-        activeItems: [{ id: 4, name: 'some item' }],
-        activeTab: { id: 1 },
-        page: 6
-      },
-      companies: {
-        ...initialState.panels.companies,
-        activeItems: [{ id: 4, name: 'some item' }],
-        activeTab: { id: 7, name: 'IMPORTER' },
-        page: 5
-      }
-    }
-  };
-
-  it('clears panels', () => {
-    const action = {
-      type: PROFILES__CLEAR_PANELS,
-      payload: {
-        panels: ['companies', 'commodities']
-      }
-    };
-
-    const newState = reducer(state, action);
-    expect(newState).toEqual({
-      ...state,
-      panels: {
-        ...state.panels,
-        countries: state.panels.countries,
-        companies: {
-          ...initialState.panels.companies,
-          activeTab: state.panels.companies.activeTab
-        },
-        commodities: {
-          ...initialState.panels.commodities,
-          activeTab: state.panels.commodities.activeTab
-        }
-      }
-    });
   });
 });
 

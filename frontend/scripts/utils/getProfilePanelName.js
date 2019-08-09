@@ -5,7 +5,7 @@ const getPanelStepName = activeStep => invert(PROFILE_STEPS)[activeStep];
 
 export const getPanelName = profileSelector =>
   profileSelector.activeStep === PROFILE_STEPS.profiles
-    ? profileSelector.panels.types.activeItems.type
+    ? profileSelector.panels.type
     : getPanelStepName(profileSelector.activeStep);
 
 export default getPanelStepName;

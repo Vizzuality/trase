@@ -119,7 +119,7 @@ export function* getDashboardPanelData(dashboardElement, optionsType, activeTab 
   }
 }
 
-export function* getDashboardPanelSectionTabs(dashboardElement, optionsType) {
+export function* getDashboardPanelSectionTabs(optionsType) {
   const params = yield getDashboardPanelParams(optionsType);
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_TABS_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);

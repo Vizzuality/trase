@@ -25,7 +25,7 @@ function ProfilePanel(props) {
     traders: 'Trader'
   };
   switch (step) {
-    case PROFILE_STEPS.types:
+    case PROFILE_STEPS.type:
       return (
         <div className="c-profile-panel">
           <Heading align="center" size="md" weight="light">
@@ -37,7 +37,7 @@ function ProfilePanel(props) {
           <div className="row profile-panel-content">
             <BlockSwitch
               blocks={blocks}
-              selectBlock={item => setProfilesActiveItem(item, 'types')}
+              selectBlock={item => setProfilesActiveItem(item, 'type')}
               activeBlockId={profileType}
             />
           </div>

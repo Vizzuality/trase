@@ -1,23 +1,79 @@
 import { createSelector } from 'reselect';
 import { PROFILE_STEPS } from 'constants';
-import isEmpty from 'lodash/isEmpty';
+
+import {
+  makeGetPanelActiveTabItems,
+  makeGetPanelActiveItems,
+  makeGetPanelActiveTab,
+  makeGetPanelTabs
+} from 'selectors/panel.selectors';
+
+const getProfileSelectorTabs = state => state.profileSelector.tabs;
+const getCompaniesPanel = state => state.profileSelector.panels.companies;
+const getSourcesPanel = state => state.profileSelector.panels.sources;
+const getCountriesPanel = state => state.profileSelector.panels.countries;
+
+const getCountriesData = state => state.profileSelector.data.countries;
+const getSourcesData = state => state.profileSelector.data.sources;
+const getCompaniesData = state => state.profileSelector.data.companies;
 
 const getActiveStep = state => state.profileSelector.activeStep;
 const getPanels = state => state.profileSelector.panels;
-const getProfileType = state => state.profileSelector.panels.types.activeItems.type;
+const getProfileType = state => state.profileSelector.panels.type;
+
+export const getSourcesTabs = makeGetPanelTabs(getProfileSelectorTabs, () => 'sources');
+export const getCompaniesTabs = makeGetPanelTabs(getProfileSelectorTabs, () => 'companies');
+export const getSourcesActiveTab = makeGetPanelActiveTab(
+  getSourcesPanel,
+  getProfileSelectorTabs,
+  () => 'sources'
+);
+export const getCompaniesActiveTab = makeGetPanelActiveTab(
+  getCompaniesPanel,
+  getProfileSelectorTabs,
+  () => 'companies'
+);
+
+export const getCompaniesCountryData = createSelector(
+  [getCompaniesData, getCountriesData, getCountriesPanel],
+  (companiesData, countriesData, countriesPanel) => {
+    let countryId;
+    if (countriesPanel.activeItems.length > 0) {
+      [countryId] = countriesPanel.activeItems;
+    } else if (countriesData.length > 0) {
+      [{ id: countryId }] = countriesData;
+    }
+    if (countryId) {
+      return companiesData[countryId] || {};
+    }
+    return [];
+  }
+);
+
+export const getCompaniesActiveData = createSelector(
+  [getCompaniesCountryData, getCompaniesActiveTab],
+  (companiesCountryData, companiesActiveTab) => companiesCountryData[companiesActiveTab] || []
+);
+
+export const getCountriesActiveItems = makeGetPanelActiveItems(getCountriesPanel, getCountriesData);
+export const getSourcesActiveItems = makeGetPanelActiveTabItems(getSourcesPanel, getSourcesData);
+export const getCompaniesActiveItems = makeGetPanelActiveTabItems(
+  getCompaniesPanel,
+  getCompaniesCountryData
+);
 
 export const getIsDisabled = createSelector(
   [getActiveStep, getPanels, getProfileType],
   (step, panels, profileType) => {
     switch (step) {
-      case PROFILE_STEPS.types:
+      case PROFILE_STEPS.type:
         return !profileType;
       case PROFILE_STEPS.profiles: {
-        // As we dont have a country profile page the requisite is the sourcesPanel selection
-        return panels[profileType] && isEmpty(panels[profileType].activeItems);
+        // As we dont have a country profile page the min requirement is the sourcesPanel selection
+        return panels[profileType] && panels[profileType].activeItems.length === 0;
       }
       case PROFILE_STEPS.commodities:
-        return isEmpty(panels.commodities.activeItems);
+        return panels.commodities.activeItems.length === 0;
       default:
         return !profileType;
     }
@@ -25,24 +81,25 @@ export const getIsDisabled = createSelector(
 );
 
 export const getDynamicSentence = createSelector(
-  [getPanels],
-  panels => {
-    if (!panels) return [];
-    if (Object.values(panels).every(p => isEmpty(p.activeItems))) return [];
+  [getSourcesActiveItems, getCompaniesActiveItems],
+  (sourcesActiveItems, companiesActiveItems) => {
+    if (!sourcesActiveItems || !companiesActiveItems) {
+      return [];
+    }
     const dynamicParts = [];
-    if (!isEmpty(panels.sources.activeItems)) {
+    if (sourcesActiveItems.length > 0) {
       dynamicParts.push({
         panel: 'sources',
         id: 'sources',
         prefix: 'See the',
-        value: Object.values(panels.sources.activeItems)
+        value: sourcesActiveItems
       });
-    } else if (!isEmpty(panels.companies.activeItems)) {
+    } else if (companiesActiveItems.length > 0) {
       dynamicParts.push({
         panel: 'companies',
         id: 'companies',
         prefix: 'See the',
-        value: Object.values(panels.companies.activeItems)
+        value: companiesActiveItems
       });
     }
 
