@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Heading from 'react-components/shared/heading';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import PropTypes from 'prop-types';
@@ -8,13 +8,34 @@ import uniq from 'lodash/uniq';
 import { TOOL_SELECTOR_STEPS } from 'constants';
 import 'react-components/tool-selector/tool-selector.scss';
 
-function ToolSelector({ items, step, setCommodity, setCountry, commodity, country, contexts }) {
-  const [context, setContext] = useState(null);
-  const [countriesIdsToHighlight, setHighlightedCountries] = useState(null);
-  const findContext = countryId =>
-    countryId
-      ? contexts.find(c => c.countryId === countryId && c.commodityId === commodity.id)
-      : null;
+function ToolSelector({
+  items,
+  step,
+  setCommodity,
+  setCountry,
+  commodity,
+  country,
+  contexts,
+  allCountriesIds
+}) {
+  const [highlightedContext, setHighlightedContext] = useState(null);
+  const [highlightedSelectableCountryIds, setHighlightedSelectableCountries] = useState(
+    allCountriesIds
+  );
+  const [highlightedCountryIds, setHighlightedCountries] = useState(null);
+  const [highlightedCommodityIds, setHighlightedCommodities] = useState(null);
+
+  // Set highlighted countries
+  useEffect(() => {
+    setHighlightedSelectableCountries(allCountriesIds);
+  }, [allCountriesIds]);
+
+  // Clear highlighted items on step change
+  useEffect(() => {
+    setHighlightedCommodities(null);
+    if (step !== TOOL_SELECTOR_STEPS.selected) setHighlightedContext(null);
+  }, [step]);
+
   const renderTitle = () => {
     const titleParts = ['commodity', 'sourcing country', 'supply chain'];
     return (
@@ -23,15 +44,35 @@ function ToolSelector({ items, step, setCommodity, setCountry, commodity, countr
       </Heading>
     );
   };
+
+  const findHighlightedCommoditiesIds = geoId => {
+    const highlightedCommoditiesIds = [];
+    contexts.forEach(c => {
+      if (c.worldMap.geoId === geoId) {
+        highlightedCommoditiesIds.push(c.commodityId);
+      }
+    });
+    return uniq(highlightedCommoditiesIds);
+  };
+
+  const onItemHover = item => {
+    if (step === TOOL_SELECTOR_STEPS.selectCommodity) {
+      const findContextCountries = commodityId =>
+        !commodityId
+          ? null
+          : uniq(contexts.filter(c => c.commodityId === commodityId).map(c => c.countryId));
+
+      return setHighlightedCountries(findContextCountries(item?.id));
+    }
+    const findContext = countryId =>
+      countryId
+        ? contexts.find(c => c.countryId === countryId && c.commodityId === commodity.id)
+        : null;
+
+    return setHighlightedContext(findContext(item?.id));
+  };
+
   const setItemFunction = step === TOOL_SELECTOR_STEPS.selectCommodity ? setCommodity : setCountry;
-  const findContextCountries = commodityId =>
-    !commodityId
-      ? null
-      : uniq(contexts.filter(c => c.commodityId === commodityId).map(c => c.countryId));
-  const onHover = item =>
-    step === TOOL_SELECTOR_STEPS.selectCommodity
-      ? setHighlightedCountries(findContextCountries(item?.id))
-      : setContext(findContext(item?.id));
   return (
     <div className="c-tool-selector">
       <div className="row columns">{renderTitle()}</div>
@@ -42,8 +83,9 @@ function ToolSelector({ items, step, setCommodity, setCountry, commodity, countr
               <GridListItem
                 item={item}
                 enableItem={i => setItemFunction(i.id)}
-                onHover={onHover}
+                onHover={onItemHover}
                 variant="white"
+                isActive={highlightedCommodityIds && highlightedCommodityIds.includes(item.id)}
               />
             ))}
         </div>
@@ -51,10 +93,14 @@ function ToolSelector({ items, step, setCommodity, setCountry, commodity, countr
       <div className="row columns">
         <WorldMap
           toolSelector
-          highlightedContext={context}
+          highlightedContext={highlightedContext}
           highlightedCountryIds={
-            step === TOOL_SELECTOR_STEPS.selectCommodity && countriesIdsToHighlight
+            step === TOOL_SELECTOR_STEPS.selectCommodity && {
+              level1: highlightedSelectableCountryIds,
+              level2: highlightedCountryIds
+            }
           }
+          onHoverGeometry={geoId => setHighlightedCommodities(findHighlightedCommoditiesIds(geoId))}
         />
       </div>
       <div className="row columns">
@@ -77,6 +123,7 @@ ToolSelector.propTypes = {
   commodity: PropTypes.object,
   country: PropTypes.object,
   contexts: PropTypes.array,
+  allCountriesIds: PropTypes.array,
   setCommodity: PropTypes.func.isRequired,
   setCountry: PropTypes.func.isRequired,
   step: PropTypes.number

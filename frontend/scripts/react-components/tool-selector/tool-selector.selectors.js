@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import uniqBy from 'lodash/uniqBy';
+import uniq from 'lodash/uniq';
 
 export const getContexts = state => state.app.contexts || null;
 const getActiveCommodityId = state => state.toolSelector.activeCommodityId;
@@ -25,6 +26,14 @@ const getCommodities = createSelector(
       })),
       'name'
     );
+  }
+);
+
+export const getAllCountriesIds = createSelector(
+  [getContexts],
+  contexts => {
+    if (!contexts) return null;
+    return uniq(contexts.map(c => c.countryId));
   }
 );
 

@@ -38,8 +38,13 @@ const MapGeographies = ({
                 {
                   '-dark':
                     isDestinationCountry(geography.properties.iso2, flows) ||
-                    (highlightedCountriesIso &&
-                      highlightedCountriesIso.includes(geography.properties.iso2))
+                    (highlightedCountriesIso?.level1 &&
+                      highlightedCountriesIso.level1.includes(geography.properties.iso2))
+                },
+                {
+                  '-darker':
+                    highlightedCountriesIso?.level2 &&
+                    highlightedCountriesIso.level2.includes(geography.properties.iso2)
                 },
                 { '-pink': originGeoId === geography.properties.iso2 }
               )}
@@ -62,6 +67,7 @@ const WorldMap = ({
   originGeoId,
   originCoordinates,
   highlightedCountriesIso,
+  onHoverGeometry,
   className
 }) => {
   const [tooltipConfig, setTooltipConfig] = useState(null);
@@ -76,9 +82,11 @@ const WorldMap = ({
   }, [selectedContext, selectedYears, getTopNodes, flows.length]);
 
   const mouseInteractionProps = useMemo(() => {
+    const getGeoId = geometry => (geometry.properties ? geometry.properties.iso2 : geometry.geoId);
     const onMouseMove = (geometry, e) => {
+      const geoId = getGeoId(geometry);
+      if (onHoverGeometry) onHoverGeometry(getGeoId(geometry));
       const totalValue = flows.reduce((a, b) => a + b.value, 0);
-      const geoId = geometry.properties ? geometry.properties.iso2 : geometry.geoId;
       if (isDestinationCountry(geoId, flows)) {
         const volume = geometry.value || (flows.find(flow => flow.geoId === geoId) || {}).value;
         const percentage = (volume / totalValue) * 100;
@@ -96,10 +104,11 @@ const WorldMap = ({
     };
     const onMouseLeave = () => {
       setTooltipConfig(null);
+      if (onHoverGeometry) onHoverGeometry(null);
     };
 
     return isMobile() ? {} : { onMouseMove, onMouseLeave };
-  }, [flows]);
+  }, [flows, onHoverGeometry]);
 
   const renderLines = () =>
     flows.map(flow => (
@@ -118,7 +127,6 @@ const WorldMap = ({
         {...mouseInteractionProps}
       />
     ));
-
   return (
     <React.Fragment>
       <UnitsTooltip show={!!tooltipConfig} {...tooltipConfig} />
@@ -156,6 +164,7 @@ WorldMap.propTypes = {
   selectedContext: PropTypes.object,
   selectedYears: PropTypes.array,
   highlightedCountriesIso: PropTypes.array,
+  onHoverGeometry: PropTypes.func,
   getTopNodes: PropTypes.func.isRequired
 };
 

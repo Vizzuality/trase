@@ -125,11 +125,14 @@ export const getWorldMapFlows = createSelector(
 export const getHighlightedCountriesIso = createSelector(
   [getHighlightedCountryIds, getContexts],
   (highlightedCountryIds, contexts) => {
-    if (!highlightedCountryIds || !highlightedCountryIds.length) return null;
-    const countryGeoIds = [];
+    if (!highlightedCountryIds || !highlightedCountryIds.level1) return null;
+    const countryGeoIds = { level1: [], level2: [] };
     contexts.forEach(c => {
-      if (highlightedCountryIds.includes(c.countryId)) {
-        countryGeoIds.push(c.worldMap.geoId);
+      if (highlightedCountryIds.level1?.includes(c.countryId)) {
+        countryGeoIds.level1.push(c.worldMap.geoId);
+      }
+      if (highlightedCountryIds.level2?.includes(c.countryId)) {
+        countryGeoIds.level2.push(c.worldMap.geoId);
       }
     });
     return countryGeoIds;
