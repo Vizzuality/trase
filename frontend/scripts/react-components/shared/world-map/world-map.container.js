@@ -4,24 +4,28 @@ import { setExploreTopNodes } from 'react-components/explore/explore.actions';
 import {
   getOriginGeoId,
   getOriginCoordinates,
-  getWorldMapFlows
+  getWorldMapFlows,
+  getHighlightedCountriesIso
 } from 'react-components/shared/world-map/world-map.selectors';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 
 const mapStateToProps = (state, ownProps) => {
-  const { highlightedContext } = ownProps;
+  const { highlightedContext, highlightedCountryIds } = ownProps;
   const selectedYears = getSelectedYears(state, ownProps);
   const selectedContext = highlightedContext || getSelectedContext(state, ownProps);
   const originGeoId = getOriginGeoId(state, ownProps);
   const originCoordinates = getOriginCoordinates(state, ownProps);
   const flows = getWorldMapFlows(state, ownProps);
-
+  const highlightedCountriesIsoProp = highlightedCountryIds
+    ? { highlightedCountriesIso: getHighlightedCountriesIso(state, ownProps) }
+    : {};
   return {
     flows,
     originGeoId,
     selectedYears,
     selectedContext,
-    originCoordinates
+    originCoordinates,
+    ...highlightedCountriesIsoProp
   };
 };
 
