@@ -81,20 +81,23 @@ export const getIsDisabled = createSelector(
 );
 
 export const getDynamicSentence = createSelector(
-  [getSourcesActiveItems, getCompaniesActiveItems],
-  (sourcesActiveItems, companiesActiveItems) => {
-    if (!sourcesActiveItems || !companiesActiveItems) {
+  [getSourcesActiveItems, getCompaniesActiveItems, getProfileType],
+  (sourcesActiveItems, companiesActiveItems, profileType) => {
+    if (
+      (profileType === 'sources' && !sourcesActiveItems) ||
+      (profileType === 'companies' && !companiesActiveItems)
+    ) {
       return [];
     }
     const dynamicParts = [];
-    if (sourcesActiveItems.length > 0) {
+    if (profileType === 'sources' && sourcesActiveItems.length > 0) {
       dynamicParts.push({
         panel: 'sources',
         id: 'sources',
         prefix: 'See the',
         value: sourcesActiveItems
       });
-    } else if (companiesActiveItems.length > 0) {
+    } else if (profileType === 'companies' && companiesActiveItems.length > 0) {
       dynamicParts.push({
         panel: 'companies',
         id: 'companies',
