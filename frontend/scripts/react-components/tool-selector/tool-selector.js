@@ -5,7 +5,8 @@ import {
   getItems,
   getStep,
   getCountry,
-  getCommodity
+  getCommodity,
+  getAllCountriesIds
 } from 'react-components/tool-selector/tool-selector.selectors';
 import { setCommodity, setCountry } from 'react-components/tool-selector/tool-selector.actions';
 
@@ -14,7 +15,8 @@ const mapStateToProps = state => ({
   step: getStep(state),
   country: getCountry(state),
   commodity: getCommodity(state),
-  contexts: getContexts(state)
+  contexts: getContexts(state),
+  allCountriesIds: getAllCountriesIds(state)
 });
 
 const mapDispatchToProps = {
