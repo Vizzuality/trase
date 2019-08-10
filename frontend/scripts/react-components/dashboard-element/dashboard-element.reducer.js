@@ -150,13 +150,10 @@ const dashboardElementReducer = {
     };
   },
   [DASHBOARD_ELEMENT__SET_LOADING_ITEMS](state, action) {
-    const { loadingItems, panelId } = action.payload;
+    const { loadingItems } = action.payload;
     return {
       ...state,
-      [panelId]: {
-        ...state[panelId],
-        loadingItems
-      }
+      loadingItems
     };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_TABS](state, action) {
@@ -347,7 +344,6 @@ const dashboardElementReducerTypes = PropTypes => {
   const PanelTypes = {
     page: PropTypes.number,
     searchResults: PropTypes.array,
-    loadingItems: PropTypes.bool,
     activeItems: PropTypes.array,
     activeTab: PropTypes.number
   };

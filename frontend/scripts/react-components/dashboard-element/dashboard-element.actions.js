@@ -65,9 +65,9 @@ export const setDashboardPanelPage = page => ({
   payload: { page }
 });
 
-export const setDashboardPanelLoadingItems = (loadingItems, panelId) => ({
+export const setDashboardPanelLoadingItems = loadingItems => ({
   type: DASHBOARD_ELEMENT__SET_LOADING_ITEMS,
-  payload: { loadingItems, panelId }
+  payload: { loadingItems }
 });
 
 export const getDashboardPanelSearchResults = query => ({

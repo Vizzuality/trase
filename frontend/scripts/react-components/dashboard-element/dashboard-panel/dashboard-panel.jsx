@@ -26,6 +26,7 @@ import { getCountryNamesByCountryId } from 'reducers/app.selectors';
 const mapStateToProps = (state, ownProps) => {
   const {
     loading,
+    loadingItems,
     activePanelId,
     sources: sourcesPanel,
     destinations: destinationsPanel,
@@ -44,6 +45,7 @@ const mapStateToProps = (state, ownProps) => {
     destinations,
     activePanelId,
     sourcesPanel,
+    loadingItems,
     countriesPanel,
     destinationsPanel,
     companiesPanel,

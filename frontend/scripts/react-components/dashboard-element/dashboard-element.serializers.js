@@ -11,7 +11,6 @@ const activeItemsSerializer = {
       page: 1,
       activeItems,
       searchResults: [],
-      loadingItems: false,
       activeTab: null
     };
   }
@@ -39,8 +38,7 @@ const activeItemTabSerializer = {
       page: 1,
       activeTab,
       activeItems,
-      searchResults: [],
-      loadingItems: false
+      searchResults: []
     };
   }
 };

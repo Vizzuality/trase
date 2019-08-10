@@ -43,6 +43,7 @@ class DashboardPanel extends Component {
   renderPanel() {
     const {
       step,
+      loadingItems,
       getMoreItems,
       activePanelId,
       countriesPanel,
@@ -81,7 +82,7 @@ class DashboardPanel extends Component {
                 : sourcesPanel.searchResults
             }
             getSearchResults={getSearchResults}
-            loading={sourcesPanel.loadingItems}
+            loading={loadingItems}
             clearItems={() => clearActiveItems(activePanelId)}
             activeCountryItems={countriesActiveItems}
             sourcesActiveTab={sourcesActiveTab}
@@ -99,7 +100,7 @@ class DashboardPanel extends Component {
           <CommoditiesPanel
             page={commoditiesPanel.page}
             getMoreItems={getMoreItems}
-            loading={commoditiesPanel.loadingItems}
+            loading={loadingItems}
             commodities={commodities}
             onSelectCommodity={item => setActiveItem(item, activePanelId)}
             activeCommodities={commoditiesPanel.activeItems}
@@ -115,7 +116,7 @@ class DashboardPanel extends Component {
             searchDestinations={destinationsPanel.searchResults}
             destinations={destinations}
             onSelectDestinationValue={item => setActiveItems(item, activePanelId)}
-            loading={destinationsPanel.loadingItems}
+            loading={loadingItems}
             activeDestinations={destinationsPanel.activeItems}
           />
         );
@@ -130,7 +131,7 @@ class DashboardPanel extends Component {
             nodeTypeRenderer={DashboardPanel.countryNameNodeTypeRenderer}
             setSearchResult={item => setSearchResult(item, activePanelId)}
             getSearchResults={getSearchResults}
-            loading={companiesPanel.loadingItems}
+            loading={loadingItems}
             companies={companies[companiesActiveTab] || []}
             onSelectCompany={item => setActiveItems(item, activePanelId)}
             activeNodeTypeTab={companiesActiveTab}
