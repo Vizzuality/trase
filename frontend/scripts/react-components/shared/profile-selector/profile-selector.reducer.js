@@ -100,16 +100,17 @@ const profileRootReducer = {
         draft.panels[panelName].page = state.panels[panelName].page - 1;
       }
 
-      let oldData = state.data[panelName];
-      let selectedCountryId = null;
-      if (panelName === 'companies') {
-        const selectedCountry = state.panels.countries.activeItems;
-        selectedCountryId =
-          (selectedCountry[0] && selectedCountry[0]) || state.data.countries[0].id;
+      const selectedCountry = state.panels.countries.activeItems;
+      const selectedCountryId =
+        selectedCountry[0] || (state.data.countries[0] && state.data.countries[0].id);
 
-        oldData = state.data.companies[selectedCountryId][tab];
-      } else if (tab) {
-        oldData = state.data[panelName][tab];
+      let oldData = (tab ? state.data[panelName][tab] : state.data[panelName]) || [];
+
+      if (panelName === 'companies') {
+        oldData =
+          (state.data[panelName][selectedCountryId] &&
+            state.data[panelName][selectedCountryId][tab]) ||
+          [];
       }
 
       const dataMap = data.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
@@ -123,6 +124,8 @@ const profileRootReducer = {
         draft.data[panelName][selectedCountryId][tab] = together;
       } else if (tab) {
         draft.data[panelName][tab] = together;
+      } else {
+        draft.data[panelName] = together;
       }
     });
   },
@@ -139,7 +142,6 @@ const profileRootReducer = {
       const panelName = getPanelName(state);
       const getSection = n => n.section && n.section.toLowerCase();
       const panelTabs = data.filter(item => getSection(item) === key);
-
       draft.tabs = panelTabs.reduce(
         (acc, next) => ({ ...acc, [getSection(next)]: next.tabs }),
         state.tabs
@@ -184,12 +186,6 @@ const profileRootReducer = {
       if (panel === 'profiles') {
         activePanel = state.panels.type;
       }
-      const prevTab = state.panels[activePanel].activeTab;
-      const clearActiveTabData = prevTab && prevTab.id !== activeTab.id;
-
-      if (clearActiveTabData) {
-        draft.data[activePanel][prevTab.id] = null;
-      }
 
       draft.panels[activePanel].activeTab = activeTab;
       draft.panels[activePanel].page = initialState.panels[activePanel].page;
@@ -214,21 +210,39 @@ const profileRootReducer = {
 
       const prevTab = state.panels[panel].activeTab;
 
+      const selectedCountry = state.panels.countries.activeItems;
+      const selectedCountryId =
+        selectedCountry[0] || (state.data.countries[0] && state.data.countries[0].id);
+
       if (activeTab === prevTab && draft.panels[panel].activeItems[0] === activeItem.id) {
         draft.panels[panel].activeItems = [];
       } else {
         draft.panels[panel].activeItems = [activeItem.id];
       }
 
-      const oldData = (activeTab ? state.data[panel][activeTab] : state.data[panel]) || [];
-
+      let oldData = (activeTab ? state.data[panel][activeTab] : state.data[panel]) || [];
+      if (panel === 'companies') {
+        oldData =
+          (state.data[panel][selectedCountryId] &&
+            state.data[panel][selectedCountryId][activeTab]) ||
+          [];
+      }
+      const dataMap = oldData.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
       let together = oldData;
-      if (!oldData.includes(activeItem.id)) {
+      if (!dataMap[activeItem.id]) {
         together = [activeItem, ...oldData];
       }
 
-      if (activeTab) {
-        const clearActiveTabData = prevTab && prevTab !== activeTab;
+      const clearActiveTabData = prevTab && prevTab !== activeTab;
+      if (panel === 'companies') {
+        if (clearActiveTabData && draft.data[panel][selectedCountryId]) {
+          draft.data[panel][selectedCountryId][prevTab] = null;
+        }
+        if (!draft.data[panel][selectedCountryId]) {
+          draft.data[panel][selectedCountryId] = {};
+        }
+        draft.data[panel][selectedCountryId][activeTab] = together;
+      } else if (activeTab) {
         if (clearActiveTabData) {
           draft.data[panel][prevTab] = null;
         }

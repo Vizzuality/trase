@@ -114,7 +114,10 @@ export function* onTabChange() {
 
   if (activeTab) {
     if (panelName === 'companies') {
-      const activeCountry = profileSelector.panels.countries.activeItems[0];
+      const activeCountry =
+        profileSelector.panels.countries.activeItems[0] ||
+        (profileSelector.data.countries[0] && profileSelector.data.countries[0].id);
+
       if (
         activeCountry &&
         profileSelector.data[panelName][activeCountry] &&
