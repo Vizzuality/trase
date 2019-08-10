@@ -37,11 +37,11 @@ const dashboardElementReducer = {
         destinations: destinationsData,
         companies: companiesData
       },
-      countriesPanel: { activeItems: countriesItems },
-      sourcesPanel: { activeItems: sourcesItems, activeTab: sourcesTab },
-      commoditiesPanel: { activeItems: commoditiesItems },
-      destinationsPanel: { activeItems: destinationsItems },
-      companiesPanel: { activeItems: companiesItems, activeTab: companiesTab }
+      countries: { activeItems: countriesItems },
+      sources: { activeItems: sourcesItems, activeTab: sourcesTab },
+      commodities: { activeItems: commoditiesItems },
+      destinations: { activeItems: destinationsItems },
+      companies: { activeItems: companiesItems, activeTab: companiesTab }
     } = state;
     const isLoading =
       (countriesItems.length > 0 && countriesData.length === 0) ||
@@ -61,11 +61,11 @@ const dashboardElementReducer = {
           'selectedYears',
           'selectedResizeBy',
           'selectedRecolorBy',
-          'countriesPanel',
-          'sourcesPanel',
-          'commoditiesPanel',
-          'destinationsPanel',
-          'companiesPanel'
+          'countries',
+          'sources',
+          'commodities',
+          'destinations',
+          'companies'
         ]
       });
       newState.loading = isLoading;
@@ -76,7 +76,7 @@ const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_ACTIVE_PANEL](state, action) {
     const { activePanelId } = action.payload;
     const prevActivePanelId = state.activePanelId;
-    const prevPanelName = `${prevActivePanelId}Panel`;
+    const prevPanelName = prevActivePanelId;
     const prevPanelState = prevActivePanelId
       ? {
           ...state[prevPanelName],
@@ -94,7 +94,7 @@ const dashboardElementReducer = {
   },
   [DASHBOARD_ELEMENT__SET_PANEL_PAGE](state, action) {
     const { activePanelId } = state;
-    const panelName = `${activePanelId}Panel`;
+    const panelName = activePanelId;
     const { page } = action.payload;
     return { ...state, [panelName]: { ...state[panelName], page } };
   },
@@ -114,14 +114,13 @@ const dashboardElementReducer = {
   },
   [DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA](state, action) {
     const { key, data, tab } = action.payload;
-    const panelName = `${key}Panel`;
 
     if (data.length === 0) {
       return {
         ...state,
-        [panelName]: {
-          ...state[panelName],
-          page: state[panelName].page - 1
+        [key]: {
+          ...state[key],
+          page: state[key].page - 1
         }
       };
     }
@@ -152,11 +151,10 @@ const dashboardElementReducer = {
   },
   [DASHBOARD_ELEMENT__SET_LOADING_ITEMS](state, action) {
     const { loadingItems, panelId } = action.payload;
-    const panelName = `${panelId}Panel`;
     return {
       ...state,
-      [panelName]: {
-        ...state[panelName],
+      [panelId]: {
+        ...state[panelId],
         loadingItems
       }
     };
@@ -169,39 +167,36 @@ const dashboardElementReducer = {
       (acc, next) => ({ ...acc, [getSection(next)]: next.tabs }),
       state.tabs
     );
-    const panelName = `${key}Panel`;
+
     return {
       ...state,
       tabs,
-      [panelName]: {
-        ...state[panelName],
-        page: initialState[panelName].page
+      [key]: {
+        ...state[key],
+        page: initialState[key].page
       }
     };
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEM](state, action) {
     const { panel, activeItem } = action.payload;
-    const panelName = `${panel}Panel`;
-    const sourcesPanelState =
-      panel === 'countries' ? initialState.sourcesPanel : state.sourcesPanel;
+    const sourcesPanelState = panel === 'countries' ? initialState.sources : state.sources;
     const sourcesData = panel === 'countries' ? initialState.data.sources : state.data.sources;
-    const activeItems = activeItem ? [activeItem.id] : initialState[panelName].activeItems;
+    const activeItems = activeItem ? [activeItem.id] : initialState[panel].activeItems;
     return {
       ...state,
       data: {
         ...state.data,
         sources: sourcesData
       },
-      sourcesPanel: sourcesPanelState,
-      [panelName]: {
-        ...state[panelName],
+      sources: sourcesPanelState,
+      [panel]: {
+        ...state[panel],
         activeItems
       }
     };
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS](state, action) {
     const { panel, activeItems } = action.payload;
-    const panelName = `${panel}Panel`;
     const selectedItems = Array.isArray(activeItems) ? activeItems : [activeItems];
     const items = selectedItems.map(i => i.id);
     const activeTab = state.tabs[panel]
@@ -209,42 +204,38 @@ const dashboardElementReducer = {
       : null;
     return {
       ...state,
-      [panelName]: {
-        ...state[panelName],
+      [panel]: {
+        ...state[panel],
         activeTab,
-        activeItems: xor(state[panelName].activeItems, items)
+        activeItems: xor(state[panel].activeItems, items)
       }
     };
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_TAB](state, action) {
     const { panel, activeTab } = action.payload;
-    const panelName = `${panel}Panel`;
 
     return {
       ...state,
-      [panelName]: {
-        ...state[panelName],
+      [panel]: {
+        ...state[panel],
         activeTab,
-        page: initialState[panelName].page,
-        activeItems: initialState[panelName].activeItems
+        page: initialState[panel].page,
+        activeItems: initialState[panel].activeItems
       }
     };
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH](state, action) {
     const { panel, activeItems: selectedItem } = action.payload;
-    const panelName = `${panel}Panel`;
 
     const activeTabObj =
       state.tabs[panel] && state.tabs[panel].find(tab => tab.id === selectedItem.nodeTypeId);
     const activeTab = activeTabObj?.id || null;
 
-    const prevTab = state[panelName].activeTab;
+    const prevTab = state[panel].activeTab;
     const clearedActiveTabData = prevTab && prevTab !== activeTab ? { [prevTab]: null } : {};
 
     const activeItems =
-      activeTab === prevTab
-        ? xor(state[panelName].activeItems, [selectedItem.id])
-        : [selectedItem.id];
+      activeTab === prevTab ? xor(state[panel].activeItems, [selectedItem.id]) : [selectedItem.id];
 
     const oldData = (activeTab ? state.data[panel][activeTab] : state.data[panel]) || [];
     const dataMap = oldData.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
@@ -266,37 +257,33 @@ const dashboardElementReducer = {
         ...state.data,
         [panel]: newData
       },
-      [panelName]: {
-        ...state[panelName],
+      [panel]: {
+        ...state[panel],
         activeItems,
         activeTab,
         searchResults: [],
-        page: initialState[panelName].page
+        page: initialState[panel].page
       }
     };
   },
   [DASHBOARD_ELEMENT__CLEAR_PANEL](state, action) {
     const { panel } = action.payload;
-    const panelName = `${panel}Panel`;
-    const { activeTab } = state[panelName];
+    const { activeTab } = state[panel];
     const shouldResetCountries = ['countries', 'sources'].includes(panel);
-    const countriesState = shouldResetCountries
-      ? initialState.countriesPanel
-      : state.countriesPanel;
+    const countriesState = shouldResetCountries ? initialState.countries : state.countries;
 
     return {
       ...state,
-      [panelName]: { ...initialState[panelName], activeTab },
-      countriesPanel: countriesState
+      [panel]: { ...initialState[panel], activeTab },
+      countries: countriesState
     };
   },
   [DASHBOARD_ELEMENT__CLEAR_PANELS](state, action) {
     const { panels } = action.payload;
     const removedPanels = {};
     panels.forEach(panel => {
-      const panelName = `${panel}Panel`;
-      const { activeTab } = state[panelName];
-      removedPanels[panelName] = { ...initialState[panelName], activeTab };
+      const { activeTab } = state[panel];
+      removedPanels[panel] = { ...initialState[panel], activeTab };
     });
     return {
       ...state,
@@ -306,14 +293,13 @@ const dashboardElementReducer = {
   [DASHBOARD_ELEMENT__SET_SEARCH_RESULTS](state, action) {
     const { data, query } = action.payload;
     let panel = state.activePanelId;
-    if (state.activePanelId === 'sources' && state.countriesPanel.activeItems.length === 0) {
+    if (state.activePanelId === 'sources' && state.countries.activeItems.length === 0) {
       panel = 'countries';
     }
-    const panelName = `${panel}Panel`;
     return {
       ...state,
-      [panelName]: {
-        ...state[panelName],
+      [panel]: {
+        ...state[panel],
         searchResults: fuzzySearch(query, data)
       }
     };
@@ -376,11 +362,11 @@ const dashboardElementReducerTypes = PropTypes => {
       sources: PropTypes.object.isRequired,
       destinations: PropTypes.array.isRequired
     }).isRequired,
-    countriesPanel: PropTypes.shape(PanelTypes).isRequired,
-    sourcesPanel: PropTypes.shape(PanelTypes).isRequired,
-    destinationsPanel: PropTypes.shape(PanelTypes).isRequired,
-    companiesPanel: PropTypes.shape(PanelTypes).isRequired,
-    commoditiesPanel: PropTypes.shape(PanelTypes).isRequired,
+    countries: PropTypes.shape(PanelTypes).isRequired,
+    sources: PropTypes.shape(PanelTypes).isRequired,
+    destinations: PropTypes.shape(PanelTypes).isRequired,
+    companies: PropTypes.shape(PanelTypes).isRequired,
+    commodities: PropTypes.shape(PanelTypes).isRequired,
     selectedYears: PropTypes.arrayOf(PropTypes.number),
     selectedResizeBy: PropTypes.string,
     selectedRecolorBy: PropTypes.string

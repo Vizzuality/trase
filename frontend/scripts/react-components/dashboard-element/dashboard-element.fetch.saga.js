@@ -31,11 +31,11 @@ import { DASHBOARD_STEPS } from 'constants';
 function* getDashboardPanelParams(optionsType, options = {}) {
   const state = yield select();
   const {
-    countriesPanel,
-    sourcesPanel,
-    companiesPanel,
-    destinationsPanel,
-    commoditiesPanel
+    countries: countriesPanel,
+    sources: sourcesPanel,
+    companies: companiesPanel,
+    destinations: destinationsPanel,
+    commodities: commoditiesPanel
   } = state.dashboardElement;
   const { page, isOverview } = options;
   const sourcesTab = getSourcesActiveTab(state);
@@ -76,7 +76,7 @@ function* getDashboardPanelParams(optionsType, options = {}) {
 }
 
 export function* getDashboardPanelData(dashboardElement, optionsType, activeTab = null, options) {
-  const { page } = dashboardElement[`${optionsType}Panel`];
+  const { page } = dashboardElement[optionsType];
 
   const params = yield getDashboardPanelParams(optionsType, {
     page,
@@ -145,7 +145,7 @@ export function* getDashboardPanelSectionTabs(optionsType) {
 }
 
 export function* getMoreDashboardPanelData(dashboardElement, optionsType, activeTab = null) {
-  const { page } = dashboardElement[`${optionsType}Panel`];
+  const { page } = dashboardElement[optionsType];
   const params = yield getDashboardPanelParams(optionsType, { page });
   const task = yield fork(
     setLoadingSpinner,
@@ -208,7 +208,7 @@ export function* getMissingDashboardPanelItems(dashboardElement, optionsType, ac
 export function* fetchDashboardPanelSearchResults(dashboardElement, query) {
   if (!query) return;
   let optionsType = dashboardElement.activePanelId;
-  if (optionsType === 'sources' && dashboardElement.countriesPanel.activeItems.length === 0) {
+  if (optionsType === 'sources' && dashboardElement.countries.activeItems.length === 0) {
     optionsType = 'countries';
   }
   // eslint-ignore-next-line

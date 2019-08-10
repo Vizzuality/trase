@@ -12,12 +12,12 @@ describe('Table widget selectors', () => {
           countries: [{ id: 0, name: 'Country Name' }],
           commodities: [{ id: 0, name: 'Commodity Name' }]
         },
-        countriesPanel: {
-          ...initialState.countriesPanel,
+        countries: {
+          ...initialState.countries,
           activeItems: [0]
         },
-        commoditiesPanel: {
-          ...initialState.commoditiesPanel,
+        commodities: {
+          ...initialState.commodities,
           activeItems: [0]
         }
       }
@@ -64,7 +64,7 @@ describe('Table widget selectors', () => {
       const { mYearNCont } = meta;
       const oneSourceState = {
         ...state,
-        sourcesPanel: {
+        sources: {
           activeItems: { 0: { name: 'Biome Name' } }
         }
       };

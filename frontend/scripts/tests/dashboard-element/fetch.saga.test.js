@@ -33,8 +33,8 @@ const dashboardElement = {
     sources: [{ id: 1, name: 'BIOME' }]
   },
   activePanelId: 'sources',
-  sourcesPanel: {
-    ...initialState.sourcesPanel,
+  sources: {
+    ...initialState.sources,
     activeTab: 1
   }
 };

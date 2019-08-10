@@ -62,8 +62,8 @@ const baseState = {
       countries: [{ id: 6, name: 'Brazil' }]
     },
     activePanelId: 'sources',
-    countriesPanel: {
-      ...initialState.countriesPanel,
+    countries: {
+      ...initialState.countries,
       activeItems: [6]
     }
   }
@@ -165,8 +165,8 @@ describe('onTabChange', () => {
           }
         }
       },
-      sourcesPanel: {
-        ...baseState.dashboardElement.sourcesPanel,
+      sources: {
+        ...baseState.dashboardElement.sources,
         activeTab: 3
       },
       activePanelId: 'sources'
@@ -227,8 +227,8 @@ describe('onItemChange', () => {
         }
       },
       activePanelId: 'sources',
-      sourcesPanel: {
-        ...baseState.dashboardElement.sourcesPanel,
+      sources: {
+        ...baseState.dashboardElement.sources,
         activeTab: {
           id: 6
         }
@@ -244,8 +244,8 @@ describe('onItemChange', () => {
           6: [{ name: 'data', id: 6 }]
         }
       },
-      sourcesPanel: {
-        ...state.dashboardElement.sourcesPanel,
+      sources: {
+        ...state.dashboardElement.sources,
         activeItems: [2]
       }
     }
@@ -286,22 +286,22 @@ describe('onChangePanel', () => {
     dashboardElement: {
       ...baseState.dashboardElement,
       activePanelId: 'countries',
-      countriesPanel: {
-        ...baseState.dashboardElement.countriesPanel,
+      countries: {
+        ...baseState.dashboardElement.countries,
         activeTab: {
           id: 1
         },
         activeItems: [{ id: 0 }]
       },
-      commoditiesPanel: {
-        ...baseState.dashboardElement.commoditiesPanel,
+      commodities: {
+        ...baseState.dashboardElement.commodities,
         activeTab: {
           id: 1
         },
         activeItems: [{ id: 0 }]
       },
-      companiesPanel: {
-        ...baseState.dashboardElement.companiesPanel,
+      companies: {
+        ...baseState.dashboardElement.companies,
         activeTab: {
           id: 1
         },
@@ -325,8 +325,8 @@ describe('onPageChange', () => {
     dashboardElement: {
       ...baseState.dashboardElement,
       activePanelId: 'sources',
-      sourcesPanel: {
-        ...baseState.dashboardElement.countriesPanel,
+      sources: {
+        ...baseState.dashboardElement.countries,
         activeTab: { id: 2 },
         page: 2
       }
@@ -377,8 +377,8 @@ describe('fetchDataOnPanelChange', () => {
   it(`calls fetchDashboardPanelInitialData when an item has changed`, () => {
     const state = {
       ...baseState.dashboardElement,
-      sourcesPanel: {
-        ...baseState.dashboardElement.sourcesPanel,
+      sources: {
+        ...baseState.dashboardElement.sources,
         activeItems: {
           0: { id: 0, name: 'source' }
         }

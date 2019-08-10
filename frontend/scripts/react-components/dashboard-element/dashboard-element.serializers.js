@@ -45,11 +45,11 @@ const activeItemTabSerializer = {
   }
 };
 
-export const countriesPanel = activeItemsSerializer;
-export const sourcesPanel = activeItemTabSerializer;
-export const commoditiesPanel = activeItemsSerializer;
-export const destinationsPanel = activeItemsSerializer;
-export const companiesPanel = activeItemTabSerializer;
+export const countries = activeItemsSerializer;
+export const sources = activeItemTabSerializer;
+export const commodities = activeItemsSerializer;
+export const destinations = activeItemsSerializer;
+export const companies = activeItemTabSerializer;
 
 const indicatorsSerializer = {
   stringify(prop, DONT_SERIALIZE) {

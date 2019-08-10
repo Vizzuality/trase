@@ -19,12 +19,11 @@ const getCommoditiesData = state => state.dashboardElement.data.commodities;
 const getCompaniesData = state => state.dashboardElement.data.companies;
 const getDestinationsData = state => state.dashboardElement.data.destinations;
 
-const getCountriesPanel = state => state.dashboardElement.countriesPanel;
-
-const getSourcesPanel = state => state.dashboardElement.sourcesPanel;
-const getDestinationsPanel = state => state.dashboardElement.destinationsPanel;
-const getCompaniesPanel = state => state.dashboardElement.companiesPanel;
-const getCommoditiesPanel = state => state.dashboardElement.commoditiesPanel;
+const getCountriesPanel = state => state.dashboardElement.countries;
+const getSourcesPanel = state => state.dashboardElement.sources;
+const getDestinationsPanel = state => state.dashboardElement.destinations;
+const getCompaniesPanel = state => state.dashboardElement.companies;
+const getCommoditiesPanel = state => state.dashboardElement.commodities;
 const getDashboardPanelTabs = state => state.dashboardElement.tabs;
 
 const getAppContexts = state => state.app.contexts;
@@ -352,11 +351,11 @@ const getURLDashboardSelectedResizeBy = createSelector(
 );
 
 export const getDashboardElementUrlProps = createStructuredSelector({
-  countriesPanel: getCountriesPanel,
-  sourcesPanel: getSourcesPanel,
-  commoditiesPanel: getCommoditiesPanel,
-  destinationsPanel: getDestinationsPanel,
-  companiesPanel: getCompaniesPanel,
+  countries: getCountriesPanel,
+  sources: getSourcesPanel,
+  commodities: getCommoditiesPanel,
+  destinations: getDestinationsPanel,
+  companies: getCompaniesPanel,
   selectedYears: getURLDashboardSelectedYears,
   selectedResizeBy: getURLDashboardSelectedResizeBy,
   selectedRecolorBy: getDashboardSelectedRecolorBy

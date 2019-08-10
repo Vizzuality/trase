@@ -10,35 +10,35 @@ export default {
   },
   tabs: {},
   activePanelId: null,
-  countriesPanel: {
+  countries: {
     page: 1,
     searchResults: [],
     loadingItems: false,
     activeItems: [],
     activeTab: null
   },
-  sourcesPanel: {
+  sources: {
     page: 1,
     searchResults: [],
     loadingItems: false,
     activeItems: [],
     activeTab: null
   },
-  destinationsPanel: {
+  destinations: {
     page: 1,
     searchResults: [],
     loadingItems: false,
     activeItems: [],
     activeTab: null
   },
-  companiesPanel: {
+  companies: {
     page: 1,
     searchResults: [],
     loadingItems: false,
     activeItems: [],
     activeTab: null
   },
-  commoditiesPanel: {
+  commodities: {
     page: 1,
     searchResults: [],
     loadingItems: false,

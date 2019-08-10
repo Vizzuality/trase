@@ -27,11 +27,11 @@ const mapStateToProps = (state, ownProps) => {
   const {
     loading,
     activePanelId,
-    sourcesPanel,
-    destinationsPanel,
-    companiesPanel,
-    commoditiesPanel,
-    countriesPanel,
+    sources: sourcesPanel,
+    destinations: destinationsPanel,
+    companies: companiesPanel,
+    commodities: commoditiesPanel,
+    countries: countriesPanel,
     data: { sources, countries, commodities, companies, destinations }
   } = state.dashboardElement;
 

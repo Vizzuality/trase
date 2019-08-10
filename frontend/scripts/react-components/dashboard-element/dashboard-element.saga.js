@@ -44,7 +44,7 @@ import {
 import { DASHBOARD_STEPS } from 'constants';
 
 const hasActiveItems = (_state, panelId) => {
-  const panel = _state[`${panelId}Panel`];
+  const panel = _state[panelId];
   return panel.activeItems.length > 0;
 };
 
@@ -53,7 +53,7 @@ export function* fetchMissingDashboardPanelItems() {
     const panelsValues = yield select(getDashboardPanelsValues);
     const dashboardElement = yield select(state => state.dashboardElement);
     const tasks = [];
-    if (panelsValues.countries === null && dashboardElement.countriesPanel.activeItems.length > 0) {
+    if (panelsValues.countries === null && dashboardElement.countries.activeItems.length > 0) {
       tasks.push(
         call(getMissingDashboardPanelItems, dashboardElement, 'countries', null, {
           isOverview: true
@@ -61,13 +61,13 @@ export function* fetchMissingDashboardPanelItems() {
       );
     }
 
-    if (panelsValues.sources === null && dashboardElement.sourcesPanel.activeItems.length > 0) {
+    if (panelsValues.sources === null && dashboardElement.sources.activeItems.length > 0) {
       tasks.push(
         call(
           getMissingDashboardPanelItems,
           dashboardElement,
           'sources',
-          dashboardElement.sourcesPanel.activeTab,
+          dashboardElement.sources.activeTab,
           {
             isOverview: true
           }
@@ -75,10 +75,7 @@ export function* fetchMissingDashboardPanelItems() {
       );
     }
 
-    if (
-      panelsValues.commodities === null &&
-      dashboardElement.commoditiesPanel.activeItems.length > 0
-    ) {
+    if (panelsValues.commodities === null && dashboardElement.commodities.activeItems.length > 0) {
       tasks.push(
         call(getMissingDashboardPanelItems, dashboardElement, 'commodities', null, {
           isOverview: true
@@ -88,7 +85,7 @@ export function* fetchMissingDashboardPanelItems() {
 
     if (
       panelsValues.destinations === null &&
-      dashboardElement.destinationsPanel.activeItems.length > 0
+      dashboardElement.destinations.activeItems.length > 0
     ) {
       tasks.push(
         call(getMissingDashboardPanelItems, dashboardElement, 'destinations', null, {
@@ -97,13 +94,13 @@ export function* fetchMissingDashboardPanelItems() {
       );
     }
 
-    if (panelsValues.companies === null && dashboardElement.companiesPanel.activeItems.length > 0) {
+    if (panelsValues.companies === null && dashboardElement.companies.activeItems.length > 0) {
       tasks.push(
         call(
           getMissingDashboardPanelItems,
           dashboardElement,
           'companies',
-          dashboardElement.companiesPanel.activeTab,
+          dashboardElement.companies.activeTab,
           {
             isOverview: true
           }
@@ -165,7 +162,7 @@ export function* fetchDashboardPanelInitialData(action) {
       : getDashboardPanelData;
     yield fork(countriesSaga, dashboardElement, 'countries');
     // Fetch regions
-    if (dashboardElement.countriesPanel.activeItems.length > 0) {
+    if (dashboardElement.countries.activeItems.length > 0) {
       yield fork(fetchTabPanelData, getSourcesActiveTab);
     }
   } else {
@@ -184,11 +181,11 @@ export function* fetchDataOnPanelChange() {
   const hasChangedAt = panel => {
     if (!previousPanelState) return -1;
     return [
-      panel.countriesPanel.activeItems !== previousPanelState.countriesPanel.activeItems ||
-        panel.sourcesPanel.activeItems !== previousPanelState.sourcesPanel.activeItems,
-      panel.commoditiesPanel.activeItems !== previousPanelState.commoditiesPanel.activeItems,
-      panel.destinationsPanel.activeItems !== previousPanelState.destinationsPanel.activeItems,
-      panel.companiesPanel.activeItems !== previousPanelState.companiesPanel.activeItems
+      panel.countries.activeItems !== previousPanelState.countries.activeItems ||
+        panel.sources.activeItems !== previousPanelState.sources.activeItems,
+      panel.commodities.activeItems !== previousPanelState.commodities.activeItems,
+      panel.destinations.activeItems !== previousPanelState.destinations.activeItems,
+      panel.companies.activeItems !== previousPanelState.companies.activeItems
     ].findIndex(value => value === true);
   };
 
@@ -323,7 +320,7 @@ export function* onChangePanel(action) {
   const nextPanels = Object.keys(DASHBOARD_STEPS).slice(panelIndex + 1);
 
   const panelsToClear = nextPanels
-    .map(p => ({ name: p, items: dashboardElement[`${p}Panel`].activeItems }))
+    .map(p => ({ name: p, items: dashboardElement[p].activeItems }))
     .filter(p => p.items.length > 0)
     .map(p => p.name);
 
@@ -387,8 +384,8 @@ function* updateIndicatorsOnItemChange() {
   const { dashboardElement } = yield select();
 
   const contextSelected =
-    dashboardElement.countriesPanel.activeItems.length > 0 &&
-    dashboardElement.commoditiesPanel.activeItems.length > 0;
+    dashboardElement.countries.activeItems.length > 0 &&
+    dashboardElement.commodities.activeItems.length > 0;
   if (contextSelected) {
     yield fork(fetchDashboardCharts);
   }

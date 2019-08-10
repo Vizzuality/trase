@@ -131,11 +131,11 @@ const store = createStore(
         'selectedYears',
         'selectedResizeBy',
         'selectedRecolorBy',
-        'countriesPanel',
-        'sourcesPanel',
-        'commoditiesPanel',
-        'destinationsPanel',
-        'companiesPanel'
+        'countries',
+        'sources',
+        'commodities',
+        'destinations',
+        'companies'
       ]
     })
   },
