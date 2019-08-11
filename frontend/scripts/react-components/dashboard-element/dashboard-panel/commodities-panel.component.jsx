@@ -22,7 +22,7 @@ function CommoditiesPanel(props) {
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={activeCommodities.includes(itemProps.item?.id)}
+            isActive={activeCommodities.find(i => i.id === itemProps.item?.id)}
             enableItem={onSelectCommodity}
             disableItem={() => onSelectCommodity(null)}
           />

@@ -6,12 +6,7 @@ import capitalize from 'lodash/capitalize';
 import { getPanelId } from 'utils/dashboardPanel';
 import { makeGetResizeByItems, makeGetRecolorByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
-import {
-  makeGetPanelActiveTab,
-  makeGetPanelTabs,
-  makeGetPanelActiveItems,
-  makeGetPanelActiveTabItems
-} from 'selectors/panel.selectors';
+import { makeGetPanelActiveTab, makeGetPanelTabs } from 'selectors/panel.selectors';
 
 const getCountriesData = state => state.dashboardElement.data.countries;
 const getSourcesData = state => state.dashboardElement.data.sources;
@@ -19,20 +14,20 @@ const getCommoditiesData = state => state.dashboardElement.data.commodities;
 const getCompaniesData = state => state.dashboardElement.data.companies;
 const getDestinationsData = state => state.dashboardElement.data.destinations;
 
-const getCountriesPanel = state => state.dashboardElement.countries;
 const getSourcesPanel = state => state.dashboardElement.sources;
-const getDestinationsPanel = state => state.dashboardElement.destinations;
 const getCompaniesPanel = state => state.dashboardElement.companies;
-const getCommoditiesPanel = state => state.dashboardElement.commodities;
 const getDashboardPanelTabs = state => state.dashboardElement.tabs;
 
-const getAppContexts = state => state.app.contexts;
+const getSelectedCountryId = state => state.dashboardElement.selectedCountryId;
+const getSelectedCommodityId = state => state.dashboardElement.selectedCommodityId;
+const getSelectedNodesIds = state => state.dashboardElement.selectedNodesIds;
 const getSelectedYears = state => state.dashboardElement.selectedYears;
 const getSelectedResizeBy = state => state.dashboardElement.selectedResizeBy;
 const getSelectedRecolorBy = state => state.dashboardElement.selectedRecolorBy;
 const getDashboardCharts = state => state.dashboardElement.charts;
-
 export const getEditMode = state => state.dashboardElement.editMode;
+
+const getAppContexts = state => state.app.contexts;
 
 export const getSourcesTabs = makeGetPanelTabs(getDashboardPanelTabs, () => 'sources');
 export const getCompaniesTabs = makeGetPanelTabs(getDashboardPanelTabs, () => 'companies');
@@ -47,31 +42,86 @@ export const getCompaniesActiveTab = makeGetPanelActiveTab(
   () => 'companies'
 );
 
-export const getDirtyBlocks = createSelector(
-  [
-    getCountriesPanel,
-    getSourcesPanel,
-    getDestinationsPanel,
-    getCompaniesPanel,
-    getCommoditiesPanel
-  ],
-  (countriesPanel, sourcesPanel, destinationsPanel, companiesPanel, commoditiesPanel) => ({
-    countries: countriesPanel.activeItems.length > 0,
-    sources: sourcesPanel.activeItems.length > 0,
-    destinations: destinationsPanel.activeItems.length > 0,
-    companies: companiesPanel.activeItems.length > 0,
-    commodities: commoditiesPanel.activeItems.length > 0
-  })
+const getDataByTab = (data, tabs, activeTab) => {
+  const tab = tabs.find(t => t.id === activeTab);
+  if (tab) {
+    return data.filter(item => item.nodeType === tab.name);
+  }
+  return [];
+};
+
+export const getSourcesDataByTab = createSelector(
+  [getSourcesData, getSourcesTabs, getSourcesActiveTab],
+  getDataByTab
 );
 
-export const getCountriesActiveItems = makeGetPanelActiveItems(getCountriesPanel, getCountriesData);
-const getCommoditiesActiveItems = makeGetPanelActiveItems(getCommoditiesPanel, getCommoditiesData);
-const getDestinationsActiveItems = makeGetPanelActiveItems(
-  getDestinationsPanel,
-  getDestinationsData
+export const getCompaniesDataByTab = createSelector(
+  [getCompaniesData, getCompaniesTabs, getCompaniesActiveTab],
+  getDataByTab
 );
-const getSourcesActiveItems = makeGetPanelActiveTabItems(getSourcesPanel, getSourcesData);
-const getCompaniesActiveItems = makeGetPanelActiveTabItems(getCompaniesPanel, getCompaniesData);
+
+const getPanelActiveItems = (selectedNodesIds, data) => {
+  const selectedNodesMap = selectedNodesIds.reduce((acc, next) => ({ ...acc, [next]: true }), {});
+  return data
+    .filter(item => selectedNodesMap[item.id])
+    .map(item => ({ ...item, name: `${item.name}`.toLowerCase() }));
+};
+
+const getSingleActiveItem = (selectedId, data) => {
+  const selected = data.find(item => item.id === selectedId);
+  if (selected) {
+    return [{ ...selected, name: `${selected.name}`.toLowerCase() }];
+  }
+  return [];
+};
+
+export const getCountriesActiveItems = createSelector(
+  [getSelectedCountryId, getCountriesData],
+  getSingleActiveItem
+);
+
+export const getCommoditiesActiveItems = createSelector(
+  [getSelectedCommodityId, getCommoditiesData],
+  getSingleActiveItem
+);
+
+export const getDestinationsActiveItems = createSelector(
+  [getSelectedNodesIds, getDestinationsData],
+  getPanelActiveItems
+);
+
+export const getSourcesActiveItems = createSelector(
+  [getSelectedNodesIds, getSourcesData],
+  getPanelActiveItems
+);
+
+export const getCompaniesActiveItems = createSelector(
+  [getSelectedNodesIds, getCompaniesData],
+  getPanelActiveItems
+);
+
+export const getDirtyBlocks = createSelector(
+  [
+    getCountriesActiveItems,
+    getSourcesActiveItems,
+    getDestinationsActiveItems,
+    getCompaniesActiveItems,
+    getCommoditiesActiveItems
+  ],
+  (
+    countriesActiveItems,
+    sourcesActiveItems,
+    destinationsActiveItems,
+    companiesActiveItems,
+    commoditiesActiveItems
+  ) => ({
+    countries: countriesActiveItems.length > 0,
+    sources: sourcesActiveItems.length > 0,
+    destinations: destinationsActiveItems.length > 0,
+    companies: companiesActiveItems.length > 0,
+    commodities: commoditiesActiveItems.length > 0
+  })
+);
 
 export const getDashboardPanelsValues = createStructuredSelector({
   countries: getCountriesActiveItems,
@@ -87,12 +137,13 @@ export const getDynamicSentence = createSelector(
     if (Object.values(dirtyBlocks).every(block => !block)) {
       return [];
     }
-    const commoditiesPanelSentence = `${panelsValues.commodities ? '' : 'commodities'}`;
+    const commoditiesPanelSentence = `${panelsValues.commodities.length > 0 ? '' : 'commodities'}`;
     const commoditiesPrefix = editMode
       ? capitalize(commoditiesPanelSentence)
       : `Your dashboard will include ${commoditiesPanelSentence}`;
     const capitalizeCommodities = editMode ? { transform: 'capitalize' } : {};
-    const sourcesValues = panelsValues.sources || panelsValues.countries;
+    const sourcesValues =
+      panelsValues.sources.length > 0 ? panelsValues.sources : panelsValues.countries;
     return [
       {
         panel: 'commodities',
@@ -111,7 +162,7 @@ export const getDynamicSentence = createSelector(
       {
         panel: 'companies',
         id: 'companies',
-        prefix: panelsValues.companies ? 'traded by' : '',
+        prefix: panelsValues.companies.length > 0 ? 'traded by' : '',
         value: panelsValues.companies,
         optional: true,
         transform: 'capitalize'
@@ -119,7 +170,7 @@ export const getDynamicSentence = createSelector(
       {
         panel: 'destinations',
         id: 'destinations',
-        prefix: panelsValues.destinations ? `going to` : '',
+        prefix: panelsValues.destinations.length > 0 ? `going to` : '',
         value: panelsValues.destinations,
         optional: true,
         transform: 'capitalize'
@@ -139,10 +190,7 @@ export const getIsDisabled = createSelector(
       return false;
     }
     const currentSentencePart = dynamicSentence.find(p => p.panel === currentPanel);
-    if (!currentSentencePart.optional && !currentSentencePart.value) {
-      return true;
-    }
-    return false;
+    return !currentSentencePart.optional && !currentSentencePart.value.length > 0;
   }
 );
 
@@ -351,11 +399,7 @@ const getURLDashboardSelectedResizeBy = createSelector(
 );
 
 export const getDashboardElementUrlProps = createStructuredSelector({
-  countries: getCountriesPanel,
-  sources: getSourcesPanel,
-  commodities: getCommoditiesPanel,
-  destinations: getDestinationsPanel,
-  companies: getCompaniesPanel,
+  selectedNodesIds: getSelectedNodesIds,
   selectedYears: getURLDashboardSelectedYears,
   selectedResizeBy: getURLDashboardSelectedResizeBy,
   selectedRecolorBy: getDashboardSelectedRecolorBy

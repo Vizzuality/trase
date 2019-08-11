@@ -12,6 +12,11 @@ import {
   DASHBOARD_ELEMENT__SET_CHARTS
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import {
+  getCountriesActiveItems,
+  getSourcesActiveItems,
+  getDestinationsActiveItems,
+  getCommoditiesActiveItems,
+  getCompaniesActiveItems,
   getSourcesActiveTab,
   getCompaniesActiveTab,
   getDashboardSelectedYears,
@@ -30,21 +35,19 @@ import { DASHBOARD_STEPS } from 'constants';
 
 function* getDashboardPanelParams(optionsType, options = {}) {
   const state = yield select();
-  const {
-    countries: countriesPanel,
-    sources: sourcesPanel,
-    companies: companiesPanel,
-    destinations: destinationsPanel,
-    commodities: commoditiesPanel
-  } = state.dashboardElement;
   const { page, isOverview } = options;
+  const countriesActiveItems = yield select(getCountriesActiveItems);
+  const sourcesActiveItems = yield select(getSourcesActiveItems);
+  const commoditiesActiveItems = yield select(getCommoditiesActiveItems);
+  const destinationsActiveItems = yield select(getDestinationsActiveItems);
+  const companiesActiveItems = yield select(getCompaniesActiveItems);
   const sourcesTab = getSourcesActiveTab(state);
   const companiesTab = getCompaniesActiveTab(state);
   const nodeTypesIds = {
-    sources: sourcesTab,
-    companies: companiesTab
+    sources: sourcesTab || null,
+    companies: companiesTab || null
   }[optionsType];
-  const activeItemParams = panel => panel.activeItems.join();
+  const activeItemParams = items => items.map(i => i.id).join();
   const params = {
     page,
     options_type: optionsType,
@@ -52,24 +55,24 @@ function* getDashboardPanelParams(optionsType, options = {}) {
   };
   const currentStep = DASHBOARD_STEPS[optionsType];
   if (currentStep === DASHBOARD_STEPS.sources) {
-    params.countries_ids = activeItemParams(countriesPanel);
+    params.countries_ids = activeItemParams(countriesActiveItems);
   }
 
   if (currentStep > DASHBOARD_STEPS.sources || isOverview) {
-    params.countries_ids = activeItemParams(countriesPanel);
-    params.sources_ids = activeItemParams(sourcesPanel);
+    params.countries_ids = activeItemParams(countriesActiveItems);
+    params.sources_ids = activeItemParams(sourcesActiveItems);
   }
 
   if (currentStep > DASHBOARD_STEPS.commodities || isOverview) {
-    params.commodities_ids = activeItemParams(commoditiesPanel);
+    params.commodities_ids = activeItemParams(commoditiesActiveItems);
   }
 
   if (currentStep > DASHBOARD_STEPS.destinations || isOverview) {
-    params.destinations_ids = activeItemParams(destinationsPanel);
+    params.destinations_ids = activeItemParams(destinationsActiveItems);
   }
 
   if (currentStep > DASHBOARD_STEPS.companies || isOverview) {
-    params.companies_ids = activeItemParams(companiesPanel);
+    params.companies_ids = activeItemParams(companiesActiveItems);
   }
 
   return params;
@@ -82,6 +85,9 @@ export function* getDashboardPanelData(dashboardElement, optionsType, activeTab 
     page,
     ...options
   });
+  if (params.node_types_ids === null) {
+    return;
+  }
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const task = yield fork(setLoadingSpinner, 750, setDashboardPanelLoadingItems(true));
   yield put({
@@ -121,7 +127,10 @@ export function* getDashboardPanelData(dashboardElement, optionsType, activeTab 
 
 export function* getDashboardPanelSectionTabs(optionsType) {
   const params = yield getDashboardPanelParams(optionsType);
-  const url = getURLFromParams(GET_DASHBOARD_OPTIONS_TABS_URL, params);
+
+  // eslint-disable-next-line
+  const { node_types_ids, options_type, ...urlParams } = params;
+  const url = getURLFromParams(GET_DASHBOARD_OPTIONS_TABS_URL, urlParams);
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
@@ -147,6 +156,9 @@ export function* getDashboardPanelSectionTabs(optionsType) {
 export function* getMoreDashboardPanelData(dashboardElement, optionsType, activeTab = null) {
   const { page } = dashboardElement[optionsType];
   const params = yield getDashboardPanelParams(optionsType, { page });
+  if (params.node_types_ids === null) {
+    return;
+  }
   const task = yield fork(setLoadingSpinner, 350, setDashboardPanelLoadingItems(true));
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);
@@ -199,12 +211,13 @@ export function* getMissingDashboardPanelItems(dashboardElement, optionsType, ac
 
 export function* fetchDashboardPanelSearchResults(dashboardElement, query) {
   if (!query) return;
+  const countriesActiveItems = yield select(getCountriesActiveItems);
   let optionsType = dashboardElement.activePanelId;
-  if (optionsType === 'sources' && dashboardElement.countries.activeItems.length === 0) {
+  if (optionsType === 'sources' && countriesActiveItems.length === 0) {
     optionsType = 'countries';
   }
-  // eslint-ignore-next-line
-  const { node_types_ids: excluded, ...filters } = yield getDashboardPanelParams(optionsType);
+  // eslint-disable-next-line
+  const { node_types_ids, ...filters } = yield getDashboardPanelParams(optionsType);
   const params = {
     ...filters,
     q: deburr(query)

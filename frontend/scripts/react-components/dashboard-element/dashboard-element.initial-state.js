@@ -3,38 +3,33 @@ export default {
   editMode: false,
   data: {
     countries: [],
-    companies: {},
-    sources: {},
+    companies: [],
+    sources: [],
     destinations: [],
     commodities: []
   },
   tabs: {},
   activePanelId: null,
   countries: {
-    page: 1,
-    activeItems: [],
-    activeTab: null
+    page: 1
   },
   sources: {
     page: 1,
-    activeItems: [],
     activeTab: null
   },
   destinations: {
-    page: 1,
-    activeItems: [],
-    activeTab: null
+    page: 1
   },
   companies: {
     page: 1,
-    activeItems: [],
     activeTab: null
   },
   commodities: {
-    page: 1,
-    activeItems: [],
-    activeTab: null
+    page: 1
   },
+  selectedCountryId: null,
+  selectedCommodityId: null,
+  selectedNodesIds: [],
   searchResults: [],
   loadingItems: false,
   selectedYears: null,

@@ -26,15 +26,14 @@ function SourcesPanel(props) {
     nodeTypeRenderer,
     onSelectSourceValue,
     sourcesActiveTab,
-    activeSourceItem,
+    activeSourcesItem,
     sourcesRequired
   } = props;
-
   const [sourcesOpen, changeSourcesOpen] = useState(sourcesRequired);
   const toggleSourcesOpen = () => changeSourcesOpen(!sourcesOpen);
 
-  const showJurisdictions = activeCountryItems && tabs.length > 0;
-  const activeCountryName = activeCountryItems && capitalize(activeCountryItems[0].name);
+  const showJurisdictions = activeCountryItems.length > 0 && tabs.length > 0;
+  const activeCountryName = activeCountryItems.length > 0 && capitalize(activeCountryItems[0].name);
   return (
     <div className="c-sources-panel">
       <GridList
@@ -50,9 +49,7 @@ function SourcesPanel(props) {
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={
-              activeCountryItems && activeCountryItems.find(i => i.id === itemProps.item?.id)
-            }
+            isActive={activeCountryItems.find(i => i.id === itemProps.item?.id)}
             enableItem={onSelectCountry}
             disableItem={() => onSelectCountry(null)}
           />
@@ -61,7 +58,7 @@ function SourcesPanel(props) {
       {showJurisdictions && (
         <Accordion
           title={`${activeCountryName} regions${sourcesRequired ? '' : ' (Optional)'}`}
-          defaultValue={activeSourceItem.length > 0 || sourcesOpen}
+          defaultValue={activeSourcesItem.length > 0 || sourcesOpen}
           onToggle={toggleSourcesOpen}
         >
           <Text color="grey-faded" className="sources-panel-sources-subtitle">
@@ -99,7 +96,7 @@ function SourcesPanel(props) {
               {itemProps => (
                 <GridListItem
                   {...itemProps}
-                  isActive={activeSourceItem.includes(itemProps.item?.id)}
+                  isActive={activeSourcesItem.includes(itemProps.item?.id)}
                   enableItem={onSelectSourceValue}
                   disableItem={onSelectSourceValue}
                 />
@@ -120,7 +117,7 @@ SourcesPanel.propTypes = {
   nodeTypeRenderer: PropTypes.func,
   page: PropTypes.number.isRequired,
   sourcesActiveTab: PropTypes.number,
-  activeSourceItem: PropTypes.array,
+  activeSourcesItem: PropTypes.array,
   activeCountryItems: PropTypes.array,
   getMoreItems: PropTypes.func.isRequired,
   searchSources: PropTypes.array.isRequired,

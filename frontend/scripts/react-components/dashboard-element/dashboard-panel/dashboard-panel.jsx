@@ -5,7 +5,8 @@ import {
   clearDashboardPanel,
   setDashboardPanelPage,
   setDashboardPanelActiveTab,
-  setDashboardPanelActiveItem,
+  setDashboardSelectedCountryId,
+  setDashboardSelectedCommodityId,
   setDashboardPanelActiveItems,
   getDashboardPanelSearchResults,
   setDashboardPanelActiveItemsWithSearch,
@@ -17,9 +18,12 @@ import {
   getSourcesTabs,
   getCompaniesTabs,
   getDynamicSentence,
+  getSourcesDataByTab,
   getSourcesActiveTab,
   getCompaniesActiveTab,
-  getCountriesActiveItems
+  getCompaniesDataByTab,
+  getCountriesActiveItems,
+  getCommoditiesActiveItems
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { getCountryNamesByCountryId } from 'reducers/app.selectors';
 
@@ -29,19 +33,20 @@ const mapStateToProps = (state, ownProps) => {
     loadingItems,
     activePanelId,
     searchResults,
+    selectedNodesIds,
     sources: sourcesPanel,
     destinations: destinationsPanel,
     companies: companiesPanel,
     commodities: commoditiesPanel,
     countries: countriesPanel,
-    data: { sources, countries, commodities, companies, destinations }
+    data: { countries, commodities, destinations }
   } = state.dashboardElement;
 
   return {
     loading,
-    sources,
+    sources: getSourcesDataByTab(state),
     countries,
-    companies,
+    companies: getCompaniesDataByTab(state),
     commodities,
     destinations,
     activePanelId,
@@ -52,14 +57,16 @@ const mapStateToProps = (state, ownProps) => {
     destinationsPanel,
     companiesPanel,
     commoditiesPanel,
+    selectedNodesIds,
+    countriesActiveItems: getCountriesActiveItems(state),
+    commoditiesActiveItems: getCommoditiesActiveItems(state),
     sourcesTabs: getSourcesTabs(state),
     companiesTabs: getCompaniesTabs(state),
     sourcesActiveTab: getSourcesActiveTab(state),
     companiesActiveTab: getCompaniesActiveTab(state),
     isDisabled: getIsDisabled(state, ownProps),
     dynamicSentenceParts: getDynamicSentence(state),
-    countryNames: getCountryNamesByCountryId(state),
-    countriesActiveItems: getCountriesActiveItems(state)
+    countryNames: getCountryNamesByCountryId(state)
   };
 };
 
@@ -67,8 +74,9 @@ const mapDispatchToProps = {
   getMoreItems: setDashboardPanelPage,
   clearActiveItems: clearDashboardPanel,
   setActiveTab: setDashboardPanelActiveTab,
-  setActiveItems: setDashboardPanelActiveItems,
-  setActiveItem: setDashboardPanelActiveItem,
+  setActiveItem: setDashboardPanelActiveItems,
+  setActiveCountryId: setDashboardSelectedCountryId,
+  setActiveCommodityId: setDashboardSelectedCommodityId,
   getSearchResults: getDashboardPanelSearchResults,
   setSearchResult: setDashboardPanelActiveItemsWithSearch,
   goToDashboard: goToDashboardFn
