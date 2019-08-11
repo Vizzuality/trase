@@ -10,7 +10,6 @@ const activeItemsSerializer = {
     return {
       page: 1,
       activeItems,
-      searchResults: [],
       activeTab: null
     };
   }
@@ -37,8 +36,7 @@ const activeItemTabSerializer = {
     return {
       page: 1,
       activeTab,
-      activeItems,
-      searchResults: []
+      activeItems
     };
   }
 };

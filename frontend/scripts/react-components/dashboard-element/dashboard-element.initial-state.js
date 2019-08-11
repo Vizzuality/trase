@@ -12,34 +12,30 @@ export default {
   activePanelId: null,
   countries: {
     page: 1,
-    searchResults: [],
     activeItems: [],
     activeTab: null
   },
   sources: {
     page: 1,
-    searchResults: [],
     activeItems: [],
     activeTab: null
   },
   destinations: {
     page: 1,
-    searchResults: [],
     activeItems: [],
     activeTab: null
   },
   companies: {
     page: 1,
-    searchResults: [],
     activeItems: [],
     activeTab: null
   },
   commodities: {
     page: 1,
-    searchResults: [],
     activeItems: [],
     activeTab: null
   },
+  searchResults: [],
   loadingItems: false,
   selectedYears: null,
   selectedResizeBy: null,

@@ -86,7 +86,8 @@ const dashboardElementReducer = {
     return {
       ...state,
       activePanelId,
-      ...(prevActivePanelId ? { [prevPanelName]: prevPanelState } : {})
+      ...(prevActivePanelId ? { [prevPanelName]: prevPanelState } : {}),
+      searchResults: []
     };
   },
   [DASHBOARD_ELEMENT__EDIT_DASHBOARD](state) {
@@ -258,9 +259,9 @@ const dashboardElementReducer = {
         ...state[panel],
         activeItems,
         activeTab,
-        searchResults: [],
         page: initialState[panel].page
-      }
+      },
+      searchResults: []
     };
   },
   [DASHBOARD_ELEMENT__CLEAR_PANEL](state, action) {
@@ -289,16 +290,9 @@ const dashboardElementReducer = {
   },
   [DASHBOARD_ELEMENT__SET_SEARCH_RESULTS](state, action) {
     const { data, query } = action.payload;
-    let panel = state.activePanelId;
-    if (state.activePanelId === 'sources' && state.countries.activeItems.length === 0) {
-      panel = 'countries';
-    }
     return {
       ...state,
-      [panel]: {
-        ...state[panel],
-        searchResults: fuzzySearch(query, data)
-      }
+      searchResults: fuzzySearch(query, data)
     };
   },
   [DASHBOARD_ELEMENT__SET_SELECTED_YEARS](state, action) {
@@ -343,7 +337,6 @@ const dashboardElementReducer = {
 const dashboardElementReducerTypes = PropTypes => {
   const PanelTypes = {
     page: PropTypes.number,
-    searchResults: PropTypes.array,
     activeItems: PropTypes.array,
     activeTab: PropTypes.number
   };
@@ -351,6 +344,8 @@ const dashboardElementReducerTypes = PropTypes => {
   return {
     tabs: PropTypes.object.isRequired,
     loading: PropTypes.bool,
+    loadingItems: PropTypes.bool,
+    searchResults: PropTypes.array,
     activePanelId: PropTypes.string,
     data: PropTypes.shape({
       countries: PropTypes.array.isRequired,

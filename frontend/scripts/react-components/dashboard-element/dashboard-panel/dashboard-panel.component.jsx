@@ -46,7 +46,7 @@ class DashboardPanel extends Component {
       loadingItems,
       getMoreItems,
       activePanelId,
-      countriesPanel,
+      searchResults,
       sourcesPanel,
       getSearchResults,
       destinationsPanel,
@@ -76,11 +76,7 @@ class DashboardPanel extends Component {
             countries={countries}
             page={sourcesPanel.page}
             getMoreItems={getMoreItems}
-            searchSources={
-              !countriesPanel.activeItems
-                ? countriesPanel.searchResults
-                : sourcesPanel.searchResults
-            }
+            searchSources={searchResults}
             getSearchResults={getSearchResults}
             loading={loadingItems}
             clearItems={() => clearActiveItems(activePanelId)}
@@ -113,7 +109,7 @@ class DashboardPanel extends Component {
             getMoreItems={getMoreItems}
             getSearchResults={getSearchResults}
             setSearchResult={item => setSearchResult(item, activePanelId)}
-            searchDestinations={destinationsPanel.searchResults}
+            searchDestinations={searchResults}
             destinations={destinations}
             onSelectDestinationValue={item => setActiveItems(item, activePanelId)}
             loading={loadingItems}
@@ -127,7 +123,7 @@ class DashboardPanel extends Component {
             onSelectNodeTypeTab={item => setActiveTab(item?.id, activePanelId)}
             page={companiesPanel.page}
             getMoreItems={getMoreItems}
-            searchCompanies={companiesPanel.searchResults}
+            searchCompanies={searchResults}
             nodeTypeRenderer={DashboardPanel.countryNameNodeTypeRenderer}
             setSearchResult={item => setSearchResult(item, activePanelId)}
             getSearchResults={getSearchResults}
@@ -259,6 +255,8 @@ DashboardPanel.propTypes = {
   getMoreItems: PropTypes.func,
   goToDashboard: PropTypes.func,
   commodities: PropTypes.array,
+  loadingItems: PropTypes.bool,
+  searchResults: PropTypes.array,
   activePanelId: PropTypes.string,
   step: PropTypes.number.isRequired,
   commoditiesPanel: PropTypes.object,
@@ -278,7 +276,6 @@ DashboardPanel.propTypes = {
   setSearchResult: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
   companiesPanel: PropTypes.object.isRequired,
-  countriesPanel: PropTypes.object.isRequired,
   destinationsPanel: PropTypes.object.isRequired
 };
 

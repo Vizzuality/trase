@@ -28,6 +28,7 @@ const mapStateToProps = (state, ownProps) => {
     loading,
     loadingItems,
     activePanelId,
+    searchResults,
     sources: sourcesPanel,
     destinations: destinationsPanel,
     companies: companiesPanel,
@@ -46,6 +47,7 @@ const mapStateToProps = (state, ownProps) => {
     activePanelId,
     sourcesPanel,
     loadingItems,
+    searchResults,
     countriesPanel,
     destinationsPanel,
     companiesPanel,
@@ -74,25 +76,23 @@ const mapDispatchToProps = {
 
 class DashboardPanelContainer extends React.PureComponent {
   static propTypes = {
-    companiesPanel: PropTypes.object,
+    searchResults: PropTypes.array,
     countryNames: PropTypes.object
   };
 
-  static addCountryNameToSearchResults(panel, countryNames) {
-    const searchResults = panel.searchResults.map(item => ({
+  static addCountryNameToSearchResults(searchResults, countryNames) {
+    return searchResults.map(item => ({
       ...item,
       countryName: countryNames[item.countryId]
     }));
-
-    return { ...panel, searchResults };
   }
 
   render() {
-    const companiesPanel = DashboardPanelContainer.addCountryNameToSearchResults(
-      this.props.companiesPanel,
+    const searchResults = DashboardPanelContainer.addCountryNameToSearchResults(
+      this.props.searchResults,
       this.props.countryNames
     );
-    return <DashboardPanel {...this.props} companiesPanel={companiesPanel} />;
+    return <DashboardPanel {...this.props} searchResults={searchResults} />;
   }
 }
 
