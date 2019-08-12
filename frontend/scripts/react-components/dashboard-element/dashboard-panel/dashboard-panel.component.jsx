@@ -43,14 +43,12 @@ class DashboardPanel extends Component {
   renderPanel() {
     const {
       step,
+      pages,
       loadingItems,
       getMoreItems,
       activePanelId,
       searchResults,
-      sourcesPanel,
       getSearchResults,
-      destinationsPanel,
-      companiesPanel,
       clearActiveItems,
       setActiveTab,
       setActiveCountryId,
@@ -61,7 +59,6 @@ class DashboardPanel extends Component {
       countries,
       companies,
       commodities,
-      commoditiesPanel,
       setSearchResult,
       sourcesTabs,
       companiesTabs,
@@ -77,7 +74,7 @@ class DashboardPanel extends Component {
           <SourcesPanel
             tabs={sourcesTabs}
             countries={countries}
-            page={sourcesPanel.page}
+            page={pages.sources}
             getMoreItems={getMoreItems}
             searchSources={searchResults}
             getSearchResults={getSearchResults}
@@ -97,7 +94,7 @@ class DashboardPanel extends Component {
       case DASHBOARD_STEPS.commodities:
         return (
           <CommoditiesPanel
-            page={commoditiesPanel.page}
+            page={pages.commodities}
             getMoreItems={getMoreItems}
             loading={loadingItems}
             commodities={commodities}
@@ -108,7 +105,7 @@ class DashboardPanel extends Component {
       case DASHBOARD_STEPS.destinations:
         return (
           <DestinationsPanel
-            page={destinationsPanel.page}
+            page={pages.destinations}
             getMoreItems={getMoreItems}
             getSearchResults={getSearchResults}
             setSearchResult={item => setSearchResult(item, activePanelId)}
@@ -124,7 +121,7 @@ class DashboardPanel extends Component {
           <CompaniesPanel
             tabs={companiesTabs}
             onSelectNodeTypeTab={item => setActiveTab(item?.id, activePanelId)}
-            page={companiesPanel.page}
+            page={pages.companies}
             getMoreItems={getMoreItems}
             searchCompanies={searchResults}
             nodeTypeRenderer={DashboardPanel.countryNameNodeTypeRenderer}
@@ -262,7 +259,6 @@ DashboardPanel.propTypes = {
   searchResults: PropTypes.array,
   activePanelId: PropTypes.string,
   step: PropTypes.number.isRequired,
-  commoditiesPanel: PropTypes.object,
   setStep: PropTypes.func.isRequired,
   editMode: PropTypes.bool.isRequired,
   isDisabled: PropTypes.bool.isRequired,
@@ -276,12 +272,9 @@ DashboardPanel.propTypes = {
   setActiveCommodityId: PropTypes.func.isRequired,
   destinations: PropTypes.array.isRequired,
   selectedNodesIds: PropTypes.array.isRequired,
-  sourcesPanel: PropTypes.object.isRequired,
   clearActiveItems: PropTypes.func.isRequired,
   setSearchResult: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
-  companiesPanel: PropTypes.object.isRequired,
-  destinationsPanel: PropTypes.object.isRequired,
   commoditiesActiveItems: PropTypes.array.isRequired
 };
 

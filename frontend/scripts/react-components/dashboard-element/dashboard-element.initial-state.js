@@ -1,6 +1,4 @@
 export default {
-  loading: false,
-  editMode: false,
   data: {
     countries: [],
     companies: [],
@@ -9,31 +7,25 @@ export default {
     commodities: []
   },
   tabs: {},
+  loading: false,
+  loadingItems: false,
+  editMode: false,
   activePanelId: null,
-  countries: {
-    page: 1
+  pages: {
+    countries: 1,
+    sources: 1,
+    destinations: 1,
+    companies: 1,
+    commodities: 1
   },
-  sources: {
-    page: 1
-  },
-  destinations: {
-    page: 1
-  },
-  companies: {
-    page: 1
-  },
-  commodities: {
-    page: 1
-  },
+  searchResults: [],
+  selectedNodesIds: [],
+  charts: null,
   sourcesActiveTab: null,
   companiesActiveTab: null,
   selectedCountryId: null,
   selectedCommodityId: null,
-  selectedNodesIds: [],
-  searchResults: [],
-  loadingItems: false,
   selectedYears: null,
   selectedResizeBy: null,
-  selectedRecolorBy: null,
-  charts: null
+  selectedRecolorBy: null
 };

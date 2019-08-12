@@ -79,7 +79,7 @@ function* getDashboardPanelParams(optionsType, options = {}) {
 }
 
 export function* getDashboardPanelData(dashboardElement, optionsType, options) {
-  const { page } = dashboardElement[optionsType];
+  const page = dashboardElement.pages[optionsType];
 
   const params = yield getDashboardPanelParams(optionsType, {
     page,
@@ -152,7 +152,7 @@ export function* getDashboardPanelSectionTabs(optionsType) {
 }
 
 export function* getMoreDashboardPanelData(dashboardElement, optionsType) {
-  const { page } = dashboardElement[optionsType];
+  const page = dashboardElement.pages[optionsType];
   const params = yield getDashboardPanelParams(optionsType, { page });
   if (params.node_types_ids === null) {
     return;

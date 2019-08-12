@@ -73,7 +73,7 @@ function CompaniesPanel(props) {
 
 CompaniesPanel.propTypes = {
   companies: PropTypes.array,
-  activeCompanies: PropTypes.object,
+  activeCompanies: PropTypes.array,
   page: PropTypes.number.isRequired,
   loading: PropTypes.bool,
   getMoreItems: PropTypes.func.isRequired,

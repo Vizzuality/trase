@@ -102,30 +102,25 @@ const dashboardElementReducer = {
     return { ...state, loading: isLoading };
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_PANEL](state, action) {
-    const { activePanelId } = action.payload;
-    const prevActivePanelId = state.activePanelId;
-    const prevPanelName = prevActivePanelId;
-    const prevPanelState = prevActivePanelId
-      ? {
-          ...state[prevPanelName],
-          page: initialState[prevPanelName].page
-        }
-      : undefined;
-    return {
-      ...state,
-      activePanelId,
-      ...(prevActivePanelId ? { [prevPanelName]: prevPanelState } : {}),
-      searchResults: []
-    };
+    return immer(state, draft => {
+      const { activePanelId } = action.payload;
+      const prevActivePanelId = state.activePanelId;
+      if (prevActivePanelId) {
+        draft.pages[prevActivePanelId] = initialState.pages[prevActivePanelId];
+      }
+      draft.activePanelId = activePanelId;
+      draft.searchResults = [];
+    });
   },
   [DASHBOARD_ELEMENT__EDIT_DASHBOARD](state) {
     return { ...state, editMode: true };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_PAGE](state, action) {
-    const { activePanelId } = state;
-    const panelName = activePanelId;
-    const { page } = action.payload;
-    return { ...state, [panelName]: { ...state[panelName], page } };
+    return immer(state, draft => {
+      const { activePanelId } = state;
+      const { page } = action.payload;
+      draft.pages[activePanelId] = page;
+    });
   },
   [DASHBOARD_ELEMENT__SET_PANEL_DATA](state, action) {
     const { key, data } = action.payload;
@@ -137,29 +132,20 @@ const dashboardElementReducer = {
     };
   },
   [DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA](state, action) {
-    const { key, data } = action.payload;
+    return immer(state, draft => {
+      const { key, data } = action.payload;
 
-    if (data.length === 0) {
-      return {
-        ...state,
-        [key]: {
-          ...state[key],
-          page: state[key].page - 1
-        }
-      };
-    }
+      if (data.length === 0) {
+        draft.pages[key] = state.pages[key] - 1;
+        return;
+      }
 
-    const oldData = state.data[key];
+      const oldData = state.data[key];
 
-    // in case we preloaded some items, we make sure to avoid duplicates
-    const dataMap = data.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
-
-    const together = [...oldData.filter(item => !dataMap[item.id]), ...data];
-
-    return {
-      ...state,
-      data: { ...state.data, [key]: together }
-    };
+      // in case we preloaded some items, we make sure to avoid duplicates
+      const dataMap = data.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
+      draft.data[key] = [...oldData.filter(item => !dataMap[item.id]), ...data];
+    });
   },
   [DASHBOARD_ELEMENT__SET_MISSING_DATA](state, action) {
     const { key, data } = action.payload;
@@ -187,7 +173,7 @@ const dashboardElementReducer = {
         (acc, next) => ({ ...acc, [getSection(next)]: next.tabs }),
         state.tabs
       );
-      draft[key].page = initialState[key].page;
+      draft.pages[key] = initialState.pages[key];
     });
   },
   [DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID](state, action) {
@@ -259,7 +245,7 @@ const dashboardElementReducer = {
       if (panel === 'companies') {
         draft.companiesActiveTab = activeTab;
       }
-      draft[panel].page = initialState[panel].page;
+      draft.pages[panel] = initialState.pages[panel];
       draft.selectedNodesIds = draft.selectedNodesIds.filter(nodeId => !dataMap[nodeId]);
     });
   },
@@ -286,7 +272,7 @@ const dashboardElementReducer = {
       if (panel === 'companies') {
         draft.companiesActiveTab = activeTab;
       }
-      draft[panel].page = initialState[panel].page;
+      draft.pages[panel] = initialState.pages[panel];
       draft.searchResults = [];
       draft.selectedNodesIds = xor(clearSubsequentPanels(panel, state, activeItem), [
         activeItem.id
@@ -375,34 +361,34 @@ const dashboardElementReducer = {
   }
 };
 
-const dashboardElementReducerTypes = PropTypes => {
-  const PanelTypes = {
-    page: PropTypes.number
-  };
-
-  return {
-    tabs: PropTypes.object.isRequired,
-    loading: PropTypes.bool,
-    loadingItems: PropTypes.bool,
-    searchResults: PropTypes.array,
-    activePanelId: PropTypes.string,
-    data: PropTypes.shape({
-      countries: PropTypes.array.isRequired,
-      companies: PropTypes.object.isRequired,
-      sources: PropTypes.object.isRequired,
-      destinations: PropTypes.array.isRequired
-    }).isRequired,
-    countries: PropTypes.shape(PanelTypes).isRequired,
-    sources: PropTypes.shape(PanelTypes).isRequired,
-    destinations: PropTypes.shape(PanelTypes).isRequired,
-    companies: PropTypes.shape(PanelTypes).isRequired,
-    commodities: PropTypes.shape(PanelTypes).isRequired,
-    selectedNodesIds: PropTypes.array,
-    selectedYears: PropTypes.arrayOf(PropTypes.number),
-    selectedResizeBy: PropTypes.string,
-    selectedRecolorBy: PropTypes.string
-  };
-};
+const dashboardElementReducerTypes = PropTypes => ({
+  data: PropTypes.shape({
+    countries: PropTypes.array.isRequired,
+    companies: PropTypes.array.isRequired,
+    sources: PropTypes.array.isRequired,
+    destinations: PropTypes.array.isRequired
+  }).isRequired,
+  pages: PropTypes.shape({
+    countries: PropTypes.number.isRequired,
+    sources: PropTypes.number.isRequired,
+    commodities: PropTypes.number.isRequired,
+    destinations: PropTypes.number.isRequired,
+    companies: PropTypes.number.isRequired
+  }),
+  tabs: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired,
+  loadingItems: PropTypes.bool.isRequired,
+  searchResults: PropTypes.array.isRequired,
+  activePanelId: PropTypes.string.isRequired,
+  selectedNodesIds: PropTypes.array,
+  selectedYears: PropTypes.arrayOf(PropTypes.number),
+  selectedResizeBy: PropTypes.number,
+  selectedRecolorBy: PropTypes.number,
+  selectedCountryId: PropTypes.number,
+  selectedCommodityId: PropTypes.number,
+  sourcesActiveTab: PropTypes.number,
+  companiesActiveTab: PropTypes.number
+});
 
 export { initialState };
 export default createReducer(initialState, dashboardElementReducer, dashboardElementReducerTypes);
