@@ -30,33 +30,27 @@ import {
 import initialState from './dashboard-element.initial-state';
 import * as DashboardElementUrlPropHandlers from './dashboard-element.serializers';
 
-const clearSubsequentPanels = (panel, state, item) => {
+const getPanelsToClear = (panel, state, item) => {
   const currentPanelIndex = DASHBOARD_STEPS[panel];
-  const currentPanelMap = state.data[panel].reduce(
-    (acc, next) => ({ ...acc, [next.id]: true }),
-    {}
-  );
 
   // if the selected items in a panel are zero, that means we're including all of them
   // thus the subsequent panels will include all possible nodes.
   // if we add an item at this point, it means we're passing from "show me all" to "show me just one" filtering
   // this means the subsequents panels selection most likely will be invalid and needs to be cleared.
-  const hadAllItemsSelected = state.selectedNodesIds.filter(id => currentPanelMap[id]).length === 0;
+  const hadAllItemsSelected = state[panel].length === 0;
 
   // if the selected items in a panel are N, that means that we're including only N
   // if we remove an item at this point, it means we're passing from "show me N" to "shot me N-1" filtering
   // this means the subsequent panels selection might include items that corresponded to the removed item
   // thus rendering the selection invalid so we need to clear it.
   // When passing from N to N+1 we're including more possible results so we don't need to clear the selection.
-  const isRemovingAnItem = state.selectedNodesIds.find(i => i === item.id);
+  const isRemovingAnItem = state[panel].includes(item.id);
 
   if (hadAllItemsSelected || isRemovingAnItem) {
     const panelsToClear = Object.keys(DASHBOARD_STEPS).slice(currentPanelIndex + 1);
-    const data = panelsToClear.flatMap(p => state.data[p]);
-    const dataMap = data.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
-    return state.selectedNodesIds.filter(id => !dataMap[id]);
+    return panelsToClear;
   }
-  return state.selectedNodesIds;
+  return null;
 };
 
 const dashboardElementReducer = {
@@ -69,10 +63,12 @@ const dashboardElementReducer = {
         destinations: destinationsData,
         companies: companiesData
       },
-      selectedNodesIds
+      sources,
+      companies,
+      destinations
     } = state;
     const isLoading =
-      selectedNodesIds.length > 0 &&
+      (sources.length > 0 || companies.length > 0 || destinations.length > 0) &&
       countriesData.length === 0 &&
       sourcesData.length === 0 &&
       commoditiesData.length === 0 &&
@@ -85,15 +81,14 @@ const dashboardElementReducer = {
         state: initialState,
         urlPropHandlers: DashboardElementUrlPropHandlers,
         props: [
+          'sources',
+          'companies',
+          'destinations',
           'selectedYears',
           'selectedResizeBy',
           'selectedRecolorBy',
-          'countries',
-          'sources',
-          'commodities',
-          'destinations',
-          'companies',
-          'selectedNodesIds'
+          'selectedCountryId',
+          'selectedCommodityId'
         ]
       });
       newState.loading = isLoading;
@@ -184,7 +179,9 @@ const dashboardElementReducer = {
       draft.sources = initialState.sources;
       draft.selectedCountryId =
         activeItem && activeItem.id !== state.selectedCountryId ? activeItem.id : null;
-      draft.selectedNodesIds = [];
+      draft.sources = [];
+      draft.companies = [];
+      draft.destinations = [];
       draft.selectedCommodityId = null;
     });
   },
@@ -194,12 +191,8 @@ const dashboardElementReducer = {
       draft.selectedCommodityId =
         activeItem && activeItem.id !== state.selectedCountryId ? activeItem.id : null;
 
-      const sourcesDataMap = state.data.sources.reduce(
-        (acc, next) => ({ ...acc, [next.id]: true }),
-        {}
-      );
-      // we filter selected nodes of panels after soy.
-      draft.selectedNodesIds = state.selectedNodesIds.filter(id => sourcesDataMap[id]);
+      draft.companies = [];
+      draft.destinations = [];
     });
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS](state, action) {
@@ -217,27 +210,27 @@ const dashboardElementReducer = {
         draft.companiesActiveTab = activeTab;
       }
 
-      draft.selectedNodesIds = xor(clearSubsequentPanels(panel, state, activeItem), [
-        activeItem.id
-      ]);
+      const panelsToClear = getPanelsToClear(panel, state, activeItem);
 
-      const data = state.data[panel] || [];
-      const itemsWithSameNodeType = data.reduce(
-        (acc, next) => ({ ...acc, [next.id]: next.nodeType === activeItem.nodeType }),
-        {}
-      );
+      if (panelsToClear) {
+        panelsToClear.forEach(panelToClear => {
+          draft[panelToClear] = [];
+        });
+      }
 
-      // we remove all items that belong to the same panel but dont match in node type
-      draft.selectedNodesIds = draft.selectedNodesIds.filter(
-        id => typeof itemsWithSameNodeType[id] === 'undefined' || itemsWithSameNodeType[id]
-      );
+      // we clear the previously selected items if the new item has a different nodeType
+      const firstItem =
+        state[panel] && state[panel][0] && state.data[panel].find(i => i.id === state[panel][0]);
+      if (firstItem && firstItem.nodeType !== activeItem.nodeType) {
+        draft[panel] = [activeItem.id];
+      } else {
+        draft[panel] = xor(draft[panel], [activeItem.id]);
+      }
     });
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_TAB](state, action) {
     return immer(state, draft => {
       const { panel, activeTab } = action.payload;
-      const dataMap =
-        draft.data[panel] || [].reduce((acc, next) => ({ ...next, [next.id]: true }), {});
 
       if (panel === 'sources') {
         draft.sourcesActiveTab = activeTab;
@@ -246,7 +239,9 @@ const dashboardElementReducer = {
         draft.companiesActiveTab = activeTab;
       }
       draft.pages[panel] = initialState.pages[panel];
-      draft.selectedNodesIds = draft.selectedNodesIds.filter(nodeId => !dataMap[nodeId]);
+
+      // TODO test this
+      // draft[panel] = [];
     });
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH](state, action) {
@@ -274,19 +269,14 @@ const dashboardElementReducer = {
       }
       draft.pages[panel] = initialState.pages[panel];
       draft.searchResults = [];
-      draft.selectedNodesIds = xor(clearSubsequentPanels(panel, state, activeItem), [
-        activeItem.id
-      ]);
 
-      const itemsWithSameNodeType = data.reduce(
-        (acc, next) => ({ ...acc, [next.id]: next.nodeType === activeItem.nodeType }),
-        {}
-      );
-
-      // we remove all items that belong to the same panel but dont match in node type
-      draft.selectedNodesIds = draft.selectedNodesIds.filter(
-        id => typeof itemsWithSameNodeType[id] === 'undefined' || itemsWithSameNodeType[id]
-      );
+      const firstItem =
+        state[panel] && state[panel][0] && state.data[panel].find(i => i.id === state[panel][0]);
+      if (firstItem && firstItem.nodeType !== activeItem.nodeType) {
+        draft[panel] = [activeItem.id];
+      } else {
+        draft[panel] = xor(draft[panel], [activeItem.id]);
+      }
     });
   },
   [DASHBOARD_ELEMENT__CLEAR_PANEL](state, action) {
@@ -303,12 +293,13 @@ const dashboardElementReducer = {
       }
 
       if (panel === 'countries' || panel === 'commodities' || panel === 'sources') {
-        draft.selectedNodesIds = [];
+        draft.sources = [];
+        draft.companies = [];
+        draft.destinations = [];
       }
 
-      if (panel !== 'destinations' && panel !== 'companies') {
-        const dataMap = draft.data[panel].reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
-        draft.selectedNodesIds = state.selectedNodesIds.filter(id => !dataMap[id]);
+      if (panel === 'destinations') {
+        draft.companies = [];
       }
     });
   },
@@ -375,12 +366,14 @@ const dashboardElementReducerTypes = PropTypes => ({
     destinations: PropTypes.number.isRequired,
     companies: PropTypes.number.isRequired
   }),
+  sources: PropTypes.array,
+  companies: PropTypes.array,
+  destinations: PropTypes.array,
   tabs: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
   loadingItems: PropTypes.bool.isRequired,
   searchResults: PropTypes.array.isRequired,
   activePanelId: PropTypes.string.isRequired,
-  selectedNodesIds: PropTypes.array,
   selectedYears: PropTypes.arrayOf(PropTypes.number),
   selectedResizeBy: PropTypes.number,
   selectedRecolorBy: PropTypes.number,

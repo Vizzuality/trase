@@ -18,13 +18,17 @@ const getSourcesTab = state => state.dashboardElement.sourcesActiveTab;
 const getCompaniesTab = state => state.dashboardElement.companiesActiveTab;
 const getDashboardPanelTabs = state => state.dashboardElement.tabs;
 
+const getSources = state => state.dashboardElement.sources;
+const getCompanies = state => state.dashboardElement.companies;
+const getDestinations = state => state.dashboardElement.destinations;
+
 const getSelectedCountryId = state => state.dashboardElement.selectedCountryId;
 const getSelectedCommodityId = state => state.dashboardElement.selectedCommodityId;
-const getSelectedNodesIds = state => state.dashboardElement.selectedNodesIds;
 const getSelectedYears = state => state.dashboardElement.selectedYears;
 const getSelectedResizeBy = state => state.dashboardElement.selectedResizeBy;
 const getSelectedRecolorBy = state => state.dashboardElement.selectedRecolorBy;
 const getDashboardCharts = state => state.dashboardElement.charts;
+
 export const getEditMode = state => state.dashboardElement.editMode;
 
 const getAppContexts = state => state.app.contexts;
@@ -87,17 +91,17 @@ export const getCommoditiesActiveItems = createSelector(
 );
 
 export const getDestinationsActiveItems = createSelector(
-  [getSelectedNodesIds, getDestinationsData],
+  [getDestinations, getDestinationsData],
   getPanelActiveItems
 );
 
 export const getSourcesActiveItems = createSelector(
-  [getSelectedNodesIds, getSourcesData],
+  [getSources, getSourcesData],
   getPanelActiveItems
 );
 
 export const getCompaniesActiveItems = createSelector(
-  [getSelectedNodesIds, getCompaniesData],
+  [getCompanies, getCompaniesData],
   getPanelActiveItems
 );
 
@@ -400,8 +404,12 @@ const getURLDashboardSelectedResizeBy = createSelector(
 );
 
 export const getDashboardElementUrlProps = createStructuredSelector({
-  selectedNodesIds: getSelectedNodesIds,
+  sources: getSources,
+  companies: getCompanies,
+  destinations: getDestinations,
+  selectedCountryId: getSelectedCountryId,
+  selectedCommodityId: getSelectedCommodityId,
   selectedYears: getURLDashboardSelectedYears,
-  selectedResizeBy: getURLDashboardSelectedResizeBy,
-  selectedRecolorBy: getDashboardSelectedRecolorBy
+  selectedRecolorBy: getDashboardSelectedRecolorBy,
+  selectedResizeBy: getURLDashboardSelectedResizeBy
 });

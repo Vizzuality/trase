@@ -54,17 +54,19 @@ class DashboardPanel extends Component {
       setActiveCountryId,
       setActiveCommodityId,
       setActiveItem,
-      sources,
-      destinations,
-      countries,
-      companies,
-      commodities,
+      sourcesData,
+      countriesData,
+      companiesData,
+      commoditiesData,
+      destinationsData,
       setSearchResult,
       sourcesTabs,
       companiesTabs,
       sourcesActiveTab,
+      activeSources,
+      activeCompanies,
+      activeDestinations,
       companiesActiveTab,
-      selectedNodesIds,
       countriesActiveItems,
       commoditiesActiveItems
     } = this.props;
@@ -73,7 +75,7 @@ class DashboardPanel extends Component {
         return (
           <SourcesPanel
             tabs={sourcesTabs}
-            countries={countries}
+            countries={countriesData}
             page={pages.sources}
             getMoreItems={getMoreItems}
             searchSources={searchResults}
@@ -82,13 +84,13 @@ class DashboardPanel extends Component {
             clearItems={() => clearActiveItems(activePanelId)}
             activeCountryItems={countriesActiveItems}
             sourcesActiveTab={sourcesActiveTab}
-            activeSourcesItem={selectedNodesIds}
+            activeSourcesItem={activeSources}
             onSelectCountry={setActiveCountryId}
             onSelectSourceTab={item => setActiveTab(item?.id, activePanelId)}
             setSearchResult={item => setSearchResult(item, activePanelId)}
             onSelectSourceValue={item => setActiveItem(item, activePanelId)}
             nodeTypeRenderer={DashboardPanel.sourcesNodeTypeRenderer}
-            sources={sources || []}
+            sources={sourcesData}
           />
         );
       case DASHBOARD_STEPS.commodities:
@@ -97,7 +99,7 @@ class DashboardPanel extends Component {
             page={pages.commodities}
             getMoreItems={getMoreItems}
             loading={loadingItems}
-            commodities={commodities}
+            commodities={commoditiesData}
             onSelectCommodity={setActiveCommodityId}
             activeCommodities={commoditiesActiveItems}
           />
@@ -110,10 +112,10 @@ class DashboardPanel extends Component {
             getSearchResults={getSearchResults}
             setSearchResult={item => setSearchResult(item, activePanelId)}
             searchDestinations={searchResults}
-            destinations={destinations}
+            destinations={destinationsData}
             onSelectDestinationValue={item => setActiveItem(item, activePanelId)}
             loading={loadingItems}
-            activeDestinations={selectedNodesIds}
+            activeDestinations={activeDestinations}
           />
         );
       case DASHBOARD_STEPS.companies:
@@ -128,10 +130,10 @@ class DashboardPanel extends Component {
             setSearchResult={item => setSearchResult(item, activePanelId)}
             getSearchResults={getSearchResults}
             loading={loadingItems}
-            companies={companies || []}
+            companies={companiesData}
             onSelectCompany={item => setActiveItem(item, activePanelId)}
             activeNodeTypeTab={companiesActiveTab}
-            activeCompanies={selectedNodesIds}
+            activeCompanies={activeCompanies}
           />
         );
       default:
@@ -271,7 +273,9 @@ DashboardPanel.propTypes = {
   setActiveCountryId: PropTypes.func.isRequired,
   setActiveCommodityId: PropTypes.func.isRequired,
   destinations: PropTypes.array.isRequired,
-  selectedNodesIds: PropTypes.array.isRequired,
+  activeSources: PropTypes.array.isRequired,
+  activeCompanies: PropTypes.array.isRequired,
+  activeDestinations: PropTypes.array.isRequired,
   clearActiveItems: PropTypes.func.isRequired,
   setSearchResult: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,

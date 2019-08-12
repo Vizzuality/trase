@@ -18,9 +18,11 @@ export default {
     companies: 1,
     commodities: 1
   },
-  searchResults: [],
-  selectedNodesIds: [],
+  sources: [],
+  companies: [],
+  destinations: [],
   charts: null,
+  searchResults: [],
   sourcesActiveTab: null,
   companiesActiveTab: null,
   selectedCountryId: null,
