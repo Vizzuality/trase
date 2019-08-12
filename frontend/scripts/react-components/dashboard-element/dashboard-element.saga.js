@@ -56,6 +56,8 @@ export function* fetchMissingDashboardPanelItems() {
         dashboardElement.destinations.length > 0) ||
       (dashboardElement.data.companies.length === 0 && dashboardElement.companies.length > 0)
     ) {
+      yield fork(getDashboardPanelData, dashboardElement, 'countries');
+      yield fork(getDashboardPanelData, dashboardElement, 'commodities');
       yield call(getMissingDashboardPanelItems, dashboardElement, selectedContext);
       yield put(setDashboardLoading(false));
     }

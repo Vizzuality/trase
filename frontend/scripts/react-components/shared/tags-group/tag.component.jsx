@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Dropdown from 'react-components/shared/dropdown';
@@ -18,7 +18,7 @@ function Tag(props) {
     placement
   } = props;
 
-  const readOnly = useMemo(() => isPartReadOnly(part), [isPartReadOnly, part]);
+  const readOnly = isPartReadOnly(part);
 
   if (!part.value || part.value.length === 0) {
     return null;

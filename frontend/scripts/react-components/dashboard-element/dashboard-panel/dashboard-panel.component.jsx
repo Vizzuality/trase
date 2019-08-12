@@ -250,8 +250,18 @@ DashboardPanel.propTypes = {
   countries: PropTypes.array,
   sourcesTabs: PropTypes.array,
   companiesTabs: PropTypes.array,
+  sourcesData: PropTypes.array,
+  countriesData: PropTypes.array,
+  companiesData: PropTypes.array,
+  commoditiesData: PropTypes.array,
+  destinationsData: PropTypes.array,
   sourcesActiveTab: PropTypes.number,
   companiesActiveTab: PropTypes.number,
+  pages: PropTypes.shape({
+    sources: PropTypes.number.isRequired,
+    companies: PropTypes.number.isRequired,
+    destinations: PropTypes.number.isRequired
+  }).isRequired,
   dirtyBlocks: PropTypes.array,
   companies: PropTypes.object,
   getMoreItems: PropTypes.func,

@@ -309,6 +309,11 @@ const dashboardElementReducer = {
 
       if (panel === 'destinations') {
         draft.companies = [];
+        draft.destinations = [];
+      }
+
+      if (panel === 'companies') {
+        draft.companies = [];
       }
     });
   },
