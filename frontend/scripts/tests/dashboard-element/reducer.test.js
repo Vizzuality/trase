@@ -10,9 +10,8 @@ import {
   DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
   DASHBOARD_ELEMENT__CLEAR_PANEL,
-  DASHBOARD_ELEMENT__CLEAR_PANELS,
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
+  DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
   DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
@@ -451,53 +450,6 @@ describe(DASHBOARD_ELEMENT__CLEAR_PANEL, () => {
   });
 });
 
-describe(DASHBOARD_ELEMENT__CLEAR_PANELS, () => {
-  const state = {
-    ...initialState,
-    countries: {
-      ...initialState.countries,
-      activeItems: [{ id: 1, name: 'some item' }],
-      activeTab: { id: 7, name: 'BIOME' },
-      page: 2
-    },
-    commodities: {
-      ...initialState.commodities,
-      activeItems: [{ id: 4, name: 'some item' }],
-      activeTab: { id: 1 },
-      page: 6
-    },
-    companies: {
-      ...initialState.companies,
-      activeItems: [{ id: 4, name: 'some item' }],
-      activeTab: { id: 7, name: 'IMPORTER' },
-      page: 5
-    }
-  };
-
-  it('clears panels', () => {
-    const action = {
-      type: DASHBOARD_ELEMENT__CLEAR_PANELS,
-      payload: {
-        panels: ['companies', 'commodities']
-      }
-    };
-
-    const newState = reducer(state, action);
-    expect(newState).toEqual({
-      ...state,
-      countries: state.countries,
-      companies: {
-        ...initialState.companies,
-        activeTab: state.companies.activeTab
-      },
-      commodities: {
-        ...initialState.commodities,
-        activeTab: state.commodities.activeTab
-      }
-    });
-  });
-});
-
 describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
   const someResults = [
     { id: 0, name: 'some result' },
@@ -563,11 +515,11 @@ describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
   });
 });
 
-describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, () => {
+describe(DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID, () => {
   const someItem = { id: 1, name: 'some item' };
   it('Sets an active item in a single entity panel', () => {
     const action = {
-      type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
+      type: DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID,
       payload: {
         panel: 'companies',
         activeItem: someItem
@@ -592,7 +544,7 @@ describe(DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, () => {
 
   it('Clears the current sources when selecting a country in the sources panel', () => {
     const action = {
-      type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
+      type: DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID,
       payload: {
         panel: 'countries',
         activeItem: someItem

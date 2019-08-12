@@ -227,6 +227,17 @@ const dashboardElementReducer = {
       draft.selectedNodesIds = xor(clearSubsequentPanels(panel, state, activeItem), [
         activeItem.id
       ]);
+
+      const data = state.data[panel] || [];
+      const itemsWithSameNodeType = data.reduce(
+        (acc, next) => ({ ...acc, [next.id]: next.nodeType === activeItem.nodeType }),
+        {}
+      );
+
+      // we remove all items that belong to the same panel but dont match in node type
+      draft.selectedNodesIds = draft.selectedNodesIds.filter(
+        id => typeof itemsWithSameNodeType[id] === 'undefined' || itemsWithSameNodeType[id]
+      );
     });
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_TAB](state, action) {
@@ -248,11 +259,11 @@ const dashboardElementReducer = {
         state.tabs[panel] && state.tabs[panel].find(tab => tab.id === activeItem.nodeTypeId);
       const activeTab = activeTabObj?.id || null;
 
-      const oldData = state.data[panel] || [];
-      const dataMap = oldData.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
-      let together = oldData;
+      const data = state.data[panel] || [];
+      const dataMap = data.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
+      let together = data;
       if (!dataMap[activeItem.id]) {
-        together = [activeItem, ...oldData];
+        together = [activeItem, ...data];
       }
 
       draft.data[panel] = together;
@@ -263,6 +274,16 @@ const dashboardElementReducer = {
       draft.selectedNodesIds = xor(clearSubsequentPanels(panel, state, activeItem), [
         activeItem.id
       ]);
+
+      const itemsWithSameNodeType = data.reduce(
+        (acc, next) => ({ ...acc, [next.id]: next.nodeType === activeItem.nodeType }),
+        {}
+      );
+
+      // we remove all items that belong to the same panel but dont match in node type
+      draft.selectedNodesIds = draft.selectedNodesIds.filter(
+        id => typeof itemsWithSameNodeType[id] === 'undefined' || itemsWithSameNodeType[id]
+      );
     });
   },
   [DASHBOARD_ELEMENT__CLEAR_PANEL](state, action) {

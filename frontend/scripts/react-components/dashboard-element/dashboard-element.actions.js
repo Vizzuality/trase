@@ -43,9 +43,9 @@ export const setDashboardSelectedCommodityId = activeItem => ({
   payload: { activeItem }
 });
 
-export const setDashboardPanelActiveItemsWithSearch = (activeItems, panel) => ({
+export const setDashboardPanelActiveItemsWithSearch = (activeItem, panel) => ({
   type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
-  payload: { panel, activeItems }
+  payload: { panel, activeItem }
 });
 
 export const setDashboardPanelActiveItems = (activeItem, panel) => ({
