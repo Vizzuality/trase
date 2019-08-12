@@ -146,17 +146,7 @@ function* checkForceOverviewOnExpand() {
 
 function* fetchMissingLockedNodes() {
   function* performFetch() {
-    const {
-      selectedNodesIds,
-      expandedNodesIds,
-      data: { nodes }
-    } = yield select(state => state.toolLinks);
-    const lockedNodes = new Set([...selectedNodesIds, expandedNodesIds]);
-    const missingNodes = Array.from(lockedNodes).filter(lockedNode => !nodes[lockedNode]);
-
-    if (missingNodes.length > 0) {
-      yield fork(getMissingLockedNodes, missingNodes);
-    }
+    yield fork(getMissingLockedNodes);
   }
 
   yield takeLatest([TOOL_LINKS__SET_NODES], performFetch);

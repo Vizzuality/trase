@@ -143,14 +143,23 @@ const dashboardElementReducer = {
     });
   },
   [DASHBOARD_ELEMENT__SET_MISSING_DATA](state, action) {
-    const { key, data } = action.payload;
-    const oldData = state.data[key];
-    const together = oldData ? [...oldData, ...data] : data;
-
-    return {
-      ...state,
-      data: { ...state.data, [key]: together }
-    };
+    return immer(state, draft => {
+      const { data } = action.payload;
+      const panelsByItem = {};
+      state.sources.forEach(id => {
+        panelsByItem[id] = 'sources';
+      });
+      state.companies.forEach(id => {
+        panelsByItem[id] = 'companies';
+      });
+      state.destinations.forEach(id => {
+        panelsByItem[id] = 'destinations';
+      });
+      data.forEach(item => {
+        const panel = panelsByItem[item.id];
+        draft.data[panel].push(item);
+      });
+    });
   },
   [DASHBOARD_ELEMENT__SET_LOADING_ITEMS](state, action) {
     const { loadingItems } = action.payload;

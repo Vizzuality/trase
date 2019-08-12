@@ -15,7 +15,6 @@ import {
   getCountriesActiveItems,
   getSourcesActiveItems,
   getDestinationsActiveItems,
-  getCommoditiesActiveItems,
   getCompaniesActiveItems,
   getSourcesActiveTab,
   getCompaniesActiveTab,
@@ -28,7 +27,8 @@ import {
   GET_DASHBOARD_OPTIONS_URL,
   GET_DASHBOARD_OPTIONS_TABS_URL,
   GET_DASHBOARD_SEARCH_RESULTS_URL,
-  GET_DASHBOARD_PARAMETRISED_CHARTS_URL
+  GET_DASHBOARD_PARAMETRISED_CHARTS_URL,
+  GET_ALL_NODES_URL
 } from 'utils/getURLFromParams';
 import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
 import { DASHBOARD_STEPS } from 'constants';
@@ -36,11 +36,11 @@ import { DASHBOARD_STEPS } from 'constants';
 function* getDashboardPanelParams(optionsType, options = {}) {
   const state = yield select();
   const { page, isOverview } = options;
-  const countriesActiveItems = yield select(getCountriesActiveItems);
+
   const sourcesActiveItems = yield select(getSourcesActiveItems);
-  const commoditiesActiveItems = yield select(getCommoditiesActiveItems);
   const destinationsActiveItems = yield select(getDestinationsActiveItems);
   const companiesActiveItems = yield select(getCompaniesActiveItems);
+
   const sourcesTab = getSourcesActiveTab(state);
   const companiesTab = getCompaniesActiveTab(state);
   const nodeTypesIds = {
@@ -55,16 +55,16 @@ function* getDashboardPanelParams(optionsType, options = {}) {
   };
   const currentStep = DASHBOARD_STEPS[optionsType];
   if (currentStep === DASHBOARD_STEPS.sources) {
-    params.countries_ids = activeItemParams(countriesActiveItems);
+    params.countries_ids = state.dashboardElement.selectedCountryId;
   }
 
   if (currentStep > DASHBOARD_STEPS.sources || isOverview) {
-    params.countries_ids = activeItemParams(countriesActiveItems);
+    params.countries_ids = state.dashboardElement.selectedCountryId;
     params.sources_ids = activeItemParams(sourcesActiveItems);
   }
 
   if (currentStep > DASHBOARD_STEPS.commodities || isOverview) {
-    params.commodities_ids = activeItemParams(commoditiesActiveItems);
+    params.commodities_ids = state.dashboardElement.selectedCommodityId;
   }
 
   if (currentStep > DASHBOARD_STEPS.destinations || isOverview) {
@@ -187,18 +187,29 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType) {
   }
 }
 
-export function* getMissingDashboardPanelItems(dashboardElement, optionsType, options) {
-  const params = yield getDashboardPanelParams(optionsType, options);
-  const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
+export function* getMissingDashboardPanelItems(dashboardElement, selectedContext) {
+  const nodesIds = [
+    ...dashboardElement.sources,
+    ...dashboardElement.destinations,
+    ...dashboardElement.companies
+  ];
+  const params = {
+    context_id: selectedContext.id,
+    nodes_ids: nodesIds.join(',')
+  };
+  if (nodesIds.length === 0) {
+    return;
+  }
+  const url = getURLFromParams(GET_ALL_NODES_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
-    yield put(setMissingDashboardPanelItems(optionsType, data.data));
+    yield put(setMissingDashboardPanelItems(data.data));
   } catch (e) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled', url);
+      if (NODE_ENV_DEV) console.error('Cancelled');
       if (source) {
         source.cancel();
       }

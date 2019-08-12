@@ -117,14 +117,14 @@ export const goToDashboard = payload => ({
   payload
 });
 
-export const setMoreDashboardPanelData = ({ key, tab, data }) => ({
+export const setMoreDashboardPanelData = ({ key, data }) => ({
   type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
-  payload: { data, key, tab }
+  payload: { data, key }
 });
 
-export const setMissingDashboardPanelItems = (key, data, tab) => ({
+export const setMissingDashboardPanelItems = data => ({
   type: DASHBOARD_ELEMENT__SET_MISSING_DATA,
-  payload: { key, tab, data }
+  payload: { data }
 });
 
 export const getDashboardMissingPanelItems = () => ({

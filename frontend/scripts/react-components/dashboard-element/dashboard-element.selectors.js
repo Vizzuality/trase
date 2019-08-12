@@ -106,25 +106,19 @@ export const getCompaniesActiveItems = createSelector(
 );
 
 export const getDirtyBlocks = createSelector(
-  [
-    getCountriesActiveItems,
-    getSourcesActiveItems,
-    getDestinationsActiveItems,
-    getCompaniesActiveItems,
-    getCommoditiesActiveItems
-  ],
+  [getSelectedCountryId, getSelectedCommodityId, getSources, getDestinations, getCompanies],
   (
-    countriesActiveItems,
+    selectedCountryId,
+    selectedCommodityId,
     sourcesActiveItems,
     destinationsActiveItems,
-    companiesActiveItems,
-    commoditiesActiveItems
+    companiesActiveItems
   ) => ({
-    countries: countriesActiveItems.length > 0,
+    countries: selectedCountryId !== null,
     sources: sourcesActiveItems.length > 0,
     destinations: destinationsActiveItems.length > 0,
     companies: companiesActiveItems.length > 0,
-    commodities: commoditiesActiveItems.length > 0
+    commodities: selectedCommodityId !== null
   })
 );
 
@@ -200,12 +194,10 @@ export const getIsDisabled = createSelector(
 );
 
 export const getDashboardsContext = createSelector(
-  [getCountriesActiveItems, getCommoditiesActiveItems, getAppContexts],
-  (countriesActiveItems, commoditiesActiveItems, contexts) => {
-    const [{ id: countryId } = {}] = countriesActiveItems || [];
-    const [{ id: commodityId } = {}] = commoditiesActiveItems || [];
+  [getSelectedCountryId, getSelectedCommodityId, getAppContexts],
+  (selectedCountryId, selectedCommodityId, contexts) => {
     const context = contexts.find(
-      ctx => ctx.countryId === countryId && ctx.commodityId === commodityId
+      ctx => ctx.countryId === selectedCountryId && ctx.commodityId === selectedCommodityId
     );
 
     return context || null;

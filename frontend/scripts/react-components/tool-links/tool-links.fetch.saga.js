@@ -175,8 +175,24 @@ export function* getToolGeoColumnNodes(selectedContext) {
   }
 }
 
-export function* getMissingLockedNodes(nodesIds) {
+export function* getMissingLockedNodes() {
+  const {
+    selectedNodesIds,
+    expandedNodesIds,
+    data: { nodes }
+  } = yield select(state => state.toolLinks);
   const selectedContext = yield select(getSelectedContext);
+  const lockedNodes = new Set([...selectedNodesIds, ...expandedNodesIds]);
+  const nodesIds = Array.from(lockedNodes).filter(lockedNode => !nodes[lockedNode]);
+
+  if (nodesIds.length === 0) {
+    if (NODE_ENV_DEV) console.log('No missing nodes.');
+    return;
+  }
+  if (NODE_ENV_DEV) {
+    console.log('Fetching missing nodes: ', nodesIds);
+  }
+
   const params = {
     context_id: selectedContext.id,
     nodes_ids: nodesIds.join(',')
