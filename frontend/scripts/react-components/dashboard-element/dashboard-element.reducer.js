@@ -220,9 +220,16 @@ const dashboardElementReducer = {
     return immer(state, draft => {
       const { panel, activeItem } = action.payload;
 
-      draft[panel].activeTab = state.tabs[panel]
+      const activeTab = state.tabs[panel]
         ? state.tabs[panel].find(tab => tab.name === activeItem.nodeType).id
         : null;
+
+      if (panel === 'sources') {
+        draft.sourcesActiveTab = activeTab;
+      }
+      if (panel === 'companies') {
+        draft.companiesActiveTab = activeTab;
+      }
 
       draft.selectedNodesIds = xor(clearSubsequentPanels(panel, state, activeItem), [
         activeItem.id
@@ -246,7 +253,12 @@ const dashboardElementReducer = {
       const dataMap =
         draft.data[panel] || [].reduce((acc, next) => ({ ...next, [next.id]: true }), {});
 
-      draft[panel].activeTab = activeTab;
+      if (panel === 'sources') {
+        draft.sourcesActiveTab = activeTab;
+      }
+      if (panel === 'companies') {
+        draft.companiesActiveTab = activeTab;
+      }
       draft[panel].page = initialState[panel].page;
       draft.selectedNodesIds = draft.selectedNodesIds.filter(nodeId => !dataMap[nodeId]);
     });
@@ -268,7 +280,12 @@ const dashboardElementReducer = {
 
       draft.data[panel] = together;
 
-      draft[panel].activeTab = activeTab;
+      if (panel === 'sources') {
+        draft.sourcesActiveTab = activeTab;
+      }
+      if (panel === 'companies') {
+        draft.companiesActiveTab = activeTab;
+      }
       draft[panel].page = initialState[panel].page;
       draft.searchResults = [];
       draft.selectedNodesIds = xor(clearSubsequentPanels(panel, state, activeItem), [
@@ -360,8 +377,7 @@ const dashboardElementReducer = {
 
 const dashboardElementReducerTypes = PropTypes => {
   const PanelTypes = {
-    page: PropTypes.number,
-    activeTab: PropTypes.number
+    page: PropTypes.number
   };
 
   return {

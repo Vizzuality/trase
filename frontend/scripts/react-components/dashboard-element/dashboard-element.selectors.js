@@ -14,8 +14,8 @@ const getCommoditiesData = state => state.dashboardElement.data.commodities;
 const getCompaniesData = state => state.dashboardElement.data.companies;
 const getDestinationsData = state => state.dashboardElement.data.destinations;
 
-const getSourcesPanel = state => state.dashboardElement.sources;
-const getCompaniesPanel = state => state.dashboardElement.companies;
+const getSourcesTab = state => state.dashboardElement.sourcesActiveTab;
+const getCompaniesTab = state => state.dashboardElement.companiesActiveTab;
 const getDashboardPanelTabs = state => state.dashboardElement.tabs;
 
 const getSelectedCountryId = state => state.dashboardElement.selectedCountryId;
@@ -31,13 +31,14 @@ const getAppContexts = state => state.app.contexts;
 
 export const getSourcesTabs = makeGetPanelTabs(getDashboardPanelTabs, () => 'sources');
 export const getCompaniesTabs = makeGetPanelTabs(getDashboardPanelTabs, () => 'companies');
+
 export const getSourcesActiveTab = makeGetPanelActiveTab(
-  getSourcesPanel,
+  getSourcesTab,
   getDashboardPanelTabs,
   () => 'sources'
 );
 export const getCompaniesActiveTab = makeGetPanelActiveTab(
-  getCompaniesPanel,
+  getCompaniesTab,
   getDashboardPanelTabs,
   () => 'companies'
 );

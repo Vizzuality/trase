@@ -1,12 +1,12 @@
 import { createSelector } from 'reselect';
 
-export const makeGetPanelActiveTab = (getPanel, getTabs, getPanelId) =>
+export const makeGetPanelActiveTab = (getTab, getTabs, getPanelId) =>
   createSelector(
-    [getPanel, getTabs, getPanelId],
-    (panel, tabs, panelId) => {
+    [getTab, getTabs, getPanelId],
+    (activeTab, tabs, panelId) => {
       const panelTabs = tabs[panelId];
-      if (panel.activeTab) {
-        return panel.activeTab;
+      if (activeTab) {
+        return activeTab;
       }
       if (panelTabs?.length > 0) {
         return panelTabs[0].id;

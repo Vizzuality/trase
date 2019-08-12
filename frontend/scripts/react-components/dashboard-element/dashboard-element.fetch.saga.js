@@ -78,7 +78,7 @@ function* getDashboardPanelParams(optionsType, options = {}) {
   return params;
 }
 
-export function* getDashboardPanelData(dashboardElement, optionsType, activeTab = null, options) {
+export function* getDashboardPanelData(dashboardElement, optionsType, options) {
   const { page } = dashboardElement[optionsType];
 
   const params = yield getDashboardPanelParams(optionsType, {
@@ -94,7 +94,6 @@ export function* getDashboardPanelData(dashboardElement, optionsType, activeTab 
     type: DASHBOARD_ELEMENT__SET_PANEL_DATA,
     payload: {
       key: optionsType,
-      tab: activeTab,
       data: null
     }
   });
@@ -108,7 +107,6 @@ export function* getDashboardPanelData(dashboardElement, optionsType, activeTab 
       type: DASHBOARD_ELEMENT__SET_PANEL_DATA,
       payload: {
         key: optionsType,
-        tab: activeTab,
         data: data.data
       }
     });
@@ -116,7 +114,7 @@ export function* getDashboardPanelData(dashboardElement, optionsType, activeTab 
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled', activeTab);
+      if (NODE_ENV_DEV) console.error('Cancelled', url);
       if (source) {
         source.cancel();
       }
@@ -153,7 +151,7 @@ export function* getDashboardPanelSectionTabs(optionsType) {
   }
 }
 
-export function* getMoreDashboardPanelData(dashboardElement, optionsType, activeTab = null) {
+export function* getMoreDashboardPanelData(dashboardElement, optionsType) {
   const { page } = dashboardElement[optionsType];
   const params = yield getDashboardPanelParams(optionsType, { page });
   if (params.node_types_ids === null) {
@@ -167,8 +165,7 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType, active
     yield put(
       setMoreDashboardPanelData({
         data: data.data,
-        key: optionsType,
-        tab: activeTab
+        key: optionsType
       })
     );
     if (task.isRunning()) {
@@ -190,13 +187,13 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType, active
   }
 }
 
-export function* getMissingDashboardPanelItems(dashboardElement, optionsType, activeTab, options) {
+export function* getMissingDashboardPanelItems(dashboardElement, optionsType, options) {
   const params = yield getDashboardPanelParams(optionsType, options);
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
-    yield put(setMissingDashboardPanelItems(optionsType, data.data, activeTab));
+    yield put(setMissingDashboardPanelItems(optionsType, data.data));
   } catch (e) {
     console.error('Error', e);
   } finally {
