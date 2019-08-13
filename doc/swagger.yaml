@@ -637,7 +637,7 @@ paths:
   /countries:
     get:
       tags:
-        - "filters"
+        - "countries"
       summary: Countries matching selected filters
       parameters:
         - $ref: "#/components/parameters/commodities_ids"
@@ -659,6 +659,32 @@ paths:
                     properties:
                       commodities:
                         $ref: "#/components/schemas/CommoditiesFromCountries"
+
+  /commodities:
+    get:
+      tags:
+        - "commodities"
+      summary: Commodities matching selected filters
+      parameters:
+        - $ref: "#/components/parameters/countries_ids"
+        - $ref: "#/components/parameters/include"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CommoditiesFromContexts"
+                  meta:
+                    type: object
+                    properties:
+                      countries:
+                        $ref: "#/components/schemas/CountriesFromCommodities"
 
   /dashboards/commodities:
     get:
@@ -709,32 +735,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/DashboardsCommodity"
-
-  /dashboards/commodities_from_contexts:
-    get:
-      tags:
-        - "dashboards filters"
-      summary: Commodities matching selected filters
-      parameters:
-        - $ref: "#/components/parameters/dashboards_countries_ids"
-        - $ref: "#/components/parameters/dashboards_include"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/DashboardsCommodityFromContext"
-                  meta:
-                    type: object
-                    properties:
-                      countries:
-                        $ref: "#/components/schemas/DashboardsCommodityFromContextCountries"
 
   /dashboards/countries:
     get:
@@ -1755,6 +1755,13 @@ components:
         type: string
     commodities_ids:
       name: commodities_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    countries_ids:
+      name: countries_ids
       in: query
       description: String with comma-separated numeric ids
       required: false
@@ -3121,11 +3128,32 @@ components:
           type: integer
         name:
           type: string
+        countryIds:
+          type: array
+          items:
+            type: integer
+
+    CommoditiesFromContexts:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
         commodityIds:
           type: array
           items:
             type: integer
     CommoditiesFromCountries:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+          name:
+            type: string
+    CountriesFromCommodities:
       type: array
       items:
         type: object

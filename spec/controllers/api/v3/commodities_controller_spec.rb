@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::V3::Dashboards::CommoditiesFromContextsController, type: :controller do
+RSpec.describe Api::V3::CommoditiesController, type: :controller do
   include_context 'api v3 brazil flows quants'
   include_context 'api v3 brazil beef flows'
 

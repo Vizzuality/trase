@@ -80,7 +80,6 @@ Rails.application.routes.draw do
         resources :commodities, only: [:index] do
           get :search, on: :collection
         end
-        resources :commodities_from_contexts, only: [:index]
         resources :countries, only: [:index] do
           get :search, on: :collection
         end
@@ -99,6 +98,7 @@ Rails.application.routes.draw do
         resources :parametrised_charts, only: [:index]
       end
       resources :countries, only: [:index]
+      resources :commodities, only: [:index]
     end
     namespace :v2 do
       resources :geo_id, only: :index
