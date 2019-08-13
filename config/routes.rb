@@ -97,6 +97,7 @@ Rails.application.routes.draw do
         end
         resources :parametrised_charts, only: [:index]
       end
+      resources :countries, only: [:index]
     end
     namespace :v2 do
       resources :geo_id, only: :index
