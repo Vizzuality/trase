@@ -7,6 +7,7 @@ import { getPanelId } from 'utils/dashboardPanel';
 import { makeGetResizeByItems, makeGetRecolorByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
 import { makeGetPanelActiveTab, makeGetPanelTabs } from 'selectors/panel.selectors';
+import camelCase from 'lodash/camelCase';
 
 const getCountriesData = state => state.dashboardElement.data.countries;
 const getSourcesData = state => state.dashboardElement.data.sources;
@@ -17,6 +18,7 @@ const getDestinationsData = state => state.dashboardElement.data.destinations;
 const getSourcesTab = state => state.dashboardElement.sourcesActiveTab;
 const getCompaniesTab = state => state.dashboardElement.companiesActiveTab;
 const getDashboardPanelTabs = state => state.dashboardElement.tabs;
+const getDashboardPanelPrefixes = state => state.dashboardElement.prefixes;
 
 const getSources = state => state.dashboardElement.sources;
 const getCompanies = state => state.dashboardElement.companies;
@@ -130,9 +132,22 @@ export const getDashboardPanelsValues = createStructuredSelector({
   destinations: getDestinationsActiveItems
 });
 
+export const getPluralNodeType = nodeType => {
+  const name = camelCase(nodeType);
+  return (
+    {
+      country: 'countries',
+      municipality: 'municipalities',
+      portOfImport: 'ports of import',
+      portOfExport: 'ports of export',
+      districtOfExport: 'districts of export'
+    }[name] || `${nodeType}s`.toLowerCase()
+  );
+};
+
 export const getDynamicSentence = createSelector(
-  [getDirtyBlocks, getDashboardPanelsValues, getEditMode],
-  (dirtyBlocks, panelsValues, editMode) => {
+  [getDirtyBlocks, getDashboardPanelsValues, getEditMode, getDashboardPanelPrefixes],
+  (dirtyBlocks, panelsValues, editMode, prefixes) => {
     if (Object.values(dirtyBlocks).every(block => !block)) {
       return [];
     }
@@ -143,6 +158,36 @@ export const getDynamicSentence = createSelector(
     const capitalizeCommodities = editMode ? { transform: 'capitalize' } : {};
     const sourcesValues =
       panelsValues.sources.length > 0 ? panelsValues.sources : panelsValues.countries;
+
+    const getSettings = (item, prefixesMap, defaultName, defaultPrefix) => {
+      const settings = { prefix: defaultPrefix, name: defaultName };
+      if (prefixesMap && item) {
+        const nodeType = item.nodeType || item.type;
+        settings.prefix = prefixesMap[nodeType] || defaultPrefix;
+        settings.name = nodeType ? getPluralNodeType(nodeType) : defaultName;
+      }
+      return settings;
+    };
+
+    const sourcesSettings = getSettings(
+      panelsValues.sources[0],
+      prefixes.sources,
+      'sources',
+      'produced in'
+    );
+    const companiesSettings = getSettings(
+      panelsValues.companies[0],
+      prefixes.companies,
+      'companies',
+      'traded by'
+    );
+    const destinationsSettings = getSettings(
+      panelsValues.destinations[0],
+      prefixes.destinations,
+      'destinations',
+      'going to'
+    );
+
     return [
       {
         panel: 'commodities',
@@ -154,14 +199,16 @@ export const getDynamicSentence = createSelector(
       {
         panel: 'sources',
         id: 'sources',
-        prefix: sourcesValues ? `produced in` : 'produced in countries covered by Trase',
+        name: sourcesSettings.name,
+        prefix: sourcesValues ? sourcesSettings.prefix : 'produced in countries covered by Trase',
         value: sourcesValues,
         transform: 'capitalize'
       },
       {
         panel: 'companies',
         id: 'companies',
-        prefix: panelsValues.companies.length > 0 ? 'traded by' : '',
+        name: companiesSettings.name,
+        prefix: panelsValues.companies.length > 0 ? companiesSettings.prefix : '',
         value: panelsValues.companies,
         optional: true,
         transform: 'capitalize'
@@ -169,7 +216,8 @@ export const getDynamicSentence = createSelector(
       {
         panel: 'destinations',
         id: 'destinations',
-        prefix: panelsValues.destinations.length > 0 ? `going to` : '',
+        name: destinationsSettings.name,
+        prefix: panelsValues.destinations.length > 0 ? destinationsSettings.prefix : '',
         value: panelsValues.destinations,
         optional: true,
         transform: 'capitalize'

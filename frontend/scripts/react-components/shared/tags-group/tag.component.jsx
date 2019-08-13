@@ -34,7 +34,7 @@ function Tag(props) {
         placement={placement}
         readOnly={readOnly}
         onChange={option => removeOption(part, option)}
-        selectedValueOverride={`${part.value.length} ${part.panel}`}
+        selectedValueOverride={`${part.value.length} ${part.name || part.panel}`}
       />
     );
   }

@@ -45,22 +45,51 @@ import {
   getDashboardsContext
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 
+function* updateIndicatorsOnItemChange() {
+  const selectedContext = yield select(getDashboardsContext);
+  if (selectedContext) {
+    yield fork(fetchDashboardCharts);
+  }
+}
+
+function* fetchChartsOnItemChange() {
+  yield takeLatest(
+    [
+      DASHBOARD_ELEMENT__CLEAR_PANEL,
+      DASHBOARD_ELEMENT__CLEAR_PANELS,
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
+      DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID,
+      DASHBOARD_ELEMENT__SET_SELECTED_COMMODITY_ID,
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
+    ],
+    updateIndicatorsOnItemChange
+  );
+}
+
 export function* fetchMissingDashboardPanelItems() {
   function* fetchMissingItems() {
     const dashboardElement = yield select(state => state.dashboardElement);
     const selectedContext = yield select(getDashboardsContext);
+
+    const tasks = [];
+    if (selectedContext) {
+      tasks.push(call(getDashboardPanelData, dashboardElement, 'countries'));
+      tasks.push(call(getDashboardPanelData, dashboardElement, 'commodities'));
+    }
+
     if (
-      (selectedContext &&
-        (dashboardElement.data.sources.length === 0 && dashboardElement.sources.length > 0)) ||
+      (dashboardElement.data.sources.length === 0 && dashboardElement.sources.length > 0) ||
       (dashboardElement.data.destinations.length === 0 &&
         dashboardElement.destinations.length > 0) ||
       (dashboardElement.data.companies.length === 0 && dashboardElement.companies.length > 0)
     ) {
-      yield fork(getDashboardPanelData, dashboardElement, 'countries');
-      yield fork(getDashboardPanelData, dashboardElement, 'commodities');
-      yield call(getMissingDashboardPanelItems, dashboardElement, selectedContext);
-      yield put(setDashboardLoading(false));
+      tasks.push(call(getMissingDashboardPanelItems, dashboardElement, selectedContext));
     }
+    if (tasks.length > 0) {
+      tasks.push(call(updateIndicatorsOnItemChange));
+    }
+    yield all(tasks);
+    yield put(setDashboardLoading(false));
   }
 
   yield takeLatest([DASHBOARD_ELEMENT__GET_MISSING_DATA], fetchMissingItems);
@@ -267,28 +296,6 @@ function* fetchChartsOnIndicatorsChange() {
       DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY
     ],
     fetchDashboardCharts
-  );
-}
-
-function* updateIndicatorsOnItemChange() {
-  const selectedContext = yield select(getDashboardsContext);
-  if (selectedContext) {
-    yield fork(fetchDashboardCharts);
-  }
-}
-
-function* fetchChartsOnItemChange() {
-  yield takeLatest(
-    [
-      DASHBOARD_ELEMENT__CLEAR_PANEL,
-      DASHBOARD_ELEMENT__CLEAR_PANELS,
-      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
-      DASHBOARD_ELEMENT__SET_MISSING_DATA,
-      DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID,
-      DASHBOARD_ELEMENT__SET_SELECTED_COMMODITY_ID,
-      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
-    ],
-    updateIndicatorsOnItemChange
   );
 }
 

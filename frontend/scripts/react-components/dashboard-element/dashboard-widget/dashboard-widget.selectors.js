@@ -5,9 +5,9 @@ import kebabCase from 'lodash/kebabCase';
 import addApostrophe from 'utils/addApostrophe';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
 import { CHART_TYPES, NODE_TYPE_PANELS } from 'constants';
-import camelCase from 'lodash/camelCase';
 import capitalize from 'lodash/capitalize';
 import {
+  getPluralNodeType,
   getDashboardsContext,
   getDashboardSelectedRecolorBy
 } from 'react-components/dashboard-element/dashboard-element.selectors';
@@ -186,15 +186,6 @@ export const makeGetConfig = () =>
     }
   );
 
-const getPluralNodeType = nodeType => {
-  const name = camelCase(nodeType);
-  return (
-    {
-      country: 'countries',
-      municipality: 'municipalities'
-    }[name] || `${nodeType}s`.toLowerCase()
-  );
-};
 const getNodeTypeName = pluralNodeType =>
   pluralNodeType === 'countries' ? 'importing countries' : pluralNodeType;
 

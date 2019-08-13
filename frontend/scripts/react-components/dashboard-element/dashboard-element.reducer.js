@@ -177,6 +177,13 @@ const dashboardElementReducer = {
         (acc, next) => ({ ...acc, [getSection(next)]: next.tabs }),
         state.tabs
       );
+      draft.prefixes = {};
+      data.forEach(item => {
+        draft.prefixes[getSection(item)] = item.tabs.reduce(
+          (acc, next) => ({ ...acc, [next.name]: next.prefix }),
+          {}
+        );
+      });
       draft.pages[key] = initialState.pages[key];
     });
   },

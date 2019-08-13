@@ -7,6 +7,7 @@ export default {
     commodities: []
   },
   tabs: {},
+  prefixes: {},
   loading: false,
   loadingItems: false,
   editMode: false,
