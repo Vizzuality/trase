@@ -80,6 +80,7 @@ Rails.application.routes.draw do
         resources :commodities, only: [:index] do
           get :search, on: :collection
         end
+        resources :commodities_from_contexts, only: [:index]
         resources :countries, only: [:index] do
           get :search, on: :collection
         end
