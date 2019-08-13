@@ -72,8 +72,14 @@ export function* fetchMissingDashboardPanelItems() {
     const selectedContext = yield select(getDashboardsContext);
 
     const tasks = [];
-    if (selectedContext) {
+    if (dashboardElement.selectedCountryId) {
       tasks.push(call(getDashboardPanelData, dashboardElement, 'countries'));
+      if (!selectedContext) {
+        tasks.push(call(getDashboardPanelSectionTabs, 'sources'));
+      }
+    }
+
+    if (dashboardElement.selectedCommodityId) {
       tasks.push(call(getDashboardPanelData, dashboardElement, 'commodities'));
     }
 
@@ -85,7 +91,7 @@ export function* fetchMissingDashboardPanelItems() {
     ) {
       tasks.push(call(getMissingDashboardPanelItems, dashboardElement, selectedContext));
     }
-    if (tasks.length > 0) {
+    if (tasks.length > 0 && selectedContext) {
       tasks.push(call(updateIndicatorsOnItemChange));
     }
     yield all(tasks);

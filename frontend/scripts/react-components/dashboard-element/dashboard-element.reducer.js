@@ -198,6 +198,8 @@ const dashboardElementReducer = {
       draft.sources = [];
       draft.companies = [];
       draft.destinations = [];
+      draft.sourcesActiveTab = null;
+      draft.companiesActiveTab = null;
       draft.selectedCommodityId = null;
     });
   },
@@ -209,6 +211,7 @@ const dashboardElementReducer = {
 
       draft.companies = [];
       draft.destinations = [];
+      draft.companiesActiveTab = null;
     });
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS](state, action) {
