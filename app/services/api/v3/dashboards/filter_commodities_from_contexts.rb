@@ -16,12 +16,6 @@ module Api
           {data: @query, meta: @meta}
         end
 
-        def call_with_query_term(q)
-          super
-
-          {data: @query, meta: @meta}
-        end
-
         private
 
         def initialize_query
