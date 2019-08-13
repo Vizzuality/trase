@@ -634,6 +634,32 @@ paths:
         "200":
           description: OK
 
+  /countries:
+    get:
+      tags:
+        - "filters"
+      summary: Countries matching selected filters
+      parameters:
+        - $ref: "#/components/parameters/commodities_ids"
+        - $ref: "#/components/parameters/include"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CountriesFromContexts"
+                  meta:
+                    type: object
+                    properties:
+                      commodities:
+                        $ref: "#/components/schemas/CommoditiesFromCountries"
+
   /dashboards/commodities:
     get:
       tags:
@@ -1692,6 +1718,20 @@ components:
       in: query
       description: String with comma-separated numeric ids
       required: true
+      schema:
+        type: string
+    commodities_ids:
+      name: commodities_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    include:
+      name: include
+      in: query
+      description: String with comma-separated list of included information
+      required: false
       schema:
         type: string
   schemas:
@@ -3021,3 +3061,23 @@ components:
                   example: 'place'
                   nullable: true
                   description: 'place or null'
+    CountriesFromContexts:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        commodityIds:
+          type: array
+          items:
+            type: integer
+    CommoditiesFromCountries:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+          name:
+            type: string
