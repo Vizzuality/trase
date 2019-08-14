@@ -4,11 +4,11 @@ module Api
       include Api::V3::ParamHelpers
 
       skip_before_action :load_context
-      before_action :set_collection, only: %i[index]
+      before_action :set_collection, only: [:index]
 
       def index
         render json: @collection,
-                each_serializer: Api::V3::Dashboards::CommoditySerializer
+               each_serializer: Api::V3::Dashboards::CommoditySerializer
       end
 
       private
