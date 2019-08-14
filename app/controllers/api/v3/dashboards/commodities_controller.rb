@@ -26,7 +26,7 @@ module Api
         private
 
         def filter_klass
-          FilterCommodities
+          Api::V3::Dashboards::FilterCommodities
         end
       end
     end
