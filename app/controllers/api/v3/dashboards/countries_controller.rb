@@ -26,7 +26,7 @@ module Api
         private
 
         def filter_klass
-          FilterCountries
+          Api::V3::Dashboards::FilterCountries
         end
       end
     end
