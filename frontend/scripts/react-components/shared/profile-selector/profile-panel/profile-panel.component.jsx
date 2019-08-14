@@ -4,9 +4,9 @@ import { PROFILE_STEPS } from 'constants';
 import 'react-components/shared/profile-selector/profile-panel/profile-panel.scss';
 import BlockSwitch from 'react-components/shared/block-switch/block-switch.component';
 import Heading from 'react-components/shared/heading';
-import CommoditiesPanel from 'react-components/dashboard-element/dashboard-panel/commodities-panel.component';
 import ProfileStepPanel from 'react-components/shared/profile-selector/profile-panel/profile-step-panel';
 import getPanelStepName from 'utils/getProfilePanelName';
+import ProfilesCommoditiesPanel from './profiles-commodity-panel.component';
 
 function ProfilePanel(props) {
   const {
@@ -69,7 +69,7 @@ function ProfilePanel(props) {
             </Heading>
           </Heading>
           <div className="row profile-panel-content">
-            <CommoditiesPanel
+            <ProfilesCommoditiesPanel
               page={panels.commodities.page}
               getMoreItems={setProfilesPage}
               loadingMoreItems={panels.commodities.loadingItems}

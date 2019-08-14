@@ -1,12 +1,7 @@
 import { createSelector } from 'reselect';
 import { PROFILE_STEPS } from 'constants';
 
-import {
-  makeGetPanelActiveTabItems,
-  makeGetPanelActiveItems,
-  makeGetPanelActiveTab,
-  makeGetPanelTabs
-} from 'selectors/panel.selectors';
+import { makeGetPanelActiveTab, makeGetPanelTabs } from 'selectors/panel.selectors';
 
 const getProfileSelectorTabs = state => state.profileSelector.tabs;
 const getCompaniesPanel = state => state.profileSelector.panels.companies;
@@ -17,6 +12,9 @@ const getCountriesData = state => state.profileSelector.data.countries;
 const getSourcesData = state => state.profileSelector.data.sources;
 const getCompaniesData = state => state.profileSelector.data.companies;
 
+const getSourcesTab = state => state.profileSelector.panels.sources.activeTab;
+const getCompaniesTab = state => state.profileSelector.panels.companies.activeTab;
+
 const getActiveStep = state => state.profileSelector.activeStep;
 const getPanels = state => state.profileSelector.panels;
 const getProfileType = state => state.profileSelector.panels.type;
@@ -24,12 +22,12 @@ const getProfileType = state => state.profileSelector.panels.type;
 export const getSourcesTabs = makeGetPanelTabs(getProfileSelectorTabs, () => 'sources');
 export const getCompaniesTabs = makeGetPanelTabs(getProfileSelectorTabs, () => 'companies');
 export const getSourcesActiveTab = makeGetPanelActiveTab(
-  getSourcesPanel,
+  getSourcesTab,
   getProfileSelectorTabs,
   () => 'sources'
 );
 export const getCompaniesActiveTab = makeGetPanelActiveTab(
-  getCompaniesPanel,
+  getCompaniesTab,
   getProfileSelectorTabs,
   () => 'companies'
 );
@@ -55,11 +53,50 @@ export const getCompaniesActiveData = createSelector(
   (companiesCountryData, companiesActiveTab) => companiesCountryData[companiesActiveTab] || []
 );
 
-export const getCountriesActiveItems = makeGetPanelActiveItems(getCountriesPanel, getCountriesData);
-export const getSourcesActiveItems = makeGetPanelActiveTabItems(getSourcesPanel, getSourcesData);
-export const getCompaniesActiveItems = makeGetPanelActiveTabItems(
-  getCompaniesPanel,
-  getCompaniesCountryData
+export const getCountriesActiveItems = createSelector(
+  [getCountriesPanel, getCountriesData],
+  (panel, data) => {
+    if (data.length === 0 || panel.activeItems.length === 0) {
+      return null;
+    }
+    const dict = data.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
+    const items = panel.activeItems
+      .map(id => dict[id] && { ...dict[id], name: dict[id].name.toLowerCase() })
+      .filter(Boolean);
+
+    return items.length > 0 ? items : null;
+  }
+);
+
+const getPanelActiveTabItems = (panel, data) => {
+  if (
+    Object.keys(data).length === 0 ||
+    panel.activeItems.length === 0 ||
+    !panel.activeTab ||
+    !data[panel.activeTab]
+  ) {
+    return null;
+  }
+  const list = data[panel.activeTab];
+  const dict = list.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
+  const items = panel.activeItems
+    .map(id => dict[id] && { ...dict[id], name: dict[id].name.toLowerCase() })
+    .filter(Boolean);
+
+  if (items.length > 0) {
+    return items;
+  }
+
+  return null;
+};
+
+export const getSourcesActiveItems = createSelector(
+  [getSourcesPanel, getSourcesData],
+  getPanelActiveTabItems
+);
+export const getCompaniesActiveItems = createSelector(
+  [getCompaniesPanel, getCompaniesCountryData],
+  getPanelActiveTabItems
 );
 
 export const getIsDisabled = createSelector(

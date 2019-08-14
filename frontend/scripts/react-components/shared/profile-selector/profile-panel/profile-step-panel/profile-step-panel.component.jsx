@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import 'react-components/shared/profile-selector/profile-panel/profile-panel.scss';
-import SourcesPanel from 'react-components/dashboard-element/dashboard-panel/sources-panel.component';
-import CompaniesPanel from 'react-components/dashboard-element/dashboard-panel/companies-panel.component';
 import addApostrophe from 'utils/addApostrophe';
 import Dropdown from 'react-components/shared/dropdown';
 import Text from 'react-components/shared/text';
 import ShrinkingSpinner from 'scripts/react-components/shared/shrinking-spinner/shrinking-spinner.component';
+import ProfilesCompaniesPanel from './profiles-companies-panel.component';
+import ProfilesSourcesPanel from './profiles-sources-panel.component';
 import 'react-components/shared/profile-selector/profile-panel/profile-step-panel/profile-step-panel.scss';
 
 function ProfileStepPanel(props) {
@@ -30,7 +30,7 @@ function ProfileStepPanel(props) {
   switch (profileType) {
     case 'sources':
       return (
-        <SourcesPanel
+        <ProfilesSourcesPanel
           tabs={sourcesTabs}
           loading={sources.loadingItems}
           countries={data.countries}
@@ -68,7 +68,7 @@ function ProfileStepPanel(props) {
       };
 
       return (
-        <CompaniesPanel
+        <ProfilesCompaniesPanel
           actionComponent={
             <div className="profile-panel-dropdown-container">
               <Text as="span" color="grey-faded" weight="bold">
