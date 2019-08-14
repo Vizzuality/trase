@@ -6,6 +6,8 @@ import capitalize from 'lodash/capitalize';
 import { getPanelId } from 'utils/dashboardPanel';
 import { makeGetResizeByItems, makeGetRecolorByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
+import { makeGetPanelActiveTab, makeGetPanelTabs } from 'selectors/panel.selectors';
+import camelCase from 'lodash/camelCase';
 
 const getCountriesData = state => state.dashboardElement.data.countries;
 const getSourcesData = state => state.dashboardElement.data.sources;
@@ -13,15 +15,17 @@ const getCommoditiesData = state => state.dashboardElement.data.commodities;
 const getCompaniesData = state => state.dashboardElement.data.companies;
 const getDestinationsData = state => state.dashboardElement.data.destinations;
 
-const getCountriesPanel = state => state.dashboardElement.countriesPanel;
-
-const getSourcesPanel = state => state.dashboardElement.sourcesPanel;
-const getDestinationsPanel = state => state.dashboardElement.destinationsPanel;
-const getCompaniesPanel = state => state.dashboardElement.companiesPanel;
-const getCommoditiesPanel = state => state.dashboardElement.commoditiesPanel;
+const getSourcesTab = state => state.dashboardElement.sourcesActiveTab;
+const getCompaniesTab = state => state.dashboardElement.companiesActiveTab;
 const getDashboardPanelTabs = state => state.dashboardElement.tabs;
+const getDashboardPanelPrefixes = state => state.dashboardElement.prefixes;
 
-const getAppContexts = state => state.app.contexts;
+const getSources = state => state.dashboardElement.sources;
+const getCompanies = state => state.dashboardElement.companies;
+const getDestinations = state => state.dashboardElement.destinations;
+
+const getSelectedCountryId = state => state.dashboardElement.selectedCountryId;
+const getSelectedCommodityId = state => state.dashboardElement.selectedCommodityId;
 const getSelectedYears = state => state.dashboardElement.selectedYears;
 const getSelectedResizeBy = state => state.dashboardElement.selectedResizeBy;
 const getSelectedRecolorBy = state => state.dashboardElement.selectedRecolorBy;
@@ -29,111 +33,95 @@ const getDashboardCharts = state => state.dashboardElement.charts;
 
 export const getEditMode = state => state.dashboardElement.editMode;
 
-export const getSourcesTabs = createSelector(
-  [getDashboardPanelTabs],
-  tabs => tabs.sources || []
+const getAppContexts = state => state.app.contexts;
+
+export const getSourcesTabs = makeGetPanelTabs(getDashboardPanelTabs, () => 'sources');
+export const getCompaniesTabs = makeGetPanelTabs(getDashboardPanelTabs, () => 'companies');
+
+export const getSourcesActiveTab = makeGetPanelActiveTab(
+  getSourcesTab,
+  getDashboardPanelTabs,
+  () => 'sources'
+);
+export const getCompaniesActiveTab = makeGetPanelActiveTab(
+  getCompaniesTab,
+  getDashboardPanelTabs,
+  () => 'companies'
 );
 
-export const getCompaniesTabs = createSelector(
-  [getDashboardPanelTabs],
-  tabs => tabs.companies || []
-);
-
-const getPanelActiveTab = (panel, tabs, panelId) => {
-  const panelTabs = tabs[panelId];
-  if (panel.activeTab) {
-    return panel.activeTab;
+const getDataByTab = (data, tabs, activeTab) => {
+  const tab = tabs.find(t => t.id === activeTab);
+  if (tab) {
+    return data.filter(item => item.nodeType === tab.name);
   }
-  if (panelTabs?.length > 0) {
-    return panelTabs[0].id;
-  }
-  return null;
+  return [];
 };
 
-export const getSourcesActiveTab = createSelector(
-  [getSourcesPanel, getDashboardPanelTabs, () => 'sources'],
-  getPanelActiveTab
+export const getSourcesDataByTab = createSelector(
+  [getSourcesData, getSourcesTabs, getSourcesActiveTab],
+  getDataByTab
 );
 
-export const getCompaniesActiveTab = createSelector(
-  [getCompaniesPanel, getDashboardPanelTabs, () => 'companies'],
-  getPanelActiveTab
+export const getCompaniesDataByTab = createSelector(
+  [getCompaniesData, getCompaniesTabs, getCompaniesActiveTab],
+  getDataByTab
 );
 
-export const getDirtyBlocks = createSelector(
-  [
-    getCountriesPanel,
-    getSourcesPanel,
-    getDestinationsPanel,
-    getCompaniesPanel,
-    getCommoditiesPanel
-  ],
-  (countriesPanel, sourcesPanel, destinationsPanel, companiesPanel, commoditiesPanel) => ({
-    countries: countriesPanel.activeItems.length > 0,
-    sources: sourcesPanel.activeItems.length > 0,
-    destinations: destinationsPanel.activeItems.length > 0,
-    companies: companiesPanel.activeItems.length > 0,
-    commodities: commoditiesPanel.activeItems.length > 0
-  })
-);
-
-const getPanelActiveItems = (panel, data) => {
-  if (data.length === 0 || panel.activeItems.length === 0) {
-    return null;
-  }
-  const dict = data.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
-  const items = panel.activeItems
-    .map(id => dict[id] && { ...dict[id], name: dict[id].name.toLowerCase() })
-    .filter(Boolean);
-
-  return items.length > 0 ? items : null;
+const getPanelActiveItems = (selectedNodesIds, data) => {
+  const selectedNodesMap = selectedNodesIds.reduce((acc, next) => ({ ...acc, [next]: true }), {});
+  return data
+    .filter(item => selectedNodesMap[item.id])
+    .map(item => ({ ...item, name: `${item.name}`.toLowerCase() }));
 };
 
-const getPanelActiveTabItems = (panel, data) => {
-  if (
-    Object.keys(data).length === 0 ||
-    panel.activeItems.length === 0 ||
-    !panel.activeTab ||
-    !data[panel.activeTab]
-  ) {
-    return null;
+const getSingleActiveItem = (selectedId, data) => {
+  const selected = data.find(item => item.id === selectedId);
+  if (selected) {
+    return [{ ...selected, name: `${selected.name}`.toLowerCase() }];
   }
-  const list = data[panel.activeTab];
-  const dict = list.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
-  const items = panel.activeItems
-    .map(id => dict[id] && { ...dict[id], name: dict[id].name.toLowerCase() })
-    .filter(Boolean);
-
-  if (items.length > 0) {
-    return items;
-  }
-
-  return null;
+  return [];
 };
 
 export const getCountriesActiveItems = createSelector(
-  [getCountriesPanel, getCountriesData],
+  [getSelectedCountryId, getCountriesData],
+  getSingleActiveItem
+);
+
+export const getCommoditiesActiveItems = createSelector(
+  [getSelectedCommodityId, getCommoditiesData],
+  getSingleActiveItem
+);
+
+export const getDestinationsActiveItems = createSelector(
+  [getDestinations, getDestinationsData],
   getPanelActiveItems
 );
 
-const getSourcesActiveItems = createSelector(
-  [getSourcesPanel, getSourcesData],
-  getPanelActiveTabItems
-);
-
-const getCommoditiesActiveItems = createSelector(
-  [getCommoditiesPanel, getCommoditiesData],
+export const getSourcesActiveItems = createSelector(
+  [getSources, getSourcesData],
   getPanelActiveItems
 );
 
-const getCompaniesActiveItems = createSelector(
-  [getCompaniesPanel, getCompaniesData],
-  getPanelActiveTabItems
+export const getCompaniesActiveItems = createSelector(
+  [getCompanies, getCompaniesData],
+  getPanelActiveItems
 );
 
-const getDestinationsActiveItems = createSelector(
-  [getDestinationsPanel, getDestinationsData],
-  getPanelActiveItems
+export const getDirtyBlocks = createSelector(
+  [getSelectedCountryId, getSelectedCommodityId, getSources, getDestinations, getCompanies],
+  (
+    selectedCountryId,
+    selectedCommodityId,
+    sourcesActiveItems,
+    destinationsActiveItems,
+    companiesActiveItems
+  ) => ({
+    countries: selectedCountryId !== null,
+    sources: sourcesActiveItems.length > 0,
+    destinations: destinationsActiveItems.length > 0,
+    companies: companiesActiveItems.length > 0,
+    commodities: selectedCommodityId !== null
+  })
 );
 
 export const getDashboardPanelsValues = createStructuredSelector({
@@ -144,18 +132,62 @@ export const getDashboardPanelsValues = createStructuredSelector({
   destinations: getDestinationsActiveItems
 });
 
+export const getPluralNodeType = nodeType => {
+  const name = camelCase(nodeType);
+  return (
+    {
+      country: 'countries',
+      municipality: 'municipalities',
+      portOfImport: 'ports of import',
+      portOfExport: 'ports of export',
+      districtOfExport: 'districts of export'
+    }[name] || `${nodeType}s`.toLowerCase()
+  );
+};
+
 export const getDynamicSentence = createSelector(
-  [getDirtyBlocks, getDashboardPanelsValues, getEditMode],
-  (dirtyBlocks, panelsValues, editMode) => {
+  [getDirtyBlocks, getDashboardPanelsValues, getEditMode, getDashboardPanelPrefixes],
+  (dirtyBlocks, panelsValues, editMode, prefixes) => {
     if (Object.values(dirtyBlocks).every(block => !block)) {
       return [];
     }
-    const commoditiesPanelSentence = `${panelsValues.commodities ? '' : 'commodities'}`;
+    const commoditiesPanelSentence = `${panelsValues.commodities.length > 0 ? '' : 'commodities'}`;
     const commoditiesPrefix = editMode
       ? capitalize(commoditiesPanelSentence)
       : `Your dashboard will include ${commoditiesPanelSentence}`;
     const capitalizeCommodities = editMode ? { transform: 'capitalize' } : {};
-    const sourcesValues = panelsValues.sources || panelsValues.countries;
+    const sourcesValues =
+      panelsValues.sources.length > 0 ? panelsValues.sources : panelsValues.countries;
+
+    const getSettings = (item, prefixesMap, defaultName, defaultPrefix) => {
+      const settings = { prefix: defaultPrefix, name: defaultName };
+      if (prefixesMap && item) {
+        const nodeType = item.nodeType || item.type;
+        settings.prefix = prefixesMap[nodeType] || defaultPrefix;
+        settings.name = nodeType ? getPluralNodeType(nodeType) : defaultName;
+      }
+      return settings;
+    };
+
+    const sourcesSettings = getSettings(
+      panelsValues.sources[0],
+      prefixes.sources,
+      'sources',
+      'produced in'
+    );
+    const companiesSettings = getSettings(
+      panelsValues.companies[0],
+      prefixes.companies,
+      'companies',
+      'traded by'
+    );
+    const destinationsSettings = getSettings(
+      panelsValues.destinations[0],
+      prefixes.destinations,
+      'destinations',
+      'going to'
+    );
+
     return [
       {
         panel: 'commodities',
@@ -167,14 +199,16 @@ export const getDynamicSentence = createSelector(
       {
         panel: 'sources',
         id: 'sources',
-        prefix: sourcesValues ? `produced in` : 'produced in countries covered by Trase',
+        name: sourcesSettings.name,
+        prefix: sourcesValues ? sourcesSettings.prefix : 'produced in countries covered by Trase',
         value: sourcesValues,
         transform: 'capitalize'
       },
       {
         panel: 'companies',
         id: 'companies',
-        prefix: panelsValues.companies ? 'traded by' : '',
+        name: companiesSettings.name,
+        prefix: panelsValues.companies.length > 0 ? companiesSettings.prefix : '',
         value: panelsValues.companies,
         optional: true,
         transform: 'capitalize'
@@ -182,7 +216,8 @@ export const getDynamicSentence = createSelector(
       {
         panel: 'destinations',
         id: 'destinations',
-        prefix: panelsValues.destinations ? `going to` : '',
+        name: destinationsSettings.name,
+        prefix: panelsValues.destinations.length > 0 ? destinationsSettings.prefix : '',
         value: panelsValues.destinations,
         optional: true,
         transform: 'capitalize'
@@ -202,20 +237,15 @@ export const getIsDisabled = createSelector(
       return false;
     }
     const currentSentencePart = dynamicSentence.find(p => p.panel === currentPanel);
-    if (!currentSentencePart.optional && !currentSentencePart.value) {
-      return true;
-    }
-    return false;
+    return !currentSentencePart.optional && !currentSentencePart.value.length > 0;
   }
 );
 
 export const getDashboardsContext = createSelector(
-  [getCountriesActiveItems, getCommoditiesActiveItems, getAppContexts],
-  (countriesActiveItems, commoditiesActiveItems, contexts) => {
-    const [{ id: countryId } = {}] = countriesActiveItems || [];
-    const [{ id: commodityId } = {}] = commoditiesActiveItems || [];
+  [getSelectedCountryId, getSelectedCommodityId, getAppContexts],
+  (selectedCountryId, selectedCommodityId, contexts) => {
     const context = contexts.find(
-      ctx => ctx.countryId === countryId && ctx.commodityId === commodityId
+      ctx => ctx.countryId === selectedCountryId && ctx.commodityId === selectedCommodityId
     );
 
     return context || null;
@@ -414,12 +444,12 @@ const getURLDashboardSelectedResizeBy = createSelector(
 );
 
 export const getDashboardElementUrlProps = createStructuredSelector({
-  countriesPanel: getCountriesPanel,
-  sourcesPanel: getSourcesPanel,
-  commoditiesPanel: getCommoditiesPanel,
-  destinationsPanel: getDestinationsPanel,
-  companiesPanel: getCompaniesPanel,
+  sources: getSources,
+  companies: getCompanies,
+  destinations: getDestinations,
+  selectedCountryId: getSelectedCountryId,
+  selectedCommodityId: getSelectedCommodityId,
   selectedYears: getURLDashboardSelectedYears,
-  selectedResizeBy: getURLDashboardSelectedResizeBy,
-  selectedRecolorBy: getDashboardSelectedRecolorBy
+  selectedRecolorBy: getDashboardSelectedRecolorBy,
+  selectedResizeBy: getURLDashboardSelectedResizeBy
 });

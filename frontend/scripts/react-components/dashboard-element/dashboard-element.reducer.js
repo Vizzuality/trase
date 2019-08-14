@@ -1,11 +1,14 @@
+import immer from 'immer';
 import createReducer from 'utils/createReducer';
 import fuzzySearch from 'utils/fuzzySearch';
 import xor from 'lodash/xor';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
+import { DASHBOARD_STEPS } from 'constants';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
+  DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID,
+  DASHBOARD_ELEMENT__SET_SELECTED_COMMODITY_ID,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__CLEAR_PANELS,
@@ -27,6 +30,29 @@ import {
 import initialState from './dashboard-element.initial-state';
 import * as DashboardElementUrlPropHandlers from './dashboard-element.serializers';
 
+const getPanelsToClear = (panel, state, item) => {
+  const currentPanelIndex = DASHBOARD_STEPS[panel];
+
+  // if the selected items in a panel are zero, that means we're including all of them
+  // thus the subsequent panels will include all possible nodes.
+  // if we add an item at this point, it means we're passing from "show me all" to "show me just one" filtering
+  // this means the subsequents panels selection most likely will be invalid and needs to be cleared.
+  const hadAllItemsSelected = state[panel].length === 0;
+
+  // if the selected items in a panel are N, that means that we're including only N
+  // if we remove an item at this point, it means we're passing from "show me N" to "shot me N-1" filtering
+  // this means the subsequent panels selection might include items that corresponded to the removed item
+  // thus rendering the selection invalid so we need to clear it.
+  // When passing from N to N+1 we're including more possible results so we don't need to clear the selection.
+  const isRemovingAnItem = state[panel].includes(item.id);
+
+  if (hadAllItemsSelected || isRemovingAnItem) {
+    const panelsToClear = Object.keys(DASHBOARD_STEPS).slice(currentPanelIndex + 1);
+    return panelsToClear;
+  }
+  return null;
+};
+
 const dashboardElementReducer = {
   dashboardElement(state, action) {
     const {
@@ -37,20 +63,17 @@ const dashboardElementReducer = {
         destinations: destinationsData,
         companies: companiesData
       },
-      countriesPanel: { activeItems: countriesItems },
-      sourcesPanel: { activeItems: sourcesItems, activeTab: sourcesTab },
-      commoditiesPanel: { activeItems: commoditiesItems },
-      destinationsPanel: { activeItems: destinationsItems },
-      companiesPanel: { activeItems: companiesItems, activeTab: companiesTab }
+      sources,
+      companies,
+      destinations
     } = state;
     const isLoading =
-      (countriesItems.length > 0 && countriesData.length === 0) ||
-      (sourcesItems.length > 0 &&
-        (!sourcesData[sourcesTab] || sourcesData[sourcesTab].length === 0)) ||
-      (commoditiesItems.length > 0 && commoditiesData.length === 0) ||
-      (destinationsItems.length > 0 && destinationsData.length === 0) ||
-      (companiesItems.length > 0 &&
-        (!companiesData[companiesTab] || companiesData[companiesTab].length === 0));
+      (sources.length > 0 || companies.length > 0 || destinations.length > 0) &&
+      countriesData.length === 0 &&
+      sourcesData.length === 0 &&
+      commoditiesData.length === 0 &&
+      destinationsData.length === 0 &&
+      companiesData.length === 0;
 
     if (action.payload?.serializerParams) {
       const newState = deserialize({
@@ -58,14 +81,14 @@ const dashboardElementReducer = {
         state: initialState,
         urlPropHandlers: DashboardElementUrlPropHandlers,
         props: [
+          'sources',
+          'companies',
+          'destinations',
           'selectedYears',
           'selectedResizeBy',
           'selectedRecolorBy',
-          'countriesPanel',
-          'sourcesPanel',
-          'commoditiesPanel',
-          'destinationsPanel',
-          'companiesPanel'
+          'selectedCountryId',
+          'selectedCommodityId'
         ]
       });
       newState.loading = isLoading;
@@ -74,248 +97,244 @@ const dashboardElementReducer = {
     return { ...state, loading: isLoading };
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_PANEL](state, action) {
-    const { activePanelId } = action.payload;
-    const prevActivePanelId = state.activePanelId;
-    const prevPanelName = `${prevActivePanelId}Panel`;
-    const prevPanelState = prevActivePanelId
-      ? {
-          ...state[prevPanelName],
-          page: initialState[prevPanelName].page
-        }
-      : undefined;
-    return {
-      ...state,
-      activePanelId,
-      ...(prevActivePanelId ? { [prevPanelName]: prevPanelState } : {})
-    };
+    return immer(state, draft => {
+      const { activePanelId } = action.payload;
+      const prevActivePanelId = state.activePanelId;
+      if (prevActivePanelId) {
+        draft.pages[prevActivePanelId] = initialState.pages[prevActivePanelId];
+      }
+      draft.activePanelId = activePanelId;
+      draft.searchResults = [];
+    });
   },
   [DASHBOARD_ELEMENT__EDIT_DASHBOARD](state) {
     return { ...state, editMode: true };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_PAGE](state, action) {
-    const { activePanelId } = state;
-    const panelName = `${activePanelId}Panel`;
-    const { page } = action.payload;
-    return { ...state, [panelName]: { ...state[panelName], page } };
+    return immer(state, draft => {
+      const { activePanelId } = state;
+      const { page } = action.payload;
+      draft.pages[activePanelId] = page;
+    });
   },
   [DASHBOARD_ELEMENT__SET_PANEL_DATA](state, action) {
-    const { key, data, tab } = action.payload;
+    const { key, data } = action.payload;
     const initialData = initialState.data[key];
-    let newData;
-    if (Array.isArray(initialData)) {
-      newData = data || initialData;
-    } else {
-      newData = tab ? { ...state.data[key], [tab]: data } : initialData;
-    }
+    const newData = data || initialData;
     return {
       ...state,
       data: { ...state.data, [key]: newData }
     };
   },
   [DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA](state, action) {
-    const { key, data, tab } = action.payload;
-    const panelName = `${key}Panel`;
+    return immer(state, draft => {
+      const { key, data } = action.payload;
 
-    if (data.length === 0) {
-      return {
-        ...state,
-        [panelName]: {
-          ...state[panelName],
-          page: state[panelName].page - 1
-        }
-      };
-    }
+      if (data.length === 0) {
+        draft.pages[key] = state.pages[key] - 1;
+        return;
+      }
 
-    const oldData = tab ? state.data[key][tab] : state.data[key];
+      const oldData = state.data[key];
 
-    // in case we preloaded some items, we make sure to avoid duplicates
-    const dataMap = data.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
-
-    const together = [...oldData.filter(item => !dataMap[item.id]), ...data];
-    const newData = tab ? { ...state.data[key], [tab]: together } : together;
-
-    return {
-      ...state,
-      data: { ...state.data, [key]: newData }
-    };
+      // in case we preloaded some items, we make sure to avoid duplicates
+      const dataMap = data.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
+      draft.data[key] = [...oldData.filter(item => !dataMap[item.id]), ...data];
+    });
   },
   [DASHBOARD_ELEMENT__SET_MISSING_DATA](state, action) {
-    const { key, data, tab } = action.payload;
-    const oldData = tab ? state.data[key][tab] : state.data[key];
-    const together = oldData ? [...oldData, ...data] : data;
-    const newData = tab ? { ...state.data[key], [tab]: together } : together;
-
-    return {
-      ...state,
-      data: { ...state.data, [key]: newData }
-    };
+    return immer(state, draft => {
+      const { data } = action.payload;
+      const panelsByItem = {};
+      state.sources.forEach(id => {
+        panelsByItem[id] = 'sources';
+      });
+      state.companies.forEach(id => {
+        panelsByItem[id] = 'companies';
+      });
+      state.destinations.forEach(id => {
+        panelsByItem[id] = 'destinations';
+      });
+      data.forEach(item => {
+        const panel = panelsByItem[item.id];
+        draft.data[panel].push(item);
+      });
+    });
   },
   [DASHBOARD_ELEMENT__SET_LOADING_ITEMS](state, action) {
-    const { loadingItems, panelId } = action.payload;
-    const panelName = `${panelId}Panel`;
+    const { loadingItems } = action.payload;
     return {
       ...state,
-      [panelName]: {
-        ...state[panelName],
-        loadingItems
-      }
+      loadingItems
     };
   },
   [DASHBOARD_ELEMENT__SET_PANEL_TABS](state, action) {
-    const { data, key } = action.payload;
-    const getSection = n => n.section && n.section.toLowerCase();
-    const panelTabs = data.filter(item => getSection(item) === key);
-    const tabs = panelTabs.reduce(
-      (acc, next) => ({ ...acc, [getSection(next)]: next.tabs }),
-      state.tabs
-    );
-    const panelName = `${key}Panel`;
-    return {
-      ...state,
-      tabs,
-      [panelName]: {
-        ...state[panelName],
-        page: initialState[panelName].page
-      }
-    };
+    return immer(state, draft => {
+      const { data, key } = action.payload;
+      const getSection = n => n.section && n.section.toLowerCase();
+      const panelTabs = data.filter(item => getSection(item) === key);
+      draft.tabs = panelTabs.reduce(
+        (acc, next) => ({ ...acc, [getSection(next)]: next.tabs }),
+        state.tabs
+      );
+      draft.prefixes = {};
+      data.forEach(item => {
+        draft.prefixes[getSection(item)] = item.tabs.reduce(
+          (acc, next) => ({ ...acc, [next.name]: next.prefix }),
+          {}
+        );
+      });
+      draft.pages[key] = initialState.pages[key];
+    });
   },
-  [DASHBOARD_ELEMENT__SET_ACTIVE_ITEM](state, action) {
-    const { panel, activeItem } = action.payload;
-    const panelName = `${panel}Panel`;
-    const sourcesPanelState =
-      panel === 'countries' ? initialState.sourcesPanel : state.sourcesPanel;
-    const sourcesData = panel === 'countries' ? initialState.data.sources : state.data.sources;
-    const activeItems = activeItem ? [activeItem.id] : initialState[panelName].activeItems;
-    return {
-      ...state,
-      data: {
-        ...state.data,
-        sources: sourcesData
-      },
-      sourcesPanel: sourcesPanelState,
-      [panelName]: {
-        ...state[panelName],
-        activeItems
-      }
-    };
+  [DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID](state, action) {
+    return immer(state, draft => {
+      const { activeItem } = action.payload;
+
+      draft.data.sources = initialState.data.sources;
+      draft.sources = initialState.sources;
+      draft.selectedCountryId =
+        activeItem && activeItem.id !== state.selectedCountryId ? activeItem.id : null;
+      draft.sources = [];
+      draft.companies = [];
+      draft.destinations = [];
+      draft.sourcesActiveTab = null;
+      draft.companiesActiveTab = null;
+      draft.selectedCommodityId = null;
+    });
+  },
+  [DASHBOARD_ELEMENT__SET_SELECTED_COMMODITY_ID](state, action) {
+    return immer(state, draft => {
+      const { activeItem } = action.payload;
+      draft.selectedCommodityId =
+        activeItem && activeItem.id !== state.selectedCountryId ? activeItem.id : null;
+
+      draft.companies = [];
+      draft.destinations = [];
+      draft.companiesActiveTab = null;
+    });
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS](state, action) {
-    const { panel, activeItems } = action.payload;
-    const panelName = `${panel}Panel`;
-    const selectedItems = Array.isArray(activeItems) ? activeItems : [activeItems];
-    const items = selectedItems.map(i => i.id);
-    const activeTab = state.tabs[panel]
-      ? state.tabs[panel].find(tab => tab.name === selectedItems[0].nodeType).id
-      : null;
-    return {
-      ...state,
-      [panelName]: {
-        ...state[panelName],
-        activeTab,
-        activeItems: xor(state[panelName].activeItems, items)
+    return immer(state, draft => {
+      const { panel, activeItem } = action.payload;
+
+      const activeTab = state.tabs[panel]
+        ? state.tabs[panel].find(tab => tab.name === activeItem.nodeType).id
+        : null;
+
+      if (panel === 'sources') {
+        draft.sourcesActiveTab = activeTab;
       }
-    };
+      if (panel === 'companies') {
+        draft.companiesActiveTab = activeTab;
+      }
+
+      const panelsToClear = getPanelsToClear(panel, state, activeItem);
+
+      if (panelsToClear) {
+        panelsToClear.forEach(panelToClear => {
+          draft[panelToClear] = [];
+        });
+      }
+
+      // we clear the previously selected items if the new item has a different nodeType
+      const firstItem =
+        state[panel] && state[panel][0] && state.data[panel].find(i => i.id === state[panel][0]);
+      if (firstItem && firstItem.nodeType !== activeItem.nodeType) {
+        draft[panel] = [activeItem.id];
+      } else {
+        draft[panel] = xor(draft[panel], [activeItem.id]);
+      }
+    });
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_TAB](state, action) {
-    const { panel, activeTab } = action.payload;
-    const panelName = `${panel}Panel`;
+    return immer(state, draft => {
+      const { panel, activeTab } = action.payload;
 
-    return {
-      ...state,
-      [panelName]: {
-        ...state[panelName],
-        activeTab,
-        page: initialState[panelName].page,
-        activeItems: initialState[panelName].activeItems
+      if (panel === 'sources') {
+        draft.sourcesActiveTab = activeTab;
       }
-    };
+      if (panel === 'companies') {
+        draft.companiesActiveTab = activeTab;
+      }
+      draft.pages[panel] = initialState.pages[panel];
+
+      // TODO test this
+      // draft[panel] = [];
+    });
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH](state, action) {
-    const { panel, activeItems: selectedItem } = action.payload;
-    const panelName = `${panel}Panel`;
+    return immer(state, draft => {
+      const { panel, activeItem } = action.payload;
 
-    const activeTabObj =
-      state.tabs[panel] && state.tabs[panel].find(tab => tab.id === selectedItem.nodeTypeId);
-    const activeTab = activeTabObj?.id || null;
+      const activeTabObj =
+        state.tabs[panel] && state.tabs[panel].find(tab => tab.id === activeItem.nodeTypeId);
+      const activeTab = activeTabObj?.id || null;
 
-    const prevTab = state[panelName].activeTab;
-    const clearedActiveTabData = prevTab && prevTab !== activeTab ? { [prevTab]: null } : {};
-
-    const activeItems =
-      activeTab === prevTab
-        ? xor(state[panelName].activeItems, [selectedItem.id])
-        : [selectedItem.id];
-
-    const oldData = (activeTab ? state.data[panel][activeTab] : state.data[panel]) || [];
-    const dataMap = oldData.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
-    let together = oldData;
-    if (!dataMap[selectedItem.id]) {
-      together = [selectedItem, ...oldData];
-    }
-    const newData = activeTab
-      ? {
-          ...state.data[panel],
-          ...clearedActiveTabData,
-          [activeTab]: together
-        }
-      : together;
-
-    return {
-      ...state,
-      data: {
-        ...state.data,
-        [panel]: newData
-      },
-      [panelName]: {
-        ...state[panelName],
-        activeItems,
-        activeTab,
-        searchResults: [],
-        page: initialState[panelName].page
+      const data = state.data[panel] || [];
+      const dataMap = data.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
+      let together = data;
+      if (!dataMap[activeItem.id]) {
+        together = [activeItem, ...data];
       }
-    };
+
+      draft.data[panel] = together;
+
+      if (panel === 'sources') {
+        draft.sourcesActiveTab = activeTab;
+      }
+      if (panel === 'companies') {
+        draft.companiesActiveTab = activeTab;
+      }
+      draft.pages[panel] = initialState.pages[panel];
+      draft.searchResults = [];
+
+      const firstItem =
+        state[panel] && state[panel][0] && state.data[panel].find(i => i.id === state[panel][0]);
+      if (firstItem && firstItem.nodeType !== activeItem.nodeType) {
+        draft[panel] = [activeItem.id];
+      } else {
+        draft[panel] = xor(draft[panel], [activeItem.id]);
+      }
+    });
   },
   [DASHBOARD_ELEMENT__CLEAR_PANEL](state, action) {
-    const { panel } = action.payload;
-    const panelName = `${panel}Panel`;
-    const { activeTab } = state[panelName];
-    const shouldResetCountries = ['countries', 'sources'].includes(panel);
-    const countriesState = shouldResetCountries
-      ? initialState.countriesPanel
-      : state.countriesPanel;
+    return immer(state, draft => {
+      const { panel } = action.payload;
 
-    return {
-      ...state,
-      [panelName]: { ...initialState[panelName], activeTab },
-      countriesPanel: countriesState
-    };
-  },
-  [DASHBOARD_ELEMENT__CLEAR_PANELS](state, action) {
-    const { panels } = action.payload;
-    const removedPanels = {};
-    panels.forEach(panel => {
-      const panelName = `${panel}Panel`;
-      const { activeTab } = state[panelName];
-      removedPanels[panelName] = { ...initialState[panelName], activeTab };
+      if (panel === 'countries' || panel === 'sources') {
+        draft.selectedCountryId = null;
+        draft.selectedCommodityId = null;
+      }
+
+      if (panel === 'commodities') {
+        draft.selectedCommodityId = null;
+      }
+
+      if (panel === 'countries' || panel === 'commodities' || panel === 'sources') {
+        draft.sources = [];
+        draft.companies = [];
+        draft.destinations = [];
+      }
+
+      if (panel === 'destinations') {
+        draft.companies = [];
+        draft.destinations = [];
+      }
+
+      if (panel === 'companies') {
+        draft.companies = [];
+      }
     });
-    return {
-      ...state,
-      ...removedPanels
-    };
+  },
+  [DASHBOARD_ELEMENT__CLEAR_PANELS](state) {
+    return immer(state, () => {});
   },
   [DASHBOARD_ELEMENT__SET_SEARCH_RESULTS](state, action) {
     const { data, query } = action.payload;
-    let panel = state.activePanelId;
-    if (state.activePanelId === 'sources' && state.countriesPanel.activeItems.length === 0) {
-      panel = 'countries';
-    }
-    const panelName = `${panel}Panel`;
     return {
       ...state,
-      [panelName]: {
-        ...state[panelName],
-        searchResults: fuzzySearch(query, data)
-      }
+      searchResults: fuzzySearch(query, data)
     };
   },
   [DASHBOARD_ELEMENT__SET_SELECTED_YEARS](state, action) {
@@ -357,35 +376,36 @@ const dashboardElementReducer = {
   }
 };
 
-const dashboardElementReducerTypes = PropTypes => {
-  const PanelTypes = {
-    page: PropTypes.number,
-    searchResults: PropTypes.array,
-    loadingItems: PropTypes.bool,
-    activeItems: PropTypes.array,
-    activeTab: PropTypes.number
-  };
-
-  return {
-    tabs: PropTypes.object.isRequired,
-    loading: PropTypes.bool,
-    activePanelId: PropTypes.string,
-    data: PropTypes.shape({
-      countries: PropTypes.array.isRequired,
-      companies: PropTypes.object.isRequired,
-      sources: PropTypes.object.isRequired,
-      destinations: PropTypes.array.isRequired
-    }).isRequired,
-    countriesPanel: PropTypes.shape(PanelTypes).isRequired,
-    sourcesPanel: PropTypes.shape(PanelTypes).isRequired,
-    destinationsPanel: PropTypes.shape(PanelTypes).isRequired,
-    companiesPanel: PropTypes.shape(PanelTypes).isRequired,
-    commoditiesPanel: PropTypes.shape(PanelTypes).isRequired,
-    selectedYears: PropTypes.arrayOf(PropTypes.number),
-    selectedResizeBy: PropTypes.string,
-    selectedRecolorBy: PropTypes.string
-  };
-};
+const dashboardElementReducerTypes = PropTypes => ({
+  data: PropTypes.shape({
+    countries: PropTypes.array.isRequired,
+    companies: PropTypes.array.isRequired,
+    sources: PropTypes.array.isRequired,
+    destinations: PropTypes.array.isRequired
+  }).isRequired,
+  pages: PropTypes.shape({
+    countries: PropTypes.number.isRequired,
+    sources: PropTypes.number.isRequired,
+    commodities: PropTypes.number.isRequired,
+    destinations: PropTypes.number.isRequired,
+    companies: PropTypes.number.isRequired
+  }),
+  sources: PropTypes.array,
+  companies: PropTypes.array,
+  destinations: PropTypes.array,
+  tabs: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired,
+  loadingItems: PropTypes.bool.isRequired,
+  searchResults: PropTypes.array.isRequired,
+  activePanelId: PropTypes.string.isRequired,
+  selectedYears: PropTypes.arrayOf(PropTypes.number),
+  selectedResizeBy: PropTypes.number,
+  selectedRecolorBy: PropTypes.number,
+  selectedCountryId: PropTypes.number,
+  selectedCommodityId: PropTypes.number,
+  sourcesActiveTab: PropTypes.number,
+  companiesActiveTab: PropTypes.number
+});
 
 export { initialState };
 export default createReducer(initialState, dashboardElementReducer, dashboardElementReducerTypes);

@@ -6,10 +6,10 @@ import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.
 import Tabs from 'react-components/shared/tabs/tabs.component';
 import Text from 'react-components/shared/text/text.component';
 import capitalize from 'lodash/capitalize';
-import Accordion from '../../shared/accordion/accordion.component';
+import Accordion from 'react-components/shared/accordion/accordion.component';
 import 'react-components/dashboard-element/dashboard-panel/sources-panel.scss';
 
-function SourcesPanel(props) {
+function ProfilesSourcesPanel(props) {
   const {
     tabs,
     page,
@@ -26,14 +26,15 @@ function SourcesPanel(props) {
     nodeTypeRenderer,
     onSelectSourceValue,
     sourcesActiveTab,
-    activeSourcesItem,
+    activeSourceItem,
     sourcesRequired
   } = props;
+
   const [sourcesOpen, changeSourcesOpen] = useState(sourcesRequired);
   const toggleSourcesOpen = () => changeSourcesOpen(!sourcesOpen);
 
-  const showJurisdictions = activeCountryItems.length > 0 && tabs.length > 0;
-  const activeCountryName = activeCountryItems.length > 0 && capitalize(activeCountryItems[0].name);
+  const showJurisdictions = activeCountryItems && tabs.length > 0;
+  const activeCountryName = activeCountryItems && capitalize(activeCountryItems[0].name);
   return (
     <div className="c-sources-panel">
       <GridList
@@ -49,7 +50,9 @@ function SourcesPanel(props) {
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={activeCountryItems.find(i => i.id === itemProps.item?.id)}
+            isActive={
+              activeCountryItems && activeCountryItems.find(i => i.id === itemProps.item?.id)
+            }
             enableItem={onSelectCountry}
             disableItem={() => onSelectCountry(null)}
           />
@@ -58,7 +61,7 @@ function SourcesPanel(props) {
       {showJurisdictions && (
         <Accordion
           title={`${activeCountryName} regions${sourcesRequired ? '' : ' (Optional)'}`}
-          defaultValue={activeSourcesItem.length > 0 || sourcesOpen}
+          defaultValue={activeSourceItem.length > 0 || sourcesOpen}
           onToggle={toggleSourcesOpen}
         >
           <Text color="grey-faded" className="sources-panel-sources-subtitle">
@@ -96,7 +99,7 @@ function SourcesPanel(props) {
               {itemProps => (
                 <GridListItem
                   {...itemProps}
-                  isActive={activeSourcesItem.includes(itemProps.item?.id)}
+                  isActive={activeSourceItem.includes(itemProps.item?.id)}
                   enableItem={onSelectSourceValue}
                   disableItem={onSelectSourceValue}
                 />
@@ -109,7 +112,7 @@ function SourcesPanel(props) {
   );
 }
 
-SourcesPanel.propTypes = {
+ProfilesSourcesPanel.propTypes = {
   loading: PropTypes.bool,
   sources: PropTypes.array,
   countries: PropTypes.array,
@@ -117,7 +120,7 @@ SourcesPanel.propTypes = {
   nodeTypeRenderer: PropTypes.func,
   page: PropTypes.number.isRequired,
   sourcesActiveTab: PropTypes.number,
-  activeSourcesItem: PropTypes.array,
+  activeSourceItem: PropTypes.array,
   activeCountryItems: PropTypes.array,
   getMoreItems: PropTypes.func.isRequired,
   searchSources: PropTypes.array.isRequired,
@@ -129,9 +132,9 @@ SourcesPanel.propTypes = {
   sourcesRequired: PropTypes.bool
 };
 
-SourcesPanel.defaultProps = {
+ProfilesSourcesPanel.defaultProps = {
   sources: [],
   sourcesRequired: false
 };
 
-export default SourcesPanel;
+export default ProfilesSourcesPanel;

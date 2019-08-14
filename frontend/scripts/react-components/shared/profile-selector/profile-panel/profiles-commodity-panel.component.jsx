@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import GridList from 'react-components/shared/grid-list/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 
-function CommoditiesPanel(props) {
+function ProfilesCommoditiesPanel(props) {
   const { loading, commodities, activeCommodities, onSelectCommodity, getMoreItems, page } = props;
   return (
     <React.Fragment>
@@ -22,7 +22,7 @@ function CommoditiesPanel(props) {
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={activeCommodities.find(i => i.id === itemProps.item?.id)}
+            isActive={activeCommodities.includes(itemProps.item?.id)}
             enableItem={onSelectCommodity}
             disableItem={() => onSelectCommodity(null)}
           />
@@ -32,13 +32,13 @@ function CommoditiesPanel(props) {
   );
 }
 
-CommoditiesPanel.propTypes = {
+ProfilesCommoditiesPanel.propTypes = {
   commodities: PropTypes.array,
   loading: PropTypes.bool,
   page: PropTypes.number.isRequired,
-  activeCommodities: PropTypes.array,
+  activeCommodities: PropTypes.object,
   getMoreItems: PropTypes.func.isRequired,
   onSelectCommodity: PropTypes.func.isRequired
 };
 
-export default CommoditiesPanel;
+export default ProfilesCommoditiesPanel;

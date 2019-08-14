@@ -128,14 +128,14 @@ const store = createStore(
       state: dashboardElementInitialState,
       urlPropHandlers: DashboardElementUrlPropHandlers,
       props: [
+        'sources',
+        'companies',
+        'destinations',
         'selectedYears',
         'selectedResizeBy',
         'selectedRecolorBy',
-        'countriesPanel',
-        'sourcesPanel',
-        'commoditiesPanel',
-        'destinationsPanel',
-        'companiesPanel'
+        'selectedCountryId',
+        'selectedCommodityId'
       ]
     })
   },

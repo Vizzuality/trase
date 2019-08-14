@@ -33,8 +33,8 @@ const dashboardElement = {
     sources: [{ id: 1, name: 'BIOME' }]
   },
   activePanelId: 'sources',
-  sourcesPanel: {
-    ...initialState.sourcesPanel,
+  sources: {
+    ...initialState.sources,
     activeTab: 1
   }
 };
@@ -67,7 +67,7 @@ describe('getDashboardPanelData', () => {
 
 describe('getDashboardPanelSectionTabs', () => {
   it('Cancels if the fetch is cancelled', () => {
-    const generator = getDashboardPanelSectionTabs(dashboardElement, optionsType);
+    const generator = getDashboardPanelSectionTabs(optionsType);
     generator.next();
     generator.next();
     expect(generator.return().value).toEqual(cancelled());

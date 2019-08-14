@@ -1,52 +1,34 @@
 export default {
-  loading: false,
-  editMode: false,
   data: {
     countries: [],
-    companies: {},
-    sources: {},
+    companies: [],
+    sources: [],
     destinations: [],
     commodities: []
   },
   tabs: {},
+  prefixes: {},
+  loading: false,
+  loadingItems: false,
+  editMode: false,
   activePanelId: null,
-  countriesPanel: {
-    page: 1,
-    searchResults: [],
-    loadingItems: false,
-    activeItems: [],
-    activeTab: null
+  pages: {
+    countries: 1,
+    sources: 1,
+    destinations: 1,
+    companies: 1,
+    commodities: 1
   },
-  sourcesPanel: {
-    page: 1,
-    searchResults: [],
-    loadingItems: false,
-    activeItems: [],
-    activeTab: null
-  },
-  destinationsPanel: {
-    page: 1,
-    searchResults: [],
-    loadingItems: false,
-    activeItems: [],
-    activeTab: null
-  },
-  companiesPanel: {
-    page: 1,
-    searchResults: [],
-    loadingItems: false,
-    activeItems: [],
-    activeTab: null
-  },
-  commoditiesPanel: {
-    page: 1,
-    searchResults: [],
-    loadingItems: false,
-    activeItems: [],
-    activeTab: null
-  },
+  sources: [],
+  companies: [],
+  destinations: [],
+  charts: null,
+  searchResults: [],
+  sourcesActiveTab: null,
+  companiesActiveTab: null,
+  selectedCountryId: null,
+  selectedCommodityId: null,
   selectedYears: null,
   selectedResizeBy: null,
-  selectedRecolorBy: null,
-  charts: null
+  selectedRecolorBy: null
 };

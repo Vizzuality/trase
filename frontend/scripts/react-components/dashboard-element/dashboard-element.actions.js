@@ -1,7 +1,10 @@
 export const DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_PANEL = 'DASHBOARD_ELEMENT__SET_ACTIVE_PANEL';
-export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEM = 'DASHBOARD_ELEMENT__SET_ACTIVE_ITEM';
+export const DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID =
+  'DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID';
+export const DASHBOARD_ELEMENT__SET_SELECTED_COMMODITY_ID =
+  'DASHBOARD_ELEMENT__SET_SELECTED_COMMODITY_ID';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS = 'DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_TAB = 'DASHBOARD_ELEMENT__SET_ACTIVE_TAB';
 export const DASHBOARD_ELEMENT__CLEAR_PANEL = 'DASHBOARD_ELEMENT__CLEAR_PANEL';
@@ -30,19 +33,24 @@ export const setDashboardActivePanel = activePanelId => ({
   payload: { activePanelId }
 });
 
-export const setDashboardPanelActiveItem = (activeItem, panel) => ({
-  type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
+export const setDashboardSelectedCountryId = activeItem => ({
+  type: DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID,
+  payload: { activeItem }
+});
+
+export const setDashboardSelectedCommodityId = activeItem => ({
+  type: DASHBOARD_ELEMENT__SET_SELECTED_COMMODITY_ID,
+  payload: { activeItem }
+});
+
+export const setDashboardPanelActiveItemsWithSearch = (activeItem, panel) => ({
+  type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
   payload: { panel, activeItem }
 });
 
-export const setDashboardPanelActiveItemsWithSearch = (activeItems, panel) => ({
-  type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
-  payload: { panel, activeItems }
-});
-
-export const setDashboardPanelActiveItems = (activeItems, panel) => ({
+export const setDashboardPanelActiveItems = (activeItem, panel) => ({
   type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
-  payload: { panel, activeItems }
+  payload: { panel, activeItem }
 });
 
 export const setDashboardPanelActiveTab = (activeTab, panel) => ({
@@ -65,9 +73,9 @@ export const setDashboardPanelPage = page => ({
   payload: { page }
 });
 
-export const setDashboardPanelLoadingItems = (loadingItems, panelId) => ({
+export const setDashboardPanelLoadingItems = loadingItems => ({
   type: DASHBOARD_ELEMENT__SET_LOADING_ITEMS,
-  payload: { loadingItems, panelId }
+  payload: { loadingItems }
 });
 
 export const getDashboardPanelSearchResults = query => ({
@@ -109,14 +117,14 @@ export const goToDashboard = payload => ({
   payload
 });
 
-export const setMoreDashboardPanelData = ({ key, tab, data }) => ({
+export const setMoreDashboardPanelData = ({ key, data }) => ({
   type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
-  payload: { data, key, tab }
+  payload: { data, key }
 });
 
-export const setMissingDashboardPanelItems = (key, data, tab) => ({
+export const setMissingDashboardPanelItems = data => ({
   type: DASHBOARD_ELEMENT__SET_MISSING_DATA,
-  payload: { key, tab, data }
+  payload: { data }
 });
 
 export const getDashboardMissingPanelItems = () => ({

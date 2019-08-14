@@ -6,7 +6,7 @@ import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.
 import Tabs from 'react-components/shared/tabs/tabs.component';
 import 'react-components/dashboard-element/dashboard-panel/companies-panel.scss';
 
-function CompaniesPanel(props) {
+function ProfilesCompaniesPanel(props) {
   const {
     tabs,
     page,
@@ -71,9 +71,9 @@ function CompaniesPanel(props) {
   );
 }
 
-CompaniesPanel.propTypes = {
+ProfilesCompaniesPanel.propTypes = {
   companies: PropTypes.array,
-  activeCompanies: PropTypes.array,
+  activeCompanies: PropTypes.object,
   page: PropTypes.number.isRequired,
   loading: PropTypes.bool,
   getMoreItems: PropTypes.func.isRequired,
@@ -88,9 +88,9 @@ CompaniesPanel.propTypes = {
   actionComponent: PropTypes.node
 };
 
-CompaniesPanel.defaultProps = {
+ProfilesCompaniesPanel.defaultProps = {
   companies: [],
   activeNodeTypeTab: null
 };
 
-export default CompaniesPanel;
+export default ProfilesCompaniesPanel;

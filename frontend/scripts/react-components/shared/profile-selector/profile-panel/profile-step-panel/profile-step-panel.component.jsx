@@ -1,16 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import 'react-components/shared/profile-selector/profile-panel/profile-panel.scss';
-import SourcesPanel from 'react-components/dashboard-element/dashboard-panel/sources-panel.component';
-import CompaniesPanel from 'react-components/dashboard-element/dashboard-panel/companies-panel.component';
 import addApostrophe from 'utils/addApostrophe';
 import Dropdown from 'react-components/shared/dropdown';
 import Text from 'react-components/shared/text';
 import ShrinkingSpinner from 'scripts/react-components/shared/shrinking-spinner/shrinking-spinner.component';
+import ProfilesCompaniesPanel from './profiles-companies-panel.component';
+import ProfilesSourcesPanel from './profiles-sources-panel.component';
 import 'react-components/shared/profile-selector/profile-panel/profile-step-panel/profile-step-panel.scss';
 
 function ProfileStepPanel(props) {
   const {
+    sourcesTabs,
+    companiesTabs,
+    sourcesActiveTab,
+    companiesActiveTab,
+    companiesData,
+    countriesActiveItems,
     setProfilesActiveItem,
     setProfilesActiveTab,
     getSearchResults,
@@ -18,47 +24,42 @@ function ProfileStepPanel(props) {
     getMoreItems,
     panels,
     data,
-    loading,
-    profileType,
-    tabs
+    profileType
   } = props;
   const { sources, countries, companies } = panels;
   switch (profileType) {
     case 'sources':
       return (
-        <SourcesPanel
-          tabs={tabs}
-          loading={loading}
+        <ProfilesSourcesPanel
+          tabs={sourcesTabs}
+          loading={sources.loadingItems}
           countries={data.countries}
           page={sources.page}
           getMoreItems={getMoreItems}
           searchSources={!countries.activeItems ? countries.searchResults : sources.searchResults}
           getSearchResults={getSearchResults}
           loadingMoreItems={sources.loadingItems}
-          activeCountryItems={countries.activeItems}
-          activeSourceTab={sources.activeTab}
+          activeCountryItems={countriesActiveItems}
+          sourcesActiveTab={sourcesActiveTab}
           activeSourceItem={sources.activeItems}
           onSelectCountry={item => setProfilesActiveItem(item, 'countries')}
-          onSelectSourceTab={item => setProfilesActiveTab(item, 'sources')}
+          onSelectSourceTab={item => setProfilesActiveTab(item?.id, 'sources')}
           setSearchResult={item => setProfilesSearchResult(item, 'sources')}
           onSelectSourceValue={item => setProfilesActiveItem(item, 'sources')}
           nodeTypeRenderer={node => node.nodeType || 'Country of Production'}
-          sources={data.sources[sources.activeTab && sources.activeTab.id] || []}
+          sources={data.sources[sourcesActiveTab] || []}
           sourcesRequired
         />
       );
     case 'companies': {
       const toOption = d => ({ label: d.name, value: d.id });
       const options = data.countries?.map(toOption);
-      const activeCountry = Object.values(countries.activeItems)[0];
+      const activeCountry = (countriesActiveItems && countriesActiveItems[0]) || data.countries[0];
 
-      if (!activeCountry || tabs.length === 0) return <ShrinkingSpinner className="-large" />;
+      if (!activeCountry || companiesTabs.length === 0)
+        return <ShrinkingSpinner className="-large" />;
 
       const selectedCountry = toOption(activeCountry);
-
-      const countryCompanies = data.companies[(selectedCountry?.value)];
-      const companiesOptions =
-        (countryCompanies && countryCompanies[(companies.activeTab?.id)]) || [];
 
       const getCountryName = node => data.countries.find(c => c.id === node.countryId)?.name;
       const countryNameNodeTypeRenderer = node => {
@@ -67,7 +68,7 @@ function ProfileStepPanel(props) {
       };
 
       return (
-        <CompaniesPanel
+        <ProfilesCompaniesPanel
           actionComponent={
             <div className="profile-panel-dropdown-container">
               <Text as="span" color="grey-faded" weight="bold">
@@ -83,8 +84,8 @@ function ProfileStepPanel(props) {
               />
             </div>
           }
-          tabs={tabs}
-          onSelectNodeTypeTab={item => setProfilesActiveTab(item, 'companies')}
+          tabs={companiesTabs}
+          onSelectNodeTypeTab={item => setProfilesActiveTab(item?.id, 'companies')}
           page={companies.page}
           getMoreItems={getMoreItems}
           searchCompanies={companies.searchResults}
@@ -92,10 +93,10 @@ function ProfileStepPanel(props) {
           setSearchResult={item => setProfilesSearchResult(item, 'companies')}
           getSearchResults={getSearchResults}
           loadingMoreItems={companies.loadingItems}
-          loading={loading}
-          companies={companiesOptions}
+          loading={companies.loadingItems}
+          companies={companiesData}
           onSelectCompany={item => setProfilesActiveItem(item, 'companies')}
-          activeNodeTypeTab={companies.activeTab}
+          activeNodeTypeTab={companiesActiveTab}
           activeCompanies={companies.activeItems}
         />
       );
@@ -113,9 +114,13 @@ ProfileStepPanel.propTypes = {
   getMoreItems: PropTypes.func.isRequired,
   panels: PropTypes.object,
   profileType: PropTypes.string,
-  tabs: PropTypes.array,
+  companiesTabs: PropTypes.array,
   data: PropTypes.object,
-  loading: PropTypes.bool
+  sourcesTabs: PropTypes.array,
+  companiesData: PropTypes.array,
+  countriesActiveItems: PropTypes.array,
+  companiesActiveTab: PropTypes.number,
+  sourcesActiveTab: PropTypes.number
 };
 
 export default ProfileStepPanel;
