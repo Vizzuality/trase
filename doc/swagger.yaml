@@ -1718,13 +1718,6 @@ components:
       required: false
       schema:
         type: integer
-    dashboards_include:
-      name: include
-      in: query
-      description: String with comma-separated list of included information
-      required: false
-      schema:
-        type: string
     profile_only:
       name: profile_only
       in: query
@@ -2723,26 +2716,6 @@ components:
           type: integer
         name:
           type: string
-    DashboardsCommodityFromContext:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        countryIds:
-          type: array
-          items:
-            type: integer
-    DashboardsCommodityFromContextCountries:
-      type: array
-      items:
-        type: object
-        properties:
-          id:
-            type: integer
-          name:
-            type: string
     DashboardsCountry:
       type: object
       properties:
