@@ -36,12 +36,26 @@ module Api
         end
 
         def apply_filters
+          adjust_node_filters
           filter_by_countries
           filter_by_commodities
           filter_by_nodes
           filter_by_node_types
           filter_by_profile_only
           filter_by_self
+        end
+
+        def adjust_node_filters
+          return unless @self_ids.any? && @node_types_ids.any?
+
+          # nodes that don't match selected node type
+          self_nodes_to_filter_by = Api::V3::Node.where(id: @self_ids).
+            reject do |node|
+              @node_types_ids.include? node.node_type_id
+            end
+          self_ids_to_filter_by = self_nodes_to_filter_by.map(&:id)
+          @self_ids -= self_ids_to_filter_by
+          @node_ids += self_ids_to_filter_by
         end
 
         def filter_by_countries
