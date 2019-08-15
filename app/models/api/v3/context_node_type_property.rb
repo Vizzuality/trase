@@ -63,7 +63,26 @@ module Api
 
       def refresh_dependents
         Api::V3::Readonly::Context.refresh
-        Api::V3::Readonly::SankeyNode.refresh
+        if previous_changes.key?('is_geo_column')
+          Api::V3::Readonly::SankeyNode.refresh_later
+        end
+        return unless previous_changes.key?('role')
+
+        refresh_role_dependents(previous_changes['role'])
+      end
+
+      def refresh_role_dependents(roles = [])
+        return unless roles.any?
+
+        if roles.include?(SOURCE_ROLE)
+          Api::V3::Readonly::Dashboards::Source.refresh_later
+        end
+        if (roles & [EXPORTER_ROLE, IMPORTER_ROLE]).any?
+          Api::V3::Readonly::Dashboards::Company.refresh_later
+        end
+        if roles.include?(DESTINATION_ROLE)
+          Api::V3::Readonly::Dashboards::Destination.refresh_later
+        end
       end
 
       def self.roles
