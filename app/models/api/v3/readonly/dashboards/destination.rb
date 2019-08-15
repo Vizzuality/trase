@@ -29,8 +29,6 @@ module Api
     module Readonly
       module Dashboards
         class Destination < Api::V3::Readonly::BaseModel
-          include Refresh
-
           self.table_name = 'dashboards_destinations_mv'
           belongs_to :node
         end

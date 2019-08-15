@@ -5,7 +5,6 @@ RSpec.describe Api::V3::CountriesController, type: :controller do
   include_context 'api v3 paraguay flows quants'
 
   before(:each) do
-    Api::V3::Readonly::Dashboards::FlowPath.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::Dashboards::Country.refresh(sync: true, skip_dependencies: true)
   end
 
