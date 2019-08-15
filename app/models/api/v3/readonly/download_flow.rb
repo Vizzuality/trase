@@ -16,6 +16,7 @@
 #
 
 # This class is not backed by a materialized view, but a partitioned table.
+# It only needs to be refreshed once during the data import process.
 # The intention is to use this table for downloads only.
 module Api
   module V3
@@ -30,7 +31,7 @@ module Api
           # @option options [Boolean] :skip_precompute skip precomputing downloads
           def refresh_now(options = {})
             refresh_dependencies(options) unless options[:skip_dependencies]
-            Api::V3::TablePartitions.create
+            Api::V3::TablePartitions::CreatePartitionsForDownloadFlows.new.call
             after_refresh(options)
             refresh_dependents(options) unless options[:skip_dependents]
           end
@@ -39,9 +40,8 @@ module Api
           # @option options [Boolean] :skip_dependencies skip refreshing
           # @option options [Boolean] :skip_dependents skip refreshing
           # @option options [Boolean] :skip_precompute skip precomputing downloads
-          # this materialized view takes a long time to refresh
           def refresh_later(options = {})
-            TablePartitionsWorker.perform_async(options)
+            TablePartitionsWorker.perform_async(name, options)
           end
 
           protected
