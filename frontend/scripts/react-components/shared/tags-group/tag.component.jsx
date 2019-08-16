@@ -12,24 +12,34 @@ function Tag(props) {
     spaced,
     removeOption,
     clearSingleItem,
-    options,
+    getOptions,
     color,
     isPartReadOnly,
     placement
   } = props;
-  if (!part.value || part.value.length === 0) return null;
-  return part.value.length > 1 ? (
-    <Dropdown
-      showSelected
-      color={color}
-      options={options}
-      variant="sentence"
-      placement={placement}
-      readOnly={isPartReadOnly}
-      onChange={option => removeOption(option)}
-      selectedValueOverride={`${part.value.length} ${part.panel}`}
-    />
-  ) : (
+
+  const readOnly = isPartReadOnly(part);
+
+  if (!part.value || part.value.length === 0) {
+    return null;
+  }
+
+  if (part.value.length > 1) {
+    return (
+      <Dropdown
+        showSelected
+        color={color}
+        options={getOptions(part)}
+        variant="sentence"
+        placement={placement}
+        readOnly={readOnly}
+        onChange={option => removeOption(part, option)}
+        selectedValueOverride={`${part.value.length} ${part.name || part.panel}`}
+      />
+    );
+  }
+
+  return (
     <Heading
       size="md"
       as="span"
@@ -43,7 +53,7 @@ function Tag(props) {
       })}
     >
       {translateText(part.value[0].name)}
-      {!isPartReadOnly && clearPanel && (
+      {!readOnly && clearPanel && (
         <button
           key={`button${part.id}`}
           onClick={() => clearSingleItem(part)}
@@ -66,7 +76,7 @@ Tag.propTypes = {
   removeOption: PropTypes.func.isRequired,
   clearSingleItem: PropTypes.func.isRequired,
   clearPanel: PropTypes.func,
-  options: PropTypes.array,
+  getOptions: PropTypes.func,
   isPartReadOnly: PropTypes.bool.isRequired
 };
 

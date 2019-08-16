@@ -21,7 +21,6 @@ const makeMapStateToProps = () => {
     title: getTitle(state, props),
     chartType: getChartType(state, props),
     config: getDashboardWidgetsConfig(state, props),
-    chartsLoading: state.dashboardElement.chartsLoading,
     groupingOptions: getGroupingOptions(state, props),
     groupingActiveItem: getGroupingActiveItem(state, props)
   });
@@ -51,7 +50,6 @@ class DashboardWidgetContainer extends Component {
       meta,
       config,
       chartType,
-      chartsLoading,
       title,
       groupingActiveItem,
       setActiveChartId,
@@ -67,7 +65,7 @@ class DashboardWidgetContainer extends Component {
         chartType={chartType}
         setActiveChartId={setActiveChartId}
         groupingOptions={groupingOptions}
-        loading={loading || chartsLoading}
+        loading={loading}
         groupingActiveItem={groupingActiveItem}
         trackOpenTableView={trackOpenTableView}
         chartConfig={this.addTooltipContentToConfig(config, meta)}
@@ -84,7 +82,6 @@ DashboardWidgetContainer.propTypes = {
   title: PropTypes.string,
   config: PropTypes.object,
   chartType: PropTypes.string,
-  chartsLoading: PropTypes.bool,
   setActiveChartId: PropTypes.func,
   groupingOptions: PropTypes.array,
   trackOpenTableView: PropTypes.func,

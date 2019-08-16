@@ -7,9 +7,9 @@ import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.
 function DestinationsPanel(props) {
   const {
     page,
+    setSearchResult,
     searchDestinations,
     destinations,
-    loadingMoreItems,
     loading,
     getSearchResults,
     activeDestinations,
@@ -24,7 +24,7 @@ function DestinationsPanel(props) {
         className="dashboard-panel-search"
         items={searchDestinations}
         placeholder="Search place"
-        onSelect={onSelectDestinationValue}
+        onSelect={setSearchResult}
         onSearchTermChange={getSearchResults}
       />
       <GridList
@@ -37,13 +37,12 @@ function DestinationsPanel(props) {
         columnCount={5}
         page={page}
         getMoreItems={getMoreItems}
-        loadingMoreItems={loadingMoreItems}
         loading={loading}
       >
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={!!activeDestinations[itemProps.item && itemProps.item.id]}
+            isActive={activeDestinations.includes(itemProps.item?.id)}
             enableItem={onSelectDestinationValue}
             disableItem={onSelectDestinationValue}
           />
@@ -56,12 +55,12 @@ function DestinationsPanel(props) {
 DestinationsPanel.propTypes = {
   destinations: PropTypes.array,
   page: PropTypes.number.isRequired,
-  loadingMoreItems: PropTypes.bool,
   loading: PropTypes.bool,
   searchDestinations: PropTypes.array,
-  activeDestinations: PropTypes.object,
+  activeDestinations: PropTypes.array,
   getMoreItems: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
+  setSearchResult: PropTypes.func.isRequired,
   onSelectDestinationValue: PropTypes.func.isRequired
 };
 

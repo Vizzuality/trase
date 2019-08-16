@@ -5,7 +5,8 @@ import {
   clearDashboardPanel,
   setDashboardPanelPage,
   setDashboardPanelActiveTab,
-  setDashboardPanelActiveItem,
+  setDashboardSelectedCountryId,
+  setDashboardSelectedCommodityId,
   setDashboardPanelActiveItems,
   getDashboardPanelSearchResults,
   setDashboardPanelActiveItemsWithSearch,
@@ -13,41 +14,55 @@ import {
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.component';
 import {
-  getActivePanelTabs,
+  getIsDisabled,
+  getSourcesTabs,
+  getCompaniesTabs,
   getDynamicSentence,
-  getIsDisabled
+  getSourcesDataByTab,
+  getSourcesActiveTab,
+  getCompaniesActiveTab,
+  getCompaniesDataByTab,
+  getCountriesActiveItems,
+  getCommoditiesActiveItems
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { getCountryNamesByCountryId } from 'reducers/app.selectors';
 
 const mapStateToProps = (state, ownProps) => {
   const {
     loading,
+    loadingItems,
     activePanelId,
-    sourcesPanel,
-    destinationsPanel,
-    companiesPanel,
-    commoditiesPanel,
-    countriesPanel,
-    data: { sources, countries, commodities, companies, destinations }
+    searchResults,
+    sources,
+    companies,
+    destinations,
+    pages,
+    data
   } = state.dashboardElement;
 
   return {
+    pages,
     loading,
-    sources,
-    countries,
-    companies,
-    commodities,
-    destinations,
+    loadingItems,
     activePanelId,
-    sourcesPanel,
-    countriesPanel,
-    destinationsPanel,
-    companiesPanel,
-    commoditiesPanel,
-    countryNames: getCountryNamesByCountryId(state),
-    tabs: getActivePanelTabs(state),
+    searchResults,
+    activeSources: sources,
+    activeCompanies: companies,
+    activeDestinations: destinations,
+    sourcesData: getSourcesDataByTab(state),
+    countriesData: data.countries,
+    companiesData: getCompaniesDataByTab(state),
+    commoditiesData: data.commodities,
+    destinationsData: data.destinations,
+    countriesActiveItems: getCountriesActiveItems(state),
+    commoditiesActiveItems: getCommoditiesActiveItems(state),
+    sourcesTabs: getSourcesTabs(state),
+    companiesTabs: getCompaniesTabs(state),
+    sourcesActiveTab: getSourcesActiveTab(state),
+    companiesActiveTab: getCompaniesActiveTab(state),
+    isDisabled: getIsDisabled(state, ownProps),
     dynamicSentenceParts: getDynamicSentence(state),
-    isDisabled: getIsDisabled(state, ownProps)
+    countryNames: getCountryNamesByCountryId(state)
   };
 };
 
@@ -55,8 +70,9 @@ const mapDispatchToProps = {
   getMoreItems: setDashboardPanelPage,
   clearActiveItems: clearDashboardPanel,
   setActiveTab: setDashboardPanelActiveTab,
-  setActiveItems: setDashboardPanelActiveItems,
-  setActiveItem: setDashboardPanelActiveItem,
+  setActiveItem: setDashboardPanelActiveItems,
+  setActiveCountryId: setDashboardSelectedCountryId,
+  setActiveCommodityId: setDashboardSelectedCommodityId,
   getSearchResults: getDashboardPanelSearchResults,
   setSearchResult: setDashboardPanelActiveItemsWithSearch,
   goToDashboard: goToDashboardFn
@@ -64,25 +80,23 @@ const mapDispatchToProps = {
 
 class DashboardPanelContainer extends React.PureComponent {
   static propTypes = {
-    companiesPanel: PropTypes.object,
+    searchResults: PropTypes.array,
     countryNames: PropTypes.object
   };
 
-  static addCountryNameToSearchResults(panel, countryNames) {
-    const searchResults = panel.searchResults.map(item => ({
+  static addCountryNameToSearchResults(searchResults, countryNames) {
+    return searchResults.map(item => ({
       ...item,
       countryName: countryNames[item.countryId]
     }));
-
-    return { ...panel, searchResults };
   }
 
   render() {
-    const companiesPanel = DashboardPanelContainer.addCountryNameToSearchResults(
-      this.props.companiesPanel,
+    const searchResults = DashboardPanelContainer.addCountryNameToSearchResults(
+      this.props.searchResults,
       this.props.countryNames
     );
-    return <DashboardPanel {...this.props} companiesPanel={companiesPanel} />;
+    return <DashboardPanel {...this.props} searchResults={searchResults} />;
   }
 }
 

@@ -10,20 +10,19 @@ import {
   PROFILES__SET_LOADING_ITEMS,
   PROFILES__SET_PANEL_TABS,
   PROFILES__SET_ACTIVE_TAB,
-  PROFILES__CLEAR_PANELS,
   PROFILES__SET_SEARCH_RESULTS,
   PROFILES__SET_ACTIVE_ITEM,
   PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH
 } from 'react-components/shared/profile-selector/profile-selector.actions';
 
-const activeTypePanel = panel => ({ types: { activeItems: { type: panel } } });
+const activeTypePanel = panel => ({ type: panel });
 
 describe(PROFILES__SET_ACTIVE_STEP, () => {
   const action = {
     type: PROFILES__SET_ACTIVE_STEP,
-    payload: { activeStep: 'types' }
+    payload: { activeStep: 'type' }
   };
-  const expectedState = { ...initialState, activeStep: 'types' };
+  const expectedState = { ...initialState, activeStep: 'type' };
 
   it('sets correctly the activeStep', () => {
     const newState = reducer(initialState, action);
@@ -68,15 +67,13 @@ describe(PROFILES__SET_PANEL_DATA, () => {
       payload: {
         panelName: 'commodities',
         tab: null,
-        data: someData,
-        loading: false
+        data: someData
       }
     };
-    const state = { ...initialState, loading: true };
+    const state = { ...initialState };
     const newState = reducer(state, action);
     expect(newState).toEqual({
       ...initialState,
-      loading: false,
       data: { ...initialState.data, commodities: someData }
     });
   });
@@ -87,15 +84,13 @@ describe(PROFILES__SET_PANEL_DATA, () => {
       payload: {
         panelName: 'sources',
         tab: 3,
-        data: someData,
-        loading: false
+        data: someData
       }
     };
-    const state = { ...initialState, loading: true };
+    const state = { ...initialState };
     const newState = reducer(state, action);
     expect(newState).toEqual({
       ...initialState,
-      loading: false,
       data: { ...initialState.data, sources: { [action.payload.tab]: someData } }
     });
   });
@@ -106,19 +101,13 @@ describe(PROFILES__SET_PANEL_DATA, () => {
       payload: {
         panelName: 'companies',
         tab: 3,
-        data: someData,
-        loading: false
+        data: someData
       }
     };
     const countriesPanel = {
       countries: {
         ...initialState.panels.countries,
-        activeItems: [
-          {
-            id: 1,
-            name: 'BRAZIL'
-          }
-        ]
+        activeItems: [1]
       }
     };
     const state = {
@@ -126,14 +115,12 @@ describe(PROFILES__SET_PANEL_DATA, () => {
       panels: {
         ...initialState.panels,
         ...countriesPanel
-      },
-      loading: true
+      }
     };
 
     const newState = reducer(state, action);
     expect(newState).toEqual({
       ...initialState,
-      loading: false,
       panels: {
         ...initialState.panels,
         ...countriesPanel
@@ -141,7 +128,7 @@ describe(PROFILES__SET_PANEL_DATA, () => {
       data: {
         ...initialState.data,
         companies: {
-          [state.panels.countries.activeItems[0].id]: { [action.payload.tab]: someData }
+          [state.panels.countries.activeItems[0]]: { [action.payload.tab]: someData }
         }
       }
     });
@@ -150,7 +137,7 @@ describe(PROFILES__SET_PANEL_DATA, () => {
 
 describe(PROFILES__SET_MORE_PANEL_DATA, () => {
   const someData = [{ id: 0, name: 'name0' }, { id: 1, name: 'name1' }];
-  const moreData = [{ id: 0, name: 'Whatever' }];
+  const moreData = [{ id: 2, name: 'Whatever' }];
 
   it('adds more data to a panel', () => {
     const action = {
@@ -158,8 +145,7 @@ describe(PROFILES__SET_MORE_PANEL_DATA, () => {
       payload: {
         tab: null,
         data: moreData,
-        key: 'commodities',
-        direction: 'forward'
+        key: 'commodities'
       }
     };
     const state = {
@@ -185,27 +171,19 @@ describe(PROFILES__SET_MORE_PANEL_DATA, () => {
       payload: {
         tab: 3,
         data: moreData,
-        key: 'companies',
-        direction: 'forward'
+        key: 'companies'
       }
     };
 
-    const countriesPanel = {
-      countries: {
-        ...initialState.panels.countries,
-        activeItems: [
-          {
-            id: 1,
-            name: 'BRAZIL'
-          }
-        ]
-      }
+    const countries = {
+      ...initialState.panels.countries,
+      activeItems: [1]
     };
     const state = {
       ...initialState,
       panels: {
         ...initialState.panels,
-        ...countriesPanel
+        countries
       },
       data: {
         ...initialState.data,
@@ -213,7 +191,7 @@ describe(PROFILES__SET_MORE_PANEL_DATA, () => {
       }
     };
     const newState = reducer(state, action);
-    const selectedCountryId = state.panels.countries.activeItems[0].id;
+    const selectedCountryId = state.panels.countries.activeItems[0];
     const moreCountryData = {
       [selectedCountryId]: {
         ...state.data.companies[selectedCountryId],
@@ -224,7 +202,7 @@ describe(PROFILES__SET_MORE_PANEL_DATA, () => {
       ...state,
       panels: {
         ...initialState.panels,
-        ...countriesPanel
+        countries
       },
       data: {
         ...state.data,
@@ -237,10 +215,9 @@ describe(PROFILES__SET_MORE_PANEL_DATA, () => {
     const action = {
       type: PROFILES__SET_MORE_PANEL_DATA,
       payload: {
-        tab: 1,
+        tab: null,
         data: [],
-        key: 'commodities',
-        direction: 'forward'
+        key: 'commodities'
       }
     };
     const state = {
@@ -250,6 +227,7 @@ describe(PROFILES__SET_MORE_PANEL_DATA, () => {
         commodities: someData
       },
       panels: {
+        ...initialState.panels,
         commodities: {
           ...initialState.panels.commodities,
           page: 3
@@ -260,6 +238,7 @@ describe(PROFILES__SET_MORE_PANEL_DATA, () => {
     expect(newState).toEqual({
       ...state,
       panels: {
+        ...state.panels,
         commodities: {
           ...state.panels.commodities,
           page: 2
@@ -305,7 +284,7 @@ describe(PROFILES__SET_PANEL_TABS, () => {
   };
   const action = {
     type: PROFILES__SET_PANEL_TABS,
-    payload: { data }
+    payload: { data, key: 'sources' }
   };
 
   it('loads tabs for the first time', () => {
@@ -321,18 +300,11 @@ describe(PROFILES__SET_PANEL_TABS, () => {
     const newState = reducer(state, action);
     expect(newState).toEqual({
       ...state,
-      tabs: expectedTabs,
-      panels: {
-        ...state.panels,
-        sources: {
-          ...state.panels.sources,
-          activeTab: expectedTabs.sources[0]
-        }
-      }
+      tabs: { sources: expectedTabs.sources }
     });
   });
 
-  it('resets page to inital state after loading tabs', () => {
+  it('resets page to initial state after loading tabs', () => {
     const state = {
       ...initialState,
       activeStep: PROFILE_STEPS.profiles,
@@ -342,7 +314,7 @@ describe(PROFILES__SET_PANEL_TABS, () => {
         ...activeTypePanel('sources'),
         sources: {
           ...initialState.panels.sources,
-          activeTab: expectedTabs.sources[0],
+          activeTab: expectedTabs.sources[0].id,
           page: 4
         }
       }
@@ -350,10 +322,8 @@ describe(PROFILES__SET_PANEL_TABS, () => {
     const newState = reducer(state, action);
     expect(newState).toEqual({
       ...state,
-      tabs: expectedTabs,
       panels: {
         ...state.panels,
-        ...activeTypePanel('sources'),
         sources: {
           ...state.panels.sources,
           page: initialState.panels.sources.page
@@ -379,42 +349,7 @@ describe(PROFILES__SET_PANEL_TABS, () => {
     const newState = reducer(state, action);
     expect(newState).toEqual({
       ...state,
-      tabs: expectedTabs
-    });
-  });
-
-  it('sets activeTab to first value if previous value doesnt exists in new tabs', () => {
-    const newData = [...data];
-    newData[0].tabs = [expectedTabs.sources[0]];
-    const newAction = {
-      type: PROFILES__SET_PANEL_TABS,
-      payload: {
-        data: newData
-      }
-    };
-    const state = {
-      ...initialState,
-      activeStep: PROFILE_STEPS.profiles,
-      tabs: { sources: [expectedTabs.sources[0]] },
-      panels: {
-        ...activeTypePanel('sources'),
-        sources: {
-          ...initialState.panels.sources,
-          activeTab: expectedTabs.sources[1]
-        }
-      }
-    };
-    const newState = reducer(state, newAction);
-    expect(newState).toEqual({
-      ...state,
-      tabs: { ...expectedTabs, sources: newData[0].tabs },
-      panels: {
-        ...state.panels,
-        sources: {
-          ...state.panels.sources,
-          activeTab: expectedTabs.sources[0]
-        }
-      }
+      tabs: { sources: expectedTabs.sources }
     });
   });
 });
@@ -444,7 +379,7 @@ test(PROFILES__SET_ACTIVE_TAB, () => {
     ...state,
     data: {
       ...state.data,
-      sources: { 1: null }
+      sources: {}
     },
     panels: {
       ...state.panels,
@@ -454,58 +389,6 @@ test(PROFILES__SET_ACTIVE_TAB, () => {
         page: initialState.panels.sources.page
       }
     }
-  });
-});
-
-describe(PROFILES__CLEAR_PANELS, () => {
-  const state = {
-    ...initialState,
-    panels: {
-      countries: {
-        ...initialState.panels.countries,
-        activeItems: [{ id: 1, name: 'some item' }],
-        activeTab: { id: 7, name: 'BIOME' },
-        page: 2
-      },
-      commodities: {
-        ...initialState.panels.commodities,
-        activeItems: [{ id: 4, name: 'some item' }],
-        activeTab: { id: 1 },
-        page: 6
-      },
-      companies: {
-        ...initialState.panels.companies,
-        activeItems: [{ id: 4, name: 'some item' }],
-        activeTab: { id: 7, name: 'IMPORTER' },
-        page: 5
-      }
-    }
-  };
-
-  it('clears panels', () => {
-    const action = {
-      type: PROFILES__CLEAR_PANELS,
-      payload: {
-        panels: ['companies', 'commodities']
-      }
-    };
-
-    const newState = reducer(state, action);
-    expect(newState).toEqual({
-      ...state,
-      panels: {
-        ...state.panels,
-        countries: state.panels.countries,
-        companies: {
-          ...initialState.panels.companies,
-          activeTab: state.panels.companies.activeTab
-        },
-        commodities: {
-          ...initialState.panels.commodities,
-          activeTab: state.panels.commodities.activeTab
-        }
-      }
-    });
   });
 });
 
@@ -529,6 +412,7 @@ describe(PROFILES__SET_SEARCH_RESULTS, () => {
       ...initialState,
       activeStep: PROFILE_STEPS.profiles,
       panels: {
+        ...initialState.panels,
         ...activeTypePanel('companies')
       }
     };
@@ -621,7 +505,7 @@ describe(PROFILES__SET_ACTIVE_ITEM, () => {
         ...state.panels,
         companies: {
           ...state.panels.companies,
-          activeItems: { [someItem.id]: someItem }
+          activeItems: [someItem.id]
         }
       }
     });
@@ -631,7 +515,7 @@ describe(PROFILES__SET_ACTIVE_ITEM, () => {
     const action = {
       type: PROFILES__SET_ACTIVE_ITEM,
       payload: {
-        panel: 'types',
+        panel: 'type',
         activeItem: 'panelName'
       }
     };
@@ -640,16 +524,17 @@ describe(PROFILES__SET_ACTIVE_ITEM, () => {
       ...initialState,
       panels: {
         ...initialState.panels,
-        types: {
-          ...initialState.panels.types,
-          activeItems: { type: 'panelName' }
-        }
+        type: 'panelName'
       }
     });
   });
 });
 
-test(PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH, () => {
+describe(PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH, () => {
+  const otherItems = [
+    { id: 0, name: 'some item0', nodeTypeId: 6 },
+    { id: 3, name: 'some item3', nodeTypeId: 6 }
+  ];
   const tabs = {
     sources: [{ id: 3, name: 'MUNICIPALITY' }, { id: 1, name: 'BIOME' }],
     companies: [{ id: 6, name: 'EXPORTER' }, { id: 7, name: 'IMPORTER' }]
@@ -659,36 +544,56 @@ test(PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH, () => {
     type: PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH,
     payload: {
       panel: 'companies',
-      activeItems: someItem
+      activeItem: someItem
     }
   };
-  const state = {
-    ...initialState,
-    tabs,
-    panels: {
-      ...initialState.panels,
-      companies: {
-        ...initialState.panels.companies,
-        activeTab: { id: 7, name: 'IMPORTER' },
-        page: 4
+
+  it('sets an active item by search and adds it as data', () => {
+    const state = {
+      ...initialState,
+      tabs,
+      data: {
+        ...initialState.data,
+        companies: {
+          1: {
+            6: otherItems
+          }
+        }
+      },
+      panels: {
+        ...initialState.panels,
+        ...activeTypePanel('companies'),
+        countries: {
+          ...initialState.countries,
+          activeItems: [1]
+        },
+        companies: {
+          ...initialState.panels.companies,
+          activeTab: 6
+        }
       }
-    }
-  };
-  const newState = reducer(state, action);
-  expect(newState).toEqual({
-    ...state,
-    data: {
-      ...state.data,
-      companies: { 7: null }
-    },
-    panels: {
-      ...state.panels,
-      companies: {
-        ...state.panels.companies,
-        activeItems: { [someItem.id]: someItem },
-        activeTab: tabs.companies[0],
-        page: initialState.panels.companies.page
+    };
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      data: {
+        ...state.data,
+        companies: {
+          1: {
+            6: [someItem, ...otherItems]
+          }
+        }
+      },
+      panels: {
+        ...state.panels,
+        companies: {
+          ...state.panels.companies,
+          activeItems: [someItem.id],
+          activeTab: tabs.companies[0].id
+        }
       }
-    }
+    });
   });
+
+  it('adds search result to the beginning of the data', () => {});
 });

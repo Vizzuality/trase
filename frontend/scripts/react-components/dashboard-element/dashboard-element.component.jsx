@@ -8,17 +8,20 @@ import TagsGroup from 'react-components/shared/tags-group';
 import RecolorBy from 'react-components/shared/recolor-by';
 import Dropdown from 'react-components/shared/dropdown';
 import YearsRangeDropdown from 'react-components/shared/years-range-dropdown';
-import Text from 'react-components/shared/text';
 import DashboardWidget from 'react-components/dashboard-element/dashboard-widget';
+import UrlSerializer from 'react-components/shared/url-serializer';
 import InView from 'react-components/shared/in-view.component';
 import cx from 'classnames';
+import * as DashboardElementUrlPropHandlers from 'react-components/dashboard-element/dashboard-element.serializers';
 import { DASHBOARD_STEPS } from 'constants';
 
 import 'react-components/dashboard-element/dashboard-element.scss';
 
 class DashboardElement extends React.PureComponent {
   static propTypes = {
+    loading: PropTypes.bool,
     groupedCharts: PropTypes.object,
+    urlProps: PropTypes.object,
     dirtyBlocks: PropTypes.object,
     step: PropTypes.number.isRequired,
     setStep: PropTypes.func.isRequired,
@@ -61,27 +64,28 @@ class DashboardElement extends React.PureComponent {
     );
   }
 
+  renderPlaceholder() {
+    return (
+      <section className="dashboard-element-placeholder">
+        <div className="row">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <div key={i} className="column small-12 medium-6">
+              <b className="dashboard-element-placeholder-item" />
+            </div>
+          ))}
+        </div>
+      </section>
+    );
+  }
+
   renderDashboardModal() {
     const { editMode, goToRoot, modalOpen, closeModal, dirtyBlocks } = this.props;
     const canProceed = dirtyBlocks.countries && dirtyBlocks.commodities;
     const onClose = editMode && canProceed ? closeModal : goToRoot;
     return (
-      <React.Fragment>
-        {modalOpen && (
-          <section className="dashboard-element-placeholder">
-            <div className="row">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="column small-12 medium-6">
-                  <b className="dashboard-element-placeholder-item" />
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-        <SimpleModal isOpen={modalOpen} onClickClose={onClose}>
-          {this.renderStep()}
-        </SimpleModal>
-      </React.Fragment>
+      <SimpleModal isOpen={modalOpen} onClickClose={onClose}>
+        {this.renderStep()}
+      </SimpleModal>
     );
   }
 
@@ -96,10 +100,10 @@ class DashboardElement extends React.PureComponent {
   renderWidgets() {
     const { groupedCharts, filters } = this.props;
     return groupedCharts.charts.map((chart, widgetIndex) => (
-      <InView triggerOnce>
+      <InView triggerOnce key={chart.id}>
         {({ ref, inView }) => (
           <div
-            key={chart.id}
+            key={`${chart.id}-widget`}
             className="column small-12 medium-6"
             data-test="dashboard-widget-container"
             ref={ref}
@@ -119,10 +123,11 @@ class DashboardElement extends React.PureComponent {
 
   render() {
     const {
+      loading,
       groupedCharts,
       modalOpen,
-      goToRoot,
       filters,
+      urlProps,
       reopenPanel,
       setSelectedYears,
       setSelectedResizeBy,
@@ -133,117 +138,94 @@ class DashboardElement extends React.PureComponent {
       <div className="l-dashboard-element">
         <div className="c-dashboard-element">
           {this.renderDashboardModal()}
-          {modalOpen === false && (
-            <>
-              <section className="dashboard-element-header">
-                <div className="row">
-                  <div className="column small-12">
-                    <h2 className="dashboard-element-title" data-test="dashboard-element-title">
-                      {this.renderDynamicSentence()}
-                      <Button
-                        size="sm"
-                        type="button"
-                        color="gray"
-                        variant="icon"
-                        className="dashboard-edit-button"
-                        onClick={() => reopenPanel()}
-                      >
-                        <svg className="icon icon-pen">
-                          <use xlinkHref="#icon-pen" />
-                        </svg>
-                      </Button>
-                    </h2>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="column small-12 medium-9">
-                    <div className="dashboard-header-filters">
+          <section className="dashboard-element-header">
+            <div className="row">
+              <div className="column small-12">
+                {modalOpen === false && (
+                  <h2 className="dashboard-element-title" data-test="dashboard-element-title">
+                    {this.renderDynamicSentence()}
+                    <Button
+                      size="sm"
+                      type="button"
+                      color="gray"
+                      variant="icon"
+                      className="dashboard-edit-button"
+                      onClick={() => reopenPanel()}
+                    >
+                      <svg className="icon icon-pen">
+                        <use xlinkHref="#icon-pen" />
+                      </svg>
+                    </Button>
+                  </h2>
+                )}
+              </div>
+            </div>
+            <div className="row">
+              <div className="column small-12 medium-9">
+                {modalOpen === false && (
+                  <div className="dashboard-header-filters">
+                    <div className="dashboard-filter">
+                      <YearsRangeDropdown
+                        color="white"
+                        years={filters.years}
+                        selectYears={setSelectedYears}
+                        selectedYears={filters.selectedYears}
+                      />
+                    </div>
+                    <div className="dashboard-filter">
+                      <Dropdown
+                        color="white"
+                        label="Units"
+                        placement="bottom-start"
+                        onChange={setSelectedResizeBy}
+                        options={filters.resizeBy}
+                        value={filters.selectedResizeBy}
+                      />
+                    </div>
+                    {filters.recolorBy?.length > 0 && (
                       <div className="dashboard-filter">
-                        <YearsRangeDropdown
+                        <RecolorBy
                           color="white"
-                          years={filters.years}
-                          selectYears={setSelectedYears}
-                          selectedYears={filters.selectedYears}
+                          label="Indicator"
+                          recolorGroups={[]}
+                          recolorBys={filters.recolorBy}
+                          onChange={setSelectedRecolorBy}
+                          selectedRecolorBy={filters.selectedRecolorBy}
                         />
                       </div>
-                      <div className="dashboard-filter">
-                        <Dropdown
-                          color="white"
-                          label="Units"
-                          placement="bottom-start"
-                          onChange={setSelectedResizeBy}
-                          options={filters.resizeBy}
-                          value={filters.selectedResizeBy}
-                        />
-                      </div>
-                      {filters.recolorBy.length > 0 && (
-                        <div className="dashboard-filter">
-                          <RecolorBy
-                            color="white"
-                            label="Indicator"
-                            recolorGroups={[]}
-                            recolorBys={filters.recolorBy}
-                            onChange={setSelectedRecolorBy}
-                            selectedRecolorBy={filters.selectedRecolorBy}
-                          />
-                        </div>
-                      )}
-                    </div>
+                    )}
                   </div>
-                  <div className="column small-12 medium-3">
-                    <div className="dashboard-header-links">
-                      <button
-                        className="dashboard-header-link"
-                        onClick={() => alert('coming soon')}
-                      >
-                        <svg className="icon icon-download">
-                          <use xlinkHref="#icon-download" />
-                        </svg>
-                        DOWNLOAD
-                      </button>
-                      <button
-                        className="dashboard-header-link"
-                        onClick={() => alert('coming soon')}
-                      >
-                        <svg className="icon icon-share">
-                          <use xlinkHref="#icon-share" />
-                        </svg>
-                        SHARE
-                      </button>
-                    </div>
-                  </div>
+                )}
+              </div>
+              <div className="column small-12 medium-3">
+                <div className="dashboard-header-links">
+                  <button className="dashboard-header-link" disabled>
+                    <svg className="icon icon-download">
+                      <use xlinkHref="#icon-download" />
+                    </svg>
+                    DOWNLOAD
+                  </button>
+                  <button className="dashboard-header-link" disabled>
+                    <svg className="icon icon-share">
+                      <use xlinkHref="#icon-share" />
+                    </svg>
+                    SHARE
+                  </button>
                 </div>
-              </section>
-              <section className="dashboard-element-widgets">
-                <div className={cx('row', { '-equal-height -flex-end': groupedCharts })}>
-                  {groupedCharts && this.renderWidgets()}
-                  {!groupedCharts && (
-                    <div className="column small-12">
-                      <div className="dashboard-element-fallback">
-                        <Text
-                          color="white"
-                          size="md"
-                          align="center"
-                          className="dashboard-element-fallback-text"
-                        >
-                          Your dashboard has no selection.
-                        </Text>
-                        <Button
-                          color="gray-transparent"
-                          size="medium"
-                          className="dashboard-element-fallback-button"
-                          onClick={goToRoot}
-                        >
-                          Go Back
-                        </Button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </section>
-            </>
+              </div>
+            </div>
+          </section>
+          {!groupedCharts || loading || modalOpen ? (
+            this.renderPlaceholder()
+          ) : (
+            <section className="dashboard-element-widgets">
+              <div className={cx('row', { '-equal-height -flex-end': groupedCharts })}>
+                {this.renderWidgets()}
+              </div>
+            </section>
           )}
         </div>
+        <UrlSerializer urlProps={urlProps} urlPropHandlers={DashboardElementUrlPropHandlers} />
       </div>
     );
   }

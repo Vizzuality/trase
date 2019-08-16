@@ -5,9 +5,12 @@ import kebabCase from 'lodash/kebabCase';
 import addApostrophe from 'utils/addApostrophe';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
 import { CHART_TYPES, NODE_TYPE_PANELS } from 'constants';
-import camelCase from 'lodash/camelCase';
 import capitalize from 'lodash/capitalize';
-import { getDashboardsContext } from 'react-components/dashboard-element/dashboard-element.selectors';
+import {
+  getPluralNodeType,
+  getDashboardsContext,
+  getDashboardSelectedRecolorBy
+} from 'react-components/dashboard-element/dashboard-element.selectors';
 
 export const PARSED_CHART_TYPES = {
   bar_chart: CHART_TYPES.bar,
@@ -39,8 +42,6 @@ export const getChartType = (state, { chartType, meta }) => {
   return null;
 };
 
-const getSelectedRecolorBy = (state, props) => props.selectedRecolorBy;
-
 export const getDefaultConfig = createSelector(
   [getChartType],
   chartType => CHART_CONFIG[chartType] || CHART_CONFIG.bar
@@ -58,7 +59,7 @@ const getGroupedAxis = (axis, meta) => {
 const sortGroupedAxis = keys => sortBy(Object.keys(keys), key => parseInt(key.substr(1), 10));
 
 export const getColors = createSelector(
-  [getMeta, getData, getDefaultConfig, getChartType, getSelectedRecolorBy],
+  [getMeta, getData, getDefaultConfig, getChartType, getDashboardSelectedRecolorBy],
   (meta, data, defaultConfig, chartType, selectedRecolorBy) => {
     const { colors, layout, parse } = defaultConfig;
 
@@ -68,7 +69,7 @@ export const getColors = createSelector(
 
     const getColor = labelText => {
       const legendKey = labelText && kebabCase(labelText);
-      const type = colors[selectedRecolorBy.legendType];
+      const type = selectedRecolorBy && colors[selectedRecolorBy.legendType];
       const theme = type && type[selectedRecolorBy.legendColorTheme];
       return theme && theme[legendKey];
     };
@@ -185,15 +186,6 @@ export const makeGetConfig = () =>
     }
   );
 
-const getPluralNodeType = nodeType => {
-  const name = camelCase(nodeType);
-  return (
-    {
-      country: 'countries',
-      municipality: 'municipalities'
-    }[name] || `${nodeType}s`.toLowerCase()
-  );
-};
 const getNodeTypeName = pluralNodeType =>
   pluralNodeType === 'countries' ? 'importing countries' : pluralNodeType;
 

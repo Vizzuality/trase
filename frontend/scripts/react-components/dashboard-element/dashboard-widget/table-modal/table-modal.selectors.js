@@ -1,25 +1,24 @@
 import { createSelector } from 'reselect';
-import isEmpty from 'lodash/isEmpty';
 import omit from 'lodash/omit';
 import { CHART_TYPES } from 'constants';
+import { getDashboardPanelsValues } from 'react-components/dashboard-element/dashboard-element.selectors';
 
 const getMeta = (state, { meta }) => meta || null;
 const getData = (state, { data }) => data || null;
 const getChartType = (state, { chartType }) => chartType || null;
-const returnNameArrayIfNotEmpty = value =>
-  isEmpty(value) ? null : Object.values(value).map(v => v.name);
-const getActiveCountriesNames = state =>
-  returnNameArrayIfNotEmpty(
-    state.dashboardElement && state.dashboardElement.countriesPanel.activeItems
-  );
-const getActiveCommoditiesNames = state =>
-  returnNameArrayIfNotEmpty(
-    state.dashboardElement && state.dashboardElement.commoditiesPanel.activeItems
-  );
-const getActiveSourcesNames = state =>
-  returnNameArrayIfNotEmpty(
-    state.dashboardElement && state.dashboardElement.sourcesPanel.activeItems
-  );
+
+const getActiveCountriesNames = createSelector(
+  getDashboardPanelsValues,
+  panelsValues => (panelsValues.countries ? panelsValues.countries.map(i => i.name) : null)
+);
+const getActiveCommoditiesNames = createSelector(
+  getDashboardPanelsValues,
+  panelsValues => (panelsValues.commodities ? panelsValues.commodities.map(i => i.name) : null)
+);
+const getActiveSourcesNames = createSelector(
+  getDashboardPanelsValues,
+  panelsValues => (panelsValues.sources ? panelsValues.sources.map(i => i.name) : null)
+);
 
 const getTopNValue = createSelector(
   [getMeta],

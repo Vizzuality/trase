@@ -184,10 +184,10 @@ describe('Dashboards flow', () => {
 
     expect(biomeMultiYearWidgets.length).toBe(8);
 
-    const widgetDropdowSelector =
-      '[data-test=dropdown-selected-item-selection-overview-of-royal-agro-cereais]';
+    const widgetDropdowSelector = '[data-test=dropdown-selected-item-selection-overview-of-coamo]';
     await page.waitForSelector(widgetDropdowSelector);
     const text = await page.$eval(widgetDropdowSelector, el => el.textContent);
-    expect(text).toMatch('Selection overview of -royal-agro-cereaisRoyal agro cereais');
+
+    expect(text).toMatch('Selection overview of -coamoCoamo');
   });
 });

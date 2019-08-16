@@ -1,9 +1,10 @@
-import { DASHBOARD_STEPS } from 'constants';
-
 export const DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_PANEL = 'DASHBOARD_ELEMENT__SET_ACTIVE_PANEL';
-export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEM = 'DASHBOARD_ELEMENT__SET_ACTIVE_ITEM';
+export const DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID =
+  'DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID';
+export const DASHBOARD_ELEMENT__SET_SELECTED_COMMODITY_ID =
+  'DASHBOARD_ELEMENT__SET_SELECTED_COMMODITY_ID';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS = 'DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_TAB = 'DASHBOARD_ELEMENT__SET_ACTIVE_TAB';
 export const DASHBOARD_ELEMENT__CLEAR_PANEL = 'DASHBOARD_ELEMENT__CLEAR_PANEL';
@@ -21,77 +22,35 @@ export const DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY =
 export const DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY =
   'DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY';
 export const DASHBOARD_ELEMENT__SET_CHARTS = 'DASHBOARD_ELEMENT__SET_CHARTS';
-export const DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS =
-  'DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS';
-export const DASHBOARD_ELEMENT__SET_CHARTS_LOADING = 'DASHBOARD_ELEMENT__SET_CHARTS_LOADING';
 export const DASHBOARD_ELEMENT__EDIT_DASHBOARD = 'DASHBOARD_ELEMENT__EDIT_DASHBOARD';
 export const DASHBOARD_ELEMENT__GO_TO_DASHBOARD = 'DASHBOARD_ELEMENT__GO_TO_DASHBOARD';
-
-export const getDashboardPanelParams = (state, optionsType, options = {}) => {
-  const {
-    countriesPanel,
-    sourcesPanel,
-    companiesPanel,
-    destinationsPanel,
-    commoditiesPanel
-  } = state;
-  const { page, isOverview } = options;
-  const sourcesTab = sourcesPanel.activeTab && sourcesPanel.activeTab.id;
-  const companiesTab = companiesPanel.activeTab && companiesPanel.activeTab.id;
-
-  const nodeTypesIds = {
-    sources: sourcesTab,
-    companies: companiesTab
-  }[optionsType];
-  const activeItemParams = panel => Object.keys(panel.activeItems).join();
-  const params = {
-    page,
-    options_type: optionsType,
-    node_types_ids: nodeTypesIds
-  };
-  const currentStep = DASHBOARD_STEPS[optionsType];
-  if (currentStep === DASHBOARD_STEPS.sources) {
-    params.countries_ids = activeItemParams(countriesPanel);
-  }
-
-  if (currentStep > DASHBOARD_STEPS.sources || isOverview) {
-    params.countries_ids = activeItemParams(countriesPanel);
-    params.sources_ids = activeItemParams(sourcesPanel);
-  }
-
-  if (currentStep > DASHBOARD_STEPS.commodities || isOverview) {
-    params.commodities_ids = activeItemParams(commoditiesPanel);
-  }
-
-  if (currentStep > DASHBOARD_STEPS.destinations || isOverview) {
-    params.destinations_ids = activeItemParams(destinationsPanel);
-  }
-
-  if (currentStep > DASHBOARD_STEPS.companies || isOverview) {
-    params.companies_ids = activeItemParams(companiesPanel);
-  }
-
-  return params;
-};
+export const DASHBOARD_ELEMENT__GET_MISSING_DATA = 'DASHBOARD_ELEMENT__GET_MISSING_DATA';
+export const DASHBOARD_ELEMENT__SET_MISSING_DATA = 'DASHBOARD_ELEMENT__SET_MISSING_DATA';
+export const DASHBOARD_ELEMENT__SET_LOADING = 'DASHBOARD_ELEMENT__SET_LOADING';
 
 export const setDashboardActivePanel = activePanelId => ({
   type: DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
   payload: { activePanelId }
 });
 
-export const setDashboardPanelActiveItem = (activeItem, panel) => ({
-  type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
+export const setDashboardSelectedCountryId = activeItem => ({
+  type: DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID,
+  payload: { activeItem }
+});
+
+export const setDashboardSelectedCommodityId = activeItem => ({
+  type: DASHBOARD_ELEMENT__SET_SELECTED_COMMODITY_ID,
+  payload: { activeItem }
+});
+
+export const setDashboardPanelActiveItemsWithSearch = (activeItem, panel) => ({
+  type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
   payload: { panel, activeItem }
 });
 
-export const setDashboardPanelActiveItemsWithSearch = (activeItems, panel) => ({
-  type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
-  payload: { panel, activeItems }
-});
-
-export const setDashboardPanelActiveItems = (activeItems, panel) => ({
+export const setDashboardPanelActiveItems = (activeItem, panel) => ({
   type: DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
-  payload: { panel, activeItems }
+  payload: { panel, activeItem }
 });
 
 export const setDashboardPanelActiveTab = (activeTab, panel) => ({
@@ -109,9 +68,9 @@ export const clearDashboardPanels = panels => ({
   payload: { panels }
 });
 
-export const setDashboardPanelPage = (page, direction) => ({
+export const setDashboardPanelPage = page => ({
   type: DASHBOARD_ELEMENT__SET_PANEL_PAGE,
-  payload: { page, direction }
+  payload: { page }
 });
 
 export const setDashboardPanelLoadingItems = loadingItems => ({
@@ -144,8 +103,8 @@ export const setDashboardCharts = charts => ({
   payload: { charts }
 });
 
-export const setDashboardChartsLoading = loading => ({
-  type: DASHBOARD_ELEMENT__SET_CHARTS_LOADING,
+export const setDashboardLoading = loading => ({
+  type: DASHBOARD_ELEMENT__SET_LOADING,
   payload: { loading }
 });
 
@@ -156,4 +115,18 @@ export const editDashboard = () => ({
 export const goToDashboard = payload => ({
   type: DASHBOARD_ELEMENT__GO_TO_DASHBOARD,
   payload
+});
+
+export const setMoreDashboardPanelData = ({ key, data }) => ({
+  type: DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
+  payload: { data, key }
+});
+
+export const setMissingDashboardPanelItems = data => ({
+  type: DASHBOARD_ELEMENT__SET_MISSING_DATA,
+  payload: { data }
+});
+
+export const getDashboardMissingPanelItems = () => ({
+  type: DASHBOARD_ELEMENT__GET_MISSING_DATA
 });
