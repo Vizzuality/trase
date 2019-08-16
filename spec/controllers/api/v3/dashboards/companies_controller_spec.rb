@@ -5,6 +5,9 @@ RSpec.describe Api::V3::Dashboards::CompaniesController, type: :controller do
   include_context 'api v3 paraguay flows quants'
 
   before(:each) do
+    Api::V3::Readonly::FlowNode.refresh(
+      sync: true, skip_dependencies: true, skip_dependents: true
+    )
     Api::V3::Readonly::Dashboards::Company.refresh(sync: true, skip_dependencies: true)
   end
 

@@ -1,5 +1,14 @@
-class RemoveDashboardsFlowPathsMv < ActiveRecord::Migration[5.2]
+class ReplaceDashboardsFlowPathsWithFlowNodes < ActiveRecord::Migration[5.2]
   def change
+    create_view :flow_nodes_mv,
+      materialized: true,
+      version: 1
+
+    add_index :flow_nodes_mv,
+      [:flow_id, :node_id],
+      unique: true,
+      name: 'flow_nodes_mv_flow_id_node_id_idx'
+
     update_view :dashboards_sources_mv,
       materialized: true,
       version: 6,

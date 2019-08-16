@@ -3028,6 +3028,21 @@ COMMENT ON COLUMN public.flows.path IS 'Array of node ids which constitute the s
 
 
 --
+-- Name: flow_nodes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.flow_nodes_mv AS
+ SELECT flows.context_id,
+    flows.id AS flow_id,
+    flows.year,
+    a."position",
+    a.node_id
+   FROM public.flows,
+    LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")
+  WITH NO DATA;
+
+
+--
 -- Name: dashboards_commodities_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -3042,11 +3057,10 @@ CREATE MATERIALIZED VIEW public.dashboards_commodities_mv AS
             contexts.country_id,
             flow_nodes.node_id,
             profiles.name AS profile
-           FROM ((((( SELECT DISTINCT flows.context_id,
-                    a."position",
-                    a.node_id
-                   FROM public.flows,
-                    LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) flow_nodes
+           FROM ((((( SELECT DISTINCT flow_nodes_mv.context_id,
+                    flow_nodes_mv.node_id,
+                    flow_nodes_mv."position"
+                   FROM public.flow_nodes_mv) flow_nodes
              JOIN public.contexts ON ((contexts.id = flow_nodes.context_id)))
              JOIN public.context_node_types cnt ON (((cnt.context_id = flow_nodes.context_id) AND (cnt.context_id = contexts.id) AND ((cnt.column_position + 1) = flow_nodes."position"))))
              JOIN public.context_node_type_properties cnt_props ON ((cnt_props.context_node_type_id = cnt.id)))
@@ -3174,12 +3188,11 @@ CREATE MATERIALIZED VIEW public.dashboards_companies_mv AS
             flow_nodes.flow_id,
             flow_nodes.node_id,
             flow_nodes."position"
-           FROM (( SELECT flows.id AS flow_id,
-                    flows.context_id,
-                    a."position",
-                    a.node_id
-                   FROM public.flows,
-                    LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) flow_nodes
+           FROM (( SELECT flow_nodes_mv.context_id,
+                    flow_nodes_mv.flow_id,
+                    flow_nodes_mv.node_id,
+                    flow_nodes_mv."position"
+                   FROM public.flow_nodes_mv) flow_nodes
              JOIN active_cnt ON (((flow_nodes.context_id = active_cnt.context_id) AND (flow_nodes."position" = (active_cnt.column_position + 1)))))
         ), filtered_flow_nodes AS (
          SELECT flow_nodes.flow_id,
@@ -3200,7 +3213,7 @@ CREATE MATERIALIZED VIEW public.dashboards_companies_mv AS
              JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
              JOIN active_cnt cnt ON (((cnt.context_id = flow_nodes.context_id) AND ((cnt.column_position + 1) = flow_nodes."position"))))
              JOIN public.contexts ON (((contexts.id = flow_nodes.context_id) AND (contexts.id = cnt.context_id))))
-          WHERE ((cnt.role)::text = ANY (ARRAY[('exporter'::character varying)::text, ('importer'::character varying)::text]))
+          WHERE ((cnt.role)::text = ANY ((ARRAY['exporter'::character varying, 'importer'::character varying])::text[]))
         )
  SELECT ffn.node_id AS id,
     ffn.name,
@@ -3268,11 +3281,10 @@ CREATE MATERIALIZED VIEW public.dashboards_countries_mv AS
             contexts.country_id,
             flow_nodes.node_id,
             profiles.name AS profile
-           FROM ((((( SELECT DISTINCT flows.context_id,
-                    a."position",
-                    a.node_id
-                   FROM public.flows,
-                    LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) flow_nodes
+           FROM ((((( SELECT DISTINCT flow_nodes_mv.context_id,
+                    flow_nodes_mv.node_id,
+                    flow_nodes_mv."position"
+                   FROM public.flow_nodes_mv) flow_nodes
              JOIN public.contexts ON ((contexts.id = flow_nodes.context_id)))
              JOIN public.context_node_types cnt ON (((cnt.context_id = flow_nodes.context_id) AND (cnt.context_id = contexts.id) AND ((cnt.column_position + 1) = flow_nodes."position"))))
              JOIN public.context_node_type_properties cnt_props ON ((cnt_props.context_node_type_id = cnt.id)))
@@ -3330,12 +3342,11 @@ CREATE MATERIALIZED VIEW public.dashboards_destinations_mv AS
             flow_nodes.flow_id,
             flow_nodes.node_id,
             flow_nodes."position"
-           FROM (( SELECT flows.id AS flow_id,
-                    flows.context_id,
-                    a."position",
-                    a.node_id
-                   FROM public.flows,
-                    LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) flow_nodes
+           FROM (( SELECT flow_nodes_mv.context_id,
+                    flow_nodes_mv.flow_id,
+                    flow_nodes_mv.node_id,
+                    flow_nodes_mv."position"
+                   FROM public.flow_nodes_mv) flow_nodes
              JOIN active_cnt ON (((flow_nodes.context_id = active_cnt.context_id) AND (flow_nodes."position" = (active_cnt.column_position + 1)))))
         ), filtered_flow_nodes AS (
          SELECT flow_nodes.flow_id,
@@ -3519,12 +3530,11 @@ CREATE MATERIALIZED VIEW public.dashboards_sources_mv AS
             flow_nodes.flow_id,
             flow_nodes.node_id,
             flow_nodes."position"
-           FROM (( SELECT flows.id AS flow_id,
-                    flows.context_id,
-                    a."position",
-                    a.node_id
-                   FROM public.flows,
-                    LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) flow_nodes
+           FROM (( SELECT flow_nodes_mv.context_id,
+                    flow_nodes_mv.flow_id,
+                    flow_nodes_mv.node_id,
+                    flow_nodes_mv."position"
+                   FROM public.flow_nodes_mv) flow_nodes
              JOIN active_cnt ON (((flow_nodes.context_id = active_cnt.context_id) AND (flow_nodes."position" = (active_cnt.column_position + 1)))))
         ), filtered_flow_nodes AS (
          SELECT flow_nodes.flow_id,
@@ -8015,6 +8025,13 @@ CREATE INDEX flow_inds_flow_id_idx ON public.flow_inds USING btree (flow_id);
 --
 
 CREATE INDEX flow_inds_ind_id_idx ON public.flow_inds USING btree (ind_id);
+
+
+--
+-- Name: flow_nodes_mv_flow_id_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX flow_nodes_mv_flow_id_node_id_idx ON public.flow_nodes_mv USING btree (flow_id, node_id);
 
 
 --

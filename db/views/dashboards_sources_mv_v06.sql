@@ -12,12 +12,11 @@ WITH active_cnt AS (
     position
   FROM (
     SELECT
-      flows.id AS flow_id,
-      flows.context_id,
-      a."position",
-      a.node_id
-    FROM public.flows,
-    LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")
+      context_id,
+      flow_id,
+      node_id,
+      position
+    FROM flow_nodes_mv
   ) flow_nodes
   JOIN active_cnt ON flow_nodes.context_id = active_cnt.context_id
     AND flow_nodes.position = active_cnt.column_position + 1

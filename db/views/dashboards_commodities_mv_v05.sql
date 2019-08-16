@@ -13,11 +13,10 @@ FROM (
     profiles.name AS profile
   FROM (
     SELECT DISTINCT
-      flows.context_id,
-      a."position",
-      a.node_id
-    FROM public.flows,
-    LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")
+      context_id,
+      node_id,
+      position
+    FROM flow_nodes_mv
   ) flow_nodes
   JOIN contexts ON contexts.id = flow_nodes.context_id
   JOIN context_node_types cnt ON cnt.context_id = flow_nodes.context_id
