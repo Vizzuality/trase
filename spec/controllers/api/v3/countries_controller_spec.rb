@@ -4,10 +4,6 @@ RSpec.describe Api::V3::CountriesController, type: :controller do
   include_context 'api v3 brazil flows quants'
   include_context 'api v3 paraguay flows quants'
 
-  before(:each) do
-    Api::V3::Readonly::Dashboards::Country.refresh(sync: true, skip_dependencies: true)
-  end
-
   describe 'GET index' do
     it 'returns list in alphabetical order' do
       get :index, params: {commodities_ids: api_v3_soy.id}
