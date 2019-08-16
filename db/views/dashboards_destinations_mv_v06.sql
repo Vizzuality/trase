@@ -58,6 +58,7 @@ SELECT
 FROM filtered_flow_nodes ffn
 JOIN flow_nodes fn
 ON ffn.flow_id = fn.flow_id
+WHERE ffn.node_id <> fn.node_id
 GROUP BY (
   ffn.node_id,
   ffn.name,

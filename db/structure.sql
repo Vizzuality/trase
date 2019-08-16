@@ -3226,6 +3226,7 @@ CREATE MATERIALIZED VIEW public.dashboards_companies_mv AS
     fn.node_id
    FROM (filtered_flow_nodes ffn
      JOIN flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
+  WHERE (ffn.node_id <> fn.node_id)
   GROUP BY ffn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type_id, ffn.node_type, ffn.profile, ffn.country_id, ffn.commodity_id, fn.node_id
   WITH NO DATA;
 
@@ -3380,6 +3381,7 @@ CREATE MATERIALIZED VIEW public.dashboards_destinations_mv AS
     fn.node_id
    FROM (filtered_flow_nodes ffn
      JOIN flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
+  WHERE (ffn.node_id <> fn.node_id)
   GROUP BY ffn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type_id, ffn.node_type, ffn.profile, ffn.country_id, ffn.commodity_id, fn.node_id
   WITH NO DATA;
 
