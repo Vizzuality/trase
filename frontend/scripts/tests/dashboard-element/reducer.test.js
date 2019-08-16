@@ -2,6 +2,7 @@ import reducer, {
   initialState
 } from 'react-components/dashboard-element/dashboard-element.reducer';
 import {
+  DASHBOARD_ELEMENT__EDIT_DASHBOARD,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_PANEL_PAGE,
@@ -14,21 +15,25 @@ import {
   DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
   DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
-  setDashboardSelectedYears,
-  setDashboardSelectedResizeBy,
+  DASHBOARD_ELEMENT__SET_SELECTED_COMMODITY_ID,
   DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
   DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
-  setDashboardSelectedRecolorBy,
-  DASHBOARD_ELEMENT__SET_CHARTS,
-  setDashboardCharts,
   DASHBOARD_ELEMENT__SET_LOADING,
+  DASHBOARD_ELEMENT__SET_CHARTS,
+  setDashboardSelectedYears,
+  setDashboardSelectedResizeBy,
+  setDashboardSelectedRecolorBy,
+  setDashboardCharts,
   setDashboardLoading,
   setDashboardActivePanel,
   setDashboardPanelPage,
   setMoreDashboardPanelData,
   setDashboardPanelLoadingItems,
   setDashboardPanelActiveTab,
-  clearDashboardPanel
+  clearDashboardPanel,
+  editDashboard,
+  setDashboardSelectedCountryId,
+  setDashboardSelectedCommodityId
 } from 'react-components/dashboard-element/dashboard-element.actions';
 
 describe(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL, () => {
@@ -367,14 +372,9 @@ describe(DASHBOARD_ELEMENT__SET_SEARCH_RESULTS, () => {
 
 describe(DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID, () => {
   const someItem = { id: 1, name: 'some item' };
+  const someItem2 = { id: 3, name: 'some item2' };
+  const action = setDashboardSelectedCountryId(someItem);
   it('Sets an active item', () => {
-    const action = {
-      type: DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID,
-      payload: {
-        panel: 'companies',
-        activeItem: someItem
-      }
-    };
     const state = {
       ...initialState,
       pages: {
@@ -389,25 +389,77 @@ describe(DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID, () => {
     });
   });
 
-  it('Clears the current sources when selecting a country in the sources panel', () => {
-    const action = {
-      type: DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID,
-      payload: {
-        panel: 'countries',
-        activeItem: someItem
-      }
-    };
+  it('Clears the rest of the panels, sources data and active tabs when changing country', () => {
     const state = {
       ...initialState,
+      data: {
+        sources: someItem2,
+        commodities: someItem,
+        companies: someItem2,
+        destinations: someItem
+      },
       sourcesActiveTab: 3,
-      sources: [16]
+      companiesActiveTab: 6,
+      sources: [16],
+      companies: [32],
+      destinations: [100],
+      selectedCountryId: 2,
+      selectedCommodityId: 12
     };
     const newState = reducer(state, action);
     expect(newState).toEqual({
       ...state,
+      data: {
+        ...state.data,
+        sources: initialState.data.sources
+      },
+      selectedCountryId: someItem.id,
       sources: initialState.sources,
+      companies: initialState.companies,
+      destinations: initialState.destinations,
       sourcesActiveTab: initialState.sourcesActiveTab,
-      selectedCountryId: someItem.id
+      companiesActiveTab: initialState.companiesActiveTab,
+      selectedCommodityId: initialState.selectedCommodityId
+    });
+  });
+});
+
+describe(DASHBOARD_ELEMENT__SET_SELECTED_COMMODITY_ID, () => {
+  const someItem = { id: 1, name: 'some item' };
+  const someItem2 = { id: 3, name: 'some item2' };
+  const action = setDashboardSelectedCommodityId(someItem);
+  it('Sets an active item', () => {
+    const newState = reducer(initialState, action);
+    expect(newState).toEqual({
+      ...initialState,
+      selectedCommodityId: someItem.id
+    });
+  });
+
+  it('Clears the rest of the panels and companies active tab when changing commodity', () => {
+    const state = {
+      ...initialState,
+      data: {
+        sources: someItem2,
+        commodities: someItem,
+        companies: someItem2,
+        destinations: someItem
+      },
+      sourcesActiveTab: 3,
+      companiesActiveTab: 6,
+      sources: [16],
+      companies: [32],
+      destinations: [100],
+      selectedCountryId: 2,
+      selectedCommodityId: 12
+    };
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      selectedCommodityId: someItem.id,
+      companies: initialState.companies,
+      destinations: initialState.destinations,
+      companiesActiveTab: initialState.companiesActiveTab
     });
   });
 });
@@ -514,4 +566,10 @@ test(DASHBOARD_ELEMENT__SET_LOADING, () => {
     ...initialState,
     loading
   });
+});
+
+test(DASHBOARD_ELEMENT__EDIT_DASHBOARD, () => {
+  const action = editDashboard();
+  const newState = reducer(initialState, action);
+  expect(newState.editMode).toBe(true);
 });

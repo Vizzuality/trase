@@ -91,10 +91,12 @@ export function* fetchMissingDashboardPanelItems() {
     ) {
       tasks.push(call(getMissingDashboardPanelItems, dashboardElement, selectedContext));
     }
-    if (tasks.length > 0 && selectedContext) {
-      tasks.push(call(updateIndicatorsOnItemChange));
-    }
+
     yield all(tasks);
+
+    if (tasks.length > 0 && selectedContext) {
+      yield call(updateIndicatorsOnItemChange);
+    }
     yield put(setDashboardLoading(false));
   }
 
