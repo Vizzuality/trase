@@ -5,7 +5,8 @@ import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
 import {
   getDashboardPanelData,
   getDashboardPanelSectionTabs,
-  fetchDashboardPanelSearchResults
+  fetchDashboardPanelSearchResults,
+  getMoreDashboardPanelData
 } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
 import { getURLFromParams } from 'utils/getURLFromParams';
 
@@ -22,21 +23,13 @@ const dashboardElement = {
   ...initialState,
   data: {
     ...initialState.data,
-    countries: [
-      {
-        id: 23,
-        name: 'BOLIVIA'
-      }
-    ]
+    countries: [{ id: 23, name: 'BOLIVIA' }]
   },
   tabs: {
     sources: [{ id: 1, name: 'BIOME' }]
   },
   activePanelId: 'sources',
-  sources: {
-    ...initialState.sources,
-    activeTab: 1
-  }
+  sourcesActiveTab: 1
 };
 
 const someUrl = 'http://trase.earth';
@@ -54,10 +47,10 @@ describe('getDashboardPanelData', () => {
 
   it('Cancels if the fetch is cancelled', () => {
     const generator = getDashboardPanelData(dashboardElement, optionsType);
-    generator.next();
-    generator.next();
-    generator.next();
-    generator.next();
+    generator.next({});
+    generator.next({});
+    generator.next({});
+    generator.next({});
 
     expect(generator.return().value).toEqual(cancelled());
     generator.next(true);
@@ -68,8 +61,8 @@ describe('getDashboardPanelData', () => {
 describe('getDashboardPanelSectionTabs', () => {
   it('Cancels if the fetch is cancelled', () => {
     const generator = getDashboardPanelSectionTabs(optionsType);
-    generator.next();
-    generator.next();
+    generator.next({});
+    generator.next({});
     expect(generator.return().value).toEqual(cancelled());
     generator.next(true);
     expect(sourceMock.cancel).toBeCalled();
@@ -78,9 +71,10 @@ describe('getDashboardPanelSectionTabs', () => {
 
 describe('getMoreDashboardPanelData', () => {
   it('Cancels if the fetch is cancelled', () => {
-    const generator = fetchDashboardPanelSearchResults(dashboardElement, query);
+    const generator = getMoreDashboardPanelData(dashboardElement, optionsType);
     generator.next();
-    generator.next({});
+    generator.next({ node_types_ids: 4 });
+    generator.next();
     const cancel = generator.return().value;
     expect(cancel).toEqual(cancelled());
     generator.next(true);
@@ -93,6 +87,7 @@ describe('fetchDashboardPanelSearchResults', () => {
     const generator = fetchDashboardPanelSearchResults(dashboardElement, query);
     generator.next();
     generator.next({});
+    generator.next({ node_types_ids: 1 });
     expect(generator.return().value).toEqual(cancelled());
     generator.next(true);
     expect(sourceMock.cancel).toBeCalled();

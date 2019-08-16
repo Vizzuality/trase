@@ -47,7 +47,7 @@ function* getDashboardPanelParams(optionsType, options = {}) {
     sources: sourcesTab || null,
     companies: companiesTab || null
   }[optionsType];
-  const activeItemParams = items => items.map(i => i.id).join();
+  const activeItemParams = items => items.map(i => i.id).join() || undefined;
   const params = {
     page,
     options_type: optionsType,
@@ -74,7 +74,6 @@ function* getDashboardPanelParams(optionsType, options = {}) {
   if (currentStep > DASHBOARD_STEPS.companies || isOverview) {
     params.companies_ids = activeItemParams(companiesActiveItems);
   }
-
   return params;
 }
 

@@ -180,7 +180,7 @@ const dashboardElementReducer = {
       draft.prefixes = {};
       data.forEach(item => {
         draft.prefixes[getSection(item)] = item.tabs.reduce(
-          (acc, next) => ({ ...acc, [next.name]: next.prefix }),
+          (acc, next) => ({ ...acc, [next.name]: next.prefix || null }),
           {}
         );
       });

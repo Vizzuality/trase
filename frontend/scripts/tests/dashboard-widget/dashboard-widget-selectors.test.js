@@ -47,14 +47,8 @@ const defaultState = {
       countries: [country],
       commodities: [commodity]
     },
-    countriesPanel: {
-      ...initialState.countriesPanel,
-      activeItems: [country.id]
-    },
-    commoditiesPanel: {
-      ...initialState.commoditiesPanel,
-      activeItems: [commodity.id]
-    }
+    selectedCountryId: country.id,
+    selectedCommodityId: commodity.id
   }
 };
 

@@ -4,7 +4,9 @@ import sortBy from 'lodash/sortBy';
 
 const isEnabled = (filter, selectedYears) =>
   !filter.isDisabled &&
-  (filter.years.length === 0 || difference(selectedYears, filter.years).length === 0);
+  (!filter.years ||
+    filter.years.length === 0 ||
+    difference(selectedYears, filter.years).length === 0);
 
 export const makeGetResizeByItems = (getResizeBys, getSelectedYears) =>
   createSelector(
