@@ -25,6 +25,8 @@ module TraseNewApi
     }
 
     config.active_record.schema_format = :sql
+    # do not dump partitions
+    ActiveRecord::SchemaDumper.ignore_tables = ['download_flows_*']
 
     config.middleware.insert_before 0, Rack::Cors do
       allow do
