@@ -5,9 +5,9 @@ import kebabCase from 'lodash/kebabCase';
 import addApostrophe from 'utils/addApostrophe';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
 import { CHART_TYPES, NODE_TYPE_PANELS } from 'constants';
-import camelCase from 'lodash/camelCase';
 import capitalize from 'lodash/capitalize';
 import { getDashboardsContext } from 'react-components/dashboard-element/dashboard-element.selectors';
+import pluralize from 'utils/pluralize';
 
 export const PARSED_CHART_TYPES = {
   bar_chart: CHART_TYPES.bar,
@@ -185,15 +185,6 @@ export const makeGetConfig = () =>
     }
   );
 
-const getPluralNodeType = nodeType => {
-  const name = camelCase(nodeType);
-  return (
-    {
-      country: 'countries',
-      municipality: 'municipalities'
-    }[name] || `${nodeType}s`.toLowerCase()
-  );
-};
 const getNodeTypeName = pluralNodeType =>
   pluralNodeType === 'countries' ? 'importing countries' : pluralNodeType;
 
@@ -235,7 +226,7 @@ export const makeGetTitle = () =>
       const nodeFilter = meta.info?.filter?.node;
       const nodeType = meta.info.node_type;
       if (nodeType) {
-        nodeTypePart = getNodeTypeName(getPluralNodeType(nodeType));
+        nodeTypePart = getNodeTypeName(pluralize(nodeType));
       } else if (nodeFilter) {
         const label = activeChartGrouping ? '' : config?.yAxisLabel.text;
         nodeTypePart = `${capitalize(nodeFilter.name)}${addApostrophe(nodeFilter.name)} ${label}`;
