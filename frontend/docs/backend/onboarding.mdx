@@ -50,10 +50,13 @@ Permits to customize the analysis.
     * Contain a field called path, which is an array of nodes with the flow on a commodity from the production place to the final consumer, as represented on the sankey diagram.
     * The path can have different length depending on the country - commodity combination, as different data may be available
 - Indicators
-    * There are three types of indicators: quants, quals and inds. The system stores values of those indicators relating to flows (shown e.g. on the sankey) or nodes (shown e.g. on the map)
+    * There are three types of indicators: quants, quals and inds. The system stores values of those indicators relating to flows (shown e.g. on the sankey) or nodes (shown e.g. on the map).
     * Quants - quantitative, values are numbers that can be summed over years
     * Inds - values are numbers which represent ratios and percentages, can be averaged over years but not summed
     * Quals - qualitative, values are text / boolean
+    * In spite of being of three different types, they can also be differences on two different kinds for filtering: cont_attribute and ncont_attribute.
+    * cont_attribute is mandatory and it is always a quant.
+    * ncont_attribute is optional and it can be either qual or ind. They permit to add another dimension to the sankey.
 
 ## Other core concepts:
 - Commodities - things like soy, corn, coffee; in case of Trase, these are deforestation-risk commodities,
