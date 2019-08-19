@@ -41,19 +41,22 @@ module Api
 
         def initialize_params(params)
           @node_types_ids = initialize_int_set_param(params[:node_types_ids])
-          @ncont_attribute = params[:ncont_attribute_id] &&
+          context_id = @context.id
+          cont_attribute_id = params[:cont_attribute_id]
+          ncont_attribute_id = params[:ncont_attribute_id]
+          @ncont_attribute = ncont_attribute_id &&
             Api::V3::Readonly::RecolorByAttribute.
               select(:attribute_id).
               includes(:readonly_attribute).
               find_by_context_id_and_attribute_id(
-                @context.id, params[:ncont_attribute_id]
+                context_id, ncont_attribute_id
               )&.readonly_attribute
-          @cont_attribute = params[:cont_attribute_id] &&
+          @cont_attribute = cont_attribute_id &&
             Api::V3::Readonly::ResizeByAttribute.
               select(:attribute_id).
               includes(:readonly_attribute).
               find_by_context_id_and_attribute_id(
-                @context.id, params[:cont_attribute_id]
+                context_id, cont_attribute_id
               )&.readonly_attribute
           @selected_nodes_ids = initialize_int_set_param(
             params[:selected_nodes_ids]
@@ -282,18 +285,7 @@ module Api
           ]
 
           if @ncont_attribute
-            ncont_attr_table = @ncont_attribute.flow_values_class.table_name
-            if @ncont_attribute.ind?
-              select_clause_parts << [
-                "#{ncont_attr_table}.value::DOUBLE PRECISION AS ind_value",
-                'NULL::TEXT AS qual_value'
-              ].join(', ')
-            elsif @ncont_attribute.qual?
-              select_clause_parts << [
-                'NULL::DOUBLE PRECISION AS ind_value',
-                "#{ncont_attr_table}.value::TEXT AS qual_value"
-              ].join(', ')
-            end
+            select_clause_parts << select_clause_ncont_attribute
           end
 
           select_clause = ActiveRecord::Base.send(
@@ -310,13 +302,28 @@ module Api
           if @ncont_attribute
             ncont_attr_table = @ncont_attribute.flow_values_class.table_name
             query = query.
-                joins("LEFT JOIN #{ncont_attr_table} ON #{ncont_attr_table}.flow_id = flows.id").
-                where(
-                  "#{ncont_attr_table}.#{@ncont_attribute.attribute_id_name}" =>
-                    @ncont_attribute.original_id
-                )
+              joins("LEFT JOIN #{ncont_attr_table} ON #{ncont_attr_table}.flow_id = flows.id").
+              where(
+                "#{ncont_attr_table}.#{@ncont_attribute.attribute_id_name}" =>
+                  @ncont_attribute.original_id
+              )
           end
           query
+        end
+
+        def select_clause_ncont_attribute
+          ncont_attr_table = @ncont_attribute.flow_values_class.table_name
+          if @ncont_attribute.ind?
+            [
+              "#{ncont_attr_table}.value::DOUBLE PRECISION AS ind_value",
+              'NULL::TEXT AS qual_value'
+            ].join(', ')
+          elsif @ncont_attribute.qual?
+            [
+              'NULL::DOUBLE PRECISION AS ind_value',
+              "#{ncont_attr_table}.value::TEXT AS qual_value"
+            ].join(', ')
+          end
         end
 
         def basic_flows_query

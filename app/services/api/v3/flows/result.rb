@@ -21,28 +21,9 @@ module Api
         def initialize_data
           result = {}
           @flows.each do |flow|
-            active_path = flow.path.map.with_index do |node_id, i|
-              if !@active_nodes.key?(node_id)
-                @other_nodes_ids[i]
-              else
-                node_id
-              end
-            end
+            active_path = get_active_path(flow)
             identifier = active_path.dup
-            flow_hash = {
-              path: active_path,
-              quant: flow['quant_value']
-            }
-
-            if @ncont_attribute
-              if @ncont_attribute.qual?
-                flow_hash[:qual] = flow['qual_value']
-                identifier << flow['qual_value']
-              elsif @ncont_attribute.ind?
-                flow_hash[:ind] = flow['ind_value']
-                identifier << flow['ind_value']
-              end
-            end
+            flow_hash = initialize_flow_hash(active_path, flow, identifier)
 
             if result[identifier]
               result[identifier][:quant] += flow['quant_value']
@@ -50,7 +31,41 @@ module Api
               result[identifier] = flow_hash
             end
           end
-          @data = result.values.map do |flow_hash|
+
+          @data = process_data(result)
+        end
+
+        def get_active_path(flow)
+          flow.path.map.with_index do |node_id, i|
+            @active_nodes.key?(node_id) ? node_id : @other_nodes_ids[i]
+          end
+        end
+
+        def initialize_flow_hash(active_path, flow, identifier)
+          flow_hash = {
+            path: active_path,
+            quant: flow['quant_value']
+          }
+
+          add_ncont_attribute_data(flow, flow_hash, identifier)
+
+          flow_hash
+        end
+
+        def add_ncont_attribute_data(flow, flow_hash, identifier)
+          return unless @ncont_attribute
+
+          if @ncont_attribute.qual?
+            flow_hash[:qual] = flow['qual_value']
+            identifier << flow['qual_value']
+          elsif @ncont_attribute.ind?
+            flow_hash[:ind] = flow['ind_value']
+            identifier << flow['ind_value']
+          end
+        end
+
+        def process_data(result)
+          result.values.map do |flow_hash|
             flow_hash[:height] = format('%0.6f', (flow_hash[:quant] / @total_height)).to_f
             flow_hash[:quant] = format('%0.6f', flow_hash[:quant]).to_f
             flow_hash
