@@ -30,13 +30,13 @@ import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-link
 import toolLinksInitialState from './tool-links.initial-state';
 
 function setNodes(state, action) {
-  const { nodes, replaceData } = action.payload;
+  const { nodes } = action.payload;
   return immer(state, draft => {
     nodes.forEach(node => {
-      if (!draft.data.nodes || replaceData) {
+      if (!draft.data.nodes) {
         draft.data.nodes = {};
       }
-      if (!draft.data.nodesByColumnGeoId || replaceData) {
+      if (!draft.data.nodesByColumnGeoId) {
         draft.data.nodesByColumnGeoId = {};
       }
       if (!draft.data.nodes[node.id]) {

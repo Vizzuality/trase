@@ -41,10 +41,10 @@ export function setToolColumns(columns) {
   };
 }
 
-export function setToolNodes(nodes, replaceData = false) {
+export function setToolNodes(nodes) {
   return {
     type: TOOL_LINKS__SET_NODES,
-    payload: { nodes, replaceData }
+    payload: { nodes }
   };
 }
 
