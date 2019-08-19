@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
+import ToolSelector from 'react-components/tool-selector';
 import Tool from 'react-components/tool';
 import { Provider } from 'react-redux';
 import BaseMarkup from 'html/base.ejs';
@@ -9,7 +10,8 @@ import CookieBanner from 'react-components/shared/cookie-banner';
 
 export const mount = (root, store) => {
   root.innerHTML = BaseMarkup();
-
+  const state = store.getState();
+  const { editing } = state.toolSelector;
   render(
     <Provider store={store}>
       <FiltersNav />
@@ -19,7 +21,7 @@ export const mount = (root, store) => {
 
   render(
     <Provider store={store}>
-      <Tool />
+      {editing && ENABLE_REDESIGN_PAGES ? <ToolSelector /> : <Tool />}
       <Feedback />
     </Provider>,
     document.getElementById('page-react-root')

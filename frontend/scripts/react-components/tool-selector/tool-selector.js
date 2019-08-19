@@ -6,9 +6,14 @@ import {
   getStep,
   getCountry,
   getCommodity,
-  getAllCountriesIds
+  getAllCountriesIds,
+  getCards
 } from 'react-components/tool-selector/tool-selector.selectors';
-import { setCommodity, setCountry } from 'react-components/tool-selector/tool-selector.actions';
+import {
+  setCommodity,
+  setCountry,
+  setEditMode
+} from 'react-components/tool-selector/tool-selector.actions';
 
 const mapStateToProps = state => ({
   items: getItems(state),
@@ -16,12 +21,16 @@ const mapStateToProps = state => ({
   country: getCountry(state),
   commodity: getCommodity(state),
   contexts: getContexts(state),
-  allCountriesIds: getAllCountriesIds(state)
+  allCountriesIds: getAllCountriesIds(state),
+  cards: getCards(state)
 });
+
+const goToTool = () => setEditMode(false);
 
 const mapDispatchToProps = {
   setCommodity,
-  setCountry
+  setCountry,
+  goToTool
 };
 
 export default connect(
