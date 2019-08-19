@@ -10,7 +10,19 @@ import 'scripts/react-components/dashboard-root/dashboard-root.scss';
 function DashboardRoot(props) {
   const { dashboardTemplates, loadingDashboardTemplates } = props;
   const linkProps = {
-    to: { type: 'dashboardElement', payload: { dashboardId: 'new' } },
+    to: {
+      type: 'dashboardElement',
+      payload: {
+        dashboardId: 'new',
+        serializerParams: {
+          selectedCountryId: null,
+          selectedCommodityId: null,
+          sources: [],
+          companies: [],
+          destinations: []
+        }
+      }
+    },
     target: undefined,
     rel: undefined,
     'data-test': 'dashboard-root-create-button'
