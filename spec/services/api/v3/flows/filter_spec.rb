@@ -1,7 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe Api::V3::Flows::Filter do
+  include_context 'api v3 brazil resize by attributes'
   include_context 'api v3 brazil flows quants'
+
+  before(:each) do
+    Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
+    Api::V3::Readonly::ResizeByAttribute.refresh(sync: true, skip_dependents: true)
+  end
 
   let!(:api_v3_diamantino_node) {
     node = Api::V3::Node.where(
@@ -64,7 +70,7 @@ RSpec.describe Api::V3::Flows::Filter do
         year_start: 2015,
         year_end: 2015,
         node_types_ids: node_types.map(&:id),
-        resize_quant_name: api_v3_volume.name,
+        cont_attribute_id: api_v3_volume.readonly_attribute.id,
         limit: 1
       }
     }
