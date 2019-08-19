@@ -153,7 +153,7 @@ const profileRootReducer = {
   [PROFILES__SET_ACTIVE_ITEM](state, action) {
     return immer(state, draft => {
       const { panel, activeItem } = action.payload;
-      let active = null;
+      let active = [];
       if (panel === 'type') {
         draft.panels.type = activeItem;
         return;
