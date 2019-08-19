@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::ProfileMetadataController, type: :controller do
   include_context 'api v3 brazil flows'
+  include_context 'api v3 brazil soy profiles'
 
   describe 'GET index' do
     before do

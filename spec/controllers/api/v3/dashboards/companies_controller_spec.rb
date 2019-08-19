@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::V3::Dashboards::CompaniesController, type: :controller do
   include_context 'api v3 brazil flows quants'
   include_context 'api v3 paraguay flows quants'
+  include_context 'api v3 brazil soy profiles'
 
   before(:each) do
     Api::V3::Readonly::FlowNode.refresh(
@@ -58,8 +59,6 @@ RSpec.describe Api::V3::Dashboards::CompaniesController, type: :controller do
     end
 
     context 'when profile_only' do
-      include_context 'api v3 brazil exporter actor profile'
-
       it 'returns companies with profiles' do
         get :index, params: {profile_only: true}
         expect(assigns(:collection).map(&:id)).to eq(

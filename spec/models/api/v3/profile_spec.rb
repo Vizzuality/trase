@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::Profile, type: :model do
   include_context 'api v3 brazil context node types'
-  include_context 'api v3 brazil exporter actor profile'
+  include_context 'api v3 brazil soy profiles'
 
   describe :validate do
     let(:profile_without_context_node_type) {

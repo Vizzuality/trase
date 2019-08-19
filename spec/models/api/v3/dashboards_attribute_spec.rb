@@ -2,8 +2,6 @@ require 'rails_helper'
 require 'models/api/v3/shared_attributes_examples'
 
 RSpec.describe Api::V3::DashboardsAttribute, type: :model do
-  include_context 'api v3 brazil municipality place profile'
-
   describe :destroy_zombies do
     let!(:referenced) { FactoryBot.create(:api_v3_dashboards_attribute) }
     let!(:dashboards_ind) {

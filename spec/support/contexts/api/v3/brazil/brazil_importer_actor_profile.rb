@@ -1,5 +1,5 @@
 shared_context 'api v3 brazil importer actor profile' do
-  include_context 'api v3 brazil context node types'
+  include_context 'api v3 brazil soy profiles'
   include_context 'api v3 inds'
   include_context 'api v3 quants'
 
