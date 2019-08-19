@@ -4,7 +4,6 @@ import SearchInput from 'react-components/shared/search-input/search-input.compo
 import GridList from 'react-components/shared/grid-list/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import Tabs from 'react-components/shared/tabs/tabs.component';
-import Text from 'react-components/shared/text/text.component';
 import capitalize from 'lodash/capitalize';
 import Accordion from 'react-components/shared/accordion/accordion.component';
 import 'react-components/dashboard-element/dashboard-panel/sources-panel.scss';
@@ -64,9 +63,6 @@ function ProfilesSourcesPanel(props) {
           defaultValue={activeSourceItem.length > 0 || sourcesOpen}
           onToggle={toggleSourcesOpen}
         >
-          <Text color="grey-faded" className="sources-panel-sources-subtitle">
-            You can choose several places of the same category:
-          </Text>
           <SearchInput
             variant="bordered"
             size="sm"
