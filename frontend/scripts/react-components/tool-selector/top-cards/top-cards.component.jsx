@@ -3,13 +3,15 @@ import Heading from 'react-components/shared/heading';
 import Text from 'react-components/shared/text';
 import PropTypes from 'prop-types';
 import capitalize from 'lodash/capitalize';
+import upperCase from 'lodash/upperCase';
+import pluralize from 'utils/pluralize';
 
 import 'react-components/tool-selector/top-cards/top-cards.scss';
 
-const TopCard = ({ card }) => {
-  const { country, parts, commodity } = card;
+const TopCard = ({ card, goToTool }) => {
+  const { countryName, indicatorName, commodityName, nodeTypeName } = card;
   return (
-    <button className="c-top-card">
+    <button onClick={goToTool} className="c-top-card">
       <Text
         variant="mono"
         align="center"
@@ -17,28 +19,33 @@ const TopCard = ({ card }) => {
         size="lg"
         transform="uppercase"
         color="grey-faded"
-        className="top-card-title"
       >
-        {country} · {commodity}
+        {countryName} · {commodityName}
+      </Text>
+      <Text variant="mono" align="center" transform="uppercase" color="grey-faded" lineHeight="lg">
+        {nodeTypeName && `Top 10 ${pluralize(nodeTypeName)}`}
       </Text>
       <Text variant="mono" align="center" transform="uppercase" color="grey-faded">
-        Top {parts}
+        {indicatorName && upperCase(indicatorName)}
       </Text>
     </button>
   );
 };
 
 TopCard.propTypes = {
-  card: PropTypes.object.isRequired
+  card: PropTypes.object.isRequired,
+  goToTool: PropTypes.func.isRequired
 };
 
-const cards = [
-  { country: 'Brazil', commodity: 'Soy', parts: '10 municipalities' },
-  { country: 'Brazil', commodity: 'Soy', parts: '10 municipalities' },
-  { country: 'Brazil', commodity: 'Soy', parts: '10 municipalities' }
-];
-
-const TopCards = ({ setCommodity, setCountry, countryName, commodityName, step }) => {
+const TopCards = ({
+  setCommodity,
+  setCountry,
+  countryName,
+  commodityName,
+  step,
+  cards,
+  goToTool
+}) => {
   const renderName = name => (
     <Text as="span" size="lg" weight="bold">
       {capitalize(name)}
@@ -64,9 +71,14 @@ const TopCards = ({ setCommodity, setCountry, countryName, commodityName, step }
       <div className="top-cards-container">
         <div className="row columns">
           <div className="top-cards-row">
-            {cards.map(card => (
-              <TopCard key={`${card.country}-${card.commodity}`} card={card} />
-            ))}
+            {cards &&
+              cards[step].map(card => (
+                <TopCard
+                  key={`${card.country}-${card.commodity}-${card.indicatorName}-${card.nodeTypeName}`}
+                  card={card}
+                  goToTool={() => goToTool(card)}
+                />
+              ))}
           </div>
         </div>
       </div>
@@ -79,7 +91,9 @@ TopCards.propTypes = {
   commodityName: PropTypes.string,
   countryName: PropTypes.string,
   setCountry: PropTypes.func.isRequired,
-  step: PropTypes.number
+  step: PropTypes.number,
+  cards: PropTypes.object,
+  goToTool: PropTypes.func.isRequired
 };
 
 export default TopCards;

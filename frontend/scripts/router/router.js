@@ -58,7 +58,7 @@ export const routes = {
   },
   tool: {
     path: '/flows',
-    page: ENABLE_REDESIGN_PAGES ? 'tool-selector' : 'tool',
+    page: 'tool',
     title: getPageTitle,
     thunk: ENABLE_REDESIGN_PAGES
       ? loadPageData()

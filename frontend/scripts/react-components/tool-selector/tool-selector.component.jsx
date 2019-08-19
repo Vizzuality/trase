@@ -16,7 +16,9 @@ function ToolSelector({
   commodity,
   country,
   contexts,
-  allCountriesIds
+  allCountriesIds,
+  cards,
+  goToTool
 }) {
   const [highlightedContext, setHighlightedContext] = useState(null);
   const [highlightedSelectableCountryIds, setHighlightedSelectableCountries] = useState(
@@ -109,6 +111,8 @@ function ToolSelector({
         setCountry={setCountry}
         commodityName={commodity?.name}
         countryName={country?.name}
+        cards={cards}
+        goToTool={goToTool}
       />
     </div>
   );
@@ -124,6 +128,8 @@ ToolSelector.propTypes = {
   allCountriesIds: PropTypes.array,
   setCommodity: PropTypes.func.isRequired,
   setCountry: PropTypes.func.isRequired,
+  cards: PropTypes.object.isRequired,
+  goToTool: PropTypes.func.isRequired,
   step: PropTypes.number
 };
 
