@@ -27,40 +27,17 @@ class GridList extends React.Component {
     page: 1
   };
 
-  listRef = React.createRef();
-
-  debouncedGetMoreItemsCb = debounce(this.props.getMoreItems, 150);
-
-  componentDidUpdate(prevProps) {
-    const { items, columnCount } = this.props;
-    if (prevProps.items.length > 0 && items.length !== prevProps.items.length) {
-      const prevLastRow = prevProps.items[prevProps.items.length - 1];
-      const currentFirstRowIndex = items.findIndex(i => i.id === (prevLastRow && prevLastRow.id));
-      const buffer = 1;
-      const rowIndex = Math.ceil(parseInt(currentFirstRowIndex / columnCount, 10)) - buffer;
-
-      this.listRef.current.scrollToItem({
-        rowIndex,
-        columnIndex: 0,
-        align: 'start'
-      });
-    }
-  }
+  debouncedGetMoreItemsCb = debounce(this.props.getMoreItems, 350);
 
   getMoreItems = ({ scrollTop, scrollUpdateWasRequested, verticalScrollDirection }) => {
     const { items, height, rowHeight, page, columnCount } = this.props;
-    const current = parseInt((scrollTop + height) / rowHeight, 10);
+    const current = Math.ceil((scrollTop + height) / rowHeight, 10);
     const buffer = 1;
-    const pageEnd = parseInt(items.length / columnCount, 10);
+    const pageEnd = Math.ceil(items.length / columnCount, 10);
     const reachedPageEnd = current === pageEnd;
     const reachedPageEndWithBuffer =
       current === pageEnd - buffer && page > GridList.defaultProps.page;
 
-    // TODO: add backwards support
-    // const reachedPageStart = current === columnCount;
-    // if (reachedPageStart && !scrollUpdateWasRequested && page > 0 && verticalScrollDirection === 'backward') {
-    //   getMoreItems(page - 1, 'backwards');
-    // }
     if (
       (reachedPageEnd || reachedPageEndWithBuffer) &&
       !scrollUpdateWasRequested &&
@@ -105,7 +82,6 @@ class GridList extends React.Component {
     return (
       <div className="c-grid-list">
         <FixedSizeGrid
-          ref={this.listRef}
           className={className}
           height={height}
           width={width}

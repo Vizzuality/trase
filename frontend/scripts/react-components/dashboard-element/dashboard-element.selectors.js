@@ -443,10 +443,30 @@ const getURLDashboardSelectedResizeBy = createSelector(
   }
 );
 
+const getURLParamsIfContext = (params, context) => {
+  if (!context) {
+    return null;
+  }
+  return params;
+};
+
+const getURLSources = createSelector(
+  [getSources, getDashboardsContext],
+  getURLParamsIfContext
+);
+const getURLCompanies = createSelector(
+  [getCompanies, getDashboardsContext],
+  getURLParamsIfContext
+);
+const getURLDestinations = createSelector(
+  [getDestinations, getDashboardsContext],
+  getURLParamsIfContext
+);
+
 export const getDashboardElementUrlProps = createStructuredSelector({
-  sources: getSources,
-  companies: getCompanies,
-  destinations: getDestinations,
+  sources: getURLSources,
+  companies: getURLCompanies,
+  destinations: getURLDestinations,
   selectedCountryId: getSelectedCountryId,
   selectedCommodityId: getSelectedCommodityId,
   selectedYears: getURLDashboardSelectedYears,

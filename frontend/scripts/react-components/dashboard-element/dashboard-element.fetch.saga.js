@@ -156,7 +156,7 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType) {
   if (params.node_types_ids === null) {
     return;
   }
-  const task = yield fork(setLoadingSpinner, 350, setDashboardPanelLoadingItems(true));
+  yield put(setDashboardPanelLoadingItems(true));
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
@@ -167,14 +167,8 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType) {
         key: optionsType
       })
     );
-    if (task.isRunning()) {
-      task.cancel();
-    }
   } catch (e) {
     console.error('Error', e);
-    if (task.isRunning()) {
-      task.cancel();
-    }
   } finally {
     if (yield cancelled()) {
       if (NODE_ENV_DEV) console.error('Cancelled', url);
@@ -182,7 +176,7 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType) {
         source.cancel();
       }
     }
-    yield call(setLoadingSpinner, 750, setDashboardPanelLoadingItems(false));
+    yield call(setLoadingSpinner, 150, setDashboardPanelLoadingItems(false));
   }
 }
 
