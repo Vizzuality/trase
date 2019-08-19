@@ -6,7 +6,39 @@
     margin-right: 20px;
   }
 
+  .top-cards-container {
+    margin-top: 5px;
+    background-color: $mid-light-gray;
+    width: 100%;
+    height: 160px;
+  }
+
+  .top-cards-row {
+    padding-top: 20px;
+    display: flex;
+  }
+
   .back-button {
     cursor: pointer;
+  }
+}
+
+.c-top-card {
+  height: 120px;
+  width: 285px;
+  border-radius: 5px;
+  background-color: $white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  &:not(:last-child) {
+    margin-right: 20px;
+  }
+
+  .top-card-title {
+    padding-bottom: 5px;
   }
 }

@@ -103,15 +103,13 @@ function ToolSelector({
           onHoverGeometry={geoId => setHighlightedCommodities(findHighlightedCommoditiesIds(geoId))}
         />
       </div>
-      <div className="row columns">
-        <TopCards
-          step={step}
-          setCommodity={setCommodity}
-          setCountry={setCountry}
-          commodityName={commodity?.name}
-          countryName={country?.name}
-        />
-      </div>
+      <TopCards
+        step={step}
+        setCommodity={setCommodity}
+        setCountry={setCountry}
+        commodityName={commodity?.name}
+        countryName={country?.name}
+      />
     </div>
   );
 }
