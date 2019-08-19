@@ -12,9 +12,8 @@ module Api
           @active_nodes = filter_flows.active_nodes
           @total_height = filter_flows.total_height
           @other_nodes_ids = filter_flows.other_nodes_ids
-          @resize_quant = filter_flows.resize_quant
-          @recolor_ind = filter_flows.recolor_ind
-          @recolor_qual = filter_flows.recolor_qual
+          @cont_attribute = filter_flows.cont_attribute
+          @ncont_attribute = filter_flows.ncont_attribute
           initialize_data
           initialize_include
         end
@@ -34,12 +33,15 @@ module Api
               path: active_path,
               quant: flow['quant_value']
             }
-            if @recolor_qual
-              flow_hash[:qual] = flow['qual_value']
-              identifier << flow['qual_value']
-            elsif @recolor_ind
-              flow_hash[:ind] = flow['ind_value']
-              identifier << flow['ind_value']
+
+            if @ncont_attribute
+              if @ncont_attribute.qual?
+                flow_hash[:qual] = flow['qual_value']
+                identifier << flow['qual_value']
+              elsif @ncont_attribute.ind?
+                flow_hash[:ind] = flow['ind_value']
+                identifier << flow['ind_value']
+              end
             end
 
             if result[identifier]
