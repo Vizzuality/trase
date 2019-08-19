@@ -22,6 +22,7 @@ $card-min-height: 200px;
       background-size: cover;
       background-repeat: no-repeat;
       background-position: center;
+      background-color: darken($light-gray, 12%);
       transition: height 350ms ease-out;
       will-change: height;
     }
