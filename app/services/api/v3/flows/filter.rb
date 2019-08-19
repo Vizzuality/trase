@@ -128,7 +128,7 @@ module Api
             Api::V3::Flow.
               select('true').
               joins(:flow_quants).
-              where('flow_quants.quant_id' => @cont_attribute.id).
+              where('flow_quants.quant_id' => @cont_attribute.original_id).
               where(context_id: @context.id). # TODO: verify this
               where('? = ANY(flows.path)', node_id).
               where('year >= ? AND year <= ?', @year_start, @year_end).any?
