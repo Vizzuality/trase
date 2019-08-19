@@ -237,6 +237,7 @@ const profileRootReducer = {
       if (panel === 'companies') {
         if (clearActiveTabData && draft.data[panel][selectedCountryId]) {
           draft.data[panel][selectedCountryId][prevTab] = null;
+          draft.panels[panel].page = initialState.panels[panel].page;
         }
         if (!draft.data[panel][selectedCountryId]) {
           draft.data[panel][selectedCountryId] = {};
@@ -245,6 +246,7 @@ const profileRootReducer = {
       } else if (activeTab) {
         if (clearActiveTabData) {
           draft.data[panel][prevTab] = null;
+          draft.panels[panel].page = initialState.panels[panel].page;
         }
         draft.data[panel][activeTab] = together;
       } else {
@@ -253,7 +255,6 @@ const profileRootReducer = {
 
       draft.panels[panel].activeTab = activeTab;
       draft.panels[panel].searchResults = [];
-      draft.panels[panel].page = initialState.panels[panel].page;
     });
   }
 };

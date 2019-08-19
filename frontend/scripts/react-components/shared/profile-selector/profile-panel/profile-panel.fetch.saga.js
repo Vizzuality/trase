@@ -106,7 +106,7 @@ export function* getProfilesData(panelName, activeTab = null) {
 export function* getMoreProfilesData(profileSelector, panelName, activeTab = null) {
   const { page } = profileSelector.panels[panelName];
   const params = yield getProfilesParams(panelName, { page });
-  const task = yield fork(setLoadingSpinner, 350, setProfilesLoadingItems(true, panelName));
+  yield put(setProfilesLoadingItems(true, panelName));
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, { ...params, profile_only: true });
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
@@ -119,9 +119,6 @@ export function* getMoreProfilesData(profileSelector, panelName, activeTab = nul
         data: data.data
       }
     });
-    if (task.isRunning()) {
-      task.cancel();
-    }
   } catch (e) {
     console.error('Error', e);
   } finally {
@@ -131,7 +128,7 @@ export function* getMoreProfilesData(profileSelector, panelName, activeTab = nul
         source.cancel();
       }
     }
-    yield call(setLoadingSpinner, 750, setProfilesLoadingItems(false, panelName));
+    yield call(setLoadingSpinner, 150, setProfilesLoadingItems(false, panelName));
   }
 }
 
