@@ -33,14 +33,8 @@ function GridListItem(props) {
               type="button"
               disabled={isDisabled}
               onClick={() => onClick(item)}
-              onHover={
-                onHover
-                  ? {
-                      onMouseEnter: () => onHover(item),
-                      onMouseLeave: () => onHover(null)
-                    }
-                  : undefined
-              }
+              onMouseEnter={onHover ? () => onHover(item) : undefined}
+              onMouseLeave={onHover ? () => onHover(null) : undefined}
               className={cx('grid-list-item-button', {
                 '-active': isActive,
                 '-has-info': !!tooltip,

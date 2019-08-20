@@ -3,19 +3,15 @@
 .c-tool-selector {
   margin-top: $nav-height;
 
-  .tool-selector-grid {
+.tool-selector-grid {
     margin: 30px auto 0;
-    max-width: 780px;
+    max-width: 900px;
     min-height: 170px;
     flex-wrap: wrap;
     display: flex;
 
     .c-grid-list-item {
-      width: 130px;
+      width: 180px;
     }
-  }
-
-  .tool-selector-title {
-    padding-top: 20px;
   }
 }

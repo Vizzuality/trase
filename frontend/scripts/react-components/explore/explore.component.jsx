@@ -24,16 +24,8 @@ function Explore({
   if (!editing) goToTool();
 
   const [highlightedContext, setHighlightedContext] = useState(null);
-  const [highlightedSelectableCountryIds, setHighlightedSelectableCountries] = useState(
-    allCountriesIds
-  );
   const [highlightedCountryIds, setHighlightedCountries] = useState(null);
   const [highlightedCommodityIds, setHighlightedCommodities] = useState(null);
-
-  // Set highlighted countries
-  useEffect(() => {
-    setHighlightedSelectableCountries(allCountriesIds);
-  }, [allCountriesIds]);
 
   // Clear highlighted items on step change
   useEffect(() => {
@@ -44,7 +36,7 @@ function Explore({
   const renderTitle = () => {
     const titleParts = ['commodity', 'sourcing country', 'supply chain'];
     return (
-      <Heading size="lg" align="center" className="tool-selector-title">
+      <Heading size="lg" align="center">
         {step + 1}. Choose one {titleParts[step]}
       </Heading>
     );
@@ -97,10 +89,13 @@ function Explore({
       </div>
       <div className="row columns">
         <WorldMap
+          explore
+          height={320}
+          center={[0, 10]}
           highlightedContext={highlightedContext}
           highlightedCountryIds={
             step === EXPLORE_STEPS.selectCommodity && {
-              level1: highlightedSelectableCountryIds,
+              level1: allCountriesIds,
               level2: highlightedCountryIds
             }
           }
