@@ -9,11 +9,11 @@ import {
 test(EXPLORE__SET_COMMODITY, () => {
   const action = setCommodity(12);
   const newState = reducer(initialState, action);
-  expect(newState).toEqual({ ...initialState, activeCommodityId: 12 });
+  expect(newState).toEqual({ ...initialState, selectedCommodityId: 12 });
 });
 
 test(EXPLORE__SET_COUNTRY, () => {
   const action = setCountry(12);
   const newState = reducer(initialState, action);
-  expect(newState).toEqual({ ...initialState, activeCountryId: 12 });
+  expect(newState).toEqual({ ...initialState, selectedCountryId: 12 });
 });
