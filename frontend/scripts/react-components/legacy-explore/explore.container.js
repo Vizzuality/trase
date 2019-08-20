@@ -4,7 +4,7 @@ import {
   getTopNodesKey,
   setExploreTopNodes,
   setSelectedTableColumnType
-} from 'react-components/explore/explore.actions';
+} from 'react-components/legacy-explore/explore.actions';
 import { selectContextById } from 'actions/app.actions';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 import Explore from './explore.component';
@@ -12,7 +12,7 @@ import Explore from './explore.component';
 const mapStateToProps = state => {
   const selectedContext = getSelectedContext(state);
   const selectedYears = getSelectedYears(state);
-  const { topNodes, selectedTableColumnType, loading: loadingDict } = state.explore;
+  const { topNodes, selectedTableColumnType, loading: loadingDict } = state.legacyExplore;
   const topNodesKey = selectedContext
     ? getTopNodesKey(selectedContext.id, selectedTableColumnType, ...selectedYears)
     : null;
