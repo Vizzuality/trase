@@ -3,11 +3,11 @@ import uniqBy from 'lodash/uniqBy';
 import { EXPLORE_STEPS } from 'constants';
 
 export const getContexts = state => state.app.contexts || null;
-const getActiveCommodityId = state => state.explore.activeCommodityId;
-const getActiveCountryId = state => state.explore.activeCountryId;
+const getSelectedCommodityId = state => state.explore.selectedCommodityId;
+const getSelectedCountryId = state => state.explore.selectedCountryId;
 
 export const getStep = createSelector(
-  [getActiveCommodityId, getActiveCountryId],
+  [getSelectedCommodityId, getSelectedCountryId],
   (commodityId, countryId) => {
     if (!commodityId) return EXPLORE_STEPS.selectCommodity;
     if (!countryId) return EXPLORE_STEPS.selectCountry;
@@ -49,7 +49,7 @@ export const getAllCountriesIds = createSelector(
 );
 
 const getCountries = createSelector(
-  [getContexts, getActiveCommodityId],
+  [getContexts, getSelectedCommodityId],
   (contexts, commodityId) => {
     if (!contexts) return null;
     return contexts
@@ -62,7 +62,7 @@ const getCountries = createSelector(
 );
 
 export const getCommodity = createSelector(
-  [getCommodities, getActiveCommodityId],
+  [getCommodities, getSelectedCommodityId],
   (commodities, commodityId) => {
     if (!commodityId || !commodities || !commodities.length) return null;
     return commodities.find(c => c.id === commodityId);
@@ -70,7 +70,7 @@ export const getCommodity = createSelector(
 );
 
 export const getCountry = createSelector(
-  [getCountries, getActiveCountryId],
+  [getCountries, getSelectedCountryId],
   (countries, countryId) => {
     if (!countryId || !countries || !countries.length) return null;
     return countries.find(c => c.id === countryId);

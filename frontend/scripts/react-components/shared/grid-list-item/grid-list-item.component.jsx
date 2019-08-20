@@ -23,12 +23,6 @@ function GridListItem(props) {
   if (!item) return <b style={style} />;
   const onClick = isActive && disableItem ? disableItem : enableItem;
   const testId = item.name && item.name.split(' ').join('-');
-  const onHoverProp = onHover
-    ? {
-        onMouseEnter: () => onHover(item),
-        onMouseLeave: () => onHover(null)
-      }
-    : {};
   return (
     <React.Fragment>
       <div style={style} className={cx('c-grid-list-item', { [`v-${variant}`]: variant })}>
@@ -39,7 +33,14 @@ function GridListItem(props) {
               type="button"
               disabled={isDisabled}
               onClick={() => onClick(item)}
-              {...onHoverProp}
+              onHover={
+                onHover
+                  ? {
+                      onMouseEnter: () => onHover(item),
+                      onMouseLeave: () => onHover(null)
+                    }
+                  : undefined
+              }
               className={cx('grid-list-item-button', {
                 '-active': isActive,
                 '-has-info': !!tooltip,

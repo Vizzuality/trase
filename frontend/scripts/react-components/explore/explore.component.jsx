@@ -82,7 +82,7 @@ function Explore({
     <div className="c-tool-selector">
       <div className="row columns">{renderTitle()}</div>
       <div className="row columns">
-        <div className="grid-list">
+        <div className="tool-selector-grid">
           {step < EXPLORE_STEPS.selected &&
             items.map(item => (
               <GridListItem

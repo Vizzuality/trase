@@ -7,8 +7,8 @@ import createReducer from 'utils/createReducer';
 
 export const initialState = {
   editing: true,
-  activeCommodityId: null,
-  activeCountryId: null
+  selectedCommodityId: null,
+  selectedCountryId: null
 };
 
 const exploreReducer = {
@@ -17,18 +17,18 @@ const exploreReducer = {
     return { ...state, editing };
   },
   [EXPLORE__SET_COMMODITY](state, action) {
-    const { activeCommodityId } = action.payload;
-    return { ...state, activeCommodityId };
+    const { selectedCommodityId } = action.payload;
+    return { ...state, selectedCommodityId };
   },
   [EXPLORE__SET_COUNTRY](state, action) {
-    const { activeCountryId } = action.payload;
-    return { ...state, activeCountryId };
+    const { selectedCountryId } = action.payload;
+    return { ...state, selectedCountryId };
   }
 };
 
 const exploreReducerTypes = PropTypes => ({
-  activeCommodityId: PropTypes.number,
-  activeCountryId: PropTypes.number
+  selectedCommodityId: PropTypes.number,
+  selectedCountryId: PropTypes.number
 });
 
 export default createReducer(initialState, exploreReducer, exploreReducerTypes);
