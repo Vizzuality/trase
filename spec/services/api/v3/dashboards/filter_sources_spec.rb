@@ -6,7 +6,9 @@ RSpec.describe Api::V3::Dashboards::FilterSources do
   include_context 'api v3 paraguay flows'
 
   before(:each) do
-    Api::V3::Readonly::Dashboards::FlowPath.refresh(sync: true)
+    Api::V3::Readonly::FlowNode.refresh(
+      sync: true, skip_dependencies: true, skip_dependents: true
+    )
     Api::V3::Readonly::Dashboards::Source.refresh(sync: true)
   end
 

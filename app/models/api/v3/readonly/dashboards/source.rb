@@ -31,16 +31,8 @@ module Api
     module Readonly
       module Dashboards
         class Source < Api::V3::Readonly::BaseModel
-          include Refresh
-
           self.table_name = 'dashboards_sources_mv'
           belongs_to :node
-
-          def self.refresh(options = {})
-            # TODO: try the new :cascade option
-            refresh_by_name('context_node_types_mv', options)
-            super(options)
-          end
         end
       end
     end

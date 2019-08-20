@@ -3,9 +3,12 @@ require 'rails_helper'
 RSpec.describe Api::V3::Dashboards::SourcesController, type: :controller do
   include_context 'api v3 brazil flows quants'
   include_context 'api v3 paraguay flows quants'
+  include_context 'api v3 brazil soy profiles'
 
   before(:each) do
-    Api::V3::Readonly::Dashboards::FlowPath.refresh(sync: true, skip_dependents: true)
+    Api::V3::Readonly::FlowNode.refresh(
+      sync: true, skip_dependencies: true, skip_dependents: true
+    )
     Api::V3::Readonly::Dashboards::Source.refresh(sync: true, skip_dependencies: true)
   end
 
@@ -55,8 +58,6 @@ RSpec.describe Api::V3::Dashboards::SourcesController, type: :controller do
     end
 
     context 'when profile_only' do
-      include_context 'api v3 brazil municipality place profile'
-
       it 'returns sources with profiles' do
         get :index, params: {
           countries_ids: [api_v3_brazil.id].join(','),

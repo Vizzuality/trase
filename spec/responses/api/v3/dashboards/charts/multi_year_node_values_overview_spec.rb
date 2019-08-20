@@ -4,6 +4,7 @@ require 'responses/api/v3/dashboards/charts/required_chart_parameters_examples.r
 RSpec.describe 'Charts::MultiYearNodeValuesOverview', type: :request do
   include_context 'api v3 brazil municipality quant values'
   include_context 'api v3 brazil flows'
+  include_context 'api v3 brazil soy profiles'
 
   before(:each) do
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)

@@ -4,12 +4,6 @@ RSpec.describe Api::V3::CommoditiesController, type: :controller do
   include_context 'api v3 brazil flows quants'
   include_context 'api v3 brazil beef flows'
 
-  before(:each) do
-    Api::V3::Readonly::Dashboards::FlowPath.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::Dashboards::Country.refresh(sync: true, skip_dependencies: true)
-    Api::V3::Readonly::Dashboards::Commodity.refresh(sync: true, skip_dependencies: true)
-  end
-
   describe 'GET index' do
     it 'returns list in alphabetical order' do
       get :index, params: {countries_ids: api_v3_brazil.id}

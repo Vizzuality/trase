@@ -3,9 +3,12 @@ require 'rails_helper'
 RSpec.describe Api::V3::Dashboards::CountriesController, type: :controller do
   include_context 'api v3 brazil flows quants'
   include_context 'api v3 paraguay flows quants'
+  include_context 'api v3 brazil soy profiles'
 
   before(:each) do
-    Api::V3::Readonly::Dashboards::FlowPath.refresh(sync: true, skip_dependents: true)
+    Api::V3::Readonly::FlowNode.refresh(
+      sync: true, skip_dependencies: true, skip_dependents: true
+    )
     Api::V3::Readonly::Dashboards::Country.refresh(sync: true, skip_dependencies: true)
   end
 
@@ -32,8 +35,6 @@ RSpec.describe Api::V3::Dashboards::CountriesController, type: :controller do
     end
 
     context 'when profile_only' do
-      include_context 'api v3 brazil municipality place profile'
-
       it 'returns countries where nodes have profiles' do
         get :index, params: {profile_only: true}
         expect(assigns(:collection).map(&:id)).to eq([api_v3_brazil.id])
