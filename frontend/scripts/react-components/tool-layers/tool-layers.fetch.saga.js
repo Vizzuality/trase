@@ -59,6 +59,8 @@ export function* getLinkedGeoIds() {
 }
 
 export function* getMapDimensions(selectedContext, selectedYears) {
+  if (!selectedContext) return;
+
   const params = {
     context_id: selectedContext.id,
     start_year: selectedYears[0],
