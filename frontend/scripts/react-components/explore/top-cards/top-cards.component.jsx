@@ -11,7 +11,7 @@ import 'react-components/explore/top-cards/top-cards.scss';
 const TopCard = ({ card, goToTool }) => {
   const { countryName, indicatorName, commodityName, nodeTypeName } = card;
   return (
-    <button onClick={goToTool} className="c-top-card">
+    <button onClick={() => goToTool(card)} className="c-top-card">
       <Text
         variant="mono"
         align="center"

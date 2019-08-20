@@ -12,9 +12,15 @@ export const setCountry = activeCountryId => ({
   payload: { activeCountryId }
 });
 
-export const goToTool = () => dispatch => {
+export const goToTool = linkInfo => (dispatch, getState) => {
+  const { contexts } = getState().app;
+  const context = contexts.find(
+    c => c.commodityId === linkInfo.commodityId && c.countryId === linkInfo.countryId
+  );
+  const serializerParams = { selectedContextId: context?.id };
   dispatch({
-    type: 'tool'
+    type: 'tool',
+    payload: { serializerParams }
   });
   dispatch({
     type: 'EXPLORE__SET_EDIT_MODE',
