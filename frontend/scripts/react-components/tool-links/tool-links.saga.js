@@ -34,6 +34,7 @@ function* fetchToolColumns() {
       location: { type: page }
     } = state;
     const selectedContext = yield select(getSelectedContext);
+    if (!selectedContext) return;
 
     if (page !== 'tool' || selectedContext === null) {
       return;
