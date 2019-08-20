@@ -5,7 +5,7 @@ import lineString from 'turf-linestring';
 import greatCircle from '@turf/great-circle';
 import { geoPath } from 'd3-geo';
 import projections from 'react-simple-maps/lib/projections';
-import { getTopNodesKey } from 'react-components/explore/explore.actions';
+import { getTopNodesKey } from 'react-components/legacy-explore/explore.actions';
 import {
   getSelectedContext as getAppSelectedContext,
   getSelectedYears
@@ -23,7 +23,7 @@ const getSelectedContext = createSelector(
     return appSelectedContext;
   }
 );
-const getTopNodes = state => state.explore.topNodes;
+const getTopNodes = state => state.legacyExplore.topNodes;
 
 const worldMapProjection = projections(800, 450, { scale: 145 }, 'robinson');
 

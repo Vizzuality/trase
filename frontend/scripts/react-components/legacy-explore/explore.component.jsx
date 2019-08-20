@@ -12,7 +12,7 @@ import Heading from 'react-components/shared/heading/heading.component';
 import Text from 'react-components/shared/text/text.component';
 import { EXPLORE_COLUMN_LIST } from 'constants';
 
-import 'scripts/react-components/explore/explore.scss';
+import 'scripts/react-components/legacy-explore/explore.scss';
 
 function Explore(props) {
   const {

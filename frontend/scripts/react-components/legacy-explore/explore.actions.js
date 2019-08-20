@@ -41,7 +41,7 @@ export const setExploreTopNodes = (columnType, context) => (dispatch, getState) 
   }
 
   const [start_year, end_year] = getSelectedYears(state);
-  const { topNodes } = state.explore;
+  const { topNodes } = state.legacyExplore;
   const params = {
     start_year,
     end_year,
