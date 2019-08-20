@@ -6,7 +6,7 @@ import capitalize from 'lodash/capitalize';
 import upperCase from 'lodash/upperCase';
 import pluralize from 'utils/pluralize';
 
-import 'react-components/tool-selector/top-cards/top-cards.scss';
+import 'react-components/explore/top-cards/top-cards.scss';
 
 const TopCard = ({ card, goToTool }) => {
   const { countryName, indicatorName, commodityName, nodeTypeName } = card;

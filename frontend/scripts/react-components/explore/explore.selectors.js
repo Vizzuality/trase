@@ -1,17 +1,17 @@
 import { createSelector } from 'reselect';
 import uniqBy from 'lodash/uniqBy';
-import { TOOL_SELECTOR_STEPS } from 'constants';
+import { EXPLORE_STEPS } from 'constants';
 
 export const getContexts = state => state.app.contexts || null;
-const getActiveCommodityId = state => state.toolSelector.activeCommodityId;
-const getActiveCountryId = state => state.toolSelector.activeCountryId;
+const getActiveCommodityId = state => state.explore.activeCommodityId;
+const getActiveCountryId = state => state.explore.activeCountryId;
 
 export const getStep = createSelector(
   [getActiveCommodityId, getActiveCountryId],
   (commodityId, countryId) => {
-    if (!commodityId) return TOOL_SELECTOR_STEPS.selectCommodity;
-    if (!countryId) return TOOL_SELECTOR_STEPS.selectCountry;
-    return TOOL_SELECTOR_STEPS.selected;
+    if (!commodityId) return EXPLORE_STEPS.selectCommodity;
+    if (!countryId) return EXPLORE_STEPS.selectCountry;
+    return EXPLORE_STEPS.selected;
   }
 );
 
@@ -80,8 +80,8 @@ export const getCountry = createSelector(
 export const getItems = createSelector(
   [getStep, getCommodities, getCountries],
   (step, commodities, countries) => {
-    if (step === TOOL_SELECTOR_STEPS.selectCommodity) return commodities;
-    if (step === TOOL_SELECTOR_STEPS.selectCountry) return countries;
+    if (step === EXPLORE_STEPS.selectCommodity) return commodities;
+    if (step === EXPLORE_STEPS.selectCountry) return countries;
     return [];
   }
 );
@@ -126,9 +126,9 @@ export const getCards = createSelector(
     };
     const updatedCards = mockedCards.map(mockedCard => getUpdatedCard(mockedCard));
     return {
-      [TOOL_SELECTOR_STEPS.selectCommodity]: updatedCards,
-      [TOOL_SELECTOR_STEPS.selectCountry]: updatedCards,
-      [TOOL_SELECTOR_STEPS.selected]: updatedCards
+      [EXPLORE_STEPS.selectCommodity]: updatedCards,
+      [EXPLORE_STEPS.selectCountry]: updatedCards,
+      [EXPLORE_STEPS.selected]: updatedCards
     };
   }
 );

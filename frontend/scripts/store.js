@@ -17,4 +17,4 @@ export {
 export { default as logisticsMap } from 'react-components/logistics-map/logistics-map.reducer';
 export { default as toolLinks } from 'react-components/tool-links/tool-links.reducer';
 export { default as toolLayers } from 'react-components/tool-layers/tool-layers.reducer';
-export { default as toolSelector } from 'react-components/tool-selector/tool-selector.reducer';
+export { default as explore } from 'react-components/explore/explore.reducer';

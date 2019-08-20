@@ -10,16 +10,16 @@ import {
   getSelectedContext as getAppSelectedContext,
   getSelectedYears
 } from 'reducers/app.selectors';
-import { getContexts } from 'react-components/tool-selector/tool-selector.selectors';
+import { getContexts } from 'react-components/explore/explore.selectors';
 
-const getIsToolSelector = (state, { toolSelector }) => toolSelector;
+const getIsExplore = (state, { explore }) => explore;
 const getHighlightedContext = (state, { highlightedContext }) => highlightedContext;
 const getHighlightedCountryIds = (state, { highlightedCountryIds }) => highlightedCountryIds;
 const getSelectedContext = createSelector(
-  [getIsToolSelector, getHighlightedContext, getAppSelectedContext],
-  (isToolSelector, highlightedContext, appSelectedContext) => {
+  [getIsExplore, getHighlightedContext, getAppSelectedContext],
+  (isExplore, highlightedContext, appSelectedContext) => {
     if (highlightedContext) return highlightedContext;
-    if (isToolSelector) return null;
+    if (isExplore) return null;
     return appSelectedContext;
   }
 );
