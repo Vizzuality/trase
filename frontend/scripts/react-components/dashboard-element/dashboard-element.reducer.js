@@ -258,9 +258,6 @@ const dashboardElementReducer = {
         draft.companiesActiveTab = activeTab;
       }
       draft.pages[panel] = initialState.pages[panel];
-
-      // TODO test this
-      // draft[panel] = [];
     });
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH](state, action) {
@@ -272,13 +269,13 @@ const dashboardElementReducer = {
       const activeTab = activeTabObj?.id || null;
 
       if (panel === 'sources') {
-        if (activeTab !== state.sourcesActiveTab) {
+        if (activeTab !== state.sourcesActiveTab && state.sourcesActiveTab) {
           draft.pages[panel] = initialState.pages[panel];
         }
         draft.sourcesActiveTab = activeTab;
       }
       if (panel === 'companies') {
-        if (activeTab !== state.companiesActiveTab) {
+        if (activeTab !== state.companiesActiveTab && state.companiesActiveTab) {
           draft.pages[panel] = initialState.pages[panel];
         }
         draft.companiesActiveTab = activeTab;

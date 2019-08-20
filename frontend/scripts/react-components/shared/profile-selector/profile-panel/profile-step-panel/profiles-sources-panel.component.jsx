@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import SearchInput from 'react-components/shared/search-input/search-input.component';
 import GridList from 'react-components/shared/grid-list/grid-list.component';
+import { useFirstItem } from 'react-components/shared/grid-list/grid-list.hooks';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import Tabs from 'react-components/shared/tabs/tabs.component';
 import capitalize from 'lodash/capitalize';
 import Accordion from 'react-components/shared/accordion/accordion.component';
+
 import 'react-components/dashboard-element/dashboard-panel/sources-panel.scss';
 
 function ProfilesSourcesPanel(props) {
@@ -31,6 +33,7 @@ function ProfilesSourcesPanel(props) {
 
   const [sourcesOpen, changeSourcesOpen] = useState(sourcesRequired);
   const toggleSourcesOpen = () => changeSourcesOpen(!sourcesOpen);
+  const itemToScrollTo = useFirstItem(sources);
 
   const showJurisdictions = activeCountryItems && tabs.length > 0;
   const activeCountryName = activeCountryItems && capitalize(activeCountryItems[0].name);
@@ -91,6 +94,7 @@ function ProfilesSourcesPanel(props) {
               page={page}
               getMoreItems={getMoreItems}
               loading={loading}
+              itemToScrollTo={itemToScrollTo}
             >
               {itemProps => (
                 <GridListItem

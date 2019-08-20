@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SearchInput from 'react-components/shared/search-input/search-input.component';
 import GridList from 'react-components/shared/grid-list/grid-list.component';
+import { useFirstItem } from 'react-components/shared/grid-list/grid-list.hooks';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 
 function DestinationsPanel(props) {
@@ -16,6 +17,9 @@ function DestinationsPanel(props) {
     onSelectDestinationValue,
     getMoreItems
   } = props;
+
+  const itemToScrollTo = useFirstItem(destinations);
+
   return (
     <React.Fragment>
       <SearchInput
@@ -38,6 +42,7 @@ function DestinationsPanel(props) {
         page={page}
         getMoreItems={getMoreItems}
         loading={loading}
+        itemToScrollTo={itemToScrollTo}
       >
         {itemProps => (
           <GridListItem
