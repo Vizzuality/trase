@@ -52,6 +52,28 @@ function useGroupedItems({ groupBy, columnCount, items }) {
   }, [groupBy, columnCount, items]);
 }
 
+function useScrollToItemId({ itemToScrollTo, columnCount, items }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (itemToScrollTo?.id && ref.current) {
+      const currentFirstRowIndex = items.findIndex(i => i.id === itemToScrollTo.id);
+      if (currentFirstRowIndex !== -1) {
+        const rowIndex = Math.ceil(currentFirstRowIndex / columnCount);
+
+        ref.current.scrollToItem({
+          rowIndex,
+          columnIndex: 0,
+          align: 'start'
+        });
+      }
+    }
+    // we dont want to scroll to item, every time the items change
+    // eslint-disable-next-line
+  }, [itemToScrollTo, columnCount]);
+
+  return ref;
+}
+
 function GridList(props) {
   const {
     items,
@@ -63,26 +85,12 @@ function GridList(props) {
     width,
     columnWidth,
     children,
-    loading,
-    itemToScrollTo
+    loading
   } = props;
 
   const groupedItems = useGroupedItems(props);
   const onScrollCb = useMoreItems(props);
-  const fixedSizeGridRef = useRef(null);
-
-  useEffect(() => {
-    if (itemToScrollTo?.id && fixedSizeGridRef.current) {
-      const currentFirstRowIndex = items.findIndex(i => i.id === itemToScrollTo.id);
-      const rowIndex = Math.ceil(currentFirstRowIndex / columnCount);
-
-      fixedSizeGridRef.current.scrollToItem({
-        rowIndex,
-        columnIndex: 0,
-        align: 'start'
-      });
-    }
-  }, [itemToScrollTo, columnCount, items]);
+  const fixedSizeGridRef = useScrollToItemId(props);
 
   return (
     <div className="c-grid-list">
@@ -119,7 +127,7 @@ GridList.propTypes = {
   groupBy: PropTypes.string,
   className: PropTypes.string,
   getMoreItems: PropTypes.func, // eslint-disable-line
-  itemToScrollTo: PropTypes.object,
+  itemToScrollTo: PropTypes.object, // eslint-disable-line
   items: PropTypes.array.isRequired,
   width: PropTypes.number.isRequired,
   children: PropTypes.func.isRequired,
