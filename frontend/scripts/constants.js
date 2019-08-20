@@ -248,7 +248,7 @@ export const LOGISTICS_MAP_INSPECTION_LEVELS = [
   { value: 'UNKNOWN', label: 'Unknown' }
 ];
 
-export const TOOL_SELECTOR_STEPS = {
+export const EXPLORE_STEPS = {
   selectCommodity: 0,
   selectCountry: 1,
   selected: 2

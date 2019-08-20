@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import Heading from 'react-components/shared/heading';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import PropTypes from 'prop-types';
-import TopCards from 'react-components/tool-selector/top-cards';
+import TopCards from 'react-components/explore/top-cards';
 import WorldMap from 'react-components/shared/world-map/world-map.container';
 import uniq from 'lodash/uniq';
-import { TOOL_SELECTOR_STEPS } from 'constants';
-import 'react-components/tool-selector/tool-selector.scss';
+import { EXPLORE_STEPS } from 'constants';
+import 'react-components/explore/explore.scss';
 
-function ToolSelector({
+function Explore({
   items,
   step,
   setCommodity,
@@ -18,8 +18,11 @@ function ToolSelector({
   contexts,
   allCountriesIds,
   cards,
-  goToTool
+  goToTool,
+  editing
 }) {
+  if (!editing) goToTool();
+
   const [highlightedContext, setHighlightedContext] = useState(null);
   const [highlightedSelectableCountryIds, setHighlightedSelectableCountries] = useState(
     allCountriesIds
@@ -35,7 +38,7 @@ function ToolSelector({
   // Clear highlighted items on step change
   useEffect(() => {
     setHighlightedCommodities(null);
-    if (step !== TOOL_SELECTOR_STEPS.selected) setHighlightedContext(null);
+    if (step !== EXPLORE_STEPS.selected) setHighlightedContext(null);
   }, [step]);
 
   const renderTitle = () => {
@@ -58,7 +61,7 @@ function ToolSelector({
   };
 
   const onItemHover = item => {
-    if (step === TOOL_SELECTOR_STEPS.selectCommodity) {
+    if (step === EXPLORE_STEPS.selectCommodity) {
       const findContextCountries = commodityId =>
         !commodityId
           ? null
@@ -74,13 +77,13 @@ function ToolSelector({
     return setHighlightedContext(findContext(item?.id));
   };
 
-  const setItemFunction = step === TOOL_SELECTOR_STEPS.selectCommodity ? setCommodity : setCountry;
+  const setItemFunction = step === EXPLORE_STEPS.selectCommodity ? setCommodity : setCountry;
   return (
     <div className="c-tool-selector">
       <div className="row columns">{renderTitle()}</div>
       <div className="row columns">
         <div className="grid-list">
-          {step < TOOL_SELECTOR_STEPS.selected &&
+          {step < EXPLORE_STEPS.selected &&
             items.map(item => (
               <GridListItem
                 item={item}
@@ -94,10 +97,9 @@ function ToolSelector({
       </div>
       <div className="row columns">
         <WorldMap
-          toolSelector
           highlightedContext={highlightedContext}
           highlightedCountryIds={
-            step === TOOL_SELECTOR_STEPS.selectCommodity && {
+            step === EXPLORE_STEPS.selectCommodity && {
               level1: highlightedSelectableCountryIds,
               level2: highlightedCountryIds
             }
@@ -118,7 +120,7 @@ function ToolSelector({
   );
 }
 
-ToolSelector.propTypes = {
+Explore.propTypes = {
   items: PropTypes.shape({
     name: PropTypes.string.isRequired
   }),
@@ -130,7 +132,8 @@ ToolSelector.propTypes = {
   setCountry: PropTypes.func.isRequired,
   cards: PropTypes.object.isRequired,
   goToTool: PropTypes.func.isRequired,
-  step: PropTypes.number
+  step: PropTypes.number,
+  editing: PropTypes.bool
 };
 
-export default ToolSelector;
+export default Explore;

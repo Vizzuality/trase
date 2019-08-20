@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import ToolSelectorComponent from 'react-components/tool-selector/tool-selector.component';
+import ExploreComponent from 'react-components/explore/explore.component';
 import {
   getContexts,
   getItems,
@@ -8,12 +8,8 @@ import {
   getCommodity,
   getAllCountriesIds,
   getCards
-} from 'react-components/tool-selector/tool-selector.selectors';
-import {
-  setCommodity,
-  setCountry,
-  setEditMode
-} from 'react-components/tool-selector/tool-selector.actions';
+} from 'react-components/explore/explore.selectors';
+import { setCommodity, setCountry, goToTool } from 'react-components/explore/explore.actions';
 
 const mapStateToProps = state => ({
   items: getItems(state),
@@ -22,10 +18,9 @@ const mapStateToProps = state => ({
   commodity: getCommodity(state),
   contexts: getContexts(state),
   allCountriesIds: getAllCountriesIds(state),
-  cards: getCards(state)
+  cards: getCards(state),
+  editing: state.explore.editing
 });
-
-const goToTool = () => setEditMode(false);
 
 const mapDispatchToProps = {
   setCommodity,
@@ -36,4 +31,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ToolSelectorComponent);
+)(ExploreComponent);
