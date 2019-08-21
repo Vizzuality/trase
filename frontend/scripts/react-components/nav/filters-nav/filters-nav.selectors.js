@@ -70,10 +70,10 @@ export const getToolResizeByProps = createSelector(
     clip: false,
     weight: 'regular',
     value: selectedResizeBy && {
-      value: selectedResizeBy.name,
+      value: selectedResizeBy,
       label: selectedResizeBy.label || ''
     },
-    isDisabled: items.length === 1 && selectedResizeBy?.name === items[0].name,
+    isDisabled: items.length === 1 && selectedResizeBy?.attributeId === items[0].attributeId,
     tooltip: tooltips && tooltips.sankey.nav.resizeBy.main,
     titleTooltip:
       tooltips && selectedResizeBy && tooltips.sankey.nav.resizeBy[selectedResizeBy.name]

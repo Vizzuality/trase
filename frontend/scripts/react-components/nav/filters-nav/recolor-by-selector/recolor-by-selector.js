@@ -12,7 +12,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  onChange: recolorBy => selectRecolorBy(recolorBy.name)
+  onChange: selectRecolorBy
 };
 
 export default connect(

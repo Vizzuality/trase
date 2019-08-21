@@ -118,17 +118,17 @@ export function selectNodes(ids) {
   };
 }
 
-export function selectRecolorBy(name) {
+export function selectRecolorBy(recolorBy) {
   return {
     type: TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
-    payload: { name }
+    payload: recolorBy
   };
 }
 
-export function selectResizeBy(name) {
+export function selectResizeBy(resizeBy) {
   return {
     type: TOOL_LINKS__SET_SELECTED_RESIZE_BY,
-    payload: { name }
+    payload: resizeBy
   };
 }
 

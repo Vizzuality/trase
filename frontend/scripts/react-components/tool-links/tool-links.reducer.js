@@ -59,8 +59,8 @@ const toolLinksReducer = {
           'selectedColumnsIds',
           'expandedNodesIds',
           'detailedView',
-          'selectedResizeByName',
-          'selectedRecolorByName',
+          'selectedResizeBy',
+          'selectedRecolorBy',
           'selectedBiomeFilterName'
         ]
       });
@@ -78,8 +78,8 @@ const toolLinksReducer = {
     return immer(state, draft => {
       Object.assign(draft, {
         noLinksFound: toolLinksInitialState.noLinksFound,
-        selectedRecolorByName: toolLinksInitialState.selectedRecolorByName,
-        selectedResizeByName: toolLinksInitialState.selectedResizeByName,
+        selectedRecolorBy: toolLinksInitialState.selectedRecolorBy,
+        selectedResizeBy: toolLinksInitialState.selectedResizeBy,
         selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
         detailedView: toolLinksInitialState.detailedView,
         forcedOverview: toolLinksInitialState.forcedOverview,
@@ -105,8 +105,8 @@ const toolLinksReducer = {
   [SET_CONTEXT](state) {
     return immer(state, draft => {
       Object.assign(draft, {
-        selectedRecolorByName: toolLinksInitialState.selectedRecolorByName,
-        selectedResizeByName: toolLinksInitialState.selectedResizeByName,
+        selectedRecolorBy: toolLinksInitialState.selectedRecolorBy,
+        selectedResizeBy: toolLinksInitialState.selectedResizeBy,
         selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
         detailedView: toolLinksInitialState.detailedView,
         highlightedNodeId: toolLinksInitialState.highlightedNodeId,
@@ -179,12 +179,12 @@ const toolLinksReducer = {
   },
   [TOOL_LINKS__SET_SELECTED_RECOLOR_BY](state, action) {
     return immer(state, draft => {
-      draft.selectedRecolorByName = action.payload.name;
+      draft.selectedRecolorBy = action.payload.attributeId;
     });
   },
   [TOOL_LINKS__SET_SELECTED_RESIZE_BY](state, action) {
     return immer(state, draft => {
-      draft.selectedResizeByName = action.payload.name;
+      draft.selectedResizeBy = action.payload.attributeId;
     });
   },
   [TOOL_LINKS__SELECT_VIEW](state, action) {
@@ -335,8 +335,8 @@ const toolLinksReducerTypes = PropTypes => ({
   selectedBiomeFilterName: PropTypes.string,
   selectedColumnsIds: PropTypes.arrayOf(PropTypes.number),
   selectedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-  selectedRecolorByName: PropTypes.string,
-  selectedResizeByName: PropTypes.string
+  selectedRecolorBy: PropTypes.number,
+  selectedResizeBy: PropTypes.number
 });
 
 export default createReducer(toolLinksInitialState, toolLinksReducer, toolLinksReducerTypes);

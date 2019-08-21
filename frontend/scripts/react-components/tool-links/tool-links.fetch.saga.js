@@ -38,7 +38,7 @@ export function* getToolLinksData() {
     start_year: selectedYears[0],
     end_year: selectedYears[1],
     include_columns: selectedColumnsIds.join(','),
-    flow_quant: selectedResizeBy.name,
+    cont_attribute_id: selectedResizeBy.attributeId,
     locked_nodes: state.toolLinks.selectedNodesIds
   };
   const areNodesExpanded = state.toolLinks.expandedNodesIds.length > 0;
@@ -53,9 +53,9 @@ export function* getToolLinksData() {
 
   if (selectedRecolorBy) {
     if (selectedRecolorBy.type === 'qual') {
-      params.flow_qual = selectedRecolorBy.name;
+      params.ncont_attribute_id = selectedRecolorBy.attributeId;
     } else if (selectedRecolorBy.type === 'ind') {
-      params.flow_ind = selectedRecolorBy.name;
+      params.ncont_attribute_id = selectedRecolorBy.attributeId;
     }
   }
 
@@ -114,7 +114,7 @@ export function* getToolNodesByLink(selectedContext, { fetchAllNodes } = {}) {
     const {
       data: { links, nodes }
     } = yield select(state => state.toolLinks);
-    const nodesInLinkPaths = links.flatMap(link => link.path);
+    const nodesInLinkPaths = (links || []).flatMap(link => link.path);
     const existingNodes = new Set(Object.keys(nodes || {}));
     const difference = new Set(nodesInLinkPaths.filter(x => !existingNodes.has(`${x}`)));
 

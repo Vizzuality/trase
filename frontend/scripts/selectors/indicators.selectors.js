@@ -20,7 +20,7 @@ export const makeGetResizeByItems = (getResizeBys, getSelectedYears) =>
           ...filter,
           isDisabled,
           hasSeparator,
-          value: filter.name,
+          value: filter,
           label: filter.label,
           tooltip: filter.description
         };
