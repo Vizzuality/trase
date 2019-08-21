@@ -84,10 +84,11 @@ export function* fetchMissingDashboardPanelItems() {
     }
 
     if (
-      (dashboardElement.data.sources.length === 0 && dashboardElement.sources.length > 0) ||
-      (dashboardElement.data.destinations.length === 0 &&
-        dashboardElement.destinations.length > 0) ||
-      (dashboardElement.data.companies.length === 0 && dashboardElement.companies.length > 0)
+      selectedContext &&
+      ((dashboardElement.data.sources.length === 0 && dashboardElement.sources.length > 0) ||
+        (dashboardElement.data.destinations.length === 0 &&
+          dashboardElement.destinations.length > 0) ||
+        (dashboardElement.data.companies.length === 0 && dashboardElement.companies.length > 0))
     ) {
       tasks.push(call(getMissingDashboardPanelItems, dashboardElement, selectedContext));
     }

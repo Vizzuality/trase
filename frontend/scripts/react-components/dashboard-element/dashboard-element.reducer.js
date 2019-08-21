@@ -258,9 +258,6 @@ const dashboardElementReducer = {
         draft.companiesActiveTab = activeTab;
       }
       draft.pages[panel] = initialState.pages[panel];
-
-      // TODO test this
-      // draft[panel] = [];
     });
   },
   [DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH](state, action) {
@@ -271,22 +268,27 @@ const dashboardElementReducer = {
         state.tabs[panel] && state.tabs[panel].find(tab => tab.id === activeItem.nodeTypeId);
       const activeTab = activeTabObj?.id || null;
 
+      if (panel === 'sources') {
+        if (activeTab !== state.sourcesActiveTab && state.sourcesActiveTab) {
+          draft.pages[panel] = initialState.pages[panel];
+        }
+        draft.sourcesActiveTab = activeTab;
+      }
+      if (panel === 'companies') {
+        if (activeTab !== state.companiesActiveTab && state.companiesActiveTab) {
+          draft.pages[panel] = initialState.pages[panel];
+        }
+        draft.companiesActiveTab = activeTab;
+      }
+
       const data = state.data[panel] || [];
-      const dataMap = data.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
+      const existsInData = data.find(item => item.id === activeItem.id);
       let together = data;
-      if (!dataMap[activeItem.id]) {
+      if (!existsInData) {
         together = [activeItem, ...data];
       }
 
       draft.data[panel] = together;
-
-      if (panel === 'sources') {
-        draft.sourcesActiveTab = activeTab;
-      }
-      if (panel === 'companies') {
-        draft.companiesActiveTab = activeTab;
-      }
-      draft.pages[panel] = initialState.pages[panel];
       draft.searchResults = [];
 
       const firstItem =
