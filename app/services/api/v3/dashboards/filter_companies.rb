@@ -62,10 +62,10 @@ module Api
             ).
             order(:name)
 
-            if @node_ids.any?
-              @query = @query.
-                having("COUNT(DISTINCT dashboards_companies_mv.node_id) = #{@node_ids.size}")
-            end
+          return if @node_ids.none?
+
+          @query = @query.
+            having("COUNT(DISTINCT dashboards_companies_mv.node_id) = #{@node_ids.size}")
         end
       end
     end
