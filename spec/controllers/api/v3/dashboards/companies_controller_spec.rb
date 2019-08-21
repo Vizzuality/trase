@@ -51,6 +51,20 @@ RSpec.describe Api::V3::Dashboards::CompaniesController, type: :controller do
       )
     end
 
+    context 'when filter with node_ids' do
+      it 'returns companies with the specified nodes' do
+        get :index, params: {
+          countries_ids: [api_v3_brazil.id].join(','),
+          sources_ids: [api_v3_biome_node.id].join(','),
+          destinations_ids: [api_v3_country_of_destination1_node.id].join(','),
+          node_types_ids: [api_v3_exporter_node_type.id].join(',')
+        }
+        expect(assigns(:collection).map(&:id)).to eq(
+          [api_v3_exporter1_node.id, api_v3_other_exporter_node.id]
+        )
+      end
+    end
+
     let(:per_page) { 1 }
 
     it 'accepts per_page' do
