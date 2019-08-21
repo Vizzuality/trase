@@ -1,20 +1,20 @@
 /* eslint-disable camelcase */
 import { getURLFromParams, GET_TOP_NODES_URL } from 'utils/getURLFromParams';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import getTopNodesKey from 'utils/getTopNodesKey';
 
 export const EXPLORE__SET_TOP_COUNTRIES = 'EXPLORE__SET_TOP_COUNTRIES';
 export const EXPLORE__SET_TOP_EXPORTERS = 'EXPLORE__SET_TOP_EXPORTERS';
 export const EXPLORE__SET_TOP_NODES_LOADING = 'EXPLORE__SET_TOP_NODES_LOADING';
 export const EXPLORE__SET_SELECTED_TABLE_COLUMN_TYPE = 'EXPLORE__SET_SELECTED_TABLE_COLUMN_TYPE';
 
-export const getTopNodesKey = (ctx, col, start, end) =>
-  ctx && col && start && end ? `CTX${ctx}_COL${col}_START${start}_END${end}` : null;
-
 export const setExploreTopNodes = (columnType, context) => (dispatch, getState) => {
   if (!columnType) return null;
 
   const state = getState();
   const selectedContext = context || getSelectedContext(state);
+  if (!selectedContext) return null;
+
   let columnId;
   let type;
 
@@ -32,7 +32,6 @@ export const setExploreTopNodes = (columnType, context) => (dispatch, getState) 
       type = null;
       break;
   }
-
   if (!columnType || !type) {
     console.warn(
       `Column type set to ${columnType} but no matching column id was found on context data.`
@@ -55,6 +54,7 @@ export const setExploreTopNodes = (columnType, context) => (dispatch, getState) 
       payload: { topNodesKey, loading: true }
     });
   }
+
   const url = getURLFromParams(GET_TOP_NODES_URL, params);
   return (
     !topNodes[topNodesKey] &&

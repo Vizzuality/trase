@@ -69,6 +69,15 @@ export const getCommodity = createSelector(
   }
 );
 
+export const getCommodityContexts = createSelector(
+  [getContexts, getCountries, getCommodity],
+  (contexts, countries, commodity) => {
+    if (!contexts || !commodity) return null;
+    const countryIds = countries.map(c => c.id);
+    return contexts.filter(c => c.commodityId === commodity.id && countryIds.includes(c.countryId));
+  }
+);
+
 export const getCountry = createSelector(
   [getCountries, getSelectedCountryId],
   (countries, countryId) => {

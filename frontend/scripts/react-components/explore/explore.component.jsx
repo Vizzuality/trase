@@ -6,6 +6,8 @@ import TopCards from 'react-components/explore/top-cards';
 import WorldMap from 'react-components/shared/world-map/world-map.container';
 import uniq from 'lodash/uniq';
 import { EXPLORE_STEPS } from 'constants';
+import getTopNodesKey from 'utils/getTopNodesKey';
+
 import 'react-components/explore/explore.scss';
 
 function Explore({
@@ -19,7 +21,11 @@ function Explore({
   allCountriesIds,
   cards,
   goToTool,
-  editing
+  editing,
+  topNodes,
+  years,
+  getTopCountries,
+  commodityContexts
 }) {
   if (!editing) goToTool();
 
@@ -27,11 +33,20 @@ function Explore({
   const [highlightedCountryIds, setHighlightedCountries] = useState(null);
   const [highlightedCommodityIds, setHighlightedCommodities] = useState(null);
 
+  const [start, end] = years;
+  const highlightedContextKey =
+    highlightedContext && getTopNodesKey(highlightedContext.id, 'countries', start, end);
+
   // Clear highlighted items on step change
   useEffect(() => {
     setHighlightedCommodities(null);
     if (step !== EXPLORE_STEPS.selected) setHighlightedContext(null);
   }, [step]);
+
+  // Get top destination countries
+  useEffect(() => {
+    if (step === EXPLORE_STEPS.selectCountry) getTopCountries(commodityContexts);
+  }, [commodityContexts, getTopCountries, step]);
 
   const renderTitle = () => {
     const titleParts = ['commodity', 'sourcing country', 'supply chain'];
@@ -74,25 +89,27 @@ function Explore({
     <div className="c-tool-selector">
       <div className="row columns">{renderTitle()}</div>
       <div className="row columns">
-        <div className="tool-selector-grid">
-          {step < EXPLORE_STEPS.selected &&
-            items.map(item => (
-              <GridListItem
-                item={item}
-                enableItem={i => setItemFunction(i.id)}
-                onHover={onItemHover}
-                variant="white"
-                isActive={highlightedCommodityIds && highlightedCommodityIds.includes(item.id)}
-              />
-            ))}
+        <div className="tool-selector-grid-container">
+          <div className="tool-selector-grid">
+            {step < EXPLORE_STEPS.selected &&
+              items.map(item => (
+                <GridListItem
+                  item={item}
+                  enableItem={i => setItemFunction(i.id)}
+                  onHover={onItemHover}
+                  variant="white"
+                  isActive={highlightedCommodityIds && highlightedCommodityIds.includes(item.id)}
+                />
+              ))}
+          </div>
         </div>
       </div>
       <div className="row columns">
         <WorldMap
-          explore
           height={320}
           center={[0, 10]}
-          highlightedContext={highlightedContext}
+          context={highlightedContext}
+          destinationCountries={highlightedContextKey && topNodes[highlightedContextKey]}
           highlightedCountryIds={
             step === EXPLORE_STEPS.selectCommodity && {
               level1: allCountriesIds,
@@ -128,7 +145,11 @@ Explore.propTypes = {
   cards: PropTypes.object.isRequired,
   goToTool: PropTypes.func.isRequired,
   step: PropTypes.number,
-  editing: PropTypes.bool
+  editing: PropTypes.bool,
+  topNodes: PropTypes.object,
+  years: PropTypes.array,
+  commodityContexts: PropTypes.array,
+  getTopCountries: PropTypes.func.isRequired
 };
 
 export default Explore;

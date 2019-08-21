@@ -1,12 +1,13 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import getTopNodesKey from 'utils/getTopNodesKey';
 import {
-  getTopNodesKey,
   setExploreTopNodes,
   setSelectedTableColumnType
 } from 'react-components/legacy-explore/explore.actions';
 import { selectContextById } from 'actions/app.actions';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getDestinationCountries } from 'react-components/legacy-explore/explore.selectors';
 import Explore from './explore.component';
 
 const mapStateToProps = state => {
@@ -20,7 +21,7 @@ const mapStateToProps = state => {
   // set loading as true if the topNodesKey doesnt exist yet
   const loading = typeof loadingDict[topNodesKey] === 'undefined' || loadingDict[topNodesKey];
   const redirectQuery = state.location.query;
-
+  const destinationCountries = getDestinationCountries(state);
   return {
     loading,
     topNodesKey,
@@ -28,7 +29,8 @@ const mapStateToProps = state => {
     selectedYears,
     redirectQuery,
     selectedContext,
-    selectedTableColumnType
+    selectedTableColumnType,
+    destinationCountries
   };
 };
 

@@ -165,7 +165,7 @@ WorldMap.propTypes = {
   originGeoId: PropTypes.string,
   selectedContext: PropTypes.object,
   selectedYears: PropTypes.array,
-  highlightedCountriesIso: PropTypes.array,
+  highlightedCountriesIso: PropTypes.object,
   onHoverGeometry: PropTypes.func,
   getTopNodes: PropTypes.func.isRequired,
   height: PropTypes.number,
