@@ -60,7 +60,7 @@ module Api
             without_string_values = @data.map(&reject_strings)
             total_values = get_total_values(without_string_values)
 
-            @meta[:aggregates] = {total_value: total_values.except(:x)} # x is a year
+            @meta[:aggregates] = {total_value: total_values&.except(:x)} # x is a year
 
             {data: @data, meta: @meta}
           end
