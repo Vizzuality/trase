@@ -12,8 +12,11 @@ import {
   SET_CONTEXT_IS_USER_SELECTED,
   SET_CONTEXT,
   APP__SET_LOADING,
-  APP__TRANSIFEX_LANGUAGES_LOADED
+  APP__TRANSIFEX_LANGUAGES_LOADED,
+  APP__SET_TOP_DESTINATION_COUNTRIES,
+  APP__SET_TOP_DESTINATION_COUNTRIES_LOADING
 } from 'actions/app.actions';
+import { COUNTRIES_COORDINATES } from 'scripts/countries';
 import createReducer from 'utils/createReducer';
 import { SELECT_YEARS } from 'react-components/tool/tool.actions';
 import { TOOL_LINKS_RESET_SANKEY } from 'react-components/tool-links/tool-links.actions';
@@ -109,6 +112,36 @@ const appReducer = {
   },
   [TOOL_LINKS_RESET_SANKEY](state) {
     return { ...state, selectedYears: initialState.selectedYears };
+  },
+  [APP__SET_TOP_DESTINATION_COUNTRIES](state, action) {
+    const { topNodesKey, data, country } = action.payload;
+    const nodes = data.targetNodes.map(row => ({
+      ...row,
+      coordinates: COUNTRIES_COORDINATES[row.geo_id],
+      geoId: row.geo_id,
+      name: country === row.name ? 'DOMESTIC CONSUMPTION' : row.name
+    }));
+    return {
+      ...state,
+      topNodes: {
+        ...state.topNodes,
+        [topNodesKey]: nodes
+      },
+      loading: {
+        ...state.loading,
+        [topNodesKey]: false
+      }
+    };
+  },
+  [APP__SET_TOP_DESTINATION_COUNTRIES_LOADING](state, action) {
+    const { loading, topNodesKey } = action.payload;
+    return {
+      ...state,
+      loading: {
+        ...state.loading,
+        [topNodesKey]: loading
+      }
+    };
   }
 };
 

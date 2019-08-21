@@ -23,8 +23,14 @@ function Explore(props) {
     selectedYears,
     getTableElements,
     selectedTableColumnType,
-    setSelectedTableColumnType
+    setSelectedTableColumnType,
+    selectedContext,
+    destinationCountries
   } = props;
+
+  useEffect(() => {
+    if (!destinationCountries) getTableElements('country');
+  }, [destinationCountries, getTableElements]);
 
   useEffect(() => {
     if (topNodesKey) {
@@ -134,7 +140,11 @@ function Explore(props) {
                 <div
                   className={cx('explore-map-container', { '-loading': loading && !topNodesKey })}
                 >
-                  <WorldMap className="explore-world-map" />
+                  <WorldMap
+                    className="explore-world-map"
+                    context={selectedContext}
+                    destinationCountries={destinationCountries}
+                  />
                 </div>
               </div>
             </div>
@@ -194,7 +204,9 @@ Explore.propTypes = {
   getTableElements: PropTypes.func.isRequired,
   selectedYears: PropTypes.arrayOf(PropTypes.number),
   selectedTableColumnType: PropTypes.string.isRequired,
-  setSelectedTableColumnType: PropTypes.func.isRequired
+  setSelectedTableColumnType: PropTypes.func.isRequired,
+  selectedContext: PropTypes.object,
+  destinationCountries: PropTypes.array
 };
 
 export default Explore;
