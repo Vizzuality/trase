@@ -20,8 +20,8 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -58,8 +58,8 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -83,8 +83,8 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -108,8 +108,8 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -133,8 +133,8 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -158,8 +158,8 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -183,8 +183,8 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -230,8 +230,8 @@ Object {
   "selectedNodesIds": Array [
     4567,
   ],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -276,8 +276,8 @@ Object {
     1234,
     4567,
   ],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -305,8 +305,8 @@ Object {
     3,
   ],
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -334,8 +334,8 @@ Object {
     3,
   ],
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -359,8 +359,8 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -398,8 +398,8 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -423,8 +423,8 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -448,8 +448,8 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -495,8 +495,8 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -540,8 +540,8 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -565,8 +565,8 @@ Object {
   "selectedBiomeFilterName": "MY_BIOME",
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -600,8 +600,8 @@ Object {
     1234,
     5678,
   ],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -631,8 +631,8 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -667,8 +667,8 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -705,8 +705,8 @@ Object {
   "selectedNodesIds": Array [
     1,
   ],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -747,8 +747,8 @@ Object {
     5,
     6,
   ],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -786,8 +786,8 @@ Object {
     0,
     1,
   ],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -811,8 +811,8 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": "MY_RECOLOR_BY",
-  "selectedResizeByName": null,
+  "selectedRecolorBy": 13,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -836,8 +836,8 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": "MY_RESIZE_BY",
+  "selectedRecolorBy": null,
+  "selectedResizeBy": 11,
 }
 `;
 
@@ -861,8 +861,8 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -886,8 +886,8 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -937,8 +937,8 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;
 
@@ -982,7 +982,7 @@ Object {
   "selectedBiomeFilterName": null,
   "selectedColumnsIds": null,
   "selectedNodesIds": Array [],
-  "selectedRecolorByName": null,
-  "selectedResizeByName": null,
+  "selectedRecolorBy": null,
+  "selectedResizeBy": null,
 }
 `;

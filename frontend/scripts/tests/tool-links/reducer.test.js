@@ -238,13 +238,15 @@ test(TOOL_LINKS__SET_SELECTED_NODES, () => {
 });
 
 test(TOOL_LINKS__SET_SELECTED_RECOLOR_BY, () => {
-  const action = selectRecolorBy('MY_RECOLOR_BY');
+  const recolorBy = { name: 'MY_RECOLOR_BY', attributeId: 13 };
+  const action = selectRecolorBy(recolorBy);
   const newState = reducer(initialState, action);
   expect(newState).toMatchSnapshot();
 });
 
 test(TOOL_LINKS__SET_SELECTED_RESIZE_BY, () => {
-  const action = selectResizeBy('MY_RESIZE_BY');
+  const resizeBy = { name: 'MY_RESIZE_BY', attributeId: 11 };
+  const action = selectResizeBy(resizeBy);
   const newState = reducer(initialState, action);
   expect(newState).toMatchSnapshot();
 });
@@ -266,8 +268,8 @@ test(TOOL_LINKS_RESET_SANKEY, () => {
   const state = {
     ...initialState,
     noLinksFound: true,
-    selectedRecolorByName: 'MY_RECOLOR_BY',
-    selectedResizeByName: 'MY_RESIZE_BY',
+    selectedRecolorBy: 11,
+    selectedResizeBy: 13,
     selectedBiomeFilterName: 'MY_BIOME',
     detailedView: true,
     forcedOverview: true,
@@ -287,8 +289,8 @@ test(SET_CONTEXT, () => {
   };
   const state = {
     ...initialState,
-    selectedRecolorByName: 'MY_RECOLOR_BY',
-    selectedResizeByName: 'MY_RESIZE_BY',
+    selectedRecolorBy: 11,
+    selectedResizeBy: 13,
     selectedBiomeFilterName: 'MY_BIOME',
     detailedView: true,
     highlightedNodeId: 1234,

@@ -16,8 +16,8 @@ export default {
   selectedColumnsIds: null,
   expandedNodesIds: [],
   selectedNodesIds: [],
-  selectedRecolorByName: null,
-  selectedResizeByName: null,
+  selectedRecolorBy: null,
+  selectedResizeBy: null,
   selectedBiomeFilterName: null,
   isSearchOpen: false,
   noLinksFound: false
