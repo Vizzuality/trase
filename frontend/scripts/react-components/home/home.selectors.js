@@ -9,7 +9,7 @@ export const getDestinationCountries = createSelector(
   (selectedContext, topNodes, selectedYears) => {
     if (!selectedContext || !topNodes || !selectedYears) return null;
     const [startYear, endYear] = selectedYears;
-    const countryKey = getTopNodesKey(selectedContext.id, 'countries', startYear, endYear);
+    const countryKey = getTopNodesKey(selectedContext.id, 'country', startYear, endYear);
     return topNodes[countryKey];
   }
 );

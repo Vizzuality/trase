@@ -197,7 +197,7 @@ export const getTopCountries = contexts => (dispatch, getState) => {
       column_id: columnId,
       context_id: selectedContext.id
     };
-    const topNodesKey = getTopNodesKey(selectedContext.id, 'countries', start_year, end_year);
+    const topNodesKey = getTopNodesKey(selectedContext.id, 'country', start_year, end_year);
     if (!topNodes[topNodesKey]) {
       topCountries.push({
         topNodesKey,
