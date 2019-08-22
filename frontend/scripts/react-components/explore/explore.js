@@ -22,7 +22,6 @@ const mapStateToProps = state => ({
   contexts: getContexts(state),
   allCountriesIds: getAllCountriesIds(state),
   cards: getCards(state),
-  editing: state.explore.editing,
   topNodes: state.app.topNodes,
   years: getSelectedYears(state),
   commodityContexts: getCommodityContexts(state)

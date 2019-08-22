@@ -21,14 +21,11 @@ function Explore({
   allCountriesIds,
   cards,
   goToTool,
-  editing,
   topNodes,
   years,
   getTopCountries,
   commodityContexts
 }) {
-  if (!editing) goToTool();
-
   const [highlightedContext, setHighlightedContext] = useState(null);
   const [highlightedCountryIds, setHighlightedCountries] = useState(null);
   const [highlightedCommodityIds, setHighlightedCommodities] = useState(null);
@@ -145,7 +142,6 @@ Explore.propTypes = {
   cards: PropTypes.object.isRequired,
   goToTool: PropTypes.func.isRequired,
   step: PropTypes.number,
-  editing: PropTypes.bool,
   topNodes: PropTypes.object,
   years: PropTypes.array,
   commodityContexts: PropTypes.array,
