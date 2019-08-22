@@ -114,32 +114,53 @@ const appReducer = {
     return { ...state, selectedYears: initialState.selectedYears };
   },
   [APP__SET_TOP_DESTINATION_COUNTRIES](state, action) {
-    const { topNodesKey, data, country } = action.payload;
-    const nodes = data.targetNodes.map(row => ({
-      ...row,
-      coordinates: COUNTRIES_COORDINATES[row.geo_id],
-      geoId: row.geo_id,
-      name: country === row.name ? 'DOMESTIC CONSUMPTION' : row.name
-    }));
+    const { topCountries } = action.payload;
+    const getNodes = (data, country) =>
+      data.targetNodes.map(row => ({
+        ...row,
+        coordinates: COUNTRIES_COORDINATES[row.geo_id],
+        geoId: row.geo_id,
+        name: country === row.name ? 'DOMESTIC CONSUMPTION' : row.name
+      }));
+
+    const newTopCountries = {};
+    topCountries.forEach(c => {
+      newTopCountries[c.topNodesKey] = getNodes(c.data, c.country);
+    });
+
+    const topCountriesLoadingKeys = {};
+    topCountries.forEach(c => {
+      topCountriesLoadingKeys[c.topNodesKey] = false;
+    });
     return {
       ...state,
       topNodes: {
         ...state.topNodes,
-        [topNodesKey]: nodes
+        ...newTopCountries
       },
       loading: {
         ...state.loading,
-        [topNodesKey]: false
+        topCountries: {
+          ...state.loading.topCountries,
+          ...topCountriesLoadingKeys
+        }
       }
     };
   },
   [APP__SET_TOP_DESTINATION_COUNTRIES_LOADING](state, action) {
-    const { loading, topNodesKey } = action.payload;
+    const { topNodesKeys, loading } = action.payload;
+    const loadingNodes = {};
+    topNodesKeys.forEach(n => {
+      loadingNodes[n] = loading;
+    });
     return {
       ...state,
       loading: {
         ...state.loading,
-        [topNodesKey]: loading
+        topCountries: {
+          ...state.loading.topCountries,
+          ...loadingNodes
+        }
       }
     };
   }
