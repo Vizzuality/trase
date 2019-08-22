@@ -183,6 +183,8 @@ export const getTopCountries = contexts => (dispatch, getState) => {
   const defaultSelectedContext = getSelectedContext(state);
   if (!defaultSelectedContext) return;
   const selectedContexts = contexts || [defaultSelectedContext];
+
+  const topCountries = [];
   selectedContexts.forEach(selectedContext => {
     const columnId = selectedContext.worldMap.countryColumnId;
 
@@ -197,30 +199,39 @@ export const getTopCountries = contexts => (dispatch, getState) => {
     };
     const topNodesKey = getTopNodesKey(selectedContext.id, 'countries', start_year, end_year);
     if (!topNodes[topNodesKey]) {
-      dispatch({
-        type: APP__SET_TOP_DESTINATION_COUNTRIES_LOADING,
-        payload: {
-          topNodesKey,
-          loading: true
-        }
+      topCountries.push({
+        topNodesKey,
+        country: selectedContext.countryName,
+        url: getURLFromParams(GET_TOP_NODES_URL, params)
       });
     }
-    const url = getURLFromParams(GET_TOP_NODES_URL, params);
-    return (
-      !topNodes[topNodesKey] &&
-      fetch(url)
-        .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
-        .then(res =>
-          dispatch({
-            type: APP__SET_TOP_DESTINATION_COUNTRIES,
-            payload: {
-              topNodesKey,
-              data: res.data,
-              country: selectedContext.countryName
-            }
-          })
-        )
-        .catch(error => console.error(error))
-    );
   });
+  if (!topCountries.length) return;
+
+  dispatch({
+    type: APP__SET_TOP_DESTINATION_COUNTRIES_LOADING,
+    payload: {
+      topNodesKeys: topCountries.map(c => c.topNodesKey),
+      loading: true
+    }
+  });
+
+  Promise.all(
+    topCountries.map(topCountry =>
+      fetch(topCountry.url).then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    )
+  )
+    .then(res => {
+      dispatch({
+        type: APP__SET_TOP_DESTINATION_COUNTRIES,
+        payload: {
+          topCountries: topCountries.map((c, i) => ({
+            topNodesKey: c.topNodesKey,
+            country: c.country,
+            data: res[i].data
+          }))
+        }
+      });
+    })
+    .catch(error => console.error(error));
 };
