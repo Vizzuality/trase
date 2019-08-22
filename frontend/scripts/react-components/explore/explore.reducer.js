@@ -1,21 +1,15 @@
 import {
   EXPLORE__SET_COMMODITY,
-  EXPLORE__SET_COUNTRY,
-  EXPLORE__SET_EDIT_MODE
+  EXPLORE__SET_COUNTRY
 } from 'react-components/explore/explore.actions';
 import createReducer from 'utils/createReducer';
 
 export const initialState = {
-  editing: true,
   selectedCommodityId: null,
   selectedCountryId: null
 };
 
 const exploreReducer = {
-  [EXPLORE__SET_EDIT_MODE](state, action) {
-    const { editing } = action.payload;
-    return { ...state, editing };
-  },
   [EXPLORE__SET_COMMODITY](state, action) {
     const { selectedCommodityId } = action.payload;
     return { ...state, selectedCommodityId };

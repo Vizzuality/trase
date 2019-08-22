@@ -1,6 +1,5 @@
 export const EXPLORE__SET_COMMODITY = 'EXPLORE__SET_COMMODITY';
 export const EXPLORE__SET_COUNTRY = 'EXPLORE__SET_COUNTRY';
-export const EXPLORE__SET_EDIT_MODE = 'EXPLORE__SET_EDIT_MODE';
 
 export const setCommodity = selectedCommodityId => ({
   type: EXPLORE__SET_COMMODITY,
@@ -27,9 +26,5 @@ export const goToTool = linkInfo => (dispatch, getState) => {
   dispatch({
     type: 'tool',
     payload: { serializerParams }
-  });
-  dispatch({
-    type: 'EXPLORE__SET_EDIT_MODE',
-    payload: false
   });
 };
