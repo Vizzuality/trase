@@ -146,14 +146,14 @@ function Explore({
         </div>
       </div>
       <div className="row columns">
-        <WorldMap
-          height={320}
-          center={[0, 10]}
-          context={highlightedContext}
-          destinationCountries={destinationCountries}
-          highlightedCountryIds={getHighlightedCountryIds}
-          onHoverGeometry={geoId => setHighlightedCommodities(findHighlightedCommoditiesIds(geoId))}
-        />
+        <div className="map-container">
+          <WorldMap
+            context={highlightedContext}
+            destinationCountries={destinationCountries}
+            highlightedCountryIds={getHighlightedCountryIds}
+            onHoverGeometry={geoId => setHighlightedCommodities(findHighlightedCommoditiesIds(geoId))}
+          />
+        </div>
       </div>
       <TopCards
         step={step}
