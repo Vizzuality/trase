@@ -11,8 +11,8 @@ import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 
 const mapStateToProps = (state, ownProps) => {
   const { highlightedContext, highlightedCountryIds } = ownProps;
-  const selectedYears = getSelectedYears(state, ownProps);
-  const selectedContext = highlightedContext || getSelectedContext(state, ownProps);
+  const selectedYears = getSelectedYears(state);
+  const selectedContext = highlightedContext || getSelectedContext(state);
   const originGeoId = getOriginGeoId(state, ownProps);
   const originCoordinates = getOriginCoordinates(state, ownProps);
   const flows = getWorldMapFlows(state, ownProps);
@@ -31,7 +31,7 @@ const mapStateToProps = (state, ownProps) => {
 
 // TODO: Remove this when the new explore page is ready
 const mapDispatchToProps = {
-  getTopNodes: selectedContext => setExploreTopNodes('countries', selectedContext)
+  getTopNodes: selectedContext => setExploreTopNodes('country', selectedContext)
 };
 
 export default connect(

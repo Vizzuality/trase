@@ -32,7 +32,7 @@ function Explore({
 
   const [start, end] = years;
   const highlightedContextKey =
-    highlightedContext && getTopNodesKey(highlightedContext.id, 'countries', start, end);
+    highlightedContext && getTopNodesKey(highlightedContext.id, 'country', start, end);
 
   // Clear highlighted items on step change
   useEffect(() => {
