@@ -48,7 +48,7 @@ function Explore({
   // Get top destination countries
   useEffect(() => {
     if (step === EXPLORE_STEPS.selectCountry)
-      getTopCountries(commodityContexts, { fromLastYear: true });
+      getTopCountries(commodityContexts, { fromDefaultYear: true });
   }, [commodityContexts, getTopCountries, step]);
 
   const renderTitle = () => {

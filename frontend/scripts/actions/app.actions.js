@@ -179,7 +179,7 @@ export function setTransifexLanguages(languages) {
 }
 
 export const getTopCountries = (contexts, options = {}) => (dispatch, getState) => {
-  const { fromLastYear } = options;
+  const { fromDefaultYear } = options;
   const state = getState();
   const defaultSelectedContext = getSelectedContext(state);
   if (!defaultSelectedContext) return;
@@ -188,13 +188,9 @@ export const getTopCountries = (contexts, options = {}) => (dispatch, getState) 
   const topCountries = [];
   selectedContexts.forEach(selectedContext => {
     const columnId = selectedContext.worldMap.countryColumnId;
-    let years;
-    if (fromLastYear) {
-      const lastYear = selectedContext.years[selectedContext.years.length - 1];
-      years = [lastYear, lastYear];
-    } else {
-      years = getSelectedYears(state);
-    }
+    const years = fromDefaultYear
+      ? [selectedContext.defaultYear, selectedContext.defaultYear]
+      : getSelectedYears(state);
     // eslint-disable-next-line camelcase
     const [start_year, end_year] = years;
     const { topNodes } = state.app;
