@@ -45,6 +45,14 @@ function Explore({
     if (step !== EXPLORE_STEPS.selected) setHighlightedContext(null);
   }, [step]);
 
+  // Show highlighted context if we come back from the tool
+  useEffect(() => {
+    if (step === EXPLORE_STEPS.selected)
+      setHighlightedContext(
+        contexts.find(c => c.countryId === country.id && c.commodityId === commodity.id)
+      );
+  }, [commodity, contexts, country, step]);
+
   // Get top destination countries
   useEffect(() => {
     if (step === EXPLORE_STEPS.selectCountry)
