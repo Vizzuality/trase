@@ -171,9 +171,8 @@ WorldMap.propTypes = {
   center: PropTypes.array
 };
 
-WorldMap.defaultPropTypes = {
-  height: 410,
-  center: [0, 20]
+WorldMap.defaultProps = {
+  center: [20, 0]
 };
 
 export default WorldMap;

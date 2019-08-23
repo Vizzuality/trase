@@ -145,7 +145,7 @@ function Explore({
           </div>
         </div>
       </div>
-      <div className="row columns">
+      <div className="map-row">
         <div className="map-container">
           <WorldMap
             context={highlightedContext}

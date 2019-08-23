@@ -4,6 +4,20 @@ $top-cards-height: 156px;
 
 .c-tool-selector {
   margin-top: $nav-height;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - #{$top-cards-height});
+
+  .row{
+    flex: 0;
+  }
+
+  .map-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
 
   display: flex;
   flex-direction: column;
