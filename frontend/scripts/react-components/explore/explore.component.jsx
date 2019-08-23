@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import TopCards from 'react-components/explore/top-cards';
 import WorldMap from 'react-components/shared/world-map/world-map.container';
 import uniq from 'lodash/uniq';
+import last from 'lodash/last';
 import { EXPLORE_STEPS } from 'constants';
 import getTopNodesKey from 'utils/getTopNodesKey';
 
@@ -22,7 +23,6 @@ function Explore({
   cards,
   goToTool,
   topNodes,
-  years,
   getTopCountries,
   commodityContexts
 }) {
@@ -30,9 +30,14 @@ function Explore({
   const [highlightedCountryIds, setHighlightedCountries] = useState(null);
   const [highlightedCommodityIds, setHighlightedCommodities] = useState(null);
 
-  const [start, end] = years;
   const highlightedContextKey =
-    highlightedContext && getTopNodesKey(highlightedContext.id, 'country', start, end);
+    highlightedContext &&
+    getTopNodesKey(
+      highlightedContext.id,
+      'country',
+      last(highlightedContext.years),
+      last(highlightedContext.years)
+    );
 
   // Clear highlighted items on step change
   useEffect(() => {
@@ -42,7 +47,8 @@ function Explore({
 
   // Get top destination countries
   useEffect(() => {
-    if (step === EXPLORE_STEPS.selectCountry) getTopCountries(commodityContexts);
+    if (step === EXPLORE_STEPS.selectCountry)
+      getTopCountries(commodityContexts, { fromLastYear: true });
   }, [commodityContexts, getTopCountries, step]);
 
   const renderTitle = () => {
@@ -143,7 +149,6 @@ Explore.propTypes = {
   goToTool: PropTypes.func.isRequired,
   step: PropTypes.number,
   topNodes: PropTypes.object,
-  years: PropTypes.array,
   commodityContexts: PropTypes.array,
   getTopCountries: PropTypes.func.isRequired
 };

@@ -32,10 +32,6 @@
   width: 285px;
   border-radius: 5px;
   background-color: $white;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   cursor: pointer;
 
   &:not(:last-child) {
