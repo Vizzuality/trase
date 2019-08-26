@@ -1,19 +1,19 @@
-import reducer, { initialState } from 'react-components/tool-selector/tool-selector.reducer';
+import reducer, { initialState } from 'react-components/explore/explore.reducer';
 import {
-  TOOL_SELECTOR__SET_COMMODITY,
-  TOOL_SELECTOR__SET_COUNTRY,
+  EXPLORE__SET_COMMODITY,
+  EXPLORE__SET_COUNTRY,
   setCommodity,
   setCountry
-} from 'react-components/tool-selector/tool-selector.actions';
+} from 'react-components/explore/explore.actions';
 
-test(TOOL_SELECTOR__SET_COMMODITY, () => {
+test(EXPLORE__SET_COMMODITY, () => {
   const action = setCommodity(12);
   const newState = reducer(initialState, action);
-  expect(newState).toEqual({ ...initialState, activeCommodityId: 12 });
+  expect(newState).toEqual({ ...initialState, selectedCommodityId: 12 });
 });
 
-test(TOOL_SELECTOR__SET_COUNTRY, () => {
+test(EXPLORE__SET_COUNTRY, () => {
   const action = setCountry(12);
   const newState = reducer(initialState, action);
-  expect(newState).toEqual({ ...initialState, activeCountryId: 12 });
+  expect(newState).toEqual({ ...initialState, selectedCountryId: 12 });
 });

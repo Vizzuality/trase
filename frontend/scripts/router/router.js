@@ -15,7 +15,7 @@ import getPageStaticContent from 'react-components/static-content/static-content
 import loadBaseAppData from 'reducers/app.thunks';
 import getTeam from 'react-components/team/team.thunks';
 import { loadDashboardTemplates } from 'react-components/dashboard-root/dashboard-root.thunks';
-import { redirectToExplore } from 'react-components/explore/explore.thunks';
+import { redirectToExplore } from 'react-components/legacy-explore/explore.thunks';
 import {
   loadToolInitialData,
   resizeSankeyTool,
@@ -58,11 +58,9 @@ export const routes = {
   },
   tool: {
     path: '/flows',
-    page: ENABLE_REDESIGN_PAGES ? 'tool-selector' : 'tool',
+    page: 'tool',
     title: getPageTitle,
-    thunk: ENABLE_REDESIGN_PAGES
-      ? loadPageData()
-      : loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool)
+    thunk: loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool)
   },
   profileRoot: {
     path: '/profiles',

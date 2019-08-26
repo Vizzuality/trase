@@ -1,4 +1,4 @@
-import { EXPLORE__SET_TOP_COUNTRIES } from 'react-components/explore/explore.actions';
+import { EXPLORE__SET_TOP_COUNTRIES } from 'react-components/legacy-explore/explore.actions';
 import { getSelectedYears } from 'reducers/app.selectors';
 
 export default [
@@ -10,7 +10,7 @@ export default [
     },
     category: 'explore',
     shouldSend(action, state) {
-      const { topNodes } = state.explore;
+      const { topNodes } = state.legacyExplore;
       const topNodesKeys = Object.keys(topNodes);
       return !(
         topNodesKeys.length === 0 ||

@@ -2,15 +2,15 @@ import { createSelector } from 'reselect';
 import omitBy from 'lodash/omitBy';
 import sortBy from 'lodash/sortBy';
 import kebabCase from 'lodash/kebabCase';
+import capitalize from 'lodash/capitalize';
 import addApostrophe from 'utils/addApostrophe';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
 import { CHART_TYPES, NODE_TYPE_PANELS } from 'constants';
-import capitalize from 'lodash/capitalize';
 import {
-  getPluralNodeType,
   getDashboardsContext,
   getDashboardSelectedRecolorBy
 } from 'react-components/dashboard-element/dashboard-element.selectors';
+import pluralize from 'utils/pluralize';
 
 export const PARSED_CHART_TYPES = {
   bar_chart: CHART_TYPES.bar,
@@ -227,7 +227,7 @@ export const makeGetTitle = () =>
       const nodeFilter = meta.info?.filter?.node;
       const nodeType = meta.info.node_type;
       if (nodeType) {
-        nodeTypePart = getNodeTypeName(getPluralNodeType(nodeType));
+        nodeTypePart = getNodeTypeName(pluralize(nodeType));
       } else if (nodeFilter) {
         const label = activeChartGrouping ? '' : config?.yAxisLabel.text;
         nodeTypePart = `${capitalize(nodeFilter.name)}${addApostrophe(nodeFilter.name)} ${label}`;

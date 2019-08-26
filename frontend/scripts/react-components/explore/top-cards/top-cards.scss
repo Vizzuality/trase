@@ -1,0 +1,40 @@
+@import 'styles/settings';
+
+.c-top-cards {
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+
+  .top-cards-title {
+    display: inline;
+    margin-right: 20px;
+  }
+
+  .top-cards-container {
+    margin-top: 5px;
+    background-color: $mid-light-gray;
+    width: 100%;
+    height: 120px;
+  }
+
+  .top-cards-row {
+    padding-top: 10px;
+    display: flex;
+  }
+
+  .back-button {
+    cursor: pointer;
+  }
+}
+
+.c-top-card {
+  height: 100px;
+  width: 285px;
+  border-radius: 5px;
+  background-color: $white;
+  cursor: pointer;
+
+  &:not(:last-child) {
+    margin-right: 20px;
+  }
+}

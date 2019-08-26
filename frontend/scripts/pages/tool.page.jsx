@@ -9,7 +9,6 @@ import CookieBanner from 'react-components/shared/cookie-banner';
 
 export const mount = (root, store) => {
   root.innerHTML = BaseMarkup();
-
   render(
     <Provider store={store}>
       <FiltersNav />
