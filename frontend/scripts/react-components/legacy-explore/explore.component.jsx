@@ -124,7 +124,7 @@ function Explore(props) {
 
   return (
     <div className="l-explore">
-      <div className="c-explore">
+      <div className="c-legacy-explore">
         <div className="row sentence-selector-container">
           <div className="column small-12">
             <SentenceSelector />

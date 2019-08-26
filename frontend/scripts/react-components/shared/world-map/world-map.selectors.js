@@ -11,7 +11,7 @@ const getSelectedContext = (state, { context }) => context;
 const getHighlightedCountryIds = (state, { highlightedCountryIds }) => highlightedCountryIds;
 const getCountries = (state, { destinationCountries }) => destinationCountries;
 
-const worldMapProjection = projections(800, 520, {}, 'robinson');
+const worldMapProjection = projections(800, 600, {}, 'robinson');
 
 export const getOriginGeoId = createSelector(
   getSelectedContext,

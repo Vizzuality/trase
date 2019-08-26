@@ -2,45 +2,31 @@
 
 $top-cards-height: 156px;
 
-.c-tool-selector {
-  margin-top: $nav-height;
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - #{$top-cards-height});
-
-  .row{
-    flex: 0;
+.c-explore {
+  .explore-selector {
+    position: relative;
+    margin-top: $nav-height;
+    padding-bottom: $top-cards-height;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - #{$nav-height});
   }
 
-  .map-row {
+  .map-container {
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 100%;
   }
 
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - #{$top-cards-height});
-
-  .row{
-    flex: 0;
-  }
-
-  .map-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-  }
-
-  .tool-selector-grid-container {
+  .explore-grid-container {
     display: flex;
     margin: 30px auto 0;
     max-width: 900px;
     min-height: 50px;
 
-    .tool-selector-grid {
+    .explore-grid {
       display: flex;
       margin: 0 auto;
       flex-wrap: wrap;
@@ -49,9 +35,5 @@ $top-cards-height: 156px;
 
   .c-grid-list-item {
     width: 120px;
-  }
-
-  .map-container {
-    height: 460px;
   }
 }

@@ -134,7 +134,7 @@ const WorldMap = ({
       <ComposableMap
         className={cx('c-world-map', className)}
         projection="robinson"
-        height={520}
+        height={600}
         style={{ width: '100%', height: '100%' }}
       >
         <ZoomableGroup center={center} disablePanning>

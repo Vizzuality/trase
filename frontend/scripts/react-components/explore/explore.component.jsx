@@ -127,11 +127,11 @@ function Explore({
   ]);
 
   return (
-    <div className="c-tool-selector">
-      <div className="row columns">{renderTitle()}</div>
-      <div className="row columns">
-        <div className="tool-selector-grid-container">
-          <div className="tool-selector-grid">
+    <div className="c-explore">
+      <div className="explore-selector">
+        {renderTitle()}
+        <div className="explore-grid-container">
+          <div className="explore-grid">
             {step < EXPLORE_STEPS.selected &&
               items.map(item => (
                 <GridListItem
@@ -144,14 +144,14 @@ function Explore({
               ))}
           </div>
         </div>
-      </div>
-      <div className="map-row">
         <div className="map-container">
           <WorldMap
             context={highlightedContext}
             destinationCountries={destinationCountries}
             highlightedCountryIds={getHighlightedCountryIds}
-            onHoverGeometry={geoId => setHighlightedCommodities(findHighlightedCommoditiesIds(geoId))}
+            onHoverGeometry={geoId =>
+              setHighlightedCommodities(findHighlightedCommoditiesIds(geoId))
+            }
           />
         </div>
       </div>
