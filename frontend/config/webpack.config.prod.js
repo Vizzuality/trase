@@ -29,7 +29,8 @@ const main = merge(webpackBaseConfig, {
       cacheId: 'trase.earth',
       filename: 'service-worker.js',
       minify: true,
-      staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/]
+      staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/, /\.html$/],
+      dontCacheBustUrlsMatching: [/./]
     })
   ],
   module: {
