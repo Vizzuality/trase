@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import Heading from 'react-components/shared/heading';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import PropTypes from 'prop-types';
@@ -78,13 +78,16 @@ function Explore({
     return uniq(highlightedCommoditiesIds);
   };
 
+  const findContextCountries = useCallback(
+    commodityId =>
+      !commodityId
+        ? null
+        : uniq(contexts.filter(c => c.commodityId === commodityId).map(c => c.countryId)),
+    [contexts]
+  );
+
   const onItemHover = item => {
     if (step === EXPLORE_STEPS.selectCommodity) {
-      const findContextCountries = commodityId =>
-        !commodityId
-          ? null
-          : uniq(contexts.filter(c => c.commodityId === commodityId).map(c => c.countryId));
-
       return setHighlightedCountries(findContextCountries(item?.id));
     }
     const findContext = countryId =>
@@ -96,6 +99,33 @@ function Explore({
   };
 
   const setItemFunction = step === EXPLORE_STEPS.selectCommodity ? setCommodity : setCountry;
+
+  const destinationCountries = highlightedContextKey && topNodes[highlightedContextKey];
+  const getHighlightedCountryIds = useMemo(() => {
+    switch (step) {
+      case EXPLORE_STEPS.selectCommodity:
+        return {
+          level1: allCountriesIds,
+          level2: highlightedCountryIds
+        };
+      case EXPLORE_STEPS.selectCountry:
+        return destinationCountries
+          ? null
+          : {
+              level1: findContextCountries(commodity.id)
+            };
+      default:
+        return null;
+    }
+  }, [
+    allCountriesIds,
+    commodity,
+    destinationCountries,
+    findContextCountries,
+    highlightedCountryIds,
+    step
+  ]);
+
   return (
     <div className="c-tool-selector">
       <div className="row columns">{renderTitle()}</div>
@@ -120,13 +150,8 @@ function Explore({
           height={320}
           center={[0, 10]}
           context={highlightedContext}
-          destinationCountries={highlightedContextKey && topNodes[highlightedContextKey]}
-          highlightedCountryIds={
-            step === EXPLORE_STEPS.selectCommodity && {
-              level1: allCountriesIds,
-              level2: highlightedCountryIds
-            }
-          }
+          destinationCountries={destinationCountries}
+          highlightedCountryIds={getHighlightedCountryIds}
           onHoverGeometry={geoId => setHighlightedCommodities(findHighlightedCommoditiesIds(geoId))}
         />
       </div>
