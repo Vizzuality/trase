@@ -8,6 +8,7 @@ import uniq from 'lodash/uniq';
 import last from 'lodash/last';
 import { EXPLORE_STEPS } from 'constants';
 import getTopNodesKey from 'utils/getTopNodesKey';
+import cx from 'classnames';
 
 import 'react-components/explore/explore.scss';
 
@@ -131,17 +132,23 @@ function Explore({
       <div className="explore-selector">
         {renderTitle()}
         <div className="explore-grid-container">
-          <div className="explore-grid">
-            {step < EXPLORE_STEPS.selected &&
-              items.map(item => (
-                <GridListItem
-                  item={item}
-                  enableItem={i => setItemFunction(i.id)}
-                  onHover={onItemHover}
-                  variant="white"
-                  isActive={highlightedCommodityIds && highlightedCommodityIds.includes(item.id)}
-                />
-              ))}
+          <div className="row columns">
+            <div
+              className={cx('explore-grid', {
+                'first-step': step === EXPLORE_STEPS.selectCommodity
+              })}
+            >
+              {step < EXPLORE_STEPS.selected &&
+                items.map(item => (
+                  <GridListItem
+                    item={item}
+                    enableItem={i => setItemFunction(i.id)}
+                    onHover={onItemHover}
+                    variant="white"
+                    isActive={highlightedCommodityIds && highlightedCommodityIds.includes(item.id)}
+                  />
+                ))}
+            </div>
           </div>
         </div>
         <div className="map-container">

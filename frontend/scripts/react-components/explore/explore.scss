@@ -14,22 +14,26 @@ $top-cards-height: 156px;
 
   .map-container {
     height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
   }
 
   .explore-grid-container {
     display: flex;
     margin: 30px auto 0;
     max-width: 900px;
-    min-height: 50px;
 
     .explore-grid {
+      &.first-step {
+        height: 100px;
+        @media screen and (max-width: $breakpoint-tablet) {
+          height: 150px;
+        }
+      }
+
       display: flex;
       margin: 0 auto;
       flex-wrap: wrap;
+      height: 50px;
+      transition: height 0.5s;
     }
   }
 
