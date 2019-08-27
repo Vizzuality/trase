@@ -4238,6 +4238,27 @@ ALTER SEQUENCE public.flow_quals_id_seq OWNED BY public.flow_quals.id;
 
 
 --
+-- Name: flow_quant_totals_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.flow_quant_totals_mv AS
+ SELECT contexts.commodity_id,
+    contexts.country_id,
+    flows.context_id,
+    flow_quants.quant_id,
+    flows.year,
+    sum(flow_quants.value) AS total
+   FROM ((public.flow_quants
+     JOIN public.flows ON ((flow_quants.flow_id = flows.id)))
+     JOIN public.contexts ON ((flows.context_id = contexts.id)))
+  WHERE ((flows.year = contexts.default_year) AND (flow_quants.quant_id IN ( SELECT quants.id
+           FROM public.quants
+          WHERE (quants.name = 'Volume'::text))))
+  GROUP BY contexts.commodity_id, contexts.country_id, flows.context_id, flow_quants.quant_id, flows.year
+  WITH NO DATA;
+
+
+--
 -- Name: flow_quants_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -8092,6 +8113,13 @@ CREATE INDEX flow_quals_qual_id_idx ON public.flow_quals USING btree (qual_id);
 
 
 --
+-- Name: flow_quant_totals_mv_commodity_id_country_id_quant_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX flow_quant_totals_mv_commodity_id_country_id_quant_id_idx ON public.flow_quant_totals_mv USING btree (commodity_id, country_id, quant_id);
+
+
+--
 -- Name: flow_quants_flow_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -9263,6 +9291,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190801121907'),
 ('20190807095141'),
 ('20190814161133'),
+('20190820105523'),
 ('20190823135415');
 
 
