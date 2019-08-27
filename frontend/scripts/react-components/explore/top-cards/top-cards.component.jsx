@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Heading from 'react-components/shared/heading';
 import Text from 'react-components/shared/text';
 import PropTypes from 'prop-types';
 import capitalize from 'lodash/capitalize';
 import upperCase from 'lodash/upperCase';
 import pluralize from 'utils/pluralize';
+import { useTransition, animated } from 'react-spring';
 
 import 'react-components/explore/top-cards/top-cards.scss';
 
@@ -46,11 +47,32 @@ const TopCards = ({
   cards,
   goToTool
 }) => {
+  const [animatedItems, setAnimatedItems] = useState([]);
+  const transitions = useTransition(animatedItems, item => item.key, {
+    from: { transform: 'translateY(200px)' },
+    enter: { transform: 'translateY(0px)' },
+    leave: { display: 'none' }
+  });
+
+  useEffect(() => {
+    setAnimatedItems(cards[step]);
+  }, [cards, step]);
+
   const renderName = name => (
     <Text as="span" size="lg" weight="bold">
       {capitalize(name)}
     </Text>
   );
+  const renderCards = () =>
+    transitions.map(
+      ({ item, props, key }) =>
+        item && (
+          <animated.div key={key} style={props} className="animated-card">
+            <TopCard key={item.key} card={item} goToTool={() => goToTool(item)} />
+          </animated.div>
+        )
+    );
+
   const clearStep = step === 2 ? () => setCountry(null) : () => setCommodity(null);
   return (
     <div className="c-top-cards">
@@ -70,16 +92,7 @@ const TopCards = ({
       </div>
       <div className="top-cards-container">
         <div className="row columns">
-          <div className="top-cards-row">
-            {cards &&
-              cards[step].map(card => (
-                <TopCard
-                  key={`${card.country}-${card.commodity}-${card.indicatorName}-${card.nodeTypeName}`}
-                  card={card}
-                  goToTool={() => goToTool(card)}
-                />
-              ))}
-          </div>
+          <div className="top-cards-row">{cards && renderCards()}</div>
         </div>
       </div>
     </div>
