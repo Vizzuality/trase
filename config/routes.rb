@@ -66,7 +66,7 @@ Rails.application.routes.draw do
       resources :newsletter_subscriptions, only: [:create]
       resource :database_validation, controller: :database_validation,
                                      only: [:show]
-      resources :top_destinations, only: [:index]
+      resources :nodes_stats, only: [:index]
       namespace :dashboards do
         resources :templates, only: [:index]
         resources :sources, only: [:index] do

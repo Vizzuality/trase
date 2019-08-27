@@ -1,7 +1,7 @@
 module Api
   module V3
     module Profiles
-      class TopDestinationsForCommodityList < TopDestinationsList
+      class NodesStatsForCommodityList < NodesStatsList
         def initialize(commodity_id, data)
           super(data)
 
@@ -10,9 +10,9 @@ module Api
 
         private
 
-        def query_all_years(attribute, options = {})
-          super(attribute, options).
-            joins('INNER JOIN contexts ON contexts.id = flows.context_id').
+        def query_all_years(quants_ids, options = {})
+          super(quants_ids, options).
+            joins('INNER JOIN contexts ON contexts.id = nodes_stats_mv.context_id').
             joins('INNER JOIN commodities ON commodities.id = contexts.commodity_id').
             where('commodities.id': @commodity_id)
         end

@@ -1,12 +1,12 @@
 module Api
   module V3
-    class TopDestinationsController < ApiController
+    class NodesStatsController < ApiController
       before_action :set_filter_params, only: :index
 
       skip_before_action :load_context
 
       def index
-        @result = Api::V3::TopDestinations::ResponseBuilder.new(
+        @result = Api::V3::NodesStats::ResponseBuilder.new(
           params[:commodity_id], params[:contexts_ids], @filter_params
         ).call
 
@@ -18,6 +18,7 @@ module Api
       def set_filter_params
         year_start = params[:start_year]
         @filter_params = {
+          attribute_ids: params[:attribute_ids],
           node_type_id: params[:column_id],
           year_start: year_start,
           year_end: params[:end_year] || year_start,

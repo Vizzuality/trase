@@ -1,7 +1,7 @@
 module Api
   module V3
     module Profiles
-      class TopDestinationsForContextsList < TopDestinationsList
+      class NodesStatsForContextsList < NodesStatsList
         def initialize(contexts_ids, data)
           super(data)
 
@@ -10,8 +10,8 @@ module Api
 
         private
 
-        def query_all_years(attribute, options = {})
-          super(attribute, options).
+        def query_all_years(quants_ids, options = {})
+          super(quants_ids, options).
             where(context_id: @contexts_ids)
         end
       end
