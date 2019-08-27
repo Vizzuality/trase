@@ -1,5 +1,6 @@
 export const EXPLORE__SET_COMMODITY = 'EXPLORE__SET_COMMODITY';
 export const EXPLORE__SET_COUNTRY = 'EXPLORE__SET_COUNTRY';
+export const EXPLORE__SELECT_TOP_CARD = 'EXPLORE__SELECT_TOP_CARD';
 
 export const setCommodity = selectedCommodityId => ({
   type: EXPLORE__SET_COMMODITY,
@@ -23,6 +24,10 @@ export const goToTool = linkInfo => (dispatch, getState) => {
     contextId = context.id;
   }
   const serializerParams = { selectedContextId: contextId };
+  dispatch({
+    type: EXPLORE__SELECT_TOP_CARD,
+    payload: { linkInfo }
+  });
   dispatch({
     type: 'tool',
     payload: { serializerParams }
