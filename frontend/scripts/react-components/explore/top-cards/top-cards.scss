@@ -17,24 +17,27 @@
     height: 120px;
   }
 
-  .top-cards-row {
-    padding-top: 10px;
-    display: flex;
-  }
-
   .back-button {
     cursor: pointer;
   }
+
+  .top-cards-row {
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.animated-card {
+  flex: 1;
+  margin-right: 20px;
 }
 
 .c-top-card {
   height: 100px;
-  width: 285px;
+  width: 100%;
   border-radius: 5px;
   background-color: $white;
   cursor: pointer;
 
-  &:not(:last-child) {
-    margin-right: 20px;
-  }
 }

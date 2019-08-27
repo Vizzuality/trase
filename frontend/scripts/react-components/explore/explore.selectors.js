@@ -101,7 +101,9 @@ export const getCards = createSelector(
     const nodeTypes = [{ id: 1, name: 'EXPORTER' }, { id: 2, name: 'COUNTRY' }];
     const mockedCards = [
       { commodity_id: 1, country_id: 27, indicator_id: 32, node_type_id: 1 },
-      { commodity_id: 1, country_id: 27, indicator_id: 32, node_type_id: 2 }
+      { commodity_id: 1, country_id: 27, indicator_id: 32, node_type_id: 2 },
+      { commodity_id: 1, country_id: 27, indicator_id: 32, node_type_id: 3 },
+      { commodity_id: 1, country_id: 27, indicator_id: 33, node_type_id: 4 }
     ];
     const getUpdatedCard = card => {
       let commodityName = commodity?.name;
@@ -130,7 +132,8 @@ export const getCards = createSelector(
         indicatorId: card.indicator_id,
         indicatorName: indicator?.name,
         nodeTypeId: card.node_type_id,
-        nodeTypeName: nodeType?.name
+        nodeTypeName: nodeType?.name,
+        key: `${commodityName}-${countryName}-${indicator?.name}-${nodeType?.name}`
       };
     };
     const updatedCards = mockedCards.map(mockedCard => getUpdatedCard(mockedCard));
