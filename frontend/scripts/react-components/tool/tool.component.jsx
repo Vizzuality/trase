@@ -3,14 +3,12 @@ import PropTypes from 'prop-types';
 import 'styles/components/tool/map/map-basemaps.scss';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import MapContainer from 'react-components/tool/map/map.container';
-import FlowContentContainer from 'react-components/tool/tool-content/tool-content.container';
-import TooltipContainer from 'react-components/tool/help-tooltip/help-tooltip.container';
 import ModalContainer from 'react-components/tool/story-modal/story-modal.container';
 import TitlebarContainer from 'react-components/tool/titlebar/titlebar.container';
 import NodesTitlesContainer from 'react-components/tool/nodes-titles/nodes-titles.container';
 import MapContextContainer from 'react-components/tool/map-context/map-context.container';
 import MapBasemaps from 'react-components/tool/map-basemaps/map-basemaps.container';
-import Sankey from 'react-components/tool/sankey/sankey.container';
+import NewSankey from 'react-components/tool/new-sankey';
 import MapLegend from 'react-components/tool/map-legend/map-legend.container';
 import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.react';
 import EventManager from 'utils/eventManager';
@@ -161,12 +159,9 @@ const renderVainillaComponents = () => (
     <MapContainer />
     <MapBasemaps />
     <MapDimensionsContainer />
-    <FlowContentContainer />
     <MapLegend />
     <MapContextContainer />
     <NodesTitlesContainer />
-    <Sankey />
-    <TooltipContainer />
     <ModalContainer />
   </>
 );
@@ -207,7 +202,7 @@ const Tool = props => {
             {renderMapSidebar()}
             {renderMap()}
             <ColumnsSelectorGroupContainer />
-            {renderSankey()}
+            <NewSankey />
             <TitlebarContainer />
           </div>
         </div>
