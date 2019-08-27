@@ -130,7 +130,8 @@ module Api
             Api::V3::Readonly::CommodityAttributeProperty,
             Api::V3::Readonly::QuantValuesMeta,
             Api::V3::Readonly::IndValuesMeta,
-            Api::V3::Readonly::QualValuesMeta
+            Api::V3::Readonly::QualValuesMeta,
+            Api::V3::Readonly::FlowQuantTotal
           ].each { |mview| mview.refresh(sync: true, skip_dependencies: true) }
         end
 
