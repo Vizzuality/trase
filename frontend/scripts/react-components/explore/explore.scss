@@ -22,18 +22,25 @@ $top-cards-height: 156px;
     max-width: 900px;
 
     .explore-grid {
-      &.first-step {
+      display: flex;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      height: 0px;
+      transition: height 0.5s;
+
+      &.rows1 {
+        height: 50px;
+        @media screen and (max-width: $breakpoint-tablet) {
+          height: 100px;
+        }
+      }
+
+      &.rows2 {
         height: 100px;
         @media screen and (max-width: $breakpoint-tablet) {
           height: 150px;
         }
       }
-
-      display: flex;
-      margin: 0 auto;
-      flex-wrap: wrap;
-      height: 50px;
-      transition: height 0.5s;
     }
   }
 

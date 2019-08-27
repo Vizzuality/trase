@@ -126,18 +126,15 @@ function Explore({
     highlightedCountryIds,
     step
   ]);
-
+  const ITEMS_PER_ROW = 7;
+  const rowsNumber = items.length && Math.ceil(items.length / ITEMS_PER_ROW);
   return (
     <div className="c-explore">
       <div className="explore-selector">
         {renderTitle()}
         <div className="explore-grid-container">
           <div className="row columns">
-            <div
-              className={cx('explore-grid', {
-                'first-step': step === EXPLORE_STEPS.selectCommodity
-              })}
-            >
+            <div className={cx('explore-grid', { [`rows${rowsNumber}`]: rowsNumber })}>
               {step < EXPLORE_STEPS.selected &&
                 items.map(item => (
                   <GridListItem
