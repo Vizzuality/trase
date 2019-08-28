@@ -31,14 +31,12 @@ module Api
           end
         end
 
-        def query_all_years(quants_ids, options = {})
+        def query_all_years(quants_ids, _options = {})
           query = Api::V3::Readonly::NodesStats.
             select(select_clause).
             where(quant_id: quants_ids)
 
-          if @node_type_id
-            query = query.where(node_type_id: @node_type_id)
-          end
+          query = query.where(node_type_id: @node_type_id) if @node_type_id
 
           query
         end
@@ -49,7 +47,7 @@ module Api
               where(year: (@year_start..@year_end))
           else
             query_all_years(quants_ids, options).
-              joins('INNER JOIN contexts ON contexts.id = nodes_stats_mv.context_id')
+              joins('INNER JOIN contexts ON contexts.id = nodes_stats_mv.context_id').
               where('year = contexts.default_year')
           end
         end

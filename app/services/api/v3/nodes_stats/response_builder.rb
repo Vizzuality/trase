@@ -84,7 +84,7 @@ module Api
               id: node_stats['node_id'],
               name: node_stats['name'],
               value: node_stats['value'],
-              height: node_stats['height'],
+              height: node_stats['height']
             }
           end
         end
