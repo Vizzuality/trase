@@ -1,7 +1,13 @@
 import { Polly } from '@pollyjs/core';
 import PuppeteerAdapter from '@pollyjs/adapter-puppeteer';
 import FSPersister from '@pollyjs/persister-fs';
-import { pollyConfig, handleUnnecesaryRequests, expectToContain, click } from './utils';
+import {
+  pollyConfig,
+  handleUnnecesaryRequests,
+  expectToContain,
+  expectChildrenToBe,
+  click
+} from './utils';
 
 if (ENABLE_REDESIGN_PAGES) {
   Polly.register(PuppeteerAdapter);
@@ -31,6 +37,7 @@ if (ENABLE_REDESIGN_PAGES) {
       await page.goto(`${BASE_URL}/explore`);
 
       // Step 1
+      expectChildrenToBe(page, 'top-cards-row', 4);
       await page.waitForSelector('[data-test=top-card-BRAZIL-SOY-EXPORTER-FOREST_500]', {
         timeout: 5000
       });
