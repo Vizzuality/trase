@@ -1,13 +1,7 @@
 import { Polly } from '@pollyjs/core';
 import PuppeteerAdapter from '@pollyjs/adapter-puppeteer';
 import FSPersister from '@pollyjs/persister-fs';
-import {
-  pollyConfig,
-  handleUnnecesaryRequests,
-  expectToContain,
-  click,
-  expectChildrenToBe
-} from './utils';
+import { pollyConfig, handleUnnecesaryRequests, expectToContain, click } from './utils';
 
 if (ENABLE_REDESIGN_PAGES) {
   Polly.register(PuppeteerAdapter);
@@ -37,7 +31,6 @@ if (ENABLE_REDESIGN_PAGES) {
       await page.goto(`${BASE_URL}/explore`);
 
       // Step 1
-      expectChildrenToBe(page, 'top-cards-row', 4);
       await page.waitForSelector('[data-test=top-card-BRAZIL-SOY-EXPORTER-FOREST_500]', {
         timeout: 5000
       });
@@ -69,11 +62,12 @@ if (ENABLE_REDESIGN_PAGES) {
       await click(page, 'grid-list-item-button-BRAZIL');
       await expectToContain(page, 'step-title', '3.');
 
-      await Promise.all([
-        click(page, 'top-card-BRAZIL-BEEF-EXPORTER-FOREST_500'),
-        page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 0 })
-      ]);
-      await expect(page.url().startsWith(`${BASE_URL}/flows?selectedContextId=6`)).toBe(true);
+      // TODO: Lets use this when the link is complete
+      // await Promise.all([
+      //   click(page, 'top-card-BRAZIL-BEEF-EXPORTER-FOREST_500'),
+      //   page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 0 })
+      // ]);
+      // await expect(page.url().startsWith(`${BASE_URL}/flows?selectedContextId=6`)).toBe(true);
     });
   });
 }

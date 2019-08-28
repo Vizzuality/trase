@@ -74,10 +74,3 @@ export const click = async (page, selector) => {
   await page.waitForSelector(testSelector);
   await page.click(testSelector);
 };
-export const expectChildrenToBe = async (page, selector, number) => {
-  const testSelector = `[data-test=${selector}]`;
-  await page.waitForSelector(testSelector);
-  const topCardsNumber = await page.$eval(testSelector, group => group.children.length);
-
-  expect(topCardsNumber).toBe(number);
-};
