@@ -1,0 +1,87 @@
+@import 'styles/settings';
+
+.c-node-menu {
+    display: none;
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    transition: top 450ms $ease-in-out-sine, left 450ms $ease-in-out-sine;
+    border-radius: 50%;
+    background-color: $charcoal-grey;
+    color: $white;
+    box-shadow: $box-shadow-big;
+    cursor: pointer;
+    z-index: $z-base;
+    transform: translate(-50%, -50%);
+    will-change: top, left;
+
+    &.-visible {
+      display: block;
+    }
+
+    &:hover {
+      background-color: transparent;
+      box-shadow: unset;
+
+      .options {
+        display: block;
+      }
+    }
+
+    > .icon {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      top: 0;
+      margin: auto;
+    }
+
+  .options {
+    display: none;
+    position: absolute;
+    width: 200px;
+    box-shadow: $box-shadow-big;
+    font-family: $font-family-1;
+    top: 2px;
+    right: 0;
+
+    .title {
+      padding: 10px;
+      background-color: $manilla;
+      letter-spacing: -1px;
+      font-family: $font-family-1;
+    }
+
+    .body {
+      padding: 10px;
+      background-color: $white;
+    }
+
+    .menu-item {
+      position: relative;
+      height: 32px;
+      background-color: $white;
+
+      > button {
+        width: 100%;
+        cursor: pointer;
+        padding: 10px 8px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      > .icon {
+        position: absolute;
+        top: 8px;
+        right: 10px;
+        width: 16px;
+        height: 16px;
+      }
+
+      &:hover {
+        background-color: $manilla;
+      }
+    }
+  }
+}

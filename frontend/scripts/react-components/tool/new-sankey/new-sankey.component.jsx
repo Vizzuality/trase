@@ -3,15 +3,12 @@ import sankeyLayout from 'react-components/tool/sankey/sankey.d3layout';
 import cx from 'classnames';
 import 'styles/components/tool/sankey.scss';
 import { DETAILED_VIEW_MIN_LINK_HEIGHT } from 'constants';
-import { animated, useSpring } from 'react-spring';
+import { animated, useTransition } from 'react-spring';
 import toLower from 'lodash/toLower';
+import NodeMenu from './node-menu.component';
 
 function SankeyLink(props) {
-  const { link, className, hovered, ...path } = props;
-  const { strokeWidth } = useSpring({
-    to: { strokeWidth: Math.max(DETAILED_VIEW_MIN_LINK_HEIGHT, link.renderedHeight) },
-    from: { strokeWidth: 0 }
-  });
+  const { link, className, hovered, strokeWidth, ...path } = props;
   // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
   return (
     <animated.path
@@ -25,16 +22,34 @@ function SankeyLink(props) {
 }
 
 function NewSankey(props) {
-  const { links, sankeySize, selectedRecolorBy, onNodeClicked } = props;
+  const {
+    links,
+    sankeySize,
+    detailedView,
+    selectedRecolorBy,
+    onNodeClicked,
+    highlightedNodeId,
+    onNodeHighlighted,
+    selectedNodesIds
+  } = props;
   const [isReady, setIsReady] = useState(false);
   const [hoveredLink, setHoveredLink] = useState(null);
   const layout = useRef(sankeyLayout().columnWidth(100));
+  const [menuPos, setMenuPos] = useState({ x: 0, y: 0 });
+  const scrollContainerRef = useRef(null);
+  const columns = layout.current.columns();
+  const linksData = layout.current.links();
+
+  const linksTransitions = useTransition(linksData || [], i => i.id, {
+    enter: link => ({ strokeWidth: Math.max(DETAILED_VIEW_MIN_LINK_HEIGHT, link.renderedHeight) }),
+    leave: { strokeWidth: 0 },
+    from: { strokeWidth: 0 }
+  });
   // showLoadedLinks
   useEffect(() => {
     if (links === null || !sankeySize) {
       return;
     }
-
     layout.current.setViewportSize(sankeySize);
     layout.current.setLinksPayload(props);
     layout.current.relayout();
@@ -42,7 +57,26 @@ function NewSankey(props) {
     if (layout.current.columns() && layout.current.columns().length > 0) {
       setIsReady(true);
     }
-  }, [links, props, sankeySize]);
+  }, [links, props, sankeySize, selectedRecolorBy]);
+
+  useEffect(() => {
+    if (!isReady) {
+      return;
+    }
+    // use some to stop iterating once its found
+    columns.some(column =>
+      column.values.some(node => {
+        const last = selectedNodesIds.length - 1;
+        if (node.id === selectedNodesIds[last]) {
+          const x = node.x;
+          const y = Math.max(0, node.y) - (scrollContainerRef.current?.scrollTop || 0);
+          setMenuPos({ x, y });
+          return true;
+        }
+        return false;
+      })
+    );
+  }, [selectedNodesIds, links, isReady, columns]);
 
   const getLinkColor = link => {
     let classPath = 'sankey-link';
@@ -68,17 +102,25 @@ function NewSankey(props) {
     setHoveredLink(e.currentTarget.id);
   };
 
-  const columns = layout.current.columns();
-  const linksData = layout.current.links();
-
   if (!isReady) {
     return null;
   }
 
   return (
     <div className="c-sankey is-absolute">
-      <div className="sankey-scroll-container">
-        <svg className="sankey" height="100%">
+      <div
+        ref={scrollContainerRef}
+        className={cx('sankey-scroll-container', { '-detailed': detailedView })}
+      >
+        <NodeMenu
+          menuPos={menuPos}
+          isVisible={selectedNodesIds.length > 0}
+          options={[{ label: 'Expand' }, { label: 'Clear Selection' }]}
+        />
+        <svg
+          className="sankey"
+          height={detailedView ? `${layout.current.getMaxHeight()}px` : '100%'}
+        >
           <defs>
             <pattern
               id="isAggregatedPattern"
@@ -94,13 +136,15 @@ function NewSankey(props) {
           </defs>
           <g className="sankey-container">
             <g className="sankey-links">
-              {linksData.map(link => (
+              {linksTransitions.map(transition => (
+                // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
                 <SankeyLink
-                  link={link}
+                  link={transition.item}
                   onMouseOver={onLinkOver}
-                  className={getLinkColor(link)}
-                  d={layout.current.link()(link)}
-                  hovered={hoveredLink === link.id}
+                  strokeWidth={transition.props.strokeWidth}
+                  className={getLinkColor(transition.item)}
+                  d={layout.current.link()(transition.item)}
+                  hovered={hoveredLink === transition.item.id}
                   onMouseOut={() => setHoveredLink(null)}
                 />
               ))}
@@ -114,15 +158,20 @@ function NewSankey(props) {
                 >
                   <g className="sankey-nodes">
                     {column.values.map((node, i, list) => (
+                      // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
                       <g
                         key={node.id}
                         className={cx('sankey-node', {
                           '-is-aggregated': node.isAggregated,
                           '-is-domestic': node.isDomesticConsumption,
-                          '-is-alone-in-column': list.length === 1
+                          '-is-alone-in-column': list.length === 1,
+                          '-highlighted': highlightedNodeId === node.id,
+                          '-selected': selectedNodesIds.includes(node.id)
                         })}
                         transform={`translate(0,${node.y})`}
                         onClick={() => onNodeClicked(node.id, node.isAggregated)}
+                        onMouseOver={() => !node.isAggregated && onNodeHighlighted(node.id)}
+                        onMouseOut={() => !node.isAggregated && onNodeHighlighted(null)}
                       >
                         <rect
                           className="sankey-node-rect"
