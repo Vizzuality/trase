@@ -1,15 +1,15 @@
 import {
-  getMergedLinks,
-  getNodesColored,
   getSelectedRecolorBy,
-  getSelectedResizeBy,
-  getVisibleNodesByColumn
+  getSelectedResizeBy
 } from 'react-components/tool-links/tool-links.selectors';
 import {
+  getSankeyMaxHeight,
   getHasExpandedNodesIds,
   getIsReExpand,
-  getIsVisible
-} from 'react-components/tool/sankey/sankey.selectors';
+  getSankeyColumns,
+  getSankeyLinks,
+  getGapBetweenColumns
+} from 'react-components/tool/new-sankey/sankey.selectors';
 import { connect } from 'react-redux';
 import NewSankey from 'react-components/tool/new-sankey/new-sankey.component';
 import {
@@ -21,20 +21,19 @@ import {
 } from 'react-components/tool-links/tool-links.actions';
 
 const mapStateToProps = state => ({
-  links: getMergedLinks(state),
-  isVisible: getIsVisible(state),
+  links: getSankeyLinks(state),
+  columns: getSankeyColumns(state),
   isReExpand: getIsReExpand(state),
   sankeySize: state.app.sankeySize,
+  maxHeight: getSankeyMaxHeight(state),
+  sankeyColumnsWidth: state.toolLinks.sankeyColumnsWidth,
   selectedResizeBy: getSelectedResizeBy(state),
   detailedView: state.toolLinks.detailedView,
-  nodeHeights: state.toolLinks.data.nodeHeights,
   selectedNodesIds: state.toolLinks.selectedNodesIds,
   selectedRecolorBy: getSelectedRecolorBy(state),
   hasExpandedNodesIds: getHasExpandedNodesIds(state),
-  highlightedNodeId: state.toolLinks.highlightedNodeId,
-  visibleNodesByColumn: getVisibleNodesByColumn(state),
-  nodesColoredAtColumn: getNodesColored(state).nodesColoredAtColumn,
-  lang: state.location.query && state.location.query.lang
+  gapBetweenColumns: getGapBetweenColumns(state),
+  highlightedNodeId: state.toolLinks.highlightedNodeId
 });
 
 const mapDispatchToProps = {

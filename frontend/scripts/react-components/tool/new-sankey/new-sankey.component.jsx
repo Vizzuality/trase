@@ -1,15 +1,16 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import sankeyLayout from 'react-components/tool/sankey/sankey.d3layout';
 import cx from 'classnames';
-import 'styles/components/tool/sankey.scss';
-import { DETAILED_VIEW_MIN_LINK_HEIGHT } from 'constants';
 import toLower from 'lodash/toLower';
 import Tooltip from 'components/shared/info-tooltip.component';
 import formatValue from 'utils/formatValue';
 import capitalize from 'lodash/capitalize';
 import startCase from 'lodash/startCase';
+import SankeyColumn from 'react-components/tool/new-sankey/sankey-column.component';
 import NodeMenu from './node-menu.component';
+import SankeyLink from './sankey-link.component';
+
+import 'styles/components/tool/sankey.scss';
 
 function useMenuOptions(props) {
   const { hasExpandedNodesIds, isReExpand, onExpandClick, onCollapseClick, onClearClick } = props;
@@ -31,13 +32,13 @@ function useMenuOptions(props) {
   }, [hasExpandedNodesIds, isReExpand, onClearClick, onCollapseClick, onExpandClick]);
 }
 
-function useMenuPosition(props, columns, isReady) {
-  const { selectedNodesIds, links } = props;
+function useMenuPosition(props, columns) {
+  const { selectedNodesIds } = props;
   const [menuPos, setMenuPos] = useState({ x: 0, y: 0 });
   const ref = useRef(null);
 
   useEffect(() => {
-    if (!isReady) {
+    if (!columns) {
       return;
     }
     // use some to stop iterating once its found
@@ -53,28 +54,9 @@ function useMenuPosition(props, columns, isReady) {
         return false;
       })
     );
-  }, [selectedNodesIds, links, isReady, columns]);
+  }, [selectedNodesIds, columns]);
 
   return [menuPos, ref];
-}
-
-function useSankeyLayout(props) {
-  const layout = useRef(sankeyLayout().columnWidth(100));
-  const [isReady, setIsReady] = useState(false);
-  const { selectedRecolorBy, links, sankeySize } = props;
-  useEffect(() => {
-    if (links === null || !sankeySize) {
-      return;
-    }
-    layout.current.setViewportSize(sankeySize);
-    layout.current.setLinksPayload(props);
-    layout.current.relayout();
-
-    if (layout.current.columns() && layout.current.columns().length > 0) {
-      setIsReady(true);
-    }
-  }, [links, props, sankeySize, selectedRecolorBy]);
-  return [isReady, layout];
 }
 
 function useVanillaTooltip() {
@@ -113,24 +95,26 @@ function useDomNodeRect(input) {
 
 function NewSankey(props) {
   const {
+    columns,
+    links,
+    maxHeight,
+    sankeyColumnsWidth,
     selectedResizeBy,
     detailedView,
     selectedRecolorBy,
     onNodeClicked,
     highlightedNodeId,
+    gapBetweenColumns,
     onNodeHighlighted,
     selectedNodesIds
   } = props;
   const [hoveredLink, setHoveredLink] = useState(null);
-  const [isReady, layout] = useSankeyLayout(props);
   const menuOptions = useMenuOptions(props);
   const [tooltipRef, setTooltip] = useVanillaTooltip();
-  const [rect, svgRef] = useDomNodeRect(isReady);
 
-  const columns = layout.current.columns();
-  const linksData = layout.current.links();
+  const [rect, svgRef] = useDomNodeRect(columns);
 
-  const [menuPos, scrollContainerRef] = useMenuPosition(props, columns, isReady);
+  const [menuPos, scrollContainerRef] = useMenuPosition(props, columns);
 
   const getLinkColor = link => {
     let classPath = 'sankey-link';
@@ -195,10 +179,6 @@ function NewSankey(props) {
     setTooltip(null);
   };
 
-  if (!isReady) {
-    return null;
-  }
-
   return (
     <div className="c-sankey is-absolute">
       <div
@@ -210,7 +190,7 @@ function NewSankey(props) {
         <svg
           ref={svgRef}
           className="sankey"
-          height={detailedView ? `${layout.current.getMaxHeight()}px` : '100%'}
+          style={{ height: detailedView ? `${maxHeight}px` : '100%' }}
         >
           <defs>
             <pattern
@@ -227,67 +207,50 @@ function NewSankey(props) {
           </defs>
           <g className="sankey-container">
             <g className="sankey-links">
-              {linksData.map(link => (
+              {links?.map(link => (
                 // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
-                <path
+                <SankeyLink
                   key={link.id}
-                  id={link.id}
-                  onMouseOver={e => onLinkOver(e, link)}
-                  strokeWidth={Math.max(DETAILED_VIEW_MIN_LINK_HEIGHT, link.renderedHeight)}
-                  className={cx(getLinkColor(link), { '-hover': hoveredLink === link.id })}
-                  d={layout.current.link()(link)}
+                  link={link}
                   onMouseOut={onLinkOut}
+                  onMouseOver={e => onLinkOver(e, link)}
+                  className={cx(getLinkColor(link), { '-hover': hoveredLink === link.id })}
                 />
               ))}
+              {!links &&
+                Array.from({ length: 3 }).map((_, i) => (
+                  <rect
+                    key={i}
+                    height={575}
+                    width={gapBetweenColumns}
+                    className="sankey-link-placeholder"
+                    transform={`translate(${i * gapBetweenColumns +
+                      i * sankeyColumnsWidth +
+                      sankeyColumnsWidth},0)`}
+                  />
+                ))}
             </g>
             <g className="sankey-columns">
-              {columns.map(column => (
-                <g
-                  key={column.key}
-                  className="sankey-column"
-                  transform={`translate(${column.x},0)`}
-                >
-                  <g className="sankey-nodes">
-                    {column.values.map((node, i, list) => (
-                      // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
-                      <g
-                        key={node.id}
-                        className={cx('sankey-node', {
-                          '-is-aggregated': node.isAggregated,
-                          '-is-domestic': node.isDomesticConsumption,
-                          '-is-alone-in-column': list.length === 1,
-                          '-highlighted': highlightedNodeId === node.id,
-                          '-selected': selectedNodesIds.includes(node.id)
-                        })}
-                        transform={`translate(0,${node.y})`}
-                        onClick={() => onNodeClicked(node.id, node.isAggregated)}
-                        onMouseOver={() => !node.isAggregated && onNodeHighlighted(node.id)}
-                        onMouseOut={() => !node.isAggregated && onNodeHighlighted(null)}
-                      >
-                        <rect
-                          className="sankey-node-rect"
-                          width={layout.current.columnWidth()}
-                          height={node.renderedHeight}
-                        />
-                        <text
-                          className="sankey-node-labels"
-                          transform={`translate(0,${-7 +
-                            node.renderedHeight / 2 -
-                            (node.label.length - 1) * 7})`}
-                        >
-                          <tspan
-                            className="sankey-node-label"
-                            x={layout.current.columnWidth() / 2}
-                            dy={12}
-                          >
-                            {node.label.length > 0 && node.label[0].toUpperCase()}
-                          </tspan>
-                        </text>
-                      </g>
-                    ))}
-                  </g>
-                </g>
+              {columns?.map(column => (
+                <SankeyColumn
+                  column={column}
+                  selectedNodesIds={selectedNodesIds}
+                  onNodeClicked={onNodeClicked}
+                  highlightedNodeId={highlightedNodeId}
+                  onNodeHighlighted={onNodeHighlighted}
+                  sankeyColumnsWidth={sankeyColumnsWidth}
+                />
               ))}
+              {(!columns || columns.length === 0) &&
+                Array.from({ length: 4 }).map((_, i) => (
+                  <rect
+                    key={i}
+                    height={575}
+                    width={sankeyColumnsWidth}
+                    className="sankey-column-placeholder"
+                    transform={`translate(${i * (sankeyColumnsWidth + gapBetweenColumns)},0)`}
+                  />
+                ))}
             </g>
           </g>
         </svg>
@@ -297,12 +260,23 @@ function NewSankey(props) {
 }
 
 NewSankey.propTypes = {
+  links: PropTypes.array,
+  columns: PropTypes.array,
+  maxHeight: PropTypes.number,
   detailedView: PropTypes.bool,
+  isReExpand: PropTypes.bool, // eslint-disable-line
+  hasExpandedNodesIds: PropTypes.bool, // eslint-disable-line
+  selectedResizeBy: PropTypes.object,
   selectedRecolorBy: PropTypes.object,
-  onNodeClicked: PropTypes.func,
   highlightedNodeId: PropTypes.number,
-  onNodeHighlighted: PropTypes.func,
-  selectedNodesIds: PropTypes.array
+  gapBetweenColumns: PropTypes.number,
+  onClearClick: PropTypes.func.isRequired, // eslint-disable-line
+  onExpandClick: PropTypes.func.isRequired, // eslint-disable-line
+  sankeyColumnsWidth: PropTypes.number.isRequired,
+  onNodeClicked: PropTypes.func.isRequired,
+  onCollapseClick: PropTypes.func.isRequired, // eslint-disable-line
+  onNodeHighlighted: PropTypes.func.isRequired,
+  selectedNodesIds: PropTypes.array.isRequired
 };
 
 export default NewSankey;

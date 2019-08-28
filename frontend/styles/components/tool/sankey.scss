@@ -48,26 +48,24 @@
     }
 
     &.-highlighted {
-
       .sankey-node-rect {
         fill: $manilla;
       }
     }
   }
 
-
   .sankey-links .sankey-link {
-    opacity: .1;
+    opacity: 0.1;
     fill: none;
     stroke: $charcoal-grey;
 
     &.-hover {
-      opacity: .7;
+      opacity: 0.7;
     }
 
     @for $i from 1 through length($recolorby-colors) {
       &.#{nth($recolorby-colors-names, $i)} {
-        opacity: .5;
+        opacity: 0.5;
         stroke: #{nth($recolorby-colors, $i)};
       }
 
@@ -78,7 +76,7 @@
 
     @for $i from 1 through length($recolorgroup-colors) {
       &.#{nth($recolorgroup-colors-names, $i)} {
-        opacity: .5;
+        opacity: 0.5;
         stroke: #{nth($recolorgroup-colors, $i)};
       }
 
@@ -86,5 +84,17 @@
         opacity: 1;
       }
     }
+  }
+
+  .sankey-column-placeholder {
+    stroke: $charcoal-dark;
+    stroke-opacity: 0.7;
+    stroke-width: 1px;
+    fill: transparent;
+  }
+
+  .sankey-link-placeholder {
+    fill: $charcoal-dark;
+    opacity: 0.5;
   }
 }

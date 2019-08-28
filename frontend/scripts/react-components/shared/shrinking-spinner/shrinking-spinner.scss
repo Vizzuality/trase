@@ -1,12 +1,13 @@
 @import 'styles/settings';
 
-$width-small: 30px;
+$width-small: 18px;
+$width-regular: 30px;
 $width-large: 60px;
 
 .c-shrinking-spinner {
   position: relative;
   margin: 0 auto;
-  width: $width-small;
+  width: $width-regular;
 
   &:before {
     content: '';
@@ -16,6 +17,10 @@ $width-large: 60px;
 
   &.-large {
     width: $width-large;
+  }
+
+  &.-small {
+    width: $width-small;
   }
 
   &.-dark {

@@ -1,18 +1,17 @@
 @import 'styles/settings';
 @import 'styles/mixins';
 
+$column-width: 100px;
+
 .c-columns-selector-group {
+  position: relative;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  margin-left: 26px;
+  margin: 0 32px;
+  height: 32px;
 
-  .c-dropdown {
-    width: 100px;
-    height: 32px;
-
-    &:first-child {
-      width: 111px;
-      left: 4px;
-    }
+  .columns-spinner {
+    margin: 0;
   }
 }

@@ -20,5 +20,6 @@ export default {
   selectedResizeBy: null,
   selectedBiomeFilterName: null,
   isSearchOpen: false,
-  noLinksFound: false
+  noLinksFound: false,
+  sankeyColumnsWidth: 100
 };
