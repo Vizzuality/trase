@@ -17,39 +17,12 @@ export default class {
     this._relayout(relayoutOptions);
   }
 
-  resizeViewport({ sankeySize, ...relayoutOptions }) {
+  resizeViewport({ sankeySize }) {
     this.layout.setViewportSize(sankeySize);
-    this._relayout(relayoutOptions);
-  }
-
-  selectNodes({ selectedNodesIds }) {
-    // let minimumY = Infinity;
-    if (!this.layout.isReady()) {
-      return;
-    }
-    this.sankeyColumns
-      .selectAll('.sankey-node')
-      .classed('-selected', node => selectedNodesIds.indexOf(node.id) > -1);
-
-    this._repositionExpandButton(selectedNodesIds);
-  }
-
-  _relayout({ selectedRecolorBy, selectedResizeBy, selectedNodesIds }) {
-    if (this.layout.relayout()) {
-      this._render(selectedRecolorBy, selectedResizeBy);
-      this._repositionExpandButton(selectedNodesIds);
-    }
   }
 
   _build() {
     this.linkTooltip = new Tooltip('.js-sankey-tooltip');
-
-    this.expandActionButton = document.querySelector('.js-expand-action');
-    this.expandActionButton.addEventListener('click', this.callbacks.onExpandClick);
-    this.collapseActionButton = document.querySelector('.js-collapse-action');
-    this.collapseActionButton.addEventListener('click', this.callbacks.onCollapseClick);
-    this.clearButton = document.querySelector('.js-clear');
-    this.clearButton.addEventListener('click', this.callbacks.onClearClick);
   }
 
   _render() {

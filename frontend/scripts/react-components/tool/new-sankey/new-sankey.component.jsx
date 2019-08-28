@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
+import PropTypes from 'prop-types';
 import sankeyLayout from 'react-components/tool/sankey/sankey.d3layout';
 import cx from 'classnames';
 import 'styles/components/tool/sankey.scss';
@@ -7,45 +8,57 @@ import { animated, useTransition } from 'react-spring';
 import toLower from 'lodash/toLower';
 import NodeMenu from './node-menu.component';
 
-function SankeyLink(props) {
-  const { link, className, hovered, strokeWidth, ...path } = props;
-  // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
-  return (
-    <animated.path
-      {...path}
-      key={link.id}
-      id={link.id}
-      strokeWidth={strokeWidth}
-      className={cx(className, { '-hover': hovered })}
-    />
-  );
+function useMenuOptions(props) {
+  const { hasExpandedNodesIds, isReExpand, onExpandClick, onCollapseClick, onClearClick } = props;
+  return useMemo(() => {
+    const items = [
+      { id: 'expand', label: isReExpand ? 'Re-Expand' : 'Expand', onClick: onExpandClick },
+      { id: 'collapse', label: 'Collapse', onClick: onCollapseClick },
+      { id: 'clear', label: 'Clear Selection', onClick: onClearClick }
+    ];
+
+    if (!isReExpand && hasExpandedNodesIds) {
+      return items.filter(item => item.id !== 'expand');
+    }
+    if (!hasExpandedNodesIds) {
+      return items.filter(item => item.id !== 'collapse');
+    }
+
+    return items;
+  }, [hasExpandedNodesIds, isReExpand, onClearClick, onCollapseClick, onExpandClick]);
 }
 
-function NewSankey(props) {
-  const {
-    links,
-    sankeySize,
-    detailedView,
-    selectedRecolorBy,
-    onNodeClicked,
-    highlightedNodeId,
-    onNodeHighlighted,
-    selectedNodesIds
-  } = props;
-  const [isReady, setIsReady] = useState(false);
-  const [hoveredLink, setHoveredLink] = useState(null);
-  const layout = useRef(sankeyLayout().columnWidth(100));
+function useMenuPosition(props, columns, isReady) {
+  const { selectedNodesIds, links } = props;
   const [menuPos, setMenuPos] = useState({ x: 0, y: 0 });
-  const scrollContainerRef = useRef(null);
-  const columns = layout.current.columns();
-  const linksData = layout.current.links();
+  const ref = useRef(null);
 
-  const linksTransitions = useTransition(linksData || [], i => i.id, {
-    enter: link => ({ strokeWidth: Math.max(DETAILED_VIEW_MIN_LINK_HEIGHT, link.renderedHeight) }),
-    leave: { strokeWidth: 0 },
-    from: { strokeWidth: 0 }
-  });
-  // showLoadedLinks
+  useEffect(() => {
+    if (!isReady) {
+      return;
+    }
+    // use some to stop iterating once its found
+    columns.some(column =>
+      column.values.some(node => {
+        const last = selectedNodesIds.length - 1;
+        if (node.id === selectedNodesIds[last]) {
+          const x = node.x;
+          const y = Math.max(0, node.y) - (ref.current?.scrollTop || 0);
+          setMenuPos({ x, y });
+          return true;
+        }
+        return false;
+      })
+    );
+  }, [selectedNodesIds, links, isReady, columns]);
+
+  return [menuPos, ref];
+}
+
+function useSankeyLayout(props) {
+  const layout = useRef(sankeyLayout().columnWidth(100));
+  const [isReady, setIsReady] = useState(false);
+  const { selectedRecolorBy, links, sankeySize } = props;
   useEffect(() => {
     if (links === null || !sankeySize) {
       return;
@@ -58,25 +71,32 @@ function NewSankey(props) {
       setIsReady(true);
     }
   }, [links, props, sankeySize, selectedRecolorBy]);
+  return [isReady, layout];
+}
 
-  useEffect(() => {
-    if (!isReady) {
-      return;
-    }
-    // use some to stop iterating once its found
-    columns.some(column =>
-      column.values.some(node => {
-        const last = selectedNodesIds.length - 1;
-        if (node.id === selectedNodesIds[last]) {
-          const x = node.x;
-          const y = Math.max(0, node.y) - (scrollContainerRef.current?.scrollTop || 0);
-          setMenuPos({ x, y });
-          return true;
-        }
-        return false;
-      })
-    );
-  }, [selectedNodesIds, links, isReady, columns]);
+function NewSankey(props) {
+  const {
+    detailedView,
+    selectedRecolorBy,
+    onNodeClicked,
+    highlightedNodeId,
+    onNodeHighlighted,
+    selectedNodesIds
+  } = props;
+  const [hoveredLink, setHoveredLink] = useState(null);
+  const [isReady, layout] = useSankeyLayout(props);
+  const menuOptions = useMenuOptions(props);
+
+  const columns = layout.current.columns();
+  const linksData = layout.current.links();
+
+  const [menuPos, scrollContainerRef] = useMenuPosition(props, columns, isReady);
+
+  const linksTransitions = useTransition(linksData || [], i => i.id, {
+    enter: link => ({ strokeWidth: Math.max(DETAILED_VIEW_MIN_LINK_HEIGHT, link.renderedHeight) }),
+    leave: { strokeWidth: 0 },
+    from: { strokeWidth: 0 }
+  });
 
   const getLinkColor = link => {
     let classPath = 'sankey-link';
@@ -112,11 +132,7 @@ function NewSankey(props) {
         ref={scrollContainerRef}
         className={cx('sankey-scroll-container', { '-detailed': detailedView })}
       >
-        <NodeMenu
-          menuPos={menuPos}
-          isVisible={selectedNodesIds.length > 0}
-          options={[{ label: 'Expand' }, { label: 'Clear Selection' }]}
-        />
+        <NodeMenu menuPos={menuPos} isVisible={selectedNodesIds.length > 0} options={menuOptions} />
         <svg
           className="sankey"
           height={detailedView ? `${layout.current.getMaxHeight()}px` : '100%'}
@@ -204,5 +220,35 @@ function NewSankey(props) {
     </div>
   );
 }
+
+NewSankey.propTypes = {
+  detailedView: PropTypes.bool,
+  selectedRecolorBy: PropTypes.object,
+  onNodeClicked: PropTypes.func,
+  highlightedNodeId: PropTypes.number,
+  onNodeHighlighted: PropTypes.func,
+  selectedNodesIds: PropTypes.array
+};
+
+function SankeyLink(props) {
+  const { link, className, hovered, strokeWidth, ...path } = props;
+  // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
+  return (
+    <animated.path
+      {...path}
+      key={link.id}
+      id={link.id}
+      strokeWidth={strokeWidth}
+      className={cx(className, { '-hover': hovered })}
+    />
+  );
+}
+
+SankeyLink.propTypes = {
+  link: PropTypes.object,
+  className: PropTypes.string,
+  hovered: PropTypes.bool,
+  strokeWidth: PropTypes.number
+};
 
 export default NewSankey;
