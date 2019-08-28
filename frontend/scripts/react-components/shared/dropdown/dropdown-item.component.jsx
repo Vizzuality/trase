@@ -67,4 +67,4 @@ DropdownItem.propTypes = {
   listItemRef: PropTypes.any
 };
 
-export default DropdownItem;
+export default React.memo(DropdownItem);

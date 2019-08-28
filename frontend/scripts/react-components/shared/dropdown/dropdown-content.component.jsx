@@ -116,4 +116,4 @@ DropdownContent.propTypes = {
   variant: PropTypes.string.isRequired
 };
 
-export default DropdownContent;
+export default React.memo(DropdownContent);

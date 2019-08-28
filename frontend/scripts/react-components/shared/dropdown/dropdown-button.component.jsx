@@ -89,4 +89,4 @@ DropdownButton.propTypes = {
   getToggleButtonProps: PropTypes.func.isRequired
 };
 
-export default DropdownButton;
+export default React.memo(DropdownButton);
