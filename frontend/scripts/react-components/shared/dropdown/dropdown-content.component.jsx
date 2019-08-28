@@ -1,4 +1,5 @@
 import React, { useMemo, useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import DropdownContext from 'react-components/shared/dropdown/dropdown.context';
 import DropdownItem from 'react-components/shared/dropdown/dropdown-item.component';
 
@@ -96,5 +97,23 @@ function DropdownContent(props) {
     </ul>
   );
 }
+
+DropdownContent.propTypes = {
+  clip: PropTypes.bool,
+  innerRef: PropTypes.any.isRequired,
+  style: PropTypes.object.isRequired,
+  children: PropTypes.any,
+  placement: PropTypes.string.isRequired,
+  toggleMenu: PropTypes.func.isRequired,
+  selectedItem: PropTypes.object.isRequired,
+  getItemProps: PropTypes.func.isRequired,
+  getMenuProps: PropTypes.func.isRequired,
+  options: PropTypes.array,
+  showSelected: PropTypes.bool,
+  highlightedIndex: PropTypes.number,
+  readOnly: PropTypes.bool,
+  getItemClassName: PropTypes.func,
+  variant: PropTypes.string.isRequired
+};
 
 export default DropdownContent;

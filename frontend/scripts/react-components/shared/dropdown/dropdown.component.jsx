@@ -106,6 +106,7 @@ function Dropdown(props) {
                   variant={props.variant}
                   getItemClassName={props.getItemClassName}
                   readOnly={props.readOnly}
+                  clip={props.clip}
                 >
                   {props.children}
                 </DropdownContent>
@@ -119,6 +120,7 @@ function Dropdown(props) {
 }
 
 Dropdown.propTypes = {
+  clip: PropTypes.bool,
   options: PropTypes.array,
   value: PropTypes.shape({
     value: PropTypes.any,
@@ -134,10 +136,11 @@ Dropdown.propTypes = {
     disabled: PropTypes.bool,
     label: PropTypes.string.isRequired
   }),
+  label: PropTypes.string,
   onChange: PropTypes.func,
-  size: PropTypes.string, // eslint-disable-line
-  arrowType: PropTypes.string, // eslint-disable-line
-  selectedValueOverride: PropTypes.any, // eslint-disable-line
+  size: PropTypes.string,
+  arrowType: PropTypes.string,
+  selectedValueOverride: PropTypes.any,
   showSelected: PropTypes.bool,
   readOnly: PropTypes.bool,
   placement: PropTypes.string,
@@ -145,22 +148,21 @@ Dropdown.propTypes = {
   variant: PropTypes.string,
   color: PropTypes.string,
   align: PropTypes.string,
-  weight: PropTypes.string, // eslint-disable-line
-  tooltip: PropTypes.string, // eslint-disable-line
-  children: PropTypes.node, // eslint-disable-line
-  clip: PropTypes.bool, // eslint-disable-line
+  weight: PropTypes.string,
+  tooltip: PropTypes.string,
+  children: PropTypes.node,
   isDisabled: PropTypes.bool,
-  getItemClassName: PropTypes.func // eslint-disable-line
+  getItemClassName: PropTypes.func
 };
 
 Dropdown.defaultProps = {
+  clip: true,
   readOnly: false,
   showSelected: false,
   placement: 'bottom-end',
   size: 'md',
   color: 'grey',
   weight: 'bold',
-  clip: true,
   itemToString: i => i && i.label
 };
 

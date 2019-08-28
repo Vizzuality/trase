@@ -8,6 +8,7 @@ function NavDropdownSelector(props) {
       {...props}
       variant="nav"
       placement="bottom-start"
+      clip={false}
       onChange={item => props.onSelected(item.value)}
     />
   );

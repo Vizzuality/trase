@@ -3,6 +3,7 @@ import cx from 'classnames';
 import kebabCase from 'lodash/kebabCase';
 import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import Text from 'react-components/shared/text';
+import PropTypes from 'prop-types';
 
 function DropdownItem(props) {
   const {
@@ -54,5 +55,16 @@ function DropdownItem(props) {
     </>
   );
 }
+
+DropdownItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
+  highlightedIndex: PropTypes.number,
+  getItemProps: PropTypes.func.isRequired,
+  readOnly: PropTypes.bool,
+  getItemClassName: PropTypes.func,
+  variant: PropTypes.string,
+  listItemRef: PropTypes.any
+};
 
 export default DropdownItem;

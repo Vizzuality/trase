@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import cx from 'classnames';
 import kebabCase from 'lodash/kebabCase';
 import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
@@ -72,5 +73,20 @@ function DropdownButton(props) {
     </button>
   );
 }
+
+DropdownButton.propTypes = {
+  innerRef: PropTypes.any.isRequired,
+  arrowType: PropTypes.string,
+  inputValue: PropTypes.any.isRequired,
+  selectedValueOverride: PropTypes.any,
+  label: PropTypes.string,
+  size: PropTypes.string,
+  color: PropTypes.string,
+  tooltip: PropTypes.string,
+  weight: PropTypes.number,
+  variant: PropTypes.string.isRequired,
+  isDisabled: PropTypes.bool,
+  getToggleButtonProps: PropTypes.func.isRequired
+};
 
 export default DropdownButton;
