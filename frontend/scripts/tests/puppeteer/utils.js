@@ -63,3 +63,21 @@ export const handleUnnecesaryRequests = (server, BASE_URL) => {
     res.json({});
   });
 };
+
+export const expectToContain = async (page, selector, text) => {
+  const selectorText = await page.$eval(`[data-test=${selector}]`, el => el.textContent);
+  expect(selectorText).toContain(text);
+};
+
+export const click = async (page, selector) => {
+  const testSelector = `[data-test=${selector}]`;
+  await page.waitForSelector(testSelector);
+  await page.click(testSelector);
+};
+export const expectChildrenToBe = async (page, selector, number) => {
+  const testSelector = `[data-test=${selector}]`;
+  await page.waitForSelector(testSelector);
+  const topCardsNumber = await page.$eval(testSelector, group => group.children.length);
+
+  expect(topCardsNumber).toBe(number);
+};

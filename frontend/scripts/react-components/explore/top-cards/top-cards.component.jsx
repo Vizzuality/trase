@@ -67,7 +67,7 @@ const TopCards = ({
     transitions.map(
       ({ item, props, key }) =>
         item && (
-          <div className="columns small-3">
+          <div className="columns small-3" data-test="top-cards-row">
             <animated.div key={key} style={props} className="animated-card">
               <TopCard key={item.key} card={item} goToTool={() => goToTool(item)} />
             </animated.div>
@@ -80,11 +80,11 @@ const TopCards = ({
     <div className="c-top-cards">
       <div className="row columns">
         <div className="top-cards-heading">
-          <Heading className="top-cards-title">
+          <Heading className="top-cards-title" data-test="top-cards-title">
             Top {renderName(countryName)} {renderName(commodityName)} supply chains
           </Heading>
           {step > 0 && (
-            <button onClick={clearStep} className="back-button">
+            <button onClick={clearStep} className="back-button" data-test="top-cards-back-button">
               <Text variant="mono" size="rg" weight="bold">
                 BACK
               </Text>
