@@ -4,8 +4,11 @@ import sankeyLayout from 'react-components/tool/sankey/sankey.d3layout';
 import cx from 'classnames';
 import 'styles/components/tool/sankey.scss';
 import { DETAILED_VIEW_MIN_LINK_HEIGHT } from 'constants';
-import { animated, useTransition } from 'react-spring';
 import toLower from 'lodash/toLower';
+import Tooltip from 'components/shared/info-tooltip.component';
+import formatValue from 'utils/formatValue';
+import capitalize from 'lodash/capitalize';
+import startCase from 'lodash/startCase';
 import NodeMenu from './node-menu.component';
 
 function useMenuOptions(props) {
@@ -74,8 +77,43 @@ function useSankeyLayout(props) {
   return [isReady, layout];
 }
 
+function useVanillaTooltip() {
+  const ref = useRef(null);
+  const tooltip = useRef(null);
+  const [content, setContent] = useState(null);
+
+  useEffect(() => {
+    if (!tooltip.current && ref.current) {
+      tooltip.current = new Tooltip(ref.current);
+    }
+
+    if (tooltip.current) {
+      if (content) {
+        tooltip.current.show(content.x, content.y, content.title, content.values);
+      } else {
+        tooltip.current.hide();
+      }
+    }
+  }, [content]);
+
+  return [ref, setContent];
+}
+
+function useDomNodeRect(input) {
+  const [rect, setRect] = useState(null);
+  const ref = useRef(null);
+  useEffect(() => {
+    if (ref.current) {
+      setRect(ref.current.getBoundingClientRect());
+    }
+  }, [input]);
+
+  return [rect, ref];
+}
+
 function NewSankey(props) {
   const {
+    selectedResizeBy,
     detailedView,
     selectedRecolorBy,
     onNodeClicked,
@@ -86,17 +124,13 @@ function NewSankey(props) {
   const [hoveredLink, setHoveredLink] = useState(null);
   const [isReady, layout] = useSankeyLayout(props);
   const menuOptions = useMenuOptions(props);
+  const [tooltipRef, setTooltip] = useVanillaTooltip();
+  const [rect, svgRef] = useDomNodeRect(isReady);
 
   const columns = layout.current.columns();
   const linksData = layout.current.links();
 
   const [menuPos, scrollContainerRef] = useMenuPosition(props, columns, isReady);
-
-  const linksTransitions = useTransition(linksData || [], i => i.id, {
-    enter: link => ({ strokeWidth: Math.max(DETAILED_VIEW_MIN_LINK_HEIGHT, link.renderedHeight) }),
-    leave: { strokeWidth: 0 },
-    from: { strokeWidth: 0 }
-  });
 
   const getLinkColor = link => {
     let classPath = 'sankey-link';
@@ -118,8 +152,47 @@ function NewSankey(props) {
     return classPath;
   };
 
-  const onLinkOver = e => {
-    setHoveredLink(e.currentTarget.id);
+  const onLinkOver = (e, link) => {
+    const tooltip = {
+      title: `${link.sourceNodeName} > ${link.targetNodeName}`,
+      x: e.clientX - rect.x,
+      y: e.clientY - rect.y,
+      values: [
+        {
+          title: selectedResizeBy.label,
+          unit: selectedResizeBy.unit,
+          value: formatValue(link.quant, selectedResizeBy.label)
+        }
+      ]
+    };
+    if (selectedRecolorBy) {
+      let recolorValue = `${link.recolorBy}/${selectedRecolorBy.maxValue}`;
+      if (link.recolorBy === null) {
+        recolorValue = 'Unknown';
+      }
+      if (selectedRecolorBy.type !== 'ind') {
+        recolorValue = capitalize(startCase(link.recolorBy));
+      }
+      if (selectedRecolorBy.legendType === 'percentual') {
+        // percentual values are always a range, not the raw value.
+        // The value coming from the model is already floored
+        // to the start of the bucket (splitLinksByColumn)
+        const nextValue = link.recolorBy + selectedRecolorBy.divisor;
+        recolorValue = `${link.recolorBy}–${nextValue}%`;
+      }
+      tooltip.values.push({
+        title: selectedRecolorBy.label,
+        value: recolorValue
+      });
+    }
+
+    setHoveredLink(link.id);
+    setTooltip(tooltip);
+  };
+
+  const onLinkOut = () => {
+    setHoveredLink(null);
+    setTooltip(null);
   };
 
   if (!isReady) {
@@ -133,7 +206,9 @@ function NewSankey(props) {
         className={cx('sankey-scroll-container', { '-detailed': detailedView })}
       >
         <NodeMenu menuPos={menuPos} isVisible={selectedNodesIds.length > 0} options={menuOptions} />
+        <div ref={tooltipRef} className="c-info-tooltip" />
         <svg
+          ref={svgRef}
           className="sankey"
           height={detailedView ? `${layout.current.getMaxHeight()}px` : '100%'}
         >
@@ -152,16 +227,16 @@ function NewSankey(props) {
           </defs>
           <g className="sankey-container">
             <g className="sankey-links">
-              {linksTransitions.map(transition => (
+              {linksData.map(link => (
                 // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
-                <SankeyLink
-                  link={transition.item}
-                  onMouseOver={onLinkOver}
-                  strokeWidth={transition.props.strokeWidth}
-                  className={getLinkColor(transition.item)}
-                  d={layout.current.link()(transition.item)}
-                  hovered={hoveredLink === transition.item.id}
-                  onMouseOut={() => setHoveredLink(null)}
+                <path
+                  key={link.id}
+                  id={link.id}
+                  onMouseOver={e => onLinkOver(e, link)}
+                  strokeWidth={Math.max(DETAILED_VIEW_MIN_LINK_HEIGHT, link.renderedHeight)}
+                  className={cx(getLinkColor(link), { '-hover': hoveredLink === link.id })}
+                  d={layout.current.link()(link)}
+                  onMouseOut={onLinkOut}
                 />
               ))}
             </g>
@@ -228,27 +303,6 @@ NewSankey.propTypes = {
   highlightedNodeId: PropTypes.number,
   onNodeHighlighted: PropTypes.func,
   selectedNodesIds: PropTypes.array
-};
-
-function SankeyLink(props) {
-  const { link, className, hovered, strokeWidth, ...path } = props;
-  // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
-  return (
-    <animated.path
-      {...path}
-      key={link.id}
-      id={link.id}
-      strokeWidth={strokeWidth}
-      className={cx(className, { '-hover': hovered })}
-    />
-  );
-}
-
-SankeyLink.propTypes = {
-  link: PropTypes.object,
-  className: PropTypes.string,
-  hovered: PropTypes.bool,
-  strokeWidth: PropTypes.number
 };
 
 export default NewSankey;

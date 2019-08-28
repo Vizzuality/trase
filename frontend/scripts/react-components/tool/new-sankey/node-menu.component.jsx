@@ -16,7 +16,7 @@ function NodeMenu(props) {
       </svg>
       <ul className="options">
         {options.map((option, i) => (
-          <li className={cx('menu-item', option.className)}>
+          <li key={option.id} className={cx('menu-item', option.className)}>
             <button onClick={option.onClick}>
               <Text color="grey" variant="mono" weight="light">
                 {option.label?.toUpperCase()}

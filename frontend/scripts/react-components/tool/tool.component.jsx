@@ -112,7 +112,6 @@ const Tool = props => {
     () => (
       <>
         <div className="js-node-tooltip c-info-tooltip" />
-        <div className="js-sankey-tooltip c-info-tooltip" />
         <div className="l-tool">
           {renderVainillaComponents()}
 
