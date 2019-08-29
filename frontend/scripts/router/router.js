@@ -15,7 +15,7 @@ import getPageStaticContent from 'react-components/static-content/static-content
 import loadBaseAppData from 'reducers/app.thunks';
 import getTeam from 'react-components/team/team.thunks';
 import { loadDashboardTemplates } from 'react-components/dashboard-root/dashboard-root.thunks';
-import { redirectToExplore } from 'react-components/explore/explore.thunks';
+import { redirectToExplore } from 'react-components/legacy-explore/explore.thunks';
 import {
   loadToolInitialData,
   resizeSankeyTool,

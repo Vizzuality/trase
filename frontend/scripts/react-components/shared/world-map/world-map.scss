@@ -15,6 +15,10 @@
       fill: rgba($charcoal-grey, 0.5);
     }
 
+    &.-darker {
+      fill: rgba($charcoal-grey, 0.7);
+    }
+
     &.-pink {
       fill: $strong-pink;
     }

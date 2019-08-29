@@ -5,7 +5,8 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
-import Explore from 'react-components/explore/explore.container';
+import LegacyExplore from 'react-components/legacy-explore/explore.container';
+import Explore from 'react-components/explore';
 import CookieBanner from 'react-components/shared/cookie-banner';
 import Feedback from 'react-components/shared/feedback';
 
@@ -24,7 +25,7 @@ export const mount = (root, store) => {
 
   render(
     <Provider store={store}>
-      <Explore />
+      {ENABLE_REDESIGN_PAGES ? <Explore /> : <LegacyExplore />}
       <Feedback />
     </Provider>,
     document.getElementById('page-react-root')

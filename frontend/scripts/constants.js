@@ -248,6 +248,12 @@ export const LOGISTICS_MAP_INSPECTION_LEVELS = [
   { value: 'UNKNOWN', label: 'Unknown' }
 ];
 
+export const EXPLORE_STEPS = {
+  selectCommodity: 0,
+  selectCountry: 1,
+  selected: 2
+};
+
 export const DASHBOARD_STEPS = {
   welcome: 0,
   sources: 1,

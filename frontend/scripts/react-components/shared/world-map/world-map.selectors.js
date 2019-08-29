@@ -5,12 +5,13 @@ import lineString from 'turf-linestring';
 import greatCircle from '@turf/great-circle';
 import { geoPath } from 'd3-geo';
 import projections from 'react-simple-maps/lib/projections';
-import { getTopNodesKey } from 'react-components/explore/explore.actions';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getContexts } from 'react-components/explore/explore.selectors';
 
-const getTopNodes = state => state.explore.topNodes;
+const getSelectedContext = (state, { context }) => context;
+const getHighlightedCountryIds = (state, { highlightedCountryIds }) => highlightedCountryIds;
+const getCountries = (state, { destinationCountries }) => destinationCountries;
 
-const worldMapProjection = projections(800, 450, { scale: 145 }, 'robinson');
+const worldMapProjection = projections(800, 600, {}, 'robinson');
 
 export const getOriginGeoId = createSelector(
   getSelectedContext,
@@ -20,15 +21,6 @@ export const getOriginGeoId = createSelector(
 export const getOriginCoordinates = createSelector(
   getOriginGeoId,
   originGeoId => (originGeoId ? COUNTRIES_COORDINATES[originGeoId] : null)
-);
-
-export const getCountries = createSelector(
-  [getTopNodes, getSelectedContext, getSelectedYears],
-  (topNodes, selectedContext, selectedYears) => {
-    const selectedContextId = selectedContext ? selectedContext.id : null;
-    const topNodesKey = getTopNodesKey(selectedContextId, 'country', ...selectedYears);
-    return topNodes[topNodesKey];
-  }
 );
 
 function buildCustomArc(originCoords, destinationCoords) {
@@ -104,5 +96,22 @@ export const getWorldMapFlows = createSelector(
       ...flow,
       arc: buildGreatCircleArc(originCoordinates, flow.coordinates)
     }));
+  }
+);
+
+export const getHighlightedCountriesIso = createSelector(
+  [getHighlightedCountryIds, getContexts],
+  (highlightedCountryIds, contexts) => {
+    if (!highlightedCountryIds || !highlightedCountryIds.level1) return null;
+    const countryGeoIds = { level1: [], level2: [] };
+    contexts.forEach(c => {
+      if (highlightedCountryIds.level1?.includes(c.countryId)) {
+        countryGeoIds.level1.push(c.worldMap.geoId);
+      }
+      if (highlightedCountryIds.level2?.includes(c.countryId)) {
+        countryGeoIds.level2.push(c.worldMap.geoId);
+      }
+    });
+    return countryGeoIds;
   }
 );
