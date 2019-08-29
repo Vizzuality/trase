@@ -1,0 +1,877 @@
+[
+  {
+    "id": 14,
+    "name": "AFGHANISTAN",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 15,
+    "name": "ALBANIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 16,
+    "name": "ALGERIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 17,
+    "name": "AMERICAN SAMOA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 18,
+    "name": "ANGOLA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 186,
+    "name": "ANGUILLA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 19,
+    "name": "ANTIGUA AND BARBUDA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 21,
+    "name": "ARGENTINA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 27,
+    "name": "ARMENIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 157,
+    "name": "ARUBA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 22,
+    "name": "AUSTRALIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 23,
+    "name": "AUSTRIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 20,
+    "name": "AZERBAIJAN",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 24,
+    "name": "BAHAMAS",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 25,
+    "name": "BAHRAIN",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 26,
+    "name": "BANGLADESH",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 28,
+    "name": "BARBADOS",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 42,
+    "name": "BELARUS",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 29,
+    "name": "BELGIUM",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 36,
+    "name": "BELIZE",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 67,
+    "name": "BENIN",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 30,
+    "name": "BERMUDA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 31,
+    "name": "BOLIVIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 154,
+    "name": "BONAIRE, SINT EUSTATIUS AND SABA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 33,
+    "name": "BOSNIA AND HERZEGOVINA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 34,
+    "name": "BRAZIL",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 39,
+    "name": "BRUNEI",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 40,
+    "name": "BULGARIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 228,
+    "name": "BURKINA FASO",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 43,
+    "name": "CAMBODIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 44,
+    "name": "CAMEROON",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 45,
+    "name": "CANADA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 236,
+    "name": "CANARIES ISLANDS",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 46,
+    "name": "CAPE VERDE",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 47,
+    "name": "CAYMAN ISLANDS",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 48,
+    "name": "CENTRAL AFRICAN REPUBLIC",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 50,
+    "name": "CHAD",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 237,
+    "name": "CHANNEL ISLANDS",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 51,
+    "name": "CHILE",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 52,
+    "name": "CHINA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 54,
+    "name": "CHRISTMAS ISLAND",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 55,
+    "name": "COLOMBIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 57,
+    "name": "COMOROS",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 59,
+    "name": "CONGO",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 60,
+    "name": "CONGO DEMOCRATIC REPUBLIC OF THE",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 61,
+    "name": "COOK ISLANDS",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 62,
+    "name": "COSTA RICA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 112,
+    "name": "COTE D'IVOIRE",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 63,
+    "name": "CROATIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 64,
+    "name": "CUBA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 153,
+    "name": "CURACAO",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 65,
+    "name": "CYPRUS",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 66,
+    "name": "CZECH REPUBLIC",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 68,
+    "name": "DENMARK",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 84,
+    "name": "DJIBOUTI",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 69,
+    "name": "DOMINICA ISLAND",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 70,
+    "name": "DOMINICAN REPUBLIC",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 71,
+    "name": "ECUADOR",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 224,
+    "name": "EGYPT",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 73,
+    "name": "EL SALVADOR",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 74,
+    "name": "EQUATORIAL GUINEA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 76,
+    "name": "ERITREA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 77,
+    "name": "ESTONIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 75,
+    "name": "ETHIOPIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 78,
+    "name": "FAROE ISLANDS",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 79,
+    "name": "FIJI",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 80,
+    "name": "FINLAND",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 81,
+    "name": "FRANCE",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 82,
+    "name": "FRENCH GUYANA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 83,
+    "name": "FRENCH POLYNESIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 85,
+    "name": "GABON",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 87,
+    "name": "GAMBIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 88,
+    "name": "GAZA STRIP (PALESTINE)",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 86,
+    "name": "GEORGIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 89,
+    "name": "GERMANY",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 90,
+    "name": "GHANA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 91,
+    "name": "GIBRALTAR",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 93,
+    "name": "GREECE",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 94,
+    "name": "GRENADA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 95,
+    "name": "GUADELOUPE",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 96,
+    "name": "GUAM",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 97,
+    "name": "GUATEMALA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 98,
+    "name": "GUINEA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 177,
+    "name": "GUINEA-BISSAU",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 99,
+    "name": "GUYANA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 100,
+    "name": "HAITI",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 101,
+    "name": "HONDURAS",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 102,
+    "name": "HONG KONG",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 103,
+    "name": "HUNGARY",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 104,
+    "name": "ICELAND",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 105,
+    "name": "INDIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 106,
+    "name": "INDONESIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 107,
+    "name": "IRAN",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 108,
+    "name": "IRAQ",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 109,
+    "name": "IRELAND",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 110,
+    "name": "ISRAEL",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 111,
+    "name": "ITALY",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 113,
+    "name": "JAMAICA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 114,
+    "name": "JAPAN",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 238,
+    "name": "JOHNSTON (ISLAND)",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 116,
+    "name": "JORDAN",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 115,
+    "name": "KAZAKHSTAN",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 117,
+    "name": "KENYA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 92,
+    "name": "KIRIBATI",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 27400,
+    "name": "KOSOVO",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 120,
+    "name": "KUWAIT",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 121,
+    "name": "KYRGYZSTAN",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 122,
+    "name": "LAO PEOPLE'S DEMOCRATIC REPUBLIC",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 125,
+    "name": "LATVIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 123,
+    "name": "LEBANON",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 124,
+    "name": "LESOTHO",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 126,
+    "name": "LIBERIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 127,
+    "name": "LIBYA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 128,
+    "name": "LITHUANIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 129,
+    "name": "LUXEMBOURG",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 130,
+    "name": "MACAO",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 223,
+    "name": "MACEDONIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 131,
+    "name": "MADAGASCAR",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 132,
+    "name": "MALAWI",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 133,
+    "name": "MALAYSIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 134,
+    "name": "MALDIVES",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 135,
+    "name": "MALI",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 136,
+    "name": "MALTA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 141,
+    "name": "MARSHALL ISLANDS",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 137,
+    "name": "MARTINIQUE",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 138,
+    "name": "MAURITANIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 139,
+    "name": "MAURITIUS",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 58,
+    "name": "MAYOTTE",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 140,
+    "name": "MEXICO",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 166,
+    "name": "MICRONESIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 144,
+    "name": "MOLDOVA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 142,
+    "name": "MONACO",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 143,
+    "name": "MONGOLIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 145,
+    "name": "MONTENEGRO",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 146,
+    "name": "MOROCCO",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 147,
+    "name": "MOZAMBIQUE",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 41,
+    "name": "MYANMAR",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 149,
+    "name": "NAMIBIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 150,
+    "name": "NAURU",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 151,
+    "name": "NEPAL",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 152,
+    "name": "NETHERLANDS",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 235,
+    "name": "NETHERLANDS ANTILLES",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 155,
+    "name": "NEW CALEDONIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 158,
+    "name": "NEW ZEALAND",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 159,
+    "name": "NICARAGUA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 160,
+    "name": "NIGER",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 161,
+    "name": "NIGERIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 162,
+    "name": "NIUE",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 163,
+    "name": "NORFOLK ISLAND",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 165,
+    "name": "NORTHERN MARIANA ISLANDS",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 118,
+    "name": "NORTH KOREA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 164,
+    "name": "NORWAY",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 148,
+    "name": "OMAN",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 239,
+    "name": "PACIFIC ISLANDS (USA)",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 167,
+    "name": "PAKISTAN",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 240,
+    "name": "PALESTINIAN AUTHORITY",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 168,
+    "name": "PANAMA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 169,
+    "name": "PAPUA NEW GUINEA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 170,
+    "name": "PARAGUAY",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 172,
+    "name": "PERU",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 174,
+    "name": "PHILIPPINES",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 175,
+    "name": "POLAND",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 176,
+    "name": "PORTUGAL",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 179,
+    "name": "PUERTO RICO",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 180,
+    "name": "QATAR",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 181,
+    "name": "REUNION",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 182,
+    "name": "ROMANIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 183,
+    "name": "RUSSIAN FEDERATION",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 184,
+    "name": "RWANDA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 187,
+    "name": "SAINT LUCIA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 232,
+    "name": "SAMOA",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 189,
+    "name": "SAN MARINO",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 35117,
+    "name": "SAN MARTIN (PARTE HOLANDESA)",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 190,
+    "name": "SAO TOME AND PRINCIPE",
+    "nodeType": "COUNTRY"
+  },
+  {
+    "id": 191,
+    "name": "SAUDI ARABIA",
+    "nodeType": "COUNTRY"
+  }
+]

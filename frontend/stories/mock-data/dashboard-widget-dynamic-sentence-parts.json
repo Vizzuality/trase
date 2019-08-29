@@ -1,0 +1,67 @@
+[
+  {
+    "panel": "commodities",
+    "id": "commodities",
+    "prefix": "Your dashboard will include ",
+    "value": [
+      {
+        "id": 25,
+        "name": "CHICKEN"
+      }
+    ]
+  },
+  {
+    "panel": "sources",
+    "id": "sources",
+    "prefix": "produced in",
+    "value": [
+      {
+        "id": 27,
+        "name": "BRAZIL"
+      }
+    ]
+  },
+  {
+    "panel": "companies",
+    "id": "exporting-companies",
+    "prefix": "exported by",
+    "value": [
+      {
+        "id": 11917,
+        "name": "AVERAMA ALIMENTOS S/A",
+        "countryId": 27,
+        "nodeType": "EXPORTER"
+      }
+    ],
+    "optional": true
+  },
+  {
+    "panel": "companies",
+    "id": "importing-companies",
+    "prefix": "",
+    "value": null,
+    "optional": true
+  },
+  {
+    "panel": "destinations",
+    "id": "destinations",
+    "prefix": "going to",
+    "value": [
+      {
+        "id": 15,
+        "name": "ALBANIA",
+        "nodeType": "COUNTRY"
+      },
+      {
+        "id": 16,
+        "name": "ALGERIA",
+        "nodeType": "COUNTRY"
+      },
+      {
+        "id": 18,
+        "name": "ANGOLA",
+        "nodeType": "COUNTRY"
+      }
+    ]
+  }
+]
