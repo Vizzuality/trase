@@ -205,16 +205,17 @@ function NewSankey(props) {
           </defs>
           <g className="sankey-container">
             <g className="sankey-links">
-              {links?.map(link => (
-                // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
-                <SankeyLink
-                  key={link.id}
-                  link={link}
-                  onMouseOut={onLinkOut}
-                  onMouseOver={e => onLinkOver(e, link)}
-                  className={cx(getLinkColor(link), { '-hover': hoveredLink === link.id })}
-                />
-              ))}
+              {!flowsLoading &&
+                links?.map(link => (
+                  // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
+                  <SankeyLink
+                    key={link.id}
+                    link={link}
+                    onMouseOut={onLinkOut}
+                    onMouseOver={e => onLinkOver(e, link)}
+                    className={cx(getLinkColor(link), { '-hover': hoveredLink === link.id })}
+                  />
+                ))}
               {(!links || flowsLoading) && (
                 <Defs.LinksPlaceHolder
                   gapBetweenColumns={gapBetweenColumns}
@@ -252,6 +253,7 @@ NewSankey.propTypes = {
   columns: PropTypes.array,
   maxHeight: PropTypes.number,
   detailedView: PropTypes.bool,
+  flowsLoading: PropTypes.bool,
   isReExpand: PropTypes.bool, // eslint-disable-line
   hasExpandedNodesIds: PropTypes.bool, // eslint-disable-line
   selectedResizeBy: PropTypes.object,
