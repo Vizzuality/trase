@@ -1,18 +1,46 @@
 @import 'styles/settings';
 
-.c-tool-selector {
-  margin-top: $nav-height;
+$top-cards-height: 156px;
 
-  .tool-selector-grid-container {
+.c-explore {
+  .explore-selector {
+    position: relative;
+    margin-top: $nav-height;
+    padding-bottom: $top-cards-height;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - #{$nav-height});
+  }
+
+  .map-container {
+    height: 100%;
+  }
+
+  .explore-grid-container {
     display: flex;
     margin: 30px auto 0;
     max-width: 900px;
-    min-height: 50px;
 
-    .tool-selector-grid {
+    .explore-grid {
       display: flex;
       margin: 0 auto;
       flex-wrap: wrap;
+      height: 0px;
+      transition: height 0.5s;
+
+      &.rows1 {
+        height: 50px;
+        @media screen and (max-width: $breakpoint-tablet) {
+          height: 100px;
+        }
+      }
+
+      &.rows2 {
+        height: 100px;
+        @media screen and (max-width: $breakpoint-tablet) {
+          height: 150px;
+        }
+      }
     }
   }
 

@@ -8,6 +8,7 @@ import uniq from 'lodash/uniq';
 import last from 'lodash/last';
 import { EXPLORE_STEPS } from 'constants';
 import getTopNodesKey from 'utils/getTopNodesKey';
+import cx from 'classnames';
 
 import 'react-components/explore/explore.scss';
 
@@ -125,35 +126,38 @@ function Explore({
     highlightedCountryIds,
     step
   ]);
-
+  const ITEMS_PER_ROW = 7;
+  const rowsNumber = items.length && Math.ceil(items.length / ITEMS_PER_ROW);
   return (
-    <div className="c-tool-selector">
-      <div className="row columns">{renderTitle()}</div>
-      <div className="row columns">
-        <div className="tool-selector-grid-container">
-          <div className="tool-selector-grid">
-            {step < EXPLORE_STEPS.selected &&
-              items.map(item => (
-                <GridListItem
-                  item={item}
-                  enableItem={i => setItemFunction(i.id)}
-                  onHover={onItemHover}
-                  variant="white"
-                  isActive={highlightedCommodityIds && highlightedCommodityIds.includes(item.id)}
-                />
-              ))}
+    <div className="c-explore">
+      <div className="explore-selector">
+        {renderTitle()}
+        <div className="explore-grid-container">
+          <div className="row columns">
+            <div className={cx('explore-grid', { [`rows${rowsNumber}`]: rowsNumber })}>
+              {step < EXPLORE_STEPS.selected &&
+                items.map(item => (
+                  <GridListItem
+                    item={item}
+                    enableItem={i => setItemFunction(i.id)}
+                    onHover={onItemHover}
+                    variant="white"
+                    isActive={highlightedCommodityIds && highlightedCommodityIds.includes(item.id)}
+                  />
+                ))}
+            </div>
           </div>
         </div>
-      </div>
-      <div className="row columns">
-        <WorldMap
-          height={320}
-          center={[0, 10]}
-          context={highlightedContext}
-          destinationCountries={destinationCountries}
-          highlightedCountryIds={getHighlightedCountryIds}
-          onHoverGeometry={geoId => setHighlightedCommodities(findHighlightedCommoditiesIds(geoId))}
-        />
+        <div className="map-container">
+          <WorldMap
+            context={highlightedContext}
+            destinationCountries={destinationCountries}
+            highlightedCountryIds={getHighlightedCountryIds}
+            onHoverGeometry={geoId =>
+              setHighlightedCommodities(findHighlightedCommoditiesIds(geoId))
+            }
+          />
+        </div>
       </div>
       <TopCards
         step={step}
