@@ -9,6 +9,7 @@ import startCase from 'lodash/startCase';
 import SankeyColumn from 'react-components/tool/new-sankey/sankey-column.component';
 import NodeMenu from './node-menu.component';
 import SankeyLink from './sankey-link.component';
+import * as Defs from './sankey-defs.component';
 
 import 'styles/components/tool/sankey.scss';
 
@@ -98,6 +99,7 @@ function NewSankey(props) {
     columns,
     links,
     maxHeight,
+    flowsLoading,
     sankeyColumnsWidth,
     selectedResizeBy,
     detailedView,
@@ -179,40 +181,6 @@ function NewSankey(props) {
     setTooltip(null);
   };
 
-  const stops = {
-    default: [
-      { color: '#28343b', opacity: 0.4 },
-      { color: '#28343b', opacity: 0.2 },
-      { color: '#28343b', opacity: 0.1 },
-      { color: '#28343b', opacity: 0.1 },
-      { color: '#28343b', opacity: 0.1 },
-      { color: '#28343b', opacity: 0.2 },
-      { color: '#28343b', opacity: 0.4 }
-    ],
-    selection: [
-      { color: '#ea6869', opacity: 0.5 },
-      { color: '#ffeb8b', opacity: 0.5 },
-      { color: '#2d586e', opacity: 0.5 },
-      { color: '#b4008a', opacity: 0.5 },
-      { color: '#2d586e', opacity: 0.5 },
-      { color: '#ffeb8b', opacity: 0.5 },
-      { color: '#ea6869', opacity: 0.5 }
-    ],
-    biome: [
-      { color: '#43f3f3', opacity: 0.5 },
-      { color: '#517fee', opacity: 0.5 },
-      { color: '#8c28ff', opacity: 0.5 },
-      { color: '#ff66e5', opacity: 0.5 },
-      { color: '#72ea28', opacity: 0.5 },
-      { color: '#ffb314', opacity: 0.5 }
-    ]
-  };
-
-  let selectedColor = selectedNodesIds.length > 0 ? 'selection' : 'default';
-  if (selectedRecolorBy) {
-    selectedColor = 'biome';
-  }
-
   return (
     <div className="c-sankey is-absolute">
       <div
@@ -227,43 +195,13 @@ function NewSankey(props) {
           style={{ height: detailedView ? `${maxHeight}px` : '100%' }}
         >
           <defs>
-            <pattern
-              id="isAggregatedPattern"
-              x="0"
-              y="0"
-              width="1"
-              height="3"
-              patternUnits="userSpaceOnUse"
-            >
-              <rect x="0" y="0" width="50" height="1" fill="#ddd" />
-              <rect x="0" y="1" width="50" height="2" fill="#fff" />
-            </pattern>
-            <linearGradient
-              id="animate-gradient"
-              x1="0%"
-              y1="0%"
-              x2="100%"
-              y2="0"
-              spreadMethod="reflect"
-            >
-              {stops[selectedColor].map((stop, i) => (
-                <stop offset={i} stopColor={stop.color} stopOpacity={stop.opacity} />
-              ))}
-              <animate
-                id="one"
-                attributeName="x1"
-                values="0%;120%"
-                dur="4s"
-                repeatCount="indefinite"
+            {<Defs.IsAggregate />}
+            {
+              <Defs.GradientAnimation
+                selectedNodesIds={selectedNodesIds}
+                selectedRecolorBy={selectedRecolorBy}
               />
-              <animate
-                id="two"
-                attributeName="x2"
-                values="100%;200%"
-                dur="4s"
-                repeatCount="indefinite"
-              />
-            </linearGradient>
+            }
           </defs>
           <g className="sankey-container">
             <g className="sankey-links">
@@ -277,18 +215,12 @@ function NewSankey(props) {
                   className={cx(getLinkColor(link), { '-hover': hoveredLink === link.id })}
                 />
               ))}
-              {!links &&
-                Array.from({ length: 3 }).map((_, i) => (
-                  <rect
-                    key={i}
-                    height={575}
-                    width={gapBetweenColumns}
-                    transform={`translate(${i * gapBetweenColumns +
-                      i * sankeyColumnsWidth +
-                      sankeyColumnsWidth},0)`}
-                    fill="url(#animate-gradient)"
-                  />
-                ))}
+              {(!links || flowsLoading) && (
+                <Defs.LinksPlaceHolder
+                  gapBetweenColumns={gapBetweenColumns}
+                  sankeyColumnsWidth={sankeyColumnsWidth}
+                />
+              )}
             </g>
             <g className="sankey-columns">
               {columns?.map(column => (
@@ -301,16 +233,12 @@ function NewSankey(props) {
                   sankeyColumnsWidth={sankeyColumnsWidth}
                 />
               ))}
-              {(!columns || columns.length === 0) &&
-                Array.from({ length: 4 }).map((_, i) => (
-                  <rect
-                    key={i}
-                    height={575}
-                    width={sankeyColumnsWidth}
-                    className="sankey-column-placeholder"
-                    transform={`translate(${i * (sankeyColumnsWidth + gapBetweenColumns)},0)`}
-                  />
-                ))}
+              {(!columns || columns.length === 0) && (
+                <Defs.ColumnsPlaceholder
+                  gapBetweenColumns={gapBetweenColumns}
+                  sankeyColumnsWidth={sankeyColumnsWidth}
+                />
+              )}
             </g>
           </g>
         </svg>

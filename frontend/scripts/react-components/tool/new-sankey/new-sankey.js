@@ -33,6 +33,7 @@ const mapStateToProps = state => ({
   selectedRecolorBy: getSelectedRecolorBy(state),
   hasExpandedNodesIds: getHasExpandedNodesIds(state),
   gapBetweenColumns: getGapBetweenColumns(state),
+  flowsLoading: state.toolLinks.flowsLoading,
   highlightedNodeId: state.toolLinks.highlightedNodeId
 });
 
