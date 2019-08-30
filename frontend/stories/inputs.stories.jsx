@@ -5,25 +5,29 @@ import countries from './mock-data/countries-list.json';
 
 storiesOf('SearchInput', module)
   .addWithJSX('SearchInput', () => (
-    <SearchInput
-      size="sm"
-      items={countries}
-      placeholder="Search country"
-      onSelect={() => {}}
-      onSearchTermChange={() => {}}
-    />
+    <div className="components-container">
+      <SearchInput
+        size="sm"
+        items={countries}
+        placeholder="Search country"
+        onSelect={() => {}}
+        onSearchTermChange={() => {}}
+      />
+    </div>
   ))
   .addParameters({ component: SearchInput });
 
 storiesOf('SearchInput', module)
   .addWithJSX('bordered Input', () => (
-    <SearchInput
-      variant="bordered"
-      size="sm"
-      items={countries}
-      placeholder="Search country"
-      onSelect={() => {}}
-      onSearchTermChange={() => {}}
-    />
+    <div className="components-container">
+      <SearchInput
+        variant="bordered"
+        size="sm"
+        items={countries}
+        placeholder="Search country"
+        onSelect={() => {}}
+        onSearchTermChange={() => {}}
+      />
+    </div>
   ))
   .addParameters({ component: SearchInput });
