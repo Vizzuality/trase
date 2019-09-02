@@ -106,6 +106,7 @@ RSpec.describe Api::V3::Flows::Filter do
       let(:expanded_nodes) {
         {selected_nodes_ids: [api_v3_country_of_destination1_node.id]}
       }
+
       context 'when no locked nodes present' do
         it 'does not include low volume nodes in active nodes' do
           filter = Api::V3::Flows::Filter.new(
@@ -116,6 +117,7 @@ RSpec.describe Api::V3::Flows::Filter do
           expect(filter.active_nodes).not_to have_key(api_v3_diamantino_node.id)
         end
       end
+
       context 'when locked nodes' do
         it 'includes locked low volume nodes in active nodes' do
           filter = Api::V3::Flows::Filter.new(
@@ -124,6 +126,23 @@ RSpec.describe Api::V3::Flows::Filter do
           )
           filter.call
           expect(filter.active_nodes).to have_key(api_v3_diamantino_node.id)
+        end
+      end
+    end
+
+    context 'when excluded nodes' do
+      let(:excluded_nodes) {
+        {excluded_nodes_ids: [api_v3_country_of_destination1_node.id]}
+      }
+
+      it 'does not include paths with excluded nodes' do
+        filter = Api::V3::Flows::Filter.new(
+          api_v3_context,
+          filter_params.merge(excluded_nodes)
+        )
+        result = filter.call
+        result.data.each do |flow|
+          expect(flow[:path]).not_to include(api_v3_country_of_destination1_node.id)
         end
       end
     end
