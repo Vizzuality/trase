@@ -1,0 +1,97 @@
+---
+name: Onboarding
+menu: Backend
+---
+
+Welcome to Trase! This document is intended to provide introduction into the domain concepts in the platform as well as practical information about working on Trase. It's also a work in progress, where all new starters are welcome to improve te text with information that was helpful for them in the first days.
+
+# Purpose
+Trase is a project which permits to follow the trade flows around the world in an attempt to make a real impact on the sustainability.
+
+There are regions in the world at risk of deforestation due to farming. There is not enough transparency of sustainability of trade in these forest risk commodities, such as soy, beef or palm oil. This application is a visualisation tool, which maps the supply chains of key agricultural commodities from their region of production, through the different trading companies, to their country of consumption. It allows companies, governments and others to understand the risks and identify opportunities for more sustainable production.
+
+# Main sections on the website
+
+The website has five main sections:
+
+## Supply chain (or "Tool", or "Sankey")
+
+Contains a Sankey diagram which permits to check the entire flow from a production region to a commodity (soy, beef...). In spite of having more information, four columns are always displayed because in other case it would be so complex that it couldn’t be usable. On each column there appears a selector of the other information to be applied.
+
+The elements listed in the columns are called nodes. The lines that go through nodes are called flows.
+
+## Map
+
+- Permits to visualise a summary of the information checking the production region on a map.
+- It contains a layers button with different indicators to be visualised on the map.
+- Linked to the sankey (first column)
+
+## Profiles
+
+Permits to check the information of a particular company or production place summarized, showing it on different charts.
+
+
+## Download
+
+Permit to export the data contained by Trase filtered and with different formats (json, csv).
+
+## Dashboard
+
+Permits to customize the analysis.
+
+# Database
+
+## Three main concepts in the database:
+- Nodes:
+    * entities through which commodities flow, from the source country or region, through intermediate locations such as ports of export or import, companies which trade in the commodity, up to the destination country.
+    * nodes can be of different types (Country, Importer, Port…).
+    * on the sankey diagram we can only display four columns, so the nodes are grouped by a field named column group (check "Context Node Type Properties" in the admin page).
+- Flows
+    * Contain a field called path, which is an array of nodes with the flow on a commodity from the production place to the final consumer, as represented on the sankey diagram.
+    * The path can have different length depending on the country - commodity combination, as different data may be available
+- Indicators
+    * There are three types of indicators: quants, quals and inds. The system stores values of those indicators relating to flows (shown e.g. on the sankey) or nodes (shown e.g. on the map).
+    * Quants - quantitative, values are numbers that can be summed over years
+    * Inds - values are numbers which represent ratios and percentages, can be averaged over years but not summed
+    * Quals - qualitative, values are text / boolean
+    * In spite of being of three different types, they can also be differences on two different kinds for filtering: cont_attribute and ncont_attribute.
+    * cont_attribute is mandatory and it is always a quant.
+    * ncont_attribute is optional and it can be either qual or ind. They permit to add another dimension to the sankey.
+
+## Other core concepts:
+- Commodities - things like soy, corn, coffee; in case of Trase, these are deforestation-risk commodities,
+- Countries - represent source countries; this is tricky, because we also have destination countries (last column of the sankey), but those are nodes, not countries (in terms of the database)
+- A context is a combination of country & commodity, e.g. “Brazil soy”; for each context we might have slightly different data available, for example the length of the path might be different (8 nodes for Brazil soy, 4 nodes for Paraguay corn)
+
+## Blue vs Yellow tables
+- Models can inherit from two main classes: blue tables and yellow tables.
+    * Blue tables are core static information like nodes and flows, which comes directly from the source database and is not updated within Trase (during a data update, the content of these tables is replaced with new versions)
+    * Yellow tables are configuration data, e.g. which indicators to show in the resize by dropdown, which can be updated via the CMS. Those are typical writable tables, so the models contain validations, callbacks and so on on.
+- The full schema can be found [here](https://vizzuality.github.io/trase/all_tables/index.html). On the following [link](https://vizzuality.github.io/trase/all_tables/relationships.html) you can also find a diagram.
+- The blue tables schema can be found [here](https://vizzuality.github.io/trase/blue_tables/index.html). On the following [link](https://vizzuality.github.io/trase/blue_tables/relationships.html) you can also find a diagram.
+- Materialised views are readonly models in `app/models/readonly` and they often provide a bridge between blue and yellow tables, to make queries faster and simpler.
+
+## Admin panel
+
+- Active Admin CMS which allows to edit the configuration of the website (yellow tables) but not to edit the core data (blue tables)
+- Typically it is the client who updates the CMS, this is part of their workflow after incorporating new data (e.g. new country / commodity)
+
+## Repository
+- The frontend code is in the /frontend folder. The rest is a normal rails application.
+- The app/admin contains the needed code for the administration page
+
+## Different instances of the tool:
+- [trase.earth](trase.earth) - production
+- [staging.trase.earth](staging.trase.earth) - primary staging instance
+- [sandbox.trase.earth](sandbox.trase.earth) - data integration instance
+- [[demo](demo.trase.earth)|[dashboardsdemo](dashboardsdemo.trase.earth)|[indonesiademo](indonesiademo.trase.earth).trase.earth - other demo sites which either present a specific dataset or a specific new feature
+
+## Process for contributing to trase:
+- Pick a task from PT
+- Start a branch (from develop)
+- Add code and specs where applicable
+- Raise a pull request in GH
+- Review the errors raised by automated checks (code climate), see what makes sense to improve (some of the checks we routinely ignore, like the one that insists that “V3” is a bad namespace name :) )
+- Assign a reviewer and if they’re lazy remind them you need a code review :)
+- Sometimes the reviewer merges the code, but if it happens that they forgot and there are no outstanding issues on the PR the author can merge
+- We deploy using Capistrano. To deploy to the staging site: `cap staging deploy`
