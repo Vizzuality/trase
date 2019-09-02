@@ -316,6 +316,12 @@ $ch-red-2: #EF4F60;
 $ch-red-3: #95232F;
 $ch-red-4: #4F0008;
 
+$ch-blue-0: #9FCAE1;
+$ch-blue-1: #79A8D0;
+$ch-blue-2: #5488C0;
+$ch-blue-3: #246AB6;
+$ch-blue-4: #044AA6;
+
 // profile choropleth
 // For now we'll use the same color scheme as in the tool, when we include more buckets this has to change.
 $ch-profile-n-a: $metal-grey;
@@ -327,6 +333,16 @@ $ch-profile-red-4: $ch-red-4;
 $ch-profile-red-5: $ch-red-4;
 $ch-profile-red-6: $ch-red-4;
 $ch-profile-red-7: $ch-red-4;
+
+$ch-profile-n-a: $metal-grey;
+$ch-profile-blue-0: $ch-blue-0;
+$ch-profile-blue-1: $ch-blue-1;
+$ch-profile-blue-2: $ch-blue-2;
+$ch-profile-blue-3: $ch-blue-3;
+$ch-profile-blue-4: $ch-blue-4;
+$ch-profile-blue-5: $ch-blue-4;
+$ch-profile-blue-6: $ch-blue-4;
+$ch-profile-blue-7: $ch-blue-4;
 
 $choropleth-colors: (
   ch-red-0: $ch-red-0,

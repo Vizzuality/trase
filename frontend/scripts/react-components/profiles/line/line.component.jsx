@@ -1,7 +1,6 @@
 /* eslint-disable camelcase,import/no-extraneous-dependencies,jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import isFunction from 'lodash/isFunction';
 import capitalize from 'lodash/capitalize';
 import { event as d3_event, select as d3_select } from 'd3-selection';
 import { axisBottom as d3_axis_bottom, axisLeft as d3_axis_left } from 'd3-axis';
@@ -12,9 +11,10 @@ import { area as d3_area, line as d3_line } from 'd3-shape';
 import { format as d3_format } from 'd3-format';
 import { timeFormat as d3_timeFormat } from 'd3-time-format';
 
-import { LINE_LABEL_HEIGHT } from '../../../constants';
-import abbreviateNumber from '../../../utils/abbreviateNumber';
-import { translateText } from '../../../utils/transifex';
+import { BREAKPOINTS } from 'constants';
+import abbreviateNumber from 'utils/abbreviateNumber';
+import { translateText } from 'utils/transifex';
+
 import Responsive from '../../shared/responsive.hoc';
 
 import './line.scss';
@@ -34,7 +34,7 @@ class Line extends Component {
   }
 
   isSmallChart() {
-    return this.props.width < 450;
+    return this.props.width < BREAKPOINTS.mobile;
   }
 
   getTicksStyle() {
@@ -42,7 +42,7 @@ class Line extends Component {
     if (this.isSmallChart()) {
       return 'small';
     }
-    if (width <= 600) {
+    if (width <= BREAKPOINTS.small) {
       return 'medium';
     }
 
@@ -66,10 +66,6 @@ class Line extends Component {
       style,
       testId,
       xValues,
-      onLinkClick,
-      year,
-      contextId,
-      profileType,
       margin,
       ticks,
       settingsHeight,
@@ -108,13 +104,10 @@ class Line extends Component {
       .rangeRound([chartHeight, 0])
       .domain(d3_extent([0, ...allYValues]));
 
-    let lastY = chartHeight + LINE_LABEL_HEIGHT;
-
     const sanitizedLines = this.getLines().sort((a, b) => {
       const last = xValues.length - 1;
       return a.values[last] - b.values[last];
     });
-    const numLines = sanitizedLines.length;
 
     sanitizedLines.forEach((lineData, i) => {
       const lineValuesWithFormat = this.prepareData(xValues, lineData);
@@ -164,19 +157,14 @@ class Line extends Component {
           break;
 
         case 'line-points': {
-          const lineNumber = numLines - i;
           pathContainers = d3Container
             .datum(lineValuesWithFormat)
             .append('g')
             .attr('id', lineData.geo_id)
             .attr('data-test', `${testId}-line-points`)
-            .attr('class', d => {
-              const lineIndex = isSmallChart ? i : d[0].value9;
-
-              return isFunction(lineClassNameCallback)
-                ? lineClassNameCallback(lineIndex, lineStyle)
-                : lineStyle;
-            });
+            .attr('class', () =>
+              lineClassNameCallback ? lineClassNameCallback(i, lineStyle) : lineStyle
+            );
 
           pathContainers
             .selectAll('path')
@@ -184,46 +172,6 @@ class Line extends Component {
             .enter()
             .append('path')
             .attr('d', line);
-
-          if (!isSmallChart) {
-            const texts = pathContainers
-              .selectAll('text')
-              .data(d => [d])
-              .enter()
-              .append('g')
-              .attr('transform', d => {
-                const last = d.length - 1;
-                const { value } = d[last];
-                let newNumberY = y(value) + 4;
-                if (newNumberY + LINE_LABEL_HEIGHT > lastY) {
-                  newNumberY = lastY - LINE_LABEL_HEIGHT - 1;
-                }
-                lastY = newNumberY;
-                return `translate(${width + 6},${newNumberY})`;
-              });
-
-            texts.append('text').text(`${lineNumber}.`);
-
-            texts
-              .append('text')
-              .attr('transform', 'translate(16,0)')
-              .attr('class', d => {
-                if (typeof onLinkClick !== 'undefined' && d[0].nodeId && profileType) {
-                  return 'link';
-                }
-                return '';
-              })
-              .on('click', d => {
-                if (typeof onLinkClick !== 'undefined' && d[0].nodeId && profileType) {
-                  onLinkClick(profileType, {
-                    contextId,
-                    nodeId: d[0].nodeId,
-                    year
-                  });
-                }
-              })
-              .text(d => `${capitalize(translateText(d[0].name))}`);
-          }
 
           const circles = pathContainers
             .selectAll('circle')
@@ -271,29 +219,24 @@ class Line extends Component {
 
     let yTickFormat = null;
     let xTickFormat = null;
+    const getXTickFormat = value => {
+      const format = d3_timeFormat('%Y');
+      const formatValue = format(value);
+      return this.getTicksStyle() === 'normal'
+        ? formatValue
+        : `'${formatValue.toString().slice(2)}`;
+    };
+
     if (ticks.yTickFormatType === 'top-location') {
       yTickFormat = value => abbreviateNumber(value, 3);
-
-      xTickFormat = value => {
-        const format = d3_timeFormat('%Y');
-        const formatValue = format(value);
-        return this.getTicksStyle() === 'normal'
-          ? formatValue
-          : `'${formatValue.toString().slice(2)}`;
-      };
+      xTickFormat = getXTickFormat;
     } else {
       yTickFormat = (value, idx, arr) => {
         const format = d3_format('0');
         const isLast = idx === arr.length - 1;
         return `${format(value)}${isLast ? unit : ''}`;
       };
-      xTickFormat = value => {
-        const format = d3_timeFormat('%Y');
-        const formatValue = format(value);
-        return this.getTicksStyle() === 'normal'
-          ? formatValue
-          : `'${formatValue.toString().slice(2)}`;
-      };
+      xTickFormat = getXTickFormat;
     }
 
     const xTicks = this.getTicksStyle() === 'small' ? d3_time_year.every(2) : xValues.length;
@@ -331,7 +274,6 @@ class Line extends Component {
       profileType,
       contextId
     } = this.props;
-    const isSmallChart = this.isSmallChart();
     const lines = this.getLines().sort((a, b) => {
       const last = xValues.length - 1;
       return b.values[last] - a.values[last];
@@ -342,13 +284,12 @@ class Line extends Component {
     const lineOnMouseLeave = lineData => {
       this.chart.querySelector(`#${lineData.geo_id}`).classList.remove('selected');
     };
-
     return (
       <ul className="line-bottom-legend">
         {lines.map((lineData, index) => {
           const lineStyle = typeof style !== 'undefined' ? style.style : lineData.style;
-          const lineIndex = isSmallChart ? lines.length - index - 1 : lineData.value9;
-          const lineClassName = isFunction(lineClassNameCallback)
+          const lineIndex = lines.length - index - 1;
+          const lineClassName = lineClassNameCallback
             ? lineClassNameCallback(lineIndex, lineStyle)
             : lineStyle;
           const isLink = typeof onLinkClick !== 'undefined' && lineData.node_id && profileType;
@@ -395,7 +336,7 @@ class Line extends Component {
             this.chart = elem;
           }}
         />
-        {this.props.useBottomLegend && this.isSmallChart() && this.renderLegend()}
+        {this.props.useBottomLegend && this.renderLegend()}
       </div>
     );
   }

@@ -133,10 +133,10 @@ TopDestinationsMap.propTypes = {
   profileType: PropTypes.string,
   lines: PropTypes.array.isRequired,
   year: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.object,
   height: PropTypes.number.isRequired,
   buckets: PropTypes.array.isRequired,
-  summary: PropTypes.string.isRequired,
+  summary: PropTypes.object.isRequired,
   countryName: PropTypes.string.isRequired,
   includedYears: PropTypes.array.isRequired,
   commodityName: PropTypes.string.isRequired
