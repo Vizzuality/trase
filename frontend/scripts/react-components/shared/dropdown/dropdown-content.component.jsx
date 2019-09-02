@@ -64,9 +64,7 @@ function DropdownContent(props) {
   if (options) {
     const optionsToShow = showSelected
       ? options
-      : options.filter(
-          o => o.value !== (selectedItem && selectedItem.value) && o.value !== selectedItem.value
-        );
+      : options.filter(o => o.value !== selectedItem?.value);
 
     content = optionsToShow.map((item, i) => (
       <DropdownItem
