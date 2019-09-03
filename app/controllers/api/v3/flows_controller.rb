@@ -28,6 +28,7 @@ module Api
           ncont_attribute_id: params[:ncont_attribute_id],
           cont_attribute_id: params[:cont_attribute_id],
           selected_nodes_ids: params[:selected_nodes],
+          excluded_nodes_ids: params[:excluded_nodes],
           locked_nodes_ids: params[:locked_nodes],
           biome_id: params[:biome_filter_id],
           year_start: params[:start_year],
