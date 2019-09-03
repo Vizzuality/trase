@@ -3,7 +3,6 @@ import { storiesOf } from '@storybook/react';
 import Button from 'react-components/shared/button/button.component';
 
 storiesOf('Button', module)
-  .addParameters({ component: Button })
   .addWithJSX('Button', () => (
     <>
       <Button size="lg">Im a button with size lg</Button>

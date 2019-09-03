@@ -11,7 +11,7 @@ class Accordion extends React.PureComponent {
   toggleOpen = () => {
     const { isOpen } = this.state;
     const { onToggle } = this.props;
-    onToggle();
+    if (onToggle) onToggle();
     this.setState({ isOpen: !isOpen });
   };
 
