@@ -1,7 +1,6 @@
 // eslint-disable-next-line
 const merge = require('webpack-merge');
 const webpackConfig = require('../config/webpack.config');
-const createCompiler = require('@storybook/addon-docs/mdx-compiler-plugin');
 const webpack = require('webpack');
 
 const styleLoaders = [
@@ -12,20 +11,6 @@ const styleLoaders = [
   {
     test: /\.scss$/,
     use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
-  },
-  {
-    test: /\.mdx$/,
-    use: [
-      {
-        loader: 'babel-loader'
-      },
-      {
-        loader: '@mdx-js/loader',
-        options: {
-          compilers: [createCompiler({})]
-        }
-      }
-    ]
   }
 ];
 module.exports = async ({ config }) =>
