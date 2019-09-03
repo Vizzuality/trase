@@ -14,7 +14,6 @@ function SummaryWidget(props) {
     context,
     profileType,
     onYearChange,
-    tooltips,
     profileMetadata,
     openModal
   } = props;
@@ -41,7 +40,6 @@ function SummaryWidget(props) {
             {profileType === 'actor' && (
               <ActorSummary
                 year={year}
-                tooltips={tooltips}
                 printMode={printMode}
                 onYearChange={onYearChange}
                 data={data[GET_NODE_SUMMARY_URL]}
@@ -53,7 +51,6 @@ function SummaryWidget(props) {
             {profileType === 'place' && (
               <PlaceSummary
                 year={year}
-                tooltips={tooltips}
                 printMode={printMode}
                 onYearChange={onYearChange}
                 data={data[GET_NODE_SUMMARY_URL]}
@@ -72,7 +69,6 @@ function SummaryWidget(props) {
 SummaryWidget.propTypes = {
   printMode: PropTypes.bool,
   context: PropTypes.object,
-  tooltips: PropTypes.object,
   profileMetadata: PropTypes.object,
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired,
