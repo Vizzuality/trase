@@ -113,7 +113,9 @@ export function* getDashboardPanelData(dashboardElement, optionsType, options) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled', url);
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled', url);
+      }
       if (source) {
         source.cancel();
       }
@@ -142,7 +144,9 @@ export function* getDashboardPanelSectionTabs(optionsType) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled', url);
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled', url);
+      }
       if (source) {
         source.cancel();
       }
@@ -171,7 +175,9 @@ export function* getMoreDashboardPanelData(dashboardElement, optionsType) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled', url);
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled', url);
+      }
       if (source) {
         source.cancel();
       }
@@ -202,7 +208,9 @@ export function* getMissingDashboardPanelItems(dashboardElement, selectedContext
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled');
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled');
+      }
       if (source) {
         source.cancel();
       }
@@ -239,7 +247,9 @@ export function* fetchDashboardPanelSearchResults(dashboardElement, query) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled', url);
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled', url);
+      }
       if (source) {
         source.cancel();
       }
@@ -286,7 +296,9 @@ export function* fetchDashboardCharts() {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled', params);
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled', params);
+      }
       if (source) {
         source.cancel();
       }

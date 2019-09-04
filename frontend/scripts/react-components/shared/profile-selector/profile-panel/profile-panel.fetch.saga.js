@@ -94,7 +94,9 @@ export function* getProfilesData(panelName, activeTab = null) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled', activeTab);
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled', activeTab);
+      }
       if (source) {
         source.cancel();
       }
@@ -123,7 +125,9 @@ export function* getMoreProfilesData(profileSelector, panelName, activeTab = nul
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled', url);
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled', url);
+      }
       if (source) {
         source.cancel();
       }
@@ -154,7 +158,9 @@ export function* getProfilesTabs(optionsType) {
   } finally {
     if (yield cancelled()) {
       if (source) {
-        if (NODE_ENV_DEV) console.error('Cancelled', url);
+        if (NODE_ENV_DEV) {
+          console.error('Cancelled', url);
+        }
         source.cancel();
       }
     }
@@ -189,7 +195,9 @@ export function* fetchProfileSearchResults(profileSelector, query) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled', url);
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled', url);
+      }
       if (source) {
         source.cancel();
       }

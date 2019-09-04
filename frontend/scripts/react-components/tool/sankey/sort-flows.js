@@ -104,9 +104,11 @@ export function sortFlows(links, recolorBy, recolorGroupOptions) {
     return link.quant;
   });
 
-  if (logsDebug && NODE_ENV_DEV) {
-    // eslint-disable-next-line
-    console.table(logsDebug);
+  if (NODE_ENV_DEV === true) {
+    if (logsDebug) {
+      // eslint-disable-next-line
+      console.table(logsDebug);
+    }
   }
 
   return sortedLinks;
