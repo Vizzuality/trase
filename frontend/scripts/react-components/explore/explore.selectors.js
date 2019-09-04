@@ -99,6 +99,7 @@ export const getCards = createSelector(
   [getCommodity, getCountry, getCommodities, getAllCountries, getContexts],
   (commodity, country, allCommodities, allCountries, contexts) => {
     const nodeTypes = [{ id: 1, name: 'EXPORTER' }, { id: 2, name: 'COUNTRY' }];
+    // TODO: Use backend cards. The updating cards animation will work then
     const mockedCards = [
       { id: 1, commodity_id: 1, country_id: 27, indicator_id: 32, node_type_id: 1 },
       { id: 2, commodity_id: 1, country_id: 27, indicator_id: 32, node_type_id: 2 },
