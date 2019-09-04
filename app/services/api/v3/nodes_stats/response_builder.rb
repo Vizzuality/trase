@@ -7,30 +7,16 @@ module Api
         def initialize(commodity_id, contexts_ids, params)
           @commodity_id = commodity_id
           @contexts_ids = contexts_ids
+
           initialize_params(params)
+
           initialize_errors
         end
 
         def call
           initialize_nodes_stats
-          filter_name = @commodity_id ? 'commodity_id' : 'context_id'
-          filter_values =
-            @commodity_id.present? ? [@commodity_id] : @contexts_ids
-          filter_values.map do |filter|
-            {
-              filter_name => filter,
-              attributes: @quants_ids.map do |quant_id|
-                quant = Api::V3::Quant.find(quant_id)
-                targets = @nodes_stats.where(quant_id: quant_id)
-                {
-                  id: quant_id,
-                  indicator: quant.display_name,
-                  unit: quant.unit,
-                  targets: nodes_stats_attributes(targets)
-                }
-              end
-            }
-          end
+
+          formatted_nodes_stats
         end
 
         private
@@ -40,45 +26,77 @@ module Api
           @year_end = params[:year_end]&.to_i
           @limit = params[:limit]&.to_i || 10
           @node_type_id = params[:node_type_id]
-          @quants_ids = params[:attribute_ids]
+          @attributes_ids = params[:attributes_ids]
         end
 
         def initialize_nodes_stats
+          options = {
+            node_type_id: @node_type_id,
+            year_start: @year_start,
+            year_end: @year_end
+          }
           if @commodity_id
             nodes_stats_list =
               Api::V3::Profiles::NodesStatsForCommodityList.new(
-                @commodity_id,
-                quants_ids: @quants_ids,
-                node_type_id: @node_type_id,
-                year_start: @year_start,
-                year_end: @year_end
+                @commodity_id, options
               )
           else
             nodes_stats_list =
               Api::V3::Profiles::NodesStatsForContextsList.new(
-                @contexts_ids,
-                quants_ids: @quants_ids,
-                node_type_id: @node_type_id,
-                year_start: @year_start,
-                year_end: @year_end
+                @contexts_ids, options
               )
           end
 
           @nodes_stats = nodes_stats_list.
-            sorted_list(@quants_ids, limit: @limit)
+            sorted_list(@attributes_ids, limit: @limit)
         end
 
         def initialize_errors
-          @errors = []
           if @year_start && @year_end && @year_start > @year_end
-            @errors << 'Year start can not be higher than year end'
+            raise 'Year start can not be higher than year end'
           end
+
           if @commodity_id && (@contexts_ids || []).any?
-            @errors << 'Either commodity or contexts but not both'
+            raise 'Either commodity or contexts but not both'
+          end
+
+          @attributes_ids.each do |attribute_id|
+            next if Api::V3::Readonly::Attribute.where(
+              original_id: attribute_id, original_type: 'Quant'
+            ).any?
+
+            raise "Attribute #{attribute_id} not found"
           end
         end
 
-        def nodes_stats_attributes(nodes_stats)
+        def formatted_nodes_stats
+          filter_name = @commodity_id ? 'commodity_id' : 'context_id'
+          filter_values =
+            @commodity_id.present? ? [@commodity_id] : @contexts_ids
+          filter_values.map do |filter|
+            {
+              filter_name => filter,
+              attributes: @attributes_ids.map do |attribute_id|
+                attribute_information(attribute_id)
+              end
+            }
+          end
+        end
+
+        def attribute_information(attribute_id)
+          attribute = Api::V3::Readonly::Attribute.find_by(
+            original_id: attribute_id, original_type: 'Quant'
+          )
+          targets = @nodes_stats.where(quant_id: attribute_id)
+          {
+            id: attribute_id,
+            indicator: attribute.display_name,
+            unit: attribute.unit,
+            targets: nodes_stats_information(targets)
+          }
+        end
+
+        def nodes_stats_information(nodes_stats)
           nodes_stats.map do |node_stats|
             {
               id: node_stats['node_id'],
