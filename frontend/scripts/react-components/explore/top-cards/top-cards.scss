@@ -20,17 +20,10 @@
   .back-button {
     cursor: pointer;
   }
-
-  .top-cards-row {
-    padding-top: 10px;
-    display: flex;
-    justify-content: space-between;
-  }
 }
 
 .animated-card {
-  flex: 1;
-  margin-right: 20px;
+  margin: 10px 0 20px;
 }
 
 .c-top-card {
@@ -39,5 +32,4 @@
   border-radius: 5px;
   background-color: $white;
   cursor: pointer;
-
 }
