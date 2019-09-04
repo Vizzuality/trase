@@ -29,6 +29,7 @@ module Api
           initialize_biome_position
           initialize_selected_nodes
           initialize_other_nodes_ids
+          initialize_excluded_nodes
           initialize_unknown_nodes
           if @errors.none?
             initialize_active_nodes
@@ -60,6 +61,9 @@ module Api
               )&.readonly_attribute
           @selected_nodes_ids = initialize_int_set_param(
             params[:selected_nodes_ids]
+          )
+          @excluded_nodes_ids = initialize_int_set_param(
+            params[:excluded_nodes_ids]
           )
           @locked_nodes_ids = initialize_int_set_param(
             params[:locked_nodes_ids]
@@ -151,6 +155,29 @@ module Api
               pluck(:id).first
             # TODO: maybe we could not rely on those nodes in db?
             # problem is the id of those nodes is referenced
+          end
+        end
+
+        def initialize_excluded_nodes
+          # filter out nodes not involved in any flows in this context
+          @excluded_nodes_ids = @excluded_nodes_ids.select do |node_id|
+            Api::V3::Flow.
+              select('true').
+              joins(:flow_quants).
+              where('flow_quants.quant_id' => @cont_attribute.original_id).
+              where(context_id: @context.id). # TODO: verify this
+              where('NOT(? = ANY(flows.path))', node_id).
+              where('year >= ? AND year <= ?', @year_start, @year_end).any?
+          end
+          @excluded_nodes = Api::V3::Node.where(
+            id: @excluded_nodes_ids,
+            node_type_id: @node_types_ids.to_a
+          ).all
+
+          @excluded_nodes_by_position = @excluded_nodes.group_by do |node|
+            @active_node_types.find do |nt|
+              nt.id == node.node_type_id
+            end.column_position
           end
         end
 
@@ -350,6 +377,17 @@ module Api
               )
             end
           end
+
+          if @excluded_nodes.any?
+            @excluded_nodes_by_position.each do |position, nodes_ids|
+              query = query.where(
+                'NOT(flows.path[?] = ANY(ARRAY[?]))',
+                position + 1,
+                nodes_ids
+              )
+            end
+          end
+
           query
         end
       end
