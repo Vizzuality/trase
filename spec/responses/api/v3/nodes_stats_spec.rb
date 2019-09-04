@@ -4,6 +4,7 @@ RSpec.describe 'Nodes stats', type: :request do
   include_context 'api v3 brazil flows quants'
 
   before(:each) do
+    Api::V3::Readonly::Attribute.refresh
     Api::V3::Readonly::NodesStats.refresh
   end
 
@@ -13,9 +14,9 @@ RSpec.describe 'Nodes stats', type: :request do
         get '/api/v3/nodes_stats', params: {
           start_year: 2003,
           end_year: 2019,
-          attribute_ids: [api_v3_volume.id],
+          attributes_ids: api_v3_volume.id.to_s,
           column_id: api_v3_country_node_type.id,
-          contexts_ids: [api_v3_context.id]
+          contexts_ids: api_v3_context.id.to_s
         }
 
         expect(@response).to have_http_status(:ok)
@@ -36,7 +37,7 @@ RSpec.describe 'Nodes stats', type: :request do
         get '/api/v3/nodes_stats', params: {
           start_year: 2003,
           end_year: 2019,
-          attribute_ids: [api_v3_volume.id],
+          attributes_ids: api_v3_volume.id,
           column_id: api_v3_country_node_type.id,
           commodity_id: api_v3_soy.id
         }

@@ -1,13 +1,17 @@
 module Api
   module V3
     class NodesStatsController < ApiController
+      include ParamHelpers
+
       before_action :set_filter_params, only: :index
 
       skip_before_action :load_context
 
       def index
         @result = Api::V3::NodesStats::ResponseBuilder.new(
-          params[:commodity_id], params[:contexts_ids], @filter_params
+          params[:commodity_id],
+          cs_string_to_int_array(params[:contexts_ids]),
+          @filter_params
         ).call
 
         render json: {data: @result}
@@ -18,7 +22,7 @@ module Api
       def set_filter_params
         year_start = params[:start_year]
         @filter_params = {
-          attribute_ids: params[:attribute_ids],
+          attributes_ids: cs_string_to_int_array(params[:attributes_ids]),
           node_type_id: params[:column_id],
           year_start: year_start,
           year_end: params[:end_year] || year_start,
