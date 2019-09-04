@@ -2,11 +2,13 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::Flows::Filter do
   include_context 'api v3 brazil resize by attributes'
+  include_context 'api v3 brazil recolor by attributes'
   include_context 'api v3 brazil flows quants'
 
   before(:each) do
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::ResizeByAttribute.refresh(sync: true, skip_dependents: true)
+    Api::V3::Readonly::RecolorByAttribute.refresh(sync: true, skip_dependents: true)
   end
 
   let!(:api_v3_diamantino_node) {
@@ -98,6 +100,18 @@ RSpec.describe Api::V3::Flows::Filter do
           )
           filter.call
           expect(filter.active_nodes).to have_key(api_v3_diamantino_node.id)
+        end
+      end
+      context 'when recolor by attribute' do
+        it 'includes flows with null value of recolor by attribute' do
+          filter = Api::V3::Flows::Filter.new(
+            api_v3_context,
+            filter_params.merge(
+              ncont_attribute_id: api_v3_forest_500_recolor_by_attribute.readonly_attribute.id
+            )
+          )
+          filter.call
+          expect(filter.flows).to include(api_v3_diamantino_flow)
         end
       end
     end

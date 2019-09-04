@@ -301,12 +301,16 @@ module Api
             where('flow_quants.value > 0')
           if @ncont_attribute
             ncont_attr_table = @ncont_attribute.flow_values_class.table_name
-            query = query.
-              joins("LEFT JOIN #{ncont_attr_table} ON #{ncont_attr_table}.flow_id = flows.id").
-              where(
-                "#{ncont_attr_table}.#{@ncont_attribute.attribute_id_name}" =>
-                  @ncont_attribute.original_id
-              )
+            ncont_attr_join_clause = ActiveRecord::Base.send(
+              :sanitize_sql_array,
+              [
+                "LEFT JOIN #{ncont_attr_table} ON \
+                #{ncont_attr_table}.flow_id = flows.id \
+                AND #{ncont_attr_table}.#{@ncont_attribute.attribute_id_name} = ?",
+                @ncont_attribute.original_id
+              ]
+            )
+            query = query.joins(ncont_attr_join_clause)
           end
           query
         end
