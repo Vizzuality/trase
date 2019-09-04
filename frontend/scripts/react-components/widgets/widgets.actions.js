@@ -77,7 +77,9 @@ export const getWidgetData = (endpoint, params, raw) => (dispatch, getState) => 
     })
     .catch(error => {
       if (isCancel(error)) {
-        if (NODE_ENV_DEV) console.warn('Cancel', endpoint);
+        if (NODE_ENV_DEV) {
+          console.warn('Cancel', endpoint);
+        }
       } else {
         cancelPolicy.shouldCancel = false;
         dispatch({
