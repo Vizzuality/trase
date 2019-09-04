@@ -282,6 +282,12 @@ paths:
           required: false
           schema:
             type: integer
+        - name: attributes_ids
+          in: query
+          description: List of attributes ids separated by comma
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: OK
@@ -1628,10 +1634,10 @@ components:
     contexts_ids_query_param:
       name: contexts_ids
       in: query
-      description: "Contexts ids"
+      description: "Contexts ids separated by comma"
       required: false
       schema:
-        type: array
+        type: string
     node_id_path_param:
       name: id
       in: path
