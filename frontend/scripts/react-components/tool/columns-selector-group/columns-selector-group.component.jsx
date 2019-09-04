@@ -7,8 +7,8 @@ import cx from 'classnames';
 import 'react-components/tool/columns-selector-group/columns-selector-group.scss';
 
 function ColumnsSelectorGroup(props) {
-  const { sankeySize, columns } = props;
-  const loading = !columns || columns.length === 0;
+  const { sankeySize, columns, flowsLoading } = props;
+  const loading = !columns || columns.length === 0 || flowsLoading;
   const [dots, setDots] = useState(1);
   useLayoutEffect(() => {
     const interval = setInterval(() => setDots(d => (d + 1) % 4), 300);

@@ -94,9 +94,8 @@ function* fetchLinks() {
     yield call(getToolNodesByLink, selectedContext, { fetchAllNodes });
     if (task.isRunning()) {
       yield cancel(task);
-    } else {
-      yield fork(setLoadingSpinner, 350, setToolFlowsLoading(false));
     }
+    yield fork(setLoadingSpinner, 350, setToolFlowsLoading(false));
   }
   yield takeLatest(
     [

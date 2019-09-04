@@ -1,26 +1,59 @@
 import React from 'react';
 
+if (window) {
+  window._TRASE_RAINBOW_SANKEY = false;
+}
+
 const stops = {
-  default: [{ color: '#28343b', opacity: 0.3 }, { color: '#28343b', opacity: 0.2 }],
-  selection: [{ color: '#ea6869' }, { color: '#ffeb8b' }],
-  biome: [{ color: '#43f3f3' }, { color: '#517fee' }, { color: '#72ea28' }, { color: '#ffb314' }],
+  default: [
+    { color: '#28343b', opacity: 0.3 },
+    { color: '#28343b', opacity: 0.2 },
+    { color: '#28343b', opacity: 0.3 }
+  ],
+  selection: [{ color: '#ea6869' }, { color: '#ffeb8b' }, { color: '#ea6869' }],
+  biome: [
+    { color: '#43f3f3' },
+    { color: '#517fee' },
+    { color: '#8c28ff' },
+    { color: '#ff66e5' },
+    { color: '#72ea28' },
+    { color: '#ffb314' },
+    { color: '#72ea28' },
+    { color: '#ff66e5' },
+    { color: '#8c28ff' },
+    { color: '#517fee' },
+    { color: '#43f3f3' }
+  ],
   'red-blue': [
     { color: '#6F0119' },
     { color: '#a50026' },
     { color: '#5488C0' },
-    { color: '#246AB6' }
+    { color: '#246AB6' },
+    { color: '#5488C0' },
+    { color: '#a50026' },
+    { color: '#6F0119' }
   ],
   'yellow-green': [
     { color: '#ffc' },
     { color: '#c2e699' },
     { color: '#31a354' },
-    { color: '#006837' }
+    { color: '#006837' },
+    { color: '#31a354' },
+    { color: '#c2e699' },
+    { color: '#ffc' }
   ],
   'green-red': [
     { color: '#006837' },
     { color: '#1a9850' },
     { color: '#fee08b' },
-    { color: '#6f001a' }
+    { color: '#f46d43' },
+    { color: '#d73027' },
+    { color: '#6f001a' },
+    { color: '#d73027' },
+    { color: '#f46d43' },
+    { color: '#fee08b' },
+    { color: '#1a9850' },
+    { color: '#006837' }
   ]
 };
 
@@ -32,24 +65,30 @@ export const IsAggregate = () => (
 );
 
 export const GradientAnimation = ({ selectedRecolorBy, selectedNodesIds }) => {
-  let selectedColor = selectedNodesIds.length > 0 ? 'selection' : 'default';
-  if (selectedRecolorBy) {
-    selectedColor = selectedRecolorBy.legendColorTheme;
-    if (selectedColor === 'thematic') {
-      if (selectedRecolorBy.name === 'BIOME') {
-        selectedColor = 'biome';
-      } else {
-        selectedColor = 'default';
+  let selectedColor = 'default';
+
+  // easter egg :P
+  if (window._TRASE_RAINBOW_SANKEY === true) {
+    selectedColor = selectedNodesIds.length > 0 ? 'selection' : 'default';
+    if (selectedRecolorBy) {
+      selectedColor = selectedRecolorBy.legendColorTheme;
+      if (selectedColor === 'thematic') {
+        if (selectedRecolorBy.name === 'BIOME') {
+          selectedColor = 'biome';
+        } else {
+          selectedColor = 'default';
+        }
       }
     }
   }
+
   return (
     <linearGradient
       key={selectedColor}
       id="animate-gradient"
       x1="0%"
       y1="0%"
-      x2="120%"
+      x2="100%"
       y2="0"
       spreadMethod="reflect"
     >
@@ -60,8 +99,21 @@ export const GradientAnimation = ({ selectedRecolorBy, selectedNodesIds }) => {
           stopOpacity={stop.opacity || 0.5}
         />
       ))}
-      <animate id="one" attributeName="x1" values="0%;100%" dur="3s" repeatCount="indefinite" />
-      <animate id="two" attributeName="x2" values="100%;200%" dur="3s" repeatCount="indefinite" />
+
+      <animate
+        id="forwards-one"
+        attributeName="x1"
+        values="0%;100%"
+        dur="2s"
+        repeatCount="indefinite"
+      />
+      <animate
+        id="forwards-two"
+        attributeName="x2"
+        values="100%;200%"
+        dur="2s"
+        repeatCount="indefinite"
+      />
     </linearGradient>
   );
 };

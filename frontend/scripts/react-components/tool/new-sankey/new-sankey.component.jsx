@@ -60,7 +60,7 @@ function useMenuPosition(props, columns) {
   return [menuPos, ref];
 }
 
-function useVanillaTooltip() {
+function useVanillaTooltip({ links }) {
   const ref = useRef(null);
   const tooltip = useRef(null);
   const [content, setContent] = useState(null);
@@ -76,8 +76,18 @@ function useVanillaTooltip() {
       } else {
         tooltip.current.hide();
       }
+
+      if (!links) {
+        tooltip.current.hide();
+      }
     }
-  }, [content]);
+
+    return () => {
+      if (tooltip.current) {
+        tooltip.current.hide();
+      }
+    };
+  }, [content, links]);
 
   return [ref, setContent];
 }
@@ -112,7 +122,7 @@ function NewSankey(props) {
   } = props;
   const [hoveredLink, setHoveredLink] = useState(null);
   const menuOptions = useMenuOptions(props);
-  const [tooltipRef, setTooltip] = useVanillaTooltip();
+  const [tooltipRef, setTooltip] = useVanillaTooltip(props);
 
   const [rect, svgRef] = useDomNodeRect(columns);
 
@@ -195,13 +205,11 @@ function NewSankey(props) {
           style={{ height: detailedView ? `${maxHeight}px` : '100%' }}
         >
           <defs>
-            {<Defs.IsAggregate />}
-            {
-              <Defs.GradientAnimation
-                selectedNodesIds={selectedNodesIds}
-                selectedRecolorBy={selectedRecolorBy}
-              />
-            }
+            <Defs.IsAggregate />
+            <Defs.GradientAnimation
+              selectedNodesIds={selectedNodesIds}
+              selectedRecolorBy={selectedRecolorBy}
+            />
           </defs>
           <g className="sankey-container">
             <g className="sankey-links">
@@ -224,17 +232,18 @@ function NewSankey(props) {
               )}
             </g>
             <g className="sankey-columns">
-              {columns?.map(column => (
-                <SankeyColumn
-                  column={column}
-                  selectedNodesIds={selectedNodesIds}
-                  onNodeClicked={onNodeClicked}
-                  highlightedNodeId={highlightedNodeId}
-                  onNodeHighlighted={onNodeHighlighted}
-                  sankeyColumnsWidth={sankeyColumnsWidth}
-                />
-              ))}
-              {(!columns || columns.length === 0) && (
+              {!flowsLoading &&
+                columns?.map(column => (
+                  <SankeyColumn
+                    column={column}
+                    selectedNodesIds={selectedNodesIds}
+                    onNodeClicked={onNodeClicked}
+                    highlightedNodeId={highlightedNodeId}
+                    onNodeHighlighted={onNodeHighlighted}
+                    sankeyColumnsWidth={sankeyColumnsWidth}
+                  />
+                ))}
+              {(!columns || columns.length === 0 || flowsLoading) && (
                 <Defs.ColumnsPlaceholder
                   gapBetweenColumns={gapBetweenColumns}
                   sankeyColumnsWidth={sankeyColumnsWidth}

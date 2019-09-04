@@ -28,6 +28,7 @@ const getToolExpandedNodesIds = state => state.toolLinks.expandedNodesIds;
 const getSankeySize = state => state.app.sankeySize;
 const getDetailedView = state => state.toolLinks.detailedView;
 const getSankeyColumnsWidth = state => state.toolLinks.sankeyColumnsWidth;
+const getToolFlowsLoading = state => state.toolLinks.flowsLoading;
 
 export const getVisibleNodesByColumn = createSelector(
   [getVisibleNodes, getToolColumns, getToolNodeHeights],
@@ -41,9 +42,9 @@ export const getVisibleNodesByColumn = createSelector(
 );
 
 const getUnmergedLinks = createSelector(
-  [getToolLinks, getToolNodes, getToolColumns, getSelectedRecolorBy],
-  (links, nodes, columns, selectedRecolorBy) => {
-    if (!links || !nodes || !columns) {
+  [getToolLinks, getToolNodes, getToolColumns, getSelectedRecolorBy, getToolFlowsLoading],
+  (links, nodes, columns, selectedRecolorBy, flowsLoading) => {
+    if (!links || !nodes || !columns || flowsLoading) {
       return null;
     }
     return splitLinksByColumn(links, nodes, columns, selectedRecolorBy);
