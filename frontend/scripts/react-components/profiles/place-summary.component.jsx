@@ -1,7 +1,6 @@
 /* eslint-disable camelcase,react/no-danger */
 import React from 'react';
 import PropTypes from 'prop-types';
-import isEmpty from 'lodash/isEmpty';
 import capitalize from 'lodash/capitalize';
 import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import TitleGroup from 'react-components/profiles/title-group';
@@ -67,7 +66,7 @@ function PlaceSummary(props) {
   );
 
   const renderStats = () =>
-    !isEmpty(headerAttributes) &&
+    Object.keys(headerAttributes).length > 0 &&
     Object.keys(headerAttributes).some(k => headerAttributes[k].value !== null) && (
       <div className="small-12">
         {Object.keys(headerAttributes).map(indicatorKey => {

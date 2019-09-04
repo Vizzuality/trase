@@ -7,7 +7,6 @@ import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.compo
 import TitleGroup from 'react-components/profiles/title-group';
 import Text from 'react-components/shared/text';
 import Icon from 'react-components/shared/icon';
-import isEmpty from 'lodash/isEmpty';
 import formatValue from 'utils/formatValue';
 import 'react-components/profiles/summary.scss';
 
@@ -138,14 +137,12 @@ class ActorSummary extends React.PureComponent {
           <div className="small-12 columns">
             <TitleGroup titles={titles} on={onYearChange} />
           </div>
-          {!isEmpty(
-            headerAttributes &&
-              Object.keys(headerAttributes).some(k => headerAttributes[k].value !== null)
-          ) && (
-            <div className="small-12 columns">
-              {Object.keys(headerAttributes).map(indicatorKey => renderIndicator(indicatorKey))}
-            </div>
-          )}
+          {Object.keys(headerAttributes).length > 0 &&
+            Object.keys(headerAttributes).some(k => headerAttributes[k].value !== null) && (
+              <div className="small-12 columns">
+                {Object.keys(headerAttributes).map(indicatorKey => renderIndicator(indicatorKey))}
+              </div>
+            )}
           <div
             className={cx('small-12', 'columns', { 'large-12': printMode, 'large-10': !printMode })}
           >
