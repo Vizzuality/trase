@@ -41,9 +41,12 @@ function SankeyColumn(props) {
                 node.renderedHeight / 2 -
                 (node.label.length - 1) * 7})`}
             >
-              <tspan className="sankey-node-label" x={sankeyColumnsWidth / 2} dy={12}>
-                {node.label.length > 0 && node.label[0].toUpperCase()}
-              </tspan>
+              {Array.isArray(node.label) &&
+                node.label.map(label => (
+                  <tspan className="sankey-node-label" x={sankeyColumnsWidth / 2} dy={12}>
+                    {label.toUpperCase()}
+                  </tspan>
+                ))}
             </text>
           </g>
         ))}
