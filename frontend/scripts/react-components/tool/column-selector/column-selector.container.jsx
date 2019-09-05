@@ -4,7 +4,7 @@ import { selectColumn } from 'react-components/tool-links/tool-links.actions';
 import ColumnSelector from 'react-components/tool/column-selector/column-selector.component';
 import PropTypes from 'prop-types';
 import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
-import { getGapBetweenColumns } from 'react-components/tool/new-sankey/sankey.selectors';
+import { getGapBetweenColumns } from 'react-components/tool/sankey/sankey.selectors';
 
 const mapStateToProps = state => ({
   sankeyColumnsWidth: state.toolLinks.sankeyColumnsWidth,

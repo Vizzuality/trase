@@ -6,7 +6,7 @@ import Tooltip from 'components/shared/info-tooltip.component';
 import formatValue from 'utils/formatValue';
 import capitalize from 'lodash/capitalize';
 import startCase from 'lodash/startCase';
-import SankeyColumn from 'react-components/tool/new-sankey/sankey-column.component';
+import SankeyColumn from 'react-components/tool/sankey/sankey-column.component';
 import NodeMenu from './node-menu.component';
 import SankeyLink from './sankey-link.component';
 import * as Defs from './sankey-defs.component';
@@ -104,7 +104,7 @@ function useDomNodeRect(input) {
   return [rect, ref];
 }
 
-function NewSankey(props) {
+function Sankey(props) {
   const {
     columns,
     links,
@@ -257,7 +257,7 @@ function NewSankey(props) {
   );
 }
 
-NewSankey.propTypes = {
+Sankey.propTypes = {
   links: PropTypes.array,
   columns: PropTypes.array,
   maxHeight: PropTypes.number,
@@ -278,4 +278,4 @@ NewSankey.propTypes = {
   selectedNodesIds: PropTypes.array.isRequired
 };
 
-export default NewSankey;
+export default Sankey;

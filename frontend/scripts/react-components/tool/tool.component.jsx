@@ -8,7 +8,7 @@ import TitlebarContainer from 'react-components/tool/titlebar/titlebar.container
 import NodesTitlesContainer from 'react-components/tool/nodes-titles/nodes-titles.container';
 import MapContextContainer from 'react-components/tool/map-context/map-context.container';
 import MapBasemaps from 'react-components/tool/map-basemaps/map-basemaps.container';
-import NewSankey from 'react-components/tool/new-sankey';
+import Sankey from 'react-components/tool/sankey';
 import MapLegend from 'react-components/tool/map-legend/map-legend.container';
 import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.react';
 import EventManager from 'utils/eventManager';
@@ -132,7 +132,7 @@ const Tool = props => {
             {renderMapSidebar()}
             {renderMap()}
             <ColumnsSelectorGroupContainer />
-            <NewSankey />
+            <Sankey />
             <TitlebarContainer />
           </div>
         </div>

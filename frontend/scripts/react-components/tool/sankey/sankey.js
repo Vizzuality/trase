@@ -9,9 +9,9 @@ import {
   getSankeyColumns,
   getSankeyLinks,
   getGapBetweenColumns
-} from 'react-components/tool/new-sankey/sankey.selectors';
+} from 'react-components/tool/sankey/sankey.selectors';
 import { connect } from 'react-redux';
-import NewSankey from 'react-components/tool/new-sankey/new-sankey.component';
+import Sankey from 'react-components/tool/sankey/sankey.component';
 import {
   clearSankey,
   collapseSankey,
@@ -48,4 +48,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(NewSankey);
+)(Sankey);

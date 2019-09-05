@@ -11,7 +11,7 @@ import {
   getSelectedNodesAtColumns
 } from 'react-components/tool-links/tool-links.selectors';
 import uniqBy from 'lodash/uniqBy';
-import { sortFlows } from 'react-components/tool/new-sankey/sort-flows';
+import { sortFlows } from 'react-components/tool/sankey/sort-flows';
 import splitVisibleNodesByColumn from 'reducers/helpers/splitVisibleNodesByColumn';
 import sortVisibleNodes from 'reducers/helpers/sortVisibleNodes';
 import mergeLinks from 'reducers/helpers/mergeLinks';

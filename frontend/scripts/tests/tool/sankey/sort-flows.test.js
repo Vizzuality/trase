@@ -1,7 +1,7 @@
 import {
   sortFlowsBySelectedRecolorBy,
   sortFlowsBySelectionRecolorGroup
-} from 'react-components/tool/new-sankey/sort-flows';
+} from 'react-components/tool/sankey/sort-flows';
 import sortBy from 'lodash/sortBy';
 
 describe('Sort flows when a recolor by is selected', () => {
