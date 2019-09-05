@@ -52,7 +52,7 @@ module Api
         private
 
         NAMED_ATTRIBUTES = %w(
-          commodity_production commodity_yield area
+          commodity_production commodity_yield area pasture_area
         ).freeze
 
         def initialize_chart_configuration
@@ -123,6 +123,11 @@ module Api
           @values.get(attribute.simple_type, attribute.id)
         end
 
+        def initialize_pasture_area
+          @pasture_area = @pasture_area_attribute &&
+            attribute_value(@pasture_area_attribute)
+        end
+
         def initialize_area
           @area = @area_attribute && attribute_value(@area_attribute)
         end
@@ -161,6 +166,8 @@ module Api
         def initialize_commodity_attributes
           commodity_attributes = {header_attributes: {}}
 
+          initialize_pasture_area
+          commodity_attributes[:pasture_area] = @pasture_area if @pasture_area
           initialize_area
           if @area
             commodity_attributes[:area] = @area
