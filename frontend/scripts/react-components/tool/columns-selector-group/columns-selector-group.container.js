@@ -3,8 +3,7 @@ import ColumnsSelectorGroup from 'react-components/tool/columns-selector-group/c
 
 const mapStateToProps = state => ({
   sankeySize: state.app.sankeySize,
-  columns: state.toolLinks.data.columns,
-  flowsLoading: state.toolLinks.flowsLoading
+  columns: state.toolLinks.data.columns
 });
 
 export default connect(mapStateToProps)(ColumnsSelectorGroup);

@@ -1,14 +1,14 @@
 import React from 'react';
 
-if (window) {
+if (typeof window !== 'undefined') {
   window._TRASE_RAINBOW_SANKEY = false;
 }
 
 const stops = {
   default: [
-    { color: '#28343b', opacity: 0.3 },
     { color: '#28343b', opacity: 0.2 },
-    { color: '#28343b', opacity: 0.3 }
+    { color: '#28343b', opacity: 0.1 },
+    { color: '#28343b', opacity: 0.2 }
   ],
   selection: [{ color: '#ea6869' }, { color: '#ffeb8b' }, { color: '#ea6869' }],
   biome: [
@@ -94,6 +94,7 @@ export const GradientAnimation = ({ selectedRecolorBy, selectedNodesIds }) => {
     >
       {stops[selectedColor].map((stop, i, list) => (
         <stop
+          key={i}
           offset={i / (list.length - 1)}
           stopColor={stop.color}
           stopOpacity={stop.opacity || 0.5}

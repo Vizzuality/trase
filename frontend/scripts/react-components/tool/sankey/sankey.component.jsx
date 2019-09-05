@@ -6,12 +6,13 @@ import Tooltip from 'components/shared/info-tooltip.component';
 import formatValue from 'utils/formatValue';
 import capitalize from 'lodash/capitalize';
 import startCase from 'lodash/startCase';
-import SankeyColumn from 'react-components/tool/sankey/sankey-column.component';
+import Heading from 'react-components/shared/heading';
+import SankeyColumn from './sankey-column.component';
 import NodeMenu from './node-menu.component';
 import SankeyLink from './sankey-link.component';
 import * as Defs from './sankey-defs.component';
 
-import 'styles/components/tool/sankey.scss';
+import 'react-components/tool/sankey/sankey.scss';
 
 function useMenuOptions(props) {
   const { hasExpandedNodesIds, isReExpand, onExpandClick, onCollapseClick, onClearClick } = props;
@@ -191,12 +192,24 @@ function Sankey(props) {
     setTooltip(null);
   };
 
+  const loading = !columns || columns.length === 0 || !links || flowsLoading;
+
   return (
     <div className="c-sankey is-absolute">
       <div
         ref={scrollContainerRef}
         className={cx('sankey-scroll-container', { '-detailed': detailedView })}
       >
+        {loading && (
+          <div
+            className="sankey-loading"
+            style={{ left: gapBetweenColumns + 2 * sankeyColumnsWidth + gapBetweenColumns / 2 }}
+          >
+            <Heading variant="mono" size="md" weight="bold">
+              Loading
+            </Heading>
+          </div>
+        )}
         <NodeMenu menuPos={menuPos} isVisible={selectedNodesIds.length > 0} options={menuOptions} />
         <div ref={tooltipRef} className="c-info-tooltip" />
         <svg
@@ -213,8 +226,8 @@ function Sankey(props) {
           </defs>
           <g className="sankey-container">
             <g className="sankey-links">
-              {!flowsLoading &&
-                links?.map(link => (
+              {!loading &&
+                links.map(link => (
                   // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
                   <SankeyLink
                     key={link.id}
@@ -224,7 +237,7 @@ function Sankey(props) {
                     className={cx(getLinkColor(link), { '-hover': hoveredLink === link.id })}
                   />
                 ))}
-              {(!links || flowsLoading) && (
+              {loading && (
                 <Defs.LinksPlaceHolder
                   gapBetweenColumns={gapBetweenColumns}
                   sankeyColumnsWidth={sankeyColumnsWidth}
@@ -232,8 +245,8 @@ function Sankey(props) {
               )}
             </g>
             <g className="sankey-columns">
-              {!flowsLoading &&
-                columns?.map(column => (
+              {!loading &&
+                columns.map(column => (
                   <SankeyColumn
                     column={column}
                     selectedNodesIds={selectedNodesIds}
@@ -243,7 +256,7 @@ function Sankey(props) {
                     sankeyColumnsWidth={sankeyColumnsWidth}
                   />
                 ))}
-              {(!columns || columns.length === 0 || flowsLoading) && (
+              {loading && (
                 <Defs.ColumnsPlaceholder
                   gapBetweenColumns={gapBetweenColumns}
                   sankeyColumnsWidth={sankeyColumnsWidth}
