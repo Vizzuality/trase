@@ -66,6 +66,7 @@ function PlaceSummary(props) {
   );
 
   const renderStats = () =>
+    headerAttributes &&
     Object.keys(headerAttributes).length > 0 &&
     Object.keys(headerAttributes).some(k => headerAttributes[k].value !== null) && (
       <div className="small-12">

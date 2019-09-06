@@ -137,7 +137,8 @@ class ActorSummary extends React.PureComponent {
           <div className="small-12 columns">
             <TitleGroup titles={titles} on={onYearChange} />
           </div>
-          {Object.keys(headerAttributes).length > 0 &&
+          {headerAttributes &&
+            Object.keys(headerAttributes).length > 0 &&
             Object.keys(headerAttributes).some(k => headerAttributes[k].value !== null) && (
               <div className="small-12 columns">
                 {Object.keys(headerAttributes).map(indicatorKey => renderIndicator(indicatorKey))}
