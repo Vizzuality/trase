@@ -223,10 +223,6 @@ describe(TOOL_LINKS__SELECT_COLUMN, () => {
     const newState = reducer(initialState, action);
     expect(newState).toEqual({
       ...initialState,
-      data: {
-        ...initialState.data,
-        links: []
-      },
       selectedColumnsIds: [undefined, undefined, 3]
     });
   });
@@ -240,10 +236,6 @@ describe(TOOL_LINKS__SELECT_COLUMN, () => {
     const newState = reducer(state, action);
     expect(newState).toEqual({
       ...state,
-      data: {
-        ...state.data,
-        links: []
-      },
       selectedColumnsIds: [4, undefined, 3]
     });
   });
@@ -271,10 +263,6 @@ describe(TOOL_LINKS__SELECT_COLUMN, () => {
     const newState = reducer(state, action);
     expect(newState).toEqual({
       ...state,
-      data: {
-        ...state.data,
-        links: []
-      },
       selectedNodesIds: [4567],
       expandedNodesIds: [4567],
       selectedColumnsIds: [undefined, undefined, 5]
@@ -304,10 +292,6 @@ describe(TOOL_LINKS__SELECT_COLUMN, () => {
     const newState = reducer(state, action);
     expect(newState).toEqual({
       ...state,
-      data: {
-        ...state.data,
-        links: []
-      },
       selectedNodesIds: [1234],
       expandedNodesIds: [1234],
       selectedColumnsIds: [undefined, undefined, 5]
