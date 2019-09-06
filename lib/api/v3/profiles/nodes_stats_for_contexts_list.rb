@@ -10,8 +10,8 @@ module Api
 
         private
 
-        def query_all_years(attributes_ids, options = {})
-          super(attributes_ids, options).
+        def query_all_years(quants_ids, options = {})
+          super(quants_ids, options).
             where(context_id: @contexts_ids)
         end
       end

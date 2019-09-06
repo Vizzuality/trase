@@ -14,7 +14,7 @@ RSpec.describe 'Nodes stats', type: :request do
         get '/api/v3/nodes_stats', params: {
           start_year: 2003,
           end_year: 2019,
-          attributes_ids: api_v3_volume.id.to_s,
+          attributes_ids: api_v3_volume.readonly_attribute.id.to_s,
           column_id: api_v3_country_node_type.id,
           contexts_ids: api_v3_context.id.to_s
         }
@@ -37,7 +37,7 @@ RSpec.describe 'Nodes stats', type: :request do
         get '/api/v3/nodes_stats', params: {
           start_year: 2003,
           end_year: 2019,
-          attributes_ids: api_v3_volume.id,
+          attributes_ids: api_v3_volume.readonly_attribute.id,
           column_id: api_v3_country_node_type.id,
           commodity_id: api_v3_soy.id
         }

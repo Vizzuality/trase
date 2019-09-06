@@ -48,7 +48,7 @@ module Api
           end
 
           @nodes_stats = nodes_stats_list.
-            sorted_list(@attributes_ids, limit: @limit)
+            sorted_list(@attributes.map(&:original_id), limit: @limit)
         end
 
         def initialize_errors
@@ -60,12 +60,14 @@ module Api
             raise 'Either commodity or contexts but not both'
           end
 
-          @attributes_ids.each do |attribute_id|
-            next if Api::V3::Readonly::Attribute.where(
-              original_id: attribute_id, original_type: 'Quant'
-            ).any?
+          @attributes = @attributes_ids.map do |attribute_id|
+            attribute = Api::V3::Readonly::Attribute.find_by(
+              id: attribute_id, original_type: 'Quant'
+            )
 
-            raise "Attribute #{attribute_id} not found"
+            raise "Attribute #{attribute_id} not found" unless attribute
+
+            attribute
           end
         end
 
@@ -76,20 +78,17 @@ module Api
           filter_values.map do |filter|
             {
               filter_name => filter,
-              attributes: @attributes_ids.map do |attribute_id|
-                attribute_information(attribute_id)
+              attributes: @attributes.map do |attribute|
+                attribute_information(attribute)
               end
             }
           end
         end
 
-        def attribute_information(attribute_id)
-          attribute = Api::V3::Readonly::Attribute.find_by(
-            original_id: attribute_id, original_type: 'Quant'
-          )
-          targets = @nodes_stats.where(quant_id: attribute_id)
+        def attribute_information(attribute)
+          targets = @nodes_stats.where(quant_id: attribute.original_id)
           {
-            id: attribute_id,
+            id: attribute.id,
             indicator: attribute.display_name,
             unit: attribute.unit,
             targets: nodes_stats_information(targets)

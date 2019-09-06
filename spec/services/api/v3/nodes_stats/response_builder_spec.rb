@@ -16,7 +16,7 @@ RSpec.describe Api::V3::NodesStats::ResponseBuilder do
           nil,
           [api_v3_context.id],
           node_type_id: api_v3_country_node_type.id,
-          attributes_ids: [api_v3_volume.id],
+          attributes_ids: [api_v3_volume.readonly_attribute.id],
           year_start: 2015,
           year_end: 2015
         )
@@ -36,7 +36,7 @@ RSpec.describe Api::V3::NodesStats::ResponseBuilder do
             nil,
             [api_v3_context.id],
             node_type_id: api_v3_country_node_type.id,
-            attributes_ids: [api_v3_volume.id],
+            attributes_ids: [api_v3_volume.readonly_attribute.id],
             year_start: 2016,
             year_end: 2015
           )
@@ -53,7 +53,7 @@ RSpec.describe Api::V3::NodesStats::ResponseBuilder do
             api_v3_soy.id,
             [api_v3_context.id],
             node_type_id: api_v3_country_node_type.id,
-            attributes_ids: [api_v3_volume.id],
+            attributes_ids: [api_v3_volume.readonly_attribute.id],
             year_start: 2015,
             year_end: 2015
           )
@@ -70,12 +70,15 @@ RSpec.describe Api::V3::NodesStats::ResponseBuilder do
             nil,
             [api_v3_context.id],
             node_type_id: api_v3_country_node_type.id,
-            attributes_ids: [api_v3_volume.id, api_v3_biome.id],
+            attributes_ids: [
+              api_v3_volume.readonly_attribute.id,
+              api_v3_biome.readonly_attribute.id
+            ],
             year_start: 2015,
             year_end: 2015
           )
         }.to raise_error(
-          "Attribute #{api_v3_biome.id} not found"
+          "Attribute #{api_v3_biome.readonly_attribute.id} not found"
         )
       end
     end
