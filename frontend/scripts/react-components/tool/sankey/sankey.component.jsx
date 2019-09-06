@@ -166,11 +166,9 @@ function Sankey(props) {
       let recolorValue = `${link.recolorBy}/${selectedRecolorBy.maxValue}`;
       if (link.recolorBy === null) {
         recolorValue = 'Unknown';
-      }
-      if (selectedRecolorBy.type !== 'ind') {
+      } else if (selectedRecolorBy.type !== 'ind') {
         recolorValue = capitalize(startCase(link.recolorBy));
-      }
-      if (selectedRecolorBy.legendType === 'percentual') {
+      } else if (selectedRecolorBy.legendType === 'percentual') {
         // percentual values are always a range, not the raw value.
         // The value coming from the model is already floored
         // to the start of the bucket (splitLinksByColumn)
