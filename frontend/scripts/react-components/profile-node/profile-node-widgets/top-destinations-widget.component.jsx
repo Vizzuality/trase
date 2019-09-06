@@ -101,7 +101,7 @@ class TopDestinationsWidget extends React.PureComponent {
               <div className="row align-justify">
                 <div className="column small-12 medium-7">
                   <TopDestinationsChart
-                    height={250}
+                    height={300}
                     type={type}
                     tabs={tabs}
                     onChangeTab={this.updateTab}
