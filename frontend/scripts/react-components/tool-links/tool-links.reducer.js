@@ -180,7 +180,6 @@ const toolLinksReducer = {
   [TOOL_LINKS__SET_SELECTED_RECOLOR_BY](state, action) {
     return immer(state, draft => {
       draft.selectedRecolorBy = action.payload.attributeId;
-      draft.flowsLoading = true;
     });
   },
   [TOOL_LINKS__SET_SELECTED_RESIZE_BY](state, action) {
