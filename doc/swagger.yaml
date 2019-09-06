@@ -227,7 +227,8 @@ paths:
         - flow
       summary: Top nodes of given node type per context
       parameters:
-        - $ref: "#/components/parameters/context_id_path_param"
+        - $ref: "#/components/parameters/commodity_id_query_param"
+        - $ref: "#/components/parameters/contexts_ids_query_param"
         - name: column_id
           in: query
           description: Node type id
@@ -242,6 +243,51 @@ paths:
           required: false
           schema:
             type: integer
+        - name: attribute_ids
+          in: query
+          description: Attribute ids
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/NodesStats"
+
+  "/nodes_stats":
+    get:
+      tags:
+        - flow
+      summary: Top nodes of given node type per contexts or commodity
+      parameters:
+        - $ref: "#/components/parameters/contexts_ids_query_param"
+        - $ref: "#/components/parameters/commodity_id_query_param"
+        - name: column_id
+          in: query
+          description: Node type id
+          required: true
+          schema:
+            type: integer
+        - $ref: "#/components/parameters/start_year_opt_query_param"
+        - $ref: "#/components/parameters/end_year_opt_query_param"
+        - name: n_nodes
+          in: query
+          description: Number of top nodes (defaults to 10)
+          required: false
+          schema:
+            type: integer
+        - name: attributes_ids
+          in: query
+          description: List of attributes ids separated by comma
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: OK
@@ -1571,6 +1617,13 @@ servers:
   - url: https://trase.earth/api/v3
 components:
   parameters:
+    commodity_id_query_param:
+      name: commodity_id
+      in: query
+      description: "Commodity id"
+      required: false
+      schema:
+        type: integer
     context_id_path_param:
       name: context_id
       in: path
@@ -1578,6 +1631,13 @@ components:
       required: true
       schema:
         type: integer
+    contexts_ids_query_param:
+      name: contexts_ids
+      in: query
+      description: "Contexts ids separated by comma"
+      required: false
+      schema:
+        type: string
     node_id_path_param:
       name: id
       in: path
@@ -2143,6 +2203,43 @@ components:
                     type: number
                   value:
                     type: number
+
+    NodesStats:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              context_id:
+                type: integer
+              commodity_id:
+                type: integer
+              attributes:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    indicator:
+                      type: string
+                    unit:
+                      type: string
+                    targets:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          value:
+                            type: number
+                          height:
+                            type: number
 
     Node:
       type: object

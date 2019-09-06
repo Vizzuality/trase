@@ -5,6 +5,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -3213,7 +3214,7 @@ CREATE MATERIALIZED VIEW public.dashboards_companies_mv AS
              JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
              JOIN active_cnt cnt ON (((cnt.context_id = flow_nodes.context_id) AND ((cnt.column_position + 1) = flow_nodes."position"))))
              JOIN public.contexts ON (((contexts.id = flow_nodes.context_id) AND (contexts.id = cnt.context_id))))
-          WHERE ((cnt.role)::text = ANY ((ARRAY['exporter'::character varying, 'importer'::character varying])::text[]))
+          WHERE ((cnt.role)::text = ANY (ARRAY[('exporter'::character varying)::text, ('importer'::character varying)::text]))
         )
  SELECT ffn.node_id AS id,
     ffn.name,
@@ -5010,6 +5011,46 @@ CREATE MATERIALIZED VIEW public.nodes_mv AS
      LEFT JOIN public.profiles ON ((profiles.context_node_type_id = context_node_types.id)))
      LEFT JOIN public.context_properties ON ((context_node_types.context_id = context_properties.context_id)))
   WHERE ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text))
+  WITH NO DATA;
+
+
+--
+-- Name: nodes_stats_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.nodes_stats_mv AS
+ WITH top_destinations_totals AS (
+         SELECT flows_1.context_id,
+            flows_1.year,
+            flow_quants_1.quant_id,
+            context_node_types_1.node_type_id,
+            sum(flow_quants_1.value) AS value
+           FROM ((((public.flows flows_1
+             JOIN public.context_node_types context_node_types_1 ON ((context_node_types_1.context_id = flows_1.context_id)))
+             JOIN public.flow_quants flow_quants_1 ON ((flows_1.id = flow_quants_1.flow_id)))
+             JOIN public.nodes nodes_1 ON ((nodes_1.id = flows_1.path[(context_node_types_1.column_position + 1)])))
+             JOIN public.node_properties node_properties_1 ON ((nodes_1.id = node_properties_1.node_id)))
+          WHERE ((NOT nodes_1.is_unknown) AND (NOT node_properties_1.is_domestic_consumption))
+          GROUP BY flows_1.context_id, flows_1.year, flow_quants_1.quant_id, context_node_types_1.node_type_id
+        )
+ SELECT flows.context_id,
+    flows.year,
+    flow_quants.quant_id,
+    context_node_types.node_type_id,
+    flows.path[(context_node_types.column_position + 1)] AS node_id,
+    nodes.name,
+    nodes.geo_id,
+    sum(flow_quants.value) AS value,
+    (sum(flow_quants.value) / NULLIF(( SELECT top_destinations_totals.value
+           FROM top_destinations_totals
+          WHERE ((top_destinations_totals.context_id = flows.context_id) AND (top_destinations_totals.year = flows.year) AND (top_destinations_totals.quant_id = flow_quants.quant_id) AND (top_destinations_totals.node_type_id = context_node_types.node_type_id))), (0)::double precision)) AS height
+   FROM ((((public.flows
+     JOIN public.context_node_types ON ((context_node_types.context_id = flows.context_id)))
+     JOIN public.flow_quants ON ((flows.id = flow_quants.flow_id)))
+     JOIN public.nodes ON ((nodes.id = flows.path[(context_node_types.column_position + 1)])))
+     JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
+  WHERE ((NOT nodes.is_unknown) AND (NOT node_properties.is_domestic_consumption))
+  GROUP BY flows.context_id, flows.year, flow_quants.quant_id, context_node_types.node_type_id, flows.path[(context_node_types.column_position + 1)], nodes.name, nodes.geo_id
   WITH NO DATA;
 
 
@@ -8275,6 +8316,13 @@ CREATE INDEX nodes_node_type_id_idx ON public.nodes USING btree (node_type_id);
 
 
 --
+-- Name: nodes_stats_mv_context_id_quant_id_node_id_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX nodes_stats_mv_context_id_quant_id_node_id_node_type_id_idx ON public.nodes_stats_mv USING btree (context_id, quant_id, node_id, node_type_id);
+
+
+--
 -- Name: qual_commodity_properties_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -9214,6 +9262,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190722152438'),
 ('20190801121907'),
 ('20190807095141'),
-('20190814161133');
+('20190814161133'),
+('20190823135415');
 
 
