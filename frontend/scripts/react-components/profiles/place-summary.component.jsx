@@ -1,7 +1,6 @@
 /* eslint-disable camelcase,react/no-danger */
 import React from 'react';
 import PropTypes from 'prop-types';
-import get from 'lodash/get';
 import capitalize from 'lodash/capitalize';
 import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import TitleGroup from 'react-components/profiles/title-group';
@@ -13,7 +12,6 @@ import formatValue from 'utils/formatValue';
 function PlaceSummary(props) {
   const {
     year,
-    tooltips,
     onYearChange,
     context,
     openModal,
@@ -21,13 +19,11 @@ function PlaceSummary(props) {
       countryName,
       jurisdiction1GeoId,
       summary,
-      area,
-      commodityProduction,
-      commodityArea,
       jurisdictionName,
       jurisdictionGeoId,
       jurisdiction1: stateName,
-      jurisdiction2: biomeName
+      jurisdiction2: biomeName,
+      headerAttributes
     } = {},
     profileMetadata: { mainTopojsonPath, mainTopojsonRoot, availableYears } = {}
   } = props;
@@ -49,9 +45,6 @@ function PlaceSummary(props) {
     { name: capitalize(biomeName), label: 'Biome' },
     { name: capitalize(stateName), label: 'State' }
   ];
-  const commodityAreaValue = formatValue(commodityArea, 'area');
-  const areaValue = formatValue(area, 'area');
-  const commodityProductionValue = formatValue(commodityProduction, 'tons');
 
   const renderMunicipalityMap = () => (
     <div className="c-overall-info page-break-inside-avoid">
@@ -73,55 +66,29 @@ function PlaceSummary(props) {
   );
 
   const renderStats = () =>
-    (areaValue !== '-' || commodityAreaValue !== '-' || commodityProductionValue !== '-') && (
+    headerAttributes &&
+    Object.keys(headerAttributes).length > 0 &&
+    Object.keys(headerAttributes).some(k => headerAttributes[k].value !== null) && (
       <div className="small-12">
-        {areaValue !== '-' && (
-          <div className="stat-item">
-            <Text variant="mono" color="grey-faded" transform="uppercase" className="legend">
-              Area
-            </Text>
-            <Text as="span" variant="mono" size="lg" weight="bold">
-              {areaValue}
-            </Text>
-            <Text as="span" variant="mono" size="lg" weight="bold">
-              {' '}
-              km<sup>2</sup>
-            </Text>
-          </div>
-        )}
-        {commodityAreaValue !== '-' && (
-          <div className="stat-item">
-            <Text variant="mono" color="grey-faded" transform="uppercase" className="legend">
-              {commodityName} land
-              <HelpTooltip text={get(tooltips, 'profileNode.soyLand')} position="bottom" />
-            </Text>
-            <Text as="span" variant="mono" size="lg" weight="bold">
-              {commodityAreaValue}
-            </Text>
-            <Text as="span" variant="mono" size="lg" weight="bold">
-              {' '}
-              ha
-            </Text>
-          </div>
-        )}
-        {commodityProductionValue !== '-' && (
-          <div className="stat-item">
-            <Text variant="mono" color="grey-faded" transform="uppercase" className="legend">
-              Soy production
-              <HelpTooltip
-                text={get(tooltips, 'profileNode.commodityProduction')}
-                position="bottom"
-              />
-            </Text>
-            <Text as="span" variant="mono" size="lg" weight="bold">
-              {commodityProductionValue}
-            </Text>
-            <Text as="span" variant="mono" size="lg" weight="bold">
-              {' '}
-              t
-            </Text>
-          </div>
-        )}
+        {Object.keys(headerAttributes).map(indicatorKey => {
+          const { name, value, unit, tooltip } = headerAttributes[indicatorKey];
+          if (!value) return null;
+          return (
+            <div className="stat-item">
+              <Text variant="mono" color="grey-faded" transform="uppercase" className="legend">
+                {name}
+                {tooltip && <HelpTooltip text={tooltip} position="bottom" />}
+              </Text>
+              <Text as="span" variant="mono" size="lg" weight="bold">
+                {formatValue(value, indicatorKey)}
+              </Text>
+              <Text as="span" variant="mono" size="lg" weight="bold">
+                {' '}
+                {unit === 'km2' ? 'km²' : unit}
+              </Text>
+            </div>
+          );
+        })}
       </div>
     );
 
@@ -161,7 +128,6 @@ PlaceSummary.propTypes = {
   year: PropTypes.number,
   data: PropTypes.object,
   context: PropTypes.object,
-  tooltips: PropTypes.object,
   onYearChange: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
   profileMetadata: PropTypes.object.isRequired

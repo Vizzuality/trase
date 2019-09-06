@@ -26,6 +26,8 @@ export const NUM_DECIMALS = {
   'smallholder dominance': 3,
   'reported cases of forced labour (2014)': 0,
   'land conflicts (2014)': 0,
+  commodity_area: 0,
+  commodity_production: 0,
   // generic
   area: 0,
   percentage: 1,
