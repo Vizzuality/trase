@@ -36,7 +36,7 @@ class TopDestinationsMap extends React.PureComponent {
     const polygon = lines.find(c => geography.properties[searchKey] === c.geo_id);
     let value = 'n-a';
     if (polygon) value = typeof polygon.value9 !== 'undefined' ? polygon.value9 : 'n-a';
-    return `-outline ch-${value}`;
+    return `ch-${value}`;
   };
 
   getPolygonTestId = (geography, testId) => {
