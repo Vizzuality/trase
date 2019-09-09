@@ -43,7 +43,7 @@ function Dropdown(props) {
     initialValue,
     itemToString
   } = props;
-  const unstyledVariants = ['column'];
+
   return (
     <Downshift
       initialSelectedItem={initialValue}
@@ -94,7 +94,7 @@ function Dropdown(props) {
               {p => (
                 <DropdownContent
                   innerRef={p.ref}
-                  style={unstyledVariants.includes(variant) ? undefined : p.style}
+                  style={p.style}
                   placement={p.placement}
                   selectedItem={selectedItem}
                   highlightedIndex={highlightedIndex}

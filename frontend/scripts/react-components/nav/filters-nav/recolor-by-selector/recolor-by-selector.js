@@ -1,5 +1,8 @@
-import { connect } from 'react-redux';
-import { selectRecolorBy } from 'react-components/tool-links/tool-links.actions';
+import { connect, batch } from 'react-redux';
+import {
+  selectRecolorBy,
+  setToolFlowsLoading
+} from 'react-components/tool-links/tool-links.actions';
 import { getToolRecolorGroups } from 'react-components/tool-links/tool-links.selectors';
 import RecolorBySelector from './recolor-by.component';
 import { getSelectedRecolorByValue, getRecolorByOptions } from './recolor-by-selector.selectors';
@@ -11,9 +14,14 @@ const mapStateToProps = state => ({
   tooltip: state.app.tooltips?.sankey.nav.colorBy.main
 });
 
-const mapDispatchToProps = {
-  onChange: selectRecolorBy
-};
+const mapDispatchToProps = dispatch => ({
+  onChange: recolorBy => {
+    batch(() => {
+      dispatch(setToolFlowsLoading(true));
+      dispatch(selectRecolorBy(recolorBy));
+    });
+  }
+});
 
 export default connect(
   mapStateToProps,

@@ -22,6 +22,7 @@ export const makeGetResizeByItems = (getResizeBys, getSelectedYears) =>
           hasSeparator,
           value: filter,
           label: filter.label,
+          id: filter.attributeId,
           tooltip: filter.description
         };
       })

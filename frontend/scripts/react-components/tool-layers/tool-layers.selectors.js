@@ -148,9 +148,12 @@ export const getMapView = createSelector(
       return null;
     }
 
+    const lat = selectedContext.map.latitude.toFixed(2);
+    const lng = selectedContext.map.longitude.toFixed(2);
+
     if (
-      mapView.latitude === selectedContext.map.latitude &&
-      mapView.longitude === selectedContext.map.longitude &&
+      mapView.latitude === lat &&
+      mapView.longitude === lng &&
       mapView.zoom === selectedContext.map.zoom
     ) {
       return null;

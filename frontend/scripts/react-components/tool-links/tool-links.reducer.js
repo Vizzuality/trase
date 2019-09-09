@@ -205,7 +205,6 @@ const toolLinksReducer = {
       if (!draft.selectedColumnsIds.includes(columnId)) {
         draft.selectedColumnsIds[columnIndex] = columnId;
       }
-      draft.data.links = [];
 
       const isInColumn = nodeId => {
         const node = draft.data.nodes[nodeId];

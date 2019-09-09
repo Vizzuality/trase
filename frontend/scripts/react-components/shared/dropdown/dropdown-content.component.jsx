@@ -70,6 +70,7 @@ function DropdownContent(props) {
       <DropdownItem
         item={item}
         index={i}
+        key={item.id || item.value}
         highlightedIndex={highlightedIndex}
         getItemProps={getItemProps}
         readOnly={readOnly}
@@ -101,9 +102,9 @@ DropdownContent.propTypes = {
   innerRef: PropTypes.any.isRequired,
   style: PropTypes.object.isRequired,
   children: PropTypes.any,
-  placement: PropTypes.string.isRequired,
+  placement: PropTypes.string,
   toggleMenu: PropTypes.func.isRequired,
-  selectedItem: PropTypes.object.isRequired,
+  selectedItem: PropTypes.object,
   getItemProps: PropTypes.func.isRequired,
   getMenuProps: PropTypes.func.isRequired,
   options: PropTypes.array,

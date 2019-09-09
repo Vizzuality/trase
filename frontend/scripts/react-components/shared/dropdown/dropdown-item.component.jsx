@@ -29,7 +29,6 @@ function DropdownItem(props) {
         {...getItemProps({
           item,
           index,
-          key: item.value,
           disabled: readOnly || item.isDisabled,
           className: cx('dropdown-menu-item', itemCustomClassName, {
             '-with-icon': item.icon,

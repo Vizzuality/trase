@@ -48,26 +48,24 @@
     }
 
     &.-highlighted {
-
       .sankey-node-rect {
         fill: $manilla;
       }
     }
   }
 
-
   .sankey-links .sankey-link {
-    opacity: .1;
+    opacity: 0.1;
     fill: none;
     stroke: $charcoal-grey;
 
     &.-hover {
-      opacity: .7;
+      opacity: 0.7;
     }
 
     @for $i from 1 through length($recolorby-colors) {
       &.#{nth($recolorby-colors-names, $i)} {
-        opacity: .5;
+        opacity: 0.5;
         stroke: #{nth($recolorby-colors, $i)};
       }
 
@@ -78,7 +76,7 @@
 
     @for $i from 1 through length($recolorgroup-colors) {
       &.#{nth($recolorgroup-colors-names, $i)} {
-        opacity: .5;
+        opacity: 0.5;
         stroke: #{nth($recolorgroup-colors, $i)};
       }
 
@@ -88,65 +86,16 @@
     }
   }
 
-  .expand-button {
-    display: none;
+  .sankey-column-placeholder {
+    stroke: $pinkish-grey-two;
+    stroke-width: 1px;
+    fill: transparent;
+  }
+
+  .sankey-loading {
     position: absolute;
-    width: 36px;
-    height: 36px;
-    transition: top .45s $ease-in-out-sine;
-    border-radius: 50%;
-    background-color: $charcoal-grey;
-    color: $white;
-    box-shadow: $box-shadow-big;
-    cursor: pointer;
-    z-index: $z-base;
-
-    &.-visible {
-      display: block;
-    }
-
-    &:hover {
-      background-color: transparent;
-      box-shadow: unset;
-      .c-node-menu {
-        display: block;
-      }
-    }
-
-    > .icon {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      top: 0;
-      margin: auto;
-    }
-
-    .actions {
-      /* only first visible button will have more-options icon */
-      li:not(.is-hidden) ~ li:not(.is-hidden) {
-        > .icon {
-          display: none;
-        }
-      }
-    }
-
-    .expand-action {
-      &:before {
-        content: attr(data-expand-text);
-      }
-
-      &.-re-expand {
-        &:before {
-          content: attr(data-re-expand-text);
-        }
-      }
-    }
-
-    .c-node-menu {
-      display: none;
-      top: 2px;
-      right: 0;
-    }
+    top: calc(50% - 32px);
+    padding: 10px 8px;
+    transform: translate(-50%, -50%);
   }
 }

@@ -8,7 +8,6 @@ import { getToolLayersUrlProps } from 'react-components/tool-layers/tool-layers.
 import * as ToolLayersUrlPropHandlers from 'react-components/tool-layers/tool-layers.serializers';
 import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-links.serializers';
 
-
 const getUrlProps = createSelector(
   [getToolLinksUrlProps, getAppUrlProps, getToolLayersUrlProps],
   (toolLinks, app, toolLayers) => ({ ...toolLinks, ...app, ...toolLayers })

@@ -4,8 +4,11 @@ import { selectColumn } from 'react-components/tool-links/tool-links.actions';
 import ColumnSelector from 'react-components/tool/column-selector/column-selector.component';
 import PropTypes from 'prop-types';
 import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
+import { getGapBetweenColumns } from 'react-components/tool/sankey/sankey.selectors';
 
 const mapStateToProps = state => ({
+  sankeyColumnsWidth: state.toolLinks.sankeyColumnsWidth,
+  gapBetweenColumns: getGapBetweenColumns(state),
   columns: Object.values(state.toolLinks.data.columns || {}),
   selectedColumnsIds: getSelectedColumnsIds(state),
   nodesColoredAtColumn: state.toolLinks.nodesColoredAtColumn
@@ -15,7 +18,14 @@ const mapDispatchToProps = {
   onColumnSelected: selectColumn
 };
 
-function ColumnSelectorContainer({ columns, group, selectedColumnsIds, onColumnSelected }) {
+function ColumnSelectorContainer({
+  columns,
+  group,
+  selectedColumnsIds,
+  onColumnSelected,
+  gapBetweenColumns,
+  sankeyColumnsWidth
+}) {
   const columnItems = useMemo(() => columns.filter(column => column.group === group), [
     columns,
     group
@@ -38,6 +48,9 @@ function ColumnSelectorContainer({ columns, group, selectedColumnsIds, onColumnS
 
   return (
     <ColumnSelector
+      group={group}
+      sankeyColumnsWidth={sankeyColumnsWidth}
+      gapBetweenColumns={gapBetweenColumns}
       hasSingleElement={hasSingleElement}
       columnItems={columnItems}
       selectedColumnItem={selectedColumnItem}
@@ -49,6 +62,8 @@ function ColumnSelectorContainer({ columns, group, selectedColumnsIds, onColumnS
 ColumnSelectorContainer.propTypes = {
   group: PropTypes.number,
   columns: PropTypes.array,
+  sankeyColumnsWidth: PropTypes.number,
+  gapBetweenColumns: PropTypes.number,
   selectedColumnsIds: PropTypes.array,
   onColumnSelected: PropTypes.func.isRequired
 };

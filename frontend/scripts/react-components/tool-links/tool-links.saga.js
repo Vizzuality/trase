@@ -42,7 +42,9 @@ function* fetchToolColumns() {
     yield fork(getToolColumnsData, selectedContext);
     yield fork(getToolGeoColumnNodes, selectedContext);
     yield call(getToolLinksData);
-    yield call(getToolNodesByLink, selectedContext);
+    yield call(getToolNodesByLink, selectedContext, {
+      fetchAllNodes: state.toolLinks.detailedView
+    });
 
     // TODO: remove this call, just here to split the refactor in stages
     yield put(loadMapVectorData());
@@ -94,9 +96,8 @@ function* fetchLinks() {
     yield call(getToolNodesByLink, selectedContext, { fetchAllNodes });
     if (task.isRunning()) {
       yield cancel(task);
-    } else {
-      yield fork(setLoadingSpinner, 350, setToolFlowsLoading(false));
     }
+    yield fork(setLoadingSpinner, 350, setToolFlowsLoading(false));
   }
   yield takeLatest(
     [
