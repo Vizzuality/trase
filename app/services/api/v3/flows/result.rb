@@ -85,7 +85,7 @@ module Api
         end
 
         def self.model_name
-          Api::V3::FlowsResult
+          Api::V3::Flows::Result
         end
       end
     end
