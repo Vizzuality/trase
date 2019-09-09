@@ -73,7 +73,14 @@ function useVanillaTooltip({ links }) {
 
     if (tooltip.current) {
       if (content) {
-        tooltip.current.show(content.x, content.y, content.title, content.values);
+        tooltip.current.show(
+          content.x,
+          content.y,
+          content.title,
+          content.values,
+          content.height,
+          content.width
+        );
       } else {
         tooltip.current.hide();
       }
@@ -154,6 +161,8 @@ function Sankey(props) {
       title: `${link.sourceNodeName} > ${link.targetNodeName}`,
       x: e.clientX - rect.x,
       y: e.clientY - rect.y,
+      height: rect.height,
+      width: rect.width,
       values: [
         {
           title: selectedResizeBy.label,
