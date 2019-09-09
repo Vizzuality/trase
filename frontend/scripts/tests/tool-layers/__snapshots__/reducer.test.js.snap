@@ -65,8 +65,8 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": Object {
-    "latitude": -34.397,
-    "longitude": 150.644,
+    "latitude": "-34.40",
+    "longitude": "150.64",
     "zoom": 2,
   },
   "selectedMapBasemap": null,
