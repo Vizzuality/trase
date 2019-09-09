@@ -36,4 +36,4 @@ SankeyLink.propTypes = {
   className: PropTypes.string.isRequired
 };
 
-export default SankeyLink;
+export default React.memo(SankeyLink);
