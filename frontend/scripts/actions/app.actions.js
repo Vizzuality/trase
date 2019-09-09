@@ -2,7 +2,7 @@ import isEmpty from 'lodash/isEmpty';
 import {
   GET_DISCLAIMER_URL,
   GET_NODES_WITH_SEARCH_URL,
-  GET_TOP_NODES_URL,
+  GET_TOP_NODE_STATS_URL,
   getURLFromParams
 } from 'utils/getURLFromParams';
 import { TOGGLE_MAP, SELECT_YEARS } from 'react-components/tool/tool.actions';
@@ -10,6 +10,8 @@ import getPageTitle from 'scripts/router/page-title';
 import { redirect } from 'redux-first-router';
 import getTopNodesKey from 'utils/getTopNodesKey';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import omit from 'lodash/omit';
+import axios from 'axios';
 
 export const SET_CONTEXT = 'SET_CONTEXT';
 export const DISPLAY_STORY_MODAL = 'DISPLAY_STORY_MODAL';
@@ -185,54 +187,49 @@ export const getTopCountries = (contexts, options = {}) => (dispatch, getState) 
   if (!defaultSelectedContext) return;
   const selectedContexts = contexts || [defaultSelectedContext];
 
-  const topCountries = [];
+  const { topNodes } = state.app;
+
+  const topNodesKeys = [];
   selectedContexts.forEach(selectedContext => {
-    const columnId = selectedContext.worldMap.countryColumnId;
     const years = fromDefaultYear
       ? [selectedContext.defaultYear, selectedContext.defaultYear]
       : getSelectedYears(state);
     // eslint-disable-next-line camelcase
     const [start_year, end_year] = years;
-    const { topNodes } = state.app;
-    const params = {
-      start_year,
-      end_year,
-      column_id: columnId,
-      context_id: selectedContext.id
-    };
-    const topNodesKey = getTopNodesKey(selectedContext.id, 'country', start_year, end_year);
-    if (!topNodes[topNodesKey]) {
-      topCountries.push({
-        topNodesKey,
-        country: selectedContext.countryName,
-        url: getURLFromParams(GET_TOP_NODES_URL, params)
-      });
-    }
+    const topNodeKey = getTopNodesKey(selectedContext.id, 'country', start_year, end_year);
+    topNodesKeys[topNodeKey] = selectedContext;
   });
-  if (!topCountries.length) return;
+  const nonFetchedKeyContexts = omit(topNodesKeys, Object.keys(topNodes));
+  const nonFetchedContexts = Object.values(nonFetchedKeyContexts);
+
+  if (nonFetchedContexts.length === 0) return;
+  const countryColumnId = nonFetchedContexts[0].worldMap.countryColumnId;
+  const volumeIndicator = nonFetchedContexts[0].resizeBy.find(i => i.name === 'Volume').id;
 
   dispatch({
     type: APP__SET_TOP_DESTINATION_COUNTRIES_LOADING,
     payload: {
-      topNodesKeys: topCountries.map(c => c.topNodesKey),
+      topNodesKeys,
       loading: true
     }
   });
 
-  Promise.all(
-    topCountries.map(topCountry =>
-      fetch(topCountry.url).then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
-    )
-  )
+  const params = {
+    contexts_ids: nonFetchedContexts.map(c => c.id).join(),
+    column_id: countryColumnId,
+    attributes_ids: volumeIndicator
+  };
+
+  const topNodesUrl = getURLFromParams(GET_TOP_NODE_STATS_URL, params);
+  axios
+    .get(topNodesUrl)
+    .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
     .then(res => {
       dispatch({
         type: APP__SET_TOP_DESTINATION_COUNTRIES,
         payload: {
-          topCountries: topCountries.map((c, i) => ({
-            topNodesKey: c.topNodesKey,
-            country: c.country,
-            data: res[i].data
-          }))
+          topNodesKeys,
+          data: res
         }
       });
     })
