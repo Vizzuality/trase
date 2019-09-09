@@ -16,7 +16,7 @@ function ColumnsSelectorGroup(props) {
       style={styles}
       className={cx('c-columns-selector-group', 'is-absolute', { '-loading': loading })}
     >
-      {!loading && Array.from({ length: 4 }).map((_, i) => <ColumnSelector group={i} />)}
+      {!loading && Array.from({ length: 4 }).map((_, i) => <ColumnSelector key={i} group={i} />)}
     </div>
   );
 }

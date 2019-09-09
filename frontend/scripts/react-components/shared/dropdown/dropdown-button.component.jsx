@@ -83,7 +83,7 @@ DropdownButton.propTypes = {
   size: PropTypes.string,
   color: PropTypes.string,
   tooltip: PropTypes.string,
-  weight: PropTypes.number,
+  weight: PropTypes.string,
   variant: PropTypes.string.isRequired,
   isDisabled: PropTypes.bool,
   getToggleButtonProps: PropTypes.func.isRequired

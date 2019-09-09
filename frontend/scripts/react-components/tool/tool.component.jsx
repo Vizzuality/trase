@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import 'styles/components/tool/map/map-basemaps.scss';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import MapContainer from 'react-components/tool/map/map.container';
+import FlowContentContainer from 'react-components/tool/tool-content/tool-content.container';
 import ModalContainer from 'react-components/tool/story-modal/story-modal.container';
 import TitlebarContainer from 'react-components/tool/titlebar/titlebar.container';
 import NodesTitlesContainer from 'react-components/tool/nodes-titles/nodes-titles.container';
@@ -43,7 +44,7 @@ const renderMapSidebar = () => (
 );
 
 const renderMap = () => (
-  <div className="js-map-container c-map is-absolute">
+  <div className="js-map-container c-map is-absolute -smooth-transition">
     <div id="js-map" className="c-map-leaflet" />
     <div className="btn-map -toggle-map js-toggle-map" />
     <div className="js-map-warnings-container map-warnings">
@@ -90,6 +91,7 @@ const renderVainillaComponents = () => (
     <MapContainer />
     <MapBasemaps />
     <MapDimensionsContainer />
+    <FlowContentContainer />
     <MapLegend />
     <MapContextContainer />
     <NodesTitlesContainer />
@@ -123,12 +125,6 @@ const Tool = props => {
           {renderSankeyError()}
 
           <div className="js-tool-content flow-content">
-            <div className="js-tool-loading tool-loading">
-              <div className="veil sankey-veil" />
-              <div className="c-spinner" />
-            </div>
-
-            <div className="js-map-view-veil sankey-veil veil is-hidden" />
             {renderMapSidebar()}
             {renderMap()}
             <ColumnsSelectorGroupContainer />

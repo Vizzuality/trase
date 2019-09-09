@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 if (typeof window !== 'undefined') {
   window._TRASE_RAINBOW_SANKEY = false;
@@ -118,6 +119,10 @@ export const GradientAnimation = ({ selectedRecolorBy, selectedNodesIds }) => {
     </linearGradient>
   );
 };
+GradientAnimation.propTypes = {
+  selectedRecolorBy: PropTypes.object,
+  selectedNodesIds: PropTypes.array
+};
 
 export const LinksPlaceHolder = ({
   gapBetweenColumns,
@@ -136,6 +141,12 @@ export const LinksPlaceHolder = ({
       fill="url(#animate-gradient)"
     />
   ));
+LinksPlaceHolder.propTypes = {
+  gapBetweenColumns: PropTypes.number,
+  sankeyColumnsWidth: PropTypes.number,
+  size: PropTypes.number,
+  height: PropTypes.number
+};
 
 export const ColumnsPlaceholder = ({
   sankeyColumnsWidth,
@@ -152,3 +163,9 @@ export const ColumnsPlaceholder = ({
       transform={`translate(${i * (sankeyColumnsWidth + gapBetweenColumns)},0)`}
     />
   ));
+ColumnsPlaceholder.propTypes = {
+  gapBetweenColumns: PropTypes.number,
+  sankeyColumnsWidth: PropTypes.number,
+  size: PropTypes.number,
+  height: PropTypes.number
+};

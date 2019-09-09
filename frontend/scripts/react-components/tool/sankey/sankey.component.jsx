@@ -35,7 +35,7 @@ function useMenuOptions(props) {
 }
 
 function useMenuPosition(props, columns) {
-  const { selectedNodesIds } = props;
+  const { selectedNodesIds, isReExpand } = props;
   const [menuPos, setMenuPos] = useState({ x: 0, y: 0 });
   const ref = useRef(null);
 
@@ -56,7 +56,7 @@ function useMenuPosition(props, columns) {
         return false;
       })
     );
-  }, [selectedNodesIds, columns]);
+  }, [selectedNodesIds, columns, isReExpand]);
 
   return [menuPos, ref];
 }
@@ -246,6 +246,7 @@ function Sankey(props) {
               {!loading &&
                 columns.map(column => (
                   <SankeyColumn
+                    key={column.key}
                     column={column}
                     selectedNodesIds={selectedNodesIds}
                     onNodeClicked={onNodeClicked}

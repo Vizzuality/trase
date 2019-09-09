@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Text from 'react-components/shared/text';
 
@@ -33,5 +34,11 @@ function NodeMenu(props) {
     </div>
   );
 }
+
+NodeMenu.propTypes = {
+  options: PropTypes.array,
+  menuPos: PropTypes.shape({ x: PropTypes.number, y: PropTypes.number }),
+  isVisible: PropTypes.bool
+};
 
 export default NodeMenu;

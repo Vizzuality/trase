@@ -134,8 +134,8 @@ const toolLayersReducer = {
   [SAVE_MAP_VIEW](state, action) {
     return immer(state, draft => {
       draft.mapView = {
-        latitude: action.latlng.lat,
-        longitude: action.latlng.lng,
+        latitude: action.latlng.lat.toFixed(2),
+        longitude: action.latlng.lng.toFixed(2),
         zoom: action.zoom
       };
     });

@@ -12,7 +12,7 @@ function SankeyColumn(props) {
     sankeyColumnsWidth
   } = props;
   return (
-    <g key={column.key} className="sankey-column" transform={`translate(${column.x},0)`}>
+    <g className="sankey-column" transform={`translate(${column.x},0)`}>
       <g className="sankey-nodes">
         {column.values.map((node, i, list) => (
           // eslint-disable-next-line jsx-a11y/mouse-events-have-key-events
@@ -43,7 +43,12 @@ function SankeyColumn(props) {
             >
               {Array.isArray(node.label) &&
                 node.label.map(label => (
-                  <tspan className="sankey-node-label" x={sankeyColumnsWidth / 2} dy={12}>
+                  <tspan
+                    key={label}
+                    className="sankey-node-label"
+                    x={sankeyColumnsWidth / 2}
+                    dy={12}
+                  >
                     {label.toUpperCase()}
                   </tspan>
                 ))}
@@ -61,7 +66,7 @@ SankeyColumn.propTypes = {
   selectedNodesIds: PropTypes.array.isRequired,
   onNodeClicked: PropTypes.func.isRequired,
   onNodeHighlighted: PropTypes.func.isRequired,
-  sankeyColumnsWidth: PropTypes.func.isRequired
+  sankeyColumnsWidth: PropTypes.number.isRequired
 };
 
 export default SankeyColumn;
