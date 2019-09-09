@@ -58,14 +58,14 @@ const stops = {
   ]
 };
 
-export const IsAggregate = () => (
+export const IsAggregate = React.memo(() => (
   <pattern id="isAggregatedPattern" x="0" y="0" width="1" height="3" patternUnits="userSpaceOnUse">
     <rect x="0" y="0" width="50" height="1" fill="#ddd" />
     <rect x="0" y="1" width="50" height="2" fill="#fff" />
   </pattern>
-);
+));
 
-export const GradientAnimation = ({ selectedRecolorBy, selectedNodesIds }) => {
+export const GradientAnimation = React.memo(({ selectedRecolorBy, selectedNodesIds }) => {
   let selectedColor = 'default';
 
   // easter egg :P
@@ -118,29 +118,26 @@ export const GradientAnimation = ({ selectedRecolorBy, selectedNodesIds }) => {
       />
     </linearGradient>
   );
-};
+});
 GradientAnimation.propTypes = {
   selectedRecolorBy: PropTypes.object,
   selectedNodesIds: PropTypes.array
 };
 
-export const LinksPlaceHolder = ({
-  gapBetweenColumns,
-  sankeyColumnsWidth,
-  size = 3,
-  height = 575
-}) =>
-  Array.from({ length: size }).map((_, i) => (
-    <rect
-      key={i}
-      height={height}
-      width={gapBetweenColumns}
-      transform={`translate(${i * gapBetweenColumns +
-        i * sankeyColumnsWidth +
-        sankeyColumnsWidth},0)`}
-      fill="url(#animate-gradient)"
-    />
-  ));
+export const LinksPlaceHolder = React.memo(
+  ({ gapBetweenColumns, sankeyColumnsWidth, size = 3, height = 575 }) =>
+    Array.from({ length: size }).map((_, i) => (
+      <rect
+        key={i}
+        height={height}
+        width={gapBetweenColumns}
+        transform={`translate(${i * gapBetweenColumns +
+          i * sankeyColumnsWidth +
+          sankeyColumnsWidth},0)`}
+        fill="url(#animate-gradient)"
+      />
+    ))
+);
 LinksPlaceHolder.propTypes = {
   gapBetweenColumns: PropTypes.number,
   sankeyColumnsWidth: PropTypes.number,
@@ -148,21 +145,18 @@ LinksPlaceHolder.propTypes = {
   height: PropTypes.number
 };
 
-export const ColumnsPlaceholder = ({
-  sankeyColumnsWidth,
-  gapBetweenColumns,
-  size = 4,
-  height = 575
-}) =>
-  Array.from({ length: size }).map((_, i) => (
-    <rect
-      key={i}
-      height={height}
-      width={sankeyColumnsWidth}
-      className="sankey-column-placeholder"
-      transform={`translate(${i * (sankeyColumnsWidth + gapBetweenColumns)},0)`}
-    />
-  ));
+export const ColumnsPlaceholder = React.memo(
+  ({ sankeyColumnsWidth, gapBetweenColumns, size = 4, height = 575 }) =>
+    Array.from({ length: size }).map((_, i) => (
+      <rect
+        key={i}
+        height={height}
+        width={sankeyColumnsWidth}
+        className="sankey-column-placeholder"
+        transform={`translate(${i * (sankeyColumnsWidth + gapBetweenColumns)},0)`}
+      />
+    ))
+);
 ColumnsPlaceholder.propTypes = {
   gapBetweenColumns: PropTypes.number,
   sankeyColumnsWidth: PropTypes.number,

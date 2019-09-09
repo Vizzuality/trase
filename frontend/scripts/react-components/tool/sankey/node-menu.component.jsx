@@ -41,4 +41,4 @@ NodeMenu.propTypes = {
   isVisible: PropTypes.bool
 };
 
-export default NodeMenu;
+export default React.memo(NodeMenu);

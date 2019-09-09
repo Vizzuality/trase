@@ -69,4 +69,4 @@ SankeyColumn.propTypes = {
   sankeyColumnsWidth: PropTypes.number.isRequired
 };
 
-export default SankeyColumn;
+export default React.memo(SankeyColumn);
