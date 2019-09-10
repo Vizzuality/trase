@@ -116,7 +116,7 @@ const store = createStore(
       props: [
         'mapView',
         'isMapVisible',
-        'selectedMapBasemap',
+        'selectedBasemap',
         'selectedMapContextualLayers',
         'selectedMapDimensions'
       ]

@@ -31,7 +31,7 @@ const toolLayersReducer = {
         props: [
           'mapView',
           'isMapVisible',
-          'selectedMapBasemap',
+          'selectedBasemap',
           'selectedMapContextualLayers',
           'selectedMapDimensions'
         ]
@@ -123,7 +123,7 @@ const toolLayersReducer = {
   },
   [SELECT_BASEMAP](state, action) {
     return immer(state, draft => {
-      draft.selectedMapBasemap = action.payload.selectedMapBasemap;
+      draft.selectedBasemap = action.payload.selectedBasemap;
     });
   },
   [TOGGLE_MAP](state, action) {
@@ -154,7 +154,7 @@ const toolLayersReducerTypes = PropTypes => ({
   linkedGeoIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   mapLoading: PropTypes.bool,
   mapView: PropTypes.object,
-  selectedMapBasemap: PropTypes.string,
+  selectedBasemap: PropTypes.string,
   selectedMapContextualLayers: PropTypes.array,
   selectedMapDimensions: PropTypes.array
 });

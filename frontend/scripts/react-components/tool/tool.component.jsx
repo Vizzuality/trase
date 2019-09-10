@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import 'styles/components/tool/map/map-basemaps.scss';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import MapContainer from 'react-components/tool/map/map.container';
 import FlowContentContainer from 'react-components/tool/tool-content/tool-content.container';
@@ -8,10 +7,10 @@ import ModalContainer from 'react-components/tool/story-modal/story-modal.contai
 import TitlebarContainer from 'react-components/tool/titlebar/titlebar.container';
 import NodesTitlesContainer from 'react-components/tool/nodes-titles/nodes-titles.container';
 import MapContextContainer from 'react-components/tool/map-context/map-context.container';
-import MapBasemaps from 'react-components/tool/map-basemaps/map-basemaps.container';
 import Sankey from 'react-components/tool/sankey';
 import MapLegend from 'react-components/tool/map-legend/map-legend.container';
 import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.react';
+import Basemaps from 'react-components/tool/basemaps';
 import EventManager from 'utils/eventManager';
 import UrlSerializer from 'react-components/shared/url-serializer';
 
@@ -30,13 +29,6 @@ const renderMapSidebar = () => (
     <div className="map-sidebar-group c-map-context js-map-context is-hidden">
       <div className="map-sidebar-group-title">Contextual layers</div>
       <ul className="map-sidebar-group-items js-map-context-items">
-        {/* this is rendered by map-context.component */}
-      </ul>
-    </div>
-
-    <div className="map-sidebar-group c-map-basemaps">
-      <div className="map-sidebar-group-title">Basemaps</div>
-      <ul className="map-sidebar-group-items js-map-basemaps-items">
         {/* this is rendered by map-context.component */}
       </ul>
     </div>
@@ -89,7 +81,6 @@ const renderSankeyError = () => (
 const renderVainillaComponents = () => (
   <>
     <MapContainer />
-    <MapBasemaps />
     <MapDimensionsContainer />
     <FlowContentContainer />
     <MapLegend />
@@ -124,6 +115,7 @@ const Tool = props => {
 
           {renderSankeyError()}
 
+          <Basemaps />
           <div className="js-tool-content flow-content">
             {renderMapSidebar()}
             {renderMap()}

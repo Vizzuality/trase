@@ -1,0 +1,39 @@
+@import 'styles/settings';
+
+.c-basemaps {
+  position: absolute;
+  z-index: $z-leaflet-above-panes;
+  top: 150px;
+  left: 60px;
+  padding: 20px 18px;
+  background-color: $white;
+  border-radius: 2px;
+  box-shadow: 1px 1px 2px 0 rgba(0,0,0,0.2);
+
+  .basemap-item {
+    &.-active {
+      .basemap-thumb {
+        border-color: $charcoal-grey;
+      }
+    }
+  }
+
+  .basemap-item-button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    cursor: pointer;
+  }
+
+  .basemap-thumb {
+    width: 38px;
+    height: 38px;
+    border-radius: 5px;
+    border: 2px solid transparent;
+    margin: 0 8px 0 0;
+  }
+
+  .basemap-title {
+    flex-shrink: 0;
+  }
+}

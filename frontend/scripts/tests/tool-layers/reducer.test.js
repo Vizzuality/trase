@@ -110,10 +110,10 @@ test(SAVE_MAP_VIEW, () => {
 });
 
 test(SELECT_BASEMAP, () => {
-  const selectedMapBasemap = { id: 10 };
+  const selectedBasemap = { id: 10 };
   const action = {
     type: SELECT_BASEMAP,
-    payload: { selectedMapBasemap }
+    payload: { selectedBasemap }
   };
   const newState = reducer(initialState, action);
   expect(newState).toMatchSnapshot();
