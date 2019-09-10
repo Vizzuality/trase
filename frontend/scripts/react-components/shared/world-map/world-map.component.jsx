@@ -135,7 +135,7 @@ const WorldMap = ({
         className={cx('c-world-map', className)}
         projection="robinson"
         height={600}
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: '100%', height: 'inherit' }}
       >
         <ZoomableGroup center={center} disablePanning>
           <Geographies geography="/vector_layers/WORLD.topo.json" disableOptimization>
@@ -167,7 +167,6 @@ WorldMap.propTypes = {
   highlightedCountriesIso: PropTypes.object,
   onHoverGeometry: PropTypes.func,
   getTopNodes: PropTypes.func.isRequired,
-  height: PropTypes.number,
   center: PropTypes.array
 };
 

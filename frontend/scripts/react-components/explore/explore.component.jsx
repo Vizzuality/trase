@@ -148,15 +148,20 @@ function Explore({
             </div>
           </div>
         </div>
-        <div className="map-container">
-          <WorldMap
-            context={highlightedContext}
-            destinationCountries={destinationCountries}
-            highlightedCountryIds={getHighlightedCountryIds}
-            onHoverGeometry={geoId =>
-              setHighlightedCommodities(findHighlightedCommoditiesIds(geoId))
-            }
-          />
+        <div className="map-section">
+          <div className="map-container">
+            <WorldMap
+              context={highlightedContext}
+              destinationCountries={destinationCountries}
+              highlightedCountryIds={getHighlightedCountryIds}
+              onHoverGeometry={geoId =>
+                setHighlightedCommodities(findHighlightedCommoditiesIds(geoId))
+              }
+            />
+          </div>
+          <div className="quick-facts">
+            <div className="bubble">Info</div>
+          </div>
         </div>
       </div>
       <TopCards
