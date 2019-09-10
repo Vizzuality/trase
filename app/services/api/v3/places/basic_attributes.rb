@@ -167,7 +167,10 @@ module Api
           commodity_attributes = {header_attributes: {}}
 
           initialize_pasture_area
-          commodity_attributes[:pasture_area] = @pasture_area if @pasture_area
+          if @pasture_area
+            commodity_attributes[:header_attributes][:pasture_area] =
+              header_attributes('pasture_area')
+          end
           initialize_area
           if @area
             commodity_attributes[:area] = @area
