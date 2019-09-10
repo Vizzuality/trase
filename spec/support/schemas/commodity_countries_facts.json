@@ -1,0 +1,149 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "The Root Schema",
+  "required": [
+    "data",
+    "meta"
+  ],
+  "properties": {
+    "data": {
+      "$id": "#/properties/data",
+      "type": "array",
+      "title": "The Data Schema",
+      "items": {
+        "$id": "#/properties/data/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "required": [
+          "countryId",
+          "facts"
+        ],
+        "properties": {
+          "countryId": {
+            "$id": "#/properties/data/items/properties/countryId",
+            "type": "integer",
+            "title": "The Countryid Schema",
+            "default": 0,
+            "examples": [
+              12
+            ]
+          },
+          "facts": {
+            "$id": "#/properties/data/items/properties/facts",
+            "type": "array",
+            "title": "The Facts Schema",
+            "items": {
+              "$id": "#/properties/data/items/properties/facts/items",
+              "type": "object",
+              "title": "The Items Schema",
+              "required": [
+                "year",
+                "attributeId",
+                "total"
+              ],
+              "properties": {
+                "year": {
+                  "$id": "#/properties/data/items/properties/facts/items/properties/year",
+                  "type": "integer",
+                  "title": "The Year Schema",
+                  "default": 0,
+                  "examples": [
+                    2017
+                  ]
+                },
+                "attributeId": {
+                  "$id": "#/properties/data/items/properties/facts/items/properties/attributeId",
+                  "type": "integer",
+                  "title": "The Attributeid Schema",
+                  "default": 0,
+                  "examples": [
+                    29
+                  ]
+                },
+                "total": {
+                  "$id": "#/properties/data/items/properties/facts/items/properties/total",
+                  "type": "number",
+                  "title": "The Total Schema",
+                  "default": 0.0,
+                  "examples": [
+                    38181449.8828643
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "meta": {
+      "$id": "#/properties/meta",
+      "type": "object",
+      "title": "The Meta Schema",
+      "required": [
+        "attributes"
+      ],
+      "properties": {
+        "attributes": {
+          "$id": "#/properties/meta/properties/attributes",
+          "type": "array",
+          "title": "The Attributes Schema",
+          "items": {
+            "$id": "#/properties/meta/properties/attributes/items",
+            "type": "object",
+            "title": "The Items Schema",
+            "required": [
+              "id",
+              "displayName",
+              "unit",
+              "tooltipText"
+            ],
+            "properties": {
+              "id": {
+                "$id": "#/properties/meta/properties/attributes/items/properties/id",
+                "type": "integer",
+                "title": "The Id Schema",
+                "default": 0,
+                "examples": [
+                  29
+                ]
+              },
+              "displayName": {
+                "$id": "#/properties/meta/properties/attributes/items/properties/displayName",
+                "type": "string",
+                "title": "The Displayname Schema",
+                "default": "",
+                "examples": [
+                  "Trade volume"
+                ],
+                "pattern": "^(.*)$"
+              },
+              "unit": {
+                "$id": "#/properties/meta/properties/attributes/items/properties/unit",
+                "type": "string",
+                "title": "The Unit Schema",
+                "default": "",
+                "examples": [
+                  "t"
+                ],
+                "pattern": "^(.*)$"
+              },
+              "tooltipText": {
+                "$id": "#/properties/meta/properties/attributes/items/properties/tooltipText",
+                "type": ["string", "null"],
+                "title": "The Tooltiptext Schema",
+                "default": "",
+                "examples": [
+                  "Amount of the traded commodity (tons). The total value is a composite of traded sub-products, which are converted to their original raw equivalents and then aggregated. For example exports of soy cake and soy oil are converted to soybean equivalents in the areas of production, where farmers are just producing beans."
+                ],
+                "pattern": "^(.*)$"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
