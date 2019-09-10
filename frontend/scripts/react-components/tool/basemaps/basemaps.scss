@@ -25,10 +25,16 @@
     box-shadow: 0 1px 3px 0 rgba($black, 0.1), 0 1px 2px 0 rgba($black, 0.2);
     pointer-events: all;
 
+    &:hover, &:active {
+      background-color: $light-gray;
+    }
+
     > .icon {
       fill: $charcoal-grey;
       height: 16px;
       width: 16px;
+      margin: 0;
+      transform: translateY(1px);
     }
   }
 
