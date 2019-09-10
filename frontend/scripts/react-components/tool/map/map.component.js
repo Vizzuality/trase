@@ -80,7 +80,6 @@ export default class MapComponent {
     this.map.on('layeradd', this.mapEvents.updateAttribution);
     this.map.on('dragend zoomend', this.mapEvents.moveEnd);
     this.map.on('zoomend', this.mapEvents.zoomEnd);
-    this.basemapSwitcher.addEventListener('click', this.clickToggleMapLayerMenu);
     this.toggleMap.addEventListener('click', this.clickToggleMap);
 
     this.setMapView(props);
@@ -96,7 +95,6 @@ export default class MapComponent {
   }
 
   onRemoved() {
-    this.basemapSwitcher.removeEventListener('click', this.clickToggleMapLayerMenu);
     this.toggleMap.removeEventListener('click', this.clickToggleMap);
 
     this.map.off('drag', this.mapEvents.panInsideBounds);
