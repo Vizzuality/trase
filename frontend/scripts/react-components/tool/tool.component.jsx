@@ -38,6 +38,7 @@ const renderMapSidebar = () => (
 const renderMap = () => (
   <div className="js-map-container c-map is-absolute -smooth-transition">
     <div id="js-map" className="c-map-leaflet" />
+    <Basemaps />
     <div className="btn-map -toggle-map js-toggle-map" />
     <div className="js-map-warnings-container map-warnings">
       <div className="warning-wrapper">
@@ -115,7 +116,6 @@ const Tool = props => {
 
           {renderSankeyError()}
 
-          <Basemaps />
           <div className="js-tool-content flow-content">
             {renderMapSidebar()}
             {renderMap()}
