@@ -37,12 +37,19 @@ function Basemaps(props) {
       aria-expanded="true"
       aria-owns="basemaps-menu"
     >
-      <button onClick={() => setOpen(_open => !_open)} className="basemaps-toggle">
+      <button
+        onClick={() => setOpen(_open => !_open)}
+        className="basemaps-toggle"
+        aria-label="open basemaps"
+        aria-haspopup="true"
+        data-toggle="true"
+      >
         <Icon icon="icon-basemaps" color="grey" />
       </button>
       <ul className="basemaps-list" role="listbox" id="basemap-menu">
         {basemaps.map(basemap => (
           <li
+            key={basemap.id}
             role="option"
             aria-selected={activeBasemapId === basemap.id ? 'true' : 'false'}
             className={cx('basemap-item', {
