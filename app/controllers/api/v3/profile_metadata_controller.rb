@@ -19,13 +19,17 @@ module Api
 
         serialized_available_years =
           ActiveModelSerializers::SerializableResource.new(
-            @node,
+            @readonly_node,
             root: 'data',
             serializer: Api::V3::ProfileMetadata::AvailableYearsSerializer,
             key_transform: :underscore
           ).serializable_hash
 
-        render json: {data: serialized_profile_metadata[:data].merge(serialized_available_years[:data])}
+        render json: {
+          data: serialized_profile_metadata[:data].merge(
+            serialized_available_years[:data]
+          )
+        }
       end
 
       private
@@ -33,10 +37,11 @@ module Api
       def load_node
         ensure_required_param_present(:id)
 
-        node_in_mv = Api::V3::Readonly::Node.
+        @node = Api::V3::Node.find(params[:id])
+
+        @readonly_node = Api::V3::Readonly::Node.
           where(context_id: @context.id, profile: %w[actor place]).
-          find(params[:id])
-        @node = Api::V3::Node.find(node_in_mv.id)
+          find(@node.id)
       end
     end
   end
