@@ -12,8 +12,28 @@ $top-cards-height: 156px;
     height: calc(100vh - #{$nav-height});
   }
 
-  .map-container {
+  .map-section {
     height: 100%;
+    margin: 30px auto 0;
+  }
+
+  .map-container {
+    height: inherit;
+    display: inline-block;
+  }
+
+  .quick-facts {
+    display: inline-block;
+    vertical-align: top;
+    height: 100%;
+
+    .bubble {
+      height: 50%;
+      width: 50%;
+      border-radius: 50%;
+      background-color: $mid-light-gray;
+      vertical-align: top;
+    }
   }
 
   .explore-grid-container {
