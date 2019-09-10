@@ -102,11 +102,11 @@ module Api
           end
         end
 
-        def find_nodes_stats(attribute=nil)
+        def find_nodes_stats(attribute = nil)
           options = {
             node_type_id: @node_type_id,
             year_start: @year_start,
-            year_end: @year_end,
+            year_end: @year_end
           }
 
           if @commodity_id
@@ -121,11 +121,11 @@ module Api
               )
           end
 
-          nodes_stats_attribute = attribute || @attribute
-          nodes_stats_limit = attribute ? 1 : @limit
-          nodes_stats_list.sorted_list(
-            nodes_stats_attribute.original_id, limit: nodes_stats_limit
-          )
+          if attribute
+            nodes_stats_list.sorted_list(attribute.original_id, limit: 1)
+          else
+            nodes_stats_list.sorted_list(@attribute.original_id, limit: @limit)
+          end
         end
       end
     end

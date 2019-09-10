@@ -282,7 +282,13 @@ paths:
           required: false
           schema:
             type: integer
-        - name: attributes_ids
+        - name: attribute_id
+          in: query
+          description: Attribute id
+          required: false
+          schema:
+            type: string
+        - name: other_attributes_ids
           in: query
           description: List of attributes ids separated by comma
           required: false
@@ -297,7 +303,7 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/TopNodes"
+                    $ref: "#/components/schemas/NodesStats"
 
   /nodes/search:
     get:
@@ -2216,18 +2222,31 @@ components:
                 type: integer
               commodity_id:
                 type: integer
-              attributes:
+              top_nodes:
                 type: array
                 items:
                   type: object
                   properties:
                     id:
                       type: integer
-                    indicator:
+                    name:
                       type: string
-                    unit:
+                    geo_id:
                       type: string
-                    targets:
+                    attribute:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        unit:
+                          type: string
+                        value:
+                          type: number
+                        height:
+                          type: number
+                    other_attributes:
                       type: array
                       items:
                         type: object
@@ -2235,6 +2254,8 @@ components:
                           id:
                             type: integer
                           name:
+                            type: string
+                          unit:
                             type: string
                           value:
                             type: number
