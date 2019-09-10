@@ -15,24 +15,39 @@ $top-cards-height: 156px;
   .map-section {
     height: 100%;
     margin: 30px auto 0;
+    display: flex;
+    align-items: center;
   }
 
   .map-container {
     height: inherit;
-    display: inline-block;
   }
 
   .quick-facts {
-    display: inline-block;
-    vertical-align: top;
-    height: 100%;
+    max-height: 100%;
+
+    // Fix bubbles overlaping explore grid on very short screens
+    @media (min-height: 700px) {
+      min-height: 400px;
+    }
 
     .bubble {
-      height: 50%;
-      width: 50%;
+      width: 155px;
+      height: 155px;
+      padding-top: 55px;
       border-radius: 50%;
-      background-color: $mid-light-gray;
-      vertical-align: top;
+
+      &:not(.empty) {
+        background-color: $light-gray;
+      }
+
+      &:not(:first-child) {
+        margin-top: 20px;
+      }
+    }
+
+    .quick-facts-value {
+      margin-top: 26px;
     }
   }
 

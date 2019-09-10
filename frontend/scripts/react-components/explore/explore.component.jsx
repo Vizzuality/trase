@@ -3,6 +3,7 @@ import Heading from 'react-components/shared/heading';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import PropTypes from 'prop-types';
 import TopCards from 'react-components/explore/top-cards';
+import Text from 'react-components/shared/text';
 import WorldMap from 'react-components/shared/world-map/world-map.container';
 import uniq from 'lodash/uniq';
 import last from 'lodash/last';
@@ -25,7 +26,8 @@ function Explore({
   goToTool,
   topNodes,
   getTopCountries,
-  commodityContexts
+  commodityContexts,
+  quickFactsIndicators
 }) {
   const [highlightedContext, setHighlightedContext] = useState(null);
   const [highlightedCountryIds, setHighlightedCountries] = useState(null);
@@ -160,7 +162,16 @@ function Explore({
             />
           </div>
           <div className="quick-facts">
-            <div className="bubble">Info</div>
+            {quickFactsIndicators.map(indicator => (
+              <div className="bubble">
+                <Text size="rg" align="center" variant="mono">
+                  {indicator.name}
+                </Text>
+                <Text size="lg" weight="regular" align="center" className="quick-facts-value">
+                  {indicator.value} {indicator.unit}
+                </Text>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -192,7 +203,8 @@ Explore.propTypes = {
   step: PropTypes.number,
   topNodes: PropTypes.object,
   commodityContexts: PropTypes.array,
-  getTopCountries: PropTypes.func.isRequired
+  getTopCountries: PropTypes.func.isRequired,
+  quickFactsIndicators: PropTypes.object
 };
 
 export default Explore;
