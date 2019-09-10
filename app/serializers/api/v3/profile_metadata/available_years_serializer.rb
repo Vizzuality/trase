@@ -5,7 +5,7 @@ module Api
         attributes :available_years
 
         def available_years
-          object.readonly_attribute&.years
+          object.years
         end
       end
     end
