@@ -330,7 +330,7 @@ production#{state_ranking_text}."
           top_consumer_name = top_consumer['name']&.titleize if top_consumer
 
           if top_exporter && percentage_total_exports && top_consumer
-            " The largest exporter of soy in \
+            " The largest exporter of #{@commodity_name} in \
 <span class=\"notranslate\">#{@node.name.titleize}</span> was \
 <span class=\"notranslate\">#{top_exporter_name}</span>, which accounted for \
 <span class=\"notranslate\">#{percentage_total_exports}</span> of \
