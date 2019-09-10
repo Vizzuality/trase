@@ -99,7 +99,10 @@ Rails.application.routes.draw do
         resources :parametrised_charts, only: [:index]
       end
       resources :countries, only: [:index]
-      resources :commodities, only: [:index]
+      resources :commodities, only: [:index] do
+        get :countries_facts, on: :member
+      end
+      #resources :countries_facts, only: [:index]
     end
     namespace :v2 do
       resources :geo_id, only: :index

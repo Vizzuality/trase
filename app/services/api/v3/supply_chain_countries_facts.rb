@@ -1,5 +1,13 @@
 module Api
   module V3
+    class SupplyChainCountryFacts < ActiveModelSerializers::Model
+      attr_reader :country_id, :facts
+      def initialize(country_id, facts)
+        @country_id = country_id
+        @facts = facts
+      end
+    end
+
     class SupplyChainCountriesFacts
       # @param commodity_id [Integer]
       def initialize(commodity_id)
@@ -10,7 +18,9 @@ module Api
       end
 
       def facts
-        @query.all
+        @query.all.group_by(&:country_id).map do |country_id, facts|
+          SupplyChainCountryFacts.new(country_id, facts)
+        end
       end
 
       def attributes
