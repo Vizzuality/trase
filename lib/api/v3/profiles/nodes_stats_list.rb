@@ -7,18 +7,19 @@ module Api
         def initialize(data)
           @year_start = data[:year_start]
           @year_end = data[:year_end]
+          @node_id = data[:node_id]
           @node_type_id = data[:node_type_id]
         end
 
-        def unsorted_list(quants_ids, options)
+        def unsorted_list(quant_id, options)
           limit = limit_from_options(options)
-          result = query(quants_ids, options)
+          result = query(quant_id, options)
           result = result.limit(limit) if limit.present?
           result
         end
 
-        def sorted_list(quants_ids, options)
-          unsorted_list(quants_ids, options).order('value DESC')
+        def sorted_list(quant_id, options)
+          unsorted_list(quant_id, options).order('value DESC')
         end
 
         private
@@ -31,22 +32,22 @@ module Api
           end
         end
 
-        def query_all_years(quants_ids, _options = {})
+        def query_all_years(quant_id, _options = {})
           query = Api::V3::Readonly::NodesStats.
             select(select_clause).
-            where(quant_id: quants_ids)
+            where(quant_id: quant_id)
 
           query = query.where(node_type_id: @node_type_id) if @node_type_id
 
           query
         end
 
-        def query(quants_ids, options)
+        def query(quant_id, options)
           if @year_start && @year_end
-            query_all_years(quants_ids, options).
+            query_all_years(quant_id, options).
               where(year: (@year_start..@year_end))
           else
-            query_all_years(quants_ids, options).
+            query_all_years(quant_id, options).
               joins('INNER JOIN contexts ON contexts.id = nodes_stats_mv.context_id').
               where('year = contexts.default_year')
           end
@@ -62,7 +63,8 @@ module Api
                 'nodes_stats_mv.name',
                 'nodes_stats_mv.value',
                 'nodes_stats_mv.height',
-                'nodes_stats_mv.quant_id'
+                'nodes_stats_mv.quant_id',
+                'nodes_stats_mv.geo_id'
               ].join(', ')
             ]
           )
