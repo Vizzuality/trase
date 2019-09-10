@@ -274,6 +274,10 @@
             width: 8px;
             height: 8px;
             border: solid 1px $charcoal-grey-faded;
+
+            &.ch-default {
+              background-color: $ch-na;
+            }
           }
         }
       }
