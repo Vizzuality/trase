@@ -154,11 +154,12 @@ function Explore({
           </div>
         </div>
         <div className={cx('map-section', { [`rows${rowsNumber}`]: rowsNumber })}>
-          <div className="row">
-            <div className="small-8 columns">
+          <div className="row align-center">
+            <div className="small-12 medium-8 large-7 columns">
               <div className={cx('map-container', { [`rows${rowsNumber}`]: rowsNumber })}>
                 <ResponsiveWorldMap
                   center={[0, 0]}
+                  scale={100}
                   context={highlightedContext}
                   destinationCountries={destinationCountries}
                   highlightedCountryIds={getHighlightedCountryIds}
@@ -168,18 +169,20 @@ function Explore({
                 />
               </div>
             </div>
-            <div className="small-4 columns">
+            <div className="small-4 medium-2 columns hide-for-small">
               <div className="quick-facts">
-                {quickFactsIndicators.map(indicator => (
-                  <div className="bubble">
-                    <Text size="rg" align="center" variant="mono">
-                      {indicator.name}
-                    </Text>
-                    <Text size="lg" weight="regular" align="center" className="quick-facts-value">
-                      {indicator.value} {indicator.unit}
-                    </Text>
-                  </div>
-                ))}
+                <div className="bubble-container">
+                  {quickFactsIndicators.map(indicator => (
+                    <div className="bubble">
+                      <Text size="rg" align="center" variant="mono">
+                        {indicator.name}
+                      </Text>
+                      <Text size="lg" weight="regular" align="center" className="quick-facts-value">
+                        {indicator.value} {indicator.unit}
+                      </Text>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

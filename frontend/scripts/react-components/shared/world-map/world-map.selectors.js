@@ -12,15 +12,16 @@ const getSelectedContext = (state, { context }) => context;
 const getHighlightedCountryIds = (state, { highlightedCountryIds }) => highlightedCountryIds;
 const getCountries = (state, { destinationCountries }) => destinationCountries;
 const getWidth = (state, { width }) => width;
+const getScale = (state, { scale }) => scale;
 
 const getWorldMapProjection = createSelector(
-  getWidth,
-  width =>
+  [getWidth, getScale],
+  (width, scale) =>
     projections(
       width || 800,
-      width ? Math.round(width * WORLD_MAP_ASPECT_RATIO) : 450,
+      width ? Math.round(width * WORLD_MAP_ASPECT_RATIO) : 448,
       {
-        scale: 100,
+        scale: scale || 160,
         rotation: [0, 0, 0]
       },
       'robinson'
