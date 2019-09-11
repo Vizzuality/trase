@@ -12,8 +12,11 @@
     color: $charcoal-grey;
   }
 
+  max-height: 18px;
+
   &.size-lg {
     height: 28px;
+    max-height: 28px;
     width: 28px;
   }
 }
