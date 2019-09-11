@@ -53,7 +53,7 @@ gem 'sitemap_generator'
 
 group :development, :test do
   gem 'byebug', platform: :mri
-  gem 'rspec-rails', '~> 3.5'
+  gem 'rspec-rails', '~> 3.8'
   gem 'rubocop-rspec'
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'
