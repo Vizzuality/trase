@@ -10,7 +10,12 @@ import {
   getCards,
   getCommodityContexts
 } from 'react-components/explore/explore.selectors';
-import { setCommodity, setCountry, goToTool } from 'react-components/explore/explore.actions';
+import {
+  setCommodity,
+  setCountry,
+  goToTool,
+  getQuickFacts
+} from 'react-components/explore/explore.actions';
 import { getTopCountries } from 'actions/app.actions';
 
 const mockedQuickFactsIndicators = [
@@ -38,7 +43,8 @@ const mapDispatchToProps = {
   setCommodity,
   setCountry,
   goToTool,
-  getTopCountries
+  getTopCountries,
+  getQuickFacts
 };
 
 export default connect(
