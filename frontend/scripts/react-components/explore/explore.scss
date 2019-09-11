@@ -6,6 +6,8 @@ $explore-grid-height-1-row: 50px;
 $explore-grid-height-1-row-tablet: 100px;
 $explore-grid-height-2-rows: 100px;
 $explore-grid-height-2-rows-tablet: 150px;
+$explore-grid-height-3-rows: 150px;
+$explore-grid-height-3-rows-tablet: 200px;
 
 $explore-heading: 66px;
 
@@ -36,6 +38,14 @@ $explore-heading: 66px;
       }
     }
 
+    &.rows3 {
+      height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-3-rows} - #{$explore-heading});
+
+      @media screen and (max-width: $breakpoint-tablet) {
+        height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-3-rows-tablet} - #{$explore-heading});
+      }
+    }
+
     transition: height 0.3s;
   }
 
@@ -48,11 +58,17 @@ $explore-heading: 66px;
   }
 
   .quick-facts {
-    max-height: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
-    // Fix bubbles overlaping explore grid on very short screens
-    @media (min-height: 700px) {
-      min-height: 400px;
+    .bubble-container {
+      // Fix bubbles overlaping explore grid on very short screens
+      @media (min-height: 700px) {
+        min-height: 400px;
+      }
     }
 
     .bubble {
@@ -60,14 +76,8 @@ $explore-heading: 66px;
       height: 155px;
       padding-top: 55px;
       border-radius: 50%;
-
-      &:not(.empty) {
-        background-color: $light-gray;
-      }
-
-      &:not(:first-child) {
-        margin-top: 20px;
-      }
+      margin-top: 20px;
+      background-color: $light-gray;
     }
 
     .quick-facts-value {

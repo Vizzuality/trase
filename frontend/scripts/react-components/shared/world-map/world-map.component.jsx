@@ -71,7 +71,8 @@ const WorldMap = ({
   onHoverGeometry,
   center,
   width,
-  className
+  className,
+  scale
 }) => {
   const [tooltipConfig, setTooltipConfig] = useState(null);
   const buildCurves = (start, end, line) => line.arc;
@@ -136,10 +137,10 @@ const WorldMap = ({
       <ComposableMap
         className={cx('c-world-map', className)}
         projection="robinson"
-        projectionConfig={{ scale: 100, rotation: [0, 0, 0] }}
-        height={(width && Math.round(width * WORLD_MAP_ASPECT_RATIO)) || 600}
-        width={(width && Math.round(width)) || 800}
-        style={{ width: '100%', height: '100%' }}
+        projectionConfig={{ scale, rotation: [0, 0, 0] }}
+        height={Math.round(width * WORLD_MAP_ASPECT_RATIO)}
+        width={Math.round(width)}
+        style={{ height: '100%' }}
       >
         <ZoomableGroup center={center} disablePanning>
           <Geographies geography="/vector_layers/WORLD.topo.json" disableOptimization>
@@ -172,11 +173,14 @@ WorldMap.propTypes = {
   onHoverGeometry: PropTypes.func,
   getTopNodes: PropTypes.func.isRequired,
   center: PropTypes.array,
-  width: PropTypes.number
+  width: PropTypes.number,
+  scale: PropTypes.number
 };
 
 WorldMap.defaultProps = {
-  center: [20, 0]
+  center: [20, 0],
+  scale: 160,
+  width: 800
 };
 
 export default WorldMap;
