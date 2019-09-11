@@ -12,6 +12,7 @@ import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.co
 import cx from 'classnames';
 import formatValue from 'utils/formatValue';
 import isMobile from 'utils/isMobile';
+import { WORLD_MAP_ASPECT_RATIO } from 'constants';
 
 import 'scripts/react-components/shared/world-map/world-map.scss';
 
@@ -69,6 +70,7 @@ const WorldMap = ({
   highlightedCountriesIso,
   onHoverGeometry,
   center,
+  width,
   className
 }) => {
   const [tooltipConfig, setTooltipConfig] = useState(null);
@@ -134,8 +136,10 @@ const WorldMap = ({
       <ComposableMap
         className={cx('c-world-map', className)}
         projection="robinson"
-        height={600}
-        style={{ width: '100%', height: 'inherit' }}
+        projectionConfig={{ scale: 100, rotation: [0, 0, 0] }}
+        height={(width && Math.round(width * WORLD_MAP_ASPECT_RATIO)) || 600}
+        width={(width && Math.round(width)) || 800}
+        style={{ width: '100%', height: '100%' }}
       >
         <ZoomableGroup center={center} disablePanning>
           <Geographies geography="/vector_layers/WORLD.topo.json" disableOptimization>
@@ -167,7 +171,8 @@ WorldMap.propTypes = {
   highlightedCountriesIso: PropTypes.object,
   onHoverGeometry: PropTypes.func,
   getTopNodes: PropTypes.func.isRequired,
-  center: PropTypes.array
+  center: PropTypes.array,
+  width: PropTypes.number
 };
 
 WorldMap.defaultProps = {
