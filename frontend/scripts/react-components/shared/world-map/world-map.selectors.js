@@ -6,12 +6,26 @@ import greatCircle from '@turf/great-circle';
 import { geoPath } from 'd3-geo';
 import projections from 'react-simple-maps/lib/projections';
 import { getContexts } from 'react-components/explore/explore.selectors';
+import { WORLD_MAP_ASPECT_RATIO } from 'constants';
 
 const getSelectedContext = (state, { context }) => context;
 const getHighlightedCountryIds = (state, { highlightedCountryIds }) => highlightedCountryIds;
 const getCountries = (state, { destinationCountries }) => destinationCountries;
+const getWidth = (state, { width }) => width;
 
-const worldMapProjection = projections(800, 600, {}, 'robinson');
+const getWorldMapProjection = createSelector(
+  getWidth,
+  width =>
+    projections(
+      width || 800,
+      width ? Math.round(width * WORLD_MAP_ASPECT_RATIO) : 450,
+      {
+        scale: 100,
+        rotation: [0, 0, 0]
+      },
+      'robinson'
+    )
+);
 
 export const getOriginGeoId = createSelector(
   getSelectedContext,
@@ -23,7 +37,7 @@ export const getOriginCoordinates = createSelector(
   originGeoId => (originGeoId ? COUNTRIES_COORDINATES[originGeoId] : null)
 );
 
-function buildCustomArc(originCoords, destinationCoords) {
+function buildCustomArc(originCoords, destinationCoords, worldMapProjection) {
   const [minX, , maxX] = bbox(lineString(destinationCoords));
   const medianX = (maxX + minX) / 2;
   const originLeftOfBbox = originCoords[0] < medianX;
@@ -54,18 +68,18 @@ function buildCustomArc(originCoords, destinationCoords) {
   return `M ${start.join(' ')} Q ${curve} ${end.join(' ')}`;
 }
 
-function buildGreatCircleArc(originCoords, destinationCoords) {
+function buildGreatCircleArc(originCoords, destinationCoords, worldMapProjection) {
   const arc = greatCircle(originCoords, destinationCoords, { offset: 100, npoints: 50 });
   if (arc.geometry.type === 'MultiLineString') {
-    return buildCustomArc(originCoords, destinationCoords);
+    return buildCustomArc(originCoords, destinationCoords, worldMapProjection);
   }
   const pathMaker = geoPath().projection(worldMapProjection);
   return pathMaker(arc);
 }
 
 export const getWorldMapFlows = createSelector(
-  [getOriginGeoId, getOriginCoordinates, getCountries],
-  (originGeoId, originCoordinates, countries) => {
+  [getOriginGeoId, getOriginCoordinates, getCountries, getWorldMapProjection],
+  (originGeoId, originCoordinates, countries, worldMapProjection) => {
     if (!originGeoId || !originCoordinates || !countries) {
       return [];
     }
@@ -94,7 +108,7 @@ export const getWorldMapFlows = createSelector(
 
     return contextFlowsWithCoordinates.map(flow => ({
       ...flow,
-      arc: buildGreatCircleArc(originCoordinates, flow.coordinates)
+      arc: buildGreatCircleArc(originCoordinates, flow.coordinates, worldMapProjection)
     }));
   }
 );

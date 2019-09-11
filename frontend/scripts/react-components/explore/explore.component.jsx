@@ -10,8 +10,11 @@ import last from 'lodash/last';
 import { EXPLORE_STEPS } from 'constants';
 import getTopNodesKey from 'utils/getTopNodesKey';
 import cx from 'classnames';
+import Responsive from 'react-components/shared/responsive.hoc';
 
 import 'react-components/explore/explore.scss';
+
+const ResponsiveWorldMap = Responsive({ debounceRate: 350 })(WorldMap);
 
 function Explore({
   items,
@@ -150,28 +153,35 @@ function Explore({
             </div>
           </div>
         </div>
-        <div className="map-section">
-          <div className="map-container">
-            <WorldMap
-              context={highlightedContext}
-              destinationCountries={destinationCountries}
-              highlightedCountryIds={getHighlightedCountryIds}
-              onHoverGeometry={geoId =>
-                setHighlightedCommodities(findHighlightedCommoditiesIds(geoId))
-              }
-            />
-          </div>
-          <div className="quick-facts">
-            {quickFactsIndicators.map(indicator => (
-              <div className="bubble">
-                <Text size="rg" align="center" variant="mono">
-                  {indicator.name}
-                </Text>
-                <Text size="lg" weight="regular" align="center" className="quick-facts-value">
-                  {indicator.value} {indicator.unit}
-                </Text>
+        <div className={cx('map-section', { [`rows${rowsNumber}`]: rowsNumber })}>
+          <div className="row">
+            <div className="small-8 columns">
+              <div className={cx('map-container', { [`rows${rowsNumber}`]: rowsNumber })}>
+                <ResponsiveWorldMap
+                  center={[0, 0]}
+                  context={highlightedContext}
+                  destinationCountries={destinationCountries}
+                  highlightedCountryIds={getHighlightedCountryIds}
+                  onHoverGeometry={geoId =>
+                    setHighlightedCommodities(findHighlightedCommoditiesIds(geoId))
+                  }
+                />
               </div>
-            ))}
+            </div>
+            <div className="small-4 columns">
+              <div className="quick-facts">
+                {quickFactsIndicators.map(indicator => (
+                  <div className="bubble">
+                    <Text size="rg" align="center" variant="mono">
+                      {indicator.name}
+                    </Text>
+                    <Text size="lg" weight="regular" align="center" className="quick-facts-value">
+                      {indicator.value} {indicator.unit}
+                    </Text>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
