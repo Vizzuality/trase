@@ -37,6 +37,7 @@ export const GET_DASHBOARD_OPTIONS_TABS_URL = 'GET_DASHBOARD_OPTIONS_TABS_URL';
 export const GET_DASHBOARD_TEMPLATES_URL = 'GET_DASHBOARD_TEMPLATES_URL';
 export const GET_DASHBOARD_SEARCH_RESULTS_URL = 'GET_DASHBOARD_SEARCH_RESULTS_URL';
 export const GET_DASHBOARD_PARAMETRISED_CHARTS_URL = 'GET_DASHBOARD_PARAMETRISED_CHARTS_URL';
+export const GET_TOP_COUNTRIES_FACTS = 'GET_TOP_COUNTRIES_FACTS';
 
 const API_ENDPOINTS = {
   [GET_CONTEXTS_URL]: { api: 3, endpoint: '/contexts' },
@@ -127,6 +128,7 @@ const API_ENDPOINTS = {
     api: 3,
     endpoint: '/dashboards/parametrised_charts'
   },
+  [GET_TOP_COUNTRIES_FACTS]: { api: 3, endpoint: '/commodities/$commodity_id$/countries_facts' },
   [GET_TOP_PROFILES]: {
     api: 3,
     endpoint: '/top_profiles'

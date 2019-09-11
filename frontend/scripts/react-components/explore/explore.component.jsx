@@ -26,6 +26,7 @@ function Explore({
   goToTool,
   topNodes,
   getTopCountries,
+  getQuickFacts,
   commodityContexts,
   quickFactsIndicators
 }) {
@@ -61,6 +62,11 @@ function Explore({
     if (step === EXPLORE_STEPS.selectCountry)
       getTopCountries(commodityContexts, { fromDefaultYear: true });
   }, [commodityContexts, getTopCountries, step]);
+
+  // Get quick facts
+  useEffect(() => {
+    if (step === EXPLORE_STEPS.selectCountry) getQuickFacts(commodity.id);
+  }, [commodity, getQuickFacts, step]);
 
   const renderTitle = () => {
     const titleParts = ['commodity', 'sourcing country', 'supply chain'];
@@ -204,6 +210,7 @@ Explore.propTypes = {
   topNodes: PropTypes.object,
   commodityContexts: PropTypes.array,
   getTopCountries: PropTypes.func.isRequired,
+  getQuickFacts: PropTypes.func.isRequired,
   quickFactsIndicators: PropTypes.object
 };
 
