@@ -85,7 +85,6 @@ const renderVainillaComponents = () => (
     <MapContainer />
     <MapDimensionsContainer />
     <FlowContentContainer />
-    <MapLegend />
     <Tooltip />
     {!ENABLE_REDESIGN_PAGES && <LegacyBasemaps />}
     <MapContextContainer />
