@@ -74,10 +74,13 @@ $explore-heading: 66px;
     .bubble {
       width: 155px;
       height: 155px;
-      padding-top: 55px;
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      justify-content: center;
       border-radius: 50%;
-      margin-top: 20px;
       background-color: $light-gray;
+      margin-top: 20px;
     }
 
     .quick-facts-value {
