@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<database name="trase_test" schema="public" type="PostgreSQL - 11.4 (Ubuntu 11.4-1.pgdg16.04+1)">
+<database name="trase_test" schema="public" type="PostgreSQL - 11.5 (Ubuntu 11.5-1.pgdg16.04+1)">
    <tables>
       <table name="commodities" numRows="0" remarks="Commodities in supply chains, such as soy or beef" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('commodities_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">

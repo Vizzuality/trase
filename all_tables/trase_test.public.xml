@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<database name="trase_test" schema="public" type="PostgreSQL - 11.4 (Ubuntu 11.4-1.pgdg16.04+1)">
+<database name="trase_test" schema="public" type="PostgreSQL - 11.5 (Ubuntu 11.5-1.pgdg16.04+1)">
    <tables>
       <table name="ar_internal_metadata" numRows="1" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="key" nullable="false" remarks="" size="2147483647" type="varchar"/>
@@ -222,6 +222,7 @@
          <column autoUpdated="false" digits="6" id="6" name="updated_at" nullable="false" remarks="" size="29" type="timestamp"/>
          <column autoUpdated="false" defaultValue="false" digits="0" id="7" name="is_choropleth_disabled" nullable="false" remarks="When set, do not display the map choropleth" size="1" type="bool"/>
          <column autoUpdated="false" digits="0" id="8" name="role" nullable="true" remarks="" size="2147483647" type="varchar"/>
+         <column autoUpdated="false" digits="0" id="9" name="prefix" nullable="true" remarks="" size="2147483647" type="text"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="context_node_type_properties_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -1550,7 +1551,7 @@
             <column ascending="true" name="quant_id"/>
          </index>
       </table>
-      <table name="schema_migrations" numRows="51" remarks="" schema="public" type="TABLE">
+      <table name="schema_migrations" numRows="56" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" digits="0" id="0" name="version" nullable="false" remarks="" size="2147483647" type="varchar"/>
          <primaryKey column="version" sequenceNumberInPK="1"/>
          <index name="schema_migrations_pkey" unique="true">
