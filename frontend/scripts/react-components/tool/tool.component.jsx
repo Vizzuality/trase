@@ -11,6 +11,7 @@ import Sankey from 'react-components/tool/sankey';
 import MapLegend from 'react-components/tool/map-legend/map-legend.container';
 import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.react';
 import Basemaps from 'react-components/tool/basemaps';
+import LegacyBasemaps from 'react-components/tool/legacy-basemaps/legacy-basemaps.container';
 import EventManager from 'utils/eventManager';
 import UrlSerializer from 'react-components/shared/url-serializer';
 
@@ -32,13 +33,22 @@ const renderMapSidebar = () => (
         {/* this is rendered by map-context.component */}
       </ul>
     </div>
+
+    {!ENABLE_REDESIGN_PAGES && (
+      <div className="map-sidebar-group c-map-basemaps">
+        <div className="map-sidebar-group-title">Basemaps</div>
+        <ul className="map-sidebar-group-items js-map-basemaps-items">
+          {/* this is rendered by map-context.component */}
+        </ul>
+      </div>
+    )}
   </div>
 );
 
 const renderMap = () => (
   <div className="js-map-container c-map is-absolute -smooth-transition">
     <div id="js-map" className="c-map-leaflet" />
-    <Basemaps />
+    {ENABLE_REDESIGN_PAGES && <Basemaps />}
     <div className="btn-map -toggle-map js-toggle-map" />
     <div className="js-map-warnings-container map-warnings">
       <div className="warning-wrapper">
@@ -85,6 +95,7 @@ const renderVainillaComponents = () => (
     <MapDimensionsContainer />
     <FlowContentContainer />
     <MapLegend />
+    {!ENABLE_REDESIGN_PAGES && <LegacyBasemaps />}
     <MapContextContainer />
     <NodesTitlesContainer />
     <ModalContainer />
