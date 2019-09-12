@@ -247,6 +247,9 @@ module Api
               sources_ids: @sources_ids.join(','),
               companies_ids: @companies_ids.join(','),
               destinations_ids: @destinations_ids.join(','),
+              excluded_sources_ids: @chart_params.excluded_sources_ids.join(','),
+              excluded_companies_ids: @chart_params.excluded_companies_ids.join(','),
+              excluded_destinations_ids: @chart_params.excluded_destinations_ids.join(','),
               start_year: @start_year,
               end_year: @end_year
             }

@@ -1089,6 +1089,9 @@ paths:
         - $ref: "#/components/parameters/dashboards_sources_ids"
         - $ref: "#/components/parameters/dashboards_companies_ids"
         - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_sources_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_companies_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_destinations_ids"
         - $ref: "#/components/parameters/start_year_req_query_param"
         - $ref: "#/components/parameters/end_year_opt_query_param"
       responses:
@@ -1745,6 +1748,27 @@ components:
         type: string
     dashboards_destinations_ids:
       name: destinations_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    excluded_dashboards_sources_ids:
+      name: excluded_sources_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    excluded_dashboards_companies_ids:
+      name: excluded_companies_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    excluded_dashboards_destinations_ids:
+      name: excluded_destinations_ids
       in: query
       description: String with comma-separated numeric ids
       required: false

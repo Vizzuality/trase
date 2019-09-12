@@ -52,11 +52,12 @@ module Api
           end
 
           def apply_flow_path_filters
-            @chart_parameters.nodes_ids_by_position.each do |position, nodes_ids|
-              @query = @query.where(
-                'flows.path[?] IN (?)', position + 1, nodes_ids
-              )
-            end
+            @chart_parameters.
+              selected_nodes_ids_by_position.each do |position, nodes_ids|
+                @query = @query.where(
+                  'flows.path[?] IN (?)', position + 1, nodes_ids
+                )
+              end
           end
 
           def node_type_axis_meta(node_type)
@@ -139,7 +140,7 @@ module Api
 
           def flow_path_filters
             flow_path_filters = {}
-            nodes = @chart_parameters.nodes
+            nodes = @chart_parameters.selected_nodes
             nodes_by_node_id = Hash[nodes.map { |node| [node.id, node] }]
             [:sources, :companies, :destinations].each do |filter_name|
               nodes_ids = @chart_parameters.send(:"#{filter_name}_ids")
