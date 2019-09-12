@@ -106,10 +106,14 @@ const Tool = props => {
   const { resizeSankeyTool, urlProps, urlPropHandlers } = props;
   useEffect(() => {
     evManager.addEventListener(window, 'resize', resizeSankeyTool);
-    document.querySelector('body').classList.add('-overflow-hidden');
+    const body = document.querySelector('body');
+    body.classList.add('-overflow-hidden');
+    const originalBackground = body.style.backgroundColor;
+    body.style.backgroundColor = '#f2f2f2';
     return () => {
       evManager.clearEventListeners();
-      document.querySelector('body').classList.remove('-overflow-hidden');
+      body.classList.remove('-overflow-hidden');
+      body.style.backgroundColor = originalBackground;
     };
   }, [resizeSankeyTool]);
 
