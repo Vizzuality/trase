@@ -3,11 +3,11 @@ module Api
     module Flows
       class Filter
         attr_reader :errors, :flows, :active_nodes, :total_height, :other_nodes_ids,
-                    :resize_quant, :recolor_ind, :recolor_qual
+                    :cont_attribute, :ncont_attribute
         # params:
         # node_types_ids - list of node type ids
-        # resize_quant_name - Quant for resizing
-        # recolor_ind_name / recolor_qual_name - Ind / Qual name for recoloring
+        # cont_attribute_id - Quant for resizing
+        # ncont_attribute_id - Ind / Qual for recoloring
         # (only one of these may be specified, Ind takes precedence)
         # selected_nodes_ids - list of node ids for expanding.
         # biome_id - id of biome to filter by
@@ -29,6 +29,7 @@ module Api
           initialize_biome_position
           initialize_selected_nodes
           initialize_other_nodes_ids
+          initialize_excluded_nodes
           initialize_unknown_nodes
           if @errors.none?
             initialize_active_nodes
@@ -41,17 +42,28 @@ module Api
 
         def initialize_params(params)
           @node_types_ids = initialize_int_set_param(params[:node_types_ids])
-          @recolor_ind = params[:recolor_ind_name] && Api::V3::Ind.
-            includes(:ind_property).
-            find_by_name(params[:recolor_ind_name])
-          @recolor_qual = params[:recolor_qual_name] && Api::V3::Qual.
-            includes(:qual_property).
-            find_by_name(params[:recolor_qual_name])
-          @resize_quant = params[:resize_quant_name] && Api::V3::Quant.
-            includes(:quant_property).
-            find_by_name(params[:resize_quant_name])
+          context_id = @context.id
+          cont_attribute_id = params[:cont_attribute_id]
+          ncont_attribute_id = params[:ncont_attribute_id]
+          @ncont_attribute = ncont_attribute_id &&
+            Api::V3::Readonly::RecolorByAttribute.
+              select(:attribute_id).
+              includes(:readonly_attribute).
+              find_by_context_id_and_attribute_id(
+                context_id, ncont_attribute_id
+              )&.readonly_attribute
+          @cont_attribute = cont_attribute_id &&
+            Api::V3::Readonly::ResizeByAttribute.
+              select(:attribute_id).
+              includes(:readonly_attribute).
+              find_by_context_id_and_attribute_id(
+                context_id, cont_attribute_id
+              )&.readonly_attribute
           @selected_nodes_ids = initialize_int_set_param(
             params[:selected_nodes_ids]
+          )
+          @excluded_nodes_ids = initialize_int_set_param(
+            params[:excluded_nodes_ids]
           )
           @locked_nodes_ids = initialize_int_set_param(
             params[:locked_nodes_ids]
@@ -74,10 +86,7 @@ module Api
           unless @year_start && @year_end
             @errors << 'Both start and end date not given'
           end
-          @errors << 'Resize quant not given' unless @resize_quant
-          if @recolor_ind && @recolor_qual
-            @errors << 'Either ind or qual for recoloring'
-          end
+          @errors << 'Cont attribute not given' unless @cont_attribute
           return if @node_types_ids.any?
           @errors << 'No columns given'
         end
@@ -123,7 +132,7 @@ module Api
             Api::V3::Flow.
               select('true').
               joins(:flow_quants).
-              where('flow_quants.quant_id' => @resize_quant.id).
+              where('flow_quants.quant_id' => @cont_attribute.original_id).
               where(context_id: @context.id). # TODO: verify this
               where('? = ANY(flows.path)', node_id).
               where('year >= ? AND year <= ?', @year_start, @year_end).any?
@@ -146,6 +155,29 @@ module Api
               pluck(:id).first
             # TODO: maybe we could not rely on those nodes in db?
             # problem is the id of those nodes is referenced
+          end
+        end
+
+        def initialize_excluded_nodes
+          # filter out nodes not involved in any flows in this context
+          @excluded_nodes_ids = @excluded_nodes_ids.select do |node_id|
+            Api::V3::Flow.
+              select('true').
+              joins(:flow_quants).
+              where('flow_quants.quant_id' => @cont_attribute.original_id).
+              where(context_id: @context.id). # TODO: verify this
+              where('NOT(? = ANY(flows.path))', node_id).
+              where('year >= ? AND year <= ?', @year_start, @year_end).any?
+          end
+          @excluded_nodes = Api::V3::Node.where(
+            id: @excluded_nodes_ids,
+            node_type_id: @node_types_ids.to_a
+          ).all
+
+          @excluded_nodes_by_position = @excluded_nodes.group_by do |node|
+            @active_node_types.find do |nt|
+              nt.id == node.node_type_id
+            end.column_position
           end
         end
 
@@ -270,31 +302,17 @@ module Api
         end
 
         def flows_query
-          recolor_id, recolor_value_table, recolor_column =
-            if @recolor_ind
-              [@recolor_ind.id, Api::V3::FlowInd.table_name, 'ind_id']
-            elsif @recolor_qual
-              [@recolor_qual.id, Api::V3::FlowQual.table_name, 'qual_id']
-            end
-
+          cont_attr_table = @cont_attribute.flow_values_class.table_name
           select_clause_parts = [
             'flows.id',
             'ARRAY[' +
               @active_node_types_positions.map { 'flows.path[?]' }.join(', ') +
               '] AS path',
-            'flow_quants.value AS quant_value'
+            "#{cont_attr_table}.value AS quant_value"
           ]
 
-          if @recolor_ind
-            select_clause_parts << [
-              'flow_inds.value::DOUBLE PRECISION AS ind_value',
-              'NULL::TEXT AS qual_value'
-            ].join(', ')
-          elsif @recolor_qual
-            select_clause_parts << [
-              'NULL::DOUBLE PRECISION AS ind_value',
-              'flow_quals.value::TEXT AS qual_value'
-            ].join(', ')
+          if @ncont_attribute
+            select_clause_parts << select_clause_ncont_attribute
           end
 
           select_clause = ActiveRecord::Base.send(
@@ -304,32 +322,51 @@ module Api
               *(@active_node_types_positions.map { |ai| ai + 1 })
             ]
           )
-          recolor_join_clause = ActiveRecord::Base.send(
-            :sanitize_sql_array,
-            [
-              "LEFT JOIN #{recolor_value_table} ON \
-              #{recolor_value_table}.flow_id = flows.id \
-              AND #{recolor_value_table}.#{recolor_column} = ?",
-              recolor_id
-            ]
-          )
 
           query = basic_flows_query.
             select(select_clause).
             where('flow_quants.value > 0')
-          if recolor_id
-            query = query.
-              joins(recolor_join_clause)
+          if @ncont_attribute
+            ncont_attr_table = @ncont_attribute.flow_values_class.table_name
+            ncont_attr_join_clause = ActiveRecord::Base.send(
+              :sanitize_sql_array,
+              [
+                "LEFT JOIN #{ncont_attr_table} ON \
+                #{ncont_attr_table}.flow_id = flows.id \
+                AND #{ncont_attr_table}.#{@ncont_attribute.attribute_id_name} = ?",
+                @ncont_attribute.original_id
+              ]
+            )
+            query = query.joins(ncont_attr_join_clause)
           end
           query
         end
 
+        def select_clause_ncont_attribute
+          ncont_attr_table = @ncont_attribute.flow_values_class.table_name
+          if @ncont_attribute.ind?
+            [
+              "#{ncont_attr_table}.value::DOUBLE PRECISION AS ind_value",
+              'NULL::TEXT AS qual_value'
+            ].join(', ')
+          elsif @ncont_attribute.qual?
+            [
+              'NULL::DOUBLE PRECISION AS ind_value',
+              "#{ncont_attr_table}.value::TEXT AS qual_value"
+            ].join(', ')
+          end
+        end
+
         def basic_flows_query
+          cont_attr_table = @cont_attribute.flow_values_class.table_name
           query = Api::V3::Flow.
-            joins(:flow_quants).
+            joins(cont_attr_table.to_sym).
             where(context_id: @context.id).
             where('year >= ? AND year <= ?', @year_start, @year_end).
-            where('flow_quants.quant_id' => @resize_quant.id)
+            where(
+              "#{cont_attr_table}.#{@cont_attribute.attribute_id_name}" =>
+                @cont_attribute.original_id
+            )
 
           if @biome_position
             query = query.where('path[?] = ?', @biome_position, @biome_id)
@@ -344,6 +381,17 @@ module Api
               )
             end
           end
+
+          if @excluded_nodes.any?
+            @excluded_nodes_by_position.each do |position, nodes_ids|
+              query = query.where(
+                'NOT(flows.path[?] = ANY(ARRAY[?]))',
+                position + 1,
+                nodes_ids
+              )
+            end
+          end
+
           query
         end
       end

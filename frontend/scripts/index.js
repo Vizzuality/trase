@@ -1,7 +1,7 @@
 /* eslint-disable global-require,import/no-extraneous-dependencies */
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-
+import parseURL from 'utils/parseURL';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
@@ -9,14 +9,14 @@ import rangeTouch from 'rangetouch';
 import analyticsMiddleware from 'analytics/middleware';
 import * as appReducers from 'store';
 
-import qs from 'query-string';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import toolLinksInitialState from 'react-components/tool-links/tool-links.initial-state';
 import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-links.serializers';
 import appInitialState from 'reducers/app.initial-state';
 import toolLayersInitialState from 'react-components/tool-layers/tool-layers.initial-state';
 import * as ToolLayersUrlPropHandlers from 'react-components/tool-layers/tool-layers.serializers';
-
+import dashboardElementInitialState from 'react-components/dashboard-element/dashboard-element.initial-state';
+import * as DashboardElementUrlPropHandlers from 'react-components/dashboard-element/dashboard-element.serializers';
 import router from './router/router';
 import routeSubscriber from './router/route-subscriber';
 import { register, unregister } from './worker';
@@ -86,8 +86,7 @@ const reducers = combineReducers({
   location: router.reducer
 });
 
-const params = qs.parse(window.location.search, { arrayFormat: 'bracket', parseNumbers: true });
-
+const params = parseURL(window.location.search);
 const store = createStore(
   reducers,
   {
@@ -105,8 +104,8 @@ const store = createStore(
         'selectedColumnsIds',
         'expandedNodesIds',
         'detailedView',
-        'selectedResizeByName',
-        'selectedRecolorByName',
+        'selectedResizeBy',
+        'selectedRecolorBy',
         'selectedBiomeFilterName'
       ]
     }),
@@ -117,9 +116,24 @@ const store = createStore(
       props: [
         'mapView',
         'isMapVisible',
-        'selectedMapBasemap',
+        'selectedBasemap',
         'selectedMapContextualLayers',
         'selectedMapDimensions'
+      ]
+    }),
+    dashboardElement: deserialize({
+      params,
+      state: dashboardElementInitialState,
+      urlPropHandlers: DashboardElementUrlPropHandlers,
+      props: [
+        'sources',
+        'companies',
+        'destinations',
+        'selectedYears',
+        'selectedResizeBy',
+        'selectedRecolorBy',
+        'selectedCountryId',
+        'selectedCommodityId'
       ]
     })
   },

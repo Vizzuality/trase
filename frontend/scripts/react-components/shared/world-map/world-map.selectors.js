@@ -2,10 +2,16 @@ import { createSelector } from 'reselect';
 import { COUNTRIES_COORDINATES } from 'scripts/countries';
 import bbox from '@turf/bbox';
 import lineString from 'turf-linestring';
-import { getTopNodesKey } from 'react-components/explore/explore.actions';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import greatCircle from '@turf/great-circle';
+import { geoPath } from 'd3-geo';
+import projections from 'react-simple-maps/lib/projections';
+import { getContexts } from 'react-components/explore/explore.selectors';
 
-const getTopNodes = state => state.explore.topNodes;
+const getSelectedContext = (state, { context }) => context;
+const getHighlightedCountryIds = (state, { highlightedCountryIds }) => highlightedCountryIds;
+const getCountries = (state, { destinationCountries }) => destinationCountries;
+
+const worldMapProjection = projections(800, 600, {}, 'robinson');
 
 export const getOriginGeoId = createSelector(
   getSelectedContext,
@@ -17,14 +23,45 @@ export const getOriginCoordinates = createSelector(
   originGeoId => (originGeoId ? COUNTRIES_COORDINATES[originGeoId] : null)
 );
 
-export const getCountries = createSelector(
-  [getTopNodes, getSelectedContext, getSelectedYears],
-  (topNodes, selectedContext, selectedYears) => {
-    const selectedContextId = selectedContext ? selectedContext.id : null;
-    const topNodesKey = getTopNodesKey(selectedContextId, 'country', ...selectedYears);
-    return topNodes[topNodesKey];
+function buildCustomArc(originCoords, destinationCoords) {
+  const [minX, , maxX] = bbox(lineString(destinationCoords));
+  const medianX = (maxX + minX) / 2;
+  const originLeftOfBbox = originCoords[0] < medianX;
+  const pointOfControl = {
+    x: originLeftOfBbox ? minX - 10 : maxX + 10
+  };
+
+  // right
+  let curveStyle = 'forceUp';
+  if (destinationCoords[0] < pointOfControl.x) {
+    // left
+    curveStyle = 'forceDown';
   }
-);
+
+  const start = worldMapProjection(destinationCoords);
+  const end = worldMapProjection(originCoords);
+
+  const x0 = start[0];
+  const x1 = end[0];
+  const y0 = start[1];
+  const y1 = end[1];
+
+  const curve = {
+    forceUp: `${x1} ${y0}`,
+    forceDown: `${x0} ${y1}`
+  }[curveStyle];
+
+  return `M ${start.join(' ')} Q ${curve} ${end.join(' ')}`;
+}
+
+function buildGreatCircleArc(originCoords, destinationCoords) {
+  const arc = greatCircle(originCoords, destinationCoords, { offset: 100, npoints: 50 });
+  if (arc.geometry.type === 'MultiLineString') {
+    return buildCustomArc(originCoords, destinationCoords);
+  }
+  const pathMaker = geoPath().projection(worldMapProjection);
+  return pathMaker(arc);
+}
 
 export const getWorldMapFlows = createSelector(
   [getOriginGeoId, getOriginCoordinates, getCountries],
@@ -55,25 +92,26 @@ export const getWorldMapFlows = createSelector(
       console.warn('World map flows are missing geoids. Check your database.');
     }
 
-    const [minX, , maxX] = bbox(lineString(contextFlowsWithCoordinates.map(f => f.coordinates)));
-    const medianX = (maxX + minX) / 2;
-    const originLeftOfBbox = originCoordinates[0] < medianX;
-    const pointOfControl = {
-      x: originLeftOfBbox ? minX - 10 : maxX + 10
-    };
-
-    const getCurveStyle = destination => {
-      if (destination[0] < pointOfControl.x) {
-        // left
-        return 'forceDown';
-      }
-      // right
-      return 'forceUp';
-    };
-
-    return contextFlowsWithCoordinates.map(destination => ({
-      ...destination,
-      curveStyle: getCurveStyle(destination.coordinates)
+    return contextFlowsWithCoordinates.map(flow => ({
+      ...flow,
+      arc: buildGreatCircleArc(originCoordinates, flow.coordinates)
     }));
+  }
+);
+
+export const getHighlightedCountriesIso = createSelector(
+  [getHighlightedCountryIds, getContexts],
+  (highlightedCountryIds, contexts) => {
+    if (!highlightedCountryIds || !highlightedCountryIds.level1) return null;
+    const countryGeoIds = { level1: [], level2: [] };
+    contexts.forEach(c => {
+      if (highlightedCountryIds.level1?.includes(c.countryId)) {
+        countryGeoIds.level1.push(c.worldMap.geoId);
+      }
+      if (highlightedCountryIds.level2?.includes(c.countryId)) {
+        countryGeoIds.level2.push(c.worldMap.geoId);
+      }
+    });
+    return countryGeoIds;
   }
 );

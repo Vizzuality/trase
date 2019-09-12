@@ -42,7 +42,6 @@ export default class {
       columns,
       selectedMapDimensions,
       recolorGroups,
-      currentQuant,
       selectedYears,
       nodeHeights,
       attributes,
@@ -68,7 +67,6 @@ export default class {
       selectedResizeBy,
       selectedMapDimensions,
       recolorGroups,
-      currentQuant,
       selectedYears,
       selectedContextId
     });
@@ -80,7 +78,6 @@ export default class {
     selectedMapDimensions,
     highlightedNodesData,
     coordinates,
-    currentQuant,
     selectedResizeBy
   }) {
     this.tooltip.hide();
@@ -94,7 +91,6 @@ export default class {
         nodeHeights,
         nodesData: highlightedNodesData,
         coordinates,
-        currentQuant,
         attributes,
         selectedResizeBy,
         selectedMapDimensions
@@ -111,7 +107,6 @@ export default class {
     selectedResizeBy,
     selectedMapDimensions,
     recolorGroups = null,
-    currentQuant,
     selectedYears,
     selectedContextId
   }) {
@@ -144,9 +139,9 @@ export default class {
         let renderedQuant;
         if (nodeHeight) {
           renderedQuant = {
-            value: formatValue(nodeHeight.quant, currentQuant.name),
-            unit: currentQuant.unit,
-            name: currentQuant.name
+            value: formatValue(nodeHeight.quant, selectedResizeBy.label),
+            unit: selectedResizeBy.unit,
+            name: selectedResizeBy.label
           };
         }
 
@@ -219,7 +214,6 @@ export default class {
     nodeHeights,
     nodesData,
     coordinates,
-    currentQuant,
     selectedMapDimensions,
     attributes,
     selectedResizeBy
@@ -251,9 +245,9 @@ export default class {
     // if node is visible in sankey, quant is available
     if (nodeHeight) {
       values.push({
-        title: currentQuant.name,
-        unit: currentQuant.unit,
-        value: formatValue(nodeHeight.quant, currentQuant.name)
+        title: selectedResizeBy.label,
+        unit: selectedResizeBy.unit,
+        value: formatValue(nodeHeight.quant, selectedResizeBy.label)
       });
     }
     this.tooltip.show(coordinates.pageX, coordinates.pageY, node.name, values);

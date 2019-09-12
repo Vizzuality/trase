@@ -24,10 +24,9 @@ export const getSelectedContext = createSelector(
     }
 
     if (selectedContextId === null) {
-      return contexts.find(ctx => ctx.isDefault);
+      return contexts.find(ctx => ctx.isDefault) || null;
     }
-
-    return contexts.find(ctx => ctx.id === selectedContextId);
+    return contexts.find(ctx => ctx.id === selectedContextId) || null;
   }
 );
 

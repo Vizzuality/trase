@@ -11,7 +11,6 @@ RSpec.describe Admin::TopProfilesController, type: :controller do
 
   let(:context) { api_v3_context }
   let(:node) { api_v3_exporter1_node }
-  # let(:top_profile) { FactoryBot.create(:api_v3_top_profile) }
 
   describe 'POST create' do
     before(:each) do

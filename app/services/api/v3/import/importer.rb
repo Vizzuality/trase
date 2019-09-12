@@ -107,7 +107,7 @@ module Api
             Api::V3::Readonly::Node,
             Api::V3::Readonly::SankeyNode,
             Api::V3::Readonly::Flow,
-            Api::V3::Readonly::Dashboards::FlowPath
+            Api::V3::Readonly::FlowNode
           ].each { |mview| mview.refresh(sync: true, skip_dependents: true) }
           Api::V3::Readonly::DownloadFlow.refresh(
             sync: true, skip_dependents: true, skip_precompute: true
@@ -130,7 +130,8 @@ module Api
             Api::V3::Readonly::CommodityAttributeProperty,
             Api::V3::Readonly::QuantValuesMeta,
             Api::V3::Readonly::IndValuesMeta,
-            Api::V3::Readonly::QualValuesMeta
+            Api::V3::Readonly::QualValuesMeta,
+            Api::V3::Readonly::FlowQuantTotal
           ].each { |mview| mview.refresh(sync: true, skip_dependencies: true) }
         end
 

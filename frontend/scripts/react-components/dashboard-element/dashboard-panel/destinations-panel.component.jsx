@@ -2,20 +2,24 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SearchInput from 'react-components/shared/search-input/search-input.component';
 import GridList from 'react-components/shared/grid-list/grid-list.component';
+import { useFirstItem } from 'react-components/shared/grid-list/grid-list.hooks';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 
 function DestinationsPanel(props) {
   const {
     page,
+    setSearchResult,
     searchDestinations,
     destinations,
-    loadingMoreItems,
     loading,
     getSearchResults,
     activeDestinations,
     onSelectDestinationValue,
     getMoreItems
   } = props;
+
+  const itemToScrollTo = useFirstItem(destinations);
+
   return (
     <React.Fragment>
       <SearchInput
@@ -24,7 +28,7 @@ function DestinationsPanel(props) {
         className="dashboard-panel-search"
         items={searchDestinations}
         placeholder="Search place"
-        onSelect={onSelectDestinationValue}
+        onSelect={setSearchResult}
         onSearchTermChange={getSearchResults}
       />
       <GridList
@@ -37,13 +41,13 @@ function DestinationsPanel(props) {
         columnCount={5}
         page={page}
         getMoreItems={getMoreItems}
-        loadingMoreItems={loadingMoreItems}
         loading={loading}
+        itemToScrollTo={itemToScrollTo}
       >
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={!!activeDestinations[itemProps.item && itemProps.item.id]}
+            isActive={activeDestinations.includes(itemProps.item?.id)}
             enableItem={onSelectDestinationValue}
             disableItem={onSelectDestinationValue}
           />
@@ -56,12 +60,12 @@ function DestinationsPanel(props) {
 DestinationsPanel.propTypes = {
   destinations: PropTypes.array,
   page: PropTypes.number.isRequired,
-  loadingMoreItems: PropTypes.bool,
   loading: PropTypes.bool,
   searchDestinations: PropTypes.array,
-  activeDestinations: PropTypes.object,
+  activeDestinations: PropTypes.array,
   getMoreItems: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
+  setSearchResult: PropTypes.func.isRequired,
   onSelectDestinationValue: PropTypes.func.isRequired
 };
 

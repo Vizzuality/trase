@@ -2,11 +2,14 @@ import isEmpty from 'lodash/isEmpty';
 import {
   GET_DISCLAIMER_URL,
   GET_NODES_WITH_SEARCH_URL,
+  GET_TOP_NODES_URL,
   getURLFromParams
 } from 'utils/getURLFromParams';
 import { TOGGLE_MAP, SELECT_YEARS } from 'react-components/tool/tool.actions';
 import getPageTitle from 'scripts/router/page-title';
 import { redirect } from 'redux-first-router';
+import getTopNodesKey from 'utils/getTopNodesKey';
+import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 
 export const SET_CONTEXT = 'SET_CONTEXT';
 export const DISPLAY_STORY_MODAL = 'DISPLAY_STORY_MODAL';
@@ -23,6 +26,9 @@ export const SET_CONTEXTS = 'SET_CONTEXTS';
 export const SET_CONTEXT_IS_USER_SELECTED = 'SET_CONTEXT_IS_USER_SELECTED';
 export const APP__SET_LOADING = 'APP__SET_LOADING';
 export const APP__TRANSIFEX_LANGUAGES_LOADED = 'APP__TRANSIFEX_LANGUAGES_LOADED';
+export const APP__SET_TOP_DESTINATION_COUNTRIES = 'APP__SET_TOP_DESTINATION_COUNTRIES';
+export const APP__SET_TOP_DESTINATION_COUNTRIES_LOADING =
+  'APP__SET_TOP_DESTINATION_COUNTRIES_LOADING';
 
 export function setContextIsUserSelected(contextIsUserSelected) {
   return {
@@ -171,3 +177,64 @@ export function setTransifexLanguages(languages) {
     payload: { languages }
   };
 }
+
+export const getTopCountries = (contexts, options = {}) => (dispatch, getState) => {
+  const { fromDefaultYear } = options;
+  const state = getState();
+  const defaultSelectedContext = getSelectedContext(state);
+  if (!defaultSelectedContext) return;
+  const selectedContexts = contexts || [defaultSelectedContext];
+
+  const topCountries = [];
+  selectedContexts.forEach(selectedContext => {
+    const columnId = selectedContext.worldMap.countryColumnId;
+    const years = fromDefaultYear
+      ? [selectedContext.defaultYear, selectedContext.defaultYear]
+      : getSelectedYears(state);
+    // eslint-disable-next-line camelcase
+    const [start_year, end_year] = years;
+    const { topNodes } = state.app;
+    const params = {
+      start_year,
+      end_year,
+      column_id: columnId,
+      context_id: selectedContext.id
+    };
+    const topNodesKey = getTopNodesKey(selectedContext.id, 'country', start_year, end_year);
+    if (!topNodes[topNodesKey]) {
+      topCountries.push({
+        topNodesKey,
+        country: selectedContext.countryName,
+        url: getURLFromParams(GET_TOP_NODES_URL, params)
+      });
+    }
+  });
+  if (!topCountries.length) return;
+
+  dispatch({
+    type: APP__SET_TOP_DESTINATION_COUNTRIES_LOADING,
+    payload: {
+      topNodesKeys: topCountries.map(c => c.topNodesKey),
+      loading: true
+    }
+  });
+
+  Promise.all(
+    topCountries.map(topCountry =>
+      fetch(topCountry.url).then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    )
+  )
+    .then(res => {
+      dispatch({
+        type: APP__SET_TOP_DESTINATION_COUNTRIES,
+        payload: {
+          topCountries: topCountries.map((c, i) => ({
+            topNodesKey: c.topNodesKey,
+            country: c.country,
+            data: res[i].data
+          }))
+        }
+      });
+    })
+    .catch(error => console.error(error));
+};

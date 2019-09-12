@@ -16,13 +16,16 @@ function GridListItem(props) {
     enableItem,
     disableItem,
     onInfoClick,
-    isInfoActive
+    onHover,
+    isInfoActive,
+    variant
   } = props;
   if (!item) return <b style={style} />;
   const onClick = isActive && disableItem ? disableItem : enableItem;
+  const testId = item.name && item.name.split(' ').join('-');
   return (
     <React.Fragment>
-      <div style={style} className="c-grid-list-item">
+      <div style={style} className={cx('c-grid-list-item', { [`v-${variant}`]: variant })}>
         {isGroup && <h3 className="grid-list-item-heading">{item.name}</h3>}
         {!isGroup && (
           <div className="grid-list-item-content" data-test="grid-list-item-button">
@@ -30,12 +33,14 @@ function GridListItem(props) {
               type="button"
               disabled={isDisabled}
               onClick={() => onClick(item)}
+              onMouseEnter={onHover ? () => onHover(item) : undefined}
+              onMouseLeave={onHover ? () => onHover(null) : undefined}
               className={cx('grid-list-item-button', {
                 '-active': isActive,
                 '-has-info': !!tooltip,
                 '-clickable': isActive && !disableItem
               })}
-              data-test={`grid-list-item-button-${item.name}`}
+              data-test={`grid-list-item-button-${testId}`}
             >
               <span>{item.name}</span>
             </button>
@@ -75,8 +80,10 @@ GridListItem.propTypes = {
   enableItem: PropTypes.func,
   disableItem: PropTypes.func,
   onInfoClick: PropTypes.func,
+  onHover: PropTypes.func,
   isInfoActive: PropTypes.bool,
-  style: PropTypes.object.isRequired
+  style: PropTypes.object.isRequired,
+  variant: PropTypes.string
 };
 
 export default GridListItem;

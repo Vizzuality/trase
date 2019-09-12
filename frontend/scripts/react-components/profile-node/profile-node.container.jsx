@@ -48,12 +48,11 @@ function mapStateToProps(state) {
     query: { year: selectedYear, nodeId, print, contextId = 1 } = {},
     payload: { profileType }
   } = state.location;
-  const { tooltips, contexts } = state.app;
+  const { contexts } = state.app;
   const ctxId = contextId && parseInt(contextId, 10);
   const context = contexts.find(ctx => ctx.id === ctxId) || { id: ctxId };
   return {
     selectedYear,
-    tooltips,
     context,
     profileType,
     printMode: print && JSON.parse(print),

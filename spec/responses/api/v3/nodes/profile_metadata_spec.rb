@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Profile metadata', type: :request do
   include_context 'api v3 brazil flows quants'
-  include_context 'api v3 brazil municipality place profile'
+  include_context 'api v3 brazil soy profiles'
 
   before(:each) do
     Api::V3::Readonly::Node.refresh

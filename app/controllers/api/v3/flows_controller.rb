@@ -5,7 +5,7 @@ module Api
 
       def index
         ensure_required_param_present(:include_columns)
-        ensure_required_param_present(:flow_quant)
+        ensure_required_param_present(:cont_attribute_id)
         ensure_required_param_present(:start_year)
         @flows_result = Api::V3::Flows::Filter.new(
           @context, @filter_params
@@ -25,10 +25,10 @@ module Api
       def set_filter_params
         @filter_params = {
           node_types_ids: params[:include_columns],
-          recolor_ind_name: params[:flow_ind],
-          recolor_qual_name: params[:flow_qual],
-          resize_quant_name: params[:flow_quant],
+          ncont_attribute_id: params[:ncont_attribute_id],
+          cont_attribute_id: params[:cont_attribute_id],
           selected_nodes_ids: params[:selected_nodes],
+          excluded_nodes_ids: params[:excluded_nodes],
           locked_nodes_ids: params[:locked_nodes],
           biome_id: params[:biome_filter_id],
           year_start: params[:start_year],

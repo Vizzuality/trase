@@ -2,12 +2,15 @@ import { createSelector } from 'reselect';
 import omitBy from 'lodash/omitBy';
 import sortBy from 'lodash/sortBy';
 import kebabCase from 'lodash/kebabCase';
+import capitalize from 'lodash/capitalize';
 import addApostrophe from 'utils/addApostrophe';
 import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
-import { CHART_TYPES } from 'constants';
-import camelCase from 'lodash/camelCase';
-import capitalize from 'lodash/capitalize';
-import { getDashboardsContext } from 'react-components/dashboard-element/dashboard-element.selectors';
+import { CHART_TYPES, NODE_TYPE_PANELS } from 'constants';
+import {
+  getDashboardsContext,
+  getDashboardSelectedRecolorBy
+} from 'react-components/dashboard-element/dashboard-element.selectors';
+import pluralize from 'utils/pluralize';
 
 export const PARSED_CHART_TYPES = {
   bar_chart: CHART_TYPES.bar,
@@ -21,7 +24,14 @@ export const PARSED_CHART_TYPES = {
 
 const getMeta = (state, { meta }) => meta || null;
 const getData = (state, { data }) => data || null;
-const getChartType = (state, { chartType, meta }) => {
+const getGrouping = (state, { grouping }) => grouping || null;
+const getActiveChartId = (state, { activeChartId }) => {
+  if (typeof activeChartId !== 'undefined' && activeChartId !== null) {
+    return activeChartId;
+  }
+  return null;
+};
+export const getChartType = (state, { chartType, meta }) => {
   if (chartType) {
     const type = PARSED_CHART_TYPES[chartType];
     if (type === CHART_TYPES.dynamicSentence && typeof meta?.info?.filter?.node !== 'undefined') {
@@ -31,7 +41,6 @@ const getChartType = (state, { chartType, meta }) => {
   }
   return null;
 };
-const getSelectedRecolorBy = (state, props) => props.selectedRecolorBy;
 
 export const getDefaultConfig = createSelector(
   [getChartType],
@@ -50,7 +59,7 @@ const getGroupedAxis = (axis, meta) => {
 const sortGroupedAxis = keys => sortBy(Object.keys(keys), key => parseInt(key.substr(1), 10));
 
 export const getColors = createSelector(
-  [getMeta, getData, getDefaultConfig, getChartType, getSelectedRecolorBy],
+  [getMeta, getData, getDefaultConfig, getChartType, getDashboardSelectedRecolorBy],
   (meta, data, defaultConfig, chartType, selectedRecolorBy) => {
     const { colors, layout, parse } = defaultConfig;
 
@@ -60,7 +69,7 @@ export const getColors = createSelector(
 
     const getColor = labelText => {
       const legendKey = labelText && kebabCase(labelText);
-      const type = colors[selectedRecolorBy.legendType];
+      const type = selectedRecolorBy && colors[selectedRecolorBy.legendType];
       const theme = type && type[selectedRecolorBy.legendColorTheme];
       return theme && theme[legendKey];
     };
@@ -140,7 +149,6 @@ export const getXKeys = createSelector(
   }
 );
 
-export const makeGetChartType = () => getChartType;
 export const makeGetConfig = () =>
   createSelector(
     [getMeta, getYKeys, getXKeys, getColors, getDefaultConfig, getDashboardsContext],
@@ -178,53 +186,72 @@ export const makeGetConfig = () =>
     }
   );
 
-const getPluralNodeType = nodeType => {
-  const name = camelCase(nodeType);
-  return (
-    {
-      country: 'countries',
-      municipality: 'municipalities'
-    }[name] || `${nodeType}s`.toLowerCase()
-  );
-};
 const getNodeTypeName = pluralNodeType =>
   pluralNodeType === 'countries' ? 'importing countries' : pluralNodeType;
 
-const getFilterPreposition = filterKey => {
-  switch (filterKey) {
-    case 'companies':
-      return 'of';
-    case 'destinations':
-      return 'to';
-    case 'sources':
-      return 'in';
-    default:
-      return '';
-  }
-};
+export const makeGetGroupingActiveItem = () =>
+  createSelector(
+    [getGrouping, getActiveChartId],
+    (grouping, activeChartId) => {
+      if (activeChartId && grouping) {
+        const item = grouping.options.find(option => option.id === activeChartId);
+        return { ...item, value: item.id, label: capitalize(item.label) };
+      }
+      return null;
+    }
+  );
+
+export const makeGetGroupingOptions = () =>
+  createSelector(
+    [getGrouping],
+    grouping => {
+      if (grouping) {
+        return sortBy(grouping.options, ['label']).map(option => ({
+          ...option,
+          value: option.id,
+          label: capitalize(option.label)
+        }));
+      }
+      return null;
+    }
+  );
 
 export const makeGetTitle = () =>
   createSelector(
-    [getMeta, makeGetConfig()],
-    (meta, config) => {
+    [getMeta, makeGetGroupingActiveItem(), makeGetConfig()],
+    (meta, activeChartGrouping, config) => {
       if (!meta || !meta.info) return '';
       // adding 1 to the top_n to count in "other" aggregation
-      const topNPart = meta.info.top_n ? `Top ${meta.info.top_n + 1}` : null;
+      let topNPart = meta.info.top_n ? `Top ${meta.info.top_n + 1}` : null;
       let nodeTypePart = 'Selection overview';
       const nodeFilter = meta.info?.filter?.node;
-      if (meta.info.node_type) {
-        nodeTypePart = getNodeTypeName(getPluralNodeType(meta.info.node_type));
+      const nodeType = meta.info.node_type;
+      if (nodeType) {
+        nodeTypePart = getNodeTypeName(pluralize(nodeType));
       } else if (nodeFilter) {
-        nodeTypePart = `${capitalize(nodeFilter.name)}${addApostrophe(
-          nodeFilter.name
-        )} regional indicators: ${config?.yAxisLabel.text}`;
+        const label = activeChartGrouping ? '' : config?.yAxisLabel.text;
+        nodeTypePart = `${capitalize(nodeFilter.name)}${addApostrophe(nodeFilter.name)} ${label}`;
       }
+
       let filterPart = '';
       const filterKey = meta.info.single_filter_key;
       if (filterKey) {
-        const name = capitalize(meta.info.filter[filterKey][0].name);
-        filterPart = `${getFilterPreposition(filterKey)} ${name}`;
+        const name = activeChartGrouping ? '' : capitalize(meta.info.filter[filterKey][0].name);
+        filterPart = `of ${name}`;
       }
+
+      const nodeStep = NODE_TYPE_PANELS[nodeType];
+      const isNodeComparison =
+        meta.info.filter &&
+        meta.info.filter[nodeStep] &&
+        meta.info.filter[nodeStep].length &&
+        meta.info.filter[nodeStep].map(f => f.node_type === nodeType).filter(Boolean).length > 1;
+      if (isNodeComparison) {
+        topNPart = null;
+        nodeTypePart = capitalize(nodeTypePart);
+        filterPart = 'comparison';
+      }
+
       return [topNPart, nodeTypePart, filterPart].filter(Boolean).join(' ');
     }
   );

@@ -1,5 +1,5 @@
-import qs from 'query-string';
 import last from 'lodash/last';
+import qs from 'qs';
 
 const BASE_URL = 'http://0.0.0.0:8081';
 

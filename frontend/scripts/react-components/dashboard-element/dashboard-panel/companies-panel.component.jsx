@@ -2,15 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SearchInput from 'react-components/shared/search-input/search-input.component';
 import GridList from 'react-components/shared/grid-list/grid-list.component';
+import { useFirstItem } from 'react-components/shared/grid-list/grid-list.hooks';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import Tabs from 'react-components/shared/tabs/tabs.component';
+
 import 'react-components/dashboard-element/dashboard-panel/companies-panel.scss';
 
 function CompaniesPanel(props) {
   const {
     tabs,
     page,
-    loadingMoreItems,
     loading,
     searchCompanies,
     companies,
@@ -24,6 +25,9 @@ function CompaniesPanel(props) {
     activeNodeTypeTab,
     actionComponent
   } = props;
+
+  const itemToScrollTo = useFirstItem(companies);
+
   return (
     <div className="c-companies-panel">
       <SearchInput
@@ -39,7 +43,7 @@ function CompaniesPanel(props) {
       <Tabs
         tabs={tabs}
         onSelectTab={onSelectNodeTypeTab}
-        selectedTab={activeNodeTypeTab && activeNodeTypeTab.id}
+        selectedTab={activeNodeTypeTab}
         itemTabRenderer={i => i.name}
         getTabId={item => item.id}
         actionComponent={actionComponent}
@@ -55,13 +59,13 @@ function CompaniesPanel(props) {
             columnCount={5}
             getMoreItems={getMoreItems}
             page={page}
-            loadingMoreItems={loadingMoreItems}
             loading={loading}
+            itemToScrollTo={itemToScrollTo}
           >
             {itemProps => (
               <GridListItem
                 {...itemProps}
-                isActive={!!activeCompanies[itemProps.item && itemProps.item.id]}
+                isActive={activeCompanies.includes(itemProps.item?.id)}
                 enableItem={onSelectCompany}
                 disableItem={onSelectCompany}
               />
@@ -75,9 +79,8 @@ function CompaniesPanel(props) {
 
 CompaniesPanel.propTypes = {
   companies: PropTypes.array,
-  activeCompanies: PropTypes.object,
+  activeCompanies: PropTypes.array,
   page: PropTypes.number.isRequired,
-  loadingMoreItems: PropTypes.bool,
   loading: PropTypes.bool,
   getMoreItems: PropTypes.func.isRequired,
   setSearchResult: PropTypes.func.isRequired,
@@ -86,7 +89,7 @@ CompaniesPanel.propTypes = {
   searchCompanies: PropTypes.array.isRequired,
   nodeTypeRenderer: PropTypes.func.isRequired,
   tabs: PropTypes.array.isRequired,
-  activeNodeTypeTab: PropTypes.object,
+  activeNodeTypeTab: PropTypes.number,
   onSelectNodeTypeTab: PropTypes.func.isRequired,
   actionComponent: PropTypes.node
 };

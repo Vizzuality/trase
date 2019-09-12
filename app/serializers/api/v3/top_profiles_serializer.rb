@@ -17,12 +17,16 @@ module Api
       end
 
       def photo_url
-        if object.top_profile_image
-          object.top_profile_image.image.url(SIZE)
-        else
-          top_profile = Api::V3::TopProfile.includes(:context).find(object.id)
-          Api::V3::TopProfiles::GetMatchingImage.call(top_profile, SIZE)
-        end
+        url =
+          if object.top_profile_image
+            object.top_profile_image.image.url(SIZE)
+          else
+            top_profile = Api::V3::TopProfile.includes(:context).find(object.id)
+            Api::V3::TopProfiles::GetMatchingImage.call(top_profile, SIZE)
+          end
+        return url if Rails.env.development? || Rails.env.test?
+
+        '/content' + url
       end
     end
   end

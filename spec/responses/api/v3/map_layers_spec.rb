@@ -5,7 +5,6 @@ RSpec.describe 'Map layers', type: :request do
   include_context 'api v3 brazil map attributes'
 
   before(:each) do
-    Api::V3::Readonly::Dashboards::FlowPath.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::MapAttribute.refresh(sync: true, skip_dependencies: true)
     Api::V3::Readonly::ContextAttributeProperty.refresh(sync: true, skip_dependencies: true)

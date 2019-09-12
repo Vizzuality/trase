@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   ComposableMap,
@@ -11,123 +11,108 @@ import {
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import cx from 'classnames';
 import formatValue from 'utils/formatValue';
-import xor from 'lodash/xor';
 import isMobile from 'utils/isMobile';
 
 import 'scripts/react-components/shared/world-map/world-map.scss';
 
-class WorldMap extends React.PureComponent {
-  static buildCurves(start, end, arc) {
-    const x0 = start[0];
-    const x1 = end[0];
-    const y0 = start[1];
-    const y1 = end[1];
-    const curve = {
-      forceUp: `${x1} ${y0}`,
-      forceDown: `${x0} ${y1}`
-    }[arc.curveStyle];
+const isDestinationCountry = (iso, countries) => countries.map(f => f.geoId).includes(iso);
 
-    return `M ${start.join(' ')} Q ${curve} ${end.join(' ')}`;
-  }
+const MapGeographies = ({
+  geographies,
+  flows,
+  originGeoId,
+  projection,
+  mouseInteractionProps,
+  highlightedCountriesIso
+}) =>
+  useMemo(
+    () =>
+      geographies.map(
+        geography =>
+          geography.properties.iso2 !== 'AQ' && (
+            <Geography
+              key={geography.properties.cartodb_id}
+              cacheId={`geography-world${geography.properties.cartodb_id}`}
+              className={cx(
+                'world-map-geography',
+                {
+                  '-dark':
+                    isDestinationCountry(geography.properties.iso2, flows) ||
+                    (highlightedCountriesIso?.level1 &&
+                      highlightedCountriesIso.level1.includes(geography.properties.iso2))
+                },
+                {
+                  '-darker':
+                    highlightedCountriesIso?.level2 &&
+                    highlightedCountriesIso.level2.includes(geography.properties.iso2)
+                },
+                { '-pink': originGeoId === geography.properties.iso2 }
+              )}
+              geography={geography}
+              projection={projection}
+              {...mouseInteractionProps}
+            />
+          )
+      ),
+    // We dont want the projection function to force new renders
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [geographies, flows, originGeoId, mouseInteractionProps, highlightedCountriesIso]
+  );
 
-  static isDestinationCountry(iso, countries) {
-    return countries.map(f => f.geoId).includes(iso);
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.flows.length !== 0 && nextProps.flows !== prevState.flows) {
-      // avoids rendering intermediate states
-      return {
-        flows: nextProps.flows,
-        originGeoId: nextProps.originGeoId,
-        originCoordinates: nextProps.originCoordinates
-      };
-    }
-    return prevState;
-  }
-
-  state = {
-    flows: [],
-    originGeoId: null,
-    tooltipConfig: null,
-    originCoordinates: []
-  };
-
-  componentDidMount() {
-    if (this.props.flows.length === 0 && this.props.selectedContext && this.props.selectedYears) {
-      this.props.getTopNodes();
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (!this.props.selectedContext) {
+const WorldMap = ({
+  flows,
+  selectedContext,
+  selectedYears,
+  getTopNodes,
+  originGeoId,
+  originCoordinates,
+  highlightedCountriesIso,
+  onHoverGeometry,
+  center,
+  className
+}) => {
+  const [tooltipConfig, setTooltipConfig] = useState(null);
+  const buildCurves = (start, end, line) => line.arc;
+  useEffect(() => {
+    if (!selectedContext) {
       return;
     }
-
-    if (
-      !prevProps.selectedContext ||
-      this.props.selectedContext.id !== prevProps.selectedContext.id ||
-      xor(this.props.selectedYears, prevProps.selectedYears).length !== 0
-    ) {
-      this.props.getTopNodes();
+    if (flows.length === 0 && selectedYears) {
+      getTopNodes(selectedContext);
     }
-  }
+  }, [selectedContext, selectedYears, getTopNodes, flows.length]);
 
-  onMouseMove = (geometry, e) => {
-    const { flows } = this.state;
-    const geoId = geometry.properties ? geometry.properties.iso2 : geometry.geoId;
-    if (WorldMap.isDestinationCountry(geoId, flows)) {
-      const x = e.clientX + 10;
-      const y = e.clientY + window.scrollY + 10;
-      const text = geometry.name || geometry.properties.name;
-      const title = 'Trade Volume';
-      const unit = 't';
-      const volume = geometry.value || (flows.find(flow => flow.geoId === geoId) || {}).value;
-      const value = formatValue(volume, 'tons');
-      const tooltipConfig = { x, y, text, items: [{ title, value, unit }] };
-      this.setState(() => ({ tooltipConfig }));
-    }
-  };
-
-  onMouseLeave = () => {
-    this.setState(() => ({ tooltipConfig: null }));
-  };
-
-  renderGeographies = (geographies, projection) => {
-    const { flows, originGeoId } = this.state;
-    const mouseInteractionProps = isMobile()
-      ? {}
-      : {
-          onMouseMove: this.onMouseMove,
-          onMouseLeave: this.onMouseLeave
+  const mouseInteractionProps = useMemo(() => {
+    const getGeoId = geometry => (geometry.properties ? geometry.properties.iso2 : geometry.geoId);
+    const onMouseMove = (geometry, e) => {
+      const geoId = getGeoId(geometry);
+      if (onHoverGeometry) onHoverGeometry(getGeoId(geometry));
+      const totalValue = flows.reduce((a, b) => a + b.value, 0);
+      if (isDestinationCountry(geoId, flows)) {
+        const volume = geometry.value || (flows.find(flow => flow.geoId === geoId) || {}).value;
+        const percentage = (volume / totalValue) * 100;
+        const updatedTooltipConfig = {
+          x: e.clientX + 10,
+          y: e.clientY + window.scrollY + 10,
+          text: geometry.name || geometry.properties.name,
+          items: [
+            { title: 'Trade Volume', value: formatValue(volume, 'tons'), unit: 't' },
+            { value: Math.round(percentage * 10) / 10, unit: '%' }
+          ]
         };
-    return geographies.map(
-      geography =>
-        geography.properties.iso2 !== 'AQ' && (
-          <Geography
-            key={geography.properties.cartodb_id}
-            className={cx(
-              'world-map-geography',
-              { '-dark': WorldMap.isDestinationCountry(geography.properties.iso2, flows) },
-              { '-pink': originGeoId === geography.properties.iso2 }
-            )}
-            geography={geography}
-            projection={projection}
-            {...mouseInteractionProps}
-          />
-        )
-    );
-  };
+        setTooltipConfig(updatedTooltipConfig);
+      }
+    };
+    const onMouseLeave = () => {
+      setTooltipConfig(null);
+      if (onHoverGeometry) onHoverGeometry(null);
+    };
 
-  renderLines = () => {
-    const { originCoordinates, flows } = this.state;
-    const mouseInteractionProps = isMobile()
-      ? {}
-      : {
-          onMouseMove: this.onMouseMove,
-          onMouseLeave: this.onMouseLeave
-        };
-    return flows.map(flow => (
+    return isMobile() ? {} : { onMouseMove, onMouseLeave };
+  }, [flows, onHoverGeometry]);
+
+  const renderLines = () =>
+    flows.map(flow => (
       <Line
         key={flow.geoId}
         className="world-map-arc"
@@ -138,36 +123,39 @@ class WorldMap extends React.PureComponent {
             end: originCoordinates
           }
         }}
-        buildPath={WorldMap.buildCurves}
+        buildPath={buildCurves}
         strokeWidth={flow.strokeWidth}
         {...mouseInteractionProps}
       />
     ));
-  };
-
-  render() {
-    const { tooltipConfig } = this.state;
-    const { className } = this.props;
-    return (
-      <React.Fragment>
-        <UnitsTooltip show={!!tooltipConfig} {...tooltipConfig} />
-        <ComposableMap
-          className={cx('c-world-map', className)}
-          projection="robinson"
-          style={{ width: '100%', height: 'auto' }}
-          projectionConfig={{ scale: 145 }}
-        >
-          <ZoomableGroup disablePanning center={[20, 0]}>
-            <Geographies geography="/vector_layers/WORLD.topo.json" disableOptimization>
-              {this.renderGeographies}
-            </Geographies>
-            <Lines>{this.renderLines()}</Lines>
-          </ZoomableGroup>
-        </ComposableMap>
-      </React.Fragment>
-    );
-  }
-}
+  return (
+    <React.Fragment>
+      <UnitsTooltip show={!!tooltipConfig} {...tooltipConfig} />
+      <ComposableMap
+        className={cx('c-world-map', className)}
+        projection="robinson"
+        height={600}
+        style={{ width: '100%', height: '100%' }}
+      >
+        <ZoomableGroup center={center} disablePanning>
+          <Geographies geography="/vector_layers/WORLD.topo.json" disableOptimization>
+            {(geographies, projection) => (
+              <MapGeographies
+                geographies={geographies}
+                flows={flows}
+                originGeoId={originGeoId}
+                projection={projection}
+                mouseInteractionProps={mouseInteractionProps}
+                highlightedCountriesIso={highlightedCountriesIso}
+              />
+            )}
+          </Geographies>
+          <Lines>{renderLines()}</Lines>
+        </ZoomableGroup>
+      </ComposableMap>
+    </React.Fragment>
+  );
+};
 
 WorldMap.propTypes = {
   className: PropTypes.string,
@@ -176,7 +164,15 @@ WorldMap.propTypes = {
   originGeoId: PropTypes.string,
   selectedContext: PropTypes.object,
   selectedYears: PropTypes.array,
-  getTopNodes: PropTypes.func.isRequired
+  highlightedCountriesIso: PropTypes.object,
+  onHoverGeometry: PropTypes.func,
+  getTopNodes: PropTypes.func.isRequired,
+  height: PropTypes.number,
+  center: PropTypes.array
+};
+
+WorldMap.defaultProps = {
+  center: [20, 0]
 };
 
 export default WorldMap;

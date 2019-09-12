@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Tag from 'react-components/shared/tags-group/tag';
+import Tag from 'react-components/shared/tags-group/tag.component';
 import Heading from 'react-components/shared/heading';
 import { translateText } from 'utils/transifex';
 

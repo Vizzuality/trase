@@ -1,7 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe Api::V3::Flows::Filter do
+  include_context 'api v3 brazil resize by attributes'
+  include_context 'api v3 brazil recolor by attributes'
   include_context 'api v3 brazil flows quants'
+
+  before(:each) do
+    Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
+    Api::V3::Readonly::ResizeByAttribute.refresh(sync: true, skip_dependents: true)
+    Api::V3::Readonly::RecolorByAttribute.refresh(sync: true, skip_dependents: true)
+  end
 
   let!(:api_v3_diamantino_node) {
     node = Api::V3::Node.where(
@@ -64,7 +72,7 @@ RSpec.describe Api::V3::Flows::Filter do
         year_start: 2015,
         year_end: 2015,
         node_types_ids: node_types.map(&:id),
-        resize_quant_name: api_v3_volume.name,
+        cont_attribute_id: api_v3_volume.readonly_attribute.id,
         limit: 1
       }
     }
@@ -94,12 +102,25 @@ RSpec.describe Api::V3::Flows::Filter do
           expect(filter.active_nodes).to have_key(api_v3_diamantino_node.id)
         end
       end
+      context 'when recolor by attribute' do
+        it 'includes flows with null value of recolor by attribute' do
+          filter = Api::V3::Flows::Filter.new(
+            api_v3_context,
+            filter_params.merge(
+              ncont_attribute_id: api_v3_forest_500_recolor_by_attribute.readonly_attribute.id
+            )
+          )
+          filter.call
+          expect(filter.flows).to include(api_v3_diamantino_flow)
+        end
+      end
     end
 
     context 'when expanded mode' do
       let(:expanded_nodes) {
         {selected_nodes_ids: [api_v3_country_of_destination1_node.id]}
       }
+
       context 'when no locked nodes present' do
         it 'does not include low volume nodes in active nodes' do
           filter = Api::V3::Flows::Filter.new(
@@ -110,6 +131,7 @@ RSpec.describe Api::V3::Flows::Filter do
           expect(filter.active_nodes).not_to have_key(api_v3_diamantino_node.id)
         end
       end
+
       context 'when locked nodes' do
         it 'includes locked low volume nodes in active nodes' do
           filter = Api::V3::Flows::Filter.new(
@@ -118,6 +140,23 @@ RSpec.describe Api::V3::Flows::Filter do
           )
           filter.call
           expect(filter.active_nodes).to have_key(api_v3_diamantino_node.id)
+        end
+      end
+    end
+
+    context 'when excluded nodes' do
+      let(:excluded_nodes) {
+        {excluded_nodes_ids: [api_v3_country_of_destination1_node.id]}
+      }
+
+      it 'does not include paths with excluded nodes' do
+        filter = Api::V3::Flows::Filter.new(
+          api_v3_context,
+          filter_params.merge(excluded_nodes)
+        )
+        result = filter.call
+        result.data.each do |flow|
+          expect(flow[:path]).not_to include(api_v3_country_of_destination1_node.id)
         end
       end
     end

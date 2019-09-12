@@ -1,0 +1,128 @@
+{
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "properties": {
+    "data": {
+      "$id": "/properties/data",
+      "type": "array",
+      "items": {
+        "$id": "/properties/data/items",
+        "type": "object",
+        "properties": {
+          "commodity_id": {
+            "$id": "/properties/data/items/properties/commodity_id",
+            "type": "string, null",
+            "title": "Commodity id",
+            "description": "Id of the commodity",
+            "default": 0,
+            "examples": [
+              1
+            ]
+          },
+          "context_id": {
+            "$id": "/properties/data/items/properties/contexts_ids",
+            "type": "string, null",
+            "title": "Context id",
+            "description": "Id of the context",
+            "default": 0,
+            "examples": [
+              1
+            ]
+          },
+          "attributes": {
+            "$id": "/properties/data/items/properties/attributes",
+            "type": "array",
+            "items": {
+              "$id": "/properties/data/items/properties/attributes/items",
+              "type": "object",
+              "properties": {
+                "id": {
+                  "$id": "/properties/data/items/properties/attributes/items/properties/id",
+                  "type": "string, integer",
+                  "title": "Id of the attribute",
+                  "description": "Id of the attribute of a top destination",
+                  "default": 0,
+                  "examples": [
+                    684
+                  ]
+                },
+                "indicator": {
+                  "$id": "/properties/data/items/properties/attributes/items/properties/indicator",
+                  "type": "string",
+                  "title": "The Indicator Schema",
+                  "description": "An explanation about the purpose of this instance.",
+                  "default": "",
+                  "examples": [
+                    "Trade volume"
+                  ]
+                },
+                "unit": {
+                  "$id": "/properties/data/items/properties/attributes/items/properties/unit",
+                  "type": "string",
+                  "title": "The Unit Schema",
+                  "description": "An explanation about the purpose of this instance.",
+                  "default": "",
+                  "examples": [
+                    "Tn"
+                  ]
+                },
+                "targets": {
+                  "$id": "/properties/data/items/properties/attributes/items/properties/targets",
+                  "type": "array",
+                  "items": {
+                    "$id": "/properties/data/items/properties/attributes/items/properties/targets/items",
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "$id": "/properties/data/items/properties/attributes/items/properties/targets/items/properties/id",
+                        "type": "string, integer",
+                        "title": "Id of the node",
+                        "description": "Id of the node",
+                        "default": "",
+                        "examples": [
+                          "CHINA"
+                        ]
+                      },
+                      "name": {
+                        "$id": "/properties/data/items/properties/attributes/items/properties/targets/items/properties/name",
+                        "type": "string",
+                        "title": "Name of the top destination",
+                        "description": "Name of the node of a top destination",
+                        "default": "",
+                        "examples": [
+                          "CHINA"
+                        ]
+                      },
+                      "value": {
+                        "$id": "/properties/data/items/properties/attributes/items/properties/targets/items/properties/value",
+                        "type": "number",
+                        "title": "Volume amount of the top destination",
+                        "description": "Amount of the node of a top destination",
+                        "default": 0,
+                        "examples": [
+                          41375772
+                        ]
+                      },
+                      "height": {
+                        "$id": "/properties/data/items/properties/attributes/items/properties/targets/items/properties/height",
+                        "type": "number",
+                        "title": "Percentage amount of the top destination",
+                        "description": "Percentage of the node of a top destination",
+                        "default": 0,
+                        "examples": [
+                          41375772
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

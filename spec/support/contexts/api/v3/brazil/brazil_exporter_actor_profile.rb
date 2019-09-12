@@ -1,5 +1,5 @@
 shared_context 'api v3 brazil exporter actor profile' do
-  include_context 'api v3 brazil context node types'
+  include_context 'api v3 brazil soy profiles'
   include_context 'api v3 inds'
   include_context 'api v3 quants'
 
@@ -43,6 +43,92 @@ shared_context 'api v3 brazil exporter actor profile' do
       node_type: api_v3_country_node_type,
       identifier: 'destination'
     )
+  end
+
+  let!(:api_v3_exporter_basic_attributes_zero_deforestation) do
+    return unless defined?(api_v3_zero_deforestation)
+
+    chart_attribute = Api::V3::ChartQual.
+      includes(:chart_attribute).
+      where(
+        'chart_attributes.chart_id' => api_v3_exporter_basic_attributes.id,
+        qual_id: api_v3_zero_deforestation.id
+      ).first&.chart_attribute
+    unless chart_attribute
+      chart_attribute = FactoryBot.create(
+        :api_v3_chart_attribute,
+        chart: api_v3_exporter_basic_attributes,
+        identifier: 'zero_deforestation'
+      )
+      FactoryBot.create(
+        :api_v3_chart_qual,
+        chart_attribute: chart_attribute,
+        qual: api_v3_zero_deforestation
+      )
+    end
+    chart_attribute
+  end
+
+  let!(:api_v3_exporter_basic_attributes_zero_deforestation_property) do
+    return unless defined?(api_v3_zero_deforestation)
+
+    qual_context_property = Api::V3::QualContextProperty.
+      where(
+        context_id: api_v3_context.id,
+        qual_id: api_v3_zero_deforestation.id
+      ).first
+    unless qual_context_property
+      qual_context_property = FactoryBot.create(
+        :api_v3_qual_context_property,
+        context: api_v3_context,
+        qual: api_v3_zero_deforestation,
+        tooltip_text: 'Tooltip context qual translation'
+      )
+    end
+    qual_context_property
+  end
+
+  let!(:api_v3_exporter_basic_attributes_forest_500) do
+    return unless defined?(api_v3_forest_500)
+
+    chart_attribute = Api::V3::ChartInd.
+      includes(:chart_attribute).
+      where(
+        'chart_attributes.chart_id' => api_v3_exporter_basic_attributes.id,
+        ind_id: api_v3_forest_500.id
+      ).first&.chart_attribute
+    unless chart_attribute
+      chart_attribute = FactoryBot.create(
+        :api_v3_chart_attribute,
+        chart: api_v3_exporter_basic_attributes,
+        identifier: 'forest_500'
+      )
+      FactoryBot.create(
+        :api_v3_chart_ind,
+        chart_attribute: chart_attribute,
+        ind: api_v3_forest_500
+      )
+    end
+    chart_attribute
+  end
+
+  let!(:api_v3_exporter_basic_attributes_forest_500_property) do
+    return unless defined?(api_v3_forest_500)
+
+    ind_context_property = Api::V3::IndContextProperty.
+      where(
+        context_id: api_v3_context.id,
+        ind_id: api_v3_forest_500.id
+      ).first
+    unless ind_context_property
+      ind_context_property = FactoryBot.create(
+        :api_v3_ind_context_property,
+        context: api_v3_context,
+        ind: api_v3_forest_500,
+        tooltip_text: 'Tooltip context ind translation'
+      )
+    end
+    ind_context_property
   end
 
   let!(:api_v3_exporter_top_countries) do

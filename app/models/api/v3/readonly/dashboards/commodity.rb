@@ -24,8 +24,6 @@ module Api
     module Readonly
       module Dashboards
         class Commodity < Api::V3::Readonly::BaseModel
-          include Refresh
-
           self.table_name = 'dashboards_commodities_mv'
           belongs_to :commodity
         end

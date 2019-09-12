@@ -9,7 +9,6 @@ export default {
     nodeAttributes: null,
     nodesByColumnGeoId: null
   },
-  currentQuant: null,
   detailedView: false,
   forcedOverview: false,
   highlightedNodeId: null,
@@ -17,9 +16,10 @@ export default {
   selectedColumnsIds: null,
   expandedNodesIds: [],
   selectedNodesIds: [],
-  selectedRecolorByName: null,
-  selectedResizeByName: null,
+  selectedRecolorBy: null,
+  selectedResizeBy: null,
   selectedBiomeFilterName: null,
   isSearchOpen: false,
-  noLinksFound: false
+  noLinksFound: false,
+  sankeyColumnsWidth: 100
 };

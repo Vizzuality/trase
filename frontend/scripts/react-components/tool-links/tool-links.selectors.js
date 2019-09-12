@@ -1,73 +1,63 @@
 import { createSelector, createStructuredSelector } from 'reselect';
-import mergeLinks from 'reducers/helpers/mergeLinks';
-import filterLinks from 'reducers/helpers/filterLinks';
 import getNodesAtColumns from 'reducers/helpers/getNodesAtColumns';
 import getNodesColoredBySelection from 'reducers/helpers/getNodesColoredBySelection';
 import getNextRecolorGroups from 'reducers/helpers/getRecolorGroups';
-import splitLinksByColumn from 'reducers/helpers/splitLinksByColumn';
-import splitVisibleNodesByColumn from 'reducers/helpers/splitVisibleNodesByColumn';
-import sortVisibleNodes from 'reducers/helpers/sortVisibleNodes';
 import getVisibleNodesUtil from 'reducers/helpers/getVisibleNodes';
 import { getSelectedColumnsIds, getSelectedNodesData } from 'react-components/tool/tool.selectors';
 import { getSelectedContext } from 'reducers/app.selectors';
+import { NUM_COLUMNS } from 'constants';
 
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolColumns = state => state.toolLinks.data.columns;
-const getToolNodeHeights = state => state.toolLinks.data.nodeHeights;
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getToolExpandedNodesIds = state => state.toolLinks.expandedNodesIds;
 const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
-const getToolRecolorByName = state => state.toolLinks.selectedRecolorByName;
-const getToolResizeByName = state => state.toolLinks.selectedResizeByName;
+const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
+const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
 const getToolBiomeFilterName = state => state.toolLinks.selectedBiomeFilterName;
 const getToolDetailedView = state => state.toolLinks.detailedView;
 
 export const getSelectedResizeBy = createSelector(
-  [getToolResizeByName, getSelectedContext],
-  (selectedResizeByName, selectedContext) => {
+  [getToolResizeBy, getSelectedContext],
+  (selectedResizeBy, selectedContext) => {
     if (!selectedContext) {
       return null;
     }
 
-    if (!selectedResizeByName && selectedContext) {
+    if (!selectedResizeBy && selectedContext) {
       return selectedContext.resizeBy.find(resizeBy => resizeBy.isDefault === true);
     }
 
-    return selectedContext.resizeBy.find(resizeBy => resizeBy.name === selectedResizeByName);
+    return selectedContext.resizeBy.find(resizeBy => resizeBy.attributeId === selectedResizeBy);
   }
 );
 
 export const getSelectedRecolorBy = createSelector(
-  [getToolRecolorByName, getSelectedContext],
-  (selectedRecolorByName, selectedContext) => {
+  [getToolRecolorBy, getSelectedContext],
+  (selectedRecolorBy, selectedContext) => {
     if (!selectedContext) {
       return null;
     }
 
-    if (!selectedRecolorByName && selectedContext) {
+    if (!selectedRecolorBy && selectedContext) {
       return selectedContext.recolorBy.find(recolorBy => recolorBy.isDefault === true);
     }
 
-    return selectedContext.recolorBy.find(recolorBy => recolorBy.name === selectedRecolorByName);
+    return selectedContext.recolorBy.find(recolorBy => recolorBy.attributeId === selectedRecolorBy);
   }
 );
 
 export const getSelectedBiomeFilter = createSelector(
-  [getToolBiomeFilterName, getSelectedContext, getToolNodes],
-  (selectedBiomeFilterName, selectedContext, nodes) => {
+  [getToolBiomeFilterName, getSelectedContext],
+  (selectedBiomeFilterName, selectedContext) => {
     if (!selectedBiomeFilterName || !selectedContext || selectedContext.filterBy.length === 0) {
       return null;
     }
 
-    const biomeFilter = selectedContext.filterBy[0].nodes.find(
+    return selectedContext.filterBy[0].nodes.find(
       filterBy => filterBy.name === selectedBiomeFilterName
     );
-
-    // TODO add the geoId from the backend
-    const biomeFilterNode = biomeFilter && nodes && nodes[biomeFilter.nodeId];
-
-    return { ...biomeFilter, geoId: biomeFilterNode && biomeFilterNode.geoId };
   }
 );
 
@@ -77,18 +67,9 @@ export const getVisibleNodes = createSelector(
     if (!links || !nodes || !selectedColumnsIds) {
       return null;
     }
-    return getVisibleNodesUtil(links, nodes, selectedColumnsIds);
-  }
-);
-
-export const getVisibleNodesByColumn = createSelector(
-  [getVisibleNodes, getToolColumns, getToolNodeHeights],
-  (visibleNodes, columns, nodeHeights) => {
-    if (!visibleNodes || !columns) {
-      return [];
-    }
-    const byColumn = splitVisibleNodesByColumn(visibleNodes, columns);
-    return sortVisibleNodes(byColumn, nodeHeights);
+    const visibleNodes = getVisibleNodesUtil(links, nodes, selectedColumnsIds);
+    const visibleColumns = new Set(visibleNodes.map(node => node.columnId));
+    return visibleColumns.size === NUM_COLUMNS ? visibleNodes : null;
   }
 );
 
@@ -106,7 +87,7 @@ export const getSelectedNodesColumnsPos = createSelector(
   }
 );
 
-const getSelectedNodesAtColumns = createSelector(
+export const getSelectedNodesAtColumns = createSelector(
   [getToolSelectedNodesIds, getSelectedNodesColumnsPos],
   (selectedNodesIds, selectedNodesColumnsPos) =>
     getNodesAtColumns(selectedNodesIds, selectedNodesColumnsPos)
@@ -122,58 +103,12 @@ export const getToolRecolorGroups = createSelector(
   nodesColored => getNextRecolorGroups(nodesColored.nodesColoredBySelection)
 );
 
-const getUnmergedLinks = createSelector(
-  [getToolLinks, getToolNodes, getToolColumns, getSelectedRecolorBy],
-  (links, nodes, columns, selectedRecolorBy) => {
-    if (!links || !nodes || !columns) {
-      return null;
-    }
-    return splitLinksByColumn(links, nodes, columns, selectedRecolorBy);
-  }
-);
-
-export const getFilteredLinks = createSelector(
-  [
-    getUnmergedLinks,
-    getSelectedNodesAtColumns,
-    getNodesColored,
-    getToolSelectedNodesIds,
-    getToolRecolorGroups
-  ],
-  (unmergedLinks, selectedNodesAtColumns, nodesColored, selectedNodesIds, recolorGroups) => {
-    if (selectedNodesIds.length === 0 || unmergedLinks === null) {
-      return null;
-    }
-    const { nodesColoredBySelection } = nodesColored;
-    return filterLinks(
-      unmergedLinks,
-      selectedNodesAtColumns,
-      nodesColoredBySelection,
-      recolorGroups
-    );
-  }
-);
-
-export const getMergedLinks = createSelector(
-  [getUnmergedLinks, getFilteredLinks],
-  (unmergedLinks, filteredLinks) => {
-    if (!unmergedLinks) {
-      return null;
-    }
-
-    if (filteredLinks) {
-      return mergeLinks(filteredLinks, true);
-    }
-    return mergeLinks(unmergedLinks);
-  }
-);
-
 export const getToolLinksUrlProps = createStructuredSelector({
   selectedNodesIds: getToolSelectedNodesIds,
   selectedColumnsIds: getToolSelectedColumnsIds,
   expandedNodesIds: getToolExpandedNodesIds,
   detailedView: getToolDetailedView,
-  selectedResizeByName: getToolResizeByName,
-  selectedRecolorByName: getToolRecolorByName,
+  selectedResizeBy: getToolResizeBy,
+  selectedRecolorBy: getToolRecolorBy,
   selectedBiomeFilterName: getToolBiomeFilterName
 });

@@ -5,8 +5,10 @@ export default function createReducer(initialState, reducers, getTypes) {
     const reducerMethod = reducers[action.type];
     const newState = typeof reducerMethod === 'undefined' ? state : reducerMethod(state, action);
 
-    if (getTypes && NODE_ENV_DEV) {
-      PropTypes.checkPropTypes(getTypes(PropTypes), newState, 'reducer prop', getTypes.name);
+    if (NODE_ENV_DEV === true) {
+      if (getTypes) {
+        PropTypes.checkPropTypes(getTypes(PropTypes), newState, 'reducer prop', getTypes.name);
+      }
     }
     return newState;
   };

@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.component';
-import { selectSearchNode } from 'react-components/tool/tool.actions';
-import { setIsSearchOpen } from 'react-components/tool-links/tool-links.actions';
+import { setIsSearchOpen, selectSearchNode } from 'react-components/tool-links/tool-links.actions';
 import { getSearchResults } from 'react-components/tool/tool-search/tool-search.selectors';
 import { loadSearchResults } from 'actions/app.actions';
 import { getSelectedContext } from 'reducers/app.selectors';

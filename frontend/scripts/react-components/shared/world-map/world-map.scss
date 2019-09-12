@@ -15,6 +15,10 @@
       fill: rgba($charcoal-grey, 0.5);
     }
 
+    &.-darker {
+      fill: rgba($charcoal-grey, 0.7);
+    }
+
     &.-pink {
       fill: $strong-pink;
     }
@@ -26,6 +30,10 @@
     stroke-linecap: round;
     outline: 0;
     pointer-events: visibleStroke;
+
+    &:hover {
+      stroke: $charcoal-grey;
+    }
   }
 
   .world-map-annotation-text {

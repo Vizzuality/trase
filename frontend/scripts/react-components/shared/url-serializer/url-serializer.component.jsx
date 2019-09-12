@@ -45,6 +45,7 @@ function UrlSerializer(props) {
 }
 
 UrlSerializer.defaultProps = {
+  query: {},
   urlPropHandlers: {}
 };
 

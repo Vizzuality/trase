@@ -35,6 +35,13 @@ module Api
           {name: :node_id, table_class: Api::V3::Node}
         ]
       end
+
+      def image_url(size = :small)
+        url = image.url(size)
+        return url if Rails.env.development? || Rails.env.test?
+
+        '/content' + url
+      end
     end
   end
 end

@@ -7,14 +7,25 @@ import {
   getProfilesSearchResults,
   setProfilesActiveItemWithSearch
 } from 'react-components/shared/profile-selector/profile-selector.actions';
-import { getActivePanelTabs } from 'react-components/shared/profile-selector/profile-panel/profile-step-panel/profile-step-panel.selectors';
+import {
+  getCompaniesActiveData,
+  getCountriesActiveItems,
+  getCompaniesActiveTab,
+  getSourcesActiveTab,
+  getCompaniesTabs,
+  getSourcesTabs
+} from 'react-components/shared/profile-selector/profile-selector.selectors';
 
 const mapStateToProps = state => ({
-  profileType: state.profileSelector.panels.types.activeItems.type,
+  profileType: state.profileSelector.panels.type,
   panels: state.profileSelector.panels,
   data: state.profileSelector.data,
-  loading: state.profileSelector.loading,
-  tabs: getActivePanelTabs(state)
+  companiesTabs: getCompaniesTabs(state),
+  sourcesTabs: getSourcesTabs(state),
+  companiesData: getCompaniesActiveData(state),
+  countriesActiveItems: getCountriesActiveItems(state),
+  sourcesActiveTab: getSourcesActiveTab(state),
+  companiesActiveTab: getCompaniesActiveTab(state)
 });
 
 const mapDispatchToProps = {

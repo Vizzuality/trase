@@ -2,7 +2,12 @@ module Api
   module V3
     module Places
       class BasicAttributes
+        include ActiveSupport::Configurable
         include Api::V3::Profiles::AttributesInitializer
+
+        config_accessor :get_tooltip do
+          Api::V3::Profiles::GetTooltipPerAttribute
+        end
 
         # @param context [Api::V3::Context]
         # @param node [Api::V3::Node]
@@ -47,7 +52,7 @@ module Api
         private
 
         NAMED_ATTRIBUTES = %w(
-          commodity_production commodity_yield area
+          commodity_production commodity_yield area pasture_area
         ).freeze
 
         def initialize_chart_configuration
@@ -118,6 +123,11 @@ module Api
           @values.get(attribute.simple_type, attribute.id)
         end
 
+        def initialize_pasture_area
+          @pasture_area = @pasture_area_attribute &&
+            attribute_value(@pasture_area_attribute)
+        end
+
         def initialize_area
           @area = @area_attribute && attribute_value(@area_attribute)
         end
@@ -154,19 +164,54 @@ module Api
         end
 
         def initialize_commodity_attributes
-          commodity_attributes = {}
+          commodity_attributes = {header_attributes: {}}
+
+          initialize_pasture_area
+          if @pasture_area
+            commodity_attributes[:header_attributes][:pasture_area] =
+              header_attributes('pasture_area')
+          end
           initialize_area
-          commodity_attributes[:area] = @area if @area
+          if @area
+            commodity_attributes[:area] = @area
+            commodity_attributes[:header_attributes][:area] =
+              header_attributes('area')
+          end
+
           initialize_commodity_production
           if @commodity_production
             commodity_attributes[:commodity_production] = @commodity_production
+            commodity_attributes[:header_attributes][:commodity_production] =
+              header_attributes('commodity_production')
           end
+
           initialize_commodity_yield
+
           initialize_commodity_area
           if @commodity_area_formatted
             commodity_attributes[:commodity_area] = @commodity_area_formatted
           end
+          commodity_attributes[:header_attributes][:commodity_area] = {
+            value: @commodity_area_formatted,
+            name: "#{@commodity_name} land",
+            unit: 'ha',
+            tooltip: 'Area of land used to grow soybeans'
+          }
+
           commodity_attributes
+        end
+
+        def header_attributes(attribute_name)
+          attribute = @chart_config.named_chart_attribute(attribute_name)
+          {
+            value: instance_variable_get("@#{attribute_name}"),
+            name: attribute.display_name,
+            unit: attribute.unit,
+            tooltip: get_tooltip.call(
+              ro_chart_attribute: attribute,
+              context: @context
+            )
+          }
         end
 
         def initialize_top_nodes
@@ -285,7 +330,7 @@ production#{state_ranking_text}."
           top_consumer_name = top_consumer['name']&.titleize if top_consumer
 
           if top_exporter && percentage_total_exports && top_consumer
-            " The largest exporter of soy in \
+            " The largest exporter of #{@commodity_name} in \
 <span class=\"notranslate\">#{@node.name.titleize}</span> was \
 <span class=\"notranslate\">#{top_exporter_name}</span>, which accounted for \
 <span class=\"notranslate\">#{percentage_total_exports}</span> of \

@@ -1,8 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe 'Flows', type: :request do
+  include_context 'api v3 brazil resize by attributes'
   include_context 'api v3 brazil flows'
   include_context 'api v3 brazil flows quants'
+
+  before(:each) do
+    Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
+    Api::V3::Readonly::ResizeByAttribute.refresh(sync: true, skip_dependents: true)
+  end
+
+  let(:cont_attribute) { api_v3_volume.readonly_attribute }
 
   describe 'GET /api/v2/contexts/:context_id/flows' do
     let(:node_types) {
@@ -17,7 +25,7 @@ RSpec.describe 'Flows', type: :request do
       {
         start_year: 2015,
         include_columns: node_types.map(&:id),
-        flow_quant: api_v3_volume.name
+        cont_attribute_id: cont_attribute.id
       }
     }
     it 'requires include_columns' do
@@ -30,10 +38,10 @@ RSpec.describe 'Flows', type: :request do
     end
     it 'requires flow_quant' do
       get "/api/v3/contexts/#{api_v3_context.id}/flows",
-          params: filter_params.except(:flow_quant)
+          params: filter_params.except(:cont_attribute_id)
       expect(@response).to have_http_status(:bad_request)
       expect(JSON.parse(@response.body)).to eq(
-        'error' => 'param is missing or the value is empty: Required param flow_quant missing'
+        'error' => 'param is missing or the value is empty: Required param cont_attribute_id missing'
       )
     end
     it 'requires start_year' do

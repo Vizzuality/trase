@@ -1,5 +1,6 @@
 import { createSelector, createStructuredSelector } from 'reselect';
 import getChoropleth from 'reducers/helpers/getChoropleth';
+import { DEFAULT_BASEMAP_FOR_CHOROPLETH } from 'constants';
 import { getMapDimensionsWarnings as getMapDimensionsWarningsUtil } from 'scripts/reducers/helpers/getMapDimensionsWarnings';
 import {
   getHighlightedNodesData,
@@ -17,7 +18,7 @@ const getToolSelectedMapDimensions = state => state.toolLayers.selectedMapDimens
 const getSelectedMapContextualLayers = state => state.toolLayers.selectedMapContextualLayers;
 const getToolMapView = state => state.toolLayers.mapView;
 const getIsMapVisible = state => state.toolLayers.isMapVisible;
-const getSelectedMapBasemap = state => state.toolLayers.selectedMapBasemap;
+const getSelectedBasemap = state => state.toolLayers.selectedBasemap;
 
 const getNodesGeoIds = (nodesData, columns) => {
   if (columns) {
@@ -141,6 +142,17 @@ export const getSelectedMapContextualLayersData = createSelector(
   }
 );
 
+export const getBasemap = createSelector(
+  [getSelectedContext, getSelectedBasemap, getSelectedMapDimensionsUids],
+  (selectedContext, selectedBasemap, selectedMapDimensions) => {
+    const defaultBasemap =
+      selectedMapDimensions.filter(d => d !== null).length > 0
+        ? DEFAULT_BASEMAP_FOR_CHOROPLETH
+        : selectedContext?.defaultBasemap || 'satellite';
+    return selectedBasemap || defaultBasemap;
+  }
+);
+
 export const getMapView = createSelector(
   [getToolMapView, getSelectedContext],
   (mapView, selectedContext) => {
@@ -148,9 +160,12 @@ export const getMapView = createSelector(
       return null;
     }
 
+    const lat = selectedContext.map.latitude.toFixed(2);
+    const lng = selectedContext.map.longitude.toFixed(2);
+
     if (
-      mapView.latitude === selectedContext.map.latitude &&
-      mapView.longitude === selectedContext.map.longitude &&
+      mapView.latitude === lat &&
+      mapView.longitude === lng &&
       mapView.zoom === selectedContext.map.zoom
     ) {
       return null;
@@ -169,7 +184,7 @@ export const getShouldFitBoundsSelectedPolygons = createSelector(
 export const getToolLayersUrlProps = createStructuredSelector({
   mapView: getMapView,
   isMapVisible: getIsMapVisible,
-  selectedMapBasemap: getSelectedMapBasemap,
+  selectedBasemap: getSelectedBasemap,
   selectedMapDimensions: getToolSelectedMapDimensions,
   selectedMapContextualLayers: getSelectedMapContextualLayers
 });

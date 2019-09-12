@@ -12,7 +12,6 @@ import {
   TOOL_LINKS__COLLAPSE_SANKEY,
   TOOL_LINKS__CLEAR_SANKEY,
   TOOL_LINKS__SET_NODES,
-  TOOL_LINKS__SET_MORE_NODES,
   TOOL_LINKS__SET_SELECTED_RESIZE_BY,
   TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
   TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
@@ -25,8 +24,7 @@ import {
   getToolLinksData,
   getToolNodesByLink,
   getMissingLockedNodes,
-  getToolGeoColumnNodes,
-  getMoreToolNodesByLink
+  getToolGeoColumnNodes
 } from './tool-links.fetch.saga';
 
 function* fetchToolColumns() {
@@ -40,12 +38,13 @@ function* fetchToolColumns() {
     if (page !== 'tool' || selectedContext === null) {
       return;
     }
-
     const task = yield fork(setLoadingSpinner, 750, setToolFlowsLoading(true));
     yield fork(getToolColumnsData, selectedContext);
+    yield fork(getToolGeoColumnNodes, selectedContext);
     yield call(getToolLinksData);
-    yield call(getToolNodesByLink, selectedContext);
-    yield call(getToolGeoColumnNodes, selectedContext);
+    yield call(getToolNodesByLink, selectedContext, {
+      fetchAllNodes: state.toolLinks.detailedView
+    });
 
     // TODO: remove this call, just here to split the refactor in stages
     yield put(loadMapVectorData());
@@ -94,12 +93,11 @@ function* fetchLinks() {
     const fetchAllNodes = action.type === TOOL_LINKS__SELECT_VIEW && action.payload.detailedView;
     const task = yield fork(setLoadingSpinner, 2000, setToolFlowsLoading(true));
     yield call(getToolLinksData);
-    yield call(getMoreToolNodesByLink, selectedContext, fetchAllNodes);
+    yield call(getToolNodesByLink, selectedContext, { fetchAllNodes });
     if (task.isRunning()) {
       yield cancel(task);
-    } else {
-      yield fork(setLoadingSpinner, 350, setToolFlowsLoading(false));
     }
+    yield fork(setLoadingSpinner, 350, setToolFlowsLoading(false));
   }
   yield takeLatest(
     [
@@ -148,20 +146,10 @@ function* checkForceOverviewOnExpand() {
 
 function* fetchMissingLockedNodes() {
   function* performFetch() {
-    const {
-      selectedNodesIds,
-      expandedNodesIds,
-      data: { nodes }
-    } = yield select(state => state.toolLinks);
-    const lockedNodes = new Set([...selectedNodesIds, expandedNodesIds]);
-    const missingNodes = Array.from(lockedNodes).filter(lockedNode => !nodes[lockedNode]);
-
-    if (missingNodes.length > 0) {
-      yield fork(getMissingLockedNodes, missingNodes);
-    }
+    yield fork(getMissingLockedNodes);
   }
 
-  yield takeLatest([TOOL_LINKS__SET_NODES, TOOL_LINKS__SET_MORE_NODES], performFetch);
+  yield takeLatest([TOOL_LINKS__SET_NODES], performFetch);
 }
 
 export default function* toolLinksSaga() {

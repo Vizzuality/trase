@@ -323,6 +323,7 @@ export default class MapComponent {
   }
 
   _createCartoLayer(layerData /* , i */) {
+    // TODO: layerData doesn't always have layergroupid so the fetch fails
     const baseUrl = `${CARTO_BASE_URL}${layerData.layergroupid}/{z}/{x}/{y}`;
     const layerUrl = `${baseUrl}.png`;
     // eslint-disable-next-line new-cap
@@ -578,7 +579,9 @@ export default class MapComponent {
   // this is to fit bounds in the polygons without filtering the choropleth by calling showLinkedGeoIds
   fitBoundsSelectedGeoPolygons({ selectedNodesGeoIds, shouldFitBoundsSelectedPolygons }) {
     if (shouldFitBoundsSelectedPolygons) {
-      this._fitBoundsToSelectedPolygons(selectedNodesGeoIds);
+      setTimeout(() => {
+        this._fitBoundsToSelectedPolygons(selectedNodesGeoIds);
+      }, 0);
     }
   }
 

@@ -42,7 +42,8 @@ module Api
                 {
                   id: tab.node_type_id,
                   name: tab.node_type_name,
-                  profileType: tab.profile_type
+                  profileType: tab.profile_type,
+                  prefix: tab.property_prefix
                 }
               end
               section
@@ -59,11 +60,13 @@ module Api
             select(
               'node_types.name AS node_type_name',
               'node_types.id AS node_type_id',
-              'profiles.name AS profile_type'
+              'profiles.name AS profile_type',
+              'context_node_type_properties.prefix AS property_prefix'
             ).group(
               'node_types.name',
               'node_types.id',
-              'profiles.name'
+              'profiles.name',
+              'context_node_type_properties.prefix'
             )
 
           if @countries_ids.any?

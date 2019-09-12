@@ -5,7 +5,6 @@ import {
   PROFILES__SET_PANEL_TABS,
   PROFILES__SET_MORE_PANEL_DATA,
   PROFILES__SET_SEARCH_RESULTS,
-  getProfilesParams,
   setProfilesLoadingItems
 } from 'react-components/shared/profile-selector/profile-selector.actions';
 import {
@@ -18,22 +17,63 @@ import { PROFILE_STEPS } from 'constants';
 import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
 import isEmpty from 'lodash/isEmpty';
 import deburr from 'lodash/deburr';
+import {
+  getSourcesActiveTab,
+  getCompaniesActiveTab
+} from 'react-components/shared/profile-selector/profile-selector.selectors';
 
-export function* getProfilesData(panelName) {
+function* getProfilesParams(step, options = {}) {
+  const state = yield select();
+  const {
+    panels: { countries, sources, companies },
+    data
+  } = state.profileSelector;
+  const { page } = options;
+  const sourcesTab = getSourcesActiveTab(state);
+  const companiesTab = getCompaniesActiveTab(state);
+  const nodeTypesIds = {
+    sources: sourcesTab,
+    companies: companiesTab
+  }[step];
+
+  const activeItemParams = panel => panel.activeItems.join();
+  const params = {
+    page,
+    options_type: step,
+    node_types_ids: nodeTypesIds
+  };
+
+  if (step === 'sources' || step === 'companies') {
+    params.countries_ids = countries.activeItems[0] || (data.countries[0] && data.countries[0].id);
+  }
+
+  if (step === 'commodities') {
+    if (sources) {
+      params.sources_ids = activeItemParams(sources);
+    } else if (countries) {
+      params.countries_ids = activeItemParams(countries);
+    }
+    if (companies) {
+      params.companies_ids = activeItemParams(companies);
+    }
+  }
+
+  return params;
+}
+
+export function* getProfilesData(panelName, activeTab = null) {
   const profileSelector = yield select(state => state.profileSelector);
-  if (!profileSelector.activeStep || profileSelector.activeStep === PROFILE_STEPS.types) return;
-  const { page, activeTab } = profileSelector.panels[panelName];
-  const tab = activeTab?.id;
-  const params = getProfilesParams(profileSelector, panelName, { page });
+  if (!profileSelector.activeStep || profileSelector.activeStep === PROFILE_STEPS.type) return;
+  const { page } = profileSelector.panels[panelName];
+  const params = yield getProfilesParams(panelName, { page });
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, { ...params, profile_only: true });
-  const task = yield fork(setLoadingSpinner, 750, {
+  const task = yield fork(setLoadingSpinner, 750, setProfilesLoadingItems(true, panelName));
+  yield put({
     type: PROFILES__SET_PANEL_DATA,
     payload: {
       panelName,
-      tab,
-      data: null,
-      meta: null,
-      loading: true
+      tab: activeTab,
+      data: null
     }
   });
   const { source, fetchPromise } = fetchWithCancel(url);
@@ -46,28 +86,29 @@ export function* getProfilesData(panelName) {
       type: PROFILES__SET_PANEL_DATA,
       payload: {
         panelName,
-        tab,
-        data: data.data,
-        meta: data.meta,
-        loading: false
+        tab: activeTab,
+        data: data.data
       }
     });
   } catch (e) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled', tab);
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled', activeTab);
+      }
       if (source) {
         source.cancel();
       }
     }
+    yield fork(setLoadingSpinner, 750, setProfilesLoadingItems(false, panelName));
   }
 }
 
-export function* getMoreProfilesData(profileSelector, panelName, activeTab, direction) {
+export function* getMoreProfilesData(profileSelector, panelName, activeTab = null) {
   const { page } = profileSelector.panels[panelName];
-  const params = getProfilesParams(profileSelector, panelName, { page });
-  const task = yield fork(setLoadingSpinner, 350, setProfilesLoadingItems(true));
+  const params = yield getProfilesParams(panelName, { page });
+  yield put(setProfilesLoadingItems(true, panelName));
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, { ...params, profile_only: true });
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
@@ -76,36 +117,27 @@ export function* getMoreProfilesData(profileSelector, panelName, activeTab, dire
       type: PROFILES__SET_MORE_PANEL_DATA,
       payload: {
         key: panelName,
-        tab: activeTab && activeTab.id,
-        direction,
+        tab: activeTab,
         data: data.data
       }
     });
-    if (task.isRunning()) {
-      task.cancel();
-    } else {
-      yield call(setLoadingSpinner, 750, setProfilesLoadingItems(false));
-    }
   } catch (e) {
     console.error('Error', e);
-    if (task.isRunning()) {
-      task.cancel();
-    } else {
-      yield call(setLoadingSpinner, 750, setProfilesLoadingItems(false));
-    }
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled', url);
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled', url);
+      }
       if (source) {
         source.cancel();
       }
     }
+    yield call(setLoadingSpinner, 150, setProfilesLoadingItems(false, panelName));
   }
 }
 
 export function* getProfilesTabs(optionsType) {
-  const profileSelector = yield select(state => state.profileSelector);
-  const params = getProfilesParams(profileSelector, optionsType);
+  const params = yield getProfilesParams(optionsType);
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_TABS_URL, { ...params, profile_only: true });
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
@@ -117,6 +149,7 @@ export function* getProfilesTabs(optionsType) {
     yield put({
       type: PROFILES__SET_PANEL_TABS,
       payload: {
+        key: optionsType,
         data: filteredData
       }
     });
@@ -125,7 +158,9 @@ export function* getProfilesTabs(optionsType) {
   } finally {
     if (yield cancelled()) {
       if (source) {
-        if (NODE_ENV_DEV) console.error('Cancelled', url);
+        if (NODE_ENV_DEV) {
+          console.error('Cancelled', url);
+        }
         source.cancel();
       }
     }
@@ -139,7 +174,7 @@ export function* fetchProfileSearchResults(profileSelector, query) {
     panelName = 'countries';
   }
   // eslint-ignore-next-line
-  const { node_types_ids: excluded, ...filters } = getProfilesParams(profileSelector, panelName);
+  const { node_types_ids: excluded, ...filters } = yield getProfilesParams(panelName);
   const params = {
     ...filters,
     q: deburr(query)
@@ -160,7 +195,9 @@ export function* fetchProfileSearchResults(profileSelector, query) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled', url);
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled', url);
+      }
       if (source) {
         source.cancel();
       }

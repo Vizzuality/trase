@@ -2,7 +2,6 @@ import {
   GET_CONTEXT_LAYERS,
   GET_MAP_VECTOR_DATA,
   SET_NODE_ATTRIBUTES,
-  SET_MAP_LOADING_STATE,
   SAVE_MAP_VIEW,
   SELECT_BASEMAP,
   SELECT_CONTEXTUAL_LAYERS,
@@ -32,7 +31,7 @@ const toolLayersReducer = {
         props: [
           'mapView',
           'isMapVisible',
-          'selectedMapBasemap',
+          'selectedBasemap',
           'selectedMapContextualLayers',
           'selectedMapDimensions'
         ]
@@ -43,12 +42,6 @@ const toolLayersReducer = {
   },
   [SET_CONTEXT]() {
     return toolLayersInitialState;
-  },
-
-  [SET_MAP_LOADING_STATE](state) {
-    return immer(state, draft => {
-      draft.mapLoading = true;
-    });
   },
 
   [SET_NODE_ATTRIBUTES](state) {
@@ -90,13 +83,14 @@ const toolLayersReducer = {
   },
   [GET_MAP_VECTOR_DATA](state, action) {
     return immer(state, draft => {
-      draft.data.mapVectorData = action.mapVectorData;
+      draft.data.mapVectorData = action.payload.mapVectorData;
     });
   },
   [GET_CONTEXT_LAYERS](state, action) {
     return immer(state, draft => {
+      const { mapContextualLayers } = action.payload;
       draft.data.mapContextualLayers = {};
-      action.mapContextualLayers.forEach(layer => {
+      mapContextualLayers.forEach(layer => {
         draft.data.mapContextualLayers[layer.id] = layer;
       });
     });
@@ -124,12 +118,12 @@ const toolLayersReducer = {
   },
   [SELECT_CONTEXTUAL_LAYERS](state, action) {
     return immer(state, draft => {
-      draft.selectedMapContextualLayers = action.contextualLayers;
+      draft.selectedMapContextualLayers = action.payload.contextualLayers;
     });
   },
   [SELECT_BASEMAP](state, action) {
     return immer(state, draft => {
-      draft.selectedMapBasemap = action.selectedMapBasemap;
+      draft.selectedBasemap = action.payload.selectedBasemap;
     });
   },
   [TOGGLE_MAP](state, action) {
@@ -140,8 +134,8 @@ const toolLayersReducer = {
   [SAVE_MAP_VIEW](state, action) {
     return immer(state, draft => {
       draft.mapView = {
-        latitude: action.latlng.lat,
-        longitude: action.latlng.lng,
+        latitude: action.latlng.lat.toFixed(2),
+        longitude: action.latlng.lng.toFixed(2),
         zoom: action.zoom
       };
     });
@@ -160,7 +154,7 @@ const toolLayersReducerTypes = PropTypes => ({
   linkedGeoIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   mapLoading: PropTypes.bool,
   mapView: PropTypes.object,
-  selectedMapBasemap: PropTypes.string,
+  selectedBasemap: PropTypes.string,
   selectedMapContextualLayers: PropTypes.array,
   selectedMapDimensions: PropTypes.array
 });

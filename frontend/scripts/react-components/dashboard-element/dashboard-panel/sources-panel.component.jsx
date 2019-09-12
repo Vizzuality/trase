@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import SearchInput from 'react-components/shared/search-input/search-input.component';
 import GridList from 'react-components/shared/grid-list/grid-list.component';
+import { useFirstItem } from 'react-components/shared/grid-list/grid-list.hooks';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import Tabs from 'react-components/shared/tabs/tabs.component';
 import Text from 'react-components/shared/text/text.component';
 import capitalize from 'lodash/capitalize';
 import Accordion from '../../shared/accordion/accordion.component';
+
 import 'react-components/dashboard-element/dashboard-panel/sources-panel.scss';
 
 function SourcesPanel(props) {
@@ -15,7 +17,6 @@ function SourcesPanel(props) {
     page,
     getMoreItems,
     searchSources,
-    loadingMoreItems,
     loading,
     setSearchResult,
     getSearchResults,
@@ -26,18 +27,16 @@ function SourcesPanel(props) {
     onSelectSourceTab,
     nodeTypeRenderer,
     onSelectSourceValue,
-    activeSourceTab,
-    activeSourceItem,
+    sourcesActiveTab,
+    activeSourcesItem,
     sourcesRequired
   } = props;
-
   const [sourcesOpen, changeSourcesOpen] = useState(sourcesRequired);
   const toggleSourcesOpen = () => changeSourcesOpen(!sourcesOpen);
+  const itemToScrollTo = useFirstItem(sources);
 
-  const hasActiveCountryItems = Object.keys(activeCountryItems).length > 0;
-  const showJurisdictions = hasActiveCountryItems && tabs.length > 0;
-  const activeCountryName =
-    hasActiveCountryItems && capitalize(Object.values(activeCountryItems)[0].name);
+  const showJurisdictions = activeCountryItems.length > 0 && tabs.length > 0;
+  const activeCountryName = activeCountryItems.length > 0 && capitalize(activeCountryItems[0].name);
   return (
     <div className="c-sources-panel">
       <GridList
@@ -48,21 +47,21 @@ function SourcesPanel(props) {
         rowHeight={50}
         columnCount={5}
         items={countries}
-        loading={!hasActiveCountryItems && loading}
+        loading={!activeCountryItems && loading}
       >
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={!!activeCountryItems[itemProps.item && itemProps.item.id]}
+            isActive={activeCountryItems.find(i => i.id === itemProps.item?.id)}
             enableItem={onSelectCountry}
-            disableItem={() => onSelectCountry({})}
+            disableItem={() => onSelectCountry(null)}
           />
         )}
       </GridList>
       {showJurisdictions && (
         <Accordion
           title={`${activeCountryName} regions${sourcesRequired ? '' : ' (Optional)'}`}
-          defaultValue={Object.keys(activeSourceItem).length > 0 || sourcesOpen}
+          defaultValue={activeSourcesItem.length > 0 || sourcesOpen}
           onToggle={toggleSourcesOpen}
         >
           <Text color="grey-faded" className="sources-panel-sources-subtitle">
@@ -81,7 +80,7 @@ function SourcesPanel(props) {
           <Tabs
             tabs={tabs}
             onSelectTab={onSelectSourceTab}
-            selectedTab={activeSourceTab && activeSourceTab.id}
+            selectedTab={sourcesActiveTab}
             itemTabRenderer={i => i.name}
             getTabId={item => item.id}
           >
@@ -95,13 +94,13 @@ function SourcesPanel(props) {
               columnCount={5}
               page={page}
               getMoreItems={getMoreItems}
-              loadingMoreItems={loadingMoreItems}
               loading={loading}
+              itemToScrollTo={itemToScrollTo}
             >
               {itemProps => (
                 <GridListItem
                   {...itemProps}
-                  isActive={!!activeSourceItem[itemProps.item && itemProps.item.id]}
+                  isActive={activeSourcesItem.includes(itemProps.item?.id)}
                   enableItem={onSelectSourceValue}
                   disableItem={onSelectSourceValue}
                 />
@@ -120,11 +119,10 @@ SourcesPanel.propTypes = {
   countries: PropTypes.array,
   tabs: PropTypes.array.isRequired,
   nodeTypeRenderer: PropTypes.func,
-  loadingMoreItems: PropTypes.bool,
   page: PropTypes.number.isRequired,
-  activeSourceTab: PropTypes.object,
-  activeSourceItem: PropTypes.object,
-  activeCountryItems: PropTypes.object,
+  sourcesActiveTab: PropTypes.number,
+  activeSourcesItem: PropTypes.array,
+  activeCountryItems: PropTypes.array,
   getMoreItems: PropTypes.func.isRequired,
   searchSources: PropTypes.array.isRequired,
   onSelectCountry: PropTypes.func.isRequired,

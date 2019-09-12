@@ -50,7 +50,9 @@ export function* getLinkedGeoIds() {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled');
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled');
+      }
       if (source) {
         source.cancel();
       }
@@ -104,7 +106,9 @@ export function* getMapDimensions(selectedContext, selectedYears) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled');
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled');
+      }
       if (source) {
         source.cancel();
       }

@@ -17,7 +17,6 @@ import {
   highlightNode
 } from 'react-components/tool-links/tool-links.actions';
 
-export const SET_MAP_LOADING_STATE = 'SET_MAP_LOADING_STATE';
 export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
 export const SELECT_YEARS = 'SELECT_YEARS';
 export const GET_MAP_VECTOR_DATA = 'GET_MAP_VECTOR_DATA';
@@ -27,9 +26,6 @@ export const SELECT_CONTEXTUAL_LAYERS = 'SELECT_CONTEXTUAL_LAYERS';
 export const SELECT_BASEMAP = 'SELECT_BASEMAP';
 export const TOGGLE_MAP = 'TOGGLE_MAP';
 export const SAVE_MAP_VIEW = 'SAVE_MAP_VIEW';
-export const SHOW_LINKS_ERROR = 'SHOW_LINKS_ERROR';
-export const RESET_TOOL_STATE = 'RESET_TOOL_STATE';
-export const SET_SELECTED_NODES_BY_SEARCH = 'SET_SELECTED_NODES_BY_SEARCH';
 
 export function loadMapVectorData() {
   return (dispatch, getState) => {
@@ -103,7 +99,9 @@ export function loadMapVectorData() {
     layerLoaded.then(layers => {
       dispatch({
         type: GET_MAP_VECTOR_DATA,
-        mapVectorData: layers
+        payload: {
+          mapVectorData: layers
+        }
       });
       dispatch(loadMapChoropleth());
     });
@@ -137,13 +135,13 @@ export function setMapContextLayers(contextualLayers) {
       // this is just about reinstanciating named maps, you know, because CARTO
       dispatch({
         type: GET_CONTEXT_LAYERS,
-        mapContextualLayers
+        payload: { mapContextualLayers }
       });
 
       if (typeof contextualLayers !== 'undefined' && contextualLayers.length) {
         dispatch({
           type: GET_CONTEXT_LAYERS,
-          mapContextualLayers
+          payload: { mapContextualLayers }
         });
 
         const { selectedMapContextualLayers } = getState().toolLayers;
@@ -151,7 +149,7 @@ export function setMapContextLayers(contextualLayers) {
         if (selectedMapContextualLayers && selectedMapContextualLayers.length) {
           dispatch({
             type: SELECT_CONTEXTUAL_LAYERS,
-            contextualLayers: selectedMapContextualLayers
+            payload: { contextualLayers: selectedMapContextualLayers }
           });
         }
       }
@@ -194,13 +192,6 @@ export function selectExpandedNode(param) {
     } else {
       dispatch(selectNodes(ids));
     }
-  };
-}
-
-export function selectSearchNode(results) {
-  return {
-    type: SET_SELECTED_NODES_BY_SEARCH,
-    payload: { results }
   };
 }
 
@@ -308,13 +299,13 @@ export function loadMapChoropleth() {
 export function selectContextualLayers(contextualLayers) {
   return {
     type: SELECT_CONTEXTUAL_LAYERS,
-    contextualLayers
+    payload: { contextualLayers }
   };
 }
 
-export function selectMapBasemap(selectedMapBasemap) {
+export function selectBasemap(selectedBasemap) {
   return {
     type: SELECT_BASEMAP,
-    selectedMapBasemap
+    payload: { selectedBasemap }
   };
 }

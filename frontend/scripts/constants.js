@@ -26,6 +26,8 @@ export const NUM_DECIMALS = {
   'smallholder dominance': 3,
   'reported cases of forced labour (2014)': 0,
   'land conflicts (2014)': 0,
+  commodity_area: 0,
+  commodity_production: 0,
   // generic
   area: 0,
   percentage: 1,
@@ -163,6 +165,7 @@ export const MAP_PANES_Z = {
 
 export const BASEMAPS = {
   default: {
+    id: 'default',
     title: 'Default',
     url:
       'https://api.mapbox.com/styles/v1/trasebase/cizi55y2r00122rl65a97ppz1/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJhc2ViYXNlIiwiYSI6ImNpemk1NWdhOTAwMmYyeGw5dXRncHpvZGEifQ.fQ6F9DSqmhLXZs-nKiYvzA',
@@ -173,6 +176,7 @@ export const BASEMAPS = {
     thumbnail: '/images/maps/thumb-basemap-default.png'
   },
   satellite: {
+    id: 'satellite',
     title: 'Satellite',
     url:
       'https://api.mapbox.com/styles/v1/trasebase/cj808lpze6d6o2st3yim6eedl/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJhc2ViYXNlIiwiYSI6ImNpemk1NWdhOTAwMmYyeGw5dXRncHpvZGEifQ.fQ6F9DSqmhLXZs-nKiYvzA',
@@ -184,6 +188,7 @@ export const BASEMAPS = {
     dark: true
   },
   topo: {
+    id: 'topo',
     title: 'Topography',
     url: '//{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
     attribution:
@@ -191,6 +196,7 @@ export const BASEMAPS = {
     thumbnail: '/images/maps/thumb-basemap-topo.png'
   },
   streets: {
+    id: 'streets',
     title: 'Streets (OSM)',
     url: '//{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
     attribution:
@@ -248,6 +254,12 @@ export const LOGISTICS_MAP_INSPECTION_LEVELS = [
   { value: 'UNKNOWN', label: 'Unknown' }
 ];
 
+export const EXPLORE_STEPS = {
+  selectCommodity: 0,
+  selectCountry: 1,
+  selected: 2
+};
+
 export const DASHBOARD_STEPS = {
   welcome: 0,
   sources: 1,
@@ -257,7 +269,7 @@ export const DASHBOARD_STEPS = {
 };
 
 export const PROFILE_STEPS = {
-  types: 0,
+  type: 0,
   profiles: 1,
   commodities: 2
 };
@@ -287,3 +299,12 @@ export const PROFILE_TYPES = {
 };
 
 export const DEFAULT_DASHBOARD_UNIT_FORMAT = '.4~s';
+
+export const NODE_TYPE_PANELS = {
+  IMPORTER: 'companies',
+  EXPORTER: 'companies',
+  BIOME: 'sources',
+  STATE: 'sources',
+  MUNICIPALITY: 'sources',
+  COUNTRY: 'destinations'
+};

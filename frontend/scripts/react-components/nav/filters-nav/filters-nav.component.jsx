@@ -57,19 +57,28 @@ class FiltersNav extends React.PureComponent {
 
   renderInToolLinks() {
     const { links, openMap, openSankey, isMapVisible } = this.props;
-    const supplyChainLink = links.find(
-      link => link.page?.type === 'tool' && !link.page?.payload?.serializerParams?.isMapVisible
-    );
+    const supplyChainLink = ENABLE_REDESIGN_PAGES
+      ? links.find(link => link.page?.type === 'explore')
+      : links.find(
+          link => link.page?.type === 'tool' && !link.page?.payload?.serializerParams?.isMapVisible
+        );
+
     const mapLink = links.find(
       link => link.page?.type === 'tool' && link.page?.payload?.serializerParams?.isMapVisible
     );
-    return (
-      <ul className="filters-nav-submenu-list">
-        <li className="filters-nav-item">
-          <NavLink exact strict className="filters-nav-link" to={{ type: 'home' }}>
-            home
-          </NavLink>
-        </li>
+    const renderToolLinks = ENABLE_REDESIGN_PAGES ? (
+      <li className="filters-nav-item">
+        <span
+          className={cx('filters-nav-link', {
+            '-active': !isMapVisible
+          })}
+          onClick={openSankey}
+        >
+          {supplyChainLink.name}
+        </span>
+      </li>
+    ) : (
+      <>
         <li className="filters-nav-item">
           <span
             className={cx('filters-nav-link', {
@@ -90,6 +99,16 @@ class FiltersNav extends React.PureComponent {
             {mapLink.name}
           </span>
         </li>
+      </>
+    );
+    return (
+      <ul className="filters-nav-submenu-list">
+        <li className="filters-nav-item">
+          <NavLink exact strict className="filters-nav-link" to={{ type: 'home' }}>
+            home
+          </NavLink>
+        </li>
+        {renderToolLinks}
       </ul>
     );
   }

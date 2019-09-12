@@ -1,14 +1,8 @@
-import {
-  RESET_TOOL_STATE,
-  SET_NODE_ATTRIBUTES,
-  SHOW_LINKS_ERROR,
-  SET_SELECTED_NODES_BY_SEARCH
-} from 'react-components/tool/tool.actions';
+import { SET_NODE_ATTRIBUTES } from 'react-components/tool/tool.actions';
 import {
   TOOL_LINKS__CLEAR_SANKEY,
   TOOL_LINKS__HIGHLIGHT_NODE,
   TOOL_LINKS__SET_NODES,
-  TOOL_LINKS__SET_MORE_NODES,
   TOOL_LINKS__SET_FLOWS_LOADING,
   TOOL_LINKS__SET_COLUMNS,
   TOOL_LINKS__SET_LINKS,
@@ -23,7 +17,8 @@ import {
   TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
   TOOL_LINKS__SET_SELECTED_RESIZE_BY,
   TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
-  TOOL_LINKS__SET_MISSING_LOCKED_NODES
+  TOOL_LINKS__SET_MISSING_LOCKED_NODES,
+  TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
 import immer from 'immer';
@@ -34,7 +29,7 @@ import { deserialize } from 'react-components/shared/url-serializer/url-serializ
 import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-links.serializers';
 import toolLinksInitialState from './tool-links.initial-state';
 
-function setMoreNodes(state, action) {
+function setNodes(state, action) {
   const { nodes } = action.payload;
   return immer(state, draft => {
     nodes.forEach(node => {
@@ -64,8 +59,8 @@ const toolLinksReducer = {
           'selectedColumnsIds',
           'expandedNodesIds',
           'detailedView',
-          'selectedResizeByName',
-          'selectedRecolorByName',
+          'selectedResizeBy',
+          'selectedRecolorBy',
           'selectedBiomeFilterName'
         ]
       });
@@ -83,8 +78,8 @@ const toolLinksReducer = {
     return immer(state, draft => {
       Object.assign(draft, {
         noLinksFound: toolLinksInitialState.noLinksFound,
-        selectedRecolorByName: toolLinksInitialState.selectedRecolorByName,
-        selectedResizeByName: toolLinksInitialState.selectedResizeByName,
+        selectedRecolorBy: toolLinksInitialState.selectedRecolorBy,
+        selectedResizeBy: toolLinksInitialState.selectedResizeBy,
         selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
         detailedView: toolLinksInitialState.detailedView,
         forcedOverview: toolLinksInitialState.forcedOverview,
@@ -110,8 +105,8 @@ const toolLinksReducer = {
   [SET_CONTEXT](state) {
     return immer(state, draft => {
       Object.assign(draft, {
-        selectedRecolorByName: toolLinksInitialState.selectedRecolorByName,
-        selectedResizeByName: toolLinksInitialState.selectedResizeByName,
+        selectedRecolorBy: toolLinksInitialState.selectedRecolorBy,
+        selectedResizeBy: toolLinksInitialState.selectedResizeBy,
         selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
         detailedView: toolLinksInitialState.detailedView,
         highlightedNodeId: toolLinksInitialState.highlightedNodeId,
@@ -142,22 +137,9 @@ const toolLinksReducer = {
       // TODO: if any selectedNode, make those columns visible (selected)
     });
   },
+  [TOOL_LINKS__SET_NODES]: setNodes,
 
-  [TOOL_LINKS__SET_NODES](state, action) {
-    const { nodes } = action.payload;
-    return immer(state, draft => {
-      draft.data.nodes = {};
-      draft.data.nodesByColumnGeoId = {};
-      nodes.forEach(node => {
-        draft.data.nodes[node.id] = node;
-        draft.data.nodesByColumnGeoId[`${node.columnId}-${node.geoId}`] = node.id;
-      });
-    });
-  },
-
-  [TOOL_LINKS__SET_MORE_NODES]: setMoreNodes,
-
-  [TOOL_LINKS__SET_MISSING_LOCKED_NODES]: setMoreNodes,
+  [TOOL_LINKS__SET_MISSING_LOCKED_NODES]: setNodes,
 
   [TOOL_LINKS__SET_LINKS](state, action) {
     return immer(state, draft => {
@@ -167,8 +149,6 @@ const toolLinksReducer = {
       linksMeta.nodeHeights.forEach(nodeHeight => {
         draft.data.nodeHeights[nodeHeight.id] = nodeHeight;
       });
-
-      draft.currentQuant = linksMeta.quant;
       draft.data.links = links;
     });
   },
@@ -192,11 +172,6 @@ const toolLinksReducer = {
       }
     });
   },
-  [SHOW_LINKS_ERROR](state) {
-    return immer(state, draft => {
-      Object.assign(draft, { links: null, flowsLoading: false });
-    });
-  },
   [TOOL_LINKS__SET_SELECTED_BIOME_FILTER](state, action) {
     return immer(state, draft => {
       draft.selectedBiomeFilterName = action.payload.name;
@@ -204,12 +179,12 @@ const toolLinksReducer = {
   },
   [TOOL_LINKS__SET_SELECTED_RECOLOR_BY](state, action) {
     return immer(state, draft => {
-      draft.selectedRecolorByName = action.payload.name;
+      draft.selectedRecolorBy = action.payload.attributeId;
     });
   },
   [TOOL_LINKS__SET_SELECTED_RESIZE_BY](state, action) {
     return immer(state, draft => {
-      draft.selectedResizeByName = action.payload.name;
+      draft.selectedResizeBy = action.payload.attributeId;
     });
   },
   [TOOL_LINKS__SELECT_VIEW](state, action) {
@@ -230,7 +205,6 @@ const toolLinksReducer = {
       if (!draft.selectedColumnsIds.includes(columnId)) {
         draft.selectedColumnsIds[columnIndex] = columnId;
       }
-      draft.data.links = [];
 
       const isInColumn = nodeId => {
         const node = draft.data.nodes[nodeId];
@@ -239,12 +213,11 @@ const toolLinksReducer = {
         const column = draft.data.columns[node.columnId];
         return column.group !== columnIndex;
       };
-
       draft.selectedNodesIds = state.selectedNodesIds.filter(isInColumn);
       draft.expandedNodesIds = state.expandedNodesIds.filter(isInColumn);
     });
   },
-  [SET_SELECTED_NODES_BY_SEARCH](state, action) {
+  [TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH](state, action) {
     return immer(state, draft => {
       const { results } = action.payload;
       const ids = results.map(n => n.id);
@@ -273,7 +246,7 @@ const toolLinksReducer = {
       if (
         areNodesExpanded &&
         draft.selectedNodesIds.length === 1 &&
-        draft.selectedNodesIds.includes(ids)
+        ids.includes(draft.selectedNodesIds[0])
       ) {
         // we are unselecting the node that is currently expanded: shrink sankey and continue to unselecting node
         draft.expandedNodesIds = [];
@@ -330,11 +303,6 @@ const toolLinksReducer = {
       draft.expandedNodesIds = state.selectedNodesIds;
     });
   },
-  [RESET_TOOL_STATE](state, action) {
-    return immer(state, draft => {
-      Object.assign(draft, toolLinksInitialState, action.payload);
-    });
-  },
   [TOOL_LINKS__SET_IS_SEARCH_OPEN](state, action) {
     return immer(state, draft => {
       draft.isSearchOpen = action.payload.isSearchOpen;
@@ -357,7 +325,6 @@ const toolLinksReducerTypes = PropTypes => ({
     nodesByColumnGeoId: PropTypes.object
   }).isRequired,
   noLinksFound: PropTypes.bool,
-  currentQuant: PropTypes.object,
   detailedView: PropTypes.bool,
   isSearchOpen: PropTypes.bool,
   forcedOverview: PropTypes.bool,
@@ -367,8 +334,8 @@ const toolLinksReducerTypes = PropTypes => ({
   selectedBiomeFilterName: PropTypes.string,
   selectedColumnsIds: PropTypes.arrayOf(PropTypes.number),
   selectedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-  selectedRecolorByName: PropTypes.string,
-  selectedResizeByName: PropTypes.string
+  selectedRecolorBy: PropTypes.number,
+  selectedResizeBy: PropTypes.number
 });
 
 export default createReducer(toolLinksInitialState, toolLinksReducer, toolLinksReducerTypes);

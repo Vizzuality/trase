@@ -9,12 +9,16 @@ const mapStateToProps = state => ({
 
 const serializer = (query, urlProps, removedProps = []) => (dispatch, getState) => {
   const {
-    location: { type }
+    location: {
+      type,
+      payload: { serializerParams, ...payloadRest }
+    }
   } = getState();
   dispatch(
     redirect({
       type,
       payload: {
+        ...payloadRest,
         query: omit({ ...query, ...urlProps }, removedProps)
       }
     })

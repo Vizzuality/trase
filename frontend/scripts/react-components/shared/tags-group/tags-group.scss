@@ -8,7 +8,7 @@
   .tags-group-item {
     display: inline-flex;
     position: relative;
-    height: 30px;
+    min-height: 30px;
     padding: 0 6px 0 0;
 
     &.-with-cross {

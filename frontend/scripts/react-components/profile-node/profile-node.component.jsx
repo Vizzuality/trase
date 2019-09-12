@@ -18,7 +18,6 @@ class ProfileNode extends React.PureComponent {
   static propTypes = {
     printMode: PropTypes.bool,
     context: PropTypes.object,
-    tooltips: PropTypes.object,
     errorMetadata: PropTypes.any,
     profileMetadata: PropTypes.object,
     year: PropTypes.number.isRequired,
@@ -73,7 +72,6 @@ class ProfileNode extends React.PureComponent {
       year,
       nodeId,
       context,
-      tooltips,
       printMode,
       profileType,
       profileMetadata,
@@ -173,7 +171,6 @@ class ProfileNode extends React.PureComponent {
               nodeId={nodeId}
               context={context}
               title={chart.title}
-              tooltips={tooltips}
               printMode={printMode}
               profileType={profileType}
               profileMetadata={profileMetadata}

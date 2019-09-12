@@ -4,6 +4,7 @@ import GA_TOOL_EVENTS from './tool.events';
 import GA_DATA_EVENTS from './data.events';
 import GA_ROUTER_EVENTS from './router.events';
 import GA_HOME_EVENTS from './home.events';
+import GA_LEGACY_EXPLORE_EVENTS from './legacy-explore.events';
 import GA_EXPLORE_EVENTS from './explore.events';
 import GA_PROFILE_NODE_EVENTS from './profile-node.events';
 import GA_DASHBOARD_ELEMENT_EVENTS from './dashboard-element.events';
@@ -13,6 +14,7 @@ const GA_EVENT_WHITELIST = [
   ...GA_DATA_EVENTS,
   ...GA_ROUTER_EVENTS,
   ...GA_HOME_EVENTS,
+  ...GA_LEGACY_EXPLORE_EVENTS,
   ...GA_EXPLORE_EVENTS,
   ...GA_PROFILE_NODE_EVENTS,
   ...GA_DASHBOARD_ELEMENT_EVENTS

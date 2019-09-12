@@ -1,0 +1,37 @@
+@import 'styles/settings';
+
+.c-map-basemaps {
+  .basemap-thumb {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 56px;
+    height: 56px;
+    margin: 16px 0;
+    border-radius: 50%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    > .basemap-name {
+      padding-left: 72px;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      width: calc(100% + 2px);
+      height: calc(100% + 2px);
+      border-radius: 50%;
+      background-color: $pinkish-grey-two;
+      z-index: $z-below-thumb;
+    }
+  }
+
+  .-disabled {
+    pointer-events: none;
+    opacity: .5;
+  }
+}

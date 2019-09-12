@@ -37,6 +37,8 @@ module Api
       has_many :dashboard_templates, through: :dashboard_template_sources
       has_many :top_profiles
 
+      has_many :nodes_stats
+
       def stringify
         name + ' - ' + node_type.name + ' - ' + node_type&.context_node_types&.first&.context&.country&.name + ' ' + node_type&.context_node_types&.first&.context&.commodity&.name
       end

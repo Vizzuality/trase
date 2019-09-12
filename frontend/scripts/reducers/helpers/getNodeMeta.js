@@ -5,13 +5,15 @@ const getNodeMeta = (selectedMapDimension, node, attributes, selectedResizeBy, n
     return meta;
   }
 
-  if (meta && meta.value !== nodeHeight.quant && NODE_ENV_DEV === true) {
-    // See https://basecamp.com/1756858/projects/12498794/todos/312319406
-    console.warn(
-      'Attempting to show different values two dimensions with the same name.',
-      `ResizeBy: ${selectedResizeBy.label} with value ${node.quant}`,
-      `Map layer: ${meta.name} with value ${meta.value}`
-    );
+  if (NODE_ENV_DEV === true) {
+    if (selectedMapDimension && meta && nodeHeight && meta.value !== nodeHeight.quant) {
+      // See https://basecamp.com/1756858/projects/12498794/todos/312319406
+      console.warn(
+        'Attempting to show different values two dimensions with the same name.',
+        `ResizeBy: ${selectedResizeBy.label} with value ${nodeHeight.quant}`,
+        `Map layer: ${selectedMapDimension.name} with value ${meta.value}`
+      );
+    }
   }
   return null;
 };

@@ -2,7 +2,12 @@ module Api
   module V3
     module Actors
       class BasicAttributes
+        include ActiveSupport::Configurable
         include Api::V3::Profiles::AttributesInitializer
+
+        config_accessor :get_tooltip do
+          Api::V3::Profiles::GetTooltipPerAttribute
+        end
 
         # @param context [Api::V3::Context]
         # @param node [Api::V3::Node]
@@ -57,19 +62,35 @@ module Api
         NAMED_ATTRIBUTES = %w(forest_500 zero_deforestation).freeze
 
         def initialize_named_attributes
-          values =
-            NAMED_ATTRIBUTES.map do |name|
-              original_attribute = @chart_config.named_attribute(name)
-              next nil unless original_attribute
+          values = {header_attributes: {}}
+          NAMED_ATTRIBUTES.map do |name|
+            original_attribute = @chart_config.named_attribute(name)
+            next nil unless original_attribute
 
-              value = @values.get(
-                original_attribute.simple_type, original_attribute.id
-              )
-              next nil unless value
+            value = @values.get(
+              original_attribute.simple_type, original_attribute.id
+            )
+            next nil unless value
 
-              [name, value]
-            end
-          Hash[values.compact]
+            values[name.to_sym] = value
+
+            chart_attribute = @chart_config.named_chart_attribute(name)
+            values[:header_attributes][chart_attribute.identifier.to_sym] =
+              header_attributes(original_attribute, chart_attribute)
+          end
+          values
+        end
+
+        def header_attributes(attribute, chart_attribute)
+          {
+            value: @values.get(attribute.simple_type, attribute.id),
+            name: chart_attribute.display_name,
+            unit: chart_attribute.unit,
+            tooltip: get_tooltip.call(
+              ro_chart_attribute: chart_attribute,
+              context: @context
+            )
+          }
         end
 
         def initialize_top_nodes

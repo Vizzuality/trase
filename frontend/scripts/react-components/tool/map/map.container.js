@@ -13,17 +13,17 @@ import {
 } from 'react-components/tool-links/tool-links.selectors';
 import {
   getMapView,
+  getBasemap,
   getSelectedNodesGeoIds,
   getHighlightedNodesGeoIds,
   getChoroplethOptions,
   getSelectedMapContextualLayersData,
   getShouldFitBoundsSelectedPolygons
 } from 'react-components/tool-layers/tool-layers.selectors';
+import { getSelectedContext } from 'reducers/app.selectors';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 import { connect } from 'react-redux';
 import Map from 'react-components/tool/map/map.component';
-import getBasemap from 'utils/getBasemap';
-import { getSelectedContext } from 'reducers/app.selectors';
 
 const mapStateToProps = state => {
   const { choropleth } = getChoroplethOptions(state);

@@ -1,0 +1,101 @@
+@import 'styles/settings';
+
+.c-sankey {
+  .sankey-node {
+    cursor: pointer;
+
+    .sankey-node-rect {
+      fill: $white-two;
+      stroke: $pinkish-grey-two;
+      stroke-width: 1px;
+    }
+
+    .sankey-node-label {
+      font-family: $font-family-1;
+      font-size: $font-size-regular;
+      text-transform: capitalize;
+      text-anchor: middle;
+      fill: $charcoal-grey;
+      pointer-events: none;
+    }
+
+    &.-is-aggregated > .sankey-node-rect {
+      // the horizontal lines pattern is defined in the <defs> section of the SVG in flows.ejs
+      cursor: zoom-in;
+      fill: url('#isAggregatedPattern');
+    }
+
+    &.-is-domestic > .sankey-node-rect {
+      fill: $gray;
+    }
+
+    &.-is-alone-in-column {
+      pointer-events: none;
+
+      & > .sankey-node-rect {
+        fill: $background-white;
+      }
+    }
+
+    &.-selected {
+      // disabled for now because of a Firefox rendering bug
+      //filter: url(#drop-shadow); //ignore sasslint warning here
+
+      .sankey-node-rect {
+        fill: $white;
+        stroke: $charcoal-grey;
+      }
+    }
+
+    &.-highlighted {
+      .sankey-node-rect {
+        fill: $manilla;
+      }
+    }
+  }
+
+  .sankey-links .sankey-link {
+    opacity: 0.1;
+    fill: none;
+    stroke: $charcoal-grey;
+
+    &.-hover {
+      opacity: 0.7;
+    }
+
+    @for $i from 1 through length($recolorby-colors) {
+      &.#{nth($recolorby-colors-names, $i)} {
+        opacity: 0.5;
+        stroke: #{nth($recolorby-colors, $i)};
+      }
+
+      &.#{nth($recolorby-colors-names, $i)}.-hover {
+        opacity: 1;
+      }
+    }
+
+    @for $i from 1 through length($recolorgroup-colors) {
+      &.#{nth($recolorgroup-colors-names, $i)} {
+        opacity: 0.5;
+        stroke: #{nth($recolorgroup-colors, $i)};
+      }
+
+      &.#{nth($recolorgroup-colors-names, $i)}.-hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  .sankey-column-placeholder {
+    stroke: $pinkish-grey-two;
+    stroke-width: 1px;
+    fill: transparent;
+  }
+
+  .sankey-loading {
+    position: absolute;
+    top: calc(50% - 32px);
+    padding: 10px 8px;
+    transform: translate(-50%, -50%);
+  }
+}

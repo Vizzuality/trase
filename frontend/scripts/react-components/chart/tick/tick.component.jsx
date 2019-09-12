@@ -25,7 +25,9 @@ function Tick(props) {
 Tick.propTypes = {
   x: PropTypes.number,
   y: PropTypes.number,
-  payload: PropTypes.shape({}),
+  payload: PropTypes.shape({
+    value: PropTypes.string
+  }),
   unitFormat: PropTypes.func.isRequired,
   fill: PropTypes.string.isRequired,
   backgroundColor: PropTypes.string

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useMemo, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { FixedSizeGrid } from 'react-window';
 import debounce from 'lodash/debounce';
@@ -6,74 +6,37 @@ import ShrinkingSpinner from '../shrinking-spinner/shrinking-spinner.component';
 
 import './grid-list.scss';
 
-class GridList extends React.Component {
-  static propTypes = {
-    page: PropTypes.number,
-    loading: PropTypes.bool,
-    loadingMoreItems: PropTypes.bool,
-    groupBy: PropTypes.string,
-    className: PropTypes.string,
-    getMoreItems: PropTypes.func,
-    items: PropTypes.array.isRequired,
-    width: PropTypes.number.isRequired,
-    children: PropTypes.func.isRequired,
-    height: PropTypes.number.isRequired,
-    rowHeight: PropTypes.number.isRequired,
-    columnWidth: PropTypes.number.isRequired,
-    columnCount: PropTypes.number.isRequired
-  };
+function useMoreItems({ getMoreItems, rowHeight, height, columnCount, items, page }) {
+  const debouncedGetMoreItemsCb = useCallback(debounce(getMoreItems, 350), [getMoreItems]);
 
-  static defaultProps = {
-    getMoreItems: () => {},
-    page: 1
-  };
-
-  listRef = React.createRef();
-
-  debouncedGetMoreItemsCb = debounce(this.props.getMoreItems, 150);
-
-  componentDidUpdate(prevProps) {
-    const { items, columnCount } = this.props;
-    if (prevProps.items.length > 0 && items.length !== prevProps.items.length) {
-      const prevLastRow = prevProps.items[prevProps.items.length - 1];
-      const currentFirstRowIndex = items.findIndex(i => i.id === (prevLastRow && prevLastRow.id));
+  return useCallback(
+    ({ scrollTop, scrollUpdateWasRequested, verticalScrollDirection }) => {
+      const current = Math.ceil((scrollTop + height) / rowHeight);
       const buffer = 1;
-      const rowIndex = Math.ceil(parseInt(currentFirstRowIndex / columnCount, 10)) - buffer;
+      const pageEnd = Math.ceil(items.length / columnCount);
+      const reachedPageEnd = current === pageEnd;
+      const reachedPageEndWithBuffer = current === pageEnd - buffer && page > 1;
 
-      this.listRef.current.scrollToItem({
-        rowIndex,
-        columnIndex: 0,
-        align: 'start'
-      });
+      if (
+        (reachedPageEnd || reachedPageEndWithBuffer) &&
+        !scrollUpdateWasRequested &&
+        verticalScrollDirection === 'forward'
+      ) {
+        debouncedGetMoreItemsCb(page + 1, 'forward');
+      }
+    },
+    [height, rowHeight, items.length, columnCount, page, debouncedGetMoreItemsCb]
+  );
+}
+
+function useGroupedItems({ groupBy, columnCount, items }) {
+  return useMemo(() => {
+    if (!groupBy) {
+      return null;
     }
-  }
 
-  getMoreItems = ({ scrollTop, scrollUpdateWasRequested, verticalScrollDirection }) => {
-    const { items, height, rowHeight, page, columnCount } = this.props;
-    const current = parseInt((scrollTop + height) / rowHeight, 10);
-    const buffer = 1;
-    const pageEnd = parseInt(items.length / columnCount, 10);
-    const reachedPageEnd = current === pageEnd;
-    const reachedPageEndWithBuffer =
-      current === pageEnd - buffer && page > GridList.defaultProps.page;
-
-    // TODO: add backwards support
-    // const reachedPageStart = current === columnCount;
-    // if (reachedPageStart && !scrollUpdateWasRequested && page > 0 && verticalScrollDirection === 'backward') {
-    //   getMoreItems(page - 1, 'backwards');
-    // }
-    if (
-      (reachedPageEnd || reachedPageEndWithBuffer) &&
-      !scrollUpdateWasRequested &&
-      verticalScrollDirection === 'forward'
-    ) {
-      this.debouncedGetMoreItemsCb(page + 1, 'forward');
-    }
-  };
-
-  getGroupedItems() {
-    const { groupBy, items, columnCount } = this.props;
     const grouped = [];
+
     items.forEach(item => {
       const index = grouped.length;
       if (item[groupBy]) {
@@ -86,53 +49,97 @@ class GridList extends React.Component {
       }
     });
     return grouped;
-  }
-
-  render() {
-    const {
-      className,
-      height,
-      width,
-      columnWidth,
-      rowHeight,
-      items,
-      columnCount,
-      children,
-      groupBy,
-      loading,
-      loadingMoreItems
-    } = this.props;
-    const groupedItems = groupBy && this.getGroupedItems();
-    const isLoading = loading || loadingMoreItems;
-
-    return (
-      <div className="c-grid-list">
-        <FixedSizeGrid
-          ref={this.listRef}
-          className={className}
-          height={height}
-          width={width}
-          columnWidth={columnWidth}
-          rowHeight={rowHeight}
-          itemData={groupedItems || items}
-          rowCount={Math.ceil((groupedItems || items).length / columnCount)}
-          columnCount={columnCount}
-          onScroll={this.getMoreItems}
-        >
-          {({ rowIndex, columnIndex, style, data }) => {
-            const item = data[rowIndex * columnCount + columnIndex];
-            if (typeof item === 'undefined' || !children) return null;
-            return children({ item, style, isGroup: item && !!item[groupBy] });
-          }}
-        </FixedSizeGrid>
-        {isLoading && (
-          <div className="grid-list-loading-container">
-            <ShrinkingSpinner className="-small -dark grid-list-spinner" />
-          </div>
-        )}
-      </div>
-    );
-  }
+  }, [groupBy, columnCount, items]);
 }
+
+function useScrollToItemId({ itemToScrollTo, columnCount, items }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    if (itemToScrollTo?.id && ref.current) {
+      const currentFirstRowIndex = items.findIndex(i => i.id === itemToScrollTo.id);
+      if (currentFirstRowIndex !== -1) {
+        const rowIndex = Math.ceil(currentFirstRowIndex / columnCount);
+
+        ref.current.scrollToItem({
+          rowIndex,
+          columnIndex: 0,
+          align: 'start'
+        });
+      }
+    }
+    // we dont want to scroll to item, every time the items change
+    // eslint-disable-next-line
+  }, [itemToScrollTo, columnCount]);
+
+  return ref;
+}
+
+function GridList(props) {
+  const {
+    items,
+    height,
+    rowHeight,
+    columnCount,
+    groupBy,
+    className,
+    width,
+    columnWidth,
+    children,
+    loading
+  } = props;
+
+  const groupedItems = useGroupedItems(props);
+  const onScrollCb = useMoreItems(props);
+  const fixedSizeGridRef = useScrollToItemId(props);
+
+  return (
+    <div className="c-grid-list">
+      <FixedSizeGrid
+        ref={fixedSizeGridRef}
+        className={className}
+        height={height}
+        width={width}
+        columnWidth={columnWidth}
+        rowHeight={rowHeight}
+        itemData={groupedItems || items}
+        rowCount={Math.ceil((groupedItems || items).length / columnCount)}
+        columnCount={columnCount}
+        onScroll={onScrollCb}
+      >
+        {({ rowIndex, columnIndex, style, data }) => {
+          const item = data[rowIndex * columnCount + columnIndex];
+          if (typeof item === 'undefined' || !children) return null;
+          return children({ item, style, isGroup: item && !!item[groupBy] });
+        }}
+      </FixedSizeGrid>
+      {loading && (
+        <div className="grid-list-loading-container">
+          <ShrinkingSpinner className="-small -dark grid-list-spinner" />
+        </div>
+      )}
+    </div>
+  );
+}
+
+GridList.propTypes = {
+  page: PropTypes.number, // eslint-disable-line
+  loading: PropTypes.bool,
+  groupBy: PropTypes.string,
+  className: PropTypes.string,
+  getMoreItems: PropTypes.func, // eslint-disable-line
+  itemToScrollTo: PropTypes.object, // eslint-disable-line
+  items: PropTypes.array.isRequired,
+  width: PropTypes.number.isRequired,
+  children: PropTypes.func.isRequired,
+  height: PropTypes.number.isRequired,
+  rowHeight: PropTypes.number.isRequired,
+  columnWidth: PropTypes.number.isRequired,
+  columnCount: PropTypes.number.isRequired
+};
+
+GridList.defaultProps = {
+  getMoreItems: () => {},
+  page: 1
+};
 
 export default GridList;

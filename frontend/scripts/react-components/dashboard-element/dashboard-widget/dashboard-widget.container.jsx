@@ -1,25 +1,28 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import camelCase from 'lodash/camelCase';
 import DashboardWidgetComponent from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.component';
 import DashboardWidgetTooltip from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-tooltip';
 import {
+  getChartType,
   makeGetConfig,
-  makeGetChartType,
-  makeGetTitle
+  makeGetTitle,
+  makeGetGroupingOptions,
+  makeGetGroupingActiveItem
 } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.selectors';
 import { trackOpenTableView as trackOpenTableViewFn } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.actions';
 
 const makeMapStateToProps = () => {
   const getDashboardWidgetsConfig = makeGetConfig();
-  const getChartType = makeGetChartType();
   const getTitle = makeGetTitle();
+  const getGroupingOptions = makeGetGroupingOptions();
+  const getGroupingActiveItem = makeGetGroupingActiveItem();
   const mapStateToProps = (state, props) => ({
-    config: getDashboardWidgetsConfig(state, props),
-    chartType: getChartType(state, props),
     title: getTitle(state, props),
-    chartsLoading: state.dashboardElement.chartsLoading
+    chartType: getChartType(state, props),
+    config: getDashboardWidgetsConfig(state, props),
+    groupingOptions: getGroupingOptions(state, props),
+    groupingActiveItem: getGroupingActiveItem(state, props)
   });
   return mapStateToProps;
 };
@@ -39,19 +42,6 @@ class DashboardWidgetContainer extends Component {
     };
   }
 
-  getPluralNodeType = nodeType => {
-    const name = camelCase(nodeType);
-    return (
-      {
-        country: 'importing countries',
-        municipality: 'municipalities',
-        countryOfProduction: 'countries of production',
-        portOfExport: 'ports of export',
-        portOfImport: 'ports of import'
-      }[name] || `${nodeType}s`.toLowerCase()
-    );
-  };
-
   render() {
     const {
       data,
@@ -60,8 +50,10 @@ class DashboardWidgetContainer extends Component {
       meta,
       config,
       chartType,
-      chartsLoading,
       title,
+      groupingActiveItem,
+      setActiveChartId,
+      groupingOptions,
       trackOpenTableView
     } = this.props;
     return config ? (
@@ -69,11 +61,14 @@ class DashboardWidgetContainer extends Component {
         data={data}
         meta={meta}
         error={error}
-        trackOpenTableView={trackOpenTableView}
-        loading={loading || chartsLoading}
-        chartConfig={this.addTooltipContentToConfig(config, meta)}
-        chartType={chartType}
         title={title}
+        chartType={chartType}
+        setActiveChartId={setActiveChartId}
+        groupingOptions={groupingOptions}
+        loading={loading}
+        groupingActiveItem={groupingActiveItem}
+        trackOpenTableView={trackOpenTableView}
+        chartConfig={this.addTooltipContentToConfig(config, meta)}
       />
     ) : null;
   }
@@ -87,8 +82,10 @@ DashboardWidgetContainer.propTypes = {
   title: PropTypes.string,
   config: PropTypes.object,
   chartType: PropTypes.string,
-  chartsLoading: PropTypes.bool,
-  trackOpenTableView: PropTypes.func
+  setActiveChartId: PropTypes.func,
+  groupingOptions: PropTypes.array,
+  trackOpenTableView: PropTypes.func,
+  groupingActiveItem: PropTypes.object
 };
 
 export default connect(

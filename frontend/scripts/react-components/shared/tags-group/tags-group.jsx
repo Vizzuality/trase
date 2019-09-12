@@ -26,26 +26,19 @@ class TagsGroupContainer extends React.Component {
       : options.concat({ label: 'CLEAR ALL', value: 'clear-all', ...iconProp });
   };
 
-  removeOption = (optionToClear, part) => {
+  removeOption = (part, optionToClear) => {
     const { removeSentenceItem, clearPanel } = this.props;
 
     if (optionToClear.value === 'clear-all') {
-      if (part.panel === 'companies') removeSentenceItem(part.value, part.panel);
-      else {
-        clearPanel(part.panel);
-      }
+      clearPanel(part.panel);
     } else {
       removeSentenceItem(part.value.find(v => v.id === optionToClear.value), part.panel);
     }
   };
 
   clearSingleItem = part => {
-    const { removeSentenceItem, clearPanel } = this.props;
-    if (part.panel === 'companies') {
-      removeSentenceItem(part.value[0], part.panel);
-    } else {
-      clearPanel(part.panel);
-    }
+    const { clearPanel } = this.props;
+    clearPanel(part.panel);
   };
 
   render() {

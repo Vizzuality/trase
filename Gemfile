@@ -53,7 +53,7 @@ gem 'sitemap_generator'
 
 group :development, :test do
   gem 'byebug', platform: :mri
-  gem 'rspec-rails', '~> 3.5'
+  gem 'rspec-rails', '~> 3.8'
   gem 'rubocop-rspec'
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'
@@ -75,7 +75,7 @@ group :development do
   gem 'capistrano-rvm'
   gem 'capistrano-passenger'
 
-  gem 'rubocop', '~> 0.67.0', require: false
+  gem 'rubocop', '~> 0.74.0', require: false
   gem 'rubocop-performance', require: false
   gem 'rbnacl', '>= 3.2', '< 5.0'
   gem 'rbnacl-libsodium'

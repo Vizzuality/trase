@@ -66,6 +66,7 @@ Rails.application.routes.draw do
       resources :newsletter_subscriptions, only: [:create]
       resource :database_validation, controller: :database_validation,
                                      only: [:show]
+      resources :nodes_stats, only: [:index]
       namespace :dashboards do
         resources :templates, only: [:index]
         resources :sources, only: [:index] do
@@ -97,6 +98,11 @@ Rails.application.routes.draw do
         end
         resources :parametrised_charts, only: [:index]
       end
+      resources :countries, only: [:index]
+      resources :commodities, only: [:index] do
+        get :countries_facts, on: :member
+      end
+      #resources :countries_facts, only: [:index]
     end
     namespace :v2 do
       resources :geo_id, only: :index

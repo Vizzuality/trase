@@ -1,85 +1,35 @@
-/* eslint-disable camelcase */
-import { getURLFromParams, GET_TOP_NODES_URL } from 'utils/getURLFromParams';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+export const EXPLORE__SET_COMMODITY = 'EXPLORE__SET_COMMODITY';
+export const EXPLORE__SET_COUNTRY = 'EXPLORE__SET_COUNTRY';
+export const EXPLORE__SELECT_TOP_CARD = 'EXPLORE__SELECT_TOP_CARD';
 
-export const EXPLORE__SET_TOP_COUNTRIES = 'EXPLORE__SET_TOP_COUNTRIES';
-export const EXPLORE__SET_TOP_EXPORTERS = 'EXPLORE__SET_TOP_EXPORTERS';
-export const EXPLORE__SET_TOP_NODES_LOADING = 'EXPLORE__SET_TOP_NODES_LOADING';
-export const EXPLORE__SET_SELECTED_TABLE_COLUMN_TYPE = 'EXPLORE__SET_SELECTED_TABLE_COLUMN_TYPE';
+export const setCommodity = selectedCommodityId => ({
+  type: EXPLORE__SET_COMMODITY,
+  payload: { selectedCommodityId }
+});
 
-export const getTopNodesKey = (ctx, col, start, end) =>
-  ctx && col && start && end ? `CTX${ctx}_COL${col}_START${start}_END${end}` : null;
+export const setCountry = selectedCountryId => ({
+  type: EXPLORE__SET_COUNTRY,
+  payload: { selectedCountryId }
+});
 
-export const setExploreTopNodes = columnType => (dispatch, getState) => {
-  if (!columnType) return null;
-
-  const state = getState();
-  const selectedContext = getSelectedContext(state);
-  let columnId;
-  let type;
-
-  switch (columnType) {
-    case 'exporter':
-      type = EXPLORE__SET_TOP_EXPORTERS;
-      columnId = selectedContext.worldMap.exporterColumnId;
-      break;
-    case 'country':
-      type = EXPLORE__SET_TOP_COUNTRIES;
-      columnId = selectedContext.worldMap.countryColumnId;
-      break;
-    default:
-      columnId = null;
-      type = null;
-      break;
-  }
-
-  if (!columnType || !type) {
-    console.warn(
-      `Column type set to ${columnType} but no matching column id was found on context data.`
+export const goToTool = linkInfo => (dispatch, getState) => {
+  const { contexts, selectedContextId } = getState().app;
+  let contextId;
+  if (!linkInfo) {
+    contextId = selectedContextId;
+  } else {
+    const context = contexts.find(
+      c => c.commodityId === linkInfo.commodityId && c.countryId === linkInfo.countryId
     );
-    return null;
+    contextId = context.id;
   }
-
-  const [start_year, end_year] = getSelectedYears(state);
-  const { topNodes } = state.explore;
-  const params = {
-    start_year,
-    end_year,
-    column_id: columnId,
-    context_id: selectedContext.id
-  };
-  const topNodesKey = getTopNodesKey(selectedContext.id, columnType, start_year, end_year);
-  if (!topNodes[topNodesKey]) {
-    dispatch({
-      type: EXPLORE__SET_TOP_NODES_LOADING,
-      payload: { topNodesKey, loading: true }
-    });
-  }
-  const url = getURLFromParams(GET_TOP_NODES_URL, params);
-  return (
-    !topNodes[topNodesKey] &&
-    fetch(url)
-      .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
-      .then(res =>
-        dispatch({
-          type,
-          payload: {
-            topNodesKey,
-            data: res.data,
-            country: selectedContext.countryName
-          }
-        })
-      )
-      .catch(error => console.error(error))
-  );
+  const serializerParams = { selectedContextId: contextId };
+  dispatch({
+    type: EXPLORE__SELECT_TOP_CARD,
+    payload: { linkInfo }
+  });
+  dispatch({
+    type: 'tool',
+    payload: { serializerParams }
+  });
 };
-
-export const setSelectedTableColumnType = columnType => ({
-  type: EXPLORE__SET_SELECTED_TABLE_COLUMN_TYPE,
-  payload: { columnType }
-});
-
-export const setExploreTopNodesLoading = loading => ({
-  type: EXPLORE__SET_TOP_NODES_LOADING,
-  payload: { loading }
-});

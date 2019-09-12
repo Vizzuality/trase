@@ -18,7 +18,6 @@ import {
   setToolColumns,
   setToolLinks,
   setToolNodes,
-  setMoreToolNodes,
   setNoLinksFound,
   setMissingLockedNodes
 } from './tool-links.actions';
@@ -39,7 +38,7 @@ export function* getToolLinksData() {
     start_year: selectedYears[0],
     end_year: selectedYears[1],
     include_columns: selectedColumnsIds.join(','),
-    flow_quant: selectedResizeBy.name,
+    cont_attribute_id: selectedResizeBy.attributeId,
     locked_nodes: state.toolLinks.selectedNodesIds
   };
   const areNodesExpanded = state.toolLinks.expandedNodesIds.length > 0;
@@ -54,9 +53,9 @@ export function* getToolLinksData() {
 
   if (selectedRecolorBy) {
     if (selectedRecolorBy.type === 'qual') {
-      params.flow_qual = selectedRecolorBy.name;
+      params.ncont_attribute_id = selectedRecolorBy.attributeId;
     } else if (selectedRecolorBy.type === 'ind') {
-      params.flow_ind = selectedRecolorBy.name;
+      params.ncont_attribute_id = selectedRecolorBy.attributeId;
     }
   }
 
@@ -81,7 +80,9 @@ export function* getToolLinksData() {
     }
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled');
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled');
+      }
       if (source) {
         source.cancel();
       }
@@ -100,7 +101,9 @@ export function* getToolColumnsData(selectedContext) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled');
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled');
+      }
       if (source) {
         source.cancel();
       }
@@ -108,43 +111,21 @@ export function* getToolColumnsData(selectedContext) {
   }
 }
 
-export function* getToolNodesByLink(selectedContext) {
-  const {
-    data: { links }
-  } = yield select(state => state.toolLinks);
-
-  const nodesIds = Array.from(new Set(Object.values(links).flatMap(link => link.path))).join(',');
-  const params = { context_id: selectedContext.id, nodes_ids: nodesIds };
-  const url = getURLFromParams(GET_ALL_NODES_URL, params);
-  const { source, fetchPromise } = fetchWithCancel(url);
-  try {
-    const { data } = yield call(fetchPromise);
-    yield put(setToolNodes(data.data));
-  } catch (e) {
-    console.error('Error', e);
-  } finally {
-    if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled');
-      if (source) {
-        source.cancel();
-      }
-    }
-  }
-}
-
-export function* getMoreToolNodesByLink(selectedContext, fetchAllNodes) {
+export function* getToolNodesByLink(selectedContext, { fetchAllNodes } = {}) {
   let nodesIds;
   let nodeTypesIds;
   if (!fetchAllNodes) {
     const {
       data: { links, nodes }
     } = yield select(state => state.toolLinks);
-    const nodesInLinkPaths = Object.values(links).flatMap(link => link.path);
-    const existingNodes = new Set(Object.keys(nodes));
+    const nodesInLinkPaths = (links || []).flatMap(link => link.path);
+    const existingNodes = new Set(Object.keys(nodes || {}));
     const difference = new Set(nodesInLinkPaths.filter(x => !existingNodes.has(`${x}`)));
 
     if (difference.size === 0) {
-      if (NODE_ENV_DEV) console.log('All necessary nodes have been downloaded');
+      if (NODE_ENV_DEV) {
+        console.log('All necessary nodes have been downloaded');
+      }
       return;
     }
     // we only want to fetch the missing nodes
@@ -163,12 +144,14 @@ export function* getMoreToolNodesByLink(selectedContext, fetchAllNodes) {
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
-    yield put(setMoreToolNodes(data.data));
+    yield put(setToolNodes(data.data));
   } catch (e) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled');
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled');
+      }
       if (source) {
         source.cancel();
       }
@@ -187,12 +170,14 @@ export function* getToolGeoColumnNodes(selectedContext) {
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
-    yield put(setMoreToolNodes(data.data));
+    yield put(setToolNodes(data.data));
   } catch (e) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled');
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled');
+      }
       if (source) {
         source.cancel();
       }
@@ -200,8 +185,26 @@ export function* getToolGeoColumnNodes(selectedContext) {
   }
 }
 
-export function* getMissingLockedNodes(nodesIds) {
+export function* getMissingLockedNodes() {
+  const {
+    selectedNodesIds,
+    expandedNodesIds,
+    data: { nodes }
+  } = yield select(state => state.toolLinks);
   const selectedContext = yield select(getSelectedContext);
+  const lockedNodes = new Set([...selectedNodesIds, ...expandedNodesIds]);
+  const nodesIds = Array.from(lockedNodes).filter(lockedNode => !nodes[lockedNode]);
+
+  if (nodesIds.length === 0) {
+    if (NODE_ENV_DEV) {
+      console.log('No missing nodes.');
+    }
+    return;
+  }
+  if (NODE_ENV_DEV) {
+    console.log('Fetching missing nodes: ', nodesIds);
+  }
+
   const params = {
     context_id: selectedContext.id,
     nodes_ids: nodesIds.join(',')
@@ -215,7 +218,9 @@ export function* getMissingLockedNodes(nodesIds) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled');
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled');
+      }
       if (source) {
         source.cancel();
       }

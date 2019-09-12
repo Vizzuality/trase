@@ -12,9 +12,8 @@ module Api
           @active_nodes = filter_flows.active_nodes
           @total_height = filter_flows.total_height
           @other_nodes_ids = filter_flows.other_nodes_ids
-          @resize_quant = filter_flows.resize_quant
-          @recolor_ind = filter_flows.recolor_ind
-          @recolor_qual = filter_flows.recolor_qual
+          @cont_attribute = filter_flows.cont_attribute
+          @ncont_attribute = filter_flows.ncont_attribute
           initialize_data
           initialize_include
         end
@@ -22,25 +21,9 @@ module Api
         def initialize_data
           result = {}
           @flows.each do |flow|
-            active_path = flow.path.map.with_index do |node_id, i|
-              if !@active_nodes.key?(node_id)
-                @other_nodes_ids[i]
-              else
-                node_id
-              end
-            end
+            active_path = get_active_path(flow)
             identifier = active_path.dup
-            flow_hash = {
-              path: active_path,
-              quant: flow['quant_value']
-            }
-            if @recolor_qual
-              flow_hash[:qual] = flow['qual_value']
-              identifier << flow['qual_value']
-            elsif @recolor_ind
-              flow_hash[:ind] = flow['ind_value']
-              identifier << flow['ind_value']
-            end
+            flow_hash = initialize_flow_hash(active_path, flow, identifier)
 
             if result[identifier]
               result[identifier][:quant] += flow['quant_value']
@@ -48,7 +31,41 @@ module Api
               result[identifier] = flow_hash
             end
           end
-          @data = result.values.map do |flow_hash|
+
+          @data = process_data(result)
+        end
+
+        def get_active_path(flow)
+          flow.path.map.with_index do |node_id, i|
+            @active_nodes.key?(node_id) ? node_id : @other_nodes_ids[i]
+          end
+        end
+
+        def initialize_flow_hash(active_path, flow, identifier)
+          flow_hash = {
+            path: active_path,
+            quant: flow['quant_value']
+          }
+
+          add_ncont_attribute_data(flow, flow_hash, identifier)
+
+          flow_hash
+        end
+
+        def add_ncont_attribute_data(flow, flow_hash, identifier)
+          return unless @ncont_attribute
+
+          if @ncont_attribute.qual?
+            flow_hash[:qual] = flow['qual_value']
+            identifier << flow['qual_value']
+          elsif @ncont_attribute.ind?
+            flow_hash[:ind] = flow['ind_value']
+            identifier << flow['ind_value']
+          end
+        end
+
+        def process_data(result)
+          result.values.map do |flow_hash|
             flow_hash[:height] = format('%0.6f', (flow_hash[:quant] / @total_height)).to_f
             flow_hash[:quant] = format('%0.6f', flow_hash[:quant]).to_f
             flow_hash
@@ -63,21 +80,7 @@ module Api
                 height: format('%0.6f', (value / @total_height)).to_f,
                 quant: format('%0.6f', value).to_f
               }
-            end,
-            quant: {
-              id: @resize_quant.id,
-              name: @resize_quant.display_name,
-              unit: @resize_quant.unit
-            },
-            ind: @recolor_ind && {
-              id: @recolor_ind.id,
-              name: @recolor_ind.display_name,
-              unit: @recolor_ind.unit
-            },
-            qual: @recolor_qual && {
-              id: @recolor_qual.id,
-              name: @recolor_qual.display_name
-            }
+            end
           }
         end
 

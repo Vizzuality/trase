@@ -171,6 +171,14 @@ paths:
             type: array
             items:
               type: integer
+        - name: excluded_nodes
+          in: query
+          description: List of excluded node ids
+          required: false
+          schema:
+            type: array
+            items:
+              type: integer
         - name: biome_filter_id
           in: query
           description: Id of biome to filter by
@@ -219,7 +227,8 @@ paths:
         - flow
       summary: Top nodes of given node type per context
       parameters:
-        - $ref: "#/components/parameters/context_id_path_param"
+        - $ref: "#/components/parameters/commodity_id_query_param"
+        - $ref: "#/components/parameters/contexts_ids_query_param"
         - name: column_id
           in: query
           description: Node type id
@@ -234,6 +243,51 @@ paths:
           required: false
           schema:
             type: integer
+        - name: attribute_ids
+          in: query
+          description: Attribute ids
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/NodesStats"
+
+  "/nodes_stats":
+    get:
+      tags:
+        - flow
+      summary: Top nodes of given node type per contexts or commodity
+      parameters:
+        - $ref: "#/components/parameters/contexts_ids_query_param"
+        - $ref: "#/components/parameters/commodity_id_query_param"
+        - name: column_id
+          in: query
+          description: Node type id
+          required: true
+          schema:
+            type: integer
+        - $ref: "#/components/parameters/start_year_opt_query_param"
+        - $ref: "#/components/parameters/end_year_opt_query_param"
+        - name: n_nodes
+          in: query
+          description: Number of top nodes (defaults to 10)
+          required: false
+          schema:
+            type: integer
+        - name: attributes_ids
+          in: query
+          description: List of attributes ids separated by comma
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: OK
@@ -634,6 +688,58 @@ paths:
         "200":
           description: OK
 
+  /countries:
+    get:
+      tags:
+        - "countries"
+      summary: Countries matching selected filters
+      parameters:
+        - $ref: "#/components/parameters/commodities_ids"
+        - $ref: "#/components/parameters/include"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CountriesFromContexts"
+                  meta:
+                    type: object
+                    properties:
+                      commodities:
+                        $ref: "#/components/schemas/CommoditiesFromCountries"
+
+  /commodities:
+    get:
+      tags:
+        - "commodities"
+      summary: Commodities matching selected filters
+      parameters:
+        - $ref: "#/components/parameters/countries_ids"
+        - $ref: "#/components/parameters/include"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CommoditiesFromContexts"
+                  meta:
+                    type: object
+                    properties:
+                      countries:
+                        $ref: "#/components/schemas/CountriesFromCommodities"
+
   /dashboards/commodities:
     get:
       tags:
@@ -961,6 +1067,9 @@ paths:
                               profileType:
                                 type: string
                                 example: 'place'
+                              prefix:
+                                type: string
+                                example: 'imported from'
   /dashboards/parametrised_charts:
     get:
       tags:
@@ -1508,6 +1617,13 @@ servers:
   - url: https://trase.earth/api/v3
 components:
   parameters:
+    commodity_id_query_param:
+      name: commodity_id
+      in: query
+      description: "Commodity id"
+      required: false
+      schema:
+        type: integer
     context_id_path_param:
       name: context_id
       in: path
@@ -1515,6 +1631,13 @@ components:
       required: true
       schema:
         type: integer
+    contexts_ids_query_param:
+      name: contexts_ids
+      in: query
+      description: "Contexts ids separated by comma"
+      required: false
+      schema:
+        type: string
     node_id_path_param:
       name: id
       in: path
@@ -1689,6 +1812,27 @@ components:
       in: query
       description: String with comma-separated numeric ids
       required: true
+      schema:
+        type: string
+    commodities_ids:
+      name: commodities_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    countries_ids:
+      name: countries_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    include:
+      name: include
+      in: query
+      description: String with comma-separated list of included information
+      required: false
       schema:
         type: string
   schemas:
@@ -2031,31 +2175,6 @@ components:
                     type: number
                   quant:
                     type: number
-            quant:
-              type: object
-              properties:
-                id:
-                  type: integer
-                name:
-                  type: string
-                unit:
-                  type: string
-            ind:
-              type: object
-              properties:
-                id:
-                  type: integer
-                name:
-                  type: string
-                unit:
-                  type: string
-            qual:
-              type: object
-              properties:
-                id:
-                  type: integer
-                name:
-                  type: string
 
     TopNodes:
       type: object
@@ -2084,6 +2203,43 @@ components:
                     type: number
                   value:
                     type: number
+
+    NodesStats:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              context_id:
+                type: integer
+              commodity_id:
+                type: integer
+              attributes:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    indicator:
+                      type: string
+                    unit:
+                      type: string
+                    targets:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          value:
+                            type: number
+                          height:
+                            type: number
 
     Node:
       type: object
@@ -2224,6 +2380,31 @@ components:
               type: number
             summary:
               type: string
+            header_attributes:
+              type: object
+              properties:
+                zero_deforestation:
+                  type: object
+                  properties:
+                    value:
+                      type: string
+                    name:
+                      type: string
+                    unit:
+                      type: string
+                    tooltip:
+                      type: string
+                forest_500:
+                  type: object
+                  properties:
+                    value:
+                      type: string
+                    name:
+                      type: string
+                    unit:
+                      type: string
+                    tooltip:
+                      type: string
     ActorTopCountries:
       type: object
       properties:
@@ -2478,6 +2659,42 @@ components:
               type: number
             commodity_area:
               type: string
+            header_attributes:
+              type: object
+              properties:
+                area:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    value:
+                      type: string
+                    unit:
+                      type: string
+                    tooltip:
+                      type: string
+                commodity_area:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    value:
+                      type: string
+                    unit:
+                      type: string
+                    tooltip:
+                      type: string
+                commodity_production:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    value:
+                      type: string
+                    unit:
+                      type: string
+                    tooltip:
+                      type: string
     PlaceTopConsumerActors:
       type: object
       properties:
@@ -2982,3 +3199,44 @@ components:
                   example: 'place'
                   nullable: true
                   description: 'place or null'
+    CountriesFromContexts:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        countryIds:
+          type: array
+          items:
+            type: integer
+
+    CommoditiesFromContexts:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        commodityIds:
+          type: array
+          items:
+            type: integer
+    CommoditiesFromCountries:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+          name:
+            type: string
+    CountriesFromCommodities:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+          name:
+            type: string

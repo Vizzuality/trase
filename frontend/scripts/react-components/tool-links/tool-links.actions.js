@@ -4,7 +4,6 @@ export const TOOL_LINKS__SET_FLOWS_LOADING = 'TOOL_LINKS__SET_FLOWS_LOADING';
 export const TOOL_LINKS__GET_COLUMNS = 'TOOL_LINKS__GET_COLUMNS';
 export const TOOL_LINKS__SET_COLUMNS = 'TOOL_LINKS__SET_COLUMNS';
 export const TOOL_LINKS__SET_NODES = 'TOOL_LINKS__SET_NODES';
-export const TOOL_LINKS__SET_MORE_NODES = 'TOOL_LINKS__SET_MORE_NODES';
 export const TOOL_LINKS__SET_LINKS = 'TOOL_LINKS__SET_LINKS';
 export const TOOL_LINKS__SELECT_VIEW = 'TOOL_LINKS__SELECT_VIEW';
 export const TOOL_LINKS__SET_IS_SEARCH_OPEN = 'TOOL_LINKS__SET_IS_SEARCH_OPEN';
@@ -20,6 +19,7 @@ export const TOOL_LINKS__SET_SELECTED_BIOME_FILTER = 'TOOL_LINKS__SET_SELECTED_B
 export const TOOL_LINKS_SET_NO_LINKS_FOUND = 'TOOL_LINKS_SET_NO_LINKS_FOUND';
 export const TOOL_LINKS_RESET_SANKEY = 'TOOL_LINKS_RESET_SANKEY';
 export const TOOL_LINKS__SET_MISSING_LOCKED_NODES = 'TOOL_LINKS__SET_MISSING_LOCKED_NODES';
+export const TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH = 'TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH';
 
 export function setToolFlowsLoading(loading) {
   return {
@@ -44,13 +44,6 @@ export function setToolColumns(columns) {
 export function setToolNodes(nodes) {
   return {
     type: TOOL_LINKS__SET_NODES,
-    payload: { nodes }
-  };
-}
-
-export function setMoreToolNodes(nodes) {
-  return {
-    type: TOOL_LINKS__SET_MORE_NODES,
     payload: { nodes }
   };
 }
@@ -125,17 +118,17 @@ export function selectNodes(ids) {
   };
 }
 
-export function selectRecolorBy(name) {
+export function selectRecolorBy(recolorBy) {
   return {
     type: TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
-    payload: { name }
+    payload: recolorBy
   };
 }
 
-export function selectResizeBy(name) {
+export function selectResizeBy(resizeBy) {
   return {
     type: TOOL_LINKS__SET_SELECTED_RESIZE_BY,
-    payload: { name }
+    payload: resizeBy
   };
 }
 
@@ -163,5 +156,12 @@ export function setMissingLockedNodes(nodes) {
   return {
     type: TOOL_LINKS__SET_MISSING_LOCKED_NODES,
     payload: { nodes }
+  };
+}
+
+export function selectSearchNode(results) {
+  return {
+    type: TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH,
+    payload: { results }
   };
 }

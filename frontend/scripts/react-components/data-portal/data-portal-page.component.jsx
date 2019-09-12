@@ -320,7 +320,6 @@ class DataContent extends Component {
 
   downloadFile(inputParams) {
     const params = inputParams || this.state.currentDownloadParams || this.getDownloadURLParams();
-
     if (!params.context_id) {
       return;
     }

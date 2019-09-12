@@ -42,10 +42,6 @@ shared_context 'api v3 brazil beef context node types' do
         column_group: 1,
         role: 'exporter'
       )
-      FactoryBot.create(
-        :api_v3_profile,
-        context_node_type: cnt
-      )
     end
     cnt
   end

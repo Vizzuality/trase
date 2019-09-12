@@ -41,6 +41,8 @@ module Api
       has_many :quant_context_properties
       has_many :qual_context_properties
 
+      has_many :nodes_stats
+
       has_one :readonly_context,
               class_name: 'Api::V3::Readonly::Context',
               foreign_key: :id

@@ -1,6 +1,7 @@
 import { connectRoutes, NOT_FOUND, redirect, replace } from 'redux-first-router';
 import restoreScroll from 'redux-first-router-restore-scroll';
-import qs from 'query-string';
+import parseURL from 'utils/parseURL';
+import qs from 'qs';
 
 import { BREAKPOINTS } from 'constants';
 import {
@@ -14,12 +15,13 @@ import getPageStaticContent from 'react-components/static-content/static-content
 import loadBaseAppData from 'reducers/app.thunks';
 import getTeam from 'react-components/team/team.thunks';
 import { loadDashboardTemplates } from 'react-components/dashboard-root/dashboard-root.thunks';
-import { redirectToExplore } from 'react-components/explore/explore.thunks';
+import { redirectToExplore } from 'react-components/legacy-explore/explore.thunks';
 import {
   loadToolInitialData,
   resizeSankeyTool,
   loadDisclaimerTool
 } from 'scripts/react-components/tool/tool.thunks';
+import { loadInitialDashboardData } from 'scripts/react-components/dashboard-element/dashboard-element.thunks';
 
 import getPageTitle from 'scripts/router/page-title';
 
@@ -90,7 +92,7 @@ export const routes = {
     path: '/dashboards/:dashboardId',
     page: 'dashboard-element',
     title: getPageTitle,
-    thunk: loadPageData()
+    thunk: loadPageData(loadInitialDashboardData)
   },
   data: {
     path: '/data',
@@ -151,8 +153,8 @@ const config = {
   notFoundPath: '/404',
   initialDispatch: false,
   querySerializer: {
-    parse: url => qs.parse(url, { arrayFormat: 'bracket', parseNumbers: true }),
-    stringify: params => qs.stringify(params, { arrayFormat: 'bracket' })
+    parse: url => parseURL(url),
+    stringify: params => qs.stringify(params, { arrayFormat: 'brackets' })
   },
   title: state => {
     const route = routes[state.location.type];

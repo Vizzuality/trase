@@ -17,36 +17,21 @@
   }
 
   .dashboard-element-placeholder {
+    background-color: $charcoal-dark;
+    padding: 30px;
     &-item {
       display: block;
-      height: 400px;
+      height: 480px;
       width: 100%;
-      margin: 0 0 40px;
-      background-color: $elephant;
+      background-color: rgba($white, 0.13);
+      border-radius: 6px;
+      margin: 18px 0 0;
     }
   }
 
   .dashboard-element-widgets {
     padding: 0 0 40px;
     background-color: $charcoal-dark;
-
-    .dashboard-element-fallback {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      padding: 40px 0 0;
-
-      .dashboard-element-fallback-text {
-        margin: 0 0 15px 0;
-      }
-
-      &-button {
-        height: 30px;
-        width: 125px;
-        padding: 8px 15px;
-      }
-    }
   }
 
   .dashboard-edit-button {
@@ -84,7 +69,8 @@
       line-height: 0.77;
       letter-spacing: -0.8px;
       color: $white;
-      cursor: pointer;
+      cursor: not-allowed;
+      opacity: 0.5;
 
       svg {
         fill: $white;

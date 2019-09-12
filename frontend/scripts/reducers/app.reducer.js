@@ -12,8 +12,11 @@ import {
   SET_CONTEXT_IS_USER_SELECTED,
   SET_CONTEXT,
   APP__SET_LOADING,
-  APP__TRANSIFEX_LANGUAGES_LOADED
+  APP__TRANSIFEX_LANGUAGES_LOADED,
+  APP__SET_TOP_DESTINATION_COUNTRIES,
+  APP__SET_TOP_DESTINATION_COUNTRIES_LOADING
 } from 'actions/app.actions';
+import { COUNTRIES_COORDINATES } from 'scripts/countries';
 import createReducer from 'utils/createReducer';
 import { SELECT_YEARS } from 'react-components/tool/tool.actions';
 import { TOOL_LINKS_RESET_SANKEY } from 'react-components/tool-links/tool-links.actions';
@@ -109,6 +112,57 @@ const appReducer = {
   },
   [TOOL_LINKS_RESET_SANKEY](state) {
     return { ...state, selectedYears: initialState.selectedYears };
+  },
+  [APP__SET_TOP_DESTINATION_COUNTRIES](state, action) {
+    const { topCountries } = action.payload;
+    const getNodes = (data, country) =>
+      data.targetNodes.map(row => ({
+        ...row,
+        coordinates: COUNTRIES_COORDINATES[row.geo_id],
+        geoId: row.geo_id,
+        name: country === row.name ? 'DOMESTIC CONSUMPTION' : row.name
+      }));
+
+    const newTopCountries = {};
+    topCountries.forEach(c => {
+      newTopCountries[c.topNodesKey] = getNodes(c.data, c.country);
+    });
+
+    const topCountriesLoadingKeys = {};
+    topCountries.forEach(c => {
+      topCountriesLoadingKeys[c.topNodesKey] = false;
+    });
+    return {
+      ...state,
+      topNodes: {
+        ...state.topNodes,
+        ...newTopCountries
+      },
+      loading: {
+        ...state.loading,
+        topCountries: {
+          ...state.loading.topCountries,
+          ...topCountriesLoadingKeys
+        }
+      }
+    };
+  },
+  [APP__SET_TOP_DESTINATION_COUNTRIES_LOADING](state, action) {
+    const { topNodesKeys, loading } = action.payload;
+    const loadingNodes = {};
+    topNodesKeys.forEach(n => {
+      loadingNodes[n] = loading;
+    });
+    return {
+      ...state,
+      loading: {
+        ...state.loading,
+        topCountries: {
+          ...state.loading.topCountries,
+          ...loadingNodes
+        }
+      }
+    };
   }
 };
 

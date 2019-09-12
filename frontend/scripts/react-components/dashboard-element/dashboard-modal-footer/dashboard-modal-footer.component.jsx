@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import TagsGroup from 'react-components/shared/tags-group';
 import Button from 'react-components/shared/button/button.component';
 import Text from 'react-components/shared/text/text.component';
-
+import { DASHBOARD_STEPS } from 'constants';
 import './dashboard-modal-footer.scss';
 
 function DashboardModalFooter(props) {
@@ -27,7 +27,6 @@ function DashboardModalFooter(props) {
     }
     onContinue();
   }, [isLastStep, goToDashboard, onContinue, dirtyBlocks, dynamicSentenceParts]);
-
   return (
     <div className="c-dashboard-modal-footer">
       <TagsGroup
@@ -36,6 +35,7 @@ function DashboardModalFooter(props) {
         clearPanel={clearPanel}
         step={step}
         placement="top-end"
+        readOnly={step === DASHBOARD_STEPS.welcome}
       />
       <div className="dashboard-modal-actions">
         {onBack && (

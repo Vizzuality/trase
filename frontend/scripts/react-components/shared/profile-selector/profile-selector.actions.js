@@ -1,5 +1,3 @@
-import isEmpty from 'lodash/isEmpty';
-
 import { PROFILE_STEPS } from 'constants';
 
 export const PROFILES__SET_MORE_PANEL_DATA = 'PROFILES__SET_MORE_PANEL_DATA';
@@ -7,7 +5,6 @@ export const PROFILES__SET_PANEL_DATA = 'PROFILES__SET_PANEL_DATA';
 export const PROFILES__SET_ACTIVE_STEP = 'PROFILES__SET_ACTIVE_STEP';
 export const PROFILES__SET_ACTIVE_ITEM = 'PROFILES__SET_ACTIVE_ITEM';
 export const PROFILES__SET_ACTIVE_TAB = 'PROFILES__SET_ACTIVE_TAB';
-export const PROFILES__CLEAR_PANELS = 'PROFILES__CLEAR_PANELS';
 export const PROFILES__SET_PANEL_TABS = 'PROFILES__SET_PANEL_TABS';
 export const PROFILES__SET_PANEL_PAGE = 'PROFILES__SET_PANEL_PAGE';
 export const PROFILES__SET_LOADING_ITEMS = 'PROFILES__SET_LOADING_ITEMS';
@@ -18,7 +15,7 @@ export const PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH = 'PROFILES__SET_ACTIVE_ITEM_
 export const openModal = () => ({
   type: PROFILES__SET_ACTIVE_STEP,
   payload: {
-    activeStep: PROFILE_STEPS.types
+    activeStep: PROFILE_STEPS.type
   }
 });
 
@@ -44,11 +41,11 @@ export const setProfilesActiveItem = (activeItem, panel) => ({
   }
 });
 
-export const setProfilesActiveItemWithSearch = (activeItems, panel) => ({
+export const setProfilesActiveItemWithSearch = (activeItem, panel) => ({
   type: PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH,
   payload: {
     panel,
-    activeItems
+    activeItem
   }
 });
 
@@ -77,21 +74,20 @@ export const setProfilesLoadingItems = loadingItems => ({
 export const goToProfile = () => (dispatch, getState) => {
   const { profileSelector, app } = getState();
   const { contexts } = app;
-  const hasCompanies = !isEmpty(profileSelector.panels.companies.activeItems);
+  const hasCompanies = profileSelector.panels.companies.activeItems.length > 0;
   const profileType = hasCompanies ? 'actor' : 'place';
-  const profileSelection = hasCompanies
-    ? Object.values(profileSelector.panels.companies.activeItems)[0]
-    : Object.values(profileSelector.panels.sources.activeItems)[0];
-  const query = {
-    nodeId: profileSelection.id
-  };
-  const commodity = Object.values(profileSelector.panels.commodities.activeItems)[0];
+  const nodeId = hasCompanies
+    ? profileSelector.panels.companies.activeItems[0]
+    : profileSelector.panels.sources.activeItems[0];
+  const query = { nodeId };
+  const commodity = profileSelector.panels.commodities.activeItems[0];
   if (commodity) {
-    const country = Object.values(profileSelector.panels.countries.activeItems)[0];
-    const contextId = contexts.find(
-      c => c.countryId === country.id && c.commodityId === commodity.id
-    )?.id;
-    if (contextId) query.contextId = contextId;
+    const country = profileSelector.panels.countries.activeItems[0];
+    const contextId = contexts.find(c => c.countryId === country && c.commodityId === commodity)
+      ?.id;
+    if (contextId) {
+      query.contextId = contextId;
+    }
   }
   dispatch({ type: 'profileNode', payload: { profileType, query } });
   dispatch(closeModal());
@@ -103,32 +99,3 @@ export const getProfilesSearchResults = query => ({
     query
   }
 });
-
-export const getProfilesParams = (state, step, options = {}) => {
-  const { panels } = state;
-  const { countries, sources, companies } = panels;
-  const { page } = options;
-  const activeItemParams = panel => Object.keys(panel.activeItems).join();
-  const params = {
-    page,
-    options_type: step,
-    node_types_ids: panels[step].activeTab?.id
-  };
-
-  if (step === 'sources' || step === 'companies') {
-    params.countries_ids = activeItemParams(countries);
-  }
-
-  if (step === 'commodities') {
-    if (sources) {
-      params.sources_ids = activeItemParams(sources);
-    } else if (countries) {
-      params.countries_ids = activeItemParams(countries);
-    }
-    if (companies) {
-      params.companies_ids = activeItemParams(companies);
-    }
-  }
-
-  return params;
-};

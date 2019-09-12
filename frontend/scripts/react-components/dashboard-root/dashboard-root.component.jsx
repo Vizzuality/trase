@@ -3,17 +3,48 @@ import Card from 'react-components/shared/card/card.component';
 import Link from 'redux-first-router-link';
 import PropTypes from 'prop-types';
 import ShrinkingSpinner from 'scripts/react-components/shared/shrinking-spinner/shrinking-spinner.component';
+import kebabCase from 'lodash/kebabCase';
 
 import 'scripts/react-components/dashboard-root/dashboard-root.scss';
 
 function DashboardRoot(props) {
   const { dashboardTemplates, loadingDashboardTemplates } = props;
   const linkProps = {
-    to: { type: 'dashboardElement', payload: { dashboardId: 'new' } },
+    to: {
+      type: 'dashboardElement',
+      payload: {
+        dashboardId: 'new',
+        serializerParams: {
+          selectedCountryId: null,
+          selectedCommodityId: null,
+          sources: [],
+          companies: [],
+          destinations: []
+        }
+      }
+    },
     target: undefined,
     rel: undefined,
     'data-test': 'dashboard-root-create-button'
   };
+  const getTemplateLink = template => ({
+    to: {
+      type: 'dashboardElement',
+      payload: {
+        dashboardId: kebabCase(template.title),
+        serializerParams: {
+          selectedCountryId: template.countries[0],
+          selectedCommodityId: template.commodities[0],
+          sources: template.sources,
+          companies: template.companies,
+          destinations: template.destinations
+        }
+      }
+    },
+    target: undefined,
+    rel: undefined
+  });
+
   return (
     <div className="l-dashboard-root">
       <div className="c-dashboard-root">
@@ -41,16 +72,17 @@ function DashboardRoot(props) {
             )}
             {!loadingDashboardTemplates &&
               dashboardTemplates &&
-              dashboardTemplates.map(post => (
-                <div key={post.title} className="column small-12 medium-6 large-4">
+              dashboardTemplates.map(template => (
+                <div key={template.title} className="column small-12 medium-6 large-4">
                   <div className="post">
                     <Card
-                      title={post.title}
-                      subtitle={post.category}
-                      imageUrl={API_V3_URL + post.imageUrl}
+                      title={template.title}
+                      subtitle={template.category}
+                      imageUrl={API_V3_URL + template.imageUrl}
                       className="dashboard-root-item"
                       actionName="Go To Dashboard"
-                      linkUrl={post.completePostUrl}
+                      linkProps={getTemplateLink(template)}
+                      Link={Link}
                     />
                   </div>
                 </div>

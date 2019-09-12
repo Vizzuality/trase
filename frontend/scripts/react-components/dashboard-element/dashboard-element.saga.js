@@ -1,13 +1,21 @@
-import { take, select, all, fork, put, takeLatest, cancel } from 'redux-saga/effects';
-import isEmpty from 'lodash/isEmpty';
-import isEqual from 'lodash/isEqual';
+import {
+  take,
+  select,
+  all,
+  fork,
+  takeLatest,
+  cancel,
+  put,
+  call,
+  takeEvery
+} from 'redux-saga/effects';
 import {
   DASHBOARD_ELEMENT__CLEAR_PANEL,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
+  DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID,
+  DASHBOARD_ELEMENT__SET_SELECTED_COMMODITY_ID,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
-  DASHBOARD_ELEMENT__SET_PANEL_TABS,
   DASHBOARD_ELEMENT__SET_PANEL_PAGE,
   DASHBOARD_ELEMENT__GET_SEARCH_RESULTS,
   DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
@@ -15,17 +23,95 @@ import {
   DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
   DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
   DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
-  DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS
+  DASHBOARD_ELEMENT__SET_MISSING_DATA,
+  DASHBOARD_ELEMENT__SET_PANEL_TABS,
+  DASHBOARD_ELEMENT__GET_MISSING_DATA,
+  setDashboardLoading
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import {
+  getMissingDashboardPanelItems,
   getDashboardPanelSectionTabs,
   getDashboardPanelData,
   getMoreDashboardPanelData,
   fetchDashboardPanelSearchResults,
   fetchDashboardCharts
 } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
-import { getDashboardFiltersProps } from 'react-components/dashboard-element/dashboard-element.selectors';
-import { DASHBOARD_STEPS } from 'constants';
+import {
+  getCountriesActiveItems,
+  getSourcesActiveItems,
+  getCommoditiesActiveItems,
+  getDestinationsActiveItems,
+  getCompaniesActiveItems,
+  getDashboardsContext
+} from 'react-components/dashboard-element/dashboard-element.selectors';
+
+function* updateIndicatorsOnItemChange() {
+  const selectedContext = yield select(getDashboardsContext);
+  if (selectedContext) {
+    yield fork(fetchDashboardCharts);
+  }
+}
+
+function* fetchChartsOnItemChange() {
+  yield takeLatest(
+    [
+      DASHBOARD_ELEMENT__CLEAR_PANEL,
+      DASHBOARD_ELEMENT__CLEAR_PANELS,
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
+      DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID,
+      DASHBOARD_ELEMENT__SET_SELECTED_COMMODITY_ID,
+      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
+    ],
+    updateIndicatorsOnItemChange
+  );
+}
+
+export function* fetchMissingDashboardPanelItems() {
+  function* fetchMissingItems() {
+    const dashboardElement = yield select(state => state.dashboardElement);
+    const selectedContext = yield select(getDashboardsContext);
+
+    const tasks = [];
+    if (dashboardElement.selectedCountryId) {
+      tasks.push(call(getDashboardPanelData, dashboardElement, 'countries'));
+      if (!selectedContext) {
+        tasks.push(call(getDashboardPanelSectionTabs, 'sources'));
+      }
+    }
+
+    if (dashboardElement.selectedCommodityId) {
+      tasks.push(call(getDashboardPanelData, dashboardElement, 'commodities'));
+    }
+
+    if (
+      selectedContext &&
+      ((dashboardElement.data.sources.length === 0 && dashboardElement.sources.length > 0) ||
+        (dashboardElement.data.destinations.length === 0 &&
+          dashboardElement.destinations.length > 0) ||
+        (dashboardElement.data.companies.length === 0 && dashboardElement.companies.length > 0))
+    ) {
+      tasks.push(call(getMissingDashboardPanelItems, dashboardElement, selectedContext));
+    }
+
+    yield all(tasks);
+
+    if (tasks.length > 0 && selectedContext) {
+      yield call(updateIndicatorsOnItemChange);
+    }
+    yield put(setDashboardLoading(false));
+  }
+
+  yield takeLatest([DASHBOARD_ELEMENT__GET_MISSING_DATA], fetchMissingItems);
+}
+
+export function* onMissingItemDownload() {
+  yield fork(getDashboardPanelSectionTabs, 'sources');
+  yield fork(getDashboardPanelSectionTabs, 'companies');
+}
+
+function* fetchDataMissingItemDownload() {
+  yield takeLatest([DASHBOARD_ELEMENT__SET_MISSING_DATA], onMissingItemDownload);
+}
 
 /**
  * Should receive the DASHBOARD_ELEMENT__SET_ACTIVE_PANEL action and depending on which panel it is on fetch the necessary data.
@@ -39,15 +125,31 @@ export function* fetchDashboardPanelInitialData(action) {
   const { activePanelId } = action.payload;
   const state = yield select();
   const { dashboardElement } = state;
+  const countriesActiveItems = yield select(getCountriesActiveItems);
+  const sourcesActiveItems = yield select(getSourcesActiveItems);
+  const companiesActiveItems = yield select(getCompaniesActiveItems);
 
-  // avoid dispatching getDashboardPanelData through getDashboardPanelSectionTabs for companies
-  if (dashboardElement.activePanelId === 'companies') {
-    yield fork(getDashboardPanelSectionTabs, dashboardElement, activePanelId);
-  } else if (activePanelId === 'sources') {
-    yield fork(getDashboardPanelData, dashboardElement, 'countries');
-    // Fetch regions
-    if (!isEmpty(dashboardElement.countriesPanel.activeItems)) {
+  function* fetchTabPanelData() {
+    if (
+      (activePanelId === 'companies' && companiesActiveItems.length > 0) ||
+      (activePanelId === 'sources' && sourcesActiveItems.length > 0)
+    ) {
+      yield fork(getMoreDashboardPanelData, dashboardElement, activePanelId);
+    } else {
       yield fork(getDashboardPanelData, dashboardElement, activePanelId);
+    }
+  }
+
+  if (dashboardElement.activePanelId === 'companies') {
+    yield fork(getDashboardPanelSectionTabs, activePanelId);
+    yield fork(fetchTabPanelData);
+  } else if (activePanelId === 'sources') {
+    const countriesSaga =
+      countriesActiveItems.length > 0 ? getMoreDashboardPanelData : getDashboardPanelData;
+    yield fork(countriesSaga, dashboardElement, 'countries');
+    // Fetch regions
+    if (countriesActiveItems.length > 0) {
+      yield fork(fetchTabPanelData);
     }
   } else {
     yield fork(getDashboardPanelData, dashboardElement, activePanelId);
@@ -58,29 +160,52 @@ export function* fetchDashboardPanelInitialData(action) {
  * Checks if the activeItem in one of the panels has changed, if it has changed it fetches the panel data.
  */
 export function* fetchDataOnPanelChange() {
+  const panelsOrder = ['sources', 'commodities', 'destinations', 'companies'];
   let loaded = [];
-  let previousPanelState = null;
+  let previousPanelStateItems = null;
   let task = null;
-  const hasChanged = panel => {
-    if (!previousPanelState) return false;
-    return (
-      panel.sourcesPanel.activeItems !== previousPanelState.sourcesPanel.activeItems ||
-      panel.countriesPanel.activeItems !== previousPanelState.countriesPanel.activeItems ||
-      panel.commoditiesPanel.activeItems !== previousPanelState.commoditiesPanel.activeItems ||
-      panel.companiesPanel.activeItems !== previousPanelState.companiesPanel.activeItems ||
-      panel.destinationsPanel.activeItems !== previousPanelState.destinationsPanel.activeItems
-    );
+  const hasChangedAt = panel => {
+    if (!previousPanelStateItems) return -1;
+    return [
+      panel.countries !== previousPanelStateItems.countries ||
+        panel.sources !== previousPanelStateItems.sources,
+      panel.commodities !== previousPanelStateItems.commodities,
+      panel.destinations !== previousPanelStateItems.destinations,
+      panel.companies !== previousPanelStateItems.companies
+    ].findIndex(value => value === true);
   };
 
   while (true) {
     const activePanel = yield take(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL);
     const { activePanelId } = activePanel.payload;
+
     const newPanelState = yield select(state => state.dashboardElement);
-    const changes = hasChanged(newPanelState);
-    if (changes) {
-      loaded = [previousPanelState.activePanelId];
+
+    const countriesActiveItems = yield select(getCountriesActiveItems);
+    const sourcesActiveItems = yield select(getSourcesActiveItems);
+    const commoditiesActiveItems = yield select(getCommoditiesActiveItems);
+    const destinationsActiveItems = yield select(getDestinationsActiveItems);
+    const companiesActiveItems = yield select(getCompaniesActiveItems);
+
+    const itemsByPanel = {
+      countries: countriesActiveItems,
+      sources: sourcesActiveItems,
+      commodities: commoditiesActiveItems,
+      destinations: destinationsActiveItems,
+      companies: companiesActiveItems
+    };
+
+    const changedAt = hasChangedAt(itemsByPanel);
+    if (changedAt !== -1) {
+      loaded = panelsOrder.slice(0, changedAt + 1);
     }
-    if (!previousPanelState || !loaded.includes(activePanelId)) {
+
+    const newPanelData = newPanelState.data[activePanelId];
+    const isEmpty = Array.isArray(newPanelState)
+      ? newPanelData.length === 0
+      : Object.keys(newPanelData).length === 0;
+
+    if (!previousPanelStateItems || !loaded.includes(activePanelId) || isEmpty) {
       if (task !== null) {
         yield cancel(task);
       }
@@ -89,7 +214,7 @@ export function* fetchDataOnPanelChange() {
         loaded.push(activePanelId);
       }
     }
-    previousPanelState = newPanelState;
+    previousPanelStateItems = itemsByPanel;
   }
 }
 
@@ -107,101 +232,65 @@ export function* getSearchResults(action) {
 function* fetchDataOnSearch() {
   yield takeLatest(DASHBOARD_ELEMENT__GET_SEARCH_RESULTS, getSearchResults);
 }
+
+export function* fetchDataOnTabsFetch() {
+  function* onTabsFetch(action) {
+    const { key } = action.payload;
+    const { dashboardElement } = yield select();
+
+    if (dashboardElement.data[key].length === 0) {
+      yield fork(getDashboardPanelData, dashboardElement, key);
+    } else {
+      yield fork(getMoreDashboardPanelData, dashboardElement, key);
+    }
+  }
+
+  yield takeEvery([DASHBOARD_ELEMENT__SET_PANEL_TABS], onTabsFetch);
+}
 /**
  * Fetches the data for the activeTab if the data hasn't been loaded.
  */
 export function* onTabChange(action) {
   const { panel } = action.payload;
-  const panelName = `${panel}Panel`;
   const { dashboardElement } = yield select();
-  const { activeTab } = dashboardElement[panelName] || {};
   const activePanelId = panel || dashboardElement.activePanelId;
-  const currentTabId = activeTab && activeTab.id;
-  if (!dashboardElement.data.sources[currentTabId]) {
-    yield fork(getDashboardPanelData, dashboardElement, activePanelId);
+
+  if (activePanelId) {
+    if (dashboardElement.data[panel] && dashboardElement.data[panel].length > 0) {
+      yield fork(getMoreDashboardPanelData, dashboardElement, activePanelId);
+    }
   }
 }
 
 function* fetchDataOnTabChange() {
   yield takeLatest(
-    [
-      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
-      DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
-      DASHBOARD_ELEMENT__SET_PANEL_TABS
-    ],
+    [DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH, DASHBOARD_ELEMENT__SET_ACTIVE_TAB],
     onTabChange
   );
 }
 
 /**
- * Listens to DASHBOARD_ELEMENT__SET_ACTIVE_ITEM and requests the tabs data every time a new country has been selected.
+ * Listens to DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID and requests the tabs data every time a new country has been selected.
  */
 export function* onItemChange(action) {
-  const { panel, activeItem } = action.payload;
-  const { dashboardElement } = yield select();
+  const { activeItem } = action.payload;
   // for now, we just need to recalculate the tabs when selecting a new country
-  if (panel === 'countries' && !isEmpty(activeItem)) {
-    yield fork(getDashboardPanelSectionTabs, dashboardElement, 'sources');
+  if (activeItem) {
+    yield fork(getDashboardPanelSectionTabs, 'sources');
   }
 }
 
 function* fetchDataOnItemChange() {
-  yield takeLatest(
-    [DASHBOARD_ELEMENT__SET_ACTIVE_ITEM, DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS],
-    onItemChange
-  );
-}
-
-/**
- * Listens to actions that remove or clear panel items and deletes all subsequent selections if the panel is changed
- */
-
-export function* onChangePanel(action) {
-  const { panel } = action.payload;
-  const dashboardElement = yield select(state => state.dashboardElement);
-  const dashboardStepName = panel === 'countries' ? 'sources' : panel;
-  const panelIndex = DASHBOARD_STEPS[dashboardStepName];
-  const nextPanels = Object.keys(DASHBOARD_STEPS).slice(panelIndex + 1);
-
-  const panelsToClear = nextPanels
-    .map(p => ({ name: p, items: dashboardElement[`${p}Panel`].activeItems }))
-    .filter(p => !isEmpty(p.items))
-    .map(p => p.name);
-
-  if (panelsToClear.length > 0) {
-    yield put({
-      type: DASHBOARD_ELEMENT__CLEAR_PANELS,
-      payload: { panels: nextPanels }
-    });
-  }
-}
-
-function* clearSubsequentPanels() {
-  yield takeLatest(
-    [
-      DASHBOARD_ELEMENT__CLEAR_PANEL,
-      DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
-      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS
-    ],
-    onChangePanel
-  );
+  yield takeLatest([DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID], onItemChange);
 }
 
 /**
  * Listens to DASHBOARD_ELEMENT__SET_PANEL_PAGE and fetches the data for the next page.
  */
-export function* onPageChange(action) {
-  const { direction } = action.payload;
+export function* onPageChange() {
   const { dashboardElement } = yield select();
-  const panelName = `${dashboardElement.activePanelId}Panel`;
-  const { activeTab } = dashboardElement[panelName];
-  yield fork(
-    getMoreDashboardPanelData,
-    dashboardElement,
-    dashboardElement.activePanelId,
-    activeTab,
-    direction
-  );
+
+  yield fork(getMoreDashboardPanelData, dashboardElement, dashboardElement.activePanelId);
 }
 
 function* fetchDataOnPageChange() {
@@ -219,72 +308,18 @@ function* fetchChartsOnIndicatorsChange() {
   );
 }
 
-function* updateIndicatorsOnItemChange() {
-  const { dashboardElement } = yield select();
-
-  const contextSelected =
-    !isEmpty(dashboardElement.countriesPanel.activeItems) &&
-    !isEmpty(dashboardElement.commoditiesPanel.activeItems);
-
-  if (contextSelected) {
-    const filters = yield select(getDashboardFiltersProps);
-    let years = dashboardElement.selectedYears;
-    let resizeBy = { attributeId: dashboardElement.selectedResizeBy };
-    let recolorBy = { attribute: dashboardElement.selectedRecolorBy };
-    let hasChanged = false;
-
-    if (
-      dashboardElement.selectedYears === null ||
-      !isEqual(dashboardElement.selectedYears, filters.selectedYears)
-    ) {
-      years = filters.selectedYears;
-      hasChanged = true;
-    }
-
-    if (
-      dashboardElement.selectedResizeBy === null ||
-      dashboardElement.selectedResizeBy !== filters.selectedResizeBy.attributeId
-    ) {
-      resizeBy = filters.selectedResizeBy;
-      hasChanged = true;
-    }
-
-    if (dashboardElement.selectedRecolorBy !== null && filters.recolorBy.length === 0) {
-      recolorBy = filters.selectedRecolorBy;
-      hasChanged = true;
-    }
-
-    if (hasChanged && resizeBy && years[0]) {
-      yield put({
-        type: DASHBOARD_ELEMENT__SET_CONTEXT_DEFAULT_FILTERS,
-        payload: { years, resizeBy, recolorBy }
-      });
-    }
-    yield fork(fetchDashboardCharts);
-  }
-}
-
-function* fetchChartsOnItemChange() {
-  yield takeLatest(
-    [
-      DASHBOARD_ELEMENT__SET_ACTIVE_ITEM,
-      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
-      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
-    ],
-    updateIndicatorsOnItemChange
-  );
-}
-
 export default function* dashboardElementSaga() {
   const sagas = [
     fetchDataOnPanelChange,
+    fetchDataOnTabsFetch,
     fetchDataOnTabChange,
     fetchDataOnItemChange,
-    clearSubsequentPanels,
     fetchDataOnPageChange,
     fetchDataOnSearch,
     fetchChartsOnIndicatorsChange,
-    fetchChartsOnItemChange
+    fetchChartsOnItemChange,
+    fetchDataMissingItemDownload,
+    fetchMissingDashboardPanelItems
   ];
   yield all(sagas.map(saga => fork(saga)));
 }

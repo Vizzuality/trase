@@ -6,7 +6,6 @@ import { resetSankey } from 'react-components/tool-links/tool-links.actions';
 const mapStateToProps = state => ({
   isMapVisible: state.toolLayers.isMapVisible,
   isVisible: state.app.isMapLayerVisible,
-  loading: state.toolLinks.flowsLoading || state.toolLayers.mapLoading,
   noLinksFound: state.toolLinks.noLinksFound
 });
 
@@ -15,7 +14,6 @@ const mapDispatchToProps = {
 };
 
 const methodProps = [
-  { name: 'showLoader', compared: ['loading'], returned: ['loading'] },
   { name: 'toggleMapVisibility', compared: ['isMapVisible'], returned: ['isMapVisible'] },
   { name: 'toggleMapLayersVisibility', compared: ['isVisible'], returned: ['isVisible'] },
   { name: 'toggleError', compared: ['noLinksFound'], returned: ['noLinksFound'] }

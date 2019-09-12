@@ -6,7 +6,10 @@ import DashboardElement from 'react-components/dashboard-element/dashboard-eleme
 import {
   getDirtyBlocks,
   getDynamicSentence,
-  getDashboardFiltersProps
+  getDashboardFiltersProps,
+  getDashboardGroupedCharts,
+  getEditMode,
+  getDashboardElementUrlProps
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { getPanelId } from 'utils/dashboardPanel';
 import {
@@ -22,10 +25,13 @@ const mapStateToProps = state => {
   const dirtyBlocks = getDirtyBlocks(state);
   return {
     dirtyBlocks,
-    charts: state.dashboardElement.charts,
+    loading: state.dashboardElement.loading,
+    groupedCharts: getDashboardGroupedCharts(state),
     filters: getDashboardFiltersProps(state),
     dynamicSentenceParts: getDynamicSentence(state),
-    showModalOnStart: !(dirtyBlocks.countries && dirtyBlocks.commodities)
+    showModalOnStart: !(dirtyBlocks.countries && dirtyBlocks.commodities),
+    editMode: getEditMode(state),
+    urlProps: getDashboardElementUrlProps(state)
   };
 };
 
@@ -44,9 +50,12 @@ const mapDispatchToProps = dispatch =>
 
 class DashboardElementContainer extends React.Component {
   static propTypes = {
-    charts: PropTypes.array,
+    editMode: PropTypes.bool,
+    loading: PropTypes.bool,
     filters: PropTypes.object,
+    urlProps: PropTypes.object,
     dirtyBlocks: PropTypes.object,
+    groupedCharts: PropTypes.object,
     showModalOnStart: PropTypes.bool,
     goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
@@ -69,7 +78,6 @@ class DashboardElementContainer extends React.Component {
 
   state = {
     modalOpen: this.props.showModalOnStart,
-    editMode: false,
     step: this.hasVisitedBefore.get() ? DASHBOARD_STEPS.sources : DASHBOARD_STEPS.welcome
   };
 
@@ -83,8 +91,9 @@ class DashboardElementContainer extends React.Component {
     const { step } = this.state;
     if (step !== prevState.step) {
       const { setDashboardActivePanel } = this.props;
-      if (step !== DASHBOARD_STEPS.indicators) {
-        setDashboardActivePanel(getPanelId(step));
+      const panelId = getPanelId(step);
+      if (panelId !== null) {
+        setDashboardActivePanel(panelId);
       }
     }
   }
@@ -93,18 +102,21 @@ class DashboardElementContainer extends React.Component {
     this.setState({ modalOpen: false });
   };
 
-  reopenPanel = step => {
+  reopenPanel = () => {
     this.props.editDashboard();
-    this.setState({ step, editMode: true, modalOpen: true });
+    this.setState({ step: 0, modalOpen: true });
   };
 
   updateStep = step => this.setState({ step });
 
   render() {
-    const { step, modalOpen, editMode } = this.state;
+    const { editMode } = this.props;
+    const { step, modalOpen } = this.state;
     const {
-      charts,
+      loading,
+      groupedCharts,
       goToRoot,
+      urlProps,
       dynamicSentenceParts,
       dirtyBlocks,
       filters,
@@ -115,14 +127,16 @@ class DashboardElementContainer extends React.Component {
     return (
       <DashboardElement
         step={step}
-        charts={charts}
+        loading={loading}
         filters={filters}
+        urlProps={urlProps}
         editMode={editMode}
         goToRoot={goToRoot}
         modalOpen={modalOpen}
         dirtyBlocks={dirtyBlocks}
         setStep={this.updateStep}
         closeModal={this.closeModal}
+        groupedCharts={groupedCharts}
         reopenPanel={this.reopenPanel}
         dynamicSentenceParts={dynamicSentenceParts}
         setSelectedYears={setSelectedYears}

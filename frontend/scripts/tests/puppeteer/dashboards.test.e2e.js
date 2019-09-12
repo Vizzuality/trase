@@ -86,7 +86,7 @@ describe('Dashboards flow', () => {
       dashboardPanelSentenceSelector,
       el => el.textContent
     );
-    expect(destinationsSectionTitle).toMatch('destinations');
+    expect(destinationsSectionTitle).toMatch('import countries');
     const destinationsButtonsSelector = '[data-test=grid-list-item-button]';
     await page.waitForSelector(destinationsButtonsSelector);
     const destinationsButtons = await page.$$(destinationsButtonsSelector);
@@ -115,6 +115,10 @@ describe('Dashboards flow', () => {
     await page.waitForSelector(coamoButtonSelector);
     await page.click(coamoButtonSelector);
 
+    const royalAgroCereaisButtonSelector = '[data-test=grid-list-item-button-ROYAL-AGRO-CEREAIS]';
+    await page.waitForSelector(royalAgroCereaisButtonSelector);
+    await page.click(royalAgroCereaisButtonSelector);
+
     await page.waitForSelector(continueButton);
     await page.click(continueButton);
 
@@ -127,7 +131,7 @@ describe('Dashboards flow', () => {
     await page.waitForSelector(dashboardWidgetSelector);
     const widgets = await page.$$(dashboardWidgetSelector);
 
-    expect(widgets.length).toBe(5);
+    expect(widgets.length).toBe(6);
 
     // Change year dropdown
     const yearDropdownSelector = '[data-test=dropdown-selected-item-year]';
@@ -146,7 +150,7 @@ describe('Dashboards flow', () => {
     await page.waitForSelector(widgetChart);
     const multiYearWidgets = await page.$$(widgetChart);
 
-    expect(multiYearWidgets.length).toBe(5);
+    expect(multiYearWidgets.length).toBe(6);
 
     // Change unit selector
     const unitDropdownSelector = '[data-test=dropdown-selected-item-units]';
@@ -162,7 +166,7 @@ describe('Dashboards flow', () => {
     await page.waitForSelector(territorialWidgetChart);
     const territorialMultiYearWidgets = await page.$$(territorialWidgetChart);
 
-    expect(territorialMultiYearWidgets.length).toBe(5);
+    expect(territorialMultiYearWidgets.length).toBe(6);
 
     // Change indicator selector
     const indicatorDropdownSelector = '[data-test=dropdown-selected-item-indicator]';
@@ -178,6 +182,12 @@ describe('Dashboards flow', () => {
     await page.waitForSelector(biomeWidgetChart);
     const biomeMultiYearWidgets = await page.$$(biomeWidgetChart);
 
-    expect(biomeMultiYearWidgets.length).toBe(7);
+    expect(biomeMultiYearWidgets.length).toBe(8);
+
+    const widgetDropdowSelector = '[data-test=dropdown-selected-item-selection-overview-of-coamo]';
+    await page.waitForSelector(widgetDropdowSelector);
+    const text = await page.$eval(widgetDropdowSelector, el => el.textContent);
+
+    expect(text).toMatch('Selection overview of -coamoCoamo');
   });
 });

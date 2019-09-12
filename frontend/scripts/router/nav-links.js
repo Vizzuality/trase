@@ -1,18 +1,32 @@
-let nav = [
-  {
+const supplyChainNavs = [];
+if (ENABLE_REDESIGN_PAGES) {
+  supplyChainNavs.push({
     name: 'Supply Chain',
     page: {
-      type: 'tool',
-      payload: { serializerParams: { isMapVisible: false } }
+      type: 'explore'
     }
-  },
-  {
-    name: 'Map',
-    page: {
-      type: 'tool',
-      payload: { serializerParams: { isMapVisible: true } }
+  });
+} else {
+  supplyChainNavs.push(
+    {
+      name: 'Supply Chain',
+      page: {
+        type: 'tool',
+        payload: { serializerParams: { isMapVisible: false } }
+      }
+    },
+    {
+      name: 'Map',
+      page: {
+        type: 'tool',
+        payload: { serializerParams: { isMapVisible: true } }
+      }
     }
-  },
+  );
+}
+
+let nav = [
+  ...supplyChainNavs,
   {
     name: 'Profiles',
     page: 'profileRoot'

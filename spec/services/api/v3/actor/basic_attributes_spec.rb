@@ -4,6 +4,8 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
   include_context 'api v3 brazil exporter actor profile'
   include_context 'api v3 brazil importer actor profile'
   include_context 'api v3 brazil exporter quant values'
+  include_context 'api v3 brazil exporter qual values'
+  include_context 'api v3 brazil exporter ind values'
   include_context 'api v3 brazil importer quant values'
   include_context 'api v3 brazil flows quants'
   include_context 'api v3 paraguay exporter actor charts'
@@ -13,13 +15,16 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
 
   describe :call do
     before(:each) do
+      Api::V3::Readonly::CommodityAttributeProperty.refresh
+      Api::V3::Readonly::CountryAttributeProperty.refresh
+      Api::V3::Readonly::ContextAttributeProperty.refresh
       Api::V3::Readonly::Node.refresh(sync: true)
       Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
       Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
     end
-    let(:brazil_exporter_attributes) { Api::V3::Actors::BasicAttributes.new(api_v3_context, api_v3_exporter1_node, 2015) }
-    let(:brazil_importer_attributes) { Api::V3::Actors::BasicAttributes.new(api_v3_context, api_v3_importer1_node, 2015) }
-    let(:paraguay_exporter_attributes) { Api::V3::Actors::BasicAttributes.new(api_v3_paraguay_context, api_v3_paraguay_exporter_node, 2015) }
+    let!(:brazil_exporter_attributes) { Api::V3::Actors::BasicAttributes.new(api_v3_context, api_v3_exporter1_node, 2015) }
+    let!(:brazil_importer_attributes) { Api::V3::Actors::BasicAttributes.new(api_v3_context, api_v3_importer1_node, 2015) }
+    let!(:paraguay_exporter_attributes) { Api::V3::Actors::BasicAttributes.new(api_v3_paraguay_context, api_v3_paraguay_exporter_node, 2015) }
 
     it 'uses context specific quant values for production percentage calculation' do
       brazil_exporter_values = brazil_exporter_attributes.call
@@ -104,6 +109,43 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
         expect(
           brazil_exporter_values[:summary]
         ).to include('no change from')
+      end
+    end
+
+    describe 'header parameters' do
+      let!(:attrs) { brazil_exporter_attributes.call }
+      let!(:header_attributes) { attrs[:header_attributes] }
+      let!(:chart_attributes) {
+        api_v3_exporter_basic_attributes.readonly_chart_attributes
+      }
+
+      it 'check header zero deforestation parameters' do
+        zero_deforestation =
+          chart_attributes.find_by(identifier: 'zero_deforestation')
+        expect(attrs[:zero_deforestation]).not_to eql nil
+
+        expect(header_attributes[:zero_deforestation][:value]).to eql(
+          attrs[:zero_deforestation]
+        )
+        expect(header_attributes[:zero_deforestation][:name]).to eql(
+          zero_deforestation.display_name
+        )
+        expect(header_attributes[:zero_deforestation][:unit]).to eql nil #Qual
+        expect(header_attributes[:zero_deforestation][:tooltip]).to eql(
+          api_v3_exporter_basic_attributes_zero_deforestation_property.tooltip_text
+        )
+      end
+
+      it 'check header forest 500 parameters' do
+        forest_500 = chart_attributes.find_by(identifier: 'forest_500')
+        expect(attrs[:forest_500]).not_to eql nil
+        expect(header_attributes[:forest_500][:name]).to eql(
+          forest_500.display_name
+        )
+        expect(header_attributes[:forest_500][:unit]).to eql(forest_500.unit)
+        expect(header_attributes[:forest_500][:tooltip]).to eql(
+          api_v3_exporter_basic_attributes_forest_500_property.tooltip_text
+        )
       end
     end
   end

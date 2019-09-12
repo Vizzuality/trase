@@ -1,18 +1,17 @@
 import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import 'styles/components/tool/map/map-basemaps.scss';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import MapContainer from 'react-components/tool/map/map.container';
 import FlowContentContainer from 'react-components/tool/tool-content/tool-content.container';
-import TooltipContainer from 'react-components/tool/help-tooltip/help-tooltip.container';
 import ModalContainer from 'react-components/tool/story-modal/story-modal.container';
 import TitlebarContainer from 'react-components/tool/titlebar/titlebar.container';
 import NodesTitlesContainer from 'react-components/tool/nodes-titles/nodes-titles.container';
 import MapContextContainer from 'react-components/tool/map-context/map-context.container';
-import MapBasemaps from 'react-components/tool/map-basemaps/map-basemaps.container';
-import Sankey from 'react-components/tool/sankey/sankey.container';
+import Sankey from 'react-components/tool/sankey';
 import MapLegend from 'react-components/tool/map-legend/map-legend.container';
 import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.react';
+import Basemaps from 'react-components/tool/basemaps';
+import LegacyBasemaps from 'react-components/tool/legacy-basemaps/legacy-basemaps.container';
 import EventManager from 'utils/eventManager';
 import UrlSerializer from 'react-components/shared/url-serializer';
 
@@ -35,18 +34,21 @@ const renderMapSidebar = () => (
       </ul>
     </div>
 
-    <div className="map-sidebar-group c-map-basemaps">
-      <div className="map-sidebar-group-title">Basemaps</div>
-      <ul className="map-sidebar-group-items js-map-basemaps-items">
-        {/* this is rendered by map-context.component */}
-      </ul>
-    </div>
+    {!ENABLE_REDESIGN_PAGES && (
+      <div className="map-sidebar-group c-map-basemaps">
+        <div className="map-sidebar-group-title">Basemaps</div>
+        <ul className="map-sidebar-group-items js-map-basemaps-items">
+          {/* this is rendered by map-context.component */}
+        </ul>
+      </div>
+    )}
   </div>
 );
 
 const renderMap = () => (
-  <div className="js-map-container c-map is-absolute">
+  <div className="js-map-container c-map is-absolute -smooth-transition">
     <div id="js-map" className="c-map-leaflet" />
+    {ENABLE_REDESIGN_PAGES && <Basemaps />}
     <div className="btn-map -toggle-map js-toggle-map" />
     <div className="js-map-warnings-container map-warnings">
       <div className="warning-wrapper">
@@ -87,86 +89,15 @@ const renderSankeyError = () => (
   </div>
 );
 
-const renderExpandButton = () => (
-  <div className="expand-button js-expand">
-    <svg className="icon icon-outside-link">
-      <use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref="#icon-more-options" />
-    </svg>
-    <div className="c-node-menu">
-      <ul className="actions">
-        <li
-          className="expand-action js-expand-action is-hidden"
-          data-expand-text="EXPAND"
-          data-re-expand-text="RE-EXPAND"
-        >
-          <svg className="icon">
-            <use xlinkHref="#icon-more-options" />
-          </svg>
-        </li>
-        <li className="collapse-action js-collapse-action is-hidden">
-          COLLAPSE
-          <svg className="icon">
-            <use xlinkHref="#icon-more-options" />
-          </svg>
-        </li>
-        <li className="js-clear">CLEAR SELECTION</li>
-      </ul>
-    </div>
-  </div>
-);
-
-const renderSankey = () => (
-  <div className="c-sankey is-absolute js-sankey">
-    <div className="js-sankey-scroll-container sankey-scroll-container">
-      <svg className="js-sankey-canvas sankey">
-        <defs>
-          <pattern
-            id="isAggregatedPattern"
-            x="0"
-            y="0"
-            width="1"
-            height="3"
-            patternUnits="userSpaceOnUse"
-          >
-            <rect x="0" y="0" width="50" height="1" fill="#ddd" />
-            <rect x="0" y="1" width="50" height="2" fill="#fff" />
-          </pattern>
-        </defs>
-        <g className="sankey-container">
-          <g className="sankey-links" />
-          <g className="sankey-columns">
-            <g className="sankey-column">
-              <g className="sankey-nodes" />
-            </g>
-            <g className="sankey-column">
-              <g className="sankey-nodes" />
-            </g>
-            <g className="sankey-column">
-              <g className="sankey-nodes" />
-            </g>
-            <g className="sankey-column">
-              <g className="sankey-nodes" />
-            </g>
-          </g>
-        </g>
-      </svg>
-    </div>
-
-    {renderExpandButton()}
-  </div>
-);
-
 const renderVainillaComponents = () => (
   <>
     <MapContainer />
-    <MapBasemaps />
     <MapDimensionsContainer />
     <FlowContentContainer />
     <MapLegend />
+    {!ENABLE_REDESIGN_PAGES && <LegacyBasemaps />}
     <MapContextContainer />
     <NodesTitlesContainer />
-    <Sankey />
-    <TooltipContainer />
     <ModalContainer />
   </>
 );
@@ -186,7 +117,6 @@ const Tool = props => {
     () => (
       <>
         <div className="js-node-tooltip c-info-tooltip" />
-        <div className="js-sankey-tooltip c-info-tooltip" />
         <div className="l-tool">
           {renderVainillaComponents()}
 
@@ -198,16 +128,10 @@ const Tool = props => {
           {renderSankeyError()}
 
           <div className="js-tool-content flow-content">
-            <div className="js-tool-loading tool-loading">
-              <div className="veil sankey-veil" />
-              <div className="c-spinner" />
-            </div>
-
-            <div className="js-map-view-veil sankey-veil veil is-hidden" />
             {renderMapSidebar()}
             {renderMap()}
             <ColumnsSelectorGroupContainer />
-            {renderSankey()}
+            <Sankey />
             <TitlebarContainer />
           </div>
         </div>
