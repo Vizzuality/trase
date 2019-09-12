@@ -19,6 +19,7 @@ import 'scripts/react-components/shared/world-map/world-map.scss';
 const isDestinationCountry = (iso, countries) => countries.map(f => f.geoId).includes(iso);
 
 const MapGeographies = ({
+  worldMapId,
   geographies,
   flows,
   originGeoId,
@@ -33,7 +34,7 @@ const MapGeographies = ({
           geography.properties.iso2 !== 'AQ' && (
             <Geography
               key={geography.properties.cartodb_id}
-              cacheId={`geography-world${geography.properties.cartodb_id}`}
+              cacheId={`${worldMapId}geography-world${geography.properties.cartodb_id}`}
               className={cx(
                 'world-map-geography',
                 {
@@ -72,7 +73,8 @@ const WorldMap = ({
   center,
   width,
   className,
-  scale
+  scale,
+  id
 }) => {
   const [tooltipConfig, setTooltipConfig] = useState(null);
   const buildCurves = (start, end, line) => line.arc;
@@ -146,6 +148,7 @@ const WorldMap = ({
           <Geographies geography="/vector_layers/WORLD.topo.json" disableOptimization>
             {(geographies, projection) => (
               <MapGeographies
+                worldMapId={id}
                 geographies={geographies}
                 flows={flows}
                 originGeoId={originGeoId}
@@ -174,7 +177,8 @@ WorldMap.propTypes = {
   getTopNodes: PropTypes.func.isRequired,
   center: PropTypes.array,
   width: PropTypes.number,
-  scale: PropTypes.number
+  scale: PropTypes.number,
+  id: PropTypes.string.isRequired
 };
 
 WorldMap.defaultProps = {

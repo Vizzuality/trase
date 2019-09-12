@@ -141,6 +141,7 @@ function Explore(props) {
                   className={cx('explore-map-container', { '-loading': loading && !topNodesKey })}
                 >
                   <WorldMap
+                    id="legacy-explore"
                     className="explore-world-map"
                     context={selectedContext}
                     destinationCountries={destinationCountries}

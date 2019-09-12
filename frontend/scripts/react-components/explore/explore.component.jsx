@@ -158,6 +158,7 @@ function Explore({
             <div className="small-12 medium-8 large-7 columns">
               <div className={cx('map-container', { [`rows${rowsNumber}`]: rowsNumber })}>
                 <ResponsiveWorldMap
+                  id="explore"
                   center={[0, 0]}
                   scale={100}
                   context={highlightedContext}
