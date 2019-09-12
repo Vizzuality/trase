@@ -12,19 +12,13 @@ $top-cards-height: 156px;
     height: calc(100vh - #{$nav-height});
   }
 
-  .map-section {
-    height: 100%;
-    margin: 30px auto 0;
-    display: flex;
-    align-items: center;
-  }
-
   .map-container {
     height: inherit;
   }
 
   .quick-facts {
     max-height: 100%;
+    min-width: 155px;
 
     // Fix bubbles overlaping explore grid on very short screens
     @media (min-height: 700px) {

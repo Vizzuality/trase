@@ -10,6 +10,7 @@ import last from 'lodash/last';
 import { EXPLORE_STEPS } from 'constants';
 import getTopNodesKey from 'utils/getTopNodesKey';
 import cx from 'classnames';
+import { format } from 'd3-format';
 
 import 'react-components/explore/explore.scss';
 
@@ -28,7 +29,7 @@ function Explore({
   getTopCountries,
   getQuickFacts,
   commodityContexts,
-  quickFactsIndicators
+  countryQuickFacts
 }) {
   const [highlightedContext, setHighlightedContext] = useState(null);
   const [highlightedCountryIds, setHighlightedCountries] = useState(null);
@@ -136,6 +137,10 @@ function Explore({
   ]);
   const ITEMS_PER_ROW = 7;
   const rowsNumber = items.length && Math.ceil(items.length / ITEMS_PER_ROW);
+  const quickFacts =
+    countryQuickFacts &&
+    (country?.id || highlightedContext?.countryId) &&
+    countryQuickFacts[country?.id || highlightedContext?.countryId];
   return (
     <div className="c-explore">
       <div className="explore-selector">
@@ -167,18 +172,24 @@ function Explore({
               }
             />
           </div>
-          <div className="quick-facts">
-            {quickFactsIndicators.map(indicator => (
-              <div className="bubble">
-                <Text size="rg" align="center" variant="mono">
-                  {indicator.name}
-                </Text>
-                <Text size="lg" weight="regular" align="center" className="quick-facts-value">
-                  {indicator.value} {indicator.unit}
-                </Text>
-              </div>
-            ))}
-          </div>
+          {step > EXPLORE_STEPS.selectCommodity && (
+            <div className="quick-facts">
+              {quickFacts ? (
+                quickFacts.map(indicator => (
+                  <div className="bubble">
+                    <Text size="rg" align="center" variant="mono">
+                      {indicator.name} {indicator.year}
+                    </Text>
+                    <Text size="lg" weight="regular" align="center" className="quick-facts-value">
+                      {format(',')(Math.round(indicator.total))} {indicator.unit}
+                    </Text>
+                  </div>
+                ))
+              ) : (
+                <div className="bubble" />
+              )}
+            </div>
+          )}
         </div>
       </div>
       <TopCards
@@ -211,7 +222,7 @@ Explore.propTypes = {
   commodityContexts: PropTypes.array,
   getTopCountries: PropTypes.func.isRequired,
   getQuickFacts: PropTypes.func.isRequired,
-  quickFactsIndicators: PropTypes.object
+  countryQuickFacts: PropTypes.object
 };
 
 export default Explore;
