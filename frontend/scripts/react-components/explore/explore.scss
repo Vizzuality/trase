@@ -2,18 +2,90 @@
 
 $top-cards-height: 156px;
 
+$explore-grid-height-1-row: 50px;
+$explore-grid-height-1-row-tablet: 100px;
+$explore-grid-height-2-rows: 100px;
+$explore-grid-height-2-rows-tablet: 150px;
+$explore-grid-height-3-rows: 150px;
+$explore-grid-height-3-rows-tablet: 200px;
+
+$explore-heading: 66px;
+
 .c-explore {
   .explore-selector {
     position: relative;
     margin-top: $nav-height;
     padding-bottom: $top-cards-height;
-    display: flex;
-    flex-direction: column;
     height: calc(100vh - #{$nav-height});
   }
 
+  @mixin row-dependant-height {
+    height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-heading});
+
+    &.rows1 {
+      height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-1-row} - #{$explore-heading});
+
+      @media screen and (max-width: $breakpoint-tablet) {
+        height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-1-row-tablet} - #{$explore-heading});
+      }
+    }
+
+    &.rows2 {
+      height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-2-rows} - #{$explore-heading});
+
+      @media screen and (max-width: $breakpoint-tablet) {
+        height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-2-rows-tablet} - #{$explore-heading});
+      }
+    }
+
+    &.rows3 {
+      height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-3-rows} - #{$explore-heading});
+
+      @media screen and (max-width: $breakpoint-tablet) {
+        height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-3-rows-tablet} - #{$explore-heading});
+      }
+    }
+
+    transition: height 0.3s;
+  }
+
+  .map-section {
+    @include row-dependant-height();
+  }
+
   .map-container {
+    @include row-dependant-height();
+  }
+
+  .quick-facts {
     height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .bubble-container {
+      // Fix bubbles overlaping explore grid on very short screens
+      @media (min-height: 700px) {
+        min-height: 400px;
+      }
+    }
+
+    .bubble {
+      width: 155px;
+      height: 155px;
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      justify-content: center;
+      border-radius: 50%;
+      background-color: $light-gray;
+      margin-top: 20px;
+    }
+
+    .quick-facts-value {
+      margin-top: 26px;
+    }
   }
 
   .explore-grid-container {
@@ -26,19 +98,19 @@ $top-cards-height: 156px;
       margin: 0 auto;
       flex-wrap: wrap;
       height: 0px;
-      transition: height 0.5s;
+      transition: height 0.3s;
 
       &.rows1 {
-        height: 50px;
+        height: $explore-grid-height-1-row;
         @media screen and (max-width: $breakpoint-tablet) {
-          height: 100px;
+          height: $explore-grid-height-1-row-tablet;
         }
       }
 
       &.rows2 {
-        height: 100px;
+        height: $explore-grid-height-2-rows;
         @media screen and (max-width: $breakpoint-tablet) {
-          height: 150px;
+          height: $explore-grid-height-2-rows-tablet;
         }
       }
     }
