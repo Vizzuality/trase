@@ -184,20 +184,27 @@ function Explore({
             <div className="small-4 medium-2 columns hide-for-small">
               {step > EXPLORE_STEPS.selectCommodity && (
                 <div className="quick-facts">
-                  {quickFacts ? (
-                    quickFacts.map(indicator => (
-                      <div className="bubble">
-                        <Text size="rg" align="center" variant="mono">
-                          {indicator.name} {indicator.year}
-                        </Text>
-                        <Text size="lg" weight="regular" align="center" className="quick-facts-value">
-                          {format(',')(Math.round(indicator.total))} {indicator.unit}
-                        </Text>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="bubble" />
-                  )}
+                  <div className="bubble-container">
+                    {quickFacts ? (
+                      quickFacts.map(indicator => (
+                        <div className="bubble">
+                          <Text size="rg" align="center" variant="mono">
+                            {indicator.name} {indicator.year}
+                          </Text>
+                          <Text
+                            size="lg"
+                            weight="regular"
+                            align="center"
+                            className="quick-facts-value"
+                          >
+                            {format(',')(Math.round(indicator.total))} {indicator.unit}
+                          </Text>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="bubble" />
+                    )}
+                  </div>
                 </div>
               )}
             </div>
