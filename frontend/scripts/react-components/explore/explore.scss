@@ -63,6 +63,7 @@ $explore-heading: 66px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    min-width: 155px;
 
     .bubble-container {
       // Fix bubbles overlaping explore grid on very short screens
