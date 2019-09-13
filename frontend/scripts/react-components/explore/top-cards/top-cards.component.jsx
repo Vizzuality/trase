@@ -9,12 +9,12 @@ import { useTransition, animated } from 'react-spring';
 
 import 'react-components/explore/top-cards/top-cards.scss';
 
-const TopCard = ({ card, goToTool }) => {
+const TopCard = ({ card, openModal }) => {
   const { countryName, indicatorName, commodityName, nodeTypeName } = card;
   if (!card.countryName) return null;
   return (
     <button
-      onClick={() => goToTool(card)}
+      onClick={() => openModal(card)}
       className="c-top-card"
       data-test={`top-card-${countryName}-${commodityName}-${nodeTypeName}-${indicatorName}`}
     >
@@ -40,7 +40,7 @@ const TopCard = ({ card, goToTool }) => {
 
 TopCard.propTypes = {
   card: PropTypes.object.isRequired,
-  goToTool: PropTypes.func.isRequired
+  openModal: PropTypes.func.isRequired
 };
 
 const TopCards = ({
@@ -50,7 +50,7 @@ const TopCards = ({
   commodityName,
   step,
   cards,
-  goToTool
+  openModal
 }) => {
   const [animatedItems, setAnimatedItems] = useState([]);
   const transitions = useTransition(animatedItems, item => item.key, {
@@ -74,7 +74,7 @@ const TopCards = ({
         item && (
           <div className="columns small-3">
             <animated.div key={key} style={props} className="animated-card">
-              <TopCard key={item.key} card={item} goToTool={() => goToTool(item)} />
+              <TopCard key={item.key} card={item} openModal={openModal} />
             </animated.div>
           </div>
         )
@@ -113,7 +113,7 @@ TopCards.propTypes = {
   setCountry: PropTypes.func.isRequired,
   step: PropTypes.number,
   cards: PropTypes.object,
-  goToTool: PropTypes.func.isRequired
+  openModal: PropTypes.func.isRequired
 };
 
 export default TopCards;

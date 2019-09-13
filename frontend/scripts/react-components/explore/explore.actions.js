@@ -16,26 +16,50 @@ export const setCountry = selectedCountryId => ({
   payload: { selectedCountryId }
 });
 
-export const goToTool = linkInfo => (dispatch, getState) => {
+export const goToTool = (destination, linkInfo) => (dispatch, getState) => {
   const { contexts, selectedContextId } = getState().app;
-  let contextId;
-  if (!linkInfo) {
-    contextId = selectedContextId;
+  let linkParams = linkInfo;
+  const context = contexts.find(
+    c =>
+      c.id === selectedContextId ||
+      (c.commodityId === linkInfo.commodityId && c.countryId === linkInfo.countryId)
+  );
+  if (!linkParams) {
+    linkParams = {
+      contextId: selectedContextId,
+      countryId: context.countryId,
+      commodityId: context.commodityId
+    };
   } else {
-    const context = contexts.find(
-      c => c.commodityId === linkInfo.commodityId && c.countryId === linkInfo.countryId
-    );
-    contextId = context.id;
+    linkParams = {
+      contextId: context.id,
+      ...linkParams
+    };
   }
-  const serializerParams = { selectedContextId: contextId };
+
+  const serializerParams = {
+    selectedContextId: linkParams.contextId,
+    selectedCountryId: linkParams.countryId,
+    selectedCommodityId: linkParams.commodityId,
+    selectedRecolorBy: linkParams.indicatorId
+  };
+
   dispatch({
     type: EXPLORE__SELECT_TOP_CARD,
-    payload: { linkInfo }
+    payload: { linkParams }
   });
-  dispatch({
-    type: 'tool',
-    payload: { serializerParams }
-  });
+
+  if (destination === 'sankey') {
+    dispatch({
+      type: 'tool',
+      payload: { serializerParams }
+    });
+  } else {
+    dispatch({
+      type: 'dashboardElement',
+      payload: { dashboardId: 'new', query: serializerParams }
+    });
+  }
 };
 
 export const getQuickFacts = commodityId => dispatch => {
