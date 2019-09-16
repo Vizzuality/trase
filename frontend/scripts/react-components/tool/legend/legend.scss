@@ -12,18 +12,17 @@
   }
 
   .legend-header {
-    position: relative;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     padding: 0 8px;
     height: 30px;
     width: 100%;
-    background-color: $white;
-    border-bottom: 1px solid $charcoal-grey-faded-a-lot;
+    background-color: $charcoal-grey;
+    overflow: hidden;
 
     &:hover {
-      background-color: darken($white, 7%);
+      background-color: lighten($charcoal-grey, 2%);
     }
   }
 
@@ -36,7 +35,7 @@
     cursor: pointer;
 
     .icon {
-      fill: $charcoal-grey;
+      fill: $white;
       margin: 0 8px 0 0;
       height: 16px;
       width: 16px;

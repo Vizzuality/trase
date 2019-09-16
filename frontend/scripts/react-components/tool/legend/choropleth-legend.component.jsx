@@ -7,7 +7,7 @@ import ChoroArrow from './choro-arrow.component';
 import 'react-components/tool/legend/choropleth-legend.scss';
 
 function ChoroplethLegend(props) {
-  const { currentHighlightedChoroplethBucket, isBivariate, titles, colors, bucket } = props;
+  const { highlightedChoroplethBucket, isBivariate, titles, colors, bucket } = props;
   return (
     <div className="c-map-legend-choro">
       <div
@@ -30,7 +30,7 @@ function ChoroplethLegend(props) {
                   <li className="bucket-item">
                     <div
                       className={cx(`bucket color-${bivariateColor.substr(1).toLowerCase()}`, {
-                        '-highlighted': currentHighlightedChoroplethBucket === bivariateColor
+                        '-highlighted': highlightedChoroplethBucket === bivariateColor
                       })}
                       style={{ backgroundColor: bivariateColor }}
                     />
@@ -40,7 +40,7 @@ function ChoroplethLegend(props) {
                 <li className="bucket-item">
                   <div
                     className={cx(`bucket color-${color.substr(1).toLowerCase()}`, {
-                      '-highlighted': currentHighlightedChoroplethBucket === color
+                      '-highlighted': highlightedChoroplethBucket === color
                     })}
                     style={{ backgroundColor: color }}
                   >
@@ -89,7 +89,7 @@ function ChoroplethLegend(props) {
 }
 
 ChoroplethLegend.propTypes = {
-  currentHighlightedChoroplethBucket: PropTypes.object,
+  highlightedChoroplethBucket: PropTypes.object,
   isBivariate: PropTypes.bool,
   titles: PropTypes.array,
   colors: PropTypes.array,

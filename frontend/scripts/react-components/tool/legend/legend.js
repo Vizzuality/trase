@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 import {
   getChoroplethOptions,
-  getCurrentHighlightedChoroplethBucket
+  getCurrentHighlightedChoroplethBucket,
+  getSelectedMapContextualLayersData
 } from 'react-components/tool-layers/tool-layers.selectors';
 import { toggleMapLayerMenu } from 'actions/app.actions';
 import Legend from './legend.component';
@@ -10,7 +11,8 @@ const mapStateToProps = state => {
   const { choroplethLegend } = getChoroplethOptions(state);
   return {
     choroplethLegend,
-    currentHighlightedChoroplethBucket: getCurrentHighlightedChoroplethBucket(state)
+    contextualLayers: getSelectedMapContextualLayersData(state),
+    highlightedChoroplethBucket: getCurrentHighlightedChoroplethBucket(state)
   };
 };
 
