@@ -134,7 +134,7 @@ export const getCards = createSelector(
         indicatorName: indicator?.name,
         nodeTypeId: card.node_type_id,
         nodeTypeName: nodeType?.name,
-        key: card.id
+        key: `${card.id}_${commodity?.id}_${country?.id}`
       };
     };
     const updatedCards = mockedCards.map(mockedCard => getUpdatedCard(mockedCard));
