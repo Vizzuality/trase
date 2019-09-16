@@ -1,59 +1,10 @@
 @import '../../../settings';
 
-.c-map-legend {
-  padding: 0;
-  background-color: $white;
-  cursor: pointer;
-
-  .bullets {
-    color: rgba($charcoal-grey, .5);
-    font-family: $font-family-1;
-    font-size: 11px;
-    line-height: normal;
-    letter-spacing: -1.1px;
-    text-transform: uppercase;
-    text-align: left;
-
-    li {
-      margin-right: 15px;
-      line-height: 150%;
-    }
-
-    .bullet {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      position: relative;
-      top: 1px;
-      margin-right: 2px;
-      border: solid 1px $charcoal-grey;
-      text-align: center;
-
-      span {
-        position: absolute;
-        top: 11px;
-        left: 0;
-        right: 0;
-        margin: auto;
-        font-size: 10px;
-        line-height: normal;
-        letter-spacing: -1px;
-        white-space: nowrap;
-      }
-
-      &.-highlighted {
-        border: solid 2px $charcoal-grey;
-      }
-    }
-
-  }
-}
-
 .c-map-legend-context {
 
   .cartodb-legend {
     padding: 5px 6px 3px 6px;
-    border-bottom: 1px solid rgba($charcoal-grey, .2);
+    border-bottom: 1px solid $charcoal-grey-faded-a-lot;
 
     &.choropleth {
       padding-bottom: 14px;
