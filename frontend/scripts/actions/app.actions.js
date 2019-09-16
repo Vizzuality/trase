@@ -204,7 +204,7 @@ export const getTopCountries = (contexts, options = {}) => (dispatch, getState) 
 
   if (nonFetchedContexts.length === 0) return;
   const countryColumnId = nonFetchedContexts[0].worldMap.countryColumnId;
-  const volumeIndicator = nonFetchedContexts[0].resizeBy.find(i => i.name === 'Volume').id;
+  const volumeIndicator = nonFetchedContexts[0].resizeBy.find(i => i.name === 'Volume').attributeId;
 
   dispatch({
     type: APP__SET_TOP_DESTINATION_COUNTRIES_LOADING,
@@ -213,7 +213,6 @@ export const getTopCountries = (contexts, options = {}) => (dispatch, getState) 
       loading: true
     }
   });
-
   const params = {
     contexts_ids: nonFetchedContexts.map(c => c.id).join(),
     column_id: countryColumnId,
@@ -223,13 +222,19 @@ export const getTopCountries = (contexts, options = {}) => (dispatch, getState) 
   const topNodesUrl = getURLFromParams(GET_TOP_NODE_STATS_URL, params);
   axios
     .get(topNodesUrl)
-    .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
     .then(res => {
       dispatch({
         type: APP__SET_TOP_DESTINATION_COUNTRIES,
         payload: {
           topNodesKeys,
-          data: res
+          topCountries: res.data.data
+        }
+      });
+      dispatch({
+        type: APP__SET_TOP_DESTINATION_COUNTRIES_LOADING,
+        payload: {
+          topNodesKeys,
+          loading: false
         }
       });
     })
