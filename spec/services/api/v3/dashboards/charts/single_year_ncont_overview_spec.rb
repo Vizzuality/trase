@@ -52,11 +52,26 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontOverview do
 
     context 'when filtered by 1 exporter' do
       let(:parameters_hash) {
-        shared_parameters_hash.merge(companies_ids: [api_v3_other_exporter_node.id])
+        shared_parameters_hash.merge(companies_ids: [api_v3_exporter1_node.id])
       }
       it 'summarized flows matching exporter per ncont' do
-        expect(data.size).to eq(1)
-        expect(data[idx_of_x(data, 4.0)][:y0]).to eq(25)
+        expect(data.size).to eq(4)
+        expect(data[idx_of_x(data, 3.0)][:y0]).to eq(20)
+      end
+    end
+
+    context 'when filtered by 1 exporter and 1 destination excluded' do
+      let(:parameters_hash) {
+        shared_parameters_hash.merge(
+          companies_ids: [api_v3_exporter1_node.id],
+          excluded_destinations_ids: [
+            api_v3_other_country_of_destination_node.id
+          ]
+        )
+      }
+      it 'summarized flows matching exporter per ncont' do
+        expect(data.size).to eq(3)
+        expect(idx_of_x(data, 3.0)).to be_nil
       end
     end
 

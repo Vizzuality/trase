@@ -432,7 +432,10 @@
                 "ncont_attribute",
                 "sources",
                 "companies",
-                "destinations"
+                "destinations",
+                "excluded_sources",
+                "excluded_companies",
+                "excluded_destinations"
               ],
               "properties": {
                 "cont_attribute": {
@@ -453,6 +456,18 @@
                 },
                 "destinations": {
                   "$id": "#/properties/meta/properties/info/properties/filter/properties/destinations",
+                  "type": "array"
+                },
+                "excluded_sources": {
+                  "$id": "#/properties/meta/properties/info/properties/filter/properties/excluded_sources",
+                  "type": "array"
+                },
+                "excluded_companies": {
+                  "$id": "#/properties/meta/properties/info/properties/filter/properties/excluded_companies",
+                  "type": "array"
+                },
+                "excluded_destinations": {
+                  "$id": "#/properties/meta/properties/info/properties/filter/properties/excluded_destinations",
                   "type": "array"
                 }
               }

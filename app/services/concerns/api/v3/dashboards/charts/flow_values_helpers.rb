@@ -58,6 +58,12 @@ module Api
                   'flows.path[?] IN (?)', position + 1, nodes_ids
                 )
               end
+            @chart_parameters.
+              excluded_nodes_ids_by_position.each do |position, nodes_ids|
+                @query = @query.where(
+                  'flows.path[?] NOT IN (?)', position + 1, nodes_ids
+                )
+              end
           end
 
           def node_type_axis_meta(node_type)
@@ -139,10 +145,26 @@ module Api
           end
 
           def flow_path_filters
+            selected_nodes = @chart_parameters.selected_nodes
+            selected_nodes_flow_path_filters = nodes_flow_path_filters(
+              selected_nodes, [:sources, :companies, :destinations]
+            )
+            excluded_nodes = @chart_parameters.excluded_nodes
+            excluded_nodes_flow_path_filters = nodes_flow_path_filters(
+              excluded_nodes,
+              [
+                :excluded_sources, :excluded_companies, :excluded_destinations
+              ]
+            )
+            selected_nodes_flow_path_filters.merge(
+              excluded_nodes_flow_path_filters
+            )
+          end
+
+          def nodes_flow_path_filters(nodes, categories)
             flow_path_filters = {}
-            nodes = @chart_parameters.selected_nodes
             nodes_by_node_id = Hash[nodes.map { |node| [node.id, node] }]
-            [:sources, :companies, :destinations].each do |filter_name|
+            categories.each do |filter_name|
               nodes_ids = @chart_parameters.send(:"#{filter_name}_ids")
               flow_path_filters[filter_name] = flow_path_filter(
                 nodes_ids, nodes_by_node_id, profiles_by_node_type_id

@@ -3200,6 +3200,59 @@ components:
                     type: string
                     example: 'null'
                     nullable: true
+            excluded_sources:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  node_type_id:
+                    type: integer
+                  node_type:
+                    type: string
+                  profile:
+                    type: string
+                    example: 'place'
+                    nullable: true
+                    description: 'place or null'
+            excluded_companies:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  node_type_id:
+                    type: integer
+                  node_type:
+                    type: string
+                  profile:
+                    type: string
+                    example: 'actor'
+                    nullable: true
+                    description: 'actor or null'
+            excluded_destinations:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  node_type_id:
+                    type: integer
+                  node_type:
+                    type: string
+                  profile:
+                    type: string
+                    example: 'null'
+                    nullable: true
         single_filter_key:
           type: string
           example: 'destinations'
