@@ -21,6 +21,10 @@
     width: 100%;
     background-color: $white;
     border-bottom: 1px solid $charcoal-grey-faded-a-lot;
+
+    &:hover {
+      background-color: darken($white, 7%);
+    }
   }
 
   .legend-layers-toggle {
@@ -32,14 +36,16 @@
     cursor: pointer;
 
     .icon {
+      fill: $charcoal-grey;
       margin: 0 8px 0 0;
+      height: 16px;
+      width: 16px;
     }
   }
 
   .legend-container {
     padding: 0;
     background-color: $white;
-    cursor: pointer;
 
     .bullets {
       color: rgba($charcoal-grey, .5);

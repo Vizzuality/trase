@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
 
 import 'styles/components/tool/map/map-legend.scss';
 import './legend.scss';
@@ -9,20 +8,9 @@ import Icon from 'react-components/shared/icon/icon.component';
 import ChoroplethLegend from './choropleth-legend.component';
 
 function Legend(props) {
-  const {
-    toggleMapLayerMenu,
-    choroplethLegend,
-    currentHighlightedChoroplethBucket,
-    selectedMapContextualLayersData
-  } = props;
+  const { toggleMapLayerMenu, choroplethLegend, currentHighlightedChoroplethBucket } = props;
   return (
-    <div
-      className={cx('c-legend', {
-        '-hidden':
-          choroplethLegend === null &&
-          (selectedMapContextualLayersData === undefined || !selectedMapContextualLayersData.length)
-      })}
-    >
+    <div className="c-legend">
       <div className="legend-header">
         <button className="legend-layers-toggle" onClick={toggleMapLayerMenu}>
           <Icon icon="icon-layers" />
@@ -50,7 +38,6 @@ function Legend(props) {
 Legend.propTypes = {
   choroplethLegend: PropTypes.object,
   toggleMapLayerMenu: PropTypes.func.isRequired,
-  selectedMapContextualLayersData: PropTypes.object,
   currentHighlightedChoroplethBucket: PropTypes.string
 };
 

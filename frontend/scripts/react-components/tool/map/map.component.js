@@ -35,7 +35,6 @@ export default class MapComponent {
 
     this.map = L.map('js-map', mapOptions);
     new L.Control.Zoom({ position: 'topleft' }).addTo(this.map);
-    L.control.scale({ position: 'bottomleft', imperial: false }).addTo(this.map);
 
     const worldBounds = L.latLngBounds(L.latLng(-89, -180), L.latLng(89, 180));
     this.map.setMaxBounds(worldBounds);
@@ -62,13 +61,9 @@ export default class MapComponent {
     });
     this.contextLayers = [];
     this.pointVolumeShadowLayer = null;
-    this.clickToggleMapLayerMenu = () => {
-      this.callbacks.onToggleMapLayerMenu();
-    };
     this.clickToggleMap = () => {
       this.callbacks.onToggleMap();
     };
-    this.basemapSwitcher = document.querySelector('.js-basemap-switcher');
     this.toggleMap = document.querySelector('.js-toggle-map');
 
     this.attribution = document.querySelector('.js-map-attribution');
