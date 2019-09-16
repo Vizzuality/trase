@@ -223,12 +223,16 @@ export const getTopCountries = (contexts, options = {}) => (dispatch, getState) 
   axios
     .get(topNodesUrl)
     .then(res => {
+      const contextId = res.data.context.id;
+      const updatedTopCountries = res.data.data.map(data => ({
+        data,
+        country: data.name,
+        topNodesKey: getTopNodesKey(contextId, 'country')
+      }));
+
       dispatch({
         type: APP__SET_TOP_DESTINATION_COUNTRIES,
-        payload: {
-          topNodesKeys,
-          topCountries: res.data.data
-        }
+        payload: { topCountries: updatedTopCountries }
       });
       dispatch({
         type: APP__SET_TOP_DESTINATION_COUNTRIES_LOADING,
