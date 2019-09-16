@@ -48,7 +48,7 @@ frontend/.env*
 
 frontend/public/js
 frontend/dist
-frontend/.docz
+frontend/.storybook
 
 frontend/tmp
 
