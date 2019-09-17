@@ -6,6 +6,7 @@ import capitalize from 'lodash/capitalize';
 import upperCase from 'lodash/upperCase';
 import pluralize from 'utils/pluralize';
 import { useTransition, animated } from 'react-spring';
+import ResizeListener from 'react-components/shared/resize-listener.component';
 
 import 'react-components/explore/top-cards/top-cards.scss';
 
@@ -63,17 +64,27 @@ const TopCards = ({
       {capitalize(name)}
     </Text>
   );
+
   const renderCards = () =>
-    transitions.map(
-      ({ item, props, key }) =>
-        item && (
-          <div className="columns small-3">
-            <animated.div key={key} style={props} className="animated-card">
-              <TopCard key={item.key} card={item} goToTool={() => goToTool(item)} />
-            </animated.div>
-          </div>
-        )
-    );
+    transitions.map(({ item, props, key }) => {
+      if (!item) return null;
+      const card = (
+        <animated.div key={key} style={props} className="animated-card">
+          <TopCard key={item.key} card={item} goToTool={() => goToTool(item)} />
+        </animated.div>
+      );
+      return (
+        <ResizeListener>
+          {({ resolution }) =>
+            resolution.isSmall ? (
+              <div className="mobile-card"> {card} </div>
+            ) : (
+              <div className="columns small-5 medium-3"> {card} </div>
+            )
+          }
+        </ResizeListener>
+      );
+    });
 
   const clearStep = step === 2 ? () => setCountry(null) : () => setCommodity(null);
   return (
@@ -93,7 +104,15 @@ const TopCards = ({
         </div>
       </div>
       <div className="top-cards-container">
-        <div className="row">{cards && renderCards()}</div>
+        <ResizeListener>
+          {({ resolution }) =>
+            resolution.isSmall ? (
+              <div className="mobile-top-cards">{cards && renderCards()}</div>
+            ) : (
+              <div className="row">{cards && renderCards()}</div>
+            )
+          }
+        </ResizeListener>
       </div>
     </div>
   );
