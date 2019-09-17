@@ -42,10 +42,24 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNoNcontOverview do
 
     context 'when filtered by 1 exporter' do
       let(:parameters_hash) {
-        shared_parameters_hash.merge(companies_ids: [api_v3_other_exporter_node.id])
+        shared_parameters_hash.merge(companies_ids: [api_v3_exporter1_node.id])
       }
       it 'it summarized flows matching exporter' do
-        expect(data[0][:y0]).to eq(25)
+        expect(data[0][:y0]).to eq(75)
+      end
+    end
+
+    context 'when filtered by 1 exporter and 1 destination excluded' do
+      let(:parameters_hash) {
+        shared_parameters_hash.merge(
+          companies_ids: [api_v3_exporter1_node.id],
+          excluded_destinations_ids: [
+            api_v3_other_country_of_destination_node.id
+          ]
+        )
+      }
+      it 'it summarized flows matching exporter' do
+        expect(data[0][:y0]).to eq(55)
       end
     end
 
