@@ -56,13 +56,14 @@ module Api
         end
 
         def formatted_nodes_stats
+          query_filter_name = @commodity_id ? 'commodities.id' : 'context_id'
           filter_name = @commodity_id ? 'commodity_id' : 'context_id'
           filter_values =
             @commodity_id.present? ? [@commodity_id] : @contexts_ids
           filter_values.map do |filter|
             {
               filter_name => filter,
-              top_nodes: @nodes_stats.map do |node_stats|
+              top_nodes: @nodes_stats.where(query_filter_name => filter).map do |node_stats|
                 nodes_stats_information(node_stats)
               end
             }
