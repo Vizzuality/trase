@@ -50,6 +50,7 @@ function Legend(props) {
 }
 
 Legend.propTypes = {
+  contextualLayers: PropTypes.array,
   choroplethLegend: PropTypes.object,
   toggleMapLayerMenu: PropTypes.func.isRequired,
   highlightedChoroplethBucket: PropTypes.string

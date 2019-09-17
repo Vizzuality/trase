@@ -9,7 +9,7 @@ import 'react-components/tool/legend/choropleth-legend.scss';
 function ChoroplethLegend(props) {
   const { highlightedChoroplethBucket, isBivariate, titles, colors, bucket } = props;
   return (
-    <div className="c-map-legend-choro">
+    <div className="c-choropleth-legend">
       <div
         className={cx('bucket-container', {
           '-bidimensional': isBivariate,

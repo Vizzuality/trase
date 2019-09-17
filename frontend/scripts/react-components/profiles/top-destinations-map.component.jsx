@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import formatValue from 'utils/formatValue';
-import ChoroLegend from 'react-components/profiles/choro-legend.component';
+import ChoroLegend from 'react-components/profiles/choro-legend/choro-legend.component';
 import cx from 'classnames';
 import Map from 'react-components/profiles/map.component';
 import ProfileTitle from 'react-components/profiles/profile-title.component';
