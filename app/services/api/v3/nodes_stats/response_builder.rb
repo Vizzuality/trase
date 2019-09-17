@@ -14,7 +14,7 @@ module Api
         end
 
         def call
-          initialize_nodes_stats
+          @nodes_stats = find_nodes_stats
 
           formatted_nodes_stats
         end
@@ -26,29 +26,8 @@ module Api
           @year_end = params[:year_end]&.to_i
           @limit = params[:limit]&.to_i || 10
           @node_type_id = params[:node_type_id]
-          @attributes_ids = params[:attributes_ids]
-        end
-
-        def initialize_nodes_stats
-          options = {
-            node_type_id: @node_type_id,
-            year_start: @year_start,
-            year_end: @year_end
-          }
-          if @commodity_id
-            nodes_stats_list =
-              Api::V3::Profiles::NodesStatsForCommodityList.new(
-                @commodity_id, options
-              )
-          else
-            nodes_stats_list =
-              Api::V3::Profiles::NodesStatsForContextsList.new(
-                @contexts_ids, options
-              )
-          end
-
-          @nodes_stats = nodes_stats_list.
-            sorted_list(@attributes.map(&:original_id), limit: @limit)
+          @attribute_id = params[:attribute_id]
+          @other_attributes_ids = params[:other_attributes_ids] || []
         end
 
         def initialize_errors
@@ -60,7 +39,12 @@ module Api
             raise 'Either commodity or contexts but not both'
           end
 
-          @attributes = @attributes_ids.map do |attribute_id|
+          @attribute = Api::V3::Readonly::Attribute.find_by(
+            id: @attribute_id, original_type: 'Quant'
+          )
+          raise "Attribute #{@attribute_id} not found" unless @attribute
+
+          @other_attributes = @other_attributes_ids.map do |attribute_id|
             attribute = Api::V3::Readonly::Attribute.find_by(
               id: attribute_id, original_type: 'Quant'
             )
@@ -78,31 +62,69 @@ module Api
           filter_values.map do |filter|
             {
               filter_name => filter,
-              attributes: @attributes.map do |attribute|
-                attribute_information(attribute)
+              top_nodes: @nodes_stats.map do |node_stats|
+                nodes_stats_information(node_stats)
               end
             }
           end
         end
 
-        def attribute_information(attribute)
-          targets = @nodes_stats.where(quant_id: attribute.original_id)
+        def nodes_stats_information(nodes_stats)
           {
-            id: attribute.id,
-            indicator: attribute.display_name,
-            unit: attribute.unit,
-            targets: nodes_stats_information(targets)
+            id: nodes_stats.node_id,
+            name: nodes_stats.name,
+            geo_id: nodes_stats.geo_id,
+            attribute: attribute_information(nodes_stats),
+            other_attributes: other_attributes_information
           }
         end
 
-        def nodes_stats_information(nodes_stats)
-          nodes_stats.map do |node_stats|
+        def attribute_information(nodes_stats)
+          {
+            id: @attribute.id,
+            indicator: @attribute.display_name,
+            unit: @attribute.unit,
+            value: nodes_stats.value,
+            height: nodes_stats.height
+          }
+        end
+
+        def other_attributes_information
+          @other_attributes.map do |attribute|
+            nodes_stats = find_nodes_stats(attribute).first
             {
-              id: node_stats['node_id'],
-              name: node_stats['name'],
-              value: node_stats['value'],
-              height: node_stats['height']
+              id: attribute.id,
+              name: attribute.display_name,
+              unit: attribute.unit,
+              value: nodes_stats.value,
+              height: nodes_stats.height
             }
+          end
+        end
+
+        def find_nodes_stats(attribute = nil)
+          options = {
+            node_type_id: @node_type_id,
+            year_start: @year_start,
+            year_end: @year_end
+          }
+
+          if @commodity_id
+            nodes_stats_list =
+              Api::V3::Profiles::NodesStatsForCommodityList.new(
+                @commodity_id, options
+              )
+          else
+            nodes_stats_list =
+              Api::V3::Profiles::NodesStatsForContextsList.new(
+                @contexts_ids, options
+              )
+          end
+
+          if attribute
+            nodes_stats_list.sorted_list(attribute.original_id, limit: 1)
+          else
+            nodes_stats_list.sorted_list(@attribute.original_id, limit: @limit)
           end
         end
       end
