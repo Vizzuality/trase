@@ -4,6 +4,7 @@ env:
     - CC_TEST_REPORTER_ID=ae4098e380eed3c112bd34c4c2ceec913288ce9479bb748bf098a57b75ff5de5
     - SURGE_LOGIN=trase.vizzuality@gmail.com
     - SURGE_TOKEN=$SURGE_TOKEN # Set in the settings page of your repository, as a secure variable
+    - MAILER_HOST=test.com
 matrix:
   include:
     - language: ruby
