@@ -15,7 +15,7 @@ export const getStep = createSelector(
   }
 );
 
-const getCommodities = createSelector(
+export const getCommodities = createSelector(
   [getContexts],
   contexts => {
     if (!contexts) return null;
@@ -48,7 +48,7 @@ export const getAllCountriesIds = createSelector(
   countries => (countries ? countries.map(c => c.id) : null)
 );
 
-const getCountries = createSelector(
+export const getCountries = createSelector(
   [getContexts, getSelectedCommodityId],
   (contexts, commodityId) => {
     if (!contexts) return null;

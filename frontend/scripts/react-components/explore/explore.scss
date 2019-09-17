@@ -3,11 +3,9 @@
 $top-cards-height: 156px;
 
 $explore-grid-height-1-row: 50px;
-$explore-grid-height-1-row-tablet: 100px;
 $explore-grid-height-2-rows: 100px;
-$explore-grid-height-2-rows-tablet: 150px;
 $explore-grid-height-3-rows: 150px;
-$explore-grid-height-3-rows-tablet: 200px;
+$explore-mobile-dropdowns: 100px;
 
 $explore-heading: 66px;
 
@@ -24,29 +22,21 @@ $explore-heading: 66px;
 
     &.rows1 {
       height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-1-row} - #{$explore-heading});
-
-      @media screen and (max-width: $breakpoint-tablet) {
-        height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-1-row-tablet} - #{$explore-heading});
-      }
     }
 
     &.rows2 {
       height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-2-rows} - #{$explore-heading});
-
-      @media screen and (max-width: $breakpoint-tablet) {
-        height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-2-rows-tablet} - #{$explore-heading});
-      }
     }
 
     &.rows3 {
       height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-3-rows} - #{$explore-heading});
-
-      @media screen and (max-width: $breakpoint-tablet) {
-        height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-3-rows-tablet} - #{$explore-heading});
-      }
     }
 
     transition: height 0.3s;
+
+    @media screen and (max-width: $breakpoint-tablet) {
+      height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-mobile-dropdowns} - #{$explore-heading});
+    }
   }
 
   .map-section {
@@ -59,10 +49,14 @@ $explore-heading: 66px;
 
   .quick-facts {
     height: 100%;
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    display: none;
+
+    @media screen and (min-width: $breakpoint-tablet) {
+      display: flex;
+    }
 
     .bubble-container {
       // Fix bubbles overlaping explore grid on very short screens
@@ -102,21 +96,19 @@ $explore-heading: 66px;
 
       &.rows1 {
         height: $explore-grid-height-1-row;
-        @media screen and (max-width: $breakpoint-tablet) {
-          height: $explore-grid-height-1-row-tablet;
-        }
       }
 
       &.rows2 {
         height: $explore-grid-height-2-rows;
-        @media screen and (max-width: $breakpoint-tablet) {
-          height: $explore-grid-height-2-rows-tablet;
-        }
       }
     }
   }
 
   .c-grid-list-item {
     width: 120px;
+  }
+
+  .country-dropdown-container {
+    margin-top: 20px;
   }
 }

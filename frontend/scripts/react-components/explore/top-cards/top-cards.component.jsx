@@ -46,7 +46,8 @@ const TopCards = ({
   commodityName,
   step,
   cards,
-  goToTool
+  goToTool,
+  isMobile
 }) => {
   const [animatedItems, setAnimatedItems] = useState([]);
   const transitions = useTransition(animatedItems, item => item.key, {
@@ -94,7 +95,7 @@ const TopCards = ({
           <Heading className="top-cards-title">
             Top {renderName(countryName)} {renderName(commodityName)} supply chains
           </Heading>
-          {step > 0 && (
+          {step > 0 && !isMobile && (
             <button onClick={clearStep} className="back-button">
               <Text variant="mono" size="rg" weight="bold">
                 BACK
@@ -125,7 +126,8 @@ TopCards.propTypes = {
   setCountry: PropTypes.func.isRequired,
   step: PropTypes.number,
   cards: PropTypes.object,
-  goToTool: PropTypes.func.isRequired
+  goToTool: PropTypes.func.isRequired,
+  isMobile: PropTypes.bool
 };
 
 export default TopCards;

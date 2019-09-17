@@ -8,7 +8,9 @@ import {
   getCommodity,
   getAllCountriesIds,
   getCards,
-  getCommodityContexts
+  getCommodityContexts,
+  getCommodities,
+  getCountries
 } from 'react-components/explore/explore.selectors';
 import { setCommodity, setCountry, goToTool } from 'react-components/explore/explore.actions';
 import { getTopCountries } from 'actions/app.actions';
@@ -23,6 +25,8 @@ const mockedQuickFactsIndicators = [
 
 const mapStateToProps = state => ({
   items: getItems(state),
+  commodities: getCommodities(state),
+  countries: getCountries(state),
   step: getStep(state),
   country: getCountry(state),
   commodity: getCommodity(state),
