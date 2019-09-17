@@ -185,6 +185,7 @@ export const getTopCountries = contexts => (dispatch, getState) => {
   const selectedContexts = contexts || [defaultSelectedContext];
 
   const volumeIndicator = selectedContexts[0].resizeBy.find(i => i.name === 'Volume').attributeId;
+  const countryColumnId = selectedContexts[0].worldMap.countryColumnId;
 
   dispatch({
     type: APP__SET_TOP_DESTINATION_COUNTRIES_LOADING,
@@ -192,7 +193,8 @@ export const getTopCountries = contexts => (dispatch, getState) => {
   });
   const params = {
     contexts_ids: selectedContexts.map(c => c.id).join(),
-    attribute_id: volumeIndicator
+    attribute_id: volumeIndicator,
+    column_id: countryColumnId
   };
 
   const topNodesUrl = getURLFromParams(GET_TOP_NODE_STATS_URL, params);
