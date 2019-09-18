@@ -32,7 +32,7 @@ class TopDestinationsChart extends React.PureComponent {
 
   margin = {
     top: 10,
-    right: 100,
+    right: 10,
     bottom: 30,
     left: 50
   };
@@ -111,7 +111,6 @@ class TopDestinationsChart extends React.PureComponent {
               lines={lines}
               style={style}
               xValues={includedYears}
-              useBottomLegend
               year={year}
               showTooltipCallback={this.onMouseMove}
               hideTooltipCallback={this.onMouseLeave}

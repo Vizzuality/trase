@@ -336,7 +336,7 @@ class Line extends Component {
             this.chart = elem;
           }}
         />
-        {this.props.useBottomLegend && this.renderLegend()}
+        {this.renderLegend()}
       </div>
     );
   }
@@ -352,7 +352,6 @@ Line.propTypes = {
   width: PropTypes.number,
   contextId: PropTypes.number,
   xValues: PropTypes.array,
-  useBottomLegend: PropTypes.bool,
   year: PropTypes.number,
   margin: PropTypes.object,
   ticks: PropTypes.object,
