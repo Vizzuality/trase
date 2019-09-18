@@ -7,7 +7,7 @@ Polly.register(PuppeteerAdapter);
 Polly.register(FSPersister);
 
 const BASE_URL = 'http://0.0.0.0:8081';
-const TIMEOUT = 100000;
+const TIMEOUT = 60000;
 
 jest.setTimeout(TIMEOUT);
 
@@ -113,6 +113,7 @@ describe('Dashboards flow', () => {
 
     const coamoButtonSelector = '[data-test=grid-list-item-button-COAMO]';
     await page.waitForSelector(coamoButtonSelector, { visible: true });
+    await page.waitFor(300);
     await page.click(coamoButtonSelector);
     await page.waitFor(300);
     const royalAgroCereaisButtonSelector = '[data-test=grid-list-item-button-ROYAL-AGRO-CEREAIS]';
@@ -130,13 +131,14 @@ describe('Dashboards flow', () => {
     const dashboardWidgetChartSelector = '[data-test=widget-chart]';
     const dashboardWidgetRankingSelector = '[data-test=widget-ranking]';
     const dashboardWidgetDynamicSentenceSelector = '[data-test=widget-dynamic-sentence]';
-    const widgetsCharts = await page.$$(dashboardWidgetChartSelector);
-    const widgetRanking = await page.$$(dashboardWidgetRankingSelector);
-    const widgetSentence = await page.$$(dashboardWidgetDynamicSentenceSelector);
+    const widgetsCharts = page.$$(dashboardWidgetChartSelector);
+    const widgetRanking = page.$$(dashboardWidgetRankingSelector);
+    const widgetSentence = page.$$(dashboardWidgetDynamicSentenceSelector);
+    const result = await Promise.all([widgetsCharts, widgetRanking, widgetSentence]);
 
-    expect(widgetsCharts.length).toBe(4);
-    expect(widgetRanking.length).toBe(1);
-    expect(widgetSentence.length).toBe(1);
+    expect(result[0].length).toBe(4);
+    expect(result[1].length).toBe(1);
+    expect(result[2].length).toBe(1);
 
     // Change year dropdown
     const yearDropdownSelector = '[data-test=dropdown-selected-item-year]';
