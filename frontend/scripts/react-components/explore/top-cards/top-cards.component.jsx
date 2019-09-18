@@ -11,8 +11,13 @@ import 'react-components/explore/top-cards/top-cards.scss';
 
 const TopCard = ({ card, goToTool }) => {
   const { countryName, indicatorName, commodityName, nodeTypeName } = card;
+  if (!card.countryName) return null;
   return (
-    <button onClick={() => goToTool(card)} className="c-top-card">
+    <button
+      onClick={() => goToTool(card)}
+      className="c-top-card"
+      data-test={`top-card-${countryName}-${commodityName}-${nodeTypeName}-${indicatorName}`}
+    >
       <Text
         variant="mono"
         align="center"
@@ -80,11 +85,11 @@ const TopCards = ({
     <div className="c-top-cards">
       <div className="row columns">
         <div className="top-cards-heading">
-          <Heading className="top-cards-title">
+          <Heading className="top-cards-title" data-test="top-cards-title">
             Top {renderName(countryName)} {renderName(commodityName)} supply chains
           </Heading>
           {step > 0 && (
-            <button onClick={clearStep} className="back-button">
+            <button onClick={clearStep} className="back-button" data-test="top-cards-back-button">
               <Text variant="mono" size="rg" weight="bold">
                 BACK
               </Text>
@@ -93,7 +98,9 @@ const TopCards = ({
         </div>
       </div>
       <div className="top-cards-container">
-        <div className="row">{cards && renderCards()}</div>
+        <div className="row" data-test="top-cards-row">
+          {cards && renderCards()}
+        </div>
       </div>
     </div>
   );
