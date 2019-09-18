@@ -1,0 +1,87 @@
+@import 'styles/settings';
+
+.tippy-tooltip.blue-theme {
+  background-color: $charcoal-grey;
+  background-color: $charcoal-grey;
+  color: $white;
+  border-radius: 0;
+
+  a {
+    color: $white;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.tippy-tooltip.blue-theme[data-animatefill] {
+  background-color: transparent
+}
+
+.tippy-tooltip.blue-theme .tippy-backdrop {
+  background-color: $charcoal-grey;
+}
+
+.tippy-tooltip.blue-theme[x-placement^='top'] .tippy-arrow {
+  border-top-color: $charcoal-grey;
+}
+
+.tippy-tooltip.blue-theme[x-placement^='bottom'] .tippy-arrow {
+  border-bottom-color: $charcoal-grey;
+}
+
+.tippy-tooltip.blue-theme[x-placement^='left'] .tippy-arrow {
+  border-left-color: $charcoal-grey;
+}
+
+.tippy-tooltip.blue-theme[x-placement^='right'] .tippy-arrow {
+  border-right-color: $charcoal-grey;
+}
+
+.tooltip-react {
+  display: inline;
+  position: relative;
+  margin-left: 4px;
+  cursor: default;
+
+  &:hover {
+    .tooltip-react-icon {
+      opacity: 1;
+    }
+  }
+
+  @media print {
+    display: none;
+  }
+
+  .tooltip-react-icon {
+    opacity: .3;
+    font-size: 12px;
+    margin-left: 0;
+  }
+
+  &.size-rg {
+    display: block;
+    margin: 0;
+    height: 16px;
+    width: 16px;
+    color: $charcoal-grey-faded;
+
+    .tooltip-react-icon {
+      font-size: initial;
+    }
+  }
+}
+
+.tooltip-ios-touch {
+  cursor: pointer !important;
+}
+
+.tooltip-modal .tooltip {
+  z-index: $z-above-veil + 1;
+}
+
+.tooltip-react.recolor-by {
+  position: absolute;
+  top: 34px;
+  right: 34px;
+}

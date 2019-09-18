@@ -5,7 +5,7 @@ import capitalize from 'lodash/capitalize';
 import Text from 'react-components/shared/text/text.component';
 import Heading from 'react-components/shared/heading/heading.component';
 import Toggle from 'react-components/shared/toggle/toggle.component';
-import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
+import Tooltip from 'react-components/shared/interactive-tooltip/interactive-tooltip.component';
 
 import './logistics-map-legend.scss';
 
@@ -47,7 +47,7 @@ class LogisticsMapLegend extends React.PureComponent {
                   onChange={e => setLayerActive(layer.id, e.target.checked)}
                 />
                 {tooltips && tooltips[layer.id] && (
-                  <Tooltip text={tooltips[layer.id]} constraint="window" className="size-rg" />
+                  <Tooltip text={tooltips[layer.id]} className="size-rg" />
                 )}
               </div>
             </li>
