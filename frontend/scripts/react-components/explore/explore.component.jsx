@@ -11,12 +11,9 @@ import { EXPLORE_STEPS } from 'constants';
 import getTopNodesKey from 'utils/getTopNodesKey';
 import cx from 'classnames';
 import Dropdown from 'react-components/shared/dropdown';
-import Responsive from 'react-components/shared/responsive.hoc';
 import ResizeListener from 'react-components/shared/resize-listener.component';
 
 import 'react-components/explore/explore.scss';
-
-const ResponsiveWorldMap = Responsive({ debounceRate: 350 })(WorldMap);
 
 function Explore({
   items,
@@ -173,7 +170,7 @@ function Explore({
     <div className="c-explore">
       <ResizeListener>
         {({ resolution, windowWidth }) => {
-          const rowsNumber = 2 || getRowsNumber(windowWidth);
+          const rowsNumber = getRowsNumber(windowWidth);
           return (
             <>
               <div className="explore-selector">
@@ -204,17 +201,18 @@ function Explore({
                   <div className="row align-center">
                     <div className="small-12 medium-8 large-7 columns">
                       <div className={cx('map-container', { [`rows${rowsNumber}`]: rowsNumber })}>
-                        <ResponsiveWorldMap
-                          id="explore"
-                          center={[0, 0]}
-                          scale={100}
-                          context={highlightedContext}
-                          destinationCountries={destinationCountries}
-                          highlightedCountryIds={getHighlightedCountryIds}
-                          onHoverGeometry={geoId =>
-                            setHighlightedCommodities(findHighlightedCommoditiesIds(geoId))
-                          }
-                        />
+                        <div className="map-centering">
+                          <WorldMap
+                            id="explore"
+                            center={[0, 0]}
+                            context={highlightedContext}
+                            destinationCountries={destinationCountries}
+                            highlightedCountryIds={getHighlightedCountryIds}
+                            onHoverGeometry={geoId =>
+                              setHighlightedCommodities(findHighlightedCommoditiesIds(geoId))
+                            }
+                          />
+                        </div>
                       </div>
                     </div>
                     <div className="small-4 medium-2 columns hide-for-tablet">

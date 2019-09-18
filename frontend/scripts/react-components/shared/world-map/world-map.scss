@@ -1,57 +1,72 @@
 @import 'styles/settings';
 
 .c-world-map {
-  background-color: transparent;
-  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  height: 0;
+  width: 100%;
+  padding-bottom: 56%;
 
-  .world-map-geography {
-    fill: rgba($charcoal-grey, 0.3);
-    stroke: $white;
-    stroke-width: 0.2px;
-    outline: 0;
-    pointer-events: visibleFill;
-
-    &.-dark {
-      fill: rgba($charcoal-grey, 0.5);
-    }
-
-    &.-darker {
-      fill: rgba($charcoal-grey, 0.7);
-    }
-
-    &.-pink {
-      fill: $strong-pink;
-    }
+  .ratio-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
 
-  .world-map-arc {
-    fill: transparent;
-    stroke: rgba($charcoal-grey, 0.7);
-    stroke-linecap: round;
-    outline: 0;
-    pointer-events: visibleStroke;
+  .world-map {
+    background-color: transparent;
+    -webkit-tap-highlight-color: transparent;
 
-    &:hover {
-      stroke: $charcoal-grey;
-    }
-  }
+    .world-map-geography {
+      fill: rgba($charcoal-grey, 0.3);
+      stroke: $white;
+      stroke-width: 0.2px;
+      outline: 0;
+      pointer-events: visibleFill;
 
-  .world-map-annotation-text {
-    fill: $charcoal-grey;
-    font-family: $font-family-1;
-    font-size: 13px;
-    text-transform: uppercase;
-    text-align: right;
-    line-height: 0.64;
-    letter-spacing: -0.7px;
-    pointer-events: none;
+      &.-dark {
+        fill: rgba($charcoal-grey, 0.5);
+      }
 
-    + path {
-      stroke: $charcoal-grey;
+      &.-darker {
+        fill: rgba($charcoal-grey, 0.7);
+      }
+
+      &.-pink {
+        fill: $strong-pink;
+      }
     }
 
-    &.-label {
-      transform: translateY(3px);
+    .world-map-arc {
+      fill: transparent;
+      stroke: rgba($charcoal-grey, 0.7);
+      stroke-linecap: round;
+      outline: 0;
+      pointer-events: visibleStroke;
+
+      &:hover {
+        stroke: $charcoal-grey;
+      }
+    }
+
+    .world-map-annotation-text {
+      fill: $charcoal-grey;
+      font-family: $font-family-1;
+      font-size: 13px;
+      text-transform: uppercase;
+      text-align: right;
+      line-height: 0.64;
+      letter-spacing: -0.7px;
+      pointer-events: none;
+
+      + path {
+        stroke: $charcoal-grey;
+      }
+
+      &.-label {
+        transform: translateY(3px);
+      }
     }
   }
 }

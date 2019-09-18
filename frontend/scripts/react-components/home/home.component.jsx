@@ -56,7 +56,6 @@ const Home = props => {
                     {inView && (
                       <WorldMap
                         id="home"
-                        scale={140}
                         context={selectedContext}
                         destinationCountries={destinationCountries}
                       />

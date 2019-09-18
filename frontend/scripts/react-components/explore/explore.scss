@@ -1,12 +1,9 @@
 @import 'styles/settings';
 
 $top-cards-height: 156px;
-
-$explore-grid-height-1-row: 50px;
-$explore-grid-height-2-rows: 100px;
-$explore-grid-height-3-rows: 150px;
+$max-rows: 3;
+$row-height: 50;
 $explore-mobile-dropdowns: 100px;
-
 $explore-heading: 66px;
 
 .c-explore {
@@ -20,16 +17,10 @@ $explore-heading: 66px;
   @mixin row-dependant-height {
     height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-heading});
 
-    &.rows1 {
-      height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-1-row} - #{$explore-heading});
-    }
-
-    &.rows2 {
-      height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-2-rows} - #{$explore-heading});
-    }
-
-    &.rows3 {
-      height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-3-rows} - #{$explore-heading});
+    @for $i from 1 through $max-rows {
+      &.rows#{$i} {
+        height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$i * $row-height}px - #{$explore-heading});
+      }
     }
 
     transition: height 0.3s;
@@ -44,7 +35,20 @@ $explore-heading: 66px;
   }
 
   .map-container {
+    position: relative;
     @include row-dependant-height();
+  }
+
+  .map-centering {
+    // Still able to scroll the map in very short screens
+    margin-bottom: $top-cards-height;
+
+    @media (min-height: 700px) {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      margin-bottom: 0;
+    }
   }
 
   .quick-facts {
@@ -94,12 +98,10 @@ $explore-heading: 66px;
       height: 0px;
       transition: height 0.3s;
 
-      &.rows1 {
-        height: $explore-grid-height-1-row;
-      }
-
-      &.rows2 {
-        height: $explore-grid-height-2-rows;
+      @for $i from 1 through $max-rows {
+        &.rows#{$i} {
+          height: calc(#{$i * $row-height}px);
+        }
       }
     }
   }
