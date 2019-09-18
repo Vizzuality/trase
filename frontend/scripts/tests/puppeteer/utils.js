@@ -1,4 +1,5 @@
 import path from 'path';
+import { Timing } from '@pollyjs/core';
 
 require('dotenv').config({ silent: true });
 
@@ -15,6 +16,7 @@ export const pollyConfig = page => ({
       recordingsDir: path.join(__dirname, '__recordings__')
     }
   },
+  timing: Timing.fixed(16),
   recordIfMissing: true,
   matchRequestsBy: {
     method: false,
