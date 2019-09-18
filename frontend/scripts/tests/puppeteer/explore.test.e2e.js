@@ -35,7 +35,7 @@ if (ENABLE_REDESIGN_PAGES) {
   describe('Explore flow', () => {
     it('The happy path succeeds', async () => {
       await page.goto(`${BASE_URL}/explore`);
-
+      await page.waitFor(1000);
       // Step 1
       expectChildrenToBe(page, 'top-cards-row', 4);
       await page.waitForSelector('[data-test=top-card-BRAZIL-SOY-EXPORTER-FOREST_500]', {

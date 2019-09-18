@@ -72,7 +72,7 @@ const TopCards = ({
     transitions.map(
       ({ item, props, key }) =>
         item && (
-          <div className="columns small-3" data-test="top-cards-row">
+          <div className="columns small-3">
             <animated.div key={key} style={props} className="animated-card">
               <TopCard key={item.key} card={item} goToTool={() => goToTool(item)} />
             </animated.div>
@@ -98,7 +98,9 @@ const TopCards = ({
         </div>
       </div>
       <div className="top-cards-container">
-        <div className="row">{cards && renderCards()}</div>
+        <div className="row" data-test="top-cards-row">
+          {cards && renderCards()}
+        </div>
       </div>
     </div>
   );

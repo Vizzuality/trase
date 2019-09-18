@@ -115,6 +115,7 @@ describe('Dashboards flow', () => {
     await page.waitForSelector(coamoButtonSelector);
     await page.click(coamoButtonSelector);
 
+    await page.waitFor(16);
     const royalAgroCereaisButtonSelector = '[data-test=grid-list-item-button-ROYAL-AGRO-CEREAIS]';
     await page.waitForSelector(royalAgroCereaisButtonSelector);
     await page.click(royalAgroCereaisButtonSelector);
@@ -178,7 +179,7 @@ describe('Dashboards flow', () => {
     await page.click(biomeOptionSelector);
 
     const biomeWidgetChart = '[data-test=widget-chart]';
-    await page.waitForSelector('[data-test=widget-spinner]', { hidden: true });
+    await page.waitFor(16);
     await page.waitForSelector(biomeWidgetChart);
     const biomeMultiYearWidgets = await page.$$(biomeWidgetChart);
 
