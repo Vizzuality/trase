@@ -75,7 +75,7 @@ function Explore({
   const renderTitle = () => {
     const titleParts = ['commodity', 'sourcing country', 'supply chain'];
     return (
-      <Heading size="lg" align="center">
+      <Heading size="lg" align="center" data-test="step-title">
         {step + 1}. Choose one {titleParts[step]}
       </Heading>
     );

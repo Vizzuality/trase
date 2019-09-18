@@ -303,9 +303,9 @@ export function selectContextualLayers(contextualLayers) {
   };
 }
 
-export function selectMapBasemap(selectedMapBasemap) {
+export function selectBasemap(selectedBasemap) {
   return {
     type: SELECT_BASEMAP,
-    payload: { selectedMapBasemap }
+    payload: { selectedBasemap }
   };
 }

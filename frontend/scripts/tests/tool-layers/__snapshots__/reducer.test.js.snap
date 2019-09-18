@@ -20,7 +20,7 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
-  "selectedMapBasemap": null,
+  "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
 }
@@ -46,7 +46,7 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
-  "selectedMapBasemap": null,
+  "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
 }
@@ -69,7 +69,7 @@ Object {
     "longitude": "150.64",
     "zoom": 2,
   },
-  "selectedMapBasemap": null,
+  "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
 }
@@ -88,7 +88,7 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
-  "selectedMapBasemap": Object {
+  "selectedBasemap": Object {
     "id": 10,
   },
   "selectedMapContextualLayers": null,
@@ -109,7 +109,7 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
-  "selectedMapBasemap": null,
+  "selectedBasemap": null,
   "selectedMapContextualLayers": Array [
     Object {
       "id": 10,
@@ -135,7 +135,7 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
-  "selectedMapBasemap": null,
+  "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
 }
@@ -154,7 +154,7 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
-  "selectedMapBasemap": null,
+  "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
 }
@@ -173,7 +173,7 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
-  "selectedMapBasemap": null,
+  "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
 }
@@ -192,7 +192,7 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": true,
   "mapView": null,
-  "selectedMapBasemap": null,
+  "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": Array [
     "quant90",
@@ -213,7 +213,7 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": true,
   "mapView": null,
-  "selectedMapBasemap": null,
+  "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": Array [
     "NotEmpty",
@@ -235,7 +235,7 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
-  "selectedMapBasemap": null,
+  "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": Array [
     "quant95",
@@ -259,7 +259,7 @@ Object {
   ],
   "mapLoading": false,
   "mapView": null,
-  "selectedMapBasemap": null,
+  "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
 }
@@ -278,7 +278,7 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
-  "selectedMapBasemap": null,
+  "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
 }
@@ -317,7 +317,7 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
-  "selectedMapBasemap": null,
+  "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
 }

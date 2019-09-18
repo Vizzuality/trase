@@ -24,6 +24,8 @@ module TraseNewApi
       'Access-Control-Request-Method' => %w{GET POST OPTIONS}.join(',')
     }
 
+    config.action_mailer.default_url_options = {host: ENV['MAILER_HOST'] || URI.parse(ENV['API_HOST']).host}
+
     config.active_record.schema_format = :sql
     # do not dump partitions
     ActiveRecord::SchemaDumper.ignore_tables = ['download_flows_*']

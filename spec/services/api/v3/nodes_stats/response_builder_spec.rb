@@ -16,7 +16,8 @@ RSpec.describe Api::V3::NodesStats::ResponseBuilder do
           nil,
           [api_v3_context.id],
           node_type_id: api_v3_country_node_type.id,
-          attributes_ids: [api_v3_volume.readonly_attribute.id],
+          attribute_id: api_v3_volume.readonly_attribute.id,
+          other_attributes_ids: [],
           year_start: 2015,
           year_end: 2015
         )
@@ -36,7 +37,8 @@ RSpec.describe Api::V3::NodesStats::ResponseBuilder do
             nil,
             [api_v3_context.id],
             node_type_id: api_v3_country_node_type.id,
-            attributes_ids: [api_v3_volume.readonly_attribute.id],
+            attribute_id: api_v3_volume.readonly_attribute.id,
+            other_attributes_ids: [],
             year_start: 2016,
             year_end: 2015
           )
@@ -53,7 +55,8 @@ RSpec.describe Api::V3::NodesStats::ResponseBuilder do
             api_v3_soy.id,
             [api_v3_context.id],
             node_type_id: api_v3_country_node_type.id,
-            attributes_ids: [api_v3_volume.readonly_attribute.id],
+            attribute_id: api_v3_volume.readonly_attribute.id,
+            other_attributes_ids: [],
             year_start: 2015,
             year_end: 2015
           )
@@ -63,17 +66,32 @@ RSpec.describe Api::V3::NodesStats::ResponseBuilder do
       end
     end
 
-    context 'when a qual or ind is used as attributes_ids' do
+    context 'when a qual or ind is used as attribute_id' do
       it 'raise an error' do
         expect {
           Api::V3::NodesStats::ResponseBuilder.new(
             nil,
             [api_v3_context.id],
             node_type_id: api_v3_country_node_type.id,
-            attributes_ids: [
-              api_v3_volume.readonly_attribute.id,
-              api_v3_biome.readonly_attribute.id
-            ],
+            attribute_id: api_v3_biome.readonly_attribute.id,
+            year_start: 2015,
+            year_end: 2015
+          )
+        }.to raise_error(
+          "Attribute #{api_v3_biome.readonly_attribute.id} not found"
+        )
+      end
+    end
+
+    context 'when a qual or ind is used as other_attributes_ids' do
+      it 'raise an error' do
+        expect {
+          Api::V3::NodesStats::ResponseBuilder.new(
+            nil,
+            [api_v3_context.id],
+            node_type_id: api_v3_country_node_type.id,
+            attribute_id: api_v3_volume.readonly_attribute.id,
+            other_attributes_ids: [api_v3_biome.readonly_attribute.id],
             year_start: 2015,
             year_end: 2015
           )

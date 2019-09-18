@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import 'styles/components/tool/map/map-basemaps.scss';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import MapContainer from 'react-components/tool/map/map.container';
 import FlowContentContainer from 'react-components/tool/tool-content/tool-content.container';
@@ -8,10 +7,12 @@ import ModalContainer from 'react-components/tool/story-modal/story-modal.contai
 import TitlebarContainer from 'react-components/tool/titlebar/titlebar.container';
 import NodesTitlesContainer from 'react-components/tool/nodes-titles/nodes-titles.container';
 import MapContextContainer from 'react-components/tool/map-context/map-context.container';
-import MapBasemaps from 'react-components/tool/map-basemaps/map-basemaps.container';
 import Sankey from 'react-components/tool/sankey';
 import MapLegend from 'react-components/tool/map-legend/map-legend.container';
 import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.react';
+import Tooltip from 'react-components/tool/help-tooltip/help-tooltip.container';
+import Basemaps from 'react-components/tool/basemaps';
+import LegacyBasemaps from 'react-components/tool/legacy-basemaps/legacy-basemaps.container';
 import EventManager from 'utils/eventManager';
 import UrlSerializer from 'react-components/shared/url-serializer';
 
@@ -34,18 +35,21 @@ const renderMapSidebar = () => (
       </ul>
     </div>
 
-    <div className="map-sidebar-group c-map-basemaps">
-      <div className="map-sidebar-group-title">Basemaps</div>
-      <ul className="map-sidebar-group-items js-map-basemaps-items">
-        {/* this is rendered by map-context.component */}
-      </ul>
-    </div>
+    {!ENABLE_REDESIGN_PAGES && (
+      <div className="map-sidebar-group c-map-basemaps">
+        <div className="map-sidebar-group-title">Basemaps</div>
+        <ul className="map-sidebar-group-items js-map-basemaps-items">
+          {/* this is rendered by map-context.component */}
+        </ul>
+      </div>
+    )}
   </div>
 );
 
 const renderMap = () => (
   <div className="js-map-container c-map is-absolute -smooth-transition">
     <div id="js-map" className="c-map-leaflet" />
+    {ENABLE_REDESIGN_PAGES && <Basemaps />}
     <div className="btn-map -toggle-map js-toggle-map" />
     <div className="js-map-warnings-container map-warnings">
       <div className="warning-wrapper">
@@ -89,10 +93,11 @@ const renderSankeyError = () => (
 const renderVainillaComponents = () => (
   <>
     <MapContainer />
-    <MapBasemaps />
     <MapDimensionsContainer />
     <FlowContentContainer />
     <MapLegend />
+    <Tooltip />
+    {!ENABLE_REDESIGN_PAGES && <LegacyBasemaps />}
     <MapContextContainer />
     <NodesTitlesContainer />
     <ModalContainer />
@@ -103,10 +108,14 @@ const Tool = props => {
   const { resizeSankeyTool, urlProps, urlPropHandlers } = props;
   useEffect(() => {
     evManager.addEventListener(window, 'resize', resizeSankeyTool);
-    document.querySelector('body').classList.add('-overflow-hidden');
+    const body = document.querySelector('body');
+    body.classList.add('-overflow-hidden');
+    const originalBackground = body.style.backgroundColor;
+    body.style.backgroundColor = '#f2f2f2';
     return () => {
       evManager.clearEventListeners();
-      document.querySelector('body').classList.remove('-overflow-hidden');
+      body.classList.remove('-overflow-hidden');
+      body.style.backgroundColor = originalBackground;
     };
   }, [resizeSankeyTool]);
 

@@ -165,6 +165,7 @@ export const MAP_PANES_Z = {
 
 export const BASEMAPS = {
   default: {
+    id: 'default',
     title: 'Default',
     url:
       'https://api.mapbox.com/styles/v1/trasebase/cizi55y2r00122rl65a97ppz1/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJhc2ViYXNlIiwiYSI6ImNpemk1NWdhOTAwMmYyeGw5dXRncHpvZGEifQ.fQ6F9DSqmhLXZs-nKiYvzA',
@@ -175,6 +176,7 @@ export const BASEMAPS = {
     thumbnail: '/images/maps/thumb-basemap-default.png'
   },
   satellite: {
+    id: 'satellite',
     title: 'Satellite',
     url:
       'https://api.mapbox.com/styles/v1/trasebase/cj808lpze6d6o2st3yim6eedl/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoidHJhc2ViYXNlIiwiYSI6ImNpemk1NWdhOTAwMmYyeGw5dXRncHpvZGEifQ.fQ6F9DSqmhLXZs-nKiYvzA',
@@ -186,6 +188,7 @@ export const BASEMAPS = {
     dark: true
   },
   topo: {
+    id: 'topo',
     title: 'Topography',
     url: '//{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
     attribution:
@@ -193,6 +196,7 @@ export const BASEMAPS = {
     thumbnail: '/images/maps/thumb-basemap-topo.png'
   },
   streets: {
+    id: 'streets',
     title: 'Streets (OSM)',
     url: '//{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
     attribution:

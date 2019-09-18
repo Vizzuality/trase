@@ -1,5 +1,5 @@
 import BasemapsTemplate from 'templates/tool/map/map-basemaps.ejs';
-import 'styles/components/tool/map/map-basemaps.scss';
+import './legacy-basemaps.scss';
 
 export default class MapBasemaps {
   constructor() {
@@ -40,6 +40,7 @@ export default class MapBasemaps {
     this.basemaps.forEach(basemap => {
       basemap.classList.toggle('-selected', basemap.getAttribute('data-value') === activeBasemapId);
     });
+    this.callbacks.onMapBasemapSelected(activeBasemapId);
   }
 
   _onBasemapClicked(event) {

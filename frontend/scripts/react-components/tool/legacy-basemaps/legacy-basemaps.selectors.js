@@ -12,7 +12,7 @@ export default state => {
   if (shouldUseDefaultBasemap(state)) {
     return DEFAULT_BASEMAP_FOR_CHOROPLETH;
   }
-  return state.toolLayers.selectedMapBasemap || selectedContext?.defaultBasemap || 'satellite';
+  return state.toolLayers.selectedBasemap || selectedContext?.defaultBasemap || 'satellite';
 };
 
 export { shouldUseDefaultBasemap };

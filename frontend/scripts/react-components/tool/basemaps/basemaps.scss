@@ -1,0 +1,102 @@
+@import 'styles/settings';
+
+.c-basemaps {
+  position: absolute;
+  z-index: $z-leaflet-above-panes;
+  top: 84px;
+  left: 8px;
+  pointer-events: none;
+
+  &.-open {
+    .basemaps-list {
+      opacity: 1;
+      pointer-events: all;
+      transform: translate3d(32px, 0px, 0px);
+    }
+  }
+
+  .basemaps-toggle {
+    height: 32px;
+    width: 32px;
+    border: 0;
+    border-radius: 4px;
+    background-color: $white;
+    cursor: pointer;
+    box-shadow: 0 1px 3px 0 rgba($black, 0.1), 0 1px 2px 0 rgba($black, 0.2);
+    pointer-events: all;
+
+    &:hover, &:active {
+      background-color: $light-gray;
+    }
+
+    > .icon {
+      fill: $charcoal-grey;
+      height: 16px;
+      width: 16px;
+      margin: 0;
+      transform: translateY(1px);
+    }
+  }
+
+  .basemaps-list {
+    position: absolute;
+    top: -74px;
+    left: 0;
+    width: 175px;
+    margin: 0 0 0 16px;
+    padding: 20px 18px;
+    background-color: $white;
+    border-radius: 2px;
+    box-shadow: 1px 1px 2px 0 rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 300ms ease-out;
+    will-change: transform, opacity;
+    transform: translate3d(0, 0, 0);
+  }
+
+  .basemap-item {
+    margin: 0 0 10px 0;
+
+    &:last-child {
+      margin: 0;
+    }
+
+    &.-active,
+    &:active,
+    &:hover {
+      .basemap-thumb {
+        border-color: $charcoal-grey-toned-down;
+      }
+    }
+
+    &:active {
+      opacity: 0.7;
+    }
+  }
+
+  .basemap-item-button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .basemap-thumb {
+    width: 38px;
+    height: 38px;
+    border-radius: 5px;
+    border: 2px solid $charcoal-grey-faded-a-lot;
+    margin: 0 8px 0 0;
+    flex-shrink: 0;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    transition: border 150ms $ease-in-out-cubic;
+  }
+
+  .basemap-title {
+    flex-shrink: 0;
+  }
+}

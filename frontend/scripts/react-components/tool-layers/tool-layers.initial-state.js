@@ -10,7 +10,7 @@ export default {
   linkedGeoIds: [],
   mapLoading: false,
   mapView: null,
-  selectedMapBasemap: null,
+  selectedBasemap: null,
   selectedMapContextualLayers: null,
   selectedMapDimensions: null
 };

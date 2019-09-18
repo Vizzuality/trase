@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
-import { selectMapBasemap } from 'react-components/tool/tool.actions';
+import { selectBasemap } from 'react-components/tool/tool.actions';
 import { BASEMAPS } from 'constants';
-import MapBasemaps from 'react-components/tool/map-basemaps/map-basemaps.component';
-import getBasemap, { shouldUseDefaultBasemap } from 'utils/getBasemap';
+import MapBasemaps from './legacy-basemaps.component';
+import getBasemap, { shouldUseDefaultBasemap } from './legacy-basemaps.selectors';
 
 const mapStateToProps = state => ({
   basemaps: BASEMAPS,
@@ -12,7 +12,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  onMapBasemapSelected: selectMapBasemap
+  onMapBasemapSelected: selectBasemap
 };
 
 const methodProps = [

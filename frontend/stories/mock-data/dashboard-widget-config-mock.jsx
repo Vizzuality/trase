@@ -158,6 +158,9 @@ export default {
   },
   horizontalBar: {
     ...CHART_CONFIG.horizontalBar,
+    dashboardMeta: {
+      context: { id: 1 }
+    },
     colors: color,
     tooltip,
     type: 'bar',
@@ -183,6 +186,9 @@ export default {
   },
   horizontalStackedBar: {
     ...CHART_CONFIG.horizontalBar,
+    dashboardMeta: {
+      context: { id: 1 }
+    },
     colors,
     tooltip,
     type: 'bar',
