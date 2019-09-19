@@ -10,6 +10,9 @@ module Api
                       :sources_ids,
                       :companies_ids,
                       :destinations_ids,
+                      :excluded_sources_ids,
+                      :excluded_companies_ids,
+                      :excluded_destinations_ids,
                       :node_type,
                       :top_n,
                       :single_filter_key
@@ -20,6 +23,9 @@ module Api
           # @option params [Array<Integer>] sources_ids
           # @option params [Array<Integer>] companies_ids
           # @option params [Array<Integer>] destinations_ids
+          # @option params [Array<Integer>] excluded_sources_ids,
+          # @option params [Array<Integer>] excluded_companies_ids,
+          # @option params [Array<Integer>] excluded_destinations_ids,
           # @option params [Integer] node_type_id
           # @option params [Integer] top_n
           # @option params [String] single_filter_key
@@ -32,6 +38,9 @@ module Api
             @sources_ids = params[:sources_ids] || []
             @companies_ids = params[:companies_ids] || []
             @destinations_ids = params[:destinations_ids] || []
+            @excluded_sources_ids = params[:excluded_sources_ids] || []
+            @excluded_companies_ids = params[:excluded_companies_ids] || []
+            @excluded_destinations_ids = params[:excluded_destinations_ids] || []
             initialize_node_type(params[:node_type_id])
 
             @top_n = params[:top_n]
@@ -44,30 +53,63 @@ module Api
             Api::V3::NodeType.node_index_for_id(@context, @node_type.id)
           end
 
-          def nodes
-            return @nodes if defined? @nodes
+          def selected_nodes
+            return @selected_nodes if defined? @selected_nodes
 
-            @nodes = Api::V3::Node.where(
+            @selected_nodes = Api::V3::Node.where(
               id: @sources_ids + @companies_ids + @destinations_ids
             ).includes(:node_type)
           end
 
-          def nodes_ids_by_position
-            return @nodes_ids_by_position if defined? @nodes_ids_by_position
+          def selected_nodes_ids_by_position
+            if defined? @selected_nodes_ids_by_position
+              return @selected_nodes_ids_by_position
+            end
 
-            node_type_ids_to_positions = Hash[
+            @selected_nodes_ids_by_position =
+              nodes_ids_by_position(selected_nodes)
+          end
+
+          def excluded_nodes
+            return @excluded_nodes if defined? @excluded_nodes
+
+            @excluded_nodes = Api::V3::Node.where(
+              id: (
+                @excluded_sources_ids +
+                @excluded_companies_ids +
+                @excluded_destinations_ids
+              )
+            ).includes(:node_type)
+          end
+
+          def excluded_nodes_ids_by_position
+            if defined? @excluded_nodes_ids_by_position
+              return @excluded_nodes_ids_by_position
+            end
+
+            @excluded_nodes_ids_by_position =
+              nodes_ids_by_position(excluded_nodes)
+          end
+
+          private
+
+          def node_types_ids_to_positions
+            return @node_types_ids_to_positions if defined? @node_types_ids_positions
+
+            @node_types_ids_to_positions = Hash[
               @context.context_node_types.
                 select(:node_type_id, :column_position).map do |cnt|
                 [cnt.node_type_id, cnt.column_position]
               end
             ]
-            @nodes_ids_by_position = nodes.select(:id, :node_type_id).
-              group_by do |node|
-                node_type_ids_to_positions[node.node_type_id]
-              end
           end
 
-          private
+          def nodes_ids_by_position(nodes)
+            nodes.select(:id, :node_type_id).
+              group_by do |node|
+                node_types_ids_to_positions[node.node_type_id]
+              end
+          end
 
           def initialize_cont_attribute(cont_attribute_id)
             return unless cont_attribute_id.present?

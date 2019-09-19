@@ -3,14 +3,18 @@ import Heading from 'react-components/shared/heading';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import PropTypes from 'prop-types';
 import TopCards from 'react-components/explore/top-cards';
+import Text from 'react-components/shared/text';
 import WorldMap from 'react-components/shared/world-map/world-map.container';
 import uniq from 'lodash/uniq';
 import last from 'lodash/last';
 import { EXPLORE_STEPS } from 'constants';
 import getTopNodesKey from 'utils/getTopNodesKey';
 import cx from 'classnames';
+import Responsive from 'react-components/shared/responsive.hoc';
 
 import 'react-components/explore/explore.scss';
+
+const ResponsiveWorldMap = Responsive({ debounceRate: 350 })(WorldMap);
 
 function Explore({
   items,
@@ -25,7 +29,8 @@ function Explore({
   goToTool,
   topNodes,
   getTopCountries,
-  commodityContexts
+  commodityContexts,
+  quickFactsIndicators
 }) {
   const [highlightedContext, setHighlightedContext] = useState(null);
   const [highlightedCountryIds, setHighlightedCountries] = useState(null);
@@ -63,7 +68,7 @@ function Explore({
   const renderTitle = () => {
     const titleParts = ['commodity', 'sourcing country', 'supply chain'];
     return (
-      <Heading size="lg" align="center">
+      <Heading size="lg" align="center" data-test="step-title">
         {step + 1}. Choose one {titleParts[step]}
       </Heading>
     );
@@ -148,15 +153,40 @@ function Explore({
             </div>
           </div>
         </div>
-        <div className="map-container">
-          <WorldMap
-            context={highlightedContext}
-            destinationCountries={destinationCountries}
-            highlightedCountryIds={getHighlightedCountryIds}
-            onHoverGeometry={geoId =>
-              setHighlightedCommodities(findHighlightedCommoditiesIds(geoId))
-            }
-          />
+        <div className={cx('map-section', { [`rows${rowsNumber}`]: rowsNumber })}>
+          <div className="row align-center">
+            <div className="small-12 medium-8 large-7 columns">
+              <div className={cx('map-container', { [`rows${rowsNumber}`]: rowsNumber })}>
+                <ResponsiveWorldMap
+                  id="explore"
+                  center={[0, 0]}
+                  scale={100}
+                  context={highlightedContext}
+                  destinationCountries={destinationCountries}
+                  highlightedCountryIds={getHighlightedCountryIds}
+                  onHoverGeometry={geoId =>
+                    setHighlightedCommodities(findHighlightedCommoditiesIds(geoId))
+                  }
+                />
+              </div>
+            </div>
+            <div className="small-4 medium-2 columns hide-for-small">
+              <div className="quick-facts">
+                <div className="bubble-container">
+                  {quickFactsIndicators.map(indicator => (
+                    <div className="bubble">
+                      <Text size="rg" align="center" variant="mono">
+                        {indicator.name}
+                      </Text>
+                      <Text size="lg" weight="regular" align="center" className="quick-facts-value">
+                        {indicator.value} {indicator.unit}
+                      </Text>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <TopCards
@@ -187,7 +217,8 @@ Explore.propTypes = {
   step: PropTypes.number,
   topNodes: PropTypes.object,
   commodityContexts: PropTypes.array,
-  getTopCountries: PropTypes.func.isRequired
+  getTopCountries: PropTypes.func.isRequired,
+  quickFactsIndicators: PropTypes.object
 };
 
 export default Explore;

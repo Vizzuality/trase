@@ -12,12 +12,14 @@ import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.co
 import cx from 'classnames';
 import formatValue from 'utils/formatValue';
 import isMobile from 'utils/isMobile';
+import { WORLD_MAP_ASPECT_RATIO } from 'constants';
 
 import 'scripts/react-components/shared/world-map/world-map.scss';
 
 const isDestinationCountry = (iso, countries) => countries.map(f => f.geoId).includes(iso);
 
 const MapGeographies = ({
+  worldMapId,
   geographies,
   flows,
   originGeoId,
@@ -32,7 +34,7 @@ const MapGeographies = ({
           geography.properties.iso2 !== 'AQ' && (
             <Geography
               key={geography.properties.cartodb_id}
-              cacheId={`geography-world${geography.properties.cartodb_id}`}
+              cacheId={`${worldMapId}geography-world${geography.properties.cartodb_id}`}
               className={cx(
                 'world-map-geography',
                 {
@@ -69,7 +71,10 @@ const WorldMap = ({
   highlightedCountriesIso,
   onHoverGeometry,
   center,
-  className
+  width,
+  className,
+  scale,
+  id
 }) => {
   const [tooltipConfig, setTooltipConfig] = useState(null);
   const buildCurves = (start, end, line) => line.arc;
@@ -134,13 +139,16 @@ const WorldMap = ({
       <ComposableMap
         className={cx('c-world-map', className)}
         projection="robinson"
-        height={600}
-        style={{ width: '100%', height: '100%' }}
+        projectionConfig={{ scale, rotation: [0, 0, 0] }}
+        height={Math.round(width * WORLD_MAP_ASPECT_RATIO)}
+        width={Math.round(width)}
+        style={{ height: '100%' }}
       >
         <ZoomableGroup center={center} disablePanning>
           <Geographies geography="/vector_layers/WORLD.topo.json" disableOptimization>
             {(geographies, projection) => (
               <MapGeographies
+                worldMapId={id}
                 geographies={geographies}
                 flows={flows}
                 originGeoId={originGeoId}
@@ -167,12 +175,16 @@ WorldMap.propTypes = {
   highlightedCountriesIso: PropTypes.object,
   onHoverGeometry: PropTypes.func,
   getTopNodes: PropTypes.func.isRequired,
-  height: PropTypes.number,
-  center: PropTypes.array
+  center: PropTypes.array,
+  width: PropTypes.number,
+  scale: PropTypes.number,
+  id: PropTypes.string.isRequired
 };
 
 WorldMap.defaultProps = {
-  center: [20, 0]
+  center: [20, 0],
+  scale: 160,
+  width: 800
 };
 
 export default WorldMap;

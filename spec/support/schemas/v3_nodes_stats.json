@@ -31,82 +31,150 @@
               1
             ]
           },
-          "attributes": {
-            "$id": "/properties/data/items/properties/attributes",
+          "top_nodes": {
+            "$id": "/properties/data/items/properties/top_nodes",
             "type": "array",
             "items": {
-              "$id": "/properties/data/items/properties/attributes/items",
+              "$id": "/properties/data/items/properties/top_nodes/items",
               "type": "object",
               "properties": {
                 "id": {
-                  "$id": "/properties/data/items/properties/attributes/items/properties/id",
+                  "$id": "/properties/data/items/properties/top_nodes/items/properties/id",
                   "type": "string, integer",
-                  "title": "Id of the attribute",
-                  "description": "Id of the attribute of a top destination",
+                  "title": "Id of the node",
+                  "description": "Id of the node of a top destination",
                   "default": 0,
                   "examples": [
                     684
                   ]
                 },
-                "indicator": {
-                  "$id": "/properties/data/items/properties/attributes/items/properties/indicator",
+                "name": {
+                  "$id": "/properties/data/items/properties/top_nodes/items/properties/name",
                   "type": "string",
-                  "title": "The Indicator Schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": "",
+                  "title": "Name of the node",
+                  "description": "Name of the node of a top destination",
+                  "default": 0,
                   "examples": [
-                    "Trade volume"
+                    684
                   ]
                 },
-                "unit": {
-                  "$id": "/properties/data/items/properties/attributes/items/properties/unit",
-                  "type": "string",
-                  "title": "The Unit Schema",
-                  "description": "An explanation about the purpose of this instance.",
-                  "default": "",
+                "geo_id": {
+                  "$id": "/properties/data/items/properties/top_nodes/items/properties/geo_id",
+                  "type": "string, null",
+                  "title": "Geo id of the node",
+                  "description": "Geo id of the node of a top destination",
+                  "default": 0,
                   "examples": [
-                    "Tn"
+                    684
                   ]
                 },
-                "targets": {
-                  "$id": "/properties/data/items/properties/attributes/items/properties/targets",
+                "attribute": {
+                  "$id": "/properties/data/items/properties/top_nodes/items/properties/attribute",
+                  "type": "object",
+                  "title": "Geo id of the node",
+                  "description": "Geo id of the node of a top destination",
+                  "properties": {
+                    "id": {
+                      "$id": "/properties/data/items/properties/top_nodes/items/properties/attribute/properties/id",
+                      "type": "string, integer",
+                      "title": "Id of the attribute",
+                      "description": "Id of the attribute",
+                      "default": "",
+                      "examples": [
+                        "7"
+                      ]
+                    },
+                    "indicator": {
+                      "$id": "/properties/data/items/properties/top_nodes/items/properties/attribute/properties/indicator",
+                      "type": "string",
+                      "title": "Indicator of the attribute",
+                      "description": "Indicator of the attribute",
+                      "default": "",
+                      "examples": [
+                        "CHINA"
+                      ]
+                    },
+                    "unit": {
+                      "$id": "/properties/data/items/properties/top_nodes/items/properties/attribute/properties/unit",
+                      "type": "string",
+                      "title": "Unit of the attribute",
+                      "description": "Unit of the attribute",
+                      "default": 0,
+                      "examples": [
+                        41375772
+                      ]
+                    },
+                    "value": {
+                      "$id": "/properties/data/items/properties/top_nodes/items/properties/attribute/properties/value",
+                      "type": "number",
+                      "title": "Amount of the top destination",
+                      "description": "Amount of a top destination",
+                      "default": 0,
+                      "examples": [
+                        41375772
+                      ]
+                    },
+                    "height": {
+                      "$id": "/properties/data/items/properties/top_nodes/items/properties/attribute/properties/height",
+                      "type": "number",
+                      "title": "Percentage amount of the top destination",
+                      "description": "Percentage of the node of a top destination",
+                      "default": 0,
+                      "examples": [
+                        41375772
+                      ]
+                    }
+                  }
+                },
+                "other_attributes": {
+                  "$id": "/properties/data/items/properties/top_nodes/items/properties/other_attribute",
                   "type": "array",
                   "items": {
-                    "$id": "/properties/data/items/properties/attributes/items/properties/targets/items",
+                    "$id": "/properties/data/items/properties/top_nodes/items/properties/other_attributes/items",
                     "type": "object",
                     "properties": {
                       "id": {
-                        "$id": "/properties/data/items/properties/attributes/items/properties/targets/items/properties/id",
+                        "$id": "/properties/data/items/properties/top_nodes/items/properties/other_attributes/items/properties/id",
                         "type": "string, integer",
-                        "title": "Id of the node",
-                        "description": "Id of the node",
+                        "title": "Id of the attribute",
+                        "description": "Id of the attribute",
+                        "default": "",
+                        "examples": [
+                          "7"
+                        ]
+                      },
+                      "indicator": {
+                        "$id": "/properties/data/items/properties/top_nodes/items/properties/other_attributes/items/properties/indicator",
+                        "type": "string",
+                        "title": "Indicator of the attribute",
+                        "description": "Indicator of the attribute",
                         "default": "",
                         "examples": [
                           "CHINA"
                         ]
                       },
-                      "name": {
-                        "$id": "/properties/data/items/properties/attributes/items/properties/targets/items/properties/name",
+                      "unit": {
+                        "$id": "/properties/data/items/properties/top_nodes/items/properties/other_attributes/items/properties/unit",
                         "type": "string",
-                        "title": "Name of the top destination",
-                        "description": "Name of the node of a top destination",
-                        "default": "",
+                        "title": "Unit of the attribute",
+                        "description": "Unit of the attribute",
+                        "default": 0,
                         "examples": [
-                          "CHINA"
+                          41375772
                         ]
                       },
                       "value": {
-                        "$id": "/properties/data/items/properties/attributes/items/properties/targets/items/properties/value",
+                        "$id": "/properties/data/items/properties/top_nodes/items/properties/other_attributes/items/properties/value",
                         "type": "number",
-                        "title": "Volume amount of the top destination",
-                        "description": "Amount of the node of a top destination",
+                        "title": "Amount of the top destination",
+                        "description": "Amount of a top destination",
                         "default": 0,
                         "examples": [
                           41375772
                         ]
                       },
                       "height": {
-                        "$id": "/properties/data/items/properties/attributes/items/properties/targets/items/properties/height",
+                        "$id": "/properties/data/items/properties/top_nodes/items/properties/other_attributes/items/properties/height",
                         "type": "number",
                         "title": "Percentage amount of the top destination",
                         "description": "Percentage of the node of a top destination",

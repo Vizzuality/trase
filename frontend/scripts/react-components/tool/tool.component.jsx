@@ -10,6 +10,7 @@ import MapContextContainer from 'react-components/tool/map-context/map-context.c
 import Sankey from 'react-components/tool/sankey';
 import MapLegend from 'react-components/tool/map-legend/map-legend.container';
 import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.react';
+import Tooltip from 'react-components/tool/help-tooltip/help-tooltip.container';
 import Basemaps from 'react-components/tool/basemaps';
 import LegacyBasemaps from 'react-components/tool/legacy-basemaps/legacy-basemaps.container';
 import EventManager from 'utils/eventManager';
@@ -95,6 +96,7 @@ const renderVainillaComponents = () => (
     <MapDimensionsContainer />
     <FlowContentContainer />
     <MapLegend />
+    <Tooltip />
     {!ENABLE_REDESIGN_PAGES && <LegacyBasemaps />}
     <MapContextContainer />
     <NodesTitlesContainer />
@@ -106,10 +108,14 @@ const Tool = props => {
   const { resizeSankeyTool, urlProps, urlPropHandlers } = props;
   useEffect(() => {
     evManager.addEventListener(window, 'resize', resizeSankeyTool);
-    document.querySelector('body').classList.add('-overflow-hidden');
+    const body = document.querySelector('body');
+    body.classList.add('-overflow-hidden');
+    const originalBackground = body.style.backgroundColor;
+    body.style.backgroundColor = '#f2f2f2';
     return () => {
       evManager.clearEventListeners();
-      document.querySelector('body').classList.remove('-overflow-hidden');
+      body.classList.remove('-overflow-hidden');
+      body.style.backgroundColor = originalBackground;
     };
   }, [resizeSankeyTool]);
 

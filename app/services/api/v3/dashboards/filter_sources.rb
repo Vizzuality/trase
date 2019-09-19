@@ -21,17 +21,13 @@ module Api
               :id,
               :name,
               :node_type,
-              :node_type_id,
-              :parent_name,
-              :parent_node_type
+              :node_type_id
             ).
             group(
               :id,
               :name,
               :node_type,
-              :node_type_id,
-              :parent_name,
-              :parent_node_type
+              :node_type_id
             ).
             order(:name)
         end

@@ -308,3 +308,5 @@ export const NODE_TYPE_PANELS = {
   MUNICIPALITY: 'sources',
   COUNTRY: 'destinations'
 };
+
+export const WORLD_MAP_ASPECT_RATIO = 0.56;

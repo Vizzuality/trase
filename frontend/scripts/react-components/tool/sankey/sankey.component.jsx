@@ -112,6 +112,17 @@ function useDomNodeRect(input) {
   return [rect, ref];
 }
 
+function useNodeRefHeight(ref) {
+  const [height, setHeight] = useState(undefined);
+  useEffect(() => {
+    if (ref.current) {
+      setHeight(ref.current.clientHeight);
+    }
+  }, []);
+
+  return height;
+}
+
 function Sankey(props) {
   const {
     columns,
@@ -131,10 +142,9 @@ function Sankey(props) {
   const [hoveredLink, setHoveredLink] = useState(null);
   const menuOptions = useMenuOptions(props);
   const [tooltipRef, setTooltip] = useVanillaTooltip(props);
-
   const [rect, svgRef] = useDomNodeRect(columns);
-
   const [menuPos, scrollContainerRef] = useMenuPosition(props, columns);
+  const placeholderHeight = useNodeRefHeight(scrollContainerRef);
 
   const getLinkColor = link => {
     let classPath = 'sankey-link';
@@ -246,6 +256,7 @@ function Sankey(props) {
                 ))}
               {loading && (
                 <Defs.LinksPlaceHolder
+                  height={placeholderHeight}
                   gapBetweenColumns={gapBetweenColumns}
                   sankeyColumnsWidth={sankeyColumnsWidth}
                 />
@@ -266,6 +277,7 @@ function Sankey(props) {
                 ))}
               {loading && (
                 <Defs.ColumnsPlaceholder
+                  height={placeholderHeight}
                   gapBetweenColumns={gapBetweenColumns}
                   sankeyColumnsWidth={sankeyColumnsWidth}
                 />
