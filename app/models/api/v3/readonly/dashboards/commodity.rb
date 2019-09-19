@@ -2,12 +2,12 @@
 #
 # Table name: dashboards_commodities_mv
 #
-#  id            :integer          primary key
-#  name          :text
-#  name_tsvector :tsvector
-#  country_id    :integer
-#  node_id       :integer
-#  profile       :text
+#  id(id of commodity (not unique))                                               :integer          primary key
+#  country_id(id of country, from which this commodity is sourced)                :integer
+#  node_id(id of node, through which this commodity is sourced from this country) :integer
+#  name                                                                           :text
+#  name_tsvector                                                                  :tsvector
+#  profile                                                                        :text
 #
 # Indexes
 #
