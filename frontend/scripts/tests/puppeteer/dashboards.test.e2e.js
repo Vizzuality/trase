@@ -12,7 +12,7 @@ const TIMEOUT = 60000;
 jest.setTimeout(TIMEOUT);
 
 const { page } = global;
-const polly = new Polly('dashboard', pollyConfig(page));
+const polly = new Polly('explore', pollyConfig(page));
 
 beforeAll(async () => {
   await page.setRequestInterception(true);
