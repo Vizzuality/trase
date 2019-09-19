@@ -95,12 +95,6 @@
     }
   }
 
-  &.-left {
-    .bucket-container {
-
-    }
-  }
-
   .bucket-container {
     position: relative;
     border-bottom: 1px solid rgba($charcoal-grey, .2);
@@ -280,6 +274,10 @@
             width: 8px;
             height: 8px;
             border: solid 1px $charcoal-grey-faded;
+
+            &.ch-default {
+              background-color: $ch-na;
+            }
           }
         }
       }

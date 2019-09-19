@@ -35,11 +35,8 @@ class ChoroLegend extends Component {
 
           <ul className="bullets">
             <li>
-              <div className="bullet ch-default" style={{ background: '#ebebeb' }} />
+              <div className="bullet ch-default" />
               N/A
-            </li>
-            <li>
-              <div className="bullet ch-zero" style={{ background: '#fffff' }} />0
             </li>
           </ul>
         </div>

@@ -7,12 +7,12 @@ Polly.register(PuppeteerAdapter);
 Polly.register(FSPersister);
 
 const BASE_URL = 'http://0.0.0.0:8081';
-const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;
+const TIMEOUT = 60000;
 
 jest.setTimeout(TIMEOUT);
 
 const { page } = global;
-const polly = new Polly('dashboard', pollyConfig(page));
+const polly = new Polly('explore', pollyConfig(page));
 
 beforeAll(async () => {
   await page.setRequestInterception(true);
@@ -112,12 +112,12 @@ describe('Dashboards flow', () => {
     expect(companiesButtons.length).toBe(22);
 
     const coamoButtonSelector = '[data-test=grid-list-item-button-COAMO]';
-    await page.waitForSelector(coamoButtonSelector);
+    await page.waitForSelector(coamoButtonSelector, { visible: true });
+    await page.waitFor(300);
     await page.click(coamoButtonSelector);
-
-    await page.waitFor(16);
+    await page.waitFor(300);
     const royalAgroCereaisButtonSelector = '[data-test=grid-list-item-button-ROYAL-AGRO-CEREAIS]';
-    await page.waitForSelector(royalAgroCereaisButtonSelector);
+    await page.waitForSelector(royalAgroCereaisButtonSelector, { visible: true });
     await page.click(royalAgroCereaisButtonSelector);
 
     await page.waitForSelector(continueButton);
@@ -127,12 +127,18 @@ describe('Dashboards flow', () => {
     await page.waitForSelector('[data-test=dashboard-element-title]');
 
     // Has initial charts
-    const dashboardWidgetSelector = '[data-test="dashboard-widget-container"]';
-    await page.waitForSelector('[data-test=widget-spinner]', { hidden: true });
-    await page.waitForSelector(dashboardWidgetSelector);
-    const widgets = await page.$$(dashboardWidgetSelector);
+    await page.waitFor(() => document.querySelectorAll('[data-test=widget-spinner]').length === 0);
+    const dashboardWidgetChartSelector = '[data-test=widget-chart]';
+    const dashboardWidgetRankingSelector = '[data-test=widget-ranking]';
+    const dashboardWidgetDynamicSentenceSelector = '[data-test=widget-dynamic-sentence]';
+    const widgetsCharts = page.$$(dashboardWidgetChartSelector);
+    const widgetRanking = page.$$(dashboardWidgetRankingSelector);
+    const widgetSentence = page.$$(dashboardWidgetDynamicSentenceSelector);
+    const result = await Promise.all([widgetsCharts, widgetRanking, widgetSentence]);
 
-    expect(widgets.length).toBe(6);
+    expect(result[0].length).toBe(4);
+    expect(result[1].length).toBe(1);
+    expect(result[2].length).toBe(1);
 
     // Change year dropdown
     const yearDropdownSelector = '[data-test=dropdown-selected-item-year]';
@@ -147,7 +153,8 @@ describe('Dashboards flow', () => {
     await page.click(yearSelector2017);
 
     const widgetChart = '[data-test=widget-chart]';
-    await page.waitForSelector('[data-test=widget-spinner]', { hidden: true });
+    await page.waitForSelector('[data-test=widget-spinner]');
+    await page.waitFor(() => document.querySelectorAll('[data-test=widget-spinner]').length === 0);
     await page.waitForSelector(widgetChart);
     const multiYearWidgets = await page.$$(widgetChart);
 
@@ -163,7 +170,8 @@ describe('Dashboards flow', () => {
     await page.click(territorialOptionSelector);
 
     const territorialWidgetChart = '[data-test=widget-chart]';
-    await page.waitForSelector('[data-test=widget-spinner]', { hidden: true });
+    await page.waitForSelector('[data-test=widget-spinner]');
+    await page.waitFor(() => document.querySelectorAll('[data-test=widget-spinner]').length === 0);
     await page.waitForSelector(territorialWidgetChart);
     const territorialMultiYearWidgets = await page.$$(territorialWidgetChart);
 
@@ -179,16 +187,19 @@ describe('Dashboards flow', () => {
     await page.click(biomeOptionSelector);
 
     const biomeWidgetChart = '[data-test=widget-chart]';
-    await page.waitFor(16);
+    await page.waitForSelector('[data-test=widget-spinner]');
+    await page.waitFor(() => document.querySelectorAll('[data-test=widget-spinner]').length === 0);
+
     await page.waitForSelector(biomeWidgetChart);
     const biomeMultiYearWidgets = await page.$$(biomeWidgetChart);
 
     expect(biomeMultiYearWidgets.length).toBe(8);
 
-    const widgetDropdowSelector = '[data-test=dropdown-selected-item-selection-overview-of-coamo]';
+    const widgetDropdowSelector =
+      '[data-test=dropdown-selected-item-selection-overview-of-royal-agro-cereais]';
     await page.waitForSelector(widgetDropdowSelector);
     const text = await page.$eval(widgetDropdowSelector, el => el.textContent);
 
-    expect(text).toMatch('Selection overview of -coamoCoamo');
+    expect(text).toMatch('Selection overview of -royal-agro-cereaisRoyal agro cereais');
   });
 });
