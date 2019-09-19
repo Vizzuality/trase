@@ -12,13 +12,13 @@ function DashboardWelcome(props) {
     {
       title: 'Single or multiple choices',
       body:
-        "Select one or more options in the categories you are interested in. You don't need to select an item from every category to create your dashboard.",
+        "Depending on the step, you can select one or more options. You don't need to select an item from every category to create your dashboard.",
       image: '/images/dashboards/icon_welcome_01.png'
     },
     {
       title: 'More options',
       body:
-        'Within each category you will be able to select from sub-categories where data is available. For example, select a country in "regions of production" and you will be presented with sub-national levels of governance, such as biomes or states, to select if you want to.',
+        'Within source countries, you will be able to select from sub-categories such as biomes or states where data is available.',
       image: '/images/dashboards/icon_welcome_02.png'
     },
     {

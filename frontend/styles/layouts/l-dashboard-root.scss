@@ -1,6 +1,14 @@
 @import 'styles/settings';
 
 .l-dashboard-root {
+  position: relative;
   padding-top: $nav-height;
   background-color: $charcoal-grey;
+  overflow: hidden;
+
+  .responsive-container {
+    height: 100vh;
+    position: absolute;
+    top: 0;
+  }
 }
