@@ -3551,19 +3551,13 @@ CREATE MATERIALIZED VIEW public.dashboards_sources_mv AS
                 CASE
                     WHEN ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text)) THEN cnt.profile
                     ELSE NULL::text
-                END AS profile,
-            quals.name AS parent_node_type,
-            node_quals.value AS parent_name
-           FROM (((((((((flow_nodes
-             JOIN public.contexts ON ((contexts.id = flow_nodes.context_id)))
+                END AS profile
+           FROM (((((flow_nodes
              JOIN public.nodes ON ((nodes.id = flow_nodes.node_id)))
              JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
              JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
-             JOIN active_cnt cnt ON (((cnt.context_id = flow_nodes.context_id) AND (contexts.id = cnt.context_id) AND ((cnt.column_position + 1) = flow_nodes."position"))))
-             LEFT JOIN public.context_node_types prev_cnt ON (((prev_cnt.context_id = flow_nodes.context_id) AND (prev_cnt.context_id = cnt.context_id) AND (contexts.id = prev_cnt.context_id) AND ((prev_cnt.column_position + 1) = cnt.column_position))))
-             LEFT JOIN public.node_types prev_nt ON ((prev_nt.id = prev_cnt.node_type_id)))
-             LEFT JOIN public.quals ON ((quals.name = prev_nt.name)))
-             LEFT JOIN public.node_quals ON (((flow_nodes.node_id = node_quals.node_id) AND (quals.id = node_quals.qual_id))))
+             JOIN active_cnt cnt ON (((cnt.context_id = flow_nodes.context_id) AND ((cnt.column_position + 1) = flow_nodes."position"))))
+             JOIN public.contexts ON (((contexts.id = flow_nodes.context_id) AND (contexts.id = cnt.context_id))))
           WHERE ((cnt.role)::text = 'source'::text)
         )
  SELECT ffn.node_id AS id,
@@ -3574,13 +3568,11 @@ CREATE MATERIALIZED VIEW public.dashboards_sources_mv AS
     ffn.profile,
     ffn.country_id,
     ffn.commodity_id,
-    ffn.parent_node_type,
-    ffn.parent_name,
     fn.node_id
    FROM (filtered_flow_nodes ffn
      JOIN flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
   WHERE (ffn.node_id <> fn.node_id)
-  GROUP BY ffn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type_id, ffn.node_type, ffn.profile, ffn.country_id, ffn.commodity_id, ffn.parent_node_type, ffn.parent_name, fn.node_id
+  GROUP BY ffn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type_id, ffn.node_type, ffn.profile, ffn.country_id, ffn.commodity_id, fn.node_id
   WITH NO DATA;
 
 
@@ -7959,13 +7951,6 @@ CREATE INDEX dashboards_sources_mv_country_id_idx ON public.dashboards_sources_m
 
 
 --
--- Name: dashboards_sources_mv_group_columns_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_sources_mv_group_columns_idx ON public.dashboards_sources_mv USING btree (id, name, node_type, parent_name, parent_node_type);
-
-
---
 -- Name: dashboards_sources_mv_name_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -9292,6 +9277,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190807095141'),
 ('20190814161133'),
 ('20190820105523'),
-('20190823135415');
+('20190823135415'),
+('20190919063754');
 
 
