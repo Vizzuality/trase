@@ -141,31 +141,30 @@ function Explore({
     console.log(items.length && Math.ceil(items.length / itemsPerRow));
     return items.length && Math.ceil(items.length / itemsPerRow);
   };
-  const renderDropdowns = () =>
-    console.log(commodity, country, commodities) || (
-      <>
-        <Dropdown
-          size="rg"
-          variant="panel"
-          selectedValueOverride={commodity ? undefined : `Commodity (${commodities.length})`}
-          options={commodities.map(i => ({ value: i.id, label: i.name }))}
-          value={commodity && { value: commodity.id, label: commodity.name }}
-          onChange={i => (commodity ? resetCommodity(i.value) : setCommodity(i.value))}
-        />
-        {commodity && (
-          <div className="country-dropdown-container">
-            <Dropdown
-              size="rg"
-              variant="panel"
-              selectedValueOverride={country ? undefined : `Countries (${countries.length})`}
-              options={countries.map(i => ({ value: i.id, label: i.name }))}
-              value={country && { value: country.id, label: country.name }}
-              onChange={i => setCountry(i.value)}
-            />
-          </div>
-        )}
-      </>
-    );
+  const renderDropdowns = () => (
+    <>
+      <Dropdown
+        size="rg"
+        variant="panel"
+        selectedValueOverride={commodity ? undefined : `Commodity (${commodities.length})`}
+        options={commodities.map(i => ({ value: i.id, label: i.name }))}
+        value={commodity && { value: commodity.id, label: commodity.name }}
+        onChange={i => (commodity ? resetCommodity(i.value) : setCommodity(i.value))}
+      />
+      {commodity && (
+        <div className="country-dropdown-container">
+          <Dropdown
+            size="rg"
+            variant="panel"
+            selectedValueOverride={country ? undefined : `Countries (${countries.length})`}
+            options={countries.map(i => ({ value: i.id, label: i.name }))}
+            value={country && { value: country.id, label: country.name }}
+            onChange={i => setCountry(i.value)}
+          />
+        </div>
+      )}
+    </>
+  );
   return (
     <div className="c-explore">
       <ResizeListener>
