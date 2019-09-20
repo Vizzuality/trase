@@ -16,7 +16,7 @@ module Api
             # rubocop:disable Style/DoubleNegation
             sync_processing = !!options[:sync]
             # rubocop:enable Style/DoubleNegation
-            if long_running? && !sync_processing
+            if long_running? || !sync_processing
               refresh_later(options)
             else
               refresh_now(options)
