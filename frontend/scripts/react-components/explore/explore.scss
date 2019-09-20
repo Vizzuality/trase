@@ -70,6 +70,11 @@ $explore-heading: 66px;
       @media (min-height: 700px) {
         min-height: 400px;
       }
+
+      @media (max-height: 480px) {
+        display: none;
+      }
+
     }
 
     .bubble {
