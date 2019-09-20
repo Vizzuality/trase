@@ -6,9 +6,7 @@ import TopCards from 'react-components/explore/top-cards';
 import Text from 'react-components/shared/text';
 import WorldMap from 'react-components/shared/world-map/world-map.container';
 import uniq from 'lodash/uniq';
-import last from 'lodash/last';
 import { EXPLORE_STEPS } from 'constants';
-import getTopNodesKey from 'utils/getTopNodesKey';
 import cx from 'classnames';
 import Responsive from 'react-components/shared/responsive.hoc';
 import { format } from 'd3-format';
@@ -52,15 +50,6 @@ function Explore({
     setModalOpen(false);
     setLinkInfo(null);
   };
-
-  const highlightedContextKey =
-    highlightedContext &&
-    getTopNodesKey(
-      highlightedContext.id,
-      'country',
-      last(highlightedContext.years),
-      last(highlightedContext.years)
-    );
 
   // Clear highlighted items on step change
   useEffect(() => {
@@ -128,7 +117,7 @@ function Explore({
 
   const setItemFunction = step === EXPLORE_STEPS.selectCommodity ? setCommodity : setCountry;
 
-  const destinationCountries = highlightedContextKey && topNodes[highlightedContextKey];
+  const destinationCountries = highlightedContext?.id && topNodes[highlightedContext.id];
   const getHighlightedCountryIds = useMemo(() => {
     switch (step) {
       case EXPLORE_STEPS.selectCommodity:

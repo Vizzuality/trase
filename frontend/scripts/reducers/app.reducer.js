@@ -114,53 +114,40 @@ const appReducer = {
     return { ...state, selectedYears: initialState.selectedYears };
   },
   [APP__SET_TOP_DESTINATION_COUNTRIES](state, action) {
-    const { topCountries } = action.payload;
-    const getNodes = (data, country) =>
-      data.targetNodes.map(row => ({
-        ...row,
-        coordinates: COUNTRIES_COORDINATES[row.geo_id],
-        geoId: row.geo_id,
-        name: country === row.name ? 'DOMESTIC CONSUMPTION' : row.name
+    const { topContextCountries } = action.payload;
+    const { contexts } = state;
+
+    const getNodes = (countries, contextCountryName) =>
+      countries.map(c => ({
+        id: c.id,
+        value: c.attribute.value,
+        height: c.attribute.height,
+        coordinates: COUNTRIES_COORDINATES[c.geo_id],
+        geoId: c.geo_id,
+        name: contextCountryName === c.name ? 'DOMESTIC CONSUMPTION' : c.name,
+        otherIndicators: c.other_attributes
       }));
 
     const newTopCountries = {};
-    topCountries.forEach(c => {
-      newTopCountries[c.topNodesKey] = getNodes(c.data, c.country);
-    });
-
-    const topCountriesLoadingKeys = {};
-    topCountries.forEach(c => {
-      topCountriesLoadingKeys[c.topNodesKey] = false;
+    topContextCountries.forEach(c => {
+      const countryContext = contexts.find(context => c.context_id === context.id);
+      newTopCountries[c.context_id] = getNodes(c.top_nodes, countryContext?.countryName);
     });
     return {
       ...state,
       topNodes: {
         ...state.topNodes,
         ...newTopCountries
-      },
-      loading: {
-        ...state.loading,
-        topCountries: {
-          ...state.loading.topCountries,
-          ...topCountriesLoadingKeys
-        }
       }
     };
   },
   [APP__SET_TOP_DESTINATION_COUNTRIES_LOADING](state, action) {
-    const { topNodesKeys, loading } = action.payload;
-    const loadingNodes = {};
-    topNodesKeys.forEach(n => {
-      loadingNodes[n] = loading;
-    });
+    const { loading } = action.payload;
     return {
       ...state,
       loading: {
         ...state.loading,
-        topCountries: {
-          ...state.loading.topCountries,
-          ...loadingNodes
-        }
+        topCountries: loading
       }
     };
   }

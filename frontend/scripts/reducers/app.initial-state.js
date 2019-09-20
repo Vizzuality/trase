@@ -22,6 +22,7 @@ export default {
   topNodes: {},
   loading: {
     contexts: false,
-    tooltips: false
+    tooltips: false,
+    topCountries: false
   }
 };
