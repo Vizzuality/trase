@@ -2036,6 +2036,8 @@ components:
                 type: string
               group:
                 type: string
+              role:
+                type: string
               isDefault:
                 type: boolean
               isGeo:
