@@ -1,3 +1,4 @@
+import { batch } from 'react-redux';
 import axios from 'axios';
 import { GET_TOP_COUNTRIES_FACTS, getURLFromParams } from 'utils/getURLFromParams';
 
@@ -16,25 +17,45 @@ export const setCountry = selectedCountryId => ({
   payload: { selectedCountryId }
 });
 
-export const goToTool = linkInfo => (dispatch, getState) => {
-  const { contexts, selectedContextId } = getState().app;
-  let contextId;
-  if (!linkInfo) {
-    contextId = selectedContextId;
-  } else {
-    const context = contexts.find(
-      c => c.commodityId === linkInfo.commodityId && c.countryId === linkInfo.countryId
-    );
-    contextId = context.id;
-  }
-  const serializerParams = { selectedContextId: contextId };
-  dispatch({
-    type: EXPLORE__SELECT_TOP_CARD,
-    payload: { linkInfo }
-  });
-  dispatch({
-    type: 'tool',
-    payload: { serializerParams }
+export const goToTool = (destination, linkInfo) => (dispatch, getState) => {
+  const { contexts } = getState().app;
+  const context = contexts.find(
+    c => c.commodityId === linkInfo.commodityId && c.countryId === linkInfo.countryId
+  );
+
+  batch(() => {
+    // for analytics purpose
+    dispatch({
+      type: EXPLORE__SELECT_TOP_CARD,
+      payload: {
+        linkParams: {
+          countryName: context.countryName,
+          commodityName: context.commodityName,
+          nodeTypeName: linkInfo.nodeTypeName,
+          indicatorName: linkInfo.indicatorName
+        }
+      }
+    });
+
+    if (destination === 'sankey') {
+      const serializerParams = {
+        selectedContextId: context.id,
+        selectedRecolorBy: linkInfo.indicatorId
+      };
+
+      dispatch({ type: 'tool', payload: { serializerParams } });
+    } else {
+      const serializerParams = {
+        selectedCountryId: context.countryId,
+        selectedCommodityId: context.commodityId,
+        selectedRecolorBy: linkInfo.indicatorId
+      };
+
+      dispatch({
+        type: 'dashboardElement',
+        payload: { dashboardId: 'new', serializerParams }
+      });
+    }
   });
 };
 

@@ -12,6 +12,8 @@ import getTopNodesKey from 'utils/getTopNodesKey';
 import cx from 'classnames';
 import Responsive from 'react-components/shared/responsive.hoc';
 import { format } from 'd3-format';
+import ToolLinksModal from 'react-components/explore/tool-links-modal';
+import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 
 import 'react-components/explore/explore.scss';
 
@@ -34,9 +36,22 @@ function Explore({
   commodityContexts,
   countryQuickFacts
 }) {
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [linkParams, setLinkInfo] = useState(null);
+
   const [highlightedContext, setHighlightedContext] = useState(null);
   const [highlightedCountryIds, setHighlightedCountries] = useState(null);
   const [highlightedCommodityIds, setHighlightedCommodities] = useState(null);
+
+  const openModal = params => {
+    setModalOpen(true);
+    setLinkInfo(params);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setLinkInfo(null);
+  };
 
   const highlightedContextKey =
     highlightedContext &&
@@ -218,8 +233,12 @@ function Explore({
         commodityName={commodity?.name}
         countryName={country?.name}
         cards={cards}
-        goToTool={goToTool}
+        openModal={params => openModal(params)}
       />
+      <SimpleModal isOpen={isModalOpen} onRequestClose={() => closeModal()}>
+        <ToolLinksModal goToTool={destination => goToTool(destination, linkParams)} />
+      </SimpleModal>
+      );
     </div>
   );
 }
