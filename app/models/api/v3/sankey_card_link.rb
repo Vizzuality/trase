@@ -51,6 +51,10 @@ module Api
         "http://#{self.host}?#{self.query_params&.to_query}"
       end
 
+      def self.ransackable_scopes(*)
+        %i(link_contains)
+      end
+
       private
 
       def extract_link_params
