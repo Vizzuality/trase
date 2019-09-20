@@ -272,7 +272,8 @@ const getDashboardContextRecolorBy = createSelector(
     };
     // TODO: handle this indicators by bucketing either here or preferably in backend
     const contextRecolorByList = context.recolorBy.filter(
-      item => !['LR_DEFICIT_PERC_PRIVATE_LAND', 'SMALLHOLDERS'].includes(item.name)
+      item =>
+        !['LR_DEFICIT_PERC_PRIVATE_LAND', 'SMALLHOLDERS', 'SMALLHOLDERS_V2'].includes(item.name)
     );
 
     if (contextRecolorByList.length > 0) {

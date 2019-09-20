@@ -59,7 +59,10 @@ const colors = {
       'chaco-seco': '#ffb314',
       'chaco-humedo': '#43f3f3',
       'company-commitment': '#C2E699',
+      'company-ndpe-commitment': '#1D6837',
       'soy-moratorium': '#1D6837',
+      tac: '#79ae6d',
+      'tac-&-g4': '#1D6837',
       none: '#e36845'
     }
   },

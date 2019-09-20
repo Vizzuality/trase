@@ -12,7 +12,7 @@ Polly.register(FSPersister);
 expect.extend({ toMatchImageSnapshot });
 
 const BASE_URL = 'http://0.0.0.0:8081';
-const TIMEOUT = 60000 || process.env.PUPETEER_TIMEOUT || 30000;
+const TIMEOUT = 60000;
 
 jest.setTimeout(TIMEOUT);
 const { page } = global;

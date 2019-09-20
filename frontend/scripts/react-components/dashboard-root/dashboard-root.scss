@@ -1,16 +1,21 @@
 @import 'styles/settings';
 
 .c-dashboard-root {
+  position: relative;
+  z-index: $z-above;
   padding: 60px 0;
 
-  .title {
-    margin: 0 0 60px;
+  .dashboard-root-title {
     color: $white;
-    font-size: 46px;
-    font-weight: 300;
-    line-height: 1.22;
+    font-size: $font-size-big;
+    font-family: $font-family-2;
+    font-weight: $font-weight-light;
     text-align: center;
-    letter-spacing: -1px;
+    margin: 0 0 60px;
+
+    @media screen and (min-width: $breakpoint-foundation-medium){
+      font-size: 40px;
+    }
   }
 
   .dashboard-root-grid {

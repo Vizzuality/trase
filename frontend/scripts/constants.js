@@ -231,6 +231,7 @@ export const HOME_VIDEO = {
 };
 
 export const BREAKPOINTS = {
+  mobile: 425,
   small: 640,
   tablet: 768
 };

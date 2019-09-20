@@ -308,7 +308,7 @@ $recolorgroup-colors-names: '-recolorgroup-1', '-recolorgroup-2', '-recolorgroup
 
 // choropleth
 $ch-zero: $white;
-$ch-default: $gray;
+$ch-na: #D8CCA1;
 
 $ch-red-0: #F5B7AD;
 $ch-red-1: #F28789;
@@ -316,9 +316,15 @@ $ch-red-2: #EF4F60;
 $ch-red-3: #95232F;
 $ch-red-4: #4F0008;
 
+$ch-legend-0: #40B9BB;
+$ch-legend-1: #6C3BC6;
+$ch-legend-2: #ED4E63;
+$ch-legend-3: #2D755D;
+$ch-legend-4: #FFA473;
+
 // profile choropleth
 // For now we'll use the same color scheme as in the tool, when we include more buckets this has to change.
-$ch-profile-n-a: $metal-grey;
+$ch-profile-n-a: $ch-na;
 $ch-profile-red-0: $ch-red-0;
 $ch-profile-red-1: $ch-red-1;
 $ch-profile-red-2: $ch-red-2;
@@ -334,4 +340,13 @@ $choropleth-colors: (
   ch-red-2: $ch-red-2,
   ch-red-3: $ch-red-3,
   ch-red-4: $ch-red-4
-)
+);
+
+$ch-profile-legend-0: $ch-legend-0;
+$ch-profile-legend-1: $ch-legend-1;
+$ch-profile-legend-2: $ch-legend-2;
+$ch-profile-legend-3: $ch-legend-3;
+$ch-profile-legend-4: $ch-legend-4;
+$ch-profile-legend-5: $ch-legend-4;
+$ch-profile-legend-6: $ch-legend-4;
+$ch-profile-legend-7: $ch-legend-4;
