@@ -2,10 +2,10 @@
 #
 # Table name: dashboards_attributes_mv
 #
-#  id                                                       :bigint(8)        primary key
-#  dashboards_attribute_group_id                            :bigint(8)
-#  position                                                 :integer
-#  attribute_id(References the unique id in attributes_mv.) :bigint(8)
+#  id                                                    :bigint(8)        primary key
+#  dashboards_attribute_group_id                         :bigint(8)
+#  position                                              :integer
+#  attribute_id(References the unique id in attributes.) :bigint(8)
 #
 # Indexes
 #
@@ -24,8 +24,12 @@ module Api
         delegate :original_type, to: :readonly_attribute
         delegate :original_id, to: :readonly_attribute
 
-        def self.refresh_dependencies(options = {})
-          Api::V3::Readonly::Attribute.refresh(options.merge(skip_dependents: true))
+        class << self
+          protected
+
+          def refresh_dependencies(options = {})
+            Api::V3::Readonly::Attribute.refresh(options.merge(skip_dependents: true))
+          end
         end
       end
     end

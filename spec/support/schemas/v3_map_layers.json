@@ -184,16 +184,6 @@
                 1990
               ]
             }
-          },
-          "aggregateMethod": {
-            "$id": "/properties/dimensions/items/properties/aggregateMethod",
-            "type": "string",
-            "title": "The Aggregatemethod Schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": "",
-            "examples": [
-              "SUM"
-            ]
           }
         },
         "required": [
@@ -208,8 +198,7 @@
           "layerAttributeId",
           "description",
           "colorScale",
-          "years",
-          "aggregateMethod"
+          "years"
         ]
       }
     },

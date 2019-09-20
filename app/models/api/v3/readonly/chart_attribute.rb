@@ -2,22 +2,22 @@
 #
 # Table name: chart_attributes_mv
 #
-#  id                                                                             :integer          primary key
-#  chart_id                                                                       :integer
-#  position                                                                       :integer
-#  years                                                                          :integer          is an Array
-#  display_name(If absent in chart_attributes this is pulled from attributes_mv.) :text
-#  legend_name                                                                    :text
-#  display_type                                                                   :text
-#  display_style                                                                  :text
-#  state_average                                                                  :boolean
-#  identifier                                                                     :text
-#  name                                                                           :text
-#  unit                                                                           :text
-#  tooltip_text                                                                   :text
-#  attribute_id                                                                   :bigint(8)
-#  original_id                                                                    :integer
-#  original_type                                                                  :text
+#  id                                                                          :integer          primary key
+#  chart_id                                                                    :integer
+#  position                                                                    :integer
+#  years                                                                       :integer          is an Array
+#  display_name(If absent in chart_attributes this is pulled from attributes.) :text
+#  legend_name                                                                 :text
+#  display_type                                                                :text
+#  display_style                                                               :text
+#  state_average                                                               :boolean
+#  identifier                                                                  :text
+#  name                                                                        :text
+#  unit                                                                        :text
+#  tooltip_text                                                                :text
+#  attribute_id                                                                :bigint(8)
+#  original_id                                                                 :integer
+#  original_type                                                               :text
 #
 # Indexes
 #

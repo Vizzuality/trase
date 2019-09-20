@@ -2,22 +2,22 @@
 #
 # Table name: recolor_by_attributes_mv
 #
-#  id                                                       :integer          primary key
-#  context_id                                               :integer
-#  group_number                                             :integer
-#  position                                                 :integer
-#  legend_type                                              :text
-#  legend_color_theme                                       :text
-#  interval_count                                           :integer
-#  min_value                                                :text
-#  max_value                                                :text
-#  divisor                                                  :float
-#  tooltip_text                                             :text
-#  years                                                    :integer          is an Array
-#  is_disabled                                              :boolean
-#  is_default                                               :boolean
-#  attribute_id(References the unique id in attributes_mv.) :bigint(8)
-#  legend                                                   :text             is an Array
+#  id                                                    :integer          primary key
+#  context_id                                            :integer
+#  group_number                                          :integer
+#  position                                              :integer
+#  legend_type                                           :text
+#  legend_color_theme                                    :text
+#  interval_count                                        :integer
+#  min_value                                             :text
+#  max_value                                             :text
+#  divisor                                               :float
+#  tooltip_text                                          :text
+#  years                                                 :integer          is an Array
+#  is_disabled                                           :boolean
+#  is_default                                            :boolean
+#  attribute_id(References the unique id in attributes.) :bigint(8)
+#  legend                                                :text             is an Array
 #
 # Indexes
 #
