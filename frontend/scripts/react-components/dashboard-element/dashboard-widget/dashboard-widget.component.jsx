@@ -85,19 +85,19 @@ function DashboardWidget(props) {
     switch (chartConfig.type) {
       case 'nodeIndicatorSentence':
         return (
-          <div className="dynamic-sentence-widget">
+          <div className="dynamic-sentence-widget" data-test="widget-node-indicator-sentence">
             <NodeIndicatorSentenceWidget data={data} meta={meta} config={chartConfig} />
           </div>
         );
       case 'sentence':
         return (
-          <div className="dynamic-sentence-widget">
+          <div className="dynamic-sentence-widget" data-test="widget-dynamic-sentence">
             <DynamicSentenceWidget data={data} config={chartConfig} />
           </div>
         );
       case 'ranking':
         return (
-          <div className="widget-centered">
+          <div className="widget-centered" data-test="widget-ranking">
             <RankingWidget data={data} meta={meta} config={chartConfig} />
           </div>
         );

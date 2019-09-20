@@ -118,7 +118,7 @@ function useNodeRefHeight(ref) {
     if (ref.current) {
       setHeight(ref.current.clientHeight);
     }
-  }, []);
+  }, [ref]);
 
   return height;
 }

@@ -22,10 +22,6 @@
   &.ch-5 { fill: $ch-profile-red-5; };
   &.ch-6 { fill: $ch-profile-red-6; };
   &.ch-7 { fill: $ch-profile-red-7; };
-
-  &.-outline {
-    stroke: $charcoal-grey-faded;
-  }
 }
 
 @media print {

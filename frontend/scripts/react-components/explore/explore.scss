@@ -19,14 +19,23 @@ $explore-heading: 66px;
 
     @for $i from 1 through $max-rows {
       &.rows#{$i} {
-        height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$i * $row-height}px - #{$explore-heading});
+        height: calc(
+          100vh -
+            #{$top-cards-height} -
+            #{$nav-height} -
+            #{$i *
+            $row-height}px -
+            #{$explore-heading}
+        );
       }
     }
 
     transition: height 0.3s;
 
     @media screen and (max-width: $breakpoint-tablet) {
-      height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-mobile-dropdowns} - #{$explore-heading});
+      height: calc(
+        100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-mobile-dropdowns} - #{$explore-heading}
+      );
     }
   }
 
@@ -56,6 +65,7 @@ $explore-heading: 66px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    min-width: 155px;
     display: none;
 
     @media screen and (min-width: $breakpoint-tablet) {
@@ -67,6 +77,10 @@ $explore-heading: 66px;
       @media (min-height: 700px) {
         min-height: 400px;
       }
+
+      @media (max-height: 480px) {
+        display: none;
+      }
     }
 
     .bubble {
@@ -74,11 +88,10 @@ $explore-heading: 66px;
       height: 155px;
       display: flex;
       flex-direction: column;
-      align-content: center;
       justify-content: center;
       border-radius: 50%;
-      background-color: $light-gray;
       margin-top: 20px;
+      background-color: $light-gray;
     }
 
     .quick-facts-value {

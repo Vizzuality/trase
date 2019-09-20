@@ -32,7 +32,7 @@ class TopDestinationsChart extends React.PureComponent {
 
   margin = {
     top: 10,
-    right: 100,
+    right: 10,
     bottom: 30,
     left: 50
   };

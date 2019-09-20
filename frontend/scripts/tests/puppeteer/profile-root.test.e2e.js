@@ -8,7 +8,7 @@ import { pollyConfig, handleUnnecesaryRequests } from './utils';
 Polly.register(PuppeteerAdapter);
 Polly.register(FSPersister);
 
-const TIMEOUT = process.env.PUPETEER_TIMEOUT || 30000;
+const TIMEOUT = process.env.PUPETEER_TIMEOUT || 60000;
 const BASE_URL = 'http://0.0.0.0:8081';
 
 jest.setTimeout(TIMEOUT);

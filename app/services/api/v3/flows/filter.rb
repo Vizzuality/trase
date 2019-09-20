@@ -9,7 +9,8 @@ module Api
         # cont_attribute_id - Quant for resizing
         # ncont_attribute_id - Ind / Qual for recoloring
         # (only one of these may be specified, Ind takes precedence)
-        # selected_nodes_ids - list of node ids for expanding.
+        # selected_nodes_ids - list of node ids for expanding
+        # excluded_nodes_ids
         # biome_id - id of biome to filter by
         # year_start
         # year_end

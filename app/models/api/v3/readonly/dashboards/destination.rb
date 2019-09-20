@@ -2,15 +2,15 @@
 #
 # Table name: dashboards_destinations_mv
 #
-#  id            :integer          primary key
-#  name          :text
-#  name_tsvector :tsvector
-#  node_type_id  :integer
-#  node_type     :text
-#  profile       :text
-#  country_id    :integer
-#  commodity_id  :integer
-#  node_id       :integer
+#  id(id of destination node (not unique))                         :integer          primary key
+#  name                                                            :text
+#  name_tsvector                                                   :tsvector
+#  node_type_id                                                    :integer
+#  node_type                                                       :text
+#  profile                                                         :text
+#  country_id(id of country sourcing commodity going to this node) :integer
+#  commodity_id(id of commodity going to this node)                :integer
+#  node_id(id of another node from the same supply chain)          :integer
 #
 # Indexes
 #

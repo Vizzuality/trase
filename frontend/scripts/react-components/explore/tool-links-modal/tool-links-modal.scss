@@ -1,0 +1,34 @@
+@import 'styles/settings';
+
+.c-tool-links-modal {
+  width: 820px;
+  padding: 30px 0;
+
+  .modal-title {
+    margin-bottom: 15px;
+  }
+
+  .links-container {
+    margin-bottom: 20px;
+  }
+
+  .tool-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 10px;
+    height: 120px;
+    border: 1px solid $charcoal-dark;
+  }
+
+  .description-list {
+    > li {
+      position: relative;
+      list-style-type: initial;
+      left: 20px;
+      margin-bottom: 15px;
+    }
+  }
+}

@@ -16,6 +16,10 @@ module Api
             joins('INNER JOIN commodities ON commodities.id = contexts.commodity_id').
             where('commodities.id': @commodity_id)
         end
+
+        def select_clause
+          super + ', commodities.id'
+        end
       end
     end
   end

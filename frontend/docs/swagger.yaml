@@ -282,7 +282,13 @@ paths:
           required: false
           schema:
             type: integer
-        - name: attributes_ids
+        - name: attribute_id
+          in: query
+          description: Attribute id
+          required: false
+          schema:
+            type: string
+        - name: other_attributes_ids
           in: query
           description: List of attributes ids separated by comma
           required: false
@@ -297,7 +303,7 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/TopNodes"
+                    $ref: "#/components/schemas/NodesStats"
 
   /nodes/search:
     get:
@@ -1083,6 +1089,9 @@ paths:
         - $ref: "#/components/parameters/dashboards_sources_ids"
         - $ref: "#/components/parameters/dashboards_companies_ids"
         - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_sources_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_companies_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_destinations_ids"
         - $ref: "#/components/parameters/start_year_req_query_param"
         - $ref: "#/components/parameters/end_year_opt_query_param"
       responses:
@@ -1744,6 +1753,27 @@ components:
       required: false
       schema:
         type: string
+    excluded_dashboards_sources_ids:
+      name: excluded_sources_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    excluded_dashboards_companies_ids:
+      name: excluded_companies_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    excluded_dashboards_destinations_ids:
+      name: excluded_destinations_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
     dashboards_attribute_id:
       name: attribute_id
       in: query
@@ -2216,18 +2246,31 @@ components:
                 type: integer
               commodity_id:
                 type: integer
-              attributes:
+              top_nodes:
                 type: array
                 items:
                   type: object
                   properties:
                     id:
                       type: integer
-                    indicator:
+                    name:
                       type: string
-                    unit:
+                    geo_id:
                       type: string
-                    targets:
+                    attribute:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        unit:
+                          type: string
+                        value:
+                          type: number
+                        height:
+                          type: number
+                    other_attributes:
                       type: array
                       items:
                         type: object
@@ -2235,6 +2278,8 @@ components:
                           id:
                             type: integer
                           name:
+                            type: string
+                          unit:
                             type: string
                           value:
                             type: number
@@ -3139,6 +3184,59 @@ components:
                     nullable: true
                     description: 'actor or null'
             destinations:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  node_type_id:
+                    type: integer
+                  node_type:
+                    type: string
+                  profile:
+                    type: string
+                    example: 'null'
+                    nullable: true
+            excluded_sources:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  node_type_id:
+                    type: integer
+                  node_type:
+                    type: string
+                  profile:
+                    type: string
+                    example: 'place'
+                    nullable: true
+                    description: 'place or null'
+            excluded_companies:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  node_type_id:
+                    type: integer
+                  node_type:
+                    type: string
+                  profile:
+                    type: string
+                    example: 'actor'
+                    nullable: true
+                    description: 'actor or null'
+            excluded_destinations:
               type: array
               items:
                 type: object

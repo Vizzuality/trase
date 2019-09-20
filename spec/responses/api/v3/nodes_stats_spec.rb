@@ -14,7 +14,8 @@ RSpec.describe 'Nodes stats', type: :request do
         get '/api/v3/nodes_stats', params: {
           start_year: 2003,
           end_year: 2019,
-          attributes_ids: api_v3_volume.readonly_attribute.id.to_s,
+          attribute_id: api_v3_volume.readonly_attribute.id,
+          other_attributes_ids: api_v3_deforestation_v2.readonly_attribute.id,
           column_id: api_v3_country_node_type.id,
           contexts_ids: api_v3_context.id.to_s
         }
@@ -24,7 +25,7 @@ RSpec.describe 'Nodes stats', type: :request do
 
         parsed_response = JSON.parse(@response.body)
         nodes_ids =
-          parsed_response['data'].first['attributes'].first['targets'].map { |d| d['id'] }
+          parsed_response['data'].first['top_nodes'].map { |a| a['id'] }
         expect(nodes_ids).to eql([
           api_v3_country_of_destination1_node.id,
           api_v3_other_country_of_destination_node.id
@@ -37,7 +38,7 @@ RSpec.describe 'Nodes stats', type: :request do
         get '/api/v3/nodes_stats', params: {
           start_year: 2003,
           end_year: 2019,
-          attributes_ids: api_v3_volume.readonly_attribute.id,
+          attribute_id: api_v3_volume.readonly_attribute.id,
           column_id: api_v3_country_node_type.id,
           commodity_id: api_v3_soy.id
         }
@@ -47,7 +48,7 @@ RSpec.describe 'Nodes stats', type: :request do
 
         parsed_response = JSON.parse(@response.body)
         nodes_ids =
-          parsed_response['data'].first['attributes'].first['targets'].map { |d| d['id'] }
+          parsed_response['data'].first['top_nodes'].map { |a| a['id'] }
         expect(nodes_ids).to eql([
           api_v3_country_of_destination1_node.id,
           api_v3_other_country_of_destination_node.id

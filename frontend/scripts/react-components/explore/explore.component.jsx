@@ -12,6 +12,9 @@ import getTopNodesKey from 'utils/getTopNodesKey';
 import cx from 'classnames';
 import Dropdown from 'react-components/shared/dropdown';
 import ResizeListener from 'react-components/shared/resize-listener.component';
+import { format } from 'd3-format';
+import ToolLinksModal from 'react-components/explore/tool-links-modal';
+import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 
 import 'react-components/explore/explore.scss';
 
@@ -28,14 +31,28 @@ function Explore({
   goToTool,
   topNodes,
   getTopCountries,
+  getQuickFacts,
   commodityContexts,
-  quickFactsIndicators,
   commodities,
-  countries
+  countries,
+  countryQuickFacts
 }) {
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [linkParams, setLinkInfo] = useState(null);
+
   const [highlightedContext, setHighlightedContext] = useState(null);
   const [highlightedCountryIds, setHighlightedCountries] = useState(null);
   const [highlightedCommodityIds, setHighlightedCommodities] = useState(null);
+
+  const openModal = params => {
+    setModalOpen(true);
+    setLinkInfo(params);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+    setLinkInfo(null);
+  };
 
   const highlightedContextKey =
     highlightedContext &&
@@ -66,10 +83,15 @@ function Explore({
       getTopCountries(commodityContexts, { fromDefaultYear: true });
   }, [commodityContexts, getTopCountries, step]);
 
+  // Get quick facts
+  useEffect(() => {
+    if (step === EXPLORE_STEPS.selectCountry) getQuickFacts(commodity.id);
+  }, [commodity, getQuickFacts, step]);
+
   const renderTitle = () => {
     const titleParts = ['commodity', 'sourcing country', 'supply chain'];
     return (
-      <Heading size="lg" align="center">
+      <Heading size="lg" align="center" data-test="step-title">
         {step + 1}. Choose one {titleParts[step]}
       </Heading>
     );
@@ -136,9 +158,12 @@ function Explore({
     highlightedCountryIds,
     step
   ]);
+  const quickFacts =
+    countryQuickFacts &&
+    (country?.id || highlightedContext?.countryId) &&
+    countryQuickFacts[country?.id || highlightedContext?.countryId];
   const getRowsNumber = windowWidth => {
     const itemsPerRow = windowWidth > 880 ? 7 : 6;
-    console.log(items.length && Math.ceil(items.length / itemsPerRow));
     return items.length && Math.ceil(items.length / itemsPerRow);
   };
   const renderDropdowns = () => (
@@ -217,21 +242,25 @@ function Explore({
                     <div className="small-4 medium-2 columns hide-for-tablet">
                       <div className="quick-facts">
                         <div className="bubble-container">
-                          {quickFactsIndicators.map(indicator => (
-                            <div className="bubble">
-                              <Text size="rg" align="center" variant="mono">
-                                {indicator.name}
-                              </Text>
-                              <Text
-                                size="lg"
-                                weight="regular"
-                                align="center"
-                                className="quick-facts-value"
-                              >
-                                {indicator.value} {indicator.unit}
-                              </Text>
-                            </div>
-                          ))}
+                          {quickFacts ? (
+                            quickFacts.map(indicator => (
+                              <div className="bubble">
+                                <Text size="rg" align="center" variant="mono">
+                                  {indicator.name} {indicator.year}
+                                </Text>
+                                <Text
+                                  size="lg"
+                                  weight="regular"
+                                  align="center"
+                                  className="quick-facts-value"
+                                >
+                                  {format(',')(Math.round(indicator.total))} {indicator.unit}
+                                </Text>
+                              </div>
+                            ))
+                          ) : (
+                            <div className="bubble" />
+                          )}
                         </div>
                       </div>
                     </div>
@@ -245,9 +274,12 @@ function Explore({
                 commodityName={commodity?.name}
                 countryName={country?.name}
                 cards={cards}
-                goToTool={goToTool}
+                openModal={params => openModal(params)}
                 isMobile={resolution.isSmall}
               />
+              <SimpleModal isOpen={isModalOpen} onRequestClose={() => closeModal()}>
+                <ToolLinksModal goToTool={destination => goToTool(destination, linkParams)} />
+              </SimpleModal>
             </>
           );
         }}
@@ -274,7 +306,8 @@ Explore.propTypes = {
   topNodes: PropTypes.object,
   commodityContexts: PropTypes.array,
   getTopCountries: PropTypes.func.isRequired,
-  quickFactsIndicators: PropTypes.object
+  getQuickFacts: PropTypes.func.isRequired,
+  countryQuickFacts: PropTypes.object
 };
 
 export default Explore;

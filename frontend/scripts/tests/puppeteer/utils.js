@@ -1,4 +1,5 @@
 import path from 'path';
+import { Timing } from '@pollyjs/core';
 
 require('dotenv').config({ silent: true });
 
@@ -15,6 +16,7 @@ export const pollyConfig = page => ({
       recordingsDir: path.join(__dirname, '__recordings__')
     }
   },
+  timing: Timing.fixed(16),
   recordIfMissing: true,
   matchRequestsBy: {
     method: false,
@@ -62,4 +64,23 @@ export const handleUnnecesaryRequests = (server, BASE_URL) => {
     res.sendStatus(200);
     res.json({});
   });
+};
+
+export const expectToContain = async (page, selector, text) => {
+  const selectorText = await page.$eval(`[data-test=${selector}]`, el => el.textContent);
+  expect(selectorText).toContain(text);
+};
+
+export const click = async (page, selector) => {
+  const testSelector = `[data-test=${selector}]`;
+  await page.waitForSelector(testSelector);
+  await page.click(testSelector);
+};
+
+export const expectChildrenToBe = async (page, selector, number) => {
+  const testSelector = `[data-test=${selector}]`;
+  await page.waitForSelector(testSelector);
+  const topCardsNumber = await page.$eval(testSelector, group => group.children.length);
+
+  expect(topCardsNumber).toBe(number);
 };
