@@ -80,7 +80,9 @@ export function* getToolLinksData() {
     }
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled');
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled');
+      }
       if (source) {
         source.cancel();
       }
@@ -99,7 +101,9 @@ export function* getToolColumnsData(selectedContext) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled');
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled');
+      }
       if (source) {
         source.cancel();
       }
@@ -119,7 +123,9 @@ export function* getToolNodesByLink(selectedContext, { fetchAllNodes } = {}) {
     const difference = new Set(nodesInLinkPaths.filter(x => !existingNodes.has(`${x}`)));
 
     if (difference.size === 0) {
-      if (NODE_ENV_DEV) console.log('All necessary nodes have been downloaded');
+      if (NODE_ENV_DEV) {
+        console.log('All necessary nodes have been downloaded');
+      }
       return;
     }
     // we only want to fetch the missing nodes
@@ -143,7 +149,9 @@ export function* getToolNodesByLink(selectedContext, { fetchAllNodes } = {}) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled');
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled');
+      }
       if (source) {
         source.cancel();
       }
@@ -167,7 +175,9 @@ export function* getToolGeoColumnNodes(selectedContext) {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled');
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled');
+      }
       if (source) {
         source.cancel();
       }
@@ -186,7 +196,9 @@ export function* getMissingLockedNodes() {
   const nodesIds = Array.from(lockedNodes).filter(lockedNode => !nodes[lockedNode]);
 
   if (nodesIds.length === 0) {
-    if (NODE_ENV_DEV) console.log('No missing nodes.');
+    if (NODE_ENV_DEV) {
+      console.log('No missing nodes.');
+    }
     return;
   }
   if (NODE_ENV_DEV) {
@@ -206,7 +218,9 @@ export function* getMissingLockedNodes() {
     console.error('Error', e);
   } finally {
     if (yield cancelled()) {
-      if (NODE_ENV_DEV) console.error('Cancelled');
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled');
+      }
       if (source) {
         source.cancel();
       }

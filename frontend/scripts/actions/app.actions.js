@@ -184,6 +184,7 @@ export const getTopCountries = contexts => (dispatch, getState) => {
   if (!defaultSelectedContext) return;
   const selectedContexts = contexts || [defaultSelectedContext];
 
+  // TODO move into context.worldMap
   const volumeIndicator = selectedContexts[0].resizeBy.find(i => i.name === 'Volume').attributeId;
   const countryColumnId = selectedContexts[0].worldMap.countryColumnId;
 
@@ -205,10 +206,12 @@ export const getTopCountries = contexts => (dispatch, getState) => {
         type: APP__SET_TOP_DESTINATION_COUNTRIES,
         payload: { topContextCountries: res.data.data }
       });
+    })
+    .catch(error => console.error(error))
+    .finally(() =>
       dispatch({
         type: APP__SET_TOP_DESTINATION_COUNTRIES_LOADING,
         payload: { loading: false }
-      });
-    })
-    .catch(error => console.error(error));
+      })
+    );
 };
