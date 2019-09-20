@@ -63,6 +63,7 @@ $explore-heading: 66px;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    min-width: 155px;
 
     .bubble-container {
       // Fix bubbles overlaping explore grid on very short screens
@@ -76,11 +77,10 @@ $explore-heading: 66px;
       height: 155px;
       display: flex;
       flex-direction: column;
-      align-content: center;
       justify-content: center;
       border-radius: 50%;
-      background-color: $light-gray;
       margin-top: 20px;
+      background-color: $light-gray;
     }
 
     .quick-facts-value {
