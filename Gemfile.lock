@@ -172,10 +172,10 @@ GEM
     docile (1.3.1)
     domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
-    dotenv (2.5.0)
-    dotenv-rails (2.5.0)
-      dotenv (= 2.5.0)
-      railties (>= 3.2, < 6.0)
+    dotenv (2.7.5)
+    dotenv-rails (2.7.5)
+      dotenv (= 2.7.5)
+      railties (>= 3.2, < 6.1)
     enumerate_it (1.4.1)
       activesupport (>= 3.0.0)
     equalizer (0.0.11)
@@ -487,7 +487,7 @@ DEPENDENCIES
   coffee-rails (~> 4.2)
   database_cleaner
   devise (~> 4.7)
-  dotenv-rails (~> 2.2)
+  dotenv-rails (~> 2.7)
   enumerate_it (~> 1.4.1)
   factory_bot_rails
   inherited_resources!
