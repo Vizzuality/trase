@@ -5,10 +5,15 @@
   z-index: $z-above;
   padding: 60px 0;
 
-  .title {
+  .dashboard-root-title {
+    color: $white;
+    font-size: $font-size-big;
+    font-family: $font-family-2;
+    font-weight: $font-weight-light;
+    text-align: center;
     margin: 0 0 60px;
 
-    @media screen and (min-width: $breakpoint-foundation-small){
+    @media screen and (min-width: $breakpoint-foundation-medium){
       font-size: 40px;
     }
   }

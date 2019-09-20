@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import ShrinkingSpinner from 'scripts/react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import kebabCase from 'lodash/kebabCase';
 import AnimatedFlows from 'react-components/animated-flows/animated-flows.component';
-import Heading from 'react-components/shared/heading/heading.component';
 
 import 'scripts/react-components/dashboard-root/dashboard-root.scss';
 
@@ -51,9 +50,7 @@ function DashboardRoot(props) {
     <div className="l-dashboard-root">
       <AnimatedFlows />
       <div className="c-dashboard-root">
-        <Heading weight="light" color="white" size="lg" align="center" className="title">
-          See how commodity trade impacts the world
-        </Heading>
+        <h2 className="dashboard-root-title">See how commodity trade impacts the world</h2>
         <section className="dashboard-root-grid">
           <div className="row">
             {loadingDashboardTemplates && (
