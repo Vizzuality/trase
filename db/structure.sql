@@ -5907,6 +5907,39 @@ ALTER SEQUENCE public.resize_by_quants_id_seq OWNED BY public.resize_by_quants.i
 
 
 --
+-- Name: sankey_card_links; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sankey_card_links (
+    id bigint NOT NULL,
+    link json NOT NULL,
+    title text NOT NULL,
+    subtitle text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: sankey_card_links_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.sankey_card_links_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sankey_card_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.sankey_card_links_id_seq OWNED BY public.sankey_card_links.id;
+
+
+--
 -- Name: sankey_nodes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -6548,6 +6581,13 @@ ALTER TABLE ONLY public.resize_by_attributes ALTER COLUMN id SET DEFAULT nextval
 --
 
 ALTER TABLE ONLY public.resize_by_quants ALTER COLUMN id SET DEFAULT nextval('public.resize_by_quants_id_seq'::regclass);
+
+
+--
+-- Name: sankey_card_links id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_links ALTER COLUMN id SET DEFAULT nextval('public.sankey_card_links_id_seq'::regclass);
 
 
 --
@@ -7639,6 +7679,14 @@ ALTER TABLE ONLY public.resize_by_quants
 
 ALTER TABLE ONLY public.resize_by_quants
     ADD CONSTRAINT resize_by_quants_resize_by_attribute_id_quant_id_key UNIQUE (resize_by_attribute_id, quant_id);
+
+
+--
+-- Name: sankey_card_links sankey_card_links_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_links
+    ADD CONSTRAINT sankey_card_links_pkey PRIMARY KEY (id);
 
 
 --
@@ -9338,9 +9386,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190823135415'),
 ('20190919063754'),
 ('20190919211340'),
+('20190920090440'),
 ('20190923074833'),
 ('20190924075531'),
 ('20190924102948'),
 ('20191002200900');
-
 
