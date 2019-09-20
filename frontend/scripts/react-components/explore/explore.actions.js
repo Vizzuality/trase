@@ -1,3 +1,4 @@
+import { batch } from 'react-redux';
 import axios from 'axios';
 import { GET_TOP_COUNTRIES_FACTS, getURLFromParams } from 'utils/getURLFromParams';
 
@@ -17,49 +18,45 @@ export const setCountry = selectedCountryId => ({
 });
 
 export const goToTool = (destination, linkInfo) => (dispatch, getState) => {
-  const { contexts, selectedContextId } = getState().app;
-  let linkParams = linkInfo;
+  const { contexts } = getState().app;
   const context = contexts.find(
-    c =>
-      c.id === selectedContextId ||
-      (c.commodityId === linkInfo.commodityId && c.countryId === linkInfo.countryId)
+    c => c.commodityId === linkInfo.commodityId && c.countryId === linkInfo.countryId
   );
-  if (!linkParams) {
-    linkParams = {
-      contextId: selectedContextId,
-      countryId: context.countryId,
-      commodityId: context.commodityId
-    };
-  } else {
-    linkParams = {
-      contextId: context.id,
-      ...linkParams
-    };
-  }
 
-  const serializerParams = {
-    selectedContextId: linkParams.contextId,
-    selectedCountryId: linkParams.countryId,
-    selectedCommodityId: linkParams.commodityId,
-    selectedRecolorBy: linkParams.indicatorId
-  };
+  batch(() => {
+    // for analytics purpose
+    dispatch({
+      type: EXPLORE__SELECT_TOP_CARD,
+      payload: {
+        linkParams: {
+          countryName: context.countryName,
+          commodityName: context.commodityName,
+          nodeTypeName: linkInfo.nodeTypeName,
+          indicatorName: linkInfo.indicatorName
+        }
+      }
+    });
 
-  dispatch({
-    type: EXPLORE__SELECT_TOP_CARD,
-    payload: { linkParams }
+    if (destination === 'sankey') {
+      const serializerParams = {
+        selectedContextId: context.id,
+        selectedRecolorBy: linkInfo.indicatorId
+      };
+
+      dispatch({ type: 'tool', payload: { serializerParams } });
+    } else {
+      const serializerParams = {
+        selectedCountryId: context.countryId,
+        selectedCommodityId: context.commodityId,
+        selectedRecolorBy: linkInfo.indicatorId
+      };
+
+      dispatch({
+        type: 'dashboardElement',
+        payload: { dashboardId: 'new', serializerParams }
+      });
+    }
   });
-
-  if (destination === 'sankey') {
-    dispatch({
-      type: 'tool',
-      payload: { serializerParams }
-    });
-  } else {
-    dispatch({
-      type: 'dashboardElement',
-      payload: { dashboardId: 'new', query: serializerParams }
-    });
-  }
 };
 
 export const getQuickFacts = commodityId => dispatch => {
