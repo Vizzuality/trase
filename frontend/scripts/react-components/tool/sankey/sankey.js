@@ -8,7 +8,8 @@ import {
   getIsReExpand,
   getSankeyColumns,
   getSankeyLinks,
-  getGapBetweenColumns
+  getGapBetweenColumns,
+  getLastSelectedNodeLink
 } from 'react-components/tool/sankey/sankey.selectors';
 import { connect } from 'react-redux';
 import Sankey from 'react-components/tool/sankey/sankey.component';
@@ -17,7 +18,8 @@ import {
   collapseSankey,
   expandSankey,
   highlightNode,
-  selectNodes
+  selectNodes,
+  goToProfileFromSankey
 } from 'react-components/tool-links/tool-links.actions';
 import { getSelectedMapDimensionsData } from 'react-components/tool-layers/tool-layers.selectors';
 
@@ -37,11 +39,13 @@ const mapStateToProps = state => ({
   hasExpandedNodesIds: getHasExpandedNodesIds(state),
   gapBetweenColumns: getGapBetweenColumns(state),
   flowsLoading: state.toolLinks.flowsLoading,
+  lastSelectedNodeLink: getLastSelectedNodeLink(state),
   highlightedNodeId: state.toolLinks.highlightedNodeId,
   selectedMapDimensions: getSelectedMapDimensionsData(state)
 });
 
 const mapDispatchToProps = {
+  goToProfile: goToProfileFromSankey,
   onNodeClicked: selectNodes,
   onNodeHighlighted: highlightNode,
   onExpandClick: expandSankey,

@@ -16,13 +16,29 @@ import * as Defs from './sankey-defs.component';
 import 'react-components/tool/sankey/sankey.scss';
 
 function useMenuOptions(props) {
-  const { hasExpandedNodesIds, isReExpand, onExpandClick, onCollapseClick, onClearClick } = props;
+  const {
+    goToProfile,
+    hasExpandedNodesIds,
+    isReExpand,
+    onExpandClick,
+    onCollapseClick,
+    onClearClick,
+    lastSelectedNodeLink
+  } = props;
   return useMemo(() => {
     const items = [
       { id: 'expand', label: isReExpand ? 'Re-Expand' : 'Expand', onClick: onExpandClick },
       { id: 'collapse', label: 'Collapse', onClick: onCollapseClick },
       { id: 'clear', label: 'Clear Selection', onClick: onClearClick }
     ];
+
+    if (lastSelectedNodeLink) {
+      items.splice(2, 0, {
+        id: 'profile-link',
+        label: 'Go To Profile',
+        onClick: () => goToProfile(lastSelectedNodeLink)
+      });
+    }
 
     if (!isReExpand && hasExpandedNodesIds) {
       return items.filter(item => item.id !== 'expand');
@@ -32,11 +48,19 @@ function useMenuOptions(props) {
     }
 
     return items;
-  }, [hasExpandedNodesIds, isReExpand, onClearClick, onCollapseClick, onExpandClick]);
+  }, [
+    lastSelectedNodeLink,
+    hasExpandedNodesIds,
+    isReExpand,
+    onClearClick,
+    onCollapseClick,
+    onExpandClick,
+    goToProfile
+  ]);
 }
 
-function useMenuPosition(props, columns) {
-  const { selectedNodesIds, isReExpand } = props;
+function useMenuPosition(props) {
+  const { selectedNodesIds, isReExpand, columns } = props;
   const [menuPos, setMenuPos] = useState({ x: 0, y: 0 });
   const ref = useRef(null);
 
@@ -147,7 +171,7 @@ function Sankey(props) {
   const menuOptions = useMenuOptions(props);
   const [tooltipRef, setTooltip] = useVanillaTooltip(props);
   const [rect, svgRef] = useDomNodeRect(columns);
-  const [menuPos, scrollContainerRef] = useMenuPosition(props, columns);
+  const [menuPos, scrollContainerRef] = useMenuPosition(props);
   const placeholderHeight = useNodeRefHeight(scrollContainerRef);
 
   const getLinkColor = link => {
