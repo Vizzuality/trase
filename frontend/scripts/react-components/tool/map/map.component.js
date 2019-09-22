@@ -43,6 +43,7 @@ export default class MapComponent {
     this.warnings = document.querySelector('.js-map-warnings');
     this.tooltip = new Tooltip('.js-node-tooltip');
 
+    this.tooltip = new Tooltip('.js-node-tooltip');
     const worldBounds = L.latLngBounds(L.latLng(-89, -180), L.latLng(89, 180));
     this.map.setMaxBounds(worldBounds);
     this.mapEvents = {
