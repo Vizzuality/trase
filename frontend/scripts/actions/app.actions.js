@@ -185,7 +185,8 @@ export const getTopCountries = contexts => (dispatch, getState) => {
   const selectedContexts = contexts || [defaultSelectedContext];
 
   // TODO move into context.worldMap
-  const volumeIndicator = selectedContexts[0].resizeBy.find(i => i.name === 'Volume').attributeId;
+  const volumeIndicator = selectedContexts[0].resizeBy.find(i => i.name === 'Volume')
+  const volumneIndicatorId = volumeIndicator?.attributeId;
   const countryColumnId = selectedContexts[0].worldMap.countryColumnId;
 
   dispatch({
@@ -194,7 +195,7 @@ export const getTopCountries = contexts => (dispatch, getState) => {
   });
   const params = {
     contexts_ids: selectedContexts.map(c => c.id).join(),
-    attribute_id: volumeIndicator,
+    attribute_id: volumneIndicatorId,
     column_id: countryColumnId
   };
 

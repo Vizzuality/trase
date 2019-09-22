@@ -3,6 +3,8 @@ import isNumber from 'lodash/isNumber';
 import debounce from 'lodash/debounce';
 // eslint-disable-next-line camelcase
 import turf_bbox from '@turf/bbox';
+import getNodeMeta from 'reducers/helpers/getNodeMeta';
+import formatValue from 'utils/formatValue';
 import {
   BASEMAPS,
   CARTO_BASE_URL,
@@ -11,6 +13,8 @@ import {
   MAP_PANES_Z,
   CHOROPLETH_COLORS
 } from 'constants';
+import Tooltip from 'components/shared/info-tooltip.component';
+
 import 'styles/components/tool/map/leaflet.css';
 import 'styles/components/tool/map.scss';
 import 'styles/components/tool/map/map-choropleth.scss';
@@ -37,6 +41,8 @@ export default class MapComponent {
 
     this.warningsContainer = document.querySelector('.js-map-warnings-container');
     this.warnings = document.querySelector('.js-map-warnings');
+    this.tooltip = new Tooltip('.js-node-tooltip');
+
     const worldBounds = L.latLngBounds(L.latLng(-89, -180), L.latLng(89, 180));
     this.map.setMaxBounds(worldBounds);
     this.mapEvents = {
@@ -634,5 +640,73 @@ export default class MapComponent {
     if (selectedMapDimensionsWarnings !== null) {
       this.warnings.innerHTML = selectedMapDimensionsWarnings;
     }
+  }
+
+  highlightNode({
+    nodeAttributes,
+    nodeHeights,
+    selectedMapDimensions,
+    highlightedNodesData,
+    coordinates,
+    selectedResizeBy
+  }) {
+    this.tooltip.hide();
+    if (highlightedNodesData === undefined || !highlightedNodesData.length) {
+      return;
+    }
+
+    if (coordinates !== undefined) {
+      this._showTooltip({
+        nodeHeights,
+        nodesData: highlightedNodesData,
+        coordinates,
+        nodeAttributes,
+        selectedResizeBy,
+        selectedMapDimensions
+      });
+    }
+  }
+
+  _showTooltip({
+    nodeHeights,
+    nodesData,
+    coordinates,
+    selectedMapDimensions,
+    nodeAttributes,
+    selectedResizeBy
+  }) {
+    const node = nodesData[0];
+    const nodeHeight = nodeHeights && nodeHeights[node.id];
+
+    if (!coordinates) {
+      return;
+    }
+
+    let values = [];
+    if (nodeAttributes && selectedMapDimensions && selectedMapDimensions.length > 0) {
+      values = selectedMapDimensions
+        .map(dimension => {
+          const meta = getNodeMeta(dimension, node, nodeAttributes, selectedResizeBy, nodeHeights);
+          if (!meta) {
+            return null;
+          }
+          return {
+            title: dimension.name,
+            unit: dimension.unit,
+            value: formatValue(meta.value, dimension.name)
+          };
+        })
+        .filter(Boolean);
+    }
+
+    // if node is visible in sankey, quant is available
+    if (nodeHeight) {
+      values.push({
+        title: selectedResizeBy.label,
+        unit: selectedResizeBy.unit,
+        value: formatValue(nodeHeight.quant, selectedResizeBy.label)
+      });
+    }
+    this.tooltip.show(coordinates.pageX, coordinates.pageY, node.name, values);
   }
 }
