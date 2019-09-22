@@ -1,0 +1,37 @@
+@import 'styles/settings';
+@import 'styles/mixins';
+
+.layout-arrow-button {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: - ($map-btn-height / 2);
+  width: $map-btn-height;
+  height: $map-btn-height;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  background-color: $charcoal-grey;
+  box-shadow: $box-shadow;
+  color: $light-gray;
+  cursor: pointer;
+  z-index: $z-leaflet-above-panes;
+
+  @include simple-arrow($white);
+
+  &::after {
+    top: 50%;
+    left: calc(50% - 4px);
+    transform: translate(-1px, -50%) rotateZ(-45deg);
+  }
+
+  &.-right {
+    top: 100px;
+    &::after {
+      left: calc(50% - 2px);
+      transform: translate(-1px, -50%) rotateZ(-225deg);
+    }
+  }
+}

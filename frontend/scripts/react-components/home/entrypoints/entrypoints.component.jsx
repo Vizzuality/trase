@@ -8,6 +8,7 @@ import Heading from 'react-components/shared/heading/heading.component';
 import { ImgBackground } from 'react-components/shared/img';
 
 import './entrypoints.scss';
+import { TOOL_LAYOUT } from 'constants';
 
 class Entrypoints extends React.PureComponent {
   constructor(props) {
@@ -36,7 +37,7 @@ class Entrypoints extends React.PureComponent {
         src: '/images/backgrounds/entrypoint-1@2x.jpg'
       },
       {
-        link: { type: 'tool', payload: { serializerParams: { isMapVisible: true } } },
+        link: { type: 'tool', payload: { serializerParams: { toolLayout: TOOL_LAYOUT.left } } },
         subtitle: 'Map',
         text:
           'Explore the sustainability of different production regions and identify risks and' +

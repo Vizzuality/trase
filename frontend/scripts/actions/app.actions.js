@@ -5,7 +5,7 @@ import {
   GET_TOP_NODE_STATS_URL,
   getURLFromParams
 } from 'utils/getURLFromParams';
-import { TOGGLE_MAP, SELECT_YEARS } from 'react-components/tool/tool.actions';
+import { CHANGE_LAYOUT, SELECT_YEARS } from 'react-components/tool/tool.actions';
 import getPageTitle from 'scripts/router/page-title';
 import { redirect } from 'redux-first-router';
 import { getSelectedContext } from 'reducers/app.selectors';
@@ -56,11 +56,11 @@ export function resize() {
   };
 }
 
-export function toggleMap(forceState = null) {
+export function changeLayout(newToolLayout) {
   return dispatch => {
     dispatch({
-      type: TOGGLE_MAP,
-      forceState
+      type: CHANGE_LAYOUT,
+      toolLayout: newToolLayout
     });
     dispatch({ type: SET_SANKEY_SIZE });
   };

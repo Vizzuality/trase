@@ -1,5 +1,6 @@
 import capitalize from 'lodash/capitalize';
 import { getSelectedContext } from 'reducers/app.selectors';
+import { TOOL_LAYOUT } from 'constants';
 
 export default function(state) {
   const selectedContext = getSelectedContext(state);
@@ -15,7 +16,7 @@ export default function(state) {
       return 'TRASE - Profiles';
     case 'tool':
       if (!selectedContext) {
-        if (state.toolLayers.isMapVisible) {
+        if (state.toolLayers.toolLayout === TOOL_LAYOUT.left) {
           return 'TRASE - Map';
         }
         return 'TRASE - Supply Chain';

@@ -24,7 +24,7 @@ export const GET_CONTEXT_LAYERS = 'GET_CONTEXT_LAYERS';
 export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
 export const SELECT_CONTEXTUAL_LAYERS = 'SELECT_CONTEXTUAL_LAYERS';
 export const SELECT_BASEMAP = 'SELECT_BASEMAP';
-export const TOGGLE_MAP = 'TOGGLE_MAP';
+export const CHANGE_LAYOUT = 'CHANGE_LAYOUT';
 export const SAVE_MAP_VIEW = 'SAVE_MAP_VIEW';
 
 export function loadMapVectorData() {

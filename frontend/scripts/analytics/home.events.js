@@ -3,6 +3,7 @@ import {
   HOME__CLICK_ENTRYPOINT,
   HOME__CLICK_NEXT_ENTRYPOINT
 } from 'react-components/home/home.actions';
+import { TOOL_LAYOUT } from 'constants';
 
 export default [
   {
@@ -25,7 +26,7 @@ export default [
       if (route.type !== 'tool') {
         return route.type === 'profileRoot' ? 'profiles' : route.type;
       }
-      if (route.payload?.query?.state?.isMapVisible) {
+      if (route.payload?.query?.state?.toolLayout === TOOL_LAYOUT.left) {
         return 'Map';
       }
       return 'Supply Chain';

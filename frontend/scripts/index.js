@@ -115,7 +115,7 @@ const store = createStore(
       urlPropHandlers: ToolLayersUrlPropHandlers,
       props: [
         'mapView',
-        'isMapVisible',
+        'toolLayout',
         'selectedBasemap',
         'selectedMapContextualLayers',
         'selectedMapDimensions'

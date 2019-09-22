@@ -1,10 +1,11 @@
 import React from 'react';
 import cx from 'classnames';
 import PropTypes from 'prop-types';
+import { TOOL_LAYOUT } from 'constants';
 
-import LinkButton from '../../../shared/link-button.component';
-import HighlightTextFragments from '../../../shared/highlight-text-fragments.component';
-import Button from '../../../shared/button/button.component';
+import LinkButton from 'react-components/shared/link-button.component';
+import HighlightTextFragments from 'react-components/shared/highlight-text-fragments.component';
+import Button from 'react-components/shared/button/button.component';
 
 function ToolSearchResult({
   value,
@@ -16,14 +17,14 @@ function ToolSearchResult({
   isHighlighted,
   item,
   contextId,
-  isMapVisible
+  toolLayout
 }) {
   const buttonList = [];
 
   if (selected) {
     buttonList.push(
       <Button key="alreadyInSupplyChain" size="rg" disabled>
-        Already in {isMapVisible ? 'map' : 'supply chain'}
+        Already in {toolLayout === TOOL_LAYOUT.left ? 'map' : 'supply chain'}
       </Button>
     );
   } else if (exporterNotSelected === importerNotSelected) {
@@ -37,7 +38,7 @@ function ToolSearchResult({
     //     size="rg"
     //     onClick={e => onClickAdd(e, item)}
     //   >
-    //     Add to {isMapVisible ? 'map' : 'supply chain'}
+    //     Add to {toolLayout === TOOL_LAYOUT.left ? 'map' : 'supply chain'}
     //   </Button>
     // );
   }
@@ -101,7 +102,7 @@ ToolSearchResult.propTypes = {
   selected: PropTypes.bool,
   onClickAdd: PropTypes.func,
   itemProps: PropTypes.object,
-  isMapVisible: PropTypes.bool,
+  toolLayout: PropTypes.number,
   isHighlighted: PropTypes.bool,
   exporterNotSelected: PropTypes.bool,
   importerNotSelected: PropTypes.bool,

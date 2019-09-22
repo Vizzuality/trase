@@ -1,3 +1,5 @@
+import { TOOL_LAYOUT } from 'constants';
+
 const supplyChainNavs = [];
 if (ENABLE_REDESIGN_PAGES) {
   supplyChainNavs.push({
@@ -12,14 +14,14 @@ if (ENABLE_REDESIGN_PAGES) {
       name: 'Supply Chain',
       page: {
         type: 'tool',
-        payload: { serializerParams: { isMapVisible: false } }
+        payload: { serializerParams: { toolLayout: TOOL_LAYOUT.right } }
       }
     },
     {
       name: 'Map',
       page: {
         type: 'tool',
-        payload: { serializerParams: { isMapVisible: true } }
+        payload: { serializerParams: { toolLayout: TOOL_LAYOUT.left } }
       }
     }
   );

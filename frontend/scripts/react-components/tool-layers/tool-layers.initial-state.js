@@ -1,3 +1,5 @@
+import { TOOL_LAYOUT } from 'constants';
+
 export default {
   data: {
     mapDimensions: {},
@@ -6,7 +8,7 @@ export default {
     mapContextualLayers: {}
   },
   highlightedNodeCoordinates: null, // TODO: this should be local state only used for map tooltip
-  isMapVisible: false,
+  toolLayout: TOOL_LAYOUT.right,
   linkedGeoIds: [],
   mapLoading: false,
   mapView: null,

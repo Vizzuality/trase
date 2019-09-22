@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { TOOL_LAYOUT } from 'constants';
 
-import LinkButton from '../../../shared/link-button.component';
-import HighlightTextFragments from '../../../shared/highlight-text-fragments.component';
+import LinkButton from 'react-components/shared/link-button.component';
+import HighlightTextFragments from 'react-components/shared/highlight-text-fragments.component';
 
 class GlobalSearchResult extends Component {
   state = {
@@ -40,7 +41,7 @@ class GlobalSearchResult extends Component {
               type: 'tool',
               payload: {
                 serializerParams: {
-                  isMapVisible: false,
+                  toolLayout: TOOL_LAYOUT.right,
                   selectedContextId: item.contextId,
                   selectedNodesIds: item.nodes.map(i => i.id),
                   expandedNodesIds: item.nodes.map(i => i.id)
@@ -61,7 +62,7 @@ class GlobalSearchResult extends Component {
                 type: 'tool',
                 payload: {
                   serializerParams: {
-                    isMapVisible: true,
+                    toolLayout: TOOL_LAYOUT.left,
                     selectedContextId: item.contextId,
                     selectedNodesIds: item.nodes.map(i => i.id),
                     expandedNodesIds: item.nodes.map(i => i.id)

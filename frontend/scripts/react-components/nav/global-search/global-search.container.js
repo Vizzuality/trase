@@ -3,6 +3,7 @@ import GlobalSearch from 'react-components/nav/global-search/global-search.compo
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getAppSearchResults } from 'react-components/nav/global-search/global-search.selectors';
+import { TOOL_LAYOUT } from 'constants';
 
 const mapStateToProps = state => {
   const { search } = state.app;
@@ -24,7 +25,7 @@ const mapDispatchToProps = dispatch =>
           type: 'tool',
           payload: {
             serializerParams: {
-              isMapVisible: false,
+              toolLayout: TOOL_LAYOUT.right,
               selectedContextId: item.contextId,
               selectedNodesIds: item.nodes.map(i => i.id),
               expandedNodesIds: item.nodes.map(i => i.id)

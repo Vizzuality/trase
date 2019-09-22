@@ -11,6 +11,7 @@ import Sankey from 'react-components/tool/sankey';
 import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.react';
 import Tooltip from 'react-components/tool/help-tooltip/help-tooltip.container';
 import Basemaps from 'react-components/tool/basemaps';
+import LayoutArrows from 'react-components/tool/layout-arrows';
 import LegacyBasemaps from 'react-components/tool/legacy-basemaps/legacy-basemaps.container';
 import Legend from 'react-components/tool/legend';
 import EventManager from 'utils/eventManager';
@@ -50,7 +51,7 @@ const renderMap = () => (
   <div className="js-map-container c-map is-absolute -smooth-transition">
     <div id="js-map" className="c-map-leaflet" />
     {ENABLE_REDESIGN_PAGES && <Basemaps />}
-    <div className="btn-map -toggle-map js-toggle-map" />
+    {ENABLE_REDESIGN_PAGES && <LayoutArrows />}
     <div className="js-map-warnings-container map-warnings">
       <div className="warning-wrapper">
         <svg className="icon">

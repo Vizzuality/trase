@@ -11,6 +11,7 @@ import NavDropdownSelector from 'react-components/nav/filters-nav/nav-dropdown-s
 import ToolSearch from 'react-components/tool/tool-search/tool-search.container';
 import { NavLink } from 'redux-first-router-link';
 import Img from 'react-components/shared/img';
+import { TOOL_LAYOUT } from 'constants';
 
 import 'scripts/react-components/nav/filters-nav/filters-nav.scss';
 import 'scripts/react-components/nav/filters-nav/burger.scss';
@@ -19,7 +20,7 @@ class FiltersNav extends React.PureComponent {
   static propTypes = {
     openMap: PropTypes.func,
     openSankey: PropTypes.func,
-    isMapVisible: PropTypes.bool,
+    toolLayout: PropTypes.number,
     toggleDropdown: PropTypes.func,
     currentDropdown: PropTypes.string,
     links: PropTypes.array.isRequired,
@@ -56,21 +57,25 @@ class FiltersNav extends React.PureComponent {
   };
 
   renderInToolLinks() {
-    const { links, openMap, openSankey, isMapVisible } = this.props;
+    const { links, openMap, openSankey, toolLayout } = this.props;
     const supplyChainLink = ENABLE_REDESIGN_PAGES
       ? links.find(link => link.page?.type === 'explore')
       : links.find(
-          link => link.page?.type === 'tool' && !link.page?.payload?.serializerParams?.isMapVisible
+          link =>
+            link.page?.type === 'tool' &&
+            link.page?.payload?.serializerParams?.toolLayout !== TOOL_LAYOUT.left
         );
 
     const mapLink = links.find(
-      link => link.page?.type === 'tool' && link.page?.payload?.serializerParams?.isMapVisible
+      link =>
+        link.page?.type === 'tool' &&
+        link.page?.payload?.serializerParams?.toolLayout === TOOL_LAYOUT.left
     );
     const renderToolLinks = ENABLE_REDESIGN_PAGES ? (
       <li className="filters-nav-item">
         <span
           className={cx('filters-nav-link', {
-            '-active': !isMapVisible
+            '-active': toolLayout !== TOOL_LAYOUT.left
           })}
           onClick={openSankey}
         >
@@ -82,7 +87,7 @@ class FiltersNav extends React.PureComponent {
         <li className="filters-nav-item">
           <span
             className={cx('filters-nav-link', {
-              '-active': !isMapVisible
+              '-active': toolLayout !== TOOL_LAYOUT.left
             })}
             onClick={openSankey}
           >
@@ -92,7 +97,7 @@ class FiltersNav extends React.PureComponent {
         <li className="filters-nav-item">
           <span
             className={cx('filters-nav-link', {
-              '-active': isMapVisible
+              '-active': toolLayout === TOOL_LAYOUT.left
             })}
             onClick={openMap}
           >
