@@ -69,10 +69,6 @@ export default class MapComponent {
     });
     this.contextLayers = [];
     this.pointVolumeShadowLayer = null;
-    this.clickToggleMap = () => {
-      this.callbacks.onToggleMap();
-    };
-    this.toggleMap = document.querySelector('.js-toggle-map');
 
     this.attribution = document.querySelector('.js-map-attribution');
     this.attributionSource = document.querySelector('.leaflet-control-attribution');
@@ -83,7 +79,6 @@ export default class MapComponent {
     this.map.on('layeradd', this.mapEvents.updateAttribution);
     this.map.on('dragend zoomend', this.mapEvents.moveEnd);
     this.map.on('zoomend', this.mapEvents.zoomEnd);
-    this.toggleMap.addEventListener('click', this.clickToggleMap);
 
     this.setMapView(props);
     this.setBasemap(props);
@@ -98,8 +93,6 @@ export default class MapComponent {
   }
 
   onRemoved() {
-    this.toggleMap.removeEventListener('click', this.clickToggleMap);
-
     this.map.off('drag', this.mapEvents.panInsideBounds);
     this.map.off('layeradd', this.mapEvents.updateAttribution);
     this.map.off('dragend zoomend', this.mapEvents.moveEnd);

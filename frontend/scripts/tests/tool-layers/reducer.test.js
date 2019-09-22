@@ -5,7 +5,7 @@ import {
   SAVE_MAP_VIEW,
   SELECT_BASEMAP,
   SELECT_CONTEXTUAL_LAYERS,
-  TOGGLE_MAP,
+  CHANGE_LAYOUT,
   TOGGLE_MAP_DIMENSION,
   saveMapView,
   selectContextualLayers
@@ -16,6 +16,7 @@ import {
 } from 'react-components/tool-layers/tool-layers.actions';
 import reducer from 'react-components/tool-layers/tool-layers.reducer';
 import initialState from 'react-components/tool-layers/tool-layers.initial-state';
+import { TOOL_LAYOUT } from 'constants';
 
 test(SET_NODE_ATTRIBUTES, () => {
   const action = {
@@ -133,19 +134,11 @@ test(SELECT_CONTEXTUAL_LAYERS, () => {
   expect(newState).toMatchSnapshot();
 });
 
-describe(TOGGLE_MAP, () => {
-  it('Toggles the map visibility if forceState is null', () => {
+describe(CHANGE_LAYOUT, () => {
+  it('Changes the map layout', () => {
     const action = {
-      type: TOGGLE_MAP,
-      forceState: null
-    };
-    const newState = reducer(initialState, action);
-    expect(newState).toMatchSnapshot();
-  });
-  it('Forces the map visibility to the forceState value', () => {
-    const action = {
-      type: TOGGLE_MAP,
-      forceState: false
+      type: CHANGE_LAYOUT,
+      toolLayout: TOOL_LAYOUT.right
     };
     const newState = reducer(initialState, action);
     expect(newState).toMatchSnapshot();

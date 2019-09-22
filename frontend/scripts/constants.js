@@ -311,3 +311,9 @@ export const NODE_TYPE_PANELS = {
 };
 
 export const WORLD_MAP_ASPECT_RATIO = 0.56;
+
+export const TOOL_LAYOUT = {
+  left: 0,
+  splitted: 1,
+  right: 2
+};

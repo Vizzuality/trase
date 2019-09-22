@@ -21,9 +21,11 @@ import createReducer from 'utils/createReducer';
 import { SELECT_YEARS } from 'react-components/tool/tool.actions';
 import { TOOL_LINKS_RESET_SANKEY } from 'react-components/tool-links/tool-links.actions';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
+import { TOOL_LAYOUT } from 'constants';
 import initialState from './app.initial-state';
 
-const isSankeyExpanded = state => state.isMapLayerVisible !== true && state.isMapVisible !== true;
+const isSankeyExpanded = state =>
+  state.isMapLayerVisible !== true && state.toolLayout !== TOOL_LAYOUT.left;
 
 const appReducer = {
   tool(state, action) {

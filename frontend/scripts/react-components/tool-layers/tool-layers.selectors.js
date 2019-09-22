@@ -17,7 +17,7 @@ const getMapContextualLayers = state => state.toolLayers.data.mapContextualLayer
 const getToolSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
 const getSelectedMapContextualLayers = state => state.toolLayers.selectedMapContextualLayers;
 const getToolMapView = state => state.toolLayers.mapView;
-const getIsMapVisible = state => state.toolLayers.isMapVisible;
+const getToolLayout = state => state.toolLayers.toolLayout;
 const getSelectedBasemap = state => state.toolLayers.selectedBasemap;
 
 const getNodesGeoIds = (nodesData, columns) => {
@@ -183,7 +183,7 @@ export const getShouldFitBoundsSelectedPolygons = createSelector(
 
 export const getToolLayersUrlProps = createStructuredSelector({
   mapView: getMapView,
-  isMapVisible: getIsMapVisible,
+  toolLayout: getToolLayout,
   selectedBasemap: getSelectedBasemap,
   selectedMapDimensions: getToolSelectedMapDimensions,
   selectedMapContextualLayers: getSelectedMapContextualLayers

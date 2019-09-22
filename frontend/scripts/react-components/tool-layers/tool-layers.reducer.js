@@ -5,7 +5,7 @@ import {
   SAVE_MAP_VIEW,
   SELECT_BASEMAP,
   SELECT_CONTEXTUAL_LAYERS,
-  TOGGLE_MAP,
+  CHANGE_LAYOUT,
   TOGGLE_MAP_DIMENSION
 } from 'react-components/tool/tool.actions';
 import {
@@ -30,7 +30,7 @@ const toolLayersReducer = {
         urlPropHandlers: ToolLayersUrlPropHandlers,
         props: [
           'mapView',
-          'isMapVisible',
+          'toolLayout',
           'selectedBasemap',
           'selectedMapContextualLayers',
           'selectedMapDimensions'
@@ -126,9 +126,9 @@ const toolLayersReducer = {
       draft.selectedBasemap = action.payload.selectedBasemap;
     });
   },
-  [TOGGLE_MAP](state, action) {
+  [CHANGE_LAYOUT](state, action) {
     return immer(state, draft => {
-      draft.isMapVisible = action.forceState !== null ? action.forceState : !state.isMapVisible;
+      draft.toolLayout = action.toolLayout;
     });
   },
   [SAVE_MAP_VIEW](state, action) {
@@ -150,7 +150,7 @@ const toolLayersReducerTypes = PropTypes => ({
     mapContextualLayers: PropTypes.object.isRequired
   }).isRequired,
   highlightedNodeCoordinates: PropTypes.object,
-  isMapVisible: PropTypes.bool,
+  toolLayout: PropTypes.number,
   linkedGeoIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   mapLoading: PropTypes.bool,
   mapView: PropTypes.object,

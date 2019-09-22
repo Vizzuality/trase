@@ -1,5 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`CHANGE_LAYOUT Changes the map layout 1`] = `
+Object {
+  "data": Object {
+    "mapContextualLayers": Object {},
+    "mapDimensions": Object {},
+    "mapDimensionsGroups": Array [],
+    "mapVectorData": null,
+  },
+  "highlightedNodeCoordinates": null,
+  "linkedGeoIds": Array [],
+  "mapLoading": false,
+  "mapView": null,
+  "selectedBasemap": null,
+  "selectedMapContextualLayers": null,
+  "selectedMapDimensions": null,
+  "toolLayout": 2,
+}
+`;
+
 exports[`GET_CONTEXT_LAYERS 1`] = `
 Object {
   "data": Object {
@@ -16,13 +35,13 @@ Object {
     "mapVectorData": null,
   },
   "highlightedNodeCoordinates": null,
-  "isMapVisible": false,
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
+  "toolLayout": 2,
 }
 `;
 
@@ -42,13 +61,13 @@ Object {
     ],
   },
   "highlightedNodeCoordinates": null,
-  "isMapVisible": false,
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
+  "toolLayout": 2,
 }
 `;
 
@@ -61,7 +80,6 @@ Object {
     "mapVectorData": null,
   },
   "highlightedNodeCoordinates": null,
-  "isMapVisible": false,
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": Object {
@@ -72,6 +90,7 @@ Object {
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
+  "toolLayout": 2,
 }
 `;
 
@@ -84,7 +103,6 @@ Object {
     "mapVectorData": null,
   },
   "highlightedNodeCoordinates": null,
-  "isMapVisible": false,
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
@@ -93,6 +111,7 @@ Object {
   },
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
+  "toolLayout": 2,
 }
 `;
 
@@ -105,7 +124,6 @@ Object {
     "mapVectorData": null,
   },
   "highlightedNodeCoordinates": null,
-  "isMapVisible": false,
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
@@ -119,6 +137,7 @@ Object {
     },
   ],
   "selectedMapDimensions": null,
+  "toolLayout": 2,
 }
 `;
 
@@ -131,51 +150,13 @@ Object {
     "mapVectorData": null,
   },
   "highlightedNodeCoordinates": null,
-  "isMapVisible": false,
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
-}
-`;
-
-exports[`TOGGLE_MAP Forces the map visibility to the forceState value 1`] = `
-Object {
-  "data": Object {
-    "mapContextualLayers": Object {},
-    "mapDimensions": Object {},
-    "mapDimensionsGroups": Array [],
-    "mapVectorData": null,
-  },
-  "highlightedNodeCoordinates": null,
-  "isMapVisible": false,
-  "linkedGeoIds": Array [],
-  "mapLoading": false,
-  "mapView": null,
-  "selectedBasemap": null,
-  "selectedMapContextualLayers": null,
-  "selectedMapDimensions": null,
-}
-`;
-
-exports[`TOGGLE_MAP Toggles the map visibility if forceState is null 1`] = `
-Object {
-  "data": Object {
-    "mapContextualLayers": Object {},
-    "mapDimensions": Object {},
-    "mapDimensionsGroups": Array [],
-    "mapVectorData": null,
-  },
-  "highlightedNodeCoordinates": null,
-  "isMapVisible": true,
-  "linkedGeoIds": Array [],
-  "mapLoading": false,
-  "mapView": null,
-  "selectedBasemap": null,
-  "selectedMapContextualLayers": null,
-  "selectedMapDimensions": null,
+  "toolLayout": 2,
 }
 `;
 
@@ -188,7 +169,6 @@ Object {
     "mapVectorData": null,
   },
   "highlightedNodeCoordinates": null,
-  "isMapVisible": false,
   "linkedGeoIds": Array [],
   "mapLoading": true,
   "mapView": null,
@@ -197,6 +177,7 @@ Object {
   "selectedMapDimensions": Array [
     "quant90",
   ],
+  "toolLayout": 2,
 }
 `;
 
@@ -209,7 +190,6 @@ Object {
     "mapVectorData": null,
   },
   "highlightedNodeCoordinates": null,
-  "isMapVisible": false,
   "linkedGeoIds": Array [],
   "mapLoading": true,
   "mapView": null,
@@ -219,6 +199,7 @@ Object {
     "NotEmpty",
     "quant90",
   ],
+  "toolLayout": 2,
 }
 `;
 
@@ -231,7 +212,6 @@ Object {
     "mapVectorData": null,
   },
   "highlightedNodeCoordinates": null,
-  "isMapVisible": false,
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
@@ -241,6 +221,7 @@ Object {
     "quant95",
     null,
   ],
+  "toolLayout": 2,
 }
 `;
 
@@ -253,7 +234,6 @@ Object {
     "mapVectorData": null,
   },
   "highlightedNodeCoordinates": null,
-  "isMapVisible": false,
   "linkedGeoIds": Array [
     "BR-123-23",
   ],
@@ -262,6 +242,7 @@ Object {
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
+  "toolLayout": 2,
 }
 `;
 
@@ -274,13 +255,13 @@ Object {
     "mapVectorData": null,
   },
   "highlightedNodeCoordinates": null,
-  "isMapVisible": false,
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
+  "toolLayout": 2,
 }
 `;
 
@@ -313,12 +294,12 @@ Object {
     "mapVectorData": null,
   },
   "highlightedNodeCoordinates": null,
-  "isMapVisible": false,
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
+  "toolLayout": 2,
 }
 `;
