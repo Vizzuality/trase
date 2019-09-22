@@ -6,6 +6,7 @@ import Tooltip from 'components/shared/info-tooltip.component';
 import formatValue from 'utils/formatValue';
 import capitalize from 'lodash/capitalize';
 import startCase from 'lodash/startCase';
+import addApostrophe from 'utils/addApostrophe';
 import getNodeMeta from 'reducers/helpers/getNodeMeta';
 import Heading from 'react-components/shared/heading';
 import SankeyColumn from './sankey-column.component';
@@ -15,7 +16,7 @@ import * as Defs from './sankey-defs.component';
 
 import 'react-components/tool/sankey/sankey.scss';
 
-function useMenuOptions(props) {
+function useMenuOptions(props, hoveredSelectedNode) {
   const {
     goToProfile,
     hasExpandedNodesIds,
@@ -32,11 +33,32 @@ function useMenuOptions(props) {
       { id: 'clear', label: 'Clear Selection', onClick: onClearClick }
     ];
 
+    let nodeName = null;
+    let link = {};
+
     if (lastSelectedNodeLink) {
+      const { name, ...params } = lastSelectedNodeLink;
+      nodeName = name;
+      link = {
+        ...params
+      };
+    }
+
+    if (
+      hoveredSelectedNode &&
+      hoveredSelectedNode.isUnknown !== true &&
+      hoveredSelectedNode.isDomesticConsumption !== true
+    ) {
+      nodeName = hoveredSelectedNode.name;
+      link.profileType = hoveredSelectedNode.profileType;
+      link.nodeId = hoveredSelectedNode.id;
+    }
+
+    if (link.profileType) {
       items.splice(2, 0, {
         id: 'profile-link',
-        label: 'Go To Profile',
-        onClick: () => goToProfile(lastSelectedNodeLink)
+        label: `Go To ${nodeName}${addApostrophe(nodeName)} Profile`,
+        onClick: () => goToProfile(link)
       });
     }
 
@@ -49,6 +71,7 @@ function useMenuOptions(props) {
 
     return items;
   }, [
+    hoveredSelectedNode,
     lastSelectedNodeLink,
     hasExpandedNodesIds,
     isReExpand,
@@ -61,29 +84,43 @@ function useMenuOptions(props) {
 
 function useMenuPosition(props) {
   const { selectedNodesIds, isReExpand, columns } = props;
+  const [hoveredSelectedNode, setHoveredSelectedNode] = useState(null);
   const [menuPos, setMenuPos] = useState({ x: 0, y: 0 });
   const ref = useRef(null);
+
+  const getCoordinates = n => ({
+    x: n.x,
+    y: Math.max(0, n.y) - (ref.current?.scrollTop || 0)
+  });
+
+  useEffect(() => {
+    setHoveredSelectedNode(null);
+  }, [selectedNodesIds]);
 
   useEffect(() => {
     if (!columns) {
       return;
     }
-    // use some to stop iterating once its found
-    columns.some(column =>
-      column.values.some(node => {
-        const last = selectedNodesIds.length - 1;
-        if (node.id === selectedNodesIds[last]) {
-          const x = node.x;
-          const y = Math.max(0, node.y) - (ref.current?.scrollTop || 0);
-          setMenuPos({ x, y });
-          return true;
-        }
-        return false;
-      })
-    );
-  }, [selectedNodesIds, columns, isReExpand]);
+    if (hoveredSelectedNode) {
+      const coordinates = getCoordinates(hoveredSelectedNode);
+      setMenuPos(coordinates);
+    } else {
+      // use some to stop iterating once its found
+      columns.some(column =>
+        column.values.some(node => {
+          const last = selectedNodesIds.length - 1;
+          if (node.id === selectedNodesIds[last]) {
+            const coordinates = getCoordinates(node);
+            setMenuPos(coordinates);
+            return true;
+          }
+          return false;
+        })
+      );
+    }
+  }, [selectedNodesIds, columns, isReExpand, hoveredSelectedNode]);
 
-  return [menuPos, ref];
+  return [menuPos, ref, hoveredSelectedNode, setHoveredSelectedNode];
 }
 
 function useVanillaTooltip({ links }) {
@@ -168,10 +205,15 @@ function Sankey(props) {
     selectedNodesIds
   } = props;
   const [hoveredLink, setHoveredLink] = useState(null);
-  const menuOptions = useMenuOptions(props);
   const [tooltipRef, setTooltip] = useVanillaTooltip(props);
   const [rect, svgRef] = useDomNodeRect(columns);
-  const [menuPos, scrollContainerRef] = useMenuPosition(props);
+  const [
+    menuPos,
+    scrollContainerRef,
+    hoveredSelectedNode,
+    setHoveredSelectedNode
+  ] = useMenuPosition(props);
+  const menuOptions = useMenuOptions(props, hoveredSelectedNode);
   const placeholderHeight = useNodeRefHeight(scrollContainerRef);
 
   const getLinkColor = link => {
@@ -273,6 +315,10 @@ function Sankey(props) {
         .filter(Boolean);
 
       tooltip.values.push(...nodeIndicators);
+    }
+
+    if (selectedNodesIds.includes(node.id)) {
+      setHoveredSelectedNode(node);
     }
 
     setTooltip(tooltip);

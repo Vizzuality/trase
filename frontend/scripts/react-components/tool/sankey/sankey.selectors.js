@@ -282,20 +282,12 @@ export const getLastSelectedNodeLink = createSelector(
       return null;
     }
 
-    const link =
-      node.isUnknown !== true &&
-      node.isDomesticConsumption !== true &&
-      column?.profileType !== undefined &&
-      column?.profileType !== null;
-
-    if (link) {
-      return {
-        nodeId: node.id,
-        year: selectedYears[0],
-        contextId: selectedContext.id,
-        profileType: column.profileType
-      };
-    }
-    return null;
+    return {
+      name: node.name,
+      nodeId: node.id,
+      year: selectedYears[0],
+      contextId: selectedContext.id,
+      profileType: column.profileType
+    };
   }
 );
