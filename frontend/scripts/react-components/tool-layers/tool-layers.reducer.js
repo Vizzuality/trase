@@ -5,8 +5,9 @@ import {
   SAVE_MAP_VIEW,
   SELECT_BASEMAP,
   SELECT_CONTEXTUAL_LAYERS,
+  TOGGLE_MAP_DIMENSION,
   CHANGE_LAYOUT,
-  TOGGLE_MAP_DIMENSION
+  SET_SANKEY_SIZE
 } from 'react-components/tool/tool.actions';
 import {
   TOOL_LAYERS__SET_LINKED_GEOIDS,
@@ -19,7 +20,8 @@ import createReducer from 'utils/createReducer';
 import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import * as ToolLayersUrlPropHandlers from 'react-components/tool-layers/tool-layers.serializers';
-import toolLayersInitialState from './tool-layers.initial-state';
+import toolLayersInitialState from 'react-components/tool-layers//tool-layers.initial-state';
+import { TOOL_LAYOUT } from 'constants';
 
 const toolLayersReducer = {
   tool(state, action) {
@@ -139,6 +141,18 @@ const toolLayersReducer = {
         zoom: action.zoom
       };
     });
+  },
+  [SET_SANKEY_SIZE](state) {
+    const { toolLayout } = state;
+    console.log(toolLayout, TOOL_LAYOUT.splitted);
+    const heightOffset = 175;
+    let widthOffset = 120;
+    if (toolLayout === TOOL_LAYOUT.splitted) {
+      widthOffset = 392;
+    }
+    return immer(state, draft => {
+      draft.sankeySize = [window.innerWidth - widthOffset, window.innerHeight - heightOffset];
+    });
   }
 };
 
@@ -156,7 +170,8 @@ const toolLayersReducerTypes = PropTypes => ({
   mapView: PropTypes.object,
   selectedBasemap: PropTypes.string,
   selectedMapContextualLayers: PropTypes.array,
-  selectedMapDimensions: PropTypes.array
+  selectedMapDimensions: PropTypes.array,
+  sankeySize: PropTypes.arrayOf(PropTypes.number).isRequired
 });
 
 export default createReducer(toolLayersInitialState, toolLayersReducer, toolLayersReducerTypes);

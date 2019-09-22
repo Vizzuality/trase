@@ -8,6 +8,8 @@ import capitalize from 'lodash/capitalize';
 import startCase from 'lodash/startCase';
 import getNodeMeta from 'reducers/helpers/getNodeMeta';
 import Heading from 'react-components/shared/heading';
+import { TOOL_LAYOUT } from 'constants';
+
 import SankeyColumn from './sankey-column.component';
 import NodeMenu from './node-menu.component';
 import SankeyLink from './sankey-link.component';
@@ -201,7 +203,8 @@ function Sankey(props) {
     highlightedNodeId,
     gapBetweenColumns,
     onNodeHighlighted,
-    selectedNodesIds
+    selectedNodesIds,
+    toolLayout
   } = props;
   const [hoveredLink, setHoveredLink] = useState(null);
   const [tooltipRef, setTooltip] = useVanillaTooltip(props);
@@ -341,7 +344,9 @@ function Sankey(props) {
   const loading = !columns || columns.length === 0 || !links || flowsLoading;
 
   return (
-    <div className="c-sankey is-absolute">
+    <div
+      className={cx('c-sankey is-absolute', { '-full-screen': toolLayout === TOOL_LAYOUT.right })}
+    >
       <div
         ref={scrollContainerRef}
         className={cx('sankey-scroll-container', { '-detailed': detailedView })}
@@ -447,7 +452,8 @@ Sankey.propTypes = {
   onNodeClicked: PropTypes.func.isRequired,
   onCollapseClick: PropTypes.func.isRequired, // eslint-disable-line
   onNodeHighlighted: PropTypes.func.isRequired,
-  selectedNodesIds: PropTypes.array.isRequired
+  selectedNodesIds: PropTypes.array.isRequired,
+  toolLayout: PropTypes.number.isRequired
 };
 
 export default Sankey;

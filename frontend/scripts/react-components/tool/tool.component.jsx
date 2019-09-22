@@ -16,6 +16,8 @@ import LegacyBasemaps from 'react-components/tool/legacy-basemaps/legacy-basemap
 import Legend from 'react-components/tool/legend';
 import EventManager from 'utils/eventManager';
 import UrlSerializer from 'react-components/shared/url-serializer';
+import cx from 'classnames';
+import { TOOL_LAYOUT } from 'constants';
 
 import 'styles/layouts/l-tool.scss';
 import 'styles/components/shared/veil.scss';
@@ -47,8 +49,14 @@ const renderMapSidebar = () => (
   </div>
 );
 
-const renderMap = () => (
-  <div className="js-map-container c-map is-absolute -smooth-transition">
+const renderMap = ({ toolLayout }) => (
+  <div
+    className={cx(
+      'js-map-container c-map is-absolute -smooth-transition',
+      { '-map-fullscreen': toolLayout === TOOL_LAYOUT.left },
+      { '-sankey-fullscreen': toolLayout === TOOL_LAYOUT.right }
+    )}
+  >
     <div id="js-map" className="c-map-leaflet" />
     {ENABLE_REDESIGN_PAGES && <Basemaps />}
     {ENABLE_REDESIGN_PAGES && <LayoutArrows />}
@@ -95,7 +103,7 @@ const renderVainillaComponents = () => (
 );
 
 const Tool = props => {
-  const { resizeSankeyTool, urlProps, urlPropHandlers } = props;
+  const { resizeSankeyTool, urlProps, urlPropHandlers, toolLayout } = props;
   useEffect(() => {
     evManager.addEventListener(window, 'resize', resizeSankeyTool);
     const body = document.querySelector('body');
@@ -108,7 +116,6 @@ const Tool = props => {
       body.style.backgroundColor = originalBackground;
     };
   }, [resizeSankeyTool]);
-
   const render = useMemo(
     () => (
       <>
@@ -123,9 +130,15 @@ const Tool = props => {
 
           {renderSankeyError()}
 
-          <div className="js-tool-content flow-content">
+          <div
+            className={cx(
+              'js-tool-content flow-content',
+              { '-sankey-fullscreen': toolLayout === TOOL_LAYOUT.right },
+              { '-map-fullscreen': toolLayout === TOOL_LAYOUT.left }
+            )}
+          >
             {renderMapSidebar()}
-            {renderMap()}
+            {renderMap({ toolLayout })}
             <ColumnsSelectorGroupContainer />
             <Sankey />
             <TitlebarContainer />
@@ -133,7 +146,7 @@ const Tool = props => {
         </div>
       </>
     ),
-    []
+    [toolLayout]
   );
 
   return (
@@ -147,7 +160,8 @@ const Tool = props => {
 Tool.propTypes = {
   resizeSankeyTool: PropTypes.func.isRequired,
   urlPropHandlers: PropTypes.object,
-  urlProps: PropTypes.object
+  urlProps: PropTypes.object,
+  toolLayout: PropTypes.number
 };
 
 export default Tool;
