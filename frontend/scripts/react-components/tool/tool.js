@@ -20,7 +20,8 @@ const urlPropHandlers = {
 
 const mapStateToProps = state => ({
   urlPropHandlers,
-  urlProps: getUrlProps(state)
+  urlProps: getUrlProps(state),
+  toolLayout: state.toolLayers.toolLayout
 });
 
 const mapDispatchToProps = dispatch => ({

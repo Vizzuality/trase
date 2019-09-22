@@ -21,7 +21,7 @@ function mapStateToProps(state) {
   return {
     links: routerLinks.nav,
     filters: getNavFilters(state),
-    toolLayout: state.toolLayers && state.toolLayers.toolLayout,
+    toolLayout: state.toolLayers?.toolLayout,
     currentDropdown: state.app.currentDropdown
   };
 }

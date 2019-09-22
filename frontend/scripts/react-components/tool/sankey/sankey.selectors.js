@@ -26,7 +26,7 @@ const getToolNodes = state => state.toolLinks.data.nodes;
 
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getToolExpandedNodesIds = state => state.toolLinks.expandedNodesIds;
-const getSankeySize = state => state.app.sankeySize;
+const getSankeySize = state => state.toolLayers.sankeySize;
 const getDetailedView = state => state.toolLinks.detailedView;
 const getSankeyColumnsWidth = state => state.toolLinks.sankeyColumnsWidth;
 const getToolFlowsLoading = state => state.toolLinks.flowsLoading;

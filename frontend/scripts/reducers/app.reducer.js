@@ -2,7 +2,6 @@ import {
   DISPLAY_STORY_MODAL,
   LOAD_SEARCH_RESULTS,
   LOAD_TOOLTIP,
-  SET_SANKEY_SIZE,
   SET_SEARCH_TERM,
   SET_TOOLTIPS,
   SHOW_DISCLAIMER,
@@ -21,11 +20,7 @@ import createReducer from 'utils/createReducer';
 import { SELECT_YEARS } from 'react-components/tool/tool.actions';
 import { TOOL_LINKS_RESET_SANKEY } from 'react-components/tool-links/tool-links.actions';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
-import { TOOL_LAYOUT } from 'constants';
 import initialState from './app.initial-state';
-
-const isSankeyExpanded = state =>
-  state.isMapLayerVisible !== true && state.toolLayout !== TOOL_LAYOUT.left;
 
 const appReducer = {
   tool(state, action) {
@@ -41,14 +36,6 @@ const appReducer = {
         props: ['selectedContextId', 'selectedYears']
       });
       return newState;
-    }
-    return state;
-  },
-  [SET_SANKEY_SIZE](state) {
-    if (isSankeyExpanded(state)) {
-      return Object.assign({}, state, {
-        sankeySize: [window.innerWidth - 392, window.innerHeight - 175]
-      });
     }
     return state;
   },
@@ -173,7 +160,6 @@ const appReducerTypes = PropTypes => ({
   selectedContext: PropTypes.object,
   tooltips: PropTypes.object,
   tooltipCheck: PropTypes.number,
-  sankeySize: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedYears: PropTypes.arrayOf(PropTypes.number)
 });
 

@@ -5,7 +5,7 @@ import {
   GET_TOP_NODE_STATS_URL,
   getURLFromParams
 } from 'utils/getURLFromParams';
-import { CHANGE_LAYOUT, SELECT_YEARS } from 'react-components/tool/tool.actions';
+import { CHANGE_LAYOUT, SET_SANKEY_SIZE, SELECT_YEARS } from 'react-components/tool/tool.actions';
 import getPageTitle from 'scripts/router/page-title';
 import { redirect } from 'redux-first-router';
 import { getSelectedContext } from 'reducers/app.selectors';
@@ -14,7 +14,6 @@ import axios from 'axios';
 export const SET_CONTEXT = 'SET_CONTEXT';
 export const DISPLAY_STORY_MODAL = 'DISPLAY_STORY_MODAL';
 export const LOAD_TOOLTIP = 'LOAD_TOOLTIP';
-export const SET_SANKEY_SIZE = 'SET_SANKEY_SIZE';
 export const SET_TOOLTIPS = 'SET_TOOLTIPS';
 export const SHOW_DISCLAIMER = 'SHOW_DISCLAIMER';
 export const TOGGLE_DROPDOWN = 'TOGGLE_DROPDOWN';

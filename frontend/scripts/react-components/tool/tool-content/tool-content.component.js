@@ -1,11 +1,8 @@
-import { TOOL_LAYOUT } from 'constants';
-
 export default class {
   onCreated(props) {
     this.onSankeyReset = this._resetSankey.bind(this);
 
     this._setVars();
-    this.toggleMapVisibility(props);
     this.toggleMapLayersVisibility(props);
     this.toggleError(props);
   }
@@ -25,11 +22,6 @@ export default class {
 
   _resetSankey() {
     this.callbacks.resetSankey();
-  }
-
-  toggleMapVisibility({ toolLayout }) {
-    this.el.classList.toggle('-center-map', toolLayout === TOOL_LAYOUT.left);
-    this.map.classList.toggle('-fullscreen', toolLayout === TOOL_LAYOUT.left);
   }
 
   toggleMapLayersVisibility({ isVisible }) {
