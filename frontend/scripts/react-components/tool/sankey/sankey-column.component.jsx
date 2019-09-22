@@ -5,10 +5,11 @@ import cx from 'classnames';
 function SankeyColumn(props) {
   const {
     column,
+    onNodeOver,
+    onNodeOut,
     highlightedNodeId,
     selectedNodesIds,
     onNodeClicked,
-    onNodeHighlighted,
     sankeyColumnsWidth
   } = props;
   return (
@@ -26,9 +27,9 @@ function SankeyColumn(props) {
               '-selected': selectedNodesIds.includes(node.id)
             })}
             transform={`translate(0,${node.y})`}
-            onClick={() => onNodeClicked(node.id, node.isAggregated)}
-            onMouseOver={() => !node.isAggregated && onNodeHighlighted(node.id)}
-            onMouseOut={() => !node.isAggregated && onNodeHighlighted(null)}
+            onClick={() => list.length > 1 && onNodeClicked(node.id, node.isAggregated)}
+            onMouseOver={e => onNodeOver(e, node)}
+            onMouseOut={e => onNodeOut(e, node)}
           >
             <rect
               className="sankey-node-rect"
@@ -65,7 +66,8 @@ SankeyColumn.propTypes = {
   highlightedNodeId: PropTypes.number,
   selectedNodesIds: PropTypes.array.isRequired,
   onNodeClicked: PropTypes.func.isRequired,
-  onNodeHighlighted: PropTypes.func.isRequired,
+  onNodeOver: PropTypes.func.isRequired,
+  onNodeOut: PropTypes.func.isRequired,
   sankeyColumnsWidth: PropTypes.number.isRequired
 };
 

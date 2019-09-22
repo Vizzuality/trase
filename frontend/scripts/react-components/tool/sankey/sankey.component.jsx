@@ -6,6 +6,7 @@ import Tooltip from 'components/shared/info-tooltip.component';
 import formatValue from 'utils/formatValue';
 import capitalize from 'lodash/capitalize';
 import startCase from 'lodash/startCase';
+import getNodeMeta from 'reducers/helpers/getNodeMeta';
 import Heading from 'react-components/shared/heading';
 import SankeyColumn from './sankey-column.component';
 import NodeMenu from './node-menu.component';
@@ -129,6 +130,9 @@ function Sankey(props) {
     links,
     maxHeight,
     flowsLoading,
+    nodeHeights,
+    nodeAttributes,
+    selectedMapDimensions,
     sankeyColumnsWidth,
     selectedResizeBy,
     detailedView,
@@ -209,6 +213,56 @@ function Sankey(props) {
     setTooltip(null);
   };
 
+  const onNodeOver = (e, node) => {
+    if (node.isAggregated) {
+      return;
+    }
+
+    const nodeHeight = nodeHeights[node.id];
+    const tooltip = {
+      title: node.name,
+      values: [
+        {
+          title: selectedResizeBy.label,
+          unit: selectedResizeBy.unit,
+          value: `${formatValue(nodeHeight.quant, selectedResizeBy.label)}`
+        }
+      ],
+      width: rect.width,
+      height: rect.height,
+      x: e.clientX - rect.x,
+      y: e.clientY - rect.y
+    };
+    if (nodeAttributes && selectedMapDimensions && selectedMapDimensions.length > 0) {
+      const nodeIndicators = selectedMapDimensions
+        .map(dimension => {
+          const meta = getNodeMeta(dimension, node, nodeAttributes, selectedResizeBy, nodeHeights);
+          if (!meta) {
+            return null;
+          }
+          return {
+            title: dimension.name,
+            unit: dimension.unit,
+            value: formatValue(meta.value, dimension.name)
+          };
+        })
+        .filter(Boolean);
+
+      tooltip.values.push(...nodeIndicators);
+    }
+
+    setTooltip(tooltip);
+    onNodeHighlighted(node.id);
+  };
+
+  const onNodeOut = (e, node) => {
+    if (node.isAggregated) {
+      return;
+    }
+    setTooltip(null);
+    onNodeHighlighted(null);
+  };
+
   const loading = !columns || columns.length === 0 || !links || flowsLoading;
 
   return (
@@ -268,10 +322,11 @@ function Sankey(props) {
                   <SankeyColumn
                     key={column.key}
                     column={column}
+                    onNodeOver={onNodeOver}
+                    onNodeOut={onNodeOut}
                     selectedNodesIds={selectedNodesIds}
                     onNodeClicked={onNodeClicked}
                     highlightedNodeId={highlightedNodeId}
-                    onNodeHighlighted={onNodeHighlighted}
                     sankeyColumnsWidth={sankeyColumnsWidth}
                   />
                 ))}
@@ -302,6 +357,9 @@ Sankey.propTypes = {
   selectedRecolorBy: PropTypes.object,
   highlightedNodeId: PropTypes.number,
   gapBetweenColumns: PropTypes.number,
+  nodeHeights: PropTypes.object,
+  nodeAttributes: PropTypes.object,
+  selectedMapDimensions: PropTypes.array,
   onClearClick: PropTypes.func.isRequired, // eslint-disable-line
   onExpandClick: PropTypes.func.isRequired, // eslint-disable-line
   sankeyColumnsWidth: PropTypes.number.isRequired,

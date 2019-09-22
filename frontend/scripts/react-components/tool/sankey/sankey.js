@@ -19,6 +19,7 @@ import {
   highlightNode,
   selectNodes
 } from 'react-components/tool-links/tool-links.actions';
+import { getSelectedMapDimensionsData } from 'react-components/tool-layers/tool-layers.selectors';
 
 const mapStateToProps = state => ({
   links: getSankeyLinks(state),
@@ -26,6 +27,8 @@ const mapStateToProps = state => ({
   isReExpand: getIsReExpand(state),
   sankeySize: state.app.sankeySize,
   maxHeight: getSankeyMaxHeight(state),
+  nodeHeights: state.toolLinks.data.nodeHeights,
+  nodeAttributes: state.toolLinks.data.nodeAttributes,
   sankeyColumnsWidth: state.toolLinks.sankeyColumnsWidth,
   selectedResizeBy: getSelectedResizeBy(state),
   detailedView: state.toolLinks.detailedView,
@@ -34,7 +37,8 @@ const mapStateToProps = state => ({
   hasExpandedNodesIds: getHasExpandedNodesIds(state),
   gapBetweenColumns: getGapBetweenColumns(state),
   flowsLoading: state.toolLinks.flowsLoading,
-  highlightedNodeId: state.toolLinks.highlightedNodeId
+  highlightedNodeId: state.toolLinks.highlightedNodeId,
+  selectedMapDimensions: getSelectedMapDimensionsData(state)
 });
 
 const mapDispatchToProps = {
