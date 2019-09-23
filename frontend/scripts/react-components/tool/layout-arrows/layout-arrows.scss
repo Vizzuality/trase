@@ -3,7 +3,6 @@
 
 .layout-arrow-button {
   position: absolute;
-  top: 0;
   bottom: 0;
   right: - ($map-btn-height / 2);
   width: $map-btn-height;
@@ -27,11 +26,33 @@
     transform: translate(-1px, -50%) rotateZ(-45deg);
   }
 
+  top: -50px;
+  transition: top 0.3s;
+
   &.-right {
-    top: 100px;
+    top: 50px;
     &::after {
       left: calc(50% - 2px);
       transform: translate(-1px, -50%) rotateZ(-225deg);
+    }
+  }
+
+  &.-centered-arrow {
+    top: 0;
+  }
+
+  &.-disabled {
+    pointer-events: none;
+    z-index: $z-leaflet-above-panes - 1;
+
+    &::after {
+      transform: translate(-1px, -50%) rotateZ(-225deg);
+    }
+
+    &.-right {
+      &::after {
+        transform: translate(-1px, -50%) rotateZ(-45deg);
+      }
     }
   }
 }
