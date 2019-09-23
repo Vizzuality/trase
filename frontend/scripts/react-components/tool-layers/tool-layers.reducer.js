@@ -21,7 +21,7 @@ import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import * as ToolLayersUrlPropHandlers from 'react-components/tool-layers/tool-layers.serializers';
 import toolLayersInitialState from 'react-components/tool-layers//tool-layers.initial-state';
-import { TOOL_LAYOUT } from 'constants';
+import { TOOL_LAYOUT, SANKEY_OFFSETS } from 'constants';
 
 const toolLayersReducer = {
   tool(state, action) {
@@ -144,14 +144,15 @@ const toolLayersReducer = {
   },
   [SET_SANKEY_SIZE](state) {
     const { toolLayout } = state;
-    console.log(toolLayout, TOOL_LAYOUT.splitted);
-    const heightOffset = 175;
-    let widthOffset = 120;
+    let widthOffset = SANKEY_OFFSETS.width;
     if (toolLayout === TOOL_LAYOUT.splitted) {
-      widthOffset = 392;
+      widthOffset = SANKEY_OFFSETS.splittedWidth;
     }
     return immer(state, draft => {
-      draft.sankeySize = [window.innerWidth - widthOffset, window.innerHeight - heightOffset];
+      draft.sankeySize = [
+        window.innerWidth - widthOffset,
+        window.innerHeight - SANKEY_OFFSETS.height
+      ];
     });
   }
 };

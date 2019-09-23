@@ -317,3 +317,9 @@ export const TOOL_LAYOUT = {
   splitted: 1,
   right: 2
 };
+
+export const SANKEY_OFFSETS = {
+  height: 175,
+  width: 120,
+  splittedWidth: 392
+};

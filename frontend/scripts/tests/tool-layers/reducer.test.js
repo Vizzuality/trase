@@ -7,6 +7,7 @@ import {
   SELECT_CONTEXTUAL_LAYERS,
   CHANGE_LAYOUT,
   TOGGLE_MAP_DIMENSION,
+  SET_SANKEY_SIZE,
   saveMapView,
   selectContextualLayers
 } from 'react-components/tool/tool.actions';
@@ -16,7 +17,7 @@ import {
 } from 'react-components/tool-layers/tool-layers.actions';
 import reducer from 'react-components/tool-layers/tool-layers.reducer';
 import initialState from 'react-components/tool-layers/tool-layers.initial-state';
-import { TOOL_LAYOUT } from 'constants';
+import { TOOL_LAYOUT, SANKEY_OFFSETS } from 'constants';
 
 test(SET_NODE_ATTRIBUTES, () => {
   const action = {
@@ -142,6 +143,33 @@ describe(CHANGE_LAYOUT, () => {
     };
     const newState = reducer(initialState, action);
     expect(newState).toMatchSnapshot();
+  });
+});
+
+describe(SET_SANKEY_SIZE, () => {
+  it('Sets sankey size', () => {
+    const action = {
+      type: SET_SANKEY_SIZE
+    };
+    const windowInnerWidth = 1024;
+    const windowInnerHeight = 768;
+    const newState = reducer(initialState, action);
+    expect(newState.sankeySize).toStrictEqual([
+      windowInnerWidth - SANKEY_OFFSETS.splittedWidth,
+      windowInnerHeight - SANKEY_OFFSETS.height
+    ]);
+  });
+  it('Sets sankey size in map view', () => {
+    const action = {
+      type: SET_SANKEY_SIZE
+    };
+    const windowInnerWidth = 1024;
+    const windowInnerHeight = 768;
+    const newState = reducer({ ...initialState, toolLayout: TOOL_LAYOUT.left }, action);
+    expect(newState.sankeySize).toStrictEqual([
+      windowInnerWidth - SANKEY_OFFSETS.width,
+      windowInnerHeight - SANKEY_OFFSETS.height
+    ]);
   });
 });
 
