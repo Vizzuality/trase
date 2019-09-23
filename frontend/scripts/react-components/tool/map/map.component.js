@@ -13,7 +13,6 @@ import {
 } from 'constants';
 import 'styles/components/tool/map/leaflet.css';
 import 'styles/components/tool/map.scss';
-import 'styles/components/tool/map/map-legend.scss';
 import 'styles/components/tool/map/map-choropleth.scss';
 
 const POINT_RADIUS = 4;
@@ -35,8 +34,9 @@ export default class MapComponent {
 
     this.map = L.map('js-map', mapOptions);
     new L.Control.Zoom({ position: 'topleft' }).addTo(this.map);
-    L.control.scale({ position: 'bottomleft', imperial: false }).addTo(this.map);
 
+    this.warningsContainer = document.querySelector('.js-map-warnings-container');
+    this.warnings = document.querySelector('.js-map-warnings');
     const worldBounds = L.latLngBounds(L.latLng(-89, -180), L.latLng(89, 180));
     this.map.setMaxBounds(worldBounds);
     this.mapEvents = {
@@ -62,13 +62,9 @@ export default class MapComponent {
     });
     this.contextLayers = [];
     this.pointVolumeShadowLayer = null;
-    this.clickToggleMapLayerMenu = () => {
-      this.callbacks.onToggleMapLayerMenu();
-    };
     this.clickToggleMap = () => {
       this.callbacks.onToggleMap();
     };
-    this.basemapSwitcher = document.querySelector('.js-basemap-switcher');
     this.toggleMap = document.querySelector('.js-toggle-map');
 
     this.attribution = document.querySelector('.js-map-attribution');
@@ -80,7 +76,6 @@ export default class MapComponent {
     this.map.on('layeradd', this.mapEvents.updateAttribution);
     this.map.on('dragend zoomend', this.mapEvents.moveEnd);
     this.map.on('zoomend', this.mapEvents.zoomEnd);
-    this.basemapSwitcher.addEventListener('click', this.clickToggleMapLayerMenu);
     this.toggleMap.addEventListener('click', this.clickToggleMap);
 
     this.setMapView(props);
@@ -96,7 +91,6 @@ export default class MapComponent {
   }
 
   onRemoved() {
-    this.basemapSwitcher.removeEventListener('click', this.clickToggleMapLayerMenu);
     this.toggleMap.removeEventListener('click', this.clickToggleMap);
 
     this.map.off('drag', this.mapEvents.panInsideBounds);
@@ -633,5 +627,12 @@ export default class MapComponent {
       nodeHeights
     );
     this.map.addLayer(this.pointVolumeShadowLayer);
+  }
+
+  showMapWarnings({ selectedMapDimensionsWarnings }) {
+    this.warningsContainer.classList.toggle('-visible', selectedMapDimensionsWarnings !== null);
+    if (selectedMapDimensionsWarnings !== null) {
+      this.warnings.innerHTML = selectedMapDimensionsWarnings;
+    }
   }
 }

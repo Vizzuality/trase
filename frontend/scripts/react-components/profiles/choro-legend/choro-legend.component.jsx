@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 
-import 'styles/components/tool/map/map-legend.scss';
+import 'react-components/profiles/choro-legend/choro-legend.scss';
 
 class ChoroLegend extends Component {
   abbreviateNumber(x, index) {
@@ -15,7 +15,7 @@ class ChoroLegend extends Component {
     const { title, unit, bucket, testId } = this.props;
 
     return (
-      <div className="c-map-legend-choro" data-test={testId}>
+      <div className="c-choro-legend" data-test={testId}>
         <div className="bucket-container -horizontal -profile">
           <div className="bucket-names">
             <div className="layer-name">{title}</div>

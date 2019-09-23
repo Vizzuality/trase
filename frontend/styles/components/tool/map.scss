@@ -14,18 +14,6 @@ $map-btn-height: 32px;
     flex: 1 1 100%;
   }
 
-  > .c-map-legend {
-    position: absolute;
-    bottom: 20px;
-    width: 319px;
-    z-index: 1001;
-
-    &.-hidden {
-      height: 0;
-      padding: 0;
-    }
-  }
-
   .leaflet-control-zoom {
     left: 8px;
     top: 0;
@@ -214,13 +202,6 @@ $map-btn-height: 32px;
       border-right: 1px solid rgba($charcoal-grey, .2);
     }
   }
-}
-
-.c-map-footer {
-  position: absolute;
-  bottom: 23px;
-  z-index: $z-leaflet-above-panes;
-  width: 319px;
 }
 
 .map-warnings {

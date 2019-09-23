@@ -18,7 +18,8 @@ import {
   getHighlightedNodesGeoIds,
   getChoroplethOptions,
   getSelectedMapContextualLayersData,
-  getShouldFitBoundsSelectedPolygons
+  getShouldFitBoundsSelectedPolygons,
+  getMapDimensionsWarnings
 } from 'react-components/tool-layers/tool-layers.selectors';
 import { getSelectedContext } from 'reducers/app.selectors';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
@@ -45,7 +46,8 @@ const mapStateToProps = state => {
     isMapVisible: state.toolLayers.isMapVisible,
     visibleNodes: getVisibleNodes(state),
     selectedBiomeFilter: getSelectedBiomeFilter(state),
-    basemapId: getBasemap(state)
+    basemapId: getBasemap(state),
+    selectedMapDimensionsWarnings: getMapDimensionsWarnings(state)
   };
 };
 
@@ -115,6 +117,11 @@ const methodProps = [
     name: 'fitBoundsSelectedGeoPolygons',
     compared: ['selectedNodesGeoIds', 'shouldFitBoundsSelectedPolygons'],
     returned: ['selectedNodesGeoIds', 'shouldFitBoundsSelectedPolygons']
+  },
+  {
+    name: 'showMapWarnings',
+    compared: ['selectedMapDimensionsWarnings'],
+    returned: ['selectedMapDimensionsWarnings']
   }
 ];
 

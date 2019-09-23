@@ -1,0 +1,119 @@
+@import 'styles/settings';
+
+.c-choro-legend {
+  position: relative;
+
+  .bucket {
+    position: relative;
+    text-align: center;
+
+    @each $item, $color in $choropleth-colors {
+      &.#{$item} {
+        background-color: $color;
+      }
+    }
+
+    span {
+      position: absolute;
+      top: 22px;
+      right: 0;
+      transform: translateX(50%);
+      margin: auto;
+      font-size: 10px;
+      line-height: normal;
+      letter-spacing: -1px;
+      white-space: nowrap;
+      color: rgba($charcoal-grey, .5);
+      font-family: $font-family-1;
+    }
+
+    &.ch-red-0, &.ch-blue-0, &.recolorby-linear-red-blue-3, &.recolorby-percentual-green-red-5, &.recolorby-linear-yellow-green-0 {
+      &::after {
+        border-color: $charcoal-grey;
+      }
+    }
+  }
+
+  .bucket-container {
+    position: relative;
+    border-bottom: 1px solid rgba($charcoal-grey, .2);
+    border-bottom: 0;
+    margin-bottom: 40px;
+    padding: 0;
+    width: 100%;
+    text-align: right;
+
+    .bucket-names {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0;
+    }
+
+    .icon-legend-arrow {
+      display: none;
+    }
+
+    .bucket-legend > .bucket-item,
+    .bucket-legend > .bucket-item > .bucket {
+      height: 100%;
+    }
+
+    .layer-name {
+      font-family: $font-family-1;
+      letter-spacing: -1.1px;
+      color: $charcoal-grey;
+      text-transform: uppercase;
+      font-size: 13px;
+
+      &:last-child {
+        font-weight: $font-weight-regular;
+        color: $charcoal-grey-faded;
+        text-transform: lowercase;
+        line-height: 1.3;
+        margin-left: 3px;
+      }
+    }
+
+    .bucket-legend {
+      display: inline-flex;
+      justify-content: flex-end;
+      height: 14px;
+      margin: 4px 0 0;
+      width: calc(100% - 40px);
+      border: 1px solid #6C787D;
+
+      .bucket-item {
+        flex: 1;
+      }
+    }
+
+    .bucket {
+      span {
+        left: 0;
+        top: 14px;
+        transform: none;
+      }
+    }
+
+    .bullets {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+
+      li {
+        font-family: $font-family-1;
+        display: flex;
+        align-items: baseline;
+        font-size: 10px;
+        color: $charcoal-grey-faded;
+
+        .bullet {
+          margin-right: 3px;
+          width: 8px;
+          height: 8px;
+          border: solid 1px $charcoal-grey-faded;
+        }
+      }
+    }
+  }
+}

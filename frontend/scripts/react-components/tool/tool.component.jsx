@@ -8,11 +8,11 @@ import TitlebarContainer from 'react-components/tool/titlebar/titlebar.container
 import NodesTitlesContainer from 'react-components/tool/nodes-titles/nodes-titles.container';
 import MapContextContainer from 'react-components/tool/map-context/map-context.container';
 import Sankey from 'react-components/tool/sankey';
-import MapLegend from 'react-components/tool/map-legend/map-legend.container';
 import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.react';
 import Tooltip from 'react-components/tool/help-tooltip/help-tooltip.container';
 import Basemaps from 'react-components/tool/basemaps';
 import LegacyBasemaps from 'react-components/tool/legacy-basemaps/legacy-basemaps.container';
+import Legend from 'react-components/tool/legend';
 import EventManager from 'utils/eventManager';
 import UrlSerializer from 'react-components/shared/url-serializer';
 
@@ -59,20 +59,10 @@ const renderMap = () => (
         <span className="js-map-warnings" />
       </div>
     </div>
-    <div className="c-map-footer">
-      <div className="btn-map -map-layers js-basemap-switcher">
-        <svg className="icon icon-layers">
-          <use xlinkHref="#icon-layers" />
-        </svg>
-      </div>
-      <div className="c-map-legend js-map-legend">
-        <div className="js-map-legend-context c-map-legend-context" />
-        <div className="js-map-legend-choro c-map-legend-choro" />
-      </div>
-    </div>
     <div className="js-map-attribution c-map-attribution">
       {/* this is rendered by map.component */}
     </div>
+    <Legend />
   </div>
 );
 
@@ -95,7 +85,6 @@ const renderVainillaComponents = () => (
     <MapContainer />
     <MapDimensionsContainer />
     <FlowContentContainer />
-    <MapLegend />
     <Tooltip />
     {!ENABLE_REDESIGN_PAGES && <LegacyBasemaps />}
     <MapContextContainer />
