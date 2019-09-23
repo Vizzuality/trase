@@ -4,8 +4,9 @@ import getNodesColoredBySelection from 'reducers/helpers/getNodesColoredBySelect
 import getNextRecolorGroups from 'reducers/helpers/getRecolorGroups';
 import getVisibleNodesUtil from 'reducers/helpers/getVisibleNodes';
 import { getSelectedColumnsIds, getSelectedNodesData } from 'react-components/tool/tool.selectors';
-import { getSelectedContext } from 'reducers/app.selectors';
+import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 import { NUM_COLUMNS } from 'constants';
+import { makeGetAvailableYears } from 'selectors/years.selectors';
 
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolNodes = state => state.toolLinks.data.nodes;
@@ -111,4 +112,9 @@ export const getToolLinksUrlProps = createStructuredSelector({
   selectedResizeBy: getToolResizeBy,
   selectedRecolorBy: getToolRecolorBy,
   selectedBiomeFilterName: getToolBiomeFilterName
+});
+
+export const getToolYearsProps = createStructuredSelector({
+  selectedYears: getSelectedYears,
+  years: makeGetAvailableYears(getToolResizeBy, getToolRecolorBy, getSelectedContext)
 });
