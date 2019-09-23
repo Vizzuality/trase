@@ -23,8 +23,8 @@ module Api
         self.table_name = 'flow_quant_totals_mv'
 
         scope :with_attribute_id, -> {
-          select('flow_quant_totals_mv.*, attributes_mv.id AS attribute_id').
-            joins("JOIN attributes_mv ON original_type = 'Quant' AND original_id = quant_id")
+          select('flow_quant_totals_mv.*, attributes.id AS attribute_id').
+            joins("JOIN attributes ON original_type = 'Quant' AND original_id = quant_id")
         }
 
         def attribute_id

@@ -5,7 +5,6 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
-SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -148,6 +147,86 @@ $$;
 --
 
 COMMENT ON FUNCTION public.bucket_index(buckets double precision[], value double precision) IS 'Given an n-element array of choropleth buckets and a positive value, returns index of bucket where value falls (1 to n + 1); else returns 0.';
+
+
+--
+-- Name: upsert_attributes(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.upsert_attributes() RETURNS void
+    LANGUAGE sql
+    AS $$
+
+INSERT INTO attributes (
+  original_id,
+  original_type,
+  name,
+  display_name,
+  unit,
+  unit_type,
+  tooltip_text
+)
+SELECT
+  original_id,
+  original_type,
+  name,
+  display_name,
+  unit,
+  unit_type,
+  tooltip_text
+FROM attributes_v
+
+EXCEPT
+
+SELECT
+  original_id,
+  original_type,
+  name,
+  display_name,
+  unit,
+  unit_type,
+  tooltip_text
+FROM attributes
+ON CONFLICT (name, original_type) DO UPDATE SET
+  original_id = excluded.original_id,
+  display_name = excluded.display_name,
+  unit = excluded.unit,
+  unit_type = excluded.unit_type,
+  tooltip_text = excluded.tooltip_text;
+
+DELETE FROM attributes
+USING (
+  SELECT
+    original_id,
+    original_type,
+    name,
+    display_name,
+    unit,
+    unit_type,
+    tooltip_text
+  FROM attributes
+
+  EXCEPT
+
+  SELECT
+    original_id,
+    original_type,
+    name,
+    display_name,
+    unit,
+    unit_type,
+    tooltip_text
+  FROM attributes_v
+) s
+WHERE attributes.name = s.name AND attributes.original_type = s.original_type;
+$$;
+
+
+--
+-- Name: FUNCTION upsert_attributes(); Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON FUNCTION public.upsert_attributes() IS 'Upserts attributes based on new values as returned by attributes_v (identity by original_type + name)';
 
 
 SET default_tablespace = '';
@@ -473,6 +552,70 @@ CREATE TABLE public.ar_internal_metadata (
 
 
 --
+-- Name: attributes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.attributes (
+    id bigint NOT NULL,
+    original_id integer NOT NULL,
+    original_type text NOT NULL,
+    name text NOT NULL,
+    display_name text,
+    unit text,
+    unit_type text,
+    tooltip_text text,
+    CONSTRAINT attributes_original_type_check CHECK ((original_type = ANY (ARRAY['Ind'::text, 'Qual'::text, 'Quant'::text])))
+);
+
+
+--
+-- Name: TABLE attributes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.attributes IS 'Merges inds, quals and quants.';
+
+
+--
+-- Name: COLUMN attributes.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.attributes.id IS 'Id is fixed between data updates, unless name changes';
+
+
+--
+-- Name: COLUMN attributes.original_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.attributes.original_id IS 'Id from the original table (inds / quals / quants)';
+
+
+--
+-- Name: COLUMN attributes.original_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.attributes.original_type IS 'Type of the original entity (Ind / Qual / Quant)';
+
+
+--
+-- Name: attributes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.attributes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.attributes_id_seq OWNED BY public.attributes.id;
+
+
+--
 -- Name: ind_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -734,96 +877,46 @@ COMMENT ON COLUMN public.quants.unit IS 'Unit in which values for this attribute
 
 
 --
--- Name: attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+-- Name: attributes_v; Type: VIEW; Schema: public; Owner: -
 --
 
-CREATE MATERIALIZED VIEW public.attributes_mv AS
- SELECT row_number() OVER () AS id,
+CREATE VIEW public.attributes_v AS
+ SELECT s.original_id,
     s.original_type,
-    s.original_id,
     s.name,
     s.display_name,
     s.unit,
     s.unit_type,
-    s.tooltip_text,
-    s.is_visible_on_actor_profile,
-    s.is_visible_on_place_profile,
-    s.is_temporal_on_actor_profile,
-    s.is_temporal_on_place_profile,
-    s.aggregate_method
-   FROM ( SELECT 'Quant'::text AS original_type,
-            quants.id AS original_id,
+    s.tooltip_text
+   FROM ( SELECT quants.id AS original_id,
+            'Quant'::text AS original_type,
             quants.name,
             qp.display_name,
             quants.unit,
             qp.unit_type,
-            qp.tooltip_text,
-            qp.is_visible_on_actor_profile,
-            qp.is_visible_on_place_profile,
-            qp.is_temporal_on_actor_profile,
-            qp.is_temporal_on_place_profile,
-            'SUM'::text AS aggregate_method
+            qp.tooltip_text
            FROM (public.quants
              LEFT JOIN public.quant_properties qp ON ((qp.quant_id = quants.id)))
         UNION ALL
-         SELECT 'Ind'::text AS text,
-            inds.id,
+         SELECT inds.id,
+            'Ind'::text,
             inds.name,
             ip.display_name,
             inds.unit,
             ip.unit_type,
-            ip.tooltip_text,
-            ip.is_visible_on_actor_profile,
-            ip.is_visible_on_place_profile,
-            ip.is_temporal_on_actor_profile,
-            ip.is_temporal_on_place_profile,
-            'AVG'::text AS text
+            ip.tooltip_text
            FROM (public.inds
              LEFT JOIN public.ind_properties ip ON ((ip.ind_id = inds.id)))
         UNION ALL
-         SELECT 'Qual'::text AS text,
-            quals.id,
+         SELECT quals.id,
+            'Qual'::text,
             quals.name,
             qp.display_name,
-            NULL::text AS text,
-            NULL::text AS text,
-            qp.tooltip_text,
-            qp.is_visible_on_actor_profile,
-            qp.is_visible_on_place_profile,
-            qp.is_temporal_on_actor_profile,
-            qp.is_temporal_on_place_profile,
-            NULL::text AS text
+            NULL::text,
+            NULL::text,
+            qp.tooltip_text
            FROM (public.quals
-             LEFT JOIN public.qual_properties qp ON ((qp.qual_id = quals.id)))) s
-  WITH NO DATA;
-
-
---
--- Name: MATERIALIZED VIEW attributes_mv; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON MATERIALIZED VIEW public.attributes_mv IS 'Materialized view which merges inds, quals and quants.';
-
-
---
--- Name: COLUMN attributes_mv.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.attributes_mv.id IS 'The unique id is a sequential number which is generated at REFRESH and therefore not fixed.';
-
-
---
--- Name: COLUMN attributes_mv.original_type; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.attributes_mv.original_type IS 'Type of the original entity (Ind / Qual / Quant)';
-
-
---
--- Name: COLUMN attributes_mv.original_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.attributes_mv.original_id IS 'Id from the original table (inds / quals / quants)';
+             LEFT JOIN public.qual_properties qp ON ((qp.qual_id = quals.id)))) s;
 
 
 --
@@ -1082,7 +1175,7 @@ CREATE MATERIALIZED VIEW public.chart_attributes_mv AS
     cha.updated_at
    FROM ((public.chart_quals chq
      JOIN public.chart_attributes cha ON ((cha.id = chq.chart_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = chq.qual_id) AND (a.original_type = 'Qual'::text))))
+     JOIN public.attributes a ON (((a.original_id = chq.qual_id) AND (a.original_type = 'Qual'::text))))
 UNION ALL
  SELECT cha.id,
     cha.chart_id,
@@ -1104,7 +1197,7 @@ UNION ALL
     cha.updated_at
    FROM ((public.chart_quants chq
      JOIN public.chart_attributes cha ON ((cha.id = chq.chart_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = chq.quant_id) AND (a.original_type = 'Quant'::text))))
+     JOIN public.attributes a ON (((a.original_id = chq.quant_id) AND (a.original_type = 'Quant'::text))))
 UNION ALL
  SELECT cha.id,
     cha.chart_id,
@@ -1126,7 +1219,7 @@ UNION ALL
     cha.updated_at
    FROM ((public.chart_inds chi
      JOIN public.chart_attributes cha ON ((cha.id = chi.chart_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = chi.ind_id) AND (a.original_type = 'Ind'::text))))
+     JOIN public.attributes a ON (((a.original_id = chi.ind_id) AND (a.original_type = 'Ind'::text))))
   WITH NO DATA;
 
 
@@ -1141,7 +1234,7 @@ COMMENT ON MATERIALIZED VIEW public.chart_attributes_mv IS 'Materialized view wh
 -- Name: COLUMN chart_attributes_mv.display_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.chart_attributes_mv.display_name IS 'If absent in chart_attributes this is pulled from attributes_mv.';
+COMMENT ON COLUMN public.chart_attributes_mv.display_name IS 'If absent in chart_attributes this is pulled from attributes.';
 
 
 --
@@ -2959,7 +3052,7 @@ CREATE MATERIALIZED VIEW public.dashboards_attributes_mv AS
     a.id AS attribute_id
    FROM ((public.dashboards_inds di
      JOIN public.dashboards_attributes da ON ((da.id = di.dashboards_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = di.ind_id) AND (a.original_type = 'Ind'::text))))
+     JOIN public.attributes a ON (((a.original_id = di.ind_id) AND (a.original_type = 'Ind'::text))))
 UNION ALL
  SELECT da.id,
     da.dashboards_attribute_group_id,
@@ -2967,7 +3060,7 @@ UNION ALL
     a.id AS attribute_id
    FROM ((public.dashboards_quals dq
      JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = dq.qual_id) AND (a.original_type = 'Qual'::text))))
+     JOIN public.attributes a ON (((a.original_id = dq.qual_id) AND (a.original_type = 'Qual'::text))))
 UNION ALL
  SELECT da.id,
     da.dashboards_attribute_group_id,
@@ -2975,7 +3068,7 @@ UNION ALL
     a.id AS attribute_id
    FROM ((public.dashboards_quants dq
      JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = dq.quant_id) AND (a.original_type = 'Quant'::text))))
+     JOIN public.attributes a ON (((a.original_id = dq.quant_id) AND (a.original_type = 'Quant'::text))))
   WITH NO DATA;
 
 
@@ -2990,7 +3083,7 @@ COMMENT ON MATERIALIZED VIEW public.dashboards_attributes_mv IS 'Materialized vi
 -- Name: COLUMN dashboards_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dashboards_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+COMMENT ON COLUMN public.dashboards_attributes_mv.attribute_id IS 'References the unique id in attributes.';
 
 
 --
@@ -3480,41 +3573,6 @@ ALTER SEQUENCE public.dashboards_quants_id_seq OWNED BY public.dashboards_quants
 
 
 --
--- Name: node_quals; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.node_quals (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    qual_id integer NOT NULL,
-    year integer,
-    value text NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE node_quals; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.node_quals IS 'Values of quals for node';
-
-
---
--- Name: COLUMN node_quals.year; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_quals.year IS 'Year; empty (NULL) for all years';
-
-
---
--- Name: COLUMN node_quals.value; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_quals.value IS 'Textual value';
-
-
---
 -- Name: dashboards_sources_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -3885,7 +3943,7 @@ CREATE MATERIALIZED VIEW public.download_attributes_mv AS
     a.original_id
    FROM ((public.download_quants daq
      JOIN public.download_attributes da ON ((da.id = daq.download_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = daq.quant_id) AND (a.original_type = 'Quant'::text))))
+     JOIN public.attributes a ON (((a.original_id = daq.quant_id) AND (a.original_type = 'Quant'::text))))
 UNION ALL
  SELECT da.id,
     da.context_id,
@@ -3899,7 +3957,7 @@ UNION ALL
     a.original_id
    FROM ((public.download_quals daq
      JOIN public.download_attributes da ON ((da.id = daq.download_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = daq.qual_id) AND (a.original_type = 'Qual'::text))))
+     JOIN public.attributes a ON (((a.original_id = daq.qual_id) AND (a.original_type = 'Qual'::text))))
   WITH NO DATA;
 
 
@@ -3914,7 +3972,7 @@ COMMENT ON MATERIALIZED VIEW public.download_attributes_mv IS 'Materialized view
 -- Name: COLUMN download_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.download_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+COMMENT ON COLUMN public.download_attributes_mv.attribute_id IS 'References the unique id in attributes.';
 
 
 --
@@ -4713,13 +4771,12 @@ CREATE MATERIALIZED VIEW public.map_attributes_mv AS
     'quant'::text AS attribute_type,
     a.unit,
     a.tooltip_text AS description,
-    a.aggregate_method,
     a.original_id AS original_attribute_id,
     mag.context_id
    FROM (((public.map_quants maq
      JOIN public.map_attributes ma ON ((ma.id = maq.map_attribute_id)))
      JOIN public.map_attribute_groups mag ON ((mag.id = ma.map_attribute_group_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = maq.quant_id) AND (a.original_type = 'Quant'::text))))
+     JOIN public.attributes a ON (((a.original_id = maq.quant_id) AND (a.original_type = 'Quant'::text))))
 UNION ALL
  SELECT ma.id,
     ma.map_attribute_group_id,
@@ -4737,13 +4794,12 @@ UNION ALL
     'ind'::text AS attribute_type,
     a.unit,
     a.tooltip_text AS description,
-    a.aggregate_method,
     a.original_id AS original_attribute_id,
     mag.context_id
    FROM (((public.map_inds mai
      JOIN public.map_attributes ma ON ((ma.id = mai.map_attribute_id)))
      JOIN public.map_attribute_groups mag ON ((mag.id = ma.map_attribute_group_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = mai.ind_id) AND (a.original_type = 'Ind'::text))))
+     JOIN public.attributes a ON (((a.original_id = mai.ind_id) AND (a.original_type = 'Ind'::text))))
   WITH NO DATA;
 
 
@@ -4758,7 +4814,7 @@ COMMENT ON MATERIALIZED VIEW public.map_attributes_mv IS 'Materialized view whic
 -- Name: COLUMN map_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.map_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+COMMENT ON COLUMN public.map_attributes_mv.attribute_id IS 'References the unique id in attributes.';
 
 
 --
@@ -4787,13 +4843,6 @@ COMMENT ON COLUMN public.map_attributes_mv.unit IS 'Name of the attribute''s uni
 --
 
 COMMENT ON COLUMN public.map_attributes_mv.description IS 'Attribute''s description';
-
-
---
--- Name: COLUMN map_attributes_mv.aggregate_method; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.map_attributes_mv.aggregate_method IS 'The method used to aggregate the data';
 
 
 --
@@ -4884,6 +4933,41 @@ CREATE SEQUENCE public.node_properties_id_seq
 --
 
 ALTER SEQUENCE public.node_properties_id_seq OWNED BY public.node_properties.id;
+
+
+--
+-- Name: node_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.node_quals (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    qual_id integer NOT NULL,
+    year integer,
+    value text NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE node_quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.node_quals IS 'Values of quals for node';
+
+
+--
+-- Name: COLUMN node_quals.year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quals.year IS 'Year; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN node_quals.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quals.value IS 'Textual value';
 
 
 --
@@ -5784,7 +5868,7 @@ CREATE MATERIALIZED VIEW public.resize_by_attributes_mv AS
     a.id AS attribute_id
    FROM ((public.resize_by_quants raq
      JOIN public.resize_by_attributes ra ON ((ra.id = raq.resize_by_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = raq.quant_id) AND (a.original_type = 'Quant'::text))))
+     JOIN public.attributes a ON (((a.original_id = raq.quant_id) AND (a.original_type = 'Quant'::text))))
   WITH NO DATA;
 
 
@@ -5799,7 +5883,7 @@ COMMENT ON MATERIALIZED VIEW public.resize_by_attributes_mv IS 'Materialized vie
 -- Name: COLUMN resize_by_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.resize_by_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+COMMENT ON COLUMN public.resize_by_attributes_mv.attribute_id IS 'References the unique id in attributes.';
 
 
 --
@@ -5987,6 +6071,13 @@ ALTER TABLE ONLY content.testimonials ALTER COLUMN id SET DEFAULT nextval('conte
 --
 
 ALTER TABLE ONLY content.users ALTER COLUMN id SET DEFAULT nextval('content.users_id_seq'::regclass);
+
+
+--
+-- Name: attributes id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.attributes ALTER COLUMN id SET DEFAULT nextval('public.attributes_id_seq'::regclass);
 
 
 --
@@ -6505,7 +6596,7 @@ CREATE MATERIALIZED VIEW public.recolor_by_attributes_mv AS
     ARRAY[]::text[] AS legend
    FROM ((public.recolor_by_inds rai
      JOIN public.recolor_by_attributes ra ON ((ra.id = rai.recolor_by_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = rai.ind_id) AND (a.original_type = 'Ind'::text))))
+     JOIN public.attributes a ON (((a.original_id = rai.ind_id) AND (a.original_type = 'Ind'::text))))
 UNION ALL
  SELECT ra.id,
     ra.context_id,
@@ -6527,7 +6618,7 @@ UNION ALL
     array_agg(DISTINCT flow_quals.value) AS legend
    FROM ((((public.recolor_by_quals raq
      JOIN public.recolor_by_attributes ra ON ((ra.id = raq.recolor_by_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = raq.qual_id) AND (a.original_type = 'Qual'::text))))
+     JOIN public.attributes a ON (((a.original_id = raq.qual_id) AND (a.original_type = 'Qual'::text))))
      JOIN public.flow_quals ON ((flow_quals.qual_id = raq.qual_id)))
      JOIN public.flows ON (((flow_quals.flow_id = flows.id) AND (flows.context_id = ra.context_id))))
   WHERE (flow_quals.value !~~ 'UNKNOWN%'::text)
@@ -6546,7 +6637,7 @@ COMMENT ON MATERIALIZED VIEW public.recolor_by_attributes_mv IS 'Materialized vi
 -- Name: COLUMN recolor_by_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.recolor_by_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+COMMENT ON COLUMN public.recolor_by_attributes_mv.attribute_id IS 'References the unique id in attributes.';
 
 
 --
@@ -6619,6 +6710,14 @@ ALTER TABLE ONLY content.users
 
 ALTER TABLE ONLY public.ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: attributes attributes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.attributes
+    ADD CONSTRAINT attributes_pkey PRIMARY KEY (id);
 
 
 --
@@ -7594,17 +7693,10 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON content.users USING b
 
 
 --
--- Name: attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: attributes_original_type_name_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX attributes_mv_id_idx ON public.attributes_mv USING btree (id);
-
-
---
--- Name: attributes_mv_name_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX attributes_mv_name_idx ON public.attributes_mv USING btree (name);
+CREATE UNIQUE INDEX attributes_original_type_name_idx ON public.attributes USING btree (original_type, name);
 
 
 --
@@ -8652,7 +8744,7 @@ ALTER TABLE ONLY public.recolor_by_inds
 --
 
 ALTER TABLE ONLY public.top_profile_images
-    ADD CONSTRAINT fk_rails_29f1862b03 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id);
+    ADD CONSTRAINT fk_rails_29f1862b03 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -9172,7 +9264,7 @@ ALTER TABLE ONLY public.chart_node_types
 --
 
 ALTER TABLE ONLY public.top_profiles
-    ADD CONSTRAINT fk_rails_f4a644ec90 FOREIGN KEY (top_profile_image_id) REFERENCES public.top_profile_images(id);
+    ADD CONSTRAINT fk_rails_f4a644ec90 FOREIGN KEY (top_profile_image_id) REFERENCES public.top_profile_images(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -9278,6 +9370,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190814161133'),
 ('20190820105523'),
 ('20190823135415'),
-('20190919063754');
+('20190919063754'),
+('20190919211340'),
+('20190923074833');
 
 

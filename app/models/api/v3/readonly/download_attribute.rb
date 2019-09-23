@@ -2,14 +2,14 @@
 #
 # Table name: download_attributes_mv
 #
-#  id                                                       :integer          primary key
-#  context_id                                               :integer
-#  position                                                 :integer
-#  display_name                                             :text
-#  years                                                    :integer          is an Array
-#  attribute_id(References the unique id in attributes_mv.) :bigint(8)
-#  original_type                                            :text
-#  original_id                                              :integer
+#  id                                                    :integer          primary key
+#  context_id                                            :integer
+#  position                                              :integer
+#  display_name                                          :text
+#  years                                                 :integer          is an Array
+#  attribute_id(References the unique id in attributes.) :bigint(8)
+#  original_type                                         :text
+#  original_id                                           :integer
 #
 # Indexes
 #
@@ -33,8 +33,12 @@ module Api
         delegate :original_type, to: :readonly_attribute
         delegate :original_id, to: :readonly_attribute
 
-        def self.refresh_dependencies(options = {})
-          Api::V3::Readonly::Attribute.refresh(options.merge(skip_dependents: true))
+        class << self
+          protected
+
+          def refresh_dependencies(options = {})
+            Api::V3::Readonly::Attribute.refresh(options.merge(skip_dependents: true))
+          end
         end
       end
     end

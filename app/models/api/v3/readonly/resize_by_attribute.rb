@@ -2,15 +2,15 @@
 #
 # Table name: resize_by_attributes_mv
 #
-#  id                                                       :integer          primary key
-#  context_id                                               :integer
-#  group_number                                             :integer
-#  position                                                 :integer
-#  tooltip_text                                             :text
-#  years                                                    :integer          is an Array
-#  is_disabled                                              :boolean
-#  is_default                                               :boolean
-#  attribute_id(References the unique id in attributes_mv.) :bigint(8)
+#  id                                                    :integer          primary key
+#  context_id                                            :integer
+#  group_number                                          :integer
+#  position                                              :integer
+#  tooltip_text                                          :text
+#  years                                                 :integer          is an Array
+#  is_disabled                                           :boolean
+#  is_default                                            :boolean
+#  attribute_id(References the unique id in attributes.) :bigint(8)
 #
 # Indexes
 #
