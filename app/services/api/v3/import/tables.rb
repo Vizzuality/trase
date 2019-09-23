@@ -14,7 +14,8 @@ module Api
           {
             table_class: Api::V3::Commodity,
             yellow_tables: [
-              Api::V3::DashboardTemplateCommodity
+              Api::V3::DashboardTemplateCommodity,
+              Api::V3::TopProfileImage
             ]
           },
           {

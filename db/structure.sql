@@ -8744,7 +8744,7 @@ ALTER TABLE ONLY public.recolor_by_inds
 --
 
 ALTER TABLE ONLY public.top_profile_images
-    ADD CONSTRAINT fk_rails_29f1862b03 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id);
+    ADD CONSTRAINT fk_rails_29f1862b03 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -9264,7 +9264,7 @@ ALTER TABLE ONLY public.chart_node_types
 --
 
 ALTER TABLE ONLY public.top_profiles
-    ADD CONSTRAINT fk_rails_f4a644ec90 FOREIGN KEY (top_profile_image_id) REFERENCES public.top_profile_images(id);
+    ADD CONSTRAINT fk_rails_f4a644ec90 FOREIGN KEY (top_profile_image_id) REFERENCES public.top_profile_images(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -9371,6 +9371,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190820105523'),
 ('20190823135415'),
 ('20190919063754'),
-('20190919211340');
+('20190919211340'),
+('20190923074833');
 
 

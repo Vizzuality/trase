@@ -20,7 +20,7 @@
 #
 #  fk_rails_...  (context_id => contexts.id) ON DELETE => cascade ON UPDATE => cascade
 #  fk_rails_...  (node_id => nodes.id) ON DELETE => cascade ON UPDATE => cascade
-#  fk_rails_...  (top_profile_image_id => top_profile_images.id)
+#  fk_rails_...  (top_profile_image_id => top_profile_images.id) ON DELETE => cascade ON UPDATE => cascade
 #
 
 module Api
@@ -34,6 +34,12 @@ module Api
       validates :context, presence: true
 
       before_create :derive_top_profile_details
+
+      def self.yellow_foreign_keys
+        [
+          {name: :top_profile_image_id, table_class: Api::V3::TopProfileImage}
+        ]
+      end
 
       def self.blue_foreign_keys
         [
