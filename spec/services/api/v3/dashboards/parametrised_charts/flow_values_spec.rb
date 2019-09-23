@@ -76,6 +76,8 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_biome_node_type,
         api_v3_state_node_type,
         api_v3_municipality_node_type,
+        api_v3_logistics_hub_node_type,
+        api_v3_port_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
         api_v3_country_node_type
@@ -110,6 +112,8 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_biome_node_type,
         api_v3_state_node_type,
         api_v3_municipality_node_type,
+        api_v3_logistics_hub_node_type,
+        api_v3_port_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
         api_v3_country_node_type
@@ -145,6 +149,8 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_biome_node_type,
         api_v3_state_node_type,
         api_v3_municipality_node_type,
+        api_v3_logistics_hub_node_type,
+        api_v3_port_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
         api_v3_country_node_type
@@ -181,6 +187,8 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_biome_node_type,
         api_v3_state_node_type,
         api_v3_municipality_node_type,
+        api_v3_logistics_hub_node_type,
+        api_v3_port_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
         api_v3_country_node_type
@@ -238,6 +246,8 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_biome_node_type,
         api_v3_state_node_type,
         api_v3_municipality_node_type,
+        api_v3_logistics_hub_node_type,
+        api_v3_port_node_type,
         api_v3_importer_node_type,
         api_v3_country_node_type
       ].map do |node_type|
@@ -296,6 +306,8 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_biome_node_type,
         api_v3_state_node_type,
         api_v3_municipality_node_type,
+        api_v3_logistics_hub_node_type,
+        api_v3_port_node_type,
         api_v3_importer_node_type,
         api_v3_country_node_type
       ].map do |node_type|
@@ -363,6 +375,8 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_biome_node_type,
         api_v3_state_node_type,
         api_v3_municipality_node_type,
+        api_v3_logistics_hub_node_type,
+        api_v3_port_node_type,
         api_v3_importer_node_type,
         api_v3_exporter_node_type,
         api_v3_country_node_type

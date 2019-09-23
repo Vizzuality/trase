@@ -35,7 +35,12 @@ RSpec.describe Api::V3::Dashboards::CompaniesController, type: :controller do
     }
 
     it 'returns list in alphabetical order' do
-      get :index, params: {countries_ids: api_v3_brazil.id}
+      get :index, params: {
+        countries_ids: api_v3_brazil.id,
+        node_types_ids: [
+          api_v3_exporter_node_type.id, api_v3_importer_node_type.id
+        ].join(',')
+      }
       expect(assigns(:collection).map(&:name)).to eq(
         all_results_alphabetically.map(&:name)
       )
