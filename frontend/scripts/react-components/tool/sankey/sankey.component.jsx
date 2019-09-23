@@ -6,7 +6,6 @@ import Tooltip from 'components/shared/info-tooltip.component';
 import formatValue from 'utils/formatValue';
 import capitalize from 'lodash/capitalize';
 import startCase from 'lodash/startCase';
-import addApostrophe from 'utils/addApostrophe';
 import getNodeMeta from 'reducers/helpers/getNodeMeta';
 import Heading from 'react-components/shared/heading';
 import SankeyColumn from './sankey-column.component';
@@ -57,7 +56,7 @@ function useMenuOptions(props, hoveredSelectedNode) {
     if (link.profileType) {
       items.splice(2, 0, {
         id: 'profile-link',
-        label: `Go To ${nodeType}${addApostrophe(nodeType)} Profile`,
+        label: `Go To The ${nodeType} Profile`,
         onClick: () => goToProfile(link)
       });
     }
@@ -285,6 +284,8 @@ function Sankey(props) {
     }
 
     const nodeHeight = nodeHeights[node.id];
+    const tooltipPadding = 10;
+    const minTooltipWidth = 180;
     const tooltip = {
       title: node.name,
       values: [
@@ -296,8 +297,12 @@ function Sankey(props) {
       ],
       width: rect.width,
       height: rect.height,
-      x: e.clientX - rect.x,
-      y: e.clientY - rect.y
+      x:
+        // this math is here to prevent overflow from the viewport, or the tooltip appearing on top of the mouse
+        node.x + sankeyColumnsWidth + tooltipPadding > rect.width - minTooltipWidth
+          ? node.x
+          : node.x + sankeyColumnsWidth,
+      y: node.y - tooltipPadding
     };
     if (nodeAttributes && selectedMapDimensions && selectedMapDimensions.length > 0) {
       const nodeIndicators = selectedMapDimensions
@@ -351,7 +356,13 @@ function Sankey(props) {
             </Heading>
           </div>
         )}
-        <NodeMenu menuPos={menuPos} isVisible={selectedNodesIds.length > 0} options={menuOptions} />
+        {!loading && (
+          <NodeMenu
+            menuPos={menuPos}
+            isVisible={selectedNodesIds.length > 0}
+            options={menuOptions}
+          />
+        )}
         <div ref={tooltipRef} className="c-info-tooltip" />
         <svg
           ref={svgRef}
