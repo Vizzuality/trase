@@ -14,7 +14,7 @@ if (ENABLE_REDESIGN_PAGES) {
       name: 'Supply Chain',
       page: {
         type: 'tool',
-        payload: { serializerParams: { toolLayout: TOOL_LAYOUT.right } }
+        payload: { serializerParams: { toolLayout: TOOL_LAYOUT.splitted } }
       }
     },
     {
