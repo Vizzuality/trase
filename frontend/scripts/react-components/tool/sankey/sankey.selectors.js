@@ -283,7 +283,7 @@ export const getLastSelectedNodeLink = createSelector(
     }
 
     return {
-      name: node.name,
+      type: node.type,
       nodeId: node.id,
       year: selectedYears[0],
       contextId: selectedContext.id,

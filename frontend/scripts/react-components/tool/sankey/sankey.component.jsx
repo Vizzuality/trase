@@ -33,12 +33,12 @@ function useMenuOptions(props, hoveredSelectedNode) {
       { id: 'clear', label: 'Clear Selection', onClick: onClearClick }
     ];
 
-    let nodeName = null;
+    let nodeType = null;
     let link = {};
 
     if (lastSelectedNodeLink) {
-      const { name, ...params } = lastSelectedNodeLink;
-      nodeName = name;
+      const { type, ...params } = lastSelectedNodeLink;
+      nodeType = type;
       link = {
         ...params
       };
@@ -49,7 +49,7 @@ function useMenuOptions(props, hoveredSelectedNode) {
       hoveredSelectedNode.isUnknown !== true &&
       hoveredSelectedNode.isDomesticConsumption !== true
     ) {
-      nodeName = hoveredSelectedNode.name;
+      nodeType = hoveredSelectedNode.type;
       link.profileType = hoveredSelectedNode.profileType;
       link.nodeId = hoveredSelectedNode.id;
     }
@@ -57,7 +57,7 @@ function useMenuOptions(props, hoveredSelectedNode) {
     if (link.profileType) {
       items.splice(2, 0, {
         id: 'profile-link',
-        label: `Go To ${nodeName}${addApostrophe(nodeName)} Profile`,
+        label: `Go To ${nodeType}${addApostrophe(nodeType)} Profile`,
         onClick: () => goToProfile(link)
       });
     }
