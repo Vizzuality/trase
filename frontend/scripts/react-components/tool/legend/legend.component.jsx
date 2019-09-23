@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import 'styles/components/tool/map/map-legend.scss';
 import './legend.scss';
 import Text from 'react-components/shared/text/text.component';
 import Icon from 'react-components/shared/icon/icon.component';
@@ -27,7 +26,7 @@ function Legend(props) {
       </div>
       <div className="legend-container">
         <div
-          className="c-map-legend-context"
+          className="map-legend-contextual"
           dangerouslySetInnerHTML={{
             __html: contextualLayers.reduce(
               (acc, contextualLayer) => `${acc}${contextualLayer.legend}\n`,

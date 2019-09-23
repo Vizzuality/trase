@@ -13,7 +13,6 @@ import {
 } from 'constants';
 import 'styles/components/tool/map/leaflet.css';
 import 'styles/components/tool/map.scss';
-import 'styles/components/tool/map/map-legend.scss';
 import 'styles/components/tool/map/map-choropleth.scss';
 
 const POINT_RADIUS = 4;

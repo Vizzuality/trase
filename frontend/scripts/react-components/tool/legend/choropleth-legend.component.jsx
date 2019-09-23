@@ -76,11 +76,11 @@ function ChoroplethLegend(props) {
 
         <ul className="bullets">
           <li>
-            <div className="bullet color-dfdfdf" style={{ background: '#DFDFDF' }} />
+            <div className="bullet -color-gray" />
             N/A
           </li>
           <li>
-            <div className="bullet color-ffffff" style={{ background: '#ffffff' }} />0
+            <div className="bullet -color-white" />0
           </li>
         </ul>
       </div>

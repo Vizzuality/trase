@@ -85,8 +85,50 @@
         &.-highlighted {
           border: solid 2px $charcoal-grey;
         }
+
+        &.-color-white {
+          background-color: $white;
+        }
+
+        &.-color-gray {
+          background-color: $gray;
+        }
       }
 
+    }
+
+    .map-legend-contextual {
+      .cartodb-legend {
+        padding: 5px 6px 3px 6px;
+        border-bottom: 1px solid $charcoal-grey-faded-a-lot;
+
+        &.choropleth {
+          padding-bottom: 14px;
+
+          .bullet {
+            width: 20px;
+
+            &:first-child {
+              border-right: 0;
+              margin-right: 0;
+            }
+
+            &:not(:first-child):not(:last-child) {
+              border-right: 0;
+              border-left: 0;
+              margin-right: 0;
+            }
+
+            &:last-child {
+              border-left: 0;
+            }
+          }
+        }
+      }
+
+      .bullets li {
+        display: inline-block;
+      }
     }
   }
 }
