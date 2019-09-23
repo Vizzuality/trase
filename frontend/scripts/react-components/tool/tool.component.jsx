@@ -88,7 +88,7 @@ const renderVainillaComponents = () => (
     <Tooltip />
     {!ENABLE_REDESIGN_PAGES && <LegacyBasemaps />}
     <MapContextContainer />
-    <NodesTitlesContainer />
+    {!ENABLE_REDESIGN_PAGES && <NodesTitlesContainer />}
     <ModalContainer />
   </>
 );

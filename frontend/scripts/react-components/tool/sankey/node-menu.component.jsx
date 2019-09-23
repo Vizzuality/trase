@@ -18,7 +18,7 @@ function NodeMenu(props) {
       <ul className="options">
         {options.map((option, i) => (
           <li key={option.id} className={cx('menu-item', option.className)}>
-            <button onClick={option.onClick}>
+            <button className="menu-item-button" onClick={option.onClick}>
               <Text color="grey" variant="mono" weight="light">
                 {option.label?.toUpperCase()}
               </Text>

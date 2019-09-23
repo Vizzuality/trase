@@ -6,6 +6,7 @@ import Tooltip from 'components/shared/info-tooltip.component';
 import formatValue from 'utils/formatValue';
 import capitalize from 'lodash/capitalize';
 import startCase from 'lodash/startCase';
+import getNodeMeta from 'reducers/helpers/getNodeMeta';
 import Heading from 'react-components/shared/heading';
 import SankeyColumn from './sankey-column.component';
 import NodeMenu from './node-menu.component';
@@ -14,14 +15,51 @@ import * as Defs from './sankey-defs.component';
 
 import 'react-components/tool/sankey/sankey.scss';
 
-function useMenuOptions(props) {
-  const { hasExpandedNodesIds, isReExpand, onExpandClick, onCollapseClick, onClearClick } = props;
+function useMenuOptions(props, hoveredSelectedNode) {
+  const {
+    goToProfile,
+    hasExpandedNodesIds,
+    isReExpand,
+    onExpandClick,
+    onCollapseClick,
+    onClearClick,
+    lastSelectedNodeLink
+  } = props;
   return useMemo(() => {
     const items = [
       { id: 'expand', label: isReExpand ? 'Re-Expand' : 'Expand', onClick: onExpandClick },
       { id: 'collapse', label: 'Collapse', onClick: onCollapseClick },
       { id: 'clear', label: 'Clear Selection', onClick: onClearClick }
     ];
+
+    let nodeType = null;
+    let link = {};
+
+    if (lastSelectedNodeLink) {
+      const { type, ...params } = lastSelectedNodeLink;
+      nodeType = type;
+      link = {
+        ...params
+      };
+    }
+
+    if (
+      hoveredSelectedNode &&
+      hoveredSelectedNode.isUnknown !== true &&
+      hoveredSelectedNode.isDomesticConsumption !== true
+    ) {
+      nodeType = hoveredSelectedNode.type;
+      link.profileType = hoveredSelectedNode.profileType;
+      link.nodeId = hoveredSelectedNode.id;
+    }
+
+    if (link.profileType) {
+      items.splice(2, 0, {
+        id: 'profile-link',
+        label: `Go To The ${nodeType} Profile`,
+        onClick: () => goToProfile(link)
+      });
+    }
 
     if (!isReExpand && hasExpandedNodesIds) {
       return items.filter(item => item.id !== 'expand');
@@ -31,34 +69,57 @@ function useMenuOptions(props) {
     }
 
     return items;
-  }, [hasExpandedNodesIds, isReExpand, onClearClick, onCollapseClick, onExpandClick]);
+  }, [
+    hoveredSelectedNode,
+    lastSelectedNodeLink,
+    hasExpandedNodesIds,
+    isReExpand,
+    onClearClick,
+    onCollapseClick,
+    onExpandClick,
+    goToProfile
+  ]);
 }
 
-function useMenuPosition(props, columns) {
-  const { selectedNodesIds, isReExpand } = props;
+function useMenuPosition(props) {
+  const { selectedNodesIds, isReExpand, columns } = props;
+  const [hoveredSelectedNode, setHoveredSelectedNode] = useState(null);
   const [menuPos, setMenuPos] = useState({ x: 0, y: 0 });
   const ref = useRef(null);
+
+  const getCoordinates = n => ({
+    x: n.x,
+    y: Math.max(0, n.y) - (ref.current?.scrollTop || 0)
+  });
+
+  useEffect(() => {
+    setHoveredSelectedNode(null);
+  }, [selectedNodesIds]);
 
   useEffect(() => {
     if (!columns) {
       return;
     }
-    // use some to stop iterating once its found
-    columns.some(column =>
-      column.values.some(node => {
-        const last = selectedNodesIds.length - 1;
-        if (node.id === selectedNodesIds[last]) {
-          const x = node.x;
-          const y = Math.max(0, node.y) - (ref.current?.scrollTop || 0);
-          setMenuPos({ x, y });
-          return true;
-        }
-        return false;
-      })
-    );
-  }, [selectedNodesIds, columns, isReExpand]);
+    if (hoveredSelectedNode) {
+      const coordinates = getCoordinates(hoveredSelectedNode);
+      setMenuPos(coordinates);
+    } else {
+      // use some to stop iterating once its found
+      columns.some(column =>
+        column.values.some(node => {
+          const last = selectedNodesIds.length - 1;
+          if (node.id === selectedNodesIds[last]) {
+            const coordinates = getCoordinates(node);
+            setMenuPos(coordinates);
+            return true;
+          }
+          return false;
+        })
+      );
+    }
+  }, [selectedNodesIds, columns, isReExpand, hoveredSelectedNode]);
 
-  return [menuPos, ref];
+  return [menuPos, ref, hoveredSelectedNode, setHoveredSelectedNode];
 }
 
 function useVanillaTooltip({ links }) {
@@ -129,6 +190,9 @@ function Sankey(props) {
     links,
     maxHeight,
     flowsLoading,
+    nodeHeights,
+    nodeAttributes,
+    selectedMapDimensions,
     sankeyColumnsWidth,
     selectedResizeBy,
     detailedView,
@@ -140,10 +204,15 @@ function Sankey(props) {
     selectedNodesIds
   } = props;
   const [hoveredLink, setHoveredLink] = useState(null);
-  const menuOptions = useMenuOptions(props);
   const [tooltipRef, setTooltip] = useVanillaTooltip(props);
   const [rect, svgRef] = useDomNodeRect(columns);
-  const [menuPos, scrollContainerRef] = useMenuPosition(props, columns);
+  const [
+    menuPos,
+    scrollContainerRef,
+    hoveredSelectedNode,
+    setHoveredSelectedNode
+  ] = useMenuPosition(props);
+  const menuOptions = useMenuOptions(props, hoveredSelectedNode);
   const placeholderHeight = useNodeRefHeight(scrollContainerRef);
 
   const getLinkColor = link => {
@@ -209,6 +278,66 @@ function Sankey(props) {
     setTooltip(null);
   };
 
+  const onNodeOver = (e, node) => {
+    if (node.isAggregated) {
+      return;
+    }
+
+    const nodeHeight = nodeHeights[node.id];
+    const tooltipPadding = 10;
+    const minTooltipWidth = 180;
+    const tooltip = {
+      title: node.name,
+      values: [
+        {
+          title: selectedResizeBy.label,
+          unit: selectedResizeBy.unit,
+          value: `${formatValue(nodeHeight.quant, selectedResizeBy.label)}`
+        }
+      ],
+      width: rect.width,
+      height: rect.height,
+      x:
+        // this math is here to prevent overflow from the viewport, or the tooltip appearing on top of the mouse
+        node.x + sankeyColumnsWidth + tooltipPadding > rect.width - minTooltipWidth
+          ? node.x
+          : node.x + sankeyColumnsWidth,
+      y: node.y - tooltipPadding
+    };
+    if (nodeAttributes && selectedMapDimensions && selectedMapDimensions.length > 0) {
+      const nodeIndicators = selectedMapDimensions
+        .map(dimension => {
+          const meta = getNodeMeta(dimension, node, nodeAttributes, selectedResizeBy, nodeHeights);
+          if (!meta) {
+            return null;
+          }
+          return {
+            title: dimension.name,
+            unit: dimension.unit,
+            value: formatValue(meta.value, dimension.name)
+          };
+        })
+        .filter(Boolean);
+
+      tooltip.values.push(...nodeIndicators);
+    }
+
+    if (selectedNodesIds.includes(node.id)) {
+      setHoveredSelectedNode(node);
+    }
+
+    setTooltip(tooltip);
+    onNodeHighlighted(node.id);
+  };
+
+  const onNodeOut = (e, node) => {
+    if (node.isAggregated) {
+      return;
+    }
+    setTooltip(null);
+    onNodeHighlighted(null);
+  };
+
   const loading = !columns || columns.length === 0 || !links || flowsLoading;
 
   return (
@@ -227,7 +356,13 @@ function Sankey(props) {
             </Heading>
           </div>
         )}
-        <NodeMenu menuPos={menuPos} isVisible={selectedNodesIds.length > 0} options={menuOptions} />
+        {!loading && (
+          <NodeMenu
+            menuPos={menuPos}
+            isVisible={selectedNodesIds.length > 0}
+            options={menuOptions}
+          />
+        )}
         <div ref={tooltipRef} className="c-info-tooltip" />
         <svg
           ref={svgRef}
@@ -268,10 +403,11 @@ function Sankey(props) {
                   <SankeyColumn
                     key={column.key}
                     column={column}
+                    onNodeOver={onNodeOver}
+                    onNodeOut={onNodeOut}
                     selectedNodesIds={selectedNodesIds}
                     onNodeClicked={onNodeClicked}
                     highlightedNodeId={highlightedNodeId}
-                    onNodeHighlighted={onNodeHighlighted}
                     sankeyColumnsWidth={sankeyColumnsWidth}
                   />
                 ))}
@@ -302,6 +438,9 @@ Sankey.propTypes = {
   selectedRecolorBy: PropTypes.object,
   highlightedNodeId: PropTypes.number,
   gapBetweenColumns: PropTypes.number,
+  nodeHeights: PropTypes.object,
+  nodeAttributes: PropTypes.object,
+  selectedMapDimensions: PropTypes.array,
   onClearClick: PropTypes.func.isRequired, // eslint-disable-line
   onExpandClick: PropTypes.func.isRequired, // eslint-disable-line
   sankeyColumnsWidth: PropTypes.number.isRequired,

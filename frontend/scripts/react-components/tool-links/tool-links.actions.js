@@ -165,3 +165,13 @@ export function selectSearchNode(results) {
     payload: { results }
   };
 }
+
+export function goToProfileFromSankey({ profileType, ...query }) {
+  return {
+    type: 'profileNode',
+    payload: {
+      query,
+      profileType
+    }
+  };
+}
