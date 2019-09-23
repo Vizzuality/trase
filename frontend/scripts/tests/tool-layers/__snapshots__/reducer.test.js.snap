@@ -12,6 +12,10 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
+  "sankeySize": Array [
+    1024,
+    768,
+  ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
@@ -38,10 +42,14 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
+  "sankeySize": Array [
+    1024,
+    768,
+  ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
-  "toolLayout": 2,
+  "toolLayout": 1,
 }
 `;
 
@@ -64,10 +72,14 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
+  "sankeySize": Array [
+    1024,
+    768,
+  ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
-  "toolLayout": 2,
+  "toolLayout": 1,
 }
 `;
 
@@ -87,10 +99,14 @@ Object {
     "longitude": "150.64",
     "zoom": 2,
   },
+  "sankeySize": Array [
+    1024,
+    768,
+  ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
-  "toolLayout": 2,
+  "toolLayout": 1,
 }
 `;
 
@@ -106,12 +122,16 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
+  "sankeySize": Array [
+    1024,
+    768,
+  ],
   "selectedBasemap": Object {
     "id": 10,
   },
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
-  "toolLayout": 2,
+  "toolLayout": 1,
 }
 `;
 
@@ -127,6 +147,10 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
+  "sankeySize": Array [
+    1024,
+    768,
+  ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": Array [
     Object {
@@ -137,7 +161,7 @@ Object {
     },
   ],
   "selectedMapDimensions": null,
-  "toolLayout": 2,
+  "toolLayout": 1,
 }
 `;
 
@@ -153,10 +177,14 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
+  "sankeySize": Array [
+    1024,
+    768,
+  ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
-  "toolLayout": 2,
+  "toolLayout": 1,
 }
 `;
 
@@ -172,12 +200,16 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": true,
   "mapView": null,
+  "sankeySize": Array [
+    1024,
+    768,
+  ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": Array [
     "quant90",
   ],
-  "toolLayout": 2,
+  "toolLayout": 1,
 }
 `;
 
@@ -193,13 +225,17 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": true,
   "mapView": null,
+  "sankeySize": Array [
+    1024,
+    768,
+  ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": Array [
     "NotEmpty",
     "quant90",
   ],
-  "toolLayout": 2,
+  "toolLayout": 1,
 }
 `;
 
@@ -215,13 +251,17 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
+  "sankeySize": Array [
+    1024,
+    768,
+  ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": Array [
     "quant95",
     null,
   ],
-  "toolLayout": 2,
+  "toolLayout": 1,
 }
 `;
 
@@ -239,10 +279,14 @@ Object {
   ],
   "mapLoading": false,
   "mapView": null,
+  "sankeySize": Array [
+    1024,
+    768,
+  ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
-  "toolLayout": 2,
+  "toolLayout": 1,
 }
 `;
 
@@ -258,10 +302,14 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
+  "sankeySize": Array [
+    1024,
+    768,
+  ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
-  "toolLayout": 2,
+  "toolLayout": 1,
 }
 `;
 
@@ -297,9 +345,13 @@ Object {
   "linkedGeoIds": Array [],
   "mapLoading": false,
   "mapView": null,
+  "sankeySize": Array [
+    1024,
+    768,
+  ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
   "selectedMapDimensions": null,
-  "toolLayout": 2,
+  "toolLayout": 1,
 }
 `;
