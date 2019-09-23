@@ -16,7 +16,7 @@
   box-shadow: $box-shadow;
   color: $light-gray;
   cursor: pointer;
-  z-index: $z-leaflet-above-panes;
+  z-index: $z-above-leaflet;
 
   @include simple-arrow($white);
 
@@ -43,7 +43,7 @@
 
   &.-disabled {
     pointer-events: none;
-    z-index: $z-leaflet-above-panes - 1;
+    z-index: $z-above-leaflet - 1;
 
     &::after {
       transform: translate(-1px, -50%) rotateZ(-225deg);
