@@ -35,7 +35,7 @@
 
       > .c-sankey,
       .c-columns-selector-group {
-        left: 91%;
+        left: 96%;
       }
     }
 
@@ -72,7 +72,7 @@
 
     &.-map-fullscreen {
       > .c-map {
-        width: calc(91% - 366px);
+        width: calc(91% - 265px);
         z-index: $z-above;
       }
     }
