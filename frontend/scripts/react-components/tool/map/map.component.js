@@ -35,6 +35,8 @@ export default class MapComponent {
     this.map = L.map('js-map', mapOptions);
     new L.Control.Zoom({ position: 'topleft' }).addTo(this.map);
 
+    this.warningsContainer = document.querySelector('.js-map-warnings-container');
+    this.warnings = document.querySelector('.js-map-warnings');
     const worldBounds = L.latLngBounds(L.latLng(-89, -180), L.latLng(89, 180));
     this.map.setMaxBounds(worldBounds);
     this.mapEvents = {
@@ -625,5 +627,12 @@ export default class MapComponent {
       nodeHeights
     );
     this.map.addLayer(this.pointVolumeShadowLayer);
+  }
+
+  showMapWarnings({ selectedMapDimensionsWarnings }) {
+    this.warningsContainer.classList.toggle('-visible', selectedMapDimensionsWarnings !== null);
+    if (selectedMapDimensionsWarnings !== null) {
+      this.warnings.innerHTML = selectedMapDimensionsWarnings;
+    }
   }
 }
