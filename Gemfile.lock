@@ -289,7 +289,7 @@ GEM
     public_suffix (3.0.3)
     puma (3.12.0)
     rack (2.0.7)
-    rack-cors (0.4.1)
+    rack-cors (1.0.3)
     rack-protection (2.0.4)
       rack
     rack-test (1.1.0)
@@ -504,7 +504,7 @@ DEPENDENCIES
   pg_csv
   pg_search
   puma (~> 3.0)
-  rack-cors (~> 0.4)
+  rack-cors (~> 1.0)
   rails (~> 5.2.3)
   rails-controller-testing
   ransack

@@ -39,7 +39,7 @@ gem 'ckeditor', git: 'https://github.com/galetahub/ckeditor.git'
 gem 'paperclip', '~> 6.1.0'
 gem 'aws-sdk-s3', '~> 1'
 
-gem 'rack-cors', '~> 0.4'
+gem 'rack-cors', '~> 1.0'
 gem 'twitter', '~> 6.1'
 
 gem 'appsignal'
