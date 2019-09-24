@@ -18,14 +18,33 @@
   }
 
   .timeline-year-item {
-    width: 50px;
-    height: 32px;
-    border: 1px solid black;
-    margin: 0 8px;
+    border: 1px solid $charcoal-grey-faded;
+    margin: 0 6px;
+    border-radius: 4px;
+    background-color: white;
 
     &.-active {
-      background-color: black;
-      color: white;
+      background-color: $charcoal-grey-faded;
+    }
+
+    &.-start,
+    &.-end {
+      background-color: $charcoal-grey;
+    }
+
+    .timeline-year-button {
+      padding: 6px 12px;
+      height: 100%;
+      width: 100%;
+      cursor: pointer;
+
+      &[disabled=''] {
+        cursor: default;
+      }
+    }
+
+    &:last-child {
+      margin: 0;
     }
   }
 }
