@@ -2352,8 +2352,6 @@ components:
       properties:
         id:
           type: integer
-        context_node_type_id:
-          type: integer
         name:
           type: string
         main_topojson_path:
@@ -2372,10 +2370,33 @@ components:
           type: string
         adm_2_topojson_root:
           type: string
+        context_node_type:
+          type: object
+          properties:
+            id:
+              type: integer
+            context_id:
+              type: integer
+            node_type_id:
+              type: integer
+            column_position:
+              type: integer
+            column_group:
+              type: integer
+            prefix:
+              type: string
+              example: "imported by"
+            role:
+              type: string
+              example: "importer"
         charts:
           type: array
           items:
             $ref: "#/components/schemas/Chart"
+        available_years:
+          type: array
+          items:
+            type: integer
     Chart:
       type: object
       properties:
