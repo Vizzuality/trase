@@ -3,7 +3,6 @@
   "$schema": "http://json-schema.org/draft-06/schema#",
   "$id": "http://example.com/root.json",
   "type": "object",
-  "title": "The Root Schema",
   "required": [
     "data"
   ],
@@ -11,10 +10,8 @@
     "data": {
       "$id": "#/properties/data",
       "type": "object",
-      "title": "The Data Schema",
       "required": [
         "id",
-        "context_node_type_id",
         "name",
         "main_topojson_path",
         "main_topojson_root",
@@ -24,125 +21,102 @@
         "adm_2_name",
         "adm_2_topojson_path",
         "adm_2_topojson_root",
-        "charts"
+        "context_node_type",
+        "charts",
+        "available_years"
       ],
       "properties": {
         "id": {
           "$id": "#/properties/data/properties/id",
-          "type": "integer",
-          "title": "The Id Schema",
-          "default": 0,
-          "examples": [
-            11
-          ]
-        },
-        "context_node_type_id": {
-          "$id": "#/properties/data/properties/context_node_type_id",
-          "type": "integer",
-          "title": "The Context_node_type_id Schema",
-          "default": 0,
-          "examples": [
-            3
-          ]
+          "type": "integer"
         },
         "name": {
           "$id": "#/properties/data/properties/name",
           "type": "string",
-          "title": "The Name Schema",
-          "default": "",
-          "examples": [
-            "place"
-          ],
           "pattern": "^(.*)$"
         },
         "main_topojson_path": {
           "$id": "#/properties/data/properties/main_topojson_path",
-          "type": "string",
-          "title": "The Main_topojson_path Schema",
-          "default": "",
-          "examples": [
-            "/municip_states/brazil/$stateGeoId$.topo.json"
-          ],
-          "pattern": "^(.*)$"
+          "type": ["string", "null"]
         },
         "main_topojson_root": {
           "$id": "#/properties/data/properties/main_topojson_root",
-          "type": "string",
-          "title": "The Main_topojson_root Schema",
-          "default": "",
-          "examples": [
-            "BRAZIL_$stateGeoId$"
-          ],
-          "pattern": "^(.*)$"
+          "type": ["string", "null"]
         },
         "adm_1_name": {
           "$id": "#/properties/data/properties/adm_1_name",
-          "type": ["string", "null"],
-          "title": "The Adm_1_name Schema",
-          "default": "",
-          "examples": [
-            "Biome"
-          ],
-          "pattern": "^(.*)$"
+          "type": ["string", "null"]
         },
         "adm_1_topojson_path": {
           "$id": "#/properties/data/properties/adm_1_topojson_path",
-          "type": "string",
-          "title": "The Adm_1_topojson_path Schema",
-          "default": "",
-          "examples": [
-            "/BRAZIL_BIOME.topo.json"
-          ],
-          "pattern": "^(.*)$"
+          "type": ["string", "null"]
         },
         "adm_1_topojson_root": {
           "$id": "#/properties/data/properties/adm_1_topojson_root",
-          "type": "string",
-          "title": "The Adm_1_topojson_root Schema",
-          "default": "",
-          "examples": [
-            "BRAZIL_BIOME"
-          ],
-          "pattern": "^(.*)$"
+          "type": ["string", "null"]
         },
         "adm_2_name": {
           "$id": "#/properties/data/properties/adm_2_name",
-          "type": ["string", "null"],
-          "title": "The Adm_2_name Schema",
-          "default": "",
-          "examples": [
-            "State"
-          ],
-          "pattern": "^(.*)$"
+          "type": ["string", "null"]
         },
         "adm_2_topojson_path": {
           "$id": "#/properties/data/properties/adm_2_topojson_path",
-          "type": "string",
-          "title": "The Adm_2_topojson_path Schema",
-          "default": "",
-          "examples": [
-            "/BRAZIL_STATE.topo.json"
-          ],
-          "pattern": "^(.*)$"
+          "type": ["string", "null"]
         },
         "adm_2_topojson_root": {
           "$id": "#/properties/data/properties/adm_2_topojson_root",
-          "type": "string",
-          "title": "The Adm_2_topojson_root Schema",
-          "default": "",
-          "examples": [
-            "BRAZIL_STATE"
+          "type": ["string", "null"]
+        },
+        "context_node_type": {
+          "$id": "#/properties/data/properties/context_node_type",
+          "type": "object",
+          "required": [
+            "id",
+            "context_id",
+            "node_type_id",
+            "column_position",
+            "column_group",
+            "prefix",
+            "role"
           ],
-          "pattern": "^(.*)$"
+          "properties": {
+            "id": {
+              "$id": "#/properties/data/properties/context_node_type/properties/id",
+              "type": "integer"
+            },
+            "context_id": {
+              "$id": "#/properties/data/properties/context_node_type/properties/context_id",
+              "type": "integer"
+            },
+            "node_type_id": {
+              "$id": "#/properties/data/properties/context_node_type/properties/node_type_id",
+              "type": "integer"
+            },
+            "column_position": {
+              "$id": "#/properties/data/properties/context_node_type/properties/column_position",
+              "type": "integer"
+            },
+            "column_group": {
+              "$id": "#/properties/data/properties/context_node_type/properties/column_group",
+              "type": "integer"
+            },
+            "prefix": {
+              "$id": "#/properties/data/properties/context_node_type/properties/prefix",
+              "type": "string"
+            },
+            "role": {
+              "$id": "#/properties/data/properties/context_node_type/properties/role",
+              "type": "string",
+              "pattern": "^(.*)$"
+            }
+          }
         },
         "charts": {
           "$id": "#/properties/data/properties/charts",
           "type": "array",
-          "title": "The Charts Schema",
           "items": {
             "$id": "#/properties/data/properties/charts/items",
             "type": "object",
-            "title": "The Items Schema",
             "required": [
               "id",
               "chart_type",
@@ -154,57 +128,40 @@
             "properties": {
               "id": {
                 "$id": "#/properties/data/properties/charts/items/properties/id",
-                "type": "integer",
-                "title": "The Id Schema",
-                "default": 0,
-                "examples": [
-                  43
-                ]
+                "type": "integer"
               },
               "chart_type": {
                 "$id": "#/properties/data/properties/charts/items/properties/chart_type",
-                "type": ["string", "null"],
-                "title": "The Chart_type Schema",
-                "default": null,
-                "examples": [
-                  null
-                ]
+                "type": "string",
+                "pattern": "^(.*)$"
               },
               "identifier": {
                 "$id": "#/properties/data/properties/charts/items/properties/identifier",
                 "type": "string",
-                "title": "The Identifier Schema",
-                "default": "",
-                "examples": [
-                  "place_basic_attributes"
-                ],
                 "pattern": "^(.*)$"
               },
               "title": {
                 "$id": "#/properties/data/properties/charts/items/properties/title",
                 "type": "string",
-                "title": "The Title Schema",
-                "default": "",
-                "examples": [
-                  "Basic attributes"
-                ],
                 "pattern": "^(.*)$"
               },
               "position": {
                 "$id": "#/properties/data/properties/charts/items/properties/position",
-                "type": "integer",
-                "title": "The Position Schema",
-                "default": 0,
-                "examples": [
-                  0
-                ]
+                "type": "integer"
               },
               "children": {
                 "$id": "#/properties/data/properties/charts/items/properties/children",
-                "type": "array",
-                "title": "The Children Schema"
+                "type": "array"
               }
             }
+          }
+        },
+        "available_years": {
+          "$id": "#/properties/data/properties/available_years",
+          "type": "array",
+          "items": {
+            "$id": "#/properties/data/properties/available_years/items",
+            "type": "integer"
           }
         }
       }

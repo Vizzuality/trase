@@ -8,14 +8,13 @@ module Api
         end
 
         def call
-          context_node_type = Api::V3::ContextNodeType.
-            find_by(
-              node_type_id: @node.node_type_id,
-              context_id: @context.id
-            )
-
           Api::V3::Profile.
-            where(context_node_type_id: context_node_type.id).
+            includes(context_node_type: :context_node_type_property).
+            references(:context_node_type).
+            where(
+              'context_node_types.node_type_id' => @node.node_type_id,
+              'context_node_types.context_id' => @context.id
+            ).
             includes(charts: :children).
             references(:charts).
             where('charts.parent_id IS NULL').
