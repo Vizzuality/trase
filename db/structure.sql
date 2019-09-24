@@ -5,6 +5,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -899,7 +900,7 @@ CREATE VIEW public.attributes_v AS
              LEFT JOIN public.quant_properties qp ON ((qp.quant_id = quants.id)))
         UNION ALL
          SELECT inds.id,
-            'Ind'::text,
+            'Ind'::text AS text,
             inds.name,
             ip.display_name,
             inds.unit,
@@ -909,11 +910,11 @@ CREATE VIEW public.attributes_v AS
              LEFT JOIN public.ind_properties ip ON ((ip.ind_id = inds.id)))
         UNION ALL
          SELECT quals.id,
-            'Qual'::text,
+            'Qual'::text AS text,
             quals.name,
             qp.display_name,
-            NULL::text,
-            NULL::text,
+            NULL::text AS text,
+            NULL::text AS text,
             qp.tooltip_text
            FROM (public.quals
              LEFT JOIN public.qual_properties qp ON ((qp.qual_id = quals.id)))) s;
@@ -5906,6 +5907,36 @@ ALTER SEQUENCE public.resize_by_quants_id_seq OWNED BY public.resize_by_quants.i
 
 
 --
+-- Name: sankey_card_link_nodes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sankey_card_link_nodes (
+    id bigint NOT NULL,
+    sankey_card_link_id bigint,
+    node_id bigint
+);
+
+
+--
+-- Name: sankey_card_link_nodes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.sankey_card_link_nodes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sankey_card_link_nodes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.sankey_card_link_nodes_id_seq OWNED BY public.sankey_card_link_nodes.id;
+
+
+--
 -- Name: sankey_card_links; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -5916,7 +5947,11 @@ CREATE TABLE public.sankey_card_links (
     title text NOT NULL,
     subtitle text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    commodity_id bigint,
+    country_id bigint,
+    cont_attribute_id bigint,
+    ncont_attribute_id bigint
 );
 
 
@@ -6581,6 +6616,13 @@ ALTER TABLE ONLY public.resize_by_attributes ALTER COLUMN id SET DEFAULT nextval
 --
 
 ALTER TABLE ONLY public.resize_by_quants ALTER COLUMN id SET DEFAULT nextval('public.resize_by_quants_id_seq'::regclass);
+
+
+--
+-- Name: sankey_card_link_nodes id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_link_nodes ALTER COLUMN id SET DEFAULT nextval('public.sankey_card_link_nodes_id_seq'::regclass);
 
 
 --
@@ -7682,6 +7724,14 @@ ALTER TABLE ONLY public.resize_by_quants
 
 
 --
+-- Name: sankey_card_link_nodes sankey_card_link_nodes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_link_nodes
+    ADD CONSTRAINT sankey_card_link_nodes_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: sankey_card_links sankey_card_links_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8344,6 +8394,48 @@ CREATE UNIQUE INDEX ind_values_meta_mv_ind_id_idx ON public.ind_values_meta_mv U
 
 
 --
+-- Name: index_sankey_card_link_nodes_on_node_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sankey_card_link_nodes_on_node_id ON public.sankey_card_link_nodes USING btree (node_id);
+
+
+--
+-- Name: index_sankey_card_link_nodes_on_sankey_card_link_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sankey_card_link_nodes_on_sankey_card_link_id ON public.sankey_card_link_nodes USING btree (sankey_card_link_id);
+
+
+--
+-- Name: index_sankey_card_links_on_commodity_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sankey_card_links_on_commodity_id ON public.sankey_card_links USING btree (commodity_id);
+
+
+--
+-- Name: index_sankey_card_links_on_cont_attribute_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sankey_card_links_on_cont_attribute_id ON public.sankey_card_links USING btree (cont_attribute_id);
+
+
+--
+-- Name: index_sankey_card_links_on_country_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sankey_card_links_on_country_id ON public.sankey_card_links USING btree (country_id);
+
+
+--
+-- Name: index_sankey_card_links_on_ncont_attribute_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sankey_card_links_on_ncont_attribute_id ON public.sankey_card_links USING btree (ncont_attribute_id);
+
+
+--
 -- Name: index_top_profile_images_on_commodity_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8685,6 +8777,14 @@ ALTER TABLE ONLY public.dashboards_quals
 
 
 --
+-- Name: sankey_card_link_nodes fk_rails_1428ad7ffd; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_link_nodes
+    ADD CONSTRAINT fk_rails_1428ad7ffd FOREIGN KEY (node_id) REFERENCES public.nodes(id);
+
+
+--
 -- Name: node_quals fk_rails_14ebb50b5a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8794,6 +8894,14 @@ ALTER TABLE ONLY public.recolor_by_inds
 
 ALTER TABLE ONLY public.top_profile_images
     ADD CONSTRAINT fk_rails_29f1862b03 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: sankey_card_links fk_rails_2c41bcb873; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_links
+    ADD CONSTRAINT fk_rails_2c41bcb873 FOREIGN KEY (cont_attribute_id) REFERENCES public.attributes(id);
 
 
 --
@@ -8925,6 +9033,14 @@ ALTER TABLE ONLY public.qual_context_properties
 
 
 --
+-- Name: sankey_card_links fk_rails_5b56ba10d2; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_links
+    ADD CONSTRAINT fk_rails_5b56ba10d2 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id);
+
+
+--
 -- Name: ind_commodity_properties fk_rails_5c0dcf9d64; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8981,6 +9097,14 @@ ALTER TABLE ONLY public.flow_quals
 
 
 --
+-- Name: sankey_card_link_nodes fk_rails_70f69f2537; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_link_nodes
+    ADD CONSTRAINT fk_rails_70f69f2537 FOREIGN KEY (sankey_card_link_id) REFERENCES public.sankey_card_links(id);
+
+
+--
 -- Name: ind_properties fk_rails_720a88d4b2; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9018,6 +9142,14 @@ ALTER TABLE ONLY public.quant_context_properties
 
 ALTER TABLE ONLY public.quant_country_properties
     ADD CONSTRAINT fk_rails_90fcd1e231 FOREIGN KEY (country_id) REFERENCES public.countries(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: sankey_card_links fk_rails_9113195b2d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_links
+    ADD CONSTRAINT fk_rails_9113195b2d FOREIGN KEY (country_id) REFERENCES public.countries(id);
 
 
 --
@@ -9285,6 +9417,14 @@ ALTER TABLE ONLY public.top_profiles
 
 
 --
+-- Name: sankey_card_links fk_rails_ec3ba51bdb; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_links
+    ADD CONSTRAINT fk_rails_ec3ba51bdb FOREIGN KEY (ncont_attribute_id) REFERENCES public.attributes(id);
+
+
+--
 -- Name: contexts fk_rails_eea78f436e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9423,5 +9563,6 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190919211340'),
 ('20190920090440'),
 ('20190923074833'),
+('20190923143224'),
 ('20190924075531');
 
