@@ -1889,8 +1889,8 @@ CREATE TABLE public.context_node_type_properties (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     is_choropleth_disabled boolean DEFAULT false NOT NULL,
-    role character varying,
-    prefix text,
+    role character varying NOT NULL,
+    prefix text NOT NULL,
     CONSTRAINT context_node_type_properties_role_check CHECK (((role)::text = ANY (ARRAY[('source'::character varying)::text, ('exporter'::character varying)::text, ('importer'::character varying)::text, ('destination'::character varying)::text])))
 );
 
@@ -9372,6 +9372,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190823135415'),
 ('20190919063754'),
 ('20190919211340'),
-('20190923074833');
+('20190923074833'),
+('20190924075531');
 
 

@@ -8,8 +8,8 @@
 #  is_default(When set, show this node type as default (only use for one))                 :boolean          default(FALSE), not null
 #  is_geo_column(When set, show nodes on map)                                              :boolean          default(FALSE), not null
 #  is_choropleth_disabled(When set, do not display the map choropleth)                     :boolean          default(FALSE), not null
-#  role                                                                                    :string
-#  prefix                                                                                  :text
+#  role                                                                                    :string           not null
+#  prefix                                                                                  :text             not null
 #
 # Indexes
 #
@@ -37,21 +37,17 @@ module Api
         SOURCE_ROLE, EXPORTER_ROLE, IMPORTER_ROLE, DESTINATION_ROLE
       ].freeze
 
-      before_save :nilify_role,
-                  if: -> { role.blank? }
       # TODO: there should be only one default per group
 
       belongs_to :context_node_type
 
-      validates :prefix,
-                presence: true,
-                if: proc { |record| record.role.present? }
       validates :context_node_type, presence: true, uniqueness: true
       validates :column_group, presence: true, inclusion: COLUMN_GROUP
       validates :is_default, inclusion: {in: [true, false]}
       validates :is_geo_column, inclusion: {in: [true, false]}
       validates :is_choropleth_disabled, inclusion: {in: [true, false]}
-      validates :role, inclusion: ROLES, allow_nil: true, allow_blank: true
+      validates :role, inclusion: ROLES, presence: true
+      validates :prefix, presence: true
 
       after_commit :refresh_dependents
 
@@ -89,11 +85,21 @@ module Api
         ROLES
       end
 
-      private
+      # by column group
+      DEFAULT_ROLES = {
+        0 => SOURCE_ROLE,
+        1 => EXPORTER_ROLE,
+        2 => IMPORTER_ROLE,
+        3 => DESTINATION_ROLE
+      }.freeze
 
-      def nilify_role
-        self.role = nil
-      end
+      # by column group
+      DEFAULT_PREFIXES = {
+        0 => 'sourced from',
+        1 => 'exported by',
+        2 => 'imported by',
+        3 => 'going into'
+      }.freeze
     end
   end
 end
