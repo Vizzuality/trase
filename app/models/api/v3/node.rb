@@ -39,6 +39,9 @@ module Api
 
       has_many :nodes_stats
 
+      has_many :sankey_card_link_nodes
+      has_many :sankey_card_links, through: :sankey_card_link_nodes
+
       def stringify
         name + ' - ' + node_type.name + ' - ' + node_type&.context_node_types&.first&.context&.country&.name + ' ' + node_type&.context_node_types&.first&.context&.commodity&.name
       end
