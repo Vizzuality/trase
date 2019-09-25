@@ -40,7 +40,6 @@ const renderSankeyError = () => (
 const renderVainillaComponents = () => (
   <>
     <FlowContentContainer />
-    <Tooltip />
     <ModalContainer />
     <MapContainer />
     {!ENABLE_REDESIGN_PAGES && <LegacyBasemaps />}
