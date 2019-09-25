@@ -19,9 +19,7 @@
   }
 
   .left {
-    position: absolute;
-    top: 0;
-    bottom: 0;
+    position: relative;
     left: $layer-map-width;
     width: $map-width;
     height: calc(100% - 62px);
