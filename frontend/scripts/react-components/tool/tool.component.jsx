@@ -8,7 +8,6 @@ import TitlebarContainer from 'react-components/tool/titlebar/titlebar.container
 import NodesTitlesContainer from 'react-components/tool/nodes-titles/nodes-titles.container';
 import MapContextContainer from 'react-components/tool/map-context/map-context.container';
 import Sankey from 'react-components/tool/sankey';
-import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.react';
 import Tooltip from 'react-components/tool/help-tooltip/help-tooltip.container';
 import SplittedView from 'react-components/tool/splitted-view';
 import MapLayout from 'react-components/tool/map-layout';
@@ -48,7 +47,7 @@ const renderVainillaComponents = () => (
     {!ENABLE_REDESIGN_PAGES && <LegacyBasemaps />}
     {!ENABLE_REDESIGN_PAGES && <NodesTitlesContainer />}
     <MapContextContainer />
-    <MapDimensionsContainer />
+    <Tooltip />
   </>
 );
 

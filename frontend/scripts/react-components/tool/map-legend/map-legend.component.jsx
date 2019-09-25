@@ -83,14 +83,16 @@ export default class {
   }
 
   selectMapDimensions({ selectedMapDimensionsWarnings }) {
-    this.warningsContainer.classList.toggle('-visible', selectedMapDimensionsWarnings !== null);
+    if (this.warningsContainer) {
+      this.warningsContainer.classList.toggle('-visible', selectedMapDimensionsWarnings !== null);
+    }
     if (selectedMapDimensionsWarnings !== null) {
       this.warnings.innerHTML = selectedMapDimensionsWarnings;
     }
   }
 
   _setupChoro(choroplethLegend) {
-    if (this.el.hasChildNodes()) {
+    if (this.el?.hasChildNodes()) {
       this._cleanChoro();
     }
 
@@ -111,11 +113,15 @@ export default class {
   }
 
   _showLegend() {
-    this.el.classList.remove('-hidden');
+    if (this.el) {
+      this.el.classList.remove('-hidden');
+    }
   }
 
   _hideLegend() {
-    this.el.classList.add('-hidden');
+    if (this.el) {
+      this.el.classList.add('-hidden');
+    }
   }
 
   _cleanChoro() {
@@ -129,19 +135,20 @@ export default class {
     if (!choroplethLegend.isBivariate && choroplethLegend.bucket[0].length >= 7) {
       cssClasses.push('-wide');
     }
+    if (this.choro) {
+      this.choro.innerHTML = LegendChoroTemplate({
+        title: choroplethLegend.titles,
+        colors: choroplethLegend.colors,
+        cssClass: cssClasses.join(' '),
+        bucket: choroplethLegend.bucket,
+        isBivariate: choroplethLegend.isBivariate,
+        abbreviateNumber
+      });
 
-    this.choro.innerHTML = LegendChoroTemplate({
-      title: choroplethLegend.titles,
-      colors: choroplethLegend.colors,
-      cssClass: cssClasses.join(' '),
-      bucket: choroplethLegend.bucket,
-      isBivariate: choroplethLegend.isBivariate,
-      abbreviateNumber
-    });
-
-    this.currentBuckets = Array.prototype.slice
-      .call(this.choro.getElementsByClassName('bucket'))
-      .concat(Array.prototype.slice.call(this.choro.getElementsByClassName('bullet')));
+      this.currentBuckets = Array.prototype.slice
+        .call(this.choro.getElementsByClassName('bucket'))
+        .concat(Array.prototype.slice.call(this.choro.getElementsByClassName('bullet')));
+    }
 
     const choroArrow = document.querySelector('.js-choro-arrow');
 
@@ -157,9 +164,11 @@ export default class {
   }
 
   _renderContext(layers) {
-    this.context.innerHTML = LegendContextTemplate({
-      layers
-    });
+    if (this.context) {
+      this.context.innerHTML = LegendContextTemplate({
+        layers
+      });
+    }
   }
 
   _updateMapControlsPosition(legend) {

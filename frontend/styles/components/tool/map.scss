@@ -222,9 +222,7 @@
   &.-minified {
     .c-map-legend,
     .c-map-attribution,
-    .leaflet-control-container,
-    .basemaps-toggle,
-    .-map-layers {
+    .leaflet-control-container {
       display: none;
     }
   }
