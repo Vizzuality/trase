@@ -12,8 +12,10 @@ function Legend(props) {
     toggleMapLayerMenu,
     choroplethLegend,
     highlightedChoroplethBucket,
-    contextualLayers
+    contextualLayers,
+    isHidden
   } = props;
+  if (isHidden) return null;
   return (
     <div className="c-legend">
       <div className="legend-header">
@@ -52,7 +54,8 @@ Legend.propTypes = {
   contextualLayers: PropTypes.array,
   choroplethLegend: PropTypes.object,
   toggleMapLayerMenu: PropTypes.func.isRequired,
-  highlightedChoroplethBucket: PropTypes.string
+  highlightedChoroplethBucket: PropTypes.string,
+  isHidden: PropTypes.bool
 };
 
 export default Legend;
