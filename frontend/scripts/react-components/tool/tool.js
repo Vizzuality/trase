@@ -21,7 +21,7 @@ const urlPropHandlers = {
 const mapStateToProps = state => ({
   urlPropHandlers,
   urlProps: getUrlProps(state),
-  toolLayout: state.toolLayers.toolLayout
+  mapSidebarOpen: state.app.isMapLayerVisible
 });
 
 const mapDispatchToProps = dispatch => ({

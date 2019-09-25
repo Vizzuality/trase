@@ -5,11 +5,13 @@ $column-width: 100px;
 
 .c-columns-selector-group {
   position: relative;
+  height: 48px;
+  margin-top: 10px;
+  transition: left .45s $ease-in-out-sine;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0 32px;
-  height: 32px;
 
   .columns-spinner {
     margin: 0;

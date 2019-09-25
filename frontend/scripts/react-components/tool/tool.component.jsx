@@ -10,14 +10,12 @@ import MapContextContainer from 'react-components/tool/map-context/map-context.c
 import Sankey from 'react-components/tool/sankey';
 import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.react';
 import Tooltip from 'react-components/tool/help-tooltip/help-tooltip.container';
-import Basemaps from 'react-components/tool/basemaps';
-import LayoutArrows from 'react-components/tool/layout-arrows';
+import SplittedView from 'react-components/tool/splitted-view';
+import MapLayout from 'react-components/tool/map-layout';
+import MapSidebar from 'react-components/tool/map-sidebar-layout';
 import LegacyBasemaps from 'react-components/tool/legacy-basemaps/legacy-basemaps.container';
-import Legend from 'react-components/tool/legend';
 import EventManager from 'utils/eventManager';
 import UrlSerializer from 'react-components/shared/url-serializer';
-import cx from 'classnames';
-import { TOOL_LAYOUT } from 'constants';
 import Timeline from './timeline';
 
 import 'styles/layouts/l-tool.scss';
@@ -27,55 +25,6 @@ import 'styles/components/shared/dropdown.scss';
 import 'styles/components/tool/map/map-sidebar.scss';
 
 const evManager = new EventManager();
-
-const renderMapSidebar = () => (
-  <div className="c-map-sidebar is-absolute">
-    <div className="js-dimensions">{/* this is rendered by map-dimensions.component  */}</div>
-
-    <div className="map-sidebar-group c-map-context js-map-context is-hidden">
-      <div className="map-sidebar-group-title">Contextual layers</div>
-      <ul className="map-sidebar-group-items js-map-context-items">
-        {/* this is rendered by map-context.component */}
-      </ul>
-    </div>
-
-    {!ENABLE_REDESIGN_PAGES && (
-      <div className="map-sidebar-group c-map-basemaps">
-        <div className="map-sidebar-group-title">Basemaps</div>
-        <ul className="map-sidebar-group-items js-map-basemaps-items">
-          {/* this is rendered by map-context.component */}
-        </ul>
-      </div>
-    )}
-  </div>
-);
-
-const renderMap = ({ toolLayout }) => (
-  <div
-    className={cx(
-      'js-map-container c-map is-absolute -smooth-transition',
-      { '-map-fullscreen': toolLayout === TOOL_LAYOUT.left },
-      { '-sankey-fullscreen': toolLayout === TOOL_LAYOUT.right }
-    )}
-  >
-    <div id="js-map" className="c-map-leaflet" />
-    {ENABLE_REDESIGN_PAGES && <Basemaps />}
-    {ENABLE_REDESIGN_PAGES && <LayoutArrows />}
-    <div className="js-map-warnings-container map-warnings">
-      <div className="warning-wrapper">
-        <svg className="icon">
-          <use xlinkHref="#icon-warning" />
-        </svg>
-        <span className="js-map-warnings" />
-      </div>
-    </div>
-    <div className="js-map-attribution c-map-attribution">
-      {/* this is rendered by map.component */}
-    </div>
-    <Legend />
-  </div>
-);
-
 const renderSankeyError = () => (
   <div className="js-sankey-error is-hidden">
     <div className="veil -with-menu -below-nav" />
@@ -92,19 +41,19 @@ const renderSankeyError = () => (
 
 const renderVainillaComponents = () => (
   <>
-    <MapContainer />
-    <MapDimensionsContainer />
     <FlowContentContainer />
     <Tooltip />
-    {!ENABLE_REDESIGN_PAGES && <LegacyBasemaps />}
-    <MapContextContainer />
-    {!ENABLE_REDESIGN_PAGES && <NodesTitlesContainer />}
     <ModalContainer />
+    <MapContainer />
+    {!ENABLE_REDESIGN_PAGES && <LegacyBasemaps />}
+    {!ENABLE_REDESIGN_PAGES && <NodesTitlesContainer />}
+    <MapContextContainer />
+    <MapDimensionsContainer />
   </>
 );
 
 const Tool = props => {
-  const { resizeSankeyTool, urlProps, urlPropHandlers, toolLayout } = props;
+  const { resizeSankeyTool, urlProps, urlPropHandlers, mapSidebarOpen } = props;
   useEffect(() => {
     evManager.addEventListener(window, 'resize', resizeSankeyTool);
     const body = document.querySelector('body');
@@ -122,38 +71,36 @@ const Tool = props => {
       <>
         <div className="js-node-tooltip c-info-tooltip" />
         <div className="l-tool">
-          {renderVainillaComponents()}
-
           <div className="-hidden-on-mobile">
             <div className="veil js-veil" />
             <div className="c-modal js-modal" />
           </div>
-
           {renderSankeyError()}
-
-          <div
-            className={cx(
-              'js-tool-content flow-content',
-              { '-sankey-fullscreen': toolLayout === TOOL_LAYOUT.right },
-              { '-map-fullscreen': toolLayout === TOOL_LAYOUT.left }
-            )}
-          >
-            {renderMapSidebar()}
-            {renderMap({ toolLayout })}
-            <ColumnsSelectorGroupContainer />
-            <Sankey />
+          <MapSidebar />
+          <div className="main-content">
+            <SplittedView
+              sidebarOpen={mapSidebarOpen}
+              leftSlot={<MapLayout />}
+              rightSlot={
+                <>
+                  <ColumnsSelectorGroupContainer />
+                  <Sankey />
+                </>
+              }
+            />
             {!ENABLE_REDESIGN_PAGES && <TitlebarContainer />}
           </div>
           <Timeline />
         </div>
       </>
     ),
-    [toolLayout]
+    [mapSidebarOpen]
   );
 
   return (
     <div>
       {render}
+      {renderVainillaComponents()}
       <UrlSerializer urlProps={urlProps} urlPropHandlers={urlPropHandlers} />
     </div>
   );
@@ -163,7 +110,7 @@ Tool.propTypes = {
   resizeSankeyTool: PropTypes.func.isRequired,
   urlPropHandlers: PropTypes.object,
   urlProps: PropTypes.object,
-  toolLayout: PropTypes.number
+  mapSidebarOpen: PropTypes.bool
 };
 
 export default Tool;

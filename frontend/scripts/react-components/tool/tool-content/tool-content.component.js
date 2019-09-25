@@ -3,7 +3,6 @@ export default class {
     this.onSankeyReset = this._resetSankey.bind(this);
 
     this._setVars();
-    this.toggleMapLayersVisibility(props);
     this.toggleError(props);
   }
 
@@ -13,7 +12,7 @@ export default class {
 
   _setVars() {
     this.el = document.querySelector('.js-tool-content');
-    this.map = this.el.querySelector('.js-map-container');
+    this.sidebar = document.querySelector('.js-map-sidebar');
     this.sankeyError = document.querySelector('.js-sankey-error');
     this.sankeyResetButton = document.querySelector('.js-sankey-reset');
 
@@ -22,10 +21,6 @@ export default class {
 
   _resetSankey() {
     this.callbacks.resetSankey();
-  }
-
-  toggleMapLayersVisibility({ isVisible }) {
-    this.el.classList.toggle('-open', isVisible);
   }
 
   toggleError({ noLinksFound }) {
