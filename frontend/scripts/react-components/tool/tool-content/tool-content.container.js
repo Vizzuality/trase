@@ -14,7 +14,6 @@ const mapDispatchToProps = {
 };
 
 const methodProps = [
-  { name: 'toggleMapLayersVisibility', compared: ['isVisible'], returned: ['isVisible'] },
   { name: 'toggleError', compared: ['noLinksFound'], returned: ['noLinksFound'] }
 ];
 

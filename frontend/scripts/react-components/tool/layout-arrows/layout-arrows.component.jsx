@@ -5,26 +5,26 @@ import cx from 'classnames';
 import 'react-components/tool/layout-arrows/layout-arrows.scss';
 import { TOOL_LAYOUT } from 'constants';
 
-export default function LayoutArrows({ toolLayout, changeLayout }) {
+export default function LayoutArrows({ layout, changeLayout }) {
   return (
     <>
       <button
         className={cx(
           'layout-arrow-button',
-          { '-centered-arrow': toolLayout !== TOOL_LAYOUT.splitted },
-          { '-disabled': toolLayout === TOOL_LAYOUT.left }
+          { '-centered-arrow': layout !== TOOL_LAYOUT.splitted },
+          { '-disabled': layout === TOOL_LAYOUT.left }
         )}
-        disabled={toolLayout === TOOL_LAYOUT.left}
-        onClick={() => changeLayout(toolLayout - 1)}
+        disabled={layout === TOOL_LAYOUT.left}
+        onClick={() => changeLayout(layout - 1)}
       />
       <button
         className={cx(
           'layout-arrow-button -right',
-          { '-centered-arrow': toolLayout !== TOOL_LAYOUT.splitted },
-          { '-disabled': toolLayout === TOOL_LAYOUT.right }
+          { '-centered-arrow': layout !== TOOL_LAYOUT.splitted },
+          { '-disabled': layout === TOOL_LAYOUT.right }
         )}
-        disabled={toolLayout === TOOL_LAYOUT.right}
-        onClick={() => changeLayout(toolLayout + 1)}
+        disabled={layout === TOOL_LAYOUT.right}
+        onClick={() => changeLayout(layout + 1)}
       />
     </>
   );
@@ -32,5 +32,5 @@ export default function LayoutArrows({ toolLayout, changeLayout }) {
 
 LayoutArrows.propTypes = {
   changeLayout: PropTypes.func.isRequired,
-  toolLayout: PropTypes.number
+  layout: PropTypes.number
 };

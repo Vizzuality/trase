@@ -89,9 +89,10 @@ function useMenuPosition(props) {
   const [menuPos, setMenuPos] = useState({ x: 0, y: 0 });
   const ref = useRef(null);
 
+  const COLUMN_SELECTOR_HEIGHT = 60;
   const getCoordinates = n => ({
     x: n.x,
-    y: Math.max(0, n.y) - (ref.current?.scrollTop || 0)
+    y: Math.max(0, n.y) + COLUMN_SELECTOR_HEIGHT - (ref.current?.scrollTop || 0)
   });
 
   useEffect(() => {
@@ -344,9 +345,7 @@ function Sankey(props) {
   const loading = !columns || columns.length === 0 || !links || flowsLoading;
 
   return (
-    <div
-      className={cx('c-sankey is-absolute', { '-full-screen': toolLayout === TOOL_LAYOUT.right })}
-    >
+    <div className={cx('c-sankey', { '-full-screen': toolLayout === TOOL_LAYOUT.right })}>
       <div
         ref={scrollContainerRef}
         className={cx('sankey-scroll-container', { '-detailed': detailedView })}
