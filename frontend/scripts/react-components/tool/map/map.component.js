@@ -50,7 +50,9 @@ export default class MapComponent {
         this.map.panInsideBounds(worldBounds, { animate: false });
       },
       updateAttribution: () => {
-        this.attribution.innerHTML = this.attributionSource.innerHTML;
+        if (this.attribution) {
+          this.attribution.innerHTML = this.attributionSource.innerHTML;
+        }
       },
       moveEnd: () => {
         this.callbacks.onMoveEnd(this.map.getCenter(), this.map.getZoom());
