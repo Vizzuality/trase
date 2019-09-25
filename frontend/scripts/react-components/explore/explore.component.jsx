@@ -195,13 +195,14 @@ function Explore({
       <ResizeListener>
         {({ resolution, windowWidth }) => {
           const rowsNumber = getRowsNumber(windowWidth);
+          const isMobile = resolution.isSmall;
           return (
             <>
               <div className="explore-selector">
                 {renderTitle()}
                 <div className="explore-grid-container">
                   <div className="row columns">
-                    {resolution.isSmall ? (
+                    {isMobile ? (
                       renderDropdowns()
                     ) : (
                       <div className={cx('explore-grid', { [`rows${rowsNumber}`]: rowsNumber })}>
@@ -274,8 +275,8 @@ function Explore({
                 commodityName={commodity?.name}
                 countryName={country?.name}
                 cards={cards}
-                openModal={params => openModal(params)}
-                isMobile={resolution.isSmall}
+                openModal={params => (isMobile ? goToTool('dataView', params) : openModal(params))}
+                isMobile={isMobile}
               />
               <SimpleModal isOpen={isModalOpen} onRequestClose={() => closeModal()}>
                 <ToolLinksModal goToTool={destination => goToTool(destination, linkParams)} />
