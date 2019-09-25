@@ -130,7 +130,7 @@ const toolLayersReducer = {
   },
   [CHANGE_LAYOUT](state, action) {
     return immer(state, draft => {
-      draft.toolLayout = action.toolLayout;
+      draft.toolLayout = action.payload.toolLayout;
     });
   },
   [SAVE_MAP_VIEW](state, action) {
