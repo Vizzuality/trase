@@ -2,7 +2,6 @@ import immer from 'immer';
 
 export function initTimelineState(selectedYears) {
   return {
-    init: selectedYears.length > 0,
     hovered: null,
     prevStart: null,
     prevEnd: null,

@@ -8,7 +8,6 @@ describe('Tool Timeline component behavior', () => {
   it('should return empty state if no years available', () => {
     const initialState = initTimelineState([]);
     expect(initialState).toEqual({
-      init: false,
       hovered: null,
       prevStart: null,
       prevEnd: null,
@@ -22,7 +21,6 @@ describe('Tool Timeline component behavior', () => {
   it('should return initial state for a single year', () => {
     const initialState = initTimelineState([2017, 2017]);
     expect(initialState).toEqual({
-      init: true,
       hovered: null,
       prevStart: null,
       prevEnd: null,
@@ -36,7 +34,6 @@ describe('Tool Timeline component behavior', () => {
   it('should return initial state for a range of years', () => {
     const initialState = initTimelineState([2017, 2018]);
     expect(initialState).toEqual({
-      init: true,
       hovered: null,
       prevStart: null,
       prevEnd: null,
@@ -87,7 +84,6 @@ describe('Tool Timeline component behavior', () => {
 
   it('reducer completes single with prev single', () => {
     const state = {
-      init: true,
       hovered: null,
       range: false,
       prevRange: false,
@@ -109,7 +105,6 @@ describe('Tool Timeline component behavior', () => {
 
   it('reducer completes single with prev range', () => {
     const state = {
-      init: true,
       hovered: null,
       range: false,
       prevRange: true,

@@ -10,10 +10,10 @@ import './timeline.scss';
 
 function useSelectedYearsPropsState(props, state, dispatch) {
   useEffect(() => {
-    if (!state.init && props.selectedYears.length > 0) {
+    if (props.selectedYears.length > 0) {
       dispatch({ type: 'reset', payload: props.selectedYears });
     }
-  }, [props.selectedYears, state.end, state.start, dispatch, state.init]);
+  }, [props.selectedYears, dispatch]);
 }
 
 function useUpdateSelectedYears(props, state) {
@@ -26,7 +26,8 @@ function useUpdateSelectedYears(props, state) {
     ) {
       selectYears([state.start, state.end]);
     }
-  }, [state.start, state.end, selectedYears, selectYears]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.start, state.end]);
 }
 
 function useEscapeClearEvent(state, dispatch) {
@@ -97,13 +98,14 @@ function Timeline(props) {
 
   const tabs = [
     { label: 'range', payload: true, type: 'toggleRange' },
-    { label: 'single', payload: false, type: 'toggleRange' }
+    { label: 'year', payload: false, type: 'toggleRange' }
   ];
 
   return (
     <div className="c-timeline">
       <Tabs
         tabs={tabs}
+        margin={null}
         onSelectTab={item => dispatch(item)}
         selectedTab={state.range}
         getTabId={t => t.payload}
