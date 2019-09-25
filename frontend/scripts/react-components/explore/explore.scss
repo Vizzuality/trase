@@ -7,11 +7,21 @@ $explore-mobile-dropdowns: 100px;
 $explore-heading: 66px;
 
 .c-explore {
+  overflow: hidden;
+
+  @media screen and (min-width: $breakpoint-mobile) {
+    overflow: auto;
+  }
+
   .explore-selector {
     position: relative;
     margin-top: $nav-height;
-    padding-bottom: $top-cards-height;
     height: calc(100vh - #{$nav-height});
+    padding-bottom: 0;
+
+    @media screen and (min-width: $breakpoint-tablet) {
+      padding-bottom: $top-cards-height;
+    }
   }
 
   @mixin row-dependant-height {
@@ -50,7 +60,11 @@ $explore-heading: 66px;
 
   .map-centering {
     // Still able to scroll the map in very short screens
-    margin-bottom: $top-cards-height;
+    margin-bottom: 0;
+
+    @media screen and (min-width: $breakpoint-tablet) {
+      margin-bottom: $top-cards-height;
+    }
 
     @media (min-height: 700px) {
       display: flex;
