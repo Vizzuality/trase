@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from 'react';
+import React, { useReducer, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Tabs from 'react-components/shared/tabs';
@@ -47,6 +47,46 @@ function useEscapeClearEvent(state, dispatch) {
   }, [state.end, dispatch, state.range]);
 }
 
+function useSlider({ years }) {
+  const [page, setPage] = useState(0);
+  const container = useRef(null);
+  const contentList = useRef(null);
+  const item = useRef(null);
+  const [pageSize, setPageSize] = useState(0);
+  const [itemSize, setItemSize] = useState(0);
+
+  useEffect(() => {
+    if (container.current) {
+      if (contentList.current) {
+        const listBounds = contentList.current.getBoundingClientRect();
+        if (item.current) {
+          const itemBounds = item.current.getBoundingClientRect();
+          const marginBetweenItems = 12;
+          setItemSize(Math.ceil(itemBounds.width + marginBetweenItems));
+          setPageSize(listBounds.width);
+          setPage(0);
+        }
+      }
+    }
+  }, [years]);
+
+  const numPages = Math.round(pageSize / (itemSize * 3)) - 1;
+
+  return {
+    refs: {
+      container,
+      contentList,
+      item
+    },
+    page,
+    pageSize,
+    itemSize,
+    numPages,
+    onPrevious: () => setPage(p => p - 1),
+    onNext: () => setPage(p => p + 1)
+  };
+}
+
 function Timeline(props) {
   const { years, selectedYears } = props;
   const [state, dispatch] = useReducer(
@@ -58,6 +98,7 @@ function Timeline(props) {
   useSelectedYearsPropsState(props, state, dispatch);
   useUpdateSelectedYears(props, state);
   useEscapeClearEvent(state, dispatch);
+  const { page, refs, pageSize, itemSize, numPages, onNext, onPrevious } = useSlider(props);
 
   function getClassName(year) {
     if (state.range) {
@@ -101,6 +142,11 @@ function Timeline(props) {
     { label: 'year', payload: false, type: 'toggleRange' }
   ];
 
+  const translateYearList = (() => {
+    const jump = itemSize * 3;
+    return `translate3d(${-page * jump}px, 0, 0)`;
+  })();
+
   return (
     <div className="c-timeline">
       <Tabs
@@ -111,28 +157,54 @@ function Timeline(props) {
         getTabId={t => t.payload}
         itemTabRenderer={t => t.label}
       />
-      <ul className="timeline-years-list">
-        {years.map(year => {
-          const isActive = year === state.start || year === state.end;
-          const statusClassName = getClassName(year);
-          return (
-            <li key={year} className={cx('timeline-year-item', statusClassName)}>
-              <button
-                disabled={!state.range && state.end && isActive}
-                className="timeline-year-button"
-                onMouseLeave={() => dispatch({ type: 'hover', payload: null })}
-                onMouseEnter={() => dispatch({ type: 'hover', payload: year })}
-                onClick={() => dispatch({ type: 'select', payload: year })}
-                data-test={`timeline-year-button-${year}`}
-              >
-                <Text as="span" weight="bold" color={statusClassName ? 'white' : 'grey'}>
-                  {year}
-                </Text>
-              </button>
-            </li>
-          );
+      <div
+        ref={refs.container}
+        className={cx('timeline-container', {
+          '-button-left': page > 0,
+          '-button-right': page < numPages
         })}
-      </ul>
+      >
+        <button
+          className={cx('timeline-page-button', '-next', { '-visible': page < numPages })}
+          onClick={onNext}
+        />
+        <button
+          className={cx('timeline-page-button', '-prev', { '-visible': page > 0 })}
+          onClick={onPrevious}
+        />
+        <ul
+          ref={refs.contentList}
+          className="timeline-years-list"
+          style={{
+            transform: translateYearList
+          }}
+        >
+          {years.map((year, i) => {
+            const isActive = year === state.start || year === state.end;
+            const statusClassName = getClassName(year);
+            return (
+              <li
+                ref={i === 0 ? refs.item : undefined}
+                key={year}
+                className={cx('timeline-year-item', statusClassName)}
+              >
+                <button
+                  disabled={isActive}
+                  className="timeline-year-button"
+                  onMouseLeave={() => dispatch({ type: 'hover', payload: null })}
+                  onMouseEnter={() => dispatch({ type: 'hover', payload: year })}
+                  onClick={() => dispatch({ type: 'select', payload: year })}
+                  data-test={`timeline-year-button-${year}`}
+                >
+                  <Text as="span" weight="bold" color={statusClassName ? 'white' : 'grey'}>
+                    {year}
+                  </Text>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 }
