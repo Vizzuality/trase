@@ -139,7 +139,9 @@ describe(CHANGE_LAYOUT, () => {
   it('Changes the map layout', () => {
     const action = {
       type: CHANGE_LAYOUT,
-      toolLayout: TOOL_LAYOUT.right
+      payload: {
+        toolLayout: TOOL_LAYOUT.right
+      }
     };
     const newState = reducer(initialState, action);
     expect(newState).toMatchSnapshot();

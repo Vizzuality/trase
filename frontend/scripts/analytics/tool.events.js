@@ -81,7 +81,7 @@ export default [
     type: CHANGE_LAYOUT,
     action: 'Change layout',
     category: 'Sankey',
-    getPayload: action => action.toolLayout
+    getPayload: action => action.payload.toolLayout
   },
   {
     type: SELECT_BASEMAP,

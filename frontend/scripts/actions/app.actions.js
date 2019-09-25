@@ -59,7 +59,9 @@ export function changeLayout(newToolLayout) {
   return dispatch => {
     dispatch({
       type: CHANGE_LAYOUT,
-      toolLayout: newToolLayout
+      payload: {
+        toolLayout: newToolLayout
+      }
     });
     dispatch({ type: SET_SANKEY_SIZE });
   };
