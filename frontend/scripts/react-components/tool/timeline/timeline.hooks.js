@@ -84,9 +84,10 @@ export function useSlider({ years, selectedYears }) {
 
   useEffect(() => {
     const startYearIndex = years.findIndex(i => i === selectedYears[0]);
-    const selectedYearPage = Math.floor(startYearIndex / maxVisibleItems);
-    const startOfPage = startYearIndex % maxVisibleItems === 0;
-    const pageToStart = startOfPage && selectedYearPage ? selectedYearPage : selectedYearPage;
+    const position = startYearIndex / maxVisibleItems + ((startYearIndex / maxVisibleItems) % 1);
+    const numPages = years.length / maxVisibleItems - 1;
+    const selectedYearPage = position > 1 ? Math.ceil(position) : Math.floor(position);
+    const pageToStart = numPages > 0 ? selectedYearPage : 0;
     setPage(pageToStart);
 
     // we want to recalculate the active page only when the sizes change.
