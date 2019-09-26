@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import MapContainer from 'react-components/tool/map/map.container';
 import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.react';
-import FlowContentContainer from 'react-components/tool/tool-content/tool-content.container';
 import ModalContainer from 'react-components/tool/story-modal/story-modal.container';
 import TitlebarContainer from 'react-components/tool/titlebar/titlebar.container';
 import NodesTitlesContainer from 'react-components/tool/nodes-titles/nodes-titles.container';
@@ -12,6 +11,7 @@ import Sankey from 'react-components/tool/sankey';
 import Tooltip from 'react-components/tool/help-tooltip/help-tooltip.container';
 import SplittedView from 'react-components/tool/splitted-view';
 import MapLayout from 'react-components/tool/map-layout';
+import ErrorModal from 'react-components/tool/error-modal';
 import MapSidebar from 'react-components/tool/map-sidebar-layout';
 import LegacyBasemaps from 'react-components/tool/legacy-basemaps/legacy-basemaps.container';
 import EventManager from 'utils/eventManager';
@@ -25,23 +25,9 @@ import 'styles/components/shared/dropdown.scss';
 import 'styles/components/tool/map/map-sidebar.scss';
 
 const evManager = new EventManager();
-const renderSankeyError = () => (
-  <div className="js-sankey-error is-hidden">
-    <div className="veil -with-menu -below-nav" />
-    <div className="c-modal -below-nav">
-      <div className="content -auto-height">
-        The current selection produced no results. This may be due to data not being available for
-        the current configuration or due to an error in loading the data. Please change your
-        selection or reset the tool to its default settings.
-        <button className="c-button js-sankey-reset">reset</button>
-      </div>
-    </div>
-  </div>
-);
 
 const renderVainillaComponents = () => (
   <>
-    <FlowContentContainer />
     <ModalContainer />
     <MapContainer />
     <MapDimensionsContainer />
@@ -53,7 +39,7 @@ const renderVainillaComponents = () => (
 );
 
 const Tool = props => {
-  const { resizeSankeyTool, urlProps, urlPropHandlers, mapSidebarOpen } = props;
+  const { resizeSankeyTool, urlProps, urlPropHandlers, mapSidebarOpen, noLinksFound } = props;
   useEffect(() => {
     evManager.addEventListener(window, 'resize', resizeSankeyTool);
     const body = document.querySelector('body');
@@ -75,7 +61,7 @@ const Tool = props => {
             <div className="veil js-veil" />
             <div className="c-modal js-modal" />
           </div>
-          {renderSankeyError()}
+          <ErrorModal noLinksFound={noLinksFound} />
           <MapSidebar />
           <div className="main-content">
             <SplittedView
@@ -94,7 +80,7 @@ const Tool = props => {
         </div>
       </>
     ),
-    [mapSidebarOpen]
+    [mapSidebarOpen, noLinksFound]
   );
 
   return (
@@ -110,7 +96,8 @@ Tool.propTypes = {
   resizeSankeyTool: PropTypes.func.isRequired,
   urlPropHandlers: PropTypes.object,
   urlProps: PropTypes.object,
-  mapSidebarOpen: PropTypes.bool
+  mapSidebarOpen: PropTypes.bool,
+  noLinksFound: PropTypes.bool
 };
 
 export default Tool;
