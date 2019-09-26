@@ -140,7 +140,7 @@ function Timeline(props) {
                 className={cx('timeline-year-item', statusClassName)}
               >
                 <button
-                  disabled={isActive}
+                  disabled={!state.range && isActive}
                   className="timeline-year-button"
                   onMouseLeave={() => dispatch({ type: 'hover', payload: null })}
                   onMouseEnter={() => dispatch({ type: 'hover', payload: year })}

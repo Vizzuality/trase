@@ -98,6 +98,9 @@ export default function timelineReducer(state, action) {
           draft.start = year;
         }
         if (status === 'completeRange') {
+          if (year === state.start) {
+            return;
+          }
           draft.start = Math.min(state.start, year);
           draft.end = Math.max(state.start, year);
         }
