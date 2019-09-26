@@ -110,21 +110,15 @@
 
   .timeline-years-list {
     display: flex;
-    align-items: flex-start;
-    justify-content: center;
     transition: transform 350ms $ease-in-out-sine;
   }
 
   .timeline-year-item {
     border: 1px solid $charcoal-grey-faded;
-    margin: 0 6px; // matches marginBetweenItems inside useSlider
+    margin: 0 6px; // matches MARGIN_BETWEEN_ITEMS inside useSlider
     height: 30px;
     border-radius: 4px;
     background-color: white;
-
-    &:last-child {
-      margin: 0 0 0 6px;
-    }
 
     &.-active {
       background-color: $charcoal-grey-faded;
