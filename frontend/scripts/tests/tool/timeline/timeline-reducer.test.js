@@ -12,6 +12,7 @@ describe('Tool Timeline component behavior', () => {
       prevStart: null,
       prevEnd: null,
       prevRange: null,
+      hoverPlaceholder: false,
       range: null,
       start: null,
       end: null
@@ -25,6 +26,7 @@ describe('Tool Timeline component behavior', () => {
       prevStart: null,
       prevEnd: null,
       prevRange: null,
+      hoverPlaceholder: false,
       range: false,
       start: 2017,
       end: 2017
@@ -38,6 +40,7 @@ describe('Tool Timeline component behavior', () => {
       prevStart: null,
       prevEnd: null,
       prevRange: null,
+      hoverPlaceholder: false,
       range: true,
       start: 2017,
       end: 2018
@@ -87,6 +90,7 @@ describe('Tool Timeline component behavior', () => {
       hovered: null,
       range: false,
       prevRange: false,
+      hoverPlaceholder: false,
       prevStart: 2017,
       prevEnd: 2017,
       start: null,
@@ -108,6 +112,7 @@ describe('Tool Timeline component behavior', () => {
       hovered: null,
       range: false,
       prevRange: true,
+      hoverPlaceholder: false,
       prevStart: 2017,
       prevEnd: 2018,
       start: null,
