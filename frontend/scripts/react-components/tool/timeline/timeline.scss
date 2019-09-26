@@ -21,6 +21,7 @@
     overflow: hidden;
     flex: 1;
     position: relative;
+    border-radius: 4px;
 
     &::before,
     &::after {
@@ -117,8 +118,9 @@
     border: 1px solid $charcoal-grey-faded;
     margin: 0 6px; // matches MARGIN_BETWEEN_ITEMS inside useSlider
     height: 30px;
+    width: 58px;
     border-radius: 4px;
-    background-color: white;
+    background-color: $white;
 
     &.-active {
       background-color: $charcoal-grey-faded;
@@ -138,6 +140,47 @@
       &[disabled=''] {
         cursor: default;
       }
+    }
+  }
+
+  .timeline-range-placeholder {
+    position: absolute;
+    height: 30px;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: $z-above-hero;
+    background-color: darken($background-white, 7%);
+    border-radius: 4px;
+    opacity: 1;
+    transition: opacity 350ms $ease-in-out-sine;
+    margin: 0 6px;
+
+    &.-hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .timeline-placeholder-year-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 30px;
+      width: 58px;
+      border-radius: 4px;
+      background-color: $charcoal-grey;
+      padding: 6px 12px;
+      flex-shrink: 0;
+
+      > span {
+        display: block;
+      }
+    }
+
+    .timeline-placeholder-text {
+      pointer-events: none;
     }
   }
 }

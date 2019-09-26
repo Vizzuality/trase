@@ -6,6 +6,7 @@ export function initTimelineState(selectedYears) {
     prevStart: null,
     prevEnd: null,
     prevRange: null,
+    hoverPlaceholder: false,
     range: selectedYears.length > 0 ? selectedYears[0] !== selectedYears[1] : null,
     start: selectedYears[0] || null,
     end: selectedYears[1] || null
@@ -126,6 +127,13 @@ export default function timelineReducer(state, action) {
         } else {
           draft.start = null;
           draft.end = null;
+        }
+      });
+    }
+    case 'togglePlaceholder': {
+      return immer(state, draft => {
+        if (state.start && state.end && state.range) {
+          draft.hoverPlaceholder = action.payload;
         }
       });
     }

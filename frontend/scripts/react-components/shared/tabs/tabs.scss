@@ -41,7 +41,9 @@
   }
 
   &.margin-sm {
-    margin: 0 0 25px 0;
+    .tabs-container {
+      margin: 0 0 25px 0;
+    }
   }
 
 }

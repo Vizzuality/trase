@@ -58,12 +58,23 @@ function Timeline(props) {
   useSelectedYearsPropsState(props, state, dispatch);
   useUpdateSelectedYears(props, state);
   useEscapeClearEvent(state, dispatch);
-  const { refs, hasNextPage, hasPrevPage, transform, onNext, onPrevious } = useSlider(props);
+  const {
+    refs,
+    hasNextPage,
+    hasPrevPage,
+    transform,
+    onNext,
+    onPrevious,
+    sizes,
+    MARGIN_BETWEEN_ITEMS
+  } = useSlider(props);
 
   const tabs = [
     { label: 'range', payload: true, type: 'toggleRange' },
     { label: 'year', payload: false, type: 'toggleRange' }
   ];
+
+  const showPlaceholder = state.start && state.end && state.range;
 
   return (
     <div className="c-timeline">
@@ -81,13 +92,41 @@ function Timeline(props) {
           '-button-left': hasPrevPage,
           '-button-right': hasNextPage
         })}
+        onMouseEnter={() => dispatch({ type: 'togglePlaceholder', payload: true })}
+        onMouseLeave={() => dispatch({ type: 'togglePlaceholder', payload: false })}
       >
+        {showPlaceholder && (
+          <div
+            style={{ width: sizes.container - MARGIN_BETWEEN_ITEMS }}
+            className={cx('timeline-range-placeholder', { '-hidden': state.hoverPlaceholder })}
+          >
+            <div className="timeline-placeholder-year-item">
+              <Text as="span" weight="bold" color="white">
+                {state.start}
+              </Text>
+            </div>
+            <div className="timeline-placeholder-text">
+              <Text as="span" weight="bold" color="gray" transform="uppercase" variant="mono">
+                Change selected years
+              </Text>
+            </div>
+            <div className="timeline-placeholder-year-item">
+              <Text as="span" weight="bold" color="white">
+                {state.end}
+              </Text>
+            </div>
+          </div>
+        )}
         <button
-          className={cx('timeline-page-button', '-next', { '-visible': hasNextPage })}
+          className={cx('timeline-page-button', '-next', {
+            '-visible': hasNextPage && (!showPlaceholder || state.hoverPlaceholder)
+          })}
           onClick={onNext}
         />
         <button
-          className={cx('timeline-page-button', '-prev', { '-visible': hasPrevPage })}
+          className={cx('timeline-page-button', '-prev', {
+            '-visible': hasPrevPage && (!showPlaceholder || state.hoverPlaceholder)
+          })}
           onClick={onPrevious}
         />
         <ul ref={refs.contentList} className="timeline-years-list" style={{ transform }}>

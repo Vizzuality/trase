@@ -101,6 +101,7 @@ export function useSlider({ years, selectedYears }) {
       item
     },
     sizes,
+    MARGIN_BETWEEN_ITEMS,
     transform,
     hasNextPage,
     hasPrevPage: page > 0,

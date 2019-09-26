@@ -179,11 +179,7 @@ export const getNavFilters = createSelector(
             ...insertIf(toolAdminLevel, {
               type: NAV_FILTER_TYPES.dropdown,
               props: toolAdminLevel
-            }),
-            {
-              type: NAV_FILTER_TYPES.yearSelector,
-              props: { id: 'yearsSelector' }
-            }
+            })
           ],
           right: [
             { type: NAV_FILTER_TYPES.dropdown, props: toolResizeBy },
