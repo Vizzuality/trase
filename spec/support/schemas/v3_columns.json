@@ -45,6 +45,10 @@
               "string",
               "null"
             ]
+          },
+          "role": {
+            "id": "/properties/data/items/properties/role",
+            "type": "string"
           }
         },
         "required": [
@@ -55,7 +59,8 @@
           "position",
           "id",
           "isChoroplethDisabled",
-          "isDefault"
+          "isDefault",
+          "role"
         ],
         "type": "object"
       },

@@ -1,15 +1,19 @@
 /* eslint-disable no-shadow */
 // see sankey.container for details on how to use those containers
-import { toggleMap, toggleMapLayerMenu } from 'actions/app.actions';
+import { toggleMap } from 'actions/app.actions';
 import {
   selectNodeFromGeoId,
   highlightNodeFromGeoId,
   saveMapView
 } from 'react-components/tool/tool.actions';
-import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
+import {
+  getHighlightedNodesData,
+  getSelectedColumnsIds
+} from 'react-components/tool/tool.selectors';
 import {
   getVisibleNodes,
-  getSelectedBiomeFilter
+  getSelectedBiomeFilter,
+  getSelectedResizeBy
 } from 'react-components/tool-links/tool-links.selectors';
 import {
   getMapView,
@@ -18,7 +22,9 @@ import {
   getHighlightedNodesGeoIds,
   getChoroplethOptions,
   getSelectedMapContextualLayersData,
-  getShouldFitBoundsSelectedPolygons
+  getShouldFitBoundsSelectedPolygons,
+  getMapDimensionsWarnings,
+  getSelectedMapDimensionsData
 } from 'react-components/tool-layers/tool-layers.selectors';
 import { getSelectedContext } from 'reducers/app.selectors';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
@@ -45,7 +51,13 @@ const mapStateToProps = state => {
     isMapVisible: state.toolLayers.isMapVisible,
     visibleNodes: getVisibleNodes(state),
     selectedBiomeFilter: getSelectedBiomeFilter(state),
-    basemapId: getBasemap(state)
+    basemapId: getBasemap(state),
+    selectedMapDimensionsWarnings: getMapDimensionsWarnings(state),
+    selectedResizeBy: getSelectedResizeBy(state),
+    selectedMapDimensions: getSelectedMapDimensionsData(state),
+    highlightedNodesData: getHighlightedNodesData(state),
+    coordinates: state.toolLayers.highlightedNodeCoordinates,
+    nodeAttributes: state.toolLinks.data.nodeAttributes
   };
 };
 
@@ -115,6 +127,23 @@ const methodProps = [
     name: 'fitBoundsSelectedGeoPolygons',
     compared: ['selectedNodesGeoIds', 'shouldFitBoundsSelectedPolygons'],
     returned: ['selectedNodesGeoIds', 'shouldFitBoundsSelectedPolygons']
+  },
+  {
+    name: 'showMapWarnings',
+    compared: ['selectedMapDimensionsWarnings'],
+    returned: ['selectedMapDimensionsWarnings']
+  },
+  {
+    name: 'highlightNode',
+    compared: ['highlightedNodesData'],
+    returned: [
+      'nodeHeights',
+      'selectedResizeBy',
+      'selectedMapDimensions',
+      'highlightedNodesData',
+      'coordinates',
+      'nodeAttributes'
+    ]
   }
 ];
 
@@ -122,7 +151,6 @@ const mapDispatchToProps = {
   onPolygonClicked: geoId => selectNodeFromGeoId(geoId),
   onPolygonHighlighted: (geoId, coordinates) => highlightNodeFromGeoId(geoId, coordinates),
   onToggleMap: () => toggleMap(),
-  onToggleMapLayerMenu: () => toggleMapLayerMenu(),
   onMoveEnd: (latlng, zoom) => saveMapView(latlng, zoom)
 };
 

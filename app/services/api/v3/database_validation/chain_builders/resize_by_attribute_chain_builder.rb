@@ -10,8 +10,7 @@ module Api
       module ChainBuilders
         class ResizeByAttributeChainBuilder < AbstractChainBuilder
           checks :declared_years_match_flow_attributes,
-                 association: :resize_by_quant,
-                 link: :edit
+                 association: :resize_by_quant
           checks :attribute_present,
                  attribute: :tooltip_text,
                  link: :edit,
@@ -19,7 +18,7 @@ module Api
           checks :has_exactly_one,
                  association: :resize_by_quant,
                  link: :index
-          checks :active_record_check, on: :resize_by_attribute, link: :edit
+          checks :active_record_check, on: :resize_by_attribute
 
           def self.build_chain(context)
             chain = []

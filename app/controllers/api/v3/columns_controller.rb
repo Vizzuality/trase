@@ -9,6 +9,7 @@ module Api
             'node_types.id',
             'context_node_types.column_position AS position',
             'context_node_type_properties.column_group AS group',
+            'context_node_type_properties.role',
             'node_types.name AS name',
             'context_node_type_properties.is_default',
             'context_node_type_properties.is_geo_column AS is_geo',

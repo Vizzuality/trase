@@ -40,7 +40,7 @@
   .options {
     display: none;
     position: absolute;
-    width: 200px;
+    min-width: 200px;
     box-shadow: $box-shadow-big;
     font-family: $font-family-1;
     top: 2px;
@@ -63,12 +63,13 @@
       height: 32px;
       background-color: $white;
 
-      > button {
+      .menu-item-button {
         width: 100%;
         cursor: pointer;
         padding: 10px 8px;
         display: flex;
         justify-content: space-between;
+        white-space: nowrap;
       }
 
       > .icon {

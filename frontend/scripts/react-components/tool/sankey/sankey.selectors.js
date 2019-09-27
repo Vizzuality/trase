@@ -17,6 +17,7 @@ import sortVisibleNodes from 'reducers/helpers/sortVisibleNodes';
 import mergeLinks from 'reducers/helpers/mergeLinks';
 import filterLinks from 'reducers/helpers/filterLinks';
 import splitLinksByColumn from 'reducers/helpers/splitLinksByColumn';
+import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 
 const getToolNodeHeights = state => state.toolLinks.data.nodeHeights;
 const getToolColumns = state => state.toolLinks.data.columns;
@@ -262,5 +263,31 @@ export const getSankeyLinks = createSelector(
     });
 
     return sankeyLinks;
+  }
+);
+
+export const getLastSelectedNodeLink = createSelector(
+  [getToolSelectedNodesIds, getToolNodes, getToolColumns, getSelectedContext, getSelectedYears],
+  (selectedNodesIds, nodes, columns, selectedContext, selectedYears) => {
+    if (!nodes || !columns || !selectedContext || selectedNodesIds.length === 0) {
+      return null;
+    }
+
+    const last = selectedNodesIds.length - 1;
+    const lastId = selectedNodesIds[last];
+    const node = nodes[lastId];
+    const column = columns[(node?.columnId)];
+
+    if (!node || !column) {
+      return null;
+    }
+
+    return {
+      type: node.type,
+      nodeId: node.id,
+      year: selectedYears[0],
+      contextId: selectedContext.id,
+      profileType: column.profileType
+    };
   }
 );
