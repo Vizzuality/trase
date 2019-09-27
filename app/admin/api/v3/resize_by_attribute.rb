@@ -57,6 +57,8 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
     end
 
     def manage_download_attribute
+      return if @is_downloadable.nil?
+
       Api::V3::ManageDownloadAttribute.new(
         @context, resource.original_attribute
       ).call(@is_downloadable, @download_name)
