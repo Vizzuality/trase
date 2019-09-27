@@ -73,12 +73,7 @@ class FiltersNav extends React.PureComponent {
     );
     const renderToolLinks = ENABLE_REDESIGN_PAGES ? (
       <li className="filters-nav-item">
-        <span
-          className={cx('filters-nav-link', {
-            '-active': toolLayout !== TOOL_LAYOUT.left
-          })}
-          onClick={openSankey}
-        >
+        <span className={cx('filters-nav-link -active')} onClick={openSankey}>
           {supplyChainLink.name}
         </span>
       </li>
@@ -123,7 +118,6 @@ class FiltersNav extends React.PureComponent {
     const restOfLinks = links.slice(2);
     const decoratedLinks = [{ name: 'Home', page: { type: 'home' } }, ...links];
     const navLinks = filters.showToolLinks ? restOfLinks : decoratedLinks;
-
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">

@@ -1,6 +1,7 @@
 @import 'styles/settings';
 
 .c-sankey {
+  position: relative;
   height: 100%;
 
   .sankey-scroll-container {
