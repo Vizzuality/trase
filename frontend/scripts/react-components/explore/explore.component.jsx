@@ -7,7 +7,7 @@ import Text from 'react-components/shared/text';
 import WorldMap from 'react-components/shared/world-map/world-map.container';
 import uniq from 'lodash/uniq';
 import last from 'lodash/last';
-import { EXPLORE_STEPS } from 'constants';
+import { EXPLORE_STEPS, BREAKPOINTS } from 'constants';
 import getTopNodesKey from 'utils/getTopNodesKey';
 import cx from 'classnames';
 import Dropdown from 'react-components/shared/dropdown';
@@ -193,9 +193,10 @@ function Explore({
   return (
     <div className="c-explore">
       <ResizeListener>
-        {({ resolution, windowWidth }) => {
+        {({ resolution, windowWidth, windowHeight }) => {
           const rowsNumber = getRowsNumber(windowWidth);
-          const isMobile = resolution.isSmall;
+          const isMobileLandscape = windowHeight < windowWidth && windowHeight < BREAKPOINTS.small;
+          const isMobile = resolution.isSmall || isMobileLandscape;
           return (
             <>
               <div className="explore-selector">

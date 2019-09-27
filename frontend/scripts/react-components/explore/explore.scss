@@ -9,7 +9,7 @@ $explore-heading: 66px;
 .c-explore {
   overflow: hidden;
 
-  @media screen and (min-width: $breakpoint-mobile) {
+  @media screen and (min-width: $breakpoint-tablet), (orientation: landscape) {
     overflow: auto;
   }
 
@@ -19,7 +19,8 @@ $explore-heading: 66px;
     height: calc(100vh - #{$nav-height});
     padding-bottom: 0;
 
-    @media screen and (min-width: $breakpoint-tablet) {
+    @media screen and (min-width: $breakpoint-tablet),
+    (orientation: portrait) {
       padding-bottom: $top-cards-height;
     }
   }
@@ -62,7 +63,7 @@ $explore-heading: 66px;
     // Still able to scroll the map in very short screens
     margin-bottom: 0;
 
-    @media screen and (min-width: $breakpoint-tablet) {
+    @media screen and (min-width: $breakpoint-tablet), (orientation: landscape) {
       margin-bottom: $top-cards-height;
     }
 
