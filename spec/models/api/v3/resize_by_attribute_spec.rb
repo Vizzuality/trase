@@ -6,19 +6,35 @@ RSpec.describe Api::V3::ResizeByAttribute, type: :model do
   include_context 'api v3 node types'
 
   describe :validate do
-    let(:attribute_without_context) {
-      FactoryBot.build(:api_v3_resize_by_attribute, context: nil)
-    }
-    let(:duplicate) {
-      FactoryBot.build(
-        :api_v3_resize_by_attribute,
-        context: api_v3_context,
-        group_number: api_v3_volume_resize_by_attribute.group_number,
-        position: api_v3_volume_resize_by_attribute.position
-      )
-    }
-    it 'fails when context missing' do
-      expect(attribute_without_context).to have(2).errors_on(:context)
+    context 'when context not given' do
+      let(:attribute_without_context) {
+        FactoryBot.build(:api_v3_resize_by_attribute, context: nil)
+      }
+      let(:duplicate) {
+        FactoryBot.build(
+          :api_v3_resize_by_attribute,
+          context: api_v3_context,
+          group_number: api_v3_volume_resize_by_attribute.group_number,
+          position: api_v3_volume_resize_by_attribute.position
+        )
+      }
+      it 'fails when context missing' do
+        expect(attribute_without_context).to have(2).errors_on(:context)
+      end
+    end
+
+    context 'when max quick facts already defined' do
+      let(:attribute_with_quick_fact) {
+        FactoryBot.build(
+          :api_v3_resize_by_attribute,
+          context: api_v3_context,
+          is_quick_fact: true
+        )
+      }
+      it 'fails when more than 2 quick facts per context' do
+        2.times { attribute_with_quick_fact.dup.save }
+        expect(attribute_with_quick_fact).to have(1).error_on(:is_quick_fact)
+      end
     end
   end
 
