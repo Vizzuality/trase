@@ -19,7 +19,7 @@ class Entrypoints extends React.PureComponent {
     };
     this.entrypoints = [
       {
-        link: { type: Entrypoints.getIsMobile() ? 'explore' : 'tool' },
+        link: { type: Entrypoints.getIsMobile() && ENABLE_REDESIGN_PAGES ? 'explore' : 'tool' },
         subtitle: 'Supply Chain',
         text:
           'Follow trade flows to identify sourcing regions, profile supply chain risks and' +
