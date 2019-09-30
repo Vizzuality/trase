@@ -9,6 +9,8 @@ import {
   getAllCountriesIds,
   getCards,
   getCommodityContexts,
+  getCommodities,
+  getCountries,
   getCountryQuickFacts
 } from 'react-components/explore/explore.selectors';
 import {
@@ -21,6 +23,8 @@ import { getTopCountries } from 'actions/app.actions';
 
 const mapStateToProps = state => ({
   items: getItems(state),
+  commodities: getCommodities(state),
+  countries: getCountries(state),
   step: getStep(state),
   country: getCountry(state),
   commodity: getCommodity(state),

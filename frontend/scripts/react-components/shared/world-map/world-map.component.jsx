@@ -97,8 +97,8 @@ const WorldMap = ({
         const volume = geometry.value || (flows.find(flow => flow.geoId === geoId) || {}).value;
         const percentage = (volume / totalValue) * 100;
         const updatedTooltipConfig = {
-          x: e.clientX + 10,
-          y: e.clientY + window.scrollY + 10,
+          x: e.nativeEvent.offsetX + 10,
+          y: e.nativeEvent.offsetY - 20,
           text: geometry.name || geometry.properties.name,
           items: [
             { title: 'Trade Volume', value: formatValue(volume, 'tons'), unit: 't' },
@@ -134,34 +134,36 @@ const WorldMap = ({
       />
     ));
   return (
-    <React.Fragment>
-      <UnitsTooltip show={!!tooltipConfig} {...tooltipConfig} />
-      <ComposableMap
-        className={cx('c-world-map', className)}
-        projection="robinson"
-        projectionConfig={{ scale, rotation: [0, 0, 0] }}
-        height={Math.round(width * WORLD_MAP_ASPECT_RATIO)}
-        width={Math.round(width)}
-        style={{ height: '100%' }}
-      >
-        <ZoomableGroup center={center} disablePanning>
-          <Geographies geography="/vector_layers/WORLD.topo.json" disableOptimization>
-            {(geographies, projection) => (
-              <MapGeographies
-                worldMapId={id}
-                geographies={geographies}
-                flows={flows}
-                originGeoId={originGeoId}
-                projection={projection}
-                mouseInteractionProps={mouseInteractionProps}
-                highlightedCountriesIso={highlightedCountriesIso}
-              />
-            )}
-          </Geographies>
-          <Lines>{renderLines()}</Lines>
-        </ZoomableGroup>
-      </ComposableMap>
-    </React.Fragment>
+    <div className="c-world-map">
+      <div className="ratio-container">
+        <UnitsTooltip show={!!tooltipConfig} {...tooltipConfig} />
+        <ComposableMap
+          className={cx('world-map', className)}
+          projection="robinson"
+          projectionConfig={{ scale, rotation: [0, 0, 0] }}
+          height={Math.round(width * WORLD_MAP_ASPECT_RATIO)}
+          width={Math.round(width)}
+          style={{ height: '100%', width: '100%' }}
+        >
+          <ZoomableGroup center={center} disablePanning>
+            <Geographies geography="/vector_layers/WORLD.topo.json" disableOptimization>
+              {(geographies, projection) => (
+                <MapGeographies
+                  worldMapId={id}
+                  geographies={geographies}
+                  flows={flows}
+                  originGeoId={originGeoId}
+                  projection={projection}
+                  mouseInteractionProps={mouseInteractionProps}
+                  highlightedCountriesIso={highlightedCountriesIso}
+                />
+              )}
+            </Geographies>
+            <Lines>{renderLines()}</Lines>
+          </ZoomableGroup>
+        </ComposableMap>
+      </div>
+    </div>
   );
 };
 
@@ -183,7 +185,7 @@ WorldMap.propTypes = {
 
 WorldMap.defaultProps = {
   center: [20, 0],
-  scale: 160,
+  scale: 140,
   width: 800
 };
 

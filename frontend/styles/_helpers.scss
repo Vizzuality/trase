@@ -30,6 +30,12 @@
   }
 }
 
+.hide-for-tablet {
+  @media (max-width: $breakpoint-tablet - 1) {
+    display: none !important;
+  }
+}
+
 .show-for-small {
   @media (min-width: $breakpoint-foundation-small) {
     display: none !important;

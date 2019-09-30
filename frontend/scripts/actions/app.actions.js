@@ -185,7 +185,7 @@ export const getTopCountries = contexts => (dispatch, getState) => {
   const selectedContexts = contexts || [defaultSelectedContext];
 
   // TODO move into context.worldMap
-  const volumeIndicator = selectedContexts[0].resizeBy.find(i => i.name === 'Volume')
+  const volumeIndicator = selectedContexts[0].resizeBy.find(i => i.name === 'Volume');
   const volumneIndicatorId = volumeIndicator?.attributeId;
   const countryColumnId = selectedContexts[0].worldMap.countryColumnId;
 
