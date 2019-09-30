@@ -10,6 +10,7 @@
 #  years(Array of years for which to show this attribute in scope of chart; empty (NULL) for all years) :integer          is an Array
 #  is_disabled(When set, this attribute is not displayed)                                               :boolean          default(FALSE), not null
 #  is_default(When set, show this attribute by default)                                                 :boolean          default(FALSE), not null
+#  is_quick_fact                                                                                        :boolean          default(FALSE), not null
 #
 # Indexes
 #
@@ -40,6 +41,7 @@ module Api
       validates_with AttributeAssociatedOnceValidator,
                      attribute: :resize_by_quant,
                      if: :new_resize_by_quant_given?
+      validate :at_most_two_quick_facts_per_context
 
       after_create :set_years
       after_commit :refresh_dependents
@@ -63,6 +65,21 @@ module Api
       def set_years
         FlowAttributeAvailableYearsUpdateWorker.perform_async(
           self.class.name, id, context_id
+        )
+      end
+
+      def at_most_two_quick_facts_per_context
+        return false unless context
+
+        current_quick_facts = context.resize_by_attributes.
+          where(is_quick_fact: true).
+          where.not(id: id)
+
+        return if current_quick_facts.length <= 1
+
+        errors.add(
+          :is_quick_fact,
+          "can't have more than two indicators set up as quick facts"
         )
       end
 

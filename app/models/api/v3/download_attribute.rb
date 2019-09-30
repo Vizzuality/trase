@@ -29,7 +29,6 @@ module Api
       has_one :download_quant, autosave: true
 
       validates :context, presence: true
-      validates :position, presence: true, uniqueness: {scope: :context}
       validates :display_name, presence: true
       validates_with OneAssociatedAttributeValidator,
                      attributes: [:download_qual, :download_quant]

@@ -5758,7 +5758,8 @@ CREATE TABLE public.resize_by_attributes (
     is_disabled boolean DEFAULT false NOT NULL,
     is_default boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    is_quick_fact boolean DEFAULT false NOT NULL
 );
 
 
@@ -9373,6 +9374,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190919063754'),
 ('20190919211340'),
 ('20190923074833'),
-('20190924075531');
+('20190924075531'),
+('20190924102948');
 
 

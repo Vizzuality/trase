@@ -12,7 +12,8 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
   permit_params :context_id, :group_number, :tooltip_text,
                 :is_disabled, :is_default,
                 :is_downloadable, :download_name,
-                :readonly_attribute_id
+                :readonly_attribute_id,
+                :is_quick_fact
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -56,6 +57,8 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
     end
 
     def manage_download_attribute
+      return if @is_downloadable.nil?
+
       Api::V3::ManageDownloadAttribute.new(
         @context, resource.original_attribute
       ).call(@is_downloadable, @download_name)
@@ -116,6 +119,7 @@ ActiveAdmin.register Api::V3::ResizeByAttribute, as: 'ResizeByAttribute' do
     toggle_bool_column :is_disabled
     toggle_bool_column :is_default
     toggle_bool_column :is_downloadable
+    toggle_bool_column :is_quick_fact
 
     actions
     handle_column(
