@@ -232,9 +232,10 @@ GEM
       activerecord
       kaminari-core (= 1.1.1)
     kaminari-core (1.1.1)
-    listen (3.0.8)
+    listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
+      ruby_dep (~> 1.2)
     loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -373,6 +374,7 @@ GEM
     rubocop-rspec (1.35.0)
       rubocop (>= 0.60.0)
     ruby-progressbar (1.10.1)
+    ruby_dep (1.5.0)
     rubyzip (2.0.0)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
@@ -495,7 +497,7 @@ DEPENDENCIES
   jquery-rails
   json-schema
   kaminari
-  listen (~> 3.0.5)
+  listen (~> 3.1.5)
   mailchimp-api
   newrelic_rpm
   oj
