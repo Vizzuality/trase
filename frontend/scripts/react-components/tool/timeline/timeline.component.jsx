@@ -70,8 +70,8 @@ function Timeline(props) {
   } = useSlider(props);
 
   const tabs = [
-    { label: 'range', payload: true, type: 'toggleRange' },
-    { label: 'year', payload: false, type: 'toggleRange' }
+    { label: 'year', payload: false, type: 'toggleRange' },
+    { label: 'range', payload: true, type: 'toggleRange' }
   ];
 
   const showPlaceholder = state.start && state.end && state.range;
