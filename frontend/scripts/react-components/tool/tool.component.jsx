@@ -76,7 +76,7 @@ const Tool = props => {
             />
             {!ENABLE_REDESIGN_PAGES && <TitlebarContainer />}
           </div>
-          <Timeline />
+          {ENABLE_REDESIGN_PAGES && <Timeline />}
         </div>
       </>
     ),
