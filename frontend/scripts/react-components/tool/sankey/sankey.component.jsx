@@ -125,7 +125,7 @@ function useMenuPosition(props) {
   return [menuPos, ref, hoveredSelectedNode, setHoveredSelectedNode];
 }
 
-function useVanillaTooltip({ links }) {
+function useVanillaTooltip({ links, toolLayout }) {
   const ref = useRef(null);
   const tooltip = useRef(null);
   const [content, setContent] = useState(null);
@@ -159,21 +159,9 @@ function useVanillaTooltip({ links }) {
         tooltip.current.hide();
       }
     };
-  }, [content, links]);
+  }, [content, links, toolLayout]);
 
   return [ref, setContent];
-}
-
-function useDomNodeRect(input) {
-  const [rect, setRect] = useState(null);
-  const ref = useRef(null);
-  useEffect(() => {
-    if (ref.current) {
-      setRect(ref.current.getBoundingClientRect());
-    }
-  }, [input]);
-
-  return [rect, ref];
 }
 
 function useNodeRefHeight(ref) {
@@ -209,7 +197,15 @@ function Sankey(props) {
   } = props;
   const [hoveredLink, setHoveredLink] = useState(null);
   const [tooltipRef, setTooltip] = useVanillaTooltip(props);
-  const [rect, svgRef] = useDomNodeRect(columns);
+  const svgRef = useRef(null);
+  const layoutRects = useRef([]);
+  const getRect = layout => {
+    if (layoutRects.current[layout]) {
+      return layoutRects.current[layout];
+    }
+    layoutRects.current[layout] = svgRef.current.getBoundingClientRect();
+    return layoutRects.current[layout];
+  };
   const [
     menuPos,
     scrollContainerRef,
@@ -240,6 +236,7 @@ function Sankey(props) {
   };
 
   const onLinkOver = (e, link) => {
+    const rect = getRect(toolLayout);
     const tooltip = {
       title: `${link.sourceNodeName} > ${link.targetNodeName}`,
       x: e.clientX - rect.x,
@@ -286,6 +283,8 @@ function Sankey(props) {
     if (node.isAggregated) {
       return;
     }
+
+    const rect = getRect(toolLayout);
 
     const nodeHeight = nodeHeights[node.id];
     const tooltipPadding = 10;
@@ -371,6 +370,7 @@ function Sankey(props) {
         <svg
           ref={svgRef}
           className="sankey"
+          key={`svg-container-${toolLayout}`}
           style={{ height: detailedView ? `${maxHeight}px` : '100%' }}
         >
           <defs>
