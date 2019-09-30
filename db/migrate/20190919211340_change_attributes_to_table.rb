@@ -127,5 +127,7 @@ class ChangeAttributesToTable < ActiveRecord::Migration[5.2]
       materialized: true
 
     drop_view :attributes_mv, materialized: true
+
+    Api::V3::Readonly::Attribute.refresh_now
   end
 end

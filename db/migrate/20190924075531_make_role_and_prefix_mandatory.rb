@@ -9,9 +9,9 @@ class MakeRoleAndPrefixMandatory < ActiveRecord::Migration[5.2]
           cnt_prop.save!
         end
         Api::V3::ContextNodeTypeProperty.set_callback(:commit, :after, :refresh_dependents)
-        Api::V3::Readonly::Dashboards::Source.refresh_later
-        Api::V3::Readonly::Dashboards::Company.refresh_later
-        Api::V3::Readonly::Dashboards::Destination.refresh_later
+        Api::V3::Readonly::Dashboards::Source.refresh_now
+        Api::V3::Readonly::Dashboards::Company.refresh_now
+        Api::V3::Readonly::Dashboards::Destination.refresh_now
       end
     end
 
