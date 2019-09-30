@@ -2,9 +2,8 @@
 
 .c-map-sidebar {
   position: absolute;
-  top: 0;
   bottom: 0;
-  height: 100%;
+  height: calc(100% - #{$nav-height});
   width: 376px;
   overflow-y: auto;
   z-index: $z-above-hero;
