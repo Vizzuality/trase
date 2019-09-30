@@ -10,14 +10,6 @@ RSpec.describe Api::V3::ResizeByAttribute, type: :model do
       let(:attribute_without_context) {
         FactoryBot.build(:api_v3_resize_by_attribute, context: nil)
       }
-      let(:duplicate) {
-        FactoryBot.build(
-          :api_v3_resize_by_attribute,
-          context: api_v3_context,
-          group_number: api_v3_volume_resize_by_attribute.group_number,
-          position: api_v3_volume_resize_by_attribute.position
-        )
-      }
       it 'fails when context missing' do
         expect(attribute_without_context).to have(2).errors_on(:context)
       end
