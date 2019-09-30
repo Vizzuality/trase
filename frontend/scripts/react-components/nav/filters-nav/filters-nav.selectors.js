@@ -180,10 +180,10 @@ export const getNavFilters = createSelector(
               type: NAV_FILTER_TYPES.dropdown,
               props: toolAdminLevel
             }),
-            {
+            ...insertIf(!ENABLE_REDESIGN_PAGES, {
               type: NAV_FILTER_TYPES.yearSelector,
               props: { id: 'yearsSelector' }
-            }
+            })
           ],
           right: [
             { type: NAV_FILTER_TYPES.dropdown, props: toolResizeBy },

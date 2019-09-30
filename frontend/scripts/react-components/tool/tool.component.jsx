@@ -15,6 +15,7 @@ import LegacyBasemaps from 'react-components/tool/legacy-basemaps/legacy-basemap
 import Legend from 'react-components/tool/legend';
 import EventManager from 'utils/eventManager';
 import UrlSerializer from 'react-components/shared/url-serializer';
+import Timeline from './timeline';
 
 import 'styles/layouts/l-tool.scss';
 import 'styles/components/shared/veil.scss';
@@ -127,8 +128,9 @@ const Tool = props => {
             {renderMap()}
             <ColumnsSelectorGroupContainer />
             <Sankey />
-            <TitlebarContainer />
+            {!ENABLE_REDESIGN_PAGES && <TitlebarContainer />}
           </div>
+          <Timeline />
         </div>
       </>
     ),

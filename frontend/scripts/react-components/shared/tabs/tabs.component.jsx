@@ -8,6 +8,7 @@ import './tabs.scss';
 function Tabs(props) {
   const {
     tabs,
+    margin,
     onSelectTab,
     children,
     itemTabRenderer,
@@ -19,7 +20,7 @@ function Tabs(props) {
   } = props;
   const isSelected = item => getTabId(item) === selectedTab;
   return (
-    <div className="c-tabs">
+    <div className={cx('c-tabs', { [`margin-${margin}`]: margin })}>
       <div className="tabs-container">
         <div className="tabs-options">
           {tabs.map((item, index) => (
@@ -56,11 +57,13 @@ function Tabs(props) {
 Tabs.defaultProps = {
   testId: 'tab',
   getTabId: x => x,
-  color: 'white'
+  color: 'white',
+  margin: 'sm'
 };
 
 Tabs.propTypes = {
   testId: PropTypes.string,
+  margin: PropTypes.string,
   getTabId: PropTypes.func,
   itemTabRenderer: PropTypes.func,
   tabs: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.object])).isRequired,
