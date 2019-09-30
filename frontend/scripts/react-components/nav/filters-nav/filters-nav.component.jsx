@@ -12,8 +12,7 @@ import ToolSearch from 'react-components/tool/tool-search/tool-search.container'
 import { NavLink } from 'redux-first-router-link';
 import Img from 'react-components/shared/img';
 import { TOOL_LAYOUT } from 'constants';
-import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
-import IndicatorsModal from 'react-components/tool/modals/indicators-modal';
+import ToolModal from 'react-components/tool/modals/tool-modal';
 
 import 'scripts/react-components/nav/filters-nav/filters-nav.scss';
 import 'scripts/react-components/nav/filters-nav/burger.scss';
@@ -29,12 +28,10 @@ const FiltersNav = props => {
     toggleDropdown,
     currentDropdown,
     filters,
-    openLogisticsMapDownload,
-    recolorByItems
+    openLogisticsMapDownload
   } = props;
 
   const [menuOpen, changeMenu] = useState(false);
-  const [openModal, changeOpenModal] = useState(false);
   const toggleMenu = () => changeMenu(!menuOpen);
 
   const renderMenuButton = () => {
@@ -136,17 +133,7 @@ const FiltersNav = props => {
   const renderFilter = filter => {
     const Component = FILTERS[filter.type];
     if (Component === RecolorBySelector) {
-      return (
-        <>
-          <button onClick={() => changeOpenModal('indicator')}>Indicator</button>
-          <SimpleModal
-            isOpen={openModal === 'indicator'}
-            onClickClose={() => changeOpenModal(null)}
-          >
-            <IndicatorsModal items={recolorByItems} />
-          </SimpleModal>
-        </>
-      );
+      return <ToolModal modalId="indicator" />;
     }
     return React.createElement(Component, {
       currentDropdown,
@@ -206,8 +193,7 @@ FiltersNav.propTypes = {
   currentDropdown: PropTypes.string,
   links: PropTypes.array.isRequired,
   filters: PropTypes.object.isRequired,
-  openLogisticsMapDownload: PropTypes.func,
-  recolorByItems: PropTypes.array
+  openLogisticsMapDownload: PropTypes.func
 };
 
 export default FiltersNav;

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import HelpTooltip from '../help-tooltip/help-tooltip.component';
+import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 
 import './grid-list-item.scss';
 
@@ -13,6 +13,7 @@ function GridListItem(props) {
     tooltip,
     isActive,
     isDisabled,
+    isInModal,
     enableItem,
     disableItem,
     onInfoClick,
@@ -57,6 +58,7 @@ function GridListItem(props) {
                   show={isInfoActive}
                   position="bottom-start"
                   insideTooltip
+                  isInModal={isInModal}
                 >
                   <button type="button" disabled={isDisabled} onClick={() => onInfoClick(item)}>
                     i
@@ -77,6 +79,7 @@ GridListItem.propTypes = {
   isActive: PropTypes.bool,
   tooltip: PropTypes.string,
   isDisabled: PropTypes.bool,
+  isInModal: PropTypes.bool,
   enableItem: PropTypes.func,
   disableItem: PropTypes.func,
   onInfoClick: PropTypes.func,
