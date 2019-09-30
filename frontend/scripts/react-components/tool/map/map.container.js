@@ -1,6 +1,6 @@
 /* eslint-disable no-shadow */
 // see sankey.container for details on how to use those containers
-import { toggleMap } from 'actions/app.actions';
+import { changeLayout } from 'actions/app.actions';
 import {
   selectNodeFromGeoId,
   highlightNodeFromGeoId,
@@ -48,7 +48,7 @@ const mapStateToProps = state => {
     selectedNodesIdsLength: state.toolLinks.selectedNodesIds.length,
     selectedColumnsIds: getSelectedColumnsIds(state),
     selectedMapContextualLayersData: getSelectedMapContextualLayersData(state),
-    isMapVisible: state.toolLayers.isMapVisible,
+    toolLayout: state.toolLayers.toolLayout,
     visibleNodes: getVisibleNodes(state),
     selectedBiomeFilter: getSelectedBiomeFilter(state),
     basemapId: getBasemap(state),
@@ -110,8 +110,8 @@ const methodProps = [
   },
   {
     name: 'invalidate',
-    compared: ['isMapVisible'],
-    returned: ['isMapVisible']
+    compared: ['toolLayout'],
+    returned: ['toolLayout']
   },
   {
     name: 'setBasemap',
@@ -150,7 +150,7 @@ const methodProps = [
 const mapDispatchToProps = {
   onPolygonClicked: geoId => selectNodeFromGeoId(geoId),
   onPolygonHighlighted: (geoId, coordinates) => highlightNodeFromGeoId(geoId, coordinates),
-  onToggleMap: () => toggleMap(),
+  onChangeLayout: newLayout => changeLayout(newLayout),
   onMoveEnd: (latlng, zoom) => saveMapView(latlng, zoom)
 };
 

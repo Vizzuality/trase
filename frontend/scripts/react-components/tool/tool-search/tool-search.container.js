@@ -7,12 +7,12 @@ import { getSelectedContext } from 'reducers/app.selectors';
 
 const mapStateToProps = state => {
   const selectedContext = getSelectedContext(state);
-  const { selectedNodesIds, isSearchOpen, isMapVisible } = state.toolLinks;
+  const { selectedNodesIds, isSearchOpen, toolLayout } = state.toolLinks;
   const searchResults = getSearchResults(state);
   return {
     selectedNodesIds,
     isSearchOpen,
-    isMapVisible,
+    toolLayout,
     nodes: searchResults,
     contextId: selectedContext && selectedContext.id
   };

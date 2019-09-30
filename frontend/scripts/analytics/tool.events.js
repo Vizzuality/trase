@@ -2,7 +2,8 @@ import { TOGGLE_MAP_LAYERS_MENU, SET_CONTEXT } from 'actions/app.actions';
 import {
   SELECT_CONTEXTUAL_LAYERS,
   SELECT_YEARS,
-  TOGGLE_MAP
+  CHANGE_LAYOUT,
+  SELECT_BASEMAP
 } from 'react-components/tool/tool.actions';
 import {
   TOOL_LINKS__SELECT_VIEW,
@@ -77,8 +78,14 @@ export default [
     getPayload: (action, state) => state.toolLinks.data.columns[action.payload.columnId].name
   },
   {
-    type: TOGGLE_MAP,
-    action: 'Toggle map',
+    type: CHANGE_LAYOUT,
+    action: 'Change layout',
+    category: 'Sankey',
+    getPayload: action => action.payload.toolLayout
+  },
+  {
+    type: SELECT_BASEMAP,
+    action: 'Select basemap',
     category: 'Sankey'
   },
   {

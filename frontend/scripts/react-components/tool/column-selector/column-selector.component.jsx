@@ -37,7 +37,7 @@ function ColumnSelector(props) {
   return (
     <div
       className="c-column-selector"
-      style={{ left: group * sankeyColumnsWidth + group * gapBetweenColumns - 4 }}
+      style={{ left: group * sankeyColumnsWidth + group * gapBetweenColumns - 8 }}
     >
       {content}
     </div>

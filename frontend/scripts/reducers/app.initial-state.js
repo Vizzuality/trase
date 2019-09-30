@@ -1,6 +1,5 @@
 export default {
   languages: [],
-  sankeySize: [window.innerWidth, window.innerHeight],
   isMapLayerVisible: false,
   isAppMenuVisible: false,
   tooltipCheck: 0,

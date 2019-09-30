@@ -27,7 +27,7 @@ const mapStateToProps = state => ({
   links: getSankeyLinks(state),
   columns: getSankeyColumns(state),
   isReExpand: getIsReExpand(state),
-  sankeySize: state.app.sankeySize,
+  sankeySize: state.toolLayers.sankeySize,
   maxHeight: getSankeyMaxHeight(state),
   nodeHeights: state.toolLinks.data.nodeHeights,
   nodeAttributes: state.toolLinks.data.nodeAttributes,
@@ -41,7 +41,8 @@ const mapStateToProps = state => ({
   flowsLoading: state.toolLinks.flowsLoading,
   lastSelectedNodeLink: getLastSelectedNodeLink(state),
   highlightedNodeId: state.toolLinks.highlightedNodeId,
-  selectedMapDimensions: getSelectedMapDimensionsData(state)
+  selectedMapDimensions: getSelectedMapDimensionsData(state),
+  toolLayout: state.toolLayers.toolLayout
 });
 
 const mapDispatchToProps = {

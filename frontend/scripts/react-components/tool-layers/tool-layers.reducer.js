@@ -5,8 +5,9 @@ import {
   SAVE_MAP_VIEW,
   SELECT_BASEMAP,
   SELECT_CONTEXTUAL_LAYERS,
-  TOGGLE_MAP,
-  TOGGLE_MAP_DIMENSION
+  TOGGLE_MAP_DIMENSION,
+  CHANGE_LAYOUT,
+  SET_SANKEY_SIZE
 } from 'react-components/tool/tool.actions';
 import {
   TOOL_LAYERS__SET_LINKED_GEOIDS,
@@ -19,7 +20,8 @@ import createReducer from 'utils/createReducer';
 import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import * as ToolLayersUrlPropHandlers from 'react-components/tool-layers/tool-layers.serializers';
-import toolLayersInitialState from './tool-layers.initial-state';
+import toolLayersInitialState from 'react-components/tool-layers//tool-layers.initial-state';
+import { TOOL_LAYOUT, SANKEY_OFFSETS } from 'constants';
 
 const toolLayersReducer = {
   tool(state, action) {
@@ -30,7 +32,7 @@ const toolLayersReducer = {
         urlPropHandlers: ToolLayersUrlPropHandlers,
         props: [
           'mapView',
-          'isMapVisible',
+          'toolLayout',
           'selectedBasemap',
           'selectedMapContextualLayers',
           'selectedMapDimensions'
@@ -126,9 +128,9 @@ const toolLayersReducer = {
       draft.selectedBasemap = action.payload.selectedBasemap;
     });
   },
-  [TOGGLE_MAP](state, action) {
+  [CHANGE_LAYOUT](state, action) {
     return immer(state, draft => {
-      draft.isMapVisible = action.forceState !== null ? action.forceState : !state.isMapVisible;
+      draft.toolLayout = action.payload.toolLayout;
     });
   },
   [SAVE_MAP_VIEW](state, action) {
@@ -138,6 +140,19 @@ const toolLayersReducer = {
         longitude: action.latlng.lng.toFixed(2),
         zoom: action.zoom
       };
+    });
+  },
+  [SET_SANKEY_SIZE](state) {
+    const { toolLayout } = state;
+    let widthOffset = SANKEY_OFFSETS.width;
+    if (toolLayout === TOOL_LAYOUT.splitted) {
+      widthOffset = SANKEY_OFFSETS.splittedWidth;
+    }
+    return immer(state, draft => {
+      draft.sankeySize = [
+        window.innerWidth - widthOffset,
+        window.innerHeight - SANKEY_OFFSETS.height
+      ];
     });
   }
 };
@@ -150,13 +165,14 @@ const toolLayersReducerTypes = PropTypes => ({
     mapContextualLayers: PropTypes.object.isRequired
   }).isRequired,
   highlightedNodeCoordinates: PropTypes.object,
-  isMapVisible: PropTypes.bool,
+  toolLayout: PropTypes.number,
   linkedGeoIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   mapLoading: PropTypes.bool,
   mapView: PropTypes.object,
   selectedBasemap: PropTypes.string,
   selectedMapContextualLayers: PropTypes.array,
-  selectedMapDimensions: PropTypes.array
+  selectedMapDimensions: PropTypes.array,
+  sankeySize: PropTypes.arrayOf(PropTypes.number).isRequired
 });
 
 export default createReducer(toolLayersInitialState, toolLayersReducer, toolLayersReducerTypes);

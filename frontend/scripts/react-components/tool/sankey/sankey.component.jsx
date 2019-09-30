@@ -8,6 +8,8 @@ import capitalize from 'lodash/capitalize';
 import startCase from 'lodash/startCase';
 import getNodeMeta from 'reducers/helpers/getNodeMeta';
 import Heading from 'react-components/shared/heading';
+import { TOOL_LAYOUT } from 'constants';
+
 import SankeyColumn from './sankey-column.component';
 import NodeMenu from './node-menu.component';
 import SankeyLink from './sankey-link.component';
@@ -87,9 +89,10 @@ function useMenuPosition(props) {
   const [menuPos, setMenuPos] = useState({ x: 0, y: 0 });
   const ref = useRef(null);
 
+  const COLUMN_SELECTOR_HEIGHT = 60;
   const getCoordinates = n => ({
     x: n.x,
-    y: Math.max(0, n.y) - (ref.current?.scrollTop || 0)
+    y: Math.max(0, n.y) + COLUMN_SELECTOR_HEIGHT - (ref.current?.scrollTop || 0)
   });
 
   useEffect(() => {
@@ -122,7 +125,7 @@ function useMenuPosition(props) {
   return [menuPos, ref, hoveredSelectedNode, setHoveredSelectedNode];
 }
 
-function useVanillaTooltip({ links }) {
+function useVanillaTooltip({ links, toolLayout }) {
   const ref = useRef(null);
   const tooltip = useRef(null);
   const [content, setContent] = useState(null);
@@ -156,21 +159,9 @@ function useVanillaTooltip({ links }) {
         tooltip.current.hide();
       }
     };
-  }, [content, links]);
+  }, [content, links, toolLayout]);
 
   return [ref, setContent];
-}
-
-function useDomNodeRect(input) {
-  const [rect, setRect] = useState(null);
-  const ref = useRef(null);
-  useEffect(() => {
-    if (ref.current) {
-      setRect(ref.current.getBoundingClientRect());
-    }
-  }, [input]);
-
-  return [rect, ref];
 }
 
 function useNodeRefHeight(ref) {
@@ -201,11 +192,20 @@ function Sankey(props) {
     highlightedNodeId,
     gapBetweenColumns,
     onNodeHighlighted,
-    selectedNodesIds
+    selectedNodesIds,
+    toolLayout
   } = props;
   const [hoveredLink, setHoveredLink] = useState(null);
   const [tooltipRef, setTooltip] = useVanillaTooltip(props);
-  const [rect, svgRef] = useDomNodeRect(columns);
+  const svgRef = useRef(null);
+  const layoutRects = useRef([]);
+  const getRect = layout => {
+    if (layoutRects.current[layout]) {
+      return layoutRects.current[layout];
+    }
+    layoutRects.current[layout] = svgRef.current.getBoundingClientRect();
+    return layoutRects.current[layout];
+  };
   const [
     menuPos,
     scrollContainerRef,
@@ -236,6 +236,7 @@ function Sankey(props) {
   };
 
   const onLinkOver = (e, link) => {
+    const rect = getRect(toolLayout);
     const tooltip = {
       title: `${link.sourceNodeName} > ${link.targetNodeName}`,
       x: e.clientX - rect.x,
@@ -282,6 +283,8 @@ function Sankey(props) {
     if (node.isAggregated) {
       return;
     }
+
+    const rect = getRect(toolLayout);
 
     const nodeHeight = nodeHeights[node.id];
     const tooltipPadding = 10;
@@ -341,7 +344,7 @@ function Sankey(props) {
   const loading = !columns || columns.length === 0 || !links || flowsLoading;
 
   return (
-    <div className="c-sankey is-absolute">
+    <div className={cx('c-sankey', { '-full-screen': toolLayout === TOOL_LAYOUT.right })}>
       <div
         ref={scrollContainerRef}
         className={cx('sankey-scroll-container', { '-detailed': detailedView })}
@@ -367,6 +370,7 @@ function Sankey(props) {
         <svg
           ref={svgRef}
           className="sankey"
+          key={`svg-container-${toolLayout}`}
           style={{ height: detailedView ? `${maxHeight}px` : '100%' }}
         >
           <defs>
@@ -447,7 +451,8 @@ Sankey.propTypes = {
   onNodeClicked: PropTypes.func.isRequired,
   onCollapseClick: PropTypes.func.isRequired, // eslint-disable-line
   onNodeHighlighted: PropTypes.func.isRequired,
-  selectedNodesIds: PropTypes.array.isRequired
+  selectedNodesIds: PropTypes.array.isRequired,
+  toolLayout: PropTypes.number.isRequired
 };
 
 export default Sankey;

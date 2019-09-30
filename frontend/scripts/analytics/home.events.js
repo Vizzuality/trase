@@ -3,6 +3,7 @@ import {
   HOME__CLICK_ENTRYPOINT,
   HOME__CLICK_NEXT_ENTRYPOINT
 } from 'react-components/home/home.actions';
+import { TOOL_LAYOUT } from 'constants';
 
 export default [
   {
@@ -21,11 +22,11 @@ export default [
     category: 'homepage',
     action: 'Click on entry points',
     getPayload(action) {
-      const route = action.payload;
-      if (route.type !== 'tool') {
-        return route.type === 'profileRoot' ? 'profiles' : route.type;
+      const { payload } = action;
+      if (payload.type !== 'tool') {
+        return payload.type === 'profileRoot' ? 'profiles' : payload.type;
       }
-      if (route.payload?.query?.state?.isMapVisible) {
+      if (payload.payload?.serializerParams?.toolLayout === TOOL_LAYOUT.left) {
         return 'Map';
       }
       return 'Supply Chain';

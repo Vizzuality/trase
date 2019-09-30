@@ -1,0 +1,85 @@
+  @import 'styles/settings';
+
+.c-splitted-view {
+  position: absolute;
+  top: $nav-height;
+  left: 0;
+  width: calc(100% + #{$layer-map-width});
+  height: calc(100% - #{$nav-height});
+  overflow: hidden;
+  background-color: $background-white;
+
+  transform: translate(-$layer-map-width, 0);
+  transition: transform .15s $ease-in-out-sine, width .15s $ease-in-out-sine;
+  z-index: $z-above;
+
+  &:not(.-right-fullscreen).-sidebar-open {
+    width: 100%;
+    transform: translate(0, 0);
+  }
+
+  .left {
+    position: relative;
+    left: $layer-map-width;
+    width: $map-width;
+    height: calc(100% - 62px);
+
+    display: flex;
+    flex-direction: column;
+
+
+    transition: width .45s $ease-in-out-sine;
+    will-change: width, z-index;
+  }
+
+  .right {
+    position: absolute;
+    top: 0;
+    left: $map-width + $layer-map-width;
+    width: calc(100% - #{$map-width + $layer-map-width + ($sankey-x-margin * 2)});
+    height: calc(100% - 110px);
+    margin-left: $sankey-x-margin + 5px;
+
+    transition: left .45s $ease-in-out-sine;
+  }
+
+  .invisible-link {
+    position: absolute;
+    height: 100%;
+    width: $map-width-closed;
+    z-index: $z-above;
+    cursor: pointer;
+
+    &.-left {
+      left: $layer-map-width;
+    }
+
+    &.-right {
+      width: 4%;
+      right: 0;
+    }
+
+  }
+
+  &.-left-fullscreen {
+    .left {
+      width: calc(100% - #{$layer-map-width} - #{$map-width-closed});
+      z-index: $z-above;
+    }
+
+    .right {
+      left: calc(100% - #{$map-width-closed} - 15px);
+    }
+  }
+
+  &.-right-fullscreen {
+    .left {
+      width: $map-width-closed;
+    }
+
+    .right {
+      left: $map-width-closed + $layer-map-width;
+      width: calc(100% - #{$map-width-closed + $layer-map-width + ($sankey-x-margin * 2)});
+    }
+  }
+}

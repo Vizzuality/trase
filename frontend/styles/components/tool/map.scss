@@ -1,9 +1,13 @@
 @import '../../settings';
 @import '../../mixins';
 
-$map-btn-height: 32px;
-
 .c-map {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+
   border-right: solid 1px rgba($charcoal-grey, .7);
   border-bottom: solid 1px rgba($charcoal-grey, .7);
   transform: translate(0, 0);
@@ -11,7 +15,26 @@ $map-btn-height: 32px;
   z-index: $z-base;
 
   > .c-map-leaflet {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    bottom: 0;
     flex: 1 1 100%;
+  }
+
+  > .c-map-legend {
+    display: initial;
+    position: absolute;
+    bottom: 20px;
+    width: 319px;
+    z-index: 1001;
+    transition: width 1s ease;
+
+    &.-hidden {
+      height: 0;
+      padding: 0;
+    }
   }
 
   .leaflet-control-zoom {
@@ -105,6 +128,7 @@ $map-btn-height: 32px;
   }
 
   .c-map-attribution {
+    display: initial;
     position: absolute;
     bottom: 0;
     width: 319px;
@@ -137,6 +161,7 @@ $map-btn-height: 32px;
     z-index: $z-leaflet-above-panes;
 
     &.-map-layers {
+      display: flex;
       position: absolute;
       top: 0;
       left: 8px;
@@ -187,21 +212,27 @@ $map-btn-height: 32px;
   }
 
   &.-fullscreen {
-
-    .-toggle-map {
-      &::after {
-        top: 50%;
-        transform: translate(-1px, -50%) rotateZ(135deg);
-        left: calc(50% - 2px);
-      }
-    }
-
     .c-map-legend,
     .c-map-attribution {
-      width: 320px;
+      width: $map-width;
       border-right: 1px solid rgba($charcoal-grey, .2);
     }
   }
+
+  &.-minified {
+    .c-map-legend,
+    .c-map-attribution,
+    .leaflet-control-container {
+      display: none;
+    }
+  }
+
+  &:not(.-minified) {
+    .leaflet-control-container {
+      display: initial;
+    }
+  }
+
 }
 
 .map-warnings {

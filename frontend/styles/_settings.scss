@@ -2,8 +2,10 @@
 $nav-height: 64px;
 $titlebar-height: 62px;
 $map-width: 320px;
+$map-width-closed: 30px;
 $layer-map-width: 376px;
 $feedback-button-closed-width: 45px;
+$map-btn-height: 32px;
 $content-max-width: 1040px;
 $anchor-list-max-width: calc(100% / 3 - 10%);
 $content-width: calc(100% / 3);
@@ -69,6 +71,7 @@ $z-tooltip: 92;
 $z-veil: 100;
 $z-above-veil: 101;
 $z-leaflet-above-panes: 500;
+$z-above-leaflet: 501;
 
 
 // colors
