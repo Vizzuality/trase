@@ -58,11 +58,12 @@ module Api
 
           def refresh_dependents(options = {})
             [
+              Api::V3::Readonly::ChartAttribute,
+              Api::V3::Readonly::DashboardsAttribute,
               Api::V3::Readonly::DownloadAttribute,
               Api::V3::Readonly::MapAttribute,
               Api::V3::Readonly::RecolorByAttribute,
-              Api::V3::Readonly::ResizeByAttribute,
-              Api::V3::Readonly::DashboardsAttribute
+              Api::V3::Readonly::ResizeByAttribute
             ].each do |mview_klass|
               mview_klass.refresh(
                 options.merge(skip_dependencies: true, sync: false)
