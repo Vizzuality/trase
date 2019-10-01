@@ -1,5 +1,5 @@
 class ChangeAttributesToTable < ActiveRecord::Migration[5.2]
-  def change
+  def up
     create_view :attributes_v,
       version: 1,
       materialized: false
@@ -129,5 +129,51 @@ class ChangeAttributesToTable < ActiveRecord::Migration[5.2]
     drop_view :attributes_mv, materialized: true
 
     Api::V3::Readonly::Attribute.refresh_now
+  end
+
+  def down
+    execute 'DROP MATERIALIZED VIEW IF EXISTS attributes_mv'
+
+    create_view :attributes_mv,
+      version: 3,
+      materialized: true
+
+    add_index :attributes_mv, :id, unique: true,
+      name: 'index_attributes_mv_id_idx'
+    add_index :attributes_mv, :name, unique: true,
+      name: 'attributes_mv_name_idx'
+
+    update_view :chart_attributes_mv,
+      version: 3,
+      revert_to_version: 2,
+      materialized: true
+
+    update_view :dashboards_attributes_mv,
+      version: 2,
+      revert_to_version: 1,
+      materialized: true
+
+    update_view :download_attributes_mv,
+      version: 3,
+      revert_to_version: 2,
+      materialized: true
+
+    update_view :map_attributes_mv,
+      version: 4,
+      revert_to_version: 3,
+      materialized: true
+
+    update_view :recolor_by_attributes_mv,
+      version: 3,
+      revert_to_version: 2,
+      materialized: true
+
+    update_view :resize_by_attributes_mv,
+      version: 2,
+      revert_to_version: 1,
+      materialized: true
+
+    drop_table :attributes
+    drop_view :attributes_v, materialized: false
   end
 end
