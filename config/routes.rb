@@ -33,7 +33,7 @@ Rails.application.routes.draw do
       resources :top_profiles, only: [:index]
       resources :contexts, only: [:index] do
         resources :map_layers, only: [:index]
-        resources :columns, only: [:index]
+        resources :columns, only: [:index], controller: :node_types
         resources :flows, only: [:index]
         resources :nodes, only: [:index] do
           get :profile_metadata, on: :member, controller: :profile_metadata, action: :index
