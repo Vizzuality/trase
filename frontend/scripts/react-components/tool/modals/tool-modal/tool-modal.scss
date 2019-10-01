@@ -1,10 +1,21 @@
 @import 'styles/settings';
+@import 'styles/mixins';
 
 .c-tool-modal {
   .tool-modal-button {
     height: 100%;
     padding: 0 20px;
+    margin-right: 20px;
     border-left: 1px solid $charcoal-grey-faded-a-lot;
+    position: relative;
     cursor: pointer;
+  }
+
+  .selected-item-with-arrow {
+    @include simple-arrow($charcoal-grey-faded);
+
+    &:after {
+      top: calc(50% + 10px);
+    }
   }
 }

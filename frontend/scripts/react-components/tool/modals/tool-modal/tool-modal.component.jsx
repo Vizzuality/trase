@@ -16,7 +16,13 @@ export default function ToolModal({ items, selectedItem, onChange, modalId, tool
           {modalId}
           {tooltip && <Tooltip text={tooltip} constraint="window" />}
         </Text>
-        <Heading as="span" size="rg" color="grey" weight="regular">
+        <Heading
+          as="span"
+          size="rg"
+          color="grey"
+          weight="regular"
+          className="selected-item-with-arrow"
+        >
           {selectedItem.label}
         </Heading>
       </button>
