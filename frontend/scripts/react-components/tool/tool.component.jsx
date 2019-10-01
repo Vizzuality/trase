@@ -14,6 +14,7 @@ import MapLayout from 'react-components/tool/map-layout';
 import ErrorModal from 'react-components/tool/error-modal';
 import MapSidebar from 'react-components/tool/map-sidebar-layout';
 import LegacyBasemaps from 'react-components/tool/legacy-basemaps/legacy-basemaps.container';
+import ToolModal from 'react-components/tool/tool-modal';
 import EventManager from 'utils/eventManager';
 import UrlSerializer from 'react-components/shared/url-serializer';
 import Timeline from './timeline';
@@ -88,6 +89,7 @@ const Tool = props => {
       {render}
       {renderVainillaComponents()}
       <UrlSerializer urlProps={urlProps} urlPropHandlers={urlPropHandlers} />
+      <ToolModal />
     </div>
   );
 };

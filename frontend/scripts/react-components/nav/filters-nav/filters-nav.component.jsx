@@ -12,7 +12,7 @@ import ToolSearch from 'react-components/tool/tool-search/tool-search.container'
 import { NavLink } from 'redux-first-router-link';
 import Img from 'react-components/shared/img';
 import { TOOL_LAYOUT } from 'constants';
-import ToolModal from 'react-components/tool/modals/tool-modal';
+import ToolModalButton from 'react-components/nav/filters-nav/tool-modal-button';
 
 import 'scripts/react-components/nav/filters-nav/filters-nav.scss';
 import 'scripts/react-components/nav/filters-nav/burger.scss';
@@ -132,9 +132,10 @@ const FiltersNav = props => {
 
   const renderFilter = filter => {
     const Component = FILTERS[filter.type];
-    if (Component === RecolorBySelector) {
-      return <ToolModal modalId="indicator" />;
+    if (ENABLE_REDESIGN_PAGES && filter.props.id === 'toolRecolorBy') {
+      return <ToolModalButton modalId="indicator" />;
     }
+
     return React.createElement(Component, {
       currentDropdown,
       className: 'filters-nav-item',

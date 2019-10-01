@@ -7,7 +7,8 @@ import {
   SELECT_CONTEXTUAL_LAYERS,
   TOGGLE_MAP_DIMENSION,
   CHANGE_LAYOUT,
-  SET_SANKEY_SIZE
+  SET_SANKEY_SIZE,
+  SET_ACTIVE_MODAL
 } from 'react-components/tool/tool.actions';
 import {
   TOOL_LAYERS__SET_LINKED_GEOIDS,
@@ -153,6 +154,11 @@ const toolLayersReducer = {
         window.innerWidth - widthOffset,
         window.innerHeight - SANKEY_OFFSETS.height
       ];
+    });
+  },
+  [SET_ACTIVE_MODAL](state, action) {
+    return immer(state, draft => {
+      draft.activeModal = action.payload.activeModal;
     });
   }
 };

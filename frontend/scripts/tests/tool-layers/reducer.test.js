@@ -8,6 +8,7 @@ import {
   CHANGE_LAYOUT,
   TOGGLE_MAP_DIMENSION,
   SET_SANKEY_SIZE,
+  SET_ACTIVE_MODAL,
   saveMapView,
   selectContextualLayers
 } from 'react-components/tool/tool.actions';
@@ -25,6 +26,18 @@ test(SET_NODE_ATTRIBUTES, () => {
   };
   const newState = reducer(initialState, action);
   expect(newState).toMatchSnapshot();
+});
+
+test(SET_ACTIVE_MODAL, () => {
+  const action = {
+    type: SET_ACTIVE_MODAL,
+    payload: { activeModal: 'openedModal' }
+  };
+  const newState = reducer(initialState, action);
+  expect(newState).toEqual({
+    ...initialState,
+    activeModal: 'openedModal'
+  });
 });
 
 test(TOOL_LAYERS__SET_MAP_DIMENSIONS, () => {
