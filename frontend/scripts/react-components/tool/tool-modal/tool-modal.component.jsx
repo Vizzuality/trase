@@ -9,7 +9,7 @@ export default function ToolModal({ items, selectedItem, onChange, activeModal, 
     <SimpleModal
       isOpen
       onClickClose={() => setActiveModal(null)}
-      onClickOutside={() => setActiveModal(null)}
+      onRequestClose={() => setActiveModal(null)}
     >
       <BaseModal
         items={items}
