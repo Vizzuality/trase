@@ -7,7 +7,6 @@ import {
   LOGISTICS_MAP_INSPECTION_LEVELS
 } from 'constants';
 import capitalize from 'lodash/capitalize';
-import { makeGetResizeByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 import {
@@ -25,11 +24,6 @@ const getToolDetailedView = state => state.toolLinks && state.toolLinks.detailed
 const getContextFilterBy = createSelector(
   getSelectedContext,
   selectedContext => selectedContext && selectedContext.filterBy
-);
-
-const getToolResizeBys = createSelector(
-  getSelectedContext,
-  selectedContext => selectedContext && selectedContext.resizeBy
 );
 
 export const getToolYearsProps = createStructuredSelector({
@@ -57,27 +51,6 @@ export const getToolAdminLevelProps = createSelector(
         : { label: 'All', value: null }
     };
   }
-);
-
-export const getToolResizeByProps = createSelector(
-  [getAppTooltips, getToolResizeBy, makeGetResizeByItems(getToolResizeBys, getSelectedYears)],
-  (tooltips, selectedResizeBy, items) => ({
-    options: items,
-    label: 'Resize by',
-    id: 'toolResizeBy',
-    showSelected: true,
-    size: 'rg',
-    clip: false,
-    weight: 'regular',
-    value: selectedResizeBy && {
-      value: selectedResizeBy,
-      label: selectedResizeBy.label || ''
-    },
-    isDisabled: items.length === 1 && selectedResizeBy?.attributeId === items[0].attributeId,
-    tooltip: tooltips && tooltips.sankey.nav.resizeBy.main,
-    titleTooltip:
-      tooltips && selectedResizeBy && tooltips.sankey.nav.resizeBy[selectedResizeBy.name]
-  })
 );
 
 export const getToolViewModeProps = createSelector(
@@ -150,7 +123,6 @@ export const getNavFilters = createSelector(
     getCurrentPage,
     getSelectedContext,
     getToolAdminLevelProps,
-    getToolResizeByProps,
     getToolViewModeProps,
     getLogisticsMapYearsProps,
     getLogisticsMapHubsProps,
@@ -160,7 +132,6 @@ export const getNavFilters = createSelector(
     page,
     selectedContext,
     toolAdminLevel,
-    toolResizeBy,
     toolViewMode,
     logisticsMapsYears,
     logisticsMapsHubs,
@@ -186,7 +157,7 @@ export const getNavFilters = createSelector(
             })
           ],
           right: [
-            { type: NAV_FILTER_TYPES.dropdown, props: toolResizeBy },
+            { type: NAV_FILTER_TYPES.dropdown, props: { id: 'toolResizeBy' } },
             { type: NAV_FILTER_TYPES.recolorBySelector, props: { id: 'toolRecolorBy' } },
             { type: NAV_FILTER_TYPES.dropdown, props: toolViewMode }
           ]

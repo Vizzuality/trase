@@ -7,7 +7,7 @@ import {
   getRecolorByOptions
 } from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.selectors';
 
-export const getActiveModal = state => state.toolLayers.activeModal;
+const getActiveModal = state => state.toolLayers.activeModal;
 
 const getToolResizeBys = createSelector(
   getSelectedContext,
@@ -16,18 +16,22 @@ const getToolResizeBys = createSelector(
 
 export const getItems = createSelector(
   [getActiveModal, getRecolorByOptions, makeGetResizeByItems(getToolResizeBys, getSelectedYears)],
-  (activeModal, recolorByItems, resizeByItems) =>
-    ({
+  (activeModal, recolorByItems, resizeByItems) => {
+    if (!activeModal) return null;
+    return {
       indicator: recolorByItems,
       unit: resizeByItems
-    }[activeModal])
+    }[activeModal];
+  }
 );
 
 export const getSelectedItem = createSelector(
   [getActiveModal, getSelectedRecolorByValue, getSelectedResizeBy],
-  (activeModal, activeRecolorBy, activeResizeBy) =>
-    ({
+  (activeModal, activeRecolorBy, activeResizeBy) => {
+    if (!activeModal) return null;
+    return {
       indicator: activeRecolorBy,
       unit: activeResizeBy
-    }[activeModal])
+    }[activeModal];
+  }
 );

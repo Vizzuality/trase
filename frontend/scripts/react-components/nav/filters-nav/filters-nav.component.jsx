@@ -135,7 +135,9 @@ const FiltersNav = props => {
     if (ENABLE_REDESIGN_PAGES && filter.props.id === 'toolRecolorBy') {
       return <ToolModalButton modalId="indicator" />;
     }
-
+    if (ENABLE_REDESIGN_PAGES && filter.props.id === 'toolResizeBy') {
+      return <ToolModalButton modalId="unit" />;
+    }
     return React.createElement(Component, {
       currentDropdown,
       className: 'filters-nav-item',

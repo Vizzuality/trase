@@ -40,7 +40,14 @@ const renderVainillaComponents = () => (
 );
 
 const Tool = props => {
-  const { resizeSankeyTool, urlProps, urlPropHandlers, mapSidebarOpen, noLinksFound } = props;
+  const {
+    resizeSankeyTool,
+    urlProps,
+    urlPropHandlers,
+    mapSidebarOpen,
+    noLinksFound,
+    activeModal
+  } = props;
   useEffect(() => {
     evManager.addEventListener(window, 'resize', resizeSankeyTool);
     const body = document.querySelector('body');
@@ -79,9 +86,10 @@ const Tool = props => {
           </div>
           {ENABLE_REDESIGN_PAGES && <Timeline />}
         </div>
+        <ToolModal activeModal={activeModal} />
       </>
     ),
-    [mapSidebarOpen, noLinksFound]
+    [mapSidebarOpen, noLinksFound, activeModal]
   );
 
   return (
@@ -89,7 +97,6 @@ const Tool = props => {
       {render}
       {renderVainillaComponents()}
       <UrlSerializer urlProps={urlProps} urlPropHandlers={urlPropHandlers} />
-      <ToolModal />
     </div>
   );
 };
@@ -99,7 +106,8 @@ Tool.propTypes = {
   urlPropHandlers: PropTypes.object,
   urlProps: PropTypes.object,
   mapSidebarOpen: PropTypes.bool,
-  noLinksFound: PropTypes.bool
+  noLinksFound: PropTypes.bool,
+  activeModal: PropTypes.string
 };
 
 export default Tool;

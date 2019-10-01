@@ -19,7 +19,7 @@ export default function ToolModalButton({ selectedItem, modalId, tooltip, setAct
         weight="regular"
         className="selected-item-with-arrow"
       >
-        {selectedItem.label}
+        {selectedItem?.label}
       </Heading>
     </button>
   );
