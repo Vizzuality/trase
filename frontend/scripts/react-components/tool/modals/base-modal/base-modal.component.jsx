@@ -38,7 +38,6 @@ export default function BaseModal({ items, selectedItem, onChange, itemId }) {
                 tooltip={itemProps.item.description}
                 isActive={selectedItem[itemId] === itemProps.item[itemId]}
                 enableItem={onChange}
-                isInModal
               />
             )
           }

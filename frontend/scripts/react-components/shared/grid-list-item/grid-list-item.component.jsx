@@ -13,7 +13,6 @@ function GridListItem(props) {
     tooltip,
     isActive,
     isDisabled,
-    isInModal,
     enableItem,
     disableItem,
     onInfoClick,
@@ -57,10 +56,12 @@ function GridListItem(props) {
                   trigger="click"
                   show={isInfoActive}
                   position="bottom-start"
-                  insideTooltip
-                  isInModal={isInModal}
                 >
-                  <button type="button" disabled={isDisabled} onClick={() => onInfoClick(item)}>
+                  <button
+                    type="button"
+                    disabled={isDisabled}
+                    onClick={() => onInfoClick && onInfoClick(item)}
+                  >
                     i
                   </button>
                 </HelpTooltip>
@@ -79,7 +80,6 @@ GridListItem.propTypes = {
   isActive: PropTypes.bool,
   tooltip: PropTypes.string,
   isDisabled: PropTypes.bool,
-  isInModal: PropTypes.bool,
   enableItem: PropTypes.func,
   disableItem: PropTypes.func,
   onInfoClick: PropTypes.func,

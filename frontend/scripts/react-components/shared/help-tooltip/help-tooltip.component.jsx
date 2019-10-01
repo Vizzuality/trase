@@ -26,22 +26,14 @@ export default class TooltipComponent extends Component {
   }
 
   initTooltip() {
-    const { position, text, show, insideTooltip, isInModal } = this.props;
-
-    const template = isInModal
-      ? {
-          template:
-            '<div class="tooltip-modal"><div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div></div>'
-        }
-      : {};
+    const { position, text, show } = this.props;
     this.tooltip = new Tooltip(this.element, {
       trigger: typeof show !== 'undefined' ? '' : 'hover focus',
       title: text,
       placement: position,
       container: 'body',
-      boundariesElement: insideTooltip ? 'scrollParent' : 'window',
-      offset: '1, 1',
-      ...template
+      boundariesElement: 'window',
+      offset: '1, 1'
     });
 
     if (typeof show !== 'undefined') {
@@ -90,14 +82,11 @@ TooltipComponent.propTypes = {
   text: PropTypes.string,
   children: PropTypes.any,
   showIcon: PropTypes.bool,
-  insideTooltip: PropTypes.bool,
   position: PropTypes.string,
-  className: PropTypes.string,
-  isInModal: PropTypes.bool
+  className: PropTypes.string
 };
 
 TooltipComponent.defaultProps = {
   position: 'bottom',
-  showIcon: true,
-  insideTooltip: false
+  showIcon: true
 };
