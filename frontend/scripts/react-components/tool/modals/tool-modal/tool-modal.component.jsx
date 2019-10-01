@@ -32,6 +32,7 @@ export default function ToolModal({ items, selectedItem, onChange, modalId, tool
           selectedItem={selectedItem}
           onChange={onChange}
           itemId="attributeId"
+          modalId={modalId}
         />
       </SimpleModal>
     </div>

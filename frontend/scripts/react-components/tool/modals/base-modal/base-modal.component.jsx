@@ -6,13 +6,13 @@ import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.
 
 import 'react-components/tool/modals/base-modal/base-modal.scss';
 
-export default function BaseModal({ items, selectedItem, onChange, itemId }) {
+export default function BaseModal({ items, selectedItem, onChange, itemId, modalId }) {
   const COLUMN_COUNT = 3;
   return (
     <div className="c-base-modal">
       <div className="row columns">
         <Heading size="md" className="modal-title">
-          Choose one indicator
+          Choose one {modalId}
         </Heading>
         <GridList
           items={items}
@@ -51,5 +51,6 @@ BaseModal.propTypes = {
   items: PropTypes.array,
   selectedItem: PropTypes.object,
   onChange: PropTypes.func.isRequired,
-  itemId: PropTypes.string.isRequired
+  itemId: PropTypes.string.isRequired,
+  modalId: PropTypes.string.isRequired
 };
