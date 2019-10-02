@@ -13,13 +13,13 @@ module Api
           # @option options [Boolean] :skip_dependents skip refreshing
           # @option options [Boolean] :sync synchronously
           def refresh(options = {})
-            # rubocop:disable Style/DoubleNegation
-            sync_processing = !!options[:sync]
-            # rubocop:enable Style/DoubleNegation
-            if long_running? || !sync_processing
-              refresh_later(options)
-            else
+            sync_processing = options[:sync]
+            # in unspecified, decide based on how long it takes to run
+            sync_processing ||= !long_running?
+            if sync_processing
               refresh_now(options)
+            else
+              refresh_later(options)
             end
           end
 

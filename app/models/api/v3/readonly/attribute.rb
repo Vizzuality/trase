@@ -66,7 +66,7 @@ module Api
               Api::V3::Readonly::ResizeByAttribute
             ].each do |mview_klass|
               mview_klass.refresh(
-                options.merge(skip_dependencies: true, sync: false)
+                options.merge(skip_dependencies: true)
               )
             end
           end
