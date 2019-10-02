@@ -117,7 +117,7 @@ const ProfileRoot = props => {
               />
             </div>
             <div className="profile-root-slider">
-              <SliderSection name="Top profiles" slides={topProfiles} variant="profiles" />
+              <SliderSection name="Featured profiles" slides={topProfiles} variant="profiles" />
             </div>
           </div>
         </div>
