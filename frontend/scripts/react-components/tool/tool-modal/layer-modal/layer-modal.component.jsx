@@ -8,8 +8,24 @@ import Tabs from 'react-components/shared/tabs/tabs.component';
 import 'react-components/tool/tool-modal/layer-modal/layer-modal.scss';
 import { LAYER_TAB_NAMES } from 'constants';
 
-const renderList = (items, selectedItems, onChange) => {
+const renderList = (items, selectedItems, selectedTab, onToggleUnit, onChangeContexts) => {
   const COLUMN_COUNT = 3;
+  const enableItem =
+    selectedTab === LAYER_TAB_NAMES.unit
+      ? onToggleUnit
+      : item => onChangeContexts([...selectedItems, item]);
+  const disableItem =
+    selectedTab === LAYER_TAB_NAMES.unit
+      ? onToggleUnit
+      : item => onChangeContexts(selectedItems.filter(i => i.id !== item.id));
+  const isActive = itemProps =>
+    selectedTab === LAYER_TAB_NAMES.unit
+      ? itemProps.item &&
+        !itemProps.item.isGroup &&
+        selectedItems &&
+        selectedItems.includes(itemProps.item.uid)
+      : selectedItems && selectedItems.map(i => i.id).includes(itemProps.item.id);
+
   return (
     <GridList
       items={items}
@@ -18,27 +34,33 @@ const renderList = (items, selectedItems, onChange) => {
       rowHeight={50}
       columnWidth={240}
       columnCount={COLUMN_COUNT}
+      groupBy={selectedTab === LAYER_TAB_NAMES.unit ? 'group' : undefined}
     >
-      {itemProps => (
-        <GridListItem
-          {...itemProps}
-          item={{ ...itemProps.item, name: itemProps.item.label }}
-          tooltip={itemProps.item.description}
-          isActive={selectedItems && selectedItems.map(i => i.id).includes(itemProps.item.id)}
-          enableItem={onChange}
-        />
-      )}
+      {itemProps =>
+        console.log(itemProps.item) || (
+          <GridListItem
+            {...itemProps}
+            tooltip={itemProps.item?.description}
+            isActive={isActive(itemProps)}
+            enableItem={enableItem}
+            disableItem={disableItem}
+          />
+        )
+      }
     </GridList>
   );
 };
 
-export default function LayerModal({ layers, selectedItems, onChange }) {
+export default function LayerModal({ layers, selectedItems, onChangeContexts, onToggleUnit }) {
   const tabs = [LAYER_TAB_NAMES.unit, LAYER_TAB_NAMES.contextual];
   const [selectedTab, changeTab] = useState(LAYER_TAB_NAMES.unit);
+  // const [currentSelection, changeSelection] = useState(selectedItems);
+  // console.log(changeSelection)
   const infoMessage = {
     'unit layers': 'You can choose one or two unit layers',
     'contextual layers': 'You can choose one or several contextual layers'
   }[selectedTab];
+
   return (
     <div className="c-layer-modal">
       <div className="row columns">
@@ -46,11 +68,17 @@ export default function LayerModal({ layers, selectedItems, onChange }) {
           Edit map layers
         </Heading>
         <Tabs tabs={tabs} selectedTab={selectedTab} onSelectTab={tab => changeTab(tab)} />
-        <Text color="grey-faded" size="md">
+        <Text color="grey-faded" size="md" className="info-message">
           {infoMessage}
         </Text>
         {layers[selectedTab] &&
-          renderList(layers[selectedTab], selectedItems[selectedTab], onChange)}
+          renderList(
+            layers[selectedTab],
+            selectedItems[selectedTab],
+            selectedTab,
+            onChangeContexts,
+            onToggleUnit
+          )}
       </div>
     </div>
   );
@@ -59,5 +87,6 @@ export default function LayerModal({ layers, selectedItems, onChange }) {
 LayerModal.propTypes = {
   layers: PropTypes.object,
   selectedItems: PropTypes.object,
-  onChange: PropTypes.func.isRequired
+  onChangeContexts: PropTypes.func.isRequired,
+  onToggleUnit: PropTypes.func.isRequired
 };
