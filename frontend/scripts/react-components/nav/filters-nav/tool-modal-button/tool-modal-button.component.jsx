@@ -6,6 +6,7 @@ import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component
 import 'react-components/nav/filters-nav/tool-modal-button/tool-modal-button.scss';
 
 export default function ToolModalButton({ selectedItem, modalId, tooltip, setActiveModal }) {
+  const selectedLabel = selectedItem?.label;
   return (
     <button onClick={() => setActiveModal(modalId)} className="c-tool-modal-button">
       <Text color="grey-faded" size="sm" variant="mono" transform="uppercase">
@@ -18,8 +19,9 @@ export default function ToolModalButton({ selectedItem, modalId, tooltip, setAct
         color="grey"
         weight="regular"
         className="selected-item-with-arrow"
+        title={selectedLabel}
       >
-        {selectedItem?.label}
+        {selectedLabel}
       </Heading>
     </button>
   );

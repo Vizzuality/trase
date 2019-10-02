@@ -7,9 +7,15 @@
   margin-right: 20px;
   border-left: 1px solid $charcoal-grey-faded-a-lot;
   position: relative;
+  max-width: 16vh;
   cursor: pointer;
 
   .selected-item-with-arrow {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
     @include simple-arrow($charcoal-grey-faded);
 
     &:after {
