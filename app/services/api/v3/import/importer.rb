@@ -115,11 +115,11 @@ module Api
           # synchronously, skip dependencies (already refreshed)
           [
             Api::V3::Readonly::ChartAttribute,
+            Api::V3::Readonly::DashboardsAttribute,
             Api::V3::Readonly::DownloadAttribute,
             Api::V3::Readonly::MapAttribute,
             Api::V3::Readonly::RecolorByAttribute,
             Api::V3::Readonly::ResizeByAttribute,
-            Api::V3::Readonly::DashboardsAttribute,
             Api::V3::Readonly::Dashboards::Commodity,
             Api::V3::Readonly::Dashboards::Country,
             Api::V3::Readonly::Dashboards::Source,
