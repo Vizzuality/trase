@@ -284,7 +284,7 @@ paths:
             type: integer
         - name: attribute_id
           in: query
-          description: Attribute id
+          description: Attribute id (default volume)
           required: false
           schema:
             type: string
