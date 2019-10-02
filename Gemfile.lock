@@ -99,7 +99,7 @@ GEM
     annotate (2.7.5)
       activerecord (>= 3.2, < 7.0)
       rake (>= 10.4, < 13.0)
-    appsignal (2.9.13)
+    appsignal (2.9.16)
       rack
     arbre (1.2.1)
       activesupport (>= 3.0.0)
