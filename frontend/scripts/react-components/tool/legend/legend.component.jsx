@@ -9,7 +9,7 @@ import ChoroplethLegend from './choropleth-legend.component';
 
 function Legend(props) {
   const {
-    toggleMapLayerMenu,
+    openLayerModal,
     choroplethLegend,
     highlightedChoroplethBucket,
     contextualLayers,
@@ -19,7 +19,7 @@ function Legend(props) {
   return (
     <div className="c-legend">
       <div className="legend-header">
-        <button className="legend-layers-toggle" onClick={toggleMapLayerMenu}>
+        <button className="legend-layers-toggle" onClick={openLayerModal}>
           <Icon icon="icon-layers" />
           <Text variant="mono" transform="uppercase" color="white">
             Edit Map Layers
@@ -53,7 +53,7 @@ function Legend(props) {
 Legend.propTypes = {
   contextualLayers: PropTypes.array,
   choroplethLegend: PropTypes.object,
-  toggleMapLayerMenu: PropTypes.func.isRequired,
+  openLayerModal: PropTypes.func.isRequired,
   highlightedChoroplethBucket: PropTypes.string,
   isHidden: PropTypes.bool
 };

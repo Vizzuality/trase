@@ -4,7 +4,7 @@ import {
   getCurrentHighlightedChoroplethBucket,
   getSelectedMapContextualLayersData
 } from 'react-components/tool-layers/tool-layers.selectors';
-import { toggleMapLayerMenu } from 'actions/app.actions';
+import { setActiveModal } from 'react-components/tool/tool.actions';
 import { TOOL_LAYOUT } from 'constants';
 import Legend from './legend.component';
 
@@ -18,7 +18,7 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = { toggleMapLayerMenu };
+const mapDispatchToProps = { openLayerModal: () => setActiveModal('layer') };
 
 export default connect(
   mapStateToProps,
