@@ -8,7 +8,7 @@
   color: $charcoal-grey;
   z-index: $z-above-veil-below-nav;
 
-  > .units-tooltip-text {
+  .units-tooltip-text {
     font-family: $font-family-1;
     font-size: $font-size-regular;
     line-height: 1;
@@ -17,6 +17,7 @@
     padding: 12px 8px;
     background-color: $egg-shell;
     text-transform: uppercase;
+    white-space: nowrap;
   }
 
   .units-tooltip-value {
@@ -37,6 +38,7 @@
       letter-spacing: -0.9px;
       line-height: 1;
       padding-top: 2px;
+      white-space: nowrap;
 
       span {
         opacity: 0.6;

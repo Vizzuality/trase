@@ -2,12 +2,12 @@ import React, { useEffect, useRef, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import toLower from 'lodash/toLower';
-import Tooltip from 'components/shared/info-tooltip.component';
 import formatValue from 'utils/formatValue';
 import capitalize from 'lodash/capitalize';
 import startCase from 'lodash/startCase';
 import getNodeMeta from 'reducers/helpers/getNodeMeta';
 import Heading from 'react-components/shared/heading';
+import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import { TOOL_LAYOUT } from 'constants';
 
 import SankeyColumn from './sankey-column.component';
@@ -125,45 +125,6 @@ function useMenuPosition(props) {
   return [menuPos, ref, hoveredSelectedNode, setHoveredSelectedNode];
 }
 
-function useVanillaTooltip({ links, toolLayout }) {
-  const ref = useRef(null);
-  const tooltip = useRef(null);
-  const [content, setContent] = useState(null);
-
-  useEffect(() => {
-    if (!tooltip.current && ref.current) {
-      tooltip.current = new Tooltip(ref.current);
-    }
-
-    if (tooltip.current) {
-      if (content) {
-        tooltip.current.show(
-          content.x,
-          content.y,
-          content.title,
-          content.values,
-          content.height,
-          content.width
-        );
-      } else {
-        tooltip.current.hide();
-      }
-
-      if (!links) {
-        tooltip.current.hide();
-      }
-    }
-
-    return () => {
-      if (tooltip.current) {
-        tooltip.current.hide();
-      }
-    };
-  }, [content, links, toolLayout]);
-
-  return [ref, setContent];
-}
-
 function useNodeRefHeight(ref) {
   const [height, setHeight] = useState(undefined);
   useEffect(() => {
@@ -196,7 +157,7 @@ function Sankey(props) {
     toolLayout
   } = props;
   const [hoveredLink, setHoveredLink] = useState(null);
-  const [tooltipRef, setTooltip] = useVanillaTooltip(props);
+  const [tooltipContent, setTooltipContent] = useState(null);
   const svgRef = useRef(null);
   const layoutRects = useRef([]);
   const getRect = layout => {
@@ -238,12 +199,12 @@ function Sankey(props) {
   const onLinkOver = (e, link) => {
     const rect = getRect(toolLayout);
     const tooltip = {
-      title: `${link.sourceNodeName} > ${link.targetNodeName}`,
+      text: `${link.sourceNodeName} > ${link.targetNodeName}`,
       x: e.clientX - rect.x,
       y: e.clientY - rect.y,
       height: rect.height,
       width: rect.width,
-      values: [
+      items: [
         {
           title: selectedResizeBy.label,
           unit: selectedResizeBy.unit,
@@ -264,19 +225,19 @@ function Sankey(props) {
         const nextValue = link.recolorBy + selectedRecolorBy.divisor;
         recolorValue = `${link.recolorBy}–${nextValue}%`;
       }
-      tooltip.values.push({
+      tooltip.items.push({
         title: selectedRecolorBy.label,
         value: recolorValue
       });
     }
 
     setHoveredLink(link.id);
-    setTooltip(tooltip);
+    setTooltipContent(tooltip);
   };
 
   const onLinkOut = () => {
     setHoveredLink(null);
-    setTooltip(null);
+    setTooltipContent(null);
   };
 
   const onNodeOver = (e, node) => {
@@ -290,8 +251,8 @@ function Sankey(props) {
     const tooltipPadding = 10;
     const minTooltipWidth = 180;
     const tooltip = {
-      title: node.name,
-      values: [
+      text: node.name,
+      items: [
         {
           title: selectedResizeBy.label,
           unit: selectedResizeBy.unit,
@@ -322,14 +283,14 @@ function Sankey(props) {
         })
         .filter(Boolean);
 
-      tooltip.values.push(...nodeIndicators);
+      tooltip.items.push(...nodeIndicators);
     }
 
     if (selectedNodesIds.includes(node.id)) {
       setHoveredSelectedNode(node);
     }
 
-    setTooltip(tooltip);
+    setTooltipContent(tooltip);
     onNodeHighlighted(node.id);
   };
 
@@ -337,7 +298,7 @@ function Sankey(props) {
     if (node.isAggregated) {
       return;
     }
-    setTooltip(null);
+    setTooltipContent(null);
     onNodeHighlighted(null);
   };
 
@@ -345,6 +306,7 @@ function Sankey(props) {
 
   return (
     <div className={cx('c-sankey', { '-full-screen': toolLayout === TOOL_LAYOUT.right })}>
+      <UnitsTooltip {...tooltipContent} show={!!tooltipContent} />
       <div
         ref={scrollContainerRef}
         className={cx('sankey-scroll-container', { '-detailed': detailedView })}
@@ -366,7 +328,6 @@ function Sankey(props) {
             options={menuOptions}
           />
         )}
-        <div ref={tooltipRef} className="c-info-tooltip" />
         <svg
           ref={svgRef}
           className="sankey"
