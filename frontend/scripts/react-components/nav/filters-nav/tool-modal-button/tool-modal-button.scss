@@ -10,16 +10,22 @@
   max-width: 16vh;
   cursor: pointer;
 
-  .selected-item-with-arrow {
+  &[disabled=""] {
+    cursor: default;
+  }
+
+  .selected-item {
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 
-    @include simple-arrow($charcoal-grey-faded);
+    &.-with-arrow {
+      @include simple-arrow($charcoal-grey-faded);
 
-    &:after {
-      top: calc(50% + 10px);
+      &:after {
+        top: calc(50% + 10px);
+      }
     }
   }
 }

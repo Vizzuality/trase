@@ -5,7 +5,7 @@ import SimpleModal from 'react-components/shared/simple-modal/simple-modal.compo
 import 'react-components/tool/tool-modal/tool-modal.scss';
 
 export default function ToolModal({ items, selectedItem, onChange, activeModal, setActiveModal }) {
-  return activeModal ? (
+  return activeModal && items?.length > 1 ? (
     <SimpleModal
       isOpen
       onClickClose={() => setActiveModal(null)}

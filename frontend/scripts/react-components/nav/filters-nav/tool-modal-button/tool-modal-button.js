@@ -4,6 +4,7 @@ import ToolModalButton from 'react-components/nav/filters-nav/tool-modal-button/
 import { setActiveModal } from 'react-components/tool/tool.actions';
 import { getSelectedResizeBy } from 'react-components/tool-links/tool-links.selectors';
 import { getSelectedRecolorByValue } from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.selectors';
+import { getHasMoreThanOneItem } from 'react-components/nav/filters-nav/tool-modal-button/tool-modal-button.selectors';
 
 const mapStateToProps = (state, { modalId }) => {
   const selectedItem = {
@@ -16,7 +17,8 @@ const mapStateToProps = (state, { modalId }) => {
   }[modalId];
   return {
     selectedItem,
-    tooltip
+    tooltip,
+    hasMoreThanOneItem: getHasMoreThanOneItem(state, { modalId })
   };
 };
 
