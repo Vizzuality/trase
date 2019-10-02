@@ -49,6 +49,10 @@
           "role": {
             "id": "/properties/data/items/properties/role",
             "type": "string"
+          },
+          "filterTo": {
+            "id": "/properties/data/items/properties/filterTo",
+            "type": ["integer", "null"]
           }
         },
         "required": [
@@ -60,7 +64,8 @@
           "id",
           "isChoroplethDisabled",
           "isDefault",
-          "role"
+          "role",
+          "filterTo"
         ],
         "type": "object"
       },

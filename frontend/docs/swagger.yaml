@@ -2046,6 +2046,8 @@ components:
                 type: boolean
               profileType:
                 type: string
+              filterTo:
+                type: integer
 
     MapGroup:
       type: object
