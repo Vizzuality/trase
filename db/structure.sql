@@ -3291,37 +3291,37 @@ CREATE MATERIALIZED VIEW public.dashboards_companies_mv AS
         ), filtered_flow_nodes AS (
          SELECT flow_nodes.flow_id,
             flow_nodes.node_id,
+            nodes.node_type_id,
+            contexts.country_id,
+            contexts.commodity_id,
             btrim(nodes.name) AS name,
             to_tsvector('simple'::regconfig, COALESCE(btrim(nodes.name), ''::text)) AS name_tsvector,
-            nodes.node_type_id,
             node_types.name AS node_type,
                 CASE
                     WHEN ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text)) THEN cnt.profile
                     ELSE NULL::text
-                END AS profile,
-            contexts.country_id,
-            contexts.commodity_id
+                END AS profile
            FROM (((((flow_nodes
              JOIN public.nodes ON ((nodes.id = flow_nodes.node_id)))
              JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
              JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
              JOIN active_cnt cnt ON (((cnt.context_id = flow_nodes.context_id) AND ((cnt.column_position + 1) = flow_nodes."position"))))
              JOIN public.contexts ON (((contexts.id = flow_nodes.context_id) AND (contexts.id = cnt.context_id))))
-          WHERE ((cnt.role)::text = ANY (ARRAY[('exporter'::character varying)::text, ('importer'::character varying)::text]))
+          WHERE ((cnt.role)::text = ANY ((ARRAY['exporter'::character varying, 'importer'::character varying])::text[]))
         )
  SELECT ffn.node_id AS id,
-    ffn.name,
-    ffn.name_tsvector,
     ffn.node_type_id,
-    ffn.node_type,
-    ffn.profile,
     ffn.country_id,
     ffn.commodity_id,
-    fn.node_id
+    fn.node_id,
+    ffn.name,
+    ffn.name_tsvector,
+    ffn.node_type,
+    ffn.profile
    FROM (filtered_flow_nodes ffn
      JOIN flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
   WHERE (ffn.node_id <> fn.node_id)
-  GROUP BY ffn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type_id, ffn.node_type, ffn.profile, ffn.country_id, ffn.commodity_id, fn.node_id
+  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile
   WITH NO DATA;
 
 
@@ -3465,18 +3465,18 @@ CREATE MATERIALIZED VIEW public.dashboards_destinations_mv AS
           WHERE ((cnt.role)::text = 'destination'::text)
         )
  SELECT ffn.node_id AS id,
-    ffn.name,
-    ffn.name_tsvector,
     ffn.node_type_id,
-    ffn.node_type,
-    ffn.profile,
     ffn.country_id,
     ffn.commodity_id,
-    fn.node_id
+    fn.node_id,
+    ffn.name,
+    ffn.name_tsvector,
+    ffn.node_type,
+    ffn.profile
    FROM (filtered_flow_nodes ffn
      JOIN flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
   WHERE (ffn.node_id <> fn.node_id)
-  GROUP BY ffn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type_id, ffn.node_type, ffn.profile, ffn.country_id, ffn.commodity_id, fn.node_id
+  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile
   WITH NO DATA;
 
 
@@ -3619,18 +3619,18 @@ CREATE MATERIALIZED VIEW public.dashboards_sources_mv AS
           WHERE ((cnt.role)::text = 'source'::text)
         )
  SELECT ffn.node_id AS id,
-    ffn.name,
-    ffn.name_tsvector,
     ffn.node_type_id,
-    ffn.node_type,
-    ffn.profile,
     ffn.country_id,
     ffn.commodity_id,
-    fn.node_id
+    fn.node_id,
+    ffn.name,
+    ffn.name_tsvector,
+    ffn.node_type,
+    ffn.profile
    FROM (filtered_flow_nodes ffn
      JOIN flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
   WHERE (ffn.node_id <> fn.node_id)
-  GROUP BY ffn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type_id, ffn.node_type, ffn.profile, ffn.country_id, ffn.commodity_id, fn.node_id
+  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile
   WITH NO DATA;
 
 
@@ -7890,20 +7890,6 @@ CREATE INDEX dashboards_companies_mv_country_id_idx ON public.dashboards_compani
 
 
 --
--- Name: dashboards_companies_mv_group_columns_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_companies_mv_group_columns_idx ON public.dashboards_companies_mv USING btree (id, name, node_type);
-
-
---
--- Name: dashboards_companies_mv_name_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_companies_mv_name_idx ON public.dashboards_companies_mv USING btree (name);
-
-
---
 -- Name: dashboards_companies_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7988,20 +7974,6 @@ CREATE INDEX dashboards_destinations_mv_country_id_idx ON public.dashboards_dest
 
 
 --
--- Name: dashboards_destinations_mv_group_columns_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_destinations_mv_group_columns_idx ON public.dashboards_destinations_mv USING btree (id, name, node_type);
-
-
---
--- Name: dashboards_destinations_mv_name_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_destinations_mv_name_idx ON public.dashboards_destinations_mv USING btree (name);
-
-
---
 -- Name: dashboards_destinations_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8041,13 +8013,6 @@ CREATE INDEX dashboards_sources_mv_commodity_id_idx ON public.dashboards_sources
 --
 
 CREATE INDEX dashboards_sources_mv_country_id_idx ON public.dashboards_sources_mv USING btree (country_id);
-
-
---
--- Name: dashboards_sources_mv_name_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_sources_mv_name_idx ON public.dashboards_sources_mv USING btree (name);
 
 
 --
@@ -9375,6 +9340,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190919211340'),
 ('20190923074833'),
 ('20190924075531'),
-('20190924102948');
+('20190924102948'),
+('20191002200900');
 
 
