@@ -1,0 +1,71 @@
+import React, { useMemo } from 'react';
+import PropTypes from 'prop-types';
+import GridList from 'react-components/shared/grid-list/grid-list.component';
+import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
+import { LAYER_TAB_NAMES } from 'constants';
+
+export default function LayersList({ items, currentSelection, selectedTab, changeSelection }) {
+  const COLUMN_COUNT = 3;
+  const selectedItemIds = currentSelection[selectedTab];
+  const idAttribute = {
+    [LAYER_TAB_NAMES.unit]: 'uid',
+    [LAYER_TAB_NAMES.contextual]: 'id'
+  }[selectedTab];
+  const enableItem = item =>
+    changeSelection({
+      ...currentSelection,
+      [selectedTab]: [...(selectedItemIds || []), item[idAttribute]]
+    });
+  const disableItem = item =>
+    changeSelection({
+      ...currentSelection,
+      [selectedTab]: selectedItemIds.filter(id => id !== item[idAttribute])
+    });
+  const isActive = itemProps =>
+    selectedTab === LAYER_TAB_NAMES.unit
+      ? itemProps.item && !itemProps.item.isGroup && selectedItemIds?.includes(itemProps.item.uid)
+      : selectedItemIds?.includes(itemProps.item.id);
+  const groupItemsNumber = items.filter(i => i.group).length;
+  const getHeight = useMemo(() => {
+    const PADDING = 20;
+    if (items.length < COLUMN_COUNT) return 100;
+    let rows = (items.length - groupItemsNumber) / COLUMN_COUNT;
+    if (groupItemsNumber) {
+      rows += groupItemsNumber;
+    }
+    return rows * 60 + PADDING;
+  }, [groupItemsNumber, items.length]);
+  return (
+    <GridList
+      items={items}
+      height={getHeight}
+      width={750}
+      rowHeight={50}
+      columnWidth={240}
+      columnCount={COLUMN_COUNT}
+      groupBy={selectedTab === LAYER_TAB_NAMES.unit ? 'group' : undefined}
+    >
+      {itemProps => (
+        <GridListItem
+          {...itemProps}
+          tooltip={itemProps.item?.description}
+          isActive={isActive(itemProps)}
+          enableItem={enableItem}
+          disableItem={disableItem}
+          isDisabled={
+            selectedTab === LAYER_TAB_NAMES.unit &&
+            !isActive(itemProps) &&
+            selectedItemIds?.length > 1
+          }
+        />
+      )}
+    </GridList>
+  );
+}
+
+LayersList.propTypes = {
+  items: PropTypes.array,
+  currentSelection: PropTypes.object,
+  selectedTab: PropTypes.string.isRequired,
+  changeSelection: PropTypes.func.isRequired
+};

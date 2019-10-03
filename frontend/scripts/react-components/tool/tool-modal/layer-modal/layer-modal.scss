@@ -5,6 +5,8 @@ $footer-height: 86px;
 .c-layer-modal {
   .layer-modal-content {
     width: 750px;
+    height: 90vh;
+    overflow: auto;
     padding: 15px 5px;
     padding-bottom: $footer-height + 20px;
 
