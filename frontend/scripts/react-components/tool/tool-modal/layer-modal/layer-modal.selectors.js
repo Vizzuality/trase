@@ -1,4 +1,5 @@
 import { LAYER_TAB_NAMES } from 'constants';
+import compact from 'lodash/compact';
 
 export const getLayers = state => {
   const { mapContextualLayers, mapDimensions, mapDimensionsGroups } = state.toolLayers.data;
@@ -27,6 +28,6 @@ export const getSelectedLayerIds = state => {
   const { selectedMapContextualLayers, selectedMapDimensions } = state.toolLayers;
   return {
     [LAYER_TAB_NAMES.contextual]: selectedMapContextualLayers,
-    [LAYER_TAB_NAMES.unit]: selectedMapDimensions
+    [LAYER_TAB_NAMES.unit]: compact(selectedMapDimensions)
   };
 };
