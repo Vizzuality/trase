@@ -6,7 +6,6 @@ import {
   SELECT_BASEMAP,
   SELECT_CONTEXTUAL_LAYERS,
   CHANGE_LAYOUT,
-  TOGGLE_MAP_DIMENSION,
   SET_SANKEY_SIZE,
   SET_ACTIVE_MODAL,
   SELECT_UNIT_LAYERS,
@@ -198,42 +197,5 @@ describe(SET_SANKEY_SIZE, () => {
       windowInnerWidth - SANKEY_OFFSETS.width,
       windowInnerHeight - SANKEY_OFFSETS.height
     ]);
-  });
-});
-
-describe(TOGGLE_MAP_DIMENSION, () => {
-  it('Remove map dimension if the dimension is selected', () => {
-    const action = {
-      type: TOGGLE_MAP_DIMENSION,
-      payload: {
-        selectedMapDimensions: ['quant95', 'quant90'],
-        uid: 'quant90'
-      }
-    };
-    const newState = reducer(initialState, action);
-    expect(newState).toMatchSnapshot();
-  });
-
-  it('Add a map dimension if the dimension is not selected', () => {
-    const action = {
-      type: TOGGLE_MAP_DIMENSION,
-      payload: {
-        selectedMapDimensions: [],
-        uid: 'quant90'
-      }
-    };
-    const newState = reducer(initialState, action);
-    expect(newState).toMatchSnapshot();
-  });
-  it('Add a map dimension in the second slot if the dimension is not selected', () => {
-    const action = {
-      type: TOGGLE_MAP_DIMENSION,
-      payload: {
-        selectedMapDimensions: ['NotEmpty'],
-        uid: 'quant90'
-      }
-    };
-    const newState = reducer(initialState, action);
-    expect(newState).toMatchSnapshot();
   });
 });

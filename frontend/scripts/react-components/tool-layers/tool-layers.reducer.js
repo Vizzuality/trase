@@ -5,7 +5,6 @@ import {
   SAVE_MAP_VIEW,
   SELECT_BASEMAP,
   SELECT_CONTEXTUAL_LAYERS,
-  TOGGLE_MAP_DIMENSION,
   CHANGE_LAYOUT,
   SET_SANKEY_SIZE,
   SET_ACTIVE_MODAL,
@@ -97,27 +96,6 @@ const toolLayersReducer = {
       mapContextualLayers.forEach(layer => {
         draft.data.mapContextualLayers[layer.id] = layer;
       });
-    });
-  },
-  [TOGGLE_MAP_DIMENSION](state, action) {
-    return immer(state, draft => {
-      if (!draft.selectedMapDimensions) {
-        draft.selectedMapDimensions = [...action.payload.selectedMapDimensions];
-      }
-      const uidIndex = draft.selectedMapDimensions.indexOf(action.payload.uid);
-
-      if (uidIndex === -1) {
-        // dimension was not found: put it on a free slot
-        if (!draft.selectedMapDimensions[0]) {
-          draft.selectedMapDimensions[0] = action.payload.uid;
-        } else if (!draft.selectedMapDimensions[1]) {
-          draft.selectedMapDimensions[1] = action.payload.uid;
-        }
-        draft.mapLoading = true;
-      } else {
-        // dimension was found: remove it from selection
-        draft.selectedMapDimensions[uidIndex] = null;
-      }
     });
   },
   [SELECT_UNIT_LAYERS](state, action) {
