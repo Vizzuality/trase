@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
+import Heading from 'react-components/shared/heading';
 
 import './grid-list-item.scss';
 
@@ -26,7 +27,11 @@ function GridListItem(props) {
   return (
     <React.Fragment>
       <div style={style} className={cx('c-grid-list-item', { [`v-${variant}`]: variant })}>
-        {isGroup && <h3 className="grid-list-item-heading">{item.name}</h3>}
+        {isGroup && (
+          <Heading as="h3" weight="regular" className="grid-list-item-heading">
+            {item.name}
+          </Heading>
+        )}
         {!isGroup && (
           <div className="grid-list-item-content" data-test="grid-list-item-button">
             <button
