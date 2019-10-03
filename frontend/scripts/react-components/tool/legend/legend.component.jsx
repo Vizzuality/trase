@@ -13,19 +13,22 @@ function Legend(props) {
     choroplethLegend,
     highlightedChoroplethBucket,
     contextualLayers,
-    isHidden
+    isHidden,
+    hasLayers
   } = props;
   if (isHidden) return null;
   return (
     <div className="c-legend">
-      <div className="legend-header">
-        <button className="legend-layers-toggle" onClick={openLayerModal}>
-          <Icon icon="icon-layers" />
-          <Text variant="mono" transform="uppercase" color="white">
-            Edit Map Layers
-          </Text>
-        </button>
-      </div>
+      {hasLayers && (
+        <div className="legend-header">
+          <button className="legend-layers-toggle" onClick={openLayerModal}>
+            <Icon icon="icon-layers" />
+            <Text variant="mono" transform="uppercase" color="white">
+              Edit Map Layers
+            </Text>
+          </button>
+        </div>
+      )}
       <div className="legend-container">
         <div
           className="map-legend-contextual"
@@ -55,7 +58,8 @@ Legend.propTypes = {
   choroplethLegend: PropTypes.object,
   openLayerModal: PropTypes.func.isRequired,
   highlightedChoroplethBucket: PropTypes.string,
-  isHidden: PropTypes.bool
+  isHidden: PropTypes.bool,
+  hasLayers: PropTypes.bool
 };
 
 export default Legend;

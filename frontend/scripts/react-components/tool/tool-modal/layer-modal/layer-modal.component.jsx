@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Heading from 'react-components/shared/heading';
 import GridList from 'react-components/shared/grid-list/grid-list.component';
@@ -27,16 +27,14 @@ const renderList = (items, currentSelection, selectedTab, changeSelection) => {
       ...currentSelection,
       [selectedTab]: selectedItemIds.filter(id => id !== item[idAttribute])
     });
-
   const isActive = itemProps =>
     selectedTab === LAYER_TAB_NAMES.unit
       ? itemProps.item && !itemProps.item.isGroup && selectedItemIds?.includes(itemProps.item.uid)
       : selectedItemIds?.includes(itemProps.item.id);
-
   return (
     <GridList
       items={items}
-      height={items.length > COLUMN_COUNT ? (items.length / COLUMN_COUNT) * 60 : 60}
+      height={items.length > COLUMN_COUNT ? (items.length / COLUMN_COUNT) * 60 + 20 : 100}
       width={750}
       rowHeight={50}
       columnWidth={240}
@@ -68,8 +66,29 @@ export default function LayerModal({
   selectContextualLayers,
   setActiveModal
 }) {
-  const tabs = [LAYER_TAB_NAMES.unit, LAYER_TAB_NAMES.contextual];
-  const [selectedTab, changeTab] = useState(LAYER_TAB_NAMES.unit);
+  const tabs = useMemo(() => {
+    const layerTabs = [];
+    Object.keys(layers).forEach(key => {
+      if (layers[key] && layers[key].length > 0) {
+        layerTabs.push(key);
+      }
+    });
+    return layerTabs;
+  }, [layers]);
+
+  const firstTab = useMemo(() => {
+    let firstLayerTab = null;
+    Object.keys(layers).some(key => {
+      if (layers[key] && layers[key].length > 0) {
+        firstLayerTab = key;
+        return true;
+      }
+      return false;
+    });
+    return firstLayerTab;
+  }, [layers]);
+
+  const [selectedTab, changeTab] = useState(firstTab);
   const [currentSelection, changeSelection] = useState(selectedItemIds);
   const onSave = () => {
     const toArray = l => (l ? castArray(l) : null);
@@ -78,8 +97,8 @@ export default function LayerModal({
     setActiveModal(null);
   };
   const infoMessage = {
-    'unit layers': 'You can choose one or two unit layers',
-    'contextual layers': 'You can choose one or several contextual layers'
+    [LAYER_TAB_NAMES.unit]: 'You can choose one or two unit layers',
+    [LAYER_TAB_NAMES.contextual]: 'You can choose one or several contextual layers'
   }[selectedTab];
   return (
     <div className="c-layer-modal">

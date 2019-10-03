@@ -15,19 +15,19 @@ export const getLayers = state => {
     });
   });
   return {
+    [LAYER_TAB_NAMES.unit]: unitLayers,
     [LAYER_TAB_NAMES.contextual]: Object.values(mapContextualLayers).map(layer => ({
       ...layer,
       name: layer.title,
       description: layer.tooltipText
-    })),
-    [LAYER_TAB_NAMES.unit]: unitLayers
+    }))
   };
 };
 
 export const getSelectedLayerIds = state => {
   const { selectedMapContextualLayers, selectedMapDimensions } = state.toolLayers;
   return {
-    [LAYER_TAB_NAMES.contextual]: selectedMapContextualLayers,
-    [LAYER_TAB_NAMES.unit]: compact(selectedMapDimensions)
+    [LAYER_TAB_NAMES.unit]: compact(selectedMapDimensions),
+    [LAYER_TAB_NAMES.contextual]: selectedMapContextualLayers
   };
 };
