@@ -35,7 +35,12 @@ module Api
               Api::V3::DashboardsAttribute
             ]
           },
-          {table_class: Api::V3::NodeType},
+          {
+            table_class: Api::V3::NodeType,
+            yellow_tables: [
+              Api::V3::SankeyCardLinkNodeType
+            ]
+          },
           {
             table_class: Api::V3::ContextNodeType,
             yellow_tables: [

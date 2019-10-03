@@ -30,8 +30,6 @@ ActiveAdmin.register Api::V3::SankeyCardLink, as: 'SankeyCardLinks' do
     actions
   end
 
-  filter :link_contains, as: :string, label: 'Link'
-
   show do
     attributes_table do
       row :link do |sankey_card_link|

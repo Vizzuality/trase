@@ -1,3 +1,25 @@
+# == Schema Information
+#
+# Table name: sankey_card_link_node_types
+#
+#  id                            :bigint(8)        not null, primary key
+#  context_node_type_property_id :bigint(8)
+#  sankey_card_link_id           :bigint(8)
+#  node_type_id                  :bigint(8)
+#
+# Indexes
+#
+#  index_sankey_card_link_node_types_on_node_type_id              (node_type_id)
+#  index_sankey_card_link_node_types_on_sankey_card_link_id       (sankey_card_link_id)
+#  sankey_card_link_node_types_context_node_type_property_id_idx  (context_node_type_property_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (context_node_type_property_id => context_node_type_properties.id)
+#  fk_rails_...  (node_type_id => node_types.id)
+#  fk_rails_...  (sankey_card_link_id => sankey_card_links.id)
+#
+
 module Api
   module V3
     class SankeyCardLinkNodeType < YellowTable

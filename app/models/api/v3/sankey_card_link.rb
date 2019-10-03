@@ -11,9 +11,13 @@
 #  country_id         :bigint(8)
 #  cont_attribute_id  :bigint(8)
 #  ncont_attribute_id :bigint(8)
+#  start_year         :integer          not null
+#  end_year           :integer          not null
+#  biome_id           :bigint(8)
 #
 # Indexes
 #
+#  index_sankey_card_links_on_biome_id            (biome_id)
 #  index_sankey_card_links_on_commodity_id        (commodity_id)
 #  index_sankey_card_links_on_cont_attribute_id   (cont_attribute_id)
 #  index_sankey_card_links_on_country_id          (country_id)
@@ -21,6 +25,7 @@
 #
 # Foreign Keys
 #
+#  fk_rails_...  (biome_id => nodes.id)
 #  fk_rails_...  (commodity_id => commodities.id)
 #  fk_rails_...  (cont_attribute_id => attributes.id)
 #  fk_rails_...  (country_id => countries.id)
@@ -44,18 +49,6 @@ module Api
         'selectedBiomeFilterName' => :selected_biome_filter_name
       }.freeze
 
-      scope :link_contains, ->(link) {
-        where("host LIKE '%#{link}%' OR
-               query_params->>'#{link}' IS NOT NULL OR
-               commodity_id = '%#{link}%' OR
-               country_id = '%#{link}%' OR
-               cont_attribute_id = '%#{link}%' OR
-               ncont_attribute_id = '%#{link}%' OR
-               query_params->>'nodes_ids' LIKE '%#{link}%' OR
-               query_params->>'start_year' LIKE '%#{link}%' OR
-               query_params->>'end_year' LIKE '%#{link}%'")
-      }
-
       belongs_to :commodity
       belongs_to :country
       belongs_to :cont_attribute,
@@ -67,7 +60,8 @@ module Api
                  class_name: 'Api::V3::Readonly::Attribute',
                  foreign_key: 'ncont_attribute_id',
                  inverse_of: :ncont_attribute_sankey_card_links,
-                 dependent: :destroy
+                 dependent: :destroy,
+                 optional: true
       belongs_to :biome,
                  class_name: 'Api::V3::Node',
                  foreign_key: 'biome_id',
@@ -83,26 +77,17 @@ module Api
                through: :sankey_card_link_node_types
 
       validates :host, presence: true
-      validates :query_params, presence: true
       validates :title, presence: true
-
-      validate :check_valid_query_params
 
       before_validation :extract_link_params
       before_validation :extract_relations
       after_commit :add_nodes_relations
       after_commit :add_node_types_relations
 
-      def self.ransackable_scopes(*)
-        [:link_contains]
-      end
-
       def self.blue_foreign_keys
         [
           {name: :commodity_id, table_class: Api::V3::Commodity},
           {name: :country_id, table_class: Api::V3::Country},
-          {name: :cont_attribute_id, table_class: Api::V3::Readonly::Attribute},
-          {name: :ncont_attribute_id, table_class: Api::V3::Readonly::Attribute},
           {name: :biome_id, table_class: Api::V3::Node}
         ]
       end
@@ -117,16 +102,14 @@ module Api
 
       def extract_link_params
         return unless link_param
+
         uri = URI.parse link_param
         self.host = uri.host
-
-        return unless uri.query
-        self.query_params = Rack::Utils.parse_nested_query uri.query
+        self.query_params =
+          uri.query ? Rack::Utils.parse_nested_query(uri.query) : {}
       end
 
       def extract_relations
-        return unless query_params
-
         query_params =
           VALID_QUERY_PARAMS.except('selectedColumnsIds', 'selectedNodesIds')
         query_params.each do |uri_query_param, query_param|
@@ -187,18 +170,20 @@ module Api
       end
 
       def add_nodes_relations
-        return unless query_params['selectedNodesIds']
+        if query_params['selectedNodesIds']
+          nodes_ids = query_params['selectedNodesIds']
+          nodes_ids.each do |node_id|
+            Api::V3::SankeyCardLinkNode.find_or_create_by!(
+              node_id: node_id,
+              sankey_card_link_id: id
+            )
+          end
 
-        nodes_ids = query_params['selectedNodesIds']
-        nodes_ids.each do |node_id|
-          Api::V3::SankeyCardLinkNode.find_or_create_by!(
-            node_id: node_id,
-            sankey_card_link_id: id
-          )
+          # Remove old sankey card link nodes relations
+          remove_old_sankey_card_link_nodes_relations(nodes_ids)
+        else
+          remove_old_sankey_card_link_nodes_relations([])
         end
-
-        # Remove old sankey card link nodes relations
-        remove_old_sankey_card_link_nodes_relations(nodes_ids)
       end
 
       def remove_old_sankey_card_link_nodes_relations(nodes_ids)
@@ -215,26 +200,29 @@ module Api
       end
 
       def add_node_types_relations
-        return unless query_params['selectedColumnsIds']
+        if query_params['selectedColumnsIds']
+          context_id = Api::V3::Context.
+            find_by(commodity_id: commodity_id, country_id: country_id)
+          columns = query_params['selectedColumnsIds'].split('-')
+          columns.each do |column|
+            column_group, node_type_id = column.split('_')
+            context_node_type_property_id = get_context_node_type_property_id(
+              context_id, node_type_id, column_group
+            )
 
-        context_id = Api::V3::Context.
-          find_by(commodity_id: commodity_id, country_id: country_id)
-        columns = query_params['selectedColumnsIds'].split('-')
-        columns.each do |column|
-          column_group, node_type_id = column.split('_')
-          context_node_type_property_id = get_context_node_type_property_id(
-            context_id, node_type_id, column_group
-          )
+            Api::V3::SankeyCardLinkNodeType.find_or_create_by!(
+              node_type_id: node_type_id,
+              sankey_card_link_id: id,
+              context_node_type_property_id: context_node_type_property_id
+            )
+          end
 
-          Api::V3::SankeyCardLinkNodeType.find_or_create_by!(
-            node_type_id: node_type_id,
-            sankey_card_link_id: id,
-            context_node_type_property_id: context_node_type_property_id
-          )
+          # Remove old sankey card link nodes relations
+          remove_old_sankey_card_link_node_types_relations(columns)
+        else
+          # Remove old sankey card link nodes relations
+          remove_old_sankey_card_link_node_types_relations([])
         end
-
-        # Remove old sankey card link nodes relations
-        remove_old_sankey_card_link_node_types_relations(columns)
       end
 
       def get_context_node_type_property_id(context_id, node_type_id, column_group)
@@ -261,13 +249,6 @@ module Api
             where(sankey_card_link_id: id).
             destroy_all
         end
-      end
-
-      def check_valid_query_params
-        # Check if we are indicating only permitted params
-        return if ((query_params || {}).keys - VALID_QUERY_PARAMS.keys).none?
-
-        errors.add(:link_param, 'includes invalid parameters')
       end
     end
   end

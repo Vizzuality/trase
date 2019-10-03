@@ -19,26 +19,12 @@ RSpec.describe Api::V3::SankeyCardLink, type: :model do
     let(:sankey_card_link_without_host) {
       FactoryBot.build(:api_v3_sankey_card_link, host: nil)
     }
-    let(:sankey_card_link_without_query_params) {
-      FactoryBot.build(:api_v3_sankey_card_link, query_params: nil, link_param: 'http://test.com')
-    }
     let(:sankey_card_link_without_title) {
       FactoryBot.build(:api_v3_sankey_card_link, title: nil)
-    }
-    let(:sankey_card_link_with_invalid_query_params) {
-      FactoryBot.build(:api_v3_sankey_card_link, link_param: 'http://test.com?one=1')
     }
 
     it 'fails when host blank' do
       expect(sankey_card_link_without_host).to have(1).errors_on(:host)
-    end
-
-    it 'fails when query_params blank' do
-      expect(sankey_card_link_without_query_params).to have(1).errors_on(:query_params)
-    end
-
-    it 'fails when query_params include invalid parameters' do
-      expect(sankey_card_link_with_invalid_query_params).to have(1).errors_on(:link_param)
     end
 
     it 'fails when title blank' do
