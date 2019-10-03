@@ -5986,7 +5986,8 @@ CREATE TABLE public.sankey_card_links (
     ncont_attribute_id bigint,
     start_year integer NOT NULL,
     end_year integer NOT NULL,
-    biome_id bigint
+    biome_id bigint,
+    level integer NOT NULL
 );
 
 
@@ -9642,4 +9643,5 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190924075531'),
 ('20190924102948'),
 ('20191002200900'),
-('20191003080052');
+('20191003080052'),
+('20191003152614');
