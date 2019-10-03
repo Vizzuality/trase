@@ -23,7 +23,7 @@ export const getLayers = state => {
   };
 };
 
-export const getSelectedLayers = state => {
+export const getSelectedLayerIds = state => {
   const { selectedMapContextualLayers, selectedMapDimensions } = state.toolLayers;
   return {
     [LAYER_TAB_NAMES.contextual]: selectedMapContextualLayers,

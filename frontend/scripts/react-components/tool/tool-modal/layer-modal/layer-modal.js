@@ -1,22 +1,24 @@
 import { connect } from 'react-redux';
 import LayerModal from 'react-components/tool/tool-modal/layer-modal/layer-modal.component';
-import { selectContextualLayers, toggleMapDimension } from 'react-components/tool/tool.actions';
-
-// import { loadTooltip } from 'actions/app.actions';
+import {
+  selectContextualLayers,
+  selectUnitLayers,
+  setActiveModal
+} from 'react-components/tool/tool.actions';
 import {
   getLayers,
-  getSelectedLayers
+  getSelectedLayerIds
 } from 'react-components/tool/tool-modal/layer-modal/layer-modal.selectors';
-import castArray from 'lodash/castArray';
 
 const mapStateToProps = state => ({
   layers: getLayers(state),
-  selectedItems: getSelectedLayers(state)
+  selectedItemIds: getSelectedLayerIds(state)
 });
 
 const mapDispatchToProps = {
-  onChangeContexts: layers => selectContextualLayers(castArray(layers)),
-  onToggleUnit: layer => toggleMapDimension(layer.uid)
+  selectUnitLayers,
+  selectContextualLayers,
+  setActiveModal
 };
 
 export default connect(

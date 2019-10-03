@@ -8,7 +8,8 @@ import {
   TOGGLE_MAP_DIMENSION,
   CHANGE_LAYOUT,
   SET_SANKEY_SIZE,
-  SET_ACTIVE_MODAL
+  SET_ACTIVE_MODAL,
+  SELECT_UNIT_LAYERS
 } from 'react-components/tool/tool.actions';
 import {
   TOOL_LAYERS__SET_LINKED_GEOIDS,
@@ -117,6 +118,11 @@ const toolLayersReducer = {
         // dimension was found: remove it from selection
         draft.selectedMapDimensions[uidIndex] = null;
       }
+    });
+  },
+  [SELECT_UNIT_LAYERS](state, action) {
+    return immer(state, draft => {
+      draft.selectedMapDimensions = action.payload.uids;
     });
   },
   [SELECT_CONTEXTUAL_LAYERS](state, action) {

@@ -1,11 +1,31 @@
 @import 'styles/settings';
 
-.c-layer-modal {
-  width: 750px;
-  padding: 15px 5px;
+$footer-height: 86px;
 
-  .modal-title,
-  .info-message {
-    margin-bottom: 15px;
+.c-layer-modal {
+  .layer-modal-content {
+    width: 750px;
+    padding: 15px 5px;
+    padding-bottom: $footer-height + 20px;
+
+    .modal-title,
+    .info-message {
+      margin-bottom: 15px;
+    }
+  }
+
+  .modal-footer {
+    background-color: $background-white;
+    padding: 20px 0 20px;
+    border-top: 1px solid $medium-gray;
+    position: absolute;
+    bottom: 0;
+    height: $footer-height;
+    width: 100%;
+
+    .save-button {
+      margin: 0 auto;
+      display: block;
+    }
   }
 }
