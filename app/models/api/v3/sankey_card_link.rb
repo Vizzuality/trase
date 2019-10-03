@@ -37,6 +37,7 @@ module Api
     class SankeyCardLink < YellowTable
       attr_accessor :link_param
 
+      MAX_PER_LEVEL = 4
       VALID_QUERY_PARAMS = {
         'selectedCountryId' => :selected_country_id,
         'selectedCommodityId' => :selected_commodity_id,
@@ -78,6 +79,9 @@ module Api
 
       validates :host, presence: true
       validates :title, presence: true
+      validates :level, presence: true, inclusion: {in: 1..3}
+
+      validate :validate_max_links_per_level
 
       before_validation :extract_link_params
       before_validation :extract_relations
@@ -156,8 +160,7 @@ module Api
         if years.size > 1
           self.start_year, self.end_year = years
         else
-          self.start_year = years.first
-          self.end_year = years.first
+          self.start_year = self.end_year = years.first
         end
       end
 
@@ -249,6 +252,33 @@ module Api
             where(sankey_card_link_id: id).
             destroy_all
         end
+      end
+
+      def validate_max_links_per_level
+        return unless level
+
+        [1, 2, 3].each do |n|
+          next unless send("level#{n}_max_sankey_card_links?")
+
+          message = "cannot be more than #{MAX_PER_LEVEL} sankey card links "\
+                    "for level #{n}"
+          errors.add(:level, message)
+        end
+      end
+
+      def level1_max_sankey_card_links?
+        Api::V3::SankeyCardLink.where(level: 1).size >= MAX_PER_LEVEL
+      end
+
+      def level2_max_sankey_card_links?
+        Api::V3::SankeyCardLink.where(commodity_id: commodity_id,
+                                      level: 2).size >= MAX_PER_LEVEL
+      end
+
+      def level3_max_sankey_card_links?
+        Api::V3::SankeyCardLink.where(commodity_id: commodity_id,
+                                      country_id: country_id,
+                                      level: 3).size >= MAX_PER_LEVEL
       end
     end
   end
