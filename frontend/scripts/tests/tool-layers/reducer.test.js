@@ -9,6 +9,7 @@ import {
   TOGGLE_MAP_DIMENSION,
   SET_SANKEY_SIZE,
   SET_ACTIVE_MODAL,
+  SELECT_UNIT_LAYERS,
   saveMapView,
   selectContextualLayers
 } from 'react-components/tool/tool.actions';
@@ -37,6 +38,18 @@ test(SET_ACTIVE_MODAL, () => {
   expect(newState).toEqual({
     ...initialState,
     activeModal: 'openedModal'
+  });
+});
+
+test(SELECT_UNIT_LAYERS, () => {
+  const action = {
+    type: SELECT_UNIT_LAYERS,
+    payload: { uids: ['some_uid', 'another_uid'] }
+  };
+  const newState = reducer(initialState, action);
+  expect(newState).toEqual({
+    ...initialState,
+    selectedMapDimensions: ['some_uid', 'another_uid']
   });
 });
 

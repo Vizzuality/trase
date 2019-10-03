@@ -82,7 +82,7 @@ function Timeline(props) {
         tabs={tabs}
         margin={null}
         onSelectTab={item => dispatch(item)}
-        selectedTab={state.range}
+        selectedTab={state.range ? state.range : null}
         getTabId={t => t.payload}
         itemTabRenderer={t => t.label}
       />
