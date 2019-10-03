@@ -21,11 +21,11 @@ module Api
   module V3
     class SankeyCardLinkNode < YellowTable
       belongs_to :sankey_card_link,
-        class_name: 'Api::V3::SankeyCardLink',
-        inverse_of: :sankey_card_link_nodes
+                 class_name: 'Api::V3::SankeyCardLink',
+                 inverse_of: :sankey_card_link_nodes
       belongs_to :node,
-        class_name: 'Api::V3::Node',
-        inverse_of: :sankey_card_link_nodes
+                 class_name: 'Api::V3::Node',
+                 inverse_of: :sankey_card_link_nodes
 
       validates :sankey_card_link_id, uniqueness: {scope: :node_id}
     end

@@ -39,6 +39,7 @@ module Api
 
       has_many :nodes_stats
 
+      has_many :sankey_card_links
       has_many :sankey_card_link_nodes
       has_many :sankey_card_links, through: :sankey_card_link_nodes
 

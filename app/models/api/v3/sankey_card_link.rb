@@ -32,22 +32,17 @@ module Api
     class SankeyCardLink < YellowTable
       attr_accessor :link_param
 
-      VALID_QUERY_PARAMS = %w[
-        commodity_id
-        country_id
-        nodes_ids
-        cont_attribute_id
-        ncont_attribute_id
-        start_year
-        end_year
-      ]
-
-      REQUIRED_QUERY_PARAMS = %w[
-        commodity_id
-        country_id
-        cont_attribute_id
-        ncont_attribute_id
-      ]
+      VALID_QUERY_PARAMS = {
+        'selectedCountryId' => :selected_country_id,
+        'selectedCommodityId' => :selected_commodity_id,
+        'selectedContextId' => :selected_context_id,
+        'selectedResizeBy' => :selected_resize_by,
+        'selectedRecolorBy' => :selected_recolor_by,
+        'selectedYears' => :selected_years,
+        'selectedColumnsIds' => :selected_columns_ids,
+        'selectedNodesIds' => :selected_nodes_ids,
+        'selectedBiomeFilterName' => :selected_biome_filter_name
+      }.freeze
 
       scope :link_contains, ->(link) {
         where("host LIKE '%#{link}%' OR
@@ -58,26 +53,34 @@ module Api
                ncont_attribute_id = '%#{link}%' OR
                query_params->>'nodes_ids' LIKE '%#{link}%' OR
                query_params->>'start_year' LIKE '%#{link}%' OR
-               query_params->>'end_year' LIKE '%#{link}%'"
-        )
+               query_params->>'end_year' LIKE '%#{link}%'")
       }
 
       belongs_to :commodity
       belongs_to :country
       belongs_to :cont_attribute,
-        class_name: 'Api::V3::Readonly::Attribute',
-        foreign_key: 'cont_attribute_id',
-        inverse_of: :cont_attribute_sankey_card_links,
-        dependent: :destroy
+                 class_name: 'Api::V3::Readonly::Attribute',
+                 foreign_key: 'cont_attribute_id',
+                 inverse_of: :cont_attribute_sankey_card_links,
+                 dependent: :destroy
       belongs_to :ncont_attribute,
-        class_name: 'Api::V3::Readonly::Attribute',
-        foreign_key: 'ncont_attribute_id',
-        inverse_of: :ncont_attribute_sankey_card_links,
-        dependent: :destroy
+                 class_name: 'Api::V3::Readonly::Attribute',
+                 foreign_key: 'ncont_attribute_id',
+                 inverse_of: :ncont_attribute_sankey_card_links,
+                 dependent: :destroy
+      belongs_to :biome,
+                 class_name: 'Api::V3::Node',
+                 foreign_key: 'biome_id',
+                 inverse_of: :sankey_card_links,
+                 optional: true
       has_many :sankey_card_link_nodes
       has_many :nodes,
-        class_name: 'Api::V3::SankeyCardLinkNode',
-        through: :sankey_card_link_nodes
+               class_name: 'Api::V3::SankeyCardLinkNode',
+               through: :sankey_card_link_nodes
+      has_many :sankey_card_link_node_types
+      has_many :node_types,
+               class_name: 'Api::V3::NodeType',
+               through: :sankey_card_link_node_types
 
       validates :host, presence: true
       validates :query_params, presence: true
@@ -86,17 +89,12 @@ module Api
       validate :check_valid_query_params
 
       before_validation :extract_link_params
-      before_validation :extract_required_params
+      before_validation :extract_relations
       after_commit :add_nodes_relations
-
-      def link
-        return '' unless self.host && self.query_params
-
-        "http://#{self.host}?#{self.query_params&.to_query}"
-      end
+      after_commit :add_node_types_relations
 
       def self.ransackable_scopes(*)
-        %i(link_contains)
+        [:link_contains]
       end
 
       def self.blue_foreign_keys
@@ -104,8 +102,15 @@ module Api
           {name: :commodity_id, table_class: Api::V3::Commodity},
           {name: :country_id, table_class: Api::V3::Country},
           {name: :cont_attribute_id, table_class: Api::V3::Readonly::Attribute},
-          {name: :ncont_attribute_id, table_class: Api::V3::Readonly::Attribute}
+          {name: :ncont_attribute_id, table_class: Api::V3::Readonly::Attribute},
+          {name: :biome_id, table_class: Api::V3::Node}
         ]
+      end
+
+      def link
+        return '' unless host && query_params
+
+        "http://#{host}?#{query_params&.to_query}"
       end
 
       private
@@ -116,47 +121,153 @@ module Api
         self.host = uri.host
 
         return unless uri.query
-        ary = URI.decode_www_form(uri.query).to_h
-        self.query_params = ary
+        self.query_params = Rack::Utils.parse_nested_query uri.query
       end
 
-      def extract_required_params
-        return unless self.query_params
+      def extract_relations
+        return unless query_params
 
-        REQUIRED_QUERY_PARAMS.each do |required_parameter|
-          self.send("#{required_parameter}=", self.query_params[required_parameter])
+        query_params =
+          VALID_QUERY_PARAMS.except('selectedColumnsIds', 'selectedNodesIds')
+        query_params.each do |uri_query_param, query_param|
+          send("extract_#{query_param}") if query_params[uri_query_param]
         end
       end
 
+      def extract_selected_country_id
+        self.country_id =
+          query_params['selectedCountryId'] ||
+          Api::V3::Country.where(name: 'BRAZIL').first&.id
+      end
+
+      def extract_selected_commodity_id
+        self.commodity_id =
+          query_params['selectedCommodityId'] ||
+          Api::V3::Commodity.where(name: 'SOY').first&.id
+      end
+
+      def extract_selected_context_id
+        return unless query_params['selectedContextId']
+
+        context = Api::V3::Context.find(query_params['selectedContextId'])
+        self.country_id = context&.country_id
+        self.commodity_id = context&.commodity_id
+      end
+
+      def extract_selected_resize_by
+        self.cont_attribute_id =
+          query_params['selectedResizeBy'] ||
+          Api::V3::Readonly::Attribute.where(
+            original_type: 'Quant', name: 'Volume'
+          ).first&.id
+      end
+
+      def extract_selected_recolor_by
+        return unless query_params['selectedRecolorBy']
+
+        self.ncont_attribute_id = query_params['selectedRecolorBy']
+      end
+
+      def extract_selected_years
+        years = query_params['selectedYears'] || [2017, 2017]
+        if years.size > 1
+          self.start_year, self.end_year = years
+        else
+          self.start_year = years.first
+          self.end_year = years.first
+        end
+      end
+
+      def extract_selected_biome_filter_name
+        return unless query_params['selectedBiomeFilterName']
+
+        self.biome = Api::V3::Node.find_by(
+          name: query_params['selectedBiomeFilterName']
+        )
+      end
+
       def add_nodes_relations
-        nodes_ids = self.query_params['nodes_ids'].split(',')
+        return unless query_params['selectedNodesIds']
+
+        nodes_ids = query_params['selectedNodesIds']
         nodes_ids.each do |node_id|
           Api::V3::SankeyCardLinkNode.find_or_create_by!(
             node_id: node_id,
-            sankey_card_link_id: self.id
+            sankey_card_link_id: id
           )
         end
 
         # Remove old sankey card link nodes relations
-        Api::V3::SankeyCardLinkNode.
-          where(sankey_card_link_id: self.id).
-          where.not(node_id: nodes_ids).
-          destroy_all
+        remove_old_sankey_card_link_nodes_relations(nodes_ids)
+      end
+
+      def remove_old_sankey_card_link_nodes_relations(nodes_ids)
+        if nodes_ids.any?
+          Api::V3::SankeyCardLinkNode.
+            where(sankey_card_link_id: id).
+            where.not(node_id: nodes_ids).
+            destroy_all
+        else
+          Api::V3::SankeyCardLinkNode.
+            where(sankey_card_link_id: id).
+            destroy_all
+        end
+      end
+
+      def add_node_types_relations
+        return unless query_params['selectedColumnsIds']
+
+        context_id = Api::V3::Context.
+          find_by(commodity_id: commodity_id, country_id: country_id)
+        columns = query_params['selectedColumnsIds'].split('-')
+        columns.each do |column|
+          column_group, node_type_id = column.split('_')
+          context_node_type_property_id = get_context_node_type_property_id(
+            context_id, node_type_id, column_group
+          )
+
+          Api::V3::SankeyCardLinkNodeType.find_or_create_by!(
+            node_type_id: node_type_id,
+            sankey_card_link_id: id,
+            context_node_type_property_id: context_node_type_property_id
+          )
+        end
+
+        # Remove old sankey card link nodes relations
+        remove_old_sankey_card_link_node_types_relations(columns)
+      end
+
+      def get_context_node_type_property_id(context_id, node_type_id, column_group)
+        Api::V3::NodeType.
+          select('context_node_type_properties.id AS context_node_type_property_id').
+          joins('JOIN context_node_types ON context_node_types.node_type_id = node_types.id').
+          joins('JOIN context_node_type_properties ON context_node_type_properties.context_node_type_id = context_node_types.id').
+          find_by(
+            'node_types.id': node_type_id,
+            'context_node_types.context_id': context_id,
+            'context_node_type_properties.column_group': column_group
+          )&.context_node_type_property_id
+      end
+
+      def remove_old_sankey_card_link_node_types_relations(node_types_ids)
+        node_types_ids = node_types_ids.map { |c| c.split('_') }.map(&:last)
+        if node_types_ids.any?
+          Api::V3::SankeyCardLinkNodeType.
+            where(sankey_card_link_id: id).
+            where.not(node_type_id: node_types_ids).
+            destroy_all
+        else
+          Api::V3::SankeyCardLinkNodeType.
+            where(sankey_card_link_id: id).
+            destroy_all
+        end
       end
 
       def check_valid_query_params
         # Check if we are indicating only permitted params
-        if ((query_params || {}).keys - VALID_QUERY_PARAMS).any?
-          errors.add(:link_param, 'includes invalid parameters')
-        end
+        return if ((query_params || {}).keys - VALID_QUERY_PARAMS.keys).none?
 
-        # Check if we are including all obligatory params
-        if (REQUIRED_QUERY_PARAMS - (query_params || {}).keys).any?
-          errors.add(
-            :link_param,
-            'must specify commodity, country, cont_attribute and ncont_attribute'
-          )
-        end
+        errors.add(:link_param, 'includes invalid parameters')
       end
     end
   end
