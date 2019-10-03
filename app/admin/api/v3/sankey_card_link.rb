@@ -1,7 +1,7 @@
 ActiveAdmin.register Api::V3::SankeyCardLink, as: 'SankeyCardLinks' do
   menu parent: 'Sankey & Map'
 
-  permit_params :link_param, :title, :subtitle
+  permit_params :link_param, :title, :subtitle, :level
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -17,6 +17,7 @@ ActiveAdmin.register Api::V3::SankeyCardLink, as: 'SankeyCardLinks' do
       input :link_param, input_html: {value: f.object.link}, as: :string, required: true
       input :title, as: :string, required: true
       input :subtitle, as: :string
+      input :level, as: :select, required: true, collection: [[1, 1], [2, 2], [3, 3]]
     end
     f.actions
   end
@@ -27,6 +28,7 @@ ActiveAdmin.register Api::V3::SankeyCardLink, as: 'SankeyCardLinks' do
     column('Link', sortable: true) do |sankey_card_link|
       link_to(sankey_card_link.link, sankey_card_link.link)
     end
+    column :level
     actions
   end
 
@@ -37,6 +39,7 @@ ActiveAdmin.register Api::V3::SankeyCardLink, as: 'SankeyCardLinks' do
       end
       row :title
       row :subtitle
+      row :level
       row :created_at
       row :updated_at
     end
