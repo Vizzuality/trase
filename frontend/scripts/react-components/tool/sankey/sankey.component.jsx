@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import toLower from 'lodash/toLower';
 import formatValue from 'utils/formatValue';
-import capitalize from 'lodash/capitalize';
-import startCase from 'lodash/startCase';
 import getNodeMeta from 'reducers/helpers/getNodeMeta';
 import Heading from 'react-components/shared/heading';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import { TOOL_LAYOUT } from 'constants';
 
+import RecolorByLegend from './recolor-by-legend';
 import SankeyColumn from './sankey-column.component';
 import NodeMenu from './node-menu.component';
 import SankeyLink from './sankey-link.component';
@@ -182,7 +181,7 @@ function Sankey(props) {
       if (link.recolorBy === null) {
         return classPath;
       }
-      let recolorBy = link.recolorBy;
+      let recolorBy = link.recolorBySlug || link.recolorBy;
       if (selectedRecolorBy.divisor) {
         recolorBy = Math.floor(link.recolorBy / selectedRecolorBy.divisor);
       }
@@ -213,21 +212,18 @@ function Sankey(props) {
       ]
     };
     if (selectedRecolorBy) {
-      let recolorValue = `${link.recolorBy}/${selectedRecolorBy.maxValue}`;
+      let recolorValue = null;
+      let recolorChildren = null;
       if (link.recolorBy === null) {
         recolorValue = 'Unknown';
-      } else if (selectedRecolorBy.type !== 'ind') {
-        recolorValue = capitalize(startCase(link.recolorBy));
-      } else if (selectedRecolorBy.legendType === 'percentual') {
-        // percentual values are always a range, not the raw value.
-        // The value coming from the model is already floored
-        // to the start of the bucket (splitLinksByColumn)
-        const nextValue = link.recolorBy + selectedRecolorBy.divisor;
-        recolorValue = `${link.recolorBy}–${nextValue}%`;
+      } else {
+        recolorChildren = <RecolorByLegend recolorById={link.recolorBy} />;
       }
+
       tooltip.items.push({
         title: selectedRecolorBy.label,
-        value: recolorValue
+        value: recolorValue,
+        children: recolorChildren
       });
     }
 

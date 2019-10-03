@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import Text from 'react-components/shared/text';
 
 import './units-tooltip.scss';
 
@@ -42,14 +43,25 @@ function UnitsTooltip(props) {
         visibility
       }}
     >
-      <div className="units-tooltip-text">{text}</div>
+      <Text variant="mono" transform="uppercase" className="units-tooltip-text">
+        {text}
+      </Text>
       {items.map(item => (
         <div key={item.title} className="units-tooltip-value">
-          <div className="units-tooltip-title">{item.title}</div>
-          <div className="units-tooltip-data">
-            {item.value}
-            {item.unit && <span className="units-tooltip-value-unit"> {item.unit}</span>}
-          </div>
+          <Text variant="mono" size="sm" color="grey-faded" transform="uppercase">
+            {item.title}
+          </Text>
+          {item.value && (
+            <Text variant="mono" size="lg" className="units-tooltip-data">
+              {item.value}
+              {item.unit && (
+                <Text variant="mono" as="span" size="md" color="grey-faded">
+                  {item.unit}
+                </Text>
+              )}
+            </Text>
+          )}
+          {!item.value && item.children}
         </div>
       ))}
     </div>
