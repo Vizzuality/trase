@@ -80,7 +80,7 @@ export const routes = {
       className: '-light',
       printable: true
     },
-    thunk: loadPageData()
+    thunk: loadPageData(loadToolInitialData)
   },
   dashboardRoot: {
     path: '/dashboards',
@@ -92,7 +92,7 @@ export const routes = {
     path: '/dashboards/:dashboardId',
     page: 'dashboard-element',
     title: getPageTitle,
-    thunk: loadPageData(loadInitialDashboardData)
+    thunk: loadPageData(loadToolInitialData, loadInitialDashboardData)
   },
   data: {
     path: '/data',

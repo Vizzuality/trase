@@ -28,18 +28,18 @@ export const APP__TRANSIFEX_LANGUAGES_LOADED = 'APP__TRANSIFEX_LANGUAGES_LOADED'
 export const APP__SET_TOP_DESTINATION_COUNTRIES = 'APP__SET_TOP_DESTINATION_COUNTRIES';
 export const APP__SET_TOP_DESTINATION_COUNTRIES_LOADING =
   'APP__SET_TOP_DESTINATION_COUNTRIES_LOADING';
-export const TOOL_LINKS__GET_COLUMNS = 'TOOL_LINKS__GET_COLUMNS';
-export const TOOL_LINKS__SET_COLUMNS = 'TOOL_LINKS__SET_COLUMNS';
+export const APP__GET_COLUMNS = 'APP__GET_COLUMNS';
+export const APP__SET_COLUMNS = 'APP__SET_COLUMNS';
 
 export function getToolColumns() {
   return {
-    type: TOOL_LINKS__GET_COLUMNS
+    type: APP__GET_COLUMNS
   };
 }
 
 export function setToolColumns(columns) {
   return {
-    type: TOOL_LINKS__SET_COLUMNS,
+    type: APP__SET_COLUMNS,
     payload: { columns }
   };
 }

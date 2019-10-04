@@ -5,7 +5,7 @@ import {
   TOOL_LINKS__SELECT_COLUMN,
   TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH
 } from 'react-components/tool-links/tool-links.actions';
-import { SET_CONTEXT, SET_CONTEXTS, TOOL_LINKS__GET_COLUMNS } from 'actions/app.actions';
+import { SET_CONTEXT, SET_CONTEXTS, APP__GET_COLUMNS } from 'actions/app.actions';
 import {
   SELECT_YEARS,
   loadMapChoropleth,
@@ -47,7 +47,7 @@ function* fetchMapDimensions() {
   yield takeLatest(
     [
       SET_CONTEXTS,
-      TOOL_LINKS__GET_COLUMNS,
+      APP__GET_COLUMNS,
       SET_CONTEXT,
       SELECT_YEARS,
       TOOL_LINKS__SELECT_COLUMN,

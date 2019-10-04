@@ -1,8 +1,8 @@
 import reducer from 'reducers/app.reducer';
 import initialState from 'reducers/app.initial-state';
-import { TOOL_LINKS__SET_COLUMNS, setToolColumns } from 'actions/app.actions';
+import { APP__SET_COLUMNS, setToolColumns } from 'actions/app.actions';
 
-test(TOOL_LINKS__SET_COLUMNS, () => {
+test(APP__SET_COLUMNS, () => {
   const columns = [
     { id: 1, name: 'MUNICIPALITY' },
     { id: 2, name: 'LOGISTICS HUB' },
