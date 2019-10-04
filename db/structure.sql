@@ -5915,7 +5915,8 @@ CREATE TABLE public.sankey_card_link_node_types (
     id bigint NOT NULL,
     context_node_type_property_id bigint,
     sankey_card_link_id bigint,
-    node_type_id bigint
+    node_type_id bigint,
+    column_group integer NOT NULL
 );
 
 
@@ -9644,4 +9645,5 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190924102948'),
 ('20191002200900'),
 ('20191003080052'),
-('20191003152614');
+('20191003152614'),
+('20191004083620');
