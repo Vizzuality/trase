@@ -51,7 +51,9 @@ RSpec.describe Api::V3::SankeyCardLinks::ResponseBuilder do
         api_v3_country_of_destination_node.node_type.name
       ])
 
-      column = @builder.meta[:columns].select { |c| c[:column_group] == 1 }.first
+      column = @builder.meta[:columns].find { |c| c[:column_group] == 1 }
+      pp column
+      pp @node_type_id
       expect(column[:node_type_id]).to eq(@node_type_id)
     end
   end

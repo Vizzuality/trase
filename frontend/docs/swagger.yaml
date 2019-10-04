@@ -305,6 +305,29 @@ paths:
                   data:
                     $ref: "#/components/schemas/NodesStats"
 
+  "/sankey_card_links":
+    get:
+      summary: Data for the sankey card links
+      parameters:
+        - $ref: "#/components/parameters/country_id_query_param"
+        - $ref: "#/components/parameters/commodity_id_query_param"
+        - name: level
+          in: query
+          description: Level
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/SankeyCardLinks"
+
   /nodes/search:
     get:
       tags:
@@ -1626,6 +1649,13 @@ servers:
   - url: https://trase.earth/api/v3
 components:
   parameters:
+    country_id_query_param:
+      name: country_id
+      in: query
+      description: "Country id"
+      required: false
+      schema:
+        type: integer
     commodity_id_query_param:
       name: commodity_id
       in: query
@@ -2289,6 +2319,69 @@ components:
                             type: number
                           height:
                             type: number
+
+    SankeyCardLinks:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              host:
+                type: string
+              link:
+                type: string
+              query_params:
+                type: object
+                properties:
+                  selectedCountryId:
+                    type: integer
+                  selectedCommodityId:
+                    type: integer
+                  selectedContextId:
+                    type: integer
+                  selectedResizeBy:
+                    type: integer
+                  selectedRecolorBy:
+                    type: integer
+                  selectedYears:
+                    type: array
+                    items:
+                      type: integer
+                  selectedColumnsIds:
+                    type: string
+                  selectedNodesIds:
+                    type: array
+                    items:
+                      type: integer
+                  selectedBiomeFilterName:
+                    type: string
+        meta:
+          type: object
+          properties:
+            nodes:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  node_type:
+                    type: string
+            columns:
+              type: array
+              items:
+                type: object
+                properties:
+                  column_group:
+                    type: integer
+                  node_type_id:
+                    type: integer
+                  role:
+                    type: string
 
     Node:
       type: object

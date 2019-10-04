@@ -100,7 +100,7 @@ module Api
       def link
         return '' unless host && query_params
 
-        "http://#{host}?#{query_params&.to_query}"
+        "http://#{host}?#{query_params.to_query}"
       end
 
       private
@@ -125,29 +125,29 @@ module Api
       def extract_selected_country_id
         self.country_id =
           query_params['selectedCountryId'] ||
-          Api::V3::Country.where(name: 'BRAZIL').first&.id
+          Api::V3::Country.find_by(name: 'BRAZIL')&.id
       end
 
       def extract_selected_commodity_id
         self.commodity_id =
           query_params['selectedCommodityId'] ||
-          Api::V3::Commodity.where(name: 'SOY').first&.id
+          Api::V3::Commodity.find_by(name: 'SOY')&.id
       end
 
       def extract_selected_context_id
         return unless query_params['selectedContextId']
 
         context = Api::V3::Context.find(query_params['selectedContextId'])
-        self.country_id = context&.country_id
-        self.commodity_id = context&.commodity_id
+        self.country_id = context.country_id
+        self.commodity_id = context.commodity_id
       end
 
       def extract_selected_resize_by
         self.cont_attribute_id =
           query_params['selectedResizeBy'] ||
-          Api::V3::Readonly::Attribute.where(
+          Api::V3::Readonly::Attribute.find_by(
             original_type: 'Quant', name: 'Volume'
-          ).first&.id
+          )&.id
       end
 
       def extract_selected_recolor_by
