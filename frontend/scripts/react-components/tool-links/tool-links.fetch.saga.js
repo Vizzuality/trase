@@ -14,8 +14,8 @@ import {
   getSelectedRecolorBy,
   getSelectedBiomeFilter
 } from 'react-components/tool-links/tool-links.selectors';
+import { setToolColumns } from 'actions/app.actions';
 import {
-  setToolColumns,
   setToolLinks,
   setToolNodes,
   setNoLinksFound,

@@ -13,13 +13,15 @@ import {
   APP__SET_LOADING,
   APP__TRANSIFEX_LANGUAGES_LOADED,
   APP__SET_TOP_DESTINATION_COUNTRIES,
-  APP__SET_TOP_DESTINATION_COUNTRIES_LOADING
+  APP__SET_TOP_DESTINATION_COUNTRIES_LOADING,
+  TOOL_LINKS__SET_COLUMNS
 } from 'actions/app.actions';
 import { COUNTRIES_COORDINATES } from 'scripts/countries';
 import createReducer from 'utils/createReducer';
 import { SELECT_YEARS } from 'react-components/tool/tool.actions';
 import { TOOL_LINKS_RESET_SANKEY } from 'react-components/tool-links/tool-links.actions';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
+import immer from 'immer';
 import initialState from './app.initial-state';
 
 const appReducer = {
@@ -139,6 +141,26 @@ const appReducer = {
         topCountries: loading
       }
     };
+  },
+
+  [TOOL_LINKS__SET_COLUMNS](state, action) {
+    return immer(state, draft => {
+      const { columns } = action.payload;
+
+      // TODO the API should have the info on which file to load (if any) per column
+      const municipalitiesColumn = columns.find(column => column.name === 'MUNICIPALITY');
+      const logisticsHubColumn = columns.find(column => column.name === 'LOGISTICS HUB');
+      if (logisticsHubColumn && municipalitiesColumn) {
+        logisticsHubColumn.useGeometryFromColumnId = municipalitiesColumn.id;
+      }
+
+      draft.data.columns = {};
+      columns.forEach(column => {
+        draft.data.columns[column.id] = column;
+      });
+
+      // TODO: if any selectedNode, make those columns visible (selected)
+    });
   }
 };
 

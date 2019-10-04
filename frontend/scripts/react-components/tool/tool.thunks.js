@@ -1,5 +1,4 @@
-import { loadDisclaimer, resize } from 'actions/app.actions';
-import { getToolColumns } from 'react-components/tool-links/tool-links.actions';
+import { loadDisclaimer, resize, getToolColumns } from 'actions/app.actions';
 
 export const loadDisclaimerTool = dispatch => dispatch(loadDisclaimer());
 

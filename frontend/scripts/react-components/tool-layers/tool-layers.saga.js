@@ -1,12 +1,11 @@
 import { all, fork, takeLatest, select, put, call } from 'redux-saga/effects';
 import {
-  TOOL_LINKS__GET_COLUMNS,
   TOOL_LINKS__SET_SELECTED_NODES,
   TOOL_LINKS__CLEAR_SANKEY,
   TOOL_LINKS__SELECT_COLUMN,
   TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH
 } from 'react-components/tool-links/tool-links.actions';
-import { SET_CONTEXT, SET_CONTEXTS } from 'actions/app.actions';
+import { SET_CONTEXT, SET_CONTEXTS, TOOL_LINKS__GET_COLUMNS } from 'actions/app.actions';
 import {
   SELECT_YEARS,
   loadMapChoropleth,

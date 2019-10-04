@@ -23,7 +23,7 @@ const mapStateToProps = state => {
     selectedMapDimensions: getSelectedMapDimensionsData(state),
     selectedNodesData: getSelectedNodesData(state),
     nodeHeights: state.toolLinks.data.nodeHeights,
-    columns: state.toolLinks.data.columns,
+    columns: state.app.data.columns,
     attributes: state.toolLinks.data.nodeAttributes,
     recolorGroups: getToolRecolorGroups(state),
     selectedContextId: selectedContext ? selectedContext.id : null,

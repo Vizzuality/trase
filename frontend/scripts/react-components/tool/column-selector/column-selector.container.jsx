@@ -9,7 +9,7 @@ import { getGapBetweenColumns } from 'react-components/tool/sankey/sankey.select
 const mapStateToProps = state => ({
   sankeyColumnsWidth: state.toolLinks.sankeyColumnsWidth,
   gapBetweenColumns: getGapBetweenColumns(state),
-  columns: Object.values(state.toolLinks.data.columns || {}),
+  columns: Object.values(state.app.data.columns || {}),
   selectedColumnsIds: getSelectedColumnsIds(state),
   nodesColoredAtColumn: state.toolLinks.nodesColoredAtColumn
 });

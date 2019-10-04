@@ -3,7 +3,7 @@ import { getSelectedContext } from 'reducers/app.selectors';
 
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getToolNodes = state => state.toolLinks.data.nodes;
-const getToolColumns = state => state.toolLinks.data.columns;
+const getToolColumns = state => state.app.data.columns;
 const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getHighlightedNodeIds = state => state.toolLinks.highlightedNodeId;
 

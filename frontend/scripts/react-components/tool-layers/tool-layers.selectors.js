@@ -10,7 +10,7 @@ import {
 import { getSelectedYears, getSelectedContext } from 'reducers/app.selectors';
 
 const getToolNodes = state => state.toolLinks.data.nodes;
-const getToolColumns = state => state.toolLinks.data.columns;
+const getToolColumns = state => state.app.data.columns;
 const getToolNodeAttributes = state => state.toolLinks.data.nodeAttributes;
 const getToolMapDimensions = state => state.toolLayers.data.mapDimensions;
 const getMapContextualLayers = state => state.toolLayers.data.mapContextualLayers;

@@ -2,7 +2,6 @@ import initialState from 'react-components/tool-links/tool-links.initial-state';
 import reducer from 'react-components/tool-links/tool-links.reducer';
 import {
   TOOL_LINKS__SET_FLOWS_LOADING,
-  TOOL_LINKS__SET_COLUMNS,
   TOOL_LINKS__SET_NODES,
   TOOL_LINKS__SET_MISSING_LOCKED_NODES,
   TOOL_LINKS__SET_LINKS,
@@ -32,7 +31,6 @@ import {
   setToolFlowsLoading,
   resetSankey,
   clearSankey,
-  setToolColumns,
   setMissingLockedNodes,
   setToolLinks,
   selectColumn,
@@ -49,27 +47,6 @@ test(TOOL_LINKS__SET_FLOWS_LOADING, () => {
   expect(newState).toEqual({
     ...initialState,
     flowsLoading: true
-  });
-});
-
-test(TOOL_LINKS__SET_COLUMNS, () => {
-  const columns = [
-    { id: 1, name: 'MUNICIPALITY' },
-    { id: 2, name: 'LOGISTICS HUB' },
-    { id: 3, name: 'BIOMES' }
-  ];
-  const action = setToolColumns(columns);
-  const newState = reducer(initialState, action);
-  expect(newState).toEqual({
-    ...initialState,
-    data: {
-      ...initialState.data,
-      columns: {
-        1: columns[0],
-        2: columns[1],
-        3: columns[2]
-      }
-    }
   });
 });
 
