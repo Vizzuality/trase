@@ -124,7 +124,10 @@ module Api
             Api::V3::Readonly::Dashboards::Commodity,
             Api::V3::Readonly::Dashboards::Country,
             Api::V3::Readonly::Dashboards::Source,
+            # TODO: remove once dashboards_companies_mv retired
             Api::V3::Readonly::Dashboards::Company,
+            Api::V3::Readonly::Dashboards::Exporter,
+            Api::V3::Readonly::Dashboards::Importer,
             Api::V3::Readonly::Dashboards::Destination,
             Api::V3::Readonly::ContextAttributeProperty,
             Api::V3::Readonly::CountryAttributeProperty,

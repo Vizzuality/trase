@@ -7,13 +7,18 @@ module Api
         # @option params [Array<Integer>] commodities_ids
         # @option params [Array<Integer>] sources_ids
         # @option params [Array<Integer>] companies_ids
+        # @option params [Array<Integer>] exporters_ids
+        # @option params [Array<Integer>] importers_ids
         # @option params [Array<Integer>] destinations_ids
         # @option params [Array<Integer>] node_types_ids
         def initialize(params)
           @countries_ids = params[:countries_ids] || []
           @commodities_ids = params[:commodities_ids] || []
           @node_ids = (params[:sources_ids] || []) +
+            # TODO: remove once dashboards_companies_mv retired
             (params[:companies_ids] || []) +
+            (params[:exporters_ids] || []) +
+            (params[:importers_ids] || []) +
             (params[:destinations_ids] || [])
           @node_types_ids = params[:node_types_ids] || []
           @profile_only = params.delete(:profile_only) || false

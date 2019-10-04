@@ -1,10 +1,7 @@
-# @deprecated Use {Api::V3::Dashboards::ExportersController} or
-# {Api::V3::Dashboards::ImportersController} instead.
-# TODO: remove once dashboards_companies_mv retired
 module Api
   module V3
     module Dashboards
-      class CompaniesController < ApiController
+      class ExportersController < ApiController
         include FilterParams
         include PaginationHeaders
         include PaginatedCollection
@@ -30,7 +27,7 @@ module Api
         private
 
         def filter_klass
-          FilterCompanies
+          FilterExporters
         end
       end
     end

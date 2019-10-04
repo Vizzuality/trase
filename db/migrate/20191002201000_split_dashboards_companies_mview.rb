@@ -8,9 +8,6 @@ class SplitDashboardsCompaniesMview < ActiveRecord::Migration[5.2]
       unique: true,
       name: 'dashboards_exporters_mv_unique_idx'
     add_index :dashboards_exporters_mv,
-      :context_id,
-      name: 'dashboards_exporters_mv_context_id_idx'
-    add_index :dashboards_exporters_mv,
       :commodity_id,
       name: 'dashboards_exporters_mv_commodity_id_idx'
     add_index :dashboards_exporters_mv,
@@ -34,9 +31,6 @@ class SplitDashboardsCompaniesMview < ActiveRecord::Migration[5.2]
       [:id, :node_id, :country_id, :commodity_id],
       unique: true,
       name: 'dashboards_importers_mv_unique_idx'
-    add_index :dashboards_importers_mv,
-      :context_id,
-      name: 'dashboards_importers_mv_context_id_idx'
     add_index :dashboards_importers_mv,
       :commodity_id,
       name: 'dashboards_importers_mv_commodity_id_idx'

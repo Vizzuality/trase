@@ -26,7 +26,6 @@ WITH active_cnt AS (
     flow_nodes.flow_id,
     flow_nodes.node_id,
     nodes.node_type_id,
-    contexts.id AS context_id,
     contexts.country_id,
     contexts.commodity_id,
     TRIM(nodes.name) AS name,
@@ -51,7 +50,6 @@ SELECT
   -- fixed width first
   ffn.node_id AS id,
   ffn.node_type_id,
-  ffn.context_id,
   ffn.country_id,
   ffn.commodity_id,
   fn.node_id,
@@ -66,7 +64,6 @@ WHERE ffn.node_id <> fn.node_id
 GROUP BY (
   ffn.node_id,
   ffn.node_type_id,
-  ffn.context_id,
   ffn.country_id,
   ffn.commodity_id,
   fn.node_id,

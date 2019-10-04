@@ -72,7 +72,14 @@ Rails.application.routes.draw do
         resources :sources, only: [:index] do
           get :search, on: :collection
         end
+        # TODO: remove once dashboards_companies_mv retired
         resources :companies, only: [:index] do
+          get :search, on: :collection
+        end
+        resources :exporters, only: [:index] do
+          get :search, on: :collection
+        end
+        resources :importers, only: [:index] do
           get :search, on: :collection
         end
         resources :destinations, only: [:index] do
