@@ -6,6 +6,7 @@
 #  context_node_type_property_id :bigint(8)
 #  sankey_card_link_id           :bigint(8)
 #  node_type_id                  :bigint(8)
+#  column_group                  :integer          not null
 #
 # Indexes
 #

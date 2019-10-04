@@ -14,6 +14,7 @@
 #  start_year         :integer          not null
 #  end_year           :integer          not null
 #  biome_id           :bigint(8)
+#  level              :integer          not null
 #
 # Indexes
 #
@@ -205,7 +206,7 @@ module Api
       def add_node_types_relations
         context_id = Api::V3::Context.
           find_by(commodity_id: commodity_id, country_id: country_id)
-        columns = (query_params['selectedColumnsIds'] || []).split('-')
+        columns = (query_params['selectedColumnsIds'] || '').split('-')
         columns = Hash[*columns.map { |c| c.split('_') }.flatten]
         [0, 1, 2, 3].each do |column_group|
           node_type_id = columns[column_group] ||
