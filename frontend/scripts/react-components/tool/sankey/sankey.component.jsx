@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import toLower from 'lodash/toLower';
 import formatValue from 'utils/formatValue';
 import getNodeMeta from 'reducers/helpers/getNodeMeta';
 import Heading from 'react-components/shared/heading';
@@ -185,8 +184,8 @@ function Sankey(props) {
       if (selectedRecolorBy.divisor) {
         recolorBy = Math.floor(link.recolorBy / selectedRecolorBy.divisor);
       }
-      const legendTypeClass = toLower(selectedRecolorBy.legendType);
-      const legendColorThemeClass = toLower(selectedRecolorBy.legendColorTheme);
+      const legendTypeClass = selectedRecolorBy.legendType.toString().toLowerCase();
+      const legendColorThemeClass = selectedRecolorBy.legendColorTheme.toString().toLowerCase();
       classPath = `${classPath} -recolorby-${legendTypeClass}-${legendColorThemeClass}-${recolorBy}`;
     } else {
       classPath = `${classPath} -recolorgroup-${link.recolorGroup}`;
@@ -217,7 +216,7 @@ function Sankey(props) {
       if (link.recolorBy === null) {
         recolorValue = 'Unknown';
       } else {
-        recolorChildren = <RecolorByLegend recolorById={link.recolorBy} />;
+        recolorChildren = <RecolorByLegend value={link.recolorBy} />;
       }
 
       tooltip.items.push({

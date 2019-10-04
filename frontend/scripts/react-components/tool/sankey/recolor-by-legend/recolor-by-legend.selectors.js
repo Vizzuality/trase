@@ -2,8 +2,6 @@ import { getSelectedRecolorBy } from 'react-components/tool-links/tool-links.sel
 import { createSelector } from 'reselect';
 import kebabCase from 'lodash/kebabCase';
 
-// const getRecolorById = (state, props) => props.recolorById;
-
 const getRecolorByClassNames = (item, recolorBy) => {
   const recolorById =
     typeof item === 'number' ? item + parseInt(recolorBy.minValue, 10) : item.toLowerCase();
@@ -23,13 +21,15 @@ export const getRecolorByLegend = createSelector(
     const items = legendItems.map(legendItem => {
       const recolorByClassNames = getRecolorByClassNames(legendItem, selectedRecolorBy);
       return {
-        className: recolorByClassNames,
-        value: legendItem
+        value: legendItem,
+        className: recolorByClassNames
       };
     });
     return {
       items,
+      type: selectedRecolorBy.type,
       label: selectedRecolorBy.label,
+      divisor: selectedRecolorBy.divisor,
       minValue: selectedRecolorBy.minValue,
       maxValue: selectedRecolorBy.maxValue,
       legendType: selectedRecolorBy.legendType,
