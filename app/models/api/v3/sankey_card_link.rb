@@ -203,29 +203,35 @@ module Api
       end
 
       def add_node_types_relations
-        if query_params['selectedColumnsIds']
-          context_id = Api::V3::Context.
-            find_by(commodity_id: commodity_id, country_id: country_id)
-          columns = query_params['selectedColumnsIds'].split('-')
-          columns.each do |column|
-            column_group, node_type_id = column.split('_')
-            context_node_type_property_id = get_context_node_type_property_id(
-              context_id, node_type_id, column_group
-            )
+        context_id = Api::V3::Context.
+          find_by(commodity_id: commodity_id, country_id: country_id)
+        columns = (query_params['selectedColumnsIds'] || []).split('-')
+        columns = Hash[*columns.map { |c| c.split('_') }.flatten]
+        [0, 1, 2, 3].each do |column_group|
+          node_type_id = columns[column_group] ||
+            get_default_node_type(context_id, column_group)
 
-            Api::V3::SankeyCardLinkNodeType.find_or_create_by!(
-              node_type_id: node_type_id,
-              sankey_card_link_id: id,
-              context_node_type_property_id: context_node_type_property_id
-            )
-          end
+          context_node_type_property_id = get_context_node_type_property_id(
+            context_id, node_type_id, column_group
+          )
 
-          # Remove old sankey card link nodes relations
-          remove_old_sankey_card_link_node_types_relations(columns)
-        else
-          # Remove old sankey card link nodes relations
-          remove_old_sankey_card_link_node_types_relations([])
+          Api::V3::SankeyCardLinkNodeType.find_or_initialize_by(
+            column_group: column_group,
+            sankey_card_link_id: id,
+            context_node_type_property_id: context_node_type_property_id
+          ).update!(node_type_id: node_type_id)
         end
+      end
+
+      def get_default_node_type(context_id, column_group)
+        Api::V3::ContextNodeType.
+          select('node_type_id').
+          joins('JOIN context_node_type_properties ON context_node_type_properties.context_node_type_id = context_node_types.id').
+          find_by(
+            'context_node_types.context_id': context_id,
+            'context_node_type_properties.column_group': column_group,
+            'context_node_type_properties.is_default': true
+          )&.node_type_id
       end
 
       def get_context_node_type_property_id(context_id, node_type_id, column_group)
@@ -238,20 +244,6 @@ module Api
             'context_node_types.context_id': context_id,
             'context_node_type_properties.column_group': column_group
           )&.context_node_type_property_id
-      end
-
-      def remove_old_sankey_card_link_node_types_relations(node_types_ids)
-        node_types_ids = node_types_ids.map { |c| c.split('_') }.map(&:last)
-        if node_types_ids.any?
-          Api::V3::SankeyCardLinkNodeType.
-            where(sankey_card_link_id: id).
-            where.not(node_type_id: node_types_ids).
-            destroy_all
-        else
-          Api::V3::SankeyCardLinkNodeType.
-            where(sankey_card_link_id: id).
-            destroy_all
-        end
       end
 
       def validate_max_links_per_level

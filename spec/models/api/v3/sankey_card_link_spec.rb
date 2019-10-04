@@ -5,6 +5,7 @@ RSpec.describe Api::V3::SankeyCardLink, type: :model do
   include_context 'api v3 brazil beef nodes'
   include_context 'api v3 brazil flows quals'
   include_context 'api v3 brazil resize by attributes'
+  include_context 'api v3 brazil beef context node types'
 
   before do
     Api::V3::Readonly::Node.refresh(sync: true)
@@ -59,10 +60,9 @@ RSpec.describe Api::V3::SankeyCardLink, type: :model do
       describe '#extract_link_params' do
         it 'extract parameters from link' do
           sankey_card_link.update_attributes(
-            link_param: 'http://test.com?selectedYears%5B%5D=2009'
+            link_param: "#{sankey_card_link.link}&selectedYears%5B%5D=2009"
           )
-          expect(sankey_card_link.host).to eql 'test.com'
-          expect(sankey_card_link.query_params).to eql(
+          expect(sankey_card_link.query_params).to include(
             'selectedYears' => ['2009']
           )
         end
@@ -122,30 +122,46 @@ RSpec.describe Api::V3::SankeyCardLink, type: :model do
 
       describe '#add_node_types_relations' do
         it 'extract new node types relations' do
+          node_type_id = api_v3_brazil_beef_port_of_export_context_node_type.
+            node_type_id
           expect do
-            column_id = api_v3_brazil_beef_port_of_export_context_node_type.
-              node_type_id
             sankey_card_link.update_attributes(
               link_param: "#{sankey_card_link.link}&" \
-                          "selectedColumnsIds=1_#{column_id}"
+                          "selectedColumnsIds=1_#{node_type_id}"
             )
-          end.to change { Api::V3::SankeyCardLinkNodeType.count }.by(1)
+          end.to change { Api::V3::SankeyCardLinkNodeType.count }.by(4)
+
+          sankey_card_link_node_type = Api::V3::SankeyCardLinkNodeType.
+            find_by(sankey_card_link_id: sankey_card_link.id, column_group: 1)
+          expect(sankey_card_link_node_type.node_type_id).to eql node_type_id
         end
 
-        it 'removes old nodes relations' do
-          base_link = sankey_card_link.link
-          column_id = api_v3_brazil_beef_port_of_export_context_node_type.
-            node_type_id
-          sankey_card_link.update_attributes(
-            link_param: "#{base_link}&"\
-                        "selectedColumnsIds=1_#{column_id}"
+        it 'add default node types relations' do
+          expect do
+            sankey_card_link.save
+          end.to change { Api::V3::SankeyCardLinkNodeType.count }.by(4)
+
+          context_id = Api::V3::Context.find_by(
+            country_id: sankey_card_link.country_id,
+            commodity_id: sankey_card_link.commodity_id
           )
 
-          expect do
-            sankey_card_link.update_attributes(
-              link_param: "#{base_link}&selectedColumnsIds="
-            )
-          end.to change { Api::V3::SankeyCardLinkNodeType.count }.by(-1)
+          [0, 1, 2, 3].each do |column_group|
+            sankey_card_link_node_type = Api::V3::SankeyCardLinkNodeType.
+              find_by(sankey_card_link_id: sankey_card_link.id,
+                      column_group: column_group)
+
+            node_type_id = Api::V3::ContextNodeType.
+              select('node_type_id').
+              joins('JOIN context_node_type_properties ON context_node_type_properties.context_node_type_id = context_node_types.id').
+              find_by(
+                'context_node_types.context_id': context_id,
+                'context_node_type_properties.column_group': column_group,
+                'context_node_type_properties.is_default': true
+              )&.node_type_id
+
+            expect(sankey_card_link_node_type.node_type_id).to eql node_type_id
+          end
         end
       end
     end

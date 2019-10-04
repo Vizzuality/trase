@@ -31,6 +31,10 @@ module Api
                  class_name: 'Api::V3::NodeType',
                  inverse_of: :sankey_card_link_node_types
 
+      validates :column_group,
+                presence: true,
+                inclusion: 0..3,
+                uniqueness: {scope: :sankey_card_link_id}
       validates :sankey_card_link_id, uniqueness: {scope: :node_type_id}
     end
   end
