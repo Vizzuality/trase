@@ -6,14 +6,16 @@ $footer-height: 86px;
   .layer-modal-content {
     width: 750px;
     height: 90vh;
-    overflow: auto;
-    padding: 15px 5px;
-    padding-bottom: $footer-height + 20px;
+    padding: 15px 5px $footer-height + 20px;
 
     .modal-title,
     .info-message {
       margin-bottom: 15px;
     }
+  }
+
+  .layers-grid-list-container {
+    padding: 0 0 $footer-height + 20px;
   }
 
   .modal-footer {

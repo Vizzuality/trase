@@ -54,6 +54,9 @@ export const selectedMapContextualLayers = {
     return prop.join(',');
   },
   parse(param) {
-    return param.split(',').map(n => parseInt(n, 10));
+    return param
+      .toString()
+      .split(',')
+      .map(n => parseInt(n, 10));
   }
 };

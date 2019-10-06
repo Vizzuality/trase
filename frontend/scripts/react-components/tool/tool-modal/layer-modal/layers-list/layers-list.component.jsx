@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import GridList from 'react-components/shared/grid-list/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import { LAYER_TAB_NAMES } from 'constants';
 
-export default function LayersList({ items, currentSelection, selectedTab, changeSelection }) {
+export default function LayersList(props) {
+  const { items, currentSelection, selectedTab, changeSelection } = props;
   const COLUMN_COUNT = 3;
   const selectedItemIds = currentSelection[selectedTab];
   const idAttribute = {
@@ -25,24 +26,16 @@ export default function LayersList({ items, currentSelection, selectedTab, chang
     selectedTab === LAYER_TAB_NAMES.unit
       ? itemProps.item && !itemProps.item.isGroup && selectedItemIds?.includes(itemProps.item.uid)
       : selectedItemIds?.includes(itemProps.item.id);
-  const groupItemsNumber = items.filter(i => i.group).length;
-  const getHeight = useMemo(() => {
-    const PADDING = 20;
-    if (items.length < COLUMN_COUNT) return 100;
-    let rows = (items.length - groupItemsNumber) / COLUMN_COUNT;
-    if (groupItemsNumber) {
-      rows += groupItemsNumber;
-    }
-    return rows * 60 + PADDING;
-  }, [groupItemsNumber, items.length]);
+  const height = window.innerHeight * 0.9 - 155;
   return (
     <GridList
       items={items}
-      height={getHeight}
+      height={height}
       width={750}
       rowHeight={50}
       columnWidth={240}
       columnCount={COLUMN_COUNT}
+      outerElementType={p => <div {...p} className="layers-grid-list-container" />}
       groupBy={selectedTab === LAYER_TAB_NAMES.unit ? 'group' : undefined}
     >
       {itemProps => (

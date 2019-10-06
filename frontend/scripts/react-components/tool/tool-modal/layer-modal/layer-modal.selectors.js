@@ -1,18 +1,16 @@
 import { LAYER_TAB_NAMES } from 'constants';
-import compact from 'lodash/compact';
-import isEmpty from 'lodash/isEmpty';
 
 import { createSelector } from 'reselect';
-import { getChoroplethOptions } from 'react-components/tool-layers/tool-layers.selectors';
+import { getSelectedMapDimensionsUids } from 'react-components/tool-layers/tool-layers.selectors';
+
+const getMapContextualLayers = state => state.toolLayers.data.mapContextualLayers;
+const getMapDimensions = state => state.toolLayers.data.mapDimensions;
+const getMapDimensionGroups = state => state.toolLayers.data.mapDimensionsGroups;
+const getSelectedMapContextualLayers = state => state.toolLayers.selectedMapContextualLayers;
 
 export const getLayers = createSelector(
-  [
-    state => state.toolLayers.data.mapContextualLayers,
-    state => state.toolLayers.data.mapDimensions,
-    state => state.toolLayers.data.mapDimensionsGroups,
-    getChoroplethOptions
-  ],
-  (mapContextualLayers, mapDimensions, mapDimensionsGroups, choroplethOptions) => {
+  [getMapContextualLayers, getMapDimensions, getMapDimensionGroups],
+  (mapContextualLayers, mapDimensions, mapDimensionsGroups) => {
     const unitLayers = [];
     mapDimensionsGroups.forEach(group => {
       unitLayers.push({
@@ -25,10 +23,7 @@ export const getLayers = createSelector(
       });
     });
     return {
-      [LAYER_TAB_NAMES.unit]:
-        choroplethOptions?.choropleth && !isEmpty(choroplethOptions?.choropleth)
-          ? unitLayers
-          : null,
+      [LAYER_TAB_NAMES.unit]: unitLayers,
       [LAYER_TAB_NAMES.contextual]: Object.values(mapContextualLayers).map(layer => ({
         ...layer,
         name: layer.title,
@@ -38,10 +33,10 @@ export const getLayers = createSelector(
   }
 );
 
-export const getSelectedLayerIds = state => {
-  const { selectedMapContextualLayers, selectedMapDimensions } = state.toolLayers;
-  return {
-    [LAYER_TAB_NAMES.unit]: compact(selectedMapDimensions),
+export const getSelectedLayerIds = createSelector(
+  [getSelectedMapDimensionsUids, getSelectedMapContextualLayers],
+  (selectedMapDimensions, selectedMapContextualLayers) => ({
+    [LAYER_TAB_NAMES.unit]: selectedMapDimensions.filter(Boolean),
     [LAYER_TAB_NAMES.contextual]: selectedMapContextualLayers
-  };
-};
+  })
+);

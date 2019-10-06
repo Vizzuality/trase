@@ -85,7 +85,9 @@ function GridList(props) {
     width,
     columnWidth,
     children,
-    loading
+    loading,
+    innerElementType,
+    outerElementType
   } = props;
 
   const groupedItems = useGroupedItems(props);
@@ -105,6 +107,8 @@ function GridList(props) {
         rowCount={Math.ceil((groupedItems || items).length / columnCount)}
         columnCount={columnCount}
         onScroll={onScrollCb}
+        innerElementType={innerElementType}
+        outerElementType={outerElementType}
       >
         {({ rowIndex, columnIndex, style, data }) => {
           const item = data[rowIndex * columnCount + columnIndex];
@@ -133,6 +137,8 @@ GridList.propTypes = {
   children: PropTypes.func.isRequired,
   height: PropTypes.number.isRequired,
   rowHeight: PropTypes.number.isRequired,
+  innerElementType: PropTypes.elementType,
+  outerElementType: PropTypes.elementType,
   columnWidth: PropTypes.number.isRequired,
   columnCount: PropTypes.number.isRequired
 };
