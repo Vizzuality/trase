@@ -42,7 +42,7 @@ export const getHighlightedNodesGeoIds = createSelector(
   getNodesGeoIds
 );
 
-const getSelectedGeoColumn = createSelector(
+export const getSelectedGeoColumn = createSelector(
   [getToolColumns, getSelectedColumnsIds],
   (columns, selectedColumnsIds) =>
     columns &&

@@ -1,7 +1,10 @@
 import { LAYER_TAB_NAMES } from 'constants';
 
 import { createSelector } from 'reselect';
-import { getSelectedMapDimensionsUids } from 'react-components/tool-layers/tool-layers.selectors';
+import {
+  getSelectedMapDimensionsUids,
+  getSelectedGeoColumn
+} from 'react-components/tool-layers/tool-layers.selectors';
 
 const getMapContextualLayers = state => state.toolLayers.data.mapContextualLayers;
 const getMapDimensions = state => state.toolLayers.data.mapDimensions;
@@ -9,8 +12,8 @@ const getMapDimensionGroups = state => state.toolLayers.data.mapDimensionsGroups
 const getSelectedMapContextualLayers = state => state.toolLayers.selectedMapContextualLayers;
 
 export const getLayers = createSelector(
-  [getMapContextualLayers, getMapDimensions, getMapDimensionGroups],
-  (mapContextualLayers, mapDimensions, mapDimensionsGroups) => {
+  [getMapContextualLayers, getMapDimensions, getMapDimensionGroups, getSelectedGeoColumn],
+  (mapContextualLayers, mapDimensions, mapDimensionsGroups, selectedGeoColumn) => {
     const unitLayers = [];
     mapDimensionsGroups.forEach(group => {
       unitLayers.push({
@@ -23,7 +26,7 @@ export const getLayers = createSelector(
       });
     });
     return {
-      [LAYER_TAB_NAMES.unit]: unitLayers,
+      [LAYER_TAB_NAMES.unit]: selectedGeoColumn?.isChoroplethDisabled === false && unitLayers,
       [LAYER_TAB_NAMES.contextual]: Object.values(mapContextualLayers).map(layer => ({
         ...layer,
         name: layer.title,
