@@ -75,14 +75,13 @@ function Timeline(props) {
   ];
 
   const showPlaceholder = state.start && state.end && state.range;
-
   return (
     <div className="c-timeline">
       <Tabs
         tabs={tabs}
         margin={null}
         onSelectTab={item => dispatch(item)}
-        selectedTab={state.range ? state.range : null}
+        selectedTab={state.range}
         getTabId={t => t.payload}
         itemTabRenderer={t => t.label}
       />
