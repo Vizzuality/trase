@@ -34,6 +34,7 @@ function* fetchToolColumns() {
         return contextId ? contexts.find(c => c.id === contextId) : null;
       }
       case 'dashboardElement': {
+        if (!location.query) return null;
         const { selectedCountryId, selectedCommodityId } = location.query;
         if (!selectedCountryId || !selectedCommodityId) return null;
         return contexts.find(
