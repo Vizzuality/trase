@@ -133,10 +133,10 @@ const FiltersNav = props => {
   const renderFilter = filter => {
     const Component = FILTERS[filter.type];
     if (ENABLE_REDESIGN_PAGES && filter.props.id === 'toolRecolorBy') {
-      return <ToolModalButton modalId="indicator" />;
+      return <ToolModalButton modalId="indicator" key="indicator-toggle" />;
     }
     if (ENABLE_REDESIGN_PAGES && filter.props.id === 'toolResizeBy') {
-      return <ToolModalButton modalId="unit" />;
+      return <ToolModalButton modalId="unit" key="unit-toggle" />;
     }
     return React.createElement(Component, {
       currentDropdown,

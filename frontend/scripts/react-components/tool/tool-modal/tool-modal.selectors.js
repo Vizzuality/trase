@@ -17,7 +17,7 @@ const getToolResizeBys = createSelector(
 export const getItems = createSelector(
   [getActiveModal, getRecolorByOptions, makeGetResizeByItems(getToolResizeBys, getSelectedYears)],
   (activeModal, recolorByItems, resizeByItems) => {
-    if (!activeModal) return null;
+    if (!activeModal || activeModal === 'layer') return null;
     return {
       indicator: recolorByItems,
       unit: resizeByItems
@@ -28,7 +28,7 @@ export const getItems = createSelector(
 export const getSelectedItem = createSelector(
   [getActiveModal, getSelectedRecolorByValue, getSelectedResizeBy],
   (activeModal, activeRecolorBy, activeResizeBy) => {
-    if (!activeModal) return null;
+    if (!activeModal || activeModal === 'layer') return null;
     return {
       indicator: activeRecolorBy,
       unit: activeResizeBy

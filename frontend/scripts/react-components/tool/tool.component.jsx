@@ -2,7 +2,6 @@ import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import MapContainer from 'react-components/tool/map/map.container';
-import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.react';
 import ModalContainer from 'react-components/tool/story-modal/story-modal.container';
 import TitlebarContainer from 'react-components/tool/titlebar/titlebar.container';
 import NodesTitlesContainer from 'react-components/tool/nodes-titles/nodes-titles.container';
@@ -31,7 +30,6 @@ const renderVainillaComponents = () => (
   <>
     <ModalContainer />
     <MapContainer />
-    <MapDimensionsContainer />
     {!ENABLE_REDESIGN_PAGES && <LegacyBasemaps />}
     {!ENABLE_REDESIGN_PAGES && <NodesTitlesContainer />}
     <MapContextContainer />

@@ -6,7 +6,7 @@ import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.
 
 import 'react-components/tool/tool-modal/base-modal/base-modal.scss';
 
-export default function BaseModal({ items, selectedItem, onChange, itemId, modalId }) {
+export default function BaseModal({ items, selectedItem, onChange, modalId }) {
   const COLUMN_COUNT = 3;
   return (
     <div className="c-base-modal">
@@ -23,20 +23,20 @@ export default function BaseModal({ items, selectedItem, onChange, itemId, modal
           columnCount={COLUMN_COUNT}
         >
           {itemProps =>
-            !itemProps.item[itemId] ? (
+            !itemProps.item.attributeId ? (
               <GridListItem
                 {...itemProps}
                 variant="white"
                 style={{ width: '250px' }}
                 enableItem={onChange}
-                isActive={!selectedItem[itemId]}
+                isActive={!selectedItem.attributeId}
               />
             ) : (
               <GridListItem
                 {...itemProps}
                 item={{ ...itemProps.item, name: itemProps.item.label }}
                 tooltip={itemProps.item.description}
-                isActive={selectedItem[itemId] === itemProps.item[itemId]}
+                isActive={selectedItem.attributeId === itemProps.item.attributeId}
                 enableItem={onChange}
               />
             )
@@ -51,6 +51,5 @@ BaseModal.propTypes = {
   items: PropTypes.array,
   selectedItem: PropTypes.object,
   onChange: PropTypes.func.isRequired,
-  itemId: PropTypes.string.isRequired,
   modalId: PropTypes.string.isRequired
 };

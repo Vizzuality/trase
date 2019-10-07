@@ -1,0 +1,35 @@
+@import 'styles/settings';
+
+$footer-height: 86px;
+
+.c-layer-modal {
+  .layer-modal-content {
+    width: 750px;
+    height: 90vh;
+    padding: 15px 5px $footer-height + 20px;
+
+    .modal-title,
+    .info-message {
+      margin-bottom: 15px;
+    }
+  }
+
+  .layers-grid-list-container {
+    padding: 0 0 $footer-height + 20px;
+  }
+
+  .modal-footer {
+    background-color: $background-white;
+    padding: 20px 0 20px;
+    border-top: 1px solid $medium-gray;
+    position: absolute;
+    bottom: 0;
+    height: $footer-height;
+    width: 100%;
+
+    .save-button {
+      margin: 0 auto;
+      display: block;
+    }
+  }
+}
