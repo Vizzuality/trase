@@ -14,7 +14,9 @@
 #  start_year         :integer          not null
 #  end_year           :integer          not null
 #  biome_id           :bigint(8)
-#  level              :integer          not null
+#  level1             :boolean          default(FALSE), not null
+#  level2             :boolean          default(FALSE), not null
+#  level3             :boolean          default(FALSE), not null
 #
 # Indexes
 #
@@ -80,7 +82,9 @@ module Api
 
       validates :host, presence: true
       validates :title, presence: true
-      validates :level, presence: true, inclusion: {in: 1..3}
+      validates :level1, presence: true, if: -> {!level2 && !level3}
+      validates :level2, presence: true, if: -> {!level1 && !level3}
+      validates :level3, presence: true, if: -> {!level1 && !level2}
 
       validate :validate_max_links_per_level
 
@@ -248,30 +252,28 @@ module Api
       end
 
       def validate_max_links_per_level
-        return unless level
-
         [1, 2, 3].each do |n|
           next unless send("level#{n}_max_sankey_card_links?")
 
           message = "cannot be more than #{MAX_PER_LEVEL} sankey card links "\
-                    "for level #{n}"
-          errors.add(:level, message)
+                    "for level#{n}"
+          errors.add(:"level#{n}", message)
         end
       end
 
       def level1_max_sankey_card_links?
-        Api::V3::SankeyCardLink.where(level: 1).size >= MAX_PER_LEVEL
+        Api::V3::SankeyCardLink.where(level1: true).size >= MAX_PER_LEVEL
       end
 
       def level2_max_sankey_card_links?
         Api::V3::SankeyCardLink.where(commodity_id: commodity_id,
-                                      level: 2).size >= MAX_PER_LEVEL
+                                      level2: true).size >= MAX_PER_LEVEL
       end
 
       def level3_max_sankey_card_links?
         Api::V3::SankeyCardLink.where(commodity_id: commodity_id,
                                       country_id: country_id,
-                                      level: 3).size >= MAX_PER_LEVEL
+                                      level3: true).size >= MAX_PER_LEVEL
       end
     end
   end

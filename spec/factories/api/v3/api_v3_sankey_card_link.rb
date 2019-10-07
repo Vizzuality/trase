@@ -2,7 +2,7 @@ FactoryBot.define do
   factory :api_v3_sankey_card_link, class: 'Api::V3::SankeyCardLink' do
     sequence(:title) { |n| "Title#{n}" }
     sequence(:host) { |n| "host#{n}.com" }
-    level { rand(1..3) }
+    level3 { true }
     query_params {
       {
         'selectedCommodityId' => Api::V3::Commodity.find_by(name: 'BEEF').id,

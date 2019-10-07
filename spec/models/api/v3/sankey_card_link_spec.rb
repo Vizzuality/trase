@@ -24,7 +24,7 @@ RSpec.describe Api::V3::SankeyCardLink, type: :model do
       FactoryBot.build(:api_v3_sankey_card_link, title: nil)
     }
     let(:sankey_card_link_without_level) {
-      FactoryBot.build(:api_v3_sankey_card_link, level: nil)
+      FactoryBot.build(:api_v3_sankey_card_link, level3: nil)
     }
 
     it 'fails when host blank' do
@@ -36,11 +36,11 @@ RSpec.describe Api::V3::SankeyCardLink, type: :model do
     end
 
     [1, 2, 3].each do |n|
-      it "fails when there is more than #{Api::V3::SankeyCardLink::MAX_PER_LEVEL} for level #{n}" do
-        FactoryBot.create_list(:api_v3_sankey_card_link, 4, level: n)
+      it "fails when there is more than #{Api::V3::SankeyCardLink::MAX_PER_LEVEL} for level#{n}" do
+        FactoryBot.create_list(:api_v3_sankey_card_link, 4, "level#{n}": true)
 
-        sankey_card_link = FactoryBot.build(:api_v3_sankey_card_link, level: n)
-        expect(sankey_card_link).to have(1).errors_on(:level)
+        sankey_card_link = FactoryBot.build(:api_v3_sankey_card_link, "level#{n}": true)
+        expect(sankey_card_link).to have(1).errors_on(:"level#{n}")
       end
     end
   end
