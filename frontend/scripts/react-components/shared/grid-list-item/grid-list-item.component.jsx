@@ -59,7 +59,7 @@ function GridListItem(props) {
                 >
                   <button
                     type="button"
-                    disabled={isDisabled}
+                    disabled={isDisabled || !onInfoClick}
                     onClick={() => onInfoClick && onInfoClick(item)}
                   >
                     i

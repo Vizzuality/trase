@@ -14,6 +14,7 @@ import MapLayout from 'react-components/tool/map-layout';
 import ErrorModal from 'react-components/tool/error-modal';
 import MapSidebar from 'react-components/tool/map-sidebar-layout';
 import LegacyBasemaps from 'react-components/tool/legacy-basemaps/legacy-basemaps.container';
+import ToolModal from 'react-components/tool/tool-modal';
 import EventManager from 'utils/eventManager';
 import UrlSerializer from 'react-components/shared/url-serializer';
 import Timeline from './timeline';
@@ -39,7 +40,14 @@ const renderVainillaComponents = () => (
 );
 
 const Tool = props => {
-  const { resizeSankeyTool, urlProps, urlPropHandlers, mapSidebarOpen, noLinksFound } = props;
+  const {
+    resizeSankeyTool,
+    urlProps,
+    urlPropHandlers,
+    mapSidebarOpen,
+    noLinksFound,
+    activeModal
+  } = props;
   useEffect(() => {
     evManager.addEventListener(window, 'resize', resizeSankeyTool);
     const body = document.querySelector('body');
@@ -78,9 +86,10 @@ const Tool = props => {
           </div>
           {ENABLE_REDESIGN_PAGES && <Timeline />}
         </div>
+        <ToolModal activeModal={activeModal} />
       </>
     ),
-    [mapSidebarOpen, noLinksFound]
+    [mapSidebarOpen, noLinksFound, activeModal]
   );
 
   return (
@@ -97,7 +106,8 @@ Tool.propTypes = {
   urlPropHandlers: PropTypes.object,
   urlProps: PropTypes.object,
   mapSidebarOpen: PropTypes.bool,
-  noLinksFound: PropTypes.bool
+  noLinksFound: PropTypes.bool,
+  activeModal: PropTypes.string
 };
 
 export default Tool;

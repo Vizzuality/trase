@@ -4,7 +4,7 @@ import Heading from 'react-components/shared/heading';
 import GridList from 'react-components/shared/grid-list/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 
-import 'react-components/tool/modals/base-modal/base-modal.scss';
+import 'react-components/tool/tool-modal/base-modal/base-modal.scss';
 
 export default function BaseModal({ items, selectedItem, onChange, itemId, modalId }) {
   const COLUMN_COUNT = 3;
