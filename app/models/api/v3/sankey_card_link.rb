@@ -82,9 +82,9 @@ module Api
 
       validates :host, presence: true
       validates :title, presence: true
-      validates :level1, presence: true, if: -> {!level2 && !level3}
-      validates :level2, presence: true, if: -> {!level1 && !level3}
-      validates :level3, presence: true, if: -> {!level1 && !level2}
+      validates :level1, presence: true, if: -> { !level2 && !level3 }
+      validates :level2, presence: true, if: -> { !level1 && !level3 }
+      validates :level3, presence: true, if: -> { !level1 && !level2 }
 
       validate :validate_max_links_per_level
 

@@ -307,6 +307,8 @@ paths:
 
   "/sankey_card_links":
     get:
+      tags:
+        - explore
       summary: Data for the sankey card links
       parameters:
         - $ref: "#/components/parameters/country_id_query_param"
@@ -316,7 +318,7 @@ paths:
           description: Level
           required: true
           schema:
-            type: integer
+            type: string
       responses:
         "200":
           description: OK
@@ -2359,6 +2361,10 @@ components:
                       type: integer
                   selectedBiomeFilterName:
                     type: string
+              commodity_id:
+                type: integer
+              country_id:
+                type: integer
         meta:
           type: object
           properties:
@@ -2369,19 +2375,11 @@ components:
                 properties:
                   id:
                     type: integer
-                  node_type:
-                    type: string
-            columns:
-              type: array
-              items:
-                type: object
-                properties:
-                  column_group:
-                    type: integer
                   node_type_id:
                     type: integer
-                  role:
-                    type: string
+            columns:
+              type: object
+              # In normal JSON Schema you could use patternProperties for dynamic object keys, but OpenAPI forbids it
 
     Node:
       type: object
