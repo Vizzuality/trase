@@ -6,12 +6,8 @@ import SimpleModal from 'react-components/shared/simple-modal/simple-modal.compo
 import 'react-components/tool/tool-modal/tool-modal.scss';
 
 export default function ToolModal({ items, selectedItem, onChange, activeModal, setActiveModal }) {
-  return activeModal && items?.length > 1 ? (
-    <SimpleModal
-      isOpen
-      onClickClose={() => setActiveModal(null)}
-      onRequestClose={() => setActiveModal(null)}
-    >
+  return activeModal ? (
+    <SimpleModal isOpen onRequestClose={() => setActiveModal(null)}>
       {activeModal === 'layer' ? (
         <LayerModal />
       ) : (
@@ -19,7 +15,6 @@ export default function ToolModal({ items, selectedItem, onChange, activeModal, 
           items={items}
           selectedItem={selectedItem}
           onChange={onChange}
-          itemId="attributeId"
           modalId={activeModal}
         />
       )}
