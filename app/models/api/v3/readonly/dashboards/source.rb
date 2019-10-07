@@ -3,20 +3,19 @@
 # Table name: dashboards_sources_mv
 #
 #  id(id of source node (not unique))                                 :integer          primary key
-#  name                                                               :text
-#  name_tsvector                                                      :tsvector
 #  node_type_id                                                       :integer
-#  node_type                                                          :text
-#  profile                                                            :text
 #  country_id(id of country sourcing commodity coming from this node) :integer
 #  commodity_id(id of commodity coming from this node)                :integer
 #  node_id(id of another node from the same supply chain)             :integer
+#  name                                                               :text
+#  name_tsvector                                                      :tsvector
+#  node_type                                                          :text
+#  profile                                                            :text
 #
 # Indexes
 #
 #  dashboards_sources_mv_commodity_id_idx   (commodity_id)
 #  dashboards_sources_mv_country_id_idx     (country_id)
-#  dashboards_sources_mv_name_idx           (name)
 #  dashboards_sources_mv_name_tsvector_idx  (name_tsvector) USING gin
 #  dashboards_sources_mv_node_id_idx        (node_id)
 #  dashboards_sources_mv_node_type_id_idx   (node_type_id)

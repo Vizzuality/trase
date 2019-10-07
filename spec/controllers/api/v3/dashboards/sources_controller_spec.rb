@@ -27,7 +27,8 @@ RSpec.describe Api::V3::Dashboards::SourcesController, type: :controller do
       [
         api_v3_biome_node,
         api_v3_state_node,
-        api_v3_municipality_node
+        api_v3_municipality_node,
+        api_v3_municipality2_node
       ]
     }
 
