@@ -18,13 +18,14 @@ module Api
         private
 
         def initialize_params(params)
-          @level = params[:level]
+          @level = (params[:level] || '').split(',')
           @country_id = params[:country_id]
           @commodity_id = params[:commodity_id]
         end
 
         def initialize_sankey_card_links
-          query = Api::V3::SankeyCardLink.where(level: @level)
+          query = Api::V3::SankeyCardLink.all
+          @level.each { |level| query = query.where("level#{level}": true) }
           query = query.where(country_id: @country_id) if @country_id
           query = query.where(commodity_id: @commodity_id) if @commodity_id
           @sankey_card_links = query
@@ -53,10 +54,12 @@ module Api
             @sankey_card_links.map(&:sankey_card_link_node_type_ids).flatten.uniq
           sankey_card_link_node_types = Api::V3::SankeyCardLinkNodeType.
             where(id: sankey_card_link_node_type_ids)
-          @meta[:columns] = ActiveModel::Serializer::CollectionSerializer.new(
+          columns = ActiveModel::Serializer::CollectionSerializer.new(
             sankey_card_link_node_types,
             serializer: Api::V3::SankeyCardLinks::ColumnSerializer
           ).as_json
+          @meta[:columns] = {}
+          columns.each { |col| @meta[:columns][col[:node_type_id]] = col }
         end
       end
     end
