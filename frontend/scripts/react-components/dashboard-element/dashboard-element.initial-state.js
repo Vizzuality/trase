@@ -19,6 +19,7 @@ export default {
     companies: 1,
     commodities: 1
   },
+  nodes: [],
   sources: [],
   companies: [],
   destinations: [],

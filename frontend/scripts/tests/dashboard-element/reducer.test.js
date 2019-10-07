@@ -20,6 +20,7 @@ import {
   DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
   DASHBOARD_ELEMENT__SET_LOADING,
   DASHBOARD_ELEMENT__SET_CHARTS,
+  DASHBOARD_ELEMENT__SET_MISSING_NODES,
   setDashboardSelectedYears,
   setDashboardSelectedResizeBy,
   setDashboardSelectedRecolorBy,
@@ -572,4 +573,14 @@ test(DASHBOARD_ELEMENT__EDIT_DASHBOARD, () => {
   const action = editDashboard();
   const newState = reducer(initialState, action);
   expect(newState.editMode).toBe(true);
+});
+
+test(DASHBOARD_ELEMENT__SET_MISSING_NODES, () => {
+  const nodes = [{ id: 1, type: 'COUNTRY' }, { id: 18, type: 'EXPORTER' }];
+  const action = {
+    type: DASHBOARD_ELEMENT__SET_MISSING_NODES,
+    payload: { data: nodes }
+  };
+  const newState = reducer(initialState, action);
+  expect(newState.nodes).toBe(nodes);
 });
