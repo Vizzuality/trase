@@ -92,4 +92,23 @@ shared_context 'api v3 brazil flows' do
       year: 2015
     )
   end
+
+  # other municipality
+  let!(:api_v3_flow6) do
+    FactoryBot.create(
+      :api_v3_flow,
+      context: api_v3_context,
+      path: [
+        api_v3_biome_node,
+        api_v3_state_node,
+        api_v3_municipality2_node,
+        api_v3_logistics_hub_node,
+        api_v3_port1_node,
+        api_v3_exporter1_node,
+        api_v3_importer1_node,
+        api_v3_country_of_destination1_node
+      ].map(&:id),
+      year: 2015
+    )
+  end
 end

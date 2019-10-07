@@ -60,6 +60,25 @@ shared_context 'api v3 brazil soy nodes' do
     node
   end
 
+  let!(:api_v3_municipality2_node) do
+    node = Api::V3::Node.where(
+      name: 'SORRISO', node_type_id: api_v3_municipality_node_type.id
+    ).first
+    unless node
+      node = FactoryBot.create(
+        :api_v3_node,
+        name: 'SORRISO',
+        node_type: api_v3_municipality_node_type,
+        geo_id: 'BR-5107925'
+      )
+      FactoryBot.create(
+        :api_v3_node_property,
+        node: node
+      )
+    end
+    node
+  end
+
   let!(:api_v3_other_municipality_node) do
     node = Api::V3::Node.where(
       name: 'OTHER', node_type_id: api_v3_municipality_node_type.id
