@@ -10,12 +10,14 @@ function RecolorByLegend(props) {
   const { recolorBy, value } = props;
   const valueSize = recolorBy.legendType === 'qual' ? 'lg' : 'sm';
   const valueWeight = recolorBy.legendType === 'qual' ? undefined : 'bold';
-  let displayValue = value - 1;
-  let bucketValue = value - 1;
-  if (recolorBy.type !== 'ind') {
-    displayValue = value;
-    bucketValue = value;
-  } else if (recolorBy.legendType === 'percentual') {
+  let displayValue = value;
+  let bucketValue = value;
+  if (recolorBy.type === 'ind') {
+    if (parseInt(recolorBy.minValue, 10) === 1) {
+      bucketValue = value - 1;
+    }
+  }
+  if (recolorBy.legendType === 'percentual') {
     // percentual values are always a range, not the raw value.
     // The value coming from the model is already floored
     // to the start of the bucket (splitLinksByColumn)
@@ -55,6 +57,7 @@ function RecolorByLegend(props) {
       {recolorBy.maxValue && (
         <Text as="span" size="sm" variant="mono" className="recolor-by-legend-unit -right">
           {recolorBy.maxValue}
+          {recolorBy.legendType === 'percentual' && '%'}
         </Text>
       )}
     </div>
