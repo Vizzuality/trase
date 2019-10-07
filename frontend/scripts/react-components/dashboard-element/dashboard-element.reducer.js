@@ -25,6 +25,7 @@ import {
   DASHBOARD_ELEMENT__SET_CHARTS,
   DASHBOARD_ELEMENT__EDIT_DASHBOARD,
   DASHBOARD_ELEMENT__SET_MISSING_DATA,
+  DASHBOARD_ELEMENT__SET_MISSING_NODES,
   DASHBOARD_ELEMENT__SET_LOADING
 } from './dashboard-element.actions';
 import initialState from './dashboard-element.initial-state';
@@ -159,6 +160,12 @@ const dashboardElementReducer = {
         const panel = panelsByItem[item.id];
         draft.data[panel].push(item);
       });
+    });
+  },
+  [DASHBOARD_ELEMENT__SET_MISSING_NODES](state, action) {
+    return immer(state, draft => {
+      const { data } = action.payload;
+      draft.nodes = data;
     });
   },
   [DASHBOARD_ELEMENT__SET_LOADING_ITEMS](state, action) {

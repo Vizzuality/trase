@@ -1,3 +1,7 @@
+import { getURLFromParams, GET_ALL_NODES_URL } from 'utils/getURLFromParams';
+import { getDashboardsContext } from 'react-components/dashboard-element/dashboard-element.selectors';
+import axios from 'axios';
+
 export const DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_ACTIVE_PANEL = 'DASHBOARD_ELEMENT__SET_ACTIVE_PANEL';
@@ -26,6 +30,8 @@ export const DASHBOARD_ELEMENT__EDIT_DASHBOARD = 'DASHBOARD_ELEMENT__EDIT_DASHBO
 export const DASHBOARD_ELEMENT__GO_TO_DASHBOARD = 'DASHBOARD_ELEMENT__GO_TO_DASHBOARD';
 export const DASHBOARD_ELEMENT__GET_MISSING_DATA = 'DASHBOARD_ELEMENT__GET_MISSING_DATA';
 export const DASHBOARD_ELEMENT__SET_MISSING_DATA = 'DASHBOARD_ELEMENT__SET_MISSING_DATA';
+export const DASHBOARD_ELEMENT__GET_MISSING_NODES = 'DASHBOARD_ELEMENT__GET_MISSING_NODES';
+export const DASHBOARD_ELEMENT__SET_MISSING_NODES = 'DASHBOARD_ELEMENT__SET_MISSING_NODES';
 export const DASHBOARD_ELEMENT__SET_LOADING = 'DASHBOARD_ELEMENT__SET_LOADING';
 
 export const setDashboardActivePanel = activePanelId => ({
@@ -130,3 +136,21 @@ export const setMissingDashboardPanelItems = data => ({
 export const getDashboardMissingPanelItems = () => ({
   type: DASHBOARD_ELEMENT__GET_MISSING_DATA
 });
+
+export const getDashboardMissingNodes = nodes => (dispatch, getState) => {
+  const selectedContext = getDashboardsContext(getState());
+  const params = {
+    context_id: selectedContext.id,
+    nodes_ids: nodes.join(',')
+  };
+  const url = getURLFromParams(GET_ALL_NODES_URL, params);
+  axios
+    .get(url)
+    .then(res => {
+      dispatch({
+        type: DASHBOARD_ELEMENT__SET_MISSING_NODES,
+        payload: { data: res.data.data }
+      });
+    })
+    .catch(error => console.error(error));
+};
