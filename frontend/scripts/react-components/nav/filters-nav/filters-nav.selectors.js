@@ -157,6 +157,7 @@ export const getNavFilters = createSelector(
             })
           ],
           right: [
+            { type: NAV_FILTER_TYPES.dropdown, props: { id: 'version' } },
             { type: NAV_FILTER_TYPES.dropdown, props: { id: 'toolResizeBy' } },
             { type: NAV_FILTER_TYPES.recolorBySelector, props: { id: 'toolRecolorBy' } },
             { type: NAV_FILTER_TYPES.dropdown, props: toolViewMode }

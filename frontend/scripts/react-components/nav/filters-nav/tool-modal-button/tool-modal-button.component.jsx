@@ -17,7 +17,7 @@ export default function ToolModalButton({
   const selectedLabel = selectedItem?.label;
   return (
     <button
-      disabled={!hasMoreThanOneItem}
+      disabled={!modalId === 'version' && !hasMoreThanOneItem}
       onClick={() => setActiveModal(modalId)}
       className="c-tool-modal-button"
     >
@@ -30,7 +30,9 @@ export default function ToolModalButton({
         size="rg"
         color="grey"
         weight="regular"
-        className={cx('selected-item', { '-with-arrow': hasMoreThanOneItem })}
+        className={cx('selected-item', {
+          '-with-arrow': modalId === 'version' || hasMoreThanOneItem
+        })}
         title={selectedLabel}
       >
         {selectedLabel}
