@@ -1,7 +1,7 @@
 ActiveAdmin.register Api::V3::SankeyCardLink, as: 'SankeyCardLinks' do
   menu parent: 'Sankey & Map'
 
-  permit_params :link_param, :title, :subtitle, :level
+  permit_params :link_param, :title, :subtitle, :level1, :level2, :level3
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -17,7 +17,9 @@ ActiveAdmin.register Api::V3::SankeyCardLink, as: 'SankeyCardLinks' do
       input :link_param, input_html: {value: f.object.link}, as: :string, required: true
       input :title, as: :string, required: true
       input :subtitle, as: :string
-      input :level, as: :select, required: true, collection: [[1, 1], [2, 2], [3, 3]]
+      input :level1, as: :boolean
+      input :level2, as: :boolean
+      input :level3, as: :boolean
     end
     f.actions
   end
@@ -28,7 +30,9 @@ ActiveAdmin.register Api::V3::SankeyCardLink, as: 'SankeyCardLinks' do
     column('Link', sortable: true) do |sankey_card_link|
       link_to(sankey_card_link.link, sankey_card_link.link)
     end
-    column :level
+    column :level do |sankey_card_link|
+      [1, 2, 3].select { |n| sankey_card_link.send("level#{n}") }.join(', ')
+    end
     actions
   end
 
@@ -39,7 +43,9 @@ ActiveAdmin.register Api::V3::SankeyCardLink, as: 'SankeyCardLinks' do
       end
       row :title
       row :subtitle
-      row :level
+      row :level do |sankey_card_link|
+        [1, 2, 3].select { |n| sankey_card_link.send("level#{n}") }.join(', ')
+      end
       row :created_at
       row :updated_at
     end
