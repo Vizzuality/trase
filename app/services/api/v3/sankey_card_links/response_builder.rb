@@ -32,10 +32,11 @@ module Api
         end
 
         def initialize_data
-          @data = ActiveModel::Serializer::CollectionSerializer.new(
+          @data = ActiveModelSerializers::SerializableResource.new(
             @sankey_card_links,
-            serializer: Api::V3::SankeyCardLinks::SankeyCardLinkSerializer
-          ).as_json
+            each_serializer: Api::V3::SankeyCardLinks::SankeyCardLinkSerializer,
+            root: 'data'
+          ).serializable_hash[:data]
         end
 
         def initialize_meta
@@ -45,21 +46,23 @@ module Api
             @sankey_card_links.map(&:sankey_card_link_node_ids).flatten.uniq
           sankey_card_link_nodes =
             Api::V3::SankeyCardLinkNode.where(id: sankey_card_link_nodes_ids)
-          @meta[:nodes] = ActiveModel::Serializer::CollectionSerializer.new(
+          @meta[:nodes] = ActiveModelSerializers::SerializableResource.new(
             sankey_card_link_nodes,
-            serializer: Api::V3::SankeyCardLinks::NodeSerializer
-          ).as_json
+            each_serializer: Api::V3::SankeyCardLinks::NodeSerializer,
+            root: 'nodes'
+          ).serializable_hash[:nodes]
 
           sankey_card_link_node_type_ids =
             @sankey_card_links.map(&:sankey_card_link_node_type_ids).flatten.uniq
           sankey_card_link_node_types = Api::V3::SankeyCardLinkNodeType.
             where(id: sankey_card_link_node_type_ids)
-          columns = ActiveModel::Serializer::CollectionSerializer.new(
+          columns = ActiveModelSerializers::SerializableResource.new(
             sankey_card_link_node_types,
-            serializer: Api::V3::SankeyCardLinks::ColumnSerializer
-          ).as_json
+            each_serializer: Api::V3::SankeyCardLinks::ColumnSerializer,
+            root: 'columns'
+          ).serializable_hash[:columns]
           @meta[:columns] = {}
-          columns.each { |col| @meta[:columns][col[:node_type_id]] = col }
+          columns.each { |col| @meta[:columns][col[:nodeTypeId]] = col }
         end
       end
     end

@@ -2,21 +2,21 @@
 #
 # Table name: sankey_card_links
 #
-#  id                 :bigint(8)        not null, primary key
-#  host               :text             not null
-#  query_params       :json             not null
-#  title              :text             not null
-#  subtitle           :text
-#  commodity_id       :bigint(8)
-#  country_id         :bigint(8)
-#  cont_attribute_id  :bigint(8)
-#  ncont_attribute_id :bigint(8)
-#  start_year         :integer          not null
-#  end_year           :integer          not null
-#  biome_id           :bigint(8)
-#  level1             :boolean          default(FALSE), not null
-#  level2             :boolean          default(FALSE), not null
-#  level3             :boolean          default(FALSE), not null
+#  id                                                                       :bigint(8)        not null, primary key
+#  host                                                                     :text             not null
+#  query_params(query params included on the link of the quick sankey card) :json             not null
+#  title(title of the quick sankey card)                                    :text             not null
+#  subtitle(subtitle of the quick sankey card)                              :text
+#  start_year                                                               :integer          not null
+#  end_year                                                                 :integer          not null
+#  biome_id                                                                 :bigint(8)
+#  level1(level used when commodity and country are not selected)           :boolean          default(FALSE), not null
+#  level2(level used when commodity is selected)                            :boolean          default(FALSE), not null
+#  level3(level used when commodity and country are selected)               :boolean          default(FALSE), not null
+#  country_id                                                               :bigint(8)
+#  commodity_id                                                             :bigint(8)
+#  cont_attribute_id                                                        :bigint(8)
+#  ncont_attribute_id                                                       :bigint(8)
 #
 # Indexes
 #
@@ -29,10 +29,10 @@
 # Foreign Keys
 #
 #  fk_rails_...  (biome_id => nodes.id)
-#  fk_rails_...  (commodity_id => commodities.id)
-#  fk_rails_...  (cont_attribute_id => attributes.id)
-#  fk_rails_...  (country_id => countries.id)
-#  fk_rails_...  (ncont_attribute_id => attributes.id)
+#  fk_rails_...  (commodity_id => commodities.id) ON DELETE => cascade
+#  fk_rails_...  (cont_attribute_id => attributes.id) ON DELETE => cascade
+#  fk_rails_...  (country_id => countries.id) ON DELETE => cascade
+#  fk_rails_...  (ncont_attribute_id => attributes.id) ON DELETE => cascade
 #
 
 module Api
@@ -113,7 +113,7 @@ module Api
 
       def validate_max_links_per_level
         LEVELS.each do |n|
-          next unless send("level#{n}_max_sankey_card_links?")
+          next if !send("level#{n}") || !send("level#{n}_max_sankey_card_links?")
 
           message = "cannot be more than #{MAX_PER_LEVEL} sankey card links "\
                     "for level#{n}"
@@ -245,9 +245,11 @@ module Api
 
           Api::V3::SankeyCardLinkNodeType.find_or_initialize_by(
             column_group: column_group,
-            sankey_card_link_id: id,
+            sankey_card_link_id: id
+          ).update!(
+            node_type_id: node_type_id,
             context_node_type_property_id: context_node_type_property_id
-          ).update!(node_type_id: node_type_id)
+          )
         end
       end
 

@@ -36,7 +36,7 @@ module Api
                 presence: true,
                 inclusion: 0..3,
                 uniqueness: {scope: :sankey_card_link_id}
-      validates :sankey_card_link_id, uniqueness: {scope: :node_type_id}
+      validates :sankey_card_link_id, uniqueness: {scope: [:column_group, :node_type_id]}
 
       after_commit :update_query_params
 

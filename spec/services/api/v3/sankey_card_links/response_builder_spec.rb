@@ -38,7 +38,7 @@ RSpec.describe Api::V3::SankeyCardLinks::ResponseBuilder do
       expect(data[:host]).to eq(@sankey_card_link.host)
       %w[selectedCountryId selectedCommodityId selectedRecolorBy
          selectedResizeBy selectedBiomeFilterName selectedYears].each do |attribute|
-        expect(data[:query_params][attribute]).to eq(
+        expect(data[:queryParams][attribute]).to eq(
           @sankey_card_link.query_params[attribute]
         )
       end
@@ -50,15 +50,15 @@ RSpec.describe Api::V3::SankeyCardLinks::ResponseBuilder do
         api_v3_brazil_beef_country_of_production_node.id,
         api_v3_country_of_destination_node.id
       ])
-      expect(nodes.map { |n| n[:node_type_id] }).to eql([
+      expect(nodes.map { |n| n[:nodeTypeId] }).to eql([
         api_v3_brazil_beef_country_of_production_node.node_type_id,
         api_v3_country_of_destination_node.node_type_id
       ])
 
       column = @builder.meta[:columns].
-        find { |_ntid, c| c[:column_group] == 1 }.last
-      expect(column[:node_type_id]).to eq(@node_type.id)
-      expect(column[:node_type]).to eq(@node_type.name)
+        find { |_ntid, c| c[:columnGroup] == 1 }.last
+      expect(column[:nodeTypeId]).to eq(@node_type.id)
+      expect(column[:nodeType]).to eq(@node_type.name)
     end
   end
 end
