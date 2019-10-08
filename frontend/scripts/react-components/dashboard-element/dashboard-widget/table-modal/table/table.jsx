@@ -47,7 +47,7 @@ const TableContainer = props => {
       if (sortedByColumn === header.name) {
         toggleSortDirection(header.name);
       } else {
-        setSortColumn(header.name);
+        setSortColumn(header.name || '');
       }
       resetMaxLength();
     },
@@ -99,7 +99,7 @@ TableContainer.propTypes = {
   headers: PropTypes.array.isRequired,
   data: PropTypes.array.isRequired,
   width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
+  height: PropTypes.number,
   rowHeight: PropTypes.number
 };
 

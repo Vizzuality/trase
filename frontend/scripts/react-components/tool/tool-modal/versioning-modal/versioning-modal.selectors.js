@@ -9,3 +9,19 @@ export const getVersionData = createSelector(
     return versionJson.find(version => version.context_id === selectedContext.id);
   }
 );
+
+export const getTableData = createSelector(
+  getVersionData,
+  contextVersionData => {
+    if (!contextVersionData) return null;
+    const { key_statistics: keyStatistics } = contextVersionData;
+    const years = Object.keys(keyStatistics[0].values);
+    const rowTitle = row =>
+      `${row.name.replace(/_/g, ' ')} ${row.unit && row.unit !== 'number' ? ` (${row.unit})` : ''}`;
+    const data = keyStatistics.map(row => [rowTitle(row), ...Object.values(row.values)]);
+    return {
+      headers: [{ name: '' }, ...years.map(y => ({ name: y }))],
+      data
+    };
+  }
+);

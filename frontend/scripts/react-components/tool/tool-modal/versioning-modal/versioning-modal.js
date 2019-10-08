@@ -1,11 +1,15 @@
 import { connect } from 'react-redux';
 import VersioningModal from 'react-components/tool/tool-modal/versioning-modal/versioning-modal.component';
 import { getSelectedContext } from 'reducers/app.selectors';
-import { getVersionData } from 'react-components/tool/tool-modal/versioning-modal/versioning-modal.selectors';
+import {
+  getVersionData,
+  getTableData
+} from 'react-components/tool/tool-modal/versioning-modal/versioning-modal.selectors';
 
 const mapStateToProps = state => ({
   data: getVersionData(state),
-  context: getSelectedContext(state)
+  context: getSelectedContext(state),
+  tableData: getTableData(state)
 });
 
 export default connect(

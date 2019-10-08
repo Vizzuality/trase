@@ -57,7 +57,7 @@ function Table(props) {
       </div>
       <VariableSizeGrid
         ref={gridRef}
-        height={Math.min(height, minRowHeight * sortedData.length)}
+        height={height || minRowHeight * sortedData.length}
         width={width}
         columnWidth={() => columnWidth}
         rowHeight={index => rowHeight || getMaxLength(sortedData[index]) + minRowHeight}
@@ -93,13 +93,13 @@ Table.propTypes = {
   className: PropTypes.string,
   headers: PropTypes.array.isRequired,
   width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
+  height: PropTypes.number,
   rowHeight: PropTypes.number,
-  gridRef: PropTypes.node,
+  gridRef: PropTypes.any,
   sortedData: PropTypes.array.isRequired,
   sortDirections: PropTypes.object,
   handleHeaderClick: PropTypes.func.isRequired,
-  sortedByColumn: PropTypes.func.isRequired
+  sortedByColumn: PropTypes.func
 };
 
 export default Table;
