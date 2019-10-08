@@ -5,7 +5,9 @@ module Api
         attributes :id,
                    :host,
                    :query_params,
-                   :link
+                   :link,
+                   :title,
+                   :subtitle
 
         belongs_to :country_id
         belongs_to :commodity_id
