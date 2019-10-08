@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState } from 'react';
 import Heading from 'react-components/shared/heading';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import PropTypes from 'prop-types';
 import TopCards from 'react-components/explore/top-cards';
 import Text from 'react-components/shared/text';
 import WorldMap from 'react-components/shared/world-map/world-map.container';
-import uniq from 'lodash/uniq';
 import { EXPLORE_STEPS, BREAKPOINTS } from 'constants';
 import cx from 'classnames';
 import Dropdown from 'react-components/shared/dropdown';
@@ -13,107 +12,16 @@ import ResizeListener from 'react-components/shared/resize-listener.component';
 import { format } from 'd3-format';
 import ToolLinksModal from 'react-components/explore/tool-links-modal';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
+import {
+  useTopDestinationCountries,
+  useClearExploreOnUnmount,
+  useQuickFacts,
+  useHighlightedCommodities,
+  useHighlightedContext,
+  useHighlightedCountries
+} from 'react-components/explore/explore.hooks';
 
 import 'react-components/explore/explore.scss';
-
-function useTopDestinationCountries({ commodityContexts, step, getTopCountries }) {
-  // Get top destination countries
-  useEffect(() => {
-    if (step === EXPLORE_STEPS.selectCountry) {
-      getTopCountries(commodityContexts, { fromDefaultYear: true });
-    }
-  }, [commodityContexts, getTopCountries, step]);
-}
-
-function useClearExploreOnUnmount({ setCommodity, setCountry }) {
-  useEffect(
-    () => () => {
-      setCommodity(null);
-      setCountry(null);
-    },
-    [setCountry, setCommodity]
-  );
-}
-
-function useQuickFacts({ step, getQuickFacts, commodity }) {
-  // Get quick facts
-  useEffect(() => {
-    if (step === EXPLORE_STEPS.selectCountry) {
-      getQuickFacts(commodity.id);
-    }
-  }, [commodity, getQuickFacts, step]);
-}
-
-function useHighlightedCommodities({ contexts }) {
-  const [hoveredGeometry, setHoveredGeometry] = useState(null);
-
-  const highligtedCommodities = useMemo(() => {
-    const highlighted = [];
-    contexts.forEach(c => {
-      if (c.worldMap.geoId === hoveredGeometry) {
-        highlighted.push(c.commodityId);
-      }
-    });
-    return uniq(highlighted);
-  }, [contexts, hoveredGeometry]);
-
-  return [highligtedCommodities, setHoveredGeometry];
-}
-
-function useHighlightedContext({ commodity, contexts, step, country }) {
-  const [hoveredCountry, setHoveredCountry] = useState(null);
-
-  // clear hovered on step change
-  useEffect(() => () => setHoveredCountry(null), [step, setHoveredCountry]);
-
-  const highlightedContext = useMemo(() => {
-    const activeCountry = hoveredCountry || country?.id;
-    if (!activeCountry || !commodity) {
-      return null;
-    }
-    return contexts.find(c => c.countryId === activeCountry && c.commodityId === commodity.id);
-  }, [commodity, contexts, hoveredCountry, country]);
-
-  return [highlightedContext, setHoveredCountry];
-}
-
-function useHighlightedCountries(
-  { step, commodity, allCountriesIds, contexts },
-  destinationCountries
-) {
-  const [hoveredCommodity, setHoveredCommodity] = useState(null);
-
-  // clear hovered on step change
-  useEffect(() => () => setHoveredCommodity(null), [step, setHoveredCommodity]);
-
-  const highlightedCountries = useMemo(() => {
-    switch (step) {
-      case EXPLORE_STEPS.selectCommodity:
-        return {
-          level1: allCountriesIds,
-          level2: uniq(
-            contexts.filter(c => c.commodityId === hoveredCommodity).map(c => c.countryId)
-          )
-        };
-      case EXPLORE_STEPS.selectCountry: {
-        if (destinationCountries || !commodity) {
-          return null;
-        }
-        const destinationIds = destinationCountries?.map(c => c.id);
-        return {
-          level1: uniq(
-            destinationIds ||
-              contexts.filter(c => c.commodityId === commodity.id).map(c => c.countryId)
-          )
-        };
-      }
-      default:
-        return null;
-    }
-  }, [step, hoveredCommodity, contexts, allCountriesIds, commodity, destinationCountries]);
-
-  return [highlightedCountries, setHoveredCommodity];
-}
 
 function Explore(props) {
   const {
