@@ -103,6 +103,7 @@ Rails.application.routes.draw do
         get :countries_facts, on: :member
       end
       #resources :countries_facts, only: [:index]
+      resources :sankey_card_links, only: [:index]
     end
     namespace :v2 do
       resources :geo_id, only: :index

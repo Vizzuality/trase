@@ -16,6 +16,8 @@ module Api
       has_many :context_node_types
       has_many :nodes
       has_many :nodes_stats
+      has_many :sankey_card_link_node_types
+      has_many :sankey_card_links, through: :sankey_card_link_node_types
 
       def self.node_index_for_name(context, node_type_name)
         zero_based_idx = ContextNodeType.

@@ -8,14 +8,16 @@ module Api
             table_class: Api::V3::Country,
             yellow_tables: [
               Api::V3::CountryProperty,
-              Api::V3::DashboardTemplateCountry
+              Api::V3::DashboardTemplateCountry,
+              Api::V3::SankeyCardLink
             ]
           },
           {
             table_class: Api::V3::Commodity,
             yellow_tables: [
               Api::V3::DashboardTemplateCommodity,
-              Api::V3::TopProfileImage
+              Api::V3::TopProfileImage,
+              Api::V3::SankeyCardLink
             ]
           },
           {
@@ -33,7 +35,12 @@ module Api
               Api::V3::DashboardsAttribute
             ]
           },
-          {table_class: Api::V3::NodeType},
+          {
+            table_class: Api::V3::NodeType,
+            yellow_tables: [
+              Api::V3::SankeyCardLinkNodeType
+            ]
+          },
           {
             table_class: Api::V3::ContextNodeType,
             yellow_tables: [
@@ -52,8 +59,8 @@ module Api
               Api::V3::TopProfile,
               Api::V3::DashboardTemplateSource,
               Api::V3::DashboardTemplateCompany,
-              Api::V3::DashboardTemplateDestination
-
+              Api::V3::DashboardTemplateDestination,
+              Api::V3::SankeyCardLinkNode
             ]
           },
           {

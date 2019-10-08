@@ -22,6 +22,8 @@ module Api
       has_many :quant_commodity_properties
       has_many :qual_commodity_properties
 
+      has_many :sankey_card_links
+
       validates :name, presence: true, uniqueness: true
 
       def self.import_key

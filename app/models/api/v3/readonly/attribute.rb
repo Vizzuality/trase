@@ -25,6 +25,13 @@ module Api
       class Attribute < Api::V3::Readonly::BaseModel
         self.table_name = 'attributes'
 
+        has_many :cont_attribute_sankey_card_links,
+                 class_name: 'Api::V3::SankeyCardLink',
+                 inverse_of: :cont_attribute
+        has_many :ncont_attribute_sankey_card_links,
+                 class_name: 'Api::V3::SankeyCardLink',
+                 inverse_of: :ncont_attribute
+
         delegate :values_meta, to: :original_attribute
 
         class << self

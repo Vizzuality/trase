@@ -40,6 +40,7 @@ module Api
       # TODO: there should be only one default per group
 
       belongs_to :context_node_type
+      has_many :sankey_card_link_node_types
 
       validates :context_node_type, presence: true, uniqueness: true
       validates :column_group, presence: true, inclusion: COLUMN_GROUP
