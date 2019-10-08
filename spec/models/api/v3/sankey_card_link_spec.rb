@@ -7,6 +7,12 @@ RSpec.describe Api::V3::SankeyCardLink, type: :model do
   include_context 'api v3 brazil resize by attributes'
   include_context 'api v3 brazil beef context node types'
 
+  include_context 'api v3 paraguay flows'
+  include_context 'api v3 paraguay soy nodes'
+  include_context 'api v3 paraguay flows quals'
+  include_context 'api v3 paraguay recolor by attributes'
+  include_context 'api v3 paraguay context node types'
+
   before do
     Api::V3::Readonly::Node.refresh(sync: true)
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
@@ -35,7 +41,7 @@ RSpec.describe Api::V3::SankeyCardLink, type: :model do
       expect(sankey_card_link_without_title).to have(1).errors_on(:title)
     end
 
-    [1, 2, 3].each do |n|
+    Api::V3::SankeyCardLink::LEVELS.each do |n|
       it "fails when there is more than #{Api::V3::SankeyCardLink::MAX_PER_LEVEL} for level#{n}" do
         FactoryBot.create_list(:api_v3_sankey_card_link, 4, "level#{n}": true)
 
@@ -162,6 +168,36 @@ RSpec.describe Api::V3::SankeyCardLink, type: :model do
 
             expect(sankey_card_link_node_type.node_type_id).to eql node_type_id
           end
+        end
+      end
+
+      describe '#update_query_params' do
+        it 'update query_params when the relations change' do
+          sankey_card_link.save
+
+          sankey_card_link.update_attributes(
+            country_id: api_v3_paraguay.id,
+            commodity_id: api_v3_soy.id,
+            biome_id: api_v3_paraguay_biome_node.id,
+            cont_attribute_id: api_v3_fob.readonly_attribute.id,
+            ncont_attribute_id: api_v3_biome.readonly_attribute.id
+          )
+
+          expect(sankey_card_link.query_params['selectedCountryId']).to eql(
+            api_v3_paraguay.id
+          )
+          expect(sankey_card_link.query_params['selectedCommodityId']).to eql(
+            api_v3_soy.id
+          )
+          expect(sankey_card_link.query_params['selectedBiomeFilterName']).to eql(
+            api_v3_paraguay_biome_node.name
+          )
+          expect(sankey_card_link.query_params['selectedResizeBy']).to eql(
+            api_v3_fob.readonly_attribute.id
+          )
+          expect(sankey_card_link.query_params['selectedRecolorBy']).to eql(
+            api_v3_biome.readonly_attribute.id
+          )
         end
       end
     end

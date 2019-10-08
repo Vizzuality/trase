@@ -41,6 +41,7 @@ module Api
       attr_accessor :link_param
 
       MAX_PER_LEVEL = 4
+      LEVELS = [1, 2, 3].freeze
       VALID_QUERY_PARAMS = {
         'selectedCountryId' => :selected_country_id,
         'selectedCommodityId' => :selected_commodity_id,
@@ -89,7 +90,8 @@ module Api
       validate :validate_max_links_per_level
 
       before_validation :extract_link_params
-      before_validation :extract_relations
+      before_validation :extract_relations, if: :will_save_change_to_query_params?
+      before_save  :update_query_params
       after_commit :add_nodes_relations
       after_commit :add_node_types_relations
 
@@ -108,6 +110,31 @@ module Api
       end
 
       private
+
+      def validate_max_links_per_level
+        LEVELS.each do |n|
+          next unless send("level#{n}_max_sankey_card_links?")
+
+          message = "cannot be more than #{MAX_PER_LEVEL} sankey card links "\
+                    "for level#{n}"
+          errors.add(:"level#{n}", message)
+        end
+      end
+
+      def level1_max_sankey_card_links?
+        Api::V3::SankeyCardLink.where(level1: true).size >= MAX_PER_LEVEL
+      end
+
+      def level2_max_sankey_card_links?
+        Api::V3::SankeyCardLink.where(commodity_id: commodity_id,
+                                      level2: true).size >= MAX_PER_LEVEL
+      end
+
+      def level3_max_sankey_card_links?
+        Api::V3::SankeyCardLink.where(commodity_id: commodity_id,
+                                      country_id: country_id,
+                                      level3: true).size >= MAX_PER_LEVEL
+      end
 
       def extract_link_params
         return unless link_param
@@ -155,8 +182,6 @@ module Api
       end
 
       def extract_selected_recolor_by
-        return unless query_params['selectedRecolorBy']
-
         self.ncont_attribute_id = query_params['selectedRecolorBy']
       end
 
@@ -170,8 +195,6 @@ module Api
       end
 
       def extract_selected_biome_filter_name
-        return unless query_params['selectedBiomeFilterName']
-
         self.biome = Api::V3::Node.find_by(
           name: query_params['selectedBiomeFilterName']
         )
@@ -209,16 +232,16 @@ module Api
 
       def add_node_types_relations
         context_id = Api::V3::Context.
-          find_by(commodity_id: commodity_id, country_id: country_id)
+          find_by(commodity_id: commodity_id, country_id: country_id)&.id
         columns = (query_params['selectedColumnsIds'] || '').split('-')
         columns = Hash[*columns.map { |c| c.split('_') }.flatten]
         [0, 1, 2, 3].each do |column_group|
           node_type_id = columns[column_group] ||
             get_default_node_type(context_id, column_group)
-
           context_node_type_property_id = get_context_node_type_property_id(
             context_id, node_type_id, column_group
           )
+          next unless node_type_id && context_node_type_property_id
 
           Api::V3::SankeyCardLinkNodeType.find_or_initialize_by(
             column_group: column_group,
@@ -251,29 +274,25 @@ module Api
           )&.context_node_type_property_id
       end
 
-      def validate_max_links_per_level
-        [1, 2, 3].each do |n|
-          next unless send("level#{n}_max_sankey_card_links?")
-
-          message = "cannot be more than #{MAX_PER_LEVEL} sankey card links "\
-                    "for level#{n}"
-          errors.add(:"level#{n}", message)
+      def update_query_params
+        if query_params['selectedCountryId'] != country_id
+          query_params['selectedCountryId'] = country_id
         end
-      end
 
-      def level1_max_sankey_card_links?
-        Api::V3::SankeyCardLink.where(level1: true).size >= MAX_PER_LEVEL
-      end
+        if query_params['selectedCommodityId'] != commodity_id
+          query_params['selectedCommodityId'] = commodity_id
+        end
 
-      def level2_max_sankey_card_links?
-        Api::V3::SankeyCardLink.where(commodity_id: commodity_id,
-                                      level2: true).size >= MAX_PER_LEVEL
-      end
+        if query_params['selectedResizeBy'] != cont_attribute_id
+          query_params['selectedResizeBy'] = cont_attribute_id
+        end
 
-      def level3_max_sankey_card_links?
-        Api::V3::SankeyCardLink.where(commodity_id: commodity_id,
-                                      country_id: country_id,
-                                      level3: true).size >= MAX_PER_LEVEL
+        if query_params['selectedRecolorBy'] != ncont_attribute_id
+          query_params['selectedRecolorBy'] = ncont_attribute_id
+        end
+
+        return if query_params['selectedBiomeFilterName'] == biome&.name
+        query_params['selectedBiomeFilterName'] = biome&.name
       end
     end
   end

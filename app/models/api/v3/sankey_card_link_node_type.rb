@@ -37,6 +37,24 @@ module Api
                 inclusion: 0..3,
                 uniqueness: {scope: :sankey_card_link_id}
       validates :sankey_card_link_id, uniqueness: {scope: :node_type_id}
+
+      after_commit :update_query_params
+
+      private
+
+      # After an import process, we update query params if nodes has changed
+      def update_query_params
+        column = "#{column_group}_#{node_type_id}"
+        return if sankey_card_link.query_params['selectedColumnsIds']&.include?(column)
+
+        query_params = sankey_card_link.query_params
+        columns = (query_params['selectedColumnsIds'] || '').split('-')
+        column_was = "#{column_group_was}_#{node_type_id_was}"
+        columns.delete column_was
+        columns.push column
+        query_params['selectedColumnsIds'] = columns.join('-')
+        sankey_card_link.update_attribute(:query_params, query_params)
+      end
     end
   end
 end

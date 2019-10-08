@@ -36,8 +36,12 @@ RSpec.describe Api::V3::SankeyCardLinks::ResponseBuilder do
       data = @builder.data.first
       expect(data[:id]).to eq(@sankey_card_link.id)
       expect(data[:host]).to eq(@sankey_card_link.host)
-      expect(data[:query_params]).to eq(@sankey_card_link.query_params)
-      expect(data[:link]).to eq(@sankey_card_link.link)
+      %w[selectedCountryId selectedCommodityId selectedRecolorBy
+         selectedResizeBy selectedBiomeFilterName selectedYears].each do |attribute|
+        expect(data[:query_params][attribute]).to eq(
+          @sankey_card_link.query_params[attribute]
+        )
+      end
     end
 
     it 'should return meta' do
