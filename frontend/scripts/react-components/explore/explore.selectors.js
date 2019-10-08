@@ -10,6 +10,7 @@ const getQuickFacts = state => state.explore.quickFacts;
 export const getStep = createSelector(
   [getSelectedCommodityId, getSelectedCountryId],
   (commodityId, countryId) => {
+    console.log(commodityId, countryId);
     if (!commodityId) return EXPLORE_STEPS.selectCommodity;
     if (!countryId) return EXPLORE_STEPS.selectCountry;
     return EXPLORE_STEPS.selected;
@@ -115,52 +116,10 @@ export const getCountryQuickFacts = createSelector(
 );
 
 export const getCards = createSelector(
-  [getCommodity, getCountry, getCommodities, getAllCountries, getContexts],
-  (commodity, country, allCommodities, allCountries, contexts) => {
-    const nodeTypes = [{ id: 1, name: 'EXPORTER' }, { id: 2, name: 'COUNTRY' }];
-    // TODO: Use backend cards. The updating cards animation will work then
-    const mockedCards = [
-      { id: 1, commodity_id: 1, country_id: 27, indicator_id: 32, node_type_id: 1 },
-      { id: 2, commodity_id: 1, country_id: 27, indicator_id: 32, node_type_id: 2 },
-      { id: 3, commodity_id: 1, country_id: 27, indicator_id: 32, node_type_id: 3 },
-      { id: 4, commodity_id: 1, country_id: 27, indicator_id: 33, node_type_id: 4 }
-    ];
-    const getUpdatedCard = card => {
-      let commodityName = commodity?.name;
-      if (!commodityName) {
-        const cardCommodity = allCommodities.find(c => c.id === card.commodity_id);
-        commodityName = cardCommodity?.name;
-      }
-      let countryName = country?.name;
-      if (!countryName) {
-        const cardCountry = allCountries.find(c => c.id === card.country_id);
-        countryName = cardCountry?.name;
-      }
-
-      const cardContext = contexts.find(
-        c => c.commodityId === card.commodity_id && c.countryId === card.country_id
-      );
-
-      const indicator = cardContext?.recolorBy.find(i => i.attributeId === card.indicator_id);
-      const nodeType = nodeTypes.find(i => i.id === card.node_type_id);
-
-      return {
-        commodityId: commodity ? commodity.id : card.commodity_id,
-        commodityName,
-        countryId: country ? country.id : card.country_id,
-        countryName,
-        indicatorId: card.indicator_id,
-        indicatorName: indicator?.name,
-        nodeTypeId: card.node_type_id,
-        nodeTypeName: nodeType?.name,
-        key: `${card.id}_${commodity?.id}_${country?.id}`
-      };
-    };
-    const updatedCards = mockedCards.map(mockedCard => getUpdatedCard(mockedCard));
-    return {
-      [EXPLORE_STEPS.selectCommodity]: updatedCards,
-      [EXPLORE_STEPS.selectCountry]: updatedCards,
-      [EXPLORE_STEPS.selected]: updatedCards
-    };
-  }
+  [getStep],
+  () => ({
+    [EXPLORE_STEPS.selectCommodity]: [],
+    [EXPLORE_STEPS.selectCountry]: [],
+    [EXPLORE_STEPS.selected]: []
+  })
 );

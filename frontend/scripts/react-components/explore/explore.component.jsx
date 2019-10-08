@@ -16,25 +16,26 @@ import SimpleModal from 'react-components/shared/simple-modal/simple-modal.compo
 
 import 'react-components/explore/explore.scss';
 
-function Explore({
-  items,
-  step,
-  setCommodity,
-  setCountry,
-  commodity,
-  country,
-  contexts,
-  allCountriesIds,
-  cards,
-  goToTool,
-  topNodes,
-  getTopCountries,
-  getQuickFacts,
-  commodityContexts,
-  commodities,
-  countries,
-  countryQuickFacts
-}) {
+function Explore(props) {
+  const {
+    items,
+    step,
+    setCommodity,
+    setCountry,
+    commodity,
+    country,
+    contexts,
+    allCountriesIds,
+    cards,
+    goToTool,
+    topNodes,
+    getTopCountries,
+    getQuickFacts,
+    commodityContexts,
+    commodities,
+    countries,
+    countryQuickFacts
+  } = props;
   const [isModalOpen, setModalOpen] = useState(false);
   const [linkParams, setLinkInfo] = useState(null);
 
@@ -52,36 +53,50 @@ function Explore({
     setLinkInfo(null);
   };
 
+  useEffect(
+    () => () => {
+      setCommodity(null);
+      setCountry(null);
+    },
+    [setCountry, setCommodity]
+  );
+
   // Clear highlighted items on step change
   useEffect(() => {
     setHighlightedCommodities(null);
-    if (step !== EXPLORE_STEPS.selected) setHighlightedContext(null);
+    if (step !== EXPLORE_STEPS.selected) {
+      setHighlightedContext(null);
+    }
   }, [step]);
 
   // Show highlighted context if we come back from the tool
   useEffect(() => {
-    if (step === EXPLORE_STEPS.selected)
+    if (step === EXPLORE_STEPS.selected) {
       setHighlightedContext(
         contexts.find(c => c.countryId === country.id && c.commodityId === commodity.id)
       );
+    }
   }, [commodity, contexts, country, step]);
 
   // Get top destination countries
   useEffect(() => {
-    if (step === EXPLORE_STEPS.selectCountry)
+    if (step === EXPLORE_STEPS.selectCountry) {
       getTopCountries(commodityContexts, { fromDefaultYear: true });
+    }
   }, [commodityContexts, getTopCountries, step]);
 
   // Get quick facts
   useEffect(() => {
-    if (step === EXPLORE_STEPS.selectCountry) getQuickFacts(commodity.id);
+    if (step === EXPLORE_STEPS.selectCountry) {
+      getQuickFacts(commodity.id);
+    }
   }, [commodity, getQuickFacts, step]);
 
   const renderTitle = () => {
     const titleParts = ['commodity', 'sourcing country', 'supply chain'];
     return (
       <Heading size="lg" align="center" data-test="step-title">
-        {step + 1}. Choose one {titleParts[step]}
+        {step}. Choose one {titleParts[step]}
       </Heading>
     );
   };

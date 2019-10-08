@@ -257,9 +257,9 @@ export const LOGISTICS_MAP_INSPECTION_LEVELS = [
 ];
 
 export const EXPLORE_STEPS = {
-  selectCommodity: 0,
-  selectCountry: 1,
-  selected: 2
+  selectCommodity: 1,
+  selectCountry: 2,
+  selected: 3
 };
 
 export const DASHBOARD_STEPS = {

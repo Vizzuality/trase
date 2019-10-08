@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import capitalize from 'lodash/capitalize';
 import upperCase from 'lodash/upperCase';
 import pluralize from 'utils/pluralize';
+import { EXPLORE_STEPS } from 'constants';
 import { useTransition, animated } from 'react-spring';
 import ResizeListener from 'react-components/shared/resize-listener.component';
 
@@ -92,7 +93,8 @@ const TopCards = ({
       );
     });
 
-  const clearStep = step === 2 ? () => setCountry(null) : () => setCommodity(null);
+  const clearStep =
+    step === EXPLORE_STEPS.selected ? () => setCountry(null) : () => setCommodity(null);
   return (
     <div className="c-top-cards">
       <div className="row columns">
@@ -100,7 +102,7 @@ const TopCards = ({
           <Heading className="top-cards-title" data-test="top-cards-title">
             Top {renderName(countryName)} {renderName(commodityName)} supply chains
           </Heading>
-          {step > 0 && !isMobile && (
+          {step > EXPLORE_STEPS.selectCommodity && !isMobile && (
             <button onClick={clearStep} className="back-button" data-test="top-cards-back-button">
               <Text variant="mono" size="rg" weight="bold">
                 BACK
