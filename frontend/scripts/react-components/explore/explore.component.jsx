@@ -40,7 +40,7 @@ function Explore(props) {
     countryQuickFacts
   } = props;
   const [isModalOpen, setModalOpen] = useState(false);
-  const [linkParams, setLinkInfo] = useState(null);
+  const [activeCard, setActiveCard] = useState(null);
 
   useTopDestinationCountries(props);
   useClearExploreOnUnmount(props);
@@ -55,14 +55,14 @@ function Explore(props) {
     destinationCountries
   );
 
-  const openModal = params => {
+  const openModal = card => {
     setModalOpen(true);
-    setLinkInfo(params);
+    setActiveCard(card);
   };
 
   const closeModal = () => {
     setModalOpen(false);
-    setLinkInfo(null);
+    setActiveCard(null);
   };
 
   const renderTitle = () => {
@@ -216,7 +216,7 @@ function Explore(props) {
                 isMobile={isMobile}
               />
               <SimpleModal isOpen={isModalOpen} onRequestClose={() => closeModal()}>
-                <ToolLinksModal goToTool={destination => goToTool(destination, linkParams)} />
+                <ToolLinksModal goToTool={destination => goToTool(destination, activeCard)} />
               </SimpleModal>
             </>
           );

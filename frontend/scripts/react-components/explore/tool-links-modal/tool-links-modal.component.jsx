@@ -25,7 +25,7 @@ function ToolLinksModal({ goToTool }) {
             </button>
           </div>
           <div className="small-12 medium-6 column">
-            <button className="tool-link" onClick={() => goToTool('data')}>
+            <button className="tool-link" onClick={() => goToTool('dashboard')}>
               <ImgBackground />
               <Heading weight="bold" variant="mono">
                 DATA VIEW

@@ -23,45 +23,16 @@ export const setCountry = selectedCountryId => ({
   payload: { selectedCountryId }
 });
 
-export const goToTool = (destination, linkInfo) => (dispatch, getState) => {
-  const { contexts } = getState().app;
-  const context = contexts.find(
-    c => c.commodityId === linkInfo.commodityId && c.countryId === linkInfo.countryId
-  );
-
+export const goToTool = (destination, card) => dispatch => {
   batch(() => {
     // for analytics purpose
     dispatch({
       type: EXPLORE__SELECT_TOP_CARD,
       payload: {
-        linkParams: {
-          countryName: context.countryName,
-          commodityName: context.commodityName,
-          nodeTypeName: linkInfo.nodeTypeName,
-          indicatorName: linkInfo.indicatorName
-        }
+        linkParams: card
       }
     });
-
-    if (destination === 'sankey') {
-      const serializerParams = {
-        selectedContextId: context.id,
-        selectedRecolorBy: linkInfo.indicatorId
-      };
-
-      dispatch({ type: 'tool', payload: { serializerParams } });
-    } else {
-      const serializerParams = {
-        selectedCountryId: context.countryId,
-        selectedCommodityId: context.commodityId,
-        selectedRecolorBy: linkInfo.indicatorId
-      };
-
-      dispatch({
-        type: 'dashboardElement',
-        payload: { dashboardId: 'new', serializerParams }
-      });
-    }
+    dispatch(card.links[destination]);
   });
 };
 

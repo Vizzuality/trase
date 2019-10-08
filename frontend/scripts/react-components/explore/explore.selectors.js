@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import uniqBy from 'lodash/uniqBy';
 import { EXPLORE_STEPS } from 'constants';
+import translateLink from 'utils/translateLink';
 
 export const getContexts = state => state.app.contexts || null;
 const getSelectedCommodityId = state => state.explore.selectedCommodityId;
@@ -11,7 +12,6 @@ const getSankeyCards = state => state.explore.sankeyCards;
 export const getStep = createSelector(
   [getSelectedCommodityId, getSelectedCountryId],
   (commodityId, countryId) => {
-    console.log(commodityId, countryId);
     if (!commodityId) return EXPLORE_STEPS.selectCommodity;
     if (!countryId) return EXPLORE_STEPS.selectCountry;
     return EXPLORE_STEPS.selected;
@@ -118,5 +118,20 @@ export const getCountryQuickFacts = createSelector(
 
 export const getCards = createSelector(
   [getSankeyCards],
-  cards => cards?.data || []
+  cards => {
+    if (!cards) {
+      return [];
+    }
+    return cards.data.map(options => ({
+      id: options.id,
+      title: options.title,
+      subtitle: options.subtitle,
+      countryId: options.countryId,
+      commodityId: options.commodityId,
+      links: {
+        sankey: translateLink(options, cards.meta),
+        dashboard: translateLink(options, cards.meta, 'dashboard')
+      }
+    }));
+  }
 );
