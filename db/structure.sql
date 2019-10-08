@@ -5981,17 +5981,66 @@ CREATE TABLE public.sankey_card_links (
     subtitle text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    commodity_id bigint,
-    country_id bigint,
-    cont_attribute_id bigint,
-    ncont_attribute_id bigint,
     start_year integer NOT NULL,
     end_year integer NOT NULL,
     biome_id bigint,
     level1 boolean DEFAULT false NOT NULL,
     level2 boolean DEFAULT false NOT NULL,
-    level3 boolean DEFAULT false NOT NULL
+    level3 boolean DEFAULT false NOT NULL,
+    country_id bigint,
+    commodity_id bigint,
+    cont_attribute_id bigint,
+    ncont_attribute_id bigint
 );
+
+
+--
+-- Name: TABLE sankey_card_links; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.sankey_card_links IS 'Quick sankey cards';
+
+
+--
+-- Name: COLUMN sankey_card_links.query_params; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sankey_card_links.query_params IS 'query params included on the link of the quick sankey card';
+
+
+--
+-- Name: COLUMN sankey_card_links.title; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sankey_card_links.title IS 'title of the quick sankey card';
+
+
+--
+-- Name: COLUMN sankey_card_links.subtitle; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sankey_card_links.subtitle IS 'subtitle of the quick sankey card';
+
+
+--
+-- Name: COLUMN sankey_card_links.level1; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sankey_card_links.level1 IS 'level used when commodity and country are not selected';
+
+
+--
+-- Name: COLUMN sankey_card_links.level2; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sankey_card_links.level2 IS 'level used when commodity is selected';
+
+
+--
+-- Name: COLUMN sankey_card_links.level3; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sankey_card_links.level3 IS 'level used when commodity and country are selected';
 
 
 --
@@ -8956,7 +9005,7 @@ ALTER TABLE ONLY public.top_profile_images
 --
 
 ALTER TABLE ONLY public.sankey_card_links
-    ADD CONSTRAINT fk_rails_2c41bcb873 FOREIGN KEY (cont_attribute_id) REFERENCES public.attributes(id);
+    ADD CONSTRAINT fk_rails_2c41bcb873 FOREIGN KEY (cont_attribute_id) REFERENCES public.attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -9092,7 +9141,7 @@ ALTER TABLE ONLY public.qual_context_properties
 --
 
 ALTER TABLE ONLY public.sankey_card_links
-    ADD CONSTRAINT fk_rails_5b56ba10d2 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id);
+    ADD CONSTRAINT fk_rails_5b56ba10d2 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON DELETE CASCADE;
 
 
 --
@@ -9212,7 +9261,7 @@ ALTER TABLE ONLY public.quant_country_properties
 --
 
 ALTER TABLE ONLY public.sankey_card_links
-    ADD CONSTRAINT fk_rails_9113195b2d FOREIGN KEY (country_id) REFERENCES public.countries(id);
+    ADD CONSTRAINT fk_rails_9113195b2d FOREIGN KEY (country_id) REFERENCES public.countries(id) ON DELETE CASCADE;
 
 
 --
@@ -9500,7 +9549,7 @@ ALTER TABLE ONLY public.top_profiles
 --
 
 ALTER TABLE ONLY public.sankey_card_links
-    ADD CONSTRAINT fk_rails_ec3ba51bdb FOREIGN KEY (ncont_attribute_id) REFERENCES public.attributes(id);
+    ADD CONSTRAINT fk_rails_ec3ba51bdb FOREIGN KEY (ncont_attribute_id) REFERENCES public.attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -9649,4 +9698,5 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191003080052'),
 ('20191003152614'),
 ('20191004083620'),
-('20191007090648');
+('20191007090648'),
+('20191008083758');
