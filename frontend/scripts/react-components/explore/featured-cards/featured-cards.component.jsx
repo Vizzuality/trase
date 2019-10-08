@@ -3,22 +3,19 @@ import Heading from 'react-components/shared/heading';
 import Text from 'react-components/shared/text';
 import PropTypes from 'prop-types';
 import capitalize from 'lodash/capitalize';
-import upperCase from 'lodash/upperCase';
-import pluralize from 'utils/pluralize';
 import { EXPLORE_STEPS } from 'constants';
 import { useTransition, animated } from 'react-spring';
 import ResizeListener from 'react-components/shared/resize-listener.component';
 
-import 'react-components/explore/top-cards/top-cards.scss';
+import 'react-components/explore/featured-cards/featured-cards.scss';
 
-const TopCard = ({ card, openModal }) => {
-  const { countryName, indicatorName, commodityName, nodeTypeName } = card;
-  if (!card.countryName) return null;
+const FeaturedCard = ({ card, openModal }) => {
+  const { title, subtitle, id, commodityId, countryId } = card;
   return (
     <button
       onClick={() => openModal(card)}
-      className="c-top-card"
-      data-test={`top-card-${countryName}-${commodityName}-${nodeTypeName}-${indicatorName}`}
+      className="c-featured-card"
+      data-test={`featured-card-${commodityId}-${countryId}-${id}`}
     >
       <Text
         variant="mono"
@@ -28,43 +25,44 @@ const TopCard = ({ card, openModal }) => {
         transform="uppercase"
         color="grey-faded"
       >
-        {countryName} · {commodityName}
+        {card.country_id} · {card.commodity_id}
       </Text>
       <Text variant="mono" align="center" transform="uppercase" color="grey-faded" lineHeight="lg">
-        {nodeTypeName && `Top 10 ${pluralize(nodeTypeName)}`}
+        {title || 'title'}
       </Text>
       <Text variant="mono" align="center" transform="uppercase" color="grey-faded">
-        {indicatorName && upperCase(indicatorName)}
+        {subtitle || 'subtitle'}
       </Text>
     </button>
   );
 };
 
-TopCard.propTypes = {
+FeaturedCard.propTypes = {
   card: PropTypes.object.isRequired,
   openModal: PropTypes.func.isRequired
 };
 
-const TopCards = ({
-  setCommodity,
-  setCountry,
-  countryName,
-  commodityName,
-  step,
-  cards,
-  isMobile,
-  openModal
-}) => {
+const FeaturedCards = props => {
+  const {
+    setCommodity,
+    setCountry,
+    countryName,
+    commodityName,
+    step,
+    cards,
+    isMobile,
+    openModal
+  } = props;
   const [animatedItems, setAnimatedItems] = useState([]);
-  const transitions = useTransition(animatedItems, item => item.key, {
+  const transitions = useTransition(animatedItems, item => item.id, {
     from: { transform: 'translateY(200px)' },
     enter: { transform: 'translateY(0px)' },
     leave: { display: 'none' }
   });
 
   useEffect(() => {
-    setAnimatedItems(cards[step]);
-  }, [cards, step]);
+    setAnimatedItems(cards);
+  }, [cards]);
 
   const renderName = name => (
     <Text as="span" size="lg" weight="bold">
@@ -73,11 +71,11 @@ const TopCards = ({
   );
 
   const renderCards = () =>
-    transitions.map(({ item, props, key }) => {
-      if (!item) return null;
+    transitions.map(transition => {
+      if (!transition.item) return null;
       const card = (
-        <animated.div key={key} style={props} className="animated-card">
-          <TopCard key={item.key} card={item} openModal={openModal} />
+        <animated.div key={transition.key} style={props} className="animated-card">
+          <FeaturedCard key={transition.item.id} card={transition.item} openModal={openModal} />
         </animated.div>
       );
       return (
@@ -96,14 +94,18 @@ const TopCards = ({
   const clearStep =
     step === EXPLORE_STEPS.selected ? () => setCountry(null) : () => setCommodity(null);
   return (
-    <div className="c-top-cards">
+    <div className="c-featured-cards">
       <div className="row columns">
-        <div className="top-cards-heading">
-          <Heading className="top-cards-title" data-test="top-cards-title">
-            Top {renderName(countryName)} {renderName(commodityName)} supply chains
+        <div className="featured-cards-heading">
+          <Heading className="featured-cards-title" data-test="featured-cards-title">
+            Featured {renderName(countryName)} {renderName(commodityName)} supply chains
           </Heading>
           {step > EXPLORE_STEPS.selectCommodity && !isMobile && (
-            <button onClick={clearStep} className="back-button" data-test="top-cards-back-button">
+            <button
+              onClick={clearStep}
+              className="back-button"
+              data-test="featured-cards-back-button"
+            >
               <Text variant="mono" size="rg" weight="bold">
                 BACK
               </Text>
@@ -111,15 +113,15 @@ const TopCards = ({
           )}
         </div>
       </div>
-      <div className="top-cards-container">
+      <div className="featured-cards-container">
         <ResizeListener>
           {({ resolution }) =>
             resolution.isSmall ? (
-              <div className="mobile-top-cards" data-test="top-cards-row-mobile">
+              <div className="mobile-featured-cards" data-test="featured-cards-row-mobile">
                 {cards && renderCards()}
               </div>
             ) : (
-              <div className="row" data-test="top-cards-row">
+              <div className="row" data-test="featured-cards-row">
                 {cards && renderCards()}
               </div>
             )
@@ -130,7 +132,7 @@ const TopCards = ({
   );
 };
 
-TopCards.propTypes = {
+FeaturedCards.propTypes = {
   setCommodity: PropTypes.func.isRequired,
   commodityName: PropTypes.string,
   countryName: PropTypes.string,
@@ -141,4 +143,4 @@ TopCards.propTypes = {
   openModal: PropTypes.func.isRequired
 };
 
-export default TopCards;
+export default FeaturedCards;

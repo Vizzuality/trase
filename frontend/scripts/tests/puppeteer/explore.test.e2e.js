@@ -37,8 +37,8 @@ if (ENABLE_REDESIGN_PAGES) {
       await page.goto(`${BASE_URL}/explore`);
       await page.waitFor(1000);
       // Step 1
-      expectChildrenToBe(page, 'top-cards-row', 4);
-      await page.waitForSelector('[data-test=top-card-BRAZIL-SOY-EXPORTER-FOREST_500]', {
+      expectChildrenToBe(page, 'featured-cards-row', 4);
+      await page.waitForSelector('[data-test=featured-card-BRAZIL-SOY-EXPORTER-FOREST_500]', {
         timeout: 5000
       });
 
@@ -46,8 +46,8 @@ if (ENABLE_REDESIGN_PAGES) {
 
       // Step 2
       await expectToContain(page, 'step-title', '2.');
-      await expectToContain(page, 'top-cards-title', 'Beef');
-      await page.waitForSelector('[data-test=top-card-BRAZIL-BEEF-EXPORTER-FOREST_500]', {
+      await expectToContain(page, 'featured-cards-title', 'Beef');
+      await page.waitForSelector('[data-test=featured-card-BRAZIL-BEEF-EXPORTER-FOREST_500]', {
         timeout: 5000
       });
 
@@ -55,12 +55,12 @@ if (ENABLE_REDESIGN_PAGES) {
 
       // Step 3
       await expectToContain(page, 'step-title', '3.');
-      await expectToContain(page, 'top-cards-title', 'Colombia Beef');
-      await page.waitForSelector('[data-test=top-card-COLOMBIA-BEEF-EXPORTER-FOREST_500]', {
+      await expectToContain(page, 'featured-cards-title', 'Colombia Beef');
+      await page.waitForSelector('[data-test=featured-card-COLOMBIA-BEEF-EXPORTER-FOREST_500]', {
         timeout: 5000
       });
 
-      await click(page, 'top-cards-back-button');
+      await click(page, 'featured-cards-back-button');
 
       // Step 2
       await expectToContain(page, 'step-title', '2.');

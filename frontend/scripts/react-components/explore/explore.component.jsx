@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Heading from 'react-components/shared/heading';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import PropTypes from 'prop-types';
-import TopCards from 'react-components/explore/top-cards';
+import TopCards from 'react-components/explore/featured-cards';
 import Text from 'react-components/shared/text';
 import WorldMap from 'react-components/shared/world-map/world-map.container';
 import { EXPLORE_STEPS, BREAKPOINTS } from 'constants';
@@ -16,6 +16,7 @@ import {
   useTopDestinationCountries,
   useClearExploreOnUnmount,
   useQuickFacts,
+  useSankeyCards,
   useHighlightedCommodities,
   useHighlightedContext,
   useHighlightedCountries
@@ -44,6 +45,7 @@ function Explore(props) {
   useTopDestinationCountries(props);
   useClearExploreOnUnmount(props);
   useQuickFacts(props);
+  useSankeyCards(props);
 
   const [highlightedCommodityIds, setHoveredGeometry] = useHighlightedCommodities(props);
   const [highlightedContext, setHoveredCountry] = useHighlightedContext(props);
@@ -234,13 +236,14 @@ Explore.propTypes = {
   allCountriesIds: PropTypes.array, // eslint-disable-line
   setCommodity: PropTypes.func.isRequired,
   setCountry: PropTypes.func.isRequired,
-  cards: PropTypes.object.isRequired,
+  cards: PropTypes.array.isRequired,
   goToTool: PropTypes.func.isRequired,
   step: PropTypes.number,
   topNodes: PropTypes.object,
   commodityContexts: PropTypes.array, // eslint-disable-line
   getTopCountries: PropTypes.func.isRequired, // eslint-disable-line
   getQuickFacts: PropTypes.func.isRequired, // eslint-disable-line
+  getSankeyCards: PropTypes.func.isRequired, // eslint-disable-line
   countryQuickFacts: PropTypes.object
 };
 

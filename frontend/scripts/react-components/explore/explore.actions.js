@@ -1,11 +1,17 @@
 import { batch } from 'react-redux';
 import axios from 'axios';
-import { GET_TOP_COUNTRIES_FACTS, getURLFromParams } from 'utils/getURLFromParams';
+import {
+  GET_TOP_COUNTRIES_FACTS,
+  GET_SANKEY_CARD_LINKS,
+  getURLFromParams
+} from 'utils/getURLFromParams';
+import pickBy from 'lodash/pickBy';
 
 export const EXPLORE__SET_COMMODITY = 'EXPLORE__SET_COMMODITY';
 export const EXPLORE__SET_COUNTRY = 'EXPLORE__SET_COUNTRY';
 export const EXPLORE__SELECT_TOP_CARD = 'EXPLORE__SELECT_TOP_CARD';
 export const EXPLORE__SET_QUICK_FACTS = 'EXPLORE__SET_QUICK_FACTS';
+export const EXPLORE__SET_SANKEY_CARDS = 'EXPLORE__SET_SANKEY_CARDS';
 
 export const setCommodity = selectedCommodityId => ({
   type: EXPLORE__SET_COMMODITY,
@@ -71,6 +77,27 @@ export const getQuickFacts = commodityId => dispatch => {
           data,
           meta
         }
+      });
+    })
+    .catch(error => console.error(error));
+};
+
+export const getSankeyCards = (level, commodity, country) => dispatch => {
+  const url = getURLFromParams(
+    GET_SANKEY_CARD_LINKS,
+    pickBy({
+      level,
+      country_id: country?.id,
+      commodity_id: commodity?.id
+    })
+  );
+  axios
+    .get(url)
+    .then(res => {
+      const { data, meta } = res.data;
+      dispatch({
+        type: EXPLORE__SET_SANKEY_CARDS,
+        payload: { data, meta }
       });
     })
     .catch(error => console.error(error));

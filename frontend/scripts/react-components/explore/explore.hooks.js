@@ -30,6 +30,13 @@ export function useQuickFacts({ step, getQuickFacts, commodity }) {
   }, [commodity, getQuickFacts, step]);
 }
 
+export function useSankeyCards({ step, getSankeyCards, commodity, country }) {
+  // Get quick facts
+  useEffect(() => {
+    getSankeyCards(step, commodity, country);
+  }, [commodity, country, getSankeyCards, step]);
+}
+
 export function useHighlightedCommodities({ contexts }) {
   const [hoveredGeometry, setHoveredGeometry] = useState(null);
 

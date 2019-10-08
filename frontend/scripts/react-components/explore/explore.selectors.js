@@ -6,6 +6,7 @@ export const getContexts = state => state.app.contexts || null;
 const getSelectedCommodityId = state => state.explore.selectedCommodityId;
 const getSelectedCountryId = state => state.explore.selectedCountryId;
 const getQuickFacts = state => state.explore.quickFacts;
+const getSankeyCards = state => state.explore.sankeyCards;
 
 export const getStep = createSelector(
   [getSelectedCommodityId, getSelectedCountryId],
@@ -116,10 +117,6 @@ export const getCountryQuickFacts = createSelector(
 );
 
 export const getCards = createSelector(
-  [getStep],
-  () => ({
-    [EXPLORE_STEPS.selectCommodity]: [],
-    [EXPLORE_STEPS.selectCountry]: [],
-    [EXPLORE_STEPS.selected]: []
-  })
+  [getSankeyCards],
+  cards => cards?.data || []
 );

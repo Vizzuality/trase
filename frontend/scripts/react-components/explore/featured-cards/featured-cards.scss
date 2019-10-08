@@ -1,16 +1,16 @@
 @import 'styles/settings';
 
-.c-top-cards {
+.c-featured-cards {
   position: fixed;
   width: 100%;
   bottom: 0;
 
-  .top-cards-title {
+  .featured-cards-title {
     display: inline;
     margin-right: 20px;
   }
 
-  .top-cards-container {
+  .featured-cards-container {
     margin-top: 5px;
     background-color: $mid-light-gray;
     width: 100%;
@@ -19,7 +19,7 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  .mobile-top-cards {
+  .mobile-featured-cards {
     width: 880px;
   }
 
@@ -39,7 +39,7 @@
   margin: 10px 0 10px;
 }
 
-.c-top-card {
+.c-featured-card {
   height: 100px;
   width: 100%;
   border-radius: 5px;

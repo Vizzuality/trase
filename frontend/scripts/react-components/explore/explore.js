@@ -17,7 +17,8 @@ import {
   setCommodity,
   setCountry,
   goToTool,
-  getQuickFacts
+  getQuickFacts,
+  getSankeyCards
 } from 'react-components/explore/explore.actions';
 import { getTopCountries } from 'actions/app.actions';
 
@@ -41,7 +42,8 @@ const mapDispatchToProps = {
   setCountry,
   goToTool,
   getTopCountries,
-  getQuickFacts
+  getQuickFacts,
+  getSankeyCards
 };
 
 export default connect(
