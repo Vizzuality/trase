@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Heading from 'react-components/shared/heading';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import PropTypes from 'prop-types';
@@ -16,6 +16,105 @@ import SimpleModal from 'react-components/shared/simple-modal/simple-modal.compo
 
 import 'react-components/explore/explore.scss';
 
+function useTopDestinationCountries({ commodityContexts, step, getTopCountries }) {
+  // Get top destination countries
+  useEffect(() => {
+    if (step === EXPLORE_STEPS.selectCountry) {
+      getTopCountries(commodityContexts, { fromDefaultYear: true });
+    }
+  }, [commodityContexts, getTopCountries, step]);
+}
+
+function useClearExploreOnUnmount({ setCommodity, setCountry }) {
+  useEffect(
+    () => () => {
+      setCommodity(null);
+      setCountry(null);
+    },
+    [setCountry, setCommodity]
+  );
+}
+
+function useQuickFacts({ step, getQuickFacts, commodity }) {
+  // Get quick facts
+  useEffect(() => {
+    if (step === EXPLORE_STEPS.selectCountry) {
+      getQuickFacts(commodity.id);
+    }
+  }, [commodity, getQuickFacts, step]);
+}
+
+function useHighlightedCommodities({ contexts }) {
+  const [hoveredGeometry, setHoveredGeometry] = useState(null);
+
+  const highligtedCommodities = useMemo(() => {
+    const highlighted = [];
+    contexts.forEach(c => {
+      if (c.worldMap.geoId === hoveredGeometry) {
+        highlighted.push(c.commodityId);
+      }
+    });
+    return uniq(highlighted);
+  }, [contexts, hoveredGeometry]);
+
+  return [highligtedCommodities, setHoveredGeometry];
+}
+
+function useHighlightedContext({ commodity, contexts, step, country }) {
+  const [hoveredCountry, setHoveredCountry] = useState(null);
+
+  // clear hovered on step change
+  useEffect(() => () => setHoveredCountry(null), [step, setHoveredCountry]);
+
+  const highlightedContext = useMemo(() => {
+    const activeCountry = hoveredCountry || country?.id;
+    if (!activeCountry || !commodity) {
+      return null;
+    }
+    return contexts.find(c => c.countryId === activeCountry && c.commodityId === commodity.id);
+  }, [commodity, contexts, hoveredCountry, country]);
+
+  return [highlightedContext, setHoveredCountry];
+}
+
+function useHighlightedCountries(
+  { step, commodity, allCountriesIds, contexts },
+  destinationCountries
+) {
+  const [hoveredCommodity, setHoveredCommodity] = useState(null);
+
+  // clear hovered on step change
+  useEffect(() => () => setHoveredCommodity(null), [step, setHoveredCommodity]);
+
+  const highlightedCountries = useMemo(() => {
+    switch (step) {
+      case EXPLORE_STEPS.selectCommodity:
+        return {
+          level1: allCountriesIds,
+          level2: uniq(
+            contexts.filter(c => c.commodityId === hoveredCommodity).map(c => c.countryId)
+          )
+        };
+      case EXPLORE_STEPS.selectCountry: {
+        if (destinationCountries || !commodity) {
+          return null;
+        }
+        const destinationIds = destinationCountries?.map(c => c.id);
+        return {
+          level1: uniq(
+            destinationIds ||
+              contexts.filter(c => c.commodityId === commodity.id).map(c => c.countryId)
+          )
+        };
+      }
+      default:
+        return null;
+    }
+  }, [step, hoveredCommodity, contexts, allCountriesIds, commodity, destinationCountries]);
+
+  return [highlightedCountries, setHoveredCommodity];
+}
+
 function Explore(props) {
   const {
     items,
@@ -24,14 +123,9 @@ function Explore(props) {
     setCountry,
     commodity,
     country,
-    contexts,
-    allCountriesIds,
     cards,
     goToTool,
     topNodes,
-    getTopCountries,
-    getQuickFacts,
-    commodityContexts,
     commodities,
     countries,
     countryQuickFacts
@@ -39,9 +133,17 @@ function Explore(props) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [linkParams, setLinkInfo] = useState(null);
 
-  const [highlightedContext, setHighlightedContext] = useState(null);
-  const [highlightedCountryIds, setHighlightedCountries] = useState(null);
-  const [highlightedCommodityIds, setHighlightedCommodities] = useState(null);
+  useTopDestinationCountries(props);
+  useClearExploreOnUnmount(props);
+  useQuickFacts(props);
+
+  const [highlightedCommodityIds, setHoveredGeometry] = useHighlightedCommodities(props);
+  const [highlightedContext, setHoveredCountry] = useHighlightedContext(props);
+  const destinationCountries = highlightedContext?.id && topNodes[highlightedContext.id];
+  const [highlightedCountryIds, setHoveredCommodity] = useHighlightedCountries(
+    props,
+    destinationCountries
+  );
 
   const openModal = params => {
     setModalOpen(true);
@@ -53,45 +155,6 @@ function Explore(props) {
     setLinkInfo(null);
   };
 
-  useEffect(
-    () => () => {
-      setCommodity(null);
-      setCountry(null);
-    },
-    [setCountry, setCommodity]
-  );
-
-  // Clear highlighted items on step change
-  useEffect(() => {
-    setHighlightedCommodities(null);
-    if (step !== EXPLORE_STEPS.selected) {
-      setHighlightedContext(null);
-    }
-  }, [step]);
-
-  // Show highlighted context if we come back from the tool
-  useEffect(() => {
-    if (step === EXPLORE_STEPS.selected) {
-      setHighlightedContext(
-        contexts.find(c => c.countryId === country.id && c.commodityId === commodity.id)
-      );
-    }
-  }, [commodity, contexts, country, step]);
-
-  // Get top destination countries
-  useEffect(() => {
-    if (step === EXPLORE_STEPS.selectCountry) {
-      getTopCountries(commodityContexts, { fromDefaultYear: true });
-    }
-  }, [commodityContexts, getTopCountries, step]);
-
-  // Get quick facts
-  useEffect(() => {
-    if (step === EXPLORE_STEPS.selectCountry) {
-      getQuickFacts(commodity.id);
-    }
-  }, [commodity, getQuickFacts, step]);
-
   const renderTitle = () => {
     const titleParts = ['commodity', 'sourcing country', 'supply chain'];
     return (
@@ -101,34 +164,19 @@ function Explore(props) {
     );
   };
 
-  const findHighlightedCommoditiesIds = geoId => {
-    const highlightedCommoditiesIds = [];
-    contexts.forEach(c => {
-      if (c.worldMap.geoId === geoId) {
-        highlightedCommoditiesIds.push(c.commodityId);
-      }
-    });
-    return uniq(highlightedCommoditiesIds);
-  };
-
-  const findContextCountries = useCallback(
-    commodityId =>
-      !commodityId
-        ? null
-        : uniq(contexts.filter(c => c.commodityId === commodityId).map(c => c.countryId)),
-    [contexts]
-  );
-
   const onItemHover = item => {
-    if (step === EXPLORE_STEPS.selectCommodity) {
-      return setHighlightedCountries(findContextCountries(item?.id));
-    }
-    const findContext = countryId =>
-      countryId
-        ? contexts.find(c => c.countryId === countryId && c.commodityId === commodity.id)
-        : null;
+    if (item) {
+      if (step === EXPLORE_STEPS.selectCommodity) {
+        setHoveredCommodity(item.id);
+      }
 
-    return setHighlightedContext(findContext(item?.id));
+      if (step === EXPLORE_STEPS.selectCountry) {
+        setHoveredCountry(item.id);
+      }
+    } else {
+      setHoveredCommodity(null);
+      setHoveredCountry(null);
+    }
   };
 
   const setItemFunction = step === EXPLORE_STEPS.selectCommodity ? setCommodity : setCountry;
@@ -137,39 +185,16 @@ function Explore(props) {
     setCommodity(commodityId);
   };
 
-  const destinationCountries = highlightedContext?.id && topNodes[highlightedContext.id];
-  const getHighlightedCountryIds = useMemo(() => {
-    switch (step) {
-      case EXPLORE_STEPS.selectCommodity:
-        return {
-          level1: allCountriesIds,
-          level2: highlightedCountryIds
-        };
-      case EXPLORE_STEPS.selectCountry:
-        return destinationCountries
-          ? null
-          : {
-              level1: findContextCountries(commodity.id)
-            };
-      default:
-        return null;
-    }
-  }, [
-    allCountriesIds,
-    commodity,
-    destinationCountries,
-    findContextCountries,
-    highlightedCountryIds,
-    step
-  ]);
   const quickFacts =
     countryQuickFacts &&
     (country?.id || highlightedContext?.countryId) &&
     countryQuickFacts[country?.id || highlightedContext?.countryId];
+
   const getRowsNumber = windowWidth => {
     const itemsPerRow = windowWidth > 880 ? 7 : 6;
     return items.length && Math.ceil(items.length / itemsPerRow);
   };
+
   const renderDropdowns = () => (
     <>
       <Dropdown
@@ -194,6 +219,7 @@ function Explore(props) {
       )}
     </>
   );
+
   return (
     <div className="c-explore">
       <ResizeListener>
@@ -218,9 +244,7 @@ function Explore(props) {
                               enableItem={i => setItemFunction(i.id)}
                               onHover={onItemHover}
                               variant="white"
-                              isActive={
-                                highlightedCommodityIds && highlightedCommodityIds.includes(item.id)
-                              }
+                              isActive={highlightedCommodityIds.includes(item.id)}
                             />
                           ))}
                       </div>
@@ -237,10 +261,8 @@ function Explore(props) {
                             center={[0, 0]}
                             context={highlightedContext}
                             destinationCountries={destinationCountries}
-                            highlightedCountryIds={getHighlightedCountryIds}
-                            onHoverGeometry={geoId =>
-                              setHighlightedCommodities(findHighlightedCommoditiesIds(geoId))
-                            }
+                            highlightedCountryIds={highlightedCountryIds}
+                            onHoverGeometry={setHoveredGeometry}
                           />
                         </div>
                       </div>
@@ -295,24 +317,22 @@ function Explore(props) {
 }
 
 Explore.propTypes = {
-  items: PropTypes.shape({
-    name: PropTypes.string.isRequired
-  }),
+  items: PropTypes.object,
   commodities: PropTypes.array,
   countries: PropTypes.array,
   commodity: PropTypes.object,
   country: PropTypes.object,
-  contexts: PropTypes.array,
-  allCountriesIds: PropTypes.array,
+  contexts: PropTypes.array, // eslint-disable-line
+  allCountriesIds: PropTypes.array, // eslint-disable-line
   setCommodity: PropTypes.func.isRequired,
   setCountry: PropTypes.func.isRequired,
   cards: PropTypes.object.isRequired,
   goToTool: PropTypes.func.isRequired,
   step: PropTypes.number,
   topNodes: PropTypes.object,
-  commodityContexts: PropTypes.array,
-  getTopCountries: PropTypes.func.isRequired,
-  getQuickFacts: PropTypes.func.isRequired,
+  commodityContexts: PropTypes.array, // eslint-disable-line
+  getTopCountries: PropTypes.func.isRequired, // eslint-disable-line
+  getQuickFacts: PropTypes.func.isRequired, // eslint-disable-line
   countryQuickFacts: PropTypes.object
 };
 
