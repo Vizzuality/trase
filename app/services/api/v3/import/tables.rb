@@ -117,6 +117,12 @@ module Api
           Api::V3::RecolorByAttribute,
           Api::V3::ResizeByAttribute
         ].freeze
+
+        TABLES_TO_REFRESH_YEARS = [
+          Api::V3::DownloadAttribute,
+          Api::V3::RecolorByAttribute,
+          Api::V3::ResizeByAttribute
+        ]
       end
     end
   end
