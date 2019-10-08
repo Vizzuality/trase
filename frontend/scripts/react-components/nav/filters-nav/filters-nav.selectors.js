@@ -138,7 +138,17 @@ export const getNavFilters = createSelector(
     logisticsMapInspectionLevel
   ) => {
     switch (page) {
-      case 'tool':
+      case 'tool': {
+        const right = [
+          { type: NAV_FILTER_TYPES.dropdown, props: { id: 'toolResizeBy' } },
+          { type: NAV_FILTER_TYPES.recolorBySelector, props: { id: 'toolRecolorBy' } },
+          { type: NAV_FILTER_TYPES.dropdown, props: toolViewMode }
+        ];
+
+        if (ENABLE_VERSIONING) {
+          right.unshift({ type: NAV_FILTER_TYPES.dropdown, props: { id: 'version' } });
+        }
+
         return {
           showSearch: true,
           showToolLinks: true,
@@ -156,13 +166,9 @@ export const getNavFilters = createSelector(
               props: { id: 'yearsSelector' }
             })
           ],
-          right: [
-            { type: NAV_FILTER_TYPES.dropdown, props: { id: 'version' } },
-            { type: NAV_FILTER_TYPES.dropdown, props: { id: 'toolResizeBy' } },
-            { type: NAV_FILTER_TYPES.recolorBySelector, props: { id: 'toolRecolorBy' } },
-            { type: NAV_FILTER_TYPES.dropdown, props: toolViewMode }
-          ]
+          right
         };
+      }
       case 'logisticsMap':
         return {
           showLogisticsMapDownload: true,

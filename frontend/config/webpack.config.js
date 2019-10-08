@@ -43,6 +43,7 @@ module.exports = {
       NODE_ENV_DEV: process.env.NODE_ENV === 'development',
       ENABLE_INTERSECTION_OBSERVER: process.env.ENABLE_INTERSECTION_OBSERVER === 'true',
       ENABLE_REDESIGN_PAGES: process.env.ENABLE_REDESIGN_PAGES === 'true',
+      ENABLE_VERSIONING: process.env.ENABLE_VERSIONING === 'true',
       DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true',
       SHOW_WORLD_MAP_IN_EXPLORE: process.env.SHOW_WORLD_MAP_IN_EXPLORE === 'true',
       ALWAYS_DISPLAY_DASHBOARD_INFO: process.env.ALWAYS_DISPLAY_DASHBOARD_INFO === 'true',
