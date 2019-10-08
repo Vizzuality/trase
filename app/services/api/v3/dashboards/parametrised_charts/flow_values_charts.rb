@@ -39,13 +39,23 @@ module Api
 
           def initialize_nodes
             @sources_ids = @chart_params.sources_ids
+            # TODO: remove once dashboards_companies_mv retired
             @companies_ids = @chart_params.companies_ids
+            @exporters_ids = @chart_params.exporters_ids
+            @importers_ids = @chart_params.importers_ids
             @destinations_ids = @chart_params.destinations_ids
             @sources = nodes.select do |node|
               @sources_ids.include? node.id
             end
+            # TODO: remove once dashboards_companies_mv retired
             @companies = nodes.select do |node|
               @companies_ids.include? node.id
+            end
+            @exporters = nodes.select do |node|
+              @exporters_ids.include? node.id
+            end
+            @importers = nodes.select do |node|
+              @importers_ids.include? node.id
             end
             @destinations = nodes.select do |node|
               @destinations_ids.include? node.id
@@ -56,7 +66,12 @@ module Api
             return @nodes if defined?(@nodes)
 
             @nodes = Api::V3::Node.find(
-              @sources_ids + @companies_ids + @destinations_ids
+              @sources_ids +
+              # TODO: remove once dashboards_companies_mv retired
+              @companies_ids +
+              @exporters_ids +
+              @importers_ids +
+              @destinations_ids
             )
           end
 
@@ -178,7 +193,10 @@ module Api
 
             [
               [:sources_ids, @sources],
+              # TODO: remove once dashboards_companies_mv retired
               [:companies_ids, @companies],
+              [:exporters_ids, @exporters],
+              [:importers_ids, @importers],
               [:destinations_ids, @destinations]
             ].each do |nodes_ids_param_name, nodes|
               parametrised_charts += charts_per_selected_node(
@@ -245,10 +263,16 @@ module Api
               country_id: @chart_params.country_id,
               commodity_id: @chart_params.commodity_id,
               sources_ids: @sources_ids.join(','),
+              # TODO: remove once dashboards_companies_mv retired
               companies_ids: @companies_ids.join(','),
+              exporters_ids: @exporters_ids.join(','),
+              importers_ids: @importers_ids.join(','),
               destinations_ids: @destinations_ids.join(','),
               excluded_sources_ids: @chart_params.excluded_sources_ids.join(','),
+              # TODO: remove once dashboards_companies_mv retired
               excluded_companies_ids: @chart_params.excluded_companies_ids.join(','),
+              excluded_exporters_ids: @chart_params.excluded_exporters_ids.join(','),
+              excluded_importers_ids: @chart_params.excluded_importers_ids.join(','),
               excluded_destinations_ids: @chart_params.excluded_destinations_ids.join(','),
               start_year: @start_year,
               end_year: @end_year

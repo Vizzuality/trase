@@ -117,7 +117,13 @@ module Api
           end
 
           def top_nodes_break_by_values
-            selected_nodes = @chart_parameters.sources_ids + @chart_parameters.companies_ids + @chart_parameters.destinations_ids
+            selected_nodes =
+              @chart_parameters.sources_ids +
+              # TODO: remove once dashboards_companies_mv retired
+              @chart_parameters.companies_ids +
+              @chart_parameters.exporters_ids +
+              @chart_parameters.importers_ids +
+              @chart_parameters.destinations_ids
             selected_node_types = selected_nodes.map { |id| Api::V3::Node.includes(:node_type).find(id).node_type.id }
             is_current_node_type_in_selected_node_types = selected_node_types.include?(@node_type_idx)
             array = is_current_node_type_in_selected_node_types ? [] : [OTHER]

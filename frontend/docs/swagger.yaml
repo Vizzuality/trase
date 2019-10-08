@@ -1254,9 +1254,13 @@ paths:
         - $ref: "#/components/parameters/dashboards_ncont_attribute_id"
         - $ref: "#/components/parameters/dashboards_sources_ids"
         - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
         - $ref: "#/components/parameters/dashboards_destinations_ids"
         - $ref: "#/components/parameters/excluded_dashboards_sources_ids"
         - $ref: "#/components/parameters/excluded_dashboards_companies_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_exporters_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_importers_ids"
         - $ref: "#/components/parameters/excluded_dashboards_destinations_ids"
         - $ref: "#/components/parameters/start_year_req_query_param"
         - $ref: "#/components/parameters/end_year_opt_query_param"
@@ -1285,7 +1289,14 @@ paths:
         - $ref: "#/components/parameters/dashboards_cont_attribute_id"
         - $ref: "#/components/parameters/dashboards_sources_ids"
         - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
         - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_sources_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_companies_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_exporters_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_importers_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_destinations_ids"
         - $ref: "#/components/parameters/start_year_req_query_param"
       responses:
         "200":
@@ -1330,7 +1341,14 @@ paths:
         - $ref: "#/components/parameters/dashboards_mandatory_ncont_attribute_id"
         - $ref: "#/components/parameters/dashboards_sources_ids"
         - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
         - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_sources_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_companies_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_exporters_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_importers_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_destinations_ids"
         - $ref: "#/components/parameters/start_year_req_query_param"
       responses:
         "200":
@@ -1377,7 +1395,14 @@ paths:
         - $ref: "#/components/parameters/dashboards_cont_attribute_id"
         - $ref: "#/components/parameters/dashboards_sources_ids"
         - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
         - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_sources_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_companies_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_exporters_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_importers_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_destinations_ids"
         - $ref: "#/components/parameters/start_year_req_query_param"
         - $ref: "#/components/parameters/end_year_req_query_param"
       responses:
@@ -1426,7 +1451,14 @@ paths:
         - $ref: "#/components/parameters/dashboards_mandatory_ncont_attribute_id"
         - $ref: "#/components/parameters/dashboards_sources_ids"
         - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
         - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_sources_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_companies_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_exporters_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_importers_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_destinations_ids"
         - $ref: "#/components/parameters/start_year_req_query_param"
         - $ref: "#/components/parameters/end_year_req_query_param"
       responses:
@@ -1512,7 +1544,14 @@ paths:
         - $ref: "#/components/parameters/dashboards_cont_attribute_id"
         - $ref: "#/components/parameters/dashboards_sources_ids"
         - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
         - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_sources_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_companies_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_exporters_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_importers_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_destinations_ids"
         - $ref: "#/components/parameters/dashboards_node_type_id"
         - $ref: "#/components/parameters/start_year_req_query_param"
         - $ref: "#/components/parameters/dashboards_top_n"
@@ -1562,7 +1601,14 @@ paths:
         - $ref: "#/components/parameters/dashboards_mandatory_ncont_attribute_id"
         - $ref: "#/components/parameters/dashboards_sources_ids"
         - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
         - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_sources_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_companies_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_exporters_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_importers_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_destinations_ids"
         - $ref: "#/components/parameters/dashboards_node_type_id"
         - $ref: "#/components/parameters/start_year_req_query_param"
         - $ref: "#/components/parameters/dashboards_top_n"
@@ -1639,7 +1685,14 @@ paths:
         - $ref: "#/components/parameters/dashboards_cont_attribute_id"
         - $ref: "#/components/parameters/dashboards_sources_ids"
         - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
         - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_sources_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_companies_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_exporters_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_importers_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_destinations_ids"
         - $ref: "#/components/parameters/dashboards_node_type_id"
         - $ref: "#/components/parameters/start_year_req_query_param"
         - $ref: "#/components/parameters/end_year_req_query_param"
@@ -1949,7 +2002,22 @@ components:
       schema:
         type: string
     excluded_dashboards_companies_ids:
+      deprecated: true
       name: excluded_companies_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    excluded_dashboards_exporters_ids:
+      name: excluded_exporters_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    excluded_dashboards_importers_ids:
+      name: excluded_importers_ids
       in: query
       description: String with comma-separated numeric ids
       required: false
