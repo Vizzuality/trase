@@ -227,8 +227,7 @@ paths:
         - flow
       summary: Top nodes of given node type per context
       parameters:
-        - $ref: "#/components/parameters/commodity_id_query_param"
-        - $ref: "#/components/parameters/contexts_ids_query_param"
+        - $ref: "#/components/parameters/context_id_path_param"
         - name: column_id
           in: query
           description: Node type id
@@ -382,7 +381,7 @@ paths:
                       items:
                         type: integer
                       example: [2013, 2014, 2015]
-  "/contexts/{context_id}/top_profiles":
+  "/top_profiles":
     get:
       tags:
         - top_profile
