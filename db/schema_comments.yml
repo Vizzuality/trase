@@ -506,6 +506,21 @@ tables:
         comment: Type of the original entity (Ind / Qual / Quant)
       - name: original_id
         comment: Id from the original table (inds / quals / quants)
+  - name: sankey_card_links
+    comment: Quick sankey cards
+    columns:
+      - name: query_params
+        comment: query params included on the link of the quick sankey card
+      - name: title
+        comment: title of the quick sankey card
+      - name: subtitle
+        comment: subtitle of the quick sankey card
+      - name: level1
+        comment: level used when commodity and country are not selected
+      - name: level2
+        comment: level used when commodity is selected
+      - name: level3
+        comment: level used when commodity and country are selected
 materialized_views:
   - name: chart_attributes_mv
     comment: Materialized view which merges chart_inds, chart_quals and chart_quants with chart_attributes.
