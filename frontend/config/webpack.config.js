@@ -48,7 +48,6 @@ module.exports = {
       ALWAYS_DISPLAY_DASHBOARD_INFO: process.env.ALWAYS_DISPLAY_DASHBOARD_INFO === 'true',
       ENABLE_DASHBOARDS: process.env.ENABLE_DASHBOARDS === 'true',
       DISABLE_PROFILES: process.env.DISABLE_PROFILES === 'true',
-      ENABLE_COOKIE_BANNER: process.env.ENABLE_COOKIE_BANNER === 'true',
       GFW_WIDGETS_BASE_URL: JSON.stringify(process.env.GFW_WIDGETS_BASE_URL),
       ENABLE_LOGISTICS_MAP: process.env.ENABLE_LOGISTICS_MAP === 'true',
       INDONESIA_LOGISTICS_MAP_ACTIVE: process.env.INDONESIA_LOGISTICS_MAP_ACTIVE === 'true',

@@ -108,31 +108,26 @@ const sidebarNav = [
       type: 'about',
       payload: { section: 'terms-of-use' }
     }
-  }
-];
-
-if (ENABLE_COOKIE_BANNER) {
-  sidebarNav.push(
-    {
-      name: 'Privacy policy',
-      page: {
-        type: 'about',
-        payload: {
-          section: 'privacy-policy'
-        }
-      }
-    },
-    {
-      name: 'Cookie policy',
-      page: {
-        type: 'about',
-        payload: {
-          section: 'cookie-policy'
-        }
+  },
+  {
+    name: 'Privacy policy',
+    page: {
+      type: 'about',
+      payload: {
+        section: 'privacy-policy'
       }
     }
-  );
-}
+  },
+  {
+    name: 'Cookie policy',
+    page: {
+      type: 'about',
+      payload: {
+        section: 'cookie-policy'
+      }
+    }
+  }
+];
 
 if (DISABLE_PROFILES) {
   nav = nav.filter(route => route.page !== 'profileRoot');

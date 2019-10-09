@@ -60,7 +60,6 @@
     "API_V3_URL": true,
     "ENABLE_DASHBOARDS": true,
     "DISABLE_PROFILES": true,
-    "ENABLE_COOKIE_BANNER": true,
     "ENABLE_LOGISTICS_MAP": true,
     "INDONESIA_LOGISTICS_MAP_ACTIVE": true,
     "ENABLE_LEGACY_TOOL_SEARCH": true,
