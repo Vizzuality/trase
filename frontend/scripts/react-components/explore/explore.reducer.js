@@ -34,11 +34,12 @@ const exploreReducer = {
   [EXPLORE__SET_SANKEY_CARDS](state, action) {
     return immer(state, draft => {
       const { data, meta } = action.payload;
-      const newDataIds = data.reduce((acc, next) => ({ [next.id]: true }), {});
+      const newDataIds = data.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
       const intersection = state.sankeyCards?.data.filter(c => newDataIds[c.id]) || [];
+      const resultingCards = unionBy([...intersection, ...data], 'id');
       draft.sankeyCards = {
         meta,
-        data: unionBy([...intersection, ...data], 'id')
+        data: resultingCards
       };
     });
   }

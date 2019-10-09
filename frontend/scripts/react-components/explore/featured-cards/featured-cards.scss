@@ -46,7 +46,7 @@ $card-min-width: 180px;
 
 .desktop-card {
   position: absolute;
-  width: calc(25% - #{$cards-side-margin});
+  width: calc(25% - (#{$cards-side-margin} * 4));
   min-width: $card-min-width;
 }
 

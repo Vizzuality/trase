@@ -72,19 +72,21 @@ const FeaturedCards = props => {
     openModal
   } = props;
   const CARDS_SIZE_MARGIN = 16; // matches featured-cards.scss
-  const getSizeMargin = index => (index === 0 ? 0 : CARDS_SIZE_MARGIN);
+
   const transitions = useTransition(cards, item => item.id, {
     from: item => ({
-      transform: `translate(calc(${item.index * 100}% + ${getSizeMargin(item.index)}px), 200px)`
+      transform: `translate(calc(${item.index * 100}% + ${item.index *
+        CARDS_SIZE_MARGIN}px), 200px)`
     }),
     enter: item => ({
-      transform: `translate(calc(${item.index * 100}% + ${getSizeMargin(item.index)}px), 0px)`
+      transform: `translate(calc(${item.index * 100}% + ${item.index * CARDS_SIZE_MARGIN}px), 0px)`
     }),
     update: item => ({
-      transform: `translate(calc(${item.index * 100}% + ${getSizeMargin(item.index)}px), 0px)`
+      transform: `translate(calc(${item.index * 100}% + ${item.index * CARDS_SIZE_MARGIN}px), 0px)`
     }),
     leave: item => ({
-      transform: `translate(calc(${item.index * 100}% + ${getSizeMargin(item.index)}px), 200px)`
+      transform: `translate(calc(${item.index * 100}% + ${item.index *
+        CARDS_SIZE_MARGIN}px), 200px)`
     }),
     unique: true
   });
