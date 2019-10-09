@@ -59,4 +59,14 @@
   .dashboard-panel-sources-subtitle {
     margin-bottom: 20px;
   }
+
+  .grid-container {
+    width: 560px;
+    margin: 0 auto;
+
+    @media screen and (min-width: 1000px) {
+      width: initial;
+      margin: initial;
+    }
+  }
 }
