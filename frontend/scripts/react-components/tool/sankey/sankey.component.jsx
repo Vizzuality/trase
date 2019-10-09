@@ -87,10 +87,9 @@ function useMenuPosition(props) {
   const [menuPos, setMenuPos] = useState({ x: 0, y: 0 });
   const ref = useRef(null);
 
-  const COLUMN_SELECTOR_HEIGHT = 60;
   const getCoordinates = n => ({
     x: n.x,
-    y: Math.max(0, n.y) + COLUMN_SELECTOR_HEIGHT - (ref.current?.scrollTop || 0)
+    y: Math.max(0, n.y) + (ref.current?.scrollTop || 0)
   });
 
   useEffect(() => {
