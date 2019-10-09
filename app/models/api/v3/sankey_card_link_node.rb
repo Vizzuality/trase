@@ -29,17 +29,15 @@ module Api
 
       validates :sankey_card_link_id, uniqueness: {scope: :node_id}
 
-      after_commit :update_query_params
+      after_commit :update_query_params, if: -> { saved_change_to_node_id? }
 
       private
 
       # After an import process, we update query params if nodes has changed
       def update_query_params
-        return if sankey_card_link.query_params['selectedNodesIds']&.include?(node_id)
-
         query_params = sankey_card_link.query_params
-        query_params['selectedNodesIds'].delete node_id_was
-        query_params['selectedNodesIds'].push node_id
+        query_params['selectedNodesIds'].delete node_id_before_last_save&.to_i
+        query_params['selectedNodesIds'] |= [node_id&.to_i]
         sankey_card_link.update_attribute(:query_params, query_params)
       end
     end

@@ -59,24 +59,22 @@ module Api
       belongs_to :cont_attribute,
                  class_name: 'Api::V3::Readonly::Attribute',
                  foreign_key: 'cont_attribute_id',
-                 inverse_of: :cont_attribute_sankey_card_links,
-                 dependent: :destroy
+                 inverse_of: :cont_attribute_sankey_card_links
       belongs_to :ncont_attribute,
                  class_name: 'Api::V3::Readonly::Attribute',
                  foreign_key: 'ncont_attribute_id',
                  inverse_of: :ncont_attribute_sankey_card_links,
-                 dependent: :destroy,
                  optional: true
       belongs_to :biome,
                  class_name: 'Api::V3::Node',
                  foreign_key: 'biome_id',
                  inverse_of: :sankey_card_links,
                  optional: true
-      has_many :sankey_card_link_nodes
+      has_many :sankey_card_link_nodes, dependent: :destroy
       has_many :nodes,
                class_name: 'Api::V3::SankeyCardLinkNode',
                through: :sankey_card_link_nodes
-      has_many :sankey_card_link_node_types
+      has_many :sankey_card_link_node_types, dependent: :destroy
       has_many :node_types,
                class_name: 'Api::V3::NodeType',
                through: :sankey_card_link_node_types
@@ -92,8 +90,8 @@ module Api
       before_validation :extract_link_params
       before_validation :extract_relations, if: :will_save_change_to_query_params?
       before_save  :update_query_params
-      after_commit :add_nodes_relations
-      after_commit :add_node_types_relations
+      after_commit :add_nodes_relations, if: :persisted?
+      after_commit :add_node_types_relations, if: :persisted?
 
       def self.blue_foreign_keys
         [
@@ -151,6 +149,10 @@ module Api
         query_params.each do |uri_query_param, query_param|
           send("extract_#{query_param}") if query_params[uri_query_param]
         end
+
+        return unless self.query_params['selectedNodesIds']
+        self.query_params['selectedNodesIds'] =
+          self.query_params['selectedNodesIds'].map(&:to_i)
       end
 
       def extract_selected_country_id
@@ -234,7 +236,7 @@ module Api
         context_id = Api::V3::Context.
           find_by(commodity_id: commodity_id, country_id: country_id)&.id
         columns = (query_params['selectedColumnsIds'] || '').split('-')
-        columns = Hash[*columns.map { |c| c.split('_') }.flatten]
+        columns = Hash[*columns.map { |c| c.split('_').map(&:to_i) }.flatten]
         [0, 1, 2, 3].each do |column_group|
           node_type_id = columns[column_group] ||
             get_default_node_type(context_id, column_group)
