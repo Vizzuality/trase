@@ -212,7 +212,7 @@ function Explore(props) {
                 commodityName={commodity?.name}
                 countryName={country?.name}
                 cards={cards}
-                openModal={params => (isMobile ? goToTool('dataView', params) : openModal(params))}
+                openModal={params => (isMobile ? goToTool('dashboard', params) : openModal(params))}
                 isMobile={isMobile}
               />
               <SimpleModal isOpen={isModalOpen} onRequestClose={() => closeModal()}>
