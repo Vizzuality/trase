@@ -57,12 +57,14 @@ RSpec.describe Api::V3::ContextNodeTypeProperty, type: :model do
       it 'dashboards_sources_mv and dashboards_companies_mv are refreshed' do
         allow(Api::V3::Readonly::Dashboards::Source).to receive(:refresh_later)
         allow(Api::V3::Readonly::Dashboards::Company).to receive(:refresh_later)
+        allow(Api::V3::Readonly::Dashboards::Exporter).to receive(:refresh_later)
         property = FactoryBot.create(
           :api_v3_context_node_type_property,
           role: Api::V3::ContextNodeTypeProperty::SOURCE_ROLE
         )
         expect(Api::V3::Readonly::Dashboards::Source).to receive(:refresh_later)
         expect(Api::V3::Readonly::Dashboards::Company).to receive(:refresh_later)
+        expect(Api::V3::Readonly::Dashboards::Exporter).to receive(:refresh_later)
         property.update(role: Api::V3::ContextNodeTypeProperty::EXPORTER_ROLE)
       end
     end

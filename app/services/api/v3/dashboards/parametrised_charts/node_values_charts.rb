@@ -27,7 +27,10 @@ module Api
 
           def initialize_nodes
             @sources_ids = @chart_params.sources_ids
+            # TODO: remove once dashboards_companies_mv retired
             @companies_ids = @chart_params.companies_ids
+            @exporters_ids = @chart_params.exporters_ids
+            @importers_ids = @chart_params.importers_ids
             @destinations_ids = @chart_params.destinations_ids
             nodes = Api::V3::Node.find(
               @sources_ids + @companies_ids + @destinations_ids
@@ -35,8 +38,15 @@ module Api
             @sources = nodes.select do |node|
               @sources_ids.include? node.id
             end
+            # TODO: remove once dashboards_companies_mv retired
             @companies = nodes.select do |node|
               @companies_ids.include? node.id
+            end
+            @exporters = nodes.select do |node|
+              @exporters_ids.include? node.id
+            end
+            @importers = nodes.select do |node|
+              @importers_ids.include? node.id
             end
             @destinations = nodes.select do |node|
               @destinations_ids.include? node.id
@@ -128,7 +138,13 @@ module Api
           end
 
           def matching_nodes(attribute_node_types_ids)
-            nodes = @sources + @companies + @destinations
+            nodes =
+              @sources +
+              # TODO: remove once dashboards_companies_mv retired
+              @companies +
+              @exporters +
+              @importers +
+              @destinations
             nodes.select do |node|
               attribute_node_types_ids.include? node.node_type_id
             end

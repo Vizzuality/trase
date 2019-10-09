@@ -74,8 +74,16 @@ module Api
         if roles.include?(SOURCE_ROLE)
           Api::V3::Readonly::Dashboards::Source.refresh_later
         end
+        # TODO: remove once dashboards_companies_mv retired
         if (roles & [EXPORTER_ROLE, IMPORTER_ROLE]).any?
           Api::V3::Readonly::Dashboards::Company.refresh_later
+        end
+        # END TODO
+        if roles.include?(EXPORTER_ROLE)
+          Api::V3::Readonly::Dashboards::Exporter.refresh_later
+        end
+        if roles.include?(IMPORTER_ROLE)
+          Api::V3::Readonly::Dashboards::Importer.refresh_later
         end
         if roles.include?(DESTINATION_ROLE)
           Api::V3::Readonly::Dashboards::Destination.refresh_later

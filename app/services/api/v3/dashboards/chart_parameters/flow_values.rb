@@ -8,10 +8,16 @@ module Api
                       :start_year,
                       :end_year,
                       :sources_ids,
+                      # TODO: remove once dashboards_companies_mv retired
                       :companies_ids,
+                      :exporters_ids,
+                      :importers_ids,
                       :destinations_ids,
                       :excluded_sources_ids,
+                      # TODO: remove once dashboards_companies_mv retired
                       :excluded_companies_ids,
+                      :excluded_exporters_ids,
+                      :excluded_importers_ids,
                       :excluded_destinations_ids,
                       :node_type,
                       :top_n,
@@ -22,9 +28,13 @@ module Api
           # @option params [Integer] ncont_attribute_id
           # @option params [Array<Integer>] sources_ids
           # @option params [Array<Integer>] companies_ids
+          # @option params [Array<Integer>] exporters_ids
+          # @option params [Array<Integer>] importers_ids
           # @option params [Array<Integer>] destinations_ids
           # @option params [Array<Integer>] excluded_sources_ids,
           # @option params [Array<Integer>] excluded_companies_ids,
+          # @option params [Array<Integer>] excluded_exporters_ids,
+          # @option params [Array<Integer>] excluded_importers_ids,
           # @option params [Array<Integer>] excluded_destinations_ids,
           # @option params [Integer] node_type_id
           # @option params [Integer] top_n
@@ -36,10 +46,16 @@ module Api
             initialize_ncont_attribute params[:ncont_attribute_id]
 
             @sources_ids = params[:sources_ids] || []
+            # TODO: remove once dashboards_companies_mv retired
             @companies_ids = params[:companies_ids] || []
+            @exporters_ids = params[:exporters_ids] || []
+            @importers_ids = params[:importers_ids] || []
             @destinations_ids = params[:destinations_ids] || []
             @excluded_sources_ids = params[:excluded_sources_ids] || []
+            # TODO: remove once dashboards_companies_mv retired
             @excluded_companies_ids = params[:excluded_companies_ids] || []
+            @excluded_exporters_ids = params[:excluded_exporters_ids] || []
+            @excluded_importers_ids = params[:excluded_importers_ids] || []
             @excluded_destinations_ids = params[:excluded_destinations_ids] || []
             initialize_node_type(params[:node_type_id])
 
@@ -57,7 +73,14 @@ module Api
             return @selected_nodes if defined? @selected_nodes
 
             @selected_nodes = Api::V3::Node.where(
-              id: @sources_ids + @companies_ids + @destinations_ids
+              id: (
+                @sources_ids +
+                # TODO: remove once dashboards_companies_mv retired
+                @companies_ids +
+                @exporters_ids +
+                @importers_ids +
+                @destinations_ids
+              )
             ).includes(:node_type)
           end
 
@@ -76,7 +99,10 @@ module Api
             @excluded_nodes = Api::V3::Node.where(
               id: (
                 @excluded_sources_ids +
+                # TODO: remove once dashboards_companies_mv retired
                 @excluded_companies_ids +
+                @excluded_exporters_ids +
+                @excluded_importers_ids +
                 @excluded_destinations_ids
               )
             ).includes(:node_type)

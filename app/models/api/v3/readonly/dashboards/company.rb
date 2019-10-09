@@ -22,6 +22,9 @@
 #  dashboards_companies_mv_unique_idx         (id,node_id,country_id,commodity_id) UNIQUE
 #
 
+# @deprecated Use {Api::V3::Readonly::Dashboards::Exporter} or
+# {Api::V3::Readonly::Dashboards::Importer} instead.
+# TODO: remove once dashboards_companies_mv retired
 module Api
   module V3
     module Readonly

@@ -31,6 +31,22 @@ module Api
                 ).all
               },
               {
+                section: 'EXPORTERS',
+                tabs: @query.where(
+                  'context_node_type_properties.role' => [
+                    ContextNodeTypeProperty::EXPORTER_ROLE
+                  ]
+                ).all
+              },
+              {
+                section: 'IMPORTERS',
+                tabs: @query.where(
+                  'context_node_type_properties.role' => [
+                    ContextNodeTypeProperty::IMPORTER_ROLE
+                  ]
+                ).all
+              },
+              {
                 section: 'DESTINATIONS',
                 tabs: @query.where(
                   'context_node_type_properties.role' =>

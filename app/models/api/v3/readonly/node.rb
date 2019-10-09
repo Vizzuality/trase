@@ -27,7 +27,7 @@ module Api
         self.table_name = 'nodes_mv'
         belongs_to :context
 
-        include PgSearch
+        include PgSearch::Model
         pg_search_scope :search_by_name, lambda { |query|
           {
             query: query,
