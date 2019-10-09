@@ -25,7 +25,7 @@ gem 'coffee-rails', '~> 4.2'
 
 gem 'jquery-rails'
 gem 'turbolinks', '~> 5'
-gem 'jbuilder', '~> 2.5'
+gem 'jbuilder', '~> 2.9'
 gem 'devise', '~> 4.7'
 gem 'activeadmin', '~> 1.4.3'
 gem 'activeadmin_simplemde'
