@@ -95,7 +95,7 @@ const ProfileRoot = props => {
         <div className="row column">
           <div className="profile-root-search-container">
             <h2 className="profile-root-description">
-              Explore the trade activities of countries, regions or traders
+              Explore the trade linkages between countries, regions and traders
             </h2>
             <div className="profile-root-actions">
               <Button
