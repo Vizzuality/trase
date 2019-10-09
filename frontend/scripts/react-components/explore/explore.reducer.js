@@ -5,6 +5,8 @@ import {
   EXPLORE__SET_SANKEY_CARDS
 } from 'react-components/explore/explore.actions';
 import createReducer from 'utils/createReducer';
+import immer from 'immer';
+import unionBy from 'lodash/unionBy';
 
 export const initialState = {
   selectedCommodityId: null,
@@ -15,19 +17,30 @@ export const initialState = {
 
 const exploreReducer = {
   [EXPLORE__SET_COMMODITY](state, action) {
-    const { selectedCommodityId } = action.payload;
-    return { ...state, selectedCommodityId };
+    return immer(state, draft => {
+      draft.selectedCommodityId = action.payload.selectedCommodityId;
+    });
   },
   [EXPLORE__SET_COUNTRY](state, action) {
-    const { selectedCountryId } = action.payload;
-    return { ...state, selectedCountryId };
+    return immer(state, draft => {
+      draft.selectedCountryId = action.payload.selectedCountryId;
+    });
   },
   [EXPLORE__SET_QUICK_FACTS](state, action) {
-    const { data, meta } = action.payload;
-    return { ...state, quickFacts: { data, meta } };
+    return immer(state, draft => {
+      draft.quickFacts = action.payload;
+    });
   },
   [EXPLORE__SET_SANKEY_CARDS](state, action) {
-    return { ...state, sankeyCards: action.payload };
+    return immer(state, draft => {
+      const { data, meta } = action.payload;
+      const newDataIds = data.reduce((acc, next) => ({ [next.id]: true }), {});
+      const intersection = state.sankeyCards?.data.filter(c => newDataIds[c.id]) || [];
+      draft.sankeyCards = {
+        meta,
+        data: unionBy([...intersection, ...data], 'id')
+      };
+    });
   }
 };
 

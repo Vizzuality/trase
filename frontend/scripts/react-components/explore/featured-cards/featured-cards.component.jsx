@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Heading from 'react-components/shared/heading';
 import Text from 'react-components/shared/text';
 import PropTypes from 'prop-types';
@@ -6,49 +6,52 @@ import capitalize from 'lodash/capitalize';
 import { EXPLORE_STEPS } from 'constants';
 import { useTransition, animated } from 'react-spring';
 import ResizeListener from 'react-components/shared/resize-listener.component';
+import cx from 'classnames';
 
 import 'react-components/explore/featured-cards/featured-cards.scss';
 
 const FeaturedCard = ({ card, openModal }) => {
   const { title, subtitle, id, commodityId, countryId } = card;
   return (
-    <button
-      onClick={() => openModal(card)}
-      className="c-featured-card"
-      data-test={`featured-card-${commodityId}-${countryId}-${id}`}
-    >
-      <Text
-        variant="mono"
-        align="center"
-        weight="bold"
-        size="lg"
-        transform="uppercase"
-        color="grey-faded"
+    <div className="c-featured-card">
+      <button
+        onClick={() => openModal(card)}
+        className="featured-card-button"
+        data-test={`featured-card-${commodityId}-${countryId}-${id}`}
       >
-        {card.countryName} · {card.commodityName}
-      </Text>
-      <Text
-        variant="mono"
-        align="center"
-        transform="uppercase"
-        color="grey-faded"
-        lineHeight="lg"
-        className="featured-card-text"
-        title={title}
-      >
-        {title}
-      </Text>
-      <Text
-        variant="mono"
-        align="center"
-        transform="uppercase"
-        color="grey-faded"
-        className="featured-card-text"
-        title={subtitle}
-      >
-        {subtitle}
-      </Text>
-    </button>
+        <Text
+          variant="mono"
+          align="center"
+          weight="bold"
+          size="lg"
+          transform="uppercase"
+          color="grey-faded"
+        >
+          {card.countryName} · {card.commodityName}
+        </Text>
+        <Text
+          variant="mono"
+          align="center"
+          transform="uppercase"
+          color="grey-faded"
+          lineHeight="lg"
+          className="featured-card-text"
+          title={title}
+        >
+          {title}
+        </Text>
+        <Text
+          variant="mono"
+          align="center"
+          transform="uppercase"
+          color="grey-faded"
+          className="featured-card-text"
+          title={subtitle}
+        >
+          {subtitle}
+        </Text>
+      </button>
+    </div>
   );
 };
 
@@ -68,16 +71,23 @@ const FeaturedCards = props => {
     isMobile,
     openModal
   } = props;
-  const [animatedItems, setAnimatedItems] = useState([]);
-  const transitions = useTransition(animatedItems, item => item.id, {
-    from: { transform: 'translateY(200px)' },
-    enter: { transform: 'translateY(0px)' },
-    leave: { display: 'none' }
+  const CARDS_SIZE_MARGIN = 16; // matches featured-cards.scss
+  const getSizeMargin = index => (index === 0 ? 0 : CARDS_SIZE_MARGIN);
+  const transitions = useTransition(cards, item => item.id, {
+    from: item => ({
+      transform: `translate(calc(${item.index * 100}% + ${getSizeMargin(item.index)}px), 200px)`
+    }),
+    enter: item => ({
+      transform: `translate(calc(${item.index * 100}% + ${getSizeMargin(item.index)}px), 0px)`
+    }),
+    update: item => ({
+      transform: `translate(calc(${item.index * 100}% + ${getSizeMargin(item.index)}px), 0px)`
+    }),
+    leave: item => ({
+      transform: `translate(calc(${item.index * 100}% + ${getSizeMargin(item.index)}px), 200px)`
+    }),
+    unique: true
   });
-
-  useEffect(() => {
-    setAnimatedItems(cards);
-  }, [cards]);
 
   const renderName = name => (
     <Text as="span" size="lg" weight="bold">
@@ -85,26 +95,16 @@ const FeaturedCards = props => {
     </Text>
   );
 
-  const renderCards = () =>
-    transitions.map(transition => {
-      if (!transition.item) return null;
-      const card = (
-        <animated.div key={transition.key} style={props} className="animated-card">
-          <FeaturedCard key={transition.item.id} card={transition.item} openModal={openModal} />
-        </animated.div>
-      );
-      return (
-        <ResizeListener>
-          {({ resolution }) =>
-            resolution.isSmall ? (
-              <div className="mobile-card"> {card} </div>
-            ) : (
-              <div className="columns small-5 medium-3"> {card} </div>
-            )
-          }
-        </ResizeListener>
-      );
-    });
+  const renderCards = isSmall =>
+    transitions.map(transition => (
+      <animated.div
+        key={transition.key}
+        style={!isSmall ? transition.props : undefined}
+        className={cx({ 'mobile-card': isSmall, 'desktop-card': !isSmall })}
+      >
+        <FeaturedCard key={transition.key} card={transition.item} openModal={openModal} />
+      </animated.div>
+    ));
 
   const clearStep =
     step === EXPLORE_STEPS.selected ? () => setCountry(null) : () => setCommodity(null);
@@ -128,21 +128,27 @@ const FeaturedCards = props => {
           )}
         </div>
       </div>
-      <div className="featured-cards-container">
-        <ResizeListener>
-          {({ resolution }) =>
-            resolution.isSmall ? (
-              <div className="mobile-featured-cards" data-test="featured-cards-row-mobile">
-                {cards && renderCards()}
-              </div>
+      <ResizeListener>
+        {({ resolution }) => (
+          <div
+            className={cx('featured-cards-container', {
+              '-mobile': resolution.isSmall
+            })}
+            data-test={cx({
+              'featured-cards-row-mobile': resolution.isSmall,
+              'featured-cards-row': !resolution.isSmall
+            })}
+          >
+            {resolution.isSmall ? (
+              renderCards(resolution.isSmall)
             ) : (
-              <div className="row" data-test="featured-cards-row">
-                {cards && renderCards()}
+              <div className="row column animated-cards-container">
+                {renderCards(resolution.isSmall)}
               </div>
-            )
-          }
-        </ResizeListener>
-      </div>
+            )}
+          </div>
+        )}
+      </ResizeListener>
     </div>
   );
 };

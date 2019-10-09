@@ -119,15 +119,16 @@ export const getCountryQuickFacts = createSelector(
 export const getCards = createSelector(
   [getSankeyCards, getContexts],
   (cards, contexts) => {
-    if (!cards) {
+    if (!cards || contexts.length === 0) {
       return [];
     }
 
-    return cards.data.map(options => {
+    return cards.data.map((options, index) => {
       const context = contexts.find(
         ctx => ctx.countryId === options.countryId && ctx.commodityId === options.commodityId
       );
       return {
+        index,
         id: options.id,
         title: options.title,
         subtitle: options.subtitle,
