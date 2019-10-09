@@ -1,12 +1,12 @@
 GIT
   remote: https://github.com/activeadmin/inherited_resources.git
-  revision: bf4a5bac90ea0bfb00b236ea9cb625fc9c19e250
+  revision: 47acbb1b0859b68639b85ebe95f99e67c34e8e1d
   specs:
-    inherited_resources (1.9.0)
-      actionpack (>= 5.0, < 5.3)
+    inherited_resources (1.11.0)
+      actionpack (>= 5.0, < 6.1)
       has_scope (~> 0.6)
-      railties (>= 5.0, < 5.3)
-      responders
+      railties (>= 5.0, < 6.1)
+      responders (>= 2, < 4)
 
 GIT
   remote: https://github.com/galetahub/ckeditor.git
