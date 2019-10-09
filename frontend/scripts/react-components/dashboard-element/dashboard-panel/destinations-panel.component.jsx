@@ -5,6 +5,7 @@ import GridList from 'react-components/shared/grid-list/grid-list.component';
 import { useFirstItem } from 'react-components/shared/grid-list/grid-list.hooks';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import ResizeListener from 'react-components/shared/resize-listener.component';
+import { BREAKPOINTS } from 'constants';
 
 function DestinationsPanel(props) {
   const {
@@ -23,7 +24,7 @@ function DestinationsPanel(props) {
   return (
     <ResizeListener>
       {({ windowWidth }) => {
-        const columnsCount = windowWidth > 1000 ? 5 : 3;
+        const columnsCount = windowWidth > BREAKPOINTS.laptop ? 5 : 3;
         return (
           <div className="grid-container">
             <SearchInput

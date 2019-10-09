@@ -4,7 +4,7 @@
   width: 560px;
   margin: 0 auto;
 
-  @media screen and (min-width: 1000px){
+  @media screen and (min-width: $breakpoint-laptop) {
     width: initial;
     margin: initial;
   }

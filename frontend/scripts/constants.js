@@ -233,7 +233,8 @@ export const HOME_VIDEO = {
 export const BREAKPOINTS = {
   mobile: 425,
   small: 640,
-  tablet: 768
+  tablet: 768,
+  laptop: 1024
 };
 
 export const MAX_SEARCH_RESULTS = 50;

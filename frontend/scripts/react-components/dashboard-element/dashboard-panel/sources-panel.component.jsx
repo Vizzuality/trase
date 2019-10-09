@@ -8,6 +8,7 @@ import Tabs from 'react-components/shared/tabs/tabs.component';
 import Text from 'react-components/shared/text/text.component';
 import capitalize from 'lodash/capitalize';
 import ResizeListener from 'react-components/shared/resize-listener.component';
+import { BREAKPOINTS } from 'constants';
 import Accordion from '../../shared/accordion/accordion.component';
 
 import 'react-components/dashboard-element/dashboard-panel/sources-panel.scss';
@@ -41,13 +42,14 @@ function SourcesPanel(props) {
   return (
     <ResizeListener>
       {({ windowWidth }) => {
-        const columnsCount = windowWidth > 1000 ? 5 : 3;
+        const columnsCount = windowWidth > BREAKPOINTS.laptop ? 5 : 3;
+        const width = windowWidth > BREAKPOINTS.laptop ? 950 : 560;
         return (
           <div className="c-sources-panel">
             <GridList
               className="sources-panel-pill-list"
               height={Math.min(200, Math.ceil(countries.length / columnsCount) * 50)}
-              width={950}
+              width={width}
               columnWidth={190}
               rowHeight={50}
               columnCount={columnsCount}
@@ -95,7 +97,7 @@ function SourcesPanel(props) {
                     className="sources-panel-pill-list"
                     items={sources}
                     height={sources.length > columnsCount ? 200 : 50}
-                    width={950}
+                    width={width}
                     rowHeight={50}
                     columnWidth={190}
                     columnCount={columnsCount}

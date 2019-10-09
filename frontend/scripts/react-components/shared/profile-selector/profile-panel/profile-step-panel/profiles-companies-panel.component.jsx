@@ -6,6 +6,7 @@ import { useFirstItem } from 'react-components/shared/grid-list/grid-list.hooks'
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import Tabs from 'react-components/shared/tabs/tabs.component';
 import ResizeListener from 'react-components/shared/resize-listener.component';
+import { BREAKPOINTS } from 'constants';
 import 'react-components/dashboard-element/dashboard-panel/companies-panel.scss';
 
 function ProfilesCompaniesPanel(props) {
@@ -31,7 +32,7 @@ function ProfilesCompaniesPanel(props) {
   return (
     <ResizeListener>
       {({ windowWidth }) => {
-        const columnsCount = windowWidth > 1000 ? 5 : 3;
+        const columnsCount = windowWidth > BREAKPOINTS.laptop ? 5 : 3;
         return (
           <div className="c-companies-panel">
             <SearchInput

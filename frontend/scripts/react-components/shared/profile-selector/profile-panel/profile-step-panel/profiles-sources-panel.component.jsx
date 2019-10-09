@@ -8,6 +8,7 @@ import Tabs from 'react-components/shared/tabs/tabs.component';
 import capitalize from 'lodash/capitalize';
 import Accordion from 'react-components/shared/accordion/accordion.component';
 import ResizeListener from 'react-components/shared/resize-listener.component';
+import { BREAKPOINTS } from 'constants';
 
 import 'react-components/dashboard-element/dashboard-panel/sources-panel.scss';
 
@@ -41,7 +42,7 @@ function ProfilesSourcesPanel(props) {
   return (
     <ResizeListener>
       {({ windowWidth }) => {
-        const columnsCount = windowWidth > 1000 ? 5 : 3;
+        const columnsCount = windowWidth > BREAKPOINTS.laptop ? 5 : 3;
         return (
           <div className="c-sources-panel">
             <GridList

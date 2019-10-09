@@ -8,7 +8,12 @@
   height: 100%;
   background-color: $light-gray;
   overflow: hidden;
-  min-width: 1000px;
+
+  min-width: 600px;
+
+  @media screen and (min-width: $breakpoint-laptop) {
+    min-width: $breakpoint-laptop;
+  }
 
   .dashboard-panel-content,
   .dashboard-indicators-content {
@@ -61,12 +66,12 @@
   }
 
   .grid-container {
-    width: 560px;
-    margin: 0 auto;
+  width: 560px;
+  margin: 0 auto;
 
-    @media screen and (min-width: 1000px) {
-      width: initial;
-      margin: initial;
-    }
+  @media screen and (min-width: $breakpoint-laptop) {
+    width: initial;
+    margin: initial;
+  }
   }
 }
