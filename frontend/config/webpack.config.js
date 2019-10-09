@@ -54,7 +54,6 @@ module.exports = {
       INDONESIA_LOGISTICS_MAP_ACTIVE: process.env.INDONESIA_LOGISTICS_MAP_ACTIVE === 'true',
       ENABLE_LEGACY_TOOL_SEARCH: process.env.ENABLE_LEGACY_TOOL_SEARCH === 'true',
       DISABLE_MULTIPLE_CONTEXT_PROFILES: process.env.DISABLE_MULTIPLE_CONTEXT_PROFILES === 'true',
-      NEW_PROFILES_PAGE: process.env.NEW_PROFILES_PAGE === 'true',
       API_V3_URL: JSON.stringify(process.env.API_V3_URL),
       API_V2_URL: JSON.stringify(process.env.API_V2_URL),
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),

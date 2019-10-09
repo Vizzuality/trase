@@ -87,7 +87,6 @@ const ProfileRoot = props => {
   const getResultTestId = item =>
     `search-result-${item.nodeType.toLowerCase()}-${item.name.toLowerCase()}`;
 
-  if (!NEW_PROFILES_PAGE) return renderLegacyProfiles(props);
   const { topProfiles, openModal } = props;
   return (
     <div className="l-profile-root">
