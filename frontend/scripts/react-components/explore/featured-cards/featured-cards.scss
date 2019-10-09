@@ -45,4 +45,11 @@
   border-radius: 5px;
   background-color: $white;
   cursor: pointer;
+  padding: 20px;
+
+  .featured-card-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }

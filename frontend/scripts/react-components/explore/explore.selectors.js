@@ -117,21 +117,29 @@ export const getCountryQuickFacts = createSelector(
 );
 
 export const getCards = createSelector(
-  [getSankeyCards],
-  cards => {
+  [getSankeyCards, getContexts],
+  (cards, contexts) => {
     if (!cards) {
       return [];
     }
-    return cards.data.map(options => ({
-      id: options.id,
-      title: options.title,
-      subtitle: options.subtitle,
-      countryId: options.countryId,
-      commodityId: options.commodityId,
-      links: {
-        sankey: translateLink(options, cards.meta),
-        dashboard: translateLink(options, cards.meta, 'dashboard')
-      }
-    }));
+
+    return cards.data.map(options => {
+      const context = contexts.find(
+        ctx => ctx.countryId === options.countryId && ctx.commodityId === options.commodityId
+      );
+      return {
+        id: options.id,
+        title: options.title,
+        subtitle: options.subtitle,
+        countryId: options.countryId,
+        commodityId: options.commodityId,
+        countryName: context.countryName,
+        commodityName: context.commodityName,
+        links: {
+          sankey: translateLink(options, cards.meta),
+          dashboard: translateLink(options, cards.meta, 'dashboard')
+        }
+      };
+    });
   }
 );

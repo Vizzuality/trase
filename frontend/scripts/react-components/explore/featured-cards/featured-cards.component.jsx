@@ -25,13 +25,28 @@ const FeaturedCard = ({ card, openModal }) => {
         transform="uppercase"
         color="grey-faded"
       >
-        {card.country_id} · {card.commodity_id}
+        {card.countryName} · {card.commodityName}
       </Text>
-      <Text variant="mono" align="center" transform="uppercase" color="grey-faded" lineHeight="lg">
-        {title || 'title'}
+      <Text
+        variant="mono"
+        align="center"
+        transform="uppercase"
+        color="grey-faded"
+        lineHeight="lg"
+        className="featured-card-text"
+        title={title}
+      >
+        {title}
       </Text>
-      <Text variant="mono" align="center" transform="uppercase" color="grey-faded">
-        {subtitle || 'subtitle'}
+      <Text
+        variant="mono"
+        align="center"
+        transform="uppercase"
+        color="grey-faded"
+        className="featured-card-text"
+        title={subtitle}
+      >
+        {subtitle}
       </Text>
     </button>
   );

@@ -62,8 +62,8 @@ export default [
       const {
         payload: { linkParams }
       } = action;
-      const { commodityId, countryId, title, subtitle } = linkParams;
-      return `commodity: ${commodityId} - country: ${countryId} - ${title} - ${subtitle}`;
+      const { commodityName, countryName, title, subtitle } = linkParams;
+      return `commodity: ${commodityName} - country: ${countryName} - ${title} - ${subtitle}`;
     }
   }
 ];
