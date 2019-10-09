@@ -74,6 +74,29 @@
       }
     }
 
+    h3 {
+      font-family: $font-family-2;
+      margin: 20px 0 0;
+      font-size: $font-size-xxx-regular;
+      font-weight: $font-weight-bold;
+      line-height: 1.5;
+      color: $charcoal-grey;
+
+      @media only screen and (max-width: $breakpoint-foundation-small) {
+        font-size: $font-size-medium
+      }
+
+      &:first-child {
+        margin: 0;
+      }
+
+      @media only screen and (max-width: $breakpoint-foundation-small) {
+        &:not(:first-child) {
+          margin: 10px 0 0;
+        }
+      }
+    }
+
     p, li {
       color: $charcoal-grey;
       font-family: $font-family-2;
