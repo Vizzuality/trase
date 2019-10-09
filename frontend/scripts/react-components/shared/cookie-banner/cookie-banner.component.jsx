@@ -16,7 +16,7 @@ function CookieBanner({ setAccepted, accepted }) {
               continuing to browse this site, you consent to the use of cookies and similar
               technologies. Please visit our{' '}
             </Text>
-            <Link to="/about/terms-of-use">
+            <Link to="/about/privacy-policy">
               <Text as="span" color="white" className="cookie-link">
                 privacy policy
               </Text>
