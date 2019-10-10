@@ -19,7 +19,11 @@
   .dashboard-indicators-content {
     flex: 1;
     overflow: auto;
-    padding: 20px 25px 0;
+    padding: 60px 25px 0;
+
+    @media screen and (min-width: $breakpoint-laptop) {
+      padding: 20px 25px 0;
+    }
   }
 
   .dashboard-indicators-content {
