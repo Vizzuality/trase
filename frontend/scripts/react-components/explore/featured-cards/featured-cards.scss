@@ -25,29 +25,31 @@ $card-min-width: 180px;
       overflow: auto;
       -webkit-overflow-scrolling: touch;
     }
-
-    &.-desktop {
-      position: relative;
-    }
   }
 
   .back-button {
     cursor: pointer;
   }
-}
 
-.mobile-card {
-  display: inline-block;
-  vertical-align: top;
-  width: $card-min-width;
-  margin: 0 20px;
-  flex-shrink: 0;
-}
+  .animated-cards-container {
+    height: 200px;
+    position: relative;
+    overflow-x: auto;
+  }
 
-.desktop-card {
-  position: absolute;
-  width: calc(25% - (#{$cards-side-margin} * 4));
-  min-width: $card-min-width;
+  .mobile-card {
+    display: inline-block;
+    vertical-align: top;
+    width: $card-min-width;
+    margin: 0 20px;
+    flex-shrink: 0;
+  }
+
+  .desktop-card {
+    position: absolute;
+    width: calc(25% - (#{$cards-side-margin} * 2));
+    min-width: $card-min-width;
+  }
 }
 
 .c-featured-card {
