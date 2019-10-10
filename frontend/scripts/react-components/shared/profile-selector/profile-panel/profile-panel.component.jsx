@@ -52,7 +52,7 @@ function ProfilePanel(props) {
               {singularTypes[profileType]} profile
             </Heading>
           </Heading>
-          <div className="row profile-panel-content">
+          <div className="row columns profile-panel-content">
             <ProfileStepPanel panelName={getPanelStepName(step)} />
           </div>
         </div>
@@ -68,7 +68,7 @@ function ProfilePanel(props) {
               commodity
             </Heading>
           </Heading>
-          <div className="row profile-panel-content">
+          <div className="row columns profile-panel-content">
             <ProfilesCommoditiesPanel
               page={panels.commodities.page}
               getMoreItems={setProfilesPage}
