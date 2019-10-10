@@ -33,6 +33,7 @@ function ProfilesCompaniesPanel(props) {
     <ResizeListener>
       {({ windowWidth }) => {
         const columnsCount = windowWidth > BREAKPOINTS.laptop ? 5 : 3;
+        const width = windowWidth > BREAKPOINTS.laptop ? 950 : 560;
         return (
           <div className="c-companies-panel">
             <SearchInput
@@ -58,7 +59,7 @@ function ProfilesCompaniesPanel(props) {
                   className="companies-panel-pill-list"
                   items={companies}
                   height={companies.length > columnsCount ? 200 : 50}
-                  width={950}
+                  width={width}
                   rowHeight={50}
                   columnWidth={190}
                   columnCount={columnsCount}

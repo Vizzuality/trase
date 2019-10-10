@@ -25,6 +25,7 @@ function DestinationsPanel(props) {
     <ResizeListener>
       {({ windowWidth }) => {
         const columnsCount = windowWidth > BREAKPOINTS.laptop ? 5 : 3;
+        const width = windowWidth > BREAKPOINTS.laptop ? 950 : 560;
         return (
           <div className="grid-container">
             <SearchInput
@@ -40,7 +41,7 @@ function DestinationsPanel(props) {
               className="dashboard-panel-pill-list"
               items={destinations}
               height={200}
-              width={950}
+              width={width}
               rowHeight={50}
               columnWidth={190}
               columnCount={columnsCount}

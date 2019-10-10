@@ -43,12 +43,13 @@ function ProfilesSourcesPanel(props) {
     <ResizeListener>
       {({ windowWidth }) => {
         const columnsCount = windowWidth > BREAKPOINTS.laptop ? 5 : 3;
+        const width = windowWidth > BREAKPOINTS.laptop ? 950 : 560;
         return (
           <div className="c-sources-panel">
             <GridList
               className="sources-panel-pill-list"
               height={Math.min(200, Math.ceil(countries.length / columnsCount) * 50)}
-              width={950}
+              width={width}
               columnWidth={190}
               rowHeight={50}
               columnCount={columnsCount}
@@ -95,7 +96,7 @@ function ProfilesSourcesPanel(props) {
                     className="sources-panel-pill-list"
                     items={sources}
                     height={sources.length > columnsCount ? 200 : 50}
-                    width={950}
+                    width={width}
                     rowHeight={50}
                     columnWidth={190}
                     columnCount={columnsCount}
