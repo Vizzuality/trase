@@ -25,9 +25,13 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
     {
       sources_ids: [],
       companies_ids: [],
+      exporters_ids: [],
+      importers_ids: [],
       destinations_ids: [],
       excluded_sources_ids: [],
       excluded_companies_ids: [],
+      excluded_exporters_ids: [],
+      excluded_importers_ids: [],
       excluded_destinations_ids: []
     }
   }
@@ -76,6 +80,8 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_biome_node_type,
         api_v3_state_node_type,
         api_v3_municipality_node_type,
+        api_v3_logistics_hub_node_type,
+        api_v3_port_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
         api_v3_country_node_type
@@ -110,6 +116,8 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_biome_node_type,
         api_v3_state_node_type,
         api_v3_municipality_node_type,
+        api_v3_logistics_hub_node_type,
+        api_v3_port_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
         api_v3_country_node_type
@@ -145,6 +153,8 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_biome_node_type,
         api_v3_state_node_type,
         api_v3_municipality_node_type,
+        api_v3_logistics_hub_node_type,
+        api_v3_port_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
         api_v3_country_node_type
@@ -181,6 +191,8 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_biome_node_type,
         api_v3_state_node_type,
         api_v3_municipality_node_type,
+        api_v3_logistics_hub_node_type,
+        api_v3_port_node_type,
         api_v3_exporter_node_type,
         api_v3_importer_node_type,
         api_v3_country_node_type
@@ -200,6 +212,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
     end
   end
 
+  # TODO: remove once dashboards_companies_mv retired
   context 'when multiple years, non-cont indicator, 1 exporter' do
     let(:overview_parameters) {
       mandatory_parameters.merge(multi_year).merge(
@@ -238,6 +251,8 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_biome_node_type,
         api_v3_state_node_type,
         api_v3_municipality_node_type,
+        api_v3_logistics_hub_node_type,
+        api_v3_port_node_type,
         api_v3_importer_node_type,
         api_v3_country_node_type
       ].map do |node_type|
@@ -256,6 +271,65 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
     end
   end
 
+  context 'when multiple years, non-cont indicator, 1 exporter' do
+    let(:overview_parameters) {
+      mandatory_parameters.merge(multi_year).merge(
+        ncont_attribute_id: ncont_attribute.id
+      )
+    }
+    let(:parameters) {
+      overview_parameters.
+        merge(no_flow_path_filters).
+        merge(
+          exporters_ids: [
+            api_v3_exporter1_node.id
+          ]
+        )
+    }
+    let(:simplified_expected_chart_types) {
+      [
+        {
+          source: :multi_year_ncont_overview,
+          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::STACKED_BAR_CHART,
+          x: :year,
+          break_by: :ncont_attribute
+        },
+        {
+          source: :multi_year_ncont_overview,
+          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::STACKED_BAR_CHART,
+          x: :year,
+          break_by: :ncont_attribute,
+          node_type_id: api_v3_exporter_node_type.id,
+          exporters_ids: [api_v3_exporter1_node.id],
+          single_filter_key: :exporters,
+          grouping_key: :cont_attribute_id,
+          grouping_label: api_v3_exporter1_node.name
+        }
+      ] + [
+        api_v3_biome_node_type,
+        api_v3_state_node_type,
+        api_v3_municipality_node_type,
+        api_v3_logistics_hub_node_type,
+        api_v3_port_node_type,
+        api_v3_importer_node_type,
+        api_v3_country_node_type
+      ].map do |node_type|
+        {
+          source: :multi_year_no_ncont_node_type_view,
+          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::STACKED_BAR_CHART,
+          x: :year,
+          break_by: :node_type,
+          node_type_id: node_type.id
+        }
+      end
+    }
+
+    it 'returns expected chart types' do
+      expect(chart_types).to match_array(expected_chart_types)
+    end
+  end
+
+  # TODO: remove once dashboards_companies_mv retired
   context 'when multiple years, non-cont indicator, 1 exporter, 1 excluded source' do
     let(:overview_parameters) {
       mandatory_parameters.merge(multi_year).merge(
@@ -296,6 +370,8 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_biome_node_type,
         api_v3_state_node_type,
         api_v3_municipality_node_type,
+        api_v3_logistics_hub_node_type,
+        api_v3_port_node_type,
         api_v3_importer_node_type,
         api_v3_country_node_type
       ].map do |node_type|
@@ -314,6 +390,67 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
     end
   end
 
+  context 'when multiple years, non-cont indicator, 1 exporter, 1 excluded source' do
+    let(:overview_parameters) {
+      mandatory_parameters.merge(multi_year).merge(
+        ncont_attribute_id: ncont_attribute.id
+      )
+    }
+    let(:parameters) {
+      overview_parameters.
+        merge(no_flow_path_filters).
+        merge(
+          exporters_ids: [
+            api_v3_exporter1_node.id
+          ],
+          excluded_sources_ids: [api_v3_municipality_node.id]
+        )
+    }
+    let(:simplified_expected_chart_types) {
+      [
+        {
+          source: :multi_year_ncont_overview,
+          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::STACKED_BAR_CHART,
+          x: :year,
+          break_by: :ncont_attribute
+        },
+        {
+          source: :multi_year_ncont_overview,
+          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::STACKED_BAR_CHART,
+          x: :year,
+          break_by: :ncont_attribute,
+          node_type_id: api_v3_exporter_node_type.id,
+          exporters_ids: [api_v3_exporter1_node.id],
+          excluded_sources_ids: [api_v3_municipality_node.id],
+          single_filter_key: :exporters,
+          grouping_key: :cont_attribute_id,
+          grouping_label: api_v3_exporter1_node.name
+        }
+      ] + [
+        api_v3_biome_node_type,
+        api_v3_state_node_type,
+        api_v3_municipality_node_type,
+        api_v3_logistics_hub_node_type,
+        api_v3_port_node_type,
+        api_v3_importer_node_type,
+        api_v3_country_node_type
+      ].map do |node_type|
+        {
+          source: :multi_year_no_ncont_node_type_view,
+          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::STACKED_BAR_CHART,
+          x: :year,
+          break_by: :node_type,
+          node_type_id: node_type.id
+        }
+      end
+    }
+
+    it 'returns expected chart types' do
+      expect(chart_types).to match_array(expected_chart_types)
+    end
+  end
+
+  # TODO: remove once dashboards_companies_mv retired
   context 'when multiple years, non-cont indicator, 2 exporters' do
     let(:overview_parameters) {
       mandatory_parameters.merge(multi_year).merge(
@@ -363,6 +500,78 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         api_v3_biome_node_type,
         api_v3_state_node_type,
         api_v3_municipality_node_type,
+        api_v3_logistics_hub_node_type,
+        api_v3_port_node_type,
+        api_v3_importer_node_type,
+        api_v3_exporter_node_type,
+        api_v3_country_node_type
+      ].map do |node_type|
+        {
+          source: :multi_year_no_ncont_node_type_view,
+          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::STACKED_BAR_CHART,
+          x: :year,
+          break_by: :node_type,
+          node_type_id: node_type.id
+        }
+      end
+    }
+
+    it 'returns expected chart types' do
+      expect(chart_types).to match_array(expected_chart_types)
+    end
+  end
+
+  context 'when multiple years, non-cont indicator, 2 exporters' do
+    let(:overview_parameters) {
+      mandatory_parameters.merge(multi_year).merge(
+        ncont_attribute_id: ncont_attribute.id
+      )
+    }
+    let(:parameters) {
+      overview_parameters.
+        merge(no_flow_path_filters).
+        merge(
+          exporters_ids: [
+            api_v3_exporter1_node.id, api_v3_other_exporter_node.id
+          ]
+        )
+    }
+    let(:simplified_expected_chart_types) {
+      [
+        {
+          source: :multi_year_ncont_overview,
+          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::STACKED_BAR_CHART,
+          x: :year,
+          break_by: :ncont_attribute
+        },
+        {
+          source: :multi_year_ncont_overview,
+          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::STACKED_BAR_CHART,
+          x: :year,
+          break_by: :ncont_attribute,
+          node_type_id: api_v3_exporter_node_type.id,
+          exporters_ids: [api_v3_exporter1_node.id],
+          single_filter_key: :exporters,
+          grouping_key: :cont_attribute_id,
+          grouping_label: api_v3_exporter1_node.name
+        },
+        {
+          source: :multi_year_ncont_overview,
+          type: Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts::STACKED_BAR_CHART,
+          x: :year,
+          break_by: :ncont_attribute,
+          node_type_id: api_v3_exporter_node_type.id,
+          exporters_ids: [api_v3_other_exporter_node.id],
+          single_filter_key: :exporters,
+          grouping_key: :cont_attribute_id,
+          grouping_label: api_v3_other_exporter_node.name
+        }
+      ] + [
+        api_v3_biome_node_type,
+        api_v3_state_node_type,
+        api_v3_municipality_node_type,
+        api_v3_logistics_hub_node_type,
+        api_v3_port_node_type,
         api_v3_importer_node_type,
         api_v3_exporter_node_type,
         api_v3_country_node_type

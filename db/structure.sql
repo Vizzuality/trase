@@ -149,6 +149,86 @@ $$;
 COMMENT ON FUNCTION public.bucket_index(buckets double precision[], value double precision) IS 'Given an n-element array of choropleth buckets and a positive value, returns index of bucket where value falls (1 to n + 1); else returns 0.';
 
 
+--
+-- Name: upsert_attributes(); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.upsert_attributes() RETURNS void
+    LANGUAGE sql
+    AS $$
+
+INSERT INTO attributes (
+  original_id,
+  original_type,
+  name,
+  display_name,
+  unit,
+  unit_type,
+  tooltip_text
+)
+SELECT
+  original_id,
+  original_type,
+  name,
+  display_name,
+  unit,
+  unit_type,
+  tooltip_text
+FROM attributes_v
+
+EXCEPT
+
+SELECT
+  original_id,
+  original_type,
+  name,
+  display_name,
+  unit,
+  unit_type,
+  tooltip_text
+FROM attributes
+ON CONFLICT (name, original_type) DO UPDATE SET
+  original_id = excluded.original_id,
+  display_name = excluded.display_name,
+  unit = excluded.unit,
+  unit_type = excluded.unit_type,
+  tooltip_text = excluded.tooltip_text;
+
+DELETE FROM attributes
+USING (
+  SELECT
+    original_id,
+    original_type,
+    name,
+    display_name,
+    unit,
+    unit_type,
+    tooltip_text
+  FROM attributes
+
+  EXCEPT
+
+  SELECT
+    original_id,
+    original_type,
+    name,
+    display_name,
+    unit,
+    unit_type,
+    tooltip_text
+  FROM attributes_v
+) s
+WHERE attributes.name = s.name AND attributes.original_type = s.original_type;
+$$;
+
+
+--
+-- Name: FUNCTION upsert_attributes(); Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON FUNCTION public.upsert_attributes() IS 'Upserts attributes based on new values as returned by attributes_v (identity by original_type + name)';
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -472,6 +552,70 @@ CREATE TABLE public.ar_internal_metadata (
 
 
 --
+-- Name: attributes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.attributes (
+    id bigint NOT NULL,
+    original_id integer NOT NULL,
+    original_type text NOT NULL,
+    name text NOT NULL,
+    display_name text,
+    unit text,
+    unit_type text,
+    tooltip_text text,
+    CONSTRAINT attributes_original_type_check CHECK ((original_type = ANY (ARRAY['Ind'::text, 'Qual'::text, 'Quant'::text])))
+);
+
+
+--
+-- Name: TABLE attributes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.attributes IS 'Merges inds, quals and quants.';
+
+
+--
+-- Name: COLUMN attributes.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.attributes.id IS 'Id is fixed between data updates, unless name changes';
+
+
+--
+-- Name: COLUMN attributes.original_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.attributes.original_id IS 'Id from the original table (inds / quals / quants)';
+
+
+--
+-- Name: COLUMN attributes.original_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.attributes.original_type IS 'Type of the original entity (Ind / Qual / Quant)';
+
+
+--
+-- Name: attributes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.attributes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: attributes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.attributes_id_seq OWNED BY public.attributes.id;
+
+
+--
 -- Name: ind_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -733,96 +877,46 @@ COMMENT ON COLUMN public.quants.unit IS 'Unit in which values for this attribute
 
 
 --
--- Name: attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+-- Name: attributes_v; Type: VIEW; Schema: public; Owner: -
 --
 
-CREATE MATERIALIZED VIEW public.attributes_mv AS
- SELECT row_number() OVER () AS id,
+CREATE VIEW public.attributes_v AS
+ SELECT s.original_id,
     s.original_type,
-    s.original_id,
     s.name,
     s.display_name,
     s.unit,
     s.unit_type,
-    s.tooltip_text,
-    s.is_visible_on_actor_profile,
-    s.is_visible_on_place_profile,
-    s.is_temporal_on_actor_profile,
-    s.is_temporal_on_place_profile,
-    s.aggregate_method
-   FROM ( SELECT 'Quant'::text AS original_type,
-            quants.id AS original_id,
+    s.tooltip_text
+   FROM ( SELECT quants.id AS original_id,
+            'Quant'::text AS original_type,
             quants.name,
             qp.display_name,
             quants.unit,
             qp.unit_type,
-            qp.tooltip_text,
-            qp.is_visible_on_actor_profile,
-            qp.is_visible_on_place_profile,
-            qp.is_temporal_on_actor_profile,
-            qp.is_temporal_on_place_profile,
-            'SUM'::text AS aggregate_method
+            qp.tooltip_text
            FROM (public.quants
              LEFT JOIN public.quant_properties qp ON ((qp.quant_id = quants.id)))
         UNION ALL
-         SELECT 'Ind'::text AS text,
-            inds.id,
+         SELECT inds.id,
+            'Ind'::text AS text,
             inds.name,
             ip.display_name,
             inds.unit,
             ip.unit_type,
-            ip.tooltip_text,
-            ip.is_visible_on_actor_profile,
-            ip.is_visible_on_place_profile,
-            ip.is_temporal_on_actor_profile,
-            ip.is_temporal_on_place_profile,
-            'AVG'::text AS text
+            ip.tooltip_text
            FROM (public.inds
              LEFT JOIN public.ind_properties ip ON ((ip.ind_id = inds.id)))
         UNION ALL
-         SELECT 'Qual'::text AS text,
-            quals.id,
+         SELECT quals.id,
+            'Qual'::text AS text,
             quals.name,
             qp.display_name,
             NULL::text AS text,
             NULL::text AS text,
-            qp.tooltip_text,
-            qp.is_visible_on_actor_profile,
-            qp.is_visible_on_place_profile,
-            qp.is_temporal_on_actor_profile,
-            qp.is_temporal_on_place_profile,
-            NULL::text AS text
+            qp.tooltip_text
            FROM (public.quals
-             LEFT JOIN public.qual_properties qp ON ((qp.qual_id = quals.id)))) s
-  WITH NO DATA;
-
-
---
--- Name: MATERIALIZED VIEW attributes_mv; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON MATERIALIZED VIEW public.attributes_mv IS 'Materialized view which merges inds, quals and quants.';
-
-
---
--- Name: COLUMN attributes_mv.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.attributes_mv.id IS 'The unique id is a sequential number which is generated at REFRESH and therefore not fixed.';
-
-
---
--- Name: COLUMN attributes_mv.original_type; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.attributes_mv.original_type IS 'Type of the original entity (Ind / Qual / Quant)';
-
-
---
--- Name: COLUMN attributes_mv.original_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.attributes_mv.original_id IS 'Id from the original table (inds / quals / quants)';
+             LEFT JOIN public.qual_properties qp ON ((qp.qual_id = quals.id)))) s;
 
 
 --
@@ -1081,7 +1175,7 @@ CREATE MATERIALIZED VIEW public.chart_attributes_mv AS
     cha.updated_at
    FROM ((public.chart_quals chq
      JOIN public.chart_attributes cha ON ((cha.id = chq.chart_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = chq.qual_id) AND (a.original_type = 'Qual'::text))))
+     JOIN public.attributes a ON (((a.original_id = chq.qual_id) AND (a.original_type = 'Qual'::text))))
 UNION ALL
  SELECT cha.id,
     cha.chart_id,
@@ -1103,7 +1197,7 @@ UNION ALL
     cha.updated_at
    FROM ((public.chart_quants chq
      JOIN public.chart_attributes cha ON ((cha.id = chq.chart_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = chq.quant_id) AND (a.original_type = 'Quant'::text))))
+     JOIN public.attributes a ON (((a.original_id = chq.quant_id) AND (a.original_type = 'Quant'::text))))
 UNION ALL
  SELECT cha.id,
     cha.chart_id,
@@ -1125,7 +1219,7 @@ UNION ALL
     cha.updated_at
    FROM ((public.chart_inds chi
      JOIN public.chart_attributes cha ON ((cha.id = chi.chart_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = chi.ind_id) AND (a.original_type = 'Ind'::text))))
+     JOIN public.attributes a ON (((a.original_id = chi.ind_id) AND (a.original_type = 'Ind'::text))))
   WITH NO DATA;
 
 
@@ -1140,7 +1234,7 @@ COMMENT ON MATERIALIZED VIEW public.chart_attributes_mv IS 'Materialized view wh
 -- Name: COLUMN chart_attributes_mv.display_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.chart_attributes_mv.display_name IS 'If absent in chart_attributes this is pulled from attributes_mv.';
+COMMENT ON COLUMN public.chart_attributes_mv.display_name IS 'If absent in chart_attributes this is pulled from attributes.';
 
 
 --
@@ -1795,8 +1889,8 @@ CREATE TABLE public.context_node_type_properties (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     is_choropleth_disabled boolean DEFAULT false NOT NULL,
-    role character varying,
-    prefix text,
+    role character varying NOT NULL,
+    prefix text NOT NULL,
     CONSTRAINT context_node_type_properties_role_check CHECK (((role)::text = ANY (ARRAY[('source'::character varying)::text, ('exporter'::character varying)::text, ('importer'::character varying)::text, ('destination'::character varying)::text])))
 );
 
@@ -2958,7 +3052,7 @@ CREATE MATERIALIZED VIEW public.dashboards_attributes_mv AS
     a.id AS attribute_id
    FROM ((public.dashboards_inds di
      JOIN public.dashboards_attributes da ON ((da.id = di.dashboards_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = di.ind_id) AND (a.original_type = 'Ind'::text))))
+     JOIN public.attributes a ON (((a.original_id = di.ind_id) AND (a.original_type = 'Ind'::text))))
 UNION ALL
  SELECT da.id,
     da.dashboards_attribute_group_id,
@@ -2966,7 +3060,7 @@ UNION ALL
     a.id AS attribute_id
    FROM ((public.dashboards_quals dq
      JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = dq.qual_id) AND (a.original_type = 'Qual'::text))))
+     JOIN public.attributes a ON (((a.original_id = dq.qual_id) AND (a.original_type = 'Qual'::text))))
 UNION ALL
  SELECT da.id,
     da.dashboards_attribute_group_id,
@@ -2974,7 +3068,7 @@ UNION ALL
     a.id AS attribute_id
    FROM ((public.dashboards_quants dq
      JOIN public.dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = dq.quant_id) AND (a.original_type = 'Quant'::text))))
+     JOIN public.attributes a ON (((a.original_id = dq.quant_id) AND (a.original_type = 'Quant'::text))))
   WITH NO DATA;
 
 
@@ -2989,7 +3083,7 @@ COMMENT ON MATERIALIZED VIEW public.dashboards_attributes_mv IS 'Materialized vi
 -- Name: COLUMN dashboards_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dashboards_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+COMMENT ON COLUMN public.dashboards_attributes_mv.attribute_id IS 'References the unique id in attributes.';
 
 
 --
@@ -3197,16 +3291,16 @@ CREATE MATERIALIZED VIEW public.dashboards_companies_mv AS
         ), filtered_flow_nodes AS (
          SELECT flow_nodes.flow_id,
             flow_nodes.node_id,
+            nodes.node_type_id,
+            contexts.country_id,
+            contexts.commodity_id,
             btrim(nodes.name) AS name,
             to_tsvector('simple'::regconfig, COALESCE(btrim(nodes.name), ''::text)) AS name_tsvector,
-            nodes.node_type_id,
             node_types.name AS node_type,
                 CASE
                     WHEN ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text)) THEN cnt.profile
                     ELSE NULL::text
-                END AS profile,
-            contexts.country_id,
-            contexts.commodity_id
+                END AS profile
            FROM (((((flow_nodes
              JOIN public.nodes ON ((nodes.id = flow_nodes.node_id)))
              JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
@@ -3216,18 +3310,18 @@ CREATE MATERIALIZED VIEW public.dashboards_companies_mv AS
           WHERE ((cnt.role)::text = ANY ((ARRAY['exporter'::character varying, 'importer'::character varying])::text[]))
         )
  SELECT ffn.node_id AS id,
-    ffn.name,
-    ffn.name_tsvector,
     ffn.node_type_id,
-    ffn.node_type,
-    ffn.profile,
     ffn.country_id,
     ffn.commodity_id,
-    fn.node_id
+    fn.node_id,
+    ffn.name,
+    ffn.name_tsvector,
+    ffn.node_type,
+    ffn.profile
    FROM (filtered_flow_nodes ffn
      JOIN flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
   WHERE (ffn.node_id <> fn.node_id)
-  GROUP BY ffn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type_id, ffn.node_type, ffn.profile, ffn.country_id, ffn.commodity_id, fn.node_id
+  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile
   WITH NO DATA;
 
 
@@ -3371,18 +3465,18 @@ CREATE MATERIALIZED VIEW public.dashboards_destinations_mv AS
           WHERE ((cnt.role)::text = 'destination'::text)
         )
  SELECT ffn.node_id AS id,
-    ffn.name,
-    ffn.name_tsvector,
     ffn.node_type_id,
-    ffn.node_type,
-    ffn.profile,
     ffn.country_id,
     ffn.commodity_id,
-    fn.node_id
+    fn.node_id,
+    ffn.name,
+    ffn.name_tsvector,
+    ffn.node_type,
+    ffn.profile
    FROM (filtered_flow_nodes ffn
      JOIN flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
   WHERE (ffn.node_id <> fn.node_id)
-  GROUP BY ffn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type_id, ffn.node_type, ffn.profile, ffn.country_id, ffn.commodity_id, fn.node_id
+  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile
   WITH NO DATA;
 
 
@@ -3419,6 +3513,130 @@ COMMENT ON COLUMN public.dashboards_destinations_mv.commodity_id IS 'id of commo
 --
 
 COMMENT ON COLUMN public.dashboards_destinations_mv.node_id IS 'id of another node from the same supply chain';
+
+
+--
+-- Name: dashboards_exporters_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.dashboards_exporters_mv AS
+ WITH active_cnt AS (
+         SELECT cnt.context_id,
+            cnt.column_position,
+            cnt_props.role,
+            profiles.name AS profile
+           FROM ((public.context_node_types cnt
+             JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
+             LEFT JOIN public.profiles ON ((cnt.id = profiles.context_node_type_id)))
+          WHERE (cnt_props.role IS NOT NULL)
+        ), flow_nodes AS (
+         SELECT flow_nodes.context_id,
+            flow_nodes.flow_id,
+            flow_nodes.node_id,
+            flow_nodes."position"
+           FROM (( SELECT flow_nodes_mv.context_id,
+                    flow_nodes_mv.flow_id,
+                    flow_nodes_mv.node_id,
+                    flow_nodes_mv."position"
+                   FROM public.flow_nodes_mv) flow_nodes
+             JOIN active_cnt ON (((flow_nodes.context_id = active_cnt.context_id) AND (flow_nodes."position" = (active_cnt.column_position + 1)))))
+        ), filtered_flow_nodes AS (
+         SELECT flow_nodes.flow_id,
+            flow_nodes.node_id,
+            nodes.node_type_id,
+            contexts.country_id,
+            contexts.commodity_id,
+            btrim(nodes.name) AS name,
+            to_tsvector('simple'::regconfig, COALESCE(btrim(nodes.name), ''::text)) AS name_tsvector,
+            node_types.name AS node_type,
+                CASE
+                    WHEN ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text)) THEN cnt.profile
+                    ELSE NULL::text
+                END AS profile
+           FROM (((((flow_nodes
+             JOIN public.nodes ON ((nodes.id = flow_nodes.node_id)))
+             JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
+             JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
+             JOIN active_cnt cnt ON (((cnt.context_id = flow_nodes.context_id) AND ((cnt.column_position + 1) = flow_nodes."position"))))
+             JOIN public.contexts ON (((contexts.id = flow_nodes.context_id) AND (contexts.id = cnt.context_id))))
+          WHERE ((cnt.role)::text = 'exporter'::text)
+        )
+ SELECT ffn.node_id AS id,
+    ffn.node_type_id,
+    ffn.country_id,
+    ffn.commodity_id,
+    fn.node_id,
+    ffn.name,
+    ffn.name_tsvector,
+    ffn.node_type,
+    ffn.profile
+   FROM (filtered_flow_nodes ffn
+     JOIN flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
+  WHERE (ffn.node_id <> fn.node_id)
+  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile
+  WITH NO DATA;
+
+
+--
+-- Name: dashboards_importers_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.dashboards_importers_mv AS
+ WITH active_cnt AS (
+         SELECT cnt.context_id,
+            cnt.column_position,
+            cnt_props.role,
+            profiles.name AS profile
+           FROM ((public.context_node_types cnt
+             JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
+             LEFT JOIN public.profiles ON ((cnt.id = profiles.context_node_type_id)))
+          WHERE (cnt_props.role IS NOT NULL)
+        ), flow_nodes AS (
+         SELECT flow_nodes.context_id,
+            flow_nodes.flow_id,
+            flow_nodes.node_id,
+            flow_nodes."position"
+           FROM (( SELECT flow_nodes_mv.context_id,
+                    flow_nodes_mv.flow_id,
+                    flow_nodes_mv.node_id,
+                    flow_nodes_mv."position"
+                   FROM public.flow_nodes_mv) flow_nodes
+             JOIN active_cnt ON (((flow_nodes.context_id = active_cnt.context_id) AND (flow_nodes."position" = (active_cnt.column_position + 1)))))
+        ), filtered_flow_nodes AS (
+         SELECT flow_nodes.flow_id,
+            flow_nodes.node_id,
+            nodes.node_type_id,
+            contexts.country_id,
+            contexts.commodity_id,
+            btrim(nodes.name) AS name,
+            to_tsvector('simple'::regconfig, COALESCE(btrim(nodes.name), ''::text)) AS name_tsvector,
+            node_types.name AS node_type,
+                CASE
+                    WHEN ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text)) THEN cnt.profile
+                    ELSE NULL::text
+                END AS profile
+           FROM (((((flow_nodes
+             JOIN public.nodes ON ((nodes.id = flow_nodes.node_id)))
+             JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
+             JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
+             JOIN active_cnt cnt ON (((cnt.context_id = flow_nodes.context_id) AND ((cnt.column_position + 1) = flow_nodes."position"))))
+             JOIN public.contexts ON (((contexts.id = flow_nodes.context_id) AND (contexts.id = cnt.context_id))))
+          WHERE ((cnt.role)::text = 'importer'::text)
+        )
+ SELECT ffn.node_id AS id,
+    ffn.node_type_id,
+    ffn.country_id,
+    ffn.commodity_id,
+    fn.node_id,
+    ffn.name,
+    ffn.name_tsvector,
+    ffn.node_type,
+    ffn.profile
+   FROM (filtered_flow_nodes ffn
+     JOIN flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
+  WHERE (ffn.node_id <> fn.node_id)
+  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile
+  WITH NO DATA;
 
 
 --
@@ -3479,41 +3697,6 @@ ALTER SEQUENCE public.dashboards_quants_id_seq OWNED BY public.dashboards_quants
 
 
 --
--- Name: node_quals; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.node_quals (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    qual_id integer NOT NULL,
-    year integer,
-    value text NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE node_quals; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.node_quals IS 'Values of quals for node';
-
-
---
--- Name: COLUMN node_quals.year; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_quals.year IS 'Year; empty (NULL) for all years';
-
-
---
--- Name: COLUMN node_quals.value; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_quals.value IS 'Textual value';
-
-
---
 -- Name: dashboards_sources_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -3560,18 +3743,18 @@ CREATE MATERIALIZED VIEW public.dashboards_sources_mv AS
           WHERE ((cnt.role)::text = 'source'::text)
         )
  SELECT ffn.node_id AS id,
-    ffn.name,
-    ffn.name_tsvector,
     ffn.node_type_id,
-    ffn.node_type,
-    ffn.profile,
     ffn.country_id,
     ffn.commodity_id,
-    fn.node_id
+    fn.node_id,
+    ffn.name,
+    ffn.name_tsvector,
+    ffn.node_type,
+    ffn.profile
    FROM (filtered_flow_nodes ffn
      JOIN flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
   WHERE (ffn.node_id <> fn.node_id)
-  GROUP BY ffn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type_id, ffn.node_type, ffn.profile, ffn.country_id, ffn.commodity_id, fn.node_id
+  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile
   WITH NO DATA;
 
 
@@ -3884,7 +4067,7 @@ CREATE MATERIALIZED VIEW public.download_attributes_mv AS
     a.original_id
    FROM ((public.download_quants daq
      JOIN public.download_attributes da ON ((da.id = daq.download_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = daq.quant_id) AND (a.original_type = 'Quant'::text))))
+     JOIN public.attributes a ON (((a.original_id = daq.quant_id) AND (a.original_type = 'Quant'::text))))
 UNION ALL
  SELECT da.id,
     da.context_id,
@@ -3898,7 +4081,7 @@ UNION ALL
     a.original_id
    FROM ((public.download_quals daq
      JOIN public.download_attributes da ON ((da.id = daq.download_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = daq.qual_id) AND (a.original_type = 'Qual'::text))))
+     JOIN public.attributes a ON (((a.original_id = daq.qual_id) AND (a.original_type = 'Qual'::text))))
   WITH NO DATA;
 
 
@@ -3913,7 +4096,7 @@ COMMENT ON MATERIALIZED VIEW public.download_attributes_mv IS 'Materialized view
 -- Name: COLUMN download_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.download_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+COMMENT ON COLUMN public.download_attributes_mv.attribute_id IS 'References the unique id in attributes.';
 
 
 --
@@ -4712,13 +4895,12 @@ CREATE MATERIALIZED VIEW public.map_attributes_mv AS
     'quant'::text AS attribute_type,
     a.unit,
     a.tooltip_text AS description,
-    a.aggregate_method,
     a.original_id AS original_attribute_id,
     mag.context_id
    FROM (((public.map_quants maq
      JOIN public.map_attributes ma ON ((ma.id = maq.map_attribute_id)))
      JOIN public.map_attribute_groups mag ON ((mag.id = ma.map_attribute_group_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = maq.quant_id) AND (a.original_type = 'Quant'::text))))
+     JOIN public.attributes a ON (((a.original_id = maq.quant_id) AND (a.original_type = 'Quant'::text))))
 UNION ALL
  SELECT ma.id,
     ma.map_attribute_group_id,
@@ -4736,13 +4918,12 @@ UNION ALL
     'ind'::text AS attribute_type,
     a.unit,
     a.tooltip_text AS description,
-    a.aggregate_method,
     a.original_id AS original_attribute_id,
     mag.context_id
    FROM (((public.map_inds mai
      JOIN public.map_attributes ma ON ((ma.id = mai.map_attribute_id)))
      JOIN public.map_attribute_groups mag ON ((mag.id = ma.map_attribute_group_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = mai.ind_id) AND (a.original_type = 'Ind'::text))))
+     JOIN public.attributes a ON (((a.original_id = mai.ind_id) AND (a.original_type = 'Ind'::text))))
   WITH NO DATA;
 
 
@@ -4757,7 +4938,7 @@ COMMENT ON MATERIALIZED VIEW public.map_attributes_mv IS 'Materialized view whic
 -- Name: COLUMN map_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.map_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+COMMENT ON COLUMN public.map_attributes_mv.attribute_id IS 'References the unique id in attributes.';
 
 
 --
@@ -4786,13 +4967,6 @@ COMMENT ON COLUMN public.map_attributes_mv.unit IS 'Name of the attribute''s uni
 --
 
 COMMENT ON COLUMN public.map_attributes_mv.description IS 'Attribute''s description';
-
-
---
--- Name: COLUMN map_attributes_mv.aggregate_method; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.map_attributes_mv.aggregate_method IS 'The method used to aggregate the data';
 
 
 --
@@ -4883,6 +5057,41 @@ CREATE SEQUENCE public.node_properties_id_seq
 --
 
 ALTER SEQUENCE public.node_properties_id_seq OWNED BY public.node_properties.id;
+
+
+--
+-- Name: node_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.node_quals (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    qual_id integer NOT NULL,
+    year integer,
+    value text NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE node_quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.node_quals IS 'Values of quals for node';
+
+
+--
+-- Name: COLUMN node_quals.year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quals.year IS 'Year; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN node_quals.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quals.value IS 'Textual value';
 
 
 --
@@ -5673,7 +5882,8 @@ CREATE TABLE public.resize_by_attributes (
     is_disabled boolean DEFAULT false NOT NULL,
     is_default boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    is_quick_fact boolean DEFAULT false NOT NULL
 );
 
 
@@ -5783,7 +5993,7 @@ CREATE MATERIALIZED VIEW public.resize_by_attributes_mv AS
     a.id AS attribute_id
    FROM ((public.resize_by_quants raq
      JOIN public.resize_by_attributes ra ON ((ra.id = raq.resize_by_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = raq.quant_id) AND (a.original_type = 'Quant'::text))))
+     JOIN public.attributes a ON (((a.original_id = raq.quant_id) AND (a.original_type = 'Quant'::text))))
   WITH NO DATA;
 
 
@@ -5798,7 +6008,7 @@ COMMENT ON MATERIALIZED VIEW public.resize_by_attributes_mv IS 'Materialized vie
 -- Name: COLUMN resize_by_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.resize_by_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+COMMENT ON COLUMN public.resize_by_attributes_mv.attribute_id IS 'References the unique id in attributes.';
 
 
 --
@@ -5818,6 +6028,161 @@ CREATE SEQUENCE public.resize_by_quants_id_seq
 --
 
 ALTER SEQUENCE public.resize_by_quants_id_seq OWNED BY public.resize_by_quants.id;
+
+
+--
+-- Name: sankey_card_link_node_types; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sankey_card_link_node_types (
+    id bigint NOT NULL,
+    context_node_type_property_id bigint,
+    sankey_card_link_id bigint,
+    node_type_id bigint,
+    column_group integer NOT NULL
+);
+
+
+--
+-- Name: sankey_card_link_node_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.sankey_card_link_node_types_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sankey_card_link_node_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.sankey_card_link_node_types_id_seq OWNED BY public.sankey_card_link_node_types.id;
+
+
+--
+-- Name: sankey_card_link_nodes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sankey_card_link_nodes (
+    id bigint NOT NULL,
+    sankey_card_link_id bigint,
+    node_id bigint
+);
+
+
+--
+-- Name: sankey_card_link_nodes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.sankey_card_link_nodes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sankey_card_link_nodes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.sankey_card_link_nodes_id_seq OWNED BY public.sankey_card_link_nodes.id;
+
+
+--
+-- Name: sankey_card_links; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sankey_card_links (
+    id bigint NOT NULL,
+    host text NOT NULL,
+    query_params json NOT NULL,
+    title text NOT NULL,
+    subtitle text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    start_year integer NOT NULL,
+    end_year integer NOT NULL,
+    biome_id bigint,
+    level1 boolean DEFAULT false NOT NULL,
+    level2 boolean DEFAULT false NOT NULL,
+    level3 boolean DEFAULT false NOT NULL,
+    country_id bigint,
+    commodity_id bigint,
+    cont_attribute_id bigint,
+    ncont_attribute_id bigint
+);
+
+
+--
+-- Name: TABLE sankey_card_links; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.sankey_card_links IS 'Quick sankey cards';
+
+
+--
+-- Name: COLUMN sankey_card_links.query_params; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sankey_card_links.query_params IS 'query params included on the link of the quick sankey card';
+
+
+--
+-- Name: COLUMN sankey_card_links.title; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sankey_card_links.title IS 'title of the quick sankey card';
+
+
+--
+-- Name: COLUMN sankey_card_links.subtitle; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sankey_card_links.subtitle IS 'subtitle of the quick sankey card';
+
+
+--
+-- Name: COLUMN sankey_card_links.level1; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sankey_card_links.level1 IS 'level used when commodity and country are not selected';
+
+
+--
+-- Name: COLUMN sankey_card_links.level2; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sankey_card_links.level2 IS 'level used when commodity is selected';
+
+
+--
+-- Name: COLUMN sankey_card_links.level3; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sankey_card_links.level3 IS 'level used when commodity and country are selected';
+
+
+--
+-- Name: sankey_card_links_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.sankey_card_links_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sankey_card_links_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.sankey_card_links_id_seq OWNED BY public.sankey_card_links.id;
 
 
 --
@@ -5986,6 +6351,13 @@ ALTER TABLE ONLY content.testimonials ALTER COLUMN id SET DEFAULT nextval('conte
 --
 
 ALTER TABLE ONLY content.users ALTER COLUMN id SET DEFAULT nextval('content.users_id_seq'::regclass);
+
+
+--
+-- Name: attributes id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.attributes ALTER COLUMN id SET DEFAULT nextval('public.attributes_id_seq'::regclass);
 
 
 --
@@ -6458,6 +6830,27 @@ ALTER TABLE ONLY public.resize_by_quants ALTER COLUMN id SET DEFAULT nextval('pu
 
 
 --
+-- Name: sankey_card_link_node_types id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_link_node_types ALTER COLUMN id SET DEFAULT nextval('public.sankey_card_link_node_types_id_seq'::regclass);
+
+
+--
+-- Name: sankey_card_link_nodes id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_link_nodes ALTER COLUMN id SET DEFAULT nextval('public.sankey_card_link_nodes_id_seq'::regclass);
+
+
+--
+-- Name: sankey_card_links id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_links ALTER COLUMN id SET DEFAULT nextval('public.sankey_card_links_id_seq'::regclass);
+
+
+--
 -- Name: top_profile_images id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -6504,7 +6897,7 @@ CREATE MATERIALIZED VIEW public.recolor_by_attributes_mv AS
     ARRAY[]::text[] AS legend
    FROM ((public.recolor_by_inds rai
      JOIN public.recolor_by_attributes ra ON ((ra.id = rai.recolor_by_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = rai.ind_id) AND (a.original_type = 'Ind'::text))))
+     JOIN public.attributes a ON (((a.original_id = rai.ind_id) AND (a.original_type = 'Ind'::text))))
 UNION ALL
  SELECT ra.id,
     ra.context_id,
@@ -6526,7 +6919,7 @@ UNION ALL
     array_agg(DISTINCT flow_quals.value) AS legend
    FROM ((((public.recolor_by_quals raq
      JOIN public.recolor_by_attributes ra ON ((ra.id = raq.recolor_by_attribute_id)))
-     JOIN public.attributes_mv a ON (((a.original_id = raq.qual_id) AND (a.original_type = 'Qual'::text))))
+     JOIN public.attributes a ON (((a.original_id = raq.qual_id) AND (a.original_type = 'Qual'::text))))
      JOIN public.flow_quals ON ((flow_quals.qual_id = raq.qual_id)))
      JOIN public.flows ON (((flow_quals.flow_id = flows.id) AND (flows.context_id = ra.context_id))))
   WHERE (flow_quals.value !~~ 'UNKNOWN%'::text)
@@ -6545,7 +6938,7 @@ COMMENT ON MATERIALIZED VIEW public.recolor_by_attributes_mv IS 'Materialized vi
 -- Name: COLUMN recolor_by_attributes_mv.attribute_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.recolor_by_attributes_mv.attribute_id IS 'References the unique id in attributes_mv.';
+COMMENT ON COLUMN public.recolor_by_attributes_mv.attribute_id IS 'References the unique id in attributes.';
 
 
 --
@@ -6618,6 +7011,14 @@ ALTER TABLE ONLY content.users
 
 ALTER TABLE ONLY public.ar_internal_metadata
     ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: attributes attributes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.attributes
+    ADD CONSTRAINT attributes_pkey PRIMARY KEY (id);
 
 
 --
@@ -7541,6 +7942,30 @@ ALTER TABLE ONLY public.resize_by_quants
 
 
 --
+-- Name: sankey_card_link_node_types sankey_card_link_node_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_link_node_types
+    ADD CONSTRAINT sankey_card_link_node_types_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sankey_card_link_nodes sankey_card_link_nodes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_link_nodes
+    ADD CONSTRAINT sankey_card_link_nodes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sankey_card_links sankey_card_links_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_links
+    ADD CONSTRAINT sankey_card_links_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7593,17 +8018,10 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON content.users USING b
 
 
 --
--- Name: attributes_mv_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: attributes_original_type_name_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX attributes_mv_id_idx ON public.attributes_mv USING btree (id);
-
-
---
--- Name: attributes_mv_name_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX attributes_mv_name_idx ON public.attributes_mv USING btree (name);
+CREATE UNIQUE INDEX attributes_original_type_name_idx ON public.attributes USING btree (original_type, name);
 
 
 --
@@ -7796,20 +8214,6 @@ CREATE INDEX dashboards_companies_mv_country_id_idx ON public.dashboards_compani
 
 
 --
--- Name: dashboards_companies_mv_group_columns_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_companies_mv_group_columns_idx ON public.dashboards_companies_mv USING btree (id, name, node_type);
-
-
---
--- Name: dashboards_companies_mv_name_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_companies_mv_name_idx ON public.dashboards_companies_mv USING btree (name);
-
-
---
 -- Name: dashboards_companies_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7894,20 +8298,6 @@ CREATE INDEX dashboards_destinations_mv_country_id_idx ON public.dashboards_dest
 
 
 --
--- Name: dashboards_destinations_mv_group_columns_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_destinations_mv_group_columns_idx ON public.dashboards_destinations_mv USING btree (id, name, node_type);
-
-
---
--- Name: dashboards_destinations_mv_name_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_destinations_mv_name_idx ON public.dashboards_destinations_mv USING btree (name);
-
-
---
 -- Name: dashboards_destinations_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7936,6 +8326,90 @@ CREATE UNIQUE INDEX dashboards_destinations_mv_unique_idx ON public.dashboards_d
 
 
 --
+-- Name: dashboards_exporters_mv_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_exporters_mv_commodity_id_idx ON public.dashboards_exporters_mv USING btree (commodity_id);
+
+
+--
+-- Name: dashboards_exporters_mv_country_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_exporters_mv_country_id_idx ON public.dashboards_exporters_mv USING btree (country_id);
+
+
+--
+-- Name: dashboards_exporters_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_exporters_mv_name_tsvector_idx ON public.dashboards_exporters_mv USING gin (name_tsvector);
+
+
+--
+-- Name: dashboards_exporters_mv_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_exporters_mv_node_id_idx ON public.dashboards_exporters_mv USING btree (node_id);
+
+
+--
+-- Name: dashboards_exporters_mv_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_exporters_mv_node_type_id_idx ON public.dashboards_exporters_mv USING btree (node_type_id);
+
+
+--
+-- Name: dashboards_exporters_mv_unique_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX dashboards_exporters_mv_unique_idx ON public.dashboards_exporters_mv USING btree (id, node_id, country_id, commodity_id);
+
+
+--
+-- Name: dashboards_importers_mv_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_importers_mv_commodity_id_idx ON public.dashboards_importers_mv USING btree (commodity_id);
+
+
+--
+-- Name: dashboards_importers_mv_country_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_importers_mv_country_id_idx ON public.dashboards_importers_mv USING btree (country_id);
+
+
+--
+-- Name: dashboards_importers_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_importers_mv_name_tsvector_idx ON public.dashboards_importers_mv USING gin (name_tsvector);
+
+
+--
+-- Name: dashboards_importers_mv_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_importers_mv_node_id_idx ON public.dashboards_importers_mv USING btree (node_id);
+
+
+--
+-- Name: dashboards_importers_mv_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX dashboards_importers_mv_node_type_id_idx ON public.dashboards_importers_mv USING btree (node_type_id);
+
+
+--
+-- Name: dashboards_importers_mv_unique_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX dashboards_importers_mv_unique_idx ON public.dashboards_importers_mv USING btree (id, node_id, country_id, commodity_id);
+
+
+--
 -- Name: dashboards_sources_mv_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7947,13 +8421,6 @@ CREATE INDEX dashboards_sources_mv_commodity_id_idx ON public.dashboards_sources
 --
 
 CREATE INDEX dashboards_sources_mv_country_id_idx ON public.dashboards_sources_mv USING btree (country_id);
-
-
---
--- Name: dashboards_sources_mv_name_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_sources_mv_name_idx ON public.dashboards_sources_mv USING btree (name);
 
 
 --
@@ -8199,6 +8666,69 @@ CREATE INDEX ind_country_properties_ind_id_idx ON public.ind_country_properties 
 --
 
 CREATE UNIQUE INDEX ind_values_meta_mv_ind_id_idx ON public.ind_values_meta_mv USING btree (ind_id);
+
+
+--
+-- Name: index_sankey_card_link_node_types_on_node_type_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sankey_card_link_node_types_on_node_type_id ON public.sankey_card_link_node_types USING btree (node_type_id);
+
+
+--
+-- Name: index_sankey_card_link_node_types_on_sankey_card_link_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sankey_card_link_node_types_on_sankey_card_link_id ON public.sankey_card_link_node_types USING btree (sankey_card_link_id);
+
+
+--
+-- Name: index_sankey_card_link_nodes_on_node_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sankey_card_link_nodes_on_node_id ON public.sankey_card_link_nodes USING btree (node_id);
+
+
+--
+-- Name: index_sankey_card_link_nodes_on_sankey_card_link_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sankey_card_link_nodes_on_sankey_card_link_id ON public.sankey_card_link_nodes USING btree (sankey_card_link_id);
+
+
+--
+-- Name: index_sankey_card_links_on_biome_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sankey_card_links_on_biome_id ON public.sankey_card_links USING btree (biome_id);
+
+
+--
+-- Name: index_sankey_card_links_on_commodity_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sankey_card_links_on_commodity_id ON public.sankey_card_links USING btree (commodity_id);
+
+
+--
+-- Name: index_sankey_card_links_on_cont_attribute_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sankey_card_links_on_cont_attribute_id ON public.sankey_card_links USING btree (cont_attribute_id);
+
+
+--
+-- Name: index_sankey_card_links_on_country_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sankey_card_links_on_country_id ON public.sankey_card_links USING btree (country_id);
+
+
+--
+-- Name: index_sankey_card_links_on_ncont_attribute_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sankey_card_links_on_ncont_attribute_id ON public.sankey_card_links USING btree (ncont_attribute_id);
 
 
 --
@@ -8489,6 +9019,13 @@ CREATE INDEX resize_by_quants_resize_by_attribute_id_idx ON public.resize_by_qua
 
 
 --
+-- Name: sankey_card_link_node_types_context_node_type_property_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX sankey_card_link_node_types_context_node_type_property_id_idx ON public.sankey_card_link_node_types USING btree (context_node_type_property_id);
+
+
+--
 -- Name: sankey_nodes_mv_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8543,6 +9080,14 @@ ALTER TABLE ONLY public.dashboards_quals
 
 
 --
+-- Name: sankey_card_link_nodes fk_rails_1428ad7ffd; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_link_nodes
+    ADD CONSTRAINT fk_rails_1428ad7ffd FOREIGN KEY (node_id) REFERENCES public.nodes(id);
+
+
+--
 -- Name: node_quals fk_rails_14ebb50b5a; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8588,6 +9133,14 @@ ALTER TABLE ONLY public.download_attributes
 
 ALTER TABLE ONLY public.chart_attributes
     ADD CONSTRAINT fk_rails_18fff2d805 FOREIGN KEY (chart_id) REFERENCES public.charts(id) ON DELETE CASCADE;
+
+
+--
+-- Name: sankey_card_link_node_types fk_rails_1a85ec11cd; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_link_node_types
+    ADD CONSTRAINT fk_rails_1a85ec11cd FOREIGN KEY (sankey_card_link_id) REFERENCES public.sankey_card_links(id);
 
 
 --
@@ -8651,7 +9204,15 @@ ALTER TABLE ONLY public.recolor_by_inds
 --
 
 ALTER TABLE ONLY public.top_profile_images
-    ADD CONSTRAINT fk_rails_29f1862b03 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id);
+    ADD CONSTRAINT fk_rails_29f1862b03 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: sankey_card_links fk_rails_2c41bcb873; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_links
+    ADD CONSTRAINT fk_rails_2c41bcb873 FOREIGN KEY (cont_attribute_id) REFERENCES public.attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -8783,6 +9344,14 @@ ALTER TABLE ONLY public.qual_context_properties
 
 
 --
+-- Name: sankey_card_links fk_rails_5b56ba10d2; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_links
+    ADD CONSTRAINT fk_rails_5b56ba10d2 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON DELETE CASCADE;
+
+
+--
 -- Name: ind_commodity_properties fk_rails_5c0dcf9d64; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8796,6 +9365,14 @@ ALTER TABLE ONLY public.ind_commodity_properties
 
 ALTER TABLE ONLY public.contextual_layers
     ADD CONSTRAINT fk_rails_5c2d32b5a7 FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON DELETE CASCADE;
+
+
+--
+-- Name: sankey_card_link_node_types fk_rails_610fd60c08; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_link_node_types
+    ADD CONSTRAINT fk_rails_610fd60c08 FOREIGN KEY (node_type_id) REFERENCES public.node_types(id);
 
 
 --
@@ -8839,6 +9416,14 @@ ALTER TABLE ONLY public.flow_quals
 
 
 --
+-- Name: sankey_card_link_nodes fk_rails_70f69f2537; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_link_nodes
+    ADD CONSTRAINT fk_rails_70f69f2537 FOREIGN KEY (sankey_card_link_id) REFERENCES public.sankey_card_links(id);
+
+
+--
 -- Name: ind_properties fk_rails_720a88d4b2; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8876,6 +9461,14 @@ ALTER TABLE ONLY public.quant_context_properties
 
 ALTER TABLE ONLY public.quant_country_properties
     ADD CONSTRAINT fk_rails_90fcd1e231 FOREIGN KEY (country_id) REFERENCES public.countries(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: sankey_card_links fk_rails_9113195b2d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_links
+    ADD CONSTRAINT fk_rails_9113195b2d FOREIGN KEY (country_id) REFERENCES public.countries(id) ON DELETE CASCADE;
 
 
 --
@@ -8940,6 +9533,14 @@ ALTER TABLE ONLY public.dashboards_attributes
 
 ALTER TABLE ONLY public.carto_layers
     ADD CONSTRAINT fk_rails_9b2f0fa157 FOREIGN KEY (contextual_layer_id) REFERENCES public.contextual_layers(id) ON DELETE CASCADE;
+
+
+--
+-- Name: sankey_card_link_node_types fk_rails_a152a2cab3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_link_node_types
+    ADD CONSTRAINT fk_rails_a152a2cab3 FOREIGN KEY (context_node_type_property_id) REFERENCES public.context_node_type_properties(id);
 
 
 --
@@ -9119,6 +9720,14 @@ ALTER TABLE ONLY public.download_quants
 
 
 --
+-- Name: sankey_card_links fk_rails_e3c8c4d772; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_links
+    ADD CONSTRAINT fk_rails_e3c8c4d772 FOREIGN KEY (biome_id) REFERENCES public.nodes(id);
+
+
+--
 -- Name: node_quants fk_rails_e5f4cc54e9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9140,6 +9749,14 @@ ALTER TABLE ONLY public.download_quals
 
 ALTER TABLE ONLY public.top_profiles
     ADD CONSTRAINT fk_rails_eb02423c0e FOREIGN KEY (node_id) REFERENCES public.nodes(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: sankey_card_links fk_rails_ec3ba51bdb; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sankey_card_links
+    ADD CONSTRAINT fk_rails_ec3ba51bdb FOREIGN KEY (ncont_attribute_id) REFERENCES public.attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -9171,7 +9788,7 @@ ALTER TABLE ONLY public.chart_node_types
 --
 
 ALTER TABLE ONLY public.top_profiles
-    ADD CONSTRAINT fk_rails_f4a644ec90 FOREIGN KEY (top_profile_image_id) REFERENCES public.top_profile_images(id);
+    ADD CONSTRAINT fk_rails_f4a644ec90 FOREIGN KEY (top_profile_image_id) REFERENCES public.top_profile_images(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
@@ -9277,6 +9894,19 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190814161133'),
 ('20190820105523'),
 ('20190823135415'),
-('20190919063754');
+('20190919063754'),
+('20190919211340'),
+('20190920090440'),
+('20190923074833'),
+('20190923143224'),
+('20190924075531'),
+('20190924102948'),
+('20191002200900'),
+('20191002201000'),
+('20191003080052'),
+('20191003152614'),
+('20191004083620'),
+('20191007090648'),
+('20191008083758');
 
 

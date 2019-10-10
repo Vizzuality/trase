@@ -24,6 +24,7 @@ module Api
           Cache::Cleaner.clear_all
           Cache::Warmer::UrlsFile.generate
           refresh_precomputed_downloads_later
+          refresh_attributes_years
           @database_update.finished_with_success(@stats.to_h)
         rescue => e
           @database_update.finished_with_error(e, @stats.to_h)
@@ -115,15 +116,18 @@ module Api
           # synchronously, skip dependencies (already refreshed)
           [
             Api::V3::Readonly::ChartAttribute,
+            Api::V3::Readonly::DashboardsAttribute,
             Api::V3::Readonly::DownloadAttribute,
             Api::V3::Readonly::MapAttribute,
             Api::V3::Readonly::RecolorByAttribute,
             Api::V3::Readonly::ResizeByAttribute,
-            Api::V3::Readonly::DashboardsAttribute,
             Api::V3::Readonly::Dashboards::Commodity,
             Api::V3::Readonly::Dashboards::Country,
             Api::V3::Readonly::Dashboards::Source,
+            # TODO: remove once dashboards_companies_mv retired
             Api::V3::Readonly::Dashboards::Company,
+            Api::V3::Readonly::Dashboards::Exporter,
+            Api::V3::Readonly::Dashboards::Importer,
             Api::V3::Readonly::Dashboards::Destination,
             Api::V3::Readonly::ContextAttributeProperty,
             Api::V3::Readonly::CountryAttributeProperty,
@@ -137,6 +141,12 @@ module Api
 
         def refresh_precomputed_downloads_later
           Api::V3::Download::PrecomputedDownload.refresh_later
+        end
+
+        def refresh_attributes_years
+          TABLES_TO_REFRESH_YEARS.each do |table_class|
+            table_class.all.each { |ra| ra.send(:set_years) }
+          end
         end
       end
     end

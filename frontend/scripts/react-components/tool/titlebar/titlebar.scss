@@ -4,9 +4,8 @@
     display: flex;
     align-items: center;
     position: absolute;
-    left: $layer-map-width;
     top: calc(100% - #{$titlebar-height});
-    width: calc(100% - #{$layer-map-width + $feedback-button-closed-width + 8});
+    width: calc(100% - #{$feedback-button-closed-width + 8});
     height: $titlebar-height;
     padding-left: 8px;
     overflow-x: auto;

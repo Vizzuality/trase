@@ -35,7 +35,12 @@ RSpec.describe Api::V3::Dashboards::CompaniesController, type: :controller do
     }
 
     it 'returns list in alphabetical order' do
-      get :index, params: {countries_ids: api_v3_brazil.id}
+      get :index, params: {
+        countries_ids: api_v3_brazil.id,
+        node_types_ids: [
+          api_v3_exporter_node_type.id, api_v3_importer_node_type.id
+        ].join(',')
+      }
       expect(assigns(:collection).map(&:name)).to eq(
         all_results_alphabetically.map(&:name)
       )
@@ -57,6 +62,44 @@ RSpec.describe Api::V3::Dashboards::CompaniesController, type: :controller do
           countries_ids: [api_v3_brazil.id].join(','),
           sources_ids: [api_v3_biome_node.id].join(','),
           destinations_ids: [api_v3_country_of_destination1_node.id].join(','),
+          node_types_ids: [api_v3_exporter_node_type.id].join(',')
+        }
+        expect(assigns(:collection).map(&:id)).to eq(
+          [api_v3_exporter1_node.id, api_v3_other_exporter_node.id]
+        )
+      end
+
+      it 'returns companies exporting to country' do
+        get :index, params: {
+          destinations_ids: [
+            api_v3_country_of_destination1_node.id
+          ].join(','),
+          node_types_ids: [api_v3_exporter_node_type.id].join(',')
+        }
+        expect(assigns(:collection).map(&:id)).to eq(
+          [api_v3_exporter1_node.id, api_v3_other_exporter_node.id]
+        )
+      end
+
+      it 'returns companies exporting to country from source' do
+        get :index, params: {
+          sources_ids: [api_v3_municipality2_node.id].join(','),
+          destinations_ids: [
+            api_v3_country_of_destination1_node.id
+          ].join(','),
+          node_types_ids: [api_v3_exporter_node_type.id].join(',')
+        }
+        expect(assigns(:collection).map(&:id)).to eq(
+          [api_v3_exporter1_node.id]
+        )
+      end
+
+      it 'returns companies exporting to either country' do
+        get :index, params: {
+          destinations_ids: [
+            api_v3_country_of_destination1_node.id,
+            api_v3_other_country_of_destination_node.id
+          ].join(','),
           node_types_ids: [api_v3_exporter_node_type.id].join(',')
         }
         expect(assigns(:collection).map(&:id)).to eq(

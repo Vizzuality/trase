@@ -11,17 +11,15 @@ function SummaryTitle(props) {
       <h2 className="profiles-title" data-test="profiles-title">
         {capitalize(name)}
       </h2>
-      {NEW_PROFILES_PAGE && (
-        <Button
-          size="xs"
-          color="pink-transparent"
-          className="profiles-selector-button hide-for-small"
-          onClick={openModal}
-          variant="slim"
-        >
-          Change profile
-        </Button>
-      )}
+      <Button
+        size="xs"
+        color="pink-transparent"
+        className="profiles-selector-button hide-for-small"
+        onClick={openModal}
+        variant="slim"
+      >
+        Change profile
+      </Button>
     </div>
   );
 }

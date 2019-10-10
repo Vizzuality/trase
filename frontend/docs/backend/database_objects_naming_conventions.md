@@ -34,3 +34,7 @@ Same as for tables, but with \_mv suffix.
 ```
 
 These kinds of names are typically shorter that the default Rails-generated names. However, in case the name still goes over the limit, instead of enumerating the columns involved in the index we go for a descriptive name, e.g. xxx\_grouping\_idx.
+
+## Foreign keys
+
+No naming convention. However, please define with ON DELETE CASCADE behaviour (important for the data upload script).

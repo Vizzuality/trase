@@ -5,6 +5,8 @@ import GridList from 'react-components/shared/grid-list/grid-list.component';
 import { useFirstItem } from 'react-components/shared/grid-list/grid-list.hooks';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import Tabs from 'react-components/shared/tabs/tabs.component';
+import ResizeListener from 'react-components/shared/resize-listener.component';
+import { BREAKPOINTS } from 'constants';
 
 import 'react-components/dashboard-element/dashboard-panel/companies-panel.scss';
 
@@ -29,51 +31,59 @@ function CompaniesPanel(props) {
   const itemToScrollTo = useFirstItem(companies);
 
   return (
-    <div className="c-companies-panel">
-      <SearchInput
-        variant="bordered"
-        size="sm"
-        className="companies-panel-search"
-        items={searchCompanies}
-        placeholder="Search company"
-        onSelect={setSearchResult}
-        nodeTypeRenderer={nodeTypeRenderer}
-        onSearchTermChange={getSearchResults}
-      />
-      <Tabs
-        tabs={tabs}
-        onSelectTab={onSelectNodeTypeTab}
-        selectedTab={activeNodeTypeTab}
-        itemTabRenderer={i => i.name}
-        getTabId={item => item.id}
-        actionComponent={actionComponent}
-      >
-        {activeNodeTypeTab && (
-          <GridList
-            className="companies-panel-pill-list"
-            items={companies}
-            height={companies.length > 5 ? 200 : 50}
-            width={950}
-            rowHeight={50}
-            columnWidth={190}
-            columnCount={5}
-            getMoreItems={getMoreItems}
-            page={page}
-            loading={loading}
-            itemToScrollTo={itemToScrollTo}
-          >
-            {itemProps => (
-              <GridListItem
-                {...itemProps}
-                isActive={activeCompanies.includes(itemProps.item?.id)}
-                enableItem={onSelectCompany}
-                disableItem={onSelectCompany}
-              />
-            )}
-          </GridList>
-        )}
-      </Tabs>
-    </div>
+    <ResizeListener>
+      {({ windowWidth }) => {
+        const columnsCount = windowWidth > BREAKPOINTS.laptop ? 5 : 3;
+        const width = windowWidth > BREAKPOINTS.laptop ? 950 : 560;
+        return (
+          <div className="c-companies-panel">
+            <SearchInput
+              variant="bordered"
+              size="sm"
+              className="companies-panel-search"
+              items={searchCompanies}
+              placeholder="Search company"
+              onSelect={setSearchResult}
+              nodeTypeRenderer={nodeTypeRenderer}
+              onSearchTermChange={getSearchResults}
+            />
+            <Tabs
+              tabs={tabs}
+              onSelectTab={onSelectNodeTypeTab}
+              selectedTab={activeNodeTypeTab}
+              itemTabRenderer={i => i.name}
+              getTabId={item => item.id}
+              actionComponent={actionComponent}
+            >
+              {activeNodeTypeTab && (
+                <GridList
+                  className="companies-panel-pill-list"
+                  items={companies}
+                  height={companies.length > columnsCount ? 200 : 50}
+                  width={width}
+                  rowHeight={50}
+                  columnWidth={190}
+                  columnCount={columnsCount}
+                  getMoreItems={getMoreItems}
+                  page={page}
+                  loading={loading}
+                  itemToScrollTo={itemToScrollTo}
+                >
+                  {itemProps => (
+                    <GridListItem
+                      {...itemProps}
+                      isActive={activeCompanies.includes(itemProps.item?.id)}
+                      enableItem={onSelectCompany}
+                      disableItem={onSelectCompany}
+                    />
+                  )}
+                </GridList>
+              )}
+            </Tabs>
+          </div>
+        );
+      }}
+    </ResizeListener>
   );
 }
 

@@ -10,7 +10,7 @@ import SentenceSelector from 'react-components/shared/sentence-selector/sentence
 import Button from 'react-components/shared/button/button.component';
 import Heading from 'react-components/shared/heading/heading.component';
 import Text from 'react-components/shared/text/text.component';
-import { EXPLORE_COLUMN_LIST } from 'constants';
+import { EXPLORE_COLUMN_LIST, TOOL_LAYOUT } from 'constants';
 
 import 'scripts/react-components/legacy-explore/explore.scss';
 
@@ -68,7 +68,7 @@ function Explore(props) {
   }, [selectedTableColumnType, handleTableColumnChange]);
 
   function getCallToAction(query) {
-    if (query && query.isMapVisible && JSON.parse(query.isMapVisible)) {
+    if (query && query.toolLayout && JSON.parse(query.toolLayout) === TOOL_LAYOUT.left) {
       return 'Explore the map';
     }
     return 'Explore the supply chain';

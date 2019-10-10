@@ -6,7 +6,7 @@ import Text from 'react-components/shared/text';
 import 'react-components/shared/cookie-banner/cookie-banner.scss';
 
 function CookieBanner({ setAccepted, accepted }) {
-  return accepted || !ENABLE_COOKIE_BANNER ? null : (
+  return accepted ? null : (
     <div className="c-cookie-banner">
       <div className="row">
         <div className="cookie-content">
@@ -16,7 +16,7 @@ function CookieBanner({ setAccepted, accepted }) {
               continuing to browse this site, you consent to the use of cookies and similar
               technologies. Please visit our{' '}
             </Text>
-            <Link to="/about/terms-of-use">
+            <Link to="/about/privacy-policy">
               <Text as="span" color="white" className="cookie-link">
                 privacy policy
               </Text>

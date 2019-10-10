@@ -1,3 +1,5 @@
+import { TOOL_LAYOUT } from 'constants';
+
 const supplyChainNavs = [];
 if (ENABLE_REDESIGN_PAGES) {
   supplyChainNavs.push({
@@ -12,14 +14,14 @@ if (ENABLE_REDESIGN_PAGES) {
       name: 'Supply Chain',
       page: {
         type: 'tool',
-        payload: { serializerParams: { isMapVisible: false } }
+        payload: { serializerParams: { toolLayout: TOOL_LAYOUT.splitted } }
       }
     },
     {
       name: 'Map',
       page: {
         type: 'tool',
-        payload: { serializerParams: { isMapVisible: true } }
+        payload: { serializerParams: { toolLayout: TOOL_LAYOUT.left } }
       }
     }
   );
@@ -106,31 +108,26 @@ const sidebarNav = [
       type: 'about',
       payload: { section: 'terms-of-use' }
     }
-  }
-];
-
-if (ENABLE_COOKIE_BANNER) {
-  sidebarNav.push(
-    {
-      name: 'Privacy policy',
-      page: {
-        type: 'about',
-        payload: {
-          section: 'privacy-policy'
-        }
-      }
-    },
-    {
-      name: 'Cookie policy',
-      page: {
-        type: 'about',
-        payload: {
-          section: 'cookie-policy'
-        }
+  },
+  {
+    name: 'Privacy policy',
+    page: {
+      type: 'about',
+      payload: {
+        section: 'privacy-policy'
       }
     }
-  );
-}
+  },
+  {
+    name: 'Cookie policy',
+    page: {
+      type: 'about',
+      payload: {
+        section: 'cookie-policy'
+      }
+    }
+  }
+];
 
 if (DISABLE_PROFILES) {
   nav = nav.filter(route => route.page !== 'profileRoot');

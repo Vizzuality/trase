@@ -2,19 +2,18 @@ import isEmpty from 'lodash/isEmpty';
 import {
   GET_DISCLAIMER_URL,
   GET_NODES_WITH_SEARCH_URL,
-  GET_TOP_NODES_URL,
+  GET_TOP_NODE_STATS_URL,
   getURLFromParams
 } from 'utils/getURLFromParams';
-import { TOGGLE_MAP, SELECT_YEARS } from 'react-components/tool/tool.actions';
+import { CHANGE_LAYOUT, SET_SANKEY_SIZE, SELECT_YEARS } from 'react-components/tool/tool.actions';
 import getPageTitle from 'scripts/router/page-title';
 import { redirect } from 'redux-first-router';
-import getTopNodesKey from 'utils/getTopNodesKey';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedContext } from 'reducers/app.selectors';
+import axios from 'axios';
 
 export const SET_CONTEXT = 'SET_CONTEXT';
 export const DISPLAY_STORY_MODAL = 'DISPLAY_STORY_MODAL';
 export const LOAD_TOOLTIP = 'LOAD_TOOLTIP';
-export const SET_SANKEY_SIZE = 'SET_SANKEY_SIZE';
 export const SET_TOOLTIPS = 'SET_TOOLTIPS';
 export const SHOW_DISCLAIMER = 'SHOW_DISCLAIMER';
 export const TOGGLE_DROPDOWN = 'TOGGLE_DROPDOWN';
@@ -56,11 +55,13 @@ export function resize() {
   };
 }
 
-export function toggleMap(forceState = null) {
+export function changeLayout(newToolLayout) {
   return dispatch => {
     dispatch({
-      type: TOGGLE_MAP,
-      forceState
+      type: CHANGE_LAYOUT,
+      payload: {
+        toolLayout: newToolLayout
+      }
     });
     dispatch({ type: SET_SANKEY_SIZE });
   };
@@ -178,63 +179,41 @@ export function setTransifexLanguages(languages) {
   };
 }
 
-export const getTopCountries = (contexts, options = {}) => (dispatch, getState) => {
-  const { fromDefaultYear } = options;
+export const getTopCountries = contexts => (dispatch, getState) => {
   const state = getState();
   const defaultSelectedContext = getSelectedContext(state);
   if (!defaultSelectedContext) return;
   const selectedContexts = contexts || [defaultSelectedContext];
 
-  const topCountries = [];
-  selectedContexts.forEach(selectedContext => {
-    const columnId = selectedContext.worldMap.countryColumnId;
-    const years = fromDefaultYear
-      ? [selectedContext.defaultYear, selectedContext.defaultYear]
-      : getSelectedYears(state);
-    // eslint-disable-next-line camelcase
-    const [start_year, end_year] = years;
-    const { topNodes } = state.app;
-    const params = {
-      start_year,
-      end_year,
-      column_id: columnId,
-      context_id: selectedContext.id
-    };
-    const topNodesKey = getTopNodesKey(selectedContext.id, 'country', start_year, end_year);
-    if (!topNodes[topNodesKey]) {
-      topCountries.push({
-        topNodesKey,
-        country: selectedContext.countryName,
-        url: getURLFromParams(GET_TOP_NODES_URL, params)
-      });
-    }
-  });
-  if (!topCountries.length) return;
+  // TODO move into context.worldMap
+  const volumeIndicator = selectedContexts[0].resizeBy.find(i => i.name === 'Volume');
+  const volumneIndicatorId = volumeIndicator?.attributeId;
+  const countryColumnId = selectedContexts[0].worldMap.countryColumnId;
 
   dispatch({
     type: APP__SET_TOP_DESTINATION_COUNTRIES_LOADING,
-    payload: {
-      topNodesKeys: topCountries.map(c => c.topNodesKey),
-      loading: true
-    }
+    payload: { loading: true }
   });
+  const params = {
+    contexts_ids: selectedContexts.map(c => c.id).join(),
+    attribute_id: volumneIndicatorId,
+    column_id: countryColumnId
+  };
 
-  Promise.all(
-    topCountries.map(topCountry =>
-      fetch(topCountry.url).then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
-    )
-  )
+  const topNodesUrl = getURLFromParams(GET_TOP_NODE_STATS_URL, params);
+  axios
+    .get(topNodesUrl)
     .then(res => {
       dispatch({
         type: APP__SET_TOP_DESTINATION_COUNTRIES,
-        payload: {
-          topCountries: topCountries.map((c, i) => ({
-            topNodesKey: c.topNodesKey,
-            country: c.country,
-            data: res[i].data
-          }))
-        }
+        payload: { topContextCountries: res.data.data }
       });
     })
-    .catch(error => console.error(error));
+    .catch(error => console.error(error))
+    .finally(() =>
+      dispatch({
+        type: APP__SET_TOP_DESTINATION_COUNTRIES_LOADING,
+        payload: { loading: false }
+      })
+    );
 };

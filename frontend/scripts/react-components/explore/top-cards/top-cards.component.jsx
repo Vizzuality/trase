@@ -6,15 +6,16 @@ import capitalize from 'lodash/capitalize';
 import upperCase from 'lodash/upperCase';
 import pluralize from 'utils/pluralize';
 import { useTransition, animated } from 'react-spring';
+import ResizeListener from 'react-components/shared/resize-listener.component';
 
 import 'react-components/explore/top-cards/top-cards.scss';
 
-const TopCard = ({ card, goToTool }) => {
+const TopCard = ({ card, openModal }) => {
   const { countryName, indicatorName, commodityName, nodeTypeName } = card;
   if (!card.countryName) return null;
   return (
     <button
-      onClick={() => goToTool(card)}
+      onClick={() => openModal(card)}
       className="c-top-card"
       data-test={`top-card-${countryName}-${commodityName}-${nodeTypeName}-${indicatorName}`}
     >
@@ -40,7 +41,7 @@ const TopCard = ({ card, goToTool }) => {
 
 TopCard.propTypes = {
   card: PropTypes.object.isRequired,
-  goToTool: PropTypes.func.isRequired
+  openModal: PropTypes.func.isRequired
 };
 
 const TopCards = ({
@@ -50,7 +51,8 @@ const TopCards = ({
   commodityName,
   step,
   cards,
-  goToTool
+  isMobile,
+  openModal
 }) => {
   const [animatedItems, setAnimatedItems] = useState([]);
   const transitions = useTransition(animatedItems, item => item.key, {
@@ -68,17 +70,27 @@ const TopCards = ({
       {capitalize(name)}
     </Text>
   );
+
   const renderCards = () =>
-    transitions.map(
-      ({ item, props, key }) =>
-        item && (
-          <div className="columns small-3">
-            <animated.div key={key} style={props} className="animated-card">
-              <TopCard key={item.key} card={item} goToTool={() => goToTool(item)} />
-            </animated.div>
-          </div>
-        )
-    );
+    transitions.map(({ item, props, key }) => {
+      if (!item) return null;
+      const card = (
+        <animated.div key={key} style={props} className="animated-card">
+          <TopCard key={item.key} card={item} openModal={openModal} />
+        </animated.div>
+      );
+      return (
+        <ResizeListener>
+          {({ resolution }) =>
+            resolution.isSmall ? (
+              <div className="mobile-card"> {card} </div>
+            ) : (
+              <div className="columns small-5 medium-3"> {card} </div>
+            )
+          }
+        </ResizeListener>
+      );
+    });
 
   const clearStep = step === 2 ? () => setCountry(null) : () => setCommodity(null);
   return (
@@ -88,7 +100,7 @@ const TopCards = ({
           <Heading className="top-cards-title" data-test="top-cards-title">
             Top {renderName(countryName)} {renderName(commodityName)} supply chains
           </Heading>
-          {step > 0 && (
+          {step > 0 && !isMobile && (
             <button onClick={clearStep} className="back-button" data-test="top-cards-back-button">
               <Text variant="mono" size="rg" weight="bold">
                 BACK
@@ -98,9 +110,19 @@ const TopCards = ({
         </div>
       </div>
       <div className="top-cards-container">
-        <div className="row" data-test="top-cards-row">
-          {cards && renderCards()}
-        </div>
+        <ResizeListener>
+          {({ resolution }) =>
+            resolution.isSmall ? (
+              <div className="mobile-top-cards" data-test="top-cards-row-mobile">
+                {cards && renderCards()}
+              </div>
+            ) : (
+              <div className="row" data-test="top-cards-row">
+                {cards && renderCards()}
+              </div>
+            )
+          }
+        </ResizeListener>
       </div>
     </div>
   );
@@ -113,7 +135,8 @@ TopCards.propTypes = {
   setCountry: PropTypes.func.isRequired,
   step: PropTypes.number,
   cards: PropTypes.object,
-  goToTool: PropTypes.func.isRequired
+  isMobile: PropTypes.bool,
+  openModal: PropTypes.func.isRequired
 };
 
 export default TopCards;

@@ -8,13 +8,22 @@
   height: 100%;
   background-color: $light-gray;
   overflow: hidden;
-  min-width: 1000px;
+
+  min-width: 600px;
+
+  @media screen and (min-width: $breakpoint-laptop) {
+    min-width: $breakpoint-laptop;
+  }
 
   .dashboard-panel-content,
   .dashboard-indicators-content {
     flex: 1;
     overflow: auto;
-    padding: 20px 25px 0;
+    padding: 60px 25px 0;
+
+    @media screen and (min-width: $breakpoint-laptop) {
+      padding: 20px 25px 0;
+    }
   }
 
   .dashboard-indicators-content {
@@ -58,5 +67,15 @@
 
   .dashboard-panel-sources-subtitle {
     margin-bottom: 20px;
+  }
+
+  .grid-container {
+  width: 560px;
+  margin: 0 auto;
+
+  @media screen and (min-width: $breakpoint-laptop) {
+    width: initial;
+    margin: initial;
+  }
   }
 }

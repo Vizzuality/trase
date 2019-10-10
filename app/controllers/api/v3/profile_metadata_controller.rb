@@ -14,7 +14,7 @@ module Api
             serializer: Api::V3::ProfileMetadata::ProfileSerializer,
             key_transform: :underscore,
             root: 'data',
-            include: {charts: :children}
+            include: [:context_node_type, {charts: :children}]
           ).serializable_hash
 
         serialized_available_years =

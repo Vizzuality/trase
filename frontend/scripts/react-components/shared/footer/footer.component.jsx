@@ -160,28 +160,26 @@ const Footer = () => (
             Terms of Use
           </Link>
         </li>
-        {ENABLE_COOKIE_BANNER && (
-          <>
-            <li className="separator"> · </li>
-            <li className="link-item">
-              <Link
-                className="title -mono-font"
-                to={{ type: 'about', payload: { section: 'privacy-policy' } }}
-              >
-                Privacy policy
-              </Link>
-            </li>
-            <li className="separator"> · </li>
-            <li className="link-item">
-              <Link
-                className="title -mono-font"
-                to={{ type: 'about', payload: { section: 'cookie-policy' } }}
-              >
-                Cookie policy
-              </Link>
-            </li>
-          </>
-        )}
+        <>
+          <li className="separator"> · </li>
+          <li className="link-item">
+            <Link
+              className="title -mono-font"
+              to={{ type: 'about', payload: { section: 'privacy-policy' } }}
+            >
+              Privacy policy
+            </Link>
+          </li>
+          <li className="separator"> · </li>
+          <li className="link-item">
+            <Link
+              className="title -mono-font"
+              to={{ type: 'about', payload: { section: 'cookie-policy' } }}
+            >
+              Cookie policy
+            </Link>
+          </li>
+        </>
         <li className="separator"> · </li>
         <li className="link-item">
           <a className="title -mono-font" href="mailto:info@trase.earth">

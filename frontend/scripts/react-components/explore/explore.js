@@ -8,21 +8,23 @@ import {
   getCommodity,
   getAllCountriesIds,
   getCards,
-  getCommodityContexts
+  getCommodityContexts,
+  getCommodities,
+  getCountries,
+  getCountryQuickFacts
 } from 'react-components/explore/explore.selectors';
-import { setCommodity, setCountry, goToTool } from 'react-components/explore/explore.actions';
+import {
+  setCommodity,
+  setCountry,
+  goToTool,
+  getQuickFacts
+} from 'react-components/explore/explore.actions';
 import { getTopCountries } from 'actions/app.actions';
-
-const mockedQuickFactsIndicators = [
-  {
-    name: 'Volume exported',
-    value: '71.413.340',
-    unit: 't'
-  }
-];
 
 const mapStateToProps = state => ({
   items: getItems(state),
+  commodities: getCommodities(state),
+  countries: getCountries(state),
   step: getStep(state),
   country: getCountry(state),
   commodity: getCommodity(state),
@@ -31,14 +33,15 @@ const mapStateToProps = state => ({
   cards: getCards(state),
   topNodes: state.app.topNodes,
   commodityContexts: getCommodityContexts(state),
-  quickFactsIndicators: mockedQuickFactsIndicators
+  countryQuickFacts: getCountryQuickFacts(state)
 });
 
 const mapDispatchToProps = {
   setCommodity,
   setCountry,
   goToTool,
-  getTopCountries
+  getTopCountries,
+  getQuickFacts
 };
 
 export default connect(

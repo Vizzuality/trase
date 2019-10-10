@@ -4,13 +4,17 @@ module Api
       extend ActiveSupport::Concern
 
       included do
-        before_validation :ensure_position_present
+        before_validation :ensure_position_correct
       end
 
-      def ensure_position_present
-        return if position.present?
+      def ensure_position_correct
+        return unless context.present?
 
-        max_position = others_in_context.map(&:position).max || 1
+        others_positions = others_in_context.map(&:position)
+        duplicated = others_positions.include?(position)
+        return if position.present? && !duplicated
+
+        max_position = (others_positions.max || 0) + 1
         self.position = max_position
       end
 

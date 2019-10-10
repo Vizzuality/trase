@@ -36,7 +36,6 @@ attribute_type) AS single_layer_buckets",
               'attribute_type AS type',
               'unit',
               'description',
-              'aggregate_method',
               'original_attribute_id AS layer_attribute_id',
               'map_attribute_group_id AS group_id'
             ]).

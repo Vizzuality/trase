@@ -16,7 +16,7 @@ export default class ToolSearch extends Component {
     contextId: PropTypes.number,
     className: PropTypes.string,
     isSearchOpen: PropTypes.bool,
-    isMapVisible: PropTypes.bool,
+    toolLayout: PropTypes.number,
     selectedNodesIds: PropTypes.array,
     setIsSearchOpen: PropTypes.func,
     onInputValueChange: PropTypes.func
@@ -151,7 +151,7 @@ export default class ToolSearch extends Component {
       isSearchOpen,
       className,
       selectedNodesIds = [],
-      isMapVisible,
+      toolLayout,
       contextId,
       nodes
     } = this.props;
@@ -204,7 +204,7 @@ export default class ToolSearch extends Component {
                         key={`${item.id} + ${item.contextId}`}
                         value={inputValue}
                         isHighlighted={row === highlightedIndex}
-                        isMapVisible={isMapVisible}
+                        toolLayout={toolLayout}
                         item={item}
                         contextId={contextId}
                         itemProps={getItemProps({ item })}

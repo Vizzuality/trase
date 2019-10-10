@@ -12,10 +12,7 @@ function ColumnsSelectorGroup(props) {
   const styles = { width: `${sankeySize[0] + 8}px` };
 
   return (
-    <div
-      style={styles}
-      className={cx('c-columns-selector-group', 'is-absolute', { '-loading': loading })}
-    >
+    <div style={styles} className={cx('c-columns-selector-group', { '-loading': loading })}>
       {!loading && Array.from({ length: 4 }).map((_, i) => <ColumnSelector key={i} group={i} />)}
     </div>
   );

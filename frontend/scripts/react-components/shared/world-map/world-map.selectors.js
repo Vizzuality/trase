@@ -21,7 +21,7 @@ const getWorldMapProjection = createSelector(
       width || 800,
       width ? Math.round(width * WORLD_MAP_ASPECT_RATIO) : 448,
       {
-        scale: scale || 160,
+        scale: scale || 140,
         rotation: [0, 0, 0]
       },
       'robinson'

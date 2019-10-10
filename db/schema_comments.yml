@@ -497,36 +497,51 @@ tables:
         comment: Count of warnings detected
       - name: report
         comment: JSON structure with validation report
-materialized_views:
-  - name: attributes_mv
-    comment: Materialized view which merges inds, quals and quants.
+  - name: attributes
+    comment: Merges inds, quals and quants.
     columns:
       - name: id
-        comment: The unique id is a sequential number which is generated at REFRESH and therefore not fixed.
+        comment: Id is fixed between data updates, unless name changes
       - name: original_type
         comment: Type of the original entity (Ind / Qual / Quant)
       - name: original_id
         comment: Id from the original table (inds / quals / quants)
+  - name: sankey_card_links
+    comment: Quick sankey cards
+    columns:
+      - name: query_params
+        comment: query params included on the link of the quick sankey card
+      - name: title
+        comment: title of the quick sankey card
+      - name: subtitle
+        comment: subtitle of the quick sankey card
+      - name: level1
+        comment: level used when commodity and country are not selected
+      - name: level2
+        comment: level used when commodity is selected
+      - name: level3
+        comment: level used when commodity and country are selected
+materialized_views:
   - name: chart_attributes_mv
     comment: Materialized view which merges chart_inds, chart_quals and chart_quants with chart_attributes.
     columns:
       - name: display_name
-        comment: If absent in chart_attributes this is pulled from attributes_mv.
+        comment: If absent in chart_attributes this is pulled from attributes.
   - name: dashboards_attributes_mv
     comment: Materialized view which merges dashboards_inds, dashboards_quals and dashboards_quants with dashboards_attributes.
     columns:
       - name: attribute_id
-        comment: References the unique id in attributes_mv.
+        comment: References the unique id in attributes.
   - name: download_attributes_mv
     comment: Materialized view which merges download_quals and download_quants with download_attributes.
     columns:
       - name: attribute_id
-        comment: References the unique id in attributes_mv.
+        comment: References the unique id in attributes.
   - name: map_attributes_mv
     comment: Materialized view which merges map_inds and map_quants with map_attributes.
     columns:
       - name: attribute_id
-        comment: References the unique id in attributes_mv.
+        comment: References the unique id in attributes.
       - name: name
         comment: Display name of the ind/quant
       - name: attribute_type
@@ -535,8 +550,6 @@ materialized_views:
         comment: Name of the attribute''s unit
       - name: description
         comment: Attribute''s description
-      - name: aggregate_method
-        comment: The method used to aggregate the data
       - name: original_attribute_id
         comment: The attribute''s original id
       - name: context_id
@@ -545,12 +558,12 @@ materialized_views:
     comment: Materialized view which merges recolor_by_inds and recolor_by_quals with recolor_by_attributes.
     columns:
       - name: attribute_id
-        comment: References the unique id in attributes_mv.
+        comment: References the unique id in attributes.
   - name: resize_by_attributes_mv
     comment: Materialized view which merges resize_by_quants with resize_by_attributes.
     columns:
       - name: attribute_id
-        comment: References the unique id in attributes_mv.
+        comment: References the unique id in attributes.
   - name: context_attribute_properties_mv
     comment: Materialized view combining context specific properties for inds, quals and quants.
     columns:

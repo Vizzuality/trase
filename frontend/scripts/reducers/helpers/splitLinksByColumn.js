@@ -1,3 +1,5 @@
+import kebabCase from 'lodash/kebabCase';
+
 // break down links into simple src - target binomes
 export default function(rawLinks, nodes, columns, selectedRecolorBy) {
   const links = [];
@@ -10,8 +12,10 @@ export default function(rawLinks, nodes, columns, selectedRecolorBy) {
       const targetNode = nodes[targetNodeId];
 
       let recolorBy = null;
+      let recolorBySlug = null;
       if (link.qual !== undefined && link.qual !== null) {
-        recolorBy = link.qual.replace(/\s/gi, '-').toLowerCase();
+        recolorBy = link.qual.startsWith('UNKNOWN') ? null : link.qual;
+        recolorBySlug = recolorBy && kebabCase(recolorBy);
       } else if (link.ind !== undefined && link.ind !== null) {
         recolorBy = link.ind;
 
@@ -39,6 +43,7 @@ export default function(rawLinks, nodes, columns, selectedRecolorBy) {
         height: link.height,
         quant: parseFloat(link.quant),
         recolorBy,
+        recolorBySlug,
         originalPath: path
       });
     }

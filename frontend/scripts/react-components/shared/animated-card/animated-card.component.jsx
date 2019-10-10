@@ -44,7 +44,7 @@ function AnimatedCard(props) {
               <Text
                 as="span"
                 color="grey"
-                size="lg"
+                size="md"
                 weight="light"
                 transform="capitalize"
                 className="card-title"

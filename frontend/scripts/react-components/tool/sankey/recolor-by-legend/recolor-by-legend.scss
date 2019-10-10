@@ -1,0 +1,111 @@
+@import 'styles/settings';
+
+.c-recolor-by-legend {
+  display: flex;
+  margin-top: 5px;
+  align-items: center;
+
+
+  .recolor-by-legend-unit {
+    height: 12px;
+    display: inline-flex;
+    align-items: center;
+
+    &.-left {
+      margin-right: 4px;
+    }
+
+    &.-right {
+      margin-left: 4px;
+    }
+  }
+
+  .recolor-by-legend-container {
+    display: inline-block;
+  }
+
+  .recolor-by-legend-item {
+    display: inline-block;
+  }
+
+  &.-qual {
+    .recolor-by-legend-item {
+      display: none;
+
+      &::before {
+        content: '';
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        margin-right: 4px;
+        border-radius: 100%;
+      }
+
+      @for $i from 1 through length($recolorby-colors) {
+        &.#{nth($recolorby-colors-names, $i)} {
+          &::before {
+            background-color: #{nth($recolorby-colors, $i)};
+          }
+        }
+      }
+
+      @for $i from 1 through length($recolorgroup-colors) {
+        &.#{nth($recolorgroup-colors-names, $i)} {
+          &::before {
+            background-color: #{nth($recolorgroup-colors, $i)};
+          }
+        }
+      }
+
+      &.-active {
+        display: block;
+      }
+    }
+  }
+
+  &.-linear,
+  &.-percentual,
+  &.-stars {
+    align-items: flex-start;
+
+    .recolor-by-legend-container {
+      display: flex;
+      align-items: flex-start;
+      height: 32px;
+    }
+
+    .recolor-by-legend-item {
+      position: relative;
+      width: 12px;
+      height: 12px;
+
+      @for $i from 1 through length($recolorby-colors) {
+        &.#{nth($recolorby-colors-names, $i)} {
+          background-color: #{nth($recolorby-colors, $i)};
+        }
+      }
+
+      &.-active {
+        border: solid $black 2px;
+        .recolor-by-legend-item-value {
+          display: block;
+        }
+      }
+    }
+
+    .recolor-by-legend-item-value {
+      display: none;
+      position: absolute;
+      left: 50%;
+      top: calc(100% + 5px);
+      white-space: nowrap;
+      transform: translateX(-50%);
+    }
+  }
+
+  &.-percentual {
+    .recolor-by-legend-item-value {
+      transform: translateX(calc(-50% + 2px));
+    }
+  }
+}

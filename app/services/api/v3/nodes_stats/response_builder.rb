@@ -39,10 +39,7 @@ module Api
             raise 'Either commodity or contexts but not both'
           end
 
-          @attribute = Api::V3::Readonly::Attribute.find_by(
-            id: @attribute_id, original_type: 'Quant'
-          )
-          raise "Attribute #{@attribute_id} not found" unless @attribute
+          @attribute = initialize_attribute
 
           @other_attributes = @other_attributes_ids.map do |attribute_id|
             attribute = Api::V3::Readonly::Attribute.find_by(
@@ -53,6 +50,22 @@ module Api
 
             attribute
           end
+        end
+
+        def initialize_attribute
+          if @attribute_id
+            attribute = Api::V3::Readonly::Attribute.find_by(
+              id: @attribute_id, original_type: 'Quant'
+            )
+            raise "Attribute #{@attribute_id} not found" unless attribute
+          else
+            volume_quant = Dictionary::Quant.instance.get('Volume')
+            attribute = Api::V3::Readonly::Attribute.find_by(
+              original_id: volume_quant.id, original_type: 'Quant'
+            )
+            raise 'Quant Volume not found' unless attribute
+          end
+          attribute
         end
 
         def formatted_nodes_stats

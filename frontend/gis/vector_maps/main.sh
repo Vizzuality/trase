@@ -13,7 +13,7 @@ ${BIN}/mapshaper tmp/BRAZIL_STATE.json -simplify rdp 30% planar keep-shapes -o p
 ${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, name, geoid FROM brazil_municipalities' > tmp/BRAZIL_MUNICIPALITY.json
 ${BIN}/mapshaper tmp/BRAZIL_MUNICIPALITY.json -simplify rdp 30% planar keep-shapes -o public/vector_layers/BRAZIL_MUNICIPALITY.topo.json format=topojson
 
-${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, name, geoid FROM colombia_departments' > tmp/COLOMBIA_DEPARTMENT.json
+${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, name, geocode as geoid FROM colombia_departments_dane_20190808' > tmp/COLOMBIA_DEPARTMENT.json
 ${BIN}/mapshaper tmp/COLOMBIA_DEPARTMENT.json -simplify rdp 30% planar keep-shapes -o public/vector_layers/COLOMBIA_DEPARTMENT.topo.json format=topojson
 
 ${BIN}/cartodb -u p2cs-sei -f geojson "SELECT the_geom, name, geoid FROM colombia_municipalities" > tmp/COLOMBIA_MUNICIPALITY.json

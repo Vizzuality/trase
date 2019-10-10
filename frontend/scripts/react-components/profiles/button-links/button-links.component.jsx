@@ -6,6 +6,7 @@ import Img from 'react-components/shared/img';
 import Heading from 'react-components/shared/heading';
 import Text from 'react-components/shared/text';
 import Icon from 'react-components/shared/icon';
+import { TOOL_LAYOUT } from 'constants';
 
 import './button-links.scss';
 
@@ -21,7 +22,7 @@ function ButtonLinks(props) {
               type: 'tool',
               payload: {
                 serializerParams: {
-                  isMapVisible: true,
+                  toolLayout: TOOL_LAYOUT.left,
                   selectedNodesIds: [nodeId],
                   expandedNodesIds: [nodeId],
                   selectedYears: [year, year],
@@ -51,7 +52,7 @@ function ButtonLinks(props) {
               type: 'tool',
               payload: {
                 serializerParams: {
-                  isMapVisible: false,
+                  toolLayout: TOOL_LAYOUT.right,
                   selectedNodesIds: [nodeId],
                   expandedNodesIds: [nodeId],
                   selectedYears: [year, year],

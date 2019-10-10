@@ -1,6 +1,6 @@
 {
   "name": "trase-frontend",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Frontend for trase.earth",
   "scripts": {
     "start": "webpack-dev-server --config config/webpack.config.dev.js",

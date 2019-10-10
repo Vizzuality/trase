@@ -27,12 +27,20 @@ RSpec.describe Api::V3::Dashboards::SourcesController, type: :controller do
       [
         api_v3_biome_node,
         api_v3_state_node,
-        api_v3_municipality_node
+        api_v3_municipality_node,
+        api_v3_municipality2_node
       ]
     }
 
     it 'returns list in alphabetical order' do
-      get :index, params: {countries_ids: [api_v3_brazil.id].join(',')}
+      get :index, params: {
+        countries_ids: [api_v3_brazil.id].join(','),
+        node_types_ids: [
+          api_v3_biome_node_type.id,
+          api_v3_state_node_type.id,
+          api_v3_municipality_node_type.id
+        ].join(',')
+      }
       expect(assigns(:collection).map(&:name)).to eq(
         all_results_alphabetically.map(&:name)
       )

@@ -233,7 +233,8 @@ export const HOME_VIDEO = {
 export const BREAKPOINTS = {
   mobile: 425,
   small: 640,
-  tablet: 768
+  tablet: 768,
+  laptop: 1024
 };
 
 export const MAX_SEARCH_RESULTS = 50;
@@ -311,3 +312,15 @@ export const NODE_TYPE_PANELS = {
 };
 
 export const WORLD_MAP_ASPECT_RATIO = 0.56;
+
+export const TOOL_LAYOUT = {
+  left: 0,
+  splitted: 1,
+  right: 2
+};
+
+export const SANKEY_OFFSETS = {
+  height: 175,
+  width: 120,
+  splittedWidth: 392
+};

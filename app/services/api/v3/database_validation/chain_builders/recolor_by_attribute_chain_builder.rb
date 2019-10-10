@@ -12,11 +12,9 @@ module Api
       module ChainBuilders
         class RecolorByAttributeChainBuilder < AbstractChainBuilder
           checks :declared_years_match_flow_attributes,
-                 association: :recolor_by_ind,
-                 link: :edit
+                 association: :recolor_by_ind
           checks :declared_years_match_flow_attributes,
-                 association: :recolor_by_qual,
-                 link: :edit
+                 association: :recolor_by_qual
           checks :attribute_present,
                  attribute: :tooltip_text,
                  link: :edit,
@@ -24,7 +22,7 @@ module Api
           checks :has_exactly_one_of,
                  associations: [:recolor_by_ind, :recolor_by_qual],
                  link: :index
-          checks :active_record_check, on: :recolor_by_attribute, link: :edit
+          checks :active_record_check, on: :recolor_by_attribute
 
           def self.build_chain(context)
             chain = []

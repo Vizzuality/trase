@@ -15,7 +15,7 @@
 #
 # Foreign Keys
 #
-#  fk_rails_...  (commodity_id => commodities.id)
+#  fk_rails_...  (commodity_id => commodities.id) ON DELETE => cascade ON UPDATE => cascade
 #
 
 module Api
@@ -31,8 +31,7 @@ module Api
 
       def self.blue_foreign_keys
         [
-          {name: :context_id, table_class: Api::V3::Context},
-          {name: :node_id, table_class: Api::V3::Node}
+          {name: :commodity_id, table_class: Api::V3::Commodity}
         ]
       end
 

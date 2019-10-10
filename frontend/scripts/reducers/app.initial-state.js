@@ -1,6 +1,5 @@
 export default {
   languages: [],
-  sankeySize: [window.innerWidth, window.innerHeight],
   isMapLayerVisible: false,
   isAppMenuVisible: false,
   tooltipCheck: 0,
@@ -22,6 +21,7 @@ export default {
   topNodes: {},
   loading: {
     contexts: false,
-    tooltips: false
+    tooltips: false,
+    topCountries: false
   }
 };

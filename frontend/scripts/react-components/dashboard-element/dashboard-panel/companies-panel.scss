@@ -1,6 +1,14 @@
 @import 'styles/settings';
 
 .c-companies-panel {
+  width: 560px;
+  margin: 0 auto;
+
+  @media screen and (min-width: $breakpoint-laptop) {
+    width: initial;
+    margin: initial;
+  }
+
   .companies-panel-search {
     margin: 0 0 25px 0;
   }

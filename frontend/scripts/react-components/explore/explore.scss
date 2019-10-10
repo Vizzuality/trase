@@ -1,52 +1,53 @@
 @import 'styles/settings';
 
 $top-cards-height: 156px;
-
-$explore-grid-height-1-row: 50px;
-$explore-grid-height-1-row-tablet: 100px;
-$explore-grid-height-2-rows: 100px;
-$explore-grid-height-2-rows-tablet: 150px;
-$explore-grid-height-3-rows: 150px;
-$explore-grid-height-3-rows-tablet: 200px;
-
+$max-rows: 3;
+$row-height: 50;
+$explore-mobile-dropdowns: 100px;
 $explore-heading: 66px;
 
 .c-explore {
+  overflow: hidden;
+
+  @media screen and (min-width: $breakpoint-tablet), (orientation: landscape) {
+    overflow: auto;
+  }
+
   .explore-selector {
     position: relative;
     margin-top: $nav-height;
-    padding-bottom: $top-cards-height;
     height: calc(100vh - #{$nav-height});
+    padding-bottom: 0;
+
+    @media screen and (min-width: $breakpoint-tablet),
+    (orientation: portrait) {
+      padding-bottom: $top-cards-height;
+    }
   }
 
   @mixin row-dependant-height {
     height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-heading});
 
-    &.rows1 {
-      height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-1-row} - #{$explore-heading});
-
-      @media screen and (max-width: $breakpoint-tablet) {
-        height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-1-row-tablet} - #{$explore-heading});
-      }
-    }
-
-    &.rows2 {
-      height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-2-rows} - #{$explore-heading});
-
-      @media screen and (max-width: $breakpoint-tablet) {
-        height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-2-rows-tablet} - #{$explore-heading});
-      }
-    }
-
-    &.rows3 {
-      height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-3-rows} - #{$explore-heading});
-
-      @media screen and (max-width: $breakpoint-tablet) {
-        height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-grid-height-3-rows-tablet} - #{$explore-heading});
+    @for $i from 1 through $max-rows {
+      &.rows#{$i} {
+        height: calc(
+          100vh -
+            #{$top-cards-height} -
+            #{$nav-height} -
+            #{$i *
+            $row-height}px -
+            #{$explore-heading}
+        );
       }
     }
 
     transition: height 0.3s;
+
+    @media screen and (max-width: $breakpoint-tablet) {
+      height: calc(
+        100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-mobile-dropdowns} - #{$explore-heading}
+      );
+    }
   }
 
   .map-section {
@@ -54,20 +55,46 @@ $explore-heading: 66px;
   }
 
   .map-container {
+    position: relative;
     @include row-dependant-height();
+  }
+
+  .map-centering {
+    // Still able to scroll the map in very short screens
+    margin-bottom: 0;
+
+    @media screen and (min-width: $breakpoint-tablet), (orientation: landscape) {
+      margin-bottom: $top-cards-height;
+    }
+
+    @media (min-height: 700px) {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      margin-bottom: 0;
+    }
   }
 
   .quick-facts {
     height: 100%;
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    min-width: 155px;
+    display: none;
+
+    @media screen and (min-width: $breakpoint-tablet) {
+      display: flex;
+    }
 
     .bubble-container {
       // Fix bubbles overlaping explore grid on very short screens
       @media (min-height: 700px) {
         min-height: 400px;
+      }
+
+      @media (max-height: 480px) {
+        display: none;
       }
     }
 
@@ -76,11 +103,10 @@ $explore-heading: 66px;
       height: 155px;
       display: flex;
       flex-direction: column;
-      align-content: center;
       justify-content: center;
       border-radius: 50%;
-      background-color: $light-gray;
       margin-top: 20px;
+      background-color: $light-gray;
     }
 
     .quick-facts-value {
@@ -101,16 +127,12 @@ $explore-heading: 66px;
       transition: height 0.3s;
 
       &.rows1 {
-        height: $explore-grid-height-1-row;
-        @media screen and (max-width: $breakpoint-tablet) {
-          height: $explore-grid-height-1-row-tablet;
-        }
+        justify-content: center;
       }
 
-      &.rows2 {
-        height: $explore-grid-height-2-rows;
-        @media screen and (max-width: $breakpoint-tablet) {
-          height: $explore-grid-height-2-rows-tablet;
+      @for $i from 1 through $max-rows {
+        &.rows#{$i} {
+          height: calc(#{$i * $row-height}px);
         }
       }
     }
@@ -118,5 +140,9 @@ $explore-heading: 66px;
 
   .c-grid-list-item {
     width: 120px;
+  }
+
+  .country-dropdown-container {
+    margin-top: 20px;
   }
 }

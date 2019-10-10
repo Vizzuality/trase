@@ -27,6 +27,10 @@ module Api
       has_one :context_node_type_property
       has_one :profile
 
+      delegate :column_group, to: :context_node_type_property
+      delegate :prefix, to: :context_node_type_property
+      delegate :role, to: :context_node_type_property
+
       validates :context, presence: true
       validates :node_type, presence: true, uniqueness: {scope: :context}
       validates :column_position, presence: true

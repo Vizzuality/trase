@@ -33,7 +33,7 @@ Rails.application.routes.draw do
       resources :top_profiles, only: [:index]
       resources :contexts, only: [:index] do
         resources :map_layers, only: [:index]
-        resources :columns, only: [:index]
+        resources :columns, only: [:index], controller: :node_types
         resources :flows, only: [:index]
         resources :nodes, only: [:index] do
           get :profile_metadata, on: :member, controller: :profile_metadata, action: :index
@@ -72,7 +72,14 @@ Rails.application.routes.draw do
         resources :sources, only: [:index] do
           get :search, on: :collection
         end
+        # TODO: remove once dashboards_companies_mv retired
         resources :companies, only: [:index] do
+          get :search, on: :collection
+        end
+        resources :exporters, only: [:index] do
+          get :search, on: :collection
+        end
+        resources :importers, only: [:index] do
           get :search, on: :collection
         end
         resources :destinations, only: [:index] do
@@ -103,6 +110,7 @@ Rails.application.routes.draw do
         get :countries_facts, on: :member
       end
       #resources :countries_facts, only: [:index]
+      resources :sankey_card_links, only: [:index]
     end
     namespace :v2 do
       resources :geo_id, only: :index

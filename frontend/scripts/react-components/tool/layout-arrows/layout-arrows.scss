@@ -1,0 +1,58 @@
+@import 'styles/settings';
+@import 'styles/mixins';
+
+.layout-arrow-button {
+  position: absolute;
+  bottom: 0;
+  right: - ($map-btn-height / 2);
+  width: $map-btn-height;
+  height: $map-btn-height;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+  background-color: $charcoal-grey;
+  box-shadow: $box-shadow;
+  color: $light-gray;
+  cursor: pointer;
+  z-index: $z-above-leaflet;
+
+  @include simple-arrow($white);
+
+  &::after {
+    top: 50%;
+    left: calc(50% - 4px);
+    transform: translate(-1px, -50%) rotateZ(-45deg);
+  }
+
+  top: -50px;
+  transition: top 0.3s;
+
+  &.-right {
+    top: 50px;
+    &::after {
+      left: calc(50% - 2px);
+      transform: translate(-1px, -50%) rotateZ(-225deg);
+    }
+  }
+
+  &.-centered-arrow {
+    top: 0;
+  }
+
+  &.-disabled {
+    pointer-events: none;
+    z-index: $z-above-leaflet - 1;
+
+    &::after {
+      transform: translate(-1px, -50%) rotateZ(-225deg);
+    }
+
+    &.-right {
+      &::after {
+        transform: translate(-1px, -50%) rotateZ(-45deg);
+      }
+    }
+  }
+}

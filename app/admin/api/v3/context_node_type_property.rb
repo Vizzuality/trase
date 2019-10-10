@@ -26,8 +26,15 @@ ActiveAdmin.register Api::V3::ContextNodeTypeProperty, as: 'ContextNodeTypePrope
                             hint: object.class.column_comment('is_geo_column')
       input :is_choropleth_disabled, as: :boolean, required: true,
                                      hint: object.class.column_comment('is_choropleth_disabled')
-      input :role, as: :select, collection: Api::V3::ContextNodeTypeProperty.roles, required: false
-      input :prefix, as: :string, hint: object.class.column_comment('prefix')
+      input :role,
+            as: :select,
+            collection: Api::V3::ContextNodeTypeProperty.roles,
+            hint: object.class.column_comment('role'),
+            required: true
+      input :prefix,
+            as: :string,
+            hint: object.class.column_comment('prefix'),
+            required: true
     end
     f.actions
   end

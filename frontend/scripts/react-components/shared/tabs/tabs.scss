@@ -8,7 +8,6 @@
 
   .tabs-options {
     display: flex;
-    margin: 0 0 25px 0;
   }
 
   .tab {
@@ -38,6 +37,12 @@
       opacity: 1;
       cursor: default;
       background-color: $charcoal-grey;
+    }
+  }
+
+  &.margin-sm {
+    .tabs-container {
+      margin: 0 0 25px 0;
     }
   }
 

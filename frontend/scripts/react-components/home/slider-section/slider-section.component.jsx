@@ -130,8 +130,13 @@ class SliderSection extends React.PureComponent {
 
     return (
       <section className={cx('c-slider-section', className)}>
+        <div className="gradient-before" />
         <div
-          className={cx('row', 'slider-wrapper', { '-auto-width': slides.length < visiblePages })}
+          className={cx('row', 'slider-wrapper', {
+            '-auto-width': slides.length < visiblePages,
+            '-yellow-fade': variant === 'profiles',
+            '-white-fade': variant !== 'profiles'
+          })}
         >
           <div className="column small-12">
             <Heading {...headingProps}>{name}</Heading>
@@ -165,6 +170,7 @@ class SliderSection extends React.PureComponent {
             />
           )}
         </div>
+        <div className="gradient-after" />
       </section>
     );
   }

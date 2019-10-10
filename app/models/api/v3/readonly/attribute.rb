@@ -1,51 +1,81 @@
 # == Schema Information
 #
-# Table name: attributes_mv
+# Table name: attributes
 #
-#  id(The unique id is a sequential number which is generated at REFRESH and therefore not fixed.) :bigint(8)        primary key
-#  original_type(Type of the original entity (Ind / Qual / Quant))                                 :text
-#  original_id(Id from the original table (inds / quals / quants))                                 :integer
-#  name                                                                                            :text
-#  display_name                                                                                    :text
-#  unit                                                                                            :text
-#  unit_type                                                                                       :text
-#  tooltip_text                                                                                    :text
-#  is_visible_on_actor_profile                                                                     :boolean
-#  is_visible_on_place_profile                                                                     :boolean
-#  is_temporal_on_actor_profile                                                                    :boolean
-#  is_temporal_on_place_profile                                                                    :boolean
-#  aggregate_method                                                                                :text
+#  id(Id is fixed between data updates, unless name changes)       :bigint(8)        not null, primary key
+#  original_id(Id from the original table (inds / quals / quants)) :integer          not null
+#  original_type(Type of the original entity (Ind / Qual / Quant)) :text             not null
+#  name                                                            :text             not null
+#  display_name                                                    :text
+#  unit                                                            :text
+#  unit_type                                                       :text
+#  tooltip_text                                                    :text
 #
 # Indexes
 #
-#  attributes_mv_id_idx    (id) UNIQUE
-#  attributes_mv_name_idx  (name) UNIQUE
+#  attributes_original_type_name_idx  (original_type,name) UNIQUE
 #
 
+# This class is not backed by a materialized view, but a table.
+# The table is refreshed using Postgres "upsert" to preserve ids.
+# The upsert is defined in a SQL function.
 module Api
   module V3
     module Readonly
       class Attribute < Api::V3::Readonly::BaseModel
-        self.table_name = 'attributes_mv'
-        self.primary_key = 'id'
+        self.table_name = 'attributes'
+
+        has_many :cont_attribute_sankey_card_links,
+                 class_name: 'Api::V3::SankeyCardLink',
+                 inverse_of: :cont_attribute
+        has_many :ncont_attribute_sankey_card_links,
+                 class_name: 'Api::V3::SankeyCardLink',
+                 inverse_of: :ncont_attribute
 
         delegate :values_meta, to: :original_attribute
 
-        def self.select_options
-          order(:display_name).map do |a|
-            ["#{a.display_name} (#{a.name})", a.id]
+        class << self
+          def select_options
+            order(:display_name).map do |a|
+              ["#{a.display_name} (#{a.name})", a.id]
+            end
           end
-        end
 
-        def self.refresh_dependents(options = {})
-          [
-            Api::V3::Readonly::DownloadAttribute,
-            Api::V3::Readonly::MapAttribute,
-            Api::V3::Readonly::RecolorByAttribute,
-            Api::V3::Readonly::ResizeByAttribute,
-            Api::V3::Readonly::DashboardsAttribute
-          ].each do |mview_klass|
-            mview_klass.refresh(options.merge(skip_dependencies: true))
+          # @param options
+          # @option options [Boolean] :skip_dependencies skip refreshing
+          # @option options [Boolean] :skip_dependents skip refreshing
+          def refresh_now(options = {})
+            refresh_dependencies(options) unless options[:skip_dependencies]
+            upsert_attributes
+            refresh_dependents(options) unless options[:skip_dependents]
+          end
+
+          # @param options
+          # @option options [Boolean] :skip_dependencies skip refreshing
+          # @option options [Boolean] :skip_dependents skip refreshing
+          def refresh_later(options = {})
+            UpsertAttributesWorker.perform_async(options)
+          end
+
+          protected
+
+          def upsert_attributes
+            connection.execute('SELECT upsert_attributes()')
+          end
+
+          def refresh_dependents(options = {})
+            [
+              Api::V3::Readonly::ChartAttribute,
+              Api::V3::Readonly::DashboardsAttribute,
+              Api::V3::Readonly::DownloadAttribute,
+              Api::V3::Readonly::MapAttribute,
+              Api::V3::Readonly::RecolorByAttribute,
+              Api::V3::Readonly::ResizeByAttribute
+            ].each do |mview_klass|
+              mview_klass.refresh(
+                options.merge(skip_dependencies: true)
+              )
+            end
           end
         end
 

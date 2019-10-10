@@ -33,21 +33,27 @@ function DashboardWelcome(props) {
       <Heading size="lg" align="center">
         Welcome to your dashboard
       </Heading>
-      <div className="dashboard-welcome-container">
+      <div className="row align-center">
         {cards.map(card => (
-          <div className="dashboard-welcome-card" key={card.title}>
-            <h3 className="dashboard-welcome-card-title">{card.title}</h3>
-            <div className="dashboard-welcome-card-container">
-              <p className="dashboard-welcome-card-text">{card.body}</p>
-              <ImgBackground className="dashboard-welcome-card-image" src={card.image} />
+          <div className="column small-12 medium-6 large-4" key={card.title}>
+            <div className="dashboard-welcome-card">
+              <Heading size="md" weight="bold" className="dashboard-welcome-card-title">
+                {card.title}
+              </Heading>
+              <div className="dashboard-welcome-card-container">
+                <p className="dashboard-welcome-card-text">{card.body}</p>
+                <ImgBackground className="dashboard-welcome-card-image" src={card.image} />
+              </div>
             </div>
           </div>
         ))}
       </div>
-      <div className="dashboard-welcome-button-container">
-        <Button size="md" color="pink" onClick={onContinue} testId="dashboard-welcome-button">
-          Continue
-        </Button>
+      <div className="dashboard-welcome-footer">
+        <div className="dashboard-welcome-button-container">
+          <Button size="md" color="pink" onClick={onContinue} testId="dashboard-welcome-button">
+            Continue
+          </Button>
+        </div>
       </div>
     </div>
   );

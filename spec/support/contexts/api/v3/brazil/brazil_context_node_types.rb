@@ -78,7 +78,7 @@ shared_context 'api v3 brazil context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 0,
-        role: nil
+        role: 'source'
       )
     end
     cnt
@@ -98,7 +98,7 @@ shared_context 'api v3 brazil context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 1,
-        role: nil
+        role: 'exporter'
       )
     end
     cnt

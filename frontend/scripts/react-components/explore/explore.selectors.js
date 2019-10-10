@@ -5,6 +5,7 @@ import { EXPLORE_STEPS } from 'constants';
 export const getContexts = state => state.app.contexts || null;
 const getSelectedCommodityId = state => state.explore.selectedCommodityId;
 const getSelectedCountryId = state => state.explore.selectedCountryId;
+const getQuickFacts = state => state.explore.quickFacts;
 
 export const getStep = createSelector(
   [getSelectedCommodityId, getSelectedCountryId],
@@ -15,7 +16,7 @@ export const getStep = createSelector(
   }
 );
 
-const getCommodities = createSelector(
+export const getCommodities = createSelector(
   [getContexts],
   contexts => {
     if (!contexts) return null;
@@ -48,7 +49,7 @@ export const getAllCountriesIds = createSelector(
   countries => (countries ? countries.map(c => c.id) : null)
 );
 
-const getCountries = createSelector(
+export const getCountries = createSelector(
   [getContexts, getSelectedCommodityId],
   (contexts, commodityId) => {
     if (!contexts) return null;
@@ -92,6 +93,24 @@ export const getItems = createSelector(
     if (step === EXPLORE_STEPS.selectCommodity) return commodities;
     if (step === EXPLORE_STEPS.selectCountry) return countries;
     return [];
+  }
+);
+
+export const getCountryQuickFacts = createSelector(
+  [getQuickFacts],
+  quickFacts => {
+    if (!quickFacts) return null;
+    const { data, meta } = quickFacts;
+    const countryQuickFacts = {};
+    data.forEach(d => {
+      const indicators = d.facts.map(i => {
+        const indicatorMeta = meta.attributes.find(m => m.id === i.attributeId);
+        const { unit, displayName: name, tooltipText: tooltip } = indicatorMeta;
+        return { ...i, unit, name, tooltip };
+      });
+      countryQuickFacts[d.countryId] = indicators;
+    });
+    return countryQuickFacts;
   }
 );
 

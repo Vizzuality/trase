@@ -1,7 +1,8 @@
-@import '../../../settings';
-@import '../../../mixins';
+@import 'styles/settings';
+@import 'styles/mixins';
 
 .c-map-sidebar {
+  background: $background-white;
   border-right: solid 1px rgba($charcoal-grey, .7);
 
   .map-sidebar-group {

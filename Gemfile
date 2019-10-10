@@ -12,7 +12,7 @@ gem 'pg_csv'
 gem 'pg_search'
 gem 'rubyzip'
 gem 'puma', '~> 3.0'
-gem 'dotenv-rails', '~> 2.2'
+gem 'dotenv-rails', '~> 2.7'
 gem 'active_model_serializers', '~> 0.10.10'
 gem 'kaminari'
 gem 'enumerate_it', '~> 1.4.1'
@@ -25,9 +25,9 @@ gem 'coffee-rails', '~> 4.2'
 
 gem 'jquery-rails'
 gem 'turbolinks', '~> 5'
-gem 'jbuilder', '~> 2.5'
+gem 'jbuilder', '~> 2.9'
 gem 'devise', '~> 4.7'
-gem 'activeadmin', '~> 1.3.1'
+gem 'activeadmin', '~> 1.4.3'
 gem 'activeadmin_simplemde'
 gem 'inherited_resources', github: 'activeadmin/inherited_resources'
 gem 'activeadmin_addons'
@@ -39,7 +39,7 @@ gem 'ckeditor', git: 'https://github.com/galetahub/ckeditor.git'
 gem 'paperclip', '~> 6.1.0'
 gem 'aws-sdk-s3', '~> 1'
 
-gem 'rack-cors', '~> 0.4'
+gem 'rack-cors', '~> 1.0'
 gem 'twitter', '~> 6.1'
 
 gem 'appsignal'
@@ -64,7 +64,7 @@ end
 group :development do
   gem 'annotate'
 
-  gem 'listen', '~> 3.0.5'
+  gem 'listen', '~> 3.2.0'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'

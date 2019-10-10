@@ -1,71 +1,27 @@
+# @deprecated Use {Api::V3::Dashboards::FilterImporters} or
+# {Api::V3::Dashboards::FilterExporters} instead.
+# TODO: remove once dashboards_companies_mv retired
 module Api
   module V3
     module Dashboards
       class FilterCompanies < BaseFilter
+        include Query
         include CallWithQueryTerm
 
         def initialize(params)
           @self_ids = params.delete(:companies_ids)
+          @nodes_to_filter_by = Api::V3::Dashboards::NodesToFilterBy.new(params)
           super(params)
         end
 
-        def call
-          return @query if @node_ids.none?
-
-          @query = Api::V3::Readonly::Dashboards::Company.
-            select(
-              'companies.id',
-              'companies.name',
-              'companies.node_type',
-              'companies.node_type_id',
-              'companies.country_id',
-              'companies.profile',
-              'companies.commodity_id'
-            ).
-            from("(#{@query.to_sql}) AS companies").
-            joins('INNER JOIN contexts ON contexts.country_id = companies.country_id AND
-                                          contexts.commodity_id = companies.commodity_id').
-            joins("INNER JOIN flows ON flows.context_id = contexts.id AND
-                                       flows.path @> ARRAY[#{@node_ids.join(', ')}, companies.id]").
-            group(
-              'companies.id',
-              'companies.name',
-              'companies.node_type',
-              'companies.node_type_id',
-              'companies.country_id',
-              'companies.profile',
-              'companies.commodity_id'
-            )
+        def call_with_query_term(query_term)
+          super(query_term, {include_country_id: true})
         end
 
         private
 
-        def initialize_query
-          @query = Api::V3::Readonly::Dashboards::Company.
-            select(
-              :id,
-              :name,
-              :node_type,
-              :node_type_id,
-              :country_id,
-              :profile,
-              :commodity_id
-            ).
-            group(
-              :id,
-              :name,
-              :node_type,
-              :node_type_id,
-              :country_id,
-              :profile,
-              :commodity_id
-            ).
-            order(:name)
-
-          return if @node_ids.none?
-
-          @query = @query.
-            having("COUNT(DISTINCT dashboards_companies_mv.node_id) = #{@node_ids.size}")
+        def filtered_class
+          Api::V3::Readonly::Dashboards::Company
         end
       end
     end

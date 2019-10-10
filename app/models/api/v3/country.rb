@@ -24,6 +24,8 @@ module Api
       has_many :quant_country_properties
       has_many :qual_country_properties
 
+      has_many :sankey_card_links
+
       delegate :latitude, to: :country_property
       delegate :longitude, to: :country_property
       delegate :zoom, to: :country_property
