@@ -16,6 +16,7 @@ const Home = props => {
     homeVideo,
     promotedPost,
     insightsPosts,
+    testimonials,
     onPlayVideo,
     selectedContext,
     goToContextPage,
@@ -71,6 +72,11 @@ const Home = props => {
             </div>
           )}
         </InView>
+        {testimonials && testimonials.length > 0 && (
+          <div className="sliders">
+            <SliderSection className="-small" name="Testimonials" slides={testimonials} />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -78,6 +84,7 @@ const Home = props => {
 
 Home.propTypes = {
   insightsPosts: PropTypes.array,
+  testimonials: PropTypes.array,
   tweets: PropTypes.array,
   promotedPost: PropTypes.object,
   homeVideo: PropTypes.string,

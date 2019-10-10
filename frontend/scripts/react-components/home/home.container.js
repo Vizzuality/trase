@@ -13,12 +13,11 @@ function mapStateToProps(state) {
   // not ideal, we could use redux-responsive if we need more changes like the one below
   const isSmallResolution = window.innerWidth <= BREAKPOINTS.small;
   const promotedPost = posts.find(post => post.highlighted);
-  const insightsPosts = posts
-    .filter(post => !(post.highlighted && !isSmallResolution))
-    .concat(testimonials);
+  const insightsPosts = posts.filter(post => !(post.highlighted && !isSmallResolution));
   const homeVideo = HOME_VIDEO[query.lang] || HOME_VIDEO.en;
   return {
     homeVideo,
+    testimonials,
     insightsPosts: sortBy(insightsPosts, 'date').reverse(),
     promotedPost,
     tweets: tweets.length > 0 ? tweets : null,
