@@ -75,7 +75,7 @@ export default [
     type: TOOL_LINKS__SELECT_COLUMN,
     category: 'Sankey',
     action: 'Select column',
-    getPayload: (action, state) => state.app.data.columns[action.payload.columnId].name
+    getPayload: (action, state) => state.toolLinks.data.columns[action.payload.columnId].name
   },
   {
     type: CHANGE_LAYOUT,

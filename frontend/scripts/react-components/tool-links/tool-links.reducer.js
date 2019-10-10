@@ -4,6 +4,7 @@ import {
   TOOL_LINKS__HIGHLIGHT_NODE,
   TOOL_LINKS__SET_NODES,
   TOOL_LINKS__SET_FLOWS_LOADING,
+  TOOL_LINKS__SET_COLUMNS,
   TOOL_LINKS__SET_LINKS,
   TOOL_LINKS_RESET_SANKEY,
   TOOL_LINKS__SELECT_VIEW,
@@ -117,7 +118,25 @@ const toolLinksReducer = {
     });
   },
   [TOOL_LINKS__SET_NODES]: setNodes,
+  [TOOL_LINKS__SET_COLUMNS](state, action) {
+    return immer(state, draft => {
+      const { columns } = action.payload;
 
+      // TODO the API should have the info on which file to load (if any) per column
+      const municipalitiesColumn = columns.find(column => column.name === 'MUNICIPALITY');
+      const logisticsHubColumn = columns.find(column => column.name === 'LOGISTICS HUB');
+      if (logisticsHubColumn && municipalitiesColumn) {
+        logisticsHubColumn.useGeometryFromColumnId = municipalitiesColumn.id;
+      }
+
+      draft.data.columns = {};
+      columns.forEach(column => {
+        draft.data.columns[column.id] = column;
+      });
+
+      // TODO: if any selectedNode, make those columns visible (selected)
+    });
+  },
   [TOOL_LINKS__SET_MISSING_LOCKED_NODES]: setNodes,
 
   [TOOL_LINKS__SET_LINKS](state, action) {

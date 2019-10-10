@@ -10,7 +10,7 @@ import { makeGetAvailableYears } from 'selectors/years.selectors';
 
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolNodes = state => state.toolLinks.data.nodes;
-const getToolColumns = state => state.app.data.columns;
+const getToolColumns = state => state.toolLinks.data.columns;
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getToolExpandedNodesIds = state => state.toolLinks.expandedNodesIds;
 const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;

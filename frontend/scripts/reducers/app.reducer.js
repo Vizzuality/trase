@@ -14,7 +14,8 @@ import {
   APP__TRANSIFEX_LANGUAGES_LOADED,
   APP__SET_TOP_DESTINATION_COUNTRIES,
   APP__SET_TOP_DESTINATION_COUNTRIES_LOADING,
-  APP__SET_COLUMNS
+  APP__SET_COLUMNS,
+  APP__SET_COLUMNS_LOADING
 } from 'actions/app.actions';
 import { COUNTRIES_COORDINATES } from 'scripts/countries';
 import createReducer from 'utils/createReducer';
@@ -142,7 +143,16 @@ const appReducer = {
       }
     };
   },
-
+  [APP__SET_COLUMNS_LOADING](state, action) {
+    const { loading } = action.payload;
+    return {
+      ...state,
+      loading: {
+        ...state.loading,
+        columns: loading
+      }
+    };
+  },
   [APP__SET_COLUMNS](state, action) {
     return immer(state, draft => {
       const { columns } = action.payload;

@@ -12,7 +12,7 @@ import {
 import { loadTopNodes } from 'react-components/profile-root/profile-root.thunks';
 import withSidebarNavLayout from 'react-components/nav/sidebar-nav/with-sidebar-nav-layout.hoc';
 import getPageStaticContent from 'react-components/static-content/static-content.thunks';
-import loadBaseAppData from 'reducers/app.thunks';
+import loadBaseAppData, { loadAppInitialData } from 'reducers/app.thunks';
 import getTeam from 'react-components/team/team.thunks';
 import { loadDashboardTemplates } from 'react-components/dashboard-root/dashboard-root.thunks';
 import { redirectToExplore } from 'react-components/legacy-explore/explore.thunks';
@@ -21,6 +21,7 @@ import {
   resizeSankeyTool,
   loadDisclaimerTool
 } from 'scripts/react-components/tool/tool.thunks';
+
 import { loadInitialDashboardData } from 'scripts/react-components/dashboard-element/dashboard-element.thunks';
 
 import getPageTitle from 'scripts/router/page-title';
@@ -80,7 +81,7 @@ export const routes = {
       className: '-light',
       printable: true
     },
-    thunk: loadPageData(loadToolInitialData)
+    thunk: loadPageData(loadAppInitialData)
   },
   dashboardRoot: {
     path: '/dashboards',
@@ -92,7 +93,7 @@ export const routes = {
     path: '/dashboards/:dashboardId',
     page: 'dashboard-element',
     title: getPageTitle,
-    thunk: loadPageData(loadToolInitialData, loadInitialDashboardData)
+    thunk: loadPageData(loadAppInitialData, loadInitialDashboardData)
   },
   data: {
     path: '/data',

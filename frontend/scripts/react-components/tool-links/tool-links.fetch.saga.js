@@ -14,12 +14,12 @@ import {
   getSelectedRecolorBy,
   getSelectedBiomeFilter
 } from 'react-components/tool-links/tool-links.selectors';
-import { setToolColumns } from 'actions/app.actions';
 import {
   setToolLinks,
   setToolNodes,
   setNoLinksFound,
-  setMissingLockedNodes
+  setMissingLockedNodes,
+  setToolColumns
 } from './tool-links.actions';
 
 export function* getToolLinksData() {

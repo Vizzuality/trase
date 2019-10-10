@@ -2,6 +2,7 @@
 
 export default {
   data: {
+    columns: null,
     nodes: null,
     links: null,
     nodeHeights: null,

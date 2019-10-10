@@ -30,17 +30,25 @@ export const APP__SET_TOP_DESTINATION_COUNTRIES_LOADING =
   'APP__SET_TOP_DESTINATION_COUNTRIES_LOADING';
 export const APP__GET_COLUMNS = 'APP__GET_COLUMNS';
 export const APP__SET_COLUMNS = 'APP__SET_COLUMNS';
+export const APP__SET_COLUMNS_LOADING = 'APP__SET_COLUMNS_LOADING';
 
-export function getToolColumns() {
+export function getColumns() {
   return {
     type: APP__GET_COLUMNS
   };
 }
 
-export function setToolColumns(columns) {
+export function setColumns(columns) {
   return {
     type: APP__SET_COLUMNS,
     payload: { columns }
+  };
+}
+
+export function setColumnsLoading(loading) {
+  return {
+    type: APP__SET_COLUMNS_LOADING,
+    payload: { loading }
   };
 }
 

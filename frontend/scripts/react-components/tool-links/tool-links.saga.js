@@ -1,12 +1,14 @@
 import { select, all, call, fork, put, takeLatest, cancel } from 'redux-saga/effects';
-import { SET_CONTEXT, SET_CONTEXTS, APP__GET_COLUMNS } from 'actions/app.actions';
+import { SET_CONTEXT, SET_CONTEXTS } from 'actions/app.actions';
 import { setLoadingSpinner } from 'utils/saga-utils';
 import { loadMapVectorData, SELECT_YEARS } from 'react-components/tool/tool.actions';
 import { getSelectedContext } from 'reducers/app.selectors';
+import { getColumnsData } from 'reducers/app.fetch.saga';
 import {
   TOOL_LINKS__SET_SELECTED_NODES,
   TOOL_LINKS__SELECT_COLUMN,
   TOOL_LINKS__SELECT_VIEW,
+  TOOL_LINKS__GET_COLUMNS,
   TOOL_LINKS__EXPAND_SANKEY,
   TOOL_LINKS__COLLAPSE_SANKEY,
   TOOL_LINKS__CLEAR_SANKEY,
@@ -19,7 +21,6 @@ import {
   selectView
 } from './tool-links.actions';
 import {
-  getToolColumnsData,
   getToolLinksData,
   getToolNodesByLink,
   getMissingLockedNodes,
@@ -27,49 +28,22 @@ import {
 } from './tool-links.fetch.saga';
 
 function* fetchToolColumns() {
-  function* findSelectedContext(location, contexts) {
-    switch (location.type) {
-      case 'profileNode': {
-        const { contextId } = location.query;
-        return contextId ? contexts.find(c => c.id === contextId) : null;
-      }
-      case 'dashboardElement': {
-        if (!location.query) return null;
-        const { selectedCountryId, selectedCommodityId } = location.query;
-        if (!selectedCountryId || !selectedCommodityId) return null;
-        return contexts.find(
-          c => c.countryId === selectedCountryId && c.commodityId === selectedCommodityId
-        );
-      }
-      case 'explore':
-      case 'tool':
-        return yield select(getSelectedContext);
-      default:
-        return null;
-    }
-  }
-
   function* performFetch() {
-    const {
-      toolLinks,
-      location,
-      app: { contexts }
-    } = yield select();
-    const selectedContext = yield findSelectedContext(location, contexts);
+    const { toolLinks, location } = yield select();
+    if (location.type !== 'tool') return;
+    const selectedContext = yield select(getSelectedContext);
     if (selectedContext === null) return;
 
     const task = yield fork(setLoadingSpinner, 750, setToolFlowsLoading(true));
-    yield fork(getToolColumnsData, selectedContext);
+    yield fork(getColumnsData, selectedContext);
     yield fork(getToolGeoColumnNodes, selectedContext);
-    if (location.type === 'tool') {
-      yield call(getToolLinksData);
-      yield call(getToolNodesByLink, selectedContext, {
-        fetchAllNodes: toolLinks.detailedView
-      });
+    yield call(getToolLinksData);
+    yield call(getToolNodesByLink, selectedContext, {
+      fetchAllNodes: toolLinks.detailedView
+    });
 
-      // TODO: remove this call, just here to split the refactor in stages
-      yield put(loadMapVectorData());
-    }
+    // TODO: remove this call, just here to split the refactor in stages
+    yield put(loadMapVectorData());
 
     if (task.isRunning()) {
       yield cancel(task);
@@ -77,7 +51,7 @@ function* fetchToolColumns() {
       yield fork(setLoadingSpinner, 350, setToolFlowsLoading(false));
     }
   }
-  yield takeLatest([SET_CONTEXTS, APP__GET_COLUMNS, SET_CONTEXT], performFetch);
+  yield takeLatest([SET_CONTEXTS, TOOL_LINKS__GET_COLUMNS, SET_CONTEXT], performFetch);
 }
 
 function* fetchToolGeoColumnNodes() {

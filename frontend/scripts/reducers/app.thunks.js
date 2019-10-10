@@ -1,5 +1,6 @@
-import { SET_TOOLTIPS, SET_CONTEXTS, APP__SET_LOADING } from 'actions/app.actions';
+import { SET_TOOLTIPS, SET_CONTEXTS, APP__SET_LOADING, getColumns } from 'actions/app.actions';
 import { GET_TOOLTIPS_URL, getURLFromParams, GET_CONTEXTS_URL } from 'utils/getURLFromParams';
+
 import getPageTitle from 'router/page-title';
 
 function loadTooltipsPromise(dispatch, getState) {
@@ -65,3 +66,9 @@ export default function(dispatch, getState) {
     loadContextsPromise(dispatch, getState)
   ]).catch(e => console.error(e));
 }
+
+export const loadAppInitialData = (dispatch, getState, bag) => {
+  if (bag?.action?.meta?.location?.kind !== 'redirect') {
+    dispatch(getColumns());
+  }
+};
