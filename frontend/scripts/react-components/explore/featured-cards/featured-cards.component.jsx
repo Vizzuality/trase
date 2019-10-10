@@ -10,14 +10,16 @@ import cx from 'classnames';
 
 import 'react-components/explore/featured-cards/featured-cards.scss';
 
-const FeaturedCard = ({ card, openModal }) => {
-  const { title, subtitle, id, commodityId, countryId } = card;
+const FeaturedCard = ({ card, openModal, step }) => {
+  const { title, subtitle, countryName, commodityName } = card;
+  const stepIds = { 1: '', 2: `-${commodityName}`, 3: `-${commodityName}-${countryName}` };
+  const cardStepId = stepIds[step];
   return (
     <div className="c-featured-card">
       <button
         onClick={() => openModal(card)}
         className="featured-card-button"
-        data-test={`featured-card-${commodityId}-${countryId}-${id}`}
+        data-test={`featured-card${cardStepId}`}
       >
         <Text
           variant="mono"
@@ -27,7 +29,7 @@ const FeaturedCard = ({ card, openModal }) => {
           transform="uppercase"
           color="grey-faded"
         >
-          {card.countryName} · {card.commodityName}
+          {countryName} · {commodityName}
         </Text>
         <Text
           variant="mono"
@@ -56,6 +58,7 @@ const FeaturedCard = ({ card, openModal }) => {
 };
 
 FeaturedCard.propTypes = {
+  step: PropTypes.number,
   card: PropTypes.object.isRequired,
   openModal: PropTypes.func.isRequired
 };
@@ -104,7 +107,12 @@ const FeaturedCards = props => {
         style={!isSmall ? transition.props : undefined}
         className={cx({ 'mobile-card': isSmall, 'desktop-card': !isSmall })}
       >
-        <FeaturedCard key={transition.key} card={transition.item} openModal={openModal} />
+        <FeaturedCard
+          step={step}
+          key={transition.key}
+          card={transition.item}
+          openModal={openModal}
+        />
       </animated.div>
     ));
 

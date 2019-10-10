@@ -1,3 +1,4 @@
+import qs from 'qs';
 import { Polly } from '@pollyjs/core';
 import PuppeteerAdapter from '@pollyjs/adapter-puppeteer';
 import FSPersister from '@pollyjs/persister-fs';
@@ -37,8 +38,8 @@ if (ENABLE_REDESIGN_PAGES) {
       await page.goto(`${BASE_URL}/explore`);
       await page.waitFor(1000);
       // Step 1
-      expectChildrenToBe(page, 'featured-cards-row', 4);
-      await page.waitForSelector('[data-test=featured-card-BRAZIL-SOY-EXPORTER-FOREST_500]', {
+      expectChildrenToBe(page, 'featured-cards-row', 1);
+      await page.waitForSelector('[data-test=featured-card', {
         timeout: 5000
       });
 
@@ -47,7 +48,7 @@ if (ENABLE_REDESIGN_PAGES) {
       // Step 2
       await expectToContain(page, 'step-title', '2.');
       await expectToContain(page, 'featured-cards-title', 'Beef');
-      await page.waitForSelector('[data-test=featured-card-BRAZIL-BEEF-EXPORTER-FOREST_500]', {
+      await page.waitForSelector('[data-test=featured-card-BEEF]', {
         timeout: 5000
       });
 
@@ -56,7 +57,7 @@ if (ENABLE_REDESIGN_PAGES) {
       // Step 3
       await expectToContain(page, 'step-title', '3.');
       await expectToContain(page, 'featured-cards-title', 'Colombia Beef');
-      await page.waitForSelector('[data-test=featured-card-COLOMBIA-BEEF-EXPORTER-FOREST_500]', {
+      await page.waitForSelector('[data-test=featured-card-BEEF-COLOMBIA]', {
         timeout: 5000
       });
 
@@ -69,12 +70,12 @@ if (ENABLE_REDESIGN_PAGES) {
       await click(page, 'grid-list-item-button-BRAZIL');
       await expectToContain(page, 'step-title', '3.');
 
-      // TODO: Lets use this when the link is complete
-      // await Promise.all([
-      //   click(page, 'top-card-BRAZIL-BEEF-EXPORTER-FOREST_500'),
-      //   page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 0 })
-      // ]);
-      // await expect(page.url().startsWith(`${BASE_URL}/flows?selectedContextId=6`)).toBe(true);
+      await Promise.all([
+        click(page, 'featured-card-BEEF-COLOMBIA'),
+        page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 0 })
+      ]);
+      const params = qs.parse(page.url(), { ignoreQueryPrefix: true, arrayLimit: 500 });
+      await expect(params.selectedContextId).toBe(6);
     });
   });
 }
