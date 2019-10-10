@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import uniqBy from 'lodash/uniqBy';
 import { EXPLORE_STEPS } from 'constants';
-import translateLink from 'utils/translateLink';
+import translateLink from 'utils/translate-link';
 
 export const getContexts = state => state.app.contexts || null;
 const getSelectedCommodityId = state => state.explore.selectedCommodityId;
