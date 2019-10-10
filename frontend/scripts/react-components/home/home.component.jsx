@@ -5,24 +5,19 @@ import NewsletterForm from 'react-components/shared/newsletter/newsletter.contai
 import SliderSection from 'react-components/home/slider-section/slider-section.component';
 import WorldMap from 'react-components/shared/world-map/world-map.container';
 import SentenceSelector from 'react-components/shared/sentence-selector/sentence-selector.container';
-import Entrypoints from 'react-components/home/entrypoints/entrypoints.component';
 import Button from 'react-components/shared/button/button.component';
 import InView from 'react-components/shared/in-view.component';
-import cx from 'classnames';
 
 import 'scripts/react-components/home/homepage.scss';
 
 const Home = props => {
   const {
     tweets,
-    blogPosts,
     homeVideo,
     promotedPost,
-    testimonials,
     insightsPosts,
+    testimonials,
     onPlayVideo,
-    clickEntrypoint,
-    clickNextEntrypoint,
     selectedContext,
     goToContextPage,
     getTopCountries,
@@ -43,8 +38,9 @@ const Home = props => {
           homeVideo={homeVideo}
           onPlayVideo={onPlayVideo}
         />
-        <div className={cx('homepage-entrypoints', { '-hide-profiles': DISABLE_PROFILES })}>
-          <Entrypoints onClickNext={clickNextEntrypoint} onClick={clickEntrypoint} />
+        <div className="sliders">
+          <NewsletterForm />
+          <SliderSection name="Insights" slides={insightsPosts} />
         </div>
         <InView triggerOnce>
           {({ ref, inView }) => (
@@ -76,12 +72,11 @@ const Home = props => {
             </div>
           )}
         </InView>
-        <div className="sliders">
-          <NewsletterForm />
-          <SliderSection name="News and Blogs" slides={blogPosts} />
-          <SliderSection name="Insights" slides={insightsPosts} />
-          <SliderSection className="-small" name="Testimonials" slides={testimonials} />
-        </div>
+        {testimonials && testimonials.length > 0 && (
+          <div className="sliders">
+            <SliderSection className="-small" name="Testimonials" slides={testimonials} />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -91,13 +86,10 @@ Home.propTypes = {
   insightsPosts: PropTypes.array,
   testimonials: PropTypes.array,
   tweets: PropTypes.array,
-  blogPosts: PropTypes.array,
   promotedPost: PropTypes.object,
   homeVideo: PropTypes.string,
   goToContextPage: PropTypes.func,
   onPlayVideo: PropTypes.func.isRequired,
-  clickNextEntrypoint: PropTypes.func.isRequired,
-  clickEntrypoint: PropTypes.func.isRequired,
   getTopCountries: PropTypes.func.isRequired,
   selectedContext: PropTypes.object,
   destinationCountries: PropTypes.array,
