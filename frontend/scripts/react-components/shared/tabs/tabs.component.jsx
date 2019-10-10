@@ -30,7 +30,7 @@ function Tabs(props) {
                 '-selected': isSelected(item),
                 [color]: !!color
               })}
-              data-key={item}
+              data-key={itemTabRenderer ? itemTabRenderer(item, index) : item}
               onClick={() => onSelectTab(item, index)}
               data-test={`${testId}-item`}
               disabled={isSelected(item)}
