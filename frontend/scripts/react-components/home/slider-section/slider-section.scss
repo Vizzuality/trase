@@ -1,5 +1,57 @@
 @import 'styles/settings';
 
+@mixin fade-slider($color) {
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    margin-left: calc(1px - ((100vw - 72em) / 2) - 200px);
+    width: calc((100vw - 72em) / 2);
+    height: 101%; // to get rid of the shadow too
+    top: 0;
+    background-color: $color;
+    z-index: $z-base;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    margin-right: calc(1px - ((100vw - 72em) / 2) - 200px);
+    width: calc((100vw - 72em) / 2);
+    height: 101%; // to get rid of the shadow too
+    top: 0;
+    background-color: $color;
+  }
+
+  > div {
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      margin-left: -200px;
+      width: 100px;
+      height: 101%;
+      top: 0;
+      background: -webkit-gradient(linear,left top,right top,from($color),to(transparent));
+      background: linear-gradient(90deg, $color, transparent);
+      z-index: $z-base;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      margin-right: -200px;
+      width: 100px;
+      height: 101%;
+      top: 0;
+      background: -webkit-gradient(linear,left top,right top,from(transparent),to($color));
+      background: linear-gradient(90deg, transparent,$color);
+    }
+  }
+}
+
 .c-slider-section {
   padding: 100px 0 0;
 
@@ -14,6 +66,14 @@
 
 .slider-wrapper {
   position: relative;
+
+  &.-white-fade {
+    @include fade-slider($white);
+  }
+
+  &.-yellow-fade {
+    @include fade-slider($egg-shell);
+  }
 
   > div {
     display: block;
