@@ -8,6 +8,7 @@ const getSelectedCommodityId = state => state.explore.selectedCommodityId;
 const getSelectedCountryId = state => state.explore.selectedCountryId;
 const getQuickFacts = state => state.explore.quickFacts;
 const getSankeyCards = state => state.explore.sankeyCards;
+const getSankeyCardsLoading = state => state.explore.sankeyCardsLoading;
 
 export const getStep = createSelector(
   [getSelectedCommodityId, getSelectedCountryId],
@@ -142,5 +143,44 @@ export const getCards = createSelector(
         }
       };
     });
+  }
+);
+
+export const getCardsWithDefault = createSelector(
+  [getCards, getSelectedCommodityId, getSelectedCountryId, getContexts, getSankeyCardsLoading],
+  (cards, commodityId, countryId, contexts, loading) => {
+    if (cards.length > 0 || contexts.length === 0 || !commodityId || loading) {
+      return cards;
+    }
+
+    const availableContexts = contexts.filter(
+      ctx => ctx.commodityId === commodityId && (countryId ? ctx.countryId === countryId : true)
+    );
+
+    return availableContexts
+      .map((context, index) => {
+        const options = {
+          id: `${context.commodityId}_${context.countryId}`,
+          title: 'Full supply chain',
+          countryId: context.countryId,
+          commodityId: context.commodityId,
+          queryParams: {
+            selectedContextId: context.id
+          }
+        };
+        return {
+          index,
+          id: options.id,
+          title: options.title,
+          countryId: context.countryId,
+          countryName: context.countryName,
+          commodityName: context.commodityName,
+          links: {
+            sankey: translateLink(options, cards.meta),
+            dashboard: translateLink(options, cards.meta, 'dashboard')
+          }
+        };
+      })
+      .slice(0, 4);
   }
 );

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Heading from 'react-components/shared/heading';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import PropTypes from 'prop-types';
-import TopCards from 'react-components/explore/featured-cards';
+import FeaturedCards from 'react-components/explore/featured-cards';
 import Text from 'react-components/shared/text';
 import WorldMap from 'react-components/shared/world-map/world-map.container';
 import { EXPLORE_STEPS, BREAKPOINTS } from 'constants';
@@ -69,7 +69,7 @@ function Explore(props) {
     const titleParts = ['commodity', 'sourcing country', 'supply chain'];
     return (
       <Heading size="lg" align="center" data-test="step-title">
-        {step}. Choose one {titleParts[step]}
+        {step}. Choose one {titleParts[step - 1]}
       </Heading>
     );
   };
@@ -205,7 +205,7 @@ function Explore(props) {
                   </div>
                 </div>
               </div>
-              <TopCards
+              <FeaturedCards
                 step={step}
                 setCommodity={setCommodity}
                 setCountry={setCountry}

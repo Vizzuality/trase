@@ -2,7 +2,8 @@ import {
   EXPLORE__SET_COMMODITY,
   EXPLORE__SET_COUNTRY,
   EXPLORE__SET_QUICK_FACTS,
-  EXPLORE__SET_SANKEY_CARDS
+  EXPLORE__SET_SANKEY_CARDS,
+  EXPLORE__SET_SANKEY_CARDS_LOADING
 } from 'react-components/explore/explore.actions';
 import createReducer from 'utils/createReducer';
 import immer from 'immer';
@@ -12,7 +13,8 @@ export const initialState = {
   selectedCommodityId: null,
   selectedCountryId: null,
   quickFacts: null,
-  sankeyCards: null
+  sankeyCards: null,
+  sankeyCardsLoading: false
 };
 
 const exploreReducer = {
@@ -41,6 +43,11 @@ const exploreReducer = {
         meta,
         data: resultingCards
       };
+    });
+  },
+  [EXPLORE__SET_SANKEY_CARDS_LOADING](state, action) {
+    return immer(state, draft => {
+      draft.sankeyCardsLoading = action.payload;
     });
   }
 };

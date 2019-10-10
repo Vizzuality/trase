@@ -12,6 +12,7 @@ export const EXPLORE__SET_COUNTRY = 'EXPLORE__SET_COUNTRY';
 export const EXPLORE__SELECT_TOP_CARD = 'EXPLORE__SELECT_TOP_CARD';
 export const EXPLORE__SET_QUICK_FACTS = 'EXPLORE__SET_QUICK_FACTS';
 export const EXPLORE__SET_SANKEY_CARDS = 'EXPLORE__SET_SANKEY_CARDS';
+export const EXPLORE__SET_SANKEY_CARDS_LOADING = 'EXPLORE__SET_SANKEY_CARDS_LOADING';
 
 export const setCommodity = selectedCommodityId => ({
   type: EXPLORE__SET_COMMODITY,
@@ -21,6 +22,11 @@ export const setCommodity = selectedCommodityId => ({
 export const setCountry = selectedCountryId => ({
   type: EXPLORE__SET_COUNTRY,
   payload: { selectedCountryId }
+});
+
+export const setSankeyCardsLoading = loading => ({
+  type: EXPLORE__SET_SANKEY_CARDS_LOADING,
+  payload: loading
 });
 
 export const goToTool = (destination, card) => dispatch => {
@@ -62,6 +68,7 @@ export const getSankeyCards = (level, commodity, country) => dispatch => {
       commodity_id: commodity?.id
     })
   );
+  dispatch(setSankeyCardsLoading(true));
   axios
     .get(url)
     .then(res => {
@@ -71,5 +78,6 @@ export const getSankeyCards = (level, commodity, country) => dispatch => {
         payload: { data, meta }
       });
     })
-    .catch(error => console.error(error));
+    .catch(error => console.error(error))
+    .finally(() => dispatch(setSankeyCardsLoading(false)));
 };

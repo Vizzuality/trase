@@ -7,7 +7,7 @@ import {
   getCountry,
   getCommodity,
   getAllCountriesIds,
-  getCards,
+  getCardsWithDefault,
   getCommodityContexts,
   getCommodities,
   getCountries,
@@ -31,7 +31,7 @@ const mapStateToProps = state => ({
   commodity: getCommodity(state),
   contexts: getContexts(state),
   allCountriesIds: getAllCountriesIds(state),
-  cards: getCards(state),
+  cards: getCardsWithDefault(state),
   topNodes: state.app.topNodes,
   commodityContexts: getCommodityContexts(state),
   countryQuickFacts: getCountryQuickFacts(state)
