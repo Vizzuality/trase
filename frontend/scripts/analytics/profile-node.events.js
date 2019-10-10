@@ -18,7 +18,7 @@ export default [
       // eslint-disable-next-line
       return `${data?.jurisdiction_name || data?.node_name} - ${data?.column_name} - ${
         context?.countryName
-      } - ${context.commodityName} - ${query?.year}`;
+      } - ${context?.commodityName} - ${query?.year}`;
     },
     shouldSend: action => action.payload.endpoint === GET_NODE_SUMMARY_URL
   },
