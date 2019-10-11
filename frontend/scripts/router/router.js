@@ -12,7 +12,7 @@ import {
 import { loadTopNodes } from 'react-components/profile-root/profile-root.thunks';
 import withSidebarNavLayout from 'react-components/nav/sidebar-nav/with-sidebar-nav-layout.hoc';
 import getPageStaticContent from 'react-components/static-content/static-content.thunks';
-import loadBaseAppData from 'reducers/app.thunks';
+import loadBaseAppData, { loadColumnsData } from 'reducers/app.thunks';
 import getTeam from 'react-components/team/team.thunks';
 import { loadDashboardTemplates } from 'react-components/dashboard-root/dashboard-root.thunks';
 import { redirectToExplore } from 'react-components/legacy-explore/explore.thunks';
@@ -80,7 +80,7 @@ export const routes = {
       className: '-light',
       printable: true
     },
-    thunk: loadPageData()
+    thunk: loadPageData(loadColumnsData)
   },
   dashboardRoot: {
     path: '/dashboards',
@@ -92,7 +92,7 @@ export const routes = {
     path: '/dashboards/:dashboardId',
     page: 'dashboard-element',
     title: getPageTitle,
-    thunk: loadPageData(loadInitialDashboardData)
+    thunk: loadPageData(loadInitialDashboardData, loadColumnsData)
   },
   data: {
     path: '/data',

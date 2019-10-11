@@ -1,4 +1,4 @@
-import { SET_TOOLTIPS, SET_CONTEXTS, APP__SET_LOADING } from 'actions/app.actions';
+import { SET_TOOLTIPS, SET_CONTEXTS, APP__SET_LOADING, getColumns } from 'actions/app.actions';
 import { GET_TOOLTIPS_URL, getURLFromParams, GET_CONTEXTS_URL } from 'utils/getURLFromParams';
 import getPageTitle from 'router/page-title';
 
@@ -58,6 +58,12 @@ function loadContextsPromise(dispatch, getState) {
       document.title = getPageTitle(getState());
     });
 }
+
+export const loadColumnsData = (dispatch, getState, bag) => {
+  if (bag?.action?.meta?.location?.kind !== 'redirect') {
+    dispatch(getColumns());
+  }
+};
 
 export default function(dispatch, getState) {
   return Promise.all([

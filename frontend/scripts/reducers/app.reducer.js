@@ -13,13 +13,16 @@ import {
   APP__SET_LOADING,
   APP__TRANSIFEX_LANGUAGES_LOADED,
   APP__SET_TOP_DESTINATION_COUNTRIES,
-  APP__SET_TOP_DESTINATION_COUNTRIES_LOADING
+  APP__SET_TOP_DESTINATION_COUNTRIES_LOADING,
+  APP__SET_COLUMNS,
+  APP__SET_COLUMNS_LOADING
 } from 'actions/app.actions';
 import { COUNTRIES_COORDINATES } from 'scripts/countries';
 import createReducer from 'utils/createReducer';
 import { SELECT_YEARS } from 'react-components/tool/tool.actions';
 import { TOOL_LINKS_RESET_SANKEY } from 'react-components/tool-links/tool-links.actions';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
+import immer from 'immer';
 import initialState from './app.initial-state';
 
 const appReducer = {
@@ -92,6 +95,10 @@ const appReducer = {
     const { contexts = contextsLoading, tooltips = tooltipsLoading } = action.payload;
     return { ...state, loading: { contexts, tooltips } };
   },
+  [APP__SET_COLUMNS_LOADING](state, action) {
+    const { loading } = action.payload;
+    return { ...state, loading: { ...state.loading, columns: loading } };
+  },
   [SELECT_YEARS](state, action) {
     return { ...state, selectedYears: action.payload.years };
   },
@@ -139,6 +146,23 @@ const appReducer = {
         topCountries: loading
       }
     };
+  },
+  [APP__SET_COLUMNS](state, action) {
+    return immer(state, draft => {
+      const { columns } = action.payload;
+
+      // TODO the API should have the info on which file to load (if any) per column
+      const municipalitiesColumn = columns.find(column => column.name === 'MUNICIPALITY');
+      const logisticsHubColumn = columns.find(column => column.name === 'LOGISTICS HUB');
+      if (logisticsHubColumn && municipalitiesColumn) {
+        logisticsHubColumn.useGeometryFromColumnId = municipalitiesColumn.id;
+      }
+
+      draft.columns = {};
+      columns.forEach(column => {
+        draft.columns[column.id] = column;
+      });
+    });
   }
 };
 

@@ -6,6 +6,7 @@ export default {
   tooltips: null,
   contextIsUserSelected: !SHOW_WORLD_MAP_IN_EXPLORE,
   currentDropdown: null,
+  columns: null,
   modal: {
     visibility: false,
     modalParams: null
