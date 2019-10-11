@@ -6,11 +6,10 @@ import {
   setColumnsLoading
 } from 'actions/app.actions';
 import { setLoadingSpinner } from 'utils/saga-utils';
-import { getSelectedContext } from 'reducers/app.selectors';
 import { getColumnsData } from 'reducers/app.fetch.saga';
 
 function* fetchColumns() {
-  function* findSelectedContext(location, contexts) {
+  function findSelectedContext(location, contexts) {
     switch (location.type) {
       case 'profileNode': {
         const { contextId } = location.query;
@@ -23,9 +22,6 @@ function* fetchColumns() {
           c => c.countryId === selectedCountryId && c.commodityId === selectedCommodityId
         );
       }
-      case 'explore':
-      case 'tool':
-        return yield select(getSelectedContext);
       default:
         return null;
     }
@@ -36,7 +32,10 @@ function* fetchColumns() {
       location,
       app: { contexts }
     } = yield select();
-    const selectedContext = yield findSelectedContext(location, contexts);
+
+    if (location.type === 'tool') return; // We will get the columns in tool-links.saga
+
+    const selectedContext = findSelectedContext(location, contexts);
     if (selectedContext === null) return;
     const task = yield fork(setLoadingSpinner, 750, setColumnsLoading(true));
     yield fork(getColumnsData, selectedContext);
