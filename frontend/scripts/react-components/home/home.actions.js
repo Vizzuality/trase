@@ -9,6 +9,8 @@ import { HOME_VIDEO } from 'constants';
 
 export const HOME__SET_CONTENT = 'HOME__SET_CONTENT';
 export const HOME__PLAY_VIDEO = 'HOME__PLAY_VIDEO';
+export const HOME__CLICK_ENTRYPOINT = 'HOME__CLICK_ENTRYPOINT';
+export const HOME__CLICK_NEXT_ENTRYPOINT = 'HOME__CLICK_NEXT_ENTRYPOINT';
 
 export const getHomeContent = (type, mock) => dispatch => {
   const content = {
@@ -36,3 +38,12 @@ export const playHomeVideo = videoId => {
     payload: lang
   };
 };
+
+export const clickEntrypoint = link => ({
+  type: HOME__CLICK_ENTRYPOINT,
+  payload: link
+});
+
+export const clickNextEntrypoint = () => ({
+  type: HOME__CLICK_NEXT_ENTRYPOINT
+});
