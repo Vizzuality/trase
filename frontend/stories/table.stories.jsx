@@ -1,6 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import Table from 'react-components/dashboard-element/dashboard-widget/table-modal//table';
+import Table from 'react-components/shared/table-modal//table';
 import data from './mock-data/table-data.json';
 
 storiesOf('Table', module).addWithJSX('Table', () => (

@@ -7,7 +7,7 @@ import { getSelectedRecolorByValue } from 'react-components/nav/filters-nav/reco
 import {
   getHasMoreThanOneItem,
   getVersioningSelected
-} from 'react-components/nav/filters-nav/tool-modal-button/tool-modal-button.selectors';
+} from 'react-components/nav/filters-nav/filters-nav.selectors';
 
 const mapStateToProps = (state, { modalId }) => {
   const selectedItem = {

@@ -132,7 +132,12 @@ const FiltersNav = props => {
 
   const renderFilter = filter => {
     const Component = FILTERS[filter.type];
-    if (ENABLE_REDESIGN_PAGES && ENABLE_VERSIONING && filter.props.id === 'version') {
+    if (
+      ENABLE_REDESIGN_PAGES &&
+      ENABLE_VERSIONING &&
+      filter.props.id === 'version' &&
+      !filter.disabled
+    ) {
       return <ToolModalButton modalId="version" key="version-toggle" />;
     }
     if (ENABLE_REDESIGN_PAGES && filter.props.id === 'toolRecolorBy') {

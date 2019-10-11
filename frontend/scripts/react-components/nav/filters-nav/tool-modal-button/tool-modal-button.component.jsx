@@ -17,7 +17,7 @@ export default function ToolModalButton({
   const selectedLabel = selectedItem?.label;
   return (
     <button
-      disabled={!modalId === 'version' && !hasMoreThanOneItem}
+      disabled={!hasMoreThanOneItem}
       onClick={() => setActiveModal(modalId)}
       className="c-tool-modal-button"
     >

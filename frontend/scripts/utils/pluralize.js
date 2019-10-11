@@ -6,7 +6,8 @@ export default name => {
     logisticsHub: 'logistics hubs',
     portOfImport: 'ports of import',
     portOfExport: 'ports of export',
-    districtOfExport: 'districts of export'
+    districtOfExport: 'districts of export',
+    countryOfProduction: 'country of production'
   }[camelCasedName];
 
   if (!plural) {

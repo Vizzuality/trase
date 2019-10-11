@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import 'react-components/dashboard-element/dashboard-widget/table-modal/table/table.scss';
+import 'react-components/shared/table-modal/table/table.scss';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import { VariableSizeGrid } from 'react-window';
 import cx from 'classnames';
@@ -68,12 +68,26 @@ function Table(props) {
           const formatFn = headers[columnIndex].format && d3Format(headers[columnIndex].format);
           const cell = sortedData[rowIndex][columnIndex];
           const item = cell !== null ? cell : 'n/a';
+          const isPlainItem = typeof item !== 'object';
+          const renderItem = () => {
+            const text = isPlainItem ? item : item.value;
+            if (formatFn && (text === 0 || text) && !Number.isNaN(parseFloat(text))) {
+              return formatFn(text);
+            }
+            return text;
+          };
           return (
             <div style={style} className={cx('list-item', !(rowIndex % 2) && '-even')}>
-              <Text align="center" size="md" as="span" variant="mono">
-                {formatFn && (item === 0 || item) && !Number.isNaN(parseFloat(item))
-                  ? formatFn(item)
-                  : item}
+              <Text align="center" size="md" as="span" variant="mono" transform="uppercase">
+                {renderItem()}
+                {!isPlainItem && (
+                  <>
+                    {' '}
+                    <Text align="center" size="md" as="span" variant="mono" transform="none">
+                      {item.suffix}
+                    </Text>
+                  </>
+                )}
               </Text>
             </div>
           );

@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import Heading from 'react-components/shared/heading/heading.component';
 import Button from 'react-components/shared/button';
 import debounce from 'lodash/debounce';
-import Table from 'react-components/dashboard-element/dashboard-widget/table-modal/table';
-import 'react-components/dashboard-element/dashboard-widget/table-modal/table-modal.scss';
+import Table from 'react-components/shared/table-modal/table';
+import 'react-components/shared/table-modal/table-modal.scss';
 
 function TableModal({ title, tableData }) {
   const modalRef = useRef(null);

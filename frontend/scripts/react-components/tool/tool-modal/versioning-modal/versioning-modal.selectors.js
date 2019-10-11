@@ -16,8 +16,10 @@ export const getTableData = createSelector(
     if (!contextVersionData) return null;
     const { key_statistics: keyStatistics } = contextVersionData;
     const years = Object.keys(keyStatistics[0].values);
-    const rowTitle = row =>
-      `${row.name.replace(/_/g, ' ')} ${row.unit && row.unit !== 'number' ? ` (${row.unit})` : ''}`;
+    const rowTitle = row => ({
+      value: `${row.name.replace(/_/g, ' ')}`,
+      suffix: row.unit && row.unit !== 'number' ? `(${row.unit})` : ''
+    });
     const data = keyStatistics.map(row => [rowTitle(row), ...Object.values(row.values)]);
     return {
       headers: [{ name: '' }, ...years.map(y => ({ name: y }))],

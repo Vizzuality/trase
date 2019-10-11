@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import uniqBy from 'lodash/uniqBy';
-import TableComponent from 'react-components/dashboard-element/dashboard-widget/table-modal/table/table.component';
+import TableComponent from 'react-components/shared/table-modal/table/table.component';
 
 const TableContainer = props => {
   const gridRef = useRef(null);

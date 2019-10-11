@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Heading from 'react-components/shared/heading';
 import Text from 'react-components/shared/text';
 import Button from 'react-components/shared/button';
-import Table from 'react-components/dashboard-element/dashboard-widget/table-modal/table';
+import Table from 'react-components/shared/table-modal/table';
 import 'react-components/tool/tool-modal/versioning-modal/versioning-modal.scss';
 import useWindowSize from 'utils/hooks/useWindowSize';
 import capitalize from 'lodash/capitalize';
