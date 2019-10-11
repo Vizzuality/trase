@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import RecolorBySelector from 'react-components/nav/filters-nav/recolor-by-selector';
@@ -12,32 +12,29 @@ import ToolSearch from 'react-components/tool/tool-search/tool-search.container'
 import { NavLink } from 'redux-first-router-link';
 import Img from 'react-components/shared/img';
 import { TOOL_LAYOUT } from 'constants';
+import ToolModalButton from 'react-components/nav/filters-nav/tool-modal-button';
 
 import 'scripts/react-components/nav/filters-nav/filters-nav.scss';
 import 'scripts/react-components/nav/filters-nav/burger.scss';
 
-class FiltersNav extends React.PureComponent {
-  static propTypes = {
-    openMap: PropTypes.func,
-    openSankey: PropTypes.func,
-    toolLayout: PropTypes.number,
-    toggleDropdown: PropTypes.func,
-    currentDropdown: PropTypes.string,
-    links: PropTypes.array.isRequired,
-    filters: PropTypes.object.isRequired,
-    openLogisticsMapDownload: PropTypes.func
-  };
+const FILTERS = [ContextSelector, YearsSelector, NavDropdownSelector, RecolorBySelector];
 
-  FILTERS = [ContextSelector, YearsSelector, NavDropdownSelector, RecolorBySelector];
+const FiltersNav = props => {
+  const {
+    links,
+    openMap,
+    openSankey,
+    toolLayout,
+    toggleDropdown,
+    currentDropdown,
+    filters,
+    openLogisticsMapDownload
+  } = props;
 
-  state = {
-    menuOpen: false
-  };
+  const [menuOpen, changeMenu] = useState(false);
+  const toggleMenu = () => changeMenu(!menuOpen);
 
-  toggleMenu = () => this.setState(state => ({ menuOpen: !state.menuOpen }));
-
-  renderMenuButton = () => {
-    const { menuOpen } = this.state;
+  const renderMenuButton = () => {
     const content = menuOpen ? (
       <div className="c-burger open">
         <span className="ingredient" />
@@ -50,14 +47,13 @@ class FiltersNav extends React.PureComponent {
       </div>
     );
     return (
-      <button className="filters-nav-item -no-padding" onClick={this.toggleMenu} type="button">
+      <button className="filters-nav-item -no-padding" onClick={toggleMenu} type="button">
         {content}
       </button>
     );
   };
 
-  renderInToolLinks() {
-    const { links, openMap, openSankey, toolLayout } = this.props;
+  const renderInToolLinks = () => {
     const supplyChainLink = ENABLE_REDESIGN_PAGES
       ? links.find(link => link.page?.type === 'explore')
       : links.find(
@@ -105,17 +101,16 @@ class FiltersNav extends React.PureComponent {
         {renderToolLinks}
       </ul>
     );
-  }
+  };
 
-  renderMenuOpened = () => {
-    const { links, filters } = this.props;
+  const renderMenuOpened = () => {
     const restOfLinks = ENABLE_REDESIGN_PAGES ? links : links.slice(2);
     const decoratedLinks = [{ name: 'Home', page: { type: 'home' } }, ...links];
     const navLinks = filters.showToolLinks ? restOfLinks : decoratedLinks;
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">
-          {!ENABLE_REDESIGN_PAGES && filters.showToolLinks && this.renderInToolLinks()}
+          {!ENABLE_REDESIGN_PAGES && filters.showToolLinks && renderInToolLinks()}
           <ul className="filters-nav-submenu-list">
             <NavLinksList
               links={navLinks}
@@ -135,47 +130,44 @@ class FiltersNav extends React.PureComponent {
     );
   };
 
-  renderFilter(filter) {
-    const { toggleDropdown, currentDropdown } = this.props;
-    const Component = this.FILTERS[filter.type];
-
+  const renderFilter = filter => {
+    const Component = FILTERS[filter.type];
+    if (
+      ENABLE_REDESIGN_PAGES &&
+      ENABLE_VERSIONING &&
+      filter.props.id === 'version' &&
+      !filter.disabled
+    ) {
+      return <ToolModalButton modalId="version" key="version-toggle" />;
+    }
+    if (ENABLE_REDESIGN_PAGES && filter.props.id === 'toolRecolorBy') {
+      return <ToolModalButton modalId="indicator" key="indicator-toggle" />;
+    }
+    if (ENABLE_REDESIGN_PAGES && filter.props.id === 'toolResizeBy') {
+      return <ToolModalButton modalId="unit" key="unit-toggle" />;
+    }
     return React.createElement(Component, {
       currentDropdown,
       className: 'filters-nav-item',
       onToggle: toggleDropdown,
-      onSelected: this.props[`${filter.props.id}_onSelected`],
+      onSelected: props[`${filter.props.id}_onSelected`],
       ...filter.props,
       key: filter.props.id
     });
-  }
+  };
 
-  renderMenuClosed = () => (
-    <React.Fragment>
-      {this.renderLeftSection()}
-      {this.renderRightSection()}
-    </React.Fragment>
-  );
-
-  renderLeftSection = () => {
-    const {
-      filters: { left = [] }
-    } = this.props;
+  const renderLeftSection = () => {
+    const { left = [] } = filters;
     return (
-      <div className="filters-nav-left-section">
-        {left.map(filter => this.renderFilter(filter))}
-      </div>
+      <div className="filters-nav-left-section">{left.map(filter => renderFilter(filter))}</div>
     );
   };
 
-  renderRightSection = () => {
-    const {
-      openLogisticsMapDownload,
-      filters: { right = [], showSearch, showLogisticsMapDownload }
-    } = this.props;
-
+  const renderRightSection = () => {
+    const { right = [], showSearch, showLogisticsMapDownload } = filters;
     return (
       <div className="filters-nav-left-section">
-        {right.map(filter => this.renderFilter(filter))}
+        {right.map(filter => renderFilter(filter))}
         {showSearch && <ToolSearch className="filters-nav-item -no-padding" />}
         {showLogisticsMapDownload && (
           <button onClick={openLogisticsMapDownload} className="filters-nav-item -no-padding -icon">
@@ -188,17 +180,31 @@ class FiltersNav extends React.PureComponent {
     );
   };
 
-  render() {
-    const { menuOpen } = this.state;
-    return (
-      <div className="c-filters-nav">
-        {this.renderMenuButton()}
-        <div className="filters-nav-section-container">
-          {menuOpen ? this.renderMenuOpened() : this.renderMenuClosed()}
-        </div>
+  const renderMenuClosed = () => (
+    <React.Fragment>
+      {renderLeftSection()}
+      {renderRightSection()}
+    </React.Fragment>
+  );
+  return (
+    <div className="c-filters-nav">
+      {renderMenuButton()}
+      <div className="filters-nav-section-container">
+        {menuOpen ? renderMenuOpened() : renderMenuClosed()}
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
+
+FiltersNav.propTypes = {
+  openMap: PropTypes.func,
+  openSankey: PropTypes.func,
+  toolLayout: PropTypes.number,
+  toggleDropdown: PropTypes.func,
+  currentDropdown: PropTypes.string,
+  links: PropTypes.array.isRequired,
+  filters: PropTypes.object.isRequired,
+  openLogisticsMapDownload: PropTypes.func
+};
 
 export default FiltersNav;

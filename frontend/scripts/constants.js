@@ -324,3 +324,8 @@ export const SANKEY_OFFSETS = {
   width: 120,
   splittedWidth: 392
 };
+
+export const LAYER_TAB_NAMES = {
+  unit: 'unit layers',
+  contextual: 'contextual layers'
+};

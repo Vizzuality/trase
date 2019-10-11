@@ -71,7 +71,7 @@ Tabs.propTypes = {
   onSelectTab: PropTypes.func.isRequired,
   color: PropTypes.string,
   actionComponent: PropTypes.node,
-  selectedTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+  selectedTab: PropTypes.any
 };
 
 export default Tabs;

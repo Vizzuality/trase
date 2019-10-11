@@ -169,7 +169,7 @@
     "react-tether": "^1.0.3",
     "react-tooltip": "^3.10.0",
     "react-transition-group": "^2.5.0",
-    "react-window": "^1.2.4",
+    "react-window": "^1.8.5",
     "recharts": "^1.3.6",
     "redux": "^4.0.1",
     "redux-first-router": "0.0.9-rudy",

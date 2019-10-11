@@ -6,8 +6,9 @@ import {
   SELECT_BASEMAP,
   SELECT_CONTEXTUAL_LAYERS,
   CHANGE_LAYOUT,
-  TOGGLE_MAP_DIMENSION,
   SET_SANKEY_SIZE,
+  SET_ACTIVE_MODAL,
+  SELECT_UNIT_LAYERS,
   saveMapView,
   selectContextualLayers
 } from 'react-components/tool/tool.actions';
@@ -25,6 +26,30 @@ test(SET_NODE_ATTRIBUTES, () => {
   };
   const newState = reducer(initialState, action);
   expect(newState).toMatchSnapshot();
+});
+
+test(SET_ACTIVE_MODAL, () => {
+  const action = {
+    type: SET_ACTIVE_MODAL,
+    payload: { activeModal: 'openedModal' }
+  };
+  const newState = reducer(initialState, action);
+  expect(newState).toEqual({
+    ...initialState,
+    activeModal: 'openedModal'
+  });
+});
+
+test(SELECT_UNIT_LAYERS, () => {
+  const action = {
+    type: SELECT_UNIT_LAYERS,
+    payload: { uids: ['some_uid', 'another_uid'] }
+  };
+  const newState = reducer(initialState, action);
+  expect(newState).toEqual({
+    ...initialState,
+    selectedMapDimensions: ['some_uid', 'another_uid']
+  });
 });
 
 test(TOOL_LAYERS__SET_MAP_DIMENSIONS, () => {
@@ -172,42 +197,5 @@ describe(SET_SANKEY_SIZE, () => {
       windowInnerWidth - SANKEY_OFFSETS.width,
       windowInnerHeight - SANKEY_OFFSETS.height
     ]);
-  });
-});
-
-describe(TOGGLE_MAP_DIMENSION, () => {
-  it('Remove map dimension if the dimension is selected', () => {
-    const action = {
-      type: TOGGLE_MAP_DIMENSION,
-      payload: {
-        selectedMapDimensions: ['quant95', 'quant90'],
-        uid: 'quant90'
-      }
-    };
-    const newState = reducer(initialState, action);
-    expect(newState).toMatchSnapshot();
-  });
-
-  it('Add a map dimension if the dimension is not selected', () => {
-    const action = {
-      type: TOGGLE_MAP_DIMENSION,
-      payload: {
-        selectedMapDimensions: [],
-        uid: 'quant90'
-      }
-    };
-    const newState = reducer(initialState, action);
-    expect(newState).toMatchSnapshot();
-  });
-  it('Add a map dimension in the second slot if the dimension is not selected', () => {
-    const action = {
-      type: TOGGLE_MAP_DIMENSION,
-      payload: {
-        selectedMapDimensions: ['NotEmpty'],
-        uid: 'quant90'
-      }
-    };
-    const newState = reducer(initialState, action);
-    expect(newState).toMatchSnapshot();
   });
 });

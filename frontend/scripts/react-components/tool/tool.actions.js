@@ -21,12 +21,13 @@ export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
 export const SELECT_YEARS = 'SELECT_YEARS';
 export const GET_MAP_VECTOR_DATA = 'GET_MAP_VECTOR_DATA';
 export const GET_CONTEXT_LAYERS = 'GET_CONTEXT_LAYERS';
-export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
+export const SELECT_UNIT_LAYERS = 'SELECT_UNIT_LAYERS';
 export const SELECT_CONTEXTUAL_LAYERS = 'SELECT_CONTEXTUAL_LAYERS';
 export const SELECT_BASEMAP = 'SELECT_BASEMAP';
 export const CHANGE_LAYOUT = 'CHANGE_LAYOUT';
 export const SAVE_MAP_VIEW = 'SAVE_MAP_VIEW';
 export const SET_SANKEY_SIZE = 'SET_SANKEY_SIZE';
+export const SET_ACTIVE_MODAL = 'SET_ACTIVE_MODAL';
 
 export function loadMapVectorData() {
   return (dispatch, getState) => {
@@ -234,15 +235,12 @@ export function saveMapView(latlng, zoom) {
   };
 }
 
-export function toggleMapDimension(uid) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const selectedMapDimensions = getSelectedMapDimensionsUids(state);
+export function selectUnitLayers(uids) {
+  return dispatch => {
     dispatch({
-      type: TOGGLE_MAP_DIMENSION,
+      type: SELECT_UNIT_LAYERS,
       payload: {
-        uid,
-        selectedMapDimensions
+        uids
       }
     });
 
@@ -308,5 +306,11 @@ export function selectBasemap(selectedBasemap) {
   return {
     type: SELECT_BASEMAP,
     payload: { selectedBasemap }
+  };
+}
+export function setActiveModal(activeModal) {
+  return {
+    type: SET_ACTIVE_MODAL,
+    payload: { activeModal }
   };
 }

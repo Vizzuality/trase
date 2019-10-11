@@ -7,7 +7,6 @@ import {
   LOGISTICS_MAP_INSPECTION_LEVELS
 } from 'constants';
 import capitalize from 'lodash/capitalize';
-import { makeGetResizeByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 import {
@@ -15,6 +14,9 @@ import {
   getSelectedRecolorBy as getToolRecolorBy,
   getSelectedBiomeFilter as getToolSelectedBiome
 } from 'react-components/tool-links/tool-links.selectors';
+import { getVersionData } from 'react-components/tool/tool-modal/versioning-modal/versioning-modal.selectors';
+import { getRecolorByOptions } from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.selectors';
+import { makeGetResizeByItems } from 'selectors/indicators.selectors';
 
 const insertIf = (condition, item) => (condition ? [item] : []);
 
@@ -25,11 +27,6 @@ const getToolDetailedView = state => state.toolLinks && state.toolLinks.detailed
 const getContextFilterBy = createSelector(
   getSelectedContext,
   selectedContext => selectedContext && selectedContext.filterBy
-);
-
-const getToolResizeBys = createSelector(
-  getSelectedContext,
-  selectedContext => selectedContext && selectedContext.resizeBy
 );
 
 export const getToolYearsProps = createStructuredSelector({
@@ -57,27 +54,6 @@ export const getToolAdminLevelProps = createSelector(
         : { label: 'All', value: null }
     };
   }
-);
-
-export const getToolResizeByProps = createSelector(
-  [getAppTooltips, getToolResizeBy, makeGetResizeByItems(getToolResizeBys, getSelectedYears)],
-  (tooltips, selectedResizeBy, items) => ({
-    options: items,
-    label: 'Resize by',
-    id: 'toolResizeBy',
-    showSelected: true,
-    size: 'rg',
-    clip: false,
-    weight: 'regular',
-    value: selectedResizeBy && {
-      value: selectedResizeBy,
-      label: selectedResizeBy.label || ''
-    },
-    isDisabled: items.length === 1 && selectedResizeBy?.attributeId === items[0].attributeId,
-    tooltip: tooltips && tooltips.sankey.nav.resizeBy.main,
-    titleTooltip:
-      tooltips && selectedResizeBy && tooltips.sankey.nav.resizeBy[selectedResizeBy.name]
-  })
 );
 
 export const getToolViewModeProps = createSelector(
@@ -145,13 +121,48 @@ const getLogisticsMapInspectionLevelProps = createSelector(
   }
 );
 
+const getToolResizeBys = createSelector(
+  getSelectedContext,
+  selectedContext => selectedContext && selectedContext.resizeBy
+);
+
+const getModalId = (state, { modalId }) => modalId;
+
+export const getVersioningSelected = createSelector(
+  getVersionData,
+  versionData => {
+    if (!versionData) return null;
+    const { title, version } = versionData;
+    return { label: `${title} v${version}` };
+  }
+);
+
+export const getHasMoreThanOneItem = createSelector(
+  [getModalId, getRecolorByOptions, makeGetResizeByItems(getToolResizeBys, getSelectedYears)],
+  (modalId, recolorByItems, resizeByItems) => {
+    if (!modalId) {
+      return null;
+    }
+
+    if (modalId === 'version') {
+      return true;
+    }
+
+    const items = {
+      indicator: recolorByItems,
+      unit: resizeByItems
+    }[modalId];
+    return items.length > 1;
+  }
+);
+
 export const getNavFilters = createSelector(
   [
     getCurrentPage,
     getSelectedContext,
     getToolAdminLevelProps,
-    getToolResizeByProps,
     getToolViewModeProps,
+    getVersioningSelected,
     getLogisticsMapYearsProps,
     getLogisticsMapHubsProps,
     getLogisticsMapInspectionLevelProps
@@ -160,14 +171,27 @@ export const getNavFilters = createSelector(
     page,
     selectedContext,
     toolAdminLevel,
-    toolResizeBy,
     toolViewMode,
+    versionData,
     logisticsMapsYears,
     logisticsMapsHubs,
     logisticsMapInspectionLevel
   ) => {
     switch (page) {
-      case 'tool':
+      case 'tool': {
+        const right = [
+          { type: NAV_FILTER_TYPES.dropdown, props: { id: 'toolResizeBy' } },
+          { type: NAV_FILTER_TYPES.recolorBySelector, props: { id: 'toolRecolorBy' } },
+          { type: NAV_FILTER_TYPES.dropdown, props: toolViewMode }
+        ];
+
+        if (ENABLE_VERSIONING && versionData) {
+          right.unshift({
+            type: NAV_FILTER_TYPES.dropdown,
+            props: { id: 'version' }
+          });
+        }
+
         return {
           showSearch: true,
           showToolLinks: true,
@@ -185,12 +209,9 @@ export const getNavFilters = createSelector(
               props: { id: 'yearsSelector' }
             })
           ],
-          right: [
-            { type: NAV_FILTER_TYPES.dropdown, props: toolResizeBy },
-            { type: NAV_FILTER_TYPES.recolorBySelector, props: { id: 'toolRecolorBy' } },
-            { type: NAV_FILTER_TYPES.dropdown, props: toolViewMode }
-          ]
+          right
         };
+      }
       case 'logisticsMap':
         return {
           showLogisticsMapDownload: true,

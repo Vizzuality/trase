@@ -3,6 +3,8 @@ import { bindActionCreators } from 'redux';
 import { toggleDropdown, changeLayout } from 'actions/app.actions';
 import FiltersNav from 'react-components/nav/filters-nav/filters-nav.component';
 import { getNavFilters } from 'react-components/nav/filters-nav/filters-nav.selectors';
+import { getRecolorByOptions } from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.selectors';
+
 import routerLinks from 'router/nav-links';
 import {
   selectLogisticsMapHub,
@@ -22,7 +24,8 @@ function mapStateToProps(state) {
     links: routerLinks.nav,
     filters: getNavFilters(state),
     toolLayout: state.toolLayers?.toolLayout,
-    currentDropdown: state.app.currentDropdown
+    currentDropdown: state.app.currentDropdown,
+    recolorByItems: getRecolorByOptions(state)
   };
 }
 

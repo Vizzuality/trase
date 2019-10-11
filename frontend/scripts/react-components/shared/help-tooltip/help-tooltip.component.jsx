@@ -26,14 +26,13 @@ export default class TooltipComponent extends Component {
   }
 
   initTooltip() {
-    const { position, text, show, insideTooltip } = this.props;
-
+    const { position, text, show } = this.props;
     this.tooltip = new Tooltip(this.element, {
       trigger: typeof show !== 'undefined' ? '' : 'hover focus',
       title: text,
       placement: position,
       container: 'body',
-      boundariesElement: insideTooltip ? 'scrollParent' : 'window',
+      boundariesElement: 'window',
       offset: '1, 1'
     });
 
@@ -59,13 +58,13 @@ export default class TooltipComponent extends Component {
   }
 
   render() {
-    const { showIcon, children } = this.props;
+    const { showIcon, children, className } = this.props;
     return (
       <div
         ref={elem => {
           this.element = elem;
         }}
-        className={cx('tooltip-react', this.props.className)}
+        className={cx('tooltip-react', className)}
       >
         {showIcon && (
           <svg className="icon tooltip-react-icon">
@@ -83,13 +82,11 @@ TooltipComponent.propTypes = {
   text: PropTypes.string,
   children: PropTypes.any,
   showIcon: PropTypes.bool,
-  insideTooltip: PropTypes.bool,
   position: PropTypes.string,
   className: PropTypes.string
 };
 
 TooltipComponent.defaultProps = {
   position: 'bottom',
-  showIcon: true,
-  insideTooltip: false
+  showIcon: true
 };

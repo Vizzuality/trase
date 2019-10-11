@@ -75,7 +75,6 @@ function Timeline(props) {
   ];
 
   const showPlaceholder = state.start && state.end && state.range;
-
   return (
     <div className="c-timeline">
       <Tabs

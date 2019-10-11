@@ -1,5 +1,5 @@
 import initialState from 'react-components/dashboard-element/dashboard-element.initial-state';
-import { getTableHeaders } from 'react-components/dashboard-element/dashboard-widget/table-modal/table-modal.selectors';
+import { getTableHeaders } from 'react-components/shared/table-modal/table-modal.selectors';
 import { meta, data } from './table-modal-mocks';
 
 describe('Table widget selectors', () => {
