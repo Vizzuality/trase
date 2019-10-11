@@ -10,7 +10,7 @@ import WRIIcons from 'vizzuality-components/dist/icons';
 import { Layer, LayerManager } from 'layer-manager/dist/components';
 import { PluginLeaflet } from 'layer-manager';
 import { BASEMAPS } from 'constants';
-import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
+import LogisticsMapTooltip from 'react-components/shared/logistics-map-tooltip/logistics-map-tooltip.component';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 import LogisticsMapLegend from 'react-components/logistics-map/logistics-map-legend/logistics-map-legend.component';
 import LogisticsMapPanel from 'react-components/logistics-map/logistics-map-panel/logistics-map-panel.container';
@@ -37,7 +37,7 @@ function LogisticsMap(props) {
     setLayerActive,
     getCurrentPopUp
   } = props;
-  const Tooltip = p => <UnitsTooltip {...p.data} />;
+  const Tooltip = p => <LogisticsMapTooltip {...p.data} />;
   return (
     <div className="l-logistics-map">
       <div className="c-logistics-map">
