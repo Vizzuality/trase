@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import uniqBy from 'lodash/uniqBy';
-import TableComponent from 'react-components/dashboard-element/dashboard-widget/table-modal/table/table.component';
+import TableComponent from 'react-components/shared/table-modal/table/table.component';
 
 const TableContainer = props => {
   const gridRef = useRef(null);
@@ -47,7 +47,7 @@ const TableContainer = props => {
       if (sortedByColumn === header.name) {
         toggleSortDirection(header.name);
       } else {
-        setSortColumn(header.name);
+        setSortColumn(header.name || '');
       }
       resetMaxLength();
     },
@@ -99,7 +99,7 @@ TableContainer.propTypes = {
   headers: PropTypes.array.isRequired,
   data: PropTypes.array.isRequired,
   width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
+  height: PropTypes.number,
   rowHeight: PropTypes.number
 };
 

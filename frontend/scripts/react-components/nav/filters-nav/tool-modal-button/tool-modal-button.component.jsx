@@ -30,7 +30,9 @@ export default function ToolModalButton({
         size="rg"
         color="grey"
         weight="regular"
-        className={cx('selected-item', { '-with-arrow': hasMoreThanOneItem })}
+        className={cx('selected-item', {
+          '-with-arrow': modalId === 'version' || hasMoreThanOneItem
+        })}
         title={selectedLabel}
       >
         {selectedLabel}

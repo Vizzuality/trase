@@ -14,6 +14,9 @@ import {
   getSelectedRecolorBy as getToolRecolorBy,
   getSelectedBiomeFilter as getToolSelectedBiome
 } from 'react-components/tool-links/tool-links.selectors';
+import { getVersionData } from 'react-components/tool/tool-modal/versioning-modal/versioning-modal.selectors';
+import { getRecolorByOptions } from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.selectors';
+import { makeGetResizeByItems } from 'selectors/indicators.selectors';
 
 const insertIf = (condition, item) => (condition ? [item] : []);
 
@@ -118,12 +121,48 @@ const getLogisticsMapInspectionLevelProps = createSelector(
   }
 );
 
+const getToolResizeBys = createSelector(
+  getSelectedContext,
+  selectedContext => selectedContext && selectedContext.resizeBy
+);
+
+const getModalId = (state, { modalId }) => modalId;
+
+export const getVersioningSelected = createSelector(
+  getVersionData,
+  versionData => {
+    if (!versionData) return null;
+    const { title, version } = versionData;
+    return { label: `${title} v${version}` };
+  }
+);
+
+export const getHasMoreThanOneItem = createSelector(
+  [getModalId, getRecolorByOptions, makeGetResizeByItems(getToolResizeBys, getSelectedYears)],
+  (modalId, recolorByItems, resizeByItems) => {
+    if (!modalId) {
+      return null;
+    }
+
+    if (modalId === 'version') {
+      return true;
+    }
+
+    const items = {
+      indicator: recolorByItems,
+      unit: resizeByItems
+    }[modalId];
+    return items.length > 1;
+  }
+);
+
 export const getNavFilters = createSelector(
   [
     getCurrentPage,
     getSelectedContext,
     getToolAdminLevelProps,
     getToolViewModeProps,
+    getVersioningSelected,
     getLogisticsMapYearsProps,
     getLogisticsMapHubsProps,
     getLogisticsMapInspectionLevelProps
@@ -133,12 +172,26 @@ export const getNavFilters = createSelector(
     selectedContext,
     toolAdminLevel,
     toolViewMode,
+    versionData,
     logisticsMapsYears,
     logisticsMapsHubs,
     logisticsMapInspectionLevel
   ) => {
     switch (page) {
-      case 'tool':
+      case 'tool': {
+        const right = [
+          { type: NAV_FILTER_TYPES.dropdown, props: { id: 'toolResizeBy' } },
+          { type: NAV_FILTER_TYPES.recolorBySelector, props: { id: 'toolRecolorBy' } },
+          { type: NAV_FILTER_TYPES.dropdown, props: toolViewMode }
+        ];
+
+        if (ENABLE_VERSIONING && versionData) {
+          right.unshift({
+            type: NAV_FILTER_TYPES.dropdown,
+            props: { id: 'version' }
+          });
+        }
+
         return {
           showSearch: true,
           showToolLinks: true,
@@ -156,12 +209,9 @@ export const getNavFilters = createSelector(
               props: { id: 'yearsSelector' }
             })
           ],
-          right: [
-            { type: NAV_FILTER_TYPES.dropdown, props: { id: 'toolResizeBy' } },
-            { type: NAV_FILTER_TYPES.recolorBySelector, props: { id: 'toolRecolorBy' } },
-            { type: NAV_FILTER_TYPES.dropdown, props: toolViewMode }
-          ]
+          right
         };
+      }
       case 'logisticsMap':
         return {
           showLogisticsMapDownload: true,
