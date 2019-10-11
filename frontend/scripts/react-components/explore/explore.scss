@@ -1,6 +1,6 @@
 @import 'styles/settings';
 
-$top-cards-height: 156px;
+$featured-cards-height: 156px;
 $max-rows: 3;
 $row-height: 50;
 $explore-mobile-dropdowns: 100px;
@@ -21,18 +21,18 @@ $explore-heading: 66px;
 
     @media screen and (min-width: $breakpoint-tablet),
     (orientation: portrait) {
-      padding-bottom: $top-cards-height;
+      padding-bottom: $featured-cards-height;
     }
   }
 
   @mixin row-dependant-height {
-    height: calc(100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-heading});
+    height: calc(100vh - #{$featured-cards-height} - #{$nav-height} - #{$explore-heading});
 
     @for $i from 1 through $max-rows {
       &.rows#{$i} {
         height: calc(
           100vh -
-            #{$top-cards-height} -
+            #{$featured-cards-height} -
             #{$nav-height} -
             #{$i *
             $row-height}px -
@@ -45,7 +45,7 @@ $explore-heading: 66px;
 
     @media screen and (max-width: $breakpoint-tablet) {
       height: calc(
-        100vh - #{$top-cards-height} - #{$nav-height} - #{$explore-mobile-dropdowns} - #{$explore-heading}
+        100vh - #{$featured-cards-height} - #{$nav-height} - #{$explore-mobile-dropdowns} - #{$explore-heading}
       );
     }
   }
@@ -64,7 +64,7 @@ $explore-heading: 66px;
     margin-bottom: 0;
 
     @media screen and (min-width: $breakpoint-tablet), (orientation: landscape) {
-      margin-bottom: $top-cards-height;
+      margin-bottom: $featured-cards-height;
     }
 
     @media (min-height: 700px) {

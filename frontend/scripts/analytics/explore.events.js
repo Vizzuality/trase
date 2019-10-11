@@ -62,9 +62,8 @@ export default [
       const {
         payload: { linkParams }
       } = action;
-      const { countryName, commodityName, nodeTypeName, indicatorName } = linkParams;
-      const indicatorNamePart = indicatorName ? ` - ${indicatorName}` : '';
-      return `${countryName} - ${commodityName} - ${nodeTypeName}${indicatorNamePart}`;
+      const { commodityName, countryName, title, subtitle } = linkParams;
+      return `commodity: ${commodityName} - country: ${countryName} - ${title} - ${subtitle}`;
     }
   }
 ];

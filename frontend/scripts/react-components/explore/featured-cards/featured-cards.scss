@@ -1,0 +1,72 @@
+@import 'styles/settings';
+
+$cards-side-margin: 16px;
+$card-min-width: 180px;
+
+.c-featured-cards {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+
+  .featured-cards-title {
+    display: inline;
+    margin-right: 20px;
+  }
+
+  .featured-cards-container {
+    margin-top: 5px;
+    background-color: $mid-light-gray;
+    width: 100%;
+    height: 120px;
+
+    &.-mobile {
+      display: flex;
+      align-items: center;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+  }
+
+  .back-button {
+    cursor: pointer;
+  }
+
+  .animated-cards-container {
+    height: 200px;
+    position: relative;
+    overflow-x: auto;
+  }
+
+  .mobile-card {
+    display: inline-block;
+    vertical-align: top;
+    width: $card-min-width;
+    margin: 0 20px;
+    flex-shrink: 0;
+  }
+
+  .desktop-card {
+    position: absolute;
+    width: calc(25% - (#{$cards-side-margin} * 2));
+    min-width: $card-min-width;
+  }
+}
+
+.c-featured-card {
+  margin: 10px 0 10px;
+
+  .featured-card-button {
+    height: 100px;
+    width: 100%;
+    border-radius: 5px;
+    background-color: $white;
+    cursor: pointer;
+    padding: 20px;
+  }
+
+  .featured-card-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

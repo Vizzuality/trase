@@ -39,6 +39,7 @@ export const GET_DASHBOARD_TEMPLATES_URL = 'GET_DASHBOARD_TEMPLATES_URL';
 export const GET_DASHBOARD_SEARCH_RESULTS_URL = 'GET_DASHBOARD_SEARCH_RESULTS_URL';
 export const GET_DASHBOARD_PARAMETRISED_CHARTS_URL = 'GET_DASHBOARD_PARAMETRISED_CHARTS_URL';
 export const GET_TOP_COUNTRIES_FACTS = 'GET_TOP_COUNTRIES_FACTS';
+export const GET_SANKEY_CARD_LINKS = 'GET_SANKEY_CARD_LINKS';
 
 const API_ENDPOINTS = {
   [GET_CONTEXTS_URL]: { api: 3, endpoint: '/contexts' },
@@ -134,6 +135,10 @@ const API_ENDPOINTS = {
   [GET_TOP_PROFILES]: {
     api: 3,
     endpoint: '/top_profiles'
+  },
+  [GET_SANKEY_CARD_LINKS]: {
+    api: 3,
+    endpoint: '/sankey_card_links'
   }
 };
 

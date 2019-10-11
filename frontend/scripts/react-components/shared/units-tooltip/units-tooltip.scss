@@ -7,6 +7,7 @@
   background-color: $white;
   color: $charcoal-grey;
   z-index: $z-above-veil-below-nav;
+  pointer-events: none;
 
   .units-tooltip-text {
     min-height: 32px;
