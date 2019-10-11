@@ -24,7 +24,7 @@ module Api
   module V3
     module Readonly
       module Dashboards
-        class Country < Api::V3::Readonly::BaseModel
+        class Country < Api::Readonly::BaseModel
           self.table_name = 'dashboards_countries_mv'
           belongs_to :country
         end

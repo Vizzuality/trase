@@ -16,7 +16,7 @@
 module Api
   module V3
     module Readonly
-      class DownloadFlowsStats < Api::V3::Readonly::BaseModel
+      class DownloadFlowsStats < Api::Readonly::BaseModel
         self.table_name = 'download_flows_stats_mv'
       end
     end

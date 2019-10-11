@@ -28,7 +28,7 @@
 module Api
   module V3
     module Readonly
-      class Context < Api::V3::Readonly::BaseModel
+      class Context < Api::Readonly::BaseModel
         self.table_name = 'contexts_mv'
 
         belongs_to :country

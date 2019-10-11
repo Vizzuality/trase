@@ -14,7 +14,7 @@
 module Api
   module V3
     module Readonly
-      class IndValuesMeta < Api::V3::Readonly::BaseModel
+      class IndValuesMeta < Api::Readonly::BaseModel
         self.table_name = 'ind_values_meta_mv'
 
         belongs_to :ind

@@ -18,7 +18,7 @@
 module Api
   module V3
     module Readonly
-      class Flow < Api::V3::Readonly::BaseModel
+      class Flow < Api::Readonly::BaseModel
         self.table_name = 'flows_mv'
         belongs_to :context
       end

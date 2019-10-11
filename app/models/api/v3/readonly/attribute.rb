@@ -22,7 +22,7 @@
 module Api
   module V3
     module Readonly
-      class Attribute < Api::V3::Readonly::BaseModel
+      class Attribute < Api::Readonly::BaseModel
         self.table_name = 'attributes'
 
         has_many :cont_attribute_sankey_card_links,

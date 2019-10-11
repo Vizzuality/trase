@@ -25,7 +25,7 @@
 module Api
   module V3
     module Readonly
-      class SankeyNode < Api::V3::Readonly::BaseModel
+      class SankeyNode < Api::Readonly::BaseModel
         self.table_name = 'sankey_nodes_mv'
       end
     end

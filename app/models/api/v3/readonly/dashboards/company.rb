@@ -29,7 +29,7 @@ module Api
   module V3
     module Readonly
       module Dashboards
-        class Company < Api::V3::Readonly::BaseModel
+        class Company < Api::Readonly::BaseModel
           self.table_name = 'dashboards_companies_mv'
           belongs_to :node
         end

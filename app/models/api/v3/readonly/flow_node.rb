@@ -18,7 +18,7 @@
 module Api
   module V3
     module Readonly
-      class FlowNode < Api::V3::Readonly::BaseModel
+      class FlowNode < Api::Readonly::BaseModel
         self.table_name = 'flow_nodes_mv'
       end
     end

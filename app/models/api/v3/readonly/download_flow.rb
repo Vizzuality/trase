@@ -20,7 +20,7 @@
 module Api
   module V3
     module Readonly
-      class DownloadFlow < Api::V3::Readonly::BaseModel
+      class DownloadFlow < Api::Readonly::BaseModel
         self.table_name = 'download_flows'
 
         class << self

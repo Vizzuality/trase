@@ -17,7 +17,7 @@
 module Api
   module V3
     module Readonly
-      class CommodityAttributeProperty < Api::V3::Readonly::BaseModel
+      class CommodityAttributeProperty < Api::Readonly::BaseModel
         self.table_name = 'commodity_attribute_properties_mv'
       end
     end
