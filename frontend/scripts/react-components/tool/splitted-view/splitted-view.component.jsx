@@ -22,7 +22,7 @@ const SplittedView = ({ leftSlot, rightSlot, layout, sidebarOpen, changeLayout }
     )}
     <div className="left">
       {leftSlot}
-      {<LayoutArrows changeLayout={changeLayout} layout={layout} />}
+      <LayoutArrows changeLayout={changeLayout} layout={layout} />
     </div>
     <div className="right">{rightSlot}</div>
   </div>
