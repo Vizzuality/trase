@@ -320,6 +320,7 @@ function Sankey(props) {
             menuPos={menuPos}
             isVisible={selectedNodesIds.length > 0}
             options={menuOptions}
+            containerRef={scrollContainerRef}
           />
         )}
         <svg
