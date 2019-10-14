@@ -30,14 +30,14 @@ RSpec.describe Api::Public::Attributes::ResponseBuilder do
       it 'should return flow attributes for that country' do
         country = Api::V3::Country.first
         builder = Api::Public::Attributes::ResponseBuilder.new(
-          country: country.name
+          country: country.iso2
         )
         builder.call
 
         returned_countries = builder.data.map do |fa|
           fa[:availability].map { |a| a['country'] }
         end.flatten.uniq
-        expect(returned_countries).to eql [country.name]
+        expect(returned_countries).to eql [country.iso2]
       end
     end
 

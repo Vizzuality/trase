@@ -18,7 +18,7 @@ module Api
 
         def initialize_params(params)
           if params[:country]
-            @country = Api::V3::Country.find_by(name: params[:country])
+            @country = Api::V3::Country.find_by(iso2: params[:country])
             raise 'Country not found' unless @country
           end
 
@@ -58,7 +58,7 @@ module Api
             'unit',
             'json_agg(' \
               'json_build_object(' \
-                '\'country\', countries.name, ' \
+                '\'country\', countries.iso2, ' \
                 '\'commodity\', commodities.name, ' \
                 '\'years\', flow_attributes_mv.years' \
               ')' \

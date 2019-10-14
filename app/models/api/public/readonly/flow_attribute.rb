@@ -2,6 +2,7 @@
 #
 # Table name: flow_attributes_mv
 #
+#  attribute_id :bigint(8)
 #  name         :text
 #  display_name :text
 #  unit         :text
@@ -10,7 +11,7 @@
 #
 # Indexes
 #
-#  flow_attributes_mv_name_display_name_unit_context_idx  (name,display_name,unit,context_id) UNIQUE
+#  flow_attributes_mv_attribute_id_context_id_idx  (attribute_id,context_id) UNIQUE
 #
 
 module Api
