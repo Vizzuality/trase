@@ -53,6 +53,7 @@ module Api
 
         def flow_attributes_select_clause
           [
+            'attribute_id',
             'name',
             'display_name',
             'unit',
@@ -67,7 +68,7 @@ module Api
         end
 
         def flow_attributes_group_clause
-          %w[name display_name unit]
+          %w[attribute_id name display_name unit]
         end
 
         def initialize_data

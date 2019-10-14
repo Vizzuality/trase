@@ -1,4 +1,4 @@
-class AddTypeAndIdToFlowAttributes < ActiveRecord::Migration[5.2]
+class AddAttributeIdToFlowAttributes < ActiveRecord::Migration[5.2]
   def up
     remove_index :flow_attributes_mv,
                  column: [:name, :display_name, :unit, :context_id]
