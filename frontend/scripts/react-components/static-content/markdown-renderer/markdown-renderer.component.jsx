@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import unified from 'unified';
-import parse from 'remark-parse';
+import remark from 'remark';
 import remarkReact from 'remark-react';
 import cx from 'classnames';
 import Link from 'redux-first-router-link';
@@ -24,8 +23,7 @@ const MarkdownRenderer = props => {
       </a>
     );
   };
-  return unified()
-    .use(parse)
+  return remark()
     .use(remarkReact, { remarkReactComponents: { div: MarkdownContainer, a: SmartLink } })
     .processSync(content).contents;
 };

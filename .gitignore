@@ -48,12 +48,12 @@ frontend/.env*
 
 frontend/public/js
 frontend/dist
-frontend/.storybook
 
 frontend/tmp
 
 frontend/gis/cartodb/cartodb-config.json
 
+frontend/coverage/
 frontend/scripts/coverage
 frontend/docs/dist
 frontend/package-lock.json

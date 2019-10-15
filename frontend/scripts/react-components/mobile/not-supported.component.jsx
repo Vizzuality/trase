@@ -7,7 +7,7 @@ const NotSupported = () => (
       <div className="row column">
         <Img src="/images/backgrounds/not-supported-on-mobile.svg" alt="Not supported on mobile" />
         <p className="not-supported-text">
-          {"You'll need a bigger screen to explore the full commodity supply chains."}
+          You&apos;ll need a bigger screen to explore the full commodity supply chains.
         </p>
       </div>
     </section>

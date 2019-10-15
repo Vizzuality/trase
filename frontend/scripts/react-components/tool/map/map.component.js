@@ -14,6 +14,7 @@ import {
   CHOROPLETH_COLORS
 } from 'constants';
 import Tooltip from 'components/shared/info-tooltip.component';
+import cloneDeep from 'lodash/cloneDeep';
 
 import 'styles/components/tool/map/leaflet.css';
 import 'styles/components/tool/map.scss';
@@ -624,7 +625,7 @@ export default class MapComponent {
     if (!polygonTypeLayer) return;
 
     this.pointVolumeShadowLayer = this._createPointVolumeShadowLayer(
-      polygonTypeLayer.geoJSON,
+      cloneDeep(polygonTypeLayer.geoJSON),
       visibleNodes,
       nodeHeights
     );
