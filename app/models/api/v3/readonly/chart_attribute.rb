@@ -27,7 +27,7 @@
 module Api
   module V3
     module Readonly
-      class ChartAttribute < Api::V3::Readonly::BaseModel
+      class ChartAttribute < Api::Readonly::BaseModel
         self.table_name = 'chart_attributes_mv'
 
         belongs_to :chart

@@ -26,7 +26,7 @@ module Api
   module V3
     module Readonly
       module Dashboards
-        class Importer < Api::V3::Readonly::BaseModel
+        class Importer < Api::Readonly::BaseModel
           self.table_name = 'dashboards_importers_mv'
           belongs_to :node
         end

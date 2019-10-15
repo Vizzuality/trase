@@ -26,7 +26,7 @@ module Api
   module V3
     module Readonly
       module Dashboards
-        class Source < Api::V3::Readonly::BaseModel
+        class Source < Api::Readonly::BaseModel
           self.table_name = 'dashboards_sources_mv'
           belongs_to :node
         end

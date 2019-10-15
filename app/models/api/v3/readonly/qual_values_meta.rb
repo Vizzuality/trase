@@ -14,7 +14,7 @@
 module Api
   module V3
     module Readonly
-      class QualValuesMeta < Api::V3::Readonly::BaseModel
+      class QualValuesMeta < Api::Readonly::BaseModel
         self.table_name = 'qual_values_meta_mv'
 
         belongs_to :qual

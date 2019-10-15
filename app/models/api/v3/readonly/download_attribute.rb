@@ -20,7 +20,7 @@
 module Api
   module V3
     module Readonly
-      class DownloadAttribute < Api::V3::Readonly::BaseModel
+      class DownloadAttribute < Api::Readonly::BaseModel
         self.table_name = 'download_attributes_mv'
         self.primary_key = 'id'
 

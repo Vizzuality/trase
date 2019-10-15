@@ -23,7 +23,7 @@
 module Api
   module V3
     module Readonly
-      class Node < Api::V3::Readonly::BaseModel
+      class Node < Api::Readonly::BaseModel
         self.table_name = 'nodes_mv'
         belongs_to :context
 

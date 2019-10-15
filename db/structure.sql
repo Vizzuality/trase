@@ -3308,7 +3308,7 @@ CREATE MATERIALIZED VIEW public.dashboards_companies_mv AS
              JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
              JOIN active_cnt cnt ON (((cnt.context_id = flow_nodes.context_id) AND ((cnt.column_position + 1) = flow_nodes."position"))))
              JOIN public.contexts ON (((contexts.id = flow_nodes.context_id) AND (contexts.id = cnt.context_id))))
-          WHERE ((cnt.role)::text = ANY ((ARRAY['exporter'::character varying, 'importer'::character varying])::text[]))
+          WHERE ((cnt.role)::text = ANY (ARRAY[('exporter'::character varying)::text, ('importer'::character varying)::text]))
         )
  SELECT ffn.node_id AS id,
     ffn.node_type_id,
@@ -4372,6 +4372,46 @@ COMMENT ON TABLE public.flow_inds IS 'Values of inds for flow';
 --
 
 COMMENT ON COLUMN public.flow_inds.value IS 'Numeric value';
+
+
+--
+-- Name: flow_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.flow_attributes_mv AS
+ SELECT attributes.id AS attribute_id,
+    attributes.name,
+    attributes.display_name,
+    attributes.unit,
+    flows.context_id,
+    array_agg(DISTINCT flows.year) AS years
+   FROM ((public.flows
+     JOIN public.flow_quants ON ((flow_quants.flow_id = flows.id)))
+     JOIN public.attributes ON (((attributes.original_type = 'Quant'::text) AND (attributes.original_id = flow_quants.quant_id))))
+  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, flows.context_id
+UNION ALL
+ SELECT attributes.id AS attribute_id,
+    attributes.name,
+    attributes.display_name,
+    attributes.unit,
+    flows.context_id,
+    array_agg(DISTINCT flows.year) AS years
+   FROM ((public.flows
+     JOIN public.flow_quals ON ((flow_quals.flow_id = flows.id)))
+     JOIN public.attributes ON (((attributes.original_type = 'Qual'::text) AND (attributes.original_id = flow_quals.qual_id))))
+  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, flows.context_id
+UNION ALL
+ SELECT attributes.id AS attribute_id,
+    attributes.name,
+    attributes.display_name,
+    attributes.unit,
+    flows.context_id,
+    array_agg(DISTINCT flows.year) AS years
+   FROM ((public.flows
+     JOIN public.flow_inds ON ((flow_inds.flow_id = flows.id)))
+     JOIN public.attributes ON (((attributes.original_type = 'Ind'::text) AND (attributes.original_id = flow_inds.ind_id))))
+  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, flows.context_id
+  WITH NO DATA;
 
 
 --
@@ -8530,6 +8570,13 @@ CREATE UNIQUE INDEX download_versions_context_id_is_current_idx ON public.downlo
 
 
 --
+-- Name: flow_attributes_mv_attribute_id_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX flow_attributes_mv_attribute_id_context_id_idx ON public.flow_attributes_mv USING btree (attribute_id, context_id);
+
+
+--
 -- Name: flow_inds_flow_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -9908,6 +9955,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191003152614'),
 ('20191004083620'),
 ('20191007090648'),
-('20191008083758');
+('20191008083758'),
+('20191011112339'),
+('20191014111756');
 
 
