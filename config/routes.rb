@@ -133,6 +133,9 @@ Rails.application.routes.draw do
     end
     namespace :public do
       resources :attributes, only: [:index]
+      namespace :nodes do
+        resources :sources, only: [:index]
+      end
     end
   end
 end
