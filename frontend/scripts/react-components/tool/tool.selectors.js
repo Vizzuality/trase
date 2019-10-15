@@ -5,11 +5,12 @@ const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolColumns = state => state.toolLinks.data.columns;
 const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
+const getExtraColumnId = state => state.toolLinks.extraColumnId;
 const getHighlightedNodeIds = state => state.toolLinks.highlightedNodeId;
 
 export const getSelectedColumnsIds = createSelector(
-  [getSelectedContext, getToolColumns, getToolSelectedColumnsIds],
-  (selectedContext, columns, selectedColumnsIds) => {
+  [getSelectedContext, getToolColumns, getToolSelectedColumnsIds, getExtraColumnId],
+  (selectedContext, columns, selectedColumnsIds, extraColumnId) => {
     if (
       selectedColumnsIds &&
       selectedContext &&
@@ -21,12 +22,18 @@ export const getSelectedColumnsIds = createSelector(
     if (!columns && !selectedContext) {
       return [];
     }
+
     return selectedContext.defaultColumns.reduce((acc, column) => {
       let id = column.id;
       if (selectedColumnsIds && selectedColumnsIds[column.group]) {
         id = selectedColumnsIds[column.group];
       }
-      acc[column.group] = id;
+      acc.push(id);
+
+      if (columns && columns[id].filterTo && columns[id].filterTo === extraColumnId) {
+        acc.push(extraColumnId);
+      }
+
       return acc;
     }, []);
   }

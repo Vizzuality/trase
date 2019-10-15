@@ -62,20 +62,23 @@ function useMenuOptions(props, hoveredSelectedNode) {
       });
     }
 
+    const activeColumn = toolColumns && Object.values(toolColumns).find(c => c.name === nodeType);
+    const selectedRegion =
+      columns?.length &&
+      activeColumn &&
+      columns[activeColumn.group].values.find(node => node.id === link.nodeId);
+
     if (ENABLE_REDESIGN_PAGES && nodeType) {
-      const activeColumn = Object.values(toolColumns).find(c => c.name === nodeType);
       if (activeColumn.filterTo && columns?.length) {
+        const columnToExpand = toolColumns[activeColumn.filterTo];
+
         if (extraColumnId || selectedBiomeFilterName) {
-          const columnToExpand = toolColumns[activeColumn.filterTo];
           items.push({
             id: 'remove-column',
             label: `Close ${pluralize(columnToExpand.name)}`,
             onClick: () => onChangeExtraColumn(null)
           });
         } else {
-          const columnToExpand = toolColumns[activeColumn.filterTo];
-          const columnGroup = 0; // Right now only exporter regions
-          const selectedRegion = columns[columnGroup].values.find(node => node.id === link.nodeId);
           items.push({
             id: 'expand-column',
             label: `See ${pluralize(columnToExpand.name)}`,
@@ -85,7 +88,10 @@ function useMenuOptions(props, hoveredSelectedNode) {
       }
     }
 
-    if ((isReExpand || !hasExpandedNodesIds) && !selectedBiomeFilterName) {
+    const isExpandedColumn =
+      ENABLE_REDESIGN_PAGES && selectedRegion?.name === selectedBiomeFilterName;
+
+    if ((isReExpand || !hasExpandedNodesIds) && !isExpandedColumn) {
       items.push({
         id: 'expand',
         label: isReExpand ? 'Re-Expand' : 'Expand',
@@ -93,7 +99,7 @@ function useMenuOptions(props, hoveredSelectedNode) {
       });
     }
 
-    if (hasExpandedNodesIds && !selectedBiomeFilterName) {
+    if (hasExpandedNodesIds && !isExpandedColumn) {
       items.push({ id: 'collapse', label: 'Collapse', onClick: onCollapseClick });
     }
 

@@ -5,7 +5,7 @@ import getNextRecolorGroups from 'reducers/helpers/getRecolorGroups';
 import getVisibleNodesUtil from 'reducers/helpers/getVisibleNodes';
 import { getSelectedColumnsIds, getSelectedNodesData } from 'react-components/tool/tool.selectors';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
-import { NUM_COLUMNS } from 'constants';
+import { MIN_COLUMNS_NUMBER } from 'constants';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
 
 const getToolLinks = state => state.toolLinks.data.links;
@@ -18,6 +18,7 @@ const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
 const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
 const getToolBiomeFilterName = state => state.toolLinks.selectedBiomeFilterName;
 const getToolDetailedView = state => state.toolLinks.detailedView;
+const getToolExtraColumnId = state => state.toolLinks.extraColumnId;
 
 export const getSelectedResizeBy = createSelector(
   [getToolResizeBy, getSelectedContext],
@@ -62,15 +63,33 @@ export const getSelectedBiomeFilter = createSelector(
   }
 );
 
+export const getColumnsNumber = createSelector(
+  getToolExtraColumnId,
+  extraColumnId => (extraColumnId ? MIN_COLUMNS_NUMBER + 1 : MIN_COLUMNS_NUMBER)
+);
+
 export const getVisibleNodes = createSelector(
-  [getToolLinks, getToolNodes, getSelectedColumnsIds],
-  (links, nodes, selectedColumnsIds) => {
+  [
+    getToolLinks,
+    getToolNodes,
+    getToolColumns,
+    getSelectedColumnsIds,
+    getToolExtraColumnId,
+    getColumnsNumber
+  ],
+  (links, nodes, toolColumns, selectedColumnsIds, extraColumnId, columnsNumber) => {
     if (!links || !nodes || !selectedColumnsIds) {
       return null;
     }
     const visibleNodes = getVisibleNodesUtil(links, nodes, selectedColumnsIds);
-    const visibleColumns = new Set(visibleNodes.map(node => node.columnId));
-    return visibleColumns.size === NUM_COLUMNS ? visibleNodes : null;
+    const visibleNodesWithCorrectedColumn = visibleNodes.map(node => {
+      if (!extraColumnId || toolColumns[node.columnId].filterBy !== extraColumnId) {
+        return node;
+      }
+      return { ...node, columnId: extraColumnId };
+    });
+    const visibleColumns = new Set(visibleNodesWithCorrectedColumn.map(node => node.columnId));
+    return visibleColumns.size === columnsNumber ? visibleNodesWithCorrectedColumn : null;
   }
 );
 
@@ -80,7 +99,6 @@ export const getSelectedNodesColumnsPos = createSelector(
     if (!columns) {
       return [];
     }
-
     return selectedNodesData.map(({ columnId }) => {
       const column = columns[columnId];
       return column.group;

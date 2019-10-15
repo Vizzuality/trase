@@ -1,7 +1,15 @@
 import kebabCase from 'lodash/kebabCase';
 
+const getCorrectedPosition = (columns, columnId, extraColumnId) => {
+  const column = columns[columnId];
+  if (!extraColumnId) return column.group;
+  if (extraColumnId === columnId) return column.group + 1;
+  const extraColumnGroup = columns[extraColumnId].group;
+  return column.group > extraColumnGroup ? column.group + 1 : column.group;
+};
+
 // break down links into simple src - target binomes
-export default function(rawLinks, nodes, columns, selectedRecolorBy) {
+export default function(rawLinks, nodes, columns, selectedRecolorBy, extraColumnId) {
   const links = [];
   rawLinks.forEach(link => {
     const path = link.path;
@@ -30,14 +38,11 @@ export default function(rawLinks, nodes, columns, selectedRecolorBy) {
         return;
       }
 
-      const sourceColumn = columns[sourceNode.columnId];
-      const targetColumn = columns[targetNode.columnId];
-
       links.push({
         sourceNodeId,
         targetNodeId,
-        sourceColumnPosition: sourceColumn.group,
-        targetColumnPosition: targetColumn.group,
+        sourceColumnPosition: getCorrectedPosition(columns, sourceNode.columnId, extraColumnId),
+        targetColumnPosition: getCorrectedPosition(columns, targetNode.columnId, extraColumnId),
         sourceNodeName: sourceNode.name,
         targetNodeName: targetNode.name,
         height: link.height,
