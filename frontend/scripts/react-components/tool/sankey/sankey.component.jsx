@@ -6,6 +6,7 @@ import getNodeMeta from 'reducers/helpers/getNodeMeta';
 import Heading from 'react-components/shared/heading';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import { TOOL_LAYOUT } from 'constants';
+import pluralize from 'utils/pluralize';
 
 import RecolorByLegend from './recolor-by-legend';
 import SankeyColumn from './sankey-column.component';
@@ -23,18 +24,18 @@ function useMenuOptions(props, hoveredSelectedNode) {
     onExpandClick,
     onCollapseClick,
     onClearClick,
-    lastSelectedNodeLink
+    lastSelectedNodeLink,
+    onChangeExtraColumn,
+    toolColumns,
+    columns,
+    extraColumnId,
+    selectedBiomeFilterName
   } = props;
   return useMemo(() => {
-    const items = [
-      { id: 'expand', label: isReExpand ? 'Re-Expand' : 'Expand', onClick: onExpandClick },
-      { id: 'collapse', label: 'Collapse', onClick: onCollapseClick },
-      { id: 'clear', label: 'Clear Selection', onClick: onClearClick }
-    ];
+    const items = [{ id: 'clear', label: 'Clear Selection', onClick: onClearClick }];
 
     let nodeType = null;
     let link = {};
-
     if (lastSelectedNodeLink) {
       const { type, ...params } = lastSelectedNodeLink;
       nodeType = type;
@@ -61,23 +62,56 @@ function useMenuOptions(props, hoveredSelectedNode) {
       });
     }
 
-    if (!isReExpand && hasExpandedNodesIds) {
-      return items.filter(item => item.id !== 'expand');
+    if (ENABLE_REDESIGN_PAGES && nodeType) {
+      const activeColumn = Object.values(toolColumns).find(c => c.name === nodeType);
+      if (activeColumn.filterTo && columns?.length) {
+        if (extraColumnId || selectedBiomeFilterName) {
+          const columnToExpand = toolColumns[activeColumn.filterTo];
+          items.push({
+            id: 'remove-column',
+            label: `Close ${pluralize(columnToExpand.name)}`,
+            onClick: () => onChangeExtraColumn(null)
+          });
+        } else {
+          const columnToExpand = toolColumns[activeColumn.filterTo];
+          const columnGroup = 0; // Right now only exporter regions
+          const selectedRegion = columns[columnGroup].values.find(node => node.id === link.nodeId);
+          items.push({
+            id: 'expand-column',
+            label: `See ${pluralize(columnToExpand.name)}`,
+            onClick: () => onChangeExtraColumn(columnToExpand.id, selectedRegion?.name)
+          });
+        }
+      }
     }
-    if (!hasExpandedNodesIds) {
-      return items.filter(item => item.id !== 'collapse');
+
+    if ((isReExpand || !hasExpandedNodesIds) && !selectedBiomeFilterName) {
+      items.push({
+        id: 'expand',
+        label: isReExpand ? 'Re-Expand' : 'Expand',
+        onClick: onExpandClick
+      });
+    }
+
+    if (hasExpandedNodesIds && !selectedBiomeFilterName) {
+      items.push({ id: 'collapse', label: 'Collapse', onClick: onCollapseClick });
     }
 
     return items;
   }, [
-    hoveredSelectedNode,
-    lastSelectedNodeLink,
-    hasExpandedNodesIds,
     isReExpand,
-    onClearClick,
-    onCollapseClick,
     onExpandClick,
-    goToProfile
+    onCollapseClick,
+    onClearClick,
+    lastSelectedNodeLink,
+    hoveredSelectedNode,
+    hasExpandedNodesIds,
+    goToProfile,
+    toolColumns,
+    columns,
+    extraColumnId,
+    selectedBiomeFilterName,
+    onChangeExtraColumn
   ]);
 }
 
@@ -389,6 +423,7 @@ function Sankey(props) {
 Sankey.propTypes = {
   links: PropTypes.array,
   columns: PropTypes.array,
+  toolColumns: PropTypes.object,
   maxHeight: PropTypes.number,
   detailedView: PropTypes.bool,
   flowsLoading: PropTypes.bool,
@@ -407,6 +442,7 @@ Sankey.propTypes = {
   onNodeClicked: PropTypes.func.isRequired,
   onCollapseClick: PropTypes.func.isRequired, // eslint-disable-line
   onNodeHighlighted: PropTypes.func.isRequired,
+  onChangeExtraColumn: PropTypes.func.isRequired,
   selectedNodesIds: PropTypes.array.isRequired,
   toolLayout: PropTypes.number.isRequired
 };

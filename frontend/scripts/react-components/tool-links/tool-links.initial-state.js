@@ -14,6 +14,7 @@ export default {
   highlightedNodeId: null,
   flowsLoading: false,
   selectedColumnsIds: null,
+  extraColumnId: null,
   expandedNodesIds: [],
   selectedNodesIds: [],
   selectedRecolorBy: null,

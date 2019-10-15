@@ -20,7 +20,7 @@ import splitLinksByColumn from 'reducers/helpers/splitLinksByColumn';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 
 const getToolNodeHeights = state => state.toolLinks.data.nodeHeights;
-const getToolColumns = state => state.toolLinks.data.columns;
+export const getToolColumns = state => state.toolLinks.data.columns;
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolNodes = state => state.toolLinks.data.nodes;
 

@@ -18,7 +18,8 @@ import {
   TOOL_LINKS__SET_SELECTED_RESIZE_BY,
   TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
   TOOL_LINKS__SET_MISSING_LOCKED_NODES,
-  TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH
+  TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH,
+  TOOL_LINKS__CHANGE_EXTRA_COLUMN
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
 import immer from 'immer';
@@ -86,7 +87,8 @@ const toolLinksReducer = {
         highlightedNodeId: toolLinksInitialState.highlightedNodeId,
         selectedNodesIds: toolLinksInitialState.selectedNodesIds,
         expandedNodesIds: toolLinksInitialState.expandedNodesIds,
-        selectedColumnsIds: toolLinksInitialState.selectedColumnsIds
+        selectedColumnsIds: toolLinksInitialState.selectedColumnsIds,
+        extraColumnId: toolLinksInitialState.extraColumnId
       });
     });
   },
@@ -98,7 +100,8 @@ const toolLinksReducer = {
         expandedNodesIds: toolLinksInitialState.expandedNodesIds,
         detailedView: toolLinksInitialState.detailedView,
         forcedOverview: toolLinksInitialState.forcedOverview,
-        selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName
+        selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
+        extraColumnId: toolLinksInitialState.extraColumnId
       });
     });
   },
@@ -108,6 +111,7 @@ const toolLinksReducer = {
         selectedRecolorBy: toolLinksInitialState.selectedRecolorBy,
         selectedResizeBy: toolLinksInitialState.selectedResizeBy,
         selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
+        extraColumnId: toolLinksInitialState.extraColumnId,
         detailedView: toolLinksInitialState.detailedView,
         highlightedNodeId: toolLinksInitialState.highlightedNodeId,
         selectedNodesIds: toolLinksInitialState.selectedNodesIds,
@@ -215,6 +219,23 @@ const toolLinksReducer = {
       };
       draft.selectedNodesIds = state.selectedNodesIds.filter(isInColumn);
       draft.expandedNodesIds = state.expandedNodesIds.filter(isInColumn);
+    });
+  },
+  [TOOL_LINKS__CHANGE_EXTRA_COLUMN](state, action) {
+    return immer(state, draft => {
+      const { columnId } = action.payload;
+      draft.extraColumnId = columnId;
+      const columnNode =
+        state.data.nodes &&
+        Object.values(state.data.nodes).find(node => node.name === state.selectedBiomeFilterName);
+      if (columnId) {
+        if (columnNode) {
+          draft.expandedNodesIds = state.expandedNodesIds.concat(columnNode?.id);
+        }
+      } else {
+        draft.expandedNodesIds = state.expandedNodesIds.filter(node => node !== columnNode?.id);
+      }
+      draft.selectedBiomeFilterName = action.payload.columnName || null;
     });
   },
   [TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH](state, action) {
@@ -332,6 +353,7 @@ const toolLinksReducerTypes = PropTypes => ({
   highlightedNodeId: PropTypes.number,
   flowsLoading: PropTypes.bool,
   selectedBiomeFilterName: PropTypes.string,
+  extraColumnId: PropTypes.number,
   selectedColumnsIds: PropTypes.arrayOf(PropTypes.number),
   selectedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   selectedRecolorBy: PropTypes.number,

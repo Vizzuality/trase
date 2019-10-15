@@ -11,7 +11,8 @@ import {
   TOOL_LINKS__SET_SELECTED_NODES,
   TOOL_LINKS__SET_SELECTED_RESIZE_BY,
   TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
-  TOOL_LINKS__SET_SELECTED_BIOME_FILTER
+  TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
+  TOOL_LINKS__CHANGE_EXTRA_COLUMN
 } from 'react-components/tool-links/tool-links.actions';
 
 export default [
@@ -45,6 +46,12 @@ export default [
     type: TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
     category: 'Sankey',
     action: 'Update biome filter',
+    getPayload: action => action.payload.name
+  },
+  {
+    type: TOOL_LINKS__CHANGE_EXTRA_COLUMN,
+    category: 'Sankey',
+    action: 'Select extra column',
     getPayload: action => action.payload.name
   },
   {

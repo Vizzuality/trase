@@ -9,7 +9,8 @@ import {
   getSankeyColumns,
   getSankeyLinks,
   getGapBetweenColumns,
-  getLastSelectedNodeLink
+  getLastSelectedNodeLink,
+  getToolColumns
 } from 'react-components/tool/sankey/sankey.selectors';
 import { connect } from 'react-redux';
 import Sankey from 'react-components/tool/sankey/sankey.component';
@@ -19,12 +20,14 @@ import {
   expandSankey,
   highlightNode,
   selectNodes,
-  goToProfileFromSankey
+  goToProfileFromSankey,
+  changeExtraColumn
 } from 'react-components/tool-links/tool-links.actions';
 import { getSelectedMapDimensionsData } from 'react-components/tool-layers/tool-layers.selectors';
 
 const mapStateToProps = state => ({
   links: getSankeyLinks(state),
+  toolColumns: getToolColumns(state),
   columns: getSankeyColumns(state),
   isReExpand: getIsReExpand(state),
   sankeySize: state.toolLayers.sankeySize,
@@ -42,7 +45,9 @@ const mapStateToProps = state => ({
   lastSelectedNodeLink: getLastSelectedNodeLink(state),
   highlightedNodeId: state.toolLinks.highlightedNodeId,
   selectedMapDimensions: getSelectedMapDimensionsData(state),
-  toolLayout: state.toolLayers.toolLayout
+  toolLayout: state.toolLayers.toolLayout,
+  extraColumnId: state.toolLinks.extraColumnId,
+  selectedBiomeFilterName: state.toolLinks.selectedBiomeFilterName
 });
 
 const mapDispatchToProps = {
@@ -50,6 +55,7 @@ const mapDispatchToProps = {
   onNodeClicked: selectNodes,
   onNodeHighlighted: highlightNode,
   onExpandClick: expandSankey,
+  onChangeExtraColumn: changeExtraColumn,
   onCollapseClick: collapseSankey,
   onClearClick: clearSankey
 };

@@ -11,6 +11,7 @@ import {
   TOOL_LINKS__COLLAPSE_SANKEY,
   TOOL_LINKS__EXPAND_SANKEY,
   TOOL_LINKS__SELECT_COLUMN,
+  TOOL_LINKS__CHANGE_EXTRA_COLUMN,
   TOOL_LINKS__HIGHLIGHT_NODE,
   TOOL_LINKS__CLEAR_SANKEY,
   TOOL_LINKS__SET_SELECTED_NODES,
@@ -39,9 +40,10 @@ import {
   selectNodes,
   selectSearchNode,
   setToolNodes
-} from 'react-components/tool-links/tool-links.actions';
+, changeExtraColumn } from 'react-components/tool-links/tool-links.actions';
 import { SET_NODE_ATTRIBUTES } from 'react-components/tool/tool.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
+
 
 test(TOOL_LINKS__SET_FLOWS_LOADING, () => {
   const action = setToolFlowsLoading(true);
@@ -296,6 +298,21 @@ describe(TOOL_LINKS__SELECT_COLUMN, () => {
       expandedNodesIds: [1234],
       selectedColumnsIds: [undefined, undefined, 5]
     });
+  });
+});
+
+test(TOOL_LINKS__CHANGE_EXTRA_COLUMN, () => {
+  const columnId = 3;
+  const regionName = 'REGION_NAME';
+  const action = changeExtraColumn(columnId, regionName);
+  const state = {
+    ...initialState
+  };
+  const newState = reducer(state, action);
+  expect(newState).toEqual({
+    ...state,
+    extraColumnId: columnId,
+    selectedBiomeFilterName: regionName
   });
 });
 
