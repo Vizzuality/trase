@@ -5,7 +5,7 @@ import formatValue from 'utils/formatValue';
 import getNodeMeta from 'reducers/helpers/getNodeMeta';
 import Heading from 'react-components/shared/heading';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
-import { TOOL_LAYOUT } from 'constants';
+import { TOOL_LAYOUT, MIN_COLUMNS_NUMBER } from 'constants';
 import pluralize from 'utils/pluralize';
 
 import RecolorByLegend from './recolor-by-legend';
@@ -191,7 +191,8 @@ function Sankey(props) {
     gapBetweenColumns,
     onNodeHighlighted,
     selectedNodesIds,
-    toolLayout
+    toolLayout,
+    extraColumnId
   } = props;
   const [hoveredLink, setHoveredLink] = useState(null);
   const [tooltipContent, setTooltipContent] = useState(null);
@@ -394,6 +395,7 @@ function Sankey(props) {
                   height={placeholderHeight}
                   gapBetweenColumns={gapBetweenColumns}
                   sankeyColumnsWidth={sankeyColumnsWidth}
+                  size={extraColumnId ? MIN_COLUMNS_NUMBER : MIN_COLUMNS_NUMBER - 1}
                 />
               )}
             </g>
@@ -416,6 +418,7 @@ function Sankey(props) {
                   height={placeholderHeight}
                   gapBetweenColumns={gapBetweenColumns}
                   sankeyColumnsWidth={sankeyColumnsWidth}
+                  size={extraColumnId ? MIN_COLUMNS_NUMBER + 1 : MIN_COLUMNS_NUMBER}
                 />
               )}
             </g>
@@ -450,7 +453,8 @@ Sankey.propTypes = {
   onNodeHighlighted: PropTypes.func.isRequired,
   onChangeExtraColumn: PropTypes.func.isRequired,
   selectedNodesIds: PropTypes.array.isRequired,
-  toolLayout: PropTypes.number.isRequired
+  toolLayout: PropTypes.number.isRequired,
+  extraColumnId: PropTypes.number
 };
 
 export default Sankey;

@@ -7,6 +7,7 @@ import { getSelectedColumnsIds, getSelectedNodesData } from 'react-components/to
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 import { MIN_COLUMNS_NUMBER } from 'constants';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
+import getCorrectedPosition from 'utils/getCorrectedPosition';
 
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolNodes = state => state.toolLinks.data.nodes;
@@ -78,12 +79,12 @@ export const getVisibleNodes = createSelector(
     getColumnsNumber
   ],
   (links, nodes, toolColumns, selectedColumnsIds, extraColumnId, columnsNumber) => {
-    if (!links || !nodes || !selectedColumnsIds) {
+    if (!links || !nodes || !selectedColumnsIds || !toolColumns) {
       return null;
     }
     const visibleNodes = getVisibleNodesUtil(links, nodes, selectedColumnsIds);
     const visibleNodesWithCorrectedColumn = visibleNodes.map(node => {
-      if (!extraColumnId || toolColumns[node.columnId].filterBy !== extraColumnId) {
+      if (!toolColumns || !extraColumnId || toolColumns[node.columnId].filterBy !== extraColumnId) {
         return node;
       }
       return { ...node, columnId: extraColumnId };
@@ -94,15 +95,14 @@ export const getVisibleNodes = createSelector(
 );
 
 export const getSelectedNodesColumnsPos = createSelector(
-  [getSelectedNodesData, getToolColumns],
-  (selectedNodesData, columns) => {
+  [getSelectedNodesData, getToolColumns, getToolExtraColumnId],
+  (selectedNodesData, columns, extraColumnId) => {
     if (!columns) {
       return [];
     }
-    return selectedNodesData.map(({ columnId }) => {
-      const column = columns[columnId];
-      return column.group;
-    });
+    return selectedNodesData.map(({ columnId }) =>
+      getCorrectedPosition(columns, columnId, extraColumnId)
+    );
   }
 );
 
