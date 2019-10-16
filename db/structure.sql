@@ -5253,15 +5253,17 @@ ALTER SEQUENCE public.nodes_id_seq OWNED BY public.nodes.id;
 CREATE MATERIALIZED VIEW public.nodes_mv AS
  SELECT nodes.id,
     nodes.main_id,
+    nodes_with_flows.context_id,
+    context_node_types.column_position,
+    context_properties.is_subnational,
     btrim(nodes.name) AS name,
     to_tsvector('simple'::regconfig, COALESCE(btrim(nodes.name), ''::text)) AS name_tsvector,
     node_types.name AS node_type,
-    nodes_with_flows.context_id,
-    nodes_with_flows.years,
     profiles.name AS profile,
-    context_properties.is_subnational,
-    nodes.geo_id
-   FROM ((((((public.nodes
+    upper(btrim(nodes.geo_id)) AS geo_id,
+    context_node_type_properties.role,
+    nodes_with_flows.years
+   FROM (((((((public.nodes
      JOIN ( SELECT unnest(flows.path) AS node_id,
             flows.context_id,
             array_agg(DISTINCT flows.year ORDER BY flows.year) AS years
@@ -5270,8 +5272,9 @@ CREATE MATERIALIZED VIEW public.nodes_mv AS
      JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
      JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
      JOIN public.context_node_types ON (((context_node_types.node_type_id = node_types.id) AND (context_node_types.context_id = nodes_with_flows.context_id))))
+     JOIN public.context_properties ON ((context_node_types.context_id = context_properties.context_id)))
+     JOIN public.context_node_type_properties ON ((context_node_type_properties.context_node_type_id = context_node_types.id)))
      LEFT JOIN public.profiles ON ((profiles.context_node_type_id = context_node_types.id)))
-     LEFT JOIN public.context_properties ON ((context_node_types.context_id = context_properties.context_id)))
   WHERE ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text))
   WITH NO DATA;
 
@@ -9957,6 +9960,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191007090648'),
 ('20191008083758'),
 ('20191011112339'),
-('20191014111756');
+('20191014111756'),
+('20191015095615');
 
 

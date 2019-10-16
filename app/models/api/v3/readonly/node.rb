@@ -2,16 +2,18 @@
 #
 # Table name: nodes_mv
 #
-#  id             :integer          primary key
-#  main_id        :integer
-#  name           :text
-#  name_tsvector  :tsvector
-#  node_type      :text
-#  context_id     :integer
-#  years          :integer          is an Array
-#  profile        :text
-#  is_subnational :boolean
-#  geo_id         :text
+#  id              :integer          primary key
+#  main_id         :integer
+#  context_id      :integer
+#  column_position :integer
+#  is_subnational  :boolean
+#  name            :text
+#  name_tsvector   :tsvector
+#  node_type       :text
+#  profile         :text
+#  geo_id          :text
+#  role            :string
+#  years           :integer          is an Array
 #
 # Indexes
 #
