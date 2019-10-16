@@ -18,7 +18,6 @@ function ColumnSelector(props) {
 
   const hasMultipleElements = columnItems.length > 1;
 
-  console.log('selectedITM', selectedColumnItem, columnItems);
   let content = (
     <Text className="column-selector" size="rg" align="center" variant="mono" weight="bold">
       {selectedColumnItem.name}

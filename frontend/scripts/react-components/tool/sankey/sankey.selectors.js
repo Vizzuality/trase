@@ -214,6 +214,10 @@ export const getSankeyLinks = createSelector(
       return null;
     }
 
+    // Fix a race condition in which the links were still loading
+    const isReady = mergedLinks && mergedLinks[0].originalPath.length === sankeyColumns.length;
+    if (!isReady) return null;
+
     const _getNode = (columnPosition, nodeId) => {
       const column = sankeyColumns[columnPosition];
       return column.values.find(node => node.id === nodeId);

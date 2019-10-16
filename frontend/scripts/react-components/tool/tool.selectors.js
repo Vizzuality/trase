@@ -14,7 +14,8 @@ export const getSelectedColumnsIds = createSelector(
     if (
       selectedColumnsIds &&
       selectedContext &&
-      selectedColumnsIds.length === selectedContext.defaultColumns.length
+      selectedColumnsIds.length === selectedContext.defaultColumns.length &&
+      !extraColumnId
     ) {
       return selectedColumnsIds;
     }

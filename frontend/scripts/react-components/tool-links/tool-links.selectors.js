@@ -129,7 +129,8 @@ export const getToolLinksUrlProps = createStructuredSelector({
   detailedView: getToolDetailedView,
   selectedResizeBy: getToolResizeBy,
   selectedRecolorBy: getToolRecolorBy,
-  selectedBiomeFilterName: getToolBiomeFilterName
+  selectedBiomeFilterName: getToolBiomeFilterName,
+  extraColumnId: getToolExtraColumnId
 });
 
 export const getToolYearsProps = createStructuredSelector({

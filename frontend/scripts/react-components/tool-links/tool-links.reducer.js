@@ -62,7 +62,8 @@ const toolLinksReducer = {
           'detailedView',
           'selectedResizeBy',
           'selectedRecolorBy',
-          'selectedBiomeFilterName'
+          'selectedBiomeFilterName',
+          'extraColumnId'
         ]
       });
       return newState;

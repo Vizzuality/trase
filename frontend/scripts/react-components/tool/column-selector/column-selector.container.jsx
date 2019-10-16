@@ -23,12 +23,16 @@ function ColumnSelectorContainer({
   onColumnSelected,
   gapBetweenColumns,
   sankeyColumnsWidth,
-  selectedColumnId
+  selectedColumnId,
+  isExtraColumn
 }) {
-  const columnItems = useMemo(() => columns.filter(column => column.group === group), [
-    columns,
-    group
-  ]);
+  const columnItems = useMemo(
+    () =>
+      isExtraColumn
+        ? columns.filter(column => column.id === selectedColumnId)
+        : columns.filter(column => column.group === group),
+    [columns, group, isExtraColumn, selectedColumnId]
+  );
   const selectedColumnItem = useMemo(
     () => columnItems.find(column => column.id === selectedColumnId),
     [columnItems, selectedColumnId]
@@ -62,7 +66,8 @@ ColumnSelectorContainer.propTypes = {
   sankeyColumnsWidth: PropTypes.number,
   gapBetweenColumns: PropTypes.number,
   selectedColumnId: PropTypes.number,
-  onColumnSelected: PropTypes.func.isRequired
+  onColumnSelected: PropTypes.func.isRequired,
+  isExtraColumn: PropTypes.bool
 };
 
 export default connect(
