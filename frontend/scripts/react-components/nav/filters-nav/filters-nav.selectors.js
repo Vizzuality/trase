@@ -200,7 +200,7 @@ export const getNavFilters = createSelector(
               type: NAV_FILTER_TYPES.contextSelector,
               props: { selectedContext, id: 'contextSelector' }
             },
-            ...insertIf(toolAdminLevel, {
+            ...insertIf(!ENABLE_REDESIGN_PAGES && toolAdminLevel, {
               type: NAV_FILTER_TYPES.dropdown,
               props: toolAdminLevel
             }),
