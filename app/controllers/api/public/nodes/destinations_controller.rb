@@ -1,13 +1,13 @@
 module Api
   module Public
     module Nodes
-      class SourcesController < ApiController
+      class DestinationsController < ApiController
         include Nodes
 
         private
 
         def filter_klass
-          Sources::Filter
+          Destinations::Filter
         end
       end
     end

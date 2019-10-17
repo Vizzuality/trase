@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Nodes sources', type: :request do
+RSpec.describe 'Nodes destinations', type: :request do
   include_context 'api v3 brazil flows quants'
 
   before(:each) do
@@ -8,9 +8,9 @@ RSpec.describe 'Nodes sources', type: :request do
     Api::V3::Readonly::Node.refresh(sync: true)
   end
 
-  describe 'GET /api/public/nodes/sources' do
+  describe 'GET /api/public/nodes/destinations' do
     it 'has the correct response structure' do
-      get '/api/public/nodes/sources'
+      get '/api/public/nodes/destinations'
 
       expect(@response).to have_http_status(:ok)
       expect(@response).to match_response_schema('public_nodes')
