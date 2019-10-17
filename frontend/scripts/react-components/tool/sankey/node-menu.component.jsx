@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Text from 'react-components/shared/text';
@@ -9,12 +9,10 @@ const ITEM_HEIGHT = 33;
 
 function NodeMenu(props) {
   const { options, menuPos, isVisible, containerRef } = props;
-  const menuHeight = useMemo(() => ITEM_HEIGHT * options?.length, [options]);
-  const flipped = useMemo(() => {
-    const nodeContainerHeight = containerRef.current?.getBoundingClientRect().height;
-    const menuBottom = menuPos.y + menuHeight;
-    return menuBottom > nodeContainerHeight;
-  }, [containerRef, menuHeight, menuPos.y]);
+  const menuHeight = ITEM_HEIGHT * options?.length;
+  const nodeContainerHeight = containerRef.current?.getBoundingClientRect().height;
+  const menuBottom = menuPos.y + menuHeight;
+  const flipped = menuBottom > nodeContainerHeight;
 
   return (
     <div
