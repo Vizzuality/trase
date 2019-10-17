@@ -135,6 +135,7 @@ Rails.application.routes.draw do
       resources :attributes, only: [:index]
       namespace :nodes do
         resources :sources, only: [:index]
+        resources :destinations, only: [:index]
       end
     end
   end
