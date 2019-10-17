@@ -7,7 +7,7 @@ export default function(nodes, columns, minColumns = MIN_COLUMNS_NUMBER) {
     .key(el => {
       const { columnId } = el;
       const column = columns[columnId];
-      return Number(column.id);
+      return `${Number(column.group)}-${Number(column.id)}`;
     })
     .sortKeys((a, b) => (parseInt(a, 10) < parseInt(b, 10) ? -1 : 1))
     .entries(nodes);

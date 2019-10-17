@@ -68,23 +68,21 @@ function useMenuOptions(props, hoveredSelectedNode) {
       activeColumn &&
       columns[activeColumn.group].values.find(node => node.id === link.nodeId);
 
-    if (ENABLE_REDESIGN_PAGES && nodeType) {
-      if (activeColumn.filterTo && columns?.length) {
-        const columnToExpand = toolColumns[activeColumn.filterTo];
+    if (ENABLE_REDESIGN_PAGES && nodeType && activeColumn?.filterTo && columns?.length) {
+      const columnToExpand = toolColumns[activeColumn.filterTo];
 
-        if (extraColumnId || selectedBiomeFilterName) {
-          items.push({
-            id: 'remove-column',
-            label: `Close ${pluralize(columnToExpand.name)}`,
-            onClick: () => onChangeExtraColumn(null)
-          });
-        } else {
-          items.push({
-            id: 'expand-column',
-            label: `See ${pluralize(columnToExpand.name)}`,
-            onClick: () => onChangeExtraColumn(columnToExpand.id, selectedRegion?.name)
-          });
-        }
+      if (extraColumnId || selectedBiomeFilterName) {
+        items.push({
+          id: 'remove-column',
+          label: `Close ${pluralize(columnToExpand.name)}`,
+          onClick: () => onChangeExtraColumn(null)
+        });
+      } else {
+        items.push({
+          id: 'expand-column',
+          label: `See ${pluralize(columnToExpand.name)}`,
+          onClick: () => onChangeExtraColumn(columnToExpand.id, selectedRegion?.name)
+        });
       }
     }
 

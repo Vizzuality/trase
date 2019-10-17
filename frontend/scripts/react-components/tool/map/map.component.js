@@ -466,13 +466,6 @@ export default class MapComponent {
     const hasChoroplethLayersEnabled = Object.values(choropleth).length > 0;
     const isPoint = this.currentPolygonTypeLayer.isPoint;
     this.currentPolygonTypeLayer.eachLayer(layer => {
-      const isFilteredOut =
-        biome === null ||
-        biome.geoId === undefined ||
-        layer.feature.properties.biome_geoid === undefined
-          ? false
-          : biome.geoId !== layer.feature.properties.biome_geoid;
-
       const isLinked = linkedGeoIds.indexOf(layer.feature.properties.geoid) > -1;
       const choroItem = choropleth[layer.feature.properties.geoid];
 
@@ -483,8 +476,16 @@ export default class MapComponent {
       const color = this.darkBasemap
         ? CHOROPLETH_COLORS.bright_stroke
         : CHOROPLETH_COLORS.dark_stroke;
-
-      if (!ENABLE_REDESIGN_PAGES && isFilteredOut) {
+      let isFilteredOut = false;
+      if (!ENABLE_REDESIGN_PAGES) {
+        isFilteredOut =
+          biome === null ||
+          biome.geoId === undefined ||
+          layer.feature.properties.biome_geoid === undefined
+            ? false
+            : biome.geoId !== layer.feature.properties.biome_geoid;
+      }
+      if (isFilteredOut) {
         // If region is filtered out by biome filter, hide it and bail
         fillOpacity = 0;
         strokeOpacity = 0;
