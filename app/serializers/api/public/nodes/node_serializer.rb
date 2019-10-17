@@ -1,7 +1,7 @@
 module Api
   module Public
     module Nodes
-      class SourceSerializer < ActiveModel::Serializer
+      class NodeSerializer < ActiveModel::Serializer
         attributes :id,
                    :name,
                    :node_type,

@@ -13,7 +13,7 @@ RSpec.describe 'Nodes sources', type: :request do
       get '/api/public/nodes/sources'
 
       expect(@response).to have_http_status(:ok)
-      expect(@response).to match_response_schema('public_nodes_sources')
+      expect(@response).to match_response_schema('public_nodes')
     end
   end
 end
