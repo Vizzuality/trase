@@ -3,9 +3,13 @@ import getNodesAtColumns from 'reducers/helpers/getNodesAtColumns';
 import getNodesColoredBySelection from 'reducers/helpers/getNodesColoredBySelection';
 import getNextRecolorGroups from 'reducers/helpers/getRecolorGroups';
 import getVisibleNodesUtil from 'reducers/helpers/getVisibleNodes';
-import { getSelectedColumnsIds, getSelectedNodesData } from 'react-components/tool/tool.selectors';
+import {
+  getSelectedColumnsIds,
+  getSelectedNodesData,
+  getHasExtraColumn,
+  getColumnsNumber
+} from 'react-components/tool/tool.selectors';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
-import { MIN_COLUMNS_NUMBER } from 'constants';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
 import getCorrectedPosition from 'utils/getCorrectedPosition';
 
@@ -19,7 +23,10 @@ const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
 const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
 const getToolBiomeFilterName = state => state.toolLinks.selectedBiomeFilterName;
 const getToolDetailedView = state => state.toolLinks.detailedView;
-const getToolExtraColumnId = state => state.toolLinks.extraColumnId;
+const getToolExtraColumnId = createSelector(
+  [getHasExtraColumn, state => state.toolLinks.extraColumnId],
+  (hasExtraColumn, extraColumnId) => (hasExtraColumn ? extraColumnId : null)
+);
 
 export const getSelectedResizeBy = createSelector(
   [getToolResizeBy, getSelectedContext],
@@ -52,9 +59,14 @@ export const getSelectedRecolorBy = createSelector(
 );
 
 export const getSelectedBiomeFilter = createSelector(
-  [getToolBiomeFilterName, getSelectedContext],
-  (selectedBiomeFilterName, selectedContext) => {
-    if (!selectedBiomeFilterName || !selectedContext || selectedContext.filterBy.length === 0) {
+  [getToolBiomeFilterName, getSelectedContext, getHasExtraColumn],
+  (selectedBiomeFilterName, selectedContext, hasExtraColumn) => {
+    if (
+      !selectedBiomeFilterName ||
+      !selectedContext ||
+      selectedContext.filterBy.length === 0 ||
+      (ENABLE_REDESIGN_PAGES && !hasExtraColumn)
+    ) {
       return null;
     }
 
@@ -62,11 +74,6 @@ export const getSelectedBiomeFilter = createSelector(
       filterBy => filterBy.name === selectedBiomeFilterName
     );
   }
-);
-
-export const getColumnsNumber = createSelector(
-  getToolExtraColumnId,
-  extraColumnId => (extraColumnId ? MIN_COLUMNS_NUMBER + 1 : MIN_COLUMNS_NUMBER)
 );
 
 export const getVisibleNodes = createSelector(

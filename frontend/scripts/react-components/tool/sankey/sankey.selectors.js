@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import isEqual from 'lodash/isEqual';
-import { DETAILED_VIEW_MIN_NODE_HEIGHT, DETAILED_VIEW_SCALE, MIN_COLUMNS_NUMBER } from 'constants';
+import { DETAILED_VIEW_MIN_NODE_HEIGHT, DETAILED_VIEW_SCALE } from 'constants';
 import wrapSVGText from 'utils/wrapSVGText';
 import { translateText } from 'utils/transifex';
 import {
@@ -18,13 +18,12 @@ import mergeLinks from 'reducers/helpers/mergeLinks';
 import filterLinks from 'reducers/helpers/filterLinks';
 import splitLinksByColumn from 'reducers/helpers/splitLinksByColumn';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getHasExtraColumn, getColumnsNumber } from 'react-components/tool/tool.selectors';
 
 const getToolNodeHeights = state => state.toolLinks.data.nodeHeights;
 export const getToolColumns = state => state.toolLinks.data.columns;
-const getExtraColumnId = state => state.toolLinks.extraColumnId;
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolNodes = state => state.toolLinks.data.nodes;
-
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getToolExpandedNodesIds = state => state.toolLinks.expandedNodesIds;
 const getSankeySize = state => state.toolLayers.sankeySize;
@@ -32,13 +31,13 @@ const getDetailedView = state => state.toolLinks.detailedView;
 const getSankeyColumnsWidth = state => state.toolLinks.sankeyColumnsWidth;
 const getToolFlowsLoading = state => state.toolLinks.flowsLoading;
 
-export const getColumnNumber = createSelector(
-  getExtraColumnId,
-  extraColumnId => (extraColumnId ? MIN_COLUMNS_NUMBER + 1 : MIN_COLUMNS_NUMBER)
+const getExtraColumnId = createSelector(
+  [getHasExtraColumn, state => state.toolLinks.extraColumnId],
+  (hasExtraColumn, extraColumnId) => (hasExtraColumn ? extraColumnId : null)
 );
 
 export const getVisibleNodesByColumn = createSelector(
-  [getVisibleNodes, getToolColumns, getToolNodeHeights, getColumnNumber],
+  [getVisibleNodes, getToolColumns, getToolNodeHeights, getColumnsNumber],
   (visibleNodes, columns, nodeHeights, columnsNumber) => {
     if (!visibleNodes || !columns) {
       return [];
@@ -113,9 +112,8 @@ export const getIsReExpand = createSelector(
 );
 
 export const getGapBetweenColumns = createSelector(
-  [getSankeySize, getSankeyColumnsWidth, getExtraColumnId],
-  (sankeySize, sankeyColumnsWidth, extraColumnId) => {
-    const columnNumber = extraColumnId ? MIN_COLUMNS_NUMBER + 1 : MIN_COLUMNS_NUMBER;
+  [getSankeySize, getSankeyColumnsWidth, getColumnsNumber],
+  (sankeySize, sankeyColumnsWidth, columnNumber) => {
     const availableLinkSpace = sankeySize[0] - columnNumber * sankeyColumnsWidth;
     return availableLinkSpace / (columnNumber - 1);
   }

@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { getSelectedContext } from 'reducers/app.selectors';
+import { MIN_COLUMNS_NUMBER } from 'constants';
 
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getToolNodes = state => state.toolLinks.data.nodes;
@@ -24,7 +25,7 @@ export const getSelectedColumnsIds = createSelector(
       return [];
     }
 
-    return selectedContext.defaultColumns.reduce((acc, column) => {
+    const selectedColumns = selectedContext.defaultColumns.reduce((acc, column) => {
       let id = column.id;
       if (selectedColumnsIds && selectedColumnsIds[column.group]) {
         id = selectedColumnsIds[column.group];
@@ -37,7 +38,22 @@ export const getSelectedColumnsIds = createSelector(
 
       return acc;
     }, []);
+    return selectedColumns;
   }
+);
+
+export const getHasExtraColumn = createSelector(
+  [getExtraColumnId, getToolColumns, getSelectedColumnsIds],
+  (extraColumnId, columns, selectedColumnsIds) => {
+    if (!columns || !extraColumnId) return false;
+    const selectedColumns = Object.values(columns).filter(c => selectedColumnsIds.includes(c.id));
+    return selectedColumns.some(c => c.filterTo === extraColumnId);
+  }
+);
+
+export const getColumnsNumber = createSelector(
+  getHasExtraColumn,
+  hasExtraColumn => (hasExtraColumn ? MIN_COLUMNS_NUMBER + 1 : MIN_COLUMNS_NUMBER)
 );
 
 export const getSelectedNodesData = createSelector(

@@ -2,6 +2,7 @@ import {
   getSelectedRecolorBy,
   getSelectedResizeBy
 } from 'react-components/tool-links/tool-links.selectors';
+import { getHasExtraColumn } from 'react-components/tool/tool.selectors';
 import {
   getSankeyMaxHeight,
   getHasExpandedNodesIds,
@@ -46,7 +47,7 @@ const mapStateToProps = state => ({
   highlightedNodeId: state.toolLinks.highlightedNodeId,
   selectedMapDimensions: getSelectedMapDimensionsData(state),
   toolLayout: state.toolLayers.toolLayout,
-  extraColumnId: state.toolLinks.extraColumnId,
+  extraColumnId: getHasExtraColumn(state) && state.toolLinks.extraColumnId,
   selectedBiomeFilterName: state.toolLinks.selectedBiomeFilterName
 });
 
