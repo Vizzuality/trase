@@ -48,6 +48,10 @@ function setNodes(state, action) {
   });
 }
 
+const getSelectedBiomeFilterNameNode = state =>
+  state.data.nodes &&
+  Object.values(state.data.nodes).find(node => node.name === state.selectedBiomeFilterName);
+
 const toolLinksReducer = {
   tool(state, action) {
     if (action.payload?.serializerParams) {
@@ -220,23 +224,39 @@ const toolLinksReducer = {
       };
       draft.selectedNodesIds = state.selectedNodesIds.filter(isInColumn);
       draft.expandedNodesIds = state.expandedNodesIds.filter(isInColumn);
+
+      // Add expanded source node for the extra column
+      const column = draft.data.columns[columnId];
+      if (state.extraColumnId && column.filterTo === state.extraColumnId) {
+        const sourceNode = getSelectedBiomeFilterNameNode(state);
+        draft.selectedNodesIds = draft.selectedNodesIds.concat(sourceNode.id);
+        draft.expandedNodesIds = draft.expandedNodesIds.concat(sourceNode.id);
+      }
     });
   },
   [TOOL_LINKS__CHANGE_EXTRA_COLUMN](state, action) {
     return immer(state, draft => {
       const { columnId } = action.payload;
-      draft.extraColumnId = columnId;
-      const columnNode =
-        state.data.nodes &&
-        Object.values(state.data.nodes).find(node => node.name === state.selectedBiomeFilterName);
+      const columnNode = getSelectedBiomeFilterNameNode(state);
+      const notWereInColumn = nodeId => {
+        const node = draft.data.nodes[nodeId];
+        const column = draft.data.columns[node.columnId];
+        return column.id !== state.extraColumnId;
+      };
       if (columnId) {
+        // Open extra column
         if (columnNode) {
           draft.expandedNodesIds = state.expandedNodesIds.concat(columnNode?.id);
         }
       } else {
-        draft.expandedNodesIds = state.expandedNodesIds.filter(node => node !== columnNode?.id);
+        // Close extra column
+        draft.expandedNodesIds = state.expandedNodesIds
+          .filter(nodeId => nodeId !== columnNode?.id)
+          .filter(notWereInColumn);
+        draft.selectedNodesIds = state.selectedNodesIds.filter(notWereInColumn);
       }
       draft.selectedBiomeFilterName = action.payload.columnName || null;
+      draft.extraColumnId = columnId;
     });
   },
   [TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH](state, action) {
