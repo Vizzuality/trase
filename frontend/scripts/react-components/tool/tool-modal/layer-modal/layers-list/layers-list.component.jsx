@@ -26,7 +26,7 @@ export default function LayersList(props) {
     selectedTab === LAYER_TAB_NAMES.unit
       ? itemProps.item && !itemProps.item.isGroup && selectedItemIds?.includes(itemProps.item.uid)
       : selectedItemIds?.includes(itemProps.item.id);
-  const height = window.innerHeight * 0.9 - 155;
+  const height = window.innerHeight * 0.9 - 250;
   return (
     <GridList
       items={items}

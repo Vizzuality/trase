@@ -24,7 +24,12 @@
       box-shadow: unset;
 
       .options {
-        display: block;
+        display: flex;
+        flex-direction: column;
+
+        &.flipped {
+          flex-direction: column-reverse;
+        }
       }
     }
 
