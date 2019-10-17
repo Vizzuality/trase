@@ -8,7 +8,8 @@ import {
 } from 'react-components/tool/tool.actions';
 import {
   getHighlightedNodesData,
-  getSelectedColumnsIds
+  getSelectedColumnsIds,
+  getHasExtraColumn
 } from 'react-components/tool/tool.selectors';
 import {
   getVisibleNodes,
@@ -57,7 +58,9 @@ const mapStateToProps = state => {
     selectedMapDimensions: getSelectedMapDimensionsData(state),
     highlightedNodesData: getHighlightedNodesData(state),
     coordinates: state.toolLayers.highlightedNodeCoordinates,
-    nodeAttributes: state.toolLinks.data.nodeAttributes
+    nodeAttributes: state.toolLinks.data.nodeAttributes,
+    columns: state.toolLinks.data.columns,
+    extraColumnId: getHasExtraColumn(state) && state.toolLinks.extraColumnId
   };
 };
 
@@ -74,8 +77,8 @@ const methodProps = [
   },
   {
     name: 'selectPolygonType',
-    compared: ['selectedColumnsIds', 'mapVectorData'],
-    returned: ['selectedColumnsIds']
+    compared: ['selectedColumnsIds', 'mapVectorData', 'columns', 'extraColumnId'],
+    returned: ['selectedColumnsIds', 'columns', 'extraColumnId']
   },
   {
     name: 'selectPolygons',

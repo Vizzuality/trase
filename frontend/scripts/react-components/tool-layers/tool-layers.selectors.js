@@ -44,11 +44,14 @@ export const getHighlightedNodesGeoIds = createSelector(
 
 export const getSelectedGeoColumn = createSelector(
   [getToolColumns, getSelectedColumnsIds],
-  (columns, selectedColumnsIds) =>
-    columns &&
-    Object.values(columns).find(column =>
-      selectedColumnsIds.some(id => id === column.id && column.isGeo)
-    )
+  (columns, selectedColumnsIds) => {
+    if (!columns) return null;
+    const selectedGeoColumns = Object.values(columns).filter(
+      column => column.isGeo && selectedColumnsIds.includes(column.id)
+    );
+    // Get extraColumn if exists as it is the last geo column
+    return selectedGeoColumns[selectedGeoColumns.length - 1];
+  }
 );
 
 export const getSelectedMapDimensionsUids = createSelector(
@@ -75,6 +78,7 @@ export const getSelectedMapDimensionsUids = createSelector(
         const uids = Object.values(mapDimensions)
           .filter(dimension => dimension.isDefault)
           .map(selectedDimension => selectedDimension.uid);
+
         return [uids[0] || null, uids[1] || null];
       }
     }

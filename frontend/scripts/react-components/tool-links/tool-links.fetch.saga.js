@@ -9,6 +9,7 @@ import { fetchWithCancel } from 'utils/saga-utils';
 import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
 import { NUM_NODES_DETAILED, NUM_NODES_EXPANDED, NUM_NODES_SUMMARY } from 'constants';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedGeoColumn } from 'react-components/tool-layers/tool-layers.selectors';
 import {
   getSelectedResizeBy,
   getSelectedRecolorBy,
@@ -160,12 +161,10 @@ export function* getToolNodesByLink(selectedContext, { fetchAllNodes } = {}) {
 }
 
 export function* getToolGeoColumnNodes(selectedContext) {
-  const selectedColumnsIds = yield select(getSelectedColumnsIds);
-
+  const geoColumn = yield select(getSelectedGeoColumn);
   // TODO: this is not the best way to read the geoColumn,
   //  the backend should provide it within contexts.defaultColumns
-  const geoColumnId = selectedColumnsIds[0];
-  const params = { context_id: selectedContext.id, node_types_ids: geoColumnId };
+  const params = { context_id: selectedContext.id, node_types_ids: geoColumn?.id };
   const url = getURLFromParams(GET_ALL_NODES_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);
   try {

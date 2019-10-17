@@ -41,10 +41,15 @@ export default function(selectedMapDimensionsUids, nodes, attributes, columns, m
         bucket[0].length + 1
       );
 
+  const choroplethColumns = Object.values(columns).filter(
+    c => c.isGeo && Object.keys(nodes).some(nodeId => nodes[nodeId].columnId === c.id)
+  );
+  const lastChoroplethColumn = choroplethColumns[choroplethColumns.length - 1];
   const geoNodesIds = Object.keys(nodes).filter(nodeId => {
     const node = nodes[nodeId];
-    const column = columns[node.columnId];
-    return node.geoId !== undefined && node.geoId !== null && column.isGeo;
+    return (
+      node.geoId !== undefined && node.geoId !== null && node.columnId === lastChoroplethColumn.id
+    );
   });
 
   const choropleth = {};
