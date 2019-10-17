@@ -49,7 +49,7 @@ function Dropdown(props) {
       initialSelectedItem={initialValue}
       selectedItem={value}
       itemToString={itemToString}
-      onChange={onChange}
+      onChange={item => item !== null && onChange(item)}
     >
       {({
         isOpen,
@@ -77,7 +77,7 @@ function Dropdown(props) {
                 <DropdownButton
                   innerRef={p.ref}
                   getToggleButtonProps={getToggleButtonProps}
-                  inputValue={inputValue}
+                  inputValue={inputValue || itemToString(value)}
                   arrowType={props.arrowType}
                   selectedValueOverride={props.selectedValueOverride}
                   label={props.label}
