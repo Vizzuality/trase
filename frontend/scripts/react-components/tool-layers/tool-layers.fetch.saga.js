@@ -5,7 +5,6 @@ import {
   GET_MAP_BASE_DATA_URL
 } from 'utils/getURLFromParams';
 import { fetchWithCancel } from 'utils/saga-utils';
-import { getSelectedNodesColumnsPos } from 'react-components/tool-links/tool-links.selectors';
 import {
   setMapDimensions,
   setLinkedGeoIds
@@ -19,17 +18,18 @@ import { getSelectedGeoColumn } from 'react-components/tool-layers/tool-layers.s
 
 export function* getLinkedGeoIds() {
   const {
-    toolLinks: { selectedNodesIds }
+    toolLinks: {
+      selectedNodesIds,
+      data: { nodes }
+    }
   } = yield select();
-  const selectedNodesColumnsPos = yield select(getSelectedNodesColumnsPos);
   const selectedYears = yield select(getSelectedYears);
   const selectedContext = yield select(getSelectedContext);
   const selectedGeoColumn = yield select(getSelectedGeoColumn);
-
   const selectedNonGeoNodeIds = selectedNodesIds.filter(
-    (nodeId, index) => selectedNodesColumnsPos[index] !== 0
+    nodeId => nodes && nodes[nodeId] && !nodes[nodeId].geoId
   );
-  // when selection only contains geo nodes (column 0), we should not call get_linked_geoids
+  // when selection only contains geo nodes, we should not call get_linked_geoids
   if (selectedNonGeoNodeIds.length === 0) {
     yield put(setLinkedGeoIds([]));
     return;

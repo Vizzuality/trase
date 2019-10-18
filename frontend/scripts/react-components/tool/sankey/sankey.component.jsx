@@ -71,7 +71,7 @@ function useMenuOptions(props, hoveredSelectedNode) {
     if (ENABLE_REDESIGN_PAGES && nodeType && activeColumn?.filterTo && columns?.length) {
       const columnToExpand = toolColumns[activeColumn.filterTo];
 
-      if (extraColumnId || selectedBiomeFilterName) {
+      if (extraColumnId) {
         items.push({
           id: 'remove-column',
           label: `Close ${pluralize(columnToExpand.name)}`,
