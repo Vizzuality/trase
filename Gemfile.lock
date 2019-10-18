@@ -279,7 +279,8 @@ GEM
     polyamorous (2.3.0)
       activerecord (>= 5.0)
     public_suffix (3.0.3)
-    puma (3.12.0)
+    puma (4.2.1)
+      nio4r (~> 2.0)
     rack (2.0.7)
     rack-cors (1.0.3)
     rack-protection (2.0.7)
@@ -498,7 +499,7 @@ DEPENDENCIES
   pg (~> 0.18)
   pg_csv
   pg_search
-  puma (~> 3.0)
+  puma (~> 4.2)
   rack-cors (~> 1.0)
   rails (~> 5.2.3)
   rails-controller-testing
