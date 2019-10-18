@@ -1,14 +1,4 @@
 GIT
-  remote: https://github.com/activeadmin/inherited_resources.git
-  revision: bf4a5bac90ea0bfb00b236ea9cb625fc9c19e250
-  specs:
-    inherited_resources (1.9.0)
-      actionpack (>= 5.0, < 5.3)
-      has_scope (~> 0.6)
-      railties (>= 5.0, < 5.3)
-      responders
-
-GIT
   remote: https://github.com/galetahub/ckeditor.git
   revision: dc2cef2c2c3358124ebd86ca2ef2335cc898b41f
   specs:
@@ -207,6 +197,11 @@ GEM
     http_parser.rb (0.6.0)
     i18n (1.7.0)
       concurrent-ruby (~> 1.0)
+    inherited_resources (1.11.0)
+      actionpack (>= 5.0, < 6.1)
+      has_scope (~> 0.6)
+      railties (>= 5.0, < 6.1)
+      responders (>= 2, < 4)
     jaro_winkler (1.5.3)
     jbuilder (2.9.1)
       activesupport (>= 4.2.0)
@@ -491,7 +486,6 @@ DEPENDENCIES
   dotenv-rails (~> 2.7)
   enumerate_it (~> 1.4.1)
   factory_bot_rails
-  inherited_resources!
   jbuilder (~> 2.9)
   jquery-rails
   json-schema
