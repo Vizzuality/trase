@@ -18,9 +18,10 @@ function createNodesPanelReducer(name, moduleOptions = {}) {
     SET_SELECTED_ID,
     SET_SELECTED_IDS,
     SET_ACTIVE_TAB,
+    SET_TABS,
     SET_ACTIVE_ITEMS_WITH_SEARCH,
     SET_SEARCH_RESULTS
-  } = createNodesPanelActions(name);
+  } = createNodesPanelActions(name, moduleOptions);
   const initialState = {
     data: {
       byId: [],
@@ -37,6 +38,11 @@ function createNodesPanelReducer(name, moduleOptions = {}) {
     initialState.selectedNodeId = null;
   }
 
+  if (moduleOptions.hasTabs) {
+    initialState.tabs = [];
+    initialState.activeTab = null;
+  }
+
   const reducer = {
     [NODES_PANELS__SET_INSTANCE_ID](state) {
       return immer(state, draft => {
@@ -51,9 +57,13 @@ function createNodesPanelReducer(name, moduleOptions = {}) {
     [SET_DATA](state, action) {
       return immer(state, draft => {
         const { data } = action.payload;
-        const newItems = data.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
-        draft.data.byId = data ? Object.keys(newItems) : [];
-        draft.data.nodes = newItems;
+        if (data) {
+          const newItems = data.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
+          draft.data.byId = data ? Object.keys(newItems) : [];
+          draft.data.nodes = newItems;
+        } else {
+          draft.data = initialState.data;
+        }
       });
     },
     [SET_MORE_DATA](state, action) {
@@ -78,6 +88,22 @@ function createNodesPanelReducer(name, moduleOptions = {}) {
         draft.data.nodes = { ...state.data.nodes, ...newItems };
         draft.data.byId = Array.from(new Set([...state.data.byId, ...Object.keys(newItems)]));
       });
+    },
+    [SET_TABS](state, action) {
+      if (moduleOptions.hasTabs) {
+        return immer(state, draft => {
+          const { data } = action.payload;
+          const getSection = n => n.section && n.section.toLowerCase();
+          const sectionTabs = data.find(item => getSection(item) === name);
+          draft.tabs = sectionTabs?.tabs;
+          draft.prefixes = {};
+          draft.tabs.forEach(item => {
+            draft.prefixes[item.name] = item.prefix;
+          });
+          draft.page = initialState.page;
+        });
+      }
+      return state;
     },
     [SET_LOADING_ITEMS](state, action) {
       const { loadingItems } = action.payload;
@@ -122,7 +148,7 @@ function createNodesPanelReducer(name, moduleOptions = {}) {
       if (moduleOptions.hasTabs) {
         return immer(state, draft => {
           const { activeTab } = action.payload;
-          draft.activeTab = activeTab;
+          draft.activeTab = activeTab.id;
           draft.page = initialState.page;
         });
       }
@@ -197,7 +223,11 @@ const nodesPanelReducer = combineReducers({
     action === NODES_PANELS__SET_INSTANCE_ID ? action.payload.instanceId : state,
   countries: createNodesPanelReducer('countries'),
   commodities: createNodesPanelReducer('commodities'),
-  sources: createNodesPanelReducer('sources', { hasSearch: true, hasMultipleSelection: true }),
+  sources: createNodesPanelReducer('sources', {
+    hasTabs: true,
+    hasSearch: true,
+    hasMultipleSelection: true
+  }),
   destinations: createNodesPanelReducer('destinations', {
     hasSearch: true,
     hasMultipleSelection: true

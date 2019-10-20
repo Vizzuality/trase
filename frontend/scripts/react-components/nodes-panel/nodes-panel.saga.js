@@ -2,45 +2,38 @@ import { select, all, fork, takeLatest, takeEvery } from 'redux-saga/effects';
 import { createNodesPanelActions } from 'react-components/nodes-panel/nodes-panel.actions';
 import { createNodesPanelFetchSaga } from 'react-components/nodes-panel/nodes-panel.fetch.saga';
 
-export function createNodesPanelSaga(name, moduleOptions) {
+export function createNodesPanelSaga(name, moduleOptions = {}) {
   const {
     SET_SELECTED_ID,
-    SET_MISSING_DATA,
+    // SET_MISSING_DATA,
     GET_SEARCH_RESULTS,
-    SET_PANEL_TABS,
+    SET_TABS,
     FETCH_DATA,
     SET_ACTIVE_ITEMS_WITH_SEARCH,
     SET_ACTIVE_TAB,
     SET_PANEL_PAGE
-  } = createNodesPanelActions(name);
+  } = createNodesPanelActions(name, moduleOptions);
   const { getData, getSectionTabs, getMoreData, fetchSearchResults } = createNodesPanelFetchSaga(
-    name
+    name,
+    moduleOptions
   );
 
-  function* fetchDataMissingItemDownload() {
-    function* onMissingItemDownload() {
-      yield fork(getSectionTabs, name);
-    }
-
-    yield takeLatest([SET_MISSING_DATA], onMissingItemDownload);
-  }
+  // function* fetchDataMissingItemDownload() {
+  //   function* onMissingItemDownload() {
+  //     yield fork(getSectionTabs, name);
+  //   }
+  //
+  //   yield takeLatest([SET_MISSING_DATA], onMissingItemDownload);
+  // }
 
   function* fetchData() {
     function* onFetchRequest() {
       const reducer = yield select(state => state.nodesPanel[name]);
 
-      function* fetchPanelData() {
-        if (reducer.data.byId.length > 0) {
-          yield fork(getMoreData, reducer);
-        } else {
-          yield fork(getData, reducer);
-        }
-      }
-
       if (moduleOptions.hasTabs) {
         yield fork(getSectionTabs, name);
       }
-      yield fork(fetchPanelData);
+      yield fork(getData, reducer);
     }
     yield takeLatest([FETCH_DATA], onFetchRequest);
   }
@@ -70,7 +63,7 @@ export function createNodesPanelSaga(name, moduleOptions) {
       }
     }
 
-    yield takeEvery([SET_PANEL_TABS], onTabsFetch);
+    yield takeEvery([SET_TABS], onTabsFetch);
   }
   /**
    * Fetches the data for the activeTab if the data hasn't been loaded.
@@ -93,7 +86,7 @@ export function createNodesPanelSaga(name, moduleOptions) {
   function* onItemChange(action) {
     const { activeItem } = action.payload;
     // for now, we just need to recalculate the tabs when selecting a new country
-    if (activeItem) {
+    if (activeItem && moduleOptions.hasTabs) {
       yield fork(getSectionTabs, name);
     }
   }
@@ -115,25 +108,31 @@ export function createNodesPanelSaga(name, moduleOptions) {
     yield takeLatest(SET_PANEL_PAGE, onPageChange);
   }
 
-  return [
-    fetchData,
-    fetchDataOnTabsFetch,
-    fetchDataOnTabChange,
-    fetchDataOnItemChange,
-    fetchDataOnPageChange,
-    fetchDataOnSearch,
-    fetchDataMissingItemDownload
-  ];
+  const sagas = [fetchData, fetchDataOnItemChange, fetchDataOnPageChange];
+
+  if (moduleOptions.hasSearch) {
+    sagas.push(fetchDataOnSearch);
+  }
+
+  if (moduleOptions.hasTabs) {
+    sagas.push(fetchDataOnTabsFetch, fetchDataOnTabChange);
+  }
+
+  return sagas;
 }
 
 export default function* nodesPanelSagas() {
   const sagas = [
     ...createNodesPanelSaga('countries'),
     ...createNodesPanelSaga('commodities'),
-    ...createNodesPanelSaga('sourcing', { hasSearch: true, hasMultipleSelection: true }),
-    ...createNodesPanelSaga('destinations', { hasSearch: true, hasMultipleSelection: true }),
-    ...createNodesPanelSaga('importers', { hasSearch: true, hasMultipleSelection: true }),
-    ...createNodesPanelSaga('exporters', { hasSearch: true, hasMultipleSelection: true })
+    ...createNodesPanelSaga('sources', {
+      hasTabs: true,
+      hasSearch: true,
+      hasMultipleSelection: true
+    })
+    // ...createNodesPanelSaga('destinations', { hasSearch: true, hasMultipleSelection: true }),
+    // ...createNodesPanelSaga('importers', { hasSearch: true, hasMultipleSelection: true }),
+    // ...createNodesPanelSaga('exporters', { hasSearch: true, hasMultipleSelection: true })
   ];
   yield all(sagas.map(saga => fork(saga)));
 }

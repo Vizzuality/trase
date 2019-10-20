@@ -1,0 +1,11 @@
+@import 'styles/settings';
+
+.c-country-sources-panel {
+  width: 560px;
+  margin: 0 auto;
+
+  @media screen and (min-width: $breakpoint-laptop) {
+    width: initial;
+    margin: initial;
+  }
+}

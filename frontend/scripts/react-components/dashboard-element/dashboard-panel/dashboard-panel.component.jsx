@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import SourcesPanel from 'react-components/dashboard-element/dashboard-panel/sources-panel.component';
+import CountrySourcesPanel from 'react-components/nodes-panel/country-sources-panel';
 import DestinationsPanel from 'react-components/dashboard-element/dashboard-panel/destinations-panel.component';
 import CompaniesPanel from 'react-components/dashboard-element/dashboard-panel/companies-panel.component';
-import CommoditiesPanel from 'react-components/dashboard-element/dashboard-panel/commodities-panel.component';
+import CommoditiesPanel from 'react-components/nodes-panel/commodities-panel';
 import DashboardModalFooter from 'react-components/dashboard-element/dashboard-modal-footer/dashboard-modal-footer.component';
 import addApostrophe from 'utils/addApostrophe';
 import { DASHBOARD_STEPS } from 'constants';
@@ -49,61 +49,21 @@ class DashboardPanel extends Component {
       activePanelId,
       searchResults,
       getSearchResults,
-      clearActiveItems,
       setActiveTab,
-      setActiveCountryId,
-      setActiveCommodityId,
       setActiveItem,
-      sourcesData,
-      countriesData,
       companiesData,
-      commoditiesData,
       destinationsData,
       setSearchResult,
-      sourcesTabs,
       companiesTabs,
-      sourcesActiveTab,
-      activeSources,
       activeCompanies,
       activeDestinations,
-      companiesActiveTab,
-      countriesActiveItems,
-      commoditiesActiveItems
+      companiesActiveTab
     } = this.props;
     switch (step) {
       case DASHBOARD_STEPS.sources:
-        return (
-          <SourcesPanel
-            tabs={sourcesTabs}
-            countries={countriesData}
-            page={pages.sources}
-            getMoreItems={getMoreItems}
-            searchSources={searchResults}
-            getSearchResults={getSearchResults}
-            loading={loadingItems}
-            clearItems={() => clearActiveItems(activePanelId)}
-            activeCountryItems={countriesActiveItems}
-            sourcesActiveTab={sourcesActiveTab}
-            activeSourcesItem={activeSources}
-            onSelectCountry={setActiveCountryId}
-            onSelectSourceTab={item => setActiveTab(item?.id, activePanelId)}
-            setSearchResult={item => setSearchResult(item, activePanelId)}
-            onSelectSourceValue={item => setActiveItem(item, activePanelId)}
-            nodeTypeRenderer={DashboardPanel.sourcesNodeTypeRenderer}
-            sources={sourcesData}
-          />
-        );
+        return <CountrySourcesPanel nodeTypeRenderer={DashboardPanel.sourcesNodeTypeRenderer} />;
       case DASHBOARD_STEPS.commodities:
-        return (
-          <CommoditiesPanel
-            page={pages.commodities}
-            getMoreItems={getMoreItems}
-            loading={loadingItems}
-            commodities={commoditiesData}
-            onSelectCommodity={setActiveCommodityId}
-            activeCommodities={commoditiesActiveItems}
-          />
-        );
+        return <CommoditiesPanel />;
       case DASHBOARD_STEPS.destinations:
         return (
           <DestinationsPanel
@@ -246,16 +206,10 @@ class DashboardPanel extends Component {
 
 DashboardPanel.propTypes = {
   onBack: PropTypes.func,
-  sources: PropTypes.object,
   countries: PropTypes.array,
-  sourcesTabs: PropTypes.array,
   companiesTabs: PropTypes.array,
-  sourcesData: PropTypes.array,
-  countriesData: PropTypes.array,
   companiesData: PropTypes.array,
-  commoditiesData: PropTypes.array,
   destinationsData: PropTypes.array,
-  sourcesActiveTab: PropTypes.number,
   companiesActiveTab: PropTypes.number,
   pages: PropTypes.shape({
     sources: PropTypes.number.isRequired,
@@ -277,19 +231,14 @@ DashboardPanel.propTypes = {
   dynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
-  countriesActiveItems: PropTypes.array,
   setActiveTab: PropTypes.func.isRequired,
   setActiveItem: PropTypes.func.isRequired,
-  setActiveCountryId: PropTypes.func.isRequired,
-  setActiveCommodityId: PropTypes.func.isRequired,
   destinations: PropTypes.array.isRequired,
-  activeSources: PropTypes.array.isRequired,
   activeCompanies: PropTypes.array.isRequired,
   activeDestinations: PropTypes.array.isRequired,
   clearActiveItems: PropTypes.func.isRequired,
   setSearchResult: PropTypes.func.isRequired,
-  getSearchResults: PropTypes.func.isRequired,
-  commoditiesActiveItems: PropTypes.array.isRequired
+  getSearchResults: PropTypes.func.isRequired
 };
 
 export default DashboardPanel;

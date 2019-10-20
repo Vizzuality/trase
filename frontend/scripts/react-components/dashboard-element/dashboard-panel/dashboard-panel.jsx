@@ -5,8 +5,6 @@ import {
   clearDashboardPanel,
   setDashboardPanelPage,
   setDashboardPanelActiveTab,
-  setDashboardSelectedCountryId,
-  setDashboardSelectedCommodityId,
   setDashboardPanelActiveItems,
   getDashboardPanelSearchResults,
   setDashboardPanelActiveItemsWithSearch,
@@ -15,15 +13,10 @@ import {
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.component';
 import {
   getIsDisabled,
-  getSourcesTabs,
   getCompaniesTabs,
   getDynamicSentence,
-  getSourcesDataByTab,
-  getSourcesActiveTab,
   getCompaniesActiveTab,
-  getCompaniesDataByTab,
-  getCountriesActiveItems,
-  getCommoditiesActiveItems
+  getCompaniesDataByTab
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { getCountryNamesByCountryId } from 'reducers/app.selectors';
 
@@ -33,7 +26,6 @@ const mapStateToProps = (state, ownProps) => {
     loadingItems,
     activePanelId,
     searchResults,
-    sources,
     companies,
     destinations,
     pages,
@@ -46,19 +38,11 @@ const mapStateToProps = (state, ownProps) => {
     loadingItems,
     activePanelId,
     searchResults,
-    activeSources: sources,
     activeCompanies: companies,
     activeDestinations: destinations,
-    sourcesData: getSourcesDataByTab(state),
-    countriesData: data.countries,
     companiesData: getCompaniesDataByTab(state),
-    commoditiesData: data.commodities,
     destinationsData: data.destinations,
-    countriesActiveItems: getCountriesActiveItems(state),
-    commoditiesActiveItems: getCommoditiesActiveItems(state),
-    sourcesTabs: getSourcesTabs(state),
     companiesTabs: getCompaniesTabs(state),
-    sourcesActiveTab: getSourcesActiveTab(state),
     companiesActiveTab: getCompaniesActiveTab(state),
     isDisabled: getIsDisabled(state, ownProps),
     dynamicSentenceParts: getDynamicSentence(state),
@@ -71,8 +55,6 @@ const mapDispatchToProps = {
   clearActiveItems: clearDashboardPanel,
   setActiveTab: setDashboardPanelActiveTab,
   setActiveItem: setDashboardPanelActiveItems,
-  setActiveCountryId: setDashboardSelectedCountryId,
-  setActiveCommodityId: setDashboardSelectedCommodityId,
   getSearchResults: getDashboardPanelSearchResults,
   setSearchResult: setDashboardPanelActiveItemsWithSearch,
   goToDashboard: goToDashboardFn
