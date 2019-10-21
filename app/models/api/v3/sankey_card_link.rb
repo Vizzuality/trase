@@ -9,7 +9,7 @@
 #  subtitle(subtitle of the quick sankey card)                              :text
 #  start_year                                                               :integer          not null
 #  end_year                                                                 :integer          not null
-#  biome_id                                                                 :bigint(8)
+#  node_id                                                                  :bigint(8)
 #  level1(level used when commodity and country are not selected)           :boolean          default(FALSE), not null
 #  level2(level used when commodity is selected)                            :boolean          default(FALSE), not null
 #  level3(level used when commodity and country are selected)               :boolean          default(FALSE), not null
@@ -20,19 +20,19 @@
 #
 # Indexes
 #
-#  index_sankey_card_links_on_biome_id            (biome_id)
 #  index_sankey_card_links_on_commodity_id        (commodity_id)
 #  index_sankey_card_links_on_cont_attribute_id   (cont_attribute_id)
 #  index_sankey_card_links_on_country_id          (country_id)
 #  index_sankey_card_links_on_ncont_attribute_id  (ncont_attribute_id)
+#  index_sankey_card_links_on_node_id             (node_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (biome_id => nodes.id)
 #  fk_rails_...  (commodity_id => commodities.id) ON DELETE => cascade
 #  fk_rails_...  (cont_attribute_id => attributes.id) ON DELETE => cascade
 #  fk_rails_...  (country_id => countries.id) ON DELETE => cascade
 #  fk_rails_...  (ncont_attribute_id => attributes.id) ON DELETE => cascade
+#  fk_rails_...  (node_id => nodes.id)
 #
 
 module Api
