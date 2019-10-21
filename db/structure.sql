@@ -6150,7 +6150,7 @@ CREATE TABLE public.sankey_card_links (
     updated_at timestamp without time zone NOT NULL,
     start_year integer NOT NULL,
     end_year integer NOT NULL,
-    biome_id bigint,
+    node_id bigint,
     level1 boolean DEFAULT false NOT NULL,
     level2 boolean DEFAULT false NOT NULL,
     level3 boolean DEFAULT false NOT NULL,
@@ -8748,13 +8748,6 @@ CREATE INDEX index_sankey_card_link_nodes_on_sankey_card_link_id ON public.sanke
 
 
 --
--- Name: index_sankey_card_links_on_biome_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_sankey_card_links_on_biome_id ON public.sankey_card_links USING btree (biome_id);
-
-
---
 -- Name: index_sankey_card_links_on_commodity_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8780,6 +8773,13 @@ CREATE INDEX index_sankey_card_links_on_country_id ON public.sankey_card_links U
 --
 
 CREATE INDEX index_sankey_card_links_on_ncont_attribute_id ON public.sankey_card_links USING btree (ncont_attribute_id);
+
+
+--
+-- Name: index_sankey_card_links_on_node_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sankey_card_links_on_node_id ON public.sankey_card_links USING btree (node_id);
 
 
 --
@@ -9775,7 +9775,7 @@ ALTER TABLE ONLY public.download_quants
 --
 
 ALTER TABLE ONLY public.sankey_card_links
-    ADD CONSTRAINT fk_rails_e3c8c4d772 FOREIGN KEY (biome_id) REFERENCES public.nodes(id);
+    ADD CONSTRAINT fk_rails_e3c8c4d772 FOREIGN KEY (node_id) REFERENCES public.nodes(id);
 
 
 --
@@ -9961,6 +9961,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191008083758'),
 ('20191011112339'),
 ('20191014111756'),
-('20191015095615');
+('20191015095615'),
+('20191021084412');
 
 
