@@ -51,7 +51,7 @@ module Api
         'selectedYears' => :selected_years,
         'selectedColumnsIds' => :selected_columns_ids,
         'selectedNodesIds' => :selected_nodes_ids,
-        'selectedBiomeFilterName' => :selected_biome_filter_name
+        'extraColumnNodeId' => :extra_column_node_id
       }.freeze
 
       belongs_to :commodity
@@ -65,9 +65,9 @@ module Api
                  foreign_key: 'ncont_attribute_id',
                  inverse_of: :ncont_attribute_sankey_card_links,
                  optional: true
-      belongs_to :biome,
+      belongs_to :node,
                  class_name: 'Api::V3::Node',
-                 foreign_key: 'biome_id',
+                 foreign_key: 'node_id',
                  inverse_of: :sankey_card_links,
                  optional: true
       has_many :sankey_card_link_nodes, dependent: :destroy
@@ -97,7 +97,7 @@ module Api
         [
           {name: :commodity_id, table_class: Api::V3::Commodity},
           {name: :country_id, table_class: Api::V3::Country},
-          {name: :biome_id, table_class: Api::V3::Node}
+          {name: :node_id, table_class: Api::V3::Node}
         ]
       end
 
@@ -196,9 +196,9 @@ module Api
         end
       end
 
-      def extract_selected_biome_filter_name
-        self.biome = Api::V3::Node.find_by(
-          name: query_params['selectedBiomeFilterName']
+      def extract_extra_column_node_id
+        self.node = Api::V3::Node.find_by(
+          id: query_params['extraColumnNodeId']
         )
       end
 
@@ -295,8 +295,8 @@ module Api
           query_params['selectedRecolorBy'] = ncont_attribute_id
         end
 
-        return if query_params['selectedBiomeFilterName'] == biome&.name
-        query_params['selectedBiomeFilterName'] = biome&.name
+        return if query_params['extraColumnNodeId'] == node&.id
+        query_params['extraColumnNodeId'] = node&.id
       end
     end
   end
