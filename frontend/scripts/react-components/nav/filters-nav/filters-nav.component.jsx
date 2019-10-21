@@ -9,6 +9,7 @@ import NavLinksList from 'react-components/nav/nav-links.component';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.container';
 import NavDropdownSelector from 'react-components/nav/filters-nav/nav-dropdown-selector';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.container';
+import ToolSwitch from 'react-components/tool/tool-switch';
 import { NavLink } from 'redux-first-router-link';
 import Img from 'react-components/shared/img';
 import { TOOL_LAYOUT } from 'constants';
@@ -172,6 +173,7 @@ const FiltersNav = props => {
     return (
       <div className="filters-nav-left-section">
         {right.map(filter => renderFilter(filter))}
+        {ENABLE_REDESIGN_PAGES && <ToolSwitch />}
         {showSearch && <ToolSearch className="filters-nav-item -no-padding" />}
         {showLogisticsMapDownload && (
           <button onClick={openLogisticsMapDownload} className="filters-nav-item -no-padding -icon">
