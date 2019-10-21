@@ -12,7 +12,7 @@ import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 import {
   getSelectedResizeBy as getToolResizeBy,
   getSelectedRecolorBy as getToolRecolorBy,
-  getSelectedBiomeFilter as getToolSelectedBiome
+  getToolColumnFilterNodeId
 } from 'react-components/tool-links/tool-links.selectors';
 import { getVersionData } from 'react-components/tool/tool-modal/versioning-modal/versioning-modal.selectors';
 import { getRecolorByOptions } from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.selectors';
@@ -35,7 +35,7 @@ export const getToolYearsProps = createStructuredSelector({
 });
 
 export const getToolAdminLevelProps = createSelector(
-  [getToolSelectedBiome, getContextFilterBy],
+  [getToolColumnFilterNodeId, getContextFilterBy],
   (selectedFilter, filterBy) => {
     const [adminLevel] = filterBy || [];
     if (!adminLevel) return null;
@@ -46,7 +46,7 @@ export const getToolAdminLevelProps = createSelector(
       options: [
         { value: null, label: 'All' },
         ...adminLevel.nodes
-          .filter(node => node.name !== (selectedFilter && selectedFilter.name))
+          .filter(node => node.id !== (selectedFilter && selectedFilter.id))
           .map(node => ({ ...node, value: node.name, label: capitalize(node.name) }))
       ],
       value: selectedFilter

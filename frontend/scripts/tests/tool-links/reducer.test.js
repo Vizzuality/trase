@@ -39,11 +39,11 @@ import {
   selectColumn,
   selectNodes,
   selectSearchNode,
-  setToolNodes
-, changeExtraColumn } from 'react-components/tool-links/tool-links.actions';
+  setToolNodes,
+  changeExtraColumn
+} from 'react-components/tool-links/tool-links.actions';
 import { SET_NODE_ATTRIBUTES } from 'react-components/tool/tool.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
-
 
 test(TOOL_LINKS__SET_FLOWS_LOADING, () => {
   const action = setToolFlowsLoading(true);
@@ -303,8 +303,8 @@ describe(TOOL_LINKS__SELECT_COLUMN, () => {
 
 test(TOOL_LINKS__CHANGE_EXTRA_COLUMN, () => {
   const columnId = 3;
-  const regionName = 'REGION_NAME';
-  const action = changeExtraColumn(columnId, regionName);
+  const nodeId = 5;
+  const action = changeExtraColumn(columnId, nodeId);
   const state = {
     ...initialState
   };
@@ -312,7 +312,7 @@ test(TOOL_LINKS__CHANGE_EXTRA_COLUMN, () => {
   expect(newState).toEqual({
     ...state,
     extraColumnId: columnId,
-    selectedBiomeFilterName: regionName
+    extraColumnNodeId: nodeId
   });
 });
 

@@ -48,7 +48,7 @@ const mapStateToProps = state => ({
   selectedMapDimensions: getSelectedMapDimensionsData(state),
   toolLayout: state.toolLayers.toolLayout,
   extraColumnId: getHasExtraColumn(state) && state.toolLinks.extraColumnId,
-  selectedBiomeFilterName: state.toolLinks.selectedBiomeFilterName
+  extraColumnNodeId: state.toolLinks.extraColumnNodeId
 });
 
 const mapDispatchToProps = {

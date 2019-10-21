@@ -48,10 +48,6 @@ function setNodes(state, action) {
   });
 }
 
-const getSelectedBiomeFilterNameNode = state =>
-  state.data.nodes &&
-  Object.values(state.data.nodes).find(node => node.name === state.selectedBiomeFilterName);
-
 const toolLinksReducer = {
   tool(state, action) {
     if (action.payload?.serializerParams) {
@@ -66,8 +62,8 @@ const toolLinksReducer = {
           'detailedView',
           'selectedResizeBy',
           'selectedRecolorBy',
-          'selectedBiomeFilterName',
-          'extraColumnId'
+          'extraColumnId',
+          ENABLE_REDESIGN_PAGES ? 'extraColumnNodeId' : 'selectedBiomeFilterName'
         ]
       });
       return newState;
@@ -93,7 +89,8 @@ const toolLinksReducer = {
         selectedNodesIds: toolLinksInitialState.selectedNodesIds,
         expandedNodesIds: toolLinksInitialState.expandedNodesIds,
         selectedColumnsIds: toolLinksInitialState.selectedColumnsIds,
-        extraColumnId: toolLinksInitialState.extraColumnId
+        extraColumnId: toolLinksInitialState.extraColumnId,
+        extraColumnNodeId: toolLinksInitialState.extraColumnNodeId
       });
     });
   },
@@ -106,7 +103,8 @@ const toolLinksReducer = {
         detailedView: toolLinksInitialState.detailedView,
         forcedOverview: toolLinksInitialState.forcedOverview,
         selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
-        extraColumnId: toolLinksInitialState.extraColumnId
+        extraColumnId: toolLinksInitialState.extraColumnId,
+        extraColumnNodeId: toolLinksInitialState.extraColumnNodeId
       });
     });
   },
@@ -117,6 +115,7 @@ const toolLinksReducer = {
         selectedResizeBy: toolLinksInitialState.selectedResizeBy,
         selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
         extraColumnId: toolLinksInitialState.extraColumnId,
+        extraColumnNodeId: toolLinksInitialState.extraColumnNodeId,
         detailedView: toolLinksInitialState.detailedView,
         highlightedNodeId: toolLinksInitialState.highlightedNodeId,
         selectedNodesIds: toolLinksInitialState.selectedNodesIds,
@@ -226,9 +225,14 @@ const toolLinksReducer = {
       draft.expandedNodesIds = state.expandedNodesIds.filter(isInColumn);
 
       // Add expanded source node for the extra column
-      const column = draft.data.columns[columnId];
-      if (state.extraColumnId && column.filterTo === state.extraColumnId) {
-        const sourceNode = getSelectedBiomeFilterNameNode(state);
+      if (
+        ENABLE_REDESIGN_PAGES &&
+        state.extraColumnId &&
+        draft.data.columns[columnId].filterTo === state.extraColumnId
+      ) {
+        const sourceNode =
+          state.data.nodes &&
+          Object.values(state.data.nodes).find(node => node.id === state.extraColumnNodeId);
         draft.selectedNodesIds = draft.selectedNodesIds.concat(sourceNode.id);
         draft.expandedNodesIds = draft.expandedNodesIds.concat(sourceNode.id);
       }
@@ -236,10 +240,16 @@ const toolLinksReducer = {
   },
   [TOOL_LINKS__CHANGE_EXTRA_COLUMN](state, action) {
     return immer(state, draft => {
-      const { columnId } = action.payload;
-      const columnNode = getSelectedBiomeFilterNameNode(state);
-      const notWereInColumn = nodeId => {
-        const node = draft.data.nodes[nodeId];
+      const { columnId, nodeId } = action.payload;
+
+      const columnNode =
+        state.data.nodes &&
+        Object.values(state.data.nodes).find(
+          node => node.id === (state.extraColumnNodeId || nodeId)
+        );
+
+      const notWereInColumn = id => {
+        const node = draft.data.nodes[id];
         const column = draft.data.columns[node.columnId];
         return column.id !== state.extraColumnId;
       };
@@ -251,11 +261,11 @@ const toolLinksReducer = {
       } else {
         // Close extra column
         draft.expandedNodesIds = state.expandedNodesIds
-          .filter(nodeId => nodeId !== columnNode?.id)
+          .filter(id => id !== columnNode?.id)
           .filter(notWereInColumn);
         draft.selectedNodesIds = state.selectedNodesIds.filter(notWereInColumn);
       }
-      draft.selectedBiomeFilterName = action.payload.columnName || null;
+      draft.extraColumnNodeId = action.payload.nodeId || null;
       draft.extraColumnId = columnId;
     });
   },

@@ -13,7 +13,7 @@ import {
 } from 'react-components/tool/tool.selectors';
 import {
   getVisibleNodes,
-  getSelectedBiomeFilter,
+  getSelectedColumnFilterNode,
   getSelectedResizeBy
 } from 'react-components/tool-links/tool-links.selectors';
 import {
@@ -51,7 +51,8 @@ const mapStateToProps = state => {
     selectedMapContextualLayersData: getSelectedMapContextualLayersData(state),
     toolLayout: state.toolLayers.toolLayout,
     visibleNodes: getVisibleNodes(state),
-    selectedBiomeFilter: getSelectedBiomeFilter(state),
+    extraColumnNodeId: getSelectedColumnFilterNode(state),
+    selectedBiomeFilter: getSelectedColumnFilterNode(state),
     basemapId: getBasemap(state),
     selectedMapDimensionsWarnings: getMapDimensionsWarnings(state),
     selectedResizeBy: getSelectedResizeBy(state),

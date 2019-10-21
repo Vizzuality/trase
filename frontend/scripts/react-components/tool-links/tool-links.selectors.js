@@ -21,7 +21,10 @@ const getToolExpandedNodesIds = state => state.toolLinks.expandedNodesIds;
 const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
 const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
-const getToolBiomeFilterName = state => state.toolLinks.selectedBiomeFilterName;
+export const getToolColumnFilterNodeId = state =>
+  ENABLE_REDESIGN_PAGES
+    ? state.toolLinks.extraColumnNodeId
+    : state.toolLinks.selectedBiomeFilterName;
 const getToolDetailedView = state => state.toolLinks.detailedView;
 const getToolExtraColumnId = createSelector(
   [getHasExtraColumn, state => state.toolLinks.extraColumnId],
@@ -58,11 +61,11 @@ export const getSelectedRecolorBy = createSelector(
   }
 );
 
-export const getSelectedBiomeFilter = createSelector(
-  [getToolBiomeFilterName, getSelectedContext, getHasExtraColumn],
-  (selectedBiomeFilterName, selectedContext, hasExtraColumn) => {
+export const getSelectedColumnFilterNode = createSelector(
+  [getToolColumnFilterNodeId, getSelectedContext, getHasExtraColumn],
+  (columnFilterNodeId, selectedContext, hasExtraColumn) => {
     if (
-      !selectedBiomeFilterName ||
+      !columnFilterNodeId ||
       !selectedContext ||
       selectedContext.filterBy.length === 0 ||
       (ENABLE_REDESIGN_PAGES && !hasExtraColumn)
@@ -70,9 +73,7 @@ export const getSelectedBiomeFilter = createSelector(
       return null;
     }
 
-    return selectedContext.filterBy[0].nodes.find(
-      filterBy => filterBy.name === selectedBiomeFilterName
-    );
+    return selectedContext.filterBy[0].nodes.find(filterBy => filterBy.id === columnFilterNodeId);
   }
 );
 
@@ -136,7 +137,7 @@ export const getToolLinksUrlProps = createStructuredSelector({
   detailedView: getToolDetailedView,
   selectedResizeBy: getToolResizeBy,
   selectedRecolorBy: getToolRecolorBy,
-  selectedBiomeFilterName: getToolBiomeFilterName,
+  extraColumnNodeId: getToolColumnFilterNodeId,
   extraColumnId: getToolExtraColumnId
 });
 

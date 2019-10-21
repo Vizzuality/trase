@@ -106,8 +106,8 @@ const store = createStore(
         'detailedView',
         'selectedResizeBy',
         'selectedRecolorBy',
-        'selectedBiomeFilterName',
-        'extraColumnId'
+        'extraColumnId',
+        ENABLE_REDESIGN_PAGES ? 'extraColumnNodeId' : 'selectedBiomeFilterName'
       ]
     }),
     toolLayers: deserialize({

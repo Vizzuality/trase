@@ -29,7 +29,7 @@ function useMenuOptions(props, hoveredSelectedNode) {
     toolColumns,
     columns,
     extraColumnId,
-    selectedBiomeFilterName
+    extraColumnNodeId
   } = props;
   return useMemo(() => {
     const items = [{ id: 'clear', label: 'Clear Selection', onClick: onClearClick }];
@@ -63,7 +63,7 @@ function useMenuOptions(props, hoveredSelectedNode) {
     }
 
     const activeColumn = toolColumns && Object.values(toolColumns).find(c => c.name === nodeType);
-    const selectedRegion =
+    const selectedNode =
       columns?.length &&
       activeColumn &&
       columns[activeColumn.group].values.find(node => node.id === link.nodeId);
@@ -81,13 +81,12 @@ function useMenuOptions(props, hoveredSelectedNode) {
         items.push({
           id: 'expand-column',
           label: `See ${pluralize(columnToExpand.name)}`,
-          onClick: () => onChangeExtraColumn(columnToExpand.id, selectedRegion?.name)
+          onClick: () => onChangeExtraColumn(columnToExpand.id, selectedNode?.id)
         });
       }
     }
-
     const isExpandedColumn =
-      ENABLE_REDESIGN_PAGES && selectedRegion?.name === selectedBiomeFilterName;
+      ENABLE_REDESIGN_PAGES && extraColumnId && selectedNode?.id === extraColumnNodeId;
 
     if ((isReExpand || !hasExpandedNodesIds) && !isExpandedColumn) {
       items.push({
@@ -103,19 +102,19 @@ function useMenuOptions(props, hoveredSelectedNode) {
 
     return items;
   }, [
-    isReExpand,
-    onExpandClick,
-    onCollapseClick,
     onClearClick,
     lastSelectedNodeLink,
     hoveredSelectedNode,
-    hasExpandedNodesIds,
-    goToProfile,
     toolColumns,
     columns,
+    extraColumnNodeId,
+    isReExpand,
+    hasExpandedNodesIds,
+    goToProfile,
     extraColumnId,
-    selectedBiomeFilterName,
-    onChangeExtraColumn
+    onChangeExtraColumn,
+    onExpandClick,
+    onCollapseClick
   ]);
 }
 
@@ -452,7 +451,8 @@ Sankey.propTypes = {
   onChangeExtraColumn: PropTypes.func.isRequired,
   selectedNodesIds: PropTypes.array.isRequired,
   toolLayout: PropTypes.number.isRequired,
-  extraColumnId: PropTypes.number
+  extraColumnId: PropTypes.number,
+  extraColumnNodeId: PropTypes.number
 };
 
 export default Sankey;
