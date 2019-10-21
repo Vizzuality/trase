@@ -27,7 +27,7 @@ import createReducer from 'utils/createReducer';
 import getNodesMetaUid from 'reducers/helpers/getNodeMetaUid';
 import xor from 'lodash/xor';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
-import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-links.serializers';
+import toolLinksSerialization from 'react-components/tool-links/tool-links.serializers';
 import toolLinksInitialState from './tool-links.initial-state';
 
 function setNodes(state, action) {
@@ -54,17 +54,7 @@ const toolLinksReducer = {
       const newState = deserialize({
         params: action.payload.serializerParams,
         state: toolLinksInitialState,
-        urlPropHandlers: ToolLinksUrlPropHandlers,
-        props: [
-          'selectedNodesIds',
-          'selectedColumnsIds',
-          'expandedNodesIds',
-          'detailedView',
-          'selectedResizeBy',
-          'selectedRecolorBy',
-          'extraColumnId',
-          ENABLE_REDESIGN_PAGES ? 'extraColumnNodeId' : 'selectedBiomeFilterName'
-        ]
+        ...toolLinksSerialization
       });
       return newState;
     }
@@ -256,7 +246,7 @@ const toolLinksReducer = {
       if (columnId) {
         // Open extra column
         if (columnNode) {
-          const parentColumn = draft.data.columns.find(c => c.filterBy === columnId);
+          const parentColumn = Object.values(draft.data.columns).find(c => c.filterBy === columnId);
           draft.expandedNodesIds = state.expandedNodesIds
             .filter(expandedNodeId => draft.data.nodes[expandedNodeId].columnId === parentColumn)
             .concat(columnNode?.id);

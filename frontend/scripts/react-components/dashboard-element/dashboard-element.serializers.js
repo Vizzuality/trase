@@ -10,5 +10,22 @@ const indicatorsSerializer = {
   }
 };
 
-export const selectedResizeBy = indicatorsSerializer;
-export const selectedRecolorBy = indicatorsSerializer;
+const selectedResizeBy = indicatorsSerializer;
+const selectedRecolorBy = indicatorsSerializer;
+
+export default {
+  urlPropHandlers: {
+    selectedResizeBy,
+    selectedRecolorBy
+  },
+  props: [
+    'sources',
+    'companies',
+    'destinations',
+    'selectedYears',
+    'selectedResizeBy',
+    'selectedRecolorBy',
+    'selectedCountryId',
+    'selectedCommodityId'
+  ]
+};

@@ -51,7 +51,6 @@ const mapStateToProps = state => {
     selectedMapContextualLayersData: getSelectedMapContextualLayersData(state),
     toolLayout: state.toolLayers.toolLayout,
     visibleNodes: getVisibleNodes(state),
-    extraColumnNodeId: getSelectedColumnFilterNode(state),
     selectedBiomeFilter: getSelectedColumnFilterNode(state),
     basemapId: getBasemap(state),
     selectedMapDimensionsWarnings: getMapDimensionsWarnings(state),

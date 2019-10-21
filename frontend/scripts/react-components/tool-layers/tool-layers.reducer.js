@@ -20,7 +20,7 @@ import immer from 'immer';
 import createReducer from 'utils/createReducer';
 import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
-import * as ToolLayersUrlPropHandlers from 'react-components/tool-layers/tool-layers.serializers';
+import toolLayersSerialization from 'react-components/tool-layers/tool-layers.serializers';
 import toolLayersInitialState from 'react-components/tool-layers//tool-layers.initial-state';
 import { TOOL_LAYOUT, SANKEY_OFFSETS } from 'constants';
 
@@ -30,14 +30,7 @@ const toolLayersReducer = {
       const newState = deserialize({
         params: action.payload.serializerParams,
         state: { ...state, mapView: null },
-        urlPropHandlers: ToolLayersUrlPropHandlers,
-        props: [
-          'mapView',
-          'toolLayout',
-          'selectedBasemap',
-          'selectedMapContextualLayers',
-          'selectedMapDimensions'
-        ]
+        ...toolLayersSerialization
       });
       return newState;
     }

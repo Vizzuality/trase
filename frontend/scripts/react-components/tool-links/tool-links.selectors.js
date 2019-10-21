@@ -73,7 +73,9 @@ export const getSelectedColumnFilterNode = createSelector(
       return null;
     }
 
-    return selectedContext.filterBy[0].nodes.find(filterBy => filterBy.id === columnFilterNodeId);
+    return selectedContext.filterBy[0].nodes.find(
+      filterBy => (ENABLE_REDESIGN_PAGES ? filterBy.id : filterBy.name) === columnFilterNodeId
+    );
   }
 );
 
@@ -137,8 +139,10 @@ export const getToolLinksUrlProps = createStructuredSelector({
   detailedView: getToolDetailedView,
   selectedResizeBy: getToolResizeBy,
   selectedRecolorBy: getToolRecolorBy,
-  extraColumnNodeId: getToolColumnFilterNodeId,
-  extraColumnId: getToolExtraColumnId
+  extraColumnId: getToolExtraColumnId,
+  [ENABLE_REDESIGN_PAGES
+    ? 'extraColumnNodeId'
+    : 'selectedBiomeFilterName']: getToolColumnFilterNodeId
 });
 
 export const getToolYearsProps = createStructuredSelector({

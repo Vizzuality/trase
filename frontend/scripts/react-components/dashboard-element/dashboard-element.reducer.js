@@ -4,6 +4,7 @@ import fuzzySearch from 'utils/fuzzySearch';
 import xor from 'lodash/xor';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import { DASHBOARD_STEPS } from 'constants';
+import dashboardElementSerialization from 'react-components/dashboard-element/dashboard-element.serializers';
 import {
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_ACTIVE_TAB,
@@ -28,7 +29,6 @@ import {
   DASHBOARD_ELEMENT__SET_LOADING
 } from './dashboard-element.actions';
 import initialState from './dashboard-element.initial-state';
-import * as DashboardElementUrlPropHandlers from './dashboard-element.serializers';
 
 const getPanelsToClear = (panel, state, item) => {
   const currentPanelIndex = DASHBOARD_STEPS[panel];
@@ -79,17 +79,7 @@ const dashboardElementReducer = {
       const newState = deserialize({
         params: action.payload.serializerParams,
         state: initialState,
-        urlPropHandlers: DashboardElementUrlPropHandlers,
-        props: [
-          'sources',
-          'companies',
-          'destinations',
-          'selectedYears',
-          'selectedResizeBy',
-          'selectedRecolorBy',
-          'selectedCountryId',
-          'selectedCommodityId'
-        ]
+        ...dashboardElementSerialization
       });
       newState.loading = isLoading;
       return newState;
