@@ -256,7 +256,10 @@ const toolLinksReducer = {
       if (columnId) {
         // Open extra column
         if (columnNode) {
-          draft.expandedNodesIds = state.expandedNodesIds.concat(columnNode?.id);
+          const parentColumn = draft.data.columns.find(c => c.filterBy === columnId);
+          draft.expandedNodesIds = state.expandedNodesIds
+            .filter(expandedNodeId => draft.data.nodes[expandedNodeId].columnId === parentColumn)
+            .concat(columnNode?.id);
         }
       } else {
         // Close extra column
