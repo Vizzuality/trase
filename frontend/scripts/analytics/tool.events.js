@@ -12,7 +12,8 @@ import {
   TOOL_LINKS__SET_SELECTED_RESIZE_BY,
   TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
   TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
-  TOOL_LINKS__CHANGE_EXTRA_COLUMN
+  TOOL_LINKS__CHANGE_EXTRA_COLUMN,
+  TOOL_LINKS__SWITCH_TOOL
 } from 'react-components/tool-links/tool-links.actions';
 
 export default [
@@ -111,5 +112,11 @@ export default [
     action: 'Select contextual layers',
     category: 'Sankey',
     getPayload: action => action.payload.contextualLayers.join(', ')
+  },
+  {
+    type: TOOL_LINKS__SWITCH_TOOL,
+    action: 'Toggle tool',
+    category: 'Sankey',
+    getPayload: action => (action.payload.section ? 'data-view' : 'sankey')
   }
 ];
