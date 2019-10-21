@@ -57,7 +57,7 @@ export const routes = {
     }
   },
   tool: {
-    path: '/flows',
+    path: '/flows/:section?',
     page: 'tool',
     title: getPageTitle,
     thunk: loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool)

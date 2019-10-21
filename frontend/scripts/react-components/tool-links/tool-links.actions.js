@@ -20,6 +20,7 @@ export const TOOL_LINKS_SET_NO_LINKS_FOUND = 'TOOL_LINKS_SET_NO_LINKS_FOUND';
 export const TOOL_LINKS_RESET_SANKEY = 'TOOL_LINKS_RESET_SANKEY';
 export const TOOL_LINKS__SET_MISSING_LOCKED_NODES = 'TOOL_LINKS__SET_MISSING_LOCKED_NODES';
 export const TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH = 'TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH';
+export const TOOL_LINKS__SWITCH_TOOL = 'TOOL_LINKS__SWITCH_TOOL';
 
 export function setToolFlowsLoading(loading) {
   return {
@@ -172,6 +173,15 @@ export function goToProfileFromSankey({ profileType, ...query }) {
     payload: {
       query,
       profileType
+    }
+  };
+}
+
+export function switchTool({ section }) {
+  return {
+    type: 'tool',
+    payload: {
+      section
     }
   };
 }
