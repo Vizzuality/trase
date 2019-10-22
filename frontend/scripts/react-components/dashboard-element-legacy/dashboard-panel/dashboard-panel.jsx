@@ -11,8 +11,8 @@ import {
   getDashboardPanelSearchResults,
   setDashboardPanelActiveItemsWithSearch,
   goToDashboard as goToDashboardFn
-} from 'react-components/dashboard-element/dashboard-element.actions';
-import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.component';
+} from 'react-components/dashboard-element-legacy/dashboard-element.actions';
+import DashboardPanel from 'react-components/dashboard-element-legacy/dashboard-panel/dashboard-panel.component';
 import {
   getIsDisabled,
   getSourcesTabs,
@@ -24,7 +24,7 @@ import {
   getCompaniesDataByTab,
   getCountriesActiveItems,
   getCommoditiesActiveItems
-} from 'react-components/dashboard-element/dashboard-element.selectors';
+} from 'react-components/dashboard-element-legacy/dashboard-element.selectors';
 import { getCountryNamesByCountryId } from 'reducers/app.selectors';
 
 const mapStateToProps = (state, ownProps) => {

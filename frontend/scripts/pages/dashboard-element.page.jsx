@@ -4,7 +4,7 @@ import React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 import { Provider } from 'react-redux';
 
-import DashboardElement from 'react-components/dashboard-element/dashboard-element.container';
+import DashboardElement from 'react-components/dashboard-element-legacy/dashboard-element.container';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import Footer from 'react-components/shared/footer/footer.component';
 import CookieBanner from 'react-components/shared/cookie-banner';

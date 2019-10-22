@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 
-import DashboardWidget from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.component';
+import DashboardWidget from 'react-components/dashboard-element-legacy/dashboard-widget/dashboard-widget.component';
 import data from './mock-data/dashboard-widget-data';
 import dataPie from './mock-data/dashboard-widget-data-pie';
 // import horizontalData from './mock-data/dashboard-widget-horizontal-data';

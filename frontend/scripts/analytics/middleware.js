@@ -7,7 +7,7 @@ import GA_HOME_EVENTS from './home.events';
 import GA_LEGACY_EXPLORE_EVENTS from './legacy-explore.events';
 import GA_EXPLORE_EVENTS from './explore.events';
 import GA_PROFILE_NODE_EVENTS from './profile-node.events';
-import GA_DASHBOARD_ELEMENT_EVENTS from './dashboard-element.events';
+import GA_DASHBOARD_ELEMENT_EVENTS from './dashboard-element-legacy.events';
 
 const GA_EVENT_WHITELIST = [
   ...GA_TOOL_EVENTS,

@@ -1,5 +1,5 @@
 import { take, fork } from 'redux-saga/effects';
-import initialState from 'react-components/dashboard-element/dashboard-element.initial-state';
+import initialState from 'react-components/dashboard-element-legacy/dashboard-element.initial-state';
 import {
   fetchDataOnPanelChange,
   fetchDashboardPanelInitialData,
@@ -7,7 +7,7 @@ import {
   onTabChange,
   onItemChange,
   onPageChange
-} from 'react-components/dashboard-element/dashboard-element.saga';
+} from 'react-components/dashboard-element-legacy/dashboard-element.saga';
 import {
   setDashboardPanelPage,
   setDashboardActivePanel,
@@ -21,7 +21,7 @@ import {
   DASHBOARD_ELEMENT__SET_SEARCH_RESULTS,
   DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL
-} from 'react-components/dashboard-element/dashboard-element.actions';
+} from 'react-components/dashboard-element-legacy/dashboard-element.actions';
 
 import { getURLFromParams } from 'utils/getURLFromParams';
 import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';

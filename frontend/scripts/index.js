@@ -15,8 +15,8 @@ import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-link
 import appInitialState from 'reducers/app.initial-state';
 import toolLayersInitialState from 'react-components/tool-layers/tool-layers.initial-state';
 import * as ToolLayersUrlPropHandlers from 'react-components/tool-layers/tool-layers.serializers';
-import dashboardElementInitialState from 'react-components/dashboard-element/dashboard-element.initial-state';
-import * as DashboardElementUrlPropHandlers from 'react-components/dashboard-element/dashboard-element.serializers';
+import dashboardElementInitialState from 'react-components/dashboard-element-legacy/dashboard-element.initial-state';
+import * as DashboardElementUrlPropHandlers from 'react-components/dashboard-element-legacy/dashboard-element.serializers';
 import router from './router/router';
 import routeSubscriber from './router/route-subscriber';
 import { register, unregister } from './worker';

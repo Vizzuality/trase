@@ -1,0 +1,46 @@
+@import 'styles/settings';
+
+.c-dashboard-widget-tooltip {
+  display: flex;
+  flex-direction: column;
+  background-color: $charcoal-extra-dark;
+  border-radius: 6px;
+  padding: 5px 10px;
+}
+
+.dashboard-widget-tooltip-item,
+.dashboard-widget-tooltip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.dashboard-widget-tooltip-color-line {
+  display: inline-block;
+  flex-shrink: 0;
+  height: 4px;
+  width: 22px;
+}
+
+.dashboard-widget-tooltip-label,
+.dashboard-widget-tooltip-value,
+.dashboard-widget-tooltip-year,
+.dashboard-widget-tooltip-unit {
+  display: inline-block;
+  text-transform: uppercase;
+  margin-left: 10px;
+}
+
+.dashboard-widget-tooltip-year{
+  margin-left: 32px;
+}
+
+.dashboard-widget-tooltip-label {
+  max-width: 250px;
+}
+
+.dashboard-widget-tooltip-value {
+  text-transform: none;
+  text-align: right;
+}

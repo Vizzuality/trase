@@ -11,7 +11,7 @@ import ResizeListener from 'react-components/shared/resize-listener.component';
 import { BREAKPOINTS } from 'constants';
 import Accordion from '../../shared/accordion/accordion.component';
 
-import 'react-components/dashboard-element/dashboard-panel/sources-panel.scss';
+import 'react-components/dashboard-element-legacy/dashboard-panel/sources-panel.scss';
 
 function SourcesPanel(props) {
   const {

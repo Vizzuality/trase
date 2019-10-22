@@ -10,7 +10,7 @@ import Accordion from 'react-components/shared/accordion/accordion.component';
 import ResizeListener from 'react-components/shared/resize-listener.component';
 import { BREAKPOINTS } from 'constants';
 
-import 'react-components/dashboard-element/dashboard-panel/sources-panel.scss';
+import 'react-components/dashboard-element-legacy/dashboard-panel/sources-panel.scss';
 
 function ProfilesSourcesPanel(props) {
   const {

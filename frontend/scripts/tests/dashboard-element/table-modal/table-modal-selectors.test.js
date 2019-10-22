@@ -1,4 +1,4 @@
-import initialState from 'react-components/dashboard-element/dashboard-element.initial-state';
+import initialState from 'react-components/dashboard-element-legacy/dashboard-element.initial-state';
 import { getTableHeaders } from 'react-components/shared/table-modal/table-modal.selectors';
 import { meta, data } from './table-modal-mocks';
 

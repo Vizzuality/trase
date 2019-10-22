@@ -21,7 +21,7 @@ import {
   resizeSankeyTool,
   loadDisclaimerTool
 } from 'scripts/react-components/tool/tool.thunks';
-import { loadInitialDashboardData } from 'scripts/react-components/dashboard-element/dashboard-element.thunks';
+import { loadInitialDashboardData } from 'scripts/react-components/dashboard-element-legacy/dashboard-element.thunks';
 
 import getPageTitle from 'scripts/router/page-title';
 

@@ -8,7 +8,7 @@ import Tabs from 'react-components/shared/tabs/tabs.component';
 import ResizeListener from 'react-components/shared/resize-listener.component';
 import { BREAKPOINTS } from 'constants';
 
-import 'react-components/dashboard-element/dashboard-panel/companies-panel.scss';
+import 'react-components/dashboard-element-legacy/dashboard-panel/companies-panel.scss';
 
 function CompaniesPanel(props) {
   const {

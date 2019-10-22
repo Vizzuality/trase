@@ -1,11 +1,11 @@
-import initialState from 'react-components/dashboard-element/dashboard-element.initial-state';
+import initialState from 'react-components/dashboard-element-legacy/dashboard-element.initial-state';
 import {
   getDefaultConfig,
   getYKeys,
   getColors,
   makeGetConfig
-} from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.selectors';
-import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
+} from 'react-components/dashboard-element-legacy/dashboard-widget/dashboard-widget.selectors';
+import CHART_CONFIG from 'react-components/dashboard-element-legacy/dashboard-widget/dashboard-widget-config';
 
 const country = {
   id: 27,

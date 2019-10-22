@@ -1,0 +1,86 @@
+@import 'styles/settings';
+
+.c-dashboard-widget {
+  min-width: 100%;
+
+  .widget-title-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .dynamic-sentence-widget {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 0 30px;
+  }
+
+  .widget-centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  .widget-actions {
+    flex-shrink: 0;
+    button {
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      border-radius: 100%;
+      border: solid 1px rgba($white, 0.13);
+      margin: 0 15px 0 0;
+
+      &:last-child {
+        margin: 0;
+      }
+    }
+  }
+
+  .widget-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 480px;
+    border-radius: 6px;
+    border: solid 1px rgba($white, 0.13);
+    margin: 18px 0 0;
+    overflow: auto;
+
+    .widget-spinner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+    }
+
+    .widget-yAxis-label {
+      color: $elephant;
+      font-family: $font-family-1;
+      font-size: 11px;
+      position: relative;
+      top: 25px;
+      margin-left: 42px;
+      text-transform: uppercase;
+
+      .widget-yAxis-label-unit {
+        margin: 0 0 0 10px;
+        text-transform: none;
+      }
+    }
+
+    .widget-chart {
+      flex: 1;
+      padding: 25px 42px;
+    }
+  }
+
+  .background-no-data {
+    margin: 40px 60px;
+    background-image: url('/images/dashboards/pattern.svg');
+  }
+}

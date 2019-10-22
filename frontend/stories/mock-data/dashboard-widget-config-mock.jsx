@@ -1,6 +1,6 @@
 import React from 'react';
-import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
-import DashboardWidgetTooltip from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-tooltip';
+import CHART_CONFIG from 'react-components/dashboard-element-legacy/dashboard-widget/dashboard-widget-config';
+import DashboardWidgetTooltip from 'react-components/dashboard-element-legacy/dashboard-widget/dashboard-widget-tooltip';
 import { format } from 'd3-format';
 
 export const meta = {

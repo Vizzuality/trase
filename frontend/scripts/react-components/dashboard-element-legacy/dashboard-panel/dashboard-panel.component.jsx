@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import SourcesPanel from 'react-components/dashboard-element/dashboard-panel/sources-panel.component';
-import DestinationsPanel from 'react-components/dashboard-element/dashboard-panel/destinations-panel.component';
-import CompaniesPanel from 'react-components/dashboard-element/dashboard-panel/companies-panel.component';
-import CommoditiesPanel from 'react-components/dashboard-element/dashboard-panel/commodities-panel.component';
-import DashboardModalFooter from 'react-components/dashboard-element/dashboard-modal-footer/dashboard-modal-footer.component';
+import SourcesPanel from 'react-components/dashboard-element-legacy/dashboard-panel/sources-panel.component';
+import DestinationsPanel from 'react-components/dashboard-element-legacy/dashboard-panel/destinations-panel.component';
+import CompaniesPanel from 'react-components/dashboard-element-legacy/dashboard-panel/companies-panel.component';
+import CommoditiesPanel from 'react-components/dashboard-element-legacy/dashboard-panel/commodities-panel.component';
+import DashboardModalFooter from 'react-components/dashboard-element-legacy/dashboard-modal-footer/dashboard-modal-footer.component';
 import addApostrophe from 'utils/addApostrophe';
 import { DASHBOARD_STEPS } from 'constants';
 import { getPanelLabel, singularize } from 'utils/dashboardPanel';
@@ -12,7 +12,7 @@ import Heading from 'react-components/shared/heading';
 import StepsTracker from 'react-components/shared/steps-tracker/steps-tracker.component';
 import { translateText } from 'utils/transifex';
 
-import 'scripts/react-components/dashboard-element/dashboard-panel/dashboard-panel.scss';
+import 'scripts/react-components/dashboard-element-legacy/dashboard-panel/dashboard-panel.scss';
 
 class DashboardPanel extends Component {
   containerRef = React.createRef();
@@ -260,7 +260,8 @@ DashboardPanel.propTypes = {
   pages: PropTypes.shape({
     sources: PropTypes.number.isRequired,
     companies: PropTypes.number.isRequired,
-    destinations: PropTypes.number.isRequired
+    destinations: PropTypes.number.isRequired,
+    commodities: PropTypes.number.isRequired
   }).isRequired,
   dirtyBlocks: PropTypes.array,
   companies: PropTypes.object,

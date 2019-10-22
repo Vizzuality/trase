@@ -1,7 +1,7 @@
 import capitalize from 'lodash/capitalize';
 import startCase from 'lodash/startCase';
 import { getSelectedContext } from 'reducers/app.selectors';
-import { getDashboardsContext } from 'react-components/dashboard-element/dashboard-element.selectors';
+import { getDashboardsContext } from 'react-components/dashboard-element-legacy/dashboard-element.selectors';
 import { TOOL_LAYOUT } from 'constants';
 
 export default function(state) {

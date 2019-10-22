@@ -13,7 +13,7 @@ export { default as widgets } from 'react-components/widgets/widgets.reducer';
 export { default as dashboardRoot } from 'react-components/dashboard-root/dashboard-root.reducer';
 export {
   default as dashboardElement
-} from 'react-components/dashboard-element/dashboard-element.reducer';
+} from 'react-components/dashboard-element-legacy/dashboard-element.reducer';
 export { default as logisticsMap } from 'react-components/logistics-map/logistics-map.reducer';
 export { default as toolLinks } from 'react-components/tool-links/tool-links.reducer';
 export { default as toolLayers } from 'react-components/tool-layers/tool-layers.reducer';

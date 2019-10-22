@@ -1,4 +1,4 @@
-import initialState from 'react-components/dashboard-element/dashboard-element.initial-state';
+import initialState from 'react-components/dashboard-element-legacy/dashboard-element.initial-state';
 import { cancelled } from 'redux-saga/effects';
 import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
 
@@ -7,7 +7,7 @@ import {
   getDashboardPanelSectionTabs,
   fetchDashboardPanelSearchResults,
   getMoreDashboardPanelData
-} from 'react-components/dashboard-element/dashboard-element.fetch.saga';
+} from 'react-components/dashboard-element-legacy/dashboard-element.fetch.saga';
 import { getURLFromParams } from 'utils/getURLFromParams';
 
 jest.mock('utils/saga-utils', () => ({

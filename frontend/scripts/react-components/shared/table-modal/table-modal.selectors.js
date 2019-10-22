@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import omit from 'lodash/omit';
 import { CHART_TYPES } from 'constants';
-import { getDashboardPanelsValues } from 'react-components/dashboard-element/dashboard-element.selectors';
+import { getDashboardPanelsValues } from 'react-components/dashboard-element-legacy/dashboard-element.selectors';
 
 const getMeta = (state, { meta }) => meta || null;
 const getData = (state, { data }) => data || null;

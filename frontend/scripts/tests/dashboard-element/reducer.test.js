@@ -1,6 +1,6 @@
 import reducer, {
   initialState
-} from 'react-components/dashboard-element/dashboard-element.reducer';
+} from 'react-components/dashboard-element-legacy/dashboard-element.reducer';
 import {
   DASHBOARD_ELEMENT__EDIT_DASHBOARD,
   DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
@@ -34,7 +34,7 @@ import {
   editDashboard,
   setDashboardSelectedCountryId,
   setDashboardSelectedCommodityId
-} from 'react-components/dashboard-element/dashboard-element.actions';
+} from 'react-components/dashboard-element-legacy/dashboard-element.actions';
 
 describe(DASHBOARD_ELEMENT__SET_ACTIVE_PANEL, () => {
   const action = setDashboardActivePanel('sources');
