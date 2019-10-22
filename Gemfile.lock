@@ -166,8 +166,8 @@ GEM
     dotenv-rails (2.7.5)
       dotenv (= 2.7.5)
       railties (>= 3.2, < 6.1)
-    enumerate_it (1.4.1)
-      activesupport (>= 3.0.0)
+    enumerate_it (3.0.0)
+      activesupport (>= 4.2.0)
     equalizer (0.0.11)
     erubi (1.9.0)
     excon (0.62.0)
@@ -485,7 +485,7 @@ DEPENDENCIES
   database_cleaner
   devise (~> 4.7)
   dotenv-rails (~> 2.7)
-  enumerate_it (~> 1.4.1)
+  enumerate_it (~> 3.0.0)
   factory_bot_rails
   jbuilder (~> 2.9)
   jquery-rails
