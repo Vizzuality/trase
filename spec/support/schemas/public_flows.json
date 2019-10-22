@@ -1,0 +1,64 @@
+{
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "properties": {
+    "data": {
+      "$id": "/properties/data",
+      "type": "array",
+      "items": {
+        "$id": "/properties/data/items",
+        "type": "object",
+        "properties": {
+          "attributeId": {
+            "$id": "/properties/data/items/properties/year",
+            "type": "integer",
+            "title": "Year",
+            "description": "Year of the flow.",
+            "examples": [
+              1
+            ]
+          },
+          "name": {
+            "$id": "/properties/data/items/properties/path",
+            "type": "array",
+            "title": "Path",
+            "description": "Path of nodes of the flow.",
+            "examples": [
+              [1234]
+            ]
+          },
+          "flowAttributes": {
+            "$id": "/properties/data/items/properties/flowAttributes",
+            "type": "array",
+            "items": {
+              "$id": "/properties/data/items/properties/flowAttributes/items",
+              "type": "object",
+              "properties": {
+                "attributeId": {
+                  "$id": "/properties/data/items/properties/flowAttributes/items/properties/attributeId",
+                  "type": "integer",
+                  "title": "Attribute ID",
+                  "description": "ID of the attribute on the flow.",
+                  "examples": [
+                    11
+                  ]
+                },
+                "value": {
+                  "$id": "/properties/data/items/properties/flowAttributes/items/properties/value",
+                  "type": "number",
+                  "title": "Value",
+                  "description": "Value of the attribute on the flow.",
+                  "examples": [
+                    12.65
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
