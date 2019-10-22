@@ -145,6 +145,7 @@ function Explore(props) {
                     className="explore-world-map"
                     context={selectedContext}
                     destinationCountries={destinationCountries}
+                    scale={120}
                   />
                 </div>
               </div>
