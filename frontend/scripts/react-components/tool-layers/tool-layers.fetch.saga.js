@@ -20,7 +20,8 @@ export function* getLinkedGeoIds() {
   const {
     toolLinks: {
       selectedNodesIds,
-      data: { nodes }
+      extraColumnId,
+      data: { nodes, columns }
     }
   } = yield select();
   const selectedYears = yield select(getSelectedYears);
@@ -29,15 +30,27 @@ export function* getLinkedGeoIds() {
   const selectedNonGeoNodeIds = selectedNodesIds.filter(
     nodeId => nodes && nodes[nodeId] && !nodes[nodeId].geoId
   );
-  // when selection only contains geo nodes, we should not call get_linked_geoids
-  if (selectedNonGeoNodeIds.length === 0) {
+
+  const parentColumn = Object.values(columns).find(c => c.filterTo === extraColumnId);
+
+  // when selection only contains geo nodes and its not the parent geo column, we should not filter by linked geoids
+  if (selectedNonGeoNodeIds.length === 0 && (!parentColumn || !parentColumn.isGeo)) {
     yield put(setLinkedGeoIds([]));
     return;
   }
+
+  let nodesIds = selectedNodesIds;
+  if (parentColumn && parentColumn.isGeo) {
+    nodesIds = selectedNodesIds.filter(nodeId => {
+      const node = nodes && nodes[nodeId];
+      return node && (!node.geoId || node.columnId === parentColumn.id);
+    });
+  }
+
   const params = {
     context_id: selectedContext.id,
     years: Array.from(new Set([selectedYears[0], selectedYears[1]])),
-    nodes_ids: selectedNodesIds,
+    nodes_ids: nodesIds,
     target_column_id: selectedGeoColumn?.id
   };
   const url = getURLFromParams(GET_LINKED_GEO_IDS_URL, params);
