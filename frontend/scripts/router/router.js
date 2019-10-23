@@ -10,6 +10,7 @@ import {
   getTweetsContent
 } from 'react-components/home/home.thunks';
 import { loadTopNodes } from 'react-components/profile-root/profile-root.thunks';
+import { loadColumnsData } from 'react-components/profile-node/profile-node.thunks';
 import withSidebarNavLayout from 'react-components/nav/sidebar-nav/with-sidebar-nav-layout.hoc';
 import getPageStaticContent from 'react-components/static-content/static-content.thunks';
 import loadBaseAppData from 'reducers/app.thunks';
@@ -80,7 +81,7 @@ export const routes = {
       className: '-light',
       printable: true
     },
-    thunk: loadPageData()
+    thunk: loadPageData(loadColumnsData)
   },
   dashboardRoot: {
     path: '/dashboards',
