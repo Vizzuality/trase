@@ -62,8 +62,12 @@ const colors = {
       'company-ndpe-commitment': '#1D6837',
       'soy-moratorium': '#1D6837',
       tac: '#79ae6d',
-      'tac-&-g4': '#1D6837',
-      none: '#e36845'
+      'tac-g-4': '#1D6837',
+      none: '#e36845',
+      'fresh-frozen-beef-products': '#80cdc1',
+      'bovine-offals': '#a6611a',
+      'live-cattle-exports': '#dfc27d',
+      'processed-beef-products': '#018571'
     }
   },
   stars: {

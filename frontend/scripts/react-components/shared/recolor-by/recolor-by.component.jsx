@@ -21,7 +21,7 @@ class RecolorBy extends Component {
 
     const legendTypeName = recolorBy.legendType.toLowerCase();
     const legendColorThemeName = recolorBy.legendColorTheme.toLowerCase();
-    return `-recolorby-${legendTypeName}-${legendColorThemeName}-${recolorById}`.replace(/ /g, '-');
+    return `-recolorby-${legendTypeName}-${legendColorThemeName}-${kebabCase(recolorById)}`;
   }
 
   getRecolorData() {
