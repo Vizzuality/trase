@@ -45,7 +45,7 @@ export function loadMapVectorData() {
       if (geoColumn.useGeometryFromColumnId === undefined) {
         const selectedContext = getSelectedContext(getState());
         const countryName = selectedContext.countryName;
-        const vectorLayerURL = `vector_layers/${countryName}_${geoColumn.name.replace(
+        const vectorLayerURL = `/vector_layers/${countryName}_${geoColumn.name.replace(
           / /g,
           '_'
         )}.topo.json`;
