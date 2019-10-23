@@ -220,9 +220,7 @@ const toolLinksReducer = {
         state.extraColumnId &&
         draft.data.columns[columnId].filterTo === state.extraColumnId
       ) {
-        const sourceNode =
-          state.data.nodes &&
-          Object.values(state.data.nodes).find(node => node.id === state.extraColumnNodeId);
+        const sourceNode = state.data.nodes && state.data.nodes[state.extraColumnNodeId];
         draft.selectedNodesIds = draft.selectedNodesIds.concat(sourceNode.id);
         draft.expandedNodesIds = draft.expandedNodesIds.concat(sourceNode.id);
       }
@@ -231,32 +229,28 @@ const toolLinksReducer = {
   [TOOL_LINKS__CHANGE_EXTRA_COLUMN](state, action) {
     return immer(state, draft => {
       const { columnId, nodeId } = action.payload;
+      const extraColumnNode =
+        state.data.nodes && state.data.nodes[state.extraColumnNodeId || nodeId];
 
-      const columnNode =
-        state.data.nodes &&
-        Object.values(state.data.nodes).find(
-          node => node.id === (state.extraColumnNodeId || nodeId)
-        );
-
-      const notWereInColumn = id => {
+      const wasInExtraColumn = id => {
         const node = draft.data.nodes[id];
         const column = draft.data.columns[node.columnId];
-        return column.id !== state.extraColumnId;
+        return column.id === state.extraColumnId;
       };
       if (columnId) {
         // Open extra column
-        if (columnNode) {
+        if (extraColumnNode) {
           const parentColumn = Object.values(draft.data.columns).find(c => c.filterBy === columnId);
           draft.expandedNodesIds = state.expandedNodesIds
             .filter(expandedNodeId => draft.data.nodes[expandedNodeId].columnId === parentColumn)
-            .concat(columnNode?.id);
+            .concat(extraColumnNode?.id);
         }
       } else {
         // Close extra column
-        draft.expandedNodesIds = state.expandedNodesIds
-          .filter(id => id !== columnNode?.id)
-          .filter(notWereInColumn);
-        draft.selectedNodesIds = state.selectedNodesIds.filter(notWereInColumn);
+        draft.expandedNodesIds = state.expandedNodesIds.filter(
+          id => !wasInExtraColumn(id) && id !== extraColumnNode?.id
+        );
+        draft.selectedNodesIds = state.selectedNodesIds.filter(id => !wasInExtraColumn(id));
       }
       draft.extraColumnNodeId = action.payload.nodeId || null;
       draft.extraColumnId = columnId;

@@ -476,15 +476,12 @@ export default class MapComponent {
       const color = this.darkBasemap
         ? CHOROPLETH_COLORS.bright_stroke
         : CHOROPLETH_COLORS.dark_stroke;
-      let isFilteredOut = false;
-      if (!ENABLE_REDESIGN_PAGES) {
-        isFilteredOut =
-          biome === null ||
-          biome.geoId === undefined ||
-          layer.feature.properties.biome_geoid === undefined
-            ? false
-            : biome.geoId !== layer.feature.properties.biome_geoid;
-      }
+
+      const isFilteredOut =
+        !biome || biome.geoId === undefined || layer.feature.properties.biome_geoid === undefined
+          ? false
+          : biome.geoId !== layer.feature.properties.biome_geoid;
+
       if (isFilteredOut) {
         // If region is filtered out by biome filter, hide it and bail
         fillOpacity = 0;

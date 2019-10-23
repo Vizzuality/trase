@@ -17,7 +17,7 @@ function ColumnsSelectorGroup({ sankeySize, columns, selectedColumnsIds, extraCo
             position={i}
             group={columns[selectedColumnId].group}
             selectedColumnId={selectedColumnId}
-            isExtraColumn={selectedColumnId === extraColumnId}
+            hasExtraColumn={selectedColumnId === extraColumnId}
           />
         ))}
     </div>
