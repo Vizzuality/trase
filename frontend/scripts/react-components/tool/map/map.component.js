@@ -261,10 +261,11 @@ export default class MapComponent {
     }
   }
 
-  selectPolygonType({ selectedColumnsIds, extraColumnId, columns }) {
+  selectPolygonType({ selectedColumnsIds, extraColumn, columns }) {
     if (!this.polygonTypesLayers || !selectedColumnsIds.length) {
       return;
     }
+    const extraColumnId = extraColumn?.id;
     const extraGeoColumnId =
       extraColumnId &&
       columns &&

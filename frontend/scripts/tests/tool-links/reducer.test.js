@@ -302,16 +302,17 @@ describe(TOOL_LINKS__SELECT_COLUMN, () => {
 });
 
 test(TOOL_LINKS__CHANGE_EXTRA_COLUMN, () => {
+  const parentColumnId = 1;
   const columnId = 3;
   const nodeId = 5;
-  const action = changeExtraColumn(columnId, nodeId);
+  const action = changeExtraColumn(columnId, parentColumnId, nodeId);
   const state = {
     ...initialState
   };
   const newState = reducer(state, action);
   expect(newState).toEqual({
     ...state,
-    extraColumnId: columnId,
+    extraColumnId: { id: columnId, parentId: parentColumnId },
     extraColumnNodeId: nodeId
   });
 });

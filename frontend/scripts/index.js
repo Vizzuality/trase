@@ -88,13 +88,6 @@ const reducers = combineReducers({
 });
 
 const params = parseURL(window.location.search);
-console.log(
-  '---------',
-  appSerialization,
-  toolLinksSerialization,
-  toolLayersSerialization,
-  dashboardElementSerialization
-);
 const store = createStore(
   reducers,
   {

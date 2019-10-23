@@ -52,7 +52,12 @@ export default [
     type: TOOL_LINKS__CHANGE_EXTRA_COLUMN,
     category: 'Sankey',
     action: 'Select extra column',
-    getPayload: action => action.payload.name
+    getPayload: (action, state) => {
+      const columnId = action.payload.columnId;
+      if (!columnId) return 'CLEARED';
+      const column = state.toolLinks.data.columns[columnId];
+      return column?.name;
+    }
   },
   {
     type: SELECT_YEARS,

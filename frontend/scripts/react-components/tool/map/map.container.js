@@ -60,7 +60,7 @@ const mapStateToProps = state => {
     coordinates: state.toolLayers.highlightedNodeCoordinates,
     nodeAttributes: state.toolLinks.data.nodeAttributes,
     columns: state.toolLinks.data.columns,
-    extraColumnId: getHasExtraColumn(state) && state.toolLinks.extraColumnId
+    extraColumn: (getHasExtraColumn(state) && state.toolLinks.extraColumn) || null
   };
 };
 
@@ -77,8 +77,8 @@ const methodProps = [
   },
   {
     name: 'selectPolygonType',
-    compared: ['selectedColumnsIds', 'mapVectorData', 'columns', 'extraColumnId'],
-    returned: ['selectedColumnsIds', 'columns', 'extraColumnId']
+    compared: ['selectedColumnsIds', 'mapVectorData', 'columns', 'extraColumn'],
+    returned: ['selectedColumnsIds', 'columns', 'extraColumn']
   },
   {
     name: 'selectPolygons',

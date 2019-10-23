@@ -5,7 +5,7 @@ import { getSelectedColumnsIds, getHasExtraColumn } from 'react-components/tool/
 const mapStateToProps = state => ({
   sankeySize: state.toolLayers.sankeySize,
   columns: state.toolLinks.data.columns,
-  extraColumnId: getHasExtraColumn(state) && state.toolLinks.extraColumnId,
+  extraColumnId: (getHasExtraColumn(state) && state.toolLinks.extraColumn?.id) || null,
   selectedColumnsIds: getSelectedColumnsIds(state)
 });
 

@@ -47,7 +47,7 @@ const mapStateToProps = state => ({
   highlightedNodeId: state.toolLinks.highlightedNodeId,
   selectedMapDimensions: getSelectedMapDimensionsData(state),
   toolLayout: state.toolLayers.toolLayout,
-  extraColumnId: getHasExtraColumn(state) && state.toolLinks.extraColumnId,
+  extraColumnId: (getHasExtraColumn(state) && state.toolLinks.extraColumn?.id) || null,
   extraColumnNodeId: state.toolLinks.extraColumnNodeId
 });
 

@@ -20,7 +20,7 @@ export function* getLinkedGeoIds() {
   const {
     toolLinks: {
       selectedNodesIds,
-      extraColumnId,
+      extraColumn,
       data: { nodes, columns }
     }
   } = yield select();
@@ -31,7 +31,7 @@ export function* getLinkedGeoIds() {
     nodeId => nodes && nodes[nodeId] && !nodes[nodeId].geoId
   );
 
-  const parentColumn = Object.values(columns).find(c => c.filterTo === extraColumnId);
+  const parentColumn = extraColumn?.parentId && columns[extraColumn.parentId];
 
   // when selection only contains geo nodes and its not the parent geo column, we should not filter by linked geoids
   if (selectedNonGeoNodeIds.length === 0 && (!parentColumn || !parentColumn.isGeo)) {

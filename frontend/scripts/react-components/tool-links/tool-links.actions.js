@@ -95,11 +95,12 @@ export function selectColumn(columnIndex, columnId) {
   };
 }
 
-export function changeExtraColumn(columnId, nodeId) {
+export function changeExtraColumn(columnId, parentColumnId, nodeId) {
   return {
     type: TOOL_LINKS__CHANGE_EXTRA_COLUMN,
     payload: {
       columnId,
+      parentColumnId,
       nodeId
     }
   };

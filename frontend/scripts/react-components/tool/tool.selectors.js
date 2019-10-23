@@ -4,24 +4,23 @@ import { MIN_COLUMNS_NUMBER } from 'constants';
 
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getToolNodes = state => state.toolLinks.data.nodes;
-const getToolColumns = state => state.toolLinks.data.columns;
 const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
-const getExtraColumnId = state => state.toolLinks.extraColumnId;
+const getExtraColumn = state => state.toolLinks.extraColumn;
 const getHighlightedNodeIds = state => state.toolLinks.highlightedNodeId;
 
 export const getSelectedColumnsIds = createSelector(
-  [getSelectedContext, getToolColumns, getToolSelectedColumnsIds, getExtraColumnId],
-  (selectedContext, columns, selectedColumnsIds, extraColumnId) => {
+  [getSelectedContext, getToolSelectedColumnsIds, getExtraColumn],
+  (selectedContext, selectedColumnsIds, extraColumn) => {
     if (
       selectedColumnsIds &&
       selectedContext &&
       selectedColumnsIds.length === selectedContext.defaultColumns.length &&
-      !extraColumnId
+      !extraColumn
     ) {
       return selectedColumnsIds;
     }
 
-    if (!columns && !selectedContext) {
+    if (!selectedContext) {
       return [];
     }
 
@@ -32,8 +31,8 @@ export const getSelectedColumnsIds = createSelector(
       }
       acc.push(id);
 
-      if (columns && columns[id].filterTo && columns[id].filterTo === extraColumnId) {
-        acc.push(extraColumnId);
+      if (id === extraColumn?.parentId) {
+        acc.push(extraColumn.id);
       }
 
       return acc;
@@ -43,11 +42,10 @@ export const getSelectedColumnsIds = createSelector(
 );
 
 export const getHasExtraColumn = createSelector(
-  [getExtraColumnId, getToolColumns, getSelectedColumnsIds],
-  (extraColumnId, columns, selectedColumnsIds) => {
-    if (!columns || !extraColumnId) return false;
-    const selectedColumns = Object.values(columns).filter(c => selectedColumnsIds.includes(c.id));
-    return selectedColumns.some(c => c.filterTo === extraColumnId);
+  [getExtraColumn, getSelectedColumnsIds],
+  (extraColumn, selectedColumnsIds) => {
+    if (!selectedColumnsIds || !extraColumn) return false;
+    return selectedColumnsIds.includes(extraColumn.parentId);
   }
 );
 

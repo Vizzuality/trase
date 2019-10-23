@@ -32,7 +32,7 @@ const getSankeyColumnsWidth = state => state.toolLinks.sankeyColumnsWidth;
 const getToolFlowsLoading = state => state.toolLinks.flowsLoading;
 
 const getExtraColumnId = createSelector(
-  [getHasExtraColumn, state => state.toolLinks.extraColumnId],
+  [getHasExtraColumn, state => state.toolLinks.extraColumn?.id],
   (hasExtraColumn, extraColumnId) => (hasExtraColumn ? extraColumnId : null)
 );
 

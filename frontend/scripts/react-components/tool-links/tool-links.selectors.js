@@ -26,9 +26,14 @@ export const getToolColumnFilterNodeId = state =>
     ? state.toolLinks.extraColumnNodeId
     : state.toolLinks.selectedBiomeFilterName;
 const getToolDetailedView = state => state.toolLinks.detailedView;
+const getToolExtraColumn = createSelector(
+  [getHasExtraColumn, state => state.toolLinks.extraColumn],
+  (hasExtraColumn, extraColumn) => (hasExtraColumn ? extraColumn : null)
+);
+
 const getToolExtraColumnId = createSelector(
-  [getHasExtraColumn, state => state.toolLinks.extraColumnId],
-  (hasExtraColumn, extraColumnId) => (hasExtraColumn ? extraColumnId : null)
+  getToolExtraColumn,
+  extraColumn => (extraColumn ? extraColumn.id : null)
 );
 
 export const getSelectedResizeBy = createSelector(
@@ -139,7 +144,7 @@ export const getToolLinksUrlProps = createStructuredSelector({
   detailedView: getToolDetailedView,
   selectedResizeBy: getToolResizeBy,
   selectedRecolorBy: getToolRecolorBy,
-  extraColumnId: getToolExtraColumnId,
+  extraColumn: getToolExtraColumn,
   [ENABLE_REDESIGN_PAGES
     ? 'extraColumnNodeId'
     : 'selectedBiomeFilterName']: getToolColumnFilterNodeId

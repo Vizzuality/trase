@@ -81,7 +81,7 @@ function useMenuOptions(props, hoveredSelectedNode) {
         items.push({
           id: 'expand-column',
           label: `See ${pluralize(columnToExpand.name)}`,
-          onClick: () => onChangeExtraColumn(columnToExpand.id, selectedNode?.id)
+          onClick: () => onChangeExtraColumn(columnToExpand.id, activeColumn.id, selectedNode?.id)
         });
       }
     }
