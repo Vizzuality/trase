@@ -312,7 +312,7 @@ test(TOOL_LINKS__CHANGE_EXTRA_COLUMN, () => {
   const newState = reducer(state, action);
   expect(newState).toEqual({
     ...state,
-    extraColumnId: { id: columnId, parentId: parentColumnId },
+    extraColumn: { id: columnId, parentId: parentColumnId },
     extraColumnNodeId: nodeId
   });
 });
