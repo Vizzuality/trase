@@ -12,13 +12,21 @@ import { DASHBOARD_STEPS } from 'constants';
 import { createNodesPanelActions } from 'react-components/nodes-panel/nodes-panel.actions';
 import { createNodesPanelSelectors } from 'react-components/nodes-panel/nodes-panel.selectors';
 
-function* getPanelParams(optionsType, options = {}) {
+const sourcesSelector = createNodesPanelSelectors('sources', { hasTabs: true });
+const exportersSelector = createNodesPanelSelectors('sources', { hasTabs: true });
+const importersSelector = createNodesPanelSelectors('sources', { hasTabs: true });
+
+export function* getPanelParams(optionsType, options = {}) {
   const state = yield select();
   const { page, isOverview } = options;
 
-  const { activeTab: sourcesTab } = createNodesPanelSelectors('sources', { hasTabs: true })(state);
+  const { activeTab: sourcesTab } = sourcesSelector(state);
+  const { activeTab: exportersTab } = exportersSelector(state);
+  const { activeTab: importersTab } = importersSelector(state);
   const nodeTypesIds = {
-    sources: sourcesTab || null
+    sources: sourcesTab || null,
+    exporters: exportersTab || null,
+    importers: importersTab || null
   }[optionsType];
   const activeItemParams = items => items.join() || undefined;
   const params = {
@@ -38,7 +46,7 @@ function* getPanelParams(optionsType, options = {}) {
   }
 
   if (currentStep > DASHBOARD_STEPS.commodities || isOverview) {
-    params.commodities_ids = state.nodesPanel.commodities.selectedCommodityId;
+    params.commodities_ids = state.nodesPanel.commodities.selectedNodeId;
   }
 
   if (currentStep > DASHBOARD_STEPS.destinations || isOverview) {
@@ -63,6 +71,7 @@ export function createNodesPanelFetchSaga(name, moduleOptions = {}) {
 
   function* getData(reducer, options) {
     const { page } = reducer;
+
     const params = yield getPanelParams(name, {
       page,
       ...options
@@ -111,6 +120,7 @@ export function createNodesPanelFetchSaga(name, moduleOptions = {}) {
 
     // eslint-disable-next-line
     const { node_types_ids, options_type, ...urlParams } = params;
+    console.log(urlParams);
     const url = getURLFromParams(GET_DASHBOARD_OPTIONS_TABS_URL, urlParams);
     const { source, fetchPromise } = fetchWithCancel(url);
     try {

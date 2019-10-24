@@ -10,8 +10,8 @@ function CommoditiesPanel(props) {
     loading,
     commodities,
     selectedNodeId,
-    onSelectCommodity,
-    getMoreItems,
+    setSelectedItem,
+    setPage,
     page,
     previousSteps,
     fetchData
@@ -34,7 +34,7 @@ function CommoditiesPanel(props) {
               rowHeight={50}
               columnWidth={190}
               columnCount={columnsCount}
-              getMoreItems={getMoreItems}
+              getMoreItems={setPage}
               page={page}
               loading={loading}
             >
@@ -42,8 +42,8 @@ function CommoditiesPanel(props) {
                 <GridListItem
                   {...itemProps}
                   isActive={selectedNodeId === itemProps.item?.id}
-                  enableItem={onSelectCommodity}
-                  disableItem={() => onSelectCommodity(null)}
+                  enableItem={setSelectedItem}
+                  disableItem={() => setSelectedItem(null)}
                 />
               )}
             </GridList>
@@ -59,8 +59,9 @@ CommoditiesPanel.propTypes = {
   loading: PropTypes.bool,
   page: PropTypes.number.isRequired,
   selectedNodeId: PropTypes.array,
-  getMoreItems: PropTypes.func.isRequired,
-  onSelectCommodity: PropTypes.func.isRequired
+  setPage: PropTypes.func.isRequired,
+  fetchData: PropTypes.func.isRequired,
+  setSelectedItem: PropTypes.func.isRequired
 };
 
 export default CommoditiesPanel;

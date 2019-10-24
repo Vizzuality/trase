@@ -129,10 +129,18 @@ export default function* nodesPanelSagas() {
       hasTabs: true,
       hasSearch: true,
       hasMultipleSelection: true
+    }),
+    ...createNodesPanelSaga('destinations', { hasSearch: true, hasMultipleSelection: true }),
+    ...createNodesPanelSaga('importers', {
+      hasTabs: true,
+      hasSearch: true,
+      hasMultipleSelection: true
+    }),
+    ...createNodesPanelSaga('exporters', {
+      hasTabs: true,
+      hasSearch: true,
+      hasMultipleSelection: true
     })
-    // ...createNodesPanelSaga('destinations', { hasSearch: true, hasMultipleSelection: true }),
-    // ...createNodesPanelSaga('importers', { hasSearch: true, hasMultipleSelection: true }),
-    // ...createNodesPanelSaga('exporters', { hasSearch: true, hasMultipleSelection: true })
   ];
   yield all(sagas.map(saga => fork(saga)));
 }

@@ -6,26 +6,29 @@ import capitalize from 'lodash/capitalize';
 import { getPanelId } from 'utils/dashboardPanel';
 import { makeGetResizeByItems, makeGetRecolorByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
-import { makeGetPanelActiveTab, makeGetPanelTabs } from 'selectors/panel.selectors';
 import camelCase from 'lodash/camelCase';
 
-const getCountriesData = state => state.dashboardElement.data.countries;
-const getSourcesData = state => state.dashboardElement.data.sources;
-const getCommoditiesData = state => state.dashboardElement.data.commodities;
-const getCompaniesData = state => state.dashboardElement.data.companies;
-const getDestinationsData = state => state.dashboardElement.data.destinations;
+const getCountriesData = state => state.nodesPanel.countries.data;
+const getSourcesData = state => state.nodesPanel.sources.data;
+const getCommoditiesData = state => state.nodesPanel.commodities.data;
+const getExportersData = state => state.nodesPanel.exporters.data;
+const getImportersData = state => state.nodesPanel.importers.data;
+const getDestinationsData = state => state.nodesPanel.destinations.data;
 
-const getSourcesTab = state => state.dashboardElement.sourcesActiveTab;
-const getCompaniesTab = state => state.dashboardElement.companiesActiveTab;
-const getDashboardPanelTabs = state => state.dashboardElement.tabs;
-const getDashboardPanelPrefixes = state => state.dashboardElement.prefixes;
+const getSourcesPrefixes = state => state.nodesPanel.sources.prefixes;
+const getCommoditiesPrefixes = state => state.nodesPanel.commodities.prefixes;
+const getExportersPrefixes = state => state.nodesPanel.exporters.prefixes;
+const getImportersPrefixes = state => state.nodesPanel.importers.prefixes;
+const getDestinationsPrefixes = state => state.nodesPanel.destinations.prefixes;
 
-const getSources = state => state.dashboardElement.sources;
-const getCompanies = state => state.dashboardElement.companies;
-const getDestinations = state => state.dashboardElement.destinations;
+const getSources = state => state.nodesPanel.sources.selectedNodesIds;
+const getDestinations = state => state.nodesPanel.destinations.selectedNodesIds;
+const getExporters = state => state.nodesPanel.exporters.selectedNodesIds;
+const getImporters = state => state.nodesPanel.importers.selectedNodesIds;
 
-const getSelectedCountryId = state => state.dashboardElement.selectedCountryId;
-const getSelectedCommodityId = state => state.dashboardElement.selectedCommodityId;
+const getSelectedCountryId = state => state.nodesPanel.countries.selectedNodeId;
+const getSelectedCommodityId = state => state.nodesPanel.commodities.selectedNodeId;
+
 const getSelectedYears = state => state.dashboardElement.selectedYears;
 const getSelectedResizeBy = state => state.dashboardElement.selectedResizeBy;
 const getSelectedRecolorBy = state => state.dashboardElement.selectedRecolorBy;
@@ -35,100 +38,79 @@ export const getEditMode = state => state.dashboardElement.editMode;
 
 const getAppContexts = state => state.app.contexts;
 
-export const getSourcesTabs = makeGetPanelTabs(getDashboardPanelTabs, () => 'sources');
-export const getCompaniesTabs = makeGetPanelTabs(getDashboardPanelTabs, () => 'companies');
-
-export const getSourcesActiveTab = makeGetPanelActiveTab(
-  getSourcesTab,
-  getDashboardPanelTabs,
-  () => 'sources'
-);
-export const getCompaniesActiveTab = makeGetPanelActiveTab(
-  getCompaniesTab,
-  getDashboardPanelTabs,
-  () => 'companies'
-);
-
-const getDataByTab = (data, tabs, activeTab) => {
-  const tab = tabs.find(t => t.id === activeTab);
-  if (tab) {
-    return data.filter(item => item.nodeType === tab.name);
-  }
-  return [];
-};
-
-export const getSourcesDataByTab = createSelector(
-  [getSourcesData, getSourcesTabs, getSourcesActiveTab],
-  getDataByTab
-);
-
-export const getCompaniesDataByTab = createSelector(
-  [getCompaniesData, getCompaniesTabs, getCompaniesActiveTab],
-  getDataByTab
-);
-
-const getPanelActiveItems = (selectedNodesIds, data) => {
-  const selectedNodesMap = selectedNodesIds.reduce((acc, next) => ({ ...acc, [next]: true }), {});
-  return data
-    .filter(item => selectedNodesMap[item.id])
-    .map(item => ({ ...item, name: `${item.name}`.toLowerCase() }));
-};
+const getPanelActiveItems = (selectedNodesIds, data) =>
+  selectedNodesIds.map(id => {
+    const item = data.nodes[id];
+    return { ...item, name: `${item.name}`.toLowerCase() };
+  });
 
 const getSingleActiveItem = (selectedId, data) => {
-  const selected = data.find(item => item.id === selectedId);
+  const selected = selectedId && data.nodes[selectedId];
   if (selected) {
     return [{ ...selected, name: `${selected.name}`.toLowerCase() }];
   }
   return [];
 };
 
-export const getCountriesActiveItems = createSelector(
+const getCountriesActiveItems = createSelector(
   [getSelectedCountryId, getCountriesData],
   getSingleActiveItem
 );
 
-export const getCommoditiesActiveItems = createSelector(
+const getCommoditiesActiveItems = createSelector(
   [getSelectedCommodityId, getCommoditiesData],
   getSingleActiveItem
 );
 
-export const getDestinationsActiveItems = createSelector(
-  [getDestinations, getDestinationsData],
-  getPanelActiveItems
-);
-
-export const getSourcesActiveItems = createSelector(
+const getSourcesActiveItems = createSelector(
   [getSources, getSourcesData],
   getPanelActiveItems
 );
-
-export const getCompaniesActiveItems = createSelector(
-  [getCompanies, getCompaniesData],
+const getDestinationsActiveItems = createSelector(
+  [getDestinations, getDestinationsData],
+  getPanelActiveItems
+);
+const getExportersActiveItems = createSelector(
+  [getExporters, getExportersData],
+  getPanelActiveItems
+);
+const getImportersActiveItems = createSelector(
+  [getImporters, getImportersData],
   getPanelActiveItems
 );
 
 export const getDirtyBlocks = createSelector(
-  [getSelectedCountryId, getSelectedCommodityId, getSources, getDestinations, getCompanies],
+  [
+    getSelectedCountryId,
+    getSelectedCommodityId,
+    getSources,
+    getDestinations,
+    getExporters,
+    getImporters
+  ],
   (
     selectedCountryId,
     selectedCommodityId,
     sourcesActiveItems,
     destinationsActiveItems,
-    companiesActiveItems
+    importersActiveItems,
+    exportersActiveItems
   ) => ({
     countries: selectedCountryId !== null,
     sources: sourcesActiveItems.length > 0,
     destinations: destinationsActiveItems.length > 0,
-    companies: companiesActiveItems.length > 0,
+    exporters: exportersActiveItems.length > 0,
+    importers: importersActiveItems.length > 0,
     commodities: selectedCommodityId !== null
   })
 );
 
-export const getDashboardPanelsValues = createStructuredSelector({
+export const getNodesPanelValues = createStructuredSelector({
   countries: getCountriesActiveItems,
   sources: getSourcesActiveItems,
   commodities: getCommoditiesActiveItems,
-  companies: getCompaniesActiveItems,
+  exporters: getExportersActiveItems,
+  importers: getImportersActiveItems,
   destinations: getDestinationsActiveItems
 });
 
@@ -145,8 +127,25 @@ export const getPluralNodeType = nodeType => {
   );
 };
 
+const getNodesPanelPrefixes = createSelector(
+  [
+    getSourcesPrefixes,
+    getCommoditiesPrefixes,
+    getExportersPrefixes,
+    getImportersPrefixes,
+    getDestinationsPrefixes
+  ],
+  (sources, commodities, exporters, importers, destinations) => ({
+    sources,
+    commodities,
+    exporters,
+    importers,
+    destinations
+  })
+);
+
 export const getDynamicSentence = createSelector(
-  [getDirtyBlocks, getDashboardPanelsValues, getEditMode, getDashboardPanelPrefixes],
+  [getDirtyBlocks, getNodesPanelValues, getEditMode, getNodesPanelPrefixes],
   (dirtyBlocks, panelsValues, editMode, prefixes) => {
     if (Object.values(dirtyBlocks).every(block => !block)) {
       return [];
@@ -175,11 +174,17 @@ export const getDynamicSentence = createSelector(
       'sources',
       'produced in'
     );
-    const companiesSettings = getSettings(
-      panelsValues.companies[0],
-      prefixes.companies,
-      'companies',
-      'traded by'
+    const exportersSettings = getSettings(
+      panelsValues.exporters[0],
+      prefixes.importers,
+      'exporters',
+      'exported by'
+    );
+    const importersSettings = getSettings(
+      panelsValues.importers[0],
+      prefixes.exporters,
+      'importers',
+      'imported by'
     );
     const destinationsSettings = getSettings(
       panelsValues.destinations[0],
@@ -205,11 +210,20 @@ export const getDynamicSentence = createSelector(
         transform: 'capitalize'
       },
       {
-        panel: 'companies',
-        id: 'companies',
-        name: companiesSettings.name,
-        prefix: panelsValues.companies.length > 0 ? companiesSettings.prefix : '',
-        value: panelsValues.companies,
+        panel: 'exporters',
+        id: 'exporters',
+        name: exportersSettings.name,
+        prefix: panelsValues.exporters.length > 0 ? exportersSettings.prefix : '',
+        value: panelsValues.exporters,
+        optional: true,
+        transform: 'capitalize'
+      },
+      {
+        panel: 'importers',
+        id: 'importers',
+        name: importersSettings.name,
+        prefix: panelsValues.exporters.length > 0 ? importersSettings.prefix : '',
+        value: panelsValues.importers,
         optional: true,
         transform: 'capitalize'
       },
@@ -455,8 +469,12 @@ const getURLSources = createSelector(
   [getSources, getDashboardsContext],
   getURLParamsIfContext
 );
-const getURLCompanies = createSelector(
-  [getCompanies, getDashboardsContext],
+const getURLExporters = createSelector(
+  [getExporters, getDashboardsContext],
+  getURLParamsIfContext
+);
+const getURLImporters = createSelector(
+  [getImporters, getDashboardsContext],
   getURLParamsIfContext
 );
 const getURLDestinations = createSelector(
@@ -466,7 +484,8 @@ const getURLDestinations = createSelector(
 
 export const getDashboardElementUrlProps = createStructuredSelector({
   sources: getURLSources,
-  companies: getURLCompanies,
+  exporters: getURLExporters,
+  importers: getURLImporters,
   destinations: getURLDestinations,
   selectedCountryId: getSelectedCountryId,
   selectedCommodityId: getSelectedCommodityId,

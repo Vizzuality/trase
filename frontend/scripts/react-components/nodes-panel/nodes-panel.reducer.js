@@ -232,8 +232,16 @@ const nodesPanelReducer = combineReducers({
     hasSearch: true,
     hasMultipleSelection: true
   }),
-  importers: createNodesPanelReducer('importers', { hasSearch: true, hasMultipleSelection: true }),
-  exporters: createNodesPanelReducer('exporters', { hasSearch: true, hasMultipleSelection: true })
+  importers: createNodesPanelReducer('importers', {
+    hasTabs: true,
+    hasSearch: true,
+    hasMultipleSelection: true
+  }),
+  exporters: createNodesPanelReducer('exporters', {
+    hasTabs: true,
+    hasSearch: true,
+    hasMultipleSelection: true
+  })
 });
 
 export default nodesPanelReducer;

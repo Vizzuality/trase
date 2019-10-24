@@ -47,7 +47,7 @@ class DashboardElement extends React.PureComponent {
   renderStep() {
     const { step, setStep, editMode, closeModal, dirtyBlocks } = this.props;
     const showBackButton = step > DASHBOARD_STEPS.sources;
-    const onContinue = step === DASHBOARD_STEPS.companies ? closeModal : () => setStep(step + 1);
+    const onContinue = step === DASHBOARD_STEPS.importers ? closeModal : () => setStep(step + 1);
     if (step === DASHBOARD_STEPS.welcome && !editMode) {
       return <DashboardWelcome onContinue={() => setStep(step + 1)} />;
     }

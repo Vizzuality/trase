@@ -4,26 +4,15 @@ import { createNodesPanelSelectors } from 'react-components/nodes-panel/nodes-pa
 import CountriesPanel from './countries-panel.component';
 
 const { fetchData, setLoadingItems, setSelectedItem } = createNodesPanelActions('countries');
-
-const mapStateToProps = state => {
-  const { countries, page, loading, selectedNodeId } = createNodesPanelSelectors('countries')(
-    state
-  );
-  return {
-    countries,
-    page,
-    loading,
-    selectedCountryId: selectedNodeId
-  };
-};
+const countriesProps = createNodesPanelSelectors('countries');
 
 const mapDispatchToProps = {
   fetchData,
   setLoadingItems,
-  onSelectCountry: setSelectedItem
+  setSelectedItem
 };
 
 export default connect(
-  mapStateToProps,
+  countriesProps,
   mapDispatchToProps
 )(CountriesPanel);

@@ -10,9 +10,9 @@ function CountriesPanel(props) {
     countries,
     width,
     columnsCount,
-    selectedCountryId,
+    selectedNodeId,
     loading,
-    onSelectCountry,
+    setSelectedItem,
     fetchData
   } = props;
 
@@ -29,14 +29,14 @@ function CountriesPanel(props) {
         rowHeight={50}
         columnCount={columnsCount}
         items={countries}
-        loading={!selectedCountryId && loading}
+        loading={!selectedNodeId && loading}
       >
         {itemProps => (
           <GridListItem
             {...itemProps}
-            isActive={selectedCountryId === itemProps.item?.id}
-            enableItem={onSelectCountry}
-            disableItem={() => onSelectCountry(null)}
+            isActive={selectedNodeId === itemProps.item?.id}
+            enableItem={setSelectedItem}
+            disableItem={() => setSelectedItem(null)}
           />
         )}
       </GridList>
@@ -49,9 +49,9 @@ CountriesPanel.propTypes = {
   countries: PropTypes.array.isRequired,
   width: PropTypes.number.isRequired,
   columnsCount: PropTypes.number.isRequired,
-  selectedCountryId: PropTypes.number,
+  selectedNodeId: PropTypes.number,
   loading: PropTypes.bool.isRequired,
-  onSelectCountry: PropTypes.func.isRequired
+  setSelectedItem: PropTypes.func.isRequired
 };
 
 export default CountriesPanel;

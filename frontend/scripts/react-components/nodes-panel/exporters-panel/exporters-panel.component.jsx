@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SearchInput from 'react-components/shared/search-input/search-input.component';
 import GridList from 'react-components/shared/grid-list/grid-list.component';
@@ -8,27 +8,33 @@ import Tabs from 'react-components/shared/tabs/tabs.component';
 import ResizeListener from 'react-components/shared/resize-listener.component';
 import { BREAKPOINTS } from 'constants';
 
-import 'react-components/dashboard-element/dashboard-panel/companies-panel.scss';
+import './exporters-panel.scss';
 
-function CompaniesPanel(props) {
+function ExportersPanel(props) {
   const {
     tabs,
     page,
     loading,
-    searchCompanies,
-    companies,
-    getMoreItems,
+    searchResults,
+    exporters,
+    setPage,
     setSearchResult,
     getSearchResults,
     nodeTypeRenderer,
-    onSelectCompany,
-    activeCompanies,
-    onSelectNodeTypeTab,
-    activeNodeTypeTab,
-    actionComponent
+    setSelectedIds,
+    selectedNodesIds,
+    setSelectedTab,
+    activeTab,
+    actionComponent,
+    previousSteps,
+    fetchData
   } = props;
 
-  const itemToScrollTo = useFirstItem(companies);
+  useEffect(() => {
+    fetchData();
+  }, [previousSteps, fetchData]);
+
+  const itemToScrollTo = useFirstItem(exporters);
 
   return (
     <ResizeListener>
@@ -36,35 +42,35 @@ function CompaniesPanel(props) {
         const columnsCount = windowWidth > BREAKPOINTS.laptop ? 5 : 3;
         const width = windowWidth > BREAKPOINTS.laptop ? 950 : 560;
         return (
-          <div className="c-companies-panel">
+          <div className="c-exporters-panel">
             <SearchInput
               variant="bordered"
               size="sm"
-              className="companies-panel-search"
-              items={searchCompanies}
-              placeholder="Search company"
+              className="exporters-panel-search"
+              items={searchResults}
+              placeholder="Search exporter"
               onSelect={setSearchResult}
               nodeTypeRenderer={nodeTypeRenderer}
               onSearchTermChange={getSearchResults}
             />
             <Tabs
               tabs={tabs}
-              onSelectTab={onSelectNodeTypeTab}
-              selectedTab={activeNodeTypeTab}
+              onSelectTab={setSelectedTab}
+              selectedTab={activeTab}
               itemTabRenderer={i => i.name}
               getTabId={item => item.id}
               actionComponent={actionComponent}
             >
-              {activeNodeTypeTab && (
+              {activeTab && (
                 <GridList
-                  className="companies-panel-pill-list"
-                  items={companies}
-                  height={companies.length > columnsCount ? 200 : 50}
+                  className="exporters-panel-pill-list"
+                  items={exporters}
+                  height={exporters.length > columnsCount ? 200 : 50}
                   width={width}
                   rowHeight={50}
                   columnWidth={190}
                   columnCount={columnsCount}
-                  getMoreItems={getMoreItems}
+                  getMoreItems={setPage}
                   page={page}
                   loading={loading}
                   itemToScrollTo={itemToScrollTo}
@@ -72,9 +78,9 @@ function CompaniesPanel(props) {
                   {itemProps => (
                     <GridListItem
                       {...itemProps}
-                      isActive={activeCompanies.includes(itemProps.item?.id)}
-                      enableItem={onSelectCompany}
-                      disableItem={onSelectCompany}
+                      isActive={selectedNodesIds.includes(itemProps.item?.id)}
+                      enableItem={setSelectedIds}
+                      disableItem={setSelectedIds}
                     />
                   )}
                 </GridList>
@@ -87,26 +93,26 @@ function CompaniesPanel(props) {
   );
 }
 
-CompaniesPanel.propTypes = {
-  companies: PropTypes.array,
-  activeCompanies: PropTypes.array,
+ExportersPanel.propTypes = {
+  exporters: PropTypes.array,
+  selectedNodesIds: PropTypes.array,
   page: PropTypes.number.isRequired,
   loading: PropTypes.bool,
-  getMoreItems: PropTypes.func.isRequired,
+  setPage: PropTypes.func.isRequired,
   setSearchResult: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
-  onSelectCompany: PropTypes.func.isRequired,
-  searchCompanies: PropTypes.array.isRequired,
+  setSelectedIds: PropTypes.func.isRequired,
+  searchResults: PropTypes.array.isRequired,
   nodeTypeRenderer: PropTypes.func.isRequired,
   tabs: PropTypes.array.isRequired,
-  activeNodeTypeTab: PropTypes.number,
-  onSelectNodeTypeTab: PropTypes.func.isRequired,
+  activeTab: PropTypes.number,
+  setSelectedTab: PropTypes.func.isRequired,
   actionComponent: PropTypes.node
 };
 
-CompaniesPanel.defaultProps = {
-  companies: [],
-  activeNodeTypeTab: null
+ExportersPanel.defaultProps = {
+  exporters: [],
+  activeTab: null
 };
 
-export default CompaniesPanel;
+export default ExportersPanel;

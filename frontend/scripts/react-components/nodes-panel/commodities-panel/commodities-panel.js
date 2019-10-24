@@ -1,22 +1,28 @@
 import { connect } from 'react-redux';
+import { createNodesPanelSelectors } from 'react-components/nodes-panel/nodes-panel.selectors';
 import { createNodesPanelActions } from 'react-components/nodes-panel/nodes-panel.actions';
 import CommoditiesPanel from './commodities-panel.component';
 
-const { fetchData, setLoadingItems, setSelectedItem } = createNodesPanelActions('commodities');
+const { fetchData, setLoadingItems, setSelectedItem, setPage } = createNodesPanelActions(
+  'commodities'
+);
+const commoditiesSelectors = createNodesPanelSelectors('commodities');
 
-const mapStateToProps = state => ({
-  commodities: state.nodesPanel.commodities.data.byId.map(
-    id => state.nodesPanel.commodities.data.nodes[id]
-  ),
-  page: state.nodesPanel.commodities.page,
-  loading: state.nodesPanel.commodities.loadingItems,
-  selectedNodeId: state.nodesPanel.commodities.selectedNodeId
-});
+const mapStateToProps = state => {
+  const { commodities, page, loading, selectedNodeId } = commoditiesSelectors(state);
+  return {
+    commodities,
+    page,
+    loading,
+    selectedNodeId
+  };
+};
 
 const mapDispatchToProps = {
+  setPage,
   fetchData,
   setLoadingItems,
-  onSelectCommodity: setSelectedItem
+  setSelectedItem
 };
 
 export default connect(

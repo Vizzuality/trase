@@ -29,14 +29,15 @@ function SourcesPanel(props) {
     page,
     setPage,
     loading,
-    selectedSourcesIds,
-    onSelectSource,
+    selectedNodesIds,
+    setSelectedItems,
     previousSteps
   } = props;
 
   useEffect(() => {
     fetchData();
   }, [previousSteps, fetchData]);
+
   const itemToScrollTo = useFirstItem(sources);
   return (
     <div className="c-sources-panel">
@@ -77,9 +78,9 @@ function SourcesPanel(props) {
             {itemProps => (
               <GridListItem
                 {...itemProps}
-                isActive={selectedSourcesIds.includes(itemProps.item?.id)}
-                enableItem={onSelectSource}
-                disableItem={onSelectSource}
+                isActive={selectedNodesIds.includes(itemProps.item?.id)}
+                enableItem={setSelectedItems}
+                disableItem={setSelectedItems}
               />
             )}
           </GridList>
@@ -106,8 +107,8 @@ SourcesPanel.propTypes = {
   page: PropTypes.number.isRequired,
   setPage: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
-  selectedSourcesIds: PropTypes.array.isRequired,
-  onSelectSource: PropTypes.func.isRequired
+  selectedNodesIds: PropTypes.array.isRequired,
+  setSelectedItems: PropTypes.func.isRequired
 };
 
 export default SourcesPanel;

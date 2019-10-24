@@ -19,13 +19,8 @@ export default {
     selectedRecolorBy
   },
   props: [
-    'sources',
-    'companies',
-    'destinations',
     'selectedYears',
     'selectedResizeBy',
     'selectedRecolorBy',
-    'selectedCountryId',
-    'selectedCommodityId'
   ]
 };

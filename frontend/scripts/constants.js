@@ -264,10 +264,12 @@ export const EXPLORE_STEPS = {
 
 export const DASHBOARD_STEPS = {
   welcome: 0,
+  countries: 1,
   sources: 1,
   commodities: 2,
   destinations: 3,
-  companies: 4
+  exporters: 4,
+  importers: 5
 };
 
 export const PROFILE_STEPS = {

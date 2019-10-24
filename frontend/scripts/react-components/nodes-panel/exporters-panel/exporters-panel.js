@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { createNodesPanelActions } from 'react-components/nodes-panel/nodes-panel.actions';
 import { createNodesPanelSelectors } from 'react-components/nodes-panel/nodes-panel.selectors';
-import SourcesPanel from './sources-panel.component';
+import ExportersPanel from './exporters-panel.component';
 
 const {
   setPage,
@@ -11,13 +11,13 @@ const {
   setSelectedTab,
   getSearchResults,
   setSearchResult
-} = createNodesPanelActions('sources', {
+} = createNodesPanelActions('exporters', {
   hasTabs: true,
   hasSearch: true,
   hasMultipleSelection: true
 });
 
-const sourcesProps = createNodesPanelSelectors('sources', {
+const exportersProps = createNodesPanelSelectors('exporters', {
   hasTabs: true,
   hasSearch: true,
   hasMultipleSelection: true
@@ -34,6 +34,6 @@ const mapDispatchToProps = {
 };
 
 export default connect(
-  sourcesProps,
+  exportersProps,
   mapDispatchToProps
-)(SourcesPanel);
+)(ExportersPanel);
