@@ -1,5 +1,5 @@
 module Admin
-  class CommoditySearchController < ::Api::V3::ApiController
+  class CommoditySearchController < ::Api::ApiController
     skip_before_action :load_context
 
     def index
