@@ -9,7 +9,9 @@ RSpec.describe 'Flows', type: :request do
 
   describe 'GET /api/public/flows' do
     it 'has the correct response structure' do
-      get '/api/public/flows'
+      country = Api::V3::Country.first.iso2
+      commodity = Api::V3::Commodity.first.name
+      get "/api/public/flows?country=#{country}&commodity=#{commodity}"
 
       expect(@response).to have_http_status(:ok)
       expect(@response).to match_response_schema('public_flows')

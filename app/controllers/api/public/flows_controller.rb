@@ -7,6 +7,9 @@ module Api
       skip_before_action :load_context
 
       def index
+        ensure_required_param_present(:country)
+        ensure_required_param_present(:commodity)
+
         initialize_collection_for_index
         render json: @collection,
                root: 'data',
