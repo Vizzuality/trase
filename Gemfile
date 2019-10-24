@@ -15,7 +15,7 @@ gem 'puma', '~> 4.2'
 gem 'dotenv-rails', '~> 2.7'
 gem 'active_model_serializers', '~> 0.10.10'
 gem 'kaminari'
-gem 'enumerate_it', '~> 1.4.1'
+gem 'enumerate_it', '~> 3.0.0'
 gem 'mailchimp-api', require: 'mailchimp'
 gem 'oj'
 
