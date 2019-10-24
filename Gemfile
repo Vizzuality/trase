@@ -34,7 +34,7 @@ gem 'acts_as_list'
 gem 'activeadmin_sortable_table'
 gem 'best_in_place'
 
-gem 'ckeditor', git: 'https://github.com/galetahub/ckeditor.git'
+gem 'ckeditor'
 gem 'paperclip', '~> 6.1.0'
 gem 'aws-sdk-s3', '~> 1'
 
