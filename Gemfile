@@ -73,6 +73,7 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano-rvm'
   gem 'capistrano-passenger'
+  gem 'capistrano-nvm'
 
   gem 'rubocop', '~> 0.75.1', require: false
   gem 'rubocop-performance', require: false
