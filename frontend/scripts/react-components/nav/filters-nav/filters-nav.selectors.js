@@ -29,6 +29,11 @@ const getContextFilterBy = createSelector(
   selectedContext => selectedContext && selectedContext.filterBy
 );
 
+const getToolResizeBys = createSelector(
+  getSelectedContext,
+  selectedContext => selectedContext && selectedContext.resizeBy
+);
+
 export const getToolYearsProps = createStructuredSelector({
   selectedYears: getSelectedYears,
   years: makeGetAvailableYears(getToolResizeBy, getToolRecolorBy, getSelectedContext)
@@ -54,6 +59,27 @@ export const getToolAdminLevelProps = createSelector(
         : { label: 'All', value: null }
     };
   }
+);
+
+export const getToolResizeByProps = createSelector(
+  [getAppTooltips, getToolResizeBy, makeGetResizeByItems(getToolResizeBys, getSelectedYears)],
+  (tooltips, selectedResizeBy, items) => ({
+    options: items,
+    label: 'Resize by',
+    id: 'toolResizeBy',
+    showSelected: true,
+    size: 'rg',
+    clip: false,
+    weight: 'regular',
+    value: selectedResizeBy && {
+      value: selectedResizeBy,
+      label: selectedResizeBy.label || ''
+    },
+    isDisabled: items.length === 1 && selectedResizeBy?.attributeId === items[0].attributeId,
+    tooltip: tooltips && tooltips.sankey.nav.resizeBy.main,
+    titleTooltip:
+      tooltips && selectedResizeBy && tooltips.sankey.nav.resizeBy[selectedResizeBy.name]
+  })
 );
 
 export const getToolViewModeProps = createSelector(
@@ -121,11 +147,6 @@ const getLogisticsMapInspectionLevelProps = createSelector(
   }
 );
 
-const getToolResizeBys = createSelector(
-  getSelectedContext,
-  selectedContext => selectedContext && selectedContext.resizeBy
-);
-
 const getModalId = (state, { modalId }) => modalId;
 
 export const getVersioningSelected = createSelector(
@@ -161,6 +182,7 @@ export const getNavFilters = createSelector(
     getCurrentPage,
     getSelectedContext,
     getToolAdminLevelProps,
+    getToolResizeByProps,
     getToolViewModeProps,
     getVersioningSelected,
     getLogisticsMapYearsProps,
@@ -171,6 +193,7 @@ export const getNavFilters = createSelector(
     page,
     selectedContext,
     toolAdminLevel,
+    toolResizeBy,
     toolViewMode,
     versionData,
     logisticsMapsYears,
@@ -180,7 +203,10 @@ export const getNavFilters = createSelector(
     switch (page) {
       case 'tool': {
         const right = [
-          { type: NAV_FILTER_TYPES.dropdown, props: { id: 'toolResizeBy' } },
+          {
+            type: NAV_FILTER_TYPES.dropdown,
+            props: ENABLE_REDESIGN_PAGES ? { id: 'toolResizeBy' } : toolResizeBy
+          },
           { type: NAV_FILTER_TYPES.recolorBySelector, props: { id: 'toolRecolorBy' } },
           { type: NAV_FILTER_TYPES.dropdown, props: toolViewMode }
         ];

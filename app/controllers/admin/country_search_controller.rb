@@ -1,5 +1,5 @@
 module Admin
-  class CountrySearchController < ::Api::V3::ApiController
+  class CountrySearchController < ::Api::ApiController
     skip_before_action :load_context
 
     def index
