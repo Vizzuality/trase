@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Use this hook to configure ckeditor
 Ckeditor.setup do |config|
   # ==> ORM configuration
@@ -23,7 +25,7 @@ Ckeditor.setup do |config|
 
   # Setup authorization to be run as a before filter
   # By default: there is no authorization.
-  # config.authorize_with :cancan
+  # config.authorize_with :cancancan
 
   # Override parent controller CKEditor inherits from
   # By default: 'ApplicationController'
@@ -39,20 +41,15 @@ Ckeditor.setup do |config|
 
   # Customize ckeditor assets path
   # By default: nil
-  # config.asset_path = "http://www.example.com/assets/ckeditor/"
-
-  # To reduce the asset precompilation time, you can limit plugins and/or languages to those you need:
-  # By default: nil (no limit)
-  # config.assets_languages = ['en', 'uk']
-  # config.assets_plugins = ['image', 'smiley']
+  # config.asset_path = 'http://www.example.com/assets/ckeditor/'
 
   # CKEditor CDN
   # More info here http://cdn.ckeditor.com/
   # By default: nil (CDN disabled)
-  # config.cdn_url = "//cdn.ckeditor.com/4.5.6/standard/ckeditor.js"
+  # config.cdn_url = '//cdn.ckeditor.com/4.11.3/standard/ckeditor.js'
 
   # JS config url
   # Used when CKEditor CDN enabled
-  # By default: "/assets/ckeditor/config.js"
-  # config.js_config_url = "/assets/ckeditor/config.js"
+  # By default: "ckeditor/config.js"
+  # config.js_config_url = 'ckeditor/config.js'
 end
