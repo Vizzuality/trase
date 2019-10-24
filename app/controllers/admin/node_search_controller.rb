@@ -1,5 +1,5 @@
 module Admin
-  class NodeSearchController < ::Api::V3::ApiController
+  class NodeSearchController < ::Api::ApiController
     skip_before_action :load_context
 
     def source_search
