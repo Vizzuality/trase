@@ -39,6 +39,7 @@ require 'capistrano/bundler'
 require 'capistrano/rails/migrations'
 require 'capistrano/rails/assets'
 require 'capistrano/passenger'
+require 'capistrano/nvm'
 require 'capistrano/yarn'
 require 'capistrano/sitemap_generator'
 
