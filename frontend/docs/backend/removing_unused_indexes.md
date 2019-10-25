@@ -7,7 +7,7 @@ menu: Backend
 
 ## Why would you even bother doing this?
 
-When creating ActiveRecord tables using migrations, we take advantage of the `references` method to create foreign keys. By default an index is also created automatically in these cases. 
+When creating ActiveRecord tables using migrations, we take advantage of the `references` method to create foreign keys. By default an index is also created automatically in these cases.
 
 While often a good idea, the assumption being we will be using this column for joining tables, often indexes end up being unused and become a liability. They take up a lot of space needlessly and slow down table writes. Which is why it is good to review indexes.
 
@@ -17,7 +17,7 @@ While often a good idea, the assumption being we will be using this column for j
 
   - production (environment with most reliable data for API queries)
   - sandbox (environment with most reliable data for data uploader and validation queries)
-  - in case of features which had not been release to production yet, the environment where they are actively tested (e.g. dashboardsdemo for dashboards queries)
+  - in case of features which had not been release to production yet, the environment where they are actively tested
 
 2. Retrieve lists of potentially unused indexes from all relevant environments
 
@@ -41,7 +41,7 @@ ORDER BY pg_relation_size(s.indexrelid) DESC;
 
 3. Prepare files
 
-  Save those lists in files, e.g. `production.txt`, `sandbox.txt`, `dashboardsdemo.txt`. For comparisons, the size of the index should be removed from the file (as this can differ between environments).
+  Save those lists in files, e.g. `production.txt`, `sandbox.txt`, `staging.txt`. For comparisons, the size of the index should be removed from the file (as this can differ between environments).
 
 4. Find the common ones
 
@@ -49,7 +49,7 @@ ORDER BY pg_relation_size(s.indexrelid) DESC;
 
   ````
 comm -12 <(sort production.txt) <(sort sandbox.txt) > tmp.txt
-comm -12 <(sort dashboardsdemo.txt) <(sort tmp.txt) > unused_indexes.txt
+comm -12 <(sort staging.txt) <(sort tmp.txt) > unused_indexes.txt
 ```
 
 5. Use your judgement

@@ -10,8 +10,6 @@ sandbox:
   :concurrency: 2
 demo:
   :concurrency: 2
-dashboardsdemo:
-  :concurrency: 2
 indonesiademo:
   :concurrency: 2
 :queues:

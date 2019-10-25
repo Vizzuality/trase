@@ -30,8 +30,5 @@ sandbox:
 demo:
   <<: *default
 
-dashboardsdemo:
-  <<: *default
-
 indonesiademo:
   <<: *default
