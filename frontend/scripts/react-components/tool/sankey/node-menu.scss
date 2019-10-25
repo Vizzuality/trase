@@ -1,51 +1,47 @@
 @import 'styles/settings';
 
 .c-node-menu {
-    display: none;
+  display: none;
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  transition: top 450ms $ease-in-out-sine, left 450ms $ease-in-out-sine;
+  border-radius: 50%;
+  background-color: $charcoal-grey;
+  color: $white;
+  box-shadow: $box-shadow-big;
+  cursor: pointer;
+  z-index: $z-base;
+  transform: translate(-50%, -50%);
+  will-change: top, left;
+
+  &.-visible {
+    display: block;
+  }
+
+  &:hover {
+    background-color: transparent;
+    box-shadow: unset;
+
+    .options {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  > .icon {
     position: absolute;
-    width: 36px;
-    height: 36px;
-    transition: top 450ms $ease-in-out-sine, left 450ms $ease-in-out-sine;
-    border-radius: 50%;
-    background-color: $charcoal-grey;
-    color: $white;
-    box-shadow: $box-shadow-big;
-    cursor: pointer;
-    z-index: $z-base;
-    transform: translate(-50%, -50%);
-    will-change: top, left;
-
-    &.-visible {
-      display: block;
-    }
-
-    &:hover {
-      background-color: transparent;
-      box-shadow: unset;
-
-      .options {
-        display: flex;
-        flex-direction: column;
-
-        &.flipped {
-          flex-direction: column-reverse;
-        }
-      }
-    }
-
-    > .icon {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      top: 0;
-      margin: auto;
-    }
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    margin: auto;
+  }
 
   .options {
     display: none;
     position: absolute;
-    min-width: 200px;
+    min-width: 230px;
     box-shadow: $box-shadow-big;
     font-family: $font-family-1;
     top: 2px;
@@ -73,8 +69,17 @@
         cursor: pointer;
         padding: 10px 8px;
         display: flex;
+        flex-direction: row;
         justify-content: space-between;
         white-space: nowrap;
+
+        .option-icon {
+          order: 2;
+        }
+
+        .option-text {
+          order: 1;
+        }
       }
 
       > .icon {
@@ -88,6 +93,26 @@
       &:hover {
         background-color: $manilla;
       }
+    }
+
+    &.mirrorX {
+      .menu-item-button {
+        justify-content: start;
+
+        .option-icon {
+          order: 1;
+          margin-right: 5px;
+          margin-left: -3px;
+        }
+
+        .option-text {
+          order: 2;
+        }
+      }
+    }
+
+    &.mirrorY {
+      flex-direction: column-reverse;
     }
   }
 }

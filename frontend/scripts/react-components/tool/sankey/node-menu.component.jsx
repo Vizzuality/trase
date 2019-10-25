@@ -12,7 +12,8 @@ function NodeMenu(props) {
   const menuHeight = ITEM_HEIGHT * options?.length;
   const nodeContainerHeight = containerRef.current?.getBoundingClientRect().height;
   const menuBottom = menuPos.y + menuHeight;
-  const flipped = menuBottom > nodeContainerHeight;
+  const mirrorX = menuPos.x < 200;
+  const mirrorY = menuBottom > nodeContainerHeight;
 
   return (
     <div
@@ -23,17 +24,17 @@ function NodeMenu(props) {
         <use xmlnsXlink="http://www.w3.org/1999/xlink" xlinkHref="#icon-more-options" />
       </svg>
       <ul
-        className={cx('options', { flipped })}
-        style={{ top: `${flipped ? 32 - menuHeight : 2}px` }}
+        className={cx('options', { mirrorY, mirrorX })}
+        style={{ top: `${mirrorY ? 32 - menuHeight : 2}px`, left: mirrorX ? 0 : undefined }}
       >
         {options.map((option, i) => (
           <li key={option.id} className={cx('menu-item', option.className)}>
             <button className="menu-item-button" onClick={option.onClick}>
-              <Text color="grey" variant="mono" weight="light">
+              <Text color="grey" variant="mono" weight="light" className="option-text">
                 {option.label?.toUpperCase()}
               </Text>
               {i === 0 && (
-                <svg className="icon">
+                <svg className="icon option-icon">
                   <use xlinkHref="#icon-more-options" />
                 </svg>
               )}
