@@ -8,6 +8,7 @@ import { BREAKPOINTS } from 'constants';
 function CommoditiesPanel(props) {
   const {
     loading,
+    fetchKey,
     commodities,
     selectedNodeId,
     setSelectedItem,
@@ -16,9 +17,13 @@ function CommoditiesPanel(props) {
     previousSteps,
     fetchData
   } = props;
+
   useEffect(() => {
-    fetchData();
-  }, [fetchData, previousSteps]);
+    if (previousSteps !== fetchKey || fetchKey === null) {
+      fetchData(previousSteps);
+    }
+  }, [previousSteps, fetchData, fetchKey]);
+
   return (
     <ResizeListener>
       {({ windowWidth }) => {
@@ -55,6 +60,8 @@ function CommoditiesPanel(props) {
 }
 
 CommoditiesPanel.propTypes = {
+  fetchKey: PropTypes.string,
+  previousSteps: PropTypes.string,
   commodities: PropTypes.array,
   loading: PropTypes.bool,
   page: PropTypes.number.isRequired,

@@ -16,8 +16,9 @@ export function createNodesPanelActions(name) {
   };
 
   const actionCreators = {
-    fetchData: () => ({
-      type: constants.FETCH_DATA
+    fetchData: key => ({
+      type: constants.FETCH_DATA,
+      payload: key
     }),
     setSelectedItem: activeItem => ({
       type: constants.SET_SELECTED_ID,

@@ -10,6 +10,7 @@ export const NODES_PANELS__SET_INSTANCE_ID = 'NODES_PANELS__SET_INSTANCE_ID';
 
 function createNodesPanelReducer(name, moduleOptions = {}) {
   const {
+    FETCH_DATA,
     SET_PANEL_PAGE,
     SET_DATA,
     SET_MORE_DATA,
@@ -29,7 +30,7 @@ function createNodesPanelReducer(name, moduleOptions = {}) {
     },
     page: 1,
     loadingItems: false,
-    searchResults: []
+    fetchKey: null
   };
 
   if (moduleOptions.hasMultipleSelection) {
@@ -43,6 +44,19 @@ function createNodesPanelReducer(name, moduleOptions = {}) {
     initialState.activeTab = null;
   }
 
+  if (moduleOptions.hasSearch) {
+    initialState.searchResults = [];
+  }
+
+  const resetState = draft => {
+    draft.page = initialState.page;
+    draft.data = initialState.data;
+
+    if (moduleOptions.hasSearch) {
+      draft.searchResults = initialState.searchResults;
+    }
+  };
+
   const reducer = {
     [NODES_PANELS__SET_INSTANCE_ID](state) {
       return immer(state, draft => {
@@ -54,6 +68,22 @@ function createNodesPanelReducer(name, moduleOptions = {}) {
         draft.page = action.payload;
       });
     },
+    [FETCH_DATA](state, action) {
+      return immer(state, draft => {
+        if (moduleOptions.hasTabs) {
+          draft.activeTab = initialState.activeTab;
+        }
+        draft.fetchKey = action.payload || null;
+
+        if (draft.fetchKey !== null) {
+          if (moduleOptions.hasMultipleSelection) {
+            draft.selectedNodesIds = initialState.selectedNodesIds;
+          } else {
+            draft.selectedNodeId = initialState.selectedNodeId;
+          }
+        }
+      });
+    },
     [SET_DATA](state, action) {
       return immer(state, draft => {
         const { data } = action.payload;
@@ -62,7 +92,7 @@ function createNodesPanelReducer(name, moduleOptions = {}) {
           draft.data.byId = data ? Object.keys(newItems) : [];
           draft.data.nodes = newItems;
         } else {
-          draft.data = initialState.data;
+          resetState(draft);
         }
       });
     },
@@ -100,7 +130,7 @@ function createNodesPanelReducer(name, moduleOptions = {}) {
           draft.tabs.forEach(item => {
             draft.prefixes[item.name] = item.prefix;
           });
-          draft.page = initialState.page;
+          resetState(draft);
         });
       }
       return state;

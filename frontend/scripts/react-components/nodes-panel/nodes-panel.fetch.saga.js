@@ -36,7 +36,7 @@ export function* getPanelParams(optionsType, options = {}) {
   };
   const currentStep = DASHBOARD_STEPS[optionsType];
 
-  if (currentStep === DASHBOARD_STEPS.sources) {
+  if (currentStep === DASHBOARD_STEPS.sources && optionsType !== 'countries') {
     params.countries_ids = state.nodesPanel.countries.selectedNodeId;
   }
 
@@ -120,7 +120,7 @@ export function createNodesPanelFetchSaga(name, moduleOptions = {}) {
 
     // eslint-disable-next-line
     const { node_types_ids, options_type, ...urlParams } = params;
-    console.log(urlParams);
+
     const url = getURLFromParams(GET_DASHBOARD_OPTIONS_TABS_URL, urlParams);
     const { source, fetchPromise } = fetchWithCancel(url);
     try {

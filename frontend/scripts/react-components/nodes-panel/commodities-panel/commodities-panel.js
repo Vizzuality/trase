@@ -6,17 +6,7 @@ import CommoditiesPanel from './commodities-panel.component';
 const { fetchData, setLoadingItems, setSelectedItem, setPage } = createNodesPanelActions(
   'commodities'
 );
-const commoditiesSelectors = createNodesPanelSelectors('commodities');
-
-const mapStateToProps = state => {
-  const { commodities, page, loading, selectedNodeId } = commoditiesSelectors(state);
-  return {
-    commodities,
-    page,
-    loading,
-    selectedNodeId
-  };
-};
+const commoditiesProps = createNodesPanelSelectors('commodities');
 
 const mapDispatchToProps = {
   setPage,
@@ -26,6 +16,6 @@ const mapDispatchToProps = {
 };
 
 export default connect(
-  mapStateToProps,
+  commoditiesProps,
   mapDispatchToProps
 )(CommoditiesPanel);

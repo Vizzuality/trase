@@ -21,18 +21,21 @@ function ExportersPanel(props) {
     setSearchResult,
     getSearchResults,
     nodeTypeRenderer,
-    setSelectedIds,
+    setSelectedItems,
     selectedNodesIds,
     setSelectedTab,
     activeTab,
     actionComponent,
     previousSteps,
-    fetchData
+    fetchData,
+    fetchKey
   } = props;
 
   useEffect(() => {
-    fetchData();
-  }, [previousSteps, fetchData]);
+    if (previousSteps !== fetchKey || fetchKey === null) {
+      fetchData(previousSteps);
+    }
+  }, [previousSteps, fetchData, fetchKey]);
 
   const itemToScrollTo = useFirstItem(exporters);
 
@@ -79,8 +82,8 @@ function ExportersPanel(props) {
                     <GridListItem
                       {...itemProps}
                       isActive={selectedNodesIds.includes(itemProps.item?.id)}
-                      enableItem={setSelectedIds}
-                      disableItem={setSelectedIds}
+                      enableItem={setSelectedItems}
+                      disableItem={setSelectedItems}
                     />
                   )}
                 </GridList>
@@ -94,6 +97,8 @@ function ExportersPanel(props) {
 }
 
 ExportersPanel.propTypes = {
+  fetchKey: PropTypes.string,
+  previousSteps: PropTypes.string,
   exporters: PropTypes.array,
   selectedNodesIds: PropTypes.array,
   page: PropTypes.number.isRequired,
@@ -101,13 +106,14 @@ ExportersPanel.propTypes = {
   setPage: PropTypes.func.isRequired,
   setSearchResult: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
-  setSelectedIds: PropTypes.func.isRequired,
+  setSelectedItems: PropTypes.func.isRequired,
   searchResults: PropTypes.array.isRequired,
   nodeTypeRenderer: PropTypes.func.isRequired,
   tabs: PropTypes.array.isRequired,
   activeTab: PropTypes.number,
   setSelectedTab: PropTypes.func.isRequired,
-  actionComponent: PropTypes.node
+  actionComponent: PropTypes.node,
+  fetchData: PropTypes.func.isRequired
 };
 
 ExportersPanel.defaultProps = {

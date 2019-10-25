@@ -39,13 +39,18 @@ export const getEditMode = state => state.dashboardElement.editMode;
 const getAppContexts = state => state.app.contexts;
 
 const getPanelActiveItems = (selectedNodesIds, data) =>
-  selectedNodesIds.map(id => {
-    const item = data.nodes[id];
-    return { ...item, name: `${item.name}`.toLowerCase() };
-  });
+  selectedNodesIds
+    .map(id => {
+      const item = data.nodes && data.nodes[id];
+      if (!item) {
+        return null;
+      }
+      return { ...item, name: `${item.name}`.toLowerCase() };
+    })
+    .filter(Boolean);
 
 const getSingleActiveItem = (selectedId, data) => {
-  const selected = selectedId && data.nodes[selectedId];
+  const selected = selectedId && data.nodes && data.nodes[selectedId];
   if (selected) {
     return [{ ...selected, name: `${selected.name}`.toLowerCase() }];
   }

@@ -12,6 +12,7 @@ import './sources-panel.scss';
 
 function SourcesPanel(props) {
   const {
+    fetchKey,
     fetchData,
     accordionTitle,
     accordionValue,
@@ -35,8 +36,10 @@ function SourcesPanel(props) {
   } = props;
 
   useEffect(() => {
-    fetchData();
-  }, [previousSteps, fetchData]);
+    if (previousSteps !== fetchKey || fetchKey === null) {
+      fetchData(previousSteps);
+    }
+  }, [previousSteps, fetchData, fetchKey]);
 
   const itemToScrollTo = useFirstItem(sources);
   return (
@@ -91,6 +94,8 @@ function SourcesPanel(props) {
 }
 
 SourcesPanel.propTypes = {
+  fetchKey: PropTypes.string,
+  previousSteps: PropTypes.string,
   accordionTitle: PropTypes.string.isRequired,
   accordionValue: PropTypes.bool.isRequired,
   toggleAccordion: PropTypes.func.isRequired,
@@ -108,7 +113,8 @@ SourcesPanel.propTypes = {
   setPage: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   selectedNodesIds: PropTypes.array.isRequired,
-  setSelectedItems: PropTypes.func.isRequired
+  setSelectedItems: PropTypes.func.isRequired,
+  fetchData: PropTypes.func.isRequired
 };
 
 export default SourcesPanel;

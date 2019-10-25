@@ -19,6 +19,7 @@ function CountriesPanel(props) {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
   return (
     <div className="c-countries-panel">
       <GridList

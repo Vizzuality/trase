@@ -1,10 +1,6 @@
 import { select, all, fork, takeLatest, put, call } from 'redux-saga/effects';
 import {
-  DASHBOARD_ELEMENT__CLEAR_PANEL,
-  DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID,
-  DASHBOARD_ELEMENT__SET_SELECTED_COMMODITY_ID,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
-  DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH,
+  DASHBOARD_ELEMENT__GO_TO_DASHBOARD,
   DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
   DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
   DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
@@ -25,16 +21,7 @@ function* updateIndicatorsOnItemChange() {
 }
 
 function* fetchChartsOnItemChange() {
-  yield takeLatest(
-    [
-      DASHBOARD_ELEMENT__CLEAR_PANEL,
-      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS,
-      DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID,
-      DASHBOARD_ELEMENT__SET_SELECTED_COMMODITY_ID,
-      DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH
-    ],
-    updateIndicatorsOnItemChange
-  );
+  yield takeLatest([DASHBOARD_ELEMENT__GO_TO_DASHBOARD], updateIndicatorsOnItemChange);
 }
 
 export function* fetchMissingDashboardPanelItems() {

@@ -13,6 +13,7 @@ function DestinationsPanel(props) {
     setPage,
     loading,
     fetchData,
+    fetchKey,
     previousSteps,
     destinations,
     searchResults,
@@ -23,8 +24,10 @@ function DestinationsPanel(props) {
   } = props;
 
   useEffect(() => {
-    fetchData();
-  }, [previousSteps, fetchData]);
+    if (previousSteps !== fetchKey || fetchKey === null) {
+      fetchData(previousSteps);
+    }
+  }, [previousSteps, fetchData, fetchKey]);
 
   const itemToScrollTo = useFirstItem(destinations);
 
@@ -74,6 +77,8 @@ function DestinationsPanel(props) {
 }
 
 DestinationsPanel.propTypes = {
+  fetchKey: PropTypes.string,
+  previousSteps: PropTypes.string,
   destinations: PropTypes.array,
   page: PropTypes.number.isRequired,
   loading: PropTypes.bool,
@@ -81,6 +86,7 @@ DestinationsPanel.propTypes = {
   selectedNodesIds: PropTypes.array,
   setPage: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
+  fetchData: PropTypes.func.isRequired,
   setSearchResult: PropTypes.func.isRequired,
   setSelectedItems: PropTypes.func.isRequired
 };

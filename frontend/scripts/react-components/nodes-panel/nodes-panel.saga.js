@@ -4,7 +4,6 @@ import { createNodesPanelFetchSaga } from 'react-components/nodes-panel/nodes-pa
 
 export function createNodesPanelSaga(name, moduleOptions = {}) {
   const {
-    SET_SELECTED_ID,
     // SET_MISSING_DATA,
     GET_SEARCH_RESULTS,
     SET_TABS,
@@ -32,8 +31,9 @@ export function createNodesPanelSaga(name, moduleOptions = {}) {
 
       if (moduleOptions.hasTabs) {
         yield fork(getSectionTabs, name);
+      } else {
+        yield fork(getData, reducer);
       }
-      yield fork(getData, reducer);
     }
     yield takeLatest([FETCH_DATA], onFetchRequest);
   }
@@ -81,21 +81,6 @@ export function createNodesPanelSaga(name, moduleOptions = {}) {
   }
 
   /**
-   * Listens to SET_SELECTED_COUNTRY_ID and requests the tabs data every time a new country has been selected.
-   */
-  function* onItemChange(action) {
-    const { activeItem } = action.payload;
-    // for now, we just need to recalculate the tabs when selecting a new country
-    if (activeItem && moduleOptions.hasTabs) {
-      yield fork(getSectionTabs, name);
-    }
-  }
-
-  function* fetchDataOnItemChange() {
-    yield takeLatest([SET_SELECTED_ID], onItemChange);
-  }
-
-  /**
    * Listens to SET_PANEL_PAGE and fetches the data for the next page.
    */
   function* onPageChange() {
@@ -108,7 +93,7 @@ export function createNodesPanelSaga(name, moduleOptions = {}) {
     yield takeLatest(SET_PANEL_PAGE, onPageChange);
   }
 
-  const sagas = [fetchData, fetchDataOnItemChange, fetchDataOnPageChange];
+  const sagas = [fetchData, fetchDataOnPageChange];
 
   if (moduleOptions.hasSearch) {
     sagas.push(fetchDataOnSearch);
