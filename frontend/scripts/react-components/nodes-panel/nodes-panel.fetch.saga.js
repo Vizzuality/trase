@@ -13,8 +13,8 @@ import { createNodesPanelActions } from 'react-components/nodes-panel/nodes-pane
 import { createNodesPanelSelectors } from 'react-components/nodes-panel/nodes-panel.selectors';
 
 const sourcesSelector = createNodesPanelSelectors('sources', { hasTabs: true });
-const exportersSelector = createNodesPanelSelectors('sources', { hasTabs: true });
-const importersSelector = createNodesPanelSelectors('sources', { hasTabs: true });
+const exportersSelector = createNodesPanelSelectors('exporters', { hasTabs: true });
+const importersSelector = createNodesPanelSelectors('importers', { hasTabs: true });
 
 export function* getPanelParams(optionsType, options = {}) {
   const state = yield select();
