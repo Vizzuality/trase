@@ -35,6 +35,7 @@ export const goToTool = (destination, card) => dispatch => {
     dispatch({
       type: EXPLORE__SELECT_TOP_CARD,
       payload: {
+        destination,
         linkParams: card
       }
     });
