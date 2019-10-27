@@ -1,9 +1,5 @@
 import { connect } from 'react-redux';
-import { createNodesPanelActions } from 'react-components/nodes-panel/nodes-panel.actions';
-import { createNodesPanelSelectors } from 'react-components/nodes-panel/nodes-panel.selectors';
-import ImportersPanel from './importers-panel.component';
-
-const {
+import {
   setPage,
   fetchData,
   setLoadingItems,
@@ -11,29 +7,22 @@ const {
   setSelectedTab,
   getSearchResults,
   setSearchResult
-} = createNodesPanelActions('importers', {
-  hasTabs: true,
-  hasSearch: true,
-  hasMultipleSelection: true
-});
+} from 'react-components/nodes-panel/nodes-panel.actions';
+import { makeGetNodesPanelsProps } from 'react-components/nodes-panel/nodes-panel.selectors';
+import ImportersPanel from './importers-panel.component';
 
-const importersProps = createNodesPanelSelectors('importers', {
-  hasTabs: true,
-  hasSearch: true,
-  hasMultipleSelection: true
-});
-
+const NAME = 'importers';
 const mapDispatchToProps = {
-  setPage,
-  fetchData,
-  setSelectedTab,
-  setLoadingItems,
-  setSearchResult,
-  getSearchResults,
-  setSelectedItems
+  setPage: page => setPage(page, NAME),
+  fetchData: key => fetchData(key, NAME),
+  setSelectedTab: activeTab => setSelectedTab(activeTab, NAME),
+  setLoadingItems: loadingItems => setLoadingItems(loadingItems, NAME),
+  setSearchResult: activeItem => setSearchResult(activeItem, NAME),
+  getSearchResults: query => getSearchResults(query, NAME),
+  setSelectedItems: activeItem => setSelectedItems(activeItem, NAME)
 };
 
 export default connect(
-  importersProps,
+  makeGetNodesPanelsProps(NAME),
   mapDispatchToProps
 )(ImportersPanel);

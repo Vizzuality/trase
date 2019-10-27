@@ -1,31 +1,126 @@
 import { createSelector, createStructuredSelector } from 'reselect';
 import { DASHBOARD_STEPS } from 'constants';
+import modules from 'react-components/nodes-panel/nodes-panel.modules';
 
-export function createNodesPanelSelectors(name, moduleOptions = {}) {
-  const getById = state => state.nodesPanel[name].data.byId;
-  const getNodes = state => state.nodesPanel[name].data.nodes;
-  const getPage = state => state.nodesPanel[name].page;
-  const getLoading = state => state.nodesPanel[name].loadingItems;
-  const getTabs = state => state.nodesPanel[name].tabs;
-  const getTab = state => state.nodesPanel[name].activeTab;
-  const getSelectedNodeId = state => state.nodesPanel[name].selectedNodeId;
-  const getSelectedNodesIds = state => state.nodesPanel[name].selectedNodesIds;
-  const getSearchResults = state => state.nodesPanel[name].searchResults;
-  const getFetchKey = state => state.nodesPanel[name].fetchKey;
+const getCountrySelectedNodeId = state => state.nodesPanel.countries.selectedNodeId;
+const getSourcesSelectedNodesIds = state => state.nodesPanel.sources.selectedNodesIds;
+const getCommoditySelectedNodeId = state => state.nodesPanel.commodities.selectedNodeId;
+const getDestinationsSelectedNodesIds = state => state.nodesPanel.destinations.selectedNodesIds;
+const getExportersSelectedNodesIds = state => state.nodesPanel.exporters.selectedNodesIds;
+const getImportersSelectedNodesIds = state => state.nodesPanel.importers.selectedNodesIds;
 
-  const getCountriesSelectedNodesIds = state => [state.nodesPanel.countries.selectedNodeId];
-  const getSourcesSelectedNodesIds = state => state.nodesPanel.sources.selectedNodesIds;
-  const getCommoditiesSelectedNodeId = state => [state.nodesPanel.commodities.selectedNodeId];
-  const getDestinationsSelectedNodesIds = state => state.nodesPanel.destinations.selectedNodesIds;
-  const getExportersSelectedNodesIds = state => state.nodesPanel.exporters.selectedNodesIds;
-  const getImportersSelectedNodesIds = state => state.nodesPanel.importers.selectedNodesIds;
+const getSourcesFetchKey = state => state.nodesPanel.sources.fetchKey;
+const getCommodityFetchKey = state => state.nodesPanel.commodities.fetchKey;
+const getDestinationsFetchKey = state => state.nodesPanel.destinations.fetchKey;
+const getExportersFetchKey = state => state.nodesPanel.exporters.fetchKey;
+const getImportersFetchKey = state => state.nodesPanel.importers.fetchKey;
 
-  const getItems = createSelector(
-    [getById, getNodes],
-    (byId, nodes) => byId.map(id => nodes[id])
+const makeGetTabs = name => state => state.nodesPanel[name].tabs;
+
+export const getDirtyBlocks = createSelector(
+  [
+    getCountrySelectedNodeId,
+    getCommoditySelectedNodeId,
+    getSourcesSelectedNodesIds,
+    getDestinationsSelectedNodesIds,
+    getExportersSelectedNodesIds,
+    getImportersSelectedNodesIds
+  ],
+  (
+    selectedCountryId,
+    selectedCommodityId,
+    sourcesActiveItems,
+    destinationsActiveItems,
+    importersActiveItems,
+    exportersActiveItems
+  ) => ({
+    countries: selectedCountryId !== null,
+    sources: sourcesActiveItems.length > 0,
+    commodities: selectedCommodityId !== null,
+    destinations: destinationsActiveItems.length > 0,
+    exporters: exportersActiveItems.length > 0,
+    importers: importersActiveItems.length > 0
+  })
+);
+
+const makeGetPreviousSteps = name =>
+  createSelector(
+    [
+      getCountrySelectedNodeId,
+      getSourcesSelectedNodesIds,
+      getCommoditySelectedNodeId,
+      getDestinationsSelectedNodesIds,
+      getExportersSelectedNodesIds,
+      getImportersSelectedNodesIds
+    ],
+    (...steps) => {
+      const currentStep = DASHBOARD_STEPS[name];
+      const previousStepsSelectedItems = steps.slice(0, currentStep);
+      return previousStepsSelectedItems
+        .flatMap(step => (Array.isArray(step) ? step.join('_') : `${step}_`))
+        .join('_');
+    }
   );
 
-  const getActiveTab = createSelector(
+export const getSourcesPreviousSteps = makeGetPreviousSteps('sources');
+export const getCommoditiesPreviousSteps = makeGetPreviousSteps('commodities');
+export const getDestinationsPreviousSteps = makeGetPreviousSteps('destinations');
+export const getExportersPreviousSteps = makeGetPreviousSteps('exporters');
+export const getImportersPreviousSteps = makeGetPreviousSteps('importers');
+
+const getSomeBlocksNeedUpdate = createSelector(
+  [
+    getCommodityFetchKey,
+    getSourcesFetchKey,
+    getDestinationsFetchKey,
+    getExportersFetchKey,
+    getImportersFetchKey,
+    getSourcesPreviousSteps,
+    getCommoditiesPreviousSteps,
+    getDestinationsPreviousSteps,
+    getExportersPreviousSteps,
+    getImportersPreviousSteps
+  ],
+  (
+    sourcesFetchKey,
+    commoditiesFetchKey,
+    destinationsFetchKey,
+    exportersFetchKey,
+    importersFetchKey,
+    sourcesPreviousSteps,
+    commoditiesPreviousSteps,
+    destinationsPreviousSteps,
+    exportersPreviousSteps,
+    importersPreviousSteps
+  ) => {
+    const conditions = [
+      sourcesFetchKey === sourcesPreviousSteps,
+      commoditiesFetchKey === commoditiesPreviousSteps,
+      destinationsFetchKey === destinationsPreviousSteps,
+      exportersFetchKey === exportersPreviousSteps,
+      importersFetchKey === importersPreviousSteps
+    ];
+    return !conditions.includes(false);
+  }
+);
+
+export const canProceed = createSelector(
+  [getDirtyBlocks, getSomeBlocksNeedUpdate],
+  (dirtyBlocks, someBlocksNeedUpate) => {
+    const mandatoryBlocks = dirtyBlocks.countries && dirtyBlocks.commodities;
+
+    if (mandatoryBlocks && someBlocksNeedUpate === false) {
+      return true;
+    }
+    return false;
+  }
+);
+
+export const makeGetActiveTab = name => {
+  const getTab = state => state.nodesPanel[name].activeTab;
+  const getTabs = makeGetTabs(name);
+
+  return createSelector(
     [getTab, getTabs],
     (activeTab, tabs) => {
       if (activeTab) {
@@ -37,6 +132,27 @@ export function createNodesPanelSelectors(name, moduleOptions = {}) {
       return null;
     }
   );
+};
+
+export const makeGetNodesPanelsProps = name => {
+  const moduleOptions = modules[name];
+
+  const getById = state => state.nodesPanel[name].data.byId;
+  const getNodes = state => state.nodesPanel[name].data.nodes;
+  const getPage = state => state.nodesPanel[name].page;
+  const getLoading = state => state.nodesPanel[name].loadingItems;
+  const getTabs = makeGetTabs(name);
+  const getSelectedNodeId = state => state.nodesPanel[name].selectedNodeId;
+  const getSelectedNodesIds = state => state.nodesPanel[name].selectedNodesIds;
+  const getSearchResults = state => state.nodesPanel[name].searchResults;
+  const getFetchKey = state => state.nodesPanel[name].fetchKey;
+
+  const getItems = createSelector(
+    [getById, getNodes],
+    (byId, nodes) => byId.map(id => nodes[id])
+  );
+
+  const getActiveTab = makeGetActiveTab(name);
 
   const getItemsByTab = createSelector(
     [getItems, getTabs, getActiveTab],
@@ -49,21 +165,7 @@ export function createNodesPanelSelectors(name, moduleOptions = {}) {
     }
   );
 
-  const getPreviousSteps = createSelector(
-    [
-      getCountriesSelectedNodesIds,
-      getSourcesSelectedNodesIds,
-      getCommoditiesSelectedNodeId,
-      getDestinationsSelectedNodesIds,
-      getExportersSelectedNodesIds,
-      getImportersSelectedNodesIds
-    ],
-    (...steps) => {
-      const currentStep = DASHBOARD_STEPS[name];
-      const previousStepsSelectedItems = steps.slice(0, currentStep);
-      return previousStepsSelectedItems.flatMap(step => step.join('_')).join('_');
-    }
-  );
+  const getPreviousSteps = makeGetPreviousSteps(name);
 
   const selectors = {
     page: getPage,
@@ -91,4 +193,4 @@ export function createNodesPanelSelectors(name, moduleOptions = {}) {
   }
 
   return createStructuredSelector(selectors);
-}
+};

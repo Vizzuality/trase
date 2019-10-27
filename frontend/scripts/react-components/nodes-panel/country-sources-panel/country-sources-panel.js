@@ -6,7 +6,7 @@ function getSelectedCountry(state) {
     selectedNodeId,
     data: { nodes }
   } = state.nodesPanel.countries;
-  return selectedNodeId && nodes[selectedNodeId];
+  return selectedNodeId && nodes && nodes[selectedNodeId];
 }
 const mapStateToProps = state => ({
   selectedCountry: getSelectedCountry(state),

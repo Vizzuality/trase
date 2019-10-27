@@ -4,13 +4,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import DashboardElement from 'react-components/dashboard-element/dashboard-element.component';
 import {
-  getDirtyBlocks,
   getDynamicSentence,
   getDashboardFiltersProps,
   getDashboardGroupedCharts,
   getEditMode,
   getDashboardElementUrlProps
 } from 'react-components/dashboard-element/dashboard-element.selectors';
+import { getDirtyBlocks } from 'react-components/nodes-panel/nodes-panel.selectors';
 import { getPanelId } from 'utils/dashboardPanel';
 import {
   setDashboardSelectedYears,

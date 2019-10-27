@@ -1,131 +1,108 @@
 import { select, all, fork, takeLatest, takeEvery } from 'redux-saga/effects';
-import { createNodesPanelActions } from 'react-components/nodes-panel/nodes-panel.actions';
-import { createNodesPanelFetchSaga } from 'react-components/nodes-panel/nodes-panel.fetch.saga';
+import {
+  NODES_PANEL__GET_SEARCH_RESULTS,
+  NODES_PANEL__SET_TABS,
+  NODES_PANEL__FETCH_DATA,
+  NODES_PANEL__SET_ACTIVE_ITEMS_WITH_SEARCH,
+  NODES_PANEL__SET_ACTIVE_TAB,
+  NODES_PANEL__SET_PANEL_PAGE
+} from './nodes-panel.actions';
+import { getData, getSectionTabs, getMoreData, fetchSearchResults } from './nodes-panel.fetch.saga';
+import modules from './nodes-panel.modules';
 
-export function createNodesPanelSaga(name, moduleOptions = {}) {
-  const {
-    // SET_MISSING_DATA,
-    GET_SEARCH_RESULTS,
-    SET_TABS,
-    FETCH_DATA,
-    SET_ACTIVE_ITEMS_WITH_SEARCH,
-    SET_ACTIVE_TAB,
-    SET_PANEL_PAGE
-  } = createNodesPanelActions(name, moduleOptions);
-  const { getData, getSectionTabs, getMoreData, fetchSearchResults } = createNodesPanelFetchSaga(
-    name,
-    moduleOptions
-  );
+function* fetchData() {
+  function* onFetchRequest(action) {
+    const { name } = action.meta;
+    const moduleOptions = modules[name];
+    const reducer = yield select(state => state.nodesPanel[name]);
 
-  // function* fetchDataMissingItemDownload() {
-  //   function* onMissingItemDownload() {
-  //     yield fork(getSectionTabs, name);
-  //   }
-  //
-  //   yield takeLatest([SET_MISSING_DATA], onMissingItemDownload);
-  // }
-
-  function* fetchData() {
-    function* onFetchRequest() {
-      const reducer = yield select(state => state.nodesPanel[name]);
-
-      if (moduleOptions.hasTabs) {
-        yield fork(getSectionTabs, name);
-      } else {
-        yield fork(getData, reducer);
-      }
+    if (moduleOptions.hasTabs) {
+      yield fork(getSectionTabs, name);
+    } else {
+      yield fork(getData, name, reducer);
     }
-    yield takeLatest([FETCH_DATA], onFetchRequest);
   }
+  yield takeLatest([NODES_PANEL__FETCH_DATA], onFetchRequest);
+}
 
-  /**
-   * Reads the query from the GET_SEARCH_RESULTS action
-   * and calls fetchSearchResults to fetch the data.
-   */
-  function* getSearchResults(action) {
+/**
+ * Reads the query from the GET_SEARCH_RESULTS action
+ * and calls fetchSearchResults to fetch the data.
+ */
+function* getSearchResults(action) {
+  const { name } = action.meta;
+  const moduleOptions = modules[name];
+  if (moduleOptions.hasSearch) {
     const reducer = yield select(state => state.nodesPanel[name]);
     const { query } = action.payload;
-    yield fork(fetchSearchResults, reducer, query);
+    yield fork(fetchSearchResults, name, reducer, query);
   }
+}
 
-  function* fetchDataOnSearch() {
-    yield takeLatest(GET_SEARCH_RESULTS, getSearchResults);
-  }
+function* fetchDataOnSearch() {
+  yield takeLatest(NODES_PANEL__GET_SEARCH_RESULTS, getSearchResults);
+}
 
-  function* fetchDataOnTabsFetch() {
-    function* onTabsFetch() {
+function* fetchDataOnTabsFetch() {
+  function* onTabsFetch(action) {
+    const { name } = action.meta;
+    const moduleOptions = modules[name];
+    if (moduleOptions.hasTabs) {
       const reducer = yield select(state => state.nodesPanel[name]);
 
       if (reducer.data.byId.length === 0) {
-        yield fork(getData, reducer);
+        yield fork(getData, name, reducer);
       } else {
-        yield fork(getMoreData, reducer);
+        yield fork(getMoreData, name, reducer);
       }
     }
-
-    yield takeEvery([SET_TABS], onTabsFetch);
   }
-  /**
-   * Fetches the data for the activeTab if the data hasn't been loaded.
-   */
-  function* onTabChange() {
+
+  yield takeEvery([NODES_PANEL__SET_TABS], onTabsFetch);
+}
+/**
+ * Fetches the data for the activeTab if the data hasn't been loaded.
+ */
+function* onTabChange(action) {
+  const { name } = action.meta;
+  const moduleOptions = modules[name];
+  if (moduleOptions.hasTabs) {
     const reducer = yield select(state => state.nodesPanel[name]);
 
     if (reducer.data.byId.length > 0) {
-      yield fork(getMoreData, reducer);
+      yield fork(getMoreData, name, reducer);
     }
   }
+}
 
-  function* fetchDataOnTabChange() {
-    yield takeLatest([SET_ACTIVE_ITEMS_WITH_SEARCH, SET_ACTIVE_TAB], onTabChange);
-  }
+function* fetchDataOnTabChange() {
+  yield takeLatest(
+    [NODES_PANEL__SET_ACTIVE_ITEMS_WITH_SEARCH, NODES_PANEL__SET_ACTIVE_TAB],
+    onTabChange
+  );
+}
 
-  /**
-   * Listens to SET_PANEL_PAGE and fetches the data for the next page.
-   */
-  function* onPageChange() {
-    const reducer = yield select(state => state.nodesPanel[name]);
+/**
+ * Listens to SET_PANEL_PAGE and fetches the data for the next page.
+ */
+function* onPageChange(action) {
+  const { name } = action.meta;
+  const reducer = yield select(state => state.nodesPanel[name]);
 
-    yield fork(getMoreData, reducer);
-  }
+  yield fork(getMoreData, name, reducer);
+}
 
-  function* fetchDataOnPageChange() {
-    yield takeLatest(SET_PANEL_PAGE, onPageChange);
-  }
-
-  const sagas = [fetchData, fetchDataOnPageChange];
-
-  if (moduleOptions.hasSearch) {
-    sagas.push(fetchDataOnSearch);
-  }
-
-  if (moduleOptions.hasTabs) {
-    sagas.push(fetchDataOnTabsFetch, fetchDataOnTabChange);
-  }
-
-  return sagas;
+function* fetchDataOnPageChange() {
+  yield takeLatest(NODES_PANEL__SET_PANEL_PAGE, onPageChange);
 }
 
 export default function* nodesPanelSagas() {
   const sagas = [
-    ...createNodesPanelSaga('countries'),
-    ...createNodesPanelSaga('commodities'),
-    ...createNodesPanelSaga('sources', {
-      hasTabs: true,
-      hasSearch: true,
-      hasMultipleSelection: true
-    }),
-    ...createNodesPanelSaga('destinations', { hasSearch: true, hasMultipleSelection: true }),
-    ...createNodesPanelSaga('importers', {
-      hasTabs: true,
-      hasSearch: true,
-      hasMultipleSelection: true
-    }),
-    ...createNodesPanelSaga('exporters', {
-      hasTabs: true,
-      hasSearch: true,
-      hasMultipleSelection: true
-    })
+    fetchData,
+    fetchDataOnPageChange,
+    fetchDataOnSearch,
+    fetchDataOnTabsFetch,
+    fetchDataOnTabChange
   ];
   yield all(sagas.map(saga => fork(saga)));
 }

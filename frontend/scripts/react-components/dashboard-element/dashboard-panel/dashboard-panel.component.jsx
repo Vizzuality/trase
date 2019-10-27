@@ -113,7 +113,7 @@ class DashboardPanel extends Component {
   render() {
     const {
       editMode,
-      clearActiveItems,
+      clearPanel,
       onContinue,
       onBack,
       setStep,
@@ -122,7 +122,8 @@ class DashboardPanel extends Component {
       dynamicSentenceParts,
       step,
       isDisabled,
-      closeModal
+      closeModal,
+      setSelectedItems
     } = this.props;
 
     const handleGoToDashboard = () => {
@@ -158,10 +159,11 @@ class DashboardPanel extends Component {
           backText="Back"
           dirtyBlocks={dirtyBlocks}
           goToDashboard={handleGoToDashboard}
-          clearPanel={panelName => clearActiveItems(panelName)}
+          clearPanel={panelName => clearPanel(panelName)}
           dynamicSentenceParts={dynamicSentenceParts}
           step={step}
           isDisabled={isDisabled}
+          removeSentenceItem={setSelectedItems}
         />
       </div>
     );
@@ -172,7 +174,6 @@ DashboardPanel.propTypes = {
   onBack: PropTypes.func,
   dirtyBlocks: PropTypes.array,
   goToDashboard: PropTypes.func,
-  activePanelId: PropTypes.string,
   step: PropTypes.number.isRequired,
   setStep: PropTypes.func.isRequired,
   editMode: PropTypes.bool.isRequired,
@@ -180,7 +181,7 @@ DashboardPanel.propTypes = {
   dynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
-  clearActiveItems: PropTypes.func.isRequired
+  clearPanel: PropTypes.func.isRequired
 };
 
 export default DashboardPanel;

@@ -1,27 +1,26 @@
 import { connect } from 'react-redux';
-import { createNodesPanelActions } from 'react-components/nodes-panel/nodes-panel.actions';
-import { createNodesPanelSelectors } from 'react-components/nodes-panel/nodes-panel.selectors';
+import {
+  setPage,
+  fetchData,
+  setSearchResult,
+  getSearchResults,
+  setLoadingItems,
+  setSelectedItems
+} from 'react-components/nodes-panel/nodes-panel.actions';
+import { makeGetNodesPanelsProps } from 'react-components/nodes-panel/nodes-panel.selectors';
 import DestinationsPanel from './destinations-panel.component';
 
-const destinationsActions = createNodesPanelActions('destinations', {
-  hasSearch: true,
-  hasMultipleSelection: true
-});
-const destinationsProps = createNodesPanelSelectors('destinations', {
-  hasSearch: true,
-  hasMultipleSelection: true
-});
-
+const NAME = 'destinations';
 const mapDispatchToProps = {
-  setPage: destinationsActions.setPage,
-  fetchData: destinationsActions.fetchData,
-  setSearchResult: destinationsActions.setSearchResult,
-  getSearchResults: destinationsActions.getSearchResults,
-  setLoadingItems: destinationsActions.setLoadingItems,
-  setSelectedItems: destinationsActions.setSelectedItems
+  setPage: page => setPage(page, NAME),
+  fetchData: key => fetchData(key, NAME),
+  setLoadingItems: loadingItems => setLoadingItems(loadingItems, NAME),
+  setSearchResult: activeItem => setSearchResult(activeItem, NAME),
+  getSearchResults: query => getSearchResults(query, NAME),
+  setSelectedItems: activeItem => setSelectedItems(activeItem, NAME)
 };
 
 export default connect(
-  destinationsProps,
+  makeGetNodesPanelsProps(NAME),
   mapDispatchToProps
 )(DestinationsPanel);

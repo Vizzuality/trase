@@ -1,65 +1,99 @@
-export function createNodesPanelActions(name) {
-  const constants = {
-    FETCH_DATA: `${name.toUpperCase()}_PANEL__FETCH_DATA`,
-    SET_PANEL_PAGE: `${name.toUpperCase()}_PANEL__SET_PANEL_PAGE`,
-    SET_DATA: `${name.toUpperCase()}_PANEL__SET_DATA`,
-    SET_TABS: `${name.toUpperCase()}_PANEL__SET_TABS`,
-    SET_MORE_DATA: `${name.toUpperCase()}_PANEL__SET_MORE_DATA`,
-    SET_MISSING_DATA: `${name.toUpperCase()}_PANEL__SET_MISSING_DATA`,
-    SET_LOADING_ITEMS: `${name.toUpperCase()}_PANEL__SET_LOADING_ITEMS`,
-    SET_SELECTED_ID: `${name.toUpperCase()}_PANEL__SET_SELECTED_COMMODITY_ID`,
-    SET_SELECTED_IDS: `${name.toUpperCase()}_PANEL__SET_SELECTED_COMMODITY_IDS`,
-    SET_ACTIVE_TAB: `${name.toUpperCase()}_PANEL__SET_ACTIVE_TAB`,
-    SET_ACTIVE_ITEMS_WITH_SEARCH: `${name.toUpperCase()}_PANEL__SET_ACTIVE_ITEMS_WITH_SEARCH`,
-    SET_SEARCH_RESULTS: `${name.toUpperCase()}_PANEL__SET_SEARCH_RESULTS`,
-    GET_SEARCH_RESULTS: `${name.toUpperCase()}_PANEL__GET_SEARCH_RESULTS`
-  };
+export const NODES_PANEL__SET_INSTANCE_ID = 'NODES_PANEL__SET_INSTANCE_ID';
+export const NODES_PANEL__SET_SELECTED_ID = 'NODES_PANEL__SET_SELECTED_ID';
+export const NODES_PANEL__SET_SELECTED_IDS = 'NODES_PANEL__SET_SELECTED_IDS';
+export const NODES_PANEL__CLEAR_PANEL = 'NODES_PANEL__CLEAR_PANEL';
+export const NODES_PANEL__FETCH_DATA = 'NODES_PANEL__FETCH_DATA';
+export const NODES_PANEL__SET_PANEL_PAGE = 'NODES_PANEL__SET_PANEL_PAGE';
+export const NODES_PANEL__SET_DATA = 'NODES_PANEL__SET_DATA';
+export const NODES_PANEL__SET_TABS = 'NODES_PANEL__SET_TABS';
+export const NODES_PANEL__SET_MORE_DATA = 'NODES_PANEL__SET_MORE_DATA';
+export const NODES_PANEL__SET_MISSING_DATA = 'NODES_PANEL__SET_MISSING_DATA';
+export const NODES_PANEL__SET_LOADING_ITEMS = 'NODES_PANEL__SET_LOADING_ITEMS';
+export const NODES_PANEL__SET_ACTIVE_TAB = 'NODES_PANEL__SET_ACTIVE_TAB';
+export const NODES_PANEL__SET_ACTIVE_ITEMS_WITH_SEARCH =
+  'NODES_PANEL__SET_ACTIVE_ITEMS_WITH_SEARCH';
+export const NODES_PANEL__SET_SEARCH_RESULTS = 'NODES_PANEL__SET_SEARCH_RESULTS';
+export const NODES_PANEL__GET_SEARCH_RESULTS = 'NODES_PANEL__GET_SEARCH_RESULTS';
 
-  const actionCreators = {
-    fetchData: key => ({
-      type: constants.FETCH_DATA,
-      payload: key
-    }),
-    setSelectedItem: activeItem => ({
-      type: constants.SET_SELECTED_ID,
-      payload: { activeItem }
-    }),
-    setSelectedItems: activeItem => ({
-      type: constants.SET_SELECTED_IDS,
-      payload: { activeItem }
-    }),
-    setSelectedTab: activeTab => ({
-      type: constants.SET_ACTIVE_TAB,
-      payload: { activeTab }
-    }),
-    setLoadingItems: loadingItems => ({
-      type: constants.SET_LOADING_ITEMS,
-      payload: { loadingItems }
-    }),
-    setMoreData: payload => ({
-      type: constants.SET_MORE_DATA,
-      payload
-    }),
-    setPage: page => ({
-      type: constants.SET_PANEL_PAGE,
-      payload: page
-    }),
-    setMissingItems: data => ({
-      type: constants.SET_MISSING_DATA,
-      payload: { data }
-    }),
-    getSearchResults: query => ({
-      type: constants.GET_SEARCH_RESULTS,
-      payload: { query }
-    }),
-    setSearchResult: activeItem => ({
-      type: constants.SET_ACTIVE_ITEMS_WITH_SEARCH,
-      payload: { activeItem }
-    })
-  };
+export const fetchData = (key, name) => ({
+  type: NODES_PANEL__FETCH_DATA,
+  payload: key,
+  meta: { name }
+});
 
-  return {
-    ...constants,
-    ...actionCreators
-  };
-}
+export const setData = (data, name) => ({
+  type: NODES_PANEL__SET_DATA,
+  payload: { data },
+  meta: { name }
+});
+
+export const setMoreData = (data, name) => ({
+  type: NODES_PANEL__SET_MORE_DATA,
+  payload: { data },
+  meta: { name }
+});
+
+export const setTabs = (data, name) => ({
+  type: NODES_PANEL__SET_TABS,
+  payload: { data },
+  meta: { name }
+});
+
+export const setSearchResults = (query, data, name) => ({
+  type: NODES_PANEL__SET_SEARCH_RESULTS,
+  payload: { query, data },
+  meta: { name }
+});
+
+export const setSelectedItem = (activeItem, name) => ({
+  type: NODES_PANEL__SET_SELECTED_ID,
+  payload: { activeItem },
+  meta: { name }
+});
+
+export const setSelectedItems = (activeItem, name) => ({
+  type: NODES_PANEL__SET_SELECTED_IDS,
+  payload: { activeItem },
+  meta: { name }
+});
+
+export const setSelectedTab = (activeTab, name) => ({
+  type: NODES_PANEL__SET_ACTIVE_TAB,
+  payload: { activeTab },
+  meta: { name }
+});
+
+export const setLoadingItems = (loadingItems, name) => ({
+  type: NODES_PANEL__SET_LOADING_ITEMS,
+  payload: { loadingItems },
+  meta: { name }
+});
+
+export const setPage = (page, name) => ({
+  type: NODES_PANEL__SET_PANEL_PAGE,
+  payload: page,
+  meta: { name }
+});
+
+export const setMissingItems = (data, name) => ({
+  type: NODES_PANEL__SET_MISSING_DATA,
+  payload: { data },
+  meta: { name }
+});
+
+export const getSearchResults = (query, name) => ({
+  type: NODES_PANEL__GET_SEARCH_RESULTS,
+  payload: { query },
+  meta: { name }
+});
+
+export const setSearchResult = (activeItem, name) => ({
+  type: NODES_PANEL__SET_ACTIVE_ITEMS_WITH_SEARCH,
+  payload: { activeItem },
+  meta: { name }
+});
+
+export const clearPanel = panel => ({
+  type: NODES_PANEL__CLEAR_PANEL,
+  payload: { panel }
+});

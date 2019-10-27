@@ -1,21 +1,22 @@
 import { connect } from 'react-redux';
-import { createNodesPanelSelectors } from 'react-components/nodes-panel/nodes-panel.selectors';
-import { createNodesPanelActions } from 'react-components/nodes-panel/nodes-panel.actions';
-import CommoditiesPanel from './commodities-panel.component';
-
-const { fetchData, setLoadingItems, setSelectedItem, setPage } = createNodesPanelActions(
-  'commodities'
-);
-const commoditiesProps = createNodesPanelSelectors('commodities');
-
-const mapDispatchToProps = {
-  setPage,
+import {
   fetchData,
   setLoadingItems,
-  setSelectedItem
+  setSelectedItem,
+  setPage
+} from 'react-components/nodes-panel/nodes-panel.actions';
+import { makeGetNodesPanelsProps } from 'react-components/nodes-panel/nodes-panel.selectors';
+import CommoditiesPanel from './commodities-panel.component';
+
+const NAME = 'commodities';
+const mapDispatchToProps = {
+  setPage: page => setPage(page, NAME),
+  fetchData: key => fetchData(key, NAME),
+  setLoadingItems: loadingItems => setLoadingItems(loadingItems, NAME),
+  setSelectedItem: activeItem => setSelectedItem(activeItem, NAME)
 };
 
 export default connect(
-  commoditiesProps,
+  makeGetNodesPanelsProps(NAME),
   mapDispatchToProps
 )(CommoditiesPanel);

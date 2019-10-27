@@ -1,14 +1,12 @@
 import { connect } from 'react-redux';
-import {
-  clearDashboardPanel,
-  goToDashboard as goToDashboardFn
-} from 'react-components/dashboard-element/dashboard-element.actions';
+import { goToDashboard as goToDashboardFn } from 'react-components/dashboard-element/dashboard-element.actions';
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.component';
 import {
   getIsDisabled,
   getDynamicSentence
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { getCountryNamesByCountryId } from 'reducers/app.selectors';
+import { clearPanel, setSelectedItems } from 'react-components/nodes-panel/nodes-panel.actions';
 
 const mapStateToProps = (state, ownProps) => {
   const { loading, activePanelId } = state.dashboardElement;
@@ -23,7 +21,8 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = {
-  clearActiveItems: clearDashboardPanel,
+  clearPanel,
+  setSelectedItems,
   goToDashboard: goToDashboardFn
 };
 

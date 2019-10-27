@@ -13,12 +13,15 @@ function CountriesPanel(props) {
     selectedNodeId,
     loading,
     setSelectedItem,
-    fetchData
+    fetchData,
+    fetchKey
   } = props;
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (fetchKey === null) {
+      fetchData(true);
+    }
+  }, [fetchData, fetchKey]);
 
   return (
     <div className="c-countries-panel">

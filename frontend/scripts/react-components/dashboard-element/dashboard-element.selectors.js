@@ -7,6 +7,7 @@ import { getPanelId } from 'utils/dashboardPanel';
 import { makeGetResizeByItems, makeGetRecolorByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
 import camelCase from 'lodash/camelCase';
+import { getDirtyBlocks } from 'react-components/nodes-panel/nodes-panel.selectors';
 
 const getCountriesData = state => state.nodesPanel.countries.data;
 const getSourcesData = state => state.nodesPanel.sources.data;
@@ -82,32 +83,6 @@ const getExportersActiveItems = createSelector(
 const getImportersActiveItems = createSelector(
   [getImporters, getImportersData],
   getPanelActiveItems
-);
-
-export const getDirtyBlocks = createSelector(
-  [
-    getSelectedCountryId,
-    getSelectedCommodityId,
-    getSources,
-    getDestinations,
-    getExporters,
-    getImporters
-  ],
-  (
-    selectedCountryId,
-    selectedCommodityId,
-    sourcesActiveItems,
-    destinationsActiveItems,
-    importersActiveItems,
-    exportersActiveItems
-  ) => ({
-    countries: selectedCountryId !== null,
-    sources: sourcesActiveItems.length > 0,
-    destinations: destinationsActiveItems.length > 0,
-    exporters: exportersActiveItems.length > 0,
-    importers: importersActiveItems.length > 0,
-    commodities: selectedCommodityId !== null
-  })
 );
 
 export const getNodesPanelValues = createStructuredSelector({
