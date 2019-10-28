@@ -131,7 +131,6 @@ const toolLinksReducer = {
       columns.forEach(column => {
         draft.data.columns[column.id] = column;
       });
-
       // TODO: if any selectedNode, make those columns visible (selected)
     });
   },
@@ -214,15 +213,11 @@ const toolLinksReducer = {
       draft.selectedNodesIds = state.selectedNodesIds.filter(isInColumn);
       draft.expandedNodesIds = state.expandedNodesIds.filter(isInColumn);
 
-      // Add expanded source node for the extra column
-      if (
-        ENABLE_REDESIGN_PAGES &&
-        state.extraColumn &&
-        draft.data.columns[columnId].filterTo === state.extraColumn.id
-      ) {
-        const sourceNode = state.data.nodes && state.data.nodes[state.extraColumnNodeId];
-        draft.selectedNodesIds = draft.selectedNodesIds.concat(sourceNode.id);
-        draft.expandedNodesIds = draft.expandedNodesIds.concat(sourceNode.id);
+      if (state.extraColumn) {
+        draft.selectedNodesIds.filter(id => state.extraColumnNodeId !== id);
+        draft.expandedNodesIds.filter(id => state.extraColumnNodeId !== id);
+        draft.extraColumn = toolLinksInitialState.extraColumn;
+        draft.extraColumnNodeId = toolLinksInitialState.extraColumnNodeId;
       }
     });
   },
@@ -244,15 +239,17 @@ const toolLinksReducer = {
             .filter(expandedNodeId => draft.data.nodes[expandedNodeId].columnId === parentColumnId)
             .concat(extraColumnNode?.id);
         }
+        draft.extraColumnNodeId = action.payload.nodeId;
+        draft.extraColumn = { id: columnId, parentId: parentColumnId };
       } else {
         // Close extra column
         draft.expandedNodesIds = state.expandedNodesIds.filter(
           id => !wasInExtraColumn(id) && id !== extraColumnNode?.id
         );
         draft.selectedNodesIds = state.selectedNodesIds.filter(id => !wasInExtraColumn(id));
+        draft.extraColumnNodeId = null;
+        draft.extraColumn = null;
       }
-      draft.extraColumnNodeId = action.payload.nodeId || null;
-      draft.extraColumn = columnId ? { id: columnId, parentId: parentColumnId } : null;
     });
   },
   [TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH](state, action) {
