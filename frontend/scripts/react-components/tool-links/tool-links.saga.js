@@ -40,7 +40,6 @@ function* fetchToolColumns() {
       return;
     }
     const task = yield fork(setLoadingSpinner, 750, setToolFlowsLoading(true));
-    // We need getToolColumnsData to be syncrhonous for the selectedColumnIds to load the links
     yield fork(getToolColumnsData, selectedContext);
     yield fork(getToolGeoColumnNodes, selectedContext);
 

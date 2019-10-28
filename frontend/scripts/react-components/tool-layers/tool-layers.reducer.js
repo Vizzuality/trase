@@ -92,8 +92,9 @@ const toolLayersReducer = {
     });
   },
   [SELECT_UNIT_LAYERS](state, action) {
+    const { uids } = action.payload;
     return immer(state, draft => {
-      draft.selectedMapDimensions = action.payload.uids;
+      draft.selectedMapDimensions = uids && uids.length > 0 ? uids : null;
     });
   },
   [SELECT_CONTEXTUAL_LAYERS](state, action) {
