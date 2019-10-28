@@ -23,6 +23,7 @@ class DashboardElement extends React.PureComponent {
     groupedCharts: PropTypes.object,
     urlProps: PropTypes.object,
     dirtyBlocks: PropTypes.object,
+    canProceed: PropTypes.bool.isRequired,
     step: PropTypes.number.isRequired,
     setStep: PropTypes.func.isRequired,
     editMode: PropTypes.bool.isRequired,
@@ -45,7 +46,7 @@ class DashboardElement extends React.PureComponent {
   };
 
   renderStep() {
-    const { step, setStep, editMode, closeModal, dirtyBlocks } = this.props;
+    const { step, setStep, editMode, closeModal, dirtyBlocks, canProceed } = this.props;
     const showBackButton = step > DASHBOARD_STEPS.sources;
     const onContinue = step === DASHBOARD_STEPS.importers ? closeModal : () => setStep(step + 1);
     if (step === DASHBOARD_STEPS.welcome && !editMode) {
@@ -55,6 +56,7 @@ class DashboardElement extends React.PureComponent {
       <DashboardPanel
         step={step}
         editMode={editMode}
+        canProceed={canProceed}
         onContinue={onContinue}
         dirtyBlocks={dirtyBlocks}
         onBack={showBackButton ? () => setStep(step - 1) : undefined}
@@ -79,8 +81,7 @@ class DashboardElement extends React.PureComponent {
   }
 
   renderDashboardModal() {
-    const { editMode, goToRoot, modalOpen, closeModal, dirtyBlocks } = this.props;
-    const canProceed = dirtyBlocks.countries && dirtyBlocks.commodities;
+    const { editMode, goToRoot, modalOpen, closeModal, canProceed } = this.props;
     const onClose = editMode && canProceed ? closeModal : goToRoot;
     return (
       <SimpleModal isOpen={modalOpen} onClickClose={onClose}>

@@ -57,7 +57,13 @@ const makeGetPreviousSteps = name =>
       const currentStep = DASHBOARD_STEPS[name];
       const previousStepsSelectedItems = steps.slice(0, currentStep);
       return previousStepsSelectedItems
-        .flatMap(step => (Array.isArray(step) ? step.join('_') : `${step}_`))
+        .flatMap(step => {
+          if (Array.isArray(step)) {
+            return step.join('_');
+          }
+          return step ? `${step}_` : null;
+        })
+        .filter(Boolean)
         .join('_');
     }
   );
@@ -70,8 +76,8 @@ export const getImportersPreviousSteps = makeGetPreviousSteps('importers');
 
 const getSomeBlocksNeedUpdate = createSelector(
   [
-    getCommodityFetchKey,
     getSourcesFetchKey,
+    getCommodityFetchKey,
     getDestinationsFetchKey,
     getExportersFetchKey,
     getImportersFetchKey,
@@ -94,17 +100,17 @@ const getSomeBlocksNeedUpdate = createSelector(
     importersPreviousSteps
   ) => {
     const conditions = [
-      sourcesFetchKey === sourcesPreviousSteps,
-      commoditiesFetchKey === commoditiesPreviousSteps,
-      destinationsFetchKey === destinationsPreviousSteps,
-      exportersFetchKey === exportersPreviousSteps,
-      importersFetchKey === importersPreviousSteps
+      sourcesFetchKey === null || sourcesFetchKey === sourcesPreviousSteps,
+      commoditiesFetchKey === null || commoditiesFetchKey === commoditiesPreviousSteps,
+      destinationsFetchKey === null || destinationsFetchKey === destinationsPreviousSteps,
+      exportersFetchKey === null || exportersFetchKey === exportersPreviousSteps,
+      importersFetchKey === null || importersFetchKey === importersPreviousSteps
     ];
-    return !conditions.includes(false);
+    return conditions.includes(false);
   }
 );
 
-export const canProceed = createSelector(
+export const getCanProceed = createSelector(
   [getDirtyBlocks, getSomeBlocksNeedUpdate],
   (dirtyBlocks, someBlocksNeedUpate) => {
     const mandatoryBlocks = dirtyBlocks.countries && dirtyBlocks.commodities;

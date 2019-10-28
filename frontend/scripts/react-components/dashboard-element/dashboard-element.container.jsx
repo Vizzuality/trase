@@ -10,7 +10,7 @@ import {
   getEditMode,
   getDashboardElementUrlProps
 } from 'react-components/dashboard-element/dashboard-element.selectors';
-import { getDirtyBlocks } from 'react-components/nodes-panel/nodes-panel.selectors';
+import { getDirtyBlocks, getCanProceed } from 'react-components/nodes-panel/nodes-panel.selectors';
 import { getPanelId } from 'utils/dashboardPanel';
 import {
   setDashboardSelectedYears,
@@ -25,6 +25,7 @@ const mapStateToProps = state => {
   const dirtyBlocks = getDirtyBlocks(state);
   return {
     dirtyBlocks,
+    canProceed: getCanProceed(state),
     loading: state.dashboardElement.loading,
     groupedCharts: getDashboardGroupedCharts(state),
     filters: getDashboardFiltersProps(state),
@@ -53,6 +54,7 @@ class DashboardElementContainer extends React.Component {
     editMode: PropTypes.bool,
     loading: PropTypes.bool,
     filters: PropTypes.object,
+    canProceed: PropTypes.bool,
     urlProps: PropTypes.object,
     dirtyBlocks: PropTypes.object,
     groupedCharts: PropTypes.object,
@@ -117,6 +119,7 @@ class DashboardElementContainer extends React.Component {
       groupedCharts,
       goToRoot,
       urlProps,
+      canProceed,
       dynamicSentenceParts,
       dirtyBlocks,
       filters,
@@ -133,6 +136,7 @@ class DashboardElementContainer extends React.Component {
         editMode={editMode}
         goToRoot={goToRoot}
         modalOpen={modalOpen}
+        canProceed={canProceed}
         dirtyBlocks={dirtyBlocks}
         setStep={this.updateStep}
         closeModal={this.closeModal}

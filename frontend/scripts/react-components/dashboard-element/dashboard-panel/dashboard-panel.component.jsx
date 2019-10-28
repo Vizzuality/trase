@@ -123,15 +123,14 @@ class DashboardPanel extends Component {
       step,
       isDisabled,
       closeModal,
-      setSelectedItems
+      setSelectedItems,
+      canProceed
     } = this.props;
 
     const handleGoToDashboard = () => {
       goToDashboard({ dirtyBlocks, dynamicSentenceParts });
       closeModal();
     };
-
-    const mandatoryFieldsSelected = dirtyBlocks.countries && dirtyBlocks.commodities;
 
     return (
       <div className="c-dashboard-panel">
@@ -145,7 +144,7 @@ class DashboardPanel extends Component {
               'Importers'
             ].map(label => ({ label }))}
             activeStep={step - 1}
-            onSelectStep={editMode && mandatoryFieldsSelected ? setStep : undefined}
+            onSelectStep={editMode && canProceed ? setStep : undefined}
           />
           <Heading className="dashboard-panel-title notranslate" align="center" size="lg">
             {this.renderTitleSentence()}
@@ -153,7 +152,7 @@ class DashboardPanel extends Component {
           {this.renderPanel()}
         </div>
         <DashboardModalFooter
-          isLastStep={step === DASHBOARD_STEPS.importers || (editMode && mandatoryFieldsSelected)}
+          isLastStep={step === DASHBOARD_STEPS.importers || (editMode && canProceed)}
           onContinue={onContinue}
           onBack={onBack}
           backText="Back"
@@ -181,7 +180,9 @@ DashboardPanel.propTypes = {
   dynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
-  clearPanel: PropTypes.func.isRequired
+  clearPanel: PropTypes.func.isRequired,
+  setSelectedItems: PropTypes.func.isRequired,
+  canProceed: PropTypes.bool.isRequired
 };
 
 export default DashboardPanel;
