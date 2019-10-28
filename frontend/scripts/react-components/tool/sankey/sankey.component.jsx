@@ -85,10 +85,10 @@ function useMenuOptions(props, hoveredSelectedNode) {
         });
       }
     }
-    const isExpandedColumn =
+    const hasExtraColumn =
       ENABLE_REDESIGN_PAGES && extraColumnId && selectedNode?.id === extraColumnNodeId;
 
-    if ((isReExpand || !hasExpandedNodesIds) && !isExpandedColumn) {
+    if ((isReExpand || !hasExpandedNodesIds) && !hasExtraColumn) {
       items.push({
         id: 'expand',
         label: isReExpand ? 'Re-Expand' : 'Expand',
@@ -96,7 +96,7 @@ function useMenuOptions(props, hoveredSelectedNode) {
       });
     }
 
-    if (hasExpandedNodesIds && !isExpandedColumn) {
+    if (hasExpandedNodesIds && !hasExtraColumn) {
       items.push({ id: 'collapse', label: 'Collapse', onClick: onCollapseClick });
     }
 
@@ -336,6 +336,9 @@ function Sankey(props) {
 
   const loading = !columns || columns.length === 0 || !links || flowsLoading;
 
+  const regularloadingPos = gapBetweenColumns + 2 * sankeyColumnsWidth + gapBetweenColumns / 2;
+  const extraColumnLoadingPos =
+    2 * sankeyColumnsWidth + 2 * gapBetweenColumns + sankeyColumnsWidth / 2;
   return (
     <div className={cx('c-sankey', { '-full-screen': toolLayout === TOOL_LAYOUT.right })}>
       <UnitsTooltip {...tooltipContent} show={!!tooltipContent} />
@@ -346,7 +349,7 @@ function Sankey(props) {
         {loading && (
           <div
             className="sankey-loading"
-            style={{ left: gapBetweenColumns + 2 * sankeyColumnsWidth + gapBetweenColumns / 2 }}
+            style={{ left: extraColumnId ? extraColumnLoadingPos : regularloadingPos }}
           >
             <Heading variant="mono" size="md" weight="bold">
               Loading
