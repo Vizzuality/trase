@@ -11,12 +11,10 @@ import {
   getDashboardElementUrlProps
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { getDirtyBlocks, getCanProceed } from 'react-components/nodes-panel/nodes-panel.selectors';
-import { getPanelId } from 'utils/dashboardPanel';
 import {
   setDashboardSelectedYears,
   setDashboardSelectedResizeBy,
   setDashboardSelectedRecolorBy,
-  setDashboardActivePanel as setDashboardActivePanelFn,
   editDashboard as editDashboardFn
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import { DASHBOARD_STEPS } from 'constants';
@@ -42,7 +40,6 @@ const mapDispatchToProps = dispatch =>
       goToRoot: () => ({ type: 'dashboardRoot' }),
       setSelectedYears: setDashboardSelectedYears,
       setSelectedResizeBy: setDashboardSelectedResizeBy,
-      setDashboardActivePanel: setDashboardActivePanelFn,
       setSelectedRecolorBy: setDashboardSelectedRecolorBy,
       editDashboard: editDashboardFn
     },
@@ -64,8 +61,7 @@ class DashboardElementContainer extends React.Component {
     editDashboard: PropTypes.func.isRequired,
     setSelectedYears: PropTypes.func.isRequired,
     setSelectedResizeBy: PropTypes.func.isRequired,
-    setSelectedRecolorBy: PropTypes.func.isRequired,
-    setDashboardActivePanel: PropTypes.func.isRequired
+    setSelectedRecolorBy: PropTypes.func.isRequired
   };
 
   hasVisitedBefore = {
@@ -86,17 +82,6 @@ class DashboardElementContainer extends React.Component {
   componentDidMount() {
     if (!this.hasVisitedBefore.get()) {
       this.hasVisitedBefore.set(Date.now());
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { step } = this.state;
-    if (step !== prevState.step) {
-      const { setDashboardActivePanel } = this.props;
-      const panelId = getPanelId(step);
-      if (panelId !== null) {
-        setDashboardActivePanel(panelId);
-      }
     }
   }
 

@@ -18,9 +18,9 @@ function ExportersPanel(props) {
     searchResults,
     exporters,
     setPage,
+    nodeTypeRenderer,
     setSearchResult,
     getSearchResults,
-    nodeTypeRenderer,
     setSelectedItems,
     selectedNodesIds,
     setSelectedTab,
@@ -49,11 +49,11 @@ function ExportersPanel(props) {
             <SearchInput
               variant="bordered"
               size="sm"
+              nodeTypeRenderer={nodeTypeRenderer}
               className="exporters-panel-search"
               items={searchResults}
               placeholder="Search exporter"
               onSelect={setSearchResult}
-              nodeTypeRenderer={nodeTypeRenderer}
               onSearchTermChange={getSearchResults}
             />
             <Tabs

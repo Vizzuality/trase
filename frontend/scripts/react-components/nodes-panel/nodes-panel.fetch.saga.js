@@ -183,7 +183,10 @@ export function* getMissingItems(name, reducer, selectedContext) {
 }
 
 export function* fetchSearchResults(name, reducer, query) {
-  if (!query) return;
+  if (!query) {
+    yield put(setSearchResults(query, [], name));
+    return;
+  }
   // eslint-disable-next-line
   const { node_types_ids, ...filters } = yield getPanelParams(name);
   const params = {

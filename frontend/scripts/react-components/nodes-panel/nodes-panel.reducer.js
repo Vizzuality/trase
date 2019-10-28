@@ -131,7 +131,7 @@ const nodesPanelReducer = {
       const { data } = action.payload;
       if (data) {
         const newItems = data.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
-        draft[name].data.byId = data ? Object.keys(newItems) : [];
+        draft[name].data.byId = data ? Object.keys(newItems).map(n => parseInt(n, 10)) : [];
         draft[name].data.nodes = newItems;
       } else {
         resetState(draft, name);
@@ -151,8 +151,9 @@ const nodesPanelReducer = {
       const newItems = data.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
       // in case we preloaded some items, we make sure to avoid duplicates
       draft[name].data.byId = Array.from(
-        new Set([...state[name].data.byId, ...Object.keys(newItems)])
+        new Set([...state[name].data.byId, ...Object.keys(newItems)].map(n => parseInt(n, 10)))
       );
+
       draft[name].data.nodes = { ...state[name].data.nodes, ...newItems };
     });
   },
@@ -163,7 +164,7 @@ const nodesPanelReducer = {
       const newItems = data.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
       draft[name].data.nodes = { ...state[name].data.nodes, ...newItems };
       draft[name].data.byId = Array.from(
-        new Set([...state[name].data.byId, ...Object.keys(newItems)])
+        new Set([...state[name].data.byId, ...Object.keys(newItems)].map(n => parseInt(n, 10)))
       );
     });
   },
@@ -270,12 +271,11 @@ const nodesPanelReducer = {
     const moduleOptions = modules[name];
     if (moduleOptions.hasSearch) {
       return immer(state, draft => {
-        const { panel, activeItem } = action.payload;
+        const { activeItem } = action.payload;
 
         if (moduleOptions.hasTabs) {
           const activeTabObj =
-            state[name].tabs[panel] &&
-            state[name].tabs[panel].find(tab => tab.id === activeItem.nodeTypeId);
+            state[name].tabs && state[name].tabs.find(tab => tab.id === activeItem.nodeTypeId);
           const activeTab = activeTabObj?.id || null;
 
           if (activeTab !== state[name].activeTab && state[name].activeTab) {
@@ -299,7 +299,7 @@ const nodesPanelReducer = {
           if (firstItem && firstItem.nodeType !== activeItem.nodeType) {
             draft[name].selectedNodesIds = [activeItem.id];
           } else {
-            draft[name].selectedNodesIds = xor(draft[panel], [activeItem.id]);
+            draft[name].selectedNodesIds = xor(draft[name].selectedNodesIds, [activeItem.id]);
           }
         } else {
           draft[name].selectedNodeId = activeItem.id;

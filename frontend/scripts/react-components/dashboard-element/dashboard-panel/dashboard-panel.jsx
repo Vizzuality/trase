@@ -9,11 +9,10 @@ import { getCountryNamesByCountryId } from 'reducers/app.selectors';
 import { clearPanel, setSelectedItems } from 'react-components/nodes-panel/nodes-panel.actions';
 
 const mapStateToProps = (state, ownProps) => {
-  const { loading, activePanelId } = state.dashboardElement;
+  const { loading } = state.dashboardElement;
 
   return {
     loading,
-    activePanelId,
     isDisabled: getIsDisabled(state, ownProps),
     dynamicSentenceParts: getDynamicSentence(state),
     countryNames: getCountryNamesByCountryId(state)

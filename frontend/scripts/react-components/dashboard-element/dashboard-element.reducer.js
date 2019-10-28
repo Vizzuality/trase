@@ -3,7 +3,6 @@ import createReducer from 'utils/createReducer';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import dashboardElementSerialization from 'react-components/dashboard-element/dashboard-element.serializers';
 import {
-  DASHBOARD_ELEMENT__SET_ACTIVE_PANEL,
   DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
   DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
   DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
@@ -25,12 +24,6 @@ const dashboardElementReducer = {
       return newState;
     }
     return state;
-  },
-  [DASHBOARD_ELEMENT__SET_ACTIVE_PANEL](state, action) {
-    return immer(state, draft => {
-      const { activePanelId } = action.payload;
-      draft.activePanelId = activePanelId;
-    });
   },
   [DASHBOARD_ELEMENT__EDIT_DASHBOARD](state) {
     return { ...state, editMode: true };
