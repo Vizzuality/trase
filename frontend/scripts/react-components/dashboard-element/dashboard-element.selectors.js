@@ -202,7 +202,7 @@ export const getDynamicSentence = createSelector(
         panel: 'importers',
         id: 'importers',
         name: importersSettings.name,
-        prefix: panelsValues.exporters.length > 0 ? importersSettings.prefix : '',
+        prefix: panelsValues.importers.length > 0 ? importersSettings.prefix : '',
         value: panelsValues.importers,
         optional: true,
         transform: 'capitalize'
