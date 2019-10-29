@@ -1,0 +1,29 @@
+@import 'styles/settings';
+@import 'styles/mixins';
+
+.c-context-modal-button {
+  height: 100%;
+  padding: 0 20px;
+  margin-right: 20px;
+  border-left: 1px solid $charcoal-grey-faded-a-lot;
+  position: relative;
+  max-width: 16vw;
+  cursor: pointer;
+
+  &[disabled=""] {
+    cursor: default;
+  }
+
+  .selected-item {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    @include simple-arrow($charcoal-grey-faded);
+
+    &:after {
+      top: calc(50% + 10px);
+    }
+  }
+}
