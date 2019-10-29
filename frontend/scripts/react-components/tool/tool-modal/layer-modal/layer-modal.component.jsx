@@ -42,7 +42,11 @@ export default function LayerModal({
   const [currentSelection, changeSelection] = useState(selectedItemIds);
   const onSave = () => {
     const toArray = l => (l ? castArray(l) : null);
-    selectUnitLayers(toArray(currentSelection[LAYER_TAB_NAMES.unit]));
+    const unitLayers =
+      layers[LAYER_TAB_NAMES.unit].length > 0
+        ? toArray(currentSelection[LAYER_TAB_NAMES.unit])
+        : null;
+    selectUnitLayers(unitLayers);
     selectContextualLayers(toArray(currentSelection[LAYER_TAB_NAMES.contextual]));
     setActiveModal(null);
   };

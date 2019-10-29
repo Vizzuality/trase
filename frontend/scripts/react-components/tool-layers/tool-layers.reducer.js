@@ -94,7 +94,7 @@ const toolLayersReducer = {
   [SELECT_UNIT_LAYERS](state, action) {
     const { uids } = action.payload;
     return immer(state, draft => {
-      draft.selectedMapDimensions = uids && uids.length > 0 ? uids : null;
+      draft.selectedMapDimensions = uids;
     });
   },
   [SELECT_CONTEXTUAL_LAYERS](state, action) {
