@@ -17,8 +17,10 @@ module Api
               {
                 section: 'SOURCES',
                 tabs: @query.where(
-                  'context_node_type_properties.role' =>
-                    ContextNodeTypeProperty::SOURCE_ROLE
+                  'context_node_type_properties.role = ? AND ' \
+                  'node_types.name != ?',
+                  ContextNodeTypeProperty::SOURCE_ROLE,
+                  NodeTypeName::COUNTRY_OF_PRODUCTION
                 ).all
               },
               {

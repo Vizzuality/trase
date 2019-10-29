@@ -23,9 +23,16 @@ RSpec.describe Api::V3::Dashboards::FilterMeta do
 
     it 'return prefix on all tabs' do
       %w[SOURCES COMPANIES DESTINATIONS].each do |type|
-        meta_type = meta.select { |m| m[:section] = type }.first
+        meta_type = meta.find { |m| m[:section] == type }
         meta_type[:tabs].each { |tab| expect(tab).to include(:prefix) }
       end
+    end
+
+    it 'not include COUNTRY OF PRODUCTION for sources section' do
+      meta_type = meta.find { |m| m[:section] == 'SOURCES' }
+      expect(meta_type[:tabs].map { |tab| tab[:name] }).not_to include(
+        NodeTypeName::COUNTRY_OF_PRODUCTION
+      )
     end
   end
 end
