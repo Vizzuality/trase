@@ -26,7 +26,7 @@ function CountriesPanel(props) {
   return (
     <div className="c-countries-panel">
       <GridList
-        className="country-sources-panel-pill-list"
+        className="country-panel-pill-list"
         height={Math.min(200, Math.ceil(countries.length / columnsCount) * 50)}
         width={width}
         columnWidth={190}

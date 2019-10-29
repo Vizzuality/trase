@@ -80,7 +80,7 @@ const getPanelsToClear = (panel, state, item) => {
   const hadAllItemsSelected = state[panel].selectedNodesIds.length === 0;
 
   // if the selected items in a panel are N, that means that we're including only N
-  // if we remove an item at this point, it means we're passing from "show me N" to "shot me N-1" filtering
+  // if we remove an item at this point, it means we're passing from "show me N" to "show me N-1" filtering
   // this means the subsequent panels selection might include items that corresponded to the removed item
   // thus rendering the selection invalid so we need to clear it.
   // When passing from N to N+1 we're including more possible results so we don't need to clear the selection.

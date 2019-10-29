@@ -112,10 +112,10 @@ const getSomeBlocksNeedUpdate = createSelector(
 
 export const getCanProceed = createSelector(
   [getDirtyBlocks, getSomeBlocksNeedUpdate],
-  (dirtyBlocks, someBlocksNeedUpate) => {
+  (dirtyBlocks, someBlocksNeedUpdate) => {
     const mandatoryBlocks = dirtyBlocks.countries && dirtyBlocks.commodities;
 
-    if (mandatoryBlocks && someBlocksNeedUpate === false) {
+    if (mandatoryBlocks && someBlocksNeedUpdate === false) {
       return true;
     }
     return false;
