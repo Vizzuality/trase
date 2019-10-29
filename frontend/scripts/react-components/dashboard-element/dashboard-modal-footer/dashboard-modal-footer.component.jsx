@@ -63,7 +63,7 @@ function DashboardModalFooter(props) {
 
 DashboardModalFooter.propTypes = {
   onBack: PropTypes.func,
-  dirtyBlocks: PropTypes.array,
+  dirtyBlocks: PropTypes.object,
   removeSentenceItem: PropTypes.func,
   clearPanel: PropTypes.func,
   goToDashboard: PropTypes.func,

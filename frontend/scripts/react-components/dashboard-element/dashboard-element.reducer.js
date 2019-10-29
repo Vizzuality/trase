@@ -85,8 +85,8 @@ const dashboardElementReducer = {
 };
 
 const dashboardElementReducerTypes = PropTypes => ({
-  loading: PropTypes.bool.isRequired,
-  activePanelId: PropTypes.string.isRequired,
+  loading: PropTypes.bool,
+  activePanelId: PropTypes.string,
   selectedYears: PropTypes.arrayOf(PropTypes.number),
   selectedResizeBy: PropTypes.number,
   selectedRecolorBy: PropTypes.number,

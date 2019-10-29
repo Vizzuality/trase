@@ -65,7 +65,7 @@ CommoditiesPanel.propTypes = {
   commodities: PropTypes.array,
   loading: PropTypes.bool,
   page: PropTypes.number.isRequired,
-  selectedNodeId: PropTypes.array,
+  selectedNodeId: PropTypes.number,
   setPage: PropTypes.func.isRequired,
   fetchData: PropTypes.func.isRequired,
   setSelectedItem: PropTypes.func.isRequired

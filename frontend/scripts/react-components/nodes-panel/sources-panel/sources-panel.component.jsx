@@ -105,7 +105,7 @@ SourcesPanel.propTypes = {
   nodeTypeRenderer: PropTypes.func.isRequired,
   tabs: PropTypes.array.isRequired,
   setSelectedTab: PropTypes.func.isRequired,
-  activeTab: PropTypes.object,
+  activeTab: PropTypes.number,
   sources: PropTypes.array.isRequired,
   columnsCount: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,

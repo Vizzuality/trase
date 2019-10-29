@@ -37,7 +37,7 @@ class DashboardElement extends React.PureComponent {
       selectedYears: PropTypes.array,
       selectedResizeBy: PropTypes.object,
       selectedRecolorBy: PropTypes.object,
-      recolorBy: PropTypes.array.isRequired
+      recolorBy: PropTypes.array
     }).isRequired,
     dynamicSentenceParts: PropTypes.array,
     setSelectedYears: PropTypes.func.isRequired,

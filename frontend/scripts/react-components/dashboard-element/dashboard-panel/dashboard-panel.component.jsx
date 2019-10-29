@@ -173,7 +173,7 @@ class DashboardPanel extends Component {
 
 DashboardPanel.propTypes = {
   onBack: PropTypes.func,
-  dirtyBlocks: PropTypes.array,
+  dirtyBlocks: PropTypes.object,
   goToDashboard: PropTypes.func,
   step: PropTypes.number.isRequired,
   setStep: PropTypes.func.isRequired,
@@ -185,7 +185,7 @@ DashboardPanel.propTypes = {
   clearPanel: PropTypes.func.isRequired,
   setSelectedItems: PropTypes.func.isRequired,
   canProceed: PropTypes.bool.isRequired,
-  countryNames: PropTypes.array.isRequired
+  countryNames: PropTypes.object.isRequired
 };
 
 export default DashboardPanel;
