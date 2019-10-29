@@ -5,8 +5,11 @@ import { resizeSankeyTool } from 'react-components/tool/tool.thunks';
 import { getToolLinksUrlProps } from 'react-components/tool-links/tool-links.selectors';
 import { getAppUrlProps } from 'reducers/app.selectors';
 import { getToolLayersUrlProps } from 'react-components/tool-layers/tool-layers.selectors';
-import * as ToolLayersUrlPropHandlers from 'react-components/tool-layers/tool-layers.serializers';
-import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-links.serializers';
+import toolLayerSerializer from 'react-components/tool-layers/tool-layers.serializers';
+import toolLinksSerializer from 'react-components/tool-links/tool-links.serializers';
+
+const { urlPropHandlers: toolLayersUrlPropHandlers } = toolLayerSerializer;
+const { urlPropHandlers: toolLinksUrlPropHandlers } = toolLinksSerializer;
 
 const getUrlProps = createSelector(
   [getToolLinksUrlProps, getAppUrlProps, getToolLayersUrlProps],
@@ -14,8 +17,8 @@ const getUrlProps = createSelector(
 );
 
 const urlPropHandlers = {
-  ...ToolLayersUrlPropHandlers,
-  ...ToolLinksUrlPropHandlers
+  ...toolLayersUrlPropHandlers,
+  ...toolLinksUrlPropHandlers
 };
 
 const mapStateToProps = state => ({

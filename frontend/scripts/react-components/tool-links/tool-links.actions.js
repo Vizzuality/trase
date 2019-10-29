@@ -20,6 +20,7 @@ export const TOOL_LINKS_SET_NO_LINKS_FOUND = 'TOOL_LINKS_SET_NO_LINKS_FOUND';
 export const TOOL_LINKS_RESET_SANKEY = 'TOOL_LINKS_RESET_SANKEY';
 export const TOOL_LINKS__SET_MISSING_LOCKED_NODES = 'TOOL_LINKS__SET_MISSING_LOCKED_NODES';
 export const TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH = 'TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH';
+export const TOOL_LINKS__CHANGE_EXTRA_COLUMN = 'TOOL_LINKS__CHANGE_EXTRA_COLUMN';
 
 export function setToolFlowsLoading(loading) {
   return {
@@ -90,6 +91,17 @@ export function selectColumn(columnIndex, columnId) {
     payload: {
       columnId,
       columnIndex
+    }
+  };
+}
+
+export function changeExtraColumn(columnId, parentColumnId, nodeId) {
+  return {
+    type: TOOL_LINKS__CHANGE_EXTRA_COLUMN,
+    payload: {
+      columnId,
+      parentColumnId,
+      nodeId
     }
   };
 }

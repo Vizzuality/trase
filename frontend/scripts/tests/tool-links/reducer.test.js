@@ -11,6 +11,7 @@ import {
   TOOL_LINKS__COLLAPSE_SANKEY,
   TOOL_LINKS__EXPAND_SANKEY,
   TOOL_LINKS__SELECT_COLUMN,
+  TOOL_LINKS__CHANGE_EXTRA_COLUMN,
   TOOL_LINKS__HIGHLIGHT_NODE,
   TOOL_LINKS__CLEAR_SANKEY,
   TOOL_LINKS__SET_SELECTED_NODES,
@@ -38,7 +39,8 @@ import {
   selectColumn,
   selectNodes,
   selectSearchNode,
-  setToolNodes
+  setToolNodes,
+  changeExtraColumn
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_NODE_ATTRIBUTES } from 'react-components/tool/tool.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
@@ -296,6 +298,22 @@ describe(TOOL_LINKS__SELECT_COLUMN, () => {
       expandedNodesIds: [1234],
       selectedColumnsIds: [undefined, undefined, 5]
     });
+  });
+});
+
+test(TOOL_LINKS__CHANGE_EXTRA_COLUMN, () => {
+  const parentColumnId = 1;
+  const columnId = 3;
+  const nodeId = 5;
+  const action = changeExtraColumn(columnId, parentColumnId, nodeId);
+  const state = {
+    ...initialState
+  };
+  const newState = reducer(state, action);
+  expect(newState).toEqual({
+    ...state,
+    extraColumn: { id: columnId, parentId: parentColumnId },
+    extraColumnNodeId: nodeId
   });
 });
 

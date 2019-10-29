@@ -8,11 +8,12 @@ import {
 } from 'react-components/tool/tool.actions';
 import {
   getHighlightedNodesData,
-  getSelectedColumnsIds
+  getSelectedColumnsIds,
+  getHasExtraColumn
 } from 'react-components/tool/tool.selectors';
 import {
   getVisibleNodes,
-  getSelectedBiomeFilter,
+  getSelectedColumnFilterNode,
   getSelectedResizeBy
 } from 'react-components/tool-links/tool-links.selectors';
 import {
@@ -50,14 +51,16 @@ const mapStateToProps = state => {
     selectedMapContextualLayersData: getSelectedMapContextualLayersData(state),
     toolLayout: state.toolLayers.toolLayout,
     visibleNodes: getVisibleNodes(state),
-    selectedBiomeFilter: getSelectedBiomeFilter(state),
+    selectedBiomeFilter: getSelectedColumnFilterNode(state),
     basemapId: getBasemap(state),
     selectedMapDimensionsWarnings: getMapDimensionsWarnings(state),
     selectedResizeBy: getSelectedResizeBy(state),
     selectedMapDimensions: getSelectedMapDimensionsData(state),
     highlightedNodesData: getHighlightedNodesData(state),
     coordinates: state.toolLayers.highlightedNodeCoordinates,
-    nodeAttributes: state.toolLinks.data.nodeAttributes
+    nodeAttributes: state.toolLinks.data.nodeAttributes,
+    columns: state.toolLinks.data.columns,
+    extraColumn: (getHasExtraColumn(state) && state.toolLinks.extraColumn) || null
   };
 };
 
@@ -74,8 +77,8 @@ const methodProps = [
   },
   {
     name: 'selectPolygonType',
-    compared: ['selectedColumnsIds', 'mapVectorData'],
-    returned: ['selectedColumnsIds']
+    compared: ['selectedColumnsIds', 'mapVectorData', 'columns', 'extraColumn'],
+    returned: ['selectedColumnsIds', 'columns', 'extraColumn']
   },
   {
     name: 'selectPolygons',

@@ -5,8 +5,6 @@ import {
   GET_MAP_BASE_DATA_URL
 } from 'utils/getURLFromParams';
 import { fetchWithCancel } from 'utils/saga-utils';
-import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
-import { getSelectedNodesColumnsPos } from 'react-components/tool-links/tool-links.selectors';
 import {
   setMapDimensions,
   setLinkedGeoIds
@@ -16,29 +14,35 @@ import { YEARS_DISABLED_UNAVAILABLE, YEARS_INCOMPLETE } from 'constants';
 import { getSingleMapDimensionWarning } from 'reducers/helpers/getMapDimensionsWarnings';
 import { setMapContextLayers } from 'react-components/tool/tool.actions';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedGeoColumn } from 'react-components/tool-layers/tool-layers.selectors';
 
 export function* getLinkedGeoIds() {
   const {
-    toolLinks: { selectedNodesIds }
+    toolLinks: {
+      selectedNodesIds,
+      extraColumn,
+      data: { nodes }
+    }
   } = yield select();
-  const selectedColumnsIds = yield select(getSelectedColumnsIds);
-  const selectedNodesColumnsPos = yield select(getSelectedNodesColumnsPos);
   const selectedYears = yield select(getSelectedYears);
   const selectedContext = yield select(getSelectedContext);
-
+  const selectedGeoColumn = yield select(getSelectedGeoColumn);
   const selectedNonGeoNodeIds = selectedNodesIds.filter(
-    (nodeId, index) => selectedNodesColumnsPos[index] !== 0
+    nodeId => nodes && nodes[nodeId] && !nodes[nodeId].geoId
   );
-  // when selection only contains geo nodes (column 0), we should not call get_linked_geoids
-  if (selectedNonGeoNodeIds.length === 0) {
+
+  // when selection only contains geo nodes (non geo-nodes === 0)
+  // and the parent geo column is not selected
+  if (selectedNonGeoNodeIds.length === 0 && !extraColumn) {
     yield put(setLinkedGeoIds([]));
     return;
   }
+
   const params = {
     context_id: selectedContext.id,
     years: Array.from(new Set([selectedYears[0], selectedYears[1]])),
     nodes_ids: selectedNodesIds,
-    target_column_id: selectedColumnsIds[0]
+    target_column_id: selectedGeoColumn?.id
   };
   const url = getURLFromParams(GET_LINKED_GEO_IDS_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);

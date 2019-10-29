@@ -5,7 +5,8 @@ import formatValue from 'utils/formatValue';
 import getNodeMeta from 'reducers/helpers/getNodeMeta';
 import Heading from 'react-components/shared/heading';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
-import { TOOL_LAYOUT } from 'constants';
+import { TOOL_LAYOUT, MIN_COLUMNS_NUMBER } from 'constants';
+import pluralize from 'utils/pluralize';
 
 import RecolorByLegend from './recolor-by-legend';
 import SankeyColumn from './sankey-column.component';
@@ -23,18 +24,18 @@ function useMenuOptions(props, hoveredSelectedNode) {
     onExpandClick,
     onCollapseClick,
     onClearClick,
-    lastSelectedNodeLink
+    lastSelectedNodeLink,
+    onChangeExtraColumn,
+    toolColumns,
+    columns,
+    extraColumnId,
+    extraColumnNodeId
   } = props;
   return useMemo(() => {
-    const items = [
-      { id: 'expand', label: isReExpand ? 'Re-Expand' : 'Expand', onClick: onExpandClick },
-      { id: 'collapse', label: 'Collapse', onClick: onCollapseClick },
-      { id: 'clear', label: 'Clear Selection', onClick: onClearClick }
-    ];
+    const items = [{ id: 'clear', label: 'Clear Selection', onClick: onClearClick }];
 
     let nodeType = null;
     let link = {};
-
     if (lastSelectedNodeLink) {
       const { type, ...params } = lastSelectedNodeLink;
       nodeType = type;
@@ -61,23 +62,59 @@ function useMenuOptions(props, hoveredSelectedNode) {
       });
     }
 
-    if (!isReExpand && hasExpandedNodesIds) {
-      return items.filter(item => item.id !== 'expand');
+    const activeColumn = toolColumns && Object.values(toolColumns).find(c => c.name === nodeType);
+    const selectedNode =
+      columns?.length &&
+      activeColumn &&
+      columns[activeColumn.group].values.find(node => node.id === link.nodeId);
+
+    if (ENABLE_REDESIGN_PAGES && nodeType && activeColumn?.filterTo && columns?.length) {
+      const columnToExpand = toolColumns[activeColumn.filterTo];
+
+      if (extraColumnId) {
+        items.push({
+          id: 'remove-column',
+          label: `Close ${pluralize(columnToExpand.name)}`,
+          onClick: () => onChangeExtraColumn(null)
+        });
+      } else {
+        items.push({
+          id: 'expand-column',
+          label: `See ${pluralize(columnToExpand.name)}`,
+          onClick: () => onChangeExtraColumn(columnToExpand.id, activeColumn.id, selectedNode?.id)
+        });
+      }
     }
-    if (!hasExpandedNodesIds) {
-      return items.filter(item => item.id !== 'collapse');
+    const hasExtraColumn =
+      ENABLE_REDESIGN_PAGES && extraColumnId && selectedNode?.id === extraColumnNodeId;
+
+    if ((isReExpand || !hasExpandedNodesIds) && !hasExtraColumn) {
+      items.push({
+        id: 'expand',
+        label: isReExpand ? 'Re-Expand' : 'Expand',
+        onClick: onExpandClick
+      });
+    }
+
+    if (hasExpandedNodesIds && !hasExtraColumn) {
+      items.push({ id: 'collapse', label: 'Collapse', onClick: onCollapseClick });
     }
 
     return items;
   }, [
-    hoveredSelectedNode,
-    lastSelectedNodeLink,
-    hasExpandedNodesIds,
-    isReExpand,
     onClearClick,
-    onCollapseClick,
+    lastSelectedNodeLink,
+    hoveredSelectedNode,
+    toolColumns,
+    columns,
+    extraColumnNodeId,
+    isReExpand,
+    hasExpandedNodesIds,
+    goToProfile,
+    extraColumnId,
+    onChangeExtraColumn,
     onExpandClick,
-    goToProfile
+    onCollapseClick
   ]);
 }
 
@@ -151,7 +188,8 @@ function Sankey(props) {
     gapBetweenColumns,
     onNodeHighlighted,
     selectedNodesIds,
-    toolLayout
+    toolLayout,
+    extraColumnId
   } = props;
   const [hoveredLink, setHoveredLink] = useState(null);
   const [tooltipContent, setTooltipContent] = useState(null);
@@ -298,6 +336,9 @@ function Sankey(props) {
 
   const loading = !columns || columns.length === 0 || !links || flowsLoading;
 
+  const regularloadingPos = gapBetweenColumns + 2 * sankeyColumnsWidth + gapBetweenColumns / 2;
+  const extraColumnLoadingPos =
+    2 * sankeyColumnsWidth + 2 * gapBetweenColumns + sankeyColumnsWidth / 2;
   return (
     <div className={cx('c-sankey', { '-full-screen': toolLayout === TOOL_LAYOUT.right })}>
       <UnitsTooltip {...tooltipContent} show={!!tooltipContent} />
@@ -308,7 +349,7 @@ function Sankey(props) {
         {loading && (
           <div
             className="sankey-loading"
-            style={{ left: gapBetweenColumns + 2 * sankeyColumnsWidth + gapBetweenColumns / 2 }}
+            style={{ left: extraColumnId ? extraColumnLoadingPos : regularloadingPos }}
           >
             <Heading variant="mono" size="md" weight="bold">
               Loading
@@ -354,6 +395,7 @@ function Sankey(props) {
                   height={placeholderHeight}
                   gapBetweenColumns={gapBetweenColumns}
                   sankeyColumnsWidth={sankeyColumnsWidth}
+                  size={extraColumnId ? MIN_COLUMNS_NUMBER : MIN_COLUMNS_NUMBER - 1}
                 />
               )}
             </g>
@@ -376,6 +418,7 @@ function Sankey(props) {
                   height={placeholderHeight}
                   gapBetweenColumns={gapBetweenColumns}
                   sankeyColumnsWidth={sankeyColumnsWidth}
+                  size={extraColumnId ? MIN_COLUMNS_NUMBER + 1 : MIN_COLUMNS_NUMBER}
                 />
               )}
             </g>
@@ -389,6 +432,7 @@ function Sankey(props) {
 Sankey.propTypes = {
   links: PropTypes.array,
   columns: PropTypes.array,
+  toolColumns: PropTypes.object,
   maxHeight: PropTypes.number,
   detailedView: PropTypes.bool,
   flowsLoading: PropTypes.bool,
@@ -407,8 +451,11 @@ Sankey.propTypes = {
   onNodeClicked: PropTypes.func.isRequired,
   onCollapseClick: PropTypes.func.isRequired, // eslint-disable-line
   onNodeHighlighted: PropTypes.func.isRequired,
+  onChangeExtraColumn: PropTypes.func.isRequired,
   selectedNodesIds: PropTypes.array.isRequired,
-  toolLayout: PropTypes.number.isRequired
+  toolLayout: PropTypes.number.isRequired,
+  extraColumnId: PropTypes.number,
+  extraColumnNodeId: PropTypes.number
 };
 
 export default Sankey;

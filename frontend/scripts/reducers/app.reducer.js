@@ -19,6 +19,7 @@ import { COUNTRIES_COORDINATES } from 'scripts/countries';
 import createReducer from 'utils/createReducer';
 import { SELECT_YEARS } from 'react-components/tool/tool.actions';
 import { TOOL_LINKS_RESET_SANKEY } from 'react-components/tool-links/tool-links.actions';
+import appSerialization from 'reducers/app.serializers';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import initialState from './app.initial-state';
 
@@ -33,7 +34,7 @@ const appReducer = {
       const newState = deserialize({
         params: action.payload.serializerParams,
         state: baseState,
-        props: ['selectedContextId', 'selectedYears']
+        ...appSerialization
       });
       return newState;
     }

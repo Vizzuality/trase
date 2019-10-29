@@ -3,14 +3,12 @@ import { connect } from 'react-redux';
 import { selectColumn } from 'react-components/tool-links/tool-links.actions';
 import ColumnSelector from 'react-components/tool/column-selector/column-selector.component';
 import PropTypes from 'prop-types';
-import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
 import { getGapBetweenColumns } from 'react-components/tool/sankey/sankey.selectors';
 
 const mapStateToProps = state => ({
   sankeyColumnsWidth: state.toolLinks.sankeyColumnsWidth,
   gapBetweenColumns: getGapBetweenColumns(state),
   columns: Object.values(state.toolLinks.data.columns || {}),
-  selectedColumnsIds: getSelectedColumnsIds(state),
   nodesColoredAtColumn: state.toolLinks.nodesColoredAtColumn
 });
 
@@ -21,18 +19,23 @@ const mapDispatchToProps = {
 function ColumnSelectorContainer({
   columns,
   group,
-  selectedColumnsIds,
+  position,
   onColumnSelected,
   gapBetweenColumns,
-  sankeyColumnsWidth
+  sankeyColumnsWidth,
+  selectedColumnId,
+  hasExtraColumn
 }) {
-  const columnItems = useMemo(() => columns.filter(column => column.group === group), [
-    columns,
-    group
-  ]);
+  const columnItems = useMemo(
+    () =>
+      hasExtraColumn
+        ? columns.filter(column => column.id === selectedColumnId)
+        : columns.filter(column => column.group === group),
+    [columns, group, hasExtraColumn, selectedColumnId]
+  );
   const selectedColumnItem = useMemo(
-    () => columnItems.filter(column => column.id === selectedColumnsIds[group])[0],
-    [columnItems, selectedColumnsIds, group]
+    () => columnItems.find(column => column.id === selectedColumnId),
+    [columnItems, selectedColumnId]
   );
 
   const handleColumnSelected = ({ item }) => {
@@ -44,14 +47,11 @@ function ColumnSelectorContainer({
     return null;
   }
 
-  const hasSingleElement = columnItems.length <= 1;
-
   return (
     <ColumnSelector
-      group={group}
+      position={position}
       sankeyColumnsWidth={sankeyColumnsWidth}
       gapBetweenColumns={gapBetweenColumns}
-      hasSingleElement={hasSingleElement}
       columnItems={columnItems}
       selectedColumnItem={selectedColumnItem}
       handleColumnSelected={handleColumnSelected}
@@ -60,12 +60,14 @@ function ColumnSelectorContainer({
 }
 
 ColumnSelectorContainer.propTypes = {
+  position: PropTypes.number,
   group: PropTypes.number,
   columns: PropTypes.array,
   sankeyColumnsWidth: PropTypes.number,
   gapBetweenColumns: PropTypes.number,
-  selectedColumnsIds: PropTypes.array,
-  onColumnSelected: PropTypes.func.isRequired
+  selectedColumnId: PropTypes.number,
+  onColumnSelected: PropTypes.func.isRequired,
+  hasExtraColumn: PropTypes.bool
 };
 
 export default connect(

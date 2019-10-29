@@ -261,11 +261,19 @@ export default class MapComponent {
     }
   }
 
-  selectPolygonType({ selectedColumnsIds }) {
+  selectPolygonType({ selectedColumnsIds, extraColumn, columns }) {
     if (!this.polygonTypesLayers || !selectedColumnsIds.length) {
       return;
     }
-    const id = selectedColumnsIds[0];
+    const extraColumnId = extraColumn?.id;
+    const extraGeoColumnId =
+      extraColumnId &&
+      columns &&
+      columns[extraColumnId] &&
+      columns[extraColumnId].isGeo &&
+      extraColumnId;
+
+    const id = extraGeoColumnId || selectedColumnsIds[0];
     if (this.currentPolygonTypeLayer) {
       this.map.removeLayer(this.currentPolygonTypeLayer);
     }
@@ -458,15 +466,7 @@ export default class MapComponent {
     const hasLinkedGeoIds = linkedGeoIds.length > 0;
     const hasChoroplethLayersEnabled = Object.values(choropleth).length > 0;
     const isPoint = this.currentPolygonTypeLayer.isPoint;
-
     this.currentPolygonTypeLayer.eachLayer(layer => {
-      const isFilteredOut =
-        biome === null ||
-        biome.geoId === undefined ||
-        layer.feature.properties.biome_geoid === undefined
-          ? false
-          : biome.geoId !== layer.feature.properties.biome_geoid;
-
       const isLinked = linkedGeoIds.indexOf(layer.feature.properties.geoid) > -1;
       const choroItem = choropleth[layer.feature.properties.geoid];
 
@@ -477,6 +477,11 @@ export default class MapComponent {
       const color = this.darkBasemap
         ? CHOROPLETH_COLORS.bright_stroke
         : CHOROPLETH_COLORS.dark_stroke;
+
+      const isFilteredOut =
+        !biome || biome.geoId === undefined || layer.feature.properties.biome_geoid === undefined
+          ? false
+          : biome.geoId !== layer.feature.properties.biome_geoid;
 
       if (isFilteredOut) {
         // If region is filtered out by biome filter, hide it and bail

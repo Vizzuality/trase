@@ -1,10 +1,10 @@
-export const detailedView = {
+const detailedView = {
   parse(param) {
     return JSON.parse(param);
   }
 };
 
-export const selectedColumnsIds = {
+const selectedColumnsIds = {
   stringify(prop, DONT_SERIALIZE) {
     if (!prop || prop.length === 0) {
       return DONT_SERIALIZE;
@@ -26,4 +26,40 @@ export const selectedColumnsIds = {
       return acc;
     }, []);
   }
+};
+
+const extraColumn = {
+  stringify(prop, DONT_SERIALIZE) {
+    if (!prop) {
+      return DONT_SERIALIZE;
+    }
+    const { parentId, id } = prop;
+    return `${parentId}_${id}`;
+  },
+  parse(param) {
+    const [parentId, id] = param.split('_');
+    return {
+      parentId: parseInt(parentId, 10),
+      id: parseInt(id, 10)
+    };
+  }
+};
+
+export default {
+  urlPropHandlers: {
+    detailedView,
+    selectedColumnsIds,
+    extraColumn
+  },
+  props: [
+    'selectedNodesIds',
+    'selectedColumnsIds',
+    'expandedNodesIds',
+    'detailedView',
+    'selectedResizeBy',
+    'selectedRecolorBy',
+    'extraColumn',
+    'extraColumnNodeId',
+    'selectedBiomeFilterName'
+  ]
 };

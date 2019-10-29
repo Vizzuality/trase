@@ -39,7 +39,7 @@ export const NUM_DECIMALS_DEFAULT = 1;
 export const UNITLESS_UNITS = ['Unitless', 'Number', 'Head', 'Number', 'NA'];
 
 // flows
-export const NUM_COLUMNS = 4;
+export const MIN_COLUMNS_NUMBER = 4;
 export const NUM_NODES_SUMMARY = 10;
 export const NUM_NODES_EXPANDED = 100;
 export const NUM_NODES_DETAILED = 999;

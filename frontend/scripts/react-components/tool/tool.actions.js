@@ -6,9 +6,11 @@ import contextLayersCarto from 'named-maps/tool_named_maps_carto';
 import getNodeIdFromGeoId from 'actions/helpers/getNodeIdFromGeoId';
 import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
 import compact from 'lodash/compact';
-import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
 import { getVisibleNodes } from 'react-components/tool-links/tool-links.selectors';
-import { getSelectedMapDimensionsUids } from 'react-components/tool-layers/tool-layers.selectors';
+import {
+  getSelectedGeoColumn,
+  getSelectedMapDimensionsUids
+} from 'react-components/tool-layers/tool-layers.selectors';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 
 import {
@@ -162,11 +164,12 @@ export function setMapContextLayers(contextualLayers) {
 export function selectNodeFromGeoId(geoId) {
   return (dispatch, getState) => {
     const state = getState();
-    const selectedColumnsIds = getSelectedColumnsIds(state);
+    const selectedGeoColumn = getSelectedGeoColumn(state);
+
     const nodeId = getNodeIdFromGeoId(
       geoId,
       getState().toolLinks.data.nodes,
-      selectedColumnsIds[0]
+      selectedGeoColumn?.id
     );
 
     // node not in visible Nodes ---> expand node (same behavior as search)
@@ -200,13 +203,13 @@ export function selectExpandedNode(param) {
 export function highlightNodeFromGeoId(geoId, coordinates) {
   return (dispatch, getState) => {
     const state = getState();
-    const selectedColumnsIds = getSelectedColumnsIds(state);
+    const selectedGeoColumn = getSelectedGeoColumn(state);
     const {
       data: { nodes },
       highlightedNodeId
     } = state.toolLinks;
 
-    const nodeId = getNodeIdFromGeoId(geoId, nodes, selectedColumnsIds[0]);
+    const nodeId = getNodeIdFromGeoId(geoId, nodes, selectedGeoColumn?.id);
     if (nodeId === null) {
       if (highlightedNodeId) {
         dispatch(highlightNode(null));
