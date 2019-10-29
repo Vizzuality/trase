@@ -37,9 +37,11 @@ class DashboardPanel extends Component {
     return node.nodeType || 'Country of Production';
   }
 
-  static countryNameNodeTypeRenderer(node) {
-    return `${node.countryName + addApostrophe(node.countryName)} ${node.nodeType}`;
-  }
+  countryNameNodeTypeRenderer = node => {
+    const { countryNames } = this.props;
+    const countryName = countryNames[node.countryId];
+    return `${countryName + addApostrophe(countryName)} ${node.nodeType}`;
+  };
 
   renderPanel() {
     const { step } = this.props;
@@ -51,9 +53,9 @@ class DashboardPanel extends Component {
       case DASHBOARD_STEPS.destinations:
         return <DestinationsPanel />;
       case DASHBOARD_STEPS.exporters:
-        return <ExportersPanel nodeTypeRenderer={DashboardPanel.countryNameNodeTypeRenderer} />;
+        return <ExportersPanel nodeTypeRenderer={this.countryNameNodeTypeRenderer} />;
       case DASHBOARD_STEPS.importers:
-        return <ImportersPanel nodeTypeRenderer={DashboardPanel.countryNameNodeTypeRenderer} />;
+        return <ImportersPanel nodeTypeRenderer={this.countryNameNodeTypeRenderer} />;
       default:
         return null;
     }
@@ -182,7 +184,8 @@ DashboardPanel.propTypes = {
   closeModal: PropTypes.func.isRequired,
   clearPanel: PropTypes.func.isRequired,
   setSelectedItems: PropTypes.func.isRequired,
-  canProceed: PropTypes.bool.isRequired
+  canProceed: PropTypes.bool.isRequired,
+  countryNames: PropTypes.array.isRequired
 };
 
 export default DashboardPanel;
