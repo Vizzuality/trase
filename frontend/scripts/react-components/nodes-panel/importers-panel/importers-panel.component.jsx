@@ -5,6 +5,7 @@ import GridList from 'react-components/shared/grid-list/grid-list.component';
 import { useFirstItem } from 'react-components/shared/grid-list/grid-list.hooks';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import Tabs from 'react-components/shared/tabs/tabs.component';
+import Text from 'react-components/shared/text';
 import ResizeListener from 'react-components/shared/resize-listener.component';
 import { BREAKPOINTS } from 'constants';
 
@@ -38,6 +39,16 @@ function ImportersPanel(props) {
   }, [previousSteps, fetchData, fetchKey]);
 
   const itemToScrollTo = useFirstItem(importers);
+
+  if (!loading && !activeTab) {
+    return (
+      <div className="c-importers-panel">
+        <Text size="lg" className="no-data" align="center">
+          There is no data for importers for the current selection
+        </Text>
+      </div>
+    );
+  }
 
   return (
     <ResizeListener>
