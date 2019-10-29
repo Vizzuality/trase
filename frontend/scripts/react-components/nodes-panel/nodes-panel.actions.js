@@ -14,6 +14,7 @@ export const NODES_PANEL__SET_ACTIVE_ITEMS_WITH_SEARCH =
   'NODES_PANEL__SET_ACTIVE_ITEMS_WITH_SEARCH';
 export const NODES_PANEL__SET_SEARCH_RESULTS = 'NODES_PANEL__SET_SEARCH_RESULTS';
 export const NODES_PANEL__GET_SEARCH_RESULTS = 'NODES_PANEL__GET_SEARCH_RESULTS';
+export const NODES_PANEL__SET_NO_DATA = 'NODES_PANEL__SET_NO_DATA';
 
 export const fetchData = (key, name) => ({
   type: NODES_PANEL__FETCH_DATA,
@@ -96,4 +97,12 @@ export const setSearchResult = (activeItem, name) => ({
 export const clearPanel = panel => ({
   type: NODES_PANEL__CLEAR_PANEL,
   payload: { panel }
+});
+
+export const setNoData = (hasNoData, name) => ({
+  type: NODES_PANEL__SET_NO_DATA,
+  payload: {
+    hasNoData
+  },
+  meta: { name }
 });

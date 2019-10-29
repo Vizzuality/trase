@@ -15,7 +15,8 @@ import {
   setMissingItems,
   setSearchResults,
   setData,
-  setTabs
+  setTabs,
+  setNoData
 } from './nodes-panel.actions';
 import { makeGetActiveTab } from './nodes-panel.selectors';
 
@@ -75,8 +76,10 @@ export function* getData(name, reducer, options) {
   });
 
   if (params.node_types_ids === null) {
+    yield put(setNoData(true, name));
     return;
   }
+
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const task = yield fork(setLoadingSpinner, 750, setLoadingItems(true, name));
   yield put(setData(null, name));
@@ -87,6 +90,7 @@ export function* getData(name, reducer, options) {
       task.cancel();
     }
     yield put(setData(data.data, name));
+    yield put(setNoData(!data.data?.length, name));
   } catch (e) {
     console.error('Error', e);
   } finally {

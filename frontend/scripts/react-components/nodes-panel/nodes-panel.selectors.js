@@ -147,6 +147,7 @@ export const makeGetNodesPanelsProps = name => {
   const getNodes = state => state.nodesPanel[name].data.nodes;
   const getPage = state => state.nodesPanel[name].page;
   const getLoading = state => state.nodesPanel[name].loadingItems;
+  const getNoData = state => state.nodesPanel[name].noData;
   const getTabs = makeGetTabs(name);
   const getSelectedNodeId = state => state.nodesPanel[name].selectedNodeId;
   const getSelectedNodesIds = state => state.nodesPanel[name].selectedNodesIds;
@@ -176,6 +177,7 @@ export const makeGetNodesPanelsProps = name => {
   const selectors = {
     page: getPage,
     loading: getLoading,
+    noData: getNoData,
     fetchKey: getFetchKey,
     previousSteps: getPreviousSteps
   };

@@ -16,6 +16,7 @@ function ImportersPanel(props) {
     tabs,
     page,
     loading,
+    noData,
     searchResults,
     importers,
     setPage,
@@ -40,7 +41,7 @@ function ImportersPanel(props) {
 
   const itemToScrollTo = useFirstItem(importers);
 
-  if (!loading && !activeTab) {
+  if (noData) {
     return (
       <div className="c-importers-panel">
         <Text size="lg" className="no-data" align="center">
@@ -124,7 +125,8 @@ ImportersPanel.propTypes = {
   activeTab: PropTypes.number,
   setSelectedTab: PropTypes.func.isRequired,
   actionComponent: PropTypes.node,
-  fetchData: PropTypes.func.isRequired
+  fetchData: PropTypes.func.isRequired,
+  noData: PropTypes.bool
 };
 
 ImportersPanel.defaultProps = {

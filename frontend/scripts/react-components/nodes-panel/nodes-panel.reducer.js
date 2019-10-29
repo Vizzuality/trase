@@ -17,7 +17,8 @@ import {
   NODES_PANEL__CLEAR_PANEL,
   NODES_PANEL__SET_ACTIVE_ITEMS_WITH_SEARCH,
   NODES_PANEL__SET_SEARCH_RESULTS,
-  NODES_PANEL__SET_INSTANCE_ID
+  NODES_PANEL__SET_INSTANCE_ID,
+  NODES_PANEL__SET_NO_DATA
 } from './nodes-panel.actions';
 import modules from './nodes-panel.modules';
 
@@ -30,6 +31,7 @@ const panelInitialState = name => {
     },
     page: 1,
     loadingItems: false,
+    noData: false,
     fetchKey: null
   };
 
@@ -193,6 +195,13 @@ const nodesPanelReducer = {
       draft[name].loadingItems = loadingItems;
     });
   },
+  [NODES_PANEL__SET_NO_DATA](state, action) {
+    const { name } = action.meta;
+    const { hasNoData } = action.payload;
+    return immer(state, draft => {
+      draft[name].noData = hasNoData;
+    });
+  },
   [NODES_PANEL__SET_SELECTED_ID](state, action) {
     const { name } = action.meta;
     const moduleOptions = modules[name];
@@ -341,10 +350,10 @@ const nodesPanelReducerTypes = PropTypes => ({
   data: PropTypes.shape({
     byId: PropTypes.array.isRequired,
     nodes: PropTypes.object
-  }).isRequired,
+  }),
   page: PropTypes.number,
-  loadingItems: PropTypes.bool.isRequired,
-  searchResults: PropTypes.array.isRequired,
+  loadingItems: PropTypes.bool,
+  searchResults: PropTypes.array,
   selectedCommodityId: PropTypes.number
 });
 
