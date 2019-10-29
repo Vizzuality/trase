@@ -213,7 +213,7 @@ const toolLinksReducer = {
       draft.selectedNodesIds = state.selectedNodesIds.filter(isInColumn);
       draft.expandedNodesIds = state.expandedNodesIds.filter(isInColumn);
 
-      if (state.extraColumn) {
+      if (state.extraColumn && columnId === state.extraColumn.parentId) {
         draft.selectedNodesIds.filter(id => state.extraColumnNodeId !== id);
         draft.expandedNodesIds.filter(id => state.extraColumnNodeId !== id);
         draft.extraColumn = toolLinksInitialState.extraColumn;
@@ -232,11 +232,12 @@ const toolLinksReducer = {
         const column = draft.data.columns[node.columnId];
         return column.id === state.extraColumn.id;
       };
+
       if (columnId) {
         // Open extra column
         if (extraColumnNode) {
           draft.expandedNodesIds = state.expandedNodesIds
-            .filter(expandedNodeId => draft.data.nodes[expandedNodeId].columnId === parentColumnId)
+            .filter(expandedNodeId => draft.data.nodes[expandedNodeId].columnId !== parentColumnId)
             .concat(extraColumnNode?.id);
         }
         draft.extraColumnNodeId = action.payload.nodeId;
