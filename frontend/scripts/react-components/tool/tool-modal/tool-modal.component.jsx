@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import BaseModal from 'react-components/tool/tool-modal/base-modal';
-import ContextModal from 'react-components/tool/tool-modal/context-modal';
+import ToolSelectionModal from 'react-components/tool/tool-modal/tool-selection-modal';
 import LayerModal from 'react-components/tool/tool-modal/layer-modal';
 import VersioningModal from 'react-components/tool/tool-modal/versioning-modal';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
@@ -11,7 +11,7 @@ export default function ToolModal({ items, selectedItem, onChange, activeModal, 
   const getModalComponent = () => {
     switch (activeModal) {
       case 'context':
-        return <ContextModal />;
+        return <ToolSelectionModal />;
       case 'layer':
         return <LayerModal />;
       case 'version':
