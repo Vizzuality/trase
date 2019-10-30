@@ -6,7 +6,7 @@ import capitalize from 'lodash/capitalize';
 import { getPanelId } from 'utils/dashboardPanel';
 import { makeGetResizeByItems, makeGetRecolorByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
-import camelCase from 'lodash/camelCase';
+import pluralize from 'utils/pluralize';
 import { getDirtyBlocks } from 'react-components/nodes-panel/nodes-panel.selectors';
 
 const getCountriesData = state => state.nodesPanel.countries.data;
@@ -94,19 +94,6 @@ export const getNodesPanelValues = createStructuredSelector({
   destinations: getDestinationsActiveItems
 });
 
-export const getPluralNodeType = nodeType => {
-  const name = camelCase(nodeType);
-  return (
-    {
-      country: 'countries',
-      municipality: 'municipalities',
-      portOfImport: 'ports of import',
-      portOfExport: 'ports of export',
-      districtOfExport: 'districts of export'
-    }[name] || `${nodeType}s`.toLowerCase()
-  );
-};
-
 const getNodesPanelPrefixes = createSelector(
   [
     getSourcesPrefixes,
@@ -143,7 +130,7 @@ export const getDynamicSentence = createSelector(
       if (prefixesMap && item) {
         const nodeType = item.nodeType || item.type;
         settings.prefix = prefixesMap[nodeType] || defaultPrefix;
-        settings.name = nodeType ? getPluralNodeType(nodeType) : defaultName;
+        settings.name = nodeType ? pluralize(nodeType) : defaultName;
       }
       return settings;
     };
