@@ -5,6 +5,7 @@ import GridList from 'react-components/shared/grid-list/grid-list.component';
 import { useFirstItem } from 'react-components/shared/grid-list/grid-list.hooks';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import Tabs from 'react-components/shared/tabs/tabs.component';
+import Text from 'react-components/shared/text';
 import ResizeListener from 'react-components/shared/resize-listener.component';
 import { BREAKPOINTS } from 'constants';
 
@@ -18,6 +19,7 @@ function ExportersPanel(props) {
     searchResults,
     exporters,
     setPage,
+    noData,
     nodeTypeRenderer,
     setSearchResult,
     getSearchResults,
@@ -38,6 +40,16 @@ function ExportersPanel(props) {
   }, [previousSteps, fetchData, fetchKey]);
 
   const itemToScrollTo = useFirstItem(exporters);
+
+  if (noData) {
+    return (
+      <div className="c-importers-panel">
+        <Text size="md" color="grey-faded" className="no-data" align="center">
+          There&apos;s no exporters data for the current selection.
+        </Text>
+      </div>
+    );
+  }
 
   return (
     <ResizeListener>
@@ -103,6 +115,7 @@ ExportersPanel.propTypes = {
   selectedNodesIds: PropTypes.array,
   page: PropTypes.number.isRequired,
   loading: PropTypes.bool,
+  noData: PropTypes.bool,
   setPage: PropTypes.func.isRequired,
   setSearchResult: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
