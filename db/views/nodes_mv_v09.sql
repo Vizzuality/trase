@@ -13,6 +13,7 @@ SELECT
   nodes_with_flows.years
 FROM nodes
 JOIN (
+  -- might be an idea to use flow_nodes_mv here
   SELECT (UNNEST(path)) AS node_id, context_id, ARRAY_AGG(DISTINCT year ORDER BY year) AS years
   FROM flows
   GROUP BY UNNEST(path), context_id
