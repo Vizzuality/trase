@@ -28,6 +28,9 @@ class SearchInput extends PureComponent {
   stateReducer = (state, changes) => {
     switch (changes.type) {
       case Downshift.stateChangeTypes.clickItem:
+      case Downshift.stateChangeTypes.controlledPropUpdatedSelectedItem:
+      case Downshift.stateChangeTypes.keyDownEscape:
+      case Downshift.stateChangeTypes.blurInput:
       case Downshift.stateChangeTypes.keyDownEnter: {
         return {
           ...changes,
@@ -72,20 +75,24 @@ class SearchInput extends PureComponent {
           role="textbox"
         >
           <input
-            {...getInputProps({ placeholder: placeholderSmall })}
-            type="search"
-            autoComplete="off"
-            disabled={isDisabled}
-            className="search-input-field show-for-small"
-            data-test={`${testId}-search-input-field-sm${isDisabled ? '-disabled' : ''}`}
+            {...getInputProps({
+              placeholder: placeholderSmall,
+              type: 'search',
+              autoComplete: 'off',
+              disabled: isDisabled,
+              className: 'search-input-field show-for-small',
+              'data-test': `${testId}-search-input-field-sm${isDisabled ? '-disabled' : ''}`
+            })}
           />
           <input
-            {...getInputProps({ placeholder })}
-            type="search"
-            autoComplete="off"
-            disabled={isDisabled}
-            className="search-input-field hide-for-small"
-            data-test={`${testId}-search-input-field-lg${isDisabled ? '-disabled' : ''}`}
+            {...getInputProps({
+              placeholder,
+              type: 'search',
+              autoComplete: 'off',
+              disabled: isDisabled,
+              className: 'search-input-field hide-for-small',
+              'data-test': `${testId}-search-input-field-lg${isDisabled ? '-disabled' : ''}`
+            })}
           />
           {isLoading ? (
             <ShrinkingSpinner className="-dark" />
@@ -119,6 +126,7 @@ class SearchInput extends PureComponent {
     const { searchOptions, onSelect } = this.props;
     return (
       <Downshift
+        stateReducer={this.stateReducer}
         onChange={node => node && onSelect(node, searchOptions)}
         itemToString={i => (i === null ? '' : i.name)}
         onInputValueChange={term => this.onInputValueChange(term, searchOptions)}
@@ -140,7 +148,7 @@ SearchInput.propTypes = {
   placeholder: PropTypes.string,
   getResultTestId: PropTypes.func,
   nodeTypeRenderer: PropTypes.func,
-  items: PropTypes.array.isRequired,
+  items: PropTypes.array,
   resultClassName: PropTypes.string,
   placeholderSmall: PropTypes.string,
   searchOptions: PropTypes.object,
@@ -151,6 +159,7 @@ SearchInput.propTypes = {
 SearchInput.defaultProps = {
   placeholder: 'search',
   placeholderSmall: 'search',
+  items: [],
   getResultTestId: item => `search-result-${item.name}`
 };
 

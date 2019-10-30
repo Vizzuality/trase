@@ -1,34 +1,55 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SearchInput from 'react-components/shared/search-input/search-input.component';
 import GridList from 'react-components/shared/grid-list/grid-list.component';
 import { useFirstItem } from 'react-components/shared/grid-list/grid-list.hooks';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import Tabs from 'react-components/shared/tabs/tabs.component';
+import Text from 'react-components/shared/text';
 import ResizeListener from 'react-components/shared/resize-listener.component';
 import { BREAKPOINTS } from 'constants';
 
-import 'react-components/dashboard-element/dashboard-panel/companies-panel.scss';
+import './importers-panel.scss';
 
-function CompaniesPanel(props) {
+function ImportersPanel(props) {
   const {
     tabs,
     page,
     loading,
-    searchCompanies,
-    companies,
-    getMoreItems,
+    noData,
+    searchResults,
+    importers,
+    setPage,
     setSearchResult,
     getSearchResults,
     nodeTypeRenderer,
-    onSelectCompany,
-    activeCompanies,
-    onSelectNodeTypeTab,
-    activeNodeTypeTab,
-    actionComponent
+    setSelectedItems,
+    selectedNodesIds,
+    setSelectedTab,
+    activeTab,
+    actionComponent,
+    previousSteps,
+    fetchData,
+    fetchKey
   } = props;
 
-  const itemToScrollTo = useFirstItem(companies);
+  useEffect(() => {
+    if (previousSteps !== fetchKey || fetchKey === null) {
+      fetchData(previousSteps);
+    }
+  }, [previousSteps, fetchData, fetchKey]);
+
+  const itemToScrollTo = useFirstItem(importers);
+
+  if (noData) {
+    return (
+      <div className="c-importers-panel">
+        <Text size="md" color="grey-faded" className="no-data" align="center">
+          There&apos;s no importers data for the current selection.
+        </Text>
+      </div>
+    );
+  }
 
   return (
     <ResizeListener>
@@ -36,35 +57,35 @@ function CompaniesPanel(props) {
         const columnsCount = windowWidth > BREAKPOINTS.laptop ? 5 : 3;
         const width = windowWidth > BREAKPOINTS.laptop ? 950 : 560;
         return (
-          <div className="c-companies-panel">
+          <div className="c-importers-panel">
             <SearchInput
               variant="bordered"
               size="sm"
-              className="companies-panel-search"
-              items={searchCompanies}
-              placeholder="Search company"
+              className="importers-panel-search"
+              items={searchResults}
+              placeholder="Search importer"
               onSelect={setSearchResult}
               nodeTypeRenderer={nodeTypeRenderer}
               onSearchTermChange={getSearchResults}
             />
             <Tabs
               tabs={tabs}
-              onSelectTab={onSelectNodeTypeTab}
-              selectedTab={activeNodeTypeTab}
+              onSelectTab={setSelectedTab}
+              selectedTab={activeTab}
               itemTabRenderer={i => i.name}
               getTabId={item => item.id}
               actionComponent={actionComponent}
             >
-              {activeNodeTypeTab && (
+              {activeTab && (
                 <GridList
-                  className="companies-panel-pill-list"
-                  items={companies}
-                  height={companies.length > columnsCount ? 200 : 50}
+                  className="importers-panel-pill-list"
+                  items={importers}
+                  height={importers.length > columnsCount ? 200 : 50}
                   width={width}
                   rowHeight={50}
                   columnWidth={190}
                   columnCount={columnsCount}
-                  getMoreItems={getMoreItems}
+                  getMoreItems={setPage}
                   page={page}
                   loading={loading}
                   itemToScrollTo={itemToScrollTo}
@@ -72,9 +93,9 @@ function CompaniesPanel(props) {
                   {itemProps => (
                     <GridListItem
                       {...itemProps}
-                      isActive={activeCompanies.includes(itemProps.item?.id)}
-                      enableItem={onSelectCompany}
-                      disableItem={onSelectCompany}
+                      isActive={selectedNodesIds.includes(itemProps.item?.id)}
+                      enableItem={setSelectedItems}
+                      disableItem={setSelectedItems}
                     />
                   )}
                 </GridList>
@@ -87,26 +108,30 @@ function CompaniesPanel(props) {
   );
 }
 
-CompaniesPanel.propTypes = {
-  companies: PropTypes.array,
-  activeCompanies: PropTypes.array,
+ImportersPanel.propTypes = {
+  fetchKey: PropTypes.string,
+  previousSteps: PropTypes.string,
+  importers: PropTypes.array,
+  selectedNodesIds: PropTypes.array,
   page: PropTypes.number.isRequired,
   loading: PropTypes.bool,
-  getMoreItems: PropTypes.func.isRequired,
+  setPage: PropTypes.func.isRequired,
   setSearchResult: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
-  onSelectCompany: PropTypes.func.isRequired,
-  searchCompanies: PropTypes.array.isRequired,
+  setSelectedItems: PropTypes.func.isRequired,
+  searchResults: PropTypes.array.isRequired,
   nodeTypeRenderer: PropTypes.func.isRequired,
   tabs: PropTypes.array.isRequired,
-  activeNodeTypeTab: PropTypes.number,
-  onSelectNodeTypeTab: PropTypes.func.isRequired,
-  actionComponent: PropTypes.node
+  activeTab: PropTypes.number,
+  setSelectedTab: PropTypes.func.isRequired,
+  actionComponent: PropTypes.node,
+  fetchData: PropTypes.func.isRequired,
+  noData: PropTypes.bool
 };
 
-CompaniesPanel.defaultProps = {
-  companies: [],
-  activeNodeTypeTab: null
+ImportersPanel.defaultProps = {
+  importers: [],
+  activeTab: null
 };
 
-export default CompaniesPanel;
+export default ImportersPanel;

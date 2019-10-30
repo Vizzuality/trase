@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SearchInput from 'react-components/shared/search-input/search-input.component';
 import GridList from 'react-components/shared/grid-list/grid-list.component';
@@ -10,17 +10,27 @@ import { BREAKPOINTS } from 'constants';
 function DestinationsPanel(props) {
   const {
     page,
-    setSearchResult,
-    searchDestinations,
-    destinations,
+    setPage,
     loading,
+    fetchData,
+    fetchKey,
+    previousSteps,
+    destinations,
+    searchResults,
+    setSearchResult,
     getSearchResults,
-    activeDestinations,
-    onSelectDestinationValue,
-    getMoreItems
+    setSelectedItems,
+    selectedNodesIds
   } = props;
 
+  useEffect(() => {
+    if (previousSteps !== fetchKey || fetchKey === null) {
+      fetchData(previousSteps);
+    }
+  }, [previousSteps, fetchData, fetchKey]);
+
   const itemToScrollTo = useFirstItem(destinations);
+
   return (
     <ResizeListener>
       {({ windowWidth }) => {
@@ -32,7 +42,7 @@ function DestinationsPanel(props) {
               variant="bordered"
               size="sm"
               className="dashboard-panel-search"
-              items={searchDestinations}
+              items={searchResults}
               placeholder="Search place"
               onSelect={setSearchResult}
               onSearchTermChange={getSearchResults}
@@ -46,16 +56,16 @@ function DestinationsPanel(props) {
               columnWidth={190}
               columnCount={columnsCount}
               page={page}
-              getMoreItems={getMoreItems}
+              getMoreItems={setPage}
               loading={loading}
               itemToScrollTo={itemToScrollTo}
             >
               {itemProps => (
                 <GridListItem
                   {...itemProps}
-                  isActive={activeDestinations.includes(itemProps.item?.id)}
-                  enableItem={onSelectDestinationValue}
-                  disableItem={onSelectDestinationValue}
+                  isActive={selectedNodesIds.includes(itemProps.item?.id)}
+                  enableItem={setSelectedItems}
+                  disableItem={setSelectedItems}
                 />
               )}
             </GridList>
@@ -67,15 +77,18 @@ function DestinationsPanel(props) {
 }
 
 DestinationsPanel.propTypes = {
+  fetchKey: PropTypes.string,
+  previousSteps: PropTypes.string,
   destinations: PropTypes.array,
   page: PropTypes.number.isRequired,
   loading: PropTypes.bool,
-  searchDestinations: PropTypes.array,
-  activeDestinations: PropTypes.array,
-  getMoreItems: PropTypes.func.isRequired,
+  searchResults: PropTypes.array,
+  selectedNodesIds: PropTypes.array,
+  setPage: PropTypes.func.isRequired,
   getSearchResults: PropTypes.func.isRequired,
+  fetchData: PropTypes.func.isRequired,
   setSearchResult: PropTypes.func.isRequired,
-  onSelectDestinationValue: PropTypes.func.isRequired
+  setSelectedItems: PropTypes.func.isRequired
 };
 
 DestinationsPanel.defaultProps = {

@@ -19,3 +19,4 @@ export { default as logisticsMap } from 'react-components/logistics-map/logistic
 export { default as toolLinks } from 'react-components/tool-links/tool-links.reducer';
 export { default as toolLayers } from 'react-components/tool-layers/tool-layers.reducer';
 export { default as explore } from 'react-components/explore/explore.reducer';
+export { default as nodesPanel } from 'react-components/nodes-panel/nodes-panel.reducer';

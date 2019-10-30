@@ -18,6 +18,7 @@ function useMoreItems({ getMoreItems, rowHeight, height, columnCount, items, pag
       const reachedPageEndWithBuffer = current === pageEnd - buffer && page > 1;
 
       if (
+        scrollTop > 0 &&
         (reachedPageEnd || reachedPageEndWithBuffer) &&
         !scrollUpdateWasRequested &&
         verticalScrollDirection === 'forward'

@@ -1,14 +1,6 @@
 @import 'styles/settings';
 
 .c-sources-panel {
-  width: 560px;
-  margin: 0 auto;
-
-  @media screen and (min-width: $breakpoint-laptop) {
-    width: initial;
-    margin: initial;
-  }
-
   .sources-panel-search {
     margin: 0 0 25px 0;
   }

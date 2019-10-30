@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import SourcesPanel from 'react-components/dashboard-element/dashboard-panel/sources-panel.component';
-import DestinationsPanel from 'react-components/dashboard-element/dashboard-panel/destinations-panel.component';
-import CompaniesPanel from 'react-components/dashboard-element/dashboard-panel/companies-panel.component';
-import CommoditiesPanel from 'react-components/dashboard-element/dashboard-panel/commodities-panel.component';
+import CountrySourcesPanel from 'react-components/nodes-panel/country-sources-panel';
+import DestinationsPanel from 'react-components/nodes-panel/destinations-panel';
+import ExportersPanel from 'react-components/nodes-panel/exporters-panel';
+import ImportersPanel from 'react-components/nodes-panel/importers-panel';
+import CommoditiesPanel from 'react-components/nodes-panel/commodities-panel';
 import DashboardModalFooter from 'react-components/dashboard-element/dashboard-modal-footer/dashboard-modal-footer.component';
 import addApostrophe from 'utils/addApostrophe';
 import { DASHBOARD_STEPS } from 'constants';
@@ -36,106 +37,25 @@ class DashboardPanel extends Component {
     return node.nodeType || 'Country of Production';
   }
 
-  static countryNameNodeTypeRenderer(node) {
-    return `${node.countryName + addApostrophe(node.countryName)} ${node.nodeType}`;
-  }
+  countryNameNodeTypeRenderer = node => {
+    const { countryNames } = this.props;
+    const countryName = countryNames[node.countryId];
+    return `${countryName + addApostrophe(countryName)} ${node.nodeType}`;
+  };
 
   renderPanel() {
-    const {
-      step,
-      pages,
-      loadingItems,
-      getMoreItems,
-      activePanelId,
-      searchResults,
-      getSearchResults,
-      clearActiveItems,
-      setActiveTab,
-      setActiveCountryId,
-      setActiveCommodityId,
-      setActiveItem,
-      sourcesData,
-      countriesData,
-      companiesData,
-      commoditiesData,
-      destinationsData,
-      setSearchResult,
-      sourcesTabs,
-      companiesTabs,
-      sourcesActiveTab,
-      activeSources,
-      activeCompanies,
-      activeDestinations,
-      companiesActiveTab,
-      countriesActiveItems,
-      commoditiesActiveItems
-    } = this.props;
+    const { step } = this.props;
     switch (step) {
       case DASHBOARD_STEPS.sources:
-        return (
-          <SourcesPanel
-            tabs={sourcesTabs}
-            countries={countriesData}
-            page={pages.sources}
-            getMoreItems={getMoreItems}
-            searchSources={searchResults}
-            getSearchResults={getSearchResults}
-            loading={loadingItems}
-            clearItems={() => clearActiveItems(activePanelId)}
-            activeCountryItems={countriesActiveItems}
-            sourcesActiveTab={sourcesActiveTab}
-            activeSourcesItem={activeSources}
-            onSelectCountry={setActiveCountryId}
-            onSelectSourceTab={item => setActiveTab(item?.id, activePanelId)}
-            setSearchResult={item => setSearchResult(item, activePanelId)}
-            onSelectSourceValue={item => setActiveItem(item, activePanelId)}
-            nodeTypeRenderer={DashboardPanel.sourcesNodeTypeRenderer}
-            sources={sourcesData}
-          />
-        );
+        return <CountrySourcesPanel nodeTypeRenderer={DashboardPanel.sourcesNodeTypeRenderer} />;
       case DASHBOARD_STEPS.commodities:
-        return (
-          <CommoditiesPanel
-            page={pages.commodities}
-            getMoreItems={getMoreItems}
-            loading={loadingItems}
-            commodities={commoditiesData}
-            onSelectCommodity={setActiveCommodityId}
-            activeCommodities={commoditiesActiveItems}
-          />
-        );
+        return <CommoditiesPanel />;
       case DASHBOARD_STEPS.destinations:
-        return (
-          <DestinationsPanel
-            page={pages.destinations}
-            getMoreItems={getMoreItems}
-            getSearchResults={getSearchResults}
-            setSearchResult={item => setSearchResult(item, activePanelId)}
-            searchDestinations={searchResults}
-            destinations={destinationsData}
-            onSelectDestinationValue={item => setActiveItem(item, activePanelId)}
-            loading={loadingItems}
-            activeDestinations={activeDestinations}
-          />
-        );
-      case DASHBOARD_STEPS.companies:
-        return (
-          <CompaniesPanel
-            tabs={companiesTabs}
-            onSelectNodeTypeTab={item => setActiveTab(item?.id, activePanelId)}
-            page={pages.companies}
-            getMoreItems={getMoreItems}
-            searchCompanies={searchResults}
-            nodeTypeRenderer={DashboardPanel.countryNameNodeTypeRenderer}
-            setSearchResult={item => setSearchResult(item, activePanelId)}
-            getSearchResults={getSearchResults}
-            loading={loadingItems}
-            companies={companiesData}
-            onSelectCompany={item => setActiveItem(item, activePanelId)}
-            activeNodeTypeTab={companiesActiveTab}
-            activeCompanies={activeCompanies}
-          />
-        );
+        return <DestinationsPanel />;
+      case DASHBOARD_STEPS.exporters:
+        return <ExportersPanel nodeTypeRenderer={this.countryNameNodeTypeRenderer} />;
+      case DASHBOARD_STEPS.importers:
+        return <ImportersPanel nodeTypeRenderer={this.countryNameNodeTypeRenderer} />;
       default:
         return null;
     }
@@ -171,7 +91,11 @@ class DashboardPanel extends Component {
     }
     return (
       <>
-        {[DASHBOARD_STEPS.companies, DASHBOARD_STEPS.destinations].includes(step) && (
+        {[
+          DASHBOARD_STEPS.exporters,
+          DASHBOARD_STEPS.importers,
+          DASHBOARD_STEPS.destinations
+        ].includes(step) && (
           <Heading size="lg" as="span" weight="bold">{`${translateText('(Optional)')} `}</Heading>
         )}
         {translateText('Choose one or several')}
@@ -191,8 +115,7 @@ class DashboardPanel extends Component {
   render() {
     const {
       editMode,
-      clearActiveItems,
-      setActiveItem,
+      clearPanel,
       onContinue,
       onBack,
       setStep,
@@ -201,7 +124,9 @@ class DashboardPanel extends Component {
       dynamicSentenceParts,
       step,
       isDisabled,
-      closeModal
+      closeModal,
+      setSelectedItems,
+      canProceed
     } = this.props;
 
     const handleGoToDashboard = () => {
@@ -209,17 +134,19 @@ class DashboardPanel extends Component {
       closeModal();
     };
 
-    const mandatoryFieldsSelected = dirtyBlocks.countries && dirtyBlocks.commodities;
-
     return (
       <div className="c-dashboard-panel">
         <div ref={this.containerRef} className="dashboard-panel-content">
           <StepsTracker
-            steps={['Source countries', 'Commodities', 'Import countries', 'companies'].map(
-              label => ({ label })
-            )}
+            steps={[
+              'Source countries',
+              'Commodities',
+              'Import countries',
+              'Exporters',
+              'Importers'
+            ].map(label => ({ label }))}
             activeStep={step - 1}
-            onSelectStep={editMode && mandatoryFieldsSelected ? setStep : undefined}
+            onSelectStep={editMode && canProceed ? setStep : undefined}
           />
           <Heading className="dashboard-panel-title notranslate" align="center" size="lg">
             {this.renderTitleSentence()}
@@ -227,17 +154,17 @@ class DashboardPanel extends Component {
           {this.renderPanel()}
         </div>
         <DashboardModalFooter
-          isLastStep={step === DASHBOARD_STEPS.companies || (editMode && mandatoryFieldsSelected)}
+          isLastStep={step === DASHBOARD_STEPS.importers || (editMode && canProceed)}
           onContinue={onContinue}
           onBack={onBack}
           backText="Back"
           dirtyBlocks={dirtyBlocks}
           goToDashboard={handleGoToDashboard}
-          removeSentenceItem={setActiveItem}
-          clearPanel={panelName => clearActiveItems(panelName)}
+          clearPanel={panelName => clearPanel(panelName)}
           dynamicSentenceParts={dynamicSentenceParts}
           step={step}
           isDisabled={isDisabled}
+          removeSentenceItem={setSelectedItems}
         />
       </div>
     );
@@ -246,30 +173,8 @@ class DashboardPanel extends Component {
 
 DashboardPanel.propTypes = {
   onBack: PropTypes.func,
-  sources: PropTypes.object,
-  countries: PropTypes.array,
-  sourcesTabs: PropTypes.array,
-  companiesTabs: PropTypes.array,
-  sourcesData: PropTypes.array,
-  countriesData: PropTypes.array,
-  companiesData: PropTypes.array,
-  commoditiesData: PropTypes.array,
-  destinationsData: PropTypes.array,
-  sourcesActiveTab: PropTypes.number,
-  companiesActiveTab: PropTypes.number,
-  pages: PropTypes.shape({
-    sources: PropTypes.number.isRequired,
-    companies: PropTypes.number.isRequired,
-    destinations: PropTypes.number.isRequired
-  }).isRequired,
-  dirtyBlocks: PropTypes.array,
-  companies: PropTypes.object,
-  getMoreItems: PropTypes.func,
+  dirtyBlocks: PropTypes.object,
   goToDashboard: PropTypes.func,
-  commodities: PropTypes.array,
-  loadingItems: PropTypes.bool,
-  searchResults: PropTypes.array,
-  activePanelId: PropTypes.string,
   step: PropTypes.number.isRequired,
   setStep: PropTypes.func.isRequired,
   editMode: PropTypes.bool.isRequired,
@@ -277,19 +182,10 @@ DashboardPanel.propTypes = {
   dynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
-  countriesActiveItems: PropTypes.array,
-  setActiveTab: PropTypes.func.isRequired,
-  setActiveItem: PropTypes.func.isRequired,
-  setActiveCountryId: PropTypes.func.isRequired,
-  setActiveCommodityId: PropTypes.func.isRequired,
-  destinations: PropTypes.array.isRequired,
-  activeSources: PropTypes.array.isRequired,
-  activeCompanies: PropTypes.array.isRequired,
-  activeDestinations: PropTypes.array.isRequired,
-  clearActiveItems: PropTypes.func.isRequired,
-  setSearchResult: PropTypes.func.isRequired,
-  getSearchResults: PropTypes.func.isRequired,
-  commoditiesActiveItems: PropTypes.array.isRequired
+  clearPanel: PropTypes.func.isRequired,
+  setSelectedItems: PropTypes.func.isRequired,
+  canProceed: PropTypes.bool.isRequired,
+  countryNames: PropTypes.object.isRequired
 };
 
 export default DashboardPanel;

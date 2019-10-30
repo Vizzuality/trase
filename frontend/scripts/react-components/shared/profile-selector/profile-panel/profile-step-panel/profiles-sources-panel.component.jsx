@@ -10,7 +10,7 @@ import Accordion from 'react-components/shared/accordion/accordion.component';
 import ResizeListener from 'react-components/shared/resize-listener.component';
 import { BREAKPOINTS } from 'constants';
 
-import 'react-components/dashboard-element/dashboard-panel/sources-panel.scss';
+import './profile-sources-panel.scss';
 
 function ProfilesSourcesPanel(props) {
   const {
@@ -45,9 +45,9 @@ function ProfilesSourcesPanel(props) {
         const columnsCount = windowWidth > BREAKPOINTS.laptop ? 5 : 3;
         const width = windowWidth > BREAKPOINTS.laptop ? 950 : 560;
         return (
-          <div className="c-sources-panel">
+          <div className="c-profile-sources-panel">
             <GridList
-              className="sources-panel-pill-list"
+              className="profile-sources-panel-pill-list"
               height={Math.min(200, Math.ceil(countries.length / columnsCount) * 50)}
               width={width}
               columnWidth={190}
@@ -76,7 +76,7 @@ function ProfilesSourcesPanel(props) {
                 <SearchInput
                   variant="bordered"
                   size="sm"
-                  className="sources-panel-search"
+                  className="profile-sources-panel-search"
                   items={searchSources}
                   placeholder="Search place"
                   onSelect={item =>
@@ -93,7 +93,7 @@ function ProfilesSourcesPanel(props) {
                   getTabId={item => item.id}
                 >
                   <GridList
-                    className="sources-panel-pill-list"
+                    className="profile-sources-panel-pill-list"
                     items={sources}
                     height={sources.length > columnsCount ? 200 : 50}
                     width={width}

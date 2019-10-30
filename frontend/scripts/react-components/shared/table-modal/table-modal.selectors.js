@@ -1,22 +1,22 @@
 import { createSelector } from 'reselect';
 import omit from 'lodash/omit';
 import { CHART_TYPES } from 'constants';
-import { getDashboardPanelsValues } from 'react-components/dashboard-element/dashboard-element.selectors';
+import { getNodesPanelValues } from 'react-components/dashboard-element/dashboard-element.selectors';
 
 const getMeta = (state, { meta }) => meta || null;
 const getData = (state, { data }) => data || null;
 const getChartType = (state, { chartType }) => chartType || null;
 
 const getActiveCountriesNames = createSelector(
-  getDashboardPanelsValues,
+  getNodesPanelValues,
   panelsValues => (panelsValues.countries ? panelsValues.countries.map(i => i.name) : null)
 );
 const getActiveCommoditiesNames = createSelector(
-  getDashboardPanelsValues,
+  getNodesPanelValues,
   panelsValues => (panelsValues.commodities ? panelsValues.commodities.map(i => i.name) : null)
 );
 const getActiveSourcesNames = createSelector(
-  getDashboardPanelsValues,
+  getNodesPanelValues,
   panelsValues => (panelsValues.sources ? panelsValues.sources.map(i => i.name) : null)
 );
 

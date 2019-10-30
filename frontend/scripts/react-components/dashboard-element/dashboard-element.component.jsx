@@ -12,7 +12,9 @@ import DashboardWidget from 'react-components/dashboard-element/dashboard-widget
 import UrlSerializer from 'react-components/shared/url-serializer';
 import InView from 'react-components/shared/in-view.component';
 import cx from 'classnames';
+import Heading from 'react-components/shared/heading';
 import dashboardElementSerializer from 'react-components/dashboard-element/dashboard-element.serializers';
+import nodesPanelSerializer from 'react-components/nodes-panel/nodes-panel.serializers';
 import { DASHBOARD_STEPS } from 'constants';
 
 import 'react-components/dashboard-element/dashboard-element.scss';
@@ -23,6 +25,7 @@ class DashboardElement extends React.PureComponent {
     groupedCharts: PropTypes.object,
     urlProps: PropTypes.object,
     dirtyBlocks: PropTypes.object,
+    canProceed: PropTypes.bool.isRequired,
     step: PropTypes.number.isRequired,
     setStep: PropTypes.func.isRequired,
     editMode: PropTypes.bool.isRequired,
@@ -36,7 +39,7 @@ class DashboardElement extends React.PureComponent {
       selectedYears: PropTypes.array,
       selectedResizeBy: PropTypes.object,
       selectedRecolorBy: PropTypes.object,
-      recolorBy: PropTypes.array.isRequired
+      recolorBy: PropTypes.array
     }).isRequired,
     dynamicSentenceParts: PropTypes.array,
     setSelectedYears: PropTypes.func.isRequired,
@@ -45,9 +48,9 @@ class DashboardElement extends React.PureComponent {
   };
 
   renderStep() {
-    const { step, setStep, editMode, closeModal, dirtyBlocks } = this.props;
+    const { step, setStep, editMode, closeModal, dirtyBlocks, canProceed } = this.props;
     const showBackButton = step > DASHBOARD_STEPS.sources;
-    const onContinue = step === DASHBOARD_STEPS.companies ? closeModal : () => setStep(step + 1);
+    const onContinue = step === DASHBOARD_STEPS.importers ? closeModal : () => setStep(step + 1);
     if (step === DASHBOARD_STEPS.welcome && !editMode) {
       return <DashboardWelcome onContinue={() => setStep(step + 1)} />;
     }
@@ -55,6 +58,7 @@ class DashboardElement extends React.PureComponent {
       <DashboardPanel
         step={step}
         editMode={editMode}
+        canProceed={canProceed}
         onContinue={onContinue}
         dirtyBlocks={dirtyBlocks}
         onBack={showBackButton ? () => setStep(step - 1) : undefined}
@@ -79,8 +83,7 @@ class DashboardElement extends React.PureComponent {
   }
 
   renderDashboardModal() {
-    const { editMode, goToRoot, modalOpen, closeModal, dirtyBlocks } = this.props;
-    const canProceed = dirtyBlocks.countries && dirtyBlocks.commodities;
+    const { editMode, goToRoot, modalOpen, closeModal, canProceed } = this.props;
     const onClose = editMode && canProceed ? closeModal : goToRoot;
     return (
       <SimpleModal isOpen={modalOpen} onClickClose={onClose}>
@@ -89,12 +92,16 @@ class DashboardElement extends React.PureComponent {
     );
   }
 
-  renderDynamicSentence() {
+  renderDynamicSentence(dashboardLoaded) {
     const { dynamicSentenceParts, step } = this.props;
-    if (dynamicSentenceParts) {
+    if (dynamicSentenceParts && dashboardLoaded) {
       return <TagsGroup readOnly step={step} color="white" tags={dynamicSentenceParts} />;
     }
-    return 'Dashboards';
+    return (
+      <Heading as="span" size="md" color="white" className="notranslate">
+        Your dashboard is loading...
+      </Heading>
+    );
   }
 
   renderWidgets() {
@@ -134,6 +141,7 @@ class DashboardElement extends React.PureComponent {
       setSelectedRecolorBy
     } = this.props;
 
+    const dashboardLoaded = groupedCharts && !loading;
     return (
       <div className="l-dashboard-element">
         <div className="c-dashboard-element">
@@ -143,7 +151,7 @@ class DashboardElement extends React.PureComponent {
               <div className="column small-12">
                 {modalOpen === false && (
                   <h2 className="dashboard-element-title" data-test="dashboard-element-title">
-                    {this.renderDynamicSentence()}
+                    {this.renderDynamicSentence(dashboardLoaded)}
                     <Button
                       size="sm"
                       type="button"
@@ -215,7 +223,7 @@ class DashboardElement extends React.PureComponent {
               </div>
             </div>
           </section>
-          {!groupedCharts || loading || modalOpen ? (
+          {!dashboardLoaded || modalOpen ? (
             this.renderPlaceholder()
           ) : (
             <section className="dashboard-element-widgets">
@@ -227,7 +235,10 @@ class DashboardElement extends React.PureComponent {
         </div>
         <UrlSerializer
           urlProps={urlProps}
-          urlPropHandlers={dashboardElementSerializer.urlPropHandlers}
+          urlPropHandlers={{
+            ...dashboardElementSerializer.urlPropHandlers,
+            ...nodesPanelSerializer.urlPropHandlers
+          }}
         />
       </div>
     );
