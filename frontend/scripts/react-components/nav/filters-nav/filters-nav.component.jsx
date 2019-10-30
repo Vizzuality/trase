@@ -13,7 +13,7 @@ import { NavLink } from 'redux-first-router-link';
 import Img from 'react-components/shared/img';
 import { TOOL_LAYOUT } from 'constants';
 import ToolModalButton from 'react-components/nav/filters-nav/tool-modal-button';
-import ContextModalButton from 'react-components/nav/filters-nav/context-modal-button';
+import ToolSelectionModalButton from 'react-components/nav/filters-nav/tool-selection-modal-button';
 
 import 'scripts/react-components/nav/filters-nav/filters-nav.scss';
 import 'scripts/react-components/nav/filters-nav/burger.scss';
@@ -134,7 +134,7 @@ const FiltersNav = props => {
   const renderFilter = filter => {
     const Component = FILTERS[filter.type];
     if (ENABLE_TOOL_PANEL && filter.props.id === 'contextSelector') {
-      return <ContextModalButton selectedContext={filter.props.selectedContext} />;
+      return <ToolSelectionModalButton selectedContext={filter.props.selectedContext} />;
     }
     if (ENABLE_VERSIONING && filter.props.id === 'version' && !filter.disabled) {
       return <ToolModalButton modalId="version" key="version-toggle" />;

@@ -15,10 +15,3 @@ export const getPanelId = step => {
 
 export const getPanelLabel = step =>
   step === DASHBOARD_STEPS.destinations ? 'import countries' : PANEL_IDS[step];
-
-export const singularize = panelName => {
-  const irregularInflections = {
-    commodities: 'commodity'
-  };
-  return irregularInflections[panelName] || panelName.substring(0, panelName.length - 1);
-};

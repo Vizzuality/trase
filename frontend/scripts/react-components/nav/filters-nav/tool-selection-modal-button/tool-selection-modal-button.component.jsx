@@ -4,15 +4,15 @@ import Heading from 'react-components/shared/heading';
 import Text from 'react-components/shared/text/text.component';
 import capitalize from 'lodash/capitalize';
 
-import 'react-components/nav/filters-nav/context-modal-button/context-modal-button.scss';
+import 'react-components/nav/filters-nav/tool-selection-modal-button/tool-selection-modal-button.scss';
 
-export default function ContextModalButton({ selectedContext, setActiveModal }) {
+export default function ToolSelectionModalButton({ selectedContext, setActiveModal }) {
   const selectedLabel = selectedContext
     ? `${capitalize(selectedContext.countryName)} - ${capitalize(selectedContext.commodityName)}`
     : 'Select a context';
 
   return (
-    <button onClick={() => setActiveModal('context')} className="c-context-modal-button">
+    <button onClick={() => setActiveModal('context')} className="c-tool-selection-modal-button">
       <Text variant="mono" color="grey-faded" transform="uppercase" as="span" size="sm">
         Country - Commodity
       </Text>
@@ -30,7 +30,7 @@ export default function ContextModalButton({ selectedContext, setActiveModal }) 
   );
 }
 
-ContextModalButton.propTypes = {
+ToolSelectionModalButton.propTypes = {
   selectedContext: PropTypes.object,
   setActiveModal: PropTypes.func.isRequired
 };
