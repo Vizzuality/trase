@@ -100,11 +100,15 @@ const getSomeBlocksNeedUpdate = createSelector(
     importersPreviousSteps
   ) => {
     const conditions = [
-      sourcesFetchKey === null || sourcesFetchKey === sourcesPreviousSteps,
-      commoditiesFetchKey === null || commoditiesFetchKey === commoditiesPreviousSteps,
-      destinationsFetchKey === null || destinationsFetchKey === destinationsPreviousSteps,
-      exportersFetchKey === null || exportersFetchKey === exportersPreviousSteps,
-      importersFetchKey === null || importersFetchKey === importersPreviousSteps
+      [null, 'preloaded'].includes(sourcesFetchKey) || sourcesFetchKey === sourcesPreviousSteps,
+      [null, 'preloaded'].includes(commoditiesFetchKey) ||
+        commoditiesFetchKey === commoditiesPreviousSteps,
+      [null, 'preloaded'].includes(destinationsFetchKey) ||
+        destinationsFetchKey === destinationsPreviousSteps,
+      [null, 'preloaded'].includes(exportersFetchKey) ||
+        exportersFetchKey === exportersPreviousSteps,
+      [null, 'preloaded'].includes(importersFetchKey) ||
+        importersFetchKey === importersPreviousSteps
     ];
     return conditions.includes(false);
   }

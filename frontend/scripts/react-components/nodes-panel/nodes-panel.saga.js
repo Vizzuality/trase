@@ -18,8 +18,10 @@ function* fetchData() {
 
     if (moduleOptions.hasTabs) {
       yield fork(getSectionTabs, name);
-    } else {
+    } else if (reducer.data.byId.length === 0) {
       yield fork(getData, name, reducer);
+    } else {
+      yield fork(getMoreData, name, reducer);
     }
   }
   yield takeLatest([NODES_PANEL__FETCH_DATA], onFetchRequest);

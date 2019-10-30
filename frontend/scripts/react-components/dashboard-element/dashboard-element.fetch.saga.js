@@ -2,7 +2,6 @@ import pickBy from 'lodash/pickBy';
 import { put, call, cancelled, select } from 'redux-saga/effects';
 import {
   setDashboardLoading,
-  setMissingDashboardPanelItems,
   DASHBOARD_ELEMENT__SET_CHARTS
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import {
@@ -10,46 +9,9 @@ import {
   getDashboardSelectedResizeBy,
   getDashboardSelectedRecolorBy
 } from 'react-components/dashboard-element/dashboard-element.selectors';
-import {
-  getURLFromParams,
-  GET_DASHBOARD_PARAMETRISED_CHARTS_URL,
-  GET_ALL_NODES_URL
-} from 'utils/getURLFromParams';
+import { getURLFromParams, GET_DASHBOARD_PARAMETRISED_CHARTS_URL } from 'utils/getURLFromParams';
 import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
 import { getPanelParams } from 'react-components/nodes-panel/nodes-panel.fetch.saga';
-
-export function* getMissingDashboardPanelItems(dashboardElement, selectedContext) {
-  const nodesIds = [
-    ...dashboardElement.sources,
-    ...dashboardElement.destinations,
-    ...dashboardElement.exporters,
-    ...dashboardElement.importers
-  ];
-  const params = {
-    context_id: selectedContext.id,
-    nodes_ids: nodesIds.join(',')
-  };
-  if (nodesIds.length === 0) {
-    return;
-  }
-  const url = getURLFromParams(GET_ALL_NODES_URL, params);
-  const { source, fetchPromise } = fetchWithCancel(url);
-  try {
-    const { data } = yield call(fetchPromise);
-    yield put(setMissingDashboardPanelItems(data.data));
-  } catch (e) {
-    console.error('Error', e);
-  } finally {
-    if (yield cancelled()) {
-      if (NODE_ENV_DEV) {
-        console.error('Cancelled');
-      }
-      if (source) {
-        source.cancel();
-      }
-    }
-  }
-}
 
 export function* fetchDashboardCharts() {
   const selectedResizeBy = yield select(getDashboardSelectedResizeBy);

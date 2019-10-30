@@ -3,11 +3,13 @@ export const NODES_PANEL__SET_SELECTED_ID = 'NODES_PANEL__SET_SELECTED_ID';
 export const NODES_PANEL__SET_SELECTED_IDS = 'NODES_PANEL__SET_SELECTED_IDS';
 export const NODES_PANEL__CLEAR_PANEL = 'NODES_PANEL__CLEAR_PANEL';
 export const NODES_PANEL__FETCH_DATA = 'NODES_PANEL__FETCH_DATA';
+export const NODES_PANEL__SET_FETCH_KEY = 'NODES_PANEL__SET_FETCH_KEY';
 export const NODES_PANEL__SET_PANEL_PAGE = 'NODES_PANEL__SET_PANEL_PAGE';
 export const NODES_PANEL__SET_DATA = 'NODES_PANEL__SET_DATA';
 export const NODES_PANEL__SET_TABS = 'NODES_PANEL__SET_TABS';
 export const NODES_PANEL__SET_MORE_DATA = 'NODES_PANEL__SET_MORE_DATA';
 export const NODES_PANEL__SET_MISSING_DATA = 'NODES_PANEL__SET_MISSING_DATA';
+export const NODES_PANEL__GET_MISSING_DATA = 'NODES_PANEL__GET_MISSING_DATA';
 export const NODES_PANEL__SET_LOADING_ITEMS = 'NODES_PANEL__SET_LOADING_ITEMS';
 export const NODES_PANEL__SET_ACTIVE_TAB = 'NODES_PANEL__SET_ACTIVE_TAB';
 export const NODES_PANEL__SET_ACTIVE_ITEMS_WITH_SEARCH =
@@ -22,10 +24,16 @@ export const fetchData = (key, name) => ({
   meta: { name }
 });
 
-export const setData = (data, name) => ({
+export const setFetchKey = (key, name) => ({
+  type: NODES_PANEL__SET_FETCH_KEY,
+  payload: key,
+  meta: { name }
+});
+
+export const setData = (data, name, prefetching) => ({
   type: NODES_PANEL__SET_DATA,
   payload: { data },
-  meta: { name }
+  meta: { name, prefetching }
 });
 
 export const setMoreData = (data, name) => ({
@@ -80,6 +88,10 @@ export const setMissingItems = (data, name) => ({
   type: NODES_PANEL__SET_MISSING_DATA,
   payload: { data },
   meta: { name }
+});
+
+export const getMissingItems = () => ({
+  type: NODES_PANEL__GET_MISSING_DATA
 });
 
 export const getSearchResults = (query, name) => ({

@@ -18,6 +18,8 @@ import toolLayersInitialState from 'react-components/tool-layers/tool-layers.ini
 import toolLayersSerialization from 'react-components/tool-layers/tool-layers.serializers';
 import dashboardElementInitialState from 'react-components/dashboard-element/dashboard-element.initial-state';
 import dashboardElementSerialization from 'react-components/dashboard-element/dashboard-element.serializers';
+import nodesPanelInitialState from 'react-components/nodes-panel/nodes-panel.initial-state';
+import nodesPanelSerialization from 'react-components/nodes-panel/nodes-panel.serializers';
 import router from './router/router';
 import routeSubscriber from './router/route-subscriber';
 import { register, unregister } from './worker';
@@ -71,10 +73,6 @@ const reduxDevTools =
         ...state.toolLayers,
         data: 'NOT_SERIALIZED'
       },
-      dashboardElement: {
-        ...state.dashboardElement,
-        data: 'NOT_SERIALIZED'
-      },
       widgets: 'NOT_SERIALIZED',
       staticContent: 'NOT_SERIALIZED'
     })
@@ -110,6 +108,11 @@ const store = createStore(
       params,
       state: dashboardElementInitialState,
       ...dashboardElementSerialization
+    }),
+    nodesPanel: deserialize({
+      params,
+      state: nodesPanelInitialState,
+      ...nodesPanelSerialization
     })
   },
   composeEnhancers(router.enhancer, applyMiddleware(...middlewares))

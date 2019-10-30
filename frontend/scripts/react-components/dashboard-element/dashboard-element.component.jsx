@@ -13,6 +13,7 @@ import UrlSerializer from 'react-components/shared/url-serializer';
 import InView from 'react-components/shared/in-view.component';
 import cx from 'classnames';
 import dashboardElementSerializer from 'react-components/dashboard-element/dashboard-element.serializers';
+import nodesPanelSerializer from 'react-components/nodes-panel/nodes-panel.serializers';
 import { DASHBOARD_STEPS } from 'constants';
 
 import 'react-components/dashboard-element/dashboard-element.scss';
@@ -228,7 +229,10 @@ class DashboardElement extends React.PureComponent {
         </div>
         <UrlSerializer
           urlProps={urlProps}
-          urlPropHandlers={dashboardElementSerializer.urlPropHandlers}
+          urlPropHandlers={{
+            ...dashboardElementSerializer.urlPropHandlers,
+            ...nodesPanelSerializer.urlPropHandlers
+          }}
         />
       </div>
     );

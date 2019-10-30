@@ -1,4 +1,3 @@
-import immer from 'immer';
 import createReducer from 'utils/createReducer';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import dashboardElementSerialization from 'react-components/dashboard-element/dashboard-element.serializers';
@@ -8,7 +7,6 @@ import {
   DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
   DASHBOARD_ELEMENT__SET_CHARTS,
   DASHBOARD_ELEMENT__EDIT_DASHBOARD,
-  DASHBOARD_ELEMENT__SET_MISSING_DATA,
   DASHBOARD_ELEMENT__SET_LOADING
 } from './dashboard-element.actions';
 import initialState from './dashboard-element.initial-state';
@@ -27,28 +25,6 @@ const dashboardElementReducer = {
   },
   [DASHBOARD_ELEMENT__EDIT_DASHBOARD](state) {
     return { ...state, editMode: true };
-  },
-  [DASHBOARD_ELEMENT__SET_MISSING_DATA](state, action) {
-    return immer(state, draft => {
-      const { data } = action.payload;
-      const panelsByItem = {};
-      state.sources.forEach(id => {
-        panelsByItem[id] = 'sources';
-      });
-      state.exporters.forEach(id => {
-        panelsByItem[id] = 'exporters';
-      });
-      state.importers.forEach(id => {
-        panelsByItem[id] = 'importers';
-      });
-      state.destinations.forEach(id => {
-        panelsByItem[id] = 'destinations';
-      });
-      data.forEach(item => {
-        const panel = panelsByItem[item.id];
-        draft.data[panel].push(item);
-      });
-    });
   },
   [DASHBOARD_ELEMENT__SET_SELECTED_YEARS](state, action) {
     const { years } = action.payload;
@@ -85,13 +61,10 @@ const dashboardElementReducer = {
 };
 
 const dashboardElementReducerTypes = PropTypes => ({
-  loading: PropTypes.bool,
-  activePanelId: PropTypes.string,
-  selectedYears: PropTypes.arrayOf(PropTypes.number),
+  loading: PropTypes.bool.isRequired,
   selectedResizeBy: PropTypes.number,
   selectedRecolorBy: PropTypes.number,
-  selectedCountryId: PropTypes.number,
-  selectedCommodityId: PropTypes.number
+  selectedYears: PropTypes.arrayOf(PropTypes.number)
 });
 
 export { initialState };

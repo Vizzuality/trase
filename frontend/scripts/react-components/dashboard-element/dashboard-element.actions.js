@@ -20,8 +20,6 @@ export const DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY =
 export const DASHBOARD_ELEMENT__SET_CHARTS = 'DASHBOARD_ELEMENT__SET_CHARTS';
 export const DASHBOARD_ELEMENT__EDIT_DASHBOARD = 'DASHBOARD_ELEMENT__EDIT_DASHBOARD';
 export const DASHBOARD_ELEMENT__GO_TO_DASHBOARD = 'DASHBOARD_ELEMENT__GO_TO_DASHBOARD';
-export const DASHBOARD_ELEMENT__GET_MISSING_DATA = 'DASHBOARD_ELEMENT__GET_MISSING_DATA';
-export const DASHBOARD_ELEMENT__SET_MISSING_DATA = 'DASHBOARD_ELEMENT__SET_MISSING_DATA';
 export const DASHBOARD_ELEMENT__SET_LOADING = 'DASHBOARD_ELEMENT__SET_LOADING';
 
 export const setDashboardPanelActiveItemsWithSearch = (activeItem, panel) => ({
@@ -66,13 +64,4 @@ export const editDashboard = () => ({
 export const goToDashboard = payload => ({
   type: DASHBOARD_ELEMENT__GO_TO_DASHBOARD,
   payload
-});
-
-export const setMissingDashboardPanelItems = data => ({
-  type: DASHBOARD_ELEMENT__SET_MISSING_DATA,
-  payload: { data }
-});
-
-export const getDashboardMissingPanelItems = () => ({
-  type: DASHBOARD_ELEMENT__GET_MISSING_DATA
 });

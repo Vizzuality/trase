@@ -19,6 +19,7 @@ import {
   setNoData
 } from './nodes-panel.actions';
 import { makeGetActiveTab } from './nodes-panel.selectors';
+import modules from './nodes-panel.modules';
 
 const getSourcesTab = makeGetActiveTab('sources');
 const getExportersTab = makeGetActiveTab('exporters');
@@ -158,8 +159,15 @@ export function* getMoreData(name, reducer) {
   }
 }
 
-export function* getMissingItems(name, reducer, selectedContext) {
-  const nodesIds = reducer.selectedNodesIds;
+export function* getMissingItems(nodesPanel, selectedContext) {
+  const nodesIds = Object.entries(modules)
+    .filter(([name]) => !['countries', 'commodities'].includes(name))
+    .flatMap(([name, moduleOptions]) => {
+      if (moduleOptions.hasMultipleSelection) {
+        return nodesPanel[name].selectedNodesIds;
+      }
+      return nodesPanel[name].selectedNodeId || [];
+    });
   const params = {
     context_id: selectedContext.id,
     nodes_ids: nodesIds.join(',')
@@ -171,7 +179,7 @@ export function* getMissingItems(name, reducer, selectedContext) {
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
-    yield put(setMissingItems(data.data, name));
+    yield put(setMissingItems(data.data));
   } catch (e) {
     console.error('Error', e);
   } finally {

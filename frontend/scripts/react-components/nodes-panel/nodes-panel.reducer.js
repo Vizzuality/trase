@@ -3,6 +3,8 @@ import xor from 'lodash/xor';
 import fuzzySearch from 'utils/fuzzySearch';
 import { DASHBOARD_STEPS } from 'constants';
 import createReducer from 'utils/createReducer';
+import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
+import nodesPanelSerialization from 'react-components/nodes-panel/nodes-panel.serializers';
 import {
   NODES_PANEL__FETCH_DATA,
   NODES_PANEL__SET_PANEL_PAGE,
@@ -18,57 +20,19 @@ import {
   NODES_PANEL__SET_ACTIVE_ITEMS_WITH_SEARCH,
   NODES_PANEL__SET_SEARCH_RESULTS,
   NODES_PANEL__SET_INSTANCE_ID,
-  NODES_PANEL__SET_NO_DATA
+  NODES_PANEL__SET_NO_DATA,
+  NODES_PANEL__SET_FETCH_KEY
 } from './nodes-panel.actions';
 import modules from './nodes-panel.modules';
-
-const panelInitialState = name => {
-  const moduleOptions = modules[name];
-  const panelState = {
-    data: {
-      byId: [],
-      nodes: null
-    },
-    page: 1,
-    loadingItems: false,
-    noData: false,
-    fetchKey: null
-  };
-
-  if (moduleOptions.hasMultipleSelection) {
-    panelState.selectedNodesIds = [];
-  } else {
-    panelState.selectedNodeId = null;
-  }
-
-  if (moduleOptions.hasTabs) {
-    panelState.tabs = [];
-    panelState.activeTab = null;
-  }
-
-  if (moduleOptions.hasSearch) {
-    panelState.searchResults = [];
-  }
-  return panelState;
-};
-
-const initialState = {
-  instanceId: null,
-  countries: panelInitialState('countries'),
-  sources: panelInitialState('sources'),
-  commodities: panelInitialState('commodities'),
-  destinations: panelInitialState('destinations'),
-  exporters: panelInitialState('exporters'),
-  importers: panelInitialState('importers')
-};
+import nodesPanelInitialState from './nodes-panel.initial-state';
 
 const resetState = (draft, name) => {
   const moduleOptions = modules[name];
-  draft[name].page = initialState[name].page;
-  draft[name].data = initialState[name].data;
+  draft[name].page = nodesPanelInitialState[name].page;
+  draft[name].data = nodesPanelInitialState[name].data;
 
   if (moduleOptions.hasSearch) {
-    draft[name].searchResults = initialState[name].searchResults;
+    draft[name].searchResults = nodesPanelInitialState[name].searchResults;
   }
 };
 
@@ -98,9 +62,19 @@ const getPanelsToClear = (panel, state, item) => {
 };
 
 const nodesPanelReducer = {
+  dashboardElement(state, action) {
+    if (action.payload?.serializerParams) {
+      return deserialize({
+        params: action.payload.serializerParams,
+        state: nodesPanelInitialState,
+        ...nodesPanelSerialization
+      });
+    }
+    return state;
+  },
   [NODES_PANEL__SET_INSTANCE_ID](state) {
     return immer(state, draft => {
-      Object.assign(draft, initialState);
+      Object.assign(draft, nodesPanelInitialState);
     });
   },
   [NODES_PANEL__SET_PANEL_PAGE](state, action) {
@@ -109,20 +83,26 @@ const nodesPanelReducer = {
       draft[name].page = action.payload;
     });
   },
+  [NODES_PANEL__SET_FETCH_KEY](state, action) {
+    const { name } = action.meta;
+    return immer(state, draft => {
+      draft[name].fetchKey = action.payload || null;
+    });
+  },
   [NODES_PANEL__FETCH_DATA](state, action) {
     const { name } = action.meta;
     const moduleOptions = modules[name];
     return immer(state, draft => {
       if (moduleOptions.hasTabs) {
-        draft[name].activeTab = initialState[name].activeTab;
+        draft[name].activeTab = nodesPanelInitialState[name].activeTab;
       }
       draft[name].fetchKey = action.payload || null;
 
-      if (draft[name].fetchKey !== null) {
+      if (draft[name].fetchKey !== null && state[name].fetchKey !== 'preloaded') {
         if (moduleOptions.hasMultipleSelection) {
-          draft[name].selectedNodesIds = initialState[name].selectedNodesIds;
+          draft[name].selectedNodesIds = nodesPanelInitialState[name].selectedNodesIds;
         } else {
-          draft[name].selectedNodeId = initialState[name].selectedNodeId;
+          draft[name].selectedNodeId = nodesPanelInitialState[name].selectedNodeId;
         }
       }
     });
@@ -160,14 +140,26 @@ const nodesPanelReducer = {
     });
   },
   [NODES_PANEL__SET_MISSING_DATA](state, action) {
-    const { name } = action.meta;
     return immer(state, draft => {
       const { data } = action.payload;
-      const newItems = data.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
-      draft[name].data.nodes = { ...state[name].data.nodes, ...newItems };
-      draft[name].data.byId = Array.from(
-        new Set([...state[name].data.byId, ...Object.keys(newItems)].map(n => parseInt(n, 10)))
-      );
+      Object.entries(modules)
+        .filter(([name]) => !['countries', 'commodities'].includes(name))
+        .forEach(([name, moduleOptions]) => {
+          data
+            .filter(item => {
+              if (moduleOptions.hasMultipleSelection) {
+                return draft[name].selectedNodesIds.includes(item.id);
+              }
+              return draft[name].selectedNodeId === item.id;
+            })
+            .forEach(item => {
+              if (!draft[name].data.nodes) {
+                draft[name].data.nodes = {};
+              }
+              draft[name].data.byId.push(item.id);
+              draft[name].data.nodes[item.id] = item;
+            });
+        });
     });
   },
   [NODES_PANEL__SET_TABS](state, action) {
@@ -253,9 +245,11 @@ const nodesPanelReducer = {
         if (panelsToClear) {
           panelsToClear.forEach(panelToClear => {
             if (modules[panelToClear].hasMultipleSelection) {
-              draft[panelToClear].selectedNodesIds = initialState[panelToClear].selectedNodesIds;
+              draft[panelToClear].selectedNodesIds =
+                nodesPanelInitialState[panelToClear].selectedNodesIds;
             } else {
-              draft[panelToClear].selectedNodeId = initialState[panelToClear].selectedNodeId;
+              draft[panelToClear].selectedNodeId =
+                nodesPanelInitialState[panelToClear].selectedNodeId;
             }
           });
         }
@@ -270,7 +264,7 @@ const nodesPanelReducer = {
       return immer(state, draft => {
         const { activeTab } = action.payload;
         draft[name].activeTab = activeTab.id;
-        draft[name].page = initialState[name].page;
+        draft[name].page = nodesPanelInitialState[name].page;
       });
     }
     return state;
@@ -288,7 +282,7 @@ const nodesPanelReducer = {
           const activeTab = activeTabObj?.id || null;
 
           if (activeTab !== state[name].activeTab && state[name].activeTab) {
-            draft[name].page = initialState[name].page;
+            draft[name].page = nodesPanelInitialState[name].page;
           }
           draft[name].activeTab = activeTab;
         }
@@ -357,4 +351,4 @@ const nodesPanelReducerTypes = PropTypes => ({
   selectedCommodityId: PropTypes.number
 });
 
-export default createReducer(initialState, nodesPanelReducer, nodesPanelReducerTypes);
+export default createReducer(nodesPanelInitialState, nodesPanelReducer, nodesPanelReducerTypes);
