@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Heading from 'react-components/shared/heading';
 import capitalize from 'lodash/capitalize';
 
-import 'react-components/nav/filters-nav/tool-modal-button/tool-modal-button.scss';
+import 'react-components/nav/filters-nav/context-modal-button/context-modal-button.scss';
 
 export default function ContextModalButton({ selectedContext, setActiveModal }) {
   const selectedLabel = selectedContext
@@ -14,8 +14,8 @@ export default function ContextModalButton({ selectedContext, setActiveModal }) 
     <button onClick={() => setActiveModal('context')} className="c-context-modal-button">
       <Heading
         as="span"
-        size="lg"
-        color="grey-faded"
+        size="md"
+        color="grey"
         weight="bold"
         className="selected-item"
         title={selectedLabel}

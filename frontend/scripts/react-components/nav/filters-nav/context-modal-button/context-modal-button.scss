@@ -23,7 +23,7 @@
     @include simple-arrow($charcoal-grey-faded);
 
     &:after {
-      top: calc(50% + 10px);
+      top: calc(50% + 5px);
     }
   }
 }
