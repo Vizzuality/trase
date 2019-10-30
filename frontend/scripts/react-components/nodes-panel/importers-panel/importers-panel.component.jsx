@@ -44,8 +44,8 @@ function ImportersPanel(props) {
   if (noData) {
     return (
       <div className="c-importers-panel">
-        <Text size="lg" className="no-data" align="center">
-          There is no data for importers for the current selection
+        <Text size="md" color="grey-faded" className="no-data" align="center">
+          There&apos;s no importers data for the current selection.
         </Text>
       </div>
     );
