@@ -272,6 +272,16 @@ export const DASHBOARD_STEPS = {
   importers: 5
 };
 
+export const TOOL_STEPS = {
+  welcome: 0,
+  countries: 1,
+  sources: 1,
+  commodities: 2,
+  destinations: 3,
+  exporters: 4,
+  importers: 5
+};
+
 export const PROFILE_STEPS = {
   type: 0,
   profiles: 1,

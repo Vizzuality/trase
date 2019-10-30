@@ -5,18 +5,19 @@ import DestinationsPanel from 'react-components/nodes-panel/destinations-panel';
 import ExportersPanel from 'react-components/nodes-panel/exporters-panel';
 import ImportersPanel from 'react-components/nodes-panel/importers-panel';
 import CommoditiesPanel from 'react-components/nodes-panel/commodities-panel';
-import DashboardModalFooter from 'react-components/dashboard-element/dashboard-modal-footer/dashboard-modal-footer.component';
-import addApostrophe from 'utils/addApostrophe';
-import { DASHBOARD_STEPS } from 'constants';
+import ToolPanelFooter from 'react-components/tool/tool-modal/tool-selection-modal/tool-panel/tool-panel-footer/tool-panel-footer.component';
 import singularize from 'utils/singularize';
-import { getPanelLabel } from 'utils/dashboardPanel';
+import { getPanelLabel } from 'utils/toolPanel';
+
+import addApostrophe from 'utils/addApostrophe';
+import { TOOL_STEPS } from 'constants';
 import Heading from 'react-components/shared/heading';
 import StepsTracker from 'react-components/shared/steps-tracker/steps-tracker.component';
 import { translateText } from 'utils/transifex';
 
-import 'scripts/react-components/dashboard-element/dashboard-panel/dashboard-panel.scss';
+import 'scripts/react-components/tool/tool-modal/tool-selection-modal/tool-panel/tool-panel.scss';
 
-class DashboardPanel extends Component {
+class ToolPanel extends Component {
   containerRef = React.createRef();
 
   getSnapshotBeforeUpdate() {
@@ -47,15 +48,15 @@ class DashboardPanel extends Component {
   renderPanel() {
     const { step } = this.props;
     switch (step) {
-      case DASHBOARD_STEPS.sources:
-        return <CountrySourcesPanel nodeTypeRenderer={DashboardPanel.sourcesNodeTypeRenderer} />;
-      case DASHBOARD_STEPS.commodities:
+      case TOOL_STEPS.sources:
+        return <CountrySourcesPanel nodeTypeRenderer={ToolPanel.sourcesNodeTypeRenderer} />;
+      case TOOL_STEPS.commodities:
         return <CommoditiesPanel />;
-      case DASHBOARD_STEPS.destinations:
+      case TOOL_STEPS.destinations:
         return <DestinationsPanel />;
-      case DASHBOARD_STEPS.exporters:
+      case TOOL_STEPS.exporters:
         return <ExportersPanel nodeTypeRenderer={this.countryNameNodeTypeRenderer} />;
-      case DASHBOARD_STEPS.importers:
+      case TOOL_STEPS.importers:
         return <ImportersPanel nodeTypeRenderer={this.countryNameNodeTypeRenderer} />;
       default:
         return null;
@@ -64,26 +65,26 @@ class DashboardPanel extends Component {
 
   renderTitleSentence() {
     const { step } = this.props;
-    if (step === DASHBOARD_STEPS.welcome) {
+    if (step === TOOL_STEPS.welcome) {
       return (
         <>
           {translateText('Choose the ')}
-          <Heading size="lg" as="span" weight="bold" className="dashboard-panel-sentence">
+          <Heading size="lg" as="span" weight="bold" className="tool-panel-sentence">
             {translateText('step ')}
           </Heading>
           {translateText('you want to edit')}
         </>
       );
     }
-    if (step === DASHBOARD_STEPS.sources || step === DASHBOARD_STEPS.commodities) {
+    if (step === TOOL_STEPS.sources || step === TOOL_STEPS.commodities) {
       return (
         <>
           {translateText('Choose one ')}{' '}
           <Heading
             size="lg"
             as="span"
-            className="dashboard-panel-sentence"
-            data-test="dashboard-panel-sentence"
+            className="tool-panel-sentence"
+            data-test="tool-panel-sentence"
           >
             {translateText(singularize(getPanelLabel(step)))}
           </Heading>
@@ -92,19 +93,15 @@ class DashboardPanel extends Component {
     }
     return (
       <>
-        {[
-          DASHBOARD_STEPS.exporters,
-          DASHBOARD_STEPS.importers,
-          DASHBOARD_STEPS.destinations
-        ].includes(step) && (
+        {[TOOL_STEPS.exporters, TOOL_STEPS.importers, TOOL_STEPS.destinations].includes(step) && (
           <Heading size="lg" as="span" weight="bold">{`${translateText('(Optional)')} `}</Heading>
         )}
         {translateText('Choose one or several')}
         <Heading
           size="lg"
           as="span"
-          className="dashboard-panel-sentence"
-          data-test="dashboard-panel-sentence"
+          className="tool-panel-sentence"
+          data-test="tool-panel-sentence"
         >
           {' '}
           {translateText(getPanelLabel(step))}
@@ -115,29 +112,20 @@ class DashboardPanel extends Component {
 
   render() {
     const {
-      editMode,
       clearPanel,
       onContinue,
       onBack,
       setStep,
-      goToDashboard,
-      dirtyBlocks,
       dynamicSentenceParts,
       step,
       isDisabled,
-      closeModal,
       setSelectedItems,
       canProceed
     } = this.props;
 
-    const handleGoToDashboard = () => {
-      goToDashboard({ dirtyBlocks, dynamicSentenceParts });
-      closeModal();
-    };
-
     return (
-      <div className="c-dashboard-panel">
-        <div ref={this.containerRef} className="dashboard-panel-content">
+      <div className="c-tool-panel">
+        <div ref={this.containerRef} className="tool-panel-content">
           <StepsTracker
             steps={[
               'Source countries',
@@ -147,20 +135,18 @@ class DashboardPanel extends Component {
               'Importers'
             ].map(label => ({ label }))}
             activeStep={step - 1}
-            onSelectStep={editMode && canProceed ? setStep : undefined}
+            onSelectStep={canProceed ? setStep : undefined}
           />
-          <Heading className="dashboard-panel-title notranslate" align="center" size="lg">
+          <Heading className="tool-panel-title notranslate" align="center" size="lg">
             {this.renderTitleSentence()}
           </Heading>
           {this.renderPanel()}
         </div>
-        <DashboardModalFooter
-          isLastStep={step === DASHBOARD_STEPS.importers || (editMode && canProceed)}
+        <ToolPanelFooter
+          isLastStep={step === TOOL_STEPS.importers || canProceed}
           onContinue={onContinue}
           onBack={onBack}
           backText="Back"
-          dirtyBlocks={dirtyBlocks}
-          goToDashboard={handleGoToDashboard}
           clearPanel={panelName => clearPanel(panelName)}
           dynamicSentenceParts={dynamicSentenceParts}
           step={step}
@@ -172,21 +158,17 @@ class DashboardPanel extends Component {
   }
 }
 
-DashboardPanel.propTypes = {
+ToolPanel.propTypes = {
   onBack: PropTypes.func,
-  dirtyBlocks: PropTypes.object,
-  goToDashboard: PropTypes.func,
   step: PropTypes.number.isRequired,
   setStep: PropTypes.func.isRequired,
-  editMode: PropTypes.bool.isRequired,
   isDisabled: PropTypes.bool.isRequired,
   dynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
-  closeModal: PropTypes.func.isRequired,
   clearPanel: PropTypes.func.isRequired,
   setSelectedItems: PropTypes.func.isRequired,
   canProceed: PropTypes.bool.isRequired,
   countryNames: PropTypes.object.isRequired
 };
 
-export default DashboardPanel;
+export default ToolPanel;
