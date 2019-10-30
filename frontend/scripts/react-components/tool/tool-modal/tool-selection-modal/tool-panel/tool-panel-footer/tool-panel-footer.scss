@@ -1,0 +1,19 @@
+@import 'styles/settings';
+
+.c-tool-panel-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 10px;
+  border-top: 1px solid $medium-gray;
+
+  .tool-panel-footer-back-button {
+    border: 0;
+    padding: 15px 20px;
+    color: $charcoal-grey;
+    font-family: $font-family-1;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+}
