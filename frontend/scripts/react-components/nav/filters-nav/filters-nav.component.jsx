@@ -133,7 +133,7 @@ const FiltersNav = props => {
 
   const renderFilter = filter => {
     const Component = FILTERS[filter.type];
-    if (ENABLE_REDESIGN_PAGES && filter.props.id === 'contextSelector') {
+    if (ENABLE_TOOL_PANEL && filter.props.id === 'contextSelector') {
       return <ContextModalButton selectedContext={filter.props.selectedContext} />;
     }
     if (
