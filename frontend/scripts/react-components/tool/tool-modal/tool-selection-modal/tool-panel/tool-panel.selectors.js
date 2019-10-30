@@ -3,6 +3,7 @@ import capitalize from 'lodash/capitalize';
 import { getPanelId } from 'utils/toolPanel';
 import { getDirtyBlocks } from 'react-components/nodes-panel/nodes-panel.selectors';
 import pluralize from 'utils/pluralize';
+import { TOOL_STEPS } from 'constants';
 
 const getCountriesData = state => state.nodesPanel.countries.data;
 const getSourcesData = state => state.nodesPanel.sources.data;
@@ -198,10 +199,10 @@ export const getIsDisabled = createSelector(
       return true;
     }
     const currentPanel = getPanelId(step);
-    console.log('curr', currentPanel);
-    if (currentPanel === null) {
+    if (currentPanel === null || step === TOOL_STEPS.welcome) {
       return false;
     }
+
     const currentSentencePart = dynamicSentence.find(p => p.panel === currentPanel);
     return !currentSentencePart.optional && !currentSentencePart.value.length > 0;
   }
