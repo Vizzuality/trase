@@ -5280,6 +5280,35 @@ CREATE MATERIALIZED VIEW public.nodes_mv AS
 
 
 --
+-- Name: nodes_per_context_ranked_by_volume_per_year_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.nodes_per_context_ranked_by_volume_per_year_mv AS
+ SELECT node_volume_per_context_and_year_ranked.context_id,
+    node_volume_per_context_and_year_ranked.node_id,
+    jsonb_object_agg(node_volume_per_context_and_year_ranked.year, node_volume_per_context_and_year_ranked.rank) AS rank_by_year
+   FROM ( SELECT node_volume_per_context_and_year.node_id,
+            node_volume_per_context_and_year."position",
+            node_volume_per_context_and_year.context_id,
+            node_volume_per_context_and_year.year,
+            rank() OVER (PARTITION BY node_volume_per_context_and_year."position", node_volume_per_context_and_year.context_id, node_volume_per_context_and_year.year ORDER BY node_volume_per_context_and_year.value DESC) AS rank
+           FROM ( SELECT a.node_id,
+                    a."position",
+                    flows.context_id,
+                    flows.year,
+                    sum(flow_quants.value) AS value
+                   FROM public.flow_quants,
+                    public.flows,
+                    LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")
+                  WHERE ((flow_quants.flow_id = flows.id) AND (flow_quants.quant_id IN ( SELECT quants.id
+                           FROM public.quants
+                          WHERE (quants.name = 'Volume'::text))))
+                  GROUP BY a.node_id, a."position", flows.context_id, flows.year) node_volume_per_context_and_year) node_volume_per_context_and_year_ranked
+  GROUP BY node_volume_per_context_and_year_ranked.context_id, node_volume_per_context_and_year_ranked.node_id
+  WITH NO DATA;
+
+
+--
 -- Name: nodes_stats_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -8909,6 +8938,13 @@ CREATE INDEX nodes_node_type_id_idx ON public.nodes USING btree (node_type_id);
 
 
 --
+-- Name: nodes_per_context_ranked_by_volume_per_year_mv_unique_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX nodes_per_context_ranked_by_volume_per_year_mv_unique_idx ON public.nodes_per_context_ranked_by_volume_per_year_mv USING btree (context_id, node_id);
+
+
+--
 -- Name: nodes_stats_mv_context_id_quant_id_node_id_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -9962,6 +9998,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191011112339'),
 ('20191014111756'),
 ('20191015095615'),
-('20191021084412');
+('20191021084412'),
+('20191028134448');
 
 
