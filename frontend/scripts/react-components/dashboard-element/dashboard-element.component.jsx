@@ -12,6 +12,7 @@ import DashboardWidget from 'react-components/dashboard-element/dashboard-widget
 import UrlSerializer from 'react-components/shared/url-serializer';
 import InView from 'react-components/shared/in-view.component';
 import cx from 'classnames';
+import Heading from 'react-components/shared/heading';
 import dashboardElementSerializer from 'react-components/dashboard-element/dashboard-element.serializers';
 import nodesPanelSerializer from 'react-components/nodes-panel/nodes-panel.serializers';
 import { DASHBOARD_STEPS } from 'constants';
@@ -91,12 +92,16 @@ class DashboardElement extends React.PureComponent {
     );
   }
 
-  renderDynamicSentence() {
+  renderDynamicSentence(dashboardLoaded) {
     const { dynamicSentenceParts, step } = this.props;
-    if (dynamicSentenceParts) {
+    if (dynamicSentenceParts && dashboardLoaded) {
       return <TagsGroup readOnly step={step} color="white" tags={dynamicSentenceParts} />;
     }
-    return 'Dashboards';
+    return (
+      <Heading as="span" size="md" color="white" className="notranslate">
+        Your dashboard is loading...
+      </Heading>
+    );
   }
 
   renderWidgets() {
@@ -136,6 +141,7 @@ class DashboardElement extends React.PureComponent {
       setSelectedRecolorBy
     } = this.props;
 
+    const dashboardLoaded = groupedCharts && !loading;
     return (
       <div className="l-dashboard-element">
         <div className="c-dashboard-element">
@@ -145,7 +151,7 @@ class DashboardElement extends React.PureComponent {
               <div className="column small-12">
                 {modalOpen === false && (
                   <h2 className="dashboard-element-title" data-test="dashboard-element-title">
-                    {this.renderDynamicSentence()}
+                    {this.renderDynamicSentence(dashboardLoaded)}
                     <Button
                       size="sm"
                       type="button"
@@ -217,7 +223,7 @@ class DashboardElement extends React.PureComponent {
               </div>
             </div>
           </section>
-          {!groupedCharts || loading || modalOpen ? (
+          {!dashboardLoaded || modalOpen ? (
             this.renderPlaceholder()
           ) : (
             <section className="dashboard-element-widgets">

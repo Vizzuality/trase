@@ -156,6 +156,11 @@ const nodesPanelReducer = {
               if (!draft[name].data.nodes) {
                 draft[name].data.nodes = {};
               }
+
+              if (moduleOptions.hasTabs && !draft[name].activeTab) {
+                draft[name].activeTab = item.columnId;
+              }
+
               draft[name].data.byId.push(item.id);
               draft[name].data.nodes[item.id] = item;
             });

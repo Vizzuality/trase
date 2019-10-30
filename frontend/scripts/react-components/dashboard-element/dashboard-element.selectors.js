@@ -156,13 +156,13 @@ export const getDynamicSentence = createSelector(
     );
     const exportersSettings = getSettings(
       panelsValues.exporters[0],
-      prefixes.importers,
+      prefixes.exporters,
       'exporters',
       'exported by'
     );
     const importersSettings = getSettings(
       panelsValues.importers[0],
-      prefixes.exporters,
+      prefixes.importers,
       'importers',
       'imported by'
     );

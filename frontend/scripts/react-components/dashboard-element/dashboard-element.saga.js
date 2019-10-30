@@ -81,30 +81,29 @@ export function* fetchMissingItems() {
       tasks.push(call(getData, 'commodities', nodesPanel.commodities));
     }
 
+    const hasMissingData = name =>
+      nodesPanel[name].selectedNodesIds.length > 0 && nodesPanel.sources.data.byId.length === 0;
     if (
       selectedContext &&
-      ((nodesPanel.sources.data.byId.length === 0 &&
-        nodesPanel.sources.selectedNodesIds.length > 0) ||
-        (nodesPanel.destinations.data.byId.length === 0 &&
-          nodesPanel.destinations.selectedNodesIds.length > 0) ||
-        (nodesPanel.importers.data.byId.length === 0 &&
-          nodesPanel.importers.selectedNodesIds.length > 0) ||
-        (nodesPanel.exporters.data.byId.length === 0 &&
-          nodesPanel.exporters.selectedNodesIds.length > 0))
-    ) {
-      tasks.push(call(getMissingItems, nodesPanel, selectedContext));
       Object.keys(modules)
         .filter(name => !['countries', 'commodities'].includes(name))
-        .forEach(name => {
-          if (nodesPanel[name].selectedNodesIds.length > 0) {
-            tasks.push(call(getMissingData, name));
-          }
-        });
+        .some(name => hasMissingData(name))
+    ) {
+      tasks.push(call(getMissingItems, nodesPanel, selectedContext));
     }
 
     yield all(tasks);
 
     if (tasks.length > 0 && selectedContext) {
+      const subtasks = [];
+      Object.keys(modules)
+        .filter(name => !['countries', 'commodities'].includes(name))
+        .forEach(name => {
+          if (hasMissingData(name)) {
+            subtasks.push(call(getMissingData, name));
+          }
+        });
+      yield all(subtasks);
       yield call(updateIndicatorsOnItemChange);
     }
     yield put(setDashboardLoading(false));
