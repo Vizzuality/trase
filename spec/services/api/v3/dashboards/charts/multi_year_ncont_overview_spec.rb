@@ -52,7 +52,7 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNcontOverview do
 
     context 'when filtered by 1 exporter' do
       let(:parameters_hash) {
-        shared_parameters_hash.merge(companies_ids: [api_v3_other_exporter_node.id])
+        shared_parameters_hash.merge(companies_ids: [api_v3_exporter2_node.id])
       }
       it 'summarized flows matching exporter per ncont' do
         expect(data.size).to eq(1)
@@ -65,7 +65,7 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNcontOverview do
       let(:parameters_hash) {
         shared_parameters_hash.merge(
           companies_ids: [
-            api_v3_exporter1_node.id, api_v3_other_exporter_node.id
+            api_v3_exporter1_node.id, api_v3_exporter2_node.id
           ]
         )
       }
@@ -80,7 +80,7 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNcontOverview do
       let(:parameters_hash) {
         shared_parameters_hash.merge(
           companies_ids: [
-            api_v3_other_exporter_node.id, api_v3_importer1_node.id
+            api_v3_exporter2_node.id, api_v3_importer1_node.id
           ]
         )
       }
@@ -96,9 +96,9 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNcontOverview do
         shared_parameters_hash.merge(
           companies_ids: [
             api_v3_exporter1_node.id,
-            api_v3_other_exporter_node.id,
+            api_v3_exporter2_node.id,
             api_v3_importer1_node.id,
-            api_v3_other_importer_node.id
+            api_v3_importer2_node.id
           ]
         )
       }

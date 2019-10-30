@@ -27,7 +27,7 @@ RSpec.describe 'Nodes stats', type: :request do
           parsed_response['data'].first['top_nodes'].map { |a| a['id'] }
         expect(nodes_ids).to eql([
           api_v3_country_of_destination1_node.id,
-          api_v3_other_country_of_destination_node.id
+          api_v3_country_of_destination2_node.id
         ])
       end
     end
@@ -51,7 +51,7 @@ RSpec.describe 'Nodes stats', type: :request do
           parsed_response['data'].first['top_nodes'].map { |a| a['id'] }
         expect(nodes_ids).to eql([
           api_v3_country_of_destination1_node.id,
-          api_v3_other_country_of_destination_node.id
+          api_v3_country_of_destination2_node.id
         ])
       end
     end
@@ -74,7 +74,7 @@ RSpec.describe 'Nodes stats', type: :request do
           parsed_response['data'].first['top_nodes'].map { |a| a['id'] }
         expect(nodes_ids).to eql([
           api_v3_country_of_destination1_node.id,
-          api_v3_other_country_of_destination_node.id
+          api_v3_country_of_destination2_node.id
         ])
       end
     end

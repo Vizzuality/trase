@@ -133,6 +133,24 @@ shared_context 'api v3 brazil soy nodes' do
     node
   end
 
+  let!(:api_v3_exporter2_node) do
+    node = Api::V3::Node.where(
+      name: 'BUNGE EX', node_type_id: api_v3_exporter_node_type.id
+    ).first
+    unless node
+      node = FactoryBot.create(
+        :api_v3_node,
+        name: 'BUNGE EX',
+        node_type: api_v3_exporter_node_type
+      )
+      FactoryBot.create(
+        :api_v3_node_property,
+        node: node
+      )
+    end
+    node
+  end
+
   let!(:api_v3_other_exporter_node) do
     node = Api::V3::Node.where(
       name: 'OTHER', node_type_id: api_v3_exporter_node_type.id
@@ -187,6 +205,24 @@ shared_context 'api v3 brazil soy nodes' do
     node
   end
 
+  let!(:api_v3_importer2_node) do
+    node = Api::V3::Node.where(
+      name: 'BUNGE IM', node_type_id: api_v3_importer_node_type.id
+    ).first
+    unless node
+      node = FactoryBot.create(
+        :api_v3_node,
+        name: 'BUNGE IM',
+        node_type: api_v3_importer_node_type
+      )
+      FactoryBot.create(
+        :api_v3_node_property,
+        node: node
+      )
+    end
+    node
+  end
+
   let!(:api_v3_other_importer_node) do
     node = Api::V3::Node.where(
       name: 'OTHER', node_type_id: api_v3_importer_node_type.id
@@ -215,6 +251,25 @@ shared_context 'api v3 brazil soy nodes' do
         name: 'RUSSIAN FEDERATION',
         node_type: api_v3_country_node_type,
         geo_id: 'RU'
+      )
+      FactoryBot.create(
+        :api_v3_node_property,
+        node: node
+      )
+    end
+    node
+  end
+
+  let!(:api_v3_country_of_destination2_node) do
+    node = Api::V3::Node.where(
+      name: 'GERMANY', node_type_id: api_v3_country_node_type.id
+    ).first
+    unless node
+      node = FactoryBot.create(
+        :api_v3_node,
+        name: 'GERMANY',
+        node_type: api_v3_country_node_type,
+        geo_id: 'DE'
       )
       FactoryBot.create(
         :api_v3_node_property,

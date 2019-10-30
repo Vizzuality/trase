@@ -49,7 +49,7 @@ shared_context 'api v3 brazil flows' do
         api_v3_port1_node,
         api_v3_exporter1_node,
         api_v3_importer1_node,
-        api_v3_other_country_of_destination_node
+        api_v3_country_of_destination2_node
       ].map(&:id),
       year: 2015
     )
@@ -66,7 +66,7 @@ shared_context 'api v3 brazil flows' do
         api_v3_municipality_node,
         api_v3_logistics_hub_node,
         api_v3_port1_node,
-        api_v3_other_exporter_node,
+        api_v3_exporter2_node,
         api_v3_importer1_node,
         api_v3_country_of_destination1_node
       ].map(&:id),
@@ -86,7 +86,7 @@ shared_context 'api v3 brazil flows' do
         api_v3_logistics_hub_node,
         api_v3_port1_node,
         api_v3_exporter1_node,
-        api_v3_other_importer_node,
+        api_v3_importer2_node,
         api_v3_country_of_destination1_node
       ].map(&:id),
       year: 2015
