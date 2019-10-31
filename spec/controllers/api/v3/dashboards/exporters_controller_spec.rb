@@ -9,6 +9,9 @@ RSpec.describe Api::V3::Dashboards::ExportersController, type: :controller do
     Api::V3::Readonly::FlowNode.refresh(
       sync: true, skip_dependencies: true, skip_dependents: true
     )
+    Api::V3::Readonly::NodesPerContextRankedByVolumePerYear.refresh(
+      sync: true, skip_dependencies: true, skip_dependents: true
+    )
     Api::V3::Readonly::Dashboards::Exporter.refresh(sync: true, skip_dependencies: true)
   end
 
@@ -28,7 +31,7 @@ RSpec.describe Api::V3::Dashboards::ExportersController, type: :controller do
     let(:all_results_alphabetically) {
       [
         api_v3_exporter1_node,
-        api_v3_other_exporter_node
+        api_v3_exporter2_node
       ]
     }
 
@@ -62,7 +65,7 @@ RSpec.describe Api::V3::Dashboards::ExportersController, type: :controller do
           node_types_ids: [api_v3_exporter_node_type.id].join(',')
         }
         expect(assigns(:collection).map(&:id)).to eq(
-          [api_v3_exporter1_node.id, api_v3_other_exporter_node.id]
+          [api_v3_exporter1_node.id, api_v3_exporter2_node.id]
         )
       end
 
@@ -74,7 +77,7 @@ RSpec.describe Api::V3::Dashboards::ExportersController, type: :controller do
           node_types_ids: [api_v3_exporter_node_type.id].join(',')
         }
         expect(assigns(:collection).map(&:id)).to eq(
-          [api_v3_exporter1_node.id, api_v3_other_exporter_node.id]
+          [api_v3_exporter1_node.id, api_v3_exporter2_node.id]
         )
       end
 
@@ -95,12 +98,12 @@ RSpec.describe Api::V3::Dashboards::ExportersController, type: :controller do
         get :index, params: {
           destinations_ids: [
             api_v3_country_of_destination1_node.id,
-            api_v3_other_country_of_destination_node.id
+            api_v3_country_of_destination2_node.id
           ].join(','),
           node_types_ids: [api_v3_exporter_node_type.id].join(',')
         }
         expect(assigns(:collection).map(&:id)).to eq(
-          [api_v3_exporter1_node.id, api_v3_other_exporter_node.id]
+          [api_v3_exporter1_node.id, api_v3_exporter2_node.id]
         )
       end
     end
@@ -116,7 +119,7 @@ RSpec.describe Api::V3::Dashboards::ExportersController, type: :controller do
       it 'returns companies with profiles' do
         get :index, params: {profile_only: true}
         expect(assigns(:collection).map(&:id)).to eq(
-          [api_v3_exporter1_node.id]
+          [api_v3_exporter1_node.id, api_v3_exporter2_node.id]
         )
       end
     end

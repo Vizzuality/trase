@@ -54,7 +54,7 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNoNcontOverview do
         shared_parameters_hash.merge(
           companies_ids: [api_v3_exporter1_node.id],
           excluded_destinations_ids: [
-            api_v3_other_country_of_destination_node.id
+            api_v3_country_of_destination2_node.id
           ]
         )
       }
@@ -67,7 +67,7 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNoNcontOverview do
       let(:parameters_hash) {
         shared_parameters_hash.merge(
           companies_ids: [
-            api_v3_exporter1_node.id, api_v3_other_exporter_node.id
+            api_v3_exporter1_node.id, api_v3_exporter2_node.id
           ]
         )
       }
@@ -80,7 +80,7 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNoNcontOverview do
       let(:parameters_hash) {
         shared_parameters_hash.merge(
           companies_ids: [
-            api_v3_other_exporter_node.id, api_v3_importer1_node.id
+            api_v3_exporter2_node.id, api_v3_importer1_node.id
           ]
         )
       }
@@ -94,9 +94,9 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNoNcontOverview do
         shared_parameters_hash.merge(
           companies_ids: [
             api_v3_exporter1_node.id,
-            api_v3_other_exporter_node.id,
+            api_v3_exporter2_node.id,
             api_v3_importer1_node.id,
-            api_v3_other_importer_node.id
+            api_v3_importer2_node.id
           ]
         )
       }

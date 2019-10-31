@@ -20,6 +20,10 @@ module Api
 
         private
 
+        def apply_order_by
+          @query = @query.order(:name)
+        end
+
         def filtered_class
           Api::V3::Readonly::Dashboards::Company
         end

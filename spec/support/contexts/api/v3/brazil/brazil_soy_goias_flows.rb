@@ -1,4 +1,6 @@
 shared_context 'api v3 brazil soy goias flows' do
+  include_context 'api v3 quants'
+
   let!(:api_v3_municipality_goias) {
     name = 'GOIAS'
     node = Api::V3::Node.find_by(
@@ -72,6 +74,24 @@ shared_context 'api v3 brazil soy goias flows' do
         api_v3_country_of_destination1_node
       ].map(&:id),
       year: 2015
+    )
+  end
+
+  let!(:api_v3_goias_flow_volume) do
+    FactoryBot.create(
+      :api_v3_flow_quant,
+      flow: api_v3_goias_flow,
+      quant: api_v3_volume,
+      value: 10
+    )
+  end
+
+  let!(:api_v3_abadia_de_goias_flow_volume) do
+    FactoryBot.create(
+      :api_v3_flow_quant,
+      flow: api_v3_abadia_de_goias_flow,
+      quant: api_v3_volume,
+      value: 10
     )
   end
 end

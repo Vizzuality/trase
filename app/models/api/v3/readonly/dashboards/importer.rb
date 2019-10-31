@@ -29,6 +29,14 @@ module Api
         class Importer < Api::Readonly::BaseModel
           self.table_name = 'dashboards_importers_mv'
           belongs_to :node
+
+          class << self
+            def refresh_dependencies(options = {})
+              Api::V3::Readonly::NodesPerContextRankedByVolumePerYear.refresh(
+                options.merge(skip_dependents: true)
+              )
+            end
+          end
         end
       end
     end
