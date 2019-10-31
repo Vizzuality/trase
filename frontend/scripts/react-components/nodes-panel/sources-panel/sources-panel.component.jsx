@@ -30,6 +30,8 @@ function SourcesPanel(props) {
     page,
     setPage,
     loading,
+    selectionMode,
+    setSelectionMode,
     selectedNodesIds,
     setSelectedItems,
     previousSteps
@@ -42,6 +44,7 @@ function SourcesPanel(props) {
   }, [previousSteps, fetchData, fetchKey]);
 
   const itemToScrollTo = useFirstItem(sources);
+
   return (
     <div className="c-sources-panel">
       <Accordion title={accordionTitle} defaultValue={accordionValue} onToggle={toggleAccordion}>
@@ -77,6 +80,8 @@ function SourcesPanel(props) {
             getMoreItems={setPage}
             loading={loading}
             itemToScrollTo={itemToScrollTo}
+            selectionMode={selectionMode}
+            onSelectAllClick={setSelectionMode}
           >
             {itemProps => (
               <GridListItem
@@ -114,7 +119,9 @@ SourcesPanel.propTypes = {
   loading: PropTypes.bool.isRequired,
   selectedNodesIds: PropTypes.array.isRequired,
   setSelectedItems: PropTypes.func.isRequired,
-  fetchData: PropTypes.func.isRequired
+  fetchData: PropTypes.func.isRequired,
+  selectionMode: PropTypes.bool,
+  setSelectionMode: PropTypes.func
 };
 
 export default SourcesPanel;

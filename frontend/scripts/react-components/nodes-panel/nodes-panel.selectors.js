@@ -157,6 +157,7 @@ export const makeGetNodesPanelsProps = name => {
   const getSelectedNodesIds = state => state.nodesPanel[name].selectedNodesIds;
   const getSearchResults = state => state.nodesPanel[name].searchResults;
   const getFetchKey = state => state.nodesPanel[name].fetchKey;
+  const getSelectionMode = state => state.nodesPanel[name].selectionMode;
 
   const getItems = createSelector(
     [getById, getNodes],
@@ -200,6 +201,7 @@ export const makeGetNodesPanelsProps = name => {
 
   if (moduleOptions.hasMultipleSelection) {
     selectors.selectedNodesIds = getSelectedNodesIds;
+    selectors.selectionMode = getSelectionMode;
   } else {
     selectors.selectedNodeId = getSelectedNodeId;
   }

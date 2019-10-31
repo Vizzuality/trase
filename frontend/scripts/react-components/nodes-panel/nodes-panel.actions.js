@@ -17,6 +17,7 @@ export const NODES_PANEL__SET_ACTIVE_ITEMS_WITH_SEARCH =
 export const NODES_PANEL__SET_SEARCH_RESULTS = 'NODES_PANEL__SET_SEARCH_RESULTS';
 export const NODES_PANEL__GET_SEARCH_RESULTS = 'NODES_PANEL__GET_SEARCH_RESULTS';
 export const NODES_PANEL__SET_NO_DATA = 'NODES_PANEL__SET_NO_DATA';
+export const NODES_PANEL__SET_SELECTION_MODE = 'NODES_PANEL__SET_SELECTION_MODE';
 
 export const fetchData = (key, name) => ({
   type: NODES_PANEL__FETCH_DATA,
@@ -115,6 +116,14 @@ export const setNoData = (hasNoData, name) => ({
   type: NODES_PANEL__SET_NO_DATA,
   payload: {
     hasNoData
+  },
+  meta: { name }
+});
+
+export const setSelectionMode = (mode, name) => ({
+  type: NODES_PANEL__SET_SELECTION_MODE,
+  payload: {
+    mode
   },
   meta: { name }
 });

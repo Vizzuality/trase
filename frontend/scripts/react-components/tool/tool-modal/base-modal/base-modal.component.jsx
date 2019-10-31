@@ -26,7 +26,7 @@ export default function BaseModal({ items, selectedItem, onChange, modalId }) {
             !itemProps.item.attributeId ? (
               <GridListItem
                 {...itemProps}
-                variant="white"
+                variant="explore"
                 style={{ width: '250px' }}
                 enableItem={onChange}
                 isActive={!selectedItem.attributeId}

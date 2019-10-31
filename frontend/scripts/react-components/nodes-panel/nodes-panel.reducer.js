@@ -21,7 +21,8 @@ import {
   NODES_PANEL__SET_SEARCH_RESULTS,
   NODES_PANEL__SET_INSTANCE_ID,
   NODES_PANEL__SET_NO_DATA,
-  NODES_PANEL__SET_FETCH_KEY
+  NODES_PANEL__SET_FETCH_KEY,
+  NODES_PANEL__SET_SELECTION_MODE
 } from './nodes-panel.actions';
 import modules from './nodes-panel.modules';
 import nodesPanelInitialState from './nodes-panel.initial-state';
@@ -342,6 +343,29 @@ const nodesPanelReducer = {
         }
       });
     });
+  },
+  [NODES_PANEL__SET_SELECTION_MODE](state, action) {
+    const { name } = action.meta;
+    const { mode } = action.payload;
+    const moduleOptions = modules[name];
+    if (moduleOptions.hasMultipleSelection) {
+      return immer(state, draft => {
+        draft[name].selectedNodesIds = [];
+        draft[name].selectionMode = mode;
+        const panelIndex = DASHBOARD_STEPS[name];
+        Object.entries(DASHBOARD_STEPS).forEach(([currentPanel, step]) => {
+          const currentModuleOptions = modules[name];
+          if (panelIndex < step) {
+            if (currentModuleOptions.hasMultipleSelection) {
+              draft[currentPanel].selectedNodesIds = [];
+            } else {
+              draft[currentPanel].selectedNodeId = null;
+            }
+          }
+        });
+      });
+    }
+    return state;
   }
 };
 

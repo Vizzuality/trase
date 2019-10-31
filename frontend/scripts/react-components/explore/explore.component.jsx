@@ -153,7 +153,7 @@ function Explore(props) {
                               item={item}
                               enableItem={i => setItemFunction(i.id)}
                               onHover={onItemHover}
-                              variant="white"
+                              variant="explore"
                               isActive={highlightedCommodityIds.includes(item.id)}
                             />
                           ))}
