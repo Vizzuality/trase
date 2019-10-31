@@ -18,7 +18,8 @@ module Api
 
             context_node_types = @context.context_node_types.
               includes(:context_node_type_property, :node_type).
-              where.not('context_node_type_properties.role' => nil)
+              where.not('context_node_type_properties.role' => nil).
+              where.not('node_types.name' => NodeTypeName::COUNTRY_OF_PRODUCTION)
             @all_node_types = context_node_types.map(&:node_type)
           end
 
