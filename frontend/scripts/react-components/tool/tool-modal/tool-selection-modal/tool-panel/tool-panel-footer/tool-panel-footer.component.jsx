@@ -15,7 +15,8 @@ function ToolPanelFooter(props) {
     onBack,
     backText,
     isDisabled,
-    step
+    step,
+    closeModal
   } = props;
 
   return (
@@ -36,7 +37,7 @@ function ToolPanelFooter(props) {
           </button>
         )}
         <Button
-          onClick={onContinue}
+          onClick={isLastStep ? closeModal : onContinue}
           color="pink"
           size="md"
           disabled={isDisabled}
@@ -60,7 +61,8 @@ ToolPanelFooter.propTypes = {
   dynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
   step: PropTypes.number,
-  backText: PropTypes.string
+  backText: PropTypes.string,
+  closeModal: PropTypes.func
 };
 
 export default ToolPanelFooter;
