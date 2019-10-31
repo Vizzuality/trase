@@ -53,10 +53,6 @@ demo:
   <<: *default_settings
   app_name: Trase (Demo)
 
-dashboardsdemo:
-  <<: *default_settings
-  app_name: Trase (Dashboards demo)
-
 indonesiademo:
   <<: *default_settings
   app_name: Trase (Indonesia demo)
