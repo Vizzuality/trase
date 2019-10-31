@@ -21,10 +21,12 @@ export default function ToolModalButton({
       onClick={() => setActiveModal(modalId)}
       className="c-tool-modal-button"
     >
-      <Text color="grey-faded" size="sm" variant="mono" transform="uppercase">
-        {modalId}
-        {tooltip && <Tooltip text={tooltip} constraint="window" />}
-      </Text>
+      {modalId !== 'context' && (
+        <Text color="grey-faded" size="sm" variant="mono" transform="uppercase">
+          {modalId}
+          {tooltip && <Tooltip text={tooltip} constraint="window" />}
+        </Text>
+      )}
       <Heading
         as="span"
         size="rg"

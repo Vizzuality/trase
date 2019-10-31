@@ -33,9 +33,9 @@ function VersioningModal({ data, context, tableData }) {
   }, [summary, summaryElement, size.height]);
 
   return (
-    <div className="c-layer-modal">
+    <div className="c-versioning-modal">
       <div className="row columns">
-        <div className="layer-modal-content">
+        <div className="versioning-modal-content">
           <Heading size="md" className="modal-title">
             {title} Data version {version} {capitalize(countryName)} {capitalize(commodityName)}
           </Heading>
