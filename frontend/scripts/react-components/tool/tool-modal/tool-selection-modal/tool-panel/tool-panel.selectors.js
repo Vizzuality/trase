@@ -4,6 +4,7 @@ import { getPanelId } from 'utils/toolPanel';
 import { getDirtyBlocks } from 'react-components/nodes-panel/nodes-panel.selectors';
 import pluralize from 'utils/pluralize';
 import { TOOL_STEPS } from 'constants';
+import { getSelectedContext } from 'reducers/app.selectors';
 
 const getCountriesData = state => state.nodesPanel.countries.data;
 const getSourcesData = state => state.nodesPanel.sources.data;
@@ -195,11 +196,11 @@ export const getDynamicSentence = createSelector(
 export const getIsDisabled = createSelector(
   [getDynamicSentence, (state, ownProps) => ownProps.step],
   (dynamicSentence, step) => {
-    if (dynamicSentence.length === 0 || typeof step === 'undefined') {
+    if (typeof step === 'undefined') {
       return true;
     }
     const currentPanel = getPanelId(step);
-    if (currentPanel === null || step === TOOL_STEPS.welcome) {
+    if (!dynamicSentence.length || currentPanel === null || step === TOOL_STEPS.welcome) {
       return false;
     }
 
@@ -207,3 +208,36 @@ export const getIsDisabled = createSelector(
     return !currentSentencePart.optional && !currentSentencePart.value.length > 0;
   }
 );
+
+const getURLParamsIfContext = (params, context) => {
+  if (!context) {
+    return null;
+  }
+  return params;
+};
+
+const getURLSources = createSelector(
+  [getSources, getSelectedContext],
+  getURLParamsIfContext
+);
+const getURLExporters = createSelector(
+  [getExporters, getSelectedContext],
+  getURLParamsIfContext
+);
+const getURLImporters = createSelector(
+  [getImporters, getSelectedContext],
+  getURLParamsIfContext
+);
+const getURLDestinations = createSelector(
+  [getDestinations, getSelectedContext],
+  getURLParamsIfContext
+);
+
+export const getDashboardElementUrlProps = createStructuredSelector({
+  sources: getURLSources,
+  exporters: getURLExporters,
+  importers: getURLImporters,
+  countries: getSelectedCountryId,
+  destinations: getURLDestinations,
+  commodities: getSelectedCommodityId
+});
