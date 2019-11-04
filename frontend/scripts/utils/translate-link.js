@@ -47,15 +47,9 @@ function translateLink(data, meta, to = 'sankey') {
     const roleQueryParams = getRoleQueryParams(params.selectedNodesIds, meta);
     serializerParams = pickBy({ ...serializerParams, ...roleQueryParams });
   }
-  // ----------------- We need to add the nodes to the nodesPanel state
   if (to === 'sankey') {
     return {
       type: 'tool',
-      query: {
-        ...serializerParams,
-        countries: countryId,
-        commodities: commodityId
-      },
       payload: {
         serializerParams: {
           ...serializerParams,
