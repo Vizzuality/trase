@@ -86,10 +86,9 @@ export const setPage = (page, name) => ({
   meta: { name }
 });
 
-export const setMissingItems = (data, name) => ({
+export const setMissingItems = data => ({
   type: NODES_PANEL__SET_MISSING_DATA,
-  payload: { data },
-  meta: { name }
+  payload: { data }
 });
 
 export const getMissingItems = () => ({
