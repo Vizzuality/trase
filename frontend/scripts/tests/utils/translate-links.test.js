@@ -74,7 +74,12 @@ describe('translate links', () => {
           toolLayout: parseInt(cardLink.queryParams.toolLayout, 10),
           selectedContextId: parseInt(cardLink.queryParams.selectedContextId, 10),
           selectedNodesIds: cardLink.queryParams.selectedNodesIds.map(id => parseInt(id, 10)),
-          expandedNodesIds: cardLink.queryParams.expandedNodesIds.map(id => parseInt(id, 10))
+          expandedNodesIds: cardLink.queryParams.expandedNodesIds.map(id => parseInt(id, 10)),
+          countries: 107,
+          commodities: 6,
+          sources: [13406],
+          destinations: [13486],
+          companies: [13430, 13460, 13417, 13404, 13392, 13408, 13410, 13419]
         }
       }
     });
