@@ -140,6 +140,7 @@ Rails.application.routes.draw do
         resources :importers, only: [:index]
         resources :destinations, only: [:index]
       end
+      resources :node_types
     end
   end
 end
