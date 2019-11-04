@@ -1,102 +1,13 @@
-import { createSelector, createStructuredSelector } from 'reselect';
+import { createSelector } from 'reselect';
 import capitalize from 'lodash/capitalize';
 import { getPanelId } from 'utils/toolPanel';
 import { getDirtyBlocks } from 'react-components/nodes-panel/nodes-panel.selectors';
 import pluralize from 'utils/pluralize';
 import { TOOL_STEPS } from 'constants';
-
-const getCountriesData = state => state.nodesPanel.countries.data;
-const getSourcesData = state => state.nodesPanel.sources.data;
-const getCommoditiesData = state => state.nodesPanel.commodities.data;
-const getExportersData = state => state.nodesPanel.exporters.data;
-const getImportersData = state => state.nodesPanel.importers.data;
-const getDestinationsData = state => state.nodesPanel.destinations.data;
-
-const getSourcesPrefixes = state => state.nodesPanel.sources.prefixes;
-const getCommoditiesPrefixes = state => state.nodesPanel.commodities.prefixes;
-const getExportersPrefixes = state => state.nodesPanel.exporters.prefixes;
-const getImportersPrefixes = state => state.nodesPanel.importers.prefixes;
-const getDestinationsPrefixes = state => state.nodesPanel.destinations.prefixes;
-
-const getSources = state => state.nodesPanel.sources.selectedNodesIds;
-const getDestinations = state => state.nodesPanel.destinations.selectedNodesIds;
-const getExporters = state => state.nodesPanel.exporters.selectedNodesIds;
-const getImporters = state => state.nodesPanel.importers.selectedNodesIds;
-
-const getSelectedCountryId = state => state.nodesPanel.countries.selectedNodeId;
-const getSelectedCommodityId = state => state.nodesPanel.commodities.selectedNodeId;
-
-const getPanelActiveItems = (selectedNodesIds, data) =>
-  selectedNodesIds
-    .map(id => {
-      const item = data.nodes && data.nodes[id];
-      if (!item) {
-        return null;
-      }
-      return { ...item, name: `${item.name}`.toLowerCase() };
-    })
-    .filter(Boolean);
-
-const getSingleActiveItem = (selectedId, data) => {
-  const selected = selectedId && data.nodes && data.nodes[selectedId];
-  if (selected) {
-    return [{ ...selected, name: `${selected.name}`.toLowerCase() }];
-  }
-  return [];
-};
-
-const getCountriesActiveItems = createSelector(
-  [getSelectedCountryId, getCountriesData],
-  getSingleActiveItem
-);
-
-const getCommoditiesActiveItems = createSelector(
-  [getSelectedCommodityId, getCommoditiesData],
-  getSingleActiveItem
-);
-
-const getSourcesActiveItems = createSelector(
-  [getSources, getSourcesData],
-  getPanelActiveItems
-);
-const getDestinationsActiveItems = createSelector(
-  [getDestinations, getDestinationsData],
-  getPanelActiveItems
-);
-const getExportersActiveItems = createSelector(
-  [getExporters, getExportersData],
-  getPanelActiveItems
-);
-const getImportersActiveItems = createSelector(
-  [getImporters, getImportersData],
-  getPanelActiveItems
-);
-
-export const getNodesPanelValues = createStructuredSelector({
-  countries: getCountriesActiveItems,
-  sources: getSourcesActiveItems,
-  commodities: getCommoditiesActiveItems,
-  exporters: getExportersActiveItems,
-  importers: getImportersActiveItems,
-  destinations: getDestinationsActiveItems
-});
-
-const getNodesPanelPrefixes = createSelector(
-  [
-    getSourcesPrefixes,
-    getCommoditiesPrefixes,
-    getExportersPrefixes,
-    getImportersPrefixes,
-    getDestinationsPrefixes
-  ],
-  (sources, commodities, exporters, importers, destinations) => ({
-    sources,
-    commodities,
-    exporters,
-    importers,
-    destinations
-  })
-);
+import {
+  getNodesPanelValues,
+  getNodesPanelPrefixes
+} from 'react-components/dashboard-element/dashboard-element.selectors';
 
 export const getDynamicSentence = createSelector(
   [getDirtyBlocks, getNodesPanelValues, getNodesPanelPrefixes],
