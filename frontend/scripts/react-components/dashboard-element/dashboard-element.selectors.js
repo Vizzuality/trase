@@ -104,7 +104,7 @@ export const getNodesPanelValues = createStructuredSelector({
   destinations: getDestinationsActiveItems
 });
 
-const getNodesPanelPrefixes = createSelector(
+export const getNodesPanelPrefixes = createSelector(
   [
     getSourcesPrefixes,
     getCommoditiesPrefixes,
