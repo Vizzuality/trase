@@ -1,13 +1,16 @@
 /* eslint-disable camelcase,import/no-extraneous-dependencies */
 import { nest as d3_nest } from 'd3-collection';
 import { MIN_COLUMNS_NUMBER } from 'constants';
+import getCorrectedPosition from 'utils/getCorrectedPosition';
 
-export default function(nodes, columns, minColumns = MIN_COLUMNS_NUMBER) {
+export default function(nodes, columns, extraColumnId, minColumns = MIN_COLUMNS_NUMBER) {
   const nodesByColumn = d3_nest()
     .key(el => {
       const { columnId } = el;
       const column = columns[columnId];
-      return `${Number(column.group)}-${Number(column.id)}`;
+      return `${Number(getCorrectedPosition(columns, column.id, extraColumnId))}-${Number(
+        column.id
+      )}`;
     })
     .sortKeys((a, b) => (parseInt(a, 10) < parseInt(b, 10) ? -1 : 1))
     .entries(nodes);

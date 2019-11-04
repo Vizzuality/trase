@@ -37,12 +37,12 @@ const getExtraColumnId = createSelector(
 );
 
 export const getVisibleNodesByColumn = createSelector(
-  [getVisibleNodes, getToolColumns, getToolNodeHeights, getColumnsNumber],
-  (visibleNodes, columns, nodeHeights, columnsNumber) => {
+  [getVisibleNodes, getToolColumns, getToolNodeHeights, getColumnsNumber, getExtraColumnId],
+  (visibleNodes, columns, nodeHeights, columnsNumber, extraColumnId) => {
     if (!visibleNodes || !columns) {
       return [];
     }
-    const byColumn = splitVisibleNodesByColumn(visibleNodes, columns, columnsNumber);
+    const byColumn = splitVisibleNodesByColumn(visibleNodes, columns, extraColumnId, columnsNumber);
     return sortVisibleNodes(byColumn, nodeHeights);
   }
 );
@@ -60,6 +60,7 @@ const getUnmergedLinks = createSelector(
     if (!links || !nodes || !columns || flowsLoading) {
       return null;
     }
+
     return splitLinksByColumn(links, nodes, columns, selectedRecolorBy, extraColumnId);
   }
 );
@@ -220,6 +221,7 @@ export const getSankeyLinks = createSelector(
 
     const _getNode = (columnPosition, nodeId) => {
       const column = sankeyColumns[columnPosition];
+
       return column.values.find(node => node.id === nodeId);
     };
 
@@ -254,7 +256,6 @@ export const getSankeyLinks = createSelector(
       nodesColoredAtColumn,
       recolorGroupsOrderedByY
     });
-
     const sankeyLinks = [];
     // source and target are dicts (nodeIds are keys) containing the cumulated height of all links for each node
     const cumulativeYByNodeId = { source: {}, target: {} };
