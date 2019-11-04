@@ -111,7 +111,9 @@ module Api
 
       def validate_max_links_per_level
         LEVELS.each do |n|
-          next if !send("level#{n}") || !send("level#{n}_max_sankey_card_links?")
+          next if !send("level#{n}") ||
+            !will_save_change_to_attribute?("level#{n}") ||
+            !send("level#{n}_max_sankey_card_links?")
 
           message = "cannot be more than #{MAX_PER_LEVEL} sankey card links "\
                     "for level#{n}"
