@@ -52,6 +52,7 @@ function translateLink(data, meta, to = 'sankey') {
       type: 'tool',
       payload: {
         serializerParams: {
+          ...params,
           ...serializerParams,
           countries: countryId,
           commodities: commodityId
