@@ -69,16 +69,23 @@ const clearPanelData = (draft, { name, state, activeItem }) => {
   }
 };
 
+const deserializeInternalLink = (state, action) => {
+  if (action.payload?.serializerParams) {
+    return deserialize({
+      params: action.payload.serializerParams,
+      state: nodesPanelInitialState,
+      ...nodesPanelSerialization
+    });
+  }
+  return state;
+};
+
 const nodesPanelReducer = {
   dashboardElement(state, action) {
-    if (action.payload?.serializerParams) {
-      return deserialize({
-        params: action.payload.serializerParams,
-        state: nodesPanelInitialState,
-        ...nodesPanelSerialization
-      });
-    }
-    return state;
+    return deserializeInternalLink(state, action);
+  },
+  tool(state, action) {
+    return deserializeInternalLink(state, action);
   },
   [NODES_PANEL__SET_INSTANCE_ID](state) {
     return immer(state, draft => {
