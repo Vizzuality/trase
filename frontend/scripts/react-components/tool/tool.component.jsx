@@ -16,7 +16,6 @@ import MapSidebar from 'react-components/tool/map-sidebar-layout';
 import ToolModal from 'react-components/tool/tool-modal';
 import EventManager from 'utils/eventManager';
 import UrlSerializer from 'react-components/shared/url-serializer';
-import nodesPanelSerializer from 'react-components/nodes-panel/nodes-panel.serializers';
 
 import Timeline from './timeline';
 
@@ -96,13 +95,7 @@ const Tool = props => {
     <div>
       {render}
       {renderVainillaComponents()}
-      <UrlSerializer
-        urlProps={urlProps}
-        urlPropHandlers={{
-          ...urlPropHandlers,
-          ...nodesPanelSerializer.urlPropHandlers
-        }}
-      />
+      <UrlSerializer urlProps={urlProps} urlPropHandlers={urlPropHandlers} />
     </div>
   );
 };
