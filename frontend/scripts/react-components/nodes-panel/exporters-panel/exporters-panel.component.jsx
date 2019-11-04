@@ -29,8 +29,8 @@ function ExportersPanel(props) {
     activeTab,
     actionComponent,
     previousSteps,
-    selectionMode,
-    setSelectionMode,
+    excludingMode,
+    setExcludingMode,
     fetchData,
     fetchKey
   } = props;
@@ -91,8 +91,8 @@ function ExportersPanel(props) {
                   page={page}
                   loading={loading}
                   itemToScrollTo={itemToScrollTo}
-                  selectionMode={selectionMode}
-                  onSelectAllClick={setSelectionMode}
+                  excludingMode={excludingMode}
+                  onSelectAllClick={setExcludingMode}
                 >
                   {itemProps => (
                     <GridListItem
@@ -131,8 +131,8 @@ ExportersPanel.propTypes = {
   setSelectedTab: PropTypes.func.isRequired,
   actionComponent: PropTypes.node,
   fetchData: PropTypes.func.isRequired,
-  selectionMode: PropTypes.bool,
-  setSelectionMode: PropTypes.func
+  excludingMode: PropTypes.bool,
+  setExcludingMode: PropTypes.func
 };
 
 ExportersPanel.defaultProps = {

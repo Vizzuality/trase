@@ -45,7 +45,7 @@ function GridListItem(props) {
             <button
               type="button"
               disabled={isDisabled}
-              onClick={isToggleAll ? item.setSelectionMode : () => onClick(item)}
+              onClick={isToggleAll ? item.setExcludingMode : () => onClick(item)}
               onMouseEnter={onHover && !isToggleAll ? () => onHover(item) : undefined}
               onMouseLeave={onHover && !isToggleAll ? () => onHover(null) : undefined}
               className={cx('grid-list-item-button', {

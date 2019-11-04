@@ -30,8 +30,8 @@ function SourcesPanel(props) {
     page,
     setPage,
     loading,
-    selectionMode,
-    setSelectionMode,
+    excludingMode,
+    setExcludingMode,
     selectedNodesIds,
     setSelectedItems,
     previousSteps
@@ -80,8 +80,8 @@ function SourcesPanel(props) {
             getMoreItems={setPage}
             loading={loading}
             itemToScrollTo={itemToScrollTo}
-            selectionMode={selectionMode}
-            onSelectAllClick={setSelectionMode}
+            excludingMode={excludingMode}
+            onSelectAllClick={setExcludingMode}
           >
             {itemProps => (
               <GridListItem
@@ -120,8 +120,8 @@ SourcesPanel.propTypes = {
   selectedNodesIds: PropTypes.array.isRequired,
   setSelectedItems: PropTypes.func.isRequired,
   fetchData: PropTypes.func.isRequired,
-  selectionMode: PropTypes.bool,
-  setSelectionMode: PropTypes.func
+  excludingMode: PropTypes.bool,
+  setExcludingMode: PropTypes.func
 };
 
 export default SourcesPanel;

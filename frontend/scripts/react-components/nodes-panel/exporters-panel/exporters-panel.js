@@ -7,7 +7,7 @@ import {
   setSelectedTab,
   getSearchResults,
   setSearchResult,
-  setSelectionMode
+  setExcludingMode
 } from 'react-components/nodes-panel/nodes-panel.actions';
 import { makeGetNodesPanelsProps } from 'react-components/nodes-panel/nodes-panel.selectors';
 import ExportersPanel from './exporters-panel.component';
@@ -16,7 +16,7 @@ const NAME = 'exporters';
 const mapDispatchToProps = {
   setPage: page => setPage(page, NAME),
   fetchData: key => fetchData(key, NAME),
-  setSelectionMode: mode => setSelectionMode(mode, NAME),
+  setExcludingMode: mode => setExcludingMode(mode, NAME),
   setSelectedTab: activeTab => setSelectedTab(activeTab, NAME),
   setLoadingItems: loadingItems => setLoadingItems(loadingItems, NAME),
   setSearchResult: activeItem => setSearchResult(activeItem, NAME),

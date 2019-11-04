@@ -76,19 +76,19 @@ function useScrollToItemId({ itemToScrollTo, columnCount, items }) {
   return ref;
 }
 
-function useSelectAll({ selectionMode, onSelectAllClick }, items) {
-  const hasSelectionMode = typeof selectionMode !== 'undefined' && onSelectAllClick;
-  const itemsWithSelectAll = hasSelectionMode && [
+function useSelectAll({ excludingMode, onSelectAllClick, items }) {
+  const hasExcludingMode = typeof excludingMode !== 'undefined' && onSelectAllClick;
+  const itemsWithSelectAll = hasExcludingMode && [
     {
       id: 'TOGGLE_ALL',
-      selectionMode,
-      setSelectionMode: () => onSelectAllClick(!selectionMode),
-      name: selectionMode ? 'remove all' : 'select all'
+      excludingMode,
+      setExcludingMode: () => onSelectAllClick(!excludingMode),
+      name: excludingMode ? 'remove all' : 'select all'
     },
     ...items
   ];
 
-  return { hasSelectionMode, itemsWithSelectAll };
+  return { hasExcludingMode, itemsWithSelectAll };
 }
 
 function GridList(props) {
@@ -105,20 +105,20 @@ function GridList(props) {
     loading,
     innerElementType,
     outerElementType,
-    selectionMode
+    excludingMode
   } = props;
 
   const groupedItems = useGroupedItems(props);
   const onScrollCb = useMoreItems(props);
   const fixedSizeGridRef = useScrollToItemId(props);
-  const { itemsWithSelectAll, hasSelectionMode } = useSelectAll(props);
+  const { itemsWithSelectAll, hasExcludingMode } = useSelectAll(props);
 
   const itemsData = groupedItems || itemsWithSelectAll || items;
   return (
     <div className="c-grid-list">
       <FixedSizeGrid
         ref={fixedSizeGridRef}
-        className={cx(className, { '-all-selected': selectionMode })}
+        className={cx(className, { '-all-selected': excludingMode })}
         height={height}
         width={width}
         columnWidth={columnWidth}
@@ -133,7 +133,7 @@ function GridList(props) {
         {({ rowIndex, columnIndex, style, data }) => {
           const item = data[rowIndex * columnCount + columnIndex];
           if (typeof item === 'undefined' || !children) return null;
-          const color = hasSelectionMode && item.id === 'TOGGLE_ALL' ? 'white' : undefined;
+          const color = hasExcludingMode && item.id === 'TOGGLE_ALL' ? 'white' : undefined;
           return children({
             item,
             style,
@@ -157,7 +157,7 @@ GridList.propTypes = {
   groupBy: PropTypes.string,
   className: PropTypes.string,
   getMoreItems: PropTypes.func, // eslint-disable-line
-  selectionMode: PropTypes.bool,
+  excludingMode: PropTypes.bool,
   onSelectAllClick: PropTypes.func, // eslint-disable-line
   itemToScrollTo: PropTypes.object, // eslint-disable-line
   items: PropTypes.array.isRequired,

@@ -50,8 +50,13 @@ export function* getPanelParams(optionsType, options = {}) {
   }
 
   if (currentStep > DASHBOARD_STEPS.sources || isOverview) {
+    const panel = state.nodesPanel.sources;
     params.countries_ids = state.nodesPanel.countries.selectedNodeId;
-    params.sources_ids = activeItemParams(state.nodesPanel.sources.selectedNodesIds);
+    if (panel.excludingMode) {
+      params.excluded_sources_ids = activeItemParams(panel.selectedNodesIds);
+    } else {
+      params.sources_ids = activeItemParams(panel.selectedNodesIds);
+    }
   }
 
   if (currentStep > DASHBOARD_STEPS.commodities || isOverview) {
@@ -59,12 +64,32 @@ export function* getPanelParams(optionsType, options = {}) {
   }
 
   if (currentStep > DASHBOARD_STEPS.destinations || isOverview) {
-    params.destinations_ids = activeItemParams(state.nodesPanel.destinations.selectedNodesIds);
+    const panel = state.nodesPanel.destinations;
+    if (panel.excludingMode) {
+      params.excluded_destinations_ids = activeItemParams(panel.selectedNodesIds);
+    } else {
+      params.destinations_ids = activeItemParams(panel.selectedNodesIds);
+    }
   }
 
   if (currentStep > DASHBOARD_STEPS.exporters || isOverview) {
-    params.exporters_ids = activeItemParams(state.nodesPanel.exporters.selectedNodesIds);
+    const panel = state.nodesPanel.exporters;
+    if (panel.excludingMode) {
+      params.excluded_exporters_ids = activeItemParams(panel.selectedNodesIds);
+    } else {
+      params.exporters_ids = activeItemParams(panel.selectedNodesIds);
+    }
   }
+
+  if (isOverview) {
+    const panel = state.nodesPanel.importers;
+    if (panel.excludingMode) {
+      params.excluded_importers_ids = activeItemParams(panel.selectedNodesIds);
+    } else {
+      params.importers_ids = activeItemParams(panel.selectedNodesIds);
+    }
+  }
+
   return params;
 }
 

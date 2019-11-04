@@ -15,7 +15,7 @@ export const createPanelInitialState = name => {
 
   if (moduleOptions.hasMultipleSelection) {
     panelState.selectedNodesIds = [];
-    panelState.selectionMode = false;
+    panelState.excludingMode = false;
   } else {
     panelState.selectedNodeId = null;
   }

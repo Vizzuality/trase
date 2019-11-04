@@ -17,11 +17,13 @@ export function* fetchDashboardCharts() {
   const selectedResizeBy = yield select(getDashboardSelectedResizeBy);
   const selectedRecolorBy = yield select(getDashboardSelectedRecolorBy);
   const selectedYears = yield select(getDashboardSelectedYears);
+
   const {
     countries_ids: countryId,
     commodities_ids: commodityId,
     ...options
   } = yield getPanelParams(null, { isOverview: true });
+
   const params = pickBy(
     {
       ...options,
