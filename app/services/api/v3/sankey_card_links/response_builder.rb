@@ -50,7 +50,7 @@ module Api
             sankey_card_link_nodes,
             each_serializer: Api::V3::SankeyCardLinks::NodeSerializer,
             root: 'nodes'
-          ).serializable_hash[:nodes]
+          ).serializable_hash[:nodes].uniq
 
           sankey_card_link_node_type_ids =
             @sankey_card_links.map(&:sankey_card_link_node_type_ids).flatten.uniq
