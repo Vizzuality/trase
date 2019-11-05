@@ -170,7 +170,7 @@ export const makeGetNodesPanelsProps = name => {
     (data, tabs, activeTab) => {
       const tab = tabs.find(t => t.id === activeTab);
       if (tab) {
-        return data.filter(item => item.nodeType === tab.name);
+        return data.filter(item => item.nodeType === tab.name || item.type === tab.name);
       }
       return [];
     }

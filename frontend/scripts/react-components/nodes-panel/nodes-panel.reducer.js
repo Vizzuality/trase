@@ -26,16 +26,6 @@ import {
 import modules from './nodes-panel.modules';
 import nodesPanelInitialState from './nodes-panel.initial-state';
 
-const resetState = (draft, name) => {
-  const moduleOptions = modules[name];
-  draft[name].page = nodesPanelInitialState[name].page;
-  draft[name].data = nodesPanelInitialState[name].data;
-
-  if (moduleOptions.hasSearch) {
-    draft[name].searchResults = nodesPanelInitialState[name].searchResults;
-  }
-};
-
 const getPanelsToClear = (panel, state, item) => {
   const currentPanelIndex = DASHBOARD_STEPS[panel];
 
@@ -109,6 +99,7 @@ const nodesPanelReducer = {
   },
   [NODES_PANEL__SET_DATA](state, action) {
     const { name } = action.meta;
+    const moduleOptions = modules[name];
     return immer(state, draft => {
       const { data } = action.payload;
       if (data) {
@@ -116,7 +107,12 @@ const nodesPanelReducer = {
         draft[name].data.byId = data ? Object.keys(newItems).map(n => parseInt(n, 10)) : [];
         draft[name].data.nodes = newItems;
       } else {
-        resetState(draft, name);
+        draft[name].page = nodesPanelInitialState[name].page;
+        draft[name].data = nodesPanelInitialState[name].data;
+
+        if (moduleOptions.hasSearch) {
+          draft[name].searchResults = nodesPanelInitialState[name].searchResults;
+        }
       }
     });
   },
@@ -180,7 +176,11 @@ const nodesPanelReducer = {
         draft[name].tabs.forEach(item => {
           draft[name].prefixes[item.name] = item.prefix;
         });
-        resetState(draft, name);
+        draft[name].page = nodesPanelInitialState[name].page;
+
+        if (moduleOptions.hasSearch) {
+          draft[name].searchResults = nodesPanelInitialState[name].searchResults;
+        }
       });
     }
     return state;
@@ -218,6 +218,7 @@ const nodesPanelReducer = {
             } else {
               draft[panel].selectedNodeId = null;
             }
+            draft[panel].data = nodesPanelInitialState[panel].data;
           }
         });
       });
@@ -256,6 +257,7 @@ const nodesPanelReducer = {
               draft[panelToClear].selectedNodeId =
                 nodesPanelInitialState[panelToClear].selectedNodeId;
             }
+            draft[panelToClear].data = nodesPanelInitialState[panelToClear].data;
           });
         }
       });
