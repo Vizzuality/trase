@@ -51,6 +51,22 @@ const getPanelsToClear = (panel, state, item) => {
   return null;
 };
 
+const clearPanelData = (draft, { name, state, activeItem }) => {
+  // clear following panels if necessary
+  const panelsToClear = getPanelsToClear(name, state, activeItem);
+  if (panelsToClear) {
+    panelsToClear.forEach(panelToClear => {
+      if (modules[panelToClear].hasMultipleSelection) {
+        draft[panelToClear].selectedNodesIds =
+          nodesPanelInitialState[panelToClear].selectedNodesIds;
+      } else {
+        draft[panelToClear].selectedNodeId = nodesPanelInitialState[panelToClear].selectedNodeId;
+      }
+      draft[panelToClear].data = nodesPanelInitialState[panelToClear].data;
+    });
+  }
+};
+
 const nodesPanelReducer = {
   dashboardElement(state, action) {
     if (action.payload?.serializerParams) {
@@ -246,20 +262,7 @@ const nodesPanelReducer = {
         } else {
           draft[name].selectedNodesIds = xor(draft[name].selectedNodesIds, [activeItem.id]);
         }
-        // clear following panels if necessary
-        const panelsToClear = getPanelsToClear(name, state, activeItem);
-        if (panelsToClear) {
-          panelsToClear.forEach(panelToClear => {
-            if (modules[panelToClear].hasMultipleSelection) {
-              draft[panelToClear].selectedNodesIds =
-                nodesPanelInitialState[panelToClear].selectedNodesIds;
-            } else {
-              draft[panelToClear].selectedNodeId =
-                nodesPanelInitialState[panelToClear].selectedNodeId;
-            }
-            draft[panelToClear].data = nodesPanelInitialState[panelToClear].data;
-          });
-        }
+        clearPanelData(draft, { state, activeItem, name });
       });
     }
     return state;
@@ -301,6 +304,8 @@ const nodesPanelReducer = {
         }
 
         draft[name].searchResults = [];
+
+        clearPanelData(draft, { state, activeItem, name });
 
         if (moduleOptions.hasMultipleSelection) {
           const firstItem =
