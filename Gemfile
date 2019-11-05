@@ -43,7 +43,7 @@ gem 'twitter', '~> 6.1'
 
 gem 'appsignal'
 gem 'newrelic_rpm'
-gem 'sidekiq', '~> 5.2.7'
+gem 'sidekiq', '~> 6.0.3'
 gem 'sidekiq-unique-jobs'
 gem 'whenever', require: false
 gem 'ransack'
