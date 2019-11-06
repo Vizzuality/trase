@@ -6,7 +6,11 @@ import {
   getDynamicSentence
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { getCountryNamesByCountryId } from 'reducers/app.selectors';
-import { clearPanel, setSelectedItems } from 'react-components/nodes-panel/nodes-panel.actions';
+import {
+  clearPanel,
+  setSelectedItems,
+  savePanels as savePanelsFn
+} from 'react-components/nodes-panel/nodes-panel.actions';
 
 const mapStateToProps = (state, ownProps) => {
   const { loading } = state.dashboardElement;
@@ -22,7 +26,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = {
   clearPanel,
   setSelectedItems,
-  goToDashboard: goToDashboardFn
+  goToDashboard: goToDashboardFn,
+  savePanels: savePanelsFn
 };
 
 export default connect(
