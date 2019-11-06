@@ -17,8 +17,10 @@ export const createPanelInitialState = name => {
   if (moduleOptions.hasMultipleSelection) {
     panelState.selectedNodesIds = [];
     panelState.excludingMode = false;
+    panelState.draftSelectedNodesIds = [];
   } else {
     panelState.selectedNodeId = null;
+    panelState.draftSelectedNodeId = null;
   }
 
   if (moduleOptions.hasTabs) {
@@ -33,7 +35,6 @@ export const createPanelInitialState = name => {
 };
 
 export default {
-  instanceId: null,
   countries: createPanelInitialState('countries'),
   sources: createPanelInitialState('sources'),
   commodities: createPanelInitialState('commodities'),

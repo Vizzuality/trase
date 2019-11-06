@@ -17,6 +17,7 @@ import {
   setDashboardSelectedRecolorBy,
   editDashboard as editDashboardFn
 } from 'react-components/dashboard-element/dashboard-element.actions';
+import { editPanels as editPanelsFn } from 'react-components/nodes-panel/nodes-panel.actions';
 import { DASHBOARD_STEPS } from 'constants';
 
 const mapStateToProps = state => {
@@ -41,7 +42,8 @@ const mapDispatchToProps = dispatch =>
       setSelectedYears: setDashboardSelectedYears,
       setSelectedResizeBy: setDashboardSelectedResizeBy,
       setSelectedRecolorBy: setDashboardSelectedRecolorBy,
-      editDashboard: editDashboardFn
+      editDashboard: editDashboardFn,
+      editPanels: editPanelsFn
     },
     dispatch
   );
@@ -59,6 +61,7 @@ class DashboardElementContainer extends React.Component {
     goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
     editDashboard: PropTypes.func.isRequired,
+    editPanels: PropTypes.func.isRequired,
     setSelectedYears: PropTypes.func.isRequired,
     setSelectedResizeBy: PropTypes.func.isRequired,
     setSelectedRecolorBy: PropTypes.func.isRequired
@@ -91,6 +94,7 @@ class DashboardElementContainer extends React.Component {
 
   reopenPanel = () => {
     this.props.editDashboard();
+    this.props.editPanels();
     this.setState({ step: 0, modalOpen: true });
   };
 
