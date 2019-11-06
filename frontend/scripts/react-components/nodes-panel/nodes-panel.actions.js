@@ -19,6 +19,8 @@ export const NODES_PANEL__GET_SEARCH_RESULTS = 'NODES_PANEL__GET_SEARCH_RESULTS'
 export const NODES_PANEL__SET_NO_DATA = 'NODES_PANEL__SET_NO_DATA';
 export const NODES_PANEL__SET_EXCLUDING_MODE = 'NODES_PANEL__SET_EXCLUDING_MODE';
 export const NODES_PANEL__SET_ORDER_BY = 'NODES_PANEL__SET_ORDER_BY';
+export const NODES_PANEL__EDIT_PANELS = 'NODES_PANEL__EDIT_PANELS';
+export const NODES_PANEL__SAVE = 'NODES_PANEL__SAVE';
 
 export const fetchData = (key, name) => ({
   type: NODES_PANEL__FETCH_DATA,
@@ -110,6 +112,14 @@ export const setSearchResult = (activeItem, name) => ({
 export const clearPanel = panel => ({
   type: NODES_PANEL__CLEAR_PANEL,
   payload: { panel }
+});
+
+export const editPanels = () => ({
+  type: NODES_PANEL__EDIT_PANELS
+});
+
+export const savePanels = () => ({
+  type: NODES_PANEL__SAVE
 });
 
 export const setNoData = (hasNoData, name) => ({

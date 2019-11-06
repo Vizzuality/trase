@@ -138,18 +138,19 @@ export function* fetchMissingItems() {
     const selectedContext = yield select(getDashboardsContext);
     const tasks = [];
 
-    if (nodesPanel.countries.selectedNodeId) {
+    if (nodesPanel.countries.draftSelectedNodesId) {
       yield put(setFetchKey(true, 'countries'));
       tasks.push(call(getData, 'countries', nodesPanel.countries));
     }
 
-    if (nodesPanel.commodities.selectedNodeId) {
+    if (nodesPanel.commodities.draftSelectedNodesId) {
       yield put(setFetchKey('preloaded', 'commodities'));
       tasks.push(call(getData, 'commodities', nodesPanel.commodities));
     }
 
     const hasMissingData = name =>
-      nodesPanel[name].selectedNodesIds.length > 0 && nodesPanel.sources.data.byId.length === 0;
+      nodesPanel[name].draftSelectedNodesIds.length > 0 &&
+      nodesPanel.sources.data.byId.length === 0;
     if (
       selectedContext &&
       Object.keys(modules)
@@ -171,9 +172,7 @@ export function* fetchMissingItems() {
           }
         });
       yield all(subtasks);
-      // yield call(updateIndicatorsOnItemChange);
     }
-    // yield put(setDashboardLoading(false));
   }
 
   yield takeLatest([NODES_PANEL__GET_MISSING_DATA], shouldFetchMissingItems);

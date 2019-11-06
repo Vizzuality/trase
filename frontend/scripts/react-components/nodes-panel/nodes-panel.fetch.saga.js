@@ -50,7 +50,7 @@ export function* getPanelParams(optionsType, options = {}) {
   const currentStep = DASHBOARD_STEPS[optionsType];
 
   if (currentStep === DASHBOARD_STEPS.sources && optionsType !== 'countries') {
-    params.countries_ids = state.nodesPanel.countries.selectedNodeId;
+    params.countries_ids = state.nodesPanel.countries.draftSelectedNodesId;
   }
 
   if (currentStep > DASHBOARD_STEPS.sources || isOverview) {
@@ -64,7 +64,7 @@ export function* getPanelParams(optionsType, options = {}) {
   }
 
   if (currentStep > DASHBOARD_STEPS.commodities || isOverview) {
-    params.commodities_ids = state.nodesPanel.commodities.selectedNodeId;
+    params.commodities_ids = state.nodesPanel.commodities.draftSelectedNodesId;
   }
 
   if (currentStep > DASHBOARD_STEPS.destinations || isOverview) {
@@ -197,9 +197,9 @@ export function* getMissingItems(nodesPanel, selectedContext) {
     .filter(([name]) => !['countries', 'commodities'].includes(name))
     .flatMap(([name, moduleOptions]) => {
       if (moduleOptions.hasMultipleSelection) {
-        return nodesPanel[name].selectedNodesIds;
+        return nodesPanel[name].draftSelectedNodesIds;
       }
-      return nodesPanel[name].selectedNodeId || [];
+      return nodesPanel[name].draftSelectedNodesId || [];
     });
   const params = {
     context_id: selectedContext.id,
