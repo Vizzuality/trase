@@ -13,7 +13,7 @@ const MapLayout = ({ toolLayout, toggleMapSidebar }) => {
       <div id="js-map" className="c-map-leaflet" />
       {!minified && (
         <>
-          {ENABLE_REDESIGN_PAGES && <Basemaps />}
+          <Basemaps />
           <div className="js-map-warnings-container map-warnings">
             <div className="warning-wrapper">
               <svg className="icon">
@@ -42,7 +42,7 @@ const MapLayout = ({ toolLayout, toggleMapSidebar }) => {
       </div>
       <Legend />
     </div>
-  )
+  );
 };
 
 MapLayout.propTypes = {

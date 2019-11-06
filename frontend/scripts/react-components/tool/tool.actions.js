@@ -30,6 +30,7 @@ export const CHANGE_LAYOUT = 'CHANGE_LAYOUT';
 export const SAVE_MAP_VIEW = 'SAVE_MAP_VIEW';
 export const SET_SANKEY_SIZE = 'SET_SANKEY_SIZE';
 export const SET_ACTIVE_MODAL = 'SET_ACTIVE_MODAL';
+export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
 
 export function loadMapVectorData() {
   return (dispatch, getState) => {
@@ -235,6 +236,20 @@ export function saveMapView(latlng, zoom) {
     type: SAVE_MAP_VIEW,
     latlng,
     zoom
+  };
+}
+
+export function toggleMapDimension(uid) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const selectedMapDimensions = getSelectedMapDimensionsUids(state);
+    dispatch({
+      type: TOGGLE_MAP_DIMENSION,
+      payload: {
+        uid,
+        selectedMapDimensions
+      }
+    });
   };
 }
 

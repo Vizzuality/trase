@@ -195,6 +195,86 @@ Object {
 }
 `;
 
+exports[`TOGGLE_MAP_DIMENSION Add a map dimension if the dimension is not selected 1`] = `
+Object {
+  "activeModal": null,
+  "data": Object {
+    "mapContextualLayers": Object {},
+    "mapDimensions": Object {},
+    "mapDimensionsGroups": Array [],
+    "mapVectorData": null,
+  },
+  "highlightedNodeCoordinates": null,
+  "linkedGeoIds": Array [],
+  "mapLoading": true,
+  "mapView": null,
+  "sankeySize": Array [
+    1024,
+    768,
+  ],
+  "selectedBasemap": null,
+  "selectedMapContextualLayers": null,
+  "selectedMapDimensions": Array [
+    "quant90",
+  ],
+  "toolLayout": 1,
+}
+`;
+
+exports[`TOGGLE_MAP_DIMENSION Add a map dimension in the second slot if the dimension is not selected 1`] = `
+Object {
+  "activeModal": null,
+  "data": Object {
+    "mapContextualLayers": Object {},
+    "mapDimensions": Object {},
+    "mapDimensionsGroups": Array [],
+    "mapVectorData": null,
+  },
+  "highlightedNodeCoordinates": null,
+  "linkedGeoIds": Array [],
+  "mapLoading": true,
+  "mapView": null,
+  "sankeySize": Array [
+    1024,
+    768,
+  ],
+  "selectedBasemap": null,
+  "selectedMapContextualLayers": null,
+  "selectedMapDimensions": Array [
+    "NotEmpty",
+    "quant90",
+  ],
+  "toolLayout": 1,
+}
+`;
+
+exports[`TOGGLE_MAP_DIMENSION Remove map dimension if the dimension is selected 1`] = `
+Object {
+  "activeModal": null,
+  "data": Object {
+    "mapContextualLayers": Object {},
+    "mapDimensions": Object {},
+    "mapDimensionsGroups": Array [],
+    "mapVectorData": null,
+  },
+  "highlightedNodeCoordinates": null,
+  "linkedGeoIds": Array [],
+  "mapLoading": false,
+  "mapView": null,
+  "sankeySize": Array [
+    1024,
+    768,
+  ],
+  "selectedBasemap": null,
+  "selectedMapContextualLayers": null,
+  "selectedMapDimensions": Array [
+    "quant95",
+    null,
+  ],
+  "toolLayout": 1,
+}
+`;
+
 exports[`TOOL_LAYERS__SET_LINKED_GEOIDS sets in linkedGeoIds an array of the nodes geoIds 1`] = `
 Object {
   "activeModal": null,
