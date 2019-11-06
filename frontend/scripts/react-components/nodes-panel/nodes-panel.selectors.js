@@ -2,12 +2,13 @@ import { createSelector, createStructuredSelector } from 'reselect';
 import { DASHBOARD_STEPS } from 'constants';
 import modules from 'react-components/nodes-panel/nodes-panel.modules';
 
-const getCountrySelectedNodeId = state => state.nodesPanel.countries.selectedNodeId;
-const getSourcesSelectedNodesIds = state => state.nodesPanel.sources.selectedNodesIds;
-const getCommoditySelectedNodeId = state => state.nodesPanel.commodities.selectedNodeId;
-const getDestinationsSelectedNodesIds = state => state.nodesPanel.destinations.selectedNodesIds;
-const getExportersSelectedNodesIds = state => state.nodesPanel.exporters.selectedNodesIds;
-const getImportersSelectedNodesIds = state => state.nodesPanel.importers.selectedNodesIds;
+const getCountrySelectedNodeId = state => state.nodesPanel.countries.draftSelectedNodesId;
+const getSourcesSelectedNodesIds = state => state.nodesPanel.sources.draftSelectedNodesIds;
+const getCommoditySelectedNodeId = state => state.nodesPanel.commodities.draftSelectedNodesId;
+const getDestinationsSelectedNodesIds = state =>
+  state.nodesPanel.destinations.draftSelectedNodesIds;
+const getExportersSelectedNodesIds = state => state.nodesPanel.exporters.draftSelectedNodesIds;
+const getImportersSelectedNodesIds = state => state.nodesPanel.importers.draftSelectedNodesIds;
 
 const getSourcesFetchKey = state => state.nodesPanel.sources.fetchKey;
 const getCommodityFetchKey = state => state.nodesPanel.commodities.fetchKey;
@@ -153,8 +154,8 @@ export const makeGetNodesPanelsProps = name => {
   const getLoading = state => state.nodesPanel[name].loadingItems;
   const getNoData = state => state.nodesPanel[name].noData;
   const getTabs = makeGetTabs(name);
-  const getSelectedNodeId = state => state.nodesPanel[name].selectedNodeId;
-  const getSelectedNodesIds = state => state.nodesPanel[name].selectedNodesIds;
+  const getSelectedNodeId = state => state.nodesPanel[name].draftSelectedNodesId;
+  const getSelectedNodesIds = state => state.nodesPanel[name].draftSelectedNodesId;
   const getSearchResults = state => state.nodesPanel[name].searchResults;
   const getFetchKey = state => state.nodesPanel[name].fetchKey;
   const getExcludingMode = state => state.nodesPanel[name].excludingMode;
@@ -211,10 +212,10 @@ export const makeGetNodesPanelsProps = name => {
   }
 
   if (moduleOptions.hasMultipleSelection) {
-    selectors.selectedNodesIds = getSelectedNodesIds;
+    selectors.draftSelectedNodesIds = getSelectedNodesIds;
     selectors.excludingMode = getExcludingMode;
   } else {
-    selectors.selectedNodeId = getSelectedNodeId;
+    selectors.draftSelectedNodesId = getSelectedNodeId;
   }
 
   return createStructuredSelector(selectors);
