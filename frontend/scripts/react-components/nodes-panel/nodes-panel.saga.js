@@ -116,7 +116,6 @@ function* fetchDataOnPageChange() {
 export function* fetchMissingItems() {
   function* shouldFetchMissingItems() {
     function* getMissingData(name) {
-      console.log('%cgetMissingData', name, 'color: green; font-size: 24; font-weight: bold;');
       const previousStepSelector = {
         sources: getSourcesPreviousSteps,
         exporters: getExportersPreviousSteps,

@@ -55,7 +55,10 @@ export default function(
   const geoNodesIds = Object.keys(nodes).filter(nodeId => {
     const node = nodes[nodeId];
     return (
-      node.geoId !== undefined && node.geoId !== null && node.columnId === lastChoroplethColumn.id
+      node.geoId !== undefined &&
+      node.geoId !== null &&
+      lastChoroplethColumn &&
+      node.columnId === lastChoroplethColumn.id
     );
   });
 
