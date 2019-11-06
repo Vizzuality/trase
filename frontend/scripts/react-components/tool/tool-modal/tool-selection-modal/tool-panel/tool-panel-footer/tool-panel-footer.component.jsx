@@ -44,7 +44,7 @@ function ToolPanelFooter(props) {
           testId="tool-panel-footer-actions-continue"
         >
           <Text as="span" size="rg" color="white" variant="mono">
-            {isLastStep ? 'Go to tool' : 'Continue'}
+            {isLastStep ? 'Save' : 'Continue'}
           </Text>
         </Button>
       </div>
