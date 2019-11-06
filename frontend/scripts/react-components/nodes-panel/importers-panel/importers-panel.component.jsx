@@ -29,6 +29,8 @@ function ImportersPanel(props) {
     activeTab,
     actionComponent,
     previousSteps,
+    excludingMode,
+    setExcludingMode,
     fetchData,
     fetchKey
   } = props;
@@ -89,6 +91,8 @@ function ImportersPanel(props) {
                   page={page}
                   loading={loading}
                   itemToScrollTo={itemToScrollTo}
+                  excludingMode={excludingMode}
+                  onSelectAllClick={setExcludingMode}
                 >
                   {itemProps => (
                     <GridListItem
@@ -126,7 +130,9 @@ ImportersPanel.propTypes = {
   setSelectedTab: PropTypes.func.isRequired,
   actionComponent: PropTypes.node,
   fetchData: PropTypes.func.isRequired,
-  noData: PropTypes.bool
+  noData: PropTypes.bool,
+  excludingMode: PropTypes.bool,
+  setExcludingMode: PropTypes.func
 };
 
 ImportersPanel.defaultProps = {

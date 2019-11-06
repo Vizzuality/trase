@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import {
   setPage,
   fetchData,
+  setExcludingMode,
   setLoadingItems,
   setSelectedItems,
   setSelectedTab,
@@ -15,6 +16,7 @@ const NAME = 'sources';
 const mapDispatchToProps = {
   setPage: page => setPage(page, NAME),
   fetchData: key => fetchData(key, NAME),
+  setExcludingMode: mode => setExcludingMode(mode, NAME),
   setSelectedTab: activeTab => setSelectedTab(activeTab, NAME),
   setLoadingItems: loadingItems => setLoadingItems(loadingItems, NAME),
   setSearchResult: activeItem => setSearchResult(activeItem, NAME),

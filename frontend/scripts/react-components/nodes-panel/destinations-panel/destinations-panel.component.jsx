@@ -17,6 +17,8 @@ function DestinationsPanel(props) {
     previousSteps,
     destinations,
     searchResults,
+    excludingMode,
+    setExcludingMode,
     setSearchResult,
     getSearchResults,
     setSelectedItems,
@@ -59,6 +61,8 @@ function DestinationsPanel(props) {
               getMoreItems={setPage}
               loading={loading}
               itemToScrollTo={itemToScrollTo}
+              excludingMode={excludingMode}
+              onSelectAllClick={setExcludingMode}
             >
               {itemProps => (
                 <GridListItem
@@ -88,7 +92,9 @@ DestinationsPanel.propTypes = {
   getSearchResults: PropTypes.func.isRequired,
   fetchData: PropTypes.func.isRequired,
   setSearchResult: PropTypes.func.isRequired,
-  setSelectedItems: PropTypes.func.isRequired
+  setSelectedItems: PropTypes.func.isRequired,
+  excludingMode: PropTypes.bool,
+  setExcludingMode: PropTypes.func
 };
 
 DestinationsPanel.defaultProps = {
