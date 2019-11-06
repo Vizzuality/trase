@@ -111,9 +111,9 @@ export function* fetchMissingItems() {
 
   yield takeLatest([NODES_PANEL__GET_MISSING_DATA], shouldFetchMissingItems);
 }
-console.log('Remove fetchMissingItems from ENABLE_REDESIGN');
 
 export default function* dashboardElementSaga() {
-  const sagas = [fetchChartsOnIndicatorsChange, fetchChartsOnItemChange, fetchMissingItems];
+  const sagas = [fetchChartsOnIndicatorsChange, fetchChartsOnItemChange];
+  if (!ENABLE_REDESIGN_PAGES) sagas.push(fetchMissingItems);
   yield all(sagas.map(saga => fork(saga)));
 }

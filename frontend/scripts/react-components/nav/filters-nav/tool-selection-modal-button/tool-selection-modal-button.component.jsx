@@ -6,7 +6,8 @@ import capitalize from 'lodash/capitalize';
 
 import 'react-components/nav/filters-nav/tool-selection-modal-button/tool-selection-modal-button.scss';
 
-export default function ToolSelectionModalButton({ selectedContext, setActiveModal }) {
+export default function ToolSelectionModalButton(props) {
+  const { selectedContext, setActiveModal } = props;
   const selectedLabel = selectedContext
     ? `${capitalize(selectedContext.countryName)} - ${capitalize(selectedContext.commodityName)}`
     : 'Select a context';
@@ -31,6 +32,7 @@ export default function ToolSelectionModalButton({ selectedContext, setActiveMod
 }
 
 ToolSelectionModalButton.propTypes = {
-  selectedContext: PropTypes.object,
+  countryName: PropTypes.string,
+  commodityName: PropTypes.string,
   setActiveModal: PropTypes.func.isRequired
 };
