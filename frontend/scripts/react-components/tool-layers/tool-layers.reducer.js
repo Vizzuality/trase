@@ -8,7 +8,8 @@ import {
   CHANGE_LAYOUT,
   SET_SANKEY_SIZE,
   SET_ACTIVE_MODAL,
-  SELECT_UNIT_LAYERS
+  SELECT_UNIT_LAYERS,
+  TOGGLE_MAP_DIMENSION
 } from 'react-components/tool/tool.actions';
 import {
   TOOL_LAYERS__SET_LINKED_GEOIDS,
@@ -137,6 +138,27 @@ const toolLayersReducer = {
   [SET_ACTIVE_MODAL](state, action) {
     return immer(state, draft => {
       draft.activeModal = action.payload.activeModal;
+    });
+  },
+  [TOGGLE_MAP_DIMENSION](state, action) {
+    return immer(state, draft => {
+      if (!draft.selectedMapDimensions) {
+        draft.selectedMapDimensions = [...action.payload.selectedMapDimensions];
+      }
+      const uidIndex = draft.selectedMapDimensions.indexOf(action.payload.uid);
+
+      if (uidIndex === -1) {
+        // dimension was not found: put it on a free slot
+        if (!draft.selectedMapDimensions[0]) {
+          draft.selectedMapDimensions[0] = action.payload.uid;
+        } else if (!draft.selectedMapDimensions[1]) {
+          draft.selectedMapDimensions[1] = action.payload.uid;
+        }
+        draft.mapLoading = true;
+      } else {
+        // dimension was found: remove it from selection
+        draft.selectedMapDimensions[uidIndex] = null;
+      }
     });
   }
 };

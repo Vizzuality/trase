@@ -10,7 +10,8 @@ import { SET_CONTEXT, SET_CONTEXTS } from 'actions/app.actions';
 import {
   SELECT_YEARS,
   loadMapChoropleth,
-  SET_NODE_ATTRIBUTES
+  SET_NODE_ATTRIBUTES,
+  TOGGLE_MAP_DIMENSION
 } from 'react-components/tool/tool.actions';
 import { getSelectedYears, getSelectedContext } from 'reducers/app.selectors';
 import { getLinkedGeoIds, getMapDimensions } from './tool-layers.fetch.saga';
@@ -49,6 +50,7 @@ function* fetchMapDimensions() {
     [
       SET_CONTEXTS,
       TOOL_LINKS__GET_COLUMNS,
+      TOGGLE_MAP_DIMENSION,
       SET_CONTEXT,
       SELECT_YEARS,
       TOOL_LINKS__SELECT_COLUMN,

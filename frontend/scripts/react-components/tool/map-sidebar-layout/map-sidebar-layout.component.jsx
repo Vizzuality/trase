@@ -18,15 +18,6 @@ const MapSidebar = ({ toolLayout, open }) => (
         {/* this is rendered by map-context.component */}
       </ul>
     </div>
-
-    {!ENABLE_REDESIGN_PAGES && (
-      <div className="map-sidebar-group c-map-basemaps">
-        <div className="map-sidebar-group-title">Basemaps</div>
-        <ul className="map-sidebar-group-items js-map-basemaps-items">
-          {/* this is rendered by map-context.component */}
-        </ul>
-      </div>
-    )}
   </div>
 );
 
