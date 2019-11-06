@@ -3,6 +3,8 @@ import { createSelector, createStructuredSelector } from 'reselect';
 const getAppContexts = state => state.app.contexts;
 const getAppSelectedYears = state => state.app.selectedYears;
 const getAppSelectedContextId = state => state.app.selectedContextId;
+const getAppSelectedCountryId = state => state.nodesPanel.countries.selectedNodeId;
+const getAppSelectedCommodityId = state => state.nodesPanel.commodities.selectedNodeId;
 
 export const getCountryNamesByCountryId = createSelector(
   [getAppContexts],
@@ -17,10 +19,17 @@ export const getCountryNamesByCountryId = createSelector(
 );
 
 export const getSelectedContext = createSelector(
-  [getAppContexts, getAppSelectedContextId],
-  (contexts, selectedContextId) => {
+  [getAppContexts, getAppSelectedContextId, getAppSelectedCountryId, getAppSelectedCommodityId],
+  (contexts, selectedContextId, countryId, commodityId) => {
     if (!contexts) {
-      return { id: selectedContextId };
+      return ENABLE_TOOL_PANEL ? null : { id: selectedContextId };
+    }
+
+    if (countryId && commodityId) {
+      return (
+        contexts.find(ctx => (ctx.countryId === countryId && ctx.commodityId) === commodityId) ||
+        null
+      );
     }
 
     if (selectedContextId === null) {
