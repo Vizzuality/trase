@@ -40,7 +40,7 @@ setLoadingSpinner.mockImplementation(() => {});
 
 const optionsType = 'companies';
 const query = 'Bra';
-describe('getDashboardPanelData', () => {
+describe.skip('getDashboardPanelData', () => {
   jest.mock('utils/getURLFromParams', () => ({
     getURLFromParams: jest.fn()
   }));
@@ -58,7 +58,7 @@ describe('getDashboardPanelData', () => {
   });
 });
 
-describe('getDashboardPanelSectionTabs', () => {
+describe.skip('getDashboardPanelSectionTabs', () => {
   it('Cancels if the fetch is cancelled', () => {
     const generator = getDashboardPanelSectionTabs(optionsType);
     generator.next({});
@@ -69,7 +69,7 @@ describe('getDashboardPanelSectionTabs', () => {
   });
 });
 
-describe('getMoreDashboardPanelData', () => {
+describe.skip('getMoreDashboardPanelData', () => {
   it('Cancels if the fetch is cancelled', () => {
     const generator = getMoreDashboardPanelData(dashboardElement, optionsType);
     generator.next();
@@ -82,7 +82,7 @@ describe('getMoreDashboardPanelData', () => {
   });
 });
 
-describe('fetchDashboardPanelSearchResults', () => {
+describe.skip('fetchDashboardPanelSearchResults', () => {
   it('Cancels if the fetch is cancelled', () => {
     const generator = fetchDashboardPanelSearchResults(dashboardElement, query);
     generator.next();

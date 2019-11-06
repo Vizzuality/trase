@@ -1,4 +1,5 @@
-import initialState from 'react-components/dashboard-element/dashboard-element.initial-state';
+import dashboardElementInitialState from 'react-components/dashboard-element/dashboard-element.initial-state';
+import nodesPanelInitialState from 'react-components/nodes-panel/nodes-panel.initial-state';
 import {
   getDefaultConfig,
   getYKeys,
@@ -40,15 +41,19 @@ const defaultState = {
       }
     ]
   },
-  dashboardElement: {
-    ...initialState,
-    data: {
-      ...initialState.data,
-      countries: [country],
-      commodities: [commodity]
+  dashboardElement: dashboardElementInitialState,
+  nodesPanel: {
+    ...nodesPanelInitialState,
+    countries: {
+      ...nodesPanelInitialState.countries,
+      data: { byId: [country.id], nodes: { [country.id]: country } },
+      selectedNodeId: country.id
     },
-    selectedCountryId: country.id,
-    selectedCommodityId: commodity.id
+    commodities: {
+      ...nodesPanelInitialState.commodities,
+      data: { byId: [commodity.id], nodes: { [commodity.id]: commodity } },
+      selectedNodeId: commodity.id
+    }
   }
 };
 
