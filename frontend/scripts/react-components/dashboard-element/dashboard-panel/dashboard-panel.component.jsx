@@ -121,6 +121,7 @@ class DashboardPanel extends Component {
       onBack,
       setStep,
       goToDashboard,
+      savePanels,
       dirtyBlocks,
       dynamicSentenceParts,
       step,
@@ -131,6 +132,7 @@ class DashboardPanel extends Component {
     } = this.props;
 
     const handleGoToDashboard = () => {
+      savePanels();
       goToDashboard({ dirtyBlocks, dynamicSentenceParts });
       closeModal();
     };
@@ -176,6 +178,7 @@ DashboardPanel.propTypes = {
   onBack: PropTypes.func,
   dirtyBlocks: PropTypes.object,
   goToDashboard: PropTypes.func,
+  savePanels: PropTypes.func,
   step: PropTypes.number.isRequired,
   setStep: PropTypes.func.isRequired,
   editMode: PropTypes.bool.isRequired,
