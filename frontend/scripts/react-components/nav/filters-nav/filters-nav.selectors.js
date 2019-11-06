@@ -1,5 +1,4 @@
 import { createSelector, createStructuredSelector } from 'reselect';
-import { getActiveParams } from 'react-components/logistics-map/logistics-map.selectors';
 import {
   NAV_FILTER_TYPES,
   LOGISTICS_MAP_YEARS,
@@ -14,6 +13,10 @@ import {
   getSelectedRecolorBy as getToolRecolorBy,
   getToolColumnFilterNodeId
 } from 'react-components/tool-links/tool-links.selectors';
+import {
+  getActiveParams,
+  getSelectedCommodity as getLogisticsMapCommodity
+} from 'react-components/logistics-map/logistics-map.selectors';
 import { getVersionData } from 'react-components/tool/tool-modal/versioning-modal/versioning-modal.selectors';
 import { getRecolorByOptions } from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.selectors';
 import { makeGetResizeByItems } from 'selectors/indicators.selectors';
@@ -120,10 +123,10 @@ const getLogisticsMapHubsProps = createSelector(
     label: 'Logistics Hub',
     id: 'logisticsMapHub',
     options: LOGISTICS_MAP_HUBS.filter(hub =>
-      INDONESIA_LOGISTICS_MAP_ACTIVE ? hub.value === 'palmOil' : hub.value !== 'palmOil'
+      INDONESIA_LOGISTICS_MAP_ACTIVE ? hub.value === 'palmOil' : true
     ),
     value: LOGISTICS_MAP_HUBS.find(commodity => commodity.value === activeParams.commodity),
-    isDisabled: activeParams.commodity === 'palmOil'
+    isDisabled: INDONESIA_LOGISTICS_MAP_ACTIVE
   })
 );
 
@@ -185,6 +188,7 @@ export const getNavFilters = createSelector(
     getToolResizeByProps,
     getToolViewModeProps,
     getVersioningSelected,
+    getLogisticsMapCommodity,
     getLogisticsMapYearsProps,
     getLogisticsMapHubsProps,
     getLogisticsMapInspectionLevelProps
@@ -196,6 +200,7 @@ export const getNavFilters = createSelector(
     toolResizeBy,
     toolViewMode,
     versionData,
+    logisticsMapCommodity,
     logisticsMapsYears,
     logisticsMapsHubs,
     logisticsMapInspectionLevel
@@ -243,7 +248,7 @@ export const getNavFilters = createSelector(
           showLogisticsMapDownload: true,
           left: [
             { type: NAV_FILTER_TYPES.dropdown, props: logisticsMapsHubs },
-            ...insertIf(!INDONESIA_LOGISTICS_MAP_ACTIVE, {
+            ...insertIf(logisticsMapCommodity !== 'palmOil', {
               type: NAV_FILTER_TYPES.dropdown,
               props: logisticsMapsYears
             }),
