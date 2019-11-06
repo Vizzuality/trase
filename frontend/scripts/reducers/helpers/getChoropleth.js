@@ -13,7 +13,14 @@ const generateColorScale = (baseColorScale, length) => {
   return chroma.scale(baseColorScale).colors(length);
 };
 
-export default function(selectedMapDimensionsUids, nodes, attributes, columns, mapDimensions) {
+export default function(
+  selectedMapDimensionsUids,
+  nodes,
+  attributes,
+  selectedColumnsIds,
+  columns,
+  mapDimensions
+) {
   const uids = [...new Set(selectedMapDimensionsUids.filter(Boolean))];
   const selectedMapDimensions = uids.map(uid => mapDimensions[uid]);
 
@@ -42,7 +49,7 @@ export default function(selectedMapDimensionsUids, nodes, attributes, columns, m
       );
 
   const choroplethColumns = Object.values(columns).filter(
-    c => c.isGeo && Object.keys(nodes).some(nodeId => nodes[nodeId].columnId === c.id)
+    c => c.isGeo && selectedColumnsIds.includes(c.id)
   );
   const lastChoroplethColumn = choroplethColumns[choroplethColumns.length - 1];
   const geoNodesIds = Object.keys(nodes).filter(nodeId => {
