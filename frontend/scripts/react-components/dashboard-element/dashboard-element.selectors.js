@@ -22,10 +22,20 @@ const getExportersPrefixes = state => state.nodesPanel.exporters.prefixes;
 const getImportersPrefixes = state => state.nodesPanel.importers.prefixes;
 const getDestinationsPrefixes = state => state.nodesPanel.destinations.prefixes;
 
-const getSources = state => state.nodesPanel.sources.selectedNodesIds;
-const getDestinations = state => state.nodesPanel.destinations.selectedNodesIds;
-const getExporters = state => state.nodesPanel.exporters.selectedNodesIds;
-const getImporters = state => state.nodesPanel.importers.selectedNodesIds;
+const getSourcesExcludingMode = state => state.nodesPanel.sources.excludingMode;
+const getExportersExcludingMode = state => state.nodesPanel.exporters.excludingMode;
+const getImportersExcludingMode = state => state.nodesPanel.importers.excludingMode;
+const getDestinationsExcludingMode = state => state.nodesPanel.destinations.excludingMode;
+
+const getSourcesSelectedNodesIds = state => state.nodesPanel.sources.selectedNodesIds;
+const getDestinationsSelectedNodesIds = state => state.nodesPanel.destinations.selectedNodesIds;
+const getExportersSelectedNodesIds = state => state.nodesPanel.exporters.selectedNodesIds;
+const getImportersSelectedNodesIds = state => state.nodesPanel.importers.selectedNodesIds;
+
+const getSources = state => state.nodesPanel.sources;
+const getDestinations = state => state.nodesPanel.destinations;
+const getExporters = state => state.nodesPanel.exporters;
+const getImporters = state => state.nodesPanel.importers;
 
 const getSelectedCountryId = state => state.nodesPanel.countries.selectedNodeId;
 const getSelectedCommodityId = state => state.nodesPanel.commodities.selectedNodeId;
@@ -69,19 +79,19 @@ const getCommoditiesActiveItems = createSelector(
 );
 
 const getSourcesActiveItems = createSelector(
-  [getSources, getSourcesData],
+  [getSourcesSelectedNodesIds, getSourcesData],
   getPanelActiveItems
 );
 const getDestinationsActiveItems = createSelector(
-  [getDestinations, getDestinationsData],
+  [getDestinationsSelectedNodesIds, getDestinationsData],
   getPanelActiveItems
 );
 const getExportersActiveItems = createSelector(
-  [getExporters, getExportersData],
+  [getExportersSelectedNodesIds, getExportersData],
   getPanelActiveItems
 );
 const getImportersActiveItems = createSelector(
-  [getImporters, getImportersData],
+  [getImportersSelectedNodesIds, getImportersData],
   getPanelActiveItems
 );
 
@@ -124,9 +134,30 @@ const getNodesPanelPrefixes = createSelector(
   })
 );
 
+const getNodesPanelExcludingMode = createSelector(
+  [
+    getSourcesExcludingMode,
+    getExportersExcludingMode,
+    getImportersExcludingMode,
+    getDestinationsExcludingMode
+  ],
+  (sources, exporters, importers, destinations) => ({
+    sources,
+    exporters,
+    importers,
+    destinations
+  })
+);
+
 export const getDynamicSentence = createSelector(
-  [getDirtyBlocks, getNodesPanelValues, getEditMode, getNodesPanelPrefixes],
-  (dirtyBlocks, panelsValues, editMode, prefixes) => {
+  [
+    getDirtyBlocks,
+    getNodesPanelValues,
+    getEditMode,
+    getNodesPanelPrefixes,
+    getNodesPanelExcludingMode
+  ],
+  (dirtyBlocks, panelsValues, editMode, prefixes, excludingModeMap) => {
     if (Object.values(dirtyBlocks).every(block => !block)) {
       return [];
     }
@@ -138,37 +169,49 @@ export const getDynamicSentence = createSelector(
     const sourcesValues =
       panelsValues.sources.length > 0 ? panelsValues.sources : panelsValues.countries;
 
-    const getSettings = (item, prefixesMap, defaultName, defaultPrefix) => {
+    const getSettings = (items, prefixesMap, excludingMode, defaultName, defaultPrefix) => {
       const settings = { prefix: defaultPrefix, name: defaultName };
-      if (prefixesMap && item) {
-        const nodeType = item.nodeType || item.type;
-        settings.prefix = prefixesMap[nodeType] || defaultPrefix;
+      const [first] = items;
+      if (prefixesMap && first) {
+        const nodeType = first.nodeType || first.type;
         settings.name = nodeType ? getPluralNodeType(nodeType) : defaultName;
+        settings.prefix = prefixesMap[nodeType] || defaultPrefix;
+      }
+      if (excludingMode) {
+        if (items.length > 1) {
+          settings.prefix = `${settings.prefix} all but`;
+        } else {
+          settings.prefix = `${settings.prefix} all ${settings.name} except`;
+        }
       }
       return settings;
     };
 
     const sourcesSettings = getSettings(
-      panelsValues.sources[0],
+      panelsValues.sources,
       prefixes.sources,
+      excludingModeMap.sources,
       'sources',
       'produced in'
     );
     const exportersSettings = getSettings(
-      panelsValues.exporters[0],
+      panelsValues.exporters,
       prefixes.exporters,
+      excludingModeMap.exporters,
       'exporters',
       'exported by'
     );
     const importersSettings = getSettings(
-      panelsValues.importers[0],
+      panelsValues.importers,
       prefixes.importers,
+      excludingModeMap.importers,
       'importers',
       'imported by'
     );
     const destinationsSettings = getSettings(
-      panelsValues.destinations[0],
+      panelsValues.destinations,
       prefixes.destinations,
+      excludingModeMap.destinations,
       'destinations',
       'going to'
     );
