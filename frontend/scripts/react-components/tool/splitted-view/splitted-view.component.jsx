@@ -33,7 +33,7 @@ SplittedView.propTypes = {
   rightSlot: PropTypes.node,
   layout: PropTypes.number,
   sidebarOpen: PropTypes.bool,
-  changeLayout: PropTypes.func
+  changeLayout: PropTypes.func.isRequired
 };
 
 export default SplittedView;

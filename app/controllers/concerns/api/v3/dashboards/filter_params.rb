@@ -19,7 +19,10 @@ module Api
             destinations_ids: cs_string_to_int_array(params[:destinations_ids]),
             node_types_ids: cs_string_to_int_array(params[:node_types_ids]),
             profile_only: ActiveModel::Type::Boolean.new.cast(params[:profile_only]),
-            include: params[:include]
+            include: params[:include],
+            order_by: params[:order_by],
+            start_year: string_to_int(params[:start_year]),
+            end_year: string_to_int(params[:end_year])
           }
         end
       end

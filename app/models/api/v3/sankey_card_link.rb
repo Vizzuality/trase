@@ -9,7 +9,7 @@
 #  subtitle(subtitle of the quick sankey card)                              :text
 #  start_year                                                               :integer          not null
 #  end_year                                                                 :integer          not null
-#  biome_id                                                                 :bigint(8)
+#  node_id                                                                  :bigint(8)
 #  level1(level used when commodity and country are not selected)           :boolean          default(FALSE), not null
 #  level2(level used when commodity is selected)                            :boolean          default(FALSE), not null
 #  level3(level used when commodity and country are selected)               :boolean          default(FALSE), not null
@@ -20,19 +20,19 @@
 #
 # Indexes
 #
-#  index_sankey_card_links_on_biome_id            (biome_id)
 #  index_sankey_card_links_on_commodity_id        (commodity_id)
 #  index_sankey_card_links_on_cont_attribute_id   (cont_attribute_id)
 #  index_sankey_card_links_on_country_id          (country_id)
 #  index_sankey_card_links_on_ncont_attribute_id  (ncont_attribute_id)
+#  index_sankey_card_links_on_node_id             (node_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (biome_id => nodes.id)
 #  fk_rails_...  (commodity_id => commodities.id) ON DELETE => cascade
 #  fk_rails_...  (cont_attribute_id => attributes.id) ON DELETE => cascade
 #  fk_rails_...  (country_id => countries.id) ON DELETE => cascade
 #  fk_rails_...  (ncont_attribute_id => attributes.id) ON DELETE => cascade
+#  fk_rails_...  (node_id => nodes.id)
 #
 
 module Api
@@ -51,7 +51,7 @@ module Api
         'selectedYears' => :selected_years,
         'selectedColumnsIds' => :selected_columns_ids,
         'selectedNodesIds' => :selected_nodes_ids,
-        'selectedBiomeFilterName' => :selected_biome_filter_name
+        'extraColumnNodeId' => :extra_column_node_id
       }.freeze
 
       belongs_to :commodity
@@ -65,9 +65,9 @@ module Api
                  foreign_key: 'ncont_attribute_id',
                  inverse_of: :ncont_attribute_sankey_card_links,
                  optional: true
-      belongs_to :biome,
+      belongs_to :node,
                  class_name: 'Api::V3::Node',
-                 foreign_key: 'biome_id',
+                 foreign_key: 'node_id',
                  inverse_of: :sankey_card_links,
                  optional: true
       has_many :sankey_card_link_nodes, dependent: :destroy
@@ -97,7 +97,7 @@ module Api
         [
           {name: :commodity_id, table_class: Api::V3::Commodity},
           {name: :country_id, table_class: Api::V3::Country},
-          {name: :biome_id, table_class: Api::V3::Node}
+          {name: :node_id, table_class: Api::V3::Node}
         ]
       end
 
@@ -111,7 +111,9 @@ module Api
 
       def validate_max_links_per_level
         LEVELS.each do |n|
-          next if !send("level#{n}") || !send("level#{n}_max_sankey_card_links?")
+          next if !send("level#{n}") ||
+            !will_save_change_to_attribute?("level#{n}") ||
+            !send("level#{n}_max_sankey_card_links?")
 
           message = "cannot be more than #{MAX_PER_LEVEL} sankey card links "\
                     "for level#{n}"
@@ -196,9 +198,9 @@ module Api
         end
       end
 
-      def extract_selected_biome_filter_name
-        self.biome = Api::V3::Node.find_by(
-          name: query_params['selectedBiomeFilterName']
+      def extract_extra_column_node_id
+        self.node = Api::V3::Node.find_by(
+          id: query_params['extraColumnNodeId']
         )
       end
 
@@ -295,8 +297,8 @@ module Api
           query_params['selectedRecolorBy'] = ncont_attribute_id
         end
 
-        return if query_params['selectedBiomeFilterName'] == biome&.name
-        query_params['selectedBiomeFilterName'] = biome&.name
+        return if query_params['extraColumnNodeId'] == node&.id
+        query_params['extraColumnNodeId'] = node&.id
       end
     end
   end

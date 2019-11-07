@@ -57,6 +57,8 @@
     "NODE_ENV_DEV": true,
     "ENABLE_INTERSECTION_OBSERVER": true,
     "ENABLE_REDESIGN_PAGES": true,
+    "ENABLE_VERSIONING": true,
+    "ENABLE_TOOL_PANEL": true,
     "API_V3_URL": true,
     "ENABLE_DASHBOARDS": true,
     "DISABLE_PROFILES": true,

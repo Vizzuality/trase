@@ -15,7 +15,7 @@
 module Api
   module V3
     module Readonly
-      class DashboardsAttribute < Api::V3::Readonly::BaseModel
+      class DashboardsAttribute < Api::Readonly::BaseModel
         self.table_name = 'dashboards_attributes_mv'
         belongs_to :readonly_attribute, foreign_key: :attribute_id, class_name: 'Attribute'
 

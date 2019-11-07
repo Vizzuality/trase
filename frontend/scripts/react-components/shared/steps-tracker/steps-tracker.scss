@@ -1,6 +1,7 @@
 @import 'styles/settings';
 
 $segment-width: 150px;
+$segment-width-tablet: 110px;
 $label-height: 25px;
 $circle-size: 32px;
 $item-height: $label-height + $circle-size;
@@ -14,8 +15,12 @@ $circle-dot-size: $circle-size / 2;
   margin-left: -$circle-dot-size;
 
   .steps-tracker-item-wrapper {
-    width: $segment-width;
     position: relative;
+    width: $segment-width-tablet;
+
+    @media screen and (min-width: $breakpoint-laptop) {
+      width: $segment-width;
+    }
 
     &:last-child {
       width: $circle-size;

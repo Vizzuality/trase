@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import HelpTooltip from '../help-tooltip/help-tooltip.component';
+import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
+import Heading from 'react-components/shared/heading';
 
 import './grid-list-item.scss';
 
@@ -18,27 +19,38 @@ function GridListItem(props) {
     onInfoClick,
     onHover,
     isInfoActive,
-    variant
+    variant,
+    color
   } = props;
   if (!item) return <b style={style} />;
   const onClick = isActive && disableItem ? disableItem : enableItem;
   const testId = item.name && item.name.split(' ').join('-');
+  const isToggleAll = item.id === 'TOGGLE_ALL';
   return (
     <React.Fragment>
-      <div style={style} className={cx('c-grid-list-item', { [`v-${variant}`]: variant })}>
-        {isGroup && <h3 className="grid-list-item-heading">{item.name}</h3>}
+      <div
+        style={style}
+        className={cx('c-grid-list-item', {
+          [`v-${variant}`]: variant,
+          [`color-${color}`]: color
+        })}
+      >
+        {isGroup && (
+          <Heading as="h3" weight="regular" className="grid-list-item-heading">
+            {item.name}
+          </Heading>
+        )}
         {!isGroup && (
           <div className="grid-list-item-content" data-test="grid-list-item-button">
             <button
               type="button"
               disabled={isDisabled}
-              onClick={() => onClick(item)}
-              onMouseEnter={onHover ? () => onHover(item) : undefined}
-              onMouseLeave={onHover ? () => onHover(null) : undefined}
+              onClick={isToggleAll ? item.setExcludingMode : () => onClick(item)}
+              onMouseEnter={onHover && !isToggleAll ? () => onHover(item) : undefined}
+              onMouseLeave={onHover && !isToggleAll ? () => onHover(null) : undefined}
               className={cx('grid-list-item-button', {
-                '-active': isActive,
-                '-has-info': !!tooltip,
-                '-clickable': isActive && !disableItem
+                '-active': !isToggleAll && isActive,
+                '-has-info': !isToggleAll && !!tooltip
               })}
               data-test={`grid-list-item-button-${testId}`}
             >
@@ -56,9 +68,12 @@ function GridListItem(props) {
                   trigger="click"
                   show={isInfoActive}
                   position="bottom-start"
-                  insideTooltip
                 >
-                  <button type="button" disabled={isDisabled} onClick={() => onInfoClick(item)}>
+                  <button
+                    type="button"
+                    disabled={isDisabled || !onInfoClick}
+                    onClick={() => onInfoClick && onInfoClick(item)}
+                  >
                     i
                   </button>
                 </HelpTooltip>
@@ -74,6 +89,7 @@ function GridListItem(props) {
 GridListItem.propTypes = {
   item: PropTypes.object,
   isGroup: PropTypes.bool,
+  color: PropTypes.string,
   isActive: PropTypes.bool,
   tooltip: PropTypes.string,
   isDisabled: PropTypes.bool,

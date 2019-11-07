@@ -15,6 +15,7 @@ import {
   TOOL_LINKS__SET_SELECTED_RESIZE_BY,
   TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
   TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
+  TOOL_LINKS__CHANGE_EXTRA_COLUMN,
   TOOL_LINKS_RESET_SANKEY,
   setToolFlowsLoading,
   selectView
@@ -41,6 +42,7 @@ function* fetchToolColumns() {
     const task = yield fork(setLoadingSpinner, 750, setToolFlowsLoading(true));
     yield fork(getToolColumnsData, selectedContext);
     yield fork(getToolGeoColumnNodes, selectedContext);
+
     yield call(getToolLinksData);
     yield call(getToolNodesByLink, selectedContext, {
       fetchAllNodes: state.toolLinks.detailedView
@@ -55,7 +57,10 @@ function* fetchToolColumns() {
       yield fork(setLoadingSpinner, 350, setToolFlowsLoading(false));
     }
   }
-  yield takeLatest([SET_CONTEXTS, TOOL_LINKS__GET_COLUMNS, SET_CONTEXT], performFetch);
+  yield takeLatest(
+    [SET_CONTEXTS, TOOL_LINKS__GET_COLUMNS, SET_CONTEXT, TOOL_LINKS__CHANGE_EXTRA_COLUMN],
+    performFetch
+  );
 }
 
 function* fetchToolGeoColumnNodes() {
@@ -111,7 +116,8 @@ function* fetchLinks() {
       TOOL_LINKS__SET_SELECTED_NODES,
       TOOL_LINKS__SET_SELECTED_RESIZE_BY,
       TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
-      TOOL_LINKS__SET_SELECTED_BIOME_FILTER
+      TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
+      TOOL_LINKS__CHANGE_EXTRA_COLUMN
     ],
     performFetch
   );

@@ -19,7 +19,7 @@ if (ENABLE_REDESIGN_PAGES) {
   jest.setTimeout(TIMEOUT);
 
   const { page } = global;
-  const polly = new Polly('dashboard', pollyConfig(page));
+  const polly = new Polly('explore', pollyConfig(page));
 
   beforeAll(async () => {
     await page.setRequestInterception(true);
@@ -37,8 +37,8 @@ if (ENABLE_REDESIGN_PAGES) {
       await page.goto(`${BASE_URL}/explore`);
       await page.waitFor(1000);
       // Step 1
-      expectChildrenToBe(page, 'top-cards-row', 4);
-      await page.waitForSelector('[data-test=top-card-BRAZIL-SOY-EXPORTER-FOREST_500]', {
+      expectChildrenToBe(page, 'featured-cards-row', 1);
+      await page.waitForSelector('[data-test=featured-card', {
         timeout: 5000
       });
 
@@ -46,8 +46,8 @@ if (ENABLE_REDESIGN_PAGES) {
 
       // Step 2
       await expectToContain(page, 'step-title', '2.');
-      await expectToContain(page, 'top-cards-title', 'Beef');
-      await page.waitForSelector('[data-test=top-card-BRAZIL-BEEF-EXPORTER-FOREST_500]', {
+      await expectToContain(page, 'featured-cards-title', 'Beef');
+      await page.waitForSelector('[data-test=featured-card-BEEF]', {
         timeout: 5000
       });
 
@@ -55,12 +55,12 @@ if (ENABLE_REDESIGN_PAGES) {
 
       // Step 3
       await expectToContain(page, 'step-title', '3.');
-      await expectToContain(page, 'top-cards-title', 'Colombia Beef');
-      await page.waitForSelector('[data-test=top-card-COLOMBIA-BEEF-EXPORTER-FOREST_500]', {
+      await expectToContain(page, 'featured-cards-title', 'Colombia Beef');
+      await page.waitForSelector('[data-test=featured-card-BEEF-COLOMBIA]', {
         timeout: 5000
       });
 
-      await click(page, 'top-cards-back-button');
+      await click(page, 'featured-cards-back-button');
 
       // Step 2
       await expectToContain(page, 'step-title', '2.');
@@ -69,12 +69,14 @@ if (ENABLE_REDESIGN_PAGES) {
       await click(page, 'grid-list-item-button-BRAZIL');
       await expectToContain(page, 'step-title', '3.');
 
-      // TODO: Lets use this when the link is complete
+      // await click(page, 'featured-card-BEEF-COLOMBIA');
+      //
       // await Promise.all([
-      //   click(page, 'top-card-BRAZIL-BEEF-EXPORTER-FOREST_500'),
+      //   click(page, 'explore-link-to-sankey'),
       //   page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 0 })
       // ]);
-      // await expect(page.url().startsWith(`${BASE_URL}/flows?selectedContextId=6`)).toBe(true);
+      // const params = qs.parse(page.url(), { ignoreQueryPrefix: true, arrayLimit: 500 });
+      // await expect(params.selectedContextId).toBe(6);
     });
   });
 }

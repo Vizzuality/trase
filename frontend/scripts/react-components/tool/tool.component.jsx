@@ -2,10 +2,10 @@ import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import MapContainer from 'react-components/tool/map/map.container';
-import MapDimensionsContainer from 'react-components/tool/map-dimensions/map-dimensions.react';
 import ModalContainer from 'react-components/tool/story-modal/story-modal.container';
 import TitlebarContainer from 'react-components/tool/titlebar/titlebar.container';
 import NodesTitlesContainer from 'react-components/tool/nodes-titles/nodes-titles.container';
+import MapDimensionsContainer from 'react-components/tool/legacy-map-dimensions/map-dimensions.react';
 import MapContextContainer from 'react-components/tool/map-context/map-context.container';
 import Sankey from 'react-components/tool/sankey';
 import Tooltip from 'react-components/tool/help-tooltip/help-tooltip.container';
@@ -13,7 +13,7 @@ import SplittedView from 'react-components/tool/splitted-view';
 import MapLayout from 'react-components/tool/map-layout';
 import ErrorModal from 'react-components/tool/error-modal';
 import MapSidebar from 'react-components/tool/map-sidebar-layout';
-import LegacyBasemaps from 'react-components/tool/legacy-basemaps/legacy-basemaps.container';
+import ToolModal from 'react-components/tool/tool-modal';
 import EventManager from 'utils/eventManager';
 import UrlSerializer from 'react-components/shared/url-serializer';
 import Timeline from './timeline';
@@ -30,16 +30,22 @@ const renderVainillaComponents = () => (
   <>
     <ModalContainer />
     <MapContainer />
-    <MapDimensionsContainer />
-    {!ENABLE_REDESIGN_PAGES && <LegacyBasemaps />}
     {!ENABLE_REDESIGN_PAGES && <NodesTitlesContainer />}
+    <MapDimensionsContainer />
     <MapContextContainer />
     <Tooltip />
   </>
 );
 
 const Tool = props => {
-  const { resizeSankeyTool, urlProps, urlPropHandlers, mapSidebarOpen, noLinksFound } = props;
+  const {
+    resizeSankeyTool,
+    urlProps,
+    urlPropHandlers,
+    mapSidebarOpen,
+    noLinksFound,
+    activeModal
+  } = props;
   useEffect(() => {
     evManager.addEventListener(window, 'resize', resizeSankeyTool);
     const body = document.querySelector('body');
@@ -78,9 +84,10 @@ const Tool = props => {
           </div>
           {ENABLE_REDESIGN_PAGES && <Timeline />}
         </div>
+        <ToolModal activeModal={activeModal} />
       </>
     ),
-    [mapSidebarOpen, noLinksFound]
+    [mapSidebarOpen, noLinksFound, activeModal]
   );
 
   return (
@@ -97,7 +104,8 @@ Tool.propTypes = {
   urlPropHandlers: PropTypes.object,
   urlProps: PropTypes.object,
   mapSidebarOpen: PropTypes.bool,
-  noLinksFound: PropTypes.bool
+  noLinksFound: PropTypes.bool,
+  activeModal: PropTypes.string
 };
 
 export default Tool;

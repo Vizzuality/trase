@@ -72,7 +72,7 @@
                   "type": "array",
                   "items": {
                     "$id": "#/properties/data/items/properties/rows/items/properties/values/items",
-                    "type": "object",
+                    "type": ["object", "null"],
                     "required": [
                       "value"
                     ],

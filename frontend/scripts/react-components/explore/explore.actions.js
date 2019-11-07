@@ -1,11 +1,18 @@
 import { batch } from 'react-redux';
 import axios from 'axios';
-import { GET_TOP_COUNTRIES_FACTS, getURLFromParams } from 'utils/getURLFromParams';
+import {
+  GET_TOP_COUNTRIES_FACTS,
+  GET_SANKEY_CARD_LINKS,
+  getURLFromParams
+} from 'utils/getURLFromParams';
+import pickBy from 'lodash/pickBy';
 
 export const EXPLORE__SET_COMMODITY = 'EXPLORE__SET_COMMODITY';
 export const EXPLORE__SET_COUNTRY = 'EXPLORE__SET_COUNTRY';
 export const EXPLORE__SELECT_TOP_CARD = 'EXPLORE__SELECT_TOP_CARD';
 export const EXPLORE__SET_QUICK_FACTS = 'EXPLORE__SET_QUICK_FACTS';
+export const EXPLORE__SET_SANKEY_CARDS = 'EXPLORE__SET_SANKEY_CARDS';
+export const EXPLORE__SET_SANKEY_CARDS_LOADING = 'EXPLORE__SET_SANKEY_CARDS_LOADING';
 
 export const setCommodity = selectedCommodityId => ({
   type: EXPLORE__SET_COMMODITY,
@@ -17,45 +24,22 @@ export const setCountry = selectedCountryId => ({
   payload: { selectedCountryId }
 });
 
-export const goToTool = (destination, linkInfo) => (dispatch, getState) => {
-  const { contexts } = getState().app;
-  const context = contexts.find(
-    c => c.commodityId === linkInfo.commodityId && c.countryId === linkInfo.countryId
-  );
+export const setSankeyCardsLoading = loading => ({
+  type: EXPLORE__SET_SANKEY_CARDS_LOADING,
+  payload: loading
+});
 
+export const goToTool = (destination, card) => dispatch => {
   batch(() => {
     // for analytics purpose
     dispatch({
       type: EXPLORE__SELECT_TOP_CARD,
       payload: {
-        linkParams: {
-          countryName: context.countryName,
-          commodityName: context.commodityName,
-          nodeTypeName: linkInfo.nodeTypeName,
-          indicatorName: linkInfo.indicatorName
-        }
+        destination,
+        linkParams: card
       }
     });
-
-    if (destination === 'sankey') {
-      const serializerParams = {
-        selectedContextId: context.id,
-        selectedRecolorBy: linkInfo.indicatorId
-      };
-
-      dispatch({ type: 'tool', payload: { serializerParams } });
-    } else {
-      const serializerParams = {
-        selectedCountryId: context.countryId,
-        selectedCommodityId: context.commodityId,
-        selectedRecolorBy: linkInfo.indicatorId
-      };
-
-      dispatch({
-        type: 'dashboardElement',
-        payload: { dashboardId: 'new', serializerParams }
-      });
-    }
+    dispatch(card.links[destination]);
   });
 };
 
@@ -74,4 +58,27 @@ export const getQuickFacts = commodityId => dispatch => {
       });
     })
     .catch(error => console.error(error));
+};
+
+export const getSankeyCards = (level, commodity, country) => dispatch => {
+  const url = getURLFromParams(
+    GET_SANKEY_CARD_LINKS,
+    pickBy({
+      level,
+      country_id: country?.id,
+      commodity_id: commodity?.id
+    })
+  );
+  dispatch(setSankeyCardsLoading(true));
+  axios
+    .get(url)
+    .then(res => {
+      const { data, meta } = res.data;
+      dispatch({
+        type: EXPLORE__SET_SANKEY_CARDS,
+        payload: { data, meta }
+      });
+    })
+    .catch(error => console.error(error))
+    .finally(() => dispatch(setSankeyCardsLoading(false)));
 };

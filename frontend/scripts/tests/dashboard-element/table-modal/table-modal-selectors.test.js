@@ -1,24 +1,27 @@
-import initialState from 'react-components/dashboard-element/dashboard-element.initial-state';
-import { getTableHeaders } from 'react-components/dashboard-element/dashboard-widget/table-modal/table-modal.selectors';
+import nodesPanelInitialState from 'react-components/nodes-panel/nodes-panel.initial-state';
+import { getTableHeaders } from 'react-components/shared/table-modal/table-modal.selectors';
 import { meta, data } from './table-modal-mocks';
 
 describe('Table widget selectors', () => {
   describe('getTableHeaders', () => {
     const state = {
-      dashboardElement: {
-        ...initialState,
-        data: {
-          ...initialState.data,
-          countries: [{ id: 0, name: 'Country Name' }],
-          commodities: [{ id: 0, name: 'Commodity Name' }]
-        },
+      nodesPanel: {
+        ...nodesPanelInitialState,
         countries: {
-          ...initialState.countries,
-          activeItems: [0]
+          ...nodesPanelInitialState.countries,
+          data: {
+            byId: [0],
+            nodes: { 0: { id: 0, name: 'Country Name' } }
+          },
+          selectedNodeId: 0
         },
         commodities: {
-          ...initialState.commodities,
-          activeItems: [0]
+          ...nodesPanelInitialState.commodities,
+          data: {
+            byId: [0],
+            nodes: { 0: { id: 0, name: 'Commodity Name' } }
+          },
+          selectedNodeId: 0
         }
       }
     };
@@ -59,7 +62,7 @@ describe('Table widget selectors', () => {
       ]);
     });
     // Multiple years, non-cont indicator, 1 source, no other flow path filters
-    xit('returns the headings for Stacked bar chart per year per value of non-continuous indicator - globally', () => {
+    it.skip('returns the headings for Stacked bar chart per year per value of non-continuous indicator - globally', () => {
       const chartType = 'stackedBar';
       const { mYearNCont } = meta;
       const oneSourceState = {

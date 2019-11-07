@@ -123,6 +123,7 @@ module Api
             Api::V3::Readonly::ResizeByAttribute,
             Api::V3::Readonly::Dashboards::Commodity,
             Api::V3::Readonly::Dashboards::Country,
+            Api::V3::Readonly::NodesPerContextRankedByVolumePerYear,
             Api::V3::Readonly::Dashboards::Source,
             # TODO: remove once dashboards_companies_mv retired
             Api::V3::Readonly::Dashboards::Company,

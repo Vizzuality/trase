@@ -60,11 +60,10 @@ export default [
     action: 'Select top card',
     getPayload(action) {
       const {
-        payload: { linkParams }
+        payload: { linkParams, destination }
       } = action;
-      const { countryName, commodityName, nodeTypeName, indicatorName } = linkParams;
-      const indicatorNamePart = indicatorName ? ` - ${indicatorName}` : '';
-      return `${countryName} - ${commodityName} - ${nodeTypeName}${indicatorNamePart}`;
+      const { commodityName, countryName, title, subtitle } = linkParams;
+      return `${destination} - commodity: ${commodityName} - country: ${countryName} - ${title} - ${subtitle}`;
     }
   }
 ];

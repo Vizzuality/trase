@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import isEqual from 'lodash/isEqual';
-import { DETAILED_VIEW_MIN_NODE_HEIGHT, DETAILED_VIEW_SCALE, NUM_COLUMNS } from 'constants';
+import { DETAILED_VIEW_MIN_NODE_HEIGHT, DETAILED_VIEW_SCALE } from 'constants';
 import wrapSVGText from 'utils/wrapSVGText';
 import { translateText } from 'utils/transifex';
 import {
@@ -18,12 +18,12 @@ import mergeLinks from 'reducers/helpers/mergeLinks';
 import filterLinks from 'reducers/helpers/filterLinks';
 import splitLinksByColumn from 'reducers/helpers/splitLinksByColumn';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getHasExtraColumn, getColumnsNumber } from 'react-components/tool/tool.selectors';
 
 const getToolNodeHeights = state => state.toolLinks.data.nodeHeights;
-const getToolColumns = state => state.toolLinks.data.columns;
+export const getToolColumns = state => state.toolLinks.data.columns;
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolNodes = state => state.toolLinks.data.nodes;
-
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getToolExpandedNodesIds = state => state.toolLinks.expandedNodesIds;
 const getSankeySize = state => state.toolLayers.sankeySize;
@@ -31,24 +31,37 @@ const getDetailedView = state => state.toolLinks.detailedView;
 const getSankeyColumnsWidth = state => state.toolLinks.sankeyColumnsWidth;
 const getToolFlowsLoading = state => state.toolLinks.flowsLoading;
 
+const getExtraColumnId = createSelector(
+  [getHasExtraColumn, state => state.toolLinks.extraColumn?.id],
+  (hasExtraColumn, extraColumnId) => (hasExtraColumn ? extraColumnId : null)
+);
+
 export const getVisibleNodesByColumn = createSelector(
-  [getVisibleNodes, getToolColumns, getToolNodeHeights],
-  (visibleNodes, columns, nodeHeights) => {
+  [getVisibleNodes, getToolColumns, getToolNodeHeights, getColumnsNumber, getExtraColumnId],
+  (visibleNodes, columns, nodeHeights, columnsNumber, extraColumnId) => {
     if (!visibleNodes || !columns) {
       return [];
     }
-    const byColumn = splitVisibleNodesByColumn(visibleNodes, columns);
+    const byColumn = splitVisibleNodesByColumn(visibleNodes, columns, extraColumnId, columnsNumber);
     return sortVisibleNodes(byColumn, nodeHeights);
   }
 );
 
 const getUnmergedLinks = createSelector(
-  [getToolLinks, getToolNodes, getToolColumns, getSelectedRecolorBy, getToolFlowsLoading],
-  (links, nodes, columns, selectedRecolorBy, flowsLoading) => {
+  [
+    getToolLinks,
+    getToolNodes,
+    getToolColumns,
+    getSelectedRecolorBy,
+    getToolFlowsLoading,
+    getExtraColumnId
+  ],
+  (links, nodes, columns, selectedRecolorBy, flowsLoading, extraColumnId) => {
     if (!links || !nodes || !columns || flowsLoading) {
       return null;
     }
-    return splitLinksByColumn(links, nodes, columns, selectedRecolorBy);
+
+    return splitLinksByColumn(links, nodes, columns, selectedRecolorBy, extraColumnId);
   }
 );
 
@@ -100,10 +113,10 @@ export const getIsReExpand = createSelector(
 );
 
 export const getGapBetweenColumns = createSelector(
-  [getSankeySize, getSankeyColumnsWidth],
-  (sankeySize, sankeyColumnsWidth) => {
-    const availableLinkSpace = sankeySize[0] - NUM_COLUMNS * sankeyColumnsWidth;
-    return availableLinkSpace / (NUM_COLUMNS - 1);
+  [getSankeySize, getSankeyColumnsWidth, getColumnsNumber],
+  (sankeySize, sankeyColumnsWidth, columnNumber) => {
+    const availableLinkSpace = sankeySize[0] - columnNumber * sankeyColumnsWidth;
+    return availableLinkSpace / (columnNumber - 1);
   }
 );
 
@@ -200,8 +213,15 @@ export const getSankeyLinks = createSelector(
       return null;
     }
 
+    // Fix a race condition in which the links were still loading
+    const isReady =
+      !mergedLinks.length ||
+      (mergedLinks[0] && mergedLinks[0].originalPath.length === sankeyColumns.length);
+    if (!isReady) return null;
+
     const _getNode = (columnPosition, nodeId) => {
       const column = sankeyColumns[columnPosition];
+
       return column.values.find(node => node.id === nodeId);
     };
 
@@ -236,7 +256,6 @@ export const getSankeyLinks = createSelector(
       nodesColoredAtColumn,
       recolorGroupsOrderedByY
     });
-
     const sankeyLinks = [];
     // source and target are dicts (nodeIds are keys) containing the cumulated height of all links for each node
     const cumulativeYByNodeId = { source: {}, target: {} };
@@ -250,7 +269,6 @@ export const getSankeyLinks = createSelector(
       } else {
         newLink.renderedHeight = link.height * sankeySize[1];
       }
-
       const sId = link.sourceNodeId;
       newLink.sy = cumulativeYByNodeId.source[sId] || _getNode(newLink.sourceColumnPosition, sId).y;
       cumulativeYByNodeId.source[sId] = newLink.sy + newLink.renderedHeight;

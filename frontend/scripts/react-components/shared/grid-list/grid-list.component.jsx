@@ -2,7 +2,8 @@ import React, { useCallback, useMemo, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { FixedSizeGrid } from 'react-window';
 import debounce from 'lodash/debounce';
-import ShrinkingSpinner from '../shrinking-spinner/shrinking-spinner.component';
+import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
+import cx from 'classnames';
 
 import './grid-list.scss';
 
@@ -18,6 +19,7 @@ function useMoreItems({ getMoreItems, rowHeight, height, columnCount, items, pag
       const reachedPageEndWithBuffer = current === pageEnd - buffer && page > 1;
 
       if (
+        scrollTop > 0 &&
         (reachedPageEnd || reachedPageEndWithBuffer) &&
         !scrollUpdateWasRequested &&
         verticalScrollDirection === 'forward'
@@ -74,6 +76,21 @@ function useScrollToItemId({ itemToScrollTo, columnCount, items }) {
   return ref;
 }
 
+function useSelectAll({ excludingMode, onSelectAllClick, items }) {
+  const hasExcludingMode = typeof excludingMode !== 'undefined' && onSelectAllClick;
+  const itemsWithSelectAll = hasExcludingMode && [
+    {
+      id: 'TOGGLE_ALL',
+      excludingMode,
+      setExcludingMode: () => onSelectAllClick(!excludingMode),
+      name: excludingMode ? 'remove all' : 'select all'
+    },
+    ...items
+  ];
+
+  return { hasExcludingMode, itemsWithSelectAll };
+}
+
 function GridList(props) {
   const {
     items,
@@ -85,31 +102,44 @@ function GridList(props) {
     width,
     columnWidth,
     children,
-    loading
+    loading,
+    innerElementType,
+    outerElementType,
+    excludingMode
   } = props;
 
   const groupedItems = useGroupedItems(props);
   const onScrollCb = useMoreItems(props);
   const fixedSizeGridRef = useScrollToItemId(props);
+  const { itemsWithSelectAll, hasExcludingMode } = useSelectAll(props);
 
+  const itemsData = groupedItems || itemsWithSelectAll || items;
   return (
     <div className="c-grid-list">
       <FixedSizeGrid
         ref={fixedSizeGridRef}
-        className={className}
+        className={cx(className, { '-all-selected': excludingMode })}
         height={height}
         width={width}
         columnWidth={columnWidth}
         rowHeight={rowHeight}
-        itemData={groupedItems || items}
-        rowCount={Math.ceil((groupedItems || items).length / columnCount)}
+        itemData={itemsData}
+        rowCount={Math.ceil(itemsData.length / columnCount)}
         columnCount={columnCount}
         onScroll={onScrollCb}
+        innerElementType={innerElementType}
+        outerElementType={outerElementType}
       >
         {({ rowIndex, columnIndex, style, data }) => {
           const item = data[rowIndex * columnCount + columnIndex];
           if (typeof item === 'undefined' || !children) return null;
-          return children({ item, style, isGroup: item && !!item[groupBy] });
+          const color = hasExcludingMode && item.id === 'TOGGLE_ALL' ? 'white' : undefined;
+          return children({
+            item,
+            style,
+            isGroup: item && !!item[groupBy],
+            color
+          });
         }}
       </FixedSizeGrid>
       {loading && (
@@ -127,12 +157,16 @@ GridList.propTypes = {
   groupBy: PropTypes.string,
   className: PropTypes.string,
   getMoreItems: PropTypes.func, // eslint-disable-line
+  excludingMode: PropTypes.bool,
+  onSelectAllClick: PropTypes.func, // eslint-disable-line
   itemToScrollTo: PropTypes.object, // eslint-disable-line
   items: PropTypes.array.isRequired,
   width: PropTypes.number.isRequired,
   children: PropTypes.func.isRequired,
   height: PropTypes.number.isRequired,
   rowHeight: PropTypes.number.isRequired,
+  innerElementType: PropTypes.elementType,
+  outerElementType: PropTypes.elementType,
   columnWidth: PropTypes.number.isRequired,
   columnCount: PropTypes.number.isRequired
 };

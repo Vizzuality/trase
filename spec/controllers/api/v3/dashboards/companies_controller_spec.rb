@@ -29,8 +29,8 @@ RSpec.describe Api::V3::Dashboards::CompaniesController, type: :controller do
       [
         api_v3_exporter1_node,
         api_v3_importer1_node,
-        api_v3_other_exporter_node,
-        api_v3_other_importer_node
+        api_v3_exporter2_node,
+        api_v3_importer2_node
       ]
     }
 
@@ -65,7 +65,7 @@ RSpec.describe Api::V3::Dashboards::CompaniesController, type: :controller do
           node_types_ids: [api_v3_exporter_node_type.id].join(',')
         }
         expect(assigns(:collection).map(&:id)).to eq(
-          [api_v3_exporter1_node.id, api_v3_other_exporter_node.id]
+          [api_v3_exporter1_node.id, api_v3_exporter2_node.id]
         )
       end
 
@@ -77,7 +77,7 @@ RSpec.describe Api::V3::Dashboards::CompaniesController, type: :controller do
           node_types_ids: [api_v3_exporter_node_type.id].join(',')
         }
         expect(assigns(:collection).map(&:id)).to eq(
-          [api_v3_exporter1_node.id, api_v3_other_exporter_node.id]
+          [api_v3_exporter1_node.id, api_v3_exporter2_node.id]
         )
       end
 
@@ -98,12 +98,12 @@ RSpec.describe Api::V3::Dashboards::CompaniesController, type: :controller do
         get :index, params: {
           destinations_ids: [
             api_v3_country_of_destination1_node.id,
-            api_v3_other_country_of_destination_node.id
+            api_v3_country_of_destination2_node.id
           ].join(','),
           node_types_ids: [api_v3_exporter_node_type.id].join(',')
         }
         expect(assigns(:collection).map(&:id)).to eq(
-          [api_v3_exporter1_node.id, api_v3_other_exporter_node.id]
+          [api_v3_exporter1_node.id, api_v3_exporter2_node.id]
         )
       end
     end
@@ -119,7 +119,12 @@ RSpec.describe Api::V3::Dashboards::CompaniesController, type: :controller do
       it 'returns companies with profiles' do
         get :index, params: {profile_only: true}
         expect(assigns(:collection).map(&:id)).to eq(
-          [api_v3_exporter1_node.id, api_v3_importer1_node.id]
+          [
+            api_v3_exporter1_node.id,
+            api_v3_importer1_node.id,
+            api_v3_exporter2_node.id,
+            api_v3_importer2_node.id
+          ]
         )
       end
     end

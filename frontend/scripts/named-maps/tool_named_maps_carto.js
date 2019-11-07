@@ -81,7 +81,7 @@ module.exports = {
     },
     paraguay_protected_areas_2018_11_14: {
       uid: 'paraguay_protected_areas_2018_11_14__development',
-      layergroupid: 'p2cs-sei@58c20a29@fdf353b181f5b78df49f77e604882d26:1542212474275'
+      layergroupid: 'p2cs-sei@b53762dd@1154d2027ca0c834ba9a8b845a898528:1542212474275'
     },
     paraguay_indigenous_areas_2018_11_14: {
       uid: 'paraguay_indigenous_areas_2018_11_14__development',
@@ -94,6 +94,14 @@ module.exports = {
     id_provinces: {
       uid: 'id_provinces__development',
       layergroupid: 'p2cs-sei@083d0ae4@3b599909380f1dc1a6af506f9bcd5756:1560524731493'
+    },
+    colombia_regional_autonomous_corps: {
+      uid: 'colombia_regional_autonomous_corps__development',
+      layergroupid: 'p2cs-sei@358d2853@4a2c3386345ec46663b8e4cf799f379b:1536313111531'
+    },
+    colombia_protected_areas: {
+      uid: 'colombia_protected_areas__development',
+      layergroupid: 'p2cs-sei@35f6976d@f87a506e2b6d20be42fd3572616fb833:1536312121956'
     }
   },
   sandbox: {
@@ -136,6 +144,14 @@ module.exports = {
     py_deforestation_2013_2017_20190131: {
       uid: 'py_deforestation_2013_2017_20190131__sandbox',
       layergroupid: 'p2cs-sei@1d3f021a@0117a7789472bd8d3ec12e4d5600e7ab:1548926222884'
+    },
+    colombia_regional_autonomous_corps: {
+      uid: 'colombia_regional_autonomous_corps__sandbox',
+      layergroupid: 'p2cs-sei@ac06e412@8920938abbeed970d70f57bec86dcd00:1536313111531'
+    },
+    colombia_protected_areas: {
+      uid: 'colombia_protected_areas__sandbox',
+      layergroupid: 'p2cs-sei@dba9560a@d9b798b42ae0e7bbb677bfbe46d49413:1536312121956'
     }
   },
   demo: {

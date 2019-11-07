@@ -1,11 +1,14 @@
 import { createSelector } from 'reselect';
 import uniqBy from 'lodash/uniqBy';
 import { EXPLORE_STEPS } from 'constants';
+import translateLink from 'utils/translate-link';
 
 export const getContexts = state => state.app.contexts || null;
 const getSelectedCommodityId = state => state.explore.selectedCommodityId;
 const getSelectedCountryId = state => state.explore.selectedCountryId;
 const getQuickFacts = state => state.explore.quickFacts;
+const getSankeyCards = state => state.explore.sankeyCards;
+const getSankeyCardsLoading = state => state.explore.sankeyCardsLoading;
 
 export const getStep = createSelector(
   [getSelectedCommodityId, getSelectedCountryId],
@@ -115,52 +118,69 @@ export const getCountryQuickFacts = createSelector(
 );
 
 export const getCards = createSelector(
-  [getCommodity, getCountry, getCommodities, getAllCountries, getContexts],
-  (commodity, country, allCommodities, allCountries, contexts) => {
-    const nodeTypes = [{ id: 1, name: 'EXPORTER' }, { id: 2, name: 'COUNTRY' }];
-    // TODO: Use backend cards. The updating cards animation will work then
-    const mockedCards = [
-      { id: 1, commodity_id: 1, country_id: 27, indicator_id: 32, node_type_id: 1 },
-      { id: 2, commodity_id: 1, country_id: 27, indicator_id: 32, node_type_id: 2 },
-      { id: 3, commodity_id: 1, country_id: 27, indicator_id: 32, node_type_id: 3 },
-      { id: 4, commodity_id: 1, country_id: 27, indicator_id: 33, node_type_id: 4 }
-    ];
-    const getUpdatedCard = card => {
-      let commodityName = commodity?.name;
-      if (!commodityName) {
-        const cardCommodity = allCommodities.find(c => c.id === card.commodity_id);
-        commodityName = cardCommodity?.name;
-      }
-      let countryName = country?.name;
-      if (!countryName) {
-        const cardCountry = allCountries.find(c => c.id === card.country_id);
-        countryName = cardCountry?.name;
-      }
+  [getSankeyCards, getContexts],
+  (cards, contexts) => {
+    if (!cards || contexts.length === 0) {
+      return [];
+    }
 
-      const cardContext = contexts.find(
-        c => c.commodityId === card.commodity_id && c.countryId === card.country_id
+    return cards.data.map((options, index) => {
+      const context = contexts.find(
+        ctx => ctx.countryId === options.countryId && ctx.commodityId === options.commodityId
       );
-
-      const indicator = cardContext?.recolorBy.find(i => i.attributeId === card.indicator_id);
-      const nodeType = nodeTypes.find(i => i.id === card.node_type_id);
-
       return {
-        commodityId: commodity ? commodity.id : card.commodity_id,
-        commodityName,
-        countryId: country ? country.id : card.country_id,
-        countryName,
-        indicatorId: card.indicator_id,
-        indicatorName: indicator?.name,
-        nodeTypeId: card.node_type_id,
-        nodeTypeName: nodeType?.name,
-        key: `${card.id}_${commodity?.id}_${country?.id}`
+        index,
+        id: options.id,
+        title: options.title,
+        subtitle: options.subtitle,
+        countryId: options.countryId,
+        commodityId: options.commodityId,
+        countryName: context.countryName,
+        commodityName: context.commodityName,
+        links: {
+          sankey: translateLink(options, cards.meta),
+          dashboard: translateLink(options, cards.meta, 'dashboard')
+        }
       };
-    };
-    const updatedCards = mockedCards.map(mockedCard => getUpdatedCard(mockedCard));
-    return {
-      [EXPLORE_STEPS.selectCommodity]: updatedCards,
-      [EXPLORE_STEPS.selectCountry]: updatedCards,
-      [EXPLORE_STEPS.selected]: updatedCards
-    };
+    });
+  }
+);
+
+export const getCardsWithDefault = createSelector(
+  [getCards, getSelectedCommodityId, getSelectedCountryId, getContexts, getSankeyCardsLoading],
+  (cards, commodityId, countryId, contexts, loading) => {
+    if (cards.length > 0 || contexts.length === 0 || !commodityId || loading) {
+      return cards;
+    }
+
+    const availableContexts = contexts.filter(
+      ctx => ctx.commodityId === commodityId && (countryId ? ctx.countryId === countryId : true)
+    );
+
+    return availableContexts
+      .map((context, index) => {
+        const options = {
+          id: `${context.commodityId}_${context.countryId}`,
+          title: 'Full supply chain',
+          countryId: context.countryId,
+          commodityId: context.commodityId,
+          queryParams: {
+            selectedContextId: context.id
+          }
+        };
+        return {
+          index,
+          id: options.id,
+          title: options.title,
+          countryId: context.countryId,
+          countryName: context.countryName,
+          commodityName: context.commodityName,
+          links: {
+            sankey: translateLink(options, cards.meta),
+            dashboard: translateLink(options, cards.meta, 'dashboard')
+          }
+        };
+      })
+      .slice(0, 4);
   }
 );

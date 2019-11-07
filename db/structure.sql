@@ -5,6 +5,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -3307,7 +3308,7 @@ CREATE MATERIALIZED VIEW public.dashboards_companies_mv AS
              JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
              JOIN active_cnt cnt ON (((cnt.context_id = flow_nodes.context_id) AND ((cnt.column_position + 1) = flow_nodes."position"))))
              JOIN public.contexts ON (((contexts.id = flow_nodes.context_id) AND (contexts.id = cnt.context_id))))
-          WHERE ((cnt.role)::text = ANY ((ARRAY['exporter'::character varying, 'importer'::character varying])::text[]))
+          WHERE ((cnt.role)::text = ANY (ARRAY[('exporter'::character varying)::text, ('importer'::character varying)::text]))
         )
  SELECT ffn.node_id AS id,
     ffn.node_type_id,
@@ -3419,50 +3420,98 @@ COMMENT ON COLUMN public.dashboards_countries_mv.node_id IS 'id of node, through
 
 
 --
+-- Name: flow_quants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.flow_quants (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE flow_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.flow_quants IS 'Values of quants for flow';
+
+
+--
+-- Name: COLUMN flow_quants.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_quants.value IS 'Numeric value';
+
+
+--
+-- Name: nodes_per_context_ranked_by_volume_per_year_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.nodes_per_context_ranked_by_volume_per_year_mv AS
+ SELECT node_volume_per_context_and_year_ranked.context_id,
+    node_volume_per_context_and_year_ranked.node_id,
+    jsonb_object_agg(node_volume_per_context_and_year_ranked.year, node_volume_per_context_and_year_ranked.rank) AS rank_by_year
+   FROM ( SELECT node_volume_per_context_and_year.node_id,
+            node_volume_per_context_and_year."position",
+            node_volume_per_context_and_year.context_id,
+            node_volume_per_context_and_year.year,
+            rank() OVER (PARTITION BY node_volume_per_context_and_year."position", node_volume_per_context_and_year.context_id, node_volume_per_context_and_year.year ORDER BY node_volume_per_context_and_year.value DESC) AS rank
+           FROM ( SELECT a.node_id,
+                    a."position",
+                    flows.context_id,
+                    flows.year,
+                    sum(flow_quants.value) AS value
+                   FROM public.flow_quants,
+                    public.flows,
+                    LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")
+                  WHERE ((flow_quants.flow_id = flows.id) AND (flow_quants.quant_id IN ( SELECT quants.id
+                           FROM public.quants
+                          WHERE (quants.name = 'Volume'::text))))
+                  GROUP BY a.node_id, a."position", flows.context_id, flows.year) node_volume_per_context_and_year) node_volume_per_context_and_year_ranked
+  GROUP BY node_volume_per_context_and_year_ranked.context_id, node_volume_per_context_and_year_ranked.node_id
+  WITH NO DATA;
+
+
+--
 -- Name: dashboards_destinations_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
 CREATE MATERIALIZED VIEW public.dashboards_destinations_mv AS
- WITH active_cnt AS (
-         SELECT cnt.context_id,
-            cnt.column_position,
+ WITH all_flow_nodes AS (
+         SELECT flow_nodes.flow_id,
+            flow_nodes.node_id,
+            flow_nodes.context_id,
+            nodes.node_type_id,
+            btrim(nodes.name) AS name,
             cnt_props.role,
             profiles.name AS profile
-           FROM ((public.context_node_types cnt
+           FROM (((((public.flow_nodes_mv flow_nodes
+             JOIN public.nodes ON ((flow_nodes.node_id = nodes.id)))
+             JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
+             JOIN public.context_node_types cnt ON (((flow_nodes.context_id = cnt.context_id) AND (flow_nodes."position" = (cnt.column_position + 1)) AND (nodes.node_type_id = cnt.node_type_id))))
              JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
              LEFT JOIN public.profiles ON ((cnt.id = profiles.context_node_type_id)))
-          WHERE (cnt_props.role IS NOT NULL)
-        ), flow_nodes AS (
-         SELECT flow_nodes.context_id,
-            flow_nodes.flow_id,
-            flow_nodes.node_id,
-            flow_nodes."position"
-           FROM (( SELECT flow_nodes_mv.context_id,
-                    flow_nodes_mv.flow_id,
-                    flow_nodes_mv.node_id,
-                    flow_nodes_mv."position"
-                   FROM public.flow_nodes_mv) flow_nodes
-             JOIN active_cnt ON (((flow_nodes.context_id = active_cnt.context_id) AND (flow_nodes."position" = (active_cnt.column_position + 1)))))
+          WHERE ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text))
         ), filtered_flow_nodes AS (
          SELECT flow_nodes.flow_id,
             flow_nodes.node_id,
-            nodes.node_type_id,
+            flow_nodes.context_id,
+            flow_nodes.node_type_id,
             contexts.country_id,
             contexts.commodity_id,
-            btrim(nodes.name) AS name,
-            to_tsvector('simple'::regconfig, COALESCE(btrim(nodes.name), ''::text)) AS name_tsvector,
+            flow_nodes.name,
+            to_tsvector('simple'::regconfig, COALESCE(flow_nodes.name, ''::text)) AS name_tsvector,
             node_types.name AS node_type,
-                CASE
-                    WHEN ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text)) THEN cnt.profile
-                    ELSE NULL::text
-                END AS profile
-           FROM (((((flow_nodes
-             JOIN public.nodes ON ((nodes.id = flow_nodes.node_id)))
-             JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
-             JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
-             JOIN active_cnt cnt ON (((cnt.context_id = flow_nodes.context_id) AND ((cnt.column_position + 1) = flow_nodes."position"))))
-             JOIN public.contexts ON (((contexts.id = flow_nodes.context_id) AND (contexts.id = cnt.context_id))))
-          WHERE ((cnt.role)::text = 'destination'::text)
+            flow_nodes.profile,
+            ranked_nodes.rank_by_year
+           FROM (((all_flow_nodes flow_nodes
+             JOIN public.node_types ON ((node_types.id = flow_nodes.node_type_id)))
+             JOIN public.contexts ON ((contexts.id = flow_nodes.context_id)))
+             JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((flow_nodes.context_id = ranked_nodes.context_id) AND (flow_nodes.node_id = ranked_nodes.node_id))))
+          WHERE ((flow_nodes.role)::text = 'destination'::text)
         )
  SELECT ffn.node_id AS id,
     ffn.node_type_id,
@@ -3472,11 +3521,12 @@ CREATE MATERIALIZED VIEW public.dashboards_destinations_mv AS
     ffn.name,
     ffn.name_tsvector,
     ffn.node_type,
-    ffn.profile
+    ffn.profile,
+    ffn.rank_by_year
    FROM (filtered_flow_nodes ffn
-     JOIN flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
+     JOIN all_flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
   WHERE (ffn.node_id <> fn.node_id)
-  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile
+  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile, ffn.rank_by_year
   WITH NO DATA;
 
 
@@ -3520,46 +3570,38 @@ COMMENT ON COLUMN public.dashboards_destinations_mv.node_id IS 'id of another no
 --
 
 CREATE MATERIALIZED VIEW public.dashboards_exporters_mv AS
- WITH active_cnt AS (
-         SELECT cnt.context_id,
-            cnt.column_position,
+ WITH all_flow_nodes AS (
+         SELECT flow_nodes.flow_id,
+            flow_nodes.node_id,
+            flow_nodes.context_id,
+            nodes.node_type_id,
+            btrim(nodes.name) AS name,
             cnt_props.role,
             profiles.name AS profile
-           FROM ((public.context_node_types cnt
+           FROM (((((public.flow_nodes_mv flow_nodes
+             JOIN public.nodes ON ((flow_nodes.node_id = nodes.id)))
+             JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
+             JOIN public.context_node_types cnt ON (((flow_nodes.context_id = cnt.context_id) AND (flow_nodes."position" = (cnt.column_position + 1)) AND (nodes.node_type_id = cnt.node_type_id))))
              JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
              LEFT JOIN public.profiles ON ((cnt.id = profiles.context_node_type_id)))
-          WHERE (cnt_props.role IS NOT NULL)
-        ), flow_nodes AS (
-         SELECT flow_nodes.context_id,
-            flow_nodes.flow_id,
-            flow_nodes.node_id,
-            flow_nodes."position"
-           FROM (( SELECT flow_nodes_mv.context_id,
-                    flow_nodes_mv.flow_id,
-                    flow_nodes_mv.node_id,
-                    flow_nodes_mv."position"
-                   FROM public.flow_nodes_mv) flow_nodes
-             JOIN active_cnt ON (((flow_nodes.context_id = active_cnt.context_id) AND (flow_nodes."position" = (active_cnt.column_position + 1)))))
+          WHERE ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text))
         ), filtered_flow_nodes AS (
          SELECT flow_nodes.flow_id,
             flow_nodes.node_id,
-            nodes.node_type_id,
+            flow_nodes.context_id,
+            flow_nodes.node_type_id,
             contexts.country_id,
             contexts.commodity_id,
-            btrim(nodes.name) AS name,
-            to_tsvector('simple'::regconfig, COALESCE(btrim(nodes.name), ''::text)) AS name_tsvector,
+            flow_nodes.name,
+            to_tsvector('simple'::regconfig, COALESCE(flow_nodes.name, ''::text)) AS name_tsvector,
             node_types.name AS node_type,
-                CASE
-                    WHEN ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text)) THEN cnt.profile
-                    ELSE NULL::text
-                END AS profile
-           FROM (((((flow_nodes
-             JOIN public.nodes ON ((nodes.id = flow_nodes.node_id)))
-             JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
-             JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
-             JOIN active_cnt cnt ON (((cnt.context_id = flow_nodes.context_id) AND ((cnt.column_position + 1) = flow_nodes."position"))))
-             JOIN public.contexts ON (((contexts.id = flow_nodes.context_id) AND (contexts.id = cnt.context_id))))
-          WHERE ((cnt.role)::text = 'exporter'::text)
+            flow_nodes.profile,
+            ranked_nodes.rank_by_year
+           FROM (((all_flow_nodes flow_nodes
+             JOIN public.node_types ON ((node_types.id = flow_nodes.node_type_id)))
+             JOIN public.contexts ON ((contexts.id = flow_nodes.context_id)))
+             JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((flow_nodes.context_id = ranked_nodes.context_id) AND (flow_nodes.node_id = ranked_nodes.node_id))))
+          WHERE ((flow_nodes.role)::text = 'exporter'::text)
         )
  SELECT ffn.node_id AS id,
     ffn.node_type_id,
@@ -3569,11 +3611,12 @@ CREATE MATERIALIZED VIEW public.dashboards_exporters_mv AS
     ffn.name,
     ffn.name_tsvector,
     ffn.node_type,
-    ffn.profile
+    ffn.profile,
+    ffn.rank_by_year
    FROM (filtered_flow_nodes ffn
-     JOIN flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
+     JOIN all_flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
   WHERE (ffn.node_id <> fn.node_id)
-  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile
+  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile, ffn.rank_by_year
   WITH NO DATA;
 
 
@@ -3582,46 +3625,38 @@ CREATE MATERIALIZED VIEW public.dashboards_exporters_mv AS
 --
 
 CREATE MATERIALIZED VIEW public.dashboards_importers_mv AS
- WITH active_cnt AS (
-         SELECT cnt.context_id,
-            cnt.column_position,
+ WITH all_flow_nodes AS (
+         SELECT flow_nodes.flow_id,
+            flow_nodes.node_id,
+            flow_nodes.context_id,
+            nodes.node_type_id,
+            btrim(nodes.name) AS name,
             cnt_props.role,
             profiles.name AS profile
-           FROM ((public.context_node_types cnt
+           FROM (((((public.flow_nodes_mv flow_nodes
+             JOIN public.nodes ON ((flow_nodes.node_id = nodes.id)))
+             JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
+             JOIN public.context_node_types cnt ON (((flow_nodes.context_id = cnt.context_id) AND (flow_nodes."position" = (cnt.column_position + 1)) AND (nodes.node_type_id = cnt.node_type_id))))
              JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
              LEFT JOIN public.profiles ON ((cnt.id = profiles.context_node_type_id)))
-          WHERE (cnt_props.role IS NOT NULL)
-        ), flow_nodes AS (
-         SELECT flow_nodes.context_id,
-            flow_nodes.flow_id,
-            flow_nodes.node_id,
-            flow_nodes."position"
-           FROM (( SELECT flow_nodes_mv.context_id,
-                    flow_nodes_mv.flow_id,
-                    flow_nodes_mv.node_id,
-                    flow_nodes_mv."position"
-                   FROM public.flow_nodes_mv) flow_nodes
-             JOIN active_cnt ON (((flow_nodes.context_id = active_cnt.context_id) AND (flow_nodes."position" = (active_cnt.column_position + 1)))))
+          WHERE ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text))
         ), filtered_flow_nodes AS (
          SELECT flow_nodes.flow_id,
             flow_nodes.node_id,
-            nodes.node_type_id,
+            flow_nodes.context_id,
+            flow_nodes.node_type_id,
             contexts.country_id,
             contexts.commodity_id,
-            btrim(nodes.name) AS name,
-            to_tsvector('simple'::regconfig, COALESCE(btrim(nodes.name), ''::text)) AS name_tsvector,
+            flow_nodes.name,
+            to_tsvector('simple'::regconfig, COALESCE(flow_nodes.name, ''::text)) AS name_tsvector,
             node_types.name AS node_type,
-                CASE
-                    WHEN ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text)) THEN cnt.profile
-                    ELSE NULL::text
-                END AS profile
-           FROM (((((flow_nodes
-             JOIN public.nodes ON ((nodes.id = flow_nodes.node_id)))
-             JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
-             JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
-             JOIN active_cnt cnt ON (((cnt.context_id = flow_nodes.context_id) AND ((cnt.column_position + 1) = flow_nodes."position"))))
-             JOIN public.contexts ON (((contexts.id = flow_nodes.context_id) AND (contexts.id = cnt.context_id))))
-          WHERE ((cnt.role)::text = 'importer'::text)
+            flow_nodes.profile,
+            ranked_nodes.rank_by_year
+           FROM (((all_flow_nodes flow_nodes
+             JOIN public.node_types ON ((node_types.id = flow_nodes.node_type_id)))
+             JOIN public.contexts ON ((contexts.id = flow_nodes.context_id)))
+             JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((flow_nodes.context_id = ranked_nodes.context_id) AND (flow_nodes.node_id = ranked_nodes.node_id))))
+          WHERE ((flow_nodes.role)::text = 'importer'::text)
         )
  SELECT ffn.node_id AS id,
     ffn.node_type_id,
@@ -3631,11 +3666,12 @@ CREATE MATERIALIZED VIEW public.dashboards_importers_mv AS
     ffn.name,
     ffn.name_tsvector,
     ffn.node_type,
-    ffn.profile
+    ffn.profile,
+    ffn.rank_by_year
    FROM (filtered_flow_nodes ffn
-     JOIN flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
+     JOIN all_flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
   WHERE (ffn.node_id <> fn.node_id)
-  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile
+  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile, ffn.rank_by_year
   WITH NO DATA;
 
 
@@ -3701,46 +3737,38 @@ ALTER SEQUENCE public.dashboards_quants_id_seq OWNED BY public.dashboards_quants
 --
 
 CREATE MATERIALIZED VIEW public.dashboards_sources_mv AS
- WITH active_cnt AS (
-         SELECT cnt.context_id,
-            cnt.column_position,
+ WITH all_flow_nodes AS (
+         SELECT flow_nodes.flow_id,
+            flow_nodes.node_id,
+            flow_nodes.context_id,
+            nodes.node_type_id,
+            btrim(nodes.name) AS name,
             cnt_props.role,
             profiles.name AS profile
-           FROM ((public.context_node_types cnt
+           FROM (((((public.flow_nodes_mv flow_nodes
+             JOIN public.nodes ON ((flow_nodes.node_id = nodes.id)))
+             JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
+             JOIN public.context_node_types cnt ON (((flow_nodes.context_id = cnt.context_id) AND (flow_nodes."position" = (cnt.column_position + 1)) AND (nodes.node_type_id = cnt.node_type_id))))
              JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
              LEFT JOIN public.profiles ON ((cnt.id = profiles.context_node_type_id)))
-          WHERE (cnt_props.role IS NOT NULL)
-        ), flow_nodes AS (
-         SELECT flow_nodes.context_id,
-            flow_nodes.flow_id,
-            flow_nodes.node_id,
-            flow_nodes."position"
-           FROM (( SELECT flow_nodes_mv.context_id,
-                    flow_nodes_mv.flow_id,
-                    flow_nodes_mv.node_id,
-                    flow_nodes_mv."position"
-                   FROM public.flow_nodes_mv) flow_nodes
-             JOIN active_cnt ON (((flow_nodes.context_id = active_cnt.context_id) AND (flow_nodes."position" = (active_cnt.column_position + 1)))))
+          WHERE ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text))
         ), filtered_flow_nodes AS (
          SELECT flow_nodes.flow_id,
             flow_nodes.node_id,
-            nodes.node_type_id,
+            flow_nodes.context_id,
+            flow_nodes.node_type_id,
             contexts.country_id,
             contexts.commodity_id,
-            btrim(nodes.name) AS name,
-            to_tsvector('simple'::regconfig, COALESCE(btrim(nodes.name), ''::text)) AS name_tsvector,
+            flow_nodes.name,
+            to_tsvector('simple'::regconfig, COALESCE(flow_nodes.name, ''::text)) AS name_tsvector,
             node_types.name AS node_type,
-                CASE
-                    WHEN ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text)) THEN cnt.profile
-                    ELSE NULL::text
-                END AS profile
-           FROM (((((flow_nodes
-             JOIN public.nodes ON ((nodes.id = flow_nodes.node_id)))
-             JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
-             JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
-             JOIN active_cnt cnt ON (((cnt.context_id = flow_nodes.context_id) AND ((cnt.column_position + 1) = flow_nodes."position"))))
-             JOIN public.contexts ON (((contexts.id = flow_nodes.context_id) AND (contexts.id = cnt.context_id))))
-          WHERE ((cnt.role)::text = 'source'::text)
+            flow_nodes.profile,
+            ranked_nodes.rank_by_year
+           FROM (((all_flow_nodes flow_nodes
+             JOIN public.node_types ON ((node_types.id = flow_nodes.node_type_id)))
+             JOIN public.contexts ON ((contexts.id = flow_nodes.context_id)))
+             JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((flow_nodes.context_id = ranked_nodes.context_id) AND (flow_nodes.node_id = ranked_nodes.node_id))))
+          WHERE ((flow_nodes.role)::text = 'source'::text)
         )
  SELECT ffn.node_id AS id,
     ffn.node_type_id,
@@ -3750,11 +3778,12 @@ CREATE MATERIALIZED VIEW public.dashboards_sources_mv AS
     ffn.name,
     ffn.name_tsvector,
     ffn.node_type,
-    ffn.profile
+    ffn.profile,
+    ffn.rank_by_year
    FROM (filtered_flow_nodes ffn
-     JOIN flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
+     JOIN all_flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
   WHERE (ffn.node_id <> fn.node_id)
-  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile
+  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile, ffn.rank_by_year
   WITH NO DATA;
 
 
@@ -4162,33 +4191,6 @@ COMMENT ON COLUMN public.flow_quals.value IS 'Textual value';
 
 
 --
--- Name: flow_quants; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.flow_quants (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE flow_quants; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.flow_quants IS 'Values of quants for flow';
-
-
---
--- Name: COLUMN flow_quants.value; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.flow_quants.value IS 'Numeric value';
-
-
---
 -- Name: flows_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -4371,6 +4373,46 @@ COMMENT ON TABLE public.flow_inds IS 'Values of inds for flow';
 --
 
 COMMENT ON COLUMN public.flow_inds.value IS 'Numeric value';
+
+
+--
+-- Name: flow_attributes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.flow_attributes_mv AS
+ SELECT attributes.id AS attribute_id,
+    attributes.name,
+    attributes.display_name,
+    attributes.unit,
+    flows.context_id,
+    array_agg(DISTINCT flows.year) AS years
+   FROM ((public.flows
+     JOIN public.flow_quants ON ((flow_quants.flow_id = flows.id)))
+     JOIN public.attributes ON (((attributes.original_type = 'Quant'::text) AND (attributes.original_id = flow_quants.quant_id))))
+  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, flows.context_id
+UNION ALL
+ SELECT attributes.id AS attribute_id,
+    attributes.name,
+    attributes.display_name,
+    attributes.unit,
+    flows.context_id,
+    array_agg(DISTINCT flows.year) AS years
+   FROM ((public.flows
+     JOIN public.flow_quals ON ((flow_quals.flow_id = flows.id)))
+     JOIN public.attributes ON (((attributes.original_type = 'Qual'::text) AND (attributes.original_id = flow_quals.qual_id))))
+  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, flows.context_id
+UNION ALL
+ SELECT attributes.id AS attribute_id,
+    attributes.name,
+    attributes.display_name,
+    attributes.unit,
+    flows.context_id,
+    array_agg(DISTINCT flows.year) AS years
+   FROM ((public.flows
+     JOIN public.flow_inds ON ((flow_inds.flow_id = flows.id)))
+     JOIN public.attributes ON (((attributes.original_type = 'Ind'::text) AND (attributes.original_id = flow_inds.ind_id))))
+  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, flows.context_id
+  WITH NO DATA;
 
 
 --
@@ -5212,15 +5254,17 @@ ALTER SEQUENCE public.nodes_id_seq OWNED BY public.nodes.id;
 CREATE MATERIALIZED VIEW public.nodes_mv AS
  SELECT nodes.id,
     nodes.main_id,
+    nodes_with_flows.context_id,
+    context_node_types.column_position,
+    context_properties.is_subnational,
     btrim(nodes.name) AS name,
     to_tsvector('simple'::regconfig, COALESCE(btrim(nodes.name), ''::text)) AS name_tsvector,
     node_types.name AS node_type,
-    nodes_with_flows.context_id,
-    nodes_with_flows.years,
     profiles.name AS profile,
-    context_properties.is_subnational,
-    nodes.geo_id
-   FROM ((((((public.nodes
+    upper(btrim(nodes.geo_id)) AS geo_id,
+    context_node_type_properties.role,
+    nodes_with_flows.years
+   FROM (((((((public.nodes
      JOIN ( SELECT unnest(flows.path) AS node_id,
             flows.context_id,
             array_agg(DISTINCT flows.year ORDER BY flows.year) AS years
@@ -5229,8 +5273,9 @@ CREATE MATERIALIZED VIEW public.nodes_mv AS
      JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
      JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
      JOIN public.context_node_types ON (((context_node_types.node_type_id = node_types.id) AND (context_node_types.context_id = nodes_with_flows.context_id))))
+     JOIN public.context_properties ON ((context_node_types.context_id = context_properties.context_id)))
+     JOIN public.context_node_type_properties ON ((context_node_type_properties.context_node_type_id = context_node_types.id)))
      LEFT JOIN public.profiles ON ((profiles.context_node_type_id = context_node_types.id)))
-     LEFT JOIN public.context_properties ON ((context_node_types.context_id = context_properties.context_id)))
   WHERE ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text))
   WITH NO DATA;
 
@@ -6106,7 +6151,7 @@ CREATE TABLE public.sankey_card_links (
     updated_at timestamp without time zone NOT NULL,
     start_year integer NOT NULL,
     end_year integer NOT NULL,
-    biome_id bigint,
+    node_id bigint,
     level1 boolean DEFAULT false NOT NULL,
     level2 boolean DEFAULT false NOT NULL,
     level3 boolean DEFAULT false NOT NULL,
@@ -8529,6 +8574,13 @@ CREATE UNIQUE INDEX download_versions_context_id_is_current_idx ON public.downlo
 
 
 --
+-- Name: flow_attributes_mv_attribute_id_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX flow_attributes_mv_attribute_id_context_id_idx ON public.flow_attributes_mv USING btree (attribute_id, context_id);
+
+
+--
 -- Name: flow_inds_flow_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8697,13 +8749,6 @@ CREATE INDEX index_sankey_card_link_nodes_on_sankey_card_link_id ON public.sanke
 
 
 --
--- Name: index_sankey_card_links_on_biome_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_sankey_card_links_on_biome_id ON public.sankey_card_links USING btree (biome_id);
-
-
---
 -- Name: index_sankey_card_links_on_commodity_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8729,6 +8774,13 @@ CREATE INDEX index_sankey_card_links_on_country_id ON public.sankey_card_links U
 --
 
 CREATE INDEX index_sankey_card_links_on_ncont_attribute_id ON public.sankey_card_links USING btree (ncont_attribute_id);
+
+
+--
+-- Name: index_sankey_card_links_on_node_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_sankey_card_links_on_node_id ON public.sankey_card_links USING btree (node_id);
 
 
 --
@@ -8858,10 +8910,17 @@ CREATE INDEX nodes_node_type_id_idx ON public.nodes USING btree (node_type_id);
 
 
 --
--- Name: nodes_stats_mv_context_year_quant_node_node_type_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: nodes_per_context_ranked_by_volume_per_year_mv_unique_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX nodes_stats_mv_context_year_quant_node_node_type_idx ON public.nodes_stats_mv USING btree (context_id, year, quant_id, node_id, node_type_id);
+CREATE UNIQUE INDEX nodes_per_context_ranked_by_volume_per_year_mv_unique_idx ON public.nodes_per_context_ranked_by_volume_per_year_mv USING btree (context_id, node_id);
+
+
+--
+-- Name: nodes_stats_mv_context_id_quant_id_node_id_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX nodes_stats_mv_context_id_quant_id_node_id_node_type_id_idx ON public.nodes_stats_mv USING btree (context_id, quant_id, node_id, node_type_id);
 
 
 --
@@ -9724,7 +9783,7 @@ ALTER TABLE ONLY public.download_quants
 --
 
 ALTER TABLE ONLY public.sankey_card_links
-    ADD CONSTRAINT fk_rails_e3c8c4d772 FOREIGN KEY (biome_id) REFERENCES public.nodes(id);
+    ADD CONSTRAINT fk_rails_e3c8c4d772 FOREIGN KEY (node_id) REFERENCES public.nodes(id);
 
 
 --
@@ -9907,6 +9966,12 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191003152614'),
 ('20191004083620'),
 ('20191007090648'),
-('20191008083758');
+('20191008083758'),
+('20191011112339'),
+('20191014111756'),
+('20191015095615'),
+('20191021084412'),
+('20191028134448'),
+('20191028134449');
 
 

@@ -7,6 +7,9 @@ RSpec.describe 'sources', type: :request do
     Api::V3::Readonly::FlowNode.refresh(
       sync: true, skip_dependencies: true, skip_dependents: true
     )
+    Api::V3::Readonly::NodesPerContextRankedByVolumePerYear.refresh(
+      sync: true, skip_dependencies: true, skip_dependents: true
+    )
     Api::V3::Readonly::Dashboards::Source.refresh(sync: true, skip_dependencies: true)
   end
 

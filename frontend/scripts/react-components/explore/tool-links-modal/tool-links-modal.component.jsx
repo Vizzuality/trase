@@ -17,7 +17,11 @@ function ToolLinksModal({ goToTool }) {
       <div className="links-container">
         <div className="row">
           <div className="small-12 medium-6 column">
-            <button className="tool-link" onClick={() => goToTool('sankey')}>
+            <button
+              className="tool-link"
+              onClick={() => goToTool('sankey')}
+              data-test="explore-link-to-sankey"
+            >
               <ImgBackground />
               <Heading weight="bold" variant="mono">
                 FLOW VIEW
@@ -25,7 +29,11 @@ function ToolLinksModal({ goToTool }) {
             </button>
           </div>
           <div className="small-12 medium-6 column">
-            <button className="tool-link" onClick={() => goToTool('data')}>
+            <button
+              className="tool-link"
+              onClick={() => goToTool('dashboard')}
+              data-test="explore-link-to-dashboard"
+            >
               <ImgBackground />
               <Heading weight="bold" variant="mono">
                 DATA VIEW

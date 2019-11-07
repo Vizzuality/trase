@@ -26,9 +26,17 @@ module Api
   module V3
     module Readonly
       module Dashboards
-        class Source < Api::V3::Readonly::BaseModel
+        class Source < Api::Readonly::BaseModel
           self.table_name = 'dashboards_sources_mv'
           belongs_to :node
+
+          class << self
+            def refresh_dependencies(options = {})
+              Api::V3::Readonly::NodesPerContextRankedByVolumePerYear.refresh(
+                options.merge(skip_dependents: true)
+              )
+            end
+          end
         end
       end
     end

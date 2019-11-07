@@ -11,12 +11,15 @@ import * as appReducers from 'store';
 
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import toolLinksInitialState from 'react-components/tool-links/tool-links.initial-state';
-import * as ToolLinksUrlPropHandlers from 'react-components/tool-links/tool-links.serializers';
+import toolLinksSerialization from 'react-components/tool-links/tool-links.serializers';
 import appInitialState from 'reducers/app.initial-state';
+import appSerialization from 'reducers/app.serializers';
 import toolLayersInitialState from 'react-components/tool-layers/tool-layers.initial-state';
-import * as ToolLayersUrlPropHandlers from 'react-components/tool-layers/tool-layers.serializers';
+import toolLayersSerialization from 'react-components/tool-layers/tool-layers.serializers';
 import dashboardElementInitialState from 'react-components/dashboard-element/dashboard-element.initial-state';
-import * as DashboardElementUrlPropHandlers from 'react-components/dashboard-element/dashboard-element.serializers';
+import dashboardElementSerialization from 'react-components/dashboard-element/dashboard-element.serializers';
+import nodesPanelInitialState from 'react-components/nodes-panel/nodes-panel.initial-state';
+import nodesPanelSerialization from 'react-components/nodes-panel/nodes-panel.serializers';
 import router from './router/router';
 import routeSubscriber from './router/route-subscriber';
 import { register, unregister } from './worker';
@@ -70,10 +73,6 @@ const reduxDevTools =
         ...state.toolLayers,
         data: 'NOT_SERIALIZED'
       },
-      dashboardElement: {
-        ...state.dashboardElement,
-        data: 'NOT_SERIALIZED'
-      },
       widgets: 'NOT_SERIALIZED',
       staticContent: 'NOT_SERIALIZED'
     })
@@ -93,48 +92,27 @@ const store = createStore(
     app: deserialize({
       params,
       state: appInitialState,
-      props: ['selectedContextId', 'selectedYears']
+      ...appSerialization
     }),
     toolLinks: deserialize({
       params,
       state: toolLinksInitialState,
-      urlPropHandlers: ToolLinksUrlPropHandlers,
-      props: [
-        'selectedNodesIds',
-        'selectedColumnsIds',
-        'expandedNodesIds',
-        'detailedView',
-        'selectedResizeBy',
-        'selectedRecolorBy',
-        'selectedBiomeFilterName'
-      ]
+      ...toolLinksSerialization
     }),
     toolLayers: deserialize({
       params,
       state: toolLayersInitialState,
-      urlPropHandlers: ToolLayersUrlPropHandlers,
-      props: [
-        'mapView',
-        'toolLayout',
-        'selectedBasemap',
-        'selectedMapContextualLayers',
-        'selectedMapDimensions'
-      ]
+      ...toolLayersSerialization
     }),
     dashboardElement: deserialize({
       params,
       state: dashboardElementInitialState,
-      urlPropHandlers: DashboardElementUrlPropHandlers,
-      props: [
-        'sources',
-        'companies',
-        'destinations',
-        'selectedYears',
-        'selectedResizeBy',
-        'selectedRecolorBy',
-        'selectedCountryId',
-        'selectedCommodityId'
-      ]
+      ...dashboardElementSerialization
+    }),
+    nodesPanel: deserialize({
+      params,
+      state: nodesPanelInitialState,
+      ...nodesPanelSerialization
     })
   },
   composeEnhancers(router.enhancer, applyMiddleware(...middlewares))

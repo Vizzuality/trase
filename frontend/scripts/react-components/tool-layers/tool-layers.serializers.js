@@ -1,4 +1,4 @@
-export const mapView = {
+const mapView = {
   stringify(prop, DONT_SERIALIZE) {
     if (!prop) {
       return DONT_SERIALIZE;
@@ -11,7 +11,7 @@ export const mapView = {
   }
 };
 
-export const selectedMapDimensions = {
+const selectedMapDimensions = {
   stringify(prop, DONT_SERIALIZE) {
     if (!prop) {
       return DONT_SERIALIZE;
@@ -46,7 +46,7 @@ export const selectedMapDimensions = {
   }
 };
 
-export const selectedMapContextualLayers = {
+const selectedMapContextualLayers = {
   stringify(prop, DONT_SERIALIZE) {
     if (!prop || prop.length === 0) {
       return DONT_SERIALIZE;
@@ -54,6 +54,24 @@ export const selectedMapContextualLayers = {
     return prop.join(',');
   },
   parse(param) {
-    return param.toString().split(',');
+    return param
+      .toString()
+      .split(',')
+      .map(n => parseInt(n, 10));
   }
+};
+
+export default {
+  urlPropHandlers: {
+    mapView,
+    selectedMapDimensions,
+    selectedMapContextualLayers
+  },
+  props: [
+    'mapView',
+    'toolLayout',
+    'selectedBasemap',
+    'selectedMapContextualLayers',
+    'selectedMapDimensions'
+  ]
 };

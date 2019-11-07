@@ -8,21 +8,23 @@ import './column-selector.scss';
 
 function ColumnSelector(props) {
   const {
-    group,
+    position,
     gapBetweenColumns,
     sankeyColumnsWidth,
-    hasSingleElement,
     columnItems,
     selectedColumnItem,
     handleColumnSelected
   } = props;
+
+  const hasMultipleElements = columnItems.length > 1;
+
   let content = (
     <Text className="column-selector" size="rg" align="center" variant="mono" weight="bold">
       {selectedColumnItem.name}
     </Text>
   );
 
-  if (!hasSingleElement) {
+  if (hasMultipleElements) {
     content = (
       <Dropdown
         className="column-selector"
@@ -37,7 +39,7 @@ function ColumnSelector(props) {
   return (
     <div
       className="c-column-selector"
-      style={{ left: group * sankeyColumnsWidth + group * gapBetweenColumns - 8 }}
+      style={{ left: position * sankeyColumnsWidth + position * gapBetweenColumns - 8 }}
     >
       {content}
     </div>
@@ -45,10 +47,9 @@ function ColumnSelector(props) {
 }
 
 ColumnSelector.propTypes = {
-  group: PropTypes.number.isRequired,
+  position: PropTypes.number.isRequired,
   gapBetweenColumns: PropTypes.number.isRequired,
   sankeyColumnsWidth: PropTypes.number.isRequired,
-  hasSingleElement: PropTypes.bool,
   handleColumnSelected: PropTypes.func.isRequired,
   columnItems: PropTypes.array,
   selectedColumnItem: PropTypes.object

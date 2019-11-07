@@ -1,5 +1,4 @@
 import { createSelector, createStructuredSelector } from 'reselect';
-import { getActiveParams } from 'react-components/logistics-map/logistics-map.selectors';
 import {
   NAV_FILTER_TYPES,
   LOGISTICS_MAP_YEARS,
@@ -7,14 +6,20 @@ import {
   LOGISTICS_MAP_INSPECTION_LEVELS
 } from 'constants';
 import capitalize from 'lodash/capitalize';
-import { makeGetResizeByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 import {
   getSelectedResizeBy as getToolResizeBy,
   getSelectedRecolorBy as getToolRecolorBy,
-  getSelectedBiomeFilter as getToolSelectedBiome
+  getToolColumnFilterNodeId
 } from 'react-components/tool-links/tool-links.selectors';
+import {
+  getActiveParams,
+  getSelectedCommodity as getLogisticsMapCommodity
+} from 'react-components/logistics-map/logistics-map.selectors';
+import { getVersionData } from 'react-components/tool/tool-modal/versioning-modal/versioning-modal.selectors';
+import { getRecolorByOptions } from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.selectors';
+import { makeGetResizeByItems } from 'selectors/indicators.selectors';
 
 const insertIf = (condition, item) => (condition ? [item] : []);
 
@@ -38,7 +43,7 @@ export const getToolYearsProps = createStructuredSelector({
 });
 
 export const getToolAdminLevelProps = createSelector(
-  [getToolSelectedBiome, getContextFilterBy],
+  [getToolColumnFilterNodeId, getContextFilterBy],
   (selectedFilter, filterBy) => {
     const [adminLevel] = filterBy || [];
     if (!adminLevel) return null;
@@ -49,11 +54,11 @@ export const getToolAdminLevelProps = createSelector(
       options: [
         { value: null, label: 'All' },
         ...adminLevel.nodes
-          .filter(node => node.name !== (selectedFilter && selectedFilter.name))
+          .filter(node => node.name !== selectedFilter)
           .map(node => ({ ...node, value: node.name, label: capitalize(node.name) }))
       ],
       value: selectedFilter
-        ? { ...selectedFilter, label: capitalize(selectedFilter.name) }
+        ? { ...selectedFilter, label: capitalize(selectedFilter) }
         : { label: 'All', value: null }
     };
   }
@@ -118,10 +123,10 @@ const getLogisticsMapHubsProps = createSelector(
     label: 'Logistics Hub',
     id: 'logisticsMapHub',
     options: LOGISTICS_MAP_HUBS.filter(hub =>
-      INDONESIA_LOGISTICS_MAP_ACTIVE ? hub.value === 'palmOil' : hub.value !== 'palmOil'
+      INDONESIA_LOGISTICS_MAP_ACTIVE ? hub.value === 'palmOil' : true
     ),
     value: LOGISTICS_MAP_HUBS.find(commodity => commodity.value === activeParams.commodity),
-    isDisabled: activeParams.commodity === 'palmOil'
+    isDisabled: INDONESIA_LOGISTICS_MAP_ACTIVE
   })
 );
 
@@ -145,6 +150,36 @@ const getLogisticsMapInspectionLevelProps = createSelector(
   }
 );
 
+const getModalId = (state, { modalId }) => modalId;
+
+export const getVersioningSelected = createSelector(
+  getVersionData,
+  versionData => {
+    if (!versionData) return null;
+    const { title, version } = versionData;
+    return { label: `${title} v${version}` };
+  }
+);
+
+export const getHasMoreThanOneItem = createSelector(
+  [getModalId, getRecolorByOptions, makeGetResizeByItems(getToolResizeBys, getSelectedYears)],
+  (modalId, recolorByItems, resizeByItems) => {
+    if (!modalId) {
+      return null;
+    }
+
+    if (modalId === 'version') {
+      return true;
+    }
+
+    const items = {
+      indicator: recolorByItems,
+      unit: resizeByItems
+    }[modalId];
+    return items.length > 1;
+  }
+);
+
 export const getNavFilters = createSelector(
   [
     getCurrentPage,
@@ -152,6 +187,8 @@ export const getNavFilters = createSelector(
     getToolAdminLevelProps,
     getToolResizeByProps,
     getToolViewModeProps,
+    getVersioningSelected,
+    getLogisticsMapCommodity,
     getLogisticsMapYearsProps,
     getLogisticsMapHubsProps,
     getLogisticsMapInspectionLevelProps
@@ -162,12 +199,30 @@ export const getNavFilters = createSelector(
     toolAdminLevel,
     toolResizeBy,
     toolViewMode,
+    versionData,
+    logisticsMapCommodity,
     logisticsMapsYears,
     logisticsMapsHubs,
     logisticsMapInspectionLevel
   ) => {
     switch (page) {
-      case 'tool':
+      case 'tool': {
+        const right = [
+          {
+            type: NAV_FILTER_TYPES.dropdown,
+            props: ENABLE_REDESIGN_PAGES ? { id: 'toolResizeBy' } : toolResizeBy
+          },
+          { type: NAV_FILTER_TYPES.recolorBySelector, props: { id: 'toolRecolorBy' } },
+          { type: NAV_FILTER_TYPES.dropdown, props: toolViewMode }
+        ];
+
+        if (ENABLE_VERSIONING && versionData) {
+          right.unshift({
+            type: NAV_FILTER_TYPES.dropdown,
+            props: { id: 'version' }
+          });
+        }
+
         return {
           showSearch: true,
           showToolLinks: true,
@@ -176,7 +231,7 @@ export const getNavFilters = createSelector(
               type: NAV_FILTER_TYPES.contextSelector,
               props: { selectedContext, id: 'contextSelector' }
             },
-            ...insertIf(toolAdminLevel, {
+            ...insertIf(!ENABLE_REDESIGN_PAGES && toolAdminLevel, {
               type: NAV_FILTER_TYPES.dropdown,
               props: toolAdminLevel
             }),
@@ -185,18 +240,15 @@ export const getNavFilters = createSelector(
               props: { id: 'yearsSelector' }
             })
           ],
-          right: [
-            { type: NAV_FILTER_TYPES.dropdown, props: toolResizeBy },
-            { type: NAV_FILTER_TYPES.recolorBySelector, props: { id: 'toolRecolorBy' } },
-            { type: NAV_FILTER_TYPES.dropdown, props: toolViewMode }
-          ]
+          right
         };
+      }
       case 'logisticsMap':
         return {
           showLogisticsMapDownload: true,
           left: [
             { type: NAV_FILTER_TYPES.dropdown, props: logisticsMapsHubs },
-            ...insertIf(!INDONESIA_LOGISTICS_MAP_ACTIVE, {
+            ...insertIf(logisticsMapCommodity !== 'palmOil', {
               type: NAV_FILTER_TYPES.dropdown,
               props: logisticsMapsYears
             }),

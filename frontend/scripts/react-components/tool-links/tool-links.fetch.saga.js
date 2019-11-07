@@ -9,10 +9,11 @@ import { fetchWithCancel } from 'utils/saga-utils';
 import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
 import { NUM_NODES_DETAILED, NUM_NODES_EXPANDED, NUM_NODES_SUMMARY } from 'constants';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedGeoColumn } from 'react-components/tool-layers/tool-layers.selectors';
 import {
   getSelectedResizeBy,
   getSelectedRecolorBy,
-  getSelectedBiomeFilter
+  getSelectedColumnFilterNode
 } from 'react-components/tool-links/tool-links.selectors';
 import {
   setToolColumns,
@@ -29,7 +30,7 @@ export function* getToolLinksData() {
   const selectedColumnsIds = yield select(getSelectedColumnsIds);
   const selectedResizeBy = yield select(getSelectedResizeBy);
   const selectedRecolorBy = yield select(getSelectedRecolorBy);
-  const selectedBiomeFilter = yield select(getSelectedBiomeFilter);
+  const selectedColumnFilterNode = yield select(getSelectedColumnFilterNode);
   if (!selectedResizeBy) {
     return;
   }
@@ -59,8 +60,17 @@ export function* getToolLinksData() {
     }
   }
 
-  if (selectedBiomeFilter && selectedBiomeFilter.name && selectedBiomeFilter.name !== 'none') {
-    params.biome_filter_id = selectedBiomeFilter.nodeId;
+  if (ENABLE_REDESIGN_PAGES) {
+    if (selectedColumnFilterNode && selectedColumnFilterNode.id) {
+      // TODO: Change this to params.extra_column_node_id
+      params.biome_filter_id = selectedColumnFilterNode.nodeId;
+    }
+  } else if (
+    selectedColumnFilterNode &&
+    selectedColumnFilterNode.name &&
+    selectedColumnFilterNode.name !== 'none'
+  ) {
+    params.biome_filter_id = selectedColumnFilterNode.nodeId;
   }
 
   if (areNodesExpanded) {
@@ -160,12 +170,8 @@ export function* getToolNodesByLink(selectedContext, { fetchAllNodes } = {}) {
 }
 
 export function* getToolGeoColumnNodes(selectedContext) {
-  const selectedColumnsIds = yield select(getSelectedColumnsIds);
-
-  // TODO: this is not the best way to read the geoColumn,
-  //  the backend should provide it within contexts.defaultColumns
-  const geoColumnId = selectedColumnsIds[0];
-  const params = { context_id: selectedContext.id, node_types_ids: geoColumnId };
+  const geoColumn = yield select(getSelectedGeoColumn);
+  const params = { context_id: selectedContext.id, node_types_ids: geoColumn?.id };
   const url = getURLFromParams(GET_ALL_NODES_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);
   try {

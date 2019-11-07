@@ -17,7 +17,7 @@
 module Api
   module V3
     module Readonly
-      class ContextAttributeProperty < Api::V3::Readonly::BaseModel
+      class ContextAttributeProperty < Api::Readonly::BaseModel
         self.table_name = 'context_attribute_properties_mv'
       end
     end

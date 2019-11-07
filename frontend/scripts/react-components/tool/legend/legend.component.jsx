@@ -9,23 +9,30 @@ import ChoroplethLegend from './choropleth-legend.component';
 
 function Legend(props) {
   const {
-    toggleMapLayerMenu,
+    openLayerModal,
     choroplethLegend,
     highlightedChoroplethBucket,
     contextualLayers,
-    isHidden
+    isHidden,
+    hasLayers,
+    toggleMapLayerMenu
   } = props;
   if (isHidden) return null;
   return (
     <div className="c-legend">
-      <div className="legend-header">
-        <button className="legend-layers-toggle" onClick={toggleMapLayerMenu}>
-          <Icon icon="icon-layers" />
-          <Text variant="mono" transform="uppercase" color="white">
-            Edit Map Layers
-          </Text>
-        </button>
-      </div>
+      {hasLayers && (
+        <div className="legend-header">
+          <button
+            className="legend-layers-toggle"
+            onClick={ENABLE_REDESIGN_PAGES ? openLayerModal : toggleMapLayerMenu}
+          >
+            <Icon icon="icon-layers" />
+            <Text variant="mono" transform="uppercase" color="white">
+              Edit Map Layers
+            </Text>
+          </button>
+        </div>
+      )}
       <div className="legend-container">
         <div
           className="map-legend-contextual"
@@ -53,9 +60,11 @@ function Legend(props) {
 Legend.propTypes = {
   contextualLayers: PropTypes.array,
   choroplethLegend: PropTypes.object,
-  toggleMapLayerMenu: PropTypes.func.isRequired,
+  openLayerModal: PropTypes.func.isRequired,
   highlightedChoroplethBucket: PropTypes.string,
-  isHidden: PropTypes.bool
+  isHidden: PropTypes.bool,
+  hasLayers: PropTypes.bool,
+  toggleMapLayerMenu: PropTypes.func
 };
 
 export default Legend;

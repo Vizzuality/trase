@@ -5,9 +5,11 @@ import {
   SAVE_MAP_VIEW,
   SELECT_BASEMAP,
   SELECT_CONTEXTUAL_LAYERS,
-  TOGGLE_MAP_DIMENSION,
   CHANGE_LAYOUT,
-  SET_SANKEY_SIZE
+  SET_SANKEY_SIZE,
+  SET_ACTIVE_MODAL,
+  SELECT_UNIT_LAYERS,
+  TOGGLE_MAP_DIMENSION
 } from 'react-components/tool/tool.actions';
 import {
   TOOL_LAYERS__SET_LINKED_GEOIDS,
@@ -19,7 +21,7 @@ import immer from 'immer';
 import createReducer from 'utils/createReducer';
 import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
-import * as ToolLayersUrlPropHandlers from 'react-components/tool-layers/tool-layers.serializers';
+import toolLayersSerialization from 'react-components/tool-layers/tool-layers.serializers';
 import toolLayersInitialState from 'react-components/tool-layers//tool-layers.initial-state';
 import { TOOL_LAYOUT, SANKEY_OFFSETS } from 'constants';
 
@@ -29,14 +31,7 @@ const toolLayersReducer = {
       const newState = deserialize({
         params: action.payload.serializerParams,
         state: { ...state, mapView: null },
-        urlPropHandlers: ToolLayersUrlPropHandlers,
-        props: [
-          'mapView',
-          'toolLayout',
-          'selectedBasemap',
-          'selectedMapContextualLayers',
-          'selectedMapDimensions'
-        ]
+        ...toolLayersSerialization
       });
       return newState;
     }
@@ -97,25 +92,10 @@ const toolLayersReducer = {
       });
     });
   },
-  [TOGGLE_MAP_DIMENSION](state, action) {
+  [SELECT_UNIT_LAYERS](state, action) {
+    const { uids } = action.payload;
     return immer(state, draft => {
-      if (!draft.selectedMapDimensions) {
-        draft.selectedMapDimensions = [...action.payload.selectedMapDimensions];
-      }
-      const uidIndex = draft.selectedMapDimensions.indexOf(action.payload.uid);
-
-      if (uidIndex === -1) {
-        // dimension was not found: put it on a free slot
-        if (!draft.selectedMapDimensions[0]) {
-          draft.selectedMapDimensions[0] = action.payload.uid;
-        } else if (!draft.selectedMapDimensions[1]) {
-          draft.selectedMapDimensions[1] = action.payload.uid;
-        }
-        draft.mapLoading = true;
-      } else {
-        // dimension was found: remove it from selection
-        draft.selectedMapDimensions[uidIndex] = null;
-      }
+      draft.selectedMapDimensions = uids;
     });
   },
   [SELECT_CONTEXTUAL_LAYERS](state, action) {
@@ -153,6 +133,32 @@ const toolLayersReducer = {
         window.innerWidth - widthOffset,
         window.innerHeight - SANKEY_OFFSETS.height
       ];
+    });
+  },
+  [SET_ACTIVE_MODAL](state, action) {
+    return immer(state, draft => {
+      draft.activeModal = action.payload.activeModal;
+    });
+  },
+  [TOGGLE_MAP_DIMENSION](state, action) {
+    return immer(state, draft => {
+      if (!draft.selectedMapDimensions) {
+        draft.selectedMapDimensions = [...action.payload.selectedMapDimensions];
+      }
+      const uidIndex = draft.selectedMapDimensions.indexOf(action.payload.uid);
+
+      if (uidIndex === -1) {
+        // dimension was not found: put it on a free slot
+        if (!draft.selectedMapDimensions[0]) {
+          draft.selectedMapDimensions[0] = action.payload.uid;
+        } else if (!draft.selectedMapDimensions[1]) {
+          draft.selectedMapDimensions[1] = action.payload.uid;
+        }
+        draft.mapLoading = true;
+      } else {
+        // dimension was found: remove it from selection
+        draft.selectedMapDimensions[uidIndex] = null;
+      }
     });
   }
 };

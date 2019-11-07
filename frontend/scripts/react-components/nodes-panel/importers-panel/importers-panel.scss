@@ -1,0 +1,33 @@
+@import 'styles/settings';
+
+.c-importers-panel {
+  width: 560px;
+  margin: 0 auto;
+
+  @media screen and (min-width: $breakpoint-laptop) {
+    width: initial;
+    margin: initial;
+  }
+
+  .importers-panel-search {
+    margin: 0 0 25px 0;
+  }
+
+  .importers-panel-pill-list {
+    margin-bottom: 39px;
+    overflow-x: hidden !important;
+  }
+
+  .importers-panel-subtitle {
+    margin-bottom: 20px;
+  }
+
+  .importers-panel-tabs-container {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .no-data {
+    margin: 40px 0 45px;
+  }
+}

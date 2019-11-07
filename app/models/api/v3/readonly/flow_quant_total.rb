@@ -19,7 +19,7 @@
 module Api
   module V3
     module Readonly
-      class FlowQuantTotal < Api::V3::Readonly::BaseModel
+      class FlowQuantTotal < Api::Readonly::BaseModel
         self.table_name = 'flow_quant_totals_mv'
 
         scope :with_attribute_id, -> {

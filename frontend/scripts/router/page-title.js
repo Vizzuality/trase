@@ -1,5 +1,7 @@
 import capitalize from 'lodash/capitalize';
+import startCase from 'lodash/startCase';
 import { getSelectedContext } from 'reducers/app.selectors';
+import { getDashboardsContext } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { TOOL_LAYOUT } from 'constants';
 
 export default function(state) {
@@ -33,6 +35,21 @@ export default function(state) {
       return `TRASE - ${capitalize(selectedContext.countryName)} ${capitalize(
         selectedContext.commodityName
       )}`;
+    case 'dashboardRoot':
+      return 'TRASE - Dashboards';
+    case 'dashboardElement': {
+      const id = state.location?.payload?.dashboardId;
+      const dashboardContext = getDashboardsContext(state);
+      if (id === 'new') {
+        if (dashboardContext) {
+          return `TRASE - Dashboard - ${capitalize(dashboardContext.countryName)} ${capitalize(
+            dashboardContext.commodityName
+          )}`;
+        }
+        return 'TRASE - New Dashboard';
+      }
+      return `TRASE - ${capitalize(startCase(id))}`;
+    }
     default:
       return 'TRASE';
   }

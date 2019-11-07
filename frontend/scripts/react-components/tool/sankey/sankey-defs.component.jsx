@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { MIN_COLUMNS_NUMBER } from 'constants';
 
 if (typeof window !== 'undefined') {
   window._TRASE_RAINBOW_SANKEY = false;
@@ -125,7 +126,7 @@ GradientAnimation.propTypes = {
 };
 
 export const LinksPlaceHolder = React.memo(
-  ({ gapBetweenColumns, sankeyColumnsWidth, size = 3, height = 575 }) =>
+  ({ gapBetweenColumns, sankeyColumnsWidth, size = MIN_COLUMNS_NUMBER - 1, height = 575 }) =>
     Array.from({ length: size }).map((_, i) => (
       <rect
         key={i}
@@ -146,7 +147,7 @@ LinksPlaceHolder.propTypes = {
 };
 
 export const ColumnsPlaceholder = React.memo(
-  ({ sankeyColumnsWidth, gapBetweenColumns, size = 4, height = 575 }) =>
+  ({ sankeyColumnsWidth, gapBetweenColumns, size = MIN_COLUMNS_NUMBER, height = 575 }) =>
     Array.from({ length: size }).map((_, i) => (
       <rect
         key={i}

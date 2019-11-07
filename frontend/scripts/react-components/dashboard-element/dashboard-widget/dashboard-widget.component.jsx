@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import kebabCase from 'lodash/kebabCase';
 import Chart from 'react-components/chart';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
-import TableModal from 'react-components/dashboard-element/dashboard-widget/table-modal';
+import TableModal from 'react-components/shared/table-modal';
 import Button from 'react-components/shared/button';
 import Spinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import DashboardWidgetLabel from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-label.component';

@@ -54,10 +54,6 @@ demo:
   <<: *defaults
   active: true
 
-dashboardsdemo:
-  <<: *defaults
-  active: true
-
 indonesiademo:
   <<: *defaults
   active: true

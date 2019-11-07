@@ -2,6 +2,7 @@ export { default as app } from 'reducers/app.reducer';
 export { default as data } from 'react-components/data-portal/data-portal.reducer';
 export { default as home } from 'react-components/home/home.reducer';
 export { default as profileRoot } from 'react-components/profile-root/profile-root.reducer';
+export { default as profileNode } from 'react-components/profile-node/profile-node.reducer';
 export {
   default as profileSelector
 } from 'react-components/shared/profile-selector/profile-selector.reducer';
@@ -18,3 +19,4 @@ export { default as logisticsMap } from 'react-components/logistics-map/logistic
 export { default as toolLinks } from 'react-components/tool-links/tool-links.reducer';
 export { default as toolLayers } from 'react-components/tool-layers/tool-layers.reducer';
 export { default as explore } from 'react-components/explore/explore.reducer';
+export { default as nodesPanel } from 'react-components/nodes-panel/nodes-panel.reducer';

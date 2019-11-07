@@ -6,6 +6,7 @@ import Button from 'react-components/shared/button/button.component';
 import Heading from 'react-components/shared/heading/heading.component';
 
 import 'react-components/logistics-map/logistics-map-download/logistics-map-download.scss';
+import Text from 'react-components/shared/text/text.component';
 
 const mapLayerToLink = layer => (
   <div className="column small-12 medium-6" key={layer.name}>
@@ -29,9 +30,11 @@ const renderLayers = layers => {
     return (
       <div className="row">
         <div className="column small-12">
-          <Heading as="h3" weight="bold">
-            Palm Oil
-          </Heading>
+          <div className="heading-container">
+            <Heading as="h3" weight="bold">
+              Palm Oil
+            </Heading>
+          </div>
         </div>
         {layers.palmOil.map(mapLayerToLink)}
       </div>
@@ -41,18 +44,38 @@ const renderLayers = layers => {
     <>
       <div className="row">
         <div className="column small-12">
-          <Heading as="h3" weight="bold">
-            Soy
-          </Heading>
+          <div className="heading-container">
+            <Heading as="h3" weight="bold">
+              Soy
+            </Heading>
+          </div>
         </div>
         {layers.soy.map(mapLayerToLink)}
       </div>
 
       <div className="row">
         <div className="column small-12">
-          <Heading as="h3" weight="bold">
-            Cattle
-          </Heading>
+          <div className="heading-container">
+            <Heading as="h3" weight="bold">
+              Cattle
+            </Heading>
+            <Text variant="mono" weight="light" color="grey-faded" as="p">
+              (
+              <Text
+                as="a"
+                variant="mono"
+                weight="light"
+                color="grey-faded"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="methods-link"
+                href="http://resources.trase.earth/documents/Trase_LogisticsMap_Slaughterhouses_v1.0.pdf"
+              >
+                See methods document
+              </Text>
+              )
+            </Text>
+          </div>
         </div>
         {layers.cattle.map(mapLayerToLink)}
       </div>

@@ -39,7 +39,7 @@ export const NUM_DECIMALS_DEFAULT = 1;
 export const UNITLESS_UNITS = ['Unitless', 'Number', 'Head', 'Number', 'NA'];
 
 // flows
-export const NUM_COLUMNS = 4;
+export const MIN_COLUMNS_NUMBER = 4;
 export const NUM_NODES_SUMMARY = 10;
 export const NUM_NODES_EXPANDED = 100;
 export const NUM_NODES_DETAILED = 999;
@@ -257,17 +257,19 @@ export const LOGISTICS_MAP_INSPECTION_LEVELS = [
 ];
 
 export const EXPLORE_STEPS = {
-  selectCommodity: 0,
-  selectCountry: 1,
-  selected: 2
+  selectCommodity: 1,
+  selectCountry: 2,
+  selected: 3
 };
 
 export const DASHBOARD_STEPS = {
   welcome: 0,
+  countries: 1,
   sources: 1,
   commodities: 2,
   destinations: 3,
-  companies: 4
+  exporters: 4,
+  importers: 5
 };
 
 export const PROFILE_STEPS = {
@@ -323,4 +325,9 @@ export const SANKEY_OFFSETS = {
   height: 175,
   width: 120,
   splittedWidth: 392
+};
+
+export const LAYER_TAB_NAMES = {
+  unit: 'unit layers',
+  contextual: 'contextual layers'
 };

@@ -6,9 +6,11 @@ import contextLayersCarto from 'named-maps/tool_named_maps_carto';
 import getNodeIdFromGeoId from 'actions/helpers/getNodeIdFromGeoId';
 import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
 import compact from 'lodash/compact';
-import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
 import { getVisibleNodes } from 'react-components/tool-links/tool-links.selectors';
-import { getSelectedMapDimensionsUids } from 'react-components/tool-layers/tool-layers.selectors';
+import {
+  getSelectedGeoColumn,
+  getSelectedMapDimensionsUids
+} from 'react-components/tool-layers/tool-layers.selectors';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 
 import {
@@ -21,12 +23,14 @@ export const SET_NODE_ATTRIBUTES = 'SET_NODE_ATTRIBUTES';
 export const SELECT_YEARS = 'SELECT_YEARS';
 export const GET_MAP_VECTOR_DATA = 'GET_MAP_VECTOR_DATA';
 export const GET_CONTEXT_LAYERS = 'GET_CONTEXT_LAYERS';
-export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
+export const SELECT_UNIT_LAYERS = 'SELECT_UNIT_LAYERS';
 export const SELECT_CONTEXTUAL_LAYERS = 'SELECT_CONTEXTUAL_LAYERS';
 export const SELECT_BASEMAP = 'SELECT_BASEMAP';
 export const CHANGE_LAYOUT = 'CHANGE_LAYOUT';
 export const SAVE_MAP_VIEW = 'SAVE_MAP_VIEW';
 export const SET_SANKEY_SIZE = 'SET_SANKEY_SIZE';
+export const SET_ACTIVE_MODAL = 'SET_ACTIVE_MODAL';
+export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
 
 export function loadMapVectorData() {
   return (dispatch, getState) => {
@@ -161,11 +165,12 @@ export function setMapContextLayers(contextualLayers) {
 export function selectNodeFromGeoId(geoId) {
   return (dispatch, getState) => {
     const state = getState();
-    const selectedColumnsIds = getSelectedColumnsIds(state);
+    const selectedGeoColumn = getSelectedGeoColumn(state);
+
     const nodeId = getNodeIdFromGeoId(
       geoId,
       getState().toolLinks.data.nodes,
-      selectedColumnsIds[0]
+      selectedGeoColumn?.id
     );
 
     // node not in visible Nodes ---> expand node (same behavior as search)
@@ -199,13 +204,13 @@ export function selectExpandedNode(param) {
 export function highlightNodeFromGeoId(geoId, coordinates) {
   return (dispatch, getState) => {
     const state = getState();
-    const selectedColumnsIds = getSelectedColumnsIds(state);
+    const selectedGeoColumn = getSelectedGeoColumn(state);
     const {
       data: { nodes },
       highlightedNodeId
     } = state.toolLinks;
 
-    const nodeId = getNodeIdFromGeoId(geoId, nodes, selectedColumnsIds[0]);
+    const nodeId = getNodeIdFromGeoId(geoId, nodes, selectedGeoColumn?.id);
     if (nodeId === null) {
       if (highlightedNodeId) {
         dispatch(highlightNode(null));
@@ -243,6 +248,17 @@ export function toggleMapDimension(uid) {
       payload: {
         uid,
         selectedMapDimensions
+      }
+    });
+  };
+}
+
+export function selectUnitLayers(uids) {
+  return dispatch => {
+    dispatch({
+      type: SELECT_UNIT_LAYERS,
+      payload: {
+        uids
       }
     });
 
@@ -308,5 +324,11 @@ export function selectBasemap(selectedBasemap) {
   return {
     type: SELECT_BASEMAP,
     payload: { selectedBasemap }
+  };
+}
+export function setActiveModal(activeModal) {
+  return {
+    type: SET_ACTIVE_MODAL,
+    payload: { activeModal }
   };
 }

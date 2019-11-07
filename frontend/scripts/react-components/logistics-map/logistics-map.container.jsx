@@ -23,10 +23,12 @@ const getItems = (data, commodity) => {
     case 'palmOil':
       return [
         { title: 'Mill ID', value: data.mill_id },
-        { title: 'Company', value: data.company },
-        { title: 'Name', value: data.mill_name },
         { title: 'World Resources Institute Universal Mill List ID', value: data.uml_id || 'N/A' },
-        { title: 'Active', value: data.active ? 'Active' : 'Inactive' }
+        { title: 'Mill Company Group Name', value: data.group },
+        { title: 'Mill Company Name', value: data.company },
+        { title: 'Mill Name', value: data.name },
+        { title: 'RSPO certification status', value: data.rspo_status },
+        { title: 'RSPO supply chain model type', value: data.rspo_type }
       ];
 
     case 'soy':

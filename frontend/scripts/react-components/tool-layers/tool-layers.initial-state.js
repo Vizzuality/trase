@@ -15,5 +15,6 @@ export default {
   selectedBasemap: null,
   selectedMapContextualLayers: null,
   selectedMapDimensions: null,
-  sankeySize: [window.innerWidth, window.innerHeight]
+  sankeySize: [window.innerWidth, window.innerHeight],
+  activeModal: null
 };

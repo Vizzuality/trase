@@ -11,17 +11,17 @@ gem 'scenic'
 gem 'pg_csv'
 gem 'pg_search'
 gem 'rubyzip'
-gem 'puma', '~> 3.0'
+gem 'puma', '~> 4.2'
 gem 'dotenv-rails', '~> 2.7'
 gem 'active_model_serializers', '~> 0.10.10'
 gem 'kaminari'
-gem 'enumerate_it', '~> 1.4.1'
+gem 'enumerate_it', '~> 3.0.0'
 gem 'mailchimp-api', require: 'mailchimp'
 gem 'oj'
 
-gem 'sass-rails', '~> 5.0'
+gem 'sass-rails', '~> 6.0'
 gem 'uglifier', '>= 1.3.0'
-gem 'coffee-rails', '~> 4.2'
+gem 'coffee-rails', '~> 5.0'
 
 gem 'jquery-rails'
 gem 'turbolinks', '~> 5'
@@ -29,13 +29,12 @@ gem 'jbuilder', '~> 2.9'
 gem 'devise', '~> 4.7'
 gem 'activeadmin', '~> 1.4.3'
 gem 'activeadmin_simplemde'
-gem 'inherited_resources', github: 'activeadmin/inherited_resources'
 gem 'activeadmin_addons'
 gem 'acts_as_list'
 gem 'activeadmin_sortable_table'
 gem 'best_in_place'
 
-gem 'ckeditor', git: 'https://github.com/galetahub/ckeditor.git'
+gem 'ckeditor', '4.3.0'
 gem 'paperclip', '~> 6.1.0'
 gem 'aws-sdk-s3', '~> 1'
 
@@ -44,7 +43,7 @@ gem 'twitter', '~> 6.1'
 
 gem 'appsignal'
 gem 'newrelic_rpm'
-gem 'sidekiq'
+gem 'sidekiq', '~> 5.2.7'
 gem 'sidekiq-unique-jobs'
 gem 'whenever', require: false
 gem 'ransack'
@@ -53,7 +52,7 @@ gem 'sitemap_generator'
 
 group :development, :test do
   gem 'byebug', platform: :mri
-  gem 'rspec-rails', '~> 3.8'
+  gem 'rspec-rails', '~> 3.9'
   gem 'rubocop-rspec'
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'
@@ -74,8 +73,9 @@ group :development do
   gem 'capistrano-bundler'
   gem 'capistrano-rvm'
   gem 'capistrano-passenger'
+  gem 'capistrano-nvm'
 
-  gem 'rubocop', '~> 0.74.0', require: false
+  gem 'rubocop', '~> 0.76.0', require: false
   gem 'rubocop-performance', require: false
   gem 'rbnacl', '>= 3.2', '< 5.0'
   gem 'rbnacl-libsodium'

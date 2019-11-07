@@ -462,7 +462,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         merge(no_flow_path_filters).
         merge(
           companies_ids: [
-            api_v3_exporter1_node.id, api_v3_other_exporter_node.id
+            api_v3_exporter1_node.id, api_v3_exporter2_node.id
           ]
         )
     }
@@ -491,10 +491,10 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
           x: :year,
           break_by: :ncont_attribute,
           node_type_id: api_v3_exporter_node_type.id,
-          companies_ids: [api_v3_other_exporter_node.id],
+          companies_ids: [api_v3_exporter2_node.id],
           single_filter_key: :companies,
           grouping_key: :cont_attribute_id,
-          grouping_label: api_v3_other_exporter_node.name
+          grouping_label: api_v3_exporter2_node.name
         }
       ] + [
         api_v3_biome_node_type,
@@ -532,7 +532,7 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
         merge(no_flow_path_filters).
         merge(
           exporters_ids: [
-            api_v3_exporter1_node.id, api_v3_other_exporter_node.id
+            api_v3_exporter1_node.id, api_v3_exporter2_node.id
           ]
         )
     }
@@ -561,10 +561,10 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
           x: :year,
           break_by: :ncont_attribute,
           node_type_id: api_v3_exporter_node_type.id,
-          exporters_ids: [api_v3_other_exporter_node.id],
+          exporters_ids: [api_v3_exporter2_node.id],
           single_filter_key: :exporters,
           grouping_key: :cont_attribute_id,
-          grouping_label: api_v3_other_exporter_node.name
+          grouping_label: api_v3_exporter2_node.name
         }
       ] + [
         api_v3_biome_node_type,

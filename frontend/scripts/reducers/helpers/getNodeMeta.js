@@ -1,7 +1,7 @@
 const getNodeMeta = (selectedMapDimension, node, attributes, selectedResizeBy, nodeHeights) => {
-  const meta = attributes[node.id] && attributes[node.id][selectedMapDimension.uid];
-  const nodeHeight = nodeHeights[node.id];
-  if (meta && selectedMapDimension.name !== selectedResizeBy.label) {
+  const meta = attributes && attributes[node.id] && attributes[node.id][selectedMapDimension.uid];
+  const nodeHeight = nodeHeights && nodeHeights[node.id];
+  if (meta && selectedMapDimension.name !== selectedResizeBy?.label) {
     return meta;
   }
 

@@ -51,8 +51,8 @@ module Api
               :node_type,
               :node_type_id,
               :country_id
-            ).
-            order(:name)
+            )
+          apply_order_by
         end
       end
     end

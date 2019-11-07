@@ -7,7 +7,7 @@ import {
   getCountry,
   getCommodity,
   getAllCountriesIds,
-  getCards,
+  getCardsWithDefault,
   getCommodityContexts,
   getCommodities,
   getCountries,
@@ -17,7 +17,8 @@ import {
   setCommodity,
   setCountry,
   goToTool,
-  getQuickFacts
+  getQuickFacts,
+  getSankeyCards
 } from 'react-components/explore/explore.actions';
 import { getTopCountries } from 'actions/app.actions';
 
@@ -30,7 +31,7 @@ const mapStateToProps = state => ({
   commodity: getCommodity(state),
   contexts: getContexts(state),
   allCountriesIds: getAllCountriesIds(state),
-  cards: getCards(state),
+  cards: getCardsWithDefault(state),
   topNodes: state.app.topNodes,
   commodityContexts: getCommodityContexts(state),
   countryQuickFacts: getCountryQuickFacts(state)
@@ -41,7 +42,8 @@ const mapDispatchToProps = {
   setCountry,
   goToTool,
   getTopCountries,
-  getQuickFacts
+  getQuickFacts,
+  getSankeyCards
 };
 
 export default connect(

@@ -12,7 +12,7 @@ const TIMEOUT = 60000;
 jest.setTimeout(TIMEOUT);
 
 const { page } = global;
-const polly = new Polly('explore', pollyConfig(page));
+const polly = new Polly('dashboard', pollyConfig(page));
 
 beforeAll(async () => {
   await page.setRequestInterception(true);
@@ -105,6 +105,12 @@ describe('Dashboards flow', () => {
       el => el.textContent
     );
     expect(companiesSectionTitle).toMatch('companies');
+
+    await page.waitFor(1000);
+    const exporterTab = '[data-test=tab-item][data-key=EXPORTER]';
+    await page.waitForSelector(exporterTab);
+    await page.click(exporterTab);
+
     const companiesButtonsSelector = '[data-test=grid-list-item-button]';
     await page.waitForSelector(companiesButtonsSelector);
     const companiesButtons = await page.$$(companiesButtonsSelector);
@@ -136,8 +142,8 @@ describe('Dashboards flow', () => {
     const widgetSentence = page.$$(dashboardWidgetDynamicSentenceSelector);
     const result = await Promise.all([widgetsCharts, widgetRanking, widgetSentence]);
 
-    expect(result[0].length).toBe(4);
-    expect(result[1].length).toBe(1);
+    expect(result[0].length).toBe(5);
+    expect(result[1].length).toBe(2);
     expect(result[2].length).toBe(1);
 
     // Change year dropdown
@@ -158,7 +164,7 @@ describe('Dashboards flow', () => {
     await page.waitForSelector(widgetChart);
     const multiYearWidgets = await page.$$(widgetChart);
 
-    expect(multiYearWidgets.length).toBe(6);
+    expect(multiYearWidgets.length).toBe(8);
 
     // Change unit selector
     const unitDropdownSelector = '[data-test=dropdown-selected-item-units]';
@@ -175,7 +181,7 @@ describe('Dashboards flow', () => {
     await page.waitForSelector(territorialWidgetChart);
     const territorialMultiYearWidgets = await page.$$(territorialWidgetChart);
 
-    expect(territorialMultiYearWidgets.length).toBe(6);
+    expect(territorialMultiYearWidgets.length).toBe(8);
 
     // Change indicator selector
     const indicatorDropdownSelector = '[data-test=dropdown-selected-item-indicator]';
@@ -193,13 +199,12 @@ describe('Dashboards flow', () => {
     await page.waitForSelector(biomeWidgetChart);
     const biomeMultiYearWidgets = await page.$$(biomeWidgetChart);
 
-    expect(biomeMultiYearWidgets.length).toBe(8);
+    expect(biomeMultiYearWidgets.length).toBe(10);
 
-    const widgetDropdowSelector =
-      '[data-test=dropdown-selected-item-selection-overview-of-royal-agro-cereais]';
+    const widgetDropdowSelector = '[data-test=dropdown-selected-item-selection-overview-of-coamo]';
     await page.waitForSelector(widgetDropdowSelector);
     const text = await page.$eval(widgetDropdowSelector, el => el.textContent);
 
-    expect(text).toMatch('Selection overview of -royal-agro-cereaisRoyal agro cereais');
+    expect(text).toMatch('Selection overview of -coamoCoamo');
   });
 });

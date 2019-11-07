@@ -82,7 +82,7 @@ RSpec.describe Api::V3::SankeyCardLink, type: :model do
                         "selectedResizeBy=#{api_v3_volume.readonly_attribute.id}&"\
                         "selectedRecolorBy=#{api_v3_biome.readonly_attribute.id}&"\
                         'selectedYears%5B%5D=2015&selectedYears%5B%5D=2017&'\
-                        "selectedBiomeFilterName=#{api_v3_biome_node.name}"
+                        "extraColumnNodeId=#{api_v3_biome_node.id}"
           )
 
           expect(sankey_card_link.host).to eql 'test.com'
@@ -92,7 +92,7 @@ RSpec.describe Api::V3::SankeyCardLink, type: :model do
           expect(sankey_card_link.ncont_attribute_id).to eql api_v3_biome.readonly_attribute.id
           expect(sankey_card_link.start_year).to eql 2015
           expect(sankey_card_link.end_year).to eql 2017
-          expect(sankey_card_link.biome_id).to eql api_v3_biome_node.id
+          expect(sankey_card_link.node_id).to eql api_v3_biome_node.id
         end
       end
     end
@@ -178,7 +178,7 @@ RSpec.describe Api::V3::SankeyCardLink, type: :model do
           sankey_card_link.update_attributes(
             country_id: api_v3_paraguay.id,
             commodity_id: api_v3_soy.id,
-            biome_id: api_v3_paraguay_biome_node.id,
+            node_id: api_v3_paraguay_biome_node.id,
             cont_attribute_id: api_v3_fob.readonly_attribute.id,
             ncont_attribute_id: api_v3_biome.readonly_attribute.id
           )
@@ -189,8 +189,8 @@ RSpec.describe Api::V3::SankeyCardLink, type: :model do
           expect(sankey_card_link.query_params['selectedCommodityId']).to eql(
             api_v3_soy.id
           )
-          expect(sankey_card_link.query_params['selectedBiomeFilterName']).to eql(
-            api_v3_paraguay_biome_node.name
+          expect(sankey_card_link.query_params['extraColumnNodeId']).to eql(
+            api_v3_paraguay_biome_node.id
           )
           expect(sankey_card_link.query_params['selectedResizeBy']).to eql(
             api_v3_fob.readonly_attribute.id

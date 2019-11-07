@@ -1,15 +1,12 @@
 development:
   enabled: true
   host: http://localhost:3000
-dashboardsdemo:
-  enabled: true
-  host: https://dashboardsdemo.trase.earth
 demo:
   enabled: true
   host: https://demo.trase.earth
 indonesiademo:
   enabled: true
-  host: https://dashboardsdemo.trase.earth
+  host: https://indonesiademo.trase.earth
 production:
   enabled: false
 sandbox:

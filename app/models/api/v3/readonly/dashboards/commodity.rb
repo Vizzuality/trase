@@ -23,7 +23,7 @@ module Api
   module V3
     module Readonly
       module Dashboards
-        class Commodity < Api::V3::Readonly::BaseModel
+        class Commodity < Api::Readonly::BaseModel
           self.table_name = 'dashboards_commodities_mv'
           belongs_to :commodity
         end

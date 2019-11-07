@@ -131,5 +131,16 @@ Rails.application.routes.draw do
       get '/get_actor_node_attributes', to: 'actor_factsheet#actor_data'
       get '/get_node_attributes', to: 'nodes#node_attributes'
     end
+    namespace :public do
+      resources :attributes, only: [:index]
+      resources :flows, only: [:index]
+      namespace :nodes do
+        resources :sources, only: [:index]
+        resources :exporters, only: [:index]
+        resources :importers, only: [:index]
+        resources :destinations, only: [:index]
+      end
+      resources :node_types
+    end
   end
 end

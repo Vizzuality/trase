@@ -1,12 +1,12 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions,jsx-a11y/no-noninteractive-element-interactions jsx-a11y/mouse-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions, jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/mouse-events-have-key-events */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import get from 'lodash/get';
 import Tooltip from 'tooltip.js';
 import AutosizeInput from 'react-input-autosize';
-
-import Dropdown from '../../shared/dropdown.component';
+import Text from 'react-components/shared/text/text.component';
+import Dropdown from 'react-components/shared/dropdown.component';
 
 import './filter-tooltip.scss';
 
@@ -181,13 +181,17 @@ export default class FilterTooltipComponent extends Component {
         }}
       >
         <div className="title">
-          <div>FILTER INDICATOR</div>
-          <div className="clear-filter" onClick={this.handleFilterClearClick}>
-            DELETE
+          <Text as="span" variant="mono">
+            FILTER INDICATOR
+          </Text>
+          <button className="clear-filter" onClick={this.handleFilterClearClick}>
+            <Text as="span" variant="mono" color="grey-faded">
+              DELETE
+            </Text>
             <svg className="icon">
               <use xlinkHref="#icon-delete" />
             </svg>
-          </div>
+          </button>
         </div>
         <div className="content">
           {indicator.filterName}

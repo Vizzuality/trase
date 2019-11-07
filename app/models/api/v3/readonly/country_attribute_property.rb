@@ -17,7 +17,7 @@
 module Api
   module V3
     module Readonly
-      class CountryAttributeProperty < Api::V3::Readonly::BaseModel
+      class CountryAttributeProperty < Api::Readonly::BaseModel
         self.table_name = 'country_attribute_properties_mv'
       end
     end

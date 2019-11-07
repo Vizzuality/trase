@@ -1,0 +1,61 @@
+@import 'styles/settings';
+
+.c-table {
+
+  > * {
+    margin: 0 auto;
+  }
+
+  .table-header {
+    display: flex;
+    background-color: $charcoal-grey;
+    border-radius: 4px 4px 0 0;
+  }
+
+  .header-item, .list-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px 0;
+    outline: none;
+    cursor: pointer;
+
+    .header-item-name {
+      text-transform: uppercase;
+    }
+  }
+
+  .list-item {
+
+    &.-even {
+      background-color: $metal-grey;
+      border-bottom: solid 2px $medium-gray;
+      border-top: solid 2px $medium-gray;
+    }
+  }
+
+  .sort-arrows {
+    display: flex;
+    align-items: center;
+    margin: 0 10px;
+    cursor: pointer;
+
+    .icon-container {
+      min-width: 20px;
+    }
+
+    .icon-arrow, .icon-arrow-up {
+      position: relative;
+      left: 0;
+
+      &::after {
+        top: 10px;
+      }
+    }
+
+    .icon-arrow-up {
+      margin-left: 5px;
+    }
+  }
+}
