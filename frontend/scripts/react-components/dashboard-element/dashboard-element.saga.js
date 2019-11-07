@@ -24,7 +24,7 @@ import {
   getImportersPreviousSteps
 } from 'react-components/nodes-panel/nodes-panel.selectors';
 
-function* updateIndicatorsOnItemChange() {
+export function* updateIndicatorsOnItemChange() {
   const selectedContext = yield select(getDashboardsContext);
   if (selectedContext) {
     yield fork(fetchDashboardCharts);
