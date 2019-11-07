@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+import { connect, batch } from 'react-redux';
 import {
   getIsDisabled,
   getDynamicSentence
@@ -11,6 +11,7 @@ import {
   setSelectedItems,
   savePanels
 } from 'react-components/nodes-panel/nodes-panel.actions';
+import { selectContextById } from 'actions/app.actions';
 
 const mapStateToProps = (state, ownProps) => {
   const { loading } = state.dashboardElement;
@@ -24,11 +25,15 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = {
+const mapDispatchToProps = dispatch => ({
   clearPanel,
   setSelectedItems,
-  savePanels
-};
+  savePanels: contextId =>
+    batch(() => {
+      dispatch(savePanels());
+      dispatch(selectContextById(contextId));
+    })
+});
 
 export default connect(
   mapStateToProps,

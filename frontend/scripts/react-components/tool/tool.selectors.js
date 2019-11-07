@@ -1,4 +1,4 @@
-import { createSelector, createStructuredSelector } from 'reselect';
+import { createSelector } from 'reselect';
 import { getSelectedContext } from 'reducers/app.selectors';
 import { MIN_COLUMNS_NUMBER } from 'constants';
 
@@ -7,14 +7,6 @@ const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getExtraColumn = state => state.toolLinks.extraColumn;
 const getHighlightedNodeIds = state => state.toolLinks.highlightedNodeId;
-
-const getSources = state => state.nodesPanel.sources.selectedNodesIds;
-const getDestinations = state => state.nodesPanel.destinations.selectedNodesIds;
-const getExporters = state => state.nodesPanel.exporters.selectedNodesIds;
-const getImporters = state => state.nodesPanel.importers.selectedNodesIds;
-
-const getSelectedCountryId = state => state.nodesPanel.countries.selectedNodeId;
-const getSelectedCommodityId = state => state.nodesPanel.commodities.selectedNodeId;
 
 export const getSelectedColumnsIds = createSelector(
   [getSelectedContext, getToolSelectedColumnsIds, getExtraColumn],
@@ -81,36 +73,3 @@ export const getHighlightedNodesData = createSelector(
     return [];
   }
 );
-
-const getURLParamsIfContext = (params, context) => {
-  if (!context) {
-    return null;
-  }
-  return params;
-};
-
-const getURLSources = createSelector(
-  [getSources, getSelectedContext],
-  getURLParamsIfContext
-);
-const getURLExporters = createSelector(
-  [getExporters, getSelectedContext],
-  getURLParamsIfContext
-);
-const getURLImporters = createSelector(
-  [getImporters, getSelectedContext],
-  getURLParamsIfContext
-);
-const getURLDestinations = createSelector(
-  [getDestinations, getSelectedContext],
-  getURLParamsIfContext
-);
-
-export const getPanelUrlProps = createStructuredSelector({
-  sources: getURLSources,
-  exporters: getURLExporters,
-  importers: getURLImporters,
-  countries: getSelectedCountryId,
-  destinations: getURLDestinations,
-  commodities: getSelectedCommodityId
-});

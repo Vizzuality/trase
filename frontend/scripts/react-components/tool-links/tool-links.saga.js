@@ -3,6 +3,7 @@ import { SET_CONTEXT, SET_CONTEXTS } from 'actions/app.actions';
 import { setLoadingSpinner } from 'utils/saga-utils';
 import { loadMapVectorData, SELECT_YEARS } from 'react-components/tool/tool.actions';
 import { getSelectedContext } from 'reducers/app.selectors';
+import { NODES_PANEL__SAVE } from 'react-components/nodes-panel/nodes-panel.actions';
 import {
   TOOL_LINKS__SET_SELECTED_NODES,
   TOOL_LINKS__SELECT_COLUMN,
@@ -58,7 +59,13 @@ function* fetchToolColumns() {
     }
   }
   yield takeLatest(
-    [SET_CONTEXTS, TOOL_LINKS__GET_COLUMNS, SET_CONTEXT, TOOL_LINKS__CHANGE_EXTRA_COLUMN],
+    [
+      SET_CONTEXTS,
+      TOOL_LINKS__GET_COLUMNS,
+      SET_CONTEXT,
+      NODES_PANEL__SAVE,
+      TOOL_LINKS__CHANGE_EXTRA_COLUMN
+    ],
     performFetch
   );
 }

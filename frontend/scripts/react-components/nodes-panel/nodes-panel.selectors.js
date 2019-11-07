@@ -2,6 +2,7 @@ import { createSelector, createStructuredSelector } from 'reselect';
 
 import modules from 'react-components/nodes-panel/nodes-panel.modules';
 import { DASHBOARD_STEPS } from 'constants';
+import { getSelectedContext } from 'reducers/app.selectors';
 
 const getCountrySelectedNodeId = state => state.nodesPanel.countries.selectedNodeId;
 const getSourcesSelectedNodesIds = state => state.nodesPanel.sources.selectedNodesIds;
@@ -23,6 +24,11 @@ const getCommodityFetchKey = state => state.nodesPanel.commodities.fetchKey;
 const getDestinationsFetchKey = state => state.nodesPanel.destinations.fetchKey;
 const getExportersFetchKey = state => state.nodesPanel.exporters.fetchKey;
 const getImportersFetchKey = state => state.nodesPanel.importers.fetchKey;
+
+const getSources = state => state.nodesPanel.sources;
+const getDestinations = state => state.nodesPanel.destinations;
+const getExporters = state => state.nodesPanel.exporters;
+const getImporters = state => state.nodesPanel.importers;
 
 const makeGetTabs = name => state => state.nodesPanel[name].tabs;
 
@@ -254,3 +260,36 @@ export const makeGetNodesPanelsProps = name => {
 
   return createStructuredSelector(selectors);
 };
+
+const getURLParamsIfContext = (params, context) => {
+  if (!context) {
+    return null;
+  }
+  return params;
+};
+
+const getURLSources = createSelector(
+  [getSources, getSelectedContext],
+  getURLParamsIfContext
+);
+const getURLExporters = createSelector(
+  [getExporters, getSelectedContext],
+  getURLParamsIfContext
+);
+const getURLImporters = createSelector(
+  [getImporters, getSelectedContext],
+  getURLParamsIfContext
+);
+const getURLDestinations = createSelector(
+  [getDestinations, getSelectedContext],
+  getURLParamsIfContext
+);
+
+export const getNodesPanelUrlProps = createStructuredSelector({
+  sources: getURLSources,
+  exporters: getURLExporters,
+  importers: getURLImporters,
+  countries: getCountrySelectedNodeId,
+  destinations: getURLDestinations,
+  commodities: getCommoditySelectedNodeId
+});
