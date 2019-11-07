@@ -121,7 +121,8 @@ class ToolPanel extends Component {
       isDisabled,
       setSelectedItems,
       canProceed,
-      closeModal
+      closeModal,
+      savePanels
     } = this.props;
 
     return (
@@ -154,6 +155,7 @@ class ToolPanel extends Component {
           isDisabled={isDisabled}
           removeSentenceItem={setSelectedItems}
           closeModal={closeModal}
+          savePanels={savePanels}
         />
       </div>
     );
@@ -171,7 +173,8 @@ ToolPanel.propTypes = {
   setSelectedItems: PropTypes.func.isRequired,
   canProceed: PropTypes.bool.isRequired,
   countryNames: PropTypes.object.isRequired,
-  closeModal: PropTypes.func
+  closeModal: PropTypes.func,
+  savePanels: PropTypes.func
 };
 
 export default ToolPanel;

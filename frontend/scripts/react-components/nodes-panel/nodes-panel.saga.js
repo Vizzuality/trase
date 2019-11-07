@@ -10,6 +10,17 @@ import {
   NODES_PANEL__SET_PANEL_PAGE,
   NODES_PANEL__SET_ORDER_BY
 } from './nodes-panel.actions';
+
+import modules from 'react-components/nodes-panel/nodes-panel.modules';
+import {
+  getSourcesPreviousSteps,
+  getExportersPreviousSteps,
+  getImportersPreviousSteps
+} from 'react-components/nodes-panel/nodes-panel.selectors';
+
+import { setDashboardLoading } from 'react-components/dashboard-element/dashboard-element.actions';
+import { updateIndicatorsOnItemChange } from 'react-components/dashboard-element/dashboard-element.saga';
+
 import {
   getData,
   getSectionTabs,
@@ -17,12 +28,6 @@ import {
   fetchSearchResults,
   getMissingItems
 } from './nodes-panel.fetch.saga';
-import modules from './nodes-panel.modules';
-import {
-  getSourcesPreviousSteps,
-  getExportersPreviousSteps,
-  getImportersPreviousSteps
-} from 'react-components/nodes-panel/nodes-panel.selectors';
 import { getDashboardsContext } from 'react-components/dashboard-element/dashboard-element.selectors';
 
 function* fetchData() {
@@ -137,13 +142,12 @@ export function* fetchMissingItems() {
     const nodesPanel = yield select(state => state.nodesPanel);
     const selectedContext = yield select(getDashboardsContext);
     const tasks = [];
-
-    if (nodesPanel.countries.draftSelectedNodesId) {
+    if (nodesPanel.countries.selectedNodeId) {
       yield put(setFetchKey(true, 'countries'));
       tasks.push(call(getData, 'countries', nodesPanel.countries));
     }
 
-    if (nodesPanel.commodities.draftSelectedNodesId) {
+    if (nodesPanel.commodities.selectedNodeId) {
       yield put(setFetchKey('preloaded', 'commodities'));
       tasks.push(call(getData, 'commodities', nodesPanel.commodities));
     }
@@ -172,7 +176,11 @@ export function* fetchMissingItems() {
           }
         });
       yield all(subtasks);
+      // TODO: Remove when we delete the legacy dashboards
+      yield call(updateIndicatorsOnItemChange);
     }
+    // TODO: Remove when we delete the legacy dashboards
+    yield put(setDashboardLoading(false));
   }
 
   yield takeLatest([NODES_PANEL__GET_MISSING_DATA], shouldFetchMissingItems);

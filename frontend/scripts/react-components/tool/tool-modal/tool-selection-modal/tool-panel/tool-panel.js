@@ -6,7 +6,11 @@ import {
 import ToolSelectionModal from 'react-components/tool/tool-modal/tool-selection-modal/tool-panel/tool-panel.component';
 import { getCanProceed } from 'react-components/nodes-panel/nodes-panel.selectors';
 import { getCountryNamesByCountryId } from 'reducers/app.selectors';
-import { clearPanel, setSelectedItems } from 'react-components/nodes-panel/nodes-panel.actions';
+import {
+  clearPanel,
+  setSelectedItems,
+  savePanels
+} from 'react-components/nodes-panel/nodes-panel.actions';
 
 const mapStateToProps = (state, ownProps) => {
   const { loading } = state.dashboardElement;
@@ -22,7 +26,8 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = {
   clearPanel,
-  setSelectedItems
+  setSelectedItems,
+  savePanels
 };
 
 export default connect(

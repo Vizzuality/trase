@@ -48,49 +48,50 @@ export function* getPanelParams(optionsType, options = {}) {
     node_types_ids: nodeTypesIds
   };
   const currentStep = DASHBOARD_STEPS[optionsType];
-
+  const nodeId = isOverview ? 'selectedNodeId' : 'draftSelectedNodeId';
+  const nodesIds = isOverview ? 'selectedNodesIds' : 'draftSelectedNodesIds';
   if (currentStep === DASHBOARD_STEPS.sources && optionsType !== 'countries') {
-    params.countries_ids = state.nodesPanel.countries.draftSelectedNodesId;
+    params.countries_ids = state.nodesPanel.countries[nodeId];
   }
 
   if (currentStep > DASHBOARD_STEPS.sources || isOverview) {
     const panel = state.nodesPanel.sources;
-    params.countries_ids = state.nodesPanel.countries.selectedNodeId;
+    params.countries_ids = state.nodesPanel.countries[nodeId];
     if (panel.excludingMode) {
-      params.excluded_sources_ids = activeItemParams(panel.selectedNodesIds);
+      params.excluded_sources_ids = activeItemParams(panel[nodesIds]);
     } else {
-      params.sources_ids = activeItemParams(panel.selectedNodesIds);
+      params.sources_ids = activeItemParams(panel[nodesIds]);
     }
   }
 
   if (currentStep > DASHBOARD_STEPS.commodities || isOverview) {
-    params.commodities_ids = state.nodesPanel.commodities.draftSelectedNodesId;
+    params.commodities_ids = state.nodesPanel.commodities[nodeId];
   }
 
   if (currentStep > DASHBOARD_STEPS.destinations || isOverview) {
     const panel = state.nodesPanel.destinations;
     if (panel.excludingMode) {
-      params.excluded_destinations_ids = activeItemParams(panel.selectedNodesIds);
+      params.excluded_destinations_ids = activeItemParams(panel[nodesIds]);
     } else {
-      params.destinations_ids = activeItemParams(panel.selectedNodesIds);
+      params.destinations_ids = activeItemParams(panel[nodesIds]);
     }
   }
 
   if (currentStep > DASHBOARD_STEPS.exporters || isOverview) {
     const panel = state.nodesPanel.exporters;
     if (panel.excludingMode) {
-      params.excluded_exporters_ids = activeItemParams(panel.selectedNodesIds);
+      params.excluded_exporters_ids = activeItemParams(panel[nodesIds]);
     } else {
-      params.exporters_ids = activeItemParams(panel.selectedNodesIds);
+      params.exporters_ids = activeItemParams(panel[nodesIds]);
     }
   }
 
   if (isOverview) {
     const panel = state.nodesPanel.importers;
     if (panel.excludingMode) {
-      params.excluded_importers_ids = activeItemParams(panel.selectedNodesIds);
+      params.excluded_importers_ids = activeItemParams(panel[nodesIds]);
     } else {
-      params.importers_ids = activeItemParams(panel.selectedNodesIds);
+      params.importers_ids = activeItemParams(panel[nodesIds]);
     }
   } else if (ENABLE_REDESIGN_PAGES) {
     const currentPanel = state.nodesPanel[optionsType];
@@ -198,7 +199,7 @@ export function* getMissingItems(nodesPanel, selectedContext) {
       if (moduleOptions.hasMultipleSelection) {
         return nodesPanel[name].draftSelectedNodesIds;
       }
-      return nodesPanel[name].draftSelectedNodesId || [];
+      return nodesPanel[name].draftSelectedNodeId || [];
     });
   const params = {
     context_id: selectedContext.id,

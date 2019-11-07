@@ -7,31 +7,64 @@ import VersioningModal from 'react-components/tool/tool-modal/versioning-modal';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 import 'react-components/tool/tool-modal/tool-modal.scss';
 
-export default function ToolModal({ items, selectedItem, onChange, activeModal, setActiveModal }) {
+export default function ToolModal({
+  items,
+  selectedItem,
+  onChange,
+  activeModal,
+  setActiveModal,
+  cancelPanelsDraft
+}) {
+  const SimpleModalComponent = ({ children }) => (
+    <SimpleModal isOpen onRequestClose={() => setActiveModal(null)}>
+      {children}
+    </SimpleModal>
+  );
+
+  SimpleModalComponent.propTypes = {
+    children: PropTypes.node.isRequired
+  };
+
   const getModalComponent = () => {
     switch (activeModal) {
       case 'context':
-        return <ToolSelectionModal />;
+        return (
+          <SimpleModal
+            isOpen
+            onRequestClose={() => {
+              setActiveModal(null);
+              cancelPanelsDraft();
+            }}
+          >
+            <ToolSelectionModal />;
+          </SimpleModal>
+        );
       case 'layer':
-        return <LayerModal />;
+        return (
+          <SimpleModalComponent>
+            <LayerModal />
+          </SimpleModalComponent>
+        );
       case 'version':
-        return <VersioningModal />;
+        return (
+          <SimpleModalComponent>
+            <VersioningModal />
+          </SimpleModalComponent>
+        );
       default:
         return (
-          <BaseModal
-            items={items}
-            selectedItem={selectedItem}
-            onChange={onChange}
-            modalId={activeModal}
-          />
+          <SimpleModalComponent>
+            <BaseModal
+              items={items}
+              selectedItem={selectedItem}
+              onChange={onChange}
+              modalId={activeModal}
+            />
+          </SimpleModalComponent>
         );
     }
   };
-  return activeModal ? (
-    <SimpleModal isOpen onRequestClose={() => setActiveModal(null)}>
-      {getModalComponent()}
-    </SimpleModal>
-  ) : null;
+  return activeModal ? getModalComponent() : null;
 }
 
 ToolModal.propTypes = {

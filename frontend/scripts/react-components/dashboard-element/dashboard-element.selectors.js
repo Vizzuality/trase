@@ -7,7 +7,10 @@ import { getPanelId } from 'utils/dashboardPanel';
 import { makeGetResizeByItems, makeGetRecolorByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
 import pluralize from 'utils/pluralize';
-import { getDirtyBlocks } from 'react-components/nodes-panel/nodes-panel.selectors';
+import {
+  getDraftDirtyBlocks,
+  getDirtyBlocks
+} from 'react-components/nodes-panel/nodes-panel.selectors';
 
 const getCountriesData = state => state.nodesPanel.countries.data;
 const getSourcesData = state => state.nodesPanel.sources.data;
@@ -36,6 +39,14 @@ const getSources = state => state.nodesPanel.sources;
 const getDestinations = state => state.nodesPanel.destinations;
 const getExporters = state => state.nodesPanel.exporters;
 const getImporters = state => state.nodesPanel.importers;
+
+const getDraftSources = state => state.nodesPanel.sources.draftSelectedNodesIds;
+const getDraftDestinations = state => state.nodesPanel.destinations.draftSelectedNodesIds;
+const getDraftExporters = state => state.nodesPanel.exporters.draftSelectedNodesIds;
+const getDraftImporters = state => state.nodesPanel.importers.draftSelectedNodesIds;
+
+const getDraftSelectedCountryId = state => state.nodesPanel.countries.draftSelectedNodeId;
+const getDraftSelectedCommodityId = state => state.nodesPanel.commodities.draftSelectedNodeId;
 
 const getSelectedCountryId = state => state.nodesPanel.countries.selectedNodeId;
 const getSelectedCommodityId = state => state.nodesPanel.commodities.selectedNodeId;
@@ -73,8 +84,18 @@ const getCountriesActiveItems = createSelector(
   getSingleActiveItem
 );
 
+const getDraftCountriesActiveItems = createSelector(
+  [getDraftSelectedCountryId, getCountriesData],
+  getSingleActiveItem
+);
+
 const getCommoditiesActiveItems = createSelector(
   [getSelectedCommodityId, getCommoditiesData],
+  getSingleActiveItem
+);
+
+const getDraftCommoditiesActiveItems = createSelector(
+  [getDraftSelectedCommodityId, getCommoditiesData],
   getSingleActiveItem
 );
 
@@ -82,16 +103,39 @@ const getSourcesActiveItems = createSelector(
   [getSourcesSelectedNodesIds, getSourcesData],
   getPanelActiveItems
 );
+
+const getDraftSourcesActiveItems = createSelector(
+  [getDraftSources, getSourcesData],
+  getPanelActiveItems
+);
+
 const getDestinationsActiveItems = createSelector(
   [getDestinationsSelectedNodesIds, getDestinationsData],
   getPanelActiveItems
 );
+
+const getDraftDestinationsActiveItems = createSelector(
+  [getDraftDestinations, getDestinationsData],
+  getPanelActiveItems
+);
+
 const getExportersActiveItems = createSelector(
   [getExportersSelectedNodesIds, getExportersData],
   getPanelActiveItems
 );
+
+const getDraftExportersActiveItems = createSelector(
+  [getDraftExporters, getExportersData],
+  getPanelActiveItems
+);
+
 const getImportersActiveItems = createSelector(
   [getImportersSelectedNodesIds, getImportersData],
+  getPanelActiveItems
+);
+
+const getDraftImportersActiveItems = createSelector(
+  [getDraftImporters, getImportersData],
   getPanelActiveItems
 );
 
@@ -102,6 +146,15 @@ export const getNodesPanelValues = createStructuredSelector({
   exporters: getExportersActiveItems,
   importers: getImportersActiveItems,
   destinations: getDestinationsActiveItems
+});
+
+export const getDraftNodesPanelValues = createStructuredSelector({
+  countries: getDraftCountriesActiveItems,
+  sources: getDraftSourcesActiveItems,
+  commodities: getDraftCommoditiesActiveItems,
+  exporters: getDraftExportersActiveItems,
+  importers: getDraftImportersActiveItems,
+  destinations: getDraftDestinationsActiveItems
 });
 
 export const getNodesPanelPrefixes = createSelector(
@@ -134,6 +187,102 @@ const getNodesPanelExcludingMode = createSelector(
     importers,
     destinations
   })
+);
+
+export const getDraftDynamicSentence = createSelector(
+  [getDraftDirtyBlocks, getDraftNodesPanelValues, getEditMode, getNodesPanelPrefixes],
+  (dirtyBlocks, panelsValues, editMode, prefixes) => {
+    if (Object.values(dirtyBlocks).every(block => !block)) {
+      return [];
+    }
+    const commoditiesPanelSentence = `${panelsValues.commodities.length > 0 ? '' : 'commodities'}`;
+    const commoditiesPrefix = editMode
+      ? capitalize(commoditiesPanelSentence)
+      : `Your dashboard will include ${commoditiesPanelSentence}`;
+    const capitalizeCommodities = editMode ? { transform: 'capitalize' } : {};
+    const sourcesValues =
+      panelsValues.sources.length > 0 ? panelsValues.sources : panelsValues.countries;
+
+    const getSettings = (item, prefixesMap, defaultName, defaultPrefix) => {
+      const settings = { prefix: defaultPrefix, name: defaultName };
+      if (prefixesMap && item) {
+        const nodeType = item.nodeType || item.type;
+        settings.prefix = prefixesMap[nodeType] || defaultPrefix;
+        settings.name = nodeType ? pluralize(nodeType) : defaultName;
+      }
+      return settings;
+    };
+
+    const sourcesSettings = getSettings(
+      panelsValues.sources[0],
+      prefixes.sources,
+      'sources',
+      'produced in'
+    );
+    const exportersSettings = getSettings(
+      panelsValues.exporters[0],
+      prefixes.exporters,
+      'exporters',
+      'exported by'
+    );
+    const importersSettings = getSettings(
+      panelsValues.importers[0],
+      prefixes.importers,
+      'importers',
+      'imported by'
+    );
+    const destinationsSettings = getSettings(
+      panelsValues.destinations[0],
+      prefixes.destinations,
+      'destinations',
+      'going to'
+    );
+
+    return [
+      {
+        panel: 'commodities',
+        id: 'commodities',
+        prefix: commoditiesPrefix,
+        value: panelsValues.commodities,
+        ...capitalizeCommodities
+      },
+      {
+        panel: 'sources',
+        id: 'sources',
+        name: sourcesSettings.name,
+        prefix: sourcesValues ? sourcesSettings.prefix : 'produced in countries covered by Trase',
+        value: sourcesValues,
+        transform: 'capitalize'
+      },
+      {
+        panel: 'exporters',
+        id: 'exporters',
+        name: exportersSettings.name,
+        prefix: panelsValues.exporters.length > 0 ? exportersSettings.prefix : '',
+        value: panelsValues.exporters,
+        optional: true,
+        transform: 'capitalize'
+      },
+      {
+        panel: 'importers',
+        id: 'importers',
+        name: importersSettings.name,
+        prefix: panelsValues.importers.length > 0 ? importersSettings.prefix : '',
+        value: panelsValues.importers,
+        optional: true,
+        transform: 'capitalize'
+      },
+      {
+        panel: 'destinations',
+        id: 'destinations',
+        name: destinationsSettings.name,
+        prefix: panelsValues.destinations.length > 0 ? destinationsSettings.prefix : '',
+        value: panelsValues.destinations,
+        optional: true,
+        transform: 'capitalize'
+      }
+    ];
+  }
 );
 
 export const getDynamicSentence = createSelector(
@@ -251,7 +400,7 @@ export const getDynamicSentence = createSelector(
 );
 
 export const getIsDisabled = createSelector(
-  [getDynamicSentence, (state, ownProps) => ownProps.step],
+  [getDraftDynamicSentence, (state, ownProps) => ownProps.step],
   (dynamicSentence, step) => {
     if (dynamicSentence.length === 0 || typeof step === 'undefined') {
       return true;
@@ -271,7 +420,6 @@ export const getDashboardsContext = createSelector(
     const context = contexts.find(
       ctx => ctx.countryId === selectedCountryId && ctx.commodityId === selectedCommodityId
     );
-
     return context || null;
   }
 );
