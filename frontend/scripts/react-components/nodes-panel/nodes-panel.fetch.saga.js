@@ -61,7 +61,6 @@ export function* getPanelParams(optionsType, options = {}) {
     } else {
       params.sources_ids = activeItemParams(panel.selectedNodesIds);
     }
-    params.order_by = panel.orderBy;
   }
 
   if (currentStep > DASHBOARD_STEPS.commodities || isOverview) {
@@ -75,7 +74,6 @@ export function* getPanelParams(optionsType, options = {}) {
     } else {
       params.destinations_ids = activeItemParams(panel.selectedNodesIds);
     }
-    params.order_by = panel.orderBy;
   }
 
   if (currentStep > DASHBOARD_STEPS.exporters || isOverview) {
@@ -85,7 +83,6 @@ export function* getPanelParams(optionsType, options = {}) {
     } else {
       params.exporters_ids = activeItemParams(panel.selectedNodesIds);
     }
-    params.order_by = panel.orderBy;
   }
 
   if (isOverview) {
@@ -95,7 +92,9 @@ export function* getPanelParams(optionsType, options = {}) {
     } else {
       params.importers_ids = activeItemParams(panel.selectedNodesIds);
     }
-    params.order_by = panel.orderBy;
+  } else {
+    const currentPanel = state.nodesPanel[optionsType];
+    params.order_by = currentPanel.orderBy;
   }
 
   return params;

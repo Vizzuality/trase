@@ -158,6 +158,7 @@ export const makeGetNodesPanelsProps = name => {
   const getSearchResults = state => state.nodesPanel[name].searchResults;
   const getFetchKey = state => state.nodesPanel[name].fetchKey;
   const getExcludingMode = state => state.nodesPanel[name].excludingMode;
+  const getOrderBy = state => state.nodesPanel[name].orderBy;
 
   const getItems = createSelector(
     [getById, getNodes],
@@ -177,6 +178,15 @@ export const makeGetNodesPanelsProps = name => {
     }
   );
 
+  const getSelectedOrderBy = createSelector(
+    [getOrderBy],
+    orderBy => ({
+      id: orderBy,
+      label: orderBy === 'name' ? 'Name' : 'Trade Volume',
+      value: orderBy
+    })
+  );
+
   const getPreviousSteps = makeGetPreviousSteps(name);
 
   const selectors = {
@@ -184,6 +194,7 @@ export const makeGetNodesPanelsProps = name => {
     loading: getLoading,
     noData: getNoData,
     fetchKey: getFetchKey,
+    orderBy: getSelectedOrderBy,
     previousSteps: getPreviousSteps
   };
 

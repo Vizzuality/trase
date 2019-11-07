@@ -22,7 +22,8 @@ import {
   NODES_PANEL__SET_INSTANCE_ID,
   NODES_PANEL__SET_NO_DATA,
   NODES_PANEL__SET_FETCH_KEY,
-  NODES_PANEL__SET_EXCLUDING_MODE
+  NODES_PANEL__SET_EXCLUDING_MODE,
+  NODES_PANEL__SET_ORDER_BY
 } from './nodes-panel.actions';
 import modules from './nodes-panel.modules';
 import nodesPanelInitialState from './nodes-panel.initial-state';
@@ -121,7 +122,7 @@ const nodesPanelReducer = {
       const { data } = action.payload;
       if (data) {
         const newItems = data.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
-        draft[name].data.byId = data ? Object.keys(newItems).map(n => parseInt(n, 10)) : [];
+        draft[name].data.byId = data ? data.map(node => node.id) : [];
         draft[name].data.nodes = newItems;
       } else {
         draft[name].page = nodesPanelInitialState[name].page;
@@ -146,7 +147,7 @@ const nodesPanelReducer = {
       const newItems = data.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
       // in case we preloaded some items, we make sure to avoid duplicates
       draft[name].data.byId = Array.from(
-        new Set([...state[name].data.byId, ...Object.keys(newItems)].map(n => parseInt(n, 10)))
+        new Set([...state[name].data.byId, ...data.map(node => node.id)].map(n => parseInt(n, 10)))
       );
 
       draft[name].data.nodes = { ...state[name].data.nodes, ...newItems };
@@ -373,6 +374,13 @@ const nodesPanelReducer = {
       });
     }
     return state;
+  },
+  [NODES_PANEL__SET_ORDER_BY](state, action) {
+    const { name } = action.meta;
+    const { orderBy } = action.payload;
+    return immer(state, draft => {
+      draft[name].orderBy = orderBy.value;
+    });
   }
 };
 
