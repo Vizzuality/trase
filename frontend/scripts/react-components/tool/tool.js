@@ -5,7 +5,7 @@ import { resizeSankeyTool } from 'react-components/tool/tool.thunks';
 import { getToolLinksUrlProps } from 'react-components/tool-links/tool-links.selectors';
 import { getAppUrlProps } from 'reducers/app.selectors';
 import { getToolLayersUrlProps } from 'react-components/tool-layers/tool-layers.selectors';
-import { getPanelUrlProps } from 'react-components/tool/tool.selectors';
+import { getNodesPanelUrlProps } from 'react-components/nodes-panel/nodes-panel.selectors';
 import toolLayerSerializer from 'react-components/tool-layers/tool-layers.serializers';
 import toolLinksSerializer from 'react-components/tool-links/tool-links.serializers';
 import nodesPanelSerializer from 'react-components/nodes-panel/nodes-panel.serializers';
@@ -15,7 +15,7 @@ const { urlPropHandlers: toolLinksUrlPropHandlers } = toolLinksSerializer;
 const { urlPropHandlers: nodesPanelUrlPropHandlers } = nodesPanelSerializer;
 
 const getUrlProps = createSelector(
-  [getToolLinksUrlProps, getAppUrlProps, getToolLayersUrlProps, getPanelUrlProps],
+  [getToolLinksUrlProps, getAppUrlProps, getToolLayersUrlProps, getNodesPanelUrlProps],
   (toolLinks, app, toolLayers, panel) => ({ ...toolLinks, ...app, ...toolLayers, ...panel })
 );
 

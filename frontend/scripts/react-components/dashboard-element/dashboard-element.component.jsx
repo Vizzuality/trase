@@ -13,8 +13,6 @@ import UrlSerializer from 'react-components/shared/url-serializer';
 import InView from 'react-components/shared/in-view.component';
 import cx from 'classnames';
 import Heading from 'react-components/shared/heading';
-import dashboardElementSerializer from 'react-components/dashboard-element/dashboard-element.serializers';
-import nodesPanelSerializer from 'react-components/nodes-panel/nodes-panel.serializers';
 import { DASHBOARD_STEPS } from 'constants';
 
 import 'react-components/dashboard-element/dashboard-element.scss';
@@ -24,6 +22,7 @@ class DashboardElement extends React.PureComponent {
     loading: PropTypes.bool,
     groupedCharts: PropTypes.object,
     urlProps: PropTypes.object,
+    urlPropHandlers: PropTypes.object,
     dirtyBlocks: PropTypes.object,
     canProceed: PropTypes.bool.isRequired,
     step: PropTypes.number.isRequired,
@@ -135,6 +134,7 @@ class DashboardElement extends React.PureComponent {
       modalOpen,
       filters,
       urlProps,
+      urlPropHandlers,
       reopenPanel,
       setSelectedYears,
       setSelectedResizeBy,
@@ -233,13 +233,7 @@ class DashboardElement extends React.PureComponent {
             </section>
           )}
         </div>
-        <UrlSerializer
-          urlProps={urlProps}
-          urlPropHandlers={{
-            ...dashboardElementSerializer.urlPropHandlers,
-            ...nodesPanelSerializer.urlPropHandlers
-          }}
-        />
+        <UrlSerializer urlProps={urlProps} urlPropHandlers={urlPropHandlers} />
       </div>
     );
   }
