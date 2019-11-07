@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Text from 'react-components/shared/text';
 import Dropdown from 'react-components/shared/dropdown';
 
@@ -18,5 +19,10 @@ function OrderBy(props) {
     </div>
   );
 }
+
+OrderBy.propTypes = {
+  orderBy: PropTypes.object.isRequired,
+  setOrderBy: PropTypes.func.isRequired
+};
 
 export default OrderBy;

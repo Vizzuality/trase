@@ -380,6 +380,8 @@ const nodesPanelReducer = {
     const { orderBy } = action.payload;
     return immer(state, draft => {
       draft[name].orderBy = orderBy.value;
+      draft[name].data.byId = nodesPanelInitialState[name].data.byId;
+      draft[name].page = nodesPanelInitialState[name].page;
     });
   }
 };
