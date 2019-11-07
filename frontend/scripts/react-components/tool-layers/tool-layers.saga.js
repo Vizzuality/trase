@@ -6,6 +6,7 @@ import {
   TOOL_LINKS__SELECT_COLUMN,
   TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH
 } from 'react-components/tool-links/tool-links.actions';
+import { NODES_PANEL__SAVE } from 'react-components/nodes-panel/nodes-panel.actions';
 import { SET_CONTEXT, SET_CONTEXTS } from 'actions/app.actions';
 import {
   SELECT_YEARS,
@@ -52,6 +53,7 @@ function* fetchMapDimensions() {
       TOOL_LINKS__GET_COLUMNS,
       TOGGLE_MAP_DIMENSION,
       SET_CONTEXT,
+      NODES_PANEL__SAVE,
       SELECT_YEARS,
       TOOL_LINKS__SELECT_COLUMN,
       TOOL_LINKS__CLEAR_SANKEY

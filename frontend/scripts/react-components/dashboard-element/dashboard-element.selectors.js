@@ -35,11 +35,6 @@ const getDestinationsSelectedNodesIds = state => state.nodesPanel.destinations.s
 const getExportersSelectedNodesIds = state => state.nodesPanel.exporters.selectedNodesIds;
 const getImportersSelectedNodesIds = state => state.nodesPanel.importers.selectedNodesIds;
 
-const getSources = state => state.nodesPanel.sources;
-const getDestinations = state => state.nodesPanel.destinations;
-const getExporters = state => state.nodesPanel.exporters;
-const getImporters = state => state.nodesPanel.importers;
-
 const getDraftSources = state => state.nodesPanel.sources.draftSelectedNodesIds;
 const getDraftDestinations = state => state.nodesPanel.destinations.draftSelectedNodesIds;
 const getDraftExporters = state => state.nodesPanel.exporters.draftSelectedNodesIds;
@@ -616,37 +611,7 @@ const getURLDashboardSelectedResizeBy = createSelector(
   }
 );
 
-const getURLParamsIfContext = (params, context) => {
-  if (!context) {
-    return null;
-  }
-  return params;
-};
-
-const getURLSources = createSelector(
-  [getSources, getDashboardsContext],
-  getURLParamsIfContext
-);
-const getURLExporters = createSelector(
-  [getExporters, getDashboardsContext],
-  getURLParamsIfContext
-);
-const getURLImporters = createSelector(
-  [getImporters, getDashboardsContext],
-  getURLParamsIfContext
-);
-const getURLDestinations = createSelector(
-  [getDestinations, getDashboardsContext],
-  getURLParamsIfContext
-);
-
 export const getDashboardElementUrlProps = createStructuredSelector({
-  sources: getURLSources,
-  exporters: getURLExporters,
-  importers: getURLImporters,
-  countries: getSelectedCountryId,
-  destinations: getURLDestinations,
-  commodities: getSelectedCommodityId,
   selectedYears: getURLDashboardSelectedYears,
   selectedRecolorBy: getDashboardSelectedRecolorBy,
   selectedResizeBy: getURLDashboardSelectedResizeBy
