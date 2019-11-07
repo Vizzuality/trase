@@ -25,7 +25,8 @@ import {
   NODES_PANEL__SET_ORDER_BY,
   NODES_PANEL__SET_EXCLUDING_MODE,
   NODES_PANEL__EDIT_PANELS,
-  NODES_PANEL__SAVE
+  NODES_PANEL__SAVE,
+  NODES_PANEL__CANCEL_PANELS_DRAFT
 } from './nodes-panel.actions';
 import modules from './nodes-panel.modules';
 import nodesPanelInitialState from './nodes-panel.initial-state';
@@ -64,8 +65,8 @@ const clearPanelData = (draft, { name, state, activeItem }) => {
         draft[panelToClear].draftSelectedNodesIds =
           nodesPanelInitialState[panelToClear].draftSelectedNodesIds;
       } else {
-        draft[panelToClear].draftSelectedNodesId =
-          nodesPanelInitialState[panelToClear].draftSelectedNodesId;
+        draft[panelToClear].draftSelectedNodeId =
+          nodesPanelInitialState[panelToClear].draftSelectedNodeId;
       }
       draft[panelToClear].data = nodesPanelInitialState[panelToClear].data;
     });
@@ -120,7 +121,7 @@ const nodesPanelReducer = {
         if (moduleOptions.hasMultipleSelection) {
           draft[name].draftSelectedNodesIds = nodesPanelInitialState[name].draftSelectedNodesIds;
         } else {
-          draft[name].draftSelectedNodesId = nodesPanelInitialState[name].draftSelectedNodesId;
+          draft[name].draftSelectedNodeId = nodesPanelInitialState[name].draftSelectedNodeId;
         }
       }
     });
@@ -136,7 +137,7 @@ const nodesPanelReducer = {
         draft[name].data.nodes = newItems;
       } else {
         draft[name].page = nodesPanelInitialState[name].page;
-        draft[name].data = nodesPanelInitialState[name].data;
+        draft[name].data.byId = nodesPanelInitialState[name].data.byId;
 
         if (moduleOptions.hasSearch) {
           draft[name].searchResults = nodesPanelInitialState[name].searchResults;
@@ -174,7 +175,7 @@ const nodesPanelReducer = {
               if (moduleOptions.hasMultipleSelection) {
                 return draft[name].draftSelectedNodesIds.includes(item.id);
               }
-              return draft[name].draftSelectedNodesId === item.id;
+              return draft[name].draftSelectedNodeId === item.id;
             })
             .forEach(item => {
               if (!draft[name].data.nodes) {
@@ -233,9 +234,8 @@ const nodesPanelReducer = {
     const { activeItem } = action.payload;
     if (!moduleOptions.hasMultipleSelection) {
       return immer(state, draft => {
-        draft[name].draftSelectedNodesId =
-          activeItem && activeItem.id !== state[name].draftSelectedNodesId ? activeItem.id : null;
-
+        draft[name].draftSelectedNodeId =
+          activeItem && activeItem.id !== state[name].draftSelectedNodeId ? activeItem.id : null;
         // clear following panels
         const panelIndex = DASHBOARD_STEPS[name];
         Object.entries(DASHBOARD_STEPS).forEach(([panel, step]) => {
@@ -244,9 +244,9 @@ const nodesPanelReducer = {
             if (currentPanelOptions.hasMultipleSelection) {
               draft[panel].draftSelectedNodesIds = [];
             } else {
-              draft[panel].draftSelectedNodesId = null;
+              draft[panel].draftSelectedNodeId = null;
             }
-            draft[panel].data = nodesPanelInitialState[panel].data;
+            draft[panel].data.byId = nodesPanelInitialState[panel].data.byId;
           }
         });
       });
@@ -335,7 +335,7 @@ const nodesPanelReducer = {
             ]);
           }
         } else {
-          draft[name].draftSelectedNodesId = activeItem.id;
+          draft[name].draftSelectedNodeId = activeItem.id;
         }
       });
     }
@@ -362,7 +362,7 @@ const nodesPanelReducer = {
           if (moduleOptions.hasMultipleSelection) {
             draft[name].draftSelectedNodesIds = [];
           } else {
-            draft[name].draftSelectedNodesId = null;
+            draft[name].draftSelectedNodeId = null;
           }
         }
       });
@@ -414,7 +414,7 @@ const nodesPanelReducer = {
         if (moduleOptions.hasMultipleSelection) {
           draft[panelName].draftSelectedNodesIds = panelData.selectedNodesIds;
         } else {
-          draft[panelName].draftSelectedNodesId = panelData.selectedNodesId;
+          draft[panelName].draftSelectedNodeId = panelData.selectedNodeId;
         }
       });
     });
@@ -426,8 +426,23 @@ const nodesPanelReducer = {
         const moduleOptions = modules[panelName];
         if (moduleOptions.hasMultipleSelection) {
           draft[panelName].selectedNodesIds = panelData.draftSelectedNodesIds;
+          draft[panelName].draftSelectedNodesIds = [];
         } else {
-          draft[panelName].selectedNodesId = panelData.draftSelectedNodesId;
+          draft[panelName].selectedNodeId = panelData.draftSelectedNodeId;
+          draft[panelName].draftSelectedNodeId = null;
+        }
+      });
+    });
+  },
+  [NODES_PANEL__CANCEL_PANELS_DRAFT](state) {
+    // Deletes the draft
+    return immer(state, draft => {
+      Object.entries(state).forEach(([panelName]) => {
+        const moduleOptions = modules[panelName];
+        if (moduleOptions.hasMultipleSelection) {
+          draft[panelName].draftSelectedNodesIds = [];
+        } else {
+          draft[panelName].draftSelectedNodeId = null;
         }
       });
     });

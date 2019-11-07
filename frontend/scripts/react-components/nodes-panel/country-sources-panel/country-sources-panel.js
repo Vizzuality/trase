@@ -3,14 +3,14 @@ import CountrySourcesPanel from './country-sources-panel.component';
 
 function getSelectedCountry(state) {
   const {
-    selectedNodeId,
+    draftSelectedNodeId,
     data: { nodes }
   } = state.nodesPanel.countries;
-  return selectedNodeId && nodes && nodes[selectedNodeId];
+  return draftSelectedNodeId && nodes && nodes[draftSelectedNodeId];
 }
 const mapStateToProps = state => ({
   selectedCountry: getSelectedCountry(state),
-  selectedSourcesIds: state.nodesPanel.sources.selectedNodesIds
+  selectedSourcesIds: state.nodesPanel.sources.draftSelectedNodesIds
 });
 
 export default connect(mapStateToProps)(CountrySourcesPanel);

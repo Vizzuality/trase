@@ -3,7 +3,7 @@ import { goToDashboard as goToDashboardFn } from 'react-components/dashboard-ele
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel/dashboard-panel.component';
 import {
   getIsDisabled,
-  getDynamicSentence
+  getDraftDynamicSentence
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { getCountryNamesByCountryId } from 'reducers/app.selectors';
 import {
@@ -18,7 +18,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     loading,
     isDisabled: getIsDisabled(state, ownProps),
-    dynamicSentenceParts: getDynamicSentence(state),
+    dynamicSentenceParts: getDraftDynamicSentence(state),
     countryNames: getCountryNamesByCountryId(state)
   };
 };

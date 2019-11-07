@@ -1,16 +1,16 @@
 import { createSelector } from 'reselect';
 import capitalize from 'lodash/capitalize';
 import { getPanelId } from 'utils/toolPanel';
-import { getDirtyBlocks } from 'react-components/nodes-panel/nodes-panel.selectors';
+import { getDraftDirtyBlocks } from 'react-components/nodes-panel/nodes-panel.selectors';
 import pluralize from 'utils/pluralize';
 import { TOOL_STEPS } from 'constants';
 import {
-  getNodesPanelValues,
+  getDraftNodesPanelValues,
   getNodesPanelPrefixes
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 
 export const getDynamicSentence = createSelector(
-  [getDirtyBlocks, getNodesPanelValues, getNodesPanelPrefixes],
+  [getDraftDirtyBlocks, getDraftNodesPanelValues, getNodesPanelPrefixes],
   (dirtyBlocks, panelsValues, prefixes) => {
     if (Object.values(dirtyBlocks).every(block => !block)) {
       return [];

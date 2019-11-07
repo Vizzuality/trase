@@ -16,9 +16,17 @@ function ToolPanelFooter(props) {
     backText,
     isDisabled,
     step,
-    closeModal
+    closeModal,
+    savePanels
   } = props;
-
+  const handleOnClick = () => {
+    if (isLastStep) {
+      closeModal();
+      savePanels();
+    } else {
+      onContinue();
+    }
+  };
   return (
     <div className="c-tool-panel-footer">
       <TagsGroup
@@ -37,7 +45,7 @@ function ToolPanelFooter(props) {
           </button>
         )}
         <Button
-          onClick={isLastStep ? closeModal : onContinue}
+          onClick={handleOnClick}
           color="pink"
           size="md"
           disabled={isDisabled}
@@ -62,7 +70,8 @@ ToolPanelFooter.propTypes = {
   onContinue: PropTypes.func.isRequired,
   step: PropTypes.number,
   backText: PropTypes.string,
-  closeModal: PropTypes.func
+  closeModal: PropTypes.func,
+  savePanels: PropTypes.func
 };
 
 export default ToolPanelFooter;
