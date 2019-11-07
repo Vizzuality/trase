@@ -1,14 +1,22 @@
 import { createSelector, createStructuredSelector } from 'reselect';
-import { DASHBOARD_STEPS } from 'constants';
-import modules from 'react-components/nodes-panel/nodes-panel.modules';
 
-const getCountrySelectedNodeId = state => state.nodesPanel.countries.draftSelectedNodesId;
-const getSourcesSelectedNodesIds = state => state.nodesPanel.sources.draftSelectedNodesIds;
-const getCommoditySelectedNodeId = state => state.nodesPanel.commodities.draftSelectedNodesId;
-const getDestinationsSelectedNodesIds = state =>
+import modules from 'react-components/nodes-panel/nodes-panel.modules';
+import { DASHBOARD_STEPS } from 'constants';
+
+const getCountrySelectedNodeId = state => state.nodesPanel.countries.selectedNodeId;
+const getSourcesSelectedNodesIds = state => state.nodesPanel.sources.selectedNodesIds;
+const getCommoditySelectedNodeId = state => state.nodesPanel.commodities.selectedNodeId;
+const getDestinationsSelectedNodesIds = state => state.nodesPanel.destinations.selectedNodesIds;
+const getExportersSelectedNodesIds = state => state.nodesPanel.exporters.selectedNodesIds;
+const getImportersSelectedNodesIds = state => state.nodesPanel.importers.selectedNodesIds;
+
+const getCountryDraftSelectedNodeId = state => state.nodesPanel.countries.draftSelectedNodeId;
+const getSourcesDraftSelectedNodesIds = state => state.nodesPanel.sources.draftSelectedNodesIds;
+const getCommodityDraftSelectedNodeId = state => state.nodesPanel.commodities.draftSelectedNodeId;
+const getDestinationsDraftSelectedNodesIds = state =>
   state.nodesPanel.destinations.draftSelectedNodesIds;
-const getExportersSelectedNodesIds = state => state.nodesPanel.exporters.draftSelectedNodesIds;
-const getImportersSelectedNodesIds = state => state.nodesPanel.importers.draftSelectedNodesIds;
+const getExportersDraftSelectedNodesIds = state => state.nodesPanel.exporters.draftSelectedNodesIds;
+const getImportersDraftSelectedNodesIds = state => state.nodesPanel.importers.draftSelectedNodesIds;
 
 const getSourcesFetchKey = state => state.nodesPanel.sources.fetchKey;
 const getCommodityFetchKey = state => state.nodesPanel.commodities.fetchKey;
@@ -24,8 +32,34 @@ export const getDirtyBlocks = createSelector(
     getCommoditySelectedNodeId,
     getSourcesSelectedNodesIds,
     getDestinationsSelectedNodesIds,
-    getExportersSelectedNodesIds,
-    getImportersSelectedNodesIds
+    getImportersSelectedNodesIds,
+    getExportersSelectedNodesIds
+  ],
+  (
+    selectedCountryId,
+    selectedCommodityId,
+    sourcesActiveItems,
+    destinationsActiveItems,
+    importersActiveItems,
+    exportersActiveItems
+  ) => ({
+    countries: selectedCountryId !== null,
+    sources: sourcesActiveItems.length > 0,
+    commodities: selectedCommodityId !== null,
+    destinations: destinationsActiveItems.length > 0,
+    exporters: exportersActiveItems.length > 0,
+    importers: importersActiveItems.length > 0
+  })
+);
+
+export const getDraftDirtyBlocks = createSelector(
+  [
+    getCountryDraftSelectedNodeId,
+    getCommodityDraftSelectedNodeId,
+    getSourcesDraftSelectedNodesIds,
+    getDestinationsDraftSelectedNodesIds,
+    getExportersDraftSelectedNodesIds,
+    getImportersDraftSelectedNodesIds
   ],
   (
     selectedCountryId,
@@ -47,12 +81,12 @@ export const getDirtyBlocks = createSelector(
 const makeGetPreviousSteps = name =>
   createSelector(
     [
-      getCountrySelectedNodeId,
-      getSourcesSelectedNodesIds,
-      getCommoditySelectedNodeId,
-      getDestinationsSelectedNodesIds,
-      getExportersSelectedNodesIds,
-      getImportersSelectedNodesIds
+      getCountryDraftSelectedNodeId,
+      getSourcesDraftSelectedNodesIds,
+      getCommodityDraftSelectedNodeId,
+      getDestinationsDraftSelectedNodesIds,
+      getExportersDraftSelectedNodesIds,
+      getImportersDraftSelectedNodesIds
     ],
     (...steps) => {
       const currentStep = DASHBOARD_STEPS[name];
@@ -116,7 +150,7 @@ const getSomeBlocksNeedUpdate = createSelector(
 );
 
 export const getCanProceed = createSelector(
-  [getDirtyBlocks, getSomeBlocksNeedUpdate],
+  [getDraftDirtyBlocks, getSomeBlocksNeedUpdate],
   (dirtyBlocks, someBlocksNeedUpdate) => {
     const mandatoryBlocks = dirtyBlocks.countries && dirtyBlocks.commodities;
 
@@ -154,8 +188,8 @@ export const makeGetNodesPanelsProps = name => {
   const getLoading = state => state.nodesPanel[name].loadingItems;
   const getNoData = state => state.nodesPanel[name].noData;
   const getTabs = makeGetTabs(name);
-  const getSelectedNodeId = state => state.nodesPanel[name].draftSelectedNodesId;
-  const getSelectedNodesIds = state => state.nodesPanel[name].draftSelectedNodesId;
+  const getSelectedNodeId = state => state.nodesPanel[name].draftSelectedNodeId;
+  const getSelectedNodesIds = state => state.nodesPanel[name].draftSelectedNodesIds;
   const getSearchResults = state => state.nodesPanel[name].searchResults;
   const getFetchKey = state => state.nodesPanel[name].fetchKey;
   const getExcludingMode = state => state.nodesPanel[name].excludingMode;
@@ -212,10 +246,10 @@ export const makeGetNodesPanelsProps = name => {
   }
 
   if (moduleOptions.hasMultipleSelection) {
-    selectors.draftSelectedNodesIds = getSelectedNodesIds;
+    selectors.selectedNodesIds = getSelectedNodesIds;
     selectors.excludingMode = getExcludingMode;
   } else {
-    selectors.draftSelectedNodesId = getSelectedNodeId;
+    selectors.selectedNodeId = getSelectedNodeId;
   }
 
   return createStructuredSelector(selectors);
