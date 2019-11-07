@@ -5,6 +5,8 @@ import GridList from 'react-components/shared/grid-list/grid-list.component';
 import { useFirstItem } from 'react-components/shared/grid-list/grid-list.hooks';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import ResizeListener from 'react-components/shared/resize-listener.component';
+import Text from 'react-components/shared/text';
+import Dropdown from 'react-components/shared/dropdown';
 import { BREAKPOINTS } from 'constants';
 
 function DestinationsPanel(props) {
@@ -40,15 +42,17 @@ function DestinationsPanel(props) {
         const width = windowWidth > BREAKPOINTS.laptop ? 950 : 560;
         return (
           <div className="grid-container">
-            <SearchInput
-              variant="bordered"
-              size="sm"
-              className="dashboard-panel-search"
-              items={searchResults}
-              placeholder="Search place"
-              onSelect={setSearchResult}
-              onSearchTermChange={getSearchResults}
-            />
+            <div className="grid-actions-container">
+              <SearchInput
+                variant="bordered"
+                size="sm"
+                className="dashboard-panel-search"
+                items={searchResults}
+                placeholder="Search place"
+                onSelect={setSearchResult}
+                onSearchTermChange={getSearchResults}
+              />
+            </div>
             <GridList
               className="dashboard-panel-pill-list"
               items={destinations}

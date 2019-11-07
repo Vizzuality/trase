@@ -8,6 +8,7 @@ import {
   GET_ALL_NODES_URL
 } from 'utils/getURLFromParams';
 import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
+import { getDashboardSelectedYears } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { DASHBOARD_STEPS } from 'constants';
 import {
   setMoreData,
@@ -37,9 +38,12 @@ export function* getPanelParams(optionsType, options = {}) {
     exporters: exportersTab || null,
     importers: importersTab || null
   }[optionsType];
+  const [startYear, endYear] = getDashboardSelectedYears(state);
   const activeItemParams = items => items.join() || undefined;
   const params = {
     page,
+    end_year: endYear,
+    start_year: startYear,
     options_type: optionsType,
     node_types_ids: nodeTypesIds
   };
@@ -57,6 +61,7 @@ export function* getPanelParams(optionsType, options = {}) {
     } else {
       params.sources_ids = activeItemParams(panel.selectedNodesIds);
     }
+    params.order_by = panel.orderBy;
   }
 
   if (currentStep > DASHBOARD_STEPS.commodities || isOverview) {
@@ -70,6 +75,7 @@ export function* getPanelParams(optionsType, options = {}) {
     } else {
       params.destinations_ids = activeItemParams(panel.selectedNodesIds);
     }
+    params.order_by = panel.orderBy;
   }
 
   if (currentStep > DASHBOARD_STEPS.exporters || isOverview) {
@@ -79,6 +85,7 @@ export function* getPanelParams(optionsType, options = {}) {
     } else {
       params.exporters_ids = activeItemParams(panel.selectedNodesIds);
     }
+    params.order_by = panel.orderBy;
   }
 
   if (isOverview) {
@@ -88,6 +95,7 @@ export function* getPanelParams(optionsType, options = {}) {
     } else {
       params.importers_ids = activeItemParams(panel.selectedNodesIds);
     }
+    params.order_by = panel.orderBy;
   }
 
   return params;
@@ -163,6 +171,7 @@ export function* getMoreData(name, reducer) {
   if (params.node_types_ids === null) {
     return;
   }
+  console.log(params);
   yield put(setLoadingItems(true, name));
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);
