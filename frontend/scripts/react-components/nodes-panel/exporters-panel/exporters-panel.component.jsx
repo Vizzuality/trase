@@ -91,8 +91,8 @@ function ExportersPanel(props) {
                   page={page}
                   loading={loading}
                   itemToScrollTo={itemToScrollTo}
-                  excludingMode={excludingMode}
-                  onSelectAllClick={setExcludingMode}
+                  excludingMode={ENABLE_REDESIGN_PAGES ? excludingMode : undefined}
+                  onSelectAllClick={ENABLE_REDESIGN_PAGES ? setExcludingMode : undefined}
                 >
                   {itemProps => (
                     <GridListItem
