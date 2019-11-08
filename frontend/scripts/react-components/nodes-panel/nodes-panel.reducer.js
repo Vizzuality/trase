@@ -374,16 +374,16 @@ const nodesPanelReducer = {
     const moduleOptions = modules[name];
     if (moduleOptions.hasMultipleSelection) {
       return immer(state, draft => {
-        draft[name].selectedNodesIds = [];
+        draft[name].draftSelectedNodesIds = [];
         draft[name].excludingMode = mode;
         const panelIndex = DASHBOARD_STEPS[name];
         Object.entries(DASHBOARD_STEPS).forEach(([currentPanel, step]) => {
           const currentModuleOptions = modules[name];
           if (panelIndex < step) {
             if (currentModuleOptions.hasMultipleSelection) {
-              draft[currentPanel].selectedNodesIds = [];
+              draft[currentPanel].draftSelectedNodesIds = [];
             } else {
-              draft[currentPanel].selectedNodeId = null;
+              draft[currentPanel].draftSelectedNodeId = null;
             }
           }
         });
