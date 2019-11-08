@@ -4,7 +4,7 @@ import DropdownContext from 'react-components/shared/dropdown/dropdown.context';
 import DropdownItem from 'react-components/shared/dropdown/dropdown-item.component';
 
 function useClipItemList(props) {
-  const DEFAULT_MAX_LIST_HEIGHT = 242;
+  const DEFAULT_MAX_LIST_HEIGHT = 212;
   const { options, clip, showSelected } = props;
   const ref = useRef(null);
   const [listHeight, updateListHeight] = useState(null);
