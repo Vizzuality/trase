@@ -134,7 +134,9 @@ ExportersPanel.propTypes = {
   actionComponent: PropTypes.node,
   fetchData: PropTypes.func.isRequired,
   excludingMode: PropTypes.bool,
-  setExcludingMode: PropTypes.func
+  setExcludingMode: PropTypes.func,
+  setOrderBy: PropTypes.func,
+  orderBy: PropTypes.object
 };
 
 ExportersPanel.defaultProps = {

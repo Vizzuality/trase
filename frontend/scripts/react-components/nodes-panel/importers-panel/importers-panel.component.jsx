@@ -134,7 +134,9 @@ ImportersPanel.propTypes = {
   fetchData: PropTypes.func.isRequired,
   noData: PropTypes.bool,
   excludingMode: PropTypes.bool,
-  setExcludingMode: PropTypes.func
+  setExcludingMode: PropTypes.func,
+  setOrderBy: PropTypes.func,
+  orderBy: PropTypes.object
 };
 
 ImportersPanel.defaultProps = {

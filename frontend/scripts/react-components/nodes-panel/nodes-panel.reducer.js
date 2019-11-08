@@ -378,10 +378,16 @@ const nodesPanelReducer = {
   [NODES_PANEL__SET_ORDER_BY](state, action) {
     const { name } = action.meta;
     const { orderBy } = action.payload;
+    const moduleOptions = modules[name];
     return immer(state, draft => {
       draft[name].orderBy = orderBy.value;
       draft[name].data.byId = nodesPanelInitialState[name].data.byId;
       draft[name].page = nodesPanelInitialState[name].page;
+      if (moduleOptions.hasMultipleSelection) {
+        draft[name].selectedNodesIds = [];
+      } else {
+        draft[name].selectedNodeId = null;
+      }
     });
   }
 };
