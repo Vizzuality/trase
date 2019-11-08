@@ -1,1 +1,1641 @@
-{"type":"Topology","arcs":[],"objects":{"indonesia_ports_7_nov_2018":{"type":"GeometryCollection","geometries":[{"type":"Point","coordinates":[116.816667,-1.25],"properties":{"CD_NAME":"BALIKPAPAN","LATITUDE":-1.25,"LONGITUDE":116.81667,"ORIG_ID":"16919","GEO_ID":"WPI-51840"}},{"type":"Point","coordinates":[104.038078,1.167589],"properties":{"CD_NAME":"BATAM ISLAND","LATITUDE":1.16759,"LONGITUDE":104.03808,"ORIG_ID":"16924","GEO_ID":"ID-PORT-1008"}},{"type":"Point","coordinates":[98.683333,3.783333],"properties":{"CD_NAME":"BELAWAN","LATITUDE":3.78333,"LONGITUDE":98.68333,"ORIG_ID":"16929","GEO_ID":"WPI-50730"}},{"type":"Point","coordinates":[117.505548,0.132065],"properties":{"CD_NAME":"BERAU","LATITUDE":0.13206,"LONGITUDE":117.50555,"ORIG_ID":"16931","GEO_ID":"ID-PORT-1014"}},{"type":"Point","coordinates":[125.183333,1.433333],"properties":{"CD_NAME":"BITUNG","LATITUDE":1.43333,"LONGITUDE":125.18333,"ORIG_ID":"16963","GEO_ID":"WPI-52065"}},{"type":"Point","coordinates":[105.783333,-1.633333],"properties":{"CD_NAME":"BLINYU","LATITUDE":-1.63333,"LONGITUDE":105.78333,"ORIG_ID":"16967","GEO_ID":"WPI-50180"}},{"type":"Point","coordinates":[101.45,1.683333],"properties":{"CD_NAME":"DUMAI","LATITUDE":1.68333,"LONGITUDE":101.45,"ORIG_ID":"17093","GEO_ID":"WPI-50785"}},{"type":"Point","coordinates":[112.65,-7.15],"properties":{"CD_NAME":"GRESIK","LATITUDE":-7.15,"LONGITUDE":112.65,"ORIG_ID":"17243","GEO_ID":"WPI-51120"}},{"type":"Point","coordinates":[103.659715,-1.533524],"properties":{"CD_NAME":"JAMBI","LATITUDE":-1.53352,"LONGITUDE":103.65972,"ORIG_ID":"17348","GEO_ID":"ID-PORT-1028"}},{"type":"Point","coordinates":[104.135104,1.072841],"properties":{"CD_NAME":"KABIL/PANAU","LATITUDE":1.07284,"LONGITUDE":104.1351,"ORIG_ID":"17380","GEO_ID":"ID-PORT-1032"}},{"type":"Point","coordinates":[116.216667,-3.233333],"properties":{"CD_NAME":"KOTA BARU","LATITUDE":-3.23333,"LONGITUDE":116.21667,"ORIG_ID":"17420","GEO_ID":"WPI-51860"}},{"type":"Point","coordinates":[99.466667,3.35],"properties":{"CD_NAME":"KUALA TANJUNG","LATITUDE":3.35,"LONGITUDE":99.46667,"ORIG_ID":"17424","GEO_ID":"WPI-50518"}},{"type":"Point","coordinates":[111.716667,-2.75],"properties":{"CD_NAME":"KUMAI","LATITUDE":-2.75,"LONGITUDE":111.71667,"ORIG_ID":"17426","GEO_ID":"WPI-51920"}},{"type":"Point","coordinates":[118.931083,-2.695528],"properties":{"CD_NAME":"MAMUJU","LATITUDE":-2.69553,"LONGITUDE":118.93108,"ORIG_ID":"18620","GEO_ID":"ID-PORT-1050"}},{"type":"Point","coordinates":[108.289649,-2.846932],"properties":{"CD_NAME":"MANGGAR","LATITUDE":-2.84693,"LONGITUDE":108.28965,"ORIG_ID":"18624","GEO_ID":"ID-PORT-1051"}},{"type":"Point","coordinates":[117.666502,4.137294],"properties":{"CD_NAME":"NUNUKAN","LATITUDE":4.13729,"LONGITUDE":117.6665,"ORIG_ID":"17757","GEO_ID":"ID-PORT-1061"}},{"type":"Point","coordinates":[104.7928355,-2.997040625],"properties":{"CD_NAME":"PALEMBANG","LATITUDE":-2.99704,"LONGITUDE":104.79284,"ORIG_ID":"17807","GEO_ID":"WPI-50330"}},{"type":"Point","coordinates":[105.316667,-5.466667],"properties":{"CD_NAME":"PANJANG","LATITUDE":-5.46667,"LONGITUDE":105.31667,"ORIG_ID":"17814","GEO_ID":"WPI-50380"}},{"type":"Point","coordinates":[119.855399,-0.710857],"properties":{"CD_NAME":"PANTOLOAN","LATITUDE":-0.71086,"LONGITUDE":119.8554,"ORIG_ID":"18689","GEO_ID":"ID-PORT-1070"}},{"type":"Point","coordinates":[116.15,-3.3],"properties":{"CD_NAME":"PULAU LAUT","LATITUDE":-3.3,"LONGITUDE":116.15,"ORIG_ID":"18704","GEO_ID":"ID-PORT-1133"}},{"type":"Point","coordinates":[102.548115,-0.372535],"properties":{"CD_NAME":"RENGAT","LATITUDE":-0.37254,"LONGITUDE":102.54811,"ORIG_ID":"17941","GEO_ID":"ID-PORT-1086"}},{"type":"Point","coordinates":[117.116667,-0.516667],"properties":{"CD_NAME":"SAMARINDA","LATITUDE":-0.51667,"LONGITUDE":117.11667,"ORIG_ID":"18732","GEO_ID":"WPI-51820"}},{"type":"Point","coordinates":[113,-2.516667],"properties":{"CD_NAME":"SAMPIT","LATITUDE":-2.51667,"LONGITUDE":113,"ORIG_ID":"17980","GEO_ID":"WPI-51910"}},{"type":"Point","coordinates":[117.984427,0.983863],"properties":{"CD_NAME":"SANGKULIRANG","LATITUDE":0.98386,"LONGITUDE":117.98443,"ORIG_ID":"18735","GEO_ID":"ID-PORT-1091"}},{"type":"Point","coordinates":[112.787332,-7.379391],"properties":{"CD_NAME":"SURABAYA","LATITUDE":-7.37939,"LONGITUDE":112.78733,"ORIG_ID":"18777","GEO_ID":"WPI-51130"}},{"type":"Point","coordinates":[110.425306,-6.952292],"properties":{"CD_NAME":"TANJUNG EMAS","LATITUDE":-6.95229,"LONGITUDE":110.42531,"ORIG_ID":"18128","GEO_ID":"ID-PORT-1112"}},{"type":"Point","coordinates":[106.941111,-6.148722],"properties":{"CD_NAME":"TANJUNG PERAK","LATITUDE":-6.14872,"LONGITUDE":106.94111,"ORIG_ID":"18129","GEO_ID":"ID-PORT-1115"}},{"type":"Point","coordinates":[106.881651,-6.1023],"properties":{"CD_NAME":"TANJUNG PRIOK","LATITUDE":-6.1023,"LONGITUDE":106.88165,"ORIG_ID":"18130","GEO_ID":"ID-PORT-1117"}},{"type":"Point","coordinates":[107.629795,-2.739615],"properties":{"CD_NAME":"TANJUNGPANDAN","LATITUDE":-2.73962,"LONGITUDE":107.6298,"ORIG_ID":"18131","GEO_ID":"WPI-50250"}},{"type":"Point","coordinates":[105.3609885,-5.546749595],"properties":{"CD_NAME":"TARAHAN","LATITUDE":-5.54675,"LONGITUDE":105.36099,"ORIG_ID":"18132","GEO_ID":"ID-PORT-1130"}},{"type":"Point","coordinates":[116.1133005,-3.27900088],"properties":{"CD_NAME":"TARJUN","LATITUDE":-3.279,"LONGITUDE":116.1133,"ORIG_ID":"18133","GEO_ID":"ID-PORT-1131"}},{"type":"Point","coordinates":[100.333333,-0.95],"properties":{"CD_NAME":"TELUK BAYUR","LATITUDE":-0.95,"LONGITUDE":100.33333,"ORIG_ID":"18142","GEO_ID":"WPI-50450"}},{"type":"Point","coordinates":[115.167771,-8.747279],"properties":{"CD_NAME":"DENPASAR / NGURAH RAI (U)","LATITUDE":-8.74728,"LONGITUDE":115.16777,"ORIG_ID":"17077","GEO_ID":"ID-PORT-1060"}},{"type":"Point","coordinates":[98.68254,3.769393],"properties":{"CD_NAME":"MEDAN / POLONIA (U)","LATITUDE":3.76939,"LONGITUDE":98.68254,"ORIG_ID":"17661","GEO_ID":"ID-PORT-1054"}},{"type":"Point","coordinates":[104.700395,-2.897433],"properties":{"CD_NAME":"SM. BADARUDDIN (U)","LATITUDE":-2.89743,"LONGITUDE":104.7004,"ORIG_ID":"18046","GEO_ID":"ID-PORT-1100"}},{"type":"Point","coordinates":[106.65589,-6.12508],"properties":{"CD_NAME":"SOEKARNO-HATTA (U)","LATITUDE":-6.12508,"LONGITUDE":106.65589,"ORIG_ID":"18055","GEO_ID":"ID-PORT-1101"}}]}},"crs":{"type":"name","properties":{"name":"urn:ogc:def:crs:OGC:1.3:CRS84"}}}
+{"type":"Topology","transform":{"scale":[0.00420401310131013,0.0012828784878487847],"translate":[98.677366,-8.745783]},"objects": { "indonesia_ports":  { "type":"GeometryCollection","geometries": [
+  {
+    "type": "Point",
+    "coordinates": [
+      2848,
+      4649
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0001",
+      "name": "AIR HITAM"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      9928,
+      1634
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0002",
+      "name": "ASIKE"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3390,
+      4697
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0003",
+      "name": "BAGENDANG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      5470,
+      5122
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0004",
+      "name": "BAHUMBELU"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4315,
+      5839
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0005",
+      "name": "BALIKPAPAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3739,
+      481
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0006",
+      "name": "BANYUWANGI"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1266,
+      7729
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0007",
+      "name": "BATU AMPAR"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4122,
+      4117
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0008",
+      "name": "BATULICIN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      958,
+      6442
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0009",
+      "name": "BAYAS"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4,
+      9767
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0010",
+      "name": "BELAWAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1678,
+      5546
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0011",
+      "name": "BELINJU"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2965,
+      6896
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0012",
+      "name": "BELITANG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2132,
+      4673
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0013",
+      "name": "BELITUNG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      862,
+      3771
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0014",
+      "name": "BENGKULU"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3932,
+      3
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0015",
+      "name": "BENOA"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      6299,
+      7939
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0016",
+      "name": "BITUNG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4903,
+      5530
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0017",
+      "name": "BONE MANJING"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4475,
+      6958
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0018",
+      "name": "BONTANG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      745,
+      7400
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0019",
+      "name": "BUATAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4290,
+      5869
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0020",
+      "name": "BULUMINUNG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3121,
+      4770
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0021",
+      "name": "BUMI HARJO"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3843,
+      5479
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0022",
+      "name": "BUNTOK"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      5410,
+      7746
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0023",
+      "name": "BUOL"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1712,
+      4157
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0024",
+      "name": "CENGAL"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2353,
+      1586
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0025",
+      "name": "CIREBON"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1730,
+      2123
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0026",
+      "name": "CIWANDAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      658,
+      8131
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0027",
+      "name": "DUMAI"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3326,
+      1240
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0028",
+      "name": "GRESIK"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1952,
+      1932
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0029",
+      "name": "HALIM PERDANA KUSUMA (U)"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1295,
+      4779
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0030",
+      "name": "HINDOLI SUNGAI LILIN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      9999,
+      4833
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0031",
+      "name": "JAYAPURA"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2782,
+      1386
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0032",
+      "name": "JENDERAL ACHMAD YANI (U)"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3388,
+      4690
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0033",
+      "name": "JETTY WILMAR - BAGENDANG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      704,
+      8104
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0034",
+      "name": "JETTY WILMAR - PELINTUNG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4493,
+      9410
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0035",
+      "name": "JUWATA (U)"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1297,
+      7653
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0036",
+      "name": "KABIL"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3347,
+      5169
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0038",
+      "name": "KABUAU"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4308,
+      5898
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0039",
+      "name": "KARIANGAU"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2519,
+      7899
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0040",
+      "name": "KARTIASA"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2927,
+      5148
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0041",
+      "name": "KELAMPAI"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4279,
+      9645
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0042",
+      "name": "KELAPIS"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4295,
+      5953
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0043",
+      "name": "KENANGAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      5447,
+      3660
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0044",
+      "name": "KOLAKA"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      954,
+      6449
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0045",
+      "name": "KUALA CENAKU"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3705,
+      4209
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0046",
+      "name": "KUALA KAPUAS"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      47,
+      9651
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0047",
+      "name": "KUALA NAMU (U)"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      181,
+      9443
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0048",
+      "name": "KUALA TANJUNG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1137,
+      6183
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0049",
+      "name": "KUALA TUNGKAL"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3110,
+      4699
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0050",
+      "name": "KUMAI"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2598,
+      7913
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0051",
+      "name": "KUMBA"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4434,
+      8448
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0052",
+      "name": "LABANAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      5617,
+      4248
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0053",
+      "name": "LAMERURU"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4372,
+      6359
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0054",
+      "name": "LOA DURI"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      639,
+      8183
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0055",
+      "name": "LUBUK GAUNG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4931,
+      2827
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0056",
+      "name": "MAKASSAR"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4592,
+      7534
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0057",
+      "name": "MALOY"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4808,
+      4734
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0058",
+      "name": "MAMUJU"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2286,
+      4597
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0059",
+      "name": "MANGGAR"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      8420,
+      6140
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0060",
+      "name": "MANOKWARI"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3826,
+      4496
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0061",
+      "name": "MARABAHAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2734,
+      5962
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0062",
+      "name": "MATAN JAYA"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2761,
+      6734
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0063",
+      "name": "MELIAU"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4304,
+      7220
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0066",
+      "name": "MUARA BENGKAL"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1230,
+      5936
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0067",
+      "name": "MUARA SABAK"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3140,
+      7618
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0068",
+      "name": "NANGA BADAU"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3922,
+      0
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0069",
+      "name": "NGURAH RAI (U)"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1097,
+      6942
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0070",
+      "name": "NYATO/PULAI"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3345,
+      5022
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0071",
+      "name": "PALANGAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1451,
+      4493
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0072",
+      "name": "PALEMBANG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4200,
+      4919
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0073",
+      "name": "PAMUKAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1771,
+      5185
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0074",
+      "name": "PANGKAL BALAM"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3137,
+      4872
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0075",
+      "name": "PANGKALAN BANTENG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      809,
+      7978
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0076",
+      "name": "PANGKALAN BATANG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      0,
+      9597
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0077",
+      "name": "PANGKALAN UDARA SOEWONDO/POLONIA (U)"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1579,
+      2550
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0078",
+      "name": "PANJANG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      5037,
+      6263
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0079",
+      "name": "PANTOLOAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3359,
+      5235
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0080",
+      "name": "PARENGGEAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4551,
+      7771
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0081",
+      "name": "PENGADAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1475,
+      4510
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0082",
+      "name": "PERAJEN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      706,
+      7348
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0083",
+      "name": "PERAWANG, SUMATRA"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1163,
+      4676
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0084",
+      "name": "PINAGO UTAMA"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4310,
+      6595
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0086",
+      "name": "PMM JETTY, MUARA KAMAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4180,
+      5410
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0087",
+      "name": "PONDONG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2529,
+      6820
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0088",
+      "name": "PONTIANAK"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1065,
+      6916
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0089",
+      "name": "PT. THIP NYATO"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1065,
+      6916
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0090",
+      "name": "PT. THIP NYATO PULAI"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1068,
+      6983
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0091",
+      "name": "PT. THIP PULAI"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3704,
+      4664
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0092",
+      "name": "PULANG PISAU"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4562,
+      7749
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0093",
+      "name": "RANTAU BAHAN, SANGKULIRANG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      920,
+      6525
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0094",
+      "name": "RENGAT"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      869,
+      6542
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0095",
+      "name": "RENGAT/ JAPURA (U)"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4440,
+      9107
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0096",
+      "name": "SALIM BATU"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4400,
+      6379
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0097",
+      "name": "SAMARINDA"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      25,
+      8165
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0098",
+      "name": "SAMBAS"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3398,
+      4839
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0099",
+      "name": "SAMPIT"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2724,
+      6776
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0100",
+      "name": "SANGGAU"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3983,
+      3881
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0101",
+      "name": "SATUI"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4424,
+      9999
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0102",
+      "name": "SEBAKIS"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4361,
+      6596
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0103",
+      "name": "SEBULU"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2515,
+      6609
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0104",
+      "name": "SEI DERAS"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4150,
+      5085
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0105",
+      "name": "SEI KERANG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1464,
+      4483
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0106",
+      "name": "SEI LAIS PALEMBANG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2773,
+      6737
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0107",
+      "name": "SEI MAYAM"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2556,
+      6799
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0108",
+      "name": "SEI TEMPAYAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2976,
+      6880
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0109",
+      "name": "SEKADAU"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4398,
+      9376
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0111",
+      "name": "SEKATAK"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      267,
+      9145
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0112",
+      "name": "SEKUMULTI NABATI ASAHAN , PTNG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4173,
+      4849
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0113",
+      "name": "SELABAK"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2795,
+      1399
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0114",
+      "name": "SEMARANG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      805,
+      7436
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0115",
+      "name": "SIAK"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3063,
+      6984
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0116",
+      "name": "SINTANG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2468,
+      7751
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0117",
+      "name": "SINTETE"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1897,
+      2041
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0118",
+      "name": "SOEKARNO-HATTA (U)"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4165,
+      4269
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0119",
+      "name": "STAGEN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2683,
+      5419
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0120",
+      "name": "SUKA BANGUN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1433,
+      4559
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0121",
+      "name": "SULTAN MAHMUD BADARUDDIN (U)"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1181,
+      5544
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0122",
+      "name": "SULTAN THAHA (U)"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2584,
+      6803
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0123",
+      "name": "SUNGAI AMBAWANG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2550,
+      6742
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0124",
+      "name": "SUNGAI DURIAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1172,
+      7044
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0125",
+      "name": "SUNGAI GUNTUNG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4419,
+      6372
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0126",
+      "name": "SUNGAI MERIAM"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3857,
+      4526
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0128",
+      "name": "SUNGAI SALAI"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2551,
+      6702
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0129",
+      "name": "SUPADIO (U)"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3357,
+      1067
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0130",
+      "name": "SURABAYA /JUANDA (U)"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1185,
+      5621
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0131",
+      "name": "TALANG DUKU"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4156,
+      5396
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0132",
+      "name": "TANAH MERAH/GROGOT"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      5697,
+      5874
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0133",
+      "name": "TANGKIANG"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4320,
+      6566
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0134",
+      "name": "TANJUNG KARAS, BENUA PUHUN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2129,
+      4677
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0135",
+      "name": "TANJUNG PANDAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3345,
+      1200
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0136",
+      "name": "TANJUNG PERAK"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1951,
+      2061
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0137",
+      "name": "TANJUNG PRIOK"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4476,
+      8499
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0138",
+      "name": "TANJUNG REDEP"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2192,
+      4406
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0139",
+      "name": "TANJUNG RESING"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      5120,
+      4489
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0140",
+      "name": "TANJUNG RINGGIT"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4444,
+      9027
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0141",
+      "name": "TANJUNG SELOR"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1317,
+      7656
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0142",
+      "name": "TANJUNG UBAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1587,
+      2509
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0143",
+      "name": "TARAHAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4148,
+      4267
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0144",
+      "name": "TARJUN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2713,
+      6786
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0145",
+      "name": "TAYAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1420,
+      7638
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0146",
+      "name": "TELUK BAKAU"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      403,
+      6040
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0147",
+      "name": "TELUK BAYUR"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1009,
+      6414
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0148",
+      "name": "TEMBILAHAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      3780,
+      4247
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0149",
+      "name": "TRISAKTI"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2946,
+      4740
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0150",
+      "name": "UAI"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4964,
+      2858
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0151",
+      "name": "UJUNG PANDANG / HASANUDDIN (U)"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2522,
+      6826
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0152",
+      "name": "WAJOK"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      2796,
+      747
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0153",
+      "name": "YOGYAKARTA / ADI SUCIPTO (U)"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      4499,
+      9375
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0160",
+      "name": "LINGKAS TARAKAN"
+    }
+  },
+  {
+    "type": "Point",
+    "coordinates": [
+      1119,
+      6424
+    ],
+    "properties": {
+      "geoid": "ID-PORT-0161",
+      "name": "KUALA ENOK"
+    }
+  }
+]}},"arcs":[]}

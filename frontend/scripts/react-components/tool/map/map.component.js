@@ -197,8 +197,9 @@ export default class MapComponent {
         const boundsCenterZoom = this.map._getBoundsCenterZoom(bounds);
         this._setMapViewDebounced(boundsCenterZoom.center, boundsCenterZoom.zoom);
       } else {
-        const singlePoint = this.vectorOutline.getBounds().getCenter();
-        this.map.setView(singlePoint);
+        const bounds = this.vectorOutline.getBounds();
+        const boundsCenterZoom = this.map._getBoundsCenterZoom(bounds);
+        this.map.setView(bounds.getCenter(), boundsCenterZoom.zoom - 6);
       }
     }
   }
@@ -376,7 +377,6 @@ export default class MapComponent {
 
     topoLayer.isPoint = isPoint;
     this._setEventsForTopoLayer(topoLayer);
-
     return topoLayer;
   }
 
