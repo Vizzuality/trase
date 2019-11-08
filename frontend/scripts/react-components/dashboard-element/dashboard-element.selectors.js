@@ -184,9 +184,15 @@ const getNodesPanelExcludingMode = createSelector(
   })
 );
 
-export const getDraftDynamicSentence = createSelector(
-  [getDraftDirtyBlocks, getDraftNodesPanelValues, getEditMode, getNodesPanelPrefixes],
-  (dirtyBlocks, panelsValues, editMode, prefixes) => {
+export const getDynamicSentence = createSelector(
+  [
+    getDirtyBlocks,
+    getNodesPanelValues,
+    getEditMode,
+    getNodesPanelPrefixes,
+    getNodesPanelExcludingMode
+  ],
+  (dirtyBlocks, panelsValues, editMode, prefixes, excludingModeMap) => {
     if (Object.values(dirtyBlocks).every(block => !block)) {
       return [];
     }
@@ -198,37 +204,49 @@ export const getDraftDynamicSentence = createSelector(
     const sourcesValues =
       panelsValues.sources.length > 0 ? panelsValues.sources : panelsValues.countries;
 
-    const getSettings = (item, prefixesMap, defaultName, defaultPrefix) => {
+    const getSettings = (items, prefixesMap, excludingMode, defaultName, defaultPrefix) => {
       const settings = { prefix: defaultPrefix, name: defaultName };
-      if (prefixesMap && item) {
-        const nodeType = item.nodeType || item.type;
-        settings.prefix = prefixesMap[nodeType] || defaultPrefix;
+      const [first] = items;
+      if (prefixesMap && first) {
+        const nodeType = first.nodeType || first.type;
         settings.name = nodeType ? pluralize(nodeType) : defaultName;
+        settings.prefix = prefixesMap[nodeType] || defaultPrefix;
+      }
+      if (excludingMode) {
+        if (items.length > 1) {
+          settings.prefix = `${settings.prefix} all but`;
+        } else {
+          settings.prefix = `${settings.prefix} all ${settings.name} except`;
+        }
       }
       return settings;
     };
 
     const sourcesSettings = getSettings(
-      panelsValues.sources[0],
+      panelsValues.sources,
       prefixes.sources,
+      excludingModeMap.sources,
       'sources',
       'produced in'
     );
     const exportersSettings = getSettings(
-      panelsValues.exporters[0],
+      panelsValues.exporters,
       prefixes.exporters,
+      excludingModeMap.exporters,
       'exporters',
       'exported by'
     );
     const importersSettings = getSettings(
-      panelsValues.importers[0],
+      panelsValues.importers,
       prefixes.importers,
+      excludingModeMap.importers,
       'importers',
       'imported by'
     );
     const destinationsSettings = getSettings(
-      panelsValues.destinations[0],
+      panelsValues.destinations,
       prefixes.destinations,
+      excludingModeMap.destinations,
       'destinations',
       'going to'
     );
@@ -280,10 +298,10 @@ export const getDraftDynamicSentence = createSelector(
   }
 );
 
-export const getDynamicSentence = createSelector(
+export const getDraftDynamicSentence = createSelector(
   [
-    getDirtyBlocks,
-    getNodesPanelValues,
+    getDraftDirtyBlocks,
+    getDraftNodesPanelValues,
     getEditMode,
     getNodesPanelPrefixes,
     getNodesPanelExcludingMode
