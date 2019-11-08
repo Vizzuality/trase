@@ -8,8 +8,8 @@
         {
           "type": "cartodb",
           "options": {
-            "sql": "SELECT * FROM brazil_states_context_layer",
-            "cartocss": "#s{  polygon-opacity: 0;  line-color: #000000;   line-width: 1;    line-opacity: 1;} #s[zoom>3]::labels {    text-name: [abbr];    text-face-name: 'Open Sans Regular';    text-size: 12;    text-allow-overlap: true;    text-placement: interior;    text-fill: #FFFFFF;    text-halo-fill: #000000;    text-halo-radius: 1;   text-character-spacing: 0;   [zoom>4] {        text-name: [name_upper];    text-size: 14; text-allow-overlap: true;   text-placement: interior;      text-character-spacing: 3;     [name_upper='DISTRITO FEDERAL'] {      text-dy: -5;      }      [name_upper='GOIAS'] {      text-dy: 10;      }      [name_upper='RIO GRANDE DO NORTE'] {      text-dx: 1;      }    }}",
+            "sql": "SELECT * FROM brazil_states",
+            "cartocss": "#s{  polygon-opacity: 0;  line-color: #000000;   line-width: 1;    line-opacity: 1;} #s[zoom>3]::labels {    text-name: [siglauf3];    text-face-name: 'Open Sans Regular';    text-size: 12;    text-allow-overlap: true;    text-placement: interior;    text-fill: #000000;   text-character-spacing: 0;   [zoom>4] {        text-name: [name];    text-size: 14; text-allow-overlap: true;   text-placement: interior;      text-character-spacing: 3;     [name='DISTRITO FEDERAL'] {      text-dy: -5;      }      [name='GOIAS'] {      text-dy: 10;      }      [name='RIO GRANDE DO NORTE'] {      text-dx: 1;      }    }}",
             "cartocss_version": "2.3.0"
           }
         }
@@ -26,7 +26,7 @@
           "type": "cartodb",
           "options": {
             "sql": "SELECT * FROM brazil_biomes",
-            "cartocss": "#brazil_biomes{  polygon-opacity: 0;  line-color: #000000;  line-width: 1;  line-opacity: 1;}#brazil_biomes[zoom>3]::labels {  text-name: [name];  text-face-name: 'Open Sans Regular';  text-size: 15;  text-fill: #FFFFFF;  text-allow-overlap: true;  text-placement: interior;  text-halo-fill: black;  text-halo-radius: 1;  text-character-spacing: 3;  [name='MATA ATLANTICA'] {    text-horizontal-alignment: left;    text-dx: 85;   }  [name='PANTANAL'] {    text-horizontal-alignment: right;    text-dx: -60;  }  [zoom=4] {    text-size: 13;  }}",
+            "cartocss": "#brazil_biomes{  polygon-opacity: 0;  line-color: #000000;  line-width: 1;  line-opacity: 1;}#brazil_biomes[zoom>3]::labels {  text-name: [name];  text-face-name: 'Open Sans Regular';  text-size: 15;  text-fill: #000000;  text-allow-overlap: true;  text-placement: interior;  text-character-spacing: 3;  [name='MATA ATLANTICA'] {    text-horizontal-alignment: left;    text-dx: 85;   }  [name='PANTANAL'] {    text-horizontal-alignment: right;    text-dx: -60;  }  [zoom=4] {    text-size: 13;  }}",
             "cartocss_version": "2.3.0"
           }
         }
@@ -35,7 +35,7 @@
   },
   {
     "version": "0.0.1",
-    "name": "water_scarcity",
+    "name": "brazil_water_scarcity",
     "layergroup": {
       "version": "1.0.1",
       "layers": [
@@ -52,7 +52,7 @@
   },
   {
     "version": "0.0.1",
-    "name": "indigenous_areas",
+    "name": "brazil_indigenous_areas",
     "layergroup": {
       "version": "1.0.1",
       "layers": [
@@ -96,44 +96,10 @@
         {
           "type": "cartodb",
           "options": {
-            "sql": "SELECT the_geom_webmercator, '2009' as year FROM deforestation_alerts_2009 union all SELECT the_geom_webmercator, '2010' as year FROM deforestation_alerts_2010 union all SELECT the_geom_webmercator, '2011' as year FROM deforestation_alerts_2011 union all SELECT the_geom_webmercator, '2012' as year FROM deforestation_alerts_2012 union all SELECT the_geom_webmercator, '2013' as year FROM deforestation_alerts_2013 union all SELECT the_geom_webmercator, '2014' as year FROM deforestation_alerts_2014 union all SELECT the_geom_webmercator, '2015' as year FROM deforestation_alerts_2015",
+            "sql": "SELECT * from brazil_deforestation_2017_20181001",
             "cartocss": "#deforestation_alerts_2013{ polygon-fill: #B40903;   polygon-opacity: 1;   line-color: #B40903;   line-width: 0.2;   line-opacity: 1; }",
             "cartocss_version": "2.3.0",
             "interactivity":["year"]
-          }
-        }
-      ]
-    }
-  },
-  {
-    "version": "0.0.1",
-    "name": "col_protected_areas",
-    "layergroup": {
-      "version": "1.0.1",
-      "layers": [
-        {
-          "type": "cartodb",
-          "options": {
-            "sql": "SELECT * FROM brazil_protected_areas",
-            "cartocss": "#brazil_protected_areas{   polygon-opacity: 0.5;   polygon-fill:#B4D84F;   line-color: #B4D84F;   line-width: 1;   line-opacity: 1;}",
-            "cartocss_version": "2.3.0"
-          }
-        }
-      ]
-    }
-  },
-  {
-    "version": "0.0.1",
-    "name": "col_adm1_1",
-    "layergroup": {
-      "version": "1.0.1",
-      "layers": [
-        {
-          "type": "cartodb",
-          "options": {
-            "sql": "SELECT the_geom_webmercator FROM col_adm1_1",
-            "cartocss": "#col_department_boundries { polygon-opacity: 0;    line-color: #000000;    line-width: 1;    line-opacity: 1;}",
-            "cartocss_version": "2.3.0"
           }
         }
       ]
@@ -166,7 +132,7 @@
           "type": "cartodb",
           "options": {
             "sql": "SELECT * FROM paraguay_protected_areas_2018_11_14",
-            "cartocss": "#paraguay_protected_areas_2018_11_14{   polygon-opacity: 0.5;   polygon-fill: #B4D84F;   line-color: #B4D84F;   line-width: 1;   line-opacity: 1;}",
+            "cartocss": "#paraguay_protected_areas_2018_11_14{   polygon-opacity: 0.5;   polygon-fill:#B4D84F;   line-color: #B4D84F;   line-width: 1;   line-opacity: 1;}",
             "cartocss_version": "2.3.0"
           }
         }
@@ -201,23 +167,6 @@
           "options": {
             "sql": "SELECT * FROM py_deforestation_2013_2017_20190131",
             "cartocss": "#layer { polygon-opacity: 0.8; line-width: 0.2; line-opacity: 1; [ year = 2013] { polygon-fill: #ecda9a; line-color: #ecda9a; } [ year = 2014] { polygon-fill: #f1b973; line-color: #f1b973; } [ year = 2015] { polygon-fill: #f7945d; line-color: #f7945d; } [ year = 2016] { polygon-fill: #f86f56; line-color: #f86f56; } [ year = 2017] { polygon-fill: #ee4d5a; line-color: #ee4d5a; } }",
-            "cartocss_version": "2.3.0"
-          }
-        }
-      ]
-    }
-  },
-  {
-    "version": "0.0.1",
-    "name": "id_provinces",
-    "layergroup": {
-      "version": "1.0.1",
-      "layers": [
-        {
-          "type": "cartodb",
-          "options": {
-            "sql": "SELECT * FROM indonesia_provinces_boundaries_20190614",
-            "cartocss": "#layer { polygon-opacity: 0; line-color: #000000; line-width: 1; line-opacity: 1; ::outline { line-color: #FFFFFF; line-width: 1; line-opacity: 0.5; } [zoom>4]::labels { text-face-name: 'Open Sans Regular'; text-name: [prov]; text-size: 12; text-allow-overlap: true; text-placement: point; text-fill: #000000; text-character-spacing: 0; [prov='SULAWESI UTARA'] { text-dy: -10; } [prov='BENGKULU'] { text-dy: 10; } [prov='SULAWESI TENGGARA'] { text-dy: 10; } [prov='BANTEN'] { text-dx: -10; } [prov='DKI JAKARTA'] { text-dy: -10; } [prov='JAWA BARAT'] { text-dy: -10; } [prov='JAWA TIMUR'] { text-dx: 10; text-dy: -10; } [prov='NUSA TENGGARA BARAT'] { text-dy: 10; } [prov='NUSA TENGGARA TIMUR'] { text-dx: 5; } } } ",
             "cartocss_version": "2.3.0"
           }
         }
