@@ -324,11 +324,13 @@ const toolLinksReducer = {
   },
   [TOOL_LINKS__COLLAPSE_SANKEY](state) {
     return immer(state, draft => {
+      // TODO: Clear all nodes in node panel except required
       draft.expandedNodesIds = [];
     });
   },
   [TOOL_LINKS__EXPAND_SANKEY](state) {
     return immer(state, draft => {
+      // TODO: Copy the selectedNodeIds to the nodes in the panel
       draft.expandedNodesIds = state.selectedNodesIds;
     });
   },
