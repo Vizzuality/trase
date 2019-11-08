@@ -28,17 +28,16 @@ RSpec.describe Api::Public::Node::Filter do
       expect(attrs['availability'].first['country']).to eql(node.context.country.iso2)
       expect(attrs['availability'].first['commodity']).to eql(node.context.commodity_name)
       expect(attrs['availability'].first['years']).to eql(node.years)
-      
-      flows_ids = attrs['flow_indicators'].map { |fi| fi['flow_id'] }
-      expect(flows_ids).to eql(
-        Api::V3::Readonly::FlowNode.where(node_id: node.id).map(&:flow_id)
-      )
-      flow_quants_values = attrs['flow_indicators'].
-        map { |fi| fi['flow_quants'] }.
-        flatten.
-        map { |fq| fq['value'] }
-      expect(flow_quants_values).to match_array(
-        Api::V3::FlowQuant.where(flow_id: flows_ids).map(&:value).map(&:to_i)
+      flows_ids = Api::V3::Readonly::FlowNode.where(
+        node_id: api_v3_biome_node.id
+      ).map(&:flow_id).uniq
+      flow_values = attrs['flow_attributes'].
+        map { |fi| fi['values'] }.flatten.
+        map { |fq| fq['value'] }.flatten
+      expect(flow_values).to match_array(
+        Api::V3::FlowQuant.where(flow_id: flows_ids).map(&:value).map(&:to_i) +
+        Api::V3::FlowQual.where(flow_id: flows_ids).map(&:value).map(&:to_i) +
+        Api::V3::FlowInd.where(flow_id: flows_ids).map(&:value).map(&:to_i)
       )
     end
   end

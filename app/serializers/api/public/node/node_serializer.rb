@@ -6,8 +6,8 @@ module Api
                    :node_type,
                    :geo_id,
                    :availability,
-                   :node_indicators,
-                   :flow_indicators
+                   :node_attributes,
+                   :flow_attributes
       end
     end
   end

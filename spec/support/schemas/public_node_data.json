@@ -81,15 +81,15 @@
             }
           }
         },
-        "flowIndicators": {
-          "$id": "/properties/data/properties/flowIndicators",
+        "flowAttributes": {
+          "$id": "/properties/data/properties/flowAttributes",
           "type": "array",
           "items": {
-            "$id": "/properties/data/properties/flowIndicators/items",
+            "$id": "/properties/data/properties/flowAttributes/items",
             "type": "object",
             "properties": {
               "commodity": {
-                "$id": "/properties/data/properties/flowIndicators/items/commodity",
+                "$id": "/properties/data/properties/flowAttributes/items/commodity",
                 "type": "string",
                 "title": "Commodity name",
                 "description": "Commodity name",
@@ -98,7 +98,7 @@
                 ]
               },
               "country": {
-                "$id": "/properties/data/properties/flowIndicators/items/country",
+                "$id": "/properties/data/properties/flowAttributes/items/country",
                 "type": "string",
                 "title": "Country iso2",
                 "description": "Country iso2",
@@ -107,118 +107,44 @@
                 ]
               },
               "flowId": {
-                "$id": "/properties/data/properties/flowIndicators/items/flowId",
+                "$id": "/properties/data/properties/flowAttributes/items/flowId",
                 "type": "integer",
-                "title": "Flow Id",
+                "title": "Flow ID",
                 "description": "ID of the flow",
                 "examples": [
-                  2015
+                  111
                 ]
               },
-              "flowInds": {
-                "$id": "/properties/data/properties/flowIndicators/items/flowInds",
+              "values": {
+                "$id": "/properties/data/properties/flowAttributes/items/values",
                 "type": "array",
                 "items": {
-                  "$id": "/properties/data/properties/flowIndicators/items/flowInds/items",
+                  "$id": "/properties/data/properties/flowAttributes/items/values/items",
                   "type": "object",
                   "properties": {
                     "name": {
-                      "$id": "/properties/data/properties/flowIndicators/items/flowInds/items/name",
-                      "type": "string",
-                      "title": "Flow ind name",
-                      "description": "Flow ind name",
+                      "$id": "/properties/data/properties/flowAttributes/items/values/items/id",
+                      "type": "integer",
+                      "title": "Attribute ID",
+                      "description": "ID of the attribute",
                       "examples": [
-                        "name"
+                        10
                       ]
                     },
                     "year": {
-                      "$id": "/properties/data/properties/flowIndicators/items/flowInds/items/year",
+                      "$id": "/properties/data/properties/flowAttributes/items/values/items/year",
                       "type": "integer",
-                      "title": "Flow ind year",
-                      "description": "Flow ind year",
+                      "title": "Flow attribute year",
+                      "description": "Flow attribute year",
                       "examples": [
                         2017
                       ]
                     },
                     "value": {
-                      "$id": "/properties/data/properties/flowIndicators/items/flowInds/items/value",
+                      "$id": "/properties/data/properties/flowAttributes/items/values/items/value",
                       "type": "number",
-                      "title": "Flow ind value",
-                      "description": "Flow ind value",
-                      "examples": [
-                        11
-                      ]
-                    }
-                  }
-                }
-              },
-              "flowQuals": {
-                "$id": "/properties/data/properties/flowIndicators/items/flowQuals",
-                "type": "array",
-                "items": {
-                  "$id": "/properties/data/properties/flowIndicators/items/flowQuals/items",
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "$id": "/properties/data/properties/flowIndicators/items/flowQuals/items/name",
-                      "type": "string",
-                      "title": "Flow ind name",
-                      "description": "Flow ind name",
-                      "examples": [
-                        "name"
-                      ]
-                    },
-                    "year": {
-                      "$id": "/properties/data/properties/flowIndicators/items/flowQuals/items/year",
-                      "type": "integer",
-                      "title": "Flow ind year",
-                      "description": "Flow ind year",
-                      "examples": [
-                        2017
-                      ]
-                    },
-                    "value": {
-                      "$id": "/properties/data/properties/flowIndicators/items/flowQuals/items/value",
-                      "type": "number",
-                      "title": "Flow ind value",
-                      "description": "Flow ind value",
-                      "examples": [
-                        11
-                      ]
-                    }
-                  }
-                }
-              },
-              "flowQuants": {
-                "$id": "/properties/data/properties/flowIndicators/items/flowQuants",
-                "type": "array",
-                "items": {
-                  "$id": "/properties/data/properties/flowIndicators/items/flowQuants/items",
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "$id": "/properties/data/properties/flowIndicators/items/flowQuants/items/name",
-                      "type": "string",
-                      "title": "Flow ind name",
-                      "description": "Flow ind name",
-                      "examples": [
-                        "name"
-                      ]
-                    },
-                    "year": {
-                      "$id": "/properties/data/properties/flowIndicators/items/flowQuants/items/year",
-                      "type": "integer",
-                      "title": "Flow ind year",
-                      "description": "Flow ind year",
-                      "examples": [
-                        2017
-                      ]
-                    },
-                    "value": {
-                      "$id": "/properties/data/properties/flowIndicators/items/flowQuants/items/value",
-                      "type": "number",
-                      "title": "Flow ind value",
-                      "description": "Flow ind value",
+                      "title": "Flow attribute value",
+                      "description": "Flow attribute value",
                       "examples": [
                         11
                       ]
@@ -229,15 +155,15 @@
             }
           }
         },
-        "nodeIndicators": {
-          "$id": "/properties/data/properties/nodeIndicators",
+        "nodeAttributes": {
+          "$id": "/properties/data/properties/nodeAttributes",
           "type": "array",
           "items": {
-            "$id": "/properties/data/properties/nodeIndicators/items",
+            "$id": "/properties/data/properties/nodeAttributes/items",
             "type": "object",
             "properties": {
               "commodity": {
-                "$id": "/properties/data/properties/nodeIndicators/items/commodity",
+                "$id": "/properties/data/properties/nodeAttributes/items/commodity",
                 "type": "string",
                 "title": "Commodity name",
                 "description": "Commodity name",
@@ -246,7 +172,7 @@
                 ]
               },
               "country": {
-                "$id": "/properties/data/properties/nodeIndicators/items/country",
+                "$id": "/properties/data/properties/nodeAttributes/items/country",
                 "type": "string",
                 "title": "Country iso2",
                 "description": "Country iso2",
@@ -254,110 +180,36 @@
                   "iso2"
                 ]
               },
-              "nodeInds": {
-                "$id": "/properties/data/properties/nodeIndicators/items/nodeInds",
+              "values": {
+                "$id": "/properties/data/properties/nodeAttributes/items/values",
                 "type": "array",
                 "items": {
-                  "$id": "/properties/data/properties/nodeIndicators/items/nodeInds/items",
+                  "$id": "/properties/data/properties/nodeAttributes/items/values/items",
                   "type": "object",
                   "properties": {
-                    "name": {
-                      "$id": "/properties/data/properties/nodeIndicators/items/nodeInds/items/name",
-                      "type": "string",
-                      "title": "Flow ind name",
-                      "description": "Flow ind name",
-                      "examples": [
-                        "name"
-                      ]
-                    },
-                    "year": {
-                      "$id": "/properties/data/properties/nodeIndicators/items/nodeInds/items/year",
+                    "id": {
+                      "$id": "/properties/data/properties/nodeAttributes/items/values/items/id",
                       "type": "integer",
-                      "title": "Flow ind year",
-                      "description": "Flow ind year",
-                      "examples": [
-                        2017
-                      ]
-                    },
-                    "value": {
-                      "$id": "/properties/data/properties/nodeIndicators/items/nodeInds/items/value",
-                      "type": "number",
-                      "title": "Flow ind value",
-                      "description": "Flow ind value",
+                      "title": "Flow attribute id",
+                      "description": "Flow attribute id",
                       "examples": [
                         11
                       ]
-                    }
-                  }
-                }
-              },
-              "nodeQuals": {
-                "$id": "/properties/data/properties/nodeIndicators/items/nodeQuals",
-                "type": "array",
-                "items": {
-                  "$id": "/properties/data/properties/nodeIndicators/items/nodeQuals/items",
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "$id": "/properties/data/properties/nodeIndicators/items/nodeQuals/items/name",
-                      "type": "string",
-                      "title": "Flow ind name",
-                      "description": "Flow ind name",
-                      "examples": [
-                        "name"
-                      ]
                     },
                     "year": {
-                      "$id": "/properties/data/properties/nodeIndicators/items/nodeQuals/items/year",
+                      "$id": "/properties/data/properties/nodeAttributes/items/values/items/year",
                       "type": "integer",
-                      "title": "Flow ind year",
-                      "description": "Flow ind year",
+                      "title": "Flow attribute year",
+                      "description": "Flow attribute year",
                       "examples": [
                         2017
                       ]
                     },
                     "value": {
-                      "$id": "/properties/data/properties/nodeIndicators/items/nodeQuals/items/value",
+                      "$id": "/properties/data/properties/nodeAttributes/items/values/items/value",
                       "type": "number",
-                      "title": "Flow ind value",
-                      "description": "Flow ind value",
-                      "examples": [
-                        11
-                      ]
-                    }
-                  }
-                }
-              },
-              "nodeQuants": {
-                "$id": "/properties/data/properties/nodeIndicators/items/nodeQuants",
-                "type": "array",
-                "items": {
-                  "$id": "/properties/data/properties/nodeIndicators/items/nodeQuants/items",
-                  "type": "object",
-                  "properties": {
-                    "name": {
-                      "$id": "/properties/data/properties/nodeIndicators/items/nodeQuants/items/name",
-                      "type": "string",
-                      "title": "Flow ind name",
-                      "description": "Flow ind name",
-                      "examples": [
-                        "name"
-                      ]
-                    },
-                    "year": {
-                      "$id": "/properties/data/properties/nodeIndicators/items/nodeQuants/items/year",
-                      "type": "integer",
-                      "title": "Flow ind year",
-                      "description": "Flow ind year",
-                      "examples": [
-                        2017
-                      ]
-                    },
-                    "value": {
-                      "$id": "/properties/data/properties/nodeIndicators/items/nodeQuants/items/value",
-                      "type": "number",
-                      "title": "Flow ind value",
-                      "description": "Flow ind value",
+                      "title": "Flow attribute value",
+                      "description": "Flow attribute value",
                       "examples": [
                         11
                       ]
