@@ -1,8 +1,7 @@
 import { connect, batch } from 'react-redux';
-import {
-  getIsDisabled,
-  getDynamicSentence
-} from 'react-components/tool/tool-modal/tool-selection-modal/tool-panel/tool-panel.selectors';
+import { getDraftDynamicSentence } from 'react-components/dashboard-element/dashboard-element.selectors';
+
+import { getIsDisabled } from 'react-components/tool/tool-modal/tool-selection-modal/tool-panel/tool-panel.selectors';
 import ToolSelectionModal from 'react-components/tool/tool-modal/tool-selection-modal/tool-panel/tool-panel.component';
 import { getCanProceed } from 'react-components/nodes-panel/nodes-panel.selectors';
 import { getCountryNamesByCountryId } from 'reducers/app.selectors';
@@ -19,15 +18,15 @@ const mapStateToProps = (state, ownProps) => {
   return {
     loading,
     isDisabled: getIsDisabled(state, ownProps),
-    dynamicSentenceParts: getDynamicSentence(state),
+    dynamicSentenceParts: getDraftDynamicSentence(state),
     countryNames: getCountryNamesByCountryId(state),
     canProceed: getCanProceed(state)
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  clearPanel,
-  setSelectedItems,
+  clearPanel: panel => dispatch(clearPanel(panel)),
+  setSelectedItems: (activeItem, name) => dispatch(setSelectedItems(activeItem, name)),
   savePanels: contextId =>
     batch(() => {
       dispatch(savePanels());
