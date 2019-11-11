@@ -41,7 +41,10 @@ function GridListItem(props) {
           </Heading>
         )}
         {!isGroup && (
-          <div className="grid-list-item-content" data-test="grid-list-item-button">
+          <div
+            className="grid-list-item-content"
+            data-test={isToggleAll ? 'grid-list-item-toggle-all' : 'grid-list-item-button'}
+          >
             <button
               type="button"
               disabled={isDisabled}
