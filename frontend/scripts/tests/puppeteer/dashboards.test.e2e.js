@@ -90,9 +90,9 @@ describe('Dashboards flow', () => {
     const destinationsButtonsSelector = '[data-test=grid-list-item-button]';
     await page.waitForSelector(destinationsButtonsSelector);
     const destinationsButtons = await page.$$(destinationsButtonsSelector);
-    expect(destinationsButtons.length).toBe(25);
+    expect(destinationsButtons.length).toBe(24);
 
-    const argentinaButtonSelector = '[data-test=grid-list-item-button-ARGENTINA]';
+    const argentinaButtonSelector = '[data-test=grid-list-item-button-ITALY]';
     await page.waitForSelector(argentinaButtonSelector);
     await page.click(argentinaButtonSelector);
 
@@ -100,31 +100,41 @@ describe('Dashboards flow', () => {
     await page.click(continueButton);
 
     // Companies step
-    const companiesSectionTitle = await page.$eval(
+    const exportersSectionTitle = await page.$eval(
       dashboardPanelSentenceSelector,
       el => el.textContent
     );
-    expect(companiesSectionTitle).toMatch('companies');
+    expect(exportersSectionTitle).toMatch('exporters');
 
     await page.waitFor(1000);
     const exporterTab = '[data-test=tab-item][data-key=EXPORTER]';
     await page.waitForSelector(exporterTab);
     await page.click(exporterTab);
 
-    const companiesButtonsSelector = '[data-test=grid-list-item-button]';
-    await page.waitForSelector(companiesButtonsSelector);
-    const companiesButtons = await page.$$(companiesButtonsSelector);
+    const exportersButtonsSelector = '[data-test=grid-list-item-button]';
+    await page.waitForSelector(exportersButtonsSelector);
+    const exportersButtons = await page.$$(exportersButtonsSelector);
 
-    expect(companiesButtons.length).toBe(22);
+    expect(exportersButtons.length).toBe(24);
 
+    const cargillButtonSelector = '[data-test=grid-list-item-button-CARGILL]';
+    await page.waitForSelector(cargillButtonSelector, { visible: true });
+    await page.waitFor(300);
+    await page.click(cargillButtonSelector);
+    await page.waitFor(300);
     const coamoButtonSelector = '[data-test=grid-list-item-button-COAMO]';
     await page.waitForSelector(coamoButtonSelector, { visible: true });
-    await page.waitFor(300);
     await page.click(coamoButtonSelector);
-    await page.waitFor(300);
-    const royalAgroCereaisButtonSelector = '[data-test=grid-list-item-button-ROYAL-AGRO-CEREAIS]';
-    await page.waitForSelector(royalAgroCereaisButtonSelector, { visible: true });
-    await page.click(royalAgroCereaisButtonSelector);
+
+    await page.waitForSelector(continueButton);
+    await page.click(continueButton);
+
+    // Skip importers step
+    const importersSectionTitle = await page.$eval(
+      dashboardPanelSentenceSelector,
+      el => el.textContent
+    );
+    expect(importersSectionTitle).toMatch('importers');
 
     await page.waitForSelector(continueButton);
     await page.click(continueButton);
@@ -133,6 +143,7 @@ describe('Dashboards flow', () => {
     await page.waitForSelector('[data-test=dashboard-element-title]');
 
     // Has initial charts
+    await page.waitFor(() => document.querySelector('[data-test=widget-spinner]') !== null);
     await page.waitFor(() => document.querySelectorAll('[data-test=widget-spinner]').length === 0);
     const dashboardWidgetChartSelector = '[data-test=widget-chart]';
     const dashboardWidgetRankingSelector = '[data-test=widget-ranking]';
@@ -201,10 +212,11 @@ describe('Dashboards flow', () => {
 
     expect(biomeMultiYearWidgets.length).toBe(10);
 
-    const widgetDropdowSelector = '[data-test=dropdown-selected-item-selection-overview-of-coamo]';
+    const widgetDropdowSelector =
+      '[data-test=dropdown-selected-item-selection-overview-of-cargill]';
     await page.waitForSelector(widgetDropdowSelector);
-    const text = await page.$eval(widgetDropdowSelector, el => el.textContent);
+    const text = await page.$eval(widgetDropdowSelector, el => el.innerText);
 
-    expect(text).toMatch('Selection overview of -coamoCoamo');
+    expect(text).toMatch('Cargill');
   });
 });

@@ -10,6 +10,7 @@ import ResizeListener from 'react-components/shared/resize-listener.component';
 import { BREAKPOINTS } from 'constants';
 
 import './exporters-panel.scss';
+import OrderBy from 'react-components/nodes-panel/order-by.component';
 
 function ExportersPanel(props) {
   const {
@@ -27,7 +28,8 @@ function ExportersPanel(props) {
     selectedNodesIds,
     setSelectedTab,
     activeTab,
-    actionComponent,
+    orderBy,
+    setOrderBy,
     previousSteps,
     excludingMode,
     setExcludingMode,
@@ -76,7 +78,7 @@ function ExportersPanel(props) {
               selectedTab={activeTab}
               itemTabRenderer={i => i.name}
               getTabId={item => item.id}
-              actionComponent={actionComponent}
+              actionComponent={<OrderBy orderBy={orderBy} setOrderBy={setOrderBy} />}
             >
               {activeTab && (
                 <GridList
@@ -132,7 +134,9 @@ ExportersPanel.propTypes = {
   actionComponent: PropTypes.node,
   fetchData: PropTypes.func.isRequired,
   excludingMode: PropTypes.bool,
-  setExcludingMode: PropTypes.func
+  setExcludingMode: PropTypes.func,
+  setOrderBy: PropTypes.func,
+  orderBy: PropTypes.object
 };
 
 ExportersPanel.defaultProps = {

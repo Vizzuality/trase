@@ -9,6 +9,7 @@ export const createPanelInitialState = name => {
     },
     page: 1,
     noData: false,
+    orderBy: 'volume',
     loadingItems: false,
     fetchKey: null
   };

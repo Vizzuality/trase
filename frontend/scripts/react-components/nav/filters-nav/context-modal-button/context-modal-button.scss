@@ -9,6 +9,7 @@
   position: relative;
   max-width: 16vw;
   cursor: pointer;
+  text-align: left;
 
   &[disabled=""] {
     cursor: default;
@@ -23,7 +24,7 @@
     @include simple-arrow($charcoal-grey-faded);
 
     &:after {
-      top: calc(50% + 5px);
+      top: calc(50% + 10px);
     }
   }
 }

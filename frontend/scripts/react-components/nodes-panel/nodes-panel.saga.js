@@ -5,7 +5,8 @@ import {
   NODES_PANEL__FETCH_DATA,
   NODES_PANEL__SET_ACTIVE_ITEMS_WITH_SEARCH,
   NODES_PANEL__SET_ACTIVE_TAB,
-  NODES_PANEL__SET_PANEL_PAGE
+  NODES_PANEL__SET_PANEL_PAGE,
+  NODES_PANEL__SET_ORDER_BY
 } from './nodes-panel.actions';
 import { getData, getSectionTabs, getMoreData, fetchSearchResults } from './nodes-panel.fetch.saga';
 import modules from './nodes-panel.modules';
@@ -24,7 +25,7 @@ function* fetchData() {
       yield fork(getMoreData, name, reducer);
     }
   }
-  yield takeLatest([NODES_PANEL__FETCH_DATA], onFetchRequest);
+  yield takeLatest([NODES_PANEL__FETCH_DATA, NODES_PANEL__SET_ORDER_BY], onFetchRequest);
 }
 
 /**

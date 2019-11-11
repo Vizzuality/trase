@@ -7,6 +7,7 @@ import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.
 import Tabs from 'react-components/shared/tabs/tabs.component';
 import Text from 'react-components/shared/text';
 import ResizeListener from 'react-components/shared/resize-listener.component';
+import OrderBy from 'react-components/nodes-panel/order-by.component';
 import { BREAKPOINTS } from 'constants';
 
 import './importers-panel.scss';
@@ -27,7 +28,8 @@ function ImportersPanel(props) {
     selectedNodesIds,
     setSelectedTab,
     activeTab,
-    actionComponent,
+    orderBy,
+    setOrderBy,
     previousSteps,
     excludingMode,
     setExcludingMode,
@@ -76,7 +78,7 @@ function ImportersPanel(props) {
               selectedTab={activeTab}
               itemTabRenderer={i => i.name}
               getTabId={item => item.id}
-              actionComponent={actionComponent}
+              actionComponent={<OrderBy orderBy={orderBy} setOrderBy={setOrderBy} />}
             >
               {activeTab && (
                 <GridList
@@ -132,7 +134,9 @@ ImportersPanel.propTypes = {
   fetchData: PropTypes.func.isRequired,
   noData: PropTypes.bool,
   excludingMode: PropTypes.bool,
-  setExcludingMode: PropTypes.func
+  setExcludingMode: PropTypes.func,
+  setOrderBy: PropTypes.func,
+  orderBy: PropTypes.object
 };
 
 ImportersPanel.defaultProps = {

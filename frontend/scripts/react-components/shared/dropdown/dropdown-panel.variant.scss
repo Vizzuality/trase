@@ -1,6 +1,10 @@
 @import 'styles/settings';
 
 .c-dropdown-component.v-panel {
+  display: inline-block;
+  width: 160px;
+  margin-left: 15px;
+
   .dropdown-selected-item {
     border: 2px solid $charcoal-grey-faded;
     border-radius: 5px;
@@ -8,7 +12,7 @@
     padding: 5px 20px;
 
     &:after {
-      right: 20px;
+      right: 10px;
     }
   }
 }
