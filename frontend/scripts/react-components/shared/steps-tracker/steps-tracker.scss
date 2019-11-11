@@ -55,10 +55,17 @@ $circle-dot-size: $circle-size / 2;
         }
       }
 
+      &:first-child {
+        .steps-tracker-circle::before {
+          display: none;
+        }
+      }
+
       &:last-child {
         .steps-tracker-circle::after {
           display: none;
         }
+
       }
     }
 

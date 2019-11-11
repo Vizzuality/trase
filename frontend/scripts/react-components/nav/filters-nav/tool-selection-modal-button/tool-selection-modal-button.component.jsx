@@ -1,16 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Text from 'react-components/shared/text';
 import Heading from 'react-components/shared/heading';
-import Text from 'react-components/shared/text/text.component';
 import capitalize from 'lodash/capitalize';
 
 import 'react-components/nav/filters-nav/tool-selection-modal-button/tool-selection-modal-button.scss';
 
 export default function ToolSelectionModalButton(props) {
   const { selectedContext, setActiveModal, editPanels } = props;
-  const selectedLabel = selectedContext
-    ? `${capitalize(selectedContext.countryName)} - ${capitalize(selectedContext.commodityName)}`
-    : 'Select a context';
+  if (!selectedContext) {
+    return null;
+  }
+  const selectedLabel = `${capitalize(selectedContext.countryName)} - ${capitalize(
+    selectedContext.commodityName
+  )}`;
 
   return (
     <button
