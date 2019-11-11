@@ -105,11 +105,10 @@ Rails.application.routes.draw do
         end
         resources :parametrised_charts, only: [:index]
       end
-      resources :countries, only: [:index]
-      resources :commodities, only: [:index] do
+
+      resources :commodities, only: [] do
         get :countries_facts, on: :member
       end
-      #resources :countries_facts, only: [:index]
       resources :sankey_card_links, only: [:index]
     end
     namespace :v2 do
@@ -131,7 +130,13 @@ Rails.application.routes.draw do
       get '/get_actor_node_attributes', to: 'actor_factsheet#actor_data'
       get '/get_node_attributes', to: 'nodes#node_attributes'
     end
+
+    get '/v3/countries', to: 'public/countries#index'
+    get '/v3/commodities', to: 'public/commodities#index'
+
     namespace :public do
+      resources :countries, only: [:index]
+      resources :commodities, only: [:index]
       resources :attributes, only: [:index]
       resources :flows, only: [:index]
       resources :nodes, only: [] do

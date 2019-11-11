@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::V3::CountriesController, type: :controller do
+RSpec.describe Api::Public::CountriesController, type: :controller do
   include_context 'api v3 brazil flows quants'
   include_context 'api v3 paraguay flows quants'
 
@@ -19,7 +19,7 @@ RSpec.describe Api::V3::CountriesController, type: :controller do
       )
     end
 
-    context 'when include countries' do
+    context 'when include commodities' do
       it 'return list in alphabetical order with countries information' do
         get :index, params: {
           commodities_ids: api_v3_soy.id,
@@ -27,7 +27,7 @@ RSpec.describe Api::V3::CountriesController, type: :controller do
         }
 
         expect(assigns(:collection)[:meta][:commodities].first).to eq(
-          Api::V3::Dashboards::CommoditySerializer.new(api_v3_soy).as_json
+          Api::Public::CommoditySerializer.new(api_v3_soy).as_json
         )
       end
     end

@@ -17,11 +17,11 @@ module Api
                  key: :destinations
 
         has_many :commodities,
-                 serializer: Api::V3::Dashboards::CommoditySerializer,
+                 serializer: Api::Public::CommoditySerializer,
                  key: :commodities
 
         has_many :countries,
-                 serializer: Api::V3::Dashboards::CountrySerializer,
+                 serializer: Api::Public::CountrySerializer,
                  key: :countries
 
         attribute :image_url do

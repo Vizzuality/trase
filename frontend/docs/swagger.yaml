@@ -722,7 +722,9 @@ paths:
     get:
       tags:
         - "countries"
+      deprecated: true
       summary: Countries matching selected filters
+      description: Use /api/public/countries instead
       parameters:
         - $ref: "#/components/parameters/commodities_ids"
         - $ref: "#/components/parameters/include"
@@ -748,7 +750,9 @@ paths:
     get:
       tags:
         - "commodities"
+      deprecated: true
       summary: Commodities matching selected filters
+      description: Use /api/public/commodities instead
       parameters:
         - $ref: "#/components/parameters/countries_ids"
         - $ref: "#/components/parameters/include"
