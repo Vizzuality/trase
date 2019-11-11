@@ -1,5 +1,5 @@
 module Api
-  module V3
+  module Public
     class FilterCountries
       def initialize(params)
         @meta = {}
@@ -40,7 +40,7 @@ module Api
         commodity_ids = @query.map(&:commodity_ids).flatten.uniq
         commodities = Api::V3::Commodity.where(id: commodity_ids)
         @meta[:commodities] = ActiveModel::Serializer::CollectionSerializer.new(
-          commodities, serializer: Api::V3::Dashboards::CommoditySerializer
+          commodities, serializer: Api::Public::CommoditySerializer
         ).as_json
       end
     end
