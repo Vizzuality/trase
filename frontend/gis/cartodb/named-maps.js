@@ -12,30 +12,6 @@ const getCartoUrl = endpoint =>
 
 const spinner = ora();
 
-function classifyTemplates(templates) {
-  spinner.start('Fetching existing templates');
-  const getTemplates = (existingTemplates = []) => {
-    const result = templates.reduce(
-      (acc, next) => {
-        const exists = existingTemplates.find(t => next.name === t);
-        return {
-          ...acc,
-          toUpdate: exists ? [...acc.toUpdate, next] : acc.toUpdate,
-          toCreate: !exists ? [...acc.toCreate, next] : acc.toCreate
-        };
-      },
-      { toUpdate: [], toCreate: [] }
-    );
-    spinner.succeed();
-    return result;
-  };
-
-  return fetch(getCartoUrl('api/v1/map/named'))
-    .then(res => res.json())
-    .then(data => getTemplates(data.template_ids))
-    .catch(e => console.error(e));
-}
-
 function readEnv() {
   const envFlag = process.argv[2];
   if (!envFlag || !envFlag.includes('--env=')) {
@@ -45,6 +21,34 @@ function readEnv() {
   const typeFlag = process.argv[3];
   const type = (typeFlag && typeFlag.split('--type=')[1]) || DEFAULT_TYPE;
   return { env, type };
+}
+
+function classifyTemplates(templates) {
+  const { env } = readEnv();
+  spinner.start('Fetching existing templates');
+  const getTemplates = (existingTemplates = []) => {
+    const envTemplates = existingTemplates.filter(template => template.endsWith(`__${env}`));
+    const result = templates.reduce(
+      (acc, next) => {
+        const exists = envTemplates.find(t => next.name === t);
+        return {
+          ...acc,
+          toUpdate: exists ? [...acc.toUpdate, next] : acc.toUpdate,
+          toCreate: !exists ? [...acc.toCreate, next] : acc.toCreate
+        };
+      },
+      { toUpdate: [], toCreate: [] }
+    );
+    const toKeep = [...result.toUpdate, result.toCreate].map(i => i.name);
+    result.toRemove = envTemplates.filter(template => !toKeep.includes(template));
+    spinner.succeed();
+    return result;
+  };
+
+  return fetch(getCartoUrl('api/v1/map/named'))
+    .then(res => res.json())
+    .then(data => getTemplates(data.template_ids))
+    .catch(e => console.error(e));
 }
 
 function getTemplatesByEnvironment() {
@@ -104,6 +108,21 @@ function instanciate(templates) {
   return Promise.all(updates).then(res => spinner.succeed() && res);
 }
 
+function remove(templateNames) {
+  spinner.start(`Removing templates: ${JSON.stringify(templateNames, null, '  ')}`);
+  const updates = templateNames.map(templateName =>
+    fetch(getCartoUrl(`api/v1/map/named/${templateName}`), {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => res.text())
+      .catch(console.error)
+  );
+  return Promise.all(updates).then(res => spinner.succeed() && res);
+}
+
 function saveTemplates(templates, namedMaps) {
   spinner.start('Saving templates to file system');
   const { env, type } = readEnv();
@@ -142,10 +161,11 @@ function saveTemplates(templates, namedMaps) {
 }
 
 function applyTemplates(classified) {
-  const { toUpdate, toCreate } = classified;
+  const { toUpdate, toCreate, toRemove } = classified;
   console.log(toUpdate);
   const updated = toUpdate.length > 0 ? update(toUpdate) : [];
   const created = toCreate.length > 0 ? create(toCreate) : [];
+  if (toRemove.length > 0) remove(toRemove).catch(console.error);
   Promise.all([updated, created])
     .then(() => instanciate([...toUpdate, ...toCreate]))
     .then(namedMaps => saveTemplates([...toUpdate, ...toCreate], namedMaps))
