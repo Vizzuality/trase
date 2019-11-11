@@ -2,10 +2,11 @@ module Api
   module Public
     module Attributes
       class FlowAttributeSerializer < ActiveModel::Serializer
-        attributes :attribute_id,
+        attributes :id,
                    :name,
                    :display_name,
                    :unit,
+                   :unit_type,
                    :availability
       end
     end
