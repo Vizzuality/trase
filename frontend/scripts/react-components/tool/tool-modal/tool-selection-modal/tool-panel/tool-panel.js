@@ -10,7 +10,6 @@ import {
   setSelectedItems,
   savePanels
 } from 'react-components/nodes-panel/nodes-panel.actions';
-import { selectContextById } from 'actions/app.actions';
 
 const mapStateToProps = (state, ownProps) => {
   const { loading } = state.dashboardElement;
@@ -27,10 +26,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = dispatch => ({
   clearPanel: panel => dispatch(clearPanel(panel)),
   setSelectedItems: (activeItem, name) => dispatch(setSelectedItems(activeItem, name)),
-  savePanels: contextId =>
+  savePanels: () =>
     batch(() => {
       dispatch(savePanels());
-      dispatch(selectContextById(contextId));
     })
 });
 
