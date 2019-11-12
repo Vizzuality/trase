@@ -5,6 +5,7 @@ import { DASHBOARD_STEPS } from 'constants';
 import createReducer from 'utils/createReducer';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import nodesPanelSerialization from 'react-components/nodes-panel/nodes-panel.serializers';
+import { SET_CONTEXT } from 'actions/app.actions';
 import {
   NODES_PANEL__FETCH_DATA,
   NODES_PANEL__SET_PANEL_PAGE,
@@ -90,6 +91,9 @@ const nodesPanelReducer = {
   },
   tool(state, action) {
     return deserializeInternalLink(state, action);
+  },
+  [SET_CONTEXT]() {
+    return nodesPanelInitialState;
   },
   [NODES_PANEL__SET_INSTANCE_ID](state) {
     return immer(state, draft => {

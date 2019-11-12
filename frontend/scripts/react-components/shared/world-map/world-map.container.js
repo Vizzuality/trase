@@ -29,7 +29,6 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-// TODO: Remove this when the new explore page is ready
 const mapDispatchToProps = {
   getTopNodes: selectedContext => setExploreTopNodes('country', selectedContext)
 };
