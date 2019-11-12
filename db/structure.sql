@@ -4384,34 +4384,37 @@ CREATE MATERIALIZED VIEW public.flow_attributes_mv AS
     attributes.name,
     attributes.display_name,
     attributes.unit,
+    attributes.unit_type,
     flows.context_id,
     array_agg(DISTINCT flows.year) AS years
    FROM ((public.flows
      JOIN public.flow_quants ON ((flow_quants.flow_id = flows.id)))
      JOIN public.attributes ON (((attributes.original_type = 'Quant'::text) AND (attributes.original_id = flow_quants.quant_id))))
-  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, flows.context_id
+  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, attributes.unit_type, flows.context_id
 UNION ALL
  SELECT attributes.id AS attribute_id,
     attributes.name,
     attributes.display_name,
     attributes.unit,
+    attributes.unit_type,
     flows.context_id,
     array_agg(DISTINCT flows.year) AS years
    FROM ((public.flows
      JOIN public.flow_quals ON ((flow_quals.flow_id = flows.id)))
      JOIN public.attributes ON (((attributes.original_type = 'Qual'::text) AND (attributes.original_id = flow_quals.qual_id))))
-  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, flows.context_id
+  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, attributes.unit_type, flows.context_id
 UNION ALL
  SELECT attributes.id AS attribute_id,
     attributes.name,
     attributes.display_name,
     attributes.unit,
+    attributes.unit_type,
     flows.context_id,
     array_agg(DISTINCT flows.year) AS years
    FROM ((public.flows
      JOIN public.flow_inds ON ((flow_inds.flow_id = flows.id)))
      JOIN public.attributes ON (((attributes.original_type = 'Ind'::text) AND (attributes.original_id = flow_inds.ind_id))))
-  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, flows.context_id
+  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, attributes.unit_type, flows.context_id
   WITH NO DATA;
 
 
@@ -9972,6 +9975,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191015095615'),
 ('20191021084412'),
 ('20191028134448'),
-('20191028134449');
+('20191028134449'),
+('20191111213756');
 
 
