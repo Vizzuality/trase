@@ -15,6 +15,7 @@ import {
   TOOL_LAYERS__SET_LINKED_GEOIDS,
   TOOL_LAYERS__SET_MAP_DIMENSIONS
 } from 'react-components/tool-layers/tool-layers.actions';
+import { NODES_PANEL__SAVE } from 'react-components/nodes-panel/nodes-panel.actions';
 import { TOOL_LINKS__HIGHLIGHT_NODE } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'scripts/actions/app.actions';
 import immer from 'immer';
