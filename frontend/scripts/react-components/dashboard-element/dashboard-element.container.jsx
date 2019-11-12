@@ -1,5 +1,6 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import React from 'react';
 import PropTypes from 'prop-types';
 import DashboardElement from 'react-components/dashboard-element/dashboard-element.component';
@@ -10,14 +11,31 @@ import {
   getEditMode,
   getDashboardElementUrlProps
 } from 'react-components/dashboard-element/dashboard-element.selectors';
-import { getDirtyBlocks, getCanProceed } from 'react-components/nodes-panel/nodes-panel.selectors';
+import dashboardElementSerializer from 'react-components/dashboard-element/dashboard-element.serializers';
+import nodesPanelSerializer from 'react-components/nodes-panel/nodes-panel.serializers';
+import {
+  getDirtyBlocks,
+  getCanProceed,
+  getNodesPanelUrlProps
+} from 'react-components/nodes-panel/nodes-panel.selectors';
 import {
   setDashboardSelectedYears,
   setDashboardSelectedResizeBy,
   setDashboardSelectedRecolorBy,
   editDashboard as editDashboardFn
 } from 'react-components/dashboard-element/dashboard-element.actions';
+import { editPanels as editPanelsFn } from 'react-components/nodes-panel/nodes-panel.actions';
 import { DASHBOARD_STEPS } from 'constants';
+
+const getUrlProps = createSelector(
+  [getDashboardElementUrlProps, getNodesPanelUrlProps],
+  (dashboardElementProps, nodesPanelProps) => ({ ...dashboardElementProps, ...nodesPanelProps })
+);
+
+const urlPropHandlers = {
+  ...dashboardElementSerializer.urlPropHandlers,
+  ...nodesPanelSerializer.urlPropHandlers
+};
 
 const mapStateToProps = state => {
   const dirtyBlocks = getDirtyBlocks(state);
@@ -30,7 +48,8 @@ const mapStateToProps = state => {
     dynamicSentenceParts: getDynamicSentence(state),
     showModalOnStart: !(dirtyBlocks.countries && dirtyBlocks.commodities),
     editMode: getEditMode(state),
-    urlProps: getDashboardElementUrlProps(state)
+    urlProps: getUrlProps(state),
+    urlPropHandlers
   };
 };
 
@@ -41,7 +60,8 @@ const mapDispatchToProps = dispatch =>
       setSelectedYears: setDashboardSelectedYears,
       setSelectedResizeBy: setDashboardSelectedResizeBy,
       setSelectedRecolorBy: setDashboardSelectedRecolorBy,
-      editDashboard: editDashboardFn
+      editDashboard: editDashboardFn,
+      editPanels: editPanelsFn
     },
     dispatch
   );
@@ -59,6 +79,7 @@ class DashboardElementContainer extends React.Component {
     goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
     editDashboard: PropTypes.func.isRequired,
+    editPanels: PropTypes.func.isRequired,
     setSelectedYears: PropTypes.func.isRequired,
     setSelectedResizeBy: PropTypes.func.isRequired,
     setSelectedRecolorBy: PropTypes.func.isRequired
@@ -91,6 +112,7 @@ class DashboardElementContainer extends React.Component {
 
   reopenPanel = () => {
     this.props.editDashboard();
+    this.props.editPanels();
     this.setState({ step: 0, modalOpen: true });
   };
 

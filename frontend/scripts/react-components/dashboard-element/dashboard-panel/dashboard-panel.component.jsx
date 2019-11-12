@@ -8,7 +8,8 @@ import CommoditiesPanel from 'react-components/nodes-panel/commodities-panel';
 import DashboardModalFooter from 'react-components/dashboard-element/dashboard-modal-footer/dashboard-modal-footer.component';
 import addApostrophe from 'utils/addApostrophe';
 import { DASHBOARD_STEPS } from 'constants';
-import { getPanelLabel, singularize } from 'utils/dashboardPanel';
+import singularize from 'utils/singularize';
+import { getPanelLabel } from 'utils/dashboardPanel';
 import Heading from 'react-components/shared/heading';
 import StepsTracker from 'react-components/shared/steps-tracker/steps-tracker.component';
 import { translateText } from 'utils/transifex';
@@ -120,6 +121,7 @@ class DashboardPanel extends Component {
       onBack,
       setStep,
       goToDashboard,
+      savePanels,
       dirtyBlocks,
       dynamicSentenceParts,
       step,
@@ -130,6 +132,7 @@ class DashboardPanel extends Component {
     } = this.props;
 
     const handleGoToDashboard = () => {
+      savePanels();
       goToDashboard({ dirtyBlocks, dynamicSentenceParts });
       closeModal();
     };
@@ -175,6 +178,7 @@ DashboardPanel.propTypes = {
   onBack: PropTypes.func,
   dirtyBlocks: PropTypes.object,
   goToDashboard: PropTypes.func,
+  savePanels: PropTypes.func,
   step: PropTypes.number.isRequired,
   setStep: PropTypes.func.isRequired,
   editMode: PropTypes.bool.isRequired,

@@ -24,7 +24,7 @@ import {
   getImportersPreviousSteps
 } from 'react-components/nodes-panel/nodes-panel.selectors';
 
-function* updateIndicatorsOnItemChange() {
+export function* updateIndicatorsOnItemChange() {
   const selectedContext = yield select(getDashboardsContext);
   if (selectedContext) {
     yield fork(fetchDashboardCharts);
@@ -113,6 +113,7 @@ export function* fetchMissingItems() {
 }
 
 export default function* dashboardElementSaga() {
-  const sagas = [fetchChartsOnIndicatorsChange, fetchChartsOnItemChange, fetchMissingItems];
+  const sagas = [fetchChartsOnIndicatorsChange, fetchChartsOnItemChange];
+  if (!ENABLE_REDESIGN_PAGES) sagas.push(fetchMissingItems);
   yield all(sagas.map(saga => fork(saga)));
 }

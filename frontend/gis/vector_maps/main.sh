@@ -25,7 +25,7 @@ ${BIN}/mapshaper tmp/PARAGUAY_DEPARTMENT.json -simplify rdp 30% planar keep-shap
 ${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, simple_name as name, geoid FROM paraguay_ecoregions_2018_11_14' > tmp/PARAGUAY_BIOME.json
 ${BIN}/mapshaper tmp/PARAGUAY_BIOME.json -simplify rdp 30% planar keep-shapes -o public/vector_layers/PARAGUAY_BIOME.topo.json format=topojson
 
-# ${BIN}/cartodb -u p2cs-sei -f topojson 'SELECT distinct on (geoid, port, latitude, longitude) the_geom, geoid, port as name FROM indonesia_ports_20190620' > public/vector_layers/INDONESIA_PORT_OF_EXPORT.topo.json
+#${BIN}/cartodb -u p2cs-sei -f topojson 'SELECT distinct on (geoid, port, latitude, longitude) the_geom, geoid, port as name FROM indonesia_ports_20191031' > public/vector_layers/INDONESIA_PORT_OF_EXPORT.topo.json
 
 ${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, kab as name, geoid FROM indonesia_kabupaten_boundaries_2016_20190613' > tmp/INDONESIA_KABUPATEN.json
 ${BIN}/mapshaper tmp/INDONESIA_KABUPATEN.json -simplify rdp 30% planar keep-shapes -o public/vector_layers/INDONESIA_KABUPATEN.topo.json format=topojson

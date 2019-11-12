@@ -6,6 +6,9 @@ import { useFirstItem } from 'react-components/shared/grid-list/grid-list.hooks'
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import ResizeListener from 'react-components/shared/resize-listener.component';
 import { BREAKPOINTS } from 'constants';
+import OrderBy from 'react-components/nodes-panel/order-by.component';
+
+import './destinations-panel.scss';
 
 function DestinationsPanel(props) {
   const {
@@ -14,6 +17,8 @@ function DestinationsPanel(props) {
     loading,
     fetchData,
     fetchKey,
+    orderBy,
+    setOrderBy,
     previousSteps,
     destinations,
     searchResults,
@@ -39,16 +44,19 @@ function DestinationsPanel(props) {
         const columnsCount = windowWidth > BREAKPOINTS.laptop ? 5 : 3;
         const width = windowWidth > BREAKPOINTS.laptop ? 950 : 560;
         return (
-          <div className="grid-container">
-            <SearchInput
-              variant="bordered"
-              size="sm"
-              className="dashboard-panel-search"
-              items={searchResults}
-              placeholder="Search place"
-              onSelect={setSearchResult}
-              onSearchTermChange={getSearchResults}
-            />
+          <div className="c-destinations-panel">
+            <div className="destinations-panel-actions-container">
+              <SearchInput
+                variant="bordered"
+                size="sm"
+                className="dashboard-panel-search"
+                items={searchResults}
+                placeholder="Search place"
+                onSelect={setSearchResult}
+                onSearchTermChange={getSearchResults}
+              />
+              <OrderBy orderBy={orderBy} setOrderBy={setOrderBy} />
+            </div>
             <GridList
               className="dashboard-panel-pill-list"
               items={destinations}
@@ -94,7 +102,9 @@ DestinationsPanel.propTypes = {
   setSearchResult: PropTypes.func.isRequired,
   setSelectedItems: PropTypes.func.isRequired,
   excludingMode: PropTypes.bool,
-  setExcludingMode: PropTypes.func
+  setExcludingMode: PropTypes.func,
+  setOrderBy: PropTypes.func,
+  orderBy: PropTypes.object
 };
 
 DestinationsPanel.defaultProps = {

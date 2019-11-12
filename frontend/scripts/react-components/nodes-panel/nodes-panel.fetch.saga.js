@@ -8,6 +8,7 @@ import {
   GET_ALL_NODES_URL
 } from 'utils/getURLFromParams';
 import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
+import { getDashboardSelectedYears } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { DASHBOARD_STEPS } from 'constants';
 import {
   setMoreData,
@@ -37,57 +38,64 @@ export function* getPanelParams(optionsType, options = {}) {
     exporters: exportersTab || null,
     importers: importersTab || null
   }[optionsType];
+  const [startYear, endYear] = getDashboardSelectedYears(state);
   const activeItemParams = items => items.join() || undefined;
   const params = {
     page,
+    end_year: endYear,
+    start_year: startYear,
     options_type: optionsType,
     node_types_ids: nodeTypesIds
   };
   const currentStep = DASHBOARD_STEPS[optionsType];
-
+  const nodeId = isOverview ? 'selectedNodeId' : 'draftSelectedNodeId';
+  const nodesIds = isOverview ? 'selectedNodesIds' : 'draftSelectedNodesIds';
   if (currentStep === DASHBOARD_STEPS.sources && optionsType !== 'countries') {
-    params.countries_ids = state.nodesPanel.countries.selectedNodeId;
+    params.countries_ids = state.nodesPanel.countries[nodeId];
   }
 
   if (currentStep > DASHBOARD_STEPS.sources || isOverview) {
     const panel = state.nodesPanel.sources;
-    params.countries_ids = state.nodesPanel.countries.selectedNodeId;
+    params.countries_ids = state.nodesPanel.countries[nodeId];
     if (panel.excludingMode) {
-      params.excluded_sources_ids = activeItemParams(panel.selectedNodesIds);
+      params.excluded_sources_ids = activeItemParams(panel[nodesIds]);
     } else {
-      params.sources_ids = activeItemParams(panel.selectedNodesIds);
+      params.sources_ids = activeItemParams(panel[nodesIds]);
     }
   }
 
   if (currentStep > DASHBOARD_STEPS.commodities || isOverview) {
-    params.commodities_ids = state.nodesPanel.commodities.selectedNodeId;
+    params.commodities_ids = state.nodesPanel.commodities[nodeId];
   }
 
   if (currentStep > DASHBOARD_STEPS.destinations || isOverview) {
     const panel = state.nodesPanel.destinations;
     if (panel.excludingMode) {
-      params.excluded_destinations_ids = activeItemParams(panel.selectedNodesIds);
+      params.excluded_destinations_ids = activeItemParams(panel[nodesIds]);
     } else {
-      params.destinations_ids = activeItemParams(panel.selectedNodesIds);
+      params.destinations_ids = activeItemParams(panel[nodesIds]);
     }
   }
 
   if (currentStep > DASHBOARD_STEPS.exporters || isOverview) {
     const panel = state.nodesPanel.exporters;
     if (panel.excludingMode) {
-      params.excluded_exporters_ids = activeItemParams(panel.selectedNodesIds);
+      params.excluded_exporters_ids = activeItemParams(panel[nodesIds]);
     } else {
-      params.exporters_ids = activeItemParams(panel.selectedNodesIds);
+      params.exporters_ids = activeItemParams(panel[nodesIds]);
     }
   }
 
   if (isOverview) {
     const panel = state.nodesPanel.importers;
     if (panel.excludingMode) {
-      params.excluded_importers_ids = activeItemParams(panel.selectedNodesIds);
+      params.excluded_importers_ids = activeItemParams(panel[nodesIds]);
     } else {
-      params.importers_ids = activeItemParams(panel.selectedNodesIds);
+      params.importers_ids = activeItemParams(panel[nodesIds]);
     }
+  } else if (ENABLE_REDESIGN_PAGES) {
+    const currentPanel = state.nodesPanel[optionsType];
+    params.order_by = currentPanel.orderBy;
   }
 
   return params;
@@ -163,6 +171,7 @@ export function* getMoreData(name, reducer) {
   if (params.node_types_ids === null) {
     return;
   }
+  console.log(params);
   yield put(setLoadingItems(true, name));
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);
@@ -189,9 +198,9 @@ export function* getMissingItems(nodesPanel, selectedContext) {
     .filter(([name]) => !['countries', 'commodities'].includes(name))
     .flatMap(([name, moduleOptions]) => {
       if (moduleOptions.hasMultipleSelection) {
-        return nodesPanel[name].selectedNodesIds;
+        return nodesPanel[name].draftSelectedNodesIds;
       }
-      return nodesPanel[name].selectedNodeId || [];
+      return nodesPanel[name].draftSelectedNodeId || [];
     });
   const params = {
     context_id: selectedContext.id,

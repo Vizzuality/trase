@@ -11,7 +11,7 @@ module Api
 
           render json: @collection,
                  root: 'data',
-                 each_serializer: Api::V3::Dashboards::CountrySerializer
+                 each_serializer: Api::Public::CountrySerializer
         end
 
         def search
@@ -20,7 +20,7 @@ module Api
 
           render json: @collection,
                  root: 'data',
-                 each_serializer: Api::V3::Dashboards::CountrySerializer
+                 each_serializer: Api::Public::CountrySerializer
         end
 
         private

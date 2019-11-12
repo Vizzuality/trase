@@ -1,16 +1,8 @@
 module Api
   module V3
     class CommoditiesController < ApiController
-      include Api::V3::ParamHelpers
-
       skip_before_action :load_context
       before_action :load_commodity, only: [:countries_facts]
-      before_action :set_collection, only: [:index]
-
-      def index
-        render json: @collection,
-               each_serializer: Api::V3::Dashboards::CommoditySerializer
-      end
 
       def countries_facts
         facts = Api::V3::SupplyChainCountriesFacts.new(
@@ -30,18 +22,6 @@ module Api
       end
 
       private
-
-      def set_collection
-        @collection = Api::V3::FilterCommodities.new(filter_params).call
-      end
-
-      def filter_params
-        {
-          countries_ids: cs_string_to_int_array(params[:countries_ids]),
-          commodities_ids: cs_string_to_int_array(params[:commodities_ids]),
-          include: params[:include]
-        }
-      end
 
       def load_commodity
         @commodity = Api::V3::Commodity.find(params[:id])

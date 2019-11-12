@@ -6,8 +6,11 @@ import capitalize from 'lodash/capitalize';
 import { getPanelId } from 'utils/dashboardPanel';
 import { makeGetResizeByItems, makeGetRecolorByItems } from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
-import camelCase from 'lodash/camelCase';
-import { getDirtyBlocks } from 'react-components/nodes-panel/nodes-panel.selectors';
+import pluralize from 'utils/pluralize';
+import {
+  getDraftDirtyBlocks,
+  getDirtyBlocks
+} from 'react-components/nodes-panel/nodes-panel.selectors';
 
 const getCountriesData = state => state.nodesPanel.countries.data;
 const getSourcesData = state => state.nodesPanel.sources.data;
@@ -32,10 +35,13 @@ const getDestinationsSelectedNodesIds = state => state.nodesPanel.destinations.s
 const getExportersSelectedNodesIds = state => state.nodesPanel.exporters.selectedNodesIds;
 const getImportersSelectedNodesIds = state => state.nodesPanel.importers.selectedNodesIds;
 
-const getSources = state => state.nodesPanel.sources;
-const getDestinations = state => state.nodesPanel.destinations;
-const getExporters = state => state.nodesPanel.exporters;
-const getImporters = state => state.nodesPanel.importers;
+const getDraftSources = state => state.nodesPanel.sources.draftSelectedNodesIds;
+const getDraftDestinations = state => state.nodesPanel.destinations.draftSelectedNodesIds;
+const getDraftExporters = state => state.nodesPanel.exporters.draftSelectedNodesIds;
+const getDraftImporters = state => state.nodesPanel.importers.draftSelectedNodesIds;
+
+const getDraftSelectedCountryId = state => state.nodesPanel.countries.draftSelectedNodeId;
+const getDraftSelectedCommodityId = state => state.nodesPanel.commodities.draftSelectedNodeId;
 
 const getSelectedCountryId = state => state.nodesPanel.countries.selectedNodeId;
 const getSelectedCommodityId = state => state.nodesPanel.commodities.selectedNodeId;
@@ -73,8 +79,18 @@ const getCountriesActiveItems = createSelector(
   getSingleActiveItem
 );
 
+const getDraftCountriesActiveItems = createSelector(
+  [getDraftSelectedCountryId, getCountriesData],
+  getSingleActiveItem
+);
+
 const getCommoditiesActiveItems = createSelector(
   [getSelectedCommodityId, getCommoditiesData],
+  getSingleActiveItem
+);
+
+const getDraftCommoditiesActiveItems = createSelector(
+  [getDraftSelectedCommodityId, getCommoditiesData],
   getSingleActiveItem
 );
 
@@ -82,16 +98,39 @@ const getSourcesActiveItems = createSelector(
   [getSourcesSelectedNodesIds, getSourcesData],
   getPanelActiveItems
 );
+
+const getDraftSourcesActiveItems = createSelector(
+  [getDraftSources, getSourcesData],
+  getPanelActiveItems
+);
+
 const getDestinationsActiveItems = createSelector(
   [getDestinationsSelectedNodesIds, getDestinationsData],
   getPanelActiveItems
 );
+
+const getDraftDestinationsActiveItems = createSelector(
+  [getDraftDestinations, getDestinationsData],
+  getPanelActiveItems
+);
+
 const getExportersActiveItems = createSelector(
   [getExportersSelectedNodesIds, getExportersData],
   getPanelActiveItems
 );
+
+const getDraftExportersActiveItems = createSelector(
+  [getDraftExporters, getExportersData],
+  getPanelActiveItems
+);
+
 const getImportersActiveItems = createSelector(
   [getImportersSelectedNodesIds, getImportersData],
+  getPanelActiveItems
+);
+
+const getDraftImportersActiveItems = createSelector(
+  [getDraftImporters, getImportersData],
   getPanelActiveItems
 );
 
@@ -104,20 +143,16 @@ export const getNodesPanelValues = createStructuredSelector({
   destinations: getDestinationsActiveItems
 });
 
-export const getPluralNodeType = nodeType => {
-  const name = camelCase(nodeType);
-  return (
-    {
-      country: 'countries',
-      municipality: 'municipalities',
-      portOfImport: 'ports of import',
-      portOfExport: 'ports of export',
-      districtOfExport: 'districts of export'
-    }[name] || `${nodeType}s`.toLowerCase()
-  );
-};
+export const getDraftNodesPanelValues = createStructuredSelector({
+  countries: getDraftCountriesActiveItems,
+  sources: getDraftSourcesActiveItems,
+  commodities: getDraftCommoditiesActiveItems,
+  exporters: getDraftExportersActiveItems,
+  importers: getDraftImportersActiveItems,
+  destinations: getDraftDestinationsActiveItems
+});
 
-const getNodesPanelPrefixes = createSelector(
+export const getNodesPanelPrefixes = createSelector(
   [
     getSourcesPrefixes,
     getCommoditiesPrefixes,
@@ -174,7 +209,121 @@ export const getDynamicSentence = createSelector(
       const [first] = items;
       if (prefixesMap && first) {
         const nodeType = first.nodeType || first.type;
-        settings.name = nodeType ? getPluralNodeType(nodeType) : defaultName;
+        settings.name = nodeType ? pluralize(nodeType) : defaultName;
+        settings.prefix = prefixesMap[nodeType] || defaultPrefix;
+      }
+      if (excludingMode) {
+        if (items.length > 1) {
+          settings.prefix = `${settings.prefix} all but`;
+        } else {
+          settings.prefix = `${settings.prefix} all ${settings.name} except`;
+        }
+      }
+      return settings;
+    };
+
+    const sourcesSettings = getSettings(
+      panelsValues.sources,
+      prefixes.sources,
+      excludingModeMap.sources,
+      'sources',
+      'produced in'
+    );
+    const exportersSettings = getSettings(
+      panelsValues.exporters,
+      prefixes.exporters,
+      excludingModeMap.exporters,
+      'exporters',
+      'exported by'
+    );
+    const importersSettings = getSettings(
+      panelsValues.importers,
+      prefixes.importers,
+      excludingModeMap.importers,
+      'importers',
+      'imported by'
+    );
+    const destinationsSettings = getSettings(
+      panelsValues.destinations,
+      prefixes.destinations,
+      excludingModeMap.destinations,
+      'destinations',
+      'going to'
+    );
+
+    return [
+      {
+        panel: 'commodities',
+        id: 'commodities',
+        prefix: commoditiesPrefix,
+        value: panelsValues.commodities,
+        ...capitalizeCommodities
+      },
+      {
+        panel: 'sources',
+        id: 'sources',
+        name: sourcesSettings.name,
+        prefix: sourcesValues ? sourcesSettings.prefix : 'produced in countries covered by Trase',
+        value: sourcesValues,
+        transform: 'capitalize'
+      },
+      {
+        panel: 'exporters',
+        id: 'exporters',
+        name: exportersSettings.name,
+        prefix: panelsValues.exporters.length > 0 ? exportersSettings.prefix : '',
+        value: panelsValues.exporters,
+        optional: true,
+        transform: 'capitalize'
+      },
+      {
+        panel: 'importers',
+        id: 'importers',
+        name: importersSettings.name,
+        prefix: panelsValues.importers.length > 0 ? importersSettings.prefix : '',
+        value: panelsValues.importers,
+        optional: true,
+        transform: 'capitalize'
+      },
+      {
+        panel: 'destinations',
+        id: 'destinations',
+        name: destinationsSettings.name,
+        prefix: panelsValues.destinations.length > 0 ? destinationsSettings.prefix : '',
+        value: panelsValues.destinations,
+        optional: true,
+        transform: 'capitalize'
+      }
+    ];
+  }
+);
+
+export const getDraftDynamicSentence = createSelector(
+  [
+    getDraftDirtyBlocks,
+    getDraftNodesPanelValues,
+    getEditMode,
+    getNodesPanelPrefixes,
+    getNodesPanelExcludingMode
+  ],
+  (dirtyBlocks, panelsValues, editMode, prefixes, excludingModeMap) => {
+    if (Object.values(dirtyBlocks).every(block => !block)) {
+      return [];
+    }
+    const commoditiesPanelSentence = `${panelsValues.commodities.length > 0 ? '' : 'commodities'}`;
+    const commoditiesPrefix = editMode
+      ? capitalize(commoditiesPanelSentence)
+      : `Your dashboard will include ${commoditiesPanelSentence}`;
+    const capitalizeCommodities = editMode ? { transform: 'capitalize' } : {};
+    const sourcesValues =
+      panelsValues.sources.length > 0 ? panelsValues.sources : panelsValues.countries;
+
+    const getSettings = (items, prefixesMap, excludingMode, defaultName, defaultPrefix) => {
+      const settings = { prefix: defaultPrefix, name: defaultName };
+      const [first] = items;
+      if (prefixesMap && first) {
+        const nodeType = first.nodeType || first.type;
+        settings.name = nodeType ? pluralize(nodeType) : defaultName;
         settings.prefix = prefixesMap[nodeType] || defaultPrefix;
       }
       if (excludingMode) {
@@ -264,7 +413,7 @@ export const getDynamicSentence = createSelector(
 );
 
 export const getIsDisabled = createSelector(
-  [getDynamicSentence, (state, ownProps) => ownProps.step],
+  [getDraftDynamicSentence, (state, ownProps) => ownProps.step],
   (dynamicSentence, step) => {
     if (dynamicSentence.length === 0 || typeof step === 'undefined') {
       return true;
@@ -284,7 +433,6 @@ export const getDashboardsContext = createSelector(
     const context = contexts.find(
       ctx => ctx.countryId === selectedCountryId && ctx.commodityId === selectedCommodityId
     );
-
     return context || null;
   }
 );
@@ -481,37 +629,7 @@ const getURLDashboardSelectedResizeBy = createSelector(
   }
 );
 
-const getURLParamsIfContext = (params, context) => {
-  if (!context) {
-    return null;
-  }
-  return params;
-};
-
-const getURLSources = createSelector(
-  [getSources, getDashboardsContext],
-  getURLParamsIfContext
-);
-const getURLExporters = createSelector(
-  [getExporters, getDashboardsContext],
-  getURLParamsIfContext
-);
-const getURLImporters = createSelector(
-  [getImporters, getDashboardsContext],
-  getURLParamsIfContext
-);
-const getURLDestinations = createSelector(
-  [getDestinations, getDashboardsContext],
-  getURLParamsIfContext
-);
-
 export const getDashboardElementUrlProps = createStructuredSelector({
-  sources: getURLSources,
-  exporters: getURLExporters,
-  importers: getURLImporters,
-  countries: getSelectedCountryId,
-  destinations: getURLDestinations,
-  commodities: getSelectedCommodityId,
   selectedYears: getURLDashboardSelectedYears,
   selectedRecolorBy: getDashboardSelectedRecolorBy,
   selectedResizeBy: getURLDashboardSelectedResizeBy

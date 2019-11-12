@@ -6,6 +6,7 @@ import {
   selectRecolorBy,
   setToolFlowsLoading
 } from 'react-components/tool-links/tool-links.actions';
+import { cancelPanelsDraft } from 'react-components/nodes-panel/nodes-panel.actions';
 import { getItems, getSelectedItem } from 'react-components/tool/tool-modal/tool-modal.selectors';
 
 const mapStateToProps = state => ({
@@ -31,7 +32,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }[ownProps.activeModal];
   return {
     onChange,
-    setActiveModal: activeModalId => dispatch(setActiveModal(activeModalId))
+    setActiveModal: activeModalId => dispatch(setActiveModal(activeModalId)),
+    cancelPanelsDraft
   };
 };
 

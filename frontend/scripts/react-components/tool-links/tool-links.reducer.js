@@ -22,6 +22,7 @@ import {
   TOOL_LINKS__CHANGE_EXTRA_COLUMN
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
+import { NODES_PANEL__SAVE } from 'react-components/nodes-panel/nodes-panel.actions';
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
 import getNodesMetaUid from 'reducers/helpers/getNodeMetaUid';
@@ -64,6 +65,23 @@ const toolLinksReducer = {
     const { loading } = action.payload;
     return immer(state, draft => {
       draft.flowsLoading = loading;
+    });
+  },
+  [NODES_PANEL__SAVE](state) {
+    return immer(state, draft => {
+      Object.assign(draft, {
+        selectedRecolorBy: toolLinksInitialState.selectedRecolorBy,
+        selectedResizeBy: toolLinksInitialState.selectedResizeBy,
+        selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
+        extraColumn: toolLinksInitialState.extraColumn,
+        extraColumnNodeId: toolLinksInitialState.extraColumnNodeId,
+        detailedView: toolLinksInitialState.detailedView,
+        highlightedNodeId: toolLinksInitialState.highlightedNodeId,
+        selectedNodesIds: toolLinksInitialState.selectedNodesIds,
+        expandedNodesIds: toolLinksInitialState.expandedNodesIds,
+        selectedColumnsIds: toolLinksInitialState.selectedColumnsIds,
+        data: toolLinksInitialState.data
+      });
     });
   },
   [TOOL_LINKS_RESET_SANKEY](state) {
@@ -331,11 +349,13 @@ const toolLinksReducer = {
   },
   [TOOL_LINKS__COLLAPSE_SANKEY](state) {
     return immer(state, draft => {
+      // TODO: Clear all nodes in node panel except required
       draft.expandedNodesIds = [];
     });
   },
   [TOOL_LINKS__EXPAND_SANKEY](state) {
     return immer(state, draft => {
+      // TODO: Copy the selectedNodeIds to the nodes in the panel
       draft.expandedNodesIds = state.selectedNodesIds;
     });
   },

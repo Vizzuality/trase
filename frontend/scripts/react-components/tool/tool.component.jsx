@@ -16,6 +16,7 @@ import MapSidebar from 'react-components/tool/map-sidebar-layout';
 import ToolModal from 'react-components/tool/tool-modal';
 import EventManager from 'utils/eventManager';
 import UrlSerializer from 'react-components/shared/url-serializer';
+
 import Timeline from './timeline';
 
 import 'styles/layouts/l-tool.scss';

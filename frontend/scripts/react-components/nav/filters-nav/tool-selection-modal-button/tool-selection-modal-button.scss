@@ -1,14 +1,14 @@
 @import 'styles/settings';
 @import 'styles/mixins';
 
-.c-context-modal-button {
+.c-tool-selection-modal-button {
   height: 100%;
   padding: 0 20px;
   margin-right: 20px;
   border-left: 1px solid $charcoal-grey-faded-a-lot;
   position: relative;
-  max-width: 16vw;
   cursor: pointer;
+  text-align: left;
 
   &[disabled=""] {
     cursor: default;
@@ -23,7 +23,7 @@
     @include simple-arrow($charcoal-grey-faded);
 
     &:after {
-      top: calc(50% + 5px);
+      top: calc(50% + 10px);
     }
   }
 }

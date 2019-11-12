@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::V3::CommoditiesController, type: :controller do
+RSpec.describe Api::Public::CommoditiesController, type: :controller do
   include_context 'api v3 brazil flows quants'
   include_context 'api v3 brazil beef flows'
 
@@ -17,7 +17,7 @@ RSpec.describe Api::V3::CommoditiesController, type: :controller do
         get :index, params: {countries_ids: api_v3_brazil.id, include: 'countries'}
 
         expect(assigns(:collection)[:meta][:countries].first).to eq(
-          Api::V3::Dashboards::CountrySerializer.new(api_v3_brazil).as_json
+          Api::Public::CountrySerializer.new(api_v3_brazil).as_json
         )
       end
     end

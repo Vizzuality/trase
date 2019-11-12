@@ -1,0 +1,17 @@
+@import 'styles/settings';
+
+.c-destinations-panel {
+  width: 560px;
+  margin: 0 auto;
+
+  @media screen and (min-width: $breakpoint-laptop) {
+    width: initial;
+    margin: initial;
+  }
+
+  .destinations-panel-actions-container {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+}

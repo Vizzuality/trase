@@ -5,6 +5,7 @@ import { DASHBOARD_STEPS } from 'constants';
 import createReducer from 'utils/createReducer';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import nodesPanelSerialization from 'react-components/nodes-panel/nodes-panel.serializers';
+import { SET_CONTEXT } from 'actions/app.actions';
 import {
   NODES_PANEL__FETCH_DATA,
   NODES_PANEL__SET_PANEL_PAGE,
@@ -22,7 +23,11 @@ import {
   NODES_PANEL__SET_INSTANCE_ID,
   NODES_PANEL__SET_NO_DATA,
   NODES_PANEL__SET_FETCH_KEY,
-  NODES_PANEL__SET_EXCLUDING_MODE
+  NODES_PANEL__SET_ORDER_BY,
+  NODES_PANEL__SET_EXCLUDING_MODE,
+  NODES_PANEL__EDIT_PANELS,
+  NODES_PANEL__SAVE,
+  NODES_PANEL__CANCEL_PANELS_DRAFT
 } from './nodes-panel.actions';
 import modules from './nodes-panel.modules';
 import nodesPanelInitialState from './nodes-panel.initial-state';
@@ -34,14 +39,14 @@ const getPanelsToClear = (panel, state, item) => {
   // thus the subsequent panels will include all possible nodes.
   // if we add an item at this point, it means we're passing from "show me all" to "show me just one" filtering
   // this means the subsequents panels selection most likely will be invalid and needs to be cleared.
-  const hadAllItemsSelected = state[panel].selectedNodesIds.length === 0;
+  const hadAllItemsSelected = state[panel].draftSelectedNodesIds.length === 0;
 
   // if the selected items in a panel are N, that means that we're including only N
   // if we remove an item at this point, it means we're passing from "show me N" to "show me N-1" filtering
   // this means the subsequent panels selection might include items that corresponded to the removed item
   // thus rendering the selection invalid so we need to clear it.
   // When passing from N to N+1 we're including more possible results so we don't need to clear the selection.
-  const isRemovingAnItem = state[panel].selectedNodesIds.includes(item.id);
+  const isRemovingAnItem = state[panel].draftSelectedNodesIds.includes(item.id);
 
   if (hadAllItemsSelected || isRemovingAnItem) {
     const panelsToClear = Object.keys(DASHBOARD_STEPS)
@@ -58,26 +63,37 @@ const clearPanelData = (draft, { name, state, activeItem }) => {
   if (panelsToClear) {
     panelsToClear.forEach(panelToClear => {
       if (modules[panelToClear].hasMultipleSelection) {
-        draft[panelToClear].selectedNodesIds =
-          nodesPanelInitialState[panelToClear].selectedNodesIds;
+        draft[panelToClear].draftSelectedNodesIds =
+          nodesPanelInitialState[panelToClear].draftSelectedNodesIds;
       } else {
-        draft[panelToClear].selectedNodeId = nodesPanelInitialState[panelToClear].selectedNodeId;
+        draft[panelToClear].draftSelectedNodeId =
+          nodesPanelInitialState[panelToClear].draftSelectedNodeId;
       }
       draft[panelToClear].data = nodesPanelInitialState[panelToClear].data;
     });
   }
 };
 
+const deserializeInternalLink = (state, action) => {
+  if (action.payload?.serializerParams) {
+    return deserialize({
+      params: action.payload.serializerParams,
+      state: nodesPanelInitialState,
+      ...nodesPanelSerialization
+    });
+  }
+  return state;
+};
+
 const nodesPanelReducer = {
   dashboardElement(state, action) {
-    if (action.payload?.serializerParams) {
-      return deserialize({
-        params: action.payload.serializerParams,
-        state: nodesPanelInitialState,
-        ...nodesPanelSerialization
-      });
-    }
-    return state;
+    return deserializeInternalLink(state, action);
+  },
+  tool(state, action) {
+    return deserializeInternalLink(state, action);
+  },
+  [SET_CONTEXT]() {
+    return nodesPanelInitialState;
   },
   [NODES_PANEL__SET_INSTANCE_ID](state) {
     return immer(state, draft => {
@@ -107,9 +123,9 @@ const nodesPanelReducer = {
 
       if (draft[name].fetchKey !== null && state[name].fetchKey !== 'preloaded') {
         if (moduleOptions.hasMultipleSelection) {
-          draft[name].selectedNodesIds = nodesPanelInitialState[name].selectedNodesIds;
+          draft[name].draftSelectedNodesIds = nodesPanelInitialState[name].draftSelectedNodesIds;
         } else {
-          draft[name].selectedNodeId = nodesPanelInitialState[name].selectedNodeId;
+          draft[name].draftSelectedNodeId = nodesPanelInitialState[name].draftSelectedNodeId;
         }
       }
     });
@@ -121,11 +137,11 @@ const nodesPanelReducer = {
       const { data } = action.payload;
       if (data) {
         const newItems = data.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
-        draft[name].data.byId = data ? Object.keys(newItems).map(n => parseInt(n, 10)) : [];
+        draft[name].data.byId = data ? data.map(node => node.id) : [];
         draft[name].data.nodes = newItems;
       } else {
         draft[name].page = nodesPanelInitialState[name].page;
-        draft[name].data = nodesPanelInitialState[name].data;
+        draft[name].data.byId = nodesPanelInitialState[name].data.byId;
 
         if (moduleOptions.hasSearch) {
           draft[name].searchResults = nodesPanelInitialState[name].searchResults;
@@ -146,7 +162,7 @@ const nodesPanelReducer = {
       const newItems = data.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
       // in case we preloaded some items, we make sure to avoid duplicates
       draft[name].data.byId = Array.from(
-        new Set([...state[name].data.byId, ...Object.keys(newItems)].map(n => parseInt(n, 10)))
+        new Set([...state[name].data.byId, ...data.map(node => node.id)].map(n => parseInt(n, 10)))
       );
 
       draft[name].data.nodes = { ...state[name].data.nodes, ...newItems };
@@ -161,9 +177,9 @@ const nodesPanelReducer = {
           data
             .filter(item => {
               if (moduleOptions.hasMultipleSelection) {
-                return draft[name].selectedNodesIds.includes(item.id);
+                return draft[name].draftSelectedNodesIds.includes(item.id);
               }
-              return draft[name].selectedNodeId === item.id;
+              return draft[name].draftSelectedNodeId === item.id;
             })
             .forEach(item => {
               if (!draft[name].data.nodes) {
@@ -220,22 +236,21 @@ const nodesPanelReducer = {
     const { name } = action.meta;
     const moduleOptions = modules[name];
     const { activeItem } = action.payload;
-    if (!moduleOptions.hasMultiplSelection) {
+    if (!moduleOptions.hasMultipleSelection) {
       return immer(state, draft => {
-        draft[name].selectedNodeId =
-          activeItem && activeItem.id !== state[name].selectedNodeId ? activeItem.id : null;
-
+        draft[name].draftSelectedNodeId =
+          activeItem && activeItem.id !== state[name].draftSelectedNodeId ? activeItem.id : null;
         // clear following panels
         const panelIndex = DASHBOARD_STEPS[name];
         Object.entries(DASHBOARD_STEPS).forEach(([panel, step]) => {
           const currentPanelOptions = modules[panel];
           if (panelIndex < step) {
             if (currentPanelOptions.hasMultipleSelection) {
-              draft[panel].selectedNodesIds = [];
+              draft[panel].draftSelectedNodesIds = [];
             } else {
-              draft[panel].selectedNodeId = null;
+              draft[panel].draftSelectedNodeId = null;
             }
-            draft[panel].data = nodesPanelInitialState[panel].data;
+            draft[panel].data.byId = nodesPanelInitialState[panel].data.byId;
           }
         });
       });
@@ -253,15 +268,19 @@ const nodesPanelReducer = {
 
           // we clear the previously selected items if the new item has a different nodeType
           const firstItem =
-            state[name].selectedNodesIds[0] &&
-            state[name].data.nodes[state[name].selectedNodesIds[0]];
+            state[name].draftSelectedNodesIds[0] &&
+            state[name].data.nodes[state[name].draftSelectedNodesIds[0]];
           if (firstItem && firstItem.nodeType !== activeItem.nodeType) {
-            draft[name].selectedNodesIds = [activeItem.id];
+            draft[name].draftSelectedNodesIds = [activeItem.id];
           } else {
-            draft[name].selectedNodesIds = xor(draft[name].selectedNodesIds, [activeItem.id]);
+            draft[name].draftSelectedNodesIds = xor(draft[name].draftSelectedNodesIds, [
+              activeItem.id
+            ]);
           }
         } else {
-          draft[name].selectedNodesIds = xor(draft[name].selectedNodesIds, [activeItem.id]);
+          draft[name].draftSelectedNodesIds = xor(draft[name].draftSelectedNodesIds, [
+            activeItem.id
+          ]);
         }
         clearPanelData(draft, { state, activeItem, name });
       });
@@ -310,15 +329,17 @@ const nodesPanelReducer = {
 
         if (moduleOptions.hasMultipleSelection) {
           const firstItem =
-            state[name].selectedNodesIds[0] &&
-            state[name].data.nodes[state[name].selectedNodesIds[0]];
+            state[name].draftSelectedNodesIds[0] &&
+            state[name].data.nodes[state[name].draftSelectedNodesIds[0]];
           if (firstItem && firstItem.nodeType !== activeItem.nodeType) {
-            draft[name].selectedNodesIds = [activeItem.id];
+            draft[name].draftSelectedNodesIds = [activeItem.id];
           } else {
-            draft[name].selectedNodesIds = xor(draft[name].selectedNodesIds, [activeItem.id]);
+            draft[name].draftSelectedNodesIds = xor(draft[name].draftSelectedNodesIds, [
+              activeItem.id
+            ]);
           }
         } else {
-          draft[name].selectedNodeId = activeItem.id;
+          draft[name].draftSelectedNodeId = activeItem.id;
         }
       });
     }
@@ -343,9 +364,9 @@ const nodesPanelReducer = {
         const moduleOptions = modules[name];
         if (panelIndex <= step) {
           if (moduleOptions.hasMultipleSelection) {
-            draft[name].selectedNodesIds = [];
+            draft[name].draftSelectedNodesIds = [];
           } else {
-            draft[name].selectedNodeId = null;
+            draft[name].draftSelectedNodeId = null;
           }
         }
       });
@@ -357,22 +378,78 @@ const nodesPanelReducer = {
     const moduleOptions = modules[name];
     if (moduleOptions.hasMultipleSelection) {
       return immer(state, draft => {
-        draft[name].selectedNodesIds = [];
+        draft[name].draftSelectedNodesIds = [];
         draft[name].excludingMode = mode;
         const panelIndex = DASHBOARD_STEPS[name];
         Object.entries(DASHBOARD_STEPS).forEach(([currentPanel, step]) => {
           const currentModuleOptions = modules[name];
           if (panelIndex < step) {
             if (currentModuleOptions.hasMultipleSelection) {
-              draft[currentPanel].selectedNodesIds = [];
+              draft[currentPanel].draftSelectedNodesIds = [];
             } else {
-              draft[currentPanel].selectedNodeId = null;
+              draft[currentPanel].draftSelectedNodeId = null;
             }
           }
         });
       });
     }
     return state;
+  },
+  [NODES_PANEL__SET_ORDER_BY](state, action) {
+    const { name } = action.meta;
+    const { orderBy } = action.payload;
+    const moduleOptions = modules[name];
+    return immer(state, draft => {
+      draft[name].orderBy = orderBy.value;
+      draft[name].data.byId = nodesPanelInitialState[name].data.byId;
+      draft[name].page = nodesPanelInitialState[name].page;
+      if (moduleOptions.hasMultipleSelection) {
+        draft[name].selectedNodesIds = [];
+      } else {
+        draft[name].selectedNodeId = null;
+      }
+    });
+  },
+  [NODES_PANEL__EDIT_PANELS](state) {
+    // Copies the panel selectedIds to draftSelectedIds on panel edit start
+    return immer(state, draft => {
+      Object.entries(state).forEach(([panelName, panelData]) => {
+        const moduleOptions = modules[panelName];
+        if (moduleOptions.hasMultipleSelection) {
+          draft[panelName].draftSelectedNodesIds = panelData.selectedNodesIds;
+        } else {
+          draft[panelName].draftSelectedNodeId = panelData.selectedNodeId;
+        }
+      });
+    });
+  },
+  [NODES_PANEL__SAVE](state) {
+    // Copies the panel selectedIds to draftSelectedIds on panel edit start
+    return immer(state, draft => {
+      Object.entries(state).forEach(([panelName, panelData]) => {
+        const moduleOptions = modules[panelName];
+        if (moduleOptions.hasMultipleSelection) {
+          draft[panelName].selectedNodesIds = panelData.draftSelectedNodesIds;
+          draft[panelName].draftSelectedNodesIds = [];
+        } else {
+          draft[panelName].selectedNodeId = panelData.draftSelectedNodeId;
+          draft[panelName].draftSelectedNodeId = null;
+        }
+      });
+    });
+  },
+  [NODES_PANEL__CANCEL_PANELS_DRAFT](state) {
+    // Deletes the draft
+    return immer(state, draft => {
+      Object.entries(state).forEach(([panelName]) => {
+        const moduleOptions = modules[panelName];
+        if (moduleOptions.hasMultipleSelection) {
+          draft[panelName].draftSelectedNodesIds = [];
+        } else {
+          draft[panelName].draftSelectedNodeId = null;
+        }
+      });
+    });
   }
 };
 

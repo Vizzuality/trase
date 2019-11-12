@@ -18,6 +18,10 @@ export const NODES_PANEL__SET_SEARCH_RESULTS = 'NODES_PANEL__SET_SEARCH_RESULTS'
 export const NODES_PANEL__GET_SEARCH_RESULTS = 'NODES_PANEL__GET_SEARCH_RESULTS';
 export const NODES_PANEL__SET_NO_DATA = 'NODES_PANEL__SET_NO_DATA';
 export const NODES_PANEL__SET_EXCLUDING_MODE = 'NODES_PANEL__SET_EXCLUDING_MODE';
+export const NODES_PANEL__SET_ORDER_BY = 'NODES_PANEL__SET_ORDER_BY';
+export const NODES_PANEL__EDIT_PANELS = 'NODES_PANEL__EDIT_PANELS';
+export const NODES_PANEL__SAVE = 'NODES_PANEL__SAVE';
+export const NODES_PANEL__CANCEL_PANELS_DRAFT = 'NODES_PANEL__CANCEL_PANELS_DRAFT';
 
 export const fetchData = (key, name) => ({
   type: NODES_PANEL__FETCH_DATA,
@@ -85,10 +89,9 @@ export const setPage = (page, name) => ({
   meta: { name }
 });
 
-export const setMissingItems = (data, name) => ({
+export const setMissingItems = data => ({
   type: NODES_PANEL__SET_MISSING_DATA,
-  payload: { data },
-  meta: { name }
+  payload: { data }
 });
 
 export const getMissingItems = () => ({
@@ -112,6 +115,18 @@ export const clearPanel = panel => ({
   payload: { panel }
 });
 
+export const editPanels = () => ({
+  type: NODES_PANEL__EDIT_PANELS
+});
+
+export const savePanels = () => ({
+  type: NODES_PANEL__SAVE
+});
+
+export const cancelPanelsDraft = () => ({
+  type: NODES_PANEL__CANCEL_PANELS_DRAFT
+});
+
 export const setNoData = (hasNoData, name) => ({
   type: NODES_PANEL__SET_NO_DATA,
   payload: {
@@ -124,6 +139,14 @@ export const setExcludingMode = (mode, name) => ({
   type: NODES_PANEL__SET_EXCLUDING_MODE,
   payload: {
     mode
+  },
+  meta: { name }
+});
+
+export const setOrderBy = (orderBy, name) => ({
+  type: NODES_PANEL__SET_ORDER_BY,
+  payload: {
+    orderBy
   },
   meta: { name }
 });
