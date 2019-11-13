@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import BaseModal from 'react-components/tool/tool-modal/base-modal';
-import ToolPanel from 'react-components/tool/tool-panel';
+import DashboardPanel from 'react-components/dashboard-element/dashboard-panel';
 import LayerModal from 'react-components/tool/tool-modal/layer-modal';
 import VersioningModal from 'react-components/tool/tool-modal/versioning-modal';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
@@ -23,7 +23,7 @@ export default function ToolModal(props) {
         const showBackButton = step > TOOL_STEPS.sources;
         const onContinue = step === TOOL_STEPS.importers ? closeModal : () => setStep(step + 1);
         return (
-          <ToolPanel
+          <DashboardPanel
             step={step}
             setStep={setStep}
             closeModal={closeModal}

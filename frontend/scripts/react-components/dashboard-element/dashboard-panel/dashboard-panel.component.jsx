@@ -34,6 +34,10 @@ class DashboardPanel extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.cancelPanelsDraft();
+  }
+
   static sourcesNodeTypeRenderer(node) {
     return node.nodeType || 'Country of Production';
   }
@@ -185,6 +189,7 @@ DashboardPanel.propTypes = {
   onContinue: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
   clearPanel: PropTypes.func.isRequired,
+  cancelPanelsDraft: PropTypes.func.isRequired,
   setSelectedItems: PropTypes.func.isRequired,
   canProceed: PropTypes.bool.isRequired,
   countryNames: PropTypes.object.isRequired
