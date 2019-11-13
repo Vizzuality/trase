@@ -1,11 +1,11 @@
-# Pivotal Tracker
+## Pivotal Tracker
 
 Please include the link(s)
 
-# Description
+## Description
 
 Please include a summary of the change
 
-# Testing instructions
+## Testing instructions
 
 Please include examples where relevant
