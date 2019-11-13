@@ -14,7 +14,6 @@ import dashboardElementSerializer from 'react-components/dashboard-element/dashb
 import nodesPanelSerializer from 'react-components/nodes-panel/nodes-panel.serializers';
 import {
   getDirtyBlocks,
-  getCanProceed,
   getNodesPanelUrlProps
 } from 'react-components/nodes-panel/nodes-panel.selectors';
 import {
@@ -41,7 +40,6 @@ const mapStateToProps = state => {
   return {
     dirtyBlocks,
     urlPropHandlers: _urlPropHandlers,
-    canProceed: getCanProceed(state),
     loading: state.dashboardElement.loading,
     groupedCharts: getDashboardGroupedCharts(state),
     filters: getDashboardFiltersProps(state),
@@ -54,6 +52,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
+      goToRoot: () => ({ type: 'dashboardRoot' }),
       setSelectedYears: setDashboardSelectedYears,
       setSelectedResizeBy: setDashboardSelectedResizeBy,
       setSelectedRecolorBy: setDashboardSelectedRecolorBy,
@@ -67,12 +66,12 @@ class DashboardElementContainer extends React.Component {
   static propTypes = {
     loading: PropTypes.bool,
     filters: PropTypes.object,
-    canProceed: PropTypes.bool,
     urlProps: PropTypes.object,
     dirtyBlocks: PropTypes.object,
     groupedCharts: PropTypes.object,
     urlPropHandlers: PropTypes.object,
     showModalOnStart: PropTypes.bool,
+    goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
     editDashboard: PropTypes.func.isRequired,
     editPanels: PropTypes.func.isRequired,
@@ -119,8 +118,8 @@ class DashboardElementContainer extends React.Component {
     const {
       loading,
       groupedCharts,
+      goToRoot,
       urlProps,
-      canProceed,
       urlPropHandlers,
       dynamicSentenceParts,
       dirtyBlocks,
@@ -135,8 +134,8 @@ class DashboardElementContainer extends React.Component {
         loading={loading}
         filters={filters}
         urlProps={urlProps}
+        goToRoot={goToRoot}
         modalOpen={modalOpen}
-        canProceed={canProceed}
         dirtyBlocks={dirtyBlocks}
         setStep={this.updateStep}
         closeModal={this.closeModal}
