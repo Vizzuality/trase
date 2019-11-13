@@ -69,7 +69,7 @@ const clearPanelData = (draft, { name, state, activeItem }) => {
         draft[panelToClear].draftSelectedNodeId =
           nodesPanelInitialState[panelToClear].draftSelectedNodeId;
       }
-      draft[panelToClear].data = nodesPanelInitialState[panelToClear].data;
+      draft[panelToClear].data.byId = nodesPanelInitialState[panelToClear].data.byId;
       draft[panelToClear].noData = nodesPanelInitialState[panelToClear].noData;
     });
   }
