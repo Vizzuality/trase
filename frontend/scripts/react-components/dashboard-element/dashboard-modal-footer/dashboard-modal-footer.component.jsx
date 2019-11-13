@@ -53,7 +53,7 @@ function DashboardModalFooter(props) {
           testId="dashboard-modal-actions-continue"
         >
           <Text as="span" size="rg" color="white" variant="mono">
-            {isLastStep ? 'Go to dashboard' : 'Continue'}
+            {isLastStep ? 'Save' : 'Continue'}
           </Text>
         </Button>
       </div>

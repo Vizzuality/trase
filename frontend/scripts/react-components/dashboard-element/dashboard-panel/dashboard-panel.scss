@@ -49,15 +49,11 @@
 
   .dashboard-panel-search {
     margin: 0 0 25px 0;
-  }
+    width: 270px;
 
-  .dashboard-panel-text {
-    color: $charcoal-grey-faded;
-    font-family: $font-family-2;
-    font-size: 14px;
-    font-weight: 300;
-    line-height: 1.71;
-    margin: 0 0 25px 0;
+    @media screen and (min-width: $breakpoint-laptop) {
+      width: initial;
+    }
   }
 
   .dashboard-panel-pill-list {
@@ -65,17 +61,13 @@
     overflow-x: hidden !important;
   }
 
-  .dashboard-panel-sources-subtitle {
-    margin-bottom: 20px;
-  }
-
   .grid-container {
-  width: 560px;
-  margin: 0 auto;
+    width: 560px;
+    margin: 0 auto;
 
-  @media screen and (min-width: $breakpoint-laptop) {
-    width: initial;
-    margin: initial;
-  }
+    @media screen and (min-width: $breakpoint-laptop) {
+      width: initial;
+      margin: initial;
+    }
   }
 }
