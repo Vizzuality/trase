@@ -8,6 +8,7 @@ import { makeGetResizeByItems, makeGetRecolorByItems } from 'selectors/indicator
 import { makeGetAvailableYears } from 'selectors/years.selectors';
 import pluralize from 'utils/pluralize';
 import {
+  getCanProceed,
   getDraftDirtyBlocks,
   getDirtyBlocks
 } from 'react-components/nodes-panel/nodes-panel.selectors';
@@ -50,8 +51,6 @@ const getSelectedYears = state => state.dashboardElement.selectedYears;
 const getSelectedResizeBy = state => state.dashboardElement.selectedResizeBy;
 const getSelectedRecolorBy = state => state.dashboardElement.selectedRecolorBy;
 const getDashboardCharts = state => state.dashboardElement.charts;
-
-export const getEditMode = state => state.dashboardElement.editMode;
 
 const getAppContexts = state => state.app.contexts;
 
@@ -184,117 +183,121 @@ const getNodesPanelExcludingMode = createSelector(
   })
 );
 
-export const getDynamicSentence = createSelector(
-  [
-    getDirtyBlocks,
-    getNodesPanelValues,
-    getEditMode,
-    getNodesPanelPrefixes,
-    getNodesPanelExcludingMode
-  ],
-  (dirtyBlocks, panelsValues, editMode, prefixes, excludingModeMap) => {
-    if (Object.values(dirtyBlocks).every(block => !block)) {
-      return [];
+const buildDynamicSentence = (
+  dirtyBlocks,
+  panelsValues,
+  canProceed,
+  prefixes,
+  excludingModeMap
+) => {
+  if (Object.values(dirtyBlocks).every(block => !block)) {
+    return [];
+  }
+  const commoditiesPanelSentence = `${panelsValues.commodities.length > 0 ? '' : 'commodities'}`;
+  const commoditiesPrefix = canProceed
+    ? capitalize(commoditiesPanelSentence)
+    : `Your dashboard will include ${commoditiesPanelSentence}`;
+  const capitalizeCommodities = canProceed ? { transform: 'capitalize' } : {};
+  const sourcesValues =
+    panelsValues.sources.length > 0 ? panelsValues.sources : panelsValues.countries;
+
+  const getSettings = (items, prefixesMap, excludingMode, defaultName, defaultPrefix) => {
+    const settings = { prefix: defaultPrefix, name: defaultName };
+    const [first] = items;
+    if (prefixesMap && first) {
+      const nodeType = first.nodeType || first.type;
+      settings.name = nodeType ? pluralize(nodeType) : defaultName;
+      settings.prefix = prefixesMap[nodeType] || defaultPrefix;
     }
-    const commoditiesPanelSentence = `${panelsValues.commodities.length > 0 ? '' : 'commodities'}`;
-    const commoditiesPrefix = editMode
-      ? capitalize(commoditiesPanelSentence)
-      : `Your dashboard will include ${commoditiesPanelSentence}`;
-    const capitalizeCommodities = editMode ? { transform: 'capitalize' } : {};
-    const sourcesValues =
-      panelsValues.sources.length > 0 ? panelsValues.sources : panelsValues.countries;
-
-    const getSettings = (items, prefixesMap, excludingMode, defaultName, defaultPrefix) => {
-      const settings = { prefix: defaultPrefix, name: defaultName };
-      const [first] = items;
-      if (prefixesMap && first) {
-        const nodeType = first.nodeType || first.type;
-        settings.name = nodeType ? pluralize(nodeType) : defaultName;
-        settings.prefix = prefixesMap[nodeType] || defaultPrefix;
+    if (excludingMode) {
+      if (items.length > 1) {
+        settings.prefix = `${settings.prefix} all but`;
+      } else if (items.length === 1) {
+        settings.prefix = `${settings.prefix} all ${settings.name} except`;
       }
-      if (excludingMode) {
-        if (items.length > 1) {
-          settings.prefix = `${settings.prefix} all but`;
-        } else {
-          settings.prefix = `${settings.prefix} all ${settings.name} except`;
-        }
-      }
-      return settings;
-    };
+    }
+    return settings;
+  };
 
-    const sourcesSettings = getSettings(
-      panelsValues.sources,
-      prefixes.sources,
-      excludingModeMap.sources,
-      'sources',
-      'produced in'
-    );
-    const exportersSettings = getSettings(
-      panelsValues.exporters,
-      prefixes.exporters,
-      excludingModeMap.exporters,
-      'exporters',
-      'exported by'
-    );
-    const importersSettings = getSettings(
-      panelsValues.importers,
-      prefixes.importers,
-      excludingModeMap.importers,
-      'importers',
-      'imported by'
-    );
-    const destinationsSettings = getSettings(
-      panelsValues.destinations,
-      prefixes.destinations,
-      excludingModeMap.destinations,
-      'destinations',
-      'going to'
-    );
+  const sourcesSettings = getSettings(
+    panelsValues.sources,
+    prefixes.sources,
+    excludingModeMap.sources,
+    'sources',
+    'produced in'
+  );
+  const exportersSettings = getSettings(
+    panelsValues.exporters,
+    prefixes.exporters,
+    excludingModeMap.exporters,
+    'exporters',
+    'exported by'
+  );
+  const importersSettings = getSettings(
+    panelsValues.importers,
+    prefixes.importers,
+    excludingModeMap.importers,
+    'importers',
+    'imported by'
+  );
+  const destinationsSettings = getSettings(
+    panelsValues.destinations,
+    prefixes.destinations,
+    excludingModeMap.destinations,
+    'destinations',
+    'going to'
+  );
 
-    return [
-      {
-        panel: 'commodities',
-        id: 'commodities',
-        prefix: commoditiesPrefix,
-        value: panelsValues.commodities,
-        ...capitalizeCommodities
-      },
-      {
-        panel: 'sources',
-        id: 'sources',
-        name: sourcesSettings.name,
-        prefix: sourcesValues ? sourcesSettings.prefix : 'produced in countries covered by Trase',
-        value: sourcesValues,
-        transform: 'capitalize'
-      },
-      {
-        panel: 'exporters',
-        id: 'exporters',
-        name: exportersSettings.name,
-        prefix: panelsValues.exporters.length > 0 ? exportersSettings.prefix : '',
-        value: panelsValues.exporters,
-        optional: true,
-        transform: 'capitalize'
-      },
-      {
-        panel: 'importers',
-        id: 'importers',
-        name: importersSettings.name,
-        prefix: panelsValues.importers.length > 0 ? importersSettings.prefix : '',
-        value: panelsValues.importers,
-        optional: true,
-        transform: 'capitalize'
-      },
-      {
-        panel: 'destinations',
-        id: 'destinations',
-        name: destinationsSettings.name,
-        prefix: panelsValues.destinations.length > 0 ? destinationsSettings.prefix : '',
-        value: panelsValues.destinations,
-        optional: true,
-        transform: 'capitalize'
-      }
-    ];
+  return [
+    {
+      panel: 'commodities',
+      id: 'commodities',
+      prefix: commoditiesPrefix,
+      value: panelsValues.commodities,
+      ...capitalizeCommodities
+    },
+    {
+      panel: 'sources',
+      id: 'sources',
+      name: sourcesSettings.name,
+      prefix: sourcesValues ? sourcesSettings.prefix : 'produced in countries covered by Trase',
+      value: sourcesValues,
+      transform: 'capitalize'
+    },
+    {
+      panel: 'exporters',
+      id: 'exporters',
+      name: exportersSettings.name,
+      prefix: panelsValues.exporters.length > 0 ? exportersSettings.prefix : '',
+      value: panelsValues.exporters,
+      optional: true,
+      transform: 'capitalize'
+    },
+    {
+      panel: 'importers',
+      id: 'importers',
+      name: importersSettings.name,
+      prefix: panelsValues.importers.length > 0 ? importersSettings.prefix : '',
+      value: panelsValues.importers,
+      optional: true,
+      transform: 'capitalize'
+    },
+    {
+      panel: 'destinations',
+      id: 'destinations',
+      name: destinationsSettings.name,
+      prefix: panelsValues.destinations.length > 0 ? destinationsSettings.prefix : '',
+      value: panelsValues.destinations,
+      optional: true,
+      transform: 'capitalize'
+    }
+  ];
+};
+export const getDynamicSentence = createSelector(
+  [getDirtyBlocks, getNodesPanelValues, getNodesPanelPrefixes, getNodesPanelExcludingMode],
+  (dirtyBlocks, panelsValues, prefixes, excludingModeMap) => {
+    const canProceed = dirtyBlocks.countries && dirtyBlocks.commodities;
+    return buildDynamicSentence(dirtyBlocks, panelsValues, canProceed, prefixes, excludingModeMap);
   }
 );
 
@@ -302,114 +305,11 @@ export const getDraftDynamicSentence = createSelector(
   [
     getDraftDirtyBlocks,
     getDraftNodesPanelValues,
-    getEditMode,
+    getCanProceed,
     getNodesPanelPrefixes,
     getNodesPanelExcludingMode
   ],
-  (dirtyBlocks, panelsValues, editMode, prefixes, excludingModeMap) => {
-    if (Object.values(dirtyBlocks).every(block => !block)) {
-      return [];
-    }
-    const commoditiesPanelSentence = `${panelsValues.commodities.length > 0 ? '' : 'commodities'}`;
-    const commoditiesPrefix = editMode
-      ? capitalize(commoditiesPanelSentence)
-      : `Your dashboard will include ${commoditiesPanelSentence}`;
-    const capitalizeCommodities = editMode ? { transform: 'capitalize' } : {};
-    const sourcesValues =
-      panelsValues.sources.length > 0 ? panelsValues.sources : panelsValues.countries;
-
-    const getSettings = (items, prefixesMap, excludingMode, defaultName, defaultPrefix) => {
-      const settings = { prefix: defaultPrefix, name: defaultName };
-      const [first] = items;
-      if (prefixesMap && first) {
-        const nodeType = first.nodeType || first.type;
-        settings.name = nodeType ? pluralize(nodeType) : defaultName;
-        settings.prefix = prefixesMap[nodeType] || defaultPrefix;
-      }
-      if (excludingMode) {
-        if (items.length > 1) {
-          settings.prefix = `${settings.prefix} all but`;
-        } else {
-          settings.prefix = `${settings.prefix} all ${settings.name} except`;
-        }
-      }
-      return settings;
-    };
-
-    const sourcesSettings = getSettings(
-      panelsValues.sources,
-      prefixes.sources,
-      excludingModeMap.sources,
-      'sources',
-      'produced in'
-    );
-    const exportersSettings = getSettings(
-      panelsValues.exporters,
-      prefixes.exporters,
-      excludingModeMap.exporters,
-      'exporters',
-      'exported by'
-    );
-    const importersSettings = getSettings(
-      panelsValues.importers,
-      prefixes.importers,
-      excludingModeMap.importers,
-      'importers',
-      'imported by'
-    );
-    const destinationsSettings = getSettings(
-      panelsValues.destinations,
-      prefixes.destinations,
-      excludingModeMap.destinations,
-      'destinations',
-      'going to'
-    );
-
-    return [
-      {
-        panel: 'commodities',
-        id: 'commodities',
-        prefix: commoditiesPrefix,
-        value: panelsValues.commodities,
-        ...capitalizeCommodities
-      },
-      {
-        panel: 'sources',
-        id: 'sources',
-        name: sourcesSettings.name,
-        prefix: sourcesValues ? sourcesSettings.prefix : 'produced in countries covered by Trase',
-        value: sourcesValues,
-        transform: 'capitalize'
-      },
-      {
-        panel: 'exporters',
-        id: 'exporters',
-        name: exportersSettings.name,
-        prefix: panelsValues.exporters.length > 0 ? exportersSettings.prefix : '',
-        value: panelsValues.exporters,
-        optional: true,
-        transform: 'capitalize'
-      },
-      {
-        panel: 'importers',
-        id: 'importers',
-        name: importersSettings.name,
-        prefix: panelsValues.importers.length > 0 ? importersSettings.prefix : '',
-        value: panelsValues.importers,
-        optional: true,
-        transform: 'capitalize'
-      },
-      {
-        panel: 'destinations',
-        id: 'destinations',
-        name: destinationsSettings.name,
-        prefix: panelsValues.destinations.length > 0 ? destinationsSettings.prefix : '',
-        value: panelsValues.destinations,
-        optional: true,
-        transform: 'capitalize'
-      }
-    ];
-  }
+  buildDynamicSentence
 );
 
 export const getIsDisabled = createSelector(

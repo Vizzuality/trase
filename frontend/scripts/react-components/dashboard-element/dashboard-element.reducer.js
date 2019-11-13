@@ -6,7 +6,6 @@ import {
   DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
   DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
   DASHBOARD_ELEMENT__SET_CHARTS,
-  DASHBOARD_ELEMENT__EDIT_DASHBOARD,
   DASHBOARD_ELEMENT__SET_LOADING
 } from './dashboard-element.actions';
 import initialState from './dashboard-element.initial-state';
@@ -22,9 +21,6 @@ const dashboardElementReducer = {
       return newState;
     }
     return state;
-  },
-  [DASHBOARD_ELEMENT__EDIT_DASHBOARD](state) {
-    return { ...state, editMode: true };
   },
   [DASHBOARD_ELEMENT__SET_SELECTED_YEARS](state, action) {
     const { years } = action.payload;

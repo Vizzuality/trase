@@ -1,4 +1,16 @@
 import { select, all, fork, takeLatest, takeEvery, put, call } from 'redux-saga/effects';
+import modules from 'react-components/nodes-panel/nodes-panel.modules';
+
+import {
+  getSourcesPreviousSteps,
+  getExportersPreviousSteps,
+  getImportersPreviousSteps
+} from 'react-components/nodes-panel/nodes-panel.selectors';
+import { setDashboardLoading } from 'react-components/dashboard-element/dashboard-element.actions';
+
+import { updateIndicatorsOnItemChange } from 'react-components/dashboard-element/dashboard-element.saga';
+import { getDashboardsContext } from 'react-components/dashboard-element/dashboard-element.selectors';
+
 import {
   setFetchKey,
   NODES_PANEL__GET_MISSING_DATA,
@@ -10,17 +22,6 @@ import {
   NODES_PANEL__SET_PANEL_PAGE,
   NODES_PANEL__SET_ORDER_BY
 } from './nodes-panel.actions';
-
-import modules from 'react-components/nodes-panel/nodes-panel.modules';
-import {
-  getSourcesPreviousSteps,
-  getExportersPreviousSteps,
-  getImportersPreviousSteps
-} from 'react-components/nodes-panel/nodes-panel.selectors';
-
-import { setDashboardLoading } from 'react-components/dashboard-element/dashboard-element.actions';
-import { updateIndicatorsOnItemChange } from 'react-components/dashboard-element/dashboard-element.saga';
-
 import {
   getData,
   getSectionTabs,
@@ -28,7 +29,6 @@ import {
   fetchSearchResults,
   getMissingItems
 } from './nodes-panel.fetch.saga';
-import { getDashboardsContext } from 'react-components/dashboard-element/dashboard-element.selectors';
 
 function* fetchData() {
   function* onFetchRequest(action) {

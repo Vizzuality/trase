@@ -67,8 +67,8 @@ function translateLink(data, meta, to = 'sankey') {
       dashboardId: kebabCase(title),
       serializerParams: {
         ...serializerParams,
-        selectedCountryId: countryId,
-        selectedCommodityId: commodityId
+        countries: countryId,
+        commodities: commodityId
       }
     }
   };
