@@ -45,8 +45,7 @@ function ImportersPanel(props) {
 
   const itemToScrollTo = useFirstItem(importers);
 
-  // only show no data after updating data
-  if (noData && previousSteps === fetchKey) {
+  if (noData) {
     return (
       <div className="c-importers-panel">
         <Text size="md" color="grey-faded" className="no-data" align="center">

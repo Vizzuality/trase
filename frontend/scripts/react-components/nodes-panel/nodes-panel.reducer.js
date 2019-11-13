@@ -70,6 +70,7 @@ const clearPanelData = (draft, { name, state, activeItem }) => {
           nodesPanelInitialState[panelToClear].draftSelectedNodeId;
       }
       draft[panelToClear].data = nodesPanelInitialState[panelToClear].data;
+      draft[panelToClear].noData = nodesPanelInitialState[panelToClear].noData;
     });
   }
 };
@@ -252,6 +253,7 @@ const nodesPanelReducer = {
               draft[panel].draftSelectedNodeId = null;
             }
             draft[panel].data.byId = nodesPanelInitialState[panel].data.byId;
+            draft[panel].noData = nodesPanelInitialState[panel].noData;
           }
         });
       });
@@ -369,6 +371,7 @@ const nodesPanelReducer = {
           } else {
             draft[name].draftSelectedNodeId = null;
           }
+          draft[name].noData = nodesPanelInitialState[name].noData;
         }
       });
     });
@@ -390,6 +393,7 @@ const nodesPanelReducer = {
             } else {
               draft[currentPanel].draftSelectedNodeId = null;
             }
+            draft[currentPanel].noData = nodesPanelInitialState[currentPanel].noData;
           }
         });
       });
@@ -404,6 +408,7 @@ const nodesPanelReducer = {
       draft[name].orderBy = orderBy.value;
       draft[name].data.byId = nodesPanelInitialState[name].data.byId;
       draft[name].page = nodesPanelInitialState[name].page;
+      draft[name].noData = nodesPanelInitialState[name].noData;
       if (moduleOptions.hasMultipleSelection) {
         draft[name].selectedNodesIds = [];
       } else {
@@ -431,10 +436,12 @@ const nodesPanelReducer = {
         const moduleOptions = modules[panelName];
         if (moduleOptions.hasMultipleSelection) {
           draft[panelName].selectedNodesIds = panelData.draftSelectedNodesIds;
-          draft[panelName].draftSelectedNodesIds = [];
+          draft[panelName].draftSelectedNodesIds =
+            nodesPanelInitialState[panelName].draftSelectedNodesIds;
         } else {
           draft[panelName].selectedNodeId = panelData.draftSelectedNodeId;
-          draft[panelName].draftSelectedNodeId = null;
+          draft[panelName].draftSelectedNodeId =
+            nodesPanelInitialState[panelName].draftSelectedNodeId;
         }
       });
     });
@@ -445,9 +452,11 @@ const nodesPanelReducer = {
       Object.entries(state).forEach(([panelName]) => {
         const moduleOptions = modules[panelName];
         if (moduleOptions.hasMultipleSelection) {
-          draft[panelName].draftSelectedNodesIds = [];
+          draft[panelName].draftSelectedNodesIds =
+            nodesPanelInitialState[panelName].draftSelectedNodesIds;
         } else {
-          draft[panelName].draftSelectedNodeId = null;
+          draft[panelName].draftSelectedNodeId =
+            nodesPanelInitialState[panelName].draftSelectedNodeId;
         }
       });
     });
