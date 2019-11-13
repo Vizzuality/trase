@@ -92,8 +92,8 @@ describe('translate links', () => {
         dashboardId: 'top-exporters',
         serializerParams: {
           selectedResizeBy: 37,
-          selectedCountryId: 107,
-          selectedCommodityId: 6,
+          countries: 107,
+          commodities: 6,
           sources: [13406],
           destinations: [13486],
           companies: [13430, 13460, 13417, 13404, 13392, 13408, 13410, 13419]
