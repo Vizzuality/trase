@@ -27,8 +27,6 @@ class DashboardElement extends React.PureComponent {
     canProceed: PropTypes.bool.isRequired,
     step: PropTypes.number.isRequired,
     setStep: PropTypes.func.isRequired,
-    editMode: PropTypes.bool.isRequired,
-    goToRoot: PropTypes.func.isRequired,
     modalOpen: PropTypes.bool.isRequired,
     closeModal: PropTypes.func.isRequired,
     reopenPanel: PropTypes.func.isRequired,
@@ -47,16 +45,15 @@ class DashboardElement extends React.PureComponent {
   };
 
   renderStep() {
-    const { step, setStep, editMode, closeModal, dirtyBlocks, canProceed } = this.props;
+    const { step, setStep, closeModal, dirtyBlocks, canProceed } = this.props;
     const showBackButton = step > DASHBOARD_STEPS.sources;
     const onContinue = step === DASHBOARD_STEPS.importers ? closeModal : () => setStep(step + 1);
-    if (step === DASHBOARD_STEPS.welcome && !editMode) {
+    if (step === DASHBOARD_STEPS.welcome && !canProceed) {
       return <DashboardWelcome onContinue={() => setStep(step + 1)} />;
     }
     return (
       <DashboardPanel
         step={step}
-        editMode={editMode}
         canProceed={canProceed}
         onContinue={onContinue}
         dirtyBlocks={dirtyBlocks}
@@ -82,8 +79,8 @@ class DashboardElement extends React.PureComponent {
   }
 
   renderDashboardModal() {
-    const { editMode, goToRoot, modalOpen, closeModal, canProceed } = this.props;
-    const onClose = editMode && canProceed ? closeModal : goToRoot;
+    const { setStep, modalOpen, closeModal, canProceed } = this.props;
+    const onClose = canProceed ? closeModal : () => setStep(DASHBOARD_STEPS.welcome);
     return (
       <SimpleModal isOpen={modalOpen} onClickClose={onClose}>
         {this.renderStep()}

@@ -8,7 +8,6 @@ import {
   getDynamicSentence,
   getDashboardFiltersProps,
   getDashboardGroupedCharts,
-  getEditMode,
   getDashboardElementUrlProps
 } from 'react-components/dashboard-element/dashboard-element.selectors';
 import dashboardElementSerializer from 'react-components/dashboard-element/dashboard-element.serializers';
@@ -32,7 +31,7 @@ const getUrlProps = createSelector(
   (dashboardElementProps, nodesPanelProps) => ({ ...dashboardElementProps, ...nodesPanelProps })
 );
 
-const urlPropHandlers = {
+const _urlPropHandlers = {
   ...dashboardElementSerializer.urlPropHandlers,
   ...nodesPanelSerializer.urlPropHandlers
 };
@@ -41,22 +40,20 @@ const mapStateToProps = state => {
   const dirtyBlocks = getDirtyBlocks(state);
   return {
     dirtyBlocks,
+    urlPropHandlers: _urlPropHandlers,
     canProceed: getCanProceed(state),
     loading: state.dashboardElement.loading,
     groupedCharts: getDashboardGroupedCharts(state),
     filters: getDashboardFiltersProps(state),
     dynamicSentenceParts: getDynamicSentence(state),
     showModalOnStart: !(dirtyBlocks.countries && dirtyBlocks.commodities),
-    editMode: getEditMode(state),
-    urlProps: getUrlProps(state),
-    urlPropHandlers
+    urlProps: getUrlProps(state)
   };
 };
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      goToRoot: () => ({ type: 'dashboardRoot' }),
       setSelectedYears: setDashboardSelectedYears,
       setSelectedResizeBy: setDashboardSelectedResizeBy,
       setSelectedRecolorBy: setDashboardSelectedRecolorBy,
@@ -68,15 +65,14 @@ const mapDispatchToProps = dispatch =>
 
 class DashboardElementContainer extends React.Component {
   static propTypes = {
-    editMode: PropTypes.bool,
     loading: PropTypes.bool,
     filters: PropTypes.object,
     canProceed: PropTypes.bool,
     urlProps: PropTypes.object,
     dirtyBlocks: PropTypes.object,
     groupedCharts: PropTypes.object,
+    urlPropHandlers: PropTypes.object,
     showModalOnStart: PropTypes.bool,
-    goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
     editDashboard: PropTypes.func.isRequired,
     editPanels: PropTypes.func.isRequired,
@@ -119,14 +115,13 @@ class DashboardElementContainer extends React.Component {
   updateStep = step => this.setState({ step });
 
   render() {
-    const { editMode } = this.props;
     const { step, modalOpen } = this.state;
     const {
       loading,
       groupedCharts,
-      goToRoot,
       urlProps,
       canProceed,
+      urlPropHandlers,
       dynamicSentenceParts,
       dirtyBlocks,
       filters,
@@ -140,8 +135,6 @@ class DashboardElementContainer extends React.Component {
         loading={loading}
         filters={filters}
         urlProps={urlProps}
-        editMode={editMode}
-        goToRoot={goToRoot}
         modalOpen={modalOpen}
         canProceed={canProceed}
         dirtyBlocks={dirtyBlocks}
@@ -149,6 +142,7 @@ class DashboardElementContainer extends React.Component {
         closeModal={this.closeModal}
         groupedCharts={groupedCharts}
         reopenPanel={this.reopenPanel}
+        urlPropHandlers={urlPropHandlers}
         dynamicSentenceParts={dynamicSentenceParts}
         setSelectedYears={setSelectedYears}
         setSelectedResizeBy={setSelectedResizeBy}
