@@ -18,9 +18,5 @@ export default {
     selectedResizeBy,
     selectedRecolorBy
   },
-  props: [
-    'selectedYears',
-    'selectedResizeBy',
-    'selectedRecolorBy',
-  ]
+  props: ['selectedYears', 'selectedResizeBy', 'selectedRecolorBy']
 };
