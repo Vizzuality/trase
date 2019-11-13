@@ -110,6 +110,7 @@ const nodesPanelReducer = {
     const { name } = action.meta;
     return immer(state, draft => {
       draft[name].fetchKey = action.payload || null;
+      draft[name].noData = nodesPanelInitialState[name].noData;
     });
   },
   [NODES_PANEL__FETCH_DATA](state, action) {

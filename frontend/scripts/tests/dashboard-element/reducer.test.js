@@ -2,7 +2,6 @@ import reducer, {
   initialState
 } from 'react-components/dashboard-element/dashboard-element.reducer';
 import {
-  DASHBOARD_ELEMENT__EDIT_DASHBOARD,
   DASHBOARD_ELEMENT__SET_PANEL_DATA,
   DASHBOARD_ELEMENT__SET_PANEL_PAGE,
   DASHBOARD_ELEMENT__SET_LOADING_ITEMS,
@@ -540,10 +539,4 @@ test(DASHBOARD_ELEMENT__SET_LOADING, () => {
     ...initialState,
     loading
   });
-});
-
-test(DASHBOARD_ELEMENT__EDIT_DASHBOARD, () => {
-  const action = editDashboard();
-  const newState = reducer(initialState, action);
-  expect(newState.editMode).toBe(true);
 });
