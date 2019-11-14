@@ -78,7 +78,6 @@ const toolLinksReducer = {
         detailedView: toolLinksInitialState.detailedView,
         highlightedNodeId: toolLinksInitialState.highlightedNodeId,
         selectedNodesIds: toolLinksInitialState.selectedNodesIds,
-        expandedNodesIds: toolLinksInitialState.expandedNodesIds,
         selectedColumnsIds: toolLinksInitialState.selectedColumnsIds,
         data: toolLinksInitialState.data
       });
@@ -95,7 +94,6 @@ const toolLinksReducer = {
         forcedOverview: toolLinksInitialState.forcedOverview,
         highlightedNodeId: toolLinksInitialState.highlightedNodeId,
         selectedNodesIds: toolLinksInitialState.selectedNodesIds,
-        expandedNodesIds: toolLinksInitialState.expandedNodesIds,
         selectedColumnsIds: toolLinksInitialState.selectedColumnsIds,
         extraColumn: toolLinksInitialState.extraColumn,
         extraColumnNodeId: toolLinksInitialState.extraColumnNodeId
@@ -107,7 +105,6 @@ const toolLinksReducer = {
       Object.assign(draft, {
         highlightedNodeId: toolLinksInitialState.highlightedNodeId,
         selectedNodesIds: toolLinksInitialState.selectedNodesIds,
-        expandedNodesIds: toolLinksInitialState.expandedNodesIds,
         detailedView: toolLinksInitialState.detailedView,
         forcedOverview: toolLinksInitialState.forcedOverview,
         selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
@@ -127,7 +124,6 @@ const toolLinksReducer = {
         detailedView: toolLinksInitialState.detailedView,
         highlightedNodeId: toolLinksInitialState.highlightedNodeId,
         selectedNodesIds: toolLinksInitialState.selectedNodesIds,
-        expandedNodesIds: toolLinksInitialState.expandedNodesIds,
         selectedColumnsIds: toolLinksInitialState.selectedColumnsIds,
         data: toolLinksInitialState.data
       });
@@ -222,11 +218,11 @@ const toolLinksReducer = {
         return column.group !== columnIndex;
       };
       draft.selectedNodesIds = state.selectedNodesIds.filter(isInColumn);
-      draft.expandedNodesIds = state.expandedNodesIds.filter(isInColumn);
+      // draft.expandedNodesIds = state.expandedNodesIds.filter(isInColumn);
 
       if (state.extraColumn && columnId === state.extraColumn.parentId) {
         draft.selectedNodesIds.filter(id => state.extraColumnNodeId !== id);
-        draft.expandedNodesIds.filter(id => state.extraColumnNodeId !== id);
+        // draft.expandedNodesIds.filter(id => state.extraColumnNodeId !== id);
         draft.extraColumn = toolLinksInitialState.extraColumn;
         draft.extraColumnNodeId = toolLinksInitialState.extraColumnNodeId;
       }
@@ -247,17 +243,17 @@ const toolLinksReducer = {
       if (columnId) {
         // Open extra column
         if (extraColumnNode) {
-          draft.expandedNodesIds = state.expandedNodesIds
-            .filter(expandedNodeId => draft.data.nodes[expandedNodeId].columnId !== parentColumnId)
-            .concat(extraColumnNode?.id);
+          // draft.expandedNodesIds = state.expandedNodesIds
+          //   .filter(expandedNodeId => draft.data.nodes[expandedNodeId].columnId !== parentColumnId)
+          //   .concat(extraColumnNode?.id);
         }
         draft.extraColumnNodeId = action.payload.nodeId;
         draft.extraColumn = { id: columnId, parentId: parentColumnId };
       } else {
         // Close extra column
-        draft.expandedNodesIds = state.expandedNodesIds.filter(
-          id => !wasInExtraColumn(id) && id !== extraColumnNode?.id
-        );
+        // draft.expandedNodesIds = state.expandedNodesIds.filter(
+        //   id => !wasInExtraColumn(id) && id !== extraColumnNode?.id
+        // );
         draft.selectedNodesIds = state.selectedNodesIds.filter(id => !wasInExtraColumn(id));
         draft.extraColumnNodeId = null;
         draft.extraColumn = null;
@@ -289,16 +285,6 @@ const toolLinksReducer = {
         }
       });
 
-      const areNodesExpanded = draft.expandedNodesIds.length > 0;
-      if (
-        areNodesExpanded &&
-        draft.selectedNodesIds.length === 1 &&
-        ids.includes(draft.selectedNodesIds[0])
-      ) {
-        // we are unselecting the node that is currently expanded: shrink sankey and continue to unselecting node
-        draft.expandedNodesIds = [];
-      }
-
       draft.selectedNodesIds = xor(draft.selectedNodesIds, ids);
     });
   },
@@ -308,20 +294,11 @@ const toolLinksReducer = {
       let hasChanged = false;
       let newSelectedNodes = [...draft.selectedNodesIds];
       nodeIds.forEach(nodeId => {
-        const areNodesExpanded = draft.expandedNodesIds.length > 0;
         const node = draft.data.nodes[nodeId];
         if (node.isAggregated) {
           draft.isSearchOpen = true;
         } else {
           hasChanged = true;
-          if (
-            areNodesExpanded &&
-            draft.selectedNodesIds.length === 1 &&
-            draft.selectedNodesIds.includes(nodeId)
-          ) {
-            // we are unselecting the node that is currently expanded: shrink sankey and continue to unselecting node
-            draft.expandedNodesIds = [];
-          }
 
           newSelectedNodes = xor(newSelectedNodes, [nodeId]);
         }
@@ -329,9 +306,6 @@ const toolLinksReducer = {
       if (hasChanged) {
         // save to state the new node selection
         draft.selectedNodesIds = newSelectedNodes;
-        if (newSelectedNodes.length === 0) {
-          draft.expandedNodesIds = [];
-        }
       }
     });
   },
@@ -341,15 +315,15 @@ const toolLinksReducer = {
     });
   },
   [TOOL_LINKS__COLLAPSE_SANKEY](state) {
-    return immer(state, draft => {
+    return immer(state, () => {
       // TODO: Clear all nodes in node panel except required
-      draft.expandedNodesIds = [];
+      // draft.expandedNodesIds = [];
     });
   },
   [TOOL_LINKS__EXPAND_SANKEY](state) {
-    return immer(state, draft => {
+    return immer(state, () => {
       // TODO: Copy the selectedNodeIds to the nodes in the panel
-      draft.expandedNodesIds = state.selectedNodesIds;
+      // draft.expandedNodesIds = state.selectedNodesIds;
     });
   },
   [TOOL_LINKS__SET_IS_SEARCH_OPEN](state, action) {
@@ -377,7 +351,6 @@ const toolLinksReducerTypes = PropTypes => ({
   detailedView: PropTypes.bool,
   isSearchOpen: PropTypes.bool,
   forcedOverview: PropTypes.bool,
-  expandedNodesIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   highlightedNodeId: PropTypes.number,
   flowsLoading: PropTypes.bool,
   selectedBiomeFilterName: PropTypes.string,

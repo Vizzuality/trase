@@ -19,13 +19,13 @@ import filterLinks from 'reducers/helpers/filterLinks';
 import splitLinksByColumn from 'reducers/helpers/splitLinksByColumn';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 import { getHasExtraColumn, getColumnsNumber } from 'react-components/tool/tool.selectors';
+import { getExpandedNodesIds } from 'react-components/nodes-panel/nodes-panel.selectors';
 
 const getToolNodeHeights = state => state.toolLinks.data.nodeHeights;
 export const getToolColumns = state => state.toolLinks.data.columns;
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
-const getToolExpandedNodesIds = state => state.toolLinks.expandedNodesIds;
 const getSankeySize = state => state.toolLayers.sankeySize;
 const getDetailedView = state => state.toolLinks.detailedView;
 const getSankeyColumnsWidth = state => state.toolLinks.sankeyColumnsWidth;
@@ -102,12 +102,12 @@ export const getMergedLinks = createSelector(
 );
 
 export const getHasExpandedNodesIds = createSelector(
-  getToolExpandedNodesIds,
+  getExpandedNodesIds,
   expandedNodesIds => expandedNodesIds.length > 0
 );
 
 export const getIsReExpand = createSelector(
-  [getHasExpandedNodesIds, getToolSelectedNodesIds, getToolExpandedNodesIds],
+  [getHasExpandedNodesIds, getToolSelectedNodesIds, getExpandedNodesIds],
   (hasExpandedNodesIds, selectedNodesIds, expandedNodesIds) =>
     hasExpandedNodesIds && !isEqual([...selectedNodesIds].sort(), [...expandedNodesIds].sort())
 );
