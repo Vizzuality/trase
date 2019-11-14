@@ -34,6 +34,10 @@ class DashboardPanel extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.cancelPanelsDraft();
+  }
+
   static sourcesNodeTypeRenderer(node) {
     return node.nodeType || 'Country of Production';
   }
@@ -115,7 +119,6 @@ class DashboardPanel extends Component {
 
   render() {
     const {
-      editMode,
       clearPanel,
       onContinue,
       onBack,
@@ -149,7 +152,7 @@ class DashboardPanel extends Component {
               'Importers'
             ].map(label => ({ label }))}
             activeStep={step - 1}
-            onSelectStep={editMode && canProceed ? setStep : undefined}
+            onSelectStep={canProceed ? setStep : undefined}
           />
           <Heading className="dashboard-panel-title notranslate" align="center" size="lg">
             {this.renderTitleSentence()}
@@ -157,7 +160,7 @@ class DashboardPanel extends Component {
           {this.renderPanel()}
         </div>
         <DashboardModalFooter
-          isLastStep={step === DASHBOARD_STEPS.importers || (editMode && canProceed)}
+          isLastStep={step === DASHBOARD_STEPS.importers || canProceed}
           onContinue={onContinue}
           onBack={onBack}
           backText="Back"
@@ -181,12 +184,12 @@ DashboardPanel.propTypes = {
   savePanels: PropTypes.func,
   step: PropTypes.number.isRequired,
   setStep: PropTypes.func.isRequired,
-  editMode: PropTypes.bool.isRequired,
   isDisabled: PropTypes.bool.isRequired,
   dynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
   closeModal: PropTypes.func.isRequired,
   clearPanel: PropTypes.func.isRequired,
+  cancelPanelsDraft: PropTypes.func.isRequired,
   setSelectedItems: PropTypes.func.isRequired,
   canProceed: PropTypes.bool.isRequired,
   countryNames: PropTypes.object.isRequired

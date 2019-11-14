@@ -1,70 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import BaseModal from 'react-components/tool/tool-modal/base-modal';
-import ToolSelectionModal from 'react-components/tool/tool-modal/tool-selection-modal';
+import DashboardPanel from 'react-components/dashboard-element/dashboard-panel';
 import LayerModal from 'react-components/tool/tool-modal/layer-modal';
 import VersioningModal from 'react-components/tool/tool-modal/versioning-modal';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 import 'react-components/tool/tool-modal/tool-modal.scss';
+import { TOOL_STEPS } from 'constants';
 
-export default function ToolModal({
-  items,
-  selectedItem,
-  onChange,
-  activeModal,
-  setActiveModal,
-  cancelPanelsDraft
-}) {
-  const SimpleModalComponent = ({ children }) => (
-    <SimpleModal isOpen onRequestClose={() => setActiveModal(null)}>
-      {children}
-    </SimpleModal>
-  );
+export default function ToolModal(props) {
+  const { items, selectedItem, onChange, activeModal, setActiveModal } = props;
+  const [step, setStep] = useState(TOOL_STEPS.welcome);
 
-  SimpleModalComponent.propTypes = {
-    children: PropTypes.node.isRequired
-  };
+  if (!activeModal) {
+    return null;
+  }
 
   const getModalComponent = () => {
     switch (activeModal) {
-      case 'context':
+      case 'context': {
+        const closeModal = () => setActiveModal(null);
+        const showBackButton = step > TOOL_STEPS.sources;
+        const onContinue = step === TOOL_STEPS.importers ? closeModal : () => setStep(step + 1);
         return (
-          <SimpleModal
-            isOpen
-            onRequestClose={() => {
-              setActiveModal(null);
-              cancelPanelsDraft();
-            }}
-          >
-            <ToolSelectionModal />;
-          </SimpleModal>
+          <DashboardPanel
+            step={step}
+            setStep={setStep}
+            closeModal={closeModal}
+            onContinue={onContinue}
+            showBackButton={showBackButton}
+            onBack={showBackButton ? () => setStep(step - 1) : undefined}
+          />
         );
+      }
       case 'layer':
-        return (
-          <SimpleModalComponent>
-            <LayerModal />
-          </SimpleModalComponent>
-        );
+        return <LayerModal />;
       case 'version':
-        return (
-          <SimpleModalComponent>
-            <VersioningModal />
-          </SimpleModalComponent>
-        );
+        return <VersioningModal />;
       default:
         return (
-          <SimpleModalComponent>
-            <BaseModal
-              items={items}
-              selectedItem={selectedItem}
-              onChange={onChange}
-              modalId={activeModal}
-            />
-          </SimpleModalComponent>
+          <BaseModal
+            items={items}
+            selectedItem={selectedItem}
+            onChange={onChange}
+            modalId={activeModal}
+          />
         );
     }
   };
-  return activeModal ? getModalComponent() : null;
+
+  return (
+    <SimpleModal isOpen onRequestClose={() => setActiveModal(null)}>
+      {getModalComponent()}
+    </SimpleModal>
+  );
 }
 
 ToolModal.propTypes = {

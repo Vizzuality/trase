@@ -45,6 +45,10 @@ function SourcesPanel(props) {
 
   const itemToScrollTo = useFirstItem(sources);
 
+  if (tabs.length === 0) {
+    return null;
+  }
+
   return (
     <div className="c-sources-panel">
       <Accordion title={accordionTitle} defaultValue={accordionValue} onToggle={toggleAccordion}>

@@ -1,9 +1,9 @@
 import {
+  DASHBOARD_ELEMENT__EDIT_DASHBOARD,
   DASHBOARD_ELEMENT__GO_TO_DASHBOARD,
   DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
   DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY,
-  DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
-  DASHBOARD_ELEMENT__EDIT_DASHBOARD
+  DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY
 } from 'react-components/dashboard-element/dashboard-element.actions';
 
 import { DASHBOARD_WIDGET__TRACK_OPEN_TABLE_VIEW } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget.actions';
