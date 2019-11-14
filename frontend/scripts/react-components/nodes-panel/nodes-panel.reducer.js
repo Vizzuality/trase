@@ -31,7 +31,7 @@ import {
 import modules from './nodes-panel.modules';
 import nodesPanelInitialState from './nodes-panel.initial-state';
 
-const getPanelsToClear = (panel, state, item) => {
+const getPanelsToClear = (panel, state, item, isANewTab) => {
   const currentPanelIndex = DASHBOARD_STEPS[panel];
 
   // if the selected items in a panel are zero, that means we're including all of them
@@ -47,7 +47,7 @@ const getPanelsToClear = (panel, state, item) => {
   // When passing from N to N+1 we're including more possible results so we don't need to clear the selection.
   const isRemovingAnItem = state[panel].draftSelectedNodesIds.includes(item.id);
 
-  if (hadAllItemsSelected || isRemovingAnItem) {
+  if (hadAllItemsSelected || isRemovingAnItem || isANewTab) {
     const panelsToClear = Object.keys(DASHBOARD_STEPS)
       .filter(i => i !== panel)
       .slice(currentPanelIndex + 1);
@@ -56,9 +56,9 @@ const getPanelsToClear = (panel, state, item) => {
   return null;
 };
 
-const clearPanelData = (draft, { name, state, activeItem }) => {
+const clearPanelData = (draft, { name, state, activeItem, isANewTab }) => {
   // clear following panels if necessary
-  const panelsToClear = getPanelsToClear(name, state, activeItem);
+  const panelsToClear = getPanelsToClear(name, state, activeItem, isANewTab);
   if (panelsToClear) {
     panelsToClear.forEach(panelToClear => {
       if (modules[panelToClear].hasMultipleSelection) {
@@ -268,6 +268,7 @@ const nodesPanelReducer = {
     const { activeItem } = action.payload;
     if (moduleOptions.hasMultipleSelection) {
       return immer(state, draft => {
+        let isANewTab = false;
         if (moduleOptions.hasTabs) {
           draft[name].activeTab = state[name].tabs.find(tab => tab.name === activeItem.nodeType).id;
 
@@ -275,7 +276,9 @@ const nodesPanelReducer = {
           const firstItem =
             state[name].draftSelectedNodesIds[0] &&
             state[name].data.nodes[state[name].draftSelectedNodesIds[0]];
-          if (firstItem && firstItem.nodeType !== activeItem.nodeType) {
+
+          isANewTab = firstItem && firstItem.nodeType !== activeItem.nodeType;
+          if (isANewTab) {
             draft[name].draftSelectedNodesIds = [activeItem.id];
           } else {
             draft[name].draftSelectedNodesIds = xor(draft[name].draftSelectedNodesIds, [
@@ -287,7 +290,7 @@ const nodesPanelReducer = {
             activeItem.id
           ]);
         }
-        clearPanelData(draft, { state, activeItem, name });
+        clearPanelData(draft, { state, activeItem, name, isANewTab });
       });
     }
     return state;
@@ -310,6 +313,7 @@ const nodesPanelReducer = {
     if (moduleOptions.hasSearch) {
       return immer(state, draft => {
         const { activeItem } = action.payload;
+        let isANewTab = false;
 
         if (moduleOptions.hasTabs) {
           const activeTabObj =
@@ -326,13 +330,12 @@ const nodesPanelReducer = {
 
         draft[name].searchResults = [];
 
-        clearPanelData(draft, { state, activeItem, name });
-
         if (moduleOptions.hasMultipleSelection) {
           const firstItem =
             state[name].draftSelectedNodesIds[0] &&
             state[name].data.nodes[state[name].draftSelectedNodesIds[0]];
-          if (firstItem && firstItem.nodeType !== activeItem.nodeType) {
+          isANewTab = firstItem && firstItem.nodeType !== activeItem.nodeType;
+          if (isANewTab) {
             draft[name].draftSelectedNodesIds = [activeItem.id];
           } else {
             draft[name].draftSelectedNodesIds = xor(draft[name].draftSelectedNodesIds, [
@@ -342,6 +345,8 @@ const nodesPanelReducer = {
         } else {
           draft[name].draftSelectedNodeId = activeItem.id;
         }
+
+        clearPanelData(draft, { state, activeItem, name, isANewTab });
       });
     }
     return state;
