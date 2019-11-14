@@ -15,6 +15,7 @@ import {
   getSelectedRecolorBy,
   getSelectedColumnFilterNode
 } from 'react-components/tool-links/tool-links.selectors';
+import { getExpandedNodesIds } from 'react-components/nodes-panel/nodes-panel.selectors';
 import {
   setToolColumns,
   setToolLinks,
@@ -31,6 +32,7 @@ export function* getToolLinksData() {
   const selectedResizeBy = yield select(getSelectedResizeBy);
   const selectedRecolorBy = yield select(getSelectedRecolorBy);
   const selectedColumnFilterNode = yield select(getSelectedColumnFilterNode);
+  const expandedNodesIds = yield select(getExpandedNodesIds);
   if (!selectedResizeBy) {
     return;
   }
@@ -42,7 +44,7 @@ export function* getToolLinksData() {
     cont_attribute_id: selectedResizeBy.attributeId,
     locked_nodes: state.toolLinks.selectedNodesIds
   };
-  const areNodesExpanded = state.toolLinks.expandedNodesIds.length > 0;
+  const areNodesExpanded = expandedNodesIds.length > 0;
 
   if (state.toolLinks.detailedView === true) {
     params.n_nodes = NUM_NODES_DETAILED;
@@ -74,7 +76,7 @@ export function* getToolLinksData() {
   }
 
   if (areNodesExpanded) {
-    params.selected_nodes = state.toolLinks.expandedNodesIds.join(',');
+    params.selected_nodes = expandedNodesIds.join(',');
   }
 
   const url = getURLFromParams(GET_FLOWS_URL, params);
@@ -172,6 +174,9 @@ export function* getToolNodesByLink(selectedContext, { fetchAllNodes } = {}) {
 export function* getToolGeoColumnNodes(selectedContext) {
   const geoColumn = yield select(getSelectedGeoColumn);
   const params = { context_id: selectedContext.id, node_types_ids: geoColumn?.id };
+  if (!params.node_types_ids) {
+    return;
+  }
   const url = getURLFromParams(GET_ALL_NODES_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
@@ -194,9 +199,9 @@ export function* getToolGeoColumnNodes(selectedContext) {
 export function* getMissingLockedNodes() {
   const {
     selectedNodesIds,
-    expandedNodesIds,
     data: { nodes }
   } = yield select(state => state.toolLinks);
+  const expandedNodesIds = yield select(getExpandedNodesIds);
   const selectedContext = yield select(getSelectedContext);
   const lockedNodes = new Set([...selectedNodesIds, ...expandedNodesIds]);
   const nodesIds = Array.from(lockedNodes).filter(lockedNode => !nodes[lockedNode]);
