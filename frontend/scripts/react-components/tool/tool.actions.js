@@ -12,6 +12,7 @@ import {
   getSelectedMapDimensionsUids
 } from 'react-components/tool-layers/tool-layers.selectors';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getExpandedNodesIds } from 'react-components/nodes-panel/nodes-panel.selectors';
 
 import {
   expandSankey,
@@ -185,12 +186,12 @@ export function selectExpandedNode(param) {
   return (dispatch, getState) => {
     const state = getState();
     const { toolLinks } = state;
+    const expandedNodesIds = getExpandedNodesIds(state);
     const visibleNodes = getVisibleNodes(state);
     const visibleNodesById = visibleNodes.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
     const hasInvisibleNodes = ids.some(id => !visibleNodesById[id]);
     const isRemovingANodeWhileExpanded =
-      toolLinks.expandedNodesIds.length > 0 &&
-      ids.some(id => toolLinks.selectedNodesIds.includes(id));
+      expandedNodesIds.length > 0 && ids.some(id => toolLinks.selectedNodesIds.includes(id));
 
     if (hasInvisibleNodes || isRemovingANodeWhileExpanded) {
       dispatch(selectNodes(ids));
