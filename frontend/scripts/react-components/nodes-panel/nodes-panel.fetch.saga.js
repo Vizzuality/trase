@@ -19,7 +19,14 @@ import {
   setTabs,
   setNoData
 } from './nodes-panel.actions';
-import { makeGetActiveTab } from './nodes-panel.selectors';
+import {
+  getCommoditiesDraftPreviousSteps,
+  getDestinationsDraftPreviousSteps,
+  getExportersDraftPreviousSteps,
+  getImportersDraftPreviousSteps,
+  getSourcesDraftPreviousSteps,
+  makeGetActiveTab
+} from './nodes-panel.selectors';
 import modules from './nodes-panel.modules';
 
 const getSourcesTab = makeGetActiveTab('sources');
@@ -116,15 +123,27 @@ export function* getData(name, reducer, options) {
 
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const task = yield fork(setLoadingSpinner, 750, setLoadingItems(true, name));
-  yield put(setData(null, name));
+  yield put(setData(null, null, name));
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
     if (task.isRunning()) {
       task.cancel();
     }
-    yield put(setData(data.data, name));
-    yield put(setNoData(!data.data?.length, name));
+    const previousStepSelector = {
+      countries: () => true,
+      sources: getSourcesDraftPreviousSteps,
+      commodities: getCommoditiesDraftPreviousSteps,
+      destinations: getDestinationsDraftPreviousSteps,
+      exporters: getExportersDraftPreviousSteps,
+      importers: getImportersDraftPreviousSteps
+    };
+
+    const previousStep = yield select(previousStepSelector[name]);
+    yield put(setData(data.data, previousStep, name));
+    if (!data.data?.length) {
+      yield put(setNoData(!data.data?.length, name));
+    }
   } catch (e) {
     console.error('Error', e);
   } finally {
@@ -197,9 +216,9 @@ export function* getMissingItems(nodesPanel, selectedContext) {
     .filter(([name]) => !['countries', 'commodities'].includes(name))
     .flatMap(([name, moduleOptions]) => {
       if (moduleOptions.hasMultipleSelection) {
-        return nodesPanel[name].draftSelectedNodesIds;
+        return nodesPanel[name].selectedNodesIds;
       }
-      return nodesPanel[name].draftSelectedNodeId || [];
+      return nodesPanel[name].selectedNodeId || [];
     });
   const params = {
     context_id: selectedContext.id,

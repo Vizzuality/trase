@@ -32,30 +32,32 @@ const getImporters = state => state.nodesPanel.importers;
 
 const makeGetTabs = name => state => state.nodesPanel[name].tabs;
 
+const buildDirtyBlocks = (
+  selectedCountryId,
+  selectedCommodityId,
+  sourcesActiveItems,
+  destinationsActiveItems,
+  exportersActiveItems,
+  importersActiveItems
+) => ({
+  countries: selectedCountryId !== null,
+  sources: sourcesActiveItems.length > 0,
+  commodities: selectedCommodityId !== null,
+  destinations: destinationsActiveItems.length > 0,
+  exporters: exportersActiveItems.length > 0,
+  importers: importersActiveItems.length > 0
+});
+
 export const getDirtyBlocks = createSelector(
   [
     getCountrySelectedNodeId,
     getCommoditySelectedNodeId,
     getSourcesSelectedNodesIds,
     getDestinationsSelectedNodesIds,
-    getImportersSelectedNodesIds,
-    getExportersSelectedNodesIds
+    getExportersSelectedNodesIds,
+    getImportersSelectedNodesIds
   ],
-  (
-    selectedCountryId,
-    selectedCommodityId,
-    sourcesActiveItems,
-    destinationsActiveItems,
-    importersActiveItems,
-    exportersActiveItems
-  ) => ({
-    countries: selectedCountryId !== null,
-    sources: sourcesActiveItems.length > 0,
-    commodities: selectedCommodityId !== null,
-    destinations: destinationsActiveItems.length > 0,
-    exporters: exportersActiveItems.length > 0,
-    importers: importersActiveItems.length > 0
-  })
+  buildDirtyBlocks
 );
 
 export const getDraftDirtyBlocks = createSelector(
@@ -67,24 +69,24 @@ export const getDraftDirtyBlocks = createSelector(
     getExportersDraftSelectedNodesIds,
     getImportersDraftSelectedNodesIds
   ],
-  (
-    selectedCountryId,
-    selectedCommodityId,
-    sourcesActiveItems,
-    destinationsActiveItems,
-    importersActiveItems,
-    exportersActiveItems
-  ) => ({
-    countries: selectedCountryId !== null,
-    sources: sourcesActiveItems.length > 0,
-    commodities: selectedCommodityId !== null,
-    destinations: destinationsActiveItems.length > 0,
-    exporters: exportersActiveItems.length > 0,
-    importers: importersActiveItems.length > 0
-  })
+  buildDirtyBlocks
 );
 
-const makeGetPreviousSteps = name =>
+const buildPreviousStepsString = name => (...steps) => {
+  const currentStep = DASHBOARD_STEPS[name];
+  const previousStepsSelectedItems = steps.slice(0, currentStep);
+  return previousStepsSelectedItems
+    .flatMap(step => {
+      if (Array.isArray(step)) {
+        return step.join('_');
+      }
+      return step ? `${step}_` : null;
+    })
+    .filter(Boolean)
+    .join('_');
+};
+
+const makeGetDraftPreviousSteps = name =>
   createSelector(
     [
       getCountryDraftSelectedNodeId,
@@ -94,26 +96,14 @@ const makeGetPreviousSteps = name =>
       getExportersDraftSelectedNodesIds,
       getImportersDraftSelectedNodesIds
     ],
-    (...steps) => {
-      const currentStep = DASHBOARD_STEPS[name];
-      const previousStepsSelectedItems = steps.slice(0, currentStep);
-      return previousStepsSelectedItems
-        .flatMap(step => {
-          if (Array.isArray(step)) {
-            return step.join('_');
-          }
-          return step ? `${step}_` : null;
-        })
-        .filter(Boolean)
-        .join('_');
-    }
+    buildPreviousStepsString(name)
   );
 
-export const getSourcesPreviousSteps = makeGetPreviousSteps('sources');
-export const getCommoditiesPreviousSteps = makeGetPreviousSteps('commodities');
-export const getDestinationsPreviousSteps = makeGetPreviousSteps('destinations');
-export const getExportersPreviousSteps = makeGetPreviousSteps('exporters');
-export const getImportersPreviousSteps = makeGetPreviousSteps('importers');
+export const getSourcesDraftPreviousSteps = makeGetDraftPreviousSteps('sources');
+export const getCommoditiesDraftPreviousSteps = makeGetDraftPreviousSteps('commodities');
+export const getDestinationsDraftPreviousSteps = makeGetDraftPreviousSteps('destinations');
+export const getExportersDraftPreviousSteps = makeGetDraftPreviousSteps('exporters');
+export const getImportersDraftPreviousSteps = makeGetDraftPreviousSteps('importers');
 
 const getSomeBlocksNeedUpdate = createSelector(
   [
@@ -122,11 +112,11 @@ const getSomeBlocksNeedUpdate = createSelector(
     getDestinationsFetchKey,
     getExportersFetchKey,
     getImportersFetchKey,
-    getSourcesPreviousSteps,
-    getCommoditiesPreviousSteps,
-    getDestinationsPreviousSteps,
-    getExportersPreviousSteps,
-    getImportersPreviousSteps
+    getSourcesDraftPreviousSteps,
+    getCommoditiesDraftPreviousSteps,
+    getDestinationsDraftPreviousSteps,
+    getExportersDraftPreviousSteps,
+    getImportersDraftPreviousSteps
   ],
   (
     sourcesFetchKey,
@@ -141,15 +131,11 @@ const getSomeBlocksNeedUpdate = createSelector(
     importersPreviousSteps
   ) => {
     const conditions = [
-      [null, 'preloaded'].includes(sourcesFetchKey) || sourcesFetchKey === sourcesPreviousSteps,
-      [null, 'preloaded'].includes(commoditiesFetchKey) ||
-        commoditiesFetchKey === commoditiesPreviousSteps,
-      [null, 'preloaded'].includes(destinationsFetchKey) ||
-        destinationsFetchKey === destinationsPreviousSteps,
-      [null, 'preloaded'].includes(exportersFetchKey) ||
-        exportersFetchKey === exportersPreviousSteps,
-      [null, 'preloaded'].includes(importersFetchKey) ||
-        importersFetchKey === importersPreviousSteps
+      sourcesFetchKey === null || sourcesFetchKey === sourcesPreviousSteps,
+      commoditiesFetchKey === null || commoditiesFetchKey === commoditiesPreviousSteps,
+      destinationsFetchKey === null || destinationsFetchKey === destinationsPreviousSteps,
+      exportersFetchKey === null || exportersFetchKey === exportersPreviousSteps,
+      importersFetchKey === null || importersFetchKey === importersPreviousSteps
     ];
     return conditions.includes(false);
   }
@@ -228,7 +214,7 @@ export const makeGetNodesPanelsProps = name => {
     })
   );
 
-  const getPreviousSteps = makeGetPreviousSteps(name);
+  const getDraftPreviousSteps = makeGetDraftPreviousSteps(name);
 
   const selectors = {
     page: getPage,
@@ -236,7 +222,7 @@ export const makeGetNodesPanelsProps = name => {
     noData: getNoData,
     fetchKey: getFetchKey,
     orderBy: getSelectedOrderBy,
-    previousSteps: getPreviousSteps
+    draftPreviousSteps: getDraftPreviousSteps
   };
 
   if (moduleOptions.hasTabs) {
