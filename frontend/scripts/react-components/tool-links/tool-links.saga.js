@@ -41,7 +41,7 @@ function* fetchToolColumns() {
       return;
     }
     const task = yield fork(setLoadingSpinner, 750, setToolFlowsLoading(true));
-    yield fork(getToolColumnsData, selectedContext);
+    yield call(getToolColumnsData, selectedContext);
     yield fork(getToolGeoColumnNodes, selectedContext);
 
     yield call(getToolLinksData);
