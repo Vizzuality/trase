@@ -30,7 +30,7 @@ function ImportersPanel(props) {
     activeTab,
     orderBy,
     setOrderBy,
-    previousSteps,
+    draftPreviousSteps,
     excludingMode,
     setExcludingMode,
     fetchData,
@@ -38,10 +38,10 @@ function ImportersPanel(props) {
   } = props;
 
   useEffect(() => {
-    if (previousSteps !== fetchKey || fetchKey === null) {
-      fetchData(previousSteps);
+    if (draftPreviousSteps !== fetchKey || fetchKey === null) {
+      fetchData(draftPreviousSteps);
     }
-  }, [previousSteps, fetchData, fetchKey]);
+  }, [draftPreviousSteps, fetchData, fetchKey]);
 
   const itemToScrollTo = useFirstItem(importers);
 
@@ -116,7 +116,7 @@ function ImportersPanel(props) {
 
 ImportersPanel.propTypes = {
   fetchKey: PropTypes.string,
-  previousSteps: PropTypes.string,
+  draftPreviousSteps: PropTypes.string,
   importers: PropTypes.array,
   selectedNodesIds: PropTypes.array,
   page: PropTypes.number.isRequired,
