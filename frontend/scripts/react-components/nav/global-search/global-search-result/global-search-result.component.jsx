@@ -47,8 +47,8 @@ class GlobalSearchResult extends Component {
                 serializerParams: {
                   toolLayout: TOOL_LAYOUT.right,
                   selectedContextId: item.contextId,
-                  selectedNodesIds: item.nodes.map(i => i.id),
-                  expandedNodesIds: item.nodes.map(i => i.id)
+                  selectedNodesIds: item.nodes.map(i => i.id)
+                  // expandedNodesIds: item.nodes.map(i => i.id)
                 }
               }
             }}

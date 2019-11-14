@@ -54,7 +54,6 @@ export default {
   props: [
     'selectedNodesIds',
     'selectedColumnsIds',
-    'expandedNodesIds',
     'detailedView',
     'selectedResizeBy',
     'selectedRecolorBy',
