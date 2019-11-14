@@ -135,15 +135,6 @@ export function* fetchMissingItems() {
 
     yield all(tasks);
 
-    // if (selectedContext) {
-    //     Object.entries(modules).forEach(([name, moduleOptions]) => {
-    //       if (moduleOptions.hasTabs) {
-    //         subtasks.push(call(getSectionTabs, name));
-    //       }
-    //     });
-    // }
-    // yield all(subtasks);
-
     // TODO: Remove when we delete the legacy dashboards
     yield call(updateIndicatorsOnItemChange);
   }
