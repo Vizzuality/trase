@@ -16,7 +16,6 @@ export default {
   selectedColumnsIds: null,
   extraColumn: null,
   extraColumnNodeId: null,
-  expandedNodesIds: [],
   selectedNodesIds: [],
   selectedRecolorBy: null,
   selectedResizeBy: null,

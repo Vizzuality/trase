@@ -32,6 +32,16 @@ const getImporters = state => state.nodesPanel.importers;
 
 const makeGetTabs = name => state => state.nodesPanel[name].tabs;
 
+export const getExpandedNodesIds = createSelector(
+  [
+    getSourcesSelectedNodesIds,
+    getDestinationsSelectedNodesIds,
+    getExportersSelectedNodesIds,
+    getImportersSelectedNodesIds
+  ],
+  (...selectedNodesIdsByRole) => selectedNodesIdsByRole.flat()
+);
+
 const buildDirtyBlocks = (
   selectedCountryId,
   selectedCommodityId,
