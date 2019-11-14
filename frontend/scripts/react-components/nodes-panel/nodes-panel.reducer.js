@@ -22,7 +22,6 @@ import {
   NODES_PANEL__SET_SEARCH_RESULTS,
   NODES_PANEL__SET_INSTANCE_ID,
   NODES_PANEL__SET_NO_DATA,
-  NODES_PANEL__SET_FETCH_KEY,
   NODES_PANEL__SET_ORDER_BY,
   NODES_PANEL__SET_EXCLUDING_MODE,
   NODES_PANEL__EDIT_PANELS,
@@ -107,28 +106,13 @@ const nodesPanelReducer = {
       draft[name].page = action.payload;
     });
   },
-  [NODES_PANEL__SET_FETCH_KEY](state, action) {
-    const { name } = action.meta;
-    return immer(state, draft => {
-      draft[name].fetchKey = action.payload || null;
-      draft[name].noData = nodesPanelInitialState[name].noData;
-    });
-  },
   [NODES_PANEL__FETCH_DATA](state, action) {
     const { name } = action.meta;
     const moduleOptions = modules[name];
     return immer(state, draft => {
+      draft[name].noData = nodesPanelInitialState[name].noData;
       if (moduleOptions.hasTabs) {
         draft[name].activeTab = nodesPanelInitialState[name].activeTab;
-      }
-      draft[name].fetchKey = action.payload || null;
-
-      if (draft[name].fetchKey !== null && state[name].fetchKey !== 'preloaded') {
-        if (moduleOptions.hasMultipleSelection) {
-          draft[name].draftSelectedNodesIds = nodesPanelInitialState[name].draftSelectedNodesIds;
-        } else {
-          draft[name].draftSelectedNodeId = nodesPanelInitialState[name].draftSelectedNodeId;
-        }
       }
     });
   },
@@ -136,9 +120,26 @@ const nodesPanelReducer = {
     const { name } = action.meta;
     const moduleOptions = modules[name];
     return immer(state, draft => {
-      const { data } = action.payload;
+      const { data, fetchKey } = action.payload;
       if (data) {
-        const newItems = data.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
+        draft[name].fetchKey = fetchKey || null;
+
+        const selectedItemsData = {};
+        if (state[name].data.nodes) {
+          if (moduleOptions.hasMultipleSelection) {
+            state[name].selectedNodesIds.forEach(id => {
+              selectedItemsData[id] = state[name].data.nodes[id];
+            });
+          } else {
+            const id = state[name].selectedNodeId;
+            selectedItemsData[id] = state[name].data.nodes[id];
+          }
+        }
+
+        const newItems = data.reduce(
+          (acc, next) => ({ ...acc, [next.id]: next }),
+          selectedItemsData
+        );
         draft[name].data.byId = data ? data.map(node => node.id) : [];
         draft[name].data.nodes = newItems;
       } else {
@@ -173,15 +174,16 @@ const nodesPanelReducer = {
   [NODES_PANEL__SET_MISSING_DATA](state, action) {
     return immer(state, draft => {
       const { data } = action.payload;
+
       Object.entries(modules)
         .filter(([name]) => !['countries', 'commodities'].includes(name))
         .forEach(([name, moduleOptions]) => {
           data
             .filter(item => {
               if (moduleOptions.hasMultipleSelection) {
-                return draft[name].draftSelectedNodesIds.includes(item.id);
+                return draft[name].selectedNodesIds.includes(item.id);
               }
-              return draft[name].draftSelectedNodeId === item.id;
+              return draft[name].selectedNodeId === item.id;
             })
             .forEach(item => {
               if (!draft[name].data.nodes) {
@@ -192,7 +194,6 @@ const nodesPanelReducer = {
                 draft[name].activeTab = item.columnId;
               }
 
-              draft[name].data.byId.push(item.id);
               draft[name].data.nodes[item.id] = item;
             });
         });
@@ -204,6 +205,7 @@ const nodesPanelReducer = {
     if (moduleOptions.hasTabs) {
       return immer(state, draft => {
         const { data } = action.payload;
+
         const getSection = n => n.section && n.section.toLowerCase();
         const sectionTabs = data.find(item => getSection(item) === name);
         draft[name].tabs = sectionTabs?.tabs;
@@ -320,11 +322,7 @@ const nodesPanelReducer = {
           draft[name].activeTab = activeTab;
         }
 
-        const existsInData = state[name].data.nodes[activeItem.id];
         draft[name].data.nodes = { ...state[name].data.nodes, [activeItem.id]: activeItem };
-        if (!existsInData) {
-          draft[name].data.byId = [activeItem.id, ...state[name].data.byId];
-        }
 
         draft[name].searchResults = [];
 
