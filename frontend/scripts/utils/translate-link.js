@@ -35,7 +35,7 @@ function getRoleQueryParams(selectedNodesIds, meta) {
 
 function translateLink(data, meta, to = 'sankey') {
   const { queryParams, countryId, commodityId, title } = data;
-  const params = parseURL(queryParams);
+  const { selectedContextId, ...params } = parseURL(queryParams);
 
   let serializerParams = {
     selectedYears: params.selectedYears,

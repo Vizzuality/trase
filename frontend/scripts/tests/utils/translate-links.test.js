@@ -72,7 +72,6 @@ describe('translate links', () => {
         serializerParams: {
           ...cardLink.queryParams,
           toolLayout: parseInt(cardLink.queryParams.toolLayout, 10),
-          selectedContextId: parseInt(cardLink.queryParams.selectedContextId, 10),
           selectedNodesIds: cardLink.queryParams.selectedNodesIds.map(id => parseInt(id, 10)),
           expandedNodesIds: cardLink.queryParams.expandedNodesIds.map(id => parseInt(id, 10)),
           countries: 107,
