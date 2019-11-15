@@ -35,7 +35,9 @@ class DashboardPanel extends Component {
   }
 
   componentWillUnmount() {
-    this.props.cancelPanelsDraft();
+    const { cancelPanelsDraft, setStep } = this.props;
+    cancelPanelsDraft();
+    setStep(DASHBOARD_STEPS.welcome);
   }
 
   static sourcesNodeTypeRenderer(node) {
