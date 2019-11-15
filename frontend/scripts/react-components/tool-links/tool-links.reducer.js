@@ -68,15 +68,12 @@ const toolLinksReducer = {
   [NODES_PANEL__SAVE](state) {
     return immer(state, draft => {
       Object.assign(draft, {
-        selectedRecolorBy: toolLinksInitialState.selectedRecolorBy,
-        selectedResizeBy: toolLinksInitialState.selectedResizeBy,
         selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
         extraColumn: toolLinksInitialState.extraColumn,
         extraColumnNodeId: toolLinksInitialState.extraColumnNodeId,
         detailedView: toolLinksInitialState.detailedView,
         highlightedNodeId: toolLinksInitialState.highlightedNodeId,
         selectedNodesIds: toolLinksInitialState.selectedNodesIds,
-        selectedColumnsIds: toolLinksInitialState.selectedColumnsIds,
         data: toolLinksInitialState.data
       });
     });
