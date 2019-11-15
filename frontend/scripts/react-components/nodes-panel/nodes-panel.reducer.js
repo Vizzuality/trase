@@ -5,7 +5,7 @@ import { DASHBOARD_STEPS } from 'constants';
 import createReducer from 'utils/createReducer';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import nodesPanelSerialization from 'react-components/nodes-panel/nodes-panel.serializers';
-import { SET_CONTEXT } from 'actions/app.actions';
+import { SET_CONTEXTS } from 'actions/app.actions';
 import { TOOL_LINKS__COLLAPSE_SANKEY } from 'react-components/tool-links/tool-links.actions';
 import {
   NODES_PANEL__FETCH_DATA,
@@ -116,8 +116,15 @@ const nodesPanelReducer = {
   tool(state, action) {
     return deserializeInternalLink(state, action);
   },
-  [SET_CONTEXT]() {
-    return nodesPanelInitialState;
+  [SET_CONTEXTS](state, action) {
+    return immer(state, draft => {
+      const contexts = action.payload;
+      if (state.countries.selectedNodeId === null || state.commodities.selectedNodeId === null) {
+        const defaultContext = contexts.find(ctx => ctx.isDefault);
+        draft.countries.selectedNodeId = defaultContext.countryId;
+        draft.commodities.selectedNodeId = defaultContext.commodityId;
+      }
+    });
   },
   [NODES_PANEL__SET_INSTANCE_ID](state) {
     return immer(state, draft => {
@@ -487,7 +494,7 @@ const nodesPanelReducer = {
   },
   [TOOL_LINKS__COLLAPSE_SANKEY](state) {
     return immer(state, draft => {
-      clearNextPanels(draft, 'commodities', { clearDraft: false });
+      clearNextPanels(draft, 'destinations', { clearDraft: false });
     });
   }
 };
