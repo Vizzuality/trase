@@ -4,8 +4,10 @@ import { setDashboardLoading } from 'react-components/dashboard-element/dashboar
 
 import { updateIndicatorsOnItemChange } from 'react-components/dashboard-element/dashboard-element.saga';
 import { getDashboardsContext } from 'react-components/dashboard-element/dashboard-element.selectors';
+import { TOOL_LINKS__EXPAND_SANKEY } from 'react-components/tool-links/tool-links.actions';
 
 import {
+  syncNodesWithSankey,
   NODES_PANEL__GET_MISSING_DATA,
   NODES_PANEL__GET_SEARCH_RESULTS,
   NODES_PANEL__SET_TABS,
@@ -144,6 +146,29 @@ export function* fetchMissingItems() {
   yield takeLatest([NODES_PANEL__GET_MISSING_DATA], shouldFetchMissingItems);
 }
 
+function* syncSelectedNodes() {
+  function* onExpandSankey() {
+    const {
+      selectedNodesIds,
+      data: { nodes, columns }
+    } = yield select(state => state.toolLinks);
+    const nodesByRole = selectedNodesIds.reduce((acc, nodeId) => {
+      const node = nodes[nodeId];
+      const column = columns[node.columnId];
+      const role = `${column.role}s`;
+      if (!acc[role]) {
+        acc[role] = [];
+      }
+
+      acc[role].push(node.id);
+      return acc;
+    }, {});
+
+    yield put(syncNodesWithSankey(nodesByRole));
+  }
+  yield takeLatest([TOOL_LINKS__EXPAND_SANKEY], onExpandSankey);
+}
+
 export default function* nodesPanelSagas() {
   const sagas = [
     fetchData,
@@ -151,7 +176,8 @@ export default function* nodesPanelSagas() {
     fetchDataOnSearch,
     fetchDataOnTabsFetch,
     fetchDataOnTabChange,
-    fetchMissingItems
+    fetchMissingItems,
+    syncSelectedNodes
   ];
   yield all(sagas.map(saga => fork(saga)));
 }

@@ -6,6 +6,7 @@ import createReducer from 'utils/createReducer';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import nodesPanelSerialization from 'react-components/nodes-panel/nodes-panel.serializers';
 import { SET_CONTEXT } from 'actions/app.actions';
+import { TOOL_LINKS__COLLAPSE_SANKEY } from 'react-components/tool-links/tool-links.actions';
 import {
   NODES_PANEL__FETCH_DATA,
   NODES_PANEL__SET_PANEL_PAGE,
@@ -26,7 +27,8 @@ import {
   NODES_PANEL__SET_EXCLUDING_MODE,
   NODES_PANEL__EDIT_PANELS,
   NODES_PANEL__SAVE,
-  NODES_PANEL__CANCEL_PANELS_DRAFT
+  NODES_PANEL__CANCEL_PANELS_DRAFT,
+  NODES_PANEL__SYNC_NODES_WITH_SANKEY
 } from './nodes-panel.actions';
 import modules from './nodes-panel.modules';
 import nodesPanelInitialState from './nodes-panel.initial-state';
@@ -72,6 +74,28 @@ const clearPanelData = (draft, { name, state, activeItem, isANewTab }) => {
       draft[panelToClear].noData = nodesPanelInitialState[panelToClear].noData;
     });
   }
+};
+
+const clearNextPanels = (draft, panel, { clearDraft = true }) => {
+  const panelIndex = DASHBOARD_STEPS[panel];
+  Object.entries(DASHBOARD_STEPS).forEach(([name, step]) => {
+    const moduleOptions = modules[name];
+    if (panelIndex <= step) {
+      if (moduleOptions.hasMultipleSelection) {
+        if (clearDraft) {
+          draft[name].draftSelectedNodesIds = [];
+        } else {
+          draft[name].selectedNodesIds = [];
+        }
+      } else if (clearDraft) {
+        draft[name].draftSelectedNodeId = null;
+      } else {
+        draft[name].selectedNodeId = null;
+      }
+
+      draft[name].noData = nodesPanelInitialState[name].noData;
+    }
+  });
 };
 
 const deserializeInternalLink = (state, action) => {
@@ -365,18 +389,7 @@ const nodesPanelReducer = {
   [NODES_PANEL__CLEAR_PANEL](state, action) {
     return immer(state, draft => {
       const { panel } = action.payload;
-      const panelIndex = DASHBOARD_STEPS[panel];
-      Object.entries(DASHBOARD_STEPS).forEach(([name, step]) => {
-        const moduleOptions = modules[name];
-        if (panelIndex <= step) {
-          if (moduleOptions.hasMultipleSelection) {
-            draft[name].draftSelectedNodesIds = [];
-          } else {
-            draft[name].draftSelectedNodeId = null;
-          }
-          draft[name].noData = nodesPanelInitialState[name].noData;
-        }
-      });
+      clearNextPanels(draft, panel);
     });
   },
   [NODES_PANEL__SET_EXCLUDING_MODE](state, action) {
@@ -462,6 +475,19 @@ const nodesPanelReducer = {
             nodesPanelInitialState[panelName].draftSelectedNodeId;
         }
       });
+    });
+  },
+  [NODES_PANEL__SYNC_NODES_WITH_SANKEY](state, action) {
+    return immer(state, draft => {
+      const { nodesByRole } = action.payload;
+      Object.entries(nodesByRole).forEach(([name, selectedNodesIds]) => {
+        draft[name].selectedNodesIds = selectedNodesIds;
+      });
+    });
+  },
+  [TOOL_LINKS__COLLAPSE_SANKEY](state) {
+    return immer(state, draft => {
+      clearNextPanels(draft, 'commodities', { clearDraft: false });
     });
   }
 };
