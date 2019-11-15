@@ -160,7 +160,7 @@ function* syncSelectedNodes() {
         acc[role] = [];
       }
 
-      acc[role].push(node.id);
+      acc[role].push(node);
       return acc;
     }, {});
 
