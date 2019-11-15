@@ -9,8 +9,6 @@ import {
   TOOL_LINKS_RESET_SANKEY,
   TOOL_LINKS__SELECT_VIEW,
   TOOL_LINKS__SET_IS_SEARCH_OPEN,
-  TOOL_LINKS__COLLAPSE_SANKEY,
-  TOOL_LINKS__EXPAND_SANKEY,
   TOOL_LINKS__SELECT_COLUMN,
   TOOL_LINKS_SET_NO_LINKS_FOUND,
   TOOL_LINKS__SET_SELECTED_NODES,
@@ -312,18 +310,6 @@ const toolLinksReducer = {
   [TOOL_LINKS__HIGHLIGHT_NODE](state, action) {
     return immer(state, draft => {
       draft.highlightedNodeId = action.payload.nodeId;
-    });
-  },
-  [TOOL_LINKS__COLLAPSE_SANKEY](state) {
-    return immer(state, () => {
-      // TODO: Clear all nodes in node panel except required
-      // draft.expandedNodesIds = [];
-    });
-  },
-  [TOOL_LINKS__EXPAND_SANKEY](state) {
-    return immer(state, () => {
-      // TODO: Copy the selectedNodeIds to the nodes in the panel
-      // draft.expandedNodesIds = state.selectedNodesIds;
     });
   },
   [TOOL_LINKS__SET_IS_SEARCH_OPEN](state, action) {
