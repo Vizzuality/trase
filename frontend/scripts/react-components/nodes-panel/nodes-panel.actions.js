@@ -21,6 +21,7 @@ export const NODES_PANEL__SET_ORDER_BY = 'NODES_PANEL__SET_ORDER_BY';
 export const NODES_PANEL__EDIT_PANELS = 'NODES_PANEL__EDIT_PANELS';
 export const NODES_PANEL__SAVE = 'NODES_PANEL__SAVE';
 export const NODES_PANEL__CANCEL_PANELS_DRAFT = 'NODES_PANEL__CANCEL_PANELS_DRAFT';
+export const NODES_PANEL__SYNC_NODES_WITH_SANKEY = 'NODES_PANEL__SYNC_NODES_WITH_SANKEY';
 
 export const fetchData = (key, name) => ({
   type: NODES_PANEL__FETCH_DATA,
@@ -141,4 +142,9 @@ export const setOrderBy = (orderBy, name) => ({
     orderBy
   },
   meta: { name }
+});
+
+export const syncNodesWithSankey = nodesByRole => ({
+  type: NODES_PANEL__SYNC_NODES_WITH_SANKEY,
+  payload: { nodesByRole }
 });
