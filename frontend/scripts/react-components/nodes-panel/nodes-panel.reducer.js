@@ -76,7 +76,7 @@ const clearPanelData = (draft, { name, state, activeItem, isANewTab }) => {
   }
 };
 
-const clearNextPanels = (draft, panel, { clearDraft = true }) => {
+const clearNextPanels = (draft, panel, { clearDraft } = { clearDraft: true }) => {
   const panelIndex = DASHBOARD_STEPS[panel];
   Object.entries(DASHBOARD_STEPS).forEach(([name, step]) => {
     const moduleOptions = modules[name];
@@ -487,8 +487,17 @@ const nodesPanelReducer = {
   [NODES_PANEL__SYNC_NODES_WITH_SANKEY](state, action) {
     return immer(state, draft => {
       const { nodesByRole } = action.payload;
-      Object.entries(nodesByRole).forEach(([name, selectedNodesIds]) => {
-        draft[name].selectedNodesIds = selectedNodesIds;
+      Object.entries(nodesByRole).forEach(([name, selectedNodes]) => {
+        draft[name].selectedNodesIds = [];
+        if (!draft[name].data.nodes) {
+          draft[name].data.nodes = {};
+        }
+        selectedNodes.forEach(node => {
+          draft[name].selectedNodesIds.push(node.id);
+          if (!draft[name].data.nodes[node.id]) {
+            draft[name].data.nodes[node.id] = node;
+          }
+        });
       });
     });
   },
