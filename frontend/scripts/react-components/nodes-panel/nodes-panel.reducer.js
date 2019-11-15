@@ -76,28 +76,6 @@ const clearPanelData = (draft, { name, state, activeItem, isANewTab }) => {
   }
 };
 
-const clearNextPanels = (draft, panel, { clearDraft } = { clearDraft: true }) => {
-  const panelIndex = DASHBOARD_STEPS[panel];
-  Object.entries(DASHBOARD_STEPS).forEach(([name, step]) => {
-    const moduleOptions = modules[name];
-    if (panelIndex <= step) {
-      if (moduleOptions.hasMultipleSelection) {
-        if (clearDraft) {
-          draft[name].draftSelectedNodesIds = [];
-        } else {
-          draft[name].selectedNodesIds = [];
-        }
-      } else if (clearDraft) {
-        draft[name].draftSelectedNodeId = null;
-      } else {
-        draft[name].selectedNodeId = null;
-      }
-
-      draft[name].noData = nodesPanelInitialState[name].noData;
-    }
-  });
-};
-
 const deserializeInternalLink = (state, action) => {
   if (action.payload?.serializerParams) {
     return deserialize({
@@ -396,7 +374,19 @@ const nodesPanelReducer = {
   [NODES_PANEL__CLEAR_PANEL](state, action) {
     return immer(state, draft => {
       const { panel } = action.payload;
-      clearNextPanels(draft, panel);
+      const panelIndex = DASHBOARD_STEPS[panel];
+      Object.entries(DASHBOARD_STEPS).forEach(([name, step]) => {
+        const moduleOptions = modules[name];
+        if (panelIndex <= step) {
+          if (moduleOptions.hasMultipleSelection) {
+            draft[name].draftSelectedNodesIds = [];
+          } else {
+            draft[name].draftSelectedNodeId = null;
+          }
+
+          draft[name].noData = nodesPanelInitialState[name].noData;
+        }
+      });
     });
   },
   [NODES_PANEL__SET_EXCLUDING_MODE](state, action) {
@@ -503,7 +493,17 @@ const nodesPanelReducer = {
   },
   [TOOL_LINKS__COLLAPSE_SANKEY](state) {
     return immer(state, draft => {
-      clearNextPanels(draft, 'destinations', { clearDraft: false });
+      Object.keys(DASHBOARD_STEPS).forEach(name => {
+        const moduleOptions = modules[name];
+        if (!['welcome', 'countries', 'commodities'].includes(name)) {
+          if (moduleOptions.hasMultipleSelection) {
+            draft[name].selectedNodesIds = [];
+          } else {
+            draft[name].selectedNodeId = null;
+          }
+          draft[name].noData = nodesPanelInitialState[name].noData;
+        }
+      });
     });
   }
 };
