@@ -22,7 +22,6 @@ import {
   NODES_PANEL__SET_SEARCH_RESULTS,
   NODES_PANEL__SET_INSTANCE_ID,
   NODES_PANEL__SET_NO_DATA,
-  NODES_PANEL__SET_FETCH_KEY,
   NODES_PANEL__SET_ORDER_BY,
   NODES_PANEL__SET_EXCLUDING_MODE,
   NODES_PANEL__EDIT_PANELS,
@@ -32,7 +31,7 @@ import {
 import modules from './nodes-panel.modules';
 import nodesPanelInitialState from './nodes-panel.initial-state';
 
-const getPanelsToClear = (panel, state, item) => {
+const getPanelsToClear = (panel, state, item, isANewTab) => {
   const currentPanelIndex = DASHBOARD_STEPS[panel];
 
   // if the selected items in a panel are zero, that means we're including all of them
@@ -48,7 +47,7 @@ const getPanelsToClear = (panel, state, item) => {
   // When passing from N to N+1 we're including more possible results so we don't need to clear the selection.
   const isRemovingAnItem = state[panel].draftSelectedNodesIds.includes(item.id);
 
-  if (hadAllItemsSelected || isRemovingAnItem) {
+  if (hadAllItemsSelected || isRemovingAnItem || isANewTab) {
     const panelsToClear = Object.keys(DASHBOARD_STEPS)
       .filter(i => i !== panel)
       .slice(currentPanelIndex + 1);
@@ -57,9 +56,9 @@ const getPanelsToClear = (panel, state, item) => {
   return null;
 };
 
-const clearPanelData = (draft, { name, state, activeItem }) => {
+const clearPanelData = (draft, { name, state, activeItem, isANewTab }) => {
   // clear following panels if necessary
-  const panelsToClear = getPanelsToClear(name, state, activeItem);
+  const panelsToClear = getPanelsToClear(name, state, activeItem, isANewTab);
   if (panelsToClear) {
     panelsToClear.forEach(panelToClear => {
       if (modules[panelToClear].hasMultipleSelection) {
@@ -107,28 +106,13 @@ const nodesPanelReducer = {
       draft[name].page = action.payload;
     });
   },
-  [NODES_PANEL__SET_FETCH_KEY](state, action) {
-    const { name } = action.meta;
-    return immer(state, draft => {
-      draft[name].fetchKey = action.payload || null;
-      draft[name].noData = nodesPanelInitialState[name].noData;
-    });
-  },
   [NODES_PANEL__FETCH_DATA](state, action) {
     const { name } = action.meta;
     const moduleOptions = modules[name];
     return immer(state, draft => {
+      draft[name].noData = nodesPanelInitialState[name].noData;
       if (moduleOptions.hasTabs) {
         draft[name].activeTab = nodesPanelInitialState[name].activeTab;
-      }
-      draft[name].fetchKey = action.payload || null;
-
-      if (draft[name].fetchKey !== null && state[name].fetchKey !== 'preloaded') {
-        if (moduleOptions.hasMultipleSelection) {
-          draft[name].draftSelectedNodesIds = nodesPanelInitialState[name].draftSelectedNodesIds;
-        } else {
-          draft[name].draftSelectedNodeId = nodesPanelInitialState[name].draftSelectedNodeId;
-        }
       }
     });
   },
@@ -136,9 +120,26 @@ const nodesPanelReducer = {
     const { name } = action.meta;
     const moduleOptions = modules[name];
     return immer(state, draft => {
-      const { data } = action.payload;
+      const { data, fetchKey } = action.payload;
       if (data) {
-        const newItems = data.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
+        draft[name].fetchKey = fetchKey || null;
+
+        const selectedItemsData = {};
+        if (state[name].data.nodes) {
+          if (moduleOptions.hasMultipleSelection) {
+            state[name].selectedNodesIds.forEach(id => {
+              selectedItemsData[id] = state[name].data.nodes[id];
+            });
+          } else {
+            const id = state[name].selectedNodeId;
+            selectedItemsData[id] = state[name].data.nodes[id];
+          }
+        }
+
+        const newItems = data.reduce(
+          (acc, next) => ({ ...acc, [next.id]: next }),
+          selectedItemsData
+        );
         draft[name].data.byId = data ? data.map(node => node.id) : [];
         draft[name].data.nodes = newItems;
       } else {
@@ -173,15 +174,16 @@ const nodesPanelReducer = {
   [NODES_PANEL__SET_MISSING_DATA](state, action) {
     return immer(state, draft => {
       const { data } = action.payload;
+
       Object.entries(modules)
         .filter(([name]) => !['countries', 'commodities'].includes(name))
         .forEach(([name, moduleOptions]) => {
           data
             .filter(item => {
               if (moduleOptions.hasMultipleSelection) {
-                return draft[name].draftSelectedNodesIds.includes(item.id);
+                return draft[name].selectedNodesIds.includes(item.id);
               }
-              return draft[name].draftSelectedNodeId === item.id;
+              return draft[name].selectedNodeId === item.id;
             })
             .forEach(item => {
               if (!draft[name].data.nodes) {
@@ -192,7 +194,6 @@ const nodesPanelReducer = {
                 draft[name].activeTab = item.columnId;
               }
 
-              draft[name].data.byId.push(item.id);
               draft[name].data.nodes[item.id] = item;
             });
         });
@@ -204,6 +205,7 @@ const nodesPanelReducer = {
     if (moduleOptions.hasTabs) {
       return immer(state, draft => {
         const { data } = action.payload;
+
         const getSection = n => n.section && n.section.toLowerCase();
         const sectionTabs = data.find(item => getSection(item) === name);
         draft[name].tabs = sectionTabs?.tabs;
@@ -266,6 +268,7 @@ const nodesPanelReducer = {
     const { activeItem } = action.payload;
     if (moduleOptions.hasMultipleSelection) {
       return immer(state, draft => {
+        let isANewTab = false;
         if (moduleOptions.hasTabs) {
           draft[name].activeTab = state[name].tabs.find(tab => tab.name === activeItem.nodeType).id;
 
@@ -273,7 +276,9 @@ const nodesPanelReducer = {
           const firstItem =
             state[name].draftSelectedNodesIds[0] &&
             state[name].data.nodes[state[name].draftSelectedNodesIds[0]];
-          if (firstItem && firstItem.nodeType !== activeItem.nodeType) {
+
+          isANewTab = firstItem && firstItem.nodeType !== activeItem.nodeType;
+          if (isANewTab) {
             draft[name].draftSelectedNodesIds = [activeItem.id];
           } else {
             draft[name].draftSelectedNodesIds = xor(draft[name].draftSelectedNodesIds, [
@@ -285,7 +290,7 @@ const nodesPanelReducer = {
             activeItem.id
           ]);
         }
-        clearPanelData(draft, { state, activeItem, name });
+        clearPanelData(draft, { state, activeItem, name, isANewTab });
       });
     }
     return state;
@@ -308,6 +313,7 @@ const nodesPanelReducer = {
     if (moduleOptions.hasSearch) {
       return immer(state, draft => {
         const { activeItem } = action.payload;
+        let isANewTab = false;
 
         if (moduleOptions.hasTabs) {
           const activeTabObj =
@@ -320,21 +326,16 @@ const nodesPanelReducer = {
           draft[name].activeTab = activeTab;
         }
 
-        const existsInData = state[name].data.nodes[activeItem.id];
         draft[name].data.nodes = { ...state[name].data.nodes, [activeItem.id]: activeItem };
-        if (!existsInData) {
-          draft[name].data.byId = [activeItem.id, ...state[name].data.byId];
-        }
 
         draft[name].searchResults = [];
-
-        clearPanelData(draft, { state, activeItem, name });
 
         if (moduleOptions.hasMultipleSelection) {
           const firstItem =
             state[name].draftSelectedNodesIds[0] &&
             state[name].data.nodes[state[name].draftSelectedNodesIds[0]];
-          if (firstItem && firstItem.nodeType !== activeItem.nodeType) {
+          isANewTab = firstItem && firstItem.nodeType !== activeItem.nodeType;
+          if (isANewTab) {
             draft[name].draftSelectedNodesIds = [activeItem.id];
           } else {
             draft[name].draftSelectedNodesIds = xor(draft[name].draftSelectedNodesIds, [
@@ -344,6 +345,8 @@ const nodesPanelReducer = {
         } else {
           draft[name].draftSelectedNodeId = activeItem.id;
         }
+
+        clearPanelData(draft, { state, activeItem, name, isANewTab });
       });
     }
     return state;

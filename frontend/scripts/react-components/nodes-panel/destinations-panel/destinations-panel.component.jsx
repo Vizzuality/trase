@@ -19,7 +19,7 @@ function DestinationsPanel(props) {
     fetchKey,
     orderBy,
     setOrderBy,
-    previousSteps,
+    draftPreviousSteps,
     destinations,
     searchResults,
     excludingMode,
@@ -31,10 +31,10 @@ function DestinationsPanel(props) {
   } = props;
 
   useEffect(() => {
-    if (previousSteps !== fetchKey || fetchKey === null) {
-      fetchData(previousSteps);
+    if (draftPreviousSteps !== fetchKey || fetchKey === null) {
+      fetchData(draftPreviousSteps);
     }
-  }, [previousSteps, fetchData, fetchKey]);
+  }, [draftPreviousSteps, fetchData, fetchKey]);
 
   const itemToScrollTo = useFirstItem(destinations);
 
@@ -90,7 +90,7 @@ function DestinationsPanel(props) {
 
 DestinationsPanel.propTypes = {
   fetchKey: PropTypes.string,
-  previousSteps: PropTypes.string,
+  draftPreviousSteps: PropTypes.string,
   destinations: PropTypes.array,
   page: PropTypes.number.isRequired,
   loading: PropTypes.bool,
