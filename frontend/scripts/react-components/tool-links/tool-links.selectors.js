@@ -136,6 +136,25 @@ export const getToolRecolorGroups = createSelector(
   nodesColored => getNextRecolorGroups(nodesColored.nodesColoredBySelection)
 );
 
+export const getSelectedNodesByRole = createSelector(
+  [getToolColumns, getToolNodes, getToolSelectedNodesIds],
+  (columns, nodes, selectedNodesIds) =>
+    selectedNodesIds.reduce((acc, nodeId) => {
+      const node = nodes[nodeId];
+      const column = columns[(node?.columnId)];
+      if (column) {
+        const role = `${column.role}s`;
+        if (!acc[role]) {
+          acc[role] = [];
+        }
+
+        acc[role].push(node);
+      }
+
+      return acc;
+    }, {})
+);
+
 export const getToolLinksUrlProps = createStructuredSelector({
   selectedNodesIds: getToolSelectedNodesIds,
   selectedColumnsIds: getToolSelectedColumnsIds,
