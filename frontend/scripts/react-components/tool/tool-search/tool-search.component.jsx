@@ -10,20 +10,9 @@ import 'scripts/react-components/tool/tool-search/tool-search.scss';
 import 'scripts/react-components/tool/tool-search/tool-search-result/tool-search-result.scss';
 
 const getNodeIds = selectedItem =>
-  selectedItem.id
-    .toString()
-    .split('_')
-    .map(n => parseInt(n, 10));
+  selectedItem.nodes ? selectedItem.nodes.map(key => selectedItem[key].id) : [selectedItem.id];
 
-const getNodeResults = selectedItem => {
-  const nodeTypes = selectedItem.nodeType.split(' & ');
-  const ids = getNodeIds(selectedItem);
-  return nodeTypes.map((nodeType, i) => ({
-    nodeType,
-    id: ids[i],
-    contextId: selectedItem.contextId
-  }));
-};
+const getNodeResults = selectedItem => selectedItem.nodes ? selectedItem.nodes.map(key => selectedItem[key]) : [selectedItem];
 
 function useCloseOnEscape({ isSearchOpen, setIsSearchOpen }) {
   useEffect(() => {
