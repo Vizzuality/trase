@@ -35,7 +35,8 @@ export const getSearchResults = createSelector(
             nodeType: 'IMPORTER & EXPORTER',
             profile: nodeA.profile,
             [nodeA.nodeType.toLowerCase()]: nodeA,
-            [nodeB.nodeType.toLowerCase()]: nodeB
+            [nodeB.nodeType.toLowerCase()]: nodeB,
+            nodes: [nodeA.nodeType.toLowerCase(), nodeB.nodeType.toLowerCase()]
           };
         }
         return [nodeA, nodeB];
