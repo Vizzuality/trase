@@ -4,7 +4,14 @@ import { setDashboardLoading } from 'react-components/dashboard-element/dashboar
 
 import { updateIndicatorsOnItemChange } from 'react-components/dashboard-element/dashboard-element.saga';
 import { getDashboardsContext } from 'react-components/dashboard-element/dashboard-element.selectors';
-import { TOOL_LINKS__EXPAND_SANKEY } from 'react-components/tool-links/tool-links.actions';
+import {
+  TOOL_LINKS__EXPAND_SANKEY,
+  TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH
+} from 'react-components/tool-links/tool-links.actions';
+import {
+  getSelectedNodesByRole,
+  getVisibleNodes
+} from 'react-components/tool-links/tool-links.selectors';
 
 import {
   syncNodesWithSankey,
@@ -148,25 +155,44 @@ export function* fetchMissingItems() {
 
 function* syncSelectedNodes() {
   function* onExpandSankey() {
-    const {
-      selectedNodesIds,
-      data: { nodes, columns }
-    } = yield select(state => state.toolLinks);
-    const nodesByRole = selectedNodesIds.reduce((acc, nodeId) => {
-      const node = nodes[nodeId];
-      const column = columns[node.columnId];
-      const role = `${column.role}s`;
-      if (!acc[role]) {
-        acc[role] = [];
-      }
-
-      acc[role].push(node);
-      return acc;
-    }, {});
-
+    const nodesByRole = yield select(getSelectedNodesByRole);
     yield put(syncNodesWithSankey(nodesByRole));
   }
   yield takeLatest([TOOL_LINKS__EXPAND_SANKEY], onExpandSankey);
+}
+
+function* syncSearchedNodes() {
+  function* onSelectResult(action) {
+    const {
+      data: { columns }
+    } = yield select(state => state.toolLinks);
+    const { results } = action.payload;
+    const ids = results.map(n => n.id);
+    const visibleNodes = yield select(getVisibleNodes);
+    const visibleNodesById = visibleNodes.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
+    const everyNodeIsVisible = ids.some(id => visibleNodesById[id]);
+    if (everyNodeIsVisible) {
+      return;
+    }
+
+    const nodesByRole = yield select(getSelectedNodesByRole);
+
+    const nodesByRoleViaSearch = results.reduce((acc, nodeResult) => {
+      const column = Object.values(columns || {}).find(c => c.name === nodeResult.nodeType);
+      if (column) {
+        const role = `${column.role}s`;
+        if (!acc[role]) {
+          acc[role] = [];
+        }
+
+        acc[role].push(nodeResult);
+      }
+      return acc;
+    }, nodesByRole);
+
+    yield put(syncNodesWithSankey(nodesByRoleViaSearch));
+  }
+  yield takeLatest([TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH], onSelectResult);
 }
 
 export default function* nodesPanelSagas() {
@@ -177,7 +203,8 @@ export default function* nodesPanelSagas() {
     fetchDataOnTabsFetch,
     fetchDataOnTabChange,
     fetchMissingItems,
-    syncSelectedNodes
+    syncSelectedNodes,
+    syncSearchedNodes
   ];
   yield all(sagas.map(saga => fork(saga)));
 }
