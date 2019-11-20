@@ -76,6 +76,19 @@ const clearPanelData = (draft, { name, state, activeItem, isANewTab }) => {
   }
 };
 
+const clearSelectedNodes = draft =>
+  Object.keys(DASHBOARD_STEPS).forEach(name => {
+    const moduleOptions = modules[name];
+    if (!['welcome', 'countries', 'commodities'].includes(name)) {
+      if (moduleOptions.hasMultipleSelection) {
+        draft[name].selectedNodesIds = [];
+      } else {
+        draft[name].selectedNodeId = null;
+      }
+      draft[name].noData = nodesPanelInitialState[name].noData;
+    }
+  });
+
 const deserializeInternalLink = (state, action) => {
   if (action.payload?.serializerParams) {
     return deserialize({
@@ -477,6 +490,7 @@ const nodesPanelReducer = {
   [NODES_PANEL__SYNC_NODES_WITH_SANKEY](state, action) {
     return immer(state, draft => {
       const { nodesByRole } = action.payload;
+      clearSelectedNodes(draft);
       Object.entries(nodesByRole).forEach(([name, selectedNodes]) => {
         draft[name].selectedNodesIds = [];
         if (!draft[name].data.nodes) {
@@ -493,17 +507,7 @@ const nodesPanelReducer = {
   },
   [TOOL_LINKS__COLLAPSE_SANKEY](state) {
     return immer(state, draft => {
-      Object.keys(DASHBOARD_STEPS).forEach(name => {
-        const moduleOptions = modules[name];
-        if (!['welcome', 'countries', 'commodities'].includes(name)) {
-          if (moduleOptions.hasMultipleSelection) {
-            draft[name].selectedNodesIds = [];
-          } else {
-            draft[name].selectedNodeId = null;
-          }
-          draft[name].noData = nodesPanelInitialState[name].noData;
-        }
-      });
+      clearSelectedNodes(draft);
     });
   }
 };
