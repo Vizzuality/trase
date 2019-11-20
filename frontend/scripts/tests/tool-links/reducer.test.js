@@ -8,8 +8,6 @@ import {
   TOOL_LINKS__SET_LINKS,
   TOOL_LINKS__SELECT_VIEW,
   TOOL_LINKS__SET_IS_SEARCH_OPEN,
-  TOOL_LINKS__COLLAPSE_SANKEY,
-  TOOL_LINKS__EXPAND_SANKEY,
   TOOL_LINKS__SELECT_COLUMN,
   TOOL_LINKS__CHANGE_EXTRA_COLUMN,
   TOOL_LINKS__HIGHLIGHT_NODE,
@@ -23,8 +21,6 @@ import {
   TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH,
   setNoLinksFound,
   setIsSearchOpen,
-  expandSankey,
-  collapseSankey,
   highlightNode,
   selectView,
   selectResizeBy,
@@ -192,33 +188,6 @@ test(TOOL_LINKS__SET_IS_SEARCH_OPEN, () => {
   });
 });
 
-test(TOOL_LINKS__COLLAPSE_SANKEY, () => {
-  const action = collapseSankey();
-  const state = {
-    ...initialState,
-    selectedNodesIds: [1234],
-    expandedNodesIds: [1234]
-  };
-  const newState = reducer(state, action);
-  expect(newState).toEqual({
-    ...state,
-    expandedNodesIds: []
-  });
-});
-
-test(TOOL_LINKS__EXPAND_SANKEY, () => {
-  const action = expandSankey();
-  const state = {
-    ...initialState,
-    selectedNodesIds: [123]
-  };
-  const newState = reducer(state, action);
-  expect(newState).toEqual({
-    ...state,
-    expandedNodesIds: state.selectedNodesIds
-  });
-});
-
 describe(TOOL_LINKS__SELECT_COLUMN, () => {
   it('changes the column without selected nodes', () => {
     const action = selectColumn(2, 3);
@@ -247,7 +216,6 @@ describe(TOOL_LINKS__SELECT_COLUMN, () => {
       ...initialState,
       selectedColumnsIds: [undefined, undefined, 3],
       selectedNodesIds: [1234, 4567],
-      expandedNodesIds: [1234, 4567],
       data: {
         ...initialState.data,
         links: [1, 2, 3],
@@ -266,7 +234,6 @@ describe(TOOL_LINKS__SELECT_COLUMN, () => {
     expect(newState).toEqual({
       ...state,
       selectedNodesIds: [4567],
-      expandedNodesIds: [4567],
       selectedColumnsIds: [undefined, undefined, 5]
     });
   });
@@ -276,7 +243,6 @@ describe(TOOL_LINKS__SELECT_COLUMN, () => {
       ...initialState,
       selectedColumnsIds: [undefined, undefined, 3],
       selectedNodesIds: [1234, 4567],
-      expandedNodesIds: [1234, 4567],
       data: {
         ...initialState.data,
         links: [1, 2, 3],
@@ -295,7 +261,6 @@ describe(TOOL_LINKS__SELECT_COLUMN, () => {
     expect(newState).toEqual({
       ...state,
       selectedNodesIds: [1234],
-      expandedNodesIds: [1234],
       selectedColumnsIds: [undefined, undefined, 5]
     });
   });
@@ -331,8 +296,7 @@ test(TOOL_LINKS__CLEAR_SANKEY, () => {
     detailedView: true,
     forcedOverview: true,
     highlightedNodeId: 1234,
-    selectedNodesIds: [1234, 5678],
-    expandedNodesIds: [1234, 5678, 9101]
+    selectedNodesIds: [1234, 5678]
   };
   const newState = reducer(state, action);
   expect(newState).toEqual(initialState);
@@ -401,7 +365,6 @@ test(TOOL_LINKS_RESET_SANKEY, () => {
     forcedOverview: true,
     highlightedNodeId: 1234,
     selectedNodesIds: [1234, 5678],
-    expandedNodesIds: [1234, 5678, 9101],
     selectedColumnsIds: [undefined, 3]
   };
   const newState = reducer(state, action);
@@ -426,7 +389,6 @@ test(SET_CONTEXT, () => {
     detailedView: true,
     highlightedNodeId: 1234,
     selectedNodesIds: [1234, 5678],
-    expandedNodesIds: [1234, 5678, 9101],
     selectedColumnsIds: [undefined, 3],
     data: {
       columns: {},
@@ -442,7 +404,7 @@ test(SET_CONTEXT, () => {
 });
 
 describe(TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH, () => {
-  it('selects 2 nodes belonging to a column selected by default, with no previously selected or expanded nodes', () => {
+  it('selects 2 nodes belonging to a column selected by default, with no previously selected nodes', () => {
     const results = [{ id: 0, nodeType: 'EXPORTER' }, { id: 1, nodeType: 'IMPORTER' }];
     const state = {
       ...initialState,
@@ -462,7 +424,7 @@ describe(TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH, () => {
     });
   });
 
-  it('deselects 2 nodes belonging to a column selected by default, with no expanded nodes', () => {
+  it('deselects 2 nodes belonging to a column selected by default', () => {
     const results = [{ id: 0, nodeType: 'EXPORTER' }, { id: 1, nodeType: 'IMPORTER' }];
     const state = {
       ...initialState,
@@ -483,7 +445,7 @@ describe(TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH, () => {
     });
   });
 
-  it('selects 2 nodes belonging to a column not selected by default, with no expanded nodes', () => {
+  it('selects 2 nodes belonging to a column not selected by default', () => {
     const results = [{ id: 5, nodeType: 'EXPORTER' }, { id: 6, nodeType: 'IMPORTER' }];
     const state = {
       ...initialState,

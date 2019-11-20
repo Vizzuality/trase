@@ -33,12 +33,21 @@ export const getSelectedColumnsIds = createSelector(
     }
 
     const selectedColumns = selectedContext.defaultColumns.reduce((acc, next) => {
+      // TODO: default columns should have the column role as well
+      // we're relying on the columns always being specified
       const column = columns ? columns[next.id] : next;
       let id = column.id;
       if (selectedColumnsIds && selectedColumnsIds[column.group]) {
         id = selectedColumnsIds[column.group];
       } else if (panelActiveNodeTypesIds && panelActiveNodeTypesIds[column.role]) {
-        id = panelActiveNodeTypesIds[column.role];
+        const activeNodeTypeColumn = selectedContext.defaultColumns.find(
+          c => c.id === panelActiveNodeTypesIds[column.role]
+        );
+        // FIXME: In lieu of a more solid solution that includes changes to the panel structure,
+        //  we make sure that when an activeNodeType exists in another position, the default is maintained
+        if (activeNodeTypeColumn && activeNodeTypeColumn.group === column.group) {
+          id = activeNodeTypeColumn.id;
+        }
       }
       acc.push(id);
 
