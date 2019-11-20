@@ -4,7 +4,6 @@ const cardLink = {
   id: 5,
   queryParams: {
     toolLayout: '1',
-    selectedContextId: '5',
     selectedNodesIds: [
       '13430',
       '13406',

@@ -505,27 +505,6 @@ describe(TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH, () => {
     });
   });
 
-  it('deselect the only selected node that is also expanded', () => {
-    const results = [{ id: 1, nodeType: 'EXPORTER' }];
-    const state = {
-      ...initialState,
-      selectedNodesIds: [1],
-      expandedNodesIds: [1],
-      data: {
-        ...initialState.data,
-        columns: {
-          3: { group: 1, name: 'EXPORTER', isDefault: true }
-        }
-      }
-    };
-    const action = selectSearchNode(results);
-    const newState = reducer(state, action);
-    expect(newState).toEqual({
-      ...state,
-      selectedNodesIds: [],
-      expandedNodesIds: []
-    });
-  });
   it('select a item in a column with empty selectedColumnId and isDefault === true', () => {
     const results = [{ id: 1, nodeType: 'EXPORTER' }];
     const state = {
