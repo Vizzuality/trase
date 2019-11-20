@@ -156,6 +156,7 @@ export function* fetchMissingItems() {
 function* syncSelectedNodes() {
   function* onExpandSankey() {
     const nodesByRole = yield select(getSelectedNodesByRole);
+
     yield put(syncNodesWithSankey(nodesByRole));
   }
   yield takeLatest([TOOL_LINKS__EXPAND_SANKEY], onExpandSankey);
