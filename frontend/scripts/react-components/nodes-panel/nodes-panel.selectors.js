@@ -163,6 +163,33 @@ export const getCanProceed = createSelector(
   }
 );
 
+const getPanelActiveNodeTypeId = panel => {
+  const [first] = panel.selectedNodesIds;
+  const node = panel.data.nodes && panel.data.nodes[first];
+  const tab = node && panel.tabs.find(t => t.name === node.nodeType);
+  return tab?.id;
+};
+
+const getSourcesNodeTypeId = createSelector(
+  [getSources],
+  getPanelActiveNodeTypeId
+);
+
+const getExportersNodeTypeId = createSelector(
+  [getExporters],
+  getPanelActiveNodeTypeId
+);
+
+const getImportersNodeTypeId = createSelector(
+  [getImporters],
+  getPanelActiveNodeTypeId
+);
+
+export const getPanelsActiveNodeTypeIds = createSelector(
+  [getSourcesNodeTypeId, getExportersNodeTypeId, getImportersNodeTypeId],
+  (source, exporter, importer) => ({ source, exporter, importer })
+);
+
 export const makeGetActiveTab = name => {
   const getTab = state => state.nodesPanel[name].activeTab;
   const getTabs = makeGetTabs(name);

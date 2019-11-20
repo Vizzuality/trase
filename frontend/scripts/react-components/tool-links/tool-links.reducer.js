@@ -68,6 +68,7 @@ const toolLinksReducer = {
   [NODES_PANEL__SAVE](state) {
     return immer(state, draft => {
       Object.assign(draft, {
+        selectedColumnsIds: toolLinksInitialState.selectedColumnsIds,
         selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
         extraColumn: toolLinksInitialState.extraColumn,
         extraColumnNodeId: toolLinksInitialState.extraColumnNodeId,
@@ -200,7 +201,7 @@ const toolLinksReducer = {
       if (!draft.selectedColumnsIds) {
         draft.selectedColumnsIds = [];
       }
-      // TODO also update choropleth with default selected indicators
+
       if (!draft.selectedColumnsIds.includes(columnId)) {
         draft.selectedColumnsIds[columnIndex] = columnId;
       }
