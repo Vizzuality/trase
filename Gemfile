@@ -38,7 +38,7 @@ gem 'ckeditor', '4.3.0'
 gem 'paperclip', '~> 6.1.0'
 gem 'aws-sdk-s3', '~> 1'
 
-gem 'rack-cors', '~> 1.0'
+gem 'rack-cors', '~> 1.1'
 gem 'twitter', '~> 6.1'
 
 gem 'appsignal'
