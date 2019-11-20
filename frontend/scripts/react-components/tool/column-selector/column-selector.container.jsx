@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { connect } from 'react-redux';
-import { selectColumn } from 'react-components/tool-links/tool-links.actions';
+import { selectColumn as selectColumnFn } from 'react-components/tool-links/tool-links.actions';
 import ColumnSelector from 'react-components/tool/column-selector/column-selector.component';
 import PropTypes from 'prop-types';
 import { getGapBetweenColumns } from 'react-components/tool/sankey/sankey.selectors';
@@ -13,19 +13,20 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  onColumnSelected: selectColumn
+  selectColumn: selectColumnFn
 };
 
-function ColumnSelectorContainer({
-  columns,
-  group,
-  position,
-  onColumnSelected,
-  gapBetweenColumns,
-  sankeyColumnsWidth,
-  selectedColumnId,
-  hasExtraColumn
-}) {
+function ColumnSelectorContainer(props) {
+  const {
+    columns,
+    group,
+    position,
+    selectColumn,
+    gapBetweenColumns,
+    sankeyColumnsWidth,
+    selectedColumnId,
+    hasExtraColumn
+  } = props;
   const columnItems = useMemo(
     () =>
       hasExtraColumn
@@ -40,7 +41,7 @@ function ColumnSelectorContainer({
 
   const handleColumnSelected = ({ item }) => {
     const updatedColumnItem = columnItems.find(c => c.id === item.value);
-    onColumnSelected(group, updatedColumnItem.id);
+    selectColumn(group, updatedColumnItem.id, updatedColumnItem.role);
   };
 
   if (typeof selectedColumnItem === 'undefined') {
@@ -66,7 +67,7 @@ ColumnSelectorContainer.propTypes = {
   sankeyColumnsWidth: PropTypes.number,
   gapBetweenColumns: PropTypes.number,
   selectedColumnId: PropTypes.number,
-  onColumnSelected: PropTypes.func.isRequired,
+  selectColumn: PropTypes.func.isRequired,
   hasExtraColumn: PropTypes.bool
 };
 

@@ -1,16 +1,24 @@
 import { createSelector } from 'reselect';
 import { getSelectedContext } from 'reducers/app.selectors';
+import { getPanelsActiveNodeTypeIds } from 'react-components/nodes-panel/nodes-panel.selectors';
 import { MIN_COLUMNS_NUMBER } from 'constants';
 
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getToolNodes = state => state.toolLinks.data.nodes;
+const getToolColumns = state => state.toolLinks.data.columns;
 const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getExtraColumn = state => state.toolLinks.extraColumn;
 const getHighlightedNodeIds = state => state.toolLinks.highlightedNodeId;
 
 export const getSelectedColumnsIds = createSelector(
-  [getSelectedContext, getToolSelectedColumnsIds, getExtraColumn],
-  (selectedContext, selectedColumnsIds, extraColumn) => {
+  [
+    getSelectedContext,
+    getToolSelectedColumnsIds,
+    getExtraColumn,
+    getToolColumns,
+    getPanelsActiveNodeTypeIds
+  ],
+  (selectedContext, selectedColumnsIds, extraColumn, columns, panelActiveNodeTypesIds) => {
     if (
       selectedColumnsIds &&
       selectedContext &&
@@ -24,10 +32,13 @@ export const getSelectedColumnsIds = createSelector(
       return [];
     }
 
-    const selectedColumns = selectedContext.defaultColumns.reduce((acc, column) => {
+    const selectedColumns = selectedContext.defaultColumns.reduce((acc, next) => {
+      const column = columns ? columns[next.id] : next;
       let id = column.id;
       if (selectedColumnsIds && selectedColumnsIds[column.group]) {
         id = selectedColumnsIds[column.group];
+      } else if (panelActiveNodeTypesIds && panelActiveNodeTypesIds[column.role]) {
+        id = panelActiveNodeTypesIds[column.role];
       }
       acc.push(id);
 

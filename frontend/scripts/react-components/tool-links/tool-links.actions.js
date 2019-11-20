@@ -85,12 +85,13 @@ export function expandSankey() {
   };
 }
 
-export function selectColumn(columnIndex, columnId) {
+export function selectColumn(columnIndex, columnId, columnRole) {
   return {
     type: TOOL_LINKS__SELECT_COLUMN,
     payload: {
       columnId,
-      columnIndex
+      columnIndex,
+      columnRole
     }
   };
 }
