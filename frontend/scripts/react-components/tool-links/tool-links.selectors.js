@@ -12,6 +12,7 @@ import {
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
 import getCorrectedPosition from 'utils/getCorrectedPosition';
+import pluralize from 'utils/pluralize';
 
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolNodes = state => state.toolLinks.data.nodes;
@@ -142,7 +143,7 @@ export const getSelectedNodesByRole = createSelector(
       const node = nodes[nodeId];
       const column = columns[(node?.columnId)];
       if (column) {
-        const role = `${column.role}s`;
+        const role = pluralize(column.role);
         if (!acc[role]) {
           acc[role] = [];
         }
