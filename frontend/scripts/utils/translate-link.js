@@ -35,7 +35,7 @@ function getRoleQueryParams(selectedNodesIds, meta) {
 
 function translateLink(data, meta, to = 'sankey') {
   const { queryParams, countryId, commodityId, title } = data;
-  const params = parseURL(queryParams);
+  const { selectedContextId, ...params } = parseURL(queryParams);
 
   let serializerParams = {
     selectedYears: params.selectedYears,
@@ -48,14 +48,27 @@ function translateLink(data, meta, to = 'sankey') {
     serializerParams = pickBy({ ...serializerParams, ...roleQueryParams });
   }
   if (to === 'sankey') {
+    if (ENABLE_TOOL_PANEL) {
+      const { selectedNodesIds, expandedNodesIds, ...newParams } = params;
+      return {
+        type: 'tool',
+        payload: {
+          serializerParams: {
+            ...newParams,
+            ...serializerParams,
+            countries: countryId,
+            commodities: commodityId
+          }
+        }
+      };
+    }
+
     return {
       type: 'tool',
       payload: {
         serializerParams: {
           ...params,
-          ...serializerParams,
-          countries: countryId,
-          commodities: commodityId
+          ...serializerParams
         }
       }
     };

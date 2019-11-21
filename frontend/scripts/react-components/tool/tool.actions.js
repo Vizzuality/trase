@@ -184,15 +184,11 @@ export function selectExpandedNode(param) {
   const ids = Array.isArray(param) ? param : [param];
   return (dispatch, getState) => {
     const state = getState();
-    const { toolLinks } = state;
     const visibleNodes = getVisibleNodes(state);
     const visibleNodesById = visibleNodes.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
     const hasInvisibleNodes = ids.some(id => !visibleNodesById[id]);
-    const isRemovingANodeWhileExpanded =
-      toolLinks.expandedNodesIds.length > 0 &&
-      ids.some(id => toolLinks.selectedNodesIds.includes(id));
 
-    if (hasInvisibleNodes || isRemovingANodeWhileExpanded) {
+    if (hasInvisibleNodes) {
       dispatch(selectNodes(ids));
       dispatch(expandSankey());
     } else {

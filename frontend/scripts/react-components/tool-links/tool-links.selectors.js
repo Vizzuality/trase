@@ -17,7 +17,6 @@ const getToolLinks = state => state.toolLinks.data.links;
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolColumns = state => state.toolLinks.data.columns;
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
-const getToolExpandedNodesIds = state => state.toolLinks.expandedNodesIds;
 const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
 const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
@@ -137,10 +136,28 @@ export const getToolRecolorGroups = createSelector(
   nodesColored => getNextRecolorGroups(nodesColored.nodesColoredBySelection)
 );
 
+export const getSelectedNodesByRole = createSelector(
+  [getToolColumns, getToolNodes, getToolSelectedNodesIds],
+  (columns, nodes, selectedNodesIds) =>
+    selectedNodesIds.reduce((acc, nodeId) => {
+      const node = nodes[nodeId];
+      const column = columns[(node?.columnId)];
+      if (column) {
+        const role = `${column.role}s`;
+        if (!acc[role]) {
+          acc[role] = [];
+        }
+
+        acc[role].push(node);
+      }
+
+      return acc;
+    }, {})
+);
+
 export const getToolLinksUrlProps = createStructuredSelector({
   selectedNodesIds: getToolSelectedNodesIds,
   selectedColumnsIds: getToolSelectedColumnsIds,
-  expandedNodesIds: getToolExpandedNodesIds,
   detailedView: getToolDetailedView,
   selectedResizeBy: getToolResizeBy,
   selectedRecolorBy: getToolRecolorBy,

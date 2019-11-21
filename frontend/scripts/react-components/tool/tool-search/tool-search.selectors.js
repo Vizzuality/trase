@@ -2,12 +2,19 @@ import { createSelector } from 'reselect';
 import fuzzySearch from 'utils/fuzzySearch';
 import groupBy from 'lodash/groupBy';
 import flatten from 'lodash/flatten';
+import { getSelectedYears } from 'reducers/app.selectors';
 
 const getAppSearch = state => state.app.search;
 
 const filterSearch = createSelector(
-  [getAppSearch],
-  search => fuzzySearch(search.term, search.results)
+  [getAppSearch, getSelectedYears],
+  (search, selectedYears) => {
+    const [start, end] = selectedYears;
+    const filtered = search.results.filter(
+      result => result.years.includes(start) && result.years.includes(end)
+    );
+    return fuzzySearch(search.term, filtered);
+  }
 );
 
 const getGroupedNodes = createSelector(
@@ -28,7 +35,8 @@ export const getSearchResults = createSelector(
             nodeType: 'IMPORTER & EXPORTER',
             profile: nodeA.profile,
             [nodeA.nodeType.toLowerCase()]: nodeA,
-            [nodeB.nodeType.toLowerCase()]: nodeB
+            [nodeB.nodeType.toLowerCase()]: nodeB,
+            nodes: [nodeA.nodeType.toLowerCase(), nodeB.nodeType.toLowerCase()]
           };
         }
         return [nodeA, nodeB];
