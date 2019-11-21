@@ -292,14 +292,14 @@ const nodesPanelReducer = {
       return immer(state, draft => {
         let isANewTab = false;
         if (moduleOptions.hasTabs) {
-          draft[name].activeTab = state[name].tabs.find(tab => tab.name === activeItem.nodeType).id;
-
           // we clear the previously selected items if the new item has a different nodeType
           const firstItem =
             state[name].draftSelectedNodesIds[0] &&
             state[name].data.nodes[state[name].draftSelectedNodesIds[0]];
 
-          isANewTab = firstItem && firstItem.nodeType !== activeItem.nodeType;
+          isANewTab =
+            firstItem &&
+            (firstItem.nodeType || firstItem.type) !== (activeItem.nodeType || activeItem.type);
           if (isANewTab) {
             draft[name].draftSelectedNodesIds = [activeItem.id];
           } else {
@@ -339,7 +339,8 @@ const nodesPanelReducer = {
 
         if (moduleOptions.hasTabs) {
           const activeTabObj =
-            state[name].tabs && state[name].tabs.find(tab => tab.id === activeItem.nodeTypeId);
+            state[name].tabs &&
+            state[name].tabs.find(tab => tab.id === (activeItem.nodeType || activeItem.type));
           const activeTab = activeTabObj?.id || null;
 
           if (activeTab !== state[name].activeTab && state[name].activeTab) {
@@ -356,7 +357,9 @@ const nodesPanelReducer = {
           const firstItem =
             state[name].draftSelectedNodesIds[0] &&
             state[name].data.nodes[state[name].draftSelectedNodesIds[0]];
-          isANewTab = firstItem && firstItem.nodeType !== activeItem.nodeType;
+          isANewTab =
+            firstItem &&
+            (firstItem.nodeType || firstItem.type) !== (activeItem.nodeType || activeItem.type);
           if (isANewTab) {
             draft[name].draftSelectedNodesIds = [activeItem.id];
           } else {
