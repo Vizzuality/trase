@@ -40,13 +40,15 @@ export const getSelectedColumnsIds = createSelector(
       if (selectedColumnsIds && selectedColumnsIds[column.group]) {
         id = selectedColumnsIds[column.group];
       } else if (panelActiveNodeTypesIds && panelActiveNodeTypesIds[column.role]) {
-        const activeNodeTypeColumn = selectedContext.defaultColumns.find(
+        const defaultActiveNodeTypeColumn = selectedContext.defaultColumns.find(
           c => c.id === panelActiveNodeTypesIds[column.role]
         );
         // FIXME: In lieu of a more solid solution that includes changes to the panel structure,
         //  we make sure that when an activeNodeType exists in another position, the default is maintained
-        if (activeNodeTypeColumn && activeNodeTypeColumn.group === column.group) {
-          id = activeNodeTypeColumn.id;
+        if (typeof defaultActiveNodeTypeColumn === 'undefined') {
+          id = panelActiveNodeTypesIds[column.role];
+        } else if (defaultActiveNodeTypeColumn.group === column.group) {
+          id = defaultActiveNodeTypeColumn.id;
         }
       }
       acc.push(id);
