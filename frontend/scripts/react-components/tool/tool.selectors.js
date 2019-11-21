@@ -1,16 +1,24 @@
 import { createSelector } from 'reselect';
 import { getSelectedContext } from 'reducers/app.selectors';
+import { getPanelsActiveNodeTypeIds } from 'react-components/nodes-panel/nodes-panel.selectors';
 import { MIN_COLUMNS_NUMBER } from 'constants';
 
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getToolNodes = state => state.toolLinks.data.nodes;
+const getToolColumns = state => state.toolLinks.data.columns;
 const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getExtraColumn = state => state.toolLinks.extraColumn;
 const getHighlightedNodeIds = state => state.toolLinks.highlightedNodeId;
 
 export const getSelectedColumnsIds = createSelector(
-  [getSelectedContext, getToolSelectedColumnsIds, getExtraColumn],
-  (selectedContext, selectedColumnsIds, extraColumn) => {
+  [
+    getSelectedContext,
+    getToolSelectedColumnsIds,
+    getExtraColumn,
+    getToolColumns,
+    getPanelsActiveNodeTypeIds
+  ],
+  (selectedContext, selectedColumnsIds, extraColumn, columns, panelActiveNodeTypesIds) => {
     if (
       selectedColumnsIds &&
       selectedContext &&
@@ -24,10 +32,24 @@ export const getSelectedColumnsIds = createSelector(
       return [];
     }
 
-    const selectedColumns = selectedContext.defaultColumns.reduce((acc, column) => {
+    const selectedColumns = selectedContext.defaultColumns.reduce((acc, next) => {
+      // TODO: default columns should have the column role as well
+      // we're relying on the columns always being specified
+      const column = columns ? columns[next.id] : next;
       let id = column.id;
       if (selectedColumnsIds && selectedColumnsIds[column.group]) {
         id = selectedColumnsIds[column.group];
+      } else if (panelActiveNodeTypesIds && panelActiveNodeTypesIds[column.role]) {
+        const defaultActiveNodeTypeColumn = selectedContext.defaultColumns.find(
+          c => c.id === panelActiveNodeTypesIds[column.role]
+        );
+        // FIXME: In lieu of a more solid solution that includes changes to the panel structure,
+        //  we make sure that when an activeNodeType exists in another position, the default is maintained
+        if (typeof defaultActiveNodeTypeColumn === 'undefined') {
+          id = panelActiveNodeTypesIds[column.role];
+        } else if (defaultActiveNodeTypeColumn.group === column.group) {
+          id = defaultActiveNodeTypeColumn.id;
+        }
       }
       acc.push(id);
 

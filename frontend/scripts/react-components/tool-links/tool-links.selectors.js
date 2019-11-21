@@ -12,12 +12,12 @@ import {
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
 import getCorrectedPosition from 'utils/getCorrectedPosition';
+import pluralize from 'utils/pluralize';
 
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolColumns = state => state.toolLinks.data.columns;
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
-const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
 const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
 export const getToolColumnFilterNodeId = state =>
@@ -143,7 +143,7 @@ export const getSelectedNodesByRole = createSelector(
       const node = nodes[nodeId];
       const column = columns[(node?.columnId)];
       if (column) {
-        const role = `${column.role}s`;
+        const role = pluralize(column.role);
         if (!acc[role]) {
           acc[role] = [];
         }
@@ -155,9 +155,26 @@ export const getSelectedNodesByRole = createSelector(
     }, {})
 );
 
+const getUrlSelectedColumnsIds = createSelector(
+  [getSelectedColumnsIds, getSelectedContext],
+  (selectedColumnsIds, selectedContext) => {
+    if (!selectedContext) {
+      return [];
+    }
+
+    const urlColumns = [];
+    selectedContext.defaultColumns.forEach(column => {
+      if (selectedColumnsIds[column.group] !== column.id) {
+        urlColumns[column.group] = selectedColumnsIds[column.group];
+      }
+    });
+    return urlColumns;
+  }
+);
+
 export const getToolLinksUrlProps = createStructuredSelector({
   selectedNodesIds: getToolSelectedNodesIds,
-  selectedColumnsIds: getToolSelectedColumnsIds,
+  selectedColumnsIds: getUrlSelectedColumnsIds,
   detailedView: getToolDetailedView,
   selectedResizeBy: getToolResizeBy,
   selectedRecolorBy: getToolRecolorBy,

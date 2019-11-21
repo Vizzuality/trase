@@ -3,10 +3,14 @@ import xor from 'lodash/xor';
 import fuzzySearch from 'utils/fuzzySearch';
 import { DASHBOARD_STEPS } from 'constants';
 import createReducer from 'utils/createReducer';
+import pluralize from 'utils/pluralize';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import nodesPanelSerialization from 'react-components/nodes-panel/nodes-panel.serializers';
 import { SET_CONTEXTS } from 'actions/app.actions';
-import { TOOL_LINKS__COLLAPSE_SANKEY } from 'react-components/tool-links/tool-links.actions';
+import {
+  TOOL_LINKS__COLLAPSE_SANKEY,
+  TOOL_LINKS__SELECT_COLUMN
+} from 'react-components/tool-links/tool-links.actions';
 import {
   NODES_PANEL__FETCH_DATA,
   NODES_PANEL__SET_PANEL_PAGE,
@@ -511,6 +515,14 @@ const nodesPanelReducer = {
   [TOOL_LINKS__COLLAPSE_SANKEY](state) {
     return immer(state, draft => {
       clearSelectedNodes(draft);
+    });
+  },
+  [TOOL_LINKS__SELECT_COLUMN](state, action) {
+    const { columnRole } = action.payload;
+    return immer(state, draft => {
+      const name = pluralize(columnRole);
+      // groups with multiple columns always allow for multiple selection
+      draft[name].selectedNodesIds = nodesPanelInitialState[name].selectedNodesIds;
     });
   }
 };
