@@ -98,6 +98,18 @@ module.exports = {
     colombia_protected_areas: {
       uid: 'colombia_protected_areas__development',
       layergroupid: 'p2cs-sei@35f6976d@f87a506e2b6d20be42fd3572616fb833:1536312121956'
+    },
+    ar_provinces_20191118: {
+      uid: 'ar_provinces_20191118__development',
+      layergroupid: 'p2cs-sei@d3fb0f2b@6f30513d5fd87f90419883f0bc249e93:1574345521129'
+    },
+    ar_biomes_20191113: {
+      uid: 'ar_biomes_20191113__development',
+      layergroupid: 'p2cs-sei@30d8b87d@77ee0636c14b635e687b6e3c95252fae:1573645666401'
+    },
+    argentina_protected_areas_20191117: {
+      uid: 'argentina_protected_areas_20191117__development',
+      layergroupid: 'p2cs-sei@3dce118e@d8ab389137c04c540ae66807dea570c0:1574065380303'
     }
   },
   sandbox: {
@@ -150,7 +162,20 @@ module.exports = {
       layergroupid: 'p2cs-sei@1d3f021a@0117a7789472bd8d3ec12e4d5600e7ab:1548926222884'
     }
   },
-  demo: {},
+  demo: {
+    ar_provinces_20191118: {
+      uid: 'ar_provinces_20191118__demo',
+      layergroupid: 'p2cs-sei@749774f3@7bae6f47e710af598e79426d12b91bbf:1574345521129'
+    },
+    ar_biomes_20191113: {
+      uid: 'ar_biomes_20191113__demo',
+      layergroupid: 'p2cs-sei@e3bf82ba@761a22bad4e22bec918c58d95bdf6eaa:1573645666401'
+    },
+    argentina_protected_areas_20191117: {
+      uid: 'argentina_protected_areas_20191117__demo',
+      layergroupid: 'p2cs-sei@951e6b9a@1b0dcf13fd35e7e26b4116bdceb16cd1:1574065380303'
+    }
+  },
   indonesiademo: {
     id_provinces: {
       uid: 'id_provinces__indonesiademo',
