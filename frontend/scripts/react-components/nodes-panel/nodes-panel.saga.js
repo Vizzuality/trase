@@ -12,6 +12,7 @@ import {
   getSelectedNodesByRole,
   getVisibleNodes
 } from 'react-components/tool-links/tool-links.selectors';
+import pluralize from 'utils/pluralize';
 
 import {
   syncNodesWithSankey,
@@ -181,7 +182,7 @@ function* syncSearchedNodes() {
     const nodesByRoleViaSearch = results.reduce((acc, nodeResult) => {
       const column = Object.values(columns || {}).find(c => c.name === nodeResult.nodeType);
       if (column) {
-        const role = `${column.role}s`;
+        const role = pluralize(column.role);
         if (!acc[role]) {
           acc[role] = [];
         }
