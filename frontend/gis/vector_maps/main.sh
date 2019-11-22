@@ -35,3 +35,6 @@ ${BIN}/mapshaper tmp/ARGENTINA_PROVINCE.json -simplify rdp 30% planar keep-shape
 
 ${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, dept_name as name, trase_id as geoid FROM ar_departments_20191118' > tmp/ARGENTINA_DEPARTMENT.json
 ${BIN}/mapshaper tmp/ARGENTINA_DEPARTMENT.json -simplify rdp 30% planar keep-shapes -o public/vector_layers/ARGENTINA_DEPARTMENT.topo.json format=topojson
+
+${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, biome_name as name, geocode as geoid FROM ar_biomes_20191113' > tmp/ARGENTINA_BIOME.json
+${BIN}/mapshaper tmp/ARGENTINA_BIOME.json -simplify rdp 30% planar keep-shapes -o public/vector_layers/ARGENTINA_BIOME.topo.json format=topojson
