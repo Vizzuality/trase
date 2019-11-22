@@ -34,14 +34,14 @@ function SourcesPanel(props) {
     setExcludingMode,
     selectedNodesIds,
     setSelectedItems,
-    previousSteps
+    draftPreviousSteps
   } = props;
 
   useEffect(() => {
-    if (previousSteps !== fetchKey || fetchKey === null) {
-      fetchData(previousSteps);
+    if (draftPreviousSteps !== fetchKey || fetchKey === null) {
+      fetchData(draftPreviousSteps);
     }
-  }, [previousSteps, fetchData, fetchKey]);
+  }, [draftPreviousSteps, fetchData, fetchKey]);
 
   const itemToScrollTo = useFirstItem(sources);
 
