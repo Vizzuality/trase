@@ -128,15 +128,16 @@ export const getDraftDirtyBlocks = createSelector(
 const buildPreviousStepsString = name => (...steps) => {
   const currentStep = DASHBOARD_STEPS[name];
   const previousStepsSelectedItems = steps.slice(0, currentStep);
-  return previousStepsSelectedItems
+  const prev = previousStepsSelectedItems
     .flatMap(step => {
       if (Array.isArray(step)) {
         return step.join('_');
       }
-      return step ? `${step}_` : null;
+      return step || null;
     })
     .filter(Boolean)
     .join('_');
+  return prev;
 };
 
 const makeGetDraftPreviousSteps = name =>
