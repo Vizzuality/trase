@@ -15,7 +15,10 @@ import {
   getSelectedRecolorBy,
   getSelectedColumnFilterNode
 } from 'react-components/tool-links/tool-links.selectors';
-import { getExpandedNodesIds } from 'react-components/nodes-panel/nodes-panel.selectors';
+import {
+  getExpandedNodesIds,
+  getExpandedAndExcludedNodes
+} from 'react-components/nodes-panel/nodes-panel.selectors';
 import {
   setToolColumns,
   setToolLinks,
@@ -32,7 +35,7 @@ export function* getToolLinksData() {
   const selectedResizeBy = yield select(getSelectedResizeBy);
   const selectedRecolorBy = yield select(getSelectedRecolorBy);
   const selectedColumnFilterNode = yield select(getSelectedColumnFilterNode);
-  const expandedNodesIds = yield select(getExpandedNodesIds);
+  const { expandedNodesIds, excludedNodesIds } = yield select(getExpandedAndExcludedNodes);
   if (!selectedResizeBy) {
     return;
   }
@@ -45,10 +48,11 @@ export function* getToolLinksData() {
     locked_nodes: state.toolLinks.selectedNodesIds
   };
   const areNodesExpanded = expandedNodesIds.length > 0;
+  const areNodesExcluded = excludedNodesIds.length > 0;
 
   if (state.toolLinks.detailedView === true) {
     params.n_nodes = NUM_NODES_DETAILED;
-  } else if (areNodesExpanded) {
+  } else if (areNodesExpanded || areNodesExcluded) {
     params.n_nodes = NUM_NODES_EXPANDED;
   } else {
     params.n_nodes = NUM_NODES_SUMMARY;
@@ -69,6 +73,10 @@ export function* getToolLinksData() {
 
   if (areNodesExpanded) {
     params.selected_nodes = expandedNodesIds.join(',');
+  }
+
+  if (areNodesExcluded) {
+    params.excluded_nodes = excludedNodesIds.join(',');
   }
 
   const url = getURLFromParams(GET_FLOWS_URL, params);
