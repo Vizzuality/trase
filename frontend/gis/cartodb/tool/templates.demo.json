@@ -1,23 +1,6 @@
 [
   {
     "version": "0.0.1",
-    "name": "ar_provinces_20191118",
-    "layergroup": {
-      "version": "1.0.1",
-      "layers": [
-        {
-          "type": "cartodb",
-          "options": {
-            "sql": "SELECT * FROM \"p2cs-sei\".ar_provinces_20191118",
-            "cartocss": "#layer { polygon-opacity: 0; line-color: #000000; line-width: 1; line-opacity: 1; } #layer[zoom > 3]::labels { text-name: [prov_name]; text-face-name: 'Open Sans Regular'; text-size: 10; text-fill: #FFFFFF; text-halo-fill: black; text-halo-radius: 1; text-character-spacing: 3; text-placement: point; text-allow-overlap: false; text-wrap-width: 45; }",
-            "cartocss_version": "2.3.0"
-          }
-        }
-      ]
-    }
-  },
-  {
-    "version": "0.0.1",
     "name": "ar_biomes_20191113",
     "layergroup": {
       "version": "1.0.1",
@@ -32,7 +15,8 @@
         }
       ]
     }
-  },{
+  },
+  {
   "version": "0.0.1",
   "name": "argentina_protected_areas_20191117",
   "layergroup": {
@@ -48,5 +32,22 @@
       }
     ]
   }
-}
+},
+  {
+    "version": "0.0.1",
+    "name": "ar_provinces_mainland_20191122",
+    "layergroup": {
+      "version": "1.0.1",
+      "layers": [
+        {
+          "type": "cartodb",
+          "options": {
+            "sql": "SELECT * FROM \"p2cs-sei\".ar_provinces_mainland_20191122",
+            "cartocss": "#layer { polygon-opacity: 0; line-color: #000000; line-width: 1; line-opacity: 1; } #layer[zoom > 3]::labels { text-name: [prov_name]; text-face-name: 'Open Sans Regular'; text-size: 10; text-fill: #FFFFFF; text-halo-fill: black; text-halo-radius: 1; text-character-spacing: 3; text-placement: point; text-allow-overlap: false; text-wrap-width: 45; }",
+            "cartocss_version": "2.3.0"
+          }
+        }
+      ]
+    }
+  }
 ]
