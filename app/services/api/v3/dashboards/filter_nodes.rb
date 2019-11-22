@@ -56,6 +56,12 @@ module Api
           apply_order_by
         end
 
+        def filter_by_nodes
+          return unless @node_ids.any?
+
+          @query = @query.where("nodes_ids && ARRAY[#{@node_ids.join(',')}]")
+        end
+
         def year_selected?
           @start_year.present?
         end

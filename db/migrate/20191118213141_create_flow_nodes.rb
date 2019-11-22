@@ -1,5 +1,5 @@
 class CreateFlowNodes < ActiveRecord::Migration[5.2]
-  def change
+  def up
     create_table :flow_nodes, primary_key: %i[flow_id node_id] do |t|
       t.integer :flow_id, null: false
       t.integer :node_id, null: false
@@ -13,5 +13,10 @@ class CreateFlowNodes < ActiveRecord::Migration[5.2]
     Api::V3::Readonly::FlowNode.refresh(
       sync: (Rails.env.development? || Rails.env.test?)
     )
+  end
+
+  def down
+    drop_table :flow_nodes
+    drop_view 'flow_nodes_v'
   end
 end

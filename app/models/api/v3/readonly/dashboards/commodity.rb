@@ -24,8 +24,16 @@ module Api
     module Readonly
       module Dashboards
         class Commodity < Api::Readonly::BaseModel
-          self.table_name = 'dashboards_commodities_mv'
+          include Api::V3::Readonly::MaterialisedTable
+
+          self.table_name = 'dashboards_commodities'
           belongs_to :commodity
+
+          INDEXES = [
+            {columns: :country_id},
+            {columns: :node_id},
+            {columns: :name_tsvector, using: :gin}
+          ].freeze
         end
       end
     end

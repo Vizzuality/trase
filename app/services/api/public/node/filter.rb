@@ -26,15 +26,15 @@ module Api
         def initialize_query
           @query = Api::V3::Readonly::FlowNode.
             select(*select_clause).
-            joins('INNER JOIN nodes_mv ON nodes_mv.id = flow_nodes_mv.node_id').
-            joins('INNER JOIN contexts_mv ON contexts_mv.id = flow_nodes_mv.context_id').
+            joins('INNER JOIN nodes_mv ON nodes_mv.id = flow_nodes.node_id').
+            joins('INNER JOIN contexts_mv ON contexts_mv.id = flow_nodes.context_id').
             group(*group_clause).
-            order('flow_nodes_mv.node_id')
+            order('flow_nodes.node_id')
         end
 
         def select_clause
           [
-            'flow_nodes_mv.node_id',
+            'flow_nodes.node_id',
             'nodes_mv.name',
             'nodes_mv.node_type',
             'nodes_mv.geo_id',
@@ -56,7 +56,7 @@ module Api
               'DISTINCT JSONB_BUILD_OBJECT(' \
                 '\'country\', contexts_mv.iso2, ' \
                 '\'commodity\', contexts_mv.commodity_name, ' \
-                '\'flow_id\', flow_nodes_mv.flow_id, ' \
+                '\'flow_id\', flow_nodes.flow_id, ' \
                 "'values', #{select_flow_attributes_clause}" \
               ')' \
             ') AS flow_attributes'
@@ -76,8 +76,8 @@ module Api
               '\'year\', year, ' \
               '\'value\', value) ' \
             "FROM node_#{node_type} " \
-            "WHERE node_#{node_type}.node_id = flow_nodes_mv.node_id AND " \
-              "node_#{node_type}.year = flow_nodes_mv.year" \
+            "WHERE node_#{node_type}.node_id = flow_nodes.node_id AND " \
+              "node_#{node_type}.year = flow_nodes.year" \
           ')'
         end
 
@@ -94,13 +94,13 @@ module Api
               '\'year\', year, ' \
               '\'value\', value) ' \
             "FROM flow_#{flow_type} " \
-            "WHERE flow_#{flow_type}.flow_id = flow_nodes_mv.flow_id" \
+            "WHERE flow_#{flow_type}.flow_id = flow_nodes.flow_id" \
           ')'
         end
 
         def group_clause
           [
-            'flow_nodes_mv.node_id',
+            'flow_nodes.node_id',
             'nodes_mv.name',
             'nodes_mv.node_type',
             'nodes_mv.geo_id',
@@ -117,14 +117,14 @@ module Api
         def apply_node_id_filter
           return unless @node_id
 
-          @query = @query.where('flow_nodes_mv.node_id' => @node_id)
+          @query = @query.where('flow_nodes.node_id' => @node_id)
         end
 
         def apply_year_filter
           return unless @node_id
 
           @query = @query.where(
-            'flow_nodes_mv.year IS NULL OR flow_nodes_mv.year = ?', @year
+            'flow_nodes.year IS NULL OR flow_nodes.year = ?', @year
           )
         end
       end
