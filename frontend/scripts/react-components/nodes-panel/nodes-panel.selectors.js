@@ -25,6 +25,11 @@ const getDestinationsFetchKey = state => state.nodesPanel.destinations.fetchKey;
 const getExportersFetchKey = state => state.nodesPanel.exporters.fetchKey;
 const getImportersFetchKey = state => state.nodesPanel.importers.fetchKey;
 
+const getSourcesExcludingMode = state => state.nodesPanel.sources.excludingMode;
+const getDestinationsExcludingMode = state => state.nodesPanel.destinations.excludingMode;
+const getExportersExcludingMode = state => state.nodesPanel.exporters.excludingMode;
+const getImportersExcludingMode = state => state.nodesPanel.importers.excludingMode;
+
 const getSources = state => state.nodesPanel.sources;
 const getDestinations = state => state.nodesPanel.destinations;
 const getExporters = state => state.nodesPanel.exporters;
@@ -40,6 +45,44 @@ export const getExpandedNodesIds = createSelector(
     getImportersSelectedNodesIds
   ],
   (...selectedNodesIdsByRole) => selectedNodesIdsByRole.flat()
+);
+
+export const getExpandedAndExcludedNodes = createSelector(
+  [
+    getSourcesSelectedNodesIds,
+    getDestinationsSelectedNodesIds,
+    getExportersSelectedNodesIds,
+    getImportersSelectedNodesIds,
+    getSourcesExcludingMode,
+    getDestinationsExcludingMode,
+    getExportersExcludingMode,
+    getImportersExcludingMode
+  ],
+  (
+    sourcesSelectedNodes,
+    destinationsSelectedNodes,
+    exportersSelectedNodes,
+    importersSelectedNodes,
+    sourcesExcludingMode,
+    destinationsExcludingMode,
+    exportersExcludingMode,
+    importersExcludingMode
+  ) => {
+    const excludedNodesIds = [];
+    const expandedNodesIds = [];
+
+    (sourcesExcludingMode ? excludedNodesIds : expandedNodesIds).push(...sourcesSelectedNodes);
+
+    (destinationsExcludingMode ? excludedNodesIds : expandedNodesIds).push(
+      ...destinationsSelectedNodes
+    );
+
+    (exportersExcludingMode ? excludedNodesIds : expandedNodesIds).push(...exportersSelectedNodes);
+
+    (importersExcludingMode ? excludedNodesIds : expandedNodesIds).push(...importersSelectedNodes);
+
+    return { expandedNodesIds, excludedNodesIds };
+  }
 );
 
 const buildDirtyBlocks = (
@@ -163,33 +206,6 @@ export const getCanProceed = createSelector(
   }
 );
 
-const getPanelActiveNodeTypeId = panel => {
-  const [first] = panel.selectedNodesIds;
-  const node = panel.data.nodes && panel.data.nodes[first];
-  const tab = node && panel.tabs.find(t => t.name === node.nodeType);
-  return tab?.id;
-};
-
-const getSourcesNodeTypeId = createSelector(
-  [getSources],
-  getPanelActiveNodeTypeId
-);
-
-const getExportersNodeTypeId = createSelector(
-  [getExporters],
-  getPanelActiveNodeTypeId
-);
-
-const getImportersNodeTypeId = createSelector(
-  [getImporters],
-  getPanelActiveNodeTypeId
-);
-
-export const getPanelsActiveNodeTypeIds = createSelector(
-  [getSourcesNodeTypeId, getExportersNodeTypeId, getImportersNodeTypeId],
-  (source, exporter, importer) => ({ source, exporter, importer })
-);
-
 export const makeGetActiveTab = name => {
   const getTab = state => state.nodesPanel[name].activeTab;
   const getTabs = makeGetTabs(name);
@@ -207,6 +223,36 @@ export const makeGetActiveTab = name => {
     }
   );
 };
+
+const getPanelActiveNodeTypeId = (panel, activeTab) => {
+  if (panel.excludingMode && panel.selectedNodesIds.length === 0) {
+    return activeTab;
+  }
+  const [first] = panel.selectedNodesIds;
+  const node = panel.data.nodes && panel.data.nodes[first];
+  const tab = node && panel.tabs.find(t => t.name === node.nodeType);
+  return tab?.id;
+};
+
+const getSourcesNodeTypeId = createSelector(
+  [getSources, makeGetActiveTab('sources')],
+  getPanelActiveNodeTypeId
+);
+
+const getExportersNodeTypeId = createSelector(
+  [getExporters, makeGetActiveTab('exporters')],
+  getPanelActiveNodeTypeId
+);
+
+const getImportersNodeTypeId = createSelector(
+  [getImporters, makeGetActiveTab('importers')],
+  getPanelActiveNodeTypeId
+);
+
+export const getPanelsActiveNodeTypeIds = createSelector(
+  [getSourcesNodeTypeId, getExportersNodeTypeId, getImportersNodeTypeId],
+  (source, exporter, importer) => ({ source, exporter, importer })
+);
 
 export const makeGetNodesPanelsProps = name => {
   const moduleOptions = modules[name];

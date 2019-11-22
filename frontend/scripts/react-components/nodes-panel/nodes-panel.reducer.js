@@ -9,7 +9,8 @@ import nodesPanelSerialization from 'react-components/nodes-panel/nodes-panel.se
 import { SET_CONTEXTS } from 'actions/app.actions';
 import {
   TOOL_LINKS__COLLAPSE_SANKEY,
-  TOOL_LINKS__SELECT_COLUMN
+  TOOL_LINKS__SELECT_COLUMN,
+  TOOL_LINKS_RESET_SANKEY
 } from 'react-components/tool-links/tool-links.actions';
 import {
   NODES_PANEL__FETCH_DATA,
@@ -523,7 +524,11 @@ const nodesPanelReducer = {
       const name = pluralize(columnRole);
       // groups with multiple columns always allow for multiple selection
       draft[name].selectedNodesIds = nodesPanelInitialState[name].selectedNodesIds;
+      draft[name].excludingMode = nodesPanelInitialState[name].excludingMode;
     });
+  },
+  [TOOL_LINKS_RESET_SANKEY](state) {
+    return immer(state, draft => clearSelectedNodes(draft));
   }
 };
 
