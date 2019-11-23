@@ -2,7 +2,7 @@ import pickBy from 'lodash/pickBy';
 import { put, call, cancelled, select } from 'redux-saga/effects';
 import {
   setDashboardLoading,
-  DASHBOARD_ELEMENT__SET_CHARTS
+  setDashboardCharts
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import {
   getDashboardSelectedYears,
@@ -46,10 +46,7 @@ export function* fetchDashboardCharts() {
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
-    yield put({
-      type: DASHBOARD_ELEMENT__SET_CHARTS,
-      payload: { charts: data }
-    });
+    yield put(setDashboardCharts(data));
   } catch (e) {
     console.error('Error', e);
   } finally {

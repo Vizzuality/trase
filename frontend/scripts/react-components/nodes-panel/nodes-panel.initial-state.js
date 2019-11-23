@@ -25,7 +25,7 @@ export const createPanelInitialState = name => {
 
   if (moduleOptions.hasTabs) {
     panelState.tabs = [];
-    panelState.activeTab = null;
+    panelState.draftActiveTab = null;
   }
 
   if (moduleOptions.hasSearch) {
@@ -35,6 +35,7 @@ export const createPanelInitialState = name => {
 };
 
 export default {
+  instanceId: null,
   countries: createPanelInitialState('countries'),
   sources: createPanelInitialState('sources'),
   commodities: createPanelInitialState('commodities'),
