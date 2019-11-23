@@ -63,9 +63,9 @@ export const setSelectedItems = (activeItem, name) => ({
   meta: { name }
 });
 
-export const setSelectedTab = (draftActiveTab, name) => ({
+export const setSelectedTab = (activeTab, name) => ({
   type: NODES_PANEL__SET_ACTIVE_TAB,
-  payload: { draftActiveTab },
+  payload: { activeTab },
   meta: { name }
 });
 

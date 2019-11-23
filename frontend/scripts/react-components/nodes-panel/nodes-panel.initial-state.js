@@ -25,7 +25,9 @@ export const createPanelInitialState = name => {
 
   if (moduleOptions.hasTabs) {
     panelState.tabs = [];
-    panelState.draftActiveTab = null;
+    panelState.savedTabs = [];
+    panelState.activeTab = null;
+    panelState.savedActiveTab = null;
   }
 
   if (moduleOptions.hasSearch) {
