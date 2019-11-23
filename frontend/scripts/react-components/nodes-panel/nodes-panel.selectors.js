@@ -207,15 +207,15 @@ export const getCanProceed = createSelector(
   }
 );
 
-export const makeGetActiveTab = name => {
-  const getTab = state => state.nodesPanel[name].activeTab;
+export const makeGetDraftActiveTab = name => {
+  const getTab = state => state.nodesPanel[name].draftActiveTab;
   const getTabs = makeGetTabs(name);
 
   return createSelector(
     [getTab, getTabs],
-    (activeTab, tabs) => {
-      if (activeTab) {
-        return activeTab;
+    (draftActiveTab, tabs) => {
+      if (draftActiveTab) {
+        return draftActiveTab;
       }
       if (tabs?.length > 0) {
         return tabs[0].id;
@@ -225,9 +225,9 @@ export const makeGetActiveTab = name => {
   );
 };
 
-const getPanelActiveNodeTypeId = (panel, activeTab) => {
+const getPanelActiveNodeTypeId = (panel, draftActiveTab) => {
   if (panel.excludingMode && panel.selectedNodesIds.length === 0) {
-    return activeTab;
+    return draftActiveTab;
   }
   const [first] = panel.selectedNodesIds;
   const node = panel.data.nodes && panel.data.nodes[first];
@@ -236,17 +236,17 @@ const getPanelActiveNodeTypeId = (panel, activeTab) => {
 };
 
 const getSourcesNodeTypeId = createSelector(
-  [getSources, makeGetActiveTab('sources')],
+  [getSources, makeGetDraftActiveTab('sources')],
   getPanelActiveNodeTypeId
 );
 
 const getExportersNodeTypeId = createSelector(
-  [getExporters, makeGetActiveTab('exporters')],
+  [getExporters, makeGetDraftActiveTab('exporters')],
   getPanelActiveNodeTypeId
 );
 
 const getImportersNodeTypeId = createSelector(
-  [getImporters, makeGetActiveTab('importers')],
+  [getImporters, makeGetDraftActiveTab('importers')],
   getPanelActiveNodeTypeId
 );
 
@@ -276,12 +276,12 @@ export const makeGetNodesPanelsProps = name => {
     (byId, nodes) => byId.map(id => nodes[id])
   );
 
-  const getActiveTab = makeGetActiveTab(name);
+  const getDraftActiveTab = makeGetDraftActiveTab(name);
 
   const getItemsByTab = createSelector(
-    [getItems, getTabs, getActiveTab],
-    (data, tabs, activeTab) => {
-      const tab = tabs.find(t => t.id === activeTab);
+    [getItems, getTabs, getDraftActiveTab],
+    (data, tabs, draftActiveTab) => {
+      const tab = tabs.find(t => t.id === draftActiveTab);
       if (tab) {
         return data.filter(item => item.nodeType === tab.name || item.type === tab.name);
       }
@@ -311,7 +311,7 @@ export const makeGetNodesPanelsProps = name => {
 
   if (moduleOptions.hasTabs) {
     selectors[name] = getItemsByTab;
-    selectors.activeTab = getActiveTab;
+    selectors.draftActiveTab = getDraftActiveTab;
     selectors.tabs = getTabs;
   } else {
     selectors[name] = getItems;
