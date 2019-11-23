@@ -23,7 +23,7 @@ function SourcesPanel(props) {
     nodeTypeRenderer,
     tabs,
     setSelectedTab,
-    activeTab,
+    draftActiveTab,
     sources,
     columnsCount,
     width,
@@ -68,7 +68,7 @@ function SourcesPanel(props) {
         <Tabs
           tabs={tabs}
           onSelectTab={setSelectedTab}
-          selectedTab={activeTab}
+          selectedTab={draftActiveTab}
           itemTabRenderer={i => i.name}
           getTabId={item => item.id}
         >
@@ -114,7 +114,7 @@ SourcesPanel.propTypes = {
   nodeTypeRenderer: PropTypes.func.isRequired,
   tabs: PropTypes.array.isRequired,
   setSelectedTab: PropTypes.func.isRequired,
-  activeTab: PropTypes.number,
+  draftActiveTab: PropTypes.number,
   sources: PropTypes.array.isRequired,
   columnsCount: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,

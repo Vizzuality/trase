@@ -1,4 +1,3 @@
-export const NODES_PANEL__SET_INSTANCE_ID = 'NODES_PANEL__SET_INSTANCE_ID';
 export const NODES_PANEL__SET_SELECTED_ID = 'NODES_PANEL__SET_SELECTED_ID';
 export const NODES_PANEL__SET_SELECTED_IDS = 'NODES_PANEL__SET_SELECTED_IDS';
 export const NODES_PANEL__CLEAR_PANEL = 'NODES_PANEL__CLEAR_PANEL';
@@ -64,9 +63,9 @@ export const setSelectedItems = (activeItem, name) => ({
   meta: { name }
 });
 
-export const setSelectedTab = (activeTab, name) => ({
+export const setSelectedTab = (draftActiveTab, name) => ({
   type: NODES_PANEL__SET_ACTIVE_TAB,
-  payload: { activeTab },
+  payload: { draftActiveTab },
   meta: { name }
 });
 

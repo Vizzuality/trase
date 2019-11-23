@@ -125,22 +125,12 @@ class DashboardPanel extends Component {
       onContinue,
       onBack,
       setStep,
-      goToDashboard,
-      savePanels,
-      dirtyBlocks,
-      dynamicSentenceParts,
+      draftDynamicSentenceParts,
       step,
       isDisabled,
-      closeModal,
       setSelectedItems,
       canProceed
     } = this.props;
-
-    const handleGoToDashboard = () => {
-      savePanels();
-      goToDashboard({ dirtyBlocks, dynamicSentenceParts });
-      closeModal();
-    };
 
     return (
       <div className="c-dashboard-panel">
@@ -166,10 +156,8 @@ class DashboardPanel extends Component {
           onContinue={onContinue}
           onBack={onBack}
           backText="Back"
-          dirtyBlocks={dirtyBlocks}
-          goToDashboard={handleGoToDashboard}
           clearPanel={panelName => clearPanel(panelName)}
-          dynamicSentenceParts={dynamicSentenceParts}
+          draftDynamicSentenceParts={draftDynamicSentenceParts}
           step={step}
           isDisabled={isDisabled}
           removeSentenceItem={setSelectedItems}
@@ -181,15 +169,11 @@ class DashboardPanel extends Component {
 
 DashboardPanel.propTypes = {
   onBack: PropTypes.func,
-  dirtyBlocks: PropTypes.object,
-  goToDashboard: PropTypes.func,
-  savePanels: PropTypes.func,
   step: PropTypes.number.isRequired,
   setStep: PropTypes.func.isRequired,
   isDisabled: PropTypes.bool.isRequired,
-  dynamicSentenceParts: PropTypes.array,
+  draftDynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
-  closeModal: PropTypes.func.isRequired,
   clearPanel: PropTypes.func.isRequired,
   cancelPanelsDraft: PropTypes.func.isRequired,
   setSelectedItems: PropTypes.func.isRequired,
