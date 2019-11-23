@@ -23,7 +23,7 @@ function SourcesPanel(props) {
     nodeTypeRenderer,
     tabs,
     setSelectedTab,
-    draftActiveTab,
+    activeTab,
     sources,
     columnsCount,
     width,
@@ -68,7 +68,7 @@ function SourcesPanel(props) {
         <Tabs
           tabs={tabs}
           onSelectTab={setSelectedTab}
-          selectedTab={draftActiveTab}
+          selectedTab={activeTab}
           itemTabRenderer={i => i.name}
           getTabId={item => item.id}
         >
@@ -104,7 +104,7 @@ function SourcesPanel(props) {
 
 SourcesPanel.propTypes = {
   fetchKey: PropTypes.string,
-  previousSteps: PropTypes.string,
+  draftPreviousSteps: PropTypes.string,
   accordionTitle: PropTypes.string.isRequired,
   accordionValue: PropTypes.bool.isRequired,
   toggleAccordion: PropTypes.func.isRequired,
@@ -114,7 +114,7 @@ SourcesPanel.propTypes = {
   nodeTypeRenderer: PropTypes.func.isRequired,
   tabs: PropTypes.array.isRequired,
   setSelectedTab: PropTypes.func.isRequired,
-  draftActiveTab: PropTypes.number,
+  activeTab: PropTypes.number,
   sources: PropTypes.array.isRequired,
   columnsCount: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,

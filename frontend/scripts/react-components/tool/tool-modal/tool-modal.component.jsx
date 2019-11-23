@@ -34,7 +34,6 @@ export default function ToolModal(props) {
           <DashboardPanel
             step={step}
             setStep={setStep}
-            closeModal={closeModal}
             onContinue={onContinue}
             showBackButton={showBackButton}
             onBack={showBackButton ? () => setStep(step - 1) : undefined}
