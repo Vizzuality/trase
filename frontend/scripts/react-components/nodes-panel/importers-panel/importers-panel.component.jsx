@@ -27,7 +27,7 @@ function ImportersPanel(props) {
     setSelectedItems,
     selectedNodesIds,
     setSelectedTab,
-    draftActiveTab,
+    activeTab,
     orderBy,
     setOrderBy,
     draftPreviousSteps,
@@ -75,12 +75,12 @@ function ImportersPanel(props) {
             <Tabs
               tabs={tabs}
               onSelectTab={setSelectedTab}
-              selectedTab={draftActiveTab}
+              selectedTab={activeTab}
               itemTabRenderer={i => i.name}
               getTabId={item => item.id}
               actionComponent={<OrderBy orderBy={orderBy} setOrderBy={setOrderBy} />}
             >
-              {draftActiveTab && (
+              {activeTab && (
                 <GridList
                   className="importers-panel-pill-list"
                   items={importers}
@@ -128,7 +128,7 @@ ImportersPanel.propTypes = {
   searchResults: PropTypes.array.isRequired,
   nodeTypeRenderer: PropTypes.func.isRequired,
   tabs: PropTypes.array.isRequired,
-  draftActiveTab: PropTypes.number,
+  activeTab: PropTypes.number,
   setSelectedTab: PropTypes.func.isRequired,
   actionComponent: PropTypes.node,
   fetchData: PropTypes.func.isRequired,
@@ -141,7 +141,7 @@ ImportersPanel.propTypes = {
 
 ImportersPanel.defaultProps = {
   importers: [],
-  draftActiveTab: null
+  activeTab: null
 };
 
 export default ImportersPanel;
