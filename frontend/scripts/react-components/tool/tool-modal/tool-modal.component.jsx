@@ -9,7 +9,7 @@ import 'react-components/tool/tool-modal/tool-modal.scss';
 import { TOOL_STEPS } from 'constants';
 
 export default function ToolModal(props) {
-  const { items, selectedItem, onChange, activeModal, setActiveModal } = props;
+  const { items, selectedItem, onChange, activeModal, setActiveModal, savePanels } = props;
   const [step, setStep] = useState(TOOL_STEPS.welcome);
 
   if (!activeModal) {
@@ -21,7 +21,15 @@ export default function ToolModal(props) {
       case 'context': {
         const closeModal = () => setActiveModal(null);
         const showBackButton = step > TOOL_STEPS.sources;
-        const onContinue = step === TOOL_STEPS.importers ? closeModal : () => setStep(step + 1);
+        const onContinue = () => {
+          if (step === TOOL_STEPS.importers) {
+            savePanels();
+            closeModal();
+          } else {
+            setStep(step + 1);
+          }
+        };
+
         return (
           <DashboardPanel
             step={step}
@@ -58,8 +66,9 @@ export default function ToolModal(props) {
 
 ToolModal.propTypes = {
   items: PropTypes.array,
+  activeModal: PropTypes.string,
   selectedItem: PropTypes.object,
   onChange: PropTypes.func.isRequired,
-  activeModal: PropTypes.string,
+  savePanels: PropTypes.func.isRequired,
   setActiveModal: PropTypes.func.isRequired
 };

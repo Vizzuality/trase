@@ -27,7 +27,7 @@ function ExportersPanel(props) {
     setSelectedItems,
     selectedNodesIds,
     setSelectedTab,
-    activeTab,
+    draftActiveTab,
     orderBy,
     setOrderBy,
     draftPreviousSteps,
@@ -75,12 +75,12 @@ function ExportersPanel(props) {
             <Tabs
               tabs={tabs}
               onSelectTab={setSelectedTab}
-              selectedTab={activeTab}
+              selectedTab={draftActiveTab}
               itemTabRenderer={i => i.name}
               getTabId={item => item.id}
               actionComponent={<OrderBy orderBy={orderBy} setOrderBy={setOrderBy} />}
             >
-              {activeTab && (
+              {draftActiveTab && (
                 <GridList
                   className="exporters-panel-pill-list"
                   items={exporters}
@@ -129,7 +129,7 @@ ExportersPanel.propTypes = {
   searchResults: PropTypes.array.isRequired,
   nodeTypeRenderer: PropTypes.func.isRequired,
   tabs: PropTypes.array.isRequired,
-  activeTab: PropTypes.number,
+  draftActiveTab: PropTypes.number,
   setSelectedTab: PropTypes.func.isRequired,
   actionComponent: PropTypes.node,
   fetchData: PropTypes.func.isRequired,
@@ -141,7 +141,7 @@ ExportersPanel.propTypes = {
 
 ExportersPanel.defaultProps = {
   exporters: [],
-  activeTab: null
+  draftActiveTab: null
 };
 
 export default ExportersPanel;
