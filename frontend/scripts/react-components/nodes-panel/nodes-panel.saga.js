@@ -96,7 +96,7 @@ function* fetchDataOnTabsFetch() {
   yield takeEvery([NODES_PANEL__SET_TABS], onTabsFetch);
 }
 /**
- * Fetches the data for the draftActiveTab if the data hasn't been loaded.
+ * Fetches the data for the activeTab if the data hasn't been loaded.
  */
 function* onTabChange(action) {
   const { name } = action.meta;

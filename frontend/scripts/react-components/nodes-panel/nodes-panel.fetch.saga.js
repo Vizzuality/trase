@@ -25,13 +25,13 @@ import {
   getExportersDraftPreviousSteps,
   getImportersDraftPreviousSteps,
   getSourcesDraftPreviousSteps,
-  makeGetDraftActiveTab
+  makeGetActiveTab
 } from './nodes-panel.selectors';
 import modules from './nodes-panel.modules';
 
-const getSourcesTab = makeGetDraftActiveTab('sources');
-const getExportersTab = makeGetDraftActiveTab('exporters');
-const getImportersTab = makeGetDraftActiveTab('importers');
+const getSourcesTab = makeGetActiveTab('sources');
+const getExportersTab = makeGetActiveTab('exporters');
+const getImportersTab = makeGetActiveTab('importers');
 
 export function* getPanelParams(optionsType, options = {}) {
   const state = yield select();
