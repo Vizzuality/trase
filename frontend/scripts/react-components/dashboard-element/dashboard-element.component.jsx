@@ -38,27 +38,39 @@ class DashboardElement extends React.PureComponent {
       recolorBy: PropTypes.array
     }).isRequired,
     goToRoot: PropTypes.func.isRequired,
+    goToDashboard: PropTypes.func.isRequired,
+    savePanels: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
     setSelectedYears: PropTypes.func.isRequired,
     setSelectedResizeBy: PropTypes.func.isRequired,
     setSelectedRecolorBy: PropTypes.func.isRequired
   };
 
+  onContinue = () => {
+    const { closeModal, savePanels, goToDashboard, step, setStep } = this.props;
+    if (step === DASHBOARD_STEPS.importers) {
+      savePanels();
+      goToDashboard();
+      closeModal();
+    } else {
+      setStep(step + 1);
+    }
+  };
+
   renderStep() {
-    const { step, setStep, closeModal, dirtyBlocks } = this.props;
+    const { step, setStep, dirtyBlocks } = this.props;
     const showBackButton = step > DASHBOARD_STEPS.sources;
-    const onContinue = step === DASHBOARD_STEPS.importers ? closeModal : () => setStep(step + 1);
+
     if (step === DASHBOARD_STEPS.welcome && (!dirtyBlocks.countries || !dirtyBlocks.commodities)) {
       return <DashboardWelcome onContinue={() => setStep(step + 1)} />;
     }
     return (
       <DashboardPanel
         step={step}
-        onContinue={onContinue}
-        dirtyBlocks={dirtyBlocks}
+        onContinue={this.onContinue}
+        instanceId="dashboard"
         onBack={showBackButton ? () => setStep(step - 1) : undefined}
         setStep={setStep}
-        closeModal={closeModal}
       />
     );
   }

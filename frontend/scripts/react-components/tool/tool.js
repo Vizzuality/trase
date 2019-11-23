@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import ToolComponent from 'react-components/tool/tool.component';
 import { connect } from 'react-redux';
-import { resizeSankeyTool } from 'react-components/tool/tool.thunks';
+import { resize } from 'actions/app.actions';
 import { getToolLinksUrlProps } from 'react-components/tool-links/tool-links.selectors';
 import { getAppUrlProps } from 'reducers/app.selectors';
 import { getToolLayersUrlProps } from 'react-components/tool-layers/tool-layers.selectors';
@@ -33,9 +33,9 @@ const mapStateToProps = state => ({
   activeModal: state.toolLayers.activeModal
 });
 
-const mapDispatchToProps = dispatch => ({
-  resizeSankeyTool: () => resizeSankeyTool(dispatch)
-});
+const mapDispatchToProps = {
+  resizeSankeyTool: resize
+};
 
 export default connect(
   mapStateToProps,
