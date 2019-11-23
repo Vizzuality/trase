@@ -20,9 +20,13 @@ import {
   setDashboardSelectedYears,
   setDashboardSelectedResizeBy,
   setDashboardSelectedRecolorBy,
-  editDashboard as editDashboardFn
+  editDashboard as editDashboardFn,
+  goToDashboard as goToDashboardFn
 } from 'react-components/dashboard-element/dashboard-element.actions';
-import { editPanels as editPanelsFn } from 'react-components/nodes-panel/nodes-panel.actions';
+import {
+  editPanels as editPanelsFn,
+  savePanels as savePanelsFn
+} from 'react-components/nodes-panel/nodes-panel.actions';
 import { DASHBOARD_STEPS } from 'constants';
 
 const getUrlProps = createSelector(
@@ -57,7 +61,9 @@ const mapDispatchToProps = dispatch =>
       setSelectedResizeBy: setDashboardSelectedResizeBy,
       setSelectedRecolorBy: setDashboardSelectedRecolorBy,
       editDashboard: editDashboardFn,
-      editPanels: editPanelsFn
+      editPanels: editPanelsFn,
+      savePanels: savePanelsFn,
+      goToDashboard: goToDashboardFn
     },
     dispatch
   );
@@ -101,9 +107,7 @@ class DashboardElementContainer extends React.Component {
     }
   }
 
-  closeModal = () => {
-    this.setState({ modalOpen: false });
-  };
+  closeModal = () => this.setState({ modalOpen: false });
 
   reopenPanel = () => {
     this.props.editDashboard();

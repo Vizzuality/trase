@@ -1,8 +1,7 @@
 import { select, all, fork, takeLatest, takeEvery, put, call } from 'redux-saga/effects';
 import modules from 'react-components/nodes-panel/nodes-panel.modules';
 import { setDashboardLoading } from 'react-components/dashboard-element/dashboard-element.actions';
-
-import { updateIndicatorsOnItemChange } from 'react-components/dashboard-element/dashboard-element.saga';
+import { fetchDashboardCharts } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
 import { getDashboardsContext } from 'react-components/dashboard-element/dashboard-element.selectors';
 import {
   TOOL_LINKS__EXPAND_SANKEY,
@@ -23,7 +22,8 @@ import {
   NODES_PANEL__SET_ACTIVE_ITEMS_WITH_SEARCH,
   NODES_PANEL__SET_ACTIVE_TAB,
   NODES_PANEL__SET_PANEL_PAGE,
-  NODES_PANEL__SET_ORDER_BY
+  NODES_PANEL__SET_ORDER_BY,
+  NODES_PANEL__SET_SELECTED_ID
 } from './nodes-panel.actions';
 import {
   getData,
@@ -68,6 +68,20 @@ function* fetchDataOnSearch() {
   yield takeLatest(NODES_PANEL__GET_SEARCH_RESULTS, getSearchResults);
 }
 
+export function* onItemChange(action) {
+  const {
+    meta: { name },
+    payload: { activeItem }
+  } = action;
+  if (name === 'countries' && activeItem) {
+    yield fork(getSectionTabs, 'sources');
+  }
+}
+
+function* fetchDataOnCountryChange() {
+  yield takeLatest([NODES_PANEL__SET_SELECTED_ID], onItemChange);
+}
+
 function* fetchDataOnTabsFetch() {
   function* onTabsFetch(action) {
     const { name } = action.meta;
@@ -75,18 +89,14 @@ function* fetchDataOnTabsFetch() {
     if (moduleOptions.hasTabs) {
       const reducer = yield select(state => state.nodesPanel[name]);
 
-      if (reducer.data.byId.length === 0) {
-        yield fork(getData, name, reducer);
-      } else {
-        yield fork(getMoreData, name, reducer);
-      }
+      yield fork(getData, name, reducer);
     }
   }
 
   yield takeEvery([NODES_PANEL__SET_TABS], onTabsFetch);
 }
 /**
- * Fetches the data for the activeTab if the data hasn't been loaded.
+ * Fetches the data for the draftActiveTab if the data hasn't been loaded.
  */
 function* onTabChange(action) {
   const { name } = action.meta;
@@ -145,11 +155,14 @@ export function* fetchMissingItems() {
 
     yield all(tasks);
 
-    // TODO: Remove when we delete the legacy dashboards
-    yield call(updateIndicatorsOnItemChange);
+    if (nodesPanel.instanceId === 'dashboard' && selectedContext) {
+      // TODO: Remove when we delete the legacy dashboards
+      yield fork(fetchDashboardCharts);
+
+      // TODO: Remove when we delete the legacy dashboards
+      yield put(setDashboardLoading(false));
+    }
   }
-  // TODO: Remove when we delete the legacy dashboards
-  yield put(setDashboardLoading(false));
 
   yield takeLatest([NODES_PANEL__GET_MISSING_DATA], shouldFetchMissingItems);
 }
@@ -200,6 +213,7 @@ function* syncSearchedNodes() {
 export default function* nodesPanelSagas() {
   const sagas = [
     fetchData,
+    fetchDataOnCountryChange,
     fetchDataOnPageChange,
     fetchDataOnSearch,
     fetchDataOnTabsFetch,
