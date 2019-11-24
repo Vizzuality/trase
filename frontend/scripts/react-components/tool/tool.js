@@ -28,6 +28,7 @@ const urlPropHandlers = {
 const mapStateToProps = state => ({
   urlPropHandlers,
   urlProps: getUrlProps(state),
+  section: state.location.payload.section,
   mapSidebarOpen: state.app.isMapLayerVisible,
   noLinksFound: state.toolLinks.noLinksFound,
   activeModal: state.toolLayers.activeModal

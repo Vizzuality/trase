@@ -1,4 +1,5 @@
 import castArray from 'lodash/castArray';
+import { redirect } from 'redux-first-router/dist';
 
 export const TOOL_LINKS__SET_FLOWS_LOADING = 'TOOL_LINKS__SET_FLOWS_LOADING';
 export const TOOL_LINKS__GET_COLUMNS = 'TOOL_LINKS__GET_COLUMNS';
@@ -191,10 +192,10 @@ export function goToProfileFromSankey({ profileType, ...query }) {
 }
 
 export function switchTool({ section }) {
-  return {
+  return redirect({
     type: 'tool',
     payload: {
       section
     }
-  };
+  });
 }
