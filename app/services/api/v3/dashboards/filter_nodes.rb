@@ -14,9 +14,8 @@ module Api
         def initialize(params)
           @self_ids = params.delete(param_name)
           @order_by = params.delete(:order_by)&.downcase
-          @start_year = params.delete(:start_year)
-          @end_year = params.delete(:end_year)
           super(params)
+          initialize_contexts
         end
 
         def call_with_query_term(query_term)
@@ -67,7 +66,7 @@ module Api
         end
 
         def context_selected?
-          @countries_ids.length == 1 && @commodities_ids.length == 1
+          @contexts.length == 1
         end
 
         def apply_order_by
