@@ -155,7 +155,7 @@ export function* fetchMissingItems() {
 
     yield all(tasks);
 
-    if (nodesPanel.instanceId === 'dashboard' && selectedContext) {
+    if (nodesPanel.instanceId === 'dashboardElement' && selectedContext) {
       // TODO: Remove when we delete the legacy dashboards
       yield fork(fetchDashboardCharts);
 
