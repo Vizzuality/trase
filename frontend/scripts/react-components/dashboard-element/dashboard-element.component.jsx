@@ -46,9 +46,9 @@ class DashboardElement extends React.PureComponent {
     setSelectedRecolorBy: PropTypes.func.isRequired
   };
 
-  onContinue = () => {
+  onContinue = isLastStep => {
     const { closeModal, savePanels, goToDashboard, step, setStep } = this.props;
-    if (step === DASHBOARD_STEPS.importers) {
+    if (isLastStep) {
       savePanels();
       goToDashboard();
       closeModal();

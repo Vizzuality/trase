@@ -21,8 +21,8 @@ export default function ToolModal(props) {
       case 'context': {
         const closeModal = () => setActiveModal(null);
         const showBackButton = step > TOOL_STEPS.sources;
-        const onContinue = () => {
-          if (step === TOOL_STEPS.importers) {
+        const onContinue = isLastStep => {
+          if (isLastStep) {
             savePanels();
             closeModal();
           } else {

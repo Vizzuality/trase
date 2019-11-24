@@ -152,7 +152,8 @@ class DashboardPanel extends Component {
           {this.renderPanel()}
         </div>
         <DashboardModalFooter
-          isLastStep={step === DASHBOARD_STEPS.importers || canProceed}
+          canProceed={canProceed}
+          isLastStep={step === DASHBOARD_STEPS.importers}
           onContinue={onContinue}
           onBack={onBack}
           backText="Back"
