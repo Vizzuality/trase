@@ -116,7 +116,10 @@ const nodesPanelReducer = {
   [SET_CONTEXTS](state, action) {
     return immer(state, draft => {
       const contexts = action.payload;
-      if (state.countries.selectedNodeId === null || state.commodities.selectedNodeId === null) {
+      if (
+        (state.countries.selectedNodeId === null || state.commodities.selectedNodeId === null) &&
+        state.instanceId === 'tool'
+      ) {
         const defaultContext = contexts.find(ctx => ctx.isDefault);
         draft.countries.selectedNodeId = defaultContext.countryId;
         draft.commodities.selectedNodeId = defaultContext.commodityId;
