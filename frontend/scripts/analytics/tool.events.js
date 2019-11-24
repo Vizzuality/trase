@@ -117,6 +117,6 @@ export default [
     type: TOOL_LINKS__SWITCH_TOOL,
     action: 'Toggle tool',
     category: 'Sankey',
-    getPayload: action => (action.payload.section ? 'data-view' : 'sankey')
+    getPayload: action => action.payload.section || 'sankey'
   }
 ];
