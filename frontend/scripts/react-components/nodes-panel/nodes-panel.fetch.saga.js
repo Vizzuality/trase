@@ -20,6 +20,11 @@ import {
   setNoData
 } from './nodes-panel.actions';
 import {
+  getCommoditiesPreviousSteps,
+  getDestinationsPreviousSteps,
+  getExportersPreviousSteps,
+  getImportersPreviousSteps,
+  getSourcesPreviousSteps,
   getCommoditiesDraftPreviousSteps,
   getDestinationsDraftPreviousSteps,
   getExportersDraftPreviousSteps,
@@ -108,13 +113,10 @@ export function* getPanelParams(optionsType, options = {}) {
   return params;
 }
 
-export function* getData(name, reducer, options) {
+export function* getData(name, reducer, initialLoad) {
   const { page } = reducer;
 
-  const params = yield getPanelParams(name, {
-    page,
-    ...options
-  });
+  const params = yield getPanelParams(name, { page });
 
   if (params.node_types_ids === null) {
     yield put(setNoData(true, name));
@@ -139,7 +141,17 @@ export function* getData(name, reducer, options) {
       importers: getImportersDraftPreviousSteps
     };
 
-    const previousStep = yield select(previousStepSelector[name]);
+    const initialPreviousStepSelector = {
+      countries: () => true,
+      sources: getSourcesPreviousSteps,
+      commodities: getCommoditiesPreviousSteps,
+      destinations: getDestinationsPreviousSteps,
+      exporters: getExportersPreviousSteps,
+      importers: getImportersPreviousSteps
+    };
+
+    const getPreviousStep = initialLoad ? initialPreviousStepSelector : previousStepSelector;
+    const previousStep = yield select(getPreviousStep[name]);
     yield put(setData(data.data, previousStep, name));
     if (!data.data?.length) {
       yield put(setNoData(!data.data?.length, name));
