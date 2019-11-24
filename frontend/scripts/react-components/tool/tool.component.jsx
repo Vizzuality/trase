@@ -30,8 +30,22 @@ const renderVainillaComponents = () => (
   </>
 );
 
+function renderSankeyView() {
+  return (
+    <>
+      <ColumnsSelectorGroupContainer />
+      <Sankey />
+    </>
+  );
+}
+
+function renderDataView() {
+  return null;
+}
+
 const Tool = props => {
   const {
+    section,
     resizeSankeyTool,
     urlProps,
     urlPropHandlers,
@@ -51,6 +65,7 @@ const Tool = props => {
       body.style.backgroundColor = originalBackground;
     };
   }, [resizeSankeyTool]);
+
   const render = useMemo(
     () => (
       <>
@@ -65,12 +80,7 @@ const Tool = props => {
             <SplittedView
               sidebarOpen={mapSidebarOpen}
               leftSlot={<MapLayout />}
-              rightSlot={
-                <>
-                  <ColumnsSelectorGroupContainer />
-                  <Sankey />
-                </>
-              }
+              rightSlot={section === 'data-view' ? renderDataView() : renderSankeyView()}
             />
           </div>
           <Timeline />
@@ -78,7 +88,7 @@ const Tool = props => {
         <ToolModal activeModal={activeModal} />
       </>
     ),
-    [mapSidebarOpen, noLinksFound, activeModal]
+    [section, mapSidebarOpen, noLinksFound, activeModal]
   );
 
   return (
@@ -96,7 +106,8 @@ Tool.propTypes = {
   urlProps: PropTypes.object,
   mapSidebarOpen: PropTypes.bool,
   noLinksFound: PropTypes.bool,
-  activeModal: PropTypes.string
+  activeModal: PropTypes.string,
+  section: PropTypes.string
 };
 
 export default Tool;
