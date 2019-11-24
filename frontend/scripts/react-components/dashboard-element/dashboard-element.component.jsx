@@ -68,7 +68,6 @@ class DashboardElement extends React.PureComponent {
       <DashboardPanel
         step={step}
         onContinue={this.onContinue}
-        instanceId="dashboard"
         onBack={showBackButton ? () => setStep(step - 1) : undefined}
         setStep={setStep}
       />
