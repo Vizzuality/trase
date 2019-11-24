@@ -9,6 +9,7 @@ import './dashboard-modal-footer.scss';
 function DashboardModalFooter(props) {
   const {
     isLastStep,
+    canProceed,
     draftDynamicSentenceParts,
     clearPanel,
     removeSentenceItem,
@@ -37,17 +38,31 @@ function DashboardModalFooter(props) {
             </Text>
           </button>
         )}
-        <Button
-          onClick={onContinue}
-          color="pink"
-          size="md"
-          disabled={isDisabled}
-          testId="dashboard-modal-actions-continue"
-        >
-          <Text as="span" size="rg" color="white" variant="mono">
-            {isLastStep ? 'Save' : 'Continue'}
-          </Text>
-        </Button>
+        {!isLastStep && (
+          <Button
+            onClick={() => onContinue()}
+            color="gray"
+            size="rg"
+            disabled={isDisabled}
+            className="dashboard-modal-continue-button"
+            testId="dashboard-modal-actions-continue"
+          >
+            Continue
+          </Button>
+        )}
+        {canProceed && (
+          <Button
+            onClick={() => onContinue(canProceed)}
+            color="pink"
+            size={isLastStep ? 'md' : 'rg'}
+            disabled={isDisabled}
+            testId="dashboard-modal-actions-save"
+          >
+            <Text as="span" size="rg" color="white" variant="mono">
+              Save
+            </Text>
+          </Button>
+        )}
       </div>
     </div>
   );
