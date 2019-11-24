@@ -79,6 +79,8 @@ class DashboardElementContainer extends React.Component {
     showModalOnStart: PropTypes.bool,
     goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
+    goToDashboard: PropTypes.func.isRequired,
+    savePanels: PropTypes.func.isRequired,
     editDashboard: PropTypes.func.isRequired,
     editPanels: PropTypes.func.isRequired,
     setSelectedYears: PropTypes.func.isRequired,
@@ -128,6 +130,8 @@ class DashboardElementContainer extends React.Component {
       dynamicSentenceParts,
       dirtyBlocks,
       filters,
+      savePanels,
+      goToDashboard,
       setSelectedYears,
       setSelectedResizeBy,
       setSelectedRecolorBy
@@ -140,6 +144,8 @@ class DashboardElementContainer extends React.Component {
         urlProps={urlProps}
         goToRoot={goToRoot}
         modalOpen={modalOpen}
+        savePanels={savePanels}
+        goToDashboard={goToDashboard}
         dirtyBlocks={dirtyBlocks}
         setStep={this.updateStep}
         closeModal={this.closeModal}
