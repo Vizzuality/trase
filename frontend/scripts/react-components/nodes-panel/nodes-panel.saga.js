@@ -138,8 +138,8 @@ export function* fetchMissingItems() {
     const tasks = [];
 
     if (selectedContext) {
-      tasks.push(call(getData, 'countries', nodesPanel.countries));
-      tasks.push(call(getData, 'commodities', nodesPanel.commodities));
+      tasks.push(call(getData, 'countries', nodesPanel.countries, true));
+      tasks.push(call(getData, 'commodities', nodesPanel.commodities, true));
     }
 
     const hasMissingData = Object.keys(modules)

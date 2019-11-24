@@ -140,6 +140,19 @@ const buildPreviousStepsString = name => (...steps) => {
   return prev;
 };
 
+const makeGetPreviousSteps = name =>
+  createSelector(
+    [
+      getCountrySelectedNodeId,
+      getSourcesSelectedNodesIds,
+      getCommoditySelectedNodeId,
+      getDestinationsSelectedNodesIds,
+      getExportersSelectedNodesIds,
+      getImportersSelectedNodesIds
+    ],
+    buildPreviousStepsString(name)
+  );
+
 const makeGetDraftPreviousSteps = name =>
   createSelector(
     [
@@ -152,6 +165,12 @@ const makeGetDraftPreviousSteps = name =>
     ],
     buildPreviousStepsString(name)
   );
+
+export const getSourcesPreviousSteps = makeGetPreviousSteps('sources');
+export const getCommoditiesPreviousSteps = makeGetPreviousSteps('commodities');
+export const getDestinationsPreviousSteps = makeGetPreviousSteps('destinations');
+export const getExportersPreviousSteps = makeGetPreviousSteps('exporters');
+export const getImportersPreviousSteps = makeGetPreviousSteps('importers');
 
 export const getSourcesDraftPreviousSteps = makeGetDraftPreviousSteps('sources');
 export const getCommoditiesDraftPreviousSteps = makeGetDraftPreviousSteps('commodities');
@@ -239,9 +258,10 @@ const getPanelActiveNodeTypeId = (panel, activeTab) => {
   if (panel.excludingMode && panel.selectedNodesIds.length === 0) {
     return activeTab;
   }
+  const tabs = panel.savedTabs.length > 0 ? panel.savedTabs : panel.tabs;
   const [first] = panel.selectedNodesIds;
   const node = panel.data.nodes && panel.data.nodes[first];
-  const tab = node && panel.tabs.find(t => t.name === node.nodeType);
+  const tab = node && tabs.find(t => t.name === node.nodeType);
   return tab?.id;
 };
 
