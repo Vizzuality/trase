@@ -76,6 +76,7 @@ const clearPanelData = (draft, { name, state, activeItem, isANewTab }) => {
       }
       draft[panelToClear].data.byId = nodesPanelInitialState[panelToClear].data.byId;
       draft[panelToClear].noData = nodesPanelInitialState[panelToClear].noData;
+      draft[panelToClear].excludingMode = nodesPanelInitialState[panelToClear].excludingMode;
       draft[panelToClear].fetchKey = nodesPanelInitialState[panelToClear].fetchKey;
     });
   }
@@ -144,26 +145,11 @@ const nodesPanelReducer = {
     return immer(state, draft => {
       const { data, fetchKey } = action.payload;
       if (data) {
-        draft[name].fetchKey = fetchKey || null;
+        draft[name].fetchKey = fetchKey || nodesPanelInitialState[name].fetchKey;
 
-        const selectedItemsData = {};
-        if (state[name].data.nodes) {
-          if (moduleOptions.hasMultipleSelection) {
-            state[name].selectedNodesIds.forEach(id => {
-              selectedItemsData[id] = state[name].data.nodes[id];
-            });
-          } else {
-            const id = state[name].selectedNodeId;
-            selectedItemsData[id] = state[name].data.nodes[id];
-          }
-        }
-
-        const newItems = data.reduce(
-          (acc, next) => ({ ...acc, [next.id]: next }),
-          selectedItemsData
-        );
+        const newItems = data.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
         draft[name].data.byId = data ? data.map(node => node.id) : [];
-        draft[name].data.nodes = newItems;
+        draft[name].data.nodes = { ...(state[name].data.nodes || {}), ...newItems };
       } else {
         draft[name].page = nodesPanelInitialState[name].page;
         draft[name].data.byId = nodesPanelInitialState[name].data.byId;
@@ -270,7 +256,7 @@ const nodesPanelReducer = {
         const panelIndex = DASHBOARD_STEPS[name];
         Object.entries(DASHBOARD_STEPS).forEach(([panel, step]) => {
           const currentPanelOptions = modules[panel];
-          if (panelIndex < step) {
+          if (panelIndex <= step && panel !== name) {
             if (currentPanelOptions.hasMultipleSelection) {
               draft[panel].draftSelectedNodesIds = [];
             } else {
@@ -278,6 +264,7 @@ const nodesPanelReducer = {
             }
             draft[panel].data.byId = nodesPanelInitialState[panel].data.byId;
             draft[panel].noData = nodesPanelInitialState[panel].noData;
+            draft[panel].excludingMode = nodesPanelInitialState[panel].excludingMode;
             draft[panel].fetchKey = nodesPanelInitialState[panel].fetchKey;
           }
         });
@@ -472,15 +459,13 @@ const nodesPanelReducer = {
           const panelData = draft[name];
           if (moduleOptions.hasMultipleSelection) {
             draft[name].selectedNodesIds = panelData.draftSelectedNodesIds;
-            draft[name].draftSelectedNodesIds = nodesPanelInitialState[name].draftSelectedNodesIds;
           } else {
             draft[name].selectedNodeId = panelData.draftSelectedNodeId;
-            draft[name].draftSelectedNodeId = nodesPanelInitialState[name].draftSelectedNodeId;
           }
 
           if (moduleOptions.hasTabs) {
-            draft[name].savedActiveTab = nodesPanelInitialState[name].activeTab;
-            draft[name].savedATabs = nodesPanelInitialState[name].tabs;
+            draft[name].savedActiveTab = state[name].activeTab;
+            draft[name].savedTabs = state[name].tabs;
           }
         }
       });
@@ -491,7 +476,11 @@ const nodesPanelReducer = {
     return immer(state, draft => {
       Object.entries(modules).forEach(([name, moduleOptions]) => {
         if (moduleOptions.hasMultipleSelection) {
-          if (state[name].draftSelectedNodesIds !== state[name].selectedNodesIds) {
+          if (
+            state[name].draftSelectedNodesIds.length > 0 &&
+            state[name].selectedNodesIds.length > 0 &&
+            state[name].draftSelectedNodesIds !== state[name].selectedNodesIds
+          ) {
             draft[name].fetchKey = nodesPanelInitialState[name].fetchKey;
           }
           draft[name].draftSelectedNodesIds = nodesPanelInitialState[name].draftSelectedNodesIds;
