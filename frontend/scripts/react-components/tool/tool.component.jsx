@@ -8,6 +8,7 @@ import NodesTitlesContainer from 'react-components/tool/nodes-titles/nodes-title
 import MapDimensionsContainer from 'react-components/tool/legacy-map-dimensions/map-dimensions.react';
 import MapContextContainer from 'react-components/tool/map-context/map-context.container';
 import Sankey from 'react-components/tool/sankey';
+import DataView from 'react-components/tool/data-view';
 import Tooltip from 'react-components/tool/help-tooltip/help-tooltip.container';
 import SplittedView from 'react-components/tool/splitted-view';
 import MapLayout from 'react-components/tool/map-layout';
@@ -48,7 +49,7 @@ function renderSankeyView() {
 }
 
 function renderDataView() {
-  return null;
+  return <DataView />;
 }
 
 const Tool = props => {

@@ -1,8 +1,11 @@
 @import 'styles/settings';
 
+$columns-selector-group-height: 50px;
+
 .c-sankey {
   position: relative;
-  height: 100%;
+  height: calc(100% - #{$columns-selector-group-height});
+  margin: 0 $sankey-x-margin;
 
   .sankey-scroll-container {
     width: 100%;
