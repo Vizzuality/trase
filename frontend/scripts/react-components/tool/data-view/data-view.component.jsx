@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import InView from 'react-intersection-observer';
+import InView from 'react-components/shared/in-view.component';
 import cx from 'classnames';
 import DashboardWidget from 'react-components/dashboard-element/dashboard-widget';
 
@@ -35,6 +35,7 @@ function DataView(props) {
                   className="column small-12 medium-6"
                   data-test="dashboard-widget-container"
                   ref={ref}
+                  style={{ minHeight: '495px' }}
                 >
                   {(widgetIndex < 2 || inView) && (
                     <DashboardWidget
@@ -57,6 +58,7 @@ function DataView(props) {
 }
 
 DataView.propTypes = {
+  loading: PropTypes.bool,
   groupedCharts: PropTypes.object,
   selectedRecolorBy: PropTypes.object
 };
