@@ -73,6 +73,7 @@
     .widget-chart {
       flex: 1;
       padding: 25px 42px;
+      overflow: hidden;
     }
   }
 
@@ -93,6 +94,10 @@
     .widget-yAxis-label {
       color: $elephant;
     }
+
+    .tick-text {
+      fill: $white;
+    }
   }
 
   &.v-light {
@@ -108,6 +113,10 @@
 
     .widget-yAxis-label {
       color: $charcoal-grey-faded;
+    }
+
+    .tick-text {
+      fill: $charcoal-dark;
     }
   }
 }

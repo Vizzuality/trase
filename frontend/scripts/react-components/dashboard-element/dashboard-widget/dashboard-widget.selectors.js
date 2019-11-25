@@ -4,7 +4,7 @@ import sortBy from 'lodash/sortBy';
 import kebabCase from 'lodash/kebabCase';
 import capitalize from 'lodash/capitalize';
 import addApostrophe from 'utils/addApostrophe';
-import CHART_CONFIG from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
+import { getChartConfig } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
 import { CHART_TYPES, NODE_TYPE_PANELS } from 'constants';
 import {
   getDashboardsContext,
@@ -22,6 +22,7 @@ export const PARSED_CHART_TYPES = {
   horizontal_stacked_bar_chart: CHART_TYPES.horizontalStackedBar
 };
 
+const getChartVariant = (state, { variant }) => variant;
 const getMeta = (state, { meta }) => meta || null;
 const getData = (state, { data }) => data || null;
 const getGrouping = (state, { grouping }) => grouping || null;
@@ -43,8 +44,8 @@ export const getChartType = (state, { chartType, meta }) => {
 };
 
 export const getDefaultConfig = createSelector(
-  [getChartType],
-  chartType => CHART_CONFIG[chartType] || CHART_CONFIG.bar
+  [getChartType, getChartVariant],
+  (chartType, variant) => getChartConfig(variant)[chartType] || getChartConfig(variant).bar
 );
 
 const getGroupedAxis = (axis, meta) => {
