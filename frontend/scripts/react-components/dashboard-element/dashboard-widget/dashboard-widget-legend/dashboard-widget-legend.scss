@@ -51,16 +51,7 @@
     width: 22px;
   }
 
-  p {
-    font-family: $font-family-1;
-    font-size: 13px;
-    font-weight: $font-weight-bold;
-    font-style: normal;
-    font-stretch: normal;
-    line-height: 1.23;
-    letter-spacing: -0.8px;
-    color: $white;
-    text-transform: uppercase;
+  .dashboard-widget-key-item-text {
     margin: 0 0 0 8px;
   }
 
