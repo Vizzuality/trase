@@ -4,6 +4,7 @@ import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selecto
 import MapContainer from 'react-components/tool/map/map.container';
 import ModalContainer from 'react-components/tool/story-modal/story-modal.container';
 import Sankey from 'react-components/tool/sankey';
+import DataView from 'react-components/tool/data-view';
 import Tooltip from 'react-components/tool/help-tooltip/help-tooltip.container';
 import SplittedView from 'react-components/tool/splitted-view';
 import MapLayout from 'react-components/tool/map-layout';
@@ -40,7 +41,7 @@ function renderSankeyView() {
 }
 
 function renderDataView() {
-  return null;
+  return <DataView />;
 }
 
 const Tool = props => {

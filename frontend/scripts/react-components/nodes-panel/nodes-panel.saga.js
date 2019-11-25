@@ -155,12 +155,18 @@ export function* fetchMissingItems() {
 
     yield all(tasks);
 
-    if (nodesPanel.instanceId === 'dashboardElement' && selectedContext) {
-      // TODO: Remove when we delete the legacy dashboards
-      yield fork(fetchDashboardCharts);
+    // TODO: Remove when we delete the legacy dashboards
+    yield fork(fetchDashboardCharts);
 
-      // TODO: Remove when we delete the legacy dashboards
-      yield put(setDashboardLoading(false));
+    // TODO: Remove when we delete the legacy dashboards
+    yield put(setDashboardLoading(false));
+
+    if (nodesPanel.instanceId === 'dashboardElement' && selectedContext) {
+      // // TODO: Remove when we delete the legacy dashboards
+      // yield fork(fetchDashboardCharts);
+      //
+      // // TODO: Remove when we delete the legacy dashboards
+      // yield put(setDashboardLoading(false));
     }
   }
 
