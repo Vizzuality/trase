@@ -56,7 +56,7 @@ if (USE_SERVICE_WORKER) {
   unregister();
 }
 
-if (REDUX_LOGGER_ENABLED) {
+if (true) {
   const { createLogger } = require('redux-logger');
 
   const loggerMiddleware = createLogger({

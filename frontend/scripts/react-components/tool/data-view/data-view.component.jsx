@@ -39,6 +39,7 @@ function DataView(props) {
                   {(widgetIndex < 2 || inView) && (
                     <DashboardWidget
                       chart={chart}
+                      variant="light"
                       selectedRecolorBy={selectedRecolorBy}
                       grouping={groupedCharts.groupings[chart.groupingId]}
                     />

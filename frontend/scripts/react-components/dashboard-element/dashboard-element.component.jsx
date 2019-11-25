@@ -100,7 +100,7 @@ class DashboardElement extends React.PureComponent {
       }
     };
     return (
-      <SimpleModal isOpen={modalOpen} onClickClose={onClose}>
+      <SimpleModal isOpen={modalOpen} onClickClose={onClose} closeLabel="cancel">
         {this.renderStep()}
       </SimpleModal>
     );
