@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import kebabCase from 'lodash/kebabCase';
+import cx from 'classnames';
 import Chart from 'react-components/chart';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 import TableModal from 'react-components/shared/table-modal';
@@ -24,6 +25,7 @@ function DashboardWidget(props) {
     error,
     data,
     meta,
+    variant,
     chartType,
     chartConfig,
     title,
@@ -51,16 +53,21 @@ function DashboardWidget(props) {
 
   const renderWidgetActions = () => {
     const hasTable = loading || (data && data.length > 0 && chartType !== 'dynamicSentence');
+    const actionButtonColor = {
+      dark: 'white',
+      light: 'grey'
+    }[variant];
     return (
       <div className="widget-actions">
         {hasTable && (
           <>
             <Button
               icon="icon-table"
-              color="charcoal"
+              color={actionButtonColor}
               variant="circle"
-              onClick={openTableModal}
               disabled={loading}
+              onClick={openTableModal}
+              className="widget-actions-button"
             />
             <SimpleModal isOpen={isModalOpen} onRequestClose={closeTableModal}>
               <TableModal title={title} data={data} meta={meta} chartType={chartType} />
@@ -73,9 +80,13 @@ function DashboardWidget(props) {
 
   const renderChart = () => {
     if (data && data.length === 0) {
+      const color = {
+        dark: 'white',
+        light: 'grey'
+      }[variant];
       return (
         <div className="widget-centered background-no-data">
-          <Text color="white" weight="bold" variant="mono" size="lg">
+          <Text color={color} weight="bold" variant="mono" size="lg">
             No data available.
           </Text>
         </div>
@@ -86,25 +97,30 @@ function DashboardWidget(props) {
       case 'nodeIndicatorSentence':
         return (
           <div className="dynamic-sentence-widget" data-test="widget-node-indicator-sentence">
-            <NodeIndicatorSentenceWidget data={data} meta={meta} config={chartConfig} />
+            <NodeIndicatorSentenceWidget
+              data={data}
+              meta={meta}
+              config={chartConfig}
+              variant={variant}
+            />
           </div>
         );
       case 'sentence':
         return (
           <div className="dynamic-sentence-widget" data-test="widget-dynamic-sentence">
-            <DynamicSentenceWidget data={data} config={chartConfig} />
+            <DynamicSentenceWidget data={data} config={chartConfig} variant={variant} />
           </div>
         );
       case 'ranking':
         return (
           <div className="widget-centered" data-test="widget-ranking">
-            <RankingWidget data={data} meta={meta} config={chartConfig} />
+            <RankingWidget data={data} meta={meta} config={chartConfig} variant={variant} />
           </div>
         );
       default:
         return (
           <React.Fragment>
-            <DashboardWidgetLegend colors={chartConfig.colors} />
+            <DashboardWidgetLegend colors={chartConfig.colors} variant={variant} />
             {chartConfig.yAxisLabel && (
               <DashboardWidgetLabel
                 text={chartConfig.yAxisLabel.text}
@@ -112,6 +128,7 @@ function DashboardWidget(props) {
               />
             )}
             <Chart
+              variant={variant}
               className="widget-chart"
               data={data}
               meta={meta}
@@ -123,16 +140,21 @@ function DashboardWidget(props) {
     }
   };
 
+  const color = {
+    dark: 'white',
+    light: 'grey'
+  }[variant];
+
   return (
-    <div className="c-dashboard-widget">
+    <div className={cx('c-dashboard-widget', { [`v-${variant}`]: variant })}>
       <div className="widget-title-container">
-        <Heading as="h3" color="white">
+        <Heading as="h3" color={color}>
           {title}
           {groupingOptions && title && (
             <Dropdown
               size="rg"
               showSelected
-              color="white"
+              color={color}
               weight="light"
               variant="sentence"
               options={groupingOptions}
@@ -149,7 +171,7 @@ function DashboardWidget(props) {
           {error && renderError(`Error: ${error.statusText}`)}
           {loading && (
             <div className="widget-spinner" data-test="widget-spinner">
-              <Spinner className="-large -white" />
+              <Spinner className={cx('-large', { '-white': variant === 'dark' })} />
             </div>
           )}
           {!loading && chartConfig && renderChart()}
@@ -164,6 +186,7 @@ DashboardWidget.propTypes = {
   data: PropTypes.array,
   meta: PropTypes.object,
   title: PropTypes.string,
+  variant: PropTypes.string,
   loading: PropTypes.bool,
   trackOpenTableView: PropTypes.func,
   chartConfig: PropTypes.object,
@@ -171,6 +194,10 @@ DashboardWidget.propTypes = {
   setActiveChartId: PropTypes.func,
   groupingOptions: PropTypes.array,
   groupingActiveItem: PropTypes.object
+};
+
+DashboardWidget.defaultProps = {
+  variant: 'dark'
 };
 
 export default DashboardWidget;

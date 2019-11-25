@@ -29,6 +29,7 @@
 
     transition: width 0.45s $ease-in-out-sine;
     will-change: width, z-index;
+    z-index: $z-above;
   }
 
   .right {
