@@ -54,7 +54,7 @@ function DashboardWidget(props) {
   const renderWidgetActions = () => {
     const hasTable = loading || (data && data.length > 0 && chartType !== 'dynamicSentence');
     const actionButtonColor = {
-      dark: 'white',
+      dark: 'charcoal',
       light: 'grey'
     }[variant];
     return (
