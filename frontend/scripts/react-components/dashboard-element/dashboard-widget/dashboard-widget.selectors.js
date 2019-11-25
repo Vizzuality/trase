@@ -26,8 +26,6 @@ export const PARSED_CHART_TYPES = {
   horizontal_stacked_bar_chart: CHART_TYPES.horizontalStackedBar
 };
 
-const getPage = state => state.location.type;
-
 const getChartVariant = (state, { variant }) => variant;
 const getMeta = (state, { meta }) => meta || null;
 const getData = (state, { data }) => data || null;

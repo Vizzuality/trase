@@ -41,7 +41,6 @@ const tooltip = {
   content: null
 };
 
-
 const getDefaults = variant => ({
   parse: true,
   xAxis: getXAxis(variant),
