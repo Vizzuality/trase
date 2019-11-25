@@ -1,0 +1,22 @@
+@import 'styles/settings';
+
+.c-data-view {
+  height: 100%;
+  overflow: auto;
+  margin: 15px;
+
+  .data-view-placeholder-item {
+    display: block;
+    height: 480px;
+    width: 100%;
+    background-color: rgba($charcoal-dark, 0.13);
+    border-radius: 6px;
+    margin: 18px 0 0;
+  }
+
+  .data-view-placeholder-item,
+  .data-view-widgets {
+    margin: 18px 0 0;
+    padding: 0 0 40px;
+  }
+}
