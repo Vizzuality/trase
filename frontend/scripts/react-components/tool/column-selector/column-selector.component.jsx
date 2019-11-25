@@ -6,6 +6,9 @@ import Text from 'react-components/shared/text';
 
 import './column-selector.scss';
 
+const SANKEY_LATERAL_MARGIN = 30;
+const COLUMN_SELECTOR_CENTER_OFFSET = 8;
+
 function ColumnSelector(props) {
   const {
     position,
@@ -39,7 +42,13 @@ function ColumnSelector(props) {
   return (
     <div
       className="c-column-selector"
-      style={{ left: position * sankeyColumnsWidth + position * gapBetweenColumns - 8 }}
+      style={{
+        left:
+          position * sankeyColumnsWidth +
+          position * gapBetweenColumns +
+          SANKEY_LATERAL_MARGIN -
+          COLUMN_SELECTOR_CENTER_OFFSET
+      }}
     >
       {content}
     </div>
