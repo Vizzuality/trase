@@ -50,7 +50,7 @@ function DashboardModalFooter(props) {
             Continue
           </Button>
         )}
-        {canProceed && (
+        {canProceed && step > 0 && (
           <Button
             onClick={() => onContinue(canProceed)}
             color="pink"
@@ -70,6 +70,7 @@ function DashboardModalFooter(props) {
 
 DashboardModalFooter.propTypes = {
   onBack: PropTypes.func,
+  canProceed: PropTypes.bool,
   removeSentenceItem: PropTypes.func,
   clearPanel: PropTypes.func,
   isDisabled: PropTypes.bool,

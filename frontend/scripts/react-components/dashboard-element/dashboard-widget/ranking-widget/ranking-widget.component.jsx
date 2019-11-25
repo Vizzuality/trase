@@ -18,8 +18,13 @@ class RankingWidget extends PureComponent {
   };
 
   renderItemName(item) {
+    const color = {
+      dark: 'white',
+      light: 'grey'
+    }[this.props.variant];
+
     const name = (
-      <Heading as="span" size="lg" weight="bold" color="white" className="item-name">
+      <Heading as="span" size="lg" weight="bold" color={color} className="item-name">
         {capitalize(item.y)}
       </Heading>
     );
@@ -31,7 +36,7 @@ class RankingWidget extends PureComponent {
   }
 
   render() {
-    const { data, meta, config, pageSize } = this.props;
+    const { data, meta, config, pageSize, variant } = this.props;
     const { page } = this.state;
     const { context } = config.dashboardMeta;
     const dataWithUrl = data.map((d, i) => {
@@ -56,6 +61,11 @@ class RankingWidget extends PureComponent {
     const totalValue = meta.aggregates?.total_value;
     const formatTotal = format(DEFAULT_DASHBOARD_UNIT_FORMAT);
 
+    const textColor = {
+      dark: 'white',
+      light: 'grey'
+    }[variant];
+
     return (
       <div className="c-ranking-widget">
         <ul className="list">
@@ -78,7 +88,7 @@ class RankingWidget extends PureComponent {
                     </div>
                     {this.renderItemName(item)}
                   </div>
-                  <Text className="item-value" color="white" variant="mono" size="md">
+                  <Text className="item-value" color={textColor} variant="mono" size="md">
                     {formatValue(item.x0)} {config.xAxisLabel && config.xAxisLabel.suffix} /{' '}
                     {formatTotal(totalValue.x0)} {config.xAxisLabel && config.xAxisLabel.suffix}
                   </Text>
@@ -100,6 +110,7 @@ class RankingWidget extends PureComponent {
 }
 
 RankingWidget.propTypes = {
+  variant: PropTypes.string,
   data: PropTypes.array.isRequired,
   meta: PropTypes.object.isRequired,
   config: PropTypes.object.isRequired,
