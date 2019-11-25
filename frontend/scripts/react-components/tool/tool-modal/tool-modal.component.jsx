@@ -56,8 +56,9 @@ export default function ToolModal(props) {
     }
   };
 
+  const closeLabel = activeModal === 'context' ? 'cancel' : 'close';
   return (
-    <SimpleModal isOpen onRequestClose={() => setActiveModal(null)}>
+    <SimpleModal isOpen onRequestClose={() => setActiveModal(null)} closeLabel={closeLabel}>
       {getModalComponent()}
     </SimpleModal>
   );
