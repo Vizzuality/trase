@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-
 import {
   Line,
   Bar,
@@ -25,6 +24,7 @@ class Chart extends PureComponent {
     meta: PropTypes.object,
     config: PropTypes.object,
     className: PropTypes.string,
+    variant: PropTypes.string,
     handleMouseMove: PropTypes.func,
     handleMouseLeave: PropTypes.func,
     testId: PropTypes.string
@@ -32,12 +32,22 @@ class Chart extends PureComponent {
 
   static defaultProps = {
     className: '',
+    variant: 'dark',
     handleMouseMove: null,
     handleMouseLeave: null
   };
 
   render() {
-    const { className, data, meta, config, handleMouseMove, handleMouseLeave, testId } = this.props;
+    const {
+      className,
+      data,
+      meta,
+      config,
+      handleMouseMove,
+      handleMouseLeave,
+      testId,
+      variant
+    } = this.props;
 
     const {
       margin = {},
@@ -57,14 +67,14 @@ class Chart extends PureComponent {
     const axisKeys = xKeys || yKeys;
     const { lines, bars, areas, pies } = axisKeys;
 
-    let CHART;
+    let ChartComponent;
     switch (type) {
       case 'pie':
-        CHART = PieChart;
+        ChartComponent = PieChart;
         break;
 
       default: {
-        CHART = ComposedChart;
+        ChartComponent = ComposedChart;
       }
     }
     let horizontalChartProps = {};
@@ -78,7 +88,7 @@ class Chart extends PureComponent {
     return (
       <div className={`c-chart ${className}`} style={{ height }} data-test={testId}>
         <ResponsiveContainer>
-          <CHART
+          <ChartComponent
             height={height}
             data={data}
             margin={{ ...defaultMargin, ...margin }}
@@ -115,8 +125,8 @@ class Chart extends PureComponent {
             </defs>
 
             {cartesianGrid && <CartesianGrid stroke="#536269" {...cartesianGrid} />}
-            {CustomXAxis({ config, data, meta })}
-            {CustomYAxis({ config, data, meta })}
+            {CustomXAxis({ config, data, meta, variant })}
+            {CustomYAxis({ config, data, meta, variant })}
             {areas &&
               Object.keys(areas).map(key => (
                 <Area key={key} dataKey={key} dot={false} {...areas[key]} />
@@ -167,7 +177,7 @@ class Chart extends PureComponent {
             )}
 
             {legend && <Legend {...legend} />}
-          </CHART>
+          </ChartComponent>
         </ResponsiveContainer>
       </div>
     );
