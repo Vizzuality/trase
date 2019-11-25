@@ -29,7 +29,7 @@ Tick.propTypes = {
     value: PropTypes.string
   }),
   unitFormat: PropTypes.func.isRequired,
-  fill: PropTypes.string.isRequired,
+  fill: PropTypes.string,
   backgroundColor: PropTypes.string
 };
 
