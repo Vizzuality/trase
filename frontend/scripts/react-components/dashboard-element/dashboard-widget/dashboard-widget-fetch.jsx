@@ -6,7 +6,7 @@ import Widget from 'react-components/widgets/widget.component';
 import { PARSED_CHART_TYPES } from './dashboard-widget.selectors';
 
 function DashboardWidgetFetch(props) {
-  const { chart, grouping, dynamicSentenceParts, selectedRecolorBy } = props;
+  const { chart, grouping, dynamicSentenceParts, selectedRecolorBy, variant } = props;
   const hasGrouping = typeof grouping?.defaultChartId !== 'undefined';
 
   const [activeChartId, setActiveChartId] = useState(hasGrouping ? grouping.defaultChartId : null);
@@ -46,6 +46,7 @@ function DashboardWidgetFetch(props) {
         <DashboardWidgetContainer
           error={error}
           loading={loading}
+          variant={variant}
           chartType={activeChart.type}
           meta={meta && meta[chartUrl]}
           selectedRecolorBy={selectedRecolorBy}
@@ -63,6 +64,7 @@ function DashboardWidgetFetch(props) {
 DashboardWidgetFetch.propTypes = {
   chart: PropTypes.object,
   grouping: PropTypes.object,
+  variant: PropTypes.string,
   selectedRecolorBy: PropTypes.object,
   dynamicSentenceParts: PropTypes.array
 };
