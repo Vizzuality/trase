@@ -13,8 +13,10 @@ function RecolorByLegend(props) {
   let displayValue = value;
   let bucketValue = value;
   if (recolorBy.type === 'ind') {
-    if (parseInt(recolorBy.minValue, 10) === 1) {
-      bucketValue = value - 1;
+    const minValue = parseInt(recolorBy.minValue, 10);
+    if (minValue === 1) {
+      bucketValue = Math.max(value - 1, 0);
+      displayValue = Math.max(value, minValue);
     }
   }
   if (recolorBy.legendType === 'percentual') {

@@ -9,7 +9,7 @@
           "type": "cartodb",
           "options": {
             "sql": "SELECT * FROM \"p2cs-sei\".ar_biomes_20191113",
-            "cartocss": "#layer { polygon-opacity: 0; line-color: #000000; line-width: 0.5; line-opacity: 1; } #layer[zoom > 4]::labels { text-name: [biome_name]; text-face-name: 'Open Sans Regular'; text-size: 15; text-fill: #FFFFFF; text-allow-overlap: false; text-placement: interior; text-halo-fill: black; text-halo-radius: 0.7; text-character-spacing: 3; } ",
+            "cartocss": "#layer { polygon-opacity: 0; line-color: #000000; line-width: 0.5; line-opacity: 1; } #layer[zoom > 3]::labels { text-name: [biome_name]; text-face-name: 'Open Sans Regular'; text-size: 10; text-fill: #000000; text-allow-overlap: false; text-placement: interior; text-halo-fill: white; text-halo-radius: 0.7; text-character-spacing: 3; } ",
             "cartocss_version": "2.3.0"
           }
         }
