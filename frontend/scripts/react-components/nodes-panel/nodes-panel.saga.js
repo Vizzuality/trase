@@ -10,6 +10,7 @@ import {
 } from 'react-components/tool-links/tool-links.actions';
 import { fetchToolCharts } from 'react-components/tool-links/tool-links.fetch.saga';
 import {
+  getExpandedNodesByRole,
   getSelectedNodesByRole,
   getVisibleNodes
 } from 'react-components/tool-links/tool-links.selectors';
@@ -192,13 +193,18 @@ function* syncSearchedNodes() {
     const { results } = action.payload;
     const ids = results.map(n => n.id);
     const visibleNodes = yield select(getVisibleNodes);
-    const visibleNodesById = visibleNodes.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
-    const everyNodeIsVisible = ids.some(id => visibleNodesById[id]);
-    if (everyNodeIsVisible) {
-      return;
+    if (visibleNodes) {
+      const visibleNodesById = visibleNodes.reduce(
+        (acc, next) => ({ ...acc, [next.id]: true }),
+        {}
+      );
+      const everyNodeIsVisible = ids.some(id => visibleNodesById[id]);
+      if (everyNodeIsVisible) {
+        return;
+      }
     }
 
-    const nodesByRole = yield select(getSelectedNodesByRole);
+    const nodesByRole = yield select(getExpandedNodesByRole);
 
     const nodesByRoleViaSearch = results.reduce((acc, nodeResult) => {
       const column = Object.values(columns || {}).find(c => c.name === nodeResult.nodeType);
