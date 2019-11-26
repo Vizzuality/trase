@@ -8,6 +8,7 @@ import './data-view.scss';
 
 function DataView(props) {
   const { groupedCharts, selectedRecolorBy, loading } = props;
+  const loaded = groupedCharts && !loading;
 
   function renderPlaceholder() {
     return (
@@ -54,7 +55,7 @@ function DataView(props) {
     );
   }
 
-  return <div className="c-data-view">{loading ? renderPlaceholder() : renderWidgets()}</div>;
+  return <div className="c-data-view">{loaded ? renderWidgets() : renderPlaceholder()}</div>;
 }
 
 DataView.propTypes = {
