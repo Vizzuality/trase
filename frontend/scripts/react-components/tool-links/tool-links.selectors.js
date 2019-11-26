@@ -15,6 +15,7 @@ import { makeGetAvailableYears } from 'selectors/years.selectors';
 import { getIsDataView, isIndicatorSupported } from 'selectors/indicators.selectors';
 import getCorrectedPosition from 'utils/getCorrectedPosition';
 import pluralize from 'utils/pluralize';
+import { getExpandedNodesIds } from 'react-components/nodes-panel/nodes-panel.selectors';
 
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolNodes = state => state.toolLinks.data.nodes;
@@ -141,23 +142,30 @@ export const getToolRecolorGroups = createSelector(
   nodesColored => getNextRecolorGroups(nodesColored.nodesColoredBySelection)
 );
 
-export const getSelectedNodesByRole = createSelector(
-  [getToolColumns, getToolNodes, getToolSelectedNodesIds],
-  (columns, nodes, selectedNodesIds) =>
-    selectedNodesIds.reduce((acc, nodeId) => {
-      const node = nodes[nodeId];
-      const column = columns[(node?.columnId)];
-      if (column) {
-        const role = pluralize(column.role);
-        if (!acc[role]) {
-          acc[role] = [];
-        }
-
-        acc[role].push(node);
+const getNodesByRole = (columns, nodes, nodesIds) =>
+  nodesIds.reduce((acc, nodeId) => {
+    const node = nodes[nodeId];
+    const column = columns[(node?.columnId)];
+    if (column) {
+      const role = pluralize(column.role);
+      if (!acc[role]) {
+        acc[role] = [];
       }
 
-      return acc;
-    }, {})
+      acc[role].push(node);
+    }
+
+    return acc;
+  }, {});
+
+export const getSelectedNodesByRole = createSelector(
+  [getToolColumns, getToolNodes, getToolSelectedNodesIds],
+  getNodesByRole
+);
+
+export const getExpandedNodesByRole = createSelector(
+  [getToolColumns, getToolNodes, getExpandedNodesIds],
+  getNodesByRole
 );
 
 export const getToolGroupedCharts = makeGetGroupedCharts(getToolCharts);
