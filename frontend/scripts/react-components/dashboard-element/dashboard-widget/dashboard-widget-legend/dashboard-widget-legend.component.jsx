@@ -27,7 +27,12 @@ class DashboardWidgetLegend extends React.PureComponent {
     }[variant];
 
     return (
-      <div className={cx('c-dashboard-widget-legend', { '-paginated': hasPagination })}>
+      <div
+        className={cx('c-dashboard-widget-legend', {
+          '-paginated': hasPagination,
+          [`v-${variant}`]: variant
+        })}
+      >
         <div className="dashboard-widget-legend-list">
           {pageData.map((d, i) => (
             <div key={i} className="dashboard-widget-item">

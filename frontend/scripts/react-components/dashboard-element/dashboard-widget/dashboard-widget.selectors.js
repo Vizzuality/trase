@@ -10,6 +10,8 @@ import {
   getDashboardsContext,
   getDashboardSelectedRecolorBy
 } from 'react-components/dashboard-element/dashboard-element.selectors';
+import { getSelectedRecolorBy } from 'react-components/tool-links/tool-links.selectors';
+import { getSelectedContext } from 'reducers/app.selectors';
 import pluralize from 'utils/pluralize';
 
 export const PARSED_CHART_TYPES = {
@@ -21,6 +23,8 @@ export const PARSED_CHART_TYPES = {
   horizontal_bar_chart: CHART_TYPES.horizontalBar,
   horizontal_stacked_bar_chart: CHART_TYPES.horizontalStackedBar
 };
+
+const getPage = state => state.location.type;
 
 const getChartVariant = (state, { variant }) => variant;
 const getMeta = (state, { meta }) => meta || null;
@@ -59,8 +63,18 @@ const getGroupedAxis = (axis, meta) => {
 
 const sortGroupedAxis = keys => sortBy(Object.keys(keys), key => parseInt(key.substr(1), 10));
 
+const getConfigRecolorBy = createSelector(
+  [getSelectedRecolorBy, getDashboardSelectedRecolorBy, getPage],
+  (selectedRecolorBy, dashboardRecolorBy, page) => {
+    if (page === 'tool') {
+      return selectedRecolorBy;
+    }
+    return dashboardRecolorBy;
+  }
+);
+
 export const getColors = createSelector(
-  [getMeta, getData, getDefaultConfig, getChartType, getDashboardSelectedRecolorBy],
+  [getMeta, getData, getDefaultConfig, getChartType, getConfigRecolorBy],
   (meta, data, defaultConfig, chartType, selectedRecolorBy) => {
     const { colors, layout, parse } = defaultConfig;
 
@@ -150,10 +164,20 @@ export const getXKeys = createSelector(
   }
 );
 
+const getConfigContext = createSelector(
+  [getSelectedContext, getDashboardsContext, getPage],
+  (selectedContext, dashboardContext, page) => {
+    if (page === 'tool') {
+      return selectedContext;
+    }
+    return dashboardContext;
+  }
+);
+
 export const makeGetConfig = () =>
   createSelector(
-    [getMeta, getYKeys, getXKeys, getColors, getDefaultConfig, getDashboardsContext],
-    (meta, yKeys, xKeys, colors, defaultConfig, dashboardContext) => {
+    [getMeta, getYKeys, getXKeys, getColors, getDefaultConfig, getConfigContext],
+    (meta, yKeys, xKeys, colors, defaultConfig, context) => {
       if (!meta) return defaultConfig;
       const config = {
         ...defaultConfig,
@@ -179,9 +203,7 @@ export const makeGetConfig = () =>
         yKeys,
         xKeys,
         colors,
-        dashboardMeta: {
-          context: dashboardContext
-        }
+        dashboardMeta: { context }
       };
       return config;
     }
