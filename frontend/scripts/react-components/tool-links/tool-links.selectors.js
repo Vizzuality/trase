@@ -10,12 +10,14 @@ import {
   getColumnsNumber
 } from 'react-components/tool/tool.selectors';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { makeGetGroupedCharts } from 'selectors/widgets.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
 import getCorrectedPosition from 'utils/getCorrectedPosition';
 import pluralize from 'utils/pluralize';
 
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolNodes = state => state.toolLinks.data.nodes;
+const getToolCharts = state => state.toolLinks.data.charts;
 const getToolColumns = state => state.toolLinks.data.columns;
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
 const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
@@ -149,6 +151,8 @@ export const getSelectedNodesByRole = createSelector(
       return acc;
     }, {})
 );
+
+export const getToolGroupedCharts = makeGetGroupedCharts(getToolCharts);
 
 const getUrlSelectedColumnsIds = createSelector(
   [getSelectedColumnsIds, getSelectedContext],

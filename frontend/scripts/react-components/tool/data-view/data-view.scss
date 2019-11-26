@@ -11,12 +11,16 @@
     width: 100%;
     background-color: rgba($charcoal-dark, 0.13);
     border-radius: 6px;
-    margin: 18px 0 0;
+    margin: 56px 0 0;
+    box-shadow: $box-shadow;
   }
 
-  .data-view-placeholder-item,
   .data-view-widgets {
-    margin: 18px 0 0;
-    padding: 0 0 40px;
+    margin: 8px 0 0;
+  }
+
+  .data-view-placeholder,
+  .data-view-widgets {
+    padding: 0 0 16px;
   }
 }

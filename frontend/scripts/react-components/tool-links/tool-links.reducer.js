@@ -17,7 +17,9 @@ import {
   TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
   TOOL_LINKS__SET_MISSING_LOCKED_NODES,
   TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH,
-  TOOL_LINKS__CHANGE_EXTRA_COLUMN
+  TOOL_LINKS__CHANGE_EXTRA_COLUMN,
+  TOOL_LINKS__SET_CHARTS,
+  TOOL_LINKS__SET_CHARTS_LOADING
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'actions/app.actions';
 import { NODES_PANEL__SAVE } from 'react-components/nodes-panel/nodes-panel.actions';
@@ -63,6 +65,12 @@ const toolLinksReducer = {
     const { loading } = action.payload;
     return immer(state, draft => {
       draft.flowsLoading = loading;
+    });
+  },
+  [TOOL_LINKS__SET_CHARTS_LOADING](state, action) {
+    const { loading } = action.payload;
+    return immer(state, draft => {
+      draft.chartsLoading = loading;
     });
   },
   [NODES_PANEL__SAVE](state) {
@@ -318,6 +326,12 @@ const toolLinksReducer = {
   [TOOL_LINKS_SET_NO_LINKS_FOUND](state, action) {
     return immer(state, draft => {
       draft.noLinksFound = action.payload.noLinksFound;
+    });
+  },
+  [TOOL_LINKS__SET_CHARTS](state, action) {
+    const { charts } = action.payload;
+    return immer(state, draft => {
+      draft.data.charts = charts;
     });
   }
 };
