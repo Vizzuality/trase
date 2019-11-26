@@ -52,7 +52,7 @@ function getClassName(year, state) {
 }
 
 function Timeline(props) {
-  const { years } = props;
+  const { years, section } = props;
 
   const [state, dispatch] = useTimelineReducer(props);
   useSelectedYearsPropsState(props, state, dispatch);
@@ -76,7 +76,7 @@ function Timeline(props) {
 
   const showPlaceholder = state.start && state.end && state.range;
   return (
-    <div className="c-timeline">
+    <div className={cx('c-timeline', { '-show-background': section === 'data-view' })}>
       <Tabs
         tabs={tabs}
         margin={null}
@@ -160,6 +160,7 @@ function Timeline(props) {
 }
 
 Timeline.propTypes = {
+  section: PropTypes.string,
   years: PropTypes.array.isRequired,
   selectYears: PropTypes.func.isRequired, // eslint-disable-line
   selectedYears: PropTypes.array.isRequired // eslint-disable-line
