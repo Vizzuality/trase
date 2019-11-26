@@ -7,8 +7,10 @@ export default {
     links: null,
     nodeHeights: null,
     nodeAttributes: null,
-    nodesByColumnGeoId: null
+    nodesByColumnGeoId: null,
+    charts: null
   },
+  chartsLoading: false,
   detailedView: false,
   forcedOverview: false,
   highlightedNodeId: null,

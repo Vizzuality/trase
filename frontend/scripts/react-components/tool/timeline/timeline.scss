@@ -12,6 +12,8 @@
   width: 100%;
   height: 60px;
   z-index: $z-above;
+  background-color: $background-white;
+  box-shadow: $box-shadow;
 
   .timeline-container {
     display: flex;
