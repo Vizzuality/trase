@@ -4,6 +4,8 @@ module Api
       class ImportersController < ApiController
         include Nodes
 
+        skip_before_action :load_context
+
         private
 
         def filter_klass

@@ -6,10 +6,6 @@ module Api
       include PaginationHeaders
       include PaginatedCollection
 
-      included do
-        skip_before_action :load_context
-      end
-
       def index
         initialize_collection_for_index
         render json: @collection,
