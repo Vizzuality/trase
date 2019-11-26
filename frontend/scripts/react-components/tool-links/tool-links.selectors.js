@@ -12,6 +12,7 @@ import {
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 import { makeGetGroupedCharts } from 'selectors/widgets.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
+import { getIsDataView, isIndicatorSupported } from 'selectors/indicators.selectors';
 import getCorrectedPosition from 'utils/getCorrectedPosition';
 import pluralize from 'utils/pluralize';
 
@@ -50,8 +51,8 @@ export const getSelectedResizeBy = createSelector(
 );
 
 export const getSelectedRecolorBy = createSelector(
-  [getToolRecolorBy, getSelectedContext],
-  (selectedRecolorBy, selectedContext) => {
+  [getToolRecolorBy, getSelectedContext, getIsDataView],
+  (selectedRecolorBy, selectedContext, isDataView) => {
     if (!selectedContext) {
       return null;
     }
@@ -60,7 +61,14 @@ export const getSelectedRecolorBy = createSelector(
       return selectedContext.recolorBy.find(recolorBy => recolorBy.isDefault === true);
     }
 
-    return selectedContext.recolorBy.find(recolorBy => recolorBy.attributeId === selectedRecolorBy);
+    const recolorByItem = selectedContext.recolorBy.find(
+      recolorBy => recolorBy.attributeId === selectedRecolorBy
+    );
+
+    if (isDataView && !isIndicatorSupported(recolorByItem.name)) {
+      return null;
+    }
+    return recolorByItem;
   }
 );
 
