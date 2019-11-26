@@ -48,6 +48,7 @@ staging:
 sandbox:
   <<: *default_settings
   app_name: Trase (Sandbox)
+  process_host.display_name: "<%= ENV['NEW_RELIC_PROCESS_HOST_DISPLAY_NAME'] %>"
 
 demo:
   <<: *default_settings
