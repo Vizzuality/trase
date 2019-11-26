@@ -32,7 +32,6 @@ function DataView(props) {
             <InView triggerOnce key={chart.id}>
               {({ ref, inView }) => (
                 <div
-                  key={`${chart.id}-widget`}
                   className="column small-12 medium-6"
                   data-test="dashboard-widget-container"
                   ref={ref}

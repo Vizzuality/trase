@@ -66,9 +66,9 @@ export default function ToolModal(props) {
 
 ToolModal.propTypes = {
   items: PropTypes.array,
+  onChange: PropTypes.func,
   activeModal: PropTypes.string,
   selectedItem: PropTypes.object,
-  onChange: PropTypes.func.isRequired,
   savePanels: PropTypes.func.isRequired,
   setActiveModal: PropTypes.func.isRequired
 };
