@@ -6,7 +6,8 @@ import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.
 
 import 'react-components/tool/tool-modal/base-modal/base-modal.scss';
 
-export default function BaseModal({ items, selectedItem, onChange, modalId }) {
+export default function BaseModal(props) {
+  const { items, selectedItem, onChange, modalId } = props;
   const COLUMN_COUNT = 3;
   return (
     <div className="c-base-modal">
@@ -34,6 +35,7 @@ export default function BaseModal({ items, selectedItem, onChange, modalId }) {
             ) : (
               <GridListItem
                 {...itemProps}
+                isDisabled={itemProps.item?.isDisabled}
                 item={{ ...itemProps.item, name: itemProps.item.label }}
                 tooltip={itemProps.item.description}
                 isActive={selectedItem.attributeId === itemProps.item.attributeId}
