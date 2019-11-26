@@ -4,9 +4,11 @@ import { setDashboardLoading } from 'react-components/dashboard-element/dashboar
 import { fetchDashboardCharts } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
 import { getDashboardsContext } from 'react-components/dashboard-element/dashboard-element.selectors';
 import {
+  setToolChartsLoading,
   TOOL_LINKS__EXPAND_SANKEY,
   TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH
 } from 'react-components/tool-links/tool-links.actions';
+import { fetchToolCharts } from 'react-components/tool-links/tool-links.fetch.saga';
 import {
   getSelectedNodesByRole,
   getVisibleNodes
@@ -134,6 +136,9 @@ function* fetchDataOnPageChange() {
 export function* fetchMissingItems() {
   function* shouldFetchMissingItems() {
     const nodesPanel = yield select(state => state.nodesPanel);
+    const {
+      payload: { section }
+    } = yield select(state => state.location);
     const selectedContext = yield select(getDashboardsContext);
     const tasks = [];
 
@@ -155,18 +160,15 @@ export function* fetchMissingItems() {
 
     yield all(tasks);
 
-    // TODO: Remove when we delete the legacy dashboards
-    yield fork(fetchDashboardCharts);
+    if (nodesPanel.instanceId === 'tool' && section === 'data-view' && selectedContext) {
+      yield fork(fetchToolCharts);
+      yield put(setToolChartsLoading(false));
+    }
 
     // TODO: Remove when we delete the legacy dashboards
-    yield put(setDashboardLoading(false));
-
     if (nodesPanel.instanceId === 'dashboardElement' && selectedContext) {
-      // // TODO: Remove when we delete the legacy dashboards
-      // yield fork(fetchDashboardCharts);
-      //
-      // // TODO: Remove when we delete the legacy dashboards
-      // yield put(setDashboardLoading(false));
+      yield fork(fetchDashboardCharts);
+      yield put(setDashboardLoading(false));
     }
   }
 

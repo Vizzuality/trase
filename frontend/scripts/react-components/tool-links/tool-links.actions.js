@@ -1,7 +1,9 @@
 import castArray from 'lodash/castArray';
+import { batch } from 'react-redux';
 import { redirect } from 'redux-first-router/dist';
 
 export const TOOL_LINKS__SET_FLOWS_LOADING = 'TOOL_LINKS__SET_FLOWS_LOADING';
+export const TOOL_LINKS__SET_CHARTS_LOADING = 'TOOL_LINKS__SET_CHARTS_LOADING';
 export const TOOL_LINKS__GET_COLUMNS = 'TOOL_LINKS__GET_COLUMNS';
 export const TOOL_LINKS__SET_COLUMNS = 'TOOL_LINKS__SET_COLUMNS';
 export const TOOL_LINKS__SET_NODES = 'TOOL_LINKS__SET_NODES';
@@ -23,10 +25,18 @@ export const TOOL_LINKS__SET_MISSING_LOCKED_NODES = 'TOOL_LINKS__SET_MISSING_LOC
 export const TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH = 'TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH';
 export const TOOL_LINKS__CHANGE_EXTRA_COLUMN = 'TOOL_LINKS__CHANGE_EXTRA_COLUMN';
 export const TOOL_LINKS__SWITCH_TOOL = 'TOOL_LINKS__SWITCH_TOOL';
+export const TOOL_LINKS__SET_CHARTS = 'TOOL_LINKS__SET_CHARTS';
 
 export function setToolFlowsLoading(loading) {
   return {
     type: TOOL_LINKS__SET_FLOWS_LOADING,
+    payload: { loading }
+  };
+}
+
+export function setToolChartsLoading(loading) {
+  return {
+    type: TOOL_LINKS__SET_CHARTS_LOADING,
     payload: { loading }
   };
 }
@@ -191,11 +201,22 @@ export function goToProfileFromSankey({ profileType, ...query }) {
   };
 }
 
-export function switchTool({ section }) {
-  return redirect({
-    type: 'tool',
-    payload: {
-      section
-    }
+export const switchTool = payload => dispatch =>
+  batch(() => {
+    dispatch(
+      redirect({
+        type: 'tool',
+        payload
+      })
+    );
+    // needed for sagas and analytics
+    dispatch({
+      type: TOOL_LINKS__SWITCH_TOOL,
+      payload
+    });
   });
-}
+
+export const setToolCharts = charts => ({
+  type: TOOL_LINKS__SET_CHARTS,
+  payload: { charts }
+});
