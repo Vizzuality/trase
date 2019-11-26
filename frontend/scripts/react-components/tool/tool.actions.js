@@ -68,7 +68,7 @@ export function loadMapVectorData() {
               ...vectorData
             };
           })
-          .catch(() => Promise.reject(vectorLayerURL));
+          .catch(e => console.error(e) || Promise.reject(vectorLayerURL));
       }
       return Promise.resolve(vectorData);
     });

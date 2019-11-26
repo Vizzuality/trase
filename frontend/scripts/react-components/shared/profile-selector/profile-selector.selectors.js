@@ -1,8 +1,6 @@
 import { createSelector } from 'reselect';
 import { PROFILE_STEPS } from 'constants';
 
-import { makeGetPanelActiveTab, makeGetPanelTabs } from 'selectors/panel.selectors';
-
 const getProfileSelectorTabs = state => state.profileSelector.tabs;
 const getCompaniesPanel = state => state.profileSelector.panels.companies;
 const getSourcesPanel = state => state.profileSelector.panels.sources;
@@ -18,6 +16,27 @@ const getCompaniesTab = state => state.profileSelector.panels.companies.activeTa
 const getActiveStep = state => state.profileSelector.activeStep;
 const getPanels = state => state.profileSelector.panels;
 const getProfileType = state => state.profileSelector.panels.type;
+
+export const makeGetPanelActiveTab = (getTab, getTabs, getPanelId) =>
+  createSelector(
+    [getTab, getTabs, getPanelId],
+    (activeTab, tabs, panelId) => {
+      const panelTabs = tabs[panelId];
+      if (activeTab) {
+        return activeTab;
+      }
+      if (panelTabs?.length > 0) {
+        return panelTabs[0].id;
+      }
+      return null;
+    }
+  );
+
+export const makeGetPanelTabs = (getTabs, getPanelId) =>
+  createSelector(
+    [getTabs, getPanelId],
+    (tabs, panelId) => tabs[panelId] || []
+  );
 
 export const getSourcesTabs = makeGetPanelTabs(getProfileSelectorTabs, () => 'sources');
 export const getCompaniesTabs = makeGetPanelTabs(getProfileSelectorTabs, () => 'companies');

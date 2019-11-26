@@ -3,7 +3,8 @@ import {
   GET_COLUMNS_URL,
   getURLFromParams,
   GET_FLOWS_URL,
-  GET_ALL_NODES_URL
+  GET_ALL_NODES_URL,
+  GET_DASHBOARD_PARAMETRISED_CHARTS_URL
 } from 'utils/getURLFromParams';
 import { fetchWithCancel } from 'utils/saga-utils';
 import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
@@ -19,7 +20,10 @@ import {
   getExpandedNodesIds,
   getExpandedAndExcludedNodes
 } from 'react-components/nodes-panel/nodes-panel.selectors';
+import { getPanelParams } from 'react-components/nodes-panel/nodes-panel.fetch.saga';
+import pickBy from 'lodash/pickBy';
 import {
+  setToolCharts,
   setToolColumns,
   setToolLinks,
   setToolNodes,
@@ -160,6 +164,12 @@ export function* getToolNodesByLink(selectedContext, { fetchAllNodes } = {}) {
     nodes_ids: nodesIds,
     node_types_ids: nodeTypesIds
   };
+  if (
+    (params.nodes_ids && params.nodes_ids.length === 0) ||
+    (params.node_types_ids && params.node_types_ids.length === 0)
+  ) {
+    console.error(new Error('Race condition detected! Will fetch all nodes.'));
+  }
   const url = getURLFromParams(GET_ALL_NODES_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
@@ -228,6 +238,9 @@ export function* getMissingLockedNodes() {
     context_id: selectedContext.id,
     nodes_ids: nodesIds.join(',')
   };
+  if (params.nodes_ids.length === 0) {
+    console.error(new Error('Race condition detected! Will fetch all nodes.'));
+  }
   const url = getURLFromParams(GET_ALL_NODES_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
@@ -239,6 +252,53 @@ export function* getMissingLockedNodes() {
     if (yield cancelled()) {
       if (NODE_ENV_DEV) {
         console.error('Cancelled');
+      }
+      if (source) {
+        source.cancel();
+      }
+    }
+  }
+}
+
+export function* fetchToolCharts() {
+  const selectedResizeBy = yield select(getSelectedResizeBy);
+  const selectedRecolorBy = yield select(getSelectedRecolorBy);
+  const selectedYears = yield select(getSelectedYears);
+
+  const {
+    countries_ids: countryId,
+    commodities_ids: commodityId,
+    ...options
+  } = yield getPanelParams(null, { isOverview: true });
+
+  const params = pickBy(
+    {
+      ...options,
+      country_id: countryId,
+      commodity_id: commodityId,
+      cont_attribute_id: selectedResizeBy?.attributeId,
+      ncont_attribute_id: selectedRecolorBy?.attributeId,
+      start_year: selectedYears[0],
+      end_year: selectedYears[1]
+    },
+    x => !!x
+  );
+
+  if (!params.commodity_id || !params.country_id || !params.start_year || !params.end_year) {
+    return;
+  }
+  const url = getURLFromParams(GET_DASHBOARD_PARAMETRISED_CHARTS_URL, params);
+
+  const { source, fetchPromise } = fetchWithCancel(url);
+  try {
+    const { data } = yield call(fetchPromise);
+    yield put(setToolCharts(data));
+  } catch (e) {
+    console.error('Error', e);
+  } finally {
+    if (yield cancelled()) {
+      if (NODE_ENV_DEV) {
+        console.error('Cancelled', params);
       }
       if (source) {
         source.cancel();
