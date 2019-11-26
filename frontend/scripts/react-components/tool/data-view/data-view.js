@@ -7,7 +7,7 @@ import DataView from './data-view.component';
 
 const mapStateToProps = state => ({
   loading: state.toolLinks.chartsLoading,
-  selectedRecolorBy: getSelectedRecolorBy,
+  selectedRecolorBy: getSelectedRecolorBy(state),
   groupedCharts: getToolGroupedCharts(state)
 });
 
