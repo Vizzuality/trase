@@ -4,7 +4,11 @@ import intersection from 'lodash/intersection';
 import range from 'lodash/range';
 import capitalize from 'lodash/capitalize';
 import { getPanelId } from 'utils/dashboardPanel';
-import { makeGetResizeByItems, makeGetRecolorByItems } from 'selectors/indicators.selectors';
+import {
+  makeGetResizeByItems,
+  makeGetRecolorByItems,
+  isIndicatorSupported
+} from 'selectors/indicators.selectors';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
 import { makeGetGroupedCharts } from 'selectors/widgets.selectors';
 import pluralize from 'utils/pluralize';
@@ -357,10 +361,7 @@ const getDashboardContextRecolorBy = createSelector(
       attributeId: null
     };
     // TODO: handle this indicators by bucketing either here or preferably in backend
-    const contextRecolorByList = context.recolorBy.filter(
-      item =>
-        !['LR_DEFICIT_PERC_PRIVATE_LAND', 'SMALLHOLDERS', 'SMALLHOLDERS_V2'].includes(item.name)
-    );
+    const contextRecolorByList = context.recolorBy.filter(item => !isIndicatorSupported(item.name));
 
     if (contextRecolorByList.length > 0) {
       return contextRecolorByList.concat(emptyOption);
