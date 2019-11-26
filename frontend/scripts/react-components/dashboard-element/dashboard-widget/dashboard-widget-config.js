@@ -50,6 +50,7 @@ const colors = {
   ],
   qual: {
     thematic: {
+      // biomes
       amazonia: '#43f3f3',
       cerrado: '#517fee',
       'mata-atlantica': '#8c28ff',
@@ -58,16 +59,27 @@ const colors = {
       pantanal: '#ffb314',
       'chaco-seco': '#ffb314',
       'chaco-humedo': '#43f3f3',
+      'delta-e-islas-del-parana': '#1b9e77',
+      espinal: '#517fee',
+      'esteros-del-ibera': '#8c28ff',
+      'monte-de-llanuras-y-mesetas': '#ff66e5',
+      yungas: '#e36845',
+      // zero deforestation commitment
       'company-commitment': '#C2E699',
       'company-ndpe-commitment': '#1D6837',
       'soy-moratorium': '#1D6837',
       tac: '#79ae6d',
       'tac-g-4': '#1D6837',
       none: '#e36845',
+      // beef products
       'fresh-frozen-beef-products': '#80cdc1',
       'bovine-offals': '#a6611a',
       'live-cattle-exports': '#dfc27d',
-      'processed-beef-products': '#018571'
+      'processed-beef-products': '#018571',
+      // soy products
+      oil: '#f7fcb9',
+      bean: '#31a354',
+      cake: '#e48716'
     }
   },
   stars: {
