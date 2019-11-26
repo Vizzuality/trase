@@ -4,7 +4,8 @@ import { setActiveModal } from 'react-components/tool/tool.actions';
 import {
   selectResizeBy,
   selectRecolorBy,
-  setToolFlowsLoading
+  setToolFlowsLoading,
+  setToolChartsLoading
 } from 'react-components/tool-links/tool-links.actions';
 import { savePanels } from 'react-components/nodes-panel/nodes-panel.actions';
 import { getItems, getSelectedItem } from 'react-components/tool/tool-modal/tool-modal.selectors';
@@ -19,6 +20,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     indicator: recolorBy => {
       batch(() => {
         dispatch(setToolFlowsLoading(true));
+        dispatch(setToolChartsLoading(true));
         dispatch(selectRecolorBy(recolorBy));
         dispatch(setActiveModal(null));
       });

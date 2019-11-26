@@ -1,7 +1,8 @@
 import { connect, batch } from 'react-redux';
 import {
   selectRecolorBy,
-  setToolFlowsLoading
+  setToolFlowsLoading,
+  setToolChartsLoading
 } from 'react-components/tool-links/tool-links.actions';
 import { getToolRecolorGroups } from 'react-components/tool-links/tool-links.selectors';
 import RecolorBySelector from './recolor-by.component';
@@ -18,6 +19,7 @@ const mapDispatchToProps = dispatch => ({
   onChange: recolorBy => {
     batch(() => {
       dispatch(setToolFlowsLoading(true));
+      dispatch(setToolChartsLoading(true));
       dispatch(selectRecolorBy(recolorBy));
     });
   }

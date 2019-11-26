@@ -1,10 +1,17 @@
 @import 'styles/settings';
 
 .c-dashboard-widget-legend {
-  border-bottom: solid 1px rgba($white, 0.13);
   padding: 31px 42px;
   display: flex;
   position: relative;
+
+  &.v-dark {
+    border-bottom: solid 1px rgba($white, 0.13);
+  }
+
+  &.v-light {
+    border-bottom: solid 1px rgba($charcoal-dark, 0.13);
+  }
 
   &.-paginated {
     min-height: 128px;
