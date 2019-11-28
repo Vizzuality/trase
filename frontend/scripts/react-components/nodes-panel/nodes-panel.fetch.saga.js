@@ -170,7 +170,6 @@ export function* getMoreData(name, reducer) {
   if (params.node_types_ids === null) {
     return;
   }
-  console.log(params);
   yield put(setLoadingItems(true, name));
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const { source, fetchPromise } = fetchWithCancel(url);
