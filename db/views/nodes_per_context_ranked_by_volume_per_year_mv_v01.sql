@@ -10,6 +10,7 @@ FROM (
   year,
   RANK() OVER (PARTITION BY position, context_id, year ORDER BY value DESC) AS rank
   FROM (
+    -- TODO: use flow_nodes here?
     SELECT
       a.node_id,
       a.position,

@@ -27,7 +27,9 @@ module Api
     module Readonly
       module Dashboards
         class Source < Api::Readonly::BaseModel
-          self.table_name = 'dashboards_sources_mv'
+          include Api::V3::Readonly::MaterialisedTable
+
+          self.table_name = 'dashboards_sources'
           belongs_to :node
 
           class << self
@@ -37,6 +39,13 @@ module Api
               )
             end
           end
+
+          INDEXES = [
+            {columns: :commodity_id},
+            {columns: :country_id},
+            {columns: :name_tsvector, using: :gin},
+            {columns: :node_type_id}
+          ].freeze
         end
       end
     end

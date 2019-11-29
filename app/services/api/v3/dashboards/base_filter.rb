@@ -21,8 +21,11 @@ module Api
             (params[:importers_ids] || []) +
             (params[:destinations_ids] || [])
           @node_types_ids = params[:node_types_ids] || []
+          @start_year = params.delete(:start_year)
+          @end_year = params.delete(:end_year)
           @profile_only = params.delete(:profile_only) || false
           @self_ids ||= []
+          initialize_contexts
           initialize_query
           apply_filters
         end
@@ -32,6 +35,16 @@ module Api
         end
 
         private
+
+        def initialize_contexts
+          @contexts = Api::V3::Context.all
+          if @commodities_ids.any?
+            @contexts = @contexts.where(commodity_id: @commodities_ids)
+          end
+          return unless @countries_ids.any?
+
+          @contexts = @contexts.where(country_id: @countries_ids)
+        end
 
         # @abstract
         # @return [ActiveRecord::Relation]

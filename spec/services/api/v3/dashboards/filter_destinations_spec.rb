@@ -14,6 +14,9 @@ RSpec.describe Api::V3::Dashboards::FilterDestinations do
     Api::V3::Readonly::NodesPerContextRankedByVolumePerYear.refresh(
       sync: true, skip_dependencies: true, skip_dependents: true
     )
+    Api::V3::Readonly::NodeWithFlowsPerYear.refresh(
+      sync: true, skip_dependencies: true, skip_dependents: true
+    )
     Api::V3::Readonly::Dashboards::Destination.refresh(
       sync: true, skip_dependencies: true
     )

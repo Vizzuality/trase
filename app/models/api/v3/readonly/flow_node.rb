@@ -13,13 +13,22 @@
 #  flow_nodes_mv_flow_id_node_id_idx  (flow_id,node_id) UNIQUE
 #
 
-# This materialised view does not depend on any yellow tables.
+# This class is not backed by a materialized view, but a table.
+# The table is refreshed using a SQL function.
 # It should only be refreshed once per data import.
 module Api
   module V3
     module Readonly
       class FlowNode < Api::Readonly::BaseModel
-        self.table_name = 'flow_nodes_mv'
+        include Api::V3::Readonly::MaterialisedTable
+
+        self.table_name = 'flow_nodes'
+
+        INDEXES = [
+          {columns: :flow_id},
+          {columns: :node_id},
+          {columns: [:context_id, :position]}
+        ].freeze
       end
     end
   end

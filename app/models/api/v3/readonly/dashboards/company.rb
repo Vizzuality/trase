@@ -30,8 +30,25 @@ module Api
     module Readonly
       module Dashboards
         class Company < Api::Readonly::BaseModel
-          self.table_name = 'dashboards_companies_mv'
+          include Api::V3::Readonly::MaterialisedTable
+
+          self.table_name = 'dashboards_companies'
           belongs_to :node
+
+          class << self
+            def refresh_dependencies(options = {})
+              Api::V3::Readonly::NodesPerContextRankedByVolumePerYear.refresh(
+                options.merge(skip_dependents: true)
+              )
+            end
+          end
+
+          INDEXES = [
+            {columns: :commodity_id},
+            {columns: :country_id},
+            {columns: :name_tsvector, using: :gin},
+            {columns: :node_type_id}
+          ].freeze
         end
       end
     end
