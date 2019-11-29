@@ -573,7 +573,7 @@ CREATE TABLE public.attributes (
 -- Name: TABLE attributes; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.attributes IS 'Merges inds, quals and quants.';
+COMMENT ON TABLE public.attributes IS 'Merges inds, quals and quants. Readonly table.';
 
 
 --

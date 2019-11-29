@@ -1,10 +1,10 @@
 # == Schema Information
 #
-# Table name: dashboards_countries_mv
+# Table name: dashboards_countries
 #
-#  id(id of sourcing country (not unique))                                        :integer          primary key
-#  commodity_id(id of commodity sourced from this country)                        :integer
-#  node_id(id of node, through which this commodity is sourced from this country) :integer
+#  id(id of sourcing country (not unique))                                        :integer          not null, primary key
+#  commodity_id(id of commodity sourced from this country)                        :integer          not null
+#  node_id(id of node, through which this commodity is sourced from this country) :integer          not null
 #  iso2                                                                           :text
 #  name                                                                           :text
 #  name_tsvector                                                                  :tsvector
@@ -12,12 +12,9 @@
 #
 # Indexes
 #
-#  dashboards_countries_mv_commodity_id_idx   (commodity_id)
-#  dashboards_countries_mv_group_columns_idx  (id,name)
-#  dashboards_countries_mv_name_idx           (name)
-#  dashboards_countries_mv_name_tsvector_idx  (name_tsvector) USING gin
-#  dashboards_countries_mv_node_id_idx        (node_id)
-#  dashboards_countries_mv_unique_idx         (id,node_id,commodity_id) UNIQUE
+#  dashboards_countries_commodity_id_idx   (commodity_id)
+#  dashboards_countries_name_tsvector_idx  (name_tsvector)
+#  dashboards_countries_node_id_idx        (node_id)
 #
 
 module Api

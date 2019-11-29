@@ -6,6 +6,7 @@
 #  name         :text
 #  display_name :text
 #  unit         :text
+#  unit_type    :text
 #  context_id   :integer
 #  years        :integer          is an Array
 #

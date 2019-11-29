@@ -573,7 +573,7 @@ tables:
       - name: report
         comment: JSON structure with validation report
   - name: attributes
-    comment: Merges inds, quals and quants.
+    comment: Merges inds, quals and quants. Readonly table.
     columns:
       - name: id
         comment: Id is fixed between data updates, unless name changes

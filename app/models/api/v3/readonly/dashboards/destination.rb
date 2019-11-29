@@ -1,25 +1,26 @@
 # == Schema Information
 #
-# Table name: dashboards_destinations_mv
+# Table name: dashboards_destinations
 #
-#  id(id of destination node (not unique))                         :integer          primary key
-#  node_type_id                                                    :integer
-#  country_id(id of country sourcing commodity going to this node) :integer
-#  commodity_id(id of commodity going to this node)                :integer
-#  node_id(id of another node from the same supply chain)          :integer
-#  name                                                            :text
-#  name_tsvector                                                   :tsvector
-#  node_type                                                       :text
-#  profile                                                         :text
+#  id(id of destination node (not unique))                           :integer          not null, primary key
+#  node_type_id                                                      :integer
+#  context_id                                                        :integer
+#  country_id(id of country sourcing commodity going to this node)   :integer          not null
+#  commodity_id(id of commodity going to this node)                  :integer          not null
+#  nodes_ids(array of ids of other nodes from the same supply chain) :integer          is an Array
+#  year                                                              :integer          not null
+#  name                                                              :text
+#  name_tsvector                                                     :tsvector
+#  node_type                                                         :text
+#  profile                                                           :text
+#  rank_by_year                                                      :jsonb
 #
 # Indexes
 #
-#  dashboards_destinations_mv_commodity_id_idx   (commodity_id)
-#  dashboards_destinations_mv_country_id_idx     (country_id)
-#  dashboards_destinations_mv_name_tsvector_idx  (name_tsvector) USING gin
-#  dashboards_destinations_mv_node_id_idx        (node_id)
-#  dashboards_destinations_mv_node_type_id_idx   (node_type_id)
-#  dashboards_destinations_mv_unique_idx         (id,node_id,country_id,commodity_id) UNIQUE
+#  dashboards_destinations_commodity_id_idx   (commodity_id)
+#  dashboards_destinations_country_id_idx     (country_id)
+#  dashboards_destinations_name_tsvector_idx  (name_tsvector)
+#  dashboards_destinations_node_type_id_idx   (node_type_id)
 #
 
 module Api
