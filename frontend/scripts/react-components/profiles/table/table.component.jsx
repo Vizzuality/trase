@@ -38,7 +38,6 @@ class ProfilesTable extends Component {
   renderPlacesTable() {
     const { data, testId } = this.props;
     const columns = data.included_columns;
-
     return (
       <tbody>
         {data.rows[0].values.map((value, valueKey) => (
@@ -146,9 +145,7 @@ class ProfilesTable extends Component {
                         : formattedValue(value, valueIndex)}
                     </span>
                     {valueIndex > 0 && (
-                      <span className="unit">
-                        {rowIndex === 0 ? data.included_columns[valueIndex].unit : null}
-                      </span>
+                      <span className="unit">{data.included_columns[valueIndex].unit}</span>
                     )}
                   </>
                 )}
