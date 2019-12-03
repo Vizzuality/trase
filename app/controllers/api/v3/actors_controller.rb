@@ -50,7 +50,7 @@ module Api
 
       def load_readonly_node
         ensure_required_param_present(:actor_id)
-        @readonly_node = Api::V3::Readonly::Node.
+        @readonly_node = Api::V3::Readonly::NodeWithFlows.
           where(context_id: @context.id, profile: 'actor').
           find(params[:actor_id])
       end

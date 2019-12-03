@@ -71,7 +71,8 @@ module Api
       def refresh_role_dependents(roles = [])
         return unless roles.any?
 
-        Api::V3::Readonly::Node.refresh_later
+        Api::V3::Readonly::NodeWithFlows.refresh_later
+
         if roles.include?(SOURCE_ROLE)
           Api::V3::Readonly::Dashboards::Source.refresh_later
         end

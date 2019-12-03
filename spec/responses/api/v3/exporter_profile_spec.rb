@@ -15,7 +15,9 @@ RSpec.describe 'Exporter profile', type: :request do
     Api::V3::Readonly::CommodityAttributeProperty.refresh
     Api::V3::Readonly::CountryAttributeProperty.refresh
     Api::V3::Readonly::ContextAttributeProperty.refresh
-    Api::V3::Readonly::Node.refresh(sync: true, skip_dependencies: true)
+    Api::V3::Readonly::FlowNode.refresh(sync: true)
+    Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
+    Api::V3::Readonly::NodeWithFlows.refresh(sync: true, skip_dependencies: true)
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
   end
@@ -38,7 +40,7 @@ RSpec.describe 'Exporter profile', type: :request do
       ].each do |non_exporter_node|
         get "/api/v3/contexts/#{api_v3_context.id}/actors/#{non_exporter_node.id}/basic_attributes"
         expect(@response).to have_http_status(:not_found)
-        expect(JSON.parse(@response.body)['error']).to match("Couldn't find Api::V3::Readonly::Node with")
+        expect(JSON.parse(@response.body)['error']).to match("Couldn't find Api::V3::Readonly::NodeWithFlows with")
       end
     end
 

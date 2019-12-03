@@ -32,8 +32,8 @@ module Api
       end
 
       def refresh_dependents
-        Api::V3::Readonly::Node.refresh
         Api::V3::Readonly::SankeyNode.refresh
+        Api::V3::Readonly::NodeWithFlows.refresh
         # TODO dashboards nodes
       end
 

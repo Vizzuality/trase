@@ -6,7 +6,9 @@ RSpec.describe Api::V3::ProfileMetadataController, type: :controller do
 
   describe 'GET index' do
     before do
-      Api::V3::Readonly::Node.refresh(sync: true, skip_dependencies: true)
+      Api::V3::Readonly::FlowNode.refresh(sync: true)
+      Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
+      Api::V3::Readonly::NodeWithFlows.refresh(sync: true, skip_dependencies: true)
     end
 
     context 'when node does not support profile pages' do

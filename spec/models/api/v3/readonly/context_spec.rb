@@ -9,7 +9,9 @@ RSpec.describe Api::V3::Readonly::Context, type: :model do
 
       before(:each) do
         Api::V3::Readonly::Context.refresh(sync: true)
-        Api::V3::Readonly::Node.refresh(sync: true)
+        Api::V3::Readonly::FlowNode.refresh(sync: true)
+        Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
+        Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
       end
 
       let(:context) { api_v3_brazil_beef_context.readonly_context }
@@ -24,7 +26,9 @@ RSpec.describe Api::V3::Readonly::Context, type: :model do
 
       before(:each) do
         Api::V3::Readonly::Context.refresh(sync: true)
-        Api::V3::Readonly::Node.refresh(sync: true)
+        Api::V3::Readonly::FlowNode.refresh(sync: true)
+        Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
+        Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
       end
 
       let(:context) { api_v3_paraguay_context.readonly_context }

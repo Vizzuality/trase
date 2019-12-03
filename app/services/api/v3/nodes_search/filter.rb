@@ -3,7 +3,7 @@ module Api
     module NodesSearch
       class Filter
         def initialize
-          @rel = Api::V3::Readonly::Node.all
+          @rel = Api::V3::Readonly::NodeWithFlows.all
         end
 
         def call(query, context_id = nil, profile_only = nil)

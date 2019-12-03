@@ -65,8 +65,7 @@ module Api
       end
 
       def refresh_dependents
-        Api::V3::Readonly::Node.refresh
-        # TODO: sankey nodes and dashboards nodes
+        Api::V3::Readonly::NodeWithFlows.refresh
         Api::V3::Readonly::Context.refresh
       end
     end

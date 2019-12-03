@@ -25,7 +25,7 @@ module Api
         end
 
         def initialize_query
-          @query = Api::V3::Readonly::Node.all
+          @query = Api::V3::Readonly::NodeWithFlows.all
         end
 
         def apply_filters
@@ -40,7 +40,7 @@ module Api
                 'JSON_BUILD_OBJECT(' \
                   '\'country\', contexts_mv.iso2, ' \
                   '\'commodity\', contexts_mv.commodity_name, ' \
-                  '\'years\', nodes_mv.years' \
+                  '\'years\', nodes_with_flows.years' \
                 ')' \
               ') AS availability'
             ).

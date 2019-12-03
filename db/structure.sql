@@ -5311,39 +5311,6 @@ ALTER SEQUENCE public.nodes_id_seq OWNED BY public.nodes.id;
 
 
 --
--- Name: nodes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.nodes_mv AS
- SELECT nodes.id,
-    nodes.main_id,
-    nodes_with_flows.context_id,
-    context_node_types.column_position,
-    context_properties.is_subnational,
-    btrim(nodes.name) AS name,
-    to_tsvector('simple'::regconfig, COALESCE(btrim(nodes.name), ''::text)) AS name_tsvector,
-    node_types.name AS node_type,
-    profiles.name AS profile,
-    upper(btrim(nodes.geo_id)) AS geo_id,
-    context_node_type_properties.role,
-    nodes_with_flows.years
-   FROM (((((((public.nodes
-     JOIN ( SELECT unnest(flows.path) AS node_id,
-            flows.context_id,
-            array_agg(DISTINCT flows.year ORDER BY flows.year) AS years
-           FROM public.flows
-          GROUP BY (unnest(flows.path)), flows.context_id) nodes_with_flows ON ((nodes.id = nodes_with_flows.node_id)))
-     JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
-     JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
-     JOIN public.context_node_types ON (((context_node_types.node_type_id = node_types.id) AND (context_node_types.context_id = nodes_with_flows.context_id))))
-     JOIN public.context_properties ON ((context_node_types.context_id = context_properties.context_id)))
-     JOIN public.context_node_type_properties ON ((context_node_type_properties.context_node_type_id = context_node_types.id)))
-     LEFT JOIN public.profiles ON ((profiles.context_node_type_id = context_node_types.id)))
-  WHERE ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text))
-  WITH NO DATA;
-
-
---
 -- Name: nodes_stats_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -5384,6 +5351,26 @@ CREATE MATERIALIZED VIEW public.nodes_stats_mv AS
 
 
 --
+-- Name: nodes_with_flows; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.nodes_with_flows (
+    id integer NOT NULL,
+    context_id integer NOT NULL,
+    main_id integer,
+    column_position smallint,
+    is_subnational boolean,
+    name text,
+    node_type text,
+    profile text,
+    geo_id text,
+    role text,
+    name_tsvector tsvector,
+    years smallint[]
+);
+
+
+--
 -- Name: nodes_with_flows_per_year_v; Type: VIEW; Schema: public; Owner: -
 --
 
@@ -5416,6 +5403,32 @@ CREATE VIEW public.nodes_with_flows_per_year_v AS
      JOIN public.node_types ON ((nodes.node_type_id = node_types.id)))
      JOIN public.contexts ON ((nodes_with_co_nodes.context_id = contexts.id)))
      JOIN public.context_node_types cnt ON (((nodes_with_co_nodes.context_id = cnt.context_id) AND (nodes_with_co_nodes."position" = (cnt.column_position + 1)) AND (contexts.id = cnt.context_id) AND (nodes.node_type_id = cnt.node_type_id) AND (node_types.id = cnt.node_type_id))));
+
+
+--
+-- Name: nodes_with_flows_v; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.nodes_with_flows_v AS
+ SELECT nodes.id,
+    nodes.context_id,
+    nodes.main_id,
+    nodes.column_position,
+    context_properties.is_subnational,
+    btrim(nodes.name) AS btrim,
+    nodes.node_type,
+    profiles.name AS profile,
+    nodes.geo_id,
+    context_node_type_properties.role,
+    nodes.name_tsvector,
+    array_agg(DISTINCT nodes.year ORDER BY nodes.year) AS array_agg
+   FROM ((((public.nodes_with_flows_per_year nodes
+     JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
+     JOIN public.context_properties ON ((nodes.context_id = context_properties.context_id)))
+     JOIN public.context_node_type_properties ON ((nodes.context_node_type_id = context_node_type_properties.context_node_type_id)))
+     LEFT JOIN public.profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))
+  WHERE ((NOT nodes.is_unknown) AND (NOT node_properties.is_domestic_consumption))
+  GROUP BY nodes.id, nodes.context_id, nodes.main_id, nodes.column_position, context_properties.is_subnational, nodes.name, nodes.node_type, profiles.name, nodes.geo_id, context_node_type_properties.role, nodes.name_tsvector;
 
 
 --
@@ -7973,6 +7986,14 @@ ALTER TABLE ONLY public.nodes_with_flows_per_year
 
 
 --
+-- Name: nodes_with_flows nodes_with_flows_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.nodes_with_flows
+    ADD CONSTRAINT nodes_with_flows_pkey PRIMARY KEY (id, context_id);
+
+
+--
 -- Name: profiles profiles_context_node_type_id_name_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8954,27 +8975,6 @@ CREATE INDEX node_quants_quant_id_idx ON public.node_quants USING btree (quant_i
 
 
 --
--- Name: nodes_mv_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX nodes_mv_context_id_id_idx ON public.nodes_mv USING btree (context_id, id);
-
-
---
--- Name: nodes_mv_context_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX nodes_mv_context_id_idx ON public.nodes_mv USING btree (context_id);
-
-
---
--- Name: nodes_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX nodes_mv_name_tsvector_idx ON public.nodes_mv USING gin (name_tsvector);
-
-
---
 -- Name: nodes_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8993,6 +8993,20 @@ CREATE UNIQUE INDEX nodes_per_context_ranked_by_volume_per_year_mv_unique_idx ON
 --
 
 CREATE UNIQUE INDEX nodes_stats_mv_context_id_quant_id_node_id_node_type_id_idx ON public.nodes_stats_mv USING btree (context_id, quant_id, node_id, node_type_id);
+
+
+--
+-- Name: nodes_with_flows_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX nodes_with_flows_context_id_idx ON public.nodes_with_flows USING btree (context_id);
+
+
+--
+-- Name: nodes_with_flows_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX nodes_with_flows_name_tsvector_idx ON public.nodes_with_flows USING btree (name_tsvector);
 
 
 --
@@ -10058,6 +10072,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191119115005'),
 ('20191122074338'),
 ('20191122074453'),
-('20191202080716');
+('20191202080716'),
+('20191202083829');
 
 

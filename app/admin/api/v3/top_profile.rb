@@ -45,7 +45,7 @@ ActiveAdmin.register Api::V3::TopProfile, as: 'Top Profile' do
       Api::V3::Profile.joins(:context_node_type).where(context_node_types: {context_id: context_id})
     node_type_ids = profiles_for_specified_context.pluck(:node_type_id)
     node_type_names = Api::V3::NodeType.where(id: node_type_ids).pluck(:name)
-    available_nodes = Api::V3::Readonly::Node.
+    available_nodes = Api::V3::Readonly::NodeWithFlows.
       where(context_id: context_id, node_type: node_type_names).
       select_options
 

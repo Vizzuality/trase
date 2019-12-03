@@ -6,7 +6,9 @@ RSpec.describe Api::V3::TopProfiles::DeriveTopProfileDetails do
 
   describe :call do
     before(:each) do
-      Api::V3::Readonly::Node.refresh(sync: true)
+      Api::V3::Readonly::FlowNode.refresh(sync: true)
+      Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
+      Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
       Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
       Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
     end
@@ -17,13 +19,13 @@ RSpec.describe Api::V3::TopProfiles::DeriveTopProfileDetails do
     it 'assigns profile type to top profile record' do
       expect(
         top_profile.profile_type
-      ).to eq(Api::V3::Readonly::Node.find(api_v3_exporter1_node.id).profile)
+      ).to eq(Api::V3::Readonly::NodeWithFlows.find(api_v3_exporter1_node.id).profile)
     end
 
     it 'assigns year to top profile record' do
       expect(
         top_profile.year
-      ).to eq(Api::V3::Readonly::Node.find(api_v3_exporter1_node.id).years.max)
+      ).to eq(Api::V3::Readonly::NodeWithFlows.find(api_v3_exporter1_node.id).years.max)
     end
 
     it 'assigns summary to top profile record' do

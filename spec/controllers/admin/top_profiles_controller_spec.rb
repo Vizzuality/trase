@@ -14,7 +14,9 @@ RSpec.describe Admin::TopProfilesController, type: :controller do
 
   describe 'POST create' do
     before(:each) do
-      Api::V3::Readonly::Node.refresh(sync: true)
+      Api::V3::Readonly::FlowNode.refresh(sync: true)
+      Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
+      Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
       Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
       Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
     end
@@ -52,7 +54,9 @@ RSpec.describe Admin::TopProfilesController, type: :controller do
 
   describe 'PUT update' do
     before(:each) do
-      Api::V3::Readonly::Node.refresh(sync: true)
+      Api::V3::Readonly::FlowNode.refresh(sync: true)
+      Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
+      Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
       Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
       Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
     end

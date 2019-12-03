@@ -65,8 +65,9 @@ module Api
         ]
       end
 
+      # TODO: ???
       def readonly_attribute
-        Api::V3::Readonly::Node.find(id)
+        Api::V3::Readonly::NodeWithFlows.find(id)
       rescue ActiveRecord::RecordNotFound
         nil
       end
