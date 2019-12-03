@@ -108,7 +108,8 @@ module Api
             Api::V3::Readonly::Node,
             Api::V3::Readonly::SankeyNode,
             Api::V3::Readonly::Flow,
-            Api::V3::Readonly::FlowNode
+            Api::V3::Readonly::FlowNode,
+            Api::V3::Readonly::NodeWithFlowsPerYear
           ].each { |mview| mview.refresh(sync: true, skip_dependents: true) }
           Api::V3::Readonly::DownloadFlow.refresh(
             sync: true, skip_dependents: true, skip_precompute: true

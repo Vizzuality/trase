@@ -3134,19 +3134,21 @@ COMMENT ON COLUMN public.dashboards_commodities.node_id IS 'id of node, through 
 --
 
 CREATE TABLE public.nodes_with_flows_per_year (
-    node_id integer NOT NULL,
+    id integer NOT NULL,
     context_id integer NOT NULL,
     country_id integer,
     commodity_id integer,
     node_type_id integer,
     context_node_type_id integer,
+    main_id integer,
+    column_position smallint,
     year smallint NOT NULL,
+    is_unknown boolean,
     nodes_ids integer[],
     name text,
     name_tsvector tsvector,
     node_type text,
-    geo_id text,
-    is_unknown boolean
+    geo_id text
 );
 
 
@@ -3157,7 +3159,7 @@ CREATE TABLE public.nodes_with_flows_per_year (
 CREATE VIEW public.dashboards_commodities_v AS
  SELECT DISTINCT nodes.commodity_id AS id,
     nodes.country_id,
-    nodes.node_id,
+    nodes.id AS node_id,
     btrim(commodities.name) AS name,
     to_tsvector('simple'::regconfig, COALESCE(btrim(commodities.name), ''::text)) AS name_tsvector,
     profiles.name AS profile
@@ -3303,7 +3305,7 @@ CREATE MATERIALIZED VIEW public.nodes_per_context_ranked_by_volume_per_year_mv A
 --
 
 CREATE VIEW public.dashboards_companies_v AS
- SELECT nodes.node_id AS id,
+ SELECT nodes.id,
     nodes.node_type_id,
     nodes.context_id,
     nodes.country_id,
@@ -3316,10 +3318,10 @@ CREATE VIEW public.dashboards_companies_v AS
     profiles.name AS profile,
     ranked_nodes.rank_by_year
    FROM ((((public.nodes_with_flows_per_year nodes
-     JOIN public.node_properties node_props ON ((nodes.node_id = node_props.node_id)))
+     JOIN public.node_properties node_props ON ((nodes.id = node_props.node_id)))
      JOIN public.context_node_type_properties cnt_props ON ((nodes.context_node_type_id = cnt_props.context_node_type_id)))
      LEFT JOIN public.profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))
-     JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((nodes.context_id = ranked_nodes.context_id) AND (nodes.node_id = ranked_nodes.node_id))))
+     JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((nodes.context_id = ranked_nodes.context_id) AND (nodes.id = ranked_nodes.node_id))))
   WHERE (((cnt_props.role)::text = ANY ((ARRAY['importer'::character varying, 'exporter'::character varying])::text[])) AND (NOT nodes.is_unknown) AND (NOT node_props.is_domestic_consumption) AND (upper(nodes.name) <> 'OTHER'::text));
 
 
@@ -3373,7 +3375,7 @@ COMMENT ON COLUMN public.dashboards_countries.node_id IS 'id of node, through wh
 CREATE VIEW public.dashboards_countries_v AS
  SELECT DISTINCT nodes.country_id AS id,
     nodes.commodity_id,
-    nodes.node_id,
+    nodes.id AS node_id,
     countries.iso2,
     btrim(countries.name) AS name,
     to_tsvector('simple'::regconfig, COALESCE(btrim(countries.name), ''::text)) AS name_tsvector,
@@ -3444,7 +3446,7 @@ COMMENT ON COLUMN public.dashboards_destinations.nodes_ids IS 'array of ids of o
 --
 
 CREATE VIEW public.dashboards_destinations_v AS
- SELECT nodes.node_id AS id,
+ SELECT nodes.id,
     nodes.node_type_id,
     nodes.context_id,
     nodes.country_id,
@@ -3457,10 +3459,10 @@ CREATE VIEW public.dashboards_destinations_v AS
     profiles.name AS profile,
     ranked_nodes.rank_by_year
    FROM ((((public.nodes_with_flows_per_year nodes
-     JOIN public.node_properties node_props ON ((nodes.node_id = node_props.node_id)))
+     JOIN public.node_properties node_props ON ((nodes.id = node_props.node_id)))
      JOIN public.context_node_type_properties cnt_props ON ((nodes.context_node_type_id = cnt_props.context_node_type_id)))
      LEFT JOIN public.profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))
-     JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((nodes.context_id = ranked_nodes.context_id) AND (nodes.node_id = ranked_nodes.node_id))))
+     JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((nodes.context_id = ranked_nodes.context_id) AND (nodes.id = ranked_nodes.node_id))))
   WHERE (((cnt_props.role)::text = 'destination'::text) AND (NOT nodes.is_unknown) AND (NOT node_props.is_domestic_consumption) AND (upper(nodes.name) <> 'OTHER'::text));
 
 
@@ -3524,7 +3526,7 @@ COMMENT ON COLUMN public.dashboards_exporters.nodes_ids IS 'array of ids of othe
 --
 
 CREATE VIEW public.dashboards_exporters_v AS
- SELECT nodes.node_id AS id,
+ SELECT nodes.id,
     nodes.node_type_id,
     nodes.context_id,
     nodes.country_id,
@@ -3537,10 +3539,10 @@ CREATE VIEW public.dashboards_exporters_v AS
     profiles.name AS profile,
     ranked_nodes.rank_by_year
    FROM ((((public.nodes_with_flows_per_year nodes
-     JOIN public.node_properties node_props ON ((nodes.node_id = node_props.node_id)))
+     JOIN public.node_properties node_props ON ((nodes.id = node_props.node_id)))
      JOIN public.context_node_type_properties cnt_props ON ((nodes.context_node_type_id = cnt_props.context_node_type_id)))
      LEFT JOIN public.profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))
-     JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((nodes.context_id = ranked_nodes.context_id) AND (nodes.node_id = ranked_nodes.node_id))))
+     JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((nodes.context_id = ranked_nodes.context_id) AND (nodes.id = ranked_nodes.node_id))))
   WHERE (((cnt_props.role)::text = 'exporter'::text) AND (NOT nodes.is_unknown) AND (NOT node_props.is_domestic_consumption) AND (upper(nodes.name) <> 'OTHER'::text));
 
 
@@ -3604,7 +3606,7 @@ COMMENT ON COLUMN public.dashboards_importers.nodes_ids IS 'array of ids of othe
 --
 
 CREATE VIEW public.dashboards_importers_v AS
- SELECT nodes.node_id AS id,
+ SELECT nodes.id,
     nodes.node_type_id,
     nodes.context_id,
     nodes.country_id,
@@ -3617,10 +3619,10 @@ CREATE VIEW public.dashboards_importers_v AS
     profiles.name AS profile,
     ranked_nodes.rank_by_year
    FROM ((((public.nodes_with_flows_per_year nodes
-     JOIN public.node_properties node_props ON ((nodes.node_id = node_props.node_id)))
+     JOIN public.node_properties node_props ON ((nodes.id = node_props.node_id)))
      JOIN public.context_node_type_properties cnt_props ON ((nodes.context_node_type_id = cnt_props.context_node_type_id)))
      LEFT JOIN public.profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))
-     JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((nodes.context_id = ranked_nodes.context_id) AND (nodes.node_id = ranked_nodes.node_id))))
+     JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((nodes.context_id = ranked_nodes.context_id) AND (nodes.id = ranked_nodes.node_id))))
   WHERE (((cnt_props.role)::text = 'importer'::text) AND (NOT nodes.is_unknown) AND (NOT node_props.is_domestic_consumption) AND (upper(nodes.name) <> 'OTHER'::text));
 
 
@@ -3741,7 +3743,7 @@ COMMENT ON COLUMN public.dashboards_sources.nodes_ids IS 'array of ids of other 
 --
 
 CREATE VIEW public.dashboards_sources_v AS
- SELECT nodes.node_id AS id,
+ SELECT nodes.id,
     nodes.node_type_id,
     nodes.context_id,
     nodes.country_id,
@@ -3754,10 +3756,10 @@ CREATE VIEW public.dashboards_sources_v AS
     profiles.name AS profile,
     ranked_nodes.rank_by_year
    FROM ((((public.nodes_with_flows_per_year nodes
-     JOIN public.node_properties node_props ON ((nodes.node_id = node_props.node_id)))
+     JOIN public.node_properties node_props ON ((nodes.id = node_props.node_id)))
      JOIN public.context_node_type_properties cnt_props ON ((nodes.context_node_type_id = cnt_props.context_node_type_id)))
      LEFT JOIN public.profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))
-     JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((nodes.context_id = ranked_nodes.context_id) AND (nodes.node_id = ranked_nodes.node_id))))
+     JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((nodes.context_id = ranked_nodes.context_id) AND (nodes.id = ranked_nodes.node_id))))
   WHERE (((cnt_props.role)::text = 'source'::text) AND (NOT nodes.is_unknown) AND (NOT node_props.is_domestic_consumption) AND (upper(nodes.name) <> 'OTHER'::text));
 
 
@@ -5386,19 +5388,21 @@ CREATE MATERIALIZED VIEW public.nodes_stats_mv AS
 --
 
 CREATE VIEW public.nodes_with_flows_per_year_v AS
- SELECT nodes_with_co_nodes.node_id,
+ SELECT nodes_with_co_nodes.node_id AS id,
     nodes_with_co_nodes.context_id,
     contexts.country_id,
     contexts.commodity_id,
     nodes.node_type_id,
     cnt.id AS context_node_type_id,
+    nodes.main_id,
+    cnt.column_position,
     nodes_with_co_nodes.year,
+    nodes.is_unknown,
     nodes_with_co_nodes.nodes_ids,
-    btrim(nodes.name) AS name,
+    nodes.name,
     to_tsvector('simple'::regconfig, COALESCE(nodes.name, ''::text)) AS name_tsvector,
     node_types.name AS node_type,
-    nodes.geo_id,
-    nodes.is_unknown
+    upper(btrim(nodes.geo_id)) AS geo_id
    FROM ((((( SELECT flow_nodes.node_id,
             flow_nodes.context_id,
             flow_nodes."position",
@@ -7965,7 +7969,7 @@ ALTER TABLE ONLY public.nodes
 --
 
 ALTER TABLE ONLY public.nodes_with_flows_per_year
-    ADD CONSTRAINT nodes_with_flows_per_year_pkey PRIMARY KEY (node_id, context_id, year);
+    ADD CONSTRAINT nodes_with_flows_per_year_pkey PRIMARY KEY (id, context_id, year);
 
 
 --
@@ -8992,10 +8996,10 @@ CREATE UNIQUE INDEX nodes_stats_mv_context_id_quant_id_node_id_node_type_id_idx 
 
 
 --
--- Name: nodes_with_flows_per_year_node_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: nodes_with_flows_per_year_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX nodes_with_flows_per_year_node_id_idx ON public.nodes_with_flows_per_year USING btree (node_id);
+CREATE INDEX nodes_with_flows_per_year_id_idx ON public.nodes_with_flows_per_year USING btree (id);
 
 
 --
@@ -10053,6 +10057,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191119115004'),
 ('20191119115005'),
 ('20191122074338'),
-('20191122074453');
+('20191122074453'),
+('20191202080716');
 
 
