@@ -61,6 +61,7 @@ module Api
           filter_by_node_types
           filter_by_profile_only
           filter_by_self
+          filter_by_year
         end
 
         def adjust_node_filters
@@ -110,6 +111,11 @@ module Api
           return unless @self_ids.any?
 
           @query = @query.where(id: @self_ids)
+        end
+
+        def filter_by_year
+          @query = @query.where('year >= ?', @start_year) if @start_year
+          @query = @query.where('year <= ?', @end_year) if @end_year
         end
       end
     end
