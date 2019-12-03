@@ -39,7 +39,7 @@
           },
           "isDomesticConsumption": {
             "id": "/properties/data/items/properties/isDomesticConsumption",
-            "type": "null"
+            "type": "boolean"
           },
           "isUnknown": {
             "id": "/properties/data/items/properties/isUnknown",

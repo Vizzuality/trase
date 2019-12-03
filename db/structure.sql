@@ -5371,6 +5371,60 @@ CREATE TABLE public.nodes_with_flows (
 
 
 --
+-- Name: nodes_with_flows_or_geo; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.nodes_with_flows_or_geo (
+    id integer NOT NULL,
+    context_id integer NOT NULL,
+    node_type_id integer,
+    main_id integer,
+    is_unknown boolean,
+    is_domestic_consumption boolean,
+    is_aggregated boolean,
+    has_flows boolean,
+    name text,
+    node_type text,
+    geo_id text,
+    profile text
+);
+
+
+--
+-- Name: nodes_with_flows_or_geo_v; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.nodes_with_flows_or_geo_v AS
+ SELECT nodes.id,
+    contexts.id AS context_id,
+    nodes.node_type_id,
+    nodes.main_id,
+    nodes.is_unknown,
+    node_properties.is_domestic_consumption,
+    (upper(btrim(nodes.name)) = 'OTHER'::text) AS is_aggregated,
+        CASE
+            WHEN ((flow_nodes.node_id IS NOT NULL) OR (upper(btrim(nodes.name)) = 'OTHER'::text)) THEN true
+            ELSE false
+        END AS has_flows,
+    nodes.name,
+    node_types.name AS node_type,
+    nodes.geo_id,
+    profiles.name AS profile
+   FROM ((((((((public.nodes
+     JOIN public.node_properties ON ((node_properties.node_id = nodes.id)))
+     JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
+     JOIN public.context_node_types ON ((context_node_types.node_type_id = node_types.id)))
+     JOIN public.contexts ON ((context_node_types.context_id = contexts.id)))
+     JOIN public.countries ON ((contexts.country_id = countries.id)))
+     JOIN public.context_node_type_properties ON ((context_node_type_properties.context_node_type_id = context_node_types.id)))
+     LEFT JOIN public.profiles ON ((profiles.context_node_type_id = context_node_types.id)))
+     LEFT JOIN ( SELECT DISTINCT flow_nodes_1.node_id,
+            flow_nodes_1.context_id
+           FROM public.flow_nodes flow_nodes_1) flow_nodes ON (((flow_nodes.node_id = nodes.id) AND (flow_nodes.context_id = context_node_types.context_id) AND (flow_nodes.context_id = contexts.id))))
+  WHERE (((flow_nodes.context_id IS NOT NULL) AND (flow_nodes.context_id = contexts.id)) OR (context_node_type_properties.is_geo_column AND (upper(countries.iso2) = upper("substring"(nodes.geo_id, 1, 2)))) OR (upper(btrim(nodes.name)) = 'OTHER'::text));
+
+
+--
 -- Name: nodes_with_flows_per_year_v; Type: VIEW; Schema: public; Owner: -
 --
 
@@ -6339,42 +6393,6 @@ CREATE SEQUENCE public.sankey_card_links_id_seq
 --
 
 ALTER SEQUENCE public.sankey_card_links_id_seq OWNED BY public.sankey_card_links.id;
-
-
---
--- Name: sankey_nodes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.sankey_nodes_mv AS
- SELECT nodes.id,
-    nodes.main_id,
-    nodes.name,
-    nodes.geo_id,
-        CASE
-            WHEN context_node_type_properties.is_geo_column THEN "substring"(nodes.geo_id, 1, 2)
-            ELSE NULL::text
-        END AS source_country_iso2,
-    NULLIF(node_properties.is_domestic_consumption, false) AS is_domestic_consumption,
-    NULLIF(nodes.is_unknown, false) AS is_unknown,
-    nodes.node_type_id,
-    node_types.name AS node_type,
-    profiles.name AS profile_type,
-        CASE
-            WHEN ((nodes_with_flows.node_id IS NOT NULL) OR (nodes.name = 'OTHER'::text)) THEN true
-            ELSE false
-        END AS has_flows,
-    (upper(btrim(nodes.name)) = 'OTHER'::text) AS is_aggregated,
-    context_node_types.context_id
-   FROM ((((((public.nodes
-     JOIN public.node_properties ON ((node_properties.node_id = nodes.id)))
-     JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
-     JOIN public.context_node_types ON ((context_node_types.node_type_id = node_types.id)))
-     JOIN public.context_node_type_properties ON ((context_node_type_properties.context_node_type_id = context_node_types.id)))
-     LEFT JOIN public.profiles ON ((profiles.context_node_type_id = context_node_types.id)))
-     LEFT JOIN ( SELECT DISTINCT unnest(flows.path) AS node_id,
-            flows.context_id
-           FROM public.flows) nodes_with_flows ON (((nodes_with_flows.node_id = nodes.id) AND (nodes_with_flows.context_id = context_node_types.context_id))))
-  WITH NO DATA;
 
 
 --
@@ -7978,6 +7996,14 @@ ALTER TABLE ONLY public.nodes
 
 
 --
+-- Name: nodes_with_flows_or_geo nodes_with_flows_or_geo_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.nodes_with_flows_or_geo
+    ADD CONSTRAINT nodes_with_flows_or_geo_pkey PRIMARY KEY (id, context_id);
+
+
+--
 -- Name: nodes_with_flows_per_year nodes_with_flows_per_year_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9010,6 +9036,20 @@ CREATE INDEX nodes_with_flows_name_tsvector_idx ON public.nodes_with_flows USING
 
 
 --
+-- Name: nodes_with_flows_or_geo_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX nodes_with_flows_or_geo_context_id_idx ON public.nodes_with_flows_or_geo USING btree (context_id);
+
+
+--
+-- Name: nodes_with_flows_or_geo_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX nodes_with_flows_or_geo_node_type_id_idx ON public.nodes_with_flows_or_geo USING btree (node_type_id);
+
+
+--
 -- Name: nodes_with_flows_per_year_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -9175,20 +9215,6 @@ CREATE INDEX resize_by_quants_resize_by_attribute_id_idx ON public.resize_by_qua
 --
 
 CREATE INDEX sankey_card_link_node_types_context_node_type_property_id_idx ON public.sankey_card_link_node_types USING btree (context_node_type_property_id);
-
-
---
--- Name: sankey_nodes_mv_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX sankey_nodes_mv_context_id_id_idx ON public.sankey_nodes_mv USING btree (context_id, id);
-
-
---
--- Name: sankey_nodes_mv_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX sankey_nodes_mv_node_type_id_idx ON public.sankey_nodes_mv USING btree (node_type_id);
 
 
 --
@@ -10073,6 +10099,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191122074338'),
 ('20191122074453'),
 ('20191202080716'),
-('20191202083829');
+('20191202083829'),
+('20191202090700');
 
 

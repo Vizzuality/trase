@@ -61,7 +61,7 @@ module Api
       def refresh_dependents
         Api::V3::Readonly::Context.refresh
         if previous_changes.key?('is_geo_column')
-          Api::V3::Readonly::SankeyNode.refresh_later
+          Api::V3::Readonly::NodeWithFlowsOrGeo.refresh_later
         end
         return unless previous_changes.key?('role')
 

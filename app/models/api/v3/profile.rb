@@ -66,6 +66,8 @@ module Api
 
       def refresh_dependents
         Api::V3::Readonly::NodeWithFlows.refresh
+        Api::V3::Readonly::NodeWithFlowsOrGeo.refresh
+        # TODO: dashboards nodes
         Api::V3::Readonly::Context.refresh
       end
     end
