@@ -1,25 +1,26 @@
 # == Schema Information
 #
-# Table name: dashboards_importers_mv
+# Table name: dashboards_importers
 #
-#  id            :integer          primary key
-#  node_type_id  :integer
-#  country_id    :integer
-#  commodity_id  :integer
-#  node_id       :integer
-#  name          :text
-#  name_tsvector :tsvector
-#  node_type     :text
-#  profile       :text
+#  id(id of importer node (not unique))                              :integer          not null, primary key
+#  node_type_id                                                      :integer
+#  context_id                                                        :integer
+#  country_id(id of country sourcing commodity traded by this node)  :integer          not null
+#  commodity_id(id of commodity traded by this node)                 :integer          not null
+#  nodes_ids(array of ids of other nodes from the same supply chain) :integer          is an Array
+#  year                                                              :integer          not null
+#  name                                                              :text
+#  name_tsvector                                                     :tsvector
+#  node_type                                                         :text
+#  profile                                                           :text
+#  rank_by_year                                                      :jsonb
 #
 # Indexes
 #
-#  dashboards_importers_mv_commodity_id_idx   (commodity_id)
-#  dashboards_importers_mv_country_id_idx     (country_id)
-#  dashboards_importers_mv_name_tsvector_idx  (name_tsvector) USING gin
-#  dashboards_importers_mv_node_id_idx        (node_id)
-#  dashboards_importers_mv_node_type_id_idx   (node_type_id)
-#  dashboards_importers_mv_unique_idx         (id,node_id,country_id,commodity_id) UNIQUE
+#  dashboards_importers_commodity_id_idx   (commodity_id)
+#  dashboards_importers_country_id_idx     (country_id)
+#  dashboards_importers_name_tsvector_idx  (name_tsvector)
+#  dashboards_importers_node_type_id_idx   (node_type_id)
 #
 
 module Api

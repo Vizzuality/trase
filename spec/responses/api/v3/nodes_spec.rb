@@ -6,7 +6,8 @@ RSpec.describe 'Nodes', type: :request do
 
   describe 'GET /api/v3/contexts/:context_id/nodes' do
     before(:each) do
-      Api::V3::Readonly::SankeyNode.refresh(sync: true)
+      Api::V3::Readonly::FlowNode.refresh(sync: true)
+      Api::V3::Readonly::NodeWithFlowsOrGeo.refresh(sync: true)
     end
 
     it 'has the correct response structure' do

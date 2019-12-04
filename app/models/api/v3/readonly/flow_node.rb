@@ -1,16 +1,18 @@
 # == Schema Information
 #
-# Table name: flow_nodes_mv
+# Table name: flow_nodes
 #
-#  context_id :integer
-#  flow_id    :integer
-#  year       :integer
-#  position   :bigint(8)
-#  node_id    :integer
+#  flow_id(id from flows)            :integer          not null
+#  node_id(id from path at position) :integer          not null
+#  context_id(from flows)            :integer          not null
+#  position(0-indexed)               :integer          not null
+#  year(from flows)                  :integer          not null
 #
 # Indexes
 #
-#  flow_nodes_mv_flow_id_node_id_idx  (flow_id,node_id) UNIQUE
+#  flow_nodes_context_id_position_idx  (context_id,position)
+#  flow_nodes_flow_id_idx              (flow_id)
+#  flow_nodes_node_id_idx              (node_id)
 #
 
 # This class is not backed by a materialized view, but a table.

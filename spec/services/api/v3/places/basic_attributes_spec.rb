@@ -13,7 +13,9 @@ RSpec.describe Api::V3::Places::BasicAttributes do
       Api::V3::Readonly::CommodityAttributeProperty.refresh
       Api::V3::Readonly::CountryAttributeProperty.refresh
       Api::V3::Readonly::ContextAttributeProperty.refresh
-      Api::V3::Readonly::Node.refresh(sync: true)
+      Api::V3::Readonly::FlowNode.refresh(sync: true)
+      Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
+      Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
       Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
       Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
     end

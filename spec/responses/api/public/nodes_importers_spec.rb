@@ -5,7 +5,9 @@ RSpec.describe 'Nodes importers', type: :request do
 
   before(:each) do
     Api::V3::Readonly::Context.refresh(sync: true)
-    Api::V3::Readonly::Node.refresh(sync: true)
+    Api::V3::Readonly::FlowNode.refresh(sync: true)
+    Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
+    Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
   end
 
   describe 'GET /api/public/nodes/importers' do

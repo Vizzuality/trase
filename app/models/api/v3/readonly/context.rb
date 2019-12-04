@@ -42,7 +42,7 @@ module Api
           return [] unless node_types_by_name[NodeTypeName::BIOME].present?
 
           # Brazil - soy & Paraguay - soy only
-          Api::V3::Readonly::Node.
+          Api::V3::Readonly::NodeWithFlows.
             select([:id, :name, :geo_id]).
             where(context_id: id, node_type: NodeTypeName::BIOME).
             order(:name)

@@ -44,7 +44,7 @@ module Api
         end
 
         def readonly_node
-          Api::V3::Readonly::Node.find(node.id)
+          Api::V3::Readonly::NodeWithFlows.find(node.id)
         end
 
         def profile_type

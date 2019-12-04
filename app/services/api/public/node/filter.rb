@@ -26,7 +26,7 @@ module Api
         def initialize_query
           @query = Api::V3::Readonly::FlowNode.
             select(*select_clause).
-            joins('INNER JOIN nodes_mv ON nodes_mv.id = flow_nodes.node_id').
+            joins('INNER JOIN nodes_with_flows ON nodes_with_flows.id = flow_nodes.node_id').
             joins('INNER JOIN contexts_mv ON contexts_mv.id = flow_nodes.context_id').
             group(*group_clause).
             order('flow_nodes.node_id')
@@ -35,14 +35,14 @@ module Api
         def select_clause
           [
             'flow_nodes.node_id',
-            'nodes_mv.name',
-            'nodes_mv.node_type',
-            'nodes_mv.geo_id',
+            'nodes_with_flows.name',
+            'nodes_with_flows.node_type',
+            'nodes_with_flows.geo_id',
             'JSON_AGG(' \
               'DISTINCT JSONB_BUILD_OBJECT(' \
                 '\'country\', contexts_mv.iso2, ' \
                 '\'commodity\', contexts_mv.commodity_name, ' \
-                '\'years\', nodes_mv.years' \
+                '\'years\', nodes_with_flows.years' \
               ')' \
             ') AS availability',
             'JSON_AGG(' \
@@ -101,9 +101,9 @@ module Api
         def group_clause
           [
             'flow_nodes.node_id',
-            'nodes_mv.name',
-            'nodes_mv.node_type',
-            'nodes_mv.geo_id',
+            'nodes_with_flows.name',
+            'nodes_with_flows.node_type',
+            'nodes_with_flows.geo_id',
             'contexts_mv.iso2',
             'contexts_mv.commodity_name'
           ]

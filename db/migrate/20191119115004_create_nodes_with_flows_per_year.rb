@@ -17,10 +17,6 @@ class CreateNodesWithFlowsPerYear < ActiveRecord::Migration[5.2]
     end
 
     create_view 'nodes_with_flows_per_year_v', materialized: false
-
-    Api::V3::Readonly::NodeWithFlowsPerYear.refresh(
-      sync: (Rails.env.development? || Rails.env.test?)
-    )
   end
 
   def down
