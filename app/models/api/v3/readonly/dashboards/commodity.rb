@@ -5,6 +5,7 @@
 #  id(id of commodity (not unique))                                               :integer          not null, primary key
 #  country_id(id of country, from which this commodity is sourced)                :integer          not null
 #  node_id(id of node, through which this commodity is sourced from this country) :integer          not null
+#  year                                                                           :integer          not null
 #  name                                                                           :text
 #  name_tsvector                                                                  :tsvector
 #  profile                                                                        :text
