@@ -7,6 +7,7 @@ import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.
 import ResizeListener from 'react-components/shared/resize-listener.component';
 import { BREAKPOINTS } from 'constants';
 import OrderBy from 'react-components/nodes-panel/order-by.component';
+import Tabs from 'react-components/shared/tabs/tabs.component';
 
 import './destinations-panel.scss';
 
@@ -27,7 +28,10 @@ function DestinationsPanel(props) {
     setSearchResult,
     getSearchResults,
     setSelectedItems,
-    selectedNodesIds
+    selectedNodesIds,
+    tabs,
+    activeTab,
+    setSelectedTab
   } = props;
 
   useEffect(() => {
@@ -55,32 +59,42 @@ function DestinationsPanel(props) {
                 onSelect={setSearchResult}
                 onSearchTermChange={getSearchResults}
               />
-              <OrderBy orderBy={orderBy} setOrderBy={setOrderBy} />
             </div>
-            <GridList
-              className="dashboard-panel-pill-list"
-              items={destinations}
-              height={200}
-              width={width}
-              rowHeight={50}
-              columnWidth={190}
-              columnCount={columnsCount}
-              page={page}
-              getMoreItems={setPage}
-              loading={loading}
-              itemToScrollTo={itemToScrollTo}
-              excludingMode={ENABLE_REDESIGN_PAGES ? excludingMode : undefined}
-              onSelectAllClick={ENABLE_REDESIGN_PAGES ? setExcludingMode : undefined}
+            <Tabs
+              tabs={tabs}
+              onSelectTab={setSelectedTab}
+              selectedTab={activeTab}
+              itemTabRenderer={i => i.name}
+              getTabId={item => item.id}
+              actionComponent={<OrderBy orderBy={orderBy} setOrderBy={setOrderBy} />}
             >
-              {itemProps => (
-                <GridListItem
-                  {...itemProps}
-                  isActive={selectedNodesIds.includes(itemProps.item?.id)}
-                  enableItem={setSelectedItems}
-                  disableItem={setSelectedItems}
-                />
+              {activeTab && (
+                <GridList
+                  className="dashboard-panel-pill-list"
+                  items={destinations}
+                  height={200}
+                  width={width}
+                  rowHeight={50}
+                  columnWidth={190}
+                  columnCount={columnsCount}
+                  page={page}
+                  getMoreItems={setPage}
+                  loading={loading}
+                  itemToScrollTo={itemToScrollTo}
+                  excludingMode={ENABLE_REDESIGN_PAGES ? excludingMode : undefined}
+                  onSelectAllClick={ENABLE_REDESIGN_PAGES ? setExcludingMode : undefined}
+                >
+                  {itemProps => (
+                    <GridListItem
+                      {...itemProps}
+                      isActive={selectedNodesIds.includes(itemProps.item?.id)}
+                      enableItem={setSelectedItems}
+                      disableItem={setSelectedItems}
+                    />
+                  )}
+                </GridList>
               )}
-            </GridList>
+            </Tabs>
           </div>
         );
       }}
@@ -104,7 +118,10 @@ DestinationsPanel.propTypes = {
   excludingMode: PropTypes.bool,
   setExcludingMode: PropTypes.func,
   setOrderBy: PropTypes.func,
-  orderBy: PropTypes.object
+  orderBy: PropTypes.object,
+  tabs: PropTypes.array,
+  activeTab: PropTypes.object,
+  setSelectedTab: PropTypes.func
 };
 
 DestinationsPanel.defaultProps = {
