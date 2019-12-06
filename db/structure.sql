@@ -3095,6 +3095,7 @@ CREATE TABLE public.dashboards_commodities (
     id integer NOT NULL,
     country_id integer NOT NULL,
     node_id integer NOT NULL,
+    year smallint NOT NULL,
     name text,
     name_tsvector tsvector,
     profile text
@@ -3160,6 +3161,7 @@ CREATE VIEW public.dashboards_commodities_v AS
  SELECT DISTINCT nodes.commodity_id AS id,
     nodes.country_id,
     nodes.id AS node_id,
+    nodes.year,
     btrim(commodities.name) AS name,
     to_tsvector('simple'::regconfig, COALESCE(btrim(commodities.name), ''::text)) AS name_tsvector,
     profiles.name AS profile
@@ -3333,6 +3335,7 @@ CREATE TABLE public.dashboards_countries (
     id integer NOT NULL,
     commodity_id integer NOT NULL,
     node_id integer NOT NULL,
+    year smallint NOT NULL,
     iso2 text,
     name text,
     name_tsvector tsvector,
@@ -3376,6 +3379,7 @@ CREATE VIEW public.dashboards_countries_v AS
  SELECT DISTINCT nodes.country_id AS id,
     nodes.commodity_id,
     nodes.id AS node_id,
+    nodes.year,
     countries.iso2,
     btrim(countries.name) AS name,
     to_tsvector('simple'::regconfig, COALESCE(btrim(countries.name), ''::text)) AS name_tsvector,
@@ -7536,7 +7540,7 @@ ALTER TABLE ONLY public.dashboards_attributes
 --
 
 ALTER TABLE ONLY public.dashboards_commodities
-    ADD CONSTRAINT dashboards_commodities_pkey PRIMARY KEY (id, node_id, country_id);
+    ADD CONSTRAINT dashboards_commodities_pkey PRIMARY KEY (id, node_id, country_id, year);
 
 
 --
@@ -7552,7 +7556,7 @@ ALTER TABLE ONLY public.dashboards_companies
 --
 
 ALTER TABLE ONLY public.dashboards_countries
-    ADD CONSTRAINT dashboards_countries_pkey PRIMARY KEY (id, node_id, commodity_id);
+    ADD CONSTRAINT dashboards_countries_pkey PRIMARY KEY (id, node_id, commodity_id, year);
 
 
 --
@@ -10100,6 +10104,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191122074453'),
 ('20191202080716'),
 ('20191202083829'),
-('20191202090700');
+('20191202090700'),
+('20191205213427');
 
 
