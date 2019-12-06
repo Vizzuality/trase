@@ -8,6 +8,7 @@ const modules = {
   },
   destinations: {
     hasSearch: true,
+    hasTabs: true,
     hasMultipleSelection: true
   },
   exporters: {

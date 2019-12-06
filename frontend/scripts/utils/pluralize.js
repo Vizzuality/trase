@@ -5,6 +5,7 @@ export default name => {
   const plural = {
     logisticsHub: 'logistics hubs',
     portOfImport: 'ports of import',
+    economicBloc: 'economic blocs',
     portOfExport: 'ports of export',
     districtOfExport: 'districts of export',
     countryOfProduction: 'country of production'
