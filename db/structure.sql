@@ -5510,6 +5510,20 @@ CREATE VIEW public.nodes_with_flows_v AS
 
 
 --
+-- Name: partitioned_flows; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[]
+)
+PARTITION BY LIST (context_id);
+
+
+--
 -- Name: profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -9081,6 +9095,20 @@ CREATE INDEX nodes_with_flows_per_year_id_idx ON public.nodes_with_flows_per_yea
 
 
 --
+-- Name: partitioned_flows_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_context_id_id_idx ON ONLY public.partitioned_flows USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_year_idx ON ONLY public.partitioned_flows USING btree (year);
+
+
+--
 -- Name: qual_commodity_properties_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10126,6 +10154,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191202083829'),
 ('20191202090700'),
 ('20191205213427'),
-('20191209224804');
+('20191209224804'),
+('20191209224805');
 
 
