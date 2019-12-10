@@ -110,6 +110,7 @@ module Api
             Api::V3::Readonly::NodeWithFlowsPerYear
           ].each { |mview| mview.refresh(sync: true, skip_dependents: true) }
           Api::V3::TablePartitions::CreatePartitionsForFlows.new.call
+          Api::V3::TablePartitions::CreatePartitionsForFlowQuants.new.call
           Api::V3::Readonly::DownloadFlow.refresh(
             sync: true, skip_dependents: true, skip_precompute: true
           )
