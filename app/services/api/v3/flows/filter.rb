@@ -199,6 +199,12 @@ module Api
               active_nodes_for_expand # expanded mode
             end
 
+          @active_nodes_ids_by_position = Hash[
+            active_nodes_by_position.map do |position, nodes|
+              [position, nodes.keys]
+            end
+          ]
+
           # TODO: think about how to maybe move this out to the result object
           @total_height = active_nodes_by_position.first[1].values.
             reduce(:+)
@@ -303,13 +309,21 @@ module Api
         end
 
         def flows_query
+          case_expressions, case_substitutions = [], []
+          @active_node_types_positions.map.with_index do |position, i|
+            case_expressions <<
+              'CASE WHEN flows.path[?] IN (?) THEN flows.path[?] ELSE ? END'
+            other_node_id = @other_nodes_ids[i]
+            nodes_ids = @active_nodes_ids_by_position[position].
+              reject { |e| e == other_node_id}
+            case_substitutions += [
+              position + 1, nodes_ids, position + 1, other_node_id
+            ]
+          end
           cont_attr_table = @cont_attribute.flow_values_class.table_name
           select_clause_parts = [
-            'flows.id',
-            'ARRAY[' +
-              @active_node_types_positions.map { 'flows.path[?]' }.join(', ') +
-              '] AS path',
-            "#{cont_attr_table}.value AS quant_value"
+            'ARRAY[' + case_expressions.join(', ') + '] AS path',
+            "SUM(#{cont_attr_table}.value) AS quant_value"
           ]
 
           if @ncont_attribute
@@ -320,13 +334,15 @@ module Api
             :sanitize_sql_array,
             [
               select_clause_parts.join(','),
-              *(@active_node_types_positions.map { |ai| ai + 1 })
+              *case_substitutions
             ]
           )
 
           query = basic_flows_query.
             select(select_clause).
-            where('flow_quants.value > 0')
+            group('1').
+            where("#{cont_attr_table}.value > 0")
+
           if @ncont_attribute
             ncont_attr_table = @ncont_attribute.flow_values_class.table_name
             ncont_attr_join_clause = ActiveRecord::Base.send(
@@ -338,7 +354,9 @@ module Api
                 @ncont_attribute.original_id
               ]
             )
-            query = query.joins(ncont_attr_join_clause)
+            query = query.
+              joins(ncont_attr_join_clause).
+              group("#{ncont_attr_table}.value")
           end
           query
         end
