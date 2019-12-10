@@ -151,6 +151,26 @@ COMMENT ON FUNCTION public.bucket_index(buckets double precision[], value double
 
 
 --
+-- Name: known_path_positions(integer[]); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.known_path_positions(path integer[]) RETURNS boolean[]
+    LANGUAGE sql IMMUTABLE
+    AS $$
+  SELECT ARRAY_AGG(NOT nodes.is_unknown)::BOOLEAN[]
+  FROM UNNEST(path) WITH ORDINALITY a (node_id, position), nodes
+  WHERE nodes.id = a.node_id
+$$;
+
+
+--
+-- Name: FUNCTION known_path_positions(path integer[]); Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON FUNCTION public.known_path_positions(path integer[]) IS 'Returns array with indexes in path where nodes are known.';
+
+
+--
 -- Name: upsert_attributes(); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -10105,6 +10125,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191202080716'),
 ('20191202083829'),
 ('20191202090700'),
-('20191205213427');
+('20191205213427'),
+('20191209224804');
 
 
