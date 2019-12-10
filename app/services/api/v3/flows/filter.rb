@@ -361,6 +361,7 @@ module Api
         def basic_flows_query
           cont_attr_table = @cont_attribute.flow_values_class.table_name
           query = Api::V3::Flow.
+            from('partitioned_flows flows').
             joins(cont_attr_table.to_sym).
             where(context_id: @context.id).
             where('year >= ? AND year <= ?', @year_start, @year_end).
