@@ -21,29 +21,17 @@ module Api
         def initialize_data
           result = {}
           @flows.each do |flow|
-            active_path = get_active_path(flow)
-            identifier = active_path.dup
-            flow_hash = initialize_flow_hash(active_path, flow, identifier)
-
-            if result[identifier]
-              result[identifier][:quant] += flow['quant_value']
-            else
-              result[identifier] = flow_hash
-            end
+            path = flow.path
+            identifier = flow.path.dup
+            result[identifier] = initialize_flow_hash(flow, identifier)
           end
 
           @data = process_data(result)
         end
 
-        def get_active_path(flow)
-          flow.path.map.with_index do |node_id, i|
-            @active_nodes.key?(node_id) ? node_id : @other_nodes_ids[i]
-          end
-        end
-
-        def initialize_flow_hash(active_path, flow, identifier)
+        def initialize_flow_hash(flow, identifier)
           flow_hash = {
-            path: active_path,
+            path: flow.path,
             quant: flow['quant_value']
           }
 
