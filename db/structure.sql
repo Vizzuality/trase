@@ -5522,6 +5522,18 @@ PARTITION BY LIST (ind_id);
 
 
 --
+-- Name: partitioned_flow_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quals (
+    flow_id integer,
+    qual_id integer,
+    value text
+)
+PARTITION BY LIST (qual_id);
+
+
+--
 -- Name: partitioned_flow_quants; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -9126,6 +9138,13 @@ CREATE UNIQUE INDEX partitioned_flow_inds_ind_id_flow_id_idx ON ONLY public.part
 
 
 --
+-- Name: partitioned_flow_quals_qual_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quals_qual_id_flow_id_idx ON ONLY public.partitioned_flow_quals USING btree (qual_id, flow_id);
+
+
+--
 -- Name: partitioned_flow_quants_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10195,6 +10214,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191209224804'),
 ('20191209224805'),
 ('20191209230015'),
-('20191211221707');
+('20191211221707'),
+('20191211222503');
 
 
