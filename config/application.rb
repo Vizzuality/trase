@@ -31,7 +31,8 @@ module TraseNewApi
     ActiveRecord::SchemaDumper.ignore_tables = [
       'download_flows_*',
       'partitioned_flows_*',
-      'partitioned_flow_quants_*'
+      'partitioned_flow_quants_*',
+      'partitioned_flow_inds_*'
     ]
 
     config.middleware.insert_before 0, Rack::Cors do

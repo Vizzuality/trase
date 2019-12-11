@@ -5510,6 +5510,18 @@ CREATE VIEW public.nodes_with_flows_v AS
 
 
 --
+-- Name: partitioned_flow_inds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_inds (
+    flow_id integer,
+    ind_id integer,
+    value double precision
+)
+PARTITION BY LIST (ind_id);
+
+
+--
 -- Name: partitioned_flow_quants; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -9107,6 +9119,13 @@ CREATE INDEX nodes_with_flows_per_year_id_idx ON public.nodes_with_flows_per_yea
 
 
 --
+-- Name: partitioned_flow_inds_ind_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_inds_ind_id_flow_id_idx ON ONLY public.partitioned_flow_inds USING btree (ind_id, flow_id);
+
+
+--
 -- Name: partitioned_flow_quants_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10175,6 +10194,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191205213427'),
 ('20191209224804'),
 ('20191209224805'),
-('20191209230015');
+('20191209230015'),
+('20191211221707');
 
 
