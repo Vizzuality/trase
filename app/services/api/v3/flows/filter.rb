@@ -332,7 +332,7 @@ module Api
             ncont_attr_join_clause = ActiveRecord::Base.send(
               :sanitize_sql_array,
               [
-                "LEFT JOIN #{ncont_attr_table} ON \
+                "LEFT JOIN partitioned_#{ncont_attr_table} #{ncont_attr_table} ON \
                 #{ncont_attr_table}.flow_id = flows.id \
                 AND #{ncont_attr_table}.#{@ncont_attribute.attribute_id_name} = ?",
                 @ncont_attribute.original_id
