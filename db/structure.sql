@@ -5596,7 +5596,8 @@ CREATE TABLE public.partitioned_flows (
     context_id integer,
     year smallint,
     path integer[],
-    known_path_positions boolean[]
+    known_path_positions boolean[],
+    names text[]
 )
 PARTITION BY LIST (context_id);
 
@@ -10267,6 +10268,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191211221707'),
 ('20191211222503'),
 ('20191212105506'),
+('20191212105507'),
 ('20191212151744');
 
 
