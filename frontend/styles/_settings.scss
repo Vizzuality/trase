@@ -151,7 +151,8 @@ $recolorby-qual-thematic-company-ndpe-commitment: #1D6837;
 $recolorby-qual-thematic-none: #e36845;
 
 $recolorby-qual-thematic-tac: #79ae6d;
-$recolorby-qual-thematic-tac-g-4: #1D6837;
+$recolorby-qual-thematic-g-4: #C2E699;
+$recolorby-qual-thematic-g-4-tac: #1D6837;
 
 
 $recolorby-qual-thematic-fresh-frozen-beef-products: #80cdc1;
@@ -167,6 +168,9 @@ $recolorby-qual-thematic-processed: #7570b3;
 $recolorby-qual-thematic-oil: #f7fcb9;
 $recolorby-qual-thematic-bean: #31a354;
 $recolorby-qual-thematic-cake: #e48716;
+
+$recolorby-qual-thematic-crude-palm-oil: #e48716;
+$recolorby-qual-thematic-refined-palm-oil: #f7fcb9;
 
 
 $recolorby-linear-red-blue-7: #6F0119;
@@ -230,7 +234,8 @@ $recolorby-colors:
         $recolorby-stars-red-blue-4,
         $recolorby-stars-red-blue-5,
         $recolorby-qual-thematic-company-ndpe-commitment,
-        $recolorby-qual-thematic-tac-g-4,
+        $recolorby-qual-thematic-g-4,
+        $recolorby-qual-thematic-g-4-tac,
         $recolorby-qual-thematic-soy-moratorium,
         $recolorby-qual-thematic-tac,
         $recolorby-qual-thematic-company-commitment,
@@ -245,6 +250,8 @@ $recolorby-colors:
         $recolorby-qual-thematic-bean,
         $recolorby-qual-thematic-cake,
         $recolorby-qual-thematic-oil,
+        $recolorby-qual-thematic-crude-palm-oil,
+        $recolorby-qual-thematic-refined-palm-oil,
         $recolorby-linear-red-blue-0,
         $recolorby-linear-red-blue-1,
         $recolorby-linear-red-blue-2,
@@ -303,7 +310,8 @@ $recolorby-colors-names:
         '-recolorby-stars-red-blue-4',
         '-recolorby-stars-red-blue-5',
         '-recolorby-qual-thematic-company-ndpe-commitment',
-        '-recolorby-qual-thematic-tac-g-4',
+        '-recolorby-qual-thematic-g-4',
+        '-recolorby-qual-thematic-g-4-tac',
         '-recolorby-qual-thematic-soy-moratorium',
         '-recolorby-qual-thematic-tac',
         '-recolorby-qual-thematic-company-commitment',
@@ -318,6 +326,8 @@ $recolorby-colors-names:
         '-recolorby-qual-thematic-bean',
         '-recolorby-qual-thematic-cake',
         '-recolorby-qual-thematic-oil',
+        '-recolorby-qual-thematic-crude-palm-oil',
+        '-recolorby-qual-thematic-refined-palm-oil',
         '-recolorby-linear-red-blue-0',
         '-recolorby-linear-red-blue-1',
         '-recolorby-linear-red-blue-2',
