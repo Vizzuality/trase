@@ -30,7 +30,7 @@ ${BIN}/mapshaper tmp/PARAGUAY_BIOME.json -simplify rdp 30% planar keep-shapes -o
 ${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, kab as name, geoid FROM indonesia_kabupaten_boundaries_2016_20190613' > tmp/INDONESIA_KABUPATEN.json
 ${BIN}/mapshaper tmp/INDONESIA_KABUPATEN.json -simplify rdp 30% planar keep-shapes -o public/vector_layers/INDONESIA_KABUPATEN.topo.json format=topojson
 
-${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, prov_name as name, entity_id as geoid FROM ar_provinces_mainland_20191122' > tmp/ARGENTINA_PROVINCE.json
+${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, prov_name as name, trase_id as geoid FROM ar_province_mainland_20191122' > tmp/ARGENTINA_PROVINCE.json
 ${BIN}/mapshaper tmp/ARGENTINA_PROVINCE.json -simplify rdp 30% planar keep-shapes -o public/vector_layers/ARGENTINA_PROVINCE.topo.json format=topojson
 
 ${BIN}/cartodb -u p2cs-sei -f geojson 'SELECT the_geom, dept_name as name, trase_id as geoid FROM ar_departments_20191118' > tmp/ARGENTINA_DEPARTMENT.json
