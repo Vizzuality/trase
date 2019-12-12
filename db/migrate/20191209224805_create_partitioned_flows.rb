@@ -6,7 +6,7 @@ class CreatePartitionedFlows < ActiveRecord::Migration[5.2]
         context_id INT,
         year SMALLINT,
         path INT[],
-        known_path_positions SMALLINT[]
+        known_path_positions BOOLEAN[]
       ) PARTITION BY LIST (context_id);
     SQL
 
