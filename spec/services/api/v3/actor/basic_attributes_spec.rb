@@ -55,7 +55,7 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
 
       expect(
         paraguay_exporter_values[:summary]
-      ).to include('or <span class="notranslate">100%</span> of the soy production municipalities')
+      ).to include('or <span class="notranslate">100%</span> of the soy production departments')
     end
 
     context 'when difference in production from last year' do
