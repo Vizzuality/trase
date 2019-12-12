@@ -151,6 +151,26 @@ COMMENT ON FUNCTION public.bucket_index(buckets double precision[], value double
 
 
 --
+-- Name: known_path_positions(integer[]); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.known_path_positions(path integer[]) RETURNS boolean[]
+    LANGUAGE sql IMMUTABLE
+    AS $$
+  SELECT ARRAY_AGG(NOT nodes.is_unknown)::BOOLEAN[]
+  FROM UNNEST(path) WITH ORDINALITY a (node_id, position), nodes
+  WHERE nodes.id = a.node_id
+$$;
+
+
+--
+-- Name: FUNCTION known_path_positions(path integer[]); Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON FUNCTION public.known_path_positions(path integer[]) IS 'Returns array with indexes in path where nodes are known.';
+
+
+--
 -- Name: upsert_attributes(); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -5490,6 +5510,56 @@ CREATE VIEW public.nodes_with_flows_v AS
 
 
 --
+-- Name: partitioned_flow_inds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_inds (
+    flow_id integer,
+    ind_id integer,
+    value double precision
+)
+PARTITION BY LIST (ind_id);
+
+
+--
+-- Name: partitioned_flow_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quals (
+    flow_id integer,
+    qual_id integer,
+    value text
+)
+PARTITION BY LIST (qual_id);
+
+
+--
+-- Name: partitioned_flow_quants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+)
+PARTITION BY LIST (quant_id);
+
+
+--
+-- Name: partitioned_flows; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[]
+)
+PARTITION BY LIST (context_id);
+
+
+--
 -- Name: profiles_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -9061,6 +9131,41 @@ CREATE INDEX nodes_with_flows_per_year_id_idx ON public.nodes_with_flows_per_yea
 
 
 --
+-- Name: partitioned_flow_inds_ind_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_inds_ind_id_flow_id_idx ON ONLY public.partitioned_flow_inds USING btree (ind_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quals_qual_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quals_qual_id_flow_id_idx ON ONLY public.partitioned_flow_quals USING btree (qual_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_quant_id_flow_id_idx ON ONLY public.partitioned_flow_quants USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flows_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_context_id_id_idx ON ONLY public.partitioned_flows USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_year_idx ON ONLY public.partitioned_flows USING btree (year);
+
+
+--
 -- Name: qual_commodity_properties_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10105,6 +10210,11 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191202080716'),
 ('20191202083829'),
 ('20191202090700'),
-('20191205213427');
+('20191205213427'),
+('20191209224804'),
+('20191209224805'),
+('20191209230015'),
+('20191211221707'),
+('20191211222503');
 
 
