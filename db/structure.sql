@@ -157,7 +157,7 @@ COMMENT ON FUNCTION public.bucket_index(buckets double precision[], value double
 CREATE FUNCTION public.known_path_positions(path integer[]) RETURNS boolean[]
     LANGUAGE sql IMMUTABLE
     AS $$
-  SELECT ARRAY_AGG(NOT nodes.is_unknown)::BOOLEAN[]
+  SELECT ARRAY_AGG(NOT nodes.is_unknown ORDER BY position)::BOOLEAN[]
   FROM UNNEST(path) WITH ORDINALITY a (node_id, position), nodes
   WHERE nodes.id = a.node_id
 $$;
@@ -168,6 +168,26 @@ $$;
 --
 
 COMMENT ON FUNCTION public.known_path_positions(path integer[]) IS 'Returns array with indexes in path where nodes are known.';
+
+
+--
+-- Name: path_names(integer[]); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.path_names(path integer[]) RETURNS text[]
+    LANGUAGE sql IMMUTABLE
+    AS $$
+  SELECT ARRAY_AGG(nodes.name ORDER BY position)::TEXT[]
+  FROM UNNEST(path) WITH ORDINALITY a (node_id, position), nodes
+  WHERE nodes.id = a.node_id
+$$;
+
+
+--
+-- Name: FUNCTION path_names(path integer[]); Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON FUNCTION public.path_names(path integer[]) IS 'Returns array with node names in path.';
 
 
 --
@@ -10246,6 +10266,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191209230015'),
 ('20191211221707'),
 ('20191211222503'),
+('20191212105506'),
 ('20191212151744');
+
 
 
