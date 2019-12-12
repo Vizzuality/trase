@@ -38,7 +38,7 @@ module Api
 
         def initialize_query
           @query = @base_query.select(flat_select_columns).
-            order(:path, :attribute_type, :attribute_id)
+            order(:row_name, 'flows.attribute_type', 'flows.attribute_id')
         end
 
         def flat_select_columns
@@ -69,7 +69,7 @@ module Api
             joins(:node_type).
             order(:column_position)
           context_column_positions = context_node_types.pluck(:column_position)
-          path_column_names = context_column_positions.map { |p| "jsonb_path->'#{p}'->'node'" }
+          path_column_names = context_column_positions.map { |p| "names[#{p + 1}]" }
           @path_column_aliases = context_node_types.
             pluck('node_types.name').
             map { |nt| "\"#{nt}\"" }
