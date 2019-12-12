@@ -256,5 +256,39 @@
       }
     ]
   }
-}
+},
+  {
+    "version": "0.0.1",
+    "name": "argentina_deforestation_2015_2017_20191128",
+    "layergroup": {
+      "version": "1.0.1",
+      "layers": [
+        {
+          "type": "cartodb",
+          "options": {
+            "sql": "SELECT * FROM \"p2cs-sei\".argentina_deforestation_2015_2017_20191128",
+            "cartocss": "#layer { polygon-opacity: 0.8; line-width: 0.2; line-opacity: 1; [year = 2015] { polygon-fill: #f7945d; line-color: #f7945d; } [year = 2016] { polygon-fill: #f86f56; line-color: #f86f56; } [year = 2017] { polygon-fill: #ee4d5a; line-color: #ee4d5a; } }",
+            "cartocss_version": "2.3.0"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "version": "0.0.1",
+    "name": "id_provinces",
+    "layergroup": {
+      "version": "1.0.1",
+      "layers": [
+        {
+          "type": "cartodb",
+          "options": {
+            "sql": "SELECT * FROM indonesia_provinces_boundaries_20190614",
+            "cartocss": "#layer { polygon-opacity: 0; line-color: #000000; line-width: 1; line-opacity: 1; ::outline { line-color: #FFFFFF; line-width: 1; line-opacity: 0.5; } [zoom>4]::labels { text-face-name: 'Open Sans Regular'; text-name: [prov]; text-size: 12; text-allow-overlap: true; text-placement: point; text-fill: #000000; text-character-spacing: 0; [prov='SULAWESI UTARA'] { text-dy: -10; } [prov='BENGKULU'] { text-dy: 10; } [prov='SULAWESI TENGGARA'] { text-dy: 10; } [prov='BANTEN'] { text-dx: -10; } [prov='DKI JAKARTA'] { text-dy: -10; } [prov='JAWA BARAT'] { text-dy: -10; } [prov='JAWA TIMUR'] { text-dx: 10; text-dy: -10; } [prov='NUSA TENGGARA BARAT'] { text-dy: 10; } [prov='NUSA TENGGARA TIMUR'] { text-dx: 5; } } } ",
+            "cartocss_version": "2.3.0"
+          }
+        }
+      ]
+    }
+  }
 ]

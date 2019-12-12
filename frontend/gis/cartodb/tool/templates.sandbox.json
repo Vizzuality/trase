@@ -206,5 +206,89 @@
         }
       ]
     }
+  },
+  {
+    "version": "0.0.1",
+    "name": "ar_provinces_mainland_20191122",
+    "layergroup": {
+      "version": "1.0.1",
+      "layers": [
+        {
+          "type": "cartodb",
+          "options": {
+            "sql": "SELECT * FROM \"p2cs-sei\".ar_provinces_mainland_20191122",
+            "cartocss": "#layer { polygon-opacity: 0; line-color: #000000; line-width: 1; line-opacity: 1; } #layer[zoom > 3]::labels { text-name: [prov_name]; text-face-name: 'Open Sans Regular'; text-size: 10; text-fill: #000000; text-halo-fill: white; text-halo-radius: 1; text-character-spacing: 3; text-placement: point; text-allow-overlap: false; text-wrap-width: 45; }",
+            "cartocss_version": "2.3.0"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "version": "0.0.1",
+    "name": "ar_biomes_20191113",
+    "layergroup": {
+      "version": "1.0.1",
+      "layers": [
+        {
+          "type": "cartodb",
+          "options": {
+            "sql": "SELECT * FROM \"p2cs-sei\".ar_biomes_20191113",
+            "cartocss": "#layer { polygon-opacity: 0; line-color: #000000; line-width: 0.5; line-opacity: 1; } #layer[zoom > 3]::labels { text-name: [biome_name]; text-face-name: 'Open Sans Regular'; text-size: 10; text-fill: #000000; text-allow-overlap: false; text-placement: interior; text-halo-fill: white; text-halo-radius: 0.7; text-character-spacing: 3; } ",
+            "cartocss_version": "2.3.0"
+          }
+        }
+      ]
+    }
+  },{
+  "version": "0.0.1",
+  "name": "argentina_protected_areas_20191117",
+  "layergroup": {
+    "version": "1.0.1",
+    "layers": [
+      {
+        "type": "cartodb",
+        "options": {
+          "sql": "SELECT * FROM \"p2cs-sei\".argentina_protected_areas_20191117",
+          "cartocss": "#layer { polygon-opacity: 0.5; polygon-fill: ramp([type], (#8dd3c7, #ffffb3, #bebada, #fb8072, #80b1d3, #fdb462, #b3de69), (\"National Protected Areas\", \"National Defense Reservers\", \"Ramsar\", \"Natural World Heritage Sites\", \"Provincial Protected Areas\", \"Biosphere Reserves\"), \"=\"); line-color: ramp([type], (#8dd3c7, #ffffb3, #bebada, #fb8072, #80b1d3, #fdb462, #b3de69), (\"National Protected Areas\", \"National Defense Reservers\", \"Ramsar\", \"Natural World Heritage Sites\", \"Provincial Protected Areas\", \"Biosphere Reserves\"), \"=\"); line-width: 1; line-opacity: 1; }",
+          "cartocss_version": "2.3.0"
+        }
+      }
+    ]
+  }
+},
+  {
+    "version": "0.0.1",
+    "name": "argentina_deforestation_2015_2017_20191128",
+    "layergroup": {
+      "version": "1.0.1",
+      "layers": [
+        {
+          "type": "cartodb",
+          "options": {
+            "sql": "SELECT * FROM \"p2cs-sei\".argentina_deforestation_2015_2017_20191128",
+            "cartocss": "#layer { polygon-opacity: 0.8; line-width: 0.2; line-opacity: 1; [year = 2015] { polygon-fill: #f7945d; line-color: #f7945d; } [year = 2016] { polygon-fill: #f86f56; line-color: #f86f56; } [year = 2017] { polygon-fill: #ee4d5a; line-color: #ee4d5a; } }",
+            "cartocss_version": "2.3.0"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "version": "0.0.1",
+    "name": "id_provinces",
+    "layergroup": {
+      "version": "1.0.1",
+      "layers": [
+        {
+          "type": "cartodb",
+          "options": {
+            "sql": "SELECT * FROM indonesia_provinces_boundaries_20190614",
+            "cartocss": "#layer { polygon-opacity: 0; line-color: #000000; line-width: 1; line-opacity: 1; ::outline { line-color: #FFFFFF; line-width: 1; line-opacity: 0.5; } [zoom>4]::labels { text-face-name: 'Open Sans Regular'; text-name: [prov]; text-size: 12; text-allow-overlap: true; text-placement: point; text-fill: #000000; text-character-spacing: 0; [prov='SULAWESI UTARA'] { text-dy: -10; } [prov='BENGKULU'] { text-dy: 10; } [prov='SULAWESI TENGGARA'] { text-dy: 10; } [prov='BANTEN'] { text-dx: -10; } [prov='DKI JAKARTA'] { text-dy: -10; } [prov='JAWA BARAT'] { text-dy: -10; } [prov='JAWA TIMUR'] { text-dx: 10; text-dy: -10; } [prov='NUSA TENGGARA BARAT'] { text-dy: 10; } [prov='NUSA TENGGARA TIMUR'] { text-dx: 5; } } } ",
+            "cartocss_version": "2.3.0"
+          }
+        }
+      ]
+    }
   }
 ]
