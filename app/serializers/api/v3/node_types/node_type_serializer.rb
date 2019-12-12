@@ -10,6 +10,7 @@ module Api
                    :is_default,
                    :is_geo,
                    :is_choropleth_disabled,
+                   :geometry_node_type_id,
                    :profile_type,
                    :filter_to
 

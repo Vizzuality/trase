@@ -1912,6 +1912,7 @@ CREATE TABLE public.context_node_type_properties (
     is_choropleth_disabled boolean DEFAULT false NOT NULL,
     role character varying NOT NULL,
     prefix text NOT NULL,
+    geometry_context_node_type_id integer,
     CONSTRAINT context_node_type_properties_role_check CHECK (((role)::text = ANY (ARRAY[('source'::character varying)::text, ('exporter'::character varying)::text, ('importer'::character varying)::text, ('destination'::character varying)::text])))
 );
 
@@ -1942,6 +1943,27 @@ COMMENT ON COLUMN public.context_node_type_properties.is_geo_column IS 'When set
 --
 
 COMMENT ON COLUMN public.context_node_type_properties.is_choropleth_disabled IS 'When set, do not display the map choropleth';
+
+
+--
+-- Name: COLUMN context_node_type_properties.role; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_node_type_properties.role IS 'A grouping which defines in which filtering panel to display nodes';
+
+
+--
+-- Name: COLUMN context_node_type_properties.prefix; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_node_type_properties.prefix IS 'Used to construct the summary sentence of selection criteria';
+
+
+--
+-- Name: COLUMN context_node_type_properties.geometry_context_node_type_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_node_type_properties.geometry_context_node_type_id IS 'Use for geo columns, when geometry is to be taken from another node type (e.g. logistics hub -> municipality)';
 
 
 --
@@ -9567,6 +9589,14 @@ ALTER TABLE ONLY public.download_versions
 
 
 --
+-- Name: context_node_type_properties fk_rails_40673dee59; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.context_node_type_properties
+    ADD CONSTRAINT fk_rails_40673dee59 FOREIGN KEY (geometry_context_node_type_id) REFERENCES public.context_node_types(id);
+
+
+--
 -- Name: chart_quals fk_rails_48ef39e784; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10215,6 +10245,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191209224805'),
 ('20191209230015'),
 ('20191211221707'),
-('20191211222503');
+('20191211222503'),
+('20191212151744');
 
 
