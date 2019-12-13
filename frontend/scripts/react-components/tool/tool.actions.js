@@ -43,9 +43,9 @@ export function loadMapVectorData() {
       const vectorData = {
         id: geoColumn.id,
         name: geoColumn.name,
-        useGeometryFromColumnId: geoColumn.useGeometryFromColumnId
+        geometryNodeTypeId: geoColumn.geometryNodeTypeId
       };
-      if (geoColumn.useGeometryFromColumnId === undefined) {
+      if (geoColumn.geometryNodeTypeId === null) {
         const selectedContext = getSelectedContext(getState());
         const countryName = selectedContext.countryName;
         const vectorLayerURL = `vector_layers/${countryName}_${geoColumn.name.replace(

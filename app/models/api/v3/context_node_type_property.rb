@@ -2,14 +2,15 @@
 #
 # Table name: context_node_type_properties
 #
-#  id                                                                                      :integer          not null, primary key
-#  context_node_type_id                                                                    :integer          not null
-#  column_group(Zero-based number of sankey column in which to display nodes of this type) :integer          not null
-#  is_default(When set, show this node type as default (only use for one))                 :boolean          default(FALSE), not null
-#  is_geo_column(When set, show nodes on map)                                              :boolean          default(FALSE), not null
-#  is_choropleth_disabled(When set, do not display the map choropleth)                     :boolean          default(FALSE), not null
-#  role                                                                                    :string           not null
-#  prefix                                                                                  :text             not null
+#  id                                                                                                                                           :integer          not null, primary key
+#  context_node_type_id                                                                                                                         :integer          not null
+#  column_group(Zero-based number of sankey column in which to display nodes of this type)                                                      :integer          not null
+#  is_default(When set, show this node type as default (only use for one))                                                                      :boolean          default(FALSE), not null
+#  is_geo_column(When set, show nodes on map)                                                                                                   :boolean          default(FALSE), not null
+#  is_choropleth_disabled(When set, do not display the map choropleth)                                                                          :boolean          default(FALSE), not null
+#  role(A grouping which defines in which filtering panel to display nodes)                                                                     :string           not null
+#  prefix(Used to construct the summary sentence of selection criteria)                                                                         :text             not null
+#  geometry_context_node_type_id(Use for geo columns, when geometry is to be taken from another node type (e.g. logistics hub -> municipality)) :integer
 #
 # Indexes
 #
@@ -19,6 +20,7 @@
 # Foreign Keys
 #
 #  fk_rails_...  (context_node_type_id => context_node_types.id) ON DELETE => cascade
+#  fk_rails_...  (geometry_context_node_type_id => context_node_types.id)
 #
 
 module Api
@@ -40,6 +42,11 @@ module Api
       # TODO: there should be only one default per group
 
       belongs_to :context_node_type
+      belongs_to :geometry_context_node_type, {
+        class_name: 'ContextNodeType',
+        foreign_key: :geometry_context_node_type_id,
+        optional: true
+      }
       has_many :sankey_card_link_node_types
 
       validates :context_node_type, presence: true, uniqueness: true
@@ -49,6 +56,8 @@ module Api
       validates :is_choropleth_disabled, inclusion: {in: [true, false]}
       validates :role, inclusion: ROLES, presence: true
       validates :prefix, presence: true
+      validate :geometry_context_node_type_from_same_context
+      validate :geometry_context_node_type_is_geo_column
 
       after_commit :refresh_dependents
 
@@ -111,6 +120,34 @@ module Api
         2 => 'imported by',
         3 => 'going into'
       }.freeze
+
+      private
+
+      def geometry_context_node_type_from_same_context
+        return true unless geometry_context_node_type && context_node_type
+
+        if geometry_context_node_type.context_id == context_node_type.context_id
+          return true
+        end
+
+        errors.add(
+          :geometry_context_node_type_id,
+          "must be in same context"
+        )
+      end
+
+      def geometry_context_node_type_is_geo_column
+        return true unless geometry_context_node_type
+
+        if geometry_context_node_type.context_node_type_property&.is_geo_column
+          return true
+        end
+
+        errors.add(
+          :geometry_context_node_type_id,
+          "must be a geo column"
+        )
+      end
     end
   end
 end

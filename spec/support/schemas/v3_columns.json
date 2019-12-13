@@ -11,6 +11,10 @@
         "additionalProperties": false,
         "id": "/properties/data/items",
         "properties": {
+          "geometryNodeTypeId": {
+            "id": "/properties/data/items/properties/geometryNodeTypeId",
+            "type": ["integer", "null"]
+          },
           "group": {
             "id": "/properties/data/items/properties/group",
             "type": "integer"
@@ -65,7 +69,8 @@
           "isChoroplethDisabled",
           "isDefault",
           "role",
-          "filterTo"
+          "filterTo",
+          "geometryNodeTypeId"
         ],
         "type": "object"
       },

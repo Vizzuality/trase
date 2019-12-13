@@ -16,6 +16,7 @@ shared_context 'api v3 brazil context node types' do
       FactoryBot.create(
         :api_v3_context_node_type_property,
         context_node_type: cnt,
+        is_geo_column: true,
         column_group: 0,
         role: 'source'
       )
@@ -36,6 +37,7 @@ shared_context 'api v3 brazil context node types' do
       FactoryBot.create(
         :api_v3_context_node_type_property,
         context_node_type: cnt,
+        is_geo_column: true,
         column_group: 0,
         role: 'source'
       )
@@ -57,6 +59,7 @@ shared_context 'api v3 brazil context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 0,
+        is_geo_column: true,
         role: 'source',
         is_default: true
       )
@@ -78,6 +81,7 @@ shared_context 'api v3 brazil context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 0,
+        is_geo_column: true,
         role: 'source'
       )
     end
@@ -98,6 +102,7 @@ shared_context 'api v3 brazil context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 1,
+        is_geo_column: false,
         role: 'exporter'
       )
     end
@@ -118,6 +123,7 @@ shared_context 'api v3 brazil context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 1,
+        is_geo_column: false,
         role: 'exporter'
       )
     end
@@ -138,6 +144,7 @@ shared_context 'api v3 brazil context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 2,
+        is_geo_column: false,
         role: 'importer'
       )
     end
@@ -158,6 +165,7 @@ shared_context 'api v3 brazil context node types' do
         :api_v3_context_node_type_property,
         context_node_type: cnt,
         column_group: 3,
+        is_geo_column: false,
         role: 'destination'
       )
     end
