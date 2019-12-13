@@ -167,16 +167,16 @@ export default class MapComponent {
 
     // create geometry layers for all polygonTypes that have their own geometry
     mapVectorData.forEach(polygonType => {
-      if (polygonType.useGeometryFromColumnId === undefined) {
+      if (polygonType.geometryNodeTypeId === null) {
         this.polygonTypesLayers[polygonType.id] = this._createPolygonTypeLayer(polygonType);
       }
     });
 
     // for polygonTypes that don't have their geometry, link to actual geometry layers
     mapVectorData.forEach(polygonType => {
-      if (polygonType.useGeometryFromColumnId !== undefined) {
+      if (polygonType.geometryNodeTypeId !== null) {
         this.polygonTypesLayers[polygonType.id] = this.polygonTypesLayers[
-          polygonType.useGeometryFromColumnId
+          polygonType.geometryNodeTypeId
         ];
       }
     });
