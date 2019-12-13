@@ -120,6 +120,7 @@ module Api
           [
             Api::V3::Readonly::NodeWithFlows,
             Api::V3::Readonly::NodeWithFlowsOrGeo,
+            Api::V3::Readonly::NodesStats,
             Api::V3::Readonly::ChartAttribute,
             Api::V3::Readonly::DashboardsAttribute,
             Api::V3::Readonly::DownloadAttribute,
