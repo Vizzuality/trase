@@ -8,7 +8,6 @@ import {
   GET_ALL_NODES_URL
 } from 'utils/getURLFromParams';
 import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
-import { getDashboardSelectedYears } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { DASHBOARD_STEPS } from 'constants';
 import {
   setMoreData,
@@ -20,6 +19,7 @@ import {
   setNoData
 } from './nodes-panel.actions';
 import {
+  getNodesPanelDraftContext,
   getCommoditiesPreviousSteps,
   getDestinationsPreviousSteps,
   getExportersPreviousSteps,
@@ -50,7 +50,8 @@ export function* getPanelParams(optionsType, options = {}) {
     exporters: exportersTab || null,
     importers: importersTab || null
   }[optionsType];
-  const [startYear, endYear] = getDashboardSelectedYears(state);
+  const draftContext = getNodesPanelDraftContext(state);
+  const [startYear, endYear] = [draftContext?.defaultYear, draftContext?.defaultYear];
   const activeItemParams = items => items.join() || undefined;
   const params = {
     page,
@@ -105,7 +106,7 @@ export function* getPanelParams(optionsType, options = {}) {
     } else {
       params.importers_ids = activeItemParams(panel[nodesIds]);
     }
-  } else {
+  } else if (startYear && endYear) {
     const currentPanel = state.nodesPanel[optionsType];
     params.order_by = currentPanel.orderBy;
   }
