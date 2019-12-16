@@ -6,6 +6,7 @@
   box-shadow: $box-shadow;
   border-radius: 4px;
   padding: 7px 5px;
+  white-space: nowrap;
 
   .dropdown-selected-item {
     &::after {
@@ -16,5 +17,6 @@
   .dropdown-menu {
     position: absolute;
     top: 100%;
+    left: 5px !important;
   }
 }

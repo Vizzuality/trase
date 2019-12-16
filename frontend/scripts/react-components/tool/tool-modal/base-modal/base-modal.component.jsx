@@ -17,7 +17,11 @@ export default function BaseModal(props) {
         </Heading>
         <GridList
           items={items}
-          height={items.length > COLUMN_COUNT ? (items.length / COLUMN_COUNT) * 60 : 60}
+          height={
+            items.length > COLUMN_COUNT
+              ? Math.min(200, (items.length % COLUMN_COUNT) * 50 + 50)
+              : 50
+          }
           width={750}
           rowHeight={50}
           columnWidth={240}
