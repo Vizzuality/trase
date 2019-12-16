@@ -73,12 +73,12 @@ export const CHOROPLETH_COLORS = {
   bluered8: [
     '#246AB6',
     '#5488C0',
+    '#79A8D0',
     '#9FCAE1',
-    '#E5F5F9',
-    '#FFFECC',
-    '#FFE6A4',
-    '#FFA16F',
-    '#E54935'
+    '#FDAE61',
+    '#D72F27',
+    '#a50026',
+    '#6F0119'
   ],
   redblue: ['#E54935', '#FFBD78', '#FFFECC', '#C2DFED', '#79A8D0'],
   greenred: ['#70C67A', '#B0DE82', '#FFFECC', '#FFBD78', '#E54935'],
