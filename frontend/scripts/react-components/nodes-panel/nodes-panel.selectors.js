@@ -4,6 +4,8 @@ import modules from 'react-components/nodes-panel/nodes-panel.modules';
 import { DASHBOARD_STEPS } from 'constants';
 import { getSelectedContext } from 'reducers/app.selectors';
 
+const getAppContexts = state => state.app.contexts;
+
 const getCountrySelectedNodeId = state => state.nodesPanel.countries.selectedNodeId;
 const getSourcesSelectedNodesIds = state => state.nodesPanel.sources.selectedNodesIds;
 const getCommoditySelectedNodeId = state => state.nodesPanel.commodities.selectedNodeId;
@@ -283,6 +285,18 @@ const getImportersNodeTypeId = createSelector(
 export const getPanelsActiveNodeTypeIds = createSelector(
   [getSourcesNodeTypeId, getExportersNodeTypeId, getImportersNodeTypeId],
   (source, exporter, importer) => ({ source, exporter, importer })
+);
+
+export const getNodesPanelDraftContext = createSelector(
+  [getCountryDraftSelectedNodeId, getCommodityDraftSelectedNodeId, getAppContexts],
+  (countryDraftSelectedNodeId, commodityDraftSelectedNodeId, contexts) => {
+    const context = contexts.find(
+      ctx =>
+        ctx.countryId === countryDraftSelectedNodeId &&
+        ctx.commodityId === commodityDraftSelectedNodeId
+    );
+    return context || null;
+  }
 );
 
 export const makeGetNodesPanelsProps = name => {
