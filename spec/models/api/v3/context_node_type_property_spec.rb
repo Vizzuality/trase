@@ -20,6 +20,30 @@ RSpec.describe Api::V3::ContextNodeTypeProperty, type: :model do
         :api_v3_context_node_type_property, role: :exporter, prefix: nil
       )
     }
+    let(:context_node_type_from_another_context) {
+      cnt = FactoryBot.create(:api_v3_context_node_type)
+      FactoryBot.create(
+        :api_v3_context_node_type_property,
+        context_node_type: cnt,
+        is_geo_column: true
+      )
+      cnt
+    }
+
+    let(:property_with_invalid_geometry_context_node_type_1) {
+      FactoryBot.build(
+        :api_v3_context_node_type_property,
+        context_node_type: api_v3_logistics_hub_context_node,
+        geometry_context_node_type: context_node_type_from_another_context
+      )
+    }
+    let(:property_with_invalid_geometry_context_node_type_2) {
+      FactoryBot.build(
+        :api_v3_context_node_type_property,
+        context_node_type: api_v3_biome_context_node,
+        geometry_context_node_type: api_v3_exporter1_context_node
+      )
+    }
     it 'fails when context node type missing' do
       expect(property_without_context_node_type).to have(2).
         errors_on(:context_node_type)
@@ -30,6 +54,14 @@ RSpec.describe Api::V3::ContextNodeTypeProperty, type: :model do
     it 'fails when prefix missing' do
       expect(property_without_prefix).to have(1).
         errors_on(:prefix)
+    end
+    it 'fails when geometry_context_node_type from different context' do
+      expect(property_with_invalid_geometry_context_node_type_1).to have(1).
+        errors_on(:geometry_context_node_type_id)
+    end
+    it 'fails when geometry_context_node_type not geo column' do
+      expect(property_with_invalid_geometry_context_node_type_2).to have(1).
+        errors_on(:geometry_context_node_type_id)
     end
   end
 

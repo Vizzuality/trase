@@ -40,6 +40,68 @@ tables:
         comment: Reference to ind
       - name: tooltip_text
         comment: Context-specific tooltips are the most specific tooltips that can be defined; in absence of a context-specific tooltip, a country-specific tooltip will be used (if any).
+  - name: dashboards_commodities
+    comment: 'Materialized table used for listing commodities in tool search panels'
+    columns:
+      - name: id
+        comment: id of commodity (not unique)
+      - name: country_id
+        comment: id of country, from which this commodity is sourced
+      - name: node_id
+        comment: id of node, through which this commodity is sourced from this country
+  - name: dashboards_countries
+    comment: 'Materialized table used for listing countries in tool search panels'
+    columns:
+      - name: id
+        comment: id of sourcing country (not unique)
+      - name: commodity_id
+        comment: id of commodity sourced from this country
+      - name: node_id
+        comment: id of node, through which this commodity is sourced from this country
+  - name: dashboards_sources
+    comment: 'Materialized table used for listing sources in tool search panels'
+    columns:
+      - name: id
+        comment: id of source node (not unique)
+      - name: commodity_id
+        comment: id of commodity coming from this node
+      - name: country_id
+        comment: id of country sourcing commodity coming from this node
+      - name: nodes_ids
+        comment: array of ids of other nodes from the same supply chain
+  - name: dashboards_exporters
+    comment: 'Materialized table used for listing exporters in tool search panels'
+    columns:
+      - name: id
+        comment: id of exporter node (not unique)
+      - name: commodity_id
+        comment: id of commodity traded by this node
+      - name: country_id
+        comment: id of country sourcing commodity traded by this node
+      - name: nodes_ids
+        comment: array of ids of other nodes from the same supply chain
+  - name: dashboards_importers
+    comment: 'Materialized table used for listing importers in tool search panels'
+    columns:
+      - name: id
+        comment: id of importer node (not unique)
+      - name: commodity_id
+        comment: id of commodity traded by this node
+      - name: country_id
+        comment: id of country sourcing commodity traded by this node
+      - name: nodes_ids
+        comment: array of ids of other nodes from the same supply chain
+  - name: dashboards_destinations
+    comment: 'Materialized table used for listing destinations in tool search panels'
+    columns:
+      - name: id
+        comment: id of destination node (not unique)
+      - name: commodity_id
+        comment: id of commodity going to this node
+      - name: country_id
+        comment: id of country sourcing commodity going to this node
+      - name: nodes_ids
+        comment: array of ids of other nodes from the same supply chain
   - name: quant_context_properties
     comment: Context specific properties for quant (like tooltip text)
     columns:
@@ -158,6 +220,12 @@ tables:
         comment: When set, show nodes on map
       - name: is_choropleth_disabled
         comment: When set, do not display the map choropleth
+      - name: geometry_context_node_type_id
+        comment: Use for geo columns, when geometry is to be taken from another node type (e.g. logistics hub -> municipality)
+      - name: role
+        comment: A grouping which defines in which filtering panel to display nodes
+      - name: prefix
+        comment: Used to construct the summary sentence of selection criteria
   - name: contexts
     comment: Country-commodity combinations.
     columns:
@@ -263,6 +331,19 @@ tables:
     columns:
       - name: value
         comment: Numeric value
+  - name: flow_nodes
+    comment: Normalised flows, a readonly table populated during data upload.
+    columns:
+      - name: flow_id
+        comment: id from flows
+      - name: node_id
+        comment: id from path at position
+      - name: context_id
+        comment: from flows
+      - name: position
+        comment: 0-indexed
+      - name: year
+        comment: from flows
   - name: flow_quals
     comment: Values of quals for flow
     columns:
@@ -498,7 +579,7 @@ tables:
       - name: report
         comment: JSON structure with validation report
   - name: attributes
-    comment: Merges inds, quals and quants.
+    comment: Merges inds, quals and quants. Readonly table.
     columns:
       - name: id
         comment: Id is fixed between data updates, unless name changes
@@ -572,7 +653,7 @@ materialized_views:
       - name: quant_id
         comment: Reference to quant
       - name: qual_id
-        comment: Reference to qual 
+        comment: Reference to qual
       - name: context_id
         comment: Reference to context
       - name: tooltip_text
@@ -585,7 +666,7 @@ materialized_views:
       - name: quant_id
         comment: Reference to quant
       - name: qual_id
-        comment: Reference to qual 
+        comment: Reference to qual
       - name: commodity_id
         comment: Reference to commodity
       - name: tooltip_text
@@ -598,59 +679,8 @@ materialized_views:
       - name: quant_id
         comment: Reference to quant
       - name: qual_id
-        comment: Reference to qual 
+        comment: Reference to qual
       - name: country_id
         comment: Reference to country
       - name: tooltip_text
         comment: Tooltip text
-  - name: dashboards_commodities_mv
-    comment: 'Materialized view used for listing commodities in tool search panels'
-    columns:
-      - name: id
-        comment: id of commodity (not unique)
-      - name: country_id
-        comment: id of country, from which this commodity is sourced
-      - name: node_id
-        comment: id of node, through which this commodity is sourced from this country
-  - name: dashboards_countries_mv
-    comment: 'Materialized view used for listing countries in tool search panels'
-    columns:
-      - name: id
-        comment: id of sourcing country (not unique)
-      - name: commodity_id
-        comment: id of commodity sourced from this country
-      - name: node_id
-        comment: id of node, through which this commodity is sourced from this country
-  - name: dashboards_sources_mv
-    comment: 'Materialized view used for listing sources in tool search panels'
-    columns:
-      - name: id
-        comment: id of source node (not unique)
-      - name: commodity_id
-        comment: id of commodity coming from this node
-      - name: country_id
-        comment: id of country sourcing commodity coming from this node
-      - name: node_id
-        comment: id of another node from the same supply chain
-  - name: dashboards_companies_mv
-    comment: 'Materialized view used for listing companies in tool search panels'
-    columns:
-      - name: id
-        comment: id of company node (not unique)
-      - name: commodity_id
-        comment: id of commodity traded by this node
-      - name: country_id
-        comment: id of country sourcing commodity traded by this node
-      - name: node_id
-        comment: id of another node from the same supply chain
-  - name: dashboards_destinations_mv
-    comment: 'Materialized view used for listing destinations in tool search panels'
-    columns:
-      - name: id
-        comment: id of destination node (not unique)
-      - name: commodity_id
-        comment: id of commodity going to this node
-      - name: country_id
-        comment: id of country sourcing commodity going to this node
-      - name: node_id
-        comment: id of another node from the same supply chain

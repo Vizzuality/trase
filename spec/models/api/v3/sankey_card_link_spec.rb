@@ -14,7 +14,6 @@ RSpec.describe Api::V3::SankeyCardLink, type: :model do
   include_context 'api v3 paraguay context node types'
 
   before do
-    Api::V3::Readonly::Node.refresh(sync: true)
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
   end
 

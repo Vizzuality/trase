@@ -28,7 +28,7 @@ export function* getLinkedGeoIds() {
   const selectedContext = yield select(getSelectedContext);
   const selectedGeoColumn = yield select(getSelectedGeoColumn);
   const selectedNonGeoNodeIds = selectedNodesIds.filter(
-    nodeId => nodes && nodes[nodeId] && !nodes[nodeId].geoId
+    nodeId => nodes && nodes[nodeId] && (nodes[nodeId].type === 'COUNTRY' || !nodes[nodeId].geoId)
   );
 
   // when selection only contains geo nodes (non geo-nodes === 0)

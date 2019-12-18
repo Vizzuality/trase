@@ -4,7 +4,8 @@ RSpec.describe Api::V3::Nodes::Filter do
   include_context 'api v3 brazil flows quants'
 
   before(:each) do
-    Api::V3::Readonly::SankeyNode.refresh(sync: true)
+    Api::V3::Readonly::FlowNode.refresh(sync: true)
+    Api::V3::Readonly::NodeWithFlowsOrGeo.refresh(sync: true)
   end
 
   context 'when no params' do

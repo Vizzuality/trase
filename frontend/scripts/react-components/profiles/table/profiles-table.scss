@@ -114,7 +114,13 @@
           min-width: 70px;
 
           > .unit {
-            color: rgba($charcoal-grey, .6);
+            color: $charcoal-grey;
+
+            &::after {
+              margin: 0 0 0 8px;
+              color: rgba($charcoal-grey, .6);
+              content: attr(data-unit);
+            }
           }
         }
       }

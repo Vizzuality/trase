@@ -128,8 +128,15 @@ $recolorby-qual-thematic-mata-atlantica: #8c28ff;
 $recolorby-qual-thematic-caatinga: #ff66e5;
 $recolorby-qual-thematic-pampa: #72ea28;
 $recolorby-qual-thematic-pantanal: #ffb314;
+
 $recolorby-qual-thematic-chaco-seco: #ffb314;
 $recolorby-qual-thematic-chaco-humedo: #43f3f3;
+
+$recolorby-qual-thematic-delta-e-islas-del-parana: #1b9e77;
+$recolorby-qual-thematic-espinal: #517fee;
+$recolorby-qual-thematic-esteros-del-ibera: #8c28ff;
+$recolorby-qual-thematic-monte-de-llanuras-y-mesetas: #ff66e5;
+$recolorby-qual-thematic-yungas: #e36845;
 
 $recolorby-stars-red-blue-0: #6F0119;
 $recolorby-stars-red-blue-1: #a50026;
@@ -144,7 +151,8 @@ $recolorby-qual-thematic-company-ndpe-commitment: #1D6837;
 $recolorby-qual-thematic-none: #e36845;
 
 $recolorby-qual-thematic-tac: #79ae6d;
-$recolorby-qual-thematic-tac-g-4: #1D6837;
+$recolorby-qual-thematic-g-4: #C2E699;
+$recolorby-qual-thematic-g-4-tac: #1D6837;
 
 
 $recolorby-qual-thematic-fresh-frozen-beef-products: #80cdc1;
@@ -155,6 +163,14 @@ $recolorby-qual-thematic-processed-beef-products: #7570b3;
 $recolorby-qual-thematic-green: #31a354;
 $recolorby-qual-thematic-roasted: #a6611a;
 $recolorby-qual-thematic-processed: #7570b3;
+
+
+$recolorby-qual-thematic-oil: #f7fcb9;
+$recolorby-qual-thematic-bean: #31a354;
+$recolorby-qual-thematic-cake: #e48716;
+
+$recolorby-qual-thematic-crude-palm-oil: #e48716;
+$recolorby-qual-thematic-refined-palm-oil: #f7fcb9;
 
 
 $recolorby-linear-red-blue-7: #6F0119;
@@ -206,6 +222,11 @@ $recolorby-colors:
         $recolorby-qual-thematic-chaco-humedo,
         $recolorby-qual-thematic-pampa,
         $recolorby-qual-thematic-caatinga,
+        $recolorby-qual-thematic-delta-e-islas-del-parana,
+        $recolorby-qual-thematic-espinal,
+        $recolorby-qual-thematic-esteros-del-ibera,
+        $recolorby-qual-thematic-monte-de-llanuras-y-mesetas,
+        $recolorby-qual-thematic-yungas,
         $recolorby-stars-red-blue-0,
         $recolorby-stars-red-blue-1,
         $recolorby-stars-red-blue-2,
@@ -213,7 +234,8 @@ $recolorby-colors:
         $recolorby-stars-red-blue-4,
         $recolorby-stars-red-blue-5,
         $recolorby-qual-thematic-company-ndpe-commitment,
-        $recolorby-qual-thematic-tac-g-4,
+        $recolorby-qual-thematic-g-4,
+        $recolorby-qual-thematic-g-4-tac,
         $recolorby-qual-thematic-soy-moratorium,
         $recolorby-qual-thematic-tac,
         $recolorby-qual-thematic-company-commitment,
@@ -225,6 +247,11 @@ $recolorby-colors:
         $recolorby-qual-thematic-green,
         $recolorby-qual-thematic-roasted,
         $recolorby-qual-thematic-processed,
+        $recolorby-qual-thematic-bean,
+        $recolorby-qual-thematic-cake,
+        $recolorby-qual-thematic-oil,
+        $recolorby-qual-thematic-crude-palm-oil,
+        $recolorby-qual-thematic-refined-palm-oil,
         $recolorby-linear-red-blue-0,
         $recolorby-linear-red-blue-1,
         $recolorby-linear-red-blue-2,
@@ -271,6 +298,11 @@ $recolorby-colors-names:
         '-recolorby-qual-thematic-chaco-humedo',
         '-recolorby-qual-thematic-pampa',
         '-recolorby-qual-thematic-caatinga',
+        '-recolorby-qual-thematic-delta-e-islas-del-parana',
+        '-recolorby-qual-thematic-espinal',
+        '-recolorby-qual-thematic-esteros-del-ibera',
+        '-recolorby-qual-thematic-monte-de-llanuras-y-mesetas',
+        '-recolorby-qual-thematic-yungas',
         '-recolorby-stars-red-blue-0',
         '-recolorby-stars-red-blue-1',
         '-recolorby-stars-red-blue-2',
@@ -278,7 +310,8 @@ $recolorby-colors-names:
         '-recolorby-stars-red-blue-4',
         '-recolorby-stars-red-blue-5',
         '-recolorby-qual-thematic-company-ndpe-commitment',
-        '-recolorby-qual-thematic-tac-g-4',
+        '-recolorby-qual-thematic-g-4',
+        '-recolorby-qual-thematic-g-4-tac',
         '-recolorby-qual-thematic-soy-moratorium',
         '-recolorby-qual-thematic-tac',
         '-recolorby-qual-thematic-company-commitment',
@@ -290,6 +323,11 @@ $recolorby-colors-names:
         '-recolorby-qual-thematic-green',
         '-recolorby-qual-thematic-roasted',
         '-recolorby-qual-thematic-processed',
+        '-recolorby-qual-thematic-bean',
+        '-recolorby-qual-thematic-cake',
+        '-recolorby-qual-thematic-oil',
+        '-recolorby-qual-thematic-crude-palm-oil',
+        '-recolorby-qual-thematic-refined-palm-oil',
         '-recolorby-linear-red-blue-0',
         '-recolorby-linear-red-blue-1',
         '-recolorby-linear-red-blue-2',

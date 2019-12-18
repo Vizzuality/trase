@@ -22,7 +22,7 @@ module Api
         private
 
         def initialize_query
-          @query = Api::V3::Readonly::SankeyNode.
+          @query = Api::V3::Readonly::NodeWithFlowsOrGeo.
             select([
               :id,
               :main_id,
@@ -32,12 +32,11 @@ module Api
               :is_unknown,
               :node_type_id,
               :node_type,
-              :profile_type,
+              :profile,
               :has_flows,
               :is_aggregated
             ]).
-            where(context_id: @context.id).
-            where('has_flows OR source_country_iso2 = ?', @context.country.iso2)
+            where(context_id: @context.id)
         end
 
         def apply_node_type_filter

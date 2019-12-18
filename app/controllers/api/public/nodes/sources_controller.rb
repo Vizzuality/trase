@@ -2,7 +2,11 @@ module Api
   module Public
     module Nodes
       class SourcesController < ApiController
+        include PaginationHeaders
+        include PaginatedCollection
         include Nodes
+
+        skip_before_action :load_context
 
         private
 

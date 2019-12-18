@@ -85,10 +85,7 @@ export function* fetchDataOnTabsFetch() {
             yield fork(getProfilesData, key, activeTab);
           }
         }
-      } else if (
-        !profileSelector.data[key][activeTab] ||
-        profileSelector.data[key][activeTab].length === 0
-      ) {
+      } else {
         yield fork(getProfilesData, key, activeTab);
       }
     }

@@ -12,6 +12,9 @@ RSpec.describe Api::V3::Dashboards::ImportersController, type: :controller do
     Api::V3::Readonly::NodesPerContextRankedByVolumePerYear.refresh(
       sync: true, skip_dependencies: true, skip_dependents: true
     )
+    Api::V3::Readonly::NodeWithFlowsPerYear.refresh(
+      sync: true, skip_dependencies: true, skip_dependents: true
+    )
     Api::V3::Readonly::Dashboards::Importer.refresh(sync: true, skip_dependencies: true)
   end
 

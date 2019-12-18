@@ -21,8 +21,11 @@ module Api
             (params[:importers_ids] || []) +
             (params[:destinations_ids] || [])
           @node_types_ids = params[:node_types_ids] || []
+          @start_year = params.delete(:start_year)
+          @end_year = params.delete(:end_year)
           @profile_only = params.delete(:profile_only) || false
           @self_ids ||= []
+          initialize_contexts
           initialize_query
           apply_filters
         end
@@ -32,6 +35,16 @@ module Api
         end
 
         private
+
+        def initialize_contexts
+          @contexts = Api::V3::Context.all
+          if @commodities_ids.any?
+            @contexts = @contexts.where(commodity_id: @commodities_ids)
+          end
+          return unless @countries_ids.any?
+
+          @contexts = @contexts.where(country_id: @countries_ids)
+        end
 
         # @abstract
         # @return [ActiveRecord::Relation]
@@ -48,6 +61,7 @@ module Api
           filter_by_node_types
           filter_by_profile_only
           filter_by_self
+          filter_by_year
         end
 
         def adjust_node_filters
@@ -97,6 +111,11 @@ module Api
           return unless @self_ids.any?
 
           @query = @query.where(id: @self_ids)
+        end
+
+        def filter_by_year
+          @query = @query.where('year >= ?', @start_year) if @start_year
+          @query = @query.where('year <= ?', @end_year) if @end_year
         end
       end
     end

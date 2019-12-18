@@ -37,10 +37,14 @@ const toolLayersReducer = {
     }
     return state;
   },
-  [SET_CONTEXT]() {
-    return toolLayersInitialState;
+  [SET_CONTEXT](state) {
+    return immer(state, draft => {
+      Object.assign(draft, toolLayersInitialState, {
+        toolLayout: state.toolLayout,
+        sankeySize: state.sankeySize
+      });
+    });
   },
-
   [SET_NODE_ATTRIBUTES](state) {
     return immer(state, draft => {
       draft.mapLoading = false;

@@ -38,7 +38,7 @@ gem 'ckeditor', '4.3.0'
 gem 'paperclip', '~> 6.1.0'
 gem 'aws-sdk-s3', '~> 1'
 
-gem 'rack-cors', '~> 1.0'
+gem 'rack-cors', '~> 1.1'
 gem 'twitter', '~> 6.1'
 
 gem 'appsignal'
@@ -63,7 +63,7 @@ end
 group :development do
   gem 'annotate'
 
-  gem 'listen', '~> 3.2.0'
+  gem 'listen', '~> 3.2.1'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
@@ -75,7 +75,7 @@ group :development do
   gem 'capistrano-passenger'
   gem 'capistrano-nvm'
 
-  gem 'rubocop', '~> 0.76.0', require: false
+  gem 'rubocop', '~> 0.77.0', require: false
   gem 'rubocop-performance', require: false
   gem 'rbnacl', '>= 3.2', '< 5.0'
   gem 'rbnacl-libsodium'

@@ -1,32 +1,33 @@
 # == Schema Information
 #
-# Table name: nodes_mv
+# Table name: nodes_with_flows
 #
-#  id              :integer          primary key
+#  id              :integer          not null, primary key
+#  context_id      :integer          not null
 #  main_id         :integer
-#  context_id      :integer
 #  column_position :integer
 #  is_subnational  :boolean
 #  name            :text
-#  name_tsvector   :tsvector
 #  node_type       :text
 #  profile         :text
 #  geo_id          :text
-#  role            :string
+#  role            :text
+#  name_tsvector   :tsvector
 #  years           :integer          is an Array
 #
 # Indexes
 #
-#  nodes_mv_context_id_id_idx  (context_id,id) UNIQUE
-#  nodes_mv_context_id_idx     (context_id)
-#  nodes_mv_name_tsvector_idx  (name_tsvector) USING gin
+#  nodes_with_flows_context_id_idx     (context_id)
+#  nodes_with_flows_name_tsvector_idx  (name_tsvector)
 #
 
 module Api
   module V3
     module Readonly
-      class Node < Api::Readonly::BaseModel
-        self.table_name = 'nodes_mv'
+      class NodeWithFlows < Api::Readonly::BaseModel
+        include Api::V3::Readonly::MaterialisedTable
+
+        self.table_name = 'nodes_with_flows'
         belongs_to :context
 
         include PgSearch::Model
@@ -46,6 +47,11 @@ module Api
             )
           }
         }
+
+        INDEXES = [
+          {columns: :context_id},
+          {columns: :name_tsvector, using: :gin}
+        ].freeze
 
         def self.select_options
           select(:id, :name, :node_type).order(:name).map do |node|

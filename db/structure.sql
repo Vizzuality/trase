@@ -151,6 +151,26 @@ COMMENT ON FUNCTION public.bucket_index(buckets double precision[], value double
 
 
 --
+-- Name: known_path_positions(integer[]); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.known_path_positions(path integer[]) RETURNS boolean[]
+    LANGUAGE sql IMMUTABLE
+    AS $$
+  SELECT ARRAY_AGG(NOT nodes.is_unknown)::BOOLEAN[]
+  FROM UNNEST(path) WITH ORDINALITY a (node_id, position), nodes
+  WHERE nodes.id = a.node_id
+$$;
+
+
+--
+-- Name: FUNCTION known_path_positions(path integer[]); Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON FUNCTION public.known_path_positions(path integer[]) IS 'Returns array with indexes in path where nodes are known.';
+
+
+--
 -- Name: upsert_attributes(); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -573,7 +593,7 @@ CREATE TABLE public.attributes (
 -- Name: TABLE attributes; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.attributes IS 'Merges inds, quals and quants.';
+COMMENT ON TABLE public.attributes IS 'Merges inds, quals and quants. Readonly table.';
 
 
 --
@@ -1892,6 +1912,7 @@ CREATE TABLE public.context_node_type_properties (
     is_choropleth_disabled boolean DEFAULT false NOT NULL,
     role character varying NOT NULL,
     prefix text NOT NULL,
+    geometry_context_node_type_id integer,
     CONSTRAINT context_node_type_properties_role_check CHECK (((role)::text = ANY (ARRAY[('source'::character varying)::text, ('exporter'::character varying)::text, ('importer'::character varying)::text, ('destination'::character varying)::text])))
 );
 
@@ -1922,6 +1943,27 @@ COMMENT ON COLUMN public.context_node_type_properties.is_geo_column IS 'When set
 --
 
 COMMENT ON COLUMN public.context_node_type_properties.is_choropleth_disabled IS 'When set, do not display the map choropleth';
+
+
+--
+-- Name: COLUMN context_node_type_properties.role; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_node_type_properties.role IS 'A grouping which defines in which filtering panel to display nodes';
+
+
+--
+-- Name: COLUMN context_node_type_properties.prefix; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_node_type_properties.prefix IS 'Used to construct the summary sentence of selection criteria';
+
+
+--
+-- Name: COLUMN context_node_type_properties.geometry_context_node_type_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_node_type_properties.geometry_context_node_type_id IS 'Use for geo columns, when geometry is to be taken from another node type (e.g. logistics hub -> municipality)';
 
 
 --
@@ -3088,6 +3130,137 @@ COMMENT ON COLUMN public.dashboards_attributes_mv.attribute_id IS 'References th
 
 
 --
+-- Name: dashboards_commodities; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.dashboards_commodities (
+    id integer NOT NULL,
+    country_id integer NOT NULL,
+    node_id integer NOT NULL,
+    year smallint NOT NULL,
+    name text,
+    name_tsvector tsvector,
+    profile text
+);
+
+
+--
+-- Name: TABLE dashboards_commodities; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.dashboards_commodities IS 'Materialized table used for listing commodities in tool search panels';
+
+
+--
+-- Name: COLUMN dashboards_commodities.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_commodities.id IS 'id of commodity (not unique)';
+
+
+--
+-- Name: COLUMN dashboards_commodities.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_commodities.country_id IS 'id of country, from which this commodity is sourced';
+
+
+--
+-- Name: COLUMN dashboards_commodities.node_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_commodities.node_id IS 'id of node, through which this commodity is sourced from this country';
+
+
+--
+-- Name: nodes_with_flows_per_year; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.nodes_with_flows_per_year (
+    id integer NOT NULL,
+    context_id integer NOT NULL,
+    country_id integer,
+    commodity_id integer,
+    node_type_id integer,
+    context_node_type_id integer,
+    main_id integer,
+    column_position smallint,
+    year smallint NOT NULL,
+    is_unknown boolean,
+    nodes_ids integer[],
+    name text,
+    name_tsvector tsvector,
+    node_type text,
+    geo_id text
+);
+
+
+--
+-- Name: dashboards_commodities_v; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.dashboards_commodities_v AS
+ SELECT DISTINCT nodes.commodity_id AS id,
+    nodes.country_id,
+    nodes.id AS node_id,
+    nodes.year,
+    btrim(commodities.name) AS name,
+    to_tsvector('simple'::regconfig, COALESCE(btrim(commodities.name), ''::text)) AS name_tsvector,
+    profiles.name AS profile
+   FROM ((public.nodes_with_flows_per_year nodes
+     JOIN public.commodities ON ((commodities.id = nodes.commodity_id)))
+     LEFT JOIN public.profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))
+  WHERE (NOT nodes.is_unknown);
+
+
+--
+-- Name: dashboards_companies; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.dashboards_companies (
+    id integer NOT NULL,
+    node_type_id integer,
+    context_id integer,
+    country_id integer NOT NULL,
+    commodity_id integer NOT NULL,
+    nodes_ids integer[],
+    year smallint NOT NULL,
+    name text,
+    name_tsvector tsvector,
+    node_type text,
+    profile text,
+    rank_by_year jsonb
+);
+
+
+--
+-- Name: flow_quants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.flow_quants (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE flow_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.flow_quants IS 'Values of quants for flow';
+
+
+--
+-- Name: COLUMN flow_quants.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_quants.value IS 'Numeric value';
+
+
+--
 -- Name: flows; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3123,78 +3296,6 @@ COMMENT ON COLUMN public.flows.path IS 'Array of node ids which constitute the s
 
 
 --
--- Name: flow_nodes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.flow_nodes_mv AS
- SELECT flows.context_id,
-    flows.id AS flow_id,
-    flows.year,
-    a."position",
-    a.node_id
-   FROM public.flows,
-    LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")
-  WITH NO DATA;
-
-
---
--- Name: dashboards_commodities_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.dashboards_commodities_mv AS
- SELECT fp.commodity_id AS id,
-    fp.country_id,
-    fp.node_id,
-    btrim(commodities.name) AS name,
-    to_tsvector('simple'::regconfig, COALESCE(btrim(commodities.name), ''::text)) AS name_tsvector,
-    fp.profile
-   FROM (( SELECT contexts.commodity_id,
-            contexts.country_id,
-            flow_nodes.node_id,
-            profiles.name AS profile
-           FROM ((((( SELECT DISTINCT flow_nodes_mv.context_id,
-                    flow_nodes_mv.node_id,
-                    flow_nodes_mv."position"
-                   FROM public.flow_nodes_mv) flow_nodes
-             JOIN public.contexts ON ((contexts.id = flow_nodes.context_id)))
-             JOIN public.context_node_types cnt ON (((cnt.context_id = flow_nodes.context_id) AND (cnt.context_id = contexts.id) AND ((cnt.column_position + 1) = flow_nodes."position"))))
-             JOIN public.context_node_type_properties cnt_props ON ((cnt_props.context_node_type_id = cnt.id)))
-             LEFT JOIN public.profiles ON ((cnt.id = profiles.context_node_type_id)))
-          WHERE (cnt_props.role IS NOT NULL)
-          GROUP BY contexts.commodity_id, contexts.country_id, flow_nodes.node_id, profiles.name) fp
-     JOIN public.commodities ON ((commodities.id = fp.commodity_id)))
-  WITH NO DATA;
-
-
---
--- Name: MATERIALIZED VIEW dashboards_commodities_mv; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON MATERIALIZED VIEW public.dashboards_commodities_mv IS 'Materialized view used for listing commodities in tool search panels';
-
-
---
--- Name: COLUMN dashboards_commodities_mv.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_commodities_mv.id IS 'id of commodity (not unique)';
-
-
---
--- Name: COLUMN dashboards_commodities_mv.country_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_commodities_mv.country_id IS 'id of country, from which this commodity is sourced';
-
-
---
--- Name: COLUMN dashboards_commodities_mv.node_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_commodities_mv.node_id IS 'id of node, through which this commodity is sourced from this country';
-
-
---
 -- Name: node_properties; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3212,238 +3313,6 @@ CREATE TABLE public.node_properties (
 --
 
 COMMENT ON COLUMN public.node_properties.is_domestic_consumption IS 'When set, assume domestic trade';
-
-
---
--- Name: nodes; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.nodes (
-    id integer NOT NULL,
-    node_type_id integer NOT NULL,
-    name text NOT NULL,
-    geo_id text,
-    is_unknown boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    main_id integer
-);
-
-
---
--- Name: TABLE nodes; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.nodes IS 'Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains';
-
-
---
--- Name: COLUMN nodes.name; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.nodes.name IS 'Name of node';
-
-
---
--- Name: COLUMN nodes.geo_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.nodes.geo_id IS '2-letter iso code in case of country nodes; other geo identifiers possible for other node types';
-
-
---
--- Name: COLUMN nodes.is_unknown; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.nodes.is_unknown IS 'When set, node was not possible to identify';
-
-
---
--- Name: COLUMN nodes.main_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.nodes.main_id IS 'Node identifier from Main DB';
-
-
---
--- Name: dashboards_companies_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.dashboards_companies_mv AS
- WITH active_cnt AS (
-         SELECT cnt.context_id,
-            cnt.column_position,
-            cnt_props.role,
-            profiles.name AS profile
-           FROM ((public.context_node_types cnt
-             JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
-             LEFT JOIN public.profiles ON ((cnt.id = profiles.context_node_type_id)))
-          WHERE (cnt_props.role IS NOT NULL)
-        ), flow_nodes AS (
-         SELECT flow_nodes.context_id,
-            flow_nodes.flow_id,
-            flow_nodes.node_id,
-            flow_nodes."position"
-           FROM (( SELECT flow_nodes_mv.context_id,
-                    flow_nodes_mv.flow_id,
-                    flow_nodes_mv.node_id,
-                    flow_nodes_mv."position"
-                   FROM public.flow_nodes_mv) flow_nodes
-             JOIN active_cnt ON (((flow_nodes.context_id = active_cnt.context_id) AND (flow_nodes."position" = (active_cnt.column_position + 1)))))
-        ), filtered_flow_nodes AS (
-         SELECT flow_nodes.flow_id,
-            flow_nodes.node_id,
-            nodes.node_type_id,
-            contexts.country_id,
-            contexts.commodity_id,
-            btrim(nodes.name) AS name,
-            to_tsvector('simple'::regconfig, COALESCE(btrim(nodes.name), ''::text)) AS name_tsvector,
-            node_types.name AS node_type,
-                CASE
-                    WHEN ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text)) THEN cnt.profile
-                    ELSE NULL::text
-                END AS profile
-           FROM (((((flow_nodes
-             JOIN public.nodes ON ((nodes.id = flow_nodes.node_id)))
-             JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
-             JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
-             JOIN active_cnt cnt ON (((cnt.context_id = flow_nodes.context_id) AND ((cnt.column_position + 1) = flow_nodes."position"))))
-             JOIN public.contexts ON (((contexts.id = flow_nodes.context_id) AND (contexts.id = cnt.context_id))))
-          WHERE ((cnt.role)::text = ANY (ARRAY[('exporter'::character varying)::text, ('importer'::character varying)::text]))
-        )
- SELECT ffn.node_id AS id,
-    ffn.node_type_id,
-    ffn.country_id,
-    ffn.commodity_id,
-    fn.node_id,
-    ffn.name,
-    ffn.name_tsvector,
-    ffn.node_type,
-    ffn.profile
-   FROM (filtered_flow_nodes ffn
-     JOIN flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
-  WHERE (ffn.node_id <> fn.node_id)
-  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile
-  WITH NO DATA;
-
-
---
--- Name: MATERIALIZED VIEW dashboards_companies_mv; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON MATERIALIZED VIEW public.dashboards_companies_mv IS 'Materialized view used for listing companies in tool search panels';
-
-
---
--- Name: COLUMN dashboards_companies_mv.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_companies_mv.id IS 'id of company node (not unique)';
-
-
---
--- Name: COLUMN dashboards_companies_mv.country_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_companies_mv.country_id IS 'id of country sourcing commodity traded by this node';
-
-
---
--- Name: COLUMN dashboards_companies_mv.commodity_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_companies_mv.commodity_id IS 'id of commodity traded by this node';
-
-
---
--- Name: COLUMN dashboards_companies_mv.node_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_companies_mv.node_id IS 'id of another node from the same supply chain';
-
-
---
--- Name: dashboards_countries_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.dashboards_countries_mv AS
- SELECT fp.country_id AS id,
-    fp.commodity_id,
-    fp.node_id,
-    countries.iso2,
-    btrim(countries.name) AS name,
-    to_tsvector('simple'::regconfig, COALESCE(btrim(countries.name), ''::text)) AS name_tsvector,
-    fp.profile
-   FROM (( SELECT contexts.commodity_id,
-            contexts.country_id,
-            flow_nodes.node_id,
-            profiles.name AS profile
-           FROM ((((( SELECT DISTINCT flow_nodes_mv.context_id,
-                    flow_nodes_mv.node_id,
-                    flow_nodes_mv."position"
-                   FROM public.flow_nodes_mv) flow_nodes
-             JOIN public.contexts ON ((contexts.id = flow_nodes.context_id)))
-             JOIN public.context_node_types cnt ON (((cnt.context_id = flow_nodes.context_id) AND (cnt.context_id = contexts.id) AND ((cnt.column_position + 1) = flow_nodes."position"))))
-             JOIN public.context_node_type_properties cnt_props ON ((cnt_props.context_node_type_id = cnt.id)))
-             LEFT JOIN public.profiles ON ((cnt.id = profiles.context_node_type_id)))
-          WHERE (cnt_props.role IS NOT NULL)
-          GROUP BY contexts.commodity_id, contexts.country_id, flow_nodes.node_id, profiles.name) fp
-     JOIN public.countries ON ((countries.id = fp.country_id)))
-  WITH NO DATA;
-
-
---
--- Name: MATERIALIZED VIEW dashboards_countries_mv; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON MATERIALIZED VIEW public.dashboards_countries_mv IS 'Materialized view used for listing countries in tool search panels';
-
-
---
--- Name: COLUMN dashboards_countries_mv.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_countries_mv.id IS 'id of sourcing country (not unique)';
-
-
---
--- Name: COLUMN dashboards_countries_mv.commodity_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_countries_mv.commodity_id IS 'id of commodity sourced from this country';
-
-
---
--- Name: COLUMN dashboards_countries_mv.node_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_countries_mv.node_id IS 'id of node, through which this commodity is sourced from this country';
-
-
---
--- Name: flow_quants; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.flow_quants (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE flow_quants; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.flow_quants IS 'Values of quants for flow';
-
-
---
--- Name: COLUMN flow_quants.value; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.flow_quants.value IS 'Numeric value';
 
 
 --
@@ -3476,203 +3345,331 @@ CREATE MATERIALIZED VIEW public.nodes_per_context_ranked_by_volume_per_year_mv A
 
 
 --
--- Name: dashboards_destinations_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+-- Name: dashboards_companies_v; Type: VIEW; Schema: public; Owner: -
 --
 
-CREATE MATERIALIZED VIEW public.dashboards_destinations_mv AS
- WITH all_flow_nodes AS (
-         SELECT flow_nodes.flow_id,
-            flow_nodes.node_id,
-            flow_nodes.context_id,
-            nodes.node_type_id,
-            btrim(nodes.name) AS name,
-            cnt_props.role,
-            profiles.name AS profile
-           FROM (((((public.flow_nodes_mv flow_nodes
-             JOIN public.nodes ON ((flow_nodes.node_id = nodes.id)))
-             JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
-             JOIN public.context_node_types cnt ON (((flow_nodes.context_id = cnt.context_id) AND (flow_nodes."position" = (cnt.column_position + 1)) AND (nodes.node_type_id = cnt.node_type_id))))
-             JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
-             LEFT JOIN public.profiles ON ((cnt.id = profiles.context_node_type_id)))
-          WHERE ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text))
-        ), filtered_flow_nodes AS (
-         SELECT flow_nodes.flow_id,
-            flow_nodes.node_id,
-            flow_nodes.context_id,
-            flow_nodes.node_type_id,
-            contexts.country_id,
-            contexts.commodity_id,
-            flow_nodes.name,
-            to_tsvector('simple'::regconfig, COALESCE(flow_nodes.name, ''::text)) AS name_tsvector,
-            node_types.name AS node_type,
-            flow_nodes.profile,
-            ranked_nodes.rank_by_year
-           FROM (((all_flow_nodes flow_nodes
-             JOIN public.node_types ON ((node_types.id = flow_nodes.node_type_id)))
-             JOIN public.contexts ON ((contexts.id = flow_nodes.context_id)))
-             JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((flow_nodes.context_id = ranked_nodes.context_id) AND (flow_nodes.node_id = ranked_nodes.node_id))))
-          WHERE ((flow_nodes.role)::text = 'destination'::text)
-        )
- SELECT ffn.node_id AS id,
-    ffn.node_type_id,
-    ffn.country_id,
-    ffn.commodity_id,
-    fn.node_id,
-    ffn.name,
-    ffn.name_tsvector,
-    ffn.node_type,
-    ffn.profile,
-    ffn.rank_by_year
-   FROM (filtered_flow_nodes ffn
-     JOIN all_flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
-  WHERE (ffn.node_id <> fn.node_id)
-  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile, ffn.rank_by_year
-  WITH NO DATA;
+CREATE VIEW public.dashboards_companies_v AS
+ SELECT nodes.id,
+    nodes.node_type_id,
+    nodes.context_id,
+    nodes.country_id,
+    nodes.commodity_id,
+    nodes.nodes_ids,
+    nodes.year,
+    nodes.name,
+    nodes.name_tsvector,
+    nodes.node_type,
+    profiles.name AS profile,
+    ranked_nodes.rank_by_year
+   FROM ((((public.nodes_with_flows_per_year nodes
+     JOIN public.node_properties node_props ON ((nodes.id = node_props.node_id)))
+     JOIN public.context_node_type_properties cnt_props ON ((nodes.context_node_type_id = cnt_props.context_node_type_id)))
+     LEFT JOIN public.profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))
+     JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((nodes.context_id = ranked_nodes.context_id) AND (nodes.id = ranked_nodes.node_id))))
+  WHERE (((cnt_props.role)::text = ANY ((ARRAY['importer'::character varying, 'exporter'::character varying])::text[])) AND (NOT nodes.is_unknown) AND (NOT node_props.is_domestic_consumption) AND (upper(nodes.name) <> 'OTHER'::text));
 
 
 --
--- Name: MATERIALIZED VIEW dashboards_destinations_mv; Type: COMMENT; Schema: public; Owner: -
+-- Name: dashboards_countries; Type: TABLE; Schema: public; Owner: -
 --
 
-COMMENT ON MATERIALIZED VIEW public.dashboards_destinations_mv IS 'Materialized view used for listing destinations in tool search panels';
-
-
---
--- Name: COLUMN dashboards_destinations_mv.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_destinations_mv.id IS 'id of destination node (not unique)';
-
-
---
--- Name: COLUMN dashboards_destinations_mv.country_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_destinations_mv.country_id IS 'id of country sourcing commodity going to this node';
+CREATE TABLE public.dashboards_countries (
+    id integer NOT NULL,
+    commodity_id integer NOT NULL,
+    node_id integer NOT NULL,
+    year smallint NOT NULL,
+    iso2 text,
+    name text,
+    name_tsvector tsvector,
+    profile text
+);
 
 
 --
--- Name: COLUMN dashboards_destinations_mv.commodity_id; Type: COMMENT; Schema: public; Owner: -
+-- Name: TABLE dashboards_countries; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dashboards_destinations_mv.commodity_id IS 'id of commodity going to this node';
-
-
---
--- Name: COLUMN dashboards_destinations_mv.node_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_destinations_mv.node_id IS 'id of another node from the same supply chain';
+COMMENT ON TABLE public.dashboards_countries IS 'Materialized table used for listing countries in tool search panels';
 
 
 --
--- Name: dashboards_exporters_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+-- Name: COLUMN dashboards_countries.id; Type: COMMENT; Schema: public; Owner: -
 --
 
-CREATE MATERIALIZED VIEW public.dashboards_exporters_mv AS
- WITH all_flow_nodes AS (
-         SELECT flow_nodes.flow_id,
-            flow_nodes.node_id,
-            flow_nodes.context_id,
-            nodes.node_type_id,
-            btrim(nodes.name) AS name,
-            cnt_props.role,
-            profiles.name AS profile
-           FROM (((((public.flow_nodes_mv flow_nodes
-             JOIN public.nodes ON ((flow_nodes.node_id = nodes.id)))
-             JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
-             JOIN public.context_node_types cnt ON (((flow_nodes.context_id = cnt.context_id) AND (flow_nodes."position" = (cnt.column_position + 1)) AND (nodes.node_type_id = cnt.node_type_id))))
-             JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
-             LEFT JOIN public.profiles ON ((cnt.id = profiles.context_node_type_id)))
-          WHERE ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text))
-        ), filtered_flow_nodes AS (
-         SELECT flow_nodes.flow_id,
-            flow_nodes.node_id,
-            flow_nodes.context_id,
-            flow_nodes.node_type_id,
-            contexts.country_id,
-            contexts.commodity_id,
-            flow_nodes.name,
-            to_tsvector('simple'::regconfig, COALESCE(flow_nodes.name, ''::text)) AS name_tsvector,
-            node_types.name AS node_type,
-            flow_nodes.profile,
-            ranked_nodes.rank_by_year
-           FROM (((all_flow_nodes flow_nodes
-             JOIN public.node_types ON ((node_types.id = flow_nodes.node_type_id)))
-             JOIN public.contexts ON ((contexts.id = flow_nodes.context_id)))
-             JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((flow_nodes.context_id = ranked_nodes.context_id) AND (flow_nodes.node_id = ranked_nodes.node_id))))
-          WHERE ((flow_nodes.role)::text = 'exporter'::text)
-        )
- SELECT ffn.node_id AS id,
-    ffn.node_type_id,
-    ffn.country_id,
-    ffn.commodity_id,
-    fn.node_id,
-    ffn.name,
-    ffn.name_tsvector,
-    ffn.node_type,
-    ffn.profile,
-    ffn.rank_by_year
-   FROM (filtered_flow_nodes ffn
-     JOIN all_flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
-  WHERE (ffn.node_id <> fn.node_id)
-  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile, ffn.rank_by_year
-  WITH NO DATA;
+COMMENT ON COLUMN public.dashboards_countries.id IS 'id of sourcing country (not unique)';
 
 
 --
--- Name: dashboards_importers_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+-- Name: COLUMN dashboards_countries.commodity_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-CREATE MATERIALIZED VIEW public.dashboards_importers_mv AS
- WITH all_flow_nodes AS (
-         SELECT flow_nodes.flow_id,
-            flow_nodes.node_id,
-            flow_nodes.context_id,
-            nodes.node_type_id,
-            btrim(nodes.name) AS name,
-            cnt_props.role,
-            profiles.name AS profile
-           FROM (((((public.flow_nodes_mv flow_nodes
-             JOIN public.nodes ON ((flow_nodes.node_id = nodes.id)))
-             JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
-             JOIN public.context_node_types cnt ON (((flow_nodes.context_id = cnt.context_id) AND (flow_nodes."position" = (cnt.column_position + 1)) AND (nodes.node_type_id = cnt.node_type_id))))
-             JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
-             LEFT JOIN public.profiles ON ((cnt.id = profiles.context_node_type_id)))
-          WHERE ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text))
-        ), filtered_flow_nodes AS (
-         SELECT flow_nodes.flow_id,
-            flow_nodes.node_id,
-            flow_nodes.context_id,
-            flow_nodes.node_type_id,
-            contexts.country_id,
-            contexts.commodity_id,
-            flow_nodes.name,
-            to_tsvector('simple'::regconfig, COALESCE(flow_nodes.name, ''::text)) AS name_tsvector,
-            node_types.name AS node_type,
-            flow_nodes.profile,
-            ranked_nodes.rank_by_year
-           FROM (((all_flow_nodes flow_nodes
-             JOIN public.node_types ON ((node_types.id = flow_nodes.node_type_id)))
-             JOIN public.contexts ON ((contexts.id = flow_nodes.context_id)))
-             JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((flow_nodes.context_id = ranked_nodes.context_id) AND (flow_nodes.node_id = ranked_nodes.node_id))))
-          WHERE ((flow_nodes.role)::text = 'importer'::text)
-        )
- SELECT ffn.node_id AS id,
-    ffn.node_type_id,
-    ffn.country_id,
-    ffn.commodity_id,
-    fn.node_id,
-    ffn.name,
-    ffn.name_tsvector,
-    ffn.node_type,
-    ffn.profile,
-    ffn.rank_by_year
-   FROM (filtered_flow_nodes ffn
-     JOIN all_flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
-  WHERE (ffn.node_id <> fn.node_id)
-  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile, ffn.rank_by_year
-  WITH NO DATA;
+COMMENT ON COLUMN public.dashboards_countries.commodity_id IS 'id of commodity sourced from this country';
+
+
+--
+-- Name: COLUMN dashboards_countries.node_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_countries.node_id IS 'id of node, through which this commodity is sourced from this country';
+
+
+--
+-- Name: dashboards_countries_v; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.dashboards_countries_v AS
+ SELECT DISTINCT nodes.country_id AS id,
+    nodes.commodity_id,
+    nodes.id AS node_id,
+    nodes.year,
+    countries.iso2,
+    btrim(countries.name) AS name,
+    to_tsvector('simple'::regconfig, COALESCE(btrim(countries.name), ''::text)) AS name_tsvector,
+    profiles.name AS profile
+   FROM ((public.nodes_with_flows_per_year nodes
+     JOIN public.countries ON ((countries.id = nodes.country_id)))
+     LEFT JOIN public.profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))
+  WHERE (NOT nodes.is_unknown);
+
+
+--
+-- Name: dashboards_destinations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.dashboards_destinations (
+    id integer NOT NULL,
+    node_type_id integer,
+    context_id integer,
+    country_id integer NOT NULL,
+    commodity_id integer NOT NULL,
+    nodes_ids integer[],
+    year smallint NOT NULL,
+    name text,
+    name_tsvector tsvector,
+    node_type text,
+    profile text,
+    rank_by_year jsonb
+);
+
+
+--
+-- Name: TABLE dashboards_destinations; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.dashboards_destinations IS 'Materialized table used for listing destinations in tool search panels';
+
+
+--
+-- Name: COLUMN dashboards_destinations.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_destinations.id IS 'id of destination node (not unique)';
+
+
+--
+-- Name: COLUMN dashboards_destinations.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_destinations.country_id IS 'id of country sourcing commodity going to this node';
+
+
+--
+-- Name: COLUMN dashboards_destinations.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_destinations.commodity_id IS 'id of commodity going to this node';
+
+
+--
+-- Name: COLUMN dashboards_destinations.nodes_ids; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_destinations.nodes_ids IS 'array of ids of other nodes from the same supply chain';
+
+
+--
+-- Name: dashboards_destinations_v; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.dashboards_destinations_v AS
+ SELECT nodes.id,
+    nodes.node_type_id,
+    nodes.context_id,
+    nodes.country_id,
+    nodes.commodity_id,
+    nodes.nodes_ids,
+    nodes.year,
+    nodes.name,
+    nodes.name_tsvector,
+    nodes.node_type,
+    profiles.name AS profile,
+    ranked_nodes.rank_by_year
+   FROM ((((public.nodes_with_flows_per_year nodes
+     JOIN public.node_properties node_props ON ((nodes.id = node_props.node_id)))
+     JOIN public.context_node_type_properties cnt_props ON ((nodes.context_node_type_id = cnt_props.context_node_type_id)))
+     LEFT JOIN public.profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))
+     JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((nodes.context_id = ranked_nodes.context_id) AND (nodes.id = ranked_nodes.node_id))))
+  WHERE (((cnt_props.role)::text = 'destination'::text) AND (NOT nodes.is_unknown) AND (NOT node_props.is_domestic_consumption) AND (upper(nodes.name) <> 'OTHER'::text));
+
+
+--
+-- Name: dashboards_exporters; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.dashboards_exporters (
+    id integer NOT NULL,
+    node_type_id integer,
+    context_id integer,
+    country_id integer NOT NULL,
+    commodity_id integer NOT NULL,
+    nodes_ids integer[],
+    year smallint NOT NULL,
+    name text,
+    name_tsvector tsvector,
+    node_type text,
+    profile text,
+    rank_by_year jsonb
+);
+
+
+--
+-- Name: TABLE dashboards_exporters; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.dashboards_exporters IS 'Materialized table used for listing exporters in tool search panels';
+
+
+--
+-- Name: COLUMN dashboards_exporters.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_exporters.id IS 'id of exporter node (not unique)';
+
+
+--
+-- Name: COLUMN dashboards_exporters.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_exporters.country_id IS 'id of country sourcing commodity traded by this node';
+
+
+--
+-- Name: COLUMN dashboards_exporters.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_exporters.commodity_id IS 'id of commodity traded by this node';
+
+
+--
+-- Name: COLUMN dashboards_exporters.nodes_ids; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_exporters.nodes_ids IS 'array of ids of other nodes from the same supply chain';
+
+
+--
+-- Name: dashboards_exporters_v; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.dashboards_exporters_v AS
+ SELECT nodes.id,
+    nodes.node_type_id,
+    nodes.context_id,
+    nodes.country_id,
+    nodes.commodity_id,
+    nodes.nodes_ids,
+    nodes.year,
+    nodes.name,
+    nodes.name_tsvector,
+    nodes.node_type,
+    profiles.name AS profile,
+    ranked_nodes.rank_by_year
+   FROM ((((public.nodes_with_flows_per_year nodes
+     JOIN public.node_properties node_props ON ((nodes.id = node_props.node_id)))
+     JOIN public.context_node_type_properties cnt_props ON ((nodes.context_node_type_id = cnt_props.context_node_type_id)))
+     LEFT JOIN public.profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))
+     JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((nodes.context_id = ranked_nodes.context_id) AND (nodes.id = ranked_nodes.node_id))))
+  WHERE (((cnt_props.role)::text = 'exporter'::text) AND (NOT nodes.is_unknown) AND (NOT node_props.is_domestic_consumption) AND (upper(nodes.name) <> 'OTHER'::text));
+
+
+--
+-- Name: dashboards_importers; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.dashboards_importers (
+    id integer NOT NULL,
+    node_type_id integer,
+    context_id integer,
+    country_id integer NOT NULL,
+    commodity_id integer NOT NULL,
+    nodes_ids integer[],
+    year smallint NOT NULL,
+    name text,
+    name_tsvector tsvector,
+    node_type text,
+    profile text,
+    rank_by_year jsonb
+);
+
+
+--
+-- Name: TABLE dashboards_importers; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.dashboards_importers IS 'Materialized table used for listing importers in tool search panels';
+
+
+--
+-- Name: COLUMN dashboards_importers.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_importers.id IS 'id of importer node (not unique)';
+
+
+--
+-- Name: COLUMN dashboards_importers.country_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_importers.country_id IS 'id of country sourcing commodity traded by this node';
+
+
+--
+-- Name: COLUMN dashboards_importers.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_importers.commodity_id IS 'id of commodity traded by this node';
+
+
+--
+-- Name: COLUMN dashboards_importers.nodes_ids; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_importers.nodes_ids IS 'array of ids of other nodes from the same supply chain';
+
+
+--
+-- Name: dashboards_importers_v; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.dashboards_importers_v AS
+ SELECT nodes.id,
+    nodes.node_type_id,
+    nodes.context_id,
+    nodes.country_id,
+    nodes.commodity_id,
+    nodes.nodes_ids,
+    nodes.year,
+    nodes.name,
+    nodes.name_tsvector,
+    nodes.node_type,
+    profiles.name AS profile,
+    ranked_nodes.rank_by_year
+   FROM ((((public.nodes_with_flows_per_year nodes
+     JOIN public.node_properties node_props ON ((nodes.id = node_props.node_id)))
+     JOIN public.context_node_type_properties cnt_props ON ((nodes.context_node_type_id = cnt_props.context_node_type_id)))
+     LEFT JOIN public.profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))
+     JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((nodes.context_id = ranked_nodes.context_id) AND (nodes.id = ranked_nodes.node_id))))
+  WHERE (((cnt_props.role)::text = 'importer'::text) AND (NOT nodes.is_unknown) AND (NOT node_props.is_domestic_consumption) AND (upper(nodes.name) <> 'OTHER'::text));
 
 
 --
@@ -3733,93 +3730,83 @@ ALTER SEQUENCE public.dashboards_quants_id_seq OWNED BY public.dashboards_quants
 
 
 --
--- Name: dashboards_sources_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+-- Name: dashboards_sources; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE MATERIALIZED VIEW public.dashboards_sources_mv AS
- WITH all_flow_nodes AS (
-         SELECT flow_nodes.flow_id,
-            flow_nodes.node_id,
-            flow_nodes.context_id,
-            nodes.node_type_id,
-            btrim(nodes.name) AS name,
-            cnt_props.role,
-            profiles.name AS profile
-           FROM (((((public.flow_nodes_mv flow_nodes
-             JOIN public.nodes ON ((flow_nodes.node_id = nodes.id)))
-             JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
-             JOIN public.context_node_types cnt ON (((flow_nodes.context_id = cnt.context_id) AND (flow_nodes."position" = (cnt.column_position + 1)) AND (nodes.node_type_id = cnt.node_type_id))))
-             JOIN public.context_node_type_properties cnt_props ON ((cnt.id = cnt_props.context_node_type_id)))
-             LEFT JOIN public.profiles ON ((cnt.id = profiles.context_node_type_id)))
-          WHERE ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text))
-        ), filtered_flow_nodes AS (
-         SELECT flow_nodes.flow_id,
-            flow_nodes.node_id,
-            flow_nodes.context_id,
-            flow_nodes.node_type_id,
-            contexts.country_id,
-            contexts.commodity_id,
-            flow_nodes.name,
-            to_tsvector('simple'::regconfig, COALESCE(flow_nodes.name, ''::text)) AS name_tsvector,
-            node_types.name AS node_type,
-            flow_nodes.profile,
-            ranked_nodes.rank_by_year
-           FROM (((all_flow_nodes flow_nodes
-             JOIN public.node_types ON ((node_types.id = flow_nodes.node_type_id)))
-             JOIN public.contexts ON ((contexts.id = flow_nodes.context_id)))
-             JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((flow_nodes.context_id = ranked_nodes.context_id) AND (flow_nodes.node_id = ranked_nodes.node_id))))
-          WHERE ((flow_nodes.role)::text = 'source'::text)
-        )
- SELECT ffn.node_id AS id,
-    ffn.node_type_id,
-    ffn.country_id,
-    ffn.commodity_id,
-    fn.node_id,
-    ffn.name,
-    ffn.name_tsvector,
-    ffn.node_type,
-    ffn.profile,
-    ffn.rank_by_year
-   FROM (filtered_flow_nodes ffn
-     JOIN all_flow_nodes fn ON ((ffn.flow_id = fn.flow_id)))
-  WHERE (ffn.node_id <> fn.node_id)
-  GROUP BY ffn.node_id, ffn.node_type_id, ffn.country_id, ffn.commodity_id, fn.node_id, ffn.name, ffn.name_tsvector, ffn.node_type, ffn.profile, ffn.rank_by_year
-  WITH NO DATA;
+CREATE TABLE public.dashboards_sources (
+    id integer NOT NULL,
+    node_type_id integer,
+    context_id integer,
+    country_id integer NOT NULL,
+    commodity_id integer NOT NULL,
+    nodes_ids integer[],
+    year smallint NOT NULL,
+    name text,
+    name_tsvector tsvector,
+    node_type text,
+    profile text,
+    rank_by_year jsonb
+);
 
 
 --
--- Name: MATERIALIZED VIEW dashboards_sources_mv; Type: COMMENT; Schema: public; Owner: -
+-- Name: TABLE dashboards_sources; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON MATERIALIZED VIEW public.dashboards_sources_mv IS 'Materialized view used for listing sources in tool search panels';
-
-
---
--- Name: COLUMN dashboards_sources_mv.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_sources_mv.id IS 'id of source node (not unique)';
+COMMENT ON TABLE public.dashboards_sources IS 'Materialized table used for listing sources in tool search panels';
 
 
 --
--- Name: COLUMN dashboards_sources_mv.country_id; Type: COMMENT; Schema: public; Owner: -
+-- Name: COLUMN dashboards_sources.id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dashboards_sources_mv.country_id IS 'id of country sourcing commodity coming from this node';
-
-
---
--- Name: COLUMN dashboards_sources_mv.commodity_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_sources_mv.commodity_id IS 'id of commodity coming from this node';
+COMMENT ON COLUMN public.dashboards_sources.id IS 'id of source node (not unique)';
 
 
 --
--- Name: COLUMN dashboards_sources_mv.node_id; Type: COMMENT; Schema: public; Owner: -
+-- Name: COLUMN dashboards_sources.country_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dashboards_sources_mv.node_id IS 'id of another node from the same supply chain';
+COMMENT ON COLUMN public.dashboards_sources.country_id IS 'id of country sourcing commodity coming from this node';
+
+
+--
+-- Name: COLUMN dashboards_sources.commodity_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_sources.commodity_id IS 'id of commodity coming from this node';
+
+
+--
+-- Name: COLUMN dashboards_sources.nodes_ids; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.dashboards_sources.nodes_ids IS 'array of ids of other nodes from the same supply chain';
+
+
+--
+-- Name: dashboards_sources_v; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.dashboards_sources_v AS
+ SELECT nodes.id,
+    nodes.node_type_id,
+    nodes.context_id,
+    nodes.country_id,
+    nodes.commodity_id,
+    nodes.nodes_ids,
+    nodes.year,
+    nodes.name,
+    nodes.name_tsvector,
+    nodes.node_type,
+    profiles.name AS profile,
+    ranked_nodes.rank_by_year
+   FROM ((((public.nodes_with_flows_per_year nodes
+     JOIN public.node_properties node_props ON ((nodes.id = node_props.node_id)))
+     JOIN public.context_node_type_properties cnt_props ON ((nodes.context_node_type_id = cnt_props.context_node_type_id)))
+     LEFT JOIN public.profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))
+     JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((nodes.context_id = ranked_nodes.context_id) AND (nodes.id = ranked_nodes.node_id))))
+  WHERE (((cnt_props.role)::text = 'source'::text) AND (NOT nodes.is_unknown) AND (NOT node_props.is_domestic_consumption) AND (upper(nodes.name) <> 'OTHER'::text));
 
 
 --
@@ -4191,6 +4178,56 @@ COMMENT ON COLUMN public.flow_quals.value IS 'Textual value';
 
 
 --
+-- Name: nodes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.nodes (
+    id integer NOT NULL,
+    node_type_id integer NOT NULL,
+    name text NOT NULL,
+    geo_id text,
+    is_unknown boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    main_id integer
+);
+
+
+--
+-- Name: TABLE nodes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.nodes IS 'Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains';
+
+
+--
+-- Name: COLUMN nodes.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.name IS 'Name of node';
+
+
+--
+-- Name: COLUMN nodes.geo_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.geo_id IS '2-letter iso code in case of country nodes; other geo identifiers possible for other node types';
+
+
+--
+-- Name: COLUMN nodes.is_unknown; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.is_unknown IS 'When set, node was not possible to identify';
+
+
+--
+-- Name: COLUMN nodes.main_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.main_id IS 'Node identifier from Main DB';
+
+
+--
 -- Name: flows_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -4384,34 +4421,37 @@ CREATE MATERIALIZED VIEW public.flow_attributes_mv AS
     attributes.name,
     attributes.display_name,
     attributes.unit,
+    attributes.unit_type,
     flows.context_id,
     array_agg(DISTINCT flows.year) AS years
    FROM ((public.flows
      JOIN public.flow_quants ON ((flow_quants.flow_id = flows.id)))
      JOIN public.attributes ON (((attributes.original_type = 'Quant'::text) AND (attributes.original_id = flow_quants.quant_id))))
-  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, flows.context_id
+  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, attributes.unit_type, flows.context_id
 UNION ALL
  SELECT attributes.id AS attribute_id,
     attributes.name,
     attributes.display_name,
     attributes.unit,
+    attributes.unit_type,
     flows.context_id,
     array_agg(DISTINCT flows.year) AS years
    FROM ((public.flows
      JOIN public.flow_quals ON ((flow_quals.flow_id = flows.id)))
      JOIN public.attributes ON (((attributes.original_type = 'Qual'::text) AND (attributes.original_id = flow_quals.qual_id))))
-  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, flows.context_id
+  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, attributes.unit_type, flows.context_id
 UNION ALL
  SELECT attributes.id AS attribute_id,
     attributes.name,
     attributes.display_name,
     attributes.unit,
+    attributes.unit_type,
     flows.context_id,
     array_agg(DISTINCT flows.year) AS years
    FROM ((public.flows
      JOIN public.flow_inds ON ((flow_inds.flow_id = flows.id)))
      JOIN public.attributes ON (((attributes.original_type = 'Ind'::text) AND (attributes.original_id = flow_inds.ind_id))))
-  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, flows.context_id
+  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, attributes.unit_type, flows.context_id
   WITH NO DATA;
 
 
@@ -4432,6 +4472,75 @@ CREATE SEQUENCE public.flow_inds_id_seq
 --
 
 ALTER SEQUENCE public.flow_inds_id_seq OWNED BY public.flow_inds.id;
+
+
+--
+-- Name: flow_nodes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.flow_nodes (
+    flow_id integer NOT NULL,
+    node_id integer NOT NULL,
+    context_id integer NOT NULL,
+    "position" smallint NOT NULL,
+    year smallint NOT NULL
+);
+
+
+--
+-- Name: TABLE flow_nodes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.flow_nodes IS 'Normalised flows, a readonly table populated during data upload.';
+
+
+--
+-- Name: COLUMN flow_nodes.flow_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_nodes.flow_id IS 'id from flows';
+
+
+--
+-- Name: COLUMN flow_nodes.node_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_nodes.node_id IS 'id from path at position';
+
+
+--
+-- Name: COLUMN flow_nodes.context_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_nodes.context_id IS 'from flows';
+
+
+--
+-- Name: COLUMN flow_nodes."position"; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_nodes."position" IS '0-indexed';
+
+
+--
+-- Name: COLUMN flow_nodes.year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_nodes.year IS 'from flows';
+
+
+--
+-- Name: flow_nodes_v; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.flow_nodes_v AS
+ SELECT flows.id AS flow_id,
+    a.node_id,
+    flows.context_id,
+    a."position",
+    flows.year
+   FROM public.flows,
+    LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position");
 
 
 --
@@ -5248,39 +5357,6 @@ ALTER SEQUENCE public.nodes_id_seq OWNED BY public.nodes.id;
 
 
 --
--- Name: nodes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.nodes_mv AS
- SELECT nodes.id,
-    nodes.main_id,
-    nodes_with_flows.context_id,
-    context_node_types.column_position,
-    context_properties.is_subnational,
-    btrim(nodes.name) AS name,
-    to_tsvector('simple'::regconfig, COALESCE(btrim(nodes.name), ''::text)) AS name_tsvector,
-    node_types.name AS node_type,
-    profiles.name AS profile,
-    upper(btrim(nodes.geo_id)) AS geo_id,
-    context_node_type_properties.role,
-    nodes_with_flows.years
-   FROM (((((((public.nodes
-     JOIN ( SELECT unnest(flows.path) AS node_id,
-            flows.context_id,
-            array_agg(DISTINCT flows.year ORDER BY flows.year) AS years
-           FROM public.flows
-          GROUP BY (unnest(flows.path)), flows.context_id) nodes_with_flows ON ((nodes.id = nodes_with_flows.node_id)))
-     JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
-     JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
-     JOIN public.context_node_types ON (((context_node_types.node_type_id = node_types.id) AND (context_node_types.context_id = nodes_with_flows.context_id))))
-     JOIN public.context_properties ON ((context_node_types.context_id = context_properties.context_id)))
-     JOIN public.context_node_type_properties ON ((context_node_type_properties.context_node_type_id = context_node_types.id)))
-     LEFT JOIN public.profiles ON ((profiles.context_node_type_id = context_node_types.id)))
-  WHERE ((nodes.is_unknown = false) AND (node_properties.is_domestic_consumption = false) AND (nodes.name !~~* 'OTHER'::text))
-  WITH NO DATA;
-
-
---
 -- Name: nodes_stats_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
 --
 
@@ -5318,6 +5394,191 @@ CREATE MATERIALIZED VIEW public.nodes_stats_mv AS
   WHERE ((NOT nodes.is_unknown) AND (NOT node_properties.is_domestic_consumption))
   GROUP BY flows.context_id, flows.year, flow_quants.quant_id, context_node_types.node_type_id, flows.path[(context_node_types.column_position + 1)], nodes.name, nodes.geo_id
   WITH NO DATA;
+
+
+--
+-- Name: nodes_with_flows; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.nodes_with_flows (
+    id integer NOT NULL,
+    context_id integer NOT NULL,
+    main_id integer,
+    column_position smallint,
+    is_subnational boolean,
+    name text,
+    node_type text,
+    profile text,
+    geo_id text,
+    role text,
+    name_tsvector tsvector,
+    years smallint[]
+);
+
+
+--
+-- Name: nodes_with_flows_or_geo; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.nodes_with_flows_or_geo (
+    id integer NOT NULL,
+    context_id integer NOT NULL,
+    node_type_id integer,
+    main_id integer,
+    is_unknown boolean,
+    is_domestic_consumption boolean,
+    is_aggregated boolean,
+    has_flows boolean,
+    name text,
+    node_type text,
+    geo_id text,
+    profile text
+);
+
+
+--
+-- Name: nodes_with_flows_or_geo_v; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.nodes_with_flows_or_geo_v AS
+ SELECT nodes.id,
+    contexts.id AS context_id,
+    nodes.node_type_id,
+    nodes.main_id,
+    nodes.is_unknown,
+    node_properties.is_domestic_consumption,
+    (upper(btrim(nodes.name)) = 'OTHER'::text) AS is_aggregated,
+        CASE
+            WHEN ((flow_nodes.node_id IS NOT NULL) OR (upper(btrim(nodes.name)) = 'OTHER'::text)) THEN true
+            ELSE false
+        END AS has_flows,
+    nodes.name,
+    node_types.name AS node_type,
+    nodes.geo_id,
+    profiles.name AS profile
+   FROM ((((((((public.nodes
+     JOIN public.node_properties ON ((node_properties.node_id = nodes.id)))
+     JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
+     JOIN public.context_node_types ON ((context_node_types.node_type_id = node_types.id)))
+     JOIN public.contexts ON ((context_node_types.context_id = contexts.id)))
+     JOIN public.countries ON ((contexts.country_id = countries.id)))
+     JOIN public.context_node_type_properties ON ((context_node_type_properties.context_node_type_id = context_node_types.id)))
+     LEFT JOIN public.profiles ON ((profiles.context_node_type_id = context_node_types.id)))
+     LEFT JOIN ( SELECT DISTINCT flow_nodes_1.node_id,
+            flow_nodes_1.context_id
+           FROM public.flow_nodes flow_nodes_1) flow_nodes ON (((flow_nodes.node_id = nodes.id) AND (flow_nodes.context_id = context_node_types.context_id) AND (flow_nodes.context_id = contexts.id))))
+  WHERE (((flow_nodes.context_id IS NOT NULL) AND (flow_nodes.context_id = contexts.id)) OR (context_node_type_properties.is_geo_column AND (upper(countries.iso2) = upper("substring"(nodes.geo_id, 1, 2)))) OR (upper(btrim(nodes.name)) = 'OTHER'::text));
+
+
+--
+-- Name: nodes_with_flows_per_year_v; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.nodes_with_flows_per_year_v AS
+ SELECT nodes_with_co_nodes.node_id AS id,
+    nodes_with_co_nodes.context_id,
+    contexts.country_id,
+    contexts.commodity_id,
+    nodes.node_type_id,
+    cnt.id AS context_node_type_id,
+    nodes.main_id,
+    cnt.column_position,
+    nodes_with_co_nodes.year,
+    nodes.is_unknown,
+    nodes_with_co_nodes.nodes_ids,
+    nodes.name,
+    to_tsvector('simple'::regconfig, COALESCE(nodes.name, ''::text)) AS name_tsvector,
+    node_types.name AS node_type,
+    upper(btrim(nodes.geo_id)) AS geo_id
+   FROM ((((( SELECT flow_nodes.node_id,
+            flow_nodes.context_id,
+            flow_nodes."position",
+            flow_nodes.year,
+            array_agg(DISTINCT co_flow_nodes.node_id) AS nodes_ids
+           FROM (public.flow_nodes
+             JOIN public.flow_nodes co_flow_nodes ON ((flow_nodes.flow_id = co_flow_nodes.flow_id)))
+          WHERE (flow_nodes.node_id <> co_flow_nodes.node_id)
+          GROUP BY flow_nodes.node_id, flow_nodes.context_id, flow_nodes."position", flow_nodes.year) nodes_with_co_nodes
+     JOIN public.nodes ON ((nodes_with_co_nodes.node_id = nodes.id)))
+     JOIN public.node_types ON ((nodes.node_type_id = node_types.id)))
+     JOIN public.contexts ON ((nodes_with_co_nodes.context_id = contexts.id)))
+     JOIN public.context_node_types cnt ON (((nodes_with_co_nodes.context_id = cnt.context_id) AND (nodes_with_co_nodes."position" = (cnt.column_position + 1)) AND (contexts.id = cnt.context_id) AND (nodes.node_type_id = cnt.node_type_id) AND (node_types.id = cnt.node_type_id))));
+
+
+--
+-- Name: nodes_with_flows_v; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.nodes_with_flows_v AS
+ SELECT nodes.id,
+    nodes.context_id,
+    nodes.main_id,
+    nodes.column_position,
+    context_properties.is_subnational,
+    btrim(nodes.name) AS btrim,
+    nodes.node_type,
+    profiles.name AS profile,
+    nodes.geo_id,
+    context_node_type_properties.role,
+    nodes.name_tsvector,
+    array_agg(DISTINCT nodes.year ORDER BY nodes.year) AS array_agg
+   FROM ((((public.nodes_with_flows_per_year nodes
+     JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
+     JOIN public.context_properties ON ((nodes.context_id = context_properties.context_id)))
+     JOIN public.context_node_type_properties ON ((nodes.context_node_type_id = context_node_type_properties.context_node_type_id)))
+     LEFT JOIN public.profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))
+  WHERE ((NOT nodes.is_unknown) AND (NOT node_properties.is_domestic_consumption))
+  GROUP BY nodes.id, nodes.context_id, nodes.main_id, nodes.column_position, context_properties.is_subnational, nodes.name, nodes.node_type, profiles.name, nodes.geo_id, context_node_type_properties.role, nodes.name_tsvector;
+
+
+--
+-- Name: partitioned_flow_inds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_inds (
+    flow_id integer,
+    ind_id integer,
+    value double precision
+)
+PARTITION BY LIST (ind_id);
+
+
+--
+-- Name: partitioned_flow_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quals (
+    flow_id integer,
+    qual_id integer,
+    value text
+)
+PARTITION BY LIST (qual_id);
+
+
+--
+-- Name: partitioned_flow_quants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+)
+PARTITION BY LIST (quant_id);
+
+
+--
+-- Name: partitioned_flows; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[]
+)
+PARTITION BY LIST (context_id);
 
 
 --
@@ -6228,42 +6489,6 @@ CREATE SEQUENCE public.sankey_card_links_id_seq
 --
 
 ALTER SEQUENCE public.sankey_card_links_id_seq OWNED BY public.sankey_card_links.id;
-
-
---
--- Name: sankey_nodes_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.sankey_nodes_mv AS
- SELECT nodes.id,
-    nodes.main_id,
-    nodes.name,
-    nodes.geo_id,
-        CASE
-            WHEN context_node_type_properties.is_geo_column THEN "substring"(nodes.geo_id, 1, 2)
-            ELSE NULL::text
-        END AS source_country_iso2,
-    NULLIF(node_properties.is_domestic_consumption, false) AS is_domestic_consumption,
-    NULLIF(nodes.is_unknown, false) AS is_unknown,
-    nodes.node_type_id,
-    node_types.name AS node_type,
-    profiles.name AS profile_type,
-        CASE
-            WHEN ((nodes_with_flows.node_id IS NOT NULL) OR (nodes.name = 'OTHER'::text)) THEN true
-            ELSE false
-        END AS has_flows,
-    (upper(btrim(nodes.name)) = 'OTHER'::text) AS is_aggregated,
-    context_node_types.context_id
-   FROM ((((((public.nodes
-     JOIN public.node_properties ON ((node_properties.node_id = nodes.id)))
-     JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
-     JOIN public.context_node_types ON ((context_node_types.node_type_id = node_types.id)))
-     JOIN public.context_node_type_properties ON ((context_node_type_properties.context_node_type_id = context_node_types.id)))
-     LEFT JOIN public.profiles ON ((profiles.context_node_type_id = context_node_types.id)))
-     LEFT JOIN ( SELECT DISTINCT unnest(flows.path) AS node_id,
-            flows.context_id
-           FROM public.flows) nodes_with_flows ON (((nodes_with_flows.node_id = nodes.id) AND (nodes_with_flows.context_id = context_node_types.context_id))))
-  WITH NO DATA;
 
 
 --
@@ -7403,6 +7628,54 @@ ALTER TABLE ONLY public.dashboards_attributes
 
 
 --
+-- Name: dashboards_commodities dashboards_commodities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_commodities
+    ADD CONSTRAINT dashboards_commodities_pkey PRIMARY KEY (id, node_id, country_id, year);
+
+
+--
+-- Name: dashboards_companies dashboards_companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_companies
+    ADD CONSTRAINT dashboards_companies_pkey PRIMARY KEY (id, country_id, commodity_id, year);
+
+
+--
+-- Name: dashboards_countries dashboards_countries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_countries
+    ADD CONSTRAINT dashboards_countries_pkey PRIMARY KEY (id, node_id, commodity_id, year);
+
+
+--
+-- Name: dashboards_destinations dashboards_destinations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_destinations
+    ADD CONSTRAINT dashboards_destinations_pkey PRIMARY KEY (id, country_id, commodity_id, year);
+
+
+--
+-- Name: dashboards_exporters dashboards_exporters_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_exporters
+    ADD CONSTRAINT dashboards_exporters_pkey PRIMARY KEY (id, country_id, commodity_id, year);
+
+
+--
+-- Name: dashboards_importers dashboards_importers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_importers
+    ADD CONSTRAINT dashboards_importers_pkey PRIMARY KEY (id, country_id, commodity_id, year);
+
+
+--
 -- Name: dashboards_inds dashboards_inds_dashboards_attribute_id_ind_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7448,6 +7721,14 @@ ALTER TABLE ONLY public.dashboards_quants
 
 ALTER TABLE ONLY public.dashboards_quants
     ADD CONSTRAINT dashboards_quants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: dashboards_sources dashboards_sources_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dashboards_sources
+    ADD CONSTRAINT dashboards_sources_pkey PRIMARY KEY (id, country_id, commodity_id, year);
 
 
 --
@@ -7552,6 +7833,14 @@ ALTER TABLE ONLY public.flow_inds
 
 ALTER TABLE ONLY public.flow_inds
     ADD CONSTRAINT flow_inds_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: flow_nodes flow_nodes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.flow_nodes
+    ADD CONSTRAINT flow_nodes_pkey PRIMARY KEY (flow_id, node_id);
 
 
 --
@@ -7800,6 +8089,30 @@ ALTER TABLE ONLY public.node_types
 
 ALTER TABLE ONLY public.nodes
     ADD CONSTRAINT nodes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: nodes_with_flows_or_geo nodes_with_flows_or_geo_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.nodes_with_flows_or_geo
+    ADD CONSTRAINT nodes_with_flows_or_geo_pkey PRIMARY KEY (id, context_id);
+
+
+--
+-- Name: nodes_with_flows_per_year nodes_with_flows_per_year_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.nodes_with_flows_per_year
+    ADD CONSTRAINT nodes_with_flows_per_year_pkey PRIMARY KEY (id, context_id, year);
+
+
+--
+-- Name: nodes_with_flows nodes_with_flows_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.nodes_with_flows
+    ADD CONSTRAINT nodes_with_flows_pkey PRIMARY KEY (id, context_id);
 
 
 --
@@ -8203,297 +8516,185 @@ CREATE UNIQUE INDEX dashboards_attributes_mv_id_idx ON public.dashboards_attribu
 
 
 --
--- Name: dashboards_commodities_mv_country_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_commodities_country_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_commodities_mv_country_id_idx ON public.dashboards_commodities_mv USING btree (country_id);
+CREATE INDEX dashboards_commodities_country_id_idx ON public.dashboards_commodities USING btree (country_id);
 
 
 --
--- Name: dashboards_commodities_mv_group_columns_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_commodities_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_commodities_mv_group_columns_idx ON public.dashboards_commodities_mv USING btree (id, name);
+CREATE INDEX dashboards_commodities_name_tsvector_idx ON public.dashboards_commodities USING btree (name_tsvector);
 
 
 --
--- Name: dashboards_commodities_mv_name_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_commodities_node_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_commodities_mv_name_idx ON public.dashboards_commodities_mv USING btree (name);
+CREATE INDEX dashboards_commodities_node_id_idx ON public.dashboards_commodities USING btree (node_id);
 
 
 --
--- Name: dashboards_commodities_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_companies_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_commodities_mv_name_tsvector_idx ON public.dashboards_commodities_mv USING gin (name_tsvector);
+CREATE INDEX dashboards_companies_commodity_id_idx ON public.dashboards_companies USING btree (commodity_id);
 
 
 --
--- Name: dashboards_commodities_mv_node_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_companies_country_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_commodities_mv_node_id_idx ON public.dashboards_commodities_mv USING btree (node_id);
+CREATE INDEX dashboards_companies_country_id_idx ON public.dashboards_companies USING btree (country_id);
 
 
 --
--- Name: dashboards_commodities_mv_unique_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_companies_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX dashboards_commodities_mv_unique_idx ON public.dashboards_commodities_mv USING btree (id, node_id, country_id);
+CREATE INDEX dashboards_companies_name_tsvector_idx ON public.dashboards_companies USING btree (name_tsvector);
 
 
 --
--- Name: dashboards_companies_mv_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_companies_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_companies_mv_commodity_id_idx ON public.dashboards_companies_mv USING btree (commodity_id);
+CREATE INDEX dashboards_companies_node_type_id_idx ON public.dashboards_companies USING btree (node_type_id);
 
 
 --
--- Name: dashboards_companies_mv_country_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_countries_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_companies_mv_country_id_idx ON public.dashboards_companies_mv USING btree (country_id);
+CREATE INDEX dashboards_countries_commodity_id_idx ON public.dashboards_countries USING btree (commodity_id);
 
 
 --
--- Name: dashboards_companies_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_countries_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_companies_mv_name_tsvector_idx ON public.dashboards_companies_mv USING gin (name_tsvector);
+CREATE INDEX dashboards_countries_name_tsvector_idx ON public.dashboards_countries USING btree (name_tsvector);
 
 
 --
--- Name: dashboards_companies_mv_node_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_countries_node_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_companies_mv_node_id_idx ON public.dashboards_companies_mv USING btree (node_id);
+CREATE INDEX dashboards_countries_node_id_idx ON public.dashboards_countries USING btree (node_id);
 
 
 --
--- Name: dashboards_companies_mv_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_destinations_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_companies_mv_node_type_id_idx ON public.dashboards_companies_mv USING btree (node_type_id);
+CREATE INDEX dashboards_destinations_commodity_id_idx ON public.dashboards_destinations USING btree (commodity_id);
 
 
 --
--- Name: dashboards_companies_mv_unique_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_destinations_country_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX dashboards_companies_mv_unique_idx ON public.dashboards_companies_mv USING btree (id, node_id, country_id, commodity_id);
+CREATE INDEX dashboards_destinations_country_id_idx ON public.dashboards_destinations USING btree (country_id);
 
 
 --
--- Name: dashboards_countries_mv_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_destinations_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_countries_mv_commodity_id_idx ON public.dashboards_countries_mv USING btree (commodity_id);
+CREATE INDEX dashboards_destinations_name_tsvector_idx ON public.dashboards_destinations USING btree (name_tsvector);
 
 
 --
--- Name: dashboards_countries_mv_group_columns_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_destinations_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_countries_mv_group_columns_idx ON public.dashboards_countries_mv USING btree (id, name);
+CREATE INDEX dashboards_destinations_node_type_id_idx ON public.dashboards_destinations USING btree (node_type_id);
 
 
 --
--- Name: dashboards_countries_mv_name_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_exporters_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_countries_mv_name_idx ON public.dashboards_countries_mv USING btree (name);
+CREATE INDEX dashboards_exporters_commodity_id_idx ON public.dashboards_exporters USING btree (commodity_id);
 
 
 --
--- Name: dashboards_countries_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_exporters_country_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_countries_mv_name_tsvector_idx ON public.dashboards_countries_mv USING gin (name_tsvector);
+CREATE INDEX dashboards_exporters_country_id_idx ON public.dashboards_exporters USING btree (country_id);
 
 
 --
--- Name: dashboards_countries_mv_node_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_exporters_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_countries_mv_node_id_idx ON public.dashboards_countries_mv USING btree (node_id);
+CREATE INDEX dashboards_exporters_name_tsvector_idx ON public.dashboards_exporters USING btree (name_tsvector);
 
 
 --
--- Name: dashboards_countries_mv_unique_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_exporters_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX dashboards_countries_mv_unique_idx ON public.dashboards_countries_mv USING btree (id, node_id, commodity_id);
+CREATE INDEX dashboards_exporters_node_type_id_idx ON public.dashboards_exporters USING btree (node_type_id);
 
 
 --
--- Name: dashboards_destinations_mv_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_importers_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_destinations_mv_commodity_id_idx ON public.dashboards_destinations_mv USING btree (commodity_id);
+CREATE INDEX dashboards_importers_commodity_id_idx ON public.dashboards_importers USING btree (commodity_id);
 
 
 --
--- Name: dashboards_destinations_mv_country_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_importers_country_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_destinations_mv_country_id_idx ON public.dashboards_destinations_mv USING btree (country_id);
+CREATE INDEX dashboards_importers_country_id_idx ON public.dashboards_importers USING btree (country_id);
 
 
 --
--- Name: dashboards_destinations_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_importers_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_destinations_mv_name_tsvector_idx ON public.dashboards_destinations_mv USING gin (name_tsvector);
+CREATE INDEX dashboards_importers_name_tsvector_idx ON public.dashboards_importers USING btree (name_tsvector);
 
 
 --
--- Name: dashboards_destinations_mv_node_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_importers_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_destinations_mv_node_id_idx ON public.dashboards_destinations_mv USING btree (node_id);
+CREATE INDEX dashboards_importers_node_type_id_idx ON public.dashboards_importers USING btree (node_type_id);
 
 
 --
--- Name: dashboards_destinations_mv_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_sources_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_destinations_mv_node_type_id_idx ON public.dashboards_destinations_mv USING btree (node_type_id);
+CREATE INDEX dashboards_sources_commodity_id_idx ON public.dashboards_sources USING btree (commodity_id);
 
 
 --
--- Name: dashboards_destinations_mv_unique_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_sources_country_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX dashboards_destinations_mv_unique_idx ON public.dashboards_destinations_mv USING btree (id, node_id, country_id, commodity_id);
+CREATE INDEX dashboards_sources_country_id_idx ON public.dashboards_sources USING btree (country_id);
 
 
 --
--- Name: dashboards_exporters_mv_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_sources_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_exporters_mv_commodity_id_idx ON public.dashboards_exporters_mv USING btree (commodity_id);
+CREATE INDEX dashboards_sources_name_tsvector_idx ON public.dashboards_sources USING btree (name_tsvector);
 
 
 --
--- Name: dashboards_exporters_mv_country_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: dashboards_sources_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX dashboards_exporters_mv_country_id_idx ON public.dashboards_exporters_mv USING btree (country_id);
-
-
---
--- Name: dashboards_exporters_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_exporters_mv_name_tsvector_idx ON public.dashboards_exporters_mv USING gin (name_tsvector);
-
-
---
--- Name: dashboards_exporters_mv_node_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_exporters_mv_node_id_idx ON public.dashboards_exporters_mv USING btree (node_id);
-
-
---
--- Name: dashboards_exporters_mv_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_exporters_mv_node_type_id_idx ON public.dashboards_exporters_mv USING btree (node_type_id);
-
-
---
--- Name: dashboards_exporters_mv_unique_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX dashboards_exporters_mv_unique_idx ON public.dashboards_exporters_mv USING btree (id, node_id, country_id, commodity_id);
-
-
---
--- Name: dashboards_importers_mv_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_importers_mv_commodity_id_idx ON public.dashboards_importers_mv USING btree (commodity_id);
-
-
---
--- Name: dashboards_importers_mv_country_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_importers_mv_country_id_idx ON public.dashboards_importers_mv USING btree (country_id);
-
-
---
--- Name: dashboards_importers_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_importers_mv_name_tsvector_idx ON public.dashboards_importers_mv USING gin (name_tsvector);
-
-
---
--- Name: dashboards_importers_mv_node_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_importers_mv_node_id_idx ON public.dashboards_importers_mv USING btree (node_id);
-
-
---
--- Name: dashboards_importers_mv_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_importers_mv_node_type_id_idx ON public.dashboards_importers_mv USING btree (node_type_id);
-
-
---
--- Name: dashboards_importers_mv_unique_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX dashboards_importers_mv_unique_idx ON public.dashboards_importers_mv USING btree (id, node_id, country_id, commodity_id);
-
-
---
--- Name: dashboards_sources_mv_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_sources_mv_commodity_id_idx ON public.dashboards_sources_mv USING btree (commodity_id);
-
-
---
--- Name: dashboards_sources_mv_country_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_sources_mv_country_id_idx ON public.dashboards_sources_mv USING btree (country_id);
-
-
---
--- Name: dashboards_sources_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_sources_mv_name_tsvector_idx ON public.dashboards_sources_mv USING gin (name_tsvector);
-
-
---
--- Name: dashboards_sources_mv_node_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_sources_mv_node_id_idx ON public.dashboards_sources_mv USING btree (node_id);
-
-
---
--- Name: dashboards_sources_mv_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX dashboards_sources_mv_node_type_id_idx ON public.dashboards_sources_mv USING btree (node_type_id);
-
-
---
--- Name: dashboards_sources_unique_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX dashboards_sources_unique_idx ON public.dashboards_sources_mv USING btree (id, node_id, country_id, commodity_id);
+CREATE INDEX dashboards_sources_node_type_id_idx ON public.dashboards_sources USING btree (node_type_id);
 
 
 --
@@ -8595,10 +8796,24 @@ CREATE INDEX flow_inds_ind_id_idx ON public.flow_inds USING btree (ind_id);
 
 
 --
--- Name: flow_nodes_mv_flow_id_node_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: flow_nodes_context_id_position_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX flow_nodes_mv_flow_id_node_id_idx ON public.flow_nodes_mv USING btree (flow_id, node_id);
+CREATE INDEX flow_nodes_context_id_position_idx ON public.flow_nodes USING btree (context_id, "position");
+
+
+--
+-- Name: flow_nodes_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX flow_nodes_flow_id_idx ON public.flow_nodes USING btree (flow_id);
+
+
+--
+-- Name: flow_nodes_node_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX flow_nodes_node_id_idx ON public.flow_nodes USING btree (node_id);
 
 
 --
@@ -8882,27 +9097,6 @@ CREATE INDEX node_quants_quant_id_idx ON public.node_quants USING btree (quant_i
 
 
 --
--- Name: nodes_mv_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX nodes_mv_context_id_id_idx ON public.nodes_mv USING btree (context_id, id);
-
-
---
--- Name: nodes_mv_context_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX nodes_mv_context_id_idx ON public.nodes_mv USING btree (context_id);
-
-
---
--- Name: nodes_mv_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX nodes_mv_name_tsvector_idx ON public.nodes_mv USING gin (name_tsvector);
-
-
---
 -- Name: nodes_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8921,6 +9115,76 @@ CREATE UNIQUE INDEX nodes_per_context_ranked_by_volume_per_year_mv_unique_idx ON
 --
 
 CREATE UNIQUE INDEX nodes_stats_mv_context_id_quant_id_node_id_node_type_id_idx ON public.nodes_stats_mv USING btree (context_id, quant_id, node_id, node_type_id);
+
+
+--
+-- Name: nodes_with_flows_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX nodes_with_flows_context_id_idx ON public.nodes_with_flows USING btree (context_id);
+
+
+--
+-- Name: nodes_with_flows_name_tsvector_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX nodes_with_flows_name_tsvector_idx ON public.nodes_with_flows USING btree (name_tsvector);
+
+
+--
+-- Name: nodes_with_flows_or_geo_context_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX nodes_with_flows_or_geo_context_id_idx ON public.nodes_with_flows_or_geo USING btree (context_id);
+
+
+--
+-- Name: nodes_with_flows_or_geo_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX nodes_with_flows_or_geo_node_type_id_idx ON public.nodes_with_flows_or_geo USING btree (node_type_id);
+
+
+--
+-- Name: nodes_with_flows_per_year_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX nodes_with_flows_per_year_id_idx ON public.nodes_with_flows_per_year USING btree (id);
+
+
+--
+-- Name: partitioned_flow_inds_ind_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_inds_ind_id_flow_id_idx ON ONLY public.partitioned_flow_inds USING btree (ind_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quals_qual_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quals_qual_id_flow_id_idx ON ONLY public.partitioned_flow_quals USING btree (qual_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_quant_id_flow_id_idx ON ONLY public.partitioned_flow_quants USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flows_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_context_id_id_idx ON ONLY public.partitioned_flows USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_year_idx ON ONLY public.partitioned_flows USING btree (year);
 
 
 --
@@ -9082,20 +9346,6 @@ CREATE INDEX resize_by_quants_resize_by_attribute_id_idx ON public.resize_by_qua
 --
 
 CREATE INDEX sankey_card_link_node_types_context_node_type_property_id_idx ON public.sankey_card_link_node_types USING btree (context_node_type_property_id);
-
-
---
--- Name: sankey_nodes_mv_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX sankey_nodes_mv_context_id_id_idx ON public.sankey_nodes_mv USING btree (context_id, id);
-
-
---
--- Name: sankey_nodes_mv_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX sankey_nodes_mv_node_type_id_idx ON public.sankey_nodes_mv USING btree (node_type_id);
 
 
 --
@@ -9336,6 +9586,14 @@ ALTER TABLE ONLY public.nodes
 
 ALTER TABLE ONLY public.download_versions
     ADD CONSTRAINT fk_rails_3fcb3b1d94 FOREIGN KEY (context_id) REFERENCES public.contexts(id) ON DELETE CASCADE;
+
+
+--
+-- Name: context_node_type_properties fk_rails_40673dee59; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.context_node_type_properties
+    ADD CONSTRAINT fk_rails_40673dee59 FOREIGN KEY (geometry_context_node_type_id) REFERENCES public.context_node_types(id);
 
 
 --
@@ -9972,6 +10230,22 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191015095615'),
 ('20191021084412'),
 ('20191028134448'),
-('20191028134449');
+('20191028134449'),
+('20191111213756'),
+('20191118213141'),
+('20191119115004'),
+('20191119115005'),
+('20191122074338'),
+('20191122074453'),
+('20191202080716'),
+('20191202083829'),
+('20191202090700'),
+('20191205213427'),
+('20191209224804'),
+('20191209224805'),
+('20191209230015'),
+('20191211221707'),
+('20191211222503'),
+('20191212151744');
 
 

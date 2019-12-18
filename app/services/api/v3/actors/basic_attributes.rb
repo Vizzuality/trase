@@ -205,12 +205,14 @@ largest #{profile_type} of #{@commodity_name} from \
         def summary_of_sources(profile_type)
           return '' unless @context.context_property.is_subnational
 
+          source_node_name_plural = @source_node_type.name.downcase.pluralize
+
           " As an #{profile_type}, \
 <span class=\"notranslate\">#{@node.name.humanize}</span> sources from \
-<span class=\"notranslate\">#{@source_municipalities_count_formatted}</span> \
-municipalities, or \
-<span class=\"notranslate\">#{@perc_municipalities_formatted}</span> \
-of the #{@commodity_name} production municipalities."
+<span class=\"notranslate\">#{@source_nodes_count_formatted}</span> \
+#{source_node_name_plural}, or \
+<span class=\"notranslate\">#{@source_nodes_perc_formatted}</span> \
+of the #{@commodity_name} production #{source_node_name_plural}."
         end
 
         def summary_of_destinations(profile_type)
@@ -293,16 +295,16 @@ accounting for \
           stats = Api::V3::Profiles::FlowStatsForNodeType.new(
             @context, @year, @source_node_type.name
           )
-          municipalities_count = stats.nodes_with_flows_count(@volume_attribute)
-          source_municipalities_count = stats.nodes_with_flows_into_node_count(
+          all_nodes_count = stats.nodes_with_flows_count(@volume_attribute)
+          source_nodes_count = stats.nodes_with_flows_into_node_count(
             @volume_attribute, @node
           )
-          @perc_municipalities_formatted = helper.number_to_percentage(
-            (source_municipalities_count * 100.0) / municipalities_count,
+          @source_nodes_perc_formatted = helper.number_to_percentage(
+            (source_nodes_count * 100.0) / all_nodes_count,
             precision: 0
           )
-          @source_municipalities_count_formatted = helper.number_with_precision(
-            source_municipalities_count, delimiter: ',', precision: 0
+          @source_nodes_count_formatted = helper.number_with_precision(
+            source_nodes_count, delimiter: ',', precision: 0
           )
         end
 

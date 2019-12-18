@@ -12,7 +12,9 @@ RSpec.describe 'Importer profile', type: :request do
   include_context 'api v3 brazil importer actor profile'
 
   before(:each) do
-    Api::V3::Readonly::Node.refresh(sync: true, skip_dependencies: true)
+    Api::V3::Readonly::FlowNode.refresh(sync: true)
+    Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
+    Api::V3::Readonly::NodeWithFlows.refresh(sync: true, skip_dependencies: true)
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
   end
@@ -35,7 +37,7 @@ RSpec.describe 'Importer profile', type: :request do
       ].each do |non_importer_node|
         get "/api/v3/contexts/#{api_v3_context.id}/actors/#{non_importer_node.id}/basic_attributes"
         expect(@response).to have_http_status(:not_found)
-        expect(JSON.parse(@response.body)['error']).to match("Couldn't find Api::V3::Readonly::Node with")
+        expect(JSON.parse(@response.body)['error']).to match("Couldn't find Api::V3::Readonly::NodeWithFlows with")
       end
     end
 

@@ -43,9 +43,9 @@ export function loadMapVectorData() {
       const vectorData = {
         id: geoColumn.id,
         name: geoColumn.name,
-        useGeometryFromColumnId: geoColumn.useGeometryFromColumnId
+        geometryNodeTypeId: geoColumn.geometryNodeTypeId
       };
-      if (geoColumn.useGeometryFromColumnId === undefined) {
+      if (geoColumn.geometryNodeTypeId === null) {
         const selectedContext = getSelectedContext(getState());
         const countryName = selectedContext.countryName;
         const vectorLayerURL = `vector_layers/${countryName}_${geoColumn.name.replace(
@@ -124,7 +124,7 @@ export function setMapContextLayers(contextualLayers) {
       const cartoIds = contextLayersCarto[NAMED_MAPS_ENV][layer.identifier];
       // TODO: implement multi-year support
       const cartoData = layer.cartoLayers[0];
-      if (!cartoData.rasterUrl && cartoIds) {
+      if (cartoData && !cartoData.rasterUrl && cartoIds) {
         contextLayer.cartoURL = `${CARTO_NAMED_MAPS_BASE_URL}${cartoIds.uid}/jsonp?callback=cb`;
         contextLayer.layergroupid = cartoIds.layergroupid;
       }

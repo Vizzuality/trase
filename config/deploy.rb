@@ -50,12 +50,12 @@ end
 
 namespace :sidekiq do
   task :quiet do
-    on roles(:app) do
+    on roles(:db) do
       puts capture("pgrep -f 'sidekiq' | xargs kill -TSTP")
     end
   end
   task :restart do
-    on roles(:app) do
+    on roles(:db) do
       execute :sudo, :systemctl, :restart, :sidekiq
     end
   end
@@ -84,7 +84,7 @@ end
 namespace :downloads do
   desc 'Clear pre-computed bulk downloads'
   task :clear do
-    on roles(:app) do
+    on roles(:db) do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :rake, 'downloads:clear'
@@ -94,7 +94,7 @@ namespace :downloads do
   end
   desc 'Refresh pre-computed bulk downloads in a background job'
   task :refresh do
-    on roles(:app) do
+    on roles(:db) do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :rake, 'downloads:refresh_later'

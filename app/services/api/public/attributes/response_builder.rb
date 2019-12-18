@@ -53,10 +53,11 @@ module Api
 
         def flow_attributes_select_clause
           [
-            'attribute_id',
+            'attribute_id AS id',
             'name',
             'display_name',
             'unit',
+            'unit_type',
             'json_agg(' \
               'json_build_object(' \
                 '\'country\', countries.iso2, ' \
@@ -68,7 +69,7 @@ module Api
         end
 
         def flow_attributes_group_clause
-          %w[attribute_id name display_name unit]
+          %w[attribute_id name display_name unit unit_type]
         end
 
         def initialize_data
