@@ -69,13 +69,17 @@ RSpec.describe Api::V3::Flows::Filter do
       ]
     }
 
+    let(:node_types_positions) {
+      [2,5,6,7]
+    }
+
     let(:filter_params) {
       {
         year_start: 2015,
         year_end: 2015,
         node_types_ids: node_types.map(&:id),
         cont_attribute_id: api_v3_volume.readonly_attribute.id,
-        limit: 1
+        limit: 5
       }
     }
 
@@ -88,9 +92,10 @@ RSpec.describe Api::V3::Flows::Filter do
         it 'does not include low volume nodes in active nodes' do
           filter = Api::V3::Flows::Filter.new(
             api_v3_context,
-            filter_params
+            filter_params.merge(limit: 1)
           )
           filter.call
+
           expect(filter.active_nodes).not_to have_key(api_v3_diamantino_node.id)
         end
       end
@@ -113,7 +118,12 @@ RSpec.describe Api::V3::Flows::Filter do
             )
           )
           filter.call
-          expect(filter.flows).to include(api_v3_diamantino_flow)
+          paths = filter.flows.map(&:path)
+          diamantino_path =
+            api_v3_diamantino_flow.path.select.with_index do |id, position|
+              node_types_positions.include?(position)
+            end
+          expect(paths).to include(diamantino_path)
         end
       end
     end
@@ -127,7 +137,7 @@ RSpec.describe Api::V3::Flows::Filter do
         it 'does not include low volume nodes in active nodes' do
           filter = Api::V3::Flows::Filter.new(
             api_v3_context,
-            filter_params.merge(expanded_nodes)
+            filter_params.merge(expanded_nodes).merge(limit: 1)
           )
           filter.call
           expect(filter.active_nodes).not_to have_key(api_v3_diamantino_node.id)
