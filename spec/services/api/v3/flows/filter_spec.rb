@@ -5,12 +5,6 @@ RSpec.describe Api::V3::Flows::Filter do
   include_context 'api v3 brazil recolor by attributes'
   include_context 'api v3 brazil flows quants'
 
-  before(:each) do
-    Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::ResizeByAttribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::RecolorByAttribute.refresh(sync: true, skip_dependents: true)
-  end
-
   let!(:api_v3_diamantino_node) {
     node = Api::V3::Node.where(
       name: 'DIAMANTINO', node_type_id: api_v3_municipality_node_type.id
@@ -56,6 +50,14 @@ RSpec.describe Api::V3::Flows::Filter do
       value: 0.1
     )
   }
+
+  before(:each) do
+    Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
+    Api::V3::Readonly::ResizeByAttribute.refresh(sync: true, skip_dependents: true)
+    Api::V3::Readonly::RecolorByAttribute.refresh(sync: true, skip_dependents: true)
+    Api::V3::TablePartitions::CreatePartitionsForFlows.new.call
+    Api::V3::TablePartitions::CreatePartitionsForFlowQuants.new.call
+  end
 
   describe :active_nodes do
     let(:node_types) {

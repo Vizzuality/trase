@@ -332,7 +332,7 @@ module Api
             ncont_attr_join_clause = ActiveRecord::Base.send(
               :sanitize_sql_array,
               [
-                "LEFT JOIN #{ncont_attr_table} ON \
+                "LEFT JOIN partitioned_#{ncont_attr_table} #{ncont_attr_table} ON \
                 #{ncont_attr_table}.flow_id = flows.id \
                 AND #{ncont_attr_table}.#{@ncont_attribute.attribute_id_name} = ?",
                 @ncont_attribute.original_id
@@ -361,7 +361,8 @@ module Api
         def basic_flows_query
           cont_attr_table = @cont_attribute.flow_values_class.table_name
           query = Api::V3::Flow.
-            joins(cont_attr_table.to_sym).
+            from('partitioned_flows flows').
+            joins("JOIN partitioned_#{cont_attr_table} #{cont_attr_table} ON flow_quants.flow_id = flows.id").
             where(context_id: @context.id).
             where('year >= ? AND year <= ?', @year_start, @year_end).
             where(
