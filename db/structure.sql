@@ -5552,6 +5552,57 @@ CREATE VIEW public.nodes_with_flows_v AS
 
 
 --
+-- Name: partitioned_denormalised_flow_inds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+)
+PARTITION BY LIST (context_id);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+)
+PARTITION BY LIST (context_id);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+)
+PARTITION BY LIST (context_id);
+
+
+--
 -- Name: partitioned_flow_inds; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -9174,6 +9225,48 @@ CREATE INDEX nodes_with_flows_per_year_id_idx ON public.nodes_with_flows_per_yea
 
 
 --
+-- Name: partitioned_denormalised_flow_inds_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_context_id_year_idx ON ONLY public.partitioned_denormalised_flow_inds USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_row_name_idx ON ONLY public.partitioned_denormalised_flow_inds USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_context_id_year_idx ON ONLY public.partitioned_denormalised_flow_quals USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_row_name_idx ON ONLY public.partitioned_denormalised_flow_quals USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_context_id_year_idx ON ONLY public.partitioned_denormalised_flow_quants USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_row_name_idx ON ONLY public.partitioned_denormalised_flow_quants USING btree (row_name);
+
+
+--
 -- Name: partitioned_flow_inds_ind_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10269,7 +10362,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191211222503'),
 ('20191212105506'),
 ('20191212105507'),
-('20191212151744');
-
+('20191212151744'),
+('20191216101622');
 
 
