@@ -4136,26 +4136,6 @@ COMMENT ON COLUMN public.download_attributes_mv.attribute_id IS 'References the 
 
 
 --
--- Name: download_flows; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.download_flows (
-    context_id integer,
-    year smallint,
-    path integer[],
-    jsonb_path jsonb,
-    attribute_type text,
-    attribute_id integer,
-    attribute_name text,
-    text_values text,
-    sum numeric,
-    total text,
-    sort text
-)
-PARTITION BY LIST (year);
-
-
---
 -- Name: partitioned_denormalised_flow_quals; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -8778,38 +8758,10 @@ CREATE UNIQUE INDEX download_attributes_mv_id_idx ON public.download_attributes_
 
 
 --
--- Name: download_flows_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX download_flows_attribute_type_attribute_id_idx ON ONLY public.download_flows USING btree (attribute_type, attribute_id);
-
-
---
--- Name: download_flows_context_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX download_flows_context_id_idx ON ONLY public.download_flows USING btree (context_id);
-
-
---
--- Name: download_flows_path_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX download_flows_path_idx ON ONLY public.download_flows USING btree (path);
-
-
---
 -- Name: download_flows_stats_mv_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX download_flows_stats_mv_id_idx ON public.download_flows_stats_mv USING btree (context_id, year, attribute_type, attribute_id);
-
-
---
--- Name: download_flows_year_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX download_flows_year_idx ON ONLY public.download_flows USING btree (year);
 
 
 --
@@ -10352,6 +10304,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191212151744'),
 ('20191216101622'),
 ('20191217105056'),
-('20191218221238');
+('20191218221238'),
+('20191219221216');
 
 

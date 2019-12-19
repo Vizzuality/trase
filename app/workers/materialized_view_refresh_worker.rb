@@ -11,7 +11,7 @@ class MaterializedViewRefreshWorker
     [args[0]]
   end
 
-  # @param mview_class_name [String] e.g. Api::V3::Readonly::DownloadFlow
+  # @param mview_class_name [String] e.g. Api::V3::Readonly::DownloadAttribute
   # @param options
   # @option options [Boolean] :skip_dependencies skip refreshing
   # @option options [Boolean] :skip_dependents skip refreshing

@@ -1,5 +1,9 @@
-class CreateDownloadFlowsTable < ActiveRecord::Migration[5.2]
+class RemoveDownloadFlows < ActiveRecord::Migration[5.2]
   def up
+    drop_table :download_flows
+  end
+
+  def down
     execute <<~SQL
       CREATE TABLE download_flows (
         id INT,
@@ -16,9 +20,5 @@ class CreateDownloadFlowsTable < ActiveRecord::Migration[5.2]
         sort TEXT
       ) PARTITION BY LIST (year);
     SQL
-  end
-
-  def down
-    drop_table :download_flows
   end
 end
