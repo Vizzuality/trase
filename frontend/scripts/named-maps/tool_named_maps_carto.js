@@ -5,6 +5,10 @@ module.exports = {
       uid: 'brazil_states__production',
       layergroupid: 'p2cs-sei@4f456911@94bb9db1cc2bbb6f823b52891ea85a4b:1536754740910'
     },
+    brazil_biomes: {
+      uid: 'brazil_biomes__production',
+      layergroupid: 'p2cs-sei@ee8b4bf2@53eff313f97bb4d6e956f5078a2ce178:1536754747512'
+    },
     brazil_water_scarcity: {
       uid: 'brazil_water_scarcity__production',
       layergroupid: 'p2cs-sei@ce96a651@bd75df185965352f558793d64c6c76af:1536754755124'
@@ -21,9 +25,17 @@ module.exports = {
       uid: 'brazil_defor_alerts__production',
       layergroupid: 'p2cs-sei@c4807a94@9495c323e40ff63e0c59e0fc6ffbebcd:1538401614852'
     },
+    paraguay_ecoregions_2018_11_14: {
+      uid: 'paraguay_ecoregions_2018_11_14__production',
+      layergroupid: 'p2cs-sei@8bc16e3e@920a70ce8cd9698d474541a13571868e:1543380503816'
+    },
     paraguay_protected_areas_2018_11_14: {
       uid: 'paraguay_protected_areas_2018_11_14__production',
       layergroupid: 'p2cs-sei@7fb7d231@e3a7e457c532b2340f2fa76d05c84160:1542212474275'
+    },
+    paraguay_indigenous_areas_2018_11_14: {
+      uid: 'paraguay_indigenous_areas_2018_11_14__production',
+      layergroupid: 'p2cs-sei@93c53b34@286bbb73f3bcdfa206205acef80ec835:1542212565695'
     },
     py_deforestation_2013_2017_20190131: {
       uid: 'py_deforestation_2013_2017_20190131__production',
@@ -37,17 +49,25 @@ module.exports = {
       uid: 'colombia_protected_areas__production',
       layergroupid: 'p2cs-sei@bd5844b5@7068763bcb727c705c489c838b6deadb:1536312121956'
     },
-    brazil_biomes: {
-      uid: 'brazil_biomes__production',
-      layergroupid: 'p2cs-sei@ee8b4bf2@53eff313f97bb4d6e956f5078a2ce178:1536754747512'
+    ar_province_mainland_20191122: {
+      uid: 'ar_province_mainland_20191122__production',
+      layergroupid: 'p2cs-sei@e0297422@4ebef4e2c77f2449b6f41d819980fc49:1575027012669'
     },
-    paraguay_ecoregions_2018_11_14: {
-      uid: 'paraguay_ecoregions_2018_11_14__production',
-      layergroupid: 'p2cs-sei@8bc16e3e@920a70ce8cd9698d474541a13571868e:1543380503816'
+    ar_biomes_20191113: {
+      uid: 'ar_biomes_20191113__production',
+      layergroupid: 'p2cs-sei@1e6ce145@8fa69e383af12b167092f6168311e13b:1573645666401'
     },
-    paraguay_indigenous_areas_2018_11_14: {
-      uid: 'paraguay_indigenous_areas_2018_11_14__production',
-      layergroupid: 'p2cs-sei@93c53b34@286bbb73f3bcdfa206205acef80ec835:1542212565695'
+    argentina_protected_areas_20191117: {
+      uid: 'argentina_protected_areas_20191117__production',
+      layergroupid: 'p2cs-sei@d80f5d17@f4d011c041959baf38c3f84509277c63:1574065380303'
+    },
+    argentina_deforestation_2015_2017_20191128: {
+      uid: 'argentina_deforestation_2015_2017_20191128__production',
+      layergroupid: 'p2cs-sei@e48f44ab@c1314fd8c9bd4a5d626c253045a06664:1574961429578'
+    },
+    id_provinces: {
+      uid: 'id_provinces__production',
+      layergroupid: 'p2cs-sei@fdb3e261@763b8ba089e515ffd820552dc2951dfb:1560524731493'
     }
   },
   development: {
