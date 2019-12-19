@@ -4171,104 +4171,37 @@ CREATE MATERIALIZED VIEW public.download_flows_stats_mv AS
 
 
 --
--- Name: flow_quals; Type: TABLE; Schema: public; Owner: -
+-- Name: partitioned_denormalised_flow_quals; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.flow_quals (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    qual_id integer NOT NULL,
-    value text NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE flow_quals; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.flow_quals IS 'Values of quals for flow';
+CREATE TABLE public.partitioned_denormalised_flow_quals (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+)
+PARTITION BY LIST (context_id);
 
 
 --
--- Name: COLUMN flow_quals.value; Type: COMMENT; Schema: public; Owner: -
+-- Name: partitioned_denormalised_flow_quants; Type: TABLE; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.flow_quals.value IS 'Textual value';
-
-
---
--- Name: nodes; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.nodes (
-    id integer NOT NULL,
-    node_type_id integer NOT NULL,
-    name text NOT NULL,
-    geo_id text,
-    is_unknown boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    main_id integer
-);
-
-
---
--- Name: TABLE nodes; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.nodes IS 'Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains';
-
-
---
--- Name: COLUMN nodes.name; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.nodes.name IS 'Name of node';
-
-
---
--- Name: COLUMN nodes.geo_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.nodes.geo_id IS '2-letter iso code in case of country nodes; other geo identifiers possible for other node types';
-
-
---
--- Name: COLUMN nodes.is_unknown; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.nodes.is_unknown IS 'When set, node was not possible to identify';
-
-
---
--- Name: COLUMN nodes.main_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.nodes.main_id IS 'Node identifier from Main DB';
-
-
---
--- Name: flows_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.flows_mv AS
- SELECT flow_nodes.id,
-    flow_nodes.context_id,
-    flow_nodes.year,
-    array_agg(nodes.id ORDER BY cnt.column_position) AS path,
-    jsonb_object_agg(cnt.column_position, jsonb_build_object('node_id', nodes.id, 'node', nodes.name, 'node_type_id', cnt.node_type_id, 'node_type', node_types.name, 'is_unknown', nodes.is_unknown) ORDER BY cnt.column_position) AS jsonb_path
-   FROM (((( SELECT flows.id,
-            flows.context_id,
-            flows.year,
-            a.node_id,
-            (a."position" - 1) AS column_position
-           FROM public.flows,
-            LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) flow_nodes
-     JOIN public.nodes ON ((flow_nodes.node_id = nodes.id)))
-     JOIN public.context_node_types cnt ON (((flow_nodes.context_id = cnt.context_id) AND (flow_nodes.column_position = cnt.column_position))))
-     JOIN public.node_types ON ((cnt.node_type_id = node_types.id)))
-  GROUP BY flow_nodes.id, flow_nodes.context_id, flow_nodes.year
-  WITH NO DATA;
+CREATE TABLE public.partitioned_denormalised_flow_quants (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+)
+PARTITION BY LIST (context_id);
 
 
 --
@@ -4276,42 +4209,29 @@ CREATE MATERIALIZED VIEW public.flows_mv AS
 --
 
 CREATE VIEW public.download_flows_v AS
- SELECT f.context_id,
-    f.year,
-    f.path,
-    f.jsonb_path,
-    fi.original_type,
-    fi.original_id,
-    fi.name AS attribute_name,
-    string_agg(fi.text_value, ' / '::text) AS text_values,
-    sum(fi.numeric_value) AS sum,
-        CASE
-            WHEN (fi.original_type = 'Qual'::text) THEN string_agg(DISTINCT fi.text_value, ' / '::text)
-            ELSE (sum(fi.numeric_value))::text
-        END AS total
-   FROM (public.flows_mv f
-     JOIN ( SELECT f_1.flow_id,
-            f_1.qual_id AS original_id,
-            'Qual'::text AS original_type,
-            NULL::double precision AS numeric_value,
-            f_1.value AS text_value,
-            q.name,
-            NULL::text AS unit
-           FROM (public.flow_quals f_1
-             JOIN public.quals q ON ((f_1.qual_id = q.id)))
-          GROUP BY f_1.flow_id, f_1.qual_id, f_1.value, q.name
-        UNION ALL
-         SELECT f_1.flow_id,
-            f_1.quant_id,
-            'Quant'::text AS text,
-            f_1.value,
-            NULL::text AS text,
-            q.name,
-            q.unit
-           FROM (public.flow_quants f_1
-             JOIN public.quants q ON ((f_1.quant_id = q.id)))
-          GROUP BY f_1.flow_id, f_1.quant_id, f_1.value, q.name, q.unit) fi ON ((f.id = fi.flow_id)))
-  GROUP BY f.context_id, f.year, f.path, f.jsonb_path, fi.original_type, fi.original_id, fi.name;
+ SELECT partitioned_denormalised_flow_quants.context_id,
+    partitioned_denormalised_flow_quants.year,
+    partitioned_denormalised_flow_quants.quant_id AS attribute_id,
+    'Quant'::text AS attribute_type,
+    partitioned_denormalised_flow_quants.value AS quant_value,
+    NULL::text AS qual_value,
+    (partitioned_denormalised_flow_quants.value)::text AS total,
+    partitioned_denormalised_flow_quants.row_name,
+    partitioned_denormalised_flow_quants.path,
+    partitioned_denormalised_flow_quants.names
+   FROM public.partitioned_denormalised_flow_quants
+UNION ALL
+ SELECT partitioned_denormalised_flow_quals.context_id,
+    partitioned_denormalised_flow_quals.year,
+    partitioned_denormalised_flow_quals.qual_id AS attribute_id,
+    'Qual'::text AS attribute_type,
+    NULL::double precision AS quant_value,
+    partitioned_denormalised_flow_quals.value AS qual_value,
+    partitioned_denormalised_flow_quals.value AS total,
+    partitioned_denormalised_flow_quals.row_name,
+    partitioned_denormalised_flow_quals.path,
+    partitioned_denormalised_flow_quals.names
+   FROM public.partitioned_denormalised_flow_quals;
 
 
 --
@@ -4430,6 +4350,33 @@ COMMENT ON TABLE public.flow_inds IS 'Values of inds for flow';
 --
 
 COMMENT ON COLUMN public.flow_inds.value IS 'Numeric value';
+
+
+--
+-- Name: flow_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.flow_quals (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    qual_id integer NOT NULL,
+    value text NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE flow_quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.flow_quals IS 'Values of quals for flow';
+
+
+--
+-- Name: COLUMN flow_quals.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_quals.value IS 'Textual value';
 
 
 --
@@ -4639,6 +4586,80 @@ CREATE SEQUENCE public.flows_id_seq
 --
 
 ALTER SEQUENCE public.flows_id_seq OWNED BY public.flows.id;
+
+
+--
+-- Name: nodes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.nodes (
+    id integer NOT NULL,
+    node_type_id integer NOT NULL,
+    name text NOT NULL,
+    geo_id text,
+    is_unknown boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    main_id integer
+);
+
+
+--
+-- Name: TABLE nodes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.nodes IS 'Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains';
+
+
+--
+-- Name: COLUMN nodes.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.name IS 'Name of node';
+
+
+--
+-- Name: COLUMN nodes.geo_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.geo_id IS '2-letter iso code in case of country nodes; other geo identifiers possible for other node types';
+
+
+--
+-- Name: COLUMN nodes.is_unknown; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.is_unknown IS 'When set, node was not possible to identify';
+
+
+--
+-- Name: COLUMN nodes.main_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.main_id IS 'Node identifier from Main DB';
+
+
+--
+-- Name: flows_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.flows_mv AS
+ SELECT flow_nodes.id,
+    flow_nodes.context_id,
+    flow_nodes.year,
+    array_agg(nodes.id ORDER BY cnt.column_position) AS path,
+    jsonb_object_agg(cnt.column_position, jsonb_build_object('node_id', nodes.id, 'node', nodes.name, 'node_type_id', cnt.node_type_id, 'node_type', node_types.name, 'is_unknown', nodes.is_unknown) ORDER BY cnt.column_position) AS jsonb_path
+   FROM (((( SELECT flows.id,
+            flows.context_id,
+            flows.year,
+            a.node_id,
+            (a."position" - 1) AS column_position
+           FROM public.flows,
+            LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) flow_nodes
+     JOIN public.nodes ON ((flow_nodes.node_id = nodes.id)))
+     JOIN public.context_node_types cnt ON (((flow_nodes.context_id = cnt.context_id) AND (flow_nodes.column_position = cnt.column_position))))
+     JOIN public.node_types ON ((cnt.node_type_id = node_types.id)))
+  GROUP BY flow_nodes.id, flow_nodes.context_id, flow_nodes.year
+  WITH NO DATA;
 
 
 --
@@ -5558,40 +5579,6 @@ CREATE VIEW public.nodes_with_flows_v AS
 CREATE TABLE public.partitioned_denormalised_flow_inds (
     context_id integer,
     ind_id integer,
-    value double precision,
-    year smallint,
-    row_name text,
-    path integer[],
-    names text[],
-    known_path_positions boolean[]
-)
-PARTITION BY LIST (context_id);
-
-
---
--- Name: partitioned_denormalised_flow_quals; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.partitioned_denormalised_flow_quals (
-    context_id integer,
-    qual_id integer,
-    year smallint,
-    value text,
-    row_name text,
-    path integer[],
-    names text[],
-    known_path_positions boolean[]
-)
-PARTITION BY LIST (context_id);
-
-
---
--- Name: partitioned_denormalised_flow_quants; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.partitioned_denormalised_flow_quants (
-    context_id integer,
-    quant_id integer,
     value double precision,
     year smallint,
     row_name text,
@@ -10363,6 +10350,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191212105506'),
 ('20191212105507'),
 ('20191212151744'),
-('20191216101622');
+('20191216101622'),
+('20191217105056');
 
 
