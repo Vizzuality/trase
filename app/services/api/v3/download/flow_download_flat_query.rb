@@ -27,7 +27,7 @@ module Api
         end
 
         def years
-          @base_query.distinct.pluck(:year)
+          @size_query.distinct.pluck(:year)
         end
 
         def by_year(year)
