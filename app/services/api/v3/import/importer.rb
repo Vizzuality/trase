@@ -121,6 +121,7 @@ module Api
           Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowQuals.new.call
           # synchronously, skip dependencies (already refreshed)
           [
+            Api::V3::Readonly::DownloadFlowsStats,
             Api::V3::Readonly::NodeWithFlows,
             Api::V3::Readonly::NodeWithFlowsOrGeo,
             Api::V3::Readonly::NodesStats,

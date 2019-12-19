@@ -4156,21 +4156,6 @@ PARTITION BY LIST (year);
 
 
 --
--- Name: download_flows_stats_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.download_flows_stats_mv AS
- SELECT download_flows.context_id,
-    download_flows.year,
-    download_flows.attribute_type,
-    download_flows.attribute_id,
-    count(*) AS count
-   FROM public.download_flows
-  GROUP BY download_flows.context_id, download_flows.year, download_flows.attribute_type, download_flows.attribute_id
-  WITH NO DATA;
-
-
---
 -- Name: partitioned_denormalised_flow_quals; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -4232,6 +4217,21 @@ UNION ALL
     partitioned_denormalised_flow_quals.path,
     partitioned_denormalised_flow_quals.names
    FROM public.partitioned_denormalised_flow_quals;
+
+
+--
+-- Name: download_flows_stats_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.download_flows_stats_mv AS
+ SELECT download_flows_v.context_id,
+    download_flows_v.year,
+    download_flows_v.attribute_type,
+    download_flows_v.attribute_id,
+    count(*) AS count
+   FROM public.download_flows_v
+  GROUP BY download_flows_v.context_id, download_flows_v.year, download_flows_v.attribute_type, download_flows_v.attribute_id
+  WITH NO DATA;
 
 
 --
@@ -10351,6 +10351,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191212105507'),
 ('20191212151744'),
 ('20191216101622'),
-('20191217105056');
+('20191217105056'),
+('20191218221238');
 
 
