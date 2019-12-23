@@ -1,8 +1,8 @@
 import { createSelector, createStructuredSelector } from 'reselect';
+import { DASHBOARD_STEPS } from 'constants';
 
 import modules from 'react-components/nodes-panel/nodes-panel.modules';
-import { DASHBOARD_STEPS } from 'constants';
-import { getSelectedContext } from 'reducers/app.selectors';
+import { getSelectedContext } from 'app/app.selectors';
 
 const getAppContexts = state => state.app.contexts;
 

@@ -4,7 +4,9 @@ import {
   getIsDisabled,
   getDraftDynamicSentence
 } from 'react-components/dashboard-element/dashboard-element.selectors';
-import { getCountryNamesByCountryId } from 'reducers/app.selectors';
+
+import { getCountryNamesByCountryId } from 'app/app.selectors';
+
 import {
   clearPanel,
   setSelectedItems,

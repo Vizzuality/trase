@@ -12,7 +12,7 @@ import {
   getToolRecolorGroups
 } from 'react-components/tool-links/tool-links.selectors';
 import { getSelectedMapDimensionsData } from 'react-components/tool-layers/tool-layers.selectors';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 
 const mapStateToProps = state => {
   const selectedContext = getSelectedContext(state);

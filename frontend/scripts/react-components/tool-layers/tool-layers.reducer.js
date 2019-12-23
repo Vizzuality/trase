@@ -16,10 +16,10 @@ import {
   TOOL_LAYERS__SET_MAP_DIMENSIONS
 } from 'react-components/tool-layers/tool-layers.actions';
 import { TOOL_LINKS__HIGHLIGHT_NODE } from 'react-components/tool-links/tool-links.actions';
-import { SET_CONTEXT } from 'scripts/actions/app.actions';
+import { SET_CONTEXT } from 'app/app.actions';
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
-import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
+import getNodeMetaUid from 'app/helpers/getNodeMetaUid';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import toolLayersSerialization from 'react-components/tool-layers/tool-layers.serializers';
 import toolLayersInitialState from 'react-components/tool-layers//tool-layers.initial-state';

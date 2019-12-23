@@ -4,7 +4,7 @@ import {
   getContextsWithProfilePages,
   getParsedTopProfiles
 } from 'react-components/profile-root/profile-root.selectors';
-import { getSelectedContext } from 'reducers/app.selectors';
+import { getSelectedContext } from 'app/app.selectors';
 import { openModal } from 'react-components/shared/profile-selector/profile-selector.actions';
 
 function mapStateToProps(state) {

@@ -1,4 +1,4 @@
-import MapDimensionsTemplate from 'templates/tool/map/map-dimensions.ejs';
+import MapDimensionsTemplate from 'legacy/map-dimensions.ejs';
 
 export default class {
   constructor() {

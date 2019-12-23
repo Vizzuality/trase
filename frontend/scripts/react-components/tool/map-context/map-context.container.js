@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import { selectContextualLayers } from 'react-components/tool/tool.actions';
 import MapContext from 'react-components/tool/map-context/map-context.component';
-import { loadTooltip } from 'actions/app.actions';
+import { loadTooltip } from 'app/app.actions';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 
 const mapStateToProps = state => ({

@@ -1,3 +1,4 @@
+import { lazy } from 'react';
 import { connectRoutes, NOT_FOUND, redirect, replace } from 'redux-first-router';
 import restoreScroll from 'redux-first-router-restore-scroll';
 import parseURL from 'utils/parseURL';
@@ -11,10 +12,10 @@ import {
 } from 'react-components/home/home.thunks';
 import { loadTopNodes } from 'react-components/profile-root/profile-root.thunks';
 import { loadColumnsData } from 'react-components/profile-node/profile-node.thunks';
-import withSidebarNavLayout from 'react-components/nav/sidebar-nav/with-sidebar-nav-layout.hoc';
 import getPageStaticContent from 'react-components/static-content/static-content.thunks';
-import loadBaseAppData from 'reducers/app.thunks';
+import loadBaseAppData from 'app/app.thunks';
 import getTeam from 'react-components/team/team.thunks';
+import withSidebarNavLayout from 'react-components/nav/sidebar-nav/with-sidebar-nav-layout.hoc';
 import { loadDashboardTemplates } from 'react-components/dashboard-root/dashboard-root.thunks';
 import { redirectToExplore } from 'react-components/legacy-explore/explore.thunks';
 import {
@@ -40,32 +41,38 @@ const dispatchThunks = (...thunks) => (...params) =>
 const loadPageData = (...thunks) => (...params) =>
   loadBaseAppData(...params).then(() => Promise.all(thunks.map(thunk => thunk(...params))));
 
+const StaticContent = lazy(() =>
+  import('../react-components/static-content/static-content.container')
+);
+
 export const routes = {
   home: {
     path: '/',
-    page: 'home',
+    Component: lazy(() => import('../react-components/home/home.container')),
     title: getPageTitle,
     thunk: loadPageData(getPostsContent, getTweetsContent, getTestimonialsContent)
   },
   explore: {
     path: '/explore',
-    page: 'explore',
+    Component: lazy(() => import('../react-components/explore/explore.js')),
     title: getPageTitle,
     thunk: loadPageData(),
     nav: {
       className: '-light',
       links: []
-    }
+    },
+    footer: false
   },
   tool: {
     path: '/flows/:section?',
-    page: 'tool',
+    Component: lazy(() => import('../react-components/tool/tool.js')),
     title: getPageTitle,
-    thunk: loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool)
+    thunk: loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool),
+    footer: false
   },
   profileRoot: {
     path: '/profiles',
-    page: 'profile-root',
+    Component: lazy(() => import('../react-components/profile-root/profile-root.container')),
     title: getPageTitle,
     extension: 'jsx',
     nav: {
@@ -75,7 +82,7 @@ export const routes = {
   },
   profileNode: {
     path: '/profile-:profileType',
-    page: 'profile-node',
+    Component: lazy(() => import('../react-components/profile-node/profile-node.container')),
     title: getPageTitle,
     nav: {
       className: '-light',
@@ -85,19 +92,21 @@ export const routes = {
   },
   dashboardRoot: {
     path: '/dashboards',
-    page: 'dashboard-root',
+    Component: lazy(() => import('../react-components/dashboard-root/dashboard-root.container')),
     title: getPageTitle,
     thunk: loadPageData(loadDashboardTemplates)
   },
   dashboardElement: {
     path: '/dashboards/:dashboardId',
-    page: 'dashboard-element',
+    Component: lazy(() =>
+      import('../react-components/dashboard-element/dashboard-element.container')
+    ),
     title: getPageTitle,
     thunk: loadPageData(loadInitialDashboardData)
   },
   data: {
     path: '/data',
-    page: 'data-portal',
+    Component: lazy(() => import('../react-components/data-portal/data-portal-page.container')),
     title: getPageTitle,
     thunk: loadPageData(),
     nav: {
@@ -106,14 +115,14 @@ export const routes = {
   },
   team: {
     path: '/about/team',
-    page: 'static-content',
+    Component: StaticContent,
     title: getPageTitle,
     thunk: loadPageData(getTeam),
     layout: withSidebarNavLayout
   },
   teamMember: {
     path: '/about/team/:member',
-    page: 'static-content',
+    Component: StaticContent,
     title: getPageTitle,
     thunk: loadPageData(getTeam),
     layout: withSidebarNavLayout,
@@ -121,14 +130,14 @@ export const routes = {
   },
   about: {
     path: '/about/:section?',
-    page: 'static-content',
+    Component: StaticContent,
     title: getPageTitle,
     thunk: loadPageData(getPageStaticContent),
     layout: withSidebarNavLayout
   },
   notSupportedOnMobile: {
     path: '/not-supported',
-    page: 'not-supported',
+    Component: lazy(() => import('../react-components/mobile/not-supported.component')),
     title: getPageTitle,
     nav: {
       className: '-light'
@@ -137,13 +146,14 @@ export const routes = {
   },
   logisticsMap: {
     path: '/logistics-map',
-    page: 'logistics-map',
+    Component: lazy(() => import('../react-components/logistics-map/logistics-map.container')),
     thunk: loadPageData(),
-    title: getPageTitle
+    title: getPageTitle,
+    footer: false
   },
   [NOT_FOUND]: {
     path: '/404',
-    page: 'static-content',
+    Component: StaticContent,
     title: getPageTitle,
     thunk: loadPageData(() => replace('/404'), getPageStaticContent)
   }

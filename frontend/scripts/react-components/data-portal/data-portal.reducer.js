@@ -1,4 +1,8 @@
-import { LOAD_CONSUMPTION_COUNTRIES, LOAD_EXPORTERS, LOAD_INDICATORS } from 'actions/data.actions';
+import {
+  LOAD_CONSUMPTION_COUNTRIES,
+  LOAD_EXPORTERS,
+  LOAD_INDICATORS
+} from 'react-components/data-portal/data-portal.actions';
 import createReducer from 'utils/createReducer';
 
 const initialState = {

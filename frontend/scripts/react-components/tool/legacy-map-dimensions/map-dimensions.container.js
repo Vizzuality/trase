@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import MapDimensions from 'react-components/tool/legacy-map-dimensions/map-dimensions.component';
 import { toggleMapDimension } from 'react-components/tool/tool.actions';
-import { loadTooltip } from 'actions/app.actions';
+import { loadTooltip } from 'app/app.actions';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
 import { getSelectedMapDimensionsUids } from 'react-components/tool-layers/tool-layers.selectors';

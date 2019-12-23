@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import formatValue from 'utils/formatValue';
-import getNodeMeta from 'reducers/helpers/getNodeMeta';
+import getNodeMeta from 'app/helpers/getNodeMeta';
 import Heading from 'react-components/shared/heading';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import { TOOL_LAYOUT, MIN_COLUMNS_NUMBER } from 'constants';

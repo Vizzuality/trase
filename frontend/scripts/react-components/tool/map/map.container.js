@@ -1,6 +1,6 @@
 /* eslint-disable no-shadow */
 // see sankey.container for details on how to use those containers
-import { changeLayout } from 'actions/app.actions';
+import { changeLayout } from 'app/app.actions';
 import {
   selectNodeFromGeoId,
   highlightNodeFromGeoId,
@@ -27,7 +27,7 @@ import {
   getMapDimensionsWarnings,
   getSelectedMapDimensionsData
 } from 'react-components/tool-layers/tool-layers.selectors';
-import { getSelectedContext } from 'reducers/app.selectors';
+import { getSelectedContext } from 'app/app.selectors';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 import { connect } from 'react-redux';
 import Map from 'react-components/tool/map/map.component';

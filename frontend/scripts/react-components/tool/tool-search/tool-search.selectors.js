@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import fuzzySearch from 'utils/fuzzySearch';
 import groupBy from 'lodash/groupBy';
 import flatten from 'lodash/flatten';
-import { getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedYears } from 'app/app.selectors';
 
 const getAppSearch = state => state.app.search;
 

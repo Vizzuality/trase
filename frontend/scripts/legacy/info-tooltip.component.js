@@ -1,5 +1,5 @@
 import debounce from 'lodash/debounce';
-import TooltipTemplate from 'templates/shared/info-tooltip.ejs';
+import TooltipTemplate from 'legacy/info-tooltip.ejs';
 import 'styles/components/shared/info-tooltip.scss';
 
 export default class {

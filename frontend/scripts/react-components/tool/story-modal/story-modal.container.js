@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import ModalComponent from 'react-components/tool/story-modal/modal.component';
-import { closeStoryModal } from 'actions/app.actions';
+import { closeStoryModal } from 'app/app.actions';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 
 const mapStateToProps = state => ({

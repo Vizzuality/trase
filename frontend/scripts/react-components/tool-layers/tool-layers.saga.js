@@ -10,14 +10,14 @@ import {
   NODES_PANEL__SAVE,
   NODES_PANEL__SYNC_NODES_WITH_SANKEY
 } from 'react-components/nodes-panel/nodes-panel.actions';
-import { SET_CONTEXT, SET_CONTEXTS } from 'actions/app.actions';
+import { SET_CONTEXT, SET_CONTEXTS } from 'app/app.actions';
 import {
   SELECT_YEARS,
   loadMapChoropleth,
   SET_NODE_ATTRIBUTES,
   TOGGLE_MAP_DIMENSION
 } from 'react-components/tool/tool.actions';
-import { getSelectedYears, getSelectedContext } from 'reducers/app.selectors';
+import { getSelectedYears, getSelectedContext } from 'app/app.selectors';
 import { getLinkedGeoIds, getMapDimensions } from './tool-layers.fetch.saga';
 
 function* fetchLinkedGeoIds() {

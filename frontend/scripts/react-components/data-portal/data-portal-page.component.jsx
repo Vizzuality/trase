@@ -17,6 +17,10 @@ import DataPortalDisabledMessage from 'react-components/data-portal/data-portal-
 import DataPortalForm from 'react-components/data-portal/data-portal-form/data-portal-form.component';
 import RadioButton from 'react-components/shared/radio-button/radio-button.component';
 
+import 'styles/components/data/custom-dataset.scss';
+import 'styles/components/shared/veil.scss';
+import 'styles/components/shared/modal.scss';
+
 class DataContent extends Component {
   constructor(props) {
     super(props);

@@ -20,9 +20,7 @@ import UrlSerializer from 'react-components/shared/url-serializer';
 
 import Timeline from './timeline';
 
-import 'styles/layouts/l-tool.scss';
 import 'styles/components/shared/veil.scss';
-import 'styles/components/shared/spinner.scss';
 import 'styles/components/shared/dropdown.scss';
 import 'styles/components/tool/map/map-sidebar.scss';
 

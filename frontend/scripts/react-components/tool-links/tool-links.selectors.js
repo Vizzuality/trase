@@ -1,16 +1,17 @@
 import { createSelector, createStructuredSelector } from 'reselect';
-import getNodesAtColumns from 'reducers/helpers/getNodesAtColumns';
-import getNodesColoredBySelection from 'reducers/helpers/getNodesColoredBySelection';
-import getNextRecolorGroups from 'reducers/helpers/getRecolorGroups';
-import getVisibleNodesUtil from 'reducers/helpers/getVisibleNodes';
+import getNodesAtColumns from 'app/helpers/getNodesAtColumns';
+import getNodesColoredBySelection from 'app/helpers/getNodesColoredBySelection';
+import getNextRecolorGroups from 'app/helpers/getRecolorGroups';
+import getVisibleNodesUtil from 'app/helpers/getVisibleNodes';
 import {
   getSelectedColumnsIds,
   getSelectedNodesData,
   getHasExtraColumn,
   getColumnsNumber
 } from 'react-components/tool/tool.selectors';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 import { makeGetGroupedCharts } from 'selectors/widgets.selectors';
+
 import { makeGetAvailableYears } from 'selectors/years.selectors';
 import { getIsDataView, isIndicatorSupported } from 'selectors/indicators.selectors';
 import getCorrectedPosition from 'utils/getCorrectedPosition';

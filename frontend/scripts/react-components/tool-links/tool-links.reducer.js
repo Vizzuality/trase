@@ -21,11 +21,13 @@ import {
   TOOL_LINKS__SET_CHARTS,
   TOOL_LINKS__SET_CHARTS_LOADING
 } from 'react-components/tool-links/tool-links.actions';
-import { SET_CONTEXT } from 'actions/app.actions';
+
+import { SET_CONTEXT } from 'app/app.actions';
 import { NODES_PANEL__SAVE } from 'react-components/nodes-panel/nodes-panel.actions';
+
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
-import getNodesMetaUid from 'reducers/helpers/getNodeMetaUid';
+import getNodesMetaUid from 'app/helpers/getNodeMetaUid';
 import xor from 'lodash/xor';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import toolLinksSerialization from 'react-components/tool-links/tool-links.serializers';

@@ -1,10 +1,10 @@
 import { bindActionCreators } from 'redux';
-import { loadContextNodes } from 'actions/data.actions';
+import { loadContextNodes } from 'react-components/data-portal/data-portal.actions';
 import { trackDataDownloadFormLoaded, trackDownload } from 'analytics/analytics.actions';
 import { connect } from 'react-redux';
-import { selectContextById } from 'actions/app.actions';
+import { selectContextById } from 'app/app.actions';
 import DataPortalPage from 'react-components/data-portal/data-portal-page.component';
-import { getSelectedContext } from 'reducers/app.selectors';
+import { getSelectedContext } from 'app/app.selectors';
 
 const mapStateToProps = state => {
   const selectedContext = getSelectedContext(state);

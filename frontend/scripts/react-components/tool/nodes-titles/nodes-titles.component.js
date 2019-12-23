@@ -1,7 +1,7 @@
 import formatValue from 'utils/formatValue';
-import NodeTitleTemplate from 'templates/tool/nodeTitle.ejs';
-import Tooltip from 'components/shared/info-tooltip.component';
-import getNodeMeta from 'reducers/helpers/getNodeMeta';
+import NodeTitleTemplate from 'legacy/nodeTitle.ejs';
+import Tooltip from 'legacy/info-tooltip.component';
+import getNodeMeta from 'app/helpers/getNodeMeta';
 
 import 'scripts/react-components/tool/tool-search/node-title-group/node-title-group.scss';
 import 'styles/components/tool/nodes-clear.scss';

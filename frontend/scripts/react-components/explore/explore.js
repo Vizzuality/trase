@@ -20,7 +20,7 @@ import {
   getQuickFacts,
   getSankeyCards
 } from 'react-components/explore/explore.actions';
-import { getTopCountries } from 'actions/app.actions';
+import { getTopCountries } from 'app/app.actions';
 
 const mapStateToProps = state => ({
   items: getItems(state),
