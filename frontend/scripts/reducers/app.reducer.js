@@ -21,6 +21,7 @@ import { SELECT_YEARS } from 'react-components/tool/tool.actions';
 import { TOOL_LINKS_RESET_SANKEY } from 'react-components/tool-links/tool-links.actions';
 import appSerialization from 'reducers/app.serializers';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
+import { NODES_PANEL__SAVE } from 'react-components/nodes-panel/nodes-panel.actions';
 import initialState from './app.initial-state';
 
 const appReducer = {
@@ -87,6 +88,9 @@ const appReducer = {
   },
   [SET_CONTEXT](state, action) {
     return { ...state, selectedYears: null, selectedContextId: action.payload };
+  },
+  [NODES_PANEL__SAVE](state) {
+    return { ...state, selectedYears: null };
   },
   [APP__SET_LOADING](state, action) {
     const { contexts: contextsLoading, tooltips: tooltipsLoading } = state.loading;
