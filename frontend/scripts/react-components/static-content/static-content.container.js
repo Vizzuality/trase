@@ -5,7 +5,7 @@ import StaticContent from './static-content.component';
 function mapStateToProps(state, ownProps) {
   const { location } = state;
 
-  const Content = ownProps.component;
+  const Content = ownProps.content;
   return {
     Content,
     notFound: location.type === NOT_FOUND

@@ -1,9 +1,10 @@
 import { createSelector } from 'reselect';
 import ToolComponent from 'react-components/tool/tool.component';
 import { connect } from 'react-redux';
-import { resize } from 'actions/app.actions';
+import { resize } from 'app/app.actions';
+
 import { getToolLinksUrlProps } from 'react-components/tool-links/tool-links.selectors';
-import { getAppUrlProps } from 'reducers/app.selectors';
+import { getAppUrlProps } from 'app/app.selectors';
 import { getToolLayersUrlProps } from 'react-components/tool-layers/tool-layers.selectors';
 import { getNodesPanelUrlProps } from 'react-components/nodes-panel/nodes-panel.selectors';
 import toolLayerSerializer from 'react-components/tool-layers/tool-layers.serializers';

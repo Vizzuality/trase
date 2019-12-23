@@ -1,6 +1,9 @@
 /* eslint-disable global-require,import/no-extraneous-dependencies */
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
+import React from 'react';
+import { render } from 'react-dom';
+import { Provider } from 'react-redux';
 import promiseFinally from 'promise.prototype.finally';
 import parseURL from 'utils/parseURL';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
@@ -12,8 +15,10 @@ import * as appReducers from 'store';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import toolLinksInitialState from 'react-components/tool-links/tool-links.initial-state';
 import toolLinksSerialization from 'react-components/tool-links/tool-links.serializers';
-import appInitialState from 'reducers/app.initial-state';
-import appSerialization from 'reducers/app.serializers';
+import appInitialState from 'app/app.initial-state';
+import appSerialization from 'app/app.serializers';
+import { setTransifexLanguages } from 'app/app.actions';
+import App from 'app/app.component';
 import toolLayersInitialState from 'react-components/tool-layers/tool-layers.initial-state';
 import toolLayersSerialization from 'react-components/tool-layers/tool-layers.serializers';
 import dashboardElementInitialState from 'react-components/dashboard-element/dashboard-element.initial-state';
@@ -21,10 +26,8 @@ import dashboardElementSerialization from 'react-components/dashboard-element/da
 import nodesPanelInitialState from 'react-components/nodes-panel/nodes-panel.initial-state';
 import nodesPanelSerialization from 'react-components/nodes-panel/nodes-panel.serializers';
 import router from './router/router';
-import routeSubscriber from './router/route-subscriber';
 import { register, unregister } from './worker';
 import { rootSaga } from './sagas';
-import { setTransifexLanguages } from './actions/app.actions';
 
 import 'styles/_base.scss';
 import 'styles/_texts.scss';
@@ -137,5 +140,12 @@ window.onTransifexLoad = () => {
 };
 
 sagaMiddleware.run(rootSaga);
-routeSubscriber(store);
+
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('app-root-container')
+);
+
 router.initialDispatch();

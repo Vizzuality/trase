@@ -10,8 +10,10 @@ import {
   getDashboardsContext,
   getDashboardSelectedRecolorBy
 } from 'react-components/dashboard-element/dashboard-element.selectors';
+
 import { getSelectedRecolorBy } from 'react-components/tool-links/tool-links.selectors';
-import { getSelectedContext } from 'reducers/app.selectors';
+import { getSelectedContext } from 'app/app.selectors';
+
 import pluralize from 'utils/pluralize';
 
 export const PARSED_CHART_TYPES = {

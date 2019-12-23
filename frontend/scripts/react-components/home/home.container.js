@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
 import Home from 'react-components/home/home.component';
 import { BREAKPOINTS, HOME_VIDEO } from 'constants';
-import { setContextIsUserSelected, getTopCountries } from 'scripts/actions/app.actions';
+import { setContextIsUserSelected, getTopCountries } from 'app/app.actions';
 import {
   playHomeVideo,
   clickNextEntrypoint,
   clickEntrypoint
 } from 'scripts/react-components/home/home.actions';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 import { getDestinationCountries } from 'react-components/home/home.selectors';
 
 function mapStateToProps(state) {

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { toggleDropdown, changeLayout } from 'actions/app.actions';
+import { toggleDropdown, changeLayout } from 'app/app.actions';
 import FiltersNav from 'react-components/nav/filters-nav/filters-nav.component';
 import { getNavFilters } from 'react-components/nav/filters-nav/filters-nav.selectors';
 import { getRecolorByOptions } from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.selectors';

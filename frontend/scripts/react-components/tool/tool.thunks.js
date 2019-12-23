@@ -1,5 +1,5 @@
 import { batch } from 'react-redux';
-import { loadDisclaimer, resize } from 'actions/app.actions';
+import { loadDisclaimer, resize } from 'app/app.actions';
 import { getToolColumns } from 'react-components/tool-links/tool-links.actions';
 import { getMissingItems } from 'react-components/nodes-panel/nodes-panel.actions';
 

@@ -12,12 +12,12 @@ import {
 } from 'react-components/tool-links/tool-links.selectors';
 import uniqBy from 'lodash/uniqBy';
 import { sortFlows } from 'react-components/tool/sankey/sort-flows';
-import splitVisibleNodesByColumn from 'reducers/helpers/splitVisibleNodesByColumn';
-import sortVisibleNodes from 'reducers/helpers/sortVisibleNodes';
-import mergeLinks from 'reducers/helpers/mergeLinks';
-import filterLinks from 'reducers/helpers/filterLinks';
-import splitLinksByColumn from 'reducers/helpers/splitLinksByColumn';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import splitVisibleNodesByColumn from 'app/helpers/splitVisibleNodesByColumn';
+import sortVisibleNodes from 'app/helpers/sortVisibleNodes';
+import mergeLinks from 'app/helpers/mergeLinks';
+import filterLinks from 'app/helpers/filterLinks';
+import splitLinksByColumn from 'app/helpers/splitLinksByColumn';
+import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 import { getHasExtraColumn, getColumnsNumber } from 'react-components/tool/tool.selectors';
 import { getExpandedNodesIds } from 'react-components/nodes-panel/nodes-panel.selectors';
 

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectYears } from 'actions/app.actions';
+import { selectYears } from 'app/app.actions';
 import Timeline from 'react-components/tool/timeline/timeline.component';
 import { getToolYearsProps } from 'react-components/tool-links/tool-links.selectors';
 

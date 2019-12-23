@@ -1,8 +1,8 @@
 import { select, all, call, fork, put, takeLatest, cancel } from 'redux-saga/effects';
-import { SET_CONTEXT, SET_CONTEXTS } from 'actions/app.actions';
+import { SET_CONTEXT, SET_CONTEXTS } from 'app/app.actions';
 import { setLoadingSpinner } from 'utils/saga-utils';
 import { loadMapVectorData, SELECT_YEARS } from 'react-components/tool/tool.actions';
-import { getSelectedContext } from 'reducers/app.selectors';
+import { getSelectedContext } from 'app/app.selectors';
 import {
   NODES_PANEL__SAVE,
   NODES_PANEL__SYNC_NODES_WITH_SANKEY

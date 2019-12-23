@@ -3,7 +3,7 @@ import {
   PROFILE_NODE__GET_COLUMNS,
   setColumnsLoading
 } from 'react-components/profile-node/profile-node.actions';
-import { SET_CONTEXT, SET_CONTEXTS } from 'actions/app.actions';
+import { SET_CONTEXT, SET_CONTEXTS } from 'app/app.actions';
 import { setLoadingSpinner } from 'utils/saga-utils';
 import { getColumnsData } from 'react-components/profile-node/profile-node-fetch.saga';
 
