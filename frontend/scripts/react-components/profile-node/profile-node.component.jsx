@@ -14,6 +14,12 @@ import Text from 'react-components/shared/text';
 import cx from 'classnames';
 import sortBy from 'lodash/sortBy';
 
+import 'styles/components/shared/dropdown.scss';
+import 'styles/components/profiles/area-select.scss';
+import 'styles/components/profiles/map.scss';
+import 'styles/components/profiles/overall-info.scss';
+import 'styles/components/profiles/info.scss';
+
 class ProfileNode extends React.PureComponent {
   static propTypes = {
     printMode: PropTypes.bool,

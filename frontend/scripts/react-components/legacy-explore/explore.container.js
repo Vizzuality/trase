@@ -5,8 +5,8 @@ import {
   setExploreTopNodes,
   setSelectedTableColumnType
 } from 'react-components/legacy-explore/explore.actions';
-import { selectContextById } from 'actions/app.actions';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { selectContextById } from 'app/app.actions';
+import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 import { getDestinationCountries } from 'react-components/legacy-explore/explore.selectors';
 import Explore from './explore.component';
 

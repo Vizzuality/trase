@@ -6,12 +6,14 @@ import createReducer from 'utils/createReducer';
 import pluralize from 'utils/pluralize';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import nodesPanelSerialization from 'react-components/nodes-panel/nodes-panel.serializers';
-import { SET_CONTEXTS } from 'actions/app.actions';
+
+import { SET_CONTEXTS } from 'app/app.actions';
 import {
   TOOL_LINKS__COLLAPSE_SANKEY,
   TOOL_LINKS__SELECT_COLUMN,
   TOOL_LINKS_RESET_SANKEY
 } from 'react-components/tool-links/tool-links.actions';
+
 import {
   NODES_PANEL__FETCH_DATA,
   NODES_PANEL__SET_PANEL_PAGE,

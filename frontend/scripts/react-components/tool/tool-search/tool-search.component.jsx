@@ -116,11 +116,11 @@ function ToolSearch(props) {
       <div className="search-wrapper">
         <Downshift
           itemToString={i => (i === null ? '' : i.name)}
-          onSelect={this.onSelected}
-          ref={this.setDownshiftRef}
+          onSelect={onSelected}
+          ref={downshift}
           defaultHighlightedIndex={0}
           itemCount={nodes.length}
-          onStateChange={this.onDownshiftStateChange}
+          onStateChange={onDownshiftStateChange}
         >
           {({ getInputProps, getItemProps, isOpen, highlightedIndex }) => (
             <div className="search-container" onClick={e => e.stopPropagation()}>
@@ -160,10 +160,10 @@ function ToolSearch(props) {
                         item={item}
                         contextId={contextId}
                         itemProps={getItemProps({ item })}
-                        selected={this.isNodeSelected(item)}
-                        importerNotSelected={item.importer && !this.isNodeSelected(item.importer)}
-                        exporterNotSelected={item.exporter && !this.isNodeSelected(item.exporter)}
-                        onClickAdd={this.handleClickAdd}
+                        selected={isNodeSelected(item)}
+                        importerNotSelected={item.importer && !isNodeSelected(item.importer)}
+                        exporterNotSelected={item.exporter && !isNodeSelected(item.exporter)}
+                        onClickAdd={handleClickAdd}
                       />
                     );
                   }}

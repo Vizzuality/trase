@@ -7,7 +7,7 @@ import {
 } from 'constants';
 import capitalize from 'lodash/capitalize';
 import { makeGetAvailableYears } from 'selectors/years.selectors';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 import {
   getSelectedResizeBy as getToolResizeBy,
   getSelectedRecolorBy as getToolRecolorBy,

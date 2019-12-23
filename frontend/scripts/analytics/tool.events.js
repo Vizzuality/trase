@@ -1,4 +1,4 @@
-import { TOGGLE_MAP_LAYERS_MENU, SET_CONTEXT } from 'actions/app.actions';
+import { TOGGLE_MAP_LAYERS_MENU, SET_CONTEXT } from 'app/app.actions';
 import {
   SELECT_CONTEXTUAL_LAYERS,
   SELECT_YEARS,

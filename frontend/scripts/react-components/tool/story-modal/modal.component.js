@@ -4,7 +4,7 @@ import 'styles/_texts.scss';
 import 'scripts/react-components/shared/button/button.scss';
 import 'styles/components/shared/modal.scss';
 
-import ModalTemplate from 'templates/shared/modal.ejs';
+import ModalTemplate from 'legacy/modal.ejs';
 
 class ModalComponent {
   constructor() {

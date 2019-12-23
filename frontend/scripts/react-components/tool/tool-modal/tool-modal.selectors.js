@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { makeGetResizeByItems } from 'selectors/indicators.selectors';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 import { getSelectedResizeBy } from 'react-components/tool-links/tool-links.selectors';
 import {
   getSelectedRecolorByValue,

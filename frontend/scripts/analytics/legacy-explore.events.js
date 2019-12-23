@@ -1,5 +1,5 @@
 import { EXPLORE__SET_TOP_COUNTRIES } from 'react-components/legacy-explore/explore.actions';
-import { getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedYears } from 'app/app.selectors';
 
 export default [
   {

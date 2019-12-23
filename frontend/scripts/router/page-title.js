@@ -1,6 +1,6 @@
 import capitalize from 'lodash/capitalize';
 import startCase from 'lodash/startCase';
-import { getSelectedContext } from 'reducers/app.selectors';
+import { getSelectedContext } from 'app/app.selectors';
 import { getDashboardsContext } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { TOOL_LAYOUT } from 'constants';
 

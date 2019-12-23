@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { getSelectedContext } from 'reducers/app.selectors';
+import { getSelectedContext } from 'app/app.selectors';
 import versionJson from 'react-components/tool/tool-modal/versioning-modal/versions.json';
 
 export const getVersionData = createSelector(
