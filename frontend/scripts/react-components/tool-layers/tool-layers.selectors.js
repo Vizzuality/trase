@@ -1,13 +1,13 @@
 import { createSelector, createStructuredSelector } from 'reselect';
-import getChoropleth from 'reducers/helpers/getChoropleth';
+import getChoropleth from 'app/helpers/getChoropleth';
 import { DEFAULT_BASEMAP_FOR_CHOROPLETH } from 'constants';
-import { getMapDimensionsWarnings as getMapDimensionsWarningsUtil } from 'scripts/reducers/helpers/getMapDimensionsWarnings';
+import { getMapDimensionsWarnings as getMapDimensionsWarningsUtil } from 'app/helpers/getMapDimensionsWarnings';
 import {
   getHighlightedNodesData,
   getSelectedColumnsIds,
   getSelectedNodesData
 } from 'react-components/tool/tool.selectors';
-import { getSelectedYears, getSelectedContext } from 'reducers/app.selectors';
+import { getSelectedYears, getSelectedContext } from 'app/app.selectors';
 
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolColumns = state => state.toolLinks.data.columns;

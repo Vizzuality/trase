@@ -3,7 +3,7 @@ import isNumber from 'lodash/isNumber';
 import debounce from 'lodash/debounce';
 // eslint-disable-next-line camelcase
 import turf_bbox from '@turf/bbox';
-import getNodeMeta from 'reducers/helpers/getNodeMeta';
+import getNodeMeta from 'app/helpers/getNodeMeta';
 import formatValue from 'utils/formatValue';
 import {
   BASEMAPS,
@@ -13,7 +13,7 @@ import {
   MAP_PANES_Z,
   CHOROPLETH_COLORS
 } from 'constants';
-import Tooltip from 'components/shared/info-tooltip.component';
+import Tooltip from 'legacy/info-tooltip.component';
 import cloneDeep from 'lodash/cloneDeep';
 
 import 'styles/components/tool/map/leaflet.css';

@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
-import { getSelectedContext } from 'reducers/app.selectors';
+import { getSelectedContext } from 'app/app.selectors';
 import { getPanelsActiveNodeTypeIds } from 'react-components/nodes-panel/nodes-panel.selectors';
+
 import { MIN_COLUMNS_NUMBER } from 'constants';
 
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;

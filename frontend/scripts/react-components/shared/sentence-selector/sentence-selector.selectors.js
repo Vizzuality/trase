@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash/sortBy';
-import { getSelectedContext } from 'reducers/app.selectors';
+import { getSelectedContext } from 'app/app.selectors';
 
 const getContexts = state => state.app.contexts;
 

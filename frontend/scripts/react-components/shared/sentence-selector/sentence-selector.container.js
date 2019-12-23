@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
 
 import SentenceSelector from 'react-components/shared/sentence-selector/sentence-selector.component';
-import { selectContextById } from 'actions/app.actions';
+import { selectContextById } from 'app/app.actions';
 import {
   getSortedContexts,
   getSelectedCommodityPairs,
   getSelectedCountryPairs
 } from 'react-components/shared/sentence-selector/sentence-selector.selectors';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 
 function mapStateToProps(state) {
   const { query: { lang } = {} } = state.location;
