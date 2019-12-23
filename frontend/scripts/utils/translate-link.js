@@ -74,6 +74,22 @@ function translateLink(data, meta, to = 'sankey') {
     };
   }
 
+  if (ENABLE_TOOL_PANEL) {
+    const { selectedNodesIds, expandedNodesIds, ...newParams } = params;
+    return {
+      type: 'tool',
+      payload: {
+        section: 'data-view',
+        serializerParams: {
+          ...newParams,
+          ...serializerParams,
+          countries: countryId,
+          commodities: commodityId
+        }
+      }
+    };
+  }
+
   return {
     type: 'dashboardElement',
     payload: {
