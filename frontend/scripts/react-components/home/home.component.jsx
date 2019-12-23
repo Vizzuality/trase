@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import sortBy from 'lodash/sortBy';
 import Hero from 'react-components/shared/hero/hero.component';
 import NewsletterForm from 'react-components/shared/newsletter/newsletter.container';
 import SliderSection from 'react-components/home/slider-section/slider-section.component';
@@ -11,6 +12,9 @@ import InView from 'react-components/shared/in-view.component';
 import cx from 'classnames';
 
 import 'scripts/react-components/home/homepage.scss';
+
+const getConsolidatedInsights = (insights, blogs) =>
+  sortBy([...insights, ...blogs], post => -new Date(post.date).getTime());
 
 const Home = props => {
   const {
@@ -34,6 +38,63 @@ const Home = props => {
     getTopCountries();
   }, [getTopCountries, selectedContext, selectedYears]);
 
+  const entryPoints = (
+    <div className={cx('homepage-entrypoints', { '-hide-profiles': DISABLE_PROFILES })}>
+      <Entrypoints onClickNext={clickNextEntrypoint} onClick={clickEntrypoint} />
+    </div>
+  );
+
+  const map = (
+    <InView triggerOnce>
+      {({ ref, inView }) => (
+        <div className={cx('homepage-map', { '-bottom': CONSOLIDATE_INSIGHTS })} ref={ref}>
+          <div className="row">
+            <div className="column small-12">
+              <SentenceSelector className="homepage-map-sentence-selector" />
+              <div className="homepage-map-container">
+                {inView && (
+                  <WorldMap
+                    id="home"
+                    context={selectedContext}
+                    destinationCountries={destinationCountries}
+                  />
+                )}
+              </div>
+              <div className="homepage-map-link-container">
+                <Button
+                  color="pink"
+                  size="lg"
+                  className="homepage-map-link"
+                  onClick={goToContextPage}
+                >
+                  Find out more
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </InView>
+  );
+
+  const sliders = (
+    <div className="sliders">
+      <NewsletterForm />
+      {CONSOLIDATE_INSIGHTS === false && (
+        <>
+          <SliderSection name="News and Blogs" slides={blogPosts} />
+          <SliderSection name="Insights" slides={insightsPosts} />
+        </>
+      )}
+      {CONSOLIDATE_INSIGHTS === true && (
+        <SliderSection name="Insights" slides={getConsolidatedInsights(insightsPosts, blogPosts)} />
+      )}
+      <SliderSection className="-small" name="Testimonials" slides={testimonials} />
+    </div>
+  );
+
+  const content = CONSOLIDATE_INSIGHTS ? [sliders, entryPoints, map] : [entryPoints, map, sliders];
+
   return (
     <div className="l-homepage">
       <div className="c-homepage">
@@ -43,45 +104,9 @@ const Home = props => {
           homeVideo={homeVideo}
           onPlayVideo={onPlayVideo}
         />
-        <div className={cx('homepage-entrypoints', { '-hide-profiles': DISABLE_PROFILES })}>
-          <Entrypoints onClickNext={clickNextEntrypoint} onClick={clickEntrypoint} />
-        </div>
-        <InView triggerOnce>
-          {({ ref, inView }) => (
-            <div className="homepage-map" ref={ref}>
-              <div className="row">
-                <div className="column small-12">
-                  <SentenceSelector className="homepage-map-sentence-selector" />
-                  <div className="homepage-map-container">
-                    {inView && (
-                      <WorldMap
-                        id="home"
-                        context={selectedContext}
-                        destinationCountries={destinationCountries}
-                      />
-                    )}
-                  </div>
-                  <div className="homepage-map-link-container">
-                    <Button
-                      color="pink"
-                      size="lg"
-                      className="homepage-map-link"
-                      onClick={goToContextPage}
-                    >
-                      Find out more
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-        </InView>
-        <div className="sliders">
-          <NewsletterForm />
-          <SliderSection name="News and Blogs" slides={blogPosts} />
-          <SliderSection name="Insights" slides={insightsPosts} />
-          <SliderSection className="-small" name="Testimonials" slides={testimonials} />
-        </div>
+        {content.map((section, index) => (
+          <React.Fragment key={index}>{section}</React.Fragment>
+        ))}
       </div>
     </div>
   );

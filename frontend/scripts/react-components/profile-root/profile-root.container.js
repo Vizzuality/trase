@@ -13,12 +13,7 @@ function mapStateToProps(state) {
 
   // we make sure the globally selected context is available in the selectorContexts
   const activeContext = selectedContext
-    ? selectorContexts.find(ctx => {
-        if (DISABLE_MULTIPLE_CONTEXT_PROFILES) {
-          return ctx.countryName === 'BRAZIL' && ctx.commodityName === 'SOY';
-        }
-        return ctx.id === selectedContext.id;
-      })
+    ? selectorContexts.find(ctx => ctx.id === selectedContext.id)
     : null;
 
   return {

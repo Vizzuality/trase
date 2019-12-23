@@ -40,6 +40,12 @@
       justify-content: center;
       margin: 0 0 60px;
     }
+
+    &.-bottom {
+      background-color: $white;
+      margin: 0;
+      padding: 60px 0 0;
+    }
   }
 
   .sliders {
