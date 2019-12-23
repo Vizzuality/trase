@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { getURLFromParams, GET_TOP_NODES_URL } from 'utils/getURLFromParams';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 import getTopNodesKey from 'utils/getTopNodesKey';
 
 export const EXPLORE__SET_TOP_COUNTRIES = 'EXPLORE__SET_TOP_COUNTRIES';

@@ -3,15 +3,15 @@ import { feature as topojsonFeature } from 'topojson';
 import { CARTO_NAMED_MAPS_BASE_URL } from 'constants';
 import { GET_NODE_ATTRIBUTES_URL, getURLFromParams } from 'utils/getURLFromParams';
 import contextLayersCarto from 'named-maps/tool_named_maps_carto';
-import getNodeIdFromGeoId from 'actions/helpers/getNodeIdFromGeoId';
-import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
+import getNodeIdFromGeoId from 'utils/getNodeIdFromGeoId';
+import setGeoJSONMeta from 'utils/setGeoJSONMeta';
 import compact from 'lodash/compact';
 import { getVisibleNodes } from 'react-components/tool-links/tool-links.selectors';
 import {
   getSelectedGeoColumn,
   getSelectedMapDimensionsUids
 } from 'react-components/tool-layers/tool-layers.selectors';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 
 import {
   expandSankey,

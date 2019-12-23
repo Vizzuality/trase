@@ -14,12 +14,12 @@ import {
   APP__TRANSIFEX_LANGUAGES_LOADED,
   APP__SET_TOP_DESTINATION_COUNTRIES,
   APP__SET_TOP_DESTINATION_COUNTRIES_LOADING
-} from 'actions/app.actions';
+} from 'app/app.actions';
 import { COUNTRIES_COORDINATES } from 'scripts/countries';
 import createReducer from 'utils/createReducer';
 import { SELECT_YEARS } from 'react-components/tool/tool.actions';
 import { TOOL_LINKS_RESET_SANKEY } from 'react-components/tool-links/tool-links.actions';
-import appSerialization from 'reducers/app.serializers';
+import appSerialization from 'app/app.serializers';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import { NODES_PANEL__SAVE } from 'react-components/nodes-panel/nodes-panel.actions';
 import initialState from './app.initial-state';

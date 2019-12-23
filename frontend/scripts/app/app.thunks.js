@@ -1,4 +1,4 @@
-import { SET_TOOLTIPS, SET_CONTEXTS, APP__SET_LOADING } from 'actions/app.actions';
+import { SET_TOOLTIPS, SET_CONTEXTS, APP__SET_LOADING } from 'app/app.actions';
 import { GET_TOOLTIPS_URL, getURLFromParams, GET_CONTEXTS_URL } from 'utils/getURLFromParams';
 import getPageTitle from 'router/page-title';
 

@@ -39,7 +39,7 @@ import {
   changeExtraColumn
 } from 'react-components/tool-links/tool-links.actions';
 import { SET_NODE_ATTRIBUTES } from 'react-components/tool/tool.actions';
-import { SET_CONTEXT } from 'actions/app.actions';
+import { SET_CONTEXT } from 'app/app.actions';
 
 test(TOOL_LINKS__SET_FLOWS_LOADING, () => {
   const action = setToolFlowsLoading(true);

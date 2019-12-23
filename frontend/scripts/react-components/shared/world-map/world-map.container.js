@@ -7,7 +7,7 @@ import {
   getWorldMapFlows,
   getHighlightedCountriesIso
 } from 'react-components/shared/world-map/world-map.selectors';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 
 const mapStateToProps = (state, ownProps) => {
   const { highlightedContext, highlightedCountryIds } = ownProps;

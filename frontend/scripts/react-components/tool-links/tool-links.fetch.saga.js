@@ -9,7 +9,7 @@ import {
 import { fetchWithCancel } from 'utils/saga-utils';
 import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
 import { NUM_NODES_DETAILED, NUM_NODES_EXPANDED, NUM_NODES_SUMMARY } from 'constants';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 import { getSelectedGeoColumn } from 'react-components/tool-layers/tool-layers.selectors';
 import {
   getSelectedResizeBy,

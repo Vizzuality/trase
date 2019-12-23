@@ -6,9 +6,9 @@ import {
   getURLFromParams
 } from 'utils/getURLFromParams';
 import { CHANGE_LAYOUT, SET_SANKEY_SIZE, SELECT_YEARS } from 'react-components/tool/tool.actions';
-import getPageTitle from 'scripts/router/page-title';
+import getPageTitle from 'router/page-title';
 import { redirect } from 'redux-first-router';
-import { getSelectedContext } from 'reducers/app.selectors';
+import { getSelectedContext } from 'app/app.selectors';
 import axios from 'axios';
 
 export const SET_CONTEXT = 'SET_CONTEXT';

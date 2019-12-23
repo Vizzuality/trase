@@ -1,4 +1,4 @@
-import { loadSearchResults } from 'actions/app.actions';
+import { loadSearchResults } from 'app/app.actions';
 import GlobalSearch from 'react-components/nav/global-search/global-search.component';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
