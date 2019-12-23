@@ -105,7 +105,11 @@ class SliderSection extends React.PureComponent {
       <Card
         translateUrl
         title={slide.title}
-        subtitle={slide.category}
+        subtitle={`${slide.category} – ${new Date(slide.date).toLocaleDateString('en-GB', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        })}`}
         imageUrl={slide.imageUrl}
         linkUrl={slide.completePostUrl}
         actionName={SliderSection.getActionName(slide.category)}
