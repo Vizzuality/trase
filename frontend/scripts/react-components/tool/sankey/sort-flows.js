@@ -88,7 +88,8 @@ export function sortFlowsBySelectedRecolorBy(link, columns, nodesMap, recolorBy,
     return -value;
   }
   if (recolorBy.type === 'qual') {
-    return recolorBy.nodes.length - recolorBy.nodes.findIndex(n => n === link.recolorBy);
+    const nodeIndex = recolorBy.nodes.findIndex(n => n === link.recolorBy);
+    return nodeIndex >= 0 ? nodeIndex : recolorBy.nodes.length + 1;
   }
   return sortFlowsByDefault(link, columns, nodesMap);
 }

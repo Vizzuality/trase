@@ -35,12 +35,15 @@ describe('Sort flows when a recolor by is selected', () => {
       type: 'ind'
     };
 
-    const resultA = sortFlowsBySelectedRecolorBy(linkA, recolorBy);
-    const resultA2 = sortFlowsBySelectedRecolorBy(linkA2, recolorBy);
-    const resultB = sortFlowsBySelectedRecolorBy(linkB, recolorBy);
-    const resultB2 = sortFlowsBySelectedRecolorBy(linkB2, recolorBy);
-    const resultC = sortFlowsBySelectedRecolorBy(linkC, recolorBy);
-    const resultC2 = sortFlowsBySelectedRecolorBy(linkC2, recolorBy);
+    const mockColumns = {};
+    const nodesMap = new Map();
+
+    const resultA = sortFlowsBySelectedRecolorBy(linkA, mockColumns, nodesMap, recolorBy);
+    const resultA2 = sortFlowsBySelectedRecolorBy(linkA2, mockColumns, nodesMap, recolorBy);
+    const resultB = sortFlowsBySelectedRecolorBy(linkB, mockColumns, nodesMap, recolorBy);
+    const resultB2 = sortFlowsBySelectedRecolorBy(linkB2, mockColumns, nodesMap, recolorBy);
+    const resultC = sortFlowsBySelectedRecolorBy(linkC, mockColumns, nodesMap, recolorBy);
+    const resultC2 = sortFlowsBySelectedRecolorBy(linkC2, mockColumns, nodesMap, recolorBy);
 
     expect(sortBy([resultA, resultB, resultC, resultA2, resultB2, resultC2])).toEqual([
       resultC,
@@ -52,7 +55,7 @@ describe('Sort flows when a recolor by is selected', () => {
     ]);
   });
 
-  it('orders flows alphabetically based on the qual recolorBY', () => {
+  it('orders flows using node index based on the qual recolorBY', () => {
     const linkA = {
       quant: 44444,
       recolorBy: 'AMAZONIA'
@@ -75,62 +78,72 @@ describe('Sort flows when a recolor by is selected', () => {
     };
     const linkC2 = {
       quant: 111,
-      recolorBy: 'CERRADO'
+      recolorBy: 'UNKNOWN'
     };
     const recolorBy = {
-      type: 'qual'
+      type: 'qual',
+      nodes: ['AMAZONIA', 'CAATINGA', 'CERRADO', 'MATA ATLANTICA', 'PAMPA', 'PANTANAL']
     };
-    const resultA = sortFlowsBySelectedRecolorBy(linkA, recolorBy);
-    const resultA2 = sortFlowsBySelectedRecolorBy(linkA2, recolorBy);
-    const resultB = sortFlowsBySelectedRecolorBy(linkB, recolorBy);
-    const resultB2 = sortFlowsBySelectedRecolorBy(linkB2, recolorBy);
-    const resultC = sortFlowsBySelectedRecolorBy(linkC, recolorBy);
-    const resultC2 = sortFlowsBySelectedRecolorBy(linkC2, recolorBy);
+    const mockColumns = {};
+    const nodesMap = new Map();
+
+    const resultA = sortFlowsBySelectedRecolorBy(linkA, mockColumns, nodesMap, recolorBy);
+    const resultA2 = sortFlowsBySelectedRecolorBy(linkA2, mockColumns, nodesMap, recolorBy);
+    const resultB = sortFlowsBySelectedRecolorBy(linkB, mockColumns, nodesMap, recolorBy);
+    const resultB2 = sortFlowsBySelectedRecolorBy(linkB2, mockColumns, nodesMap, recolorBy);
+    const resultC = sortFlowsBySelectedRecolorBy(linkC, mockColumns, nodesMap, recolorBy);
+    const resultC2 = sortFlowsBySelectedRecolorBy(linkC2, mockColumns, nodesMap, recolorBy);
 
     expect(sortBy([resultA, resultB, resultC, resultA2, resultB2, resultC2])).toEqual([
       resultA,
       resultA2,
       resultC,
-      resultC2,
       resultB,
-      resultB2
+      resultB2,
+      resultC2
     ]);
   });
 });
 
 describe('Sort flows when selection by is used', () => {
   const linkA = {
-    quant: 44444,
+    sourceNodeId: 'A',
+    targetNodeId: 'D',
     recolorGroup: 1,
     sourceColumnPosition: 0,
     targetColumnPosition: 1
   };
   const linkA2 = {
-    quant: 444,
+    sourceNodeId: 'A',
+    targetNodeId: 'F',
     recolorGroup: 1,
     sourceColumnPosition: 0,
     targetColumnPosition: 1
   };
   const linkB = {
-    quant: 33333,
+    sourceNodeId: 'B',
+    targetNodeId: 'E',
     recolorGroup: 2,
     sourceColumnPosition: 0,
     targetColumnPosition: 1
   };
   const linkB2 = {
-    quant: 333,
+    sourceNodeId: 'B',
+    targetNodeId: 'F',
     recolorGroup: 2,
     sourceColumnPosition: 0,
     targetColumnPosition: 1
   };
   const linkC = {
-    quant: 11111,
+    sourceNodeId: 'C',
+    targetNodeId: 'D',
     recolorGroup: 3,
     sourceColumnPosition: 0,
     targetColumnPosition: 1
   };
   const linkC2 = {
-    quant: 111,
+    sourceNodeId: 'C',
+    targetNodeId: 'E',
     recolorGroup: 3,
     sourceColumnPosition: 0,
     targetColumnPosition: 1
@@ -139,19 +152,27 @@ describe('Sort flows when selection by is used', () => {
     nodesColoredAtColumn: 2,
     recolorGroupsOrderedByY: [2, 1, 3]
   };
-  const resultA = sortFlowsBySelectionRecolorGroup(linkA, options);
-  const resultA2 = sortFlowsBySelectionRecolorGroup(linkA2, options);
-  const resultB = sortFlowsBySelectionRecolorGroup(linkB, options);
-  const resultB2 = sortFlowsBySelectionRecolorGroup(linkB2, options);
-  const resultC = sortFlowsBySelectionRecolorGroup(linkC, options);
-  const resultC2 = sortFlowsBySelectionRecolorGroup(linkC2, options);
+  const columns = [
+    { values: [{ id: 'A' }, { id: 'B' }, { id: 'C' }] },
+    { values: [{ id: 'D' }, { id: 'E' }, { id: 'F' }] }
+  ];
+  const nodesMap = new Map();
+
+  const resultA = sortFlowsBySelectionRecolorGroup(linkA, columns, nodesMap, options);
+  const resultA2 = sortFlowsBySelectionRecolorGroup(linkA2, columns, nodesMap, options);
+  const resultB = sortFlowsBySelectionRecolorGroup(linkB, columns, nodesMap, options);
+  const resultB2 = sortFlowsBySelectionRecolorGroup(linkB2, columns, nodesMap, options);
+  const resultC = sortFlowsBySelectionRecolorGroup(linkC, columns, nodesMap, options);
+  const resultC2 = sortFlowsBySelectionRecolorGroup(linkC2, columns, nodesMap, options);
+
+  console.log([resultA, resultB, resultC, resultA2, resultB2, resultC2]);
 
   expect(sortBy([resultA, resultB, resultC, resultA2, resultB2, resultC2])).toEqual([
-    resultB,
-    resultB2,
     resultA,
-    resultA2,
+    resultB,
     resultC,
-    resultC2
+    resultC2,
+    resultA2,
+    resultB2
   ]);
 });
