@@ -1,5 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { useSelector } from 'react-redux';
+import FiltersNav from 'react-components/nav/filters-nav/filters-nav.container';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import CookieBanner from 'react-components/shared/cookie-banner';
 import Feedback from 'react-components/shared/feedback';
@@ -17,14 +18,12 @@ const pageContent = {
 
 function App() {
   const { routesMap, type, query } = useSelector(state => state.location);
-  const { Component, layout, footer = true } = routesMap[type];
+  const { Component, layout, footer = true, filtersNav } = routesMap[type];
 
   const pageKey = type === 'profileNode' ? `${type}-${query?.nodeId}` : type;
   return (
     <Suspense fallback={null}>
-      <nav>
-        <TopNav />
-      </nav>
+      <nav>{filtersNav ? <FiltersNav /> : <TopNav />}</nav>
       <main>
         <Component key={pageKey} content={layout && layout(pageContent[type])} />
         <CookieBanner />

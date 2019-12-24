@@ -68,7 +68,8 @@ export const routes = {
     Component: lazy(() => import('../react-components/tool/tool.js')),
     title: getPageTitle,
     thunk: loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool),
-    footer: false
+    footer: false,
+    filtersNav: true
   },
   profileRoot: {
     path: '/profiles',
@@ -149,7 +150,8 @@ export const routes = {
     Component: lazy(() => import('../react-components/logistics-map/logistics-map.container')),
     thunk: loadPageData(),
     title: getPageTitle,
-    footer: false
+    footer: false,
+    filtersNav: true
   },
   [NOT_FOUND]: {
     path: '/404',
