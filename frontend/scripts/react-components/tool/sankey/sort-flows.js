@@ -15,7 +15,7 @@ const baseLog = (base, num) => Math.log(num) / Math.log(base);
 // Then to group flows within a class from source node to target node heights, we use the nodes index.
 // This can expressed as: Log(class^(source_index + 1), max_target_index - target_index)
 const getLinkSortingValue = (_class, _sourceIndex, _targetIndex, _maxTargetIndex) =>
-  baseLog(_class ** (_sourceIndex + 1), _maxTargetIndex - _targetIndex);
+  baseLog(_class ** (_sourceIndex + 1), _maxTargetIndex - _targetIndex + 1);
 
 function getPathNodesColumnIndexes(link, columns, nodesMap) {
   const sourceColumn = columns[link.sourceColumnPosition];

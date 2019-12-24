@@ -165,14 +165,12 @@ describe('Sort flows when selection by is used', () => {
   const resultC = sortFlowsBySelectionRecolorGroup(linkC, columns, nodesMap, options);
   const resultC2 = sortFlowsBySelectionRecolorGroup(linkC2, columns, nodesMap, options);
 
-  console.log([resultA, resultB, resultC, resultA2, resultB2, resultC2]);
-
   expect(sortBy([resultA, resultB, resultC, resultA2, resultB2, resultC2])).toEqual([
     resultA,
     resultB,
-    resultC,
-    resultC2,
     resultA2,
-    resultB2
+    resultB2,
+    resultC,
+    resultC2
   ]);
 });
