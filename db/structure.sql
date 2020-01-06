@@ -4569,80 +4569,6 @@ ALTER SEQUENCE public.flows_id_seq OWNED BY public.flows.id;
 
 
 --
--- Name: nodes; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.nodes (
-    id integer NOT NULL,
-    node_type_id integer NOT NULL,
-    name text NOT NULL,
-    geo_id text,
-    is_unknown boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    main_id integer
-);
-
-
---
--- Name: TABLE nodes; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.nodes IS 'Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains';
-
-
---
--- Name: COLUMN nodes.name; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.nodes.name IS 'Name of node';
-
-
---
--- Name: COLUMN nodes.geo_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.nodes.geo_id IS '2-letter iso code in case of country nodes; other geo identifiers possible for other node types';
-
-
---
--- Name: COLUMN nodes.is_unknown; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.nodes.is_unknown IS 'When set, node was not possible to identify';
-
-
---
--- Name: COLUMN nodes.main_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.nodes.main_id IS 'Node identifier from Main DB';
-
-
---
--- Name: flows_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.flows_mv AS
- SELECT flow_nodes.id,
-    flow_nodes.context_id,
-    flow_nodes.year,
-    array_agg(nodes.id ORDER BY cnt.column_position) AS path,
-    jsonb_object_agg(cnt.column_position, jsonb_build_object('node_id', nodes.id, 'node', nodes.name, 'node_type_id', cnt.node_type_id, 'node_type', node_types.name, 'is_unknown', nodes.is_unknown) ORDER BY cnt.column_position) AS jsonb_path
-   FROM (((( SELECT flows.id,
-            flows.context_id,
-            flows.year,
-            a.node_id,
-            (a."position" - 1) AS column_position
-           FROM public.flows,
-            LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) flow_nodes
-     JOIN public.nodes ON ((flow_nodes.node_id = nodes.id)))
-     JOIN public.context_node_types cnt ON (((flow_nodes.context_id = cnt.context_id) AND (flow_nodes.column_position = cnt.column_position))))
-     JOIN public.node_types ON ((cnt.node_type_id = node_types.id)))
-  GROUP BY flow_nodes.id, flow_nodes.context_id, flow_nodes.year
-  WITH NO DATA;
-
-
---
 -- Name: ind_commodity_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -4751,6 +4677,56 @@ COMMENT ON COLUMN public.node_inds.year IS 'Year; empty (NULL) for all years';
 --
 
 COMMENT ON COLUMN public.node_inds.value IS 'Numeric value';
+
+
+--
+-- Name: nodes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.nodes (
+    id integer NOT NULL,
+    node_type_id integer NOT NULL,
+    name text NOT NULL,
+    geo_id text,
+    is_unknown boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    main_id integer
+);
+
+
+--
+-- Name: TABLE nodes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.nodes IS 'Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains';
+
+
+--
+-- Name: COLUMN nodes.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.name IS 'Name of node';
+
+
+--
+-- Name: COLUMN nodes.geo_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.geo_id IS '2-letter iso code in case of country nodes; other geo identifiers possible for other node types';
+
+
+--
+-- Name: COLUMN nodes.is_unknown; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.is_unknown IS 'When set, node was not possible to identify';
+
+
+--
+-- Name: COLUMN nodes.main_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.main_id IS 'Node identifier from Main DB';
 
 
 --
@@ -8877,27 +8853,6 @@ CREATE INDEX flows_context_id_year_idx ON public.flows USING btree (context_id, 
 
 
 --
--- Name: flows_mv_context_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX flows_mv_context_id_idx ON public.flows_mv USING btree (context_id);
-
-
---
--- Name: flows_mv_unique_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX flows_mv_unique_idx ON public.flows_mv USING btree (id);
-
-
---
--- Name: flows_mv_year_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX flows_mv_year_idx ON public.flows_mv USING btree (year);
-
-
---
 -- Name: ind_commodity_properties_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -10305,6 +10260,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191216101622'),
 ('20191217105056'),
 ('20191218221238'),
-('20191219221216');
+('20191219221216'),
+('20200106092554');
 
 
