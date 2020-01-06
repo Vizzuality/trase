@@ -113,7 +113,8 @@ module Api
           Api::V3::TablePartitions::CreatePartitionsForFlowInds.new.call
           Api::V3::TablePartitions::CreatePartitionsForFlowQuals.new.call
           Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowQuants.new.call
-          Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowInds.new.call
+          # not used at the moment
+          # Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowInds.new.call
           Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowQuals.new.call
           # synchronously, skip dependencies (already refreshed)
           [
