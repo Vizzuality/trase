@@ -75,7 +75,7 @@ group :development do
   gem 'capistrano-passenger'
   gem 'capistrano-nvm'
 
-  gem 'rubocop', '~> 0.77.0', require: false
+  gem 'rubocop', '~> 0.78.0', require: false
   gem 'rubocop-performance', require: false
   gem 'rbnacl', '>= 3.2', '< 5.0'
   gem 'rbnacl-libsodium'
