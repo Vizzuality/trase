@@ -58,14 +58,18 @@ $card-min-width: 180px;
 
 .c-featured-card {
   margin: 10px 0 10px;
+  background-color: $strong-pink;
+  border-radius: 5px;
 
   .featured-card-button {
     height: 100px;
     width: 100%;
     border-radius: 5px;
-    background-color: $strong-pink;
     cursor: pointer;
-    padding: 20px;
+    padding: 30px 20px;
+    background-size: auto 90%;
+    background-repeat: no-repeat;
+    background-position: center;
   }
 
   .featured-card-text {
