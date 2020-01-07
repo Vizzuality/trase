@@ -105,13 +105,14 @@ $explore-heading: 66px;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      align-items: center;
       border-radius: 50%;
       margin-top: 20px;
       background-color: $yellow-gray;
     }
 
-    .quick-facts-value {
-      margin-top: 26px;
+    .quick-facts-label {
+      max-width: 110px;
     }
   }
 
