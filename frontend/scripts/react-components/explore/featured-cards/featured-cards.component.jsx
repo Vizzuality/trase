@@ -27,7 +27,7 @@ const FeaturedCard = ({ card, openModal, step }) => {
           weight="bold"
           size="lg"
           transform="uppercase"
-          color="grey-faded"
+          color="white"
         >
           {countryName} · {commodityName}
         </Text>
@@ -35,7 +35,7 @@ const FeaturedCard = ({ card, openModal, step }) => {
           variant="mono"
           align="center"
           transform="uppercase"
-          color="grey-faded"
+          color="white"
           lineHeight="lg"
           className="featured-card-text"
           title={title}
@@ -46,7 +46,7 @@ const FeaturedCard = ({ card, openModal, step }) => {
           variant="mono"
           align="center"
           transform="uppercase"
-          color="grey-faded"
+          color="white"
           className="featured-card-text"
           title={subtitle}
         >
