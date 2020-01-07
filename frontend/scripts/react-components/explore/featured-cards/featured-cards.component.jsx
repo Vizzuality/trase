@@ -20,6 +20,7 @@ const FeaturedCard = ({ card, openModal, step }) => {
         onClick={() => openModal(card)}
         className="featured-card-button"
         data-test={`featured-card${cardStepId}`}
+        style={{ backgroundImage: `url('/images/featured-links/${countryName}.svg')` }}
       >
         <Text
           variant="mono"
