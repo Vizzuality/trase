@@ -183,17 +183,24 @@ function Explore(props) {
                           {quickFacts ? (
                             quickFacts.map(indicator => (
                               <div className="bubble">
-                                <Text size="rg" align="center" variant="mono">
+                                <Text
+                                  size="rg"
+                                  align="center"
+                                  variant="mono"
+                                  weight="bold"
+                                  transform="uppercase"
+                                  className="quick-facts-label"
+                                >
                                   {indicator.name} {indicator.year}
                                 </Text>
-                                <Text
-                                  size="lg"
-                                  weight="regular"
+                                <Heading
+                                  size="md"
+                                  weight="bold"
                                   align="center"
                                   className="quick-facts-value"
                                 >
                                   {format(',')(Math.round(indicator.total))} {indicator.unit}
-                                </Text>
+                                </Heading>
                               </div>
                             ))
                           ) : (
