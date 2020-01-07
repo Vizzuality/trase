@@ -39,6 +39,9 @@ $font-size-huge: 48px;
 $line-height-regular: 16px;
 $line-height-lg: 31px;
 
+// List style
+$list-style-image-path: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='-1 -1 2 2'><circle fill='#3444C' r='1' /></svg>";
+
 // Breakpoints
 $breakpoint-mobile: 425px;
 $breakpoint-tablet: 768px;
