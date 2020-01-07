@@ -14,8 +14,8 @@ $card-min-width: 180px;
   }
 
   .featured-cards-container {
-    margin-top: 5px;
-    background-color: $mid-light-gray;
+    padding: 5px 0;
+    background-color: $white;
     width: 100%;
     height: 120px;
 
@@ -59,7 +59,7 @@ $card-min-width: 180px;
     height: 100px;
     width: 100%;
     border-radius: 5px;
-    background-color: $white;
+    background-color: $strong-pink;
     cursor: pointer;
     padding: 20px;
   }
