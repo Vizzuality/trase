@@ -133,7 +133,7 @@ if (DISABLE_PROFILES) {
   nav = nav.filter(route => route.page !== 'profileRoot');
 }
 
-if (!ENABLE_DASHBOARDS) {
+if (!ENABLE_DASHBOARDS || ENABLE_REDESIGN_PAGES) {
   nav = nav.filter(route => route.page !== 'dashboardRoot');
 }
 
