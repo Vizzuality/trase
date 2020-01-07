@@ -52,7 +52,7 @@ class TopNav extends React.PureComponent {
     const { links, printable, showLogo, onDownloadPDF } = this.props;
     const allLinks = [];
 
-    if (showLogo) {
+    if (showLogo && !ENABLE_REDESIGN_PAGES) {
       allLinks.push({
         name: 'Home',
         page: 'home',
@@ -65,7 +65,30 @@ class TopNav extends React.PureComponent {
     allLinks.push(...links);
 
     return (
-      <div className="top-nav-bar row align-justify -desktop-menu">
+      <div
+        className={cx({
+          'top-nav-bar row align-justify -desktop-menu': !ENABLE_REDESIGN_PAGES,
+          'row align-justify': ENABLE_REDESIGN_PAGES
+        })}
+      >
+        {ENABLE_REDESIGN_PAGES && (
+          <div className="column medium-2">
+            <ul className="top-nav-item-list">
+              <li className="top-nav-item">
+                <NavLink exact strict to={{ type: 'home' }} className={cx('top-nav-link', '-logo')}>
+                  <span className="top-nav-logo-container">
+                    <Img
+                      className="logo-image"
+                      src="/images/logos/logo-trase-nav.png"
+                      alt="trase"
+                    />
+                    trase
+                  </span>
+                </NavLink>
+              </li>
+            </ul>
+          </div>
+        )}
         <div className="column medium-8">
           <div className="top-nav-item-list-container">
             <ul className="top-nav-item-list">
