@@ -31,8 +31,7 @@ export default function BaseModal(props) {
             !itemProps.item.attributeId ? (
               <GridListItem
                 {...itemProps}
-                variant="explore"
-                style={{ width: '250px' }}
+                color="white"
                 enableItem={onChange}
                 isActive={!selectedItem.attributeId}
               />
