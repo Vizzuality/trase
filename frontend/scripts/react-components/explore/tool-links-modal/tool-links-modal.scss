@@ -24,11 +24,10 @@
   }
 
   .description-list {
-    > li {
+    .bullet-point {
       position: relative;
-      list-style-type: initial;
-      left: 20px;
-      margin-bottom: 15px;
+      margin: 0 0 0 20px;
+      list-style-image: url('/images/bullet-point.svg');
     }
   }
 }

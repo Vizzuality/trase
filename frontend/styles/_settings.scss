@@ -39,9 +39,12 @@ $font-size-huge: 48px;
 $line-height-regular: 16px;
 $line-height-lg: 31px;
 
+// List style
+$list-style-image-path: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='-1 -1 2 2'><circle fill='#3444C' r='1' /></svg>";
+
 // Breakpoints
-$breakpoint-mobile:  425px;
-$breakpoint-tablet:  768px;
+$breakpoint-mobile: 425px;
+$breakpoint-tablet: 768px;
 $breakpoint-laptop: 1024px;
 $breakpoint-desktop: 1280px;
 
@@ -50,11 +53,9 @@ $breakpoint-foundation-medium: 1024px;
 
 $home-entrypoint-breakpoint: 700px;
 
-
 // Animations
-$ease-in-out-sine: cubic-bezier(.445, .05, .55, .95);
-$ease-in-out-cubic: cubic-bezier(0.645, 0.045, 0.355, 1.000);
-
+$ease-in-out-sine: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+$ease-in-out-cubic: cubic-bezier(0.645, 0.045, 0.355, 1);
 
 // z-indexes
 $z-below-thumb: -1;
@@ -73,7 +74,6 @@ $z-tooltip: 102;
 $z-leaflet-above-panes: 500;
 $z-above-leaflet: 501;
 
-
 // colors
 $background-white: #f2f2f2;
 $light-gray: #f6f6f6;
@@ -84,13 +84,13 @@ $yellow-gray: #d9d9d9;
 $yet-another-gray: #999999;
 $black: #000;
 $charcoal-dark: #28343b;
-$charcoal-extra-dark: #1B2A32;
+$charcoal-extra-dark: #1b2a32;
 $charcoal-grey: #34444c;
 $charcoal-grey-toned-down: #536269;
 $elephant: #6f7b80;
-$charcoal-grey-faded: rgba($charcoal-grey, .6);
-$charcoal-grey-faded-a-lot: rgba($charcoal-grey, .2);
-$gray: #DFDFDF;
+$charcoal-grey-faded: rgba($charcoal-grey, 0.6);
+$charcoal-grey-faded-a-lot: rgba($charcoal-grey, 0.2);
+$gray: #dfdfdf;
 $medium-pink: #ea6869;
 $strong-pink: #f65e6e;
 $medium-pink-faded: lighten($medium-pink, 20%);
@@ -102,16 +102,12 @@ $pinkish-grey: #c7c7c7;
 $medium-grey: #aaa;
 $pinkish-grey-two: #cbcbcb;
 $white: #fff;
-$white-two: #FBFAFA;
+$white-two: #fbfafa;
 $metal-grey: #ebebeb;
 
-
-
 // Miscellaneous
-$box-shadow: 0 1px 3px 0 rgba($black, .1), 0 1px 2px 0 rgba($black, .2);
-$box-shadow-big: 0 3px 6px 0 rgba($black, .1), 0 3px 6px 0 rgba($black, .2);
-
-
+$box-shadow: 0 1px 3px 0 rgba($black, 0.1), 0 1px 2px 0 rgba($black, 0.2);
+$box-shadow-big: 0 3px 6px 0 rgba($black, 0.1), 0 3px 6px 0 rgba($black, 0.2);
 
 // color scales
 $recolorgroup-1: $medium-pink;
@@ -141,22 +137,21 @@ $recolorby-qual-thematic-esteros-del-ibera: #8c28ff;
 $recolorby-qual-thematic-monte-de-llanuras-y-mesetas: #ff66e5;
 $recolorby-qual-thematic-yungas: #e36845;
 
-$recolorby-stars-red-blue-0: #6F0119;
+$recolorby-stars-red-blue-0: #6f0119;
 $recolorby-stars-red-blue-1: #a50026;
-$recolorby-stars-red-blue-2: #D72F27;
-$recolorby-stars-red-blue-3: #FDAE61;
-$recolorby-stars-red-blue-4: #79A8D0;
-$recolorby-stars-red-blue-5: #246AB6;
+$recolorby-stars-red-blue-2: #d72f27;
+$recolorby-stars-red-blue-3: #fdae61;
+$recolorby-stars-red-blue-4: #79a8d0;
+$recolorby-stars-red-blue-5: #246ab6;
 
-$recolorby-qual-thematic-company-commitment: #C2E699;
-$recolorby-qual-thematic-soy-moratorium: #1D6837;
-$recolorby-qual-thematic-company-ndpe-commitment: #1D6837;
+$recolorby-qual-thematic-company-commitment: #c2e699;
+$recolorby-qual-thematic-soy-moratorium: #1d6837;
+$recolorby-qual-thematic-company-ndpe-commitment: #1d6837;
 $recolorby-qual-thematic-none: #e36845;
 
 $recolorby-qual-thematic-tac: #79ae6d;
-$recolorby-qual-thematic-g-4: #C2E699;
-$recolorby-qual-thematic-g-4-tac: #1D6837;
-
+$recolorby-qual-thematic-g-4: #c2e699;
+$recolorby-qual-thematic-g-4-tac: #1d6837;
 
 $recolorby-qual-thematic-fresh-frozen-beef-products: #80cdc1;
 $recolorby-qual-thematic-bovine-offals: #a6611a;
@@ -167,7 +162,6 @@ $recolorby-qual-thematic-green: #31a354;
 $recolorby-qual-thematic-roasted: #a6611a;
 $recolorby-qual-thematic-processed: #7570b3;
 
-
 $recolorby-qual-thematic-oil: #f7fcb9;
 $recolorby-qual-thematic-bean: #31a354;
 $recolorby-qual-thematic-cake: #e48716;
@@ -175,15 +169,14 @@ $recolorby-qual-thematic-cake: #e48716;
 $recolorby-qual-thematic-crude-palm-oil: #e48716;
 $recolorby-qual-thematic-refined-palm-oil: #f7fcb9;
 
-
-$recolorby-linear-red-blue-7: #6F0119;
+$recolorby-linear-red-blue-7: #6f0119;
 $recolorby-linear-red-blue-6: #a50026;
-$recolorby-linear-red-blue-5: #D72F27;
-$recolorby-linear-red-blue-4: #FDAE61;
-$recolorby-linear-red-blue-3: #9FCAE1;
-$recolorby-linear-red-blue-2: #79A8D0;
-$recolorby-linear-red-blue-1: #5488C0;
-$recolorby-linear-red-blue-0: #246AB6;
+$recolorby-linear-red-blue-5: #d72f27;
+$recolorby-linear-red-blue-4: #fdae61;
+$recolorby-linear-red-blue-3: #9fcae1;
+$recolorby-linear-red-blue-2: #79a8d0;
+$recolorby-linear-red-blue-1: #5488c0;
+$recolorby-linear-red-blue-0: #246ab6;
 
 $recolorby-linear-yellow-green-0: #ffc;
 $recolorby-linear-yellow-green-1: #c2e699;
@@ -202,7 +195,6 @@ $recolorby-percentual-yellow-green-7: #398a58;
 $recolorby-percentual-yellow-green-8: #1c7948;
 $recolorby-percentual-yellow-green-9: #006837;
 
-
 $recolorby-percentual-green-red-0: #006837;
 $recolorby-percentual-green-red-1: #1a9850;
 $recolorby-percentual-green-red-2: #66bd63;
@@ -216,178 +208,100 @@ $recolorby-percentual-green-red-9: #d73027;
 $recolorby-percentual-green-red-10: #a50026;
 $recolorby-percentual-green-red-11: #6f001a;
 
-$recolorby-colors:
-        $recolorby-qual-thematic-pantanal,
-        $recolorby-qual-thematic-cerrado,
-        $recolorby-qual-thematic-amazonia,
-        $recolorby-qual-thematic-mata-atlantica,
-        $recolorby-qual-thematic-chaco-seco,
-        $recolorby-qual-thematic-chaco-humedo,
-        $recolorby-qual-thematic-pampa,
-        $recolorby-qual-thematic-caatinga,
-        $recolorby-qual-thematic-delta-e-islas-del-parana,
-        $recolorby-qual-thematic-espinal,
-        $recolorby-qual-thematic-esteros-del-ibera,
-        $recolorby-qual-thematic-monte-de-llanuras-y-mesetas,
-        $recolorby-qual-thematic-yungas,
-        $recolorby-stars-red-blue-0,
-        $recolorby-stars-red-blue-1,
-        $recolorby-stars-red-blue-2,
-        $recolorby-stars-red-blue-3,
-        $recolorby-stars-red-blue-4,
-        $recolorby-stars-red-blue-5,
-        $recolorby-qual-thematic-company-ndpe-commitment,
-        $recolorby-qual-thematic-g-4,
-        $recolorby-qual-thematic-g-4-tac,
-        $recolorby-qual-thematic-soy-moratorium,
-        $recolorby-qual-thematic-tac,
-        $recolorby-qual-thematic-company-commitment,
-        $recolorby-qual-thematic-none,
-        $recolorby-qual-thematic-fresh-frozen-beef-products,
-        $recolorby-qual-thematic-bovine-offals,
-        $recolorby-qual-thematic-live-cattle-exports,
-        $recolorby-qual-thematic-processed-beef-products,
-        $recolorby-qual-thematic-green,
-        $recolorby-qual-thematic-roasted,
-        $recolorby-qual-thematic-processed,
-        $recolorby-qual-thematic-bean,
-        $recolorby-qual-thematic-cake,
-        $recolorby-qual-thematic-oil,
-        $recolorby-qual-thematic-crude-palm-oil,
-        $recolorby-qual-thematic-refined-palm-oil,
-        $recolorby-linear-red-blue-0,
-        $recolorby-linear-red-blue-1,
-        $recolorby-linear-red-blue-2,
-        $recolorby-linear-red-blue-3,
-        $recolorby-linear-red-blue-4,
-        $recolorby-linear-red-blue-5,
-        $recolorby-linear-red-blue-6,
-        $recolorby-linear-red-blue-7,
-        $recolorby-percentual-yellow-green-0,
-        $recolorby-percentual-yellow-green-1,
-        $recolorby-percentual-yellow-green-2,
-        $recolorby-percentual-yellow-green-3,
-        $recolorby-percentual-yellow-green-4,
-        $recolorby-percentual-yellow-green-5,
-        $recolorby-percentual-yellow-green-6,
-        $recolorby-percentual-yellow-green-7,
-        $recolorby-percentual-yellow-green-8,
-        $recolorby-percentual-yellow-green-9,
-        $recolorby-linear-yellow-green-0,
-        $recolorby-linear-yellow-green-1,
-        $recolorby-linear-yellow-green-2,
-        $recolorby-linear-yellow-green-3,
-        $recolorby-linear-yellow-green-4,
-        $recolorby-percentual-green-red-0,
-        $recolorby-percentual-green-red-1,
-        $recolorby-percentual-green-red-2,
-        $recolorby-percentual-green-red-3,
-        $recolorby-percentual-green-red-4,
-        $recolorby-percentual-green-red-5,
-        $recolorby-percentual-green-red-6,
-        $recolorby-percentual-green-red-7,
-        $recolorby-percentual-green-red-8,
-        $recolorby-percentual-green-red-9,
-        $recolorby-percentual-green-red-10,
-        $recolorby-percentual-green-red-11
-;
+$recolorby-colors: $recolorby-qual-thematic-pantanal, $recolorby-qual-thematic-cerrado,
+  $recolorby-qual-thematic-amazonia, $recolorby-qual-thematic-mata-atlantica,
+  $recolorby-qual-thematic-chaco-seco, $recolorby-qual-thematic-chaco-humedo,
+  $recolorby-qual-thematic-pampa, $recolorby-qual-thematic-caatinga,
+  $recolorby-qual-thematic-delta-e-islas-del-parana, $recolorby-qual-thematic-espinal,
+  $recolorby-qual-thematic-esteros-del-ibera, $recolorby-qual-thematic-monte-de-llanuras-y-mesetas,
+  $recolorby-qual-thematic-yungas, $recolorby-stars-red-blue-0, $recolorby-stars-red-blue-1,
+  $recolorby-stars-red-blue-2, $recolorby-stars-red-blue-3, $recolorby-stars-red-blue-4,
+  $recolorby-stars-red-blue-5, $recolorby-qual-thematic-company-ndpe-commitment,
+  $recolorby-qual-thematic-g-4, $recolorby-qual-thematic-g-4-tac,
+  $recolorby-qual-thematic-soy-moratorium, $recolorby-qual-thematic-tac,
+  $recolorby-qual-thematic-company-commitment, $recolorby-qual-thematic-none,
+  $recolorby-qual-thematic-fresh-frozen-beef-products, $recolorby-qual-thematic-bovine-offals,
+  $recolorby-qual-thematic-live-cattle-exports, $recolorby-qual-thematic-processed-beef-products,
+  $recolorby-qual-thematic-green, $recolorby-qual-thematic-roasted,
+  $recolorby-qual-thematic-processed, $recolorby-qual-thematic-bean, $recolorby-qual-thematic-cake,
+  $recolorby-qual-thematic-oil, $recolorby-qual-thematic-crude-palm-oil,
+  $recolorby-qual-thematic-refined-palm-oil, $recolorby-linear-red-blue-0,
+  $recolorby-linear-red-blue-1, $recolorby-linear-red-blue-2, $recolorby-linear-red-blue-3,
+  $recolorby-linear-red-blue-4, $recolorby-linear-red-blue-5, $recolorby-linear-red-blue-6,
+  $recolorby-linear-red-blue-7, $recolorby-percentual-yellow-green-0,
+  $recolorby-percentual-yellow-green-1, $recolorby-percentual-yellow-green-2,
+  $recolorby-percentual-yellow-green-3, $recolorby-percentual-yellow-green-4,
+  $recolorby-percentual-yellow-green-5, $recolorby-percentual-yellow-green-6,
+  $recolorby-percentual-yellow-green-7, $recolorby-percentual-yellow-green-8,
+  $recolorby-percentual-yellow-green-9, $recolorby-linear-yellow-green-0,
+  $recolorby-linear-yellow-green-1, $recolorby-linear-yellow-green-2,
+  $recolorby-linear-yellow-green-3, $recolorby-linear-yellow-green-4,
+  $recolorby-percentual-green-red-0, $recolorby-percentual-green-red-1,
+  $recolorby-percentual-green-red-2, $recolorby-percentual-green-red-3,
+  $recolorby-percentual-green-red-4, $recolorby-percentual-green-red-5,
+  $recolorby-percentual-green-red-6, $recolorby-percentual-green-red-7,
+  $recolorby-percentual-green-red-8, $recolorby-percentual-green-red-9,
+  $recolorby-percentual-green-red-10, $recolorby-percentual-green-red-11;
 
-$recolorby-colors-names:
-        '-recolorby-qual-thematic-pantanal',
-        '-recolorby-qual-thematic-cerrado',
-        '-recolorby-qual-thematic-amazonia',
-        '-recolorby-qual-thematic-mata-atlantica',
-        '-recolorby-qual-thematic-chaco-seco',
-        '-recolorby-qual-thematic-chaco-humedo',
-        '-recolorby-qual-thematic-pampa',
-        '-recolorby-qual-thematic-caatinga',
-        '-recolorby-qual-thematic-delta-e-islas-del-parana',
-        '-recolorby-qual-thematic-espinal',
-        '-recolorby-qual-thematic-esteros-del-ibera',
-        '-recolorby-qual-thematic-monte-de-llanuras-y-mesetas',
-        '-recolorby-qual-thematic-yungas',
-        '-recolorby-stars-red-blue-0',
-        '-recolorby-stars-red-blue-1',
-        '-recolorby-stars-red-blue-2',
-        '-recolorby-stars-red-blue-3',
-        '-recolorby-stars-red-blue-4',
-        '-recolorby-stars-red-blue-5',
-        '-recolorby-qual-thematic-company-ndpe-commitment',
-        '-recolorby-qual-thematic-g-4',
-        '-recolorby-qual-thematic-g-4-tac',
-        '-recolorby-qual-thematic-soy-moratorium',
-        '-recolorby-qual-thematic-tac',
-        '-recolorby-qual-thematic-company-commitment',
-        '-recolorby-qual-thematic-none',
-        '-recolorby-qual-thematic-fresh-frozen-beef-products',
-        '-recolorby-qual-thematic-bovine-offals',
-        '-recolorby-qual-thematic-live-cattle-exports',
-        '-recolorby-qual-thematic-processed-beef-products',
-        '-recolorby-qual-thematic-green',
-        '-recolorby-qual-thematic-roasted',
-        '-recolorby-qual-thematic-processed',
-        '-recolorby-qual-thematic-bean',
-        '-recolorby-qual-thematic-cake',
-        '-recolorby-qual-thematic-oil',
-        '-recolorby-qual-thematic-crude-palm-oil',
-        '-recolorby-qual-thematic-refined-palm-oil',
-        '-recolorby-linear-red-blue-0',
-        '-recolorby-linear-red-blue-1',
-        '-recolorby-linear-red-blue-2',
-        '-recolorby-linear-red-blue-3',
-        '-recolorby-linear-red-blue-4',
-        '-recolorby-linear-red-blue-5',
-        '-recolorby-linear-red-blue-6',
-        '-recolorby-linear-red-blue-7',
-        '-recolorby-percentual-yellow-green-0',
-        '-recolorby-percentual-yellow-green-1',
-        '-recolorby-percentual-yellow-green-2',
-        '-recolorby-percentual-yellow-green-3',
-        '-recolorby-percentual-yellow-green-4',
-        '-recolorby-percentual-yellow-green-5',
-        '-recolorby-percentual-yellow-green-6',
-        '-recolorby-percentual-yellow-green-7',
-        '-recolorby-percentual-yellow-green-8',
-        '-recolorby-percentual-yellow-green-9',
-        '-recolorby-linear-yellow-green-0',
-        '-recolorby-linear-yellow-green-1',
-        '-recolorby-linear-yellow-green-2',
-        '-recolorby-linear-yellow-green-3',
-        '-recolorby-linear-yellow-green-4',
-        '-recolorby-percentual-green-red-0',
-        '-recolorby-percentual-green-red-1',
-        '-recolorby-percentual-green-red-2',
-        '-recolorby-percentual-green-red-3',
-        '-recolorby-percentual-green-red-4',
-        '-recolorby-percentual-green-red-5',
-        '-recolorby-percentual-green-red-6',
-        '-recolorby-percentual-green-red-7',
-        '-recolorby-percentual-green-red-8',
-        '-recolorby-percentual-green-red-9',
-        '-recolorby-percentual-green-red-10',
-        '-recolorby-percentual-green-red-11';
+$recolorby-colors-names: '-recolorby-qual-thematic-pantanal', '-recolorby-qual-thematic-cerrado',
+  '-recolorby-qual-thematic-amazonia', '-recolorby-qual-thematic-mata-atlantica',
+  '-recolorby-qual-thematic-chaco-seco', '-recolorby-qual-thematic-chaco-humedo',
+  '-recolorby-qual-thematic-pampa', '-recolorby-qual-thematic-caatinga',
+  '-recolorby-qual-thematic-delta-e-islas-del-parana', '-recolorby-qual-thematic-espinal',
+  '-recolorby-qual-thematic-esteros-del-ibera',
+  '-recolorby-qual-thematic-monte-de-llanuras-y-mesetas', '-recolorby-qual-thematic-yungas',
+  '-recolorby-stars-red-blue-0', '-recolorby-stars-red-blue-1', '-recolorby-stars-red-blue-2',
+  '-recolorby-stars-red-blue-3', '-recolorby-stars-red-blue-4', '-recolorby-stars-red-blue-5',
+  '-recolorby-qual-thematic-company-ndpe-commitment', '-recolorby-qual-thematic-g-4',
+  '-recolorby-qual-thematic-g-4-tac', '-recolorby-qual-thematic-soy-moratorium',
+  '-recolorby-qual-thematic-tac', '-recolorby-qual-thematic-company-commitment',
+  '-recolorby-qual-thematic-none', '-recolorby-qual-thematic-fresh-frozen-beef-products',
+  '-recolorby-qual-thematic-bovine-offals', '-recolorby-qual-thematic-live-cattle-exports',
+  '-recolorby-qual-thematic-processed-beef-products', '-recolorby-qual-thematic-green',
+  '-recolorby-qual-thematic-roasted', '-recolorby-qual-thematic-processed',
+  '-recolorby-qual-thematic-bean', '-recolorby-qual-thematic-cake', '-recolorby-qual-thematic-oil',
+  '-recolorby-qual-thematic-crude-palm-oil', '-recolorby-qual-thematic-refined-palm-oil',
+  '-recolorby-linear-red-blue-0', '-recolorby-linear-red-blue-1', '-recolorby-linear-red-blue-2',
+  '-recolorby-linear-red-blue-3', '-recolorby-linear-red-blue-4', '-recolorby-linear-red-blue-5',
+  '-recolorby-linear-red-blue-6', '-recolorby-linear-red-blue-7',
+  '-recolorby-percentual-yellow-green-0', '-recolorby-percentual-yellow-green-1',
+  '-recolorby-percentual-yellow-green-2', '-recolorby-percentual-yellow-green-3',
+  '-recolorby-percentual-yellow-green-4', '-recolorby-percentual-yellow-green-5',
+  '-recolorby-percentual-yellow-green-6', '-recolorby-percentual-yellow-green-7',
+  '-recolorby-percentual-yellow-green-8', '-recolorby-percentual-yellow-green-9',
+  '-recolorby-linear-yellow-green-0', '-recolorby-linear-yellow-green-1',
+  '-recolorby-linear-yellow-green-2', '-recolorby-linear-yellow-green-3',
+  '-recolorby-linear-yellow-green-4', '-recolorby-percentual-green-red-0',
+  '-recolorby-percentual-green-red-1', '-recolorby-percentual-green-red-2',
+  '-recolorby-percentual-green-red-3', '-recolorby-percentual-green-red-4',
+  '-recolorby-percentual-green-red-5', '-recolorby-percentual-green-red-6',
+  '-recolorby-percentual-green-red-7', '-recolorby-percentual-green-red-8',
+  '-recolorby-percentual-green-red-9', '-recolorby-percentual-green-red-10',
+  '-recolorby-percentual-green-red-11';
 
-$recolorgroup-colors: $recolorgroup-1, $recolorgroup-2, $recolorgroup-3, $recolorgroup-4, $recolorgroup-5, $recolorgroup-6, $recolorgroup-7, $recolorgroup-8, $recolorgroup-9, $recolorgroup-10;
+$recolorgroup-colors: $recolorgroup-1, $recolorgroup-2, $recolorgroup-3, $recolorgroup-4,
+  $recolorgroup-5, $recolorgroup-6, $recolorgroup-7, $recolorgroup-8, $recolorgroup-9,
+  $recolorgroup-10;
 
-$recolorgroup-colors-names: '-recolorgroup-1', '-recolorgroup-2', '-recolorgroup-3', '-recolorgroup-4', '-recolorgroup-5', '-recolorgroup-6', '-recolorgroup-7', '-recolorgroup-8', '-recolorgroup-9', '-recolorgroup-10';
-
-
+$recolorgroup-colors-names: '-recolorgroup-1', '-recolorgroup-2', '-recolorgroup-3',
+  '-recolorgroup-4', '-recolorgroup-5', '-recolorgroup-6', '-recolorgroup-7', '-recolorgroup-8',
+  '-recolorgroup-9', '-recolorgroup-10';
 
 // choropleth
 $ch-zero: $white;
-$ch-na: #D8CCA1;
+$ch-na: #d8cca1;
 
-$ch-red-0: #F5B7AD;
-$ch-red-1: #F28789;
-$ch-red-2: #EF4F60;
-$ch-red-3: #95232F;
-$ch-red-4: #4F0008;
+$ch-red-0: #f5b7ad;
+$ch-red-1: #f28789;
+$ch-red-2: #ef4f60;
+$ch-red-3: #95232f;
+$ch-red-4: #4f0008;
 
-$ch-legend-0: #40B9BB;
-$ch-legend-1: #6C3BC6;
-$ch-legend-2: #ED4E63;
-$ch-legend-3: #2D755D;
-$ch-legend-4: #FFA473;
+$ch-legend-0: #40b9bb;
+$ch-legend-1: #6c3bc6;
+$ch-legend-2: #ed4e63;
+$ch-legend-3: #2d755d;
+$ch-legend-4: #ffa473;
 
 // profile choropleth
 // For now we'll use the same color scheme as in the tool, when we include more buckets this has to change.
