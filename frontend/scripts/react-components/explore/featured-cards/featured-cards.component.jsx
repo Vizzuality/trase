@@ -131,7 +131,7 @@ const FeaturedCards = props => {
               className="back-button"
               data-test="featured-cards-back-button"
             >
-              <Text variant="mono" size="rg" weight="bold">
+              <Text variant="mono" size="md" weight="bold" className="featured-cards-back">
                 BACK
               </Text>
             </button>
