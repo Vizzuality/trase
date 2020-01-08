@@ -9,6 +9,7 @@ import './dropdown-nav.variant.scss';
 import './dropdown-sentence.variant.scss';
 import './dropdown-column.variant.scss';
 import './dropdown-panel.variant.scss';
+import './dropdown-bordered.variant.scss';
 import DropdownContent from 'react-components/shared/dropdown/dropdown-content.component';
 import DropdownButton from 'react-components/shared/dropdown/dropdown-button.component';
 

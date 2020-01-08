@@ -65,12 +65,7 @@ class TopNav extends React.PureComponent {
     allLinks.push(...links);
 
     return (
-      <div
-        className={cx({
-          'top-nav-bar row align-justify -desktop-menu': !ENABLE_REDESIGN_PAGES,
-          'row align-justify': ENABLE_REDESIGN_PAGES
-        })}
-      >
+      <div className="row align-justify -desktop-menu">
         {ENABLE_REDESIGN_PAGES && (
           <div className="column medium-2">
             <ul className="top-nav-item-list">
