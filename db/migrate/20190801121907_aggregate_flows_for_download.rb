@@ -6,8 +6,5 @@ class AggregateFlowsForDownload < ActiveRecord::Migration[5.2]
       materialized: false
 
     remove_column :download_flows, :id
-
-    # this takes a long time
-    Api::V3::Readonly::DownloadFlow.refresh_now
   end
 end

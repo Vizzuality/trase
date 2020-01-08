@@ -105,7 +105,6 @@ module Api
           [
             Api::V3::Readonly::Context,
             Api::V3::Readonly::Attribute,
-            Api::V3::Readonly::Flow, # TODO: try to get rid of this one
             Api::V3::Readonly::FlowNode,
             Api::V3::Readonly::NodeWithFlowsPerYear
           ].each { |mview| mview.refresh(sync: true, skip_dependents: true) }
@@ -113,11 +112,12 @@ module Api
           Api::V3::TablePartitions::CreatePartitionsForFlowQuants.new.call
           Api::V3::TablePartitions::CreatePartitionsForFlowInds.new.call
           Api::V3::TablePartitions::CreatePartitionsForFlowQuals.new.call
-          Api::V3::Readonly::DownloadFlow.refresh(
-            sync: true, skip_dependents: true, skip_precompute: true
-          )
+          Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowQuants.new.call
+          Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowInds.new.call
+          Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowQuals.new.call
           # synchronously, skip dependencies (already refreshed)
           [
+            Api::V3::Readonly::DownloadFlowsStats,
             Api::V3::Readonly::NodeWithFlows,
             Api::V3::Readonly::NodeWithFlowsOrGeo,
             Api::V3::Readonly::NodesStats,

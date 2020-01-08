@@ -22,13 +22,12 @@ module Api
 
         def initialize_query
           @query = @base_query.select(pivot_select_columns).
-            order(:path)
+            order(:row_name)
         end
 
         def pivot_select_columns
           [
-            'rank() OVER (ORDER BY path, year)::int AS rn',
-            'path',
+            'row_name',
             'year AS "YEAR"'
           ] + @path_columns +
             [
@@ -58,8 +57,7 @@ module Api
 
         def crosstab_columns
           [
-            'rn int',
-            'path INT[]',
+            'row_name text',
             '"YEAR" int'
           ] + @path_crosstab_columns + [
             '"TYPE" text'
@@ -80,7 +78,7 @@ module Api
             AS CT(#{crosstab_columns.join(',')})
           SQL
 
-          Api::V3::Readonly::DownloadFlow.
+          Api::V3::Flow.
             select(outer_select_columns).from(crosstab_sql)
         end
       end

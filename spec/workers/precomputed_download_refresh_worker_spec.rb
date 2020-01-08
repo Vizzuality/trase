@@ -5,7 +5,6 @@ RSpec.describe PrecomputedDownloadRefreshWorker, type: :worker do
 
   describe :call do
     before(:each) do
-      Api::V3::Readonly::DownloadFlow.refresh(sync: true)
       Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
       Api::V3::Readonly::DownloadAttribute.refresh(sync: true, skip_dependencies: true)
     end

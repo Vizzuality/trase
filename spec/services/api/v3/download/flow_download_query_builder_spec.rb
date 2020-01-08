@@ -12,7 +12,8 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
     before(:each) do
       Api::V3::Readonly::Attribute.refresh(skip_dependencies: true, skip_dependents: true)
       Api::V3::Readonly::DownloadAttribute.refresh(skip_dependencies: true, skip_dependents: true)
-      Api::V3::Readonly::DownloadFlow.refresh(sync: true)
+      Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowQuants.new.call
+      Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowQuals.new.call
     end
 
     let(:flow1_potential_deforestation_row) {
