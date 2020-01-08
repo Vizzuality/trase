@@ -27,28 +27,30 @@ function ToolLinksModal({ goToTool }) {
       <div className="links-container">
         <div className="row">
           <div className="small-12 medium-6 column">
-            <button
+            <ImgBackground
+              as="button"
+              src="/images/backgrounds/SANKEY_MODE.png"
               className="tool-link"
               onClick={() => goToTool('sankey')}
               data-test="explore-link-to-sankey"
             >
-              <ImgBackground />
-              <Heading weight="bold" variant="mono">
+              <Heading size="md" weight="bold" variant="mono">
                 FLOW VIEW
               </Heading>
-            </button>
+            </ImgBackground>
           </div>
           <div className="small-12 medium-6 column">
-            <button
+            <ImgBackground
+              as="button"
+              src="/images/backgrounds/DATA_VIEW_MODE.png"
               className="tool-link"
               onClick={() => goToTool('dashboard')}
               data-test="explore-link-to-dashboard"
             >
-              <ImgBackground />
-              <Heading weight="bold" variant="mono">
+              <Heading size="md" weight="bold" variant="mono">
                 DATA VIEW
               </Heading>
-            </button>
+            </ImgBackground>
           </div>
         </div>
       </div>

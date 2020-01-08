@@ -6,6 +6,7 @@ import capitalize from 'lodash/capitalize';
 import { EXPLORE_STEPS } from 'constants';
 import { useTransition, animated } from 'react-spring';
 import ResizeListener from 'react-components/shared/resize-listener.component';
+import { ImgBackground } from 'react-components/shared/img';
 import cx from 'classnames';
 
 import 'react-components/explore/featured-cards/featured-cards.scss';
@@ -16,11 +17,12 @@ const FeaturedCard = ({ card, openModal, step }) => {
   const cardStepId = stepIds[step];
   return (
     <div className="c-featured-card">
-      <button
+      <ImgBackground
+        as="button"
         onClick={() => openModal(card)}
         className="featured-card-button"
         data-test={`featured-card${cardStepId}`}
-        style={{ backgroundImage: `url('/images/featured-links/${countryName}.svg')` }}
+        src={`'/images/featured-links/${countryName}.svg'`}
       >
         <Text
           variant="mono"
@@ -53,7 +55,7 @@ const FeaturedCard = ({ card, openModal, step }) => {
         >
           {subtitle}
         </Text>
-      </button>
+      </ImgBackground>
     </div>
   );
 };
