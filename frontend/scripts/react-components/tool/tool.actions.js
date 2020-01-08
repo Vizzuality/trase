@@ -186,7 +186,7 @@ export function selectExpandedNode(param) {
     const state = getState();
     const { toolLinks } = state;
     const visibleNodes = getVisibleNodes(state);
-    const visibleNodesById = visibleNodes.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
+    const visibleNodesById = visibleNodes?.reduce((acc, next) => ({ ...acc, [next.id]: true }), {}) || {};
     const hasInvisibleNodes = ids.some(id => !visibleNodesById[id]);
     const isRemovingANodeWhileExpanded =
       toolLinks.expandedNodesIds.length > 0 &&
