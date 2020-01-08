@@ -1,0 +1,16 @@
+@import 'styles/settings';
+
+.c-dropdown-component.v-bordered {
+  display: block;
+
+  .dropdown-selected-item {
+    border: 2px solid $charcoal-grey-faded;
+    border-radius: 5px;
+    display: inline-block;
+    padding: 5px 20px;
+
+    &:after {
+      right: 10px;
+    }
+  }
+}

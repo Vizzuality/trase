@@ -109,7 +109,7 @@ function Explore(props) {
     <>
       <Dropdown
         size="rg"
-        variant="panel"
+        variant="bordered"
         selectedValueOverride={commodity ? undefined : `Commodity (${commodities.length})`}
         options={commodities.map(i => ({ value: i.id, label: i.name }))}
         value={commodity && { value: commodity.id, label: commodity.name }}
@@ -119,7 +119,7 @@ function Explore(props) {
         <div className="country-dropdown-container">
           <Dropdown
             size="rg"
-            variant="panel"
+            variant="bordered"
             selectedValueOverride={country ? undefined : `Countries (${countries.length})`}
             options={countries.map(i => ({ value: i.id, label: i.name }))}
             value={country && { value: country.id, label: country.name }}
