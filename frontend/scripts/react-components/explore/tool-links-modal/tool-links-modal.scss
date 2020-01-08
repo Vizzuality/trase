@@ -13,14 +13,35 @@
   }
 
   .tool-link {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     width: 100%;
-    border-radius: 10px;
     height: 120px;
-    border: 1px solid $charcoal-dark;
+    overflow: hidden;
+    border-radius: 10px;
+    border: 1px solid $charcoal-grey-faded;
+    cursor: pointer;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    &::after {
+      content: '';
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      background-color: $charcoal-grey-faded-a-lot;
+      opacity: 0;
+      transition: opacity 300ms ease-in;
+    }
+
+    &:hover {
+      &::after {
+        opacity: 1;
+      }
+    }
   }
 
   .description-list {
