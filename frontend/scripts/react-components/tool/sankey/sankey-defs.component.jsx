@@ -60,7 +60,7 @@ const stops = {
 };
 
 export const IsAggregate = React.memo(() => (
-  <pattern id="isAggregatedPattern" x="0" y="0" width="1" height="3" patternUnits="userSpaceOnUse">
+  <pattern id="isAggregatedPattern" x="0" y="0" width="1" height="4" patternUnits="userSpaceOnUse">
     <rect x="0" y="0" width="50" height="1" fill="#ddd" />
     <rect x="0" y="1" width="50" height="2" fill="#fff" />
   </pattern>
@@ -73,7 +73,9 @@ export const GradientAnimation = React.memo(({ selectedRecolorBy, selectedNodesI
   if (window._TRASE_RAINBOW_SANKEY === true) {
     selectedColor = selectedNodesIds.length > 0 ? 'selection' : 'default';
     if (selectedRecolorBy) {
-      selectedColor = selectedRecolorBy.legendColorTheme;
+      selectedColor = stops[selectedRecolorBy.legendColorTheme]
+        ? selectedRecolorBy.legendColorTheme
+        : 'default';
       if (selectedColor === 'thematic') {
         if (selectedRecolorBy.name === 'BIOME') {
           selectedColor = 'biome';
@@ -126,7 +128,7 @@ GradientAnimation.propTypes = {
 };
 
 export const LinksPlaceHolder = React.memo(
-  ({ gapBetweenColumns, sankeyColumnsWidth, size = MIN_COLUMNS_NUMBER - 1, height = 575 }) =>
+  ({ gapBetweenColumns, sankeyColumnsWidth, size = MIN_COLUMNS_NUMBER - 1, height = 525 }) =>
     Array.from({ length: size }).map((_, i) => (
       <rect
         key={i}
@@ -147,7 +149,7 @@ LinksPlaceHolder.propTypes = {
 };
 
 export const ColumnsPlaceholder = React.memo(
-  ({ sankeyColumnsWidth, gapBetweenColumns, size = MIN_COLUMNS_NUMBER, height = 575 }) =>
+  ({ sankeyColumnsWidth, gapBetweenColumns, size = MIN_COLUMNS_NUMBER, height = 525 }) =>
     Array.from({ length: size }).map((_, i) => (
       <rect
         key={i}
