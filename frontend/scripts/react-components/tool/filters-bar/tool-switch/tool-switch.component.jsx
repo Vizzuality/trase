@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Tabs from 'react-components/shared/tabs';
 
-import './tool-switch.scss';
+import 'react-components/tool/filters-bar/tool-switch/tool-switch.scss';
 
 function ToolSwitch({ dashboardSelected, switchTool }) {
   const tabs = [{ label: 'Flows', section: null }, { label: 'Data', section: 'data-view' }];
@@ -18,6 +18,7 @@ function ToolSwitch({ dashboardSelected, switchTool }) {
       <Tabs
         tabs={tabs}
         margin={null}
+        variant="toolbar"
         onSelectTab={handleSelectTab}
         selectedTab={selected}
         itemTabRenderer={t => t.label}

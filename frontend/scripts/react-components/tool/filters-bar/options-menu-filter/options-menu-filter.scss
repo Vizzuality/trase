@@ -1,0 +1,15 @@
+@import 'styles/settings';
+
+.c-options-menu-filter {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+  cursor: pointer;
+
+  .options-menu-label {
+    display: block;
+    color: rgba($white, 0.6);
+  }
+}

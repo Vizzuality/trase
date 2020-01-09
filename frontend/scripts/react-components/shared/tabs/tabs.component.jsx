@@ -16,11 +16,12 @@ function Tabs(props) {
     testId,
     getTabId,
     color,
+    variant,
     actionComponent
   } = props;
   const isSelected = item => getTabId(item) === selectedTab;
   return (
-    <div className={cx('c-tabs', { [`margin-${margin}`]: margin })}>
+    <div className={cx('c-tabs', { [`margin-${margin}`]: margin, [`v-${variant}`]: variant })}>
       <div className="tabs-container">
         <div className="tabs-options">
           {tabs.map((item, index) => (
@@ -70,6 +71,7 @@ Tabs.propTypes = {
   children: PropTypes.any,
   onSelectTab: PropTypes.func.isRequired,
   color: PropTypes.string,
+  variant: PropTypes.string,
   actionComponent: PropTypes.node,
   selectedTab: PropTypes.any
 };

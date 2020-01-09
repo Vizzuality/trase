@@ -26,7 +26,6 @@
 
     &:last-child {
       border-radius: 0 5px 5px 0;
-      border-right: 1px solid $charcoal-grey;
     }
 
     &:first-child:last-child {
@@ -43,6 +42,21 @@
   &.margin-sm {
     .tabs-container {
       margin: 0 0 25px 0;
+    }
+  }
+
+  &.v-toolbar {
+    .tab {
+      border: 0;
+      background-color: $white;
+      opacity: 1;
+
+      &.-selected {
+        background-color: $strong-pink;
+        border: 0;
+        box-shadow: inset 0 0 6px 0 #C60006;
+        color: white;
+      }
     }
   }
 
