@@ -7,7 +7,6 @@
 #  context_id    :integer
 #  country_id    :integer          not null
 #  commodity_id  :integer          not null
-#  nodes_ids     :integer          is an Array
 #  year          :integer          not null
 #  name          :text
 #  name_tsvector :tsvector

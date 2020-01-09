@@ -3207,7 +3207,6 @@ CREATE TABLE public.nodes_with_flows_per_year (
     column_position smallint,
     year smallint NOT NULL,
     is_unknown boolean,
-    nodes_ids integer[],
     name text,
     name_tsvector tsvector,
     node_type text,
@@ -3243,7 +3242,6 @@ CREATE TABLE public.dashboards_companies (
     context_id integer,
     country_id integer NOT NULL,
     commodity_id integer NOT NULL,
-    nodes_ids integer[],
     year smallint NOT NULL,
     name text,
     name_tsvector tsvector,
@@ -3374,7 +3372,6 @@ CREATE VIEW public.dashboards_companies_v AS
     nodes.context_id,
     nodes.country_id,
     nodes.commodity_id,
-    nodes.nodes_ids,
     nodes.year,
     nodes.name,
     nodes.name_tsvector,
@@ -3462,7 +3459,6 @@ CREATE TABLE public.dashboards_destinations (
     context_id integer,
     country_id integer NOT NULL,
     commodity_id integer NOT NULL,
-    nodes_ids integer[],
     year smallint NOT NULL,
     name text,
     name_tsvector tsvector,
@@ -3501,13 +3497,6 @@ COMMENT ON COLUMN public.dashboards_destinations.commodity_id IS 'id of commodit
 
 
 --
--- Name: COLUMN dashboards_destinations.nodes_ids; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_destinations.nodes_ids IS 'array of ids of other nodes from the same supply chain';
-
-
---
 -- Name: dashboards_destinations_v; Type: VIEW; Schema: public; Owner: -
 --
 
@@ -3517,7 +3506,6 @@ CREATE VIEW public.dashboards_destinations_v AS
     nodes.context_id,
     nodes.country_id,
     nodes.commodity_id,
-    nodes.nodes_ids,
     nodes.year,
     nodes.name,
     nodes.name_tsvector,
@@ -3542,7 +3530,6 @@ CREATE TABLE public.dashboards_exporters (
     context_id integer,
     country_id integer NOT NULL,
     commodity_id integer NOT NULL,
-    nodes_ids integer[],
     year smallint NOT NULL,
     name text,
     name_tsvector tsvector,
@@ -3581,13 +3568,6 @@ COMMENT ON COLUMN public.dashboards_exporters.commodity_id IS 'id of commodity t
 
 
 --
--- Name: COLUMN dashboards_exporters.nodes_ids; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_exporters.nodes_ids IS 'array of ids of other nodes from the same supply chain';
-
-
---
 -- Name: dashboards_exporters_v; Type: VIEW; Schema: public; Owner: -
 --
 
@@ -3597,7 +3577,6 @@ CREATE VIEW public.dashboards_exporters_v AS
     nodes.context_id,
     nodes.country_id,
     nodes.commodity_id,
-    nodes.nodes_ids,
     nodes.year,
     nodes.name,
     nodes.name_tsvector,
@@ -3622,7 +3601,6 @@ CREATE TABLE public.dashboards_importers (
     context_id integer,
     country_id integer NOT NULL,
     commodity_id integer NOT NULL,
-    nodes_ids integer[],
     year smallint NOT NULL,
     name text,
     name_tsvector tsvector,
@@ -3661,13 +3639,6 @@ COMMENT ON COLUMN public.dashboards_importers.commodity_id IS 'id of commodity t
 
 
 --
--- Name: COLUMN dashboards_importers.nodes_ids; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_importers.nodes_ids IS 'array of ids of other nodes from the same supply chain';
-
-
---
 -- Name: dashboards_importers_v; Type: VIEW; Schema: public; Owner: -
 --
 
@@ -3677,7 +3648,6 @@ CREATE VIEW public.dashboards_importers_v AS
     nodes.context_id,
     nodes.country_id,
     nodes.commodity_id,
-    nodes.nodes_ids,
     nodes.year,
     nodes.name,
     nodes.name_tsvector,
@@ -3759,7 +3729,6 @@ CREATE TABLE public.dashboards_sources (
     context_id integer,
     country_id integer NOT NULL,
     commodity_id integer NOT NULL,
-    nodes_ids integer[],
     year smallint NOT NULL,
     name text,
     name_tsvector tsvector,
@@ -3798,13 +3767,6 @@ COMMENT ON COLUMN public.dashboards_sources.commodity_id IS 'id of commodity com
 
 
 --
--- Name: COLUMN dashboards_sources.nodes_ids; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_sources.nodes_ids IS 'array of ids of other nodes from the same supply chain';
-
-
---
 -- Name: dashboards_sources_v; Type: VIEW; Schema: public; Owner: -
 --
 
@@ -3814,7 +3776,6 @@ CREATE VIEW public.dashboards_sources_v AS
     nodes.context_id,
     nodes.country_id,
     nodes.commodity_id,
-    nodes.nodes_ids,
     nodes.year,
     nodes.name,
     nodes.name_tsvector,
@@ -5482,20 +5443,15 @@ CREATE VIEW public.nodes_with_flows_per_year_v AS
     cnt.column_position,
     nodes_with_co_nodes.year,
     nodes.is_unknown,
-    nodes_with_co_nodes.nodes_ids,
     nodes.name,
     to_tsvector('simple'::regconfig, COALESCE(nodes.name, ''::text)) AS name_tsvector,
     node_types.name AS node_type,
     upper(btrim(nodes.geo_id)) AS geo_id
-   FROM ((((( SELECT flow_nodes.node_id,
+   FROM ((((( SELECT DISTINCT flow_nodes.node_id,
             flow_nodes.context_id,
             flow_nodes."position",
-            flow_nodes.year,
-            array_agg(DISTINCT co_flow_nodes.node_id) AS nodes_ids
-           FROM (public.flow_nodes
-             JOIN public.flow_nodes co_flow_nodes ON ((flow_nodes.flow_id = co_flow_nodes.flow_id)))
-          WHERE (flow_nodes.node_id <> co_flow_nodes.node_id)
-          GROUP BY flow_nodes.node_id, flow_nodes.context_id, flow_nodes."position", flow_nodes.year) nodes_with_co_nodes
+            flow_nodes.year
+           FROM public.flow_nodes) nodes_with_co_nodes
      JOIN public.nodes ON ((nodes_with_co_nodes.node_id = nodes.id)))
      JOIN public.node_types ON ((nodes.node_type_id = node_types.id)))
      JOIN public.contexts ON ((nodes_with_co_nodes.context_id = contexts.id)))
@@ -10261,6 +10217,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191217105056'),
 ('20191218221238'),
 ('20191219221216'),
-('20200106092554');
+('20200106092554'),
+('20200107131928');
 
 

@@ -12,7 +12,6 @@
 #  column_position      :integer
 #  year                 :integer          not null
 #  is_unknown           :boolean
-#  nodes_ids            :integer          is an Array
 #  name                 :text
 #  name_tsvector        :tsvector
 #  node_type            :text
