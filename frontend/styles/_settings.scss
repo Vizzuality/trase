@@ -1,5 +1,6 @@
 // layout
-$nav-height: 64px;
+$nav-height: 60px;
+$filters-bar-height: 50px;
 $titlebar-height: 62px;
 $map-width: 320px;
 $map-width-closed: 30px;
@@ -74,36 +75,43 @@ $z-tooltip: 102;
 $z-leaflet-above-panes: 500;
 $z-above-leaflet: 501;
 
-// colors
-$background-white: #f2f2f2;
-$light-gray: #f6f6f6;
-$mid-light-gray: #e5e5e5;
-$medium-gray: #dddddd;
-$gray-text: #515253;
-$yellow-gray: #d9d9d9;
-$yet-another-gray: #999999;
+// basic colors
+$white: #fff;
 $black: #000;
-$charcoal-dark: #28343b;
-$charcoal-extra-dark: #1b2a32;
+$background-white: #f2f2f2;
+
+// charcoal colors
 $charcoal-grey: #34444c;
-$charcoal-grey-toned-down: #536269;
-$elephant: #6f7b80;
 $charcoal-grey-faded: rgba($charcoal-grey, 0.6);
 $charcoal-grey-faded-a-lot: rgba($charcoal-grey, 0.2);
-$gray: #dfdfdf;
+$charcoal-grey-toned-down: #536269;
+$charcoal-dark: #28343b;
+$charcoal-extra-dark: #1b2a32;
+
+// secondary colors
 $medium-pink: #ea6869;
 $strong-pink: #f65e6e;
 $medium-pink-faded: lighten($medium-pink, 20%);
 $manilla: #ffeb8b;
 $egg-shell: #fff0c2;
 $orange: #ffa500;
-$pale-grey: #e0e4e8;
+
+// gray colors
+$gray: #dfdfdf;
+$light-gray: #f6f6f6;
+$mid-light-gray: #e5e5e5; // barely used
+$medium-gray: #dddddd;
+$pale-grey: #e0e4e8; // barely used
 $pinkish-grey: #c7c7c7;
-$medium-grey: #aaa;
-$pinkish-grey-two: #cbcbcb;
-$white: #fff;
-$white-two: #fbfafa;
-$metal-grey: #ebebeb;
+$medium-grey: #aaa; // barely used
+$pinkish-grey-two: #cbcbcb; // barely used
+$gray-text: #515253; // barely used
+$yellow-gray: #d9d9d9; // barely used
+$white-two: #fbfafa; // barely used
+$elephant: #6f7b80; // barely used
+$metal-grey: #ebebeb; // barely used
+$yet-another-gray: #999999; // barely used
+$carbon-gray: #333; // barely used
 
 // Miscellaneous
 $box-shadow: 0 1px 3px 0 rgba($black, 0.1), 0 1px 2px 0 rgba($black, 0.2);

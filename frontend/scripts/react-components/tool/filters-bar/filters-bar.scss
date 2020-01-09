@@ -1,0 +1,54 @@
+@import 'styles/settings';
+
+.c-filters-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  margin: $nav-height 0 0;
+  width: 100%;
+  height: $filters-bar-height;
+  background-color: $charcoal-grey;
+  z-index: $z-nav;
+
+  .slot {
+    display: flex;
+    align-items: center;
+    height: 100%;
+
+    &:first-child {
+      justify-content: flex-start;
+
+      .slot-item:first-child {
+        padding: 0 24px 0 40px;
+        border-left: 0;
+      }
+    }
+
+    &:last-child {
+      justify-content: flex-end;
+
+      .slot-item {
+        &:first-child {
+          padding: 0 40px 0 24px;
+          border-right: 0;
+        }
+
+        &:only-child {
+          border: 0;
+        }
+      }
+    }
+
+    .slot-item {
+      height: 100%;
+      padding: 0 24px;
+      border-left: 1px solid rgba($white, 0.4);
+      border-right: 1px solid rgba($white, 0.4);
+
+      &:hover {
+        background-color: $carbon-gray;
+      }
+    }
+  }
+}
