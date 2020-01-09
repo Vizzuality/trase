@@ -5,7 +5,7 @@ import EditFilter from './edit-filter/edit-filter.component';
 import OptionsMenuFilter from './options-menu-filter/options-menu-filter.component';
 import ToolSwitch from './tool-switch';
 
-import './filters-bar.scss';
+import './tool-bar.scss';
 
 const types = {
   edit: EditFilter,
@@ -13,10 +13,10 @@ const types = {
   optionsMenu: OptionsMenuFilter
 };
 
-function FiltersBar(props) {
+function ToolBar(props) {
   const { leftSlot, rightSlot } = props;
   return (
-    <aside className="c-filters-bar">
+    <aside className="c-tool-bar">
       <ul className="slot">
         {leftSlot.flatMap(item =>
           types[item.id] && item.show ? (
@@ -43,12 +43,12 @@ function FiltersBar(props) {
   );
 }
 
-FiltersBar.defaultProps = {
+ToolBar.defaultProps = {
   leftSlot: [],
   rightSlot: []
 };
 
-FiltersBar.propTypes = {
+ToolBar.propTypes = {
   leftSlot: PropTypes.arrayOf(
     PropTypes.shape({ id: PropTypes.string.isRequired, content: PropTypes.any })
   ),
@@ -57,4 +57,4 @@ FiltersBar.propTypes = {
   )
 };
 
-export default FiltersBar;
+export default ToolBar;

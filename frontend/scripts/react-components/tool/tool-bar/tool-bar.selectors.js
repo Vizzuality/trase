@@ -82,7 +82,7 @@ export const getViewModeFilter = createSelector(
   }
 );
 
-export const getFiltersBar = createSelector(
+export const getToolBar = createSelector(
   [
     getCurrentPage,
     getPanelFilter,
