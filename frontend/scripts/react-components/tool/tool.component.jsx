@@ -12,7 +12,7 @@ import MapLayout from 'react-components/tool/map-layout';
 import ErrorModal from 'react-components/tool/error-modal';
 import ToolModal from 'react-components/tool/tool-modal';
 import Timeline from 'react-components/tool/timeline';
-import FiltersBar from 'react-components/tool/filters-bar';
+import ToolBar from 'react-components/tool/tool-bar';
 
 import UrlSerializer from 'react-components/shared/url-serializer';
 
@@ -77,7 +77,7 @@ const Tool = props => {
           </div>
           <ErrorModal noLinksFound={noLinksFound} />
           <div className="main-content">
-            <FiltersBar />
+            <ToolBar />
             <SplittedView
               sidebarOpen={mapSidebarOpen}
               leftSlot={<MapLayout />}
