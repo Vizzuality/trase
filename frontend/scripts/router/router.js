@@ -68,7 +68,9 @@ export const routes = {
     title: getPageTitle,
     thunk: loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool),
     footer: false,
-    filtersNav: true
+    nav: {
+      className: '-light'
+    }
   },
   profileRoot: {
     path: '/profiles',
@@ -150,7 +152,9 @@ export const routes = {
     thunk: loadPageData(),
     title: getPageTitle,
     footer: false,
-    filtersNav: true
+    nav: {
+      className: '-light'
+    }
   },
   [NOT_FOUND]: {
     path: '/404',
