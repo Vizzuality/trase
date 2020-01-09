@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import ToolSwitch from 'react-components/tool/tool-switch/tool-switch.component';
+import ToolSwitch from 'react-components/tool/filters-bar/tool-switch/tool-switch.component';
 import { switchTool } from 'react-components/tool-links/tool-links.actions';
 
 const mapStateToProps = state => ({
