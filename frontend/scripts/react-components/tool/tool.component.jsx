@@ -12,11 +12,9 @@ import MapLayout from 'react-components/tool/map-layout';
 import ErrorModal from 'react-components/tool/error-modal';
 import ToolModal from 'react-components/tool/tool-modal';
 import Timeline from 'react-components/tool/timeline';
-import FiltersBar, { EditFilter } from 'react-components/tool/filters-bar';
-import Text from 'react-components/shared/text';
+import FiltersBar from 'react-components/tool/filters-bar';
 
 import UrlSerializer from 'react-components/shared/url-serializer';
-
 
 import 'styles/components/shared/veil.scss';
 import 'styles/components/shared/dropdown.scss';
@@ -79,10 +77,7 @@ const Tool = props => {
           </div>
           <ErrorModal noLinksFound={noLinksFound} />
           <div className="main-content">
-            <FiltersBar
-              leftSlot={[{ id: 'ex', content: <EditFilter title="Total eclipse of the Heart" subtitle="(oops!)" />}]}
-              rightSlot={[{ id: 'ex', content: <Text color="white">Total eclipse of the heart</Text>}]}
-            />
+            <FiltersBar />
             <SplittedView
               sidebarOpen={mapSidebarOpen}
               leftSlot={<MapLayout />}
