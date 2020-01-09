@@ -37,12 +37,12 @@ module Api
               value_table => {attribute_type => "#{attribute_type}_property"}
             ).
             where("#{value_table}.#{attribute_type}_id" => attribute.id).
-            # rubocop:disable Metrics/LineLength
+            # rubocop:disable Layout/LineLength
             where(
               "#{value_table}.year = ? OR NOT COALESCE(#{attribute_type}_properties.is_temporal_on_place_profile, FALSE)",
               @year
             ).
-            # rubocop:enable Metrics/LineLength
+            # rubocop:enable Layout/LineLength
             joins(:node_property).
             where('NOT is_domestic_consumption').
             distinct

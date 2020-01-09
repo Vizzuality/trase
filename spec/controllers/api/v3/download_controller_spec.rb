@@ -12,7 +12,7 @@ RSpec.describe Api::V3::DownloadController, type: :controller do
 
   describe 'GET index' do
     before(:each) do
-      Api::V3::Readonly::DownloadFlow.refresh(sync: true, skip_dependencies: false)
+      Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowQuants.new.call
       Api::V3::DownloadVersion.current_version_symbol(api_v3_context) ||
         FactoryBot.create(
           :api_v3_download_version,

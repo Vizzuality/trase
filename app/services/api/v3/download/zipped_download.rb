@@ -7,7 +7,7 @@ module Api
   module V3
     module Download
       class ZippedDownload
-        # @param query [Array<Api::V3::Readonly::DownloadFlow>]
+        # @param query [Array<Api::V3::Flow>]
         # @param download_name [String]
         def initialize(query, download_name)
           @query = query

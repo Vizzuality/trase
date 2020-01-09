@@ -2,18 +2,17 @@
 #
 # Table name: dashboards_destinations
 #
-#  id(id of destination node (not unique))                           :integer          not null, primary key
-#  node_type_id                                                      :integer
-#  context_id                                                        :integer
-#  country_id(id of country sourcing commodity going to this node)   :integer          not null
-#  commodity_id(id of commodity going to this node)                  :integer          not null
-#  nodes_ids(array of ids of other nodes from the same supply chain) :integer          is an Array
-#  year                                                              :integer          not null
-#  name                                                              :text
-#  name_tsvector                                                     :tsvector
-#  node_type                                                         :text
-#  profile                                                           :text
-#  rank_by_year                                                      :jsonb
+#  id(id of destination node (not unique))                         :integer          not null, primary key
+#  node_type_id                                                    :integer
+#  context_id                                                      :integer
+#  country_id(id of country sourcing commodity going to this node) :integer          not null
+#  commodity_id(id of commodity going to this node)                :integer          not null
+#  year                                                            :integer          not null
+#  name                                                            :text
+#  name_tsvector                                                   :tsvector
+#  node_type                                                       :text
+#  profile                                                         :text
+#  rank_by_year                                                    :jsonb
 #
 # Indexes
 #

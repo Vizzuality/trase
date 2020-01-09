@@ -12,23 +12,14 @@ SELECT
   nodes.name AS name,
   TO_TSVECTOR('simple', COALESCE(nodes.name, '')) AS name_tsvector,
   node_types.name AS node_type,
-  UPPER(TRIM(nodes.geo_id)) AS geo_id,
-  nodes_with_co_nodes.nodes_ids
+  UPPER(TRIM(nodes.geo_id)) AS geo_id
 FROM (
-  SELECT
-    flow_nodes.node_id,
-    flow_nodes.context_id,
-    flow_nodes.position,
-    flow_nodes.year,
-    ARRAY_AGG(DISTINCT co_flow_nodes.node_id) AS nodes_ids
-  FROM flow_nodes
-  JOIN flow_nodes co_flow_nodes ON flow_nodes.flow_id = co_flow_nodes.flow_id
-  WHERE flow_nodes.node_id <> co_flow_nodes.node_id
-  GROUP BY
+  SELECT DISTINCT
     flow_nodes.node_id,
     flow_nodes.context_id,
     flow_nodes.position,
     flow_nodes.year
+  FROM flow_nodes
 ) nodes_with_co_nodes
 JOIN nodes ON nodes_with_co_nodes.node_id = nodes.id
 JOIN node_types ON nodes.node_type_id = node_types.id

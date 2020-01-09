@@ -21,7 +21,7 @@ module Api
           attribute_type = attribute.class.name.demodulize.downcase
           value_table = "flow_#{attribute_type}s"
 
-          # rubocop:disable Metrics/LineLength
+          # rubocop:disable Layout/LineLength
           select_clause = ActiveRecord::Base.send(
             :sanitize_sql_array,
             [
@@ -29,7 +29,7 @@ module Api
               @node_index
             ]
           )
-          # rubocop:enable Metrics/LineLength
+          # rubocop:enable Layout/LineLength
           nodes_join_clause = ActiveRecord::Base.send(
             :sanitize_sql_array,
             ['JOIN nodes ON nodes.id = flows.path[?]', @node_index]

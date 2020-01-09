@@ -13,7 +13,7 @@ RSpec.describe Api::V3::Download::FlowDownload do
   end
 
   before(:each) do
-    Api::V3::Readonly::DownloadFlow.refresh(sync: true)
+    Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowQuants.new.call
   end
 
   let(:flow_download_flat) {
