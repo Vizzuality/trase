@@ -17,7 +17,7 @@ import ErrorModal from 'react-components/tool/error-modal';
 import MapSidebar from 'react-components/tool/map-sidebar-layout';
 import ToolModal from 'react-components/tool/tool-modal';
 import Timeline from 'react-components/tool/timeline';
-import FiltersBar from 'react-components/tool/filters-bar';
+import ToolBar from 'react-components/tool/tool-bar';
 
 import UrlSerializer from 'react-components/shared/url-serializer';
 
@@ -86,7 +86,7 @@ const Tool = props => {
           <ErrorModal noLinksFound={noLinksFound} />
           {!ENABLE_REDESIGN_PAGES && <MapSidebar />}
           <div className="main-content">
-            <FiltersBar />
+            <ToolBar />
             <SplittedView
               sidebarOpen={mapSidebarOpen}
               leftSlot={<MapLayout />}
