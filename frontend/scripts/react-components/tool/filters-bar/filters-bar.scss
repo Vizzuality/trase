@@ -16,12 +16,35 @@
     align-items: center;
     height: 100%;
 
+    .slot-item {
+      height: 100%;
+
+      > * {
+        padding: 0 24px;
+      }
+
+      &:hover {
+        background-color: $carbon-gray;
+
+        &.-no-hover {
+          background-color: transparent;
+        }
+      }
+    }
+
     &:first-child {
       justify-content: flex-start;
 
-      .slot-item:first-child {
-        padding: 0 24px 0 40px;
-        border-left: 0;
+      .slot-item {
+        border-right: 1px solid rgba($white, 0.4);
+
+        &:first-child {
+          border-left: 0;
+
+          > * {
+            padding: 0 24px 0 40px;
+          }
+        }
       }
     }
 
@@ -29,25 +52,19 @@
       justify-content: flex-end;
 
       .slot-item {
-        &:first-child {
-          padding: 0 40px 0 24px;
+        border-left: 1px solid rgba($white, 0.4);
+
+        &:last-child {
           border-right: 0;
+
+          > * {
+            padding: 0 40px 0 24px;
+          }
         }
 
         &:only-child {
           border: 0;
         }
-      }
-    }
-
-    .slot-item {
-      height: 100%;
-      padding: 0 24px;
-      border-left: 1px solid rgba($white, 0.4);
-      border-right: 1px solid rgba($white, 0.4);
-
-      &:hover {
-        background-color: $carbon-gray;
       }
     }
   }
