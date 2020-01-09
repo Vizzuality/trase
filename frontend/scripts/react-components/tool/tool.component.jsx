@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
+import EventManager from 'utils/eventManager';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import MapContainer from 'react-components/tool/map/map.container';
 import ModalContainer from 'react-components/tool/story-modal/story-modal.container';
@@ -15,10 +16,12 @@ import MapLayout from 'react-components/tool/map-layout';
 import ErrorModal from 'react-components/tool/error-modal';
 import MapSidebar from 'react-components/tool/map-sidebar-layout';
 import ToolModal from 'react-components/tool/tool-modal';
-import EventManager from 'utils/eventManager';
+import Timeline from 'react-components/tool/timeline';
+import FiltersBar, { EditFilter } from 'react-components/tool/filters-bar';
+import Text from 'react-components/shared/text';
+
 import UrlSerializer from 'react-components/shared/url-serializer';
 
-import Timeline from './timeline';
 
 import 'styles/components/shared/veil.scss';
 import 'styles/components/shared/dropdown.scss';
@@ -31,8 +34,8 @@ const renderVainillaComponents = () => (
     <ModalContainer />
     <MapContainer />
     {!ENABLE_REDESIGN_PAGES && <NodesTitlesContainer />}
-    <MapDimensionsContainer />
-    <MapContextContainer />
+    {!ENABLE_REDESIGN_PAGES && <MapDimensionsContainer />}
+    {!ENABLE_REDESIGN_PAGES && <MapContextContainer />}
     <Tooltip />
   </>
 );
@@ -76,15 +79,19 @@ const Tool = props => {
   const render = useMemo(
     () => (
       <>
-        <div className="js-node-tooltip c-info-tooltip" />
         <div className="l-tool">
+          <div className="js-node-tooltip c-info-tooltip" />
           <div className="-hidden-on-mobile">
             <div className="veil js-veil" />
             <div className="c-modal js-modal" />
           </div>
           <ErrorModal noLinksFound={noLinksFound} />
-          <MapSidebar />
+          {!ENABLE_REDESIGN_PAGES && <MapSidebar />}
           <div className="main-content">
+            <FiltersBar
+              leftSlot={[{ id: 'ex', content: <EditFilter title="Total eclipse of the Heart" subtitle="(oops!)" />}]}
+              rightSlot={[{ id: 'ex', content: <Text color="white">Total eclipse of the heart</Text>}]}
+            />
             <SplittedView
               sidebarOpen={mapSidebarOpen}
               leftSlot={<MapLayout />}

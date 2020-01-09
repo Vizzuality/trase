@@ -392,7 +392,7 @@ function Sankey(props) {
                 ))}
               {loading && (
                 <Defs.LinksPlaceHolder
-                  height={placeholderHeight}
+                  height={maxHeight > 0 ? maxHeight : placeholderHeight}
                   gapBetweenColumns={gapBetweenColumns}
                   sankeyColumnsWidth={sankeyColumnsWidth}
                   size={extraColumnId ? MIN_COLUMNS_NUMBER : MIN_COLUMNS_NUMBER - 1}
@@ -415,7 +415,7 @@ function Sankey(props) {
                 ))}
               {loading && (
                 <Defs.ColumnsPlaceholder
-                  height={placeholderHeight}
+                  height={maxHeight > 0 ? maxHeight : placeholderHeight}
                   gapBetweenColumns={gapBetweenColumns}
                   sankeyColumnsWidth={sankeyColumnsWidth}
                   size={extraColumnId ? MIN_COLUMNS_NUMBER + 1 : MIN_COLUMNS_NUMBER}
