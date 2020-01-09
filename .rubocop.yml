@@ -18,6 +18,12 @@ Bundler/OrderedGems:
 Layout/DotPosition:
   EnforcedStyle: trailing
 
+Layout/LineLength:
+  Max: 80
+  Include:
+    - 'app/services/api/v3/actors/**/*'
+    - 'app/services/api/v3/places/**/*'
+
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
@@ -36,12 +42,6 @@ Metrics/BlockLength:
     - 'spec/**/*'
     - 'lib/tasks/**/*'
     - 'app/admin/**/*'
-
-Metrics/LineLength:
-  Max: 80
-  Include:
-    - 'app/services/api/v3/actors/**/*'
-    - 'app/services/api/v3/places/**/*'
 
 Style/Alias:
   Enabled: false

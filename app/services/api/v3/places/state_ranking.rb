@@ -25,7 +25,7 @@ module Api
           attribute_type = attribute.class.name.demodulize.downcase
           value_table = "node_#{attribute_type}s"
 
-          # rubocop:disable Metrics/LineLength
+          # rubocop:disable Layout/LineLength
           query = basic_query(attribute, include_domestic_consumption).
             select(
               'nodes.id AS node_id',
@@ -35,7 +35,7 @@ module Api
 OR NOT COALESCE(#{attribute_type}_properties.is_temporal_on_place_profile, FALSE)",
               @year
             )
-          # rubocop:enable Metrics/LineLength
+          # rubocop:enable Layout/LineLength
 
           result = Node.from('(' + query.to_sql + ') s').
             select('s.*').
@@ -54,14 +54,14 @@ OR NOT COALESCE(#{attribute_type}_properties.is_temporal_on_place_profile, FALSE
         )
           attribute_type = attribute.class.name.demodulize.downcase
           value_table = "node_#{attribute_type}s"
-          # rubocop:disable Metrics/LineLength
+          # rubocop:disable Layout/LineLength
           query = basic_query(attribute, include_domestic_consumption).
             select(
               'nodes.id AS node_id',
               "AVG(#{value_table}.value) OVER (PARTITION BY #{value_table}.year) AS value",
               "#{value_table}.year"
             )
-          # rubocop:enable Metrics/LineLength
+          # rubocop:enable Layout/LineLength
 
           Node.from('(' + query.to_sql + ') s').
             select('s.*').
