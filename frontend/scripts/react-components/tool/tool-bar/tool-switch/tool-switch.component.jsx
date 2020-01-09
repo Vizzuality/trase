@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Tabs from 'react-components/shared/tabs';
 
-import 'react-components/tool/filters-bar/tool-switch/tool-switch.scss';
+import './tool-switch.scss';
 
 function ToolSwitch({ dashboardSelected, switchTool }) {
   const tabs = [{ label: 'Flows', section: null }, { label: 'Data', section: 'data-view' }];
