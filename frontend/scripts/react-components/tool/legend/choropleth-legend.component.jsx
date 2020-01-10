@@ -19,15 +19,17 @@ function ChoroplethLegend(props) {
       >
         <div className="bucket-names">
           {titles.map(title => (
-            <div className="layer-name">{title}</div>
+            <div key={title} className="layer-name">
+              {title}
+            </div>
           ))}
         </div>
         <ul className="bucket-legend">
           {Object.values(colors).map((color, i) => (
-            <>
+            <React.Fragment key={i}>
               {isBivariate &&
                 Object.values(color).map(bivariateColor => (
-                  <li className="bucket-item">
+                  <li className="bucket-item" key={bivariateColor}>
                     <div
                       className={cx(`bucket color-${bivariateColor.substr(1).toLowerCase()}`, {
                         '-highlighted': highlightedChoroplethBucket === bivariateColor
@@ -48,7 +50,7 @@ function ChoroplethLegend(props) {
                   </div>
                 </li>
               )}
-            </>
+            </React.Fragment>
           ))}
         </ul>
 
@@ -89,7 +91,7 @@ function ChoroplethLegend(props) {
 }
 
 ChoroplethLegend.propTypes = {
-  highlightedChoroplethBucket: PropTypes.object,
+  highlightedChoroplethBucket: PropTypes.string,
   isBivariate: PropTypes.bool,
   titles: PropTypes.array,
   colors: PropTypes.array,
