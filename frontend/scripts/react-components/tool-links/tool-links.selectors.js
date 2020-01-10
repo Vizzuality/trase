@@ -44,11 +44,15 @@ export const getSelectedResizeBy = createSelector(
       return null;
     }
 
-    if (!selectedResizeBy && selectedContext) {
+    const resizeByItem = selectedContext.resizeBy.find(
+      resizeBy => resizeBy.attributeId === selectedResizeBy
+    );
+
+    if (!resizeByItem && selectedContext) {
       return selectedContext.resizeBy.find(resizeBy => resizeBy.isDefault === true);
     }
 
-    return selectedContext.resizeBy.find(resizeBy => resizeBy.attributeId === selectedResizeBy);
+    return resizeByItem;
   }
 );
 
@@ -59,13 +63,13 @@ export const getSelectedRecolorBy = createSelector(
       return null;
     }
 
-    if (!selectedRecolorBy && selectedContext) {
-      return selectedContext.recolorBy.find(recolorBy => recolorBy.isDefault === true);
-    }
-
     const recolorByItem = selectedContext.recolorBy.find(
       recolorBy => recolorBy.attributeId === selectedRecolorBy
     );
+
+    if (!recolorByItem) {
+      return selectedContext.recolorBy.find(recolorBy => recolorBy.isDefault === true);
+    }
 
     if (isDataView && (recolorByItem && !isIndicatorSupported(recolorByItem.name))) {
       return null;
