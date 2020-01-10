@@ -111,10 +111,12 @@ module Api
           end
 
           def grouped_query
-            Api::V3::Flow.where(context_id: context.id).order(false).
-              select('nodes.name AS x').
-              joins("JOIN nodes ON nodes.id = flows.path[#{node_type_idx}]").
-              group('nodes.name')
+            Api::V3::Flow.
+              from('partitioned_flows flows').
+              where(context_id: context.id).
+              order(false).
+              select("flows.names[#{@node_type_idx}] AS x").
+              group("flows.names[#{@node_type_idx}]")
           end
 
           def ncont_attr_table

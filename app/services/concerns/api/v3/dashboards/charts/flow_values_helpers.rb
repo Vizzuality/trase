@@ -37,9 +37,16 @@ module Api
 
           def apply_node_type_x
             @query = @query.
-              select('nodes.id, nodes.node_type_id, nodes.name AS x, nodes.is_unknown').
-              joins("JOIN nodes ON nodes.id = flows.path[#{@node_type_idx}]").
-              group('nodes.id')
+              select([
+                "flows.path[#{@node_type_idx}] AS id",
+                "flows.names[#{@node_type_idx}] AS x",
+                "NOT flows.known_path_positions[#{@node_type_idx}] AS is_unknown"
+              ]).
+              group([
+                "flows.path[#{@node_type_idx}]",
+                "flows.names[#{@node_type_idx}]",
+                "NOT flows.known_path_positions[#{@node_type_idx}]"
+              ])
           end
 
           def apply_ncont_attribute_break_by

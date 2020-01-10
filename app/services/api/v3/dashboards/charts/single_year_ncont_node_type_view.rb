@@ -79,14 +79,14 @@ module Api
               (
                 WITH q AS (#{@query.to_sql}),
                 u1 AS (
-                  SELECT id, node_type_id, x, JSONB_OBJECT_AGG(break_by, y0) AS per_break_by, SUM(y0) AS y
+                  SELECT id, x, JSONB_OBJECT_AGG(break_by, y0) AS per_break_by, SUM(y0) AS y
                   FROM q
                   WHERE NOT is_unknown
-                  GROUP BY id, node_type_id, x
+                  GROUP BY id, x
                   ORDER BY SUM(y0) DESC LIMIT #{@top_n}
                 ),
                 u2 AS (
-                  SELECT NULL::INT, NULL::INT, x, JSONB_OBJECT_AGG(break_by, y0), SUM(y0) AS y
+                  SELECT NULL::INT, x, JSONB_OBJECT_AGG(break_by, y0), SUM(y0) AS y
                   FROM (
                     SELECT '#{OTHER}'::TEXT AS x, break_by, SUM(y0) AS y0 FROM q
                     WHERE NOT EXISTS (SELECT 1 FROM u1 WHERE q.x = u1.x)
