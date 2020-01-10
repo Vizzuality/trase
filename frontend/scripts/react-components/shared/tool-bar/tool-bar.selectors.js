@@ -100,7 +100,7 @@ export const getToolBar = createSelector(
             resizeByFilter,
             recolorByFilter,
             viewModeFilter,
-            { type: 'toolSwitch', show: true, noHover: true }
+            { id: 'toolSwitch', type: 'toolSwitch', show: true, noHover: true }
           ]
         };
       }
