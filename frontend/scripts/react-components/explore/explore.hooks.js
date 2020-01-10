@@ -50,7 +50,12 @@ export function useHighlightedCommodities({ contexts }) {
     return uniq(highlighted);
   }, [contexts, hoveredGeometry]);
 
-  return [highligtedCommodities, setHoveredGeometry];
+  const countryName = useMemo(() => {
+    const ctx = contexts.find(c => c.worldMap.geoId === hoveredGeometry);
+    return ctx?.countryName;
+  }, [contexts, hoveredGeometry]);
+
+  return [highligtedCommodities, countryName, setHoveredGeometry];
 }
 
 export function useHighlightedContext({ commodity, contexts, step, country }) {
@@ -70,10 +75,7 @@ export function useHighlightedContext({ commodity, contexts, step, country }) {
   return [highlightedContext, setHoveredCountry];
 }
 
-export function useHighlightedCountries(
-  { step, commodity, allCountriesIds, contexts },
-  destinationCountries
-) {
+export function useHighlightedCountries({ step, commodity, allCountriesIds, contexts }) {
   const [hoveredCommodity, setHoveredCommodity] = useState(null);
 
   // clear hovered on step change
@@ -89,21 +91,17 @@ export function useHighlightedCountries(
           )
         };
       case EXPLORE_STEPS.selectCountry: {
-        if (destinationCountries || !commodity) {
+        if (!commodity) {
           return null;
         }
-        const destinationIds = destinationCountries?.map(c => c.id);
         return {
-          level1: uniq(
-            destinationIds ||
-              contexts.filter(c => c.commodityId === commodity.id).map(c => c.countryId)
-          )
+          level1: uniq(contexts.filter(c => c.commodityId === commodity.id).map(c => c.countryId))
         };
       }
       default:
         return null;
     }
-  }, [step, hoveredCommodity, contexts, allCountriesIds, commodity, destinationCountries]);
+  }, [step, hoveredCommodity, contexts, allCountriesIds, commodity]);
 
   return [highlightedCountries, setHoveredCommodity];
 }
