@@ -12,28 +12,37 @@ import DownloadPdfLink from './download-pdf-link.component';
 import 'scripts/react-components/nav/top-nav/top-nav.scss';
 
 class TopNav extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      backgroundVisible: false,
-      menuOpen: false
-    };
-    this.navLinkProps = {
-      exact: false,
-      strict: false,
-      isActive: null
-    };
-    this.setBackground = throttle(this.setBackground.bind(this), 300);
-    this.handleToggleClick = this.handleToggleClick.bind(this);
+  state = {
+    backgroundVisible: false,
+    menuOpen: false
+  };
+
+  navLinkProps = {
+    exact: false,
+    strict: false,
+    isActive: null
+  };
+
+  mobileMenuRef = React.createRef(null);
+
+  componentDidMount() {
+    window.addEventListener('click', this.handleClickOutside);
     window.addEventListener('scroll', this.setBackground, { passive: true });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.page !== this.props.page && this.state.menuOpen) {
+      this.handleToggleClick();
+    }
   }
 
   componentWillUnmount() {
     this.setBackground.cancel();
+    window.removeEventListener('click', this.handleClickOutside);
     window.removeEventListener('scroll', this.setBackground);
   }
 
-  setBackground() {
+  setBackground = throttle(() => {
     const { pageOffset } = this.props;
     const { backgroundVisible } = this.state;
     const hasOffset = typeof pageOffset !== 'undefined';
@@ -42,11 +51,16 @@ class TopNav extends React.PureComponent {
     } else if (hasOffset && window.pageYOffset <= pageOffset && backgroundVisible) {
       this.setState({ backgroundVisible: false });
     }
-  }
+  }, 300);
 
-  handleToggleClick() {
-    this.setState(state => ({ menuOpen: !state.menuOpen }));
-  }
+  handleClickOutside = e => {
+    const { target } = e;
+    if (!this.mobileMenuRef.current.contains(target) && this.state.menuOpen) {
+      this.handleToggleClick();
+    }
+  };
+
+  handleToggleClick = () => this.setState(state => ({ menuOpen: !state.menuOpen }));
 
   renderDesktopMenu() {
     const { links, printable, showLogo, onDownloadPDF, className } = this.props;
@@ -137,7 +151,7 @@ class TopNav extends React.PureComponent {
     allLinks.push(...links);
 
     return (
-      <div className="row -mobile-menu">
+      <div className="row -mobile-menu" ref={this.mobileMenuRef}>
         <div className="top-nav-bar column small-12">
           <ul className="top-nav-item-list">
             <li className="top-nav-item -no-margin">
@@ -193,6 +207,7 @@ class TopNav extends React.PureComponent {
 }
 
 TopNav.propTypes = {
+  page: PropTypes.string,
   links: PropTypes.array,
   showLogo: PropTypes.bool,
   printable: PropTypes.bool,

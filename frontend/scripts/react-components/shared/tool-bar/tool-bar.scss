@@ -9,7 +9,10 @@
   width: 100%;
   height: $tool-bar-height;
   background-color: $charcoal-grey;
-  z-index: $z-nav;
+
+  &.-no-margin {
+    margin: 0;
+  }
 
   .slot {
     display: flex;

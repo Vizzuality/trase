@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Heading from 'react-components/shared/heading';
 import Button from 'react-components/shared/button/button.component';
 
-import './edit-filter.scss';
+import 'react-components/shared/tool-bar/edit-filter/edit-filter.scss';
 
 function EditFilter(props) {
   const { title, subtitle, onClick } = props;
