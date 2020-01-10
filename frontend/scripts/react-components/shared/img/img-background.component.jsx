@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import InView from 'react-components/shared/in-view.component';
 
 function ImgBackground(props) {
-  // TODO: the idea is to provide a srcSet + sizes and grab one or another depending on the screen res
-  // and expose an ImgContextProvider that the users can use to pass their media-queries
   const { as, alt: title, src, children, ...rest } = props;
 
   return (
@@ -19,20 +17,7 @@ function ImgBackground(props) {
           ...rest
         };
 
-        return (
-          <>
-            {React.createElement(as, currentProps, children)}
-            {!inView && (
-              <a
-                style={{ display: 'block', visibility: 'hidden', position: 'absolute' }}
-                href={src}
-                aria-hidden="true"
-              >
-                {title}
-              </a>
-            )}
-          </>
-        );
+        return <>{React.createElement(as, currentProps, children)}</>;
       }}
     </InView>
   );
