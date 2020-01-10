@@ -2,6 +2,7 @@ import { connect, batch } from 'react-redux';
 import ToolModal from 'react-components/tool/tool-modal/tool-modal.component';
 import { setActiveModal } from 'react-components/tool/tool.actions';
 import {
+  selectView,
   selectResizeBy,
   selectRecolorBy,
   setToolFlowsLoading,
@@ -30,6 +31,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         dispatch(selectResizeBy(resizeBy));
         dispatch(setActiveModal(null));
       });
+    },
+    viewMode: viewMode => {
+      dispatch(selectView(viewMode.value));
+      dispatch(setActiveModal(null));
     }
   }[ownProps.activeModal];
   return {

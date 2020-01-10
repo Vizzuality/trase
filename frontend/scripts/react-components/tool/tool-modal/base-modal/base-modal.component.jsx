@@ -7,13 +7,13 @@ import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.
 import 'react-components/tool/tool-modal/base-modal/base-modal.scss';
 
 export default function BaseModal(props) {
-  const { items, selectedItem, onChange, modalId } = props;
+  const { items, selectedItem, onChange, heading, itemValueProp } = props;
   const COLUMN_COUNT = 3;
   return (
     <div className="c-base-modal">
       <div className="row columns">
         <Heading size="md" className="modal-title">
-          Choose one {modalId}
+          {heading}
         </Heading>
         <GridList
           items={items}
@@ -28,12 +28,12 @@ export default function BaseModal(props) {
           columnCount={COLUMN_COUNT}
         >
           {itemProps =>
-            !itemProps.item.attributeId ? (
+            typeof itemProps.item[itemValueProp] === 'undefined' ? (
               <GridListItem
                 {...itemProps}
                 color="white"
                 enableItem={onChange}
-                isActive={!selectedItem.attributeId}
+                isActive={!selectedItem[itemValueProp]}
               />
             ) : (
               <GridListItem
@@ -41,7 +41,7 @@ export default function BaseModal(props) {
                 isDisabled={itemProps.item?.isDisabled}
                 item={{ ...itemProps.item, name: itemProps.item.label }}
                 tooltip={itemProps.item.description}
-                isActive={selectedItem.attributeId === itemProps.item.attributeId}
+                isActive={selectedItem[itemValueProp] === itemProps.item[itemValueProp]}
                 enableItem={onChange}
               />
             )
@@ -52,9 +52,14 @@ export default function BaseModal(props) {
   );
 }
 
+BaseModal.defaultProps = {
+  itemValueProp: 'attributeId'
+};
+
 BaseModal.propTypes = {
   items: PropTypes.array,
+  itemValueProp: PropTypes.string,
   selectedItem: PropTypes.object,
   onChange: PropTypes.func.isRequired,
-  modalId: PropTypes.string.isRequired
+  heading: PropTypes.string.isRequired
 };

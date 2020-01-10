@@ -18,6 +18,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(editPanels());
     dispatch(setActiveModal('context'));
   },
+  viewMode_onClick: id => dispatch(setActiveModal(id)),
   version_onClick: id => dispatch(setActiveModal(id)),
   unit_onClick: id => dispatch(setActiveModal(id)),
   indicator_onClick: id => dispatch(setActiveModal(id))
