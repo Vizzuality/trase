@@ -17,7 +17,7 @@ import ErrorModal from 'react-components/tool/error-modal';
 import MapSidebar from 'react-components/tool/map-sidebar-layout';
 import ToolModal from 'react-components/tool/tool-modal';
 import Timeline from 'react-components/tool/timeline';
-import ToolBar from 'react-components/tool/tool-bar';
+import ToolBar from 'react-components/shared/tool-bar';
 
 import UrlSerializer from 'react-components/shared/url-serializer';
 
