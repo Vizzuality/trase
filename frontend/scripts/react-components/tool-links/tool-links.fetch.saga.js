@@ -148,6 +148,7 @@ export function* getToolNodesByLink(selectedContext, { fetchAllNodes } = {}) {
 
     if (difference.size === 0) {
       if (NODE_ENV_DEV) {
+        // eslint-disable-next-line
         console.log('All necessary nodes have been downloaded');
       }
       return;
@@ -226,11 +227,13 @@ export function* getMissingLockedNodes() {
 
   if (nodesIds.length === 0) {
     if (NODE_ENV_DEV) {
+      // eslint-disable-next-line
       console.log('No missing nodes.');
     }
     return;
   }
   if (NODE_ENV_DEV) {
+    // eslint-disable-next-line
     console.log('Fetching missing nodes: ', nodesIds);
   }
 

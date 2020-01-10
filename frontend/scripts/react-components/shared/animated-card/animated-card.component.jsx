@@ -50,6 +50,7 @@ function AnimatedCard(props) {
                 className="card-title"
                 lineHeight="lg"
               >
+                {/* eslint-disable-next-line react/no-danger */}
                 {parseHtml ? <div dangerouslySetInnerHTML={{ __html: subtitle }} /> : subtitle}
               </Text>
             </div>
