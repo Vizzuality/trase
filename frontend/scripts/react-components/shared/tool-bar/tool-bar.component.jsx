@@ -14,9 +14,9 @@ const types = {
 };
 
 function ToolBar(props) {
-  const { leftSlot, rightSlot } = props;
+  const { leftSlot, rightSlot, className } = props;
   return (
-    <aside className="c-tool-bar">
+    <aside className={cx('c-tool-bar', className)}>
       <ul className="slot">
         {leftSlot.flatMap(item =>
           types[item.id] && item.show ? (
@@ -49,6 +49,7 @@ ToolBar.defaultProps = {
 };
 
 ToolBar.propTypes = {
+  className: PropTypes.string,
   leftSlot: PropTypes.arrayOf(
     PropTypes.shape({ id: PropTypes.string.isRequired, content: PropTypes.any })
   ),
