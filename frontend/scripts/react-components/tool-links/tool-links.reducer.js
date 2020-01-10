@@ -121,6 +121,7 @@ const toolLinksReducer = {
   },
   [SET_CONTEXT](state) {
     return immer(state, draft => {
+      console.log('hey');
       Object.assign(draft, {
         selectedRecolorBy: toolLinksInitialState.selectedRecolorBy,
         selectedResizeBy: toolLinksInitialState.selectedResizeBy,
