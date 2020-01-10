@@ -45,14 +45,10 @@ module Api
               info: info
             }
 
+            profile = profile_for_node_type_id(@node_type.id)
             break_by_values_indexes.each do |break_by, idx|
               node = top_nodes[idx]
-              if node
-                profile_info = {
-                  id: node['id'],
-                  profile: profile_for_node_type_id(node['node_type_id'])
-                }
-              end
+              profile_info = {id: node['id'], profile: profile} if node
               @meta[:"y#{idx}"] = series_legend_meta(break_by, @cont_attribute).
                 merge(profileInfo: profile_info)
             end

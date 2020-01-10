@@ -25,11 +25,9 @@ module Api
           def call
             @data = []
             x_labels_profile_info = []
+            profile = profile_for_node_type_id(@node_type.id)
             @top_n_and_others_query.map do |record|
-              x_labels_profile_info << {
-                id: record['id'],
-                profile: profile_for_node_type_id(record['node_type_id'])
-              }
+              x_labels_profile_info << {id: record['id'], profile: profile}
               @data << record.attributes.slice('x', 'y0').symbolize_keys
             end
             if (last = @data.last) && last[:x] == OTHER && last[:y0].blank?

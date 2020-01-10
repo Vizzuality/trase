@@ -28,11 +28,9 @@ module Api
 
             data_by_x = {}
             x_labels_profile_info = []
+            profile = profile_for_node_type_id(@node_type.id)
             @top_n_and_others_query.each do |record|
-              x_labels_profile_info << {
-                id: record['id'],
-                profile: profile_for_node_type_id(record['node_type_id'])
-              }
+              x_labels_profile_info << {id: record['id'], profile: profile}
               break_by_values_indexes.each do |break_by, idx|
                 data_by_x[record['x']] ||= {}
                 data_by_x[record['x']]["y#{idx}"] = record['per_break_by'][break_by]
