@@ -48,9 +48,10 @@ export default function ToolModal(props) {
         return (
           <BaseModal
             items={items}
-            selectedItem={selectedItem}
             onChange={onChange}
-            modalId={activeModal}
+            heading={activeModal === 'viewMode' ? 'Change view' : `Choose one ${activeModal}`}
+            selectedItem={selectedItem}
+            itemValueProp={activeModal === 'viewMode' ? 'value' : undefined}
           />
         );
     }
