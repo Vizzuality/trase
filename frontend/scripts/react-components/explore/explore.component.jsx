@@ -23,6 +23,7 @@ import {
 } from 'react-components/explore/explore.hooks';
 
 import 'react-components/explore/explore.scss';
+import addApostrophe from 'utils/addApostrophe';
 
 function Explore(props) {
   const {
@@ -47,13 +48,14 @@ function Explore(props) {
   useQuickFacts(props);
   useSankeyCards(props);
 
-  const [highlightedCommodityIds, setHoveredGeometry] = useHighlightedCommodities(props);
+  const [
+    highlightedCommodityIds,
+    highlightedCommoditiesCountryName,
+    setHoveredGeometry
+  ] = useHighlightedCommodities(props);
   const [highlightedContext, setHoveredCountry] = useHighlightedContext(props);
   const destinationCountries = highlightedContext?.id && topNodes[highlightedContext.id];
-  const [highlightedCountryIds, setHoveredCommodity] = useHighlightedCountries(
-    props,
-    destinationCountries
-  );
+  const [highlightedCountryIds, setHoveredCommodity] = useHighlightedCountries(props);
 
   const openModal = card => {
     setModalOpen(true);
@@ -204,7 +206,38 @@ function Explore(props) {
                               </div>
                             ))
                           ) : (
-                            <div className="bubble" />
+                            <div className="bubble">
+                              {(highlightedCountryIds.level1.length > 0 ||
+                                highlightedCountryIds.level2.length > 0 ||
+                                highlightedCommodityIds.length > 0) && (
+                                <>
+                                  <Text
+                                    size="rg"
+                                    align="center"
+                                    variant="mono"
+                                    weight="bold"
+                                    transform="uppercase"
+                                    className="quick-facts-label"
+                                  >
+                                    {highlightedCommodityIds.length > 0
+                                      ? `${highlightedCommoditiesCountryName}${addApostrophe(
+                                          highlightedCommoditiesCountryName
+                                        )} commodities`
+                                      : 'source countries'}
+                                  </Text>
+                                  <Heading
+                                    size="md"
+                                    weight="bold"
+                                    align="center"
+                                    className="quick-facts-value"
+                                  >
+                                    {highlightedCommodityIds.length ||
+                                      highlightedCountryIds.level2?.length ||
+                                      highlightedCountryIds.level1.length}
+                                  </Heading>
+                                </>
+                              )}
+                            </div>
                           )}
                         </div>
                       </div>
