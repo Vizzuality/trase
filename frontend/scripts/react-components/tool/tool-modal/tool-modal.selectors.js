@@ -7,6 +7,12 @@ import {
   getRecolorByOptions
 } from 'react-components/nav/filters-nav/recolor-by-selector/recolor-by-selector.selectors';
 
+const getToolDetailedView = state => state.toolLinks && state.toolLinks.detailedView;
+
+const viewModeItems = [
+  { id: 1, label: 'Summary', value: false },
+  { id: 2, label: 'All Flows', value: true }
+];
 const getActiveModal = state => state.toolLayers.activeModal;
 
 const getToolResizeBys = createSelector(
@@ -19,6 +25,7 @@ export const getItems = createSelector(
   (activeModal, recolorByItems, resizeByItems) => {
     if (!activeModal || activeModal === 'layer') return null;
     return {
+      viewMode: viewModeItems,
       indicator: recolorByItems,
       unit: resizeByItems
     }[activeModal];
@@ -26,12 +33,13 @@ export const getItems = createSelector(
 );
 
 export const getSelectedItem = createSelector(
-  [getActiveModal, getSelectedRecolorByValue, getSelectedResizeBy],
-  (activeModal, activeRecolorBy, activeResizeBy) => {
+  [getActiveModal, getSelectedRecolorByValue, getSelectedResizeBy, getToolDetailedView],
+  (activeModal, activeRecolorBy, activeResizeBy, isDetailedView) => {
     if (!activeModal || activeModal === 'layer') return null;
     return {
+      unit: activeResizeBy,
       indicator: activeRecolorBy,
-      unit: activeResizeBy
+      viewMode: viewModeItems.find(i => i.value === isDetailedView)
     }[activeModal];
   }
 );
