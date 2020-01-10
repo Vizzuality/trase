@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Text from 'react-components/shared/text';
 import Heading from 'react-components/shared/heading';
 
-import './options-menu-filter.scss';
+import 'react-components/shared/tool-bar/options-menu-filter/options-menu-filter.scss';
 
 function OptionsMenuFilter(props) {
   const { value, label } = props;

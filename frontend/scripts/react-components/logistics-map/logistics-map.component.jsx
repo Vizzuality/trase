@@ -16,6 +16,7 @@ import LogisticsMapLegend from 'react-components/logistics-map/logistics-map-leg
 import LogisticsMapPanel from 'react-components/logistics-map/logistics-map-panel/logistics-map-panel.container';
 import LogisticsMapBar from 'react-components/logistics-map/logistics-map-bar/logistics-map-bar.container';
 import LogisticsMapDownload from 'react-components/logistics-map/logistics-map-download/logistics-map-download.container';
+import ToolBar from 'react-components/shared/tool-bar';
 
 import 'vizzuality-components/dist/map.css';
 import 'leaflet/dist/leaflet.css';
@@ -41,6 +42,7 @@ function LogisticsMap(props) {
   return (
     <div className="l-logistics-map">
       <div className="c-logistics-map">
+        <ToolBar className="-no-margin" />
         <WRIIcons />
         <MapComponent bounds={bounds} basemap={BASEMAPS.default}>
           {map => (
