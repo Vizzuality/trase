@@ -6,6 +6,7 @@ import { NavLink } from 'redux-first-router-link';
 import NavLinks from 'react-components/nav/nav-links.component';
 import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
 import Search from 'react-components/nav/global-search/global-search.container';
+import ToolSearch from 'react-components/tool/tool-search/tool-search.container';
 import Img from 'react-components/shared/img';
 import DownloadPdfLink from './download-pdf-link.component';
 
@@ -63,7 +64,8 @@ class TopNav extends React.PureComponent {
   handleToggleClick = () => this.setState(state => ({ menuOpen: !state.menuOpen }));
 
   renderDesktopMenu() {
-    const { links, printable, showLogo, onDownloadPDF, className } = this.props;
+
+    const { links, printable, showLogo, onDownloadPDF, className, page } = this.props;
     const allLinks = [];
 
     if (showLogo && !ENABLE_REDESIGN_PAGES) {
@@ -126,7 +128,7 @@ class TopNav extends React.PureComponent {
                 <LocaleSelector />
               </li>
               <li className="top-nav-item">
-                <Search className="top-nav-search" />
+                {page === 'tool' ? <ToolSearch /> : <Search className="top-nav-search" />}
               </li>
               {printable && (
                 <li className="top-nav-item">
