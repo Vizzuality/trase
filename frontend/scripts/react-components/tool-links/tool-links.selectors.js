@@ -70,7 +70,7 @@ export const getSelectedRecolorBy = createSelector(
       recolorBy => recolorBy.attributeId === selectedRecolorBy
     );
 
-    if (isDataView && !isIndicatorSupported(recolorByItem.name)) {
+    if (isDataView && (recolorByItem && !isIndicatorSupported(recolorByItem.name))) {
       return null;
     }
     return recolorByItem;
