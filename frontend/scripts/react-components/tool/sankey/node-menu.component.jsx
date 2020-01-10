@@ -50,7 +50,7 @@ NodeMenu.propTypes = {
   options: PropTypes.array,
   menuPos: PropTypes.shape({ x: PropTypes.number, y: PropTypes.number }),
   isVisible: PropTypes.bool,
-  containerRef: PropTypes.node
+  containerRef: PropTypes.object
 };
 
 export default React.memo(NodeMenu);
