@@ -22,7 +22,7 @@ const dashboardRootReducer = {
 
 const dashboardRootReducerTypes = PropTypes => ({
   dashboardTemplates: PropTypes.arrayOf(PropTypes.object).isRequired,
-  loadingDashboardTemplates: PropTypes.arrayOf(PropTypes.object).isRequired
+  loadingDashboardTemplates: PropTypes.any
 });
 
 export default createReducer(initialState, dashboardRootReducer, dashboardRootReducerTypes);
