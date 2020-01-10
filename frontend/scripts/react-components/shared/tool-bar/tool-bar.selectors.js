@@ -24,7 +24,8 @@ const getPanelFilter = createSelector(
       selectedContext &&
       `${capitalize(selectedContext.countryName)} - ${capitalize(selectedContext.commodityName)}`;
     return {
-      id: 'edit',
+      id: 'context',
+      type: 'edit',
       title,
       subtitle: null,
       show: selectedContext
@@ -35,7 +36,8 @@ const getPanelFilter = createSelector(
 export const getResizeByFilter = createSelector(
   [getAppTooltips, getToolResizeBy, makeGetResizeByItems(getToolResizeBys, getSelectedYears)],
   (tooltips, selectedResizeBy, items) => ({
-    id: 'optionsMenu',
+    id: 'unit',
+    type: 'optionsMenu',
     label: 'units',
     show: selectedResizeBy,
     value: selectedResizeBy?.label || '',
@@ -45,10 +47,11 @@ export const getResizeByFilter = createSelector(
 );
 
 export const getRecolorByFilter = createSelector(
-  [getAppTooltips, getToolRecolorBy],
-  (tooltips, selectedRecolorBy) => ({
-    id: 'optionsMenu',
-    show: selectedRecolorBy,
+  [getAppTooltips, getToolRecolorBy, getSelectedContext],
+  (tooltips, selectedRecolorBy, selectedContext) => ({
+    id: 'indicator',
+    type: 'optionsMenu',
+    show: selectedContext?.recolorBy.length > 0,
     label: 'indicator',
     value: selectedRecolorBy?.label || 'None',
     tooltip: tooltips && selectedRecolorBy && tooltips.sankey.nav.colorBy.none
@@ -58,7 +61,8 @@ export const getRecolorByFilter = createSelector(
 export const getVersioningSelected = createSelector(
   getVersionData,
   versionData => ({
-    id: 'optionsMenu',
+    id: 'version',
+    type: 'optionsMenu',
     show: versionData,
     label: 'version',
     value: `${versionData?.title} v${versionData?.version}`
@@ -70,9 +74,10 @@ export const getViewModeFilter = createSelector(
   (tooltips, isDetailedView) => {
     const options = [{ label: 'Summary', value: false }, { label: 'All Flows', value: true }];
     return {
+      id: 'viewMode',
       options,
       label: 'Change view',
-      id: 'toolViewMode',
+      type: 'toolViewMode',
       size: 'rg',
       clip: false,
       weight: 'regular',
@@ -101,7 +106,7 @@ export const getToolBar = createSelector(
             resizeByFilter,
             recolorByFilter,
             viewModeFilter,
-            { id: 'toolSwitch', show: true, noHover: true }
+            { type: 'toolSwitch', show: true, noHover: true }
           ]
         };
       }

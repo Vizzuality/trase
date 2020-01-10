@@ -15,13 +15,17 @@ const types = {
 
 function ToolBar(props) {
   const { leftSlot, rightSlot, className } = props;
+
   return (
     <aside className={cx('c-tool-bar', className)}>
       <ul className="slot">
         {leftSlot.flatMap(item =>
-          types[item.id] && item.show ? (
+          types[item.type] && item.show ? (
             <li className={cx('slot-item', { '-no-hover': item.noHover })} key={item.id}>
-              {React.createElement(types[item.id], item)}
+              {React.createElement(types[item.type], {
+                ...item,
+                onClick: props[`${item.id}_onClick`]
+              })}
             </li>
           ) : (
             []
@@ -30,9 +34,12 @@ function ToolBar(props) {
       </ul>
       <ul className="slot">
         {rightSlot.flatMap(item =>
-          types[item.id] && item.show ? (
+          types[item.type] && item.show ? (
             <li className={cx('slot-item', { '-no-hover': item.noHover })} key={item.id}>
-              {React.createElement(types[item.id], item)}
+              {React.createElement(types[item.type], {
+                ...item,
+                onClick: props[`${item.id}_onClick`]
+              })}
             </li>
           ) : (
             []
