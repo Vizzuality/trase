@@ -71,20 +71,14 @@ export const getVersioningSelected = createSelector(
 
 export const getViewModeFilter = createSelector(
   [getAppTooltips, getToolDetailedView],
-  (tooltips, isDetailedView) => {
-    const options = [{ label: 'Summary', value: false }, { label: 'All Flows', value: true }];
-    return {
-      id: 'viewMode',
-      options,
-      label: 'Change view',
-      type: 'toolViewMode',
-      size: 'rg',
-      clip: false,
-      weight: 'regular',
-      tooltip: tooltips && tooltips.sankey.nav.view.main,
-      value: options.find(item => item.value === isDetailedView)
-    };
-  }
+  (tooltips, isDetailedView) => ({
+    id: 'viewMode',
+    show: true,
+    label: 'Change view',
+    type: 'optionsMenu',
+    tooltip: tooltips && tooltips.sankey.nav.view.main,
+    value: isDetailedView ? 'All Nodes' : 'Summary'
+  })
 );
 
 export const getToolBar = createSelector(
