@@ -20,9 +20,7 @@ export function mapToVanilla(VanillaComponent, methodProps, callbackProps) {
       if (this.instance.onCreated) this.instance.onCreated(this.props);
       if (!this.instance.onRemoved) {
         console.error(
-          `Vanilla component ${
-            VanillaComponent.name
-          } doesn't implement unmount logic, possible memory leak`
+          `Vanilla component ${VanillaComponent.name} doesn't implement unmount logic, possible memory leak`
         );
       }
     }
@@ -50,6 +48,7 @@ export function mapToVanilla(VanillaComponent, methodProps, callbackProps) {
             {}
           );
           if (VanillaComponent.DEBUG) {
+            // eslint-disable-next-line
             console.log(VanillaComponent.name, method, props);
           }
           fn.call(this.instance, props);
