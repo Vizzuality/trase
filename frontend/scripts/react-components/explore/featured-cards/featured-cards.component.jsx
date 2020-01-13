@@ -32,11 +32,13 @@ const FeaturedCard = ({ card, openModal, step }) => {
           transform="uppercase"
           color="white"
         >
-          {countryName} · {commodityName}
+          <span className="featured-card-country-name">{countryName}</span>
+          <span className="featured-card-commodity-name">{commodityName}</span>
         </Text>
         <Text
           variant="mono"
           align="center"
+          weight="bold"
           transform="uppercase"
           color="white"
           lineHeight="lg"
@@ -50,6 +52,7 @@ const FeaturedCard = ({ card, openModal, step }) => {
           align="center"
           transform="uppercase"
           color="white"
+          weight="bold"
           className="featured-card-text"
           title={subtitle}
         >
