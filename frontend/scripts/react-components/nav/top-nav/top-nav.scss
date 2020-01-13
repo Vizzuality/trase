@@ -164,10 +164,8 @@ $desktop-nav-min-width: 960px;
     justify-content: space-between;
     text-transform: lowercase;
     font-size: $font-size-medium;
-
-    .logo-image {
-      margin: 0 10px 0 0;
-    }
+    width: 135px;
+    height: 100%;
   }
 }
 
@@ -202,6 +200,16 @@ $desktop-nav-min-width: 960px;
 
     img {
       width: 60px;
+    }
+  }
+
+  &.-new-logo {
+    &::after {
+      content: none;
+    }
+
+    img {
+      width: 135px;
     }
   }
 }
