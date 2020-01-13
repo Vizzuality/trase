@@ -93,7 +93,8 @@ Tag.propTypes = {
 };
 
 Tag.defaultProps = {
-  size: 'md'
+  size: 'md',
+  showDropdown: true
 };
 
 export default Tag;
