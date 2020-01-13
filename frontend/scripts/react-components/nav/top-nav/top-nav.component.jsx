@@ -49,7 +49,7 @@ class TopNav extends React.PureComponent {
   }
 
   renderDesktopMenu() {
-    const { links, printable, showLogo, onDownloadPDF } = this.props;
+    const { links, printable, showLogo, onDownloadPDF, className } = this.props;
     const allLinks = [];
 
     if (showLogo && !ENABLE_REDESIGN_PAGES) {
@@ -70,14 +70,22 @@ class TopNav extends React.PureComponent {
           <div className="column medium-2">
             <ul className="top-nav-item-list">
               <li className="top-nav-item">
-                <NavLink exact strict to={{ type: 'home' }} className={cx('top-nav-link', '-logo')}>
+                <NavLink
+                  exact
+                  strict
+                  to={{ type: 'home' }}
+                  className={cx('top-nav-link', '-new-logo')}
+                >
                   <span className="top-nav-logo-container">
                     <Img
                       className="logo-image"
-                      src="/images/logos/logo-trase-nav.png"
+                      src={
+                        className === '-light'
+                          ? '/images/logos/new-logo-trase-red.svg'
+                          : '/images/logos/new-logo-trase-white.svg'
+                      }
                       alt="trase"
                     />
-                    trase
                   </span>
                 </NavLink>
               </li>
