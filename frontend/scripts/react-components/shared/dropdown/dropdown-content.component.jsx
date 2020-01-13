@@ -22,6 +22,13 @@ function useClipItemList(props) {
   return [listHeight, ref];
 }
 
+function useScheduleUpdate(props) {
+  const { children, options, scheduleUpdate } = props;
+  useEffect(() => {
+    scheduleUpdate();
+  }, [options, children, scheduleUpdate]);
+}
+
 function DropdownContent(props) {
   const {
     innerRef,
@@ -40,6 +47,7 @@ function DropdownContent(props) {
     variant
   } = props;
 
+  useScheduleUpdate(props);
   const [listHeight, listItemRef] = useClipItemList(props);
 
   const providerValue = useMemo(
