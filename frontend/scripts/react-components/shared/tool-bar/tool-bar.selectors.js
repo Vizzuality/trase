@@ -1,3 +1,4 @@
+import immer from 'immer';
 import { createSelector } from 'reselect';
 import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 import {
@@ -5,6 +6,7 @@ import {
   getSelectedRecolorBy as getToolRecolorBy
 } from 'react-components/tool-links/tool-links.selectors';
 import { makeGetResizeByItems } from 'selectors/indicators.selectors';
+import { getDynamicSentence } from 'react-components/dashboard-element/dashboard-element.selectors';
 import capitalize from 'lodash/capitalize';
 import { getVersionData } from 'react-components/tool/tool-modal/versioning-modal/versioning-modal.selectors';
 
@@ -18,17 +20,23 @@ const getToolResizeBys = createSelector(
 );
 
 const getPanelFilter = createSelector(
-  getSelectedContext,
-  selectedContext => {
+  [getSelectedContext, getDynamicSentence],
+  (selectedContext, dynamicSentence) => {
     const title =
       selectedContext &&
       `${capitalize(selectedContext.countryName)} - ${capitalize(selectedContext.commodityName)}`;
+
     return {
       id: 'context',
       type: 'edit',
       title,
       subtitle: null,
-      show: selectedContext
+      show: selectedContext,
+      tooltip: immer(dynamicSentence, draft => {
+        if (draft[0] && !draft[0].prefix) {
+          draft[0].prefix = 'Your supply chain includes ';
+        }
+      })
     };
   }
 );
@@ -42,7 +50,7 @@ export const getResizeByFilter = createSelector(
     show: selectedResizeBy,
     value: selectedResizeBy?.label || '',
     isDisabled: items.length === 1 && selectedResizeBy?.attributeId === items[0].attributeId,
-    tooltip: tooltips && selectedResizeBy && tooltips.sankey.nav.resizeBy[selectedResizeBy.name]
+    tooltip: tooltips && tooltips.sankey.nav.resizeBy.main
   })
 );
 
@@ -54,7 +62,7 @@ export const getRecolorByFilter = createSelector(
     show: selectedContext?.recolorBy.length > 0,
     label: 'indicator',
     value: selectedRecolorBy?.label || 'None',
-    tooltip: tooltips && selectedRecolorBy && tooltips.sankey.nav.colorBy.none
+    tooltip: tooltips && tooltips.sankey.nav.colorBy.main
   })
 );
 
