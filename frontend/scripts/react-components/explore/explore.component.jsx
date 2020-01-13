@@ -109,7 +109,7 @@ function Explore(props) {
     <>
       <Dropdown
         size="rg"
-        variant="panel"
+        variant="bordered"
         selectedValueOverride={commodity ? undefined : `Commodity (${commodities.length})`}
         options={commodities.map(i => ({ value: i.id, label: i.name }))}
         value={commodity && { value: commodity.id, label: commodity.name }}
@@ -119,7 +119,7 @@ function Explore(props) {
         <div className="country-dropdown-container">
           <Dropdown
             size="rg"
-            variant="panel"
+            variant="bordered"
             selectedValueOverride={country ? undefined : `Countries (${countries.length})`}
             options={countries.map(i => ({ value: i.id, label: i.name }))}
             value={country && { value: country.id, label: country.name }}
@@ -153,7 +153,7 @@ function Explore(props) {
                               item={item}
                               enableItem={i => setItemFunction(i.id)}
                               onHover={onItemHover}
-                              variant="explore"
+                              color="transparent"
                               isActive={highlightedCommodityIds.includes(item.id)}
                             />
                           ))}
@@ -183,17 +183,24 @@ function Explore(props) {
                           {quickFacts ? (
                             quickFacts.map(indicator => (
                               <div className="bubble">
-                                <Text size="rg" align="center" variant="mono">
+                                <Text
+                                  size="rg"
+                                  align="center"
+                                  variant="mono"
+                                  weight="bold"
+                                  transform="uppercase"
+                                  className="quick-facts-label"
+                                >
                                   {indicator.name} {indicator.year}
                                 </Text>
-                                <Text
-                                  size="lg"
-                                  weight="regular"
+                                <Heading
+                                  size="md"
+                                  weight="bold"
                                   align="center"
                                   className="quick-facts-value"
                                 >
                                   {format(',')(Math.round(indicator.total))} {indicator.unit}
-                                </Text>
+                                </Heading>
                               </div>
                             ))
                           ) : (

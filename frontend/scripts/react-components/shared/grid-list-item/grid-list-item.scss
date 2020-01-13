@@ -7,12 +7,13 @@
   align-items: flex-start;
   padding: 0 10px 10px 0;
 
-  &.v-explore {
-    padding: 0 20px 10px 0;
-
+  &.color-transparent {
     .grid-list-item-button {
-      background-color: $white;
-      border: 1px solid $charcoal-grey-faded-a-lot;
+      background-color: transparent;
+      border: 1px solid $charcoal-grey;
+      span {
+        color: $charcoal-grey;
+      }
 
       &:hover {
         background-color: $charcoal-grey;
@@ -29,6 +30,14 @@
       background-color: $white;
       span {
         color: $charcoal-grey;
+      }
+
+      &:hover {
+        background-color: $charcoal-grey;
+
+        > span {
+          color: $white;
+        }
       }
     }
   }

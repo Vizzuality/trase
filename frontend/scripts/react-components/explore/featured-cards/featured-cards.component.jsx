@@ -6,6 +6,7 @@ import capitalize from 'lodash/capitalize';
 import { EXPLORE_STEPS } from 'constants';
 import { useTransition, animated } from 'react-spring';
 import ResizeListener from 'react-components/shared/resize-listener.component';
+import { ImgBackground } from 'react-components/shared/img';
 import cx from 'classnames';
 
 import 'react-components/explore/featured-cards/featured-cards.scss';
@@ -16,10 +17,12 @@ const FeaturedCard = ({ card, openModal, step }) => {
   const cardStepId = stepIds[step];
   return (
     <div className="c-featured-card">
-      <button
+      <ImgBackground
+        as="button"
         onClick={() => openModal(card)}
         className="featured-card-button"
         data-test={`featured-card${cardStepId}`}
+        src={`'/images/featured-links/${countryName}.svg'`}
       >
         <Text
           variant="mono"
@@ -27,15 +30,17 @@ const FeaturedCard = ({ card, openModal, step }) => {
           weight="bold"
           size="lg"
           transform="uppercase"
-          color="grey-faded"
+          color="white"
         >
-          {countryName} · {commodityName}
+          <span className="featured-card-country-name">{countryName}</span>
+          <span className="featured-card-commodity-name">{commodityName}</span>
         </Text>
         <Text
           variant="mono"
           align="center"
+          weight="bold"
           transform="uppercase"
-          color="grey-faded"
+          color="white"
           lineHeight="lg"
           className="featured-card-text"
           title={title}
@@ -46,13 +51,14 @@ const FeaturedCard = ({ card, openModal, step }) => {
           variant="mono"
           align="center"
           transform="uppercase"
-          color="grey-faded"
+          color="white"
+          weight="bold"
           className="featured-card-text"
           title={subtitle}
         >
           {subtitle}
         </Text>
-      </button>
+      </ImgBackground>
     </div>
   );
 };
@@ -131,7 +137,7 @@ const FeaturedCards = props => {
               className="back-button"
               data-test="featured-cards-back-button"
             >
-              <Text variant="mono" size="rg" weight="bold">
+              <Text variant="mono" size="md" weight="bold" className="featured-cards-back">
                 BACK
               </Text>
             </button>

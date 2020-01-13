@@ -58,8 +58,7 @@ export const routes = {
     title: getPageTitle,
     thunk: loadPageData(),
     nav: {
-      className: '-light',
-      links: []
+      className: '-light'
     },
     footer: false
   },

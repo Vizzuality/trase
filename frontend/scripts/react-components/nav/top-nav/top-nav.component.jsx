@@ -49,10 +49,10 @@ class TopNav extends React.PureComponent {
   }
 
   renderDesktopMenu() {
-    const { links, printable, showLogo, onDownloadPDF } = this.props;
+    const { links, printable, showLogo, onDownloadPDF, className } = this.props;
     const allLinks = [];
 
-    if (showLogo) {
+    if (showLogo && !ENABLE_REDESIGN_PAGES) {
       allLinks.push({
         name: 'Home',
         page: 'home',
@@ -65,7 +65,33 @@ class TopNav extends React.PureComponent {
     allLinks.push(...links);
 
     return (
-      <div className="top-nav-bar row align-justify -desktop-menu">
+      <div className="row align-justify -desktop-menu">
+        {ENABLE_REDESIGN_PAGES && (
+          <div className="column medium-2">
+            <ul className="top-nav-item-list">
+              <li className="top-nav-item">
+                <NavLink
+                  exact
+                  strict
+                  to={{ type: 'home' }}
+                  className={cx('top-nav-link', '-new-logo')}
+                >
+                  <span className="top-nav-logo-container">
+                    <Img
+                      className="logo-image"
+                      src={
+                        className === '-light'
+                          ? '/images/logos/new-logo-trase-red.svg'
+                          : '/images/logos/new-logo-trase-white.svg'
+                      }
+                      alt="trase"
+                    />
+                  </span>
+                </NavLink>
+              </li>
+            </ul>
+          </div>
+        )}
         <div className="column medium-8">
           <div className="top-nav-item-list-container">
             <ul className="top-nav-item-list">

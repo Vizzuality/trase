@@ -7,60 +7,71 @@ import { ImgBackground } from 'react-components/shared/img';
 import 'react-components/explore/tool-links-modal/tool-links-modal.scss';
 
 function ToolLinksModal({ goToTool }) {
+  const bulletPoints = {
+    left: ['Visualize the data in real flows.', 'Highlight and manage the data as you wish.'],
+    right: ['Visualize the data in our charts.', 'Compare the data between different actors.']
+  };
   return (
     <div className="c-tool-links-modal">
       <div className="row columns">
-        <Heading size="md" className="modal-title">
-          Choose type of visualization
+        <Heading size="md" className="modal-title" align="center">
+          Choose the{' '}
+          <Heading as="span" size="md" weight="bold">
+            type of visualization
+          </Heading>
         </Heading>
       </div>
       <div className="links-container">
         <div className="row">
           <div className="small-12 medium-6 column">
-            <button
+            <ImgBackground
+              as="button"
+              src="/images/backgrounds/SANKEY_MODE.png"
               className="tool-link"
               onClick={() => goToTool('sankey')}
               data-test="explore-link-to-sankey"
             >
-              <ImgBackground />
-              <Heading weight="bold" variant="mono">
+              <Heading size="md" weight="bold" variant="mono">
                 FLOW VIEW
               </Heading>
-            </button>
+            </ImgBackground>
           </div>
           <div className="small-12 medium-6 column">
-            <button
+            <ImgBackground
+              as="button"
+              src="/images/backgrounds/DATA_VIEW_MODE.png"
               className="tool-link"
               onClick={() => goToTool('dashboard')}
               data-test="explore-link-to-dashboard"
             >
-              <ImgBackground />
-              <Heading weight="bold" variant="mono">
+              <Heading size="md" weight="bold" variant="mono">
                 DATA VIEW
               </Heading>
-            </button>
+            </ImgBackground>
           </div>
         </div>
       </div>
       <div className="row">
         <div className="column small-12 medium-6">
           <ul className="description-list">
-            <li>
-              <Text>Visualize the data in real flows.</Text>
-            </li>
-            <li>
-              <Text>Highlight and manage the data as you wish.</Text>
-            </li>
+            {bulletPoints.left.map((point, i) => (
+              <li className="bullet-point" key={i}>
+                <Text size="rg" weight="bold" lineHeight="lg">
+                  {point}
+                </Text>
+              </li>
+            ))}
           </ul>
         </div>
         <div className="column small-12 medium-6">
           <ul className="description-list">
-            <li>
-              <Text>Visualize the data in our charts.</Text>
-            </li>
-            <li>
-              <Text>Compare the data between different actors.</Text>
-            </li>
+            {bulletPoints.right.map((point, i) => (
+              <li className="bullet-point" key={i}>
+                <Text size="rg" weight="bold" lineHeight="lg">
+                  {point}
+                </Text>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

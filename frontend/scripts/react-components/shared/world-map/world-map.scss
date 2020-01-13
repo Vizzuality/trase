@@ -24,14 +24,14 @@
     -webkit-tap-highlight-color: transparent;
 
     .world-map-geography {
-      fill: rgba($charcoal-grey, 0.3);
+      fill: $yellow-gray;
       stroke: $white;
       stroke-width: 0.2px;
       outline: 0;
       pointer-events: visibleFill;
 
       &.-dark {
-        fill: rgba($charcoal-grey, 0.5);
+        fill: $yet-another-gray;
       }
 
       &.-darker {
