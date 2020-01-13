@@ -1,0 +1,12 @@
+.c-tags-group.v-tooltip {
+  margin: 0;
+  max-width: 0;
+  text-align: left;
+
+  .tags-group-item {
+    display: inline-flex;
+    position: relative;
+    padding: 0 4px 0 0;
+    min-height: auto;
+  }
+}
