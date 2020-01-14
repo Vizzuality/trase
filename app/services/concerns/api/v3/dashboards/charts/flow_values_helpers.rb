@@ -53,7 +53,7 @@ module Api
             ncont_attr_table = @ncont_attribute.flow_values_class.table_name
             @query = @query.
               select("#{ncont_attr_table}.value::TEXT AS break_by").
-              joins("LEFT JOIN #{ncont_attr_table} ON #{ncont_attr_table}.flow_id = flows.id").
+              joins("LEFT JOIN partitioned_#{ncont_attr_table} #{ncont_attr_table} ON #{ncont_attr_table}.flow_id = flows.id").
               where(
                 "#{ncont_attr_table}.#{@ncont_attribute.attribute_id_name}" =>
                   @ncont_attribute.original_id
@@ -101,11 +101,11 @@ module Api
           end
 
           def ncont_break_by_values
+            ncont_attr_table = @ncont_attribute.flow_values_class.table_name
             @ncont_attribute.
               flow_values_class.
-              joins(:flow).
+              from("partitioned_#{ncont_attr_table} #{ncont_attr_table}").
               where(
-                'flows.context_id' => @context.id,
                 @ncont_attribute.attribute_id_name => @ncont_attribute.original_id
               ).
               select(Arel.sql('value::TEXT AS text_value')).
