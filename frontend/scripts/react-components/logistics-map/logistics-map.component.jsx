@@ -14,13 +14,13 @@ import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.co
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 import LogisticsMapLegend from 'react-components/logistics-map/logistics-map-legend/logistics-map-legend.component';
 import LogisticsMapPanel from 'react-components/logistics-map/logistics-map-panel/logistics-map-panel.container';
-import LogisticsMapBar from 'react-components/logistics-map/logistics-map-bar/logistics-map-bar.container';
 import LogisticsMapDownload from 'react-components/logistics-map/logistics-map-download/logistics-map-download.container';
 import ToolBar from 'react-components/shared/tool-bar';
 
 import 'vizzuality-components/dist/map.css';
 import 'leaflet/dist/leaflet.css';
 import 'scripts/react-components/logistics-map/logistics-map.scss';
+import Timeline from 'react-components/tool/timeline/timeline.component';
 
 function LogisticsMap(props) {
   const {
@@ -30,13 +30,14 @@ function LogisticsMap(props) {
     tooltips,
     mapPopUp,
     heading,
-    openModal,
     closeModal,
+    selectYears,
     activeModal,
     buildEvents,
     activeLayers,
     setLayerActive,
-    getCurrentPopUp
+    getCurrentPopUp,
+    logisticsMapYearProps
   } = props;
   const Tooltip = p => <UnitsTooltip {...p.data} />;
   return (
@@ -68,12 +69,12 @@ function LogisticsMap(props) {
           tooltips={tooltips}
           setLayerActive={setLayerActive}
         />
-        <LogisticsMapBar openModal={openModal} />
         <SimpleModal isOpen={activeModal !== null} onRequestClose={closeModal}>
           {activeModal === 'companies' && <LogisticsMapPanel close={closeModal} />}
           {activeModal === 'download' && <LogisticsMapDownload close={closeModal} />}
         </SimpleModal>
       </div>
+      <Timeline {...logisticsMapYearProps} selectYears={selectYears} />
     </div>
   );
 }
@@ -83,12 +84,14 @@ LogisticsMap.propTypes = {
   openModal: PropTypes.func,
   tooltips: PropTypes.object,
   closeModal: PropTypes.func,
+  selectYears: PropTypes.func,
   buildEvents: PropTypes.func,
   heading: PropTypes.string,
   activeModal: PropTypes.string,
   activeLayers: PropTypes.array,
   bounds: PropTypes.object,
   border: PropTypes.object,
+  logisticsMapYearProps: PropTypes.any,
   getCurrentPopUp: PropTypes.func.isRequired,
   setLayerActive: PropTypes.func.isRequired,
   mapPopUp: PropTypes.object

@@ -7,12 +7,14 @@ import {
   getActiveParams,
   getBounds,
   getBorder,
-  getHeading
+  getHeading,
+  getLogisticsMapYearsProps
 } from 'react-components/logistics-map/logistics-map.selectors';
 import {
   setLogisticsMapActiveModal,
   setLayerActive as setLayerActiveFn,
-  getLogisticsMapCompanies
+  getLogisticsMapCompanies,
+  selectLogisticsMapYear
 } from 'react-components/logistics-map/logistics-map.actions';
 import LogisticsMap from 'react-components/logistics-map/logistics-map.component';
 import formatValue from 'utils/formatValue';
@@ -61,6 +63,7 @@ class LogisticsMapContainer extends React.PureComponent {
     border: PropTypes.object,
     heading: PropTypes.string,
     commodity: PropTypes.string,
+    selectYears: PropTypes.func,
     activeLayers: PropTypes.array,
     activeModal: PropTypes.string,
     setLayerActive: PropTypes.func.isRequired,
@@ -135,7 +138,9 @@ class LogisticsMapContainer extends React.PureComponent {
       tooltips,
       activeModal,
       bounds,
-      border
+      border,
+      selectYears,
+      logisticsMapYearProps
     } = this.props;
     const { mapPopUp } = this.state;
 
@@ -147,6 +152,8 @@ class LogisticsMapContainer extends React.PureComponent {
         bounds={bounds}
         border={border}
         heading={heading}
+        selectYears={selectYears}
+        logisticsMapYearProps={logisticsMapYearProps}
         activeModal={activeModal}
         activeLayers={activeLayers}
         closeModal={this.closeModal}
@@ -169,14 +176,16 @@ const mapStateToProps = state => {
     bounds: getBounds(state),
     border: getBorder(state),
     activeModal: state.logisticsMap.activeModal,
+    logisticsMapYearProps: getLogisticsMapYearsProps(state),
     tooltips: state.app.tooltips ? state.app.tooltips.logisticsMap : {}
   };
 };
 
 const mapDispatchToProps = {
-  setLayerActive: setLayerActiveFn,
   getLogisticsMapCompanies,
-  setLogisticsMapActiveModal
+  setLogisticsMapActiveModal,
+  setLayerActive: setLayerActiveFn,
+  selectYears: selectLogisticsMapYear
 };
 
 export default connect(

@@ -1,16 +1,1 @@
-import { connect } from 'react-redux';
-import { selectYears } from 'app/app.actions';
-import Timeline from 'react-components/tool/timeline/timeline.component';
-import { getToolYearsProps } from 'react-components/tool-links/tool-links.selectors';
-
-const mapStateToProps = state => ({
-  ...getToolYearsProps(state),
-  section: state.location.payload.section
-});
-
-const mapDispatchToProps = { selectYears };
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Timeline);
+export { default } from './timeline.component';
