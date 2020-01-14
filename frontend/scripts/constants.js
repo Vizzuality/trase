@@ -239,9 +239,16 @@ export const BREAKPOINTS = {
 
 export const MAX_SEARCH_RESULTS = 50;
 
-export const LOGISTICS_MAP_YEARS = Array.from({ length: 12 })
-  .fill(2016)
-  .map((y, i) => ({ value: y - i, label: `${y - i}` }));
+const buildYears = (start, length = 1) =>
+  Array.from({ length })
+    .fill(start)
+    .map((y, i) => ({ value: y + i, label: `${y + i}` }));
+
+export const LOGISTICS_MAP_YEARS = {
+  palmOil: buildYears(2016),
+  soy: buildYears(2005, 12),
+  cattle: buildYears(2012, 6)
+};
 
 export const LOGISTICS_MAP_HUBS = [
   { value: 'soy', label: 'Soy' },

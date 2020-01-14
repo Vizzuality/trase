@@ -12,7 +12,6 @@ import ToolSearch from 'react-components/tool/tool-search/tool-search.container'
 import { NavLink } from 'redux-first-router-link';
 import Img from 'react-components/shared/img';
 import { TOOL_LAYOUT } from 'constants';
-import ToolModalButton from 'react-components/nav/filters-nav/tool-modal-button';
 import ToolSelectionModalButton from 'react-components/nav/filters-nav/tool-selection-modal-button';
 
 import 'scripts/react-components/nav/filters-nav/filters-nav.scss';
@@ -135,20 +134,6 @@ const FiltersNav = props => {
     const Component = FILTERS[filter.type];
     if (ENABLE_TOOL_PANEL && filter.props.id === 'contextSelector') {
       return <ToolSelectionModalButton selectedContext={filter.props.selectedContext} />;
-    }
-    if (
-      ENABLE_REDESIGN_PAGES &&
-      ENABLE_VERSIONING &&
-      filter.props.id === 'version' &&
-      !filter.disabled
-    ) {
-      return <ToolModalButton modalId="version" key="version-toggle" />;
-    }
-    if (ENABLE_REDESIGN_PAGES && filter.props.id === 'toolRecolorBy') {
-      return <ToolModalButton modalId="indicator" key="indicator-toggle" />;
-    }
-    if (ENABLE_REDESIGN_PAGES && filter.props.id === 'toolResizeBy') {
-      return <ToolModalButton modalId="unit" key="unit-toggle" />;
     }
     return React.createElement(Component, {
       currentDropdown,

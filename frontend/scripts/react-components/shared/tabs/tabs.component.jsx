@@ -17,6 +17,7 @@ function Tabs(props) {
     getTabId,
     color,
     variant,
+    disabled,
     actionComponent
   } = props;
   const isSelected = item => getTabId(item) === selectedTab;
@@ -34,7 +35,7 @@ function Tabs(props) {
               data-key={itemTabRenderer ? itemTabRenderer(item, index) : item}
               onClick={() => onSelectTab(item, index)}
               data-test={`${testId}-item`}
-              disabled={isSelected(item)}
+              disabled={disabled || isSelected(item)}
             >
               <Text
                 as="span"
@@ -66,6 +67,7 @@ Tabs.propTypes = {
   testId: PropTypes.string,
   margin: PropTypes.string,
   getTabId: PropTypes.func,
+  disabled: PropTypes.bool,
   itemTabRenderer: PropTypes.func,
   tabs: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.object])).isRequired,
   children: PropTypes.any,

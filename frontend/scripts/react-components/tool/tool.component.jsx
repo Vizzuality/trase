@@ -4,7 +4,6 @@ import EventManager from 'utils/eventManager';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import MapContainer from 'react-components/tool/map/map.container';
 import ModalContainer from 'react-components/tool/story-modal/story-modal.container';
-import TitlebarContainer from 'react-components/tool/titlebar/titlebar.container';
 import NodesTitlesContainer from 'react-components/tool/nodes-titles/nodes-titles.container';
 import MapDimensionsContainer from 'react-components/tool/legacy-map-dimensions/map-dimensions.react';
 import MapContextContainer from 'react-components/tool/map-context/map-context.container';
@@ -54,6 +53,8 @@ function renderDataView() {
 const Tool = props => {
   const {
     section,
+    toolYearProps,
+    selectYears,
     resizeSankeyTool,
     urlProps,
     urlPropHandlers,
@@ -92,14 +93,17 @@ const Tool = props => {
               leftSlot={<MapLayout />}
               rightSlot={section === 'data-view' ? renderDataView() : renderSankeyView()}
             />
-            {!ENABLE_REDESIGN_PAGES && <TitlebarContainer />}
           </div>
-          {ENABLE_REDESIGN_PAGES && <Timeline />}
+          <Timeline
+            {...toolYearProps}
+            showBackground={section === 'data-view'}
+            selectYears={selectYears}
+          />
         </div>
         <ToolModal activeModal={activeModal} />
       </>
     ),
-    [section, mapSidebarOpen, noLinksFound, activeModal]
+    [noLinksFound, mapSidebarOpen, section, toolYearProps, selectYears, activeModal]
   );
 
   return (
@@ -113,12 +117,17 @@ const Tool = props => {
 
 Tool.propTypes = {
   resizeSankeyTool: PropTypes.func.isRequired,
+  selectYears: PropTypes.func.isRequired,
   urlPropHandlers: PropTypes.object,
   urlProps: PropTypes.object,
   mapSidebarOpen: PropTypes.bool,
   noLinksFound: PropTypes.bool,
   activeModal: PropTypes.string,
-  section: PropTypes.string
+  section: PropTypes.string,
+  toolYearProps: PropTypes.shape({
+    years: PropTypes.array,
+    selectedYears: PropTypes.array
+  })
 };
 
 export default Tool;
