@@ -52,7 +52,7 @@ function getClassName(year, state) {
 }
 
 function Timeline(props) {
-  const { years, section } = props;
+  const { years, showBackground, visibleTabs, disabled } = props;
 
   const [state, dispatch] = useTimelineReducer(props);
   useSelectedYearsPropsState(props, state, dispatch);
@@ -72,18 +72,19 @@ function Timeline(props) {
   const tabs = [
     { label: 'year', payload: false, type: 'toggleRange' },
     { label: 'range', payload: true, type: 'toggleRange' }
-  ];
+  ].filter(tab => visibleTabs.includes(tab.label));
 
-  const showPlaceholder = state.start && state.end && state.range;
+  const showPlaceholder = state.start && state.end && state.range && !disabled;
   return (
-    <div className={cx('c-timeline', { '-show-background': section === 'data-view' })}>
+    <div className={cx('c-timeline', { '-show-background': showBackground })}>
       <Tabs
         tabs={tabs}
         margin={null}
-        onSelectTab={item => dispatch(item)}
-        selectedTab={state.range}
+        disabled={disabled}
         getTabId={t => t.payload}
         itemTabRenderer={t => t.label}
+        onSelectTab={item => dispatch(item)}
+        selectedTab={state.range}
       />
       <div
         ref={refs.container}
@@ -139,7 +140,7 @@ function Timeline(props) {
                 className={cx('timeline-year-item', statusClassName)}
               >
                 <button
-                  disabled={!state.range && isActive}
+                  disabled={disabled || (!state.range && isActive)}
                   className="timeline-year-button"
                   onMouseLeave={() => dispatch({ type: 'hover', payload: null })}
                   onMouseEnter={() => dispatch({ type: 'hover', payload: year })}
@@ -159,9 +160,16 @@ function Timeline(props) {
   );
 }
 
+Timeline.defaultProps = {
+  showBackground: true,
+  visibleTabs: ['year', 'single']
+};
+
 Timeline.propTypes = {
-  section: PropTypes.string,
+  visibleTabs: PropTypes.array,
+  showBackground: PropTypes.bool,
   years: PropTypes.array.isRequired,
+  disabled: PropTypes.bool,
   selectYears: PropTypes.func.isRequired, // eslint-disable-line
   selectedYears: PropTypes.array.isRequired // eslint-disable-line
 };

@@ -3,6 +3,7 @@ import { createSelector } from 'reselect';
 import templates from 'react-components/logistics-map/logistics-map-layers';
 import BRAZIL_COUNTRY from 'react-components/logistics-map/BRAZIL_COUNTRY.json';
 import INDONESIA_COUNTRY from 'react-components/logistics-map/INDONESIA_COUNTRY.json';
+import { LOGISTICS_MAP_YEARS } from 'constants';
 
 export const defaultLayersIds = {
   soy: ['crushing_facilities', 'refining_facilities', 'storage_facilities'],
@@ -149,6 +150,33 @@ export const getActiveLayers = createSelector(
   (layersIds, layers, activeDefaultLayersIds) => {
     const currentLayers = layersIds || activeDefaultLayersIds;
     return layers.filter(layer => !!currentLayers.includes(layer.id));
+  }
+);
+
+export const getLogisticsMapYearsProps = createSelector(
+  [getActiveParams],
+  activeParams => {
+    const selected = LOGISTICS_MAP_YEARS.soy.find(
+      year => year.value === parseInt(activeParams.year, 10)
+    );
+    const selectedYearsByCommodity = {
+      soy: [selected.value, selected.value],
+      palmOil: [
+        LOGISTICS_MAP_YEARS.palmOil[0].value,
+        LOGISTICS_MAP_YEARS.palmOil[LOGISTICS_MAP_YEARS.palmOil.length - 1].value
+      ],
+      cattle: [
+        LOGISTICS_MAP_YEARS.cattle[0].value,
+        LOGISTICS_MAP_YEARS.cattle[LOGISTICS_MAP_YEARS.cattle.length - 1].value
+      ]
+    };
+
+    return {
+      disabled: activeParams.commodity !== 'soy',
+      visibleTabs: activeParams.commodity === 'cattle' ? ['range'] : ['year'],
+      selectedYears: selectedYearsByCommodity[activeParams.commodity],
+      years: LOGISTICS_MAP_YEARS[activeParams.commodity].map(i => i.value)
+    };
   }
 );
 
