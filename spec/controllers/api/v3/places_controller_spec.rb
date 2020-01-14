@@ -1,13 +1,26 @@
 require 'rails_helper'
 
 RSpec.describe Api::V3::PlacesController, type: :controller do
-  include_context 'api v3 brazil flows'
+  include_context 'api v3 brazil municipality ind values'
+  include_context 'api v3 brazil municipality qual values'
+  include_context 'api v3 brazil municipality quant values'
+  include_context 'api v3 brazil flows quants'
   include_context 'api v3 brazil municipality place profile'
 
   let(:node) { api_v3_municipality_node }
   let(:year) { 2015 }
+  let(:valid_params) {
+    {context_id: api_v3_context.id, place_id: node.id, year: year}
+  }
+  let(:quant_dict) { instance_double(Dictionary::Quant) }
+  let(:chart_config) {
+    instance_double(Api::V3::Profiles::ChartConfiguration)
+  }
 
   before(:each) do
+    Api::V3::Readonly::CommodityAttributeProperty.refresh
+    Api::V3::Readonly::CountryAttributeProperty.refresh
+    Api::V3::Readonly::ContextAttributeProperty.refresh
     Api::V3::Readonly::FlowNode.refresh(sync: true)
     Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
     Api::V3::Readonly::NodeWithFlows.refresh(sync: true, skip_dependencies: true)
@@ -26,9 +39,7 @@ RSpec.describe Api::V3::PlacesController, type: :controller do
       }
 
       it 'is not found' do
-        get :basic_attributes, params: {
-          context_id: api_v3_context.id, place_id: node.id, year: year
-        }
+        get :basic_attributes, params: valid_params
         expect(response).to have_http_status(404)
       end
     end
@@ -37,9 +48,17 @@ RSpec.describe Api::V3::PlacesController, type: :controller do
       let(:node) { api_v3_exporter1_node }
 
       it 'is not found' do
-        get :basic_attributes, params: {
-          context_id: api_v3_context.id, place_id: node.id, year: year
-        }
+        get :basic_attributes, params: valid_params
+        expect(response).to have_http_status(404)
+      end
+    end
+
+    context 'when Volume quant missing' do
+      it 'is not found' do
+        allow(Dictionary::Quant).to receive(:instance).and_return(quant_dict)
+        allow(quant_dict).to receive(:get).and_return(nil)
+
+        get :basic_attributes, params: valid_params
         expect(response).to have_http_status(404)
       end
     end
@@ -55,9 +74,7 @@ RSpec.describe Api::V3::PlacesController, type: :controller do
 
     context 'when year provided but not valid for node' do
       it 'defaults to last available' do
-        get :basic_attributes, params: {
-          context_id: api_v3_context.id, place_id: node.id, year: 2016
-        }
+        get :basic_attributes, params: valid_params.merge(year: 2016)
         expect(assigns(:year)).to eq(year)
         expect(response).to be_successful
       end
@@ -65,11 +82,77 @@ RSpec.describe Api::V3::PlacesController, type: :controller do
 
     context 'when year not provided' do
       it 'defaults to last available' do
-        get :basic_attributes, params: {
-          context_id: api_v3_context.id, place_id: node.id
-        }
+        get :basic_attributes, params: valid_params.except(:year)
         expect(assigns(:year)).to eq(year)
         expect(response).to be_successful
+      end
+    end
+  end
+
+  describe 'GET top_consumer_actors' do
+    context 'when trader node type configuration missing' do
+      it 'is not found' do
+        allow(Api::V3::Profiles::ChartConfiguration).to(
+          receive(:new).and_return(chart_config)
+        )
+        allow(chart_config).to(
+          receive(:named_node_type).with('trader').and_return(nil)
+        )
+
+        get :top_consumer_actors, params: valid_params
+        expect(response).to have_http_status(404)
+      end
+    end
+  end
+
+  describe 'GET top_consumer_countries' do
+    context 'when destination node type configuration missing' do
+      it 'is not found' do
+        allow(Api::V3::Profiles::ChartConfiguration).to(
+          receive(:new).and_return(chart_config)
+        )
+        allow(chart_config).to(
+          receive(:named_node_type).with('destination').and_return(nil)
+        )
+
+        get :top_consumer_countries, params: valid_params
+        expect(response).to have_http_status(404)
+      end
+    end
+  end
+
+  describe 'GET indicators' do
+    context 'when attributes configuration missing' do
+      it 'is not found' do
+        allow(Api::V3::Profiles::ChartConfiguration).to(
+          receive(:new).and_return(chart_config)
+        )
+        chart = instance_double(Api::V3::Chart)
+        allow(chart_config).to receive(:chart).and_return(chart)
+        allow(chart).to receive(:children).and_return([chart])
+        allow(chart).to receive(:identifier)
+        allow(chart_config).to(
+          receive(:attributes).and_return([])
+        )
+
+        get :indicators, params: valid_params
+        expect(response).to have_http_status(404)
+      end
+    end
+  end
+
+  describe 'GET trajectory_deforestation' do
+    context 'when attributes configuration missing' do
+      it 'is not found' do
+        allow(Api::V3::Profiles::ChartConfiguration).to(
+          receive(:new).and_return(chart_config)
+        )
+        allow(chart_config).to(
+          receive(:attributes).and_return([])
+        )
+
+        get :trajectory_deforestation, params: valid_params
+        expect(response).to have_http_status(404)
       end
     end
   end

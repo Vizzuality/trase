@@ -15,7 +15,9 @@ module Api
           )
           @destination_node_type = @chart_config.named_node_type('destination')
           unless @destination_node_type
-            raise 'Chart node type "destination" not found'
+            raise ActiveRecord::RecordNotFound.new(
+              'Chart node type "destination" not found'
+            )
           end
 
           @mini_sankey = Api::V3::Places::MiniSankey.new(

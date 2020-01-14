@@ -12,7 +12,11 @@ module Api
           @node = node
           initialize_chart_config(:place, nil, :place_top_consumer_actors)
           @trader_node_type = @chart_config.named_node_type('trader')
-          raise 'Chart node type "trader" not found' unless @trader_node_type
+          unless @trader_node_type
+            raise ActiveRecord::RecordNotFound.new(
+              'Chart node type "trader" not found'
+            )
+          end
 
           @mini_sankey = Api::V3::Places::MiniSankey.new(
             context, node, year
