@@ -1,9 +1,12 @@
 import { createSelector } from 'reselect';
 import ToolComponent from 'react-components/tool/tool.component';
 import { connect } from 'react-redux';
-import { resize } from 'app/app.actions';
+import { resize, selectYears } from 'app/app.actions';
 
-import { getToolLinksUrlProps } from 'react-components/tool-links/tool-links.selectors';
+import {
+  getToolLinksUrlProps,
+  getToolYearsProps
+} from 'react-components/tool-links/tool-links.selectors';
 import { getAppUrlProps } from 'app/app.selectors';
 import { getToolLayersUrlProps } from 'react-components/tool-layers/tool-layers.selectors';
 import { getNodesPanelUrlProps } from 'react-components/nodes-panel/nodes-panel.selectors';
@@ -29,6 +32,7 @@ const urlPropHandlers = {
 const mapStateToProps = state => ({
   urlPropHandlers,
   urlProps: getUrlProps(state),
+  toolYearProps: getToolYearsProps(state),
   section: state.location.payload.section,
   mapSidebarOpen: state.app.isMapLayerVisible,
   noLinksFound: state.toolLinks.noLinksFound,
@@ -36,6 +40,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
+  selectYears,
   resizeSankeyTool: resize
 };
 

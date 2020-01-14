@@ -1,7 +1,7 @@
 @import 'styles/settings';
 
 .c-logistics-map {
-  height: calc(100% - #{$logistics-map-bar-height} - #{$tool-bar-height});
+  height: calc(100% - #{$tool-bar-height} - #{$timeline-height});
   position: relative;
 
   .leaflet-popup-content-wrapper {

@@ -46,6 +46,8 @@ function renderDataView() {
 const Tool = props => {
   const {
     section,
+    toolYearProps,
+    selectYears,
     resizeSankeyTool,
     urlProps,
     urlPropHandlers,
@@ -84,12 +86,16 @@ const Tool = props => {
               rightSlot={section === 'data-view' ? renderDataView() : renderSankeyView()}
             />
           </div>
-          <Timeline />
+          <Timeline
+            {...toolYearProps}
+            showBackground={section === 'data-view'}
+            selectYears={selectYears}
+          />
         </div>
         <ToolModal activeModal={activeModal} />
       </>
     ),
-    [section, mapSidebarOpen, noLinksFound, activeModal]
+    [noLinksFound, mapSidebarOpen, section, toolYearProps, selectYears, activeModal]
   );
 
   return (
@@ -103,12 +109,17 @@ const Tool = props => {
 
 Tool.propTypes = {
   resizeSankeyTool: PropTypes.func.isRequired,
+  selectYears: PropTypes.func.isRequired,
   urlPropHandlers: PropTypes.object,
   urlProps: PropTypes.object,
   mapSidebarOpen: PropTypes.bool,
   noLinksFound: PropTypes.bool,
   activeModal: PropTypes.string,
-  section: PropTypes.string
+  section: PropTypes.string,
+  toolYearProps: PropTypes.shape({
+    years: PropTypes.array,
+    selectedYears: PropTypes.array
+  })
 };
 
 export default Tool;
