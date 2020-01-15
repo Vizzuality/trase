@@ -115,7 +115,25 @@ export const getToolBar = createSelector(
       case 'logisticsMap': {
         return {
           left: [],
-          right: []
+          right: [
+            {
+              id: 'companies',
+              type: 'button',
+              show: true,
+              noHover: true,
+              noBorder: true,
+              noPadding: true,
+              children: 'Browse Companies'
+            },
+            {
+              id: 'download',
+              type: 'button',
+              show: true,
+              noHover: true,
+              noBorder: true,
+              children: 'Download'
+            }
+          ]
         };
       }
       default:
