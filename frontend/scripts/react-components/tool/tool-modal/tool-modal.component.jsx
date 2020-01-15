@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import BaseModal from 'react-components/tool/tool-modal/base-modal';
+import ListModal from 'react-components/shared/list-modal';
 import DashboardPanel from 'react-components/dashboard-element/dashboard-panel';
 import LayerModal from 'react-components/tool/tool-modal/layer-modal';
 import VersioningModal from 'react-components/tool/tool-modal/versioning-modal';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
-import 'react-components/tool/tool-modal/tool-modal.scss';
 import { TOOL_STEPS } from 'constants';
+
+import 'react-components/tool/tool-modal/tool-modal.scss';
 
 export default function ToolModal(props) {
   const { items, selectedItem, onChange, activeModal, setActiveModal, savePanels } = props;
@@ -46,7 +47,7 @@ export default function ToolModal(props) {
         return <VersioningModal />;
       default:
         return (
-          <BaseModal
+          <ListModal
             items={items}
             onChange={onChange}
             heading={activeModal === 'viewMode' ? 'Change view' : `Choose one ${activeModal}`}
