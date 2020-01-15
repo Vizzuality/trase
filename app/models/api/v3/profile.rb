@@ -44,6 +44,8 @@ module Api
       def self.select_options
         Api::V3::Profile.includes(
           context_node_type: [{context: [:country, :commodity]}, :node_type]
+        ).order(
+          'countries.name, commodities.name, node_types.name'
         ).all.map do |profile|
           context_node_type = profile&.context_node_type
           [
