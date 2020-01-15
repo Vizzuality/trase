@@ -19,22 +19,6 @@
     align-items: center;
     height: 100%;
 
-    .slot-item {
-      height: 100%;
-
-      > * {
-        padding: 0 24px;
-      }
-
-      &:hover {
-        background-color: $carbon-gray;
-
-        &.-no-hover {
-          background-color: transparent;
-        }
-      }
-    }
-
     &:first-child {
       justify-content: flex-start;
 
@@ -70,5 +54,38 @@
         }
       }
     }
+
+    .slot-item {
+      height: 100%;
+
+      > * {
+        padding: 0 24px;
+      }
+
+      &:hover {
+        background-color: $carbon-gray;
+
+        &.-no-hover {
+          background-color: transparent;
+        }
+      }
+
+      &.-no-border {
+        border: 0;
+      }
+
+      &.-no-padding {
+        > * {
+          padding: 0;
+        }
+      }
+    }
+  }
+
+  .toolbar-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
   }
 }

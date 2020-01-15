@@ -81,7 +81,6 @@ function LogisticsMap(props) {
 
 LogisticsMap.propTypes = {
   layers: PropTypes.array,
-  openModal: PropTypes.func,
   tooltips: PropTypes.object,
   closeModal: PropTypes.func,
   selectYears: PropTypes.func,
