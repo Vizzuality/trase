@@ -15,6 +15,7 @@
   text-transform: uppercase;
   cursor: pointer;
   white-space: nowrap;
+  flex-shrink: 0;
 
   &:active {
     opacity: 0.8;

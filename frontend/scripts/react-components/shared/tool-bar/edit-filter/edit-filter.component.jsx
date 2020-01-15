@@ -18,7 +18,7 @@ function EditFilter(props) {
           </Heading>
         )}
       </Heading>
-      <Button as="span" size="sm" type="button" color="gray" variant="icon">
+      <Button as="span" size="sm" type="button" color="gray" variant="icon" className="edit-button">
         <svg className="icon icon-pen">
           <use xlinkHref="#icon-pen" />
         </svg>
