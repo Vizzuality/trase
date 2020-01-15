@@ -162,7 +162,7 @@ function Timeline(props) {
 
 Timeline.defaultProps = {
   showBackground: true,
-  visibleTabs: ['year', 'single']
+  visibleTabs: ['year', 'range']
 };
 
 Timeline.propTypes = {

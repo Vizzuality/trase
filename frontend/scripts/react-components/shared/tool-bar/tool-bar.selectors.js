@@ -9,8 +9,11 @@ import { makeGetResizeByItems } from 'selectors/indicators.selectors';
 import { getDynamicSentence } from 'react-components/dashboard-element/dashboard-element.selectors';
 import capitalize from 'lodash/capitalize';
 import { getVersionData } from 'react-components/tool/tool-modal/versioning-modal/versioning-modal.selectors';
+import { getActiveParams } from 'react-components/logistics-map/logistics-map.selectors';
+import { LOGISTICS_MAP_HUBS, LOGISTICS_MAP_INSPECTION_LEVELS } from 'constants';
 
 const getCurrentPage = state => state.location.type;
+const getCurrentSection = state => state.location.payload?.section;
 const getAppTooltips = state => state.app.tooltips;
 const getToolDetailedView = state => state.toolLinks && state.toolLinks.detailedView;
 
@@ -78,15 +81,48 @@ export const getVersioningSelected = createSelector(
 );
 
 export const getViewModeFilter = createSelector(
-  [getAppTooltips, getToolDetailedView],
-  (tooltips, isDetailedView) => ({
+  [getAppTooltips, getToolDetailedView, getCurrentSection],
+  (tooltips, isDetailedView, section) => ({
     id: 'viewMode',
-    show: true,
+    show: section !== 'data-view',
     label: 'Change view',
     type: 'optionsMenu',
     tooltip: tooltips && tooltips.sankey.nav.view.main,
     value: isDetailedView ? 'All Nodes' : 'Summary'
   })
+);
+
+const getLogisticsMapHubsFilter = createSelector(
+  [getActiveParams],
+  activeParams => {
+    const activeHub = LOGISTICS_MAP_HUBS.find(
+      commodity => commodity.value === activeParams.commodity
+    );
+
+    return {
+      id: 'logisticsMapHub',
+      type: 'edit',
+      title: capitalize(activeHub.value),
+      show: true
+    };
+  }
+);
+
+const getLogisticsMapInspectionLevelFilter = createSelector(
+  [getActiveParams],
+  activeParams => {
+    const all = { label: 'All', value: null };
+    return {
+      label: 'Inspection Level',
+      id: 'logisticsMapInspectionLevel',
+      type: 'optionsMenu',
+      show: activeParams.commodity === 'cattle',
+      value: (
+        LOGISTICS_MAP_INSPECTION_LEVELS.find(level => level.value === activeParams.inspection) ||
+        all
+      ).label
+    };
+  }
 );
 
 export const getToolBar = createSelector(
@@ -96,9 +132,20 @@ export const getToolBar = createSelector(
     getViewModeFilter,
     getRecolorByFilter,
     getResizeByFilter,
-    getVersioningSelected
+    getVersioningSelected,
+    getLogisticsMapHubsFilter,
+    getLogisticsMapInspectionLevelFilter
   ],
-  (page, panelFilter, viewModeFilter, recolorByFilter, resizeByFilter, versionFilter) => {
+  (
+    page,
+    panelFilter,
+    viewModeFilter,
+    recolorByFilter,
+    resizeByFilter,
+    versionFilter,
+    logisticsMapHubs,
+    logisticsMapInspectionLevel
+  ) => {
     switch (page) {
       case 'tool': {
         return {
@@ -114,14 +161,14 @@ export const getToolBar = createSelector(
       }
       case 'logisticsMap': {
         return {
-          left: [],
+          left: [logisticsMapHubs],
           right: [
+            logisticsMapInspectionLevel,
             {
               id: 'companies',
               type: 'button',
               show: true,
               noHover: true,
-              noBorder: true,
               noPadding: true,
               children: 'Browse Companies'
             },
