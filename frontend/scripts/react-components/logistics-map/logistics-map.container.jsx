@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { LOGISTICS_MAP_INSPECTION_LEVELS, LOGISTICS_MAP_HUBS } from 'constants';
 import {
   getLogisticsMapLayers,
   getActiveLayers,
@@ -11,6 +12,8 @@ import {
   getLogisticsMapYearsProps
 } from 'react-components/logistics-map/logistics-map.selectors';
 import {
+  selectLogisticsMapHub,
+  selectLogisticsMapInspectionLevel,
   setLogisticsMapActiveModal,
   setLayerActive as setLayerActiveFn,
   getLogisticsMapCompanies,
@@ -130,6 +133,12 @@ class LogisticsMapContainer extends React.PureComponent {
 
   render() {
     const {
+      activeHub,
+      selectHub,
+      hubs,
+      activeInspectionLevel,
+      selectInspectionLevel,
+      inspectionLevels,
       activeLayers,
       layers,
       setLayerActive,
@@ -151,29 +160,42 @@ class LogisticsMapContainer extends React.PureComponent {
         bounds={bounds}
         border={border}
         heading={heading}
+        hubs={hubs}
+        selectHub={selectHub}
+        activeHub={activeHub}
         selectYears={selectYears}
-        logisticsMapYearProps={logisticsMapYearProps}
         activeModal={activeModal}
         activeLayers={activeLayers}
         closeModal={this.closeModal}
         buildEvents={this.buildEvents}
         setLayerActive={setLayerActive}
         getCurrentPopUp={this.getCurrentPopUp}
+        inspectionLevels={inspectionLevels}
+        activeInspectionLevel={activeInspectionLevel}
+        selectInspectionLevel={selectInspectionLevel}
+        logisticsMapYearProps={logisticsMapYearProps}
       />
     );
   }
 }
 
 const mapStateToProps = state => {
-  const { commodity } = getActiveParams(state);
+  const { commodity, inspection } = getActiveParams(state);
+  const optionAll = { value: null, label: 'All' };
+  const activeHub = LOGISTICS_MAP_HUBS.find(c => c.value === commodity);
+  const activeInspectionLevel =
+    LOGISTICS_MAP_INSPECTION_LEVELS.find(level => level.value === inspection) || optionAll;
   return {
-    commodity,
-    activeLayers: getActiveLayers(state),
-    layers: getLogisticsMapLayers(state),
-    heading: getHeading(state),
+    activeHub,
+    activeInspectionLevel,
     bounds: getBounds(state),
     border: getBorder(state),
+    hubs: LOGISTICS_MAP_HUBS,
+    heading: getHeading(state),
+    activeLayers: getActiveLayers(state),
+    layers: getLogisticsMapLayers(state),
     activeModal: state.logisticsMap.activeModal,
+    inspectionLevels: [optionAll].concat(LOGISTICS_MAP_INSPECTION_LEVELS),
     logisticsMapYearProps: getLogisticsMapYearsProps(state),
     tooltips: state.app.tooltips ? state.app.tooltips.logisticsMap : {}
   };
@@ -183,7 +205,9 @@ const mapDispatchToProps = {
   getLogisticsMapCompanies,
   setLogisticsMapActiveModal,
   setLayerActive: setLayerActiveFn,
-  selectYears: selectLogisticsMapYear
+  selectYears: selectLogisticsMapYear,
+  selectHub: selectLogisticsMapHub,
+  selectInspectionLevel: selectLogisticsMapInspectionLevel
 };
 
 export default connect(

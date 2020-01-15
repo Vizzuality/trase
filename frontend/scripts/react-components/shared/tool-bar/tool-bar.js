@@ -24,7 +24,9 @@ const mapDispatchToProps = dispatch => ({
   unit_onClick: id => dispatch(setActiveModal(id)),
   indicator_onClick: id => dispatch(setActiveModal(id)),
   companies_onClick: id => dispatch(setLogisticsMapActiveModal(id)),
-  download_onClick: id => dispatch(setLogisticsMapActiveModal(id))
+  download_onClick: id => dispatch(setLogisticsMapActiveModal(id)),
+  hubs_onClick: id => dispatch(setLogisticsMapActiveModal(id)),
+  inspectionLevels_onClick: id => dispatch(setLogisticsMapActiveModal(id))
 });
 
 export default connect(

@@ -4,9 +4,9 @@ import Heading from 'react-components/shared/heading';
 import GridList from 'react-components/shared/grid-list/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 
-import 'react-components/tool/tool-modal/base-modal/base-modal.scss';
+import './list-modal.scss';
 
-export default function BaseModal(props) {
+export default function ListModal(props) {
   const { items, selectedItem, onChange, heading, itemValueProp } = props;
   const COLUMN_COUNT = 3;
   return (
@@ -52,11 +52,11 @@ export default function BaseModal(props) {
   );
 }
 
-BaseModal.defaultProps = {
+ListModal.defaultProps = {
   itemValueProp: 'attributeId'
 };
 
-BaseModal.propTypes = {
+ListModal.propTypes = {
   items: PropTypes.array,
   itemValueProp: PropTypes.string,
   selectedItem: PropTypes.object,
