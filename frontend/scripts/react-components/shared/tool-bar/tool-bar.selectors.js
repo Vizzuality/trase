@@ -108,18 +108,6 @@ const getLogisticsMapHubsFilter = createSelector(
   }
 );
 
-const getLogisticsMapCompaniesFilter = createSelector(
-  [getActiveParams],
-  activeParams => ({
-    id: 'companies',
-    type: 'button',
-    show: activeParams.commodity === 'cattle',
-    noHover: true,
-    noPadding: true,
-    children: 'Browse Companies'
-  })
-);
-
 const getLogisticsMapInspectionLevelFilter = createSelector(
   [getActiveParams],
   activeParams => {
@@ -158,7 +146,6 @@ export const getToolBar = createSelector(
     getResizeByFilter,
     getVersioningSelected,
     getLogisticsMapHubsFilter,
-    getLogisticsMapCompaniesFilter,
     getLogisticsMapInspectionLevelFilter,
     getLogisticsMapDownload
   ],
@@ -170,7 +157,6 @@ export const getToolBar = createSelector(
     resizeByFilter,
     versionFilter,
     logisticsMapHubs,
-    logisticsMapCompanies,
     logisticsMapInspectionLevel,
     logisticsMapDownload
   ) => {
@@ -190,7 +176,18 @@ export const getToolBar = createSelector(
       case 'logisticsMap': {
         return {
           left: [logisticsMapHubs],
-          right: [logisticsMapInspectionLevel, logisticsMapCompanies, logisticsMapDownload]
+          right: [
+            logisticsMapInspectionLevel,
+            {
+              id: 'companies',
+              type: 'button',
+              show: true,
+              noHover: true,
+              noPadding: true,
+              children: 'Browse Companies'
+            },
+            logisticsMapDownload
+          ]
         };
       }
       default:

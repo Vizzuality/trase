@@ -187,6 +187,7 @@ const mapStateToProps = state => {
     LOGISTICS_MAP_INSPECTION_LEVELS.find(level => level.value === inspection) || optionAll;
   return {
     activeHub,
+    commodity,
     activeInspectionLevel,
     bounds: getBounds(state),
     border: getBorder(state),
