@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import { Manager, Reference, Popper } from 'react-popper';
+import Button from 'react-components/shared/button';
 import EditFilter from './edit-filter/edit-filter.component';
 import OptionsMenuFilter from './options-menu-filter/options-menu-filter.component';
 import ToolSwitch from './tool-switch';
@@ -9,9 +10,24 @@ import ToolbarTooltip from './toolbar-tooltip';
 
 import './tool-bar.scss';
 
+const ToolbarButton = props => (
+  <div className="toolbar-button">
+    <Button
+      {...props}
+      size="xs"
+      color="gray"
+      weight="bold"
+      transform="uppercase"
+      // eslint-disable-next-line react/prop-types
+      onClick={() => props.onClick(props.id)}
+    />
+  </div>
+);
+
 const types = {
   edit: EditFilter,
   toolSwitch: ToolSwitch,
+  button: ToolbarButton,
   optionsMenu: OptionsMenuFilter
 };
 
@@ -23,7 +39,11 @@ function ToolBar(props) {
     return (
       <li
         ref={ref}
-        className={cx('slot-item', { '-no-hover': item.noHover })}
+        className={cx('slot-item', {
+          '-no-hover': item.noHover,
+          '-no-border': item.noBorder,
+          '-no-padding': item.noPadding
+        })}
         onMouseEnter={() => setId(item.id)}
         onMouseLeave={() => setId(null)}
       >
