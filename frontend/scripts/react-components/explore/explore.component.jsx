@@ -24,6 +24,7 @@ import {
 
 import 'react-components/explore/explore.scss';
 import addApostrophe from 'utils/addApostrophe';
+import { translateText } from 'utils/transifex';
 
 function Explore(props) {
   const {
@@ -70,8 +71,8 @@ function Explore(props) {
   const renderTitle = () => {
     const titleParts = ['commodity', 'source country', 'supply chain to explore'];
     return (
-      <Heading size="lg" align="center" data-test="step-title">
-        {step}. Choose a {titleParts[step - 1]}
+      <Heading size="lg" align="center" data-test="step-title" className="notranslate">
+        {translateText(`${step}. Choose a ${titleParts[step - 1]}`)}
       </Heading>
     );
   };
@@ -191,17 +192,19 @@ function Explore(props) {
                                   variant="mono"
                                   weight="bold"
                                   transform="uppercase"
-                                  className="quick-facts-label"
+                                  className="quick-facts-label notranslate"
                                 >
-                                  {indicator.name} {indicator.year}
+                                  {translateText(`${indicator.name} ${indicator.year}`)}
                                 </Text>
                                 <Heading
                                   size="md"
                                   weight="bold"
                                   align="center"
-                                  className="quick-facts-value"
+                                  className="quick-facts-value notranslate"
                                 >
-                                  {format(',')(Math.round(indicator.total))} {indicator.unit}
+                                  {translateText(
+                                    `${format(',')(Math.round(indicator.total))} ${indicator.unit}`
+                                  )}
                                 </Heading>
                               </div>
                             ))
@@ -217,23 +220,27 @@ function Explore(props) {
                                     variant="mono"
                                     weight="bold"
                                     transform="uppercase"
-                                    className="quick-facts-label"
+                                    className="quick-facts-label notranslate"
                                   >
-                                    {highlightedCommodityIds.length > 0
-                                      ? `${highlightedCommoditiesCountryName}${addApostrophe(
-                                          highlightedCommoditiesCountryName
-                                        )} commodities`
-                                      : 'source countries'}
+                                    {translateText(
+                                      highlightedCommodityIds.length > 0
+                                        ? `${highlightedCommoditiesCountryName}${addApostrophe(
+                                            highlightedCommoditiesCountryName
+                                          )} commodities`
+                                        : 'source countries'
+                                    )}
                                   </Text>
                                   <Heading
                                     size="md"
                                     weight="bold"
                                     align="center"
-                                    className="quick-facts-value"
+                                    className="quick-facts-value notranslate"
                                   >
-                                    {highlightedCommodityIds.length ||
-                                      highlightedCountryIds.level2?.length ||
-                                      highlightedCountryIds.level1.length}
+                                    {translateText(
+                                      highlightedCommodityIds.length ||
+                                        highlightedCountryIds.level2?.length ||
+                                        highlightedCountryIds.level1.length
+                                    )}
                                   </Heading>
                                 </>
                               )}
