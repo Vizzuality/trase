@@ -11,6 +11,9 @@ RSpec.describe 'Charts::SingleYearNcontOverview', type: :request do
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::ResizeByAttribute.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::RecolorByAttribute.refresh(sync: true, skip_dependents: true)
+    Api::V3::TablePartitions::CreatePartitionsForFlows.new.call
+    Api::V3::TablePartitions::CreatePartitionsForFlowQuants.new.call
+    Api::V3::TablePartitions::CreatePartitionsForFlowInds.new.call
   end
 
   let(:cont_attribute) { api_v3_volume.readonly_attribute }

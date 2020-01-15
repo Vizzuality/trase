@@ -25,11 +25,9 @@ module Api
           def call
             @data = []
             x_labels_profile_info = []
+            profile = profile_for_node_type_id(@node_type.id)
             @top_n_and_others_query.map do |record|
-              x_labels_profile_info << {
-                id: record['id'],
-                profile: profile_for_node_type_id(record['node_type_id'])
-              }
+              x_labels_profile_info << {id: record['id'], profile: profile}
               @data << record.attributes.slice('x', 'y0').symbolize_keys
             end
             if (last = @data.last) && last[:x] == OTHER && last[:y0].blank?
@@ -70,9 +68,9 @@ module Api
             subquery = <<~SQL
               (
                 WITH q AS (#{@query.to_sql}),
-                u1 AS (SELECT id, node_type_id, x, y0 FROM q WHERE NOT is_unknown ORDER BY y0 DESC LIMIT #{@top_n}),
+                u1 AS (SELECT id, x, y0 FROM q WHERE NOT is_unknown ORDER BY y0 DESC LIMIT #{@top_n}),
                 u2 AS (
-                  SELECT NULL::INT, NULL::INT, '#{OTHER}'::TEXT AS x, SUM(y0) AS y0 FROM q
+                  SELECT NULL::INT, '#{OTHER}'::TEXT AS x, SUM(y0) AS y0 FROM q
                   WHERE NOT EXISTS (SELECT 1 FROM u1 WHERE q.x = u1.x)
                 )
                 SELECT * FROM u1

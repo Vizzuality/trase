@@ -45,14 +45,10 @@ module Api
               info: info
             }
 
+            profile = profile_for_node_type_id(@node_type.id)
             break_by_values_indexes.each do |break_by, idx|
               node = top_nodes[idx]
-              if node
-                profile_info = {
-                  id: node['id'],
-                  profile: profile_for_node_type_id(node['node_type_id'])
-                }
-              end
+              profile_info = {id: node['id'], profile: profile} if node
               @meta[:"y#{idx}"] = series_legend_meta(break_by, @cont_attribute).
                 merge(profileInfo: profile_info)
             end
@@ -82,11 +78,17 @@ module Api
           def initialize_top_nodes_query
             @top_nodes_query = @query.
               except(:select).
-              select('nodes.id, nodes.name, SUM(flow_quants.value) AS y0').
-              joins("JOIN nodes ON nodes.id = flows.path[#{@node_type_idx}]").
-              where('NOT nodes.is_unknown').
+              select([
+                "flows.path[#{@node_type_idx}] AS id",
+                "flows.names[#{@node_type_idx}] AS name",
+                "SUM(flow_quants.value) AS y0"
+              ]).
+              where("flows.known_path_positions[#{@node_type_idx}]").
               except(:group).
-              group('nodes.id, nodes.name').
+              group([
+                "flows.path[#{@node_type_idx}]",
+                "flows.names[#{@node_type_idx}]"
+              ]).
               order(Arel.sql('SUM(flow_quants.value) DESC')).
               limit(@top_n)
           end
@@ -111,9 +113,7 @@ module Api
           def top_nodes
             return @top_nodes if defined? @top_nodes
 
-            @top_nodes = @top_nodes_query.
-              select(Arel.sql('nodes.id, nodes.node_type_id, nodes.name')).
-              distinct.all
+            @top_nodes = @top_nodes_query.distinct.all
           end
 
           def top_nodes_break_by_values

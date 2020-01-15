@@ -28,11 +28,9 @@ module Api
 
             data_by_x = {}
             x_labels_profile_info = []
+            profile = profile_for_node_type_id(@node_type.id)
             @top_n_and_others_query.each do |record|
-              x_labels_profile_info << {
-                id: record['id'],
-                profile: profile_for_node_type_id(record['node_type_id'])
-              }
+              x_labels_profile_info << {id: record['id'], profile: profile}
               break_by_values_indexes.each do |break_by, idx|
                 data_by_x[record['x']] ||= {}
                 data_by_x[record['x']]["y#{idx}"] = record['per_break_by'][break_by]
@@ -81,14 +79,14 @@ module Api
               (
                 WITH q AS (#{@query.to_sql}),
                 u1 AS (
-                  SELECT id, node_type_id, x, JSONB_OBJECT_AGG(break_by, y0) AS per_break_by, SUM(y0) AS y
+                  SELECT id, x, JSONB_OBJECT_AGG(break_by, y0) AS per_break_by, SUM(y0) AS y
                   FROM q
                   WHERE NOT is_unknown
-                  GROUP BY id, node_type_id, x
+                  GROUP BY id, x
                   ORDER BY SUM(y0) DESC LIMIT #{@top_n}
                 ),
                 u2 AS (
-                  SELECT NULL::INT, NULL::INT, x, JSONB_OBJECT_AGG(break_by, y0), SUM(y0) AS y
+                  SELECT NULL::INT, x, JSONB_OBJECT_AGG(break_by, y0), SUM(y0) AS y
                   FROM (
                     SELECT '#{OTHER}'::TEXT AS x, break_by, SUM(y0) AS y0 FROM q
                     WHERE NOT EXISTS (SELECT 1 FROM u1 WHERE q.x = u1.x)

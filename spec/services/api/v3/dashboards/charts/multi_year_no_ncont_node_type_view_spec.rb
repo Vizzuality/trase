@@ -4,11 +4,6 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNoNcontNodeTypeView do
   include_context 'api v3 brazil resize by attributes'
   include_context 'api v3 brazil flows quants'
 
-  before(:each) do
-    Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::ResizeByAttribute.refresh(sync: true, skip_dependents: true)
-  end
-
   let!(:api_v3_unknown_exporter_node) do
     node = Api::V3::Node.where(
       name: 'UNKNOWN', node_type_id: api_v3_exporter_node_type.id
@@ -53,6 +48,13 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNoNcontNodeTypeView do
       quant: api_v3_volume,
       value: 100
     )
+  end
+
+  before(:each) do
+    Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
+    Api::V3::Readonly::ResizeByAttribute.refresh(sync: true, skip_dependents: true)
+    Api::V3::TablePartitions::CreatePartitionsForFlows.new.call
+    Api::V3::TablePartitions::CreatePartitionsForFlowQuants.new.call
   end
 
   let(:cont_attribute) { api_v3_volume.readonly_attribute }

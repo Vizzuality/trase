@@ -61,12 +61,12 @@ module Api
 
           def flow_query
             Api::V3::Flow.
+              from('partitioned_flows flows').
               where(context_id: context.id).order(false).
-              select('nodes.name AS x').
-              joins("JOIN nodes ON nodes.id = flows.path[#{node_type_idx}]").
-              group('nodes.name').
+              select("flows.names[#{@node_type_idx}] AS x").
+              group("flows.names[#{@node_type_idx}]").
               select("SUM(#{cont_attr_table}.value) AS y0").
-              joins(cont_attr_table.to_sym).
+              joins("JOIN partitioned_#{cont_attr_table} #{cont_attr_table} ON #{cont_attr_table}.flow_id = flows.id").
               where(
                 "#{cont_attr_table}.#{cont_attribute.attribute_id_name}" =>
                   cont_attribute.original_id
