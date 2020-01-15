@@ -67,6 +67,7 @@ class LogisticsMapContainer extends React.PureComponent {
     activeLayers: PropTypes.array,
     activeModal: PropTypes.string,
     setLayerActive: PropTypes.func.isRequired,
+    logisticsMapYearProps: PropTypes.any,
     getLogisticsMapCompanies: PropTypes.func.isRequired,
     setLogisticsMapActiveModal: PropTypes.func.isRequired
   };
@@ -125,8 +126,6 @@ class LogisticsMapContainer extends React.PureComponent {
     this.popUp = popUp;
   };
 
-  openCompaniesModal = () => this.props.setLogisticsMapActiveModal('companies');
-
   closeModal = () => this.props.setLogisticsMapActiveModal(null);
 
   render() {
@@ -159,7 +158,6 @@ class LogisticsMapContainer extends React.PureComponent {
         closeModal={this.closeModal}
         buildEvents={this.buildEvents}
         setLayerActive={setLayerActive}
-        openModal={this.openCompaniesModal}
         getCurrentPopUp={this.getCurrentPopUp}
       />
     );
