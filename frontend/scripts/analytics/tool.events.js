@@ -21,7 +21,7 @@ export default [
     category: 'Sankey',
     action: 'Switch context',
     getPayload: (action, state) => {
-      const actionContext = state.app.contexts.find(context => context.id === action.payload.id);
+      const actionContext = state.app.contexts.find(context => context.id === action.payload);
       return `${actionContext.countryName} ${actionContext.commodityName}`;
     }
   },
@@ -98,7 +98,8 @@ export default [
   {
     type: SELECT_BASEMAP,
     action: 'Select basemap',
-    category: 'Sankey'
+    category: 'Sankey',
+    getPayload: action => action.payload.selectedBasemap
   },
   {
     type: TOGGLE_MAP_LAYERS_MENU,
