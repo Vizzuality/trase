@@ -4,8 +4,8 @@ import uniqBy from 'lodash/uniqBy';
 import capitalize from 'lodash/capitalize';
 import cx from 'classnames';
 import Dropdown from 'react-components/shared/dropdown';
-import YearsSelector from 'react-components/nav/filters-nav/years-selector';
 import { translateText } from 'utils/transifex';
+import YearsSelector from './years-selector';
 
 import 'react-components/shared/sentence-selector/sentence-selector.scss';
 
