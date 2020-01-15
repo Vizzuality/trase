@@ -18,7 +18,7 @@ const GA_EVENT_WHITELIST = [
   ...GA_EXPLORE_EVENTS,
   ...GA_PROFILE_NODE_EVENTS,
   ...GA_DASHBOARD_ELEMENT_EVENTS
-].reduce((acc, next) => ({ ...acc, [next.type]: next }));
+].reduce((acc, next) => ({ ...acc, [next.type]: next }), {});
 const TRACK_WITH_QUERY = ['profileNode'];
 
 function createGAEvent(event, action, state) {
