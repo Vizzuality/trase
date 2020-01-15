@@ -6,10 +6,10 @@ import Button from 'react-components/shared/button/button.component';
 import 'react-components/shared/tool-bar/edit-filter/edit-filter.scss';
 
 function EditFilter(props) {
-  const { title, subtitle, onClick } = props;
+  const { id, title, subtitle, onClick } = props;
 
   return (
-    <button onClick={onClick} className="c-edit-filter">
+    <button onClick={() => onClick(id)} className="c-edit-filter">
       <Heading as="h2" color="white" weight="bold" size="md" className="edit-title">
         {title}
         {subtitle && (
@@ -28,6 +28,7 @@ function EditFilter(props) {
 }
 
 EditFilter.propTypes = {
+  id: PropTypes.string,
   subtitle: PropTypes.string,
   title: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired
