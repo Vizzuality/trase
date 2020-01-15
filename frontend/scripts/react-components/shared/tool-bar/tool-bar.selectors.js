@@ -100,7 +100,7 @@ const getLogisticsMapHubsFilter = createSelector(
     );
 
     return {
-      id: 'logisticsMapHub',
+      id: 'hubs',
       type: 'edit',
       title: capitalize(activeHub.value),
       show: true
@@ -108,13 +108,25 @@ const getLogisticsMapHubsFilter = createSelector(
   }
 );
 
+const getLogisticsMapCompaniesFilter = createSelector(
+  [getActiveParams],
+  activeParams => ({
+    id: 'companies',
+    type: 'button',
+    show: activeParams.commodity === 'cattle',
+    noHover: true,
+    noPadding: true,
+    children: 'Browse Companies'
+  })
+);
+
 const getLogisticsMapInspectionLevelFilter = createSelector(
   [getActiveParams],
   activeParams => {
     const all = { label: 'All', value: null };
     return {
+      id: 'inspectionLevels',
       label: 'Inspection Level',
-      id: 'logisticsMapInspectionLevel',
       type: 'optionsMenu',
       show: activeParams.commodity === 'cattle',
       value: (
@@ -123,6 +135,18 @@ const getLogisticsMapInspectionLevelFilter = createSelector(
       ).label
     };
   }
+);
+
+const getLogisticsMapDownload = createSelector(
+  [getActiveParams],
+  activeParams => ({
+    id: 'download',
+    type: 'button',
+    show: activeParams.commodity !== 'palmOil',
+    noHover: true,
+    noBorder: true,
+    children: 'Download'
+  })
 );
 
 export const getToolBar = createSelector(
@@ -134,7 +158,9 @@ export const getToolBar = createSelector(
     getResizeByFilter,
     getVersioningSelected,
     getLogisticsMapHubsFilter,
-    getLogisticsMapInspectionLevelFilter
+    getLogisticsMapCompaniesFilter,
+    getLogisticsMapInspectionLevelFilter,
+    getLogisticsMapDownload
   ],
   (
     page,
@@ -144,7 +170,9 @@ export const getToolBar = createSelector(
     resizeByFilter,
     versionFilter,
     logisticsMapHubs,
-    logisticsMapInspectionLevel
+    logisticsMapCompanies,
+    logisticsMapInspectionLevel,
+    logisticsMapDownload
   ) => {
     switch (page) {
       case 'tool': {
@@ -162,25 +190,7 @@ export const getToolBar = createSelector(
       case 'logisticsMap': {
         return {
           left: [logisticsMapHubs],
-          right: [
-            logisticsMapInspectionLevel,
-            {
-              id: 'companies',
-              type: 'button',
-              show: true,
-              noHover: true,
-              noPadding: true,
-              children: 'Browse Companies'
-            },
-            {
-              id: 'download',
-              type: 'button',
-              show: true,
-              noHover: true,
-              noBorder: true,
-              children: 'Download'
-            }
-          ]
+          right: [logisticsMapInspectionLevel, logisticsMapCompanies, logisticsMapDownload]
         };
       }
       default:
