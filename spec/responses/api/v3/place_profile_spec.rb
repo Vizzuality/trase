@@ -25,19 +25,6 @@ RSpec.describe 'Place profile', type: :request do
   }
 
   describe 'GET /api/v3/contexts/:context_id/places/:id/basic_attributes' do
-    it 'returns not found if place node not found' do
-      [
-        api_v3_exporter1_node,
-        api_v3_importer1_node,
-        api_v3_port1_node,
-        api_v3_country_of_destination1_node
-      ].each do |non_place_node|
-        get "/api/v3/contexts/#{api_v3_context.id}/places/#{non_place_node.id}/basic_attributes"
-        expect(@response).to have_http_status(:not_found)
-        expect(JSON.parse(@response.body)['error']).to match("Couldn't find Api::V3::Readonly::NodeWithFlows with")
-      end
-    end
-
     it 'has the correct response structure' do
       get "/api/v3/contexts/#{api_v3_context.id}/places/#{api_v3_municipality_node.id}/basic_attributes", params: summary_params
 
