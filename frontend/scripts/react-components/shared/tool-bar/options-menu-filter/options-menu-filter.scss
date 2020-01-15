@@ -6,6 +6,10 @@
   justify-content: center;
   flex-direction: column;
   height: 100%;
+  max-width: 16vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   cursor: pointer;
 
   .options-menu-label {
