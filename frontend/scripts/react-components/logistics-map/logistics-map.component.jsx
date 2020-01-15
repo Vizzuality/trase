@@ -16,11 +16,11 @@ import LogisticsMapLegend from 'react-components/logistics-map/logistics-map-leg
 import LogisticsMapPanel from 'react-components/logistics-map/logistics-map-panel/logistics-map-panel.container';
 import LogisticsMapDownload from 'react-components/logistics-map/logistics-map-download/logistics-map-download.container';
 import ToolBar from 'react-components/shared/tool-bar';
+import Timeline from 'react-components/tool/timeline/timeline.component';
 
 import 'vizzuality-components/dist/map.css';
 import 'leaflet/dist/leaflet.css';
 import 'scripts/react-components/logistics-map/logistics-map.scss';
-import Timeline from 'react-components/tool/timeline/timeline.component';
 
 function LogisticsMap(props) {
   const {
