@@ -23,7 +23,10 @@ import {
 } from 'react-components/tool-links/tool-links.actions';
 
 import { SET_CONTEXT } from 'app/app.actions';
-import { NODES_PANEL__SAVE } from 'react-components/nodes-panel/nodes-panel.actions';
+import {
+  NODES_PANEL__CONTEXT_CHANGED,
+  NODES_PANEL__SAVE
+} from 'react-components/nodes-panel/nodes-panel.actions';
 
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
@@ -50,6 +53,22 @@ function setNodes(state, action) {
     });
   });
 }
+
+const onContextChange = state =>
+  immer(state, draft => {
+    Object.assign(draft, {
+      selectedRecolorBy: toolLinksInitialState.selectedRecolorBy,
+      selectedResizeBy: toolLinksInitialState.selectedResizeBy,
+      selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
+      extraColumn: toolLinksInitialState.extraColumn,
+      extraColumnNodeId: toolLinksInitialState.extraColumnNodeId,
+      detailedView: toolLinksInitialState.detailedView,
+      highlightedNodeId: toolLinksInitialState.highlightedNodeId,
+      selectedNodesIds: toolLinksInitialState.selectedNodesIds,
+      selectedColumnsIds: toolLinksInitialState.selectedColumnsIds,
+      data: toolLinksInitialState.data
+    });
+  });
 
 const toolLinksReducer = {
   tool(state, action) {
@@ -82,10 +101,8 @@ const toolLinksReducer = {
         selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
         extraColumn: toolLinksInitialState.extraColumn,
         extraColumnNodeId: toolLinksInitialState.extraColumnNodeId,
-        detailedView: toolLinksInitialState.detailedView,
         highlightedNodeId: toolLinksInitialState.highlightedNodeId,
-        selectedNodesIds: toolLinksInitialState.selectedNodesIds,
-        data: toolLinksInitialState.data
+        selectedNodesIds: toolLinksInitialState.selectedNodesIds
       });
     });
   },
@@ -119,22 +136,9 @@ const toolLinksReducer = {
       });
     });
   },
-  [SET_CONTEXT](state) {
-    return immer(state, draft => {
-      Object.assign(draft, {
-        selectedRecolorBy: toolLinksInitialState.selectedRecolorBy,
-        selectedResizeBy: toolLinksInitialState.selectedResizeBy,
-        selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
-        extraColumn: toolLinksInitialState.extraColumn,
-        extraColumnNodeId: toolLinksInitialState.extraColumnNodeId,
-        detailedView: toolLinksInitialState.detailedView,
-        highlightedNodeId: toolLinksInitialState.highlightedNodeId,
-        selectedNodesIds: toolLinksInitialState.selectedNodesIds,
-        selectedColumnsIds: toolLinksInitialState.selectedColumnsIds,
-        data: toolLinksInitialState.data
-      });
-    });
-  },
+  [NODES_PANEL__CONTEXT_CHANGED]: onContextChange,
+
+  [SET_CONTEXT]: onContextChange,
 
   [TOOL_LINKS__SET_COLUMNS](state, action) {
     return immer(state, draft => {
