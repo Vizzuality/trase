@@ -40,7 +40,7 @@ const getImportersTab = makeGetActiveTab('importers');
 
 export function* getPanelParams(optionsType, options = {}) {
   const state = yield select();
-  const { page, isOverview } = options;
+  const { page, isOverview, initialLoad } = options;
 
   const sourcesTab = getSourcesTab(state);
   const exportersTab = getExportersTab(state);
@@ -61,8 +61,8 @@ export function* getPanelParams(optionsType, options = {}) {
     node_types_ids: nodeTypesIds
   };
   const currentStep = DASHBOARD_STEPS[optionsType];
-  const nodeId = isOverview ? 'selectedNodeId' : 'draftSelectedNodeId';
-  const nodesIds = isOverview ? 'selectedNodesIds' : 'draftSelectedNodesIds';
+  const nodeId = isOverview || initialLoad ? 'selectedNodeId' : 'draftSelectedNodeId';
+  const nodesIds = isOverview || initialLoad ? 'selectedNodesIds' : 'draftSelectedNodesIds';
   if (currentStep === DASHBOARD_STEPS.sources && optionsType !== 'countries') {
     params.countries_ids = state.nodesPanel.countries[nodeId];
   }
@@ -117,7 +117,7 @@ export function* getPanelParams(optionsType, options = {}) {
 export function* getData(name, reducer, initialLoad) {
   const { page } = reducer;
 
-  const params = yield getPanelParams(name, { page });
+  const params = yield getPanelParams(name, { page, initialLoad });
 
   if (params.node_types_ids === null) {
     yield put(setNoData(true, name));
