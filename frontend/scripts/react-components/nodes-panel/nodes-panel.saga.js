@@ -17,7 +17,9 @@ import {
 import pluralize from 'utils/pluralize';
 
 import {
+  setContextChange,
   syncNodesWithSankey,
+  NODES_PANEL__SAVE,
   NODES_PANEL__GET_MISSING_DATA,
   NODES_PANEL__GET_SEARCH_RESULTS,
   NODES_PANEL__SET_TABS,
@@ -224,6 +226,35 @@ function* syncSearchedNodes() {
   yield takeLatest([TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH], onSelectResult);
 }
 
+function* broadcastContextChange() {
+  const previousContext = { countryId: null, commodityId: null };
+
+  function* onPanelSave() {
+    const { contexts } = yield select(state => state.app);
+    const { countries, commodities } = yield select(state => state.nodesPanel);
+    const context = contexts.find(
+      ctx =>
+        ctx.countryId === countries.selectedNodeId && ctx.commodityId === commodities.selectedNodeId
+    );
+
+    if (
+      previousContext.countryId &&
+      previousContext.commodityId &&
+      (countries.selectedNodeId !== previousContext.countryId ||
+        commodities.selectedNodeId !== previousContext.commodityId)
+    ) {
+      // at this point we know that the panel save has indeed changed the context so we broadcast the change
+      yield put(setContextChange(context.id));
+    }
+
+    // we update the previous context
+    previousContext.countryId = context.countryId;
+    previousContext.commodityId = context.commodityId;
+  }
+
+  yield takeLatest(NODES_PANEL__SAVE, onPanelSave);
+}
+
 export default function* nodesPanelSagas() {
   const sagas = [
     fetchData,
@@ -234,7 +265,8 @@ export default function* nodesPanelSagas() {
     fetchDataOnTabChange,
     fetchMissingItems,
     syncSelectedNodes,
-    syncSearchedNodes
+    syncSearchedNodes,
+    broadcastContextChange
   ];
   yield all(sagas.map(saga => fork(saga)));
 }

@@ -21,8 +21,14 @@ import { SELECT_YEARS } from 'react-components/tool/tool.actions';
 import { TOOL_LINKS_RESET_SANKEY } from 'react-components/tool-links/tool-links.actions';
 import appSerialization from 'app/app.serializers';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
-import { NODES_PANEL__SAVE } from 'react-components/nodes-panel/nodes-panel.actions';
+import { NODES_PANEL__CONTEXT_CHANGED } from 'react-components/nodes-panel/nodes-panel.actions';
 import initialState from './app.initial-state';
+
+const onContextChange = (state, action) => ({
+  ...state,
+  selectedYears: null,
+  selectedContextId: action.payload
+});
 
 const appReducer = {
   tool(state, action) {
@@ -86,12 +92,8 @@ const appReducer = {
   [SET_CONTEXT_IS_USER_SELECTED](state, action) {
     return Object.assign({}, state, { contextIsUserSelected: action.payload });
   },
-  [SET_CONTEXT](state, action) {
-    return { ...state, selectedYears: null, selectedContextId: action.payload };
-  },
-  [NODES_PANEL__SAVE](state) {
-    return { ...state, selectedYears: null };
-  },
+  [SET_CONTEXT]: onContextChange,
+  [NODES_PANEL__CONTEXT_CHANGED]: onContextChange,
   [APP__SET_LOADING](state, action) {
     const { contexts: contextsLoading, tooltips: tooltipsLoading } = state.loading;
     const { contexts = contextsLoading, tooltips = tooltipsLoading } = action.payload;
