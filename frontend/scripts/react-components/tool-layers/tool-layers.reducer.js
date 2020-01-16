@@ -17,7 +17,7 @@ import {
 } from 'react-components/tool-layers/tool-layers.actions';
 import { TOOL_LINKS__HIGHLIGHT_NODE } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'app/app.actions';
-import { NODES_PANEL__SAVE } from 'react-components/nodes-panel/nodes-panel.actions';
+import { NODES_PANEL__CONTEXT_CHANGED } from 'react-components/nodes-panel/nodes-panel.actions';
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
 import getNodeMetaUid from 'app/helpers/getNodeMetaUid';
@@ -25,6 +25,14 @@ import { deserialize } from 'react-components/shared/url-serializer/url-serializ
 import toolLayersSerialization from 'react-components/tool-layers/tool-layers.serializers';
 import toolLayersInitialState from 'react-components/tool-layers//tool-layers.initial-state';
 import { TOOL_LAYOUT, SANKEY_OFFSETS } from 'constants';
+
+const onContextChange = state =>
+  immer(state, draft => {
+    Object.assign(draft, toolLayersInitialState, {
+      toolLayout: state.toolLayout,
+      sankeySize: state.sankeySize
+    });
+  });
 
 const toolLayersReducer = {
   tool(state, action) {
@@ -38,19 +46,8 @@ const toolLayersReducer = {
     }
     return state;
   },
-  [SET_CONTEXT](state) {
-    return immer(state, draft => {
-      Object.assign(draft, toolLayersInitialState, {
-        toolLayout: state.toolLayout,
-        sankeySize: state.sankeySize
-      });
-    });
-  },
-  [NODES_PANEL__SAVE](state) {
-    return immer(state, draft => {
-      draft.mapView = toolLayersInitialState.mapView;
-    });
-  },
+  [SET_CONTEXT]: onContextChange,
+  [NODES_PANEL__CONTEXT_CHANGED]: onContextChange,
   [SET_NODE_ATTRIBUTES](state) {
     return immer(state, draft => {
       draft.mapLoading = false;
