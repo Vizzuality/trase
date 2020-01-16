@@ -21,6 +21,7 @@ export const NODES_PANEL__EDIT_PANELS = 'NODES_PANEL__EDIT_PANELS';
 export const NODES_PANEL__SAVE = 'NODES_PANEL__SAVE';
 export const NODES_PANEL__CANCEL_PANELS_DRAFT = 'NODES_PANEL__CANCEL_PANELS_DRAFT';
 export const NODES_PANEL__SYNC_NODES_WITH_SANKEY = 'NODES_PANEL__SYNC_NODES_WITH_SANKEY';
+export const NODES_PANEL__CONTEXT_CHANGED = 'NODES_PANEL__CONTEXT_CHANGED';
 
 export const fetchData = (key, name) => ({
   type: NODES_PANEL__FETCH_DATA,
@@ -146,4 +147,9 @@ export const setOrderBy = (orderBy, name) => ({
 export const syncNodesWithSankey = nodesByRole => ({
   type: NODES_PANEL__SYNC_NODES_WITH_SANKEY,
   payload: { nodesByRole }
+});
+
+export const setContextChange = contextId => ({
+  type: NODES_PANEL__CONTEXT_CHANGED,
+  payload: contextId
 });
