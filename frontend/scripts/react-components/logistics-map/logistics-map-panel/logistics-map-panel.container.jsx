@@ -18,6 +18,8 @@ class LogisticsMapPanelContainer extends React.PureComponent {
     localActiveItems: this.props.activeItems || []
   };
 
+  clearItems = () => this.setState({ localActiveItems: [] });
+
   enableItem = item =>
     this.setState(state => ({ localActiveItems: [...state.localActiveItems, item.name] }));
 
@@ -39,6 +41,7 @@ class LogisticsMapPanelContainer extends React.PureComponent {
       <LogisticsMapPanel
         {...this.props}
         goToMap={this.goToMap}
+        clearItems={this.clearItems}
         enableItem={this.enableItem}
         disableItem={this.disableItem}
         activeItems={localActiveItems}
