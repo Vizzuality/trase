@@ -71,10 +71,10 @@ const sidebarNav = [
     }
   },
   {
-    name: 'How does Trase work?',
+    name: 'Methods and data',
     page: {
       type: 'about',
-      payload: { section: 'how-does-trase-work' }
+      payload: { section: 'methods-and-data' }
     }
   },
   {
