@@ -125,18 +125,6 @@ const getLogisticsMapInspectionLevelFilter = createSelector(
   }
 );
 
-const getLogisticsMapDownload = createSelector(
-  [getActiveParams],
-  activeParams => ({
-    id: 'download',
-    type: 'button',
-    show: activeParams.commodity !== 'palmOil',
-    noHover: true,
-    noBorder: true,
-    children: 'Download'
-  })
-);
-
 export const getToolBar = createSelector(
   [
     getCurrentPage,
@@ -146,8 +134,7 @@ export const getToolBar = createSelector(
     getResizeByFilter,
     getVersioningSelected,
     getLogisticsMapHubsFilter,
-    getLogisticsMapInspectionLevelFilter,
-    getLogisticsMapDownload
+    getLogisticsMapInspectionLevelFilter
   ],
   (
     page,
@@ -157,8 +144,7 @@ export const getToolBar = createSelector(
     resizeByFilter,
     versionFilter,
     logisticsMapHubs,
-    logisticsMapInspectionLevel,
-    logisticsMapDownload
+    logisticsMapInspectionLevel
   ) => {
     switch (page) {
       case 'tool': {
@@ -186,7 +172,14 @@ export const getToolBar = createSelector(
               noPadding: true,
               children: 'Browse Companies'
             },
-            logisticsMapDownload
+            {
+              id: 'download',
+              type: 'button',
+              show: true,
+              noHover: true,
+              noBorder: true,
+              children: 'Download'
+            }
           ]
         };
       }
