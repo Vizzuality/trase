@@ -12,9 +12,12 @@ Sidekiq.configure_server do |config|
     SidekiqUniqueJobs::Digests.del(digest: job['unique_digest']) if job['unique_digest']
   end
 
-  config.redis = {size: 4}
+  config.redis = {size: (config.options[:concurrency] + 5)}
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = {size: 2}
+  config.redis = {size: config.options[:concurrency]}
 end
+
+# about the size setting:
+# https://github.com/mperham/sidekiq/wiki/Using-Redis#complete-control
