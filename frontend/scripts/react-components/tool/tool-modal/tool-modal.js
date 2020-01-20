@@ -8,7 +8,7 @@ import {
   setToolFlowsLoading,
   setToolChartsLoading
 } from 'react-components/tool-links/tool-links.actions';
-import { savePanels } from 'react-components/nodes-panel/nodes-panel.actions';
+import { finishSelection } from 'react-components/nodes-panel/nodes-panel.actions';
 import { getItems, getSelectedItem } from 'react-components/tool/tool-modal/tool-modal.selectors';
 
 const mapStateToProps = state => ({
@@ -39,7 +39,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   }[ownProps.activeModal];
   return {
     onChange,
-    savePanels: () => dispatch(savePanels()),
+    finishSelection: () => dispatch(finishSelection()),
     setActiveModal: activeModalId => dispatch(setActiveModal(activeModalId))
   };
 };
