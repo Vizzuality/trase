@@ -10,7 +10,7 @@ import { TOOL_STEPS } from 'constants';
 import 'react-components/tool/tool-modal/tool-modal.scss';
 
 export default function ToolModal(props) {
-  const { items, selectedItem, onChange, activeModal, setActiveModal, savePanels } = props;
+  const { items, selectedItem, onChange, activeModal, setActiveModal, finishSelection } = props;
   const [step, setStep] = useState(TOOL_STEPS.welcome);
 
   if (!activeModal) {
@@ -24,7 +24,7 @@ export default function ToolModal(props) {
         const showBackButton = step > TOOL_STEPS.sources;
         const onContinue = isLastStep => {
           if (isLastStep) {
-            savePanels();
+            finishSelection();
             closeModal();
           } else {
             setStep(step + 1);
@@ -71,6 +71,6 @@ ToolModal.propTypes = {
   onChange: PropTypes.func,
   activeModal: PropTypes.string,
   selectedItem: PropTypes.object,
-  savePanels: PropTypes.func.isRequired,
+  finishSelection: PropTypes.func.isRequired,
   setActiveModal: PropTypes.func.isRequired
 };

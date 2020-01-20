@@ -36,7 +36,7 @@ export const getSelectedColumnsIds = createSelector(
     const selectedColumns = selectedContext.defaultColumns.reduce((acc, next) => {
       // TODO: default columns should have the column role as well
       // we're relying on the columns always being specified
-      const column = columns ? columns[next.id] : next;
+      const column = columns && columns[next.id] ? columns[next.id] : next;
       let id = column.id;
       if (selectedColumnsIds && selectedColumnsIds[column.group]) {
         id = selectedColumnsIds[column.group];
