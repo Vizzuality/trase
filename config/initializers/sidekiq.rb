@@ -21,3 +21,8 @@ end
 
 # about the size setting:
 # https://github.com/mperham/sidekiq/wiki/Using-Redis#complete-control
+# about logging:
+# sidekiq no longer supports a logfile
+# it will log to stdout in dev / test
+# in other envs we need to redirect the log output in systemd intializers
+# ExecStart=/bin/bash -lc 'bundle exec sidekiq -e staging -C config/sidekiq.yml 2>&1 >> /var/www/trase/current/log/sidekiq.log'

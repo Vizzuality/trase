@@ -1,4 +1,3 @@
-logfile: ./log/sidekiq.log
 :verbose: true
 :concurrency: <%= ENV['RAILS_MAX_THREADS'] || 5 %>
 :queues:
