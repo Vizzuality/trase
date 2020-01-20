@@ -5,10 +5,12 @@ import SearchInput from 'react-components/shared/search-input/search-input.compo
 import GridList from 'react-components/shared/grid-list/grid-list.component';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import Button from 'react-components/shared/button/button.component';
+import TagsGroup from 'react-components/shared/tags-group';
 
 function LogisticsMapPanel(props) {
   const {
     items,
+    clearItems,
     enableItem,
     disableItem,
     filterItems,
@@ -16,6 +18,15 @@ function LogisticsMapPanel(props) {
     activeItems,
     goToMap
   } = props;
+  const tags = [
+    {
+      name: 'companies',
+      id: 'companies',
+      prefix: 'See',
+      value: items.filter(item => activeItems.includes(item.name)),
+      transform: 'capitalize'
+    }
+  ];
   return (
     <LogisticsMapModal
       heading="Choose the options you want to see"
@@ -50,9 +61,19 @@ function LogisticsMapPanel(props) {
         </>
       }
       footer={
-        <Button size="md" color="pink" onClick={goToMap}>
-          {LogisticsMapPanel.getButtonText(activeItems)}
-        </Button>
+        <>
+          {activeItems.length > 0 && (
+            <TagsGroup
+              placement="top-end"
+              tags={tags}
+              clearPanel={clearItems}
+              removeSentenceItem={disableItem}
+            />
+          )}
+          <Button size="md" color="pink" onClick={goToMap}>
+            Save
+          </Button>
+        </>
       }
     />
   );
@@ -73,8 +94,9 @@ LogisticsMapPanel.getButtonText = items => {
 LogisticsMapPanel.propTypes = {
   items: PropTypes.array,
   hideFooter: PropTypes.bool,
-  enableItem: PropTypes.bool,
-  disableItem: PropTypes.bool,
+  clearItems: PropTypes.func,
+  enableItem: PropTypes.func,
+  disableItem: PropTypes.func,
   filterItems: PropTypes.array,
   searchResults: PropTypes.array,
   activeItems: PropTypes.array,
