@@ -46,8 +46,7 @@ export const getLogisticsMapCompanies = () => (dispatch, getState) => {
     location: { query = {} }
   } = getState();
 
-  const defaultCommodity = INDONESIA_LOGISTICS_MAP_ACTIVE ? 'palmOil' : 'soy';
-  const { commodity = defaultCommodity } = query;
+  const { commodity = 'soy' } = query;
 
   const queries = {
     soy:

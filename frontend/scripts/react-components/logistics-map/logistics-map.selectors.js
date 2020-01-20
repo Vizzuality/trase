@@ -15,8 +15,7 @@ export const defaultLayersIds = {
   palmOil: ['mills']
 };
 
-export const getSelectedCommodity = state =>
-  INDONESIA_LOGISTICS_MAP_ACTIVE ? 'palmOil' : state?.location?.query?.commodity || 'soy';
+export const getSelectedCommodity = state => state?.location?.query?.commodity || 'soy';
 
 const getSelectedYear = state => (state.location.query && state.location.query.year) || 2016;
 const getSelectedInspection = state => state.location.query && state.location.query.inspection;
@@ -84,7 +83,12 @@ export const getActiveParams = createSelector(
 
 const getSelectedTemplates = createSelector(
   [getSelectedCommodity],
-  commodity => (commodity === 'palmOil' ? templates.indonesia : templates.brazil)
+  commodity => {
+    if (commodity === 'palmOil') {
+      return templates.indonesia;
+    }
+    return templates.brazil;
+  }
 );
 
 export const getLogisticsMapLayers = createSelector(

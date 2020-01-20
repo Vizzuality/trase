@@ -53,7 +53,6 @@ module.exports = {
       DISABLE_PROFILES: process.env.DISABLE_PROFILES === 'true',
       GFW_WIDGETS_BASE_URL: JSON.stringify(process.env.GFW_WIDGETS_BASE_URL),
       ENABLE_LOGISTICS_MAP: process.env.ENABLE_LOGISTICS_MAP === 'true',
-      INDONESIA_LOGISTICS_MAP_ACTIVE: process.env.INDONESIA_LOGISTICS_MAP_ACTIVE === 'true',
       ENABLE_LEGACY_TOOL_SEARCH: process.env.ENABLE_LEGACY_TOOL_SEARCH === 'true',
       API_V3_URL: JSON.stringify(process.env.API_V3_URL),
       API_V2_URL: JSON.stringify(process.env.API_V2_URL),
