@@ -16,7 +16,7 @@
       }
     }
 
-    @media only screen and (max-width: $breakpoint-foundation-small)  {
+    @media only screen and (max-width: $breakpoint-foundation-small) {
       padding-top: 40px;
     }
   }
@@ -39,8 +39,8 @@
   }
 
   .markdown-content {
-
-    h1, h2 {
+    h1,
+    h2 {
       font-family: $font-family-2;
       line-height: 1.5;
       margin: 40px 0 0;
@@ -83,7 +83,7 @@
       color: $charcoal-grey;
 
       @media only screen and (max-width: $breakpoint-foundation-small) {
-        font-size: $font-size-medium
+        font-size: $font-size-medium;
       }
 
       &:first-child {
@@ -97,14 +97,15 @@
       }
     }
 
-    p, li {
+    p,
+    li {
       color: $charcoal-grey;
       font-family: $font-family-2;
       font-size: $font-size-xx-regular;
       font-weight: $font-weight-light;
       line-height: 2;
 
-      &:not(:first-child){
+      &:not(:first-child) {
         margin: 16px 0 0;
       }
 
@@ -116,6 +117,11 @@
     ul {
       margin: 32px 0;
       padding-left: 24px;
+
+      li {
+        position: relative;
+        list-style-image: url('/images/bullet-point.svg');
+      }
     }
 
     a {
