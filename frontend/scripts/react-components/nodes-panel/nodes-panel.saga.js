@@ -17,9 +17,9 @@ import {
 import pluralize from 'utils/pluralize';
 
 import {
-  setContextChange,
+  savePanels,
   syncNodesWithSankey,
-  NODES_PANEL__SAVE,
+  NODES_PANEL__FINISH_SELECTION,
   NODES_PANEL__GET_MISSING_DATA,
   NODES_PANEL__GET_SEARCH_RESULTS,
   NODES_PANEL__SET_TABS,
@@ -234,17 +234,17 @@ function* broadcastContextChange() {
     const { countries, commodities } = yield select(state => state.nodesPanel);
     const context = contexts.find(
       ctx =>
-        ctx.countryId === countries.selectedNodeId && ctx.commodityId === commodities.selectedNodeId
+        ctx.countryId === countries.draftSelectedNodeId &&
+        ctx.commodityId === commodities.draftSelectedNodeId
     );
-
     if (
-      previousContext.countryId &&
-      previousContext.commodityId &&
-      (countries.selectedNodeId !== previousContext.countryId ||
-        commodities.selectedNodeId !== previousContext.commodityId)
+      countries.draftSelectedNodeId !== previousContext.countryId ||
+      commodities.draftSelectedNodeId !== previousContext.commodityId
     ) {
       // at this point we know that the panel save has indeed changed the context so we broadcast the change
-      yield put(setContextChange(context.id));
+      yield put(savePanels(context.id));
+    } else {
+      yield put(savePanels(null));
     }
 
     // we update the previous context
@@ -252,7 +252,7 @@ function* broadcastContextChange() {
     previousContext.commodityId = context.commodityId;
   }
 
-  yield takeLatest(NODES_PANEL__SAVE, onPanelSave);
+  yield takeLatest(NODES_PANEL__FINISH_SELECTION, onPanelSave);
 }
 
 export default function* nodesPanelSagas() {
