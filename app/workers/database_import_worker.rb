@@ -2,7 +2,7 @@ class DatabaseImportWorker
   include Sidekiq::Worker
 
   sidekiq_options queue: :database,
-                  retry: 0,
+                  retry: false,
                   backtrace: true,
                   unique: :until_executed,
                   run_lock_expiration: 120, # 2 mins

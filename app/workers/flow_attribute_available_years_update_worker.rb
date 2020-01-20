@@ -1,7 +1,7 @@
 class FlowAttributeAvailableYearsUpdateWorker
   include Sidekiq::Worker
   sidekiq_options queue: :database,
-                  retry: 0,
+                  retry: false,
                   backtrace: true
 
   def perform(object_class_name, object_id, context_id)

@@ -1,16 +1,4 @@
-verbose: true
-logfile: ./log/sidekiq.log
-development:
-  :concurrency: 2
-production:
-  :concurrency: 2
-staging:
-  :concurrency: 2
-sandbox:
-  :concurrency: 2
-demo:
-  :concurrency: 2
-indonesiademo:
-  :concurrency: 2
+:verbose: true
+:concurrency: <%= ENV['RAILS_MAX_THREADS'] || 5 %>
 :queues:
   - database
