@@ -39,7 +39,7 @@ class DashboardElement extends React.PureComponent {
     }).isRequired,
     goToRoot: PropTypes.func.isRequired,
     goToDashboard: PropTypes.func.isRequired,
-    savePanels: PropTypes.func.isRequired,
+    finishSelection: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
     setSelectedYears: PropTypes.func.isRequired,
     setSelectedResizeBy: PropTypes.func.isRequired,
@@ -47,9 +47,9 @@ class DashboardElement extends React.PureComponent {
   };
 
   onContinue = isLastStep => {
-    const { closeModal, savePanels, goToDashboard, step, setStep } = this.props;
+    const { closeModal, finishSelection, goToDashboard, step, setStep } = this.props;
     if (isLastStep) {
-      savePanels();
+      finishSelection();
       goToDashboard();
       closeModal();
     } else {

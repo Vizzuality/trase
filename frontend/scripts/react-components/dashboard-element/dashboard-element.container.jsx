@@ -25,7 +25,7 @@ import {
 } from 'react-components/dashboard-element/dashboard-element.actions';
 import {
   editPanels as editPanelsFn,
-  savePanels as savePanelsFn
+  finishSelection as finishSelectionFn
 } from 'react-components/nodes-panel/nodes-panel.actions';
 import { DASHBOARD_STEPS } from 'constants';
 
@@ -62,7 +62,7 @@ const mapDispatchToProps = dispatch =>
       setSelectedRecolorBy: setDashboardSelectedRecolorBy,
       editDashboard: editDashboardFn,
       editPanels: editPanelsFn,
-      savePanels: savePanelsFn,
+      finishSelection: finishSelectionFn,
       goToDashboard: goToDashboardFn
     },
     dispatch
@@ -80,7 +80,7 @@ class DashboardElementContainer extends React.Component {
     goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
     goToDashboard: PropTypes.func.isRequired,
-    savePanels: PropTypes.func.isRequired,
+    finishSelection: PropTypes.func.isRequired,
     editDashboard: PropTypes.func.isRequired,
     editPanels: PropTypes.func.isRequired,
     setSelectedYears: PropTypes.func.isRequired,
@@ -130,7 +130,7 @@ class DashboardElementContainer extends React.Component {
       dynamicSentenceParts,
       dirtyBlocks,
       filters,
-      savePanels,
+      finishSelection,
       goToDashboard,
       setSelectedYears,
       setSelectedResizeBy,
@@ -144,7 +144,7 @@ class DashboardElementContainer extends React.Component {
         urlProps={urlProps}
         goToRoot={goToRoot}
         modalOpen={modalOpen}
-        savePanels={savePanels}
+        finishSelection={finishSelection}
         goToDashboard={goToDashboard}
         dirtyBlocks={dirtyBlocks}
         setStep={this.updateStep}

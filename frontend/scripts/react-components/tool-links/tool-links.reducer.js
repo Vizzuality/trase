@@ -23,10 +23,7 @@ import {
 } from 'react-components/tool-links/tool-links.actions';
 
 import { SET_CONTEXT } from 'app/app.actions';
-import {
-  NODES_PANEL__CONTEXT_CHANGED,
-  NODES_PANEL__SAVE
-} from 'react-components/nodes-panel/nodes-panel.actions';
+import { NODES_PANEL__SAVE } from 'react-components/nodes-panel/nodes-panel.actions';
 
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
@@ -136,7 +133,12 @@ const toolLinksReducer = {
       });
     });
   },
-  [NODES_PANEL__CONTEXT_CHANGED]: onContextChange,
+  [NODES_PANEL__SAVE](state, action) {
+    if (action.payload) {
+      return onContextChange(state);
+    }
+    return state;
+  },
 
   [SET_CONTEXT]: onContextChange,
 
