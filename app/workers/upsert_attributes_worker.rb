@@ -1,7 +1,7 @@
 class UpsertAttributesWorker
   include Sidekiq::Worker
   sidekiq_options queue: :database,
-                  retry: 0,
+                  retry: false,
                   backtrace: true,
                   unique: :until_and_while_executing,
                   log_duplicate_payload: true
