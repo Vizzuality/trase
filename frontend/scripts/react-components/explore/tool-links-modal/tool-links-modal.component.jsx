@@ -11,7 +11,7 @@ function ToolLinksModal({ goToTool }) {
     <div className="c-tool-links-modal">
       <div className="row columns">
         <Heading size="md" className="modal-title">
-          Choose type of visualization
+          Choose how you would like to view the data
         </Heading>
       </div>
       <div className="links-container">
@@ -46,20 +46,22 @@ function ToolLinksModal({ goToTool }) {
         <div className="column small-12 medium-6">
           <ul className="description-list">
             <li>
-              <Text>Visualize the data in real flows.</Text>
+              <Text>Visualise commodity flows</Text>
             </li>
             <li>
-              <Text>Highlight and manage the data as you wish.</Text>
+              <Text>
+                Select and deselect flows to explore relationships between supply and demand
+              </Text>
             </li>
           </ul>
         </div>
         <div className="column small-12 medium-6">
           <ul className="description-list">
             <li>
-              <Text>Visualize the data in our charts.</Text>
+              <Text>Get a chart-based overview of our data</Text>
             </li>
             <li>
-              <Text>Compare the data between different actors.</Text>
+              <Text>Make comparisons between places and actors</Text>
             </li>
           </ul>
         </div>
