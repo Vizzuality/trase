@@ -88,7 +88,7 @@ group :development do
   gem 'capistrano-passenger'
   gem 'capistrano-rails', '~> 1.4', require: false
   gem 'capistrano-rvm'
-  gem 'rbnacl', '>= 3.2', '< 5.0'
+  gem 'rbnacl', '>= 3.2', '< 8.0'
   gem 'rbnacl-libsodium'
   gem 'rubocop', '~> 0.79.0', require: false
   gem 'rubocop-performance', require: false
