@@ -468,7 +468,7 @@ DEPENDENCIES
   aws-sdk-s3 (~> 1)
   bcrypt_pbkdf (>= 1.0, < 2.0)
   best_in_place
-  bootsnap
+  bootsnap (>= 1.1.0)
   byebug
   capistrano (~> 3.11)
   capistrano-bundler
@@ -485,7 +485,6 @@ DEPENDENCIES
   enumerate_it (~> 3.0.0)
   factory_bot_rails
   jbuilder (~> 2.9)
-  jquery-rails
   json-schema
   kaminari
   listen (~> 3.2.1)
@@ -500,7 +499,6 @@ DEPENDENCIES
   rack-cors (~> 1.1)
   rails (~> 5.2.4.1)
   rails-controller-testing
-  ransack
   rbnacl (>= 3.2, < 5.0)
   rbnacl-libsodium
   rspec-collection_matchers
