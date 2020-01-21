@@ -19,7 +19,7 @@ gem 'enumerate_it', '~> 3.0.0'
 gem 'mailchimp-api', require: 'mailchimp'
 gem 'oj'
 
-gem 'sass-rails', '~> 6.0'
+gem 'sassc-rails', '~> 2.1.2'
 gem 'sprockets', '< 4'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 5.0'
