@@ -5,10 +5,10 @@
         "main": "A commodity is comprised of a grouping of traded products as identified by the international Harmonized Commodity Description and Coding System (HS). The volumes of each of these traded products is converted into equivalents of the raw commodity (for example soy cake and soy oil into soybean equivalents) using standardised conversion factors."
       },
       "resizeBy": {
-        "main": "Scale the thickness of flows connecting production regions to countries of consumption based either on tonnes of physical commodity, or embedded indicators of conditions in production regions (e.g. area of land in production, associated deforestation etc)."
+        "main": "Scale flows connecting production regions to countries of consumption based on either tonnes or value of the physical commodity, or embedded indicators of the conditions within production regions (e.g. area of land used, associated deforestation etc)."
       },
       "colorBy": {
-        "main": "Re-colour material flows by qualitative feature, such as biome from which a given shipment was originally sourced. For each indicator below, a given colour represents a specific value of that indicator as described in the legend. ",
+        "main": "Re-colour flows by qualitative feature, such as the biome from which a given shipment was originally sourced. Any given colour represents a specific value of that indicator as described in the legend.",
         "none": "Select different elements (e.g. companies, countries) in the supply chain map and colour the trade flows associated with those elements differently."
       },
       "view": {

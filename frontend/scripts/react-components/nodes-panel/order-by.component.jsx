@@ -15,8 +15,8 @@ function OrderBy(props) {
   }
   return (
     <div className="c-order-by">
-      <Text as="span" color="grey-faded" weight="bold">
-        sort by:
+      <Text as="span" color="grey-faded" weight="bold" transform="capitalize">
+        Sort by:
       </Text>
       <Dropdown variant="panel" options={options} value={orderBy} onChange={setOrderBy} />
     </div>
