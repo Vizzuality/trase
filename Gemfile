@@ -80,7 +80,7 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'annotate'
-  gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
+  gem 'bcrypt_pbkdf', '~> 1.0'
   gem 'capistrano', '~> 3.11', require: false
   gem 'capistrano-bundler'
   gem 'capistrano-yarn'
@@ -88,11 +88,16 @@ group :development do
   gem 'capistrano-passenger'
   gem 'capistrano-rails', '~> 1.4', require: false
   gem 'capistrano-rvm'
-  gem 'rbnacl', '>= 3.2', '< 5.0'
-  gem 'rbnacl-libsodium'
+  gem 'ed25519', '~> 1.2'
   gem 'rubocop', '~> 0.79.0', require: false
   gem 'rubocop-performance', require: false
 end
+
+# a note about ed25519 support
+# from net-ssh readme https://github.com/net-ssh/net-ssh:
+#{ }"For ed25519 public key auth support your bundle file should contain ed25519, bcrypt_pbkdf dependencies."
+# those are development dependencies of net-ssh
+# versions required by net-ssh can be looked up here: https://github.com/net-ssh/net-ssh/blob/master/net-ssh.gemspec
 
 group :test do
   # Adds support for Capybara system testing and selenium driver

@@ -164,6 +164,7 @@ GEM
     dotenv-rails (2.7.5)
       dotenv (= 2.7.5)
       railties (>= 3.2, < 6.1)
+    ed25519 (1.2.4)
     enumerate_it (3.0.0)
       activesupport (>= 4.2.0)
     equalizer (0.0.11)
@@ -324,10 +325,6 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
-    rbnacl (4.0.2)
-      ffi
-    rbnacl-libsodium (1.0.16)
-      rbnacl (>= 3.0.1)
     redis (4.1.3)
     require_all (1.5.0)
     responders (3.0.0)
@@ -466,7 +463,7 @@ DEPENDENCIES
   annotate
   appsignal
   aws-sdk-s3 (~> 1)
-  bcrypt_pbkdf (>= 1.0, < 2.0)
+  bcrypt_pbkdf (~> 1.0)
   best_in_place
   bootsnap (>= 1.1.0)
   byebug
@@ -482,6 +479,7 @@ DEPENDENCIES
   database_cleaner
   devise (~> 4.7)
   dotenv-rails (~> 2.7)
+  ed25519 (~> 1.2)
   enumerate_it (~> 3.0.0)
   factory_bot_rails
   jbuilder (~> 2.9)
@@ -499,8 +497,6 @@ DEPENDENCIES
   rack-cors (~> 1.1)
   rails (~> 5.2.4.1)
   rails-controller-testing
-  rbnacl (>= 3.2, < 5.0)
-  rbnacl-libsodium
   rspec-collection_matchers
   rspec-rails (~> 3.9)
   rubocop (~> 0.79.0)
