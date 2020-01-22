@@ -1,13 +1,15 @@
 openapi: 3.0.0
 info:
-  description: Trase API V3
-  version: 3.0.0
-  title: Trase API
-  termsOfService: https://trase.earth/terms-of-use.html
+  title: Trase Internal API V3
+  version: "3.0"
   contact:
+    name: Trase Public API
+    url: https://trase.earth/
     email: info@trase.earth
+  termsOfService: https://trase.earth/terms-of-use.html
   license:
     name: MIT License
+  description: Trase Internal API V3
 tags:
   - name: context
   - name: flow
@@ -27,7 +29,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Context"
-
   "/contexts/{context_id}/columns":
     get:
       tags:
@@ -44,7 +45,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Column"
-
   "/contexts/{context_id}/map_layers":
     get:
       tags:
@@ -61,7 +61,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MapGroup"
-
   "/contexts/{context_id}/download_attributes":
     get:
       tags:
@@ -81,7 +80,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/DownloadAttribute"
-
   "/contexts/{context_id}/download":
     get:
       tags:
@@ -129,7 +127,6 @@ paths:
       responses:
         "200":
           description: OK
-
   "/contexts/{context_id}/flows":
     get:
       tags:
@@ -220,7 +217,6 @@ paths:
                 properties:
                   error:
                     type: string
-
   "/contexts/{context_id}/top_nodes":
     get:
       tags:
@@ -258,8 +254,7 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/NodesStats"
-
-  "/nodes_stats":
+  /nodes_stats:
     get:
       tags:
         - flow
@@ -303,8 +298,7 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/NodesStats"
-
-  "/sankey_card_links":
+  /sankey_card_links:
     get:
       tags:
         - explore
@@ -328,7 +322,6 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/SankeyCardLinks"
-
   /nodes/search:
     get:
       tags:
@@ -380,8 +373,11 @@ paths:
                       type: array
                       items:
                         type: integer
-                      example: [2013, 2014, 2015]
-  "/top_profiles":
+                      example:
+                        - 2013
+                        - 2014
+                        - 2015
+  /top_profiles:
     get:
       tags:
         - top_profile
@@ -442,7 +438,6 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Node"
-
   "/contexts/{context_id}/nodes/attributes":
     get:
       tags:
@@ -470,7 +465,6 @@ paths:
                 properties:
                   error:
                     type: string
-
   "/contexts/{context_id}/nodes/{id}/linked_nodes":
     get:
       tags:
@@ -489,7 +483,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/LinkedNode"
-
   "/contexts/{context_id}/nodes/{node_id}/profile_metadata":
     get:
       tags:
@@ -512,7 +505,6 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/ProfileMetadata"
-
   "/contexts/{context_id}/actors/{id}/basic_attributes":
     get:
       tags:
@@ -531,7 +523,6 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/ActorBasicAttributes"
-
   "/contexts/{context_id}/actors/{id}/top_countries":
     get:
       tags:
@@ -550,7 +541,6 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/ActorTopCountries"
-
   "/contexts/{context_id}/actors/{id}/top_sources":
     get:
       tags:
@@ -569,7 +559,6 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/ActorTopSources"
-
   "/contexts/{context_id}/actors/{id}/sustainability":
     get:
       tags:
@@ -588,7 +577,6 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/ActorSustainability"
-
   "/contexts/{context_id}/actors/{id}/exporting_companies":
     get:
       tags:
@@ -607,7 +595,6 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/ActorExportingCompanies"
-
   "/contexts/{context_id}/places/{id}/basic_attributes":
     get:
       tags:
@@ -626,7 +613,6 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/PlaceBasicAttributes"
-
   "/contexts/{context_id}/places/{id}/top_consumer_actors":
     get:
       tags:
@@ -645,7 +631,6 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/PlaceTopConsumerActors"
-
   "/contexts/{context_id}/places/{id}/top_consumer_countries":
     get:
       tags:
@@ -664,7 +649,6 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/PlaceTopConsumerCountries"
-
   "/contexts/{context_id}/places/{id}/indicators":
     get:
       tags:
@@ -683,7 +667,6 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/PlaceIndicators"
-
   "/contexts/{context_id}/places/{id}/trajectory_deforestation":
     get:
       tags:
@@ -702,7 +685,6 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/PlaceTrajectoryDeforestation"
-
   /newsletter_subscriptions:
     post:
       tags:
@@ -717,11 +699,10 @@ paths:
       responses:
         "200":
           description: OK
-
   /countries:
     get:
       tags:
-        - "countries"
+        - countries
       deprecated: true
       summary: Countries matching selected filters
       description: Use /api/public/countries instead
@@ -745,11 +726,10 @@ paths:
                     properties:
                       commodities:
                         $ref: "#/components/schemas/CommoditiesFromCountries"
-
   /commodities:
     get:
       tags:
-        - "commodities"
+        - commodities
       deprecated: true
       summary: Commodities matching selected filters
       description: Use /api/public/commodities instead
@@ -773,11 +753,10 @@ paths:
                     properties:
                       countries:
                         $ref: "#/components/schemas/CountriesFromCommodities"
-
   /dashboards/commodities:
     get:
       tags:
-        - "dashboards filters"
+        - dashboards filters
       summary: Commodities matching selected filters
       parameters:
         - $ref: "#/components/parameters/dashboards_commodities_ids"
@@ -800,11 +779,10 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/DashboardsCommodity"
-
   /dashboards/commodities/search:
     get:
       tags:
-        - "dashboards search"
+        - dashboards search
       summary: Commodities matching selected filters with full text search
       parameters:
         - $ref: "#/components/parameters/query"
@@ -827,11 +805,10 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/DashboardsCommodity"
-
   /dashboards/countries:
     get:
       tags:
-        - "dashboards filters"
+        - dashboards filters
       summary: Countries matching selected filters
       parameters:
         - $ref: "#/components/parameters/dashboards_countries_ids"
@@ -876,11 +853,10 @@ paths:
                               type: integer
                             node_type_name:
                               type: string
-
   /dashboards/countries/search:
     get:
       tags:
-        - "dashboards search"
+        - dashboards search
       summary: Countries matching selected filters with full text search
       parameters:
         - $ref: "#/components/parameters/query"
@@ -903,11 +879,10 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/DashboardsCountry"
-
   /dashboards/sources:
     get:
       tags:
-        - "dashboards filters"
+        - dashboards filters
       summary: Sources matching selected filters
       parameters:
         - $ref: "#/components/parameters/dashboards_sources_ids"
@@ -936,11 +911,10 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/DashboardsSource"
-
   /dashboards/sources/search:
     get:
       tags:
-        - "dashboards search"
+        - dashboards search
       summary: Sources matching selected filters with full text search
       parameters:
         - $ref: "#/components/parameters/query"
@@ -966,12 +940,11 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/DashboardsSearchNode"
-
   /dashboards/companies:
     get:
       deprecated: true
       tags:
-        - "dashboards filters"
+        - dashboards filters
       summary: Companies matching selected filters
       parameters:
         - $ref: "#/components/parameters/dashboards_countries_ids"
@@ -997,12 +970,11 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/DashboardsCompany"
-
   /dashboards/companies/search:
     get:
       deprecated: true
       tags:
-        - "dashboards search"
+        - dashboards search
       summary: Companies matching selected filters with full text search
       parameters:
         - $ref: "#/components/parameters/query"
@@ -1028,11 +1000,10 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/DashboardsSearchNode"
-
   /dashboards/exporters:
     get:
       tags:
-        - "dashboards filters"
+        - dashboards filters
       summary: Exporters matching selected filters
       parameters:
         - $ref: "#/components/parameters/dashboards_countries_ids"
@@ -1061,11 +1032,10 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/DashboardsCompany"
-
   /dashboards/exporters/search:
     get:
       tags:
-        - "dashboards search"
+        - dashboards search
       summary: Exporters matching selected filters with full text search
       parameters:
         - $ref: "#/components/parameters/query"
@@ -1091,11 +1061,10 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/DashboardsSearchNode"
-
   /dashboards/importers:
     get:
       tags:
-        - "dashboards filters"
+        - dashboards filters
       summary: Importers matching selected filters
       parameters:
         - $ref: "#/components/parameters/dashboards_countries_ids"
@@ -1124,11 +1093,10 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/DashboardsCompany"
-
   /dashboards/importers/search:
     get:
       tags:
-        - "dashboards search"
+        - dashboards search
       summary: Importers matching selected filters with full text search
       parameters:
         - $ref: "#/components/parameters/query"
@@ -1154,11 +1122,10 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/DashboardsSearchNode"
-
   /dashboards/destinations:
     get:
       tags:
-        - "dashboards filters"
+        - dashboards filters
       summary: Destinations matching selected filters
       parameters:
         - $ref: "#/components/parameters/dashboards_countries_ids"
@@ -1186,11 +1153,10 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/DashboardsDestination"
-
   /dashboards/destinations/search:
     get:
       tags:
-        - "dashboards search"
+        - dashboards search
       summary: Destinations matching selected filters with full text search
       parameters:
         - $ref: "#/components/parameters/query"
@@ -1216,11 +1182,10 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/DashboardsSearchNode"
-
   /dashboards/filter_meta:
     get:
       tags:
-        - "dashboards filters"
+        - dashboards filters
       summary: Meta data to render filter panel sections
       parameters:
         - $ref: "#/components/parameters/dashboards_countries_ids"
@@ -1240,7 +1205,7 @@ paths:
                       properties:
                         section:
                           type: string
-                          example: 'SOURCES'
+                          example: SOURCES
                         tabs:
                           type: array
                           items:
@@ -1251,17 +1216,17 @@ paths:
                                 example: 1
                               name:
                                 type: string
-                                example: 'DEPARTMENT'
+                                example: DEPARTMENT
                               profileType:
                                 type: string
-                                example: 'place'
+                                example: place
                               prefix:
                                 type: string
-                                example: 'imported from'
+                                example: imported from
   /dashboards/parametrised_charts:
     get:
       tags:
-        - "dashboards charts"
+        - dashboards charts
       summary: Dynamic chart types matching selected filters
       parameters:
         - $ref: "#/components/parameters/dashboards_country_id"
@@ -1292,11 +1257,10 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/ParametrisedChart"
-
   /dashboards/charts/single_year_no_ncont_overview:
     get:
       tags:
-        - "dashboards charts"
+        - dashboards charts
       summary: Data formatted for display in the overview chart for single year, no
         non-continuous attribute selection (dynamic sentence)
       parameters:
@@ -1343,13 +1307,13 @@ paths:
                         $ref: "#/components/schemas/DashboardsYLegend"
                       info:
                         $ref: "#/components/schemas/DashboardsMetaInfo"
-
   /dashboards/charts/single_year_ncont_overview:
     get:
       tags:
-        - "dashboards charts"
+        - dashboards charts
       summary: Data formatted for display in the overview chart for single year,
-        non-continuous attribute selection (donut chart per value of non-continuous indicator)
+        non-continuous attribute selection (donut chart per value of
+        non-continuous indicator)
       parameters:
         - $ref: "#/components/parameters/dashboards_country_id"
         - $ref: "#/components/parameters/dashboards_commodity_id"
@@ -1398,11 +1362,10 @@ paths:
                         $ref: "#/components/schemas/DashboardsYLegend"
                       info:
                         $ref: "#/components/schemas/DashboardsMetaInfo"
-
   /dashboards/charts/multi_year_no_ncont_overview:
     get:
       tags:
-        - "dashboards charts"
+        - dashboards charts
       summary: Data formatted for display in the overview chart for multi year, no
         non-continuous attribute selection (bar chart per year)
       parameters:
@@ -1453,13 +1416,13 @@ paths:
                         $ref: "#/components/schemas/DashboardsYLegend"
                       info:
                         $ref: "#/components/schemas/DashboardsMetaInfo"
-
   /dashboards/charts/multi_year_ncont_overview:
     get:
       tags:
-        - "dashboards charts"
+        - dashboards charts
       summary: Data formatted for display in the overview chart for multi year,
-        non-continuous attribute selection (stacked bar chart per year per value of non-continuous indicator
+        non-continuous attribute selection (stacked bar chart per year per value
+        of non-continuous indicator
       parameters:
         - $ref: "#/components/parameters/dashboards_country_id"
         - $ref: "#/components/parameters/dashboards_commodity_id"
@@ -1520,7 +1483,7 @@ paths:
                             properties:
                               label:
                                 type: string
-                                example: '2.0'
+                                example: "2.0"
                       y2:
                         allOf:
                           - $ref: "#/components/schemas/DashboardsNcontYLegend"
@@ -1528,7 +1491,7 @@ paths:
                             properties:
                               label:
                                 type: string
-                                example: '3.0'
+                                example: "3.0"
                       y3:
                         allOf:
                           - $ref: "#/components/schemas/DashboardsNcontYLegend"
@@ -1536,7 +1499,7 @@ paths:
                             properties:
                               label:
                                 type: string
-                                example: '4.0'
+                                example: "4.0"
                       y4:
                         allOf:
                           - $ref: "#/components/schemas/DashboardsNcontYLegend"
@@ -1544,14 +1507,13 @@ paths:
                             properties:
                               label:
                                 type: string
-                                example: '5.0'
+                                example: "5.0"
                       info:
                         $ref: "#/components/schemas/DashboardsMetaInfo"
-
   /dashboards/charts/single_year_no_ncont_node_type_view:
     get:
       tags:
-        - "dashboards charts"
+        - dashboards charts
       summary: Data formatted for display in the chart per node, for single year, no
         non-continuous attribute selection (horizontal bar chart)
       parameters:
@@ -1603,11 +1565,10 @@ paths:
                         $ref: "#/components/schemas/DashboardsYLegend"
                       info:
                         $ref: "#/components/schemas/DashboardsMetaInfo"
-
   /dashboards/charts/single_year_ncont_node_type_view:
     get:
       tags:
-        - "dashboards charts"
+        - dashboards charts
       summary: Data formatted for display in the chart per node, for single year,
         non-continuous attribute selection (horizontal stacked bar chart)
       parameters:
@@ -1649,7 +1610,7 @@ paths:
                           example: 3495950.37088792
                         y1:
                           type: number
-                          example: 8460700.768103389
+                          example: 8460700.76810339
                         y2:
                           type: number
                           example: 6286328.13158927
@@ -1669,7 +1630,7 @@ paths:
                             properties:
                               label:
                                 type: string
-                                example: 'Company commitment'
+                                example: Company commitment
                       y1:
                         allOf:
                           - $ref: "#/components/schemas/DashboardsNcontYLegend"
@@ -1677,7 +1638,7 @@ paths:
                             properties:
                               label:
                                 type: string
-                                example: 'None'
+                                example: None
                       y2:
                         allOf:
                           - $ref: "#/components/schemas/DashboardsNcontYLegend"
@@ -1685,16 +1646,16 @@ paths:
                             properties:
                               label:
                                 type: string
-                                example: 'Soy Moratorium'
+                                example: Soy Moratorium
                       info:
                         $ref: "#/components/schemas/DashboardsMetaInfo"
-
   /dashboards/charts/multi_year_no_ncont_node_type_view:
     get:
       tags:
-        - "dashboards charts"
-      summary: Data formatted for display in the chart per node, for multi year,
-        no non-continuous attribute selection (stacked bar chart per year per top nodes)
+        - dashboards charts
+      summary: Data formatted for display in the chart per node, for multi year, no
+        non-continuous attribute selection (stacked bar chart per year per top
+        nodes)
       parameters:
         - $ref: "#/components/parameters/dashboards_country_id"
         - $ref: "#/components/parameters/dashboards_commodity_id"
@@ -1752,7 +1713,7 @@ paths:
                             properties:
                               label:
                                 type: string
-                                example: 'CERRADO'
+                                example: CERRADO
                       y1:
                         allOf:
                           - $ref: "#/components/schemas/DashboardsNcontYLegend"
@@ -1760,7 +1721,7 @@ paths:
                             properties:
                               label:
                                 type: string
-                                example: 'MATA ATLANTICA'
+                                example: MATA ATLANTICA
                       y2:
                         allOf:
                           - $ref: "#/components/schemas/DashboardsNcontYLegend"
@@ -1768,7 +1729,7 @@ paths:
                             properties:
                               label:
                                 type: string
-                                example: 'OTHER'
+                                example: OTHER
                       info:
                         $ref: "#/components/schemas/DashboardsMetaInfo"
   /dashboards/charts/single_year_node_values_overview:
@@ -1776,7 +1737,8 @@ paths:
       tags:
         - dashboards
         - charts
-      summary: Data formatted for display in the overview chart for single year, single node selection, attribute with node values (dynamic sentence)
+      summary: Data formatted for display in the overview chart for single year, single
+        node selection, attribute with node values (dynamic sentence)
       parameters:
         - $ref: "#/components/parameters/dashboards_country_id"
         - $ref: "#/components/parameters/dashboards_commodity_id"
@@ -1817,7 +1779,8 @@ paths:
       tags:
         - dashboards
         - charts
-      summary: Data formatted for display in the overview chart for single year, single node selection, attribute with node values (dynamic sentence)
+      summary: Data formatted for display in the overview chart for single year, single
+        node selection, attribute with node values (dynamic sentence)
       parameters:
         - $ref: "#/components/parameters/dashboards_country_id"
         - $ref: "#/components/parameters/dashboards_commodity_id"
@@ -1864,35 +1827,35 @@ components:
     country_id_query_param:
       name: country_id
       in: query
-      description: "Country id"
+      description: Country id
       required: false
       schema:
         type: integer
     commodity_id_query_param:
       name: commodity_id
       in: query
-      description: "Commodity id"
+      description: Commodity id
       required: false
       schema:
         type: integer
     context_id_path_param:
       name: context_id
       in: path
-      description: "Context id"
+      description: Context id
       required: true
       schema:
         type: integer
     contexts_ids_query_param:
       name: contexts_ids
       in: query
-      description: "Contexts ids separated by comma"
+      description: Contexts ids separated by comma
       required: false
       schema:
         type: string
     node_id_path_param:
       name: id
       in: path
-      description: "Node id"
+      description: Node id
       required: true
       schema:
         type: integer
@@ -2298,7 +2261,6 @@ components:
                 type: string
               geoId:
                 type: string
-
     Column:
       type: object
       properties:
@@ -2327,7 +2289,6 @@ components:
                 type: string
               filterTo:
                 type: integer
-
     MapGroup:
       type: object
       properties:
@@ -2412,7 +2373,6 @@ components:
           type: array
           items:
             type: integer
-
     DownloadAttribute:
       type: object
       properties:
@@ -2452,7 +2412,6 @@ components:
               items:
                 type: string
               description: For quals, enumeration of possible values
-
     FlowResult:
       type: object
       properties:
@@ -2488,7 +2447,6 @@ components:
                     type: number
                   quant:
                     type: number
-
     TopNodes:
       type: object
       properties:
@@ -2516,7 +2474,6 @@ components:
                     type: number
                   value:
                     type: number
-
     NodesStats:
       type: object
       properties:
@@ -2568,7 +2525,6 @@ components:
                             type: number
                           height:
                             type: number
-
     SankeyCardLinks:
       type: object
       properties:
@@ -2626,8 +2582,6 @@ components:
                     type: integer
             columns:
               type: object
-              # In normal JSON Schema you could use patternProperties for dynamic object keys, but OpenAPI forbids it
-
     Node:
       type: object
       properties:
@@ -2657,7 +2611,6 @@ components:
         isAggregated:
           type: boolean
           description: true for OTHER nodes
-
     NodeAttribute:
       type: object
       properties:
@@ -2679,14 +2632,12 @@ components:
           type: integer
         single_layer_bucket:
           type: integer
-
     LinkedNode:
       type: object
       properties:
         id:
           type: integer
           format: int64
-
     ProfileMetadata:
       type: object
       properties:
@@ -2725,10 +2676,10 @@ components:
               type: integer
             prefix:
               type: string
-              example: "imported by"
+              example: imported by
             role:
               type: string
-              example: "importer"
+              example: importer
         charts:
           type: array
           items:
@@ -2757,7 +2708,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Chart"
-
     ActorBasicAttributes:
       type: object
       properties:
@@ -2821,7 +2771,8 @@ components:
           properties:
             title:
               type: string
-              example: "Top destination countries of {{commodity_name}} exported by {{company_name}} in {{year}}"
+              example: Top destination countries of {{commodity_name}} exported by
+                {{company_name}} in {{year}}
             legend_title:
               type: string
               example: "{{commodity_name}} exported in {{year}}"
@@ -2865,7 +2816,8 @@ components:
           properties:
             title:
               type: string
-              example: "Top sourcing regions of {{commodity_name}} exported by {{company_name}} in {{year}}"
+              example: Top sourcing regions of {{commodity_name}} exported by
+                {{company_name}} in {{year}}
             legend_title:
               type: string
               example: "{{commodity_name}} exported in $year$"
@@ -3032,7 +2984,6 @@ components:
                     type: array
                     items:
                       type: number
-
     PlaceBasicAttributes:
       type: object
       properties:
@@ -3479,7 +3430,7 @@ components:
               description: not used
             suffix:
               type: string
-              example: "t"
+              example: t
               description: Same unit as in yAxis
     DashboardsMetaInfo:
       type: object
@@ -3506,10 +3457,10 @@ components:
           properties:
             cont_attribute:
               type: string
-              example: 'Trade volume'
+              example: Trade volume
             ncont_attribute:
               type: string
-              example: 'Forest 500 score'
+              example: Forest 500 score
             sources:
               type: array
               items:
@@ -3525,9 +3476,9 @@ components:
                     type: string
                   profile:
                     type: string
-                    example: 'place'
+                    example: place
                     nullable: true
-                    description: 'place or null'
+                    description: place or null
             companies:
               type: array
               items:
@@ -3543,9 +3494,9 @@ components:
                     type: string
                   profile:
                     type: string
-                    example: 'actor'
+                    example: actor
                     nullable: true
-                    description: 'actor or null'
+                    description: actor or null
             destinations:
               type: array
               items:
@@ -3561,7 +3512,7 @@ components:
                     type: string
                   profile:
                     type: string
-                    example: 'null'
+                    example: "null"
                     nullable: true
             excluded_sources:
               type: array
@@ -3578,9 +3529,9 @@ components:
                     type: string
                   profile:
                     type: string
-                    example: 'place'
+                    example: place
                     nullable: true
-                    description: 'place or null'
+                    description: place or null
             excluded_companies:
               type: array
               items:
@@ -3596,9 +3547,9 @@ components:
                     type: string
                   profile:
                     type: string
-                    example: 'actor'
+                    example: actor
                     nullable: true
-                    description: 'actor or null'
+                    description: actor or null
             excluded_destinations:
               type: array
               items:
@@ -3614,14 +3565,13 @@ components:
                     type: string
                   profile:
                     type: string
-                    example: 'null'
+                    example: "null"
                     nullable: true
         single_filter_key:
           type: string
-          example: 'destinations'
+          example: destinations
           nullable: true
-          description: 'one of [sources|companies|destinations] or null'
-
+          description: one of [sources|companies|destinations] or null
     DashboardsMetaInfoNodeValues:
       type: object
       properties:
@@ -3637,13 +3587,13 @@ components:
         temporal:
           type: boolean
           example: false
-          description: 'if false, attribute does not have values per year'
+          description: if false, attribute does not have values per year
         filter:
           type: object
           properties:
             cont_attribute:
               type: string
-              example: 'Trade volume'
+              example: Trade volume
             node:
               type: object
               properties:
@@ -3657,9 +3607,9 @@ components:
                   type: string
                 profile:
                   type: string
-                  example: 'place'
+                  example: place
                   nullable: true
-                  description: 'place or null'
+                  description: place or null
     CountriesFromContexts:
       type: object
       properties:
@@ -3671,7 +3621,6 @@ components:
           type: array
           items:
             type: integer
-
     CommoditiesFromContexts:
       type: object
       properties:
