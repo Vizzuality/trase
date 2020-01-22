@@ -1,0 +1,3703 @@
+openapi: 3.0.0
+info:
+  description: Trase API V3
+  version: 3.0.0
+  title: Trase API
+  termsOfService: https://trase.earth/terms-of-use.html
+  contact:
+    email: info@trase.earth
+  license:
+    name: MIT License
+tags:
+  - name: context
+  - name: flow
+  - name: node
+paths:
+  /contexts:
+    get:
+      tags:
+        - context
+      summary: ""
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Context"
+
+  "/contexts/{context_id}/columns":
+    get:
+      tags:
+        - context
+      summary: ""
+      parameters:
+        - $ref: "#/components/parameters/context_id_path_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Column"
+
+  "/contexts/{context_id}/map_layers":
+    get:
+      tags:
+        - context
+      summary: ""
+      parameters:
+        - $ref: "#/components/parameters/context_id_path_param"
+        - $ref: "#/components/parameters/start_year_req_query_param"
+        - $ref: "#/components/parameters/end_year_opt_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MapGroup"
+
+  "/contexts/{context_id}/download_attributes":
+    get:
+      tags:
+        - context
+      summary: ""
+      parameters:
+        - $ref: "#/components/parameters/context_id_path_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  indicators:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DownloadAttribute"
+
+  "/contexts/{context_id}/download":
+    get:
+      tags:
+        - context
+      summary: Download selected flow attributes as csv / json
+      parameters:
+        - $ref: "#/components/parameters/context_id_path_param"
+        - name: years
+          description: Years
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+        - name: e_ids
+          description: Exporters ids
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+        - name: i_ids
+          description: Importers ids
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+        - name: c_ids
+          description: Countries ids
+          in: query
+          schema:
+            type: array
+            items:
+              type: integer
+        - name: filters
+          description: Filters, e.g. filters[][name]=FOB&filters[][op]=lt&filters[][val]=2
+          in: query
+          schema:
+            type: array
+            items:
+              type: array
+              items:
+                type: string
+      responses:
+        "200":
+          description: OK
+
+  "/contexts/{context_id}/flows":
+    get:
+      tags:
+        - flow
+      summary: ""
+      parameters:
+        - $ref: "#/components/parameters/context_id_path_param"
+        - name: include_columns
+          in: query
+          description: List of node type ids
+          required: true
+          schema:
+            type: array
+            items:
+              type: integer
+        - name: flow_quant
+          in: query
+          description: Name of quant for resizing
+          required: true
+          schema:
+            type: string
+        - name: flow_ind
+          in: query
+          description: Name of ind for recoloring
+          required: false
+          schema:
+            type: string
+        - name: flow_qual
+          in: query
+          description: Name of qual for recoloring
+          required: false
+          schema:
+            type: string
+        - name: selected_nodes
+          in: query
+          description: List of selected node ids
+          required: false
+          schema:
+            type: array
+            items:
+              type: integer
+        - name: excluded_nodes
+          in: query
+          description: List of excluded node ids
+          required: false
+          schema:
+            type: array
+            items:
+              type: integer
+        - name: biome_filter_id
+          in: query
+          description: Id of biome to filter by
+          required: false
+          schema:
+            type: integer
+        - $ref: "#/components/parameters/start_year_req_query_param"
+        - $ref: "#/components/parameters/end_year_opt_query_param"
+        - name: n_nodes
+          in: query
+          description: Number of top nodes (defaults to 100)
+          required: false
+          schema:
+            type: integer
+        - name: locked_nodes
+          in: query
+          description: Ids of nodes to keep selected even if they are out of range of
+            current selection
+          required: false
+          schema:
+            type: array
+            items:
+              type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/FlowResult"
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  "/contexts/{context_id}/top_nodes":
+    get:
+      tags:
+        - flow
+      summary: Top nodes of given node type per context
+      parameters:
+        - $ref: "#/components/parameters/context_id_path_param"
+        - name: column_id
+          in: query
+          description: Node type id
+          required: true
+          schema:
+            type: integer
+        - $ref: "#/components/parameters/start_year_opt_query_param"
+        - $ref: "#/components/parameters/end_year_opt_query_param"
+        - name: n_nodes
+          in: query
+          description: Number of top nodes (defaults to 10)
+          required: false
+          schema:
+            type: integer
+        - name: attribute_ids
+          in: query
+          description: Attribute ids
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/NodesStats"
+
+  "/nodes_stats":
+    get:
+      tags:
+        - flow
+      summary: Top nodes of given node type per contexts or commodity
+      parameters:
+        - $ref: "#/components/parameters/contexts_ids_query_param"
+        - $ref: "#/components/parameters/commodity_id_query_param"
+        - name: column_id
+          in: query
+          description: Node type id
+          required: true
+          schema:
+            type: integer
+        - $ref: "#/components/parameters/start_year_opt_query_param"
+        - $ref: "#/components/parameters/end_year_opt_query_param"
+        - name: n_nodes
+          in: query
+          description: Number of top nodes (defaults to 10)
+          required: false
+          schema:
+            type: integer
+        - name: attribute_id
+          in: query
+          description: Attribute id (default volume)
+          required: false
+          schema:
+            type: string
+        - name: other_attributes_ids
+          in: query
+          description: List of attributes ids separated by comma
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/NodesStats"
+
+  "/sankey_card_links":
+    get:
+      tags:
+        - explore
+      summary: Data for the sankey card links
+      parameters:
+        - $ref: "#/components/parameters/country_id_query_param"
+        - $ref: "#/components/parameters/commodity_id_query_param"
+        - name: level
+          in: query
+          description: Level
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/SankeyCardLinks"
+
+  /nodes/search:
+    get:
+      tags:
+        - node
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: Search string to use
+          schema:
+            type: integer
+        - name: context_id
+          in: query
+          required: false
+          description: If provided, limit results to nodes of a given context
+          schema:
+            type: integer
+        - name: profile_only
+          in: query
+          description: If provided, only show results that have a profile type defined
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    mainId:
+                      type: integer
+                    name:
+                      type: string
+                      example: SORRISO
+                    nodeType:
+                      type: string
+                      example: EXPORTER
+                    contextId:
+                      type: integer
+                    profile:
+                      type: string
+                      example: place
+                    years:
+                      type: array
+                      items:
+                        type: integer
+                      example: [2013, 2014, 2015]
+  "/top_profiles":
+    get:
+      tags:
+        - top_profile
+      parameters:
+        - name: context_id
+          in: query
+          required: false
+          description: If provided, limit results to top profiles of a given context
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    contextId:
+                      type: integer
+                    nodeId:
+                      type: integer
+                    year:
+                      type: integer
+                    profileType:
+                      type: string
+                      example: actor
+                    summary:
+                      type: string
+                    photoUrl:
+                      type: string
+                    nodeName:
+                      type: string
+                      example: CARGILL
+                    nodeType:
+                      type: string
+                      example: EXPORTER
+  "/contexts/{context_id}/nodes":
+    get:
+      tags:
+        - node
+      summary: All nodes for a context
+      parameters:
+        - $ref: "#/components/parameters/context_id_path_param"
+        - $ref: "#/components/parameters/node_types_ids"
+        - $ref: "#/components/parameters/nodes_ids"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Node"
+
+  "/contexts/{context_id}/nodes/attributes":
+    get:
+      tags:
+        - node
+      summary: Aggregated values of inds and quants for all nodes in context
+      parameters:
+        - $ref: "#/components/parameters/context_id_path_param"
+        - $ref: "#/components/parameters/start_year_req_query_param"
+        - $ref: "#/components/parameters/end_year_req_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NodeAttribute"
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+
+  "/contexts/{context_id}/nodes/{id}/linked_nodes":
+    get:
+      tags:
+        - node
+      summary: ""
+      parameters:
+        - $ref: "#/components/parameters/context_id_path_param"
+        - $ref: "#/components/parameters/node_id_path_param"
+        - $ref: "#/components/parameters/year_opt_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LinkedNode"
+
+  "/contexts/{context_id}/nodes/{node_id}/profile_metadata":
+    get:
+      tags:
+        - node
+      summary: Profile metadata for a node
+      parameters:
+        - $ref: "#/components/parameters/context_id_path_param"
+        - name: node_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/ProfileMetadata"
+
+  "/contexts/{context_id}/actors/{id}/basic_attributes":
+    get:
+      tags:
+        - actor
+      parameters:
+        - $ref: "#/components/parameters/context_id_path_param"
+        - $ref: "#/components/parameters/node_id_path_param"
+        - $ref: "#/components/parameters/year_opt_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/ActorBasicAttributes"
+
+  "/contexts/{context_id}/actors/{id}/top_countries":
+    get:
+      tags:
+        - actor
+      parameters:
+        - $ref: "#/components/parameters/context_id_path_param"
+        - $ref: "#/components/parameters/node_id_path_param"
+        - $ref: "#/components/parameters/year_opt_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/ActorTopCountries"
+
+  "/contexts/{context_id}/actors/{id}/top_sources":
+    get:
+      tags:
+        - actor
+      parameters:
+        - $ref: "#/components/parameters/context_id_path_param"
+        - $ref: "#/components/parameters/node_id_path_param"
+        - $ref: "#/components/parameters/year_opt_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/ActorTopSources"
+
+  "/contexts/{context_id}/actors/{id}/sustainability":
+    get:
+      tags:
+        - actor
+      parameters:
+        - $ref: "#/components/parameters/context_id_path_param"
+        - $ref: "#/components/parameters/node_id_path_param"
+        - $ref: "#/components/parameters/year_opt_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/ActorSustainability"
+
+  "/contexts/{context_id}/actors/{id}/exporting_companies":
+    get:
+      tags:
+        - actor
+      parameters:
+        - $ref: "#/components/parameters/context_id_path_param"
+        - $ref: "#/components/parameters/node_id_path_param"
+        - $ref: "#/components/parameters/year_opt_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/ActorExportingCompanies"
+
+  "/contexts/{context_id}/places/{id}/basic_attributes":
+    get:
+      tags:
+        - place
+      parameters:
+        - $ref: "#/components/parameters/context_id_path_param"
+        - $ref: "#/components/parameters/node_id_path_param"
+        - $ref: "#/components/parameters/year_opt_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/PlaceBasicAttributes"
+
+  "/contexts/{context_id}/places/{id}/top_consumer_actors":
+    get:
+      tags:
+        - place
+      parameters:
+        - $ref: "#/components/parameters/context_id_path_param"
+        - $ref: "#/components/parameters/node_id_path_param"
+        - $ref: "#/components/parameters/year_opt_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/PlaceTopConsumerActors"
+
+  "/contexts/{context_id}/places/{id}/top_consumer_countries":
+    get:
+      tags:
+        - place
+      parameters:
+        - $ref: "#/components/parameters/context_id_path_param"
+        - $ref: "#/components/parameters/node_id_path_param"
+        - $ref: "#/components/parameters/year_opt_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/PlaceTopConsumerCountries"
+
+  "/contexts/{context_id}/places/{id}/indicators":
+    get:
+      tags:
+        - place
+      parameters:
+        - $ref: "#/components/parameters/context_id_path_param"
+        - $ref: "#/components/parameters/node_id_path_param"
+        - $ref: "#/components/parameters/year_opt_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/PlaceIndicators"
+
+  "/contexts/{context_id}/places/{id}/trajectory_deforestation":
+    get:
+      tags:
+        - place
+      parameters:
+        - $ref: "#/components/parameters/context_id_path_param"
+        - $ref: "#/components/parameters/node_id_path_param"
+        - $ref: "#/components/parameters/year_opt_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/PlaceTrajectoryDeforestation"
+
+  /newsletter_subscriptions:
+    post:
+      tags:
+        - newsletter_subscription
+      summary: Adds a new email to the subscriptions list
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+        required: true
+      responses:
+        "200":
+          description: OK
+
+  /countries:
+    get:
+      tags:
+        - "countries"
+      deprecated: true
+      summary: Countries matching selected filters
+      description: Use /api/public/countries instead
+      parameters:
+        - $ref: "#/components/parameters/commodities_ids"
+        - $ref: "#/components/parameters/include"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CountriesFromContexts"
+                  meta:
+                    type: object
+                    properties:
+                      commodities:
+                        $ref: "#/components/schemas/CommoditiesFromCountries"
+
+  /commodities:
+    get:
+      tags:
+        - "commodities"
+      deprecated: true
+      summary: Commodities matching selected filters
+      description: Use /api/public/commodities instead
+      parameters:
+        - $ref: "#/components/parameters/countries_ids"
+        - $ref: "#/components/parameters/include"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/CommoditiesFromContexts"
+                  meta:
+                    type: object
+                    properties:
+                      countries:
+                        $ref: "#/components/schemas/CountriesFromCommodities"
+
+  /dashboards/commodities:
+    get:
+      tags:
+        - "dashboards filters"
+      summary: Commodities matching selected filters
+      parameters:
+        - $ref: "#/components/parameters/dashboards_commodities_ids"
+        - $ref: "#/components/parameters/dashboards_countries_ids"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/profile_only"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DashboardsCommodity"
+
+  /dashboards/commodities/search:
+    get:
+      tags:
+        - "dashboards search"
+      summary: Commodities matching selected filters with full text search
+      parameters:
+        - $ref: "#/components/parameters/query"
+        - $ref: "#/components/parameters/dashboards_commodities_ids"
+        - $ref: "#/components/parameters/dashboards_countries_ids"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DashboardsCommodity"
+
+  /dashboards/countries:
+    get:
+      tags:
+        - "dashboards filters"
+      summary: Countries matching selected filters
+      parameters:
+        - $ref: "#/components/parameters/dashboards_countries_ids"
+        - $ref: "#/components/parameters/dashboards_commodities_ids"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/profile_only"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DashboardsCountry"
+                  meta:
+                    type: object
+                    properties:
+                      context_node_types:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                            context_id:
+                              type: integer
+                            node_type_id:
+                              type: integer
+                            column_position:
+                              type: integer
+                            country_id:
+                              type: integer
+                            commodity_id:
+                              type: integer
+                            node_type_name:
+                              type: string
+
+  /dashboards/countries/search:
+    get:
+      tags:
+        - "dashboards search"
+      summary: Countries matching selected filters with full text search
+      parameters:
+        - $ref: "#/components/parameters/query"
+        - $ref: "#/components/parameters/dashboards_countries_ids"
+        - $ref: "#/components/parameters/dashboards_commodities_ids"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DashboardsCountry"
+
+  /dashboards/sources:
+    get:
+      tags:
+        - "dashboards filters"
+      summary: Sources matching selected filters
+      parameters:
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_countries_ids"
+        - $ref: "#/components/parameters/dashboards_commodities_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/node_types_ids"
+        - $ref: "#/components/parameters/profile_only"
+        - $ref: "#/components/parameters/start_year_opt_query_param"
+        - $ref: "#/components/parameters/end_year_opt_query_param"
+        - $ref: "#/components/parameters/order_by_opt_query_param"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DashboardsSource"
+
+  /dashboards/sources/search:
+    get:
+      tags:
+        - "dashboards search"
+      summary: Sources matching selected filters with full text search
+      parameters:
+        - $ref: "#/components/parameters/query"
+        - $ref: "#/components/parameters/dashboards_countries_ids"
+        - $ref: "#/components/parameters/dashboards_commodities_ids"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/node_types_ids"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DashboardsSearchNode"
+
+  /dashboards/companies:
+    get:
+      deprecated: true
+      tags:
+        - "dashboards filters"
+      summary: Companies matching selected filters
+      parameters:
+        - $ref: "#/components/parameters/dashboards_countries_ids"
+        - $ref: "#/components/parameters/dashboards_commodities_ids"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/node_types_ids"
+        - $ref: "#/components/parameters/profile_only"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DashboardsCompany"
+
+  /dashboards/companies/search:
+    get:
+      deprecated: true
+      tags:
+        - "dashboards search"
+      summary: Companies matching selected filters with full text search
+      parameters:
+        - $ref: "#/components/parameters/query"
+        - $ref: "#/components/parameters/dashboards_countries_ids"
+        - $ref: "#/components/parameters/dashboards_commodities_ids"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/node_types_ids"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DashboardsSearchNode"
+
+  /dashboards/exporters:
+    get:
+      tags:
+        - "dashboards filters"
+      summary: Exporters matching selected filters
+      parameters:
+        - $ref: "#/components/parameters/dashboards_countries_ids"
+        - $ref: "#/components/parameters/dashboards_commodities_ids"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/node_types_ids"
+        - $ref: "#/components/parameters/profile_only"
+        - $ref: "#/components/parameters/start_year_opt_query_param"
+        - $ref: "#/components/parameters/end_year_opt_query_param"
+        - $ref: "#/components/parameters/order_by_opt_query_param"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DashboardsCompany"
+
+  /dashboards/exporters/search:
+    get:
+      tags:
+        - "dashboards search"
+      summary: Exporters matching selected filters with full text search
+      parameters:
+        - $ref: "#/components/parameters/query"
+        - $ref: "#/components/parameters/dashboards_countries_ids"
+        - $ref: "#/components/parameters/dashboards_commodities_ids"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/node_types_ids"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DashboardsSearchNode"
+
+  /dashboards/importers:
+    get:
+      tags:
+        - "dashboards filters"
+      summary: Importers matching selected filters
+      parameters:
+        - $ref: "#/components/parameters/dashboards_countries_ids"
+        - $ref: "#/components/parameters/dashboards_commodities_ids"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/node_types_ids"
+        - $ref: "#/components/parameters/profile_only"
+        - $ref: "#/components/parameters/start_year_opt_query_param"
+        - $ref: "#/components/parameters/end_year_opt_query_param"
+        - $ref: "#/components/parameters/order_by_opt_query_param"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DashboardsCompany"
+
+  /dashboards/importers/search:
+    get:
+      tags:
+        - "dashboards search"
+      summary: Importers matching selected filters with full text search
+      parameters:
+        - $ref: "#/components/parameters/query"
+        - $ref: "#/components/parameters/dashboards_countries_ids"
+        - $ref: "#/components/parameters/dashboards_commodities_ids"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/node_types_ids"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DashboardsSearchNode"
+
+  /dashboards/destinations:
+    get:
+      tags:
+        - "dashboards filters"
+      summary: Destinations matching selected filters
+      parameters:
+        - $ref: "#/components/parameters/dashboards_countries_ids"
+        - $ref: "#/components/parameters/dashboards_commodities_ids"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/node_types_ids"
+        - $ref: "#/components/parameters/start_year_opt_query_param"
+        - $ref: "#/components/parameters/end_year_opt_query_param"
+        - $ref: "#/components/parameters/order_by_opt_query_param"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DashboardsDestination"
+
+  /dashboards/destinations/search:
+    get:
+      tags:
+        - "dashboards search"
+      summary: Destinations matching selected filters with full text search
+      parameters:
+        - $ref: "#/components/parameters/query"
+        - $ref: "#/components/parameters/dashboards_countries_ids"
+        - $ref: "#/components/parameters/dashboards_commodities_ids"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/node_types_ids"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/DashboardsSearchNode"
+
+  /dashboards/filter_meta:
+    get:
+      tags:
+        - "dashboards filters"
+      summary: Meta data to render filter panel sections
+      parameters:
+        - $ref: "#/components/parameters/dashboards_countries_ids"
+        - $ref: "#/components/parameters/dashboards_commodities_ids"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        section:
+                          type: string
+                          example: 'SOURCES'
+                        tabs:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                example: 1
+                              name:
+                                type: string
+                                example: 'DEPARTMENT'
+                              profileType:
+                                type: string
+                                example: 'place'
+                              prefix:
+                                type: string
+                                example: 'imported from'
+  /dashboards/parametrised_charts:
+    get:
+      tags:
+        - "dashboards charts"
+      summary: Dynamic chart types matching selected filters
+      parameters:
+        - $ref: "#/components/parameters/dashboards_country_id"
+        - $ref: "#/components/parameters/dashboards_commodity_id"
+        - $ref: "#/components/parameters/dashboards_cont_attribute_id"
+        - $ref: "#/components/parameters/dashboards_ncont_attribute_id"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_sources_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_companies_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_exporters_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_importers_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_destinations_ids"
+        - $ref: "#/components/parameters/start_year_req_query_param"
+        - $ref: "#/components/parameters/end_year_opt_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ParametrisedChart"
+
+  /dashboards/charts/single_year_no_ncont_overview:
+    get:
+      tags:
+        - "dashboards charts"
+      summary: Data formatted for display in the overview chart for single year, no
+        non-continuous attribute selection (dynamic sentence)
+      parameters:
+        - $ref: "#/components/parameters/dashboards_country_id"
+        - $ref: "#/components/parameters/dashboards_commodity_id"
+        - $ref: "#/components/parameters/dashboards_cont_attribute_id"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_sources_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_companies_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_exporters_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_importers_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_destinations_ids"
+        - $ref: "#/components/parameters/start_year_req_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        y0:
+                          type: number
+                          example: 97464935.9917641
+                  meta:
+                    type: object
+                    properties:
+                      xAxis:
+                        $ref: "#/components/schemas/DashboardsEmptyXAxis"
+                      yAxis:
+                        $ref: "#/components/schemas/DashboardsYAxis"
+                      x:
+                        $ref: "#/components/schemas/DashboardsEmptyXLegend"
+                      y0:
+                        $ref: "#/components/schemas/DashboardsYLegend"
+                      info:
+                        $ref: "#/components/schemas/DashboardsMetaInfo"
+
+  /dashboards/charts/single_year_ncont_overview:
+    get:
+      tags:
+        - "dashboards charts"
+      summary: Data formatted for display in the overview chart for single year,
+        non-continuous attribute selection (donut chart per value of non-continuous indicator)
+      parameters:
+        - $ref: "#/components/parameters/dashboards_country_id"
+        - $ref: "#/components/parameters/dashboards_commodity_id"
+        - $ref: "#/components/parameters/dashboards_cont_attribute_id"
+        - $ref: "#/components/parameters/dashboards_mandatory_ncont_attribute_id"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_sources_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_companies_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_exporters_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_importers_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_destinations_ids"
+        - $ref: "#/components/parameters/start_year_req_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          example: 1
+                          description: Type defined in meta
+                        y0:
+                          example: 6913271.774814
+                          description: Type defined in meta
+                  meta:
+                    type: object
+                    properties:
+                      xAxis:
+                        $ref: "#/components/schemas/DashboardsNcontXAxis"
+                      yAxis:
+                        $ref: "#/components/schemas/DashboardsYAxis"
+                      x:
+                        $ref: "#/components/schemas/DashboardsNcontXLegend"
+                      y0:
+                        $ref: "#/components/schemas/DashboardsYLegend"
+                      info:
+                        $ref: "#/components/schemas/DashboardsMetaInfo"
+
+  /dashboards/charts/multi_year_no_ncont_overview:
+    get:
+      tags:
+        - "dashboards charts"
+      summary: Data formatted for display in the overview chart for multi year, no
+        non-continuous attribute selection (bar chart per year)
+      parameters:
+        - $ref: "#/components/parameters/dashboards_country_id"
+        - $ref: "#/components/parameters/dashboards_commodity_id"
+        - $ref: "#/components/parameters/dashboards_cont_attribute_id"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_sources_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_companies_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_exporters_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_importers_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_destinations_ids"
+        - $ref: "#/components/parameters/start_year_req_query_param"
+        - $ref: "#/components/parameters/end_year_req_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          example: 2014
+                          description: Type defined in meta
+                        y0:
+                          example: 86760519.9871819
+                          description: Type defined in meta
+                  meta:
+                    type: object
+                    properties:
+                      xAxis:
+                        $ref: "#/components/schemas/DashboardsYearXAxis"
+                      yAxis:
+                        $ref: "#/components/schemas/DashboardsYAxis"
+                      x:
+                        $ref: "#/components/schemas/DashboardsYearXLegend"
+                      y0:
+                        $ref: "#/components/schemas/DashboardsYLegend"
+                      info:
+                        $ref: "#/components/schemas/DashboardsMetaInfo"
+
+  /dashboards/charts/multi_year_ncont_overview:
+    get:
+      tags:
+        - "dashboards charts"
+      summary: Data formatted for display in the overview chart for multi year,
+        non-continuous attribute selection (stacked bar chart per year per value of non-continuous indicator
+      parameters:
+        - $ref: "#/components/parameters/dashboards_country_id"
+        - $ref: "#/components/parameters/dashboards_commodity_id"
+        - $ref: "#/components/parameters/dashboards_cont_attribute_id"
+        - $ref: "#/components/parameters/dashboards_mandatory_ncont_attribute_id"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_sources_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_companies_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_exporters_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_importers_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_destinations_ids"
+        - $ref: "#/components/parameters/start_year_req_query_param"
+        - $ref: "#/components/parameters/end_year_req_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          example: 2015
+                          description: Type defined in meta
+                        y0:
+                          example: 6913271.774814
+                          description: Type defined in meta
+                        y1:
+                          example: 7170873.080941
+                        y2:
+                          example: 10910119.85475
+                        y3:
+                          example: 20003570.43905
+                  meta:
+                    type: object
+                    properties:
+                      xAxis:
+                        $ref: "#/components/schemas/DashboardsNcontXAxis"
+                      yAxis:
+                        $ref: "#/components/schemas/DashboardsYAxis"
+                      x:
+                        $ref: "#/components/schemas/DashboardsNcontXLegend"
+                      y0:
+                        $ref: "#/components/schemas/DashboardsNcontYLegend"
+                      y1:
+                        allOf:
+                          - $ref: "#/components/schemas/DashboardsNcontYLegend"
+                          - type: object
+                            properties:
+                              label:
+                                type: string
+                                example: '2.0'
+                      y2:
+                        allOf:
+                          - $ref: "#/components/schemas/DashboardsNcontYLegend"
+                          - type: object
+                            properties:
+                              label:
+                                type: string
+                                example: '3.0'
+                      y3:
+                        allOf:
+                          - $ref: "#/components/schemas/DashboardsNcontYLegend"
+                          - type: object
+                            properties:
+                              label:
+                                type: string
+                                example: '4.0'
+                      y4:
+                        allOf:
+                          - $ref: "#/components/schemas/DashboardsNcontYLegend"
+                          - type: object
+                            properties:
+                              label:
+                                type: string
+                                example: '5.0'
+                      info:
+                        $ref: "#/components/schemas/DashboardsMetaInfo"
+
+  /dashboards/charts/single_year_no_ncont_node_type_view:
+    get:
+      tags:
+        - "dashboards charts"
+      summary: Data formatted for display in the chart per node, for single year, no
+        non-continuous attribute selection (horizontal bar chart)
+      parameters:
+        - $ref: "#/components/parameters/dashboards_country_id"
+        - $ref: "#/components/parameters/dashboards_commodity_id"
+        - $ref: "#/components/parameters/dashboards_cont_attribute_id"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_sources_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_companies_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_exporters_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_importers_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_destinations_ids"
+        - $ref: "#/components/parameters/dashboards_node_type_id"
+        - $ref: "#/components/parameters/start_year_req_query_param"
+        - $ref: "#/components/parameters/dashboards_top_n"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          type: string
+                          example: MATO GROSSO
+                        y0:
+                          type: number
+                          example: 27838603.8303104
+                  meta:
+                    type: object
+                    properties:
+                      xAxis:
+                        $ref: "#/components/schemas/DashboardsNodeTypeXAxis"
+                      yAxis:
+                        $ref: "#/components/schemas/DashboardsYAxis"
+                      x:
+                        $ref: "#/components/schemas/DashboardsNodeTypeXLegend"
+                      y0:
+                        $ref: "#/components/schemas/DashboardsYLegend"
+                      info:
+                        $ref: "#/components/schemas/DashboardsMetaInfo"
+
+  /dashboards/charts/single_year_ncont_node_type_view:
+    get:
+      tags:
+        - "dashboards charts"
+      summary: Data formatted for display in the chart per node, for single year,
+        non-continuous attribute selection (horizontal stacked bar chart)
+      parameters:
+        - $ref: "#/components/parameters/dashboards_country_id"
+        - $ref: "#/components/parameters/dashboards_commodity_id"
+        - $ref: "#/components/parameters/dashboards_cont_attribute_id"
+        - $ref: "#/components/parameters/dashboards_mandatory_ncont_attribute_id"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_sources_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_companies_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_exporters_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_importers_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_destinations_ids"
+        - $ref: "#/components/parameters/dashboards_node_type_id"
+        - $ref: "#/components/parameters/start_year_req_query_param"
+        - $ref: "#/components/parameters/dashboards_top_n"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          type: string
+                          example: MATO GROSSO
+                        y0:
+                          type: number
+                          example: 3495950.37088792
+                        y1:
+                          type: number
+                          example: 8460700.768103389
+                        y2:
+                          type: number
+                          example: 6286328.13158927
+                  meta:
+                    type: object
+                    properties:
+                      xAxis:
+                        $ref: "#/components/schemas/DashboardsNodeTypeXAxis"
+                      yAxis:
+                        $ref: "#/components/schemas/DashboardsYAxis"
+                      x:
+                        $ref: "#/components/schemas/DashboardsNodeTypeXLegend"
+                      y0:
+                        allOf:
+                          - $ref: "#/components/schemas/DashboardsNcontYLegend"
+                          - type: object
+                            properties:
+                              label:
+                                type: string
+                                example: 'Company commitment'
+                      y1:
+                        allOf:
+                          - $ref: "#/components/schemas/DashboardsNcontYLegend"
+                          - type: object
+                            properties:
+                              label:
+                                type: string
+                                example: 'None'
+                      y2:
+                        allOf:
+                          - $ref: "#/components/schemas/DashboardsNcontYLegend"
+                          - type: object
+                            properties:
+                              label:
+                                type: string
+                                example: 'Soy Moratorium'
+                      info:
+                        $ref: "#/components/schemas/DashboardsMetaInfo"
+
+  /dashboards/charts/multi_year_no_ncont_node_type_view:
+    get:
+      tags:
+        - "dashboards charts"
+      summary: Data formatted for display in the chart per node, for multi year,
+        no non-continuous attribute selection (stacked bar chart per year per top nodes)
+      parameters:
+        - $ref: "#/components/parameters/dashboards_country_id"
+        - $ref: "#/components/parameters/dashboards_commodity_id"
+        - $ref: "#/components/parameters/dashboards_cont_attribute_id"
+        - $ref: "#/components/parameters/dashboards_sources_ids"
+        - $ref: "#/components/parameters/dashboards_companies_ids"
+        - $ref: "#/components/parameters/dashboards_exporters_ids"
+        - $ref: "#/components/parameters/dashboards_importers_ids"
+        - $ref: "#/components/parameters/dashboards_destinations_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_sources_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_companies_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_exporters_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_importers_ids"
+        - $ref: "#/components/parameters/excluded_dashboards_destinations_ids"
+        - $ref: "#/components/parameters/dashboards_node_type_id"
+        - $ref: "#/components/parameters/start_year_req_query_param"
+        - $ref: "#/components/parameters/end_year_req_query_param"
+        - $ref: "#/components/parameters/dashboards_top_n"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          example: 2016
+                          description: Type defined in meta
+                        y0:
+                          example: 37220927.4416087
+                          description: Type defined in meta
+                        y1:
+                          example: 29212256.0995169
+                        y2:
+                          example: 29863530.4473549
+                  meta:
+                    type: object
+                    properties:
+                      xAxis:
+                        $ref: "#/components/schemas/DashboardsYearXAxis"
+                      yAxis:
+                        $ref: "#/components/schemas/DashboardsYAxis"
+                      x:
+                        $ref: "#/components/schemas/DashboardsYearXLegend"
+                      y0:
+                        allOf:
+                          - $ref: "#/components/schemas/DashboardsNcontYLegend"
+                          - type: object
+                            properties:
+                              label:
+                                type: string
+                                example: 'CERRADO'
+                      y1:
+                        allOf:
+                          - $ref: "#/components/schemas/DashboardsNcontYLegend"
+                          - type: object
+                            properties:
+                              label:
+                                type: string
+                                example: 'MATA ATLANTICA'
+                      y2:
+                        allOf:
+                          - $ref: "#/components/schemas/DashboardsNcontYLegend"
+                          - type: object
+                            properties:
+                              label:
+                                type: string
+                                example: 'OTHER'
+                      info:
+                        $ref: "#/components/schemas/DashboardsMetaInfo"
+  /dashboards/charts/single_year_node_values_overview:
+    get:
+      tags:
+        - dashboards
+        - charts
+      summary: Data formatted for display in the overview chart for single year, single node selection, attribute with node values (dynamic sentence)
+      parameters:
+        - $ref: "#/components/parameters/dashboards_country_id"
+        - $ref: "#/components/parameters/dashboards_commodity_id"
+        - $ref: "#/components/parameters/dashboards_cont_attribute_id"
+        - $ref: "#/components/parameters/node_id_req_query_param"
+        - $ref: "#/components/parameters/start_year_req_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        y0:
+                          type: number
+                          example: 17250.1
+                  meta:
+                    type: object
+                    properties:
+                      xAxis:
+                        $ref: "#/components/schemas/DashboardsEmptyXAxis"
+                      yAxis:
+                        $ref: "#/components/schemas/DashboardsYAxis"
+                      x:
+                        $ref: "#/components/schemas/DashboardsEmptyXLegend"
+                      y0:
+                        $ref: "#/components/schemas/DashboardsYLegend"
+                      info:
+                        $ref: "#/components/schemas/DashboardsMetaInfoNodeValues"
+  /dashboards/charts/multi_year_node_values_overview:
+    get:
+      tags:
+        - dashboards
+        - charts
+      summary: Data formatted for display in the overview chart for single year, single node selection, attribute with node values (dynamic sentence)
+      parameters:
+        - $ref: "#/components/parameters/dashboards_country_id"
+        - $ref: "#/components/parameters/dashboards_commodity_id"
+        - $ref: "#/components/parameters/dashboards_cont_attribute_id"
+        - $ref: "#/components/parameters/node_id_req_query_param"
+        - $ref: "#/components/parameters/start_year_req_query_param"
+        - $ref: "#/components/parameters/end_year_req_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        x:
+                          type: number
+                          example: 2017
+                        y0:
+                          type: number
+                          example: 17250.1
+                  meta:
+                    type: object
+                    properties:
+                      xAxis:
+                        $ref: "#/components/schemas/DashboardsYearXAxis"
+                      yAxis:
+                        $ref: "#/components/schemas/DashboardsYAxis"
+                      x:
+                        $ref: "#/components/schemas/DashboardsYearXLegend"
+                      y0:
+                        $ref: "#/components/schemas/DashboardsYLegend"
+                      info:
+                        $ref: "#/components/schemas/DashboardsMetaInfoNodeValues"
+servers:
+  - url: https://trase.earth/api/v3
+components:
+  parameters:
+    country_id_query_param:
+      name: country_id
+      in: query
+      description: "Country id"
+      required: false
+      schema:
+        type: integer
+    commodity_id_query_param:
+      name: commodity_id
+      in: query
+      description: "Commodity id"
+      required: false
+      schema:
+        type: integer
+    context_id_path_param:
+      name: context_id
+      in: path
+      description: "Context id"
+      required: true
+      schema:
+        type: integer
+    contexts_ids_query_param:
+      name: contexts_ids
+      in: query
+      description: "Contexts ids separated by comma"
+      required: false
+      schema:
+        type: string
+    node_id_path_param:
+      name: id
+      in: path
+      description: "Node id"
+      required: true
+      schema:
+        type: integer
+    year_opt_query_param:
+      name: year
+      in: query
+      description: Defaults to context default year
+      required: false
+      schema:
+        type: integer
+    start_year_req_query_param:
+      name: start_year
+      in: query
+      required: true
+      schema:
+        type: integer
+    start_year_opt_query_param:
+      name: start_year
+      in: query
+      required: false
+      schema:
+        type: integer
+    end_year_req_query_param:
+      name: end_year
+      in: query
+      required: true
+      schema:
+        type: integer
+    end_year_opt_query_param:
+      name: end_year
+      in: query
+      required: false
+      schema:
+        type: integer
+    order_by_opt_query_param:
+      name: order_by
+      in: query
+      required: false
+      schema:
+        type: string
+        example: volume
+    node_id_req_query_param:
+      name: node_id
+      in: query
+      description: Node id
+      required: true
+      schema:
+        type: integer
+    node_types_ids:
+      name: node_types_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    nodes_ids:
+      name: nodes_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    dashboards_country_id:
+      name: country_id
+      in: query
+      required: true
+      schema:
+        type: integer
+    dashboards_countries_ids:
+      name: countries_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    dashboards_commodity_id:
+      name: commodity_id
+      in: query
+      required: true
+      schema:
+        type: integer
+    dashboards_commodities_ids:
+      name: commodities_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    dashboards_sources_ids:
+      name: sources_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    dashboards_companies_ids:
+      deprecated: true
+      name: companies_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    dashboards_exporters_ids:
+      name: exporters_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    dashboards_importers_ids:
+      name: importers_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    dashboards_destinations_ids:
+      name: destinations_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    excluded_dashboards_sources_ids:
+      name: excluded_sources_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    excluded_dashboards_companies_ids:
+      deprecated: true
+      name: excluded_companies_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    excluded_dashboards_exporters_ids:
+      name: excluded_exporters_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    excluded_dashboards_importers_ids:
+      name: excluded_importers_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    excluded_dashboards_destinations_ids:
+      name: excluded_destinations_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    dashboards_attribute_id:
+      name: attribute_id
+      in: query
+      description: Attribute id
+      required: false
+      schema:
+        type: integer
+    dashboards_cont_attribute_id:
+      name: cont_attribute_id
+      in: query
+      description: Continuous attribute id
+      required: true
+      schema:
+        type: integer
+    dashboards_ncont_attribute_id:
+      name: ncont_attribute_id
+      in: query
+      description: Non-continuous attribute id
+      required: false
+      schema:
+        type: integer
+    dashboards_mandatory_ncont_attribute_id:
+      name: ncont_attribute_id
+      in: query
+      description: Non-continuous attribute id
+      required: true
+      schema:
+        type: integer
+    dashboards_node_type_id:
+      name: node_type_id
+      in: query
+      description: Node type id
+      required: true
+      schema:
+        type: integer
+    dashboards_top_n:
+      name: top_n
+      in: query
+      description: Number of top nodes
+      required: false
+      schema:
+        type: integer
+    profile_only:
+      name: profile_only
+      in: query
+      description: Only include results with nodes that have profiles
+      required: false
+      schema:
+        type: boolean
+    page:
+      name: page
+      in: query
+      description: Number of page for paginated responses
+      required: false
+      schema:
+        type: integer
+    per_page:
+      name: per_page
+      in: query
+      description: Number of iterms per page
+      required: false
+      schema:
+        type: integer
+    query:
+      name: q
+      in: query
+      description: String with comma-separated numeric ids
+      required: true
+      schema:
+        type: string
+    commodities_ids:
+      name: commodities_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    countries_ids:
+      name: countries_ids
+      in: query
+      description: String with comma-separated numeric ids
+      required: false
+      schema:
+        type: string
+    include:
+      name: include
+      in: query
+      description: String with comma-separated list of included information
+      required: false
+      schema:
+        type: string
+  schemas:
+    Context:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        isDefault:
+          type: boolean
+        isDisabled:
+          type: boolean
+        years:
+          type: array
+          items:
+            type: integer
+        defaultYear:
+          type: integer
+        countryId:
+          type: integer
+        commodityId:
+          type: integer
+        countryName:
+          type: string
+        commodityName:
+          type: string
+        defaultBasemap:
+          type: string
+        defaultContextLayers:
+          type: array
+          items:
+            type: string
+        defaultColumns:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 3
+              group:
+                type: integer
+                example: 0
+        map:
+          type: object
+          properties:
+            latitude:
+              type: number
+            longitude:
+              type: number
+            zoom:
+              type: integer
+        worldMap:
+          type: object
+          properties:
+            mapColumnId:
+              type: integer
+              description: Id of column to use as parameter to top nodes for top
+                destination countries (world map)
+            listColumnId:
+              type: integer
+              description: Id of column to use as parameter to top nodes for top exporters
+                (world map - list)
+        recolorBy:
+          type: array
+          items:
+            $ref: "#/components/schemas/RecolorBy"
+        resizeBy:
+          type: array
+          items:
+            $ref: "#/components/schemas/ResizeBy"
+        filterBy:
+          type: array
+          items:
+            $ref: "#/components/schemas/FilterBy"
+    RecolorBy:
+      type: object
+      properties:
+        isDefault:
+          type: boolean
+        isDisabled:
+          type: boolean
+        groupNumber:
+          type: integer
+        position:
+          type: integer
+        legendType:
+          type: string
+        legendColorTheme:
+          type: string
+        intervalCount":
+          type: integer
+        minValue:
+          type: string
+        maxValue:
+          type: string
+        divisor:
+          type: number
+        type:
+          type: string
+          enum:
+            - ind
+            - qual
+            - quant
+        name:
+          type: string
+        years:
+          type: array
+          items:
+            type: integer
+        label:
+          type: string
+        description:
+          type: string
+        nodes:
+          type: array
+          items:
+            type: string
+    ResizeBy:
+      type: object
+      properties:
+        isDefault:
+          type: boolean
+        isDisabled:
+          type: boolean
+        groupNumber:
+          type: integer
+        position:
+          type: integer
+        name:
+          type: string
+        years:
+          type: array
+          items:
+            type: integer
+        label:
+          type: string
+        description:
+          type: string
+    FilterBy:
+      type: object
+      properties:
+        name:
+          type: string
+        nodes:
+          type: array
+          items:
+            type: object
+            properties:
+              nodeId:
+                type: integer
+              name:
+                type: string
+              geoId:
+                type: string
+
+    Column:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              name:
+                type: string
+              position:
+                type: string
+              group:
+                type: string
+              role:
+                type: string
+              isDefault:
+                type: boolean
+              isGeo:
+                type: boolean
+              isChoroplethDisabled:
+                type: boolean
+              profileType:
+                type: string
+              filterTo:
+                type: integer
+
+    MapGroup:
+      type: object
+      properties:
+        dimensionGroups:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                format: int64
+              name:
+                type: string
+        dimensions:
+          type: array
+          items:
+            $ref: "#/components/schemas/Dimension"
+        contextualLayers:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              title:
+                type: string
+              identifier:
+                type: string
+                example: landcover
+              tooltipText:
+                type: string
+              isDefault:
+                type: boolean
+              legend:
+                type: string
+              cartoLayers:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    identifier:
+                      type: string
+                      example: landcover2015
+                    years:
+                      type: array
+                      items:
+                        type: integer
+                    rasterUrl:
+                      type: string
+    Dimension:
+      type: object
+      properties:
+        aggregateMethod:
+          type: string
+        dual_layer_buckets:
+          type: array
+          items:
+            type: number
+            format: float
+        single_layer_buckets:
+          type: array
+          items:
+            type: number
+            format: float
+        colorScale:
+          type: string
+        description:
+          type: string
+        id:
+          type: integer
+          format: int64
+        is_default:
+          type: boolean
+        layerAttributeId:
+          type: integer
+          format: int64
+        name:
+          type: string
+        unit:
+          type: string
+        years:
+          type: array
+          items:
+            type: integer
+
+    DownloadAttribute:
+      type: object
+      properties:
+        name:
+          type: string
+        unit:
+          type: string
+        unitType:
+          type: string
+        frontendName:
+          type: string
+        indicatorType:
+          type: string
+          enum:
+            - Ind
+            - Qual
+            - Quant
+        years:
+          type: array
+          items:
+            type: integer
+          description: null when all years
+        filterOptions:
+          type: object
+          properties:
+            ops:
+              type: array
+              items:
+                type: string
+                enum:
+                  - eq
+                  - gt
+                  - lt
+              description: Operators available for advanced filter
+            values:
+              type: array
+              items:
+                type: string
+              description: For quals, enumeration of possible values
+
+    FlowResult:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              path:
+                type: array
+                description: Array of node ids
+                items:
+                  type: integer
+              quant:
+                type: number
+              ind:
+                type: number
+              qual:
+                type: string
+              height:
+                type: number
+        include:
+          type: object
+          properties:
+            nodeHeights:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  height:
+                    type: number
+                  quant:
+                    type: number
+
+    TopNodes:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            context_id:
+              type: integer
+            indicator:
+              type: string
+              description: e.g. Trade volume
+            unit:
+              type: string
+              description: e.g. Tn
+            target_nods:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  height:
+                    type: number
+                  value:
+                    type: number
+
+    NodesStats:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              context_id:
+                type: integer
+              commodity_id:
+                type: integer
+              top_nodes:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    geo_id:
+                      type: string
+                    attribute:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+                        unit:
+                          type: string
+                        value:
+                          type: number
+                        height:
+                          type: number
+                    other_attributes:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          name:
+                            type: string
+                          unit:
+                            type: string
+                          value:
+                            type: number
+                          height:
+                            type: number
+
+    SankeyCardLinks:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+              host:
+                type: string
+              link:
+                type: string
+              query_params:
+                type: object
+                properties:
+                  selectedCountryId:
+                    type: integer
+                  selectedCommodityId:
+                    type: integer
+                  selectedContextId:
+                    type: integer
+                  selectedResizeBy:
+                    type: integer
+                  selectedRecolorBy:
+                    type: integer
+                  selectedYears:
+                    type: array
+                    items:
+                      type: integer
+                  selectedColumnsIds:
+                    type: string
+                  selectedNodesIds:
+                    type: array
+                    items:
+                      type: integer
+                  selectedBiomeFilterName:
+                    type: string
+              commodity_id:
+                type: integer
+              country_id:
+                type: integer
+        meta:
+          type: object
+          properties:
+            nodes:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  node_type_id:
+                    type: integer
+            columns:
+              type: object
+              # In normal JSON Schema you could use patternProperties for dynamic object keys, but OpenAPI forbids it
+
+    Node:
+      type: object
+      properties:
+        id:
+          type: integer
+        mainNodeId:
+          type: integer
+        name:
+          type: string
+        type:
+          type: string
+          description: e.g. BIOME
+        columnId:
+          type: integer
+          description: node type id
+        geoId:
+          type: string
+          description: e.g. BR for Brazil (country), BR1 for Amazonia (biome), BR5107925
+            for Sorriso (municipality), can be null
+        isDomesticConsumption:
+          type: boolean
+        isUnknown:
+          type: boolean
+        profileType:
+          type: string
+          description: actor or place
+        isAggregated:
+          type: boolean
+          description: true for OTHER nodes
+
+    NodeAttribute:
+      type: object
+      properties:
+        node_id:
+          type: integer
+          format: int64
+        attribute_id:
+          type: integer
+          format: int64
+        attribute_type:
+          type: string
+          enum:
+            - ind
+            - qual
+            - quant
+        value:
+          type: number
+        dual_layer_bucket:
+          type: integer
+        single_layer_bucket:
+          type: integer
+
+    LinkedNode:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+
+    ProfileMetadata:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        main_topojson_path:
+          type: string
+        main_topojson_root:
+          type: string
+        adm_1_name:
+          type: string
+        adm_1_topojson_path:
+          type: string
+        adm_1_topojson_root:
+          type: string
+        adm_2_name:
+          type: string
+        adm_2_topojson_path:
+          type: string
+        adm_2_topojson_root:
+          type: string
+        context_node_type:
+          type: object
+          properties:
+            id:
+              type: integer
+            context_id:
+              type: integer
+            node_type_id:
+              type: integer
+            column_position:
+              type: integer
+            column_group:
+              type: integer
+            prefix:
+              type: string
+              example: "imported by"
+            role:
+              type: string
+              example: "importer"
+        charts:
+          type: array
+          items:
+            $ref: "#/components/schemas/Chart"
+        available_years:
+          type: array
+          items:
+            type: integer
+    Chart:
+      type: object
+      properties:
+        id:
+          type: integer
+        chart_type:
+          type: string
+          example: tabs_table
+        identifier:
+          type: string
+          example: actor_sustainability_table
+        title:
+          type: string
+          example: Deforestation risk associated with top sourcing regions
+        position:
+          type: integer
+        charts:
+          type: array
+          items:
+            $ref: "#/components/schemas/Chart"
+
+    ActorBasicAttributes:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            node_name:
+              type: string
+            column_name:
+              type: string
+            country_name:
+              type: string
+            country_geo_id:
+              type: string
+            zero_deforestation_link:
+              type: string
+            supply_change_link:
+              type: string
+            rtrs_member:
+              type: string
+            zero_deforestation:
+              type: string
+            supply_change:
+              type: string
+            soy_:
+              type: number
+            forest_500:
+              type: number
+            summary:
+              type: string
+            header_attributes:
+              type: object
+              properties:
+                zero_deforestation:
+                  type: object
+                  properties:
+                    value:
+                      type: string
+                    name:
+                      type: string
+                    unit:
+                      type: string
+                    tooltip:
+                      type: string
+                forest_500:
+                  type: object
+                  properties:
+                    value:
+                      type: string
+                    name:
+                      type: string
+                    unit:
+                      type: string
+                    tooltip:
+                      type: string
+    ActorTopCountries:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            title:
+              type: string
+              example: "Top destination countries of {{commodity_name}} exported by {{company_name}} in {{year}}"
+            legend_title:
+              type: string
+              example: "{{commodity_name}} exported in {{year}}"
+            included_years:
+              type: array
+              items:
+                type: integer
+            buckets:
+              type: array
+              items:
+                type: integer
+            lines:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  geo_id:
+                    type: string
+                  values:
+                    type: array
+                    items:
+                      type: number
+                  value9:
+                    type: number
+            unit:
+              type: string
+            style:
+              type: object
+              properties:
+                type:
+                  type: string
+                style:
+                  type: string
+    ActorTopSources:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            title:
+              type: string
+              example: "Top sourcing regions of {{commodity_name}} exported by {{company_name}} in {{year}}"
+            legend_title:
+              type: string
+              example: "{{commodity_name}} exported in $year$"
+            included_years:
+              type: array
+              items:
+                type: integer
+            buckets:
+              type: array
+              items:
+                type: integer
+            municipality:
+              type: object
+              properties:
+                lines:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      geo_id:
+                        type: string
+                      values:
+                        type: array
+                        items:
+                          type: number
+                      value9:
+                        type: number
+                unit:
+                  type: string
+                style:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    style:
+                      type: string
+            biome:
+              type: object
+              properties:
+                lines:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      geo_id:
+                        type: string
+                      values:
+                        type: array
+                        items:
+                          type: number
+                      value9:
+                        type: number
+                unit:
+                  type: string
+                style:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    style:
+                      type: string
+            state:
+              type: object
+              properties:
+                lines:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      geo_id:
+                        type: string
+                      values:
+                        type: array
+                        items:
+                          type: number
+                      value9:
+                        type: number
+                unit:
+                  type: string
+                style:
+                  type: object
+                  properties:
+                    type:
+                      type: string
+                    style:
+                      type: string
+    ActorSustainability:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              profile:
+                type: boolean
+              included_columns:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    unit:
+                      type: string
+                    tooltip:
+                      type: string
+              rows:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    values:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                          value:
+                            type: string
+    ActorExportingCompanies:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            dimension_y:
+              type: object
+              properties:
+                name:
+                  type: string
+                unit:
+                  type: string
+            dimensions_x:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  unit:
+                    type: string
+            companies:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  id:
+                    type: integer
+                  y:
+                    type: number
+                  x:
+                    type: array
+                    items:
+                      type: number
+
+    PlaceBasicAttributes:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            column_name:
+              type: string
+              description: e.g. MUNICIPALITY
+            country_name:
+              type: string
+            country_geo_id:
+              type: string
+              description: e.g. BR
+            summary:
+              type: string
+            municipality_name:
+              type: string
+            municipality_geo_id:
+              type: string
+            state_name:
+              type: string
+            state_geo_id:
+              type: string
+            biome_name:
+              type: string
+            biome_geo_id:
+              type: string
+            area:
+              type: number
+            commodity_production:
+              type: number
+            commodity_area:
+              type: string
+            header_attributes:
+              type: object
+              properties:
+                area:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    value:
+                      type: string
+                    unit:
+                      type: string
+                    tooltip:
+                      type: string
+                commodity_area:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    value:
+                      type: string
+                    unit:
+                      type: string
+                    tooltip:
+                      type: string
+                commodity_production:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    value:
+                      type: string
+                    unit:
+                      type: string
+                    tooltip:
+                      type: string
+    PlaceTopConsumerActors:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            name:
+              type: string
+            indicators:
+              type: string
+            unit:
+              type: string
+            targetNodes:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  height:
+                    type: number
+                  value:
+                    type: number
+                  is_domestic_consumption:
+                    type: boolean
+    PlaceTopConsumerCountries:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            name:
+              type: string
+            indicators:
+              type: string
+            unit:
+              type: string
+            targetNodes:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  height:
+                    type: number
+                  value:
+                    type: number
+                  is_domestic_consumption:
+                    type: boolean
+    PlaceIndicators:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              included_columns:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    unit:
+                      type: string
+                    tooltip:
+                      type: string
+              rows:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    have_unit:
+                      type: boolean
+                    values:
+                      type: array
+                      items:
+                        type: number
+    PlaceTrajectoryDeforestation:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            included_years:
+              type: array
+              items:
+                type: integer
+            unit:
+              type: string
+            lines:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  legend_name:
+                    type: string
+                  legend_tooltip:
+                    type: string
+                  type:
+                    type: string
+                  style:
+                    type: string
+                  values:
+                    type: array
+                    items:
+                      type: number
+    DashboardsCommodity:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    DashboardsCountry:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    DashboardsSource:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        nodeType:
+          type: string
+    DashboardsCompany:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        nodeType:
+          type: string
+        countryId:
+          type: integer
+    DashboardsDestination:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        nodeType:
+          type: string
+    DashboardsSearchNode:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        nodeTypeId:
+          type: integer
+        nodeType:
+          type: string
+        countryId:
+          type: integer
+    ParametrisedChart:
+      type: object
+      properties:
+        type:
+          type: string
+          example: stacked_bar_chart
+        url:
+          type: string
+    DashboardsEmptyXAxis:
+      type: object
+    DashboardsNcontXAxis:
+      type: object
+      properties:
+        type:
+          type: string
+          example: category
+        label:
+          type: string
+          example: Forest 500 score
+        prefix:
+          type: string
+          example: ""
+          description: not used
+        format:
+          type: string
+          example: ""
+          description: not used
+        suffix:
+          type: string
+          example: /5
+    DashboardsNodeTypeXAxis:
+      type: object
+      properties:
+        type:
+          type: string
+          example: category
+        label:
+          type: string
+          example: STATE
+        prefix:
+          type: string
+          example: ""
+          description: not used
+        format:
+          type: string
+          example: ""
+          description: not used
+        suffix:
+          type: string
+          example: ""
+          description: not used
+    DashboardsYearXAxis:
+      type: object
+      properties:
+        type:
+          type: string
+          example: category
+        label:
+          type: string
+          example: Year
+        prefix:
+          type: string
+          example: ""
+          description: not used
+        format:
+          type: string
+          example: ""
+          description: not used
+        suffix:
+          type: string
+          example: ""
+          description: not used
+    DashboardsYAxis:
+      type: object
+      properties:
+        type:
+          type: string
+          example: numeric
+        label:
+          type: string
+          example: Trade Volume
+        prefix:
+          type: string
+          example: ""
+          description: not used
+        format:
+          type: string
+          example: ""
+          description: not used
+        suffix:
+          type: string
+          example: t
+    DashboardsEmptyXLegend:
+      type: object
+    DashboardsNcontXLegend:
+      type: object
+      properties:
+        type:
+          type: string
+          example: category
+        label:
+          type: string
+          example: Forest 500 score
+        tooltip:
+          type: object
+          properties:
+            prefix:
+              type: string
+              example: ""
+              description: not used
+            format:
+              type: string
+              example: ""
+              description: not used
+            suffix:
+              example: /5
+              type: string
+    DashboardsNodeTypeXLegend:
+      type: object
+      properties:
+        type:
+          type: string
+          example: category
+        label:
+          type: string
+          example: STATE
+        tooltip:
+          type: object
+          properties:
+            prefix:
+              type: string
+              example: ""
+              description: not used
+            format:
+              type: string
+              example: ""
+              description: not used
+            suffix:
+              type: string
+              example: ""
+              description: not used
+    DashboardsYearXLegend:
+      type: object
+      properties:
+        label:
+          type: string
+          example: Year
+        tooltip:
+          type: object
+          properties:
+            prefix:
+              type: string
+              example: ""
+              description: not used
+            format:
+              type: string
+              example: ""
+              description: not used
+            suffix:
+              example: ""
+              type: string
+              description: not used
+    DashboardsYLegend:
+      type: object
+      properties:
+        label:
+          type: string
+          example: Trade Volume
+        tooltip:
+          type: object
+          properties:
+            prefix:
+              type: string
+              example: ""
+              description: not used
+            format:
+              type: string
+              example: ""
+              description: not used
+            suffix:
+              example: t
+              type: string
+    DashboardsNcontYLegend:
+      type: object
+      properties:
+        label:
+          type: string
+          example: "1.0"
+        tooltip:
+          type: object
+          properties:
+            prefix:
+              type: string
+              example: ""
+              description: not used
+            format:
+              type: string
+              example: ""
+              description: not used
+            suffix:
+              type: string
+              example: "t"
+              description: Same unit as in yAxis
+    DashboardsMetaInfo:
+      type: object
+      properties:
+        node_type:
+          type: integer
+          example: 1
+          nullable: true
+        years:
+          type: object
+          properties:
+            start_year:
+              type: integer
+              example: 2016
+            end_year:
+              type: integer
+              example: 2017
+        top_n:
+          type: integer
+          example: null
+          nullable: true
+        filter:
+          type: object
+          properties:
+            cont_attribute:
+              type: string
+              example: 'Trade volume'
+            ncont_attribute:
+              type: string
+              example: 'Forest 500 score'
+            sources:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  node_type_id:
+                    type: integer
+                  node_type:
+                    type: string
+                  profile:
+                    type: string
+                    example: 'place'
+                    nullable: true
+                    description: 'place or null'
+            companies:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  node_type_id:
+                    type: integer
+                  node_type:
+                    type: string
+                  profile:
+                    type: string
+                    example: 'actor'
+                    nullable: true
+                    description: 'actor or null'
+            destinations:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  node_type_id:
+                    type: integer
+                  node_type:
+                    type: string
+                  profile:
+                    type: string
+                    example: 'null'
+                    nullable: true
+            excluded_sources:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  node_type_id:
+                    type: integer
+                  node_type:
+                    type: string
+                  profile:
+                    type: string
+                    example: 'place'
+                    nullable: true
+                    description: 'place or null'
+            excluded_companies:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  node_type_id:
+                    type: integer
+                  node_type:
+                    type: string
+                  profile:
+                    type: string
+                    example: 'actor'
+                    nullable: true
+                    description: 'actor or null'
+            excluded_destinations:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  node_type_id:
+                    type: integer
+                  node_type:
+                    type: string
+                  profile:
+                    type: string
+                    example: 'null'
+                    nullable: true
+        single_filter_key:
+          type: string
+          example: 'destinations'
+          nullable: true
+          description: 'one of [sources|companies|destinations] or null'
+
+    DashboardsMetaInfoNodeValues:
+      type: object
+      properties:
+        years:
+          type: object
+          properties:
+            start_year:
+              type: integer
+              example: 2017
+            end_year:
+              type: integer
+              example: 2017
+        temporal:
+          type: boolean
+          example: false
+          description: 'if false, attribute does not have values per year'
+        filter:
+          type: object
+          properties:
+            cont_attribute:
+              type: string
+              example: 'Trade volume'
+            node:
+              type: object
+              properties:
+                id:
+                  type: integer
+                name:
+                  type: string
+                node_type_id:
+                  type: integer
+                node_type:
+                  type: string
+                profile:
+                  type: string
+                  example: 'place'
+                  nullable: true
+                  description: 'place or null'
+    CountriesFromContexts:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        countryIds:
+          type: array
+          items:
+            type: integer
+
+    CommoditiesFromContexts:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        commodityIds:
+          type: array
+          items:
+            type: integer
+    CommoditiesFromCountries:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+          name:
+            type: string
+    CountriesFromCommodities:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+          name:
+            type: string

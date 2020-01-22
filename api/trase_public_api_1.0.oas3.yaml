@@ -1,0 +1,943 @@
+openapi: 3.0.0
+info:
+  title: Trase Public API
+  version: "1.0"
+  contact:
+    name: Trase Public API
+    url: https://trase.earth/
+    email: info@trase.earth
+  description: >-
+    This is a first version of the public API for [Trase](https://trase.earth/).
+
+
+    # Introduction
+
+
+    The Trase Public API allows to access trade flows data of forest risk commodities.
+
+
+    # Entities
+
+
+    The API will expose the following entities present in Trase:
+
+    1. attributes: quantitative and qualitative attributes (indicators)
+
+    2. commodities: forest risk commodities
+
+    3. countries: source countries for commodities
+
+    4. flows: models the list of nodes in a supply chain (path) from source to destination
+
+    5. nodes: entities participating in the supply chain. Each has a "node type", e.g. MUNICIPALITY, EXPORTER, but they are also grouped in the system by a more generic "role":
+      a. sources: source nodes, such as municipalities in Brazil or departments in Paraguay
+      b. traders: exporters / importers of commodities
+      c. destinations: destination nodes, such as importing countries
+    6. node types: the roles of nodes at particular positions in supply chains per country / commodity combination
+
+
+    # Discovering node identifiers
+
+
+    We assume one of the typical scenarios is one where the point of entry into the data will be a source, an exporter, an importer or a destination. All of these entities are nodes, but int Trase we group them by "role" in the supply chain.
+
+
+    In the first step, users would use the sources / exporters / importers / destinations endpoints, which allow to discover the identifiers of entities by searching by name and existing natural identifiers (e.g. iso code). For now we need to work around the fact that nodes in the system don't have standardised identifiers, which would allow to skip this step.
+
+
+    Those endpoints will also allow to discover the availability of indicators. Then in the next step users can use those identifiers to pull data for a particular node.
+
+
+    # Retrieving attribute values
+
+
+    It is possible to retrieve full flows data using the flows endpoint.
+
+
+    It is also possible to retrieve data filtered by a particular node, which includes both values of attributes for flows in which the node participates (flow attributes), as well as values of some attributes which are not calculated from flows (node attributes).
+
+
+    # Sample usage - retrieving flow data for country / commodity
+
+
+    Use the commodities endpoint to discover identifiers of available commodities. You can also at the same time retrieve ids of countries from which the commodities are sourced.
+
+
+    /api/public/commodities?include=countries
+
+
+    Countries can be retireved using the countries endpoint.
+
+
+    Now using the attributes endpoint, find out what sttributes are available for Brazil beef:
+
+
+    /api/public/attributes?commodity=BEEF&country=BR
+
+
+    Volume data is available for years 2015-2017. Request flows data for 2016-2017:
+
+
+    /api/public/flows?commodity=BEEF&country=BR&start_year=2016&end_year=2017&page=1
+
+
+    Data is paginated.
+
+
+    # Sample usage - retrieving data about a node
+
+
+    Discover the identifier of the sourcing place.
+
+
+    /api/public/nodes/sources?country=BR&commodity=BEEF&name=SORRISO
+
+
+    Data is available for years 2003-2017. Request data for 2017:
+
+
+    /api/public/nodes/{id of SORRISO}/data?year=2017
+paths:
+  /nodes: {}
+  /countries:
+    get:
+      responses:
+        "200":
+          description: ""
+          content:
+            text/html; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/country"
+            application/json:
+              examples:
+                response:
+                  value:
+                    - id: 1
+                      name: BRAZIL
+                      iso: BR
+                      commodities:
+                        - {}
+                        - {}
+                        - {}
+                        - {}
+                        - {}
+      summary: List of sourcing countries
+      description: >
+        List of all sourcing countries in the system. Optionally include
+        commodities sourced from these countries.
+      parameters:
+        - in: query
+          name: commodities_ids
+          description: Comma-separated list of numeric commodity ids.
+          schema:
+            type: string
+        - in: query
+          name: include
+          description: Comma-separated list of nested associations to include, e.g.
+            "commodities".
+          schema:
+            type: string
+  /commodities:
+    get:
+      responses:
+        "200":
+          description: ""
+          content:
+            text/html; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/commodity"
+            application/json:
+              examples:
+                response:
+                  value:
+                    - name: SOY
+                      id: 1
+                      countries:
+                        - {}
+                        - {}
+                        - {}
+                        - {}
+                        - {}
+                    - name: SOY
+                      id: 1
+                      countries:
+                        - {}
+                        - {}
+                    - name: SOY
+                      id: 1
+                      countries:
+                        - {}
+                        - {}
+                    - name: SOY
+                      id: 1
+                      countries:
+                        - {}
+                        - {}
+                        - {}
+      summary: List of commodities
+      description: List of all commodities in the system. Optionally include countries from
+        which commodities are sourced.
+      parameters:
+        - in: query
+          name: countries_ids
+          description: Comma-separated list of numeric country ids
+          schema:
+            type: string
+        - in: query
+          name: include
+          description: 'Comma-separated list of nested associations to include, eg:
+            "countries"'
+          schema:
+            type: string
+  /nodes/sources:
+    get:
+      responses:
+        "200":
+          description: ""
+          content:
+            text/html; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/place"
+      parameters:
+        - $ref: "#/components/parameters/country_opt"
+        - $ref: "#/components/parameters/commodity_opt"
+        - $ref: "#/components/parameters/geo_id"
+        - $ref: "#/components/parameters/node_type"
+        - $ref: "#/components/parameters/name_prefix"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      description: "List of commodity sourcing places, which can be nodes of different node type (possible to filter down by node type) depending on the supply chain (path) definition in a given country - commodity combination."
+      summary: List of commodity sourcing places
+  /nodes/destinations:
+    get:
+      responses:
+        "200":
+          description: ""
+          content:
+            text/html; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/place"
+      description: "List of commodity destination places, which can be nodes of different node type (possible to filter down by node type) depending on the supply chain (path) definition in a given country - commodity combination."
+      summary: List of commodity destination places
+      parameters:
+        - $ref: "#/components/parameters/commodity_opt"
+        - $ref: "#/components/parameters/country_opt"
+        - $ref: "#/components/parameters/geo_id"
+        - $ref: "#/components/parameters/node_type"
+        - $ref: "#/components/parameters/name_prefix"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+  /nodes/exporters:
+    get:
+      responses:
+        "200":
+          description: ""
+          content:
+            text/html; charset=utf-8:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/trader"
+      description: "List of commodity exporting traders, which can be nodes of different node type (possible to filter down by node type) depending on the supply chain (path) definition in a given country - commodity combination."
+      summary: List of commodity exporters
+      parameters:
+        - $ref: "#/components/parameters/commodity_opt"
+        - $ref: "#/components/parameters/country_opt"
+        - $ref: "#/components/parameters/node_type"
+        - $ref: "#/components/parameters/name_prefix"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+  /nodes/importers:
+    get:
+      responses:
+        "200":
+          description: ""
+          content:
+            text/html; charset=utf-8:
+              schema:
+                type: object
+                properties: {}
+      description: "List of commodity importing traders, which can be nodes of different node type (possible to filter down by node type) depending on the supply chain (path) definition in a given country - commodity combination."
+      summary: List of commodity importers
+      parameters:
+        - $ref: "#/components/parameters/commodity_opt"
+        - $ref: "#/components/parameters/country_opt"
+        - $ref: "#/components/parameters/node_type"
+        - $ref: "#/components/parameters/name_prefix"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+  /attributes:
+    get:
+      responses:
+        "200":
+          description: ""
+          content:
+            text/html; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/attribute"
+                required:
+                  - data
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                      - id: 444
+                        name: SOY_DEFORESTATION_5_YEAR
+                        displayName: Soy deforestation risk (5 years)
+                        unit: ha
+                        unitType: area
+                        availability:
+                          - country: BR
+                            commodity: SOY
+                            years:
+                              - 2006
+                              - 2007
+                              - 2008
+                              - 2009
+                              - 2010
+                              - 2011
+                              - 2012
+                              - 2013
+                              - 2014
+                              - 2015
+                              - 2016
+                              - 2017
+                      - id: 36
+                        name: CIF
+                        displayName: null
+                        unit: USD
+                        unitType: currency
+                        availability:
+                          - country: AR
+                            commodity: SOY
+                            years:
+                              - 2013
+                              - 2014
+                              - 2015
+                              - 2016
+                              - 2017
+                          - country: EC
+                            commodity: SHRIMP
+                            years:
+                              - 2013
+                              - 2014
+                              - 2015
+                              - 2016
+                              - 2017
+                          - country: CO
+                            commodity: COFFEE
+                            years:
+                              - 2013
+                              - 2014
+                              - 2015
+                              - 2016
+                              - 2017
+                          - country: BO
+                            commodity: SOY
+                            years:
+                              - 2013
+                              - 2014
+                              - 2015
+                              - 2016
+                              - 2017
+                          - country: CO
+                            commodity: WOOD PULP
+                            years:
+                              - 2013
+                              - 2014
+                              - 2015
+                              - 2016
+                              - 2017
+                          - country: CO
+                            commodity: SHRIMP
+                            years:
+                              - 2013
+                              - 2014
+                              - 2015
+                              - 2016
+                              - 2017
+                          - country: CO
+                            commodity: COCOA
+                            years:
+                              - 2013
+                              - 2014
+                              - 2015
+                              - 2016
+                              - 2017
+                          - country: CO
+                            commodity: BEEF
+                            years:
+                              - 2013
+                              - 2014
+                              - 2015
+                              - 2016
+                              - 2017
+                          - country: CO
+                            commodity: CRUDE PALM OIL
+                            years:
+                              - 2013
+                              - 2014
+                              - 2015
+                              - 2016
+                              - 2017
+                          - country: CO
+                            commodity: PALM KERNEL
+                            years:
+                              - 2013
+                              - 2014
+                              - 2015
+                              - 2016
+                              - 2017
+                          - country: AR
+                            commodity: CORN
+                            years:
+                              - 2013
+                              - 2014
+                              - 2015
+                              - 2016
+                              - 2017
+                          - country: AR
+                            commodity: COTTON
+                            years:
+                              - 2013
+                              - 2014
+                              - 2015
+                              - 2016
+                              - 2017
+                          - country: AR
+                            commodity: WOOD PULP
+                            years:
+                              - 2013
+                              - 2014
+                              - 2015
+                              - 2016
+                              - 2017
+      summary: "List of all attributes in the system. Optionally include:"
+      parameters:
+        - $ref: "#/components/parameters/country_opt"
+        - $ref: "#/components/parameters/commodity_opt"
+      description: List of attributes (indicators), with their ids, names, display names,
+        units and availability for country / commodity combinations in different
+        years.
+  "/nodes/{id}/data":
+    get:
+      responses:
+        "200":
+          description: ""
+          content:
+            text/html; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    required:
+                      - name
+                      - nodeType
+                      - geoId
+                      - availability
+                      - flowAttributes
+                      - nodeAttributes
+                    properties:
+                      name:
+                        type: string
+                      nodeType:
+                        type: string
+                      geoId:
+                        type: string
+                      unit:
+                        type: string
+                      availability:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/availability"
+                      flowAttributes:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            commodity:
+                              type: string
+                            country:
+                              type: string
+                            flowId:
+                              type: integer
+                            values:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                  value:
+                                    type: number
+                                  year:
+                                    type: integer
+                                required:
+                                  - id
+                                  - value
+                                  - year
+                          required:
+                            - commodity
+                            - country
+                            - values
+                      nodeAttributes:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            commodity:
+                              type: string
+                            country:
+                              type: string
+                            values:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                  year:
+                                    type: integer
+                                  value:
+                                    type: number
+                                required:
+                                  - id
+                                  - year
+                                  - value
+                          required:
+                            - commodity
+                            - country
+                            - values
+                required:
+                  - data
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                      name: ALTO ALEGRE DOS PARECIS
+                      nodeType: MUNICIPALITY
+                      geoId: BR-1100379
+                      availability:
+                        - years:
+                            - 2012
+                            - 2013
+                            - 2014
+                            - 2015
+                            - 2016
+                            - 2017
+                          country: BR
+                          commodity: SOY
+                      nodeAttributes:
+                        - values:
+                            - id: 95
+                              year: 2017
+                              value: 0
+                            - id: 80
+                              year: 2017
+                              value: 937.29
+                            - id: 33
+                              year: 2017
+                              value: 2981
+                            - id: 89
+                              year: 2017
+                              value: 0
+                          country: BR
+                          commodity: SOY
+                      flowAttributes:
+                        - values:
+                            - id: 1
+                              year: 2017
+                              value: 502.2964572384
+                            - id: 2
+                              year: 2017
+                              value: 214450.449453362
+                            - id: 33
+                              year: 2017
+                              value: 105.217106928182
+                          country: BR
+                          flowId: 54131240
+                          commodity: SOY
+      summary: Node properties and attribute values
+      parameters:
+        - name: id
+          in: path
+          description: Id of the node
+          required: true
+          schema:
+            type: string
+        - $ref: "#/components/parameters/year_req"
+      description: Information about a node, including name, node type and geo id. It also
+        includes the availability for country / commodity combinations in
+        different years and node and flow attributes.
+  /flows:
+    get:
+      responses:
+        "200":
+          description: ""
+          content:
+            text/html; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        year:
+                          type: integer
+                        path:
+                          type: array
+                          items:
+                            type: integer
+                        flowAttributes:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              attributeId:
+                                type: integer
+                              value:
+                                oneOf:
+                                  - type: string
+                                  - type: number
+                            required:
+                              - value
+                      required:
+                        - year
+                        - path
+                required:
+                  - data
+            application/json:
+              examples:
+                response:
+                  value:
+                    data:
+                      - data:
+                          - year: 2017
+                            path:
+                              - 11626
+                              - 267
+                              - 10684
+                              - 11271
+                              - 12460
+                              - 28265
+                              - 27757
+                              - 212
+                            flowAttributes:
+                              - attributeId: 37
+                                value: 97.3052314237206
+                              - attributeId: 14
+                                value: 15756.3191550692
+                              - attributeId: 8
+                                value: 28.3523401584267
+                              - attributeId: 39
+                                value: 8149.54492168693
+                              - attributeId: 2
+                                value: 44.0096364875163
+                              - attributeId: 5
+                                value: 0
+                              - attributeId: 44
+                                value: 0.00604213363675935
+                              - attributeId: 26
+                                value: 0.00120842672735187
+                              - attributeId: 45
+                                value: 0
+                              - attributeId: 52
+                                value: 1.58696639969484
+                              - attributeId: 18
+                                value: 0.31739327993897
+                          - year: 2017
+                            path:
+                              - 11627
+                              - 263
+                              - 10176
+                              - 9827
+                              - 12458
+                              - 28245
+                              - 28246
+                              - 53
+                            flowAttributes:
+                              - attributeId: 37
+                                value: 97.3048815004618
+                              - attributeId: 14
+                                value: 35826.684319655
+                              - attributeId: 8
+                                value: 19.3065241072345
+                              - attributeId: 39
+                                value: 0
+                              - attributeId: 2
+                                value: 0
+      parameters:
+        - $ref: "#/components/parameters/commodity_req"
+        - $ref: "#/components/parameters/country_req"
+        - in: query
+          name: attribute_id
+          description: Filter by attribute id
+          schema:
+            type: integer
+        - $ref: "#/components/parameters/start_year_opt"
+        - $ref: "#/components/parameters/end_year_opt"
+        - $ref: "#/components/parameters/page"
+        - $ref: "#/components/parameters/per_page"
+      description: List of flows, with their ids, paths and attributes associated to the
+        nodes on the paths.
+      summary: Flows data
+  /node_types:
+    get:
+      responses:
+        "200":
+          description: ""
+          content:
+            text/html; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        country:
+                          type: string
+                        commodity:
+                          type: string
+                        node_types:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                              name:
+                                type: string
+                              role:
+                                type: string
+                            required:
+                              - id
+                              - name
+                              - role
+                      required:
+                        - country
+                        - commodity
+                        - node_types
+                required:
+                  - data
+      description: "This endpoint will allow users to understand the structure of flow
+        paths in different country / commodity combinations. It will return an
+        ordered list of objects with the following information: node type id,
+        node type name, role."
+      parameters:
+        - $ref: "#/components/parameters/country_opt"
+        - $ref: "#/components/parameters/commodity_opt"
+      summary: List of node types as they appear in flow paths
+
+servers:
+  - url: https://staging.trase.earth/api/public
+components:
+  parameters:
+    page:
+      name: page
+      in: query
+      description: 1-based number of requested page for paginated resources
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    per_page:
+      name: per_page
+      in: query
+      description: Number of objects per page for paginated resources
+      schema:
+        type: integer
+        default: 100
+    country_opt:
+      name: country
+      in: query
+      description: Country iso 2, e.g. BR
+      schema:
+        type: string
+    commodity_opt:
+      name: commodity
+      in: query
+      description: Commodity name, e.g. SOY
+      schema:
+        type: string
+    commodity_req:
+      in: query
+      name: commodity
+      description: Commodity name, e.g. SOY
+      schema:
+        type: string
+    country_req:
+      in: query
+      name: country
+      description: Country ISO 2, e.g. BR
+      schema:
+        type: string
+    geo_id:
+      in: query
+      name: geo_id
+      description: Geo identifier, e.g. BR-5107925
+      schema:
+        type: string
+    node_type:
+      name: node_type
+      in: query
+      description: Node type name, e.g. MUNICIPALITY
+      schema:
+        type: string
+    name_prefix:
+      name: name
+      in: query
+      description: Node name prefix
+      schema:
+        type: string
+    year_req:
+      name: year
+      in: query
+      description: Year of data
+      schema:
+        type: integer
+    start_year_opt:
+      in: query
+      name: start_year
+      description: Start year of data
+      schema:
+        type: integer
+    end_year_opt:
+      in: query
+      name: end_year
+      description: End year of data
+      schema:
+        type: string
+  securitySchemes:
+    apikey:
+      type: apiKey
+      name: api_key
+      in: header
+      description: >-
+        We could start with an api key which would allow us to restrict or track
+        API traffic. 
+
+        API key gives full access to every operation an API can perform but since we won't have any create/update/delete requests it's enough for the start.
+  schemas:
+    node:
+      type: object
+      description: Single node record.
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: SORRISO
+        availability:
+          type: array
+          items:
+            $ref: "#/components/schemas/availability"
+        nodeType:
+          type: string
+          example: MUNICIPALITY
+      required:
+        - id
+        - name
+    country:
+      type: object
+      description: Single country record.
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: BRAZIL
+        iso:
+          type: string
+          minLength: 2
+          maxLength: 2
+          example: BR
+        commodities:
+          type: array
+          items:
+            $ref: "#/components/schemas/commodity"
+      required:
+        - id
+        - name
+        - iso
+    commodity:
+      type: object
+      description: Single commodity record
+      properties:
+        name:
+          type: string
+          example: SOY
+        countries:
+          type: array
+          items:
+            $ref: "#/components/schemas/country"
+        id:
+          type: number
+          example: 1
+      required:
+        - name
+        - id
+    availability:
+      type: object
+      properties:
+        commodity:
+          type: string
+          example: SOY
+        country:
+          type: string
+          example: BR
+        years:
+          type: array
+          items:
+            type: integer
+      description: Years of data available for country / commodity combination
+    place:
+      allOf:
+        - $ref: "#/components/schemas/node"
+        - type: object
+          properties:
+            geoId:
+              type: string
+    trader:
+      allOf:
+        - $ref: "#/components/schemas/node"
+    attribute:
+      type: object
+      description: Attribute (indicator)
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        displayName:
+          type: string
+        unit:
+          type: string
+        unitType:
+          type: string
+        availability:
+          $ref: "#/components/schemas/availability"
+      required:
+        - id
+        - name
+        - availability
