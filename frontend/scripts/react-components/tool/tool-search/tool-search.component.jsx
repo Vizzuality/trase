@@ -180,6 +180,8 @@ export default class ToolSearch extends Component {
             itemToString={i => (i === null ? '' : i.name)}
             onSelect={this.onSelected}
             ref={this.setDownshiftRef}
+            defaultHighlightedIndex={0}
+            itemCount={nodes.length}
             onStateChange={this.onDownshiftStateChange}
           >
             {({ getInputProps, getItemProps, isOpen, highlightedIndex }) => (
@@ -215,9 +217,7 @@ export default class ToolSearch extends Component {
                           style={style}
                           key={index}
                           value={inputValue}
-                          isHighlighted={
-                            item?.id === (nodes[highlightedIndex] && nodes[highlightedIndex].id)
-                          }
+                          isHighlighted={index === highlightedIndex}
                           toolLayout={toolLayout}
                           item={item}
                           contextId={contextId}

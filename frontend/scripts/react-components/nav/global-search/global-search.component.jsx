@@ -114,6 +114,8 @@ export default class GlobalSearch extends Component {
               return i;
             }}
             selectedItem={inputValue}
+            defaultHighlightedIndex={0}
+            itemCount={searchResults.length}
             onStateChange={this.onDownshiftStateChange}
             onChange={this.onItemSelected}
             ref={this.setDownshiftRef}
@@ -165,11 +167,7 @@ export default class GlobalSearch extends Component {
                           style={style}
                           value={searchTerm}
                           isLoading={isLoading}
-                          isHighlighted={
-                            searchResults[highlightedIndex] &&
-                            item &&
-                            item.id === searchResults[highlightedIndex].id
-                          }
+                          isHighlighted={index === highlightedIndex}
                           item={item}
                           itemProps={getItemProps({ item })}
                           testId={`global-search-result-${kebabCase(item.name)}-${

@@ -6,14 +6,24 @@ import SearchInputResult from 'react-components/shared/search-input/search-input
 import cx from 'classnames';
 import debounce from 'lodash/debounce';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
-import { MAX_SEARCH_RESULTS } from 'constants';
 
 import 'scripts/react-components/shared/search-input/search-input.scss';
+import { FixedSizeList } from 'react-window';
 
 const SEARCH_DEBOUNCE_RATE_IN_MS = 400;
 
 class SearchInput extends PureComponent {
   static VARIANTS = ['bordered', 'slim'];
+
+  containerRef = React.createRef();
+
+  getContainerWidth() {
+    if (this.containerRef.current) {
+      const bounds = this.containerRef.current.getBoundingClientRect();
+      return bounds.width;
+    }
+    return 150;
+  }
 
   onInputValueChange = debounce(
     (...params) => this.props.onSearchTermChange && this.props.onSearchTermChange(...params),
@@ -59,8 +69,7 @@ class SearchInput extends PureComponent {
       resultClassName,
       nodeTypeRenderer
     } = this.props;
-    const visibleResults = items.slice(0, MAX_SEARCH_RESULTS);
-
+    const containerWidth = this.getContainerWidth();
     return (
       <div
         className={cx('c-search-input', className, {
@@ -70,6 +79,7 @@ class SearchInput extends PureComponent {
         data-test={`${testId}-search-input-container`}
       >
         <div
+          ref={this.containerRef}
           className={cx('search-input-bar', { '-loading': isLoading, '-disabled': isDisabled })}
           onClick={this.focusInput}
           role="textbox"
@@ -102,31 +112,45 @@ class SearchInput extends PureComponent {
             </svg>
           )}
         </div>
-        {isOpen && visibleResults.length > 0 && (
-          <ul className="search-input-results">
-            {visibleResults.map((item, row) => (
-              <SearchInputResult
-                key={item.id}
-                item={item}
-                className={resultClassName}
-                testId={getResultTestId(item)}
-                searchString={inputValue}
-                itemProps={getItemProps({ item })}
-                nodeTypeRenderer={nodeTypeRenderer}
-                isHighlighted={row === highlightedIndex}
-              />
-            ))}
-          </ul>
+        {isOpen && items.length > 0 && (
+          <FixedSizeList
+            height={100}
+            width={containerWidth}
+            itemSize={42}
+            itemData={items}
+            itemCount={items.length}
+            innerElementType="ul"
+            className="search-input-results"
+          >
+            {({ index, style, data }) => {
+              const item = data[index];
+              return (
+                <SearchInputResult
+                  key={index}
+                  item={item}
+                  style={style}
+                  className={resultClassName}
+                  testId={getResultTestId(item)}
+                  searchString={inputValue}
+                  itemProps={getItemProps({ item })}
+                  nodeTypeRenderer={nodeTypeRenderer}
+                  isHighlighted={index === highlightedIndex}
+                />
+              );
+            }}
+          </FixedSizeList>
         )}
       </div>
     );
   };
 
   render() {
-    const { searchOptions, onSelect } = this.props;
+    const { searchOptions, onSelect, items } = this.props;
     return (
       <Downshift
         stateReducer={this.stateReducer}
+        defaultHighlightedIndex={0}
+        itemCount={items.length}
         onChange={node => node && onSelect(node, searchOptions)}
         itemToString={i => (i === null ? '' : i.name)}
         onInputValueChange={term => this.onInputValueChange(term, searchOptions)}

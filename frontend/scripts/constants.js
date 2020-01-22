@@ -237,8 +237,6 @@ export const BREAKPOINTS = {
   laptop: 1024
 };
 
-export const MAX_SEARCH_RESULTS = 50;
-
 export const LOGISTICS_MAP_YEARS = Array.from({ length: 12 })
   .fill(2016)
   .map((y, i) => ({ value: y - i, label: `${y - i}` }));

@@ -35,7 +35,6 @@
     }
 
     .search-input-results {
-      max-height: 345px;
       text-align: left;
     }
 
@@ -110,11 +109,7 @@
   }
 
   .search-input-results {
-    position: absolute;
     background: $white;
-    overflow-y: auto;
-    width: 100%;
-    max-height: 100px;
     box-shadow: $box-shadow;
     z-index: $z-base;
   }
@@ -125,6 +120,7 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
+  height: 42px;
   padding: 8px 15px;
   cursor: pointer;
   border-bottom: solid 1px $pale-grey;
