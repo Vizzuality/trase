@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="trase_test" schema="public" type="PostgreSQL - 11.6 (Ubuntu 11.6-1.pgdg18.04+1)">
+   <tables>
+      <table name="commodities" numRows="0" remarks="Commodities in supply chains, such as soy or beef" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('commodities_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
+            <child column="commodity_id" foreignKey="fk_rails_eea78f436e" implied="false" onDeleteCascade="true" schema="public" table="contexts"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="Commodity name; unique across commodities" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="2" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="commodities_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="commodities_name_key" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
+      </table>
+      <table name="context_node_types" numRows="0" remarks="Node types represented in supply chains per context. The value of column_position is interpreted as position in flows.path." schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('context_node_types_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_23d7986b34" implied="false" onDeleteCascade="true" schema="public" table="contexts"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="node_type_id" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="3" name="column_position" nullable="false" remarks="Index of node of this type in flows.path" size="10" type="int4"/>
+         <column autoUpdated="false" digits="6" id="4" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="context_node_types_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="context_node_types_context_id_idx" unique="false">
+            <column ascending="true" name="context_id"/>
+         </index>
+         <index name="context_node_types_context_id_node_type_id_key" unique="true">
+            <column ascending="true" name="context_id"/>
+            <column ascending="true" name="node_type_id"/>
+         </index>
+         <index name="context_node_types_node_type_id_idx" unique="false">
+            <column ascending="true" name="node_type_id"/>
+         </index>
+      </table>
+      <table name="contexts" numRows="0" remarks="Country-commodity combinations." schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('contexts_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
+            <child column="context_id" foreignKey="fk_rails_23d7986b34" implied="false" onDeleteCascade="true" schema="public" table="context_node_types"/>
+            <child column="context_id" foreignKey="fk_rails_3fcb3b1d94" implied="false" onDeleteCascade="true" schema="public" table="download_versions"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="country_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_d9e59d1113" implied="false" onDeleteCascade="true" schema="public" table="countries"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="commodity_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_eea78f436e" implied="false" onDeleteCascade="true" schema="public" table="commodities"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="years" nullable="true" remarks="Years for which country-commodity data is present; empty (NULL) for all years" size="10" type="_int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="default_year" nullable="true" remarks="Default year for this context" size="10" type="int4"/>
+         <column autoUpdated="false" digits="6" id="5" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="contexts_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="contexts_commodity_id_idx" unique="false">
+            <column ascending="true" name="commodity_id"/>
+         </index>
+         <index name="contexts_country_id_commodity_id_key" unique="true">
+            <column ascending="true" name="country_id"/>
+            <column ascending="true" name="commodity_id"/>
+         </index>
+      </table>
+      <table name="countries" numRows="0" remarks="Countries (source)" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('countries_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
+            <child column="country_id" foreignKey="fk_rails_d9e59d1113" implied="false" onDeleteCascade="true" schema="public" table="contexts"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="Country name" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="iso2" nullable="false" remarks="2-letter ISO code" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="3" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="countries_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="countries_iso2_key" unique="true">
+            <column ascending="true" name="iso2"/>
+         </index>
+      </table>
+      <table name="download_versions" numRows="0" remarks="Versions of data downloads" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('download_versions_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="context_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_3fcb3b1d94" implied="false" onDeleteCascade="true" schema="public" table="contexts"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="symbol" nullable="false" remarks="Version symbol (included in downloaded file name)" size="2147483647" type="varchar"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="3" name="is_current" nullable="false" remarks="When set, use this version symbol for new downloads (only use for one)" size="1" type="bool"/>
+         <column autoUpdated="false" digits="6" id="4" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="download_versions_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="download_versions_context_id_is_current_idx" unique="true">
+            <column ascending="true" name="context_id"/>
+            <column ascending="true" name="is_current"/>
+         </index>
+         <index name="download_versions_context_id_symbol_key" unique="true">
+            <column ascending="true" name="context_id"/>
+            <column ascending="true" name="symbol"/>
+         </index>
+      </table>
+      <table name="flow_inds" numRows="0" remarks="Values of inds for flow" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('flow_inds_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="flow_id" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="ind_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_23d15ab229" implied="false" onDeleteCascade="true" schema="public" table="inds"/>
+         </column>
+         <column autoUpdated="false" digits="17" id="3" name="value" nullable="false" remarks="Numeric value" size="17" type="float8"/>
+         <column autoUpdated="false" digits="6" id="4" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="flow_inds_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="flow_inds_flow_id_idx" unique="false">
+            <column ascending="true" name="flow_id"/>
+         </index>
+         <index name="flow_inds_flow_id_ind_id_key" unique="true">
+            <column ascending="true" name="flow_id"/>
+            <column ascending="true" name="ind_id"/>
+         </index>
+         <index name="flow_inds_ind_id_idx" unique="false">
+            <column ascending="true" name="ind_id"/>
+         </index>
+      </table>
+      <table name="flow_quals" numRows="0" remarks="Values of quals for flow" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('flow_quals_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="flow_id" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="qual_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_917b9da2b8" implied="false" onDeleteCascade="true" schema="public" table="quals"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="value" nullable="false" remarks="Textual value" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="4" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="flow_quals_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="flow_quals_flow_id_idx" unique="false">
+            <column ascending="true" name="flow_id"/>
+         </index>
+         <index name="flow_quals_flow_id_qual_id_key" unique="true">
+            <column ascending="true" name="flow_id"/>
+            <column ascending="true" name="qual_id"/>
+         </index>
+         <index name="flow_quals_qual_id_idx" unique="false">
+            <column ascending="true" name="qual_id"/>
+         </index>
+      </table>
+      <table name="flow_quants" numRows="0" remarks="Values of quants for flow" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('flow_quants_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="flow_id" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="quant_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_a48f7b74d0" implied="false" onDeleteCascade="true" schema="public" table="quants"/>
+         </column>
+         <column autoUpdated="false" digits="17" id="3" name="value" nullable="false" remarks="Numeric value" size="17" type="float8"/>
+         <column autoUpdated="false" digits="6" id="4" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="flow_quants_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="flow_quants_flow_id_idx" unique="false">
+            <column ascending="true" name="flow_id"/>
+         </index>
+         <index name="flow_quants_flow_id_quant_id_key" unique="true">
+            <column ascending="true" name="flow_id"/>
+            <column ascending="true" name="quant_id"/>
+         </index>
+         <index name="flow_quants_quant_id_idx" unique="false">
+            <column ascending="true" name="quant_id"/>
+         </index>
+      </table>
+      <table name="inds" numRows="0" remarks="Attributes classified as inds" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('inds_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
+            <child column="ind_id" foreignKey="fk_rails_23d15ab229" implied="false" onDeleteCascade="true" schema="public" table="flow_inds"/>
+            <child column="ind_id" foreignKey="fk_rails_28ea53a9b9" implied="false" onDeleteCascade="true" schema="public" table="node_inds"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="Attribute short name, e.g. FOREST_500; those literals are referred to in code, therefore should not be changed without notice" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="unit" nullable="true" remarks="Unit in which values for this attribute are given" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="3" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="inds_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="inds_name_key" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
+      </table>
+      <table name="node_inds" numRows="0" remarks="Values of inds for node" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('node_inds_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="node_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_fe29817503" implied="false" onDeleteCascade="true" schema="public" table="nodes"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="ind_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_28ea53a9b9" implied="false" onDeleteCascade="true" schema="public" table="inds"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="year" nullable="true" remarks="Year; empty (NULL) for all years" size="10" type="int4"/>
+         <column autoUpdated="false" digits="17" id="4" name="value" nullable="false" remarks="Numeric value" size="17" type="float8"/>
+         <column autoUpdated="false" digits="6" id="5" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="node_inds_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="node_inds_ind_id_idx" unique="false">
+            <column ascending="true" name="ind_id"/>
+         </index>
+         <index name="node_inds_node_id_idx" unique="false">
+            <column ascending="true" name="node_id"/>
+         </index>
+         <index name="node_inds_node_id_ind_id_year_key" unique="true">
+            <column ascending="true" name="node_id"/>
+            <column ascending="true" name="ind_id"/>
+            <column ascending="true" name="year"/>
+         </index>
+      </table>
+      <table name="node_quals" numRows="0" remarks="Values of quals for node" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('node_quals_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="node_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_14ebb50b5a" implied="false" onDeleteCascade="true" schema="public" table="nodes"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="qual_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_962f283611" implied="false" onDeleteCascade="true" schema="public" table="quals"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="year" nullable="true" remarks="Year; empty (NULL) for all years" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="4" name="value" nullable="false" remarks="Textual value" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="5" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="node_quals_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="node_quals_node_id_idx" unique="false">
+            <column ascending="true" name="node_id"/>
+         </index>
+         <index name="node_quals_node_id_qual_id_year_key" unique="true">
+            <column ascending="true" name="node_id"/>
+            <column ascending="true" name="qual_id"/>
+            <column ascending="true" name="year"/>
+         </index>
+         <index name="node_quals_qual_id_idx" unique="false">
+            <column ascending="true" name="qual_id"/>
+         </index>
+      </table>
+      <table name="node_quants" numRows="0" remarks="Values of quants for node" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('node_quants_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial"/>
+         <column autoUpdated="false" digits="0" id="1" name="node_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_dd544b3e59" implied="false" onDeleteCascade="true" schema="public" table="nodes"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="2" name="quant_id" nullable="false" remarks="" size="10" type="int4">
+            <parent column="id" foreignKey="fk_rails_e5f4cc54e9" implied="false" onDeleteCascade="true" schema="public" table="quants"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="3" name="year" nullable="true" remarks="Year; empty (NULL) for all years" size="10" type="int4"/>
+         <column autoUpdated="false" digits="17" id="4" name="value" nullable="false" remarks="Numeric value" size="17" type="float8"/>
+         <column autoUpdated="false" digits="6" id="5" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="node_quants_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="node_quants_node_id_idx" unique="false">
+            <column ascending="true" name="node_id"/>
+         </index>
+         <index name="node_quants_node_id_quant_id_year_key" unique="true">
+            <column ascending="true" name="node_id"/>
+            <column ascending="true" name="quant_id"/>
+            <column ascending="true" name="year"/>
+         </index>
+         <index name="node_quants_quant_id_idx" unique="false">
+            <column ascending="true" name="quant_id"/>
+         </index>
+      </table>
+      <table name="nodes" numRows="0" remarks="Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('nodes_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
+            <child column="node_id" foreignKey="fk_rails_fe29817503" implied="false" onDeleteCascade="true" schema="public" table="node_inds"/>
+            <child column="node_id" foreignKey="fk_rails_14ebb50b5a" implied="false" onDeleteCascade="true" schema="public" table="node_quals"/>
+            <child column="node_id" foreignKey="fk_rails_dd544b3e59" implied="false" onDeleteCascade="true" schema="public" table="node_quants"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="node_type_id" nullable="false" remarks="" size="10" type="int4"/>
+         <column autoUpdated="false" digits="0" id="2" name="name" nullable="false" remarks="Name of node" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="3" name="geo_id" nullable="true" remarks="2-letter iso code in case of country nodes; other geo identifiers possible for other node types" size="2147483647" type="text"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="4" name="is_unknown" nullable="false" remarks="When set, node was not possible to identify" size="1" type="bool"/>
+         <column autoUpdated="false" digits="6" id="5" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <column autoUpdated="false" digits="0" id="6" name="main_id" nullable="true" remarks="Node identifier from Main DB" size="10" type="int4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="nodes_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="nodes_node_type_id_idx" unique="false">
+            <column ascending="true" name="node_type_id"/>
+         </index>
+      </table>
+      <table name="quals" numRows="0" remarks="Attributes classified as quals" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('quals_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
+            <child column="qual_id" foreignKey="fk_rails_917b9da2b8" implied="false" onDeleteCascade="true" schema="public" table="flow_quals"/>
+            <child column="qual_id" foreignKey="fk_rails_962f283611" implied="false" onDeleteCascade="true" schema="public" table="node_quals"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="Attribute short name, e.g. ZERO_DEFORESTATION; those literals are referred to in code, therefore should not be changed without notice" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="2" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="quals_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="quals_name_key" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
+      </table>
+      <table name="quants" numRows="0" remarks="Attributes classified as quants" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('quants_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial">
+            <child column="quant_id" foreignKey="fk_rails_a48f7b74d0" implied="false" onDeleteCascade="true" schema="public" table="flow_quants"/>
+            <child column="quant_id" foreignKey="fk_rails_e5f4cc54e9" implied="false" onDeleteCascade="true" schema="public" table="node_quants"/>
+         </column>
+         <column autoUpdated="false" digits="0" id="1" name="name" nullable="false" remarks="Attribute short name, e.g. FOB; those literals are referred to in code, therefore should not be changed without notice" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="0" id="2" name="unit" nullable="true" remarks="Unit in which values for this attribute are given" size="2147483647" type="text"/>
+         <column autoUpdated="false" digits="6" id="3" name="created_at" nullable="false" remarks="" size="29" type="timestamp"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="quants_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="quants_name_key" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
+      </table>
+   </tables>
+</database>
