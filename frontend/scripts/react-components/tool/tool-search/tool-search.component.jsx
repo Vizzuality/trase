@@ -216,7 +216,7 @@ export default class ToolSearch extends Component {
                           key={index}
                           value={inputValue}
                           isHighlighted={
-                            item?.id === (nodes[highlightedIndex] && nodes[highlightedIndex].id.id)
+                            item?.id === (nodes[highlightedIndex] && nodes[highlightedIndex].id)
                           }
                           toolLayout={toolLayout}
                           item={item}
