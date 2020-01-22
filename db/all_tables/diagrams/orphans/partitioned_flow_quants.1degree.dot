@@ -1,5 +1,3 @@
-// dot 2.40 on Linux 5.0.0-1026-gcp
-// SchemaSpy rev Unknown
 digraph "partitioned_flow_quants" {
   graph [
     rankdir="RL"
@@ -28,6 +26,7 @@ digraph "partitioned_flow_quants" {
       <TR><TD ALIGN="LEFT" BGCOLOR="#ffffff">&lt; 0</TD><TD ALIGN="RIGHT" BGCOLOR="#ffffff">0 rows</TD><TD ALIGN="RIGHT" BGCOLOR="#ffffff">0 &gt;</TD></TR>
     </TABLE>>
     URL="tables/partitioned_flow_quants.html"
+    target="_top"
     tooltip="partitioned_flow_quants"
   ];
 }

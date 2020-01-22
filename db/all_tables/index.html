@@ -1,1132 +1,1386 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>trase_test Database</title>
-  <!-- Tell the browser to be responsive to screen width -->
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
-  <!-- Bootstrap 3.3.5 -->
-  <link rel="stylesheet" href="bower/admin-lte/bootstrap/css/bootstrap.min.css">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="bower/font-awesome/css/font-awesome.min.css">
-  <!-- Ionicons -->
-  <link rel="stylesheet" href="bower/ionicons/css/ionicons.min.css">
-  <!-- DataTables -->
-  <link rel="stylesheet" href="bower/datatables.net-bs/css/dataTables.bootstrap.min.css">
-  <link rel="stylesheet" href="bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css">
-  <!-- Code Mirror -->
-  <link rel="stylesheet" href="bower/codemirror/codemirror.css">
-  <!-- Fonts -->
-  <link href='fonts/indieflower/indie-flower.css' rel='stylesheet' type='text/css'>
-  <link href='fonts/source-sans-pro/source-sans-pro.css' rel='stylesheet' type='text/css'>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>trase_test Database</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="bower/admin-lte/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="bower/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="bower/ionicons/css/ionicons.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="bower/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css">
+        <!-- Code Mirror -->
+        <link rel="stylesheet" href="bower/codemirror/codemirror.css">
+        <!-- Fonts -->
+        <link href='fonts/indieflower/indie-flower.css' rel='stylesheet' type='text/css'>
+        <link href='fonts/source-sans-pro/source-sans-pro.css' rel='stylesheet' type='text/css'>
 
-  <!-- Theme style -->
-  <link rel="stylesheet" href="bower/admin-lte/dist/css/AdminLTE.min.css">
-  <!-- Salvattore -->
-  <link rel="stylesheet" href="bower/salvattore/salvattore.css">
-  <!-- AdminLTE Skins. Choose a skin from the css/skins
-       folder instead of downloading all of them to reduce the load. -->
-  <link rel="stylesheet" href="bower/admin-lte/dist/css/skins/_all-skins.min.css">
-  <!-- SchemaSpy -->
-  <link rel="stylesheet" href="schemaSpy.css">
-  
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-  <script src="bower/html5shiv/html5shiv.min.js"></script>
-  <script src="bower/respond/respond.min.js"></script>
-  <![endif]-->
-</head>
-<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
-<body class="hold-transition skin-blue layout-top-nav">
-<div class="wrapper">
-  <header class="main-header">
-    <nav class="navbar navbar-static-top">
-      <div class="container">
-        <div class="navbar-header">
-          <a href="index.html" class="navbar-brand"><b>trase_test</b> Database</a>
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
-            <i class="fa fa-bars"></i>
-          </button>
-        </div>
+        <!-- Theme style -->
+        <link rel="stylesheet" href="bower/admin-lte/dist/css/AdminLTE.min.css">
+        <!-- Salvattore -->
+        <link rel="stylesheet" href="bower/salvattore/salvattore.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+           folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="bower/admin-lte/dist/css/skins/_all-skins.min.css">
+        <!-- SchemaSpy -->
+        <link rel="stylesheet" href="schemaSpy.css">
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li><a href="index.html">Tables <span class="sr-only">(current)</span></a></li>
-			<li><a href="columns.html" title="All of the columns in the schema">Columns</a></li>
-			<li><a href="constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
-			<li><a href="relationships.html" title="Diagram of table relationships">Relationships</a></li>
-			<li><a href="orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>				
-			<li><a href="anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
-			<li><a href="routines.html" title="Procedures and functions">Routines</a></li>
-          </ul>
-        </div>
-        <!-- /.navbar-collapse -->
-        <!-- Navbar Right Menu -->
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="bower/html5shiv/html5shiv.min.js"></script>
+        <script src="bower/respond/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+    <body class="hold-transition skin-blue layout-top-nav">
+        <div class="wrapper">
+            <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a href="index.html" class="navbar-brand"><b>trase_test</b> Database</a>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><i class="fa fa-bars"></i></button>
+                        </div>
 
-      </div>
-      <!-- /.container-fluid -->
-    </nav>
-  </header>
-  <!-- Main content -->
-  <!-- Full Width Column -->
-  <div class="content-wrapper">
-          <!-- Content Header (Page header) -->
-      <section class="content-header">
-        <h1>Tables</h1></br>
-		<div class="row">
-			<div class="col-md-12">
-				<div class="callout callout-info">
-					<h4>SchemaSpy Analysis of trase_test</h4>
-					<p>Generated on Wed Jan 22 14:24 UTC 2020</p>
-				</div>
-			</div>
-		</div>
-
-
-        <a href="trase_test.public.xml" title="XML Representation">XML Representation</a></br>
-		<a href="insertionOrder.txt" title="Useful for loading data into a database">Insertion Order</a>
-        <a href="deletionOrder.txt" title="Useful for purging data from a database">Deletion Order</a>	
-      </section>
-      <!-- Main content -->
-      <section class="content">
-		  <div class="row">
-			<div class="col-md-2 col-sm-4 col-xs-12">
-			  <div class="info-box">
-				  <span class="info-box-icon bg-aqua"><i class="fa fa-table"></i></span>
-				  <div class="info-box-content">
-					  <span class="info-box-text">TABLES</span>
-					  <span class="info-box-number">93</span>
-				  </div>
-				  <!-- /.info-box-content -->
-			  </div>
-			  <!-- /.info-box -->
-			</div>
-			<!-- /.col -->
-			<div class="col-md-2 col-sm-4 col-xs-12">
-			  <div class="info-box">
-				  <span class="info-box-icon bg-teal"><i class="fa fa-table"></i></span>
-				  <div class="info-box-content">
-					  <span class="info-box-text">VIEWS</span>
-					  <span class="info-box-number">14</span>
-				  </div>
-				  <!-- /.info-box-content -->
-			  </div>
-			  <!-- /.info-box -->
-			</div>
-			<!-- /.col -->
-
-			<div class="col-md-2 col-sm-4 col-xs-12">
-			  <div class="info-box">
-				  <span class="info-box-icon bg-green"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></span>
-
-				  <div class="info-box-content">
-					  <span class="info-box-text">COLUMNS</span>
-					  <span class="info-box-number">793</span>
-				  </div>
-				  <!-- /.info-box-content -->
-			  </div>
-			  <!-- /.info-box -->
-			</div>
-		  <!-- /.col -->
-			<div class="col-md-2 col-sm-4 col-xs-12">
-			  <div class="info-box">
-				  <span class="info-box-icon bg-yellow"><i class="ion ion-key"></i></span>
-
-				  <div class="info-box-content">
-					  <span class="info-box-text">Constraints</span>
-					  <span class="info-box-number">99</span>
-				  </div>
-				  <!-- /.info-box-content -->
-			  </div>
-			  <!-- /.info-box -->
-			</div>
-			<!-- /.col -->
-			<div class="col-md-2 col-sm-4 col-xs-12">
-			  <div class="info-box">
-				  <span class="info-box-icon bg-red-active"><i class="fa fa-question" aria-hidden="true"></i></span>
-
-				  <div class="info-box-content">
-					  <span class="info-box-text">Anomalies</span>
-					  <span class="info-box-number">2</span>
-				  </div>
-				  <!-- /.info-box-content -->
-			  </div>
-			  <!-- /.info-box -->
-			</div>
-		  	<!-- /.col -->
-			<div class="col-md-2 col-sm-4 col-xs-12">
-				<div class="info-box">
-					<span class="info-box-icon bg-navy"><i class="fa fa-file-code-o" aria-hidden="true"></i></span>
-
-					<div class="info-box-content">
-						<span class="info-box-text">Routines</span>
-						<span class="info-box-number">0</span>
-					</div>
-					<!-- /.info-box-content -->
-				</div>
-				<!-- /.info-box -->
-			</div>
-			<!-- /.col -->
-		</div>
-		<div class="box box-primary">		
-			<div class="box-header with-border">
-			  <h3 class="box-title">Database Properties</h3>
-			  <span class="label label-primary pull-right"><i class="fa fa-cog fa-2x"></i></span>			  
-			</div><!-- /.box-header -->
-			<div class="box-body">
-			  <p>Database Type: PostgreSQL - 11.6 (Ubuntu 11.6-1.pgdg18.04+1)</p>			  
-			</div><!-- /.box-body -->
-		</div>
-		<div class="box box-primary">		
-			<div class="box-header with-border">
-			  <h3 class="box-title">Schema public</h3>
-			  <span class="label label-primary pull-right"><i class="fa fa-cog fa-2x"></i></span>			  
-			</div><!-- /.box-header -->
-			<div class="box-body">
-			  <p> <p>standard public schema</p> </p>			  
-			</div><!-- /.box-body -->
-		</div>
-		<div class="box box-primary">
-            <div class="box-header with-border">
-              <h3 class="box-title">Tables</h3>			  
-			  <span class="label label-primary pull-right"><i class="fa fa-database fa-2x"></i></span>
-            </div><!-- /.box-header -->
-            <div class="box-body">
-			<div class="row">
-				<div id="button_group_one" class="col-md-3 col-sm-6"></div>
-				<div id="button_group_two" class="col-md-2 col-sm-4 pull-right text-right"></div>
-			</div>
-            <table id="database_objects" class="table table-bordered table-striped dataTable" role="grid">
-				<thead>
-					<tr>
-					  <th valign="bottom">Table / View</th>
-					  <th align="right" valign="bottom">Children</th>
-					  <th align="right" valign="bottom">Parents</th>
-					  <th align="right" valign="bottom">Columns</th>
-					  <th align="right" valign="bottom">Rows</th>
-					  <th align="right" valign="bottom">Type</th>
-					  <th class="toggle">Comments</th>
-					</tr>
-				</thead>
-				<tbody>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/node_properties.html">node_properties</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/profiles.html">profiles</a></td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">13</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Context-specific profiles</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboards_inds.html">dashboards_inds</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Inds available in dashboards (see dashboards_attributes.)</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/top_profile_images.html">top_profile_images</a></td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/sankey_card_link_node_types.html">sankey_card_link_node_types</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">3</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboards_attribute_groups.html">dashboards_attribute_groups</a></td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Groups attributes (inds/quals/quants) to display on dashboards wizard</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/map_inds.html">map_inds</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Inds to display on map (see map_attributes.)</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/chart_quants.html">chart_quants</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Quants to display in a chart (see chart_attributes.)</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/node_inds.html">node_inds</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Values of inds for node</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboards_commodities.html">dashboards_commodities</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">7</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Materialized table used for listing commodities in tool search panels</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/flow_inds.html">flow_inds</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Values of inds for flow</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/qual_properties.html">qual_properties</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">10</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboards_importers.html">dashboards_importers</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">11</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Materialized table used for listing importers in tool search panels</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/nodes_with_flows_per_year.html">nodes_with_flows_per_year</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">14</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/partitioned_flows.html">partitioned_flows</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboards_countries.html">dashboards_countries</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">8</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Materialized table used for listing countries in tool search panels</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/contextual_layers.html">contextual_layers</a></td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">10</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Additional layers shown on map coming from CartoDB</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/recolor_by_quals.html">recolor_by_quals</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Quals available for recoloring (see recolor_by_attributes.)</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/chart_attributes.html">chart_attributes</a></td>
-				  <td class="detail" align="right">3</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">12</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Attributes (inds/quals/quants) to display in a chart.</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/nodes_with_flows.html">nodes_with_flows</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">12</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/quants.html">quants</a></td>
-				  <td class="detail" align="right">11</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">4</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Attributes classified as quants</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboard_template_countries.html">dashboard_template_countries</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/flows.html">flows</a></td>
-				  <td class="detail" align="right">3</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Flows of commodities through nodes</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/download_attributes.html">download_attributes</a></td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">7</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Attributes (quals/quants) available for download.</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/node_types.html">node_types</a></td>
-				  <td class="detail" align="right">4</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">3</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>List of types of nodes in the system, e.g. MUNICIPALITY or EXPORTER. Those literals are referred to in code, therefore should not be changed without notice.</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/qual_country_properties.html">qual_country_properties</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Country specific properties for qual</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/countries.html">countries</a></td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">4</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Countries (source)</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/qual_context_properties.html">qual_context_properties</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Context specific properties for qual (like tooltip text)</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/map_attribute_groups.html">map_attribute_groups</a></td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Groups attributes (inds/quals/quants) to display on map</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/top_profiles.html">top_profiles</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">3</td>
-				  <td class="detail" align="right">7</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/partitioned_flow_quants.html">partitioned_flow_quants</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">3</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboard_template_companies.html">dashboard_template_companies</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/flow_quants.html">flow_quants</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Values of quants for flow</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/download_quals.html">download_quals</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Quals to include in downloads (see download_attributes.)</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/download_quants.html">download_quants</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">7</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Quants to include in downloads (see download_attributes.)</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/carto_layers.html">carto_layers</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">7</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Year-specific data layers defined in CartoDB used to display contextual layers.</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/qual_commodity_properties.html">qual_commodity_properties</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Commodity specific properties for qual</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboard_template_destinations.html">dashboard_template_destinations</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/map_quants.html">map_quants</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Quants to display on map (see map_attributes.)</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/ind_commodity_properties.html">ind_commodity_properties</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Commodity specific properties for ind</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/context_node_type_properties.html">context_node_type_properties</a></td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">11</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/nodes_with_flows_or_geo.html">nodes_with_flows_or_geo</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">12</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/download_versions.html">download_versions</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Versions of data downloads</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/charts.html">charts</a></td>
-				  <td class="detail" align="right">3</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">8</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Charts on profile pages.</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboards_companies.html">dashboards_companies</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">11</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/attributes.html">attributes</a></td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">8</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Merges inds, quals and quants. Readonly table.</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/recolor_by_inds.html">recolor_by_inds</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Inds available for recoloring (see recolor_by_attributes.)</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/node_quants.html">node_quants</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Values of quants for node</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboard_template_commodities.html">dashboard_template_commodities</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/chart_inds.html">chart_inds</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Inds to display in a chart (see chart_attributes.)</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/ind_properties.html">ind_properties</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">11</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboard_templates.html">dashboard_templates</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">10</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/ar_internal_metadata.html">ar_internal_metadata</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">4</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/sankey_card_link_nodes.html">sankey_card_link_nodes</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">3</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/flow_quals.html">flow_quals</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Values of quals for flow</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/map_attributes.html">map_attributes</a></td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">11</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Attributes (inds/quants) to display on map</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/context_node_types.html">context_node_types</a></td>
-				  <td class="detail" align="right">3</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Node types represented in supply chains per context. The value of column_position is interpreted as position in flows.path.</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/resize_by_attributes.html">resize_by_attributes</a></td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">11</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Attributes (quants) available for resizing.</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboards_quals.html">dashboards_quals</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Quals available in dashboards (see dashboards_attributes.)</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/quant_properties.html">quant_properties</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">11</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboard_template_sources.html">dashboard_template_sources</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/ind_context_properties.html">ind_context_properties</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Context specific properties for ind (like tooltip text)</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/partitioned_denormalised_flow_quals.html">partitioned_denormalised_flow_quals</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">8</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/inds.html">inds</a></td>
-				  <td class="detail" align="right">10</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">4</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Attributes classified as inds</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/context_properties.html">context_properties</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">9</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Visualisation properties of a context (one row per context)</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/sankey_card_links.html">sankey_card_links</a></td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">17</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Quick sankey cards</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/schema_migrations.html">schema_migrations</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">100</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboards_sources.html">dashboards_sources</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">11</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Materialized table used for listing sources in tool search panels</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboards_attributes.html">dashboards_attributes</a></td>
-				  <td class="detail" align="right">3</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Attributes (inds/quals/quants) available in dashboards</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/nodes.html">nodes</a></td>
-				  <td class="detail" align="right">7</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">7</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/country_properties.html">country_properties</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">9</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/database_updates.html">database_updates</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">7</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Keeping track of database update operations, also used to ensure only one update processed at a time</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/quant_context_properties.html">quant_context_properties</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Context specific properties for quant (like tooltip text)</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/chart_quals.html">chart_quals</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Quals to display in a chart (see chart_attributes.)</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/chart_node_types.html">chart_node_types</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">8</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Node types to display in a chart.</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/quant_country_properties.html">quant_country_properties</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Country specific properties for quant</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/flow_nodes.html">flow_nodes</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Normalised flows, a readonly table populated during data upload.</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/partitioned_flow_inds.html">partitioned_flow_inds</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">3</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/database_validation_reports.html">database_validation_reports</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Keeping track of database validation operations</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/resize_by_quants.html">resize_by_quants</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Quants available for recoloring (see resize_by_attributes.)</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/contexts.html">contexts</a></td>
-				  <td class="detail" align="right">13</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Country-commodity combinations.</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboards_quants.html">dashboards_quants</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Quants available in dashboards (see dashboards_attributes.)</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/ind_country_properties.html">ind_country_properties</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Country specific properties for ind</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/node_quals.html">node_quals</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Values of quals for node</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/recolor_by_attributes.html">recolor_by_attributes</a></td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">1</td>
-				  <td class="detail" align="right">16</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Attributes (inds/quals) available for recoloring.</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/partitioned_denormalised_flow_quants.html">partitioned_denormalised_flow_quants</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">8</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/partitioned_flow_quals.html">partitioned_flow_quals</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">3</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/quals.html">quals</a></td>
-				  <td class="detail" align="right">10</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">3</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Attributes classified as quals</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboards_exporters.html">dashboards_exporters</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">11</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Materialized table used for listing exporters in tool search panels</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/partitioned_denormalised_flow_inds.html">partitioned_denormalised_flow_inds</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">8</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/quant_commodity_properties.html">quant_commodity_properties</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">2</td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Commodity specific properties for quant</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/commodities.html">commodities</a></td>
-				  <td class="detail" align="right">6</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">3</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Commodities in supply chains, such as soy or beef</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboards_destinations.html">dashboards_destinations</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">11</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">Table</td>
-				  <td class="comment detail" style="display: table-cell;"><p>Materialized table used for listing destinations in tool search panels</p></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboards_commodities_v.html">dashboards_commodities_v</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">7</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">View</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboards_companies_v.html">dashboards_companies_v</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">11</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">View</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/pg_stat_statements.html">pg_stat_statements</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">23</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">View</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/attributes_v.html">attributes_v</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">7</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">View</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboards_countries_v.html">dashboards_countries_v</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">8</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">View</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboards_sources_v.html">dashboards_sources_v</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">11</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">View</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/flow_nodes_v.html">flow_nodes_v</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">5</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">View</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboards_destinations_v.html">dashboards_destinations_v</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">11</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">View</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/nodes_with_flows_per_year_v.html">nodes_with_flows_per_year_v</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">14</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">View</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboards_importers_v.html">dashboards_importers_v</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">11</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">View</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/dashboards_exporters_v.html">dashboards_exporters_v</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">11</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">View</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/download_flows_v.html">download_flows_v</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">10</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">View</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/nodes_with_flows_or_geo_v.html">nodes_with_flows_or_geo_v</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">12</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">View</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				 <tr class="tbl even" valign="top">  <td class="detail"><a href="tables/nodes_with_flows_v.html">nodes_with_flows_v</a></td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">12</td>
-				  <td class="detail" align="right">0</td>
-				  <td class="detail" align="right">View</td>
-				  <td class="comment detail" style="display: table-cell;"></td>
-				  </tr>
-				  			</table>
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="index.html">Tables <span class="sr-only">(current)</span></a></li>
+                                <li><a href="columns.html" title="All of the columns in the schema">Columns</a></li>
+                                <li><a href="constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
+                                <li><a href="relationships.html" title="Diagram of table relationships">Relationships</a></li>
+                                <li><a href="orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>
+                                <li><a href="anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+                                <li><a href="routines.html" title="Procedures and functions">Routines</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                        <!-- Navbar Right Menu -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </nav>
+            </header>
+            <!-- Main content -->
+            <!-- Full Width Column -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>Tables</h1><br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="callout callout-info">
+                                <h4>SchemaSpy Analysis of trase_test</h4>
+                                <p>Generated on Wed Jan 22 18:06 UTC 2020</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="trase_test.public.xml" title="XML Representation">XML Representation</a><br />
+                    <a href="insertionOrder.txt" title="Useful for loading data into a database">Insertion Order</a>
+                    <a href="deletionOrder.txt" title="Useful for purging data from a database">Deletion Order</a>
+                </section>
+                <!-- Main content -->
+                <section class="content">
+                    <div class="row">
+                        <div class="col-md-2 col-sm-4 col-xs-12">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-aqua"><i class="fa fa-table"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">TABLES</span>
+                                    <span class="info-box-number">93</span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-2 col-sm-4 col-xs-12">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-teal"><i class="fa fa-table"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">VIEWS</span>
+                                    <span class="info-box-number">32</span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-2 col-sm-4 col-xs-12">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-green"><span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">COLUMNS</span>
+                                    <span class="info-box-number">946</span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-2 col-sm-4 col-xs-12">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-yellow"><i class="ion ion-key"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Constraints</span>
+                                    <span class="info-box-number">99</span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-2 col-sm-4 col-xs-12">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-red-active"><i class="fa fa-question" aria-hidden="true"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Anomalies</span>
+                                    <span class="info-box-number">2</span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-2 col-sm-4 col-xs-12">
+                            <div class="info-box">
+                                <span class="info-box-icon bg-navy"><i class="fa fa-file-code-o" aria-hidden="true"></i></span>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">Routines</span>
+                                    <span class="info-box-number">0</span>
+                                </div>
+                                <!-- /.info-box-content -->
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Database Properties</h3>
+                            <span class="label label-primary pull-right"><i class="fa fa-cog fa-2x"></i></span>
+                        </div><!-- /.box-header -->
+                        <div class="box-body">
+                            <p>Database Type: PostgreSQL - 11.6 (Ubuntu 11.6-1.pgdg18.04+1)</p>
+                        </div><!-- /.box-body -->
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Schema public</h3>
+                            <span class="label label-primary pull-right"><i class="fa fa-cog fa-2x"></i></span>
+                        </div><!-- /.box-header -->
+                        <div class="box-body">
+                            <p> <p>standard public schema</p> </p>
+                        </div><!-- /.box-body -->
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Tables</h3>
+                            <span class="label label-primary pull-right"><i class="fa fa-database fa-2x"></i></span>
+                        </div><!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="database_objects" class="table table-bordered table-striped dataTable" role="grid">
+                                <thead>
+                                    <tr>
+                                        <th valign="bottom">Table / View</th>
+                                        <th align="right" valign="bottom">Children</th>
+                                        <th align="right" valign="bottom">Parents</th>
+                                        <th align="right" valign="bottom">Columns</th>
+                                        <th align="right" valign="bottom">Rows</th>
+                                        <th align="right" valign="bottom">Type</th>
+                                        <th class="toggle">Comments</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/node_properties.html">node_properties</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/profiles.html">profiles</a></td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">13</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Context-specific profiles</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboards_inds.html">dashboards_inds</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Inds available in dashboards (see dashboards_attributes.)</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/sankey_card_link_node_types.html">sankey_card_link_node_types</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/top_profile_images.html">top_profile_images</a></td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboards_attribute_groups.html">dashboards_attribute_groups</a></td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Groups attributes (inds/quals/quants) to display on dashboards wizard</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/map_inds.html">map_inds</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Inds to display on map (see map_attributes.)</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/chart_quants.html">chart_quants</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Quants to display in a chart (see chart_attributes.)</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/node_inds.html">node_inds</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Values of inds for node</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboards_commodities.html">dashboards_commodities</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Materialized table used for listing commodities in tool search panels</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/flow_inds.html">flow_inds</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Values of inds for flow</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/qual_properties.html">qual_properties</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">10</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboards_importers.html">dashboards_importers</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">11</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Materialized table used for listing importers in tool search panels</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/partitioned_flows.html">partitioned_flows</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/nodes_with_flows_per_year.html">nodes_with_flows_per_year</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">14</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboards_countries.html">dashboards_countries</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">8</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Materialized table used for listing countries in tool search panels</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/contextual_layers.html">contextual_layers</a></td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">10</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Additional layers shown on map coming from CartoDB</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/recolor_by_quals.html">recolor_by_quals</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Quals available for recoloring (see recolor_by_attributes.)</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/chart_attributes.html">chart_attributes</a></td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">12</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Attributes (inds/quals/quants) to display in a chart.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/nodes_with_flows.html">nodes_with_flows</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">12</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/quants.html">quants</a></td>
+                                        <td class="detail" align="right">11</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">4</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Attributes classified as quants</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboard_template_countries.html">dashboard_template_countries</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/flows.html">flows</a></td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Flows of commodities through nodes</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/download_attributes.html">download_attributes</a></td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Attributes (quals/quants) available for download.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/node_types.html">node_types</a></td>
+                                        <td class="detail" align="right">4</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>List of types of nodes in the system, e.g. MUNICIPALITY or EXPORTER. Those literals are referred to in code, therefore should not be changed without notice.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/qual_country_properties.html">qual_country_properties</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Country specific properties for qual</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/countries.html">countries</a></td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">4</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Countries (source)</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/qual_context_properties.html">qual_context_properties</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Context specific properties for qual (like tooltip text)</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/map_attribute_groups.html">map_attribute_groups</a></td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Groups attributes (inds/quals/quants) to display on map</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/top_profiles.html">top_profiles</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/partitioned_flow_quants.html">partitioned_flow_quants</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboard_template_companies.html">dashboard_template_companies</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/flow_quants.html">flow_quants</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Values of quants for flow</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/download_quals.html">download_quals</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Quals to include in downloads (see download_attributes.)</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/download_quants.html">download_quants</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Quants to include in downloads (see download_attributes.)</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/carto_layers.html">carto_layers</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Year-specific data layers defined in CartoDB used to display contextual layers.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/qual_commodity_properties.html">qual_commodity_properties</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Commodity specific properties for qual</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboard_template_destinations.html">dashboard_template_destinations</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/map_quants.html">map_quants</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Quants to display on map (see map_attributes.)</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/ind_commodity_properties.html">ind_commodity_properties</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Commodity specific properties for ind</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/context_node_type_properties.html">context_node_type_properties</a></td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">11</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/nodes_with_flows_or_geo.html">nodes_with_flows_or_geo</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">12</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/download_versions.html">download_versions</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Versions of data downloads</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/charts.html">charts</a></td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">8</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Charts on profile pages.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboards_companies.html">dashboards_companies</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">11</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/attributes.html">attributes</a></td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">8</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Merges inds, quals and quants. Readonly table.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/recolor_by_inds.html">recolor_by_inds</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Inds available for recoloring (see recolor_by_attributes.)</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/node_quants.html">node_quants</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Values of quants for node</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/chart_inds.html">chart_inds</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Inds to display in a chart (see chart_attributes.)</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboard_template_commodities.html">dashboard_template_commodities</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/ind_properties.html">ind_properties</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">11</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboard_templates.html">dashboard_templates</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">10</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/ar_internal_metadata.html">ar_internal_metadata</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">4</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/sankey_card_link_nodes.html">sankey_card_link_nodes</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/flow_quals.html">flow_quals</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Values of quals for flow</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/map_attributes.html">map_attributes</a></td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">11</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Attributes (inds/quants) to display on map</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/context_node_types.html">context_node_types</a></td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Node types represented in supply chains per context. The value of column_position is interpreted as position in flows.path.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/resize_by_attributes.html">resize_by_attributes</a></td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">11</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Attributes (quants) available for resizing.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboards_quals.html">dashboards_quals</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Quals available in dashboards (see dashboards_attributes.)</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/quant_properties.html">quant_properties</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">11</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboard_template_sources.html">dashboard_template_sources</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/ind_context_properties.html">ind_context_properties</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Context specific properties for ind (like tooltip text)</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/partitioned_denormalised_flow_quals.html">partitioned_denormalised_flow_quals</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">8</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/inds.html">inds</a></td>
+                                        <td class="detail" align="right">10</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">4</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Attributes classified as inds</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/context_properties.html">context_properties</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">9</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Visualisation properties of a context (one row per context)</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/schema_migrations.html">schema_migrations</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">100</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/sankey_card_links.html">sankey_card_links</a></td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">17</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Quick sankey cards</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboards_sources.html">dashboards_sources</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">11</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Materialized table used for listing sources in tool search panels</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboards_attributes.html">dashboards_attributes</a></td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Attributes (inds/quals/quants) available in dashboards</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/nodes.html">nodes</a></td>
+                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/country_properties.html">country_properties</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">9</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/database_updates.html">database_updates</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Keeping track of database update operations, also used to ensure only one update processed at a time</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/quant_context_properties.html">quant_context_properties</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Context specific properties for quant (like tooltip text)</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/chart_quals.html">chart_quals</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Quals to display in a chart (see chart_attributes.)</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/chart_node_types.html">chart_node_types</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">8</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Node types to display in a chart.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/quant_country_properties.html">quant_country_properties</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Country specific properties for quant</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/flow_nodes.html">flow_nodes</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Normalised flows, a readonly table populated during data upload.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/partitioned_flow_inds.html">partitioned_flow_inds</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/database_validation_reports.html">database_validation_reports</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Keeping track of database validation operations</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/resize_by_quants.html">resize_by_quants</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Quants available for recoloring (see resize_by_attributes.)</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/contexts.html">contexts</a></td>
+                                        <td class="detail" align="right">13</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Country-commodity combinations.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboards_quants.html">dashboards_quants</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Quants available in dashboards (see dashboards_attributes.)</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/ind_country_properties.html">ind_country_properties</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Country specific properties for ind</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/node_quals.html">node_quals</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Values of quals for node</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/recolor_by_attributes.html">recolor_by_attributes</a></td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">1</td>
+                                        <td class="detail" align="right">16</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Attributes (inds/quals) available for recoloring.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/partitioned_flow_quals.html">partitioned_flow_quals</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/partitioned_denormalised_flow_quants.html">partitioned_denormalised_flow_quants</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">8</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/quals.html">quals</a></td>
+                                        <td class="detail" align="right">10</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Attributes classified as quals</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboards_exporters.html">dashboards_exporters</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">11</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Materialized table used for listing exporters in tool search panels</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/partitioned_denormalised_flow_inds.html">partitioned_denormalised_flow_inds</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">8</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/quant_commodity_properties.html">quant_commodity_properties</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">2</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Commodity specific properties for quant</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/commodities.html">commodities</a></td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Commodities in supply chains, such as soy or beef</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboards_destinations.html">dashboards_destinations</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">11</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">Table</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Materialized table used for listing destinations in tool search panels</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboards_commodities_v.html">dashboards_commodities_v</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/country_attribute_properties_mv.html">country_attribute_properties_mv</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Materialized view combining country specific properties for inds, quals and quants.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/ind_values_meta_mv.html">ind_values_meta_mv</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/context_attribute_properties_mv.html">context_attribute_properties_mv</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Materialized view combining context specific properties for inds, quals and quants.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/recolor_by_attributes_mv.html">recolor_by_attributes_mv</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">18</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Materialized view which merges recolor_by_inds and recolor_by_quals with recolor_by_attributes.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboards_sources_v.html">dashboards_sources_v</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">11</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/flow_nodes_v.html">flow_nodes_v</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboards_destinations_v.html">dashboards_destinations_v</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">11</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/nodes_with_flows_per_year_v.html">nodes_with_flows_per_year_v</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">14</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/resize_by_attributes_mv.html">resize_by_attributes_mv</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">11</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Materialized view which merges resize_by_quants with resize_by_attributes.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboards_importers_v.html">dashboards_importers_v</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">11</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/qual_values_meta_mv.html">qual_values_meta_mv</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/download_flows_v.html">download_flows_v</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">10</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/nodes_with_flows_or_geo_v.html">nodes_with_flows_or_geo_v</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">12</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/nodes_with_flows_v.html">nodes_with_flows_v</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">12</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/nodes_stats_mv.html">nodes_stats_mv</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">9</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/flow_attributes_mv.html">flow_attributes_mv</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/chart_attributes_mv.html">chart_attributes_mv</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">18</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Materialized view which merges chart_inds, chart_quals and chart_quants with chart_attributes.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/map_attributes_mv.html">map_attributes_mv</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">18</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Materialized view which merges map_inds and map_quants with map_attributes.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/contexts_mv.html">contexts_mv</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">17</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboards_companies_v.html">dashboards_companies_v</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">11</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/pg_stat_statements.html">pg_stat_statements</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">23</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/attributes_v.html">attributes_v</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">7</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboards_countries_v.html">dashboards_countries_v</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">8</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/download_attributes_mv.html">download_attributes_mv</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">10</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Materialized view which merges download_quals and download_quants with download_attributes.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/commodity_attribute_properties_mv.html">commodity_attribute_properties_mv</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Materialized view combining commodity specific properties for inds, quals and quants.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboards_attributes_mv.html">dashboards_attributes_mv</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">4</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"><p>Materialized view which merges dashboards_inds, dashboards_quals and dashboards_quants with dashboards_attributes.</p></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/quant_values_meta_mv.html">quant_values_meta_mv</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/download_flows_stats_mv.html">download_flows_stats_mv</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">5</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/flow_quant_totals_mv.html">flow_quant_totals_mv</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">6</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/dashboards_exporters_v.html">dashboards_exporters_v</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">11</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                                    <tr class="tbl even" valign="top">
+                                        <td class="detail"><a href="tables/nodes_per_context_ranked_by_volume_per_year_mv.html">nodes_per_context_ranked_by_volume_per_year_mv</a></td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">3</td>
+                                        <td class="detail" align="right">0</td>
+                                        <td class="detail" align="right">View</td>
+                                        <td class="comment detail" style="display: table-cell;"></td>
+                                    </tr>
+                            </table>
+                        </div>
+                    </div><!-- /.box-body -->
+                </section>
+                <!-- /.content -->
+                <script>
+                    var config = {
+                        pagination: true
+                    }
+                </script>
             </div>
-            <!-- /.box-body -->
-          </div>			
-      </section>
-      <!-- /.content -->
-	  <script>
-          var config = {
-	          pagination: true
-          }
-	  </script>    
-  </div>
-  <!-- /.content-wrapper -->
-  <footer class="main-footer">
-    <div>
-      <div class="pull-right hidden-xs">
-        <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
-        <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
-      </div>
-      <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.0.0</a></strong>
-    </div>
-    <!-- /.container -->
-  </footer>
-</div>
-<!-- ./wrapper -->
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
+                        <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
+                    </div>
+                    <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.1.0</a></strong>
+                </div>
+                <!-- /.container -->
+            </footer>
+        </div>
+        <!-- ./wrapper -->
 
-<!-- jQuery 2.2.3 -->
-<script src="bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js"></script>
-<script src="bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js"></script>
-<!-- Bootstrap 3.3.5 -->
-<script src="bower/admin-lte/bootstrap/js/bootstrap.min.js"></script>
-<!-- DataTables -->
-<script src="bower/datatables.net/jquery.dataTables.min.js"></script>
-<script src="bower/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-<script src="bower/datatables.net-buttons/dataTables.buttons.min.js"></script>
-<script src="bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-<script src="bower/datatables.net-buttons/buttons.html5.min.js"></script>
-<script src="bower/datatables.net-buttons/buttons.print.min.js"></script>
-<script src="bower/datatables.net-buttons/buttons.colVis.min.js"></script>
-<!-- SheetJS -->
-<script src="bower/js-xlsx/xlsx.full.min.js"></script>
-<!-- pdfmake -->
-<script src="bower/pdfmake/pdfmake.min.js"></script>
-<script src="bower/pdfmake/vfs_fonts.js"></script>
-<!-- SlimScroll -->
-<script src="bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
-<!-- FastClick -->
-<script src="bower/admin-lte/plugins/fastclick/fastclick.js"></script>
-<!-- Salvattore -->
-<script src="bower/salvattore/salvattore.min.js"></script>
-<!-- AnchorJS -->
-<script src="bower/anchor-js/anchor.min.js"></script>
-<!-- CodeMirror -->
-<script src="bower/codemirror/codemirror.js"></script>
-<script src="bower/codemirror/sql.js"></script>
-<!-- AdminLTE App -->
-<script src="bower/admin-lte/dist/js/app.min.js"></script>
-<script src="main.js"></script>
-<script src="schemaSpy.js"></script>
-</body>
+        <!-- jQuery 2.2.3 -->
+        <script src="bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js"></script>
+        <!-- Bootstrap 3.3.5 -->
+        <script src="bower/admin-lte/bootstrap/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="bower/datatables.net/jquery.dataTables.min.js"></script>
+        <script src="bower/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <script src="bower/datatables.net-buttons/dataTables.buttons.min.js"></script>
+        <script src="bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+        <script src="bower/datatables.net-buttons/buttons.html5.min.js"></script>
+        <script src="bower/datatables.net-buttons/buttons.print.min.js"></script>
+        <script src="bower/datatables.net-buttons/buttons.colVis.min.js"></script>
+        <!-- SheetJS -->
+        <script src="bower/js-xlsx/xlsx.full.min.js"></script>
+        <!-- pdfmake -->
+        <script src="bower/pdfmake/pdfmake.min.js"></script>
+        <script src="bower/pdfmake/vfs_fonts.js"></script>
+        <!-- SlimScroll -->
+        <script src="bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="bower/admin-lte/plugins/fastclick/fastclick.js"></script>
+        <!-- Salvattore -->
+        <script src="bower/salvattore/salvattore.min.js"></script>
+        <!-- AnchorJS -->
+        <script src="bower/anchor-js/anchor.min.js"></script>
+        <!-- CodeMirror -->
+        <script src="bower/codemirror/codemirror.js"></script>
+        <script src="bower/codemirror/sql.js"></script>
+        <!-- AdminLTE App -->
+        <script src="bower/admin-lte/dist/js/app.min.js"></script>
+        <script src="main.js"></script>
+        <script src="schemaSpy.js"></script>
+    </body>
 </html>
