@@ -1,4 +1,4 @@
-dist: xenial
+dist: bionic
 env:
   global:
     - CC_TEST_REPORTER_ID=ae4098e380eed3c112bd34c4c2ceec913288ce9479bb748bf098a57b75ff5de5
@@ -9,7 +9,7 @@ matrix:
   include:
     - language: ruby
       rvm:
-        - 2.6.3
+        - 2.6.5
       services:
         - postgresql
       addons:
