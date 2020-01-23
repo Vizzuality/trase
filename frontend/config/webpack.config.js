@@ -35,7 +35,15 @@ module.exports = {
       DATA_DOWNLOAD_ENABLED: process.env.DATA_DOWNLOAD_ENABLED === 'true',
       icons: templates.icons,
       head: templates.head,
-      preconnect: [`https:${process.env.API_V3_URL}`, `http:${process.env.API_V3_URL}`]
+      preconnect: [
+        `https:${process.env.API_V3_URL}`,
+        `http:${process.env.API_V3_URL}`,
+        `https://${process.env.CARTO_ACCOUNT}.carto.com`,
+        'https://sample-api-v2.crazyegg.com',
+        'https://live-detector.svc.transifex.net',
+        'https://audex.userreport.com',
+        'https://dmp.adform.net'
+      ]
     }),
     new PreloadWebpackPlugin(),
     new HtmlWebpackPreconnectPlugin(),
