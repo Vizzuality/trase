@@ -46,7 +46,7 @@ matrix:
           keep-history: true
           local-dir: doc/gh-pages
           on:
-            branch: master
+            branch: develop
         - provider: surge
           project: ./frontend/docs/
           domain: trase.surge.sh
