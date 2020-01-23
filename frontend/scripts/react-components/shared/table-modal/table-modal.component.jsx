@@ -3,8 +3,38 @@ import PropTypes from 'prop-types';
 import Heading from 'react-components/shared/heading/heading.component';
 import Button from 'react-components/shared/button';
 import debounce from 'lodash/debounce';
+import snakeCase from 'lodash/snakeCase';
+import CSVConverter from 'utils/csv-converter';
 import Table from 'react-components/shared/table-modal/table';
+
 import 'react-components/shared/table-modal/table-modal.scss';
+
+function downloadCSVTableData(tableData, fileName) {
+  const getHeader = i => {
+    if (tableData.headers[i]) {
+      const { name, unit } = tableData.headers[i];
+      if (name) {
+        if (unit) {
+          return snakeCase(`${name} (${unit})`);
+        }
+        return snakeCase(name);
+      }
+    }
+    return i;
+  };
+
+  const data = tableData.data.map(row =>
+    row.reduce(
+      (acc, next, i) => ({
+        ...acc,
+        [getHeader(i)]: next
+      }),
+      {}
+    )
+  );
+  const csv = CSVConverter.convert(data);
+  CSVConverter.download(csv, fileName);
+}
 
 function TableModal({ title, tableData }) {
   const modalRef = useRef(null);
@@ -40,6 +70,7 @@ function TableModal({ title, tableData }) {
       }
     }
   }, [height, rect]);
+
   return (
     <div className="c-table-modal" ref={modalRef} style={{ height: tableModalHeight }}>
       {height > 0 && (
@@ -57,7 +88,12 @@ function TableModal({ title, tableData }) {
             />
           )}
           <div className="table-modal-footer">
-            <Button color="pink" size="sm" disabled>
+            <Button
+              color="pink"
+              size="sm"
+              disabled={!tableData}
+              onClick={() => downloadCSVTableData(tableData, title)}
+            >
               Download CSV
             </Button>
           </div>
