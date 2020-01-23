@@ -6,6 +6,9 @@ info:
     name: Trase Public API
     url: https://trase.earth/
     email: info@trase.earth
+  termsOfService: https://trase.earth/terms-of-use.html
+  license:
+    name: MIT License
   description: >-
     This is a first version of the public API for [Trase](https://trase.earth/).
 
