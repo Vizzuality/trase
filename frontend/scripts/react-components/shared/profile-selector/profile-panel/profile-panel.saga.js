@@ -7,7 +7,7 @@ import {
   PROFILES__SET_ACTIVE_TAB,
   PROFILES__SET_PANEL_PAGE,
   PROFILES__GET_SEARCH_RESULTS
-} from 'react-components/shared/profile-selector/profile-selector.register';
+} from 'react-components/shared/profile-selector/profile-selector.actions';
 import {
   getProfilesData,
   getProfilesTabs,

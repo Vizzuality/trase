@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import throttle from 'lodash/throttle';
@@ -8,9 +8,10 @@ import LocaleSelector from 'react-components/nav/locale-selector/locale-selector
 import Search from 'react-components/nav/global-search/global-search.container';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.container';
 import Img from 'react-components/shared/img';
-import DownloadPdfLink from './download-pdf-link.component';
 
 import 'scripts/react-components/nav/top-nav/top-nav.scss';
+
+const DownloadPdfLink = React.lazy(() => import('./download-pdf-link.component'));
 
 class TopNav extends React.PureComponent {
   state = {
@@ -64,7 +65,7 @@ class TopNav extends React.PureComponent {
   handleToggleClick = () => this.setState(state => ({ menuOpen: !state.menuOpen }));
 
   renderDesktopMenu() {
-    const { links, printable, showLogo, onDownloadPDF, className, page } = this.props;
+    const { links, printable, showLogo, className, page } = this.props;
     const allLinks = [];
 
     if (showLogo && !ENABLE_TOOL_PANEL) {
@@ -131,7 +132,9 @@ class TopNav extends React.PureComponent {
               </li>
               {printable && (
                 <li className="top-nav-item">
-                  <DownloadPdfLink onClick={onDownloadPDF} />
+                  <Suspense fallback={null}>
+                    <DownloadPdfLink />
+                  </Suspense>
                 </li>
               )}
             </ul>
@@ -213,8 +216,7 @@ TopNav.propTypes = {
   showLogo: PropTypes.bool,
   printable: PropTypes.bool,
   className: PropTypes.string,
-  pageOffset: PropTypes.number,
-  onDownloadPDF: PropTypes.func
+  pageOffset: PropTypes.number
 };
 
 TopNav.defaultProps = {

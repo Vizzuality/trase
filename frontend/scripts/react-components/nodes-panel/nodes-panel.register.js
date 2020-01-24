@@ -1,7 +1,10 @@
 import reducerRegistry from 'reducer-registry';
+import sagaRegistry from 'saga-registry';
 import reducer from './nodes-panel.reducer';
+import saga from './nodes-panel.saga';
 
 reducerRegistry.register('nodesPanel', reducer);
+sagaRegistry.register('nodesPanel', saga);
 
 // not ideal because you have to change in two, but still better than changing across all app
 export {
