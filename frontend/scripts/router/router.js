@@ -3,29 +3,62 @@ import { connectRoutes, NOT_FOUND, redirect, replace } from 'redux-first-router'
 import restoreScroll from 'redux-first-router-restore-scroll';
 import parseURL from 'utils/parseURL';
 import qs from 'qs';
-
 import { BREAKPOINTS } from 'constants';
-import {
-  getPostsContent,
-  getTestimonialsContent,
-  getTweetsContent
-} from 'react-components/home/home.thunks';
-import { loadTopNodes } from 'react-components/profile-root/profile-root.thunks';
-import { loadColumnsData } from 'react-components/profile-node/profile-node.thunks';
-import getPageStaticContent from 'react-components/static-content/static-content.thunks';
-import loadBaseAppData from 'app/app.thunks';
-import getTeam from 'react-components/team/team.thunks';
 import withSidebarNavLayout from 'react-components/nav/sidebar-nav/with-sidebar-nav-layout.hoc';
-import { loadDashboardTemplates } from 'react-components/dashboard-root/dashboard-root.thunks';
-import { redirectToExplore } from 'react-components/legacy-explore/explore.thunks';
-import {
-  loadToolInitialData,
-  resizeSankeyTool,
-  loadDisclaimerTool
-} from 'scripts/react-components/tool/tool.thunks';
-import { loadInitialDashboardData } from 'scripts/react-components/dashboard-element/dashboard-element.thunks';
-
 import getPageTitle from 'scripts/router/page-title';
+
+const getPostsContent = (dispatch, getState) =>
+  import('../react-components/home/home.thunks').then(module =>
+    module.getPostsContent(dispatch, getState)
+  );
+const getTestimonialsContent = (dispatch, getState) =>
+  import('../react-components/home/home.thunks').then(module =>
+    module.getTestimonialsContent(dispatch, getState)
+  );
+const getTweetsContent = (dispatch, getState) =>
+  import('../react-components/home/home.thunks').then(module =>
+    module.getTweetsContent(dispatch, getState)
+  );
+const loadColumnsData = (dispatch, getState) =>
+  import('../react-components/profile-node/profile-node.thunks').then(module =>
+    module.loadColumnsData(dispatch, getState)
+  );
+const loadTopNodes = (dispatch, getState) =>
+  import('../react-components/profile-root/profile-root.thunks').then(module =>
+    module.loadTopNodes(dispatch, getState)
+  );
+const getPageStaticContent = (dispatch, getState) =>
+  import('../react-components/static-content/static-content.thunks').then(module =>
+    module.default(dispatch, getState)
+  );
+const loadBaseAppData = (dispatch, getState) =>
+  import('../app/app.thunks').then(module => module.default(dispatch, getState));
+const getTeam = (dispatch, getState) =>
+  import('../react-components/team/team.thunks').then(module => module.default(dispatch, getState));
+const loadDashboardTemplates = (dispatch, getState) =>
+  import('../react-components/dashboard-root/dashboard-root.thunks').then(module =>
+    module.loadDashboardTemplates(dispatch, getState)
+  );
+const redirectToExplore = (dispatch, getState) =>
+  import('../react-components/legacy-explore/explore.thunks').then(module =>
+    module.redirectToExplore(dispatch, getState)
+  );
+const loadToolInitialData = (dispatch, getState) =>
+  import('../react-components/tool/tool.thunks').then(module =>
+    module.loadToolInitialData(dispatch, getState)
+  );
+const resizeSankeyTool = (dispatch, getState) =>
+  import('../react-components/tool/tool.thunks').then(module =>
+    module.resizeSankeyTool(dispatch, getState)
+  );
+const loadDisclaimerTool = (dispatch, getState) =>
+  import('../react-components/tool/tool.thunks').then(module =>
+    module.loadDisclaimerTool(dispatch, getState)
+  );
+const loadInitialDashboardData = (dispatch, getState) =>
+  import('../react-components/dashboard-element/dashboard-element.thunks').then(module =>
+    module.loadInitialDashboardData(dispatch, getState)
+  );
 
 const pagesSupportedLimit = {
   data: 'small',

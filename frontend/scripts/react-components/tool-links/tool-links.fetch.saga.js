@@ -29,7 +29,7 @@ import {
   setToolNodes,
   setNoLinksFound,
   setMissingLockedNodes
-} from './tool-links.register';
+} from './tool-links.actions';
 
 export function* getToolLinksData() {
   const state = yield select();

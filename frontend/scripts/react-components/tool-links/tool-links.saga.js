@@ -25,7 +25,7 @@ import {
   setToolFlowsLoading,
   selectView,
   setToolChartsLoading
-} from './tool-links.register';
+} from './tool-links.actions';
 import {
   getToolColumnsData,
   getToolLinksData,

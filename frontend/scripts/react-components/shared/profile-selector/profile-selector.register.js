@@ -1,7 +1,10 @@
 import reducerRegistry from 'reducer-registry';
+import sagaRegistry from 'saga-registry';
 import reducer from './profile-selector.reducer';
+import saga from './profile-panel/profile-panel.saga';
 
 reducerRegistry.register('profileSelector', reducer);
+sagaRegistry.register('profilePanel', saga);
 
 // not ideal because you have to change in two, but still better than changing across all app
 export {

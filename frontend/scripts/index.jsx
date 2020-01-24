@@ -8,8 +8,10 @@ import parseURL from 'utils/parseURL';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
+import { all } from 'redux-saga/effects';
 import analyticsMiddleware from 'analytics/middleware';
 import reducerRegistry from 'reducer-registry';
+import sagaRegistry from 'saga-registry';
 
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import toolLinksInitialState from 'react-components/tool-links/tool-links.initial-state';
@@ -26,7 +28,6 @@ import nodesPanelInitialState from 'react-components/nodes-panel/nodes-panel.ini
 import nodesPanelSerialization from 'react-components/nodes-panel/nodes-panel.serializers';
 import router from './router/router';
 import { register, unregister } from './worker';
-import { rootSaga } from './sagas';
 
 import 'styles/_base.scss';
 import 'styles/_texts.scss';
@@ -139,7 +140,21 @@ window.onTransifexLoad = () => {
   }
 };
 
-sagaMiddleware.run(rootSaga);
+let sagaTask = null;
+sagaRegistry.setChangeListener(sagas => {
+  function* runSagas() {
+    yield all(sagas);
+  }
+  if (sagaTask) {
+    sagaTask.cancel();
+  }
+  sagaTask = sagaMiddleware.run(runSagas);
+});
+
+function* startSagas() {
+  yield all(sagaRegistry.getSagas());
+}
+sagaTask = sagaMiddleware.run(startSagas);
 
 render(
   <Provider store={store}>

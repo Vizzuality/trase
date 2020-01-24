@@ -3,7 +3,7 @@ import { put, call, cancelled, select } from 'redux-saga/effects';
 import {
   setDashboardLoading,
   setDashboardCharts
-} from 'react-components/dashboard-element/dashboard-element.register';
+} from 'react-components/dashboard-element/dashboard-element.actions';
 import {
   getDashboardSelectedYears,
   getDashboardSelectedResizeBy,
