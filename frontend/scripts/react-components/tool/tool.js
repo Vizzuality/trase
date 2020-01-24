@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import ToolComponent from 'react-components/tool/tool.component';
 import { connect } from 'react-redux';
-import { resize, selectYears } from 'app/app.actions';
+import { resize, selectYears } from 'app/app.register';
 
 import {
   getToolLinksUrlProps,

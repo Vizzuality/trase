@@ -19,8 +19,8 @@ import {
   goToTool,
   getQuickFacts,
   getSankeyCards
-} from 'react-components/explore/explore.actions';
-import { getTopCountries } from 'app/app.actions';
+} from 'react-components/explore/explore.register';
+import { getTopCountries } from 'app/app.register';
 
 const mapStateToProps = state => ({
   items: getItems(state),

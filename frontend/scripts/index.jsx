@@ -9,14 +9,14 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 import analyticsMiddleware from 'analytics/middleware';
-import * as appReducers from 'store';
+import reducerRegistry from 'reducer-registry';
 
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import toolLinksInitialState from 'react-components/tool-links/tool-links.initial-state';
 import toolLinksSerialization from 'react-components/tool-links/tool-links.serializers';
 import appInitialState from 'app/app.initial-state';
 import appSerialization from 'app/app.serializers';
-import { setTransifexLanguages } from 'app/app.actions';
+import { setTransifexLanguages } from 'app/app.register';
 import App from 'app/app.component';
 import toolLayersInitialState from 'react-components/tool-layers/tool-layers.initial-state';
 import toolLayersSerialization from 'react-components/tool-layers/tool-layers.serializers';
@@ -90,10 +90,9 @@ const reduxDevTools =
 
 const composeEnhancers = (process.env.NODE_ENV === 'development' && reduxDevTools) || compose;
 
-const reducers = combineReducers({
-  ...appReducers,
-  location: router.reducer
-});
+reducerRegistry.register('location', router.reducer);
+
+const reducers = combineReducers(reducerRegistry.getReducers());
 
 const params = parseURL(window.location.search);
 const store = createStore(
@@ -126,6 +125,10 @@ const store = createStore(
     })
   },
   composeEnhancers(router.enhancer, applyMiddleware(...middlewares))
+);
+
+reducerRegistry.setChangeListener(asyncReducers =>
+  store.replaceReducer(combineReducers(asyncReducers))
 );
 
 window.onTransifexLoad = () => {

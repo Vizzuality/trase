@@ -4,7 +4,7 @@ import {
   setLoadingItems,
   setSelectedItem,
   setPage
-} from 'react-components/nodes-panel/nodes-panel.actions';
+} from 'react-components/nodes-panel/nodes-panel.register';
 import { makeGetNodesPanelsProps } from 'react-components/nodes-panel/nodes-panel.selectors';
 import CommoditiesPanel from './commodities-panel.component';
 

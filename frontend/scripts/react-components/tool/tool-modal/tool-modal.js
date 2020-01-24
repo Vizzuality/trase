@@ -7,8 +7,8 @@ import {
   selectRecolorBy,
   setToolFlowsLoading,
   setToolChartsLoading
-} from 'react-components/tool-links/tool-links.actions';
-import { finishSelection } from 'react-components/nodes-panel/nodes-panel.actions';
+} from 'react-components/tool-links/tool-links.register';
+import { finishSelection } from 'react-components/nodes-panel/nodes-panel.register';
 import { getItems, getSelectedItem } from 'react-components/tool/tool-modal/tool-modal.selectors';
 
 const mapStateToProps = state => ({

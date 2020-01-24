@@ -17,7 +17,7 @@ import {
   setData,
   setTabs,
   setNoData
-} from './nodes-panel.actions';
+} from './nodes-panel.register';
 import {
   getNodesPanelDraftContext,
   getCommoditiesPreviousSteps,

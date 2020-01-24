@@ -4,7 +4,7 @@ import {
   DASHBOARD_ELEMENT__SET_SELECTED_YEARS,
   DASHBOARD_ELEMENT__SET_SELECTED_RESIZE_BY,
   DASHBOARD_ELEMENT__SET_SELECTED_RECOLOR_BY
-} from 'react-components/dashboard-element/dashboard-element.actions';
+} from 'react-components/dashboard-element/dashboard-element.register';
 import { fetchDashboardCharts } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
 import { getDashboardsContext } from 'react-components/dashboard-element/dashboard-element.selectors';
 

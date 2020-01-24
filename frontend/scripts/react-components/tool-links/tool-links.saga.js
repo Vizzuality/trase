@@ -6,7 +6,7 @@ import { getSelectedContext } from 'app/app.selectors';
 import {
   NODES_PANEL__SAVE,
   NODES_PANEL__SYNC_NODES_WITH_SANKEY
-} from 'react-components/nodes-panel/nodes-panel.actions';
+} from 'react-components/nodes-panel/nodes-panel.register';
 import {
   TOOL_LINKS__SWITCH_TOOL,
   TOOL_LINKS__SET_SELECTED_NODES,
@@ -25,7 +25,7 @@ import {
   setToolFlowsLoading,
   selectView,
   setToolChartsLoading
-} from './tool-links.actions';
+} from './tool-links.register';
 import {
   getToolColumnsData,
   getToolLinksData,

@@ -8,7 +8,7 @@ import {
   setSelectedTab,
   getSearchResults,
   setSearchResult
-} from 'react-components/nodes-panel/nodes-panel.actions';
+} from 'react-components/nodes-panel/nodes-panel.register';
 import { makeGetNodesPanelsProps } from 'react-components/nodes-panel/nodes-panel.selectors';
 import SourcesPanel from './sources-panel.component';
 

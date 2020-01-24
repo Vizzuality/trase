@@ -4,7 +4,7 @@ import { PROFILE_TYPES } from 'constants';
 import {
   setProfilesPage,
   setProfilesActiveItem
-} from 'react-components/shared/profile-selector/profile-selector.actions';
+} from 'react-components/shared/profile-selector/profile-selector.register';
 
 // Importing countries panel is not ready yet
 const blocks = [

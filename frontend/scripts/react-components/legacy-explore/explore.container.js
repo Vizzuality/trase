@@ -4,8 +4,8 @@ import getTopNodesKey from 'utils/getTopNodesKey';
 import {
   setExploreTopNodes,
   setSelectedTableColumnType
-} from 'react-components/legacy-explore/explore.actions';
-import { selectContextById } from 'app/app.actions';
+} from 'react-components/legacy-explore/legacy-explore.register';
+import { selectContextById } from 'app/app.register';
 import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 import { getDestinationCountries } from 'react-components/legacy-explore/explore.selectors';
 import Explore from './explore.component';

@@ -1,5 +1,4 @@
 import {
-  DISPLAY_STORY_MODAL,
   LOAD_SEARCH_RESULTS,
   LOAD_TOOLTIP,
   SET_SEARCH_TERM,
@@ -69,9 +68,6 @@ const appReducer = {
   [TOGGLE_DROPDOWN](state, action) {
     const currentDropdown = action.dropdownId === state.currentDropdown ? null : action.dropdownId;
     return Object.assign({}, state, { currentDropdown });
-  },
-  [DISPLAY_STORY_MODAL](state, action) {
-    return { ...state, modal: action.payload };
   },
   [SET_SEARCH_TERM](state, action) {
     return { ...state, search: { ...state.search, ...action.payload } };

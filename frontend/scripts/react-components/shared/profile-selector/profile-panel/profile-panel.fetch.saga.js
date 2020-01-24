@@ -6,7 +6,7 @@ import {
   PROFILES__SET_MORE_PANEL_DATA,
   PROFILES__SET_SEARCH_RESULTS,
   setProfilesLoadingItems
-} from 'react-components/shared/profile-selector/profile-selector.actions';
+} from 'react-components/shared/profile-selector/profile-selector.register';
 import {
   getURLFromParams,
   GET_DASHBOARD_OPTIONS_URL,

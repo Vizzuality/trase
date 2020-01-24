@@ -18,7 +18,7 @@ import {
   setLayerActive as setLayerActiveFn,
   getLogisticsMapCompanies,
   selectLogisticsMapYear
-} from 'react-components/logistics-map/logistics-map.actions';
+} from 'react-components/logistics-map/logistics-map.register';
 import LogisticsMap from 'react-components/logistics-map/logistics-map.component';
 import formatValue from 'utils/formatValue';
 import capitalize from 'lodash/capitalize';

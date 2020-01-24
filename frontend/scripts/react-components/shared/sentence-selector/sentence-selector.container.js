@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import SentenceSelector from 'react-components/shared/sentence-selector/sentence-selector.component';
-import { selectContextById } from 'app/app.actions';
+import { selectContextById } from 'app/app.register';
 import {
   getSortedContexts,
   getSelectedCommodityPairs,
