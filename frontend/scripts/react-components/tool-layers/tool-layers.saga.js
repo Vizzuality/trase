@@ -5,12 +5,12 @@ import {
   TOOL_LINKS__CLEAR_SANKEY,
   TOOL_LINKS__SELECT_COLUMN,
   TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH
-} from 'react-components/tool-links/tool-links.actions';
+} from 'react-components/tool-links/tool-links.register';
 import {
   NODES_PANEL__SAVE,
   NODES_PANEL__SYNC_NODES_WITH_SANKEY
-} from 'react-components/nodes-panel/nodes-panel.actions';
-import { SET_CONTEXT, SET_CONTEXTS } from 'app/app.actions';
+} from 'react-components/nodes-panel/nodes-panel.register';
+import { SET_CONTEXT, SET_CONTEXTS } from 'app/app.register';
 import {
   SELECT_YEARS,
   loadMapChoropleth,

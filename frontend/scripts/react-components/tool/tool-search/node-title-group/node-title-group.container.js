@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectNodes } from 'react-components/tool-links/tool-links.actions';
+import { selectNodes } from 'react-components/tool-links/tool-links.register';
 import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group/node-title-group.component';
 import { getSelectedNodesData } from 'react-components/tool/tool.selectors';
 import { getToolRecolorGroups } from 'react-components/tool-links/tool-links.selectors';

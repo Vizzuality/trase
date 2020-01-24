@@ -1,8 +1,8 @@
 import { bindActionCreators } from 'redux';
-import { loadContextNodes } from 'react-components/data-portal/data-portal.actions';
+import { loadContextNodes } from 'react-components/data-portal/data-portal.register';
 import { trackDataDownloadFormLoaded, trackDownload } from 'analytics/analytics.actions';
 import { connect } from 'react-redux';
-import { selectContextById } from 'app/app.actions';
+import { selectContextById } from 'app/app.register';
 import DataPortalPage from 'react-components/data-portal/data-portal-page.component';
 import { getSelectedContext } from 'app/app.selectors';
 

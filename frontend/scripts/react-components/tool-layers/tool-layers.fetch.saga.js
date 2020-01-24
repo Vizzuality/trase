@@ -8,7 +8,7 @@ import { fetchWithCancel } from 'utils/saga-utils';
 import {
   setMapDimensions,
   setLinkedGeoIds
-} from 'react-components/tool-layers/tool-layers.actions';
+} from 'react-components/tool-layers/tool-layers.register';
 import intesection from 'lodash/intersection';
 import { YEARS_DISABLED_UNAVAILABLE, YEARS_INCOMPLETE } from 'constants';
 import { getSingleMapDimensionWarning } from 'app/helpers/getMapDimensionsWarnings';

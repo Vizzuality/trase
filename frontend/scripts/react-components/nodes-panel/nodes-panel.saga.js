@@ -1,13 +1,13 @@
 import { select, all, fork, takeLatest, takeEvery, put, call } from 'redux-saga/effects';
 import modules from 'react-components/nodes-panel/nodes-panel.modules';
-import { setDashboardLoading } from 'react-components/dashboard-element/dashboard-element.actions';
+import { setDashboardLoading } from 'react-components/dashboard-element/dashboard-element.register';
 import { fetchDashboardCharts } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
 import { getDashboardsContext } from 'react-components/dashboard-element/dashboard-element.selectors';
 import {
   setToolChartsLoading,
   TOOL_LINKS__EXPAND_SANKEY,
   TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH
-} from 'react-components/tool-links/tool-links.actions';
+} from 'react-components/tool-links/tool-links.register';
 import { fetchToolCharts } from 'react-components/tool-links/tool-links.fetch.saga';
 import {
   getExpandedNodesByRole,
@@ -29,7 +29,7 @@ import {
   NODES_PANEL__SET_PANEL_PAGE,
   NODES_PANEL__SET_ORDER_BY,
   NODES_PANEL__SET_SELECTED_ID
-} from './nodes-panel.actions';
+} from './nodes-panel.register';
 import {
   getData,
   getSectionTabs,

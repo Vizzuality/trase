@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import routerLinks from 'router/nav-links';
-import { onDownloadPDF } from 'react-components/profile-node/profile-node.actions';
+import { onDownloadPDF } from 'react-components/profile-node/profile-node.register';
 import TopNav from './top-nav.component';
 
 function mapStateToProps(state) {

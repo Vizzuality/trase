@@ -3,7 +3,7 @@ import ProfileSelectorComponent from 'react-components/shared/profile-selector/p
 import {
   setProfilesActiveStep,
   goToProfile
-} from 'react-components/shared/profile-selector/profile-selector.actions';
+} from 'react-components/shared/profile-selector/profile-selector.register';
 import {
   getIsDisabled,
   getDynamicSentence

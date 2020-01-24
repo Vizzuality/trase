@@ -93,7 +93,8 @@ module.exports = {
       store: path.resolve(srcPath, 'store'),
       router: path.resolve(srcPath, 'router'),
       selectors: path.resolve(srcPath, 'selectors'),
-      'lodash-es': 'lodash'
+      'lodash-es': 'lodash',
+      'reducer-registry': path.resolve(srcPath, 'reducer-registry')
     },
     plugins: [
       new DirectoryNamedWebpackPlugin({

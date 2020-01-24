@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import {
   getWidgetData as getWidgetDataFn,
   getWidgetState
-} from 'react-components/widgets/widgets.actions';
+} from 'react-components/widgets/widgets.register';
 
 const mapStateToProps = (state, { query, params }) => {
   const { endpoints } = state.widgets;

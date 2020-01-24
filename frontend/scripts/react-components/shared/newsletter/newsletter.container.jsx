@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {
   sendSubscriptionEmail,
   resetNewsletter
-} from 'react-components/shared/newsletter/newsletter.actions';
+} from 'react-components/shared/newsletter/newsletter.register';
 import NewsletterForm from './newsletter-form.component';
 
 function mapStateToProps(state) {

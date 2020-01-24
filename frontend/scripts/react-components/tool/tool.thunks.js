@@ -1,7 +1,7 @@
 import { batch } from 'react-redux';
-import { loadDisclaimer, resize } from 'app/app.actions';
-import { getToolColumns } from 'react-components/tool-links/tool-links.actions';
-import { getMissingItems } from 'react-components/nodes-panel/nodes-panel.actions';
+import { loadDisclaimer, resize } from 'app/app.register';
+import { getToolColumns } from 'react-components/tool-links/tool-links.register';
+import { getMissingItems } from 'react-components/nodes-panel/nodes-panel.register';
 
 export const loadDisclaimerTool = dispatch => dispatch(loadDisclaimer());
 

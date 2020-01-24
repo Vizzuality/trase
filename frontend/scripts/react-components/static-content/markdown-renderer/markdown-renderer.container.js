@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { getStaticContentFilename } from 'react-components/static-content/static-content.actions';
+import { getStaticContentFilename } from 'react-components/static-content/static-content.register';
 import MarkdownRenderer from './markdown-renderer.component';
 
 function mapStateToProps(state) {

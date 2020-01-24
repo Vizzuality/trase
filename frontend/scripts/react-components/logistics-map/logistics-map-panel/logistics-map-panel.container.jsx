@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import {
   updateQueryParams,
   setCompanySearchTerm
-} from 'react-components/logistics-map/logistics-map.actions';
+} from 'react-components/logistics-map/logistics-map.register';
 import {
   getActiveParams,
   getCurrentCompanies,
