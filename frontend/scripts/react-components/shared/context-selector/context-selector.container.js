@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { toggleDropdown, selectContextById } from 'app/app.actions';
+import { toggleDropdown, selectContextById } from 'app/app.register';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.component';
 
 const mapStateToProps = (state, ownProps) => {

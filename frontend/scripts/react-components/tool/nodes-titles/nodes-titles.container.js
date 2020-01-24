@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 import { navigateToProfile } from 'react-components/tool/tool.actions';
-import { clearSankey, selectNodes } from 'react-components/tool-links/tool-links.actions';
+import { clearSankey, selectNodes } from 'react-components/tool-links/tool-links.register';
 import NodesTitles from 'react-components/tool/nodes-titles/nodes-titles.component';
 import {
   getSelectedNodesData,

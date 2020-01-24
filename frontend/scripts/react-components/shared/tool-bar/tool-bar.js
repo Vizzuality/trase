@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { connect } from 'react-redux';
-import { editPanels } from 'react-components/nodes-panel/nodes-panel.actions';
-import { setLogisticsMapActiveModal } from 'react-components/logistics-map/logistics-map.actions';
+import { editPanels } from 'react-components/nodes-panel/nodes-panel.register';
+import { setLogisticsMapActiveModal } from 'react-components/logistics-map/logistics-map.register';
 import { setActiveModal } from 'react-components/tool/tool.actions';
 import ToolBar from './tool-bar.component';
 import { getToolBar } from './tool-bar.selectors';

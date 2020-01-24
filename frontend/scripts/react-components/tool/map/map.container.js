@@ -1,6 +1,6 @@
 /* eslint-disable no-shadow */
 // see sankey.container for details on how to use those containers
-import { changeLayout } from 'app/app.actions';
+import { changeLayout } from 'app/app.register';
 import {
   selectNodeFromGeoId,
   highlightNodeFromGeoId,

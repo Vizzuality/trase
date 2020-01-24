@@ -22,7 +22,7 @@ export const getCountryNamesByCountryId = createSelector(
 export const getSelectedContext = createSelector(
   [getAppContexts, getAppSelectedContextId, getNodesPanelCountryId, getNodesPanelCommodityId],
   (contexts, selectedContextId, countryId, commodityId) => {
-    if (!contexts) {
+    if (!contexts || contexts.length === 0) {
       return ENABLE_TOOL_PANEL ? null : { id: selectedContextId };
     }
 

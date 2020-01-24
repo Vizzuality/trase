@@ -9,7 +9,7 @@ import {
   setSelectedTab,
   setExcludingMode,
   setOrderBy
-} from 'react-components/nodes-panel/nodes-panel.actions';
+} from 'react-components/nodes-panel/nodes-panel.register';
 import { makeGetNodesPanelsProps } from 'react-components/nodes-panel/nodes-panel.selectors';
 import DestinationsPanel from './destinations-panel.component';
 

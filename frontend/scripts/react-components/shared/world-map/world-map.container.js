@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import WorldMap from 'react-components/shared/world-map/world-map.component';
-import { setExploreTopNodes } from 'react-components/legacy-explore/explore.actions';
+import { setExploreTopNodes } from 'react-components/legacy-explore/legacy-explore.register';
 import {
   getOriginGeoId,
   getOriginCoordinates,

@@ -22,11 +22,11 @@ import {
   setDashboardSelectedRecolorBy,
   editDashboard as editDashboardFn,
   goToDashboard as goToDashboardFn
-} from 'react-components/dashboard-element/dashboard-element.actions';
+} from 'react-components/dashboard-element/dashboard-element.register';
 import {
   editPanels as editPanelsFn,
   finishSelection as finishSelectionFn
-} from 'react-components/nodes-panel/nodes-panel.actions';
+} from 'react-components/nodes-panel/nodes-panel.register';
 import { DASHBOARD_STEPS } from 'constants';
 
 const getUrlProps = createSelector(

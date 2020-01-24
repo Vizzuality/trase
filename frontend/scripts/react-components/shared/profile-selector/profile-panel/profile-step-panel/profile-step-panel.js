@@ -6,7 +6,7 @@ import {
   setProfilesActiveTab,
   getProfilesSearchResults,
   setProfilesActiveItemWithSearch
-} from 'react-components/shared/profile-selector/profile-selector.actions';
+} from 'react-components/shared/profile-selector/profile-selector.register';
 import {
   getCompaniesActiveData,
   getCountriesActiveItems,

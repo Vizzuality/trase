@@ -11,7 +11,7 @@ import {
   clearPanel,
   setSelectedItems,
   cancelPanelsDraft
-} from 'react-components/nodes-panel/nodes-panel.actions';
+} from 'react-components/nodes-panel/nodes-panel.register';
 import { getCanProceed } from 'react-components/nodes-panel/nodes-panel.selectors';
 
 const mapStateToProps = (state, ownProps) => {

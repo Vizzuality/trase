@@ -41,7 +41,8 @@
     "react/jsx-wrap-multilines": 0,
     "import/prefer-default-export": 0, // DON'T REMOVE AGAIN PLZ *cries*
     "react/sort-comp": 0, // DON'T REMOVE AGAIN PLZ *cries again*
-    "react/prop-types": "warn"
+    "react/prop-types": "warn",
+    "import/no-cycle": [2, { "maxDepth": 2 }]
   },
   "parser": "babel-eslint",
   "parserOptions": {

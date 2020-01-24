@@ -23,7 +23,7 @@ import {
   selectNodes,
   goToProfileFromSankey,
   changeExtraColumn
-} from 'react-components/tool-links/tool-links.actions';
+} from 'react-components/tool-links/tool-links.register';
 import { getSelectedMapDimensionsData } from 'react-components/tool-layers/tool-layers.selectors';
 
 const mapStateToProps = state => ({
