@@ -1,10 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import sortBy from 'lodash/sortBy';
 import Hero from 'react-components/shared/hero/hero.component';
-import NewsletterForm from 'react-components/shared/newsletter/newsletter.container';
 import SliderSection from 'react-components/home/slider-section/slider-section.component';
-import WorldMap from 'react-components/shared/world-map/world-map.container';
 import SentenceSelector from 'react-components/shared/sentence-selector/sentence-selector.container';
 import Entrypoints from 'react-components/home/entrypoints/entrypoints.component';
 import Button from 'react-components/shared/button/button.component';
@@ -12,6 +10,11 @@ import InView from 'react-components/shared/in-view.component';
 import cx from 'classnames';
 
 import 'scripts/react-components/home/homepage.scss';
+
+const WorldMap = React.lazy(() => import('../shared/world-map/world-map.container'));
+const NewsletterForm = React.lazy(() =>
+  import('react-components/shared/newsletter/newsletter.container')
+);
 
 const getConsolidatedInsights = (insights, blogs) =>
   sortBy([...insights, ...blogs], post => -new Date(post.date).getTime());
@@ -53,11 +56,13 @@ const Home = props => {
               <SentenceSelector className="homepage-map-sentence-selector" />
               <div className="homepage-map-container">
                 {inView && (
-                  <WorldMap
-                    id="home"
-                    context={selectedContext}
-                    destinationCountries={destinationCountries}
-                  />
+                  <Suspense fallback={null}>
+                    <WorldMap
+                      id="home"
+                      context={selectedContext}
+                      destinationCountries={destinationCountries}
+                    />
+                  </Suspense>
                 )}
               </div>
               <div className="homepage-map-link-container">
@@ -79,7 +84,9 @@ const Home = props => {
 
   const sliders = (
     <div className="sliders">
-      <NewsletterForm />
+      <Suspense fallback={null}>
+        <NewsletterForm />
+      </Suspense>
       {CONSOLIDATE_INSIGHTS === false && (
         <>
           <SliderSection name="News and Blogs" slides={blogPosts} />

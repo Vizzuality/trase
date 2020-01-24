@@ -29,7 +29,7 @@ import {
   NODES_PANEL__SET_PANEL_PAGE,
   NODES_PANEL__SET_ORDER_BY,
   NODES_PANEL__SET_SELECTED_ID
-} from './nodes-panel.register';
+} from './nodes-panel.actions';
 import {
   getData,
   getSectionTabs,

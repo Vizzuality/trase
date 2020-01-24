@@ -94,7 +94,8 @@ module.exports = {
       router: path.resolve(srcPath, 'router'),
       selectors: path.resolve(srcPath, 'selectors'),
       'lodash-es': 'lodash',
-      'reducer-registry': path.resolve(srcPath, 'reducer-registry')
+      'reducer-registry': path.resolve(srcPath, 'reducer-registry'),
+      'saga-registry': path.resolve(srcPath, 'saga-registry')
     },
     plugins: [
       new DirectoryNamedWebpackPlugin({

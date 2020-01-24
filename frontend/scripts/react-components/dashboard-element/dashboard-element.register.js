@@ -1,7 +1,10 @@
 import reducerRegistry from 'reducer-registry';
+import sagaRegistry from 'saga-registry';
 import reducer from './dashboard-element.reducer';
+import saga from './dashboard-element.saga';
 
 reducerRegistry.register('dashboardElement', reducer);
+sagaRegistry.register('dashboardElement', saga);
 
 // not ideal because you have to change in two, but still better than changing across all app
 export {

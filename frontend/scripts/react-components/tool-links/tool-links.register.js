@@ -1,7 +1,10 @@
 import reducerRegistry from 'reducer-registry';
+import sagaRegistry from 'saga-registry';
 import reducer from './tool-links.reducer';
+import saga from './tool-links.saga';
 
 reducerRegistry.register('toolLinks', reducer);
+sagaRegistry.register('toolLinks', saga);
 
 // not ideal because you have to change in two, but still better than changing across all app
 export {
