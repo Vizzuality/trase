@@ -7,57 +7,49 @@ import { BREAKPOINTS } from 'constants';
 import withSidebarNavLayout from 'react-components/nav/sidebar-nav/with-sidebar-nav-layout.hoc';
 import getPageTitle from 'scripts/router/page-title';
 
-const getPostsContent = (dispatch, getState) =>
+const getPostsContent = (...args) =>
+  import('../react-components/home/home.thunks').then(module => module.getPostsContent(...args));
+const getTestimonialsContent = (...args) =>
   import('../react-components/home/home.thunks').then(module =>
-    module.getPostsContent(dispatch, getState)
+    module.getTestimonialsContent(...args)
   );
-const getTestimonialsContent = (dispatch, getState) =>
-  import('../react-components/home/home.thunks').then(module =>
-    module.getTestimonialsContent(dispatch, getState)
-  );
-const getTweetsContent = (dispatch, getState) =>
-  import('../react-components/home/home.thunks').then(module =>
-    module.getTweetsContent(dispatch, getState)
-  );
-const loadColumnsData = (dispatch, getState) =>
+const getTweetsContent = (...args) =>
+  import('../react-components/home/home.thunks').then(module => module.getTweetsContent(...args));
+const loadColumnsData = (...args) =>
   import('../react-components/profile-node/profile-node.thunks').then(module =>
-    module.loadColumnsData(dispatch, getState)
+    module.loadColumnsData(...args)
   );
-const loadTopNodes = (dispatch, getState) =>
+const loadTopNodes = (...args) =>
   import('../react-components/profile-root/profile-root.thunks').then(module =>
-    module.loadTopNodes(dispatch, getState)
+    module.loadTopNodes(...args)
   );
-const getPageStaticContent = (dispatch, getState) =>
+const getPageStaticContent = (...args) =>
   import('../react-components/static-content/static-content.thunks').then(module =>
-    module.default(dispatch, getState)
+    module.default(...args)
   );
-const loadBaseAppData = (dispatch, getState) =>
-  import('../app/app.thunks').then(module => module.default(dispatch, getState));
-const getTeam = (dispatch, getState) =>
-  import('../react-components/team/team.thunks').then(module => module.default(dispatch, getState));
-const loadDashboardTemplates = (dispatch, getState) =>
+const loadBaseAppData = (...args) =>
+  import('../app/app.thunks').then(module => module.default(...args));
+const getTeam = (...args) =>
+  import('../react-components/team/team.thunks').then(module => module.default(...args));
+const loadDashboardTemplates = (...args) =>
   import('../react-components/dashboard-root/dashboard-root.thunks').then(module =>
-    module.loadDashboardTemplates(dispatch, getState)
+    module.loadDashboardTemplates(...args)
   );
-const redirectToExplore = (dispatch, getState) =>
+const redirectToExplore = (...args) =>
   import('../react-components/legacy-explore/explore.thunks').then(module =>
-    module.redirectToExplore(dispatch, getState)
+    module.redirectToExplore(...args)
   );
-const loadToolInitialData = (dispatch, getState) =>
+const loadToolInitialData = (...args) =>
   import('../react-components/tool/tool.thunks').then(module =>
-    module.loadToolInitialData(dispatch, getState)
+    module.loadToolInitialData(...args)
   );
-const resizeSankeyTool = (dispatch, getState) =>
-  import('../react-components/tool/tool.thunks').then(module =>
-    module.resizeSankeyTool(dispatch, getState)
-  );
-const loadDisclaimerTool = (dispatch, getState) =>
-  import('../react-components/tool/tool.thunks').then(module =>
-    module.loadDisclaimerTool(dispatch, getState)
-  );
-const loadInitialDashboardData = (dispatch, getState) =>
+const resizeSankeyTool = (...args) =>
+  import('../react-components/tool/tool.thunks').then(module => module.resizeSankeyTool(...args));
+const loadDisclaimerTool = (...args) =>
+  import('../react-components/tool/tool.thunks').then(module => module.loadDisclaimerTool(...args));
+const loadInitialDashboardData = (...args) =>
   import('../react-components/dashboard-element/dashboard-element.thunks').then(module =>
-    module.loadInitialDashboardData(dispatch, getState)
+    module.loadInitialDashboardData(...args)
   );
 
 const pagesSupportedLimit = {

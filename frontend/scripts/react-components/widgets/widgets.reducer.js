@@ -1,18 +1,12 @@
 import createReducer from 'utils/createReducer';
 import camelCase from 'lodash/camelCase';
+import initialState from './widgets.initial-state';
+
 import {
   WIDGETS__INIT_ENDPOINT,
   WIDGETS__SET_ENDPOINT_DATA,
   WIDGETS__SET_ENDPOINT_ERROR
 } from './widgets.actions';
-
-export const initialState = {
-  endpoints: {
-    /**
-     * { [endpoint]: { key, data, error, loading } }
-     */
-  }
-};
 
 export const defaultEndpoint = key => ({
   data: null,

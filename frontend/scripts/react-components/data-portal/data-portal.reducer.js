@@ -1,26 +1,14 @@
 import {
-<<<<<<< HEAD
   DATA_PORTAL__SET_SELECTED_COUNTRY_ID,
   DATA_PORTAL__SET_SELECTED_COMMODITY_ID,
   DATA_PORTAL__LOAD_CONSUMPTION_COUNTRIES,
   DATA_PORTAL__LOAD_EXPORTERS,
   DATA_PORTAL__LOAD_INDICATORS
-=======
-  LOAD_CONSUMPTION_COUNTRIES,
-  LOAD_EXPORTERS,
-  LOAD_INDICATORS
->>>>>>> moves everything under one react root
 } from 'react-components/data-portal/data-portal.actions';
-import createReducer from 'utils/createReducer';
 import immer from 'immer';
+import createReducer from 'utils/createReducer';
 
-const initialState = {
-  country: null,
-  commodity: null,
-  exporters: [],
-  consumptionCountries: [],
-  indicators: []
-};
+import initialState from './data-portal.initial-state';
 
 const dataPortalReducer = {
   [DATA_PORTAL__SET_SELECTED_COUNTRY_ID](state, action) {

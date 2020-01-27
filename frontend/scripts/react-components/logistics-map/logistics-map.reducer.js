@@ -3,16 +3,8 @@ import {
   LOGISTICS_MAP__SET_COMPANIES,
   LOGISTICS_MAP__SET_ACTIVE_MODAL,
   LOGISTICS_MAP__SET_COMPANY_SEARCH_TERM
-} from 'react-components/logistics-map/logistics-map.actions';
-
-const initialState = {
-  companies: {
-    soy: null,
-    cattle: null,
-    palmOil: null
-  },
-  activeModal: null
-};
+} from './logistics-map.actions';
+import initialState from './logistics-map.initial-state';
 
 const logisticsMapReducer = {
   [LOGISTICS_MAP__SET_COMPANIES](state, action) {

@@ -6,12 +6,7 @@ import {
   EXPLORE__SET_TOP_NODES_LOADING,
   EXPLORE__SET_SELECTED_TABLE_COLUMN_TYPE
 } from './explore.actions';
-
-const initialState = {
-  topNodes: {},
-  loading: {},
-  selectedTableColumnType: 'exporter'
-};
+import initialState from './legacy-explore.initial-state';
 
 const exploreReducer = {
   [EXPLORE__SET_TOP_COUNTRIES](state, action) {
