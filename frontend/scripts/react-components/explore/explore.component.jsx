@@ -10,8 +10,9 @@ import cx from 'classnames';
 import Dropdown from 'react-components/shared/dropdown';
 import ResizeListener from 'react-components/shared/resize-listener.component';
 import { format } from 'd3-format';
-import ToolLinksModal from 'react-components/explore/tool-links-modal';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
+import addApostrophe from 'utils/addApostrophe';
+import { translateText } from 'utils/transifex';
 import {
   useTopDestinationCountries,
   useClearExploreOnUnmount,
@@ -23,8 +24,8 @@ import {
 } from 'react-components/explore/explore.hooks';
 
 import 'react-components/explore/explore.scss';
-import addApostrophe from 'utils/addApostrophe';
-import { translateText } from 'utils/transifex';
+
+const ToolLinksModal = React.lazy(() => import('./tool-links-modal'));
 
 function Explore(props) {
   const {
@@ -263,7 +264,9 @@ function Explore(props) {
                 isMobile={isMobile}
               />
               <SimpleModal isOpen={isModalOpen} onRequestClose={() => closeModal()}>
-                <ToolLinksModal goToTool={destination => goToTool(destination, activeCard)} />
+                {isModalOpen && (
+                  <ToolLinksModal goToTool={destination => goToTool(destination, activeCard)} />
+                )}
               </SimpleModal>
             </>
           );

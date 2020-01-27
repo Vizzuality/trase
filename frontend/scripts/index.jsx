@@ -96,6 +96,12 @@ const composeEnhancers = (process.env.NODE_ENV === 'development' && reduxDevTool
 const combinedReducers = reducerRegistry.getCombinedReducer();
 
 const params = parseURL(window.location.search);
+
+// easter egg :P
+if (typeof window !== 'undefined') {
+  window._TRASE_CANDY_SANKEY = params.candyMode;
+}
+
 const store = createStore(
   combinedReducers,
   {

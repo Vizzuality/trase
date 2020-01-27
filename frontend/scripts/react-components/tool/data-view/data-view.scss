@@ -6,7 +6,9 @@
   margin: 15px 15px 0;
 
   .data-view-placeholder-item {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 480px;
     width: 100%;
     background-color: $white;
