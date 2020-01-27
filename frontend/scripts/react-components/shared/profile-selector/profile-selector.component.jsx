@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 import { PROFILE_STEPS } from 'constants';
-import ProfilePanel from 'react-components/shared/profile-selector/profile-panel';
 import StepsTracker from 'react-components/shared/steps-tracker';
 import ProfilePanelFooter from 'react-components/shared/profile-selector/profile-panel-footer';
+
 import 'react-components/shared/profile-selector/profile-selector.scss';
+
+const ProfilePanel = React.lazy(() => import('./profile-panel'));
 
 function ProfilesSelectorModal(props) {
   const { activeStep, onClose, setStep, isDisabled, dynamicSentenceParts, goToProfile } = props;
@@ -15,22 +17,26 @@ function ProfilesSelectorModal(props) {
   const isOpen = activeStep !== null;
   return (
     <SimpleModal isOpen={isOpen} onRequestClose={onClose}>
-      <div className="c-profile-selector">
-        <div className="profile-content">
-          <StepsTracker
-            steps={['Type', 'Profile', 'Commodity'].map(label => ({ label }))}
-            activeStep={activeStep || 0}
+      {isOpen && (
+        <div className="c-profile-selector">
+          <div className="profile-content">
+            <StepsTracker
+              steps={['Type', 'Profile', 'Commodity'].map(label => ({ label }))}
+              activeStep={activeStep || 0}
+            />
+            <Suspense fallback={null}>
+              <ProfilePanel step={activeStep} />
+            </Suspense>
+          </div>
+          <ProfilePanelFooter
+            onBack={showBackButton ? () => setStep(activeStep - 1) : undefined}
+            onContinue={onContinue}
+            isDisabled={isDisabled}
+            step={activeStep}
+            dynamicSentenceParts={dynamicSentenceParts}
           />
-          <ProfilePanel step={activeStep} />
         </div>
-        <ProfilePanelFooter
-          onBack={showBackButton ? () => setStep(activeStep - 1) : undefined}
-          onContinue={onContinue}
-          isDisabled={isDisabled}
-          step={activeStep}
-          dynamicSentenceParts={dynamicSentenceParts}
-        />
-      </div>
+      )}
     </SimpleModal>
   );
 }

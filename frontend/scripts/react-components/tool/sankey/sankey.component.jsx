@@ -372,8 +372,10 @@ function Sankey(props) {
           <defs>
             <Defs.IsAggregate />
             <Defs.GradientAnimation
-              selectedNodesIds={selectedNodesIds}
-              selectedRecolorBy={selectedRecolorBy}
+              candyMode={
+                window._TRASE_CANDY_SANKEY &&
+                (selectedRecolorBy && selectedRecolorBy.name === 'BIOME')
+              }
             />
           </defs>
           <g className="sankey-container">
