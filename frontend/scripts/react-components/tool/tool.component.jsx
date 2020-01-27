@@ -1,24 +1,25 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, Suspense } from 'react';
 import PropTypes from 'prop-types';
 import EventManager from 'utils/eventManager';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import MapContainer from 'react-components/tool/map/map.container';
 import ModalContainer from 'react-components/tool/story-modal/story-modal.container';
-import Sankey from 'react-components/tool/sankey';
-import DataView from 'react-components/tool/data-view';
 import Tooltip from 'react-components/tool/help-tooltip/help-tooltip.container';
 import SplittedView from 'react-components/tool/splitted-view';
-import MapLayout from 'react-components/tool/map-layout';
-import ErrorModal from 'react-components/tool/error-modal';
-import ToolModal from 'react-components/tool/tool-modal';
 import Timeline from 'react-components/tool/timeline';
 import ToolBar from 'react-components/shared/tool-bar';
+import MapLayout from 'react-components/tool/map-layout';
 
 import UrlSerializer from 'react-components/shared/url-serializer';
 
 import 'styles/components/shared/veil.scss';
 import 'styles/components/shared/dropdown.scss';
 import 'styles/components/tool/map/map-sidebar.scss';
+
+const Sankey = React.lazy(() => import('./sankey'));
+const DataView = React.lazy(() => import('./data-view'));
+const ToolModal = React.lazy(() => import('./tool-modal'));
+const ErrorModal = React.lazy(() => import('./error-modal'));
 
 const evManager = new EventManager();
 
@@ -34,13 +35,19 @@ function renderSankeyView() {
   return (
     <>
       <ColumnsSelectorGroupContainer />
-      <Sankey />
+      <Suspense fallback={null}>
+        <Sankey />
+      </Suspense>
     </>
   );
 }
 
 function renderDataView() {
-  return <DataView />;
+  return (
+    <Suspense fallback={null}>
+      <DataView />
+    </Suspense>
+  );
 }
 
 const Tool = props => {
@@ -77,7 +84,9 @@ const Tool = props => {
             <div className="veil js-veil" />
             <div className="c-modal js-modal" />
           </div>
-          <ErrorModal noLinksFound={noLinksFound} />
+          <Suspense fallback={null}>
+            <ErrorModal noLinksFound={noLinksFound} />
+          </Suspense>
           <div className="main-content">
             <ToolBar />
             <SplittedView
@@ -92,7 +101,9 @@ const Tool = props => {
             selectYears={selectYears}
           />
         </div>
-        <ToolModal activeModal={activeModal} />
+        <Suspense fallback={null}>
+          <ToolModal activeModal={activeModal} />
+        </Suspense>
       </>
     ),
     [noLinksFound, mapSidebarOpen, section, toolYearProps, selectYears, activeModal]

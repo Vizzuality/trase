@@ -8,10 +8,10 @@ import Footer from 'react-components/shared/footer/footer.component';
 import 'styles/_layouts.scss';
 
 const pageContent = {
-  team: lazy(() => import(`../react-components/team/team.container`)),
-  teamMember: lazy(() => import(`../react-components/team/team-member/team-member.container`)),
+  team: lazy(() => import('../react-components/team/team.container')),
+  teamMember: lazy(() => import('../react-components/team/team-member/team-member.container')),
   about: lazy(() =>
-    import(`../react-components/static-content/markdown-renderer/markdown-renderer.container`)
+    import('../react-components/static-content/markdown-renderer/markdown-renderer.container')
   )
 };
 
