@@ -1,5 +1,7 @@
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
+import fuzzySearch from 'utils/fuzzySearch';
+import { getPanelName } from 'utils/getProfilePanelName';
 import {
   PROFILES__SET_ACTIVE_STEP,
   PROFILES__SET_PANEL_DATA,
@@ -11,51 +13,8 @@ import {
   PROFILES__SET_SEARCH_RESULTS,
   PROFILES__SET_ACTIVE_TAB,
   PROFILES__SET_ACTIVE_ITEM_WITH_SEARCH
-} from 'react-components/shared/profile-selector/profile-selector.actions';
-import fuzzySearch from 'utils/fuzzySearch';
-import { getPanelName } from 'utils/getProfilePanelName';
-
-export const initialState = {
-  activeStep: null,
-  panels: {
-    type: null,
-    commodities: {
-      page: 1,
-      searchResults: [],
-      loadingItems: false,
-      activeItems: [],
-      activeTab: null
-    },
-    countries: {
-      page: 1,
-      searchResults: [],
-      loadingItems: false,
-      activeItems: [],
-      activeTab: null
-    },
-    sources: {
-      page: 1,
-      searchResults: [],
-      loadingItems: false,
-      activeItems: [],
-      activeTab: null
-    },
-    companies: {
-      page: 1,
-      searchResults: [],
-      loadingItems: false,
-      activeItems: [],
-      activeTab: null
-    }
-  },
-  data: {
-    commodities: [],
-    countries: [],
-    sources: {},
-    companies: {}
-  },
-  tabs: {}
-};
+} from './profile-selector.actions';
+import initialState from './profile-selector.initial-state';
 
 const profileRootReducer = {
   [PROFILES__SET_ACTIVE_STEP](state, action) {

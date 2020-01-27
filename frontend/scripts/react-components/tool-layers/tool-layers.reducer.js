@@ -2,7 +2,6 @@ import {
   GET_CONTEXT_LAYERS,
   GET_MAP_VECTOR_DATA,
   SET_NODE_ATTRIBUTES,
-  SAVE_MAP_VIEW,
   SELECT_BASEMAP,
   SELECT_CONTEXTUAL_LAYERS,
   CHANGE_LAYOUT,
@@ -12,6 +11,7 @@ import {
   TOGGLE_MAP_DIMENSION
 } from 'react-components/tool/tool.actions';
 import {
+  TOOL_LAYERS__SAVE_MAP_VIEW,
   TOOL_LAYERS__SET_LINKED_GEOIDS,
   TOOL_LAYERS__SET_MAP_DIMENSIONS
 } from 'react-components/tool-layers/tool-layers.actions';
@@ -125,7 +125,7 @@ const toolLayersReducer = {
       draft.toolLayout = action.payload.toolLayout;
     });
   },
-  [SAVE_MAP_VIEW](state, action) {
+  [TOOL_LAYERS__SAVE_MAP_VIEW](state, action) {
     return immer(state, draft => {
       draft.mapView = {
         latitude: action.latlng.lat.toFixed(2),

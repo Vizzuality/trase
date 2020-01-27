@@ -1,10 +1,16 @@
 /* eslint-disable camelcase */
 import { connect } from 'react-redux';
-import { editPanels } from 'react-components/nodes-panel/nodes-panel.register';
-import { setLogisticsMapActiveModal } from 'react-components/logistics-map/logistics-map.register';
-import { setActiveModal } from 'react-components/tool/tool.actions';
 import ToolBar from './tool-bar.component';
 import { getToolBar } from './tool-bar.selectors';
+
+const getEditPanels = () =>
+  import('../../nodes-panel/nodes-panel.register').then(module => module.editPanels);
+const getSetActiveModal = () =>
+  import('../../tool/tool.actions').then(module => module.setActiveModal);
+const getSetLogisticsMapActiveModal = () =>
+  import('../../logistics-map/logistics-map.register').then(
+    module => module.setLogisticsMapActiveModal
+  );
 
 const mapStateToProps = state => {
   const { left, right } = getToolBar(state);
@@ -16,17 +22,43 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   context_onClick: () => {
-    dispatch(editPanels());
-    dispatch(setActiveModal('context'));
+    Promise.all([getEditPanels(), getSetActiveModal()]).then(([editPanels, setActiveModal]) => {
+      dispatch(editPanels());
+      dispatch(setActiveModal('context'));
+    });
   },
-  viewMode_onClick: id => dispatch(setActiveModal(id)),
-  version_onClick: id => dispatch(setActiveModal(id)),
-  unit_onClick: id => dispatch(setActiveModal(id)),
-  indicator_onClick: id => dispatch(setActiveModal(id)),
-  companies_onClick: id => dispatch(setLogisticsMapActiveModal(id)),
-  download_onClick: id => dispatch(setLogisticsMapActiveModal(id)),
-  hubs_onClick: id => dispatch(setLogisticsMapActiveModal(id)),
-  inspectionLevels_onClick: id => dispatch(setLogisticsMapActiveModal(id))
+  viewMode_onClick: id => {
+    getSetActiveModal().then(setActiveModal => dispatch(setActiveModal(id)));
+  },
+  version_onClick: id => {
+    getSetActiveModal().then(setActiveModal => dispatch(setActiveModal(id)));
+  },
+  unit_onClick: id => {
+    getSetActiveModal().then(setActiveModal => dispatch(setActiveModal(id)));
+  },
+  indicator_onClick: id => {
+    getSetActiveModal().then(setActiveModal => dispatch(setActiveModal(id)));
+  },
+  companies_onClick: id => {
+    getSetLogisticsMapActiveModal().then(setLogisticsMapActiveModal =>
+      dispatch(setLogisticsMapActiveModal(id))
+    );
+  },
+  download_onClick: id => {
+    getSetLogisticsMapActiveModal().then(setLogisticsMapActiveModal =>
+      dispatch(setLogisticsMapActiveModal(id))
+    );
+  },
+  hubs_onClick: id => {
+    getSetLogisticsMapActiveModal().then(setLogisticsMapActiveModal =>
+      dispatch(setLogisticsMapActiveModal(id))
+    );
+  },
+  inspectionLevels_onClick: id => {
+    getSetLogisticsMapActiveModal().then(setLogisticsMapActiveModal =>
+      dispatch(setLogisticsMapActiveModal(id))
+    );
+  }
 });
 
 export default connect(

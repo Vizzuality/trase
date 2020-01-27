@@ -6,7 +6,7 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import promiseFinally from 'promise.prototype.finally';
 import parseURL from 'utils/parseURL';
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
 import { all } from 'redux-saga/effects';
@@ -73,6 +73,8 @@ if (REDUX_LOGGER_ENABLED) {
   middlewares.push(loggerMiddleware);
 }
 
+reducerRegistry.register('location', router.reducer);
+
 const reduxDevTools =
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
@@ -94,13 +96,11 @@ const reduxDevTools =
 
 const composeEnhancers = (process.env.NODE_ENV === 'development' && reduxDevTools) || compose;
 
-reducerRegistry.register('location', router.reducer);
-
-const reducers = combineReducers(reducerRegistry.getReducers());
+const combinedReducers = reducerRegistry.getCombinedReducer();
 
 const params = parseURL(window.location.search);
 const store = createStore(
-  reducers,
+  combinedReducers,
   {
     app: deserialize({
       params,
@@ -131,8 +131,8 @@ const store = createStore(
   composeEnhancers(router.enhancer, applyMiddleware(...middlewares))
 );
 
-reducerRegistry.setChangeListener(asyncReducers =>
-  store.replaceReducer(combineReducers(asyncReducers))
+reducerRegistry.setChangeListener(asyncCombinedReducers =>
+  store.replaceReducer(asyncCombinedReducers)
 );
 
 window.onTransifexLoad = () => {
@@ -143,21 +143,17 @@ window.onTransifexLoad = () => {
   }
 };
 
-let sagaTask = null;
 sagaRegistry.setChangeListener(sagas => {
   function* runSagas() {
     yield all(sagas);
   }
-  if (sagaTask) {
-    sagaTask.cancel();
-  }
-  sagaTask = sagaMiddleware.run(runSagas);
+  sagaMiddleware.run(runSagas);
 });
 
 function* startSagas() {
   yield all(sagaRegistry.getSagas());
 }
-sagaTask = sagaMiddleware.run(startSagas);
+sagaMiddleware.run(startSagas);
 
 render(
   <Provider store={store}>
