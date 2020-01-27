@@ -134,7 +134,7 @@ export default class GlobalSearch extends Component {
                     data-test="global-search-input"
                   />
                 </div>
-                {!isEmpty(searchTerm) && (
+                {!isEmpty(searchTerm) && !noResults && (
                   <FixedSizeList
                     height={345}
                     width={window.innerWidth}
@@ -146,21 +146,6 @@ export default class GlobalSearch extends Component {
                   >
                     {({ index, style, data }) => {
                       const item = data[index];
-
-                      if (noResults) {
-                        return (
-                          <li style={style} className="c-search-result -no-highlight">
-                            <div className="search-node-text-container">
-                              <span
-                                className="search-node-name"
-                                data-test="global-search-no-result"
-                              >
-                                No results found
-                              </span>
-                            </div>
-                          </li>
-                        );
-                      }
                       return (
                         <GlobalSearchResult
                           key={index}
@@ -177,6 +162,17 @@ export default class GlobalSearch extends Component {
                       );
                     }}
                   </FixedSizeList>
+                )}
+                {noResults && (
+                  <ul className="search-results">
+                    <li className="c-search-result -no-highlight">
+                      <div className="search-node-text-container">
+                        <span className="search-node-name" data-test="global-search-no-result">
+                          No results found
+                        </span>
+                      </div>
+                    </li>
+                  </ul>
                 )}
               </div>
             )}
