@@ -8,6 +8,12 @@ import Spinner from 'react-components/shared/shrinking-spinner/shrinking-spinner
 
 const DashboardWidget = React.lazy(() => import('../../dashboard-element/dashboard-widget'));
 
+const WidgetPlaceholder = () => (
+  <div className="data-view-placeholder-item">
+    <Spinner className="-large" />
+  </div>
+);
+
 function DataView(props) {
   const { groupedCharts, selectedRecolorBy, loading } = props;
   const loaded = groupedCharts && !loading;
@@ -18,9 +24,7 @@ function DataView(props) {
         <div className="row">
           {Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="column small-12 medium-6">
-              <div className="data-view-placeholder-item">
-                <Spinner className="-large" />
-              </div>
+              <WidgetPlaceholder />
             </div>
           ))}
         </div>
@@ -42,7 +46,7 @@ function DataView(props) {
                   style={{ minHeight: '495px' }}
                 >
                   {(widgetIndex < 2 || inView) && (
-                    <Suspense fallback={null}>
+                    <Suspense fallback={<WidgetPlaceholder />}>
                       <DashboardWidget
                         chart={chart}
                         variant="light"
