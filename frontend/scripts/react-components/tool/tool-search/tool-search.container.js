@@ -15,7 +15,7 @@ const mapStateToProps = state => {
     toolLayout,
     nodes: searchResults,
     contextId: selectedContext && selectedContext.id,
-    openOnKeyDown: state.toolLayers.activeModal === null
+    openOnKeyDown: state.toolLayers?.activeModal === null
   };
 };
 

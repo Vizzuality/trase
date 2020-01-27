@@ -3,10 +3,11 @@ import * as initialState from './initial-state';
 
 // As seen in http://nicolasgallagher.com/redux-modules-and-code-splitting/
 class ReducerRegistry {
-  constructor(intialState = {}) {
+  constructor(intialState = {}, blacklist = []) {
     this._emitChange = null;
     this._reducers = {};
     this._initialState = intialState;
+    this._blacklist = blacklist;
   }
 
   getReducers() {
@@ -16,6 +17,16 @@ class ReducerRegistry {
   getCombinedReducer() {
     const reducers = this.getReducers();
     const reducerNames = Object.keys(reducers);
+    if (NODE_ENV_DEV) {
+      reducerNames.forEach(name => {
+        if (!this._blacklist.includes(name) && typeof this._initialState[name] === 'undefined') {
+          throw new Error(
+            `You forgot to declare ${name} reducer initial state in initial-state.js`
+          );
+        }
+      });
+    }
+
     Object.entries(this._initialState).forEach(([name, initial]) => {
       if (reducerNames.includes(name) === false) {
         reducers[name] = (state = initial) => state;
@@ -36,5 +47,5 @@ class ReducerRegistry {
   }
 }
 
-const reducerRegistry = new ReducerRegistry(initialState);
+const reducerRegistry = new ReducerRegistry(initialState, ['location']);
 export default reducerRegistry;
