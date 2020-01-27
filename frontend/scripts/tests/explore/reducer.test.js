@@ -1,4 +1,4 @@
-import reducer, { initialState } from 'react-components/explore/explore.reducer';
+import reducer from 'react-components/explore/explore.reducer';
 import {
   EXPLORE__SET_COMMODITY,
   EXPLORE__SET_COUNTRY,
@@ -9,6 +9,7 @@ import {
   setCountry,
   setSankeyCardsLoading
 } from 'react-components/explore/explore.actions';
+import initialState from 'react-components/explore/explore.initial-state';
 
 test(EXPLORE__SET_COMMODITY, () => {
   const action = setCommodity(12);
