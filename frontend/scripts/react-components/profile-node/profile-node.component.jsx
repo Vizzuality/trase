@@ -1,24 +1,35 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import SummaryWidget from 'react-components/profile-node/profile-node-widgets/summary-widget.component';
 import LinksWidget from 'react-components/profile-node/profile-node-widgets/links-widget.component';
-import SustainabilityTableWidget from 'react-components/profile-node/profile-node-widgets/sustainability-table-widget.component';
-import DeforestationWidget from 'react-components/profile-node/profile-node-widgets/deforestation-widget.component';
-import TopConsumersWidget from 'react-components/profile-node/profile-node-widgets/top-consumers-widget.component';
-import ImportingCompaniesWidget from 'react-components/profile-node/profile-node-widgets/importing-companies-widget.component';
-import TopDestinationsWidget from 'react-components/profile-node/profile-node-widgets/top-destinations-widget.component';
-import ProfileSelector from 'react-components/shared/profile-selector';
-import GfwWidget from 'react-components/profile-node/profile-node-widgets/gfw-widget.component';
 import ErrorCatch from 'react-components/shared/error-catch.component';
 import Text from 'react-components/shared/text';
 import cx from 'classnames';
 import sortBy from 'lodash/sortBy';
+import ProfileSelector from 'react-components/shared/profile-selector';
 
 import 'styles/components/shared/dropdown.scss';
 import 'styles/components/profiles/area-select.scss';
 import 'styles/components/profiles/map.scss';
 import 'styles/components/profiles/overall-info.scss';
 import 'styles/components/profiles/info.scss';
+
+const SustainabilityTableWidget = React.lazy(() =>
+  import('./profile-node-widgets/sustainability-table-widget.component')
+);
+const DeforestationWidget = React.lazy(() =>
+  import('./profile-node-widgets/deforestation-widget.component')
+);
+const TopConsumersWidget = React.lazy(() =>
+  import('./profile-node-widgets/top-consumers-widget.component')
+);
+const ImportingCompaniesWidget = React.lazy(() =>
+  import('./profile-node-widgets/importing-companies-widget.component')
+);
+const TopDestinationsWidget = React.lazy(() =>
+  import('./profile-node-widgets/top-destinations-widget.component')
+);
+const GfwWidget = React.lazy(() => import('./profile-node-widgets/gfw-widget.component'));
 
 class ProfileNode extends React.PureComponent {
   static propTypes = {
@@ -226,20 +237,22 @@ class ProfileNode extends React.PureComponent {
                 </section>
               )}
             >
-              {this.renderSection(chart)}
+              <Suspense fallback={null}>{this.renderSection(chart)}</Suspense>
             </ErrorCatch>
           ))}
         {ready &&
           profileType === 'place' &&
           GFW_WIDGETS_BASE_URL &&
           context.countryName === 'BRAZIL' && (
-            <GfwWidget
-              year={year}
-              nodeId={nodeId}
-              contextId={context.id}
-              renderIframes={renderIframes}
-              profileType={profileType}
-            />
+            <Suspense fallback={null}>
+              <GfwWidget
+                year={year}
+                nodeId={nodeId}
+                contextId={context.id}
+                renderIframes={renderIframes}
+                profileType={profileType}
+              />
+            </Suspense>
           )}
         {ready && (
           <LinksWidget
