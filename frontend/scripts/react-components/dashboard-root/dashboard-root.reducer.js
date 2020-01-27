@@ -3,11 +3,7 @@ import {
   DASHBOARD_ROOT__SET_DASHBOARD_TEMPLATES,
   DASHBOARD_ROOT__SET_LOADING_DASHBOARD_TEMPLATES
 } from './dashboard-root.actions';
-
-const initialState = {
-  dashboardTemplates: [],
-  loadingDashboardTemplates: true
-};
+import initialState from './dashboard-root.initial-state';
 
 const dashboardRootReducer = {
   [DASHBOARD_ROOT__SET_DASHBOARD_TEMPLATES](state, action) {

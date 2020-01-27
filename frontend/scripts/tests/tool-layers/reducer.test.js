@@ -2,18 +2,18 @@ import {
   SET_NODE_ATTRIBUTES,
   GET_CONTEXT_LAYERS,
   GET_MAP_VECTOR_DATA,
-  SAVE_MAP_VIEW,
   SELECT_BASEMAP,
   SELECT_CONTEXTUAL_LAYERS,
   CHANGE_LAYOUT,
   SET_SANKEY_SIZE,
   SET_ACTIVE_MODAL,
   SELECT_UNIT_LAYERS,
-  saveMapView,
   selectContextualLayers,
   TOGGLE_MAP_DIMENSION
 } from 'react-components/tool/tool.actions';
 import {
+  saveMapView,
+  TOOL_LAYERS__SAVE_MAP_VIEW,
   TOOL_LAYERS__SET_MAP_DIMENSIONS,
   TOOL_LAYERS__SET_LINKED_GEOIDS
 } from 'react-components/tool-layers/tool-layers.actions';
@@ -128,7 +128,7 @@ test(GET_MAP_VECTOR_DATA, () => {
   expect(newState).toMatchSnapshot();
 });
 
-test(SAVE_MAP_VIEW, () => {
+test(TOOL_LAYERS__SAVE_MAP_VIEW, () => {
   const zoom = 2;
   const latlng = { lat: -34.397, lng: 150.644 };
   const action = saveMapView(latlng, zoom);

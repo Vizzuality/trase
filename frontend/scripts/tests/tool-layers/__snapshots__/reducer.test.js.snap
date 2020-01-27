@@ -86,7 +86,7 @@ Object {
 }
 `;
 
-exports[`SAVE_MAP_VIEW 1`] = `
+exports[`TOOL_LAYERS__SAVE_MAP_VIEW 1`] = `
 Object {
   "activeModal": null,
   "data": Object {

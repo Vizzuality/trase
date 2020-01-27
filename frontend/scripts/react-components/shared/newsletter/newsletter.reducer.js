@@ -3,10 +3,7 @@ import {
   NEWSLETTER__SET_SUBSCRIPTION_MESSAGE,
   NEWSLETTER__RESET_NEWSLETTER
 } from './newsletter.actions';
-
-const initialState = {
-  message: ''
-};
+import initialState from './newsletter.initial-state';
 
 const newsletterReducer = {
   [NEWSLETTER__SET_SUBSCRIPTION_MESSAGE](state, action) {

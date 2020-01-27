@@ -1,21 +1,14 @@
+import createReducer from 'utils/createReducer';
+import immer from 'immer';
+import unionBy from 'lodash/unionBy';
 import {
   EXPLORE__SET_COMMODITY,
   EXPLORE__SET_COUNTRY,
   EXPLORE__SET_QUICK_FACTS,
   EXPLORE__SET_SANKEY_CARDS,
   EXPLORE__SET_SANKEY_CARDS_LOADING
-} from 'react-components/explore/explore.actions';
-import createReducer from 'utils/createReducer';
-import immer from 'immer';
-import unionBy from 'lodash/unionBy';
-
-export const initialState = {
-  selectedCommodityId: null,
-  selectedCountryId: null,
-  quickFacts: null,
-  sankeyCards: null,
-  sankeyCardsLoading: false
-};
+} from './explore.actions';
+import initialState from './explore.initial-state';
 
 const exploreReducer = {
   [EXPLORE__SET_COMMODITY](state, action) {

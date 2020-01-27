@@ -28,7 +28,6 @@ export const SELECT_UNIT_LAYERS = 'SELECT_UNIT_LAYERS';
 export const SELECT_CONTEXTUAL_LAYERS = 'SELECT_CONTEXTUAL_LAYERS';
 export const SELECT_BASEMAP = 'SELECT_BASEMAP';
 export const CHANGE_LAYOUT = 'CHANGE_LAYOUT';
-export const SAVE_MAP_VIEW = 'SAVE_MAP_VIEW';
 export const SET_SANKEY_SIZE = 'SET_SANKEY_SIZE';
 export const SET_ACTIVE_MODAL = 'SET_ACTIVE_MODAL';
 export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
@@ -227,14 +226,6 @@ export function navigateToProfile(nodeId, contextId) {
       type: 'profileNode',
       payload: { query: { nodeId, contextId }, profileType: node.profileType }
     });
-  };
-}
-
-export function saveMapView(latlng, zoom) {
-  return {
-    type: SAVE_MAP_VIEW,
-    latlng,
-    zoom
   };
 }
 
