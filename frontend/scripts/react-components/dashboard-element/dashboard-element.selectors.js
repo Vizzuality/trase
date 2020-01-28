@@ -347,29 +347,26 @@ const getDashboardContextResizeBy = createSelector(
   context => context && context.resizeBy
 );
 
-const getDashboardContextRecolorBy = createSelector(
-  getDashboardsContext,
-  context => {
-    if (!context) return null;
-    const emptyOption = {
-      position: 0,
-      groupNumber: -1,
-      label: 'No selection',
-      name: 'none',
-      years: [],
-      value: null,
-      attributeId: null
-    };
-    // TODO: handle this indicators by bucketing either here or preferably in backend
-    const contextRecolorByList = context.recolorBy.filter(item => !isIndicatorSupported(item.name));
+const getDashboardContextRecolorBy = createSelector(getDashboardsContext, context => {
+  if (!context) return null;
+  const emptyOption = {
+    position: 0,
+    groupNumber: -1,
+    label: 'No selection',
+    name: 'none',
+    years: [],
+    value: null,
+    attributeId: null
+  };
+  // TODO: handle this indicators by bucketing either here or preferably in backend
+  const contextRecolorByList = context.recolorBy.filter(item => isIndicatorSupported(item.name));
 
-    if (contextRecolorByList.length > 0) {
-      return contextRecolorByList.concat(emptyOption);
-    }
-
-    return contextRecolorByList.length > 0 ? contextRecolorByList : null;
+  if (contextRecolorByList.length > 0) {
+    return contextRecolorByList.concat(emptyOption);
   }
-);
+
+  return contextRecolorByList.length > 0 ? contextRecolorByList : null;
+});
 
 export const getDashboardSelectedResizeBy = createSelector(
   [getSelectedResizeBy, getDashboardContextResizeBy],

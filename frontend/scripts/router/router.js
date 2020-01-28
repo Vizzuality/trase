@@ -108,7 +108,7 @@ export const routes = {
   },
   data: {
     path: '/data',
-    Component: lazy(() => import('../react-components/data-portal/data-portal-page.container')),
+    Component: lazy(() => import('../react-components/data-portal/data-portal.container')),
     title: getPageTitle,
     thunk: loadPageData(),
     nav: {
