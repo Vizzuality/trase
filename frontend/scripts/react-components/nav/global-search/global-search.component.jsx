@@ -152,6 +152,7 @@ export default class GlobalSearch extends Component {
                           style={style}
                           value={searchTerm}
                           isLoading={isLoading}
+                          closeSearch={this.onCloseClicked}
                           isHighlighted={index === highlightedIndex}
                           item={item}
                           itemProps={getItemProps({ item })}

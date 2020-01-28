@@ -149,7 +149,6 @@ class SentenceSelector extends React.PureComponent {
     if (!selectedContext) return null;
 
     const { commodityName, countryName } = selectedContext;
-
     const commodityNames = uniqBy(
       contexts.map(c => ({
         value: c.commodityName,
