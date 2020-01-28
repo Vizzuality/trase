@@ -1,5 +1,6 @@
 import React from 'react';
 import { findAll } from 'highlight-words-core';
+import Text from 'react-components/shared/text';
 
 function HighlightTextFragments({ text, highlight }) {
   return findAll({
@@ -8,9 +9,13 @@ function HighlightTextFragments({ text, highlight }) {
   }).map(chunk => {
     const segmentStr = text.substr(chunk.start, chunk.end - chunk.start);
     return chunk.highlight ? (
-      <mark key={`marked_${segmentStr}_${text}_${chunk.start}`}>{segmentStr}</mark>
+      <Text as="mark" key={`marked_${segmentStr}_${text}_${chunk.start}`} variant="mono">
+        {segmentStr}
+      </Text>
     ) : (
-      <span key={`clean${segmentStr}_${text}_${chunk.start}`}>{segmentStr}</span>
+      <Text as="span" key={`clean${segmentStr}_${text}_${chunk.start}`} variant="mono">
+        {segmentStr}
+      </Text>
     );
   });
 }

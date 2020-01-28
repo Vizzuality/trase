@@ -117,9 +117,6 @@
 }
 
 .c-search-input-result {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
   height: 42px;
   padding: 8px 15px;
   cursor: pointer;
@@ -134,12 +131,11 @@
   }
 
   .search-input-item-name {
-    left: -1px;
-    font-family: $font-family-1;
-    font-size: 13px;
-    letter-spacing: -0.5px;
-    color: $charcoal-grey;
-    text-transform: uppercase;
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 
   .search-input-item-type {

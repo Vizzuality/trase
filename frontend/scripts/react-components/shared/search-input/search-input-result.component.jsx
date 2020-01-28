@@ -23,7 +23,7 @@ function SearchInputResult(props) {
       data-test={testId}
     >
       <span className="search-input-item-type">{nodeTypeRenderer(item)}</span>
-      <span className="search-input-item-name">
+      <span className="search-input-item-name" title={item.name}>
         <HighlightTextFragments text={item.name} highlight={searchString} />
       </span>
     </li>

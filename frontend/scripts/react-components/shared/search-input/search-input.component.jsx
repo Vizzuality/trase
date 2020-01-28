@@ -5,10 +5,10 @@ import Downshift from 'downshift';
 import SearchInputResult from 'react-components/shared/search-input/search-input-result.component';
 import cx from 'classnames';
 import debounce from 'lodash/debounce';
+import { FixedSizeList } from 'react-window';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 
 import 'scripts/react-components/shared/search-input/search-input.scss';
-import { FixedSizeList } from 'react-window';
 
 const SEARCH_DEBOUNCE_RATE_IN_MS = 400;
 
@@ -114,7 +114,7 @@ class SearchInput extends PureComponent {
         </div>
         {isOpen && items.length > 0 && (
           <FixedSizeList
-            height={100}
+            height={250}
             width={containerWidth}
             itemSize={42}
             itemData={items}
