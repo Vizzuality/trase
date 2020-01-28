@@ -68,7 +68,7 @@ function useMenuOptions(props, hoveredSelectedNode) {
       activeColumn &&
       columns[activeColumn.group].values.find(node => node.id === link.nodeId);
 
-    if (ENABLE_REDESIGN_PAGES && nodeType && activeColumn?.filterTo && columns?.length) {
+    if (nodeType && activeColumn?.filterTo && columns?.length) {
       const columnToExpand = toolColumns[activeColumn.filterTo];
 
       if (extraColumnId) {
@@ -85,8 +85,7 @@ function useMenuOptions(props, hoveredSelectedNode) {
         });
       }
     }
-    const hasExtraColumn =
-      ENABLE_REDESIGN_PAGES && extraColumnId && selectedNode?.id === extraColumnNodeId;
+    const hasExtraColumn = extraColumnId && selectedNode?.id === extraColumnNodeId;
 
     if ((isReExpand || !hasExpandedNodesIds) && !hasExtraColumn) {
       items.push({

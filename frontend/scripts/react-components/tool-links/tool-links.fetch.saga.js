@@ -60,16 +60,8 @@ export function* getToolLinksData() {
     }
   }
 
-  if (ENABLE_REDESIGN_PAGES) {
-    if (selectedColumnFilterNode && selectedColumnFilterNode.id) {
-      // TODO: Change this to params.extra_column_node_id
-      params.biome_filter_id = selectedColumnFilterNode.nodeId;
-    }
-  } else if (
-    selectedColumnFilterNode &&
-    selectedColumnFilterNode.name &&
-    selectedColumnFilterNode.name !== 'none'
-  ) {
+  if (selectedColumnFilterNode && selectedColumnFilterNode.id) {
+    // TODO: Change this to params.extra_column_node_id
     params.biome_filter_id = selectedColumnFilterNode.nodeId;
   }
 

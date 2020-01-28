@@ -25,7 +25,7 @@ export const mount = (root, store) => {
 
   render(
     <Provider store={store}>
-      {ENABLE_REDESIGN_PAGES ? <Explore /> : <LegacyExplore />}
+      {ENABLE_TOOL_PANEL ? <Explore /> : <LegacyExplore />}
       <Feedback />
     </Provider>,
     document.getElementById('page-react-root')

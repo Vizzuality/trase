@@ -92,7 +92,7 @@ export function* getPanelParams(optionsType, options = {}) {
     } else {
       params.importers_ids = activeItemParams(panel.selectedNodesIds);
     }
-  } else if (ENABLE_REDESIGN_PAGES) {
+  } else {
     const currentPanel = state.nodesPanel[optionsType];
     params.order_by = currentPanel.orderBy;
   }

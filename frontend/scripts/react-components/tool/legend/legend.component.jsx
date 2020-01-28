@@ -14,18 +14,14 @@ function Legend(props) {
     highlightedChoroplethBucket,
     contextualLayers,
     isHidden,
-    hasLayers,
-    toggleMapLayerMenu
+    hasLayers
   } = props;
   if (isHidden) return null;
   return (
     <div className="c-legend">
       {hasLayers && (
         <div className="legend-header">
-          <button
-            className="legend-layers-toggle"
-            onClick={ENABLE_REDESIGN_PAGES ? openLayerModal : toggleMapLayerMenu}
-          >
+          <button className="legend-layers-toggle" onClick={openLayerModal}>
             <Icon icon="icon-layers" />
             <Text variant="mono" transform="uppercase" color="white">
               Edit Map Layers
@@ -63,8 +59,7 @@ Legend.propTypes = {
   openLayerModal: PropTypes.func.isRequired,
   highlightedChoroplethBucket: PropTypes.string,
   isHidden: PropTypes.bool,
-  hasLayers: PropTypes.bool,
-  toggleMapLayerMenu: PropTypes.func
+  hasLayers: PropTypes.bool
 };
 
 export default Legend;

@@ -21,10 +21,7 @@ const getToolExpandedNodesIds = state => state.toolLinks.expandedNodesIds;
 const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
 const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
-export const getToolColumnFilterNodeId = state =>
-  ENABLE_REDESIGN_PAGES
-    ? state.toolLinks.extraColumnNodeId
-    : state.toolLinks.selectedBiomeFilterName;
+export const getToolColumnFilterNodeId = state => state.toolLinks.extraColumnNodeId;
 const getToolDetailedView = state => state.toolLinks.detailedView;
 const getToolExtraColumn = createSelector(
   [getHasExtraColumn, state => state.toolLinks.extraColumn],
@@ -73,14 +70,12 @@ export const getSelectedColumnFilterNode = createSelector(
       !columnFilterNodeId ||
       !selectedContext ||
       selectedContext.filterBy.length === 0 ||
-      (ENABLE_REDESIGN_PAGES && !hasExtraColumn)
+      !hasExtraColumn
     ) {
       return null;
     }
 
-    return selectedContext.filterBy[0].nodes.find(
-      filterBy => (ENABLE_REDESIGN_PAGES ? filterBy.id : filterBy.name) === columnFilterNodeId
-    );
+    return selectedContext.filterBy[0].nodes.find(filterBy => filterBy.id === columnFilterNodeId);
   }
 );
 
@@ -145,9 +140,7 @@ export const getToolLinksUrlProps = createStructuredSelector({
   selectedResizeBy: getToolResizeBy,
   selectedRecolorBy: getToolRecolorBy,
   extraColumn: getToolExtraColumn,
-  [ENABLE_REDESIGN_PAGES
-    ? 'extraColumnNodeId'
-    : 'selectedBiomeFilterName']: getToolColumnFilterNodeId
+  extraColumnNodeId: getToolColumnFilterNodeId
 });
 
 export const getToolYearsProps = createStructuredSelector({

@@ -67,15 +67,6 @@ export function changeLayout(newToolLayout) {
   };
 }
 
-export function toggleMapLayerMenu() {
-  return dispatch => {
-    dispatch({
-      type: TOGGLE_MAP_LAYERS_MENU
-    });
-    dispatch({ type: SET_SANKEY_SIZE });
-  };
-}
-
 export function loadTooltip() {
   return {
     type: LOAD_TOOLTIP

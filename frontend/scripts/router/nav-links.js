@@ -1,7 +1,7 @@
 import { TOOL_LAYOUT } from 'constants';
 
 const supplyChainNavs = [];
-if (ENABLE_REDESIGN_PAGES) {
+if (ENABLE_TOOL_PANEL) {
   supplyChainNavs.push({
     name: 'Supply Chain',
     page: {
