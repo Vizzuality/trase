@@ -175,7 +175,7 @@ GEM
     factory_bot_rails (5.1.1)
       factory_bot (~> 5.1.0)
       railties (>= 4.2.0)
-    ffi (1.11.3)
+    ffi (1.12.1)
     formtastic (3.1.5)
       actionpack (>= 3.2.13)
     formtastic_i18n (0.6.0)
@@ -324,7 +324,7 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
-    rbnacl (4.0.2)
+    rbnacl (7.1.1)
       ffi
     rbnacl-libsodium (1.0.16)
       rbnacl (>= 3.0.1)
@@ -499,7 +499,7 @@ DEPENDENCIES
   rack-cors (~> 1.1)
   rails (~> 5.2.4.1)
   rails-controller-testing
-  rbnacl (>= 3.2, < 5.0)
+  rbnacl (>= 3.2, < 8.0)
   rbnacl-libsodium
   rspec-collection_matchers
   rspec-rails (~> 3.9)
