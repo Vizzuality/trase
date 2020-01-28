@@ -116,10 +116,11 @@
 
     ul {
       margin: 32px 0;
-      padding-left: 24px;
+      padding-left: 15px;
 
       li {
         position: relative;
+        padding-left: 10px;
         list-style-image: url('/images/bullet-point.svg');
       }
     }
