@@ -75,6 +75,10 @@ export const GradientAnimation = React.memo(({ candyMode }) => {
   );
 });
 
+GradientAnimation.propTypes = {
+  candyMode: PropTypes.bool
+};
+
 export const LinksPlaceHolder = React.memo(
   ({ gapBetweenColumns, sankeyColumnsWidth, size = MIN_COLUMNS_NUMBER - 1, height = 525 }) =>
     Array.from({ length: size }).map((_, i) => (
