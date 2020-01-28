@@ -1,41 +1,87 @@
-import { getURLFromParams, GET_ALL_NODES_URL, GET_INDICATORS_URL } from 'utils/getURLFromParams';
+import {
+  getURLFromParams,
+  GET_DASHBOARD_OPTIONS_TABS_URL,
+  GET_ALL_NODES_URL,
+  GET_INDICATORS_URL
+} from 'utils/getURLFromParams';
+import { getDataDownloadContext } from 'react-components/data-portal/data-portal.selectors';
+import axios from 'axios';
+import { batch } from 'react-redux';
 
-export const LOAD_EXPORTERS = 'LOAD_EXPORTERS';
-export const LOAD_CONSUMPTION_COUNTRIES = 'LOAD_CONSUMPTION_COUNTRIES';
-export const LOAD_INDICATORS = 'LOAD_INDICATORS';
+export const DATA_PORTAL__SET_SELECTED_COUNTRY_ID = 'DATA_PORTAL__SET_SELECTED_COUNTRY_ID';
+export const DATA_PORTAL__SET_SELECTED_COMMODITY_ID = 'DATA_PORTAL__SET_SELECTED_COMMODITY_ID';
+export const DATA_PORTAL__LOAD_EXPORTERS = 'DATA_PORTAL__LOAD_EXPORTERS';
+export const DATA_PORTAL__LOAD_CONSUMPTION_COUNTRIES = 'DATA_PORTAL__LOAD_CONSUMPTION_COUNTRIES';
+export const DATA_PORTAL__LOAD_INDICATORS = 'DATA_PORTAL__LOAD_INDICATORS';
 
-export function loadContextNodes(contextId) {
-  return dispatch => {
-    const allNodesURL = getURLFromParams(GET_ALL_NODES_URL, { context_id: contextId });
-    const indicatorsURL = getURLFromParams(GET_INDICATORS_URL, { context_id: contextId });
+export const setSelectedCountryId = countryId => ({
+  type: DATA_PORTAL__SET_SELECTED_COUNTRY_ID,
+  payload: countryId
+});
 
-    Promise.all([allNodesURL, indicatorsURL].map(url => fetch(url).then(resp => resp.text()))).then(
-      rawPayload => {
-        const payload = {
-          nodes: JSON.parse(rawPayload[0]).data,
-          indicators: JSON.parse(rawPayload[1]).indicators
-        };
+export const setSelectedCommodityId = commodityId => ({
+  type: DATA_PORTAL__SET_SELECTED_COMMODITY_ID,
+  payload: commodityId
+});
 
-        const flowNodes = payload.nodes.filter(node => node.hasFlows === true);
-        const exporters = flowNodes.filter(node => node.type === 'EXPORTER');
-        const consumptionCountries = flowNodes.filter(node => node.type === 'COUNTRY');
-        const { indicators } = payload;
+export const loadDataDownloadLists = () => (dispatch, getState) => {
+  const state = getState();
+  const selectedContext = getDataDownloadContext(state);
 
-        dispatch({
-          type: LOAD_EXPORTERS,
-          exporters
-        });
+  const contextFiltersURL = getURLFromParams(GET_DASHBOARD_OPTIONS_TABS_URL, {
+    country_id: selectedContext.countryId,
+    commodity_id: selectedContext.commodityId
+  });
 
-        dispatch({
-          type: LOAD_CONSUMPTION_COUNTRIES,
-          consumptionCountries
-        });
+  axios
+    .get(contextFiltersURL)
+    .then(res => res.data)
+    .then(({ data }) => {
+      const columnIds = {};
+      data.forEach(item => {
+        const tab = item.tabs.find(t => ['EXPORTER', 'COUNTRY'].includes(t.name));
+        if (tab) {
+          columnIds[tab.name] = tab.id;
+        }
+      });
 
-        dispatch({
-          type: LOAD_INDICATORS,
-          indicators
-        });
-      }
-    );
-  };
-}
+      const exportersURL = getURLFromParams(GET_ALL_NODES_URL, {
+        context_id: selectedContext.id,
+        node_types_ids: columnIds.EXPORTER
+      });
+
+      const destinationsURL = getURLFromParams(GET_ALL_NODES_URL, {
+        context_id: selectedContext.id,
+        node_types_ids: columnIds.COUNTRY
+      });
+
+      const indicatorsURL = getURLFromParams(GET_INDICATORS_URL, {
+        context_id: selectedContext.id
+      });
+
+      Promise.all([exportersURL, destinationsURL, indicatorsURL].map(url => axios.get(url))).then(
+        responses => {
+          const [{ data: exporters }, { data: destinations }, { indicators }] = responses.map(
+            res => res.data
+          );
+
+          batch(() => {
+            dispatch({
+              type: DATA_PORTAL__LOAD_EXPORTERS,
+              exporters
+            });
+
+            dispatch({
+              type: DATA_PORTAL__LOAD_CONSUMPTION_COUNTRIES,
+              consumptionCountries: destinations
+            });
+
+            dispatch({
+              type: DATA_PORTAL__LOAD_INDICATORS,
+              indicators
+            });
+          });
+        }
+      );
+    });
+};
