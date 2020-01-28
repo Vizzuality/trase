@@ -24,7 +24,7 @@ class GlobalSearchResult extends Component {
   onMouseOut = () => this.setState({ hoverOverLink: false });
 
   render() {
-    const { value, itemProps, isHighlighted, item, testId, style } = this.props;
+    const { value, itemProps, isHighlighted, item, testId, style, closeSearch } = this.props;
 
     return (
       <li
@@ -40,6 +40,7 @@ class GlobalSearchResult extends Component {
         </div>
         <div className="search-node-actions-container">
           <LinkButton
+            onClick={closeSearch}
             className={cx('-medium-large', { '-charcoal': !this.state.hoverOverLink })}
             to={{
               type: 'tool',
@@ -59,6 +60,7 @@ class GlobalSearchResult extends Component {
           </LinkButton>
           {item.isSubnational && (
             <LinkButton
+              onClick={closeSearch}
               className="-medium-large"
               onMouseEnter={this.onMouseEnter}
               onMouseOut={this.onMouseOut}
@@ -85,6 +87,7 @@ class GlobalSearchResult extends Component {
             .filter(n => n.profile && !DISABLE_PROFILES)
             .map(node => (
               <LinkButton
+                onClick={closeSearch}
                 onMouseEnter={this.onMouseEnter}
                 onMouseOut={this.onMouseOut}
                 onBlur={this.onMouseOut}
@@ -112,6 +115,7 @@ class GlobalSearchResult extends Component {
 }
 
 GlobalSearchResult.propTypes = {
+  closeSearch: PropTypes.func,
   isLoading: PropTypes.bool,
   showMap: PropTypes.bool,
   value: PropTypes.string,
