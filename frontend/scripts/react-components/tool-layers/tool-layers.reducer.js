@@ -64,7 +64,7 @@ const toolLayersReducer = {
       draft.data.mapDimensions = {};
       dimensions.forEach(dimension => {
         const uid = getNodeMetaUid(dimension.type, dimension.layerAttributeId);
-        draft.data.mapDimensions[uid] = { ...draft.data.mapDimensions[uid], dimension, uid };
+        draft.data.mapDimensions[uid] = { ...dimension, uid };
       });
       draft.data.mapDimensionsGroups = [];
       dimensionGroups.forEach((g, i) => {
