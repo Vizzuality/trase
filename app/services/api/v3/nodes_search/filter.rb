@@ -24,7 +24,7 @@ module Api
             search_by_name(query).
             select(select_columns).
             group(select_columns).
-            limit(100)
+            limit(1000)
         end
       end
     end
