@@ -64,11 +64,10 @@ class TopNav extends React.PureComponent {
   handleToggleClick = () => this.setState(state => ({ menuOpen: !state.menuOpen }));
 
   renderDesktopMenu() {
-
     const { links, printable, showLogo, onDownloadPDF, className, page } = this.props;
     const allLinks = [];
 
-    if (showLogo && !ENABLE_REDESIGN_PAGES) {
+    if (showLogo && !ENABLE_TOOL_PANEL) {
       allLinks.push({
         name: 'Home',
         page: 'home',
@@ -82,7 +81,7 @@ class TopNav extends React.PureComponent {
 
     return (
       <div className="row align-justify -desktop-menu">
-        {ENABLE_REDESIGN_PAGES && (
+        {ENABLE_TOOL_PANEL && (
           <div className="column medium-2">
             <ul className="top-nav-item-list">
               <li className="top-nav-item">
