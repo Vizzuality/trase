@@ -6,6 +6,7 @@ import HighlightTextFragments from 'react-components/shared/highlight-text-fragm
 
 function SearchInputResult(props) {
   const {
+    style,
     className,
     item,
     itemProps,
@@ -17,11 +18,12 @@ function SearchInputResult(props) {
   return (
     <li
       {...itemProps}
+      style={style}
       className={cx('c-search-input-result', className, { '-highlighted': isHighlighted })}
       data-test={testId}
     >
       <span className="search-input-item-type">{nodeTypeRenderer(item)}</span>
-      <span className="search-input-item-name">
+      <span className="search-input-item-name" title={item.name}>
         <HighlightTextFragments text={item.name} highlight={searchString} />
       </span>
     </li>
@@ -33,6 +35,7 @@ SearchInputResult.propTypes = {
   className: PropTypes.string,
   nodeTypeRenderer: PropTypes.func,
   item: PropTypes.object.isRequired,
+  style: PropTypes.object.isRequired,
   itemProps: PropTypes.object.isRequired,
   isHighlighted: PropTypes.bool.isRequired,
   searchString: PropTypes.string.isRequired

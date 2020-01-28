@@ -6,34 +6,21 @@ import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 import kebabCase from 'lodash/kebabCase';
 import GlobalSearchResult from 'react-components/nav/global-search/global-search-result/global-search-result.component';
-import { MAX_SEARCH_RESULTS } from 'constants';
 
 import 'react-components/nav/global-search/global-search.scss';
 import 'react-components/nav/global-search/global-search-result/global-search-result.scss';
+import { FixedSizeList } from 'react-window';
 
 const SEARCH_DEBOUNCE_RATE_IN_MS = 400;
 
 export default class GlobalSearch extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { isSearchOpen: false, inputValue: '' };
-    this.onOpenClicked = this.onOpenClicked.bind(this);
-    this.onCloseClicked = this.onCloseClicked.bind(this);
-    this.onKeydown = this.onKeydown.bind(this);
-    this.onDownshiftStateChange = this.onDownshiftStateChange.bind(this);
-    this.onItemSelected = this.onItemSelected.bind(this);
-    this.debouncedInputValueChange = debounce(
-      this.debouncedInputValueChange.bind(this),
-      SEARCH_DEBOUNCE_RATE_IN_MS
-    );
-    this.onInputValueChange = this.onInputValueChange.bind(this);
-    this.setDownshiftRef = element => {
-      this.downshift = element;
-    };
-    this.setInputRef = element => {
-      this.input = element;
-    };
+  state = { isSearchOpen: false, inputValue: '' };
 
+  downshift = null;
+
+  input = null;
+
+  componentDidMount() {
     document.addEventListener('keydown', this.onKeydown);
   }
 
@@ -49,42 +36,50 @@ export default class GlobalSearch extends Component {
     document.removeEventListener('keydown', this.onKeydown);
   }
 
-  onOpenClicked(e) {
+  setDownshiftRef = element => {
+    this.downshift = element;
+  };
+
+  setInputRef = element => {
+    this.input = element;
+  };
+
+  onOpenClicked = e => {
     if (e) e.stopPropagation();
     this.setState({ isSearchOpen: true });
-  }
+  };
 
-  onCloseClicked(e) {
+  onCloseClicked = e => {
     if (e) e.stopPropagation();
     this.setState({ isSearchOpen: false, inputValue: '' });
     this.debouncedInputValueChange('');
-  }
+  };
 
-  onItemSelected(item) {
+  onItemSelected = item => {
     this.onCloseClicked();
     if (item) {
       this.props.onItemSelected(item);
     }
-  }
+  };
 
-  onDownshiftStateChange(state) {
+  onDownshiftStateChange = state => {
     if (state.inputValue !== undefined) this.onInputValueChange(state.inputValue);
-  }
+  };
 
-  onInputValueChange(value) {
+  onInputValueChange = value => {
     this.setState({ inputValue: value });
     this.debouncedInputValueChange(value);
-  }
+  };
 
-  onKeydown(e) {
+  onKeydown = e => {
     if (e.key === 'Escape' && this.state.isSearchOpen) {
       this.onCloseClicked();
     }
-  }
+  };
 
-  debouncedInputValueChange(value) {
+  debouncedInputValueChange = debounce(value => {
     this.props.onInputValueChange(value);
-  }
+  }, SEARCH_DEBOUNCE_RATE_IN_MS);
 
   render() {
     const { isLoading, className, searchResults = [], searchTerm } = this.props;
@@ -119,6 +114,8 @@ export default class GlobalSearch extends Component {
               return i;
             }}
             selectedItem={inputValue}
+            defaultHighlightedIndex={0}
+            itemCount={searchResults.length}
             onStateChange={this.onDownshiftStateChange}
             onChange={this.onItemSelected}
             ref={this.setDownshiftRef}
@@ -137,30 +134,44 @@ export default class GlobalSearch extends Component {
                     data-test="global-search-input"
                   />
                 </div>
-                {!isEmpty(searchTerm) && (
+                {!isEmpty(searchTerm) && !noResults && (
+                  <FixedSizeList
+                    height={345}
+                    width={window.innerWidth}
+                    itemSize={85}
+                    itemData={searchResults}
+                    itemCount={searchResults.length}
+                    innerElementType="ul"
+                    className="search-results"
+                  >
+                    {({ index, style, data }) => {
+                      const item = data[index];
+                      return (
+                        <GlobalSearchResult
+                          key={index}
+                          style={style}
+                          value={searchTerm}
+                          isLoading={isLoading}
+                          isHighlighted={index === highlightedIndex}
+                          item={item}
+                          itemProps={getItemProps({ item })}
+                          testId={`global-search-result-${kebabCase(item.name)}-${
+                            item.contextId
+                          }`.toLowerCase()}
+                        />
+                      );
+                    }}
+                  </FixedSizeList>
+                )}
+                {noResults && (
                   <ul className="search-results">
-                    {searchResults.slice(0, MAX_SEARCH_RESULTS).map((item, row) => (
-                      <GlobalSearchResult
-                        key={row}
-                        value={searchTerm}
-                        isLoading={isLoading}
-                        isHighlighted={row === highlightedIndex}
-                        item={item}
-                        itemProps={getItemProps({ item })}
-                        testId={`global-search-result-${kebabCase(item.name)}-${
-                          item.contextId
-                        }`.toLowerCase()}
-                      />
-                    ))}
-                    {noResults && (
-                      <li className="c-search-result -no-highlight">
-                        <div className="search-node-text-container">
-                          <span className="search-node-name" data-test="global-search-no-result">
-                            No results found
-                          </span>
-                        </div>
-                      </li>
-                    )}
+                    <li className="c-search-result -no-highlight">
+                      <div className="search-node-text-container">
+                        <span className="search-node-name" data-test="global-search-no-result">
+                          No results found
+                        </span>
+                      </div>
+                    </li>
                   </ul>
                 )}
               </div>

@@ -7,18 +7,20 @@ import LinkButton from 'react-components/shared/link-button.component';
 import HighlightTextFragments from 'react-components/shared/highlight-text-fragments.component';
 import Button from 'react-components/shared/button/button.component';
 
-function ToolSearchResult({
-  value,
-  onClickAdd,
-  selected,
-  exporterNotSelected,
-  importerNotSelected,
-  itemProps,
-  isHighlighted,
-  item,
-  contextId,
-  toolLayout
-}) {
+function ToolSearchResult(props) {
+  const {
+    style,
+    value,
+    onClickAdd,
+    selected,
+    exporterNotSelected,
+    importerNotSelected,
+    itemProps,
+    isHighlighted,
+    item,
+    contextId,
+    toolLayout
+  } = props;
   const buttonList = [];
 
   if (selected) {
@@ -27,20 +29,6 @@ function ToolSearchResult({
         Already in {toolLayout === TOOL_LAYOUT.left ? 'map' : 'supply chain'}
       </Button>
     );
-  } else if (exporterNotSelected === importerNotSelected) {
-    // The weird "if" above means that we only do NOT show this button if
-    // node is both importer and exporter, and is added as one of them but no the other to the supply chain.
-    // The "if" statement above that ensures it's also not shown if node is both and is selected
-    // Commented out to hide the "add to supply chain"/"add to map" button
-    // buttonList.push(
-    //   <Button
-    //     key="addToSupplyChain"
-    //     size="rg"
-    //     onClick={e => onClickAdd(e, item)}
-    //   >
-    //     Add to {toolLayout === TOOL_LAYOUT.left ? 'map' : 'supply chain'}
-    //   </Button>
-    // );
   }
 
   if (!(exporterNotSelected && !importerNotSelected)) {
@@ -62,7 +50,11 @@ function ToolSearchResult({
   }
 
   return (
-    <li {...itemProps} className={cx('c-search-result', { '-highlighted': isHighlighted })}>
+    <li
+      {...itemProps}
+      style={style}
+      className={cx('c-search-result', { '-highlighted': isHighlighted })}
+    >
       <div className="search-node-text-container">
         <span className="search-node-type">{item.nodeType}</span>
         <span className="search-node-name">
@@ -97,6 +89,7 @@ function ToolSearchResult({
 }
 
 ToolSearchResult.propTypes = {
+  style: PropTypes.object,
   item: PropTypes.object,
   value: PropTypes.string,
   selected: PropTypes.bool,

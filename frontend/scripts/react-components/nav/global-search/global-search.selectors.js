@@ -31,6 +31,7 @@ const getGroupedAppSearchResults = createSelector(
       const { defaultYear = null } = contexts.find(c => c.id === node.contextId) || {};
 
       return {
+        id: byContextMainIdAndNodeType(node),
         nodes,
         defaultYear,
         name: node.name,
