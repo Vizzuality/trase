@@ -25,7 +25,7 @@ import {
 
 import 'react-components/explore/explore.scss';
 
-const ToolLinksModal = React.lazy(() => import('./tool-links-modal'));
+const ToolLinksModal = React.lazy(() => import(/* webpackPreload: true */ './tool-links-modal'));
 
 function Explore(props) {
   const {

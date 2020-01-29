@@ -6,7 +6,10 @@ import cx from 'classnames';
 import './data-view.scss';
 import Spinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 
-const DashboardWidget = React.lazy(() => import('../../dashboard-element/dashboard-widget'));
+const DashboardWidget = React.lazy(
+  /* webpackChunkName: "dashboard-widget" */ /* webpackPreload: true */ () =>
+    import('../../dashboard-element/dashboard-widget')
+);
 
 const WidgetPlaceholder = () => (
   <div className="data-view-placeholder-item">
