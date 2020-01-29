@@ -45,7 +45,10 @@ module.exports = {
         'https://dmp.adform.net'
       ]
     }),
-    new PreloadWebpackPlugin(),
+    new PreloadWebpackPlugin({
+      rel: 'preload',
+      include: ['tool', 'explore']
+    }),
     new HtmlWebpackPreconnectPlugin(),
     new webpack.DefinePlugin({
       NODE_ENV_DEV: process.env.NODE_ENV === 'development',

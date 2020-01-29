@@ -16,10 +16,14 @@ import 'styles/components/shared/veil.scss';
 import 'styles/components/shared/dropdown.scss';
 import 'styles/components/tool/map/map-sidebar.scss';
 
-const Sankey = React.lazy(() => import('./sankey'));
-const DataView = React.lazy(() => import('./data-view'));
-const ToolModal = React.lazy(() => import('./tool-modal'));
-const ErrorModal = React.lazy(() => import('./error-modal'));
+const Sankey = React.lazy(() =>
+  import(/* webpackChunkName: "sankey" */ /* webpackPreload: true */ './sankey')
+);
+const DataView = React.lazy(() =>
+  import(/* webpackChunkName: "data-view" */ /* webpackPreload: true */ './data-view')
+);
+const ToolModal = React.lazy(() => import(/* webpackPreload: true */ './tool-modal'));
+const ErrorModal = React.lazy(() => import(/* webpackPreload: true */ './error-modal'));
 
 const evManager = new EventManager();
 
