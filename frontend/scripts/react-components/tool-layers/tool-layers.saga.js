@@ -10,7 +10,7 @@ import {
   NODES_PANEL__SAVE,
   NODES_PANEL__SYNC_NODES_WITH_SANKEY
 } from 'react-components/nodes-panel/nodes-panel.actions';
-import { SET_CONTEXT, SET_CONTEXTS } from 'app/app.actions';
+import { SET_CONTEXT, SET_CONTEXTS, APP_SAGA_REGISTERED } from 'app/app.actions';
 import {
   SELECT_YEARS,
   loadMapChoropleth,
@@ -38,17 +38,20 @@ function* fetchLinkedGeoIds() {
 }
 
 function* fetchMapDimensions() {
-  function* performFetch() {
+  function* performFetch({ type }) {
     const selectedYears = yield select(getSelectedYears);
     const selectedContext = yield select(getSelectedContext);
-    const page = yield select(state => state.location.type);
+    const { type: page, prev } = yield select(state => state.location);
     if (page !== 'tool' || selectedContext === null) {
       return;
     }
 
     yield call(getMapDimensions, selectedContext, selectedYears);
-    // TODO remove this when mapbox comes
-    yield put(loadMapChoropleth());
+
+    if (type !== APP_SAGA_REGISTERED || prev.type !== page) {
+      // TODO remove this when mapbox comes
+      yield put(loadMapChoropleth());
+    }
   }
   yield takeLatest(
     [
@@ -60,7 +63,8 @@ function* fetchMapDimensions() {
       SELECT_YEARS,
       TOOL_LINKS__SELECT_COLUMN,
       TOOL_LINKS__CLEAR_SANKEY,
-      NODES_PANEL__SYNC_NODES_WITH_SANKEY
+      NODES_PANEL__SYNC_NODES_WITH_SANKEY,
+      APP_SAGA_REGISTERED
     ],
     performFetch
   );

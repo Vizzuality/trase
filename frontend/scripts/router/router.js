@@ -73,13 +73,19 @@ const StaticContent = lazy(() =>
 export const routes = {
   home: {
     path: '/',
-    Component: lazy(() => import('../react-components/home/home.container')),
+    Component: lazy(() =>
+      import(/* webpackChunkName: "home" */ '../react-components/home/home.container')
+    ),
     title: getPageTitle,
     thunk: loadPageData(getPostsContent, getTweetsContent, getTestimonialsContent)
   },
   explore: {
     path: '/explore',
-    Component: lazy(() => import('../react-components/explore/explore.js')),
+    Component: lazy(() =>
+      import(
+        /* webpackChunkName: "explore" */ /* webpackPreload: true */ '../react-components/explore/explore.js'
+      )
+    ),
     title: getPageTitle,
     thunk: loadPageData(),
     nav: {
@@ -89,7 +95,9 @@ export const routes = {
   },
   tool: {
     path: '/flows/:section?',
-    Component: lazy(() => import('../react-components/tool/tool.js')),
+    Component: lazy(() =>
+      import(/* webpackChunkName: "tool" */ '../react-components/tool/tool.js')
+    ),
     title: getPageTitle,
     thunk: loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool),
     footer: false,
@@ -99,7 +107,11 @@ export const routes = {
   },
   profileRoot: {
     path: '/profiles',
-    Component: lazy(() => import('../react-components/profile-root/profile-root.container')),
+    Component: lazy(() =>
+      import(
+        /* webpackChunkName: "profile-root" */ '../react-components/profile-root/profile-root.container'
+      )
+    ),
     title: getPageTitle,
     extension: 'jsx',
     nav: {
@@ -109,7 +121,11 @@ export const routes = {
   },
   profileNode: {
     path: '/profile-:profileType',
-    Component: lazy(() => import('../react-components/profile-node/profile-node.container')),
+    Component: lazy(() =>
+      import(
+        /* webpackChunkName: "profile-node" */ '../react-components/profile-node/profile-node.container'
+      )
+    ),
     title: getPageTitle,
     nav: {
       className: '-light',
@@ -119,21 +135,31 @@ export const routes = {
   },
   dashboardRoot: {
     path: '/dashboards',
-    Component: lazy(() => import('../react-components/dashboard-root/dashboard-root.container')),
+    Component: lazy(() =>
+      import(
+        /* webpackChunkName: "dashboard-root" */ '../react-components/dashboard-root/dashboard-root.container'
+      )
+    ),
     title: getPageTitle,
     thunk: loadPageData(loadDashboardTemplates)
   },
   dashboardElement: {
     path: '/dashboards/:dashboardId',
     Component: lazy(() =>
-      import('../react-components/dashboard-element/dashboard-element.container')
+      import(
+        /* webpackChunkName: "dashboard-element" */ '../react-components/dashboard-element/dashboard-element.container'
+      )
     ),
     title: getPageTitle,
     thunk: loadPageData(loadInitialDashboardData)
   },
   data: {
     path: '/data',
-    Component: lazy(() => import('../react-components/data-portal/data-portal.container')),
+    Component: lazy(() =>
+      import(
+        /* webpackChunkName: "data-portal" */ '../react-components/data-portal/data-portal-page.container'
+      )
+    ),
     title: getPageTitle,
     thunk: loadPageData(),
     nav: {
@@ -164,7 +190,11 @@ export const routes = {
   },
   notSupportedOnMobile: {
     path: '/not-supported',
-    Component: lazy(() => import('../react-components/mobile/not-supported.component')),
+    Component: lazy(() =>
+      import(
+        /* webpackChunkName: "not-supported" */ '../react-components/mobile/not-supported.component'
+      )
+    ),
     title: getPageTitle,
     nav: {
       className: '-light'
@@ -173,7 +203,11 @@ export const routes = {
   },
   logisticsMap: {
     path: '/logistics-map',
-    Component: lazy(() => import('../react-components/logistics-map/logistics-map.container')),
+    Component: lazy(() =>
+      import(
+        /* webpackChunkName: "logistics-map" */ '../react-components/logistics-map/logistics-map.container'
+      )
+    ),
     thunk: loadPageData(),
     title: getPageTitle,
     footer: false,

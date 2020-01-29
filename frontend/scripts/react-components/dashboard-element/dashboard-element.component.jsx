@@ -1,14 +1,12 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
-import DashboardPanel from 'react-components/dashboard-element/dashboard-panel';
 import DashboardWelcome from 'react-components/dashboard-element/dashboard-welcome/dashboard-welcome.component';
 import Button from 'react-components/shared/button/button.component';
 import TagsGroup from 'react-components/shared/tags-group';
 import RecolorBy from 'react-components/shared/recolor-by';
 import Dropdown from 'react-components/shared/dropdown';
 import YearsRangeDropdown from 'react-components/shared/years-range-dropdown';
-import DashboardWidget from 'react-components/dashboard-element/dashboard-widget';
 import UrlSerializer from 'react-components/shared/url-serializer';
 import InView from 'react-components/shared/in-view.component';
 import cx from 'classnames';
@@ -16,6 +14,9 @@ import Heading from 'react-components/shared/heading';
 import { DASHBOARD_STEPS } from 'constants';
 
 import 'react-components/dashboard-element/dashboard-element.scss';
+
+const DashboardWidget = React.lazy(() => import(/* webpackPreload: true */ './dashboard-widget'));
+const DashboardPanel = React.lazy(() => import(/* webpackPreload: true */ './dashboard-panel'));
 
 class DashboardElement extends React.PureComponent {
   static propTypes = {
@@ -65,12 +66,14 @@ class DashboardElement extends React.PureComponent {
       return <DashboardWelcome onContinue={() => setStep(step + 1)} />;
     }
     return (
-      <DashboardPanel
-        step={step}
-        onContinue={this.onContinue}
-        onBack={showBackButton ? () => setStep(step - 1) : undefined}
-        setStep={setStep}
-      />
+      <Suspense fallback={null}>
+        <DashboardPanel
+          step={step}
+          onContinue={this.onContinue}
+          onBack={showBackButton ? () => setStep(step - 1) : undefined}
+          setStep={setStep}
+        />
+      </Suspense>
     );
   }
 
@@ -130,11 +133,13 @@ class DashboardElement extends React.PureComponent {
             ref={ref}
           >
             {(widgetIndex < 2 || inView) && (
-              <DashboardWidget
-                chart={chart}
-                selectedRecolorBy={filters.selectedRecolorBy}
-                grouping={groupedCharts.groupings[chart.groupingId]}
-              />
+              <Suspense fallback={null}>
+                <DashboardWidget
+                  chart={chart}
+                  selectedRecolorBy={filters.selectedRecolorBy}
+                  grouping={groupedCharts.groupings[chart.groupingId]}
+                />
+              </Suspense>
             )}
           </div>
         )}
