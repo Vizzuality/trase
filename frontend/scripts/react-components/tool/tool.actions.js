@@ -55,20 +55,25 @@ export function loadMapVectorData() {
         return axios
           .get(vectorLayerURL)
           .then(res => res.data)
-          .then(topoJSON => {
-            const [key] = Object.keys(topoJSON.objects);
-            const geoJSON = topojsonFeature(topoJSON, topoJSON.objects[key]);
-            setGeoJSONMeta(
-              geoJSON,
-              getState().toolLinks.data.nodes,
-              getState().toolLinks.data.nodesByColumnGeoId,
-              geoColumn.id
-            );
-            return {
-              geoJSON,
-              ...vectorData
-            };
-          })
+          .then(
+            topoJSON =>
+              new Promise(resolve => {
+                const [key] = Object.keys(topoJSON.objects);
+                setTimeout(() => {
+                  const geoJSON = topojsonFeature(topoJSON, topoJSON.objects[key]);
+                  setGeoJSONMeta(
+                    geoJSON,
+                    getState().toolLinks.data.nodes,
+                    getState().toolLinks.data.nodesByColumnGeoId,
+                    geoColumn.id
+                  );
+                  resolve({
+                    geoJSON,
+                    ...vectorData
+                  });
+                }, 0);
+              })
+          )
           .catch(e => console.error(e) || Promise.reject(vectorLayerURL));
       }
       return Promise.resolve(vectorData);
