@@ -1,4 +1,4 @@
-import { TOOL_LAYOUT } from 'constants';
+import { SANKEY_OFFSETS, TOOL_LAYOUT } from 'constants';
 
 export default {
   data: {
@@ -15,6 +15,9 @@ export default {
   selectedBasemap: null,
   selectedMapContextualLayers: null,
   selectedMapDimensions: null,
-  sankeySize: [window.innerWidth, window.innerHeight],
+  sankeySize: [
+    window.innerWidth - SANKEY_OFFSETS.splittedWidth,
+    window.innerHeight - SANKEY_OFFSETS.height
+  ],
   activeModal: null
 };

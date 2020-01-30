@@ -17,7 +17,7 @@ const pageContent = {
 
 function App() {
   const { routesMap, type, query } = useSelector(state => state.location);
-  const { Component, layout, footer = true } = routesMap[type];
+  const { Component, layout, footer = true, feedback = true } = routesMap[type];
 
   const pageKey = type === 'profileNode' ? `${type}-${query?.nodeId}` : type;
   return (
@@ -28,7 +28,7 @@ function App() {
       <main>
         <Component key={pageKey} content={layout && layout(pageContent[type])} />
         <CookieBanner />
-        <Feedback />
+        {feedback && <Feedback />}
       </main>
       {footer && (
         <footer>
