@@ -101,6 +101,7 @@ export const routes = {
     title: getPageTitle,
     thunk: loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool),
     footer: false,
+    feedback: false,
     nav: {
       className: '-light'
     }
