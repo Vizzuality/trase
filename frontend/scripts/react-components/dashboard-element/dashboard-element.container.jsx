@@ -16,17 +16,8 @@ import {
   getDirtyBlocks,
   getNodesPanelUrlProps
 } from 'react-components/nodes-panel/nodes-panel.selectors';
-import {
-  setDashboardSelectedYears,
-  setDashboardSelectedResizeBy,
-  setDashboardSelectedRecolorBy,
-  editDashboard as editDashboardFn,
-  goToDashboard as goToDashboardFn
-} from 'react-components/dashboard-element/dashboard-element.register';
-import {
-  editPanels as editPanelsFn,
-  finishSelection as finishSelectionFn
-} from 'react-components/nodes-panel/nodes-panel.register';
+import { dashboardElementActions } from 'react-components/dashboard-element/dashboard-element.register';
+import { nodesPanelActions } from 'react-components/nodes-panel/nodes-panel.register';
 import { DASHBOARD_STEPS } from 'constants';
 
 const getUrlProps = createSelector(
@@ -57,13 +48,13 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       goToRoot: () => ({ type: 'dashboardRoot' }),
-      setSelectedYears: setDashboardSelectedYears,
-      setSelectedResizeBy: setDashboardSelectedResizeBy,
-      setSelectedRecolorBy: setDashboardSelectedRecolorBy,
-      editDashboard: editDashboardFn,
-      editPanels: editPanelsFn,
-      finishSelection: finishSelectionFn,
-      goToDashboard: goToDashboardFn
+      setSelectedYears: dashboardElementActions.setDashboardSelectedYears,
+      setSelectedResizeBy: dashboardElementActions.setDashboardSelectedResizeBy,
+      setSelectedRecolorBy: dashboardElementActions.setDashboardSelectedRecolorBy,
+      editDashboard: dashboardElementActions.editDashboard,
+      editPanels: nodesPanelActions.editPanels,
+      finishSelection: nodesPanelActions.finishSelection,
+      goToDashboard: dashboardElementActions.goToDashboard
     },
     dispatch
   );
@@ -161,7 +152,4 @@ class DashboardElementContainer extends React.Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DashboardElementContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardElementContainer);

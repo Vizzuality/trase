@@ -13,14 +13,8 @@ import {
   getCountries,
   getCountryQuickFacts
 } from 'react-components/explore/explore.selectors';
-import {
-  setCommodity,
-  setCountry,
-  goToTool,
-  getQuickFacts,
-  getSankeyCards
-} from 'react-components/explore/explore.register';
-import { getTopCountries } from 'app/app.register';
+import { exploreActions } from 'react-components/explore/explore.register';
+import { appActions } from 'app/app.register';
 
 const mapStateToProps = state => ({
   items: getItems(state),
@@ -38,15 +32,12 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  setCommodity,
-  setCountry,
-  goToTool,
-  getTopCountries,
-  getQuickFacts,
-  getSankeyCards
+  setCommodity: exploreActions.setCommodity,
+  setCountry: exploreActions.setCountry,
+  goToTool: exploreActions.goToTool,
+  getTopCountries: appActions.getTopCountries,
+  getQuickFacts: exploreActions.getQuickFacts,
+  getSankeyCards: exploreActions.getSankeyCards
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ExploreComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(ExploreComponent);

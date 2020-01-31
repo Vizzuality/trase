@@ -29,7 +29,6 @@ export const SELECT_CONTEXTUAL_LAYERS = 'SELECT_CONTEXTUAL_LAYERS';
 export const SELECT_BASEMAP = 'SELECT_BASEMAP';
 export const CHANGE_LAYOUT = 'CHANGE_LAYOUT';
 export const SET_SANKEY_SIZE = 'SET_SANKEY_SIZE';
-export const SET_ACTIVE_MODAL = 'SET_ACTIVE_MODAL';
 export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
 
 export function loadMapVectorData() {
@@ -315,11 +314,5 @@ export function selectBasemap(selectedBasemap) {
   return {
     type: SELECT_BASEMAP,
     payload: { selectedBasemap }
-  };
-}
-export function setActiveModal(activeModal) {
-  return {
-    type: SET_ACTIVE_MODAL,
-    payload: { activeModal }
   };
 }

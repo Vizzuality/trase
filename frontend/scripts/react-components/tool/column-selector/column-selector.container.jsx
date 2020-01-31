@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { connect } from 'react-redux';
-import { selectColumn as selectColumnFn } from 'react-components/tool-links/tool-links.register';
+import { toolLinksActions } from 'react-components/tool-links/tool-links.register';
 import ColumnSelector from 'react-components/tool/column-selector/column-selector.component';
 import PropTypes from 'prop-types';
 import { getGapBetweenColumns } from 'react-components/tool/sankey/sankey.selectors';
@@ -13,7 +13,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  selectColumn: selectColumnFn
+  selectColumn: toolLinksActions.selectColumn
 };
 
 function ColumnSelectorContainer(props) {
@@ -71,7 +71,4 @@ ColumnSelectorContainer.propTypes = {
   hasExtraColumn: PropTypes.bool
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ColumnSelectorContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(ColumnSelectorContainer);

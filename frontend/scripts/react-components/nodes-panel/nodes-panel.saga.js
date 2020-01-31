@@ -1,13 +1,9 @@
 import { select, all, fork, takeLatest, takeEvery, put, call } from 'redux-saga/effects';
 import modules from 'react-components/nodes-panel/nodes-panel.modules';
-import { setDashboardLoading } from 'react-components/dashboard-element/dashboard-element.register';
+import { dashboardElementActions } from 'react-components/dashboard-element/dashboard-element.register';
 import { fetchDashboardCharts } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
 import { getDashboardsContext } from 'react-components/dashboard-element/dashboard-element.selectors';
-import {
-  setToolChartsLoading,
-  TOOL_LINKS__EXPAND_SANKEY,
-  TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH
-} from 'react-components/tool-links/tool-links.register';
+import { toolLinksActions } from 'react-components/tool-links/tool-links.register';
 import { fetchToolCharts } from 'react-components/tool-links/tool-links.fetch.saga';
 import {
   getExpandedNodesByRole,
@@ -165,13 +161,13 @@ export function* fetchMissingItems() {
 
     if (nodesPanel.instanceId === 'tool' && section === 'data-view' && selectedContext) {
       yield fork(fetchToolCharts);
-      yield put(setToolChartsLoading(false));
+      yield put(toolLinksActions.setToolChartsLoading(false));
     }
 
     // TODO: Remove when we delete the legacy dashboards
     if (nodesPanel.instanceId === 'dashboardElement' && selectedContext) {
       yield fork(fetchDashboardCharts);
-      yield put(setDashboardLoading(false));
+      yield put(dashboardElementActions.setDashboardLoading(false));
     }
   }
 
@@ -184,7 +180,7 @@ function* syncSelectedNodes() {
 
     yield put(syncNodesWithSankey(nodesByRole));
   }
-  yield takeLatest([TOOL_LINKS__EXPAND_SANKEY], onExpandSankey);
+  yield takeLatest([toolLinksActions.TOOL_LINKS__EXPAND_SANKEY], onExpandSankey);
 }
 
 function* syncSearchedNodes() {
@@ -223,7 +219,7 @@ function* syncSearchedNodes() {
 
     yield put(syncNodesWithSankey(nodesByRoleViaSearch));
   }
-  yield takeLatest([TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH], onSelectResult);
+  yield takeLatest([toolLinksActions.TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH], onSelectResult);
 }
 
 function* broadcastContextChange() {

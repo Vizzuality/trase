@@ -6,11 +6,8 @@ import {
   TOOL_LINKS__SELECT_COLUMN,
   TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH
 } from 'react-components/tool-links/tool-links.actions';
-import {
-  NODES_PANEL__SAVE,
-  NODES_PANEL__SYNC_NODES_WITH_SANKEY
-} from 'react-components/nodes-panel/nodes-panel.actions';
-import { SET_CONTEXT, SET_CONTEXTS, APP_SAGA_REGISTERED } from 'app/app.actions';
+import { nodesPanelActions } from 'react-components/nodes-panel/nodes-panel.register';
+import { appActions } from 'app/app.register';
 import {
   SELECT_YEARS,
   loadMapChoropleth,
@@ -48,23 +45,23 @@ function* fetchMapDimensions() {
 
     yield call(getMapDimensions, selectedContext, selectedYears);
 
-    if (type !== APP_SAGA_REGISTERED || prev.type !== page) {
+    if (type !== appActions.APP_SAGA_REGISTERED || prev.type !== page) {
       // TODO remove this when mapbox comes
       yield put(loadMapChoropleth());
     }
   }
   yield takeLatest(
     [
-      SET_CONTEXTS,
+      appActions.SET_CONTEXTS,
       TOOL_LINKS__GET_COLUMNS,
       TOGGLE_MAP_DIMENSION,
-      SET_CONTEXT,
-      NODES_PANEL__SAVE,
+      appActions.SET_CONTEXT,
+      nodesPanelActions.NODES_PANEL__SAVE,
       SELECT_YEARS,
       TOOL_LINKS__SELECT_COLUMN,
       TOOL_LINKS__CLEAR_SANKEY,
-      NODES_PANEL__SYNC_NODES_WITH_SANKEY,
-      APP_SAGA_REGISTERED
+      nodesPanelActions.NODES_PANEL__SYNC_NODES_WITH_SANKEY,
+      appActions.APP_SAGA_REGISTERED
     ],
     performFetch
   );

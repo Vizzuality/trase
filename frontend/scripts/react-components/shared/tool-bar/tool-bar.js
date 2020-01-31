@@ -4,12 +4,16 @@ import ToolBar from './tool-bar.component';
 import { getToolBar } from './tool-bar.selectors';
 
 const getEditPanels = () =>
-  import('../../nodes-panel/nodes-panel.register').then(module => module.editPanels);
+  import('../../nodes-panel/nodes-panel.register').then(
+    module => module.nodesPanelActions.editPanels
+  );
 const getSetActiveModal = () =>
-  import('../../tool/tool.actions').then(module => module.setActiveModal);
+  import('../../tool-layers/tool-layers.register').then(
+    module => module.toolLayersActions.setActiveModal
+  );
 const getSetLogisticsMapActiveModal = () =>
   import('../../logistics-map/logistics-map.register').then(
-    module => module.setLogisticsMapActiveModal
+    module => module.logisticsMapActions.setLogisticsMapActiveModal
   );
 
 const mapStateToProps = state => {
@@ -61,7 +65,4 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ToolBar);
+export default connect(mapStateToProps, mapDispatchToProps)(ToolBar);

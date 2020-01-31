@@ -19,8 +19,7 @@ import toolLinksInitialState from 'react-components/tool-links/tool-links.initia
 import toolLinksSerialization from 'react-components/tool-links/tool-links.serializers';
 import appInitialState from 'app/app.initial-state';
 import appSerialization from 'app/app.serializers';
-import { APP_SAGA_REGISTERED } from 'app/app.actions';
-import { setTransifexLanguages } from 'app/app.register';
+import { appActions } from 'app/app.register';
 import App from 'app/app.component';
 import toolLayersInitialState from 'react-components/tool-layers/tool-layers.initial-state';
 import toolLayersSerialization from 'react-components/tool-layers/tool-layers.serializers';
@@ -145,7 +144,7 @@ reducerRegistry.setChangeListener(asyncCombinedReducers =>
 window.onTransifexLoad = () => {
   if (window.Transifex?.live) {
     window.Transifex.live.onFetchLanguages(languages =>
-      store.dispatch(setTransifexLanguages(languages))
+      store.dispatch(appActions.setTransifexLanguages(languages))
     );
   }
 };
@@ -155,7 +154,7 @@ sagaRegistry.setChangeListener(sagas => {
     yield all(sagas);
   }
   sagaMiddleware.run(runSagas);
-  store.dispatch({ type: APP_SAGA_REGISTERED });
+  store.dispatch({ type: appActions.APP_SAGA_REGISTERED });
 });
 
 function* startSagas() {

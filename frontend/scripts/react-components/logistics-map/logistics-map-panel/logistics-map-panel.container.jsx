@@ -2,10 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
-import {
-  updateQueryParams,
-  setCompanySearchTerm
-} from 'react-components/logistics-map/logistics-map.register';
+import { logisticsMapActions } from 'react-components/logistics-map/logistics-map.register';
 import {
   getActiveParams,
   getCurrentCompanies,
@@ -57,8 +54,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  filterItems: setCompanySearchTerm,
-  setActiveItems: items => updateQueryParams({ companies: items })
+  filterItems: logisticsMapActions.setCompanySearchTerm,
+  setActiveItems: items => logisticsMapActions.updateQueryParams({ companies: items })
 };
 
 LogisticsMapPanelContainer.propTypes = {
@@ -67,7 +64,4 @@ LogisticsMapPanelContainer.propTypes = {
   setActiveItems: PropTypes.func
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LogisticsMapPanelContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(LogisticsMapPanelContainer);

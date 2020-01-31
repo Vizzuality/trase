@@ -1,12 +1,7 @@
 import reducerRegistry from 'reducer-registry';
 import reducers from './team.reducer';
+import * as teamActions from './team.actions';
 
 reducerRegistry.register('team', reducers);
 
-// not ideal because you have to change in two, but still better than changing across all app
-export {
-  TEAM__SET_CONTENT,
-  TEAM__SET_ERROR_MESSAGE,
-  getStaticContentFilename,
-  getTeamData
-} from './team.actions';
+export { teamActions };

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import WorldMap from 'react-components/shared/world-map/world-map.component';
-import { setExploreTopNodes } from 'react-components/legacy-explore/legacy-explore.register';
+import { legacyExploreActions } from 'react-components/legacy-explore/legacy-explore.register';
 import {
   getOriginGeoId,
   getOriginCoordinates,
@@ -30,10 +30,8 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = {
-  getTopNodes: selectedContext => setExploreTopNodes('country', selectedContext)
+  getTopNodes: selectedContext =>
+    legacyExploreActions.setExploreTopNodes('country', selectedContext)
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(WorldMap);
+export default connect(mapStateToProps, mapDispatchToProps)(WorldMap);

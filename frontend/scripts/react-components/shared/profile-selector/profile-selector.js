@@ -1,9 +1,6 @@
 import { connect } from 'react-redux';
 import ProfileSelectorComponent from 'react-components/shared/profile-selector/profile-selector.component';
-import {
-  setProfilesActiveStep,
-  goToProfile
-} from 'react-components/shared/profile-selector/profile-selector.register';
+import { profileSelectorActions } from 'react-components/shared/profile-selector/profile-selector.register';
 import {
   getIsDisabled,
   getDynamicSentence
@@ -16,12 +13,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  onClose: () => setProfilesActiveStep(null),
-  setStep: setProfilesActiveStep,
-  goToProfile
+  onClose: () => profileSelectorActions.setProfilesActiveStep(null),
+  setStep: profileSelectorActions.setProfilesActiveStep,
+  goToProfile: profileSelectorActions.goToProfile
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ProfileSelectorComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileSelectorComponent);

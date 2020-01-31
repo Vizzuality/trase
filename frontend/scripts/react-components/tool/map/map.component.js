@@ -395,6 +395,7 @@ export default class MapComponent {
         if (!visibleNodes) {
           return null;
         }
+
         const node = visibleNodes.find(n => n.geoId === feature.properties.geoid);
         // node is not visible bail
         if (!node) return null;
@@ -568,7 +569,10 @@ export default class MapComponent {
     if (linkedPolygons.length) {
       const bbox = turf_bbox({ type: 'FeatureCollection', features: linkedPolygons });
       // we use L's _getBoundsCenterZoom internal method + setView as fitBounds does not support a minZoom option
-      const bounds = L.latLngBounds([[bbox[1], bbox[0]], [bbox[3], bbox[2]]]);
+      const bounds = L.latLngBounds([
+        [bbox[1], bbox[0]],
+        [bbox[3], bbox[2]]
+      ]);
       const boundsCenterZoom = this.map._getBoundsCenterZoom(bounds);
       if (defaultMapView) {
         boundsCenterZoom.zoom = Math.max(boundsCenterZoom.zoom, defaultMapView.zoom);

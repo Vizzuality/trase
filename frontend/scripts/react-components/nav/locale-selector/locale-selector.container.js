@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { setLanguage } from 'app/app.register';
+import { appActions } from 'app/app.register';
 import LocaleSelector from './locale-selector.component';
 
 const mapStateToProps = state => {
@@ -13,9 +13,6 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = { onTranslate: setLanguage };
+const mapDispatchToProps = { onTranslate: appActions.setLanguage };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LocaleSelector);
+export default connect(mapStateToProps, mapDispatchToProps)(LocaleSelector);

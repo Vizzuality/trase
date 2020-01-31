@@ -2,14 +2,11 @@ import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {
-  getWidgetData as getWidgetDataFn,
-  getWidgetState
-} from 'react-components/widgets/widgets.register';
+import { widgetsActions } from 'react-components/widgets/widgets.register';
 
 const mapStateToProps = (state, { query, params }) => {
   const { endpoints } = state.widgets;
-  const widget = getWidgetState(query, endpoints);
+  const widget = widgetsActions.getWidgetState(query, endpoints);
   return {
     params,
     widget
@@ -17,7 +14,7 @@ const mapStateToProps = (state, { query, params }) => {
 };
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({ getWidgetData: getWidgetDataFn }, dispatch);
+  bindActionCreators({ getWidgetData: widgetsActions.getWidgetData }, dispatch);
 
 function Widget(props) {
   const { widget, children, query, params, raw, getWidgetData } = props;
@@ -68,7 +65,4 @@ Widget.propTypes = {
   children: PropTypes.func.isRequired
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Widget);
+export default connect(mapStateToProps, mapDispatchToProps)(Widget);
