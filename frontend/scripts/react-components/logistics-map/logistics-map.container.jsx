@@ -11,14 +11,7 @@ import {
   getHeading,
   getLogisticsMapYearsProps
 } from 'react-components/logistics-map/logistics-map.selectors';
-import {
-  selectLogisticsMapHub,
-  selectLogisticsMapInspectionLevel,
-  setLogisticsMapActiveModal,
-  setLayerActive as setLayerActiveFn,
-  getLogisticsMapCompanies,
-  selectLogisticsMapYear
-} from 'react-components/logistics-map/logistics-map.register';
+import { logisticsMapActions } from 'react-components/logistics-map/logistics-map.register';
 import LogisticsMap from 'react-components/logistics-map/logistics-map.component';
 import formatValue from 'utils/formatValue';
 import capitalize from 'lodash/capitalize';
@@ -209,15 +202,12 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  getLogisticsMapCompanies,
-  setLogisticsMapActiveModal,
-  setLayerActive: setLayerActiveFn,
-  selectYears: selectLogisticsMapYear,
-  selectHub: selectLogisticsMapHub,
-  selectInspectionLevel: selectLogisticsMapInspectionLevel
+  getLogisticsMapCompanies: logisticsMapActions.getLogisticsMapCompanies,
+  setLogisticsMapActiveModal: logisticsMapActions.setLogisticsMapActiveModal,
+  setLayerActive: logisticsMapActions.setLayerActive,
+  selectYears: logisticsMapActions.selectLogisticsMapYear,
+  selectHub: logisticsMapActions.selectLogisticsMapHub,
+  selectInspectionLevel: logisticsMapActions.selectLogisticsMapInspectionLevel
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LogisticsMapContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(LogisticsMapContainer);

@@ -1,12 +1,8 @@
 import { connect } from 'react-redux';
 import Home from 'react-components/home/home.component';
 import { BREAKPOINTS, HOME_VIDEO } from 'constants';
-import { setContextIsUserSelected, getTopCountries } from 'app/app.register';
-import {
-  playHomeVideo,
-  clickNextEntrypoint,
-  clickEntrypoint
-} from 'scripts/react-components/home/home.register';
+import { appActions } from 'app/app.register';
+import { homeActions } from 'scripts/react-components/home/home.register';
 import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 import { getDestinationCountries } from 'react-components/home/home.selectors';
 
@@ -40,15 +36,12 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = dispatch => ({
   goToContextPage: () => {
-    dispatch(setContextIsUserSelected(true));
+    dispatch(appActions.setContextIsUserSelected(true));
     dispatch({ type: 'explore' });
   },
-  onPlayVideo: videoId => dispatch(playHomeVideo(videoId)),
-  clickEntrypoint: link => dispatch(clickEntrypoint(link)),
-  clickNextEntrypoint: () => dispatch(clickNextEntrypoint()),
-  getTopCountries: () => dispatch(getTopCountries())
+  onPlayVideo: videoId => dispatch(homeActions.playHomeVideo(videoId)),
+  clickEntrypoint: link => dispatch(homeActions.clickEntrypoint(link)),
+  clickNextEntrypoint: () => dispatch(homeActions.clickNextEntrypoint()),
+  getTopCountries: () => dispatch(appActions.getTopCountries())
 });
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

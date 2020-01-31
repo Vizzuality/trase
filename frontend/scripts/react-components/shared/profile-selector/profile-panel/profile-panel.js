@@ -1,10 +1,7 @@
 import { connect } from 'react-redux';
 import ProfilePanelComponent from 'react-components/shared/profile-selector/profile-panel/profile-panel.component';
 import { PROFILE_TYPES } from 'constants';
-import {
-  setProfilesPage,
-  setProfilesActiveItem
-} from 'react-components/shared/profile-selector/profile-selector.register';
+import { profileSelectorActions } from 'react-components/shared/profile-selector/profile-selector.register';
 
 // Importing countries panel is not ready yet
 const blocks = [
@@ -37,11 +34,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  setProfilesActiveItem,
-  setProfilesPage
+  setProfilesActiveItem: profileSelectorActions.setProfilesActiveItem,
+  setProfilesPage: profileSelectorActions.setProfilesPage
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ProfilePanelComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(ProfilePanelComponent);

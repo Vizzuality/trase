@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import SentenceSelector from 'react-components/shared/sentence-selector/sentence-selector.component';
-import { selectContextById } from 'app/app.register';
+import { appActions } from 'app/app.register';
 import {
   getSortedContexts,
   getSelectedCommodityPairs,
@@ -28,10 +28,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  selectContextById
+  selectContextById: appActions.selectContextById
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SentenceSelector);
+export default connect(mapStateToProps, mapDispatchToProps)(SentenceSelector);
