@@ -4,9 +4,6 @@ RSpec.describe Api::V3::ActorsController, type: :controller do
   include_context 'api v3 brazil exporter quant values'
   include_context 'api v3 brazil exporter qual values'
   include_context 'api v3 brazil exporter ind values'
-  include_context 'api v3 brazil municipality quant values'
-  include_context 'api v3 brazil municipality qual values'
-  include_context 'api v3 brazil municipality ind values'
   include_context 'api v3 brazil flows quants'
   include_context 'api v3 brazil exporter actor profile'
 
@@ -29,7 +26,14 @@ RSpec.describe Api::V3::ActorsController, type: :controller do
     Api::V3::Readonly::NodeWithFlows.refresh(sync: true, skip_dependencies: true)
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
+
+    NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
+      Api::V3::Readonly::NodeWithFlows.all.map(&:id)
+    )
   end
+
+  let(:node) { api_v3_exporter1_node }
+  let(:year) { 2015 }
 
   describe 'GET basic_attributes' do
     context 'when node without flows' do
@@ -56,50 +60,13 @@ RSpec.describe Api::V3::ActorsController, type: :controller do
       end
     end
 
-    context 'when Volume quant missing' do
-      it 'is not found' do
-        allow(Dictionary::Quant).to receive(:instance).and_return(quant_dict)
-        allow(quant_dict).to receive(:get).and_return(nil)
-
-        get :basic_attributes, params: valid_params
-        expect(response).to have_http_status(404)
-      end
-    end
-
-    context 'when source node type configuration missing' do
-      it 'is not found' do
-        allow(Api::V3::Profiles::ChartConfiguration).to(
-          receive(:new).and_return(chart_config)
-        )
-        allow(chart_config).to(
-          receive(:named_node_type).with('source').and_return(nil)
-        )
-
-        get :basic_attributes, params: valid_params
-        expect(response).to have_http_status(404)
-      end
-    end
-
-    context 'when destination node type configuration missing' do
-      it 'is not found' do
-        allow(Api::V3::Profiles::ChartConfiguration).to(
-          receive(:new).and_return(chart_config)
-        )
-        allow(chart_config).to(
-          receive(:named_node_type).
-            with('source').
-            and_return(api_v3_municipality_node_type)
-        )
-        allow(chart_config).to(
-          receive(:named_node_type).with('destination').and_return(nil)
-        )
-
-        get :basic_attributes, params: valid_params
-        expect(response).to have_http_status(404)
-      end
-    end
-
     context 'when year provided and valid for node' do
+      let(:node) do
+        Api::V3::Readonly::NodeWithFlows.where(
+          context_id: api_v3_context.id, profile: :actor
+        ).first.node
+      end
+
       it 'is successful' do
         get :basic_attributes, params: valid_params
         expect(response).to be_successful
@@ -107,6 +74,12 @@ RSpec.describe Api::V3::ActorsController, type: :controller do
     end
 
     context 'when year provided but not valid for node' do
+      let(:node) do
+        Api::V3::Readonly::NodeWithFlows.where(
+          context_id: api_v3_context.id, profile: :actor
+        ).first.node
+      end
+
       it 'defaults to last available' do
         get :basic_attributes, params: valid_params.merge(year: 2016)
         expect(assigns(:year)).to eq(year)
@@ -115,6 +88,12 @@ RSpec.describe Api::V3::ActorsController, type: :controller do
     end
 
     context 'when year not provided' do
+      let(:node) do
+        Api::V3::Readonly::NodeWithFlows.where(
+          context_id: api_v3_context.id, profile: :actor
+        ).first.node
+      end
+
       it 'defaults to last available' do
         get :basic_attributes, params: valid_params.except(:year)
         expect(assigns(:year)).to eq(year)

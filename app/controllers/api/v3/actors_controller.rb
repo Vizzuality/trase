@@ -7,9 +7,9 @@ module Api
       before_action :set_year
 
       def basic_attributes
-        @result = Api::V3::Actors::BasicAttributes.new(
-          @context, @node, @year
-        ).call
+        @result = Api::V3::Readonly::NodeWithFlows.where(
+          id: @node.id, context: @context.id
+        ).pluck(:actor_basic_attributes).first[@year]
 
         render json: {data: @result}
       end
