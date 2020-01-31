@@ -81,8 +81,8 @@ function DestinationsPanel(props) {
                   getMoreItems={setPage}
                   loading={loading}
                   itemToScrollTo={itemToScrollTo}
-                  excludingMode={ENABLE_REDESIGN_PAGES ? excludingMode : undefined}
-                  onSelectAllClick={ENABLE_REDESIGN_PAGES ? setExcludingMode : undefined}
+                  excludingMode={ENABLE_TOOL_PANEL ? excludingMode : undefined}
+                  onSelectAllClick={ENABLE_TOOL_PANEL ? setExcludingMode : undefined}
                 >
                   {itemProps => (
                     <GridListItem

@@ -55,7 +55,7 @@ const FiltersNav = props => {
   };
 
   const renderInToolLinks = () => {
-    const supplyChainLink = ENABLE_REDESIGN_PAGES
+    const supplyChainLink = ENABLE_TOOL_PANEL
       ? links.find(link => link.page?.type === 'explore')
       : links.find(
           link =>
@@ -105,13 +105,13 @@ const FiltersNav = props => {
   };
 
   const renderMenuOpened = () => {
-    const restOfLinks = ENABLE_REDESIGN_PAGES ? links : links.slice(2);
+    const restOfLinks = ENABLE_TOOL_PANEL ? links : links.slice(2);
     const decoratedLinks = [{ name: 'Home', page: { type: 'home' } }, ...links];
     const navLinks = filters.showToolLinks ? restOfLinks : decoratedLinks;
     return (
       <React.Fragment>
         <div className="filters-nav-left-section">
-          {!ENABLE_REDESIGN_PAGES && filters.showToolLinks && renderInToolLinks()}
+          {!ENABLE_TOOL_PANEL && filters.showToolLinks && renderInToolLinks()}
           <ul className="filters-nav-submenu-list">
             <NavLinksList
               links={navLinks}
@@ -136,18 +136,13 @@ const FiltersNav = props => {
     if (ENABLE_TOOL_PANEL && filter.props.id === 'contextSelector') {
       return <ContextModalButton selectedContext={filter.props.selectedContext} />;
     }
-    if (
-      ENABLE_REDESIGN_PAGES &&
-      ENABLE_VERSIONING &&
-      filter.props.id === 'version' &&
-      !filter.disabled
-    ) {
+    if (ENABLE_VERSIONING && filter.props.id === 'version' && !filter.disabled) {
       return <ToolModalButton modalId="version" key="version-toggle" />;
     }
-    if (ENABLE_REDESIGN_PAGES && filter.props.id === 'toolRecolorBy') {
+    if (filter.props.id === 'toolRecolorBy') {
       return <ToolModalButton modalId="indicator" key="indicator-toggle" />;
     }
-    if (ENABLE_REDESIGN_PAGES && filter.props.id === 'toolResizeBy') {
+    if (filter.props.id === 'toolResizeBy') {
       return <ToolModalButton modalId="unit" key="unit-toggle" />;
     }
     return React.createElement(Component, {

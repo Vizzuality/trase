@@ -10,9 +10,6 @@ const options = [
 
 function OrderBy(props) {
   const { orderBy, setOrderBy } = props;
-  if (!ENABLE_REDESIGN_PAGES) {
-    return null;
-  }
   return (
     <div className="c-order-by">
       <Text as="span" color="grey-faded" weight="bold" transform="capitalize">
