@@ -1,3 +1,5 @@
+import colors from 'styles/_settings.scss';
+
 const xAxis = {
   tickLine: false,
   interval: 'preserveStartEnd',
@@ -32,89 +34,6 @@ const tooltip = {
     opacity: 0
   },
   content: null
-};
-
-const colors = {
-  default: [
-    '#ea6869',
-    '#ffeb8b',
-    '#2d586e',
-    '#007d29',
-    '#b4008a',
-    '#06ff67',
-    '#8339aa',
-    '#ffb700',
-    '#fc7839',
-    '#67caf1',
-    '#e1228c'
-  ],
-  qual: {
-    thematic: {
-      // biomes
-      amazonia: '#43f3f3',
-      cerrado: '#517fee',
-      'mata-atlantica': '#8c28ff',
-      caatinga: '#ff66e5',
-      pampa: '#72ea28',
-      pantanal: '#ffb314',
-      'chaco-seco': '#ffb314',
-      'chaco-humedo': '#43f3f3',
-      'delta-e-islas-del-parana': '#1b9e77',
-      espinal: '#517fee',
-      'esteros-del-ibera': '#8c28ff',
-      'monte-de-llanuras-y-mesetas': '#ff66e5',
-      yungas: '#e36845',
-      // zero deforestation commitment
-      'company-commitment': '#C2E699',
-      'company-ndpe-commitment': '#1D6837',
-      'soy-moratorium': '#1D6837',
-      tac: '#79ae6d',
-      'tac-g-4': '#1D6837',
-      none: '#e36845',
-      // beef products
-      'fresh-frozen-beef-products': '#80cdc1',
-      'bovine-offals': '#a6611a',
-      'live-cattle-exports': '#dfc27d',
-      'processed-beef-products': '#018571',
-      // soy products
-      oil: '#f7fcb9',
-      bean: '#31a354',
-      cake: '#e48716'
-    }
-  },
-  stars: {
-    'red-blue': ['#6F0119', '#a50026', '#D72F27', '#FDAE61', '#79A8D0', '#246AB6']
-  },
-  linear: {
-    'red-blue': [
-      '#6F0119',
-      '#a50026',
-      '#D72F27',
-      '#FDAE61',
-      '#9FCAE1',
-      '#79A8D0',
-      '#5488C0',
-      '#246AB6'
-    ],
-    'yellow-green': ['', '#ffc', '#c2e699', '#78c679', '#31a354', '#006837']
-  },
-  percentual: {
-    'yellow-green': ['', '#ffc', '#c2e699', '#78c679', '#31a354', '#006837'],
-    'green-red': [
-      '#006837',
-      '#1a9850',
-      '#66bd63',
-      '#a6d96a',
-      '#d9ef8b',
-      '#ffffbf',
-      '#fee08b',
-      '#fdae61',
-      '#f46d43',
-      '#d73027',
-      '#a50026',
-      '#6f001a'
-    ]
-  }
 };
 
 const defaults = {

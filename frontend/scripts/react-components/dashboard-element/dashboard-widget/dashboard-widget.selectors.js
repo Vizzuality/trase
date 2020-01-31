@@ -69,9 +69,11 @@ export const getColors = createSelector(
 
     const getColor = labelText => {
       const legendKey = labelText && kebabCase(labelText);
-      const type = selectedRecolorBy && colors[selectedRecolorBy.legendType];
-      const theme = type && type[selectedRecolorBy.legendColorTheme];
-      return theme && theme[legendKey];
+      const type = selectedRecolorBy && selectedRecolorBy.legendType;
+      const theme = selectedRecolorBy && selectedRecolorBy.legendColorTheme;
+      const colorName = `recolorby-${type}-${theme}-${legendKey}`;
+
+      return selectedRecolorBy && colors[colorName];
     };
 
     if (chartType !== 'pie') {
@@ -82,7 +84,7 @@ export const getColors = createSelector(
         const color = getColor(label);
         return {
           label,
-          color: color || colors.default[index]
+          color: color || colors[`recolorgroup-${index + 1}`]
         };
       });
     }
@@ -91,7 +93,7 @@ export const getColors = createSelector(
       const color = getColor(item.x);
       return {
         label: item.x,
-        color: color || (colors && colors.default[index])
+        color: color || (colors && colors[`recolorgroup-${index + 1}`])
       };
     });
   }
@@ -190,31 +192,25 @@ const getNodeTypeName = pluralNodeType =>
   pluralNodeType === 'countries' ? 'importing countries' : pluralNodeType;
 
 export const makeGetGroupingActiveItem = () =>
-  createSelector(
-    [getGrouping, getActiveChartId],
-    (grouping, activeChartId) => {
-      if (activeChartId && grouping) {
-        const item = grouping.options.find(option => option.id === activeChartId);
-        return { ...item, value: item.id, label: capitalize(item.label) };
-      }
-      return null;
+  createSelector([getGrouping, getActiveChartId], (grouping, activeChartId) => {
+    if (activeChartId && grouping) {
+      const item = grouping.options.find(option => option.id === activeChartId);
+      return { ...item, value: item.id, label: capitalize(item.label) };
     }
-  );
+    return null;
+  });
 
 export const makeGetGroupingOptions = () =>
-  createSelector(
-    [getGrouping],
-    grouping => {
-      if (grouping) {
-        return sortBy(grouping.options, ['label']).map(option => ({
-          ...option,
-          value: option.id,
-          label: capitalize(option.label)
-        }));
-      }
-      return null;
+  createSelector([getGrouping], grouping => {
+    if (grouping) {
+      return sortBy(grouping.options, ['label']).map(option => ({
+        ...option,
+        value: option.id,
+        label: capitalize(option.label)
+      }));
     }
-  );
+    return null;
+  });
 
 export const makeGetTitle = () =>
   createSelector(
