@@ -1,8 +1,6 @@
 /* eslint-disable no-shadow */
-// see sankey.container for details on how to use those containers
-import { changeLayout } from 'app/app.register';
 import { selectNodeFromGeoId, highlightNodeFromGeoId } from 'react-components/tool/tool.actions';
-import { saveMapView } from 'react-components/tool-layers/tool-layers.register';
+import { toolLayersActions } from 'react-components/tool-layers/tool-layers.register';
 import {
   getHighlightedNodesData,
   getSelectedColumnsIds,
@@ -150,8 +148,7 @@ const methodProps = [
 const mapDispatchToProps = {
   onPolygonClicked: geoId => selectNodeFromGeoId(geoId),
   onPolygonHighlighted: (geoId, coordinates) => highlightNodeFromGeoId(geoId, coordinates),
-  onChangeLayout: newLayout => changeLayout(newLayout),
-  onMoveEnd: (latlng, zoom) => saveMapView(latlng, zoom)
+  onMoveEnd: (latlng, zoom) => toolLayersActions.saveMapView(latlng, zoom)
 };
 
 export default connect(

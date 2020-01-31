@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import ToolComponent from 'react-components/tool/tool.component';
 import { connect } from 'react-redux';
-import { resize, selectYears } from 'app/app.register';
+import { appActions } from 'app/app.register';
 
 import {
   getToolLinksUrlProps,
@@ -40,11 +40,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  selectYears,
-  resizeSankeyTool: resize
+  selectYears: appActions.selectYears,
+  resizeSankeyTool: appActions.resize
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ToolComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(ToolComponent);

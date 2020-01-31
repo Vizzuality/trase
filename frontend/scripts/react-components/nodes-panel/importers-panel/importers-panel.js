@@ -1,32 +1,19 @@
 import { connect } from 'react-redux';
-import {
-  setPage,
-  fetchData,
-  setOrderBy,
-  setLoadingItems,
-  setSelectedItems,
-  setSelectedTab,
-  getSearchResults,
-  setSearchResult,
-  setExcludingMode
-} from 'react-components/nodes-panel/nodes-panel.register';
+import { nodesPanelActions } from 'react-components/nodes-panel/nodes-panel.register';
 import { makeGetNodesPanelsProps } from 'react-components/nodes-panel/nodes-panel.selectors';
 import ImportersPanel from './importers-panel.component';
 
 const NAME = 'importers';
 const mapDispatchToProps = {
-  setPage: page => setPage(page, NAME),
-  fetchData: key => fetchData(key, NAME),
-  setOrderBy: orderBy => setOrderBy(orderBy, NAME),
-  setExcludingMode: mode => setExcludingMode(mode, NAME),
-  setSelectedTab: activeTab => setSelectedTab(activeTab, NAME),
-  setLoadingItems: loadingItems => setLoadingItems(loadingItems, NAME),
-  setSearchResult: activeItem => setSearchResult(activeItem, NAME),
-  getSearchResults: query => getSearchResults(query, NAME),
-  setSelectedItems: activeItem => setSelectedItems(activeItem, NAME)
+  setPage: page => nodesPanelActions.setPage(page, NAME),
+  fetchData: key => nodesPanelActions.fetchData(key, NAME),
+  setOrderBy: orderBy => nodesPanelActions.setOrderBy(orderBy, NAME),
+  setExcludingMode: mode => nodesPanelActions.setExcludingMode(mode, NAME),
+  setSelectedTab: activeTab => nodesPanelActions.setSelectedTab(activeTab, NAME),
+  setLoadingItems: loadingItems => nodesPanelActions.setLoadingItems(loadingItems, NAME),
+  setSearchResult: activeItem => nodesPanelActions.setSearchResult(activeItem, NAME),
+  getSearchResults: query => nodesPanelActions.getSearchResults(query, NAME),
+  setSelectedItems: activeItem => nodesPanelActions.setSelectedItems(activeItem, NAME)
 };
 
-export default connect(
-  makeGetNodesPanelsProps(NAME),
-  mapDispatchToProps
-)(ImportersPanel);
+export default connect(makeGetNodesPanelsProps(NAME), mapDispatchToProps)(ImportersPanel);

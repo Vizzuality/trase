@@ -5,7 +5,7 @@ import {
   getParsedTopProfiles
 } from 'react-components/profile-root/profile-root.selectors';
 import { getSelectedContext } from 'app/app.selectors';
-import { openModal } from 'react-components/shared/profile-selector/profile-selector.register';
+import { profileSelectorActions } from 'react-components/shared/profile-selector/profile-selector.register';
 
 function mapStateToProps(state) {
   const selectedContext = getSelectedContext(state);
@@ -26,10 +26,7 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = {
-  openModal
+  openModal: profileSelectorActions.openModal
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ProfileRoot);
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileRoot);

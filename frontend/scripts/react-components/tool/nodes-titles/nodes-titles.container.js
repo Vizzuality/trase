@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 import { navigateToProfile } from 'react-components/tool/tool.actions';
-import { clearSankey, selectNodes } from 'react-components/tool-links/tool-links.register';
+import { toolLinksActions } from 'react-components/tool-links/tool-links.register';
 import NodesTitles from 'react-components/tool/nodes-titles/nodes-titles.component';
 import {
   getSelectedNodesData,
@@ -70,9 +70,9 @@ const methodProps = [
 ];
 
 const mapDispatchToProps = {
-  onCloseNodeClicked: selectNodes,
+  onCloseNodeClicked: toolLinksActions.selectNodes,
   onProfileLinkClicked: navigateToProfile,
-  onClearClick: clearSankey
+  onClearClick: toolLinksActions.clearSankey
 };
 
 export default connect(

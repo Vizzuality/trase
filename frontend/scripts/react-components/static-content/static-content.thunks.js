@@ -1,5 +1,5 @@
-import { getStaticContent } from 'react-components/static-content/static-content.register';
+import { staticContentActions } from 'react-components/static-content/static-content.register';
 
 export default function(dispatch) {
-  return dispatch(getStaticContent());
+  return dispatch(staticContentActions.getStaticContent());
 }

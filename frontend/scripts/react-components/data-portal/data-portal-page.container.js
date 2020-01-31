@@ -1,8 +1,8 @@
 import { bindActionCreators } from 'redux';
-import { loadContextNodes } from 'react-components/data-portal/data-portal.register';
+import { dataPortalActions } from 'react-components/data-portal/data-portal.register';
 import { trackDataDownloadFormLoaded, trackDownload } from 'analytics/analytics.actions';
 import { connect } from 'react-redux';
-import { selectContextById } from 'app/app.register';
+import { appActions } from 'app/app.register';
 import DataPortalPage from 'react-components/data-portal/data-portal-page.component';
 import { getSelectedContext } from 'app/app.selectors';
 
@@ -21,8 +21,8 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       onContextSelected: contextId => () => {
-        dispatch(loadContextNodes(contextId));
-        dispatch(selectContextById(contextId));
+        dispatch(dataPortalActions.loadContextNodes(contextId));
+        dispatch(appActions.selectContextById(contextId));
       },
       onDownloadTriggered: trackDownload,
       onDataDownloadFormLoaded: trackDataDownloadFormLoaded
@@ -30,7 +30,4 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DataPortalPage);
+export default connect(mapStateToProps, mapDispatchToProps)(DataPortalPage);

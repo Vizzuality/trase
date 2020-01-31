@@ -2,7 +2,7 @@
 import { connect } from 'react-redux';
 import { selectContextualLayers } from 'react-components/tool/tool.actions';
 import MapContext from 'react-components/tool/map-context/map-context.component';
-import { loadTooltip } from 'app/app.register';
+import { appActions } from 'app/app.register';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 
 const mapStateToProps = state => ({
@@ -24,7 +24,7 @@ const methodProps = [
 ];
 
 const mapDispatchToProps = {
-  onMapDimensionsLoaded: () => loadTooltip(),
+  onMapDimensionsLoaded: () => appActions.loadTooltip(),
   onContextualLayerSelected: layers => selectContextualLayers(layers)
 };
 

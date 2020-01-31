@@ -3,10 +3,7 @@ import { SET_CONTEXTS, SET_CONTEXT } from 'app/app.actions';
 import { setLoadingSpinner } from 'utils/saga-utils';
 import { loadMapVectorData, SELECT_YEARS } from 'react-components/tool/tool.actions';
 import { getSelectedContext } from 'app/app.selectors';
-import {
-  NODES_PANEL__SAVE,
-  NODES_PANEL__SYNC_NODES_WITH_SANKEY
-} from 'react-components/nodes-panel/nodes-panel.register';
+import { nodesPanelActions } from 'react-components/nodes-panel/nodes-panel.register';
 import {
   TOOL_LINKS__SWITCH_TOOL,
   TOOL_LINKS__SET_SELECTED_NODES,
@@ -77,7 +74,7 @@ function* fetchToolInitialData() {
       SET_CONTEXTS,
       TOOL_LINKS__GET_COLUMNS,
       SET_CONTEXT,
-      NODES_PANEL__SAVE,
+      nodesPanelActions.NODES_PANEL__SAVE,
       TOOL_LINKS__COLLAPSE_SANKEY
     ],
     performFetch
@@ -142,7 +139,7 @@ function* fetchLinks() {
       TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
       TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
       TOOL_LINKS__CHANGE_EXTRA_COLUMN,
-      NODES_PANEL__SYNC_NODES_WITH_SANKEY
+      nodesPanelActions.NODES_PANEL__SYNC_NODES_WITH_SANKEY
     ],
     performFetch
   );
@@ -174,7 +171,7 @@ function* fetchCharts() {
       TOOL_LINKS__SET_SELECTED_NODES,
       TOOL_LINKS__SET_SELECTED_RESIZE_BY,
       TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
-      NODES_PANEL__SYNC_NODES_WITH_SANKEY
+      nodesPanelActions.NODES_PANEL__SYNC_NODES_WITH_SANKEY
     ],
     performFetch
   );

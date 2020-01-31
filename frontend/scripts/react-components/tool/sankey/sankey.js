@@ -15,15 +15,7 @@ import {
 } from 'react-components/tool/sankey/sankey.selectors';
 import { connect } from 'react-redux';
 import Sankey from 'react-components/tool/sankey/sankey.component';
-import {
-  clearSankey,
-  collapseSankey,
-  expandSankey,
-  highlightNode,
-  selectNodes,
-  goToProfileFromSankey,
-  changeExtraColumn
-} from 'react-components/tool-links/tool-links.register';
+import { toolLinksActions } from 'react-components/tool-links/tool-links.register';
 import { getSelectedMapDimensionsData } from 'react-components/tool-layers/tool-layers.selectors';
 
 const mapStateToProps = state => ({
@@ -52,16 +44,13 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  goToProfile: goToProfileFromSankey,
-  onNodeClicked: selectNodes,
-  onNodeHighlighted: highlightNode,
-  onExpandClick: expandSankey,
-  onChangeExtraColumn: changeExtraColumn,
-  onCollapseClick: collapseSankey,
-  onClearClick: clearSankey
+  goToProfile: toolLinksActions.goToProfileFromSankey,
+  onNodeClicked: toolLinksActions.selectNodes,
+  onNodeHighlighted: toolLinksActions.highlightNode,
+  onExpandClick: toolLinksActions.expandSankey,
+  onChangeExtraColumn: toolLinksActions.changeExtraColumn,
+  onCollapseClick: toolLinksActions.collapseSankey,
+  onClearClick: toolLinksActions.clearSankey
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Sankey);
+export default connect(mapStateToProps, mapDispatchToProps)(Sankey);

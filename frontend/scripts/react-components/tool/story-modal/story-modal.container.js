@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import ModalComponent from 'react-components/tool/story-modal/modal.component';
-import { closeStoryModal } from 'app/app.register';
+import { appActions } from 'app/app.register';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 
 const mapStateToProps = state => ({
@@ -8,7 +8,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  onClose: () => closeStoryModal()
+  onClose: () => appActions.closeStoryModal()
 };
 const methodProps = [{ name: 'getModal', compared: ['modal'], returned: ['modal'] }];
 

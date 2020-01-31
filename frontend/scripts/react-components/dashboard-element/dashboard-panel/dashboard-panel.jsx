@@ -7,11 +7,7 @@ import {
 
 import { getCountryNamesByCountryId } from 'app/app.selectors';
 
-import {
-  clearPanel,
-  setSelectedItems,
-  cancelPanelsDraft
-} from 'react-components/nodes-panel/nodes-panel.register';
+import { nodesPanelActions } from 'react-components/nodes-panel/nodes-panel.register';
 import { getCanProceed } from 'react-components/nodes-panel/nodes-panel.selectors';
 
 const mapStateToProps = (state, ownProps) => {
@@ -27,12 +23,9 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = {
-  clearPanel,
-  setSelectedItems,
-  cancelPanelsDraft
+  clearPanel: nodesPanelActions.clearPanel,
+  setSelectedItems: nodesPanelActions.setSelectedItems,
+  cancelPanelsDraft: nodesPanelActions.cancelPanelsDraft
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DashboardPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardPanel);

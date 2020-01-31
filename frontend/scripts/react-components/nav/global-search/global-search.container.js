@@ -1,4 +1,4 @@
-import { loadSearchResults } from 'app/app.register';
+import { appActions } from 'app/app.register';
 import GlobalSearch from 'react-components/nav/global-search/global-search.component';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -19,7 +19,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      onInputValueChange: inputValue => loadSearchResults(inputValue),
+      onInputValueChange: inputValue => appActions.loadSearchResults(inputValue),
       onItemSelected: item =>
         dispatch({
           type: 'tool',
