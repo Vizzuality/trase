@@ -3,6 +3,7 @@ module Api
     extend ActiveSupport::Concern
 
     included do
+      include Kaminari::Helpers::UrlHelper
       before_action :set_pagination_headers
     end
 
@@ -19,23 +20,14 @@ module Api
 
     # rubocop:disable Naming/AccessorMethodName
     def set_link_headers(scope)
-      request_params = request.query_parameters
-      unless request_params.empty?
-        url_without_params = request.original_url.slice(
-          0..(request.original_url.index('?') - 1)
-        )
-      end
-      url_without_params ||= request.original_url
-
-      page = {}
-      page[:next] = scope.next_page if scope.next_page
-      page[:prev] = scope.prev_page if scope.prev_page
-
       pagination_links = []
-      page.each do |k, v|
-        new_request_hash = request_params.merge(page: v)
-        pagination_links << "<#{url_without_params}?#{new_request_hash.to_param}>; rel=\"#{k}\""
+      if scope.next_page
+        pagination_links << "<#{next_page_url(scope)}>; rel=\"next\""
       end
+      if scope.prev_page
+        pagination_links << "<#{prev_page_url(scope)}>; rel=\"prev\""
+      end
+
       headers['Link'] = pagination_links.join(', ')
     end
     # rubocop:enable Naming/AccessorMethodName
