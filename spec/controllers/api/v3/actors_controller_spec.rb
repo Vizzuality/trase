@@ -28,7 +28,7 @@ RSpec.describe Api::V3::ActorsController, type: :controller do
     Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
 
     NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
-      Api::V3::Readonly::NodeWithFlows.all.map(&:id)
+      Api::V3::Readonly::NodeWithFlows.where(profile: :actor).map(&:id)
     )
   end
 
