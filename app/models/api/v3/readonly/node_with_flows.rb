@@ -66,55 +66,20 @@ module Api
         end
 
         def refresh_actor_basic_attributes
-          basic_attributes = if can_update_actor_basic_attributes?
-                               refreshed_actor_basic_attributes
-                             end
-
-          ActiveRecord::Base.connection.execute(
-            "UPDATE nodes_with_flows
-            SET actor_basic_attributes = '#{basic_attributes.to_json}'
-            WHERE id = #{id}"
-          )
-        end
-
-        private
-
-        def can_update_actor_basic_attributes?
-          profile = context.profiles.find_by(
-            'context_node_types.node_type_id' => node.node_type_id,
-            name: :actor
-          )
-          return false unless profile
-
-          charts = profile.charts.where(identifier: :actor_basic_attributes)
-          return false unless charts.any?
-
-          chart_node_types = charts.first.chart_node_types
-          source_node_type = chart_node_types.find_by(identifier: 'source')
-          return false unless source_node_type
-
-          destination_node_type =
-            chart_node_types.find_by(identifier: 'destination')
-          return false unless destination_node_type
-
-          true
-        end
-
-        def refreshed_actor_basic_attributes
           actor_basic_attributes = {}
 
           years.each do |year|
             actor_basic_attributes_for_year =
-              Api::V3::Actors::BasicAttributes.new(
-                Api::V3::Context.find(context_id),
-                Api::V3::Node.find(id),
-                year
-              )
-
+              Api::V3::Actors::BasicAttributes.new(context, node, year)
             actor_basic_attributes[year] = actor_basic_attributes_for_year.call
           end
-
-          actor_basic_attributes
+          update_attribute(:actor_basic_attributes, actor_basic_attributes)
+        rescue ActiveRecord::RecordNotFound
+          # this means configuration or data is missing, nothing to see
+          update_attribute(:actor_basic_attributes, nil)
+        rescue
+          # this means something is wrong and should be fixed
+          raise # re-raise same error
         end
       end
     end
