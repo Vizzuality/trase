@@ -28,7 +28,10 @@ module Api
             chart_config = initialize_chart_config(
               :place, :place_indicators_table, chart.identifier
             )
-            raise 'No attributes found' unless chart_config.attributes.any?
+            unless chart_config.attributes.any?
+              raise ActiveRecord::RecordNotFound.new 'No attributes found'
+            end
+
             indicators_group(chart_config)
           end
         end

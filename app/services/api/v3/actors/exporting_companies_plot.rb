@@ -13,10 +13,14 @@ module Api
           @year = year
           # Assumption: Volume is a special quant which always exists
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
-          raise 'Quant Volume not found' unless @volume_attribute.present?
+          unless @volume_attribute.present?
+            raise ActiveRecord::RecordNotFound.new 'Quant Volume not found'
+          end
 
           initialize_chart_config(:actor, nil, :actor_exporting_companies)
-          raise 'No attributes found' unless @chart_config.attributes.any?
+          unless @chart_config.attributes.any?
+            raise ActiveRecord::RecordNotFound.new 'No attributes found'
+          end
         end
 
         def call

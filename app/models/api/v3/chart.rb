@@ -65,7 +65,11 @@ module Api
       end
 
       def self.select_options
-        Api::V3::Chart.includes(:profile).all.map do |chart|
+        Api::V3::Chart.includes(
+          profile: {context_node_type: [{context: [:country, :commodity]}, :node_type]}
+        ).order(
+          'countries.name, commodities.name, node_types.name'
+        ).all.map do |chart|
           profile = chart.profile
           context_node_type = profile&.context_node_type
           context = context_node_type&.context

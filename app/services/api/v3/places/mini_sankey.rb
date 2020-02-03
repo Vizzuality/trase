@@ -11,7 +11,9 @@ module Api
           @year = year
           # Assumption: Volume is a special quant which always exists
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
-          raise 'Quant Volume not found' unless @volume_attribute.present?
+          unless @volume_attribute.present?
+            raise ActiveRecord::RecordNotFound.new 'Quant Volume not found'
+          end
         end
 
         def call(node_type, include_domestic_consumption)

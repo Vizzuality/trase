@@ -44,6 +44,8 @@ module Api
       def self.select_options
         Api::V3::Profile.includes(
           context_node_type: [{context: [:country, :commodity]}, :node_type]
+        ).order(
+          'countries.name, commodities.name, node_types.name'
         ).all.map do |profile|
           context_node_type = profile&.context_node_type
           [
@@ -67,7 +69,13 @@ module Api
       def refresh_dependents
         Api::V3::Readonly::NodeWithFlows.refresh
         Api::V3::Readonly::NodeWithFlowsOrGeo.refresh
-        # TODO: dashboards nodes
+        Api::V3::Readonly::Dashboards::Source.refresh(skip_dependencies: true)
+        Api::V3::Readonly::Dashboards::Company.refresh(skip_dependencies: true)
+        Api::V3::Readonly::Dashboards::Exporter.refresh(skip_dependencies: true)
+        Api::V3::Readonly::Dashboards::Importer.refresh(skip_dependencies: true)
+        Api::V3::Readonly::Dashboards::Destination.refresh(skip_dependencies: true)
+        Api::V3::Readonly::Dashboards::Country.refresh(skip_dependencies: true)
+        Api::V3::Readonly::Dashboards::Commodity.refresh(skip_dependencies: true)
         Api::V3::Readonly::Context.refresh
       end
     end

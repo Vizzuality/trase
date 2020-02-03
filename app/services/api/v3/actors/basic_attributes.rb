@@ -19,17 +19,25 @@ module Api
           @node_type_name = @node&.node_type&.name
           # Assumption: Volume is a special quant which always exists
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
-          raise 'Quant Volume not found' unless @volume_attribute.present?
+          unless @volume_attribute.present?
+            raise ActiveRecord::RecordNotFound.new 'Quant Volume not found'
+          end
 
           @values = Api::V3::NodeAttributeValuesPreloader.new(@node, @year)
           initialize_chart_config(:actor, nil, :actor_basic_attributes)
           @source_node_type = @chart_config.named_node_type('source')
-          raise 'Chart node type "source" not found' unless @source_node_type
+          unless @source_node_type
+            raise ActiveRecord::RecordNotFound.new(
+              'Chart node type "source" not found'
+            )
+          end
 
           @destination_node_type = @chart_config.named_node_type('destination')
           # rubocop:disable Style/GuardClause
           unless @destination_node_type
-            raise 'Chart node type "destination" not found'
+            raise ActiveRecord::RecordNotFound.new(
+              'Chart node type "destination" not found'
+            )
           end
           # rubocop:enable Style/GuardClause
         end

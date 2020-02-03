@@ -12,7 +12,9 @@ module Api
           quant_dictionary = Dictionary::Quant.instance
           # Assumption: Volume is a special quant which always exists
           @volume_attribute = quant_dictionary.get('Volume')
-          raise 'Quant Volume not found' unless @volume_attribute.present?
+          unless @volume_attribute.present?
+            raise ActiveRecord::RecordNotFound.new 'Quant Volume not found'
+          end
 
           initialize_flow_stats_for_node
         end

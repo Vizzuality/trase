@@ -57,7 +57,9 @@ module Api
       validates :commodity, presence: true, uniqueness: {scope: :country}
 
       def self.select_options
-        Api::V3::Context.includes(:country, :commodity).all.map do |ctx|
+        Api::V3::Context.includes(:country, :commodity).order(
+          'countries.name, commodities.name'
+        ).all.map do |ctx|
           [[ctx.country&.name, ctx.commodity&.name].join(' / '), ctx.id]
         end
       end
