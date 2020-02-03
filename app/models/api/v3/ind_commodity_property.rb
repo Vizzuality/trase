@@ -57,7 +57,7 @@ module Api
 
       def update_node_with_flows_actor_basic_attributes(commodity_id, ind_id)
         contexts = Api::V3::Context.where(commodity_id: commodity_id)
-        node_inds = Api::V3::NodeQual.where(ind_id: ind_id)
+        node_inds = Api::V3::NodeInd.where(ind_id: ind_id)
         nodes = node_inds.map(&:node)
         node_with_flows = Api::V3::Readonly::NodeWithFlows.where(
           context_id: contexts.map(&:id),
