@@ -2,18 +2,19 @@
 #
 # Table name: nodes_with_flows
 #
-#  id              :integer          not null, primary key
-#  context_id      :integer          not null
-#  main_id         :integer
-#  column_position :integer
-#  is_subnational  :boolean
-#  name            :text
-#  node_type       :text
-#  profile         :text
-#  geo_id          :text
-#  role            :text
-#  name_tsvector   :tsvector
-#  years           :integer          is an Array
+#  id                     :integer          not null, primary key
+#  context_id             :integer          not null
+#  main_id                :integer
+#  column_position        :integer
+#  is_subnational         :boolean
+#  name                   :text
+#  node_type              :text
+#  profile                :text
+#  geo_id                 :text
+#  role                   :text
+#  name_tsvector          :tsvector
+#  years                  :integer          is an Array
+#  actor_basic_attributes :json
 #
 # Indexes
 #
