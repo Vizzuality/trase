@@ -1,4 +1,5 @@
 /* eslint-disable no-use-before-define */
+import axios from 'axios';
 import { feature as topojsonFeature } from 'topojson';
 import { CARTO_NAMED_MAPS_BASE_URL } from 'constants';
 import { GET_NODE_ATTRIBUTES_URL, getURLFromParams } from 'utils/getURLFromParams';
@@ -52,8 +53,9 @@ export function loadMapVectorData() {
           / /g,
           '_'
         )}.topo.json`;
-        return fetch(vectorLayerURL)
-          .then(res => res.json())
+        return axios
+          .get(vectorLayerURL)
+          .then(res => res.data)
           .then(topoJSON => {
             const [key] = Object.keys(topoJSON.objects);
             const geoJSON = topojsonFeature(topoJSON, topoJSON.objects[key]);
@@ -134,7 +136,7 @@ export function setMapContextLayers(contextualLayers) {
     Promise.all(
       mapContextualLayers
         .filter(l => l.cartoURL)
-        .map(l => fetch(l.cartoURL).then(resp => resp.text()))
+        .map(l => axios.get(l.cartoURL).then(resp => resp.data))
     ).then(() => {
       // we actually don't care about layergroupids because we already have them pregenerated
       // this is just about reinstanciating named maps, you know, because CARTO
@@ -186,7 +188,8 @@ export function selectExpandedNode(param) {
     const state = getState();
     const { toolLinks } = state;
     const visibleNodes = getVisibleNodes(state);
-    const visibleNodesById = visibleNodes?.reduce((acc, next) => ({ ...acc, [next.id]: true }), {}) || {};
+    const visibleNodesById =
+      visibleNodes?.reduce((acc, next) => ({ ...acc, [next.id]: true }), {}) || {};
     const hasInvisibleNodes = ids.some(id => !visibleNodesById[id]);
     const isRemovingANodeWhileExpanded =
       toolLinks.expandedNodesIds.length > 0 &&
@@ -297,13 +300,9 @@ export function loadMapChoropleth() {
 
     const getNodesURL = getURLFromParams(GET_NODE_ATTRIBUTES_URL, params);
 
-    fetch(getNodesURL)
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        return Promise.reject(new Error(response.statusText));
-      })
+    axios
+      .get(getNodesURL)
+      .then(response => response.data)
       .then(payload => {
         dispatch({
           type: SET_NODE_ATTRIBUTES,

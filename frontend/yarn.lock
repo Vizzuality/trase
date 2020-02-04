@@ -12127,11 +12127,6 @@ range-parser@^1.2.1, range-parser@~1.2.1:
   resolved "https://registry.yarnpkg.com/range-parser/-/range-parser-1.2.1.tgz#3cf37023d199e1c24d1a55b84800c2f3e6468031"
   integrity sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg==
 
-rangetouch@^1.0.5:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/rangetouch/-/rangetouch-1.0.6.tgz#fcf1386cd8ec308400ec42f3984b0d612f08d59e"
-  integrity sha512-A6abbqiMxOTWrDeNC60mxQMc7grHP46HGvL756qlYHSB4m4s6tDThLwnjGLad5JPmshfGp3AgFXVS6WS8tGQrg==
-
 rangetouch@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/rangetouch/-/rangetouch-2.0.0.tgz#5459cdb38b929326c5484ab47aac9632fbe3a896"

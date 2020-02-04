@@ -1,4 +1,5 @@
 import { getURLFromParams, POST_SUBSCRIBE_NEWSLETTER_URL } from 'utils/getURLFromParams';
+import axios from 'axios';
 
 export const NEWSLETTER__SET_SUBSCRIPTION_MESSAGE = 'NEWSLETTER__SET_SUBSCRIPTION_MESSAGE';
 export const NEWSLETTER__RESET_NEWSLETTER = 'NEWSLETTER__RESET_NEWSLETTER';
@@ -8,11 +9,9 @@ export const sendSubscriptionEmail = email => dispatch => {
   body.append('email', email);
 
   const url = getURLFromParams(POST_SUBSCRIBE_NEWSLETTER_URL);
-  return fetch(url, {
-    method: 'POST',
-    body
-  })
-    .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
+  return axios
+    .post(url, body)
+    .then(res => res.data)
     .then(data => {
       if (data.error) return Promise.reject(new Error(data.error));
       return Promise.resolve('Subscription successful');
