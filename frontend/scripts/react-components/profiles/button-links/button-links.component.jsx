@@ -11,7 +11,7 @@ import { TOOL_LAYOUT } from 'constants';
 import './button-links.scss';
 
 function ButtonLinks(props) {
-  const { year, nodeId, contextId } = props;
+  const { year, nodeId, countryId, commodityId, nodeType } = props;
   return (
     <div className="c-button-links">
       <div className="row button-links-row">
@@ -22,11 +22,12 @@ function ButtonLinks(props) {
               type: 'tool',
               payload: {
                 serializerParams: {
-                  toolLayout: TOOL_LAYOUT.left,
+                  countries: countryId,
+                  commodities: commodityId,
                   selectedNodesIds: [nodeId],
-                  expandedNodesIds: [nodeId],
                   selectedYears: [year, year],
-                  selectedContextId: contextId
+                  toolLayout: TOOL_LAYOUT.left,
+                  __temporaryExpandedNodes: [{ id: nodeId, nodeType }]
                 }
               }
             }}
@@ -52,11 +53,12 @@ function ButtonLinks(props) {
               type: 'tool',
               payload: {
                 serializerParams: {
-                  toolLayout: TOOL_LAYOUT.right,
+                  countries: countryId,
+                  commodities: commodityId,
                   selectedNodesIds: [nodeId],
-                  expandedNodesIds: [nodeId],
                   selectedYears: [year, year],
-                  selectedContextId: contextId
+                  toolLayout: TOOL_LAYOUT.right,
+                  __temporaryExpandedNodes: [{ id: nodeId, nodeType }]
                 }
               }
             }}
@@ -81,9 +83,11 @@ function ButtonLinks(props) {
 }
 
 ButtonLinks.propTypes = {
+  countryId: PropTypes.number.isRequired,
+  commodityId: PropTypes.number.isRequired,
+  nodeType: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
-  nodeId: PropTypes.number.isRequired,
-  contextId: PropTypes.number.isRequired
+  nodeId: PropTypes.number.isRequired
 };
 
 export default ButtonLinks;
