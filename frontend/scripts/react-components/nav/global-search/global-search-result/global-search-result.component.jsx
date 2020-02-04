@@ -46,9 +46,10 @@ class GlobalSearchResult extends Component {
               payload: {
                 serializerParams: {
                   toolLayout: TOOL_LAYOUT.right,
-                  selectedContextId: item.contextId,
-                  selectedNodesIds: item.nodes.map(i => i.id)
-                  // expandedNodesIds: item.nodes.map(i => i.id)
+                  countries: item.countryId,
+                  commodities: item.commodityId,
+                  selectedNodesIds: item.nodes.map(i => i.id),
+                  __temporaryExpandedNodes: item.nodes
                 }
               }
             }}
@@ -67,9 +68,10 @@ class GlobalSearchResult extends Component {
                 payload: {
                   serializerParams: {
                     toolLayout: TOOL_LAYOUT.left,
-                    selectedContextId: item.contextId,
+                    countries: item.countryId,
+                    commodities: item.commodityId,
                     selectedNodesIds: item.nodes.map(i => i.id),
-                    expandedNodesIds: item.nodes.map(i => i.id)
+                    __temporaryExpandedNodes: item.nodes
                   }
                 }
               }}
