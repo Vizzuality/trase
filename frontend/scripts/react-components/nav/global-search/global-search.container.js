@@ -25,7 +25,7 @@ const mapDispatchToProps = dispatch =>
           type: 'tool',
           payload: {
             serializerParams: {
-              toolLayout: TOOL_LAYOUT.right,
+              toolLayout: TOOL_LAYOUT.splitted,
               countries: item.countryId,
               commodities: item.commodityId,
               selectedNodesIds: item.nodes.map(i => i.id),
