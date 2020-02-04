@@ -40,6 +40,7 @@ module Api
                 inclusion: NAME
 
       after_commit :refresh_dependents
+      after_commit :refresh_actor_basic_attributes
 
       def self.select_options
         Api::V3::Profile.includes(
@@ -77,6 +78,38 @@ module Api
         Api::V3::Readonly::Dashboards::Country.refresh(skip_dependencies: true)
         Api::V3::Readonly::Dashboards::Commodity.refresh(skip_dependencies: true)
         Api::V3::Readonly::Context.refresh
+      end
+
+      def refresh_actor_basic_attributes
+        return unless saved_change_to_name? ||
+          saved_change_to_context_node_type_id?
+
+        # Update previous NodeWithFlows
+        # The behaviour is the same if the name or the context_node_type changes
+        if context_node_type_id_before_last_save
+          update_node_with_flows_actor_basic_attributes(
+            context_node_type_id_before_last_save
+          )
+        end
+
+        # If we have just updated the name, it has already been updated
+        return unless saved_change_to_context_node_type_id?
+
+        # Update new NodeWithFlows
+        update_node_with_flows_actor_basic_attributes(context_node_type_id)
+      end
+
+      def update_node_with_flows_actor_basic_attributes(context_node_type_id)
+        context_node_type = Api::V3::ContextNodeType.find(context_node_type_id)
+        context = context_node_type.context
+        nodes = context_node_type.node_type.nodes
+        node_with_flows = Api::V3::Readonly::NodeWithFlows.where(
+          context_id: context.id,
+          id: nodes.map(&:id)
+        )
+        NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
+          node_with_flows.map(&:id)
+        )
       end
     end
   end

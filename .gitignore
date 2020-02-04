@@ -28,7 +28,6 @@
 
 /public/downloads
 /public/system
-/public/urls.txt
 
 # Ignore gold master responses
 spec/support/gold_master.zip

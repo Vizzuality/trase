@@ -272,8 +272,6 @@ COMMENT ON FUNCTION public.upsert_attributes() IS 'Upserts attributes based on n
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
-
 --
 -- Name: ckeditor_assets; Type: TABLE; Schema: content; Owner: -
 --
@@ -3383,7 +3381,7 @@ CREATE VIEW public.dashboards_companies_v AS
      JOIN public.context_node_type_properties cnt_props ON ((nodes.context_node_type_id = cnt_props.context_node_type_id)))
      LEFT JOIN public.profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))
      JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((nodes.context_id = ranked_nodes.context_id) AND (nodes.id = ranked_nodes.node_id))))
-  WHERE (((cnt_props.role)::text = ANY ((ARRAY['importer'::character varying, 'exporter'::character varying])::text[])) AND (NOT nodes.is_unknown) AND (NOT node_props.is_domestic_consumption) AND (upper(nodes.name) <> 'OTHER'::text));
+  WHERE (((cnt_props.role)::text = ANY (ARRAY[('importer'::character varying)::text, ('exporter'::character varying)::text])) AND (NOT nodes.is_unknown) AND (NOT node_props.is_domestic_consumption) AND (upper(nodes.name) <> 'OTHER'::text));
 
 
 --
@@ -5370,7 +5368,8 @@ CREATE TABLE public.nodes_with_flows (
     geo_id text,
     role text,
     name_tsvector tsvector,
-    years smallint[]
+    years smallint[],
+    actor_basic_attributes json
 );
 
 
@@ -10218,6 +10217,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191218221238'),
 ('20191219221216'),
 ('20200106092554'),
-('20200107131928');
+('20200107131928'),
+('20200123163215');
 
 

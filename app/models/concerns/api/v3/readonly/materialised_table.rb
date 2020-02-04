@@ -6,6 +6,10 @@ module Api
       module MaterialisedTable
         extend ActiveSupport::Concern
 
+        def readonly?
+          false
+        end
+
         class_methods do
           def create_indexes
             self::INDEXES.each do |index_properties|

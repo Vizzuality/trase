@@ -60,7 +60,6 @@ gem 'sidekiq', '~> 6.0.4'
 gem 'sidekiq-unique-jobs'
 gem 'sitemap_generator'
 gem 'twitter', '~> 6.1'
-gem 'whenever', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

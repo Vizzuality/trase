@@ -19,6 +19,10 @@ RSpec.describe 'Exporter profile', type: :request do
     Api::V3::Readonly::NodeWithFlows.refresh(sync: true, skip_dependencies: true)
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
+
+    NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
+      Api::V3::Readonly::NodeWithFlows.where(profile: :actor).map(&:id)
+    )
   end
 
   let(:summary_params) { {year: 2015} }

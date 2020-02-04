@@ -2,6 +2,26 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::Chart, type: :model do
   include_context 'api v3 brazil municipality place profile'
+  include_context 'api v3 brazil context node types'
+  include_context 'api v3 brazil soy profiles'
+  include_context 'api v3 brazil exporter actor profile'
+  include_context 'api v3 brazil importer actor profile'
+  include_context 'api v3 brazil exporter quant values'
+  include_context 'api v3 brazil exporter qual values'
+  include_context 'api v3 brazil exporter ind values'
+  include_context 'api v3 brazil importer quant values'
+  include_context 'api v3 brazil flows quants'
+
+  before do
+    Api::V3::Readonly::CommodityAttributeProperty.refresh
+    Api::V3::Readonly::CountryAttributeProperty.refresh
+    Api::V3::Readonly::ContextAttributeProperty.refresh
+    Api::V3::Readonly::FlowNode.refresh(sync: true)
+    Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
+    Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
+    Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
+    Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
+  end
 
   describe :validate do
     let(:chart_without_profile) {
@@ -69,6 +89,83 @@ RSpec.describe Api::V3::Chart, type: :model do
 
     it 'is null for actor_basic_attributes' do
       expect(api_v3_exporter_basic_attributes.chart_type).to be_nil
+    end
+  end
+
+  describe :hooks do
+    describe :after_commit do
+      describe :refresh_actor_basic_attributes do
+        let!(:profile) { api_v3_context.profiles.find_by(name: :actor) }
+        let!(:chart) do
+          profile.charts.where(identifier: :actor_basic_attributes).first
+        end
+        let!(:related_node_with_flows) do
+          context_node_type =
+            Api::V3::ContextNodeType.find(chart.profile.context_node_type_id)
+          context = context_node_type.context
+          nodes = context_node_type.node_type.nodes
+          Api::V3::Readonly::NodeWithFlows.where(
+            context_id: context.id,
+            id: nodes.map(&:id)
+          )
+        end
+
+        before do
+          ActiveRecord::Base.connection.execute(
+            "UPDATE nodes_with_flows
+            SET actor_basic_attributes = null
+            WHERE id IN(#{related_node_with_flows.map(&:id).join(',')})"
+          )
+        end
+
+        context 'when the identifier changes' do
+          it 'refresh actor_basic_attributes of the related node_with_flows' do
+            chart.update_attributes(identifier: 'new name')
+
+            related_node_with_flows.each do |node_with_flows|
+              expect(node_with_flows.actor_basic_attributes).to be_nil
+            end
+          end
+        end
+
+        context 'when profile_id changes' do
+          it 'refresh actor_basic_attributes of the related node_with_flows' do
+            new_profile = Api::V3::Profile.where(name: :actor).last
+            Api::V3::Chart.where(profile_id: new_profile.id).destroy_all
+            chart.update_attributes(profile_id: new_profile.id)
+
+            related_node_with_flows.each do |node_with_flows|
+              expect(node_with_flows.actor_basic_attributes).to be_nil
+            end
+
+            context_node_type = Api::V3::ContextNodeType.find(
+              new_profile.context_node_type_id
+            )
+            context = context_node_type.context
+            nodes = context_node_type.node_type.nodes
+            new_related_node_with_flows = Api::V3::Readonly::NodeWithFlows.where(
+              context_id: context.id,
+              id: nodes.map(&:id)
+            )
+
+            new_related_node_with_flows.each do |node_with_flows|
+              node_with_flows.reload
+
+              expect(node_with_flows.actor_basic_attributes).not_to be_nil
+            end
+          end
+        end
+
+        context 'when changes any other field' do
+          it 'not refresh actor_basic_attributes of the related node_with_flows' do
+            chart.update_attributes(title: 'new title')
+
+            related_node_with_flows.each do |node_with_flows|
+              expect(node_with_flows.actor_basic_attributes).to be_nil
+            end
+          end
+        end
+      end
     end
   end
 end

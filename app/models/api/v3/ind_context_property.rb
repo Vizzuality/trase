@@ -29,6 +29,7 @@ module Api
       validates :tooltip_text, presence: true
 
       after_commit :refresh_dependents
+      after_commit :refresh_actor_basic_attributes
 
       def self.blue_foreign_keys
         [
@@ -39,6 +40,32 @@ module Api
 
       def refresh_dependents
         Api::V3::Readonly::ContextAttributeProperty.refresh
+      end
+
+      def refresh_actor_basic_attributes
+        # Update previous NodeWithFlows
+        # The behaviour is the same if the identifier or the chart_id changes
+        if context_id_before_last_save && ind_id_before_last_save
+          update_node_with_flows_actor_basic_attributes(
+            context_id_before_last_save, ind_id_before_last_save
+          )
+        end
+
+        # Update new NodeWithFlows
+        update_node_with_flows_actor_basic_attributes(context_id, ind_id)
+      end
+
+      def update_node_with_flows_actor_basic_attributes(context_id, ind_id)
+        context = Api::V3::Context.find(context_id)
+        node_inds = Api::V3::NodeInd.where(ind_id: ind_id)
+        nodes = node_inds.map(&:node)
+        node_with_flows = Api::V3::Readonly::NodeWithFlows.where(
+          context_id: context.id,
+          id: nodes.map(&:id)
+        )
+        NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
+          node_with_flows.map(&:id)
+        )
       end
     end
   end
