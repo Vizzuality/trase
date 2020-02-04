@@ -1757,6 +1757,7 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="role" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="name_tsvector" nullable="true" remarks="" size="2147483647" type="tsvector" typeCode="1111"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="years" nullable="true" remarks="" size="5" type="_int2" typeCode="2003"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="12" name="actor_basic_attributes" nullable="true" remarks="" size="2147483647" type="json" typeCode="1111"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <primaryKey column="context_id" sequenceNumberInPK="2"/>
          <index name="nodes_with_flows_pkey" unique="true">
@@ -2496,7 +2497,7 @@
             <column ascending="true" name="node_id"/>
          </index>
       </table>
-      <table name="schema_migrations" numRows="100" remarks="" schema="public" type="TABLE">
+      <table name="schema_migrations" numRows="101" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="version" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
          <primaryKey column="version" sequenceNumberInPK="1"/>
          <index name="schema_migrations_pkey" unique="true">
