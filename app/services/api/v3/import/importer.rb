@@ -21,6 +21,7 @@ module Api
           yield if block_given?
           refresh_materialized_views_now
           Cache::Cleaner.clear_all
+          refresh_profiles_later
           refresh_precomputed_downloads_later
           refresh_attributes_years
           @database_update.finished_with_success(@stats.to_h)
@@ -143,6 +144,14 @@ module Api
             Api::V3::Readonly::QualValuesMeta,
             Api::V3::Readonly::FlowQuantTotal
           ].each { |mview| mview.refresh(sync: true, skip_dependencies: true) }
+        end
+
+        def refresh_profiles_later
+          Api::V3::Readonly::NodeWithFlows.where(profile: :actor).select(:id).distinct.each do |node|
+            NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
+              [node.id]
+            )
+          end
         end
 
         def refresh_precomputed_downloads_later
