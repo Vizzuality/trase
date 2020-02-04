@@ -85,9 +85,9 @@
     background-color: $white;
   }
 
-  @for $i from 1 through length($recolorgroup-colors) {
-    &.#{nth($recolorgroup-colors-names, $i)} {
-      box-shadow: 0 1px 3px 0 rgba($black, .1), 0 1px 2px 0 rgba($black, .2), inset 0 -6px 0 0 #{nth($recolorgroup-colors, $i)};
+  @each $name, $color in $recolorgroup-colors {
+      &.-#{$name} {
+      box-shadow: 0 1px 3px 0 rgba($black, .1), 0 1px 2px 0 rgba($black, .2), inset 0 -6px 0 0 #{$color};
     }
   }
 

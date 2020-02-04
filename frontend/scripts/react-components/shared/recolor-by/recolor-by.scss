@@ -50,13 +50,16 @@
     }
   }
 
-  .recolor-by-item-legend-unit, .recolor-by-item-legend, .recolor-by-item-legend > li {
+  .recolor-by-item-legend-unit,
+  .recolor-by-item-legend,
+  .recolor-by-item-legend > li {
     color: $charcoal-grey;
     font-family: $font-family-1;
     font-size: $font-size-small;
   }
 
-  .recolor-by-item-legend, .recolor-by-item-legend > li {
+  .recolor-by-item-legend,
+  .recolor-by-item-legend > li {
     display: inline-block;
   }
 
@@ -74,19 +77,9 @@
       content: ' ';
     }
 
-    @for $i from 1 through length($recolorby-colors) {
-      &.#{nth($recolorby-colors-names, $i)} {
-        &::before {
-          background-color: #{nth($recolorby-colors, $i)};
-        }
-      }
-    }
-
-    @for $i from 1 through length($recolorgroup-colors) {
-      &.#{nth($recolorgroup-colors-names, $i)} {
-        &::before {
-          background-color: #{nth($recolorgroup-colors, $i)};
-        }
+    @each $name, $color in $recolorby-colors {
+      &.-#{$name}::before {
+        background-color: #{$color};
       }
     }
   }
@@ -102,22 +95,21 @@
       content: ' ';
     }
 
-    @for $i from 1 through length($recolorby-colors) {
-      &.#{nth($recolorby-colors-names, $i)} {
-        &::before {
-          background-color: #{nth($recolorby-colors, $i)};
-        }
+    @each $name, $color in $recolorby-colors {
+      &.-#{$name}::before {
+        background-color: #{$color};
       }
     }
   }
 
-  .recolor-by-item-legend.-linear > li, .recolor-by-item-legend.-percentual > li {
+  .recolor-by-item-legend.-linear > li,
+  .recolor-by-item-legend.-percentual > li {
     width: 12px;
     height: 12px;
 
-    @for $i from 1 through length($recolorby-colors) {
-      &.#{nth($recolorby-colors-names, $i)} {
-        background-color: #{nth($recolorby-colors, $i)};
+    @each $name, $color in $recolorby-colors {
+      &.-#{$name} {
+        background-color: #{$color};
       }
     }
   }
