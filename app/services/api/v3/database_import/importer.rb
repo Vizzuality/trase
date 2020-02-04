@@ -1,4 +1,3 @@
-require "#{Rails.root}/lib/modules/cache/warmer.rb"
 require "#{Rails.root}/lib/modules/cache/cleaner.rb"
 
 # Downloads dump from S3 and restores to current database
@@ -28,7 +27,6 @@ module Api
           restore(options)
 
           Cache::Cleaner.clear_all
-          Cache::Warmer::UrlsFile.generate
         ensure
           FileUtils.rm_f Dir.glob("#{IMPORT_DIR}/*") if dir_exists?
         end

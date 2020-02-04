@@ -1,4 +1,3 @@
-require "#{Rails.root}/lib/modules/cache/warmer.rb"
 require "#{Rails.root}/lib/modules/cache/cleaner.rb"
 
 module Api
@@ -22,7 +21,6 @@ module Api
           yield if block_given?
           refresh_materialized_views_now
           Cache::Cleaner.clear_all
-          Cache::Warmer::UrlsFile.generate
           refresh_precomputed_downloads_later
           refresh_attributes_years
           @database_update.finished_with_success(@stats.to_h)
