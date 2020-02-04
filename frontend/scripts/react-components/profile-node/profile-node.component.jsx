@@ -203,7 +203,6 @@ class ProfileNode extends React.PureComponent {
     } = this.props;
     const { renderIframes } = this.state;
     const ready = !loadingMetadata && !errorMetadata;
-
     return (
       <div className={`l-profile-${profileType}`}>
         {printMode && (
@@ -246,8 +245,10 @@ class ProfileNode extends React.PureComponent {
           <LinksWidget
             year={year}
             nodeId={nodeId}
-            contextId={context.id}
             profileType={profileType}
+            contextId={context.id}
+            countryId={context.countryId}
+            commodityId={context.commodityId}
           />
         )}
       </div>
