@@ -45,7 +45,7 @@ function* fetchMapDimensions() {
 
     yield call(getMapDimensions, selectedContext, selectedYears);
 
-    if (type !== appActions.APP_SAGA_REGISTERED || prev.type !== page) {
+    if (type !== appActions.APP__SAGA_REGISTERED || prev.type !== page) {
       // TODO remove this when mapbox comes
       yield put(loadMapChoropleth());
     }
@@ -61,7 +61,7 @@ function* fetchMapDimensions() {
       TOOL_LINKS__SELECT_COLUMN,
       TOOL_LINKS__CLEAR_SANKEY,
       nodesPanelActions.NODES_PANEL__SYNC_NODES_WITH_SANKEY,
-      appActions.APP_SAGA_REGISTERED
+      appActions.APP__SAGA_REGISTERED
     ],
     performFetch
   );

@@ -48,6 +48,7 @@ function CustomYAxis({ config, data, meta }) {
 }
 
 CustomYAxis.propTypes = {
+  meta: PropTypes.object,
   config: PropTypes.object.isRequired,
   data: PropTypes.array
 };

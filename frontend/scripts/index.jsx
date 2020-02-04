@@ -154,7 +154,7 @@ sagaRegistry.setChangeListener(sagas => {
     yield all(sagas);
   }
   sagaMiddleware.run(runSagas);
-  store.dispatch({ type: appActions.APP_SAGA_REGISTERED });
+  store.dispatch({ type: appActions.APP__SAGA_REGISTERED });
 });
 
 function* startSagas() {
