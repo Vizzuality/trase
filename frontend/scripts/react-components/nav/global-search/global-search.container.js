@@ -26,9 +26,10 @@ const mapDispatchToProps = dispatch =>
           payload: {
             serializerParams: {
               toolLayout: TOOL_LAYOUT.right,
-              selectedContextId: item.contextId,
-              selectedNodesIds: item.nodes.map(i => i.id)
-              // expandedNodesIds: item.nodes.map(i => i.id)
+              countries: item.countryId,
+              commodities: item.commodityId,
+              selectedNodesIds: item.nodes.map(i => i.id),
+              __temporaryExpandedNodes: item.nodes
             }
           }
         })
@@ -36,7 +37,4 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GlobalSearch);
+export default connect(mapStateToProps, mapDispatchToProps)(GlobalSearch);

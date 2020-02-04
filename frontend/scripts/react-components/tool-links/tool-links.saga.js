@@ -1,5 +1,5 @@
 import { select, all, call, fork, put, takeLatest, cancel } from 'redux-saga/effects';
-import { SET_CONTEXT, SET_CONTEXTS } from 'app/app.actions';
+import { SET_CONTEXTS, SET_CONTEXT } from 'app/app.actions';
 import { setLoadingSpinner } from 'utils/saga-utils';
 import { loadMapVectorData, SELECT_YEARS } from 'react-components/tool/tool.actions';
 import { getSelectedContext } from 'app/app.selectors';
@@ -62,7 +62,8 @@ function* fetchToolInitialData() {
     }
 
     yield call(getToolGeoColumnNodes, selectedContext);
-    // TODO: remove this call, just here to split the refactor in stages
+
+    // TODO: remove this when mapbox comes
     yield put(loadMapVectorData());
 
     if (task.isRunning()) {

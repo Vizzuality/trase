@@ -9,6 +9,7 @@ import nodesPanelSerialization from 'react-components/nodes-panel/nodes-panel.se
 
 import { SET_CONTEXTS } from 'app/app.actions';
 import {
+  TOOL_LINKS__SET_COLUMNS,
   TOOL_LINKS__COLLAPSE_SANKEY,
   TOOL_LINKS__SELECT_COLUMN,
   TOOL_LINKS_RESET_SANKEY
@@ -99,11 +100,16 @@ const clearSelectedNodes = draft =>
 
 const deserializeInternalLink = (state, action) => {
   if (action.payload?.serializerParams) {
-    return deserialize({
-      params: action.payload.serializerParams,
+    const params = action.payload.serializerParams;
+    const newState = deserialize({
+      params,
       state: nodesPanelInitialState,
       ...nodesPanelSerialization
     });
+    if (params) {
+      newState.__temporaryExpandedNodes = params.__temporaryExpandedNodes;
+    }
+    return newState;
   }
   return state;
 };
@@ -125,6 +131,36 @@ const nodesPanelReducer = {
         const defaultContext = contexts.find(ctx => ctx.isDefault);
         draft.countries.selectedNodeId = defaultContext.countryId;
         draft.commodities.selectedNodeId = defaultContext.commodityId;
+      }
+    });
+  },
+  [TOOL_LINKS__SET_COLUMNS](state, action) {
+    return immer(state, draft => {
+      const { columns } = action.payload;
+      if (state.__temporaryExpandedNodes.length > 0) {
+        // this means we navigated internally with hopes of expanding some nodes once we had the columns
+        state.__temporaryExpandedNodes.forEach(node => {
+          const { id, nodeType } = node;
+          // with the columns we fing the role
+          const { role } = columns.find(col => col.name === nodeType);
+          const name = pluralize(role);
+          const moduleOptions = modules[name];
+          // with the role we set up the state
+          if (moduleOptions.hasMultipleSelection) {
+            draft[name].selectedNodesIds.push(id);
+          } else {
+            draft[name].selectedNodeId = id;
+          }
+          if (!draft[name].data.nodes) {
+            draft[name].data.nodes = {};
+          }
+          if (!draft[name].data.nodes[id]) {
+            draft[name].data.nodes[id] = node;
+          }
+        });
+
+        // finally we clear the temporary state.
+        draft.__temporaryExpandedNodes = [];
       }
     });
   },
