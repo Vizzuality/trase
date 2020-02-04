@@ -63,7 +63,9 @@ module Api
           ).first
           unless profile
             node_type = @node&.node_type&.name
-            raise "Profile not configured: #{profile_type} for #{node_type}"
+            raise ActiveRecord::RecordNotFound.new(
+              "Profile not configured: #{profile_type} for #{node_type}"
+            )
           end
           charts = profile.charts.where(identifier: identifier)
           if parent_identifier.present?
@@ -73,7 +75,9 @@ module Api
           @chart = charts.first
           return if @chart.present?
 
-          raise "Chart not configured: #{identifier} for #{profile_type}"
+          raise ActiveRecord::RecordNotFound.new(
+            "Chart not configured: #{identifier} for #{profile_type}"
+          )
         end
 
         def initialize_attributes
