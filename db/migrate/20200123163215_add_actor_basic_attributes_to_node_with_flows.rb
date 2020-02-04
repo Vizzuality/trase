@@ -4,8 +4,12 @@ class AddActorBasicAttributesToNodeWithFlows < ActiveRecord::Migration[5.2]
       :actor_basic_attributes,
       :json
 
-    Api::V3::Readonly::NodeWithFlows.where(profile: :actor).each do |node_with_flows|
-      node_with_flows.refresh_actor_basic_attributes
+    unless Rails.env.test? || Rails.env.development?
+      Api::V3::Readonly::NodeWithFlows.where(profile: :actor).select(:id).distinct.each do |node|
+        NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
+          [node.id]
+        )
+      end
     end
   end
 
