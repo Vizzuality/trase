@@ -10,79 +10,73 @@ import { TOOL_LAYOUT } from 'constants';
 
 import './button-links.scss';
 
+const links = [
+  {
+    heading: 'DATA',
+    section: 'data-view',
+    subtitle: 'GO TO DATA VIEW',
+    img: '',
+    layout: TOOL_LAYOUT.right
+  },
+  {
+    heading: 'LOCATION IMPACT',
+    subtitle: 'GO TO MAP',
+    img: '/images/profiles/profile-main-option-2.svg',
+    layout: TOOL_LAYOUT.left
+  },
+  {
+    heading: 'CONNECTIONS',
+    subtitle: 'GO TO SUPPLY CHAIN',
+    img: '/images/profiles/profile-main-option-3.svg',
+    layout: TOOL_LAYOUT.right
+  }
+];
 function ButtonLinks(props) {
-  const { year, nodeId, countryId, commodityId, nodeType } = props;
+  const { year, nodeId, countryId, commodityId, nodeType, name } = props;
   return (
     <div className="c-button-links">
       <div className="row button-links-row">
-        <div className="columns small-12 medium-6 link-container">
-          <Link
-            className="link-button"
-            to={{
-              type: 'tool',
-              payload: {
-                serializerParams: {
-                  countries: countryId,
-                  commodities: commodityId,
-                  selectedNodesIds: [nodeId],
-                  selectedYears: [year, year],
-                  toolLayout: TOOL_LAYOUT.left,
-                  __temporaryExpandedNodes: [{ id: nodeId, nodeType }]
+        {links.map(link => (
+          <div className="columns small-12 medium-4 link-container">
+            <Link
+              className="link-button"
+              to={{
+                type: 'tool',
+                payload: {
+                  section: link.section,
+                  serializerParams: {
+                    countries: countryId,
+                    commodities: commodityId,
+                    selectedNodesIds: [nodeId],
+                    selectedYears: [year, year],
+                    toolLayout: link.layout,
+                    __temporaryExpandedNodes: [{ id: nodeId, nodeType, name }]
+                  }
                 }
-              }
-            }}
-          >
-            <div>
-              <Heading weight="bold" as="h4" variant="mono" size="rg">
-                LOCATION IMPACT
-              </Heading>
-              <div className="link-text">
-                <Text variant="mono" color="grey-faded" size="md" as="span">
-                  GO TO MAP
-                </Text>
-                <Icon icon="icon-external-link" color="elephant" />
+              }}
+            >
+              <div>
+                <Heading weight="bold" as="h4" variant="mono" size="rg">
+                  {link.heading}
+                </Heading>
+                <div className="link-text">
+                  <Text variant="mono" color="grey-faded" size="md" as="span">
+                    {link.subtitle}
+                  </Text>
+                  <Icon icon="icon-external-link" color="elephant" />
+                </div>
               </div>
-            </div>
-            <Img title="Go to map" src="/images/profiles/profile-main-option-2.svg" />
-          </Link>
-        </div>
-        <div className="columns small-12 medium-6 link-container">
-          <Link
-            className="link-button"
-            to={{
-              type: 'tool',
-              payload: {
-                serializerParams: {
-                  countries: countryId,
-                  commodities: commodityId,
-                  selectedNodesIds: [nodeId],
-                  selectedYears: [year, year],
-                  toolLayout: TOOL_LAYOUT.right,
-                  __temporaryExpandedNodes: [{ id: nodeId, nodeType }]
-                }
-              }
-            }}
-          >
-            <div>
-              <Heading weight="bold" as="h4" variant="mono" size="rg">
-                CONNECTIONS
-              </Heading>
-              <div className="link-text">
-                <Text variant="mono" color="grey-faded" size="md" as="span">
-                  GO TO SUPPLY CHAIN
-                </Text>
-                <Icon icon="icon-external-link" color="elephant" />
-              </div>
-            </div>
-            <Img title="Go to supply chain" src="/images/profiles/profile-main-option-3.svg" />
-          </Link>
-        </div>
+              <Img title={link.subtitle} src={link.img} />
+            </Link>
+          </div>
+        ))}
       </div>
     </div>
   );
 }
 
 ButtonLinks.propTypes = {
+  name: PropTypes.string.isRequired,
   countryId: PropTypes.number.isRequired,
   commodityId: PropTypes.number.isRequired,
   nodeType: PropTypes.string.isRequired,
