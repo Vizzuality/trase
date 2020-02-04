@@ -1,5 +1,6 @@
 import { redirect } from 'redux-first-router';
 import { defaultLayersIds } from 'react-components/logistics-map/logistics-map.selectors';
+import axios from 'axios';
 
 export const LOGISTICS_MAP__SET_COMPANIES = 'LOGISTICS_MAP__SET_COMPANIES';
 export const LOGISTICS_MAP__SET_ACTIVE_MODAL = 'LOGISTICS_MAP__SET_ACTIVE_MODAL';
@@ -57,8 +58,9 @@ export const getLogisticsMapCompanies = () => (dispatch, getState) => {
   };
   const url = `https://${CARTO_ACCOUNT}.carto.com/api/v1/sql?q=${queries[commodity]}`;
   if (!logisticsMap.companies[commodity]) {
-    fetch(url)
-      .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    axios
+      .get(url)
+      .then(res => res.data)
       .then(data =>
         dispatch({
           type: LOGISTICS_MAP__SET_COMPANIES,

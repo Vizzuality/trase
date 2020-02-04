@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import axios from 'axios';
 import { getURLFromParams, POST_SUBSCRIBE_NEWSLETTER_URL } from '../../../utils/getURLFromParams';
 import { COUNTRIES } from '../../../countries';
 
@@ -72,19 +73,13 @@ class DataPortalForm extends Component {
       dataSubmitBody.append(key, payload[key]);
     });
 
-    fetch(DATA_FORM_ENDPOINT, {
-      method: 'POST',
-      body: dataSubmitBody
-    });
+    axios.post(DATA_FORM_ENDPOINT, dataSubmitBody);
 
     if (payload.email) {
       const newsletterSubscribeBody = new FormData();
       newsletterSubscribeBody.append('email', payload.email);
 
-      fetch(getURLFromParams(POST_SUBSCRIBE_NEWSLETTER_URL), {
-        method: 'POST',
-        body: newsletterSubscribeBody
-      });
+      axios.post(getURLFromParams(POST_SUBSCRIBE_NEWSLETTER_URL), newsletterSubscribeBody);
     }
 
     closeForm();

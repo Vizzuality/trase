@@ -5,7 +5,6 @@ import parseURL from 'utils/parseURL';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import createSagaMiddleware from 'redux-saga';
-import rangeTouch from 'rangetouch';
 import analyticsMiddleware from 'analytics/middleware';
 import * as appReducers from 'store';
 
@@ -40,8 +39,16 @@ window.liveSettings = TRANSIFEX_API_KEY && {
   autocollect: true
 };
 
-// Rangetouch to fix <input type="range"> on touch devices (see https://rangetouch.com)
-rangeTouch.set();
+// test for ie11 and googlebot
+if (
+  !(!window.ActiveXObject && 'ActiveXObject' in window) &&
+  !/bot|google|baidu|bing|msn|duckduckbot|teoma|slurp|yandex/i.test(navigator.userAgent)
+) {
+  // Rangetouch to fix <input type="range"> on touch devices (see https://rangetouch.com)
+  import(`rangetouch`)
+    .then(module => module.default)
+    .then(RangeTouch => new RangeTouch('input[type="range"]'));
+}
 
 if (USE_SERVICE_WORKER) {
   register();

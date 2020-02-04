@@ -84,9 +84,9 @@ export function loadDisclaimer() {
     const disclaimerLocal = localStorage.getItem('disclaimerVersion');
 
     const url = getURLFromParams(GET_DISCLAIMER_URL);
-    fetch(url)
-      .then(resp => resp.text())
-      .then(resp => JSON.parse(resp))
+    axios
+      .get(url)
+      .then(resp => resp.data)
       .then(disclaimer => {
         if (disclaimerLocal !== null && parseInt(disclaimerLocal, 10) >= disclaimer.version) {
           return;
@@ -139,8 +139,9 @@ export function loadSearchResults(searchTerm, contextId) {
       payload: { term: searchTerm, isLoading: true }
     });
 
-    fetch(url)
-      .then(resp => resp.json())
+    axios
+      .get(url)
+      .then(resp => resp.data)
       .then(results => {
         dispatch({
           type: LOAD_SEARCH_RESULTS,
