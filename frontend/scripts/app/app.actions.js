@@ -27,7 +27,8 @@ export const APP__TRANSIFEX_LANGUAGES_LOADED = 'APP__TRANSIFEX_LANGUAGES_LOADED'
 export const APP__SET_TOP_DESTINATION_COUNTRIES = 'APP__SET_TOP_DESTINATION_COUNTRIES';
 export const APP__SET_TOP_DESTINATION_COUNTRIES_LOADING =
   'APP__SET_TOP_DESTINATION_COUNTRIES_LOADING';
-export const APP_SAGA_REGISTERED = 'APP_SAGA_REGISTERED';
+export const APP__SAGA_REGISTERED = 'APP__SAGA_REGISTERED';
+export const APP__ON_PDF_DOWNLOAD = 'APP__ON_PDF_DOWNLOAD';
 
 export function setContextIsUserSelected(contextIsUserSelected) {
   return {
@@ -209,3 +210,9 @@ export const getTopCountries = contexts => (dispatch, getState) => {
       })
     );
 };
+
+export function onDownloadPDF() {
+  return {
+    type: APP__ON_PDF_DOWNLOAD
+  };
+}

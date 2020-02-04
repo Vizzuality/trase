@@ -15,10 +15,6 @@ const getTestimonialsContent = (...args) =>
   );
 const getTweetsContent = (...args) =>
   import('../react-components/home/home.thunks').then(module => module.getTweetsContent(...args));
-const loadColumnsData = (...args) =>
-  import('../react-components/profile-node/profile-node.thunks').then(module =>
-    module.loadColumnsData(...args)
-  );
 const loadTopNodes = (...args) =>
   import('../react-components/profile-root/profile-root.thunks').then(module =>
     module.loadTopNodes(...args)
@@ -132,7 +128,7 @@ export const routes = {
       className: '-light',
       printable: true
     },
-    thunk: loadPageData(loadColumnsData)
+    thunk: loadPageData()
   },
   dashboardRoot: {
     path: '/dashboards',

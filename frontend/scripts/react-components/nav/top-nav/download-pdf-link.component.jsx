@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { profileNodeActions } from 'react-components/profile-node/profile-node.register';
+import { appActions } from 'app/app.register';
 
 function getDownloadPdfLink() {
   const pageTitle = encodeURIComponent(document.getElementsByTagName('title')[0].innerText);
@@ -32,7 +32,7 @@ DownloadPdfLink.propTypes = {
 };
 
 const mapDispatchToProps = {
-  onClick: profileNodeActions.onDownloadPDF
+  onClick: appActions.onDownloadPDF
 };
 
 export default connect(null, mapDispatchToProps)(DownloadPdfLink);
