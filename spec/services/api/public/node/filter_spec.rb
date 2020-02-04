@@ -27,8 +27,8 @@ RSpec.describe Api::Public::Node::Filter do
       expect(attrs['node_type']).to eql(node.node_type)
       expect(attrs['geo_id']).to eql(node.geo_id)
 
-      expect(attrs['availability'].first['country']).to eql(node.context.country.iso2)
-      expect(attrs['availability'].first['commodity']).to eql(node.context.commodity_name)
+      expect(attrs['availability'].first['country']).to eql(node.readonly_context.iso2)
+      expect(attrs['availability'].first['commodity']).to eql(node.readonly_context.commodity_name)
       expect(attrs['availability'].first['years']).to eql(node.years)
       flows_ids = Api::V3::Readonly::FlowNode.where(
         node_id: api_v3_biome_node.id

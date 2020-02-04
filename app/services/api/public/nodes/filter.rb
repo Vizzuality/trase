@@ -30,7 +30,7 @@ module Api
 
         def apply_filters
           @query = @query.
-            joins(:context).
+            joins(:readonly_context).
             select(
               :id,
               :name,

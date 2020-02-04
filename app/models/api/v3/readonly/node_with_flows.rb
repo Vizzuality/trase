@@ -35,6 +35,9 @@ module Api
         belongs_to :context,
                    class_name: 'Api::V3::Context',
                    foreign_key: 'context_id'
+        belongs_to :readonly_context,
+                   class_name: 'Api::V3::Readonly::Context',
+                   foreign_key: 'context_id'
 
         include PgSearch::Model
         pg_search_scope :search_by_name, lambda { |query|
