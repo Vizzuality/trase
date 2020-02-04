@@ -69,14 +69,18 @@ module Api
         end
 
         def refresh_actor_basic_attributes
-          actor_basic_attributes = {}
+          # only refresh for last year, which is the default
+          # otherwise refreshing takes forever
+          year = years.last
+          raise ActiveRecord::RecordNotFound unless year
 
-          years.each do |year|
-            actor_basic_attributes_for_year =
-              Api::V3::Actors::BasicAttributes.new(context, node, year)
-            actor_basic_attributes[year] = actor_basic_attributes_for_year.call
-          end
-          update_attribute(:actor_basic_attributes, actor_basic_attributes)
+          actor_basic_attributes_for_year =
+            Api::V3::Actors::BasicAttributes.new(context, node, year).call
+
+          update_attribute(
+            :actor_basic_attributes,
+            {year => actor_basic_attributes_for_year}
+          )
         rescue ActiveRecord::RecordNotFound
           # this means configuration or data is missing, nothing to see
           update_attribute(:actor_basic_attributes, nil)
