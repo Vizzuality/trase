@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import Heading from 'react-components/shared/heading';
+import Text from 'react-components/shared/text';
 
 import './grid-list-item.scss';
 
@@ -57,7 +58,17 @@ function GridListItem(props) {
               })}
               data-test={`grid-list-item-button-${testId}`}
             >
-              <span>{item.name}</span>
+              <Text
+                as="p"
+                variant="mono"
+                weight="bold"
+                align="center"
+                title={item.name}
+                transform="capitalize"
+                className="grid-list-item-text"
+              >
+                {item.name}
+              </Text>
             </button>
             {tooltip && (
               <div
