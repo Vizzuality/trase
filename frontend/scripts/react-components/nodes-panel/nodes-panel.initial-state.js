@@ -43,5 +43,7 @@ export default {
   commodities: createPanelInitialState('commodities'),
   destinations: createPanelInitialState('destinations'),
   exporters: createPanelInitialState('exporters'),
-  importers: createPanelInitialState('importers')
+  importers: createPanelInitialState('importers'),
+  // DONT USE THIS: solely for internal navigation purposes. Used for expanding nodes without knowing their roles
+  __temporaryExpandedNodes: [] // { id, nodeType }
 };

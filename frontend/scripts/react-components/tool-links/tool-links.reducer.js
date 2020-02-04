@@ -150,7 +150,6 @@ const toolLinksReducer = {
       columns.forEach(column => {
         draft.data.columns[column.id] = column;
       });
-      // TODO: if any selectedNode, make those columns visible (selected)
     });
   },
   [TOOL_LINKS__SET_NODES]: setNodes,

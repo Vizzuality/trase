@@ -28,14 +28,17 @@ const getGroupedAppSearchResults = createSelector(
 
     return Object.values(grouped).map(nodes => {
       const node = nodes[0];
-      const { defaultYear = null } = contexts.find(c => c.id === node.contextId) || {};
+      const { id: contextId, defaultYear = null, countryId, commodityId } =
+        contexts.find(c => c.id === node.contextId) || {};
 
       return {
         id: byContextMainIdAndNodeType(node),
         nodes,
+        contextId,
+        countryId,
+        commodityId,
         defaultYear,
         name: node.name,
-        contextId: node.contextId,
         isSubnational: node.isSubnational,
         nodeTypeText: getNodeTypeText(nodes, contexts)
       };
