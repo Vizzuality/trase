@@ -34,10 +34,11 @@ function LinksWidget(props) {
             </div>
             <ButtonLinks
               year={year}
+              name={name}
               nodeId={nodeId}
+              nodeType={nodeType}
               countryId={countryId}
               commodityId={commodityId}
-              nodeType={nodeType}
             />
           </section>
         );
