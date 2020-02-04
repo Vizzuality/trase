@@ -1,12 +1,6 @@
 import { connect } from 'react-redux';
 import ProfileStepPanelComponent from 'react-components/shared/profile-selector/profile-panel/profile-step-panel/profile-step-panel.component';
-import {
-  setProfilesPage,
-  setProfilesActiveItem,
-  setProfilesActiveTab,
-  getProfilesSearchResults,
-  setProfilesActiveItemWithSearch
-} from 'react-components/shared/profile-selector/profile-selector.register';
+import { profileSelectorActions } from 'react-components/shared/profile-selector/profile-selector.register';
 import {
   getCompaniesActiveData,
   getCountriesActiveItems,
@@ -29,12 +23,12 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  setProfilesPage,
-  setProfilesActiveItem,
-  getSearchResults: getProfilesSearchResults,
-  setProfilesSearchResult: setProfilesActiveItemWithSearch,
-  getMoreItems: setProfilesPage,
-  setProfilesActiveTab
+  setProfilesPage: profileSelectorActions.setProfilesPage,
+  setProfilesActiveItem: profileSelectorActions.setProfilesActiveItem,
+  getSearchResults: profileSelectorActions.getProfilesSearchResults,
+  setProfilesSearchResult: profileSelectorActions.setProfilesActiveItemWithSearch,
+  getMoreItems: profileSelectorActions.setProfilesPage,
+  setProfilesActiveTab: profileSelectorActions.setProfilesActiveTab()
 };
 
 export default connect(
