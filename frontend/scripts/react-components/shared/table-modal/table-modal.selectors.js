@@ -7,37 +7,24 @@ const getMeta = (state, { meta }) => meta || null;
 const getData = (state, { data }) => data || null;
 const getChartType = (state, { chartType }) => chartType || null;
 
-const getActiveCountriesNames = createSelector(
-  getNodesPanelValues,
-  panelsValues => (panelsValues.countries ? panelsValues.countries.map(i => i.name) : null)
+const getActiveCountriesNames = createSelector(getNodesPanelValues, panelsValues =>
+  panelsValues.countries ? panelsValues.countries.map(i => i.name) : null
 );
-const getActiveCommoditiesNames = createSelector(
-  getNodesPanelValues,
-  panelsValues => (panelsValues.commodities ? panelsValues.commodities.map(i => i.name) : null)
+const getActiveCommoditiesNames = createSelector(getNodesPanelValues, panelsValues =>
+  panelsValues.commodities ? panelsValues.commodities.map(i => i.name) : null
 );
-const getActiveSourcesNames = createSelector(
-  getNodesPanelValues,
-  panelsValues => (panelsValues.sources ? panelsValues.sources.map(i => i.name) : null)
+const getActiveSourcesNames = createSelector(getNodesPanelValues, panelsValues =>
+  panelsValues.sources ? panelsValues.sources.map(i => i.name) : null
 );
 
-const getTopNValue = createSelector(
-  [getMeta],
-  meta => meta.info.top_n
+const getTopNValue = createSelector([getMeta], meta => meta.info.top_n);
+
+const getVariableColumnName = createSelector([getMeta], meta =>
+  meta.info.node_type === 'COUNTRY' ? 'importing country' : meta.info.node_type
 );
 
-const getVariableColumnName = createSelector(
-  [getMeta],
-  meta => (meta.info.node_type === 'COUNTRY' ? 'importing country' : meta.info.node_type)
-);
-
-const hasNContIndicator = createSelector(
-  [getMeta],
-  meta => meta.info.filter.ncont_attribute
-);
-const hasMultipleYears = createSelector(
-  [getMeta],
-  meta => meta.info.years.end_year
-);
+const hasNContIndicator = createSelector([getMeta], meta => meta.info.filter.ncont_attribute);
+const hasMultipleYears = createSelector([getMeta], meta => meta.info.years.end_year);
 const hasVariableColumn = createSelector(
   [
     getChartType,
@@ -81,7 +68,7 @@ export const getTableHeaders = createSelector(
   [getMeta, hasVariableColumn, getVariableColumnName, hasNContIndicator, getChartType],
   (meta, _hasVariableColumn, variableColumnName, _hasNContIndicator, chartType) => {
     if (!meta) return null;
-    const headers = [{ name: 'commodity' }, { name: 'country' }, { name: 'year' }];
+    const headers = [{ name: 'country' }, { name: 'commodity' }, { name: 'year' }];
     if (_hasVariableColumn) {
       headers.push({ name: String(variableColumnName).toLowerCase() });
     }
@@ -116,26 +103,23 @@ const nonContValue = (item, column, meta, chartType, _hasMultipleYears) => {
 };
 const getVariableColumnData = (item, column, meta) => item.y || meta[column].label;
 
-const getDataColumnNames = createSelector(
-  [getMeta, getChartType],
-  (meta, chartType) => {
-    const metaColumns = {
-      ...meta
-    };
-    const notColumnKeys = ['info', 'xAxis', 'yAxis', 'yLabelsProfileInfo', 'aggregates'];
-    if (
-      chartType === CHART_TYPES.horizontalBar ||
-      chartType === CHART_TYPES.horizontalStackedBar ||
-      chartType === CHART_TYPES.ranking
-    ) {
-      notColumnKeys.push('y');
-    } else {
-      notColumnKeys.push('x');
-    }
-    const columns = omit(metaColumns, notColumnKeys);
-    return Object.keys(columns);
+const getDataColumnNames = createSelector([getMeta, getChartType], (meta, chartType) => {
+  const metaColumns = {
+    ...meta
+  };
+  const notColumnKeys = ['info', 'xAxis', 'yAxis', 'yLabelsProfileInfo', 'aggregates'];
+  if (
+    chartType === CHART_TYPES.horizontalBar ||
+    chartType === CHART_TYPES.horizontalStackedBar ||
+    chartType === CHART_TYPES.ranking
+  ) {
+    notColumnKeys.push('y');
+  } else {
+    notColumnKeys.push('x');
   }
-);
+  const columns = omit(metaColumns, notColumnKeys);
+  return Object.keys(columns);
+});
 
 export const getTableData = createSelector(
   [
