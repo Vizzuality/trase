@@ -211,7 +211,7 @@ largest #{profile_type} of #{@commodity_name} from \
         end
 
         def summary_of_sources(profile_type)
-          return '' unless @context.context_property.is_subnational
+          return '' unless @context.context_property&.is_subnational
 
           source_node_name_plural = @source_node_type.name.downcase.pluralize
 
@@ -298,7 +298,7 @@ accounting for \
         end
 
         def initialize_sources_for_summary
-          return unless @context.context_property.is_subnational
+          return unless @context.context_property&.is_subnational
 
           stats = Api::V3::Profiles::FlowStatsForNodeType.new(
             @context, @year, @source_node_type.name
