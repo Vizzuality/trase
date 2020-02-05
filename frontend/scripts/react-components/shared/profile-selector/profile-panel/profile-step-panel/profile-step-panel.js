@@ -28,10 +28,7 @@ const mapDispatchToProps = {
   getSearchResults: profileSelectorActions.getProfilesSearchResults,
   setProfilesSearchResult: profileSelectorActions.setProfilesActiveItemWithSearch,
   getMoreItems: profileSelectorActions.setProfilesPage,
-  setProfilesActiveTab: profileSelectorActions.setProfilesActiveTab()
+  setProfilesActiveTab: profileSelectorActions.setProfilesActiveTab
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ProfileStepPanelComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileStepPanelComponent);
