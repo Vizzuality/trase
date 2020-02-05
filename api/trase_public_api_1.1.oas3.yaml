@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Trase Public API
-  version: "1.0"
+  version: "1.1"
   contact:
     name: Trase Public API
     url: https://trase.earth/
@@ -33,10 +33,13 @@ info:
     4. flows: models the list of nodes in a supply chain (path) from source to destination
 
     5. nodes: entities participating in the supply chain. Each has a "node type", e.g. MUNICIPALITY, EXPORTER, but they are also grouped in the system by a more generic "role":
-      a. sources: source nodes, such as municipalities in Brazil or departments in Paraguay
-      b. traders: exporters / importers of commodities
-      c. destinations: destination nodes, such as importing countries
-    6. node types: the roles of nodes at particular positions in supply chains per country / commodity combination
+
+        a. sources: source nodes, such as municipalities in Brazil or departments in Paraguay
+
+        b. traders: exporters / importers of commodities
+
+        c. destinations: destination nodes, such as importing countries
+    6. node types: the types of nodes at particular positions in supply chains per country / commodity combination
 
 
     # Discovering node identifiers
@@ -130,11 +133,7 @@ paths:
         List of all sourcing countries in the system. Optionally include
         commodities sourced from these countries.
       parameters:
-        - in: query
-          name: commodities_ids
-          description: Comma-separated list of numeric commodity ids.
-          schema:
-            type: string
+        - $ref: "#/components/parameters/commodities_ids"
         - in: query
           name: include
           description: Comma-separated list of nested associations to include, e.g.
@@ -184,11 +183,7 @@ paths:
       description: List of all commodities in the system. Optionally include countries from
         which commodities are sourced.
       parameters:
-        - in: query
-          name: countries_ids
-          description: Comma-separated list of numeric country ids
-          schema:
-            type: string
+        - $ref: "#/components/parameters/countries_ids"
         - in: query
           name: include
           description: 'Comma-separated list of nested associations to include, eg:
@@ -209,7 +204,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: "#/components/schemas/place"
+                      $ref: "#/components/schemas/source_node_with_availability"
                 required:
                   - data
       parameters:
@@ -235,7 +230,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: "#/components/schemas/place"
+                      $ref: "#/components/schemas/destination_node_with_availability"
                 required:
                   - data
       description: "List of commodity destination places, which can be nodes of different node type (possible to filter down by node type) depending on the supply chain (path) definition in a given country - commodity combination."
@@ -261,7 +256,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: "#/components/schemas/trader"
+                      $ref: "#/components/schemas/exporter_node_with_availability"
                 required:
                   - data
       description: "List of commodity exporting traders, which can be nodes of different node type (possible to filter down by node type) depending on the supply chain (path) definition in a given country - commodity combination."
@@ -286,7 +281,7 @@ paths:
                   data:
                     type: array
                     items:
-                      $ref: "#/components/schemas/trader"
+                      $ref: "#/components/schemas/importer_node_with_availability"
                 required:
                   - data
       description: "List of commodity importing traders, which can be nodes of different node type (possible to filter down by node type) depending on the supply chain (path) definition in a given country - commodity combination."
@@ -740,7 +735,7 @@ paths:
                         node_types:
                           type: array
                           items:
-                            $ref: "#/components/schemas/node_type"
+                            $ref: "#/components/schemas/source_node_type"
                       required:
                         - country
                         - commodity
@@ -755,9 +750,241 @@ paths:
         - $ref: "#/components/parameters/country_opt"
         - $ref: "#/components/parameters/commodity_opt"
       summary: List of node types as they appear in flow paths
+  /top_nodes/sources:
+    get:
+      tags:
+        - NEW
+      responses:
+        "200":
+          description: ""
+          content:
+            text/html; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/top_place"
+                  meta:
+                    type: object
+                    properties:
+                      country:
+                        $ref: "#/components/schemas/country"
+                      commodity:
+                        $ref: "#/components/schemas/commodity"
+                      attribute:
+                        $ref: "#/components/schemas/attribute"
+                      total:
+                        $ref: "#/components/schemas/total"
+                      node_type:
+                        $ref: "#/components/schemas/source_node_type"
+                      nodes:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/exporter_node"
+                      start_year:
+                        type: integer
+                        example: 2003
+                      end_year:
+                        type: integer
+                        example: 2017
+                      n:
+                        type: integer
+                        example: 10
+                required:
+                  - data
+                  - meta
+      parameters:
+        - $ref: "#/components/parameters/country_req"
+        - $ref: "#/components/parameters/commodity_req"
+        - $ref: "#/components/parameters/attribute_with_default"
+        - $ref: "#/components/parameters/source_node_type_with_default"
+        - $ref: "#/components/parameters/nodes_ids"
+        - $ref: "#/components/parameters/start_year_with_default"
+        - $ref: "#/components/parameters/end_year_with_default"
+        - $ref: "#/components/parameters/n"
+      description: "List of sourcing places for country - commodity combination ordered by total value of flow attribute."
+      summary: List of sourcing places for country - commodity combination ordered by total value of flow attribute.
+  /top_nodes/exporters:
+    get:
+      tags:
+        - NEW
+      responses:
+        "200":
+          description: ""
+          content:
+            text/html; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/top_trader"
+                  meta:
+                    type: object
+                    properties:
+                      country:
+                        $ref: "#/components/schemas/country"
+                      commodity:
+                        $ref: "#/components/schemas/commodity"
+                      attribute:
+                        $ref: "#/components/schemas/attribute"
+                      total:
+                        $ref: "#/components/schemas/total"
+                      node_type:
+                        $ref: "#/components/schemas/exporter_node_type"
+                      nodes:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/source_node"
+                      start_year:
+                        type: integer
+                        example: 2003
+                      end_year:
+                        type: integer
+                        example: 2017
+                      n:
+                        type: integer
+                        example: 10
+                required:
+                  - data
+                  - meta
+      parameters:
+        - $ref: "#/components/parameters/country_req"
+        - $ref: "#/components/parameters/commodity_req"
+        - $ref: "#/components/parameters/attribute_with_default"
+        - $ref: "#/components/parameters/exporter_node_type_with_default"
+        - $ref: "#/components/parameters/nodes_ids"
+        - $ref: "#/components/parameters/start_year_with_default"
+        - $ref: "#/components/parameters/end_year_with_default"
+        - $ref: "#/components/parameters/n"
+      description: "List of exporters for country - commodity combination ordered by total value of flow attribute."
+      summary: List of exporters for country - commodity combination ordered by total value of flow attribute.
+  /top_nodes/importers:
+    get:
+      tags:
+        - NEW
+      responses:
+        "200":
+          description: ""
+          content:
+            text/html; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/top_trader"
+                  meta:
+                    type: object
+                    properties:
+                      country:
+                        $ref: "#/components/schemas/country"
+                      commodity:
+                        $ref: "#/components/schemas/commodity"
+                      attribute:
+                        $ref: "#/components/schemas/attribute"
+                      total:
+                        $ref: "#/components/schemas/total"
+                      node_type:
+                        $ref: "#/components/schemas/importer_node_type"
+                      nodes:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/destination_node"
+                      start_year:
+                        type: integer
+                        example: 2003
+                      end_year:
+                        type: integer
+                        example: 2017
+                      n:
+                        type: integer
+                        example: 10
+                required:
+                  - data
+                  - meta
+      parameters:
+        - $ref: "#/components/parameters/country_req"
+        - $ref: "#/components/parameters/commodity_req"
+        - $ref: "#/components/parameters/attribute_with_default"
+        - $ref: "#/components/parameters/importer_node_type_with_default"
+        - $ref: "#/components/parameters/nodes_ids"
+        - $ref: "#/components/parameters/start_year_with_default"
+        - $ref: "#/components/parameters/end_year_with_default"
+        - $ref: "#/components/parameters/n"
+      description: "List of importers for country - commodity combination ordered by total value of flow attribute."
+      summary: List of importers for country - commodity combination ordered by total value of flow attribute.
+  /top_nodes/destinations:
+    get:
+      tags:
+        - NEW
+      responses:
+        "200":
+          description: ""
+          content:
+            text/html; charset=utf-8:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/top_place"
+                  meta:
+                    type: object
+                    properties:
+                      country:
+                        $ref: "#/components/schemas/country"
+                      commodity:
+                        $ref: "#/components/schemas/commodity"
+                      attribute:
+                        $ref: "#/components/schemas/attribute"
+                      total:
+                        $ref: "#/components/schemas/total"
+                      node_type:
+                        $ref: "#/components/schemas/destination_node_type"
+                      nodes:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/importer_node"
+                      start_year:
+                        type: integer
+                        example: 2003
+                      end_year:
+                        type: integer
+                        example: 2017
+                      n:
+                        type: integer
+                        example: 10
+                required:
+                  - data
+                  - meta
+      parameters:
+        - $ref: "#/components/parameters/country_req"
+        - $ref: "#/components/parameters/commodity_req"
+        - $ref: "#/components/parameters/attribute_with_default"
+        - $ref: "#/components/parameters/destination_node_type_with_default"
+        - $ref: "#/components/parameters/nodes_ids"
+        - $ref: "#/components/parameters/start_year_with_default"
+        - $ref: "#/components/parameters/end_year_with_default"
+        - $ref: "#/components/parameters/n"
+      description: "List of destination places for country - commodity combination ordered by total value of flow attribute."
+      summary: List of destination places for country - commodity combination ordered by total value of flow attribute.
 
 servers:
-  - url: https://trase.earth/api/public
+  - url: https://staging.trase.earth/api/public
 components:
   parameters:
     page:
@@ -801,6 +1028,24 @@ components:
       required: true
       schema:
         type: string
+    commodities_ids:
+      in: query
+      name: commodities_ids
+      description: Comma-separated list of numeric commodity ids.
+      schema:
+        type: string
+    countries_ids:
+      in: query
+      name: countries_ids
+      description: Comma-separated list of numeric country ids.
+      schema:
+        type: string
+    nodes_ids:
+      in: query
+      name: nodes_ids
+      description: Comma-separated list of numeric node ids to filter flows.
+      schema:
+        type: string
     geo_id:
       in: query
       name: geo_id
@@ -811,6 +1056,30 @@ components:
       name: node_type
       in: query
       description: Node type name, e.g. MUNICIPALITY
+      schema:
+        type: string
+    source_node_type_with_default:
+      name: node_type
+      in: query
+      description: Node type name, e.g. MUNICIPALITY; when not provided, default source node type used (depending on data availability in country - commodity combination)
+      schema:
+        type: string
+    exporter_node_type_with_default:
+      name: node_type
+      in: query
+      description: Node type name, e.g. EXPORTER; when not provided, default exporter node type used (depending on data availability in country - commodity combination)
+      schema:
+        type: string
+    importer_node_type_with_default:
+      name: node_type
+      in: query
+      description: Node type name, e.g. IMPORTER; when not provided, default importer node type used (depending on data availability in country - commodity combination)
+      schema:
+        type: string
+    destination_node_type_with_default:
+      name: node_type
+      in: query
+      description: Node type name, e.g. COUNTRY; when not provided, default source node type used (depending on data availability in country - commodity combination)
       schema:
         type: string
     name_prefix:
@@ -844,6 +1113,13 @@ components:
       description: Flow attribute id, when not provided defaults to trade volume
       schema:
         type: integer
+
+    n:
+      in: query
+      name: n
+      description: Number of elements to return
+      schema:
+        type: integer
   securitySchemes:
     apikey:
       type: apiKey
@@ -864,16 +1140,71 @@ components:
         name:
           type: string
           example: SORRISO
-        availability:
-          type: array
-          items:
-            $ref: "#/components/schemas/availability"
-        nodeType:
+        node_type:
           type: string
           example: MUNICIPALITY
       required:
         - id
         - name
+        - node_type
+    source_node:
+      allOf:
+        - $ref: "#/components/schemas/node"
+    exporter_node:
+      allOf:
+        - $ref: "#/components/schemas/node" 
+        - type: object
+          properties:
+            name:
+              example: CARGILL
+            node_type:
+              example: EXPORTER
+    importer_node:
+      allOf:
+        - $ref: "#/components/schemas/node" 
+        - type: object
+          properties:
+            name:
+              example: CARGILL
+            node_type:
+              example: IMPORTER
+    destination_node:
+      allOf:
+        - $ref: "#/components/schemas/node" 
+        - type: object
+          properties:
+            name:
+              example: CHINA
+            node_type:
+              example: COUNTRY
+    node_with_availability:
+      allOf:
+        - $ref: "#/components/schemas/node"  
+        - type: object
+          properties:
+            availability:
+              type: array
+              items:
+                $ref: "#/components/schemas/availability"
+    source_node_with_availability:
+      allOf:
+        - $ref: "#/components/schemas/node_with_availability"
+        - type: object
+          properties:
+            geoId:
+              type: string
+    exporter_node_with_availability:
+      allOf:
+        - $ref: "#/components/schemas/node_with_availability"
+        - $ref: "#/components/schemas/exporter_node"
+    importer_node_with_availability:
+      allOf:
+        - $ref: "#/components/schemas/node_with_availability"
+        - $ref: "#/components/schemas/importer_node"
+    destination_node_with_availability:
+      allOf:
+        - $ref: "#/components/schemas/source_node_with_availability"
+        - $ref: "#/components/schemas/destination_node"
     country:
       type: object
       description: Single country record.
@@ -938,16 +1269,6 @@ components:
           items:
             type: integer
       description: Years of data available for country / commodity combination
-    place:
-      allOf:
-        - $ref: "#/components/schemas/node"
-        - type: object
-          properties:
-            geoId:
-              type: string
-    trader:
-      allOf:
-        - $ref: "#/components/schemas/node"
     attribute:
       type: object
       description: Attribute (indicator)
@@ -991,4 +1312,73 @@ components:
         - id
         - name
         - role
-
+    source_node_type:
+      allOf:
+        - $ref: "#/components/schemas/node_type"
+        - type: object
+          properties:
+            name:
+              type: string
+              example: MUNICIPALITY
+            role:
+              type: string
+              example: source
+    exporter_node_type:
+      allOf:
+        - $ref: "#/components/schemas/node_type"
+        - type: object
+          properties:
+            name:
+              type: string
+              example: EXPORTER
+            role:
+              type: string
+              example: exporter
+    importer_node_type:
+      allOf:
+        - $ref: "#/components/schemas/node_type"
+        - type: object
+          properties:
+            name:
+              type: string
+              example: IMPORTER
+            role:
+              type: string
+              example: importer
+    destination_node_type:
+      allOf:
+        - $ref: "#/components/schemas/node_type"
+        - type: object
+          properties:
+            name:
+              type: string
+              example: COUNTRY
+            role:
+              type: string
+              example: destination
+    top_node:
+      type: object
+      description: Node object in list ordered by total value of flow attribute.
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          example: SORRISO
+        value:
+          type: number
+        height:
+          type: number
+    top_place:
+      allOf:
+        - $ref: "#/components/schemas/top_node"
+        - type: object
+          properties:
+            geoId:
+              type: string
+    top_trader:
+      allOf:
+        - $ref: "#/components/schemas/top_node"
+    total:
+      type: number
+      description: Total value
