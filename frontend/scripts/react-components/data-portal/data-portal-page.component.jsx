@@ -416,196 +416,189 @@ class DataContent extends Component {
           downloadFile={this.downloadFile}
           downloaded={this.state.downloaded}
         />
-        <div className="row">
-          <div className="small-12 columns c-bulk-downloads-container">
-            <BulkDownloadsBlock
-              contexts={enabledContexts}
-              enabled={DATA_DOWNLOAD_ENABLED}
-              onButtonClicked={this.onBulkDownloadClicked}
-            />
-            <div className="c-custom-dataset">
-              <div className="c-custom-dataset__title">CREATE A CUSTOM DATASET</div>
-              <div className="row">
-                <div className="small-9 columns">
-                  <div className="row">
-                    <div className="small-4 columns">
-                      <DownloadSelector
-                        enabled
-                        options={countryOptions}
-                        title="PRODUCTION COUNTRIES"
-                        type="countries"
-                        onOptionSelected={this.onClickEventHandler}
-                        selected={[this.state.selectedCountry]}
-                      />
-                    </div>
-                    <div className="small-4 columns">
-                      <DownloadSelector
-                        enabled={this.state.selectedCountry !== null}
-                        options={commodityOptions}
-                        title="COMMODITIES"
-                        type="commodities"
-                        onOptionSelected={this.onClickEventHandler}
-                        disabledText="Please select first a country"
-                        selected={[this.state.selectedCommodity]}
-                      />
-                    </div>
-                    <div className="small-4 columns">
-                      <DownloadSelector
-                        allowMultiple
-                        allSelected={this.state.allYearsSelected}
-                        options={yearOptions}
-                        enabled={
-                          this.state.selectedCountry !== null &&
-                          this.state.selectedCommodity !== null
-                        }
-                        title="YEARS"
-                        type="years"
-                        onOptionSelected={this.onClickEventHandler}
-                        onAllSelected={this.onAllSelected}
-                        disabledText="Please select first a country and commodity"
-                        selected={this.state.selectedYears}
-                      />
-                    </div>
+        <div className="row column">
+          <BulkDownloadsBlock
+            contexts={enabledContexts}
+            enabled={DATA_DOWNLOAD_ENABLED}
+            onButtonClicked={this.onBulkDownloadClicked}
+          />
+          <div className="c-custom-dataset">
+            <div className="c-custom-dataset__title">CREATE A CUSTOM DATASET</div>
+            <div className="row">
+              <div className="small-9 columns">
+                <div className="row">
+                  <div className="small-4 columns">
+                    <DownloadSelector
+                      enabled
+                      options={countryOptions}
+                      title="PRODUCTION COUNTRIES"
+                      type="countries"
+                      onOptionSelected={this.onClickEventHandler}
+                      selected={[this.state.selectedCountry]}
+                    />
                   </div>
-                  <div className="row">
-                    <div className="small-4 columns">
-                      <DownloadSelector
-                        allowMultiple
-                        allSelected={this.state.allExportersSelected}
-                        options={exporterOptions}
-                        enabled={
-                          this.state.selectedCountry !== null &&
-                          this.state.selectedCommodity !== null
-                        }
-                        title="COMPANIES"
-                        type="exporters"
-                        onOptionSelected={this.onClickEventHandler}
-                        onAllSelected={this.onAllSelected}
-                        disabledText="Please select first a country and commodity"
-                        selected={this.state.selectedExporters}
-                      />
-                    </div>
-                    <div className="small-4 columns">
-                      <DownloadSelector
-                        allowMultiple
-                        allSelected={this.state.allConsumptionCountriesSelected}
-                        options={consumptionCountryOptions}
-                        enabled={
-                          this.state.selectedCountry !== null &&
-                          this.state.selectedCommodity !== null
-                        }
-                        title="CONSUMPTION COUNTRIES"
-                        type="consumption-countries"
-                        onOptionSelected={this.onClickEventHandler}
-                        onAllSelected={this.onAllSelected}
-                        disabledText="Please select first a country and commodity"
-                        selected={this.state.selectedConsumptionCountries}
-                      />
-                    </div>
-                    <div className="small-4 columns">
-                      <DownloadSelector
-                        allowMultiple
-                        allSelected={this.state.allIndicatorsSelected}
-                        options={indicatorOptions}
-                        enabled={
-                          this.state.selectedCountry !== null &&
-                          this.state.selectedCommodity !== null
-                        }
-                        title="INDICATORS"
-                        type="indicators"
-                        selectedFilters={this.state.selectedIndicatorsFilters}
-                        onOptionSelected={this.onClickEventHandler}
-                        onOptionFilterChange={this.onOptionFilterChange}
-                        onOptionFilterClear={this.onOptionFilterClear}
-                        onAllSelected={this.onAllSelected}
-                        disabledText="Please select first a country and commodity"
-                        selected={this.state.selectedIndicators}
-                      />
-                    </div>
+                  <div className="small-4 columns">
+                    <DownloadSelector
+                      enabled={this.state.selectedCountry !== null}
+                      options={commodityOptions}
+                      title="COMMODITIES"
+                      type="commodities"
+                      onOptionSelected={this.onClickEventHandler}
+                      disabledText="Please select first a country"
+                      selected={[this.state.selectedCommodity]}
+                    />
+                  </div>
+                  <div className="small-4 columns">
+                    <DownloadSelector
+                      allowMultiple
+                      allSelected={this.state.allYearsSelected}
+                      options={yearOptions}
+                      enabled={
+                        this.state.selectedCountry !== null && this.state.selectedCommodity !== null
+                      }
+                      title="YEARS"
+                      type="years"
+                      onOptionSelected={this.onClickEventHandler}
+                      onAllSelected={this.onAllSelected}
+                      disabledText="Please select first a country and commodity"
+                      selected={this.state.selectedYears}
+                    />
                   </div>
                 </div>
-                <div className="small-3 columns">
-                  <div className="c-custom-dataset__format-sidebar">
-                    <div className="c-custom-dataset-selector" data-type="format">
-                      <div className="c-custom-dataset-selector__header">OUTPUT TYPE</div>
-                      <ul className="c-custom-dataset-selector__values">
-                        <li className="-selected">
-                          Pivot
-                          <RadioButton
-                            noSelfCancel
-                            className="-grey"
-                            enabled={this.state.outputType === 'pivot'}
-                            onClick={() => this.onOutputTypeSelected('pivot')}
-                          />
-                        </li>
-                        <li>
-                          Table
-                          <RadioButton
-                            noSelfCancel
-                            className="-grey"
-                            enabled={this.state.outputType === 'table'}
-                            onClick={() => this.onOutputTypeSelected('table')}
-                          />
-                        </li>
-                      </ul>
-                    </div>
+                <div className="row">
+                  <div className="small-4 columns">
+                    <DownloadSelector
+                      allowMultiple
+                      allSelected={this.state.allExportersSelected}
+                      options={exporterOptions}
+                      enabled={
+                        this.state.selectedCountry !== null && this.state.selectedCommodity !== null
+                      }
+                      title="COMPANIES"
+                      type="exporters"
+                      onOptionSelected={this.onClickEventHandler}
+                      onAllSelected={this.onAllSelected}
+                      disabledText="Please select first a country and commodity"
+                      selected={this.state.selectedExporters}
+                    />
+                  </div>
+                  <div className="small-4 columns">
+                    <DownloadSelector
+                      allowMultiple
+                      allSelected={this.state.allConsumptionCountriesSelected}
+                      options={consumptionCountryOptions}
+                      enabled={
+                        this.state.selectedCountry !== null && this.state.selectedCommodity !== null
+                      }
+                      title="CONSUMPTION COUNTRIES"
+                      type="consumption-countries"
+                      onOptionSelected={this.onClickEventHandler}
+                      onAllSelected={this.onAllSelected}
+                      disabledText="Please select first a country and commodity"
+                      selected={this.state.selectedConsumptionCountries}
+                    />
+                  </div>
+                  <div className="small-4 columns">
+                    <DownloadSelector
+                      allowMultiple
+                      allSelected={this.state.allIndicatorsSelected}
+                      options={indicatorOptions}
+                      enabled={
+                        this.state.selectedCountry !== null && this.state.selectedCommodity !== null
+                      }
+                      title="INDICATORS"
+                      type="indicators"
+                      selectedFilters={this.state.selectedIndicatorsFilters}
+                      onOptionSelected={this.onClickEventHandler}
+                      onOptionFilterChange={this.onOptionFilterChange}
+                      onOptionFilterClear={this.onOptionFilterClear}
+                      onAllSelected={this.onAllSelected}
+                      disabledText="Please select first a country and commodity"
+                      selected={this.state.selectedIndicators}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="small-3 columns">
+                <div className="c-custom-dataset__format-sidebar">
+                  <div className="c-custom-dataset-selector" data-type="format">
+                    <div className="c-custom-dataset-selector__header">OUTPUT TYPE</div>
+                    <ul className="c-custom-dataset-selector__values">
+                      <li className="-selected">
+                        Pivot
+                        <RadioButton
+                          noSelfCancel
+                          className="-grey"
+                          enabled={this.state.outputType === 'pivot'}
+                          onClick={() => this.onOutputTypeSelected('pivot')}
+                        />
+                      </li>
+                      <li>
+                        Table
+                        <RadioButton
+                          noSelfCancel
+                          className="-grey"
+                          enabled={this.state.outputType === 'table'}
+                          onClick={() => this.onOutputTypeSelected('table')}
+                        />
+                      </li>
+                    </ul>
+                  </div>
 
-                    <div className="c-custom-dataset-selector" data-type="format">
-                      <div className="c-custom-dataset-selector__header">FILE</div>
-                      <ul className="c-custom-dataset-selector__values">
-                        <li className="-selected">
-                          .csv (comma separated)
-                          <RadioButton
-                            noSelfCancel
-                            className="-grey"
-                            enabled={
-                              this.state.fileExtension === '.csv' &&
-                              this.state.fileSeparator === 'comma'
-                            }
-                            onClick={() => this.onFileFormatSelected('.csv', 'comma')}
-                          />
-                        </li>
-                        <li>
-                          .csv (semicolon separated)
-                          <RadioButton
-                            noSelfCancel
-                            className="-grey"
-                            enabled={
-                              this.state.fileExtension === '.csv' &&
-                              this.state.fileSeparator === 'semicolon'
-                            }
-                            onClick={() => this.onFileFormatSelected('.csv', 'semicolon')}
-                          />
-                        </li>
-                        <li>
-                          .json
-                          <RadioButton
-                            noSelfCancel
-                            className="-grey"
-                            enabled={
-                              this.state.fileExtension === '.json' &&
-                              this.state.fileSeparator === ''
-                            }
-                            onClick={() => this.onFileFormatSelected('.json', '')}
-                          />
-                        </li>
-                      </ul>
-                    </div>
+                  <div className="c-custom-dataset-selector" data-type="format">
+                    <div className="c-custom-dataset-selector__header">FILE</div>
+                    <ul className="c-custom-dataset-selector__values">
+                      <li className="-selected">
+                        .csv (comma separated)
+                        <RadioButton
+                          noSelfCancel
+                          className="-grey"
+                          enabled={
+                            this.state.fileExtension === '.csv' &&
+                            this.state.fileSeparator === 'comma'
+                          }
+                          onClick={() => this.onFileFormatSelected('.csv', 'comma')}
+                        />
+                      </li>
+                      <li>
+                        .csv (semicolon separated)
+                        <RadioButton
+                          noSelfCancel
+                          className="-grey"
+                          enabled={
+                            this.state.fileExtension === '.csv' &&
+                            this.state.fileSeparator === 'semicolon'
+                          }
+                          onClick={() => this.onFileFormatSelected('.csv', 'semicolon')}
+                        />
+                      </li>
+                      <li>
+                        .json
+                        <RadioButton
+                          noSelfCancel
+                          className="-grey"
+                          enabled={
+                            this.state.fileExtension === '.json' && this.state.fileSeparator === ''
+                          }
+                          onClick={() => this.onFileFormatSelected('.json', '')}
+                        />
+                      </li>
+                    </ul>
+                  </div>
 
-                    <div
-                      className={cx('download-button', {
-                        '-disabled':
-                          !DATA_DOWNLOAD_ENABLED ||
-                          this.state.selectedCountry === null ||
-                          this.state.selectedCommodity === null
-                      })}
-                      onClick={() => this.onDownloadButtonClicked()}
-                    >
-                      <svg className="icon icon-download">
-                        <use xlinkHref="#icon-download" />
-                      </svg>
-                      DOWNLOAD DATA
-                    </div>
+                  <div
+                    className={cx('download-button', {
+                      '-disabled':
+                        !DATA_DOWNLOAD_ENABLED ||
+                        this.state.selectedCountry === null ||
+                        this.state.selectedCommodity === null
+                    })}
+                    onClick={() => this.onDownloadButtonClicked()}
+                  >
+                    <svg className="icon icon-download">
+                      <use xlinkHref="#icon-download" />
+                    </svg>
+                    DOWNLOAD DATA
                   </div>
                 </div>
               </div>
