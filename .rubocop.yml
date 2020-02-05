@@ -83,6 +83,9 @@ Style/PercentLiteralDelimiters:
 Style/PerlBackrefs:
   Enabled: false
 
+Style/RaiseArgs:
+  EnforcedStyle: compact
+
 Style/RegexpLiteral:
   EnforcedStyle: slashes
   AllowInnerSlashes: true
