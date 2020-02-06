@@ -4,8 +4,6 @@ import capitalize from 'lodash/capitalize';
 import RadioButton from 'react-components/shared/radio-button/radio-button.component';
 import cx from 'classnames';
 
-import './format-sidebar.scss';
-
 const outputTypes = ['pivot', 'table'];
 const fileTypes = [
   {
@@ -30,7 +28,7 @@ function FormatSidebar(props) {
     fileExtension,
     fileSeparator,
     outputType,
-    dispatch,
+    dataPortalDispatch,
     selectedCountry,
     selectedCommodity
   } = props;
@@ -46,7 +44,7 @@ function FormatSidebar(props) {
                 noSelfCancel
                 className="-grey"
                 enabled={outputType === type}
-                onClick={() => dispatch({ type: 'setOutputType', payload: type })}
+                onClick={() => dataPortalDispatch({ type: 'setOutputType', payload: type })}
               />
             </li>
           ))}
@@ -65,7 +63,7 @@ function FormatSidebar(props) {
                 enabled={
                   fileExtension === fileType.extension && fileSeparator === fileType.separator
                 }
-                onClick={() => dispatch({ type: 'setFormatType', payload: fileType })}
+                onClick={() => dataPortalDispatch({ type: 'setFormatType', payload: fileType })}
               />
             </li>
           ))}
@@ -76,7 +74,7 @@ function FormatSidebar(props) {
           '-disabled':
             !DATA_DOWNLOAD_ENABLED || selectedCountry === null || selectedCommodity === null
         })}
-        onClick={() => dispatch({ type: 'setDownloadType', payload: 'custom' })}
+        onClick={() => dataPortalDispatch({ type: 'setDownloadType', payload: 'custom' })}
       >
         <svg className="icon icon-download">
           <use xlinkHref="#icon-download" />
@@ -91,7 +89,7 @@ FormatSidebar.propTypes = {
   fileExtension: PropTypes.string.isRequired,
   fileSeparator: PropTypes.string.isRequired,
   outputType: PropTypes.string.isRequired,
-  dispatch: PropTypes.func.isRequired,
+  dataPortalDispatch: PropTypes.func.isRequired,
   selectedCountry: PropTypes.number.isRequired,
   selectedCommodity: PropTypes.number.isRequired
 };

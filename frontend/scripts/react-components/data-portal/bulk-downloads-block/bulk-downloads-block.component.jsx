@@ -4,6 +4,7 @@ import Button from 'react-components/shared/button/button.component';
 import { FixedSizeGrid } from 'react-window';
 import debounce from 'lodash/debounce';
 import Text from 'react-components/shared/text';
+import cx from 'classnames';
 
 import 'scripts/react-components/data-portal/bulk-downloads-block/bulk-downloads.scss';
 
@@ -20,11 +21,11 @@ function BulkDownloadsBlock(props) {
     };
   }, []);
 
-  const LARGE = 1090;
+  const LARGE = 1078;
   const columnCount = windowWidth > LARGE ? 3 : 2;
   const rowHeight = 58;
   const columnWidth = 346;
-  const width = windowWidth > LARGE ? 1040 : 748;
+  const width = windowWidth > LARGE ? 1040 : 695;
   const rowCount = Math.ceil(contexts.length / columnCount);
 
   function onBulkDownloadButtonClicked(contextId) {
@@ -52,7 +53,10 @@ function BulkDownloadsBlock(props) {
             const item = data[rowIndex * columnCount + columnIndex];
             if (typeof item === 'undefined') return null;
             return (
-              <div style={style} className="bulk-download-item-container">
+              <div
+                style={style}
+                className={cx('bulk-download-item-container', { '-small': columnCount === 2 })}
+              >
                 <Button
                   color="charcoal-transparent"
                   size="lg"

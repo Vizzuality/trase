@@ -4,7 +4,7 @@ import DownloadSelector from 'react-components/data-portal/download-selector.com
 
 function CustomDownload(props) {
   const {
-    dispatch,
+    dataPortalDispatch,
     consumptionCountryOptions,
     selectedExporters,
     exporterOptions,
@@ -31,7 +31,7 @@ function CustomDownload(props) {
             enabled
             options={countryOptions}
             title="PRODUCTION COUNTRIES"
-            onOptionSelected={payload => dispatch({ type: 'selectCountry', payload })}
+            onOptionSelected={payload => dataPortalDispatch({ type: 'selectCountry', payload })}
             selected={[selectedCountry]}
           />
         </div>
@@ -40,7 +40,7 @@ function CustomDownload(props) {
             enabled={selectedCountry !== null}
             options={commodityOptions}
             title="COMMODITIES"
-            onOptionSelected={payload => dispatch({ type: 'selectCommodity', payload })}
+            onOptionSelected={payload => dataPortalDispatch({ type: 'selectCommodity', payload })}
             disabledText="Please select first a country"
             selected={[selectedCommodity]}
           />
@@ -52,8 +52,8 @@ function CustomDownload(props) {
             options={yearOptions}
             enabled={selectedCountry !== null && selectedCommodity !== null}
             title="YEARS"
-            onOptionSelected={payload => dispatch({ type: 'selectYears', payload })}
-            onAllSelected={() => dispatch({ type: 'selectAllYears' })}
+            onOptionSelected={payload => dataPortalDispatch({ type: 'selectYears', payload })}
+            onAllSelected={() => dataPortalDispatch({ type: 'selectAllYears' })}
             disabledText="Please select first a country and commodity"
             selected={selectedYears}
           />
@@ -67,8 +67,8 @@ function CustomDownload(props) {
             options={exporterOptions}
             enabled={selectedCountry !== null && selectedCommodity !== null}
             title="COMPANIES"
-            onOptionSelected={payload => dispatch({ type: 'selectExporters', payload })}
-            onAllSelected={() => dispatch({ type: 'selectAllExporters' })}
+            onOptionSelected={payload => dataPortalDispatch({ type: 'selectExporters', payload })}
+            onAllSelected={() => dataPortalDispatch({ type: 'selectAllExporters' })}
             disabledText="Please select first a country and commodity"
             selected={selectedExporters}
           />
@@ -80,8 +80,10 @@ function CustomDownload(props) {
             options={consumptionCountryOptions}
             enabled={selectedCountry !== null && selectedCommodity !== null}
             title="CONSUMPTION COUNTRIES"
-            onOptionSelected={payload => dispatch({ type: 'selectConsumptionCountries', payload })}
-            onAllSelected={() => dispatch({ type: 'selectAllConsumptionCountries' })}
+            onOptionSelected={payload =>
+              dataPortalDispatch({ type: 'selectConsumptionCountries', payload })
+            }
+            onAllSelected={() => dataPortalDispatch({ type: 'selectAllConsumptionCountries' })}
             disabledText="Please select first a country and commodity"
             selected={selectedConsumptionCountries}
           />
@@ -94,10 +96,12 @@ function CustomDownload(props) {
             enabled={selectedCountry !== null && selectedCommodity !== null}
             title="INDICATORS"
             selectedFilters={selectedIndicatorsFilters}
-            onOptionSelected={payload => dispatch({ type: 'selectIndicators', payload })}
-            onOptionFilterChange={payload => dispatch({ type: 'optionFilterChange', payload })}
-            onOptionFilterClear={() => dispatch({ type: 'optionFilterClear' })}
-            onAllSelected={() => dispatch({ type: 'selectAllIndicators' })}
+            onOptionSelected={payload => dataPortalDispatch({ type: 'selectIndicators', payload })}
+            onOptionFilterChange={payload =>
+              dataPortalDispatch({ type: 'optionFilterChange', payload })
+            }
+            onOptionFilterClear={() => dataPortalDispatch({ type: 'optionFilterClear' })}
+            onAllSelected={() => dataPortalDispatch({ type: 'selectAllIndicators' })}
             disabledText="Please select first a country and commodity"
             selected={selectedIndicators}
           />
@@ -108,7 +112,7 @@ function CustomDownload(props) {
 }
 
 CustomDownload.propTypes = {
-  dispatch: PropTypes.func.isRequired,
+  dataPortalDispatch: PropTypes.func.isRequired,
   consumptionCountryOptions: PropTypes.array.isRequired,
   selectedExporters: PropTypes.array.isRequired,
   exporterOptions: PropTypes.array.isRequired,

@@ -11,7 +11,7 @@
 
   .bulk-download-grid {
     position: relative;
-    margin: 12px;
+    margin: 12px 0;
     overflow: hidden;
 
     .bulk-download-grid-outer-element {
@@ -30,7 +30,19 @@
   }
 
   .bulk-download-item-container {
-    padding: 0 11px 11px 14px;
+    padding: 0 11px 0 0;
+
+    &:nth-child(3n) {
+      padding: 0;
+    }
+
+    &.-small {
+      padding: 0 11px 0 0;
+
+      &:nth-child(2n) {
+        padding: 0;
+      }
+    }
   }
 
   .bulk-download-item {

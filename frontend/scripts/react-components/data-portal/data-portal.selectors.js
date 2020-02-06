@@ -3,12 +3,15 @@ import uniqBy from 'lodash/uniqBy';
 import { getSelectedContext } from 'reducers/app.selectors';
 
 const getAppContexts = state => state.app.contexts;
+const getDataPortalExporters = state => state.data.exporters;
+const getDataPortalIndicators = state => state.data.indicators;
+const getDataPortalConsumptionCountries = state => state.data.consumptionCountries;
 
 export const getEnabledContexts = createSelector([getAppContexts], contexts =>
   contexts.filter(elem => elem.isDisabled !== true)
 );
 
-const getCountryOptions = createSelector([getEnabledContexts], enabledContexts =>
+export const getCountryOptions = createSelector([getEnabledContexts], enabledContexts =>
   uniqBy(enabledContexts, context => context.countryId).map(context => ({
     id: context.countryId,
     name: context.countryName.toLowerCase(),
@@ -16,7 +19,7 @@ const getCountryOptions = createSelector([getEnabledContexts], enabledContexts =
   }))
 );
 
-const getCommodityOptions = createSelector(
+export const getCommodityOptions = createSelector(
   [getEnabledContexts, getSelectedContext],
   (enabledContexts, selectedContext) =>
     enabledContexts
@@ -28,7 +31,7 @@ const getCommodityOptions = createSelector(
       }))
 );
 
-const getYearOptions = createSelector([getSelectedContext], selectedContext => {
+export const getYearOptions = createSelector([getSelectedContext], selectedContext => {
   if (selectedContext) {
     return selectedContext.years.map(year => ({
       id: year,
@@ -39,7 +42,7 @@ const getYearOptions = createSelector([getSelectedContext], selectedContext => {
   return [];
 });
 
-const getExporterOptions = createSelector([getDataPortalExporters], exporters =>
+export const getExporterOptions = createSelector([getDataPortalExporters], exporters =>
   exporters
     .map(exporter => ({
       id: exporter.id,
@@ -49,7 +52,7 @@ const getExporterOptions = createSelector([getDataPortalExporters], exporters =>
     .sort((a, b) => a.name.localeCompare(b.name))
 );
 
-const getConsumptionCountryOptions = createSelector(
+export const getConsumptionCountryOptions = createSelector(
   [getDataPortalConsumptionCountries],
   consumptionCountries =>
     consumptionCountries
@@ -61,7 +64,7 @@ const getConsumptionCountryOptions = createSelector(
       .sort((a, b) => a.name.localeCompare(b.name))
 );
 
-const getIndicatorOptions = createSelector([getDataPortalIndicators], indicators =>
+export const getIndicatorOptions = createSelector([getDataPortalIndicators], indicators =>
   indicators
     .map(indicator => ({
       id: indicator.name,

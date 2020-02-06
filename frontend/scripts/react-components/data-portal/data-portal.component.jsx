@@ -4,7 +4,7 @@ import DataPortalDisabledMessage from 'react-components/data-portal/data-portal-
 import DataPortalForm from 'react-components/data-portal/data-portal-form/data-portal-form.component';
 import BulkDownloadsBlock from 'react-components/data-portal/bulk-downloads-block/bulk-downloads-block.component';
 import FormatSidebar from 'react-components/data-portal/format-sidebar.component';
-import CustomDownload from 'react-components/data-portal/custom-download/custom-download.component';
+import CustomDownload from 'react-components/data-portal/custom-download/custom-download.container';
 import union from 'lodash/union';
 import xor from 'lodash/xor';
 import {
@@ -31,6 +31,7 @@ const initialState = {
 
 function DataPortal(props) {
   const {
+    loadContextNodes,
     autoCompleteCountries,
     enabledContexts,
     consumptionCountries,
@@ -48,7 +49,7 @@ function DataPortal(props) {
       case 'setDownloadType':
         return { ...state, downloadType: action.payload, formVisible: true, downloaded: false };
       case 'selectAllYears': {
-        const allYearsSelected = state.selectedYears.length === selectedContext.years.length;
+        const allYearsSelected = state.selectedYears.length === selectedContext?.years.length;
         if (allYearsSelected) {
           return {
             ...state,
@@ -177,14 +178,15 @@ function DataPortal(props) {
       case 'setFormatType': {
         return {
           ...state,
-          formatType: action.payload
+          fileExtension: action.payload.extension,
+          fileSeparator: action.payload.separator
         };
       }
       default:
         return state;
     }
   }
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dataPortalDispatch] = useReducer(reducer, initialState);
   useEffect(() => {
     if (state.formVisible) {
       onDataDownloadFormLoaded();
@@ -195,8 +197,13 @@ function DataPortal(props) {
       onContextSelected(state.selectedCommodity);
     }
   }, [onContextSelected, state.selectedCommodity]);
+  useEffect(() => {
+    if (selectedContext) {
+      loadContextNodes(selectedContext.id);
+    }
+  }, [loadContextNodes, selectedContext]);
 
-  const allYearsSelected = state.selectedYears.length === selectedContext.years.length;
+  const allYearsSelected = state.selectedYears.length === selectedContext?.years.length;
   const allExportersSelected = state.selectedExporters.length === exporters.length;
   const allConsumptionCountriesSelected =
     state.selectedConsumptionCountries.length === consumptionCountries.length;
@@ -231,7 +238,20 @@ function DataPortal(props) {
     params[state.outputType] = 1;
 
     return params;
-  }, [allConsumptionCountriesSelected, allExportersSelected, allYearsSelected, indicatorFilters, selectedContext.id, state.fileExtension, state.fileSeparator, state.outputType, state.selectedCommodity, state.selectedConsumptionCountries, state.selectedExporters, state.selectedYears]);
+  }, [
+    allConsumptionCountriesSelected,
+    allExportersSelected,
+    allYearsSelected,
+    indicatorFilters,
+    selectedContext,
+    state.fileExtension,
+    state.fileSeparator,
+    state.outputType,
+    state.selectedCommodity,
+    state.selectedConsumptionCountries,
+    state.selectedExporters,
+    state.selectedYears
+  ]);
 
   const downloadFile = inputParams => {
     const params = inputParams || downloadURLParams;
@@ -256,7 +276,7 @@ function DataPortal(props) {
 
     window.open(downloadURL);
 
-    dispatch({ type: 'setDownloaded', payload: true });
+    dataPortalDispatch({ type: 'setDownloaded', payload: true });
   };
 
   return (
@@ -265,7 +285,7 @@ function DataPortal(props) {
       <DataPortalForm
         autoCompleteCountries={autoCompleteCountries}
         isFormVisible={state.formVisible}
-        closeForm={() => dispatch({ type: 'setForm', payload: false })}
+        closeForm={() => dataPortalDispatch({ type: 'setForm', payload: false })}
         downloadFile={downloadFile}
         downloaded={state.downloaded}
       />
@@ -273,14 +293,14 @@ function DataPortal(props) {
         <BulkDownloadsBlock
           contexts={enabledContexts}
           enabled={DATA_DOWNLOAD_ENABLED}
-          onButtonClicked={() => dispatch({ type: 'setDownloadType', payload: 'bulk' })}
+          onButtonClicked={() => dataPortalDispatch({ type: 'setDownloadType', payload: 'bulk' })}
         />
         <div className="c-custom-dataset">
           <div className="c-custom-dataset__title">CREATE A CUSTOM DATASET</div>
           <div className="row">
             <div className="small-9 columns">
               <CustomDownload
-                dispatch={dispatch}
+                dataPortalDispatch={dataPortalDispatch}
                 selectedExporters={state.selectedExporters}
                 selectedYears={state.selectedYears}
                 selectedCountry={state.selectedCountry}
@@ -296,12 +316,12 @@ function DataPortal(props) {
             </div>
             <div className="small-3 columns">
               <FormatSidebar
-                dispatch={dispatch}
+                dataPortalDispatch={dataPortalDispatch}
                 fileExtension={state.fileExtension}
                 fileSeparator={state.fileSeparator}
                 outputType={state.outputType}
-                selectedCountry={selectedContext.countryId}
-                selectedCommodity={selectedContext.id}
+                selectedCountry={selectedContext?.countryId}
+                selectedCommodity={selectedContext?.id}
               />
             </div>
           </div>
@@ -322,3 +342,5 @@ DataPortal.propTypes = {
   onDownloadTriggered: PropTypes.func,
   selectedContext: PropTypes.object
 };
+
+export default DataPortal;
