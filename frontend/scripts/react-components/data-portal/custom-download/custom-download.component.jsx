@@ -95,7 +95,7 @@ function CustomDownload(props) {
             allowMultiple
             allSelected={allIndicatorsSelected}
             options={indicatorOptions}
-            enabled={selectedCountry !== null && selectedCommodity !== null}
+            enabled={selectedCountry && selectedCommodity}
             title="INDICATORS"
             selectedFilters={selectedIndicatorsFilters}
             onOptionSelected={payload => dataPortalDispatch({ type: 'selectIndicators', payload })}

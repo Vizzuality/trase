@@ -1,7 +1,8 @@
 import {
   getURLFromParams,
   GET_DASHBOARD_OPTIONS_TABS_URL,
-  GET_ALL_NODES_URL
+  GET_ALL_NODES_URL,
+  GET_INDICATORS_URL
 } from 'utils/getURLFromParams';
 import { getDataDownloadContext } from 'react-components/data-portal/data-portal.selectors';
 import axios from 'axios';
@@ -54,20 +55,33 @@ export const loadDataDownloadLists = () => (dispatch, getState) => {
         node_types_ids: columnIds.COUNTRY
       });
 
-      Promise.all([exportersURL, destinationsURL].map(url => axios.get(url))).then(responses => {
-        const [exporters, destinations] = responses.map(res => res.data.data);
-
-        batch(() => {
-          dispatch({
-            type: DATA_PORTAL__LOAD_EXPORTERS,
-            exporters
-          });
-
-          dispatch({
-            type: DATA_PORTAL__LOAD_CONSUMPTION_COUNTRIES,
-            consumptionCountries: destinations
-          });
-        });
+      const indicatorsURL = getURLFromParams(GET_INDICATORS_URL, {
+        context_id: selectedContext.id
       });
+
+      Promise.all([exportersURL, destinationsURL, indicatorsURL].map(url => axios.get(url))).then(
+        responses => {
+          const [{ data: exporters }, { data: destinations }, { indicators }] = responses.map(
+            res => res.data
+          );
+
+          batch(() => {
+            dispatch({
+              type: DATA_PORTAL__LOAD_EXPORTERS,
+              exporters
+            });
+
+            dispatch({
+              type: DATA_PORTAL__LOAD_CONSUMPTION_COUNTRIES,
+              consumptionCountries: destinations
+            });
+
+            dispatch({
+              type: DATA_PORTAL__LOAD_INDICATORS,
+              indicators
+            });
+          });
+        }
+      );
     });
 };
