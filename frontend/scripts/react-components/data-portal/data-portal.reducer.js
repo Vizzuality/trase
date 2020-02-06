@@ -1,21 +1,50 @@
-import { LOAD_CONSUMPTION_COUNTRIES, LOAD_EXPORTERS, LOAD_INDICATORS } from 'actions/data.actions';
+import {
+  DATA_PORTAL__SET_SELECTED_COUNTRY_ID,
+  DATA_PORTAL__SET_SELECTED_COMMODITY_ID,
+  DATA_PORTAL__LOAD_CONSUMPTION_COUNTRIES,
+  DATA_PORTAL__LOAD_EXPORTERS,
+  DATA_PORTAL__LOAD_INDICATORS
+} from 'react-components/data-portal/data-portal.actions';
 import createReducer from 'utils/createReducer';
+import immer from 'immer';
 
 const initialState = {
+  country: null,
+  commodity: null,
   exporters: [],
   consumptionCountries: [],
   indicators: []
 };
 
 const dataPortalReducer = {
-  [LOAD_EXPORTERS](state, action) {
-    return Object.assign({}, state, { exporters: action.exporters });
+  [DATA_PORTAL__SET_SELECTED_COUNTRY_ID](state, action) {
+    return immer(state, draft => {
+      Object.assign(draft, initialState);
+      draft.country = action.payload;
+    });
   },
-  [LOAD_CONSUMPTION_COUNTRIES](state, action) {
-    return Object.assign({}, state, { consumptionCountries: action.consumptionCountries });
+  [DATA_PORTAL__SET_SELECTED_COMMODITY_ID](state, action) {
+    return immer(state, draft => {
+      draft.commodity = action.payload;
+      draft.exporters = initialState.exporters;
+      draft.indicators = initialState.indicators;
+      draft.consumptionCountries = initialState.consumptionCountries;
+    });
   },
-  [LOAD_INDICATORS](state, action) {
-    return Object.assign({}, state, { indicators: action.indicators });
+  [DATA_PORTAL__LOAD_EXPORTERS](state, action) {
+    return immer(state, draft => {
+      draft.exporters = action.exporters;
+    });
+  },
+  [DATA_PORTAL__LOAD_CONSUMPTION_COUNTRIES](state, action) {
+    return immer(state, draft => {
+      draft.consumptionCountries = action.consumptionCountries;
+    });
+  },
+  [DATA_PORTAL__LOAD_INDICATORS](state, action) {
+    return immer(state, draft => {
+      draft.indicators = action.indicators;
+    });
   }
 };
 

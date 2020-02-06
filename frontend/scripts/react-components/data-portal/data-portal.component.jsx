@@ -15,8 +15,6 @@ import {
 
 const initialState = {
   formVisible: false,
-  selectedCountry: null,
-  selectedCommodity: null,
   selectedYears: [],
   selectedExporters: [],
   selectedConsumptionCountries: [],
@@ -31,13 +29,14 @@ const initialState = {
 
 function DataPortal(props) {
   const {
-    loadContextNodes,
+    selectedCountry,
+    selectedCommodity,
+    loadDataDownloadLists,
     autoCompleteCountries,
     enabledContexts,
     consumptionCountries,
     exporters,
     indicators,
-    onContextSelected,
     onDataDownloadFormLoaded,
     onDownloadTriggered,
     selectedContext
@@ -120,18 +119,6 @@ function DataPortal(props) {
           }
         };
       }
-      case 'selectCountry': {
-        return {
-          ...state,
-          selectedCountry: action.payload
-        };
-      }
-      case 'selectCommodity': {
-        return {
-          ...state,
-          selectedCommodity: action.payload
-        };
-      }
       case 'selectYears': {
         const newSelectedYears = xor(state.selectedYears, [action.payload]);
         return {
@@ -182,6 +169,16 @@ function DataPortal(props) {
           fileSeparator: action.payload.separator
         };
       }
+      case 'resetSelected': {
+        return {
+          ...state,
+          selectedYears: [],
+          selectedExporters: [],
+          selectedConsumptionCountries: [],
+          selectedIndicators: [],
+          selectedIndicatorsFilters: {}
+        };
+      }
       default:
         return state;
     }
@@ -193,15 +190,11 @@ function DataPortal(props) {
     }
   }, [onDataDownloadFormLoaded, state.formVisible]);
   useEffect(() => {
-    if (state.selectedCommodity) {
-      onContextSelected(state.selectedCommodity);
+    if (selectedCountry && selectedCommodity) {
+      loadDataDownloadLists();
     }
-  }, [onContextSelected, state.selectedCommodity]);
-  useEffect(() => {
-    if (selectedContext) {
-      loadContextNodes(selectedContext.id);
-    }
-  }, [loadContextNodes, selectedContext]);
+    dataPortalDispatch({ type: 'resetSelected' });
+  }, [loadDataDownloadLists, selectedCommodity, selectedCountry]);
 
   const allYearsSelected = state.selectedYears.length === selectedContext?.years.length;
   const allExportersSelected = state.selectedExporters.length === exporters.length;
@@ -221,7 +214,7 @@ function DataPortal(props) {
     if (state.selectedCommodity === null) {
       return [];
     }
-    const contextId = selectedContext.id;
+    const contextId = selectedContext?.id;
     const file = state.fileExtension;
     const params = {
       context_id: contextId
@@ -303,8 +296,8 @@ function DataPortal(props) {
                 dataPortalDispatch={dataPortalDispatch}
                 selectedExporters={state.selectedExporters}
                 selectedYears={state.selectedYears}
-                selectedCountry={state.selectedCountry}
-                selectedCommodity={state.selectedCommodity}
+                selectedCountry={selectedCountry}
+                selectedCommodity={selectedCommodity}
                 allYearsSelected={allYearsSelected}
                 allExportersSelected={allExportersSelected}
                 allConsumptionCountriesSelected={allConsumptionCountriesSelected}
@@ -320,8 +313,8 @@ function DataPortal(props) {
                 fileExtension={state.fileExtension}
                 fileSeparator={state.fileSeparator}
                 outputType={state.outputType}
-                selectedCountry={selectedContext?.countryId}
-                selectedCommodity={selectedContext?.id}
+                selectedCountry={selectedCountry}
+                selectedCommodity={selectedCommodity}
               />
             </div>
           </div>
@@ -337,7 +330,6 @@ DataPortal.propTypes = {
   consumptionCountries: PropTypes.array,
   exporters: PropTypes.array,
   indicators: PropTypes.array,
-  onContextSelected: PropTypes.func,
   onDataDownloadFormLoaded: PropTypes.func,
   onDownloadTriggered: PropTypes.func,
   selectedContext: PropTypes.object

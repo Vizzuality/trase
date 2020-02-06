@@ -1,8 +1,9 @@
 import { createSelector } from 'reselect';
 import uniqBy from 'lodash/uniqBy';
-import { getSelectedContext } from 'reducers/app.selectors';
 
 const getAppContexts = state => state.app.contexts;
+const getSelectedCountry = state => state.data.country;
+const getSelectedCommodity = state => state.data.commodity;
 const getDataPortalExporters = state => state.data.exporters;
 const getDataPortalIndicators = state => state.data.indicators;
 const getDataPortalConsumptionCountries = state => state.data.consumptionCountries;
@@ -20,18 +21,29 @@ export const getCountryOptions = createSelector([getEnabledContexts], enabledCon
 );
 
 export const getCommodityOptions = createSelector(
-  [getEnabledContexts, getSelectedContext],
-  (enabledContexts, selectedContext) =>
-    enabledContexts
-      .filter(context => context.countryId === selectedContext.countryId)
-      .map(context => ({
-        id: context.id,
-        name: context.commodityName.toLowerCase(),
-        noSelfCancel: false
-      }))
+  [getEnabledContexts, getSelectedCountry],
+  (enabledContexts, selectedCountry) =>
+    uniqBy(
+      enabledContexts.filter(context =>
+        selectedCountry ? context.countryId === selectedCountry : true
+      ),
+      context => context.commodityId
+    ).map(context => ({
+      id: context.commodityId,
+      name: context.commodityName.toLowerCase(),
+      noSelfCancel: false
+    }))
 );
 
-export const getYearOptions = createSelector([getSelectedContext], selectedContext => {
+export const getDataDownloadContext = createSelector(
+  [getSelectedCountry, getSelectedCommodity, getEnabledContexts],
+  (selectedCountry, selectedCommodity, contexts) =>
+    contexts.find(
+      ctx => ctx.countryId === selectedCountry && ctx.commodityId === selectedCommodity
+    ) || null
+);
+
+export const getYearOptions = createSelector([getDataDownloadContext], selectedContext => {
   if (selectedContext) {
     return selectedContext.years.map(year => ({
       id: year,

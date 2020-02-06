@@ -4,6 +4,8 @@ import DownloadSelector from 'react-components/data-portal/download-selector.com
 
 function CustomDownload(props) {
   const {
+    setSelectedCountryId,
+    setSelectedCommodityId,
     dataPortalDispatch,
     consumptionCountryOptions,
     selectedExporters,
@@ -31,7 +33,7 @@ function CustomDownload(props) {
             enabled
             options={countryOptions}
             title="PRODUCTION COUNTRIES"
-            onOptionSelected={payload => dataPortalDispatch({ type: 'selectCountry', payload })}
+            onOptionSelected={payload => setSelectedCountryId(payload)}
             selected={[selectedCountry]}
           />
         </div>
@@ -40,7 +42,7 @@ function CustomDownload(props) {
             enabled={selectedCountry !== null}
             options={commodityOptions}
             title="COMMODITIES"
-            onOptionSelected={payload => dataPortalDispatch({ type: 'selectCommodity', payload })}
+            onOptionSelected={payload => setSelectedCommodityId(payload)}
             disabledText="Please select first a country"
             selected={[selectedCommodity]}
           />
@@ -112,6 +114,8 @@ function CustomDownload(props) {
 }
 
 CustomDownload.propTypes = {
+  setSelectedCountryId: PropTypes.func.isRequired,
+  setSelectedCommodityId: PropTypes.func.isRequired,
   dataPortalDispatch: PropTypes.func.isRequired,
   consumptionCountryOptions: PropTypes.array.isRequired,
   selectedExporters: PropTypes.array.isRequired,

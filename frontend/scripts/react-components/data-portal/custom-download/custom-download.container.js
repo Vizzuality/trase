@@ -1,5 +1,9 @@
 import { connect } from 'react-redux';
 import {
+  setSelectedCommodityId,
+  setSelectedCountryId
+} from 'react-components/data-portal/data-portal.actions';
+import {
   getConsumptionCountryOptions,
   getCommodityOptions,
   getCountryOptions,
@@ -18,4 +22,8 @@ const mapStateToProps = state => ({
   indicatorOptions: getIndicatorOptions(state)
 });
 
-export default connect(mapStateToProps)(CustomDownload);
+const mapDispatchToProps = {
+  setSelectedCountryId,
+  setSelectedCommodityId
+};
+export default connect(mapStateToProps, mapDispatchToProps)(CustomDownload);
