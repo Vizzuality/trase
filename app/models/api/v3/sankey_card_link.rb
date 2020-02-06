@@ -27,7 +27,7 @@
 module Api
   module V3
     class SankeyCardLink < YellowTable
-      MAX_PER_LEVEL = 4
+      MAX_PER_LEVEL = {1 => 4, 2 => 4, 3 => 3}.freeze
       LEVELS = [1, 2, 3].freeze
 
       belongs_to :commodity
@@ -74,25 +74,25 @@ module Api
             !will_save_change_to_attribute?("level#{n}") ||
             !send("level#{n}_max_sankey_card_links?")
 
-          message = "there cannot be more than #{MAX_PER_LEVEL} sankey card "\
-                    "links for level#{n}"
+          message = "there cannot be more than #{MAX_PER_LEVEL[n]} sankey "\
+                    "card links for level#{n}"
           errors.add(:"level#{n}", message)
         end
       end
 
       def level1_max_sankey_card_links?
-        Api::V3::SankeyCardLink.where(level1: true).size >= MAX_PER_LEVEL
+        Api::V3::SankeyCardLink.where(level1: true).size >= MAX_PER_LEVEL[1]
       end
 
       def level2_max_sankey_card_links?
         Api::V3::SankeyCardLink.where(commodity_id: commodity_id,
-                                      level2: true).size >= MAX_PER_LEVEL
+                                      level2: true).size >= MAX_PER_LEVEL[2]
       end
 
       def level3_max_sankey_card_links?
         Api::V3::SankeyCardLink.where(commodity_id: commodity_id,
                                       country_id: country_id,
-                                      level3: true).size >= MAX_PER_LEVEL
+                                      level3: true).size >= MAX_PER_LEVEL[3]
       end
 
       def parse_link
