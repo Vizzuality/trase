@@ -64,11 +64,13 @@ RSpec.describe Api::V3::Import::Importer do
 
         @card = FactoryBot.create(
           :api_v3_sankey_card_link,
+          level3: true,
           link: link + "&selectedNodesIds[]=#{@local_id}"
         )
 
         @card_with_excluded = FactoryBot.create(
           :api_v3_sankey_card_link,
+          level3: true,
           link: link + "&sources=excluded_#{@local_id}"
         )
 
@@ -100,6 +102,7 @@ RSpec.describe Api::V3::Import::Importer do
 
         @card = FactoryBot.create(
           :api_v3_sankey_card_link,
+          level3: true,
           link: link + "&selectedNodesIds[]=#{@local_id}"
         )
 
@@ -132,6 +135,7 @@ RSpec.describe Api::V3::Import::Importer do
 
         @card = FactoryBot.create(
           :api_v3_sankey_card_link,
+          level3: true,
           link: link + "&selectedColumnsIds=0_#{@local_id}"
         )
 
@@ -157,6 +161,7 @@ RSpec.describe Api::V3::Import::Importer do
 
         @card = FactoryBot.create(
           :api_v3_sankey_card_link,
+          level3: true,
           link: link + "&selectedColumnsIds=0_#{@local_id}"
         )
 

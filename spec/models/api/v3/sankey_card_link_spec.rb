@@ -21,8 +21,8 @@ RSpec.describe Api::V3::SankeyCardLink, type: :model do
     end
 
     Api::V3::SankeyCardLink::LEVELS.each do |n|
-      it "fails when there are more than #{Api::V3::SankeyCardLink::MAX_PER_LEVEL} for level#{n}" do
-        FactoryBot.create_list(:api_v3_sankey_card_link, Api::V3::SankeyCardLink::MAX_PER_LEVEL, "level#{n}": true)
+      it "fails when there are more than #{Api::V3::SankeyCardLink::MAX_PER_LEVEL[n]} for level#{n}" do
+        FactoryBot.create_list(:api_v3_sankey_card_link, Api::V3::SankeyCardLink::MAX_PER_LEVEL[n], "level#{n}": true)
 
         sankey_card_link = FactoryBot.build(:api_v3_sankey_card_link, "level#{n}": true)
         expect(sankey_card_link).to have(1).errors_on(:"level#{n}")
