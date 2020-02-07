@@ -1,40 +1,80 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-import '../../profiles/chord/chord.scss';
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Button from 'react-components/shared/button/button.component';
+import { FixedSizeGrid } from 'react-window';
+import debounce from 'lodash/debounce';
+import Text from 'react-components/shared/text';
+import cx from 'classnames';
 
 import 'scripts/react-components/data-portal/bulk-downloads-block/bulk-downloads.scss';
 
-class BulkDownloadsBlock extends Component {
-  onBulkDownloadButtonClicked(contextId) {
-    if (!this.props.enabled) return;
-    this.props.onButtonClicked(contextId);
+function BulkDownloadsBlock(props) {
+  const { contexts, enabled, onButtonClicked } = props;
+
+  const [windowWidth, setWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const debouncedSetWidth = debounce(() => setWidth(window.innerWidth), 700);
+    window.addEventListener('resize', debouncedSetWidth);
+    return () => {
+      window.removeEventListener('resize', debouncedSetWidth);
+    };
+  }, []);
+
+  const LARGE = 1078;
+  const columnCount = windowWidth > LARGE ? 3 : 2;
+  const rowHeight = 58;
+  const columnWidth = 346;
+  const width = windowWidth > LARGE ? 1040 : 695;
+  const rowCount = Math.ceil(contexts.length / columnCount);
+
+  function onBulkDownloadButtonClicked(contextId) {
+    if (!enabled) return;
+    onButtonClicked(contextId);
   }
 
-  render() {
-    return (
-      <div className="c-bulk-downloads">
-        <div className="c-bulk-downloads__title">BULK DOWNLOADS</div>
-        <div className="row">
-          {this.props.contexts.map(context => (
-            <div key={context.id} className="small-4 columns">
-              <Button
-                color="charcoal-transparent"
-                size="lg"
-                disabled={!this.props.enabled}
-                className="c-bulk-downloads__item"
-                icon="icon-download"
-                onClick={() => this.onBulkDownloadButtonClicked(context.id)}
+  return (
+    <div className="c-bulk-downloads">
+      <Text variant="mono" weight="bold" size="md">
+        BULK DOWNLOADS
+      </Text>
+      <div className="bulk-download-grid">
+        <FixedSizeGrid
+          height={150}
+          width={width}
+          columnWidth={columnWidth}
+          rowHeight={rowHeight}
+          itemData={contexts}
+          rowCount={rowCount}
+          columnCount={columnCount}
+          outerElementType={p => <div {...p} className="bulk-download-grid-outer-element" />}
+        >
+          {({ rowIndex, columnIndex, style, data }) => {
+            const item = data[rowIndex * columnCount + columnIndex];
+            if (typeof item === 'undefined') return null;
+            return (
+              <div
+                style={style}
+                className={cx('bulk-download-item-container', { '-small': columnCount === 2 })}
               >
-                {context.countryName} - {context.commodityName} (all years)
-              </Button>
-            </div>
-          ))}
-        </div>
+                <Button
+                  color="charcoal-transparent"
+                  size="lg"
+                  disabled={!enabled}
+                  className="bulk-download-item"
+                  icon="icon-download"
+                  onClick={() => onBulkDownloadButtonClicked(item.id)}
+                >
+                  {item.countryName} - {item.commodityName} (all years)
+                </Button>
+              </div>
+            );
+          }}
+        </FixedSizeGrid>
+        <div className="bulk-download-gradient" />
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 BulkDownloadsBlock.propTypes = {

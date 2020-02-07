@@ -13,7 +13,7 @@ import Footer from 'react-components/shared/footer/footer.component';
 import CookieBanner from 'react-components/shared/cookie-banner';
 import Feedback from 'react-components/shared/feedback';
 
-import DataPortalPage from 'react-components/data-portal/data-portal-page.container';
+import DataPortalPage from 'react-components/data-portal/data-portal.container';
 
 export const mount = (root, store) => {
   root.innerHTML = BaseMarkup();
