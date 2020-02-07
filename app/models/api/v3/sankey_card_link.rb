@@ -45,7 +45,6 @@ module Api
       VALID_QUERY_PARAMS = {
         'selectedCountryId' => :selected_country_id,
         'selectedCommodityId' => :selected_commodity_id,
-        'selectedContextId' => :selected_context_id,
         'selectedResizeBy' => :selected_resize_by,
         'selectedRecolorBy' => :selected_recolor_by,
         'selectedYears' => :selected_years,
@@ -149,6 +148,7 @@ module Api
         query_params =
           VALID_QUERY_PARAMS.except('selectedColumnsIds', 'selectedNodesIds')
         query_params.each do |uri_query_param, query_param|
+          puts uri_query_param
           send("extract_#{query_param}") if query_params[uri_query_param]
         end
 
@@ -158,13 +158,17 @@ module Api
       end
 
       def extract_selected_country_id
+        cs_countries_ids = query_params.delete('countries')
         self.country_id =
+          cs_countries_ids&.split(',')&.first ||
           query_params['selectedCountryId'] ||
           Api::V3::Country.find_by(name: 'BRAZIL')&.id
       end
 
       def extract_selected_commodity_id
+        cs_commodities_ids = query_params.delete('commodities')
         self.commodity_id =
+          cs_commodities_ids&.split(',')&.first ||
           query_params['selectedCommodityId'] ||
           Api::V3::Commodity.find_by(name: 'SOY')&.id
       end
@@ -281,6 +285,7 @@ module Api
       end
 
       def update_query_params
+        puts query_params.inspect
         if query_params['selectedCountryId'] != country_id
           query_params['selectedCountryId'] = country_id
         end
