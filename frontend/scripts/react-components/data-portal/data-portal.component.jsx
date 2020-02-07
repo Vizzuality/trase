@@ -24,7 +24,8 @@ const initialState = {
   fileExtension: '.csv',
   fileSeparator: 'comma',
   downloadType: null,
-  downloaded: false
+  downloaded: false,
+  bulkContext: null
 };
 
 function DataPortal(props) {
@@ -43,10 +44,22 @@ function DataPortal(props) {
   } = props;
   function reducer(state, action) {
     switch (action.type) {
-      case 'setForm':
-        return { ...state, formVisible: action.payload };
+      case 'closeForm':
+        return {
+          ...state,
+          formVisible: false,
+          bulkContext: null,
+          downloaded: false,
+          downloadType: null
+        };
       case 'setDownloadType':
-        return { ...state, downloadType: action.payload, formVisible: true, downloaded: false };
+        return {
+          ...state,
+          downloadType: action.payload.type,
+          formVisible: true,
+          downloaded: false,
+          bulkContext: action.payload.id
+        };
       case 'selectAllYears': {
         const allYearsSelected = state.selectedYears.length === selectedContext?.years.length;
         if (allYearsSelected) {
@@ -179,6 +192,13 @@ function DataPortal(props) {
           selectedIndicatorsFilters: {}
         };
       }
+      case 'setDownloaded': {
+        return {
+          ...state,
+          downloaded: true,
+          formVisible: false
+        };
+      }
       default:
         return state;
     }
@@ -210,8 +230,8 @@ function DataPortal(props) {
     );
   }, [allIndicatorsSelected, state.selectedIndicators, state.selectedIndicatorsFilters]);
 
-  const downloadURLParams = useMemo(() => {
-    if (state.selectedCommodity === null) {
+  const getDownloadURLParams = () => {
+    if (!selectedContext) {
       return [];
     }
     const contextId = selectedContext?.id;
@@ -231,23 +251,13 @@ function DataPortal(props) {
     params[state.outputType] = 1;
 
     return params;
-  }, [
-    allConsumptionCountriesSelected,
-    allExportersSelected,
-    allYearsSelected,
-    indicatorFilters,
-    selectedContext,
-    state.fileExtension,
-    state.fileSeparator,
-    state.outputType,
-    state.selectedCommodity,
-    state.selectedConsumptionCountries,
-    state.selectedExporters,
-    state.selectedYears
-  ]);
+  };
 
-  const downloadFile = inputParams => {
-    const params = inputParams || downloadURLParams;
+  const downloadFile = () => {
+    const params =
+      state.downloadType === 'bulk'
+        ? { context_id: state.bulkContext, pivot: 1 }
+        : getDownloadURLParams();
     if (!params.context_id) {
       return;
     }
@@ -278,7 +288,7 @@ function DataPortal(props) {
       <DataPortalForm
         autoCompleteCountries={autoCompleteCountries}
         isFormVisible={state.formVisible}
-        closeForm={() => dataPortalDispatch({ type: 'setForm', payload: false })}
+        closeForm={() => dataPortalDispatch({ type: 'closeForm' })}
         downloadFile={downloadFile}
         downloaded={state.downloaded}
       />
@@ -286,7 +296,9 @@ function DataPortal(props) {
         <BulkDownloadsBlock
           contexts={enabledContexts}
           enabled={DATA_DOWNLOAD_ENABLED}
-          onButtonClicked={() => dataPortalDispatch({ type: 'setDownloadType', payload: 'bulk' })}
+          onButtonClicked={id =>
+            dataPortalDispatch({ type: 'setDownloadType', payload: { type: 'bulk', id } })
+          }
         />
         <div className="c-custom-dataset">
           <div className="c-custom-dataset__title">CREATE A CUSTOM DATASET</div>
