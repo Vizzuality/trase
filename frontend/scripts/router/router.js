@@ -154,7 +154,7 @@ export const routes = {
     path: '/data',
     Component: lazy(() =>
       import(
-        /* webpackChunkName: "data-portal" */ '../react-components/data-portal/data-portal-page.container'
+        /* webpackChunkName: "data-portal" */ '../react-components/data-portal/data-portal.container'
       )
     ),
     title: getPageTitle,
