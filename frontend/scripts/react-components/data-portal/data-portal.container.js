@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { loadDataDownloadLists } from 'react-components/data-portal/data-portal.actions';
+import { dataPortalActions } from 'react-components/data-portal/data-portal.register';
 import { trackDataDownloadFormLoaded, trackDownload } from 'analytics/analytics.actions';
 import {
   getDataDownloadContext,
@@ -18,7 +18,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  loadDataDownloadLists,
+  loadDataDownloadLists: dataPortalActions.loadDataDownloadLists,
   onDownloadTriggered: trackDownload,
   onDataDownloadFormLoaded: trackDataDownloadFormLoaded
 };

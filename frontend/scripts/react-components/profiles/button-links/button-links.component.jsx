@@ -15,8 +15,9 @@ const links = [
     heading: 'DATA',
     section: 'data-view',
     subtitle: 'GO TO DATA VIEW',
-    img: '',
-    layout: TOOL_LAYOUT.right
+    img: '/images/profiles/profile-main-option-1.svg',
+    layout: TOOL_LAYOUT.right,
+    className: 'data-view-image'
   },
   {
     heading: 'LOCATION IMPACT',
@@ -66,7 +67,7 @@ function ButtonLinks(props) {
                   <Icon icon="icon-external-link" color="elephant" />
                 </div>
               </div>
-              <Img title={link.subtitle} src={link.img} />
+              <Img className={link.className} title={link.subtitle} src={link.img} />
             </Link>
           </div>
         ))}
