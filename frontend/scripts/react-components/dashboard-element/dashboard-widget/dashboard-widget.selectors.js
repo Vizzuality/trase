@@ -6,15 +6,15 @@ import capitalize from 'lodash/capitalize';
 import addApostrophe from 'utils/addApostrophe';
 import { getChartConfig } from 'react-components/dashboard-element/dashboard-widget/dashboard-widget-config';
 import { CHART_TYPES, NODE_TYPE_PANELS } from 'constants';
+import pluralize from 'utils/pluralize';
 import {
   getDashboardsContext,
   getDashboardSelectedRecolorBy
 } from 'react-components/dashboard-element/dashboard-element.selectors';
-
 import { getSelectedRecolorBy } from 'react-components/tool-links/tool-links.selectors';
 import { getSelectedContext } from 'app/app.selectors';
 
-import pluralize from 'utils/pluralize';
+const getPage = state => state.location.type;
 
 export const PARSED_CHART_TYPES = {
   bar_chart: CHART_TYPES.bar,

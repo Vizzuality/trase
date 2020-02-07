@@ -342,6 +342,9 @@ function DataPortal(props) {
 }
 
 DataPortal.propTypes = {
+  selectedCountry: PropTypes.number,
+  selectedCommodity: PropTypes.number,
+  loadDataDownloadLists: PropTypes.func.isRequired,
   autoCompleteCountries: PropTypes.string,
   enabledContexts: PropTypes.array.isRequired,
   consumptionCountries: PropTypes.array,

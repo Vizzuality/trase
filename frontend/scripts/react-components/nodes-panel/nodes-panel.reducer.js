@@ -106,7 +106,7 @@ const deserializeInternalLink = (state, action) => {
       state: nodesPanelInitialState,
       ...nodesPanelSerialization
     });
-    if (params) {
+    if (params && params.__temporaryExpandedNodes) {
       newState.__temporaryExpandedNodes = params.__temporaryExpandedNodes;
     }
     return newState;
