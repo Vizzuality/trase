@@ -2,6 +2,7 @@
 import React from 'react';
 import showdown from 'showdown';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 
 const converter = new showdown.Converter();
 
@@ -9,7 +10,7 @@ const converter = new showdown.Converter();
 function ShowdownComponent(props) {
   return (
     <div
-      className={props.className}
+      className={cx('markdown-content', props.className)}
       dangerouslySetInnerHTML={{ __html: converter.makeHtml(props.content) }}
     />
   );
