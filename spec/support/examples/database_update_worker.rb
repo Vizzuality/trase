@@ -7,6 +7,9 @@ shared_examples 'a database update worker' do
     allow(
       Api::V3::Download::PrecomputedDownload
     ).to receive(:refresh)
+    allow_any_instance_of(
+      Api::V3::SankeyCardLinks::RefreshQueryParams
+    ).to receive(:call)
   end
 
   context 'When processing a successful database import' do

@@ -50,6 +50,12 @@ module Api
           def key_backup_table
             'bkp_key_' + table_name
           end
+
+          def ids_map
+            query = "SELECT id, new_id FROM #{key_backup_table}"
+            result = connection.execute query
+            Hash[result.map { |r| [r['id'], r['new_id']] }]
+          end
         end
       end
     end
