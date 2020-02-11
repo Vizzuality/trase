@@ -42,22 +42,31 @@ module Api
         def initialize_meta
           @meta = {}
 
-          sankey_card_link_nodes_ids =
-            @sankey_card_links.map(&:sankey_card_link_node_ids).flatten.uniq
-          sankey_card_link_nodes =
-            Api::V3::SankeyCardLinkNode.where(id: sankey_card_link_nodes_ids)
+          nodes_ids = @sankey_card_links.map(&:nodes_ids).flatten.uniq
+          nodes = Api::V3::Node.where(id: nodes_ids)
           @meta[:nodes] = ActiveModelSerializers::SerializableResource.new(
-            sankey_card_link_nodes,
+            nodes,
             each_serializer: Api::V3::SankeyCardLinks::NodeSerializer,
             root: 'nodes'
           ).serializable_hash[:nodes].uniq
 
-          sankey_card_link_node_type_ids =
-            @sankey_card_links.map(&:sankey_card_link_node_type_ids).flatten.uniq
-          sankey_card_link_node_types = Api::V3::SankeyCardLinkNodeType.
-            where(id: sankey_card_link_node_type_ids)
+          context_node_types = @sankey_card_links.map do |card|
+            Api::V3::ContextNodeType.
+              joins(:context).
+              includes(:context_node_type_property).
+              where(
+                'contexts.country_id' => card.country_id,
+                'contexts.commodity_id' => card.commodity_id,
+                node_type_id: card.node_types_ids
+              )
+          end.flatten.uniq
+
+          # sankey_card_link_node_type_ids =
+          #   @sankey_card_links.map(&:sankey_card_link_node_type_ids).flatten.uniq
+          # sankey_card_link_node_types = Api::V3::SankeyCardLinkNodeType.
+          #   where(id: sankey_card_link_node_type_ids)
           columns = ActiveModelSerializers::SerializableResource.new(
-            sankey_card_link_node_types,
+            context_node_types,
             each_serializer: Api::V3::SankeyCardLinks::ColumnSerializer,
             root: 'columns'
           ).serializable_hash[:columns]
