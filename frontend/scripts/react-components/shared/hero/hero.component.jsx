@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import TwitterFeed from 'react-components/home/twitter-feed/twitter-feed.component';
@@ -72,17 +72,19 @@ class Hero extends React.Component {
                   />
                 </div>
                 <h1 className="hero-title">Transparent supply chains for sustainable economies.</h1>
-                {!isLegacyBrowser && (
-                  <div className="hero-play-container">
-                    <HomeVideo
-                      className="c-home-video"
-                      ref={this.getVideoRef}
-                      videoId={homeVideo}
-                    />
-                    <button className="hero-play-button" onClick={this.onClickPlay} />
-                    <span>Learn about Trase in 2 minutes</span>
-                  </div>
-                )}
+                <Suspense fallback={null}>
+                  {!isLegacyBrowser && (
+                    <div className="hero-play-container">
+                      <HomeVideo
+                        className="c-home-video"
+                        ref={this.getVideoRef}
+                        videoId={homeVideo}
+                      />
+                      <button className="hero-play-button" onClick={this.onClickPlay} />
+                      <span>Learn about Trase in 2 minutes</span>
+                    </div>
+                  )}
+                </Suspense>
               </div>
               {showStory && story && (
                 <div className="layover">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import ErrorCatch from 'react-components/shared/error-catch.component';
 
@@ -9,9 +9,11 @@ const RemarkComponent = React.lazy(() => import('./remark-component.component'))
 const ShowdownComponent = React.lazy(() => import('./showdown-component.component'));
 
 const MarkdownRenderer = props => (
-  <ErrorCatch renderFallback={() => <ShowdownComponent {...props} />}>
-    <RemarkComponent {...props} />
-  </ErrorCatch>
+  <Suspense fallback={null}>
+    <ErrorCatch renderFallback={() => <ShowdownComponent {...props} />}>
+      <RemarkComponent {...props} />
+    </ErrorCatch>
+  </Suspense>
 );
 
 MarkdownRenderer.propTypes = {
