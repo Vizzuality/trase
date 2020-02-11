@@ -1,6 +1,7 @@
 /* eslint-disable global-require,import/no-extraneous-dependencies */
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
+import promiseFinally from 'promise.prototype.finally';
 import parseURL from 'utils/parseURL';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
@@ -28,6 +29,8 @@ import { setTransifexLanguages } from './actions/app.actions';
 import 'styles/_base.scss';
 import 'styles/_texts.scss';
 import 'styles/_foundation.css';
+
+promiseFinally.shim();
 
 const sagaMiddleware = createSagaMiddleware();
 
