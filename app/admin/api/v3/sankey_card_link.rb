@@ -1,7 +1,7 @@
 ActiveAdmin.register Api::V3::SankeyCardLink, as: 'SankeyCardLinks' do
   menu parent: 'Sankey & Map'
 
-  permit_params :link_param, :title, :subtitle, :level1, :level2, :level3
+  permit_params :link, :title, :subtitle, :level1, :level2, :level3
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -14,7 +14,7 @@ ActiveAdmin.register Api::V3::SankeyCardLink, as: 'SankeyCardLinks' do
   form do |f|
     f.semantic_errors
     inputs do
-      input :link_param, input_html: {value: f.object.link}, as: :string, required: true
+      input :link, as: :string, required: true
       input :title, as: :string, required: true,
                     hint: object.class.column_comment('title')
       input :subtitle, as: :string, hint: object.class.column_comment('subtitle')

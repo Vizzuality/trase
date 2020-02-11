@@ -13,14 +13,11 @@ module Api
         end
         
         def call
-          puts @ids_map.inspect
           ids_to_replace = @ids_map.select { |k, v| k != v }.keys
           ids_to_keep = @ids_map.values
 
           Api::V3::SankeyCardLink.all.each do |card|
             query_params = card.query_params
-            puts "QUERY PARAMS AT BEGINNING"
-            puts query_params.inspect
             # iterate through query params
             @query_param_wrappers.each do |qp_name, qp_wrapper|
               # wrapper object to manipulate the value of query param
@@ -29,8 +26,6 @@ module Api
 
               # replace changed ids in query param value
               ids_to_replace = query_param_object & ids_to_replace
-              puts "IDS TO REPLACE"
-              puts ids_to_replace.inspect
               if ids_to_replace.any?
                 query_param_object.replace!(
                   ids_to_replace, @ids_map.values_at(*ids_to_replace)
@@ -38,8 +33,6 @@ module Api
               end
               # delete removed ids in query param value
               ids_to_delete = query_param_object - ids_to_keep
-              puts "IDS TO DELETE"
-              puts ids_to_delete.inspect
               if ids_to_delete.any?
                 query_param_object.delete!(ids_to_delete)
               end
@@ -51,8 +44,6 @@ module Api
               end
             end
             card.update_query_params(query_params)
-            puts "QUERY PARAMS AT END"
-            puts query_params.inspect
           end
         end
       end
