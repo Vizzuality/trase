@@ -24,6 +24,7 @@ module Api
           refresh_profiles_later
           refresh_precomputed_downloads_later
           refresh_attributes_years
+          refresh_id_references
           @database_update.finished_with_success(@stats.to_h)
         rescue => e
           @database_update.finished_with_error(e, @stats.to_h)
@@ -47,6 +48,8 @@ module Api
               )
             end
           end
+          @nodes_ids_map = Api::V3::Node.ids_map
+          @node_types_ids_map = Api::V3::NodeType.ids_map
         end
 
         def import
@@ -162,6 +165,21 @@ module Api
           TABLES_TO_REFRESH_YEARS.each do |table_class|
             table_class.all.each { |ra| ra.send(:set_years) }
           end
+        end
+
+        def refresh_id_references
+          Api::V3::SankeyCardLinks::RefreshQueryParams.new(
+            @nodes_ids_map,
+            Api::V3::SankeyCardLinks::QueryParams.
+              instance.
+              node_query_param_wrappers
+          ).call
+          Api::V3::SankeyCardLinks::RefreshQueryParams.new(
+            @node_types_ids_map,
+            Api::V3::SankeyCardLinks::QueryParams.
+              instance.
+              node_type_query_param_wrappers
+          ).call
         end
       end
     end
