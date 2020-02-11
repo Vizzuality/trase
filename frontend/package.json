@@ -178,6 +178,7 @@
     "remark": "^11.0.1",
     "remark-react": "^5.0.1",
     "reselect": "^4.0.0",
+    "showdown": "^1.9.1",
     "storybook-addon-jsx": "^7.1.6",
     "tippy.js": "^4.3.5",
     "tooltip.js": "^1.3.2",

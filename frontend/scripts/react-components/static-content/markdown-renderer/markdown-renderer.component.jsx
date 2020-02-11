@@ -1,32 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import remark from 'remark';
-import remarkReact from 'remark-react';
-import cx from 'classnames';
-import Link from 'redux-first-router-link';
+import ErrorCatch from 'react-components/shared/error-catch.component';
 
-const MarkdownRenderer = props => {
-  const { content, className } = props;
+// renders markdown as react using an AST - optimal (not working on IE11)
+const RemarkComponent = React.lazy(() => import('./remark-component.component'));
 
-  const MarkdownContainer = p => (
-    <div className={cx('markdown-content', className)}>{p.children}</div>
-  );
-  const SmartLink = p => {
-    const isAbsoluteLink = /^http(s)?:\/\//.test(p.href);
-    const isEmail = /^mailto:/.test(p.href);
-    if (!isAbsoluteLink && !isEmail) {
-      return <Link to={p.href}>{p.children}</Link>;
-    }
-    return (
-      <a href={p.href} target="_blank" rel="noopener noreferrer" tx-content="translate_urls">
-        {p.children}
-      </a>
-    );
-  };
-  return remark()
-    .use(remarkReact, { remarkReactComponents: { div: MarkdownContainer, a: SmartLink } })
-    .processSync(content).contents;
-};
+// renders markdown as html using dangerouslySetInnerHTML - non optimal
+const ShowdownComponent = React.lazy(() => import('./showdown-component.component'));
+
+const MarkdownRenderer = props => (
+  <ErrorCatch renderFallback={() => <ShowdownComponent {...props} />}>
+    <RemarkComponent {...props} />
+  </ErrorCatch>
+);
 
 MarkdownRenderer.propTypes = {
   content: PropTypes.string,

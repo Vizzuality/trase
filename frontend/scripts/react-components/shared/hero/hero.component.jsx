@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import cx from 'classnames';
 import TwitterFeed from 'react-components/home/twitter-feed/twitter-feed.component';
 import AnimatedFlows from 'react-components/animated-flows/animated-flows.component';
-import HomeVideo from 'react-components/home/home-video/home-video.component';
 import Heading from 'react-components/shared/heading/heading.component';
 import InView from 'react-components/shared/in-view.component';
 import { ImgBackground } from 'react-components/shared/img';
 
 import './hero.scss';
+
+const HomeVideo = React.lazy(() => import('../../home/home-video/home-video.component'));
 
 // old school name: https://en.wikipedia.org/wiki/Hero_image
 class Hero extends React.Component {
@@ -33,6 +34,9 @@ class Hero extends React.Component {
   render() {
     const { showStory } = this.state;
     const { className, story, tweets, homeVideo } = this.props;
+    const isLegacyBrowser =
+      (!window.ActiveXObject && 'ActiveXObject' in window) ||
+      /bot|google|baidu|bing|msn|duckduckbot|teoma|slurp|yandex/i.test(navigator.userAgent);
     const StoryBox = storyObj => (
       <div className="story-box">
         <button className="story-box-close" onClick={this.closeStoryBox} />
@@ -68,11 +72,17 @@ class Hero extends React.Component {
                   />
                 </div>
                 <h1 className="hero-title">Transparent supply chains for sustainable economies.</h1>
-                <div className="hero-play-container">
-                  <HomeVideo className="c-home-video" ref={this.getVideoRef} videoId={homeVideo} />
-                  <button className="hero-play-button" onClick={this.onClickPlay} />
-                  <span>Learn about Trase in 2 minutes</span>
-                </div>
+                {!isLegacyBrowser && (
+                  <div className="hero-play-container">
+                    <HomeVideo
+                      className="c-home-video"
+                      ref={this.getVideoRef}
+                      videoId={homeVideo}
+                    />
+                    <button className="hero-play-button" onClick={this.onClickPlay} />
+                    <span>Learn about Trase in 2 minutes</span>
+                  </div>
+                )}
               </div>
               {showStory && story && (
                 <div className="layover">
