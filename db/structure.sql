@@ -6307,89 +6307,22 @@ ALTER SEQUENCE public.resize_by_quants_id_seq OWNED BY public.resize_by_quants.i
 
 
 --
--- Name: sankey_card_link_node_types; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.sankey_card_link_node_types (
-    id bigint NOT NULL,
-    context_node_type_property_id bigint,
-    sankey_card_link_id bigint,
-    node_type_id bigint,
-    column_group integer NOT NULL
-);
-
-
---
--- Name: sankey_card_link_node_types_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.sankey_card_link_node_types_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: sankey_card_link_node_types_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.sankey_card_link_node_types_id_seq OWNED BY public.sankey_card_link_node_types.id;
-
-
---
--- Name: sankey_card_link_nodes; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.sankey_card_link_nodes (
-    id bigint NOT NULL,
-    sankey_card_link_id bigint,
-    node_id bigint
-);
-
-
---
--- Name: sankey_card_link_nodes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.sankey_card_link_nodes_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: sankey_card_link_nodes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.sankey_card_link_nodes_id_seq OWNED BY public.sankey_card_link_nodes.id;
-
-
---
 -- Name: sankey_card_links; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.sankey_card_links (
     id bigint NOT NULL,
-    host text NOT NULL,
     query_params json NOT NULL,
     title text NOT NULL,
     subtitle text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    start_year integer NOT NULL,
-    end_year integer NOT NULL,
-    node_id bigint,
     level1 boolean DEFAULT false NOT NULL,
     level2 boolean DEFAULT false NOT NULL,
     level3 boolean DEFAULT false NOT NULL,
     country_id bigint,
     commodity_id bigint,
-    cont_attribute_id bigint,
-    ncont_attribute_id bigint
+    link text
 );
 
 
@@ -7067,20 +7000,6 @@ ALTER TABLE ONLY public.resize_by_attributes ALTER COLUMN id SET DEFAULT nextval
 --
 
 ALTER TABLE ONLY public.resize_by_quants ALTER COLUMN id SET DEFAULT nextval('public.resize_by_quants_id_seq'::regclass);
-
-
---
--- Name: sankey_card_link_node_types id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sankey_card_link_node_types ALTER COLUMN id SET DEFAULT nextval('public.sankey_card_link_node_types_id_seq'::regclass);
-
-
---
--- Name: sankey_card_link_nodes id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sankey_card_link_nodes ALTER COLUMN id SET DEFAULT nextval('public.sankey_card_link_nodes_id_seq'::regclass);
 
 
 --
@@ -8270,22 +8189,6 @@ ALTER TABLE ONLY public.resize_by_quants
 
 
 --
--- Name: sankey_card_link_node_types sankey_card_link_node_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sankey_card_link_node_types
-    ADD CONSTRAINT sankey_card_link_node_types_pkey PRIMARY KEY (id);
-
-
---
--- Name: sankey_card_link_nodes sankey_card_link_nodes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sankey_card_link_nodes
-    ADD CONSTRAINT sankey_card_link_nodes_pkey PRIMARY KEY (id);
-
-
---
 -- Name: sankey_card_links sankey_card_links_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8857,34 +8760,6 @@ CREATE UNIQUE INDEX ind_values_meta_mv_ind_id_idx ON public.ind_values_meta_mv U
 
 
 --
--- Name: index_sankey_card_link_node_types_on_node_type_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_sankey_card_link_node_types_on_node_type_id ON public.sankey_card_link_node_types USING btree (node_type_id);
-
-
---
--- Name: index_sankey_card_link_node_types_on_sankey_card_link_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_sankey_card_link_node_types_on_sankey_card_link_id ON public.sankey_card_link_node_types USING btree (sankey_card_link_id);
-
-
---
--- Name: index_sankey_card_link_nodes_on_node_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_sankey_card_link_nodes_on_node_id ON public.sankey_card_link_nodes USING btree (node_id);
-
-
---
--- Name: index_sankey_card_link_nodes_on_sankey_card_link_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_sankey_card_link_nodes_on_sankey_card_link_id ON public.sankey_card_link_nodes USING btree (sankey_card_link_id);
-
-
---
 -- Name: index_sankey_card_links_on_commodity_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8892,31 +8767,10 @@ CREATE INDEX index_sankey_card_links_on_commodity_id ON public.sankey_card_links
 
 
 --
--- Name: index_sankey_card_links_on_cont_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_sankey_card_links_on_cont_attribute_id ON public.sankey_card_links USING btree (cont_attribute_id);
-
-
---
 -- Name: index_sankey_card_links_on_country_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_sankey_card_links_on_country_id ON public.sankey_card_links USING btree (country_id);
-
-
---
--- Name: index_sankey_card_links_on_ncont_attribute_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_sankey_card_links_on_ncont_attribute_id ON public.sankey_card_links USING btree (ncont_attribute_id);
-
-
---
--- Name: index_sankey_card_links_on_node_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_sankey_card_links_on_node_id ON public.sankey_card_links USING btree (node_id);
 
 
 --
@@ -9305,13 +9159,6 @@ CREATE INDEX resize_by_quants_resize_by_attribute_id_idx ON public.resize_by_qua
 
 
 --
--- Name: sankey_card_link_node_types_context_node_type_property_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX sankey_card_link_node_types_context_node_type_property_id_idx ON public.sankey_card_link_node_types USING btree (context_node_type_property_id);
-
-
---
 -- Name: staff_members fk_rails_6ad8424ffc; Type: FK CONSTRAINT; Schema: content; Owner: -
 --
 
@@ -9349,14 +9196,6 @@ ALTER TABLE ONLY public.flow_inds
 
 ALTER TABLE ONLY public.dashboards_quals
     ADD CONSTRAINT fk_rails_122397808e FOREIGN KEY (dashboards_attribute_id) REFERENCES public.dashboards_attributes(id) ON DELETE CASCADE;
-
-
---
--- Name: sankey_card_link_nodes fk_rails_1428ad7ffd; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sankey_card_link_nodes
-    ADD CONSTRAINT fk_rails_1428ad7ffd FOREIGN KEY (node_id) REFERENCES public.nodes(id);
 
 
 --
@@ -9405,14 +9244,6 @@ ALTER TABLE ONLY public.download_attributes
 
 ALTER TABLE ONLY public.chart_attributes
     ADD CONSTRAINT fk_rails_18fff2d805 FOREIGN KEY (chart_id) REFERENCES public.charts(id) ON DELETE CASCADE;
-
-
---
--- Name: sankey_card_link_node_types fk_rails_1a85ec11cd; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sankey_card_link_node_types
-    ADD CONSTRAINT fk_rails_1a85ec11cd FOREIGN KEY (sankey_card_link_id) REFERENCES public.sankey_card_links(id);
 
 
 --
@@ -9477,14 +9308,6 @@ ALTER TABLE ONLY public.recolor_by_inds
 
 ALTER TABLE ONLY public.top_profile_images
     ADD CONSTRAINT fk_rails_29f1862b03 FOREIGN KEY (commodity_id) REFERENCES public.commodities(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: sankey_card_links fk_rails_2c41bcb873; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sankey_card_links
-    ADD CONSTRAINT fk_rails_2c41bcb873 FOREIGN KEY (cont_attribute_id) REFERENCES public.attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -9648,14 +9471,6 @@ ALTER TABLE ONLY public.contextual_layers
 
 
 --
--- Name: sankey_card_link_node_types fk_rails_610fd60c08; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sankey_card_link_node_types
-    ADD CONSTRAINT fk_rails_610fd60c08 FOREIGN KEY (node_type_id) REFERENCES public.node_types(id);
-
-
---
 -- Name: country_properties fk_rails_668b355aa6; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9693,14 +9508,6 @@ ALTER TABLE ONLY public.quant_context_properties
 
 ALTER TABLE ONLY public.flow_quals
     ADD CONSTRAINT fk_rails_6e55ca4cbc FOREIGN KEY (flow_id) REFERENCES public.flows(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: sankey_card_link_nodes fk_rails_70f69f2537; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sankey_card_link_nodes
-    ADD CONSTRAINT fk_rails_70f69f2537 FOREIGN KEY (sankey_card_link_id) REFERENCES public.sankey_card_links(id);
 
 
 --
@@ -9813,14 +9620,6 @@ ALTER TABLE ONLY public.dashboards_attributes
 
 ALTER TABLE ONLY public.carto_layers
     ADD CONSTRAINT fk_rails_9b2f0fa157 FOREIGN KEY (contextual_layer_id) REFERENCES public.contextual_layers(id) ON DELETE CASCADE;
-
-
---
--- Name: sankey_card_link_node_types fk_rails_a152a2cab3; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sankey_card_link_node_types
-    ADD CONSTRAINT fk_rails_a152a2cab3 FOREIGN KEY (context_node_type_property_id) REFERENCES public.context_node_type_properties(id);
 
 
 --
@@ -10000,14 +9799,6 @@ ALTER TABLE ONLY public.download_quants
 
 
 --
--- Name: sankey_card_links fk_rails_e3c8c4d772; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sankey_card_links
-    ADD CONSTRAINT fk_rails_e3c8c4d772 FOREIGN KEY (node_id) REFERENCES public.nodes(id);
-
-
---
 -- Name: node_quants fk_rails_e5f4cc54e9; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -10029,14 +9820,6 @@ ALTER TABLE ONLY public.download_quals
 
 ALTER TABLE ONLY public.top_profiles
     ADD CONSTRAINT fk_rails_eb02423c0e FOREIGN KEY (node_id) REFERENCES public.nodes(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: sankey_card_links fk_rails_ec3ba51bdb; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sankey_card_links
-    ADD CONSTRAINT fk_rails_ec3ba51bdb FOREIGN KEY (ncont_attribute_id) REFERENCES public.attributes(id) ON DELETE CASCADE;
 
 
 --
@@ -10218,6 +10001,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191219221216'),
 ('20200106092554'),
 ('20200107131928'),
-('20200123163215');
+('20200123163215'),
+('20200207162026');
 
 
