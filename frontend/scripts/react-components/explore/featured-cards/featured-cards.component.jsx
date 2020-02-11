@@ -4,7 +4,7 @@ import Text from 'react-components/shared/text';
 import PropTypes from 'prop-types';
 import capitalize from 'lodash/capitalize';
 import { EXPLORE_STEPS } from 'constants';
-import { useTransition, animated } from 'react-spring';
+import { useTransition, animated } from 'react-spring/web.cjs';
 import ResizeListener from 'react-components/shared/resize-listener.component';
 import { ImgBackground } from 'react-components/shared/img';
 import cx from 'classnames';
