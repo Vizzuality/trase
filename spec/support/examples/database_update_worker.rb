@@ -17,7 +17,6 @@ shared_examples 'a database update worker' do
       allow_any_instance_of(
         Api::V3::Import::Importer
       ).to receive(:import).and_return({})
-      allow(Cache::Warmer::UrlsFile).to receive(:generate)
     end
 
     it 'updates database_updates status to FINISHED' do

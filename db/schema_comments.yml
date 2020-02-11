@@ -67,8 +67,6 @@ tables:
         comment: id of commodity coming from this node
       - name: country_id
         comment: id of country sourcing commodity coming from this node
-      - name: nodes_ids
-        comment: array of ids of other nodes from the same supply chain
   - name: dashboards_exporters
     comment: 'Materialized table used for listing exporters in tool search panels'
     columns:
@@ -78,8 +76,6 @@ tables:
         comment: id of commodity traded by this node
       - name: country_id
         comment: id of country sourcing commodity traded by this node
-      - name: nodes_ids
-        comment: array of ids of other nodes from the same supply chain
   - name: dashboards_importers
     comment: 'Materialized table used for listing importers in tool search panels'
     columns:
@@ -89,8 +85,6 @@ tables:
         comment: id of commodity traded by this node
       - name: country_id
         comment: id of country sourcing commodity traded by this node
-      - name: nodes_ids
-        comment: array of ids of other nodes from the same supply chain
   - name: dashboards_destinations
     comment: 'Materialized table used for listing destinations in tool search panels'
     columns:
@@ -100,8 +94,6 @@ tables:
         comment: id of commodity going to this node
       - name: country_id
         comment: id of country sourcing commodity going to this node
-      - name: nodes_ids
-        comment: array of ids of other nodes from the same supply chain
   - name: quant_context_properties
     comment: Context specific properties for quant (like tooltip text)
     columns:

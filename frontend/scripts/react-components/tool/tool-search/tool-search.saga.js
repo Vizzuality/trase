@@ -10,7 +10,7 @@ function* checkExpandNode() {
     const { results } = payload;
     const ids = results.map(n => n.id);
     const visibleNodes = yield select(getVisibleNodes);
-    const visibleNodesById = visibleNodes.reduce((acc, next) => ({ ...acc, [next.id]: true }), {});
+    const visibleNodesById = visibleNodes?.reduce((acc, next) => ({ ...acc, [next.id]: true }), {}) || {};
     const hasInvisibleNodes = ids.some(id => !visibleNodesById[id]);
     if (hasInvisibleNodes) {
       yield put(expandSankey());

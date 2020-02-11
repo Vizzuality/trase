@@ -219,7 +219,7 @@
     }
   }
 
-  &.-minified {
+  &.-minimized  {
     .c-map-legend,
     .c-map-attribution,
     .leaflet-control-container {
@@ -227,7 +227,7 @@
     }
   }
 
-  &:not(.-minified) {
+  &:not(.-minimized) {
     .leaflet-control-container {
       display: initial;
     }

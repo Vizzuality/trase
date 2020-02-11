@@ -6,14 +6,17 @@ module Api
           private
 
           def flow_query
-            Api::V3::Flow.where(context_id: @context.id).order(false)
+            Api::V3::Flow.
+              from('partitioned_flows flows').
+              where(context_id: @context.id).
+              order(false)
           end
 
           def apply_cont_attribute_y
             cont_attr_table = @cont_attribute.flow_values_class.table_name
             @query = @query.
               select("SUM(#{cont_attr_table}.value) AS y0").
-              joins(cont_attr_table.to_sym).
+              joins("JOIN partitioned_#{cont_attr_table} #{cont_attr_table} ON #{cont_attr_table}.flow_id = flows.id").
               where(
                 "#{cont_attr_table}.#{@cont_attribute.attribute_id_name}" =>
                   @cont_attribute.original_id
@@ -24,7 +27,7 @@ module Api
             ncont_attr_table = @ncont_attribute.flow_values_class.table_name
             @query = @query.
               select("#{ncont_attr_table}.value AS x").
-              joins("LEFT JOIN #{ncont_attr_table} ON #{ncont_attr_table}.flow_id = flows.id").
+              joins("LEFT JOIN partitioned_#{ncont_attr_table} #{ncont_attr_table} ON #{ncont_attr_table}.flow_id = flows.id").
               where(
                 "#{ncont_attr_table}.#{@ncont_attribute.attribute_id_name}" =>
                   @ncont_attribute.original_id
@@ -34,16 +37,23 @@ module Api
 
           def apply_node_type_x
             @query = @query.
-              select('nodes.id, nodes.node_type_id, nodes.name AS x, nodes.is_unknown').
-              joins("JOIN nodes ON nodes.id = flows.path[#{@node_type_idx}]").
-              group('nodes.id')
+              select([
+                "flows.path[#{@node_type_idx}] AS id",
+                "flows.names[#{@node_type_idx}] AS x",
+                "NOT flows.known_path_positions[#{@node_type_idx}] AS is_unknown"
+              ]).
+              group([
+                "flows.path[#{@node_type_idx}]",
+                "flows.names[#{@node_type_idx}]",
+                "NOT flows.known_path_positions[#{@node_type_idx}]"
+              ])
           end
 
           def apply_ncont_attribute_break_by
             ncont_attr_table = @ncont_attribute.flow_values_class.table_name
             @query = @query.
               select("#{ncont_attr_table}.value::TEXT AS break_by").
-              joins("LEFT JOIN #{ncont_attr_table} ON #{ncont_attr_table}.flow_id = flows.id").
+              joins("LEFT JOIN partitioned_#{ncont_attr_table} #{ncont_attr_table} ON #{ncont_attr_table}.flow_id = flows.id").
               where(
                 "#{ncont_attr_table}.#{@ncont_attribute.attribute_id_name}" =>
                   @ncont_attribute.original_id
@@ -91,11 +101,11 @@ module Api
           end
 
           def ncont_break_by_values
+            ncont_attr_table = @ncont_attribute.flow_values_class.table_name
             @ncont_attribute.
               flow_values_class.
-              joins(:flow).
+              from("partitioned_#{ncont_attr_table} #{ncont_attr_table}").
               where(
-                'flows.context_id' => @context.id,
                 @ncont_attribute.attribute_id_name => @ncont_attribute.original_id
               ).
               select(Arel.sql('value::TEXT AS text_value')).

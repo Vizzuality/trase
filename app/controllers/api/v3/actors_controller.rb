@@ -7,9 +7,17 @@ module Api
       before_action :set_year
 
       def basic_attributes
-        @result = Api::V3::Actors::BasicAttributes.new(
-          @context, @node, @year
-        ).call
+        basic_attributes = @readonly_node.actor_basic_attributes
+        @result = basic_attributes && basic_attributes[@year.to_s]
+
+        if @result.nil?
+          # this can mean either data is not precomputed (non-default year)
+          # or data is not available (data or configuration missing)
+          # in both cases deferring to original implementation
+          @result = Api::V3::Actors::BasicAttributes.new(
+            @context, @node, @year
+          ).call
+        end
 
         render json: {data: @result}
       end

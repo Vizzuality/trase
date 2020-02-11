@@ -29,8 +29,8 @@ namespace :db do
       Rake::Task['db:structure:dump'].invoke
     end
 
-    POSTGRESQL_JAR = 'postgresql-42.2.5.jar'.freeze
-    SCHEMA_SPY_JAR = 'schemaspy-6.0.0.jar'.freeze
+    POSTGRESQL_JAR = 'postgresql-42.2.9.jar'.freeze
+    SCHEMA_SPY_JAR = 'schemaspy-6.1.0.jar'.freeze
     BLUE_TABLES = %w[
       countries
       commodities
@@ -49,7 +49,7 @@ namespace :db do
       flow_quants
     ].freeze
     LIB_DIR = 'doc/db'.freeze
-    OUTPUT_DIR = 'doc/db/gh-pages'.freeze
+    OUTPUT_DIR = 'doc/gh-pages/db'.freeze
 
     desc 'Generate html schema documentation'
     task html: [:sql] do
@@ -71,39 +71,6 @@ namespace :db do
       schema_spy_options << "-s #{schema_name}" if schema_name
       schema_spy_options << "-i \"#{tables.join('|')}\"" if tables
       system("java #{schema_spy_options.join(' ')}")
-    end
-
-    desc 'Generate html schema documentation and push to GH pages'
-    task html_2_gh_pages: [:html, :gh_pages]
-
-    desc 'Generate html schema documentation and push to GH pages'
-    task gh_pages: [:environment] do
-      run_gh_pages_update
-    end
-
-    def run_gh_pages_update
-      tmp_dir = 'tmp-gh-pages'
-      repo_name = 'trase'
-
-      # get current revision (this assumes we've just pushed to develop)"
-      revision = `git rev-parse HEAD`.chomp
-      raise('Cannot read current revision') unless revision
-
-      [
-        "mkdir -p #{tmp_dir}",
-        # clone gh pages branch
-        "cd #{tmp_dir}; git clone --depth=1 --branch=gh-pages git@github.com:Vizzuality/#{repo_name}.git",
-        # copy html files (this assumes we've just regenerated them)
-        "cp -a #{OUTPUT_DIR}/ #{tmp_dir}/#{repo_name}/",
-        # push to gh-pages
-        "cd #{tmp_dir}/#{repo_name}; git add .; git commit -m \"Update #{revision}\"; git push origin gh-pages"
-      ].each do |cmd|
-        puts "#{Time.now.strftime('%Y%m%d-%H:%M:%S%:z')}: #{cmd}"
-        system(cmd)
-        raise('Updating gh-pages failed') unless $CHILD_STATUS.success?
-      end
-    ensure
-      `rm -rf #{tmp_dir}` if File.directory?(tmp_dir)
     end
   end
 end

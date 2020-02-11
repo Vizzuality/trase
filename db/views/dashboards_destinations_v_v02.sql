@@ -5,13 +5,13 @@ SELECT
   nodes.context_id,
   nodes.country_id,
   nodes.commodity_id,
-  nodes.nodes_ids,
   nodes.year,
   nodes.name,
   nodes.name_tsvector,
   nodes.node_type,
   profiles.name AS profile,
-  ranked_nodes.rank_by_year
+  ranked_nodes.rank_by_year,
+  nodes.nodes_ids
 FROM nodes_with_flows_per_year nodes
 JOIN node_properties node_props ON nodes.id = node_props.node_id
 JOIN context_node_type_properties cnt_props ON nodes.context_node_type_id = cnt_props.context_node_type_id

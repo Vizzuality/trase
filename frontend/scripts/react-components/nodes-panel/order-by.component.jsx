@@ -10,13 +10,10 @@ const options = [
 
 function OrderBy(props) {
   const { orderBy, setOrderBy } = props;
-  if (!ENABLE_REDESIGN_PAGES) {
-    return null;
-  }
   return (
     <div className="c-order-by">
-      <Text as="span" color="grey-faded" weight="bold">
-        sort by:
+      <Text as="span" color="grey-faded" weight="bold" transform="capitalize">
+        Sort by:
       </Text>
       <Dropdown variant="panel" options={options} value={orderBy} onChange={setOrderBy} />
     </div>

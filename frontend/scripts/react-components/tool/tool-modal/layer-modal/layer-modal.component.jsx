@@ -51,15 +51,15 @@ export default function LayerModal({
     setActiveModal(null);
   };
   const infoMessage = {
-    [LAYER_TAB_NAMES.unit]: 'You can choose one or two unit layers',
-    [LAYER_TAB_NAMES.contextual]: 'You can choose one or several contextual layers'
+    [LAYER_TAB_NAMES.unit]: 'Please choose up to two layers (one per indicator set)',
+    [LAYER_TAB_NAMES.contextual]: 'Choose one or more contextual layers'
   }[selectedTab];
   return (
     <div className="c-layer-modal">
       <div className="row columns">
         <div className="layer-modal-content">
           <Heading size="md" className="modal-title">
-            Edit map layers
+            Edit layers to display in the map
           </Heading>
           <Tabs tabs={tabs} selectedTab={selectedTab} onSelectTab={tab => changeTab(tab)} />
           <Text color="grey-faded" size="md" className="info-message">

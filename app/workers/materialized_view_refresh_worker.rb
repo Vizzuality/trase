@@ -1,7 +1,7 @@
 class MaterializedViewRefreshWorker
   include Sidekiq::Worker
   sidekiq_options queue: :database,
-                  retry: 0,
+                  retry: false,
                   backtrace: true,
                   unique: :until_and_while_executing,
                   run_lock_expiration: 150, # 2.5 mins
@@ -11,7 +11,7 @@ class MaterializedViewRefreshWorker
     [args[0]]
   end
 
-  # @param mview_class_name [String] e.g. Api::V3::Readonly::DownloadFlow
+  # @param mview_class_name [String] e.g. Api::V3::Readonly::DownloadAttribute
   # @param options
   # @option options [Boolean] :skip_dependencies skip refreshing
   # @option options [Boolean] :skip_dependents skip refreshing

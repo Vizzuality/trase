@@ -1,4 +1,4 @@
-dist: xenial
+dist: bionic
 env:
   global:
     - CC_TEST_REPORTER_ID=ae4098e380eed3c112bd34c4c2ceec913288ce9479bb748bf098a57b75ff5de5
@@ -9,11 +9,13 @@ matrix:
   include:
     - language: ruby
       rvm:
-        - 2.6.3
-      services:
-        - postgresql
-      addons:
-        postgresql: 11
+        - 2.6.5
+      # PostgreSQL 11 support:
+      # the solution in Travis docs is to use postgresql and apt addons
+      # and override the port env var ( or two, PGPORT and POSTGRES_PORT)
+      # we're not using that solution, because there's an issue
+      # we're using a workaround instead
+      # https://travis-ci.community/t/install-postgresql-11/3894/5
       before_install:
         - sudo apt-get update
         - sudo apt-get --yes remove postgresql\*
@@ -42,9 +44,9 @@ matrix:
           skip-cleanup: true
           github-token: $GITHUB_TOKEN # Set in the settings page of your repository, as a secure variable
           keep-history: true
-          local-dir: doc/db/gh-pages
+          local-dir: doc/gh-pages
           on:
-            branch: master
+            branch: develop
         - provider: surge
           project: ./frontend/docs/
           domain: trase.surge.sh

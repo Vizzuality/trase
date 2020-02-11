@@ -202,7 +202,7 @@ export const getSankeyLinks = createSelector(
   (
     sankeyColumns,
     mergedLinks,
-    nodesColoredAtColumn,
+    nodesColored,
     selectedRecolorBy,
     detailedView,
     sankeySize,
@@ -232,19 +232,23 @@ export const getSankeyLinks = createSelector(
       // get all links of the colored column
       let coloredColumnLinks = mergedLinks.filter(link => {
         const entry =
-          nodesColoredAtColumn === 0 ? link.sourceColumnPosition : link.targetColumnPosition;
-        return entry === nodesColoredAtColumn;
+          nodesColored.nodesColoredAtColumn === 0
+            ? link.sourceColumnPosition
+            : link.targetColumnPosition;
+        return entry === nodesColored.nodesColoredAtColumn;
       });
       // remove duplicates (ie links with same connected node)
       coloredColumnLinks = uniqBy(
         coloredColumnLinks,
-        nodesColoredAtColumn === 0 ? 'sourceNodeId' : 'targetNodeId'
+        nodesColored.nodesColoredAtColumn === 0 ? 'sourceNodeId' : 'targetNodeId'
       );
       // sort by node Y
       coloredColumnLinks.sort((linkA, linkB) => {
-        const nodeIdA = nodesColoredAtColumn === 0 ? linkA.sourceNodeId : linkA.targetNodeId;
-        const nodeIdB = nodesColoredAtColumn === 0 ? linkB.sourceNodeId : linkB.targetNodeId;
-        const nodes = sankeyColumns[nodesColoredAtColumn].values;
+        const nodeIdA =
+          nodesColored.nodesColoredAtColumn === 0 ? linkA.sourceNodeId : linkA.targetNodeId;
+        const nodeIdB =
+          nodesColored.nodesColoredAtColumn === 0 ? linkB.sourceNodeId : linkB.targetNodeId;
+        const nodes = sankeyColumns[nodesColored.nodesColoredAtColumn].values;
         return nodes.find(n => n.id === nodeIdA).y - nodes.find(n => n.id === nodeIdB).y;
       });
       // map to color groups
@@ -252,8 +256,8 @@ export const getSankeyLinks = createSelector(
     }
 
     // sort links by node source, target y positions and selectedRecolorBy group
-    const sortedLinks = sortFlows(mergedLinks, selectedRecolorBy, {
-      nodesColoredAtColumn,
+    const sortedLinks = sortFlows(mergedLinks, sankeyColumns, selectedRecolorBy, {
+      nodesColored,
       recolorGroupsOrderedByY
     });
     const sankeyLinks = [];

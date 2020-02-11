@@ -2,7 +2,7 @@
 
 @mixin fade-slider($color) {
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     left: 0;
     margin-left: calc(1px - ((100vw - 72em) / 2) - 200px);
@@ -14,7 +14,7 @@
   }
 
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     right: 0;
     margin-right: calc(1px - ((100vw - 72em) / 2) - 200px);
@@ -26,28 +26,34 @@
 
   > div {
     &::before {
-      content: "";
+      content: '';
       position: absolute;
       left: 0;
       margin-left: -200px;
       width: 100px;
       height: 101%;
       top: 0;
-      background: -webkit-gradient(linear,left top,right top,from($color),to(transparent));
-      background: linear-gradient(90deg, $color, transparent);
+      background: -webkit-gradient(
+        linear,
+        left top,
+        right top,
+        from($color),
+        to(rgba($white, 0.1))
+      );
+      background: linear-gradient(90deg, $color, rgba($white, 0.1));
       z-index: $z-base;
     }
 
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       right: 0;
       margin-right: -200px;
       width: 100px;
       height: 101%;
       top: 0;
-      background: -webkit-gradient(linear,left top,right top,from(transparent),to($color));
-      background: linear-gradient(90deg, transparent,$color);
+      background: -webkit-gradient(linear, left top, right top, from(transparent), to($color));
+      background: linear-gradient(90deg, transparent, $color);
     }
   }
 }
@@ -126,8 +132,6 @@
     box-shadow: 0 0 0 lightgray;
   }
 }
-
-
 
 .slide-next {
   left: 100%;

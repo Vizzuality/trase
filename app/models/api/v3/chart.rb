@@ -42,6 +42,7 @@ module Api
       validate :parent_is_root
 
       after_commit :refresh_dependencies
+      after_commit :refresh_actor_basic_attributes
 
       def chart_type
         case identifier
@@ -65,7 +66,11 @@ module Api
       end
 
       def self.select_options
-        Api::V3::Chart.includes(:profile).all.map do |chart|
+        Api::V3::Chart.includes(
+          profile: {context_node_type: [{context: [:country, :commodity]}, :node_type]}
+        ).order(
+          'countries.name, commodities.name, node_types.name'
+        ).all.map do |chart|
           profile = chart.profile
           context_node_type = profile&.context_node_type
           context = context_node_type&.context
@@ -90,6 +95,39 @@ module Api
 
       def refresh_dependencies
         Api::V3::Readonly::MapAttribute.refresh
+      end
+
+      def refresh_actor_basic_attributes
+        return unless saved_change_to_identifier? ||
+          saved_change_to_profile_id?
+
+        # Update previous NodeWithFlows
+        # The behaviour is the same if the identifier or the profile_id changes
+        if profile_id_before_last_save
+          update_node_with_flows_actor_basic_attributes(
+            profile_id_before_last_save
+          )
+        end
+
+        # If we have just updated the identifier, it has already been updated
+        return unless saved_change_to_profile_id
+
+        # Update new NodeWithFlows
+        update_node_with_flows_actor_basic_attributes(profile_id)
+      end
+
+      def update_node_with_flows_actor_basic_attributes(profile_id)
+        profile = Api::V3::Profile.find(profile_id)
+        context_node_type = profile.context_node_type
+        context = context_node_type.context
+        nodes = context_node_type.node_type.nodes
+        node_with_flows = Api::V3::Readonly::NodeWithFlows.where(
+          context_id: context.id,
+          id: nodes.map(&:id)
+        )
+        NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
+          node_with_flows.map(&:id)
+        )
       end
 
       protected

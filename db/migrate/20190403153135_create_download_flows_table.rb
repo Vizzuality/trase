@@ -16,9 +16,6 @@ class CreateDownloadFlowsTable < ActiveRecord::Migration[5.2]
         sort TEXT
       ) PARTITION BY LIST (year);
     SQL
-
-    # Api::V3::TablePartitions.create_indexes
-    Api::V3::TablePartitions::CreatePartitionsForDownloadFlows.new.create_indexes
   end
 
   def down

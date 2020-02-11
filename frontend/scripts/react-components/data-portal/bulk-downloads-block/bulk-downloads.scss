@@ -1,22 +1,52 @@
 @import 'styles/settings';
 
 .c-bulk-downloads {
-  font-family: $font-family-1;
-  font-size: $font-size-x-regular;
-  line-height: 1.23;
-  letter-spacing: -0.6px;
-  color: $charcoal-grey;
   padding: 0 0 33px 0;
-  border-bottom: solid 2px rgba($charcoal-grey, .15);
+  border-bottom: solid 2px rgba($charcoal-grey, 0.15);
 
   .c-bulk-downloads__title {
     font-weight: bold;
     margin-bottom: 10px;
   }
 
-  .c-bulk-downloads__item {
+  .bulk-download-grid {
+    position: relative;
+    margin: 12px 0;
+    overflow: hidden;
+
+    .bulk-download-grid-outer-element {
+      padding: 0 0 50px 0;
+    }
+  }
+
+  .bulk-download-gradient {
+    position: absolute;
+    height: 50px;
+    width: calc(100% - 28px);
+    bottom: 0;
+    left: 14px;
+    background-image: linear-gradient(to top, $egg-shell, rgba($manilla, 0.1));
+    pointer-events: none;
+  }
+
+  .bulk-download-item-container {
+    padding: 0 11px 0 0;
+
+    &:nth-child(3n) {
+      padding: 0;
+    }
+
+    &.-small {
+      padding: 0 11px 0 0;
+
+      &:nth-child(2n) {
+        padding: 0;
+      }
+    }
+  }
+
+  .bulk-download-item {
     width: 100%;
-    margin-bottom: 14px;
     overflow: hidden;
   }
 }

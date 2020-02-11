@@ -9,11 +9,11 @@ SELECT
   cnt.column_position,
   nodes_with_co_nodes.year,
   nodes.is_unknown,
-  nodes_with_co_nodes.nodes_ids,
   nodes.name AS name,
   TO_TSVECTOR('simple', COALESCE(nodes.name, '')) AS name_tsvector,
   node_types.name AS node_type,
-  UPPER(TRIM(nodes.geo_id)) AS geo_id
+  UPPER(TRIM(nodes.geo_id)) AS geo_id,
+  nodes_with_co_nodes.nodes_ids
 FROM (
   SELECT
     flow_nodes.node_id,

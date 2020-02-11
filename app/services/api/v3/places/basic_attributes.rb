@@ -20,7 +20,9 @@ module Api
           quant_dictionary = Dictionary::Quant.instance
           # Assumption: Volume is a special quant which always exists
           @volume_attribute = quant_dictionary.get('Volume')
-          raise 'Quant Volume not found' unless @volume_attribute.present?
+          unless @volume_attribute.present?
+            raise ActiveRecord::RecordNotFound.new 'Quant Volume not found'
+          end
 
           @values = Api::V3::NodeAttributeValuesPreloader.new(@node, @year)
           initialize_chart_configuration
@@ -73,7 +75,9 @@ module Api
           @destination_node_type = top_countries_chart_config.
             named_node_type('destination')
           unless @destination_node_type
-            raise 'Chart node type "destination" not found (top countries)'
+            raise ActiveRecord::RecordNotFound.new(
+              'Chart node type "destination" not found (top countries)'
+            )
           end
 
           top_traders_chart_config = Api::V3::Profiles::ChartConfiguration.new(
@@ -87,7 +91,9 @@ module Api
             named_node_type('trader')
           # rubocop:disable Style/GuardClause
           unless @trader_node_type
-            raise 'Chart node type "trader" not found (top traders)'
+            raise ActiveRecord::RecordNotFound.new(
+              'Chart node type "trader" not found (top traders)'
+            )
           end
           # rubocop:enable Style/GuardClause
         end

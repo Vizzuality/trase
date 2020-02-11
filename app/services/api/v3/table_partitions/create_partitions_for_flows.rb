@@ -25,7 +25,14 @@ module Api
           execute(
             <<~SQL
               INSERT INTO #{partition_name}
-              SELECT id, context_id, year, path, known_path_positions(path) FROM flows
+              SELECT
+                id,
+                context_id,
+                year,
+                path,
+                known_path_positions(path),
+                path_names(path)
+              FROM flows
               WHERE #{@partition_key} = #{partition_key_value};
             SQL
           )

@@ -9,7 +9,7 @@ import {
   click
 } from './utils';
 
-if (ENABLE_REDESIGN_PAGES) {
+if (ENABLE_TOOL_PANEL) {
   Polly.register(PuppeteerAdapter);
   Polly.register(FSPersister);
 

@@ -7,9 +7,48 @@ import sortBy from 'lodash/sortBy';
 // This can expressed as: Log(recolorGroup, quant size)
 const baseLog = (base, num) => Math.log(num) / Math.log(base);
 
-export function sortFlowsBySelectedRecolorBy(link, recolorBy, logsDebug) {
+// to sort the flows by source and target index but also grouping them by class
+// (we use logarithms because we have the flows from all columns and classes in a single list)
+// the idea is that when we select a recolorby, that recolorby will act as a class
+// we want the flows that goes into a node to be shown grouped by class.
+// To group them we create a logarithm base that equals to the class.
+// Then to group flows within a class from source node to target node heights, we use the nodes index.
+// This can expressed as: Log(class^(source_index + 1), max_target_index - target_index)
+const getLinkSortingValue = (_class, _sourceIndex, _targetIndex, _maxTargetIndex) =>
+  baseLog(_class ** (_sourceIndex + 1), _maxTargetIndex - _targetIndex + 1);
+
+function getPathNodesColumnIndexes(link, columns, nodesMap) {
+  const sourceColumn = columns[link.sourceColumnPosition];
+  const targetColumn = columns[link.targetColumnPosition];
+
+  if (!nodesMap.has(link.sourceNodeId)) {
+    nodesMap.set(link.sourceNodeId, sourceColumn.values.findIndex(n => n.id === link.sourceNodeId));
+  }
+  const sourceIndex = nodesMap.get(link.sourceNodeId);
+  const maxSourceIndex = sourceColumn.values.length;
+
+  if (!nodesMap.has(link.targetNodeId)) {
+    nodesMap.set(link.targetNodeId, targetColumn.values.findIndex(n => n.id === link.targetNodeId));
+  }
+  const targetIndex = nodesMap.get(link.targetNodeId);
+  const maxTargetIndex = targetColumn.values.length;
+  return { sourceIndex, maxSourceIndex, targetIndex, maxTargetIndex };
+}
+
+export function sortFlowsByDefault(link, columns, nodesMap) {
+  const { sourceIndex, targetIndex, maxTargetIndex } = getPathNodesColumnIndexes(
+    link,
+    columns,
+    nodesMap
+  );
+  // when there's no recolorby we group all links in a class with a default value of 2 cause logarithms
+  const DEFAULT_CLASS = 2;
+  const value = getLinkSortingValue(DEFAULT_CLASS, sourceIndex, targetIndex, maxTargetIndex);
+  return -value;
+}
+
+export function sortFlowsBySelectedRecolorBy(link, columns, nodesMap, recolorBy, logsDebug) {
   // sorts alphabetically with quals, numerically with inds
-  // TODO for quals use the order presented in the color by menu
   if (recolorBy.type === 'ind') {
     if (link.recolorBy !== null) {
       // We raise the base to a base^10base exponent to ensure that the jumps across bases are big enough.
@@ -49,44 +88,46 @@ export function sortFlowsBySelectedRecolorBy(link, recolorBy, logsDebug) {
     return -value;
   }
   if (recolorBy.type === 'qual') {
-    return link.recolorBy;
+    const nodeIndex = recolorBy.nodes.findIndex(n => n === link.recolorBy);
+    return nodeIndex >= 0 ? nodeIndex : recolorBy.nodes.length + 1;
   }
-  return link.quant;
+  return sortFlowsByDefault(link, columns, nodesMap);
 }
 
 export function sortFlowsBySelectionRecolorGroup(
   link,
-  { nodesColoredAtColumn, recolorGroupsOrderedByY },
+  columns,
+  nodesMap,
+  { recolorGroupsOrderedByY },
   logsDebug
 ) {
-  // Because the recolorby is set by the column with more selected nodes (nodesColoredAtColumn),
-  // and each color represent the order in which you selected each node.
-  // We're only interested in sorting the flows that are before or after this column
-  if (
-    link.sourceColumnPosition >= nodesColoredAtColumn ||
-    link.targetColumnPosition < nodesColoredAtColumn
-  ) {
-    const originalRecolorGroupIndex = recolorGroupsOrderedByY.indexOf(link.recolorGroup);
-    const recolorGroupIndex = originalRecolorGroupIndex + 2;
+  const originalRecolorGroupIndex = recolorGroupsOrderedByY.indexOf(link.recolorGroup);
+  const recolorGroupIndex = originalRecolorGroupIndex + 2;
 
-    const value = baseLog(recolorGroupIndex ** (10 * recolorGroupIndex), link.quant);
-    if (logsDebug) {
-      const logRow = {
-        value,
-        originalRecolorGroupIndex,
-        recolorGroupIndex,
-        link: `${link.sourceNodeName} - ${link.targetNodeName}`
-      };
-      logsDebug.push(logRow);
-    }
-    return -value;
+  const { sourceIndex, targetIndex, maxTargetIndex } = getPathNodesColumnIndexes(
+    link,
+    columns,
+    nodesMap
+  );
+  const value = getLinkSortingValue(recolorGroupIndex, sourceIndex, targetIndex, maxTargetIndex);
+  if (logsDebug) {
+    const logRow = {
+      value,
+      originalRecolorGroupIndex,
+      recolorGroupIndex,
+      sourceIndex,
+      targetIndex,
+      link: `${link.sourceNodeName} - ${link.targetNodeName}`
+    };
+    logsDebug.push(logRow);
   }
-  return link.quant;
+  return -value;
 }
 
-export function sortFlows(links, recolorBy, recolorGroupOptions) {
+export function sortFlows(links, columns, recolorBy, recolorGroupOptions) {
   // for debugging purposes uncomment next line
   const logsDebug = false; // [];
+  const nodesMap = new Map();
 
   const sortedLinks = sortBy(links, link => {
     // all flows from all columns are mixed in the same array,
@@ -94,14 +135,20 @@ export function sortFlows(links, recolorBy, recolorGroupOptions) {
     // This allows us to sort by quant size, and lets us show the biggest flows at that top of each node.
 
     if (recolorBy) {
-      return sortFlowsBySelectedRecolorBy(link, recolorBy, logsDebug);
+      return sortFlowsBySelectedRecolorBy(link, columns, nodesMap, recolorBy, logsDebug);
     }
 
     // this is used when selecting nodes and no recolorby is active
     if (links[0] && links[0].recolorGroup !== undefined) {
-      return sortFlowsBySelectionRecolorGroup(link, recolorGroupOptions, logsDebug);
+      return sortFlowsBySelectionRecolorGroup(
+        link,
+        columns,
+        nodesMap,
+        recolorGroupOptions,
+        logsDebug
+      );
     }
-    return link.quant;
+    return sortFlowsByDefault(link, columns, nodesMap);
   });
 
   if (NODE_ENV_DEV === true) {

@@ -157,7 +157,7 @@ COMMENT ON FUNCTION public.bucket_index(buckets double precision[], value double
 CREATE FUNCTION public.known_path_positions(path integer[]) RETURNS boolean[]
     LANGUAGE sql IMMUTABLE
     AS $$
-  SELECT ARRAY_AGG(NOT nodes.is_unknown)::BOOLEAN[]
+  SELECT ARRAY_AGG(NOT nodes.is_unknown ORDER BY position)::BOOLEAN[]
   FROM UNNEST(path) WITH ORDINALITY a (node_id, position), nodes
   WHERE nodes.id = a.node_id
 $$;
@@ -168,6 +168,26 @@ $$;
 --
 
 COMMENT ON FUNCTION public.known_path_positions(path integer[]) IS 'Returns array with indexes in path where nodes are known.';
+
+
+--
+-- Name: path_names(integer[]); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION public.path_names(path integer[]) RETURNS text[]
+    LANGUAGE sql IMMUTABLE
+    AS $$
+  SELECT ARRAY_AGG(nodes.name ORDER BY position)::TEXT[]
+  FROM UNNEST(path) WITH ORDINALITY a (node_id, position), nodes
+  WHERE nodes.id = a.node_id
+$$;
+
+
+--
+-- Name: FUNCTION path_names(path integer[]); Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON FUNCTION public.path_names(path integer[]) IS 'Returns array with node names in path.';
 
 
 --
@@ -251,8 +271,6 @@ COMMENT ON FUNCTION public.upsert_attributes() IS 'Upserts attributes based on n
 
 
 SET default_tablespace = '';
-
-SET default_with_oids = false;
 
 --
 -- Name: ckeditor_assets; Type: TABLE; Schema: content; Owner: -
@@ -3187,7 +3205,6 @@ CREATE TABLE public.nodes_with_flows_per_year (
     column_position smallint,
     year smallint NOT NULL,
     is_unknown boolean,
-    nodes_ids integer[],
     name text,
     name_tsvector tsvector,
     node_type text,
@@ -3223,7 +3240,6 @@ CREATE TABLE public.dashboards_companies (
     context_id integer,
     country_id integer NOT NULL,
     commodity_id integer NOT NULL,
-    nodes_ids integer[],
     year smallint NOT NULL,
     name text,
     name_tsvector tsvector,
@@ -3354,7 +3370,6 @@ CREATE VIEW public.dashboards_companies_v AS
     nodes.context_id,
     nodes.country_id,
     nodes.commodity_id,
-    nodes.nodes_ids,
     nodes.year,
     nodes.name,
     nodes.name_tsvector,
@@ -3366,7 +3381,7 @@ CREATE VIEW public.dashboards_companies_v AS
      JOIN public.context_node_type_properties cnt_props ON ((nodes.context_node_type_id = cnt_props.context_node_type_id)))
      LEFT JOIN public.profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))
      JOIN public.nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((nodes.context_id = ranked_nodes.context_id) AND (nodes.id = ranked_nodes.node_id))))
-  WHERE (((cnt_props.role)::text = ANY ((ARRAY['importer'::character varying, 'exporter'::character varying])::text[])) AND (NOT nodes.is_unknown) AND (NOT node_props.is_domestic_consumption) AND (upper(nodes.name) <> 'OTHER'::text));
+  WHERE (((cnt_props.role)::text = ANY (ARRAY[('importer'::character varying)::text, ('exporter'::character varying)::text])) AND (NOT nodes.is_unknown) AND (NOT node_props.is_domestic_consumption) AND (upper(nodes.name) <> 'OTHER'::text));
 
 
 --
@@ -3442,7 +3457,6 @@ CREATE TABLE public.dashboards_destinations (
     context_id integer,
     country_id integer NOT NULL,
     commodity_id integer NOT NULL,
-    nodes_ids integer[],
     year smallint NOT NULL,
     name text,
     name_tsvector tsvector,
@@ -3481,13 +3495,6 @@ COMMENT ON COLUMN public.dashboards_destinations.commodity_id IS 'id of commodit
 
 
 --
--- Name: COLUMN dashboards_destinations.nodes_ids; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_destinations.nodes_ids IS 'array of ids of other nodes from the same supply chain';
-
-
---
 -- Name: dashboards_destinations_v; Type: VIEW; Schema: public; Owner: -
 --
 
@@ -3497,7 +3504,6 @@ CREATE VIEW public.dashboards_destinations_v AS
     nodes.context_id,
     nodes.country_id,
     nodes.commodity_id,
-    nodes.nodes_ids,
     nodes.year,
     nodes.name,
     nodes.name_tsvector,
@@ -3522,7 +3528,6 @@ CREATE TABLE public.dashboards_exporters (
     context_id integer,
     country_id integer NOT NULL,
     commodity_id integer NOT NULL,
-    nodes_ids integer[],
     year smallint NOT NULL,
     name text,
     name_tsvector tsvector,
@@ -3561,13 +3566,6 @@ COMMENT ON COLUMN public.dashboards_exporters.commodity_id IS 'id of commodity t
 
 
 --
--- Name: COLUMN dashboards_exporters.nodes_ids; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_exporters.nodes_ids IS 'array of ids of other nodes from the same supply chain';
-
-
---
 -- Name: dashboards_exporters_v; Type: VIEW; Schema: public; Owner: -
 --
 
@@ -3577,7 +3575,6 @@ CREATE VIEW public.dashboards_exporters_v AS
     nodes.context_id,
     nodes.country_id,
     nodes.commodity_id,
-    nodes.nodes_ids,
     nodes.year,
     nodes.name,
     nodes.name_tsvector,
@@ -3602,7 +3599,6 @@ CREATE TABLE public.dashboards_importers (
     context_id integer,
     country_id integer NOT NULL,
     commodity_id integer NOT NULL,
-    nodes_ids integer[],
     year smallint NOT NULL,
     name text,
     name_tsvector tsvector,
@@ -3641,13 +3637,6 @@ COMMENT ON COLUMN public.dashboards_importers.commodity_id IS 'id of commodity t
 
 
 --
--- Name: COLUMN dashboards_importers.nodes_ids; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_importers.nodes_ids IS 'array of ids of other nodes from the same supply chain';
-
-
---
 -- Name: dashboards_importers_v; Type: VIEW; Schema: public; Owner: -
 --
 
@@ -3657,7 +3646,6 @@ CREATE VIEW public.dashboards_importers_v AS
     nodes.context_id,
     nodes.country_id,
     nodes.commodity_id,
-    nodes.nodes_ids,
     nodes.year,
     nodes.name,
     nodes.name_tsvector,
@@ -3739,7 +3727,6 @@ CREATE TABLE public.dashboards_sources (
     context_id integer,
     country_id integer NOT NULL,
     commodity_id integer NOT NULL,
-    nodes_ids integer[],
     year smallint NOT NULL,
     name text,
     name_tsvector tsvector,
@@ -3778,13 +3765,6 @@ COMMENT ON COLUMN public.dashboards_sources.commodity_id IS 'id of commodity com
 
 
 --
--- Name: COLUMN dashboards_sources.nodes_ids; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dashboards_sources.nodes_ids IS 'array of ids of other nodes from the same supply chain';
-
-
---
 -- Name: dashboards_sources_v; Type: VIEW; Schema: public; Owner: -
 --
 
@@ -3794,7 +3774,6 @@ CREATE VIEW public.dashboards_sources_v AS
     nodes.context_id,
     nodes.country_id,
     nodes.commodity_id,
-    nodes.nodes_ids,
     nodes.year,
     nodes.name,
     nodes.name_tsvector,
@@ -4116,139 +4095,37 @@ COMMENT ON COLUMN public.download_attributes_mv.attribute_id IS 'References the 
 
 
 --
--- Name: download_flows; Type: TABLE; Schema: public; Owner: -
+-- Name: partitioned_denormalised_flow_quals; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.download_flows (
+CREATE TABLE public.partitioned_denormalised_flow_quals (
     context_id integer,
+    qual_id integer,
     year smallint,
+    value text,
+    row_name text,
     path integer[],
-    jsonb_path jsonb,
-    attribute_type text,
-    attribute_id integer,
-    attribute_name text,
-    text_values text,
-    sum numeric,
-    total text,
-    sort text
+    names text[],
+    known_path_positions boolean[]
 )
-PARTITION BY LIST (year);
+PARTITION BY LIST (context_id);
 
 
 --
--- Name: download_flows_stats_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+-- Name: partitioned_denormalised_flow_quants; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE MATERIALIZED VIEW public.download_flows_stats_mv AS
- SELECT download_flows.context_id,
-    download_flows.year,
-    download_flows.attribute_type,
-    download_flows.attribute_id,
-    count(*) AS count
-   FROM public.download_flows
-  GROUP BY download_flows.context_id, download_flows.year, download_flows.attribute_type, download_flows.attribute_id
-  WITH NO DATA;
-
-
---
--- Name: flow_quals; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.flow_quals (
-    id integer NOT NULL,
-    flow_id integer NOT NULL,
-    qual_id integer NOT NULL,
-    value text NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE flow_quals; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.flow_quals IS 'Values of quals for flow';
-
-
---
--- Name: COLUMN flow_quals.value; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.flow_quals.value IS 'Textual value';
-
-
---
--- Name: nodes; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.nodes (
-    id integer NOT NULL,
-    node_type_id integer NOT NULL,
-    name text NOT NULL,
-    geo_id text,
-    is_unknown boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    main_id integer
-);
-
-
---
--- Name: TABLE nodes; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.nodes IS 'Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains';
-
-
---
--- Name: COLUMN nodes.name; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.nodes.name IS 'Name of node';
-
-
---
--- Name: COLUMN nodes.geo_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.nodes.geo_id IS '2-letter iso code in case of country nodes; other geo identifiers possible for other node types';
-
-
---
--- Name: COLUMN nodes.is_unknown; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.nodes.is_unknown IS 'When set, node was not possible to identify';
-
-
---
--- Name: COLUMN nodes.main_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.nodes.main_id IS 'Node identifier from Main DB';
-
-
---
--- Name: flows_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
---
-
-CREATE MATERIALIZED VIEW public.flows_mv AS
- SELECT flow_nodes.id,
-    flow_nodes.context_id,
-    flow_nodes.year,
-    array_agg(nodes.id ORDER BY cnt.column_position) AS path,
-    jsonb_object_agg(cnt.column_position, jsonb_build_object('node_id', nodes.id, 'node', nodes.name, 'node_type_id', cnt.node_type_id, 'node_type', node_types.name, 'is_unknown', nodes.is_unknown) ORDER BY cnt.column_position) AS jsonb_path
-   FROM (((( SELECT flows.id,
-            flows.context_id,
-            flows.year,
-            a.node_id,
-            (a."position" - 1) AS column_position
-           FROM public.flows,
-            LATERAL unnest(flows.path) WITH ORDINALITY a(node_id, "position")) flow_nodes
-     JOIN public.nodes ON ((flow_nodes.node_id = nodes.id)))
-     JOIN public.context_node_types cnt ON (((flow_nodes.context_id = cnt.context_id) AND (flow_nodes.column_position = cnt.column_position))))
-     JOIN public.node_types ON ((cnt.node_type_id = node_types.id)))
-  GROUP BY flow_nodes.id, flow_nodes.context_id, flow_nodes.year
-  WITH NO DATA;
+CREATE TABLE public.partitioned_denormalised_flow_quants (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+)
+PARTITION BY LIST (context_id);
 
 
 --
@@ -4256,42 +4133,44 @@ CREATE MATERIALIZED VIEW public.flows_mv AS
 --
 
 CREATE VIEW public.download_flows_v AS
- SELECT f.context_id,
-    f.year,
-    f.path,
-    f.jsonb_path,
-    fi.original_type,
-    fi.original_id,
-    fi.name AS attribute_name,
-    string_agg(fi.text_value, ' / '::text) AS text_values,
-    sum(fi.numeric_value) AS sum,
-        CASE
-            WHEN (fi.original_type = 'Qual'::text) THEN string_agg(DISTINCT fi.text_value, ' / '::text)
-            ELSE (sum(fi.numeric_value))::text
-        END AS total
-   FROM (public.flows_mv f
-     JOIN ( SELECT f_1.flow_id,
-            f_1.qual_id AS original_id,
-            'Qual'::text AS original_type,
-            NULL::double precision AS numeric_value,
-            f_1.value AS text_value,
-            q.name,
-            NULL::text AS unit
-           FROM (public.flow_quals f_1
-             JOIN public.quals q ON ((f_1.qual_id = q.id)))
-          GROUP BY f_1.flow_id, f_1.qual_id, f_1.value, q.name
-        UNION ALL
-         SELECT f_1.flow_id,
-            f_1.quant_id,
-            'Quant'::text AS text,
-            f_1.value,
-            NULL::text AS text,
-            q.name,
-            q.unit
-           FROM (public.flow_quants f_1
-             JOIN public.quants q ON ((f_1.quant_id = q.id)))
-          GROUP BY f_1.flow_id, f_1.quant_id, f_1.value, q.name, q.unit) fi ON ((f.id = fi.flow_id)))
-  GROUP BY f.context_id, f.year, f.path, f.jsonb_path, fi.original_type, fi.original_id, fi.name;
+ SELECT partitioned_denormalised_flow_quants.context_id,
+    partitioned_denormalised_flow_quants.year,
+    partitioned_denormalised_flow_quants.quant_id AS attribute_id,
+    'Quant'::text AS attribute_type,
+    partitioned_denormalised_flow_quants.value AS quant_value,
+    NULL::text AS qual_value,
+    (partitioned_denormalised_flow_quants.value)::text AS total,
+    partitioned_denormalised_flow_quants.row_name,
+    partitioned_denormalised_flow_quants.path,
+    partitioned_denormalised_flow_quants.names
+   FROM public.partitioned_denormalised_flow_quants
+UNION ALL
+ SELECT partitioned_denormalised_flow_quals.context_id,
+    partitioned_denormalised_flow_quals.year,
+    partitioned_denormalised_flow_quals.qual_id AS attribute_id,
+    'Qual'::text AS attribute_type,
+    NULL::double precision AS quant_value,
+    partitioned_denormalised_flow_quals.value AS qual_value,
+    partitioned_denormalised_flow_quals.value AS total,
+    partitioned_denormalised_flow_quals.row_name,
+    partitioned_denormalised_flow_quals.path,
+    partitioned_denormalised_flow_quals.names
+   FROM public.partitioned_denormalised_flow_quals;
+
+
+--
+-- Name: download_flows_stats_mv; Type: MATERIALIZED VIEW; Schema: public; Owner: -
+--
+
+CREATE MATERIALIZED VIEW public.download_flows_stats_mv AS
+ SELECT download_flows_v.context_id,
+    download_flows_v.year,
+    download_flows_v.attribute_type,
+    download_flows_v.attribute_id,
+    count(*) AS count
+   FROM public.download_flows_v
+  GROUP BY download_flows_v.context_id, download_flows_v.year, download_flows_v.attribute_type, download_flows_v.attribute_id
+  WITH NO DATA;
 
 
 --
@@ -4410,6 +4289,33 @@ COMMENT ON TABLE public.flow_inds IS 'Values of inds for flow';
 --
 
 COMMENT ON COLUMN public.flow_inds.value IS 'Numeric value';
+
+
+--
+-- Name: flow_quals; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.flow_quals (
+    id integer NOT NULL,
+    flow_id integer NOT NULL,
+    qual_id integer NOT NULL,
+    value text NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE flow_quals; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.flow_quals IS 'Values of quals for flow';
+
+
+--
+-- Name: COLUMN flow_quals.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.flow_quals.value IS 'Textual value';
 
 
 --
@@ -4730,6 +4636,56 @@ COMMENT ON COLUMN public.node_inds.year IS 'Year; empty (NULL) for all years';
 --
 
 COMMENT ON COLUMN public.node_inds.value IS 'Numeric value';
+
+
+--
+-- Name: nodes; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.nodes (
+    id integer NOT NULL,
+    node_type_id integer NOT NULL,
+    name text NOT NULL,
+    geo_id text,
+    is_unknown boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    main_id integer
+);
+
+
+--
+-- Name: TABLE nodes; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.nodes IS 'Nodes of different types, such as MUNICIPALITY or EXPORTER, which participate in supply chains';
+
+
+--
+-- Name: COLUMN nodes.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.name IS 'Name of node';
+
+
+--
+-- Name: COLUMN nodes.geo_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.geo_id IS '2-letter iso code in case of country nodes; other geo identifiers possible for other node types';
+
+
+--
+-- Name: COLUMN nodes.is_unknown; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.is_unknown IS 'When set, node was not possible to identify';
+
+
+--
+-- Name: COLUMN nodes.main_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.nodes.main_id IS 'Node identifier from Main DB';
 
 
 --
@@ -5412,7 +5368,8 @@ CREATE TABLE public.nodes_with_flows (
     geo_id text,
     role text,
     name_tsvector tsvector,
-    years smallint[]
+    years smallint[],
+    actor_basic_attributes json
 );
 
 
@@ -5485,20 +5442,15 @@ CREATE VIEW public.nodes_with_flows_per_year_v AS
     cnt.column_position,
     nodes_with_co_nodes.year,
     nodes.is_unknown,
-    nodes_with_co_nodes.nodes_ids,
     nodes.name,
     to_tsvector('simple'::regconfig, COALESCE(nodes.name, ''::text)) AS name_tsvector,
     node_types.name AS node_type,
     upper(btrim(nodes.geo_id)) AS geo_id
-   FROM ((((( SELECT flow_nodes.node_id,
+   FROM ((((( SELECT DISTINCT flow_nodes.node_id,
             flow_nodes.context_id,
             flow_nodes."position",
-            flow_nodes.year,
-            array_agg(DISTINCT co_flow_nodes.node_id) AS nodes_ids
-           FROM (public.flow_nodes
-             JOIN public.flow_nodes co_flow_nodes ON ((flow_nodes.flow_id = co_flow_nodes.flow_id)))
-          WHERE (flow_nodes.node_id <> co_flow_nodes.node_id)
-          GROUP BY flow_nodes.node_id, flow_nodes.context_id, flow_nodes."position", flow_nodes.year) nodes_with_co_nodes
+            flow_nodes.year
+           FROM public.flow_nodes) nodes_with_co_nodes
      JOIN public.nodes ON ((nodes_with_co_nodes.node_id = nodes.id)))
      JOIN public.node_types ON ((nodes.node_type_id = node_types.id)))
      JOIN public.contexts ON ((nodes_with_co_nodes.context_id = contexts.id)))
@@ -5529,6 +5481,23 @@ CREATE VIEW public.nodes_with_flows_v AS
      LEFT JOIN public.profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))
   WHERE ((NOT nodes.is_unknown) AND (NOT node_properties.is_domestic_consumption))
   GROUP BY nodes.id, nodes.context_id, nodes.main_id, nodes.column_position, context_properties.is_subnational, nodes.name, nodes.node_type, profiles.name, nodes.geo_id, context_node_type_properties.role, nodes.name_tsvector;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+)
+PARTITION BY LIST (context_id);
 
 
 --
@@ -5576,7 +5545,8 @@ CREATE TABLE public.partitioned_flows (
     context_id integer,
     year smallint,
     path integer[],
-    known_path_positions boolean[]
+    known_path_positions boolean[],
+    names text[]
 )
 PARTITION BY LIST (context_id);
 
@@ -8719,38 +8689,10 @@ CREATE UNIQUE INDEX download_attributes_mv_id_idx ON public.download_attributes_
 
 
 --
--- Name: download_flows_attribute_type_attribute_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX download_flows_attribute_type_attribute_id_idx ON ONLY public.download_flows USING btree (attribute_type, attribute_id);
-
-
---
--- Name: download_flows_context_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX download_flows_context_id_idx ON ONLY public.download_flows USING btree (context_id);
-
-
---
--- Name: download_flows_path_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX download_flows_path_idx ON ONLY public.download_flows USING btree (path);
-
-
---
 -- Name: download_flows_stats_mv_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX download_flows_stats_mv_id_idx ON public.download_flows_stats_mv USING btree (context_id, year, attribute_type, attribute_id);
-
-
---
--- Name: download_flows_year_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX download_flows_year_idx ON ONLY public.download_flows USING btree (year);
 
 
 --
@@ -8863,27 +8805,6 @@ CREATE INDEX flows_context_id_idx ON public.flows USING btree (context_id);
 --
 
 CREATE INDEX flows_context_id_year_idx ON public.flows USING btree (context_id, year);
-
-
---
--- Name: flows_mv_context_id_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX flows_mv_context_id_idx ON public.flows_mv USING btree (context_id);
-
-
---
--- Name: flows_mv_unique_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX flows_mv_unique_idx ON public.flows_mv USING btree (id);
-
-
---
--- Name: flows_mv_year_idx; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX flows_mv_year_idx ON public.flows_mv USING btree (year);
 
 
 --
@@ -9150,6 +9071,48 @@ CREATE INDEX nodes_with_flows_or_geo_node_type_id_idx ON public.nodes_with_flows
 --
 
 CREATE INDEX nodes_with_flows_per_year_id_idx ON public.nodes_with_flows_per_year USING btree (id);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_context_id_year_idx ON ONLY public.partitioned_denormalised_flow_inds USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_row_name_idx ON ONLY public.partitioned_denormalised_flow_inds USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_context_id_year_idx ON ONLY public.partitioned_denormalised_flow_quals USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_row_name_idx ON ONLY public.partitioned_denormalised_flow_quals USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_context_id_year_idx ON ONLY public.partitioned_denormalised_flow_quants USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_row_name_idx ON ONLY public.partitioned_denormalised_flow_quants USING btree (row_name);
 
 
 --
@@ -10246,6 +10209,15 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191209230015'),
 ('20191211221707'),
 ('20191211222503'),
-('20191212151744');
+('20191212105506'),
+('20191212105507'),
+('20191212151744'),
+('20191216101622'),
+('20191217105056'),
+('20191218221238'),
+('20191219221216'),
+('20200106092554'),
+('20200107131928'),
+('20200123163215');
 
 

@@ -1,7 +1,10 @@
 ActiveAdmin.register Api::V3::ChartNodeType, as: 'ChartNodeType' do
   menu parent: 'Profiles', priority: 6
 
-  includes [chart: {profile: {context_node_type: [:context, :node_type]}}]
+  includes [
+    {chart: {profile: {context_node_type: [{context: [:country, :commodity]}, :node_type]}}},
+    :node_type
+  ]
 
   permit_params :chart_id, :node_type_id, :identifier, :position
 

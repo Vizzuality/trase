@@ -58,6 +58,7 @@ module Api
                      if: :new_chart_quant_given?
 
       after_commit :refresh_dependencies
+      after_commit :refresh_actor_basic_attributes
 
       stringy_array :years
       manage_associated_attributes [:chart_ind, :chart_qual, :chart_quant]
@@ -70,6 +71,40 @@ module Api
 
       def refresh_dependencies
         Api::V3::Readonly::ChartAttribute.refresh
+      end
+
+      def refresh_actor_basic_attributes
+        return unless saved_change_to_identifier? ||
+          saved_change_to_chart_id?
+
+        # Update previous NodeWithFlows
+        # The behaviour is the same if the identifier or the chart_id changes
+        if chart_id_before_last_save
+          update_node_with_flows_actor_basic_attributes(
+            chart_id_before_last_save
+          )
+        end
+
+        # If we have just updated the identifier, it has already been updated
+        return unless saved_change_to_chart_id
+
+        # Update new NodeWithFlows
+        update_node_with_flows_actor_basic_attributes(chart_id)
+      end
+
+      def update_node_with_flows_actor_basic_attributes(chart_id)
+        chart = Api::V3::Chart.find(chart_id)
+        profile = chart.profile
+        context_node_type = profile.context_node_type
+        context = context_node_type.context
+        nodes = context_node_type.node_type.nodes
+        node_with_flows = Api::V3::Readonly::NodeWithFlows.where(
+          context_id: context.id,
+          id: nodes.map(&:id)
+        )
+        NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
+          node_with_flows.map(&:id)
+        )
       end
 
       private_class_method def self.active_ids

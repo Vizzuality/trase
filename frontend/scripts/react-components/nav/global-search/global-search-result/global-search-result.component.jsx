@@ -24,10 +24,14 @@ class GlobalSearchResult extends Component {
   onMouseOut = () => this.setState({ hoverOverLink: false });
 
   render() {
-    const { value, itemProps, isHighlighted, item, testId } = this.props;
+    const { value, itemProps, isHighlighted, item, testId, style } = this.props;
 
     return (
-      <li {...itemProps} className={cx('c-search-result', { '-highlighted': isHighlighted })}>
+      <li
+        {...itemProps}
+        style={style}
+        className={cx('c-search-result', { '-highlighted': isHighlighted })}
+      >
         <div className="search-node-text-container" data-test={testId}>
           <span className="search-node-type">{item.nodeTypeText}</span>
           <span className="search-node-name">
@@ -109,6 +113,7 @@ GlobalSearchResult.propTypes = {
   isLoading: PropTypes.bool,
   showMap: PropTypes.bool,
   value: PropTypes.string,
+  style: PropTypes.object,
   itemProps: PropTypes.object,
   isHighlighted: PropTypes.bool,
   item: PropTypes.object,

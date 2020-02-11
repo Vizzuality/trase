@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { SET_TOOLTIPS, SET_CONTEXTS, APP__SET_LOADING } from 'actions/app.actions';
 import { GET_TOOLTIPS_URL, getURLFromParams, GET_CONTEXTS_URL } from 'utils/getURLFromParams';
 import getPageTitle from 'router/page-title';
@@ -16,8 +17,9 @@ function loadTooltipsPromise(dispatch, getState) {
   });
 
   return new Promise(resolve =>
-    fetch(tooltipsURL)
-      .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    axios
+      .get(tooltipsURL)
+      .then(res => res.data)
       .then(data => {
         dispatch({
           type: SET_TOOLTIPS,
@@ -45,8 +47,9 @@ function loadContextsPromise(dispatch, getState) {
     type: APP__SET_LOADING,
     payload: { contexts: true }
   });
-  return fetch(contextURL)
-    .then(resp => resp.json())
+  return axios
+    .get(contextURL)
+    .then(resp => resp.data)
     .then(json => {
       const contexts = json.data.sort(sortContexts);
 

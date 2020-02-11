@@ -66,10 +66,10 @@ function Explore(props) {
   };
 
   const renderTitle = () => {
-    const titleParts = ['commodity', 'sourcing country', 'supply chain'];
+    const titleParts = ['commodity', 'source country', 'supply chain to explore'];
     return (
       <Heading size="lg" align="center" data-test="step-title">
-        {step}. Choose one {titleParts[step - 1]}
+        {step}. Choose a {titleParts[step - 1]}
       </Heading>
     );
   };

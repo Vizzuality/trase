@@ -1,7 +1,7 @@
 import { redirect } from 'redux-first-router';
 
 export const redirectToExplore = (dispatch, getState, { action }) => {
-  if (action.meta.location?.kind === 'redirect' || ENABLE_REDESIGN_PAGES) {
+  if (action.meta.location?.kind === 'redirect' || ENABLE_TOOL_PANEL) {
     return;
   }
 

@@ -17,8 +17,8 @@
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
-/doc/db/all_tables/**/*
-/doc/db/blue_tables/**/*
+/doc/gh-pages/db/all_tables/**/*
+/doc/gh-pages/db/blue_tables/**/*
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -28,7 +28,6 @@
 
 /public/downloads
 /public/system
-/public/urls.txt
 
 # Ignore gold master responses
 spec/support/gold_master.zip

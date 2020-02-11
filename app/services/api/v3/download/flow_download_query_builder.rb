@@ -20,12 +20,13 @@ module Api
         #   e.g. [{"name"=>"ZERO_DEFORESTATION", "op"=>"eq", "val"=>"no"}]
         def initialize(context, params)
           @context = context
-          @query = Api::V3::Readonly::DownloadFlow.
+          @query = Api::V3::Flow.
+            from('download_flows_v flows').
             joins(
               'JOIN download_attributes_mv ON
-              download_attributes_mv.context_id = download_flows.context_id
-              AND download_attributes_mv.original_type = download_flows.attribute_type
-              AND download_attributes_mv.original_id = download_flows.attribute_id'
+              download_attributes_mv.context_id = flows.context_id
+              AND download_attributes_mv.original_type = flows.attribute_type
+              AND download_attributes_mv.original_id = flows.attribute_id'
             ).where(context_id: @context.id)
           @size_query = Api::V3::Readonly::DownloadFlowsStats.
             where(context_id: @context.id)
@@ -95,7 +96,7 @@ module Api
               [
                 role,
                 context_node_types_with_roles.select do |cnt|
-                  cnt.context_node_type_property.role == role
+                  cnt.context_node_type_property&.role == role
                 end
               ]
             end
@@ -175,14 +176,14 @@ module Api
           op = QUAL_OPS[op_symbol]
           return nil unless op
 
-          "LOWER(total) #{op} LOWER(?)"
+          "LOWER(qual_value) #{op} LOWER(?)"
         end
 
         def quant_op_part(op_symbol)
           op = QUANT_OPS[op_symbol]
           return nil unless op
 
-          "sum #{op} ?"
+          "quant_value #{op} ?"
         end
       end
     end

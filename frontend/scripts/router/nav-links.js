@@ -1,7 +1,7 @@
 import { TOOL_LAYOUT } from 'constants';
 
 const supplyChainNavs = [];
-if (ENABLE_REDESIGN_PAGES) {
+if (ENABLE_TOOL_PANEL) {
   supplyChainNavs.push({
     name: 'Supply Chain',
     page: {
@@ -71,10 +71,10 @@ const sidebarNav = [
     }
   },
   {
-    name: 'How does Trase work?',
+    name: 'Methods and data',
     page: {
       type: 'about',
-      payload: { section: 'how-does-trase-work' }
+      payload: { section: 'methods-and-data' }
     }
   },
   {

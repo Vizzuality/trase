@@ -13,6 +13,7 @@ module Api
           # @option params [Integer] end_year
         def initialize(params)
           @self_ids = params.delete(param_name)
+          @nodes_to_filter_by = Api::V3::Dashboards::NodesToFilterBy.new(params)
           @order_by = params.delete(:order_by)&.downcase
           super(params)
           initialize_contexts
@@ -44,13 +45,15 @@ module Api
               :id,
               :name,
               :node_type,
-              :node_type_id
+              :node_type_id,
+              :country_id
             ).
             group(
               :id,
               :name,
               :node_type,
-              :node_type_id
+              :node_type_id,
+              :country_id
             )
           apply_order_by
         end
@@ -58,7 +61,32 @@ module Api
         def filter_by_nodes
           return unless @node_ids.any?
 
-          @query = @query.where("nodes_ids && ARRAY[#{@node_ids.join(',')}]")
+          # to find all the matching paths, we need to look at node types
+          # of the nodes we're filtering by
+          # and for each node type we check that the path matches at least
+          # one selected node
+          # e.g. if someone selected 3 municipalities and 3 destinations
+          # we look for flows where path matches ANY of the 3 municipalities
+          # AND ANY of the 3 destinatons
+          # no path can match more than pone node id of a given node type
+          path_conditions = @nodes_to_filter_by.node_types_ids.map do |node_type_id|
+            nodes = @nodes_to_filter_by.nodes_by_node_type_id(node_type_id)
+            "flows.path && ARRAY[#{nodes.map(&:id).join(', ')}]"
+          end.join(' AND ')
+          # get a list of all matching nodes without checking role / position
+          # because that's more complicated and identical performance-wise
+          @subquery = Api::V3::Flow.
+            select('UNNEST(path) AS node_id').
+            where(path_conditions)
+          @subquery = @subquery.where(context_id: @contexts.pluck(:id))
+          @subquery = @subquery.where('year >= ?', @start_year) if @start_year
+          @subquery = @subquery.where('year <= ?', @end_year) if @end_year
+
+          @query = @query.
+            joins(
+              "JOIN (#{@subquery.to_sql}) s
+                ON s.node_id = #{filtered_class.table_name}.id"
+            )
         end
 
         def year_selected?

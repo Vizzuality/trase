@@ -17,7 +17,7 @@
       &:hover {
         background-color: $charcoal-grey;
 
-        > span {
+        .grid-list-item-text {
           color: $white;
         }
       }
@@ -27,7 +27,7 @@
   &.color-white {
     .grid-list-item-button {
       background-color: $white;
-      span {
+      .grid-list-item-text {
         color: $charcoal-grey;
       }
     }
@@ -54,20 +54,10 @@
     cursor: pointer;
     overflow: hidden;
 
-    span {
-      color: $charcoal-grey;
-      font-family: $font-family-1;
-      font-size: 13px;
-      font-weight: $font-weight-bold;
-      line-height: 0.77;
-      letter-spacing: -0.8px;
-      text-transform: capitalize;
-    }
-
     &.-active {
       background-color: $charcoal-grey;
 
-      span {
+      .grid-list-item-text {
         color: $white;
       }
     }
@@ -84,6 +74,13 @@
     &[disabled=''] {
       opacity: 0.4;
     }
+  }
+
+  .grid-list-item-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .grid-list-item-info {
@@ -127,13 +124,13 @@
   .grid-list-item-button {
     background-color: $charcoal-grey;
 
-    span {
+    .grid-list-item-text {
       color: $white;
     }
 
     &.-active {
       background-color: $medium-gray;
-      span {
+      .grid-list-item-text {
         color: $charcoal-grey;
       }
     }

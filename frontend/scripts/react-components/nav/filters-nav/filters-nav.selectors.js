@@ -122,11 +122,8 @@ const getLogisticsMapHubsProps = createSelector(
   activeParams => ({
     label: 'Logistics Hub',
     id: 'logisticsMapHub',
-    options: LOGISTICS_MAP_HUBS.filter(hub =>
-      INDONESIA_LOGISTICS_MAP_ACTIVE ? hub.value === 'palmOil' : true
-    ),
-    value: LOGISTICS_MAP_HUBS.find(commodity => commodity.value === activeParams.commodity),
-    isDisabled: INDONESIA_LOGISTICS_MAP_ACTIVE
+    options: LOGISTICS_MAP_HUBS,
+    value: LOGISTICS_MAP_HUBS.find(commodity => commodity.value === activeParams.commodity)
   })
 );
 
@@ -210,7 +207,7 @@ export const getNavFilters = createSelector(
         const right = [
           {
             type: NAV_FILTER_TYPES.dropdown,
-            props: ENABLE_REDESIGN_PAGES ? { id: 'toolResizeBy' } : toolResizeBy
+            props: { id: 'toolResizeBy' }
           },
           { type: NAV_FILTER_TYPES.recolorBySelector, props: { id: 'toolRecolorBy' } },
           { type: NAV_FILTER_TYPES.dropdown, props: toolViewMode }
@@ -230,15 +227,7 @@ export const getNavFilters = createSelector(
             {
               type: NAV_FILTER_TYPES.contextSelector,
               props: { selectedContext, id: 'contextSelector' }
-            },
-            ...insertIf(!ENABLE_REDESIGN_PAGES && toolAdminLevel, {
-              type: NAV_FILTER_TYPES.dropdown,
-              props: toolAdminLevel
-            }),
-            ...insertIf(!ENABLE_REDESIGN_PAGES, {
-              type: NAV_FILTER_TYPES.yearSelector,
-              props: { id: 'yearsSelector' }
-            })
+            }
           ],
           right
         };

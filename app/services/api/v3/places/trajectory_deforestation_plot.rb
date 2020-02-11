@@ -22,7 +22,9 @@ module Api
           @chart_config = initialize_chart_config(
             :place, nil, :place_trajectory_deforestation
           )
-          raise 'No attributes found' unless @chart_config.attributes.any?
+          unless @chart_config.attributes.any?
+            raise ActiveRecord::RecordNotFound.new 'No attributes found'
+          end
         end
 
         def call

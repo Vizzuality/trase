@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Downshift from 'downshift';
 import deburr from 'lodash/deburr';
+import { FixedSizeList } from 'react-window';
 import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group/node-title-group.container';
 import SearchResult from 'react-components/tool/tool-search/tool-search-result/tool-search-result.component';
 
@@ -179,6 +180,8 @@ export default class ToolSearch extends Component {
             itemToString={i => (i === null ? '' : i.name)}
             onSelect={this.onSelected}
             ref={this.setDownshiftRef}
+            defaultHighlightedIndex={0}
+            itemCount={nodes.length}
             onStateChange={this.onDownshiftStateChange}
           >
             {({ getInputProps, getItemProps, isOpen, highlightedIndex }) => (
@@ -198,23 +201,35 @@ export default class ToolSearch extends Component {
                   />
                 </div>
                 {isOpen && (
-                  <ul className="search-results">
-                    {nodes.map((item, row) => (
-                      <SearchResult
-                        key={`${item.id} + ${item.contextId}`}
-                        value={inputValue}
-                        isHighlighted={row === highlightedIndex}
-                        toolLayout={toolLayout}
-                        item={item}
-                        contextId={contextId}
-                        itemProps={getItemProps({ item })}
-                        selected={this.isNodeSelected(item)}
-                        importerNotSelected={item.importer && !this.isNodeSelected(item.importer)}
-                        exporterNotSelected={item.exporter && !this.isNodeSelected(item.exporter)}
-                        onClickAdd={this.handleClickAdd}
-                      />
-                    ))}
-                  </ul>
+                  <FixedSizeList
+                    height={345}
+                    width={window.innerWidth}
+                    itemSize={85}
+                    itemData={nodes}
+                    itemCount={nodes.length}
+                    innerElementType="ul"
+                    className="search-results"
+                  >
+                    {({ index, style, data }) => {
+                      const item = data[index];
+                      return (
+                        <SearchResult
+                          style={style}
+                          key={index}
+                          value={inputValue}
+                          isHighlighted={index === highlightedIndex}
+                          toolLayout={toolLayout}
+                          item={item}
+                          contextId={contextId}
+                          itemProps={getItemProps({ item })}
+                          selected={this.isNodeSelected(item)}
+                          importerNotSelected={item.importer && !this.isNodeSelected(item.importer)}
+                          exporterNotSelected={item.exporter && !this.isNodeSelected(item.exporter)}
+                          onClickAdd={this.handleClickAdd}
+                        />
+                      );
+                    }}
+                  </FixedSizeList>
                 )}
               </div>
             )}

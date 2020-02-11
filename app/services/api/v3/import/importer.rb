@@ -1,4 +1,3 @@
-require "#{Rails.root}/lib/modules/cache/warmer.rb"
 require "#{Rails.root}/lib/modules/cache/cleaner.rb"
 
 module Api
@@ -22,7 +21,7 @@ module Api
           yield if block_given?
           refresh_materialized_views_now
           Cache::Cleaner.clear_all
-          Cache::Warmer::UrlsFile.generate
+          refresh_profiles_later
           refresh_precomputed_downloads_later
           refresh_attributes_years
           @database_update.finished_with_success(@stats.to_h)
@@ -105,7 +104,6 @@ module Api
           [
             Api::V3::Readonly::Context,
             Api::V3::Readonly::Attribute,
-            Api::V3::Readonly::Flow, # TODO: try to get rid of this one
             Api::V3::Readonly::FlowNode,
             Api::V3::Readonly::NodeWithFlowsPerYear
           ].each { |mview| mview.refresh(sync: true, skip_dependents: true) }
@@ -113,11 +111,13 @@ module Api
           Api::V3::TablePartitions::CreatePartitionsForFlowQuants.new.call
           Api::V3::TablePartitions::CreatePartitionsForFlowInds.new.call
           Api::V3::TablePartitions::CreatePartitionsForFlowQuals.new.call
-          Api::V3::Readonly::DownloadFlow.refresh(
-            sync: true, skip_dependents: true, skip_precompute: true
-          )
+          Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowQuants.new.call
+          # not used at the moment
+          # Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowInds.new.call
+          Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowQuals.new.call
           # synchronously, skip dependencies (already refreshed)
           [
+            Api::V3::Readonly::DownloadFlowsStats,
             Api::V3::Readonly::NodeWithFlows,
             Api::V3::Readonly::NodeWithFlowsOrGeo,
             Api::V3::Readonly::NodesStats,
@@ -144,6 +144,14 @@ module Api
             Api::V3::Readonly::QualValuesMeta,
             Api::V3::Readonly::FlowQuantTotal
           ].each { |mview| mview.refresh(sync: true, skip_dependencies: true) }
+        end
+
+        def refresh_profiles_later
+          Api::V3::Readonly::NodeWithFlows.where(profile: :actor).select(:id).distinct.each do |node|
+            NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
+              [node.id]
+            )
+          end
         end
 
         def refresh_precomputed_downloads_later

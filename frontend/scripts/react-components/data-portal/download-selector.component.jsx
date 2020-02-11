@@ -16,8 +16,7 @@ class DownloadSelector extends Component {
       onOptionSelected,
       options,
       selected,
-      selectedFilters,
-      type
+      selectedFilters
     } = this.props;
 
     return options.map((elem, key) => (
@@ -35,7 +34,7 @@ class DownloadSelector extends Component {
           className="-red"
           noSelfCancel={elem.noSelfCancel}
           enabled={includes(selected, elem.id)}
-          onClick={() => onOptionSelected(type, elem.id)}
+          onClick={() => onOptionSelected(elem.id)}
         />
       </li>
     ));
@@ -55,7 +54,7 @@ class DownloadSelector extends Component {
                 <RadioButton
                   className="-red"
                   enabled={this.props.allSelected}
-                  onClick={() => this.props.onAllSelected(this.props.type)}
+                  onClick={() => this.props.onAllSelected()}
                 />
               </li>
             </ul>
@@ -84,8 +83,7 @@ DownloadSelector.propTypes = {
   onOptionFilterChange: PropTypes.func,
   onOptionFilterClear: PropTypes.func,
   onAllSelected: PropTypes.func,
-  title: PropTypes.string,
-  type: PropTypes.string
+  title: PropTypes.string
 };
 
 export default DownloadSelector;

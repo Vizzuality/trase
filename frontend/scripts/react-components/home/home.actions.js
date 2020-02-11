@@ -4,7 +4,7 @@ import {
   GET_POSTS_URL,
   GET_TESTIMONIALS_URL
 } from 'utils/getURLFromParams';
-
+import axios from 'axios';
 import { HOME_VIDEO } from 'constants';
 
 export const HOME__SET_CONTENT = 'HOME__SET_CONTENT';
@@ -19,8 +19,9 @@ export const getHomeContent = (type, mock) => dispatch => {
     tweets: { url: GET_TWEETS_URL, defaultValue: [] }
   }[type];
   const url = getURLFromParams(content.url, undefined, mock);
-  fetch(url)
-    .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
+  axios
+    .get(url)
+    .then(res => res.data)
     .then(data => (data[''] ? content.defaultValue : data.data)) // content/twitter may return { "": [] }
     .then(data =>
       dispatch({

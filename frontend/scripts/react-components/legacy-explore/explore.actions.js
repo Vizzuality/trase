@@ -2,6 +2,7 @@
 import { getURLFromParams, GET_TOP_NODES_URL } from 'utils/getURLFromParams';
 import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
 import getTopNodesKey from 'utils/getTopNodesKey';
+import axios from 'axios';
 
 export const EXPLORE__SET_TOP_COUNTRIES = 'EXPLORE__SET_TOP_COUNTRIES';
 export const EXPLORE__SET_TOP_EXPORTERS = 'EXPLORE__SET_TOP_EXPORTERS';
@@ -58,8 +59,9 @@ export const setExploreTopNodes = (columnType, context) => (dispatch, getState) 
   const url = getURLFromParams(GET_TOP_NODES_URL, params);
   return (
     !topNodes[topNodesKey] &&
-    fetch(url)
-      .then(res => (res.ok ? res.json() : Promise.reject(res.statusText)))
+    axios
+      .get(url)
+      .then(res => res.data)
       .then(res =>
         dispatch({
           type,
