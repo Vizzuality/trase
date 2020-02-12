@@ -6,6 +6,7 @@ import {
   getSelectedRecolorBy as getToolRecolorBy
 } from 'react-components/tool-links/tool-links.selectors';
 import { makeGetResizeByItems } from 'selectors/indicators.selectors';
+import { getDirtyBlocks } from 'react-components/nodes-panel/nodes-panel.selectors';
 import { getDynamicSentence } from 'react-components/dashboard-element/dashboard-element.selectors';
 import capitalize from 'lodash/capitalize';
 import { getVersionData } from 'react-components/tool/tool-modal/versioning-modal/versioning-modal.selectors';
@@ -17,14 +18,23 @@ const getCurrentSection = state => state.location.payload?.section;
 const getAppTooltips = state => state.app.tooltips;
 const getToolDetailedView = state => state.toolLinks && state.toolLinks.detailedView;
 
+const getIsCustomSupplyChain = createSelector(
+  [getDirtyBlocks],
+  dirtyBlocks =>
+    dirtyBlocks.sources ||
+    dirtyBlocks.destinations ||
+    dirtyBlocks.exporters ||
+    dirtyBlocks.importers
+);
+
 const getToolResizeBys = createSelector(
   getSelectedContext,
   selectedContext => selectedContext && selectedContext.resizeBy
 );
 
 const getPanelFilter = createSelector(
-  [getSelectedContext, getDynamicSentence],
-  (selectedContext, dynamicSentence) => {
+  [getSelectedContext, getDynamicSentence, getIsCustomSupplyChain],
+  (selectedContext, dynamicSentence, isCustom) => {
     const title =
       selectedContext &&
       `${capitalize(selectedContext.countryName)} - ${capitalize(selectedContext.commodityName)}`;
@@ -33,7 +43,7 @@ const getPanelFilter = createSelector(
       id: 'context',
       type: 'edit',
       title,
-      subtitle: null,
+      subtitle: isCustom ? '(Custom)' : null,
       show: selectedContext,
       tooltip: immer(dynamicSentence, draft => {
         if (draft[0] && !draft[0].prefix) {
