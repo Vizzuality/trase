@@ -2,16 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Heading from 'react-components/shared/heading';
 import Button from 'react-components/shared/button/button.component';
+import cx from 'classnames';
 
 import 'react-components/shared/tool-bar/edit-filter/edit-filter.scss';
 
 function EditFilter(props) {
-  const { id, title, subtitle, onClick } = props;
+  const { id, title, subtitle, onClick, className } = props;
 
   return (
-    <button onClick={() => onClick(id)} className="c-edit-filter">
+    <button onClick={() => onClick(id)} className={cx('c-edit-filter', className)}>
       <Heading as="h2" color="white" weight="bold" size="md" className="edit-title">
-        {title}
+        <span className="title-text">{title}</span>
         {subtitle && (
           <Heading as="span" color="white" size="sm" weight="bold" className="edit-subtitle">
             {subtitle}

@@ -16,4 +16,14 @@
     display: block;
     color: rgba($white, 0.6);
   }
+
+  &.-hovered {
+    .value-text {
+      text-decoration: underline;
+    }
+  }
+
+  @media screen and (min-width: 1120px) {
+    max-width: none;
+  }
 }
