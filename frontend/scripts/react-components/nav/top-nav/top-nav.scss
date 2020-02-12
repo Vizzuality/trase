@@ -25,26 +25,6 @@ $desktop-nav-min-width: 960px;
     .locale-selector-menu-item {
       color: $charcoal-grey;
     }
-
-    .locale-selector-menu {
-      background-color: $white;
-      box-shadow: 0 3px 6px 0 rgba($black, 0.16), 0 3px 6px 0 rgba($black, 0.23);
-
-      .locale-selector-menu-item {
-        width: 100%;
-        margin: 0;
-        padding: 5px 10px;
-        opacity: 1;
-
-        &:hover {
-          background-color: $egg-shell;
-        }
-
-        &:not(:first-child) {
-          border-top: solid 1px rgba($charcoal-grey, 0.2);
-        }
-      }
-    }
   }
 
   &:not(.-has-background) {

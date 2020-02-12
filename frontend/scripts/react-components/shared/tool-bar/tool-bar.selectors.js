@@ -52,6 +52,7 @@ export const getResizeByFilter = createSelector(
     label: 'units',
     show: selectedResizeBy,
     value: selectedResizeBy?.label || '',
+    suffix: selectedResizeBy?.unit && `(${selectedResizeBy?.unit})`,
     isDisabled: items.length === 1 && selectedResizeBy?.attributeId === items[0].attributeId,
     tooltip: tooltips && tooltips.sankey.nav.resizeBy.main
   })
@@ -69,16 +70,13 @@ export const getRecolorByFilter = createSelector(
   })
 );
 
-export const getVersioningSelected = createSelector(
-  getVersionData,
-  versionData => ({
-    id: 'version',
-    type: 'optionsMenu',
-    show: versionData,
-    label: 'version',
-    value: `${versionData?.title} v${versionData?.version}`
-  })
-);
+export const getVersioningSelected = createSelector(getVersionData, versionData => ({
+  id: 'version',
+  type: 'optionsMenu',
+  show: versionData,
+  label: 'version',
+  value: `${versionData?.title} v${versionData?.version}`
+}));
 
 export const getViewModeFilter = createSelector(
   [getAppTooltips, getToolDetailedView, getCurrentSection],
@@ -92,38 +90,31 @@ export const getViewModeFilter = createSelector(
   })
 );
 
-const getLogisticsMapHubsFilter = createSelector(
-  [getActiveParams],
-  activeParams => {
-    const activeHub = LOGISTICS_MAP_HUBS.find(
-      commodity => commodity.value === activeParams.commodity
-    );
+const getLogisticsMapHubsFilter = createSelector([getActiveParams], activeParams => {
+  const activeHub = LOGISTICS_MAP_HUBS.find(
+    commodity => commodity.value === activeParams.commodity
+  );
 
-    return {
-      id: 'hubs',
-      type: 'edit',
-      title: capitalize(activeHub.value),
-      show: true
-    };
-  }
-);
+  return {
+    id: 'hubs',
+    type: 'edit',
+    title: capitalize(activeHub.value),
+    show: true
+  };
+});
 
-const getLogisticsMapInspectionLevelFilter = createSelector(
-  [getActiveParams],
-  activeParams => {
-    const all = { label: 'All', value: null };
-    return {
-      id: 'inspectionLevels',
-      label: 'Inspection Level',
-      type: 'optionsMenu',
-      show: activeParams.commodity === 'cattle',
-      value: (
-        LOGISTICS_MAP_INSPECTION_LEVELS.find(level => level.value === activeParams.inspection) ||
-        all
-      ).label
-    };
-  }
-);
+const getLogisticsMapInspectionLevelFilter = createSelector([getActiveParams], activeParams => {
+  const all = { label: 'All', value: null };
+  return {
+    id: 'inspectionLevels',
+    label: 'Inspection Level',
+    type: 'optionsMenu',
+    show: activeParams.commodity === 'cattle',
+    value: (
+      LOGISTICS_MAP_INSPECTION_LEVELS.find(level => level.value === activeParams.inspection) || all
+    ).label
+  };
+});
 
 export const getToolBar = createSelector(
   [

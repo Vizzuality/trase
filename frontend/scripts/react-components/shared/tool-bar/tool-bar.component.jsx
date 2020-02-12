@@ -49,7 +49,8 @@ function ToolBar(props) {
       >
         {React.createElement(types[item.type], {
           ...item,
-          onClick: props[`${item.id}_onClick`]
+          onClick: props[`${item.id}_onClick`],
+          className: item.id === activeId ? '-hovered' : undefined
         })}
       </li>
     );

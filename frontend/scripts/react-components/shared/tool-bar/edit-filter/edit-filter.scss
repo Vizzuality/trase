@@ -25,6 +25,25 @@
 
     .edit-button {
       display: inline-flex;
+
+      .icon {
+        width: 1.2em;
+        height: 1.2em;
+      }
+    }
+  }
+
+  &.-hovered {
+    .title-text {
+      text-decoration: underline;
+    }
+
+    .edit-button {
+      background-color: $carbon-gray;
+
+      .icon {
+        fill: $white;
+      }
     }
   }
 }
