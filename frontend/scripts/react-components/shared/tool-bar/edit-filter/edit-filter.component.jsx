@@ -31,6 +31,7 @@ function EditFilter(props) {
 EditFilter.propTypes = {
   id: PropTypes.string,
   subtitle: PropTypes.string,
+  className: PropTypes.string,
   title: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired
 };
