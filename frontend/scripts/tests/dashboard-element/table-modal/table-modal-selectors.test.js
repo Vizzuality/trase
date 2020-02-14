@@ -36,8 +36,8 @@ describe('Table widget selectors', () => {
           chartType
         })
       ).toEqual([
-        { name: 'commodity' },
         { name: 'country' },
+        { name: 'commodity' },
         { name: 'year' },
         { name: 'biome' },
         { name: 'trade volume', unit: 't', format: ',.2s' }
@@ -54,8 +54,8 @@ describe('Table widget selectors', () => {
           chartType
         })
       ).toEqual([
-        { name: 'commodity' },
         { name: 'country' },
+        { name: 'commodity' },
         { name: 'year' },
         { name: 'trade volume', unit: 't', format: ',.2s' },
         { name: 'zero deforestation commitment (exporter)' }
