@@ -7,9 +7,8 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const webpackBaseConfig = require('./webpack.config');
-const webpackIEConfig = require('./webpack.config.ie');
 
-const main = merge(webpackBaseConfig, {
+module.exports = merge(webpackBaseConfig, {
   mode: 'production',
   devtool: 'source-map',
   output: {
@@ -84,5 +83,3 @@ const main = merge(webpackBaseConfig, {
     }
   }
 });
-
-module.exports = [main, webpackIEConfig];
