@@ -25,7 +25,7 @@ For long term caching, we set the javascript files `cache-control` to 1 year, we
 
 For the service-worker to properly update the code, we need to set a `no-cache` directive both on the service-worker file and in the `index.html`. This is also down using Apache2.
 
-_NOTE: if in the future we decide to move away from AWS and Apache2 setup (i.e. to use NextJS alongside Zeit's Now.sh), we will need to set up the cache-control directives for the service-worker. Otherwise, a bug will be introduced._ 
+_NOTE: if in the future we decide to move away from AWS and Apache2 setup (i.e. to use NextJS alongside Zeit's Now.sh), we will need to set up the cache-control directives for the service-worker. Otherwise, a bug will be introduced._
 
 ## AWS Load balancer
 Load balancer takes care of routing the requests into one of the 2 machines that hold the backend. This is set so that the backend can be more performant and so that the heavy requests are handled by the biggest machine.
@@ -36,4 +36,4 @@ Load balancer takes care of routing the requests into one of the 2 machines that
 ## Frontend SPA (React)
 Application that consumes data from the backend in REST format and uses React to render. The application manages state using Redux + Redux-Saga and/or Redux-Thunk depending on use case. It has basic unit tests using Jest and basic E2E tests using PuppeteerJS and PollyJS. For the data visualisations it uses custom D3 charts and also Recharts library. For the maps it uses, Leaflet (in the future we will be migrating to Mapbox) and React Simple Maps.
 
-![excalidraw-202021312555(1)](../../Downloads/excalidraw-202021312555(1).png)
+![excalidraw-202021312555(1)](architecture.png)
