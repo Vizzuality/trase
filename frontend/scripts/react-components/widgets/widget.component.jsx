@@ -16,6 +16,7 @@ const mapStateToProps = (state, { query, params }) => {
 const mapDispatchToProps = dispatch =>
   bindActionCreators({ getWidgetData: widgetsActions.getWidgetData }, dispatch);
 
+// TODO: replace this with Zeit's SWR library: https://github.com/zeit/swr
 function Widget(props) {
   const { widget, children, query, params, raw, getWidgetData } = props;
   const sources = useRef([]);

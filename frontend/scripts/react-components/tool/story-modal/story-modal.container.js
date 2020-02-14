@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import ModalComponent from 'react-components/tool/story-modal/modal.component';
+import ModalComponent from 'legacy/modal.component';
 import { appActions } from 'app/app.register';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 

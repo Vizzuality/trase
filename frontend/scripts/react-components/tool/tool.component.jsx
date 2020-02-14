@@ -4,7 +4,6 @@ import EventManager from 'utils/eventManager';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import MapContainer from 'react-components/tool/map/map.container';
 import ModalContainer from 'react-components/tool/story-modal/story-modal.container';
-import Tooltip from 'react-components/tool/help-tooltip/help-tooltip.container';
 import SplittedView from 'react-components/tool/splitted-view';
 import Timeline from 'react-components/tool/timeline';
 import ToolBar from 'react-components/shared/tool-bar';
@@ -31,7 +30,6 @@ const renderVainillaComponents = () => (
   <>
     <ModalContainer />
     <MapContainer />
-    <Tooltip />
   </>
 );
 
