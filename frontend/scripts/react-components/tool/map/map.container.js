@@ -25,7 +25,7 @@ import {
 import { getSelectedContext } from 'app/app.selectors';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 import { connect } from 'react-redux';
-import Map from 'react-components/tool/map/map.component';
+import Map from 'legacy/map.component';
 
 const mapStateToProps = state => {
   const { choropleth } = getChoroplethOptions(state);
