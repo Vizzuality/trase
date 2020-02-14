@@ -12,5 +12,8 @@ module.exports = {
   collectCoverage: false,
   collectCoverageFrom: ['**/*.js'],
   coverageDirectory: path.join(__dirname, 'coverage'),
-  coveragePathIgnorePatterns: ['tests/puppeteer']
+  coveragePathIgnorePatterns: ['tests/puppeteer'],
+  moduleNameMapper: {
+    '^styles/_settings.scss': '<rootDir>/../styles/styles-settings-stub.js'
+  }
 };
