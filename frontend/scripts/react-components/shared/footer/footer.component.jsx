@@ -114,6 +114,14 @@ const sections = [
           image: '/images/footer/donors/formas@2x.png',
           alt: 'Formas',
           imageClassName: null
+        },
+        {
+          className: 'nicfi-logo',
+          href:
+            'https://www.regjeringen.no/en/topics/climate-and-environment/climate/climate-and-forest-initiative/id2000712/',
+          image: '/images/footer/donors/nicfi_logo.svg',
+          alt: "Norway's International Climate and Forest Initiative (NICFI)",
+          imageClassName: null
         }
       ]
     ]
