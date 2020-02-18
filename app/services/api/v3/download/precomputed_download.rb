@@ -4,26 +4,23 @@ module Api
       class PrecomputedDownload
         ROOT_DIRNAME = 'public/downloads'.freeze
 
-        # @param parameters [Api::V3::Download::Parameters]
-        def initialize(parameters)
-          @parameters = parameters
-          @format = @parameters.format
-          @dirname = "#{ROOT_DIRNAME}/#{@format}"
-          @filename = @parameters.filename
+        # @param parameters [Api::V3::Context]
+        def initialize(context)
+          @download =
+            Api::V3::Download::FlowDownload.new(context, pivot: true)
+          @dirname = "#{ROOT_DIRNAME}/csv"
+          @filename = @download.filename
           @file_path = "#{@dirname}/#{@filename}"
         end
 
-        def retrieve
-          return nil unless File.exist?(@file_path)
-
-          Rails.logger.debug "Retrieving file from #{@file_path}"
-          File.read(@file_path)
-        end
-
-        def store(data)
+        def call
           ensure_directory_exists
-          Rails.logger.debug "Storing file at #{@file_path}"
-          File.open(@file_path, 'w') { |f| f.write data }
+
+          out = File.new(@file_path, 'wb')
+          ZipTricks::Streamer.open(out) do |stream|
+            Api::V3::Download::StreamContentForCsv.new(@download).call(stream)
+          end
+          out.close
         end
 
         class << self
@@ -38,16 +35,22 @@ module Api
 
           def refresh
             clear_and_refresh_all_contexts do |context|
-              Api::V3::Download::FlowDownload.new(context, pivot: true).
-                zipped_csv
+              Api::V3::Download::PrecomputedDownload.new(context).call
             end
           end
 
           def refresh_later
             clear_and_refresh_all_contexts do |context|
-              PrecomputedDownloadRefreshWorker.perform_async(
-                context.id, pivot: true
-              )
+              PrecomputedDownloadRefreshWorker.perform_async(context.id)
+            end
+          end
+
+          private
+
+          def clear_and_refresh_all_contexts
+            clear
+            Api::V3::Context.all.each do |context|
+              yield(context)
             end
           end
         end
@@ -58,13 +61,6 @@ module Api
           return if File.directory?(@dirname)
 
           FileUtils.mkdir_p(@dirname)
-        end
-
-        private_class_method def self.clear_and_refresh_all_contexts
-          clear
-          Api::V3::Context.all.each do |context|
-            yield(context)
-          end
         end
       end
     end

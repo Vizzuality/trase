@@ -1,15 +1,8 @@
 module ZipHelpers
-  def unzip(data)
-    fin = StringIO.new(data)
-
-    entries = {}
-
-    ::Zip::InputStream.open(fin) do |fzip|
-      while entry = fzip.get_next_entry
-        entries[entry.name] = fzip.read
-      end
+  def zip_file_entries_filenames(zip_file_path)
+    File.open(zip_file_path, 'rb') do |f|
+      entries = ZipTricks::FileReader.read_zip_structure(io: f)
+      entries.map(&:filename)
     end
-
-    entries
   end
 end

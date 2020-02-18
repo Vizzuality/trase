@@ -1,39 +1,61 @@
 module Api
   module V3
     class DownloadController < ApiController
-      before_action :set_no_cache_headers
+      include ActionController::Live # required for streaming
+      include ZipTricks::RailsStreaming
 
       def index
-        download = Api::V3::Download::FlowDownload.new(@context, params)
+        set_no_cache_headers
+        parameters = Api::V3::Download::Parameters.new(@context, params)
+        precomputed_download =
+          Api::V3::Download::RetrievePrecomputedDownload.new(parameters)
 
-        respond_to do |format|
-          format.csv do
-            send_data download.zipped_csv,
-                      type: 'application/zip',
-                      filename: download.filename,
-                      disposition: 'attachment'
-          end
-          format.json do
-            send_data download.zipped_json,
-                      type: 'application/zip',
-                      filename: download.filename,
-                      disposition: 'attachment'
-          end
+        if precomputed_download.exists?
+          # TODO: could this somehow just be served by Apache if it exists
+          serve_precomputed_download(precomputed_download)
+        else
+          set_streamed_zip_file_headers(parameters.filename)
+          stream_generated_download
         end
       end
 
       private
 
-      def set_no_cache_headers
-        response.delete_header('ETag')
-
-        response.set_header('Pragma', 'no-cache')
-        response.set_header('Expires', DateTime.yesterday)
-        response.set_header(
-          'Cache-Control',
-          'max-age=0, no-store, no-cache, must-revalidate'
-        )
+      def serve_precomputed_download(precomputed_download)
+        send_data precomputed_download.call,
+                  type: 'application/zip',
+                  filename: precomputed_download.filename,
+                  disposition: 'attachment'
       end
+
+      def stream_generated_download
+        download = Api::V3::Download::FlowDownload.new(@context, params)
+        content_streamer =
+          if request.format.json?
+            Api::V3::Download::StreamContentForJson.new(download)
+          else
+            Api::V3::Download::StreamContentForCsv.new(download)
+          end
+
+        zip_tricks_stream do |stream|
+          content_streamer.call(stream)
+        end
+      end
+
+      def set_no_cache_headers
+        response.headers['Cache-Control'] = 'no-cache'
+        response.headers['Last-Modified'] = Time.now.httpdate.to_s
+      end
+
+      # rubocop:disable Naming/AccessorMethodName
+      def set_streamed_zip_file_headers(filename)
+        response.headers['Content-Disposition'] =
+          "attachment; filename=\"#{filename}\""
+        response.headers['Content-Type'] = 'application/zip'
+        response.delete_header('Content-Length')
+        response.headers['X-Accel-Buffering'] = 'no'
+      end
+      # rubocop:enable Naming/AccessorMethodName
     end
   end
 end

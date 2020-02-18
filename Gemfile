@@ -54,12 +54,12 @@ gem 'pg_csv'
 gem 'pg_search'
 gem 'rack', '~> 2.2.2' # issue with sidekiq web in version 2.1.1, still doesn't work on sandbox in version 2.1.2
 gem 'rack-cors', '~> 1.1'
-gem 'rubyzip'
 gem 'scenic'
 gem 'sidekiq', '~> 6.0.5'
 gem 'sidekiq-unique-jobs'
 gem 'sitemap_generator'
 gem 'twitter', '~> 7.0'
+gem 'zip_tricks'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
