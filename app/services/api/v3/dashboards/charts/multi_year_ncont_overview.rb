@@ -19,11 +19,11 @@ module Api
           end
 
           def call
-            break_by_values_indexes = ncont_break_by_values_map
+            break_by_values = @query.map { |e| e['break_by'] }.uniq.sort
 
             data_by_x = {}
             @query.each do |record|
-              idx = break_by_values_indexes[record['break_by']]
+              idx = break_by_values.index(record['break_by'])
               data_by_x[record['x']] ||= {}
               data_by_x[record['x']]["y#{idx}"] = record['y0']
             end
@@ -39,7 +39,7 @@ module Api
               info: info
             }
 
-            break_by_values_indexes.each do |break_by, idx|
+            break_by_values.each.with_index do |break_by, idx|
               @meta[:"y#{idx}"] = series_legend_meta(break_by, @cont_attribute)
             end
 

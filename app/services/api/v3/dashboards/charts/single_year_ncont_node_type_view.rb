@@ -24,14 +24,14 @@ module Api
           end
 
           def call
-            break_by_values_indexes = ncont_break_by_values_map
+            break_by_values = @query.map { |e| e['break_by'] }.uniq.sort
 
             data_by_x = {}
             x_labels_profile_info = []
             profile = profile_for_node_type_id(@node_type.id)
             @top_n_and_others_query.each do |record|
               x_labels_profile_info << {id: record['id'], profile: profile}
-              break_by_values_indexes.each do |break_by, idx|
+              break_by_values.each.with_index do |break_by, idx|
                 data_by_x[record['x']] ||= {}
                 data_by_x[record['x']]["y#{idx}"] = record['per_break_by'][break_by]
               end
@@ -49,7 +49,7 @@ module Api
               info: info
             }
 
-            break_by_values_indexes.each do |break_by, idx|
+            break_by_values.each.with_index do |break_by, idx|
               @meta[:"y#{idx}"] = series_legend_meta(break_by, @cont_attribute)
             end
 

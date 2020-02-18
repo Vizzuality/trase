@@ -17,8 +17,7 @@
         "required": [
           "x",
           "y0",
-          "y1",
-          "y4"
+          "y1"
         ],
         "properties": {
           "y0": {
@@ -27,14 +26,6 @@
           },
           "y1": {
             "$id": "#/properties/data/items/properties/y1",
-            "type": "number"
-          },
-          "y2": {
-            "$id": "#/properties/data/items/properties/y2",
-            "type": "number"
-          },
-          "y3": {
-            "$id": "#/properties/data/items/properties/y3",
             "type": "number"
           },
           "x": {
@@ -53,9 +44,6 @@
         "x",
         "y0",
         "y1",
-        "y2",
-        "y3",
-        "y4",
         "info"
       ],
       "properties": {
@@ -249,126 +237,6 @@
                 },
                 "suffix": {
                   "$id": "#/properties/meta/properties/y1/properties/tooltip/properties/suffix",
-                  "type": "string",
-                  "pattern": "^(.*)$"
-                }
-              }
-            }
-          }
-        },
-        "y2": {
-          "$id": "#/properties/meta/properties/y2",
-          "type": "object",
-          "required": [
-            "label",
-            "tooltip"
-          ],
-          "properties": {
-            "label": {
-              "$id": "#/properties/meta/properties/y2/properties/label",
-              "type": ["integer", "number", "string"]
-            },
-            "tooltip": {
-              "$id": "#/properties/meta/properties/y2/properties/tooltip",
-              "type": "object",
-              "required": [
-                "prefix",
-                "format",
-                "suffix"
-              ],
-              "properties": {
-                "prefix": {
-                  "$id": "#/properties/meta/properties/y2/properties/tooltip/properties/prefix",
-                  "type": "string",
-                  "pattern": "^(.*)$"
-                },
-                "format": {
-                  "$id": "#/properties/meta/properties/y2/properties/tooltip/properties/format",
-                  "type": "string",
-                  "pattern": "^(.*)$"
-                },
-                "suffix": {
-                  "$id": "#/properties/meta/properties/y2/properties/tooltip/properties/suffix",
-                  "type": "string",
-                  "pattern": "^(.*)$"
-                }
-              }
-            }
-          }
-        },
-        "y3": {
-          "$id": "#/properties/meta/properties/y3",
-          "type": "object",
-          "required": [
-            "label",
-            "tooltip"
-          ],
-          "properties": {
-            "label": {
-              "$id": "#/properties/meta/properties/y3/properties/label",
-              "type": ["integer", "number", "string"]
-            },
-            "tooltip": {
-              "$id": "#/properties/meta/properties/y3/properties/tooltip",
-              "type": "object",
-              "required": [
-                "prefix",
-                "format",
-                "suffix"
-              ],
-              "properties": {
-                "prefix": {
-                  "$id": "#/properties/meta/properties/y3/properties/tooltip/properties/prefix",
-                  "type": "string",
-                  "pattern": "^(.*)$"
-                },
-                "format": {
-                  "$id": "#/properties/meta/properties/y3/properties/tooltip/properties/format",
-                  "type": "string",
-                  "pattern": "^(.*)$"
-                },
-                "suffix": {
-                  "$id": "#/properties/meta/properties/y3/properties/tooltip/properties/suffix",
-                  "type": "string",
-                  "pattern": "^(.*)$"
-                }
-              }
-            }
-          }
-        },
-        "y4": {
-          "$id": "#/properties/meta/properties/y4",
-          "type": "object",
-          "required": [
-            "label",
-            "tooltip"
-          ],
-          "properties": {
-            "label": {
-              "$id": "#/properties/meta/properties/y4/properties/label",
-              "type": ["integer", "number", "string"]
-            },
-            "tooltip": {
-              "$id": "#/properties/meta/properties/y4/properties/tooltip",
-              "type": "object",
-              "required": [
-                "prefix",
-                "format",
-                "suffix"
-              ],
-              "properties": {
-                "prefix": {
-                  "$id": "#/properties/meta/properties/y4/properties/tooltip/properties/prefix",
-                  "type": "string",
-                  "pattern": "^(.*)$"
-                },
-                "format": {
-                  "$id": "#/properties/meta/properties/y4/properties/tooltip/properties/format",
-                  "type": "string",
-                  "pattern": "^(.*)$"
-                },
-                "suffix": {
-                  "$id": "#/properties/meta/properties/y4/properties/tooltip/properties/suffix",
                   "type": "string",
                   "pattern": "^(.*)$"
                 }

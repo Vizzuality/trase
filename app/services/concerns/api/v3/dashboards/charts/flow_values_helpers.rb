@@ -100,25 +100,6 @@ module Api
             }
           end
 
-          def ncont_break_by_values
-            ncont_attr_table = @ncont_attribute.flow_values_class.table_name
-            @ncont_attribute.
-              flow_values_class.
-              from("partitioned_#{ncont_attr_table} #{ncont_attr_table}").
-              where(
-                @ncont_attribute.attribute_id_name => @ncont_attribute.original_id
-              ).
-              select(Arel.sql('value::TEXT AS text_value')).
-              order(Arel.sql('value::TEXT')).
-              distinct.map { |r| r['text_value'] }
-          end
-
-          def ncont_break_by_values_map
-            Hash[
-              ncont_break_by_values.map.with_index { |v, idx| [v, idx] }
-            ]
-          end
-
           def swap_x_and_y
             @data = @data.map do |object|
               swap_x_and_y_keys_in_hash(object)

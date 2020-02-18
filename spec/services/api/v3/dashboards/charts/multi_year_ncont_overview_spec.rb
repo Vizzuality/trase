@@ -58,9 +58,10 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNcontOverview do
         shared_parameters_hash.merge(companies_ids: [api_v3_exporter2_node.id])
       }
       it 'summarized flows matching exporter per ncont' do
-        expect(data.size).to eq(1)
+        # only flow4 matches, forest500=4, volume=25
+        expect(meta[:y0][:label]).to eq('4')
         expect(data[0][:x]).to eq(2015)
-        expect(data[0][:y0]).to eq(nil)
+        expect(data[0][:y0]).to eq(25)
       end
     end
 
@@ -88,9 +89,10 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNcontOverview do
         )
       }
       it 'summarized flows matching exporter AND importer per ncont' do
-        expect(data.size).to eq(1)
+        # only flow4 matches, forest500=4, volume=25
+        expect(meta[:y0][:label]).to eq('4')
         expect(data[0][:x]).to eq(2015)
-        expect(data[0][:y3]).to eq(25)
+        expect(data[0][:y0]).to eq(25)
       end
     end
 
