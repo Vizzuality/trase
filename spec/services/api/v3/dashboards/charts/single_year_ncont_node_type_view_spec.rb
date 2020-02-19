@@ -42,6 +42,7 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontNodeTypeView do
   }
 
   let(:data) { result[:data] }
+  let(:meta) { result[:meta] }
 
   describe :call do
     context 'when no flow path filters' do
@@ -59,8 +60,10 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontNodeTypeView do
         shared_parameters_hash.merge(companies_ids: [api_v3_exporter1_node.id])
       }
       it 'it summarized flows matching exporter per biome' do
-        expect(data[0][:x2]).to eq(20)
-        expect(data[0][:x3]).to be_nil
+        # all flows except flow4 match
+        # flow5 forest500=5, volume=30
+        expect(meta[:x3][:label]).to eq('5')
+        expect(data[0][:x3]).to eq(30)
       end
     end
 
@@ -74,8 +77,10 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontNodeTypeView do
         )
       }
       it 'it summarized flows matching exporter per biome' do
-        expect(data[0][:x2]).to be_nil
-        expect(data[0][:x3]).to be_nil
+        # all flows except flow3 and flow4 match
+        # flow5 forest500=5, volume=30
+        expect(meta[:x2][:label]).to eq('5')
+        expect(data[0][:x2]).to eq(30)
       end
     end
 
@@ -88,7 +93,9 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontNodeTypeView do
         )
       }
       it 'summarized flows matching either exporter per biome' do
-        # y0 is the stack for value '1.0'
+        # all flows match
+        # flow 1, forest500=1, volume=10
+        expect(meta[:x0][:label]).to eq('1')
         expect(data[0][:x0]).to eq(10)
       end
     end
@@ -102,9 +109,11 @@ RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontNodeTypeView do
         )
       }
       it 'summarized flows matching exporter AND importer per biome' do
-        expect(data[0][:x0]).to eq(nil)
-        # y3 is the stack for value '3.0'
-        expect(data[0][:x3]).to eq(25)
+        # only flow4 matches, forest500=4, volume=25
+        expect(meta[:x0][:label]).to eq('4')
+        expect(data[0][:x0]).to eq(25)
+        expect(meta[:x1]).to be_nil
+        expect(data[0][:x1]).to be_nil
       end
     end
 
