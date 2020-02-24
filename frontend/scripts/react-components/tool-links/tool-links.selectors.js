@@ -175,26 +175,9 @@ export const getExpandedNodesByRole = createSelector(
 
 export const getToolGroupedCharts = makeGetGroupedCharts(getToolCharts);
 
-const getUrlSelectedColumnsIds = createSelector(
-  [getSelectedColumnsIds, getSelectedContext],
-  (selectedColumnsIds, selectedContext) => {
-    if (!selectedContext) {
-      return [];
-    }
-
-    const urlColumns = [];
-    selectedContext.defaultColumns.forEach(column => {
-      if (selectedColumnsIds[column.group] !== column.id) {
-        urlColumns[column.group] = selectedColumnsIds[column.group];
-      }
-    });
-    return urlColumns;
-  }
-);
-
 export const getToolLinksUrlProps = createStructuredSelector({
   selectedNodesIds: getToolSelectedNodesIds,
-  selectedColumnsIds: getUrlSelectedColumnsIds,
+  selectedColumnsIds: getSelectedColumnsIds,
   detailedView: getToolDetailedView,
   selectedResizeBy: getToolResizeBy,
   selectedRecolorBy: getToolRecolorBy,
