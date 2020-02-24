@@ -212,6 +212,7 @@ const toolLinksReducer = {
 
   [TOOL_LINKS__SELECT_COLUMN](state, action) {
     return immer(state, draft => {
+      const { extraColumn, data } = state;
       const { columnId, columnIndex } = action.payload;
       if (!draft.selectedColumnsIds) {
         draft.selectedColumnsIds = [];
@@ -222,20 +223,30 @@ const toolLinksReducer = {
       }
 
       const isInColumn = nodeId => {
-        const node = draft.data.nodes[nodeId];
+        const node = data.nodes[nodeId];
         // The node could come from the search or URL and not be in the state yet
         if (!node) return true;
-        const column = draft.data.columns[node.columnId];
+        const column = data.columns[node.columnId];
         return column.group !== columnIndex;
       };
       draft.selectedNodesIds = state.selectedNodesIds.filter(isInColumn);
       // draft.expandedNodesIds = state.expandedNodesIds.filter(isInColumn);
 
-      if (state.extraColumn && columnId === state.extraColumn.parentId) {
-        draft.selectedNodesIds.filter(id => state.extraColumnNodeId !== id);
-        // draft.expandedNodesIds.filter(id => state.extraColumnNodeId !== id);
-        draft.extraColumn = toolLinksInitialState.extraColumn;
-        draft.extraColumnNodeId = toolLinksInitialState.extraColumnNodeId;
+      if (extraColumn) {
+        const extraColumnParentId = extraColumn.parentId;
+        const extraColumnParentColumnGroup = data.columns[extraColumnParentId].group;
+        const column = data.columns[columnId];
+
+        if (
+          state.extraColumn &&
+          column.group === extraColumnParentColumnGroup &&
+          columnId !== state.extraColumn.parentId
+        ) {
+          draft.selectedNodesIds.filter(id => state.extraColumnNodeId !== id);
+          // draft.expandedNodesIds.filter(id => state.extraColumnNodeId !== id);
+          draft.extraColumn = toolLinksInitialState.extraColumn;
+          draft.extraColumnNodeId = toolLinksInitialState.extraColumnNodeId;
+        }
       }
     });
   },

@@ -20,46 +20,49 @@ export const getSelectedColumnsIds = createSelector(
     getPanelsActiveNodeTypeIds
   ],
   (selectedContext, selectedColumnsIds, extraColumn, columns, panelActiveNodeTypesIds) => {
-    if (
-      selectedColumnsIds &&
-      selectedContext &&
-      selectedColumnsIds.filter(Boolean).length === selectedContext.defaultColumns.length &&
-      !extraColumn
-    ) {
-      return selectedColumnsIds;
-    }
-
     if (!selectedContext) {
       return [];
     }
 
-    const selectedColumns = selectedContext.defaultColumns.reduce((acc, next) => {
-      // TODO: default columns should have the column role as well
-      // we're relying on the columns always being specified
-      const column = columns && columns[next.id] ? columns[next.id] : next;
-      let id = column.id;
-      if (selectedColumnsIds && selectedColumnsIds[column.group]) {
-        id = selectedColumnsIds[column.group];
-      } else if (panelActiveNodeTypesIds && panelActiveNodeTypesIds[column.role]) {
-        const defaultActiveNodeTypeColumn = selectedContext.defaultColumns.find(
-          c => c.id === panelActiveNodeTypesIds[column.role]
-        );
-        // FIXME: In lieu of a more solid solution that includes changes to the panel structure,
-        //  we make sure that when an activeNodeType exists in another position, the default is maintained
-        if (typeof defaultActiveNodeTypeColumn === 'undefined') {
-          id = panelActiveNodeTypesIds[column.role];
-        } else if (defaultActiveNodeTypeColumn.group === column.group) {
-          id = defaultActiveNodeTypeColumn.id;
+    const defaultColumns = selectedContext.defaultColumns;
+    const columnsNumber = extraColumn ? MIN_COLUMNS_NUMBER + 1 : MIN_COLUMNS_NUMBER
+    const columnsIds = Array.from(Array(columnsNumber)).map(
+      (id, index) => selectedColumnsIds && selectedColumnsIds[index] || undefined
+    );
+
+    const selectedColumns = columnsIds.map((columnId, index) => {
+      if (columnId) return columnId;
+
+      const isExtraColumn = extraColumn && columnsIds[index - 1] && extraColumn.parentId === columnsIds[index - 1];
+      if (isExtraColumn) {
+        return extraColumn.id;
+      }
+
+      let correctedIndex = index;
+      if (extraColumn && index >= columns[extraColumn.parentId].group) {
+        correctedIndex -= 1;
+      }
+      const defaultColumn = defaultColumns[correctedIndex];
+
+      if (columnId === extraColumn?.parentId) {
+        if (panelActiveNodeTypesIds && panelActiveNodeTypesIds[defaultColumn.role]) {
+          const panelActiveColumnId = panelActiveNodeTypesIds[defaultColumn.role];
+          const defaultActiveNodeTypeColumn = selectedContext.defaultColumns.find(
+            c => c.id === panelActiveColumnId
+          );
+          // FIXME: In lieu of a more solid solution that includes changes to the panel structure,
+          //  we make sure that when an activeNodeType exists in another position, the default is maintained
+          if (typeof defaultActiveNodeTypeColumn === 'undefined') {
+            return panelActiveColumnId;
+          }
+          if (defaultActiveNodeTypeColumn.group === correctedIndex) {
+            return defaultActiveNodeTypeColumn.id;
+          }
         }
       }
-      acc.push(id);
 
-      if (id === extraColumn?.parentId) {
-        acc.push(extraColumn.id);
-      }
-
-      return acc;
-    }, []);
+      return defaultColumn.id;
+    });
     return selectedColumns;
   }
 );
