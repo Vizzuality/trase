@@ -22,7 +22,7 @@ module Api
           return nil unless exists?
 
           Rails.logger.debug "Retrieving file from #{@file_path}"
-          File.read(@file_path)
+          @file_path
         end
       end
     end

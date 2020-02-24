@@ -20,37 +20,88 @@ RSpec.describe Api::V3::DownloadController, type: :controller do
 
   describe 'GET index' do
     context 'when precomputed' do
+      before(:all) {
+        FileUtils.mkdir_p 'spec/support/downloads/csv'
+        FileUtils.mkdir_p 'spec/support/downloads/json'
+      }
+
+      after(:all) {
+        FileUtils.rm_rf 'spec/support/downloads'
+      }
       before(:each) do
+        stub_const(
+          'Api::V3::Download::PrecomputedDownload::ROOT_DIRNAME',
+          'spec/support/downloads'
+        )
         allow_any_instance_of(
           Api::V3::Download::RetrievePrecomputedDownload
         ).to receive(:exists?).and_return(true)
-        allow_any_instance_of(
-          Api::V3::Download::RetrievePrecomputedDownload
-        ).to receive(:call).and_return('')
       end
       it 'returns a zipped csv file' do
+        @file_name = 'BRAZIL_SOY_v1.0_tc.zip'
+        @file_path = [
+          Api::V3::Download::PrecomputedDownload::ROOT_DIRNAME,
+          'csv',
+          @file_name
+        ].join('/')
+        FileUtils.touch @file_path
+        allow_any_instance_of(
+          Api::V3::Download::Parameters
+        ).to receive(:filename).and_return(@file_name)
+        allow_any_instance_of(
+          Api::V3::Download::RetrievePrecomputedDownload
+        ).to receive(:call).and_return(@file_path)
+
         get :index, params: {context_id: api_v3_context.id}, format: :csv
         expect(assigns(:context)).to eq(api_v3_context)
         expect(response.content_type).to eq('application/zip')
         expect(
           response.headers['Content-Disposition']
-        ).to eq('attachment; filename="BRAZIL_SOY_v1.0_tc.zip"')
+        ).to eq("attachment; filename=\"#{@file_name}\"")
       end
       it 'returns a zipped json file' do
+        @file_name = 'BRAZIL_SOY_v1.0_tc.zip'
+        @file_path = [
+          Api::V3::Download::PrecomputedDownload::ROOT_DIRNAME,
+          'json',
+          @file_name
+        ].join('/')
+        FileUtils.touch @file_path
+        allow_any_instance_of(
+          Api::V3::Download::Parameters
+        ).to receive(:filename).and_return(@file_name)
+        allow_any_instance_of(
+          Api::V3::Download::RetrievePrecomputedDownload
+        ).to receive(:call).and_return(@file_path)
+
         get :index, params: {context_id: api_v3_context.id}, format: :json
         expect(assigns(:context)).to eq(api_v3_context)
         expect(response.content_type).to eq('application/zip')
         expect(
           response.headers['Content-Disposition']
-        ).to eq('attachment; filename="BRAZIL_SOY_v1.0_tc.zip"')
+        ).to eq("attachment; filename=\"#{@file_name}\"")
       end
       it 'returns no version on file name if none is available' do
-        get :index, params: {context_id: api_v3_paraguay_context.id}, format: :json
+        @file_name = 'PARAGUAY_SOY_tc.zip'
+        @file_path = [
+          Api::V3::Download::PrecomputedDownload::ROOT_DIRNAME,
+          'csv',
+          @file_name
+        ].join('/')
+        FileUtils.touch @file_path
+        allow_any_instance_of(
+          Api::V3::Download::Parameters
+        ).to receive(:filename).and_return(@file_name)
+        allow_any_instance_of(
+          Api::V3::Download::RetrievePrecomputedDownload
+        ).to receive(:call).and_return(@file_path)
+
+        get :index, params: {context_id: api_v3_paraguay_context.id}, format: :csv
         expect(assigns(:context)).to eq(api_v3_paraguay_context)
         expect(response.content_type).to eq('application/zip')
         expect(
           response.headers['Content-Disposition']
-        ).to eq('attachment; filename="PARAGUAY_SOY_tc.zip"')
+        ).to eq("attachment; filename=\"#{@file_name}\"")
       end
     end
 

@@ -22,7 +22,7 @@ module Api
       private
 
       def serve_precomputed_download(precomputed_download)
-        send_data precomputed_download.call,
+        send_file precomputed_download.call,
                   type: 'application/zip',
                   filename: precomputed_download.filename,
                   disposition: 'attachment'
