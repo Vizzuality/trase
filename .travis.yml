@@ -10,19 +10,13 @@ matrix:
     - language: ruby
       rvm:
         - 2.6.5
-      # PostgreSQL 11 support:
-      # the solution in Travis docs is to use postgresql and apt addons
-      # and override the port env var ( or two, PGPORT and POSTGRES_PORT)
-      # we're not using that solution, because there's an issue
-      # we're using a workaround instead
-      # https://travis-ci.community/t/install-postgresql-11/3894/5
-      before_install:
-        - sudo apt-get update
-        - sudo apt-get --yes remove postgresql\*
-        - sudo apt-get install -y postgresql-11 postgresql-client-11
-        - sudo cp /etc/postgresql/{9.6,11}/main/pg_hba.conf
-        - sudo service postgresql restart 11
-        - sudo apt-get install -y graphviz
+      services:
+        - postgresql
+      addons:
+        postgresql: 11
+        apt:
+          packages:
+            - graphviz
       before_script:
         - psql --version
         - bundle exec rake db:drop db:create db:structure:load RAILS_ENV=test
