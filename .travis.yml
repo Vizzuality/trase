@@ -14,9 +14,9 @@ matrix:
         - postgresql
       addons:
         postgresql: 11
-      before_install:
-        - sudo apt-get update
-        - sudo apt-get install -y graphviz
+        apt:
+          packages:
+            - graphviz
       before_script:
         - psql --version
         - bundle exec rake db:drop db:create db:structure:load RAILS_ENV=test
