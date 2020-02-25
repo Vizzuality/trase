@@ -31,6 +31,7 @@ import getNodesMetaUid from 'app/helpers/getNodeMetaUid';
 import xor from 'lodash/xor';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import toolLinksSerialization from 'react-components/tool-links/tool-links.serializers';
+import { MIN_COLUMNS_NUMBER } from 'constants';
 import toolLinksInitialState from './tool-links.initial-state';
 
 function setNodes(state, action) {
@@ -212,41 +213,43 @@ const toolLinksReducer = {
 
   [TOOL_LINKS__SELECT_COLUMN](state, action) {
     return immer(state, draft => {
-      const { extraColumn, data } = state;
+      const { extraColumn, data, extraColumnNodeId, selectedNodesIds, selectedColumnsIds } = state;
       const { columnId, columnIndex } = action.payload;
-      if (!draft.selectedColumnsIds) {
+      if (!selectedColumnsIds) {
         draft.selectedColumnsIds = [];
       }
 
-      if (!draft.selectedColumnsIds.includes(columnId)) {
+      if (!selectedColumnsIds.includes(columnId)) {
         draft.selectedColumnsIds[columnIndex] = columnId;
       }
+
+      const extraColumnParentColumnPosition =
+        extraColumn && data.columns[extraColumn.parentId].group;
+      const column = data.columns[columnId];
 
       const isInColumn = nodeId => {
         const node = data.nodes[nodeId];
         // The node could come from the search or URL and not be in the state yet
         if (!node) return true;
-        const column = data.columns[node.columnId];
         return column.group !== columnIndex;
       };
-      draft.selectedNodesIds = state.selectedNodesIds.filter(isInColumn);
+      draft.selectedNodesIds = selectedNodesIds.filter(isInColumn);
       // draft.expandedNodesIds = state.expandedNodesIds.filter(isInColumn);
 
-      if (extraColumn) {
-        const extraColumnParentId = extraColumn.parentId;
-        const extraColumnParentColumnGroup = data.columns[extraColumnParentId].group;
-        const column = data.columns[columnId];
-
-        if (
-          state.extraColumn &&
-          column.group === extraColumnParentColumnGroup &&
-          columnId !== state.extraColumn.parentId
-        ) {
-          draft.selectedNodesIds.filter(id => state.extraColumnNodeId !== id);
-          // draft.expandedNodesIds.filter(id => state.extraColumnNodeId !== id);
-          draft.extraColumn = toolLinksInitialState.extraColumn;
-          draft.extraColumnNodeId = toolLinksInitialState.extraColumnNodeId;
+      // We are removing the extra column by changing the parent column selector
+      if (extraColumnParentColumnPosition === column.group) {
+        // TOOD: Fix edge case after reloading: Remove the extraColumn parent column
+        if (selectedColumnsIds.length === MIN_COLUMNS_NUMBER + 1) {
+          const updatedSelectedColumnsIds = selectedColumnsIds;
+          updatedSelectedColumnsIds.splice(extraColumnParentColumnPosition, 1);
+          updatedSelectedColumnsIds[columnIndex] = columnId;
+          draft.selectedColumnsIds = updatedSelectedColumnsIds;
         }
+
+        draft.selectedNodesIds = selectedNodesIds.filter(id => extraColumnNodeId !== id);
+        // draft.expandedNodesIds.filter(id => state.extraColumnNodeId !== id);
+        draft.extraColumn = toolLinksInitialState.extraColumn;
+        draft.extraColumnNodeId = toolLinksInitialState.extraColumnNodeId;
       }
     });
   },
