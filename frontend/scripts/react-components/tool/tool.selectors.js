@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { getSelectedContext } from 'app/app.selectors';
 import { getPanelsActiveNodeTypeIds } from 'react-components/nodes-panel/nodes-panel.selectors';
-
+import groupBy from 'lodash/groupBy';
 import { MIN_COLUMNS_NUMBER } from 'constants';
 
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
@@ -20,28 +20,52 @@ export const getSelectedColumnsIds = createSelector(
     getPanelsActiveNodeTypeIds
   ],
   (selectedContext, selectedColumnsIds, extraColumn, columns, panelActiveNodeTypesIds) => {
-    if (!selectedContext) {
+    if (!selectedContext || !columns) {
       return [];
     }
-
+    const getCorrectedIndex = (index, selectionHasExtraColumnId) => {
+      if (!extraColumn || selectionHasExtraColumnId) {
+        return index;
+      }
+      if (index > columns[extraColumn.parentId].group) {
+        const correctedIndex = index - 1;
+        return correctedIndex;
+      }
+      return index;
+    };
     const defaultColumns = selectedContext.defaultColumns;
-    const columnsNumber = extraColumn ? MIN_COLUMNS_NUMBER + 1 : MIN_COLUMNS_NUMBER
-    const columnsIds = Array.from(Array(columnsNumber)).map(
-      (id, index) => selectedColumnsIds && selectedColumnsIds[index] || undefined
-    );
+    const columnsNumber = extraColumn ? MIN_COLUMNS_NUMBER + 1 : MIN_COLUMNS_NUMBER;
+
+    // TODO: This fixes a bug when reloading with an extra column and removing it
+    let correctedSelectedColumnsIds = selectedColumnsIds;
+    if (selectedColumnsIds?.length > MIN_COLUMNS_NUMBER && !extraColumn) {
+      const idsGroupedByGroup = groupBy(selectedColumnsIds, id => columns[id].group);
+      // We assume that there is only one column by group
+      correctedSelectedColumnsIds = Object.values(idsGroupedByGroup).map(ids => ids[0]);
+    }
+
+    const isExtraColumn = index =>
+      extraColumn &&
+      index > 0 &&
+      correctedSelectedColumnsIds[index - 1] &&
+      extraColumn.parentId === correctedSelectedColumnsIds[index - 1];
+    const selectionHasExtraColumnId =
+      extraColumn && correctedSelectedColumnsIds.includes(extraColumn.id);
+    const columnsIds = Array.from(Array(columnsNumber)).map((id, index) => {
+      if (isExtraColumn(index)) {
+        return extraColumn.id;
+      }
+
+      if (correctedSelectedColumnsIds) {
+        return correctedSelectedColumnsIds[getCorrectedIndex(index, selectionHasExtraColumnId)];
+      }
+      return undefined;
+    });
 
     const selectedColumns = columnsIds.map((columnId, index) => {
       if (columnId) return columnId;
 
-      const isExtraColumn = extraColumn && columnsIds[index - 1] && extraColumn.parentId === columnsIds[index - 1];
-      if (isExtraColumn) {
-        return extraColumn.id;
-      }
-
-      let correctedIndex = index;
-      if (extraColumn && index >= columns[extraColumn.parentId].group) {
-        correctedIndex -= 1;
-      }
+      const correctedIndex = getCorrectedIndex(index, selectionHasExtraColumnId);
       const defaultColumn = defaultColumns[correctedIndex];
 
       if (columnId === extraColumn?.parentId) {
@@ -75,9 +99,8 @@ export const getHasExtraColumn = createSelector(
   }
 );
 
-export const getColumnsNumber = createSelector(
-  getHasExtraColumn,
-  hasExtraColumn => (hasExtraColumn ? MIN_COLUMNS_NUMBER + 1 : MIN_COLUMNS_NUMBER)
+export const getColumnsNumber = createSelector(getHasExtraColumn, hasExtraColumn =>
+  hasExtraColumn ? MIN_COLUMNS_NUMBER + 1 : MIN_COLUMNS_NUMBER
 );
 
 export const getSelectedNodesData = createSelector(
