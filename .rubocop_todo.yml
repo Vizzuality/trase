@@ -39,14 +39,6 @@ Layout/EmptyLinesAroundArguments:
   Exclude:
     - 'lib/tasks/charts.rake'
 
-# Offense count: 1
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyleAlignWith, AutoCorrect, Severity.
-# SupportedStylesAlignWith: keyword, variable, start_of_line
-Layout/EndAlignment:
-  Exclude:
-    - 'app/services/api/v3/actors/top_nodes_summary.rb'
-
 # Offense count: 38
 # Cop supports --auto-correct.
 # Configuration parameters: IndentationWidth.
