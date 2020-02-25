@@ -62,6 +62,7 @@ module Api
           end
         end
 
+        # rubocop:disable Metrics/MethodLength
         def initialize_path_column_names(context_id)
           context_node_types = Api::V3::ContextNodeType.
             select([:column_position, 'node_types.name']).
@@ -78,6 +79,7 @@ module Api
           end
           @path_crosstab_columns = @path_column_aliases.map { |a| "#{a} text" }
         end
+        # rubocop:enable Metrics/MethodLength
       end
     end
   end

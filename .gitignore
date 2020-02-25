@@ -32,6 +32,7 @@
 # Ignore gold master responses
 spec/support/gold_master.zip
 spec/support/gold_master/*
+spec/support/downloads
 
 # Ignore Byebug command history file.
 .byebug_history

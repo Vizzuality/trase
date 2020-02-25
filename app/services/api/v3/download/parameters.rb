@@ -8,23 +8,8 @@ module Api
         def initialize(context, params)
           @context = context
           @version = DownloadVersion.current_version_symbol(@context)
-          @filters = {}
-          [:years, :e_ids, :i_ids, :c_ids, :filters].each do |key|
-            @filters[key] = params[key] if params[key]
-          end
-          @pivot = params[:pivot].present?
-          @separator =
-            if params[:separator].present? && params[:separator] == 'semicolon'
-              ';'
-            else
-              ','
-            end
-          @format =
-            if params[:format] && params[:format] == 'json'
-              'json'
-            else
-              'csv'
-            end
+          initialize_filters(params)
+          initialize_format(params)
           @download_name = download_name_parts.compact.join('_')
           @filename = @download_name + '.zip'
         end
@@ -56,6 +41,31 @@ module Api
             @version,
             pivot_name[0] + separator_name[0]
           ]
+        end
+
+        private
+
+        def initialize_filters(params)
+          @filters = {}
+          [:years, :e_ids, :i_ids, :c_ids, :filters].each do |key|
+            @filters[key] = params[key] if params[key]
+          end
+        end
+
+        def initialize_format(params)
+          @pivot = params[:pivot].present?
+          @separator =
+            if params[:separator].present? && params[:separator] == 'semicolon'
+              ';'
+            else
+              ','
+            end
+          @format =
+            if params[:format] && params[:format] == 'json'
+              'json'
+            else
+              'csv'
+            end
         end
       end
     end

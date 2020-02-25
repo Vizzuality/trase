@@ -20,16 +20,8 @@ module Api
         #   e.g. [{"name"=>"ZERO_DEFORESTATION", "op"=>"eq", "val"=>"no"}]
         def initialize(context, params)
           @context = context
-          @query = Api::V3::Flow.
-            from('download_flows_v flows').
-            joins(
-              'JOIN download_attributes_mv ON
-              download_attributes_mv.context_id = flows.context_id
-              AND download_attributes_mv.original_type = flows.attribute_type
-              AND download_attributes_mv.original_id = flows.attribute_id'
-            ).where(context_id: @context.id)
-          @size_query = Api::V3::Readonly::DownloadFlowsStats.
-            where(context_id: @context.id)
+          initialize_query
+          initialize_size_query
           if (years = params[:years]).present?
             @query = @query.where(year: years)
             @size_query = @size_query.where(year: years)
@@ -48,6 +40,23 @@ module Api
 
         private
 
+        def initialize_query
+          @query = Api::V3::Flow.
+            from('download_flows_v flows').
+            joins(
+              'JOIN download_attributes_mv ON
+              download_attributes_mv.context_id = flows.context_id
+              AND download_attributes_mv.original_type = flows.attribute_type
+              AND download_attributes_mv.original_id = flows.attribute_id'
+            ).where(context_id: @context.id)
+        end
+
+        def initialize_size_query
+          @size_query = Api::V3::Readonly::DownloadFlowsStats.
+            where(context_id: @context.id)
+        end
+
+        # rubocop:disable Metrics/MethodLength
         def initialize_flow_path_filters(params)
           if (exporters_ids = params[:e_ids]).present?
             apply_flow_path_filter(
@@ -68,6 +77,7 @@ module Api
             )
           end
         end
+        # rubocop:enable Metrics/MethodLength
 
         def initialize_attribute_filters(params)
           @download_attributes = Api::V3::Readonly::DownloadAttribute.
@@ -82,6 +92,7 @@ module Api
           )
         end
 
+        # rubocop:disable Metrics/MethodLength
         def context_node_types_by_role
           if defined? @context_node_types_by_role
             return @context_node_types_by_role
@@ -102,6 +113,7 @@ module Api
             end
           ]
         end
+        # rubocop:enable Metrics/MethodLength
 
         def apply_flow_path_filter(role, node_ids)
           role_node_types = context_node_types_by_role[role]
@@ -117,6 +129,7 @@ module Api
           )
         end
 
+        # rubocop:disable Metrics/MethodLength
         def apply_attribute_filters(attributes_list)
           @attributes = []
           query_parts = []
@@ -149,6 +162,7 @@ module Api
             )
           end
         end
+        # rubocop:enable Metrics/MethodLength
 
         def attribute_by_name(name)
           return nil unless name
@@ -156,6 +170,7 @@ module Api
           Api::V3::Readonly::Attribute.find_by_name(name)
         end
 
+        # rubocop:disable Metrics/MethodLength
         def attribute_filter(attribute, op_symbol, val)
           query_parts = ['download_attributes_mv.attribute_id = ?']
           parameters = [attribute.id]
@@ -171,6 +186,7 @@ module Api
           end
           [query_parts, parameters]
         end
+        # rubocop:enable Metrics/MethodLength
 
         def qual_op_part(op_symbol)
           op = QUAL_OPS[op_symbol]
