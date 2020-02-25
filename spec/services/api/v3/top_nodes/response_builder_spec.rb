@@ -3,6 +3,10 @@ require 'rails_helper'
 RSpec.describe Api::V3::TopNodes::ResponseBuilder do
   include_context 'api v3 brazil flows quants'
 
+  before(:each) {
+    Api::V3::TablePartitions::CreatePartitionsForFlowQuants.new.call
+  }
+
   describe :top_nodes do
     it 'should return top exporters' do
       builder = Api::V3::TopNodes::ResponseBuilder.new(
