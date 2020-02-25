@@ -23,8 +23,8 @@ export const getSelectedColumnsIds = createSelector(
     if (!selectedContext || !columns) {
       return [];
     }
-    const getCorrectedIndex = (index, selectionHasExtraColumnId) => {
-      if (!extraColumn || selectionHasExtraColumnId) {
+    const getCorrectedIndex = (index, correctedColumnsLength) => {
+      if (!extraColumn || correctedColumnsLength > MIN_COLUMNS_NUMBER) {
         return index;
       }
       if (index > columns[extraColumn.parentId].group) {
@@ -49,25 +49,23 @@ export const getSelectedColumnsIds = createSelector(
       index > 0 &&
       correctedSelectedColumnsIds[index - 1] &&
       extraColumn.parentId === correctedSelectedColumnsIds[index - 1];
-    const selectionHasExtraColumnId =
-      extraColumn && correctedSelectedColumnsIds.includes(extraColumn.id);
+
     const columnsIds = Array.from(Array(columnsNumber)).map((id, index) => {
       if (isExtraColumn(index)) {
         return extraColumn.id;
       }
-
       if (correctedSelectedColumnsIds) {
-        return correctedSelectedColumnsIds[getCorrectedIndex(index, selectionHasExtraColumnId)];
+        return correctedSelectedColumnsIds[
+          getCorrectedIndex(index, correctedSelectedColumnsIds.length)
+        ];
       }
       return undefined;
     });
-
     const selectedColumns = columnsIds.map((columnId, index) => {
       if (columnId) return columnId;
 
-      const correctedIndex = getCorrectedIndex(index, selectionHasExtraColumnId);
+      const correctedIndex = getCorrectedIndex(index);
       const defaultColumn = defaultColumns[correctedIndex];
-
       if (columnId === extraColumn?.parentId) {
         if (panelActiveNodeTypesIds && panelActiveNodeTypesIds[defaultColumn.role]) {
           const panelActiveColumnId = panelActiveNodeTypesIds[defaultColumn.role];
