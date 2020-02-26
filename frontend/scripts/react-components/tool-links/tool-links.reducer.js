@@ -219,39 +219,49 @@ const toolLinksReducer = {
       if (!selectedColumnsIds) {
         draft.selectedColumnsIds = [];
       }
-      const extraColumnParentColumnPosition =
-        extraColumn && data.columns[extraColumn.parentId].group;
-      const correctedIndex = extraColumn && columnId > extraColumnParentColumnPosition ? columnIndex + 1 : columnIndex;
-      if (selectedColumnsIds && !selectedColumnsIds.includes(columnId)) {
-        draft.selectedColumnsIds[correctedIndex] = columnId;
-      }
 
       const column = data.columns[columnId];
-
       const isInColumn = nodeId => {
         const node = data.nodes[nodeId];
         // The node could come from the search or URL and not be in the state yet
         if (!node) return true;
         return column.group !== data.columns[node.columnId].group;
       };
-      draft.selectedNodesIds = selectedNodesIds.filter(isInColumn);
-      // draft.expandedNodesIds = state.expandedNodesIds.filter(isInColumn);
+
+      // COLUMN CHANGES
+
+      const extraColumnParentColumnPosition =
+        extraColumn && data.columns[extraColumn.parentId].group;
+
+      const correctedIndex =
+        (extraColumn && columnIndex > extraColumnParentColumnPosition && selectedColumnsIds.length > MIN_COLUMNS_NUMBER)
+          ? columnIndex + 1
+          : columnIndex;
+
+      if (selectedColumnsIds && !selectedColumnsIds.includes(columnId)) {
+        draft.selectedColumnsIds[correctedIndex] = columnId;
+      }
 
       // We are removing the extra column by changing the parent column selector
       if (extraColumnParentColumnPosition === column.group) {
-        // TOOD: Fix edge case after reloading: Remove the extraColumn parent column
+        // Fix edge case after reloading: Remove the extraColumn parent column
         if (selectedColumnsIds.length === MIN_COLUMNS_NUMBER + 1) {
-          const updatedSelectedColumnsIds = selectedColumnsIds;
+          const updatedSelectedColumnsIds = [...selectedColumnsIds];
           updatedSelectedColumnsIds.splice(extraColumnParentColumnPosition, 1);
           updatedSelectedColumnsIds[columnIndex] = columnId;
           draft.selectedColumnsIds = updatedSelectedColumnsIds;
         }
+
+        // NODES CHANGES
 
         draft.selectedNodesIds = selectedNodesIds.filter(id => extraColumnNodeId !== id);
         // draft.expandedNodesIds.filter(id => state.extraColumnNodeId !== id);
         draft.extraColumn = toolLinksInitialState.extraColumn;
         draft.extraColumnNodeId = toolLinksInitialState.extraColumnNodeId;
       }
+
+      draft.selectedNodesIds = selectedNodesIds.filter(isInColumn);
+      // draft.expandedNodesIds = state.expandedNodesIds.filter(isInColumn);
     });
   },
   [TOOL_LINKS__CHANGE_EXTRA_COLUMN](state, action) {
