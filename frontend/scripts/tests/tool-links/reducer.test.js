@@ -190,10 +190,13 @@ test(TOOL_LINKS__SET_IS_SEARCH_OPEN, () => {
 
 describe(TOOL_LINKS__SELECT_COLUMN, () => {
   const columns = {
+    1: { group: 0 },
     2: { group: 0 },
     3: { group: 1 },
+    7: { group: 1 },
     4: { group: 2 },
-    5: { group: 3 }
+    5: { group: 3 },
+    6: { group: 3 }
   }
   const data = {
     ...initialState.data,
@@ -229,6 +232,21 @@ describe(TOOL_LINKS__SELECT_COLUMN, () => {
     });
   });
 
+  it('changes a column when we have an extra column', () => {
+    const state = {
+      ...initialState,
+      data,
+      extraColumn: { id: 2, parentId: 1 },
+      selectedColumnsIds: [1, 2, 3, 4, 5]
+    };
+    const action = selectColumn(1, 7);
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      data,
+      selectedColumnsIds: [1, 2, 7, 4, 5]
+    });
+  });
   it('changes the column with existing selected nodes', () => {
     const state = {
       ...initialState,
