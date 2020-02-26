@@ -149,15 +149,18 @@ export const getToolBar = createSelector(
   ) => {
     switch (page) {
       case 'tool': {
+        const right = [
+          resizeByFilter,
+          recolorByFilter,
+          viewModeFilter,
+          { id: 'toolSwitch', type: 'toolSwitch', show: true, noHover: true }
+        ];
+        if (ENABLE_VERSIONING) {
+          right.unshift(versionFilter);
+        }
         return {
           left: [panelFilter],
-          right: [
-            versionFilter,
-            resizeByFilter,
-            recolorByFilter,
-            viewModeFilter,
-            { id: 'toolSwitch', type: 'toolSwitch', show: true, noHover: true }
-          ]
+          right
         };
       }
       case 'logisticsMap': {
