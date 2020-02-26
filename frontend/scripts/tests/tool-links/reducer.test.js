@@ -247,6 +247,21 @@ describe(TOOL_LINKS__SELECT_COLUMN, () => {
       selectedColumnsIds: [1, 2, 7, 4, 5]
     });
   });
+  it('Edge case: changes a column when we have an extra column but 4 selected columns', () => {
+    const state = {
+      ...initialState,
+      data,
+      extraColumn: { id: 2, parentId: 1 },
+      selectedColumnsIds: [1, 3, 4, 6]
+    };
+    const action = selectColumn(1, 7);
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      data,
+      selectedColumnsIds: [1, 7, 4, 6]
+    });
+  });
   it('changes the column with existing selected nodes', () => {
     const state = {
       ...initialState,
