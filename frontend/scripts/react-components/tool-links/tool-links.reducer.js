@@ -232,7 +232,7 @@ const toolLinksReducer = {
         const node = data.nodes[nodeId];
         // The node could come from the search or URL and not be in the state yet
         if (!node) return true;
-        return column.group !== columnIndex;
+        return column.group !== data.columns[node.columnId].group;
       };
       draft.selectedNodesIds = selectedNodesIds.filter(isInColumn);
       // draft.expandedNodesIds = state.expandedNodesIds.filter(isInColumn);

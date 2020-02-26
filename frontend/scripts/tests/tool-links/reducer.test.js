@@ -189,24 +189,42 @@ test(TOOL_LINKS__SET_IS_SEARCH_OPEN, () => {
 });
 
 describe(TOOL_LINKS__SELECT_COLUMN, () => {
+  const columns = {
+    2: { group: 0 },
+    3: { group: 1 },
+    4: { group: 2 },
+    5: { group: 3 }
+  }
+  const data = {
+    ...initialState.data,
+    columns
+  };
   it('changes the column without selected nodes', () => {
-    const action = selectColumn(2, 3);
-    const newState = reducer(initialState, action);
-    expect(newState).toEqual({
+    const state = {
       ...initialState,
-      selectedColumnsIds: [undefined, undefined, 3]
+      data,
+      selectedColumnsIds: []
+    };
+    const action = selectColumn(1, 3);
+    const newState = reducer(state, action);
+    expect(newState).toEqual({
+      ...state,
+      data,
+      selectedColumnsIds: [undefined, 3]
     });
   });
 
   it('changes the column without selected nodes for the second time', () => {
     const state = {
       ...initialState,
+      data,
       selectedColumnsIds: [undefined, undefined, 3]
     };
     const action = selectColumn(0, 4);
     const newState = reducer(state, action);
     expect(newState).toEqual({
       ...state,
+      data,
       selectedColumnsIds: [4, undefined, 3]
     });
   });
@@ -214,27 +232,28 @@ describe(TOOL_LINKS__SELECT_COLUMN, () => {
   it('changes the column with existing selected nodes', () => {
     const state = {
       ...initialState,
-      selectedColumnsIds: [undefined, undefined, 3],
+      selectedColumnsIds: [3, 5, undefined],
       selectedNodesIds: [1234, 4567],
       data: {
         ...initialState.data,
         links: [1, 2, 3],
         nodes: {
           1234: { columnId: 3 },
-          4567: { columnId: 4 }
+          4567: { columnId: 5 }
         },
         columns: {
-          3: { group: 2 },
-          4: { group: 0 }
+          3: { group: 0 },
+          4: { group: 0 },
+          5: { group: 1 }
         }
       }
     };
-    const action = selectColumn(2, 5);
+    const action = selectColumn(0, 4);
     const newState = reducer(state, action);
     expect(newState).toEqual({
       ...state,
       selectedNodesIds: [4567],
-      selectedColumnsIds: [undefined, undefined, 5]
+      selectedColumnsIds: [4, 5, undefined]
     });
   });
 
