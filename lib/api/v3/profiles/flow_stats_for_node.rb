@@ -13,8 +13,21 @@ module Api
           flow_values_for_attributes(year, [attribute])
         end
 
+        # used in Api::V3::Actors::TopNodesSummary
+        # to get the list of years for front end chart
         def available_years_for_attribute(attribute)
-          flow_values_all_years(attribute).select(:year).order(:year).distinct.pluck(:year)
+          attribute_type = attribute.class.name.demodulize.downcase
+          flow_values = "flow_#{attribute_type}s"
+
+          years = Api::V3::Flow.
+            joins("JOIN partitioned_#{flow_values} #{flow_values} ON #{flow_values}.flow_id = flows.id").
+            where("#{flow_values}.#{attribute_type}_id" => attribute.id).
+            where('path[?] = ?', @node_index, @node.id).
+            where(context_id: @context.id).
+            select(:year).
+            distinct.
+            pluck(:year)
+          years.sort
         end
 
         def flow_values_totals_for_attributes_into(attributes, other_node_type, other_node_id)
@@ -43,16 +56,6 @@ module Api
         end
 
         private
-
-        def flow_values_all_years(attribute)
-          attribute_type = attribute.class.name.demodulize.downcase
-          flow_values = :"flow_#{attribute_type}s"
-          Flow.
-            joins(flow_values).
-            where("#{flow_values}.#{attribute_type}_id" => attribute.id).
-            where('path[?] = ?', @node_index, @node.id).
-            where(context_id: @context.id)
-        end
 
         def flow_values_for_attributes(year, attributes)
           node_index = Api::V3::NodeType.node_index_for_id(@context, @node.node_type_id)

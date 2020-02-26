@@ -37,7 +37,7 @@ module Api
               node_type
             else
               [node_type]
-          end
+            end
           result = {
             included_years: years,
             buckets: buckets,
