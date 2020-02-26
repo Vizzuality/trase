@@ -219,13 +219,13 @@ const toolLinksReducer = {
       if (!selectedColumnsIds) {
         draft.selectedColumnsIds = [];
       }
-
-      if (selectedColumnsIds && !selectedColumnsIds.includes(columnId)) {
-        draft.selectedColumnsIds[columnIndex] = columnId;
-      }
-
       const extraColumnParentColumnPosition =
         extraColumn && data.columns[extraColumn.parentId].group;
+      const correctedIndex = extraColumn && columnId > extraColumnParentColumnPosition ? columnIndex + 1 : columnIndex;
+      if (selectedColumnsIds && !selectedColumnsIds.includes(columnId)) {
+        draft.selectedColumnsIds[correctedIndex] = columnId;
+      }
+
       const column = data.columns[columnId];
 
       const isInColumn = nodeId => {
