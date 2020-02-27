@@ -15,7 +15,8 @@ const fontSizes = {
   'x-big': 32,
   huge: 48
 };
-const HEIGHT_TO_WIDTH_FONT_RATIO = 0.5;
+const HEIGHT_TO_WIDTH_FONT_RATIO = 0.75;
+
 function Ellipsis(props) {
   const { charLimit, lineLimit, children, fontSize } = props;
   const ref = useRef(null);

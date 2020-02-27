@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { DEFAULT_DASHBOARD_UNIT_FORMAT } from 'constants';
 import Link from 'redux-first-router-link';
@@ -11,22 +11,29 @@ import Ellipsis from 'react-components/shared/ellipsis';
 
 import 'react-components/dashboard-element/dashboard-widget/ranking-widget/ranking-widget-styles.scss';
 
-class RankingWidget extends PureComponent {
-  state = { page: 0 };
+function RankingWidget(props) {
+  const ref = useRef(null);
+  const [width, setWidth] = useState(0);
+  const [page, setPage] = useState(0);
+  const { data, meta, config, pageSize, variant } = props;
 
-  handlePageChange = pageChange => {
-    this.setState(state => ({ page: state.page + pageChange }));
+  useEffect(() => {
+    setWidth(ref.current ? ref.current.offsetWidth : 0);
+  }, [ref]);
+
+  const handlePageChange = pageChange => {
+    setPage(page + pageChange);
   };
 
-  renderItemName(item) {
+  const renderItemName = (item) => {
     const color = {
       dark: 'white',
       light: 'grey'
-    }[this.props.variant];
-
+    }[variant];
+    const WIDTH_LIMIT = 498;
     const name = (
-      <Heading as="span" size="md" weight="bold" color={color} className="item-name">
-        <Ellipsis fontSize="medium" lineLimit={2}>
+      <Heading as="span" size={width > WIDTH_LIMIT ? 'md' : 'rg'} weight="bold" color={color}>
+        <Ellipsis fontSize={width > WIDTH_LIMIT ? 'medium' : 'xxx-regular'} lineLimit={2}>
           {capitalize(item.y)}
         </Ellipsis>
       </Heading>
@@ -38,78 +45,74 @@ class RankingWidget extends PureComponent {
     return name;
   }
 
-  render() {
-    const { data, meta, config, pageSize, variant } = this.props;
-    const { page } = this.state;
-    const { context } = config.dashboardMeta;
-    const dataWithUrl = data.map((d, i) => {
-      const node = meta.yLabelsProfileInfo[i];
-      const url = node.profile &&
-        !DISABLE_PROFILES && {
-          type: 'profileNode',
-          payload: {
-            query: { nodeId: node.id, contextId: context.id },
-            profileType: node.profile
-          }
-        };
-      return { ...d, url };
-    });
-    const pageData = pageSize
-      ? dataWithUrl.slice(page * pageSize, (page + 1) * pageSize)
-      : dataWithUrl;
-    const formatValue = format((config.yAxisLabel && config.yAxisLabel.format) || ',.3s');
+  const { context } = config.dashboardMeta;
+  const dataWithUrl = data.map((d, i) => {
+    const node = meta.yLabelsProfileInfo[i];
+    const url = node.profile &&
+      !DISABLE_PROFILES && {
+        type: 'profileNode',
+        payload: {
+          query: { nodeId: node.id, contextId: context.id },
+          profileType: node.profile
+        }
+      };
+    return { ...d, url };
+  });
+  const pageData = pageSize
+    ? dataWithUrl.slice(page * pageSize, (page + 1) * pageSize)
+    : dataWithUrl;
+  const formatValue = format((config.yAxisLabel && config.yAxisLabel.format) || ',.3s');
 
-    // property is snake_case
-    // eslint-disable-next-line
-    const totalValue = meta.aggregates?.total_value;
-    const formatTotal = format(DEFAULT_DASHBOARD_UNIT_FORMAT);
+  // property is snake_case
+  // eslint-disable-next-line
+  const totalValue = meta.aggregates?.total_value;
+  const formatTotal = format(DEFAULT_DASHBOARD_UNIT_FORMAT);
 
-    const textColor = {
-      dark: 'white',
-      light: 'grey'
-    }[variant];
+  const textColor = {
+    dark: 'white',
+    light: 'grey'
+  }[variant];
 
-    return (
-      <div className="c-ranking-widget">
-        <ul className="list">
-          {dataWithUrl.length > 0 &&
-            pageData.map((item, index) => (
-              <li key={item.y} className="list-row">
-                <div className="list-item">
-                  <div className="item-label">
-                    <div className="item-bubble">
-                      <Text
-                        as="span"
-                        size="md"
-                        color="white"
-                        variant="serif"
-                        weight="bold"
-                        className="item-number"
-                      >
-                        {index + 1 + pageSize * page}
-                      </Text>
-                    </div>
-                    {this.renderItemName(item)}
+  return (
+    <div className="c-ranking-widget" ref={ref}>
+      <ul className="list">
+        {dataWithUrl.length > 0 &&
+          pageData.map((item, index) => (
+            <li key={item.y} className="list-row">
+              <div className="list-item">
+                <div className="item-label">
+                  <div className="item-bubble">
+                    <Text
+                      as="span"
+                      size="md"
+                      color="white"
+                      variant="serif"
+                      weight="bold"
+                      className="item-number"
+                    >
+                      {index + 1 + pageSize * page}
+                    </Text>
                   </div>
-                  <Text className="item-value" color={textColor} variant="mono" size="md">
-                    {formatValue(item.x0)} {config.xAxisLabel && config.xAxisLabel.suffix} /{' '}
-                    {formatTotal(totalValue.x0)} {config.xAxisLabel && config.xAxisLabel.suffix}
-                  </Text>
+                  {renderItemName(item)}
                 </div>
-              </li>
-            ))}
-        </ul>
-        {data.length > pageSize && (
-          <Paginate
-            page={page}
-            pageSize={pageSize}
-            count={data.length}
-            onClickChange={this.handlePageChange}
-          />
-        )}
-      </div>
-    );
-  }
+                <Text className="item-value" color={textColor} variant="mono" size="md">
+                  {formatValue(item.x0)} {config.xAxisLabel && config.xAxisLabel.suffix} /{' '}
+                  {formatTotal(totalValue.x0)} {config.xAxisLabel && config.xAxisLabel.suffix}
+                </Text>
+              </div>
+            </li>
+          ))}
+      </ul>
+      {data.length > pageSize && (
+        <Paginate
+          page={page}
+          pageSize={pageSize}
+          count={data.length}
+          onClickChange={handlePageChange}
+        />
+      )}
+    </div>
+  );
 }
 
 RankingWidget.propTypes = {
