@@ -57,7 +57,7 @@ export function loadMapVectorData() {
           .then(
             topoJSON =>
               new Promise(resolve => {
-                const [key] = Object.keys(topoJSON.objects);
+                const [key] = topoJSON.objects && Object.keys(topoJSON.objects);
                 setTimeout(() => {
                   const geoJSON = topojsonFeature(topoJSON, topoJSON.objects[key]);
                   setGeoJSONMeta(
