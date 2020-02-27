@@ -862,10 +862,6 @@ paths:
                         $ref: "#/components/schemas/commodity"
                       attribute:
                         $ref: "#/components/schemas/attribute"
-                      included_attributes:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/attribute"
                       node_type:
                         $ref: "#/components/schemas/node_type"
                       nodes:
@@ -881,9 +877,6 @@ paths:
                         items:
                           type: integer
                           example: [2016, 2017]
-                      year:
-                        type: integer
-                        example: 2017
                 required:
                   - data
                   - meta
@@ -891,8 +884,8 @@ paths:
         - $ref: "#/components/parameters/country_req"
         - $ref: "#/components/parameters/commodity_req"
         - in: query
-          name: attributes_ids
-          description: Comma-separated list of numeric flow attribute ids, for which values will be returned. TODO check if this is practical from performance perspective.
+          name: attribute_id
+          description: Numeric flow attribute id, for which values will be returned.
           schema:
             type: string
         - $ref: "#/components/parameters/path_nodes_ids"
@@ -900,7 +893,7 @@ paths:
         - $ref: "#/components/parameters/node_type"
         - $ref: "#/components/parameters/start_year_with_default"
         - $ref: "#/components/parameters/end_year_with_default"
-      description: "Values of requested attributes (attributes_ids) for requested nodes (nodes_ids) in requested year range. It is possible to filter down values by nodes which should appear on same path (path_nodes_ids), which allows for example to retrieve value for a sourcing region filtered by an exporter."
+      description: "Values of requested attribute for requested nodes (nodes_ids) in requested year range. It is possible to filter down values by nodes which should appear on same path (path_nodes_ids), which allows for example to retrieve value for a sourcing region filtered by an exporter."
       summary: Values of flow attributes for selected nodes.
 
 servers:
@@ -1099,7 +1092,7 @@ components:
         - node_type
     source_node:
       allOf:
-        - $ref: "#/components/schemas/node" 
+        - $ref: "#/components/schemas/node"
         - $ref: "#/components/schemas/node_node_type"
     exporter_node:
       allOf:
@@ -1133,7 +1126,7 @@ components:
               example: COUNTRY
     node_with_availability:
       allOf:
-        - $ref: "#/components/schemas/source_node"  
+        - $ref: "#/components/schemas/source_node"
         - type: object
           properties:
             availability:
@@ -1238,7 +1231,7 @@ components:
               type: number
               example: 0.43
     node_with_values:
-      description: Node object with values of flow attributes per year.
+      description: Node object with values of flow attributes per year. Values are returned in an array that matches the array of years in meta object.
       allOf:
         - $ref: "#/components/schemas/node"
         - type: object
@@ -1246,12 +1239,5 @@ components:
             values:
               type: array
               items:
-                type: object
-                properties:
-                  attribute_id:
-                    type: integer
-                  year:
-                    type: integer
-                  value:
-                    type: number
-                    example: 23.07
+                type: number
+              example: [23.07, 38.5]
