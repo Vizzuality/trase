@@ -18,9 +18,16 @@ module Api
 
             context_node_types = @context.context_node_types.
               includes(:context_node_type_property, :node_type).
-              where.not('context_node_type_properties.role' => nil).
-              where.not('node_types.name' => NodeTypeName::COUNTRY_OF_PRODUCTION)
-            @all_node_types = context_node_types.map(&:node_type)
+              where.not('node_types.name' => NodeTypeName::COUNTRY_OF_PRODUCTION).
+              order(:column_position)
+            node_types_by_name = Hash[
+              context_node_types.map { |cnt| nt = cnt.node_type; [nt.name, nt] }
+            ]
+            @all_node_types = [
+              NodeTypeName::COUNTRY, NodeTypeName::EXPORTER, NodeTypeName::IMPORTER
+            ].map do |sticky_node_type|
+              node_types_by_name.delete(sticky_node_type)
+            end.compact + node_types_by_name.values
           end
 
           def nodes_by_node_type_id
