@@ -254,7 +254,6 @@ Style/ExpandPathArguments:
 Style/GuardClause:
   Exclude:
     - 'app/models/api/v3/context_node_type_property.rb'
-    - 'app/services/api/v3/actors/exporting_companies_plot.rb'
     - 'app/services/api/v3/download/flow_download_query_builder.rb'
     - 'app/services/api/v3/places/mini_sankey.rb'
     - 'app/services/api/v3/places/trajectory_deforestation_plot.rb'

@@ -7,6 +7,7 @@ module Api
         # @param context [Api::V3::Context]
         # @param node [Api::V3::Node]
         # @year [Integer]
+        # rubocop:disable Metrics/MethodLength
         def initialize(context, node, year)
           @context = context
           @node = node
@@ -18,77 +19,75 @@ module Api
           end
 
           initialize_chart_config(:actor, nil, :actor_exporting_companies)
+          # rubocop:disable Style/GuardClause
           unless @chart_config.attributes.any?
             raise ActiveRecord::RecordNotFound.new 'No attributes found'
           end
+          # rubocop:enable Style/GuardClause
         end
+        # rubocop:enable Metrics/MethodLength
 
         def call
+          stats = Api::V3::Profiles::FlowStatsForNodeType.new(
+            @context, @year, @node.node_type.name
+          )
+          production_totals = stats.nodes_with_flows_totals(@volume_attribute)
+          attributes_totals = @chart_config.attributes.map do |attribute|
+            stats.nodes_with_flows_totals(attribute)
+          end
+          generate_response(production_totals, attributes_totals)
+        end
+
+        private
+
+        def generate_response(production_totals, attributes_totals)
           unit = @volume_attribute.unit
           value_divisor = 1
           if unit.casecmp('tn').zero?
             unit = 'kt'
             value_divisor = 1000
           end
+          values_map =
+            initialize_production_values(production_totals, value_divisor)
+          populate_attribute_values(attributes_totals, values_map)
+          format_response(values_map, unit)
+        end
 
-          stats = Api::V3::Profiles::FlowStatsForNodeType.new(
-            @context, @year, @node.node_type.name
-          )
-
-          production_totals = stats.nodes_with_flows_totals(@volume_attribute)
-          attribute_totals = stats.nodes_with_flows_totals_for_attributes(
-            @chart_config.attributes
-          )
-
-          attribute_totals_hash = attribute_totals_hash(
-            production_totals, attribute_totals
-          )
-
-          exports = production_totals.map do |total|
-            node_id = total['node_id']
-            {
+        def initialize_production_values(production_totals, value_divisor)
+          tmp_array = production_totals.map do |total|
+            element = {
               name: total['name'],
-              id: node_id,
+              id: total['node_id'],
               y: total['value'].to_f / value_divisor,
-              x: attribute_totals_hash[node_id]
+              # this will be populated with values of chart attributes
+              x: Array.new(@chart_config.attributes.length)
             }
+            [element[:id], element]
           end
+          Hash[tmp_array]
+        end
 
+        def populate_attribute_values(attributes_totals, values_map)
+          attributes_totals.each.with_index do |attribute_totals, idx|
+            attribute_totals.each do |total|
+              node_id = total['node_id']
+              next unless values_map.key?(node_id)
+
+              values_map[node_id][:x][idx] = total['value']
+            end
+          end
+          values_map
+        end
+
+        def format_response(values_map, unit)
           {
-            dimension_y: {
-              name: 'Trade Volume', unit: unit
-            },
+            dimension_y: {name: 'Trade Volume', unit: unit},
             dimensions_x: @chart_config.chart_attributes.
               map do |chart_attribute|
                 {name: chart_attribute.display_name, unit: chart_attribute.unit}
               end,
-            companies: exports
+            companies: values_map.values
           }
-        end
-
-        private
-
-        def attribute_totals_hash(production_totals, attribute_totals)
-          attribute_totals_hash = {}
-          attribute_indexes = Hash[
-            @chart_config.chart_attributes.map.
-              each_with_index do |attribute, idx|
-                [attribute.name, idx]
-              end
-          ]
-          production_totals.each do |total|
-            attribute_totals_hash[total['node_id']] ||= Array.new(
-              @chart_config.attributes.size
-            )
-          end
-          attribute_totals.each do |total|
-            attribute_idx = attribute_indexes[total['attribute_name']]
-            node_id = total['node_id']
-            if attribute_totals_hash.key?(node_id)
-              attribute_totals_hash[node_id][attribute_idx] = total['value']
-            end
-          end
-          attribute_totals_hash
         end
       end
     end

@@ -33,12 +33,7 @@ module Api
         end
 
         def nodes_with_flows_totals(attribute)
-          nodes_with_flows_totals_for_attributes([attribute])
-        end
-
-        def nodes_with_flows_totals_for_attributes(attributes)
-          attributes_ids = attributes.map(&:id)
-          attribute_type = attributes.first&.class&.name&.demodulize&.downcase
+          attribute_type = attribute.class.name.demodulize.downcase
           flow_values = :"flow_#{attribute_type}s"
           nodes_join_clause = ActiveRecord::Base.send(
             :sanitize_sql_array,
@@ -48,19 +43,21 @@ module Api
           )
           Api::V3::Flow.
             select(
-              "nodes.id AS node_id, nodes.name, \
-    SUM(#{flow_values}.value::DOUBLE PRECISION) AS value, \
-    #{attribute_type}s.name AS attribute_name"
+              [
+                'nodes.id AS node_id',
+                'nodes.name',
+                "SUM(#{flow_values}.value::DOUBLE PRECISION) AS value"
+              ].join(', ')
             ).
             joins(nodes_join_clause).
             joins('JOIN node_properties ON nodes.id = node_properties.node_id').
-            joins(flow_values => attribute_type).
+            joins("JOIN partitioned_#{flow_values} #{flow_values} ON #{flow_values}.flow_id = flows.id").
             where('flows.context_id' => @context.id).
-            where("#{flow_values}.#{attribute_type}_id" => attributes_ids).
+            where("#{flow_values}.#{attribute_type}_id" => attribute.id).
             where('flows.year' => @year).
             where('NOT nodes.is_unknown').
             where('NOT node_properties.is_domestic_consumption').
-            group("nodes.id, nodes.name, #{attribute_type}s.name")
+            group('nodes.id, nodes.name')
         end
 
         private
