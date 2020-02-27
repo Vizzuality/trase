@@ -7,6 +7,7 @@ import capitalize from 'lodash/capitalize';
 import Paginate from 'react-components/shared/paginate';
 import Text from 'react-components/shared/text';
 import Heading from 'react-components/shared/heading';
+import Ellipsis from 'react-components/shared/ellipsis';
 
 import 'react-components/dashboard-element/dashboard-widget/ranking-widget/ranking-widget-styles.scss';
 
@@ -24,8 +25,10 @@ class RankingWidget extends PureComponent {
     }[this.props.variant];
 
     const name = (
-      <Heading as="span" size="lg" weight="bold" color={color} className="item-name">
-        {capitalize(item.y)}
+      <Heading as="span" size="md" weight="bold" color={color} className="item-name">
+        <Ellipsis fontSize="medium" lineLimit={2}>
+          {capitalize(item.y)}
+        </Ellipsis>
       </Heading>
     );
     if (item.url) {
