@@ -19,7 +19,7 @@ export default function ListModal(props) {
           items={items}
           height={
             items.length > COLUMN_COUNT
-              ? Math.min(200, (items.length % COLUMN_COUNT) * 50 + 50)
+              ? Math.ceil(items.length / COLUMN_COUNT) * 50
               : 50
           }
           width={750}
