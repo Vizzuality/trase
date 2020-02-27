@@ -1,5 +1,7 @@
 @import 'styles/settings';
 
+$data-view-two-columns-limit: 1130px;
+
 .c-data-view {
   height: 100%;
   overflow: auto;
@@ -24,5 +26,11 @@
   .data-view-placeholder,
   .data-view-widgets {
     padding: 0 0 16px;
+  }
+
+  .dashboard-widget-container {
+   @media screen and (max-width: $data-view-two-columns-limit){
+     min-width: 100%;
+   }
   }
 }
