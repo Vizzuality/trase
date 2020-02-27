@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect';
 import { getSelectedContext } from 'app/app.selectors';
-import { getPanelsActiveNodeTypeIds } from 'react-components/nodes-panel/nodes-panel.selectors';
 import groupBy from 'lodash/groupBy';
 import { MIN_COLUMNS_NUMBER } from 'constants';
 
@@ -16,10 +15,9 @@ export const getSelectedColumnsIds = createSelector(
     getSelectedContext,
     getToolSelectedColumnsIds,
     getExtraColumn,
-    getToolColumns,
-    getPanelsActiveNodeTypeIds
+    getToolColumns
   ],
-  (selectedContext, selectedColumnsIds, extraColumn, columns, panelActiveNodeTypesIds) => {
+  (selectedContext, selectedColumnsIds, extraColumn, columns) => {
     if (!selectedContext || !columns) {
       return [];
     }
@@ -66,24 +64,7 @@ export const getSelectedColumnsIds = createSelector(
 
       const correctedIndex = getCorrectedIndex(index);
       const defaultColumn = defaultColumns[correctedIndex];
-      if (columnId === extraColumn?.parentId) {
-        if (panelActiveNodeTypesIds && panelActiveNodeTypesIds[defaultColumn.role]) {
-          const panelActiveColumnId = panelActiveNodeTypesIds[defaultColumn.role];
-          const defaultActiveNodeTypeColumn = selectedContext.defaultColumns.find(
-            c => c.id === panelActiveColumnId
-          );
-          // FIXME: In lieu of a more solid solution that includes changes to the panel structure,
-          //  we make sure that when an activeNodeType exists in another position, the default is maintained
-          if (typeof defaultActiveNodeTypeColumn === 'undefined') {
-            return panelActiveColumnId;
-          }
-          if (defaultActiveNodeTypeColumn.group === correctedIndex) {
-            return defaultActiveNodeTypeColumn.id;
-          }
-        }
-      }
-
-      return defaultColumn.id;
+      return defaultColumn?.id;
     });
     return selectedColumns;
   }
