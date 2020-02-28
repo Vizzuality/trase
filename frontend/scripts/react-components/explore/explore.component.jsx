@@ -158,7 +158,6 @@ function Explore(props) {
                               enableItem={i => setItemFunction(i.id)}
                               onHover={onItemHover}
                               color="transparent"
-                              isActive={highlightedCommodityIds.includes(item.id)}
                             />
                           ))}
                       </div>
