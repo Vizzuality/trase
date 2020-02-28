@@ -43,7 +43,7 @@ function DataView(props) {
             <InView triggerOnce key={chart.id}>
               {({ ref, inView }) => (
                 <div
-                  className="column small-12 medium-6"
+                  className="column small-12 medium-12 large-6 dashboard-widget-container"
                   data-test="dashboard-widget-container"
                   ref={ref}
                   style={{ minHeight: '495px' }}
