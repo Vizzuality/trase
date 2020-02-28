@@ -100,7 +100,11 @@ const Home = props => {
     </div>
   );
 
-  const content = CONSOLIDATE_INSIGHTS ? [sliders, entryPoints, map] : [entryPoints, map, sliders];
+  let content = CONSOLIDATE_INSIGHTS ? [sliders, entryPoints] : [entryPoints, sliders];
+
+  if (!ENABLE_TOOL_PANEL) {
+    content = CONSOLIDATE_INSIGHTS ? [sliders, entryPoints, map] : [entryPoints, map, sliders];
+  }
 
   return (
     <div className="l-homepage">
