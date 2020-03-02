@@ -66,15 +66,16 @@ function Timeline(props) {
     onNext,
     onPrevious,
     sizes,
-    MARGIN_BETWEEN_ITEMS
+    MARGIN_BETWEEN_ITEMS,
+    rangeOutOfBounds
   } = useSlider(props);
 
   const tabs = [
     { label: 'year', payload: false, type: 'toggleRange' },
     { label: 'range', payload: true, type: 'toggleRange' }
   ].filter(tab => visibleTabs.includes(tab.label));
+  const showPlaceholder = state.start && state.end && state.range && !disabled && rangeOutOfBounds;
 
-  const showPlaceholder = state.start && state.end && state.range && !disabled;
   return (
     <div className={cx('c-timeline', { '-show-background': showBackground })}>
       <Tabs
