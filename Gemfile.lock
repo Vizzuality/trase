@@ -271,7 +271,7 @@ GEM
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
     parallel (1.19.1)
-    parser (2.7.0.2)
+    parser (2.7.0.3)
       ast (~> 2.4.0)
     pg (0.21.0)
     pg_csv (0.2)
@@ -354,7 +354,7 @@ GEM
       rspec-mocks (~> 3.9.0)
       rspec-support (~> 3.9.0)
     rspec-support (3.9.0)
-    rubocop (0.80.0)
+    rubocop (0.80.1)
       jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
       parser (>= 2.7.0.1)
@@ -503,7 +503,7 @@ DEPENDENCIES
   rails-controller-testing
   rspec-collection_matchers
   rspec-rails (~> 3.9)
-  rubocop (~> 0.80.0)
+  rubocop (~> 0.80.1)
   rubocop-performance
   rubocop-rspec
   sassc-rails (~> 2.1.2)
