@@ -666,10 +666,6 @@ CREATE TABLE public.ind_properties (
     display_name text NOT NULL,
     unit_type text,
     tooltip_text text,
-    is_visible_on_place_profile boolean DEFAULT false NOT NULL,
-    is_visible_on_actor_profile boolean DEFAULT false NOT NULL,
-    is_temporal_on_place_profile boolean DEFAULT false NOT NULL,
-    is_temporal_on_actor_profile boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     CONSTRAINT ind_properties_unit_type_check CHECK ((unit_type = ANY (ARRAY['currency'::text, 'ratio'::text, 'score'::text, 'unitless'::text])))
@@ -695,34 +691,6 @@ COMMENT ON COLUMN public.ind_properties.unit_type IS 'Type of unit, e.g. score. 
 --
 
 COMMENT ON COLUMN public.ind_properties.tooltip_text IS 'Generic tooltip text (lowest precedence)';
-
-
---
--- Name: COLUMN ind_properties.is_visible_on_place_profile; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.ind_properties.is_visible_on_place_profile IS 'Whether to display this attribute on place profile';
-
-
---
--- Name: COLUMN ind_properties.is_visible_on_actor_profile; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.ind_properties.is_visible_on_actor_profile IS 'Whether to display this attribute on actor profile';
-
-
---
--- Name: COLUMN ind_properties.is_temporal_on_place_profile; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.ind_properties.is_temporal_on_place_profile IS 'Whether attribute has temporal data on place profile';
-
-
---
--- Name: COLUMN ind_properties.is_temporal_on_actor_profile; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.ind_properties.is_temporal_on_actor_profile IS 'Whether attribute has temporal data on actor profile';
 
 
 --
@@ -767,10 +735,6 @@ CREATE TABLE public.qual_properties (
     qual_id integer NOT NULL,
     display_name text NOT NULL,
     tooltip_text text,
-    is_visible_on_place_profile boolean DEFAULT false NOT NULL,
-    is_visible_on_actor_profile boolean DEFAULT false NOT NULL,
-    is_temporal_on_place_profile boolean DEFAULT false NOT NULL,
-    is_temporal_on_actor_profile boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -788,20 +752,6 @@ COMMENT ON COLUMN public.qual_properties.display_name IS 'Name of attribute for 
 --
 
 COMMENT ON COLUMN public.qual_properties.tooltip_text IS 'Generic tooltip text (lowest precedence)';
-
-
---
--- Name: COLUMN qual_properties.is_visible_on_place_profile; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.qual_properties.is_visible_on_place_profile IS 'Whether to display this attribute on place profile';
-
-
---
--- Name: COLUMN qual_properties.is_visible_on_actor_profile; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.qual_properties.is_visible_on_actor_profile IS 'Whether to display this attribute on actor profile';
 
 
 --
@@ -839,10 +789,6 @@ CREATE TABLE public.quant_properties (
     display_name text NOT NULL,
     unit_type text,
     tooltip_text text,
-    is_visible_on_place_profile boolean DEFAULT false NOT NULL,
-    is_visible_on_actor_profile boolean DEFAULT false NOT NULL,
-    is_temporal_on_place_profile boolean DEFAULT false NOT NULL,
-    is_temporal_on_actor_profile boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     CONSTRAINT quant_properties_unit_type_check CHECK ((unit_type = ANY (ARRAY['currency'::text, 'area'::text, 'count'::text, 'volume'::text, 'unitless'::text])))
@@ -868,20 +814,6 @@ COMMENT ON COLUMN public.quant_properties.unit_type IS 'Type of unit, e.g. count
 --
 
 COMMENT ON COLUMN public.quant_properties.tooltip_text IS 'Generic tooltip text (lowest precedence)';
-
-
---
--- Name: COLUMN quant_properties.is_visible_on_place_profile; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.quant_properties.is_visible_on_place_profile IS 'Whether to display this attribute on place profile';
-
-
---
--- Name: COLUMN quant_properties.is_visible_on_actor_profile; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.quant_properties.is_visible_on_actor_profile IS 'Whether to display this attribute on actor profile';
 
 
 --
@@ -10005,6 +9937,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200107131928'),
 ('20200123163215'),
 ('20200207162026'),
-('20200302203632');
+('20200302203632'),
+('20200302214104');
 
 

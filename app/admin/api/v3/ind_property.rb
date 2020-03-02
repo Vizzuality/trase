@@ -1,9 +1,7 @@
 ActiveAdmin.register Api::V3::IndProperty, as: 'IndProperty' do
   menu parent: 'Tooltips', priority: 4
 
-  permit_params :ind_id, :display_name, :unit_type, :tooltip_text,
-                :is_visible_on_place_profile, :is_visible_on_actor_profile,
-                :is_temporal_on_place_profile, :is_temporal_on_actor_profile
+  permit_params :ind_id, :display_name, :unit_type, :tooltip_text
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -26,14 +24,6 @@ ActiveAdmin.register Api::V3::IndProperty, as: 'IndProperty' do
                         hint: object.class.column_comment('unit_type')
       input :tooltip_text, as: :string,
                            hint: object.class.column_comment('tooltip_text')
-      input :is_visible_on_place_profile, as: :boolean, required: true,
-                                          hint: object.class.column_comment('is_visible_on_place_profile')
-      input :is_visible_on_actor_profile, as: :boolean, required: true,
-                                          hint: object.class.column_comment('is_visible_on_actor_profile')
-      input :is_temporal_on_place_profile, as: :boolean, required: true,
-                                           hint: object.class.column_comment('is_temporal_on_place_profile')
-      input :is_temporal_on_actor_profile, as: :boolean, required: true,
-                                           hint: object.class.column_comment('is_temporal_on_actor_profile')
     end
     f.actions
   end
