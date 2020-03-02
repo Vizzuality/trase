@@ -23,11 +23,7 @@ ActiveAdmin.register Api::V3::TopProfileImage, as: 'Top Profile Image' do
       input :profile_type,
             as: :select,
             required: true,
-            collection: [
-              Api::V3::Profile::ACTOR,
-              Api::V3::Profile::PLACE,
-              Api::V3::Profile::COUNTRY
-            ]
+            collection: Api::V3::Profile::NAMES
       input :commodity, as: :select, required: true,
                         collection: Api::V3::Commodity.select_options
       input :image, as: :file, required: true
@@ -46,11 +42,7 @@ ActiveAdmin.register Api::V3::TopProfileImage, as: 'Top Profile Image' do
   end
 
   filter :profile_type, as: :select, collection: -> {
-    [
-      Api::V3::Profile::ACTOR,
-      Api::V3::Profile::PLACE,
-      Api::V3::Profile::COUNTRY
-    ]
+    Api::V3::Profile::NAMES
   }
   filter :commodity, collection: -> { Api::V3::Commodity.select_options }
 end

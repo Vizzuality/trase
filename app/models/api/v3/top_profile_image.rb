@@ -21,17 +21,11 @@
 module Api
   module V3
     class TopProfileImage < YellowTable
-      PROFILE_TYPES = [
-        Api::V3::Profile::ACTOR,
-        Api::V3::Profile::PLACE,
-        Api::V3::Profile::COUNTRY
-      ].freeze
-
       belongs_to :commodity
       has_many :top_profiles, dependent: :nullify
       has_attached_file :image, styles: {small: '320x320>', large: '640x640>'}
       validates_attachment_content_type :image, content_type: /\Aimage\/.*\z/
-      validates :profile_type, inclusion: PROFILE_TYPES
+      validates :profile_type, inclusion: Api::V3::Profile::NAMES
 
       def self.blue_foreign_keys
         [

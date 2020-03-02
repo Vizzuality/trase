@@ -30,17 +30,17 @@ ActiveAdmin.register Api::V3::Chart, as: 'Chart' do
   end
 
   index do
-    column('Country') do |chart|
+    column('Country', sortable: true) do |chart|
       chart.profile&.context_node_type&.context&.country&.name
     end
-    column('Commodity') do |chart|
+    column('Commodity', sortable: true) do |chart|
       chart.profile&.context_node_type&.context&.commodity&.name
     end
-    column('Node Type') do |chart|
+    column('Node Type', sortable: true) do |chart|
       chart.profile&.context_node_type&.node_type&.name
     end
-    column('Profile Type') { |chart| chart.profile&.name }
-    column('Parent') { |chart| chart.parent&.identifier }
+    column('Profile Type', sortable: true) { |chart| chart.profile&.name }
+    column('Parent', sortable: true) { |chart| chart.parent&.identifier }
     column :title
     column :identifier
     column :position
@@ -68,5 +68,32 @@ ActiveAdmin.register Api::V3::Chart, as: 'Chart' do
     end
   end
 
+  filter :profile_context_node_type_context_country_id,
+         label: 'Country',
+         as: :select,
+         collection: -> { Api::V3::Country.select_options }
+
+  filter :profile_context_node_type_context_commodity_id,
+         label: 'Commodity',
+         as: :select,
+         collection: -> { Api::V3::Commodity.select_options }
+
+  filter :profile_context_node_type_context_id,
+         label: 'Context',
+         as: :select,
+         collection: -> { Api::V3::Context.select_options }
+
+  filter :profile_context_node_type_node_type_id,
+         label: 'Node type',
+         as: :select,
+         collection: -> { Api::V3::NodeType.select_options }
+
+  filter :profile_name,
+         label: 'Profile type',
+         as: :select,
+         collection: -> { Api::V3::Profile::NAMES }
+
   filter :profile, collection: -> { Api::V3::Profile.select_options }
+
+  filter :identifier, as: :select
 end

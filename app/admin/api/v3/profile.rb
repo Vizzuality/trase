@@ -25,7 +25,7 @@ ActiveAdmin.register Api::V3::Profile, as: 'Profile' do
       input :context_node_type, as: :select, required: true,
                                 collection: Api::V3::ContextNodeType.select_options
       input :name, as: :select,
-                   collection: Api::V3::Profile::NAME,
+                   collection: Api::V3::Profile::NAMES,
                    hint: object.class.column_comment('name')
 
       input :main_topojson_path,
@@ -57,18 +57,24 @@ ActiveAdmin.register Api::V3::Profile, as: 'Profile' do
   end
 
   index do
-    column('Country') { |property| property.context_node_type&.context&.country&.name }
-    column('Commodity') { |property| property.context_node_type&.context&.commodity&.name }
-    column('Node Type') { |property| property.context_node_type&.node_type&.name }
+    column('Country', sortable: true) do |profile|
+      profile.context_node_type&.context&.country&.name
+    end
+    column('Commodity', sortable: true) do |profile|
+      profile.context_node_type&.context&.commodity&.name
+    end
+    column('Node Type', sortable: true) do |profile|
+      profile.context_node_type&.node_type&.name
+    end
     column :name
     actions
   end
 
   show do
     attributes_table do
-      row('Country') { |property| property.context_node_type&.context&.country&.name }
-      row('Commodity') { |property| property.context_node_type&.context&.commodity&.name }
-      row('Node Type') { |property| property.context_node_type&.node_type&.name }
+      row('Country') { |profile| profile.context&.country&.name }
+      row('Commodity') { |profile| profile.context&.commodity&.name }
+      row('Node Type') { |profile| profile.node_type&.name }
       row :name
       row :adm_1_topojson_path
       row :adm_1_topojson_root
@@ -81,12 +87,28 @@ ActiveAdmin.register Api::V3::Profile, as: 'Profile' do
     end
   end
 
-  filter :context_node_type, collection: -> {
-    Api::V3::ContextNodeType.
-      select_options
-  }
+  filter :context_node_type_context_country_id,
+         label: 'Country',
+         as: :select,
+         collection: -> { Api::V3::Country.select_options }
 
-  filter :context_node_type, collection: -> {
-    Api::V3::ContextNodeType.select_options
-  }
+  filter :context_node_type_context_commodity_id,
+         label: 'Commodity',
+         as: :select,
+         collection: -> { Api::V3::Commodity.select_options }
+
+  filter :context_node_type_context_id,
+         label: 'Context',
+         as: :select,
+         collection: -> { Api::V3::Context.select_options }
+
+  filter :context_node_type_node_type_id,
+         label: 'Node type',
+         as: :select,
+         collection: -> { Api::V3::NodeType.select_options }
+
+  filter :name,
+         label: 'Profile type',
+         as: :select,
+         collection: -> { Api::V3::Profile::NAMES }
 end
