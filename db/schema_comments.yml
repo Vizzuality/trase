@@ -449,7 +449,7 @@ tables:
     comment: Context-specific profiles
     columns:
       - name: name
-        comment: Profile name, either actor or place. One of restricted set of values.
+        comment: Profile name, either actor, place or country.
       - name: main_topojson_path
         comment: Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /
       - name: main_topojson_root

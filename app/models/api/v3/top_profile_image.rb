@@ -21,7 +21,11 @@
 module Api
   module V3
     class TopProfileImage < YellowTable
-      PROFILE_TYPES = %w(actor place).freeze
+      PROFILE_TYPES = [
+        Api::V3::Profile::ACTOR,
+        Api::V3::Profile::PLACE,
+        Api::V3::Profile::COUNTRY
+      ].freeze
 
       belongs_to :commodity
       has_many :top_profiles, dependent: :nullify

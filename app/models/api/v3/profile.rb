@@ -28,8 +28,9 @@ module Api
     class Profile < YellowTable
       ACTOR = 'actor'.freeze
       PLACE = 'place'.freeze
+      COUNTRY = 'country'.freeze
 
-      NAME = [ACTOR, PLACE].freeze
+      NAME = [ACTOR, PLACE, COUNTRY].freeze
 
       belongs_to :context_node_type
       has_many :charts, -> { order(:position) }

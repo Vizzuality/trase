@@ -272,6 +272,8 @@ COMMENT ON FUNCTION public.upsert_attributes() IS 'Upserts attributes based on n
 
 SET default_tablespace = '';
 
+SET default_with_oids = false;
+
 --
 -- Name: ckeditor_assets; Type: TABLE; Schema: content; Owner: -
 --
@@ -2257,7 +2259,7 @@ CREATE TABLE public.profiles (
     adm_2_name character varying,
     adm_2_topojson_path character varying,
     adm_2_topojson_root character varying,
-    CONSTRAINT profiles_name_check CHECK ((name = ANY (ARRAY['actor'::text, 'place'::text])))
+    CONSTRAINT profiles_name_check CHECK ((name = ANY (ARRAY['actor'::text, 'place'::text, 'country'::text])))
 );
 
 
@@ -10002,6 +10004,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200106092554'),
 ('20200107131928'),
 ('20200123163215'),
-('20200207162026');
+('20200207162026'),
+('20200302203632');
 
 

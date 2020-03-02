@@ -40,7 +40,10 @@ module Api
         @node = Api::V3::Node.find(params[:id])
 
         @readonly_node = Api::V3::Readonly::NodeWithFlows.
-          where(context_id: @context.id, profile: %w[actor place]).
+          where(
+            context_id: @context.id,
+            profile: Api::V3::Profile::NAMES
+          ).
           find(@node.id)
       end
     end
