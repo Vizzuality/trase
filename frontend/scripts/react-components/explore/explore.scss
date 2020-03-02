@@ -147,4 +147,23 @@ $explore-heading: 66px;
   .country-dropdown-container {
     margin-top: 20px;
   }
+
+  .step-title-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .featured-cards-back {
+    position: relative;
+    color: $strong-pink;
+    margin-left: 20px;
+    cursor: pointer;
+
+    .icon {
+      position: relative;
+      rotate: 90deg;
+      transform: translateX(-2px); // Adjust vertical position after rotate
+    }
+  }
 }
