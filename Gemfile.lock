@@ -282,7 +282,7 @@ GEM
     polyamorous (2.3.2)
       activerecord (>= 5.2.1)
     public_suffix (4.0.3)
-    puma (4.3.1)
+    puma (4.3.2)
       nio4r (~> 2.0)
     rack (2.2.2)
     rack-cors (1.1.1)
