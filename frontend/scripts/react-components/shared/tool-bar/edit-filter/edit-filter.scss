@@ -2,7 +2,7 @@
 
 .c-edit-filter {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   height: 100%;
   white-space: nowrap;
   overflow: hidden;
@@ -12,24 +12,12 @@
     .edit-subtitle {
       margin: 0 0 0 5px;
     }
-  }
-
-  .edit-button {
-    display: none;
+    line-height: 1.35;
   }
 
   @media screen and (min-width: $breakpoint-tool-bar) {
     .edit-title {
       margin: 0 12px 0 0;
-    }
-
-    .edit-button {
-      display: inline-flex;
-
-      .icon {
-        width: 1.2em;
-        height: 1.2em;
-      }
     }
   }
 
@@ -37,13 +25,11 @@
     .title-text {
       text-decoration: underline;
     }
+  }
 
-    .edit-button {
-      background-color: $carbon-gray;
-
-      .icon {
-        fill: $white;
-      }
-    }
+  .options-menu-label {
+    display: block;
+    color: rgba($white, 0.6);
+    margin-top: 4px;
   }
 }

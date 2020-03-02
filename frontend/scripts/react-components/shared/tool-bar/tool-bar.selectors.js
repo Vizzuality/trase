@@ -42,6 +42,7 @@ const getPanelFilter = createSelector(
     return {
       id: 'context',
       type: 'edit',
+      label: 'Change context',
       title,
       subtitle: isCustom ? '(Custom)' : null,
       show: selectedContext,
@@ -59,7 +60,7 @@ export const getResizeByFilter = createSelector(
   (tooltips, selectedResizeBy, items) => ({
     id: 'unit',
     type: 'optionsMenu',
-    label: 'units',
+    label: 'Change units',
     show: selectedResizeBy,
     value: selectedResizeBy?.label || '',
     suffix: selectedResizeBy?.unit && `(${selectedResizeBy?.unit})`,
@@ -74,7 +75,7 @@ export const getRecolorByFilter = createSelector(
     id: 'indicator',
     type: 'optionsMenu',
     show: selectedContext?.recolorBy.length > 0,
-    label: 'indicator',
+    label: 'Change indicator',
     value: selectedRecolorBy?.label || 'None',
     tooltip: tooltips && tooltips.sankey.nav.colorBy.main
   })
@@ -84,7 +85,7 @@ export const getVersioningSelected = createSelector(getVersionData, versionData 
   id: 'version',
   type: 'optionsMenu',
   show: versionData,
-  label: 'version',
+  label: 'Change version',
   value: `${versionData?.title} v${versionData?.version}`
 }));
 
