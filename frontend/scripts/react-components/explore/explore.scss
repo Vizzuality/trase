@@ -162,8 +162,7 @@ $explore-heading: 66px;
 
     .icon {
       position: relative;
-      rotate: 90deg;
-      transform: translateX(-2px); // Adjust vertical position after rotate
+      transform: rotate(90deg) translateX(-2px); // Adjust vertical position after rotate
     }
   }
 }
