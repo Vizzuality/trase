@@ -6,8 +6,8 @@ $desktop-nav-sides-margin: 20px;
 .c-nav {
   position: fixed;
   top: 0;
-  left: $desktop-nav-sides-margin;
-  width: calc(100% - #{$desktop-nav-sides-margin} * 2);
+  width: 100vw;
+  padding: 0 20px;
   height: $nav-height;
   font-family: $font-family-1;
   background-color: transparent;
