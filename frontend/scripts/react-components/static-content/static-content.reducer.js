@@ -1,13 +1,6 @@
 import createReducer from 'utils/createReducer';
+import initialState from './static-content.initial-state';
 import { STATIC_CONTENT__SET_MARKDOWN } from './static-content.actions';
-
-const initialState = {
-  markdown: {
-    /**
-     * { [filename]: content }
-     */
-  }
-};
 
 const staticContentReducer = {
   [STATIC_CONTENT__SET_MARKDOWN](state, action) {

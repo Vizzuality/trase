@@ -14,15 +14,15 @@ function CommoditiesPanel(props) {
     setSelectedItem,
     setPage,
     page,
-    previousSteps,
+    draftPreviousSteps,
     fetchData
   } = props;
 
   useEffect(() => {
-    if (previousSteps !== fetchKey || fetchKey === null) {
-      fetchData(previousSteps);
+    if (draftPreviousSteps !== fetchKey || fetchKey === null) {
+      fetchData(draftPreviousSteps);
     }
-  }, [previousSteps, fetchData, fetchKey]);
+  }, [draftPreviousSteps, fetchData, fetchKey]);
 
   return (
     <ResizeListener>
@@ -61,7 +61,7 @@ function CommoditiesPanel(props) {
 
 CommoditiesPanel.propTypes = {
   fetchKey: PropTypes.string,
-  previousSteps: PropTypes.string,
+  draftPreviousSteps: PropTypes.string,
   commodities: PropTypes.array,
   loading: PropTypes.bool,
   page: PropTypes.number.isRequired,

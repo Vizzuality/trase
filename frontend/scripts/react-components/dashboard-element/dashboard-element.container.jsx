@@ -1,5 +1,6 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { createSelector } from 'reselect';
 import React from 'react';
 import PropTypes from 'prop-types';
 import DashboardElement from 'react-components/dashboard-element/dashboard-element.component';
@@ -7,30 +8,39 @@ import {
   getDynamicSentence,
   getDashboardFiltersProps,
   getDashboardGroupedCharts,
-  getEditMode,
   getDashboardElementUrlProps
 } from 'react-components/dashboard-element/dashboard-element.selectors';
-import { getDirtyBlocks, getCanProceed } from 'react-components/nodes-panel/nodes-panel.selectors';
+import dashboardElementSerializer from 'react-components/dashboard-element/dashboard-element.serializers';
+import nodesPanelSerializer from 'react-components/nodes-panel/nodes-panel.serializers';
 import {
-  setDashboardSelectedYears,
-  setDashboardSelectedResizeBy,
-  setDashboardSelectedRecolorBy,
-  editDashboard as editDashboardFn
-} from 'react-components/dashboard-element/dashboard-element.actions';
+  getDirtyBlocks,
+  getNodesPanelUrlProps
+} from 'react-components/nodes-panel/nodes-panel.selectors';
+import { dashboardElementActions } from 'react-components/dashboard-element/dashboard-element.register';
+import { nodesPanelActions } from 'react-components/nodes-panel/nodes-panel.register';
 import { DASHBOARD_STEPS } from 'constants';
+
+const getUrlProps = createSelector(
+  [getDashboardElementUrlProps, getNodesPanelUrlProps],
+  (dashboardElementProps, nodesPanelProps) => ({ ...dashboardElementProps, ...nodesPanelProps })
+);
+
+const _urlPropHandlers = {
+  ...dashboardElementSerializer.urlPropHandlers,
+  ...nodesPanelSerializer.urlPropHandlers
+};
 
 const mapStateToProps = state => {
   const dirtyBlocks = getDirtyBlocks(state);
   return {
     dirtyBlocks,
-    canProceed: getCanProceed(state),
+    urlPropHandlers: _urlPropHandlers,
     loading: state.dashboardElement.loading,
     groupedCharts: getDashboardGroupedCharts(state),
     filters: getDashboardFiltersProps(state),
     dynamicSentenceParts: getDynamicSentence(state),
     showModalOnStart: !(dirtyBlocks.countries && dirtyBlocks.commodities),
-    editMode: getEditMode(state),
-    urlProps: getDashboardElementUrlProps(state)
+    urlProps: getUrlProps(state)
   };
 };
 
@@ -38,27 +48,32 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       goToRoot: () => ({ type: 'dashboardRoot' }),
-      setSelectedYears: setDashboardSelectedYears,
-      setSelectedResizeBy: setDashboardSelectedResizeBy,
-      setSelectedRecolorBy: setDashboardSelectedRecolorBy,
-      editDashboard: editDashboardFn
+      setSelectedYears: dashboardElementActions.setDashboardSelectedYears,
+      setSelectedResizeBy: dashboardElementActions.setDashboardSelectedResizeBy,
+      setSelectedRecolorBy: dashboardElementActions.setDashboardSelectedRecolorBy,
+      editDashboard: dashboardElementActions.editDashboard,
+      editPanels: nodesPanelActions.editPanels,
+      finishSelection: nodesPanelActions.finishSelection,
+      goToDashboard: dashboardElementActions.goToDashboard
     },
     dispatch
   );
 
 class DashboardElementContainer extends React.Component {
   static propTypes = {
-    editMode: PropTypes.bool,
     loading: PropTypes.bool,
     filters: PropTypes.object,
-    canProceed: PropTypes.bool,
     urlProps: PropTypes.object,
     dirtyBlocks: PropTypes.object,
     groupedCharts: PropTypes.object,
+    urlPropHandlers: PropTypes.object,
     showModalOnStart: PropTypes.bool,
     goToRoot: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
+    goToDashboard: PropTypes.func.isRequired,
+    finishSelection: PropTypes.func.isRequired,
     editDashboard: PropTypes.func.isRequired,
+    editPanels: PropTypes.func.isRequired,
     setSelectedYears: PropTypes.func.isRequired,
     setSelectedResizeBy: PropTypes.func.isRequired,
     setSelectedRecolorBy: PropTypes.func.isRequired
@@ -85,29 +100,29 @@ class DashboardElementContainer extends React.Component {
     }
   }
 
-  closeModal = () => {
-    this.setState({ modalOpen: false });
-  };
+  closeModal = () => this.setState({ modalOpen: false });
 
   reopenPanel = () => {
     this.props.editDashboard();
+    this.props.editPanels();
     this.setState({ step: 0, modalOpen: true });
   };
 
   updateStep = step => this.setState({ step });
 
   render() {
-    const { editMode } = this.props;
     const { step, modalOpen } = this.state;
     const {
       loading,
       groupedCharts,
       goToRoot,
       urlProps,
-      canProceed,
+      urlPropHandlers,
       dynamicSentenceParts,
       dirtyBlocks,
       filters,
+      finishSelection,
+      goToDashboard,
       setSelectedYears,
       setSelectedResizeBy,
       setSelectedRecolorBy
@@ -118,15 +133,16 @@ class DashboardElementContainer extends React.Component {
         loading={loading}
         filters={filters}
         urlProps={urlProps}
-        editMode={editMode}
         goToRoot={goToRoot}
         modalOpen={modalOpen}
-        canProceed={canProceed}
+        finishSelection={finishSelection}
+        goToDashboard={goToDashboard}
         dirtyBlocks={dirtyBlocks}
         setStep={this.updateStep}
         closeModal={this.closeModal}
         groupedCharts={groupedCharts}
         reopenPanel={this.reopenPanel}
+        urlPropHandlers={urlPropHandlers}
         dynamicSentenceParts={dynamicSentenceParts}
         setSelectedYears={setSelectedYears}
         setSelectedResizeBy={setSelectedResizeBy}
@@ -136,7 +152,4 @@ class DashboardElementContainer extends React.Component {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(DashboardElementContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardElementContainer);

@@ -3,9 +3,7 @@ module Api
     module SankeyCardLinks
       class SankeyCardLinkSerializer < ActiveModel::Serializer
         attributes :id,
-                   :host,
                    :query_params,
-                   :link,
                    :title,
                    :subtitle
 

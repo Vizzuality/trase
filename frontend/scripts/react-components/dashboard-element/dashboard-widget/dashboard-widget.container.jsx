@@ -51,6 +51,7 @@ class DashboardWidgetContainer extends Component {
       config,
       chartType,
       title,
+      variant,
       groupingActiveItem,
       setActiveChartId,
       groupingOptions,
@@ -62,6 +63,7 @@ class DashboardWidgetContainer extends Component {
         meta={meta}
         error={error}
         title={title}
+        variant={variant}
         chartType={chartType}
         setActiveChartId={setActiveChartId}
         groupingOptions={groupingOptions}
@@ -82,6 +84,7 @@ DashboardWidgetContainer.propTypes = {
   title: PropTypes.string,
   config: PropTypes.object,
   chartType: PropTypes.string,
+  variant: PropTypes.string,
   setActiveChartId: PropTypes.func,
   groupingOptions: PropTypes.array,
   trackOpenTableView: PropTypes.func,

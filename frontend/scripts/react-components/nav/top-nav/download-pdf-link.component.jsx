@@ -1,5 +1,7 @@
+import { connect } from 'react-redux';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { appActions } from 'app/app.register';
 
 function getDownloadPdfLink() {
   const pageTitle = encodeURIComponent(document.getElementsByTagName('title')[0].innerText);
@@ -29,4 +31,8 @@ DownloadPdfLink.propTypes = {
   className: PropTypes.string
 };
 
-export default DownloadPdfLink;
+const mapDispatchToProps = {
+  onClick: appActions.onDownloadPDF
+};
+
+export default connect(null, mapDispatchToProps)(DownloadPdfLink);

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import TagsGroup from 'react-components/shared/tags-group';
 import Button from 'react-components/shared/button/button.component';
@@ -9,10 +9,9 @@ import './dashboard-modal-footer.scss';
 function DashboardModalFooter(props) {
   const {
     isLastStep,
-    goToDashboard,
-    dynamicSentenceParts,
+    canProceed,
+    draftDynamicSentenceParts,
     clearPanel,
-    dirtyBlocks,
     removeSentenceItem,
     onContinue,
     onBack,
@@ -21,16 +20,10 @@ function DashboardModalFooter(props) {
     step
   } = props;
 
-  const onClickContinue = useCallback(() => {
-    if (isLastStep) {
-      goToDashboard({ dirtyBlocks, dynamicSentenceParts });
-    }
-    onContinue();
-  }, [isLastStep, goToDashboard, onContinue, dirtyBlocks, dynamicSentenceParts]);
   return (
     <div className="c-dashboard-modal-footer">
       <TagsGroup
-        tags={dynamicSentenceParts}
+        tags={draftDynamicSentenceParts}
         removeSentenceItem={removeSentenceItem}
         clearPanel={clearPanel}
         step={step}
@@ -45,17 +38,31 @@ function DashboardModalFooter(props) {
             </Text>
           </button>
         )}
-        <Button
-          onClick={onClickContinue}
-          color="pink"
-          size="md"
-          disabled={isDisabled}
-          testId="dashboard-modal-actions-continue"
-        >
-          <Text as="span" size="rg" color="white" variant="mono">
-            {isLastStep ? 'Go to dashboard' : 'Continue'}
-          </Text>
-        </Button>
+        {!isLastStep && (
+          <Button
+            onClick={() => onContinue()}
+            color="gray"
+            size="rg"
+            disabled={isDisabled}
+            className="dashboard-modal-continue-button"
+            testId="dashboard-modal-actions-continue"
+          >
+            Continue
+          </Button>
+        )}
+        {canProceed && step > 0 && (
+          <Button
+            onClick={() => onContinue(canProceed)}
+            color="pink"
+            size={isLastStep ? 'md' : 'rg'}
+            disabled={isDisabled}
+            testId="dashboard-modal-actions-save"
+          >
+            <Text as="span" size="rg" color="white" variant="mono">
+              Save
+            </Text>
+          </Button>
+        )}
       </div>
     </div>
   );
@@ -63,13 +70,12 @@ function DashboardModalFooter(props) {
 
 DashboardModalFooter.propTypes = {
   onBack: PropTypes.func,
-  dirtyBlocks: PropTypes.object,
+  canProceed: PropTypes.bool,
   removeSentenceItem: PropTypes.func,
   clearPanel: PropTypes.func,
-  goToDashboard: PropTypes.func,
   isDisabled: PropTypes.bool,
   isLastStep: PropTypes.bool.isRequired,
-  dynamicSentenceParts: PropTypes.array,
+  draftDynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
   step: PropTypes.number,
   backText: PropTypes.string

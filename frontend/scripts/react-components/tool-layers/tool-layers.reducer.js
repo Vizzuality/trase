@@ -2,28 +2,37 @@ import {
   GET_CONTEXT_LAYERS,
   GET_MAP_VECTOR_DATA,
   SET_NODE_ATTRIBUTES,
-  SAVE_MAP_VIEW,
   SELECT_BASEMAP,
   SELECT_CONTEXTUAL_LAYERS,
   CHANGE_LAYOUT,
   SET_SANKEY_SIZE,
-  SET_ACTIVE_MODAL,
   SELECT_UNIT_LAYERS,
   TOGGLE_MAP_DIMENSION
 } from 'react-components/tool/tool.actions';
 import {
+  TOOL_LAYERS__SET_ACTIVE_MODAL,
+  TOOL_LAYERS__SAVE_MAP_VIEW,
   TOOL_LAYERS__SET_LINKED_GEOIDS,
   TOOL_LAYERS__SET_MAP_DIMENSIONS
 } from 'react-components/tool-layers/tool-layers.actions';
 import { TOOL_LINKS__HIGHLIGHT_NODE } from 'react-components/tool-links/tool-links.actions';
-import { SET_CONTEXT } from 'scripts/actions/app.actions';
+import { SET_CONTEXT } from 'app/app.actions';
+import { NODES_PANEL__SAVE } from 'react-components/nodes-panel/nodes-panel.actions';
 import immer from 'immer';
 import createReducer from 'utils/createReducer';
-import getNodeMetaUid from 'reducers/helpers/getNodeMetaUid';
+import getNodeMetaUid from 'app/helpers/getNodeMetaUid';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import toolLayersSerialization from 'react-components/tool-layers/tool-layers.serializers';
 import toolLayersInitialState from 'react-components/tool-layers//tool-layers.initial-state';
 import { TOOL_LAYOUT, SANKEY_OFFSETS } from 'constants';
+
+const onContextChange = state =>
+  immer(state, draft => {
+    Object.assign(draft, toolLayersInitialState, {
+      toolLayout: state.toolLayout,
+      sankeySize: state.sankeySize
+    });
+  });
 
 const toolLayersReducer = {
   tool(state, action) {
@@ -37,14 +46,13 @@ const toolLayersReducer = {
     }
     return state;
   },
-  [SET_CONTEXT](state) {
-    return immer(state, draft => {
-      Object.assign(draft, toolLayersInitialState, {
-        toolLayout: state.toolLayout,
-        sankeySize: state.sankeySize
-      });
-    });
+  [NODES_PANEL__SAVE](state, action) {
+    if (action.payload) {
+      return onContextChange(state);
+    }
+    return state;
   },
+  [SET_CONTEXT]: onContextChange,
   [SET_NODE_ATTRIBUTES](state) {
     return immer(state, draft => {
       draft.mapLoading = false;
@@ -56,8 +64,7 @@ const toolLayersReducer = {
       draft.data.mapDimensions = {};
       dimensions.forEach(dimension => {
         const uid = getNodeMetaUid(dimension.type, dimension.layerAttributeId);
-        draft.data.mapDimensions[uid] = dimension;
-        draft.data.mapDimensions[uid].uid = uid;
+        draft.data.mapDimensions[uid] = { ...dimension, uid };
       });
       draft.data.mapDimensionsGroups = [];
       dimensionGroups.forEach((g, i) => {
@@ -117,7 +124,7 @@ const toolLayersReducer = {
       draft.toolLayout = action.payload.toolLayout;
     });
   },
-  [SAVE_MAP_VIEW](state, action) {
+  [TOOL_LAYERS__SAVE_MAP_VIEW](state, action) {
     return immer(state, draft => {
       draft.mapView = {
         latitude: action.latlng.lat.toFixed(2),
@@ -139,7 +146,7 @@ const toolLayersReducer = {
       ];
     });
   },
-  [SET_ACTIVE_MODAL](state, action) {
+  [TOOL_LAYERS__SET_ACTIVE_MODAL](state, action) {
     return immer(state, draft => {
       draft.activeModal = action.payload.activeModal;
     });

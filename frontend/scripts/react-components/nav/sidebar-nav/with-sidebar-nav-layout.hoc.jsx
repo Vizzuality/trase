@@ -1,5 +1,6 @@
 import React from 'react';
-import SidebarNav from 'react-components/nav/sidebar-nav/sidebar-nav.container';
+
+const SidebarNav = React.lazy(() => import('./sidebar-nav.container'));
 
 export default function(Component) {
   function SidebarNavLayoutHOC() {

@@ -18,17 +18,24 @@ RSpec.describe Api::V3::SankeyCardLinks::ResponseBuilder do
     before do
       @node_type = api_v3_brazil_beef_port_of_export_context_node_type.
         node_type
-      @sankey_card_link = FactoryBot.create :api_v3_sankey_card_link, level1: true, query_params: {
-        'selectedCommodityId' => api_v3_beef.id,
-        'selectedCountryId' => api_v3_brazil.id,
+      @query_params = {
+        'commodities' => api_v3_beef.id,
+        'countries' => api_v3_brazil.id,
         'selectedResizeBy' => api_v3_volume.readonly_attribute.id,
         'selectedRecolorBy' => api_v3_biome.readonly_attribute.id,
         'selectedYears' => [2015, 2017],
         'selectedBiomeFilterName' => api_v3_biome_node.name,
         'selectedColumnsIds' => "1_#{@node_type.id}",
-        'selectedNodesIds' => [api_v3_brazil_beef_country_of_production_node.id,
-                               api_v3_country_of_destination_node.id]
+        'selectedNodesIds' => [
+          api_v3_brazil_beef_country_of_production_node.id,
+          api_v3_country_of_destination_node.id
+        ]
       }
+      @sankey_card_link = FactoryBot.create(
+        :api_v3_sankey_card_link,
+        level1: true,
+        link: "http://localhost:8081/flows?#{@query_params.to_query}"
+      )
 
       @builder = Api::V3::SankeyCardLinks::ResponseBuilder.new(level: '1')
       @builder.call
@@ -37,8 +44,7 @@ RSpec.describe Api::V3::SankeyCardLinks::ResponseBuilder do
     it 'should return data' do
       data = @builder.data.first
       expect(data[:id]).to eq(@sankey_card_link.id)
-      expect(data[:host]).to eq(@sankey_card_link.host)
-      %w[selectedCountryId selectedCommodityId selectedRecolorBy
+      %w[countries commodities selectedRecolorBy
          selectedResizeBy selectedBiomeFilterName selectedYears].each do |attribute|
         expect(data[:queryParams][attribute]).to eq(
           @sankey_card_link.query_params[attribute]
@@ -48,11 +54,11 @@ RSpec.describe Api::V3::SankeyCardLinks::ResponseBuilder do
 
     it 'should return meta' do
       nodes = @builder.meta[:nodes]
-      expect(nodes.map { |n| n[:id] }).to eql([
+      expect(nodes.map { |n| n[:id] }).to match_array([
         api_v3_brazil_beef_country_of_production_node.id,
         api_v3_country_of_destination_node.id
       ])
-      expect(nodes.map { |n| n[:nodeTypeId] }).to eql([
+      expect(nodes.map { |n| n[:nodeTypeId] }).to match_array([
         api_v3_brazil_beef_country_of_production_node.node_type_id,
         api_v3_country_of_destination_node.node_type_id
       ])

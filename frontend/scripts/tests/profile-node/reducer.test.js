@@ -1,5 +1,5 @@
 import reducer from 'react-components/profile-node/profile-node.reducer';
-import initialState from 'react-components/profile-node/profile-node-initial-state';
+import initialState from 'react-components/profile-node/profile-node.initial-state';
 import {
   PROFILE_NODE__SET_COLUMNS,
   setColumns,

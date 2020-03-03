@@ -1,18 +1,21 @@
 @import 'styles/settings';
 
 $desktop-nav-min-width: 960px;
+$desktop-nav-sides-margin: 20px;
 
 .c-nav {
-  top: 0;
   position: fixed;
-  width: 100%;
+  top: 0;
+  width: 100vw;
+  padding: 0 20px;
+  height: $nav-height;
   font-family: $font-family-1;
   background-color: transparent;
   z-index: $z-nav;
   transition: all 150ms ease-in;
 
   &.-has-background {
-    background-color: $white;
+    background-color: $light-gray;
     box-shadow: 0 10px 20px 0 rgba($charcoal-grey, 0.2);
 
     .top-nav-link,
@@ -23,26 +26,6 @@ $desktop-nav-min-width: 960px;
     .locale-selector-selected-item,
     .locale-selector-menu-item {
       color: $charcoal-grey;
-    }
-
-    .locale-selector-menu {
-      background-color: $white;
-      box-shadow: 0 3px 6px 0 rgba($black, .16), 0 3px 6px 0 rgba($black, .23);
-
-      .locale-selector-menu-item {
-        width: 100%;
-        margin: 0;
-        padding: 5px 10px;
-        opacity: 1;
-
-        &:hover {
-          background-color: $egg-shell;
-        }
-
-        &:not(:first-child) {
-          border-top: solid 1px rgba($charcoal-grey, .2);
-        }
-      }
     }
   }
 
@@ -89,8 +72,8 @@ $desktop-nav-min-width: 960px;
   .top-nav-search {
     .icon-search {
       margin: 0 10px 0 10px;
-      width: 20px;
-      height: 20px;
+      width: 24px;
+      height: 24px;
     }
   }
 
@@ -121,7 +104,7 @@ $desktop-nav-min-width: 960px;
 
 .top-nav-item-list {
   display: inline-flex;
-  height: 100%;
+  height: $nav-height;
 }
 
 .top-nav-item {
@@ -132,14 +115,14 @@ $desktop-nav-min-width: 960px;
   margin: 0 6px;
   font-size: 16px;
   font-weight: $font-weight-bold;
-  letter-spacing: .5px;
+  letter-spacing: 0.5px;
   cursor: pointer;
 
   &:first-child {
     margin: 0 6px 0 0;
 
     .top-nav-link {
-      padding: 16px 10px 16px 0;
+      padding: 0 10px 0 0;
     }
   }
 
@@ -155,12 +138,22 @@ $desktop-nav-min-width: 960px;
 
   .icon-download-pdf {
     height: 25px;
-    transform: translateY(1px)
+    transform: translateY(1px);
+  }
+
+  .top-nav-logo-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    text-transform: lowercase;
+    font-size: $font-size-medium;
+    width: 135px;
+    height: 100%;
   }
 }
 
 .top-nav-link {
-  padding: 16px 10px;
+  padding: 0 10px;
   color: $white;
   text-align: center;
   text-transform: uppercase;
@@ -184,13 +177,22 @@ $desktop-nav-min-width: 960px;
   }
 
   &.-logo {
-
     &::after {
       content: none;
     }
 
     img {
       width: 60px;
+    }
+  }
+
+  &.-new-logo {
+    &::after {
+      content: none;
+    }
+
+    img {
+      width: 135px;
     }
   }
 }
@@ -201,7 +203,7 @@ $desktop-nav-min-width: 960px;
   font-family: $font-family-1;
   font-size: 16px;
   font-weight: $font-weight-bold;
-  letter-spacing: .5px;
+  letter-spacing: 0.5px;
   text-align: center;
   text-transform: uppercase;
 
@@ -229,6 +231,9 @@ $desktop-nav-min-width: 960px;
 }
 
 .top-nav-collapse {
+  background-color: $background-white;
+  box-shadow: $box-shadow;
+
   .top-nav-item-list-collapse {
     padding: 28px 0px;
   }
@@ -238,7 +243,7 @@ $desktop-nav-min-width: 960px;
     padding: 12px 0px;
     font-size: 16px;
     font-weight: $font-weight-bold;
-    letter-spacing: .5px;
+    letter-spacing: 0.5px;
 
     .c-locale-selector {
       display: block;

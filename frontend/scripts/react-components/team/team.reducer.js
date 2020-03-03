@@ -1,20 +1,9 @@
 import kebabCase from 'lodash/kebabCase';
 import keyBy from 'lodash/keyBy';
 import sortBy from 'lodash/sortBy';
-import { TEAM__SET_CONTENT, TEAM__SET_ERROR_MESSAGE } from 'react-components/team/team.actions';
 import createReducer from 'utils/createReducer';
-
-const initialState = {
-  groups: [],
-  /**
-   * { [name]: { name, position, staffMembers }
-   */
-  members: {},
-  /**
-   * { [name]: { name, position, bio, smallImageUrl }
-   */
-  errorMessage: null
-};
+import initialState from './team.initial-state';
+import { TEAM__SET_CONTENT, TEAM__SET_ERROR_MESSAGE } from './team.actions';
 
 const teamReducer = {
   [TEAM__SET_CONTENT](state, action) {

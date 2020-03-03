@@ -17,13 +17,17 @@ export const createPanelInitialState = name => {
   if (moduleOptions.hasMultipleSelection) {
     panelState.selectedNodesIds = [];
     panelState.excludingMode = false;
+    panelState.draftSelectedNodesIds = [];
   } else {
     panelState.selectedNodeId = null;
+    panelState.draftSelectedNodeId = null;
   }
 
   if (moduleOptions.hasTabs) {
     panelState.tabs = [];
+    panelState.savedTabs = [];
     panelState.activeTab = null;
+    panelState.savedActiveTab = null;
   }
 
   if (moduleOptions.hasSearch) {
@@ -39,5 +43,7 @@ export default {
   commodities: createPanelInitialState('commodities'),
   destinations: createPanelInitialState('destinations'),
   exporters: createPanelInitialState('exporters'),
-  importers: createPanelInitialState('importers')
+  importers: createPanelInitialState('importers'),
+  // DONT USE THIS: solely for internal navigation purposes. Used for expanding nodes without knowing their roles
+  __temporaryExpandedNodes: [] // { id, nodeType }
 };

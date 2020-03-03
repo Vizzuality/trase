@@ -1,24 +1,28 @@
 import { createSelector, createStructuredSelector } from 'reselect';
-import getNodesAtColumns from 'reducers/helpers/getNodesAtColumns';
-import getNodesColoredBySelection from 'reducers/helpers/getNodesColoredBySelection';
-import getNextRecolorGroups from 'reducers/helpers/getRecolorGroups';
-import getVisibleNodesUtil from 'reducers/helpers/getVisibleNodes';
+import getNodesAtColumns from 'app/helpers/getNodesAtColumns';
+import getNodesColoredBySelection from 'app/helpers/getNodesColoredBySelection';
+import getNextRecolorGroups from 'app/helpers/getRecolorGroups';
+import getVisibleNodesUtil from 'app/helpers/getVisibleNodes';
 import {
   getSelectedColumnsIds,
   getSelectedNodesData,
   getHasExtraColumn,
   getColumnsNumber
 } from 'react-components/tool/tool.selectors';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
+import { makeGetGroupedCharts } from 'selectors/widgets.selectors';
+
 import { makeGetAvailableYears } from 'selectors/years.selectors';
+import { getIsDataView, isIndicatorSupported } from 'selectors/indicators.selectors';
 import getCorrectedPosition from 'utils/getCorrectedPosition';
+import pluralize from 'utils/pluralize';
+import { getExpandedNodesIds } from 'react-components/nodes-panel/nodes-panel.selectors';
 
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolNodes = state => state.toolLinks.data.nodes;
+const getToolCharts = state => state.toolLinks.data.charts;
 const getToolColumns = state => state.toolLinks.data.columns;
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
-const getToolExpandedNodesIds = state => state.toolLinks.expandedNodesIds;
-const getToolSelectedColumnsIds = state => state.toolLinks.selectedColumnsIds;
 const getToolRecolorBy = state => state.toolLinks.selectedRecolorBy;
 const getToolResizeBy = state => state.toolLinks.selectedResizeBy;
 export const getToolColumnFilterNodeId = state => state.toolLinks.extraColumnNodeId;
@@ -40,26 +44,37 @@ export const getSelectedResizeBy = createSelector(
       return null;
     }
 
-    if (!selectedResizeBy && selectedContext) {
+    const resizeByItem = selectedContext.resizeBy.find(
+      resizeBy => resizeBy.attributeId === selectedResizeBy
+    );
+
+    if (!resizeByItem && selectedContext) {
       return selectedContext.resizeBy.find(resizeBy => resizeBy.isDefault === true);
     }
 
-    return selectedContext.resizeBy.find(resizeBy => resizeBy.attributeId === selectedResizeBy);
+    return resizeByItem;
   }
 );
 
 export const getSelectedRecolorBy = createSelector(
-  [getToolRecolorBy, getSelectedContext],
-  (selectedRecolorBy, selectedContext) => {
+  [getToolRecolorBy, getSelectedContext, getIsDataView],
+  (selectedRecolorBy, selectedContext, isDataView) => {
     if (!selectedContext) {
       return null;
     }
 
-    if (!selectedRecolorBy && selectedContext) {
+    const recolorByItem = selectedContext.recolorBy.find(
+      recolorBy => recolorBy.attributeId === selectedRecolorBy
+    );
+
+    if (!recolorByItem) {
       return selectedContext.recolorBy.find(recolorBy => recolorBy.isDefault === true);
     }
 
-    return selectedContext.recolorBy.find(recolorBy => recolorBy.attributeId === selectedRecolorBy);
+    if (isDataView && (recolorByItem && !isIndicatorSupported(recolorByItem.name))) {
+      return null;
+    }
+    return recolorByItem;
   }
 );
 
@@ -132,10 +147,37 @@ export const getToolRecolorGroups = createSelector(
   nodesColored => getNextRecolorGroups(nodesColored.nodesColoredBySelection)
 );
 
+const getNodesByRole = (columns, nodes, nodesIds) =>
+  nodesIds.reduce((acc, nodeId) => {
+    const node = nodes[nodeId];
+    const column = columns[(node?.columnId)];
+    if (column) {
+      const role = pluralize(column.role);
+      if (!acc[role]) {
+        acc[role] = [];
+      }
+
+      acc[role].push(node);
+    }
+
+    return acc;
+  }, {});
+
+export const getSelectedNodesByRole = createSelector(
+  [getToolColumns, getToolNodes, getToolSelectedNodesIds],
+  getNodesByRole
+);
+
+export const getExpandedNodesByRole = createSelector(
+  [getToolColumns, getToolNodes, getExpandedNodesIds],
+  getNodesByRole
+);
+
+export const getToolGroupedCharts = makeGetGroupedCharts(getToolCharts);
+
 export const getToolLinksUrlProps = createStructuredSelector({
   selectedNodesIds: getToolSelectedNodesIds,
-  selectedColumnsIds: getToolSelectedColumnsIds,
-  expandedNodesIds: getToolExpandedNodesIds,
+  selectedColumnsIds: getSelectedColumnsIds,
   detailedView: getToolDetailedView,
   selectedResizeBy: getToolResizeBy,
   selectedRecolorBy: getToolRecolorBy,

@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
 import WorldMap from 'react-components/shared/world-map/world-map.component';
-import { setExploreTopNodes } from 'react-components/legacy-explore/explore.actions';
+import { legacyExploreActions } from 'react-components/legacy-explore/legacy-explore.register';
 import {
   getOriginGeoId,
   getOriginCoordinates,
   getWorldMapFlows,
   getHighlightedCountriesIso
 } from 'react-components/shared/world-map/world-map.selectors';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 
 const mapStateToProps = (state, ownProps) => {
   const { highlightedContext, highlightedCountryIds } = ownProps;
@@ -29,12 +29,9 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-// TODO: Remove this when the new explore page is ready
 const mapDispatchToProps = {
-  getTopNodes: selectedContext => setExploreTopNodes('country', selectedContext)
+  getTopNodes: selectedContext =>
+    legacyExploreActions.setExploreTopNodes('country', selectedContext)
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(WorldMap);
+export default connect(mapStateToProps, mapDispatchToProps)(WorldMap);

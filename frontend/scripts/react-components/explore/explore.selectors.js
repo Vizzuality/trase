@@ -19,37 +19,30 @@ export const getStep = createSelector(
   }
 );
 
-export const getCommodities = createSelector(
-  [getContexts],
-  contexts => {
-    if (!contexts) return null;
-    return uniqBy(
-      contexts.map(c => ({
-        name: c.commodityName,
-        id: c.commodityId
-      })),
-      'name'
-    );
-  }
-);
+export const getCommodities = createSelector([getContexts], contexts => {
+  if (!contexts) return null;
+  return uniqBy(
+    contexts.map(c => ({
+      name: c.commodityName,
+      id: c.commodityId
+    })),
+    'name'
+  );
+});
 
-const getAllCountries = createSelector(
-  [getContexts],
-  contexts => {
-    if (!contexts) return null;
-    return uniqBy(
-      contexts.map(c => ({
-        name: c.countryName,
-        id: c.countryId
-      })),
-      'name'
-    );
-  }
-);
+const getAllCountries = createSelector([getContexts], contexts => {
+  if (!contexts) return null;
+  return uniqBy(
+    contexts.map(c => ({
+      name: c.countryName,
+      id: c.countryId
+    })),
+    'name'
+  );
+});
 
-export const getAllCountriesIds = createSelector(
-  [getAllCountries],
-  countries => (countries ? countries.map(c => c.id) : null)
+export const getAllCountriesIds = createSelector([getAllCountries], countries =>
+  countries ? countries.map(c => c.id) : null
 );
 
 export const getCountries = createSelector(
@@ -99,57 +92,51 @@ export const getItems = createSelector(
   }
 );
 
-export const getCountryQuickFacts = createSelector(
-  [getQuickFacts],
-  quickFacts => {
-    if (!quickFacts) return null;
-    const { data, meta } = quickFacts;
-    const countryQuickFacts = {};
-    data.forEach(d => {
-      const indicators = d.facts.map(i => {
-        const indicatorMeta = meta.attributes.find(m => m.id === i.attributeId);
-        const { unit, displayName: name, tooltipText: tooltip } = indicatorMeta;
-        return { ...i, unit, name, tooltip };
-      });
-      countryQuickFacts[d.countryId] = indicators;
+export const getCountryQuickFacts = createSelector([getQuickFacts], quickFacts => {
+  if (!quickFacts) return null;
+  const { data, meta } = quickFacts;
+  const countryQuickFacts = {};
+  data.forEach(d => {
+    const indicators = d.facts.map(i => {
+      const indicatorMeta = meta.attributes.find(m => m.id === i.attributeId);
+      const { unit, displayName: name, tooltipText: tooltip } = indicatorMeta;
+      return { ...i, unit, name, tooltip };
     });
-    return countryQuickFacts;
-  }
-);
+    countryQuickFacts[d.countryId] = indicators;
+  });
+  return countryQuickFacts;
+});
 
-export const getCards = createSelector(
-  [getSankeyCards, getContexts],
-  (cards, contexts) => {
-    if (!cards || contexts.length === 0) {
-      return [];
-    }
-
-    return cards.data.map((options, index) => {
-      const context = contexts.find(
-        ctx => ctx.countryId === options.countryId && ctx.commodityId === options.commodityId
-      );
-      return {
-        index,
-        id: options.id,
-        title: options.title,
-        subtitle: options.subtitle,
-        countryId: options.countryId,
-        commodityId: options.commodityId,
-        countryName: context.countryName,
-        commodityName: context.commodityName,
-        links: {
-          sankey: translateLink(options, cards.meta),
-          dashboard: translateLink(options, cards.meta, 'dashboard')
-        }
-      };
-    });
+export const getCards = createSelector([getSankeyCards, getContexts], (cards, contexts) => {
+  if (!cards || contexts.length === 0) {
+    return [];
   }
-);
+
+  return cards.data.map((options, index) => {
+    const context = contexts.find(
+      ctx => ctx.countryId === options.countryId && ctx.commodityId === options.commodityId
+    );
+    return {
+      index,
+      id: options.id,
+      title: options.title,
+      subtitle: options.subtitle,
+      countryId: options.countryId,
+      commodityId: options.commodityId,
+      countryName: context.countryName,
+      commodityName: context.commodityName,
+      links: {
+        sankey: translateLink(options, cards.meta),
+        dashboard: translateLink(options, cards.meta, 'dashboard')
+      }
+    };
+  });
+});
 
 export const getCardsWithDefault = createSelector(
   [getCards, getSelectedCommodityId, getSelectedCountryId, getContexts, getSankeyCardsLoading],
   (cards, commodityId, countryId, contexts, loading) => {
-    if (cards.length > 0 || contexts.length === 0 || !commodityId || loading) {
+    if (cards.length === 4 || contexts.length === 0 || !commodityId || loading) {
       return cards;
     }
 
@@ -157,10 +144,10 @@ export const getCardsWithDefault = createSelector(
       ctx => ctx.commodityId === commodityId && (countryId ? ctx.countryId === countryId : true)
     );
 
-    return availableContexts
+    const availableContextsCards = availableContexts
       .map((context, index) => {
         const options = {
-          id: `${context.commodityId}_${context.countryId}`,
+          id: `${context.commodityId}_${context.countryId}_full_supply_chain`,
           title: 'Full supply chain',
           countryId: context.countryId,
           commodityId: context.commodityId,
@@ -169,7 +156,7 @@ export const getCardsWithDefault = createSelector(
           }
         };
         return {
-          index,
+          index: cards.length + index,
           id: options.id,
           title: options.title,
           countryId: context.countryId,
@@ -181,6 +168,8 @@ export const getCardsWithDefault = createSelector(
           }
         };
       })
-      .slice(0, 4);
+      .slice(0, 4 - cards.length);
+
+    return [...cards, ...availableContextsCards];
   }
 );

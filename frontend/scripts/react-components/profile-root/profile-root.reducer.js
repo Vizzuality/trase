@@ -5,17 +5,8 @@ import {
   SET_PROFILE_ROOT_ERROR_MESSAGE,
   SET_PROFILE_SEARCH_TERM,
   SET_TOP_PROFILES
-} from 'react-components/profile-root/profile-root.actions';
-
-const initialState = {
-  search: {
-    term: '',
-    isLoading: false,
-    results: []
-  },
-  topProfiles: null,
-  errorMessage: null
-};
+} from './profile-root.actions';
+import initialState from './profile-root.initial-state';
 
 const profileRootReducer = {
   [SET_TOP_PROFILES](state, action) {

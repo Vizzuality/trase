@@ -11,8 +11,16 @@ const acceptedCookieBanner = {
   }
 };
 
+const initAccepted = () => {
+  const value = acceptedCookieBanner.get();
+  if (value) {
+    return typeof JSON.parse(value) === 'number';
+  }
+  return false;
+};
+
 const CookieBannerContainer = () => {
-  const [accepted, setAccepted] = useState(acceptedCookieBanner.get());
+  const [accepted, setAccepted] = useState(initAccepted);
 
   useEffect(() => {
     if (!acceptedCookieBanner.get() && accepted === true) {

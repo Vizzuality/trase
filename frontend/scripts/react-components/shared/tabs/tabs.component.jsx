@@ -16,11 +16,13 @@ function Tabs(props) {
     testId,
     getTabId,
     color,
+    variant,
+    disabled,
     actionComponent
   } = props;
   const isSelected = item => getTabId(item) === selectedTab;
   return (
-    <div className={cx('c-tabs', { [`margin-${margin}`]: margin })}>
+    <div className={cx('c-tabs', { [`margin-${margin}`]: margin, [`v-${variant}`]: variant })}>
       <div className="tabs-container">
         <div className="tabs-options">
           {tabs.map((item, index) => (
@@ -33,7 +35,7 @@ function Tabs(props) {
               data-key={itemTabRenderer ? itemTabRenderer(item, index) : item}
               onClick={() => onSelectTab(item, index)}
               data-test={`${testId}-item`}
-              disabled={isSelected(item)}
+              disabled={disabled || isSelected(item)}
             >
               <Text
                 as="span"
@@ -65,11 +67,13 @@ Tabs.propTypes = {
   testId: PropTypes.string,
   margin: PropTypes.string,
   getTabId: PropTypes.func,
+  disabled: PropTypes.bool,
   itemTabRenderer: PropTypes.func,
   tabs: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.object])).isRequired,
   children: PropTypes.any,
   onSelectTab: PropTypes.func.isRequired,
   color: PropTypes.string,
+  variant: PropTypes.string,
   actionComponent: PropTypes.node,
   selectedTab: PropTypes.any
 };

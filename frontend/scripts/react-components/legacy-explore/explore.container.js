@@ -1,12 +1,9 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import getTopNodesKey from 'utils/getTopNodesKey';
-import {
-  setExploreTopNodes,
-  setSelectedTableColumnType
-} from 'react-components/legacy-explore/explore.actions';
-import { selectContextById } from 'actions/app.actions';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { legacyExploreActions } from 'react-components/legacy-explore/legacy-explore.register';
+import { appActions } from 'app/app.register';
+import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 import { getDestinationCountries } from 'react-components/legacy-explore/explore.selectors';
 import Explore from './explore.component';
 
@@ -37,14 +34,11 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      selectContextById,
-      setSelectedTableColumnType,
-      getTableElements: setExploreTopNodes
+      selectContextById: appActions.selectContextById,
+      setSelectedTableColumnType: legacyExploreActions.setSelectedTableColumnType,
+      getTableElements: legacyExploreActions.setExploreTopNodes
     },
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Explore);
+export default connect(mapStateToProps, mapDispatchToProps)(Explore);

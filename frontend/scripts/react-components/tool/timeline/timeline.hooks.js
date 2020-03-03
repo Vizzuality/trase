@@ -57,6 +57,7 @@ export function useSlider({ years, selectedYears }) {
   const maxVisibleItems = sizes.container ? Math.floor(sizes.container / sizes.item) : 0;
   const pointer = page > 0 ? page * DEFAULT_PAGE_SIZE + 1 : 0;
   const remainingItems = years.length - pointer;
+  const rangeOutOfBounds = maxVisibleItems < selectedYears[1] - selectedYears[0];
   const jumpToPage = (_page, pageSize = DEFAULT_PAGE_SIZE) =>
     -_page * sizes.item * pageSize - (_page > 0 ? MARGIN_BETWEEN_ITEMS * 2 : 0);
 
@@ -106,6 +107,7 @@ export function useSlider({ years, selectedYears }) {
     hasNextPage,
     hasPrevPage: page > 0,
     onPrevious: () => setPage(p => p - 1),
-    onNext: () => setPage(p => p + 1)
+    onNext: () => setPage(p => p + 1),
+    rangeOutOfBounds
   };
 }

@@ -6,14 +6,15 @@ import {
   TOOL_LINKS__SELECT_COLUMN,
   TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH
 } from 'react-components/tool-links/tool-links.actions';
-import { SET_CONTEXT, SET_CONTEXTS } from 'actions/app.actions';
+import { nodesPanelActions } from 'react-components/nodes-panel/nodes-panel.register';
+import { appActions } from 'app/app.register';
 import {
   SELECT_YEARS,
   loadMapChoropleth,
   SET_NODE_ATTRIBUTES,
   TOGGLE_MAP_DIMENSION
 } from 'react-components/tool/tool.actions';
-import { getSelectedYears, getSelectedContext } from 'reducers/app.selectors';
+import { getSelectedYears, getSelectedContext } from 'app/app.selectors';
 import { getLinkedGeoIds, getMapDimensions } from './tool-layers.fetch.saga';
 
 function* fetchLinkedGeoIds() {
@@ -34,27 +35,33 @@ function* fetchLinkedGeoIds() {
 }
 
 function* fetchMapDimensions() {
-  function* performFetch() {
+  function* performFetch({ type }) {
     const selectedYears = yield select(getSelectedYears);
     const selectedContext = yield select(getSelectedContext);
-    const page = yield select(state => state.location.type);
+    const { type: page, prev } = yield select(state => state.location);
     if (page !== 'tool' || selectedContext === null) {
       return;
     }
 
     yield call(getMapDimensions, selectedContext, selectedYears);
-    // TODO remove this when mapbox comes
-    yield put(loadMapChoropleth());
+
+    if (type !== appActions.APP__SAGA_REGISTERED || prev.type !== page) {
+      // TODO remove this when mapbox comes
+      yield put(loadMapChoropleth());
+    }
   }
   yield takeLatest(
     [
-      SET_CONTEXTS,
+      appActions.SET_CONTEXTS,
       TOOL_LINKS__GET_COLUMNS,
       TOGGLE_MAP_DIMENSION,
-      SET_CONTEXT,
+      appActions.SET_CONTEXT,
+      nodesPanelActions.NODES_PANEL__SAVE,
       SELECT_YEARS,
       TOOL_LINKS__SELECT_COLUMN,
-      TOOL_LINKS__CLEAR_SANKEY
+      TOOL_LINKS__CLEAR_SANKEY,
+      nodesPanelActions.NODES_PANEL__SYNC_NODES_WITH_SANKEY,
+      appActions.APP__SAGA_REGISTERED
     ],
     performFetch
   );

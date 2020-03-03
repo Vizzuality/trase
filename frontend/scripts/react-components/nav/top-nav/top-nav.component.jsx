@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import throttle from 'lodash/throttle';
@@ -6,34 +6,45 @@ import { NavLink } from 'redux-first-router-link';
 import NavLinks from 'react-components/nav/nav-links.component';
 import LocaleSelector from 'react-components/nav/locale-selector/locale-selector.container';
 import Search from 'react-components/nav/global-search/global-search.container';
+import ToolSearch from 'react-components/tool/tool-search/tool-search.container';
 import Img from 'react-components/shared/img';
-import DownloadPdfLink from './download-pdf-link.component';
 
 import 'scripts/react-components/nav/top-nav/top-nav.scss';
 
+const DownloadPdfLink = React.lazy(() => import('./download-pdf-link.component'));
+
 class TopNav extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      backgroundVisible: false,
-      menuOpen: false
-    };
-    this.navLinkProps = {
-      exact: false,
-      strict: false,
-      isActive: null
-    };
-    this.setBackground = throttle(this.setBackground.bind(this), 300);
-    this.handleToggleClick = this.handleToggleClick.bind(this);
+  state = {
+    backgroundVisible: false,
+    menuOpen: false
+  };
+
+  navLinkProps = {
+    exact: false,
+    strict: false,
+    isActive: null
+  };
+
+  mobileMenuRef = React.createRef(null);
+
+  componentDidMount() {
+    window.addEventListener('click', this.handleClickOutside);
     window.addEventListener('scroll', this.setBackground, { passive: true });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.page !== this.props.page && this.state.menuOpen) {
+      this.handleToggleClick();
+    }
   }
 
   componentWillUnmount() {
     this.setBackground.cancel();
+    window.removeEventListener('click', this.handleClickOutside);
     window.removeEventListener('scroll', this.setBackground);
   }
 
-  setBackground() {
+  setBackground = throttle(() => {
     const { pageOffset } = this.props;
     const { backgroundVisible } = this.state;
     const hasOffset = typeof pageOffset !== 'undefined';
@@ -42,17 +53,22 @@ class TopNav extends React.PureComponent {
     } else if (hasOffset && window.pageYOffset <= pageOffset && backgroundVisible) {
       this.setState({ backgroundVisible: false });
     }
-  }
+  }, 300);
 
-  handleToggleClick() {
-    this.setState(state => ({ menuOpen: !state.menuOpen }));
-  }
+  handleClickOutside = e => {
+    const { target } = e;
+    if (!this.mobileMenuRef.current.contains(target) && this.state.menuOpen) {
+      this.handleToggleClick();
+    }
+  };
+
+  handleToggleClick = () => this.setState(state => ({ menuOpen: !state.menuOpen }));
 
   renderDesktopMenu() {
-    const { links, printable, showLogo, onDownloadPDF } = this.props;
+    const { links, printable, showLogo, className, page } = this.props;
     const allLinks = [];
 
-    if (showLogo) {
+    if (showLogo && !ENABLE_TOOL_PANEL) {
       allLinks.push({
         name: 'Home',
         page: 'home',
@@ -65,7 +81,33 @@ class TopNav extends React.PureComponent {
     allLinks.push(...links);
 
     return (
-      <div className="top-nav-bar row align-justify -desktop-menu">
+      <div className="align-justify -desktop-menu">
+        {ENABLE_TOOL_PANEL && (
+          <div className="column medium-2">
+            <ul className="top-nav-item-list">
+              <li className="top-nav-item">
+                <NavLink
+                  exact
+                  strict
+                  to={{ type: 'home' }}
+                  className={cx('top-nav-link', '-new-logo')}
+                >
+                  <span className="top-nav-logo-container">
+                    <Img
+                      className="logo-image"
+                      src={
+                        className === '-light'
+                          ? '/images/logos/new-logo-trase-red.svg'
+                          : '/images/logos/new-logo-trase-white.svg'
+                      }
+                      alt="trase"
+                    />
+                  </span>
+                </NavLink>
+              </li>
+            </ul>
+          </div>
+        )}
         <div className="column medium-8">
           <div className="top-nav-item-list-container">
             <ul className="top-nav-item-list">
@@ -86,11 +128,13 @@ class TopNav extends React.PureComponent {
                 <LocaleSelector />
               </li>
               <li className="top-nav-item">
-                <Search className="top-nav-search" />
+                {page === 'tool' ? <ToolSearch /> : <Search className="top-nav-search" />}
               </li>
               {printable && (
                 <li className="top-nav-item">
-                  <DownloadPdfLink onClick={onDownloadPDF} />
+                  <Suspense fallback={null}>
+                    <DownloadPdfLink />
+                  </Suspense>
                 </li>
               )}
             </ul>
@@ -111,7 +155,7 @@ class TopNav extends React.PureComponent {
     allLinks.push(...links);
 
     return (
-      <div className="row -mobile-menu">
+      <div className="row -mobile-menu" ref={this.mobileMenuRef}>
         <div className="top-nav-bar column small-12">
           <ul className="top-nav-item-list">
             <li className="top-nav-item -no-margin">
@@ -167,12 +211,12 @@ class TopNav extends React.PureComponent {
 }
 
 TopNav.propTypes = {
+  page: PropTypes.string,
   links: PropTypes.array,
   showLogo: PropTypes.bool,
   printable: PropTypes.bool,
   className: PropTypes.string,
-  pageOffset: PropTypes.number,
-  onDownloadPDF: PropTypes.func
+  pageOffset: PropTypes.number
 };
 
 TopNav.defaultProps = {

@@ -3,7 +3,7 @@ import { TOOL_LAYOUT } from 'constants';
 const supplyChainNavs = [];
 if (ENABLE_TOOL_PANEL) {
   supplyChainNavs.push({
-    name: 'Supply Chain',
+    name: 'Data Tools',
     page: {
       type: 'explore'
     }

@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
-import { getStaticContentFilename } from 'react-components/static-content/static-content.actions';
+import { staticContentActions } from 'react-components/static-content/static-content.register';
 import MarkdownRenderer from './markdown-renderer.component';
 
 function mapStateToProps(state) {
   const { staticContent, location } = state;
-  const filename = getStaticContentFilename(location);
+  const filename = staticContentActions.getStaticContentFilename(location);
   return {
     content: staticContent.markdown[filename]
   };

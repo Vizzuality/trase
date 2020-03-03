@@ -1,9 +1,6 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {
-  sendSubscriptionEmail,
-  resetNewsletter
-} from 'react-components/shared/newsletter/newsletter.actions';
+import { newsletterActions } from 'react-components/shared/newsletter/newsletter.register';
 import NewsletterForm from './newsletter-form.component';
 
 function mapStateToProps(state) {
@@ -16,14 +13,11 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
-      resetForm: resetNewsletter,
-      submitForm: sendSubscriptionEmail
+      resetForm: newsletterActions.resetNewsletter,
+      submitForm: newsletterActions.sendSubscriptionEmail
     },
     dispatch
   );
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(NewsletterForm);
+export default connect(mapStateToProps, mapDispatchToProps)(NewsletterForm);

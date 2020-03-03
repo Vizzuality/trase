@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 
 const getTopNodes = state => state.app.topNodes;
 

@@ -40,15 +40,14 @@
               "scripts": "./scripts",
               "actions": "./scripts/actions",
               "utils": "./scripts/utils",
-              "reducers": "./scripts/reducers",
+              "app": "./scripts/app",
               "store": "./scripts/store",
-              "components": "./scripts/components",
-              "containers": "./scripts/containers",
               "constants": "./scripts/constants",
               "router": "./scripts/router",
               "react-components": "./scripts/react-components",
               "named-maps": "./scripts/named-maps",
-              "selectors": "./scripts/selectors"
+              "selectors": "./scripts/selectors",
+              "legacy": "./scripts/legacy"
             }
           }
         ]
