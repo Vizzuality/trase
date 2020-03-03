@@ -3,7 +3,6 @@ import Heading from 'react-components/shared/heading';
 import Text from 'react-components/shared/text';
 import PropTypes from 'prop-types';
 import capitalize from 'lodash/capitalize';
-import { EXPLORE_STEPS } from 'constants';
 import { useTransition, animated } from 'react-spring/web.cjs';
 import ResizeListener from 'react-components/shared/resize-listener.component';
 import { ImgBackground } from 'react-components/shared/img';
@@ -71,13 +70,10 @@ FeaturedCard.propTypes = {
 
 const FeaturedCards = props => {
   const {
-    setCommodity,
-    setCountry,
     countryName,
     commodityName,
     step,
     cards,
-    isMobile,
     openModal
   } = props;
   const CARDS_SIZE_MARGIN = 16; // matches featured-cards.scss
@@ -122,8 +118,6 @@ const FeaturedCards = props => {
       </animated.div>
     ));
 
-  const clearStep =
-    step === EXPLORE_STEPS.selected ? () => setCountry(null) : () => setCommodity(null);
   return (
     <div className="c-featured-cards">
       <div className="row columns">
@@ -131,17 +125,6 @@ const FeaturedCards = props => {
           <Heading className="featured-cards-title" data-test="featured-cards-title">
             Featured {renderName(countryName)} {renderName(commodityName)} supply chains
           </Heading>
-          {step > EXPLORE_STEPS.selectCommodity && !isMobile && (
-            <button
-              onClick={clearStep}
-              className="back-button"
-              data-test="featured-cards-back-button"
-            >
-              <Text variant="mono" size="md" weight="bold" className="featured-cards-back">
-                BACK
-              </Text>
-            </button>
-          )}
         </div>
       </div>
       <ResizeListener>
@@ -170,13 +153,10 @@ const FeaturedCards = props => {
 };
 
 FeaturedCards.propTypes = {
-  setCommodity: PropTypes.func.isRequired,
   commodityName: PropTypes.string,
   countryName: PropTypes.string,
-  setCountry: PropTypes.func.isRequired,
   step: PropTypes.number,
   cards: PropTypes.object,
-  isMobile: PropTypes.bool,
   openModal: PropTypes.func.isRequired
 };
 

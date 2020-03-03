@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Heading from 'react-components/shared/heading';
+import Icon from 'react-components/shared/icon';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import PropTypes from 'prop-types';
 import FeaturedCards from 'react-components/explore/featured-cards';
@@ -69,12 +70,31 @@ function Explore(props) {
     setActiveCard(null);
   };
 
-  const renderTitle = () => {
+  const clearStep =
+    step === EXPLORE_STEPS.selected ? () => setCountry(null) : () => setCommodity(null);
+
+  const renderTitle = (isMobile) => {
     const titleParts = ['commodity', 'source country', 'supply chain to explore'];
     return (
-      <Heading size="lg" align="center" data-test="step-title" className="notranslate">
-        {translateText(`${step}. Choose a ${titleParts[step - 1]}`)}
-      </Heading>
+      <div className="step-title-container">
+        <Heading size="lg" align="center" data-test="step-title" className="notranslate">
+          {translateText(`${step}. Choose a ${titleParts[step - 1]}`)}
+        </Heading>
+        <span>
+          {step > EXPLORE_STEPS.selectCommodity && !isMobile && (
+            <button
+            onClick={clearStep}
+            className="back-button"
+            data-test="featured-cards-back-button"
+            >
+              <Text variant="mono" size="lg" weight="bold" className="featured-cards-back">
+                <Icon color="pink" icon="icon-arrow" className="arrow-icon"/>
+                BACK
+              </Text>
+            </button>
+          )}
+        </span>
+      </div>
     );
   };
 
@@ -144,7 +164,7 @@ function Explore(props) {
           return (
             <>
               <div className="explore-selector">
-                {renderTitle()}
+                {renderTitle(isMobile)}
                 <div className="explore-grid-container">
                   <div className="row columns">
                     {isMobile ? (
@@ -254,13 +274,10 @@ function Explore(props) {
               </div>
               <FeaturedCards
                 step={step}
-                setCommodity={setCommodity}
-                setCountry={setCountry}
                 commodityName={commodity?.name}
                 countryName={country?.name}
                 cards={cards}
                 openModal={params => (isMobile ? goToTool('dashboard', params) : openModal(params))}
-                isMobile={isMobile}
               />
               <SimpleModal isOpen={isModalOpen} onRequestClose={() => closeModal()}>
                 {isModalOpen && (

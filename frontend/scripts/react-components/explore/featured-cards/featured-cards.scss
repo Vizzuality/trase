@@ -13,10 +13,6 @@ $card-min-width: 180px;
     margin-right: 20px;
   }
 
-  .featured-cards-back {
-    color: $strong-pink;
-  }
-
   .featured-cards-container {
     padding: 5px 0;
     background-color: $white;
@@ -29,10 +25,6 @@ $card-min-width: 180px;
       overflow: auto;
       -webkit-overflow-scrolling: touch;
     }
-  }
-
-  .back-button {
-    cursor: pointer;
   }
 
   .animated-cards-container {
