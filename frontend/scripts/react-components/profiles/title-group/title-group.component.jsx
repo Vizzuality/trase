@@ -1,4 +1,5 @@
 import React from 'react';
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 import capitalize from 'lodash/capitalize';
 import Dropdown from 'react-components/shared/dropdown';
@@ -8,24 +9,26 @@ import Heading from 'react-components/shared/heading';
 import 'react-components/profiles/title-group/title-group.scss';
 
 class TitleGroup extends React.PureComponent {
-  static renderPlainElement(title, i) {
+  static renderPlainElement(title, i, sticky = false) {
     if (!title.name) {
       return null;
     }
     return (
       <div key={title.label} className="title-group-element-container">
         <div className="title-group-element" key={title.label}>
-          <Text
-            as="span"
-            variant="mono"
-            color="grey"
-            transform="uppercase"
-            className="title-group-label"
-          >
-            {title.label}
-          </Text>
+          {!sticky && (
+            <Text
+              as="span"
+              variant="mono"
+              color="grey"
+              transform="uppercase"
+              className="title-group-label"
+            >
+              {title.label}
+            </Text>
+          )}
           <Heading
-            size="lg"
+            size={sticky ? 'md' : 'lg'}
             weight="bold"
             className="title-group-content"
             data-test={`title-group-el-${i}`}
@@ -37,7 +40,7 @@ class TitleGroup extends React.PureComponent {
     );
   }
 
-  static renderDropdownElement(title, i) {
+  static renderDropdownElement(title, i, sticky = false) {
     return (
       <div key={title.label} className="title-group-element-container">
         <div
@@ -47,8 +50,8 @@ class TitleGroup extends React.PureComponent {
         >
           <Dropdown
             variant="profiles"
-            size="lg"
-            label={title.label}
+            size={sticky ? 'md' : 'lg'}
+            label={!sticky ? title.label : null}
             options={title.options}
             onChange={item => title.onYearChange(item.value)}
             value={title.value}
@@ -59,13 +62,19 @@ class TitleGroup extends React.PureComponent {
   }
 
   render() {
-    const { titles } = this.props;
+    const { titles, sticky } = this.props;
     return (
-      <div className="c-title-group" data-test="title-group">
+      <div
+        className={cx({
+          'c-title-group': true,
+          '-sticky': sticky
+        })}
+        data-test="title-group"
+      >
         {titles.map((title, i) =>
           title.dropdown
-            ? TitleGroup.renderDropdownElement(title, i)
-            : TitleGroup.renderPlainElement(title, i)
+            ? TitleGroup.renderDropdownElement(title, i, sticky)
+            : TitleGroup.renderPlainElement(title, i, sticky)
         )}
       </div>
     );
@@ -86,7 +95,12 @@ const DropdownElementPropTypes = PropTypes.shape({
 });
 
 TitleGroup.propTypes = {
+  sticky: PropTypes.bool,
   titles: PropTypes.arrayOf(PropTypes.oneOfType([PlainElementPropTypes, DropdownElementPropTypes]))
+};
+
+TitleGroup.defaultProps = {
+  sticky: false
 };
 
 export default TitleGroup;

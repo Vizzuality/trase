@@ -1,6 +1,15 @@
 @import '../../settings';
 
 .c-overall-info {
+  .summary-sticky-group {
+    &.sticky {
+      width: 100vw;
+      padding: 0 20px;
+      transform: translate(-20px, 0);
+      position: relative;
+      background: $egg-shell;
+    }
+  }
 
   .stat-item {
     display: inline-block;

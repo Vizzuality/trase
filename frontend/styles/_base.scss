@@ -28,18 +28,24 @@ body {
   }
 }
 
+.sticky {
+  z-index: $z-nav;
+}
+
 .row {
   &.-equal-height {
     margin-top: -1.25rem;
 
-    div[class^=column], div[class*=column] {
+    div[class^='column'],
+    div[class*='column'] {
       display: flex;
       flex-direction: column;
       margin-top: 1.25rem;
     }
 
     &.-flex-end {
-      div[class^=column], div[class*=column] {
+      div[class^='column'],
+      div[class*='column'] {
         justify-content: flex-end;
       }
     }

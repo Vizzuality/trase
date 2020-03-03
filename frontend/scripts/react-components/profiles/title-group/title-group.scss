@@ -5,6 +5,10 @@
   flex-wrap: wrap;
   margin-top: 40px;
 
+  &.-sticky {
+    margin-top: initial;
+  }
+
   .title-group-element-container {
     display: inline-flex;
     margin-bottom: 10px;

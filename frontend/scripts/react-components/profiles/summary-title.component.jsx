@@ -1,13 +1,19 @@
 import React from 'react';
+import cx from 'classnames';
 import PropTypes from 'prop-types';
 import Button from 'react-components/shared/button';
 import capitalize from 'lodash/capitalize';
 import 'react-components/profiles/summary.scss';
 
 function SummaryTitle(props) {
-  const { name, openModal } = props;
+  const { name, sticky, openModal } = props;
   return (
-    <div className="profiles-title-container">
+    <div
+      className={cx({
+        'profiles-title-container': true,
+        '-sticky': sticky
+      })}
+    >
       <h2 className="profiles-title" data-test="profiles-title">
         {capitalize(name)}
       </h2>
@@ -26,7 +32,12 @@ function SummaryTitle(props) {
 
 SummaryTitle.propTypes = {
   name: PropTypes.string,
+  sticky: PropTypes.bool,
   openModal: PropTypes.func.isRequired
+};
+
+SummaryTitle.defaultProps = {
+  sticky: false
 };
 
 export default React.memo(SummaryTitle);

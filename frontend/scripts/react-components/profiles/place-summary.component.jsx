@@ -1,5 +1,8 @@
 /* eslint-disable camelcase,react/no-danger */
 import React from 'react';
+import Sticky from 'react-stickynode';
+import cx from 'classnames';
+
 import PropTypes from 'prop-types';
 import capitalize from 'lodash/capitalize';
 import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
@@ -93,34 +96,57 @@ function PlaceSummary(props) {
     );
 
   return (
-    <React.Fragment>
-      <div className="c-overall-info page-break-inside-avoid" data-test="place-summary">
-        <div className="row">
-          <div className="small-12 show-for-small profile-map-mobile">
-            {renderMunicipalityMap()}
-          </div>
-          <div className="small-12 medium-9 columns">
-            <SummaryTitle name={jurisdictionName} openModal={openModal} />
-            <TitleGroup titles={titles} on={onYearChange} />
-            {renderStats()}
-          </div>
-          <div className="small-12 medium-3 columns hide-for-small">{renderMunicipalityMap()}</div>
+    <div
+      id="overall-info"
+      className="c-overall-info page-break-inside-avoid"
+      data-test="place-summary"
+    >
+      <div className="row">
+        <div className="small-12 show-for-small profile-map-mobile">{renderMunicipalityMap()}</div>
+
+        <div className="small-12 medium-9 columns">
+          <Sticky top="#main-nav" innerZ={90} activeClass="profile-sticky-group">
+            {({ status }) => (
+              <div
+                className={cx({
+                  'summary-sticky-group': true,
+                  sticky: status === Sticky.STATUS_FIXED
+                })}
+              >
+                <SummaryTitle
+                  sticky={status === Sticky.STATUS_FIXED}
+                  name={jurisdictionName}
+                  openModal={openModal}
+                />
+                <TitleGroup
+                  sticky={status === Sticky.STATUS_FIXED}
+                  titles={titles}
+                  on={onYearChange}
+                />
+              </div>
+            )}
+          </Sticky>
+
+          {renderStats()}
         </div>
-        <div className="row">
-          <div className="small-12 columns">
-            <Text
-              variant="serif"
-              size="md"
-              weigth="light"
-              lineHeight="lg"
-              color="grey"
-              className="summary"
-              dangerouslySetInnerHTML={{ __html: summary }}
-            />
-          </div>
+
+        <div className="small-12 medium-3 columns hide-for-small">{renderMunicipalityMap()}</div>
+      </div>
+
+      <div className="row">
+        <div id="testiniiiing" className="small-12 columns">
+          <Text
+            variant="serif"
+            size="md"
+            weigth="light"
+            lineHeight="lg"
+            color="grey"
+            className="summary"
+            dangerouslySetInnerHTML={{ __html: summary }}
+          />
         </div>
       </div>
-    </React.Fragment>
+    </div>
   );
 }
 

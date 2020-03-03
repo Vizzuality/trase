@@ -78,7 +78,7 @@ export const routes = {
     page: 'profile-node',
     title: getPageTitle,
     nav: {
-      className: '-light',
+      className: '-egg-shell',
       printable: true
     },
     thunk: loadPageData(loadColumnsData)
