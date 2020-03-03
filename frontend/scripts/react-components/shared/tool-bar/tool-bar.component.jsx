@@ -42,7 +42,7 @@ function ToolBar(props) {
         className={cx('slot-item', {
           '-no-hover': item.noHover,
           '-no-border': item.noBorder,
-          '-no-padding': item.noPadding
+          '-no-padding-right': item.noPaddingRight
         })}
         onMouseEnter={() => setId(item.id)}
         onMouseLeave={() => setId(null)}
