@@ -69,8 +69,6 @@
       <sequence increment="1" name="recolor_by_quals_id_seq" startValue="1"/>
       <sequence increment="1" name="resize_by_attributes_id_seq" startValue="1"/>
       <sequence increment="1" name="resize_by_quants_id_seq" startValue="1"/>
-      <sequence increment="1" name="sankey_card_link_node_types_id_seq" startValue="1"/>
-      <sequence increment="1" name="sankey_card_link_nodes_id_seq" startValue="1"/>
       <sequence increment="1" name="sankey_card_links_id_seq" startValue="1"/>
       <sequence increment="1" name="top_profile_images_id_seq" startValue="1"/>
       <sequence increment="1" name="top_profiles_id_seq" startValue="1"/>
@@ -87,10 +85,7 @@
          </index>
       </table>
       <table name="attributes" numRows="0" remarks="Merges inds, quals and quants. Readonly table." schema="public" type="TABLE">
-         <column autoUpdated="true" defaultValue="nextval('attributes_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="Id is fixed between data updates, unless name changes" size="19" type="bigserial" typeCode="-5">
-            <child column="cont_attribute_id" foreignKey="fk_rails_2c41bcb873" implied="false" onDeleteCascade="true" schema="public" table="sankey_card_links"/>
-            <child column="ncont_attribute_id" foreignKey="fk_rails_ec3ba51bdb" implied="false" onDeleteCascade="true" schema="public" table="sankey_card_links"/>
-         </column>
+         <column autoUpdated="true" defaultValue="nextval('attributes_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="Id is fixed between data updates, unless name changes" size="19" type="bigserial" typeCode="-5"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="original_id" nullable="false" remarks="Id from the original table (inds / quals / quants)" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="original_type" nullable="false" remarks="Type of the original entity (Ind / Qual / Quant)" size="2147483647" type="text" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="name" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
@@ -354,9 +349,7 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="quant_id" nullable="true" remarks="Reference to quant" size="19" type="int8" typeCode="-5"/>
       </table>
       <table name="context_node_type_properties" numRows="0" remarks="" schema="public" type="TABLE">
-         <column autoUpdated="true" defaultValue="nextval('context_node_type_properties_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4">
-            <child column="context_node_type_property_id" foreignKey="fk_rails_a152a2cab3" implied="false" onDeleteCascade="false" schema="public" table="sankey_card_link_node_types"/>
-         </column>
+         <column autoUpdated="true" defaultValue="nextval('context_node_type_properties_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="context_node_type_id" nullable="false" remarks="" size="10" type="int4" typeCode="4">
             <parent column="id" foreignKey="fk_rails_d35e506797" implied="false" onDeleteCascade="true" schema="public" table="context_node_types"/>
          </column>
@@ -1690,7 +1683,6 @@
             <child column="node_type_id" foreignKey="fk_rails_f043b3c463" implied="false" onDeleteCascade="true" schema="public" table="chart_node_types"/>
             <child column="node_type_id" foreignKey="fk_rails_15e56acf9a" implied="false" onDeleteCascade="true" schema="public" table="context_node_types"/>
             <child column="node_type_id" foreignKey="fk_rails_37e87445f7" implied="false" onDeleteCascade="true" schema="public" table="nodes"/>
-            <child column="node_type_id" foreignKey="fk_rails_610fd60c08" implied="false" onDeleteCascade="false" schema="public" table="sankey_card_link_node_types"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="name" nullable="false" remarks="Name of node type, spelt in capital letters; unique across node types" size="2147483647" type="text" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
@@ -1708,8 +1700,6 @@
             <child column="node_id" foreignKey="fk_rails_4dcde982df" implied="false" onDeleteCascade="true" schema="public" table="node_properties"/>
             <child column="node_id" foreignKey="fk_rails_14ebb50b5a" implied="false" onDeleteCascade="true" schema="public" table="node_quals"/>
             <child column="node_id" foreignKey="fk_rails_dd544b3e59" implied="false" onDeleteCascade="true" schema="public" table="node_quants"/>
-            <child column="node_id" foreignKey="fk_rails_1428ad7ffd" implied="false" onDeleteCascade="false" schema="public" table="sankey_card_link_nodes"/>
-            <child column="node_id" foreignKey="fk_rails_e3c8c4d772" implied="false" onDeleteCascade="false" schema="public" table="sankey_card_links"/>
             <child column="node_id" foreignKey="fk_rails_eb02423c0e" implied="false" onDeleteCascade="true" schema="public" table="top_profiles"/>
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="node_type_id" nullable="false" remarks="" size="10" type="int4" typeCode="4">
@@ -2401,82 +2391,23 @@
             <column ascending="true" name="quant_id"/>
          </index>
       </table>
-      <table name="sankey_card_link_node_types" numRows="0" remarks="" schema="public" type="TABLE">
-         <column autoUpdated="true" defaultValue="nextval('sankey_card_link_node_types_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="19" type="bigserial" typeCode="-5"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="context_node_type_property_id" nullable="true" remarks="" size="19" type="int8" typeCode="-5">
-            <parent column="id" foreignKey="fk_rails_a152a2cab3" implied="false" onDeleteCascade="false" schema="public" table="context_node_type_properties"/>
-         </column>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="sankey_card_link_id" nullable="true" remarks="" size="19" type="int8" typeCode="-5">
-            <parent column="id" foreignKey="fk_rails_1a85ec11cd" implied="false" onDeleteCascade="false" schema="public" table="sankey_card_links"/>
-         </column>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="node_type_id" nullable="true" remarks="" size="19" type="int8" typeCode="-5">
-            <parent column="id" foreignKey="fk_rails_610fd60c08" implied="false" onDeleteCascade="false" schema="public" table="node_types"/>
-         </column>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="column_group" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
-         <primaryKey column="id" sequenceNumberInPK="1"/>
-         <index name="sankey_card_link_node_types_pkey" unique="true">
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="index_sankey_card_link_node_types_on_node_type_id" unique="false">
-            <column ascending="true" name="node_type_id"/>
-         </index>
-         <index name="index_sankey_card_link_node_types_on_sankey_card_link_id" unique="false">
-            <column ascending="true" name="sankey_card_link_id"/>
-         </index>
-         <index name="sankey_card_link_node_types_context_node_type_property_id_idx" unique="false">
-            <column ascending="true" name="context_node_type_property_id"/>
-         </index>
-      </table>
-      <table name="sankey_card_link_nodes" numRows="0" remarks="" schema="public" type="TABLE">
-         <column autoUpdated="true" defaultValue="nextval('sankey_card_link_nodes_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="19" type="bigserial" typeCode="-5"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="sankey_card_link_id" nullable="true" remarks="" size="19" type="int8" typeCode="-5">
-            <parent column="id" foreignKey="fk_rails_70f69f2537" implied="false" onDeleteCascade="false" schema="public" table="sankey_card_links"/>
-         </column>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="node_id" nullable="true" remarks="" size="19" type="int8" typeCode="-5">
-            <parent column="id" foreignKey="fk_rails_1428ad7ffd" implied="false" onDeleteCascade="false" schema="public" table="nodes"/>
-         </column>
-         <primaryKey column="id" sequenceNumberInPK="1"/>
-         <index name="sankey_card_link_nodes_pkey" unique="true">
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="index_sankey_card_link_nodes_on_node_id" unique="false">
-            <column ascending="true" name="node_id"/>
-         </index>
-         <index name="index_sankey_card_link_nodes_on_sankey_card_link_id" unique="false">
-            <column ascending="true" name="sankey_card_link_id"/>
-         </index>
-      </table>
       <table name="sankey_card_links" numRows="0" remarks="Quick sankey cards" schema="public" type="TABLE">
-         <column autoUpdated="true" defaultValue="nextval('sankey_card_links_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="19" type="bigserial" typeCode="-5">
-            <child column="sankey_card_link_id" foreignKey="fk_rails_1a85ec11cd" implied="false" onDeleteCascade="false" schema="public" table="sankey_card_link_node_types"/>
-            <child column="sankey_card_link_id" foreignKey="fk_rails_70f69f2537" implied="false" onDeleteCascade="false" schema="public" table="sankey_card_link_nodes"/>
-         </column>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="host" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="query_params" nullable="false" remarks="query params included on the link of the quick sankey card" size="2147483647" type="json" typeCode="1111"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="title" nullable="false" remarks="title of the quick sankey card" size="2147483647" type="text" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="subtitle" nullable="true" remarks="subtitle of the quick sankey card" size="2147483647" type="text" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="6" id="5" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="null" digits="6" id="6" name="updated_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="start_year" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="end_year" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="node_id" nullable="true" remarks="" size="19" type="int8" typeCode="-5">
-            <parent column="id" foreignKey="fk_rails_e3c8c4d772" implied="false" onDeleteCascade="false" schema="public" table="nodes"/>
-         </column>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="10" name="level1" nullable="false" remarks="level used when commodity and country are not selected" size="1" type="bool" typeCode="-7"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="11" name="level2" nullable="false" remarks="level used when commodity is selected" size="1" type="bool" typeCode="-7"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="12" name="level3" nullable="false" remarks="level used when commodity and country are selected" size="1" type="bool" typeCode="-7"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="13" name="country_id" nullable="true" remarks="" size="19" type="int8" typeCode="-5">
+         <column autoUpdated="true" defaultValue="nextval('sankey_card_links_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="19" type="bigserial" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="query_params" nullable="false" remarks="query params included on the link of the quick sankey card" size="2147483647" type="json" typeCode="1111"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="title" nullable="false" remarks="title of the quick sankey card" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="subtitle" nullable="true" remarks="subtitle of the quick sankey card" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="4" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="5" name="updated_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="level1" nullable="false" remarks="level used when commodity and country are not selected" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="7" name="level2" nullable="false" remarks="level used when commodity is selected" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="8" name="level3" nullable="false" remarks="level used when commodity and country are selected" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="country_id" nullable="true" remarks="" size="19" type="int8" typeCode="-5">
             <parent column="id" foreignKey="fk_rails_9113195b2d" implied="false" onDeleteCascade="true" schema="public" table="countries"/>
          </column>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="14" name="commodity_id" nullable="true" remarks="" size="19" type="int8" typeCode="-5">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="commodity_id" nullable="true" remarks="" size="19" type="int8" typeCode="-5">
             <parent column="id" foreignKey="fk_rails_5b56ba10d2" implied="false" onDeleteCascade="true" schema="public" table="commodities"/>
          </column>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="15" name="cont_attribute_id" nullable="true" remarks="" size="19" type="int8" typeCode="-5">
-            <parent column="id" foreignKey="fk_rails_2c41bcb873" implied="false" onDeleteCascade="true" schema="public" table="attributes"/>
-         </column>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="16" name="ncont_attribute_id" nullable="true" remarks="" size="19" type="int8" typeCode="-5">
-            <parent column="id" foreignKey="fk_rails_ec3ba51bdb" implied="false" onDeleteCascade="true" schema="public" table="attributes"/>
-         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="link" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="sankey_card_links_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -2484,20 +2415,11 @@
          <index name="index_sankey_card_links_on_commodity_id" unique="false">
             <column ascending="true" name="commodity_id"/>
          </index>
-         <index name="index_sankey_card_links_on_cont_attribute_id" unique="false">
-            <column ascending="true" name="cont_attribute_id"/>
-         </index>
          <index name="index_sankey_card_links_on_country_id" unique="false">
             <column ascending="true" name="country_id"/>
          </index>
-         <index name="index_sankey_card_links_on_ncont_attribute_id" unique="false">
-            <column ascending="true" name="ncont_attribute_id"/>
-         </index>
-         <index name="index_sankey_card_links_on_node_id" unique="false">
-            <column ascending="true" name="node_id"/>
-         </index>
       </table>
-      <table name="schema_migrations" numRows="101" remarks="" schema="public" type="TABLE">
+      <table name="schema_migrations" numRows="102" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="version" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
          <primaryKey column="version" sequenceNumberInPK="1"/>
          <index name="schema_migrations_pkey" unique="true">

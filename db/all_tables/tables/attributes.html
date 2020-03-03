@@ -124,14 +124,6 @@
                                     <td>nextval(&#39;attributes_id_seq&#39;::regclass)</td>
                                     <td>
                                         <table border='0' cellspacing='0' cellpadding='0'>
-                                            <tr>
-                                                <td title="sankey_card_links.cont_attribute_id references attributes.id via fk_rails_2c41bcb873"><a href='sankey_card_links.html'>sankey_card_links</a><span class='relatedKey'>.cont_attribute_id</span></td>
-                                                <td class="constraint detail">fk_rails_2c41bcb873<span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td title="sankey_card_links.ncont_attribute_id references attributes.id via fk_rails_ec3ba51bdb"><a href='sankey_card_links.html'>sankey_card_links</a><span class='relatedKey'>.ncont_attribute_id</span></td>
-                                                <td class="constraint detail">fk_rails_ec3ba51bdb<span title='Cascade on delete:&#10;Deletion of parent deletes child'>C</span></td>
-                                            </tr>
                                         </table>
                                     </td>
                                     <td>
@@ -325,45 +317,10 @@
                             </table>
                         </div>
                     </div>
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <i class="fa fa-code-fork"></i>
-                            <h3 id="Relationships" class="box-title">Relationships</h3>
-                            <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                            </div>
-                        </div>
-                        <div class="box-body">
-                            <div class="nav-tabs-custom"><!-- Tabs within a box -->
-                                <h5>Close relationships within degrees of separation</h5>
-                                <ul class="nav nav-tabs pull-left ui-sortable-handle">
-                                    <li class="active"><a href="#oneDegreeImg-chart" data-toggle="tab" aria-expanded="true">One</a></li>
-                                    <li class=""><a href="#twodegreesDegreeImg-chart" data-toggle="tab" aria-expanded="true">Two degrees</a></li>
-                                </ul>
-                                <div class="tab-content no-padding">
-                                    <div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">
-                                        <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
-<area shape="rect" id="node1" href="sankey_card_links.html" target="_top" title="sankey_card_links" alt="" coords="376,5,620,269">
-<area shape="rect" id="node2" href="attributes.html" target="_top" title="attributes" alt="" coords="5,135,332,439">
-</map>
-                                        <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/attributes.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
-                                    </div>
-                                    <div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">
-                                        <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
-<area shape="rect" id="node1" href="sankey_card_link_node_types.html" target="_top" title="sankey_card_link_node_types" alt="" coords="664,124,1004,212">
-<area shape="rect" id="node2" href="sankey_card_links.html" target="_top" title="sankey_card_links" alt="" coords="376,121,620,385">
-<area shape="rect" id="node4" href="nodes.html" target="_top" title="nodes" alt="" coords="91,5,246,93">
-<area shape="rect" id="node5" href="commodities.html" target="_top" title="commodities" alt="" coords="69,216,269,304">
-<area shape="rect" id="node6" href="attributes.html" target="_top" title="attributes" alt="" coords="5,321,332,625">
-<area shape="rect" id="node7" href="countries.html" target="_top" title="countries" alt="" coords="83,111,254,199">
-<area shape="rect" id="node3" href="sankey_card_link_nodes.html" target="_top" title="sankey_card_link_nodes" alt="" coords="687,11,981,99">
-</map>
-                                        <a name='diagram'><img id="twodegreesDegreeImg" src="../diagrams/tables/attributes.2degrees.png" usemap="#twoDegreesRelationshipsDiagram" class="diagram" border="0" align="left"></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!-- /.box-body -->
+                    <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4><i class="icon fa fa-warning"></i>Diagram producer might be missing</h4>
+                        <p>No diagrams were produced please see application output for any errors</p>
                     </div>
                 </section>
                 <script>

@@ -69,8 +69,6 @@
       <sequence increment="1" name="recolor_by_quals_id_seq" startValue="1"/>
       <sequence increment="1" name="resize_by_attributes_id_seq" startValue="1"/>
       <sequence increment="1" name="resize_by_quants_id_seq" startValue="1"/>
-      <sequence increment="1" name="sankey_card_link_node_types_id_seq" startValue="1"/>
-      <sequence increment="1" name="sankey_card_link_nodes_id_seq" startValue="1"/>
       <sequence increment="1" name="sankey_card_links_id_seq" startValue="1"/>
       <sequence increment="1" name="top_profile_images_id_seq" startValue="1"/>
       <sequence increment="1" name="top_profiles_id_seq" startValue="1"/>
