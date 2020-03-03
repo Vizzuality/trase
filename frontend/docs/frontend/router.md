@@ -14,6 +14,5 @@ The app is using `redux-first-router` to handle SPA like navigation.
 - `team` The team page, is hidden because SEI hasn't make up their mind about the content. They told us to leave it hidden until the content is ready.
 - `teamMember` The team member detail page
 - `about` the about pages
-- `notSupportedOnMobile` the page that appears when trying to navigate to the tool or the data download in a mobile phone
 - `logisticsMap` The logistics map page.
 - `NOT_FOUND` The 404 page.

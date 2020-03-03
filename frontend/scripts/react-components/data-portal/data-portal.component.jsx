@@ -13,6 +13,10 @@ import {
   getURLFromParams
 } from 'utils/getURLFromParams';
 
+import useWindowSize from 'utils/hooks/useWindowSize';
+import NotSupportedComponent from 'react-components/mobile/not-supported.component';
+import { BREAKPOINTS } from 'constants';
+
 import 'styles/layouts/l-data.scss';
 import 'styles/components/data/custom-dataset.scss';
 import 'styles/components/shared/veil.scss';
@@ -47,6 +51,7 @@ function DataPortal(props) {
     onDownloadTriggered,
     selectedContext
   } = props;
+
   function reducer(state, action) {
     switch (action.type) {
       case 'closeForm':
@@ -209,6 +214,9 @@ function DataPortal(props) {
     }
   }
   const [state, dataPortalDispatch] = useReducer(reducer, initialState);
+
+  const { width } = useWindowSize();
+
   useEffect(() => {
     if (state.formVisible) {
       onDataDownloadFormLoaded();
@@ -286,6 +294,10 @@ function DataPortal(props) {
 
     dataPortalDispatch({ type: 'setDownloaded', payload: true });
   };
+
+  if (width <= BREAKPOINTS.small) {
+    return <NotSupportedComponent />;
+  }
 
   return (
     <div className="l-data">

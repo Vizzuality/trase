@@ -18,6 +18,9 @@ import LogisticsMapDownload from 'react-components/logistics-map/logistics-map-d
 import ToolBar from 'react-components/shared/tool-bar';
 import Timeline from 'react-components/tool/timeline/timeline.component';
 import ListModal from 'react-components/shared/list-modal';
+import useWindowSize from 'utils/hooks/useWindowSize';
+import NotSupportedComponent from 'react-components/mobile/not-supported.component';
+import { BREAKPOINTS } from 'constants';
 
 import 'vizzuality-components/dist/map.css';
 import 'leaflet/dist/leaflet.css';
@@ -48,6 +51,8 @@ function LogisticsMap(props) {
   } = props;
   const Tooltip = p => <UnitsTooltip {...p.data} />;
 
+  const { width } = useWindowSize();
+
   const onSelectHub = hub => {
     selectHub(hub.value);
     closeModal();
@@ -57,6 +62,10 @@ function LogisticsMap(props) {
     selectInspectionLevel(hub.value);
     closeModal();
   };
+
+  if (width <= BREAKPOINTS.tablet) {
+    return <NotSupportedComponent />;
+  }
 
   return (
     <div className="l-logistics-map">
