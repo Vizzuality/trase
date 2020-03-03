@@ -9,7 +9,7 @@ import WRIIcons from 'vizzuality-components/dist/icons';
 
 import { Layer, LayerManager } from 'layer-manager/dist/components';
 import { PluginLeaflet } from 'layer-manager';
-import { BASEMAPS } from 'constants';
+import { BASEMAPS, BREAKPOINTS } from 'constants';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 import LogisticsMapLegend from 'react-components/logistics-map/logistics-map-legend/logistics-map-legend.component';
@@ -20,7 +20,6 @@ import Timeline from 'react-components/tool/timeline/timeline.component';
 import ListModal from 'react-components/shared/list-modal';
 import useWindowSize from 'utils/hooks/useWindowSize';
 import NotSupportedComponent from 'react-components/mobile/not-supported.component';
-import { BREAKPOINTS } from 'constants';
 
 import 'vizzuality-components/dist/map.css';
 import 'leaflet/dist/leaflet.css';
