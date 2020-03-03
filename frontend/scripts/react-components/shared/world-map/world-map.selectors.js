@@ -70,7 +70,7 @@ function buildCustomArc(originCoords, destinationCoords, worldMapProjection) {
 }
 
 function buildGreatCircleArc(originCoords, destinationCoords, worldMapProjection) {
-  const arc = greatCircle(originCoords, destinationCoords, { offset: 100, npoints: 50 });
+  const arc = greatCircle(originCoords, destinationCoords, { offset: 400, npoints: 100 });
   if (arc.geometry.type === 'MultiLineString') {
     return buildCustomArc(originCoords, destinationCoords, worldMapProjection);
   }
