@@ -81,7 +81,7 @@ class TopNav extends React.PureComponent {
     allLinks.push(...links);
 
     return (
-      <div className="row align-justify -desktop-menu">
+      <div className="align-justify -desktop-menu">
         {ENABLE_TOOL_PANEL && (
           <div className="column medium-2">
             <ul className="top-nav-item-list">

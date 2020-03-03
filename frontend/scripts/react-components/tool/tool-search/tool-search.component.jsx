@@ -5,6 +5,7 @@ import Downshift from 'downshift';
 import { FixedSizeList } from 'react-window';
 import NodeTitleGroup from 'react-components/tool/tool-search/node-title-group/node-title-group.container';
 import SearchResult from 'react-components/tool/tool-search/tool-search-result/tool-search-result.component';
+import cx from 'classnames';
 
 import 'scripts/react-components/tool/tool-search/tool-search.scss';
 import 'scripts/react-components/tool/tool-search/tool-search-result/tool-search-result.scss';
@@ -12,7 +13,8 @@ import 'scripts/react-components/tool/tool-search/tool-search-result/tool-search
 const getNodeIds = selectedItem =>
   selectedItem.nodes ? selectedItem.nodes.map(key => selectedItem[key].id) : [selectedItem.id];
 
-const getNodeResults = selectedItem => selectedItem.nodes ? selectedItem.nodes.map(key => selectedItem[key]) : [selectedItem];
+const getNodeResults = selectedItem =>
+  selectedItem.nodes ? selectedItem.nodes.map(key => selectedItem[key]) : [selectedItem];
 
 function useCloseOnEscape({ isSearchOpen, setIsSearchOpen }) {
   useEffect(() => {
@@ -99,7 +101,7 @@ function ToolSearch(props) {
 
   if (isSearchOpen === false) {
     return (
-      <div onClick={onOpenClicked} className={className}>
+      <div onClick={onOpenClicked} className={cx('c-tool-search', className)}>
         <svg className="icon icon-search">
           <use xlinkHref="#icon-search" />
         </svg>
@@ -108,7 +110,7 @@ function ToolSearch(props) {
   }
 
   return (
-    <div className="c-search -tool">
+    <div className="c-tool-search c-search -tool">
       <svg className="icon icon-search">
         <use xlinkHref="#icon-search" />
       </svg>
