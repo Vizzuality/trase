@@ -71,9 +71,9 @@
         border: 0;
       }
 
-      &.-no-padding {
+      &.-no-padding-right {
         > * {
-          padding: 0 0 20px 0;
+          padding: 20px 0 20px 20px;
         }
       }
     }
@@ -101,14 +101,6 @@
             > * {
               padding: 0 40px 0 24px;
             }
-          }
-        }
-      }
-
-      .slot-item {
-        &.-no-padding {
-          > * {
-            padding: 0 0 0 24px;
           }
         }
       }
