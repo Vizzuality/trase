@@ -1,3 +1,6 @@
+import { getDirtyBlocks } from 'react-components/nodes-panel/nodes-panel.selectors';
+import { getDynamicSentence } from 'react-components/dashboard-element/dashboard-element.selectors';
+
 export const DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_PANEL_DATA = 'DASHBOARD_ELEMENT__SET_PANEL_DATA';
 export const DASHBOARD_ELEMENT__SET_SELECTED_COUNTRY_ID =
@@ -61,7 +64,12 @@ export const editDashboard = () => ({
   type: DASHBOARD_ELEMENT__EDIT_DASHBOARD
 });
 
-export const goToDashboard = payload => ({
-  type: DASHBOARD_ELEMENT__GO_TO_DASHBOARD,
-  payload
-});
+export const goToDashboard = () => (dispatch, getState) => {
+  const state = getState();
+  const dirtyBlocks = getDirtyBlocks(state);
+  const dynamicSentenceParts = getDynamicSentence(state);
+  return dispatch({
+    type: DASHBOARD_ELEMENT__GO_TO_DASHBOARD,
+    payload: { dirtyBlocks, dynamicSentenceParts }
+  });
+};

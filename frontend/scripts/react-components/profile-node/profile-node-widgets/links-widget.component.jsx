@@ -7,7 +7,7 @@ import { GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
 import { translateText } from 'utils/transifex';
 
 function LinksWidget(props) {
-  const { year, nodeId, contextId, profileType } = props;
+  const { year, nodeId, countryId, commodityId, profileType, contextId } = props;
   const params = { node_id: nodeId, context_id: contextId, profile_type: profileType, year };
   return (
     <Widget params={[params]} query={[GET_NODE_SUMMARY_URL]}>
@@ -23,6 +23,8 @@ function LinksWidget(props) {
         const name =
           data.GET_NODE_SUMMARY_URL.nodeName || data.GET_NODE_SUMMARY_URL.jurisdictionName;
 
+        const nodeType = data.GET_NODE_SUMMARY_URL.columnName;
+
         return (
           <section className="c-links-widget">
             <div className="row links-widget-title columns">
@@ -30,7 +32,14 @@ function LinksWidget(props) {
                 Explore other information relevant to {translateText(name)}
               </Heading>
             </div>
-            <ButtonLinks year={year} nodeId={nodeId} contextId={contextId} />
+            <ButtonLinks
+              year={year}
+              name={name}
+              nodeId={nodeId}
+              nodeType={nodeType}
+              countryId={countryId}
+              commodityId={commodityId}
+            />
           </section>
         );
       }}
@@ -40,6 +49,8 @@ function LinksWidget(props) {
 
 LinksWidget.propTypes = {
   contextId: PropTypes.number,
+  countryId: PropTypes.number,
+  commodityId: PropTypes.number,
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired,
   profileType: PropTypes.string.isRequired

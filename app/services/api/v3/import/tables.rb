@@ -36,10 +36,7 @@ module Api
             ]
           },
           {
-            table_class: Api::V3::NodeType,
-            yellow_tables: [
-              Api::V3::SankeyCardLinkNodeType
-            ]
+            table_class: Api::V3::NodeType
           },
           {
             table_class: Api::V3::ContextNodeType,
@@ -59,8 +56,7 @@ module Api
               Api::V3::TopProfile,
               Api::V3::DashboardTemplateSource,
               Api::V3::DashboardTemplateCompany,
-              Api::V3::DashboardTemplateDestination,
-              Api::V3::SankeyCardLinkNode
+              Api::V3::DashboardTemplateDestination
             ]
           },
           {

@@ -13,22 +13,43 @@
   }
 
   .tool-link {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
     width: 100%;
-    border-radius: 10px;
     height: 120px;
-    border: 1px solid $charcoal-dark;
+    overflow: hidden;
+    border-radius: 10px;
+    border: 1px solid $charcoal-grey-faded;
+    cursor: pointer;
+    background-size: 101%; // covers extra 1% on the left
+    background-position: center;
+    background-repeat: no-repeat;
+
+    &::after {
+      content: '';
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      background-color: $charcoal-grey-faded-a-lot;
+      opacity: 0;
+      transition: opacity 150ms ease-in;
+    }
+
+    &:hover {
+      &::after {
+        opacity: 1;
+      }
+    }
   }
 
   .description-list {
-    > li {
+    .bullet-point {
       position: relative;
-      list-style-type: initial;
-      left: 20px;
-      margin-bottom: 15px;
+      margin: 0 0 0 20px;
+      padding-left: 10px;
+      list-style-image: url('/images/bullet-point.svg');
     }
   }
 }

@@ -380,9 +380,8 @@ module Api
           cont_attr_table = @cont_attribute.flow_values_class.table_name
           query = Api::V3::Flow.
             from('partitioned_flows flows').
-            joins("JOIN partitioned_#{cont_attr_table} #{cont_attr_table} ON flow_quants.flow_id = flows.id").
+            joins("JOIN partitioned_#{cont_attr_table} #{cont_attr_table} ON #{cont_attr_table}.flow_id = flows.id").
             where(context_id: @context.id).
-            # where("#{cont_attr_table}.context_id" => @context.id).
             where('year >= ? AND year <= ?', @year_start, @year_end).
             where(
               "#{cont_attr_table}.#{@cont_attribute.attribute_id_name}" =>

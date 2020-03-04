@@ -5,7 +5,7 @@ import {
   getSelectedMapContextualLayersData
 } from 'react-components/tool-layers/tool-layers.selectors';
 import { hasLayers } from 'react-components/tool/legend/legend.selectors';
-import { setActiveModal } from 'react-components/tool/tool.actions';
+import { toolLayersActions } from 'react-components/tool-layers/tool-layers.register';
 import { TOOL_LAYOUT } from 'constants';
 import Legend from './legend.component';
 
@@ -21,10 +21,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  openLayerModal: () => setActiveModal('layer')
+  openLayerModal: () => toolLayersActions.setActiveModal('layer')
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Legend);
+export default connect(mapStateToProps, mapDispatchToProps)(Legend);

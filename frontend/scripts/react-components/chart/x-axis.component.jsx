@@ -6,8 +6,13 @@ import ChartTick from 'react-components/chart/tick/tick.component';
 import { format } from 'd3-format';
 import 'react-components/chart/chart-styles.scss';
 
-function CustomXAxis({ config, data }) {
+function CustomXAxis(props) {
+  const { config, data, variant } = props;
   const { xKey, xKeys, xAxis, layout, unit, unitFormat } = config;
+  const fillColor = {
+    dark: '#ffffff',
+    light: '#34444c'
+  }[variant];
   if (!xAxis) return null;
   // horizontal charts
   if (layout === 'vertical') {
@@ -24,7 +29,7 @@ function CustomXAxis({ config, data }) {
             unitFormat={unitFormat || (value => format('.2s')(value))}
             unit={unit}
             backgroundColor="transparent"
-            fill="white"
+            fill={fillColor}
           />
         }
       >
@@ -39,6 +44,7 @@ function CustomXAxis({ config, data }) {
 }
 
 CustomXAxis.propTypes = {
+  variant: PropTypes.string.isRequired,
   config: PropTypes.object.isRequired,
   data: PropTypes.array
 };

@@ -1,0 +1,35 @@
+@import 'styles/settings';
+
+.c-edit-filter {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  cursor: pointer;
+
+  .edit-title {
+    .edit-subtitle {
+      margin: 0 0 0 5px;
+    }
+    line-height: 1.35;
+  }
+
+  @media screen and (min-width: $breakpoint-tool-bar) {
+    .edit-title {
+      margin: 0 12px 0 0;
+    }
+  }
+
+  &.-hovered {
+    .title-text {
+      text-decoration: underline;
+    }
+  }
+
+  .options-menu-label {
+    display: block;
+    color: rgba($white, 0.6);
+    margin-top: 4px;
+  }
+}

@@ -1,9 +1,7 @@
-export const NODES_PANEL__SET_INSTANCE_ID = 'NODES_PANEL__SET_INSTANCE_ID';
 export const NODES_PANEL__SET_SELECTED_ID = 'NODES_PANEL__SET_SELECTED_ID';
 export const NODES_PANEL__SET_SELECTED_IDS = 'NODES_PANEL__SET_SELECTED_IDS';
 export const NODES_PANEL__CLEAR_PANEL = 'NODES_PANEL__CLEAR_PANEL';
 export const NODES_PANEL__FETCH_DATA = 'NODES_PANEL__FETCH_DATA';
-export const NODES_PANEL__SET_FETCH_KEY = 'NODES_PANEL__SET_FETCH_KEY';
 export const NODES_PANEL__SET_PANEL_PAGE = 'NODES_PANEL__SET_PANEL_PAGE';
 export const NODES_PANEL__SET_DATA = 'NODES_PANEL__SET_DATA';
 export const NODES_PANEL__SET_TABS = 'NODES_PANEL__SET_TABS';
@@ -19,23 +17,21 @@ export const NODES_PANEL__GET_SEARCH_RESULTS = 'NODES_PANEL__GET_SEARCH_RESULTS'
 export const NODES_PANEL__SET_NO_DATA = 'NODES_PANEL__SET_NO_DATA';
 export const NODES_PANEL__SET_EXCLUDING_MODE = 'NODES_PANEL__SET_EXCLUDING_MODE';
 export const NODES_PANEL__SET_ORDER_BY = 'NODES_PANEL__SET_ORDER_BY';
+export const NODES_PANEL__EDIT_PANELS = 'NODES_PANEL__EDIT_PANELS';
+export const NODES_PANEL__SAVE = 'NODES_PANEL__SAVE';
+export const NODES_PANEL__CANCEL_PANELS_DRAFT = 'NODES_PANEL__CANCEL_PANELS_DRAFT';
+export const NODES_PANEL__SYNC_NODES_WITH_SANKEY = 'NODES_PANEL__SYNC_NODES_WITH_SANKEY';
+export const NODES_PANEL__FINISH_SELECTION = 'NODES_PANEL__FINISH_SELECTION';
 
 export const fetchData = (key, name) => ({
   type: NODES_PANEL__FETCH_DATA,
-  payload: key,
   meta: { name }
 });
 
-export const setFetchKey = (key, name) => ({
-  type: NODES_PANEL__SET_FETCH_KEY,
-  payload: key,
-  meta: { name }
-});
-
-export const setData = (data, name, prefetching) => ({
+export const setData = (data, fetchKey, name) => ({
   type: NODES_PANEL__SET_DATA,
-  payload: { data },
-  meta: { name, prefetching }
+  payload: { data, fetchKey },
+  meta: { name }
 });
 
 export const setMoreData = (data, name) => ({
@@ -86,10 +82,9 @@ export const setPage = (page, name) => ({
   meta: { name }
 });
 
-export const setMissingItems = (data, name) => ({
+export const setMissingItems = data => ({
   type: NODES_PANEL__SET_MISSING_DATA,
-  payload: { data },
-  meta: { name }
+  payload: { data }
 });
 
 export const getMissingItems = () => ({
@@ -111,6 +106,23 @@ export const setSearchResult = (activeItem, name) => ({
 export const clearPanel = panel => ({
   type: NODES_PANEL__CLEAR_PANEL,
   payload: { panel }
+});
+
+export const editPanels = () => ({
+  type: NODES_PANEL__EDIT_PANELS
+});
+
+export const savePanels = contextId => ({
+  type: NODES_PANEL__SAVE,
+  payload: contextId
+});
+
+export const finishSelection = () => ({
+  type: NODES_PANEL__FINISH_SELECTION
+});
+
+export const cancelPanelsDraft = () => ({
+  type: NODES_PANEL__CANCEL_PANELS_DRAFT
 });
 
 export const setNoData = (hasNoData, name) => ({
@@ -135,4 +147,9 @@ export const setOrderBy = (orderBy, name) => ({
     orderBy
   },
   meta: { name }
+});
+
+export const syncNodesWithSankey = nodesByRole => ({
+  type: NODES_PANEL__SYNC_NODES_WITH_SANKEY,
+  payload: { nodesByRole }
 });

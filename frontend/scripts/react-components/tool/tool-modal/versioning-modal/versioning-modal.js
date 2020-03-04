@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import VersioningModal from 'react-components/tool/tool-modal/versioning-modal/versioning-modal.component';
-import { getSelectedContext } from 'reducers/app.selectors';
+import { getSelectedContext } from 'app/app.selectors';
 import {
   getVersionData,
   getTableData

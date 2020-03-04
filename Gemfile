@@ -19,7 +19,7 @@ gem 'coffee-rails', '~> 5.0'
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.9'
+gem 'jbuilder', '~> 2.10'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
@@ -52,14 +52,14 @@ gem 'oj'
 gem 'paperclip', '~> 6.1.0'
 gem 'pg_csv'
 gem 'pg_search'
-gem 'rack', '~> 2.0.8' # issue with sidekiq web in version 2.1.1, still doesn't work on sandbox in version 2.1.2
+gem 'rack', '~> 2.2.2' # issue with sidekiq web in version 2.1.1, still doesn't work on sandbox in version 2.1.2
 gem 'rack-cors', '~> 1.1'
-gem 'rubyzip'
 gem 'scenic'
-gem 'sidekiq', '~> 6.0.4'
+gem 'sidekiq', '~> 6.0.5'
 gem 'sidekiq-unique-jobs'
 gem 'sitemap_generator'
-gem 'twitter', '~> 6.1'
+gem 'twitter', '~> 7.0'
+gem 'zip_tricks'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -81,7 +81,7 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'annotate'
   gem 'bcrypt_pbkdf', '~> 1.0'
-  gem 'capistrano', '~> 3.11', require: false
+  gem 'capistrano', '~> 3.12', require: false
   gem 'capistrano-bundler'
   gem 'capistrano-yarn'
   gem 'capistrano-nvm'
@@ -89,7 +89,7 @@ group :development do
   gem 'capistrano-rails', '~> 1.4', require: false
   gem 'capistrano-rvm'
   gem 'ed25519', '~> 1.2'
-  gem 'rubocop', '~> 0.79.0', require: false
+  gem 'rubocop', '~> 0.80.1', require: false
   gem 'rubocop-performance', require: false
 end
 

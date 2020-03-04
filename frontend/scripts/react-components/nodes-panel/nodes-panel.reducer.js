@@ -3,8 +3,18 @@ import xor from 'lodash/xor';
 import fuzzySearch from 'utils/fuzzySearch';
 import { DASHBOARD_STEPS } from 'constants';
 import createReducer from 'utils/createReducer';
+import pluralize from 'utils/pluralize';
 import { deserialize } from 'react-components/shared/url-serializer/url-serializer.component';
 import nodesPanelSerialization from 'react-components/nodes-panel/nodes-panel.serializers';
+
+import { SET_CONTEXTS } from 'app/app.actions';
+import {
+  TOOL_LINKS__SET_COLUMNS,
+  TOOL_LINKS__COLLAPSE_SANKEY,
+  TOOL_LINKS__SELECT_COLUMN,
+  TOOL_LINKS_RESET_SANKEY
+} from 'react-components/tool-links/tool-links.actions';
+
 import {
   NODES_PANEL__FETCH_DATA,
   NODES_PANEL__SET_PANEL_PAGE,
@@ -19,32 +29,34 @@ import {
   NODES_PANEL__CLEAR_PANEL,
   NODES_PANEL__SET_ACTIVE_ITEMS_WITH_SEARCH,
   NODES_PANEL__SET_SEARCH_RESULTS,
-  NODES_PANEL__SET_INSTANCE_ID,
   NODES_PANEL__SET_NO_DATA,
-  NODES_PANEL__SET_FETCH_KEY,
+  NODES_PANEL__SET_ORDER_BY,
   NODES_PANEL__SET_EXCLUDING_MODE,
-  NODES_PANEL__SET_ORDER_BY
+  NODES_PANEL__EDIT_PANELS,
+  NODES_PANEL__SAVE,
+  NODES_PANEL__CANCEL_PANELS_DRAFT,
+  NODES_PANEL__SYNC_NODES_WITH_SANKEY
 } from './nodes-panel.actions';
 import modules from './nodes-panel.modules';
 import nodesPanelInitialState from './nodes-panel.initial-state';
 
-const getPanelsToClear = (panel, state, item) => {
+const getPanelsToClear = (panel, state, item, isANewTab) => {
   const currentPanelIndex = DASHBOARD_STEPS[panel];
 
   // if the selected items in a panel are zero, that means we're including all of them
   // thus the subsequent panels will include all possible nodes.
   // if we add an item at this point, it means we're passing from "show me all" to "show me just one" filtering
   // this means the subsequents panels selection most likely will be invalid and needs to be cleared.
-  const hadAllItemsSelected = state[panel].selectedNodesIds.length === 0;
+  const hadAllItemsSelected = state[panel].draftSelectedNodesIds.length === 0;
 
   // if the selected items in a panel are N, that means that we're including only N
   // if we remove an item at this point, it means we're passing from "show me N" to "show me N-1" filtering
   // this means the subsequent panels selection might include items that corresponded to the removed item
   // thus rendering the selection invalid so we need to clear it.
   // When passing from N to N+1 we're including more possible results so we don't need to clear the selection.
-  const isRemovingAnItem = state[panel].selectedNodesIds.includes(item.id);
+  const isRemovingAnItem = state[panel].draftSelectedNodesIds.includes(item.id);
 
-  if (hadAllItemsSelected || isRemovingAnItem) {
+  if (hadAllItemsSelected || isRemovingAnItem || isANewTab) {
     const panelsToClear = Object.keys(DASHBOARD_STEPS)
       .filter(i => i !== panel)
       .slice(currentPanelIndex + 1);
@@ -53,36 +65,103 @@ const getPanelsToClear = (panel, state, item) => {
   return null;
 };
 
-const clearPanelData = (draft, { name, state, activeItem }) => {
+const clearPanelData = (draft, { name, state, activeItem, isANewTab }) => {
   // clear following panels if necessary
-  const panelsToClear = getPanelsToClear(name, state, activeItem);
+  const panelsToClear = getPanelsToClear(name, state, activeItem, isANewTab);
   if (panelsToClear) {
     panelsToClear.forEach(panelToClear => {
       if (modules[panelToClear].hasMultipleSelection) {
-        draft[panelToClear].selectedNodesIds =
-          nodesPanelInitialState[panelToClear].selectedNodesIds;
+        draft[panelToClear].draftSelectedNodesIds =
+          nodesPanelInitialState[panelToClear].draftSelectedNodesIds;
       } else {
-        draft[panelToClear].selectedNodeId = nodesPanelInitialState[panelToClear].selectedNodeId;
+        draft[panelToClear].draftSelectedNodeId =
+          nodesPanelInitialState[panelToClear].draftSelectedNodeId;
       }
-      draft[panelToClear].data = nodesPanelInitialState[panelToClear].data;
+      draft[panelToClear].data.byId = nodesPanelInitialState[panelToClear].data.byId;
+      draft[panelToClear].noData = nodesPanelInitialState[panelToClear].noData;
+      draft[panelToClear].excludingMode = nodesPanelInitialState[panelToClear].excludingMode;
+      draft[panelToClear].fetchKey = nodesPanelInitialState[panelToClear].fetchKey;
     });
   }
 };
 
+const clearSelectedNodes = draft =>
+  Object.keys(DASHBOARD_STEPS).forEach(name => {
+    const moduleOptions = modules[name];
+    if (!['welcome', 'countries', 'commodities'].includes(name)) {
+      if (moduleOptions.hasMultipleSelection) {
+        draft[name].selectedNodesIds = [];
+      } else {
+        draft[name].selectedNodeId = null;
+      }
+      draft[name].noData = nodesPanelInitialState[name].noData;
+    }
+  });
+
+const deserializeInternalLink = (state, action) => {
+  if (action.payload?.serializerParams) {
+    const params = action.payload.serializerParams;
+    const newState = deserialize({
+      params,
+      state: nodesPanelInitialState,
+      ...nodesPanelSerialization
+    });
+    if (params && params.__temporaryExpandedNodes) {
+      newState.__temporaryExpandedNodes = params.__temporaryExpandedNodes;
+    }
+    return newState;
+  }
+  return state;
+};
+
 const nodesPanelReducer = {
   dashboardElement(state, action) {
-    if (action.payload?.serializerParams) {
-      return deserialize({
-        params: action.payload.serializerParams,
-        state: nodesPanelInitialState,
-        ...nodesPanelSerialization
-      });
-    }
-    return state;
+    return { ...deserializeInternalLink(state, action), instanceId: action.type };
   },
-  [NODES_PANEL__SET_INSTANCE_ID](state) {
+  tool(state, action) {
+    return { ...deserializeInternalLink(state, action), instanceId: action.type };
+  },
+  [SET_CONTEXTS](state, action) {
     return immer(state, draft => {
-      Object.assign(draft, nodesPanelInitialState);
+      const contexts = action.payload;
+      if (
+        (state.countries.selectedNodeId === null || state.commodities.selectedNodeId === null) &&
+        state.instanceId === 'tool'
+      ) {
+        const defaultContext = contexts.find(ctx => ctx.isDefault);
+        draft.countries.selectedNodeId = defaultContext.countryId;
+        draft.commodities.selectedNodeId = defaultContext.commodityId;
+      }
+    });
+  },
+  [TOOL_LINKS__SET_COLUMNS](state, action) {
+    return immer(state, draft => {
+      const { columns } = action.payload;
+      if (state.__temporaryExpandedNodes.length > 0) {
+        // this means we navigated internally with hopes of expanding some nodes once we had the columns
+        state.__temporaryExpandedNodes.forEach(node => {
+          const { id, nodeType } = node;
+          // with the columns we fing the role
+          const { role } = columns.find(col => col.name === nodeType);
+          const name = pluralize(role);
+          const moduleOptions = modules[name];
+          // with the role we set up the state
+          if (moduleOptions.hasMultipleSelection) {
+            draft[name].selectedNodesIds.push(id);
+          } else {
+            draft[name].selectedNodeId = id;
+          }
+          if (!draft[name].data.nodes) {
+            draft[name].data.nodes = {};
+          }
+          if (!draft[name].data.nodes[id]) {
+            draft[name].data.nodes[id] = node;
+          }
+        });
+
+        // finally we clear the temporary state.
+        draft.__temporaryExpandedNodes = [];
+      }
     });
   },
   [NODES_PANEL__SET_PANEL_PAGE](state, action) {
@@ -91,27 +170,13 @@ const nodesPanelReducer = {
       draft[name].page = action.payload;
     });
   },
-  [NODES_PANEL__SET_FETCH_KEY](state, action) {
-    const { name } = action.meta;
-    return immer(state, draft => {
-      draft[name].fetchKey = action.payload || null;
-    });
-  },
   [NODES_PANEL__FETCH_DATA](state, action) {
     const { name } = action.meta;
     const moduleOptions = modules[name];
     return immer(state, draft => {
+      draft[name].noData = nodesPanelInitialState[name].noData;
       if (moduleOptions.hasTabs) {
         draft[name].activeTab = nodesPanelInitialState[name].activeTab;
-      }
-      draft[name].fetchKey = action.payload || null;
-
-      if (draft[name].fetchKey !== null && state[name].fetchKey !== 'preloaded') {
-        if (moduleOptions.hasMultipleSelection) {
-          draft[name].selectedNodesIds = nodesPanelInitialState[name].selectedNodesIds;
-        } else {
-          draft[name].selectedNodeId = nodesPanelInitialState[name].selectedNodeId;
-        }
       }
     });
   },
@@ -119,14 +184,16 @@ const nodesPanelReducer = {
     const { name } = action.meta;
     const moduleOptions = modules[name];
     return immer(state, draft => {
-      const { data } = action.payload;
+      const { data, fetchKey } = action.payload;
       if (data) {
+        draft[name].fetchKey = fetchKey || nodesPanelInitialState[name].fetchKey;
+
         const newItems = data.reduce((acc, next) => ({ ...acc, [next.id]: next }), {});
         draft[name].data.byId = data ? data.map(node => node.id) : [];
-        draft[name].data.nodes = newItems;
+        draft[name].data.nodes = { ...(state[name].data.nodes || {}), ...newItems };
       } else {
         draft[name].page = nodesPanelInitialState[name].page;
-        draft[name].data = nodesPanelInitialState[name].data;
+        draft[name].data.byId = nodesPanelInitialState[name].data.byId;
 
         if (moduleOptions.hasSearch) {
           draft[name].searchResults = nodesPanelInitialState[name].searchResults;
@@ -156,6 +223,7 @@ const nodesPanelReducer = {
   [NODES_PANEL__SET_MISSING_DATA](state, action) {
     return immer(state, draft => {
       const { data } = action.payload;
+
       Object.entries(modules)
         .filter(([name]) => !['countries', 'commodities'].includes(name))
         .forEach(([name, moduleOptions]) => {
@@ -175,7 +243,6 @@ const nodesPanelReducer = {
                 draft[name].activeTab = item.columnId;
               }
 
-              draft[name].data.byId.push(item.id);
               draft[name].data.nodes[item.id] = item;
             });
         });
@@ -187,6 +254,7 @@ const nodesPanelReducer = {
     if (moduleOptions.hasTabs) {
       return immer(state, draft => {
         const { data } = action.payload;
+
         const getSection = n => n.section && n.section.toLowerCase();
         const sectionTabs = data.find(item => getSection(item) === name);
         draft[name].tabs = sectionTabs?.tabs;
@@ -221,22 +289,24 @@ const nodesPanelReducer = {
     const { name } = action.meta;
     const moduleOptions = modules[name];
     const { activeItem } = action.payload;
-    if (!moduleOptions.hasMultiplSelection) {
+    if (!moduleOptions.hasMultipleSelection) {
       return immer(state, draft => {
-        draft[name].selectedNodeId =
-          activeItem && activeItem.id !== state[name].selectedNodeId ? activeItem.id : null;
-
+        draft[name].draftSelectedNodeId =
+          activeItem && activeItem.id !== state[name].draftSelectedNodeId ? activeItem.id : null;
         // clear following panels
         const panelIndex = DASHBOARD_STEPS[name];
         Object.entries(DASHBOARD_STEPS).forEach(([panel, step]) => {
           const currentPanelOptions = modules[panel];
-          if (panelIndex < step) {
+          if (panelIndex <= step && panel !== name) {
             if (currentPanelOptions.hasMultipleSelection) {
-              draft[panel].selectedNodesIds = [];
+              draft[panel].draftSelectedNodesIds = [];
             } else {
-              draft[panel].selectedNodeId = null;
+              draft[panel].draftSelectedNodeId = null;
             }
-            draft[panel].data = nodesPanelInitialState[panel].data;
+            draft[panel].data.byId = nodesPanelInitialState[panel].data.byId;
+            draft[panel].noData = nodesPanelInitialState[panel].noData;
+            draft[panel].excludingMode = nodesPanelInitialState[panel].excludingMode;
+            draft[panel].fetchKey = nodesPanelInitialState[panel].fetchKey;
           }
         });
       });
@@ -249,22 +319,29 @@ const nodesPanelReducer = {
     const { activeItem } = action.payload;
     if (moduleOptions.hasMultipleSelection) {
       return immer(state, draft => {
+        let isANewTab = false;
         if (moduleOptions.hasTabs) {
-          draft[name].activeTab = state[name].tabs.find(tab => tab.name === activeItem.nodeType).id;
-
           // we clear the previously selected items if the new item has a different nodeType
           const firstItem =
-            state[name].selectedNodesIds[0] &&
-            state[name].data.nodes[state[name].selectedNodesIds[0]];
-          if (firstItem && firstItem.nodeType !== activeItem.nodeType) {
-            draft[name].selectedNodesIds = [activeItem.id];
+            state[name].draftSelectedNodesIds[0] &&
+            state[name].data.nodes[state[name].draftSelectedNodesIds[0]];
+
+          isANewTab =
+            firstItem &&
+            (firstItem.nodeType || firstItem.type) !== (activeItem.nodeType || activeItem.type);
+          if (isANewTab) {
+            draft[name].draftSelectedNodesIds = [activeItem.id];
           } else {
-            draft[name].selectedNodesIds = xor(draft[name].selectedNodesIds, [activeItem.id]);
+            draft[name].draftSelectedNodesIds = xor(draft[name].draftSelectedNodesIds, [
+              activeItem.id
+            ]);
           }
         } else {
-          draft[name].selectedNodesIds = xor(draft[name].selectedNodesIds, [activeItem.id]);
+          draft[name].draftSelectedNodesIds = xor(draft[name].draftSelectedNodesIds, [
+            activeItem.id
+          ]);
         }
-        clearPanelData(draft, { state, activeItem, name });
+        clearPanelData(draft, { state, activeItem, name, isANewTab });
       });
     }
     return state;
@@ -287,10 +364,12 @@ const nodesPanelReducer = {
     if (moduleOptions.hasSearch) {
       return immer(state, draft => {
         const { activeItem } = action.payload;
+        let isANewTab = false;
 
         if (moduleOptions.hasTabs) {
           const activeTabObj =
-            state[name].tabs && state[name].tabs.find(tab => tab.id === activeItem.nodeTypeId);
+            state[name].tabs &&
+            state[name].tabs.find(tab => tab.id === (activeItem.nodeType || activeItem.type));
           const activeTab = activeTabObj?.id || null;
 
           if (activeTab !== state[name].activeTab && state[name].activeTab) {
@@ -299,28 +378,29 @@ const nodesPanelReducer = {
           draft[name].activeTab = activeTab;
         }
 
-        const existsInData = state[name].data.nodes[activeItem.id];
         draft[name].data.nodes = { ...state[name].data.nodes, [activeItem.id]: activeItem };
-        if (!existsInData) {
-          draft[name].data.byId = [activeItem.id, ...state[name].data.byId];
-        }
 
         draft[name].searchResults = [];
 
-        clearPanelData(draft, { state, activeItem, name });
-
         if (moduleOptions.hasMultipleSelection) {
           const firstItem =
-            state[name].selectedNodesIds[0] &&
-            state[name].data.nodes[state[name].selectedNodesIds[0]];
-          if (firstItem && firstItem.nodeType !== activeItem.nodeType) {
-            draft[name].selectedNodesIds = [activeItem.id];
+            state[name].draftSelectedNodesIds[0] &&
+            state[name].data.nodes[state[name].draftSelectedNodesIds[0]];
+          isANewTab =
+            firstItem &&
+            (firstItem.nodeType || firstItem.type) !== (activeItem.nodeType || activeItem.type);
+          if (isANewTab) {
+            draft[name].draftSelectedNodesIds = [activeItem.id];
           } else {
-            draft[name].selectedNodesIds = xor(draft[name].selectedNodesIds, [activeItem.id]);
+            draft[name].draftSelectedNodesIds = xor(draft[name].draftSelectedNodesIds, [
+              activeItem.id
+            ]);
           }
         } else {
-          draft[name].selectedNodeId = activeItem.id;
+          draft[name].draftSelectedNodeId = activeItem.id;
         }
+
+        clearPanelData(draft, { state, activeItem, name, isANewTab });
       });
     }
     return state;
@@ -344,10 +424,12 @@ const nodesPanelReducer = {
         const moduleOptions = modules[name];
         if (panelIndex <= step) {
           if (moduleOptions.hasMultipleSelection) {
-            draft[name].selectedNodesIds = [];
+            draft[name].draftSelectedNodesIds = [];
           } else {
-            draft[name].selectedNodeId = null;
+            draft[name].draftSelectedNodeId = null;
           }
+
+          draft[name].noData = nodesPanelInitialState[name].noData;
         }
       });
     });
@@ -358,17 +440,18 @@ const nodesPanelReducer = {
     const moduleOptions = modules[name];
     if (moduleOptions.hasMultipleSelection) {
       return immer(state, draft => {
-        draft[name].selectedNodesIds = [];
+        draft[name].draftSelectedNodesIds = [];
         draft[name].excludingMode = mode;
         const panelIndex = DASHBOARD_STEPS[name];
         Object.entries(DASHBOARD_STEPS).forEach(([currentPanel, step]) => {
           const currentModuleOptions = modules[name];
           if (panelIndex < step) {
             if (currentModuleOptions.hasMultipleSelection) {
-              draft[currentPanel].selectedNodesIds = [];
+              draft[currentPanel].draftSelectedNodesIds = [];
             } else {
-              draft[currentPanel].selectedNodeId = null;
+              draft[currentPanel].draftSelectedNodeId = null;
             }
+            draft[currentPanel].noData = nodesPanelInitialState[currentPanel].noData;
           }
         });
       });
@@ -383,12 +466,108 @@ const nodesPanelReducer = {
       draft[name].orderBy = orderBy.value;
       draft[name].data.byId = nodesPanelInitialState[name].data.byId;
       draft[name].page = nodesPanelInitialState[name].page;
+      draft[name].noData = nodesPanelInitialState[name].noData;
+      draft[name].fetchKey = nodesPanelInitialState[name].fetchKey;
       if (moduleOptions.hasMultipleSelection) {
         draft[name].selectedNodesIds = [];
       } else {
         draft[name].selectedNodeId = null;
       }
     });
+  },
+  [NODES_PANEL__EDIT_PANELS](state) {
+    // Copies the panel selectedIds to draftSelectedIds on panel edit start
+    return immer(state, draft => {
+      Object.keys(state).forEach(name => {
+        const moduleOptions = modules[name];
+        if (moduleOptions) {
+          const panelData = state[name];
+          if (moduleOptions.hasMultipleSelection) {
+            draft[name].draftSelectedNodesIds = panelData.selectedNodesIds;
+          } else {
+            draft[name].draftSelectedNodeId = panelData.selectedNodeId;
+          }
+        }
+      });
+    });
+  },
+  [NODES_PANEL__SAVE](state) {
+    // Copies the panel selectedIds to draftSelectedIds on panel edit start
+    return immer(state, draft => {
+      Object.keys(state).forEach(name => {
+        const moduleOptions = modules[name];
+        if (moduleOptions) {
+          const panelData = draft[name];
+          if (moduleOptions.hasMultipleSelection) {
+            draft[name].selectedNodesIds = panelData.draftSelectedNodesIds;
+          } else {
+            draft[name].selectedNodeId = panelData.draftSelectedNodeId;
+          }
+
+          if (moduleOptions.hasTabs) {
+            draft[name].savedActiveTab = state[name].activeTab;
+            draft[name].savedTabs = state[name].tabs;
+          }
+        }
+      });
+    });
+  },
+  [NODES_PANEL__CANCEL_PANELS_DRAFT](state) {
+    // Deletes the draft
+    return immer(state, draft => {
+      Object.entries(modules).forEach(([name, moduleOptions]) => {
+        if (moduleOptions.hasMultipleSelection) {
+          if (
+            state[name].draftSelectedNodesIds.length > 0 &&
+            state[name].selectedNodesIds.length > 0 &&
+            state[name].draftSelectedNodesIds !== state[name].selectedNodesIds
+          ) {
+            draft[name].fetchKey = nodesPanelInitialState[name].fetchKey;
+          }
+          draft[name].draftSelectedNodesIds = nodesPanelInitialState[name].draftSelectedNodesIds;
+        } else {
+          if (state[name].draftSelectedNodeId !== state[name].selectedNodeId) {
+            draft[name].fetchKey = nodesPanelInitialState[name].fetchKey;
+          }
+          draft[name].draftSelectedNodeId = nodesPanelInitialState[name].draftSelectedNodeId;
+        }
+      });
+    });
+  },
+  [NODES_PANEL__SYNC_NODES_WITH_SANKEY](state, action) {
+    return immer(state, draft => {
+      const { nodesByRole } = action.payload;
+      clearSelectedNodes(draft);
+      Object.entries(nodesByRole).forEach(([name, selectedNodes]) => {
+        draft[name].selectedNodesIds = [];
+        if (!draft[name].data.nodes) {
+          draft[name].data.nodes = {};
+        }
+        selectedNodes.forEach(node => {
+          draft[name].selectedNodesIds.push(node.id);
+          if (!draft[name].data.nodes[node.id]) {
+            draft[name].data.nodes[node.id] = node;
+          }
+        });
+      });
+    });
+  },
+  [TOOL_LINKS__COLLAPSE_SANKEY](state) {
+    return immer(state, draft => {
+      clearSelectedNodes(draft);
+    });
+  },
+  [TOOL_LINKS__SELECT_COLUMN](state, action) {
+    const { columnRole } = action.payload;
+    return immer(state, draft => {
+      const name = pluralize(columnRole);
+      // groups with multiple columns always allow for multiple selection
+      draft[name].selectedNodesIds = nodesPanelInitialState[name].selectedNodesIds;
+      draft[name].excludingMode = nodesPanelInitialState[name].excludingMode;
+    });
+  },
+  [TOOL_LINKS_RESET_SANKEY](state) {
+    return immer(state, draft => clearSelectedNodes(draft));
   }
 };
 

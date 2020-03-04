@@ -117,7 +117,7 @@ is_domestic_consumption",
         end
 
         def value_table_join_clause(value_table)
-          "JOIN #{value_table} ON flows.id = #{value_table}.flow_id"
+          "JOIN partitioned_#{value_table} #{value_table} ON flows.id = #{value_table}.flow_id"
         end
 
         def group_clause

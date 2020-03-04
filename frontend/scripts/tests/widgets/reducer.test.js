@@ -1,4 +1,5 @@
-import reducer, { initialState, defaultEndpoint } from 'react-components/widgets/widgets.reducer';
+import reducer, { defaultEndpoint } from 'react-components/widgets/widgets.reducer';
+import initialState from 'react-components/widgets/widgets.initial-state';
 import {
   WIDGETS__INIT_ENDPOINT,
   WIDGETS__SET_ENDPOINT_DATA,

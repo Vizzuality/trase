@@ -1,35 +1,32 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
-import DashboardPanel from 'react-components/dashboard-element/dashboard-panel';
 import DashboardWelcome from 'react-components/dashboard-element/dashboard-welcome/dashboard-welcome.component';
 import Button from 'react-components/shared/button/button.component';
 import TagsGroup from 'react-components/shared/tags-group';
 import RecolorBy from 'react-components/shared/recolor-by';
 import Dropdown from 'react-components/shared/dropdown';
 import YearsRangeDropdown from 'react-components/shared/years-range-dropdown';
-import DashboardWidget from 'react-components/dashboard-element/dashboard-widget';
 import UrlSerializer from 'react-components/shared/url-serializer';
 import InView from 'react-components/shared/in-view.component';
 import cx from 'classnames';
 import Heading from 'react-components/shared/heading';
-import dashboardElementSerializer from 'react-components/dashboard-element/dashboard-element.serializers';
-import nodesPanelSerializer from 'react-components/nodes-panel/nodes-panel.serializers';
 import { DASHBOARD_STEPS } from 'constants';
 
 import 'react-components/dashboard-element/dashboard-element.scss';
+
+const DashboardWidget = React.lazy(() => import(/* webpackPreload: true */ './dashboard-widget'));
+const DashboardPanel = React.lazy(() => import(/* webpackPreload: true */ './dashboard-panel'));
 
 class DashboardElement extends React.PureComponent {
   static propTypes = {
     loading: PropTypes.bool,
     groupedCharts: PropTypes.object,
     urlProps: PropTypes.object,
+    urlPropHandlers: PropTypes.object,
     dirtyBlocks: PropTypes.object,
-    canProceed: PropTypes.bool.isRequired,
     step: PropTypes.number.isRequired,
     setStep: PropTypes.func.isRequired,
-    editMode: PropTypes.bool.isRequired,
-    goToRoot: PropTypes.func.isRequired,
     modalOpen: PropTypes.bool.isRequired,
     closeModal: PropTypes.func.isRequired,
     reopenPanel: PropTypes.func.isRequired,
@@ -41,30 +38,42 @@ class DashboardElement extends React.PureComponent {
       selectedRecolorBy: PropTypes.object,
       recolorBy: PropTypes.array
     }).isRequired,
+    goToRoot: PropTypes.func.isRequired,
+    goToDashboard: PropTypes.func.isRequired,
+    finishSelection: PropTypes.func.isRequired,
     dynamicSentenceParts: PropTypes.array,
     setSelectedYears: PropTypes.func.isRequired,
     setSelectedResizeBy: PropTypes.func.isRequired,
     setSelectedRecolorBy: PropTypes.func.isRequired
   };
 
+  onContinue = isLastStep => {
+    const { closeModal, finishSelection, goToDashboard, step, setStep } = this.props;
+    if (isLastStep) {
+      finishSelection();
+      goToDashboard();
+      closeModal();
+    } else {
+      setStep(step + 1);
+    }
+  };
+
   renderStep() {
-    const { step, setStep, editMode, closeModal, dirtyBlocks, canProceed } = this.props;
+    const { step, setStep, dirtyBlocks } = this.props;
     const showBackButton = step > DASHBOARD_STEPS.sources;
-    const onContinue = step === DASHBOARD_STEPS.importers ? closeModal : () => setStep(step + 1);
-    if (step === DASHBOARD_STEPS.welcome && !editMode) {
+
+    if (step === DASHBOARD_STEPS.welcome && (!dirtyBlocks.countries || !dirtyBlocks.commodities)) {
       return <DashboardWelcome onContinue={() => setStep(step + 1)} />;
     }
     return (
-      <DashboardPanel
-        step={step}
-        editMode={editMode}
-        canProceed={canProceed}
-        onContinue={onContinue}
-        dirtyBlocks={dirtyBlocks}
-        onBack={showBackButton ? () => setStep(step - 1) : undefined}
-        setStep={setStep}
-        closeModal={closeModal}
-      />
+      <Suspense fallback={null}>
+        <DashboardPanel
+          step={step}
+          onContinue={this.onContinue}
+          onBack={showBackButton ? () => setStep(step - 1) : undefined}
+          setStep={setStep}
+        />
+      </Suspense>
     );
   }
 
@@ -83,10 +92,18 @@ class DashboardElement extends React.PureComponent {
   }
 
   renderDashboardModal() {
-    const { editMode, goToRoot, modalOpen, closeModal, canProceed } = this.props;
-    const onClose = editMode && canProceed ? closeModal : goToRoot;
+    const { goToRoot, setStep, modalOpen, closeModal, dirtyBlocks, step } = this.props;
+    const onClose = () => {
+      if (dirtyBlocks.countries && dirtyBlocks.commodities) {
+        closeModal();
+      } else if (ALWAYS_DISPLAY_DASHBOARD_INFO && step > DASHBOARD_STEPS.welcome) {
+        setStep(DASHBOARD_STEPS.welcome);
+      } else {
+        goToRoot();
+      }
+    };
     return (
-      <SimpleModal isOpen={modalOpen} onClickClose={onClose}>
+      <SimpleModal isOpen={modalOpen} onClickClose={onClose} closeLabel="cancel">
         {this.renderStep()}
       </SimpleModal>
     );
@@ -116,11 +133,13 @@ class DashboardElement extends React.PureComponent {
             ref={ref}
           >
             {(widgetIndex < 2 || inView) && (
-              <DashboardWidget
-                chart={chart}
-                selectedRecolorBy={filters.selectedRecolorBy}
-                grouping={groupedCharts.groupings[chart.groupingId]}
-              />
+              <Suspense fallback={null}>
+                <DashboardWidget
+                  chart={chart}
+                  selectedRecolorBy={filters.selectedRecolorBy}
+                  grouping={groupedCharts.groupings[chart.groupingId]}
+                />
+              </Suspense>
             )}
           </div>
         )}
@@ -135,6 +154,7 @@ class DashboardElement extends React.PureComponent {
       modalOpen,
       filters,
       urlProps,
+      urlPropHandlers,
       reopenPanel,
       setSelectedYears,
       setSelectedResizeBy,
@@ -233,13 +253,7 @@ class DashboardElement extends React.PureComponent {
             </section>
           )}
         </div>
-        <UrlSerializer
-          urlProps={urlProps}
-          urlPropHandlers={{
-            ...dashboardElementSerializer.urlPropHandlers,
-            ...nodesPanelSerializer.urlPropHandlers
-          }}
-        />
+        <UrlSerializer urlProps={urlProps} urlPropHandlers={urlPropHandlers} />
       </div>
     );
   }

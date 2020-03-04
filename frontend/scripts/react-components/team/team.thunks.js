@@ -1,5 +1,5 @@
-import { getTeamData } from 'react-components/team/team.actions';
+import { teamActions } from 'react-components/team/team.register';
 
 export default function(dispatch) {
-  return dispatch(getTeamData());
+  return dispatch(teamActions.getTeamData());
 }

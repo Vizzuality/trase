@@ -1,27 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Widget config parse selectors getColors return the colors using the default ramp 1`] = `
-Array [
-  "#ea6869",
-  "#ffeb8b",
-  "#2d586e",
-  "#007d29",
-  "#b4008a",
-  "#06ff67",
-  "#8339aa",
-  "#ffb700",
-  "#fc7839",
-  "#67caf1",
-  "#e1228c",
-]
-`;
+exports[`Widget config parse selectors getColors return the colors using the default ramp 1`] = `undefined`;
 
 exports[`Widget config parse selectors getColors return the colors using the default ramp when chart type is sentence 1`] = `undefined`;
 
 exports[`Widget config parse selectors getColors returns the pie legend colors if the chartType is pie 1`] = `
 Array [
   Object {
-    "color": "#C2E699",
+    "color": "#c2e699",
     "label": "Company commitment",
   },
   Object {
@@ -29,7 +15,7 @@ Array [
     "label": "None",
   },
   Object {
-    "color": "#1D6837",
+    "color": "#1d6837",
     "label": "Soy Moratorium",
   },
 ]
@@ -38,7 +24,7 @@ Array [
 exports[`Widget config parse selectors getColors returns the zero deforestation commitment colors 1`] = `
 Array [
   Object {
-    "color": "#C2E699",
+    "color": "#c2e699",
     "label": "Company commitment",
   },
   Object {
@@ -46,7 +32,7 @@ Array [
     "label": "None",
   },
   Object {
-    "color": "#1D6837",
+    "color": "#1d6837",
     "label": "Soy Moratorium",
   },
 ]
@@ -95,7 +81,7 @@ Object {
   },
   "colors": Array [
     Object {
-      "color": "#C2E699",
+      "color": "#c2e699",
       "label": "Company commitment",
     },
     Object {
@@ -103,7 +89,7 @@ Object {
       "label": "None",
     },
     Object {
-      "color": "#1D6837",
+      "color": "#1d6837",
       "label": "Soy Moratorium",
     },
   ],
@@ -155,9 +141,9 @@ Object {
     "bars": Object {
       "x0": Object {
         "barSize": 10,
-        "fill": "#C2E699",
+        "fill": "#c2e699",
         "interval": "preserveStartEnd",
-        "stroke": "#C2E699",
+        "stroke": "#c2e699",
       },
       "x1": Object {
         "barSize": 10,
@@ -167,9 +153,9 @@ Object {
       },
       "x2": Object {
         "barSize": 10,
-        "fill": "#1D6837",
+        "fill": "#1d6837",
         "interval": "preserveStartEnd",
-        "stroke": "#1D6837",
+        "stroke": "#1d6837",
       },
     },
   },

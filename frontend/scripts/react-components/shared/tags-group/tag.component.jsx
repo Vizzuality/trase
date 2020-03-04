@@ -7,24 +7,28 @@ import { translateText } from 'utils/transifex';
 
 function Tag(props) {
   const {
+    as,
     part,
+    size,
     clearPanel,
     spaced,
     removeOption,
     clearSingleItem,
     getOptions,
     color,
+    readOnly,
     isPartReadOnly,
-    placement
+    placement,
+    showDropdown
   } = props;
 
-  const readOnly = isPartReadOnly(part);
+  const isReadOnly = typeof readOnly !== 'undefined' ? readOnly : isPartReadOnly(part);
 
   if (!part.value || part.value.length === 0) {
     return null;
   }
 
-  if (part.value.length > 1) {
+  if (part.value.length > 1 && showDropdown) {
     return (
       <Dropdown
         showSelected
@@ -32,16 +36,18 @@ function Tag(props) {
         options={getOptions(part)}
         variant="sentence"
         placement={placement}
-        readOnly={readOnly}
+        readOnly={isReadOnly}
         onChange={option => removeOption(part, option)}
-        selectedValueOverride={`${part.value.length} ${part.name || part.panel}`}
+        selectedValueOverride={translateText(`${part.value.length} ${part.name || part.panel}`)}
       />
     );
   }
 
+  const Component = as || Heading;
+
   return (
-    <Heading
-      size="md"
+    <Component
+      size={size}
       as="span"
       weight="bold"
       align="center"
@@ -52,7 +58,9 @@ function Tag(props) {
         '-spaced': spaced
       })}
     >
-      {translateText(part.value[0].name)}
+      {part.value.length > 1
+        ? translateText(`${part.value.length} ${part.name || part.panel}`)
+        : translateText(part.value[0].name)}
       {!readOnly && clearPanel && (
         <button
           key={`button${part.id}`}
@@ -64,20 +72,29 @@ function Tag(props) {
           </svg>
         </button>
       )}
-    </Heading>
+    </Component>
   );
 }
 
 Tag.propTypes = {
+  size: PropTypes.string,
   spaced: PropTypes.bool,
   part: PropTypes.object,
   color: PropTypes.string,
-  placement: PropTypes.string,
-  removeOption: PropTypes.func.isRequired,
-  clearSingleItem: PropTypes.func.isRequired,
   clearPanel: PropTypes.func,
   getOptions: PropTypes.func,
-  isPartReadOnly: PropTypes.bool.isRequired
+  placement: PropTypes.string,
+  showDropdown: PropTypes.bool,
+  readOnly: PropTypes.bool,
+  removeOption: PropTypes.func.isRequired,
+  clearSingleItem: PropTypes.func.isRequired,
+  isPartReadOnly: PropTypes.bool.isRequired,
+  as: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
+};
+
+Tag.defaultProps = {
+  size: 'md',
+  showDropdown: true
 };
 
 export default Tag;

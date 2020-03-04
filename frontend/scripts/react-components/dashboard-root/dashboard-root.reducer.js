@@ -3,11 +3,7 @@ import {
   DASHBOARD_ROOT__SET_DASHBOARD_TEMPLATES,
   DASHBOARD_ROOT__SET_LOADING_DASHBOARD_TEMPLATES
 } from './dashboard-root.actions';
-
-const initialState = {
-  dashboardTemplates: [],
-  loadingDashboardTemplates: true
-};
+import initialState from './dashboard-root.initial-state';
 
 const dashboardRootReducer = {
   [DASHBOARD_ROOT__SET_DASHBOARD_TEMPLATES](state, action) {
@@ -22,7 +18,7 @@ const dashboardRootReducer = {
 
 const dashboardRootReducerTypes = PropTypes => ({
   dashboardTemplates: PropTypes.arrayOf(PropTypes.object).isRequired,
-  loadingDashboardTemplates: PropTypes.arrayOf(PropTypes.object).isRequired
+  loadingDashboardTemplates: PropTypes.any
 });
 
 export default createReducer(initialState, dashboardRootReducer, dashboardRootReducerTypes);

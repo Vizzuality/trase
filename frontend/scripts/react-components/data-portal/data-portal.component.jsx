@@ -13,6 +13,11 @@ import {
   getURLFromParams
 } from 'utils/getURLFromParams';
 
+import 'styles/layouts/l-data.scss';
+import 'styles/components/data/custom-dataset.scss';
+import 'styles/components/shared/veil.scss';
+import 'styles/components/shared/modal.scss';
+
 const initialState = {
   formVisible: false,
   selectedYears: [],
@@ -337,6 +342,9 @@ function DataPortal(props) {
 }
 
 DataPortal.propTypes = {
+  selectedCountry: PropTypes.number,
+  selectedCommodity: PropTypes.number,
+  loadDataDownloadLists: PropTypes.func.isRequired,
   autoCompleteCountries: PropTypes.string,
   enabledContexts: PropTypes.array.isRequired,
   consumptionCountries: PropTypes.array,

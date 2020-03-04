@@ -1,4 +1,4 @@
-import { TOGGLE_MAP_LAYERS_MENU, SET_CONTEXT } from 'actions/app.actions';
+import { TOGGLE_MAP_LAYERS_MENU, SET_CONTEXT } from 'app/app.actions';
 import {
   SELECT_CONTEXTUAL_LAYERS,
   SELECT_YEARS,
@@ -12,7 +12,8 @@ import {
   TOOL_LINKS__SET_SELECTED_RESIZE_BY,
   TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
   TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
-  TOOL_LINKS__CHANGE_EXTRA_COLUMN
+  TOOL_LINKS__CHANGE_EXTRA_COLUMN,
+  TOOL_LINKS__SWITCH_TOOL
 } from 'react-components/tool-links/tool-links.actions';
 
 export default [
@@ -111,5 +112,11 @@ export default [
     action: 'Select contextual layers',
     category: 'Sankey',
     getPayload: action => action.payload.contextualLayers.join(', ')
+  },
+  {
+    type: TOOL_LINKS__SWITCH_TOOL,
+    action: 'Toggle tool',
+    category: 'Sankey',
+    getPayload: action => action.payload.section || 'sankey'
   }
 ];

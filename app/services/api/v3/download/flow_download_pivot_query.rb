@@ -64,6 +64,7 @@ module Api
           ] + @categories_names_with_type
         end
 
+        # rubocop:disable Metrics/MethodLength
         def pivot(query)
           initialize_categories_names
 
@@ -81,6 +82,7 @@ module Api
           Api::V3::Flow.
             select(outer_select_columns).from(crosstab_sql)
         end
+        # rubocop:enable Metrics/MethodLength
       end
     end
   end

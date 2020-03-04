@@ -14,8 +14,8 @@ $card-min-width: 180px;
   }
 
   .featured-cards-container {
-    margin-top: 5px;
-    background-color: $mid-light-gray;
+    padding: 5px 0;
+    background-color: $white;
     width: 100%;
     height: 120px;
 
@@ -25,10 +25,6 @@ $card-min-width: 180px;
       overflow: auto;
       -webkit-overflow-scrolling: touch;
     }
-  }
-
-  .back-button {
-    cursor: pointer;
   }
 
   .animated-cards-container {
@@ -54,14 +50,35 @@ $card-min-width: 180px;
 
 .c-featured-card {
   margin: 10px 0 10px;
+  background-color: $strong-pink;
+  border-radius: 5px;
 
   .featured-card-button {
     height: 100px;
     width: 100%;
     border-radius: 5px;
-    background-color: $white;
     cursor: pointer;
-    padding: 20px;
+    padding: 30px 20px;
+    background-size: auto 90%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .featured-card-country-name {
+    position: relative;
+    padding: 0 20px 0 0;
+    margin: 0 10px 0 0;
+    &::after {
+      position: absolute;
+      content: '';
+      width: 10px;
+      height: 10px;
+      top: 50%;
+      right: 0;
+      border-radius: 100%;
+      background-color: $white;
+      transform: translateY(-50%);
+    }
   }
 
   .featured-card-text {

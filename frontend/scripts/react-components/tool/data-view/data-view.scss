@@ -1,0 +1,36 @@
+@import 'styles/settings';
+
+$data-view-two-columns-limit: 1130px;
+
+.c-data-view {
+  height: 100%;
+  overflow: auto;
+  margin: 15px 15px 0;
+
+  .data-view-placeholder-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 480px;
+    width: 100%;
+    background-color: $white;
+    border-radius: 6px;
+    margin: 56px 0 0;
+    box-shadow: $box-shadow;
+  }
+
+  .data-view-widgets {
+    margin: 8px 0 0;
+  }
+
+  .data-view-placeholder,
+  .data-view-widgets {
+    padding: 0 0 16px;
+  }
+
+  .dashboard-widget-container {
+   @media screen and (max-width: $data-view-two-columns-limit){
+     min-width: 100%;
+   }
+  }
+}

@@ -1,38 +1,42 @@
-require 'zip'
-
 module Zipfile
-  def self.extract_data_file(zipfile_content, format)
-    Zip::File.open_buffer(zipfile_content) do |zipfile|
-      entry = zipfile.glob("*.#{format}").first
-      break nil unless entry
-
-      break entry.get_input_stream.read
-    end
-  end
-
   def self.extract_data_file_to_path(zipfile_path, file_path, format)
-    Zip::File.open(zipfile_path) do |zipfile|
-      entry = zipfile.glob("*.#{format}").first
-      break entry&.extract(file_path)
-    end
-  end
-
-  def self.zip_dir(src_dir, archive)
-    FileUtils.rm archive, force: true
-
-    Zip::File.open(archive, 'w') do |zipfile|
-      Dir["#{src_dir}/**/**"].reject { |f| f == archive }.each do |file|
-        zipfile.add(file.sub(src_dir + '/', ''), file)
+    File.open(zipfile_path, 'rb') do |f|
+      entries = ZipTricks::FileReader.read_zip_structure(io: f)
+      entries.each do |entry|
+        if entry.filename =~ /.+\.#{format}$/
+          File.open(file_path, 'wb') do |extracted_file|
+            ex = entry.extractor_from(f)
+            extracted_file << ex.extract(1024 * 1024) until ex.eof?
+          end
+          break
+        end
       end
     end
   end
 
-  def self.unzip_archive(archive, dest_dir)
-    Zip::File.open(archive) do |zip_file|
-      zip_file.each do |f|
-        f_path = File.join(dest_dir, f.name)
-        FileUtils.mkdir_p(File.dirname(f_path))
-        zip_file.extract(f, f_path) unless File.exist?(f_path)
+  def self.zip_dir(src_dir, zipfile_path)
+    out = File.new(zipfile_path, 'wb')
+    ZipTricks::Streamer.open(out) do |stream|
+      Dir["#{src_dir}/**/**"].reject { |f| File.directory?(f) }.each do |file|
+        filename = file.sub(src_dir + '/', '')
+        stream.write_deflated_file(filename) do |writer|
+          File.open(file, 'rb'){ |source| IO.copy_stream(source, writer) }
+        end
+      end
+    end
+    out.close
+  end
+
+  def self.unzip_archive(zipfile_path, dest_dir)
+    File.open(zipfile_path, 'rb') do |f|
+      entries = ZipTricks::FileReader.read_zip_structure(io: f)
+      entries.each do |entry|
+        file_path = File.join(dest_dir, entry.filename)
+        FileUtils.mkdir_p(File.dirname(file_path))
+        File.open(file_path, 'wb') do |extracted_file|
+          ex = entry.extractor_from(f)
+          extracted_file << ex.extract(1024 * 1024) until ex.eof?
+        end
       end
     end
   end

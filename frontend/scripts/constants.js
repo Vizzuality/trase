@@ -73,12 +73,12 @@ export const CHOROPLETH_COLORS = {
   bluered8: [
     '#246AB6',
     '#5488C0',
+    '#79A8D0',
     '#9FCAE1',
-    '#E5F5F9',
-    '#FFFECC',
-    '#FFE6A4',
-    '#FFA16F',
-    '#E54935'
+    '#FDAE61',
+    '#D72F27',
+    '#a50026',
+    '#6F0119'
   ],
   redblue: ['#E54935', '#FFBD78', '#FFFECC', '#C2DFED', '#79A8D0'],
   greenred: ['#70C67A', '#B0DE82', '#FFFECC', '#FFBD78', '#E54935'],
@@ -237,9 +237,16 @@ export const BREAKPOINTS = {
   laptop: 1024
 };
 
-export const LOGISTICS_MAP_YEARS = Array.from({ length: 12 })
-  .fill(2016)
-  .map((y, i) => ({ value: y - i, label: `${y - i}` }));
+const buildYears = (start, length = 1) =>
+  Array.from({ length })
+    .fill(start)
+    .map((y, i) => ({ value: y + i, label: `${y + i}` }));
+
+export const LOGISTICS_MAP_YEARS = {
+  palmOil: buildYears(2016),
+  soy: buildYears(2005, 12),
+  cattle: buildYears(2012, 6)
+};
 
 export const LOGISTICS_MAP_HUBS = [
   { value: 'soy', label: 'Soy' },
@@ -261,6 +268,16 @@ export const EXPLORE_STEPS = {
 };
 
 export const DASHBOARD_STEPS = {
+  welcome: 0,
+  countries: 1,
+  sources: 1,
+  commodities: 2,
+  destinations: 3,
+  exporters: 4,
+  importers: 5
+};
+
+export const TOOL_STEPS = {
   welcome: 0,
   countries: 1,
   sources: 1,
@@ -320,7 +337,7 @@ export const TOOL_LAYOUT = {
 };
 
 export const SANKEY_OFFSETS = {
-  height: 175,
+  height: 227,
   width: 120,
   splittedWidth: 392
 };

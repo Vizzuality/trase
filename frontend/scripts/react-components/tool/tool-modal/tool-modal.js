@@ -1,11 +1,8 @@
 import { connect, batch } from 'react-redux';
 import ToolModal from 'react-components/tool/tool-modal/tool-modal.component';
-import { setActiveModal } from 'react-components/tool/tool.actions';
-import {
-  selectResizeBy,
-  selectRecolorBy,
-  setToolFlowsLoading
-} from 'react-components/tool-links/tool-links.actions';
+import { toolLayersActions } from 'react-components/tool-layers/tool-layers.register';
+import { toolLinksActions } from 'react-components/tool-links/tool-links.register';
+import { nodesPanelActions } from 'react-components/nodes-panel/nodes-panel.register';
 import { getItems, getSelectedItem } from 'react-components/tool/tool-modal/tool-modal.selectors';
 
 const mapStateToProps = state => ({
@@ -17,25 +14,28 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   const onChange = {
     indicator: recolorBy => {
       batch(() => {
-        dispatch(setToolFlowsLoading(true));
-        dispatch(selectRecolorBy(recolorBy));
-        dispatch(setActiveModal(null));
+        dispatch(toolLinksActions.setToolFlowsLoading(true));
+        dispatch(toolLinksActions.setToolChartsLoading(true));
+        dispatch(toolLinksActions.selectRecolorBy(recolorBy));
+        dispatch(toolLayersActions.setActiveModal(null));
       });
     },
     unit: resizeBy => {
       batch(() => {
-        dispatch(selectResizeBy(resizeBy));
-        dispatch(setActiveModal(null));
+        dispatch(toolLinksActions.selectResizeBy(resizeBy));
+        dispatch(toolLayersActions.setActiveModal(null));
       });
+    },
+    viewMode: viewMode => {
+      dispatch(toolLinksActions.selectView(viewMode.value));
+      dispatch(toolLayersActions.setActiveModal(null));
     }
   }[ownProps.activeModal];
   return {
     onChange,
-    setActiveModal: activeModalId => dispatch(setActiveModal(activeModalId))
+    finishSelection: () => dispatch(nodesPanelActions.finishSelection()),
+    setActiveModal: activeModalId => dispatch(toolLayersActions.setActiveModal(activeModalId))
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ToolModal);
+export default connect(mapStateToProps, mapDispatchToProps)(ToolModal);

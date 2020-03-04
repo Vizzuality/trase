@@ -5,16 +5,10 @@ import {
   DATA_PORTAL__LOAD_EXPORTERS,
   DATA_PORTAL__LOAD_INDICATORS
 } from 'react-components/data-portal/data-portal.actions';
-import createReducer from 'utils/createReducer';
 import immer from 'immer';
+import createReducer from 'utils/createReducer';
 
-const initialState = {
-  country: null,
-  commodity: null,
-  exporters: [],
-  consumptionCountries: [],
-  indicators: []
-};
+import initialState from './data-portal.initial-state';
 
 const dataPortalReducer = {
   [DATA_PORTAL__SET_SELECTED_COUNTRY_ID](state, action) {

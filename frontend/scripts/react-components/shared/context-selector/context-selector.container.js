@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { toggleDropdown, selectContextById } from 'actions/app.actions';
+import { appActions } from 'app/app.register';
 import ContextSelector from 'react-components/shared/context-selector/context-selector.component';
 
 const mapStateToProps = (state, ownProps) => {
@@ -24,13 +24,10 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  selectContextById: selectedContextId => dispatch(selectContextById(selectedContextId)),
+  selectContextById: selectedContextId => dispatch(appActions.selectContextById(selectedContextId)),
   toggleContextSelectorVisibility: id => {
-    dispatch(toggleDropdown(id));
+    dispatch(appActions.toggleDropdown(id));
   }
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ContextSelector);
+export default connect(mapStateToProps, mapDispatchToProps)(ContextSelector);

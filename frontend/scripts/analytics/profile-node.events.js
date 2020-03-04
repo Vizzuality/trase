@@ -1,5 +1,5 @@
 import { WIDGETS__SET_ENDPOINT_DATA } from 'react-components/widgets/widgets.actions';
-import { PROFILE_NODE__ON_PDF_DOWNLOAD } from 'react-components/profile-node/profile-node.actions';
+import { APP__ON_PDF_DOWNLOAD } from 'app/app.actions';
 import { GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
 
 export default [
@@ -23,7 +23,7 @@ export default [
     shouldSend: action => action.payload.endpoint === GET_NODE_SUMMARY_URL
   },
   {
-    type: PROFILE_NODE__ON_PDF_DOWNLOAD,
+    type: APP__ON_PDF_DOWNLOAD,
     action: 'Download PDF',
     category: 'profile',
     getPayload(action, state) {

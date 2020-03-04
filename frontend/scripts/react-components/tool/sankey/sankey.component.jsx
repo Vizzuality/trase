@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import formatValue from 'utils/formatValue';
-import getNodeMeta from 'reducers/helpers/getNodeMeta';
+import getNodeMeta from 'app/helpers/getNodeMeta';
 import Heading from 'react-components/shared/heading';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import { TOOL_LAYOUT, MIN_COLUMNS_NUMBER } from 'constants';
@@ -372,8 +372,10 @@ function Sankey(props) {
           <defs>
             <Defs.IsAggregate />
             <Defs.GradientAnimation
-              selectedNodesIds={selectedNodesIds}
-              selectedRecolorBy={selectedRecolorBy}
+              candyMode={
+                window._TRASE_CANDY_SANKEY &&
+                (selectedRecolorBy && selectedRecolorBy.name === 'BIOME')
+              }
             />
           </defs>
           <g className="sankey-container">
@@ -391,7 +393,7 @@ function Sankey(props) {
                 ))}
               {loading && (
                 <Defs.LinksPlaceHolder
-                  height={placeholderHeight}
+                  height={maxHeight > 0 ? maxHeight : placeholderHeight}
                   gapBetweenColumns={gapBetweenColumns}
                   sankeyColumnsWidth={sankeyColumnsWidth}
                   size={extraColumnId ? MIN_COLUMNS_NUMBER : MIN_COLUMNS_NUMBER - 1}
@@ -414,7 +416,7 @@ function Sankey(props) {
                 ))}
               {loading && (
                 <Defs.ColumnsPlaceholder
-                  height={placeholderHeight}
+                  height={maxHeight > 0 ? maxHeight : placeholderHeight}
                   gapBetweenColumns={gapBetweenColumns}
                   sankeyColumnsWidth={sankeyColumnsWidth}
                   size={extraColumnId ? MIN_COLUMNS_NUMBER + 1 : MIN_COLUMNS_NUMBER}

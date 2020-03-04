@@ -8,7 +8,6 @@ import {
   GET_ALL_NODES_URL
 } from 'utils/getURLFromParams';
 import { fetchWithCancel, setLoadingSpinner } from 'utils/saga-utils';
-import { getDashboardSelectedYears } from 'react-components/dashboard-element/dashboard-element.selectors';
 import { DASHBOARD_STEPS } from 'constants';
 import {
   setMoreData,
@@ -19,7 +18,20 @@ import {
   setTabs,
   setNoData
 } from './nodes-panel.actions';
-import { makeGetActiveTab } from './nodes-panel.selectors';
+import {
+  getNodesPanelDraftContext,
+  getCommoditiesPreviousSteps,
+  getDestinationsPreviousSteps,
+  getExportersPreviousSteps,
+  getImportersPreviousSteps,
+  getSourcesPreviousSteps,
+  getCommoditiesDraftPreviousSteps,
+  getDestinationsDraftPreviousSteps,
+  getExportersDraftPreviousSteps,
+  getImportersDraftPreviousSteps,
+  getSourcesDraftPreviousSteps,
+  makeGetActiveTab
+} from './nodes-panel.selectors';
 import modules from './nodes-panel.modules';
 
 const getSourcesTab = makeGetActiveTab('sources');
@@ -28,7 +40,7 @@ const getImportersTab = makeGetActiveTab('importers');
 
 export function* getPanelParams(optionsType, options = {}) {
   const state = yield select();
-  const { page, isOverview } = options;
+  const { page, isOverview, initialLoad } = options;
 
   const sourcesTab = getSourcesTab(state);
   const exportersTab = getExportersTab(state);
@@ -38,7 +50,8 @@ export function* getPanelParams(optionsType, options = {}) {
     exporters: exportersTab || null,
     importers: importersTab || null
   }[optionsType];
-  const [startYear, endYear] = getDashboardSelectedYears(state);
+  const draftContext = getNodesPanelDraftContext(state);
+  const [startYear, endYear] = [draftContext?.defaultYear, draftContext?.defaultYear];
   const activeItemParams = items => items.join() || undefined;
   const params = {
     page,
@@ -48,51 +61,52 @@ export function* getPanelParams(optionsType, options = {}) {
     node_types_ids: nodeTypesIds
   };
   const currentStep = DASHBOARD_STEPS[optionsType];
-
+  const nodeId = isOverview || initialLoad ? 'selectedNodeId' : 'draftSelectedNodeId';
+  const nodesIds = isOverview || initialLoad ? 'selectedNodesIds' : 'draftSelectedNodesIds';
   if (currentStep === DASHBOARD_STEPS.sources && optionsType !== 'countries') {
-    params.countries_ids = state.nodesPanel.countries.selectedNodeId;
+    params.countries_ids = state.nodesPanel.countries[nodeId];
   }
 
   if (currentStep > DASHBOARD_STEPS.sources || isOverview) {
     const panel = state.nodesPanel.sources;
-    params.countries_ids = state.nodesPanel.countries.selectedNodeId;
+    params.countries_ids = state.nodesPanel.countries[nodeId];
     if (panel.excludingMode) {
-      params.excluded_sources_ids = activeItemParams(panel.selectedNodesIds);
+      params.excluded_sources_ids = activeItemParams(panel[nodesIds]);
     } else {
-      params.sources_ids = activeItemParams(panel.selectedNodesIds);
+      params.sources_ids = activeItemParams(panel[nodesIds]);
     }
   }
 
   if (currentStep > DASHBOARD_STEPS.commodities || isOverview) {
-    params.commodities_ids = state.nodesPanel.commodities.selectedNodeId;
+    params.commodities_ids = state.nodesPanel.commodities[nodeId];
   }
 
   if (currentStep > DASHBOARD_STEPS.destinations || isOverview) {
     const panel = state.nodesPanel.destinations;
     if (panel.excludingMode) {
-      params.excluded_destinations_ids = activeItemParams(panel.selectedNodesIds);
+      params.excluded_destinations_ids = activeItemParams(panel[nodesIds]);
     } else {
-      params.destinations_ids = activeItemParams(panel.selectedNodesIds);
+      params.destinations_ids = activeItemParams(panel[nodesIds]);
     }
   }
 
   if (currentStep > DASHBOARD_STEPS.exporters || isOverview) {
     const panel = state.nodesPanel.exporters;
     if (panel.excludingMode) {
-      params.excluded_exporters_ids = activeItemParams(panel.selectedNodesIds);
+      params.excluded_exporters_ids = activeItemParams(panel[nodesIds]);
     } else {
-      params.exporters_ids = activeItemParams(panel.selectedNodesIds);
+      params.exporters_ids = activeItemParams(panel[nodesIds]);
     }
   }
 
   if (isOverview) {
     const panel = state.nodesPanel.importers;
     if (panel.excludingMode) {
-      params.excluded_importers_ids = activeItemParams(panel.selectedNodesIds);
+      params.excluded_importers_ids = activeItemParams(panel[nodesIds]);
     } else {
-      params.importers_ids = activeItemParams(panel.selectedNodesIds);
+      params.importers_ids = activeItemParams(panel[nodesIds]);
     }
-  } else {
+  } else if (startYear && endYear) {
     const currentPanel = state.nodesPanel[optionsType];
     params.order_by = currentPanel.orderBy;
   }
@@ -100,13 +114,10 @@ export function* getPanelParams(optionsType, options = {}) {
   return params;
 }
 
-export function* getData(name, reducer, options) {
+export function* getData(name, reducer, initialLoad) {
   const { page } = reducer;
 
-  const params = yield getPanelParams(name, {
-    page,
-    ...options
-  });
+  const params = yield getPanelParams(name, { page, initialLoad });
 
   if (params.node_types_ids === null) {
     yield put(setNoData(true, name));
@@ -115,15 +126,37 @@ export function* getData(name, reducer, options) {
 
   const url = getURLFromParams(GET_DASHBOARD_OPTIONS_URL, params);
   const task = yield fork(setLoadingSpinner, 750, setLoadingItems(true, name));
-  yield put(setData(null, name));
+  yield put(setData(null, null, name));
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
     if (task.isRunning()) {
       task.cancel();
     }
-    yield put(setData(data.data, name));
-    yield put(setNoData(!data.data?.length, name));
+    const previousStepSelector = {
+      countries: () => true,
+      sources: getSourcesDraftPreviousSteps,
+      commodities: getCommoditiesDraftPreviousSteps,
+      destinations: getDestinationsDraftPreviousSteps,
+      exporters: getExportersDraftPreviousSteps,
+      importers: getImportersDraftPreviousSteps
+    };
+
+    const initialPreviousStepSelector = {
+      countries: () => true,
+      sources: getSourcesPreviousSteps,
+      commodities: getCommoditiesPreviousSteps,
+      destinations: getDestinationsPreviousSteps,
+      exporters: getExportersPreviousSteps,
+      importers: getImportersPreviousSteps
+    };
+
+    const getPreviousStep = initialLoad ? initialPreviousStepSelector : previousStepSelector;
+    const previousStep = yield select(getPreviousStep[name]);
+    yield put(setData(data.data, previousStep, name));
+    if (!data.data?.length) {
+      yield put(setNoData(!data.data?.length, name));
+    }
   } catch (e) {
     console.error('Error', e);
   } finally {

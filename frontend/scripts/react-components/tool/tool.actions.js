@@ -4,15 +4,15 @@ import { feature as topojsonFeature } from 'topojson';
 import { CARTO_NAMED_MAPS_BASE_URL } from 'constants';
 import { GET_NODE_ATTRIBUTES_URL, getURLFromParams } from 'utils/getURLFromParams';
 import contextLayersCarto from 'named-maps/tool_named_maps_carto';
-import getNodeIdFromGeoId from 'actions/helpers/getNodeIdFromGeoId';
-import setGeoJSONMeta from 'actions/helpers/setGeoJSONMeta';
+import getNodeIdFromGeoId from 'utils/getNodeIdFromGeoId';
+import setGeoJSONMeta from 'utils/setGeoJSONMeta';
 import compact from 'lodash/compact';
 import { getVisibleNodes } from 'react-components/tool-links/tool-links.selectors';
 import {
   getSelectedGeoColumn,
   getSelectedMapDimensionsUids
 } from 'react-components/tool-layers/tool-layers.selectors';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 
 import {
   expandSankey,
@@ -28,9 +28,7 @@ export const SELECT_UNIT_LAYERS = 'SELECT_UNIT_LAYERS';
 export const SELECT_CONTEXTUAL_LAYERS = 'SELECT_CONTEXTUAL_LAYERS';
 export const SELECT_BASEMAP = 'SELECT_BASEMAP';
 export const CHANGE_LAYOUT = 'CHANGE_LAYOUT';
-export const SAVE_MAP_VIEW = 'SAVE_MAP_VIEW';
 export const SET_SANKEY_SIZE = 'SET_SANKEY_SIZE';
-export const SET_ACTIVE_MODAL = 'SET_ACTIVE_MODAL';
 export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
 
 export function loadMapVectorData() {
@@ -49,28 +47,33 @@ export function loadMapVectorData() {
       if (geoColumn.geometryNodeTypeId === null) {
         const selectedContext = getSelectedContext(getState());
         const countryName = selectedContext.countryName;
-        const vectorLayerURL = `vector_layers/${countryName}_${geoColumn.name.replace(
+        const vectorLayerURL = `/vector_layers/${countryName}_${geoColumn.name.replace(
           / /g,
           '_'
         )}.topo.json`;
         return axios
           .get(vectorLayerURL)
           .then(res => res.data)
-          .then(topoJSON => {
-            const [key] = Object.keys(topoJSON.objects);
-            const geoJSON = topojsonFeature(topoJSON, topoJSON.objects[key]);
-            setGeoJSONMeta(
-              geoJSON,
-              getState().toolLinks.data.nodes,
-              getState().toolLinks.data.nodesByColumnGeoId,
-              geoColumn.id
-            );
-            return {
-              geoJSON,
-              ...vectorData
-            };
-          })
-          .catch(() => Promise.reject(vectorLayerURL));
+          .then(
+            topoJSON =>
+              new Promise(resolve => {
+                const [key] = topoJSON.objects && Object.keys(topoJSON.objects);
+                setTimeout(() => {
+                  const geoJSON = topojsonFeature(topoJSON, topoJSON.objects[key]);
+                  setGeoJSONMeta(
+                    geoJSON,
+                    getState().toolLinks.data.nodes,
+                    getState().toolLinks.data.nodesByColumnGeoId,
+                    geoColumn.id
+                  );
+                  resolve({
+                    geoJSON,
+                    ...vectorData
+                  });
+                }, 0);
+              })
+          )
+          .catch(e => console.error(e) || Promise.reject(vectorLayerURL));
       }
       return Promise.resolve(vectorData);
     });
@@ -186,16 +189,12 @@ export function selectExpandedNode(param) {
   const ids = Array.isArray(param) ? param : [param];
   return (dispatch, getState) => {
     const state = getState();
-    const { toolLinks } = state;
     const visibleNodes = getVisibleNodes(state);
     const visibleNodesById =
       visibleNodes?.reduce((acc, next) => ({ ...acc, [next.id]: true }), {}) || {};
     const hasInvisibleNodes = ids.some(id => !visibleNodesById[id]);
-    const isRemovingANodeWhileExpanded =
-      toolLinks.expandedNodesIds.length > 0 &&
-      ids.some(id => toolLinks.selectedNodesIds.includes(id));
 
-    if (hasInvisibleNodes || isRemovingANodeWhileExpanded) {
+    if (hasInvisibleNodes) {
       dispatch(selectNodes(ids));
       dispatch(expandSankey());
     } else {
@@ -231,14 +230,6 @@ export function navigateToProfile(nodeId, contextId) {
       type: 'profileNode',
       payload: { query: { nodeId, contextId }, profileType: node.profileType }
     });
-  };
-}
-
-export function saveMapView(latlng, zoom) {
-  return {
-    type: SAVE_MAP_VIEW,
-    latlng,
-    zoom
   };
 }
 
@@ -323,11 +314,5 @@ export function selectBasemap(selectedBasemap) {
   return {
     type: SELECT_BASEMAP,
     payload: { selectedBasemap }
-  };
-}
-export function setActiveModal(activeModal) {
-  return {
-    type: SET_ACTIVE_MODAL,
-    payload: { activeModal }
   };
 }
