@@ -14,8 +14,8 @@ Object {
   "mapLoading": false,
   "mapView": null,
   "sankeySize": Array [
-    1024,
-    768,
+    632,
+    541,
   ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
@@ -45,8 +45,8 @@ Object {
   "mapLoading": false,
   "mapView": null,
   "sankeySize": Array [
-    1024,
-    768,
+    632,
+    541,
   ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
@@ -76,36 +76,8 @@ Object {
   "mapLoading": false,
   "mapView": null,
   "sankeySize": Array [
-    1024,
-    768,
-  ],
-  "selectedBasemap": null,
-  "selectedMapContextualLayers": null,
-  "selectedMapDimensions": null,
-  "toolLayout": 1,
-}
-`;
-
-exports[`TOOL_LAYERS__SAVE_MAP_VIEW 1`] = `
-Object {
-  "activeModal": null,
-  "data": Object {
-    "mapContextualLayers": Object {},
-    "mapDimensions": Object {},
-    "mapDimensionsGroups": Array [],
-    "mapVectorData": null,
-  },
-  "highlightedNodeCoordinates": null,
-  "linkedGeoIds": Array [],
-  "mapLoading": false,
-  "mapView": Object {
-    "latitude": "-34.40",
-    "longitude": "150.64",
-    "zoom": 2,
-  },
-  "sankeySize": Array [
-    1024,
-    768,
+    632,
+    541,
   ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
@@ -128,8 +100,8 @@ Object {
   "mapLoading": false,
   "mapView": null,
   "sankeySize": Array [
-    1024,
-    768,
+    632,
+    541,
   ],
   "selectedBasemap": Object {
     "id": 10,
@@ -154,8 +126,8 @@ Object {
   "mapLoading": false,
   "mapView": null,
   "sankeySize": Array [
-    1024,
-    768,
+    632,
+    541,
   ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": Array [
@@ -185,8 +157,8 @@ Object {
   "mapLoading": false,
   "mapView": null,
   "sankeySize": Array [
-    1024,
-    768,
+    632,
+    541,
   ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
@@ -209,8 +181,8 @@ Object {
   "mapLoading": true,
   "mapView": null,
   "sankeySize": Array [
-    1024,
-    768,
+    632,
+    541,
   ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
@@ -235,8 +207,8 @@ Object {
   "mapLoading": true,
   "mapView": null,
   "sankeySize": Array [
-    1024,
-    768,
+    632,
+    541,
   ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
@@ -262,8 +234,8 @@ Object {
   "mapLoading": false,
   "mapView": null,
   "sankeySize": Array [
-    1024,
-    768,
+    632,
+    541,
   ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
@@ -271,6 +243,34 @@ Object {
     "quant95",
     null,
   ],
+  "toolLayout": 1,
+}
+`;
+
+exports[`TOOL_LAYERS__SAVE_MAP_VIEW 1`] = `
+Object {
+  "activeModal": null,
+  "data": Object {
+    "mapContextualLayers": Object {},
+    "mapDimensions": Object {},
+    "mapDimensionsGroups": Array [],
+    "mapVectorData": null,
+  },
+  "highlightedNodeCoordinates": null,
+  "linkedGeoIds": Array [],
+  "mapLoading": false,
+  "mapView": Object {
+    "latitude": "-34.40",
+    "longitude": "150.64",
+    "zoom": 2,
+  },
+  "sankeySize": Array [
+    632,
+    541,
+  ],
+  "selectedBasemap": null,
+  "selectedMapContextualLayers": null,
+  "selectedMapDimensions": null,
   "toolLayout": 1,
 }
 `;
@@ -291,8 +291,8 @@ Object {
   "mapLoading": false,
   "mapView": null,
   "sankeySize": Array [
-    1024,
-    768,
+    632,
+    541,
   ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
@@ -315,8 +315,8 @@ Object {
   "mapLoading": false,
   "mapView": null,
   "sankeySize": Array [
-    1024,
-    768,
+    632,
+    541,
   ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
@@ -359,8 +359,8 @@ Object {
   "mapLoading": false,
   "mapView": null,
   "sankeySize": Array [
-    1024,
-    768,
+    632,
+    541,
   ],
   "selectedBasemap": null,
   "selectedMapContextualLayers": null,
