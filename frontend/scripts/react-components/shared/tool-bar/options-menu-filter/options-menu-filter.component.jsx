@@ -32,8 +32,8 @@ OptionsMenuFilter.propTypes = {
   onClick: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   value: PropTypes.string.isRequired,
-  suffix: PropTypes.string.isRequired,
-  className: PropTypes.string.isRequired
+  suffix: PropTypes.string,
+  className: PropTypes.string
 };
 
 export default OptionsMenuFilter;

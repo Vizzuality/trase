@@ -88,7 +88,7 @@ Tag.propTypes = {
   readOnly: PropTypes.bool,
   removeOption: PropTypes.func.isRequired,
   clearSingleItem: PropTypes.func.isRequired,
-  isPartReadOnly: PropTypes.bool.isRequired,
+  isPartReadOnly: PropTypes.func,
   as: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
 };
 
