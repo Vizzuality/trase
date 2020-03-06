@@ -45,7 +45,7 @@ class ActorSummary extends React.PureComponent {
             {name}
           </Text>
           <span id="forest-500-tooltip">
-            <HelpTooltip text={tooltip} position="bottom" />
+            <HelpTooltip text={tooltip} />
           </span>
         </div>
         <div className="value forest-500-score">
@@ -66,7 +66,7 @@ class ActorSummary extends React.PureComponent {
         <Text transform="uppercase" variant="mono" as="div" className="legend">
           {name}
           <span>
-            <HelpTooltip text={tooltip} position="bottom" />
+            <HelpTooltip text={tooltip} />
           </span>
         </Text>
         {value.toLowerCase() !== 'none' ? (
@@ -113,7 +113,7 @@ class ActorSummary extends React.PureComponent {
         <div className="stat-item">
           <Text transform="uppercase" variant="mono" as="div" className="legend">
             {name}
-            {tooltip && <HelpTooltip text={tooltip} position="bottom" />}
+            {tooltip && <HelpTooltip text={tooltip} />}
           </Text>
           <Text as="span" variant="mono" size="lg" weight="bold">
             {formatValue(value, indicatorKey)}

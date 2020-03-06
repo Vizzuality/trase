@@ -1,92 +1,52 @@
-/* eslint-disable jsx-a11y/mouse-events-have-key-events */
-import React, { Component } from 'react';
+/* eslint-disable react/no-danger */
+import React from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
-import Tooltip from 'tooltip.js';
+import Tippy from '@tippy.js/react';
 
+import 'tippy.js/dist/tippy.css';
 import './help-tooltip.scss';
 
-export default class TooltipComponent extends Component {
-  componentDidMount() {
-    this.initTooltip();
-  }
+function HelpTooltipComponent(props) {
+  const { children, referenceComponent: ReferenceComponent, position, text, interactive } = props;
+  const parsedText = interactive ? <div dangerouslySetInnerHTML={{ __html: text }} /> : text;
 
-  componentWillReceiveProps(props) {
-    if (props.text !== this.props.text && this.tooltip) {
-      this.tooltip.updateTitleContent(props.text);
-    }
-  }
-
-  shouldComponentUpdate() {
-    return false;
-  }
-
-  componentWillUnmount() {
-    this.destroyTooltip();
-  }
-
-  initTooltip() {
-    const { position, text, show } = this.props;
-    this.tooltip = new Tooltip(this.element, {
-      trigger: typeof show !== 'undefined' ? '' : 'hover focus',
-      title: text,
-      placement: position,
-      container: 'body',
-      boundariesElement: 'window',
-      offset: '1, 1'
-    });
-
-    if (typeof show !== 'undefined') {
-      if (show) {
-        this.tooltip.show();
-      } else {
-        this.tooltip.hide();
-      }
-    }
-
-    // workaround for ios not closing tooltips
-    const iOS = /iPhone|iPad|iPod/.test(navigator.platform) && !window.MSStream;
-    if (iOS) {
-      document.body.classList.add('tooltip-ios-touch');
-    }
-  }
-
-  destroyTooltip() {
-    if (this.tooltip) {
-      this.tooltip.dispose();
-    }
-  }
-
-  render() {
-    const { showIcon, children, className } = this.props;
-    return (
-      <div
-        ref={elem => {
-          this.element = elem;
-        }}
-        className={cx('tooltip-react', className)}
+  return (
+    <span className="c-help-tooltip">
+      <Tippy
+        content={children || parsedText}
+        animation="none"
+        placement={position}
+        arrow
+        theme="blue"
+        duration={0}
+        offset={20}
+        zIndex={102}
+        interactive={interactive}
+        boundary="window"
+        appendTo={document.body}
       >
-        {showIcon && (
+        {ReferenceComponent ? (
+          <ReferenceComponent />
+        ) : (
           <svg className="icon tooltip-react-icon">
             <use xlinkHref="#icon-layer-info" />
           </svg>
         )}
-        {children}
-      </div>
-    );
-  }
+      </Tippy>
+    </span>
+  );
 }
 
-TooltipComponent.propTypes = {
-  show: PropTypes.bool,
+HelpTooltipComponent.propTypes = {
   text: PropTypes.string,
   children: PropTypes.any,
-  showIcon: PropTypes.bool,
   position: PropTypes.string,
-  className: PropTypes.string
+  referenceComponent: PropTypes.node,
+  interactive: PropTypes.bool
 };
 
-TooltipComponent.defaultProps = {
-  position: 'bottom',
-  showIcon: true
+HelpTooltipComponent.defaultProps = {
+  position: 'bottom'
 };
+
+export default HelpTooltipComponent;

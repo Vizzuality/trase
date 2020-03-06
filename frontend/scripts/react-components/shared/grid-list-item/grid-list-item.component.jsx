@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
@@ -74,25 +74,22 @@ function GridListItem(props) {
               <div
                 className={cx('grid-list-item-info', {
                   '-item-active': !isToggleAll && isActive,
-                  '-active': isInfoActive,
+                  '-active': isInfoActive
                 })}
                 disabled={isDisabled}
               >
                 <HelpTooltip
                   text={tooltip}
-                  showIcon={false}
-                  trigger="click"
-                  show={isInfoActive}
-                  position="bottom-start"
-                >
-                  <button
-                    type="button"
-                    disabled={isDisabled}
-                    onClick={() => onInfoClick && onInfoClick(item)}
-                  >
-                    i
-                  </button>
-                </HelpTooltip>
+                  referenceComponent={forwardRef((_, ref) => (
+                    <button
+                      ref={ref}
+                      type="button"
+                      onClick={() => onInfoClick && onInfoClick(item)}
+                    >
+                      i
+                    </button>
+                  ))}
+                />
               </div>
             )}
           </div>
