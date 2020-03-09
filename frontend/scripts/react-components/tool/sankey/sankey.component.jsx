@@ -374,7 +374,7 @@ function Sankey(props) {
             <Defs.GradientAnimation
               candyMode={
                 window._TRASE_CANDY_SANKEY &&
-                (selectedRecolorBy && selectedRecolorBy.name === 'BIOME')
+                selectedRecolorBy && selectedRecolorBy.name === 'BIOME'
               }
             />
           </defs>

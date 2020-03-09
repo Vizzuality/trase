@@ -14,28 +14,24 @@ const getCountries = (state, { destinationCountries }) => destinationCountries;
 const getWidth = (state, { width }) => width;
 const getScale = (state, { scale }) => scale;
 
-const getWorldMapProjection = createSelector(
-  [getWidth, getScale],
-  (width, scale) =>
-    projections(
-      width || 800,
-      width ? Math.round(width * WORLD_MAP_ASPECT_RATIO) : 448,
-      {
-        scale: scale || 140,
-        rotation: [0, 0, 0]
-      },
-      'robinson'
-    )
+const getWorldMapProjection = createSelector([getWidth, getScale], (width, scale) =>
+  projections(
+    width || 800,
+    width ? Math.round(width * WORLD_MAP_ASPECT_RATIO) : 448,
+    {
+      scale: scale || 140,
+      rotation: [0, 0, 0]
+    },
+    'robinson'
+  )
 );
 
-export const getOriginGeoId = createSelector(
-  getSelectedContext,
-  selectedContext => (selectedContext ? selectedContext.worldMap.geoId : null)
+export const getOriginGeoId = createSelector(getSelectedContext, selectedContext =>
+  selectedContext ? selectedContext.worldMap.geoId : null
 );
 
-export const getOriginCoordinates = createSelector(
-  getOriginGeoId,
-  originGeoId => (originGeoId ? COUNTRIES_COORDINATES[originGeoId] : null)
+export const getOriginCoordinates = createSelector(getOriginGeoId, originGeoId =>
+  originGeoId ? COUNTRIES_COORDINATES[originGeoId] : null
 );
 
 function buildCustomArc(originCoords, destinationCoords, worldMapProjection) {

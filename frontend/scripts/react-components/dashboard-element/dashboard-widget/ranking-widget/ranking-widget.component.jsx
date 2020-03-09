@@ -25,7 +25,7 @@ function RankingWidget(props) {
     setPage(page + pageChange);
   };
 
-  const renderItemName = (item) => {
+  const renderItemName = item => {
     const color = {
       dark: 'white',
       light: 'grey'
@@ -43,7 +43,7 @@ function RankingWidget(props) {
     }
 
     return name;
-  }
+  };
 
   const { context } = config.dashboardMeta;
   const dataWithUrl = data.map((d, i) => {

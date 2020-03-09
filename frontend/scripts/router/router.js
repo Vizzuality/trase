@@ -118,7 +118,7 @@ export const routes = {
     ),
     title: getPageTitle,
     nav: {
-      className: '-light',
+      className: '-egg-shell',
       printable: true
     },
     thunk: loadPageData()
@@ -221,7 +221,8 @@ const config = {
 
     return route;
   },
-  onBeforeChange: (dispatch, getState, { action }) =>  dispatchThunks(redirectToExplore)(dispatch, getState, { action }),
+  onBeforeChange: (dispatch, getState, { action }) =>
+    dispatchThunks(redirectToExplore)(dispatch, getState, { action }),
   onAfterChange: (dispatch, getState, { action }) => {
     const currentLanguage = action.meta.location?.current?.query?.lang;
     const previousLanguage = action.meta.location?.prev?.query?.lang;

@@ -18,7 +18,4 @@ const mapDispatchToProps = {
   setActiveModal: toolLayersActions.setActiveModal
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(LayerModal);
+export default connect(mapStateToProps, mapDispatchToProps)(LayerModal);

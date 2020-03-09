@@ -118,7 +118,7 @@ const Tool = props => {
 
   if (width <= BREAKPOINTS.tablet) {
     return <NotSupportedComponent />;
-  };
+  }
 
   return (
     <div>

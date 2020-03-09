@@ -1,7 +1,29 @@
-
 @import 'styles/settings';
 
+$transition: all 0.2s;
+
+.profile-sticky-group {
+  .sticky-inner-wrapper {
+    width: 100vw;
+    left: 0;
+    padding: 0 20px;
+  }
+}
+
 .profiles-title-container {
+  &.-sticky {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    .profiles-title {
+      transition: $transition;
+      font-size: $font-size-medium;
+    }
+    .profiles-selector-button {
+      margin-top: initial;
+    }
+  }
+
   .profiles-title {
     font-family: $font-family-2;
     font-size: $font-size-huge;
@@ -9,6 +31,7 @@
     color: $charcoal-grey;
     font-weight: bold;
     margin-right: 30px;
+    transition: $transition;
   }
 
   .profiles-selector-button {

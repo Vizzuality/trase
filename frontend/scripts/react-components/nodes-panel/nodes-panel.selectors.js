@@ -229,18 +229,15 @@ export const getCanProceed = createSelector(
 );
 
 const makeActiveTabSelector = (getTab, getTabs) =>
-  createSelector(
-    [getTab, getTabs],
-    (activeTab, tabs) => {
-      if (activeTab) {
-        return activeTab;
-      }
-      if (tabs?.length > 0) {
-        return tabs[0].id;
-      }
-      return null;
+  createSelector([getTab, getTabs], (activeTab, tabs) => {
+    if (activeTab) {
+      return activeTab;
     }
-  );
+    if (tabs?.length > 0) {
+      return tabs[0].id;
+    }
+    return null;
+  });
 
 export const makeGetActiveTab = name => {
   const getTab = state => state.nodesPanel[name].activeTab;
@@ -315,10 +312,7 @@ export const makeGetNodesPanelsProps = name => {
   const getExcludingMode = state => state.nodesPanel[name].excludingMode;
   const getOrderBy = state => state.nodesPanel[name].orderBy;
 
-  const getItems = createSelector(
-    [getById, getNodes],
-    (byId, nodes) => byId.map(id => nodes[id])
-  );
+  const getItems = createSelector([getById, getNodes], (byId, nodes) => byId.map(id => nodes[id]));
 
   const getActiveTab = makeGetActiveTab(name);
 
@@ -333,14 +327,11 @@ export const makeGetNodesPanelsProps = name => {
     }
   );
 
-  const getSelectedOrderBy = createSelector(
-    [getOrderBy],
-    orderBy => ({
-      id: orderBy,
-      label: orderBy === 'name' ? 'Name' : 'Trade Volume',
-      value: orderBy
-    })
-  );
+  const getSelectedOrderBy = createSelector([getOrderBy], orderBy => ({
+    id: orderBy,
+    label: orderBy === 'name' ? 'Name' : 'Trade Volume',
+    value: orderBy
+  }));
 
   const getDraftPreviousSteps = makeGetDraftPreviousSteps(name);
 
@@ -382,18 +373,9 @@ const getURLParamsIfContext = (params, context) => {
   return params;
 };
 
-const getURLSources = createSelector(
-  [getSources, getSelectedContext],
-  getURLParamsIfContext
-);
-const getURLExporters = createSelector(
-  [getExporters, getSelectedContext],
-  getURLParamsIfContext
-);
-const getURLImporters = createSelector(
-  [getImporters, getSelectedContext],
-  getURLParamsIfContext
-);
+const getURLSources = createSelector([getSources, getSelectedContext], getURLParamsIfContext);
+const getURLExporters = createSelector([getExporters, getSelectedContext], getURLParamsIfContext);
+const getURLImporters = createSelector([getImporters, getSelectedContext], getURLParamsIfContext);
 const getURLDestinations = createSelector(
   [getDestinations, getSelectedContext],
   getURLParamsIfContext

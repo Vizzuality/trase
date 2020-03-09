@@ -234,7 +234,9 @@ const toolLinksReducer = {
         extraColumn && data.columns[extraColumn.parentId].group;
 
       const correctedIndex =
-        (extraColumn && columnIndex > extraColumnParentColumnPosition && selectedColumnsIds.length > MIN_COLUMNS_NUMBER)
+        extraColumn &&
+        columnIndex > extraColumnParentColumnPosition &&
+        selectedColumnsIds.length > MIN_COLUMNS_NUMBER
           ? columnIndex + 1
           : columnIndex;
 

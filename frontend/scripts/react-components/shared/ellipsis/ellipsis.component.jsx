@@ -25,7 +25,7 @@ function Ellipsis(props) {
     setWidth(ref.current ? ref.current.offsetWidth : 0);
   }, [ref]);
 
-  const getLines = text => (text.length * fontSizes[fontSize] * HEIGHT_TO_WIDTH_FONT_RATIO / width);
+  const getLines = text => (text.length * fontSizes[fontSize] * HEIGHT_TO_WIDTH_FONT_RATIO) / width;
 
   if (lineLimit && getLines(String(children)) < lineLimit + 1) {
     return children;

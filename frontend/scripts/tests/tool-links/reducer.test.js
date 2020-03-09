@@ -155,7 +155,10 @@ describe(`Test ${TOOL_LINKS__SET_MISSING_LOCKED_NODES}`, () => {
 });
 
 test(TOOL_LINKS__SET_LINKS, () => {
-  const links = [{ id: 1, path: [12, 34, 56] }, { id: 2, path: [78, 90, 12] }];
+  const links = [
+    { id: 1, path: [12, 34, 56] },
+    { id: 2, path: [78, 90, 12] }
+  ];
   const linksMeta = { nodeHeights: [{ id: 1, height: 12345.34 }] };
   const action = setToolLinks(links, linksMeta);
   const newState = reducer(initialState, action);
@@ -197,7 +200,7 @@ describe(TOOL_LINKS__SELECT_COLUMN, () => {
     4: { group: 2 },
     5: { group: 3 },
     6: { group: 3 }
-  }
+  };
   const data = {
     ...initialState.data,
     columns
@@ -457,7 +460,10 @@ test(SET_CONTEXT, () => {
 
 describe(TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH, () => {
   it('selects 2 nodes belonging to a column selected by default, with no previously selected nodes', () => {
-    const results = [{ id: 0, nodeType: 'EXPORTER' }, { id: 1, nodeType: 'IMPORTER' }];
+    const results = [
+      { id: 0, nodeType: 'EXPORTER' },
+      { id: 1, nodeType: 'IMPORTER' }
+    ];
     const state = {
       ...initialState,
       data: {
@@ -477,7 +483,10 @@ describe(TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH, () => {
   });
 
   it('deselects 2 nodes belonging to a column selected by default', () => {
-    const results = [{ id: 0, nodeType: 'EXPORTER' }, { id: 1, nodeType: 'IMPORTER' }];
+    const results = [
+      { id: 0, nodeType: 'EXPORTER' },
+      { id: 1, nodeType: 'IMPORTER' }
+    ];
     const state = {
       ...initialState,
       selectedNodesIds: [0, 1],
@@ -498,7 +507,10 @@ describe(TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH, () => {
   });
 
   it('selects 2 nodes belonging to a column not selected by default', () => {
-    const results = [{ id: 5, nodeType: 'EXPORTER' }, { id: 6, nodeType: 'IMPORTER' }];
+    const results = [
+      { id: 5, nodeType: 'EXPORTER' },
+      { id: 6, nodeType: 'IMPORTER' }
+    ];
     const state = {
       ...initialState,
       selectedColumnsIds: [9, 8],

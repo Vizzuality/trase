@@ -28,7 +28,6 @@ export const getSelectedCountryPairs = createSelector(
     )
 );
 
-export const getSortedContexts = createSelector(
-  getContexts,
-  contexts => sortBy(contexts, ['commodityName', 'countryName'])
+export const getSortedContexts = createSelector(getContexts, contexts =>
+  sortBy(contexts, ['commodityName', 'countryName'])
 );

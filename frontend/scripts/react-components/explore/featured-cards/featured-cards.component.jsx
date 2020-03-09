@@ -69,13 +69,7 @@ FeaturedCard.propTypes = {
 };
 
 const FeaturedCards = props => {
-  const {
-    countryName,
-    commodityName,
-    step,
-    cards,
-    openModal
-  } = props;
+  const { countryName, commodityName, step, cards, openModal } = props;
   const CARDS_SIZE_MARGIN = 16; // matches featured-cards.scss
 
   const transitions = useTransition(cards, item => item.id, {

@@ -74,7 +74,7 @@ function GridListItem(props) {
               <div
                 className={cx('grid-list-item-info', {
                   '-item-active': !isToggleAll && isActive,
-                  '-active': isInfoActive,
+                  '-active': isInfoActive
                 })}
                 disabled={isDisabled}
               >

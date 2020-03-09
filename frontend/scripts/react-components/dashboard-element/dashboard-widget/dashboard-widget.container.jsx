@@ -91,7 +91,4 @@ DashboardWidgetContainer.propTypes = {
   groupingActiveItem: PropTypes.object
 };
 
-export default connect(
-  makeMapStateToProps,
-  mapDispatchToProps
-)(DashboardWidgetContainer);
+export default connect(makeMapStateToProps, mapDispatchToProps)(DashboardWidgetContainer);

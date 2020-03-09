@@ -96,7 +96,7 @@ class TopNav extends React.PureComponent {
                     <Img
                       className="logo-image"
                       src={
-                        className === '-light'
+                        className === '-light' || className === '-egg-shell'
                           ? '/images/logos/new-logo-trase-red.svg'
                           : '/images/logos/new-logo-trase-white.svg'
                       }
@@ -202,7 +202,16 @@ class TopNav extends React.PureComponent {
     const { backgroundVisible, menuOpen } = this.state;
 
     return (
-      <div className={cx('c-nav', { '-has-background': backgroundVisible || menuOpen }, className)}>
+      <div
+        className={cx(
+          'c-nav',
+          {
+            '-has-background': backgroundVisible || menuOpen,
+            '-no-shadow': className === '-egg-shell'
+          },
+          className
+        )}
+      >
         {this.renderDesktopMenu()}
         {this.renderMobileMenu()}
       </div>

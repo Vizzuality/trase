@@ -5,7 +5,10 @@ import Tabs from 'react-components/shared/tabs';
 import './tool-switch.scss';
 
 function ToolSwitch({ dashboardSelected, switchTool }) {
-  const tabs = [{ label: 'Flows', section: null }, { label: 'Data', section: 'data-view' }];
+  const tabs = [
+    { label: 'Flows', section: null },
+    { label: 'Data', section: 'data-view' }
+  ];
   const selected = dashboardSelected ? tabs[1] : tabs[0];
   const handleSelectTab = item => {
     if (item.label !== selected.label) {

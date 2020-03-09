@@ -17,11 +17,7 @@ export default function ListModal(props) {
         </Heading>
         <GridList
           items={items}
-          height={
-            items.length > COLUMN_COUNT
-              ? Math.ceil(items.length / COLUMN_COUNT) * 50
-              : 50
-          }
+          height={items.length > COLUMN_COUNT ? Math.ceil(items.length / COLUMN_COUNT) * 50 : 50}
           width={750}
           rowHeight={50}
           columnWidth={240}
