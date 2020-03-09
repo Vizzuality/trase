@@ -134,7 +134,7 @@ function PlaceSummary(props) {
       </div>
 
       <div className="row">
-        <div id="testiniiiing" className="small-12 columns">
+        <div className="small-12 columns">
           <Text
             variant="serif"
             size="md"
