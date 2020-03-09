@@ -29,20 +29,21 @@
   background-color: $charcoal-grey;
 }
 
-.tippy-tooltip.blue-theme[x-placement^='top'] .tippy-arrow {
-  border-top-color: $charcoal-grey;
+
+.tippy-tooltip[data-placement^=top]>.tippy-arrow {
+  border-top-color: $charcoal-grey !important;
 }
 
-.tippy-tooltip.blue-theme[x-placement^='bottom'] .tippy-arrow {
-  border-bottom-color: $charcoal-grey;
+.tippy-tooltip[data-placement^=bottom]>.tippy-arrow {
+  border-bottom-color: $charcoal-grey !important;
 }
 
-.tippy-tooltip.blue-theme[x-placement^='left'] .tippy-arrow {
-  border-left-color: $charcoal-grey;
+.tippy-tooltip[data-placement^=left]>.tippy-arrow {
+  border-left-color: $charcoal-grey !important;
 }
 
-.tippy-tooltip.blue-theme[x-placement^='right'] .tippy-arrow {
-  border-right-color: $charcoal-grey;
+.tippy-tooltip[data-placement^=right]>.tippy-arrow {
+  border-right-color: $charcoal-grey !important;
 }
 
 // Black Theme
