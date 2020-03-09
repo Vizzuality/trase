@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import kebabCase from 'lodash/kebabCase';
 import cx from 'classnames';
@@ -40,6 +40,7 @@ function DashboardWidget(props) {
     </Text>
   );
 
+  const widgetBoxRef = useRef(null);
   const [isModalOpen, openModal] = useState(false);
 
   const openTableModal = useCallback(() => {
@@ -134,6 +135,7 @@ function DashboardWidget(props) {
               meta={meta}
               config={chartConfig}
               testId="widget-chart"
+              containerRef={widgetBoxRef}
             />
           </React.Fragment>
         );
@@ -166,7 +168,7 @@ function DashboardWidget(props) {
         </Heading>
         {renderWidgetActions()}
       </div>
-      <div className="widget-box">
+      <div className="widget-box" ref={widgetBoxRef}>
         <ErrorCatch renderFallback={err => renderError(`Error: ${err.message}`)}>
           {error && renderError(`Error: ${error.statusText}`)}
           {loading && (

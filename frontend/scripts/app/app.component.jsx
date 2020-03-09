@@ -35,6 +35,7 @@ function App() {
           <Footer />
         </footer>
       )}
+      <div id="recharts-tooltip-portal" />
     </Suspense>
   );
 }

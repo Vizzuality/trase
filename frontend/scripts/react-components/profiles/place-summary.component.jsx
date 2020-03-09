@@ -80,7 +80,7 @@ function PlaceSummary(props) {
             <div className="stat-item">
               <Text variant="mono" color="grey-faded" transform="uppercase" className="legend">
                 {name}
-                {tooltip && <HelpTooltip text={tooltip} position="bottom" />}
+                {tooltip && <HelpTooltip text={tooltip} />}
               </Text>
               <Text as="span" variant="mono" size="lg" weight="bold">
                 {formatValue(value, indicatorKey)}

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { Manager, Reference, Popper } from 'react-popper';
 import Button from 'react-components/shared/button';
+import Tippy from '@tippy.js/react';
 import EditFilter from './edit-filter/edit-filter.component';
 import OptionsMenuFilter from './options-menu-filter/options-menu-filter.component';
 import ToolSwitch from './tool-switch';
 import ToolbarTooltip from './toolbar-tooltip';
 
+import 'tippy.js/dist/tippy.css';
 import './tool-bar.scss';
 
 const ToolbarButton = props => (
@@ -58,22 +59,18 @@ function ToolBar(props) {
 
   function renderItemWithTooltip(item) {
     return (
-      <Manager key={item.id}>
-        <Reference>{({ ref }) => getListItem(item, ref)}</Reference>
-        <Popper placement="bottom-start">
-          {({ ref, style, placement, scheduleUpdate }) => (
-            <ToolbarTooltip
-              style={style}
-              innerRef={ref}
-              placement={placement}
-              hidden={item.id !== activeId}
-              scheduleUpdate={scheduleUpdate}
-            >
-              {item.tooltip}
-            </ToolbarTooltip>
-          )}
-        </Popper>
-      </Manager>
+      <Tippy
+        content={<ToolbarTooltip>{item.tooltip}</ToolbarTooltip>}
+        placement="bottom-start"
+        arrow={false}
+        animation="none"
+        theme="black"
+        duration={0}
+        zIndex={102}
+        distance={0}
+      >
+        {getListItem(item)}
+      </Tippy>
     );
   }
 

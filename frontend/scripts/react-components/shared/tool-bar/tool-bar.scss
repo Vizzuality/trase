@@ -3,6 +3,7 @@
 .c-tool-bar {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   position: relative;
   margin: $nav-height 0 0;
   width: 100%;

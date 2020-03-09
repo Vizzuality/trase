@@ -67,7 +67,11 @@ function DataView(props) {
     );
   }
 
-  return <div className="c-data-view">{loaded ? renderWidgets() : renderPlaceholder()}</div>;
+  return (
+    <div className="c-data-view" id="data-view">
+      {loaded ? renderWidgets() : renderPlaceholder()}
+    </div>
+  );
 }
 
 DataView.propTypes = {

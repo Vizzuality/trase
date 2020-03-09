@@ -86,10 +86,10 @@ Tag.propTypes = {
   placement: PropTypes.string,
   showDropdown: PropTypes.bool,
   readOnly: PropTypes.bool,
-  removeOption: PropTypes.func.isRequired,
-  clearSingleItem: PropTypes.func.isRequired,
-  isPartReadOnly: PropTypes.bool.isRequired,
-  as: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
+  removeOption: PropTypes.func,
+  clearSingleItem: PropTypes.func,
+  isPartReadOnly: PropTypes.func,
+  as: PropTypes.oneOfType([PropTypes.string, PropTypes.element, PropTypes.func])
 };
 
 Tag.defaultProps = {

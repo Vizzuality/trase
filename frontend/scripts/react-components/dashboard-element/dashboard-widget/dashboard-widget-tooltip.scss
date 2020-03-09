@@ -1,11 +1,15 @@
 @import 'styles/settings';
 
 .c-dashboard-widget-tooltip {
+  position: absolute;
   display: flex;
+  width: fit-content;
+  height: fit-content;
   flex-direction: column;
   background-color: $charcoal-extra-dark;
   border-radius: 6px;
   padding: 5px 10px;
+  z-index: $z-tooltip;
 }
 
 .dashboard-widget-tooltip-item,

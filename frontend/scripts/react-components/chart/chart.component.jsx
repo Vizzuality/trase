@@ -27,7 +27,8 @@ class Chart extends PureComponent {
     variant: PropTypes.string,
     handleMouseMove: PropTypes.func,
     handleMouseLeave: PropTypes.func,
-    testId: PropTypes.string
+    testId: PropTypes.string,
+    containerRef: PropTypes.node
   };
 
   static defaultProps = {
@@ -46,9 +47,9 @@ class Chart extends PureComponent {
       handleMouseMove,
       handleMouseLeave,
       testId,
-      variant
+      variant,
+      containerRef
     } = this.props;
-
     const {
       margin = {},
       padding = { top: 0, right: 0, left: 0, bottom: 0 },
@@ -172,6 +173,7 @@ class Chart extends PureComponent {
                   ...(!!bars && { strokeWidth: `${1.1 * (100 / data.length)}%` })
                 }}
                 isAnimationActive={false}
+                containerRef={containerRef}
                 {...tooltip}
               />
             )}
