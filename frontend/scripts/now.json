@@ -1,0 +1,10 @@
+{
+  "name": "trase",
+  "version": 1,
+  "build": {
+    "env": {
+      "API_V3_URL": "@api_v3_url",
+      "GFW_WIDGETS_BASE_URL": "@gfw_widgets_base_url",
+    }
+  }
+}
