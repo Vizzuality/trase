@@ -64,8 +64,10 @@ function ToolBar(props) {
         placement="bottom-start"
         arrow={false}
         animation="none"
+        theme="black"
         duration={0}
-        distance={20}
+        zIndex={102}
+        distance={0}
       >
         {getListItem(item)}
       </Tippy>

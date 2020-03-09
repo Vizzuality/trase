@@ -1,3 +1,5 @@
+// Blue Theme
+
 .tippy-tooltip.blue-theme {
   border-radius: 0;
 }
@@ -17,6 +19,7 @@
     cursor: pointer;
   }
 }
+
 
 .tippy-tooltip.blue-theme[data-animatefill] {
   background-color: transparent
@@ -40,4 +43,17 @@
 
 .tippy-tooltip.blue-theme[x-placement^='right'] .tippy-arrow {
   border-right-color: $charcoal-grey;
+}
+
+// Black Theme
+
+.tippy-tooltip.black-theme .tippy-content{
+  background-color: $charcoal-grey;
+  color: $white;
+  border-radius: 0;
+  padding: 0;
+  font-family: $font-family-2;
+  font-size: $font-size-regular;
+  font-weight: $font-weight-light;
+  line-height: $line-height-md;
 }
