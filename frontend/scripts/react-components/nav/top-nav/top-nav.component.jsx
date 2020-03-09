@@ -199,7 +199,7 @@ class TopNav extends React.PureComponent {
 
   render() {
     const { className } = this.props;
-    const { backgroundVisible, noShadow, menuOpen } = this.state;
+    const { backgroundVisible, menuOpen } = this.state;
 
     return (
       <div
