@@ -1,0 +1,29 @@
+@import 'styles/settings';
+
+.c-options-menu-filter {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+  max-width: 16vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+
+  .options-menu-label {
+    display: block;
+    color: rgba($white, 0.6);
+  }
+
+  &.-hovered {
+    .value-text {
+      text-decoration: underline;
+    }
+  }
+
+  @media screen and (min-width: 1120px) {
+    max-width: none;
+  }
+}

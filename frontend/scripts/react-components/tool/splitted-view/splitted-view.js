@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import SplittedView from 'react-components/tool/splitted-view/splitted-view.component';
-import { changeLayout } from 'actions/app.actions';
+import { appActions } from 'app/app.register';
 
 const mapStateToProps = state => ({
   layout: state.toolLayers.toolLayout,
@@ -8,10 +8,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  changeLayout
+  changeLayout: appActions.changeLayout
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SplittedView);
+export default connect(mapStateToProps, mapDispatchToProps)(SplittedView);

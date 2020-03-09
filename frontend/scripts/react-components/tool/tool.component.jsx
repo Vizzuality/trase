@@ -1,23 +1,30 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, Suspense } from 'react';
 import PropTypes from 'prop-types';
+import EventManager from 'utils/eventManager';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import MapContainer from 'react-components/tool/map/map.container';
 import ModalContainer from 'react-components/tool/story-modal/story-modal.container';
-import Sankey from 'react-components/tool/sankey';
-import Tooltip from 'react-components/tool/help-tooltip/help-tooltip.container';
 import SplittedView from 'react-components/tool/splitted-view';
+import Timeline from 'react-components/tool/timeline';
+import ToolBar from 'react-components/shared/tool-bar';
 import MapLayout from 'react-components/tool/map-layout';
-import ErrorModal from 'react-components/tool/error-modal';
-import ToolModal from 'react-components/tool/tool-modal';
-import EventManager from 'utils/eventManager';
 import UrlSerializer from 'react-components/shared/url-serializer';
-import Timeline from './timeline';
+import useWindowSize from 'utils/hooks/useWindowSize';
+import NotSupportedComponent from 'react-components/mobile/not-supported.component';
+import { BREAKPOINTS } from 'constants';
 
-import 'styles/layouts/l-tool.scss';
 import 'styles/components/shared/veil.scss';
-import 'styles/components/shared/spinner.scss';
 import 'styles/components/shared/dropdown.scss';
 import 'styles/components/tool/map/map-sidebar.scss';
+
+const Sankey = React.lazy(() =>
+  import(/* webpackChunkName: "sankey" */ /* webpackPreload: true */ './sankey')
+);
+const DataView = React.lazy(() =>
+  import(/* webpackChunkName: "data-view" */ /* webpackPreload: true */ './data-view')
+);
+const ToolModal = React.lazy(() => import(/* webpackPreload: true */ './tool-modal'));
+const ErrorModal = React.lazy(() => import(/* webpackPreload: true */ './error-modal'));
 
 const evManager = new EventManager();
 
@@ -25,12 +32,33 @@ const renderVainillaComponents = () => (
   <>
     <ModalContainer />
     <MapContainer />
-    <Tooltip />
   </>
 );
 
+function renderSankeyView() {
+  return (
+    <>
+      <ColumnsSelectorGroupContainer />
+      <Suspense fallback={null}>
+        <Sankey />
+      </Suspense>
+    </>
+  );
+}
+
+function renderDataView() {
+  return (
+    <Suspense fallback={null}>
+      <DataView />
+    </Suspense>
+  );
+}
+
 const Tool = props => {
   const {
+    section,
+    toolYearProps,
+    selectYears,
     resizeSankeyTool,
     urlProps,
     urlPropHandlers,
@@ -38,6 +66,9 @@ const Tool = props => {
     noLinksFound,
     activeModal
   } = props;
+
+  const { width } = useWindowSize();
+
   useEffect(() => {
     evManager.addEventListener(window, 'resize', resizeSankeyTool);
     const body = document.querySelector('body');
@@ -50,35 +81,44 @@ const Tool = props => {
       body.style.backgroundColor = originalBackground;
     };
   }, [resizeSankeyTool]);
+
   const render = useMemo(
     () => (
       <>
-        <div className="js-node-tooltip c-info-tooltip" />
         <div className="l-tool">
+          <div className="js-node-tooltip c-info-tooltip" />
           <div className="-hidden-on-mobile">
             <div className="veil js-veil" />
             <div className="c-modal js-modal" />
           </div>
-          <ErrorModal noLinksFound={noLinksFound} />
+          <Suspense fallback={null}>
+            <ErrorModal noLinksFound={noLinksFound} />
+          </Suspense>
           <div className="main-content">
+            <ToolBar />
             <SplittedView
               sidebarOpen={mapSidebarOpen}
               leftSlot={<MapLayout />}
-              rightSlot={
-                <>
-                  <ColumnsSelectorGroupContainer />
-                  <Sankey />
-                </>
-              }
+              rightSlot={section === 'data-view' ? renderDataView() : renderSankeyView()}
             />
           </div>
-          <Timeline />
+          <Timeline
+            {...toolYearProps}
+            showBackground={section === 'data-view'}
+            selectYears={selectYears}
+          />
         </div>
-        <ToolModal activeModal={activeModal} />
+        <Suspense fallback={null}>
+          <ToolModal activeModal={activeModal} />
+        </Suspense>
       </>
     ),
-    [mapSidebarOpen, noLinksFound, activeModal]
+    [noLinksFound, mapSidebarOpen, section, toolYearProps, selectYears, activeModal]
   );
+
+  if (width <= BREAKPOINTS.tablet) {
+    return <NotSupportedComponent />;
+  }
 
   return (
     <div>
@@ -91,11 +131,17 @@ const Tool = props => {
 
 Tool.propTypes = {
   resizeSankeyTool: PropTypes.func.isRequired,
+  selectYears: PropTypes.func.isRequired,
   urlPropHandlers: PropTypes.object,
   urlProps: PropTypes.object,
   mapSidebarOpen: PropTypes.bool,
   noLinksFound: PropTypes.bool,
-  activeModal: PropTypes.string
+  activeModal: PropTypes.string,
+  section: PropTypes.string,
+  toolYearProps: PropTypes.shape({
+    years: PropTypes.array,
+    selectedYears: PropTypes.array
+  })
 };
 
 export default Tool;

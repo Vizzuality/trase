@@ -12,20 +12,20 @@ import {
 } from 'react-components/tool-links/tool-links.selectors';
 import uniqBy from 'lodash/uniqBy';
 import { sortFlows } from 'react-components/tool/sankey/sort-flows';
-import splitVisibleNodesByColumn from 'reducers/helpers/splitVisibleNodesByColumn';
-import sortVisibleNodes from 'reducers/helpers/sortVisibleNodes';
-import mergeLinks from 'reducers/helpers/mergeLinks';
-import filterLinks from 'reducers/helpers/filterLinks';
-import splitLinksByColumn from 'reducers/helpers/splitLinksByColumn';
-import { getSelectedContext, getSelectedYears } from 'reducers/app.selectors';
+import splitVisibleNodesByColumn from 'app/helpers/splitVisibleNodesByColumn';
+import sortVisibleNodes from 'app/helpers/sortVisibleNodes';
+import mergeLinks from 'app/helpers/mergeLinks';
+import filterLinks from 'app/helpers/filterLinks';
+import splitLinksByColumn from 'app/helpers/splitLinksByColumn';
+import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 import { getHasExtraColumn, getColumnsNumber } from 'react-components/tool/tool.selectors';
+import { getExpandedNodesIds } from 'react-components/nodes-panel/nodes-panel.selectors';
 
 const getToolNodeHeights = state => state.toolLinks.data.nodeHeights;
 export const getToolColumns = state => state.toolLinks.data.columns;
 const getToolLinks = state => state.toolLinks.data.links;
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolSelectedNodesIds = state => state.toolLinks.selectedNodesIds;
-const getToolExpandedNodesIds = state => state.toolLinks.expandedNodesIds;
 const getSankeySize = state => state.toolLayers.sankeySize;
 const getDetailedView = state => state.toolLinks.detailedView;
 const getSankeyColumnsWidth = state => state.toolLinks.sankeyColumnsWidth;
@@ -102,12 +102,12 @@ export const getMergedLinks = createSelector(
 );
 
 export const getHasExpandedNodesIds = createSelector(
-  getToolExpandedNodesIds,
+  getExpandedNodesIds,
   expandedNodesIds => expandedNodesIds.length > 0
 );
 
 export const getIsReExpand = createSelector(
-  [getHasExpandedNodesIds, getToolSelectedNodesIds, getToolExpandedNodesIds],
+  [getHasExpandedNodesIds, getToolSelectedNodesIds, getExpandedNodesIds],
   (hasExpandedNodesIds, selectedNodesIds, expandedNodesIds) =>
     hasExpandedNodesIds && !isEqual([...selectedNodesIds].sort(), [...expandedNodesIds].sort())
 );
@@ -181,9 +181,8 @@ export const getSankeyColumns = createSelector(
   }
 );
 
-export const getSankeyMaxHeight = createSelector(
-  [getSankeyColumns],
-  columns => Math.max(...columns.map(c => Math.ceil(c.y)))
+export const getSankeyMaxHeight = createSelector([getSankeyColumns], columns =>
+  Math.max(...columns.map(c => Math.ceil(c.y)))
 );
 
 // compute links y and y deltas (later used by sankey.link generator)
@@ -298,7 +297,7 @@ export const getLastSelectedNodeLink = createSelector(
     const last = selectedNodesIds.length - 1;
     const lastId = selectedNodesIds[last];
     const node = nodes[lastId];
-    const column = columns[(node?.columnId)];
+    const column = columns[node?.columnId];
 
     if (!node || !column) {
       return null;

@@ -39,7 +39,6 @@ function CustomYAxis({ config, data, meta }) {
             dataMax={maxYValue}
             unit={unit || ''}
             unitFormat={unitFormat || (value => value)}
-            fill="#555555"
           />
         }
         {...yAxis}
@@ -49,6 +48,7 @@ function CustomYAxis({ config, data, meta }) {
 }
 
 CustomYAxis.propTypes = {
+  meta: PropTypes.object,
   config: PropTypes.object.isRequired,
   data: PropTypes.array
 };

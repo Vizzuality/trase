@@ -1,9 +1,11 @@
 import { select, all, call, fork, put, takeLatest, cancel } from 'redux-saga/effects';
-import { SET_CONTEXT, SET_CONTEXTS } from 'actions/app.actions';
+import { SET_CONTEXTS, SET_CONTEXT } from 'app/app.actions';
 import { setLoadingSpinner } from 'utils/saga-utils';
 import { loadMapVectorData, SELECT_YEARS } from 'react-components/tool/tool.actions';
-import { getSelectedContext } from 'reducers/app.selectors';
+import { getSelectedContext } from 'app/app.selectors';
+import { nodesPanelActions } from 'react-components/nodes-panel/nodes-panel.register';
 import {
+  TOOL_LINKS__SWITCH_TOOL,
   TOOL_LINKS__SET_SELECTED_NODES,
   TOOL_LINKS__SELECT_COLUMN,
   TOOL_LINKS__SELECT_VIEW,
@@ -18,21 +20,26 @@ import {
   TOOL_LINKS__CHANGE_EXTRA_COLUMN,
   TOOL_LINKS_RESET_SANKEY,
   setToolFlowsLoading,
-  selectView
+  selectView,
+  setToolChartsLoading
 } from './tool-links.actions';
 import {
   getToolColumnsData,
   getToolLinksData,
   getToolNodesByLink,
   getMissingLockedNodes,
-  getToolGeoColumnNodes
+  getToolGeoColumnNodes,
+  fetchToolCharts
 } from './tool-links.fetch.saga';
 
-function* fetchToolColumns() {
+function* fetchToolInitialData() {
   function* performFetch() {
     const state = yield select();
     const {
-      location: { type: page }
+      location: {
+        type: page,
+        payload: { section }
+      }
     } = state;
     const selectedContext = yield select(getSelectedContext);
 
@@ -40,15 +47,20 @@ function* fetchToolColumns() {
       return;
     }
     const task = yield fork(setLoadingSpinner, 750, setToolFlowsLoading(true));
-    yield fork(getToolColumnsData, selectedContext);
-    yield fork(getToolGeoColumnNodes, selectedContext);
+    yield call(getToolColumnsData, selectedContext);
 
-    yield call(getToolLinksData);
-    yield call(getToolNodesByLink, selectedContext, {
-      fetchAllNodes: state.toolLinks.detailedView
-    });
+    if (section === 'data-view') {
+      yield fork(fetchToolCharts);
+    } else {
+      yield call(getToolLinksData);
+      yield fork(getToolNodesByLink, selectedContext, {
+        fetchAllNodes: state.toolLinks.detailedView
+      });
+    }
 
-    // TODO: remove this call, just here to split the refactor in stages
+    yield call(getToolGeoColumnNodes, selectedContext);
+
+    // TODO: remove this when mapbox comes
     yield put(loadMapVectorData());
 
     if (task.isRunning()) {
@@ -58,7 +70,13 @@ function* fetchToolColumns() {
     }
   }
   yield takeLatest(
-    [SET_CONTEXTS, TOOL_LINKS__GET_COLUMNS, SET_CONTEXT, TOOL_LINKS__CHANGE_EXTRA_COLUMN],
+    [
+      SET_CONTEXTS,
+      TOOL_LINKS__GET_COLUMNS,
+      SET_CONTEXT,
+      nodesPanelActions.NODES_PANEL__SAVE,
+      TOOL_LINKS__COLLAPSE_SANKEY
+    ],
     performFetch
   );
 }
@@ -83,8 +101,12 @@ function* fetchToolGeoColumnNodes() {
 
 function* fetchLinks() {
   function* performFetch(action) {
-    const page = yield select(state => state.location.type);
-    if (page !== 'tool') {
+    const {
+      type: page,
+      payload: { section }
+    } = yield select(state => state.location);
+
+    if (page !== 'tool' || section === 'data-view') {
       return;
     }
 
@@ -109,15 +131,47 @@ function* fetchLinks() {
       SELECT_YEARS,
       TOOL_LINKS_RESET_SANKEY,
       TOOL_LINKS__SELECT_VIEW,
+      TOOL_LINKS__SWITCH_TOOL,
       TOOL_LINKS__CLEAR_SANKEY,
       TOOL_LINKS__SELECT_COLUMN,
-      TOOL_LINKS__EXPAND_SANKEY,
-      TOOL_LINKS__COLLAPSE_SANKEY,
       TOOL_LINKS__SET_SELECTED_NODES,
       TOOL_LINKS__SET_SELECTED_RESIZE_BY,
       TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
       TOOL_LINKS__SET_SELECTED_BIOME_FILTER,
-      TOOL_LINKS__CHANGE_EXTRA_COLUMN
+      TOOL_LINKS__CHANGE_EXTRA_COLUMN,
+      nodesPanelActions.NODES_PANEL__SYNC_NODES_WITH_SANKEY
+    ],
+    performFetch
+  );
+}
+
+function* fetchCharts() {
+  function* performFetch() {
+    const {
+      type: page,
+      payload: { section }
+    } = yield select(state => state.location);
+
+    if (page !== 'tool' || section !== 'data-view') {
+      return;
+    }
+    const task = yield fork(setLoadingSpinner, 2000, setToolChartsLoading(true));
+    yield fork(fetchToolCharts);
+    if (task.isRunning()) {
+      yield cancel(task);
+    }
+    yield fork(setLoadingSpinner, 350, setToolChartsLoading(false));
+  }
+
+  yield takeLatest(
+    [
+      SELECT_YEARS,
+      TOOL_LINKS_RESET_SANKEY,
+      TOOL_LINKS__SWITCH_TOOL,
+      TOOL_LINKS__SET_SELECTED_NODES,
+      TOOL_LINKS__SET_SELECTED_RESIZE_BY,
+      TOOL_LINKS__SET_SELECTED_RECOLOR_BY,
+      nodesPanelActions.NODES_PANEL__SYNC_NODES_WITH_SANKEY
     ],
     performFetch
   );
@@ -161,7 +215,8 @@ function* fetchMissingLockedNodes() {
 export default function* toolLinksSaga() {
   const sagas = [
     fetchLinks,
-    fetchToolColumns,
+    fetchCharts,
+    fetchToolInitialData,
     fetchMissingLockedNodes,
     fetchToolGeoColumnNodes,
     checkForceOverviewOnCollapse,

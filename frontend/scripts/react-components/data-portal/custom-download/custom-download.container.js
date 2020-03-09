@@ -1,8 +1,5 @@
 import { connect } from 'react-redux';
-import {
-  setSelectedCommodityId,
-  setSelectedCountryId
-} from 'react-components/data-portal/data-portal.actions';
+import { dataPortalActions } from 'react-components/data-portal/data-portal.register';
 import {
   getConsumptionCountryOptions,
   getCommodityOptions,
@@ -23,7 +20,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  setSelectedCountryId,
-  setSelectedCommodityId
+  setSelectedCountryId: dataPortalActions.setSelectedCountryId,
+  setSelectedCommodityId: dataPortalActions.setSelectedCommodityId
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CustomDownload);

@@ -1,6 +1,10 @@
 import { createSelector, createStructuredSelector } from 'reselect';
 import { DASHBOARD_STEPS } from 'constants';
+
 import modules from 'react-components/nodes-panel/nodes-panel.modules';
+import { getSelectedContext } from 'app/app.selectors';
+
+const getAppContexts = state => state.app.contexts;
 
 const getCountrySelectedNodeId = state => state.nodesPanel.countries.selectedNodeId;
 const getSourcesSelectedNodesIds = state => state.nodesPanel.sources.selectedNodesIds;
@@ -9,13 +13,95 @@ const getDestinationsSelectedNodesIds = state => state.nodesPanel.destinations.s
 const getExportersSelectedNodesIds = state => state.nodesPanel.exporters.selectedNodesIds;
 const getImportersSelectedNodesIds = state => state.nodesPanel.importers.selectedNodesIds;
 
+const getCountryDraftSelectedNodeId = state => state.nodesPanel.countries.draftSelectedNodeId;
+const getSourcesDraftSelectedNodesIds = state => state.nodesPanel.sources.draftSelectedNodesIds;
+const getCommodityDraftSelectedNodeId = state => state.nodesPanel.commodities.draftSelectedNodeId;
+const getDestinationsDraftSelectedNodesIds = state =>
+  state.nodesPanel.destinations.draftSelectedNodesIds;
+const getExportersDraftSelectedNodesIds = state => state.nodesPanel.exporters.draftSelectedNodesIds;
+const getImportersDraftSelectedNodesIds = state => state.nodesPanel.importers.draftSelectedNodesIds;
+
 const getSourcesFetchKey = state => state.nodesPanel.sources.fetchKey;
 const getCommodityFetchKey = state => state.nodesPanel.commodities.fetchKey;
 const getDestinationsFetchKey = state => state.nodesPanel.destinations.fetchKey;
 const getExportersFetchKey = state => state.nodesPanel.exporters.fetchKey;
 const getImportersFetchKey = state => state.nodesPanel.importers.fetchKey;
 
+const getSourcesExcludingMode = state => state.nodesPanel.sources.excludingMode;
+const getDestinationsExcludingMode = state => state.nodesPanel.destinations.excludingMode;
+const getExportersExcludingMode = state => state.nodesPanel.exporters.excludingMode;
+const getImportersExcludingMode = state => state.nodesPanel.importers.excludingMode;
+
+const getSources = state => state.nodesPanel.sources;
+const getDestinations = state => state.nodesPanel.destinations;
+const getExporters = state => state.nodesPanel.exporters;
+const getImporters = state => state.nodesPanel.importers;
+
 const makeGetTabs = name => state => state.nodesPanel[name].tabs;
+
+export const getExpandedNodesIds = createSelector(
+  [
+    getSourcesSelectedNodesIds,
+    getDestinationsSelectedNodesIds,
+    getExportersSelectedNodesIds,
+    getImportersSelectedNodesIds
+  ],
+  (...selectedNodesIdsByRole) => selectedNodesIdsByRole.flat()
+);
+
+export const getExpandedAndExcludedNodes = createSelector(
+  [
+    getSourcesSelectedNodesIds,
+    getDestinationsSelectedNodesIds,
+    getExportersSelectedNodesIds,
+    getImportersSelectedNodesIds,
+    getSourcesExcludingMode,
+    getDestinationsExcludingMode,
+    getExportersExcludingMode,
+    getImportersExcludingMode
+  ],
+  (
+    sourcesSelectedNodes,
+    destinationsSelectedNodes,
+    exportersSelectedNodes,
+    importersSelectedNodes,
+    sourcesExcludingMode,
+    destinationsExcludingMode,
+    exportersExcludingMode,
+    importersExcludingMode
+  ) => {
+    const excludedNodesIds = [];
+    const expandedNodesIds = [];
+
+    (sourcesExcludingMode ? excludedNodesIds : expandedNodesIds).push(...sourcesSelectedNodes);
+
+    (destinationsExcludingMode ? excludedNodesIds : expandedNodesIds).push(
+      ...destinationsSelectedNodes
+    );
+
+    (exportersExcludingMode ? excludedNodesIds : expandedNodesIds).push(...exportersSelectedNodes);
+
+    (importersExcludingMode ? excludedNodesIds : expandedNodesIds).push(...importersSelectedNodes);
+
+    return { expandedNodesIds, excludedNodesIds };
+  }
+);
+
+const buildDirtyBlocks = (
+  selectedCountryId,
+  selectedCommodityId,
+  sourcesActiveItems,
+  destinationsActiveItems,
+  exportersActiveItems,
+  importersActiveItems
+) => ({
+  countries: selectedCountryId !== null,
+  sources: sourcesActiveItems.length > 0,
+  commodities: selectedCommodityId !== null,
+  destinations: destinationsActiveItems.length > 0,
+  exporters: exportersActiveItems.length > 0,
+  importers: importersActiveItems.length > 0
+});
 
 export const getDirtyBlocks = createSelector(
   [
@@ -26,22 +112,35 @@ export const getDirtyBlocks = createSelector(
     getExportersSelectedNodesIds,
     getImportersSelectedNodesIds
   ],
-  (
-    selectedCountryId,
-    selectedCommodityId,
-    sourcesActiveItems,
-    destinationsActiveItems,
-    importersActiveItems,
-    exportersActiveItems
-  ) => ({
-    countries: selectedCountryId !== null,
-    sources: sourcesActiveItems.length > 0,
-    commodities: selectedCommodityId !== null,
-    destinations: destinationsActiveItems.length > 0,
-    exporters: exportersActiveItems.length > 0,
-    importers: importersActiveItems.length > 0
-  })
+  buildDirtyBlocks
 );
+
+export const getDraftDirtyBlocks = createSelector(
+  [
+    getCountryDraftSelectedNodeId,
+    getCommodityDraftSelectedNodeId,
+    getSourcesDraftSelectedNodesIds,
+    getDestinationsDraftSelectedNodesIds,
+    getExportersDraftSelectedNodesIds,
+    getImportersDraftSelectedNodesIds
+  ],
+  buildDirtyBlocks
+);
+
+const buildPreviousStepsString = name => (...steps) => {
+  const currentStep = DASHBOARD_STEPS[name];
+  const previousStepsSelectedItems = steps.slice(0, currentStep);
+  const prev = previousStepsSelectedItems
+    .flatMap(step => {
+      if (Array.isArray(step)) {
+        return step.join('_');
+      }
+      return step || null;
+    })
+    .filter(Boolean)
+    .join('_');
+  return prev;
+};
 
 const makeGetPreviousSteps = name =>
   createSelector(
@@ -53,19 +152,20 @@ const makeGetPreviousSteps = name =>
       getExportersSelectedNodesIds,
       getImportersSelectedNodesIds
     ],
-    (...steps) => {
-      const currentStep = DASHBOARD_STEPS[name];
-      const previousStepsSelectedItems = steps.slice(0, currentStep);
-      return previousStepsSelectedItems
-        .flatMap(step => {
-          if (Array.isArray(step)) {
-            return step.join('_');
-          }
-          return step ? `${step}_` : null;
-        })
-        .filter(Boolean)
-        .join('_');
-    }
+    buildPreviousStepsString(name)
+  );
+
+const makeGetDraftPreviousSteps = name =>
+  createSelector(
+    [
+      getCountryDraftSelectedNodeId,
+      getSourcesDraftSelectedNodesIds,
+      getCommodityDraftSelectedNodeId,
+      getDestinationsDraftSelectedNodesIds,
+      getExportersDraftSelectedNodesIds,
+      getImportersDraftSelectedNodesIds
+    ],
+    buildPreviousStepsString(name)
   );
 
 export const getSourcesPreviousSteps = makeGetPreviousSteps('sources');
@@ -74,6 +174,12 @@ export const getDestinationsPreviousSteps = makeGetPreviousSteps('destinations')
 export const getExportersPreviousSteps = makeGetPreviousSteps('exporters');
 export const getImportersPreviousSteps = makeGetPreviousSteps('importers');
 
+export const getSourcesDraftPreviousSteps = makeGetDraftPreviousSteps('sources');
+export const getCommoditiesDraftPreviousSteps = makeGetDraftPreviousSteps('commodities');
+export const getDestinationsDraftPreviousSteps = makeGetDraftPreviousSteps('destinations');
+export const getExportersDraftPreviousSteps = makeGetDraftPreviousSteps('exporters');
+export const getImportersDraftPreviousSteps = makeGetDraftPreviousSteps('importers');
+
 const getSomeBlocksNeedUpdate = createSelector(
   [
     getSourcesFetchKey,
@@ -81,11 +187,11 @@ const getSomeBlocksNeedUpdate = createSelector(
     getDestinationsFetchKey,
     getExportersFetchKey,
     getImportersFetchKey,
-    getSourcesPreviousSteps,
-    getCommoditiesPreviousSteps,
-    getDestinationsPreviousSteps,
-    getExportersPreviousSteps,
-    getImportersPreviousSteps
+    getSourcesDraftPreviousSteps,
+    getCommoditiesDraftPreviousSteps,
+    getDestinationsDraftPreviousSteps,
+    getExportersDraftPreviousSteps,
+    getImportersDraftPreviousSteps
   ],
   (
     sourcesFetchKey,
@@ -100,22 +206,18 @@ const getSomeBlocksNeedUpdate = createSelector(
     importersPreviousSteps
   ) => {
     const conditions = [
-      [null, 'preloaded'].includes(sourcesFetchKey) || sourcesFetchKey === sourcesPreviousSteps,
-      [null, 'preloaded'].includes(commoditiesFetchKey) ||
-        commoditiesFetchKey === commoditiesPreviousSteps,
-      [null, 'preloaded'].includes(destinationsFetchKey) ||
-        destinationsFetchKey === destinationsPreviousSteps,
-      [null, 'preloaded'].includes(exportersFetchKey) ||
-        exportersFetchKey === exportersPreviousSteps,
-      [null, 'preloaded'].includes(importersFetchKey) ||
-        importersFetchKey === importersPreviousSteps
+      sourcesFetchKey === null || sourcesFetchKey === sourcesPreviousSteps,
+      commoditiesFetchKey === null || commoditiesFetchKey === commoditiesPreviousSteps,
+      destinationsFetchKey === null || destinationsFetchKey === destinationsPreviousSteps,
+      exportersFetchKey === null || exportersFetchKey === exportersPreviousSteps,
+      importersFetchKey === null || importersFetchKey === importersPreviousSteps
     ];
     return conditions.includes(false);
   }
 );
 
 export const getCanProceed = createSelector(
-  [getDirtyBlocks, getSomeBlocksNeedUpdate],
+  [getDraftDirtyBlocks, getSomeBlocksNeedUpdate],
   (dirtyBlocks, someBlocksNeedUpdate) => {
     const mandatoryBlocks = dirtyBlocks.countries && dirtyBlocks.commodities;
 
@@ -126,23 +228,73 @@ export const getCanProceed = createSelector(
   }
 );
 
+const makeActiveTabSelector = (getTab, getTabs) =>
+  createSelector([getTab, getTabs], (activeTab, tabs) => {
+    if (activeTab) {
+      return activeTab;
+    }
+    if (tabs?.length > 0) {
+      return tabs[0].id;
+    }
+    return null;
+  });
+
 export const makeGetActiveTab = name => {
   const getTab = state => state.nodesPanel[name].activeTab;
   const getTabs = makeGetTabs(name);
 
-  return createSelector(
-    [getTab, getTabs],
-    (activeTab, tabs) => {
-      if (activeTab) {
-        return activeTab;
-      }
-      if (tabs?.length > 0) {
-        return tabs[0].id;
-      }
-      return null;
-    }
-  );
+  return makeActiveTabSelector(getTab, getTabs);
 };
+
+const makeGetSavedActiveTab = name => {
+  const getTab = state => state.nodesPanel[name].savedActiveTab;
+  const getTabs = state => state.nodesPanel[name].savedTabs;
+
+  return makeActiveTabSelector(getTab, getTabs);
+};
+
+const getPanelActiveNodeTypeId = (panel, activeTab) => {
+  if (panel.excludingMode && panel.selectedNodesIds.length === 0) {
+    return activeTab;
+  }
+  const tabs = panel.savedTabs.length > 0 ? panel.savedTabs : panel.tabs;
+  const [first] = panel.selectedNodesIds;
+  const node = panel.data.nodes && panel.data.nodes[first];
+  const tab = node && tabs.find(t => t.name === node.nodeType);
+  return tab?.id;
+};
+
+const getSourcesNodeTypeId = createSelector(
+  [getSources, makeGetSavedActiveTab('sources')],
+  getPanelActiveNodeTypeId
+);
+
+const getExportersNodeTypeId = createSelector(
+  [getExporters, makeGetSavedActiveTab('exporters')],
+  getPanelActiveNodeTypeId
+);
+
+const getImportersNodeTypeId = createSelector(
+  [getImporters, makeGetSavedActiveTab('importers')],
+  getPanelActiveNodeTypeId
+);
+
+export const getPanelsActiveNodeTypeIds = createSelector(
+  [getSourcesNodeTypeId, getExportersNodeTypeId, getImportersNodeTypeId],
+  (source, exporter, importer) => ({ source, exporter, importer })
+);
+
+export const getNodesPanelDraftContext = createSelector(
+  [getCountryDraftSelectedNodeId, getCommodityDraftSelectedNodeId, getAppContexts],
+  (countryDraftSelectedNodeId, commodityDraftSelectedNodeId, contexts) => {
+    const context = contexts.find(
+      ctx =>
+        ctx.countryId === countryDraftSelectedNodeId &&
+        ctx.commodityId === commodityDraftSelectedNodeId
+    );
+    return context || null;
+  }
+);
 
 export const makeGetNodesPanelsProps = name => {
   const moduleOptions = modules[name];
@@ -153,17 +305,14 @@ export const makeGetNodesPanelsProps = name => {
   const getLoading = state => state.nodesPanel[name].loadingItems;
   const getNoData = state => state.nodesPanel[name].noData;
   const getTabs = makeGetTabs(name);
-  const getSelectedNodeId = state => state.nodesPanel[name].selectedNodeId;
-  const getSelectedNodesIds = state => state.nodesPanel[name].selectedNodesIds;
+  const getSelectedNodeId = state => state.nodesPanel[name].draftSelectedNodeId;
+  const getSelectedNodesIds = state => state.nodesPanel[name].draftSelectedNodesIds;
   const getSearchResults = state => state.nodesPanel[name].searchResults;
   const getFetchKey = state => state.nodesPanel[name].fetchKey;
   const getExcludingMode = state => state.nodesPanel[name].excludingMode;
   const getOrderBy = state => state.nodesPanel[name].orderBy;
 
-  const getItems = createSelector(
-    [getById, getNodes],
-    (byId, nodes) => byId.map(id => nodes[id])
-  );
+  const getItems = createSelector([getById, getNodes], (byId, nodes) => byId.map(id => nodes[id]));
 
   const getActiveTab = makeGetActiveTab(name);
 
@@ -178,16 +327,13 @@ export const makeGetNodesPanelsProps = name => {
     }
   );
 
-  const getSelectedOrderBy = createSelector(
-    [getOrderBy],
-    orderBy => ({
-      id: orderBy,
-      label: orderBy === 'name' ? 'Name' : 'Trade Volume',
-      value: orderBy
-    })
-  );
+  const getSelectedOrderBy = createSelector([getOrderBy], orderBy => ({
+    id: orderBy,
+    label: orderBy === 'name' ? 'Name' : 'Trade Volume',
+    value: orderBy
+  }));
 
-  const getPreviousSteps = makeGetPreviousSteps(name);
+  const getDraftPreviousSteps = makeGetDraftPreviousSteps(name);
 
   const selectors = {
     page: getPage,
@@ -195,7 +341,7 @@ export const makeGetNodesPanelsProps = name => {
     noData: getNoData,
     fetchKey: getFetchKey,
     orderBy: getSelectedOrderBy,
-    previousSteps: getPreviousSteps
+    draftPreviousSteps: getDraftPreviousSteps
   };
 
   if (moduleOptions.hasTabs) {
@@ -219,3 +365,27 @@ export const makeGetNodesPanelsProps = name => {
 
   return createStructuredSelector(selectors);
 };
+
+const getURLParamsIfContext = (params, context) => {
+  if (!context) {
+    return null;
+  }
+  return params;
+};
+
+const getURLSources = createSelector([getSources, getSelectedContext], getURLParamsIfContext);
+const getURLExporters = createSelector([getExporters, getSelectedContext], getURLParamsIfContext);
+const getURLImporters = createSelector([getImporters, getSelectedContext], getURLParamsIfContext);
+const getURLDestinations = createSelector(
+  [getDestinations, getSelectedContext],
+  getURLParamsIfContext
+);
+
+export const getNodesPanelUrlProps = createStructuredSelector({
+  sources: getURLSources,
+  exporters: getURLExporters,
+  importers: getURLImporters,
+  countries: getCountrySelectedNodeId,
+  destinations: getURLDestinations,
+  commodities: getCommoditySelectedNodeId
+});

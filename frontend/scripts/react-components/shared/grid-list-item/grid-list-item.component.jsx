@@ -73,8 +73,10 @@ function GridListItem(props) {
             {tooltip && (
               <div
                 className={cx('grid-list-item-info', {
+                  '-item-active': !isToggleAll && isActive,
                   '-active': isInfoActive
                 })}
+                disabled={isDisabled}
               >
                 <HelpTooltip
                   text={tooltip}
@@ -85,7 +87,7 @@ function GridListItem(props) {
                 >
                   <button
                     type="button"
-                    disabled={isDisabled || !onInfoClick}
+                    disabled={isDisabled}
                     onClick={() => onInfoClick && onInfoClick(item)}
                   >
                     i

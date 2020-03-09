@@ -45,7 +45,10 @@ module.exports = {
         'https://dmp.adform.net'
       ]
     }),
-    new PreloadWebpackPlugin(),
+    new PreloadWebpackPlugin({
+      rel: 'preload',
+      include: ['tool', 'explore']
+    }),
     new HtmlWebpackPreconnectPlugin(),
     new webpack.DefinePlugin({
       NODE_ENV_DEV: process.env.NODE_ENV === 'development',
@@ -83,20 +86,19 @@ module.exports = {
       html: path.resolve(__dirname, '..', 'html'),
       actions: path.resolve(srcPath, 'actions'),
       analytics: path.resolve(srcPath, 'analytics'),
-      reducers: path.resolve(srcPath, 'reducers'),
-      templates: path.resolve(srcPath, 'templates'),
+      app: path.resolve(srcPath, 'app'),
+      legacy: path.resolve(srcPath, 'legacy'),
       styles: path.resolve(__dirname, '..', 'styles'),
-      components: path.resolve(srcPath, 'components'),
       'react-components': path.resolve(srcPath, 'react-components'),
       'named-maps': path.resolve(srcPath, 'named-maps'),
-      containers: path.resolve(srcPath, 'containers'),
       utils: path.resolve(srcPath, 'utils'),
       constants: path.resolve(srcPath, 'constants'),
-      base: path.resolve(srcPath, 'base'),
       store: path.resolve(srcPath, 'store'),
       router: path.resolve(srcPath, 'router'),
       selectors: path.resolve(srcPath, 'selectors'),
-      'lodash-es': 'lodash'
+      'lodash-es': 'lodash',
+      'reducer-registry': path.resolve(srcPath, 'reducer-registry'),
+      'saga-registry': path.resolve(srcPath, 'saga-registry')
     },
     plugins: [
       new DirectoryNamedWebpackPlugin({

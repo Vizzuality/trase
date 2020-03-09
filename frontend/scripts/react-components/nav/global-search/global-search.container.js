@@ -1,4 +1,4 @@
-import { loadSearchResults } from 'actions/app.actions';
+import { appActions } from 'app/app.register';
 import GlobalSearch from 'react-components/nav/global-search/global-search.component';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -19,16 +19,17 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      onInputValueChange: inputValue => loadSearchResults(inputValue),
+      onInputValueChange: inputValue => appActions.loadSearchResults(inputValue),
       onItemSelected: item =>
         dispatch({
           type: 'tool',
           payload: {
             serializerParams: {
-              toolLayout: TOOL_LAYOUT.right,
-              selectedContextId: item.contextId,
+              toolLayout: TOOL_LAYOUT.splitted,
+              countries: item.countryId,
+              commodities: item.commodityId,
               selectedNodesIds: item.nodes.map(i => i.id),
-              expandedNodesIds: item.nodes.map(i => i.id)
+              __temporaryExpandedNodes: item.nodes
             }
           }
         })
@@ -36,7 +37,4 @@ const mapDispatchToProps = dispatch =>
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GlobalSearch);
+export default connect(mapStateToProps, mapDispatchToProps)(GlobalSearch);

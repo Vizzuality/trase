@@ -58,7 +58,7 @@ shared_context 'minimum complete configuration' do
     FactoryBot.create(:api_v3_node, node_type: biome_node_type)
   }
   let(:municipality_node) {
-    FactoryBot.create(:api_v3_node, node_type: municipality_node_type)
+    FactoryBot.create(:api_v3_node, node_type: municipality_node_type, main_id: 1)
   }
   let(:exporter_node) {
     FactoryBot.create(:api_v3_node, node_type: exporter_node_type)

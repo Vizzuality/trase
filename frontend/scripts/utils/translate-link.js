@@ -35,20 +35,9 @@ function getRoleQueryParams(selectedNodesIds, meta) {
 
 function translateLink(data, meta, to = 'sankey') {
   const { queryParams, countryId, commodityId, title } = data;
-  const params = parseURL(queryParams);
-
-  if (to === 'sankey') {
-    return {
-      type: 'tool',
-      payload: {
-        serializerParams: params
-      }
-    };
-  }
+  const { selectedContextId, ...params } = parseURL(queryParams);
 
   let serializerParams = {
-    selectedCountryId: countryId,
-    selectedCommodityId: commodityId,
     selectedYears: params.selectedYears,
     selectedResizeBy: params.selectedResizeBy,
     selectedRecolorBy: params.selectedRecolorBy
@@ -58,12 +47,58 @@ function translateLink(data, meta, to = 'sankey') {
     const roleQueryParams = getRoleQueryParams(params.selectedNodesIds, meta);
     serializerParams = pickBy({ ...serializerParams, ...roleQueryParams });
   }
+  if (to === 'sankey') {
+    if (ENABLE_TOOL_PANEL) {
+      const { selectedNodesIds, expandedNodesIds, ...newParams } = params;
+      return {
+        type: 'tool',
+        payload: {
+          serializerParams: {
+            ...newParams,
+            ...serializerParams,
+            countries: countryId,
+            commodities: commodityId
+          }
+        }
+      };
+    }
+
+    return {
+      type: 'tool',
+      payload: {
+        serializerParams: {
+          ...params,
+          ...serializerParams
+        }
+      }
+    };
+  }
+
+  if (ENABLE_TOOL_PANEL) {
+    const { selectedNodesIds, expandedNodesIds, ...newParams } = params;
+    return {
+      type: 'tool',
+      payload: {
+        section: 'data-view',
+        serializerParams: {
+          ...newParams,
+          ...serializerParams,
+          countries: countryId,
+          commodities: commodityId
+        }
+      }
+    };
+  }
 
   return {
     type: 'dashboardElement',
     payload: {
       dashboardId: kebabCase(title),
-      serializerParams
+      serializerParams: {
+        ...serializerParams,
+        countries: countryId,
+        commodities: commodityId
+      }
     }
   };
 }

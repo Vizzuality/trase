@@ -1,6 +1,6 @@
 @import 'styles/settings';
 
-$featured-cards-height: 156px;
+$featured-cards-height: 171px;
 $max-rows: 3;
 $row-height: 50;
 $explore-mobile-dropdowns: 100px;
@@ -8,6 +8,7 @@ $explore-heading: 66px;
 
 .c-explore {
   overflow: hidden;
+  background-color: $light-gray;
 
   @media screen and (min-width: $breakpoint-tablet), (orientation: landscape) {
     overflow: auto;
@@ -104,13 +105,14 @@ $explore-heading: 66px;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      align-items: center;
       border-radius: 50%;
       margin-top: 20px;
-      background-color: $light-gray;
+      background-color: $yellow-gray;
     }
 
-    .quick-facts-value {
-      margin-top: 26px;
+    .quick-facts-label {
+      max-width: 110px;
     }
   }
 
@@ -144,5 +146,23 @@ $explore-heading: 66px;
 
   .country-dropdown-container {
     margin-top: 20px;
+  }
+
+  .step-title-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .featured-cards-back {
+    position: relative;
+    color: $strong-pink;
+    margin-left: 20px;
+    cursor: pointer;
+
+    .icon {
+      position: relative;
+      transform: rotate(90deg) translateX(-2px); // Adjust vertical position after rotate
+    }
   }
 }

@@ -1,15 +1,38 @@
-import { select, all, fork, takeLatest, takeEvery } from 'redux-saga/effects';
+import { select, all, fork, takeLatest, takeEvery, put, call } from 'redux-saga/effects';
+import modules from 'react-components/nodes-panel/nodes-panel.modules';
+import { dashboardElementActions } from 'react-components/dashboard-element/dashboard-element.register';
+import { fetchDashboardCharts } from 'react-components/dashboard-element/dashboard-element.fetch.saga';
+import { getDashboardsContext } from 'react-components/dashboard-element/dashboard-element.selectors';
+import { toolLinksActions } from 'react-components/tool-links/tool-links.register';
+import { fetchToolCharts } from 'react-components/tool-links/tool-links.fetch.saga';
 import {
+  getExpandedNodesByRole,
+  getSelectedNodesByRole,
+  getVisibleNodes
+} from 'react-components/tool-links/tool-links.selectors';
+import pluralize from 'utils/pluralize';
+
+import {
+  savePanels,
+  syncNodesWithSankey,
+  NODES_PANEL__FINISH_SELECTION,
+  NODES_PANEL__GET_MISSING_DATA,
   NODES_PANEL__GET_SEARCH_RESULTS,
   NODES_PANEL__SET_TABS,
   NODES_PANEL__FETCH_DATA,
   NODES_PANEL__SET_ACTIVE_ITEMS_WITH_SEARCH,
   NODES_PANEL__SET_ACTIVE_TAB,
   NODES_PANEL__SET_PANEL_PAGE,
-  NODES_PANEL__SET_ORDER_BY
+  NODES_PANEL__SET_ORDER_BY,
+  NODES_PANEL__SET_SELECTED_ID
 } from './nodes-panel.actions';
-import { getData, getSectionTabs, getMoreData, fetchSearchResults } from './nodes-panel.fetch.saga';
-import modules from './nodes-panel.modules';
+import {
+  getData,
+  getSectionTabs,
+  getMoreData,
+  fetchSearchResults,
+  getMissingItems
+} from './nodes-panel.fetch.saga';
 
 function* fetchData() {
   function* onFetchRequest(action) {
@@ -46,6 +69,20 @@ function* fetchDataOnSearch() {
   yield takeLatest(NODES_PANEL__GET_SEARCH_RESULTS, getSearchResults);
 }
 
+export function* onItemChange(action) {
+  const {
+    meta: { name },
+    payload: { activeItem }
+  } = action;
+  if (name === 'countries' && activeItem) {
+    yield fork(getSectionTabs, 'sources');
+  }
+}
+
+function* fetchDataOnCountryChange() {
+  yield takeLatest([NODES_PANEL__SET_SELECTED_ID], onItemChange);
+}
+
 function* fetchDataOnTabsFetch() {
   function* onTabsFetch(action) {
     const { name } = action.meta;
@@ -53,11 +90,7 @@ function* fetchDataOnTabsFetch() {
     if (moduleOptions.hasTabs) {
       const reducer = yield select(state => state.nodesPanel[name]);
 
-      if (reducer.data.byId.length === 0) {
-        yield fork(getData, name, reducer);
-      } else {
-        yield fork(getMoreData, name, reducer);
-      }
+      yield fork(getData, name, reducer);
     }
   }
 
@@ -99,13 +132,137 @@ function* fetchDataOnPageChange() {
   yield takeLatest(NODES_PANEL__SET_PANEL_PAGE, onPageChange);
 }
 
+export function* fetchMissingItems() {
+  function* shouldFetchMissingItems() {
+    const nodesPanel = yield select(state => state.nodesPanel);
+    const {
+      payload: { section }
+    } = yield select(state => state.location);
+    const selectedContext = yield select(getDashboardsContext);
+    const tasks = [];
+
+    if (selectedContext) {
+      tasks.push(call(getData, 'countries', nodesPanel.countries, true));
+      tasks.push(call(getData, 'commodities', nodesPanel.commodities, true));
+    }
+
+    const hasMissingData = Object.keys(modules)
+      .filter(name => !['countries', 'commodities'].includes(name))
+      .some(
+        name =>
+          nodesPanel[name].selectedNodesIds.length > 0 && nodesPanel.sources.data.byId.length === 0
+      );
+
+    if (selectedContext && hasMissingData) {
+      tasks.push(call(getMissingItems, nodesPanel, selectedContext));
+    }
+
+    yield all(tasks);
+
+    if (nodesPanel.instanceId === 'tool' && section === 'data-view' && selectedContext) {
+      yield fork(fetchToolCharts);
+      yield put(toolLinksActions.setToolChartsLoading(false));
+    }
+
+    // TODO: Remove when we delete the legacy dashboards
+    if (nodesPanel.instanceId === 'dashboardElement' && selectedContext) {
+      yield fork(fetchDashboardCharts);
+      yield put(dashboardElementActions.setDashboardLoading(false));
+    }
+  }
+
+  yield takeLatest([NODES_PANEL__GET_MISSING_DATA], shouldFetchMissingItems);
+}
+
+function* syncSelectedNodes() {
+  function* onExpandSankey() {
+    const nodesByRole = yield select(getSelectedNodesByRole);
+
+    yield put(syncNodesWithSankey(nodesByRole));
+  }
+  yield takeLatest([toolLinksActions.TOOL_LINKS__EXPAND_SANKEY], onExpandSankey);
+}
+
+function* syncSearchedNodes() {
+  function* onSelectResult(action) {
+    const {
+      data: { columns }
+    } = yield select(state => state.toolLinks);
+    const { results } = action.payload;
+    const ids = results.map(n => n.id);
+    const visibleNodes = yield select(getVisibleNodes);
+    if (visibleNodes) {
+      const visibleNodesById = visibleNodes.reduce(
+        (acc, next) => ({ ...acc, [next.id]: true }),
+        {}
+      );
+      const everyNodeIsVisible = ids.some(id => visibleNodesById[id]);
+      if (everyNodeIsVisible) {
+        return;
+      }
+    }
+
+    const nodesByRole = yield select(getExpandedNodesByRole);
+
+    const nodesByRoleViaSearch = results.reduce((acc, nodeResult) => {
+      const column = Object.values(columns || {}).find(c => c.name === nodeResult.nodeType);
+      if (column) {
+        const role = pluralize(column.role);
+        if (!acc[role]) {
+          acc[role] = [];
+        }
+
+        acc[role].push(nodeResult);
+      }
+      return acc;
+    }, nodesByRole);
+
+    yield put(syncNodesWithSankey(nodesByRoleViaSearch));
+  }
+  yield takeLatest([toolLinksActions.TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH], onSelectResult);
+}
+
+function* broadcastContextChange() {
+  const previousContext = { countryId: null, commodityId: null };
+
+  function* onPanelSave() {
+    const { contexts } = yield select(state => state.app);
+    const { countries, commodities } = yield select(state => state.nodesPanel);
+    const context = contexts.find(
+      ctx =>
+        ctx.countryId === countries.draftSelectedNodeId &&
+        ctx.commodityId === commodities.draftSelectedNodeId
+    );
+    if (
+      countries.draftSelectedNodeId !== previousContext.countryId ||
+      commodities.draftSelectedNodeId !== previousContext.commodityId
+    ) {
+      // at this point we know that the panel save has indeed changed the context so we broadcast the change
+      yield put(savePanels(context.id));
+    } else {
+      yield put(savePanels(null));
+    }
+
+    // we update the previous context
+    previousContext.countryId = context.countryId;
+    previousContext.commodityId = context.commodityId;
+  }
+
+  yield takeLatest(NODES_PANEL__FINISH_SELECTION, onPanelSave);
+}
+
 export default function* nodesPanelSagas() {
   const sagas = [
     fetchData,
+    fetchDataOnCountryChange,
     fetchDataOnPageChange,
     fetchDataOnSearch,
     fetchDataOnTabsFetch,
-    fetchDataOnTabChange
+    fetchDataOnTabChange,
+    fetchMissingItems,
+    syncSelectedNodes,
+    syncSearchedNodes,
+    broadcastContextChange
   ];
   yield all(sagas.map(saga => fork(saga)));
 }

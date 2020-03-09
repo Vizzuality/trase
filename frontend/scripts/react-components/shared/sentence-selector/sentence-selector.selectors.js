@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import sortBy from 'lodash/sortBy';
-import { getSelectedContext } from 'reducers/app.selectors';
+import { getSelectedContext } from 'app/app.selectors';
 
 const getContexts = state => state.app.contexts;
 
@@ -28,7 +28,6 @@ export const getSelectedCountryPairs = createSelector(
     )
 );
 
-export const getSortedContexts = createSelector(
-  getContexts,
-  contexts => sortBy(contexts, ['commodityName', 'countryName'])
+export const getSortedContexts = createSelector(getContexts, contexts =>
+  sortBy(contexts, ['commodityName', 'countryName'])
 );

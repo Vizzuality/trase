@@ -8,7 +8,8 @@ import CommoditiesPanel from 'react-components/nodes-panel/commodities-panel';
 import DashboardModalFooter from 'react-components/dashboard-element/dashboard-modal-footer/dashboard-modal-footer.component';
 import addApostrophe from 'utils/addApostrophe';
 import { DASHBOARD_STEPS } from 'constants';
-import { getPanelLabel, singularize } from 'utils/dashboardPanel';
+import singularize from 'utils/singularize';
+import { getPanelLabel } from 'utils/dashboardPanel';
 import Heading from 'react-components/shared/heading';
 import StepsTracker from 'react-components/shared/steps-tracker/steps-tracker.component';
 import { translateText } from 'utils/transifex';
@@ -31,6 +32,12 @@ class DashboardPanel extends Component {
     if (snapshot && container) {
       container.scrollTop = container.scrollHeight - snapshot;
     }
+  }
+
+  componentWillUnmount() {
+    const { cancelPanelsDraft, setStep } = this.props;
+    cancelPanelsDraft();
+    setStep(DASHBOARD_STEPS.welcome);
   }
 
   static sourcesNodeTypeRenderer(node) {
@@ -114,25 +121,16 @@ class DashboardPanel extends Component {
 
   render() {
     const {
-      editMode,
       clearPanel,
       onContinue,
       onBack,
       setStep,
-      goToDashboard,
-      dirtyBlocks,
-      dynamicSentenceParts,
+      draftDynamicSentenceParts,
       step,
       isDisabled,
-      closeModal,
       setSelectedItems,
       canProceed
     } = this.props;
-
-    const handleGoToDashboard = () => {
-      goToDashboard({ dirtyBlocks, dynamicSentenceParts });
-      closeModal();
-    };
 
     return (
       <div className="c-dashboard-panel">
@@ -146,7 +144,7 @@ class DashboardPanel extends Component {
               'Importers'
             ].map(label => ({ label }))}
             activeStep={step - 1}
-            onSelectStep={editMode && canProceed ? setStep : undefined}
+            onSelectStep={canProceed ? setStep : undefined}
           />
           <Heading className="dashboard-panel-title notranslate" align="center" size="lg">
             {this.renderTitleSentence()}
@@ -154,14 +152,13 @@ class DashboardPanel extends Component {
           {this.renderPanel()}
         </div>
         <DashboardModalFooter
-          isLastStep={step === DASHBOARD_STEPS.importers || (editMode && canProceed)}
+          canProceed={canProceed}
+          isLastStep={step === DASHBOARD_STEPS.importers}
           onContinue={onContinue}
           onBack={onBack}
           backText="Back"
-          dirtyBlocks={dirtyBlocks}
-          goToDashboard={handleGoToDashboard}
           clearPanel={panelName => clearPanel(panelName)}
-          dynamicSentenceParts={dynamicSentenceParts}
+          draftDynamicSentenceParts={draftDynamicSentenceParts}
           step={step}
           isDisabled={isDisabled}
           removeSentenceItem={setSelectedItems}
@@ -173,16 +170,13 @@ class DashboardPanel extends Component {
 
 DashboardPanel.propTypes = {
   onBack: PropTypes.func,
-  dirtyBlocks: PropTypes.object,
-  goToDashboard: PropTypes.func,
   step: PropTypes.number.isRequired,
   setStep: PropTypes.func.isRequired,
-  editMode: PropTypes.bool.isRequired,
   isDisabled: PropTypes.bool.isRequired,
-  dynamicSentenceParts: PropTypes.array,
+  draftDynamicSentenceParts: PropTypes.array,
   onContinue: PropTypes.func.isRequired,
-  closeModal: PropTypes.func.isRequired,
   clearPanel: PropTypes.func.isRequired,
+  cancelPanelsDraft: PropTypes.func.isRequired,
   setSelectedItems: PropTypes.func.isRequired,
   canProceed: PropTypes.bool.isRequired,
   countryNames: PropTypes.object.isRequired

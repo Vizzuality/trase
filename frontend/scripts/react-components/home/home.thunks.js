@@ -1,5 +1,6 @@
-import { getHomeContent } from 'react-components/home/home.actions';
+import { homeActions } from 'react-components/home/home.register';
 
-export const getPostsContent = dispatch => dispatch(getHomeContent('posts'));
-export const getTestimonialsContent = dispatch => dispatch(getHomeContent('testimonials'));
-export const getTweetsContent = dispatch => dispatch(getHomeContent('tweets'));
+export const getPostsContent = dispatch => dispatch(homeActions.getHomeContent('posts'));
+export const getTestimonialsContent = dispatch =>
+  dispatch(homeActions.getHomeContent('testimonials'));
+export const getTweetsContent = dispatch => dispatch(homeActions.getHomeContent('tweets'));

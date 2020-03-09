@@ -4,7 +4,7 @@
   position: relative;
   height: 100%;
   width: 100%;
-  padding: 42px;
+  padding: 42px 10px 0px 20px;
 
   .list {
     width: 100%;
@@ -46,7 +46,6 @@
   .item-name {
     line-height: 1.2;
     max-height: 100%;
-    overflow: hidden;
   }
 
   .item-value {

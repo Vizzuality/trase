@@ -1,11 +1,6 @@
 /* eslint-disable no-shadow */
-// see sankey.container for details on how to use those containers
-import { changeLayout } from 'actions/app.actions';
-import {
-  selectNodeFromGeoId,
-  highlightNodeFromGeoId,
-  saveMapView
-} from 'react-components/tool/tool.actions';
+import { selectNodeFromGeoId, highlightNodeFromGeoId } from 'react-components/tool/tool.actions';
+import { toolLayersActions } from 'react-components/tool-layers/tool-layers.register';
 import {
   getHighlightedNodesData,
   getSelectedColumnsIds,
@@ -27,10 +22,10 @@ import {
   getMapDimensionsWarnings,
   getSelectedMapDimensionsData
 } from 'react-components/tool-layers/tool-layers.selectors';
-import { getSelectedContext } from 'reducers/app.selectors';
+import { getSelectedContext } from 'app/app.selectors';
 import { mapToVanilla } from 'react-components/shared/vanilla-react-bridge.component';
 import { connect } from 'react-redux';
-import Map from 'react-components/tool/map/map.component';
+import Map from 'legacy/map.component';
 
 const mapStateToProps = state => {
   const { choropleth } = getChoroplethOptions(state);
@@ -153,8 +148,7 @@ const methodProps = [
 const mapDispatchToProps = {
   onPolygonClicked: geoId => selectNodeFromGeoId(geoId),
   onPolygonHighlighted: (geoId, coordinates) => highlightNodeFromGeoId(geoId, coordinates),
-  onChangeLayout: newLayout => changeLayout(newLayout),
-  onMoveEnd: (latlng, zoom) => saveMapView(latlng, zoom)
+  onMoveEnd: (latlng, zoom) => toolLayersActions.saveMapView(latlng, zoom)
 };
 
 export default connect(

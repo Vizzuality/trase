@@ -15,6 +15,7 @@
   text-transform: uppercase;
   cursor: pointer;
   white-space: nowrap;
+  flex-shrink: 0;
 
   &:active {
     opacity: 0.8;
@@ -45,7 +46,7 @@
   }
 
   &.size-xs {
-    padding: 10px 14px;
+    padding: 8px 14px;
   }
 
   &.size-sm {

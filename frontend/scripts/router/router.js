@@ -1,36 +1,51 @@
+import { lazy } from 'react';
 import { connectRoutes, NOT_FOUND, redirect, replace } from 'redux-first-router';
 import restoreScroll from 'redux-first-router-restore-scroll';
 import parseURL from 'utils/parseURL';
 import qs from 'qs';
-
-import { BREAKPOINTS } from 'constants';
-import {
-  getPostsContent,
-  getTestimonialsContent,
-  getTweetsContent
-} from 'react-components/home/home.thunks';
-import { loadTopNodes } from 'react-components/profile-root/profile-root.thunks';
-import { loadColumnsData } from 'react-components/profile-node/profile-node.thunks';
 import withSidebarNavLayout from 'react-components/nav/sidebar-nav/with-sidebar-nav-layout.hoc';
-import getPageStaticContent from 'react-components/static-content/static-content.thunks';
-import loadBaseAppData from 'reducers/app.thunks';
-import getTeam from 'react-components/team/team.thunks';
-import { loadDashboardTemplates } from 'react-components/dashboard-root/dashboard-root.thunks';
-import { redirectToExplore } from 'react-components/legacy-explore/explore.thunks';
-import {
-  loadToolInitialData,
-  resizeSankeyTool,
-  loadDisclaimerTool
-} from 'scripts/react-components/tool/tool.thunks';
-import { loadInitialDashboardData } from 'scripts/react-components/dashboard-element/dashboard-element.thunks';
-
 import getPageTitle from 'scripts/router/page-title';
 
-const pagesSupportedLimit = {
-  data: 'small',
-  tool: 'tablet',
-  map: 'tablet'
-};
+const getPostsContent = (...args) =>
+  import('../react-components/home/home.thunks').then(module => module.getPostsContent(...args));
+const getTestimonialsContent = (...args) =>
+  import('../react-components/home/home.thunks').then(module =>
+    module.getTestimonialsContent(...args)
+  );
+const getTweetsContent = (...args) =>
+  import('../react-components/home/home.thunks').then(module => module.getTweetsContent(...args));
+const loadTopNodes = (...args) =>
+  import('../react-components/profile-root/profile-root.thunks').then(module =>
+    module.loadTopNodes(...args)
+  );
+const getPageStaticContent = (...args) =>
+  import('../react-components/static-content/static-content.thunks').then(module =>
+    module.default(...args)
+  );
+const loadBaseAppData = (...args) =>
+  import('../app/app.thunks').then(module => module.default(...args));
+const getTeam = (...args) =>
+  import('../react-components/team/team.thunks').then(module => module.default(...args));
+const loadDashboardTemplates = (...args) =>
+  import('../react-components/dashboard-root/dashboard-root.thunks').then(module =>
+    module.loadDashboardTemplates(...args)
+  );
+const redirectToExplore = (...args) =>
+  import('../react-components/legacy-explore/explore.thunks').then(module =>
+    module.redirectToExplore(...args)
+  );
+const loadToolInitialData = (...args) =>
+  import('../react-components/tool/tool.thunks').then(module =>
+    module.loadToolInitialData(...args)
+  );
+const resizeSankeyTool = (...args) =>
+  import('../react-components/tool/tool.thunks').then(module => module.resizeSankeyTool(...args));
+const loadDisclaimerTool = (...args) =>
+  import('../react-components/tool/tool.thunks').then(module => module.loadDisclaimerTool(...args));
+const loadInitialDashboardData = (...args) =>
+  import('../react-components/dashboard-element/dashboard-element.thunks').then(module =>
+    module.loadInitialDashboardData(...args)
+  );
 
 // We await for all thunks using Promise.all, this makes the result then-able and allows us to
 // add an await solely to the thunks that need it.
@@ -40,32 +55,53 @@ const dispatchThunks = (...thunks) => (...params) =>
 const loadPageData = (...thunks) => (...params) =>
   loadBaseAppData(...params).then(() => Promise.all(thunks.map(thunk => thunk(...params))));
 
+const StaticContent = lazy(() =>
+  import('../react-components/static-content/static-content.container')
+);
+
 export const routes = {
   home: {
     path: '/',
-    page: 'home',
+    Component: lazy(() =>
+      import(/* webpackChunkName: "home" */ '../react-components/home/home.container')
+    ),
     title: getPageTitle,
     thunk: loadPageData(getPostsContent, getTweetsContent, getTestimonialsContent)
   },
   explore: {
     path: '/explore',
-    page: 'explore',
+    Component: lazy(() =>
+      import(
+        /* webpackChunkName: "explore" */ /* webpackPreload: true */ '../react-components/explore/explore.js'
+      )
+    ),
     title: getPageTitle,
     thunk: loadPageData(),
     nav: {
-      className: '-light',
-      links: []
-    }
+      className: '-light'
+    },
+    footer: false
   },
   tool: {
-    path: '/flows',
-    page: 'tool',
+    path: '/flows/:section?',
+    Component: lazy(() =>
+      import(/* webpackChunkName: "tool" */ '../react-components/tool/tool.js')
+    ),
     title: getPageTitle,
-    thunk: loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool)
+    thunk: loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool),
+    footer: false,
+    feedback: false,
+    nav: {
+      className: '-light'
+    }
   },
   profileRoot: {
     path: '/profiles',
-    page: 'profile-root',
+    Component: lazy(() =>
+      import(
+        /* webpackChunkName: "profile-root" */ '../react-components/profile-root/profile-root.container'
+      )
+    ),
     title: getPageTitle,
     extension: 'jsx',
     nav: {
@@ -75,29 +111,45 @@ export const routes = {
   },
   profileNode: {
     path: '/profile-:profileType',
-    page: 'profile-node',
+    Component: lazy(() =>
+      import(
+        /* webpackChunkName: "profile-node" */ '../react-components/profile-node/profile-node.container'
+      )
+    ),
     title: getPageTitle,
     nav: {
       className: '-egg-shell',
       printable: true
     },
-    thunk: loadPageData(loadColumnsData)
+    thunk: loadPageData()
   },
   dashboardRoot: {
     path: '/dashboards',
-    page: 'dashboard-root',
+    Component: lazy(() =>
+      import(
+        /* webpackChunkName: "dashboard-root" */ '../react-components/dashboard-root/dashboard-root.container'
+      )
+    ),
     title: getPageTitle,
     thunk: loadPageData(loadDashboardTemplates)
   },
   dashboardElement: {
     path: '/dashboards/:dashboardId',
-    page: 'dashboard-element',
+    Component: lazy(() =>
+      import(
+        /* webpackChunkName: "dashboard-element" */ '../react-components/dashboard-element/dashboard-element.container'
+      )
+    ),
     title: getPageTitle,
     thunk: loadPageData(loadInitialDashboardData)
   },
   data: {
     path: '/data',
-    page: 'data-portal',
+    Component: lazy(() =>
+      import(
+        /* webpackChunkName: "data-portal" */ '../react-components/data-portal/data-portal.container'
+      )
+    ),
     title: getPageTitle,
     thunk: loadPageData(),
     nav: {
@@ -106,14 +158,14 @@ export const routes = {
   },
   team: {
     path: '/about/team',
-    page: 'static-content',
+    Component: StaticContent,
     title: getPageTitle,
     thunk: loadPageData(getTeam),
     layout: withSidebarNavLayout
   },
   teamMember: {
     path: '/about/team/:member',
-    page: 'static-content',
+    Component: StaticContent,
     title: getPageTitle,
     thunk: loadPageData(getTeam),
     layout: withSidebarNavLayout,
@@ -121,29 +173,28 @@ export const routes = {
   },
   about: {
     path: '/about/:section?',
-    page: 'static-content',
+    Component: StaticContent,
     title: getPageTitle,
     thunk: loadPageData(getPageStaticContent),
     layout: withSidebarNavLayout
   },
-  notSupportedOnMobile: {
-    path: '/not-supported',
-    page: 'not-supported',
-    title: getPageTitle,
-    nav: {
-      className: '-light'
-    },
-    thunk: loadPageData()
-  },
   logisticsMap: {
     path: '/logistics-map',
-    page: 'logistics-map',
+    Component: lazy(() =>
+      import(
+        /* webpackChunkName: "logistics-map" */ '../react-components/logistics-map/logistics-map.container'
+      )
+    ),
     thunk: loadPageData(),
-    title: getPageTitle
+    title: getPageTitle,
+    footer: false,
+    nav: {
+      className: '-light'
+    }
   },
   [NOT_FOUND]: {
     path: '/404',
-    page: 'static-content',
+    Component: StaticContent,
     title: getPageTitle,
     thunk: loadPageData(() => replace('/404'), getPageStaticContent)
   }
@@ -170,14 +221,8 @@ const config = {
 
     return route;
   },
-  onBeforeChange: (dispatch, getState, { action }) => {
-    const supportedLimit = pagesSupportedLimit[action.type];
-    if (supportedLimit && window.innerWidth <= BREAKPOINTS[supportedLimit]) {
-      return dispatch(redirect({ type: 'notSupportedOnMobile' }));
-    }
-
-    return dispatchThunks(redirectToExplore)(dispatch, getState, { action });
-  },
+  onBeforeChange: (dispatch, getState, { action }) =>
+    dispatchThunks(redirectToExplore)(dispatch, getState, { action }),
   onAfterChange: (dispatch, getState, { action }) => {
     const currentLanguage = action.meta.location?.current?.query?.lang;
     const previousLanguage = action.meta.location?.prev?.query?.lang;

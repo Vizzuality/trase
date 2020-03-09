@@ -9,13 +9,17 @@ import WRIIcons from 'vizzuality-components/dist/icons';
 
 import { Layer, LayerManager } from 'layer-manager/dist/components';
 import { PluginLeaflet } from 'layer-manager';
-import { BASEMAPS } from 'constants';
+import { BASEMAPS, BREAKPOINTS } from 'constants';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 import LogisticsMapLegend from 'react-components/logistics-map/logistics-map-legend/logistics-map-legend.component';
 import LogisticsMapPanel from 'react-components/logistics-map/logistics-map-panel/logistics-map-panel.container';
-import LogisticsMapBar from 'react-components/logistics-map/logistics-map-bar/logistics-map-bar.container';
 import LogisticsMapDownload from 'react-components/logistics-map/logistics-map-download/logistics-map-download.container';
+import ToolBar from 'react-components/shared/tool-bar';
+import Timeline from 'react-components/tool/timeline/timeline.component';
+import ListModal from 'react-components/shared/list-modal';
+import useWindowSize from 'utils/hooks/useWindowSize';
+import NotSupportedComponent from 'react-components/mobile/not-supported.component';
 
 import 'vizzuality-components/dist/map.css';
 import 'leaflet/dist/leaflet.css';
@@ -29,18 +33,43 @@ function LogisticsMap(props) {
     tooltips,
     mapPopUp,
     heading,
-    openModal,
+    hubs,
+    selectHub,
+    activeHub,
     closeModal,
+    selectYears,
     activeModal,
     buildEvents,
     activeLayers,
     setLayerActive,
-    getCurrentPopUp
+    getCurrentPopUp,
+    inspectionLevels,
+    activeInspectionLevel,
+    selectInspectionLevel,
+    logisticsMapYearProps
   } = props;
   const Tooltip = p => <UnitsTooltip {...p.data} />;
+
+  const { width } = useWindowSize();
+
+  const onSelectHub = hub => {
+    selectHub(hub.value);
+    closeModal();
+  };
+
+  const onSelectInspectionLevel = hub => {
+    selectInspectionLevel(hub.value);
+    closeModal();
+  };
+
+  if (width <= BREAKPOINTS.tablet) {
+    return <NotSupportedComponent />;
+  }
+
   return (
     <div className="l-logistics-map">
       <div className="c-logistics-map">
+        <ToolBar className="-no-margin" />
         <WRIIcons />
         <MapComponent bounds={bounds} basemap={BASEMAPS.default}>
           {map => (
@@ -66,27 +95,52 @@ function LogisticsMap(props) {
           tooltips={tooltips}
           setLayerActive={setLayerActive}
         />
-        <LogisticsMapBar openModal={openModal} />
         <SimpleModal isOpen={activeModal !== null} onRequestClose={closeModal}>
           {activeModal === 'companies' && <LogisticsMapPanel close={closeModal} />}
           {activeModal === 'download' && <LogisticsMapDownload close={closeModal} />}
+          {activeModal === 'hubs' && (
+            <ListModal
+              items={hubs}
+              onChange={onSelectHub}
+              heading="Logistics map"
+              selectedItem={activeHub}
+              itemValueProp="value"
+            />
+          )}
+          {activeModal === 'inspectionLevels' && (
+            <ListModal
+              items={inspectionLevels}
+              onChange={onSelectInspectionLevel}
+              heading="Inspection level"
+              selectedItem={activeInspectionLevel}
+              itemValueProp="value"
+            />
+          )}
         </SimpleModal>
       </div>
+      <Timeline {...logisticsMapYearProps} selectYears={selectYears} />
     </div>
   );
 }
 
 LogisticsMap.propTypes = {
   layers: PropTypes.array,
-  openModal: PropTypes.func,
   tooltips: PropTypes.object,
   closeModal: PropTypes.func,
+  selectYears: PropTypes.func,
   buildEvents: PropTypes.func,
   heading: PropTypes.string,
   activeModal: PropTypes.string,
   activeLayers: PropTypes.array,
   bounds: PropTypes.object,
   border: PropTypes.object,
+  hubs: PropTypes.array,
+  selectHub: PropTypes.func,
+  activeHub: PropTypes.object,
+  inspectionLevels: PropTypes.array,
+  activeInspectionLevel: PropTypes.object,
+  selectInspectionLevel: PropTypes.func,
+  logisticsMapYearProps: PropTypes.any,
   getCurrentPopUp: PropTypes.func.isRequired,
   setLayerActive: PropTypes.func.isRequired,
   mapPopUp: PropTypes.object

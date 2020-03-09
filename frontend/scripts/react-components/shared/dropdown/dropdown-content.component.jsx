@@ -4,7 +4,7 @@ import DropdownContext from 'react-components/shared/dropdown/dropdown.context';
 import DropdownItem from 'react-components/shared/dropdown/dropdown-item.component';
 
 function useClipItemList(props) {
-  const DEFAULT_MAX_LIST_HEIGHT = 242;
+  const DEFAULT_MAX_LIST_HEIGHT = 212;
   const { options, clip, showSelected } = props;
   const ref = useRef(null);
   const [listHeight, updateListHeight] = useState(null);
@@ -20,6 +20,13 @@ function useClipItemList(props) {
   }, [listHeight, options, clip, showSelected, updateListHeight]);
 
   return [listHeight, ref];
+}
+
+function useScheduleUpdate(props) {
+  const { children, options, scheduleUpdate } = props;
+  useEffect(() => {
+    scheduleUpdate();
+  }, [options, children, scheduleUpdate]);
 }
 
 function DropdownContent(props) {
@@ -40,6 +47,7 @@ function DropdownContent(props) {
     variant
   } = props;
 
+  useScheduleUpdate(props);
   const [listHeight, listItemRef] = useClipItemList(props);
 
   const providerValue = useMemo(

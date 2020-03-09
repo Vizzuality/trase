@@ -16,7 +16,7 @@ export const updateQueryParams = params => (dispatch, getState) => {
   );
 };
 
-export const selectLogisticsMapYear = year => updateQueryParams({ year });
+export const selectLogisticsMapYear = ([year]) => updateQueryParams({ year });
 export const selectLogisticsMapHub = commodity =>
   updateQueryParams({
     commodity,

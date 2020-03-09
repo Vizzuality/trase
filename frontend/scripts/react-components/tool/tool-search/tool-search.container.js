@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import ToolSearch from 'react-components/tool/tool-search/tool-search.component';
-import { setIsSearchOpen, selectSearchNode } from 'react-components/tool-links/tool-links.actions';
+import { toolLinksActions } from 'react-components/tool-links/tool-links.register';
 import { getSearchResults } from 'react-components/tool/tool-search/tool-search.selectors';
-import { loadSearchResults } from 'actions/app.actions';
-import { getSelectedContext } from 'reducers/app.selectors';
+import { appActions } from 'app/app.register';
+import { getSelectedContext } from 'app/app.selectors';
 
 const mapStateToProps = state => {
   const selectedContext = getSelectedContext(state);
@@ -14,17 +14,15 @@ const mapStateToProps = state => {
     isSearchOpen,
     toolLayout,
     nodes: searchResults,
-    contextId: selectedContext && selectedContext.id
+    contextId: selectedContext && selectedContext.id,
+    openOnKeyDown: state.toolLayers?.activeModal === null
   };
 };
 
 const mapDispatchToProps = {
-  setIsSearchOpen,
-  onAddResult: selectSearchNode,
-  onInputValueChange: loadSearchResults
+  setIsSearchOpen: toolLinksActions.setIsSearchOpen,
+  onAddResult: toolLinksActions.selectSearchNode,
+  onInputValueChange: appActions.loadSearchResults
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ToolSearch);
+export default connect(mapStateToProps, mapDispatchToProps)(ToolSearch);

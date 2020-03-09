@@ -1,27 +1,21 @@
 import kebabCase from 'lodash/kebabCase';
 import keyBy from 'lodash/keyBy';
 import sortBy from 'lodash/sortBy';
-import { TEAM__SET_CONTENT, TEAM__SET_ERROR_MESSAGE } from 'react-components/team/team.actions';
 import createReducer from 'utils/createReducer';
-
-const initialState = {
-  groups: [],
-  /**
-   * { [name]: { name, position, staffMembers }
-   */
-  members: {},
-  /**
-   * { [name]: { name, position, bio, smallImageUrl }
-   */
-  errorMessage: null
-};
+import initialState from './team.initial-state';
+import { TEAM__SET_CONTENT, TEAM__SET_ERROR_MESSAGE } from './team.actions';
 
 const teamReducer = {
   [TEAM__SET_CONTENT](state, action) {
     const { data } = action.payload;
     const slugifyName = m => kebabCase(m.name.split(' '));
     const members = data
-      .map(group => keyBy(group.staffMembers.map(m => ({ ...m, group: group.name })), slugifyName))
+      .map(group =>
+        keyBy(
+          group.staffMembers.map(m => ({ ...m, group: group.name })),
+          slugifyName
+        )
+      )
       .reduce((acc, next) => ({ ...acc, ...next }), {});
 
     const groups = sortBy(

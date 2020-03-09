@@ -14,7 +14,7 @@
   }
 
   &.size-sm {
-    font-size: $font-size-small;
+    font-size: $font-size-regular;
   }
 
   &.size-rg {
@@ -27,6 +27,10 @@
 
   &.size-lg {
     font-size: $font-size-xxx-regular;
+  }
+
+  &.line-height-md {
+    line-height: $line-height-md;
   }
 
   &.line-height-lg {
@@ -71,6 +75,10 @@
 
   &.transform-uppercase {
     text-transform: uppercase;
+  }
+
+  &.transform-capitalize {
+    text-transform: capitalize;
   }
 
   &.transform-none {

@@ -13,6 +13,15 @@ import {
   getURLFromParams
 } from 'utils/getURLFromParams';
 
+import useWindowSize from 'utils/hooks/useWindowSize';
+import NotSupportedComponent from 'react-components/mobile/not-supported.component';
+import { BREAKPOINTS } from 'constants';
+
+import 'styles/layouts/l-data.scss';
+import 'styles/components/data/custom-dataset.scss';
+import 'styles/components/shared/veil.scss';
+import 'styles/components/shared/modal.scss';
+
 const initialState = {
   formVisible: false,
   selectedYears: [],
@@ -42,6 +51,7 @@ function DataPortal(props) {
     onDownloadTriggered,
     selectedContext
   } = props;
+
   function reducer(state, action) {
     switch (action.type) {
       case 'closeForm':
@@ -204,6 +214,9 @@ function DataPortal(props) {
     }
   }
   const [state, dataPortalDispatch] = useReducer(reducer, initialState);
+
+  const { width } = useWindowSize();
+
   useEffect(() => {
     if (state.formVisible) {
       onDataDownloadFormLoaded();
@@ -282,6 +295,10 @@ function DataPortal(props) {
     dataPortalDispatch({ type: 'setDownloaded', payload: true });
   };
 
+  if (width <= BREAKPOINTS.small) {
+    return <NotSupportedComponent />;
+  }
+
   return (
     <div className="l-data">
       {DATA_DOWNLOAD_ENABLED === false && <DataPortalDisabledMessage />}
@@ -337,6 +354,9 @@ function DataPortal(props) {
 }
 
 DataPortal.propTypes = {
+  selectedCountry: PropTypes.number,
+  selectedCommodity: PropTypes.number,
+  loadDataDownloadLists: PropTypes.func.isRequired,
   autoCompleteCountries: PropTypes.string,
   enabledContexts: PropTypes.array.isRequired,
   consumptionCountries: PropTypes.array,

@@ -1,3 +1,4 @@
+import modules from 'react-components/nodes-panel/nodes-panel.modules';
 import { createPanelInitialState } from './nodes-panel.initial-state';
 
 const multipleSelectionStringify = (prop, DONT_SERIALIZE) => {
@@ -11,11 +12,12 @@ const multipleSelectionStringify = (prop, DONT_SERIALIZE) => {
 };
 
 const makeNodePanelUrlPropHandlers = name => {
-  const initialState = createPanelInitialState(name);
+  const moduleOptions = modules[name];
   return {
-    stringify: initialState.selectedNodesIds ? multipleSelectionStringify : undefined,
+    stringify: moduleOptions.hasMultipleSelection ? multipleSelectionStringify : undefined,
     parse(param) {
-      if (initialState.selectedNodesIds) {
+      const initialState = createPanelInitialState(name);
+      if (moduleOptions.hasMultipleSelection) {
         let excludingMode = false;
         let list = null;
         if (param.toString().startsWith('excluded')) {

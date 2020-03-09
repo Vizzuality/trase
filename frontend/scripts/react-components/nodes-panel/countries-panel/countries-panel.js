@@ -1,20 +1,13 @@
 import { connect } from 'react-redux';
-import {
-  fetchData,
-  setLoadingItems,
-  setSelectedItem
-} from 'react-components/nodes-panel/nodes-panel.actions';
+import { nodesPanelActions } from 'react-components/nodes-panel/nodes-panel.register';
 import { makeGetNodesPanelsProps } from 'react-components/nodes-panel/nodes-panel.selectors';
 import CountriesPanel from './countries-panel.component';
 
 const NAME = 'countries';
 const mapDispatchToProps = {
-  fetchData: key => fetchData(key, NAME),
-  setLoadingItems: loadingItems => setLoadingItems(loadingItems, NAME),
-  setSelectedItem: activeItem => setSelectedItem(activeItem, NAME)
+  fetchData: key => nodesPanelActions.fetchData(key, NAME),
+  setLoadingItems: loadingItems => nodesPanelActions.setLoadingItems(loadingItems, NAME),
+  setSelectedItem: activeItem => nodesPanelActions.setSelectedItem(activeItem, NAME)
 };
 
-export default connect(
-  makeGetNodesPanelsProps(NAME),
-  mapDispatchToProps
-)(CountriesPanel);
+export default connect(makeGetNodesPanelsProps(NAME), mapDispatchToProps)(CountriesPanel);

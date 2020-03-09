@@ -56,6 +56,7 @@
   _urq.push(['initSite', <%= USER_REPORT_KEY ? USER_REPORT_KEY : "''" %>]);
   (function () {
     var ur = document.createElement('script');
+    ur.defer = true;
     ur.type = 'text/javascript';
     ur.async = true;
     ur.src = ('https:' === document.location.protocol ? 'https://cdn.userreport.com/userreport.js' : 'http://cdn.userreport.com/userreport.js');

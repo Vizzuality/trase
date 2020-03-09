@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Heading from 'react-components/shared/heading';
+import Icon from 'react-components/shared/icon';
 import GridListItem from 'react-components/shared/grid-list-item/grid-list-item.component';
 import PropTypes from 'prop-types';
 import FeaturedCards from 'react-components/explore/featured-cards';
@@ -10,8 +11,9 @@ import cx from 'classnames';
 import Dropdown from 'react-components/shared/dropdown';
 import ResizeListener from 'react-components/shared/resize-listener.component';
 import { format } from 'd3-format';
-import ToolLinksModal from 'react-components/explore/tool-links-modal';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
+import addApostrophe from 'utils/addApostrophe';
+import { translateText } from 'utils/transifex';
 import {
   useTopDestinationCountries,
   useClearExploreOnUnmount,
@@ -23,6 +25,8 @@ import {
 } from 'react-components/explore/explore.hooks';
 
 import 'react-components/explore/explore.scss';
+
+const ToolLinksModal = React.lazy(() => import(/* webpackPreload: true */ './tool-links-modal'));
 
 function Explore(props) {
   const {
@@ -47,13 +51,14 @@ function Explore(props) {
   useQuickFacts(props);
   useSankeyCards(props);
 
-  const [highlightedCommodityIds, setHoveredGeometry] = useHighlightedCommodities(props);
+  const [
+    highlightedCommodityIds,
+    highlightedCommoditiesCountryName,
+    setHoveredGeometry
+  ] = useHighlightedCommodities(props);
   const [highlightedContext, setHoveredCountry] = useHighlightedContext(props);
   const destinationCountries = highlightedContext?.id && topNodes[highlightedContext.id];
-  const [highlightedCountryIds, setHoveredCommodity] = useHighlightedCountries(
-    props,
-    destinationCountries
-  );
+  const [highlightedCountryIds, setHoveredCommodity] = useHighlightedCountries(props);
 
   const openModal = card => {
     setModalOpen(true);
@@ -65,12 +70,31 @@ function Explore(props) {
     setActiveCard(null);
   };
 
-  const renderTitle = () => {
+  const clearStep =
+    step === EXPLORE_STEPS.selected ? () => setCountry(null) : () => setCommodity(null);
+
+  const renderTitle = isMobile => {
     const titleParts = ['commodity', 'source country', 'supply chain to explore'];
     return (
-      <Heading size="lg" align="center" data-test="step-title">
-        {step}. Choose a {titleParts[step - 1]}
-      </Heading>
+      <div className="step-title-container">
+        <Heading size="lg" align="center" data-test="step-title" className="notranslate">
+          {translateText(`${step}. Choose a ${titleParts[step - 1]}`)}
+        </Heading>
+        <span>
+          {step > EXPLORE_STEPS.selectCommodity && !isMobile && (
+            <button
+              onClick={clearStep}
+              className="back-button"
+              data-test="featured-cards-back-button"
+            >
+              <Text variant="mono" size="lg" weight="bold" className="featured-cards-back">
+                <Icon color="pink" icon="icon-arrow" className="arrow-icon" />
+                BACK
+              </Text>
+            </button>
+          )}
+        </span>
+      </div>
     );
   };
 
@@ -109,7 +133,7 @@ function Explore(props) {
     <>
       <Dropdown
         size="rg"
-        variant="panel"
+        variant="bordered"
         selectedValueOverride={commodity ? undefined : `Commodity (${commodities.length})`}
         options={commodities.map(i => ({ value: i.id, label: i.name }))}
         value={commodity && { value: commodity.id, label: commodity.name }}
@@ -119,7 +143,7 @@ function Explore(props) {
         <div className="country-dropdown-container">
           <Dropdown
             size="rg"
-            variant="panel"
+            variant="bordered"
             selectedValueOverride={country ? undefined : `Countries (${countries.length})`}
             options={countries.map(i => ({ value: i.id, label: i.name }))}
             value={country && { value: country.id, label: country.name }}
@@ -140,7 +164,7 @@ function Explore(props) {
           return (
             <>
               <div className="explore-selector">
-                {renderTitle()}
+                {renderTitle(isMobile)}
                 <div className="explore-grid-container">
                   <div className="row columns">
                     {isMobile ? (
@@ -153,8 +177,7 @@ function Explore(props) {
                               item={item}
                               enableItem={i => setItemFunction(i.id)}
                               onHover={onItemHover}
-                              variant="explore"
-                              isActive={highlightedCommodityIds.includes(item.id)}
+                              color="transparent"
                             />
                           ))}
                       </div>
@@ -183,21 +206,65 @@ function Explore(props) {
                           {quickFacts ? (
                             quickFacts.map(indicator => (
                               <div className="bubble">
-                                <Text size="rg" align="center" variant="mono">
-                                  {indicator.name} {indicator.year}
-                                </Text>
                                 <Text
-                                  size="lg"
-                                  weight="regular"
+                                  size="rg"
                                   align="center"
-                                  className="quick-facts-value"
+                                  variant="mono"
+                                  weight="bold"
+                                  transform="uppercase"
+                                  className="quick-facts-label notranslate"
                                 >
-                                  {format(',')(Math.round(indicator.total))} {indicator.unit}
+                                  {translateText(`${indicator.name} ${indicator.year}`)}
                                 </Text>
+                                <Heading
+                                  size="md"
+                                  weight="bold"
+                                  align="center"
+                                  className="quick-facts-value notranslate"
+                                >
+                                  {translateText(
+                                    `${format(',')(Math.round(indicator.total))} ${indicator.unit}`
+                                  )}
+                                </Heading>
                               </div>
                             ))
                           ) : (
-                            <div className="bubble" />
+                            <div className="bubble">
+                              {(highlightedCountryIds.level1.length > 0 ||
+                                highlightedCountryIds.level2.length > 0 ||
+                                highlightedCommodityIds.length > 0) && (
+                                <>
+                                  <Text
+                                    size="rg"
+                                    align="center"
+                                    variant="mono"
+                                    weight="bold"
+                                    transform="uppercase"
+                                    className="quick-facts-label notranslate"
+                                  >
+                                    {translateText(
+                                      highlightedCommodityIds.length > 0
+                                        ? `${highlightedCommoditiesCountryName}${addApostrophe(
+                                            highlightedCommoditiesCountryName
+                                          )} commodities`
+                                        : 'source countries'
+                                    )}
+                                  </Text>
+                                  <Heading
+                                    size="md"
+                                    weight="bold"
+                                    align="center"
+                                    className="quick-facts-value notranslate"
+                                  >
+                                    {translateText(
+                                      highlightedCommodityIds.length ||
+                                        highlightedCountryIds.level2?.length ||
+                                        highlightedCountryIds.level1.length
+                                    )}
+                                  </Heading>
+                                </>
+                              )}
+                            </div>
                           )}
                         </div>
                       </div>
@@ -207,16 +274,15 @@ function Explore(props) {
               </div>
               <FeaturedCards
                 step={step}
-                setCommodity={setCommodity}
-                setCountry={setCountry}
                 commodityName={commodity?.name}
                 countryName={country?.name}
                 cards={cards}
                 openModal={params => (isMobile ? goToTool('dashboard', params) : openModal(params))}
-                isMobile={isMobile}
               />
               <SimpleModal isOpen={isModalOpen} onRequestClose={() => closeModal()}>
-                <ToolLinksModal goToTool={destination => goToTool(destination, activeCard)} />
+                {isModalOpen && (
+                  <ToolLinksModal goToTool={destination => goToTool(destination, activeCard)} />
+                )}
               </SimpleModal>
             </>
           );
