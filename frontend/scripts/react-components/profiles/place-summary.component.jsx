@@ -105,7 +105,7 @@ function PlaceSummary(props) {
         <div className="small-12 show-for-small profile-map-mobile">{renderMunicipalityMap()}</div>
 
         <div className="small-12 medium-9 columns">
-          <Sticky top="#main-nav" innerZ={90} activeClass="profile-sticky-group">
+          <Sticky top={60} innerZ={85} activeClass="profile-sticky-group">
             {({ status }) => (
               <div
                 className={cx({

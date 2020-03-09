@@ -118,7 +118,7 @@ export const routes = {
     ),
     title: getPageTitle,
     nav: {
-      className: '-egg-shell',
+      className: '-egg-shell -no-shadow',
       printable: true
     },
     thunk: loadPageData()

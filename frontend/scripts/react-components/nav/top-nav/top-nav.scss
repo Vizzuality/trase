@@ -18,6 +18,10 @@ $desktop-nav-sides-margin: 20px;
     background-color: $light-gray;
     box-shadow: 0 10px 20px 0 rgba($charcoal-grey, 0.2);
 
+    &.-no-shadow {
+      box-shadow: none;
+    }
+
     .top-nav-link,
     .top-nav-toggle-btn {
       color: $charcoal-grey;

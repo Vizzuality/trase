@@ -4,7 +4,7 @@
   .summary-sticky-group {
     &.sticky {
       width: 100vw;
-      padding: 0 20px;
+      padding: 0 40px;
       transform: translate(-20px, 0);
       position: relative;
       background: $egg-shell;
@@ -16,7 +16,7 @@
     margin-top: 36px;
     margin-right: 20px;
 
-    > .legend {
+    >.legend {
       margin-bottom: 5px;
     }
 
