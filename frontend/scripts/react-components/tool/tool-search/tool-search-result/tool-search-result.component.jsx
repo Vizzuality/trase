@@ -70,7 +70,7 @@ function ToolSearchResult(props) {
               className="-medium-large"
               key={item.name + nodeType}
               to={{
-                type: 'profileNode',
+                type: 'profile',
                 payload: {
                   profileType: item.profile,
                   query: {

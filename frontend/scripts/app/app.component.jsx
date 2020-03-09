@@ -19,7 +19,7 @@ function App() {
   const { routesMap, type, query } = useSelector(state => state.location);
   const { Component, layout, footer = true, feedback = true } = routesMap[type];
 
-  const pageKey = type === 'profileNode' ? `${type}-${query?.nodeId}` : type;
+  const pageKey = type === 'profile' ? `${type}-${query?.nodeId}` : type;
   return (
     <Suspense fallback={null}>
       <nav>

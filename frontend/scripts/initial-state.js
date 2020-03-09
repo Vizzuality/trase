@@ -7,7 +7,7 @@ export { default as team } from 'react-components/team/team.initial-state';
 export { default as staticContent } from 'react-components/static-content/static-content.initial-state';
 export { default as profileSelector } from 'react-components/shared/profile-selector/profile-selector.initial-state';
 export { default as newsletter } from 'react-components/shared/newsletter/newsletter.initial-state';
-export { default as profileRoot } from 'react-components/profile-root/profile-root.initial-state';
+export { default as profiles } from 'react-components/profiles/profiles.initial-state';
 export { default as nodesPanel } from 'react-components/nodes-panel/nodes-panel.initial-state';
 export { default as logisticsMap } from 'react-components/logistics-map/logistics-map.initial-state';
 export { default as legacyExplore } from 'react-components/legacy-explore/legacy-explore.initial-state';

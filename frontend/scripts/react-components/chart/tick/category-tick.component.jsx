@@ -20,7 +20,7 @@ function CategoryTick(props) {
   let url;
   if (node && node.profile && !DISABLE_PROFILES) {
     url = {
-      type: 'profileNode',
+      type: 'profile',
       payload: { profileType: node.profile },
       query: { nodeId: node.id, contextId: context.id }
     };

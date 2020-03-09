@@ -16,7 +16,7 @@ import {
 } from './profile-selector.actions';
 import initialState from './profile-selector.initial-state';
 
-const profileRootReducer = {
+const profilesReducer = {
   [PROFILES__SET_ACTIVE_STEP](state, action) {
     return immer(state, draft => {
       const { activeStep } = action.payload;
@@ -225,4 +225,4 @@ const profileSelectorReducerTypes = PropTypes => ({
   tabs: PropTypes.object
 });
 
-export default createReducer(initialState, profileRootReducer, profileSelectorReducerTypes);
+export default createReducer(initialState, profilesReducer, profileSelectorReducerTypes);

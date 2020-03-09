@@ -193,7 +193,7 @@ export function selectSearchNode(results) {
 
 export function goToProfileFromSankey({ profileType, ...query }) {
   return {
-    type: 'profileNode',
+    type: 'profile',
     payload: {
       query,
       profileType

@@ -50,7 +50,7 @@ function RankingWidget(props) {
     const node = meta.yLabelsProfileInfo[i];
     const url = node.profile &&
       !DISABLE_PROFILES && {
-        type: 'profileNode',
+        type: 'profile',
         payload: {
           query: { nodeId: node.id, contextId: context.id },
           profileType: node.profile
