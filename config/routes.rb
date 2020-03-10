@@ -106,6 +106,10 @@ Rails.application.routes.draw do
         resources :parametrised_charts, only: [:index]
       end
 
+      namespace :profiles do
+        resources :filter_meta, only: [:index]
+      end
+
       resources :commodities, only: [] do
         get :countries_facts, on: :member
       end

@@ -1,28 +1,25 @@
 require 'rails_helper'
 
 RSpec.describe Api::V3::Dashboards::FilterMeta do
-  include_context 'api v3 brazil flows'
-  include_context 'api v3 brazil soy goias flows'
+  include_context 'api v3 indonesia context node types'
 
   describe 'call' do
-    let(:country) { Api::V3::Country.find_by(name: 'BRAZIL') }
-    let(:commodity) { Api::V3::Commodity.find_by(name: 'SOY') }
     let(:filter) do
       Api::V3::Dashboards::FilterMeta.new(
-        country_ids: [country.id],
-        commodity_ids: [commodity.id]
+        country_ids: [api_v3_indonesia.id],
+        commodity_ids: [api_v3_palm_oil.id]
       )
     end
     let(:meta) { filter.call[:data] }
 
     it 'return sources, companies and destinations tabs' do
       expect(meta).to include(a_hash_including(section: 'SOURCES'))
-      expect(meta).to include(a_hash_including(section: 'COMPANIES'))
+      expect(meta).to include(a_hash_including(section: 'EXPORTERS'))
       expect(meta).to include(a_hash_including(section: 'DESTINATIONS'))
     end
 
     it 'return prefix on all tabs' do
-      %w[SOURCES COMPANIES DESTINATIONS].each do |type|
+      %w[SOURCES EXPORTERS DESTINATIONS].each do |type|
         meta_type = meta.find { |m| m[:section] == type }
         meta_type[:tabs].each { |tab| expect(tab).to include(:prefix) }
       end
