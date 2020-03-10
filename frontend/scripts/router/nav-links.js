@@ -31,7 +31,7 @@ let nav = [
   ...supplyChainNavs,
   {
     name: 'Profiles',
-    page: 'profileRoot'
+    page: 'profiles'
   },
   {
     name: 'Dashboards',
@@ -130,7 +130,7 @@ const sidebarNav = [
 ];
 
 if (DISABLE_PROFILES) {
-  nav = nav.filter(route => route.page !== 'profileRoot');
+  nav = nav.filter(route => route.page !== 'profiles');
 }
 
 if (!ENABLE_DASHBOARDS) {

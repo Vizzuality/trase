@@ -89,7 +89,7 @@ export const goToProfile = () => (dispatch, getState) => {
       query.contextId = contextId;
     }
   }
-  dispatch({ type: 'profileNode', payload: { profileType, query } });
+  dispatch({ type: 'profile', payload: { profileType, query } });
   dispatch(closeModal());
 };
 

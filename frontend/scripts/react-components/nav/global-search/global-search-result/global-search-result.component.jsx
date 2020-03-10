@@ -94,7 +94,7 @@ class GlobalSearchResult extends Component {
                 className="-medium-large"
                 key={node.id}
                 to={{
-                  type: 'profileNode',
+                  type: 'profile',
                   payload: {
                     query: {
                       nodeId: node.id,

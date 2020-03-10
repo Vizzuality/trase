@@ -15,7 +15,7 @@ const getTestimonialsContent = (...args) =>
 const getTweetsContent = (...args) =>
   import('../react-components/home/home.thunks').then(module => module.getTweetsContent(...args));
 const loadTopNodes = (...args) =>
-  import('../react-components/profile-root/profile-root.thunks').then(module =>
+  import('../react-components/profiles/profiles.thunks').then(module =>
     module.loadTopNodes(...args)
   );
 const getPageStaticContent = (...args) =>
@@ -95,11 +95,11 @@ export const routes = {
       className: '-light'
     }
   },
-  profileRoot: {
+  profiles: {
     path: '/profiles',
     Component: lazy(() =>
       import(
-        /* webpackChunkName: "profile-root" */ '../react-components/profile-root/profile-root.container'
+        /* webpackChunkName: "profiles" */ '../react-components/profiles/profiles.container'
       )
     ),
     title: getPageTitle,
@@ -109,11 +109,11 @@ export const routes = {
     },
     thunk: loadPageData(loadTopNodes)
   },
-  profileNode: {
+  profile: {
     path: '/profile-:profileType',
     Component: lazy(() =>
       import(
-        /* webpackChunkName: "profile-node" */ '../react-components/profile-node/profile-node.container'
+        /* webpackChunkName: "profile" */ '../react-components/profile/profile.container'
       )
     ),
     title: getPageTitle,

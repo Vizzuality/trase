@@ -1,0 +1,58 @@
+@import 'styles/settings';
+
+.c-chord {
+  position: relative;
+
+  > svg {
+
+    .links {
+      fill: rgba($medium-pink, .2);
+    }
+
+    .text-legend {
+      font-family: $font-family-1;
+      font-size: $font-size-regular;
+      text-transform: uppercase;
+      letter-spacing: -0.8px;
+      fill: rgba($charcoal-grey, .8);
+    }
+
+    .arc-current {
+      fill: $medium-pink;
+    }
+
+    .arc-active {
+      fill: $charcoal-grey;
+    }
+
+    .arc-default {
+      fill: rgba($charcoal-grey, .2);
+    }
+  }
+
+  .c-chord-legend {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    font-family: $font-family-1;
+    font-size: $font-size-small;
+    letter-spacing: -1px;
+    line-height: 1;
+    color: rgba($charcoal-grey, .5);
+    text-transform: uppercase;
+    text-align: left;
+    padding-left: 39px;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      margin: auto;
+      width: 32px;
+      height: 9px;
+      background-color: rgba($charcoal-grey, .2);
+    }
+  }
+}
