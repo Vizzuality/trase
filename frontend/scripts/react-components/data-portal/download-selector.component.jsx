@@ -55,6 +55,7 @@ class DownloadSelector extends Component {
                   className="-red"
                   enabled={this.props.allSelected}
                   onClick={() => this.props.onAllSelected()}
+                  disabled={!this.props.enabled}
                 />
               </li>
             </ul>

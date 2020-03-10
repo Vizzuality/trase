@@ -65,6 +65,7 @@ class TopNav extends React.PureComponent {
   handleToggleClick = () => this.setState(state => ({ menuOpen: !state.menuOpen }));
 
   renderDesktopMenu() {
+    const { backgroundVisible } = this.state;
     const { links, printable, showLogo, className, page } = this.props;
     const allLinks = [];
 
@@ -96,7 +97,7 @@ class TopNav extends React.PureComponent {
                     <Img
                       className="logo-image"
                       src={
-                        className === '-light' || className === '-egg-shell'
+                        className === '-light' || className === '-egg-shell' || backgroundVisible
                           ? '/images/logos/new-logo-trase-red.svg'
                           : '/images/logos/new-logo-trase-white.svg'
                       }
