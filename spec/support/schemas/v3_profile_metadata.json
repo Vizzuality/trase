@@ -1,170 +1,181 @@
 {
-  "definitions": {},
-  "$schema": "http://json-schema.org/draft-06/schema#",
-  "$id": "http://example.com/root.json",
-  "type": "object",
-  "required": [
-    "data"
-  ],
-  "properties": {
-    "data": {
-      "$id": "#/properties/data",
-      "type": "object",
-      "required": [
-        "id",
-        "name",
-        "main_topojson_path",
-        "main_topojson_root",
-        "adm_1_name",
-        "adm_1_topojson_path",
-        "adm_1_topojson_root",
-        "adm_2_name",
-        "adm_2_topojson_path",
-        "adm_2_topojson_root",
-        "context_node_type",
-        "charts",
-        "available_years"
-      ],
-      "properties": {
-        "id": {
-          "$id": "#/properties/data/properties/id",
-          "type": "integer"
-        },
-        "name": {
-          "$id": "#/properties/data/properties/name",
-          "type": "string",
-          "pattern": "^(.*)$"
-        },
-        "main_topojson_path": {
-          "$id": "#/properties/data/properties/main_topojson_path",
-          "type": ["string", "null"]
-        },
-        "main_topojson_root": {
-          "$id": "#/properties/data/properties/main_topojson_root",
-          "type": ["string", "null"]
-        },
-        "adm_1_name": {
-          "$id": "#/properties/data/properties/adm_1_name",
-          "type": ["string", "null"]
-        },
-        "adm_1_topojson_path": {
-          "$id": "#/properties/data/properties/adm_1_topojson_path",
-          "type": ["string", "null"]
-        },
-        "adm_1_topojson_root": {
-          "$id": "#/properties/data/properties/adm_1_topojson_root",
-          "type": ["string", "null"]
-        },
-        "adm_2_name": {
-          "$id": "#/properties/data/properties/adm_2_name",
-          "type": ["string", "null"]
-        },
-        "adm_2_topojson_path": {
-          "$id": "#/properties/data/properties/adm_2_topojson_path",
-          "type": ["string", "null"]
-        },
-        "adm_2_topojson_root": {
-          "$id": "#/properties/data/properties/adm_2_topojson_root",
-          "type": ["string", "null"]
-        },
-        "context_node_type": {
-          "$id": "#/properties/data/properties/context_node_type",
-          "type": "object",
-          "required": [
-            "id",
-            "context_id",
-            "node_type_id",
-            "column_position",
-            "column_group",
-            "prefix",
-            "role"
-          ],
-          "properties": {
-            "id": {
-              "$id": "#/properties/data/properties/context_node_type/properties/id",
-              "type": "integer"
-            },
-            "context_id": {
-              "$id": "#/properties/data/properties/context_node_type/properties/context_id",
-              "type": "integer"
-            },
-            "node_type_id": {
-              "$id": "#/properties/data/properties/context_node_type/properties/node_type_id",
-              "type": "integer"
-            },
-            "column_position": {
-              "$id": "#/properties/data/properties/context_node_type/properties/column_position",
-              "type": "integer"
-            },
-            "column_group": {
-              "$id": "#/properties/data/properties/context_node_type/properties/column_group",
-              "type": "integer"
-            },
-            "prefix": {
-              "$id": "#/properties/data/properties/context_node_type/properties/prefix",
-              "type": "string"
-            },
-            "role": {
-              "$id": "#/properties/data/properties/context_node_type/properties/role",
-              "type": "string",
-              "pattern": "^(.*)$"
-            }
-          }
-        },
-        "charts": {
-          "$id": "#/properties/data/properties/charts",
-          "type": "array",
-          "items": {
-            "$id": "#/properties/data/properties/charts/items",
+    "$schema": "http://json-schema.org/draft-06/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "required": [
+        "data"
+    ],
+    "properties": {
+        "data": {
+            "$id": "#/properties/data",
             "type": "object",
             "required": [
-              "id",
-              "chart_type",
-              "identifier",
-              "title",
-              "position",
-              "children"
+                "id",
+                "context_id",
+                "commodity_id",
+                "country_id",
+                "activity",
+                "commodities",
+                "activities",
+                "years",
+                "name",
+                "main_topojson_path",
+                "main_topojson_root",
+                "adm_1_name",
+                "adm_1_topojson_path",
+                "adm_1_topojson_root",
+                "adm_2_name",
+                "adm_2_topojson_path",
+                "adm_2_topojson_root",
+                "charts"
             ],
             "properties": {
-              "id": {
-                "$id": "#/properties/data/properties/charts/items/properties/id",
-                "type": "integer"
-              },
-              "chart_type": {
-                "$id": "#/properties/data/properties/charts/items/properties/chart_type",
-                "type": "string",
-                "pattern": "^(.*)$"
-              },
-              "identifier": {
-                "$id": "#/properties/data/properties/charts/items/properties/identifier",
-                "type": "string",
-                "pattern": "^(.*)$"
-              },
-              "title": {
-                "$id": "#/properties/data/properties/charts/items/properties/title",
-                "type": "string",
-                "pattern": "^(.*)$"
-              },
-              "position": {
-                "$id": "#/properties/data/properties/charts/items/properties/position",
-                "type": "integer"
-              },
-              "children": {
-                "$id": "#/properties/data/properties/charts/items/properties/children",
-                "type": "array"
-              }
+                "id": {
+                    "$id": "#/properties/data/properties/id",
+                    "type": "integer"
+                },
+                "context_id": {
+                    "$id": "#/properties/data/properties/context_id",
+                    "type": "integer"
+                },
+                "commodity_id": {
+                    "$id": "#/properties/data/properties/commodity_id",
+                    "type": "integer"
+                },
+                "country_id": {
+                    "$id": "#/properties/data/properties/country_id",
+                    "type": "integer"
+                },
+                "activity": {
+                    "$id": "#/properties/data/properties/activity",
+                    "type": "string"
+                },
+                "commodities": {
+                    "$id": "#/properties/data/properties/commodities",
+                    "type": "array",
+                    "items": {
+                        "$id": "#/properties/data/properties/commodities/items",
+                        "type": "object",
+                        "required": [
+                            "id",
+                            "name"
+                        ],
+                        "properties": {
+                            "id": {
+                                "$id": "#/properties/data/properties/commodities/items/properties/id",
+                                "type": "integer"
+                            },
+                            "name": {
+                                "$id": "#/properties/data/properties/commodities/items/properties/name",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "activities": {
+                    "$id": "#/properties/data/properties/activities",
+                    "type": "array",
+                    "items": {
+                        "$id": "#/properties/data/properties/activities/items",
+                        "type": "object",
+                        "required": [
+                            "id",
+                            "name"
+                        ],
+                        "properties": {
+                            "id": {
+                                "$id": "#/properties/data/properties/activities/items/properties/id",
+                                "type": "integer"
+                            },
+                            "name": {
+                                "$id": "#/properties/data/properties/activities/items/properties/name",
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "years": {
+                    "$id": "#/properties/data/properties/years",
+                    "type": "array",
+                    "items": {
+                        "$id": "#/properties/data/properties/years/items",
+                        "type": "integer"
+                    }
+                },
+                "name": {
+                    "$id": "#/properties/data/properties/name",
+                    "type": "string"
+                },
+                "main_topojson_path": {
+                    "$id": "#/properties/data/properties/main_topojson_path",
+                    "type": "string"
+                },
+                "main_topojson_root": {
+                    "$id": "#/properties/data/properties/main_topojson_root",
+                    "type": "string"
+                },
+                "adm_1_name": {
+                    "$id": "#/properties/data/properties/adm_1_name",
+                    "type": ["string", "null"]
+                },
+                "adm_1_topojson_path": {
+                    "$id": "#/properties/data/properties/adm_1_topojson_path",
+                    "type": "string"
+                },
+                "adm_1_topojson_root": {
+                    "$id": "#/properties/data/properties/adm_1_topojson_root",
+                    "type": "string"
+                },
+                "adm_2_name": {
+                    "$id": "#/properties/data/properties/adm_2_name",
+                    "type": ["string", "null"]
+                },
+                "adm_2_topojson_path": {
+                    "$id": "#/properties/data/properties/adm_2_topojson_path",
+                    "type": "string"
+                },
+                "adm_2_topojson_root": {
+                    "$id": "#/properties/data/properties/adm_2_topojson_root",
+                    "type": "string"
+                },
+                "charts": {
+                    "$id": "#/properties/data/properties/charts",
+                    "type": "array",
+                    "items": {
+                        "$id": "#/properties/data/properties/charts/items",
+                        "type": "object",
+                        "required": [
+                            "id",
+                            "chart_type",
+                            "identifier",
+                            "title",
+                            "position"
+                        ],
+                        "properties": {
+                            "id": {
+                                "$id": "#/properties/data/properties/charts/items/properties/id",
+                                "type": "integer"
+                            },
+                            "chart_type": {
+                                "$id": "#/properties/data/properties/charts/items/properties/chart_type",
+                                "type": "string"
+                            },
+                            "identifier": {
+                                "$id": "#/properties/data/properties/charts/items/properties/identifier",
+                                "type": "string"
+                            },
+                            "title": {
+                                "$id": "#/properties/data/properties/charts/items/properties/title",
+                                "type": "string"
+                            },
+                            "position": {
+                                "$id": "#/properties/data/properties/charts/items/properties/position",
+                                "type": "integer"
+                            }
+                        }
+                    }
+                }
             }
-          }
-        },
-        "available_years": {
-          "$id": "#/properties/data/properties/available_years",
-          "type": "array",
-          "items": {
-            "$id": "#/properties/data/properties/available_years/items",
-            "type": "integer"
-          }
         }
-      }
     }
-  }
 }

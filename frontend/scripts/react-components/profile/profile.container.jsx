@@ -25,9 +25,8 @@ class ProfileContainer extends React.PureComponent {
       >
         {({ data = {}, loading, error }) => {
           const profileMetadata = data[GET_PROFILE_METADATA];
-          const { availableYears } = profileMetadata || {};
-          const year =
-            selectedYear || (availableYears && availableYears[availableYears.length - 1]);
+          const { years } = profileMetadata || {};
+          const year = selectedYear || (years && years[years.length - 1]);
           return (
             <Profile
               {...this.props}
