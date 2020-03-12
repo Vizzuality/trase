@@ -35,9 +35,7 @@ Rails.application.routes.draw do
         resources :map_layers, only: [:index]
         resources :columns, only: [:index], controller: :node_types
         resources :flows, only: [:index]
-        resources :nodes, only: [:index] do
-          get :profile_metadata, on: :member, controller: :profile_metadata, action: :index
-        end
+        resources :nodes, only: [:index]
         resources :actors, only: [] do
           get :basic_attributes
           get :top_countries
@@ -106,8 +104,10 @@ Rails.application.routes.draw do
         resources :parametrised_charts, only: [:index]
       end
 
+      get '/contexts/:context_id/nodes/:id/profile_metadata', to: redirect('/api/v3/profiles/%{id}/profile_meta?context_id=%{context_id}')
       namespace :profiles do
         resources :filter_meta, only: [:index]
+        get ':id/profile_meta', to: 'profile_meta#show'
       end
 
       resources :commodities, only: [] do
