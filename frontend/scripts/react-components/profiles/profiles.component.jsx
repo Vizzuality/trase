@@ -10,9 +10,15 @@ import 'scripts/react-components/profiles/profiles.scss';
 const ProfileRoot = props => {
   const nodeTypeRenderer = node => {
     const { contexts } = props;
-    const context = contexts.find(c => c.id === node.contextId);
-    if (!context) return node.nodeType;
-    return `${node.nodeType} - ${context.commodityName} - ${context.countryName}`;
+    const { contextId, nodeType } = node;
+    const context = contexts.find(c => c.id === contextId);
+    if (!context) return nodeType;
+    const substitutions = {
+      'COUNTRY OF PRODUCTION': 'EXPORTER COUNTRY',
+      'COUNTRY': 'IMPORTER COUNTRY',
+    }
+    const nodeTypeLabel = substitutions[nodeType] || nodeType
+    return `${nodeTypeLabel} - ${context.commodityName} - ${context.countryName}`;
   };
 
   const getResultTestId = item =>
