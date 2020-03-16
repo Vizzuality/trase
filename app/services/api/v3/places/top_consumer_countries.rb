@@ -20,7 +20,7 @@ module Api
             )
           end
 
-          @mini_sankey = Api::V3::Places::MiniSankey.new(
+          @mini_sankey = Api::V3::Profiles::MiniSankeyForContext.new(
             context, node, year
           )
         end
