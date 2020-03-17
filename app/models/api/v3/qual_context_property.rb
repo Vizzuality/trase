@@ -59,10 +59,10 @@ module Api
         context = Api::V3::Context.find(context_id)
         node_quals = Api::V3::NodeQual.where(qual_id: qual_id)
         nodes = node_quals.map(&:node)
-        node_with_flows = Api::V3::Readonly::NodeWithFlows.where(
-          context_id: context.id,
-          id: nodes.map(&:id)
-        )
+        node_with_flows = Api::V3::Readonly::NodeWithFlows.
+          without_unknowns.
+          without_domestic.
+          where(context_id: context.id, id: nodes.map(&:id))
         NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
           node_with_flows.map(&:id)
         )

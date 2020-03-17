@@ -19,7 +19,9 @@ SitemapGenerator::Sitemap.create do
   add'/profiles', :changefreq => 'monthly'
 
   Api::V3::Readonly::NodeWithFlows.
-    where(profile: ['place', 'actor']).
+    without_unknowns.
+    without_domestic.
+    with_profile.
     pluck(:id, :context_id, :profile, :years).
     each do |node_id, context_id, profile, years|
       years.each do |year|

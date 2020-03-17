@@ -6,9 +6,10 @@ module Api
           private
 
           def initialize_query
-            @query = Api::V3::Readonly::NodeWithFlows.where(
-              role: Api::V3::ContextNodeTypeProperty::SOURCE_ROLE
-            )
+            @query = Api::V3::Readonly::NodeWithFlows.
+              without_unknowns.
+              without_domestic.
+              where(role: Api::V3::ContextNodeTypeProperty::SOURCE_ROLE)
           end
         end
       end

@@ -25,7 +25,10 @@ module Api
         end
 
         def initialize_query
-          @query = Api::V3::Readonly::NodeWithFlows.all
+          @query = Api::V3::Readonly::NodeWithFlows.
+            without_unknowns.
+            without_domestic.
+            all
         end
 
         def apply_filters

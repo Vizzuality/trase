@@ -51,6 +51,8 @@ module Api
       def load_readonly_node
         ensure_required_param_present(:place_id)
         @readonly_node = Api::V3::Readonly::NodeWithFlows.
+          without_unknowns.
+          without_domestic.
           where(context_id: @context.id, profile: Api::V3::Profile::PLACE).
           find(params[:place_id])
       end
