@@ -37,6 +37,14 @@ export function* fetchProfilesInitialData() {
       yield call(getProfilesData, 'countries');
       yield fork(getProfilesTabs, 'companies');
       break;
+    case 'destinations': {
+      // We don't want to reset the destinations data if we have an active item and no tabs
+      const hasActiveItem = profileSelector.panels.destinations.activeItems.length > 0;
+      if (!hasActiveItem) {
+        yield call(getProfilesData, 'destinations');
+      }
+      break;
+    }
     default:
       yield fork(getProfilesData, panelName);
       break;
