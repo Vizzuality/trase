@@ -16,6 +16,13 @@ export default {
       activeItems: [],
       activeTab: null
     },
+    destinations: {
+      page: 1,
+      searchResults: [],
+      loadingItems: false,
+      activeItems: [],
+      activeTab: null
+    },
     sources: {
       page: 1,
       searchResults: [],
@@ -35,7 +42,8 @@ export default {
     commodities: [],
     countries: [],
     sources: {},
-    companies: {}
+    companies: {},
+    destinations: {}
   },
   tabs: {}
 };

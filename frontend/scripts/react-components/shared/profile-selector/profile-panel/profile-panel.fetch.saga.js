@@ -25,7 +25,7 @@ import {
 function* getProfilesParams(step, options = {}) {
   const state = yield select();
   const {
-    panels: { countries, sources, companies },
+    panels: { countries, sources, companies, destinations },
     data
   } = state.profileSelector;
   const { page } = options;
@@ -53,8 +53,13 @@ function* getProfilesParams(step, options = {}) {
     } else if (countries) {
       params.countries_ids = activeItemParams(countries);
     }
+
     if (companies) {
       params.companies_ids = activeItemParams(companies);
+    }
+
+    if (destinations) {
+      params.destinations_ids = activeItemParams(destinations);
     }
   }
 

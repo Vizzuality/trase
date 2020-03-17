@@ -23,18 +23,23 @@ import {
 export function* fetchProfilesInitialData() {
   const profileSelector = yield select(state => state.profileSelector);
   const panelName = getPanelName(profileSelector);
-  if (panelName === 'type') return;
-  if (panelName === 'sources') {
-    yield fork(getProfilesData, 'countries');
-    // Fetch regions
-    if (profileSelector.panels.countries.activeItems.length > 0) {
-      yield fork(getProfilesTabs, 'sources');
-    }
-  } else if (panelName === 'companies') {
-    yield call(getProfilesData, 'countries');
-    yield fork(getProfilesTabs, 'companies');
-  } else {
-    yield fork(getProfilesData, panelName);
+  switch (panelName) {
+    case 'type':
+      break;
+    case 'sources':
+      yield fork(getProfilesData, 'countries');
+      // Fetch regions
+      if (profileSelector.panels.countries.activeItems.length > 0) {
+        yield fork(getProfilesTabs, 'sources');
+      }
+      break;
+    case 'companies':
+      yield call(getProfilesData, 'countries');
+      yield fork(getProfilesTabs, 'companies');
+      break;
+    default:
+      yield fork(getProfilesData, panelName);
+      break;
   }
 }
 

@@ -3,7 +3,6 @@ import ProfilePanelComponent from 'react-components/shared/profile-selector/prof
 import { PROFILE_TYPES } from 'constants';
 import { profileSelectorActions } from 'react-components/shared/profile-selector/profile-selector.register';
 
-// Importing countries panel is not ready yet
 const blocks = [
   {
     id: PROFILE_TYPES.sources,
@@ -11,12 +10,12 @@ const blocks = [
     imageUrl: '/images/dashboards/icon_sourcing.svg',
     whiteImageUrl: '/images/dashboards/icon_sourcing_white.svg'
   },
-  // {
-  //   id: PROFILE_TYPES.importing,
-  //   title: 'importing countries',
-  //   imageUrl: '/images/dashboards/icon_importing.svg',
-  //   whiteImageUrl: '/images/dashboards/icon_importing_white.svg'
-  // },
+  {
+    id: PROFILE_TYPES.importing,
+    title: 'importer countries',
+    imageUrl: '/images/dashboards/icon_importing.svg',
+    whiteImageUrl: '/images/dashboards/icon_importing_white.svg'
+  },
   {
     id: PROFILE_TYPES.traders,
     title: 'traders',
