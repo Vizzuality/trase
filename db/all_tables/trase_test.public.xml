@@ -1424,12 +1424,8 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="display_name" nullable="false" remarks="Name of attribute for display" size="2147483647" type="text" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="unit_type" nullable="true" remarks="Type of unit, e.g. score. One of restricted set of values." size="2147483647" type="text" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="tooltip_text" nullable="true" remarks="Generic tooltip text (lowest precedence)" size="2147483647" type="text" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="is_visible_on_place_profile" nullable="false" remarks="Whether to display this attribute on place profile" size="1" type="bool" typeCode="-7"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="is_visible_on_actor_profile" nullable="false" remarks="Whether to display this attribute on actor profile" size="1" type="bool" typeCode="-7"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="7" name="is_temporal_on_place_profile" nullable="false" remarks="Whether attribute has temporal data on place profile" size="1" type="bool" typeCode="-7"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="8" name="is_temporal_on_actor_profile" nullable="false" remarks="Whether attribute has temporal data on actor profile" size="1" type="bool" typeCode="-7"/>
-         <column autoUpdated="false" defaultValue="null" digits="6" id="9" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="null" digits="6" id="10" name="updated_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="5" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="6" name="updated_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="ind_properties_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -1983,7 +1979,7 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="context_node_type_id" nullable="false" remarks="" size="10" type="int4" typeCode="4">
             <parent column="id" foreignKey="fk_rails_cbc235c3bc" implied="false" onDeleteCascade="true" schema="public" table="context_node_types"/>
          </column>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="name" nullable="true" remarks="Profile name, either actor or place. One of restricted set of values." size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="name" nullable="true" remarks="Profile name, either actor, place or country." size="2147483647" type="text" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="6" id="3" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
          <column autoUpdated="false" defaultValue="null" digits="6" id="4" name="updated_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="main_topojson_path" nullable="true" remarks="Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /" size="2147483647" type="varchar" typeCode="12"/>
@@ -2002,7 +1998,7 @@
             <column ascending="true" name="context_node_type_id"/>
             <column ascending="true" name="name"/>
          </index>
-         <checkConstraint constraint="((name = ANY (ARRAY['actor'::text, 'place'::text])))" name="profiles_name_check"/>
+         <checkConstraint constraint="((name = ANY (ARRAY['actor'::text, 'place'::text, 'country'::text])))" name="profiles_name_check"/>
       </table>
       <table name="qual_commodity_properties" numRows="0" remarks="Commodity specific properties for qual" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('qual_commodity_properties_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="19" type="bigserial" typeCode="-5"/>
@@ -2077,12 +2073,8 @@
          </column>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="display_name" nullable="false" remarks="Name of attribute for display" size="2147483647" type="text" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="tooltip_text" nullable="true" remarks="Generic tooltip text (lowest precedence)" size="2147483647" type="text" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="4" name="is_visible_on_place_profile" nullable="false" remarks="Whether to display this attribute on place profile" size="1" type="bool" typeCode="-7"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="is_visible_on_actor_profile" nullable="false" remarks="Whether to display this attribute on actor profile" size="1" type="bool" typeCode="-7"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="is_temporal_on_place_profile" nullable="false" remarks="" size="1" type="bool" typeCode="-7"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="7" name="is_temporal_on_actor_profile" nullable="false" remarks="" size="1" type="bool" typeCode="-7"/>
-         <column autoUpdated="false" defaultValue="null" digits="6" id="8" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="null" digits="6" id="9" name="updated_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="4" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="5" name="updated_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="qual_properties_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -2193,12 +2185,8 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="display_name" nullable="false" remarks="Name of attribute for display" size="2147483647" type="text" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="unit_type" nullable="true" remarks="Type of unit, e.g. count. One of restricted set of values." size="2147483647" type="text" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="tooltip_text" nullable="true" remarks="Generic tooltip text (lowest precedence)" size="2147483647" type="text" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="5" name="is_visible_on_place_profile" nullable="false" remarks="Whether to display this attribute on place profile" size="1" type="bool" typeCode="-7"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="is_visible_on_actor_profile" nullable="false" remarks="Whether to display this attribute on actor profile" size="1" type="bool" typeCode="-7"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="7" name="is_temporal_on_place_profile" nullable="false" remarks="" size="1" type="bool" typeCode="-7"/>
-         <column autoUpdated="false" defaultValue="false" digits="0" id="8" name="is_temporal_on_actor_profile" nullable="false" remarks="" size="1" type="bool" typeCode="-7"/>
-         <column autoUpdated="false" defaultValue="null" digits="6" id="9" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
-         <column autoUpdated="false" defaultValue="null" digits="6" id="10" name="updated_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="5" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="6" name="updated_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="quant_properties_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -2419,7 +2407,7 @@
             <column ascending="true" name="country_id"/>
          </index>
       </table>
-      <table name="schema_migrations" numRows="102" remarks="" schema="public" type="TABLE">
+      <table name="schema_migrations" numRows="104" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="version" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
          <primaryKey column="version" sequenceNumberInPK="1"/>
          <index name="schema_migrations_pkey" unique="true">

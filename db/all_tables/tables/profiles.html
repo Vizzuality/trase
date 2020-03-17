@@ -172,7 +172,7 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td><p>Profile name, either actor or place. One of restricted set of values.</p></td>
+                                    <td><p>Profile name, either actor, place or country.</p></td>
                                 </tr>
                                 <tr>
                                     <td><span id="created_at">created_at</span></td>
@@ -404,7 +404,7 @@
                                 <tbody>
                                 <tr>
                                     <td>profiles_name_check</td>
-                                    <td>((name = ANY (ARRAY[&#39;actor&#39;::text, &#39;place&#39;::text])))</td>
+                                    <td>((name = ANY (ARRAY[&#39;actor&#39;::text, &#39;place&#39;::text, &#39;country&#39;::text])))</td>
                                 </tr>
                                 </tbody>
                             </table>
