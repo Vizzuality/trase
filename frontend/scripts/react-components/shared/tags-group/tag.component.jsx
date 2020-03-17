@@ -45,6 +45,13 @@ function Tag(props) {
 
   const Component = as || Heading;
 
+  const renderName = () => {
+    if (part.value.length > 1) {
+      return part.name ? translateText(`${part.value.length} ${part.name || part.panel}`).toLowerCase() : null;
+    }
+    return part.value[0].name ? translateText(part.value[0].name).toLowerCase() : null;
+  };
+
   return (
     <Component
       size={size}
@@ -58,9 +65,7 @@ function Tag(props) {
         '-spaced': spaced
       })}
     >
-      {part.value.length > 1
-        ? translateText(`${part.value.length} ${part.name || part.panel}`)
-        : translateText(part.value[0].name)}
+      {renderName()}
       {!readOnly && clearPanel && (
         <button
           key={`button${part.id}`}
