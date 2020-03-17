@@ -27,13 +27,6 @@ module Api
           result
         end
 
-        def unsorted_list(attribute, options)
-          limit = limit_from_options(options)
-          result = query(attribute, options)
-          result = result.limit(limit) if limit.present?
-          result
-        end
-
         def unsorted_list_grouped_by_year(attribute, options)
           limit = limit_from_options(options)
           result = query_grouped_by_year(
