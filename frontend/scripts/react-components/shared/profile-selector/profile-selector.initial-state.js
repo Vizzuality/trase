@@ -43,7 +43,7 @@ export default {
     countries: [],
     sources: {},
     companies: {},
-    destinations: {}
+    destinations: []
   },
   tabs: {}
 };
