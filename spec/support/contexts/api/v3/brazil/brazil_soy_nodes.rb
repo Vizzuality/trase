@@ -141,7 +141,8 @@ shared_context 'api v3 brazil soy nodes' do
       node = FactoryBot.create(
         :api_v3_node,
         name: 'BUNGE EX',
-        node_type: api_v3_exporter_node_type
+        node_type: api_v3_exporter_node_type,
+        main_id: 1
       )
       FactoryBot.create(
         :api_v3_node_property,
@@ -213,7 +214,8 @@ shared_context 'api v3 brazil soy nodes' do
       node = FactoryBot.create(
         :api_v3_node,
         name: 'BUNGE IM',
-        node_type: api_v3_importer_node_type
+        node_type: api_v3_importer_node_type,
+        main_id: 1
       )
       FactoryBot.create(
         :api_v3_node_property,

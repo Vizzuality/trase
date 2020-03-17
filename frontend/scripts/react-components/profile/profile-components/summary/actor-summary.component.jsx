@@ -18,7 +18,7 @@ class ActorSummary extends React.PureComponent {
       onYearChange,
       openModal,
       context,
-      profileMetadata: { availableYears },
+      profileMetadata: { years },
       data: { nodeName, columnName, summary, headerAttributes } = {}
     } = this.props;
     const { commodityName, countryName } = context;
@@ -30,10 +30,9 @@ class ActorSummary extends React.PureComponent {
         dropdown: true,
         label: 'Year',
         value: { label: `${year}`, value: year },
-        options: (availableYears
-          ? availableYears.map(_year => ({ label: `${_year}`, value: _year }))
-          : []
-        ).sort((a, b) => b.value - a.value),
+        options: (years ? years.map(_year => ({ label: `${_year}`, value: _year })) : []).sort(
+          (a, b) => b.value - a.value
+        ),
         onYearChange
       }
     ];

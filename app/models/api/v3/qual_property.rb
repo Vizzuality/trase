@@ -2,14 +2,10 @@
 #
 # Table name: qual_properties
 #
-#  id                                                                              :integer          not null, primary key
-#  qual_id                                                                         :integer          not null
-#  display_name(Name of attribute for display)                                     :text             not null
-#  tooltip_text(Generic tooltip text (lowest precedence))                          :text
-#  is_visible_on_place_profile(Whether to display this attribute on place profile) :boolean          default(FALSE), not null
-#  is_visible_on_actor_profile(Whether to display this attribute on actor profile) :boolean          default(FALSE), not null
-#  is_temporal_on_place_profile                                                    :boolean          default(FALSE), not null
-#  is_temporal_on_actor_profile                                                    :boolean          default(FALSE), not null
+#  id                                                     :integer          not null, primary key
+#  qual_id                                                :integer          not null
+#  display_name(Name of attribute for display)            :text             not null
+#  tooltip_text(Generic tooltip text (lowest precedence)) :text
 #
 # Indexes
 #
@@ -23,16 +19,10 @@
 module Api
   module V3
     class QualProperty < YellowTable
-      include AttributePropertiesProfileScopes
-
       belongs_to :qual
 
       validates :qual, presence: true, uniqueness: true
       validates :display_name, presence: true
-      validates :is_visible_on_place_profile, inclusion: {in: [true, false]}
-      validates :is_visible_on_actor_profile, inclusion: {in: [true, false]}
-      validates :is_temporal_on_place_profile, inclusion: {in: [true, false]}
-      validates :is_temporal_on_actor_profile, inclusion: {in: [true, false]}
 
       after_commit :refresh_dependents
 

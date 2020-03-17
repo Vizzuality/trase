@@ -1,0 +1,58 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "required": [
+    "data"
+  ],
+  "properties": {
+    "data": {
+      "$id": "#/properties/data",
+      "type": "array",
+      "items": {
+        "$id": "#/properties/data/items",
+        "type": "object",
+        "required": [
+          "section",
+          "tabs"
+        ],
+        "properties": {
+          "section": {
+            "$id": "#/properties/data/items/properties/section",
+            "type": "string",
+            "pattern": "^(.*)$"
+          },
+          "tabs": {
+            "$id": "#/properties/data/items/properties/tabs",
+            "type": "array",
+            "items": {
+              "$id": "#/properties/data/items/properties/tabs/items",
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "profileType"
+              ],
+              "properties": {
+                "id": {
+                  "$id": "#/properties/data/items/properties/tabs/items/properties/id",
+                  "type": "integer"
+                },
+                "name": {
+                  "$id": "#/properties/data/items/properties/tabs/items/properties/name",
+                  "type": "string",
+                  "pattern": "^(.*)$"
+                },
+                "profileType": {
+                  "$id": "#/properties/data/items/properties/tabs/items/properties/profileType",
+                  "type": "null"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -32,7 +32,7 @@
               "required": [
                 "id",
                 "name",
-                "profileType"
+                "prefix"
               ],
               "properties": {
                 "id": {
@@ -44,8 +44,8 @@
                   "type": "string",
                   "pattern": "^(.*)$"
                 },
-                "profileType": {
-                  "$id": "#/properties/data/items/properties/tabs/items/properties/profileType",
+                "prefix": {
+                  "$id": "#/properties/data/items/properties/tabs/items/properties/prefix",
                   "type": "null"
                 }
               }

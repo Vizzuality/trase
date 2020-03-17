@@ -10,7 +10,7 @@ import {
 import {
   getURLFromParams,
   GET_DASHBOARD_OPTIONS_URL,
-  GET_DASHBOARD_OPTIONS_TABS_URL,
+  GET_PROFILE_OPTIONS_TABS_URL,
   GET_DASHBOARD_SEARCH_RESULTS_URL
 } from 'utils/getURLFromParams';
 import { PROFILE_STEPS } from 'constants';
@@ -138,13 +138,13 @@ export function* getMoreProfilesData(profileSelector, panelName, activeTab = nul
 
 export function* getProfilesTabs(optionsType) {
   const params = yield getProfilesParams(optionsType);
-  const url = getURLFromParams(GET_DASHBOARD_OPTIONS_TABS_URL, { ...params, profile_only: true });
+  const url = getURLFromParams(GET_PROFILE_OPTIONS_TABS_URL, { ...params });
   const { source, fetchPromise } = fetchWithCancel(url);
   try {
     const { data } = yield call(fetchPromise);
     const filteredData = data.data.map(section => ({
       ...section,
-      tabs: section.tabs.filter(t => t.profileType)
+      tabs: section.tabs.filter(t => t.profile_type)
     }));
     yield put({
       type: PROFILES__SET_PANEL_TABS,

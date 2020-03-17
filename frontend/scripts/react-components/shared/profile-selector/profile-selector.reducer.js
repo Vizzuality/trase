@@ -50,6 +50,12 @@ const profilesReducer = {
       } else {
         draft.data[panelName] = data || initialData;
       }
+
+      // Select country of production item (there is only one) when country of production its the first tab
+      if (panelName === 'sources' && data && data[0].nodeType === 'COUNTRY OF PRODUCTION') {
+        draft.panels.sources.activeTab = tab;
+        draft.panels.sources.activeItems = [data[0].id];
+      }
     });
   },
   [PROFILES__SET_MORE_PANEL_DATA](state, action) {
@@ -144,6 +150,15 @@ const profilesReducer = {
       let activePanel = panel;
       if (panel === 'profiles') {
         activePanel = state.panels.type;
+      }
+
+      // If a country source is selected set the country item as active
+      if (panel === 'sources') {
+        const { tabs: { sources }, data } = state;
+        const countryTab = sources.find(t => t.profile_type === 'country');
+        if (activeTab === countryTab.id) {
+          draft.panels[panel].activeItems = [data.sources[countryTab.id][0].id];
+        }
       }
 
       draft.panels[activePanel].activeTab = activeTab;

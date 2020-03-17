@@ -15,7 +15,7 @@ module Api
 
           def passing?
             tmp = @object.profiles
-            if Api::V3::Profile::NAME.include? @profile_type
+            if Api::V3::Profile::NAMES.include? @profile_type
               tmp = tmp.where('profiles.name' => @profile_type)
             end
             tmp.any?

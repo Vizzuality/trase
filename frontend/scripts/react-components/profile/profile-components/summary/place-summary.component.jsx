@@ -28,7 +28,7 @@ function PlaceSummary(props) {
       jurisdiction2: biomeName,
       headerAttributes
     } = {},
-    profileMetadata: { mainTopojsonPath, mainTopojsonRoot, availableYears } = {}
+    profileMetadata: { mainTopojsonPath, mainTopojsonRoot, years } = {}
   } = props;
 
   const { commodityName } = context;
@@ -38,10 +38,9 @@ function PlaceSummary(props) {
       dropdown: true,
       label: 'Year',
       value: { label: `${year}`, value: year },
-      options: (availableYears
-        ? availableYears.map(_year => ({ label: `${_year}`, value: _year }))
-        : []
-      ).sort((a, b) => b.value - a.value),
+      options: (years ? years.map(_year => ({ label: `${_year}`, value: _year })) : []).sort(
+        (a, b) => b.value - a.value
+      ),
       onYearChange
     },
     { name: capitalize(countryName), label: 'Country' },

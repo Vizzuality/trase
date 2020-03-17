@@ -28,16 +28,20 @@ module Api
     class Profile < YellowTable
       ACTOR = 'actor'.freeze
       PLACE = 'place'.freeze
+      COUNTRY = 'country'.freeze
 
-      NAME = [ACTOR, PLACE].freeze
+      NAMES = [ACTOR, PLACE, COUNTRY].freeze
 
       belongs_to :context_node_type
       has_many :charts, -> { order(:position) }
 
+      delegate :context, to: :context_node_type, allow_nil: false
+      delegate :node_type, to: :context_node_type, allow_nil: false
+
       validates :context_node_type, presence: true
       validates :name,
                 uniqueness: {scope: :context_node_type},
-                inclusion: NAME
+                inclusion: NAMES
 
       after_commit :refresh_dependents
       after_commit :refresh_actor_basic_attributes
