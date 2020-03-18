@@ -14,15 +14,14 @@ function CountrySummary(props) {
     year,
     onYearChange,
     openModal,
-    profileMetadata: { years, activity } = {}
+    profileMetadata: { years, activity, commodities, activities } = {}
   } = props;
-
   const titles = [
     {
       dropdown: true,
       label: 'Activity',
-      value: { label: capitalize(activity), value: activity },
-      options: (activity ? [activity].map(o => ({ label: capitalize(o), value: o })) : []).sort(
+      value: { label: capitalize(activities[0].name.toLowerCase()), value: activities[0].id },
+      options: activities.map(c => ({ label: capitalize(c.name.toLowerCase()), value: c.id })).sort(
         (a, b) => b.value - a.value
       ),
       function() {}
@@ -30,8 +29,8 @@ function CountrySummary(props) {
     {
       dropdown: true,
       label: 'Commodity',
-      value: { label: `${'Commodity'}`, value: 'Commodity' },
-      options: (['Commodity'].map(o => ({ label: capitalize(o), value: o }))).sort(
+      value: { label: capitalize(commodities[0].name.toLowerCase()), value: commodities[0].id },
+      options: commodities.map(c => ({ label: capitalize(c.name.toLowerCase()), value: c.id })).sort(
         (a, b) => b.value - a.value
       ),
       function() {}
