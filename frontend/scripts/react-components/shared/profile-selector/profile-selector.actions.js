@@ -75,16 +75,25 @@ export const setProfilesLoadingItems = loadingItems => ({
 export const goToProfile = () => (dispatch, getState) => {
   const { profileSelector, app } = getState();
   const { contexts } = app;
-  const { panels } = profileSelector;
+  const { panels, data } = profileSelector;
   const hasCompanies = panels.companies.activeItems.length > 0;
-  const hasDestinations = panels.destinations.activeItems.length > 0;
+  const isCountryProfile =
+    panels.destinations.activeItems.length > 0 ||
+    (panels.sources.activeItems.length > 0 &&
+      data.sources[panels.sources.activeTab] &&
+      data.sources[panels.sources.activeTab][0] &&
+      data.sources[panels.sources.activeTab][0].nodeType === 'COUNTRY OF PRODUCTION');
   const getProfileType = () => {
-    if (hasDestinations) return 'country';
+    if (isCountryProfile) return 'country';
     return hasCompanies ? 'actor' : 'place';
   };
   const getNodeId = () => {
-    if (hasDestinations) return panels.destinations.activeItems[0];
-    if (hasCompanies) return panels.companies.activeItems[0];
+    if (isCountryProfile) {
+      return panels.destinations.activeItems[0] || panels.sources.activeItems[0];
+    }
+    if (hasCompanies) {
+      return panels.companies.activeItems[0];
+    }
     return panels.sources.activeItems[0];
   };
 

@@ -235,7 +235,7 @@ class Profile extends React.PureComponent {
         {ready &&
           sortBy(profileMetadata.charts, 'position').map(chart => (
             <ErrorCatch
-              key={`${year}_${context ? context.id : commodityId }_${profileType}_${chart.identifier}_${chart.id}`}
+              key={`${year}_${context ? context.id : commodityId}_${profileType}_${chart.identifier}_${chart.id}`}
               renderFallback={() => (
                 <section className="section-placeholder">
                   <Text variant="mono" size="md" weight="bold">
