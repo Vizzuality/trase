@@ -134,13 +134,29 @@ const profilesReducer = {
         return;
       }
 
+      // Clear other panel's items
       if (panel === 'countries') {
         draft.panels.companies = initialState.panels.companies;
+        draft.panels.destinations = initialState.panels.destinations;
         draft.panels.sources = initialState.panels.sources;
       }
 
-      if (panel === 'sources' || panel === 'companies') {
+      if (panel === 'sources') {
+        draft.panels.destinations = initialState.panels.destinations;
+        draft.panels.companies = initialState.panels.companies;
         draft.panels.commodities = initialState.panels.commodities;
+      }
+
+      if (panel === 'companies') {
+        draft.panels.destinations = initialState.panels.destinations;
+        draft.panels.sources = initialState.panels.sources;
+        draft.panels.commodities = initialState.panels.commodities;
+      }
+
+      if (panel === 'destinations') {
+        draft.panels.companies = initialState.panels.companies;
+        draft.panels.companies = initialState.panels.companies;
+        draft.panels.sources = initialState.panels.sources;
       }
 
       if (activeItem) {
