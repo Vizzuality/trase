@@ -65,6 +65,10 @@ const profilesReducer = {
       if (panelName === 'sources' && data && data[0].nodeType === 'COUNTRY OF PRODUCTION') {
         draft.panels.sources.activeTab = tab;
         draft.panels.sources.activeItems = [data[0].id];
+
+        // Clear other profile items too
+        draft.panels.destinations = initialState.panels.destinations;
+        draft.panels.companies = initialState.panels.companies;
       }
     });
   },
@@ -155,7 +159,6 @@ const profilesReducer = {
 
       if (panel === 'destinations') {
         draft.panels.companies = initialState.panels.companies;
-        draft.panels.companies = initialState.panels.companies;
         draft.panels.sources = initialState.panels.sources;
       }
 
@@ -183,7 +186,7 @@ const profilesReducer = {
         const { tabs: { sources }, data } = state;
         const countryTab = sources.find(t => t.profile_type === 'country');
         if (activeTab === countryTab.id) {
-          draft.panels[panel].activeItems = [data.sources[countryTab.id][0].id];
+          draft.panels.sources.activeItems = [data.sources[countryTab.id][0].id];
         }
       }
 
