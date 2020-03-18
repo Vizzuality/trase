@@ -130,7 +130,7 @@ const API_ENDPOINTS = {
   },
   [GET_PROFILE_METADATA]: {
     api: 3,
-    endpoint: '/contexts/$context_id$/nodes/$node_id$/profile_metadata'
+    endpoint: '/profiles/$node_id$/profile_meta'
   },
   [GET_DASHBOARD_PARAMETRISED_CHARTS_URL]: {
     api: 3,

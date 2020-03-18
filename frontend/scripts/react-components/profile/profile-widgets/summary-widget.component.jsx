@@ -12,12 +12,23 @@ function SummaryWidget(props) {
     year,
     nodeId,
     context,
+    commodityId,
     profileType,
     onYearChange,
     profileMetadata,
     openModal
   } = props;
-  const params = { node_id: nodeId, context_id: context.id, profile_type: profileType, year };
+  const params = { node_id: nodeId, profile_type: profileType, year };
+
+  if (context) {
+    params.context_id = context.id;
+  } else {
+    params.commodityId = commodityId;
+  }
+
+  // Remove when whe have the country endpoint ready
+  if (!context) return null;
+
   return (
     <Widget params={[params]} query={[GET_NODE_SUMMARY_URL]}>
       {({ data, loading, error }) => {
@@ -69,6 +80,7 @@ function SummaryWidget(props) {
 SummaryWidget.propTypes = {
   printMode: PropTypes.bool,
   context: PropTypes.object,
+  commodityId: PropTypes.number,
   profileMetadata: PropTypes.object,
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired,
