@@ -16,7 +16,7 @@ module Api
           @context = context
           @node = node
           @year = year
-          @node_type_name = @node&.node_type&.name
+          @node_type_name = @node&.node_type
           quant_dictionary = Dictionary::Quant.instance
           # Assumption: Volume is a special quant which always exists
           @volume_attribute = quant_dictionary.get('Volume')
@@ -223,17 +223,17 @@ module Api
         def initialize_top_nodes
           exporter_top_nodes = Api::V3::Profiles::TopNodesList.new(
             @context,
+            @trader_node_type,
             @node,
             year_start: @year,
-            year_end: @year,
-            other_node_type_name: @trader_node_type.name
+            year_end: @year
           )
           consumer_top_nodes = Api::V3::Profiles::TopNodesList.new(
             @context,
+            @destination_node_type,
             @node,
             year_start: @year,
-            year_end: @year,
-            other_node_type_name: @destination_node_type.name
+            year_end: @year
           )
           @top_exporters = exporter_top_nodes.sorted_list(
             @volume_attribute,

@@ -39,7 +39,7 @@ module Api
         # Top nodes (destinations) linked to this actor node across years
         def call
           @top_nodes_summary.call(
-            @destination_node_type.name,
+            @destination_node_type,
             @commodity_production_attribute
           ).merge(
             legend_title: @commodity_production_chart_attribute.legend_name

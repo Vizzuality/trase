@@ -4,6 +4,9 @@ RSpec.describe Api::V3::TopNodes::ResponseBuilder do
   include_context 'api v3 brazil flows quants'
 
   before(:each) {
+    Api::V3::Readonly::FlowNode.refresh(sync: true)
+    Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
+    Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
     Api::V3::TablePartitions::CreatePartitionsForFlowQuants.new.call
   }
 

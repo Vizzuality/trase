@@ -43,10 +43,10 @@ module Api
         def initialize_top_nodes(node_type, include_domestic_consumption)
           top_nodes_list = Api::V3::Profiles::TopNodesList.new(
             @context,
+            node_type,
             @node,
             year_start: @year,
-            year_end: @year,
-            other_node_type_name: node_type
+            year_end: @year
           )
           @top_nodes = top_nodes_list.sorted_list(
             @volume_attribute,

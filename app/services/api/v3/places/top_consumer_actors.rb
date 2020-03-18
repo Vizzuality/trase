@@ -25,7 +25,7 @@ module Api
 
         def call
           @mini_sankey.call(
-            @trader_node_type.name,
+            @trader_node_type,
             true
           )
         end
