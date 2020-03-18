@@ -2,13 +2,15 @@ import { createSelector } from 'reselect';
 import { PROFILE_STEPS } from 'constants';
 
 const getProfileSelectorTabs = state => state.profileSelector.tabs;
-const getCompaniesPanel = state => state.profileSelector.panels.companies;
-const getSourcesPanel = state => state.profileSelector.panels.sources;
 const getCountriesPanel = state => state.profileSelector.panels.countries;
+const getSourcesPanel = state => state.profileSelector.panels.sources;
+const getCompaniesPanel = state => state.profileSelector.panels.companies;
+const getDestinationsPanel = state => state.profileSelector.panels.destinations;
 
 const getCountriesData = state => state.profileSelector.data.countries;
 const getSourcesData = state => state.profileSelector.data.sources;
 const getCompaniesData = state => state.profileSelector.data.companies;
+const getDestinationsData = state => state.profileSelector.data.destinations;
 
 const getSourcesTab = state => state.profileSelector.panels.sources.activeTab;
 const getCompaniesTab = state => state.profileSelector.panels.companies.activeTab;
@@ -111,6 +113,13 @@ export const getCompaniesActiveItems = createSelector(
   [getCompaniesPanel, getCompaniesCountryData],
   getPanelActiveTabItems
 );
+export const getDestinationsActiveItems = createSelector(
+  [getDestinationsPanel, getDestinationsData],
+  (destinationsPanel, destinationsData) => {
+    if (!destinationsData || !destinationsData.length || !destinationsPanel.activeItems) return null;
+    return destinationsData.find(d => d.id === destinationsPanel.activeItems[0]);
+  }
+);
 
 export const getIsDisabled = createSelector(
   [getActiveStep, getPanels, getProfileType],
@@ -131,11 +140,12 @@ export const getIsDisabled = createSelector(
 );
 
 export const getDynamicSentence = createSelector(
-  [getSourcesActiveItems, getCompaniesActiveItems, getProfileType],
-  (sourcesActiveItems, companiesActiveItems, profileType) => {
+  [getSourcesActiveItems, getCompaniesActiveItems, getDestinationsActiveItems, getProfileType],
+  (sourcesActiveItems, companiesActiveItems, destinationsActiveItems, profileType) => {
     if (
       (profileType === 'sources' && !sourcesActiveItems) ||
-      (profileType === 'companies' && !companiesActiveItems)
+      (profileType === 'companies' && !companiesActiveItems) ||
+      (profileType === 'destinations' && !destinationsActiveItems)
     ) {
       return [];
     }
@@ -156,8 +166,15 @@ export const getDynamicSentence = createSelector(
         transform: 'capitalize',
         value: companiesActiveItems
       });
+    } else if (profileType === 'destinations') {
+      dynamicParts.push({
+        panel: 'destinations',
+        id: 'destinations',
+        prefix: 'See the',
+        transform: 'capitalize',
+        value: [destinationsActiveItems]
+      });
     }
-
     if (dynamicParts.length > 0) {
       dynamicParts.push({
         prefix: 'profile'

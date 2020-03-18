@@ -44,7 +44,7 @@ ProfilesCommoditiesPanel.propTypes = {
   commodities: PropTypes.array,
   loading: PropTypes.bool,
   page: PropTypes.number.isRequired,
-  activeCommodities: PropTypes.object,
+  activeCommodities: PropTypes.array,
   getMoreItems: PropTypes.func.isRequired,
   onSelectCommodity: PropTypes.func.isRequired
 };

@@ -21,8 +21,8 @@ function ProfilePanel(props) {
   } = props;
   const singularTypes = {
     sources: 'Source',
-    'importing countries': 'Importing country',
-    traders: 'Trader'
+    traders: 'Trader',
+    destinations: 'Importer country'
   };
   switch (step) {
     case PROFILE_STEPS.type:

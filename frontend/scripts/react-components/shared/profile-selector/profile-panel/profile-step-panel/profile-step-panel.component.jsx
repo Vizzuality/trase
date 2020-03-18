@@ -7,6 +7,7 @@ import Text from 'react-components/shared/text';
 import ShrinkingSpinner from 'scripts/react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import ProfilesCompaniesPanel from './profiles-companies-panel.component';
 import ProfilesSourcesPanel from './profiles-sources-panel.component';
+import ProfilesDestinationsPanel from './profiles-destinations-panel.component';
 import 'react-components/shared/profile-selector/profile-panel/profile-step-panel/profile-step-panel.scss';
 
 function ProfileStepPanel(props) {
@@ -26,7 +27,7 @@ function ProfileStepPanel(props) {
     data,
     profileType
   } = props;
-  const { sources, countries, companies } = panels;
+  const { sources, countries, companies, destinations } = panels;
   switch (profileType) {
     case 'sources':
       return (
@@ -51,6 +52,23 @@ function ProfileStepPanel(props) {
           sourcesRequired
         />
       );
+    case 'destinations': {
+      return (
+        <ProfilesDestinationsPanel
+          loading={destinations.loadingItems}
+          destinations={data.destinations}
+          nodeTypeRenderer={node => node.nodeType || 'Country'}
+          page={destinations.page}
+          searchDestinations={destinations.searchResults}
+          getSearchResults={getSearchResults}
+          loadingMoreItems={destinations.loadingItems}
+          getMoreItems={getMoreItems}
+          activeDestinationsItem={destinations.activeItems}
+          onSelectDestinationValue={item => setProfilesActiveItem(item, 'destinations')}
+          setSearchResult={item => setProfilesSearchResult(item, 'destinations')}
+        />
+      )
+    }
     case 'companies': {
       const toOption = d => ({ label: d.name, value: d.id });
       const options = data.countries?.map(toOption);

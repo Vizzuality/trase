@@ -21,7 +21,7 @@ function TagsGroup(props) {
           as="span"
           size={size}
           align="center"
-          key={part.id}
+          key={part.id || part.prefix}
           color={color}
           className="tag-group-part notranslate"
         >

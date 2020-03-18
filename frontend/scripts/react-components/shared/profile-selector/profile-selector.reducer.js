@@ -21,6 +21,13 @@ const profilesReducer = {
     return immer(state, draft => {
       const { activeStep } = action.payload;
 
+      const panelName = getPanelName(state);
+
+      // Reset page on destinations panel to load the first items
+      if (panelName === 'destinations') {
+        draft.panels.destinations.page = initialState.panels.destinations.page;
+      }
+
       draft.activeStep = activeStep;
     });
   },
