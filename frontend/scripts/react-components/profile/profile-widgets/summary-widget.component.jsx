@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ActorSummary from 'react-components/profile/profile-components/summary/actor-summary.component';
 import PlaceSummary from 'react-components/profile/profile-components/summary/place-summary.component';
+import CountrySummary from 'react-components/profile/profile-components/summary/country-summary.component';
 import Widget from 'react-components/widgets/widget.component';
 import { GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
@@ -26,11 +27,8 @@ function SummaryWidget(props) {
     params.commodityId = commodityId;
   }
 
-  // Remove when whe have the country endpoint ready
-  if (!context) return null;
-
   return (
-    <Widget params={[params]} query={[GET_NODE_SUMMARY_URL]}>
+    <Widget params={[params]} query={[GET_NODE_SUMMARY_URL]} disableFetch={profileType === 'country'}>
       {({ data, loading, error }) => {
         if (loading) {
           return (
@@ -45,32 +43,23 @@ function SummaryWidget(props) {
           console.error('Error loading summary data for profile page', error);
           return null;
         }
+        const summaryComponents = {
+          actor: ActorSummary,
+          place: PlaceSummary,
+          country: CountrySummary
+        };
 
+        const SummaryComponent = summaryComponents[profileType];
         return (
-          <React.Fragment>
-            {profileType === 'actor' && (
-              <ActorSummary
-                year={year}
-                printMode={printMode}
-                onYearChange={onYearChange}
-                data={data[GET_NODE_SUMMARY_URL]}
-                profileMetadata={profileMetadata}
-                context={context}
-                openModal={openModal}
-              />
-            )}
-            {profileType === 'place' && (
-              <PlaceSummary
-                year={year}
-                printMode={printMode}
-                onYearChange={onYearChange}
-                data={data[GET_NODE_SUMMARY_URL]}
-                context={context}
-                profileMetadata={profileMetadata}
-                openModal={openModal}
-              />
-            )}
-          </React.Fragment>
+          <SummaryComponent
+            year={year}
+            printMode={printMode}
+            onYearChange={onYearChange}
+            data={profileType === 'country' ? null : data[GET_NODE_SUMMARY_URL]}
+            context={context}
+            profileMetadata={profileMetadata}
+            openModal={openModal}
+          />
         );
       }}
     </Widget>

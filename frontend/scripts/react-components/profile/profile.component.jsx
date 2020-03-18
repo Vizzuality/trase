@@ -74,11 +74,12 @@ class Profile extends React.PureComponent {
   onYearChange = year => this.updateQuery('year', year);
 
   updateQuery(key, value) {
-    const { nodeId, year, context, profileType, updateQueryParams } = this.props;
+    const { nodeId, year, context, commodityId, profileType, updateQueryParams } = this.props;
     updateQueryParams(profileType, {
       nodeId,
       year,
-      contextId: context.id,
+      contextId: context?.id,
+      commodityId,
       [key]: value
     });
   }
@@ -96,6 +97,10 @@ class Profile extends React.PureComponent {
       updateQueryParams,
       openModal
     } = this.props;
+    if (profileType === 'country' && chart.chart_type) {
+      return null;
+    }
+
     switch (chart.chart_type) {
       case 'line_chart_with_map': {
         const isCountries = chart.identifier === 'actor_top_countries';
@@ -256,7 +261,7 @@ class Profile extends React.PureComponent {
               />
             </Suspense>
           )}
-        {ready && (
+        {ready && profileType !== 'country' && (
           <LinksWidget
             year={year}
             nodeId={nodeId}

@@ -18,28 +18,32 @@ const mapDispatchToProps = dispatch =>
 
 // TODO: replace this with Zeit's SWR library: https://github.com/zeit/swr
 function Widget(props) {
-  const { widget, children, query, params, raw, getWidgetData } = props;
+  const { widget, children, query, params, raw, getWidgetData, disableFetch } = props;
   const sources = useRef([]);
-
   useEffect(() => {
-    const currentSources = sources.current;
-    query.forEach((endpoint, i) => {
-      const getCancelPolicy = getWidgetData(endpoint, params[i], raw[i]);
-      if (getCancelPolicy) {
-        sources.current.push(getCancelPolicy);
-      }
-    });
-
-    return () => {
-      currentSources.forEach(getCancelPolicy => {
-        const cancelPolicy = getCancelPolicy();
-        if (cancelPolicy.shouldCancel) {
-          cancelPolicy.source.cancel();
+    // Temporary disable for country profiles
+    if (!disableFetch) {
+      const currentSources = sources.current;
+      query.forEach((endpoint, i) => {
+        const getCancelPolicy = getWidgetData(endpoint, params[i], raw[i]);
+        if (getCancelPolicy) {
+          sources.current.push(getCancelPolicy);
         }
       });
-    };
-  }, [query, params, raw, getWidgetData]);
 
+      return () => {
+        currentSources.forEach(getCancelPolicy => {
+          const cancelPolicy = getCancelPolicy();
+          if (cancelPolicy.shouldCancel) {
+            cancelPolicy.source.cancel();
+          }
+        });
+      };
+    }
+    return undefined;
+  }, [query, params, raw, getWidgetData, disableFetch]);
+
+  if (disableFetch) return children({ data: {}, error: false, loading: false });
   return children(widget);
 }
 
