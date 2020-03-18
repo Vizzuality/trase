@@ -48,10 +48,13 @@ const profilesReducer = {
         const selectedCountry = state.panels.countries.activeItems[0];
         const selectedCountryId =
           typeof selectedCountry !== 'undefined' ? selectedCountry : state.data.countries[0].id;
-        if (!draft.data[panelName][selectedCountryId]) {
-          draft.data[panelName][selectedCountryId] = {};
+        if (!draft.data.companies[selectedCountryId]) {
+          draft.data.companies[selectedCountryId] = {};
         }
-        draft.data[panelName][selectedCountryId][tab] = data;
+        draft.data.companies[selectedCountryId][tab] = data;
+
+        // Add default dropdown country to selection
+        draft.panels.countries.activeItems = [selectedCountryId];
       } else if (tab) {
         draft.data[panelName][tab] = data;
       } else {
