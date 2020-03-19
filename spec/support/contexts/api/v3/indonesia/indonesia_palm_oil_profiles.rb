@@ -1,4 +1,4 @@
-shared_context 'api v3 indonesia profiles' do
+shared_context 'api v3 indonesia palm oil profiles' do
   include_context 'api v3 indonesia context node types'
 
   let!(:api_v3_indonesia_kabupaten_place_profile) do

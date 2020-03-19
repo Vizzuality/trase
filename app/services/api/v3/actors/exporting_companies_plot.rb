@@ -5,7 +5,7 @@ module Api
         include Api::V3::Profiles::AttributesInitializer
 
         # @param context [Api::V3::Context]
-        # @param node [Api::V3::Node]
+        # @param node [Api::V3::Readonly::NodeWithFlows]
         # @year [Integer]
         # rubocop:disable Metrics/MethodLength
         def initialize(context, node, year)
@@ -29,7 +29,7 @@ module Api
 
         def call
           stats = Api::V3::Profiles::FlowStatsForNodeType.new(
-            @context, @year, @node.node_type.name
+            @context, @year, @node.node_type
           )
           production_totals = stats.nodes_with_flows_totals(@volume_attribute)
           attributes_totals = @chart_config.attributes.map do |attribute|

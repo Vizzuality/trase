@@ -10,7 +10,7 @@ module Api
         end
 
         # @param context [Api::V3::Context]
-        # @param node [Api::V3::Node]
+        # @param node [Api::V3::Readonly::NodeWithFlows]
         # @year [Integer]
         def initialize(context, node, year)
           @context = context
@@ -135,7 +135,7 @@ module Api
         end
 
         def get_top_nodes(node_type)
-          top_nodes_list = Api::V3::Profiles::TopNodesList.new(
+          top_nodes_list = Api::V3::Profiles::SingleContextTopNodesList.new(
             @context,
             node_type,
             @node,

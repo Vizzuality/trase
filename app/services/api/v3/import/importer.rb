@@ -154,11 +154,13 @@ module Api
             without_unknowns.
             without_domestic.
             where(profile: Api::V3::Profile::ACTOR).
-            select(:id).distinct.each do |node|
+            select(:id).
+            distinct.
+            each do |node|
               NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
                 [node.id]
               )
-          end
+            end
         end
 
         def refresh_precomputed_downloads_later

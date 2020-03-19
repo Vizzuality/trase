@@ -1,7 +1,7 @@
 module Api
   module V3
     class PlacesController < ApiController
-      include Api::V3::ProfileHelpers
+      include Api::V3::Profiles::SingleContextHelpers
 
       before_action :load_node
       before_action :set_year
@@ -15,16 +15,30 @@ module Api
       end
 
       def top_consumer_actors
-        @result = Api::V3::Places::TopConsumerActors.new(
-          @context, @node, @year
+        @result = Api::V3::Profiles::SingleContextTopNodesChart.new(
+          @context,
+          @node,
+          @year,
+          {
+            profile_type: profile_type,
+            chart_identifier: :place_top_consumer_actors,
+            context: @context
+          }
         ).call
 
         render json: {data: @result}
       end
 
       def top_consumer_countries
-        @result = Api::V3::Places::TopConsumerCountries.new(
-          @context, @node, @year
+        @result = Api::V3::Profiles::SingleContextTopNodesChart.new(
+          @context,
+          @node,
+          @year,
+          {
+            profile_type: profile_type,
+            chart_identifier: :place_top_consumer_countries,
+            context: @context
+          }
         ).call
 
         render json: {data: @result}
@@ -48,13 +62,8 @@ module Api
 
       private
 
-      def load_readonly_node
-        ensure_required_param_present(:place_id)
-        @readonly_node = Api::V3::Readonly::NodeWithFlows.
-          without_unknowns.
-          without_domestic.
-          where(context_id: @context.id, profile: Api::V3::Profile::PLACE).
-          find(params[:place_id])
+      def profile_type
+        Api::V3::Profile::PLACE
       end
     end
   end

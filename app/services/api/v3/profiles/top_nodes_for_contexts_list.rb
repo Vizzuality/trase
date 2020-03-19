@@ -88,7 +88,7 @@ module Api
             'flows.path[nodes.column_position + 1] AS node_id',
             "SUM(#{value_table}.value)::DOUBLE PRECISION AS value",
             'nodes.name AS name',
-            "nodes.is_domestic_consumption AS is_domestic_consumption",
+            'nodes.is_domestic_consumption AS is_domestic_consumption',
             'nodes.geo_id'
           ]
         end

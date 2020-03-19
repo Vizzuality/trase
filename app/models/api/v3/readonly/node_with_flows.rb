@@ -44,6 +44,15 @@ module Api
         belongs_to :readonly_context,
                    class_name: 'Api::V3::Readonly::Context',
                    foreign_key: 'context_id'
+        has_many :node_inds,
+                 class_name: 'Api::V3::NodeInd',
+                 foreign_key: 'node_id'
+        has_many :node_quals,
+                 class_name: 'Api::V3::NodeQual',
+                 foreign_key: 'node_id'
+        has_many :node_quants,
+                 class_name: 'Api::V3::NodeQuant',
+                 foreign_key: 'node_id'
 
         scope :with_profile, -> { where(profile: Api::V3::Profile::NAMES) }
         scope :without_unknowns, -> { where(is_unknown: false) }
@@ -85,7 +94,7 @@ module Api
           raise ActiveRecord::RecordNotFound unless year
 
           actor_basic_attributes_for_year =
-            Api::V3::Actors::BasicAttributes.new(context, node, year).call
+            Api::V3::Actors::BasicAttributes.new(context, self, year).call
 
           update_attribute(
             :actor_basic_attributes,

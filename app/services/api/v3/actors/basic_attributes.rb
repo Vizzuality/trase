@@ -10,13 +10,13 @@ module Api
         end
 
         # @param context [Api::V3::Context]
-        # @param node [Api::V3::Node]
+        # @param node [Api::V3::Readonly::NodeWithFlows]
         # @year [Integer]
         def initialize(context, node, year)
           @context = context
           @node = node
           @year = year
-          @node_type_name = @node&.node_type&.name
+          @node_type_name = @node.node_type
           # Assumption: Volume is a special quant which always exists
           @volume_attribute = Dictionary::Quant.instance.get('Volume')
           unless @volume_attribute.present?
@@ -102,15 +102,16 @@ module Api
         end
 
         def initialize_top_nodes
-          destination_top_nodes = Api::V3::Profiles::TopNodesList.new(
-            @context,
-            @destination_node_type,
-            @node,
-            year_start: @year,
-            year_end: @year,
-            place_inds: @place_inds,
-            place_quants: @place_quants
-          )
+          destination_top_nodes =
+            Api::V3::Profiles::SingleContextTopNodesList.new(
+              @context,
+              @destination_node_type,
+              @node,
+              year_start: @year,
+              year_end: @year,
+              place_inds: @place_inds,
+              place_quants: @place_quants
+            )
           @main_destination = destination_top_nodes.sorted_list(
             @volume_attribute,
             include_domestic_consumption: false,

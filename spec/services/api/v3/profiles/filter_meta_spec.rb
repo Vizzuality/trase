@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::V3::Profiles::FilterMeta do
-  include_context 'api v3 indonesia profiles'
+  include_context 'api v3 indonesia palm oil profiles'
 
   describe 'call' do
     let(:filter) do

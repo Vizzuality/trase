@@ -10,7 +10,7 @@ module Api
         end
 
         # @param context [Api::V3::Context]
-        # @param node [Api::V3::Node]
+        # @param node [Api::V3::Readonly::NodeWithFlows]
         # @param year [Integer]
         def initialize(context, node, year)
           @context = context

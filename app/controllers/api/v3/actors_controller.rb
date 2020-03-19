@@ -1,13 +1,13 @@
 module Api
   module V3
     class ActorsController < ApiController
-      include Api::V3::ProfileHelpers
+      include Api::V3::Profiles::SingleContextHelpers
 
       before_action :load_node
       before_action :set_year
 
       def basic_attributes
-        basic_attributes = @readonly_node.actor_basic_attributes
+        basic_attributes = @node.actor_basic_attributes
         @result = basic_attributes && basic_attributes[@year.to_s]
 
         if @result.nil?
@@ -56,13 +56,8 @@ module Api
 
       private
 
-      def load_readonly_node
-        ensure_required_param_present(:actor_id)
-        @readonly_node = Api::V3::Readonly::NodeWithFlows.
-          without_unknowns.
-          without_domestic.
-          where(context_id: @context.id, profile: Api::V3::Profile::ACTOR).
-          find(params[:actor_id])
+      def profile_type
+        Api::V3::Profile::ACTOR
       end
     end
   end

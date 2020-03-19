@@ -10,13 +10,13 @@ module Api
         end
 
         # @param context [Api::V3::Context]
-        # @param node [Api::V3::Node]
+        # @param node [Api::V3::Readonly::NodeWithFlows]
         # @param year [Integer]
         def initialize(context, node, year)
           @context = context
           @node = node
           @year = year
-          @node_type_name = @node&.node_type
+          @node_type_name = @node.node_type
           quant_dictionary = Dictionary::Quant.instance
           # Assumption: Volume is a special quant which always exists
           @volume_attribute = quant_dictionary.get('Volume')
@@ -221,14 +221,14 @@ module Api
         end
 
         def initialize_top_nodes
-          exporter_top_nodes = Api::V3::Profiles::TopNodesList.new(
+          exporter_top_nodes = Api::V3::Profiles::SingleContextTopNodesList.new(
             @context,
             @trader_node_type,
             @node,
             year_start: @year,
             year_end: @year
           )
-          consumer_top_nodes = Api::V3::Profiles::TopNodesList.new(
+          consumer_top_nodes = Api::V3::Profiles::SingleContextTopNodesList.new(
             @context,
             @destination_node_type,
             @node,
