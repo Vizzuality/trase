@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import SummaryWidget from 'react-components/profile/profile-widgets/summary-widget.component';
 import LinksWidget from 'react-components/profile/profile-widgets/links-widget.component';
@@ -31,50 +31,41 @@ const TopDestinationsWidget = React.lazy(() =>
 );
 const GfwWidget = React.lazy(() => import('./profile-widgets/gfw-widget.component'));
 
-class Profile extends React.PureComponent {
-  static propTypes = {
-    printMode: PropTypes.bool,
-    context: PropTypes.object,
-    commodityId: PropTypes.number,
-    errorMetadata: PropTypes.any,
-    profileMetadata: PropTypes.object,
-    year: PropTypes.number,
-    nodeId: PropTypes.number.isRequired,
-    profileType: PropTypes.string.isRequired,
-    loadingMetadata: PropTypes.bool.isRequired,
-    updateQueryParams: PropTypes.func.isRequired,
-    openModal: PropTypes.func.isRequired
-  };
+const Profile = (props) => {
+  const {
+    year,
+    nodeId,
+    context,
+    commodityId,
+    printMode,
+    profileType,
+    profileMetadata,
+    loadingMetadata,
+    errorMetadata,
+    updateQueryParams,
+    openModal
+  } = props;
 
   // if requestIdleCallback is not supported (Edge, IE) we render the iframe immediately
-  state = {
-    renderIframes: typeof window.requestIdleCallback === 'undefined'
-  };
+  const [renderIframes, setRenderIframes] = useState(typeof window.requestIdleCallback === 'undefined');
 
-  componentDidMount() {
+  const allowRenderIframes = () => setRenderIframes(true)
+  useEffect(() => {
     if (window.requestIdleCallback) {
       // http://www.aaronpeters.nl/blog/iframe-loading-techniques-performance
-      window.addEventListener('load', this.renderIframes, false);
+      window.addEventListener('load', allowRenderIframes, false);
       if (document.readyState === 'complete') {
-        window.requestIdleCallback(this.renderIframes);
+        window.requestIdleCallback(allowRenderIframes);
       }
+      return window.removeEventListener('load', allowRenderIframes);
     }
-  }
+    return undefined;
+  }, []);
+  const anchorRef = useRef(null);
 
-  componentWillUnmount() {
-    if (window.requestIdleCallback) {
-      window.removeEventListener('load', this.renderIframes);
-    }
-  }
 
-  getAnchorRef = ref => {
-    this.anchor = ref;
-  };
 
-  onYearChange = year => this.updateQuery('year', year);
-
-  updateQuery(key, value) {
-    const { nodeId, year, context, commodityId, profileType, updateQueryParams } = this.props;
+  const updateQuery = (key, value) => {
     updateQueryParams(profileType, {
       nodeId,
       year,
@@ -84,19 +75,7 @@ class Profile extends React.PureComponent {
     });
   }
 
-  renderIframes = () => this.setState({ renderIframes: true });
-
-  renderSection = chart => {
-    const {
-      year,
-      nodeId,
-      context,
-      printMode,
-      profileType,
-      profileMetadata,
-      updateQueryParams,
-      openModal
-    } = this.props;
+  const renderSection = chart => {
     if (profileType === 'country' && chart.chart_type) {
       return null;
     }
@@ -197,83 +176,83 @@ class Profile extends React.PureComponent {
               printMode={printMode}
               profileType={profileType}
               profileMetadata={profileMetadata}
-              onYearChange={this.onYearChange}
+              onChange={updateQuery}
               openModal={openModal}
             />
-            <div className="profile-content-anchor" ref={this.getAnchorRef} />
+            <div className="profile-content-anchor" ref={anchorRef} />
             <ProfileSelector />
           </React.Fragment>
         );
     }
   };
 
-  render() {
-    const {
-      year,
-      nodeId,
-      context,
-      commodityId,
-      printMode,
-      profileType,
-      profileMetadata,
-      loadingMetadata,
-      errorMetadata
-    } = this.props;
-    const { renderIframes } = this.state;
-    const ready = !loadingMetadata && !errorMetadata;
-    return (
-      <div className={`l-profile-${profileType}`}>
-        {printMode && (
-          <div className="top-logo">
-            <div className="row">
-              <div className="column small-12">
-                <img src="/images/logos/new-logo-trase-red.svg" alt="TRASE" />
-              </div>
+  const ready = !loadingMetadata && !errorMetadata;
+  return (
+    <div className={`l-profile-${profileType}`}>
+      {printMode && (
+        <div className="top-logo">
+          <div className="row">
+            <div className="column small-12">
+              <img src="/images/logos/new-logo-trase-red.svg" alt="TRASE" />
             </div>
           </div>
+        </div>
+      )}
+      {ready &&
+        sortBy(profileMetadata.charts, 'position').map(chart => (
+          <ErrorCatch
+            key={`${year}_${context ? context.id : commodityId}_${profileType}_${chart.identifier}_${chart.id}`}
+            renderFallback={() => (
+              <section className="section-placeholder">
+                <Text variant="mono" size="md" weight="bold">
+                  Error!
+                </Text>
+              </section>
+            )}
+          >
+            <Suspense fallback={null}>{renderSection(chart)}</Suspense>
+          </ErrorCatch>
+        ))}
+      {ready &&
+        profileType === 'place' &&
+        GFW_WIDGETS_BASE_URL &&
+        context.countryName === 'BRAZIL' && (
+          <Suspense fallback={null}>
+            <GfwWidget
+              year={year}
+              nodeId={nodeId}
+              contextId={context.id}
+              renderIframes={renderIframes}
+              profileType={profileType}
+            />
+          </Suspense>
         )}
-        {ready &&
-          sortBy(profileMetadata.charts, 'position').map(chart => (
-            <ErrorCatch
-              key={`${year}_${context ? context.id : commodityId}_${profileType}_${chart.identifier}_${chart.id}`}
-              renderFallback={() => (
-                <section className="section-placeholder">
-                  <Text variant="mono" size="md" weight="bold">
-                    Error!
-                  </Text>
-                </section>
-              )}
-            >
-              <Suspense fallback={null}>{this.renderSection(chart)}</Suspense>
-            </ErrorCatch>
-          ))}
-        {ready &&
-          profileType === 'place' &&
-          GFW_WIDGETS_BASE_URL &&
-          context.countryName === 'BRAZIL' && (
-            <Suspense fallback={null}>
-              <GfwWidget
-                year={year}
-                nodeId={nodeId}
-                contextId={context.id}
-                renderIframes={renderIframes}
-                profileType={profileType}
-              />
-            </Suspense>
-          )}
-        {ready && profileType !== 'country' && (
-          <LinksWidget
-            year={year}
-            nodeId={nodeId}
-            profileType={profileType}
-            contextId={context?.id}
-            countryId={context?.countryId}
-            commodityId={context?.commodityId || commodityId}
-          />
-        )}
-      </div>
-    );
-  }
+      {ready && profileType !== 'country' && (
+        <LinksWidget
+          year={year}
+          nodeId={nodeId}
+          profileType={profileType}
+          contextId={context?.id}
+          countryId={context?.countryId}
+          commodityId={context?.commodityId || commodityId}
+        />
+      )}
+    </div>
+  );
 }
+
+Profile.propTypes = {
+  printMode: PropTypes.bool,
+  context: PropTypes.object,
+  commodityId: PropTypes.number,
+  errorMetadata: PropTypes.any,
+  profileMetadata: PropTypes.object,
+  year: PropTypes.number,
+  nodeId: PropTypes.number.isRequired,
+  profileType: PropTypes.string.isRequired,
+  loadingMetadata: PropTypes.bool.isRequired,
+  updateQueryParams: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired
+};
 
 export default Profile;

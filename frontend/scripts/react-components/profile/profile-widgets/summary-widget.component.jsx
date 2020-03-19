@@ -15,7 +15,7 @@ function SummaryWidget(props) {
     context,
     commodityId,
     profileType,
-    onYearChange,
+    onChange,
     profileMetadata,
     openModal
   } = props;
@@ -54,7 +54,7 @@ function SummaryWidget(props) {
           <SummaryComponent
             year={year}
             printMode={printMode}
-            onYearChange={onYearChange}
+            onChange={onChange}
             data={profileType === 'country' ? null : data[GET_NODE_SUMMARY_URL]}
             context={context}
             profileMetadata={profileMetadata}
@@ -73,7 +73,7 @@ SummaryWidget.propTypes = {
   profileMetadata: PropTypes.object,
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired,
-  onYearChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
   profileType: PropTypes.string.isRequired
 };

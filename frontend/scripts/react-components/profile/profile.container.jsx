@@ -73,10 +73,18 @@ function mapStateToProps(state) {
   return props;
 }
 
-const updateQueryParams = (profileType, query) => ({
-  type: 'profile',
-  payload: { query, profileType }
-});
+const updateQueryParams = (profileType, query) => {
+  const updatedQuery = { ...query };
+
+  if (query.activity) {
+   delete updatedQuery.activity;
+  }
+
+  return {
+    type: 'profile',
+    payload: { query: updatedQuery, profileType }
+  };
+};
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(

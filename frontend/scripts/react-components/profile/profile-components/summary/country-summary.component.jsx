@@ -12,28 +12,33 @@ import Text from 'react-components/shared/text';
 function CountrySummary(props) {
   const {
     year,
-    onYearChange,
+    onChange,
     openModal,
-    profileMetadata: { years, activity, commodities, activities } = {}
+    profileMetadata: { years, activity, commodities, activities, commodityId } = {}
   } = props;
+  const selectedCommodity = commodities.find(c => c.id === commodityId);
+  const selectedActivity = activities.find(a => a.name === activity);
   const titles = [
     {
       dropdown: true,
       label: 'Activity',
-      value: { label: capitalize(activities[0].name.toLowerCase()), value: activities[0].id },
-      options: activities.map(c => ({ label: capitalize(c.name.toLowerCase()), value: c.id })).sort(
-        (a, b) => b.value - a.value
-      ),
-      function() {}
+      value: { label: capitalize(activity), value: selectedActivity.id },
+      options: activities
+        .map(c => ({ label: capitalize(c.name.toLowerCase()), value: c.id }))
+        .sort((a, b) => b.value - a.value),
+      onChange: newActivity => onChange('activity', newActivity)
     },
     {
       dropdown: true,
       label: 'Commodity',
-      value: { label: capitalize(commodities[0].name.toLowerCase()), value: commodities[0].id },
-      options: commodities.map(c => ({ label: capitalize(c.name.toLowerCase()), value: c.id })).sort(
-        (a, b) => b.value - a.value
-      ),
-      function() {}
+      value: {
+        label: capitalize(selectedCommodity.name.toLowerCase()),
+        value: commodityId
+      },
+      options: commodities
+        .map(c => ({ label: capitalize(c.name.toLowerCase()), value: c.id }))
+        .sort((a, b) => b.value - a.value),
+      onChange: newCommodityId => onChange('commodity', newCommodityId)
     },
     {
       dropdown: true,
@@ -42,8 +47,8 @@ function CountrySummary(props) {
       options: (years ? years.map(_year => ({ label: `${_year}`, value: _year })) : []).sort(
         (a, b) => b.value - a.value
       ),
-      onYearChange
-    },
+      onChange: newYear => onChange('year', newYear)
+    }
   ];
 
   return (
@@ -70,7 +75,7 @@ function CountrySummary(props) {
                 <TitleGroup
                   sticky={status === Sticky.STATUS_FIXED}
                   titles={titles}
-                  on={onYearChange}
+                  on={newYear => onChange('year', newYear)}
                 />
               </div>
             )}
@@ -97,7 +102,7 @@ function CountrySummary(props) {
 
 CountrySummary.propTypes = {
   year: PropTypes.number,
-  onYearChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
   profileMetadata: PropTypes.object.isRequired
 };

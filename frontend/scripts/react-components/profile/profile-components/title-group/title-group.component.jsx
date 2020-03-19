@@ -53,7 +53,7 @@ class TitleGroup extends React.PureComponent {
             size={sticky ? 'md' : 'lg'}
             label={!sticky ? title.label : null}
             options={title.options}
-            onChange={item => title.onYearChange(item.value)}
+            onChange={item => title.onChange(item.value)}
             value={title.value}
           />
         </div>

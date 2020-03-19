@@ -15,7 +15,7 @@ class ActorSummary extends React.PureComponent {
     const {
       year,
       printMode,
-      onYearChange,
+      onChange,
       openModal,
       context,
       profileMetadata: { years },
@@ -33,7 +33,7 @@ class ActorSummary extends React.PureComponent {
         options: (years ? years.map(_year => ({ label: `${_year}`, value: _year })) : []).sort(
           (a, b) => b.value - a.value
         ),
-        onYearChange
+        onChange: (newYear) => onChange('year', newYear)
       }
     ];
 
@@ -134,7 +134,7 @@ class ActorSummary extends React.PureComponent {
         </div>
         <div className="row">
           <div className="small-12 columns">
-            <TitleGroup titles={titles} on={onYearChange} />
+            <TitleGroup titles={titles} on={onChange} />
           </div>
           {headerAttributes &&
             Object.keys(headerAttributes).length > 0 &&
@@ -169,7 +169,7 @@ ActorSummary.propTypes = {
   context: PropTypes.object,
   profileMetadata: PropTypes.object,
   openModal: PropTypes.func.isRequired,
-  onYearChange: PropTypes.func.isRequired
+  onChange: PropTypes.func.isRequired
 };
 
 export default ActorSummary;

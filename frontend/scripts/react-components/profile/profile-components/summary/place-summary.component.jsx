@@ -15,7 +15,7 @@ import formatValue from 'utils/formatValue';
 function PlaceSummary(props) {
   const {
     year,
-    onYearChange,
+    onChange,
     context,
     openModal,
     data: {
@@ -41,7 +41,7 @@ function PlaceSummary(props) {
       options: (years ? years.map(_year => ({ label: `${_year}`, value: _year })) : []).sort(
         (a, b) => b.value - a.value
       ),
-      onYearChange
+      onChange: newYear => onChange('year', newYear)
     },
     { name: capitalize(countryName), label: 'Country' },
     { name: capitalize(biomeName), label: 'Biome' },
@@ -120,7 +120,7 @@ function PlaceSummary(props) {
                 <TitleGroup
                   sticky={status === Sticky.STATUS_FIXED}
                   titles={titles}
-                  on={onYearChange}
+                  on={onChange}
                 />
               </div>
             )}
@@ -153,7 +153,7 @@ PlaceSummary.propTypes = {
   year: PropTypes.number,
   data: PropTypes.object,
   context: PropTypes.object,
-  onYearChange: PropTypes.func.isRequired,
+  onChange: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
   profileMetadata: PropTypes.object.isRequired
 };
