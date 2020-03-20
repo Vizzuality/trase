@@ -16,13 +16,14 @@ class ProfileContainer extends React.PureComponent {
   };
 
   render() {
-    const { context, nodeId, selectedYear,  commodityId } = this.props;
+    const { context, nodeId, selectedYear, commodityId } = this.props;
     const contextProps = {};
     if (context) {
       contextProps.context_id = context.id
     } else {
       contextProps.commodity_id = commodityId
     }
+
     const params = { node_id: nodeId, selectedYear, ...contextProps };
     return (
       <Widget
@@ -55,6 +56,7 @@ function mapStateToProps(state) {
     payload: { profileType }
   } = state.location;
   const { contexts } = state.app;
+  const { type: panelType } = state.profileSelector.panels;
 
   const props = {
     selectedYear,
@@ -63,12 +65,14 @@ function mapStateToProps(state) {
     nodeId: parseInt(nodeId, 10)
   };
 
+  if (panelType === 'destinations') {
+    return { ...props, isImporterCountry: true, commodityId };
+  }
+
   const ctxId = contextId && parseInt(contextId, 10);
   if (ctxId) {
     const context = contexts.find(ctx => ctx.id === ctxId) || { id: ctxId };
     props.context = context;
-  } else {
-    props.commodityId = commodityId;
   }
   return props;
 }
@@ -77,18 +81,13 @@ const updateQueryParams = (profileType, query) => {
   let updatedQuery = { ...query };
   if (query.activityInfo) {
     const { activity, commodityId, nodeId } = query.activityInfo;
-    const activityInfo = { nodeId };
-    if (activity === 'importer') {
-      // We would need the countryName and the commodityId to find the contextId from the state once we have the Summary ready
-      delete updatedQuery.commodityId;
-    } else {
-      activityInfo.commodityId = commodityId;
+    const activityInfo = { nodeId, commodityId };
+    if (activity === 'exporter') {
       delete updatedQuery.contextId;
     }
     updatedQuery = { ...updatedQuery, ...activityInfo }
     delete updatedQuery.activityInfo;
   }
-
   return {
     type: 'profile',
     payload: { query: updatedQuery, profileType }

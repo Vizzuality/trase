@@ -77,12 +77,13 @@ export const goToProfile = () => (dispatch, getState) => {
   const { contexts } = app;
   const { panels, data } = profileSelector;
   const hasCompanies = panels.companies.activeItems.length > 0;
-  const isCountryProfile =
-    panels.destinations.activeItems.length > 0 ||
-    (panels.sources.activeItems.length > 0 &&
-      data.sources[panels.sources.activeTab] &&
-      data.sources[panels.sources.activeTab][0] &&
-      data.sources[panels.sources.activeTab][0].nodeType === 'COUNTRY OF PRODUCTION');
+  const isDestinationCountryProfile = panels.destinations.activeItems.length > 0;
+  const isProductionCountryProfile =
+    panels.sources.activeItems.length > 0 &&
+    data.sources[panels.sources.activeTab] &&
+    data.sources[panels.sources.activeTab][0] &&
+    data.sources[panels.sources.activeTab][0].nodeType === 'COUNTRY OF PRODUCTION';
+  const isCountryProfile = isDestinationCountryProfile || isProductionCountryProfile;
   const getProfileType = () => {
     if (isCountryProfile) return 'country';
     return hasCompanies ? 'actor' : 'place';
@@ -104,7 +105,7 @@ export const goToProfile = () => (dispatch, getState) => {
     const country = panels.countries.activeItems[0];
     const contextId = contexts.find(c => c.countryId === country && c.commodityId === commodityId)
       ?.id;
-    if (contextId) {
+    if (contextId && !isDestinationCountryProfile) {
       query.contextId = contextId;
     } else {
       query.commodityId = commodityId; // Destination profiles only have commodityId
