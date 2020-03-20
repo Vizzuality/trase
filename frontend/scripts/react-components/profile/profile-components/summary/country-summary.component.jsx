@@ -26,7 +26,7 @@ function CountrySummary(props) {
       options: activities
         .map(c => ({ label: capitalize(c.name.toLowerCase()), value: c.id }))
         .sort((a, b) => b.value - a.value),
-      onChange: newActivity => onChange('activity', newActivity)
+      onChange: nodeId => onChange('activityInfo', { nodeId, commodityId, activity })
     },
     {
       dropdown: true,

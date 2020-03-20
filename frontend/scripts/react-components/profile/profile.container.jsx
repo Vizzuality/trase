@@ -74,10 +74,19 @@ function mapStateToProps(state) {
 }
 
 const updateQueryParams = (profileType, query) => {
-  const updatedQuery = { ...query };
-
-  if (query.activity) {
-   delete updatedQuery.activity;
+  let updatedQuery = { ...query };
+  if (query.activityInfo) {
+    const { activity, commodityId, nodeId } = query.activityInfo;
+    const activityInfo = { nodeId };
+    if (activity === 'importer') {
+      // We would need the countryName and the commodityId to find the contextId from the state once we have the Summary ready
+      delete updatedQuery.commodityId;
+    } else {
+      activityInfo.commodityId = commodityId;
+      delete updatedQuery.contextId;
+    }
+    updatedQuery = { ...updatedQuery, ...activityInfo }
+    delete updatedQuery.activityInfo;
   }
 
   return {
