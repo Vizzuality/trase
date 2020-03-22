@@ -27,11 +27,19 @@
     justify-content: space-between;
   }
 
+  .dashboard-widget-tooltip-main-label {
+    padding: 10px 8px 0;
+  }
+
   .dashboard-widget-tooltip-item {
     padding: 10px 8px;
 
-    &:not(:last-child) {
-      border-bottom: 1px solid $metal-grey;
+    &.stacked-bars {
+      padding: 2px 8px;
+
+      &:last-child {
+        padding-bottom: 8px;
+      }
     }
   }
 

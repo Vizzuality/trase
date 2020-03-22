@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import cx from 'classnames';
 import Text from 'react-components/shared/text';
 import ReactDOM from 'react-dom';
 
@@ -72,51 +73,76 @@ function DashboardWidgetTooltip(props) {
       ? viewBoxLeft + x + containerRef?.current?.offsetLeft
       : left;
 
-  const renderTooltip = () => {
-    console.log(payload[0])
-    return (
-      <div className="c-dashboard-widget-tooltip" style={{ top, left }}>
-        <div className="dashboard-widget-tooltip-header">
-          <Text
-            variant="mono"
-            as="span"
-            transform="uppercase"
-          >
-            {payload[0] && (payload[0].unit || payload[0].payload?.y || payload[0].payload?.x)}
-          </Text>
-        </div>
-        {[...payload].reverse().map(item => (
-          <div className="dashboard-widget-tooltip-item" key={item.name}>
-            <Text
-              variant="mono"
-              as="div"
-              size="xs"
-              transform="uppercase"
-              color="grey-faded"
-              className="dashboard-widget-tooltip-label"
-            >
-              {getTooltipLabel(meta, item.dataKey, item.payload)}
-            </Text>
-            <div className="dashboard-widget-tooltip-value-container">
-              <span
-                className="dashboard-widget-tooltip-color-dot"
-                style={{
-                  backgroundColor: item.color || (item.payload && item.payload.fill) || 'white'
-                }}
-              />
+  const isStackedBars = meta.x1 || meta.y1;
+  const renderTooltip = () => (
+    <div className="c-dashboard-widget-tooltip" style={{ top, left }}>
+      <div className="dashboard-widget-tooltip-header">
+        <Text
+          variant="mono"
+          as="span"
+          transform="uppercase"
+        >
+          {payload[0] && (payload[0].unit || payload[0].payload?.y || payload[0].payload?.x)}
+        </Text>
+      </div>
+      {isStackedBars && (
+        <Text
+          variant="mono"
+          as="div"
+          size="xs"
+          transform="uppercase"
+          color="grey-faded"
+          className="dashboard-widget-tooltip-main-label"
+        >
+          {meta.yAxis.label}
+        </Text>
+      )}
+      {[...payload].reverse().map(item => (
+        <div className={cx("dashboard-widget-tooltip-item", { 'stacked-bars': isStackedBars })} key={item.name}>
+          {!isStackedBars && (
               <Text
                 variant="mono"
-                as="span"
+                as="div"
+                size="xs"
+                transform="uppercase"
+                color="grey-faded"
+                className="dashboard-widget-tooltip-label"
               >
-                {getTooltipValue(meta, item.dataKey, item.payload)}
-                {renderTooltipSuffix(meta, item.dataKey, item.payload)}
+                {getTooltipLabel(meta, item.dataKey, item.payload)}
               </Text>
-            </div>
+          )}
+          <div className="dashboard-widget-tooltip-value-container">
+            {isStackedBars && (
+              <div>
+                <span
+                  className="dashboard-widget-tooltip-color-dot"
+                  style={{
+                    backgroundColor: item.color || (item.payload && item.payload.fill) || 'white'
+                  }}
+                />
+                <Text
+                  variant="mono"
+                  as="span"
+                  transform="uppercase"
+                  className="dashboard-widget-tooltip-label"
+                >
+                  {getTooltipLabel(meta, item.dataKey, item.payload)}
+                </Text>
+              </div>
+            )}
+            <Text
+              variant="mono"
+              as="span"
+              size={isStackedBars ? "rg" : "lg"}
+            >
+              {getTooltipValue(meta, item.dataKey, item.payload)}
+              {renderTooltipSuffix(meta, item.dataKey, item.payload)}
+            </Text>
           </div>
-        ))}
-      </div>
-    )
-  };
+        </div>
+      ))}
+    </div>
+  );
 
   if (!payload[0]) return null;
 
