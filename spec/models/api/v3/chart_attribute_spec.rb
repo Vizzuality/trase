@@ -23,6 +23,11 @@ RSpec.describe Api::V3::ChartAttribute, type: :model do
     Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
+    Api::V3::ChartAttribute.set_callback(:commit, :after, :refresh_dependencies)
+  end
+
+  after do
+    Api::V3::ChartAttribute.skip_callback(:commit, :after, :refresh_dependencies)
   end
 
   describe :validate do
@@ -177,7 +182,7 @@ RSpec.describe Api::V3::ChartAttribute, type: :model do
 
         context 'when chart_id changes' do
           it 'refresh actor_basic_attributes of the related node_with_flows' do
-            pp chart_attribute.update_attributes(chart_id: Api::V3::Chart.last.id)
+            chart_attribute.update_attributes(chart_id: Api::V3::Chart.last.id)
 
             related_node_with_flows.each do |node_with_flows|
               expect(node_with_flows.actor_basic_attributes).to be_nil

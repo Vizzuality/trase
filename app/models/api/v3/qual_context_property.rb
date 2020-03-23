@@ -29,7 +29,6 @@ module Api
       validates :tooltip_text, presence: true
 
       after_commit :refresh_dependents
-      after_commit :refresh_actor_basic_attributes
 
       def self.blue_foreign_keys
         [
@@ -40,6 +39,7 @@ module Api
 
       def refresh_dependents
         Api::V3::Readonly::ContextAttributeProperty.refresh
+        refresh_actor_basic_attributes
       end
 
       def refresh_actor_basic_attributes

@@ -44,7 +44,6 @@ module Api
                 inclusion: NAMES
 
       after_commit :refresh_dependents
-      after_commit :refresh_actor_basic_attributes
 
       def self.select_options
         Api::V3::Profile.includes(
@@ -82,6 +81,7 @@ module Api
         Api::V3::Readonly::Dashboards::Country.refresh(skip_dependencies: true)
         Api::V3::Readonly::Dashboards::Commodity.refresh(skip_dependencies: true)
         Api::V3::Readonly::Context.refresh
+        refresh_actor_basic_attributes
       end
 
       def refresh_actor_basic_attributes
