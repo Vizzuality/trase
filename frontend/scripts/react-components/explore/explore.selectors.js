@@ -115,6 +115,7 @@ const getRecentCard = () => {
     data: [
       {
         id: 0,
+        recentCard: true,
         title: 'Recently opened supply chain',
         subtitle: null,
         countryId: parseInt(countryId, 10),
@@ -147,6 +148,7 @@ export const getCards = createSelector(
       return {
         index,
         id: options.id,
+        recentCard: options.recentCard,
         title: options.title,
         subtitle: options.subtitle,
         countryId: options.countryId,
