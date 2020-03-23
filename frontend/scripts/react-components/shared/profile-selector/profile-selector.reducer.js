@@ -48,10 +48,13 @@ const profilesReducer = {
         const selectedCountry = state.panels.countries.activeItems[0];
         const selectedCountryId =
           typeof selectedCountry !== 'undefined' ? selectedCountry : state.data.countries[0].id;
-        if (!draft.data[panelName][selectedCountryId]) {
-          draft.data[panelName][selectedCountryId] = {};
+        if (!draft.data.companies[selectedCountryId]) {
+          draft.data.companies[selectedCountryId] = {};
         }
-        draft.data[panelName][selectedCountryId][tab] = data;
+        draft.data.companies[selectedCountryId][tab] = data;
+
+        // Add default dropdown country to selection
+        draft.panels.countries.activeItems = [selectedCountryId];
       } else if (tab) {
         draft.data[panelName][tab] = data;
       } else {
@@ -62,6 +65,10 @@ const profilesReducer = {
       if (panelName === 'sources' && data && data[0].nodeType === 'COUNTRY OF PRODUCTION') {
         draft.panels.sources.activeTab = tab;
         draft.panels.sources.activeItems = [data[0].id];
+
+        // Clear other profile items too
+        draft.panels.destinations = initialState.panels.destinations;
+        draft.panels.companies = initialState.panels.companies;
       }
     });
   },
@@ -131,13 +138,28 @@ const profilesReducer = {
         return;
       }
 
+      // Clear other panel's items
       if (panel === 'countries') {
         draft.panels.companies = initialState.panels.companies;
+        draft.panels.destinations = initialState.panels.destinations;
         draft.panels.sources = initialState.panels.sources;
       }
 
-      if (panel === 'sources' || panel === 'companies') {
+      if (panel === 'sources') {
+        draft.panels.destinations = initialState.panels.destinations;
+        draft.panels.companies = initialState.panels.companies;
         draft.panels.commodities = initialState.panels.commodities;
+      }
+
+      if (panel === 'companies') {
+        draft.panels.destinations = initialState.panels.destinations;
+        draft.panels.sources = initialState.panels.sources;
+        draft.panels.commodities = initialState.panels.commodities;
+      }
+
+      if (panel === 'destinations') {
+        draft.panels.companies = initialState.panels.companies;
+        draft.panels.sources = initialState.panels.sources;
       }
 
       if (activeItem) {
@@ -164,7 +186,7 @@ const profilesReducer = {
         const { tabs: { sources }, data } = state;
         const countryTab = sources.find(t => t.profile_type === 'country');
         if (activeTab === countryTab.id) {
-          draft.panels[panel].activeItems = [data.sources[countryTab.id][0].id];
+          draft.panels.sources.activeItems = [data.sources[countryTab.id][0].id];
         }
       }
 
