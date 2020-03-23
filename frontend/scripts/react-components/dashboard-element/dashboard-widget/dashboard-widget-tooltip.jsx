@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Text from 'react-components/shared/text';
@@ -55,11 +55,11 @@ const renderTooltipSuffix = (meta, dataKey, payload) => {
 
 function DashboardWidgetTooltip(props) {
   const { payload, meta, viewBox, coordinate, containerRef } = props;
-  const { left: viewBoxLeft, height, width } = viewBox;
+  const { height, width } = viewBox;
   const { x, y } = coordinate;
   const dataView = document.getElementById('data-view');
   const [destinationElement, setDestinationElement] = useState(null);
-
+  const tooltipRef = useRef(null);
   useEffect(() => {
     setDestinationElement(document.getElementById('recharts-tooltip-portal'));
     return () => setDestinationElement(null);
@@ -67,15 +67,10 @@ function DashboardWidgetTooltip(props) {
 
   const scrollCorrection = containerRef?.current?.offsetTop - dataView.scrollTop;
   const top = y + height / 2 + scrollCorrection;
-  let left = viewBoxLeft + x + width / 2 + containerRef?.current?.offsetLeft;
-  left =
-    left - containerRef?.current?.offsetLeft > containerRef?.current?.offsetWidth
-      ? viewBoxLeft + x + containerRef?.current?.offsetLeft
-      : left;
-
+  const left = x + containerRef?.current?.offsetWidth + containerRef?.current?.offsetLeft - width / 2 - (tooltipRef?.current?.offsetWidth || 0);
   const isStackedBars = meta.x1 || meta.y1;
   const renderTooltip = () => (
-    <div className="c-dashboard-widget-tooltip" style={{ top, left }}>
+    <div className="c-dashboard-widget-tooltip" ref={tooltipRef} style={{ top, left }}>
       <div className="dashboard-widget-tooltip-header">
         <Text
           variant="mono"
