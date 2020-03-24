@@ -6,45 +6,62 @@
   width: fit-content;
   height: fit-content;
   flex-direction: column;
-  background-color: $charcoal-extra-dark;
-  border-radius: 6px;
-  padding: 5px 10px;
   z-index: $z-tooltip;
+  box-shadow: $box-shadow-big;
+  background-color: $white;
+  font-family: $font-family-1;
+  pointer-events: none;
+  color: $charcoal-grey;
+
+
+  .dashboard-widget-tooltip-header {
+    font-size: $font-size-regular;
+    line-height: 1;
+    letter-spacing: -0.6px;
+    min-height: 32px;
+    padding: 12px 8px;
+    background-color: $egg-shell;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .dashboard-widget-tooltip-main-label {
+    padding: 10px 8px 0;
+  }
+
+  .dashboard-widget-tooltip-item {
+    padding: 10px 8px;
+
+    &.stacked-bars {
+      padding: 2px 8px;
+
+      &:last-child {
+        padding-bottom: 8px;
+      }
+    }
+  }
+
+  .dashboard-widget-tooltip-value-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 5px;
+  }
+
+  .dashboard-widget-tooltip-color-dot {
+    display: inline-block;
+    flex-shrink: 0;
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .dashboard-widget-tooltip-label {
+    max-width: 250px;
+  }
 }
 
-.dashboard-widget-tooltip-item,
-.dashboard-widget-tooltip-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 5px;
-}
 
-.dashboard-widget-tooltip-color-line {
-  display: inline-block;
-  flex-shrink: 0;
-  height: 4px;
-  width: 22px;
-}
-
-.dashboard-widget-tooltip-label,
-.dashboard-widget-tooltip-value,
-.dashboard-widget-tooltip-year,
-.dashboard-widget-tooltip-unit {
-  display: inline-block;
-  text-transform: uppercase;
-  margin-left: 10px;
-}
-
-.dashboard-widget-tooltip-year{
-  margin-left: 32px;
-}
-
-.dashboard-widget-tooltip-label {
-  max-width: 250px;
-}
-
-.dashboard-widget-tooltip-value {
-  text-transform: none;
-  text-align: right;
-}
