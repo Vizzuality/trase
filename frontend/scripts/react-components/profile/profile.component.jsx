@@ -76,7 +76,9 @@ const Profile = (props) => {
   }
 
   const renderSection = chart => {
-    if (profileType === 'country' && chart.chart_type) {
+    // Temporal: Just until we have everything from the backend
+    const readyCountryIdentifiers = ['country_top_consumer_actors', 'country_top_consumer_countries']
+    if (profileType === 'country' && chart.chart_type && !readyCountryIdentifiers.includes(chart.identifier)) {
       return null;
     }
 
@@ -149,7 +151,7 @@ const Profile = (props) => {
           />
         );
       case 'sankey': {
-        const type = chart.identifier === 'place_top_consumer_actors' ? 'actor' : 'place';
+        const type = chart.identifier.split('_')[0];
         return (
           <TopConsumersWidget
             key={chart.id}
