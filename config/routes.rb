@@ -61,6 +61,7 @@ Rails.application.routes.draw do
         get :search, on: :collection, controller: :nodes_search, action: :index
       end
 
+      get 'country_profiles/:id/basic_attributes', to: 'country_profiles#basic_attributes'
       get 'country_profiles/:id/top_consumer_actors', to: 'country_profiles#top_consumer_actors'
       get 'country_profiles/:id/top_consumer_countries', to: 'country_profiles#top_consumer_countries'
 
