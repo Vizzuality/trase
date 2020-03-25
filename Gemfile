@@ -68,7 +68,7 @@ group :development, :test do
   gem 'json-schema'
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'
-  gem 'rspec-rails', '~> 3.9'
+  gem 'rspec-rails', '~> 4.0'
   gem 'rubocop-rspec'
 end
 
