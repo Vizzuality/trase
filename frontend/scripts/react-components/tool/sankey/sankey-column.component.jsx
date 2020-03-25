@@ -27,7 +27,7 @@ function SankeyColumn(props) {
               '-selected': selectedNodesIds.includes(node.id)
             })}
             transform={`translate(0,${node.y})`}
-            onClick={() => list.length > 1 && onNodeClicked(node.id, node.isAggregated)}
+            onClick={() => list.length > 1 && !node.isAggregated && onNodeClicked(node.id)}
             onMouseOver={e => onNodeOver(e, node)}
             onMouseOut={e => onNodeOut(e, node)}
           >

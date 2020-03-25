@@ -162,8 +162,12 @@ const toolLinksReducer = {
       const { links, linksMeta } = action.payload;
 
       draft.data.nodeHeights = {};
+      draft.data.otherNodes = {};
       linksMeta.nodeHeights.forEach(nodeHeight => {
         draft.data.nodeHeights[nodeHeight.id] = nodeHeight;
+      });
+      linksMeta.otherNodes.forEach(otherNode => {
+        draft.data.otherNodes[otherNode.id] = otherNode;
       });
       draft.data.links = links;
     });
