@@ -6,6 +6,7 @@ export default {
     nodes: null,
     links: null,
     nodeHeights: null,
+    otherNodes: null,
     nodeAttributes: null,
     nodesByColumnGeoId: null,
     charts: null

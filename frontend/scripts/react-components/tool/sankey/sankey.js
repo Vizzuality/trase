@@ -26,6 +26,7 @@ const mapStateToProps = state => ({
   sankeySize: state.toolLayers.sankeySize,
   maxHeight: getSankeyMaxHeight(state),
   nodeHeights: state.toolLinks.data.nodeHeights,
+  otherNodes: state.toolLinks.data.otherNodes,
   nodeAttributes: state.toolLinks.data.nodeAttributes,
   sankeyColumnsWidth: state.toolLinks.sankeyColumnsWidth,
   selectedResizeBy: getSelectedResizeBy(state),
