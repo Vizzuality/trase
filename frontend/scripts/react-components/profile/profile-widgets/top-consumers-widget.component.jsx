@@ -6,7 +6,8 @@ import { withTranslation } from 'react-components/nav/locale-selector/with-trans
 import {
   GET_NODE_SUMMARY_URL,
   GET_PLACE_TOP_CONSUMER_ACTORS,
-  GET_PLACE_TOP_CONSUMER_COUNTRIES
+  GET_PLACE_TOP_CONSUMER_COUNTRIES,
+  GET_COUNTRY_TOP_CONSUMER_COUNTRIES
 } from 'utils/getURLFromParams';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import Heading from 'react-components/shared/heading/heading.component';
@@ -22,8 +23,12 @@ class TopConsumersWidget extends React.PureComponent {
   render() {
     const { year, nodeId, contextId, type, onLinkClick, testId, title, commodityName } = this.props;
     const params = { node_id: nodeId, context_id: contextId, year };
-    const mainQuery =
-      type === 'actor' ? GET_PLACE_TOP_CONSUMER_ACTORS : GET_PLACE_TOP_CONSUMER_COUNTRIES;
+    const queries = {
+      'actor': GET_PLACE_TOP_CONSUMER_ACTORS,
+      'place': GET_PLACE_TOP_CONSUMER_COUNTRIES,
+      'country': GET_COUNTRY_TOP_CONSUMER_COUNTRIES
+    };
+    const mainQuery = queries[type];
     const isImportingCountries = type === 'place';
     return (
       <Widget

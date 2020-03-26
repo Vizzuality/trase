@@ -33,6 +33,7 @@ export const GET_ACTOR_TOP_SOURCES = 'GET_ACTOR_TOP_SOURCES';
 export const GET_PLACE_DEFORESTATION_TRAJECTORY = 'GET_PLACE_DEFORESTATION_TRAJECTORY';
 export const GET_PLACE_TOP_CONSUMER_ACTORS = 'GET_PLACE_TOP_CONSUMER_ACTORS';
 export const GET_PLACE_TOP_CONSUMER_COUNTRIES = 'GET_PLACE_TOP_CONSUMER_COUNTRIES';
+export const GET_COUNTRY_TOP_CONSUMER_COUNTRIES = 'GET_COUNTRY_TOP_CONSUMER_COUNTRIES';
 export const GET_ACTOR_SUSTAINABILITY = 'GET_ACTOR_SUSTAINABILITY';
 export const GET_ACTOR_EXPORTING_COMPANIES = 'GET_ACTOR_EXPORTING_COMPANIES';
 export const GET_DASHBOARD_OPTIONS_URL = 'GET_DASHBOARD_OPTIONS_URL';
@@ -109,6 +110,10 @@ const API_ENDPOINTS = {
     api: 3,
     endpoint: '/contexts/$context_id$/places/$node_id$/top_consumer_countries'
   },
+  [GET_COUNTRY_TOP_CONSUMER_COUNTRIES]: {
+    api: 3,
+    endpoint: '/country_profiles/$node_id$/top_consumer_countries'
+  },
   [GET_DASHBOARD_OPTIONS_URL]: {
     api: 3,
     endpoint: '/dashboards/$options_type$'
@@ -131,7 +136,7 @@ const API_ENDPOINTS = {
   },
   [GET_PROFILE_METADATA]: {
     api: 3,
-    endpoint: '/contexts/$context_id$/nodes/$node_id$/profile_metadata'
+    endpoint: '/profiles/$node_id$/profile_meta'
   },
   [GET_DASHBOARD_PARAMETRISED_CHARTS_URL]: {
     api: 3,

@@ -159,12 +159,15 @@ const Profile = (props) => {
             type={type}
             nodeId={nodeId}
             title={chart.title}
-            contextId={context.id}
+            contextId={context?.id}
             onLinkClick={updateQueryParams}
-            commodityName={context.commodityName}
+            commodityName={context?.commodityName}
             testId={type === 'actor' ? 'top-traders' : 'top-importers'}
           />
         );
+      }
+      case 'map_with_flows': {
+        return 'Map with flows widget'
       }
       default:
         return (
