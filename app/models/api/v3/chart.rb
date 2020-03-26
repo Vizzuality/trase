@@ -59,8 +59,14 @@ module Api
           :scatterplot
         when 'place_trajectory_deforestation'
           :stacked_line_chart
-        when 'place_top_consumer_actors', 'place_top_consumer_countries'
+        when
+          'place_top_consumer_actors',
+          'place_top_consumer_countries',
+          'country_top_consumer_actors'
           :sankey
+        when
+          'country_top_consumer_countries'
+          :map_with_flows
         end
       end
 
