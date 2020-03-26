@@ -45,15 +45,13 @@ module Api
               :id,
               :name,
               :node_type,
-              :node_type_id,
-              :country_id
+              :node_type_id
             ).
             group(
               :id,
               :name,
               :node_type,
-              :node_type_id,
-              :country_id
+              :node_type_id
             )
           apply_order_by
         end
