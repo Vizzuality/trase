@@ -137,6 +137,74 @@
                                     <td></td>
                                 </tr>
                                 <tr>
+                                    <td><span id="country_id">country_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="commodity_id">commodity_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="node_type_id">node_type_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="context_node_type_id">context_node_type_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
                                     <td><span id="main_id">main_id</span></td>
                                     <td>int4</td>
                                     <td>10</td>
@@ -188,7 +256,41 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="btrim">btrim</span></td>
+                                    <td><span id="is_unknown">is_unknown</span></td>
+                                    <td>bool</td>
+                                    <td>1</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="is_domestic_consumption">is_domestic_consumption</span></td>
+                                    <td>bool</td>
+                                    <td>1</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="name">name</span></td>
                                     <td>text</td>
                                     <td>2147483647</td>
                                     <td title='nullable'>√</td>
@@ -306,6 +408,23 @@
                                     </td>
                                     <td></td>
                                 </tr>
+                                <tr>
+                                    <td><span id="actor_basic_attributes">actor_basic_attributes</span></td>
+                                    <td>json</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -320,7 +439,7 @@
                             </div>
                         </div>
                         <div class="box-body">
-                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT nodes.id,&#10;    nodes.context_id,&#10;    nodes.main_id,&#10;    nodes.column_position,&#10;    context_properties.is_subnational,&#10;    btrim(nodes.name) AS btrim,&#10;    nodes.node_type,&#10;    profiles.name AS profile,&#10;    nodes.geo_id,&#10;    context_node_type_properties.role,&#10;    nodes.name_tsvector,&#10;    array_agg(DISTINCT nodes.year ORDER BY nodes.year) AS array_agg&#10;   FROM ((((nodes_with_flows_per_year nodes&#10;     JOIN node_properties ON ((nodes.id = node_properties.node_id)))&#10;     JOIN context_properties ON ((nodes.context_id = context_properties.context_id)))&#10;     JOIN context_node_type_properties ON ((nodes.context_node_type_id = context_node_type_properties.context_node_type_id)))&#10;     LEFT JOIN profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))&#10;  WHERE ((NOT nodes.is_unknown) AND (NOT node_properties.is_domestic_consumption))&#10;  GROUP BY nodes.id, nodes.context_id, nodes.main_id, nodes.column_position, context_properties.is_subnational, nodes.name, nodes.node_type, profiles.name, nodes.geo_id, context_node_type_properties.role, nodes.name_tsvector;</textarea>
+                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT nodes.id,&#10;    nodes.context_id,&#10;    nodes.country_id,&#10;    nodes.commodity_id,&#10;    nodes.node_type_id,&#10;    nodes.context_node_type_id,&#10;    nodes.main_id,&#10;    nodes.column_position,&#10;    context_properties.is_subnational,&#10;    nodes.is_unknown,&#10;    node_properties.is_domestic_consumption,&#10;    btrim(nodes.name) AS name,&#10;    nodes.node_type,&#10;    profiles.name AS profile,&#10;    nodes.geo_id,&#10;    context_node_type_properties.role,&#10;    nodes.name_tsvector,&#10;    array_agg(DISTINCT nodes.year ORDER BY nodes.year) AS array_agg,&#10;    NULL::json AS actor_basic_attributes&#10;   FROM ((((nodes_with_flows_per_year nodes&#10;     JOIN node_properties ON ((nodes.id = node_properties.node_id)))&#10;     JOIN context_properties ON ((nodes.context_id = context_properties.context_id)))&#10;     JOIN context_node_type_properties ON ((nodes.context_node_type_id = context_node_type_properties.context_node_type_id)))&#10;     LEFT JOIN profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))&#10;  WHERE (NOT context_properties.is_disabled)&#10;  GROUP BY nodes.id, nodes.context_id, nodes.country_id, nodes.commodity_id, nodes.node_type_id, nodes.context_node_type_id, nodes.main_id, nodes.column_position, context_properties.is_subnational, nodes.is_unknown, node_properties.is_domestic_consumption, (btrim(nodes.name)), nodes.node_type, profiles.name, nodes.geo_id, context_node_type_properties.role, nodes.name_tsvector;</textarea>
                             <div style="padding-top: 5px;"><hr></div>
                             <div class="box box-solid">
                                 <div class="box-header with-border">
@@ -332,10 +451,10 @@
                                     <ul class="list-unstyled">
                                         <li><a href="nodes.html">nodes</a></li>
                                         <li><a href="context_properties.html">context_properties</a></li>
+                                        <li><a href="node_properties.html">node_properties</a></li>
                                         <li><a href="profiles.html">profiles</a></li>
                                         <li><a href="context_node_type_properties.html">context_node_type_properties</a></li>
                                         <li><a href="nodes_with_flows_per_year.html">nodes_with_flows_per_year</a></li>
-                                        <li><a href="node_properties.html">node_properties</a></li>
                                     </ul>
                                 </div><!-- /.box-body -->
                             </div>
