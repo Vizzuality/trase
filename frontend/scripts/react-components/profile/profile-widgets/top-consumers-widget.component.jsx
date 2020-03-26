@@ -4,7 +4,7 @@ import Widget from 'react-components/widgets/widget.component';
 import MiniSankey from 'react-components/profile/profile-components/mini-sankey/mini-sankey.component';
 import { withTranslation } from 'react-components/nav/locale-selector/with-translation.hoc';
 import {
-  GET_NODE_SUMMARY_URL,
+  getSummaryEndpoint,
   GET_PLACE_TOP_CONSUMER_ACTORS,
   GET_PLACE_TOP_CONSUMER_COUNTRIES,
   GET_COUNTRY_TOP_CONSUMER_COUNTRIES
@@ -21,8 +21,9 @@ class TopConsumersWidget extends React.PureComponent {
   };
 
   render() {
-    const { year, nodeId, contextId, type, onLinkClick, testId, title, commodityName } = this.props;
+    const { year, nodeId, contextId, type, onLinkClick, testId, title, commodityName, profileType } = this.props;
     const params = { node_id: nodeId, context_id: contextId, year };
+    const summaryEndpoint = getSummaryEndpoint(profileType);
     const queries = {
       'actor': GET_PLACE_TOP_CONSUMER_ACTORS,
       'place': GET_PLACE_TOP_CONSUMER_COUNTRIES,
@@ -32,7 +33,7 @@ class TopConsumersWidget extends React.PureComponent {
     const isImportingCountries = type === 'place';
     return (
       <Widget
-        query={[mainQuery, GET_NODE_SUMMARY_URL]}
+        query={[mainQuery, summaryEndpoint]}
         params={[{ ...params, year }, { ...params, profile_type: 'place' }]}
       >
         {({ data, loading, error }) => {
@@ -66,7 +67,7 @@ class TopConsumersWidget extends React.PureComponent {
             return null;
           }
 
-          const summary = data[GET_NODE_SUMMARY_URL];
+          const summary = data[summaryEndpoint];
           return (
             <section className="mini-sankey-container page-break-inside-avoid" data-test={testId}>
               <div className="row">
@@ -114,7 +115,8 @@ TopConsumersWidget.propTypes = {
   title: PropTypes.string.isRequired,
   nodeId: PropTypes.number.isRequired,
   contextId: PropTypes.number.isRequired,
-  commodityName: PropTypes.string.isRequired
+  commodityName: PropTypes.string.isRequired,
+  profileType: PropTypes.string.isRequired
 };
 
 export default TopConsumersWidget;

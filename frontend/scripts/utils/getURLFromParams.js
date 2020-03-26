@@ -25,6 +25,7 @@ export const GET_TEAM_URL = 'GET_TEAM_URL';
 export const GET_TOP_NODES_URL = 'GET_TOP_NODES_URL';
 export const GET_TOP_NODE_STATS_URL = 'GET_TOP_NODE_STATS_URL';
 export const GET_NODE_SUMMARY_URL = 'GET_NODE_SUMMARY_URL';
+export const GET_COUNTRY_NODE_SUMMARY_URL = 'GET_COUNTRY_NODE_SUMMARY_URL';
 export const GET_PROFILE_OPTIONS_TABS_URL = 'GET_PROFILE_OPTIONS_TABS_URL';
 export const GET_PROFILE_METADATA = 'GET_PROFILE_METADATA';
 export const GET_PLACE_INDICATORS = 'GET_PLACE_INDICATORS';
@@ -77,6 +78,10 @@ const API_ENDPOINTS = {
   [GET_NODE_SUMMARY_URL]: {
     api: 3,
     endpoint: '/contexts/$context_id$/$profile_type$/$node_id$/basic_attributes'
+  },
+  [GET_COUNTRY_NODE_SUMMARY_URL]: {
+    api: 3,
+    endpoint: '/country_profiles/$node_id$/basic_attributes'
   },
   [GET_PLACE_INDICATORS]: {
     api: 3,
@@ -182,6 +187,10 @@ export function getURLForV3(endpoint, paramsArg = {}) {
   const queryParams = qs.stringify(params, { arrayFormat: 'brackets', encodeValuesOnly: true });
   return `${API_V3_URL}${apiEndpoint}${queryParams.length > 0 ? `?${queryParams}` : ''}`;
 }
+
+export const getSummaryEndpoint = (profileType) => (
+  profileType === 'country' ? GET_COUNTRY_NODE_SUMMARY_URL : GET_NODE_SUMMARY_URL
+);
 
 export function getURLFromParams(endpointKey, params = {}, mock = false) {
   const endpointData = API_ENDPOINTS[endpointKey];

@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 import Widget from 'react-components/widgets/widget.component';
 import ButtonLinks from 'react-components/profile/profile-components/button-links/button-links.component';
 import Heading from 'react-components/shared/heading';
-import { GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
+import { getSummaryEndpoint } from 'utils/getURLFromParams';
 import { translateText } from 'utils/transifex';
 
 function LinksWidget(props) {
   const { year, nodeId, countryId, commodityId, profileType, contextId } = props;
   const params = { node_id: nodeId, context_id: contextId, profile_type: profileType, year };
+  const summaryEndpoint = getSummaryEndpoint(profileType);
   return (
-    <Widget params={[params]} query={[GET_NODE_SUMMARY_URL]}>
+    <Widget params={[params]} query={[summaryEndpoint]}>
       {({ data, loading, error }) => {
         if (error) {
           // TODO: display a proper error message to the user
@@ -21,9 +22,9 @@ function LinksWidget(props) {
         if (loading) return null;
 
         const name =
-          data.GET_NODE_SUMMARY_URL.nodeName || data.GET_NODE_SUMMARY_URL.jurisdictionName;
+          data[summaryEndpoint].nodeName || data[summaryEndpoint].jurisdictionName;
 
-        const nodeType = data.GET_NODE_SUMMARY_URL.columnName;
+        const nodeType = data[summaryEndpoint].columnName;
 
         return (
           <section className="c-links-widget">

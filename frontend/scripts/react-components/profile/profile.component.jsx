@@ -162,6 +162,7 @@ const Profile = (props) => {
             contextId={context?.id}
             onLinkClick={updateQueryParams}
             commodityName={context?.commodityName}
+            profileType={profileType}
             testId={type === 'actor' ? 'top-traders' : 'top-importers'}
           />
         );

@@ -30,7 +30,10 @@ class SustainabilityTableWidget extends React.PureComponent {
       targetPayload
     } = this.props;
     const params = { node_id: nodeId, context_id: contextId, year };
-    const mainQuery = type === 'indicators' ? GET_PLACE_INDICATORS : GET_ACTOR_SUSTAINABILITY;
+    const mainQuery = {
+      'indicators': GET_PLACE_INDICATORS,
+      'places': GET_ACTOR_SUSTAINABILITY
+    }[type];
     return (
       <Widget
         query={[mainQuery, GET_NODE_SUMMARY_URL]}
