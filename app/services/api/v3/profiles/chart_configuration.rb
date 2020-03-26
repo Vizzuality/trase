@@ -7,7 +7,7 @@ module Api
                     :chart_node_types, :node_types
 
         # @param context [Api::V3::Context]
-        # @param node [Api::V3::Node]
+        # @param node [Api::V3::Readonly::NodeWithFlows]
         # @param chart_options [Hash]
         # @option chart_options [symbol] :profile_type
         # @option chart_options [symbol] :parent_identifier
@@ -62,7 +62,7 @@ module Api
             name: profile_type
           ).first
           unless profile
-            node_type = @node&.node_type&.name
+            node_type = @node.node_type
             raise ActiveRecord::RecordNotFound.new(
               "Profile not configured: #{profile_type} for #{node_type}"
             )

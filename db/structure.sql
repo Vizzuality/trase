@@ -5293,9 +5293,15 @@ CREATE MATERIALIZED VIEW public.nodes_stats_mv AS
 CREATE TABLE public.nodes_with_flows (
     id integer NOT NULL,
     context_id integer NOT NULL,
+    country_id integer,
+    commodity_id integer,
+    node_type_id integer,
+    context_node_type_id integer,
     main_id integer,
     column_position smallint,
     is_subnational boolean,
+    is_unknown boolean,
+    is_domestic_consumption boolean,
     name text,
     node_type text,
     profile text,
@@ -5398,23 +5404,30 @@ CREATE VIEW public.nodes_with_flows_per_year_v AS
 CREATE VIEW public.nodes_with_flows_v AS
  SELECT nodes.id,
     nodes.context_id,
+    nodes.country_id,
+    nodes.commodity_id,
+    nodes.node_type_id,
+    nodes.context_node_type_id,
     nodes.main_id,
     nodes.column_position,
     context_properties.is_subnational,
-    btrim(nodes.name) AS btrim,
+    nodes.is_unknown,
+    node_properties.is_domestic_consumption,
+    btrim(nodes.name) AS name,
     nodes.node_type,
     profiles.name AS profile,
     nodes.geo_id,
     context_node_type_properties.role,
     nodes.name_tsvector,
-    array_agg(DISTINCT nodes.year ORDER BY nodes.year) AS array_agg
+    array_agg(DISTINCT nodes.year ORDER BY nodes.year) AS array_agg,
+    NULL::json AS actor_basic_attributes
    FROM ((((public.nodes_with_flows_per_year nodes
      JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
      JOIN public.context_properties ON ((nodes.context_id = context_properties.context_id)))
      JOIN public.context_node_type_properties ON ((nodes.context_node_type_id = context_node_type_properties.context_node_type_id)))
      LEFT JOIN public.profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))
-  WHERE ((NOT nodes.is_unknown) AND (NOT node_properties.is_domestic_consumption))
-  GROUP BY nodes.id, nodes.context_id, nodes.main_id, nodes.column_position, context_properties.is_subnational, nodes.name, nodes.node_type, profiles.name, nodes.geo_id, context_node_type_properties.role, nodes.name_tsvector;
+  WHERE (NOT context_properties.is_disabled)
+  GROUP BY nodes.id, nodes.context_id, nodes.country_id, nodes.commodity_id, nodes.node_type_id, nodes.context_node_type_id, nodes.main_id, nodes.column_position, context_properties.is_subnational, nodes.is_unknown, node_properties.is_domestic_consumption, (btrim(nodes.name)), nodes.node_type, profiles.name, nodes.geo_id, context_node_type_properties.role, nodes.name_tsvector;
 
 
 --
@@ -9938,6 +9951,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200123163215'),
 ('20200207162026'),
 ('20200302203632'),
-('20200302214104');
+('20200302214104'),
+('20200317075824');
 
 

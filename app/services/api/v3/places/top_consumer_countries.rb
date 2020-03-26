@@ -5,7 +5,7 @@ module Api
         include Api::V3::Profiles::AttributesInitializer
 
         # @param context [Api::V3::Context]
-        # @param node [Api::V3::Node]
+        # @param node [Api::V3::Readonly::NodeWithFlows]
         # @param year [Integer]
         def initialize(context, node, year)
           @context = context
@@ -20,14 +20,14 @@ module Api
             )
           end
 
-          @mini_sankey = Api::V3::Places::MiniSankey.new(
+          @mini_sankey = Api::V3::Profiles::MiniSankeyForContext.new(
             context, node, year
           )
         end
 
         def call
           @mini_sankey.call(
-            @destination_node_type.name,
+            @destination_node_type,
             true
           )
         end

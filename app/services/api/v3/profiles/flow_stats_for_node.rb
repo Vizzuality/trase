@@ -31,7 +31,7 @@ module Api
         end
 
         def flow_values_totals_for_attributes_into(attributes, other_node_type, other_node_id)
-          other_node_index = Api::V3::NodeType.node_index_for_name(@context, other_node_type)
+          other_node_index = Api::V3::NodeType.node_index_for_id(@context, other_node_type.id)
           attribute_type = attributes.first&.class&.name&.demodulize&.downcase
           flow_values_table = :"flow_#{attribute_type}s"
           attributes_table = :"#{attribute_type}s"

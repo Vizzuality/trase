@@ -36,20 +36,19 @@ Rails.application.routes.draw do
         resources :columns, only: [:index], controller: :node_types
         resources :flows, only: [:index]
         resources :nodes, only: [:index]
-        resources :actors, only: [] do
-          get :basic_attributes
-          get :top_countries
-          get :top_sources
-          get :sustainability
-          get :exporting_companies
-        end
-        resources :places, only: [] do
-          get :basic_attributes
-          get :top_consumer_actors
-          get :top_consumer_countries
-          get :indicators
-          get :trajectory_deforestation
-        end
+
+        get 'actors/:id/basic_attributes', to: 'actors#basic_attributes'
+        get 'actors/:id/top_countries', to: 'actors#top_countries'
+        get 'actors/:id/top_sources', to: 'actors#top_sources'
+        get 'actors/:id/sustainability', to: 'actors#sustainability'
+        get 'actors/:id/exporting_companies', to: 'actors#exporting_companies'
+
+        get 'places/:id/basic_attributes', to: 'places#basic_attributes'
+        get 'places/:id/top_consumer_actors', to: 'places#top_consumer_actors'
+        get 'places/:id/top_consumer_countries', to: 'places#top_consumer_countries'
+        get 'places/:id/indicators', to: 'places#indicators'
+        get 'places/:id/trajectory_deforestation', to: 'places#trajectory_deforestation'
+
         resources :download_attributes, only: [:index]
         namespace :nodes do
           resources :attributes, only: [:index], controller: :nodes_attributes
@@ -61,6 +60,10 @@ Rails.application.routes.draw do
       resources :nodes, only: [] do
         get :search, on: :collection, controller: :nodes_search, action: :index
       end
+
+      get 'country_profiles/:id/top_consumer_actors', to: 'country_profiles#top_consumer_actors'
+      get 'country_profiles/:id/top_consumer_countries', to: 'country_profiles#top_consumer_countries'
+
       resources :newsletter_subscriptions, only: [:create]
       resource :database_validation, controller: :database_validation,
                                      only: [:show]
@@ -114,25 +117,6 @@ Rails.application.routes.draw do
         get :countries_facts, on: :member
       end
       resources :sankey_card_links, only: [:index]
-    end
-    namespace :v2 do
-      resources :geo_id, only: :index
-      resources :download, only: [:index], as: :download
-      resources :indicators, only: [:index]
-      resources :newsletter_subscriptions, only: [:create]
-
-      # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-      resources :download, only: [:index], as: :download
-      resources :indicators, only: [:index]
-
-      get '/get_map_base_data', to: 'map#index'
-      get '/get_linked_geoids', to: 'geo_id#index'
-      get '/get_columns', to: 'structure#columns'
-      get '/get_contexts', to: 'structure#contexts'
-      get '/get_all_nodes', to: 'nodes#all_nodes'
-      get '/get_place_node_attributes', to: 'place_factsheet#place_data'
-      get '/get_actor_node_attributes', to: 'actor_factsheet#actor_data'
-      get '/get_node_attributes', to: 'nodes#node_attributes'
     end
 
     get '/v3/countries', to: 'public/countries#index'

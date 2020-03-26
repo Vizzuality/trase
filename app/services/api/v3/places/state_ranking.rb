@@ -3,7 +3,7 @@ module Api
     module Places
       class StateRanking
         # @param context [Api::V3::Context]
-        # @param node [Api::V3::Node]
+        # @param node [Api::V3::Readonly::NodeWithFlows]
         # @param year [Integer]
         # @param state_name [String]
         def initialize(context, node, year, state_name)

@@ -28,10 +28,10 @@ module Api
         def load_by_context_id
           @context = Api::V3::Context.find(params[:context_id])
           @node_with_flows = Api::V3::Readonly::NodeWithFlows.
-            where(
-              context_id: @context.id,
-              profile: Api::V3::Profile::NAMES
-            ).
+            without_unknowns.
+            without_domestic.
+            with_profile.
+            where(context_id: @context.id).
             find(params[:id])
         end
 
@@ -44,10 +44,10 @@ module Api
             contexts = contexts.where(country_id: params[:country_id])
           end
           @node_with_flows = Api::V3::Readonly::NodeWithFlows.
-            where(
-              context_id: contexts,
-              profile: Api::V3::Profile::NAMES
-            ).
+            without_unknowns.
+            without_domestic.
+            with_profile.
+            where(context_id: contexts).
             find(params[:id])
           @context = @node_with_flows.context
         end

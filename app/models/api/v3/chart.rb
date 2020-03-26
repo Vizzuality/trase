@@ -42,7 +42,6 @@ module Api
       validate :parent_is_root
 
       after_commit :refresh_dependencies
-      after_commit :refresh_actor_basic_attributes
 
       def chart_type
         case identifier
@@ -60,8 +59,14 @@ module Api
           :scatterplot
         when 'place_trajectory_deforestation'
           :stacked_line_chart
-        when 'place_top_consumer_actors', 'place_top_consumer_countries'
+        when
+          'place_top_consumer_actors',
+          'place_top_consumer_countries',
+          'country_top_consumer_actors'
           :sankey
+        when
+          'country_top_consumer_countries'
+          :map_with_flows
         end
       end
 
@@ -95,6 +100,7 @@ module Api
 
       def refresh_dependencies
         Api::V3::Readonly::MapAttribute.refresh
+        refresh_actor_basic_attributes
       end
 
       def refresh_actor_basic_attributes
@@ -121,10 +127,10 @@ module Api
         context_node_type = profile.context_node_type
         context = context_node_type.context
         nodes = context_node_type.node_type.nodes
-        node_with_flows = Api::V3::Readonly::NodeWithFlows.where(
-          context_id: context.id,
-          id: nodes.map(&:id)
-        )
+        node_with_flows = Api::V3::Readonly::NodeWithFlows.
+          without_unknowns.
+          without_domestic.
+          where(context_id: context.id, id: nodes.map(&:id))
         NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
           node_with_flows.map(&:id)
         )

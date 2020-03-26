@@ -1,16 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe Api::V3::PlacesController, type: :controller do
-  include_context 'api v3 brazil municipality ind values'
-  include_context 'api v3 brazil municipality qual values'
-  include_context 'api v3 brazil municipality quant values'
   include_context 'api v3 brazil flows quants'
   include_context 'api v3 brazil municipality place profile'
 
   let(:node) { api_v3_municipality_node }
   let(:year) { 2015 }
   let(:valid_params) {
-    {context_id: api_v3_context.id, place_id: node.id, year: year}
+    {context_id: api_v3_context.id, id: node.id, year: year}
   }
   let(:quant_dict) { instance_double(Dictionary::Quant) }
   let(:chart_config) {
@@ -18,9 +15,9 @@ RSpec.describe Api::V3::PlacesController, type: :controller do
   }
 
   before(:each) do
-    Api::V3::Readonly::CommodityAttributeProperty.refresh
-    Api::V3::Readonly::CountryAttributeProperty.refresh
-    Api::V3::Readonly::ContextAttributeProperty.refresh
+    allow(Api::V3::Profiles::GetTooltipPerAttribute).to(
+      receive(:call).and_return('TOOLTIP')
+    )
     Api::V3::Readonly::FlowNode.refresh(sync: true)
     Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
     Api::V3::Readonly::NodeWithFlows.refresh(sync: true, skip_dependencies: true)
@@ -65,9 +62,7 @@ RSpec.describe Api::V3::PlacesController, type: :controller do
 
     context 'when year provided and valid for node' do
       it 'is successful' do
-        get :basic_attributes, params: {
-          context_id: api_v3_context.id, place_id: node.id, year: year
-        }
+        get :basic_attributes, params: valid_params
         expect(response).to be_successful
       end
     end

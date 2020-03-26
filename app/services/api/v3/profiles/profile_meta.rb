@@ -85,6 +85,8 @@ module Api
 
         def almost_same_node_same_commodity
           nodes = Api::V3::Readonly::NodeWithFlows.
+            without_unknowns.
+            without_domestic.
             select(:id, :role).
             joins(:context).
             where(
@@ -104,6 +106,8 @@ module Api
 
         def exactly_same_node_all_commodities
           Api::V3::Readonly::NodeWithFlows.
+            without_unknowns.
+            without_domestic.
             select(
               'contexts.commodity_id',
               'commodities.name AS commodity'

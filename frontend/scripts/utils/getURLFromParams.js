@@ -1,5 +1,6 @@
 import trim from 'lodash/trim';
 import qs from 'qs';
+import pluralize from 'utils/pluralize';
 
 export const GET_CONTEXTS_URL = 'GET_CONTEXTS_URL';
 export const GET_TOP_PROFILES = 'GET_TOP_PROFILES';
@@ -32,6 +33,7 @@ export const GET_ACTOR_TOP_SOURCES = 'GET_ACTOR_TOP_SOURCES';
 export const GET_PLACE_DEFORESTATION_TRAJECTORY = 'GET_PLACE_DEFORESTATION_TRAJECTORY';
 export const GET_PLACE_TOP_CONSUMER_ACTORS = 'GET_PLACE_TOP_CONSUMER_ACTORS';
 export const GET_PLACE_TOP_CONSUMER_COUNTRIES = 'GET_PLACE_TOP_CONSUMER_COUNTRIES';
+export const GET_COUNTRY_TOP_CONSUMER_COUNTRIES = 'GET_COUNTRY_TOP_CONSUMER_COUNTRIES';
 export const GET_ACTOR_SUSTAINABILITY = 'GET_ACTOR_SUSTAINABILITY';
 export const GET_ACTOR_EXPORTING_COMPANIES = 'GET_ACTOR_EXPORTING_COMPANIES';
 export const GET_DASHBOARD_OPTIONS_URL = 'GET_DASHBOARD_OPTIONS_URL';
@@ -74,7 +76,7 @@ const API_ENDPOINTS = {
   [GET_TOP_NODE_STATS_URL]: { api: 3, endpoint: '/nodes_stats' },
   [GET_NODE_SUMMARY_URL]: {
     api: 3,
-    endpoint: '/contexts/$context_id$/$profile_type$s/$node_id$/basic_attributes'
+    endpoint: '/contexts/$context_id$/$profile_type$/$node_id$/basic_attributes'
   },
   [GET_PLACE_INDICATORS]: {
     api: 3,
@@ -107,6 +109,10 @@ const API_ENDPOINTS = {
   [GET_PLACE_TOP_CONSUMER_COUNTRIES]: {
     api: 3,
     endpoint: '/contexts/$context_id$/places/$node_id$/top_consumer_countries'
+  },
+  [GET_COUNTRY_TOP_CONSUMER_COUNTRIES]: {
+    api: 3,
+    endpoint: '/country_profiles/$node_id$/top_consumer_countries'
   },
   [GET_DASHBOARD_OPTIONS_URL]: {
     api: 3,
@@ -165,9 +171,13 @@ function replaceURLParams(endpoint, params) {
   return endpoint;
 }
 
-export function getURLForV3(endpoint, paramsArg = {}) {
-  const params = Object.assign({}, paramsArg);
+const parseParams = params => {
+  if (!params.profile_type) return params;
+  return { ...params, profile_type: pluralize(params.profile_type) };
+}
 
+export function getURLForV3(endpoint, paramsArg = {}) {
+  const params = parseParams(Object.assign({}, paramsArg));
   const apiEndpoint = replaceURLParams(endpoint, params);
   const queryParams = qs.stringify(params, { arrayFormat: 'brackets', encodeValuesOnly: true });
   return `${API_V3_URL}${apiEndpoint}${queryParams.length > 0 ? `?${queryParams}` : ''}`;

@@ -44,7 +44,6 @@ module Api
                 inclusion: NAMES
 
       after_commit :refresh_dependents
-      after_commit :refresh_actor_basic_attributes
 
       def self.select_options
         Api::V3::Profile.includes(
@@ -82,6 +81,7 @@ module Api
         Api::V3::Readonly::Dashboards::Country.refresh(skip_dependencies: true)
         Api::V3::Readonly::Dashboards::Commodity.refresh(skip_dependencies: true)
         Api::V3::Readonly::Context.refresh
+        refresh_actor_basic_attributes
       end
 
       def refresh_actor_basic_attributes
@@ -107,10 +107,10 @@ module Api
         context_node_type = Api::V3::ContextNodeType.find(context_node_type_id)
         context = context_node_type.context
         nodes = context_node_type.node_type.nodes
-        node_with_flows = Api::V3::Readonly::NodeWithFlows.where(
-          context_id: context.id,
-          id: nodes.map(&:id)
-        )
+        node_with_flows = Api::V3::Readonly::NodeWithFlows.
+          without_unknowns.
+          without_domestic.
+          where(context_id: context.id, id: nodes.map(&:id))
         NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
           node_with_flows.map(&:id)
         )
