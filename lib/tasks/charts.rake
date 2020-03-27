@@ -1,10 +1,14 @@
 namespace :charts do
   def without_chart_callbacks
-    Api::V3::Chart.skip_callback(:commit, :after, :refresh_dependencies)
-    Api::V3::ChartAttribute.skip_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::Profile.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::Chart.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::ChartAttribute.skip_callback(:commit, :after, :refresh_dependents)
+
     yield
-    Api::V3::Chart.set_callback(:commit, :after, :refresh_dependencies)
-    Api::V3::ChartAttribute.set_callback(:commit, :after, :refresh_dependencies)
+
+    Api::V3::Profile.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::Chart.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::ChartAttribute.set_callback(:commit, :after, :refresh_dependents)
   end
 
   task reload: :environment do
