@@ -25,10 +25,9 @@ function TopConsumersWidget (props) {
   const summaryEndpoint = getSummaryEndpoint(profileType);
   const queries = {
     'actor': GET_PLACE_TOP_CONSUMER_ACTORS,
-    'place': GET_PLACE_TOP_CONSUMER_COUNTRIES,
-    'country': GET_COUNTRY_TOP_CONSUMER_COUNTRIES
+    'place': GET_PLACE_TOP_CONSUMER_COUNTRIES
   };
-  const mainQuery = queries[type];
+  const mainQuery = profileType === 'country' ? GET_COUNTRY_TOP_CONSUMER_COUNTRIES : queries[type] || GET_PLACE_TOP_CONSUMER_COUNTRIES;
   const isImportingCountries = type === 'place';
   return (
     <Widget

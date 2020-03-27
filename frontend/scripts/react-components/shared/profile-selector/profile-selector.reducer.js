@@ -160,6 +160,7 @@ const profilesReducer = {
       if (panel === 'destinations') {
         draft.panels.companies = initialState.panels.companies;
         draft.panels.sources = initialState.panels.sources;
+        draft.panels.commodities = initialState.panels.commodities;
       }
 
       if (activeItem) {

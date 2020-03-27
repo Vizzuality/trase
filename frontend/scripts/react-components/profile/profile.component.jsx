@@ -118,7 +118,7 @@ const Profile = (props) => {
             year={year}
             nodeId={nodeId}
             title={chart.title}
-            contextId={context.id}
+            contextId={context?.id}
             commodityName={context.commodityName}
             testId={isActor ? 'deforestation-risk' : 'sustainability-indicators'}
             targetPayload={{ profileType: isActor ? 'place' : 'actor' }}
