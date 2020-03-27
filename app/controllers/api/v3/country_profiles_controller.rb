@@ -4,7 +4,6 @@ module Api
       include Api::V3::Profiles::CrossContextHelpers
 
       skip_before_action :load_context
-      before_action :load_contexts
       before_action :load_node
       before_action :set_year
 
@@ -23,8 +22,7 @@ module Api
           @year,
           {
             profile_type: profile_type,
-            chart_identifier: :country_top_consumer_actors,
-            context: @context
+            chart_identifier: :country_top_consumer_actors
           }
         ).call
 
@@ -38,8 +36,7 @@ module Api
           @year,
           {
             profile_type: profile_type,
-            chart_identifier: :country_top_consumer_countries,
-            context: @context
+            chart_identifier: :country_top_consumer_countries
           }
         ).call
 
