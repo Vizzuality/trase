@@ -71,6 +71,8 @@ module Api
           if parent_identifier.present?
             charts = charts.includes(:parent).
               where('parents_charts.identifier' => parent_identifier)
+          else
+            charts = charts.where(parent_id: nil)
           end
           @chart = charts.first
           return if @chart.present?

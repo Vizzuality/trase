@@ -53,7 +53,8 @@ module Api
           'place_socioeconomic_indicators',
           'place_agricultural_indicators',
           'place_territorial_governance',
-          'place_indicators_table'
+          'place_indicators_table',
+          'country_indicators_table'
           :tabs_table
         when 'actor_exporting_companies'
           :scatterplot

@@ -27,6 +27,23 @@ RSpec.describe Api::V3::CountryProfilesController, type: :controller do
       {context_id: api_v3_context.id, id: node.id, year: year}
     }
 
+    describe 'GET basic_attributes' do
+      context 'when node without flows' do
+        let(:node) {
+          node = FactoryBot.create(
+            :api_v3_node, node_type: api_v3_country_of_production_node_type
+          )
+          FactoryBot.create(:api_v3_node_property, node: node)
+          node
+        }
+
+        it 'is not found' do
+          get :basic_attributes, params: valid_params
+          expect(response).to have_http_status(404)
+        end
+      end
+    end
+
     describe 'GET top_consumer_actors' do
       context 'when trader node type configuration missing' do
         it 'is not found' do
@@ -58,6 +75,17 @@ RSpec.describe Api::V3::CountryProfilesController, type: :controller do
         end
       end
     end
+
+    describe 'GET indicators' do
+      context 'when node without country profile' do
+        let(:node) { api_v3_brazil_palm_oil_exporter_node }
+
+        it 'is not found' do
+          get :indicators, params: valid_params
+          expect(response).to have_http_status(404)
+        end
+      end
+    end
   end
 
   context 'when importer' do
@@ -66,6 +94,23 @@ RSpec.describe Api::V3::CountryProfilesController, type: :controller do
     let(:valid_params) {
       {context_id: api_v3_context.id, id: node.id, year: year}
     }
+
+    describe 'GET basic_attributes' do
+      context 'when node without flows' do
+        let(:node) {
+          node = FactoryBot.create(
+            :api_v3_node, node_type: api_v3_country_node_type
+          )
+          FactoryBot.create(:api_v3_node_property, node: node)
+          node
+        }
+
+        it 'is not found' do
+          get :basic_attributes, params: valid_params
+          expect(response).to have_http_status(404)
+        end
+      end
+    end
 
     describe 'GET top_consumer_actors' do
       context 'when trader node type configuration missing' do
