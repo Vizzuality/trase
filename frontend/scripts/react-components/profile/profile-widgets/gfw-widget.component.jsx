@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Widget from 'react-components/widgets/widget.component';
-import { GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
+import { getSummaryEndpoint } from 'utils/getURLFromParams';
 import camelCase from 'lodash/camelCase';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import ReactIframeResizer from 'react-iframe-resizer-super';
@@ -22,7 +22,7 @@ class GfwWidget extends React.PureComponent {
     return (
       <Widget
         params={[params]}
-        query={[GET_NODE_SUMMARY_URL, GADM_DICTIONARY_URL]}
+        query={[getSummaryEndpoint(profileType), GADM_DICTIONARY_URL]}
         raw={[false, true]}
       >
         {({ data, error, loading }) => {
@@ -36,7 +36,7 @@ class GfwWidget extends React.PureComponent {
             return this.renderSpinner();
           }
 
-          const { jurisdictionGeoId } = data[GET_NODE_SUMMARY_URL];
+          const { jurisdictionGeoId } = data[getSummaryEndpoint(profileType)];
           const gadm = data[GADM_DICTIONARY_URL];
           const { path, match } = gadm[camelCase(jurisdictionGeoId)];
 

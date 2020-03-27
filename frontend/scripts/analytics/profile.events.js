@@ -1,6 +1,6 @@
 import { WIDGETS__SET_ENDPOINT_DATA } from 'react-components/widgets/widgets.actions';
 import { APP__ON_PDF_DOWNLOAD } from 'app/app.actions';
-import { GET_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
+import { GET_NODE_SUMMARY_URL, GET_COUNTRY_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
 
 export default [
   {
@@ -20,7 +20,9 @@ export default [
         context?.countryName
       } - ${context?.commodityName} - ${query?.year}`;
     },
-    shouldSend: action => action.payload.endpoint === GET_NODE_SUMMARY_URL
+    shouldSend: action =>
+      action.payload.endpoint === GET_NODE_SUMMARY_URL ||
+      action.payload.endpoint === GET_COUNTRY_NODE_SUMMARY_URL
   },
   {
     type: APP__ON_PDF_DOWNLOAD,

@@ -18,7 +18,7 @@ const ProfileRoot = props => {
       'COUNTRY': 'IMPORTER COUNTRY',
     }
     const nodeTypeLabel = substitutions[nodeType] || nodeType
-    return `${nodeTypeLabel} - ${context.commodityName} - ${context.countryName}`;
+    return `${nodeTypeLabel} - ${context?.commodityName} - ${context?.countryName}`;
   };
 
   const getResultTestId = item =>

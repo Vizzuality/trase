@@ -8,6 +8,14 @@ module Api
       before_action :load_node
       before_action :set_year
 
+      def basic_attributes
+        @result = Api::V3::CountryProfiles::BasicAttributes.new(
+          @node, @year
+        ).call
+
+        render json: {data: @result}
+      end
+
       def top_consumer_actors
         @result = Api::V3::Profiles::CrossContextTopNodesChart.new(
           @contexts,

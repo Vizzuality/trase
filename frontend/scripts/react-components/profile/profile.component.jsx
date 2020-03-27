@@ -96,9 +96,9 @@ const Profile = (props) => {
             nodeId={nodeId}
             title={chart.title}
             type={chart.identifier}
-            contextId={context.id}
+            contextId={context?.id}
             onLinkClick={updateQueryParams}
-            countryName={context.countryName}
+            countryName={context?.countryName}
             commodityName={context.commodityName}
             testId={isCountries ? 'top-destination-countries' : 'top-sourcing-regions'}
           />
@@ -118,7 +118,7 @@ const Profile = (props) => {
             year={year}
             nodeId={nodeId}
             title={chart.title}
-            contextId={context.id}
+            contextId={context?.id}
             commodityName={context.commodityName}
             testId={isActor ? 'deforestation-risk' : 'sustainability-indicators'}
             targetPayload={{ profileType: isActor ? 'place' : 'actor' }}
@@ -162,6 +162,7 @@ const Profile = (props) => {
             contextId={context?.id}
             onLinkClick={updateQueryParams}
             commodityName={context?.commodityName}
+            profileType={profileType}
             testId={type === 'actor' ? 'top-traders' : 'top-importers'}
           />
         );
@@ -260,4 +261,4 @@ Profile.propTypes = {
   openModal: PropTypes.func.isRequired
 };
 
-export default Profile;
+export default React.memo(Profile);

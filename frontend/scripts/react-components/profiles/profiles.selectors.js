@@ -20,7 +20,7 @@ export const getParsedTopProfiles = createSelector(
       return {
         title: nodeName,
         subtitle: summary,
-        category: `${context.countryName} · ${context.commodityName} · ${nodeType}`,
+        category: `${context?.countryName} · ${context?.commodityName} · ${nodeType}`,
         imageUrl: photoUrl,
         to: {
           type: 'profile',
