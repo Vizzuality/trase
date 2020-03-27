@@ -24,7 +24,7 @@ function CountrySummary(props) {
           topoJSONPath="./vector_layers/WORLD.topo.json"
           topoJSONRoot="world"
           getPolygonClassName={d =>
-            d.properties.name === 'Argentina' ? '-isCurrent' : ''
+            d.properties.name === countryName ? '-isCurrent' : ''
           }
           useRobinsonProjection
         />
