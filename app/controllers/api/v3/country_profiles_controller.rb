@@ -43,6 +43,19 @@ module Api
         render json: {data: @result}
       end
 
+      def indicators
+        @result = Api::V3::Profiles::IndicatorsTable.new(
+          @node,
+          @year,
+          {
+            profile_type: profile_type,
+            chart_identifier: :country_indicators_table
+          }
+        ).call
+
+        render json: {data: @result}
+      end
+
       private
 
       def profile_type

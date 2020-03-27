@@ -64,6 +64,7 @@ Rails.application.routes.draw do
       get 'country_profiles/:id/basic_attributes', to: 'country_profiles#basic_attributes'
       get 'country_profiles/:id/top_consumer_actors', to: 'country_profiles#top_consumer_actors'
       get 'country_profiles/:id/top_consumer_countries', to: 'country_profiles#top_consumer_countries'
+      get 'country_profiles/:id/indicators', to: 'country_profiles#indicators'
 
       resources :newsletter_subscriptions, only: [:create]
       resource :database_validation, controller: :database_validation,
