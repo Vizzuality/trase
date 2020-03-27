@@ -99,7 +99,7 @@ const Profile = (props) => {
             contextId={context?.id}
             onLinkClick={updateQueryParams}
             countryName={context?.countryName}
-            commodityName={context.commodityName}
+            commodityName={context?.commodityName}
             testId={isCountries ? 'top-destination-countries' : 'top-sourcing-regions'}
           />
         );
@@ -119,7 +119,7 @@ const Profile = (props) => {
             nodeId={nodeId}
             title={chart.title}
             contextId={context?.id}
-            commodityName={context.commodityName}
+            commodityName={context?.commodityName}
             testId={isActor ? 'deforestation-risk' : 'sustainability-indicators'}
             targetPayload={{ profileType: isActor ? 'place' : 'actor' }}
           />
@@ -134,7 +134,7 @@ const Profile = (props) => {
             title={chart.title}
             printMode={printMode}
             contextId={context.id}
-            commodityName={context.commodityName}
+            commodityName={context?.commodityName}
             testId="company-compare"
           />
         );
@@ -145,8 +145,8 @@ const Profile = (props) => {
             year={year}
             nodeId={nodeId}
             title={chart.title}
-            contextId={context.id}
-            commodityName={context.commodityName}
+            contextId={context?.id}
+            commodityName={context?.commodityName}
             testId="deforestation-trajectory"
           />
         );
