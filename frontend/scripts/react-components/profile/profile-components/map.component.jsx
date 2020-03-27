@@ -88,10 +88,11 @@ class Map extends Component {
     d3_json(topoJSONPath, (error, topoJSON) => {
       if (!topoJSON) return;
       const features = topojsonFeature(topoJSON, topoJSON.objects[topoJSONRoot]);
-
+      // Filter Antartica
+      const filteredFeatures = features.features.filter(f => f.properties.iso2 !== 'AQ');
       const polygons = container
         .selectAll('path')
-        .data(features.features)
+        .data(filteredFeatures)
         .enter()
         .append('path')
         .attr('class', d => `polygon ${getPolygonClassName(d)}`)
@@ -110,7 +111,7 @@ class Map extends Component {
 
       const collection = {
         type: 'FeatureCollection',
-        features: features.features
+        features: filteredFeatures
       };
       const featureBounds = path.bounds(collection);
       const { scale, trans } = this.fitGeoInside(featureBounds, width, height);

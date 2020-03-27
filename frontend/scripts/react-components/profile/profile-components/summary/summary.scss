@@ -32,6 +32,10 @@ $transition: all 0.2s;
     font-weight: bold;
     margin-right: 30px;
     transition: $transition;
+
+    .profiles-activity {
+      font-size: $font-size-x-big;
+    }
   }
 
   .profiles-selector-button {
