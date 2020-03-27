@@ -33,7 +33,7 @@ class SustainabilityTableWidget extends React.PureComponent {
     const mainQuery = {
       'indicators': GET_PLACE_INDICATORS,
       'places': GET_ACTOR_SUSTAINABILITY
-    }[type];
+    }[type] || GET_ACTOR_SUSTAINABILITY;
     return (
       <Widget
         query={[mainQuery, GET_NODE_SUMMARY_URL]}

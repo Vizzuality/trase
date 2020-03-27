@@ -96,9 +96,9 @@ const Profile = (props) => {
             nodeId={nodeId}
             title={chart.title}
             type={chart.identifier}
-            contextId={context.id}
+            contextId={context?.id}
             onLinkClick={updateQueryParams}
-            countryName={context.countryName}
+            countryName={context?.countryName}
             commodityName={context.commodityName}
             testId={isCountries ? 'top-destination-countries' : 'top-sourcing-regions'}
           />
@@ -261,4 +261,4 @@ Profile.propTypes = {
   openModal: PropTypes.func.isRequired
 };
 
-export default Profile;
+export default React.memo(Profile);

@@ -12,12 +12,14 @@ function ProfileTitle(props) {
       ...summary,
       year,
       commodityName,
-      companyName: summary.nodeName
+      companyName: summary.nodeName,
+      countryName: summary.name
     };
     const snakeCasedParams = Object.entries(params).reduce((acc, [key, value]) => ({
       ...acc,
       [snakeCase(key)]: value
     }));
+
     const compiled = _template(part, { interpolate });
     return compiled(snakeCasedParams);
   }

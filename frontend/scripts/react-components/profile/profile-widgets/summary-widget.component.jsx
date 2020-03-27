@@ -19,12 +19,12 @@ function SummaryWidget(props) {
     profileMetadata,
     openModal
   } = props;
-  const params = { node_id: nodeId, context_id: context.id, profile_type: profileType, year };
+  const params = { node_id: nodeId, context_id: context?.id, profile_type: profileType, year };
 
   if (context) {
     params.context_id = context.id;
   } else {
-    params.commodityId = commodityId;
+    params.commodity_id = commodityId;
   }
   const summaryEndpoint = getSummaryEndpoint(profileType);
   return (
