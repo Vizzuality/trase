@@ -60,6 +60,7 @@
     "ENABLE_VERSIONING": true,
     "ENABLE_TOOL_PANEL": true,
     "CONSOLIDATE_INSIGHTS": true,
+    "ENABLE_COUNTRY_PROFILES": true,
     "API_V3_URL": true,
     "ENABLE_DASHBOARDS": true,
     "DISABLE_PROFILES": true,

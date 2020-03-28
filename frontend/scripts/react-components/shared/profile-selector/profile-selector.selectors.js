@@ -128,7 +128,6 @@ export const getIsDisabled = createSelector(
       case PROFILE_STEPS.type:
         return !profileType;
       case PROFILE_STEPS.profiles: {
-        // As we dont have a country profile page the min requirement is the sourcesPanel selection
         return panels[profileType] && panels[profileType].activeItems.length === 0;
       }
       case PROFILE_STEPS.commodities:
