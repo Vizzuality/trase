@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import capitalize from 'lodash/capitalize';
 import TitleGroup from 'react-components/profile/profile-components/title-group';
 import SummaryTitle from 'react-components/profile/profile-components/summary/summary-title.component';
+import Map from 'react-components/profile/profile-components/map.component';
 import Text from 'react-components/shared/text';
 
 function CountrySummary(props) {
@@ -14,8 +15,23 @@ function CountrySummary(props) {
     year,
     onChange,
     openModal,
-    profileMetadata: { years, activity, commodities, activities, commodityId } = {}
+    profileMetadata: { years, activity, commodities, activities, commodityId, countryName } = {}
   } = props;
+  const renderCountryMap = () => (
+    <div className="c-overall-info page-break-inside-avoid">
+      <div className="c-locator-map map-country-banner">
+        <Map
+          topoJSONPath="./vector_layers/WORLD.topo.json"
+          topoJSONRoot="world"
+          getPolygonClassName={d =>
+            d.properties.name === countryName ? '-isCurrent' : ''
+          }
+          useRobinsonProjection
+        />
+      </div>
+    </div>
+  );
+
   const selectedCommodity = commodities.find(c => c.id === commodityId);
   const selectedActivity = activities.find(a => a.name === activity);
   const titles = [
@@ -58,7 +74,8 @@ function CountrySummary(props) {
       data-test="country-summary"
     >
       <div className="row">
-        <div className="small-12 medium-9 columns">
+        <div className="small-12 show-for-small profile-map-mobile">{renderCountryMap()}</div>
+        <div className="small-12 medium-7 columns">
           <Sticky top={60} innerZ={85} activeClass="profile-sticky-group">
             {({ status }) => (
               <div
@@ -69,7 +86,8 @@ function CountrySummary(props) {
               >
                 <SummaryTitle
                   sticky={status === Sticky.STATUS_FIXED}
-                  name={`[CountryName] (${activity})`}
+                  name={countryName || '[CountryName]'}
+                  activity={activity}
                   openModal={openModal}
                 />
                 <TitleGroup
@@ -81,6 +99,7 @@ function CountrySummary(props) {
             )}
           </Sticky>
         </div>
+        <div className="small-12 medium-5 columns hide-for-small">{renderCountryMap()}</div>
       </div>
 
       <div className="row">

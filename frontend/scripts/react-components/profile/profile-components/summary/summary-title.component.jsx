@@ -6,7 +6,7 @@ import capitalize from 'lodash/capitalize';
 import 'react-components/profile/profile-components/summary/summary.scss';
 
 function SummaryTitle(props) {
-  const { name, sticky, openModal } = props;
+  const { name, activity, sticky, openModal } = props;
   return (
     <div
       className={cx({
@@ -16,6 +16,9 @@ function SummaryTitle(props) {
     >
       <h2 className="profiles-title" data-test="profiles-title">
         {capitalize(name)}
+        {activity &&
+          <span className="profiles-activity">{` (${activity})`}</span>
+        }
       </h2>
       <Button
         size="xs"
@@ -32,6 +35,7 @@ function SummaryTitle(props) {
 
 SummaryTitle.propTypes = {
   name: PropTypes.string,
+  activity: PropTypes.string,
   sticky: PropTypes.bool,
   openModal: PropTypes.func.isRequired
 };
