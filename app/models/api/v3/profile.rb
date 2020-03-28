@@ -32,6 +32,8 @@ module Api
 
       NAMES = [ACTOR, PLACE, COUNTRY].freeze
 
+      alias_attribute :profile_type, :name
+
       belongs_to :context_node_type
       has_many :charts, -> { order(:position) }
 

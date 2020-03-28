@@ -4,9 +4,9 @@ module Api
       class ProfileMeta
         include ActiveModel::Serialization
 
-        delegate :id, :context_id, :years, to: :@node_with_flows
+        delegate :id, :name, :context_id, :years, to: :@node_with_flows
         delegate :commodity_id, :country_id, to: :@context
-        delegate :name,
+        delegate :profile_type,
                  :main_topojson_path,
                  :main_topojson_root,
                  :adm_1_name,
