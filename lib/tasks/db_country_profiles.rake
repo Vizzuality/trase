@@ -34,6 +34,9 @@ namespace :db do
           find_or_create_chart_node_type(
             top_countries_chart, country_of_import_node_type, 'destination'
           )
+          basic_attributes_chart = find_or_create_chart(
+            profile, :country_basic_attributes, 0, 'Basic attributes'
+          )
         end
 
         importer_context_node_types = Api::V3::ContextNodeType.where(
@@ -55,6 +58,9 @@ namespace :db do
           )
           find_or_create_chart_node_type(
             top_countries_chart, country_of_export_node_type, 'destination'
+          )
+          basic_attributes_chart = find_or_create_chart(
+            profile, :country_basic_attributes, 0, 'Basic attributes'
           )
         end
       end
