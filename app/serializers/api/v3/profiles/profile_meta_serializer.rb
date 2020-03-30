@@ -3,6 +3,7 @@ module Api
     module Profiles
       class ProfileMetaSerializer < ActiveModel::Serializer
         attributes :id,
+                   :name,
                    :context_id,
                    :commodity_id,
                    :country_id,
@@ -10,7 +11,7 @@ module Api
                    :commodities,
                    :activities,
                    :years,
-                   :name,
+                   :profile_type,
                    :main_topojson_path,
                    :main_topojson_root,
                    :adm_1_name,
