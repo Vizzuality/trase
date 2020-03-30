@@ -15,7 +15,7 @@ function CountrySummary(props) {
     year,
     onChange,
     openModal,
-    profileMetadata: { years, activity, commodities, activities, commodityId, countryName } = {}
+    profileMetadata: { years, activity, commodities, activities, commodityId, name: countryName } = {}
   } = props;
   const renderCountryMap = () => (
     <div className="c-overall-info page-break-inside-avoid">
@@ -24,7 +24,9 @@ function CountrySummary(props) {
           topoJSONPath="./vector_layers/WORLD.topo.json"
           topoJSONRoot="world"
           getPolygonClassName={d =>
-            d.properties.name === countryName ? '-isCurrent' : ''
+            d.properties.name.toLowerCase() === countryName.toLowerCase()
+              ? '-isCurrent'
+              : ''
           }
           useRobinsonProjection
         />
@@ -86,7 +88,7 @@ function CountrySummary(props) {
               >
                 <SummaryTitle
                   sticky={status === Sticky.STATUS_FIXED}
-                  name={countryName || '[CountryName]'}
+                  name={countryName}
                   activity={activity}
                   openModal={openModal}
                 />
