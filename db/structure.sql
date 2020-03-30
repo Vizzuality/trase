@@ -272,7 +272,7 @@ COMMENT ON FUNCTION public.upsert_attributes() IS 'Upserts attributes based on n
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_table_access_method = heap;
 
 --
 -- Name: ckeditor_assets; Type: TABLE; Schema: content; Owner: -
@@ -2206,7 +2206,7 @@ COMMENT ON TABLE public.profiles IS 'Context-specific profiles';
 -- Name: COLUMN profiles.name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.profiles.name IS 'Profile name, either actor or place. One of restricted set of values.';
+COMMENT ON COLUMN public.profiles.name IS 'Profile name, either actor, place or country.';
 
 
 --
@@ -2408,6 +2408,41 @@ CREATE SEQUENCE public.countries_id_seq
 --
 
 ALTER SEQUENCE public.countries_id_seq OWNED BY public.countries.id;
+
+
+--
+-- Name: countries_wb_indicators; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.countries_wb_indicators (
+    id bigint NOT NULL,
+    iso_code text NOT NULL,
+    year integer NOT NULL,
+    name text NOT NULL,
+    value numeric NOT NULL,
+    rank integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: countries_wb_indicators_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.countries_wb_indicators_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: countries_wb_indicators_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.countries_wb_indicators_id_seq OWNED BY public.countries_wb_indicators.id;
 
 
 --
@@ -6579,6 +6614,13 @@ ALTER TABLE ONLY public.countries ALTER COLUMN id SET DEFAULT nextval('public.co
 
 
 --
+-- Name: countries_wb_indicators id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.countries_wb_indicators ALTER COLUMN id SET DEFAULT nextval('public.countries_wb_indicators_id_seq'::regclass);
+
+
+--
 -- Name: country_properties id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -7365,6 +7407,14 @@ ALTER TABLE ONLY public.countries
 
 ALTER TABLE ONLY public.countries
     ADD CONSTRAINT countries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: countries_wb_indicators countries_wb_indicators_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.countries_wb_indicators
+    ADD CONSTRAINT countries_wb_indicators_pkey PRIMARY KEY (id);
 
 
 --
@@ -9952,6 +10002,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200207162026'),
 ('20200302203632'),
 ('20200302214104'),
-('20200317075824');
+('20200317075824'),
+('20200330120605');
 
 
