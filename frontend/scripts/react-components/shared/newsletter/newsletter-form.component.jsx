@@ -2,8 +2,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from 'react-components/shared/button/button.component';
+import Text from 'react-components/shared/text';
+import Link from 'redux-first-router-link';
+import cx from 'classnames';
 
-import 'scripts/react-components/shared/newsletter/newsletter.scss';
+import 'react-components/shared/newsletter/newsletter.scss';
 
 class NewsletterForm extends React.PureComponent {
   constructor(props) {
@@ -38,8 +41,9 @@ class NewsletterForm extends React.PureComponent {
 
   render() {
     const { message } = this.props;
+    const { email } = this.state;
     return (
-      <div className="c-newsletter row align-middle align-right">
+      <div className={cx('c-newsletter row align-middle align-right', { sent: message })}>
         <form ref={this.getFormRef} className="column small-12 medium-6 large-4">
           <label htmlFor="newsletter-email" className="newsletter-label -pink">
             {message}
@@ -57,6 +61,18 @@ class NewsletterForm extends React.PureComponent {
             <Button onClick={this.onClickSubmit} color="charcoal" weight="bold">
               Subscribe
             </Button>
+          </div>
+          <div className={cx("conditions", { visible: !message && email }) }>
+            <Text lineHeight="lg">
+              After subscribing I consent that my email address will be used in order for us to
+              send you the Trase newsletter. Please see our{' '}
+              <Link to="/about/privacy-policy">
+                <Text as="span" className="conditions-link">
+                  privacy policy
+                </Text>
+              </Link>{' '}
+              for more details on the use of your information
+            </Text>
           </div>
         </form>
       </div>

@@ -1,3 +1,77 @@
+@import 'styles/settings';
+
 .c-newsletter {
   width: 100%;
+  margin-bottom: 40px;
+
+  @media only screen and (min-width: $breakpoint-foundation-small) {
+    &.sent {
+      transform: translateY(calc(50% - 8px));
+      margin-bottom: 0px;
+    }
+  }
+
+  .conditions {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0;
+    background-color: rgba($egg-shell, 0.15);
+    transition: max-height 0.2s ease-out;
+
+    &.visible {
+      max-height: 120px;
+      padding: 10px;
+    }
+  }
+
+  .conditions-link {
+    text-decoration: underline;
+  }
+
+  .newsletter-label {
+    position: absolute;
+    top: 0;
+    font-family: $font-family-2;
+    font-size: $font-size-xx-regular;
+    color: $charcoal-grey;
+    transform: translateY(calc(-100% - 8px));
+  }
+
+  .-pink {
+    color: $medium-pink;
+  }
+
+  .newsletter-input-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+
+    > .newsletter-email {
+      flex: auto;
+      height: 100%;
+      font-family: $font-family-1;
+      font-size: 13px;
+      letter-spacing: -0.8px;
+      text-align: left;
+      border: 0;
+      border-radius: 4px;
+      background-color: $light-gray;
+      color: $charcoal-grey-faded;
+      text-transform: uppercase;
+      padding: 1px 10px 0;
+      &::placeholder {
+        text-transform: uppercase;
+      }
+    }
+
+    > .c-button {
+      height: 100%;
+      margin-left: auto;
+      padding: 0 16px;
+      flex: none;
+      letter-spacing: -0.8px;
+      font-weight: $font-weight-regular;
+    }
+  }
 }
