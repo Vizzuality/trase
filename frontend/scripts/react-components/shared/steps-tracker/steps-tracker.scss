@@ -7,7 +7,6 @@ $circle-size: 32px;
 $item-height: $label-height + $circle-size;
 $circle-dot-size: $circle-size / 2;
 
-
 .c-steps-tracker {
   display: flex;
   align-items: center;
@@ -65,7 +64,6 @@ $circle-dot-size: $circle-size / 2;
         .steps-tracker-circle::after {
           display: none;
         }
-
       }
     }
 
@@ -75,7 +73,8 @@ $circle-dot-size: $circle-size / 2;
       }
 
       .steps-tracker-circle {
-        &::before, &::after {
+        &::before,
+        &::after {
           height: 4px;
         }
       }
@@ -112,13 +111,13 @@ $circle-dot-size: $circle-size / 2;
 
     .steps-tracker-item {
       position: relative;
-      display: block;
       width: $circle-size;
       padding: $label-height 0 0;
       height: $item-height;
+      overflow: visible;
     }
 
-    .steps-tracker-label  {
+    .steps-tracker-label {
       position: absolute;
       left: 50%;
       top: 0;
@@ -138,7 +137,7 @@ $circle-dot-size: $circle-size / 2;
             width: $circle-dot-size + 4px;
           }
 
-          .steps-tracker-label  {
+          .steps-tracker-label {
             > span {
               font-size: $font-size-x-regular + 1px;
             }
@@ -163,7 +162,8 @@ $circle-dot-size: $circle-size / 2;
       border-radius: 100%;
     }
 
-    &::before, &::after {
+    &::before,
+    &::after {
       content: '';
       position: absolute;
       width: 50%;
