@@ -23,11 +23,11 @@ RSpec.describe Api::V3::ChartAttribute, type: :model do
     Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
-    Api::V3::ChartAttribute.set_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::ChartAttribute.set_callback(:commit, :after, :refresh_dependents)
   end
 
   after do
-    Api::V3::ChartAttribute.skip_callback(:commit, :after, :refresh_dependencies)
+    Api::V3::ChartAttribute.skip_callback(:commit, :after, :refresh_dependents)
   end
 
   describe :validate do

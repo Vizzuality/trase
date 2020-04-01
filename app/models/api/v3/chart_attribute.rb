@@ -57,7 +57,7 @@ module Api
                      attribute: :chart_quant, scope: [:chart_id, :state_average],
                      if: :new_chart_quant_given?
 
-      after_commit :refresh_dependencies
+      after_commit :refresh_dependents
 
       stringy_array :years
       manage_associated_attributes [:chart_ind, :chart_qual, :chart_quant]
@@ -68,7 +68,7 @@ module Api
         ]
       end
 
-      def refresh_dependencies
+      def refresh_dependents
         Api::V3::Readonly::ChartAttribute.refresh
         refresh_actor_basic_attributes
       end
