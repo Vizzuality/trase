@@ -12,9 +12,13 @@ module Api
         # @option options [Boolean] :skip_dependents skip refreshing
         # @option options [Boolean] :sync synchronously
         def refresh(options = {})
-          sync_processing = options[:sync]
-          # in unspecified, decide based on how long it takes to run
-          sync_processing ||= !long_running?
+          sync_processing =
+            unless options[:sync].nil?
+              options[:sync]
+            else
+              # in unspecified, decide based on how long it takes to run
+              !long_running?
+            end
           if sync_processing
             refresh_now(options)
           else
