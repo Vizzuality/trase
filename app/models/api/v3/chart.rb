@@ -41,7 +41,7 @@ module Api
       validate :parent_is_in_same_profile
       validate :parent_is_root
 
-      after_commit :refresh_dependencies
+      after_commit :refresh_dependents
 
       def chart_type
         case identifier
@@ -99,8 +99,7 @@ module Api
         ]
       end
 
-      def refresh_dependencies
-        Api::V3::Readonly::MapAttribute.refresh
+      def refresh_dependents
         refresh_actor_basic_attributes
       end
 
