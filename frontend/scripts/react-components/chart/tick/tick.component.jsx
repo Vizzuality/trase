@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import isIe from 'utils/isIe';
 
 function Tick(props) {
   const { x, y, payload, unitFormat, fill, backgroundColor } = props;
@@ -10,12 +11,21 @@ function Tick(props) {
   return (
     <g transform={`translate(${x},${y})`}>
       <defs>
-        <filter x="0" y="0" width="1" height="1" id="solid">
-          <feFlood floodColor={backgroundColor || '#fff'} />
-          <feComposite in="SourceGraphic" />
-        </filter>
+        {!isIe() && (
+          <filter x="0" y="0" width="1" height="1" id="solid">
+            <feFlood floodColor={backgroundColor || '#fff'} />
+            <feComposite in="SourceGraphic" />
+          </filter>
+        )}
       </defs>
-      <text className="tick-text" filter="url(#solid)" x="0" y="3" textAnchor="start" fill={fill}>
+      <text
+        className="tick-text"
+        filter={!isIe() ? 'url(#solid)' : ''}
+        x="0"
+        y="3"
+        textAnchor="start"
+        fill={fill}
+      >
         {formattedTick}
       </text>
     </g>

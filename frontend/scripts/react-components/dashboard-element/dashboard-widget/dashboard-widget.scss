@@ -1,6 +1,8 @@
 @import 'styles/settings';
 
-.c-dashboard-widget {
+$this: 'c-dashboard-widget';
+
+.#{$this} {
   min-width: 100%;
 
   .widget-title-container {
@@ -48,6 +50,10 @@
     margin: 18px 0 0;
     overflow: auto;
 
+    @at-root .-is-legacy-browser .#{$this} .widget-box {
+      display: block;
+    }
+
     .widget-spinner {
       display: flex;
       align-items: center;
@@ -71,7 +77,6 @@
     }
 
     .widget-chart {
-      flex: 1;
       padding: 25px 42px;
       overflow: hidden;
     }
@@ -120,3 +125,5 @@
     }
   }
 }
+
+

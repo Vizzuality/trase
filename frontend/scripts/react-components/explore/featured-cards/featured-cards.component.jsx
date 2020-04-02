@@ -16,7 +16,7 @@ const FeaturedCards = props => {
   const { countryName, commodityName, step, cards, openModal } = props;
   const CARDS_SIZE_MARGIN = 16; // matches featured-cards.scss
 
-  // XXX: For IE11, we need to seperate translation methods and are not allowed to use calc within them
+  // XXX: For IE11, we need to separate translation methods and are not allowed to use calc within them
   // We keep the calc for other browsers for performance reasons.
   const transitions = useTransition(cards, item => item.id, {
     from: item => ({

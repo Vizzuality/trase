@@ -1,9 +1,11 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import CookieBanner from 'react-components/shared/cookie-banner';
 import Feedback from 'react-components/shared/feedback';
 import Footer from 'react-components/shared/footer/footer.component';
+
+import isIe from 'utils/isIe';
 
 import 'styles/_layouts.scss';
 
@@ -20,6 +22,13 @@ function App() {
   const { Component, layout, footer = true, feedback = true } = routesMap[type];
 
   const pageKey = type === 'profile' ? `${type}-${query?.nodeId}` : type;
+
+  useEffect(() => {
+    if (isIe()) {
+      document.body.classList.add('-is-legacy-browser');
+    }
+  }, []);
+
   return (
     <Suspense fallback={null}>
       <nav>
