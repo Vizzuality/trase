@@ -26,7 +26,7 @@ $large-line-chart-width: 840px;
 
     .c-tabs {
       .tab {
-        display: none
+        display: none;
       }
     }
   }
@@ -103,8 +103,7 @@ $large-line-chart-width: 840px;
       }
     }
 
-    @media (min-width: $breakpoint-foundation-small)
-       and (max-width: $breakpoint-foundation-medium) {
+    @media (min-width: $breakpoint-foundation-small) and (max-width: $breakpoint-foundation-medium) {
       > .row .columns:not(:last-child) {
         padding-right: 0;
       }
@@ -112,7 +111,6 @@ $large-line-chart-width: 840px;
   }
 
   .c-top-municipalities {
-
     .top-destinations-map-container {
       overflow: hidden;
       max-width: 100%;
@@ -141,7 +139,7 @@ $large-line-chart-width: 840px;
 
     font-family: $font-family-1;
     font-weight: $font-weight-bold;
-    letter-spacing: -.6px;
+    letter-spacing: -0.6px;
     text-transform: uppercase;
   }
 
@@ -170,6 +168,7 @@ $large-line-chart-width: 840px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    position: relative;
   }
 
   .top-destinations-chart-container {
