@@ -128,15 +128,10 @@ RSpec.describe Api::V3::PlacesController, type: :controller do
   end
 
   describe 'GET trajectory_deforestation' do
-    context 'when attributes configuration missing' do
-      it 'is not found' do
-        allow(Api::V3::Profiles::ChartConfiguration).to(
-          receive(:new).and_return(chart_config)
-        )
-        allow(chart_config).to(
-          receive(:attributes).and_return([])
-        )
+    context 'when node without place profile' do
+      let(:node) { api_v3_exporter1_node }
 
+      it 'is not found' do
         get :trajectory_deforestation, params: valid_params
         expect(response).to have_http_status(404)
       end
