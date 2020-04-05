@@ -6,6 +6,7 @@ module.exports = {
   API_V3_URL: '//0.0.0.0:3000',
   NAMED_MAPS_ENV: 'development',
   GFW_WIDGETS_BASE_URL: undefined,
+  MAPBOX_TOKEN: undefined,
   NODE_ENV_DEV: false,
 
   // feature flags

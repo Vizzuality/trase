@@ -77,7 +77,8 @@ module.exports = {
       TRANSIFEX_API_KEY: JSON.stringify(process.env.TRANSIFEX_API_KEY),
       HOME_VIDEO_ID: JSON.stringify(process.env.HOME_VIDEO_ID),
       NAMED_MAPS_ENV: JSON.stringify(process.env.NAMED_MAPS_ENV),
-      CARTO_ACCOUNT: JSON.stringify(process.env.CARTO_ACCOUNT)
+      CARTO_ACCOUNT: JSON.stringify(process.env.CARTO_ACCOUNT),
+      MAPBOX_TOKEN: JSON.stringify(process.env.MAPBOX_TOKEN)
     }),
     new webpack.LoaderOptionsPlugin({ options: {} })
   ],
