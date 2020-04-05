@@ -85,7 +85,7 @@ function MapBoxMap() {
         {loaded &&
           mapRef.current && (
             <LayerManager map={mapRef.current.getMap()} plugin={PluginMapboxGl}>
-              {activeLayers.map(l => console.log('l', l) || (
+              {activeLayers.map(l => (
                 <Layer key={l.id} {...l} />
               ))}
             </LayerManager>
