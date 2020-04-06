@@ -17,7 +17,7 @@ namespace :db do
     EXPORTERS_RUNNING_ORDER = {
       country_basic_attributes: 0,
       top_exports: 1,
-      deforestation_trajectory: 2,
+      country_trajectory_deforestation: 2,
       country_indicators_table: 3,
       country_top_consumer_actors: 4,
       country_top_consumer_countries: 5
@@ -59,6 +59,7 @@ namespace :db do
       exporter_context_node_types.each do |cnt|
         profile = find_or_create_profile(Api::V3::Profile::COUNTRY, cnt)
         populate_basic_attributes profile
+        populate_deforestation_trajectory profile
         populate_exporter_top_traders profile
         populate_exporter_top_countries profile
         populate_sustainability_indicators profile
@@ -82,6 +83,25 @@ namespace :db do
       find_or_create_chart(
         profile, nil, :country_basic_attributes, 0, 'Basic attributes'
       )
+    end
+
+    def populate_deforestation_trajectory(profile)
+      identifier = :country_trajectory_deforestation
+      position = EXPORTERS_RUNNING_ORDER[identifier]
+      title = 'Deforestation trajectory of {{country_name}}'
+      country_chart = find_or_create_chart(
+        profile, nil, identifier, position, title
+      )
+
+      place_chart = place_chart(
+        profile.context_node_type.context.country_id,
+        :place_trajectory_deforestation
+      )
+      return unless place_chart
+
+      copy_chart_attributes(place_chart, country_chart)
+      # remove the "state average" line
+      country_chart.chart_attributes.where(display_type: 'line').delete_all
     end
 
     def populate_exporter_top_traders(profile)
@@ -140,16 +160,9 @@ namespace :db do
         profile, nil, identifier, position, title
       )
 
-      place_profile = Api::V3::Profile.
-        joins(context_node_type: :context).
-        find_by(
-          name: Api::V3::Profile::PLACE,
-          'contexts.country_id' => profile.context_node_type.context.country_id
-        )
-      return unless place_profile
-
-      parent_place_chart = place_profile.charts.find_by(
-        parent_id: nil, identifier: :place_indicators_table
+      parent_place_chart = place_chart(
+        profile.context_node_type.context.country_id,
+        :place_indicators_table
       )
       return unless parent_place_chart
 
@@ -225,6 +238,18 @@ namespace :db do
       Api::V3::ChartNodeType.create(
         chart: chart, node_type: node_type, identifier: identifier
       )
+    end
+
+    def place_chart(country_id, identifier)
+      place_profile = Api::V3::Profile.
+        joins(context_node_type: :context).
+        find_by(
+          name: Api::V3::Profile::PLACE,
+          'contexts.country_id' => country_id
+        )
+      return nil unless place_profile
+
+      place_profile.charts.find_by(identifier: identifier)
     end
 
     def country_of_export_node_type
