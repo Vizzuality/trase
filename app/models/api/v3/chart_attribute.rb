@@ -32,6 +32,14 @@ module Api
 
       NORMALIZABLE_ATTRIBUTES = [:identifier].freeze
 
+      AREA = 'area'.freeze
+      LINE = 'line'.freeze
+      DISPLAY_TYPES = [LINE, AREA].freeze
+      LINE_DASHED_BLACK = 'line-dashed-black'.freeze
+      LINE_SOLID_RED = 'line-solid-red'.freeze
+      AREA_DISPLAY_STYLES = ['area-pink', 'area-black'].freeze
+      LINE_DISPLAY_STYLES = [LINE_DASHED_BLACK].freeze
+
       belongs_to :chart, optional: false
       has_one :chart_ind, autosave: true
       has_one :chart_qual, autosave: true
@@ -45,6 +53,14 @@ module Api
                 presence: true,
                 uniqueness: {scope: :chart},
                 if: proc { |chart_attr| chart_attr.position.blank? }
+      validates :display_type,
+                inclusion: {in: DISPLAY_TYPES, allow_blank: true}
+      validates :display_style,
+                inclusion: {in: AREA_DISPLAY_STYLES, allow_blank: true},
+                if: proc { |chart_attr| chart_attr.display_type == AREA }
+      validates :display_style,
+                inclusion: {in: LINE_DISPLAY_STYLES, allow_blank: true},
+                if: proc { |chart_attr| chart_attr.display_type == LINE }
       validates_with OneAssociatedAttributeValidator,
                      attributes: [:chart_ind, :chart_qual, :chart_quant]
       validates_with AttributeAssociatedOnceValidator,
