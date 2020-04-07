@@ -25,7 +25,7 @@ namespace :db do
     IMPORTERS_RUNNING_ORDER = {
       country_basic_attributes: 0,
       top_imports: 1,
-      import_trajectory: 2,
+      country_trajectory_import: 2,
       country_top_consumer_actors: 3,
       country_top_consumer_countries: 4
     }.freeze
@@ -74,6 +74,7 @@ namespace :db do
       importer_context_node_types.each do |cnt|
         profile = find_or_create_profile(Api::V3::Profile::COUNTRY, cnt)
         populate_basic_attributes profile
+        populate_import_trajectory profile
         populate_importer_top_traders profile
         populate_importer_top_countries profile
       end
@@ -102,6 +103,15 @@ namespace :db do
       copy_chart_attributes(place_chart, country_chart)
       # remove the "state average" line
       country_chart.chart_attributes.where(display_type: 'line').delete_all
+    end
+
+    def populate_import_trajectory(profile)
+      identifier = :country_trajectory_import
+      position = IMPORTERS_RUNNING_ORDER[identifier]
+      title = 'Import trajectory of {{country_name}}'
+      find_or_create_chart(
+        profile, nil, identifier, position, title
+      )
     end
 
     def populate_exporter_top_traders(profile)
