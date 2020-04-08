@@ -16,7 +16,7 @@ namespace :db do
 
     EXPORTERS_RUNNING_ORDER = {
       country_basic_attributes: 0,
-      top_exports: 1,
+      country_commodity_exports: 1,
       country_trajectory_deforestation: 2,
       country_indicators_table: 3,
       country_top_consumer_actors: 4,
@@ -24,7 +24,7 @@ namespace :db do
     }.freeze
     IMPORTERS_RUNNING_ORDER = {
       country_basic_attributes: 0,
-      top_imports: 1,
+      country_commodity_imports: 1,
       country_trajectory_import: 2,
       country_top_consumer_actors: 3,
       country_top_consumer_countries: 4
@@ -59,6 +59,7 @@ namespace :db do
       exporter_context_node_types.each do |cnt|
         profile = find_or_create_profile(Api::V3::Profile::COUNTRY, cnt)
         populate_basic_attributes profile
+        populate_commodity_exports profile
         populate_deforestation_trajectory profile
         populate_exporter_top_traders profile
         populate_exporter_top_countries profile
@@ -74,6 +75,7 @@ namespace :db do
       importer_context_node_types.each do |cnt|
         profile = find_or_create_profile(Api::V3::Profile::COUNTRY, cnt)
         populate_basic_attributes profile
+        populate_commodity_imports profile
         populate_import_trajectory profile
         populate_importer_top_traders profile
         populate_importer_top_countries profile
@@ -83,6 +85,22 @@ namespace :db do
     def populate_basic_attributes(profile)
       find_or_create_chart(
         profile, nil, :country_basic_attributes, 0, 'Basic attributes'
+      )
+    end
+
+    def populate_commodity_exports(profile)
+      identifier = :country_commodity_exports
+      position = EXPORTERS_RUNNING_ORDER[identifier]
+      find_or_create_chart(
+        profile, nil, identifier, position, 'Top exports in {{year}}'
+      )
+    end
+
+    def populate_commodity_imports(profile)
+      identifier = :country_commodity_imports
+      position = IMPORTERS_RUNNING_ORDER[identifier]
+      find_or_create_chart(
+        profile, nil, identifier, position, 'Top imports in {{year}}'
       )
     end
 
