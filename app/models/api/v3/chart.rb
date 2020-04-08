@@ -58,8 +58,12 @@ module Api
           :tabs_table
         when 'actor_exporting_companies'
           :scatterplot
-        when 'place_trajectory_deforestation'
+        when
+          'place_trajectory_deforestation',
+          'country_trajectory_defofestation'
           :stacked_line_chart
+        when 'country_trajectory_import'
+          :line_chart
         when
           'place_top_consumer_actors',
           'place_top_consumer_countries',
