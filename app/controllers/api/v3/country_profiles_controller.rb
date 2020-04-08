@@ -15,6 +15,22 @@ module Api
         render json: {data: @result}
       end
 
+      def commodity_exports
+        @result = Api::V3::CountryProfiles::CommodityExports.new(
+          @node, @year
+        ).call
+
+        render json: {data: @result}
+      end
+
+      def commodity_imports
+        @result = Api::V3::CountryProfiles::CommodityImports.new(
+          @node, @year
+        ).call
+
+        render json: {data: @result}
+      end
+
       def top_consumer_actors
         @result = Api::V3::Profiles::CrossContextTopNodesChart.new(
           @contexts,

@@ -44,6 +44,23 @@ RSpec.describe Api::V3::CountryProfilesController, type: :controller do
       end
     end
 
+    describe 'GET commodity_exports' do
+      context 'when node without flows' do
+        let(:node) {
+          node = FactoryBot.create(
+            :api_v3_node, node_type: api_v3_country_of_production_node_type
+          )
+          FactoryBot.create(:api_v3_node_property, node: node)
+          node
+        }
+
+        it 'is not found' do
+          get :commodity_exports, params: valid_params
+          expect(response).to have_http_status(404)
+        end
+      end
+    end
+
     describe 'GET trajectory_deforestation' do
       context 'when node without flows' do
         let(:node) {
@@ -124,6 +141,23 @@ RSpec.describe Api::V3::CountryProfilesController, type: :controller do
 
         it 'is not found' do
           get :basic_attributes, params: valid_params
+          expect(response).to have_http_status(404)
+        end
+      end
+    end
+
+    describe 'GET commodity_imports' do
+      context 'when node without flows' do
+        let(:node) {
+          node = FactoryBot.create(
+            :api_v3_node, node_type: api_v3_country_of_production_node_type
+          )
+          FactoryBot.create(:api_v3_node_property, node: node)
+          node
+        }
+
+        it 'is not found' do
+          get :commodity_imports, params: valid_params
           expect(response).to have_http_status(404)
         end
       end

@@ -56,6 +56,10 @@ module Api
           'place_indicators_table',
           'country_indicators_table'
           :tabs_table
+        when
+          'country_commodity_exports',
+          'country_commodity_imports'
+          :table
         when 'actor_exporting_companies'
           :scatterplot
         when
