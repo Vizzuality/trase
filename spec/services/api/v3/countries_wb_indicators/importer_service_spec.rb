@@ -15,7 +15,7 @@ RSpec.describe Api::V3::CountriesWbIndicators::ImporterService do
       before do
         uri = worldbank_uri(:population)
         response =
-          JSON.parse(File.read(worldbank_request_path(:population_for_other_countries)))
+          File.read(worldbank_request_path(:population_for_other_countries))
         stub_request(:get, uri).to_return(body: response)
       end
 
@@ -37,7 +37,7 @@ RSpec.describe Api::V3::CountriesWbIndicators::ImporterService do
         )
 
         uri = worldbank_uri(:population)
-        response = JSON.parse(File.read(worldbank_request_path(:population)))
+        response = File.read(worldbank_request_path(:population))
         stub_request(:get, uri).to_return(body: response)
       end
 
@@ -57,7 +57,7 @@ RSpec.describe Api::V3::CountriesWbIndicators::ImporterService do
     context 'when there is no existing countries_wb_indicators' do
       before do
         uri = worldbank_uri(:population)
-        response = JSON.parse(File.read(worldbank_request_path(:population)))
+        response = File.read(worldbank_request_path(:population))
         stub_request(:get, uri).to_return(body: response)
       end
 

@@ -35,22 +35,29 @@ module Api
         private_class_method def self.indicator_request(name, iso_code)
           uri = URI(
             "#{ENV['WORLD_BANK_API_URL']}/v2/country/#{iso_code}/indicator/" \
-            "#{INDICATORS[name]}"
+            "#{INDICATORS[name]}?format=json&per_page=10000"
           )
           response = Net::HTTP.get_response(uri)
 
-          formatted_indicators(name, response.body)
+          return [] if response.code != '200'
+
+          formatted_indicators(name, JSON.parse(response.body))
         end
 
         private_class_method def self.formatted_indicators(name, indicators_response)
-          indicators_response.last.map do |indicator|
+          indicators = indicators_response.last.map do |indicator|
             {
               iso_code: indicator['countryiso3code'],
               name: name.to_s,
               year: indicator['date'].to_i,
-              value: indicator['value']
+              value: indicator['value'] || 0.0
             }
           end
+
+          {
+            last_updated: indicators_response.first['lastupdated'].to_date,
+            indicators: indicators
+          }
         end
       end
     end
