@@ -9,10 +9,7 @@ module Api
         # @option profile_options [String] chart_identifier
         def initialize(node, year, profile_options)
           super(
-            node.context, node, year, {
-              profile_type: :country,
-              chart_identifier: :country_trajectory_deforestation
-            }
+            node.context, node, year, profile_options
           )
         end
 
@@ -37,12 +34,12 @@ module Api
             legend_tooltip: 'Production',
             type: Api::V3::ChartAttribute::LINE,
             style: Api::V3::ChartAttribute::LINE_DASHED_BLACK,
-            values: get_production_values
+            values: production_values
           }
           lines
         end
 
-        def get_production_values
+        def production_values
           data = Api::V3::FlowQuant.
             select('flows.year, SUM(value) AS total').
             from('partitioned_flow_quants flow_quants').

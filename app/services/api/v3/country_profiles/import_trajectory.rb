@@ -9,10 +9,7 @@ module Api
         # @option profile_options [String] chart_identifier
         def initialize(node, year, profile_options)
           super(
-            node.context, node, year, {
-              profile_type: :country,
-              chart_identifier: :country_trajectory_import
-            }
+            node.context, node, year, profile_options
           )
         end
 
@@ -38,13 +35,13 @@ module Api
             legend_tooltip: 'Production',
             type: Api::V3::ChartAttribute::LINE,
             style: Api::V3::ChartAttribute::LINE_SOLID_RED,
-            values: get_import_values
+            values: import_values
           }
           lines
         end
 
         # TODO: tmp, this should be import value in $
-        def get_import_values
+        def import_values
           data = Api::V3::FlowQuant.
             select('flows.year, SUM(value) AS total').
             from('partitioned_flow_quants flow_quants').

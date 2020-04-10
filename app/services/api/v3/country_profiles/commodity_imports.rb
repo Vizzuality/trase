@@ -20,7 +20,7 @@ module Api
         def included_columns
           [
             {
-              name: 'World import ranking',
+              name: 'World import ranking'
             },
             {
               name: 'Production',

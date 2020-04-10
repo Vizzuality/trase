@@ -66,7 +66,7 @@ module Api
           path_conditions = @nodes_with_flows.map do |node_with_flows|
             ApplicationRecord.sanitize_sql_for_conditions(
               [
-                "flows.context_id = ? AND flows.path[?] = ?",
+                'flows.context_id = ? AND flows.path[?] = ?',
                 node_with_flows.context_id,
                 node_with_flows.column_position + 1,
                 node_with_flows.id

@@ -8,7 +8,7 @@ module Api
           Api::V3::Profile::ACTOR => '/api/v3/actors',
           Api::V3::Profile::PLACE => '/api/v3/places',
           Api::V3::Profile::COUNTRY => '/api/v3/country_profiles'
-        }
+        }.freeze
 
         # @param chart [Api::V3::Chart]
         # @param chart_params [Hash]
@@ -20,14 +20,14 @@ module Api
         def self.url_options(chart, chart_params, activity)
           profile_type = chart.profile.name
           controller_name = CONTROLLERS_BY_PROFILE_TYPE[profile_type]
-          action_name = chart.identifier.sub(/#{profile_type}_/,'')
+          action_name = chart.identifier.sub(/#{profile_type}_/, '')
           path_params, query_params =
             path_and_query_params(profile_type, activity)
           {controller: controller_name, action: action_name}.
             merge(chart_params.slice(*path_params)).
-            merge({
-              params: chart_params.slice(*query_params)
-            })
+            merge(
+              {params: chart_params.slice(*query_params)}
+            )
         end
 
         def self.path_and_query_params(profile_type, activity)
