@@ -18,7 +18,7 @@ namespace :db do
       country_basic_attributes: 0,
       country_commodity_exports: 1,
       country_trajectory_deforestation: 2,
-      country_indicators_table: 3,
+      country_indicators: 3,
       country_top_consumer_actors: 4,
       country_top_consumer_countries: 5
     }.freeze
@@ -181,7 +181,7 @@ namespace :db do
     end
 
     def populate_sustainability_indicators(profile)
-      identifier = :country_indicators_table
+      identifier = :country_indicators
       position = EXPORTERS_RUNNING_ORDER[identifier]
       title = 'Sustainability indicators in {{year}}'
       parent_country_chart = find_or_create_chart(
@@ -190,7 +190,7 @@ namespace :db do
 
       parent_place_chart = place_chart(
         profile.context_node_type.context.country_id,
-        :place_indicators_table
+        :place_indicators
       )
       return unless parent_place_chart
 

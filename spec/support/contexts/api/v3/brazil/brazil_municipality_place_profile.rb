@@ -163,15 +163,15 @@ shared_context 'api v3 brazil municipality place profile' do
     end
   end
 
-  let!(:api_v3_place_indicators_table) do
+  let!(:api_v3_place_indicators) do
     chart = Api::V3::Chart.where(
       profile_id: api_v3_brazil_municipality_place_profile.id,
-      identifier: :place_indicators_table
+      identifier: :place_indicators
     ).first
     chart || FactoryBot.create(
       :api_v3_chart,
       profile: api_v3_brazil_municipality_place_profile,
-      identifier: :place_indicators_table,
+      identifier: :place_indicators,
       position: 1,
       title: 'Sustainability indicators'
     )
@@ -180,13 +180,13 @@ shared_context 'api v3 brazil municipality place profile' do
   let!(:api_v3_place_environmental_indicators) do
     chart = Api::V3::Chart.where(
       profile_id: api_v3_brazil_municipality_place_profile.id,
-      parent_id: api_v3_place_indicators_table.id,
+      parent_id: api_v3_place_indicators.id,
       identifier: :place_environmental_indicators
     ).first
     chart || FactoryBot.create(
       :api_v3_chart,
       profile: api_v3_brazil_municipality_place_profile,
-      parent: api_v3_place_indicators_table,
+      parent: api_v3_place_indicators,
       identifier: :place_environmental_indicators,
       position: 0,
       title: 'Environmental indicators'
@@ -219,13 +219,13 @@ shared_context 'api v3 brazil municipality place profile' do
   let!(:api_v3_place_socioeconomic_indicators) do
     chart = Api::V3::Chart.where(
       profile_id: api_v3_brazil_municipality_place_profile.id,
-      parent_id: api_v3_place_indicators_table.id,
+      parent_id: api_v3_place_indicators.id,
       identifier: :place_socioeconomic_indicators
     ).first
     chart || FactoryBot.create(
       :api_v3_chart,
       profile: api_v3_brazil_municipality_place_profile,
-      parent: api_v3_place_indicators_table,
+      parent: api_v3_place_indicators,
       identifier: :place_socioeconomic_indicators,
       position: 1,
       title: 'Socio-economic indicators'
@@ -258,13 +258,13 @@ shared_context 'api v3 brazil municipality place profile' do
   let!(:api_v3_place_agricultural_indicators) do
     chart = Api::V3::Chart.where(
       profile_id: api_v3_brazil_municipality_place_profile.id,
-      parent_id: api_v3_place_indicators_table.id,
+      parent_id: api_v3_place_indicators.id,
       identifier: :place_agricultural_indicators
     ).first
     chart || FactoryBot.create(
       :api_v3_chart,
       profile: api_v3_brazil_municipality_place_profile,
-      parent: api_v3_place_indicators_table,
+      parent: api_v3_place_indicators,
       identifier: :place_agricultural_indicators,
       position: 2,
       title: 'Agricultural indicators'
@@ -297,13 +297,13 @@ shared_context 'api v3 brazil municipality place profile' do
   let!(:api_v3_place_territorial_governance) do
     chart = Api::V3::Chart.where(
       profile_id: api_v3_brazil_municipality_place_profile.id,
-      parent_id: api_v3_place_indicators_table.id,
+      parent_id: api_v3_place_indicators.id,
       identifier: :place_territorial_governance
     ).first
     chart || FactoryBot.create(
       :api_v3_chart,
       profile: api_v3_brazil_municipality_place_profile,
-      parent: api_v3_place_indicators_table,
+      parent: api_v3_place_indicators,
       identifier: :place_territorial_governance,
       position: 3,
       title: 'Territorial governance'

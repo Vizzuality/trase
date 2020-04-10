@@ -76,8 +76,8 @@ RSpec.describe Api::V3::Chart, type: :model do
       expect(api_v3_exporter_top_countries.chart_type).to eq(:line_chart_with_map)
     end
 
-    it 'is tabs_table for place_indicators_table' do
-      expect(api_v3_place_indicators_table.chart_type).to eq(:tabs_table)
+    it 'is tabs_table for place_indicators' do
+      expect(api_v3_place_indicators.chart_type).to eq(:tabs_table)
     end
 
     it 'is scatterplot for actor_exporting_companies' do
