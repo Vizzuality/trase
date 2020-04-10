@@ -23,7 +23,7 @@ module Api
             raise ActiveRecord::RecordNotFound.new 'Quant Volume not found'
           end
 
-          initialize_chart_config(:actor, nil, :actor_sustainability_table)
+          initialize_chart_config(:actor, nil, :actor_sustainability)
           unless @chart_config.attributes.any?
             raise ActiveRecord::RecordNotFound.new 'No attributes found'
           end

@@ -11,7 +11,7 @@ module Api
             year,
             {
               profile_type: Api::V3::Profile::PLACE,
-              chart_identifier: :place_indicators_table
+              chart_identifier: :place_indicators
             }
           )
           initialize_state_ranking

@@ -65,14 +65,14 @@ module Api
           @year,
           {
             profile_type: profile_type,
-            chart_identifier: :country_indicators_table
+            chart_identifier: :country_indicators
           }
         ).call
 
         render json: {data: @result}
       end
 
-      def deforestation_trajectory
+      def trajectory_deforestation
         @result = Api::V3::CountryProfiles::DeforestationTrajectory.new(
           @node, @year,
           {
@@ -84,7 +84,7 @@ module Api
         render json: {data: @result}
       end
 
-      def import_trajectory
+      def trajectory_import
         @result = Api::V3::CountryProfiles::ImportTrajectory.new(
           @node, @year,
           {

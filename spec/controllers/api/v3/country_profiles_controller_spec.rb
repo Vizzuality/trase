@@ -72,7 +72,7 @@ RSpec.describe Api::V3::CountryProfilesController, type: :controller do
         }
 
         it 'is not found' do
-          get :deforestation_trajectory, params: valid_params
+          get :trajectory_deforestation, params: valid_params
           expect(response).to have_http_status(404)
         end
       end
@@ -174,7 +174,7 @@ RSpec.describe Api::V3::CountryProfilesController, type: :controller do
         }
 
         it 'is not found' do
-          get :import_trajectory, params: valid_params
+          get :trajectory_import, params: valid_params
           expect(response).to have_http_status(404)
         end
       end
