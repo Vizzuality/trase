@@ -40,8 +40,39 @@ module Api
                 presence: true, uniqueness: {scope: [:profile_id, :parent_id]}
       validate :parent_is_in_same_profile
       validate :parent_is_root
+      validate :identifier_is_supported
 
       after_commit :refresh_dependents
+
+      ACTOR_CHARTS = %w(
+        actor_basic_attributes
+        actor_top_countries
+        actor_top_sources
+        actor_sustainability
+        actor_exporting_companies
+      ).freeze
+      PLACE_CHARTS = %w(
+        place_basic_attributes
+        place_indicators
+        place_trajectory_deforestation
+        place_top_consumer_actors
+        place_top_consumer_countries
+      ).freeze
+      EXPORTER_COUNTRY_CHARTS = %w(
+        country_basic_attributes
+        country_commodity_exports
+        country_trajectory_deforestation
+        country_indicators
+        country_top_consumer_actors
+        country_top_consumer_countries
+      ).freeze
+      IMPORTER_COUNTRY_CHARTS = %w(
+        country_basic_attributes
+        country_commodity_imports
+        country_trajectory_import
+        country_top_consumer_actors
+        country_top_consumer_countries
+      ).freeze
 
       def chart_type
         case identifier
@@ -156,6 +187,28 @@ module Api
         return if parent.nil? || parent.parent.nil?
 
         errors.add(:parent, 'cannot be a nested chart')
+      end
+
+      def identifier_is_supported
+        return unless profile.present? && parent.nil?
+
+        profile_type = profile.name
+        supported_identifiers =
+          case profile_type
+          when Api::V3::Profile::ACTOR
+            ACTOR_CHARTS
+          when Api::V3::Profile::PLACE
+            PLACE_CHARTS
+          when Api::V3::Profile::COUNTRY
+            (EXPORTER_COUNTRY_CHARTS + IMPORTER_COUNTRY_CHARTS).uniq
+          end
+
+        return if supported_identifiers.include?(identifier)
+
+        errors.add(
+          :identifier,
+          "not supported, select one of: #{supported_identifiers.join(', ')}"
+        )
       end
     end
   end
