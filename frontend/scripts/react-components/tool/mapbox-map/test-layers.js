@@ -5,30 +5,20 @@ export default [
     },
     id: 'brazil_municipalities',
     name: 'brazil_municipalities',
-    type: 'vector',
+    type: 'geojson',
     source: {
-      type: 'vector',
+      type: 'geojson',
+      data: "https://p2cs-sei.carto.com/api/v2/sql?q=SELECT%20cartodb_id,%20the_geom,%20the_geom_webmercator,%20name,%20geoid%20FROM%20brazil_municipalities&format=geojson",
       promoteId: 'cartodb_id',
       provider: {
         type: 'carto',
-        account: 'p2cs-sei',
-        layers: [
-          {
-            options: {
-              cartocss: '#layer {  polygon-opacity: 1.0; polygon-fill: #704489 }',
-              cartocss_version: '2.3.0',
-              sql: 'SELECT cartodb_id, the_geom_webmercator, name, geoid FROM brazil_municipalities'
-            },
-            type: 'mapnik'
-          }
-        ]
+        account: 'p2cs-sei'
       }
     },
     render: {
       layers: [
         {
           type: 'fill',
-          'source-layer': 'layer0',
           featureState: {},
           paint: {
             'fill-color': '#5ca2d1',
@@ -41,7 +31,6 @@ export default [
         },
         {
           type: 'line',
-          'source-layer': 'layer0',
           paint: {
             'line-color': '#000000',
             'line-opacity': 0.1
