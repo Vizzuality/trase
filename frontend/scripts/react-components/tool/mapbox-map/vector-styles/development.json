@@ -1,0 +1,91 @@
+[
+  {
+    "name": "brazil_biomes",
+    "layers": [
+      {
+        "id": "brazil_biomes",
+        "version": 0.1,
+        "type": "vector",
+        "source": {
+        "type": "vector",
+        "provider": {
+          "type": "carto",
+          "account": "p2cs-sei",
+          "layers": [
+            {
+              "options": {
+                "sql": "SELECT * FROM brazil_biomes"
+              }
+            }
+          ]
+        }
+      },
+      "render": {
+        "layers": [{
+          "source-layer": "layer0",
+          "type": "line",
+          "paint": {
+            "line-color": "#000",
+            "line-width": 1,
+            "line-opacity": 1
+          }
+        }]
+      }
+    },
+    {
+      "id": "brazil_biomes-labels",
+      "version": 0.1,
+      "type": "geojson",
+      "source": {
+        "type": "geojson",
+        "data": "https://p2cs-sei.carto.com/api/v2/sql?q=SELECT%20ST_Centroid(the_geom)%20as%20the_geom_webmercator,%20ST_Centroid(the_geom)%20as%20the_geom,%20cartodb_id,%20name%20FROM%20brazil_biomes&format=geojson"
+      },
+      "render": {
+        "layers": [
+          {
+            "type": "symbol",
+            "filter": [
+              "all",
+              [
+                "!=",
+                ["get", "name"],
+                "MATA ATLANTICA"
+              ]
+            ],
+            "layout": {
+              "text-size": 12,
+              "text-field": "{name}",
+              "text-letter-spacing": 0.3,
+              "text-allow-overlap": true
+            },
+            "metadata": {
+              "position": "top"
+            }
+          },
+          {
+            "type": "symbol",
+            "filter": [
+              "all",
+              [
+                "==",
+                ["get","name"],
+                "MATA ATLANTICA"
+              ]
+            ],
+            "layout": {
+              "text-size": 12,
+              "text-field": "{name}",
+              "text-letter-spacing": 0.3,
+              "text-allow-overlap": true,
+              "text-offset": [-5, -82]
+            },
+            "metadata": {
+              "position": "top"
+            }
+          }
+        ]
+      }
+    }
+  ]
+  }
+]
