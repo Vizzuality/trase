@@ -9,7 +9,7 @@ import { TOOL_LAYOUT, BASEMAPS } from 'constants';
 import Basemaps from 'react-components/tool/basemaps';
 import Legend from 'react-components/tool/legend';
 // import activeLayers from './test-layers';
-import developmentLayers from './vector-styles/development.json';
+import getDevelopmentLayers from './vector-styles/development';
 import { providers } from './mapbox-map.config';
 
 import 'react-components/tool/mapbox-map/mapbox-map.scss';
@@ -40,9 +40,9 @@ function MapBoxMap(props) {
       // TODO: implement multi-year support
       const { cartoLayers, identifier } = layerData;
       const cartoData = cartoLayers[0];
-
+      const developmentLayers = getDevelopmentLayers();
       if (cartoData.rasterUrl) {
-        const url = `${cartoData.rasterUrl}{z}/{x}/{y}.mvt`;
+        const url = `${cartoData.rasterUrl}{z}/{x}/{y}.png`;
         layers.push({
           id: identifier,
           type: 'raster',
@@ -53,9 +53,9 @@ function MapBoxMap(props) {
           }
         });
       } else {
-        const layerStyle = developmentLayers.find(l => l.name === identifier);
+        const layerStyle = developmentLayers[identifier];
         if (layerStyle) {
-          layers = layers.concat(layerStyle.layers);
+          layers = layers.concat(layerStyle);
         }
       }
     });

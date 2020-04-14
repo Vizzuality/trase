@@ -124,7 +124,7 @@ export const ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST = ['included_years', 'bucket
 export const LINE_LABEL_HEIGHT = 12;
 
 // map
-export const CARTO_BASE_URL = 'https://p2cs-sei.carto.com/api/v1/map/';
+export const CARTO_BASE_URL = 'https://p2cs-sei.carto.com/api/v2';
 export const CARTO_NAMED_MAPS_BASE_URL = 'https://p2cs-sei.carto.com/api/v1/map/named/';
 export const YEARS_DISABLED_WARNINGS = {
   NO_AGGR_REASON: "can't be displayed over multiple years.",
