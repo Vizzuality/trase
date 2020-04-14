@@ -216,7 +216,6 @@ const toolLinksReducer = {
   },
 
   [TOOL_LINKS__SELECT_COLUMN](state, action) {
-    // This is failing when we change a columns and we have 5 columns
     return immer(state, draft => {
       const { extraColumn, data, extraColumnNodeId, selectedNodesIds, selectedColumnsIds } = state;
       const { columnId, columnIndex } = action.payload;
@@ -233,7 +232,6 @@ const toolLinksReducer = {
       };
 
       // COLUMN CHANGES
-
       const extraColumnParentColumnPosition =
         extraColumn && data.columns[extraColumn.parentId].group;
 
@@ -244,7 +242,7 @@ const toolLinksReducer = {
           ? columnIndex + 1
           : columnIndex;
 
-      if (selectedColumnsIds && !selectedColumnsIds.includes(columnId)) {
+      if (!selectedColumnsIds || !selectedColumnsIds.includes(columnId)) {
         draft.selectedColumnsIds[correctedIndex] = columnId;
       }
 
