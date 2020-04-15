@@ -1,0 +1,30 @@
+
+@import 'styles/settings';
+
+.map-warnings {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  padding: 10px;
+  line-height: 1.35;
+  background: $charcoal-grey-faded;
+  color: $white;
+  font-family: $font-family-2;
+  font-size: $font-size-regular;
+  transform: translateY(-100%);
+  transition: transform 300ms;
+  z-index: $z-above-veil-below-nav;
+
+  svg {
+    font-size: $font-size-xx-regular;
+  }
+
+  &.-visible {
+    transform: translateY(0);
+  }
+
+  .warning-wrapper {
+    margin-left: auto;
+    width: calc(100% - #{32px + 7px});
+  }
+}
