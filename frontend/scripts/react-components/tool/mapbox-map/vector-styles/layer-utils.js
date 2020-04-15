@@ -1,24 +1,45 @@
 import { CARTO_BASE_URL } from 'constants';
+import castArray from 'lodash/castArray';
 
-const getFilter = (condition, name, value) => ['all', [condition, ['get', name], value]];
+const getFilter = (condition, name, value) => {
+  const filter = ['all'];
+  castArray(value).forEach(v => {
+    filter.push([condition, ['get', name], v]);
+  });
+  return filter;
+};
 
 export const conditionalRenderLayers = ({
   type,
-  options,
+  zooms,
   metadata,
   name,
   baseLayout = {},
-  basePaint = {}
-}) =>
-  options.map(o => ({
-    type,
-    filter: getFilter(o.condition, name, o.value),
-    layout: { ...baseLayout, ...o.layout },
-    paint: { ...basePaint, ...o.paint },
-    metadata
-  }));
+  basePaint = {},
+}) => (zooms.flatMap(z => {
+    if (z.filters) {
+      return z.filters.map(o => ({
+        minzoom: z.minZoom,
+        maxzoom: z.maxZoom,
+        type,
+        filter: getFilter(o.condition, o.name || name, o.value),
+        layout: { ...baseLayout, ...z.layout, ...o.layout },
+        paint: { ...basePaint, ...z.paint, ...o.paint },
+        metadata
+      }));
+    }
+    return ({
+      type,
+      layout: { ...baseLayout, ...z.layout },
+      paint: { ...basePaint, ...z.paint },
+      metadata,
+      minzoom: z.minZoom,
+      maxzoom: z.maxZoom,
+    });
+  })
+);
 
-export const layer = ({ name, type, provider, sql, renderLayers, id }) => {
+export const layer = ({ name, type, provider, sql, renderLayers, id, variables=['name'] }) => {
   const baseLayer = {
     id: name,
     version: '0.0.1',
@@ -29,9 +50,10 @@ export const layer = ({ name, type, provider, sql, renderLayers, id }) => {
   };
 
   if (type === 'geojson') {
+    const fetchedVariables = variables.join(', ');
     baseLayer.source = {
       ...baseLayer.source,
-      data: `${CARTO_BASE_URL}/sql?q=SELECT ST_Centroid(the_geom) as the_geom_webmercator, ST_Centroid(the_geom) as the_geom, cartodb_id, name FROM ${id}&format=geojson`
+      data: `${CARTO_BASE_URL}/sql?q=SELECT ST_Centroid(the_geom) as the_geom_webmercator, ST_Centroid(the_geom) as the_geom, cartodb_id, ${fetchedVariables} FROM ${id}&format=geojson`
     };
   }
   if (provider === 'carto') {
@@ -51,11 +73,7 @@ export const layer = ({ name, type, provider, sql, renderLayers, id }) => {
   baseLayer.render = {
     layers: renderLayers.map(l => ({
       ...sourceLayer,
-      type: l.type,
-      paint: l.paint,
-      layout: l.layout,
-      filter: l.filter,
-      metadata: l.metadata
+      ...l
     }))
   };
   return baseLayer;
