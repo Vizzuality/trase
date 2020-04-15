@@ -1,0 +1,3 @@
+eq_factor_group_id,commodity_equivalence_group,is_default,com_id,commodity,hs6_codes,parent_com_id,parent_commodity,node_id,location,year_start,year_end,eq_factor,eq_factor_id,com_eq_ref_id,commodity_equivalence_reference
+33,BEEF,t,46,BEEF,"{020110,020120,020210,020220}",46,BEEF,1,WORLD,,,1,87,1,SELF
+33,BEEF,t,65,BEEF BONELESS,"{020130,020230}",46,BEEF,1,WORLD,,,1.372560001,89,23,DRY MATTER
