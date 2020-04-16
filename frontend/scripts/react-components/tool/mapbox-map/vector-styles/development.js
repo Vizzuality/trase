@@ -244,7 +244,605 @@ const getDevelopmentLayers = () => ({
         }
       ]
     })
+  ],
+  paraguay_ecoregions_2018_11_14: [
+    layer({
+      name: 'paraguay_ecoregions_2018_11_14',
+      type: 'vector',
+      provider: 'carto',
+      sql: 'SELECT * FROM paraguay_ecoregions_2018_11_14',
+      renderLayers: [
+        {
+          type: 'line',
+          paint: {
+            'line-color': '#000',
+            'line-width': 1,
+            'line-opacity': 1
+          }
+        }
+      ]
+    }),
+    layer({
+      name: 'paraguay_ecoregions_2018_11_14-labels',
+      id: 'paraguay_ecoregions_2018_11_14',
+      type: 'geojson',
+      variables: ['simple_name'],
+      renderLayers: conditionalRenderLayers({
+        type: 'symbol',
+        name: 'simple_name',
+        baseLayout: {
+          'text-letter-spacing': 0.3,
+          'text-allow-overlap': true,
+          'text-field': '{simple_name}'
+        },
+        zooms: [
+          {
+            minZoom: 4,
+            maxZoom: 5,
+            layout: {
+              'text-size': 15
+            }
+          },
+          {
+            minZoom: 5,
+            layout: {
+              'text-size': 11
+            }
+          }
+        ],
+        metadata: {
+          position: 'top'
+        }
+      })
+    })
+  ],
+  paraguay_protected_areas_2018_11_14: [
+    layer({
+      name: 'paraguay_protected_areas_2018_11_14',
+      type: 'vector',
+      provider: 'carto',
+      sql: 'SELECT * FROM paraguay_protected_areas_2018_11_14',
+      renderLayers: [
+        {
+          type: 'fill',
+          paint: {
+            'fill-color': '#B4D84F',
+            'fill-opacity': 0.5
+          },
+          metadata: {
+            position: 'top'
+          }
+        },
+        {
+          type: 'line',
+          paint: {
+            'line-color': '#B4D84F',
+            'line-width': 1,
+            'line-opacity': 1
+          },
+          metadata: {
+            position: 'top'
+          }
+        }
+      ]
+    })
+  ],
+  paraguay_indigenous_areas_2018_11_14: [
+    layer({
+      name: 'paraguay_indigenous_areas_2018_11_14',
+      type: 'vector',
+      provider: 'carto',
+      sql: 'SELECT * FROM paraguay_indigenous_areas_2018_11_14',
+      renderLayers: [
+        {
+          type: 'fill',
+          paint: {
+            'fill-color': '#ECC35F',
+            'fill-opacity': 0.5
+          },
+          metadata: {
+            position: 'top'
+          }
+        },
+        {
+          type: 'line',
+          paint: {
+            'line-color': '#ECC35F',
+            'line-width': 1,
+            'line-opacity': 1
+          },
+          metadata: {
+            position: 'top'
+          }
+        }
+      ]
+    })
+  ],
+  // FIX: Not showing colors
+  py_deforestation_2013_2017_20190131: [
+    layer({
+      name: 'py_deforestation_2013_2017_20190131',
+      type: 'vector',
+      provider: 'carto',
+      sql: 'SELECT * FROM py_deforestation_2013_2017_20190131',
+      renderLayers: [
+        {
+          type: 'fill',
+          paint: {
+            'fill-opacity': 1
+          },
+          metadata: {
+            position: 'top'
+          },
+          name: 'year',
+          zooms: [
+            {
+              minZoom: 2,
+              filters: [
+                {
+                  condition: '==',
+                  name: 'year',
+                  value: '2013',
+                  paint: { 'fill-color': '#ecda9a' }
+                },
+                {
+                  condition: '==',
+                  name: 'year',
+                  value: '2014',
+                  paint: { 'fill-color': '#f1b973' }
+                },
+                {
+                  condition: '==',
+                  name: 'year',
+                  value: '2015',
+                  paint: { 'fill-color': '#f7945d' }
+                },
+                {
+                  condition: '==',
+                  name: 'year',
+                  value: '2016',
+                  paint: { 'fill-color': '#f86f56' }
+                },
+                { condition: '==', name: 'year', value: '2017', paint: { 'fill-color': '#ee4d5a' } }
+              ]
+            }
+          ]
+        },
+        {
+          type: 'line',
+          paint: {
+            'line-width': 0.2,
+            'line-opacity': 1
+          },
+          name: 'year',
+          zooms: [
+            {
+              minZoom: 2,
+              filters: [
+                {
+                  condition: '==',
+                  name: 'year',
+                  value: '2013',
+                  paint: { 'line-color': '#ecda9a' }
+                },
+                {
+                  condition: '==',
+                  name: 'year',
+                  value: '2014',
+                  paint: { 'line-color': '#f1b973' }
+                },
+                {
+                  condition: '==',
+                  name: 'year',
+                  value: '2015',
+                  paint: { 'line-color': '#f7945d' }
+                },
+                {
+                  condition: '==',
+                  name: 'year',
+                  value: '2016',
+                  paint: { 'line-color': '#f86f56' }
+                },
+                { condition: '==', name: 'year', value: '2017', paint: { 'line-color': '#ee4d5a' } }
+              ]
+            }
+          ],
+          metadata: {
+            position: 'top'
+          }
+        }
+      ]
+    })
+  ],
+  colombia_regional_autonomous_corps: [
+    layer({
+      name: 'colombia_regional_autonomous_corps',
+      type: 'vector',
+      provider: 'carto',
+      sql: 'SELECT * FROM colombia_regional_autonomous_corps',
+      renderLayers: [
+        {
+          type: 'line',
+          paint: {
+            'line-color': '#000000',
+            'line-width': 1,
+            'line-opacity': 1
+          },
+          metadata: {
+            position: 'top'
+          }
+        }
+      ]
+    }),
+    layer({
+      name: 'colombia_regional_autonomous_corps-labels',
+      id: 'colombia_regional_autonomous_corps',
+      type: 'geojson',
+      variables: ['label'],
+      renderLayers: conditionalRenderLayers({
+        type: 'symbol',
+        name: 'label',
+        baseLayout: {
+          'text-allow-overlap': true
+        },
+        zooms: [
+          {
+            minZoom: 6,
+            layout: {
+              'text-field': '{label}',
+              'text-size': 12
+            }
+          }
+        ],
+        metadata: {
+          position: 'top'
+        }
+      })
+    })
+  ],
+  colombia_protected_areas: [
+    layer({
+      name: 'colombia_protected_areas',
+      type: 'vector',
+      provider: 'carto',
+      sql: 'SELECT * FROM colombia_protected_areas',
+      renderLayers: [
+        {
+          type: 'fill',
+          paint: {
+            'fill-color': '#B4D84F',
+            'fill-opacity': 0.5
+          },
+          metadata: {
+            position: 'top'
+          }
+        },
+        {
+          type: 'line',
+          paint: {
+            'line-color': '#B4D84F',
+            'line-width': 1,
+            'line-opacity': 1
+          },
+          metadata: {
+            position: 'top'
+          }
+        }
+      ]
+    })
+  ],
+  ar_province_mainland_20191122: [
+    layer({
+      name: 'ar_province_mainland_20191122',
+      type: 'vector',
+      provider: 'carto',
+      sql: 'SELECT * FROM ar_province_mainland_20191122',
+      renderLayers: [
+        {
+          type: 'line',
+          paint: {
+            'line-color': '#000000',
+            'line-width': 1,
+            'line-opacity': 1
+          },
+          metadata: {
+            position: 'top'
+          }
+        }
+      ]
+    }),
+    layer({
+      name: 'ar_province_mainland_20191122-labels',
+      id: 'ar_province_mainland_20191122',
+      type: 'geojson',
+      variables: ['prov_name'],
+      renderLayers: conditionalRenderLayers({
+        type: 'symbol',
+        name: 'prov_name',
+        baseLayout: {
+          'text-allow-overlap': false
+        },
+        zooms: [
+          {
+            minZoom: 3,
+            layout: {
+              'text-field': '{prov_name}',
+              'text-size': 10
+            }
+          }
+        ],
+        metadata: {
+          position: 'top'
+        }
+      })
+    })
+  ],
+  ar_biomes_20191113: [
+    layer({
+      name: 'ar_biomes_20191113',
+      type: 'vector',
+      provider: 'carto',
+      sql: 'SELECT * FROM ar_biomes_20191113',
+      renderLayers: [
+        {
+          type: 'line',
+          paint: {
+            'line-color': '#000000',
+            'line-width': 0.5,
+            'line-opacity': 1
+          },
+          metadata: {
+            position: 'top'
+          }
+        }
+      ]
+    }),
+    // FIX: Showing several levels of labels
+    layer({
+      name: 'ar_biomes_20191113-labels',
+      id: 'ar_biomes_20191113',
+      type: 'geojson',
+      variables: ['biome_name'],
+      renderLayers: conditionalRenderLayers({
+        type: 'symbol',
+        name: 'biome_name',
+        baseLayout: {
+          'text-letter-spacing': 0.3,
+          'text-size': 10
+        },
+        zooms: [
+          {
+            minZoom: 3,
+            maxZoom: 5,
+            filters: [
+              { condition: '!=', value: ['CAMPOS Y MALEZALES', 'CHACO HUMEDO', 'ALTOS ANDES'] },
+              { condition: '==', value: 'CAMPOS Y MALEZALES', layout: { 'text-offset': [0, 2] } },
+              { condition: '==', value: 'CHACO HUMEDO', layout: { 'text-offset': [0, -2] } },
+              { condition: '==', value: 'ALTOS ANDES', layout: { 'text-offset': [0, 2] } }
+            ],
+            layout: {
+              'text-size': 8,
+              'text-field': '{biome_name}'
+            }
+          },
+          {
+            minZoom: 5,
+            layout: {
+              'text-size': 10,
+              'text-field': '{biome_name}'
+            }
+          }
+        ],
+        metadata: {
+          position: 'top'
+        }
+      })
+    })
+  ],
+  // FIX: Permission denied
+  argentina_protected_areas_20191117: [
+    layer({
+      name: 'argentina_protected_areas_20191117',
+      type: 'vector',
+      provider: 'carto',
+      sql: 'SELECT * FROM "p2cs-sei".argentina_protected_areas_20191117',
+      renderLayers: conditionalRenderLayers({
+        type: 'fill',
+        basePaint: {
+          'fill-color': '#4575b4',
+          'fill-opacity': 0.5
+        },
+        name: 'type',
+        zooms: [
+          {
+            minZoom: 2,
+            filters: [
+              {
+                condition: '!=',
+                value: [
+                  'National Protected Areas',
+                  'National Defense Reservers',
+                  'Ramsar',
+                  'Natural World Heritage Sites',
+                  'Provincial Protected Areas',
+                  'Biosphere Reserves'
+                ],
+                paint: { 'fill-color': '#b3de69' }
+              },
+              {
+                condition: '==',
+                value: 'National Protected Areas',
+                paint: { 'fill-color': '#8dd3c7' }
+              },
+              {
+                condition: '==',
+                value: 'National Defense Reservers',
+                paint: { 'fill-color': '#ffffb3' }
+              },
+              { condition: '==', value: 'Ramsar', paint: { 'fill-color': '#bebada' } },
+              {
+                condition: '==',
+                value: 'Natural World Heritage Sites',
+                paint: { 'fill-color': '#fb8072' }
+              },
+              {
+                condition: '==',
+                value: 'Provincial Protected Areas',
+                paint: { 'fill-color': '#80b1d3' }
+              },
+              { condition: '==', value: 'Biosphere Reserves', paint: { 'fill-color': '#fdb462' } }
+            ]
+          }
+        ],
+        metadata: {
+          position: 'top'
+        }
+      })
+    })
+  ],
+  // FIX: Not showing colors
+  argentina_deforestation_2015_2017_20191128: [
+    layer({
+      name: 'argentina_deforestation_2015_2017_20191128',
+      type: 'vector',
+      provider: 'carto',
+      variables: ['year'],
+      sql: 'SELECT * FROM argentina_deforestation_2015_2017_20191128',
+      renderLayers: [
+        {
+          type: 'fill',
+          paint: {
+            'fill-opacity': 1,
+            'fill-color': '#4575b4'
+          },
+          metadata: {
+            position: 'top'
+          },
+          name: 'year',
+          zooms: [
+            {
+              minZoom: 2,
+              filters: [
+                {
+                  condition: '==',
+                  name: 'year',
+                  value: '2015',
+                  paint: { 'fill-color': '#f7945d' }
+                },
+                {
+                  condition: '==',
+                  name: 'year',
+                  value: '2016',
+                  paint: { 'fill-color': '#f86f56' }
+                },
+                { condition: '==', name: 'year', value: '2017', paint: { 'fill-color': '#ee4d5a' } }
+              ]
+            }
+          ]
+        },
+        {
+          type: 'line',
+          paint: {
+            'line-width': 0.2,
+            'line-opacity': 1
+          },
+          name: 'year',
+          zooms: [
+            {
+              minZoom: 2,
+              filters: [
+                {
+                  condition: '==',
+                  name: 'year',
+                  value: '2015',
+                  paint: { 'line-color': '#f7945d' }
+                },
+                {
+                  condition: '==',
+                  name: 'year',
+                  value: '2016',
+                  paint: { 'line-color': '#f86f56' }
+                },
+                { condition: '==', name: 'year', value: '2017', paint: { 'line-color': '#ee4d5a' } }
+              ]
+            }
+          ],
+          metadata: {
+            position: 'top'
+          }
+        }
+      ]
+    })
+  ],
+  id_provinces: [
+    layer({
+      name: 'id_provinces',
+      type: 'vector',
+      provider: 'carto',
+      sql: 'SELECT * FROM indonesia_provinces_boundaries_20190614',
+      renderLayers: [
+        {
+          type: 'line',
+          paint: {
+            'line-color': '#000',
+            'line-width': 1,
+            'line-opacity': 1
+          }
+        }
+      ]
+    }),
+    layer({
+      name: 'id_provinces-labels',
+      id: 'indonesia_provinces_boundaries_20190614',
+      type: 'geojson',
+      variables: ['prov'],
+      renderLayers: conditionalRenderLayers({
+        type: 'symbol',
+        name: 'prov',
+        baseLayout: {
+          'text-size': 12,
+          'text-allow-overlap': true
+        },
+        zooms: [
+          {
+            minZoom: 4,
+            layout: {
+              'text-field': '{prov}'
+            },
+            filters: [
+              {
+                condition: '!=',
+                value: [
+                  'SULAWESI UTARA',
+                  'BENGKULU',
+                  'SULAWESI TENGGARA',
+                  'BANTEN',
+                  'JAWA TIMUR',
+                  'NUSA TENGGARA BARAT',
+                  'NUSA TENGGARA TIMUR'
+                ]
+              },
+              { condition: '==', value: ['SULAWESI UTARA'], layout: { 'text-offset': [0, -2] } },
+              { condition: '==', value: ['BENGKULU'], layout: { 'text-offset': [0, 2] } },
+              { condition: '==', value: ['SULAWESI UTARA'], layout: { 'text-offset': [0, 2] } },
+              { condition: '==', value: ['BANTEN'], layout: { 'text-offset': [0, 2] } },
+              { condition: '==', value: ['JAWA TIMUR'], layout: { 'text-offset': [0, -2] } },
+              {
+                condition: '==',
+                value: ['NUSA TENGGARA BARAT'],
+                layout: { 'text-offset': [0, 2] }
+              },
+              { condition: '==', value: ['NUSA TENGGARA TIMUR'], layout: { 'text-offset': [0, 1] } }
+            ]
+          }
+        ],
+        metadata: {
+          position: 'top'
+        }
+      })
+    })
   ]
 });
+
 
 export default getDevelopmentLayers;
