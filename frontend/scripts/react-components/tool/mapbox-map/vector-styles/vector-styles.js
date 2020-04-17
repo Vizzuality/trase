@@ -645,7 +645,7 @@ const getDevelopmentLayers = () => ({
       name: 'argentina_protected_areas_20191117',
       type: 'vector',
       provider: 'carto',
-      sql: 'SELECT * FROM "p2cs-sei".argentina_protected_areas_20191117',
+      sql: 'SELECT * FROM argentina_protected_areas_20191117',
       renderLayers: conditionalRenderLayers({
         type: 'fill',
         basePaint: {

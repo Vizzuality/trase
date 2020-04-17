@@ -13,7 +13,7 @@ import Legend from 'react-components/tool/legend';
 import { easeCubic } from 'd3-ease';
 // import activeLayers from './test-layers';
 import Warnings from './mapbox-map-warnings';
-import getDevelopmentLayers from './vector-styles/development';
+import getContextualVectorStyles from './vector-styles/vector-styles';
 import 'react-components/tool/mapbox-map/mapbox-map.scss';
 
 function MapBoxMap(props) {
@@ -38,13 +38,14 @@ function MapBoxMap(props) {
       ...updatedViewport
     });
   };
+
   useEffect(() => {
-    if (!viewport.zoom) {
-      updateViewport(defaultMapView);
-    }
-    return undefined;
+    setViewport({
+      ...viewport,
+      ...defaultMapView
+    });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultMapView, updateViewport]);
+  }, [defaultMapView]);
 
   // const fitBounds = () => {
   //   const { bbox, options } = bounds;
@@ -141,7 +142,7 @@ function MapBoxMap(props) {
       // TODO: implement multi-year support
       const { cartoLayers, identifier } = layerData;
       const cartoData = cartoLayers[0];
-      const developmentLayers = getDevelopmentLayers();
+      const developmentLayers = getContextualVectorStyles();
       if (cartoData.rasterUrl) {
         const url = `${cartoData.rasterUrl}{z}/{x}/{y}.png`;
         layers.push({
@@ -150,6 +151,7 @@ function MapBoxMap(props) {
           source: {
             type: 'raster',
             tiles: [url],
+            minZoom: 2,
             maxzoom: 11 // TODO: add this to layer configuration
           }
         });
