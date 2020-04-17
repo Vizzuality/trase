@@ -2,7 +2,7 @@
 
 import { layer, conditionalRenderLayers } from './layer-utils';
 
-export const getRasterLayerTemplate = url => (
+export const getRasterLayerTemplate = (identifier, url) => (
   {
     id: identifier,
     type: 'raster',
