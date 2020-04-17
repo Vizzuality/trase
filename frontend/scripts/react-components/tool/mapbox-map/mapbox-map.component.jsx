@@ -11,9 +11,9 @@ import Legend from 'react-components/tool/legend';
 // import WebMercatorViewport from 'viewport-mercator-project';
 // import isEmpty from 'lodash/isEmpty';
 import { easeCubic } from 'd3-ease';
-// import activeLayers from './test-layers';
+import activeLayers from './test-layers';
 import Warnings from './mapbox-map-warnings';
-import getContextualVectorStyles from './vector-styles/vector-styles';
+import { getContextualLayersTemplates } from './contextual-layers/contextual-layers';
 import 'react-components/tool/mapbox-map/mapbox-map.scss';
 
 function MapBoxMap(props) {
@@ -136,18 +136,59 @@ function MapBoxMap(props) {
     }
   }, [loaded]);
 
+  const baseLayerInfo = BASEMAPS[basemapId];
+  const baseLayer = {
+    id: baseLayerInfo.id,
+    type: 'raster',
+    source: {
+      type: 'raster',
+      tiles: [baseLayerInfo.url],
+      minzoom: 2,
+      maxzoom: 12
+    }
+  };
+
+  // z-index from 1-100
+  const layerOrder = {
+    brazil_biomes: 100,
+    'brazil_biomes-labels': 100,
+    ar_biomes_20191113: 100,
+    'ar_biomes_20191113-labels': 100,
+    colombia_regional_autonomous_corps: 100,
+    'colombia_regional_autonomous_corps-labels': 100,
+    brazil_states: 99,
+    'brazil_states-labels': 90,
+    ar_province_mainland_20191122: 99,
+    'ar_province_mainland_20191122-labels': 99,
+    brazil_protected: 50,
+    argentina_protected_areas_20191117: 50,
+    colombia_protected_areas: 50,
+    paraguay_protected_areas_2018_11_14: 50,
+    brazil_defor_alerts: 50,
+    py_deforestation_2013_2017_20190131: 50,
+    argentina_deforestation_2015_2017_20191128: 50,
+    paraguay_ecoregions_2018_11_14: 50,
+    'paraguay_ecoregions_2018_11_14-labels': 50,
+    paraguay_indigenous_areas_2018_11_14: 40,
+    brazil_indigenous_areas: 40,
+    brazil_water_scarcity: 10,
+    test: 9,
+    [baseLayerInfo.id]: 1
+  };
+
   const getContextualLayers = () => {
     let layers = [];
     selectedMapContextualLayersData.forEach((layerData) => {
       // TODO: implement multi-year support
       const { cartoLayers, identifier } = layerData;
       const cartoData = cartoLayers[0];
-      const developmentLayers = getContextualVectorStyles();
+      const developmentLayers = getContextualLayersTemplates();
       if (cartoData.rasterUrl) {
         const url = `${cartoData.rasterUrl}{z}/{x}/{y}.png`;
         layers.push({
           id: identifier,
           type: 'raster',
+          version: '0.0.1',
           source: {
             type: 'raster',
             tiles: [url],
@@ -165,17 +206,10 @@ function MapBoxMap(props) {
     return layers;
   };
 
-  const baseLayerInfo = BASEMAPS[basemapId];
-  const baseLayer = {
-    id: baseLayerInfo.id,
-    type: 'raster',
-    source: {
-      type: 'raster',
-      tiles: [baseLayerInfo.url],
-      minzoom: 2,
-      maxzoom: 12
-    }
-  };
+  const layers = [baseLayer].concat(getContextualLayers())
+    .concat(activeLayers)
+    .map(l => ({ ...l, zIndex: layerOrder[l.id] }));
+
   return (
     <div
       ref={mapContainerRef}
@@ -202,10 +236,7 @@ function MapBoxMap(props) {
         <NavigationControl showCompass={false} className="navigation-control" />
         {loaded && mapRef.current && (
           <LayerManager map={mapRef.current.getMap()} plugin={PluginMapboxGl}>
-            {[]
-              .concat(getContextualLayers())
-              .concat(baseLayer)
-              .map(l => (
+            {layers.map(l => (
                 <Layer key={l.id} {...l} />
               ))}
           </LayerManager>
@@ -217,12 +248,6 @@ function MapBoxMap(props) {
           <Warnings warnings={selectedMapDimensionsWarnings} />
         </>
       )}
-      <div className="c-map-footer">
-        <div className="c-map-legend js-map-legend">
-          <div className="js-map-legend-context c-map-legend-context" />
-          <div className="js-map-legend-choro c-map-legend-choro" />
-        </div>
-      </div>
       <div className="c-map-attribution">
         <span dangerouslySetInnerHTML={{ __html: mapAttribution }} />
       </div>

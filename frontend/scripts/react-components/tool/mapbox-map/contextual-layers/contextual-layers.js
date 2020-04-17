@@ -2,7 +2,7 @@
 
 import { layer, conditionalRenderLayers } from './layer-utils';
 
-const getDevelopmentLayers = () => ({
+export const getContextualLayersTemplates = () => ({
   brazil_states: [
     layer({
       name: 'brazil_states',
@@ -56,10 +56,7 @@ const getDevelopmentLayers = () => ({
               'text-field': '{name}'
             }
           }
-        ],
-        metadata: {
-          position: 'top'
-        }
+        ]
       })
     })
   ],
@@ -99,23 +96,28 @@ const getDevelopmentLayers = () => ({
             maxZoom: 4,
             filters: [
               { condition: '!=', value: 'MATA ATLANTICA' },
-              { condition: '==', value: 'MATA ATLANTICA', layout: { 'text-offset': [-5, -82] } }
+              {
+                condition: '==',
+                value: 'MATA ATLANTICA',
+                layout: { 'text-offset': [-5, -82] }
+              }
             ]
           },
           {
             minZoom: 4,
             filters: [
               { condition: '!=', value: 'MATA ATLANTICA' },
-              { condition: '==', value: 'MATA ATLANTICA', layout: { 'text-offset': [8, -82] } }
+              {
+                condition: '==',
+                value: 'MATA ATLANTICA',
+                layout: { 'text-offset': [8, -82] }
+              }
             ],
             layout: {
               'text-size': 12
             }
           }
-        ],
-        metadata: {
-          position: 'top'
-        }
+        ]
       })
     })
   ],
@@ -145,10 +147,7 @@ const getDevelopmentLayers = () => ({
               { condition: '<=', value: 1, paint: { 'fill-color': '#4575b4' } }
             ]
           }
-        ],
-        metadata: {
-          position: 'top'
-        }
+        ]
       })
     })
   ],
@@ -289,10 +288,7 @@ const getDevelopmentLayers = () => ({
               'text-size': 11
             }
           }
-        ],
-        metadata: {
-          position: 'top'
-        }
+        ]
       })
     })
   ],
@@ -358,18 +354,60 @@ const getDevelopmentLayers = () => ({
       ]
     })
   ],
-  // FIX: Not showing colors
   py_deforestation_2013_2017_20190131: [
     layer({
       name: 'py_deforestation_2013_2017_20190131',
       type: 'vector',
       provider: 'carto',
       sql: 'SELECT * FROM py_deforestation_2013_2017_20190131',
-      renderLayers: [
-        {
-          type: 'fill',
+      renderLayers: conditionalRenderLayers({
+        type: 'fill',
+        paint: {
+          'fill-opacity': 1
+        },
+        name: 'year',
+        zooms: [
+          {
+            minZoom: 2,
+            filters: [
+              {
+                condition: '==',
+                name: 'year',
+                value: 2013,
+                paint: { 'fill-color': '#ecda9a' }
+              },
+              {
+                condition: '==',
+                name: 'year',
+                value: 2014,
+                paint: { 'fill-color': '#f1b973' }
+              },
+              {
+                condition: '==',
+                name: 'year',
+                value: 2015,
+                paint: { 'fill-color': '#f7945d' }
+              },
+              {
+                condition: '==',
+                name: 'year',
+                value: 2016,
+                paint: { 'fill-color': '#f86f56' }
+              },
+              {
+                condition: '==',
+                name: 'year',
+                value: 2017,
+                paint: { 'fill-color': '#ee4d5a' }
+              }
+            ]
+          }
+        ]
+      }).concat(
+        conditionalRenderLayers({
+          type: 'line',
           paint: {
-            'fill-opacity': 1
+            'line-opacity': 1
           },
           metadata: {
             position: 'top'
@@ -382,76 +420,38 @@ const getDevelopmentLayers = () => ({
                 {
                   condition: '==',
                   name: 'year',
-                  value: '2013',
-                  paint: { 'fill-color': '#ecda9a' }
-                },
-                {
-                  condition: '==',
-                  name: 'year',
-                  value: '2014',
-                  paint: { 'fill-color': '#f1b973' }
-                },
-                {
-                  condition: '==',
-                  name: 'year',
-                  value: '2015',
-                  paint: { 'fill-color': '#f7945d' }
-                },
-                {
-                  condition: '==',
-                  name: 'year',
-                  value: '2016',
-                  paint: { 'fill-color': '#f86f56' }
-                },
-                { condition: '==', name: 'year', value: '2017', paint: { 'fill-color': '#ee4d5a' } }
-              ]
-            }
-          ]
-        },
-        {
-          type: 'line',
-          paint: {
-            'line-width': 0.2,
-            'line-opacity': 1
-          },
-          name: 'year',
-          zooms: [
-            {
-              minZoom: 2,
-              filters: [
-                {
-                  condition: '==',
-                  name: 'year',
-                  value: '2013',
+                  value: 2013,
                   paint: { 'line-color': '#ecda9a' }
                 },
                 {
                   condition: '==',
                   name: 'year',
-                  value: '2014',
+                  value: 2014,
                   paint: { 'line-color': '#f1b973' }
                 },
                 {
                   condition: '==',
                   name: 'year',
-                  value: '2015',
+                  value: 2015,
                   paint: { 'line-color': '#f7945d' }
                 },
                 {
                   condition: '==',
                   name: 'year',
-                  value: '2016',
+                  value: 2016,
                   paint: { 'line-color': '#f86f56' }
                 },
-                { condition: '==', name: 'year', value: '2017', paint: { 'line-color': '#ee4d5a' } }
+                {
+                  condition: '==',
+                  name: 'year',
+                  value: 2017,
+                  paint: { 'line-color': '#ee4d5a' }
+                }
               ]
             }
-          ],
-          metadata: {
-            position: 'top'
-          }
-        }
-      ]
+          ]
+        })
+      )
     })
   ],
   colombia_regional_autonomous_corps: [
@@ -493,10 +493,7 @@ const getDevelopmentLayers = () => ({
               'text-size': 12
             }
           }
-        ],
-        metadata: {
-          position: 'top'
-        }
+        ]
       })
     })
   ],
@@ -570,10 +567,7 @@ const getDevelopmentLayers = () => ({
               'text-size': 10
             }
           }
-        ],
-        metadata: {
-          position: 'top'
-        }
+        ]
       })
     })
   ],
@@ -597,7 +591,6 @@ const getDevelopmentLayers = () => ({
         }
       ]
     }),
-    // FIX: Showing several levels of labels
     layer({
       name: 'ar_biomes_20191113-labels',
       id: 'ar_biomes_20191113',
@@ -615,8 +608,15 @@ const getDevelopmentLayers = () => ({
             minZoom: 3,
             maxZoom: 5,
             filters: [
-              { condition: '!=', value: ['CAMPOS Y MALEZALES', 'CHACO HUMEDO', 'ALTOS ANDES'] },
-              { condition: '==', value: 'CAMPOS Y MALEZALES', layout: { 'text-offset': [0, 2] } },
+              {
+                condition: '!=',
+                value: ['CAMPOS Y MALEZALES', 'CHACO HUMEDO', 'ALTOS ANDES']
+              },
+              {
+                condition: '==',
+                value: 'CAMPOS Y MALEZALES',
+                layout: { 'text-offset': [0, 2] }
+              },
               { condition: '==', value: 'CHACO HUMEDO', layout: { 'text-offset': [0, -2] } },
               { condition: '==', value: 'ALTOS ANDES', layout: { 'text-offset': [0, 2] } }
             ],
@@ -632,10 +632,7 @@ const getDevelopmentLayers = () => ({
               'text-field': '{biome_name}'
             }
           }
-        ],
-        metadata: {
-          position: 'top'
-        }
+        ]
       })
     })
   ],
@@ -649,7 +646,6 @@ const getDevelopmentLayers = () => ({
       renderLayers: conditionalRenderLayers({
         type: 'fill',
         basePaint: {
-          'fill-color': '#4575b4',
           'fill-opacity': 0.5
         },
         name: 'type',
@@ -690,17 +686,17 @@ const getDevelopmentLayers = () => ({
                 value: 'Provincial Protected Areas',
                 paint: { 'fill-color': '#80b1d3' }
               },
-              { condition: '==', value: 'Biosphere Reserves', paint: { 'fill-color': '#fdb462' } }
+              {
+                condition: '==',
+                value: 'Biosphere Reserves',
+                paint: { 'fill-color': '#fdb462' }
+              }
             ]
           }
-        ],
-        metadata: {
-          position: 'top'
-        }
+        ]
       })
     })
   ],
-  // FIX: Not showing colors
   argentina_deforestation_2015_2017_20191128: [
     layer({
       name: 'argentina_deforestation_2015_2017_20191128',
@@ -708,12 +704,45 @@ const getDevelopmentLayers = () => ({
       provider: 'carto',
       variables: ['year'],
       sql: 'SELECT * FROM argentina_deforestation_2015_2017_20191128',
-      renderLayers: [
-        {
-          type: 'fill',
+      renderLayers: conditionalRenderLayers({
+        type: 'fill',
+        paint: {
+          'fill-opacity': 1
+        },
+        metadata: {
+          position: 'top'
+        },
+        name: 'year',
+        zooms: [
+          {
+            minZoom: 2,
+            filters: [
+              {
+                condition: '==',
+                name: 'year',
+                value: 2015,
+                paint: { 'fill-color': '#f7945d' }
+              },
+              {
+                condition: '==',
+                name: 'year',
+                value: 2016,
+                paint: { 'fill-color': '#f86f56' }
+              },
+              {
+                condition: '==',
+                name: 'year',
+                value: 2017,
+                paint: { 'fill-color': '#ee4d5a' }
+              }
+            ]
+          }
+        ]
+      }).concat(
+        conditionalRenderLayers({
+          type: 'line',
           paint: {
-            'fill-opacity': 1,
-            'fill-color': '#4575b4'
+            'line-opacity': 1
           },
           metadata: {
             position: 'top'
@@ -726,52 +755,26 @@ const getDevelopmentLayers = () => ({
                 {
                   condition: '==',
                   name: 'year',
-                  value: '2015',
-                  paint: { 'fill-color': '#f7945d' }
-                },
-                {
-                  condition: '==',
-                  name: 'year',
-                  value: '2016',
-                  paint: { 'fill-color': '#f86f56' }
-                },
-                { condition: '==', name: 'year', value: '2017', paint: { 'fill-color': '#ee4d5a' } }
-              ]
-            }
-          ]
-        },
-        {
-          type: 'line',
-          paint: {
-            'line-width': 0.2,
-            'line-opacity': 1
-          },
-          name: 'year',
-          zooms: [
-            {
-              minZoom: 2,
-              filters: [
-                {
-                  condition: '==',
-                  name: 'year',
-                  value: '2015',
+                  value: 2015,
                   paint: { 'line-color': '#f7945d' }
                 },
                 {
                   condition: '==',
                   name: 'year',
-                  value: '2016',
+                  value: 2016,
                   paint: { 'line-color': '#f86f56' }
                 },
-                { condition: '==', name: 'year', value: '2017', paint: { 'line-color': '#ee4d5a' } }
+                {
+                  condition: '==',
+                  name: 'year',
+                  value: 2017,
+                  paint: { 'line-color': '#ee4d5a' }
+                }
               ]
             }
-          ],
-          metadata: {
-            position: 'top'
-          }
-        }
-      ]
+          ]
+        })
+      )
     })
   ],
   id_provinces: [
@@ -822,9 +825,17 @@ const getDevelopmentLayers = () => ({
                   'NUSA TENGGARA TIMUR'
                 ]
               },
-              { condition: '==', value: ['SULAWESI UTARA'], layout: { 'text-offset': [0, -2] } },
+              {
+                condition: '==',
+                value: ['SULAWESI UTARA'],
+                layout: { 'text-offset': [0, -2] }
+              },
               { condition: '==', value: ['BENGKULU'], layout: { 'text-offset': [0, 2] } },
-              { condition: '==', value: ['SULAWESI UTARA'], layout: { 'text-offset': [0, 2] } },
+              {
+                condition: '==',
+                value: ['SULAWESI UTARA'],
+                layout: { 'text-offset': [0, 2] }
+              },
               { condition: '==', value: ['BANTEN'], layout: { 'text-offset': [0, 2] } },
               { condition: '==', value: ['JAWA TIMUR'], layout: { 'text-offset': [0, -2] } },
               {
@@ -832,17 +843,15 @@ const getDevelopmentLayers = () => ({
                 value: ['NUSA TENGGARA BARAT'],
                 layout: { 'text-offset': [0, 2] }
               },
-              { condition: '==', value: ['NUSA TENGGARA TIMUR'], layout: { 'text-offset': [0, 1] } }
+              {
+                condition: '==',
+                value: ['NUSA TENGGARA TIMUR'],
+                layout: { 'text-offset': [0, 1] }
+              }
             ]
           }
-        ],
-        metadata: {
-          position: 'top'
-        }
+        ]
       })
     })
   ]
 });
-
-
-export default getDevelopmentLayers;
