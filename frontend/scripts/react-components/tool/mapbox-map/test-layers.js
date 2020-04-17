@@ -13,14 +13,14 @@ export default [
         {
           type: "fill",
           paint: {
-            "fill-color": "#700",
-            'fill-opacity': 0.5
+            "fill-color": "#fff",
+            'fill-opacity': 1
           }
         },
         {
           type: "line",
           paint: {
-            "line-color": "#0a9",
+            "line-color": "#222",
             "line-width": 1
           }
         }
