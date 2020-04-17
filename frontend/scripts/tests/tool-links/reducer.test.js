@@ -159,7 +159,7 @@ test(TOOL_LINKS__SET_LINKS, () => {
     { id: 1, path: [12, 34, 56] },
     { id: 2, path: [78, 90, 12] }
   ];
-  const linksMeta = { nodeHeights: [{ id: 1, height: 12345.34 }] };
+  const linksMeta = { nodeHeights: [{ id: 1, height: 12345.34 }], otherNodes: [] };
   const action = setToolLinks(links, linksMeta);
   const newState = reducer(initialState, action);
   expect(newState).toEqual({
@@ -167,7 +167,8 @@ test(TOOL_LINKS__SET_LINKS, () => {
     data: {
       ...initialState.data,
       links,
-      nodeHeights: { 1: linksMeta.nodeHeights[0] }
+      nodeHeights: { 1: linksMeta.nodeHeights[0] },
+      otherNodes: {}
     }
   });
 });
