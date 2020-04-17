@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::CountriesWbIndicators::ApiService do
   include FixtureRequestsHelpers
+  include_context 'api v3 brazil beef flows'
 
   context '#population_indicators' do
     before do

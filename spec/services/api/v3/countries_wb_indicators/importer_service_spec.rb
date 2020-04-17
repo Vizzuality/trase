@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::CountriesWbIndicators::ImporterService do
   include FixtureRequestsHelpers
+  include_context 'api v3 brazil beef flows'
 
   context '#import' do
     before :all do
