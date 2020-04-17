@@ -27,7 +27,7 @@ module Api
         end
 
         private_class_method def self.countries_iso
-          node_type = Api::V3::NodeType.find_by(name: 'COUNTRY')
+          node_type = Api::V3::NodeType.find_by(name: NodeTypeName::COUNTRY)
           nodes_country_iso2 = Api::V3::Node.
             select(:geo_id).distinct.
             where(node_type_id: node_type.id).
