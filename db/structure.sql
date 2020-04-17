@@ -9201,6 +9201,36 @@ ALTER SEQUENCE public.top_profiles_id_seq OWNED BY public.top_profiles.id;
 
 
 --
+-- Name: worldbanks; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.worldbanks (
+    id bigint NOT NULL,
+    name text NOT NULL,
+    last_update timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: worldbanks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.worldbanks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: worldbanks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.worldbanks_id_seq OWNED BY public.worldbanks.id;
+
+
+--
 -- Name: ckeditor_assets id; Type: DEFAULT; Schema: content; Owner: -
 --
 
@@ -9758,6 +9788,13 @@ ALTER TABLE ONLY public.top_profile_images ALTER COLUMN id SET DEFAULT nextval('
 --
 
 ALTER TABLE ONLY public.top_profiles ALTER COLUMN id SET DEFAULT nextval('public.top_profiles_id_seq'::regclass);
+
+
+--
+-- Name: worldbanks id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.worldbanks ALTER COLUMN id SET DEFAULT nextval('public.worldbanks_id_seq'::regclass);
 
 
 --
@@ -10963,6 +11000,14 @@ ALTER TABLE ONLY public.top_profile_images
 
 ALTER TABLE ONLY public.top_profiles
     ADD CONSTRAINT top_profiles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: worldbanks worldbanks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.worldbanks
+    ADD CONSTRAINT worldbanks_pkey PRIMARY KEY (id);
 
 
 --
@@ -17078,6 +17123,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200302214104'),
 ('20200317075824'),
 ('20200330120605'),
-('20200331175932');
+('20200331175932'),
+('20200416150928');
 
 
