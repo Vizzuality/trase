@@ -5,7 +5,7 @@ module FixtureRequestsHelpers
     URI(
       "#{ENV['WORLD_BANK_API_URL']}/v2/country/#{iso_code}/indicator/" \
       "#{Api::V3::CountriesWbIndicators::ApiService::INDICATORS[indicator]}" \
-      "?date=#{year_range}format=json&per_page=10000"
+      "?date=#{year_range}&format=json&per_page=10000"
     )
   end
 

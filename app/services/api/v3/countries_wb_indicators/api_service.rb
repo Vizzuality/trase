@@ -10,7 +10,7 @@ module Api
           land_area: 'ag.lnd.totl.k2',
           agricultural_land_area: 'AG.LND.AGRI.K2',
           forested_land_area: 'AG.LND.FRST.K2',
-          human_developement_index: 'UNDP.HDI.XD'
+          human_development_index: 'UNDP.HDI.XD'
         }.freeze
 
         def self.population_indicators(iso_code = 'ALL')
@@ -33,7 +33,7 @@ module Api
           indicator_request(:forested_land_area, iso_code)
         end
 
-        def self.human_developement_index_indicators(iso_code = 'ALL')
+        def self.human_development_index_indicators(iso_code = 'ALL')
           indicator_request(:human_development_index, iso_code)
         end
 
@@ -42,7 +42,7 @@ module Api
             "#{Api::V3::Flow.minimum(:year)}:#{Api::V3::Flow.maximum(:year)}"
           uri = URI(
             "#{ENV['WORLD_BANK_API_URL']}/v2/country/#{iso_code}/indicator/" \
-            "#{INDICATORS[name]}?date=#{year_range}format=json&per_page=10000"
+            "#{INDICATORS[name]}?date=#{year_range}&format=json&per_page=10000"
           )
           response = Net::HTTP.get_response(uri)
 
