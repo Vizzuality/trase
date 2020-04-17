@@ -13,6 +13,14 @@ module Api
         # e.g. {source: :wb, id: 'WB SP.POP.TOTL'}
         def call(iso_code2, year, activity, attribute_ref)
           # TODO: implement
+          if attribute_ref[:source] == :wb
+            return Api::V3::CountriesWbIndicator.find_by(
+              iso_code: iso_code2,
+              year: year,
+              name: attribute_ref[:id]
+            )&.value
+          end
+
           0
         end
       end
