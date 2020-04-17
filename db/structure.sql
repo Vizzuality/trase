@@ -272,6 +272,7 @@ COMMENT ON FUNCTION public.upsert_attributes() IS 'Upserts attributes based on n
 
 SET default_tablespace = '';
 
+SET default_with_oids = false;
 
 --
 -- Name: ckeditor_assets; Type: TABLE; Schema: content; Owner: -
@@ -2388,6 +2389,77 @@ CREATE SEQUENCE public.contextual_layers_id_seq
 --
 
 ALTER SEQUENCE public.contextual_layers_id_seq OWNED BY public.contextual_layers.id;
+
+
+--
+-- Name: countries_com_trade_aggregated_indicators; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.countries_com_trade_aggregated_indicators (
+    quantity double precision,
+    value double precision,
+    quantity_rank integer,
+    value_rank integer,
+    commodity_id integer NOT NULL,
+    year smallint NOT NULL,
+    iso2 text NOT NULL,
+    activity text NOT NULL
+);
+
+
+--
+-- Name: countries_com_trade_indicators; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.countries_com_trade_indicators (
+    "false" bigint NOT NULL,
+    raw_quantity double precision,
+    quantity double precision,
+    value double precision,
+    commodity_id integer,
+    year smallint,
+    iso3 text,
+    iso2 text,
+    commodity_code text,
+    activity text,
+    updated_at timestamp with time zone NOT NULL
+);
+
+
+--
+-- Name: countries_com_trade_aggregated_indicators_v; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.countries_com_trade_aggregated_indicators_v AS
+ SELECT sum(countries_com_trade_indicators.quantity) AS quantity,
+    sum(countries_com_trade_indicators.value) AS value,
+    rank() OVER (PARTITION BY countries_com_trade_indicators.year, countries_com_trade_indicators.commodity_id, countries_com_trade_indicators.activity ORDER BY (sum(countries_com_trade_indicators.quantity)) DESC) AS quantity_rank,
+    rank() OVER (PARTITION BY countries_com_trade_indicators.year, countries_com_trade_indicators.commodity_id, countries_com_trade_indicators.activity ORDER BY (sum(countries_com_trade_indicators.value)) DESC) AS value_rank,
+    countries_com_trade_indicators.commodity_id,
+    countries_com_trade_indicators.year,
+    countries_com_trade_indicators.iso2,
+    countries_com_trade_indicators.activity
+   FROM public.countries_com_trade_indicators
+  GROUP BY countries_com_trade_indicators.commodity_id, countries_com_trade_indicators.year, countries_com_trade_indicators.iso2, countries_com_trade_indicators.activity;
+
+
+--
+-- Name: countries_com_trade_indicators_false_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.countries_com_trade_indicators_false_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: countries_com_trade_indicators_false_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.countries_com_trade_indicators_false_seq OWNED BY public.countries_com_trade_indicators."false";
 
 
 --
@@ -9391,6 +9463,13 @@ ALTER TABLE ONLY public.countries ALTER COLUMN id SET DEFAULT nextval('public.co
 
 
 --
+-- Name: countries_com_trade_indicators false; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.countries_com_trade_indicators ALTER COLUMN "false" SET DEFAULT nextval('public.countries_com_trade_indicators_false_seq'::regclass);
+
+
+--
 -- Name: countries_wb_indicators id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -10175,6 +10254,22 @@ ALTER TABLE ONLY public.contextual_layers
 
 ALTER TABLE ONLY public.contextual_layers
     ADD CONSTRAINT contextual_layers_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: countries_com_trade_aggregated_indicators countries_com_trade_aggregated_indicators_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.countries_com_trade_aggregated_indicators
+    ADD CONSTRAINT countries_com_trade_aggregated_indicators_pkey PRIMARY KEY (commodity_id, iso2, year, activity);
+
+
+--
+-- Name: countries_com_trade_indicators countries_com_trade_indicators_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.countries_com_trade_indicators
+    ADD CONSTRAINT countries_com_trade_indicators_pkey PRIMARY KEY ("false");
 
 
 --
@@ -17123,6 +17218,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200317075824'),
 ('20200330120605'),
 ('20200331175932'),
-('20200416150928');
+('20200416150928'),
+('20200417094644'),
+('20200425173940');
 
 
