@@ -2,19 +2,20 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::CountriesWbIndicators::ImporterService do
   include FixtureRequestsHelpers
-  include_context 'api v3 brazil beef flows'
+  include_context 'api v3 brazil country'
 
   context '#import' do
-    before :all do
+    before :each do
       FactoryBot.create(:api_v3_country, iso2: 'AR')
       FactoryBot.create(:api_v3_country, iso2: 'BO')
-      FactoryBot.create(:api_v3_country, iso2: 'BR')
       FactoryBot.create(:api_v3_country, iso2: 'CO')
+      allow(Api::V3::Flow).to receive(:minimum).and_return(2013)
+      allow(Api::V3::Flow).to receive(:maximum).and_return(2013)
     end
 
     context 'when there is unexpected countries' do
       before do
-        uri = worldbank_uri(:population)
+        uri = worldbank_uri(:population, 'ALL', '2013:2013')
         response =
           File.read(worldbank_request_path(:population_for_other_countries))
         stub_request(:get, uri).to_return(body: response)
@@ -37,7 +38,7 @@ RSpec.describe Api::V3::CountriesWbIndicators::ImporterService do
           value: 0.0
         )
 
-        uri = worldbank_uri(:population)
+        uri = worldbank_uri(:population, 'ALL', '2013:2013')
         response = File.read(worldbank_request_path(:population))
         stub_request(:get, uri).to_return(body: response)
       end
@@ -57,7 +58,7 @@ RSpec.describe Api::V3::CountriesWbIndicators::ImporterService do
 
     context 'when there is no existing countries_wb_indicators' do
       before do
-        uri = worldbank_uri(:population)
+        uri = worldbank_uri(:population, 'ALL', '2013:2013')
         response = File.read(worldbank_request_path(:population))
         stub_request(:get, uri).to_return(body: response)
       end

@@ -13,38 +13,40 @@ module Api
           human_development_index: 'UNDP.HDI.XD'
         }.freeze
 
-        def self.population_indicators(iso_code = 'ALL')
-          indicator_request(:population, iso_code)
+        def self.population_indicators(iso3, start_year = nil, end_year = nil)
+          indicator_request(:population, iso3, start_year, end_year)
         end
 
-        def self.gdp_indicators(iso_code = 'ALL')
-          indicator_request(:gdp, iso_code)
+        def self.gdp_indicators(iso3, start_year = nil, end_year = nil)
+          indicator_request(:gdp, iso3, start_year, end_year)
         end
 
-        def self.land_area_indicators(iso_code = 'ALL')
-          indicator_request(:land_area, iso_code)
+        def self.land_area_indicators(iso3, start_year = nil, end_year = nil)
+          indicator_request(:land_area, iso3, start_year, end_year)
         end
 
-        def self.agricultural_land_area_indicators(iso_code = 'ALL')
-          indicator_request(:agricultural_land_area, iso_code)
+        def self.agricultural_land_area_indicators(iso3, start_year = nil, end_year = nil)
+          indicator_request(:agricultural_land_area, iso3, start_year, end_year)
         end
 
-        def self.forested_land_area_indicators(iso_code = 'ALL')
-          indicator_request(:forested_land_area, iso_code)
+        def self.forested_land_area_indicators(iso3, start_year = nil, end_year = nil)
+          indicator_request(:forested_land_area, iso3, start_year, end_year)
         end
 
-        def self.human_development_index_indicators(iso_code = 'ALL')
-          indicator_request(:human_development_index, iso_code)
+        def self.human_development_index_indicators(iso3, start_year = nil, end_year = nil)
+          indicator_request(:human_development_index, iso3, start_year, end_year)
         end
 
-        private_class_method def self.indicator_request(name, iso_code)
-          year_range =
-            "#{Api::V3::Flow.minimum(:year)}:#{Api::V3::Flow.maximum(:year)}"
+        private_class_method def self.indicator_request(name, iso3, start_year = nil, end_year = nil)
+          query_params = {format: :json, per_page: 10000}
+          if start_year
+            query_params[:date] = [start_year, end_year].join(':')
+          end
           uri = URI(
-            "#{ENV['WORLD_BANK_API_URL']}/v2/country/#{iso_code}/indicator/" \
-            "#{INDICATORS[name]}?date=#{year_range}&format=json&per_page=10000"
+            "#{ENV['WORLD_BANK_API_URL']}/v2/country/#{iso3}/indicator/" \
+            "#{INDICATORS[name]}?" + query_params.to_query
           )
-          response = Net::HTTP.get_response(uri)
+          response = Net::HTTP.get_response(uri )
 
           return [] if response.code != '200'
 

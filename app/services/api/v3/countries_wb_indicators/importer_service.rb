@@ -12,13 +12,18 @@ module Api
 
         def self.import(indicator_names = Api::V3::CountriesWbIndicators::ApiService::INDICATORS.keys)
           countries = countries_iso
+          start_year = Api::V3::Flow.minimum(:year)
+          end_year = Api::V3::Flow.maximum(:year)
           indicator_names.each do |indicator_name|
-            indicators_response = api_indicators(indicator_name)
+            indicators_response = api_indicators(
+              indicator_name, start_year, end_year
+            )
             last_updated = indicators_response[:last_updated]
             next unless need_refreshing?(indicator_name, last_updated)
 
-            indicators =
-              add_rank_to_indicators(indicators_response[:indicators])
+            indicators = add_rank_to_indicators(
+              indicators_response[:indicators], (start_year..end_year)
+            )
 
             indicators = indicators_by_countries(indicators, countries)
 
@@ -27,18 +32,18 @@ module Api
         end
 
         private_class_method def self.countries_iso
-          node_type = Api::V3::NodeType.find_by(name: NodeTypeName::COUNTRY)
+          node_type = Api::V3::NodeType.select(:id).where(name: NodeTypeName::COUNTRY)
           nodes_country_iso2 = Api::V3::Node.
             select(:geo_id).distinct.
-            where(node_type_id: node_type.id).
+            where(node_type_id: node_type).
             map(&:geo_id).compact
           countries_iso2 = Api::V3::Country.all.map(&:iso2)
           nodes_country_iso2 | countries_iso2
         end
 
-        private_class_method def self.api_indicators(indicator_name)
+        private_class_method def self.api_indicators(indicator_name, start_year, end_year)
           Api::V3::CountriesWbIndicators::ApiService.
-            send("#{indicator_name}_indicators")
+            send("#{indicator_name}_indicators", 'ALL', start_year, end_year)
         end
 
         private_class_method def self.need_refreshing?(indicator_name, timestamp)
@@ -55,14 +60,18 @@ module Api
           false
         end
 
-        private_class_method def self.add_rank_to_indicators(indicators)
-          indicators.
-            sort_by { |indicator| indicator[:value] }.
-            reverse.
-            each_with_index.map do |indicator, index|
-              indicator[:rank] = index + 1
-              indicator
-            end
+        private_class_method def self.add_rank_to_indicators(indicators, years)
+          years.each do |year|
+            indicators.
+              select { |indicator| indicator[:year] == year }.
+              sort_by { |indicator| indicator[:value] }.
+              reverse.
+              each_with_index.map do |indicator, index|
+                indicator[:rank] = index + 1
+                indicator
+              end
+          end
+          indicators
         end
 
         private_class_method def self.indicators_by_countries(indicators, countries_iso)
