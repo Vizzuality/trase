@@ -5,6 +5,8 @@ import { scaleLinear as d3_scale_linear } from 'd3-scale';
 import { extent as d3_extent } from 'd3-array';
 
 import abbreviateNumber from 'utils/abbreviateNumber';
+import scrollOffset from 'utils/scroll-offset';
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Responsive from 'react-components/shared/responsive.hoc';
@@ -137,7 +139,7 @@ class Scatterplot extends Component {
             d,
             selectedSwitcher,
             d3_event.clientX + 10,
-            d3_event.clientY + window.scrollY + 10
+            d3_event.clientY + scrollOffset() + 10
           );
         })
         .on('mouseout', () => {

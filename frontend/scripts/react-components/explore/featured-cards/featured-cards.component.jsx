@@ -6,6 +6,8 @@ import capitalize from 'lodash/capitalize';
 import { useTransition, animated } from 'react-spring/web.cjs';
 import ResizeListener from 'react-components/shared/resize-listener.component';
 import cx from 'classnames';
+import isIe from 'utils/isIe';
+
 import FeaturedCard from './featured-card.component';
 
 import 'react-components/explore/featured-cards/featured-cards.scss';
@@ -14,20 +16,52 @@ const FeaturedCards = props => {
   const { countryName, commodityName, step, cards, openModal } = props;
   const CARDS_SIZE_MARGIN = 16; // matches featured-cards.scss
 
+  // XXX: For IE11, we need to separate translation methods and are not allowed to use calc within them
+  // We keep the calc for other browsers for performance reasons.
   const transitions = useTransition(cards, item => item.id, {
     from: item => ({
-      transform: `translate(calc(${item.index * 100}% + ${item.index *
-        CARDS_SIZE_MARGIN}px), 200px)`
+      ...(isIe()
+        ? {
+            transform: `translateX(${item.index * 100}%) translateX(${item.index *
+              CARDS_SIZE_MARGIN}px) translateY(200px)`
+          }
+        : {
+            transform: `translate(calc(${item.index * 100}% + ${item.index *
+              CARDS_SIZE_MARGIN}px), 200px)`
+          })
     }),
     enter: item => ({
-      transform: `translate(calc(${item.index * 100}% + ${item.index * CARDS_SIZE_MARGIN}px), 0px)`
+      ...(isIe()
+        ? {
+            transform: `translateX(${item.index * 100}%) translateX(${item.index *
+              CARDS_SIZE_MARGIN}px) translateY(0px)`
+          }
+        : {
+            transform: `translate(calc(${item.index * 100}% + ${item.index *
+              CARDS_SIZE_MARGIN}px), 0px)`
+          })
     }),
     update: item => ({
-      transform: `translate(calc(${item.index * 100}% + ${item.index * CARDS_SIZE_MARGIN}px), 0px)`
+      ...(isIe()
+        ? {
+            transform: `translateX(${item.index * 100}%) translateX(${item.index *
+              CARDS_SIZE_MARGIN}px) translateY(0px)`
+          }
+        : {
+            transform: `translate(calc(${item.index * 100}% + ${item.index *
+              CARDS_SIZE_MARGIN}px), 0px)`
+          })
     }),
     leave: item => ({
-      transform: `translate(calc(${item.index * 100}% + ${item.index *
-        CARDS_SIZE_MARGIN}px), 200px)`
+      ...(isIe()
+        ? {
+            transform: `translateX(${item.index * 100}%) translateX(${item.index *
+              CARDS_SIZE_MARGIN}px) translateY(200px)`
+          }
+        : {
+            transform: `translate(calc(${item.index * 100}% + ${item.index *
+              CARDS_SIZE_MARGIN}px), 200px)`
+          })
     }),
     unique: true
   });

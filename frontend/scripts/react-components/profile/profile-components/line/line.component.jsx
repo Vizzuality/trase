@@ -14,6 +14,7 @@ import { timeFormat as d3_timeFormat } from 'd3-time-format';
 import { BREAKPOINTS } from 'constants';
 import abbreviateNumber from 'utils/abbreviateNumber';
 import { translateText } from 'utils/transifex';
+import scrollOffset from 'utils/scroll-offset';
 
 import Responsive from 'react-components/shared/responsive.hoc';
 
@@ -205,7 +206,7 @@ class Line extends Component {
                 showTooltipCallback(
                   d,
                   d3_event.clientX + 10,
-                  d3_event.clientY + window.scrollY + 10
+                  d3_event.clientY + scrollOffset() + 10
                 );
               })
               .on('mouseout', () => {

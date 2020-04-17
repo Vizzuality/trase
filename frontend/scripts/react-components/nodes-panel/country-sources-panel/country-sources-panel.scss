@@ -4,8 +4,11 @@
   width: 560px;
   margin: 0 auto;
 
+  // XXX : Initial does not work for IE, set auto as it has similar behaviour
   @media screen and (min-width: $breakpoint-laptop) {
+    width: auto;
     width: initial;
+    margin: auto;
     margin: initial;
   }
 }

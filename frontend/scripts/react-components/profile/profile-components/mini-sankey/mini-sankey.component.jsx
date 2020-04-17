@@ -6,6 +6,8 @@ import { interpolateNumber as d3InterpolateNumber } from 'd3-interpolate';
 import formatValue from 'utils/formatValue';
 import wrapSVGText from 'utils/wrapSVGText';
 import { translateText } from 'utils/transifex';
+import scrollOffset from 'utils/scroll-offset';
+
 import Tooltip from 'legacy/info-tooltip.component';
 import Responsive from 'react-components/shared/responsive.hoc';
 
@@ -188,7 +190,7 @@ class MiniSankey extends Component {
                       node.value,
                       data.unit,
                       event.clientX + 10,
-                      event.clientY + window.scrollY + 10
+                      event.clientY + scrollOffset() + 10
                     )
                   }
                 />

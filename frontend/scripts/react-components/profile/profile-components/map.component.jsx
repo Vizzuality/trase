@@ -8,6 +8,7 @@ import isEqual from 'lodash/isEqual';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Responsive from 'react-components/shared/responsive.hoc';
+import scrollOffset from 'utils/scroll-offset';
 
 class Map extends Component {
   componentDidMount() {
@@ -102,7 +103,7 @@ class Map extends Component {
       if (showTooltipCallback !== undefined) {
         polygons
           .on('mousemove', d => {
-            showTooltipCallback(d, d3_event.clientX + 10, d3_event.clientY + window.scrollY + 10);
+            showTooltipCallback(d, d3_event.clientX + 10, d3_event.clientY + scrollOffset() + 10);
           })
           .on('mouseout', () => {
             hideTooltipCallback();
