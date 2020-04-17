@@ -53,17 +53,19 @@ module Api
 
         private_class_method def self.formatted_indicators(name, indicators_response)
           indicators = indicators_response.last.map do |indicator|
+            next if indicator['value'].blank?
+
             {
               iso_code: indicator['countryiso3code'],
               name: name.to_s,
               year: indicator['date'].to_i,
-              value: indicator['value'] || 0.0
+              value: indicator['value']
             }
           end
 
           {
             last_updated: indicators_response.first['lastupdated'].to_date,
-            indicators: indicators
+            indicators: indicators.compact
           }
         end
       end
