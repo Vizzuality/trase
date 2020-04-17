@@ -1,39 +1,27 @@
 export default [
   {
-    params: {
-      color: '#222'
-    },
-    id: 'brazil_municipalities',
-    name: 'brazil_municipalities',
-    type: 'geojson',
+    id: "test",
+    name: "Test",
     source: {
-      type: 'geojson',
-      data: "https://p2cs-sei.carto.com/api/v2/sql?q=SELECT%20cartodb_id,%20the_geom,%20the_geom_webmercator,%20name,%20geoid%20FROM%20brazil_municipalities&format=geojson",
-      promoteId: 'cartodb_id',
-      provider: {
-        type: 'carto',
-        account: 'p2cs-sei'
-      }
+      data:
+        "https://p2cs-sei.carto.com/api/v2/sql?q=SELECT%20cartodb_id,%20the_geom,%20the_geom_webmercator,%20name,%20geoid%20FROM%20brazil_municipalities&format=geojson",
+      type: "geojson"
     },
+    type: "geojson",
     render: {
       layers: [
         {
-          type: 'fill',
-          featureState: {},
+          type: "fill",
           paint: {
-            'fill-color': '#5ca2d1',
-            'fill-color-transition': {
-              duration: 300,
-              delay: 0
-            },
-            'fill-opacity': 1
+            "fill-color": "#700",
+            'fill-opacity': 0.5
           }
         },
         {
-          type: 'line',
+          type: "line",
           paint: {
-            'line-color': '#000000',
-            'line-opacity': 0.1
+            "line-color": "#0a9",
+            "line-width": 1
           }
         }
       ]
