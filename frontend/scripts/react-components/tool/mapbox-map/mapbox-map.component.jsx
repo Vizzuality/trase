@@ -9,7 +9,7 @@ import { TOOL_LAYOUT, BASEMAPS } from 'constants';
 import Basemaps from 'react-components/tool/basemaps';
 import Legend from 'react-components/tool/legend';
 import { easeCubic } from 'd3-ease';
-import activeLayers from './test-layers';
+import activeLayers from './layers/unit-layers';
 import Warnings from './mapbox-map-warnings';
 import { getContextualLayersTemplates, getRasterLayerTemplate } from './layers/contextual-layers';
 import { getLayerOrder } from './layers/layer-config';
@@ -29,6 +29,7 @@ function MapBoxMap(props) {
   const [viewport, setViewport] = useState({ ...defaultMapView });
   const [loaded, setLoaded] = useState(false);
   const [flying, setFlying] = useState(false);
+  const [hoveredGeoId, setHoveredGeoId] = useState(null);
   const mapRef = useRef();
   const mapContainerRef = useRef();
   const fullscreen = toolLayout === TOOL_LAYOUT.right;
@@ -69,7 +70,14 @@ function MapBoxMap(props) {
   const baseLayer = getBaseLayer(baseLayerInfo);
 
   const layerOrder = getLayerOrder(baseLayerInfo.id);
-
+  const onHover = e => {
+    if (e.features?.length) {
+      const geoFeature = e.features.find(f => f.source === 'brazil_municipalities'); // Temporary
+      if (geoFeature) {
+        setHoveredGeoId(geoFeature.properties.geoid);
+      }
+    }
+  }
   const getContextualLayers = () => {
     let layers = [];
     const cartoLayerTemplates = getContextualLayersTemplates();
@@ -79,7 +87,7 @@ function MapBoxMap(props) {
       const cartoData = cartoLayers[0];
 
       if (cartoData.rasterUrl) {
-        layers.push(getRasterLayerTemplate(`${cartoData.rasterUrl}{z}/{x}/{y}.png`));
+        layers.push(getRasterLayerTemplate(identifier, `${cartoData.rasterUrl}{z}/{x}/{y}.png`));
       } else {
         const layerStyle = cartoLayerTemplates[identifier];
         if (layerStyle) {
@@ -89,9 +97,8 @@ function MapBoxMap(props) {
     });
     return layers;
   };
-
   const layers = [baseLayer].concat(getContextualLayers())
-    .concat(activeLayers)
+    .concat(activeLayers(hoveredGeoId))
     .map(l => ({ ...l, zIndex: layerOrder[l.id] }));
 
   return (
@@ -114,6 +121,7 @@ function MapBoxMap(props) {
           [89, 180]
         ]}
         onClick={!flying && (() => {})}
+        onHover={onHover}
         transitionInterpolator={new FlyToInterpolator()}
         transitionEasing={easeCubic}
       >

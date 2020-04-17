@@ -1,4 +1,4 @@
-export const baseLayer = (baseLayerInfo) => ({
+export const getBaseLayer = (baseLayerInfo) => ({
   id: baseLayerInfo.id,
   type: 'raster',
   source: {
