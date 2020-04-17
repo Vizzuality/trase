@@ -2,6 +2,20 @@
 
 import { layer, conditionalRenderLayers } from './layer-utils';
 
+export const getRasterLayerTemplate = url => (
+  {
+    id: identifier,
+    type: 'raster',
+    version: '0.0.1',
+    source: {
+      type: 'raster',
+      tiles: [url],
+      minZoom: 2,
+      maxzoom: 11 // TODO: add this to layer configuration
+    }
+  }
+);
+
 export const getContextualLayersTemplates = () => ({
   brazil_states: [
     layer({
