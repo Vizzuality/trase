@@ -15,6 +15,7 @@ import { getContextualLayersTemplates, getRasterLayerTemplate } from './layers/c
 import { getLayerOrder } from './layers/layer-config';
 import { getBaseLayer } from './layers/base-layer';
 import 'react-components/tool/mapbox-map/mapbox-map.scss';
+import Tooltip from 'legacy/info-tooltip.component';
 
 function MapBoxMap(props) {
   const {
@@ -24,11 +25,13 @@ function MapBoxMap(props) {
     selectedMapContextualLayersData,
     selectedMapDimensionsWarnings
   } = props;
+  const tooltip = new Tooltip('.js-node-tooltip');
 
   const [mapAttribution, setMapAttribution] = useState(null);
   const [viewport, setViewport] = useState({ ...defaultMapView });
   const [loaded, setLoaded] = useState(false);
   const [flying, setFlying] = useState(false);
+  const [tooltipData, setTooltip] = useState(null);
   const [hoveredGeoId, setHoveredGeoId] = useState(null);
   const mapRef = useRef();
   const mapContainerRef = useRef();
@@ -49,6 +52,15 @@ function MapBoxMap(props) {
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultMapView]);
+
+  useEffect(() => {
+    if (tooltipData) {
+      const { x, y, name, values } = tooltipData;
+      tooltip.show(x, y, name, values);
+    } else {
+      tooltip.hide();
+    }
+  }, [tooltip]);
 
   const onLoad = () => {
     setLoaded(true);
@@ -71,10 +83,15 @@ function MapBoxMap(props) {
 
   const layerOrder = getLayerOrder(baseLayerInfo.id);
   const onHover = e => {
-    if (e.features?.length) {
-      const geoFeature = e.features.find(f => f.source === 'brazil_municipalities'); // Temporary
+    const { features, center } = e;
+    if (features?.length) {
+      const geoFeature = features.find(f => f.source === 'brazil_municipalities'); // Temporary
       if (geoFeature) {
-        setHoveredGeoId(geoFeature.properties.geoid);
+        const { properties } = geoFeature;
+        setTooltip({ x: center.x, y: center.y, name: properties.name, values: properties })
+        setHoveredGeoId(properties.geoid);
+      } else {
+        setTooltip(null);
       }
     }
   }
@@ -129,8 +146,8 @@ function MapBoxMap(props) {
         {loaded && mapRef.current && (
           <LayerManager map={mapRef.current.getMap()} plugin={PluginMapboxGl}>
             {layers.map(l => (
-                <Layer key={l.id} {...l} />
-              ))}
+              <Layer key={l.id} {...l} />
+            ))}
           </LayerManager>
         )}
       </ReactMapGL>
