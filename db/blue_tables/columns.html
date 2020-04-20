@@ -209,17 +209,17 @@
         "comments": ""
     },
     {
-        "tableName": "contexts",
+        "tableName": "node_quals",
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
-        "name": "default_year",
-        "type": "int4",
-        "length": 10,
-        "nullable": "√",
+        "name": "value",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>Default year for this context<\/p>"
+        "comments": "<p>Textual value<\/p>"
     },
     {
         "tableName": "nodes",
@@ -430,7 +430,7 @@
         "comments": "<p>Year; empty (NULL) for all years<\/p>"
     },
     {
-        "tableName": "node_quals",
+        "tableName": "contexts",
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
@@ -482,7 +482,7 @@
         "comments": ""
     },
     {
-        "tableName": "contexts",
+        "tableName": "node_quals",
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
@@ -508,17 +508,17 @@
         "comments": ""
     },
     {
-        "tableName": "node_quals",
+        "tableName": "contexts",
         "tableType": "Table",
-        "keyClass": "indexedColumn",
-        "keyTitle": "Indexed",
-        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>year",
-        "type": "int4",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "years",
+        "type": "_int4",
         "length": 10,
         "nullable": "√",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>Year; empty (NULL) for all years<\/p>"
+        "comments": "<p>Years for which country-commodity data is present; empty (NULL) for all years<\/p>"
     },
     {
         "tableName": "commodities",
@@ -573,7 +573,7 @@
         "comments": ""
     },
     {
-        "tableName": "node_quals",
+        "tableName": "contexts",
         "tableType": "Table",
         "keyClass": "primaryKey",
         "keyTitle": "Primary Key",
@@ -582,7 +582,7 @@
         "length": 10,
         "nullable": "",
         "autoUpdated": "√",
-        "defaultValue": "nextval('node_quals_id_seq'::regclass)",
+        "defaultValue": "nextval('contexts_id_seq'::regclass)",
         "comments": ""
     },
     {
@@ -638,11 +638,11 @@
         "comments": ""
     },
     {
-        "tableName": "contexts",
+        "tableName": "node_quals",
         "tableType": "Table",
         "keyClass": "foreignKey",
         "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>country_id",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>node_id",
         "type": "int4",
         "length": 10,
         "nullable": "",
@@ -651,11 +651,11 @@
         "comments": ""
     },
     {
-        "tableName": "node_quals",
+        "tableName": "contexts",
         "tableType": "Table",
         "keyClass": "foreignKey",
         "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>qual_id",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>commodity_id",
         "type": "int4",
         "length": 10,
         "nullable": "",
@@ -729,17 +729,17 @@
         "comments": ""
     },
     {
-        "tableName": "contexts",
+        "tableName": "node_quals",
         "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "years",
-        "type": "_int4",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>year",
+        "type": "int4",
         "length": 10,
         "nullable": "√",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>Years for which country-commodity data is present; empty (NULL) for all years<\/p>"
+        "comments": "<p>Year; empty (NULL) for all years<\/p>"
     },
     {
         "tableName": "node_quants",
@@ -820,17 +820,17 @@
         "comments": ""
     },
     {
-        "tableName": "node_quals",
+        "tableName": "contexts",
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
-        "name": "value",
-        "type": "text",
-        "length": 2147483647,
-        "nullable": "",
+        "name": "default_year",
+        "type": "int4",
+        "length": 10,
+        "nullable": "√",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>Textual value<\/p>"
+        "comments": "<p>Default year for this context<\/p>"
     },
     {
         "tableName": "quants",
@@ -859,11 +859,11 @@
         "comments": ""
     },
     {
-        "tableName": "contexts",
+        "tableName": "node_quals",
         "tableType": "Table",
         "keyClass": "foreignKey",
         "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>commodity_id",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>qual_id",
         "type": "int4",
         "length": 10,
         "nullable": "",
@@ -976,7 +976,7 @@
         "comments": ""
     },
     {
-        "tableName": "contexts",
+        "tableName": "node_quals",
         "tableType": "Table",
         "keyClass": "primaryKey",
         "keyTitle": "Primary Key",
@@ -985,15 +985,15 @@
         "length": 10,
         "nullable": "",
         "autoUpdated": "√",
-        "defaultValue": "nextval('contexts_id_seq'::regclass)",
+        "defaultValue": "nextval('node_quals_id_seq'::regclass)",
         "comments": ""
     },
     {
-        "tableName": "node_quals",
+        "tableName": "contexts",
         "tableType": "Table",
         "keyClass": "foreignKey",
         "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>node_id",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>country_id",
         "type": "int4",
         "length": 10,
         "nullable": "",
