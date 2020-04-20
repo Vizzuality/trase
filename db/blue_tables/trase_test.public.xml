@@ -16,6 +16,7 @@
       <sequence increment="1" name="contexts_id_seq" startValue="1"/>
       <sequence increment="1" name="contextual_layers_id_seq" startValue="1"/>
       <sequence increment="1" name="countries_id_seq" startValue="1"/>
+      <sequence increment="1" name="countries_wb_indicators_id_seq" startValue="1"/>
       <sequence increment="1" name="country_properties_id_seq" startValue="1"/>
       <sequence increment="1" name="dashboard_template_commodities_id_seq" startValue="1"/>
       <sequence increment="1" name="dashboard_template_companies_id_seq" startValue="1"/>
@@ -72,6 +73,7 @@
       <sequence increment="1" name="sankey_card_links_id_seq" startValue="1"/>
       <sequence increment="1" name="top_profile_images_id_seq" startValue="1"/>
       <sequence increment="1" name="top_profiles_id_seq" startValue="1"/>
+      <sequence increment="1" name="worldbanks_id_seq" startValue="1"/>
    </sequences>
    <tables>
       <table name="commodities" numRows="0" remarks="Commodities in supply chains, such as soy or beef" schema="public" type="TABLE">
