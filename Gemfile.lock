@@ -134,6 +134,7 @@ GEM
       capistrano (~> 3.0)
     case_transform (0.2)
       activesupport
+    chronic (0.10.2)
     ckeditor (4.3.0)
       orm_adapter (~> 0.5.0)
       terrapin
@@ -147,6 +148,12 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.6)
     connection_pool (2.2.2)
+    countries (3.0.1)
+      i18n_data (~> 0.10.0)
+      sixarm_ruby_unaccent (~> 1.1)
+      unicode_utils (~> 1.4)
+    crack (0.4.3)
+      safe_yaml (~> 1.0.0)
     crass (1.0.6)
     database_cleaner (1.8.4)
     devise (4.7.1)
@@ -187,6 +194,7 @@ GEM
     has_scope (0.7.2)
       actionpack (>= 4.1)
       activesupport (>= 4.1)
+    hashdiff (1.0.1)
     http (4.3.0)
       addressable (~> 2.3)
       http-cookie (~> 1.0)
@@ -200,6 +208,7 @@ GEM
     http_parser.rb (0.6.0)
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
+    i18n_data (0.10.0)
     inherited_resources (1.11.0)
       actionpack (>= 5.0, < 6.1)
       has_scope (~> 0.6)
@@ -367,6 +376,7 @@ GEM
     rubocop-rspec (1.38.1)
       rubocop (>= 0.68.1)
     ruby-progressbar (1.10.1)
+    safe_yaml (1.0.5)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -401,6 +411,7 @@ GEM
     simplecov-html (0.12.1)
     sitemap_generator (6.1.0)
       builder (~> 3.0)
+    sixarm_ruby_unaccent (1.2.0)
     spring (2.1.0)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -443,11 +454,18 @@ GEM
       unf_ext
     unf_ext (0.0.7.6)
     unicode-display_width (1.7.0)
+    unicode_utils (1.4.0)
     warden (1.2.8)
       rack (>= 2.0.6)
+    webmock (3.8.3)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
+      hashdiff (>= 0.4.0, < 2.0.0)
     websocket-driver (0.7.1)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.4)
+    whenever (1.0.0)
+      chronic (>= 0.6.3)
     xdan-datetimepicker-rails (2.5.4)
       jquery-rails
       rails (>= 3.2.16)
@@ -479,6 +497,7 @@ DEPENDENCIES
   capistrano-yarn
   ckeditor (= 4.3.0)
   coffee-rails (~> 5.0)
+  countries
   database_cleaner
   devise (~> 4.7)
   dotenv-rails (~> 2.7)
@@ -518,7 +537,9 @@ DEPENDENCIES
   turbolinks (~> 5)
   twitter (~> 7.0)
   uglifier (>= 1.3.0)
+  webmock
+  whenever
   zip_tricks
 
 BUNDLED WITH
-   1.17.2
+   1.17.3

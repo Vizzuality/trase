@@ -60,6 +60,8 @@ gem 'sidekiq-unique-jobs'
 gem 'sitemap_generator'
 gem 'twitter', '~> 7.0'
 gem 'zip_tricks'
+gem 'whenever', require: false
+gem 'countries'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -107,6 +109,7 @@ group :test do
   # gem 'chromedriver-helper'
   gem 'database_cleaner'
   gem 'simplecov', require: false
+  gem 'webmock'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
