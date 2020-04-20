@@ -272,7 +272,6 @@ COMMENT ON FUNCTION public.upsert_attributes() IS 'Upserts attributes based on n
 
 SET default_tablespace = '';
 
-SET default_table_access_method = heap;
 
 --
 -- Name: ckeditor_assets; Type: TABLE; Schema: content; Owner: -

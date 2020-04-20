@@ -4,6 +4,7 @@ module Api
   module V3
     module CountriesWbIndicators
       class ApiService
+        WORLD_BANK_API_URL = 'https://api.worldbank.org'.freeze
         INDICATORS = {
           population: 'SP.POP.TOTL',
           gdp: 'NY.GDP.MKTP.CD',
@@ -43,7 +44,7 @@ module Api
             query_params[:date] = [start_year, end_year].join(':')
           end
           uri = URI(
-            "#{ENV['WORLD_BANK_API_URL']}/v2/country/#{iso3}/indicator/" \
+            "#{WORLD_BANK_API_URL}/v2/country/#{iso3}/indicator/" \
             "#{INDICATORS[name]}?" + query_params.to_query
           )
           response = Net::HTTP.get_response(uri )

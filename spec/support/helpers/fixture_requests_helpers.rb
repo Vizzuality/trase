@@ -5,7 +5,8 @@ module FixtureRequestsHelpers
       query_params[:date] = year_range
     end
     URI(
-      "#{ENV['WORLD_BANK_API_URL']}/v2/country/#{iso_code}/indicator/" \
+      "#{Api::V3::CountriesWbIndicators::ApiService::WORLD_BANK_API_URL}" \
+      "/v2/country/#{iso_code}/indicator/" \
       "#{Api::V3::CountriesWbIndicators::ApiService::INDICATORS[indicator]}" \
       "?" + query_params.to_param
     )
