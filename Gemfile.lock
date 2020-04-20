@@ -385,7 +385,7 @@ GEM
       railties (>= 4.0.0)
     select2-rails (4.0.3)
       thor (~> 0.14)
-    sidekiq (6.0.5)
+    sidekiq (6.0.7)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       rack-protection (>= 2.0.0)
@@ -508,7 +508,7 @@ DEPENDENCIES
   rubocop-rspec
   sassc-rails (~> 2.1.2)
   scenic
-  sidekiq (~> 6.0.5)
+  sidekiq (~> 6.0.7)
   sidekiq-unique-jobs
   simplecov
   sitemap_generator

@@ -55,7 +55,7 @@ gem 'pg_search'
 gem 'rack', '~> 2.2.2' # issue with sidekiq web in version 2.1.1, still doesn't work on sandbox in version 2.1.2
 gem 'rack-cors', '~> 1.1'
 gem 'scenic'
-gem 'sidekiq', '~> 6.0.5'
+gem 'sidekiq', '~> 6.0.7'
 gem 'sidekiq-unique-jobs'
 gem 'sitemap_generator'
 gem 'twitter', '~> 7.0'
