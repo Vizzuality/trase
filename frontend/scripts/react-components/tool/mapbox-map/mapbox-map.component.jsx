@@ -11,11 +11,11 @@ import Legend from 'react-components/tool/legend';
 import { easeCubic } from 'd3-ease';
 import activeLayers from './layers/unit-layers';
 import Warnings from './mapbox-map-warnings';
+import Tooltip from './mapbox-map-tooltip';
 import { getContextualLayersTemplates, getRasterLayerTemplate } from './layers/contextual-layers';
 import { getLayerOrder } from './layers/layer-config';
 import { getBaseLayer } from './layers/base-layer';
 import 'react-components/tool/mapbox-map/mapbox-map.scss';
-import Tooltip from 'legacy/info-tooltip.component';
 
 function MapBoxMap(props) {
   const {
@@ -23,20 +23,23 @@ function MapBoxMap(props) {
     toolLayout,
     basemapId,
     selectedMapContextualLayersData,
-    selectedMapDimensionsWarnings
+    selectedMapDimensionsWarnings,
+    onPolygonHighlighted,
+    onPolygonClicked,
+    selectedNodesGeoIds,
+    tooltipValues
   } = props;
-  const tooltip = new Tooltip('.js-node-tooltip');
 
   const [mapAttribution, setMapAttribution] = useState(null);
   const [viewport, setViewport] = useState({ ...defaultMapView });
   const [loaded, setLoaded] = useState(false);
   const [flying, setFlying] = useState(false);
-  const [tooltipData, setTooltip] = useState(null);
   const [hoveredGeoId, setHoveredGeoId] = useState(null);
   const mapRef = useRef();
   const mapContainerRef = useRef();
   const fullscreen = toolLayout === TOOL_LAYOUT.right;
   const minimized = toolLayout === TOOL_LAYOUT.right;
+  const [tooltipData, setTooltip] = useState(null);
 
   const updateViewport = updatedViewport => {
     setViewport({
@@ -52,15 +55,6 @@ function MapBoxMap(props) {
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultMapView]);
-
-  useEffect(() => {
-    if (tooltipData) {
-      const { x, y, name, values } = tooltipData;
-      tooltip.show(x, y, name, values);
-    } else {
-      tooltip.hide();
-    }
-  }, [tooltip]);
 
   const onLoad = () => {
     setLoaded(true);
@@ -82,6 +76,7 @@ function MapBoxMap(props) {
   const baseLayer = getBaseLayer(baseLayerInfo);
 
   const layerOrder = getLayerOrder(baseLayerInfo.id);
+
   const onHover = e => {
     const { features, center } = e;
     if (features?.length) {
@@ -90,11 +85,31 @@ function MapBoxMap(props) {
         const { properties } = geoFeature;
         setTooltip({ x: center.x, y: center.y, name: properties.name, values: properties })
         setHoveredGeoId(properties.geoid);
+        onPolygonHighlighted(properties.geoid, {
+          pageX: center.x,
+          pageY: center.y
+        });
       } else {
         setTooltip(null);
+        onPolygonHighlighted();
       }
     }
-  }
+  };
+
+  const onClick = e => {
+    const { features } = e;
+    const geoFeature = features.find(f => f.source === 'brazil_municipalities'); // Temporary
+    // if (
+    //   (geoFeature?.properties && !geoFeature.properties.hasFlows) ||
+    //   (e.target.classList && e.target.classList.contains('-disabled'))
+    // ) {
+    //   return;
+    // }
+    if (geoFeature?.properties) {
+      onPolygonClicked(geoFeature.properties.geoid);
+    }
+  };
+
   const getContextualLayers = () => {
     let layers = [];
     const cartoLayerTemplates = getContextualLayersTemplates();
@@ -114,8 +129,10 @@ function MapBoxMap(props) {
     });
     return layers;
   };
-  const layers = [baseLayer].concat(getContextualLayers())
-    .concat(activeLayers(hoveredGeoId))
+
+  const layers = [baseLayer]
+    .concat(getContextualLayers())
+    .concat(activeLayers(hoveredGeoId, selectedNodesGeoIds))
     .map(l => ({ ...l, zIndex: layerOrder[l.id] }));
 
   return (
@@ -137,7 +154,7 @@ function MapBoxMap(props) {
           [-89, -180],
           [89, 180]
         ]}
-        onClick={!flying && (() => {})}
+        onClick={!flying && onClick}
         onHover={onHover}
         transitionInterpolator={new FlyToInterpolator()}
         transitionEasing={easeCubic}
@@ -161,6 +178,7 @@ function MapBoxMap(props) {
         <span dangerouslySetInnerHTML={{ __html: mapAttribution }} />
       </div>
       <Legend />
+      <Tooltip data={tooltipData} values={tooltipValues} />
     </div>
   );
 };
@@ -171,6 +189,9 @@ MapBoxMap.propTypes = {
   basemapId: PropTypes.string,
   selectedMapContextualLayersData: PropTypes.array,
   selectedMapDimensionsWarnings: PropTypes.array,
+  selectedNodesGeoIds: PropTypes.array,
+  onPolygonHighlighted: PropTypes.func,
+  onPolygonClicked: PropTypes.func,
   bounds: PropTypes.object
 };
 
