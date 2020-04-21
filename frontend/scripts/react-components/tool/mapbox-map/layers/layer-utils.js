@@ -1,8 +1,11 @@
 import { CARTO_BASE_URL } from 'constants';
 import castArray from 'lodash/castArray';
 
-export const getFilter = (condition, name, value) => {
-  const filter = ['all'];
+export const getFilter = (condition, name, value, decision) => {
+  const filter = [decision || 'all'];
+  if (!value || !value.length) {
+    return null;
+  }
   castArray(value).forEach(v => {
     filter.push([condition, ['get', name], v]);
   });
