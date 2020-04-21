@@ -12,7 +12,7 @@ const MapTooltip = ({ data, values }) => {
     if (tooltip) {
       if (data) {
         const { x, y, name } = data;
-        tooltip.show(x, y, name, values);
+        tooltip.show(x, y, name, values || {});
       } else {
         tooltip.hide();
       }

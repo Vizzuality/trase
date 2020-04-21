@@ -1,13 +1,35 @@
 import { createSelector } from 'reselect';
 import getNodeMeta from 'app/helpers/getNodeMeta';
-import { getSelectedMapDimensionsData } from 'react-components/tool-layers/tool-layers.selectors';
+import formatValue from 'utils/formatValue';
 
+import { getSelectedMapDimensionsData } from 'react-components/tool-layers/tool-layers.selectors';
+import {
+  getHighlightedNodesData
+} from 'react-components/tool/tool.selectors';
+import {
+  getSelectedResizeBy
+} from 'react-components/tool-links/tool-links.selectors';
+const getHighlightedNodesCoordinates = state =>  state.toolLayers.highlightedNodeCoordinates;
 const getNodeAttributes = state => state.toolLinks.data.nodeAttributes || null;
 export const getNodeHeights = state => state.toolLinks.data.nodeHeights || null;
 export const getTooltipValues = createSelector(
-  [getNodeAttributes, getSelectedMapDimensionsData, ],
-  (nodeAttributes, selectedMapDimensions, nodeHeight) => {
+  [
+    getNodeAttributes,
+    getSelectedMapDimensionsData,
+    getNodeHeights,
+    getHighlightedNodesData,
+    getHighlightedNodesCoordinates,
+    getSelectedResizeBy
+  ],
+  (nodeAttributes, selectedMapDimensions, nodeHeights, nodesData, coordinates, selectedResizeBy) => {
     let values = [];
+    const node = nodesData[0];
+    const nodeHeight = nodeHeights && nodeHeights[node.id];
+
+    if (!coordinates) {
+      return null;
+    }
+
     if (nodeAttributes && selectedMapDimensions && selectedMapDimensions.length > 0) {
       values = selectedMapDimensions
         .map(dimension => {
@@ -38,5 +60,6 @@ export const getTooltipValues = createSelector(
         value: formatValue(nodeHeight.quant, selectedResizeBy.label)
       });
     }
+
     return values;
 });
