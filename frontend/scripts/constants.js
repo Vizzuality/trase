@@ -124,7 +124,7 @@ export const ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST = ['included_years', 'bucket
 export const LINE_LABEL_HEIGHT = 12;
 
 // map
-export const CARTO_BASE_URL = 'https://p2cs-sei.carto.com/api/v1/map/';
+export const CARTO_BASE_URL = 'https://p2cs-sei.carto.com/api/v2';
 export const CARTO_NAMED_MAPS_BASE_URL = 'https://p2cs-sei.carto.com/api/v1/map/named/';
 export const YEARS_DISABLED_WARNINGS = {
   NO_AGGR_REASON: "can't be displayed over multiple years.",
@@ -190,7 +190,7 @@ export const BASEMAPS = {
   topo: {
     id: 'topo',
     title: 'Topography',
-    url: '//{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+    url: '//a.tile.opentopomap.org/{z}/{x}/{y}.png', // {s} subdomain was replaced with a (random subdomain)
     attribution:
       '&copy;<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy;<a href="http://opentopomap.org">opentopomap.org</a>',
     thumbnail: '/images/maps/thumb-basemap-topo.png'
@@ -198,7 +198,7 @@ export const BASEMAPS = {
   streets: {
     id: 'streets',
     title: 'Streets (OSM)',
-    url: '//{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+    url: '//a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
     attribution:
       '&copy;<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>',
     thumbnail: '/images/maps/thumb-basemap-streets.png'

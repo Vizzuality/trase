@@ -82,6 +82,7 @@
     "NAMED_MAPS_ENV": true,
     "GFW_WIDGETS_BASE_URL": true,
     "CARTO_ACCOUNT": true,
+    "MAPBOX_TOKEN": true,
     "ga": true,
     "fetch": true
   },
