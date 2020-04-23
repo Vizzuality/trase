@@ -21,4 +21,5 @@
 
 every 7.days, roles: [:data] do
   runner 'Api::V3::CountriesWbIndicators::ImporterService.import'
+  runner 'ComTradeRefreshWorker.perform_async'
 end
