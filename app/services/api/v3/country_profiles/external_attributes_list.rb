@@ -6,16 +6,34 @@ module Api
 
         # @param attribute_refs [Array<Hash>]
         # e.g. [{source: :wb, id: 'WB SP.POP.TOTL'}]
-        def call(attribute_refs)
-          attribute_refs.map do |ref|
-            if ref[:source] == :wb
-              WB_ATTRIBUTES[ref[:id]]
-            else
-              COMTRADE_ATTRIBUTES[ref[:id]]
+        # @param substitutions [Hash]
+        def call(attribute_refs, substitutions = {})
+          list =
+            attribute_refs.map do |ref|
+              if ref[:source] == :wb
+                WB_ATTRIBUTES[ref[:id]]
+              else
+                COMTRADE_ATTRIBUTES[ref[:id]]
+              end
+            end
+          pp list
+          pp substitutions
+          if substitutions.any?
+            list = list.map do |attribute|
+              pp attribute
+              substitutions.each do |from, to|
+                re = /%{#{from}}/
+                pp re
+                attribute = attribute.merge({
+                  name: attribute[:name].gsub(re, to),
+                  tooltip: attribute[:tooltip].gsub(re, to)
+                })
+              end
+              attribute
             end
           end
+          list
         end
-
 
         WB_ATTRIBUTES = {
           'SP.POP.TOTL' => {
@@ -46,15 +64,15 @@ module Api
         }.freeze
 
         COMTRADE_ATTRIBUTES = {
-          'trade_value' => {
-            name: 'Value of agricultural #{trade_flow}s',
+          'value' => {
+            name: 'Value of agricultural %{trade_flow}s',
             prefix: '$',
-            tooltip: 'TODO'
+            tooltip: 'Value of agricultural %{trade_flow}s ($)'
           },
-          'netweight' => {
+          'quantity' => {
             name: 'Netweight',
             suffix: 'kg',
-            tooltip: 'TODO'
+            tooltip: 'Netweight (kg)'
           }
         }.freeze
       end

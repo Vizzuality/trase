@@ -33,7 +33,7 @@ module Api
         HEADER_ATTRIBUTES = [
           {source: :wb, id: 'SP.POP.TOTL'},
           {source: :wb, id: 'NY.GDP.MKTP.CD'},
-          {source: :comtrade, id: 'trade_value'},
+          {source: :com_trade, id: 'value'},
           {source: :wb, id: 'AG.LND.TOTL.K2'},
           {source: :wb, id: 'AG.LND.AGRI.K2'},
           {source: :wb, id: 'AG.LND.FRST.K2'}
@@ -41,10 +41,16 @@ module Api
 
         def header_attributes
           list = ExternalAttributesList.instance
-          attributes = list.call(HEADER_ATTRIBUTES).compact
+          attributes = list.call(
+            HEADER_ATTRIBUTES, {trade_flow: @activity.to_s.sub(/er$/, '')}
+          ).compact
           attributes.map.with_index do |attribute, idx|
             value = ExternalAttributeValue.instance.call(
-              @node.geo_id, @year, @activity, HEADER_ATTRIBUTES[idx]
+              @node.commodity_id,
+              @node.geo_id,
+              @year,
+              @activity,
+              HEADER_ATTRIBUTES[idx]
             )
             attribute.merge(value: value)
           end
