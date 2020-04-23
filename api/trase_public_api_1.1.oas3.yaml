@@ -1051,16 +1051,7 @@ components:
       description: Number of elements to return
       schema:
         type: integer
-  securitySchemes:
-    apikey:
-      type: apiKey
-      name: api_key
-      in: header
-      description: >-
-        We could start with an api key which would allow us to restrict or track
-        API traffic.
 
-        API key gives full access to every operation an API can perform but since we won't have any create/update/delete requests it's enough for the start.
   schemas:
     node:
       type: object
