@@ -16,14 +16,11 @@ module Api
                 COMTRADE_ATTRIBUTES[ref[:id]]
               end
             end
-          pp list
-          pp substitutions
+
           if substitutions.any?
             list = list.map do |attribute|
-              pp attribute
               substitutions.each do |from, to|
                 re = /%{#{from}}/
-                pp re
                 attribute = attribute.merge({
                   name: attribute[:name].gsub(re, to),
                   tooltip: attribute[:tooltip].gsub(re, to)
@@ -60,16 +57,20 @@ module Api
             name: 'Forested land area',
             suffix: 'km2',
             tooltip: 'Forest area (sq. km)'
+          },
+          'UNDP.HDI.XD' => {
+            name: 'Human Development Index',
+            tooltip: 'Human Development Index'
           }
         }.freeze
 
         COMTRADE_ATTRIBUTES = {
-          'value' => {
+          value: {
             name: 'Value of agricultural %{trade_flow}s',
             prefix: '$',
             tooltip: 'Value of agricultural %{trade_flow}s ($)'
           },
-          'quantity' => {
+          quantity: {
             name: 'Netweight',
             suffix: 'kg',
             tooltip: 'Netweight (kg)'

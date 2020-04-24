@@ -5,10 +5,11 @@ module Api
     module CountriesWbIndicators
       class ApiService
         WORLD_BANK_API_URL = 'https://api.worldbank.org'.freeze
+        # TODO: remove duplication of these here and in external attributes list
         INDICATORS = {
           population: 'SP.POP.TOTL',
           gdp: 'NY.GDP.MKTP.CD',
-          land_area: 'ag.lnd.totl.k2',
+          land_area: 'AG.LND.TOTL.K2',
           agricultural_land_area: 'AG.LND.AGRI.K2',
           forested_land_area: 'AG.LND.FRST.K2',
           human_development_index: 'UNDP.HDI.XD'
