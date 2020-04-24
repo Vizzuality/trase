@@ -4,7 +4,7 @@ RSpec.describe Api::V3::CountriesWbIndicators::ImporterService do
   include FixtureRequestsHelpers
   include_context 'api v3 brazil country'
 
-  context '#import' do
+  context '#call' do
     before :each do
       FactoryBot.create(:api_v3_country, iso2: 'AR')
       FactoryBot.create(:api_v3_country, iso2: 'BO')
@@ -23,7 +23,7 @@ RSpec.describe Api::V3::CountriesWbIndicators::ImporterService do
 
       it 'do not create the countries_wb_indicator for it' do
         expect do
-          Api::V3::CountriesWbIndicators::ImporterService.import([:population])
+          Api::V3::CountriesWbIndicators::ImporterService.call([:population])
         end.to change(Api::V3::CountriesWbIndicator, :count).by(0)
       end
     end
@@ -45,7 +45,7 @@ RSpec.describe Api::V3::CountriesWbIndicators::ImporterService do
 
       it 'replace the value of the existing indicators' do
         expect do
-          Api::V3::CountriesWbIndicators::ImporterService.import([:population])
+          Api::V3::CountriesWbIndicators::ImporterService.call([:population])
         end.to change(Api::V3::CountriesWbIndicator, :count).by(3)
 
         countries_wb_indicator = Api::V3::CountriesWbIndicator.find_by(
@@ -65,7 +65,7 @@ RSpec.describe Api::V3::CountriesWbIndicators::ImporterService do
 
       it 'create the new indicators' do
         expect do
-          Api::V3::CountriesWbIndicators::ImporterService.import([:population])
+          Api::V3::CountriesWbIndicators::ImporterService.call([:population])
         end.to change(Api::V3::CountriesWbIndicator, :count).by(4)
       end
     end

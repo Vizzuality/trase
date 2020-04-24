@@ -45,19 +45,22 @@ module Api
 
         REQUEST_INTERVAL = 40 # number of seconds between requests
 
-        def import
+        def call
           Api::V3::CountriesComTradeIndicator.delete_all
+          request_no = @request_queue.length
+          Rails.logger.debug("Scheduling #{request_no} UN ComTrade requests")
           # Usage limit (guest): 100 requests per hour (per IP address)
           @request_queue.each.with_index do |uri, idx|
-            time_start = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-            Api::V3::CountriesComTradeIndicators::ComTradeRequest.new(uri).call
-            time_end = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-            elapsed = (time_end - time_start).seconds
-            Rails.logger.debug("Processed data from #{uri} in #{elapsed} seconds")
-            remaining = 40 - elapsed
-            sleep(remaining) if remaining > 0
+            Rails.logger.debug("Scheduling #{uri} ComTrade request")
+            ComTradeRequestWorker.perform_in(REQUEST_INTERVAL * idx, uri)
           end
+
           Api::V3::Readonly::CountriesComTradeAggregatedIndicator.refresh
+          MaterializedViewRefreshWorker.perform_in(
+            REQUEST_INTERVAL * request_no + 1.hour,
+            'Api::V3::Readonly::CountriesComTradeAggregatedIndicator',
+            {}
+          )
         end
 
         private

@@ -20,6 +20,6 @@
 # Learn more: http://github.com/javan/whenever
 
 every 7.days, roles: [:data] do
-  runner 'Api::V3::CountriesWbIndicators::ImporterService.import'
-  runner 'ComTradeRefreshWorker.perform_async'
+  runner 'Api::V3::CountriesWbIndicators::ImporterService.call'
+  runner 'Api::V3::CountriesComTradeIndicators::ImporterService.call'
 end
