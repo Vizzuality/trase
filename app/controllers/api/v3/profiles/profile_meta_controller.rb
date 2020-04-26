@@ -12,7 +12,15 @@ module Api
 
           render json: @result,
                  root: 'data',
-                 key_transform: :underscore
+                 key_transform: :underscore,
+                 chart_params: {
+                   id: @result.id,
+                   context_id: @result.context_id,
+                   commodity_id: @result.commodity_id,
+                   year: @result.years.last,
+                   activity: @result.activity
+                 },
+                 url_for: proc { |options| url_for(options) }
         end
 
         private

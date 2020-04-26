@@ -82,11 +82,11 @@ charts:
         attribute_name: SOY_YIELD
         identifier: commodity_yield
   - profile: place
-    identifier: place_indicators_table
+    identifier: place_indicators
     position: 1
     title: Sustainability indicators
   - profile: place
-    parent_identifier: place_indicators_table
+    parent_identifier: place_indicators
     identifier: place_environmental_indicators
     position: 0
     title: Environmental indicators
@@ -94,7 +94,7 @@ charts:
       - attribute_type: quant
         attribute_name: DEFORESTATION_PARAGUAY
   - profile: place
-    parent_identifier: place_indicators_table
+    parent_identifier: place_indicators
     identifier: place_agricultural_indicators
     position: 2
     title: Agricultural indicators

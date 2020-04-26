@@ -17,6 +17,7 @@
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
+/db/commodity_codes.csv
 /doc/gh-pages/db/all_tables/**/*
 /doc/gh-pages/db/blue_tables/**/*
 

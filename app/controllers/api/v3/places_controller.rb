@@ -21,8 +21,7 @@ module Api
           @year,
           {
             profile_type: profile_type,
-            chart_identifier: :place_top_consumer_actors,
-            context: @context
+            chart_identifier: :place_top_consumer_actors
           }
         ).call
 
@@ -36,8 +35,7 @@ module Api
           @year,
           {
             profile_type: profile_type,
-            chart_identifier: :place_top_consumer_countries,
-            context: @context
+            chart_identifier: :place_top_consumer_countries
           }
         ).call
 

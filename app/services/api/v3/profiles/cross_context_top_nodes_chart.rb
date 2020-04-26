@@ -21,7 +21,6 @@ module Api
         # @param profile_options [Hash]
         # @option profile_options [String] profile_type
         # @option profile_options [String] chart_identifier
-        # @option profile_options [Api::V3::Context] context
         def initialize(contexts, node, year, profile_options)
           # this is a bit of bandaid to support cross context charts
           # even though profile objects are linked to a single context
@@ -29,9 +28,9 @@ module Api
           # @context = one of those contexts to get the profile from
           # TODO: this needs rethinking
           @contexts = contexts
-          @context = profile_options[:context]
           @node = node
           @year = year
+          @context = @node.context
 
           profile_type = profile_options[:profile_type]
           chart_identifier = profile_options[:chart_identifier]

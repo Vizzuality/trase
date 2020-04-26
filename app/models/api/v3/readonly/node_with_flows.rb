@@ -44,6 +44,9 @@ module Api
         belongs_to :readonly_context,
                    class_name: 'Api::V3::Readonly::Context',
                    foreign_key: 'context_id'
+        belongs_to :commodity,
+                   class_name: 'Api::V3::Commodity',
+                   foreign_key: 'commodity_id'
         has_many :node_inds,
                  class_name: 'Api::V3::NodeInd',
                  foreign_key: 'node_id'
