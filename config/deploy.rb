@@ -1,8 +1,6 @@
 # config valid for current version and patch releases of Capistrano
 lock '~> 3.13.0'
 
-require 'whenever/capistrano'
-
 set :application, 'trase'
 set :repo_url, 'git@github.com:Vizzuality/trase.git'
 
