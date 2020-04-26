@@ -4,13 +4,17 @@ RSpec.describe Api::V3::CountriesWbIndicators::ImporterService do
   include FixtureRequestsHelpers
   include_context 'api v3 brazil country'
 
-  context '#import' do
+  context '#call' do
     before :each do
       FactoryBot.create(:api_v3_country, iso2: 'AR')
       FactoryBot.create(:api_v3_country, iso2: 'BO')
       FactoryBot.create(:api_v3_country, iso2: 'CO')
       allow(Api::V3::Flow).to receive(:minimum).and_return(2013)
       allow(Api::V3::Flow).to receive(:maximum).and_return(2013)
+      stub_const(
+        'Api::V3::CountriesWbIndicators::IndicatorsList::ATTRIBUTES',
+        Api::V3::CountriesWbIndicators::IndicatorsList::ATTRIBUTES.slice(:population)
+      )
     end
 
     context 'when there is unexpected countries' do
@@ -23,18 +27,23 @@ RSpec.describe Api::V3::CountriesWbIndicators::ImporterService do
 
       it 'do not create the countries_wb_indicator for it' do
         expect do
-          Api::V3::CountriesWbIndicators::ImporterService.import([:population])
+          Api::V3::CountriesWbIndicators::ImporterService.call
         end.to change(Api::V3::CountriesWbIndicator, :count).by(0)
       end
     end
 
     context 'when there is existing countries_wb_indicators' do
+      let(:indicator_name) {
+        list = Api::V3::CountriesWbIndicators::IndicatorsList::ATTRIBUTES
+        indicator_name = list[:population][:wb_name]
+      }
       before do
         FactoryBot.create(
           :api_v3_countries_wb_indicator,
-          iso_code: 'ARG',
+          iso3: 'ARG',
+          iso2: 'AR',
           year: 2013,
-          name: 'population',
+          name: indicator_name,
           value: 0.0
         )
 
@@ -44,12 +53,14 @@ RSpec.describe Api::V3::CountriesWbIndicators::ImporterService do
       end
 
       it 'replace the value of the existing indicators' do
-        expect do
-          Api::V3::CountriesWbIndicators::ImporterService.import([:population])
-        end.to change(Api::V3::CountriesWbIndicator, :count).by(3)
+        Sidekiq::Testing.inline! do
+          expect do
+            Api::V3::CountriesWbIndicators::ImporterService.call
+          end.to change(Api::V3::CountriesWbIndicator, :count).by(3)
+        end
 
         countries_wb_indicator = Api::V3::CountriesWbIndicator.find_by(
-          iso_code: 'ARG', year: 2013, name: 'population'
+          iso3: 'ARG', year: 2013, name: indicator_name
         )
         expect(countries_wb_indicator.value).to eql 379_705_719.0
         expect(countries_wb_indicator.rank).to eql 2
@@ -64,9 +75,11 @@ RSpec.describe Api::V3::CountriesWbIndicators::ImporterService do
       end
 
       it 'create the new indicators' do
-        expect do
-          Api::V3::CountriesWbIndicators::ImporterService.import([:population])
-        end.to change(Api::V3::CountriesWbIndicator, :count).by(4)
+        Sidekiq::Testing.inline! do
+          expect do
+            Api::V3::CountriesWbIndicators::ImporterService.call
+          end.to change(Api::V3::CountriesWbIndicator, :count).by(4)
+        end
       end
     end
   end
