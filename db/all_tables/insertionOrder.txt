@@ -62,6 +62,8 @@ sankey_card_links
 top_profiles
 ar_internal_metadata
 attributes
+countries_com_trade_aggregated_indicators
+countries_com_trade_indicators
 countries_wb_indicators
 dashboard_template_commodities
 dashboard_template_companies
@@ -78,6 +80,7 @@ dashboards_importers
 dashboards_sources
 database_updates
 database_validation_reports
+external_api_updates
 flow_nodes
 nodes_with_flows
 nodes_with_flows_or_geo
@@ -271,4 +274,3 @@ partitioned_flows_60
 partitioned_flows_61
 partitioned_flows_7
 schema_migrations
-worldbanks

@@ -15,6 +15,7 @@
       <sequence increment="1" name="context_properties_id_seq" startValue="1"/>
       <sequence increment="1" name="contexts_id_seq" startValue="1"/>
       <sequence increment="1" name="contextual_layers_id_seq" startValue="1"/>
+      <sequence increment="1" name="countries_com_trade_indicators_false_seq" startValue="1"/>
       <sequence increment="1" name="countries_id_seq" startValue="1"/>
       <sequence increment="1" name="countries_wb_indicators_id_seq" startValue="1"/>
       <sequence increment="1" name="country_properties_id_seq" startValue="1"/>
@@ -35,6 +36,7 @@
       <sequence increment="1" name="download_quals_id_seq" startValue="1"/>
       <sequence increment="1" name="download_quants_id_seq" startValue="1"/>
       <sequence increment="1" name="download_versions_id_seq" startValue="1"/>
+      <sequence increment="1" name="external_api_updates_id_seq" startValue="1"/>
       <sequence increment="1" name="flow_inds_id_seq" startValue="1"/>
       <sequence increment="1" name="flow_quals_id_seq" startValue="1"/>
       <sequence increment="1" name="flow_quants_id_seq" startValue="1"/>
@@ -73,7 +75,6 @@
       <sequence increment="1" name="sankey_card_links_id_seq" startValue="1"/>
       <sequence increment="1" name="top_profile_images_id_seq" startValue="1"/>
       <sequence increment="1" name="top_profiles_id_seq" startValue="1"/>
-      <sequence increment="1" name="worldbanks_id_seq" startValue="1"/>
    </sequences>
    <tables>
       <table name="ar_internal_metadata" numRows="1" remarks="" schema="public" type="TABLE">
@@ -537,15 +538,63 @@
             <column ascending="true" name="iso2"/>
          </index>
       </table>
+      <table name="countries_com_trade_aggregated_indicators" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="17" id="0" name="quantity" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="17" id="1" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="quantity_rank" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="value_rank" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="commodity_id" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="year" nullable="false" remarks="" size="5" type="int2" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="iso2" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="activity" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <primaryKey column="commodity_id" sequenceNumberInPK="1"/>
+         <primaryKey column="iso2" sequenceNumberInPK="2"/>
+         <primaryKey column="year" sequenceNumberInPK="3"/>
+         <primaryKey column="activity" sequenceNumberInPK="4"/>
+         <index name="countries_com_trade_aggregated_indicators_pkey" unique="true">
+            <column ascending="true" name="commodity_id"/>
+            <column ascending="true" name="iso2"/>
+            <column ascending="true" name="year"/>
+            <column ascending="true" name="activity"/>
+         </index>
+      </table>
+      <table name="countries_com_trade_aggregated_indicators_v" numRows="0" remarks="" schema="public" type="VIEW" viewSql=" SELECT sum(countries_com_trade_indicators.quantity) AS quantity,&#10;    sum(countries_com_trade_indicators.value) AS value,&#10;    rank() OVER (PARTITION BY countries_com_trade_indicators.year, countries_com_trade_indicators.commodity_id, countries_com_trade_indicators.activity ORDER BY (sum(countries_com_trade_indicators.quantity)) DESC) AS quantity_rank,&#10;    rank() OVER (PARTITION BY countries_com_trade_indicators.year, countries_com_trade_indicators.commodity_id, countries_com_trade_indicators.activity ORDER BY (sum(countries_com_trade_indicators.value)) DESC) AS value_rank,&#10;    countries_com_trade_indicators.commodity_id,&#10;    countries_com_trade_indicators.year,&#10;    countries_com_trade_indicators.iso2,&#10;    countries_com_trade_indicators.activity&#10;   FROM countries_com_trade_indicators&#10;  GROUP BY countries_com_trade_indicators.commodity_id, countries_com_trade_indicators.year, countries_com_trade_indicators.iso2, countries_com_trade_indicators.activity;">
+         <column autoUpdated="false" defaultValue="null" digits="17" id="0" name="quantity" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="17" id="1" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="quantity_rank" nullable="true" remarks="" size="19" type="int8" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="value_rank" nullable="true" remarks="" size="19" type="int8" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="commodity_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="year" nullable="true" remarks="" size="5" type="int2" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="iso2" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="activity" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+      </table>
+      <table name="countries_com_trade_indicators" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('countries_com_trade_indicators_false_seq'::regclass)" digits="0" id="0" name="false" nullable="false" remarks="" size="19" type="bigserial" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="17" id="1" name="raw_quantity" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="quantity" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="17" id="3" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="commodity_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="year" nullable="true" remarks="" size="5" type="int2" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="iso3" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="iso2" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="commodity_code" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="activity" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="10" name="updated_at" nullable="false" remarks="" size="35" type="timestamptz" typeCode="93"/>
+         <primaryKey column="false" sequenceNumberInPK="1"/>
+         <index name="countries_com_trade_indicators_pkey" unique="true">
+            <column ascending="true" name="false"/>
+         </index>
+      </table>
       <table name="countries_wb_indicators" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('countries_wb_indicators_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="19" type="bigserial" typeCode="-5"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="iso_code" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="iso3" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="year" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="name" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="4" name="value" nullable="false" remarks="" size="17" type="float8" typeCode="8"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="rank" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="6" id="6" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
          <column autoUpdated="false" defaultValue="null" digits="6" id="7" name="updated_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="iso2" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="countries_wb_indicators_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -1217,6 +1266,16 @@
          <index name="download_versions_context_id_symbol_key" unique="true">
             <column ascending="true" name="context_id"/>
             <column ascending="true" name="symbol"/>
+         </index>
+      </table>
+      <table name="external_api_updates" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('external_api_updates_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="19" type="bigserial" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="name" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="last_update" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="resource_name" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="external_api_updates_pkey" unique="true">
+            <column ascending="true" name="id"/>
          </index>
       </table>
       <table name="flow_attributes_mv" numRows="0" remarks="" schema="public" type="VIEW" viewSql=" SELECT attributes.id AS attribute_id,&#10;    attributes.name,&#10;    attributes.display_name,&#10;    attributes.unit,&#10;    attributes.unit_type,&#10;    flows.context_id,&#10;    array_agg(DISTINCT flows.year) AS years&#10;   FROM ((flows&#10;     JOIN flow_quants ON ((flow_quants.flow_id = flows.id)))&#10;     JOIN attributes ON (((attributes.original_type = 'Quant'::text) AND (attributes.original_id = flow_quants.quant_id))))&#10;  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, attributes.unit_type, flows.context_id&#10;UNION ALL&#10; SELECT attributes.id AS attribute_id,&#10;    attributes.name,&#10;    attributes.display_name,&#10;    attributes.unit,&#10;    attributes.unit_type,&#10;    flows.context_id,&#10;    array_agg(DISTINCT flows.year) AS years&#10;   FROM ((flows&#10;     JOIN flow_quals ON ((flow_quals.flow_id = flows.id)))&#10;     JOIN attributes ON (((attributes.original_type = 'Qual'::text) AND (attributes.original_id = flow_quals.qual_id))))&#10;  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, attributes.unit_type, flows.context_id&#10;UNION ALL&#10; SELECT attributes.id AS attribute_id,&#10;    attributes.name,&#10;    attributes.display_name,&#10;    attributes.unit,&#10;    attributes.unit_type,&#10;    flows.context_id,&#10;    array_agg(DISTINCT flows.year) AS years&#10;   FROM ((flows&#10;     JOIN flow_inds ON ((flow_inds.flow_id = flows.id)))&#10;     JOIN attributes ON (((attributes.original_type = 'Ind'::text) AND (attributes.original_id = flow_inds.ind_id))))&#10;  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, attributes.unit_type, flows.context_id;">
@@ -5025,7 +5084,7 @@
             <column ascending="true" name="country_id"/>
          </index>
       </table>
-      <table name="schema_migrations" numRows="108" remarks="" schema="public" type="TABLE">
+      <table name="schema_migrations" numRows="112" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="version" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
          <primaryKey column="version" sequenceNumberInPK="1"/>
          <index name="schema_migrations_pkey" unique="true">
@@ -5077,15 +5136,6 @@
          </index>
          <index name="index_top_profiles_on_top_profile_image_id" unique="false">
             <column ascending="true" name="top_profile_image_id"/>
-         </index>
-      </table>
-      <table name="worldbanks" numRows="0" remarks="" schema="public" type="TABLE">
-         <column autoUpdated="true" defaultValue="nextval('worldbanks_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="19" type="bigserial" typeCode="-5"/>
-         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="name" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
-         <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="last_update" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
-         <primaryKey column="id" sequenceNumberInPK="1"/>
-         <index name="worldbanks_pkey" unique="true">
-            <column ascending="true" name="id"/>
          </index>
       </table>
    </tables>

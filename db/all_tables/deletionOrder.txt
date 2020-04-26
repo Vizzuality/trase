@@ -1,4 +1,3 @@
-worldbanks
 schema_migrations
 partitioned_flows_7
 partitioned_flows_61
@@ -192,6 +191,7 @@ nodes_with_flows_per_year
 nodes_with_flows_or_geo
 nodes_with_flows
 flow_nodes
+external_api_updates
 database_validation_reports
 database_updates
 dashboards_sources
@@ -208,6 +208,8 @@ dashboard_template_countries
 dashboard_template_companies
 dashboard_template_commodities
 countries_wb_indicators
+countries_com_trade_indicators
+countries_com_trade_aggregated_indicators
 attributes
 ar_internal_metadata
 top_profiles
