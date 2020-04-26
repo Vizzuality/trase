@@ -65,7 +65,7 @@ after 'deploy:starting', 'sidekiq:quiet'
 after 'deploy:reverted', 'sidekiq:restart'
 after 'deploy:published', 'sidekiq:restart'
 after 'sidekiq:restart', 'downloads:refresh'
-after 'deploy:updated', 'newrelic:notice_deployment'
+# after 'deploy:updated', 'newrelic:notice_deployment'
 
 namespace :yarn do
   after 'yarn:install', 'yarn:build'
