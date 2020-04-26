@@ -26,8 +26,11 @@ module Api
           ensure_valid_response(data['validation']) or return
 
           data['dataset'].each do |element|
-            Api::V3::CountriesComTradeIndicator.create(
-              parse_attributes(element)
+            attributes = parse_attributes(element)
+            next unless attributes
+
+            Api::V3::CountriesComTradeIndicator.create!(
+              attributes.merge(updated_at: Time.now)
             )
           end
         end
@@ -63,7 +66,7 @@ module Api
           end
 
           iso3 = element['rt3ISO']
-          return nil if iso3.blank? # e.g. country groupings
+          return nil if iso3.blank? # ignore, e.g. country groupings
 
           country = country_codes.lookup_by_iso3(iso3)
           unless country
@@ -80,7 +83,7 @@ module Api
           eq_factor = commodity[:eq_factor] || 1
           quantity = raw_quantity && raw_quantity * eq_factor
           activity = RG_TO_ACTIVITY[element['rgCode']]
-          return nil if activity.nil? # e.g. re-export / re-import
+          return nil if activity.nil? # ignore, e.g. re-export / re-import
 
           {
             raw_quantity: raw_quantity,
@@ -99,52 +102,16 @@ module Api
           return @commodity_codes if defined? @commodity_codes
 
           @commodity_codes =
-            Api::V3::CountriesComTradeIndicators::CommodityCodes.instance
+            Api::V3::CountriesComTradeIndicators::CommodityCodes.new
         end
 
         def country_codes
           return @country_codes if defined? @country_codes
 
           @country_codes =
-            Api::V3::CountriesComTradeIndicators::CountryCodes.instance
+            Api::V3::CountriesComTradeIndicators::CountryCodes.new
         end
       end
     end
   end
 end
-
-# {"pfCode"=>"H2",
-#  "yr"=>2013,
-#  "period"=>2013,
-#  "periodDesc"=>"2013",
-#  "aggrLevel"=>6,
-#  "IsLeaf"=>1,
-#  "rgCode"=>1,
-#  "rgDesc"=>"Import",
-#  "rtCode"=>296,
-#  "rtTitle"=>"Kiribati",
-#  "rt3ISO"=>"KIR",
-#  "ptCode"=>0,
-#  "ptTitle"=>"World",
-#  "pt3ISO"=>"WLD",
-#  "ptCode2"=>nil,
-#  "ptTitle2"=>"",
-#  "pt3ISO2"=>"",
-#  "cstCode"=>"",
-#  "cstDesc"=>"",
-#  "motCode"=>"",
-#  "motDesc"=>"",
-#  "cmdCode"=>"180610",
-#  "cmdDescE"=>"Cocoa powder, cont. added sugar/oth. sweetening matter",
-#  "qtCode"=>8,
-#  "qtDesc"=>"Weight in kilograms",
-#  "qtAltCode"=>nil,
-#  "qtAltDesc"=>"",
-#  "TradeQuantity"=>1608,
-#  "AltQuantity"=>nil,
-#  "NetWeight"=>1608,
-#  "GrossWeight"=>nil,
-#  "TradeValue"=>7871,
-#  "CIFValue"=>nil,
-#  "FOBValue"=>nil,
-#  "estCode"=>0}

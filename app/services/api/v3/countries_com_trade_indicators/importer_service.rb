@@ -23,52 +23,69 @@ module Api
         def initialize
           @request_queue = []
 
-          commodities.each do |commodity_id|
-            commodity = commodity_codes.lookup_by_trase_id(commodity_id)
-            next unless commodity
+          trase_commodity_ids.each do |commodity_id|
+            commodities = commodity_codes.lookup_by_trase_id(commodity_id)
+            next unless commodities
 
-            codes = commodity[:com_trade_codes]
+            codes = commodities.map do |commodity|
+              commodity[:com_trade_codes]
+            end.flatten
+
             years(commodity_id).each do |year|
               codes.each_slice(20) do |codes_slice|
-                # max: ~ 300 countries x 2 (exports / imports) x number of codes
-                max = 600 * codes_slice.length
-                request_params = FIXED_PARAMS.merge({
-                  COMMODITY_CODES_PARAM => codes_slice.join(','),
-                  YEAR_PARAM => year,
-                  MAX_PARAM => max
-                })
-                @request_queue << URI(API_URL + '?' + request_params.to_query)
+                @request_queue << self.class.request_uri(codes_slice, year)
               end
             end
           end
         end
 
-        REQUEST_INTERVAL = 40 # number of seconds between requests
+        # Usage limit (guest): 100 requests per hour (per IP address)
+        MAX_REQUESTS_PER_HOUR = 100
+        # Rate limit (guest): 1 request every second
+        REQUEST_INTERVAL = 2 # let's make it double as timing inprecise
+        BATCH_REQUEST_INTERVAL = 40 # number of seconds between requests
 
         def call
-          Api::V3::CountriesComTradeIndicator.delete_all
           request_no = @request_queue.length
           Rails.logger.debug("Scheduling #{request_no} UN ComTrade requests")
-          # Usage limit (guest): 100 requests per hour (per IP address)
+
+          interval =
+            if request_no > MAX_REQUESTS_PER_HOUR
+              BATCH_REQUEST_INTERVAL
+            else
+              REQUEST_INTERVAL
+            end
+
+          start_time = Time.now
           @request_queue.each.with_index do |uri, idx|
             Rails.logger.debug("Scheduling #{uri} ComTrade request")
-            ComTradeRequestWorker.perform_in(REQUEST_INTERVAL * idx, uri)
+            ComTradeRequestWorker.perform_in(interval * idx, uri)
           end
-
-          Api::V3::Readonly::CountriesComTradeAggregatedIndicator.refresh
-          MaterializedViewRefreshWorker.perform_in(
+          ComTradeRefreshWorker.perform_in(
             REQUEST_INTERVAL * request_no + 1.hour,
-            'Api::V3::Readonly::CountriesComTradeAggregatedIndicator',
-            {}
+            start_time
           )
+        end
+
+        # @param commodity_codes [Array<String>]
+        # @param year [Integer]
+        def self.request_uri(commodity_codes, year)
+          # max: ~ 300 countries x 2 (exports / imports) x number of codes
+          max = 600 * commodity_codes.length
+          request_params = FIXED_PARAMS.merge({
+            COMMODITY_CODES_PARAM => commodity_codes.join(','),
+            YEAR_PARAM => year,
+            MAX_PARAM => max
+          })
+          URI(API_URL + '?' + request_params.to_query)
         end
 
         private
 
-        def commodities
-          return @commodities if defined? @commodities
+        def trase_commodity_ids
+          return @trase_commodity_ids if defined? @trase_commodity_ids
 
-          @commodities = Api::V3::Commodity.all.pluck(:id)
+          @trase_commodity_ids = Api::V3::Commodity.all.pluck(:id)
         end
 
         def years(commodity_id)
@@ -85,7 +102,7 @@ module Api
           return @commodity_codes if defined? @commodity_codes
 
           @commodity_codes =
-            Api::V3::CountriesComTradeIndicators::CommodityCodes.instance
+            Api::V3::CountriesComTradeIndicators::CommodityCodes.new
         end
       end
     end

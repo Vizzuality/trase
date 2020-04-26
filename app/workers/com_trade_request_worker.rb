@@ -1,6 +1,7 @@
 class ComTradeRequestWorker
   include Sidekiq::Worker
   sidekiq_options queue: :external_apis,
+                  retry: 3,
                   backtrace: true
 
   def perform(uri)

@@ -4,78 +4,41 @@ module Api
       class ExternalAttributesList
         include Singleton
 
-        # @param attribute_refs [Array<Hash>]
-        # e.g. [{source: :wb, id: 'WB SP.POP.TOTL'}]
+        # @param attribute_ref [String]
+        # e.g. wb.population.rank, com_trade.quantity.value
         # @param substitutions [Hash]
-        def call(attribute_refs, substitutions = {})
+        # @param substitutions [String] :from
+        # @param substitutions [String] :to
+        def call(attribute_ref, substitutions = {})
+          attribute_ref_parts = attribute_ref.split('.').map(&:to_sym)
+          source = attribute_ref_parts.shift
           list =
-            attribute_refs.map do |ref|
-              if ref[:source] == :wb
-                WB_ATTRIBUTES[ref[:id]]
-              else
-                COMTRADE_ATTRIBUTES[ref[:id]]
-              end
+            if source == :wb
+              wb_attributes
+            else
+              com_trade_attributes
             end
-
+          short_name = attribute_ref_parts.shift
+          attribute_def = list[short_name]
           if substitutions.any?
-            list = list.map do |attribute|
-              substitutions.each do |from, to|
-                re = /%{#{from}}/
-                attribute = attribute.merge({
-                  name: attribute[:name].gsub(re, to),
-                  tooltip: attribute[:tooltip].gsub(re, to)
-                })
-              end
-              attribute
+            substitutions.each do |from, to|
+              re = /%{#{from}}/
+              attribute_def = attribute_def.merge({
+                name: attribute_def[:name].gsub(re, to),
+                tooltip: attribute_def[:tooltip].gsub(re, to)
+              })
             end
           end
-          list
+          attribute_def
         end
 
-        WB_ATTRIBUTES = {
-          'SP.POP.TOTL' => {
-            name: 'Population',
-            suffix: 'people',
-            tooltip: 'Population, total'
-          },
-          'NY.GDP.MKTP.CD' => {
-            name: 'GDP',
-            prefix: '$',
-            tooltip: 'GDP (current US$)'
-          },
-          'AG.LND.TOTL.K2' => {
-            name: 'Land area',
-            suffix: 'km2',
-            tooltip: 'Land area (sq. km)'
-          },
-          'AG.LND.AGRI.K2' => {
-            name: 'Agricultural land area',
-            suffix: 'km2',
-            tooltip: 'Agricultural land (sq. km)'
-          },
-          'AG.LND.FRST.K2' => {
-            name: 'Forested land area',
-            suffix: 'km2',
-            tooltip: 'Forest area (sq. km)'
-          },
-          'UNDP.HDI.XD' => {
-            name: 'Human Development Index',
-            tooltip: 'Human Development Index'
-          }
-        }.freeze
+        def com_trade_attributes
+          Api::V3::CountriesComTradeIndicators::IndicatorsList::ATTRIBUTES
+        end
 
-        COMTRADE_ATTRIBUTES = {
-          value: {
-            name: 'Value of agricultural %{trade_flow}s',
-            prefix: '$',
-            tooltip: 'Value of agricultural %{trade_flow}s ($)'
-          },
-          quantity: {
-            name: 'Netweight',
-            suffix: 'kg',
-            tooltip: 'Netweight (kg)'
-          }
-        }.freeze
+        def wb_attributes
+          Api::V3::CountriesWbIndicators::IndicatorsList::ATTRIBUTES
+        end
       end
     end
   end

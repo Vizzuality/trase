@@ -13,35 +13,34 @@ module Api
             else
               :importer
             end
+          @value = ExternalAttributeValue.new(
+            @node.geo_id,
+            @year,
+            @activity
+          )
         end
 
         def call
           {
             name: @node.name,
             geo_id: @node.geo_id,
-            header_attributes: header_attributes_with_values,
+            header_attributes: header_attributes,
             summary: summary
           }
         end
 
         def summary
-          attributes_map = Hash[
-            summary_attributes_with_values.map { |a| [a[:name], a[:value]] }
-          ]
-          total_land_rank = attributes_map[:total_land_rank]
-          population_rank = attributes_map[:population_rank]
-          gdp_rank = attributes_map[:gdp_rank]
-          summary = overview(total_land_rank, population_rank, gdp_rank)
+          land_area_rank = @value.call 'wb.land_area.rank'
+          population_rank = @value.call 'wb.population.rank'
+          gdp_rank = @value.call 'wb.gdp.rank'
+          summary = overview(land_area_rank, population_rank, gdp_rank)
 
-          total_land = attributes_map[:total_land]
-          forest_land = attributes_map[:forest_land]
-          agricultural_land = attributes_map[:agricultural_land]
-          summary << land_summary(total_land, forest_land, agricultural_land)
+          land_area = @value.call 'wb.land_area.value'
+          forested_land_area = @value.call 'wb.forested_land_area.value'
+          agricultural_land_area = @value.call 'wb.agricultural_land_area.value'
+          summary << land_summary(land_area, forested_land_area, agricultural_land_area)
 
-          hdi_rank = attributes_map[:hdi_rank]
-          if hdi_rank
-            summary << " Its placement in the Human Development Index is #{hdi_rank}."
-          end
+          # TODO: HDI
           # TODO: signatory to declarations
           summary
         end
@@ -49,83 +48,54 @@ module Api
         private
 
         HEADER_ATTRIBUTES = [
-          {source: :wb, id: 'SP.POP.TOTL'},
-          {source: :wb, id: 'NY.GDP.MKTP.CD'},
-          {source: :com_trade, id: :value},
-          {source: :wb, id: 'AG.LND.TOTL.K2'},
-          {source: :wb, id: 'AG.LND.AGRI.K2'},
-          {source: :wb, id: 'AG.LND.FRST.K2'}
+          'wb.population.value',
+          'wb.gdp.value',
+          'com_trade.value.value',
+          'wb.land_area.value',
+          'wb.agricultural_land_area.value',
+          'wb.forested_land_area.value'
         ].freeze
 
-        SUMMARY_ATTRIBUTES = [
-          {source: :wb, id: 'AG.LND.TOTL.K2', rank: true, name: :total_land_rank},
-          {source: :wb, id: 'SP.POP.TOTL', rank: true, name: :population_rank},
-          {source: :wb, id: 'NY.GDP.MKTP.CD', rank: true, name: :gdp_rank},
-          {source: :wb, id: 'AG.LND.TOTL.K2', name: :total_land},
-          {source: :wb, id: 'AG.LND.FRST.K2', name: :forest_land},
-          {source: :wb, id: 'AG.LND.AGRI.K2', name: :agricultural_land},
-          {source: :wb, id: 'UNDP.HDI.XD', rank: true, name: :hdi_rank}
-        ].freeze
-
-        def header_attributes_with_values
-          attributes_with_values(HEADER_ATTRIBUTES)
-        end
-
-        def summary_attributes_with_values
-          attributes_with_values(SUMMARY_ATTRIBUTES)
-        end
-
-        def attributes_with_values(attributes_without_values)
+        def header_attributes
           list = ExternalAttributesList.instance
-          attributes = list.call(
-            attributes_without_values, {trade_flow: @activity.to_s.sub(/er$/, '')}
-          ).compact
-          attributes_without_values.map.with_index do |attribute, idx|
-            attribute_value = ExternalAttributeValue.instance.call(
-              @node.commodity_id,
-              @node.geo_id,
-              @year,
-              @activity,
-              attributes_without_values[idx]
-            )
-            next unless attribute_value
-
-            value =
-              if attribute[:rank]
-                attribute_value[:rank]
-              else
-                attribute_value[:value]
-              end
-            attribute.merge(value: value)
+          HEADER_ATTRIBUTES.map do |attribute_ref|
+            attribute_def = list.call(attribute_ref, substitutions)
+            attribute_def.
+              except(:short_name, :wb_name).
+              merge(value: @value.call(attribute_ref))
           end.compact
         end
 
-        def overview(total_land_rank, population_rank, gdp_rank)
+        def substitutions
+          {trade_flow: @activity.to_s.sub(/er$/, '')}
+        end
+
+        def overview(land_area_rank, population_rank, gdp_rank)
           summary = "#{@node.name} is the world's"
-          summary << " #{total_land_rank} largest country by land mass"
+          summary << " #{land_area_rank} largest country by land mass"
           summary << ", #{population_rank} largest by population size"
           summary << " and is the world's #{gdp_rank} largest economy (by GDP)."
         end
 
-        def land_summary(total_land, forest_land, agricultural_land)
-          return '' unless total_land && (forest_land || agricultural_land)
+        def land_summary(land_area, forested_land_area, agricultural_land_area)
+          return '' unless land_area && (forested_land_area || agricultural_land_area)
 
-          if forest_land
-            forest_percent = helper.number_to_percentage(
-              (forest_land * 100.0) / total_land,
+          if forested_land_area
+            forested_percent = helper.number_to_percentage(
+              (forested_land_area * 100.0) / land_area,
               precision: 0
             )
           end
-          if agricultural_land
+          if agricultural_land_area
             agricultural_percent = helper.number_to_percentage(
-              (agricultural_land * 100.0) / total_land,
+              (agricultural_land_area * 100.0) / land_area,
               precision: 0
             )
           end
-          if forest_percent && agricultural_percent
-            " Forests make up #{forest_percent} of its land mass and agricultural areas, #{agricultural_percent}."
-          elsif forest_percent
-            " Forests make up #{forest_percent} of its land mass."
+          if forested_percent && agricultural_percent
+            " Forests make up #{forested_percent} of its land mass and agricultural areas, #{agricultural_percent}."
+          elsif forested_percent
+            " Forests make up #{forested_percent} of its land mass."
           elsif agricultural_percent
             " Agricultural areas make up #{agricultural_percent} of its land mass."
           end

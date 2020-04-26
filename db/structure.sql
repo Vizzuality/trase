@@ -2487,13 +2487,14 @@ ALTER SEQUENCE public.countries_id_seq OWNED BY public.countries.id;
 
 CREATE TABLE public.countries_wb_indicators (
     id bigint NOT NULL,
-    iso_code text NOT NULL,
+    iso3 text NOT NULL,
     year integer NOT NULL,
     name text NOT NULL,
     value double precision NOT NULL,
     rank integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    iso2 text NOT NULL
 );
 
 
@@ -4302,6 +4303,37 @@ CREATE SEQUENCE public.download_versions_id_seq
 --
 
 ALTER SEQUENCE public.download_versions_id_seq OWNED BY public.download_versions.id;
+
+
+--
+-- Name: external_api_updates; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.external_api_updates (
+    id bigint NOT NULL,
+    name text NOT NULL,
+    last_update timestamp without time zone NOT NULL,
+    resource_name text
+);
+
+
+--
+-- Name: external_api_updates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.external_api_updates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: external_api_updates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.external_api_updates_id_seq OWNED BY public.external_api_updates.id;
 
 
 --
@@ -9272,36 +9304,6 @@ ALTER SEQUENCE public.top_profiles_id_seq OWNED BY public.top_profiles.id;
 
 
 --
--- Name: worldbanks; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.worldbanks (
-    id bigint NOT NULL,
-    name text NOT NULL,
-    last_update timestamp without time zone NOT NULL
-);
-
-
---
--- Name: worldbanks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.worldbanks_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: worldbanks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.worldbanks_id_seq OWNED BY public.worldbanks.id;
-
-
---
 -- Name: ckeditor_assets id; Type: DEFAULT; Schema: content; Owner: -
 --
 
@@ -9603,6 +9605,13 @@ ALTER TABLE ONLY public.download_versions ALTER COLUMN id SET DEFAULT nextval('p
 
 
 --
+-- Name: external_api_updates id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.external_api_updates ALTER COLUMN id SET DEFAULT nextval('public.external_api_updates_id_seq'::regclass);
+
+
+--
 -- Name: flow_inds id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -9866,13 +9875,6 @@ ALTER TABLE ONLY public.top_profile_images ALTER COLUMN id SET DEFAULT nextval('
 --
 
 ALTER TABLE ONLY public.top_profiles ALTER COLUMN id SET DEFAULT nextval('public.top_profiles_id_seq'::regclass);
-
-
---
--- Name: worldbanks id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.worldbanks ALTER COLUMN id SET DEFAULT nextval('public.worldbanks_id_seq'::regclass);
 
 
 --
@@ -10585,6 +10587,14 @@ ALTER TABLE ONLY public.download_versions
 
 
 --
+-- Name: external_api_updates external_api_updates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.external_api_updates
+    ADD CONSTRAINT external_api_updates_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: flow_inds flow_inds_flow_id_ind_id_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -11094,14 +11104,6 @@ ALTER TABLE ONLY public.top_profile_images
 
 ALTER TABLE ONLY public.top_profiles
     ADD CONSTRAINT top_profiles_pkey PRIMARY KEY (id);
-
-
---
--- Name: worldbanks worldbanks_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.worldbanks
-    ADD CONSTRAINT worldbanks_pkey PRIMARY KEY (id);
 
 
 --
@@ -17220,6 +17222,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200331175932'),
 ('20200416150928'),
 ('20200417094644'),
+('20200425120802'),
+('20200425165029'),
 ('20200425173940');
 
 
