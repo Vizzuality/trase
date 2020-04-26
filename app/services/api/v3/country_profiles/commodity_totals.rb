@@ -12,6 +12,12 @@ module Api
         def initialize(node, year, profile_options)
           @node = node
           @year = year
+          @activity =
+            if @node.node_type == NodeTypeName::COUNTRY_OF_PRODUCTION
+              :exporter
+            else
+              :importer
+            end
           @nodes_with_flows = Api::V3::Readonly::NodeWithFlows.
             select('nodes_with_flows.*, commodities.name AS commodity').
             joins(:commodity).
@@ -44,13 +50,19 @@ module Api
 
         def rows
           @nodes_with_flows.map do |node_with_flows|
+            @external_attribute_value = ExternalAttributeValue.new(
+              @node.geo_id,
+              @year,
+              @activity,
+              node_with_flows.commodity_id
+            )
             {
               name: node_with_flows['commodity'],
               values: [
-                0, # TODO:
+                @external_attribute_value.call('com_trade.quantity.rank'),
                 production_value(node_with_flows.commodity_id),
-                0, # TODO:
-                0 # TODO:
+                @external_attribute_value.call('com_trade.quantity.value'),
+                @external_attribute_value.call('com_trade.value.value')
               ]
             }
           end

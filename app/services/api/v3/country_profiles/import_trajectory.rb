@@ -11,24 +11,27 @@ module Api
           super(
             node.context, node, year, profile_options
           )
+          @activity =
+            if @node.node_type == NodeTypeName::COUNTRY_OF_PRODUCTION
+              :exporter
+            else
+              :importer
+            end
         end
 
         private
 
+        def fetch_years
+          years = Api::V3::Readonly::CountriesComTradeAggregatedIndicator.
+            where(iso2: @node.geo_id).
+            select(:year).
+            distinct.
+            pluck(:year)
+          @years = (years.min..years.max)
+        end
+
         def fetch_lines
           lines = []
-
-          # TODO: this is tmp
-          if @years.empty?
-            @years = Api::V3::Flow.
-              joins(:context).
-              where('path[?] = ?', @node.column_position + 1, @node.id).
-              where('contexts.commodity_id' => @node.commodity_id).
-              select(:year).
-              distinct.
-              pluck(:year).
-              sort
-          end
           lines << {
             name: 'Production',
             legend_name: 'Production',
@@ -40,21 +43,15 @@ module Api
           lines
         end
 
-        # TODO: tmp, this should be import value in $
         def import_values
-          data = Api::V3::FlowQuant.
-            select('flows.year, SUM(value) AS total').
-            from('partitioned_flow_quants flow_quants').
-            joins(flow: :context).
-            where('flows.path[?] = ?', @node.column_position + 1, @node.id).
-            where('contexts.commodity_id' => @node.commodity_id).
-            group(:year)
-
-          data_by_year = Hash[
-            data.map { |fq| [fq.year, fq['total']] }
-          ]
-
-          years.map { |year| data_by_year[year] }
+          years.map do |year|
+            external_attribute_value = ExternalAttributeValue.new(
+              @node.geo_id,
+              year,
+              @activity
+            )
+            external_attribute_value.call 'com_trade.value.value'
+          end
         end
       end
     end

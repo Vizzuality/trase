@@ -13,7 +13,7 @@ module Api
             else
               :importer
             end
-          @value = ExternalAttributeValue.new(
+          @external_attribute_value = ExternalAttributeValue.new(
             @node.geo_id,
             @year,
             @activity
@@ -30,14 +30,14 @@ module Api
         end
 
         def summary
-          land_area_rank = @value.call 'wb.land_area.rank'
-          population_rank = @value.call 'wb.population.rank'
-          gdp_rank = @value.call 'wb.gdp.rank'
+          land_area_rank = @external_attribute_value.call 'wb.land_area.rank'
+          population_rank = @external_attribute_value.call 'wb.population.rank'
+          gdp_rank = @external_attribute_value.call 'wb.gdp.rank'
           summary = overview(land_area_rank, population_rank, gdp_rank)
 
-          land_area = @value.call 'wb.land_area.value'
-          forested_land_area = @value.call 'wb.forested_land_area.value'
-          agricultural_land_area = @value.call 'wb.agricultural_land_area.value'
+          land_area = @external_attribute_value.call 'wb.land_area.value'
+          forested_land_area = @external_attribute_value.call 'wb.forested_land_area.value'
+          agricultural_land_area = @external_attribute_value.call 'wb.agricultural_land_area.value'
           summary << land_summary(land_area, forested_land_area, agricultural_land_area)
 
           # TODO: HDI
@@ -62,7 +62,7 @@ module Api
             attribute_def = list.call(attribute_ref, substitutions)
             attribute_def.
               except(:short_name, :wb_name).
-              merge(value: @value.call(attribute_ref))
+              merge(value: @external_attribute_value.call(attribute_ref))
           end.compact
         end
 
