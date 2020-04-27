@@ -23,12 +23,13 @@ export const getTooltipValues = createSelector(
   ],
   (nodeAttributes, selectedMapDimensions, nodeHeights, nodesData, coordinates, selectedResizeBy) => {
     let values = [];
-    const node = nodesData[0];
-    const nodeHeight = nodeHeights && nodeHeights[node.id];
 
     if (!coordinates) {
       return null;
     }
+
+    const node = nodesData[0];
+    const nodeHeight = nodeHeights && nodeHeights[node.id];
 
     if (nodeAttributes && selectedMapDimensions && selectedMapDimensions.length > 0) {
       values = selectedMapDimensions
