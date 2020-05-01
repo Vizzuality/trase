@@ -78,6 +78,10 @@ module Api
         )
       end
 
+      def self.last_successful_update
+        where(status: FINISHED).order(:created_at).last
+      end
+
       protected
 
       def started?
