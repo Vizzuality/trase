@@ -2,7 +2,9 @@ ActiveAdmin.register_page 'Database Import' do
   menu parent: 'Database', priority: 2
 
   content do
-    database_versions = Api::V3::S3ObjectList.instance.call(exclude: ['MAIN'])
+    database_versions = S3::ObjectList.instance.call(
+      exclude: ['MAIN']
+    )
     render partial: 'admin/database_import/form', locals: {
       database_versions: database_versions, jid: params[:jid]
     }

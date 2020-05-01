@@ -38,7 +38,7 @@ module Api
         end
 
         def upload_to_s3
-          Api::V3::S3Uploader.instance.call(
+          S3::Uploader.instance.call(
             @s3_filename,
             @local_filename,
             schema_version: ActiveRecord::Migrator.current_version.to_s
