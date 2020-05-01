@@ -3,7 +3,10 @@ ActiveAdmin.register_page 'Database Export' do
 
   content do
     database_versions = S3::ObjectList.instance.call(
-      exclude: ['MAIN']
+      exclude: [
+        Api::V3::DatabaseUpdate::S3_PREFIX,
+        Api::V3::MapAttributesExport::S3_PREFIX
+      ]
     )
     keys = database_versions.map { |n| n[:key] }.uniq
 

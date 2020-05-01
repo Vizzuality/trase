@@ -8,7 +8,9 @@ ActiveAdmin.register_page 'Database Update' do
   content do
     current_update = Api::V3::DatabaseUpdate.started.first
     database_updates = Api::V3::DatabaseUpdate.order(created_at: :desc).limit(25)
-    main_schema_versions = S3::ObjectList.instance.call(include: ['MAIN'])
+    main_schema_versions = S3::ObjectList.instance.call(
+      include: [Api::V3::DatabaseUpdate::S3_PREFIX]
+    )
     unless current_update
       render partial: 'admin/database_update/mirror_form', locals: {
         current_update: current_update,

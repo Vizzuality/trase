@@ -21,6 +21,8 @@ module Api
       FINISHED = 'FINISHED'.freeze
       FAILED = 'FAILED'.freeze
 
+      S3_PREFIX = 'MAIN'.freeze # prefix within bucket
+
       validate :only_one_update_started
       scope :started, -> { where(status: STARTED) }
 

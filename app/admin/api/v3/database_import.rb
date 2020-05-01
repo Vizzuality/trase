@@ -3,7 +3,10 @@ ActiveAdmin.register_page 'Database Import' do
 
   content do
     database_versions = S3::ObjectList.instance.call(
-      exclude: ['MAIN']
+      exclude: [
+        Api::V3::DatabaseUpdate::S3_PREFIX,
+        Api::V3::MapAttributesExport::S3_PREFIX
+      ]
     )
     render partial: 'admin/database_import/form', locals: {
       database_versions: database_versions, jid: params[:jid]
