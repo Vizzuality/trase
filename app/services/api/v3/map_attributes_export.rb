@@ -42,12 +42,17 @@ module Api
       end
 
       def upload_to_s3
-        S3::Uploader.instance.call(
-          @s3_filename,
-          @local_filename,
-          schema_version: ActiveRecord::Migrator.current_version.to_s,
-          last_database_update: Api::V3::DatabaseUpdate.last_successful_update&.created_at&.to_s
-        )
+        meta = {
+          schema_version: ActiveRecord::Migrator.current_version.to_s
+        }
+        last_successful_update = Api::V3::DatabaseUpdate.last_successful_update
+        if last_successful_update
+          meta = meta.merge({
+            last_update: last_successful_update.created_at.to_s,
+            filename: last_successful_update.filename || 'N/A'
+          })
+        end
+        S3::Uploader.instance.call(@s3_filename, @local_filename, meta)
         Rails.logger.debug "File uploaded to #{@s3_filename}"
         # set canned ACL - public read, owner write
         S3::CannedAcl.instance.call(@s3_filename, 'public-read')

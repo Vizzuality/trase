@@ -3841,6 +3841,7 @@ CREATE TABLE public.database_updates (
     jid text,
     status text DEFAULT 'STARTED'::text NOT NULL,
     error text,
+    filename text,
     CONSTRAINT database_updates_status_check CHECK ((status = ANY (ARRAY['STARTED'::text, 'FINISHED'::text, 'FAILED'::text])))
 );
 
@@ -17259,6 +17260,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200425120802'),
 ('20200425165029'),
 ('20200425173940'),
-('20200430115447');
+('20200430115447'),
+('20200501152755');
 
 

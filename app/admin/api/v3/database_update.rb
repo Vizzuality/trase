@@ -37,10 +37,13 @@ ActiveAdmin.register_page 'Database Update' do
   end
 
   page_action :start_mirror, method: :post do
-    puts params.inspect
-    database_update = Api::V3::DatabaseUpdate.new(status: Api::V3::DatabaseUpdate::STARTED)
+    main_schema_version = params[:main_schema_version]
+    database_update = Api::V3::DatabaseUpdate.new(
+      status: Api::V3::DatabaseUpdate::STARTED,
+      filename: main_schema_version
+    )
     if database_update.save
-      MirrorDatabaseUpdateWorker.perform_async(database_update.id, params[:main_schema_version])
+      MirrorDatabaseUpdateWorker.perform_async(database_update.id, main_schema_version)
       redirect_to admin_database_update_path, notice: 'Database update scheduled. Please refresh for updates.'
     else
       redirect_to admin_database_update_path, notice: 'Database update already in progress.'

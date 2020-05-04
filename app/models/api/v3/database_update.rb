@@ -7,6 +7,7 @@
 #  jid(Job ID, filled in when update started using a background job processor)               :text
 #  status(STARTED (only one at a time), FINISHED or FAILED)                                  :text             default("STARTED"), not null
 #  error(Exception message for failed updates)                                               :text
+#  filename                                                                                  :text
 #
 # Indexes
 #
