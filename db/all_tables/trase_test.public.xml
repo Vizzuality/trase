@@ -1123,6 +1123,7 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="jid" nullable="true" remarks="Job ID, filled in when update started using a background job processor" size="2147483647" type="text" typeCode="12"/>
          <column autoUpdated="false" defaultValue="'STARTED'::text" digits="0" id="5" name="status" nullable="false" remarks="STARTED (only one at a time), FINISHED or FAILED" size="2147483647" type="text" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="error" nullable="true" remarks="Exception message for failed updates" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="filename" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="database_updates_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -1604,6 +1605,15 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="15" name="description" nullable="true" remarks="Attribute's description" size="2147483647" type="text" typeCode="12"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="16" name="original_attribute_id" nullable="true" remarks="The attribute's original id" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="17" name="context_id" nullable="true" remarks="References the context" size="10" type="int4" typeCode="4"/>
+      </table>
+      <table name="map_attributes_values_v" numRows="0" remarks="" schema="public" type="VIEW" viewSql=" WITH node_attributes AS (&#10;         SELECT attributes.id AS attribute_id,&#10;            node_quants.node_id,&#10;            node_quants.year,&#10;            node_quants.value&#10;           FROM (node_quants&#10;             JOIN attributes ON (((attributes.original_id = node_quants.quant_id) AND (attributes.original_type = 'Quant'::text))))&#10;        UNION ALL&#10;         SELECT attributes.id AS attribute_id,&#10;            node_inds.node_id,&#10;            node_inds.year,&#10;            node_inds.value&#10;           FROM (node_inds&#10;             JOIN attributes ON (((attributes.original_id = node_inds.ind_id) AND (attributes.original_type = 'Ind'::text))))&#10;        )&#10; SELECT DISTINCT node_attributes.attribute_id,&#10;    node_attributes.node_id,&#10;    node_attributes.year,&#10;    (nodes.node_type_id)::smallint AS node_type_id,&#10;    node_attributes.value,&#10;    nodes.geo_id,&#10;    countries.iso2&#10;   FROM (((node_attributes&#10;     JOIN nodes_with_flows_or_geo_v nodes ON ((nodes.id = node_attributes.node_id)))&#10;     JOIN contexts ON ((contexts.id = nodes.context_id)))&#10;     JOIN countries ON ((countries.id = contexts.country_id)));">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="attribute_id" nullable="true" remarks="" size="19" type="int8" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="node_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="year" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="node_type_id" nullable="true" remarks="" size="5" type="int2" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="null" digits="17" id="4" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="geo_id" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="iso2" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
       </table>
       <table name="map_inds" numRows="0" remarks="Inds to display on map (see map_attributes.)" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('map_inds_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4"/>
@@ -5084,7 +5094,7 @@
             <column ascending="true" name="country_id"/>
          </index>
       </table>
-      <table name="schema_migrations" numRows="113" remarks="" schema="public" type="TABLE">
+      <table name="schema_migrations" numRows="115" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="version" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
          <primaryKey column="version" sequenceNumberInPK="1"/>
          <index name="schema_migrations_pkey" unique="true">
