@@ -37,7 +37,8 @@ attribute_type) AS single_layer_buckets",
               'unit',
               'description',
               'original_attribute_id AS layer_attribute_id',
-              'map_attribute_group_id AS group_id'
+              'map_attribute_group_id AS group_id',
+              'attribute_id'
             ]).
             joins(:map_attribute_group).
             where(

@@ -7,6 +7,7 @@
 #  jid(Job ID, filled in when update started using a background job processor)               :text
 #  status(STARTED (only one at a time), FINISHED or FAILED)                                  :text             default("STARTED"), not null
 #  error(Exception message for failed updates)                                               :text
+#  filename                                                                                  :text
 #
 # Indexes
 #
@@ -20,6 +21,8 @@ module Api
       STARTED = 'STARTED'.freeze
       FINISHED = 'FINISHED'.freeze
       FAILED = 'FAILED'.freeze
+
+      S3_PREFIX = 'MAIN'.freeze # prefix within bucket
 
       validate :only_one_update_started
       scope :started, -> { where(status: STARTED) }
@@ -76,6 +79,10 @@ module Api
           stats: stats,
           updated_at: current_time_from_proper_timezone
         )
+      end
+
+      def self.last_successful_update
+        where(status: FINISHED).order(:created_at).last
       end
 
       protected

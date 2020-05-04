@@ -69,6 +69,7 @@ Rails.application.routes.draw do
       get 'country_profiles/:id/indicators', to: 'country_profiles#indicators'
       get 'country_profiles/:id/trajectory_deforestation', to: 'country_profiles#trajectory_deforestation'
       get 'country_profiles/:id/trajectory_import', to: 'country_profiles#trajectory_import'
+      get 'map_layers_data', to: 'map_layers#data'
 
       resources :newsletter_subscriptions, only: [:create]
       resource :database_validation, controller: :database_validation,

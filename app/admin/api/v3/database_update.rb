@@ -8,7 +8,9 @@ ActiveAdmin.register_page 'Database Update' do
   content do
     current_update = Api::V3::DatabaseUpdate.started.first
     database_updates = Api::V3::DatabaseUpdate.order(created_at: :desc).limit(25)
-    main_schema_versions = Api::V3::S3ObjectList.instance.call(include: ['MAIN'])
+    main_schema_versions = S3::ObjectList.instance.call(
+      include: [Api::V3::DatabaseUpdate::S3_PREFIX]
+    )
     unless current_update
       render partial: 'admin/database_update/mirror_form', locals: {
         current_update: current_update,
@@ -35,10 +37,13 @@ ActiveAdmin.register_page 'Database Update' do
   end
 
   page_action :start_mirror, method: :post do
-    puts params.inspect
-    database_update = Api::V3::DatabaseUpdate.new(status: Api::V3::DatabaseUpdate::STARTED)
+    main_schema_version = params[:main_schema_version]
+    database_update = Api::V3::DatabaseUpdate.new(
+      status: Api::V3::DatabaseUpdate::STARTED,
+      filename: main_schema_version
+    )
     if database_update.save
-      MirrorDatabaseUpdateWorker.perform_async(database_update.id, params[:main_schema_version])
+      MirrorDatabaseUpdateWorker.perform_async(database_update.id, main_schema_version)
       redirect_to admin_database_update_path, notice: 'Database update scheduled. Please refresh for updates.'
     else
       redirect_to admin_database_update_path, notice: 'Database update already in progress.'
