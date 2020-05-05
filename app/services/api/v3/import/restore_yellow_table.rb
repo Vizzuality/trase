@@ -45,7 +45,7 @@ module Api
             DELETE FROM #{@backup_table}
             USING (#{subquery_for_delete}) updated_identifiers
             WHERE #{@backup_table}.id = updated_identifiers.id
-            AND #{where_conditions.join(' AND ')}
+            AND #{where_conditions.join(' OR ')}
           SQL
           @table_class.connection.execute stmt
         end
