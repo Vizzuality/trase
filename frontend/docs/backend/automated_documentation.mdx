@@ -14,15 +14,15 @@ That is done using a dedicated rake task:
 
     `rake db:doc:sql`
 
-    Note: this rake task also creates a new dump of structure.sql, as comments are part of the schema.
+    Note: this rake task also creates a new dump of structure.sql, as comments are part of the schema. Updating and regenerating the sql documentation should be done whenever we update the schema.
 2. Once comments are in place, it is possible to generate html documentation of the database schema using an external tool. One of such tools is SchemaSpy, which is an open source java library.
     1. install [Java](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
     2. install [Graphviz](http://www.graphviz.org/)
     3. the [SchemaSpy](http://schemaspy.readthedocs.io/en/latest/index.html) jar file and [PostgreSQL driver](https://jdbc.postgresql.org/download.html) file are already in doc/db
     4. `rake db:doc:html`
-    5. output files are in `doc/db/gh-pages/all_tables` (complete schema) and `doc/db/gh-pages/blue_tables` (only blue tables)
-3. regenerating the documentation and updating gh-pages is a part of the Travis CI build. When building against `master`, Travis will push to gh pages after a successful build. This uses the [Deployment Pages](https://docs.travis-ci.com/user/deployment/pages/) feature of Travis, and currently is set up using a personal GITHUB_TOKEN defined directly in Travis CI repo settings.
-4. to regenerate html docs and update the [GH pages site](https://vizzuality.github.io/trase-api/) on demand, run `bundle exec rake db:doc:html_2_gh_pages`
+    5. output files are in `doc/gh-pages/db/all_tables` (complete schema) and `doc/gh-pages/db/blue_tables` (only blue tables)
+3. regenerating the html documentation and updating gh-pages is a part of the Travis CI build. When building against `master`, Travis will push to gh pages after a successful build. This uses the [Deployment Pages](https://docs.travis-ci.com/user/deployment/pages/) feature of Travis, and currently is set up using a personal GITHUB_TOKEN defined directly in Travis CI repo settings.
+
 
 ## Ruby code documentation
 

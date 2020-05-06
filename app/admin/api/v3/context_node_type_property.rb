@@ -1,7 +1,7 @@
 ActiveAdmin.register Api::V3::ContextNodeTypeProperty, as: 'ContextNodeTypeProperty' do
   menu parent: 'General', priority: 3
 
-  permit_params :context_node_type_id, :column_group, :is_default,
+  permit_params :context_node_type_id, :column_group, :is_default, :is_visible,
                 :is_geo_column, :is_choropleth_disabled,
                 :geometry_context_node_type_id, :role, :prefix
 
@@ -29,6 +29,10 @@ ActiveAdmin.register Api::V3::ContextNodeTypeProperty, as: 'ContextNodeTypePrope
             as: :boolean,
             required: true,
             hint: object.class.column_comment('is_default')
+      input :is_visible,
+            as: :boolean,
+            required: true,
+            hint: object.class.column_comment('is_visible')
       input :is_geo_column,
             as: :boolean,
             required: true,
@@ -61,6 +65,7 @@ ActiveAdmin.register Api::V3::ContextNodeTypeProperty, as: 'ContextNodeTypePrope
     column('Node Type', sortable: true) { |property| property.context_node_type&.node_type&.name }
     column :column_group
     column :is_default
+    column :is_visible
     column :is_geo_column
     column :is_choropleth_disabled
     column('Geo Node Type', sortable: true) { |property| property.geometry_context_node_type&.node_type&.name }
@@ -76,6 +81,7 @@ ActiveAdmin.register Api::V3::ContextNodeTypeProperty, as: 'ContextNodeTypePrope
       row('Node Type') { |property| property.context_node_type&.node_type&.name }
       row :column_group
       row :is_default
+      row :is_visible
       row :is_geo_column
       row :is_choropleth_disabled
       row('Geo Node Type') { |property| property.geometry_context_node_type&.node_type&.name }

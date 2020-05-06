@@ -1865,6 +1865,7 @@ CREATE TABLE public.context_node_type_properties (
     role character varying NOT NULL,
     prefix text NOT NULL,
     geometry_context_node_type_id integer,
+    is_visible boolean DEFAULT true NOT NULL,
     CONSTRAINT context_node_type_properties_role_check CHECK (((role)::text = ANY (ARRAY[('source'::character varying)::text, ('exporter'::character varying)::text, ('importer'::character varying)::text, ('destination'::character varying)::text])))
 );
 
@@ -17261,6 +17262,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200425165029'),
 ('20200425173940'),
 ('20200430115447'),
-('20200501152755');
+('20200501152755'),
+('20200505120049');
 
 

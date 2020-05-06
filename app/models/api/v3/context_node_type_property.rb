@@ -11,6 +11,7 @@
 #  role(A grouping which defines in which filtering panel to display nodes)                                                                     :string           not null
 #  prefix(Used to construct the summary sentence of selection criteria)                                                                         :text             not null
 #  geometry_context_node_type_id(Use for geo columns, when geometry is to be taken from another node type (e.g. logistics hub -> municipality)) :integer
+#  is_visible                                                                                                                                   :boolean          default(TRUE), not null
 #
 # Indexes
 #
