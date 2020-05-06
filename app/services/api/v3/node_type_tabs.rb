@@ -52,6 +52,7 @@ module Api
             'context_node_type_properties.role'
           ).
           joins(:context, :node_type, :context_node_type_property).
+          where('context_node_type_properties.is_visible').
           order(:column_position)
 
         if @countries_ids.any?
