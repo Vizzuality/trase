@@ -208,6 +208,8 @@ tables:
         comment: Zero-based number of sankey column in which to display nodes of this type
       - name: is_default
         comment: When set, show this node type as default (only use for one)
+      - name: is_visible
+        comment: When set, show this node type in sankey & dashboards
       - name: is_geo_column
         comment: When set, show nodes on map
       - name: is_choropleth_disabled

@@ -9,6 +9,7 @@ FactoryBot.define do
       Api::V3::ContextNodeTypeProperty::DEFAULT_PREFIXES[cnt_prop.column_group]
     end
     is_default { false }
+    is_visible { true }
     is_geo_column { true }
     is_choropleth_disabled { false }
   end
