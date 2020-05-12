@@ -20,7 +20,6 @@
 #  fk_rails_...  (parent_id => charts.id) ON DELETE => cascade
 #  fk_rails_...  (profile_id => profiles.id) ON DELETE => cascade
 #
-
 module Api
   module V3
     class Chart < YellowTable
@@ -163,15 +162,13 @@ module Api
 
       def update_node_with_flows_actor_basic_attributes(profile_id)
         profile = Api::V3::Profile.find(profile_id)
-        context_node_type = profile.context_node_type
-        context = context_node_type.context
-        nodes = context_node_type.node_type.nodes
-        node_with_flows = Api::V3::Readonly::NodeWithFlows.
+        nodes_ids = Api::V3::Readonly::NodeWithFlows.
+          where(context_node_type_id: profile.context_node_type_id).
           without_unknowns.
           without_domestic.
-          where(context_id: context.id, id: nodes.map(&:id))
-        NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
-          node_with_flows.map(&:id)
+          pluck(:id)
+        NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
+          nodes_ids.uniq
         )
       end
 

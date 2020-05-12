@@ -3,11 +3,12 @@ require 'rails_helper'
 RSpec.describe Api::V3::Readonly::RecolorByAttribute, type: :model do
   include_context 'api v3 brazil recolor by attributes'
   include_context 'api v3 paraguay recolor by attributes'
-  include_context 'api v3 brazil flows quals'
+  include_context 'api v3 brazil soy flow quals'
   include_context 'api v3 paraguay flows quals'
 
   before(:each) do
-    Api::V3::Readonly::RecolorByAttribute.refresh(sync: true, skip_dependencies: false)
+    Api::V3::Readonly::FlowQualDistinctValues.refresh(sync: true, skip_dependents: true)
+    Api::V3::Readonly::Attribute.refresh
   end
 
   describe :legend do

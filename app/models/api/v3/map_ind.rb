@@ -15,7 +15,6 @@
 #  fk_rails_...  (ind_id => inds.id) ON DELETE => cascade ON UPDATE => cascade
 #  fk_rails_...  (map_attribute_id => map_attributes.id) ON DELETE => cascade
 #
-
 module Api
   module V3
     class MapInd < YellowTable

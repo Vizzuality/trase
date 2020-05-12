@@ -14,7 +14,6 @@
 #
 #  fk_rails_...  (dashboards_attribute_group_id => dashboards_attribute_groups.id) ON DELETE => cascade
 #
-
 module Api
   module V3
     class DashboardsAttribute < YellowTable
@@ -44,18 +43,12 @@ module Api
                      scope: :dashboards_attribute_group_id,
                      if: :new_dashboards_quant_given?
 
-      after_commit :refresh_dependents
-
       manage_associated_attributes [:dashboards_ind, :dashboards_qual, :dashboards_quant]
 
       def self.yellow_foreign_keys
         [
           {name: :dashboards_attribute_group_id, table_class: Api::V3::DashboardsAttributeGroup}
         ]
-      end
-
-      def refresh_dependents
-        Api::V3::Readonly::DashboardsAttribute.refresh
       end
 
       private_class_method def self.active_ids

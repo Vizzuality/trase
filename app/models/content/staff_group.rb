@@ -2,11 +2,10 @@
 #
 # Table name: content.staff_groups
 #
-#  id         :bigint(8)        not null, primary key
-#  name       :text             not null
-#  position   :integer          not null
+#  id       :bigint(8)        not null, primary key
+#  name     :text             not null
+#  position :integer          not null
 #
-
 module Content
   class StaffGroup < Content::Base
     has_many :staff_members

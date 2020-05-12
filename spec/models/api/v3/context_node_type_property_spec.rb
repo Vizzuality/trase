@@ -65,39 +65,106 @@ RSpec.describe Api::V3::ContextNodeTypeProperty, type: :model do
     end
   end
 
-  describe :refresh_dependents do
+  describe :create do
+    include_context 'api v3 brazil soy flow quants'
+
     before(:each) {
-      Api::V3::ContextNodeTypeProperty.set_callback(:commit, :after, :refresh_dependents)
+      cnt_prop = api_v3_municipality_context_node.context_node_type_property
+      @cnt_prop_attrs = cnt_prop.attributes
+      cnt_prop.delete
+
+      Api::V3::Readonly::FlowNode.refresh(
+        sync: true, skip_dependents: true
+      )
+      Api::V3::Readonly::NodeWithFlowsPerYear.refresh(
+        sync: true, skip_dependents: true
+      )
+      Api::V3::Readonly::NodesPerContextRankedByVolumePerYear.refresh(
+        sync: true, skip_dependents: true
+      )
+
+      Api::V3::ContextNodeTypeProperty.set_callback(:create, :after, :refresh_dependents_after_create)
     }
     after(:each) {
-      Api::V3::ContextNodeTypeProperty.skip_callback(:commit, :after, :refresh_dependents)
+      Api::V3::ContextNodeTypeProperty.skip_callback(:create, :after, :refresh_dependents_after_create)
     }
 
     context 'when created with source role' do
-      it 'dashboards_sources_mv is refreshed' do
-        allow(Api::V3::Readonly::Dashboards::Source).to receive(:refresh_later)
-        expect(Api::V3::Readonly::Dashboards::Source).to receive(:refresh_later)
-        expect(Api::V3::Readonly::Dashboards::Company).not_to receive(:refresh_later)
-        FactoryBot.create(
-          :api_v3_context_node_type_property,
-          role: Api::V3::ContextNodeTypeProperty::SOURCE_ROLE
+      let(:source_municipalities_cnt) {
+        Api::V3::Readonly::NodeWithFlowsPerYear.where(
+          node_type_id: api_v3_municipality_node_type.id,
+          context_id: api_v3_brazil_soy_context.id
+        ).select(:id).distinct.count
+      }
+      it 'dashboards_sources is refreshed' do
+        expect do
+          FactoryBot.create(
+            :api_v3_context_node_type_property,
+            @cnt_prop_attrs
+          )
+        end.to change(Api::V3::Readonly::Dashboards::Source, :count).by(
+          source_municipalities_cnt
         )
       end
+
+      it 'dashboards_exporters is not changed' do
+        expect do
+          FactoryBot.create(
+            :api_v3_context_node_type_property,
+            role: Api::V3::ContextNodeTypeProperty::SOURCE_ROLE
+          )
+        end.not_to change(Api::V3::Readonly::Dashboards::Exporter, :count)
+      end
     end
+  end
+
+  describe :update do
+    include_context 'api v3 brazil soy flow quants'
+
+    before(:each) {
+      Api::V3::Readonly::FlowNode.refresh(
+        sync: true, skip_dependents: true
+      )
+      Api::V3::Readonly::NodeWithFlowsPerYear.refresh(
+        sync: true, skip_dependents: true
+      )
+      Api::V3::Readonly::NodesPerContextRankedByVolumePerYear.refresh(
+        sync: true, skip_dependents: true
+      )
+      Api::V3::Readonly::Dashboards::Source.refresh(
+        sync: true, skip_dependents: true
+      )
+
+      Api::V3::ContextNodeTypeProperty.set_callback(:update, :after, :refresh_dependents_after_update)
+    }
+    after(:each) {
+      Api::V3::ContextNodeTypeProperty.skip_callback(:update, :after, :refresh_dependents_after_update)
+    }
 
     context 'when updated from source role to exporter' do
-      it 'dashboards_sources_mv and dashboards_companies_mv are refreshed' do
-        allow(Api::V3::Readonly::Dashboards::Source).to receive(:refresh_later)
-        allow(Api::V3::Readonly::Dashboards::Company).to receive(:refresh_later)
-        allow(Api::V3::Readonly::Dashboards::Exporter).to receive(:refresh_later)
-        property = FactoryBot.create(
-          :api_v3_context_node_type_property,
-          role: Api::V3::ContextNodeTypeProperty::SOURCE_ROLE
+      let(:source_municipalities_cnt) {
+        Api::V3::Readonly::NodeWithFlowsPerYear.where(
+          node_type_id: api_v3_municipality_node_type.id,
+          context_id: api_v3_brazil_soy_context.id
+        ).select(:id).distinct.count
+      }
+      let!(:property) {
+        api_v3_municipality_context_node.context_node_type_property
+      }
+      it 'dashboards_sources is refreshed' do
+        expect do
+          property.update(role: Api::V3::ContextNodeTypeProperty::EXPORTER_ROLE)
+        end.to change(Api::V3::Readonly::Dashboards::Source, :count).by(
+          -source_municipalities_cnt
         )
-        expect(Api::V3::Readonly::Dashboards::Source).to receive(:refresh_later)
-        expect(Api::V3::Readonly::Dashboards::Company).to receive(:refresh_later)
-        expect(Api::V3::Readonly::Dashboards::Exporter).to receive(:refresh_later)
-        property.update(role: Api::V3::ContextNodeTypeProperty::EXPORTER_ROLE)
+      end
+
+      it 'dashboards_exporters is refreshed' do
+        expect do
+          property.update(role: Api::V3::ContextNodeTypeProperty::EXPORTER_ROLE)
+        end.to change(Api::V3::Readonly::Dashboards::Exporter, :count).by(
+          source_municipalities_cnt
+        )
       end
     end
   end

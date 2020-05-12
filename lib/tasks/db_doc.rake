@@ -10,7 +10,7 @@ namespace :db do
     task sql: [:environment] do
       data = YAML.safe_load(File.open("#{Rails.root}/db/schema_comments.yml"))
 
-      data['tables'].each do |table|
+      data['tables'] && data['tables'].each do |table|
         comment_on_table(table['name'], table['comment'])
         table['columns']&.each do |column|
           comment_on_column(table['name'], column['name'], column['comment'] || '')
@@ -19,8 +19,14 @@ namespace :db do
           comment_on_index(index['name'], index['comment'])
         end
       end
-      data['materialized_views'].each do |table|
+      data['materialized_views'] && data['materialized_views'].each do |table|
         comment_on_materialized_view(table['name'], table['comment'])
+        table['columns']&.each do |column|
+          comment_on_column(table['name'], column['name'], column['comment'] || '')
+        end
+      end
+      data['views'] && data['views'].each do |table|
+        comment_on_view(table['name'], table['comment'])
         table['columns']&.each do |column|
           comment_on_column(table['name'], column['name'], column['comment'] || '')
         end

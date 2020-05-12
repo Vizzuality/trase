@@ -15,10 +15,10 @@ shared_context 'api v3 brazil soy context' do
       )
   end
   let!(:api_v3_brazil_soy_context_property) do
-    Api::V3::ContextProperty.find_by_context_id(api_v3_context.id) ||
+    Api::V3::ContextProperty.find_by_context_id(api_v3_brazil_soy_context.id) ||
       FactoryBot.create(
         :api_v3_context_property,
-        context: api_v3_context,
+        context: api_v3_brazil_soy_context,
         is_disabled: false,
         is_subnational: true,
         is_default: false

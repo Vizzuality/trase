@@ -15,7 +15,6 @@
 #
 #  fk_rails_...  (node_id => nodes.id) ON DELETE => cascade
 #
-
 module Api
   module V3
     class NodeProperty < YellowTable
@@ -23,18 +22,10 @@ module Api
 
       validates :node, presence: true, uniqueness: true
 
-      after_commit :refresh_dependents
-
       def self.blue_foreign_keys
         [
           {name: :node_id, table_class: Api::V3::Node}
         ]
-      end
-
-      def refresh_dependents
-        Api::V3::Readonly::NodeWithFlows.refresh
-        Api::V3::Readonly::NodeWithFlowsOrGeo.refresh
-        # TODO dashboards nodes
       end
 
       def self.insert_missing_node_properties

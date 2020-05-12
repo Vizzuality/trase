@@ -7,7 +7,6 @@
 #  error_count(Count of errors detected)         :integer          not null
 #  warning_count(Count of warnings detected)     :integer          not null
 #
-
 module Api
   module V3
     class DatabaseValidationReport < BaseModel

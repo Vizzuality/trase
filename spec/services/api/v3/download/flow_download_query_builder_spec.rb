@@ -11,7 +11,6 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
 
     before(:each) do
       Api::V3::Readonly::Attribute.refresh(skip_dependencies: true, skip_dependents: true)
-      Api::V3::Readonly::DownloadAttribute.refresh(skip_dependencies: true, skip_dependents: true)
       Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowQuants.new.call
       Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowQuals.new.call
     end
@@ -74,7 +73,7 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
     }
 
     it 'should return all flows when no filter applied' do
-      qb = Api::V3::Download::FlowDownloadQueryBuilder.new(api_v3_context, {})
+      qb = Api::V3::Download::FlowDownloadQueryBuilder.new(api_v3_brazil_soy_context, {})
 
       expected = [
         flow1_potential_deforestation_row,
@@ -87,7 +86,7 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
     end
 
     it 'should filter rows when filter applied' do
-      qb = Api::V3::Download::FlowDownloadQueryBuilder.new(api_v3_context, e_ids: [api_v3_exporter1_node.id])
+      qb = Api::V3::Download::FlowDownloadQueryBuilder.new(api_v3_brazil_soy_context, e_ids: [api_v3_exporter1_node.id])
 
       expected = [
         flow1_potential_deforestation_row,
@@ -99,7 +98,7 @@ RSpec.describe Api::V3::Download::FlowDownloadQueryBuilder, type: :model do
 
     it 'should filter rows using advanced filter' do
       qb = Api::V3::Download::FlowDownloadQueryBuilder.new(
-        api_v3_context,
+        api_v3_brazil_soy_context,
         filters: [
           {name: api_v3_zero_deforestation.name, op: 'eq', val: 'yes'},
           {name: api_v3_deforestation_v2.name, op: 'gt', val: '10'}

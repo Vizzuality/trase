@@ -14,7 +14,6 @@
 #  database_updates_jid_key     (jid) UNIQUE
 #  database_updates_status_idx  (status) UNIQUE WHERE (status = 'STARTED'::text)
 #
-
 module Api
   module V3
     class DatabaseUpdate < BaseModel

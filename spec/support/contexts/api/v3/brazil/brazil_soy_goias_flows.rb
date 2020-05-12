@@ -44,7 +44,7 @@ shared_context 'api v3 brazil soy goias flows' do
   let!(:api_v3_goias_flow) do
     FactoryBot.create(
       :api_v3_flow,
-      context: api_v3_context,
+      context: api_v3_brazil_soy_context,
       path: [
         api_v3_biome_node,
         api_v3_state_node,
@@ -62,7 +62,7 @@ shared_context 'api v3 brazil soy goias flows' do
   let!(:api_v3_abadia_de_goias_flow) do
     FactoryBot.create(
       :api_v3_flow,
-      context: api_v3_context,
+      context: api_v3_brazil_soy_context,
       path: [
         api_v3_biome_node,
         api_v3_state_node,

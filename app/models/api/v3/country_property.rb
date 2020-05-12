@@ -18,7 +18,6 @@
 #
 #  fk_rails_...  (country_id => countries.id) ON DELETE => cascade ON UPDATE => cascade
 #
-
 module Api
   module V3
     class CountryProperty < YellowTable

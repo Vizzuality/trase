@@ -21,7 +21,6 @@
 #
 #  fk_rails_...  (context_id => contexts.id) ON DELETE => cascade
 #
-
 module Api
   module V3
     class ContextualLayer < YellowTable

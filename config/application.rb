@@ -33,7 +33,10 @@ module TraseNewApi
       'partitioned_flows_*',
       'partitioned_flow_quants_*',
       'partitioned_flow_inds_*',
-      'partitioned_flow_quals_*'
+      'partitioned_flow_quals_*',
+      'partitioned_denormalised_flow_quants_*',
+      'partitioned_denormalised_flow_inds_*',
+      'partitioned_denormalised_flow_quals_*'
     ]
 
     config.middleware.insert_before 0, Rack::Cors do

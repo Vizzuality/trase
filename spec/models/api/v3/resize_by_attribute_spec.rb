@@ -19,7 +19,7 @@ RSpec.describe Api::V3::ResizeByAttribute, type: :model do
       let(:attribute_with_quick_fact) {
         FactoryBot.build(
           :api_v3_resize_by_attribute,
-          context: api_v3_context,
+          context: api_v3_brazil_soy_context,
           is_quick_fact: true
         )
       }
@@ -48,7 +48,7 @@ RSpec.describe Api::V3::ResizeByAttribute, type: :model do
     let(:years) { [2017, 2018, 2019] }
     let(:quant) { FactoryBot.create(:api_v3_quant) }
     let(:resize_by_attribute) {
-      FactoryBot.build(:api_v3_resize_by_attribute, context: api_v3_context)
+      FactoryBot.build(:api_v3_resize_by_attribute, context: api_v3_brazil_soy_context)
     }
     let!(:resize_by_quant) {
       FactoryBot.build(
@@ -71,7 +71,7 @@ RSpec.describe Api::V3::ResizeByAttribute, type: :model do
             FactoryBot.create(:api_v3_node, node_type: api_v3_importer_node_type),
             FactoryBot.create(:api_v3_node, node_type: api_v3_country_node_type)
           ].map(&:id),
-          context: api_v3_context,
+          context: api_v3_brazil_soy_context,
           year: year
         )
         FactoryBot.create(:api_v3_flow_quant, flow: flow, quant: quant)

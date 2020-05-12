@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::Public::Readonly::FlowAttribute, type: :model do
-  include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil soy flow quants'
 
   before(:each) do
     Api::V3::Readonly::Attribute.refresh(sync: true)

@@ -1,11 +1,11 @@
-shared_context 'api v3 brazil flows inds' do
-  include_context 'api v3 brazil flows'
+shared_context 'api v3 brazil soy flow inds' do
+  include_context 'api v3 brazil soy flows'
   include_context 'api v3 inds'
 
   let!(:api_v3_flow1_forest_500) do
     FactoryBot.create(
       :api_v3_flow_ind,
-      flow: api_v3_flow1,
+      flow: api_v3_brazil_soy_flow1,
       ind: api_v3_forest_500,
       value: 1
     )
@@ -13,7 +13,7 @@ shared_context 'api v3 brazil flows inds' do
   let!(:api_v3_flow2_forest_500) do
     FactoryBot.create(
       :api_v3_flow_ind,
-      flow: api_v3_flow2,
+      flow: api_v3_brazil_soy_flow2,
       ind: api_v3_forest_500,
       value: 2
     )
@@ -21,7 +21,7 @@ shared_context 'api v3 brazil flows inds' do
   let!(:api_v3_flow3_forest_500) do
     FactoryBot.create(
       :api_v3_flow_ind,
-      flow: api_v3_flow3,
+      flow: api_v3_brazil_soy_flow3,
       ind: api_v3_forest_500,
       value: 3
     )
@@ -29,7 +29,7 @@ shared_context 'api v3 brazil flows inds' do
   let!(:api_v3_flow4_forest_500) do
     FactoryBot.create(
       :api_v3_flow_ind,
-      flow: api_v3_flow4,
+      flow: api_v3_brazil_soy_flow4,
       ind: api_v3_forest_500,
       value: 4
     )
@@ -37,7 +37,7 @@ shared_context 'api v3 brazil flows inds' do
   let!(:api_v3_flow5_forest_500) do
     FactoryBot.create(
       :api_v3_flow_ind,
-      flow: api_v3_flow5,
+      flow: api_v3_brazil_soy_flow5,
       ind: api_v3_forest_500,
       value: 5
     )

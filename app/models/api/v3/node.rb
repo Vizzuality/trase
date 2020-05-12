@@ -17,7 +17,6 @@
 #
 #  fk_rails_...  (node_type_id => node_types.id) ON DELETE => cascade
 #
-
 module Api
   module V3
     class Node < BlueTable

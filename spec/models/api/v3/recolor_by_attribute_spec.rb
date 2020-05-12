@@ -32,7 +32,7 @@ RSpec.describe Api::V3::RecolorByAttribute, type: :model do
     let(:years) { [2017, 2018, 2019] }
     let(:qual) { FactoryBot.create(:api_v3_qual) }
     let(:recolor_by_attribute) {
-      FactoryBot.build(:api_v3_recolor_by_attribute, context: api_v3_context)
+      FactoryBot.build(:api_v3_recolor_by_attribute, context: api_v3_brazil_soy_context)
     }
     let!(:recolor_by_qual) {
       FactoryBot.build(
@@ -55,7 +55,7 @@ RSpec.describe Api::V3::RecolorByAttribute, type: :model do
             FactoryBot.create(:api_v3_node, node_type: api_v3_importer_node_type),
             FactoryBot.create(:api_v3_node, node_type: api_v3_country_node_type)
           ].map(&:id),
-          context: api_v3_context,
+          context: api_v3_brazil_soy_context,
           year: year
         )
         FactoryBot.create(:api_v3_flow_qual, flow: flow, qual: qual)
