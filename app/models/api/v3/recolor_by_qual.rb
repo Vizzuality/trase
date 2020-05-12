@@ -15,7 +15,6 @@
 #  fk_rails_...  (qual_id => quals.id) ON DELETE => cascade ON UPDATE => cascade
 #  fk_rails_...  (recolor_by_attribute_id => recolor_by_attributes.id) ON DELETE => cascade
 #
-
 module Api
   module V3
     class RecolorByQual < YellowTable

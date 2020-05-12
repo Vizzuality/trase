@@ -16,7 +16,6 @@
 #
 #  fk_rails_...  (contextual_layer_id => contextual_layers.id) ON DELETE => cascade
 #
-
 module Api
   module V3
     class CartoLayer < YellowTable

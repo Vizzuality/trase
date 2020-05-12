@@ -3,13 +3,12 @@ require 'rails_helper'
 RSpec.describe Api::V3::Dashboards::Charts::SingleYearNcontNodeTypeView do
   include_context 'api v3 brazil resize by attributes'
   include_context 'api v3 brazil recolor by attributes'
-  include_context 'api v3 brazil flows quants'
-  include_context 'api v3 brazil flows inds'
+  include_context 'api v3 brazil soy flow quants'
+  include_context 'api v3 brazil soy flow inds'
 
   before(:each) do
+    Api::V3::Readonly::FlowQualDistinctValues.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::ResizeByAttribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::RecolorByAttribute.refresh(sync: true, skip_dependents: true)
     Api::V3::TablePartitions::CreatePartitionsForFlows.new.call
     Api::V3::TablePartitions::CreatePartitionsForFlowQuants.new.call
     Api::V3::TablePartitions::CreatePartitionsForFlowInds.new.call

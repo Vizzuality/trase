@@ -18,7 +18,6 @@
 #  fk_rails_...  (flow_id => flows.id) ON DELETE => cascade ON UPDATE => cascade
 #  fk_rails_...  (ind_id => inds.id) ON DELETE => cascade ON UPDATE => cascade
 #
-
 module Api
   module V3
     class FlowInd < BlueTable

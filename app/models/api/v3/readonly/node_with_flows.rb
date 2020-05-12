@@ -27,7 +27,6 @@
 #  nodes_with_flows_context_id_idx     (context_id)
 #  nodes_with_flows_name_tsvector_idx  (name_tsvector)
 #
-
 module Api
   module V3
     module Readonly
@@ -59,7 +58,7 @@ module Api
 
         scope :with_profile, -> { where(profile: Api::V3::Profile::NAMES) }
         scope :without_unknowns, -> { where(is_unknown: false) }
-        scope :without_domestic, -> { where(is_unknown: false) }
+        scope :without_domestic, -> { where(is_domestic_consumption: false) }
 
         include PgSearch::Model
         pg_search_scope :search_by_name, lambda { |query|
@@ -83,6 +82,17 @@ module Api
           {columns: :context_id},
           {columns: :name_tsvector, using: :gin}
         ].freeze
+
+        def self.key_translations
+          {
+            node_id: -> (key_value) {
+              {id: key_value}
+            },
+            geometry_context_node_type_id: -> (key_value) {
+              {}
+            }
+          }
+        end
 
         def self.select_options
           select(:id, :name, :node_type).order(:name).map do |node|

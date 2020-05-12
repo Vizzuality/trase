@@ -27,7 +27,7 @@ module Api
           @query = Api::V3::Readonly::FlowNode.
             select(*select_clause).
             joins('INNER JOIN nodes_with_flows ON nodes_with_flows.id = flow_nodes.node_id').
-            joins('INNER JOIN contexts_mv ON contexts_mv.id = flow_nodes.context_id').
+            joins('INNER JOIN contexts_v ON contexts_v.id = flow_nodes.context_id').
             group(*group_clause).
             order('flow_nodes.node_id')
         end
@@ -40,22 +40,22 @@ module Api
             'nodes_with_flows.geo_id',
             'JSON_AGG(' \
               'DISTINCT JSONB_BUILD_OBJECT(' \
-                '\'country\', contexts_mv.iso2, ' \
-                '\'commodity\', contexts_mv.commodity_name, ' \
+                '\'country\', contexts_v.iso2, ' \
+                '\'commodity\', contexts_v.commodity_name, ' \
                 '\'years\', nodes_with_flows.years' \
               ')' \
             ') AS availability',
             'JSON_AGG(' \
               'DISTINCT JSONB_BUILD_OBJECT(' \
-                '\'country\', contexts_mv.iso2, ' \
-                '\'commodity\', contexts_mv.commodity_name, ' \
+                '\'country\', contexts_v.iso2, ' \
+                '\'commodity\', contexts_v.commodity_name, ' \
                 "'values', #{select_node_attributes_clause}" \
               ')' \
             ') AS node_attributes',
             'JSON_AGG(' \
               'DISTINCT JSONB_BUILD_OBJECT(' \
-                '\'country\', contexts_mv.iso2, ' \
-                '\'commodity\', contexts_mv.commodity_name, ' \
+                '\'country\', contexts_v.iso2, ' \
+                '\'commodity\', contexts_v.commodity_name, ' \
                 '\'flow_id\', flow_nodes.flow_id, ' \
                 "'values', #{select_flow_attributes_clause}" \
               ')' \
@@ -104,8 +104,8 @@ module Api
             'nodes_with_flows.name',
             'nodes_with_flows.node_type',
             'nodes_with_flows.geo_id',
-            'contexts_mv.iso2',
-            'contexts_mv.commodity_name'
+            'contexts_v.iso2',
+            'contexts_v.commodity_name'
           ]
         end
 

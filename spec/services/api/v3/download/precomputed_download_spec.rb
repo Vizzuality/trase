@@ -12,7 +12,6 @@ RSpec.describe Api::V3::Download::PrecomputedDownload do
 
   before(:each) do
     Api::V3::Readonly::Attribute.refresh(skip_dependencies: true, skip_dependents: true)
-    Api::V3::Readonly::DownloadAttribute.refresh(skip_dependencies: true, skip_dependents: true)
     Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowQuants.new.call
     Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowQuals.new.call
     Api::V3::Readonly::DownloadFlowsStats.refresh(skip_dependencies: true, skip_dependents: true)
@@ -20,7 +19,7 @@ RSpec.describe Api::V3::Download::PrecomputedDownload do
 
   describe :call do
     it 'stores a precomputed zip download' do
-      Api::V3::Download::PrecomputedDownload.new(api_v3_context).call
+      Api::V3::Download::PrecomputedDownload.new(api_v3_brazil_soy_context).call
       output_file_name = [
         Api::V3::Download::PrecomputedDownload::ROOT_DIRNAME,
         'csv',

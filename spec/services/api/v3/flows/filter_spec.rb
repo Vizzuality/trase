@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Api::V3::Flows::Filter do
   include_context 'api v3 brazil resize by attributes'
   include_context 'api v3 brazil recolor by attributes'
-  include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil soy flow quants'
 
   let!(:api_v3_diamantino_node) {
     node = Api::V3::Node.where(
@@ -27,7 +27,7 @@ RSpec.describe Api::V3::Flows::Filter do
   let!(:api_v3_diamantino_flow) {
     FactoryBot.create(
       :api_v3_flow,
-      context: api_v3_context,
+      context: api_v3_brazil_soy_context,
       path: [
         api_v3_biome_node,
         api_v3_state_node,
@@ -52,9 +52,8 @@ RSpec.describe Api::V3::Flows::Filter do
   }
 
   before(:each) do
+    Api::V3::Readonly::FlowQualDistinctValues.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::ResizeByAttribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::RecolorByAttribute.refresh(sync: true, skip_dependents: true)
     Api::V3::TablePartitions::CreatePartitionsForFlows.new.call
     Api::V3::TablePartitions::CreatePartitionsForFlowQuants.new.call
   end
@@ -91,7 +90,7 @@ RSpec.describe Api::V3::Flows::Filter do
       context 'when no locked nodes present' do
         it 'does not include low volume nodes in active nodes' do
           filter = Api::V3::Flows::Filter.new(
-            api_v3_context,
+            api_v3_brazil_soy_context,
             filter_params.merge(limit: 1)
           )
           filter.call
@@ -102,7 +101,7 @@ RSpec.describe Api::V3::Flows::Filter do
       context 'when locked nodes' do
         it 'includes locked low volume nodes in active nodes' do
           filter = Api::V3::Flows::Filter.new(
-            api_v3_context,
+            api_v3_brazil_soy_context,
             filter_params.merge(locked_nodes)
           )
           filter.call
@@ -112,7 +111,7 @@ RSpec.describe Api::V3::Flows::Filter do
       context 'when recolor by attribute' do
         it 'includes flows with null value of recolor by attribute' do
           filter = Api::V3::Flows::Filter.new(
-            api_v3_context,
+            api_v3_brazil_soy_context,
             filter_params.merge(
               ncont_attribute_id: api_v3_forest_500_recolor_by_attribute.readonly_attribute.id
             )
@@ -136,7 +135,7 @@ RSpec.describe Api::V3::Flows::Filter do
       context 'when no locked nodes present' do
         it 'does not include low volume nodes in active nodes' do
           filter = Api::V3::Flows::Filter.new(
-            api_v3_context,
+            api_v3_brazil_soy_context,
             filter_params.merge(expanded_nodes).merge(limit: 1)
           )
           filter.call
@@ -147,7 +146,7 @@ RSpec.describe Api::V3::Flows::Filter do
       context 'when locked nodes' do
         it 'includes locked low volume nodes in active nodes' do
           filter = Api::V3::Flows::Filter.new(
-            api_v3_context,
+            api_v3_brazil_soy_context,
             filter_params.merge(expanded_nodes).merge(locked_nodes)
           )
           filter.call
@@ -163,7 +162,7 @@ RSpec.describe Api::V3::Flows::Filter do
 
       it 'does not include paths with excluded nodes' do
         filter = Api::V3::Flows::Filter.new(
-          api_v3_context,
+          api_v3_brazil_soy_context,
           filter_params.merge(excluded_nodes)
         )
         result = filter.call
@@ -175,7 +174,7 @@ RSpec.describe Api::V3::Flows::Filter do
 
     context 'when required options missing' do
       context 'node_type_ids missing' do
-        let(:filter) { Api::V3::Flows::Filter.new(api_v3_context, {}) }
+        let(:filter) { Api::V3::Flows::Filter.new(api_v3_brazil_soy_context, {}) }
         it 'should have errors set' do
           filter.call
           expect(filter.errors).not_to be_empty

@@ -7,26 +7,23 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
   include_context 'api v3 brazil exporter qual values'
   include_context 'api v3 brazil exporter ind values'
   include_context 'api v3 brazil importer quant values'
-  include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil soy flow quants'
   include_context 'api v3 paraguay exporter actor charts'
   include_context 'api v3 paraguay exporter quant values'
   include_context 'api v3 paraguay profiles'
   include_context 'api v3 paraguay flows quants'
 
   describe :call do
-    before(:each) do
-      Api::V3::Readonly::CommodityAttributeProperty.refresh
-      Api::V3::Readonly::CountryAttributeProperty.refresh
-      Api::V3::Readonly::ContextAttributeProperty.refresh
+    before(:each) {
       Api::V3::Readonly::FlowNode.refresh(sync: true)
       Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
       Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
       Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-      Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
-    end
-    let!(:brazil_exporter_attributes) { Api::V3::Actors::BasicAttributes.new(api_v3_context, api_v3_exporter1_node, 2015) }
-    let!(:brazil_importer_attributes) { Api::V3::Actors::BasicAttributes.new(api_v3_context, api_v3_importer1_node, 2015) }
-    let!(:paraguay_exporter_attributes) { Api::V3::Actors::BasicAttributes.new(api_v3_paraguay_context, api_v3_paraguay_exporter_node, 2015) }
+    }
+
+    let(:brazil_exporter_attributes) { Api::V3::Actors::BasicAttributes.new(api_v3_brazil_soy_context, api_v3_exporter1_node, 2015) }
+    let(:brazil_importer_attributes) { Api::V3::Actors::BasicAttributes.new(api_v3_brazil_soy_context, api_v3_importer1_node, 2015) }
+    let(:paraguay_exporter_attributes) { Api::V3::Actors::BasicAttributes.new(api_v3_paraguay_context, api_v3_paraguay_exporter_node, 2015) }
 
     it 'uses context specific quant values for production percentage calculation' do
       brazil_exporter_values = brazil_exporter_attributes.call
@@ -62,7 +59,7 @@ RSpec.describe Api::V3::Actors::BasicAttributes do
       let(:flow) {
         FactoryBot.create(
           :api_v3_flow,
-          context: api_v3_context,
+          context: api_v3_brazil_soy_context,
           path: [
             api_v3_biome_node,
             api_v3_state_node,

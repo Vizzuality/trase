@@ -1,4 +1,5 @@
-class MaterializedViewRefreshWorker
+# To refresh materialized views or tables in full
+class FullRefreshWorker
   include Sidekiq::Worker
   sidekiq_options queue: :database,
                   retry: false,
@@ -13,7 +14,6 @@ class MaterializedViewRefreshWorker
 
   # @param mview_class_name [String] e.g. Api::V3::Readonly::DownloadAttribute
   # @param options
-  # @option options [Boolean] :skip_dependencies skip refreshing
   # @option options [Boolean] :skip_dependents skip refreshing
   def perform(mview_class_name, options)
     mview_class = mview_class_name.constantize

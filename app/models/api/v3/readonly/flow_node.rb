@@ -14,7 +14,6 @@
 #  flow_nodes_flow_id_idx              (flow_id)
 #  flow_nodes_node_id_idx              (node_id)
 #
-
 # This class is not backed by a materialized view, but a table.
 # The table is refreshed using a SQL function.
 # It should only be refreshed once per data import.

@@ -11,7 +11,6 @@
 #  image_updated_at   :datetime
 #  category           :string
 #
-
 module Api
   module V3
     class DashboardTemplate < YellowTable

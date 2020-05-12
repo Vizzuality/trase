@@ -23,7 +23,6 @@
 #  fk_rails_...  (commodity_id => commodities.id) ON DELETE => cascade
 #  fk_rails_...  (country_id => countries.id) ON DELETE => cascade
 #
-
 module Api
   module V3
     class SankeyCardLink < YellowTable

@@ -17,7 +17,6 @@
 #  fk_rails_...  (map_attribute_id => map_attributes.id) ON DELETE => cascade
 #  fk_rails_...  (quant_id => quants.id) ON DELETE => cascade ON UPDATE => cascade
 #
-
 module Api
   module V3
     class MapQuant < YellowTable

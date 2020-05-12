@@ -20,7 +20,6 @@
 #
 #  fk_rails_...  (context_id => contexts.id) ON DELETE => cascade
 #
-
 module Api
   module V3
     class ResizeByAttribute < YellowTable
@@ -44,7 +43,6 @@ module Api
       validate :at_most_two_quick_facts_per_context
 
       after_create :set_years
-      after_commit :refresh_dependents
 
       stringy_array :years
       manage_associated_attributes [:resize_by_quant]
@@ -57,10 +55,6 @@ module Api
       end
 
       private
-
-      def refresh_dependents
-        Api::V3::Readonly::ResizeByAttribute.refresh(skip_dependencies: true)
-      end
 
       def set_years
         FlowAttributeAvailableYearsUpdateWorker.perform_async(

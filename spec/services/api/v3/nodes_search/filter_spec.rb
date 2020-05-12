@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::V3::NodesSearch::Filter do
-  include_context 'api v3 brazil flows'
+  include_context 'api v3 brazil soy flows'
   include_context 'api v3 paraguay flows'
   include_context 'api v3 brazil soy goias flows'
   include_context 'api v3 brazil soy profiles'

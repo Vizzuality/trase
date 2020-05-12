@@ -6,7 +6,6 @@
 #  dashboard_template_id :integer
 #  node_id               :integer
 #
-
 module Api
   module V3
     class DashboardTemplateCompany < YellowTable

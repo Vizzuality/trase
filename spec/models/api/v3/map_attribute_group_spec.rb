@@ -10,7 +10,7 @@ RSpec.describe Api::V3::MapAttributeGroup, type: :model do
     let(:duplicate) {
       FactoryBot.build(
         :api_v3_map_attribute_group,
-        context: api_v3_context,
+        context: api_v3_brazil_soy_context,
         position: 1
       )
     }

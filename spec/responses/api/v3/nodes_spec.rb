@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Nodes', type: :request do
   include_context 'api v3 brazil context node types'
-  include_context 'api v3 brazil flows'
+  include_context 'api v3 brazil soy flows'
 
   describe 'GET /api/v3/contexts/:context_id/nodes' do
     before(:each) do
@@ -11,7 +11,7 @@ RSpec.describe 'Nodes', type: :request do
     end
 
     it 'has the correct response structure' do
-      get "/api/v3/contexts/#{api_v3_context.id}/nodes"
+      get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/nodes"
 
       expect(@response).to have_http_status(:ok)
       expect(@response).to match_response_schema('all_nodes')

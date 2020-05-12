@@ -15,7 +15,6 @@
 #  fk_rails_...  (dashboards_attribute_id => dashboards_attributes.id) ON DELETE => cascade
 #  fk_rails_...  (ind_id => inds.id) ON DELETE => cascade
 #
-
 module Api
   module V3
     class DashboardsInd < YellowTable

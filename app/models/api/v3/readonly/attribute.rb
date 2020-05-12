@@ -10,12 +10,14 @@
 #  unit                                                            :text
 #  unit_type                                                       :text
 #  tooltip_text                                                    :text
+#  tooltip_text_by_context_id                                      :jsonb
+#  tooltip_text_by_country_id                                      :jsonb
+#  tooltip_text_by_commodity_id                                    :jsonb
 #
 # Indexes
 #
 #  attributes_original_type_name_idx  (original_type,name) UNIQUE
 #
-
 # This class is not backed by a materialized view, but a table.
 # The table is refreshed using Postgres "upsert" to preserve ids.
 # The upsert is defined in a SQL function.
@@ -42,40 +44,40 @@ module Api
           end
 
           # @param options
-          # @option options [Boolean] :skip_dependencies skip refreshing
           # @option options [Boolean] :skip_dependents skip refreshing
-          def refresh_now(options = {})
-            refresh_dependencies(options) unless options[:skip_dependencies]
+          def refresh_now(_options = {})
             upsert_attributes
-            refresh_dependents(options) unless options[:skip_dependents]
           end
 
           # @param options
-          # @option options [Boolean] :skip_dependencies skip refreshing
           # @option options [Boolean] :skip_dependents skip refreshing
           def refresh_later(options = {})
             UpsertAttributesWorker.perform_async(options)
+          end
+
+          def refresh_by_conditions(old_conditions, new_conditions, options)
+            refresh_now
+            refresh_nested_dependents(old_conditions, new_conditions, options)
+          end
+
+          def refresh_nested_dependents(old_conditions = nil, new_conditions = nil, options = {})
+            dependent_classes = self.dependent_classes
+            return if options[:skip_dependents]
+
+            dependent_classes.each do |dependent_class|
+              refreshed_tables = options[:refreshed_tables] || []
+              next if refreshed_tables.include?(dependent_class.table_name)
+
+              dependent_class.refresh_by_conditions(
+                old_conditions, new_conditions, options.merge(refreshed_tables: refreshed_tables)
+              )
+            end
           end
 
           protected
 
           def upsert_attributes
             connection.execute('SELECT upsert_attributes()')
-          end
-
-          def refresh_dependents(options = {})
-            [
-              Api::V3::Readonly::ChartAttribute,
-              Api::V3::Readonly::DashboardsAttribute,
-              Api::V3::Readonly::DownloadAttribute,
-              Api::V3::Readonly::MapAttribute,
-              Api::V3::Readonly::RecolorByAttribute,
-              Api::V3::Readonly::ResizeByAttribute
-            ].each do |mview_klass|
-              mview_klass.refresh(
-                options.merge(skip_dependencies: true)
-              )
-            end
           end
         end
 
