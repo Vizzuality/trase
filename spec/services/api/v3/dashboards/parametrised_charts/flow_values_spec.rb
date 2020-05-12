@@ -7,17 +7,16 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::FlowValuesCharts do
   include_context 'api v3 brazil soy nodes'
 
   before(:each) do
+    Api::V3::Readonly::FlowQualDistinctValues.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::ResizeByAttribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::RecolorByAttribute.refresh(sync: true, skip_dependents: true)
   end
 
   let(:cont_attribute) { api_v3_volume.readonly_attribute }
   let(:ncont_attribute) { api_v3_forest_500.readonly_attribute }
   let(:mandatory_parameters) {
     {
-      country_id: api_v3_context.country_id,
-      commodity_id: api_v3_context.commodity_id,
+      country_id: api_v3_brazil_soy_context.country_id,
+      commodity_id: api_v3_brazil_soy_context.commodity_id,
       cont_attribute_id: cont_attribute.id
     }
   }

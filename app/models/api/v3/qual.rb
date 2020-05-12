@@ -9,7 +9,6 @@
 #
 #  quals_name_key  (name) UNIQUE
 #
-
 module Api
   module V3
     class Qual < BlueTable

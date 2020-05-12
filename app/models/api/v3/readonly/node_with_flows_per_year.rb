@@ -21,7 +21,6 @@
 #
 #  nodes_with_flows_per_year_id_idx  (id)
 #
-
 # Only needs to be refreshed once after data upload. Used in dashboards mviews.
 module Api
   module V3

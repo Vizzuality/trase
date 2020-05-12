@@ -19,7 +19,6 @@
 #  fk_rails_...  (download_attribute_id => download_attributes.id) ON DELETE => cascade
 #  fk_rails_...  (quant_id => quants.id) ON DELETE => cascade ON UPDATE => cascade
 #
-
 module Api
   module V3
     class DownloadQuant < YellowTable

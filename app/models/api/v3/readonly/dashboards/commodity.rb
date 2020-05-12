@@ -5,6 +5,7 @@
 #  id(id of commodity (not unique))                                               :integer          not null, primary key
 #  country_id(id of country, from which this commodity is sourced)                :integer          not null
 #  node_id(id of node, through which this commodity is sourced from this country) :integer          not null
+#  context_node_type_id                                                           :integer
 #  year                                                                           :integer          not null
 #  name                                                                           :text
 #  name_tsvector                                                                  :tsvector
@@ -16,7 +17,6 @@
 #  dashboards_commodities_name_tsvector_idx  (name_tsvector)
 #  dashboards_commodities_node_id_idx        (node_id)
 #
-
 module Api
   module V3
     module Readonly
@@ -32,6 +32,18 @@ module Api
             {columns: :node_id},
             {columns: :name_tsvector, using: :gin}
           ].freeze
+
+          def self.key_translations
+            {
+              context_id: -> (key_value) {
+                context = Api::V3::Context.find(key_value)
+                {
+                  id: context.commodity_id,
+                  country_id: context.country_id
+                }
+              }
+            }
+          end
         end
       end
     end

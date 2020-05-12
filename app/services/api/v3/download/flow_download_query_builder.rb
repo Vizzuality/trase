@@ -44,10 +44,10 @@ module Api
           @query = Api::V3::Flow.
             from('download_flows_v flows').
             joins(
-              'JOIN download_attributes_mv ON
-              download_attributes_mv.context_id = flows.context_id
-              AND download_attributes_mv.original_type = flows.attribute_type
-              AND download_attributes_mv.original_id = flows.attribute_id'
+              'JOIN download_attributes_v ON
+              download_attributes_v.context_id = flows.context_id
+              AND download_attributes_v.original_type = flows.attribute_type
+              AND download_attributes_v.original_id = flows.attribute_id'
             ).where(context_id: @context.id)
         end
 
@@ -174,7 +174,7 @@ module Api
 
         # rubocop:disable Metrics/MethodLength
         def attribute_filter(attribute, op_symbol, val)
-          query_parts = ['download_attributes_mv.attribute_id = ?']
+          query_parts = ['download_attributes_v.attribute_id = ?']
           parameters = [attribute.id]
           op_part, val =
             if attribute.original_type == 'Qual'

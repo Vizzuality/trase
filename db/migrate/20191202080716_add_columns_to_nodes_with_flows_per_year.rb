@@ -31,9 +31,6 @@ class AddColumnsToNodesWithFlowsPerYear < ActiveRecord::Migration[5.2]
       version: 2,
       revert_to_version: 1,
       materialized: false
-    Api::V3::Readonly::NodeWithFlowsPerYear.refresh(
-      sync: (Rails.env.development? || Rails.env.test?)
-    )
 
     create_view :dashboards_sources_v, version: 2, materialized: false
     create_view :dashboards_exporters_v, version: 2, materialized: false

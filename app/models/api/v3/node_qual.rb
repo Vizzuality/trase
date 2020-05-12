@@ -19,7 +19,6 @@
 #  fk_rails_...  (node_id => nodes.id) ON DELETE => cascade
 #  fk_rails_...  (qual_id => quals.id) ON DELETE => cascade ON UPDATE => cascade
 #
-
 module Api
   module V3
     class NodeQual < BlueTable

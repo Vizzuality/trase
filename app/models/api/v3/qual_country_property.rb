@@ -17,7 +17,6 @@
 #  fk_rails_...  (country_id => countries.id) ON DELETE => cascade ON UPDATE => cascade
 #  fk_rails_...  (qual_id => quals.id) ON DELETE => cascade ON UPDATE => cascade
 #
-
 module Api
   module V3
     class QualCountryProperty < YellowTable
@@ -38,7 +37,6 @@ module Api
       end
 
       def refresh_dependents
-        Api::V3::Readonly::CountryAttributeProperty.refresh
         refresh_actor_basic_attributes
       end
 
@@ -55,16 +53,14 @@ module Api
         update_node_with_flows_actor_basic_attributes(country_id, qual_id)
       end
 
-      def update_node_with_flows_actor_basic_attributes(country_id, qual_id)
-        contexts = Api::V3::Context.where(country_id: country_id)
-        node_quals = Api::V3::NodeQual.where(qual_id: qual_id)
-        nodes = node_quals.map(&:node)
-        node_with_flows = Api::V3::Readonly::NodeWithFlows.
+      def update_node_with_flows_actor_basic_attributes(country_id, _qual_id)
+        nodes_ids = Api::V3::Readonly::NodeWithFlows.
+          where(country_id: country_id).
           without_unknowns.
           without_domestic.
-          where(context_id: contexts.map(&:id), id: nodes.map(&:id))
-        NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
-          node_with_flows.map(&:id)
+          pluck(:id)
+        NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
+          nodes_ids.uniq
         )
       end
     end

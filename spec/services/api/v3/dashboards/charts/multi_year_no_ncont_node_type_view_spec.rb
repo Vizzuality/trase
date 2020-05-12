@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::Dashboards::Charts::MultiYearNoNcontNodeTypeView do
   include_context 'api v3 brazil resize by attributes'
-  include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil soy flow quants'
 
   let!(:api_v3_unknown_exporter_node) do
     node = Api::V3::Node.where(
@@ -26,7 +26,7 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNoNcontNodeTypeView do
   let!(:api_v3_flow_with_unknown) do
     FactoryBot.create(
       :api_v3_flow,
-      context: api_v3_context,
+      context: api_v3_brazil_soy_context,
       path: [
         api_v3_biome_node,
         api_v3_state_node,
@@ -52,7 +52,6 @@ RSpec.describe Api::V3::Dashboards::Charts::MultiYearNoNcontNodeTypeView do
 
   before(:each) do
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::ResizeByAttribute.refresh(sync: true, skip_dependents: true)
     Api::V3::TablePartitions::CreatePartitionsForFlows.new.call
     Api::V3::TablePartitions::CreatePartitionsForFlowQuants.new.call
   end

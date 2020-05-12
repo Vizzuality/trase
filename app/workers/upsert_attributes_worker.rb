@@ -7,7 +7,6 @@ class UpsertAttributesWorker
                   log_duplicate_payload: true
 
   # @param options
-  # @option options [Boolean] :skip_dependencies skip refreshing
   # @option options [Boolean] :skip_dependents skip refreshing
   def perform(options)
     Api::V3::Readonly::Attribute.refresh_now(options.symbolize_keys)

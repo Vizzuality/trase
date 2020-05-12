@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: contexts_mv
+# Table name: contexts_v
 #
 #  id                 :integer          primary key
 #  country_id         :integer
@@ -20,16 +20,11 @@
 #  node_types_by_name :jsonb
 #  node_types         :jsonb
 #
-# Indexes
-#
-#  contexts_mv_id_idx  (id) UNIQUE
-#
-
 module Api
   module V3
     module Readonly
       class Context < Api::Readonly::BaseModel
-        self.table_name = 'contexts_mv'
+        self.table_name = 'contexts_v'
 
         belongs_to :country
         has_many :context_node_types

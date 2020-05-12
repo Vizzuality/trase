@@ -3,13 +3,13 @@ require 'rails_helper'
 RSpec.describe Admin::TopProfilesController, type: :controller do
   render_views
 
-  include_context 'api v3 brazil flows'
+  include_context 'api v3 brazil soy flows'
   include_context 'api v3 brazil exporter actor profile'
 
   let(:user) { FactoryBot.create(:user) }
   before { sign_in user }
 
-  let(:context) { api_v3_context }
+  let(:context) { api_v3_brazil_soy_context }
   let(:node) { api_v3_exporter1_node }
 
   describe 'POST create' do
@@ -18,7 +18,6 @@ RSpec.describe Admin::TopProfilesController, type: :controller do
       Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
       Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
       Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-      Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
     end
 
     let(:top_profile) {
@@ -33,7 +32,11 @@ RSpec.describe Admin::TopProfilesController, type: :controller do
       post :create, params: {
         context_id: context.id, api_v3_top_profile: valid_attributes
       }
-      expect(response).to redirect_to(edit_admin_context_top_profile_path(Api::V3::TopProfile.last.context_id, Api::V3::TopProfile.last.id))
+      expect(response).to redirect_to(
+        edit_admin_context_top_profile_path(
+          context.id, Api::V3::TopProfile.last.id
+        )
+      )
     end
 
     it 'renders index' do
@@ -58,7 +61,6 @@ RSpec.describe Admin::TopProfilesController, type: :controller do
       Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
       Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
       Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-      Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
     end
 
     let(:top_profile) {

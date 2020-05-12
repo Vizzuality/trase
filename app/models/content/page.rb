@@ -6,7 +6,6 @@
 #  name    :text             not null
 #  content :text             not null
 #
-
 module Content
   class Page < Content::Base
     validates :name, presence: true, uniqueness: true

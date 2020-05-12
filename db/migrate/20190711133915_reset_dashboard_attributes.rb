@@ -32,6 +32,6 @@ class ResetDashboardAttributes < ActiveRecord::Migration[5.2]
 
       Api::V3::DashboardsQuant.create(quant: quant, dashboards_attribute: da)
     end
-    Api::V3::Readonly::DashboardsAttribute.refresh
+    # Api::V3::Readonly::DashboardsAttribute.refresh
   end
 end

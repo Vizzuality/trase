@@ -17,7 +17,6 @@
 #  fk_rails_...  (chart_attribute_id => chart_attributes.id) ON DELETE => cascade
 #  fk_rails_...  (qual_id => quals.id) ON DELETE => cascade ON UPDATE => cascade
 #
-
 module Api
   module V3
     class ChartQual < YellowTable

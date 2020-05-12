@@ -16,7 +16,6 @@
 #
 #  fk_rails_...  (staff_group_id => content.staff_groups.id) ON DELETE => cascade ON UPDATE => cascade
 #
-
 module Content
   class StaffMember < Content::Base
     belongs_to :staff_group

@@ -2,11 +2,11 @@ require 'rails_helper'
 
 RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeValuesCharts do
   include_context 'api v3 brazil municipality quant values'
-  include_context 'api v3 brazil flows'
+  include_context 'api v3 brazil soy flows'
 
   before(:each) do
-    Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::QuantValuesMeta.refresh(sync: true, skip_dependents: true)
+    Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
   end
 
   let(:force_labour_dashboards_attribute) {
@@ -25,8 +25,8 @@ RSpec.describe Api::V3::Dashboards::ParametrisedCharts::NodeValuesCharts do
 
   let(:mandatory_parameters) {
     {
-      country_id: api_v3_context.country_id,
-      commodity_id: api_v3_context.commodity_id
+      country_id: api_v3_brazil_soy_context.country_id,
+      commodity_id: api_v3_brazil_soy_context.commodity_id
     }
   }
 

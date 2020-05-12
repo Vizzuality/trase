@@ -7,7 +7,7 @@
 #  position(Display order in scope of chart)                                                                                                     :integer
 #  years(Array of years for which to show this attribute in scope of chart; empty (NULL) for all years)                                          :integer          is an Array
 #  display_name(Name of attribute for display in chart)                                                                                          :text
-#  legend_name(Legend title)                                                                                                                     :text
+#  legend_name(Legend title; you can use {{commodity_name}}, {{company_name}}, {{jurisdiction_name}} and {{year}})                               :text
 #  display_type(Type of display, only used for trajectory deforestation plot in place profiles; e.g. area, line)                                 :text
 #  display_style(Style of display, only used for trajectory deforestation plot in place profiles; e.g. area-pink, area-black, line-dashed-black) :text
 #  state_average(Only used for trajectory deforestation plot in place profiles)                                                                  :boolean          default(FALSE), not null
@@ -23,7 +23,6 @@
 #
 #  fk_rails_...  (chart_id => charts.id) ON DELETE => cascade
 #
-
 module Api
   module V3
     class ChartAttribute < YellowTable
@@ -85,7 +84,6 @@ module Api
       end
 
       def refresh_dependents
-        Api::V3::Readonly::ChartAttribute.refresh
         refresh_actor_basic_attributes
       end
 
@@ -111,15 +109,15 @@ module Api
       def update_node_with_flows_actor_basic_attributes(chart_id)
         chart = Api::V3::Chart.find(chart_id)
         profile = chart.profile
-        context_node_type = profile.context_node_type
-        context = context_node_type.context
-        nodes = context_node_type.node_type.nodes
-        node_with_flows = Api::V3::Readonly::NodeWithFlows.
+        nodes_ids = Api::V3::Readonly::NodeWithFlows.
+          where(
+            context_node_type_id: profile.context_node_type_id
+          ).
           without_unknowns.
           without_domestic.
-          where(context_id: context.id, id: nodes.map(&:id))
-        NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
-          node_with_flows.map(&:id)
+          pluck(:id)
+        NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
+          nodes_ids.uniq
         )
       end
 

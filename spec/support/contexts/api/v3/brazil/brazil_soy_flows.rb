@@ -1,10 +1,10 @@
-shared_context 'api v3 brazil flows' do
+shared_context 'api v3 brazil soy flows' do
   include_context 'api v3 brazil soy nodes'
 
-  let!(:api_v3_flow1) do
+  let!(:api_v3_brazil_soy_flow1) do
     FactoryBot.create(
       :api_v3_flow,
-      context: api_v3_context,
+      context: api_v3_brazil_soy_context,
       path: [
         api_v3_biome_node,
         api_v3_state_node,
@@ -18,10 +18,11 @@ shared_context 'api v3 brazil flows' do
       year: 2015
     )
   end
-  let!(:api_v3_flow2) do
+
+  let!(:api_v3_brazil_soy_flow2) do
     FactoryBot.create(
       :api_v3_flow,
-      context: api_v3_context,
+      context: api_v3_brazil_soy_context,
       path: [
         api_v3_biome_node,
         api_v3_state_node,
@@ -37,10 +38,10 @@ shared_context 'api v3 brazil flows' do
   end
 
   # second destination node - there can be only ONE destination in a single flow
-  let!(:api_v3_flow3) do
+  let!(:api_v3_brazil_soy_flow3) do
     FactoryBot.create(
       :api_v3_flow,
-      context: api_v3_context,
+      context: api_v3_brazil_soy_context,
       path: [
         api_v3_biome_node,
         api_v3_state_node,
@@ -56,10 +57,10 @@ shared_context 'api v3 brazil flows' do
   end
 
   # second exporter
-  let!(:api_v3_flow4) do
+  let!(:api_v3_brazil_soy_flow4) do
     FactoryBot.create(
       :api_v3_flow,
-      context: api_v3_context,
+      context: api_v3_brazil_soy_context,
       path: [
         api_v3_biome_node,
         api_v3_state_node,
@@ -75,10 +76,10 @@ shared_context 'api v3 brazil flows' do
   end
 
   # second importer
-  let!(:api_v3_flow5) do
+  let!(:api_v3_brazil_soy_flow5) do
     FactoryBot.create(
       :api_v3_flow,
-      context: api_v3_context,
+      context: api_v3_brazil_soy_context,
       path: [
         api_v3_biome_node,
         api_v3_state_node,
@@ -94,10 +95,10 @@ shared_context 'api v3 brazil flows' do
   end
 
   # other municipality
-  let!(:api_v3_flow6) do
+  let!(:api_v3_brazil_soy_flow6) do
     FactoryBot.create(
       :api_v3_flow,
-      context: api_v3_context,
+      context: api_v3_brazil_soy_context,
       path: [
         api_v3_biome_node,
         api_v3_state_node,
@@ -111,4 +112,7 @@ shared_context 'api v3 brazil flows' do
       year: 2015
     )
   end
+
+  Api::V3::Readonly::FlowNode.refresh(sync: true)
+  Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
 end

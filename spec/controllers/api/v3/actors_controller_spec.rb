@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe Api::V3::ActorsController, type: :controller do
-  include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil soy flow quants'
   include_context 'api v3 brazil exporter actor profile'
 
   let(:node) { api_v3_exporter1_node }
   let(:year) { 2015 }
   let(:valid_params) {
-    {context_id: api_v3_context.id, id: node.id, year: year}
+    {context_id: api_v3_brazil_soy_context.id, id: node.id, year: year}
   }
   let(:quant_dict) { instance_double(Dictionary::Quant) }
   let(:chart_config) {
@@ -20,9 +20,8 @@ RSpec.describe Api::V3::ActorsController, type: :controller do
     )
     Api::V3::Readonly::FlowNode.refresh(sync: true)
     Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
-    Api::V3::Readonly::NodeWithFlows.refresh(sync: true, skip_dependencies: true)
+    Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
   end
 
   describe 'GET basic_attributes' do
@@ -53,7 +52,7 @@ RSpec.describe Api::V3::ActorsController, type: :controller do
     context 'when year provided and valid for node' do
       let(:node) do
         Api::V3::Readonly::NodeWithFlows.where(
-          context_id: api_v3_context.id, profile: :actor
+          context_id: api_v3_brazil_soy_context.id, profile: :actor
         ).first.node
       end
 
@@ -66,7 +65,7 @@ RSpec.describe Api::V3::ActorsController, type: :controller do
     context 'when year provided but not valid for node' do
       let(:node) do
         Api::V3::Readonly::NodeWithFlows.where(
-          context_id: api_v3_context.id, profile: :actor
+          context_id: api_v3_brazil_soy_context.id, profile: :actor
         ).first.node
       end
 
@@ -80,7 +79,7 @@ RSpec.describe Api::V3::ActorsController, type: :controller do
     context 'when year not provided' do
       let(:node) do
         Api::V3::Readonly::NodeWithFlows.where(
-          context_id: api_v3_context.id, profile: :actor
+          context_id: api_v3_brazil_soy_context.id, profile: :actor
         ).first.node
       end
 
