@@ -9,6 +9,7 @@ import {
 import {
   getSelectedResizeBy
 } from 'react-components/tool-links/tool-links.selectors';
+
 const getHighlightedNodesCoordinates = state =>  state.toolLayers.highlightedNodeCoordinates;
 const getNodeAttributes = state => state.toolLinks.data.nodeAttributes || null;
 export const getNodeHeights = state => state.toolLinks.data.nodeHeights || null;

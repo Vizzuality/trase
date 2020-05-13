@@ -1,11 +1,17 @@
-import { layer, getFilter } from './layer-utils';
+import { layer } from './layer-utils';
 
-export default (hoveredGeoId = '', selectedNodesGeoIds) => {
+export default () => {
   const unitLayer = {
     name: 'brazil_municipalities',
     id: 'brazil_municipalities',
-    type: 'geojson',
-    variables: ['name', 'geoid'],
+    type: 'vector',
+    source: {
+      type: 'vector',
+      promoteId: 'geoid',
+      tiles: ['https://sandbox.trase.earth/services/brazil_municipalities/tiles/{z}/{x}/{y}.pbf']
+    },
+    sourceLayer: 'Brazil',
+    variables: ['geoid'],
     unitLayer: true,
     renderLayers: [
       {
@@ -18,36 +24,30 @@ export default (hoveredGeoId = '', selectedNodesGeoIds) => {
       {
         type: 'line',
         paint: {
-          'line-color': '#222',
-          'line-width': 0.5
+          'line-color': [
+            'case',
+            [
+              'any',
+              ['to-boolean', ['feature-state', 'selected']],
+              ['to-boolean', ['feature-state', 'hover']]
+            ],
+            '#000',
+            '#ccc'
+          ],
+          'line-width': [
+            'case',
+            [
+              'any',
+              ['to-boolean', ['feature-state', 'selected']],
+              ['to-boolean', ['feature-state', 'hover']]
+            ],
+            3,
+            0.2
+          ]
         }
       }
     ]
   };
-
-  if (hoveredGeoId) {
-    unitLayer.renderLayers = unitLayer.renderLayers.concat({
-      type: 'line',
-      filter: getFilter('==', 'geoid', hoveredGeoId),
-      paint: {
-        'line-color': '#fff',
-        'line-width': 3
-      }
-    });
-  }
-
-  if (selectedNodesGeoIds?.length) {
-    unitLayer.renderLayers = unitLayer.renderLayers.concat(
-      {
-        type: 'line',
-        filter: getFilter('==', 'geoid', selectedNodesGeoIds, 'any'),
-        paint: {
-          'line-color': '#000',
-          'line-width': 3
-        }
-      }
-    );
-  }
 
   return [layer(unitLayer)];
 };

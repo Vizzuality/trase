@@ -17,6 +17,9 @@ import { getLayerOrder } from './layers/layer-config';
 import { getBaseLayer } from './layers/base-layer';
 import 'react-components/tool/mapbox-map/mapbox-map.scss';
 
+let lastHoveredGeo = {};
+let lastSelectedGeos = [];
+
 function MapBoxMap(props) {
   const {
     defaultMapView,
@@ -32,9 +35,9 @@ function MapBoxMap(props) {
 
   const [mapAttribution, setMapAttribution] = useState(null);
   const [viewport, setViewport] = useState({ ...defaultMapView });
+  const [map, setMap] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [flying, setFlying] = useState(false);
-  const [hoveredGeoId, setHoveredGeoId] = useState(null);
   const mapRef = useRef();
   const mapContainerRef = useRef();
   const fullscreen = toolLayout === TOOL_LAYOUT.right;
@@ -55,6 +58,32 @@ function MapBoxMap(props) {
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultMapView]);
+
+  useEffect(() => {
+    if (map && loaded && selectedNodesGeoIds.length) {
+      const source = 'brazil_municipalities';
+      const sourceLayer = 'Brazil';
+      lastSelectedGeos.forEach(lastSelectedGeo =>
+        map.removeFeatureState(lastSelectedGeo, 'selected')
+      );
+      lastSelectedGeos = selectedNodesGeoIds.map(id => ({
+        id,
+        source,
+        ...(sourceLayer && { sourceLayer })
+      }));
+      lastSelectedGeos.forEach(geo =>
+        map.setFeatureState({ ...geo }, { selected: true })
+      );
+    }
+    return undefined;
+  }, [selectedNodesGeoIds, map, loaded]);
+
+  useEffect(() => {
+    if (loaded && mapRef.current) {
+      setMap(mapRef.current.getMap());
+    }
+    return undefined;
+  }, [mapRef, loaded]);
 
   const onLoad = () => {
     setLoaded(true);
@@ -83,15 +112,25 @@ function MapBoxMap(props) {
       const geoFeature = features.find(f => f.source === 'brazil_municipalities'); // Temporary
       if (geoFeature) {
         const { properties } = geoFeature;
-        setTooltip({ x: center.x, y: center.y, name: properties.name, values: properties })
-        setHoveredGeoId(properties.geoid);
-        onPolygonHighlighted(properties.geoid, {
+        const { id, source, sourceLayer } = geoFeature;
+        if (lastHoveredGeo.id) {
+          map.removeFeatureState(lastHoveredGeo, 'hover')
+        }
+        if (id && source) {
+          lastHoveredGeo = {
+            id,
+            source,
+            ...(sourceLayer && { sourceLayer })
+          };
+          map.setFeatureState({ ...lastHoveredGeo }, { hover: true });
+        }
+        setTooltip({ x: center.x, y: center.y, name: properties.nome, values: properties }) // Nome instead of name just for Brazil - Temporary
+        onPolygonHighlighted(id, {
           pageX: center.x,
           pageY: center.y
         });
       } else {
         setTooltip(null);
-        onPolygonHighlighted();
       }
     }
   };
@@ -132,9 +171,8 @@ function MapBoxMap(props) {
 
   const layers = [baseLayer]
     .concat(getContextualLayers())
-    .concat(activeLayers(hoveredGeoId, selectedNodesGeoIds))
+    .concat(activeLayers())
     .map(l => ({ ...l, zIndex: layerOrder[l.id] }));
-
   return (
     <div
       ref={mapContainerRef}
@@ -160,8 +198,8 @@ function MapBoxMap(props) {
         transitionEasing={easeCubic}
       >
         <NavigationControl showCompass={false} className="navigation-control" />
-        {loaded && mapRef.current && (
-          <LayerManager map={mapRef.current.getMap()} plugin={PluginMapboxGl}>
+        {loaded && map && (
+          <LayerManager map={map} plugin={PluginMapboxGl}>
             {layers.map(l => (
               <Layer key={l.id} {...l} />
             ))}
@@ -192,7 +230,8 @@ MapBoxMap.propTypes = {
   selectedNodesGeoIds: PropTypes.array,
   onPolygonHighlighted: PropTypes.func,
   onPolygonClicked: PropTypes.func,
-  bounds: PropTypes.object
+  bounds: PropTypes.object,
+  tooltipValues: PropTypes.object
 };
 
 MapBoxMap.defaultProps = {
