@@ -42,12 +42,12 @@ export const conditionalRenderLayers = ({
   })
 );
 
-export const layer = ({ name, type, provider, sql, renderLayers, id, variables=['name'], unitLayer }) => {
+export const layer = ({ name, type, source, sourceLayer, provider, sql, renderLayers, id, variables=['name'], unitLayer }) => {
   const baseLayer = {
     id: name,
     version: '0.0.1',
     type,
-    source: {
+    source: source || {
       type
     }
   };
@@ -74,10 +74,10 @@ export const layer = ({ name, type, provider, sql, renderLayers, id, variables=[
       ]
     };
   }
-  const sourceLayer = type === 'vector' ? { 'source-layer': 'layer0' } : {};
+  const sourceLayerAttributes = type === 'vector' ? { 'source-layer': sourceLayer || 'layer0' } : {};
   baseLayer.render = {
     layers: renderLayers.map(l => ({
-      ...sourceLayer,
+      ...sourceLayerAttributes,
       ...l
     }))
   };
