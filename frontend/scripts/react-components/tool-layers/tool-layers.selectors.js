@@ -11,6 +11,7 @@ import { getSelectedYears, getSelectedContext } from 'app/app.selectors';
 
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolColumns = state => state.toolLinks.data.columns;
+const getUnitLayers = state => state.toolLayers.data.mapUnitLayers || null;
 const getToolNodeAttributes = state => state.toolLinks.data.nodeAttributes;
 const getToolMapDimensions = state => state.toolLayers.data.mapDimensions;
 const getMapContextualLayers = state => state.toolLayers.data.mapContextualLayers;
@@ -191,6 +192,31 @@ export const getShouldFitBoundsSelectedPolygons = createSelector(
   [getSelectedNodesGeoIds, getSelectedNodesData],
   (selectedNodesGeoIds, selectedNodesData) =>
     selectedNodesGeoIds.length === selectedNodesData.length
+);
+
+export const getSelectedUnitLayer = createSelector(
+  [getUnitLayers, getSelectedGeoColumn],
+  (unitLayers, selectedGeoColumn) => {
+    if (!unitLayers || !selectedGeoColumn) return null;
+    const columnName = selectedGeoColumn.name;
+
+    // Temporary until we fix the layer names. They should be COUNTRY_REGION e.g BRAZIL_MUNICIPALITY
+    const selectedLayer = unitLayers.find(l => {
+      if (columnName === 'MUNICIPALITY') {
+        return l.id === 'municipalities'
+      }
+      if (columnName === 'STATES') {
+        return l.id === 'states'
+      }
+      return null;
+    });
+    if (selectedLayer) {
+      return selectedLayer;
+    }
+
+    // Layers are in the format COUNTRY_REGION e.g BRAZIL_MUNICIPALITY
+    return unitLayers.find(l => l.id.split('_') && l.id.split('_')[1] === columnName) || null;
+  }
 );
 
 export const getToolLayersUrlProps = createStructuredSelector({

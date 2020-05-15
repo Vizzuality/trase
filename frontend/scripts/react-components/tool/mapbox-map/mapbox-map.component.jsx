@@ -9,7 +9,7 @@ import { TOOL_LAYOUT, BASEMAPS } from 'constants';
 import Basemaps from 'react-components/tool/basemaps';
 import Legend from 'react-components/tool/legend';
 import { easeCubic } from 'd3-ease';
-import activeLayers from './layers/unit-layers';
+import getUnitLayerStyle from './layers/unit-layers';
 import Warnings from './mapbox-map-warnings';
 import Tooltip from './mapbox-map-tooltip';
 import { getContextualLayersTemplates, getRasterLayerTemplate } from './layers/contextual-layers';
@@ -30,9 +30,9 @@ function MapBoxMap(props) {
     onPolygonHighlighted,
     onPolygonClicked,
     selectedNodesGeoIds,
-    tooltipValues
+    tooltipValues,
+    unitLayer
   } = props;
-
   const [mapAttribution, setMapAttribution] = useState(null);
   const [viewport, setViewport] = useState({ ...defaultMapView });
   const [map, setMap] = useState(null);
@@ -43,7 +43,8 @@ function MapBoxMap(props) {
   const fullscreen = toolLayout === TOOL_LAYOUT.right;
   const minimized = toolLayout === TOOL_LAYOUT.right;
   const [tooltipData, setTooltip] = useState(null);
-
+  const source = unitLayer?.id;
+  const sourceLayer = unitLayer && `Brazil_${unitLayer.id}`; // 'Brazil' should be in the unit layer object too
   const updateViewport = updatedViewport => {
     setViewport({
       ...viewport,
@@ -61,8 +62,6 @@ function MapBoxMap(props) {
 
   useEffect(() => {
     if (map && loaded && selectedNodesGeoIds.length) {
-      const source = 'brazil_municipalities';
-      const sourceLayer = 'Brazil';
       lastSelectedGeos.forEach(lastSelectedGeo =>
         map.removeFeatureState(lastSelectedGeo, 'selected')
       );
@@ -76,7 +75,7 @@ function MapBoxMap(props) {
       );
     }
     return undefined;
-  }, [selectedNodesGeoIds, map, loaded]);
+  }, [selectedNodesGeoIds, map, loaded, sourceLayer, source]);
 
   useEffect(() => {
     if (loaded && mapRef.current) {
@@ -109,10 +108,10 @@ function MapBoxMap(props) {
   const onHover = e => {
     const { features, center } = e;
     if (features?.length) {
-      const geoFeature = features.find(f => f.source === 'brazil_municipalities'); // Temporary
+      const geoFeature = features.find(f => f.sourceLayer === sourceLayer);
       if (geoFeature) {
         const { properties } = geoFeature;
-        const { id, source, sourceLayer } = geoFeature;
+        const { id } = geoFeature;
         if (lastHoveredGeo.id) {
           map.removeFeatureState(lastHoveredGeo, 'hover')
         }
@@ -137,7 +136,7 @@ function MapBoxMap(props) {
 
   const onClick = e => {
     const { features } = e;
-    const geoFeature = features.find(f => f.source === 'brazil_municipalities'); // Temporary
+    const geoFeature = features.find(f => f.sourceLayer === sourceLayer);
     // if (
     //   (geoFeature?.properties && !geoFeature.properties.hasFlows) ||
     //   (e.target.classList && e.target.classList.contains('-disabled'))
@@ -169,10 +168,11 @@ function MapBoxMap(props) {
     return layers;
   };
 
-  const layers = [baseLayer]
-    .concat(getContextualLayers())
-    .concat(activeLayers())
-    .map(l => ({ ...l, zIndex: layerOrder[l.id] }));
+  let layers = [baseLayer].concat(getContextualLayers());
+  if (unitLayer) {
+    layers = layers.concat(getUnitLayerStyle(unitLayer))
+  }
+  const orderedLayers = layers.map(l => ({ ...l, zIndex: layerOrder[l.id] }));
   return (
     <div
       ref={mapContainerRef}
@@ -200,7 +200,7 @@ function MapBoxMap(props) {
         <NavigationControl showCompass={false} className="navigation-control" />
         {loaded && map && (
           <LayerManager map={map} plugin={PluginMapboxGl}>
-            {layers.map(l => (
+            {orderedLayers.map(l => (
               <Layer key={l.id} {...l} />
             ))}
           </LayerManager>
@@ -231,7 +231,8 @@ MapBoxMap.propTypes = {
   onPolygonHighlighted: PropTypes.func,
   onPolygonClicked: PropTypes.func,
   bounds: PropTypes.object,
-  tooltipValues: PropTypes.object
+  tooltipValues: PropTypes.object,
+  unitLayer: PropTypes.object
 };
 
 MapBoxMap.defaultProps = {

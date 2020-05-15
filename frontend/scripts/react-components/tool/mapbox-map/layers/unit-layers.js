@@ -1,16 +1,22 @@
 import { layer } from './layer-utils';
 
-export default () => {
-  const unitLayer = {
-    name: 'brazil_municipalities',
-    id: 'brazil_municipalities',
+export default (unitLayer) => {
+  const { id, tiles, version, bounds, center, maxzoom, minzoom } = unitLayer;
+  const styledUnitLayer = {
+    name: id,
+    id,
+    version,
+    bounds,
+    center,
+    maxzoom,
+    minzoom,
     type: 'vector',
     source: {
       type: 'vector',
       promoteId: 'geoid',
-      tiles: ['https://sandbox.trase.earth/services/brazil_municipalities/tiles/{z}/{x}/{y}.pbf']
+      tiles
     },
-    sourceLayer: 'Brazil',
+    sourceLayer: `Brazil_${id}`,
     variables: ['geoid'],
     unitLayer: true,
     renderLayers: [
@@ -49,5 +55,5 @@ export default () => {
     ]
   };
 
-  return [layer(unitLayer)];
+  return [layer(styledUnitLayer)];
 };
