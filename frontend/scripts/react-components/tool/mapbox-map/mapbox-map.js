@@ -19,7 +19,8 @@ import {
   getChoroplethOptions,
   getSelectedMapContextualLayersData,
   getShouldFitBoundsSelectedPolygons,
-  getMapDimensionsWarnings
+  getMapDimensionsWarnings,
+  getSelectedUnitLayer
 } from 'react-components/tool-layers/tool-layers.selectors';
 import { getSelectedContext } from 'app/app.selectors';
 import Map from 'react-components/tool/mapbox-map/mapbox-map.component';
@@ -48,7 +49,8 @@ const mapStateToProps = state => {
     highlightedNodesData: getHighlightedNodesData(state),
     columns: state.toolLinks.data.columns,
     extraColumn: (getHasExtraColumn(state) && state.toolLinks.extraColumn) || null,
-    tooltipValues: getTooltipValues(state)
+    tooltipValues: getTooltipValues(state),
+    unitLayer: getSelectedUnitLayer(state)
   };
 };
 
