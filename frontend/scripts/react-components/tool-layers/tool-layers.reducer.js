@@ -13,7 +13,8 @@ import {
   TOOL_LAYERS__SET_ACTIVE_MODAL,
   TOOL_LAYERS__SAVE_MAP_VIEW,
   TOOL_LAYERS__SET_LINKED_GEOIDS,
-  TOOL_LAYERS__SET_MAP_DIMENSIONS
+  TOOL_LAYERS__SET_MAP_DIMENSIONS,
+  TOOL_LAYERS__SET_UNIT_LAYERS
 } from 'react-components/tool-layers/tool-layers.actions';
 import { TOOL_LINKS__HIGHLIGHT_NODE } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'app/app.actions';
@@ -151,6 +152,11 @@ const toolLayersReducer = {
       draft.activeModal = action.payload.activeModal;
     });
   },
+  [TOOL_LAYERS__SET_UNIT_LAYERS](state, action) {
+    return immer(state, draft => {
+      draft.data.mapUnitLayers = action.payload.layers;
+    });
+  },
   [TOGGLE_MAP_DIMENSION](state, action) {
     return immer(state, draft => {
       if (!draft.selectedMapDimensions) {
@@ -179,7 +185,8 @@ const toolLayersReducerTypes = PropTypes => ({
     mapDimensions: PropTypes.object.isRequired,
     mapVectorData: PropTypes.array,
     mapDimensionsGroups: PropTypes.array.isRequired,
-    mapContextualLayers: PropTypes.object.isRequired
+    mapContextualLayers: PropTypes.object.isRequired,
+    mapUnitLayers: PropTypes.arrayOf(PropTypes.object)
   }).isRequired,
   highlightedNodeCoordinates: PropTypes.object,
   toolLayout: PropTypes.number,

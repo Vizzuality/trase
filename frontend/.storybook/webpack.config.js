@@ -30,6 +30,7 @@ module.exports = async ({ config }) =>
         ENABLE_LEGACY_TOOL_SEARCH: process.env.ENABLE_LEGACY_TOOL_SEARCH === 'true',
         NEW_PROFILES_PAGE: process.env.NEW_PROFILES_PAGE === 'true',
         API_V3_URL: JSON.stringify(process.env.API_V3_URL),
+        UNIT_LAYERS_API_URL: JSON.stringify(process.env.UNIT_LAYERS_API_URL),
         API_V2_URL: JSON.stringify(process.env.API_V2_URL),
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
         DATA_FORM_ENDPOINT: JSON.stringify(process.env.DATA_FORM_ENDPOINT),
