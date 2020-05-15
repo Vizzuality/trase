@@ -62,6 +62,7 @@
     "CONSOLIDATE_INSIGHTS": true,
     "ENABLE_COUNTRY_PROFILES": true,
     "API_V3_URL": true,
+    "UNIT_LAYERS_API_URL": true,
     "ENABLE_DASHBOARDS": true,
     "DISABLE_PROFILES": true,
     "ENABLE_LOGISTICS_MAP": true,
