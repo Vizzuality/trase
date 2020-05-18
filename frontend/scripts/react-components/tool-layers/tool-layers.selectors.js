@@ -199,16 +199,15 @@ export const getSelectedUnitLayer = createSelector(
   (unitLayers, selectedGeoColumn) => {
     if (!unitLayers || !selectedGeoColumn) return null;
     const columnName = selectedGeoColumn.name;
-
     // Temporary until we fix the layer names. They should be COUNTRY_REGION e.g BRAZIL_MUNICIPALITY
     const selectedLayer = unitLayers.find(l => {
       if (columnName === 'MUNICIPALITY') {
         return l.id === 'municipalities'
       }
-      if (columnName === 'STATES') {
+      if (columnName === 'STATE') {
         return l.id === 'states'
       }
-      return null;
+      return null
     });
     if (selectedLayer) {
       return selectedLayer;
