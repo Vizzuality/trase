@@ -9,6 +9,7 @@ import { TOOL_LAYOUT, BASEMAPS } from 'constants';
 import Basemaps from 'react-components/tool/basemaps';
 import Legend from 'react-components/tool/legend';
 import { easeCubic } from 'd3-ease';
+import capitalize from 'lodash/capitalize';
 import getUnitLayerStyle from './layers/unit-layers';
 import Warnings from './mapbox-map-warnings';
 import Tooltip from './mapbox-map-tooltip';
@@ -31,7 +32,9 @@ function MapBoxMap(props) {
     onPolygonClicked,
     selectedNodesGeoIds,
     tooltipValues,
-    unitLayer
+    unitLayer,
+    countryName,
+    highlightedNodesData
   } = props;
   const [mapAttribution, setMapAttribution] = useState(null);
   const [viewport, setViewport] = useState({ ...defaultMapView });
@@ -44,7 +47,7 @@ function MapBoxMap(props) {
   const minimized = toolLayout === TOOL_LAYOUT.right;
   const [tooltipData, setTooltip] = useState(null);
   const source = unitLayer?.id;
-  const sourceLayer = unitLayer && `Brazil_${unitLayer.id}`; // 'Brazil' should be in the unit layer object too
+  const sourceLayer = unitLayer && capitalize(countryName);
   const updateViewport = updatedViewport => {
     setViewport({
       ...viewport,
@@ -123,7 +126,8 @@ function MapBoxMap(props) {
           };
           map.setFeatureState({ ...lastHoveredGeo }, { hover: true });
         }
-        setTooltip({ x: center.x, y: center.y, name: properties.nome, values: properties }) // Nome instead of name just for Brazil - Temporary
+        const node = highlightedNodesData[0];
+        setTooltip({ x: center.x, y: center.y, name: node?.name, values: properties })
         onPolygonHighlighted(id, {
           pageX: center.x,
           pageY: center.y
@@ -170,7 +174,7 @@ function MapBoxMap(props) {
 
   let layers = [baseLayer].concat(getContextualLayers());
   if (unitLayer) {
-    layers = layers.concat(getUnitLayerStyle(unitLayer))
+    layers = layers.concat(getUnitLayerStyle(unitLayer, sourceLayer))
   }
   const orderedLayers = layers.map(l => ({ ...l, zIndex: layerOrder[l.id] }));
   return (
@@ -232,7 +236,9 @@ MapBoxMap.propTypes = {
   onPolygonClicked: PropTypes.func,
   bounds: PropTypes.object,
   tooltipValues: PropTypes.object,
-  unitLayer: PropTypes.object
+  unitLayer: PropTypes.object,
+  countryName: PropTypes.string,
+  highlightedNodesData: PropTypes.array
 };
 
 MapBoxMap.defaultProps = {

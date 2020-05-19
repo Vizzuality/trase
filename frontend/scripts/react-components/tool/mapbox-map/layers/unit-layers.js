@@ -1,6 +1,6 @@
 import { layer } from './layer-utils';
 
-export default (unitLayer) => {
+export default (unitLayer, sourceLayer) => {
   const { id, tiles, version, bounds, center, maxzoom, minzoom } = unitLayer;
   const styledUnitLayer = {
     name: id,
@@ -16,7 +16,7 @@ export default (unitLayer) => {
       promoteId: 'geoid',
       tiles
     },
-    sourceLayer: `Brazil_${id}`,
+    sourceLayer,
     variables: ['geoid'],
     unitLayer: true,
     renderLayers: [
