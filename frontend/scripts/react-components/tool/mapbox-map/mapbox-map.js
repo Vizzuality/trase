@@ -10,7 +10,10 @@ import {
   getVisibleNodes,
   getSelectedColumnFilterNode
 } from 'react-components/tool-links/tool-links.selectors';
-import { getTooltipValues } from 'react-components/tool/mapbox-map/mapbox-map.selectors';
+import {
+  getTooltipValues,
+  getCountryName
+} from 'react-components/tool/mapbox-map/mapbox-map.selectors';
 import {
   getMapView,
   getBasemap,
@@ -50,7 +53,8 @@ const mapStateToProps = state => {
     columns: state.toolLinks.data.columns,
     extraColumn: (getHasExtraColumn(state) && state.toolLinks.extraColumn) || null,
     tooltipValues: getTooltipValues(state),
-    unitLayer: getSelectedUnitLayer(state)
+    unitLayer: getSelectedUnitLayer(state),
+    countryName: getCountryName(state)
   };
 };
 

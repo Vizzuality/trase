@@ -195,26 +195,12 @@ export const getShouldFitBoundsSelectedPolygons = createSelector(
 );
 
 export const getSelectedUnitLayer = createSelector(
-  [getUnitLayers, getSelectedGeoColumn],
-  (unitLayers, selectedGeoColumn) => {
-    if (!unitLayers || !selectedGeoColumn) return null;
-    const columnName = selectedGeoColumn.name;
-    // Temporary until we fix the layer names. They should be COUNTRY_REGION e.g BRAZIL_MUNICIPALITY
-    const selectedLayer = unitLayers.find(l => {
-      if (columnName === 'MUNICIPALITY') {
-        return l.id === 'municipalities'
-      }
-      if (columnName === 'STATE') {
-        return l.id === 'states'
-      }
-      return null
-    });
-    if (selectedLayer) {
-      return selectedLayer;
-    }
-
-    // Layers are in the format COUNTRY_REGION e.g BRAZIL_MUNICIPALITY
-    return unitLayers.find(l => l.id.split('_') && l.id.split('_')[1] === columnName) || null;
+  [getUnitLayers, getSelectedGeoColumn, getSelectedContext],
+  (unitLayers, selectedGeoColumn, selectedContext) => {
+    if (!unitLayers || !selectedGeoColumn || !selectedContext) return null;
+    const countryName = selectedContext.countryName.toLowerCase();
+    const columnName = selectedGeoColumn.name.toLowerCase();
+    return unitLayers.find(l => l.id === `${countryName}_${columnName}`) || null;
   }
 );
 

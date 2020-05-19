@@ -6,9 +6,15 @@ import { getSelectedMapDimensionsData } from 'react-components/tool-layers/tool-
 import {
   getHighlightedNodesData
 } from 'react-components/tool/tool.selectors';
+import { getSelectedContext } from 'app/app.selectors';
 import {
   getSelectedResizeBy
 } from 'react-components/tool-links/tool-links.selectors';
+
+export const getContexts = state => state.app.contexts || null;
+export const getCountryName = createSelector(
+  [getSelectedContext], (selectedContext) => selectedContext?.countryName || null
+);
 
 const getHighlightedNodesCoordinates = state =>  state.toolLayers.highlightedNodeCoordinates;
 const getNodeAttributes = state => state.toolLinks.data.nodeAttributes || null;
@@ -24,7 +30,6 @@ export const getTooltipValues = createSelector(
   ],
   (nodeAttributes, selectedMapDimensions, nodeHeights, nodesData, coordinates, selectedResizeBy) => {
     let values = [];
-
     if (!coordinates) {
       return null;
     }
