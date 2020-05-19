@@ -367,6 +367,7 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="geometry_context_node_type_id" nullable="true" remarks="Use for geo columns, when geometry is to be taken from another node type (e.g. logistics hub -&gt; municipality)" size="10" type="int4" typeCode="4">
             <parent column="id" foreignKey="fk_rails_40673dee59" implied="false" onDeleteCascade="false" schema="public" table="context_node_types"/>
          </column>
+         <column autoUpdated="false" defaultValue="true" digits="0" id="11" name="is_visible" nullable="false" remarks="When set, show this node type in sankey &amp; dashboards" size="1" type="bool" typeCode="-7"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="context_node_type_properties_pkey" unique="true">
             <column ascending="true" name="id"/>
@@ -5094,7 +5095,7 @@
             <column ascending="true" name="country_id"/>
          </index>
       </table>
-      <table name="schema_migrations" numRows="115" remarks="" schema="public" type="TABLE">
+      <table name="schema_migrations" numRows="116" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="version" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
          <primaryKey column="version" sequenceNumberInPK="1"/>
          <index name="schema_migrations_pkey" unique="true">
