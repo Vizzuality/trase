@@ -2079,7 +2079,8 @@ CREATE TABLE public.contexts (
     commodity_id integer NOT NULL,
     years integer[],
     default_year integer,
-    created_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone NOT NULL,
+    subnational_years integer[]
 );
 
 
@@ -17289,7 +17290,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200430115447'),
 ('20200501152755'),
 ('20200505120049'),
+('20200521074053'),
 ('20200522153602'),
 ('20200618100150');
+
 
 
