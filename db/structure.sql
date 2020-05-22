@@ -1920,6 +1920,13 @@ COMMENT ON COLUMN public.context_node_type_properties.geometry_context_node_type
 
 
 --
+-- Name: COLUMN context_node_type_properties.is_visible; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_node_type_properties.is_visible IS 'When set, show this node type in sankey & dashboards';
+
+
+--
 -- Name: context_node_type_properties_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -5200,45 +5207,31 @@ COMMENT ON COLUMN public.node_quants.value IS 'Numeric value';
 
 
 --
--- Name: nodes_with_flows_or_geo_v; Type: VIEW; Schema: public; Owner: -
---
-
-CREATE VIEW public.nodes_with_flows_or_geo_v AS
- SELECT nodes.id,
-    contexts.id AS context_id,
-    nodes.node_type_id,
-    nodes.main_id,
-    nodes.is_unknown,
-    node_properties.is_domestic_consumption,
-    (upper(btrim(nodes.name)) = 'OTHER'::text) AS is_aggregated,
-        CASE
-            WHEN ((flow_nodes.node_id IS NOT NULL) OR (upper(btrim(nodes.name)) = 'OTHER'::text)) THEN true
-            ELSE false
-        END AS has_flows,
-    nodes.name,
-    node_types.name AS node_type,
-    nodes.geo_id,
-    profiles.name AS profile
-   FROM ((((((((public.nodes
-     JOIN public.node_properties ON ((node_properties.node_id = nodes.id)))
-     JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
-     JOIN public.context_node_types ON ((context_node_types.node_type_id = node_types.id)))
-     JOIN public.contexts ON ((context_node_types.context_id = contexts.id)))
-     JOIN public.countries ON ((contexts.country_id = countries.id)))
-     JOIN public.context_node_type_properties ON ((context_node_type_properties.context_node_type_id = context_node_types.id)))
-     LEFT JOIN public.profiles ON ((profiles.context_node_type_id = context_node_types.id)))
-     LEFT JOIN ( SELECT DISTINCT flow_nodes_1.node_id,
-            flow_nodes_1.context_id
-           FROM public.flow_nodes flow_nodes_1) flow_nodes ON (((flow_nodes.node_id = nodes.id) AND (flow_nodes.context_id = context_node_types.context_id) AND (flow_nodes.context_id = contexts.id))))
-  WHERE (((flow_nodes.context_id IS NOT NULL) AND (flow_nodes.context_id = contexts.id)) OR (context_node_type_properties.is_geo_column AND (upper(countries.iso2) = upper("substring"(nodes.geo_id, 1, 2)))) OR (upper(btrim(nodes.name)) = 'OTHER'::text));
-
-
---
 -- Name: map_attributes_values_v; Type: VIEW; Schema: public; Owner: -
 --
 
 CREATE VIEW public.map_attributes_values_v AS
- WITH node_attributes AS (
+ WITH nodes AS (
+         SELECT nodes_1.id,
+            nodes_1.node_type_id,
+            nodes_1.geo_id,
+            countries.iso2
+           FROM (public.nodes nodes_1
+             JOIN public.countries ON ((upper(countries.iso2) = upper("substring"(nodes_1.geo_id, 1, 2)))))
+          WHERE ((NOT nodes_1.is_unknown) AND (nodes_1.geo_id IS NOT NULL) AND (split_part(nodes_1.geo_id, '-'::text, 2) <> 'TRADER'::text))
+        UNION
+         SELECT DISTINCT nodes_1.id,
+            nodes_1.node_type_id,
+            nodes_1.geo_id,
+            countries.iso2
+           FROM (((public.nodes nodes_1
+             JOIN ( SELECT DISTINCT flow_nodes.node_id,
+                    flow_nodes.context_id
+                   FROM public.flow_nodes) fn ON ((fn.node_id = nodes_1.id)))
+             JOIN public.contexts ON ((fn.context_id = contexts.id)))
+             JOIN public.countries ON ((countries.id = contexts.country_id)))
+          WHERE ((NOT nodes_1.is_unknown) AND (nodes_1.geo_id IS NOT NULL) AND (split_part(nodes_1.geo_id, '-'::text, 2) <> 'TRADER'::text))
+        ), node_attributes AS (
          SELECT attributes.id AS attribute_id,
             node_quants.node_id,
             node_quants.year,
@@ -5259,11 +5252,9 @@ CREATE VIEW public.map_attributes_values_v AS
     (nodes.node_type_id)::smallint AS node_type_id,
     node_attributes.value,
     nodes.geo_id,
-    countries.iso2
-   FROM (((node_attributes
-     JOIN public.nodes_with_flows_or_geo_v nodes ON ((nodes.id = node_attributes.node_id)))
-     JOIN public.contexts ON ((contexts.id = nodes.context_id)))
-     JOIN public.countries ON ((countries.id = contexts.country_id)));
+    nodes.iso2
+   FROM (node_attributes
+     JOIN nodes ON ((nodes.id = node_attributes.node_id)));
 
 
 --
@@ -5538,6 +5529,40 @@ CREATE TABLE public.nodes_with_flows_or_geo (
     geo_id text,
     profile text
 );
+
+
+--
+-- Name: nodes_with_flows_or_geo_v; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.nodes_with_flows_or_geo_v AS
+ SELECT nodes.id,
+    contexts.id AS context_id,
+    nodes.node_type_id,
+    nodes.main_id,
+    nodes.is_unknown,
+    node_properties.is_domestic_consumption,
+    (upper(btrim(nodes.name)) = 'OTHER'::text) AS is_aggregated,
+        CASE
+            WHEN ((flow_nodes.node_id IS NOT NULL) OR (upper(btrim(nodes.name)) = 'OTHER'::text)) THEN true
+            ELSE false
+        END AS has_flows,
+    nodes.name,
+    node_types.name AS node_type,
+    nodes.geo_id,
+    profiles.name AS profile
+   FROM ((((((((public.nodes
+     JOIN public.node_properties ON ((node_properties.node_id = nodes.id)))
+     JOIN public.node_types ON ((node_types.id = nodes.node_type_id)))
+     JOIN public.context_node_types ON ((context_node_types.node_type_id = node_types.id)))
+     JOIN public.contexts ON ((context_node_types.context_id = contexts.id)))
+     JOIN public.countries ON ((contexts.country_id = countries.id)))
+     JOIN public.context_node_type_properties ON ((context_node_type_properties.context_node_type_id = context_node_types.id)))
+     LEFT JOIN public.profiles ON ((profiles.context_node_type_id = context_node_types.id)))
+     LEFT JOIN ( SELECT DISTINCT flow_nodes_1.node_id,
+            flow_nodes_1.context_id
+           FROM public.flow_nodes flow_nodes_1) flow_nodes ON (((flow_nodes.node_id = nodes.id) AND (flow_nodes.context_id = context_node_types.context_id) AND (flow_nodes.context_id = contexts.id))))
+  WHERE (((flow_nodes.context_id IS NOT NULL) AND (flow_nodes.context_id = contexts.id)) OR (context_node_type_properties.is_geo_column AND (upper(countries.iso2) = upper("substring"(nodes.geo_id, 1, 2)))) OR (upper(btrim(nodes.name)) = 'OTHER'::text));
 
 
 --
@@ -17263,6 +17288,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200425173940'),
 ('20200430115447'),
 ('20200501152755'),
-('20200505120049');
+('20200505120049'),
+('20200522153602');
 
 
