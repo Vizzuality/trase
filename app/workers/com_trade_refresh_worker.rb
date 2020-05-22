@@ -26,7 +26,7 @@ class ComTradeRefreshWorker
         "before: #{number_of_old_records}",
         "after: #{number_of_new_records}"
       ].join(', ')
-      Rails.error.log(message)
+      Rails.logger.error(message)
       raise Api::V3::CountriesComTradeIndicators::ComTradeError.new(message)
     end
 
