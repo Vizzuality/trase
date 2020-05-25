@@ -195,11 +195,12 @@ export const getShouldFitBoundsSelectedPolygons = createSelector(
 );
 
 export const getSelectedUnitLayer = createSelector(
-  [getUnitLayers, getSelectedGeoColumn, getSelectedContext],
-  (unitLayers, selectedGeoColumn, selectedContext) => {
+  [getUnitLayers, getToolColumns, getSelectedGeoColumn, getSelectedContext],
+  (unitLayers, columns, selectedGeoColumn, selectedContext) => {
     if (!unitLayers || !selectedGeoColumn || !selectedContext) return null;
+    const geoColumn = selectedGeoColumn.geometryNodeTypeId ? columns[selectedGeoColumn.geometryNodeTypeId] : selectedGeoColumn;
+    const columnName = geoColumn.name.toLowerCase();
     const countryName = selectedContext.countryName.toLowerCase();
-    const columnName = selectedGeoColumn.name.toLowerCase();
     return unitLayers.find(l => l.id === `${countryName}_${columnName}`) || null;
   }
 );
