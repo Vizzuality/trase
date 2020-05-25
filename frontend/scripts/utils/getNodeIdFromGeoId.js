@@ -1,5 +1,5 @@
 export default (geoId, nodes, selectedGeoColumnId) => {
-  if (geoId === undefined || geoId === null) {
+  if (geoId === undefined || geoId === null || !nodes) {
     return null;
   }
 
