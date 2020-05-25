@@ -114,7 +114,7 @@ function MapBoxMap(props) {
       const geoFeature = features.find(f => f.sourceLayer === sourceLayer);
       if (geoFeature) {
         const { properties } = geoFeature;
-        const { id } = geoFeature;
+        const id = geoFeature.id || properties.id || properties.geocode || properties.trase_id; // TODO: This should be just geoFeature.id if we standardise the layers
         if (lastHoveredGeo.id) {
           map.removeFeatureState(lastHoveredGeo, 'hover')
         }
@@ -127,7 +127,10 @@ function MapBoxMap(props) {
           map.setFeatureState({ ...lastHoveredGeo }, { hover: true });
         }
         const node = highlightedNodesData[0];
-        setTooltip({ x: center.x, y: center.y, name: node?.name, values: properties })
+        if(node?.name) {
+          setTooltip({ x: center.x, y: center.y, name: node?.name, values: properties })
+        }
+
         onPolygonHighlighted(id, {
           pageX: center.x,
           pageY: center.y

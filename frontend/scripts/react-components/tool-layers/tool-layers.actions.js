@@ -6,11 +6,19 @@ export const TOOL_LAYERS__SET_MAP_DIMENSIONS = 'TOOL_LAYERS__SET_MAP_DIMENSIONS'
 export const TOOL_LAYERS__SAVE_MAP_VIEW = 'TOOL_LAYERS__SAVE_MAP_VIEW';
 export const TOOL_LAYERS__SET_ACTIVE_MODAL = 'TOOL_LAYERS__SET_ACTIVE_MODAL';
 export const TOOL_LAYERS__SET_UNIT_LAYERS = 'TOOL_LAYERS__SET_UNIT_LAYERS';
+export const TOOL_LAYERS__SET_UNIT_LAYER_DATA = 'TOOL_LAYERS__SET_UNIT_LAYER_DATA';
 
 export function setLinkedGeoIds(nodes) {
   return {
     type: TOOL_LAYERS__SET_LINKED_GEOIDS,
     payload: { nodes }
+  };
+}
+
+export function setUnitLayerData(rows) {
+  return {
+    type: TOOL_LAYERS__SET_UNIT_LAYER_DATA,
+    payload: { data: rows }
   };
 }
 
