@@ -66,10 +66,10 @@ export const getTooltipValues = createSelector(
     unitLayersData
   ) => {
     let values = [];
-    if (!coordinates || !unitLayersData) {
+    const node = nodesData && nodesData[0];
+    if (!coordinates || !unitLayersData || !node) {
       return null;
     }
-    const node = nodesData[0];
     const nodeHeight = nodeHeights && nodeHeights[node.id];
     if (nodeAttributes && selectedMapDimensions && selectedMapDimensions.length > 0) {
       values = selectedMapDimensions

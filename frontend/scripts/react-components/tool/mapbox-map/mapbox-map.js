@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { selectNodeFromGeoId, highlightNodeFromGeoId } from 'react-components/tool/tool.actions';
 import { toolLayersActions } from 'react-components/tool-layers/tool-layers.register';
@@ -26,7 +27,7 @@ import {
   getSelectedUnitLayer
 } from 'react-components/tool-layers/tool-layers.selectors';
 import { getSelectedContext } from 'app/app.selectors';
-import Map from 'react-components/tool/mapbox-map/mapbox-map.component';
+import MapComponent from 'react-components/tool/mapbox-map/mapbox-map.component';
 
 const mapStateToProps = state => {
   const { choropleth } = getChoroplethOptions(state);
@@ -64,7 +65,18 @@ const mapDispatchToProps = {
   onMoveEnd: (latlng, zoom) => toolLayersActions.saveMapView(latlng, zoom)
 };
 
+const MapContainer = (props) => {
+  const [map, setMap] = useState(null);
+  return React.createElement(
+    MapComponent,
+    {...props,
+      map,
+      setMap
+    },
+    )
+};
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Map);
+)(MapContainer);

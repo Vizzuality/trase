@@ -5,7 +5,7 @@ import { LayerManager, Layer } from 'layer-manager/dist/components';
 import { PluginMapboxGl } from 'layer-manager';
 import ReactMapGL, { NavigationControl, FlyToInterpolator } from 'react-map-gl';
 import cx from 'classnames';
-import { TOOL_LAYOUT, BASEMAPS, CHOROPLETH_COLORS } from 'constants';
+import { TOOL_LAYOUT, BASEMAPS } from 'constants';
 import Basemaps from 'react-components/tool/basemaps';
 import Legend from 'react-components/tool/legend';
 import { easeCubic } from 'd3-ease';
@@ -16,6 +16,7 @@ import Tooltip from './mapbox-map-tooltip';
 import { getContextualLayersTemplates, getRasterLayerTemplate } from './layers/contextual-layers';
 import { getLayerOrder } from './layers/layer-config';
 import { getBaseLayer } from './layers/base-layer';
+import { useChoroplethFeatureState } from './mapbox-map.hooks';
 import 'react-components/tool/mapbox-map/mapbox-map.scss';
 
 let lastHoveredGeo = {};
@@ -36,11 +37,12 @@ function MapBoxMap(props) {
     countryName,
     highlightedNodesData,
     choropleth,
-    linkedGeoIds
+    linkedGeoIds,
+    map,
+    setMap
   } = props;
   const [mapAttribution, setMapAttribution] = useState(null);
   const [viewport, setViewport] = useState({ ...defaultMapView });
-  const [map, setMap] = useState(null);
   const [loaded, setLoaded] = useState(false);
   const [flying, setFlying] = useState(false);
   const mapRef = useRef();
@@ -92,7 +94,7 @@ function MapBoxMap(props) {
       setMap(mapRef.current.getMap());
     }
     return undefined;
-  }, [mapRef, loaded]);
+  }, [mapRef, loaded, setMap]);
 
   const onLoad = () => {
     setLoaded(true);
@@ -110,65 +112,16 @@ function MapBoxMap(props) {
     }
   }, [loaded]);
 
-  useEffect(() => {
-    if (map && choropleth) {
-      const geoIds = Object.keys(choropleth);
-      let color = CHOROPLETH_COLORS.default_fill;
-      let lineWidth = isPoint ? 1.5 : 0.3;
-      let fillOpacity = 1;
-      let lineOpacity = isPoint ? 1 : 0.5;
-      const lineColor = darkBasemap ? CHOROPLETH_COLORS.bright_stroke : CHOROPLETH_COLORS.dark_stroke;
-
-      const hasLinkedIds = linkedGeoIds.length > 0;
-      // Choropleth has nodes
-      geoIds.forEach(geoId => {
-        const isLinked = linkedGeoIds.indexOf(geoId) > -1;
-        const biome = null; // TODO: Selected biome - This should filter the biome colors if we have an extra column for example
-        const isFilteredOut = geoId && biome?.geoId !== geoId;
-        if (isFilteredOut) {
-          fillOpacity = 0;
-          lineOpacity = 0;
-        }
-
-        const choroplethFeatureState = {
-          id: geoId,
-          source,
-          ...(sourceLayer && { sourceLayer })
-        };
-        map.setFeatureState(
-          { ...choroplethFeatureState },
-          {
-            color:
-              hasLinkedIds && !isLinked ? CHOROPLETH_COLORS.fill_not_linked : choropleth[geoId],
-            fillOpacity,
-            lineColor,
-            lineWidth: isLinked ? 1.2 : lineWidth,
-            lineOpacity
-          }
-        );
-      });
-
-      // Choropleth has no nodes but we have linked nodes: the selected node in the sankey is linked to them
-      if (!geoIds.length > 0) {
-        linkedGeoIds.forEach(geoId => {
-          // Fill with preset color and show slightly thicker borders
-          color = CHOROPLETH_COLORS.fill_linked;
-          fillOpacity = 1;
-          lineWidth = isPoint ? 1.5 : 0.5;
-          const choroplethFeatureState = {
-            id: geoId,
-            source,
-            ...(sourceLayer && { sourceLayer })
-          };
-
-          map.setFeatureState(
-            { ...choroplethFeatureState },
-            { color, fillOpacity, lineColor, lineWidth, lineOpacity }
-          );
-        });
-      }
-    }
-  }, [choropleth, map, source, sourceLayer, linkedGeoIds, baseLayerInfo, isPoint, darkBasemap]);
+  useChoroplethFeatureState(
+    choropleth,
+    map,
+    source,
+    sourceLayer,
+    linkedGeoIds,
+    baseLayerInfo,
+    isPoint,
+    darkBasemap
+  );
 
   const onHover = e => {
     const { features, center } = e;
@@ -176,7 +129,7 @@ function MapBoxMap(props) {
       const geoFeature = features.find(f => f.sourceLayer === sourceLayer);
       if (geoFeature) {
         const { properties } = geoFeature;
-        const id = geoFeature.id || properties.id || properties.geocode || properties.trase_id; // TODO: This should be just geoFeature.id if we standardise the layers
+        const id = geoFeature.id;
         if (lastHoveredGeo.id) {
           map.removeFeatureState(lastHoveredGeo, 'hover');
         }
@@ -206,12 +159,10 @@ function MapBoxMap(props) {
   const onClick = e => {
     const { features } = e;
     const geoFeature = features.find(f => f.sourceLayer === sourceLayer);
-    // if (
-    //   (geoFeature?.properties && !geoFeature.properties.hasFlows) ||
-    //   (e.target.classList && e.target.classList.contains('-disabled'))
-    // ) {
-    //   return;
-    // }
+    const notSelectableGeometry = e.target.classList && e.target.classList.contains('-disabled');
+    if (notSelectableGeometry) {
+      return;
+    }
     if (geoFeature?.properties) {
       onPolygonClicked(geoFeature.properties.geoid);
     }
@@ -306,7 +257,9 @@ MapBoxMap.propTypes = {
   countryName: PropTypes.string,
   highlightedNodesData: PropTypes.array,
   choropleth: PropTypes.object,
-  linkedGeoIds: PropTypes.array
+  linkedGeoIds: PropTypes.array,
+  map: PropTypes.object,
+  setMap: PropTypes.func
 };
 
 MapBoxMap.defaultProps = {
