@@ -11,6 +11,7 @@ import { getSelectedYears, getSelectedContext } from 'app/app.selectors';
 
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolColumns = state => state.toolLinks.data.columns;
+const getUnitLayers = state => state.toolLayers.data.mapUnitLayers || null;
 const getToolNodeAttributes = state => state.toolLinks.data.nodeAttributes;
 const getToolMapDimensions = state => state.toolLayers.data.mapDimensions;
 const getMapContextualLayers = state => state.toolLayers.data.mapContextualLayers;
@@ -191,6 +192,17 @@ export const getShouldFitBoundsSelectedPolygons = createSelector(
   [getSelectedNodesGeoIds, getSelectedNodesData],
   (selectedNodesGeoIds, selectedNodesData) =>
     selectedNodesGeoIds.length === selectedNodesData.length
+);
+
+export const getSelectedUnitLayer = createSelector(
+  [getUnitLayers, getToolColumns, getSelectedGeoColumn, getSelectedContext],
+  (unitLayers, columns, selectedGeoColumn, selectedContext) => {
+    if (!unitLayers || !selectedGeoColumn || !selectedContext) return null;
+    const geoColumn = selectedGeoColumn.geometryNodeTypeId ? columns[selectedGeoColumn.geometryNodeTypeId] : selectedGeoColumn;
+    const columnName = geoColumn.name.toLowerCase();
+    const countryName = selectedContext.countryName.toLowerCase();
+    return unitLayers.find(l => l.id === `${countryName}_${columnName}`) || null;
+  }
 );
 
 export const getToolLayersUrlProps = createStructuredSelector({

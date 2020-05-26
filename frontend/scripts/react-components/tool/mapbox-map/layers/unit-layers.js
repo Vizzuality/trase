@@ -1,11 +1,23 @@
-import { layer, getFilter } from './layer-utils';
+import { layer } from './layer-utils';
 
-export default (hoveredGeoId='') => [
-  layer({
-    name: 'brazil_municipalities',
-    id: 'brazil_municipalities',
-    type: 'geojson',
-    variables: ['name', 'geoid'],
+export default (unitLayer, sourceLayer) => {
+  const { id, tiles, version, bounds, center, maxzoom, minzoom } = unitLayer;
+  const styledUnitLayer = {
+    name: id,
+    id,
+    version,
+    bounds,
+    center,
+    maxzoom,
+    minzoom,
+    type: 'vector',
+    source: {
+      type: 'vector',
+      promoteId: 'geoid',
+      tiles
+    },
+    sourceLayer,
+    variables: ['geoid'],
     unitLayer: true,
     renderLayers: [
       {
@@ -18,18 +30,30 @@ export default (hoveredGeoId='') => [
       {
         type: 'line',
         paint: {
-          'line-color': '#222',
-          'line-width': 1
-        }
-      },
-      {
-        type: 'line',
-        filter: getFilter('==',  'geoid', hoveredGeoId),
-        paint: {
-          'line-color': '#fff',
-          'line-width': 3
+          'line-color': [
+            'case',
+            [
+              'any',
+              ['to-boolean', ['feature-state', 'selected']],
+              ['to-boolean', ['feature-state', 'hover']]
+            ],
+            '#000',
+            '#ccc'
+          ],
+          'line-width': [
+            'case',
+            [
+              'any',
+              ['to-boolean', ['feature-state', 'selected']],
+              ['to-boolean', ['feature-state', 'hover']]
+            ],
+            3,
+            0.2
+          ]
         }
       }
     ]
-  })
-];
+  };
+
+  return [layer(styledUnitLayer)];
+};

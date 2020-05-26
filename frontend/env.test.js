@@ -4,6 +4,7 @@
 module.exports = {
   PORT: 3000,
   API_V3_URL: '//0.0.0.0:3000',
+  UNIT_LAYERS_API_URL: '//staging.trase.earth',
   NAMED_MAPS_ENV: 'development',
   GFW_WIDGETS_BASE_URL: undefined,
   MAPBOX_TOKEN: undefined,

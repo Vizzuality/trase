@@ -8,9 +8,12 @@ import {
 } from 'react-components/tool/tool.selectors';
 import {
   getVisibleNodes,
-  getSelectedColumnFilterNode,
-  getSelectedResizeBy
+  getSelectedColumnFilterNode
 } from 'react-components/tool-links/tool-links.selectors';
+import {
+  getTooltipValues,
+  getCountryName
+} from 'react-components/tool/mapbox-map/mapbox-map.selectors';
 import {
   getMapView,
   getBasemap,
@@ -20,7 +23,7 @@ import {
   getSelectedMapContextualLayersData,
   getShouldFitBoundsSelectedPolygons,
   getMapDimensionsWarnings,
-  getSelectedMapDimensionsData
+  getSelectedUnitLayer
 } from 'react-components/tool-layers/tool-layers.selectors';
 import { getSelectedContext } from 'app/app.selectors';
 import Map from 'react-components/tool/mapbox-map/mapbox-map.component';
@@ -36,7 +39,6 @@ const mapStateToProps = state => {
     selectedNodesGeoIds: getSelectedNodesGeoIds(state),
     recolorByNodeIds: state.toolLinks.recolorByNodeIds,
     linkedGeoIds: state.toolLayers.linkedGeoIds,
-    nodeHeights: state.toolLinks.data.nodeHeights,
     highlightedGeoIds: getHighlightedNodesGeoIds(state)[0],
     defaultMapView: selectedContext ? selectedContext.map : null,
     selectedNodesIdsLength: state.toolLinks.selectedNodesIds.length,
@@ -47,13 +49,12 @@ const mapStateToProps = state => {
     selectedBiomeFilter: getSelectedColumnFilterNode(state),
     basemapId: getBasemap(state),
     selectedMapDimensionsWarnings: getMapDimensionsWarnings(state),
-    selectedResizeBy: getSelectedResizeBy(state),
-    selectedMapDimensions: getSelectedMapDimensionsData(state),
     highlightedNodesData: getHighlightedNodesData(state),
-    coordinates: state.toolLayers.highlightedNodeCoordinates,
-    nodeAttributes: state.toolLinks.data.nodeAttributes,
     columns: state.toolLinks.data.columns,
-    extraColumn: (getHasExtraColumn(state) && state.toolLinks.extraColumn) || null
+    extraColumn: (getHasExtraColumn(state) && state.toolLinks.extraColumn) || null,
+    tooltipValues: getTooltipValues(state),
+    unitLayer: getSelectedUnitLayer(state),
+    countryName: getCountryName(state)
   };
 };
 

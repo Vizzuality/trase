@@ -5,7 +5,9 @@ export default {
     mapDimensions: {},
     mapVectorData: null,
     mapDimensionsGroups: [],
-    mapContextualLayers: {}
+    mapContextualLayers: {},
+    mapUnitLayers: null,
+    mapUnitLayersData: null
   },
   highlightedNodeCoordinates: null, // TODO: this should be local state only used for map tooltip
   toolLayout: TOOL_LAYOUT.splitted,
