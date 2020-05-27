@@ -33,11 +33,13 @@ const getValue = (unitLayerValues, selectedYears, dimension) => {
     }
   }
 
-  if (!value && unitLayerValues.years['0']) { // Non-temporal indicator values are stored in year 0
+  // Non-temporal indicator values are stored in year 0
+  if (!value && unitLayerValues.years['0']) {
     return unitLayerValues.years['0'];
   }
 
-  if (dimension.unit === '%') {
+  if (dimension.unit === '%' || dimension.type === "ind") {
+    // Average of the year range
     value /= (lastYear - firstYear + 1);
   }
 
