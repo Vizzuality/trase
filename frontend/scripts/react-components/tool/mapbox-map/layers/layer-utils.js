@@ -3,7 +3,7 @@ import castArray from 'lodash/castArray';
 
 export const getFilter = (condition, name, value, decision) => {
   const filter = [decision || 'all'];
-  if (!value || !value.length) {
+  if (!value) {
     return null;
   }
   castArray(value).forEach(v => {
@@ -22,13 +22,15 @@ export const conditionalRenderLayers = ({
 }) => (zooms.flatMap(z => {
     if (z.filters) {
       return z.filters.map(o => ({
-        minzoom: z.minZoom,
-        maxzoom: z.maxZoom,
+        ...(z.minZoom && { minzoom: z.minZoom }),
+        ...(z.maxZoom && { maxzoom: z.maxZoom }),
         type,
-        filter: getFilter(o.condition, o.name || name, o.value),
+        ...(o.value && {
+          filter: getFilter(o.condition, o.name || name, o.value)
+        }),
         layout: { ...baseLayout, ...z.layout, ...o.layout },
         paint: { ...basePaint, ...z.paint, ...o.paint },
-        metadata
+        ...(metadata && { metadata })
       }));
     }
     return ({

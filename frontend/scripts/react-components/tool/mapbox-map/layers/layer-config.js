@@ -1,5 +1,5 @@
 // z-index from 1-100
-export const getLayerOrder = (baseLayerInfoId) => ({
+export const getLayerOrder = (baseLayerInfoId, unitLayerId) => ({
   brazil_biomes: 100,
   'brazil_biomes-labels': 100,
   ar_biomes_20191113: 100,
@@ -22,6 +22,6 @@ export const getLayerOrder = (baseLayerInfoId) => ({
   paraguay_indigenous_areas_2018_11_14: 40,
   brazil_indigenous_areas: 40,
   brazil_water_scarcity: 10,
-  brazil_municipalities: 9,
+  [unitLayerId]: 2,
   [baseLayerInfoId]: 1
 });
