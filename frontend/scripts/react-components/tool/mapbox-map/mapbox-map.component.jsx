@@ -58,12 +58,10 @@ function MapBoxMap(props) {
       ...updatedViewport
     });
   };
-
   const baseLayerInfo = BASEMAPS[basemapId];
   const baseLayer = getBaseLayer(baseLayerInfo);
   const darkBasemap = baseLayerInfo.dark;
-
-  const layerOrder = getLayerOrder(baseLayerInfo.id);
+  const layerOrder = getLayerOrder(baseLayerInfo.id, source);
   const isPoint = false; // TODO: Address isPoint cases
 
   useEffect(() => {

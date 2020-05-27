@@ -41,6 +41,10 @@ export const getContextualLayersTemplates = () => ({
       variables: ['name', 'siglauf3'],
       renderLayers: conditionalRenderLayers({
         type: 'symbol',
+        // symbol layers need metadata position top
+        metadata: {
+          position: 'top'
+        },
         name: 'siglauf3',
         baseLayout: {
           'text-size': 12,
@@ -97,6 +101,10 @@ export const getContextualLayersTemplates = () => ({
       type: 'geojson',
       renderLayers: conditionalRenderLayers({
         type: 'symbol',
+        // symbol layers need metadata position top
+        metadata: {
+          position: 'top'
+        },
         name: 'name',
         baseLayout: {
           'text-size': 15,
@@ -177,9 +185,6 @@ export const getContextualLayersTemplates = () => ({
           paint: {
             'fill-color': '#ECC35F',
             'fill-opacity': 0.5
-          },
-          metadata: {
-            position: 'top'
           }
         },
         {
@@ -188,9 +193,6 @@ export const getContextualLayersTemplates = () => ({
             'line-color': '#ECC35F',
             'line-width': 1,
             'line-opacity': 1
-          },
-          metadata: {
-            position: 'top'
           }
         }
       ]
@@ -208,9 +210,6 @@ export const getContextualLayersTemplates = () => ({
           paint: {
             'fill-color': '#B4D84F',
             'fill-opacity': 0.5
-          },
-          metadata: {
-            position: 'top'
           }
         },
         {
@@ -219,9 +218,6 @@ export const getContextualLayersTemplates = () => ({
             'line-color': '#B4D84F',
             'line-width': 1,
             'line-opacity': 1
-          },
-          metadata: {
-            position: 'top'
           }
         }
       ]
@@ -282,6 +278,10 @@ export const getContextualLayersTemplates = () => ({
       variables: ['simple_name'],
       renderLayers: conditionalRenderLayers({
         type: 'symbol',
+        // symbol layers need metadata position top
+        metadata: {
+          position: 'top'
+        },
         name: 'simple_name',
         baseLayout: {
           'text-letter-spacing': 0.3,
@@ -423,9 +423,6 @@ export const getContextualLayersTemplates = () => ({
           paint: {
             'line-opacity': 1
           },
-          metadata: {
-            position: 'top'
-          },
           name: 'year',
           zooms: [
             {
@@ -481,9 +478,6 @@ export const getContextualLayersTemplates = () => ({
             'line-color': '#000000',
             'line-width': 1,
             'line-opacity': 1
-          },
-          metadata: {
-            position: 'top'
           }
         }
       ]
@@ -495,6 +489,10 @@ export const getContextualLayersTemplates = () => ({
       variables: ['label'],
       renderLayers: conditionalRenderLayers({
         type: 'symbol',
+        // symbol layers need metadata position top
+        metadata: {
+          position: 'top'
+        },
         name: 'label',
         baseLayout: {
           'text-allow-overlap': true
@@ -523,9 +521,6 @@ export const getContextualLayersTemplates = () => ({
           paint: {
             'fill-color': '#B4D84F',
             'fill-opacity': 0.5
-          },
-          metadata: {
-            position: 'top'
           }
         },
         {
@@ -534,9 +529,6 @@ export const getContextualLayersTemplates = () => ({
             'line-color': '#B4D84F',
             'line-width': 1,
             'line-opacity': 1
-          },
-          metadata: {
-            position: 'top'
           }
         }
       ]
@@ -555,9 +547,6 @@ export const getContextualLayersTemplates = () => ({
             'line-color': '#000000',
             'line-width': 1,
             'line-opacity': 1
-          },
-          metadata: {
-            position: 'top'
           }
         }
       ]
@@ -569,6 +558,10 @@ export const getContextualLayersTemplates = () => ({
       variables: ['prov_name'],
       renderLayers: conditionalRenderLayers({
         type: 'symbol',
+        // symbol layers need metadata position top
+        metadata: {
+          position: 'top'
+        },
         name: 'prov_name',
         baseLayout: {
           'text-allow-overlap': false
@@ -598,9 +591,6 @@ export const getContextualLayersTemplates = () => ({
             'line-color': '#000000',
             'line-width': 0.5,
             'line-opacity': 1
-          },
-          metadata: {
-            position: 'top'
           }
         }
       ]
@@ -612,6 +602,10 @@ export const getContextualLayersTemplates = () => ({
       variables: ['biome_name'],
       renderLayers: conditionalRenderLayers({
         type: 'symbol',
+        // symbol layers need metadata position top
+        metadata: {
+          position: 'top'
+        },
         name: 'biome_name',
         baseLayout: {
           'text-letter-spacing': 0.3,
@@ -723,9 +717,6 @@ export const getContextualLayersTemplates = () => ({
         paint: {
           'fill-opacity': 1
         },
-        metadata: {
-          position: 'top'
-        },
         name: 'year',
         zooms: [
           {
@@ -757,9 +748,6 @@ export const getContextualLayersTemplates = () => ({
           type: 'line',
           paint: {
             'line-opacity': 1
-          },
-          metadata: {
-            position: 'top'
           },
           name: 'year',
           zooms: [
@@ -815,6 +803,10 @@ export const getContextualLayersTemplates = () => ({
       variables: ['prov'],
       renderLayers: conditionalRenderLayers({
         type: 'symbol',
+        // symbol layers need metadata position top
+        metadata: {
+          position: 'top'
+        },
         name: 'prov',
         baseLayout: {
           'text-size': 12,
