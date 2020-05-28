@@ -61,7 +61,7 @@ let nav = [
     page: 'about'
   },
   {
-    name: 'Trase Finance',
+    name: 'Finance',
     page: 'https://trase.finance',
     external: true
   }
