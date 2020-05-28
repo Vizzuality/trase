@@ -235,7 +235,7 @@
                             </div>
                         </div>
                         <div class="box-body">
-                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">WITH node_attributes AS (&#10;         SELECT attributes.id AS attribute_id,&#10;            node_quants.node_id,&#10;            node_quants.year,&#10;            node_quants.value&#10;           FROM (node_quants&#10;             JOIN attributes ON (((attributes.original_id = node_quants.quant_id) AND (attributes.original_type = &#39;Quant&#39;::text))))&#10;        UNION ALL&#10;         SELECT attributes.id AS attribute_id,&#10;            node_inds.node_id,&#10;            node_inds.year,&#10;            node_inds.value&#10;           FROM (node_inds&#10;             JOIN attributes ON (((attributes.original_id = node_inds.ind_id) AND (attributes.original_type = &#39;Ind&#39;::text))))&#10;        )&#10; SELECT DISTINCT node_attributes.attribute_id,&#10;    node_attributes.node_id,&#10;    node_attributes.year,&#10;    (nodes.node_type_id)::smallint AS node_type_id,&#10;    node_attributes.value,&#10;    nodes.geo_id,&#10;    countries.iso2&#10;   FROM (((node_attributes&#10;     JOIN nodes_with_flows_or_geo_v nodes ON ((nodes.id = node_attributes.node_id)))&#10;     JOIN contexts ON ((contexts.id = nodes.context_id)))&#10;     JOIN countries ON ((countries.id = contexts.country_id)));</textarea>
+                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">WITH nodes AS (&#10;         SELECT nodes_1.id,&#10;            nodes_1.node_type_id,&#10;            nodes_1.geo_id,&#10;            countries.iso2&#10;           FROM (public.nodes nodes_1&#10;             JOIN countries ON ((upper(countries.iso2) = upper(&quot;substring&quot;(nodes_1.geo_id, 1, 2)))))&#10;          WHERE ((NOT nodes_1.is_unknown) AND (nodes_1.geo_id IS NOT NULL) AND (split_part(nodes_1.geo_id, &#39;-&#39;::text, 2) &lt;&gt; &#39;TRADER&#39;::text))&#10;        UNION&#10;         SELECT DISTINCT nodes_1.id,&#10;            nodes_1.node_type_id,&#10;            nodes_1.geo_id,&#10;            countries.iso2&#10;           FROM (((public.nodes nodes_1&#10;             JOIN ( SELECT DISTINCT flow_nodes.node_id,&#10;                    flow_nodes.context_id&#10;                   FROM flow_nodes) fn ON ((fn.node_id = nodes_1.id)))&#10;             JOIN contexts ON ((fn.context_id = contexts.id)))&#10;             JOIN countries ON ((countries.id = contexts.country_id)))&#10;          WHERE ((NOT nodes_1.is_unknown) AND (nodes_1.geo_id IS NOT NULL) AND (split_part(nodes_1.geo_id, &#39;-&#39;::text, 2) &lt;&gt; &#39;TRADER&#39;::text))&#10;        ), node_attributes AS (&#10;         SELECT attributes.id AS attribute_id,&#10;            node_quants.node_id,&#10;            node_quants.year,&#10;            node_quants.value&#10;           FROM (node_quants&#10;             JOIN attributes ON (((attributes.original_id = node_quants.quant_id) AND (attributes.original_type = &#39;Quant&#39;::text))))&#10;        UNION ALL&#10;         SELECT attributes.id AS attribute_id,&#10;            node_inds.node_id,&#10;            node_inds.year,&#10;            node_inds.value&#10;           FROM (node_inds&#10;             JOIN attributes ON (((attributes.original_id = node_inds.ind_id) AND (attributes.original_type = &#39;Ind&#39;::text))))&#10;        )&#10; SELECT DISTINCT node_attributes.attribute_id,&#10;    node_attributes.node_id,&#10;    node_attributes.year,&#10;    (nodes.node_type_id)::smallint AS node_type_id,&#10;    node_attributes.value,&#10;    nodes.geo_id,&#10;    nodes.iso2&#10;   FROM (node_attributes&#10;     JOIN nodes ON ((nodes.id = node_attributes.node_id)));</textarea>
                             <div style="padding-top: 5px;"><hr></div>
                             <div class="box box-solid">
                                 <div class="box-header with-border">
@@ -245,13 +245,13 @@
                                 <!-- /.box-header -->
                                 <div class="box-body">
                                     <ul class="list-unstyled">
+                                        <li><a href="nodes.html">nodes</a></li>
+                                        <li><a href="countries.html">countries</a></li>
+                                        <li><a href="flow_nodes.html">flow_nodes</a></li>
+                                        <li><a href="contexts.html">contexts</a></li>
                                         <li><a href="attributes.html">attributes</a></li>
                                         <li><a href="node_quants.html">node_quants</a></li>
                                         <li><a href="node_inds.html">node_inds</a></li>
-                                        <li><a href="nodes.html">nodes</a></li>
-                                        <li><a href="countries.html">countries</a></li>
-                                        <li><a href="nodes_with_flows_or_geo_v.html">nodes_with_flows_or_geo_v</a></li>
-                                        <li><a href="contexts.html">contexts</a></li>
                                     </ul>
                                 </div><!-- /.box-body -->
                             </div>
