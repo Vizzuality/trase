@@ -48,6 +48,11 @@ let nav = [
     external: true
   },
   {
+    name: 'Finance',
+    page: 'https://trase.finance',
+    external: true
+  },
+  {
     name: 'Insights',
     page: 'https://insights.trase.earth/insights',
     external: true
@@ -59,11 +64,6 @@ let nav = [
   {
     name: 'About',
     page: 'about'
-  },
-  {
-    name: 'Finance',
-    page: 'https://trase.finance',
-    external: true
   }
 ];
 
