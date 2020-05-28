@@ -64,7 +64,8 @@ module Api
 
       def self.blue_foreign_keys
         [
-          {name: :context_node_type_id, table_class: Api::V3::ContextNodeType}
+          {name: :context_node_type_id, table_class: Api::V3::ContextNodeType},
+          {name: :geometry_context_node_type_id, table_class: Api::V3::ContextNodeType}
         ]
       end
 
