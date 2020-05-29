@@ -13,8 +13,8 @@ module Api
 
         def initialize_query
           @query = Api::V3::Readonly::Dashboards::Country.
-            select(:id, :name).
-            group(:id, :name).
+            select(:id, :name, :iso2).
+            group(:id, :name, :iso2).
             order(:name)
         end
       end
