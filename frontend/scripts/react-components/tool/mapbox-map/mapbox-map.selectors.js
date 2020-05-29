@@ -76,7 +76,12 @@ export const getTooltipValues = createSelector(
     if (nodeAttributes && selectedMapDimensions && selectedMapDimensions.length > 0) {
       values = selectedMapDimensions
         .map(dimension => {
-          const unitLayerValues = unitLayersData.find(d => d.geo_id === node.geoId && d.attribute_id === dimension.attributeId);
+          const unitLayerValues = unitLayersData.find(
+            d =>
+              d.geo_id === node.geoId &&
+              d.attribute_id === dimension.attributeId
+              // && d.node_type_id === nodeTypeId - If we need to find the selected values for a specific nodeTypeId
+          );
           if (!unitLayerValues) {
             return null;
           }
