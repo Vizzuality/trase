@@ -74,8 +74,11 @@ function MapBoxMap(props) {
 
   useEffect(() => {
     if (map && loaded && selectedNodesGeoIds.length) {
-      lastSelectedGeos.forEach(lastSelectedGeo =>
-        map.removeFeatureState(lastSelectedGeo, 'selected')
+      lastSelectedGeos.forEach(lastSelectedGeo => {
+        if (lastSelectedGeo.source === source) {
+          map.removeFeatureState(lastSelectedGeo, 'selected')
+        }
+      }
       );
       lastSelectedGeos = selectedNodesGeoIds.map(id => ({
         id,
@@ -128,7 +131,7 @@ function MapBoxMap(props) {
       if (geoFeature) {
         const { properties } = geoFeature;
         const id = geoFeature.id;
-        if (lastHoveredGeo.id) {
+        if (lastHoveredGeo.id && lastHoveredGeo.source === source) {
           map.removeFeatureState(lastHoveredGeo, 'hover');
         }
         if (id && source) {
