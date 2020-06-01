@@ -22,8 +22,8 @@ export const conditionalRenderLayers = ({
 }) => (zooms.flatMap(z => {
     if (z.filters) {
       return z.filters.map(o => ({
-        ...(z.minZoom && { minzoom: z.minZoom }),
-        ...(z.maxZoom && { maxzoom: z.maxZoom }),
+        ...(z.minzoom && { minzoom: z.minzoom }),
+        ...(z.maxzoom && { maxzoom: z.maxzoom }),
         type,
         ...(o.value && {
           filter: getFilter(o.condition, o.name || name, o.value)
@@ -38,20 +38,26 @@ export const conditionalRenderLayers = ({
       layout: { ...baseLayout, ...z.layout },
       paint: { ...basePaint, ...z.paint },
       metadata,
-      minzoom: z.minZoom,
-      maxzoom: z.maxZoom,
+      minzoom: z.minzoom,
+      maxzoom: z.maxzoom,
     });
   })
 );
 
-export const layer = ({ name, type, source, sourceLayer, provider, sql, renderLayers, id, variables=['name'], unitLayer }) => {
+export const layer = ({
+  name, bounds, center, minzoom, maxzoom, type, source, sourceLayer, provider, sql, renderLayers, id, variables=['name'], unitLayer
+}) => {
+  const baseSource = {
+    ...(bounds && { bounds }),
+    ...(center && { center }),
+    ...(minzoom && { minzoom }),
+    ...(maxzoom && { maxzoom}),
+  }
   const baseLayer = {
     id: name,
     version: '0.0.1',
     type,
-    source: source || {
-      type
-    }
+    source: {...baseSource, ...(source || baseSource)}
   };
 
   if (type === 'geojson') {

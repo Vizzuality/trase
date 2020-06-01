@@ -10,6 +10,7 @@ import Basemaps from 'react-components/tool/basemaps';
 import Legend from 'react-components/tool/legend';
 import { easeCubic } from 'd3-ease';
 import capitalize from 'lodash/capitalize';
+import flatMap from 'lodash/flatMap';
 import getUnitLayerStyle from './layers/unit-layers';
 import Warnings from './mapbox-map-warnings';
 import Tooltip from './mapbox-map-tooltip';
@@ -33,7 +34,7 @@ function MapBoxMap(props) {
     onPolygonClicked,
     selectedNodesGeoIds,
     tooltipValues,
-    unitLayer,
+    unitLayers,
     countryName,
     highlightedNodesData,
     choropleth,
@@ -50,8 +51,8 @@ function MapBoxMap(props) {
   const fullscreen = toolLayout === TOOL_LAYOUT.right;
   const minimized = toolLayout === TOOL_LAYOUT.right;
   const [tooltipData, setTooltip] = useState(null);
-  const source = unitLayer?.id;
-  const sourceLayer = unitLayer && capitalize(countryName);
+  const layerIds = unitLayers && unitLayers.map(u => u.id);
+  const sourceLayer = unitLayers && unitLayers[0] && capitalize(countryName);
   const updateViewport = updatedViewport => {
     setViewport({
       ...viewport,
@@ -61,7 +62,7 @@ function MapBoxMap(props) {
   const baseLayerInfo = BASEMAPS[basemapId];
   const baseLayer = getBaseLayer(baseLayerInfo);
   const darkBasemap = baseLayerInfo.dark;
-  const layerOrder = getLayerOrder(baseLayerInfo.id, source);
+  const layerOrder = getLayerOrder(baseLayerInfo.id, unitLayers && unitLayers.map(u => u.id));
   const isPoint = false; // TODO: Address isPoint cases
 
   useEffect(() => {
@@ -75,20 +76,19 @@ function MapBoxMap(props) {
   useEffect(() => {
     if (map && loaded && selectedNodesGeoIds.length) {
       lastSelectedGeos.forEach(lastSelectedGeo => {
-        if (lastSelectedGeo.source === source) {
+        if (layerIds.includes(lastSelectedGeo.source)) {
           map.removeFeatureState(lastSelectedGeo, 'selected')
         }
-      }
-      );
+      });
       lastSelectedGeos = selectedNodesGeoIds.map(id => ({
         id,
-        source,
-        ...(sourceLayer && { sourceLayer })
+        source: layerIds[0], // TODO: set feature state for each layer based on the node column
+        sourceLayer
       }));
       lastSelectedGeos.forEach(geo => map.setFeatureState({ ...geo }, { selected: true }));
     }
     return undefined;
-  }, [selectedNodesGeoIds, map, loaded, sourceLayer, source]);
+  }, [selectedNodesGeoIds, map, loaded, sourceLayer, layerIds]);
 
   useEffect(() => {
     if (loaded && mapRef.current) {
@@ -116,7 +116,7 @@ function MapBoxMap(props) {
   useChoroplethFeatureState(
     choropleth,
     map,
-    source,
+    unitLayers,
     sourceLayer,
     linkedGeoIds,
     baseLayerInfo,
@@ -131,13 +131,13 @@ function MapBoxMap(props) {
       if (geoFeature) {
         const { properties } = geoFeature;
         const id = geoFeature.id;
-        if (lastHoveredGeo.id && lastHoveredGeo.source === source) {
+        if (lastHoveredGeo.id && layerIds.includes(lastHoveredGeo.source)) {
           map.removeFeatureState(lastHoveredGeo, 'hover');
         }
-        if (id && source) {
+        if (id && layerIds && layerIds[0]) {
           lastHoveredGeo = {
             id,
-            source,
+            source: layerIds[0],  // TODO: set feature state for each layer based on the node column
             ...(sourceLayer && { sourceLayer })
           };
           map.setFeatureState({ ...lastHoveredGeo }, { hover: true });
@@ -190,11 +190,11 @@ function MapBoxMap(props) {
   };
 
   let layers = [baseLayer].concat(getContextualLayers());
-  if (unitLayer) {
-    layers = layers.concat(getUnitLayerStyle(unitLayer, sourceLayer, isPoint, darkBasemap));
+  if (unitLayers) {
+    layers = layers.concat(flatMap(unitLayers, u => getUnitLayerStyle(u, sourceLayer, isPoint, darkBasemap))
+    );
   }
   const orderedLayers = layers.map(l => ({ ...l, zIndex: layerOrder[l.id] }));
-
   return (
     <div
       ref={mapContainerRef}
@@ -254,7 +254,7 @@ MapBoxMap.propTypes = {
   onPolygonClicked: PropTypes.func,
   bounds: PropTypes.object,
   tooltipValues: PropTypes.object,
-  unitLayer: PropTypes.object,
+  unitLayers: PropTypes.object,
   countryName: PropTypes.string,
   highlightedNodesData: PropTypes.array,
   choropleth: PropTypes.object,
