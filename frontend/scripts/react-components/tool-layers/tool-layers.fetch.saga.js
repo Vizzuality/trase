@@ -123,7 +123,6 @@ export function* getMapDimensions(selectedContext, selectedYears) {
 
 export function* getUnitLayerData(params) {
   const { selectedGeoColumnId, selectedUnitIndicatorIds, iso2 } = params;
-  console.log('pa', params)
   const url = `${CARTO_BASE_URL}/sql?q=
     SELECT node_type_id, node_id, geo_id, attribute_id, json_object_agg(COALESCE(year, 0 ), total
     ORDER BY year) as years FROM (SELECT node_type_id, node_id, geo_id, attribute_id, year,

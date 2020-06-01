@@ -10,7 +10,7 @@ export const getRasterLayerTemplate = (identifier, url) => (
     source: {
       type: 'raster',
       tiles: [url],
-      minZoom: 2,
+      minzoom: 2,
       maxzoom: 11 // TODO: add this to layer configuration
     }
   }
@@ -53,14 +53,14 @@ export const getContextualLayersTemplates = () => ({
         },
         zooms: [
           {
-            minZoom: 3,
-            maxZoom: 4,
+            minzoom: 3,
+            maxzoom: 4,
             layout: {
               'text-field': '{siglauf3}'
             }
           },
           {
-            minZoom: 4,
+            minzoom: 4,
             filters: [
               { condition: '!=', name: 'name', value: ['DISTRITO FEDERAL'] },
               {
@@ -114,8 +114,8 @@ export const getContextualLayersTemplates = () => ({
         },
         zooms: [
           {
-            minZoom: 3,
-            maxZoom: 4,
+            minzoom: 3,
+            maxzoom: 4,
             filters: [
               { condition: '!=', value: 'MATA ATLANTICA' },
               {
@@ -126,7 +126,7 @@ export const getContextualLayersTemplates = () => ({
             ]
           },
           {
-            minZoom: 4,
+            minzoom: 4,
             filters: [
               { condition: '!=', value: 'MATA ATLANTICA' },
               {
@@ -158,7 +158,7 @@ export const getContextualLayersTemplates = () => ({
         name: 'cat',
         zooms: [
           {
-            minZoom: 2,
+            minzoom: 2,
             filters: [
               { condition: '<=', value: 7, paint: { 'fill-color': '#d73027' } },
               { condition: '<=', value: 6.5, paint: { 'fill-color': '#fc8d59' } },
@@ -290,14 +290,14 @@ export const getContextualLayersTemplates = () => ({
         },
         zooms: [
           {
-            minZoom: 4,
-            maxZoom: 5,
+            minzoom: 4,
+            maxzoom: 5,
             layout: {
               'text-size': 15
             }
           },
           {
-            minZoom: 5,
+            minzoom: 5,
             layout: {
               'text-size': 11
             }
@@ -382,7 +382,7 @@ export const getContextualLayersTemplates = () => ({
         name: 'year',
         zooms: [
           {
-            minZoom: 2,
+            minzoom: 2,
             filters: [
               {
                 condition: '==',
@@ -426,7 +426,7 @@ export const getContextualLayersTemplates = () => ({
           name: 'year',
           zooms: [
             {
-              minZoom: 2,
+              minzoom: 2,
               filters: [
                 {
                   condition: '==',
@@ -499,7 +499,7 @@ export const getContextualLayersTemplates = () => ({
         },
         zooms: [
           {
-            minZoom: 6,
+            minzoom: 6,
             layout: {
               'text-field': '{label}',
               'text-size': 12
@@ -568,7 +568,7 @@ export const getContextualLayersTemplates = () => ({
         },
         zooms: [
           {
-            minZoom: 3,
+            minzoom: 3,
             layout: {
               'text-field': '{prov_name}',
               'text-size': 10
@@ -613,8 +613,8 @@ export const getContextualLayersTemplates = () => ({
         },
         zooms: [
           {
-            minZoom: 3,
-            maxZoom: 5,
+            minzoom: 3,
+            maxzoom: 5,
             filters: [
               {
                 condition: '!=',
@@ -634,7 +634,7 @@ export const getContextualLayersTemplates = () => ({
             }
           },
           {
-            minZoom: 5,
+            minzoom: 5,
             layout: {
               'text-size': 10,
               'text-field': '{biome_name}'
@@ -659,7 +659,7 @@ export const getContextualLayersTemplates = () => ({
         name: 'type',
         zooms: [
           {
-            minZoom: 2,
+            minzoom: 2,
             filters: [
               {
                 condition: '!=',
@@ -720,7 +720,7 @@ export const getContextualLayersTemplates = () => ({
         name: 'year',
         zooms: [
           {
-            minZoom: 2,
+            minzoom: 2,
             filters: [
               {
                 condition: '==',
@@ -752,7 +752,7 @@ export const getContextualLayersTemplates = () => ({
           name: 'year',
           zooms: [
             {
-              minZoom: 2,
+              minzoom: 2,
               filters: [
                 {
                   condition: '==',
@@ -814,7 +814,7 @@ export const getContextualLayersTemplates = () => ({
         },
         zooms: [
           {
-            minZoom: 4,
+            minzoom: 4,
             layout: {
               'text-field': '{prov}'
             },

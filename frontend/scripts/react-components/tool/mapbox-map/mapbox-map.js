@@ -24,7 +24,7 @@ import {
   getSelectedMapContextualLayersData,
   getShouldFitBoundsSelectedPolygons,
   getMapDimensionsWarnings,
-  getSelectedUnitLayer
+  getSelectedUnitLayers
 } from 'react-components/tool-layers/tool-layers.selectors';
 import { getSelectedContext } from 'app/app.selectors';
 import MapComponent from 'react-components/tool/mapbox-map/mapbox-map.component';
@@ -54,7 +54,7 @@ const mapStateToProps = state => {
     columns: state.toolLinks.data.columns,
     extraColumn: (getHasExtraColumn(state) && state.toolLinks.extraColumn) || null,
     tooltipValues: getTooltipValues(state),
-    unitLayer: getSelectedUnitLayer(state),
+    unitLayers: getSelectedUnitLayers(state),
     countryName: getCountryName(state)
   };
 };

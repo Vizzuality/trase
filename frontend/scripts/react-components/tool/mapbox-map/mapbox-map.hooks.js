@@ -1,16 +1,18 @@
 import { CHOROPLETH_COLORS } from 'constants';
 import { useEffect } from 'react';
 
-export function useChoroplethFeatureState(choropleth, map, source, sourceLayer, linkedGeoIds, baseLayerInfo, isPoint, darkBasemap) {
+export function useChoroplethFeatureState(choropleth, map, unitLayers, sourceLayer, linkedGeoIds, baseLayerInfo, darkBasemap) {
   useEffect(() => {
     if (map && choropleth) {
+      const choroplethLayerIds = unitLayers?.filter(l => l.hasChoropleth).map(u => u.id);
+      const source = choroplethLayerIds && choroplethLayerIds[0]; // Only first choropleth layer is highlighted
       const geoIds = Object.keys(choropleth);
       const hasLinkedIds = linkedGeoIds.length > 0;
 
       let color = CHOROPLETH_COLORS.default_fill;
-      let lineWidth = isPoint ? 1.5 : 0.3;
+      let lineWidth = 0.3;
       let fillOpacity = 1;
-      const lineOpacity = isPoint ? 1 : 0.5;
+      const lineOpacity = 0.5;
       const lineColor = darkBasemap
         ? CHOROPLETH_COLORS.bright_stroke
         : CHOROPLETH_COLORS.dark_stroke;
@@ -41,7 +43,7 @@ export function useChoroplethFeatureState(choropleth, map, source, sourceLayer, 
         linkedGeoIds.forEach(geoId => {
           color = CHOROPLETH_COLORS.fill_linked;
           fillOpacity = 1;
-          lineWidth = isPoint ? 1.5 : 0.5;
+          lineWidth = 0.5;
           const choroplethFeatureState = {
             id: geoId,
             source,
@@ -55,5 +57,5 @@ export function useChoroplethFeatureState(choropleth, map, source, sourceLayer, 
         });
       }
     }
-  }, [choropleth, map, source, sourceLayer, linkedGeoIds, baseLayerInfo, isPoint, darkBasemap]);
+  }, [choropleth, map, unitLayers, sourceLayer, linkedGeoIds, baseLayerInfo, darkBasemap]);
 }

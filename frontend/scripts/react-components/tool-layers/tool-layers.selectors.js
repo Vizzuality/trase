@@ -8,6 +8,7 @@ import {
   getSelectedNodesData
 } from 'react-components/tool/tool.selectors';
 import { getSelectedYears, getSelectedContext } from 'app/app.selectors';
+import snakeCase from 'lodash/snakeCase';
 
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolColumns = state => state.toolLinks.data.columns;
@@ -194,14 +195,34 @@ export const getShouldFitBoundsSelectedPolygons = createSelector(
     selectedNodesGeoIds.length === selectedNodesData.length
 );
 
-export const getSelectedUnitLayer = createSelector(
-  [getUnitLayers, getToolColumns, getSelectedGeoColumn, getSelectedContext],
-  (unitLayers, columns, selectedGeoColumn, selectedContext) => {
-    if (!unitLayers || !selectedGeoColumn || !selectedContext) return null;
-    const geoColumn = selectedGeoColumn.geometryNodeTypeId ? columns[selectedGeoColumn.geometryNodeTypeId] : selectedGeoColumn;
-    const columnName = geoColumn.name.toLowerCase();
-    const countryName = selectedContext.countryName.toLowerCase();
-    return unitLayers.find(l => l.id === `${countryName}_${columnName}`) || null;
+const getAllSelectedGeoColumns = createSelector(
+  [getToolColumns, getSelectedColumnsIds],
+  (columns, selectedColumnsIds) => {
+    if (!columns) return null;
+    const selectedGeoColumns = Object.values(columns).filter(
+      column => column.isGeo && selectedColumnsIds.includes(column.id)
+    );
+    return selectedGeoColumns;
+  }
+);
+
+export const getSelectedUnitLayers = createSelector(
+  [getUnitLayers, getToolColumns, getSelectedContext, getAllSelectedGeoColumns],
+  (unitLayers, columns, selectedContext, selectedGeoColumns) => {
+    if (!unitLayers || !selectedContext || !selectedGeoColumns) return null;
+    // Use geometryNodeTypeId column for columns without own geometry e.g. logistic hubs
+    const geoColumns = selectedGeoColumns.map(c => c.geometryNodeTypeId ? columns[c.geometryNodeTypeId] : c);
+
+    const countryName = snakeCase(selectedContext.countryName);
+    const columnName = (c) => snakeCase(c.name);
+    const selectedUnitLayers = [];
+    geoColumns.forEach(geoColumn => {
+      const unitLayer = unitLayers.find(l => l.id === `${countryName}_${columnName(geoColumn)}`);
+      if (unitLayer) {
+        selectedUnitLayers.push({...unitLayer, hasChoropleth: !geoColumn.isChoroplethDisabled } )
+      }
+    });
+    return selectedUnitLayers;
   }
 );
 

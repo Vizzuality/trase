@@ -33,7 +33,8 @@ export default (unitLayer, sourceLayer, isPoint, darkBasemap) => {
         paint: {
           'fill-color': featureStateConditional('color', CHOROPLETH_COLORS.fill_not_linked),
           'fill-opacity': featureStateConditional('fillOpacity', darkBasemap ? 0 : 1)
-        }
+        },
+        filter: ['!=', '$type', 'Point']
       },
       {
         type: 'line',
@@ -59,10 +60,21 @@ export default (unitLayer, sourceLayer, isPoint, darkBasemap) => {
             featureStateConditional('lineWidth', isPoint ? 1.5 : 0.5)
           ],
           'line-opacity': featureStateConditional('lineOpacity', 1)
+        },
+        filter: ['!=', '$type', 'Point']
+      },
+      {
+        type: 'circle',
+        paint: {
+          'circle-color': '#e2714b',
+          'circle-stroke-width': 1
+        },
+        filter: ['==', '$type', 'Point'],
+        metadata: {
+          position: 'top'
         }
       }
     ]
   };
-
   return [layer(styledUnitLayer)];
 };
