@@ -66,17 +66,28 @@ export default (unitLayer, sourceLayer, darkBasemap) => {
       {
         type: 'circle',
         paint: {
-          'circle-color': '#fff',
-          'circle-radius': 3,
-          'circle-stroke-width':
-            ['case',
-            ['any',
+          'circle-color': '#34444c',
+          'circle-radius': [
+            'case',
+            [
+              'any',
               ['to-boolean', ['feature-state', 'hover']],
-              ['to-boolean', ['feature-state', 'selected']],
+              ['to-boolean', ['feature-state', 'selected']]
             ],
-              3,
-              featureStateConditional('lineWidth', 1)
-            ]
+            3.5,
+            3
+          ],
+          'circle-stroke-color': '#fff',
+          'circle-stroke-width': [
+            'case',
+            [
+              'any',
+              ['to-boolean', ['feature-state', 'hover']],
+              ['to-boolean', ['feature-state', 'selected']]
+            ],
+            3,
+            featureStateConditional('lineWidth', 1)
+          ]
         },
         filter: ['==', '$type', 'Point'],
         metadata: {
