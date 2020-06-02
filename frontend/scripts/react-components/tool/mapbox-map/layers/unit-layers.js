@@ -8,7 +8,7 @@ const featureStateConditional = (featureStateVariable, defaultValue) => [
   defaultValue
 ];
 
-export default (unitLayer, sourceLayer, isPoint, darkBasemap) => {
+export default (unitLayer, sourceLayer, darkBasemap) => {
   const { id, tiles, version, bounds, center, maxzoom, minzoom } = unitLayer;
   const styledUnitLayer = {
     name: id,
@@ -57,7 +57,7 @@ export default (unitLayer, sourceLayer, isPoint, darkBasemap) => {
               ['to-boolean', ['feature-state', 'hover']]
             ],
             3,
-            featureStateConditional('lineWidth', isPoint ? 1.5 : 0.5)
+            featureStateConditional('lineWidth', 0.5)
           ],
           'line-opacity': featureStateConditional('lineOpacity', 1)
         },
@@ -66,8 +66,17 @@ export default (unitLayer, sourceLayer, isPoint, darkBasemap) => {
       {
         type: 'circle',
         paint: {
-          'circle-color': '#e2714b',
-          'circle-stroke-width': 1
+          'circle-color': '#fff',
+          'circle-radius': 3,
+          'circle-stroke-width':
+            ['case',
+            ['any',
+              ['to-boolean', ['feature-state', 'hover']],
+              ['to-boolean', ['feature-state', 'selected']],
+            ],
+              3,
+              featureStateConditional('lineWidth', 1)
+            ]
         },
         filter: ['==', '$type', 'Point'],
         metadata: {

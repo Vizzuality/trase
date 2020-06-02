@@ -32,7 +32,7 @@ function MapBoxMap(props) {
     selectedMapDimensionsWarnings,
     onPolygonHighlighted,
     onPolygonClicked,
-    selectedNodesGeoIds,
+    selectedGeoNodes,
     tooltipValues,
     unitLayers,
     countryName,
@@ -63,7 +63,6 @@ function MapBoxMap(props) {
   const baseLayer = getBaseLayer(baseLayerInfo);
   const darkBasemap = baseLayerInfo.dark;
   const layerOrder = getLayerOrder(baseLayerInfo.id, unitLayers && unitLayers.map(u => u.id));
-  const isPoint = false; // TODO: Address isPoint cases
 
   useEffect(() => {
     setViewport({
@@ -74,21 +73,21 @@ function MapBoxMap(props) {
   }, [defaultMapView]);
 
   useEffect(() => {
-    if (map && loaded && selectedNodesGeoIds.length) {
+    if (map && loaded && selectedGeoNodes.length) {
       lastSelectedGeos.forEach(lastSelectedGeo => {
         if (layerIds.includes(lastSelectedGeo.source)) {
           map.removeFeatureState(lastSelectedGeo, 'selected')
         }
       });
-      lastSelectedGeos = selectedNodesGeoIds.map(id => ({
-        id,
-        source: layerIds[0], // TODO: set feature state for each layer based on the node column
+      lastSelectedGeos = selectedGeoNodes.map(selectedGeoNode => ({
+        id: selectedGeoNode.geoId,
+        source: selectedGeoNode.layerId,
         sourceLayer
       }));
       lastSelectedGeos.forEach(geo => map.setFeatureState({ ...geo }, { selected: true }));
     }
     return undefined;
-  }, [selectedNodesGeoIds, map, loaded, sourceLayer, layerIds]);
+  }, [selectedGeoNodes, map, loaded, sourceLayer, layerIds]);
 
   useEffect(() => {
     if (loaded && mapRef.current) {
@@ -120,7 +119,6 @@ function MapBoxMap(props) {
     sourceLayer,
     linkedGeoIds,
     baseLayerInfo,
-    isPoint,
     darkBasemap
   );
 
@@ -129,16 +127,15 @@ function MapBoxMap(props) {
     if (features?.length) {
       const geoFeature = features.find(f => f.sourceLayer === sourceLayer);
       if (geoFeature) {
-        const { properties } = geoFeature;
-        const id = geoFeature.id;
+        const { properties, id, source } = geoFeature;
         if (lastHoveredGeo.id && layerIds.includes(lastHoveredGeo.source)) {
           map.removeFeatureState(lastHoveredGeo, 'hover');
         }
         if (id && layerIds && layerIds[0]) {
           lastHoveredGeo = {
             id,
-            source: layerIds[0],  // TODO: set feature state for each layer based on the node column
-            ...(sourceLayer && { sourceLayer })
+            source,
+            sourceLayer
           };
           map.setFeatureState({ ...lastHoveredGeo }, { hover: true });
         }
@@ -191,7 +188,7 @@ function MapBoxMap(props) {
 
   let layers = [baseLayer].concat(getContextualLayers());
   if (unitLayers) {
-    layers = layers.concat(flatMap(unitLayers, u => getUnitLayerStyle(u, sourceLayer, isPoint, darkBasemap))
+    layers = layers.concat(flatMap(unitLayers, u => getUnitLayerStyle(u, sourceLayer, darkBasemap))
     );
   }
   const orderedLayers = layers.map(l => ({ ...l, zIndex: layerOrder[l.id] }));
@@ -249,7 +246,7 @@ MapBoxMap.propTypes = {
   basemapId: PropTypes.string,
   selectedMapContextualLayersData: PropTypes.array,
   selectedMapDimensionsWarnings: PropTypes.array,
-  selectedNodesGeoIds: PropTypes.array,
+  selectedGeoNodes: PropTypes.array,
   onPolygonHighlighted: PropTypes.func,
   onPolygonClicked: PropTypes.func,
   bounds: PropTypes.object,
