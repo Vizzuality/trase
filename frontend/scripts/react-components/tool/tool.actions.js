@@ -1,15 +1,14 @@
 /* eslint-disable no-use-before-define */
 import axios from 'axios';
-import { feature as topojsonFeature } from 'topojson';
 import { CARTO_NAMED_MAPS_BASE_URL } from 'constants';
 import { GET_NODE_ATTRIBUTES_URL, getURLFromParams } from 'utils/getURLFromParams';
 import contextLayersCarto from 'named-maps/tool_named_maps_carto';
 import getNodeIdFromGeoId from 'utils/getNodeIdFromGeoId';
-import setGeoJSONMeta from 'utils/setGeoJSONMeta';
 import compact from 'lodash/compact';
 import { getVisibleNodes } from 'react-components/tool-links/tool-links.selectors';
 import {
   getSelectedGeoColumn,
+  getAllSelectedGeoColumns,
   getSelectedMapDimensionsUids
 } from 'react-components/tool-layers/tool-layers.selectors';
 import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
@@ -83,13 +82,10 @@ export function setMapContextLayers(contextualLayers) {
 export function selectNodeFromGeoId(geoId) {
   return (dispatch, getState) => {
     const state = getState();
-    const selectedGeoColumn = getSelectedGeoColumn(state);
-
-    const nodeId = getNodeIdFromGeoId(
-      geoId,
-      getState().toolLinks.data.nodes,
-      selectedGeoColumn?.id
-    );
+    const allSelectedGeoColumns = getAllSelectedGeoColumns(state);
+    const selectedColumnsId = allSelectedGeoColumns && allSelectedGeoColumns.map(c => c.id);
+    const nodes = getState().toolLinks.data.nodes;
+    const nodeId = getNodeIdFromGeoId(geoId, nodes, selectedColumnsId);
 
     // node not in visible Nodes ---> expand node (same behavior as search)
     if (nodeId !== null) {
@@ -124,8 +120,8 @@ export function highlightNodeFromGeoId(geoId, coordinates) {
       data: { nodes },
       highlightedNodeId
     } = state.toolLinks;
-
-    const nodeId = getNodeIdFromGeoId(geoId, nodes, selectedGeoColumn?.id);
+    const selectedColumnsId = selectedGeoColumn && [selectedGeoColumn.id];
+    const nodeId = getNodeIdFromGeoId(geoId, nodes, selectedColumnsId);
     if (nodeId === null) {
       if (highlightedNodeId) {
         dispatch(highlightNode(null));

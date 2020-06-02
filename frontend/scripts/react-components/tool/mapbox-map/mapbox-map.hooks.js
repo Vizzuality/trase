@@ -17,7 +17,7 @@ export function useChoroplethFeatureState(choropleth, map, unitLayers, sourceLay
         ? CHOROPLETH_COLORS.bright_stroke
         : CHOROPLETH_COLORS.dark_stroke;
 
-      // Choropleth has nodes
+      // When choropleth has nodes
       geoIds.forEach(geoId => {
         const isLinked = linkedGeoIds.indexOf(geoId) > -1;
         const choroplethFeatureState = {
@@ -38,7 +38,7 @@ export function useChoroplethFeatureState(choropleth, map, unitLayers, sourceLay
         );
       });
 
-      // Choropleth has no nodes but we have linked nodes: the selected node in the sankey is linked to them
+      // When choropleth has no nodes but we have linked nodes: the selected node in the sankey is linked to them
       if (!geoIds.length > 0) {
         linkedGeoIds.forEach(geoId => {
           color = CHOROPLETH_COLORS.fill_linked;

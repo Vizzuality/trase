@@ -22,26 +22,39 @@ const getToolMapView = state => state.toolLayers.mapView;
 const getToolLayout = state => state.toolLayers.toolLayout;
 const getSelectedBasemap = state => state.toolLayers.selectedBasemap;
 
-const getNodesGeoIds = (nodesData, columns) => {
+const getGeoNodes = (nodesData, columns, selectedContext) => {
   if (columns) {
     return nodesData
       .filter(node => {
         const column = columns[node.columnId];
         return column.isGeo === true && typeof node.geoId !== 'undefined' && node.geoId !== null;
-      })
-      .map(node => node.geoId);
+      }).map(node => {
+        const column = columns[node.columnId];
+        const layerId = selectedContext && `${snakeCase(selectedContext.countryName)}_${snakeCase(
+          column.name
+        )}`;
+        return { ...node, layerId};
+      });
   }
   return [];
 };
 
-export const getSelectedNodesGeoIds = createSelector(
-  [getSelectedNodesData, getToolColumns],
-  getNodesGeoIds
+export const getSelectedGeoNodes = createSelector(
+  [getSelectedNodesData, getToolColumns, getSelectedContext],
+  getGeoNodes
 );
 
-export const getHighlightedNodesGeoIds = createSelector(
-  [getHighlightedNodesData, getToolColumns],
-  getNodesGeoIds
+export const getHighlightedGeoNodes = createSelector(
+  [getHighlightedNodesData, getToolColumns, getSelectedContext],
+  getGeoNodes
+);
+
+export const getSelectedNodesGeoIds = createSelector([getSelectedGeoNodes], geoNodes =>
+  geoNodes ? geoNodes.map(node => node.geoId) : []
+);
+
+export const getHighlightedNodesGeoIds = createSelector([getHighlightedGeoNodes], geoNodes =>
+  geoNodes ? geoNodes.map(n => n.map(node => node.geoId)) : []
 );
 
 export const getSelectedGeoColumn = createSelector(
@@ -195,7 +208,7 @@ export const getShouldFitBoundsSelectedPolygons = createSelector(
     selectedNodesGeoIds.length === selectedNodesData.length
 );
 
-const getAllSelectedGeoColumns = createSelector(
+export const getAllSelectedGeoColumns = createSelector(
   [getToolColumns, getSelectedColumnsIds],
   (columns, selectedColumnsIds) => {
     if (!columns) return null;
