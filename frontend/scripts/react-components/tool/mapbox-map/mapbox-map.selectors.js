@@ -1,6 +1,9 @@
 import { createSelector } from 'reselect';
 import formatValue from 'utils/formatValue';
-import { getSelectedMapDimensionsData } from 'react-components/tool-layers/tool-layers.selectors';
+import {
+  getSelectedMapDimensionsData,
+  getSelectedMapContextualLayersData
+} from 'react-components/tool-layers/tool-layers.selectors';
 import {
   getHighlightedNodesData
 } from 'react-components/tool/tool.selectors';
@@ -8,7 +11,6 @@ import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 import {
   getSelectedResizeBy
 } from 'react-components/tool-links/tool-links.selectors';
-import { getSelectedMapContextualLayersData } from 'react-components/tool-layers/tool-layers.selectors';
 import { getContextualLayersTemplates, getRasterLayerTemplate } from './layers/contextual-layers';
 
 export const getContexts = state => state.app.contexts || null;
