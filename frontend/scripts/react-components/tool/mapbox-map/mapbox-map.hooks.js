@@ -1,5 +1,6 @@
 import { CHOROPLETH_COLORS } from 'constants';
 import { useEffect } from 'react';
+import bbox from '@turf/bbox';
 
 export function useChoroplethFeatureState(choropleth, map, unitLayers, sourceLayer, linkedGeoIds, baseLayerInfo, darkBasemap) {
   useEffect(() => {
@@ -58,4 +59,34 @@ export function useChoroplethFeatureState(choropleth, map, unitLayers, sourceLay
       }
     }
   }, [choropleth, map, unitLayers, sourceLayer, linkedGeoIds, baseLayerInfo, darkBasemap]);
+}
+
+export function useFitToBounds(map, selectedGeoNodes) {
+  useEffect(() => {
+    const fitToBounds = () => {
+      const selectedGeoNodesIds = selectedGeoNodes.map(n => n.geoId);
+      const features = map.queryRenderedFeatures().filter(f => selectedGeoNodesIds.includes(f.id));
+      if (features?.length) {
+        const bounds = bbox({ type: 'FeatureCollection', features });
+        // Padding bottom is more because of the legend
+        map.fitBounds(bounds, { padding: { top: 10, bottom: 130, left: 10, right: 10 } });
+      }
+    }
+
+    if (map && selectedGeoNodes) {
+      fitToBounds()
+    }
+  }, [map, selectedGeoNodes]);
+}
+
+// Set map attribution
+export function useSetMapAttribution(loaded, setMapAttribution) {
+  useEffect(() => {
+    if (loaded) {
+      const attributionNode = document.querySelector('.mapboxgl-ctrl-attrib-inner');
+      if (attributionNode) {
+        setMapAttribution(attributionNode.innerHTML);
+      }
+    }
+  }, [loaded, setMapAttribution]);
 }

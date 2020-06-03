@@ -14,10 +14,9 @@ import flatMap from 'lodash/flatMap';
 import getUnitLayerStyle from './layers/unit-layers';
 import Warnings from './mapbox-map-warnings';
 import Tooltip from './mapbox-map-tooltip';
-import { getContextualLayersTemplates, getRasterLayerTemplate } from './layers/contextual-layers';
 import { getLayerOrder } from './layers/layer-config';
 import { getBaseLayer } from './layers/base-layer';
-import { useChoroplethFeatureState } from './mapbox-map.hooks';
+import { useChoroplethFeatureState, useFitToBounds, useSetMapAttribution } from './mapbox-map.hooks';
 import 'react-components/tool/mapbox-map/mapbox-map.scss';
 
 let lastHoveredGeo = {};
@@ -28,7 +27,7 @@ function MapBoxMap(props) {
     defaultMapView,
     toolLayout,
     basemapId,
-    selectedMapContextualLayersData,
+    contextualLayers,
     selectedMapDimensionsWarnings,
     onPolygonHighlighted,
     onPolygonClicked,
@@ -42,28 +41,35 @@ function MapBoxMap(props) {
     map,
     setMap
   } = props;
-  const [mapAttribution, setMapAttribution] = useState(null);
-  const [viewport, setViewport] = useState({ ...defaultMapView });
-  const [loaded, setLoaded] = useState(false);
-  const [flying, setFlying] = useState(false);
   const mapRef = useRef();
   const mapContainerRef = useRef();
-  const fullscreen = toolLayout === TOOL_LAYOUT.right;
-  const minimized = toolLayout === TOOL_LAYOUT.right;
+  const [viewport, setViewport] = useState({ ...defaultMapView });
+  const [loaded, setLoaded] = useState(false);
+  const [mapAttribution, setMapAttribution] = useState(null);
   const [tooltipData, setTooltip] = useState(null);
+
   const layerIds = unitLayers && unitLayers.map(u => u.id);
   const sourceLayer = unitLayers && unitLayers[0] && capitalize(countryName);
+  const baseLayerInfo = BASEMAPS[basemapId];
+  const baseLayer = getBaseLayer(baseLayerInfo);
+  const darkBasemap = baseLayerInfo.dark;
+  const layerOrder = getLayerOrder(baseLayerInfo.id, unitLayers && unitLayers.map(u => u.id));
+
+  // Set map when loaded
+  useEffect(() => {
+    if (loaded && mapRef.current) {
+      setMap(mapRef.current.getMap());
+    }
+    return undefined;
+  }, [mapRef, loaded, setMap]);
+
+  // Set viewport
   const updateViewport = updatedViewport => {
     setViewport({
       ...viewport,
       ...updatedViewport
     });
   };
-  const baseLayerInfo = BASEMAPS[basemapId];
-  const baseLayer = getBaseLayer(baseLayerInfo);
-  const darkBasemap = baseLayerInfo.dark;
-  const layerOrder = getLayerOrder(baseLayerInfo.id, unitLayers && unitLayers.map(u => u.id));
-
   useEffect(() => {
     setViewport({
       ...viewport,
@@ -72,6 +78,19 @@ function MapBoxMap(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultMapView]);
 
+  useSetMapAttribution(loaded, setMapAttribution)
+  useFitToBounds(map, selectedGeoNodes);
+  useChoroplethFeatureState(
+    choropleth,
+    map,
+    unitLayers,
+    sourceLayer,
+    linkedGeoIds,
+    baseLayerInfo,
+    darkBasemap
+  );
+
+  // Set and remove selected feature-state
   useEffect(() => {
     if (map && loaded && selectedGeoNodes.length) {
       lastSelectedGeos.forEach(lastSelectedGeo => {
@@ -88,39 +107,6 @@ function MapBoxMap(props) {
     }
     return undefined;
   }, [selectedGeoNodes, map, loaded, sourceLayer, layerIds]);
-
-  useEffect(() => {
-    if (loaded && mapRef.current) {
-      setMap(mapRef.current.getMap());
-    }
-    return undefined;
-  }, [mapRef, loaded, setMap]);
-
-  const onLoad = () => {
-    setLoaded(true);
-    // if (!isEmpty(bounds) && !!bounds.bbox) {
-    //   fitBounds();
-    // }
-  };
-
-  useEffect(() => {
-    if (loaded) {
-      const attributionNode = document.querySelector('.mapboxgl-ctrl-attrib-inner');
-      if (attributionNode) {
-        setMapAttribution(attributionNode.innerHTML);
-      }
-    }
-  }, [loaded]);
-
-  useChoroplethFeatureState(
-    choropleth,
-    map,
-    unitLayers,
-    sourceLayer,
-    linkedGeoIds,
-    baseLayerInfo,
-    darkBasemap
-  );
 
   const onHover = e => {
     const { features, center } = e;
@@ -139,15 +125,16 @@ function MapBoxMap(props) {
           };
           map.setFeatureState({ ...lastHoveredGeo }, { hover: true });
         }
-        const node = highlightedNodesData[0];
-        if (node?.name) {
-          setTooltip({ x: center.x, y: center.y, name: node?.name, values: properties });
-        }
 
         onPolygonHighlighted(id, {
           pageX: center.x,
           pageY: center.y
         });
+
+        const node = highlightedNodesData[0];
+        if (node?.name) {
+          setTooltip({ x: center.x, y: center.y, name: node?.name, values: properties });
+        }
       } else {
         setTooltip(null);
       }
@@ -166,42 +153,24 @@ function MapBoxMap(props) {
     }
   };
 
-  const getContextualLayers = () => {
-    let layers = [];
-    const cartoLayerTemplates = getContextualLayersTemplates();
-
-    selectedMapContextualLayersData.forEach(layerData => {
-      const { identifier, cartoLayers } = layerData;
-      const cartoData = cartoLayers[0];
-
-      if (cartoData.rasterUrl) {
-        layers.push(getRasterLayerTemplate(identifier, `${cartoData.rasterUrl}{z}/{x}/{y}.png`));
-      } else {
-        const layerStyle = cartoLayerTemplates[identifier];
-        if (layerStyle) {
-          layers = layers.concat(layerStyle);
-        }
-      }
-    });
-    return layers;
-  };
-
-  let layers = [baseLayer].concat(getContextualLayers());
+  // Get Layers
+  let layers = [baseLayer].concat(contextualLayers);
   if (unitLayers) {
     layers = layers.concat(flatMap(unitLayers, u => getUnitLayerStyle(u, sourceLayer, darkBasemap))
     );
   }
   const orderedLayers = layers.map(l => ({ ...l, zIndex: layerOrder[l.id] }));
+  const minimized = toolLayout === TOOL_LAYOUT.right;
   return (
     <div
       ref={mapContainerRef}
-      className={cx('c-map', { '-fullscreen': fullscreen }, { '-minimized': minimized })}
+      className={cx('c-map', { '-fullscreen': toolLayout === TOOL_LAYOUT.left }, { '-minimized': minimized })}
     >
       <ReactMapGL
         ref={mapRef}
         {...viewport}
         onViewportChange={setViewport}
-        onLoad={onLoad}
+        onLoad={() => setLoaded(true)}
         onResize={updateViewport}
         mapboxApiAccessToken={MAPBOX_TOKEN}
         width="100%"
@@ -211,7 +180,7 @@ function MapBoxMap(props) {
           [-89, -180],
           [89, 180]
         ]}
-        onClick={!flying && onClick}
+        onClick={onClick}
         onHover={onHover}
         transitionInterpolator={new FlyToInterpolator()}
         transitionEasing={easeCubic}
@@ -244,7 +213,7 @@ MapBoxMap.propTypes = {
   defaultMapView: PropTypes.object,
   toolLayout: PropTypes.number,
   basemapId: PropTypes.string,
-  selectedMapContextualLayersData: PropTypes.array,
+  contextualLayers: PropTypes.array,
   selectedMapDimensionsWarnings: PropTypes.array,
   selectedGeoNodes: PropTypes.array,
   onPolygonHighlighted: PropTypes.func,

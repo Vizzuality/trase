@@ -13,7 +13,8 @@ import {
 } from 'react-components/tool-links/tool-links.selectors';
 import {
   getTooltipValues,
-  getCountryName
+  getCountryName,
+  getContextualLayers
 } from 'react-components/tool/mapbox-map/mapbox-map.selectors';
 import {
   getMapView,
@@ -55,7 +56,8 @@ const mapStateToProps = state => {
     extraColumn: (getHasExtraColumn(state) && state.toolLinks.extraColumn) || null,
     tooltipValues: getTooltipValues(state),
     unitLayers: getSelectedUnitLayers(state),
-    countryName: getCountryName(state)
+    countryName: getCountryName(state),
+    contextualLayers: getContextualLayers(state)
   };
 };
 
