@@ -58,7 +58,7 @@ module Api
         end
 
         def summary
-          if @node_type_name == NodeTypeName::EXPORTER
+          if @node_type_name =~ /#{NodeTypeName::EXPORTER}/
             exporter_summary
           else
             importer_summary
