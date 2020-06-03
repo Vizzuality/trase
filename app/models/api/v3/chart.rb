@@ -79,7 +79,7 @@ module Api
         when 'actor_top_countries', 'actor_top_sources'
           :line_chart_with_map
         when
-          'actor_sustainability_table',
+          'actor_sustainability',
           'place_environmental_indicators',
           'place_socioeconomic_indicators',
           'place_agricultural_indicators',
