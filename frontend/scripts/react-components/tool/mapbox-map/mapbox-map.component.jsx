@@ -54,7 +54,6 @@ function MapBoxMap(props) {
   const baseLayer = getBaseLayer(baseLayerInfo);
   const darkBasemap = baseLayerInfo.dark;
   const layerOrder = getLayerOrder(baseLayerInfo.id, unitLayers && unitLayers.map(u => u.id));
-
   // Set map when loaded
   useEffect(() => {
     if (loaded && mapRef.current) {
@@ -159,6 +158,7 @@ function MapBoxMap(props) {
     layers = layers.concat(flatMap(unitLayers, u => getUnitLayerStyle(u, sourceLayer, darkBasemap))
     );
   }
+
   const orderedLayers = layers.map(l => ({ ...l, zIndex: layerOrder[l.id] }));
   const minimized = toolLayout === TOOL_LAYOUT.right;
   return (

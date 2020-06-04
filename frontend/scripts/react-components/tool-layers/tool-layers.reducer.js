@@ -4,6 +4,7 @@ import {
   SET_NODE_ATTRIBUTES,
   SELECT_BASEMAP,
   SELECT_CONTEXTUAL_LAYERS,
+  SELECT_LOGISTIC_LAYERS,
   CHANGE_LAYOUT,
   SET_SANKEY_SIZE,
   SELECT_UNIT_LAYERS,
@@ -114,6 +115,11 @@ const toolLayersReducer = {
   [SELECT_CONTEXTUAL_LAYERS](state, action) {
     return immer(state, draft => {
       draft.selectedMapContextualLayers = action.payload.contextualLayers;
+    });
+  },
+  [SELECT_LOGISTIC_LAYERS](state, action) {
+    return immer(state, draft => {
+      draft.selectedLogisticLayers = action.payload.logisticLayers;
     });
   },
   [SELECT_BASEMAP](state, action) {

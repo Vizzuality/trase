@@ -25,6 +25,7 @@ export const GET_MAP_VECTOR_DATA = 'GET_MAP_VECTOR_DATA';
 export const GET_CONTEXT_LAYERS = 'GET_CONTEXT_LAYERS';
 export const SELECT_UNIT_LAYERS = 'SELECT_UNIT_LAYERS';
 export const SELECT_CONTEXTUAL_LAYERS = 'SELECT_CONTEXTUAL_LAYERS';
+export const SELECT_LOGISTIC_LAYERS = 'SELECT_LOGISTIC_LAYERS';
 export const SELECT_BASEMAP = 'SELECT_BASEMAP';
 export const CHANGE_LAYOUT = 'CHANGE_LAYOUT';
 export const SET_SANKEY_SIZE = 'SET_SANKEY_SIZE';
@@ -216,6 +217,13 @@ export function selectContextualLayers(contextualLayers) {
   return {
     type: SELECT_CONTEXTUAL_LAYERS,
     payload: { contextualLayers }
+  };
+}
+
+export function selectLogisticLayers(logisticLayers) {
+  return {
+    type: SELECT_LOGISTIC_LAYERS,
+    payload: { logisticLayers }
   };
 }
 

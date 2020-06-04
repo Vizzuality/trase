@@ -11,7 +11,7 @@ export default function LayersList(props) {
   const idAttribute = {
     [LAYER_TAB_NAMES.unit]: 'uid',
     [LAYER_TAB_NAMES.contextual]: 'id'
-  }[selectedTab];
+  }[selectedTab] || 'id';
   const enableItem = item =>
     changeSelection({
       ...currentSelection,

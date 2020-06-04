@@ -6,6 +6,7 @@ export default {
     mapVectorData: null,
     mapDimensionsGroups: [],
     mapContextualLayers: {},
+    mapLogisticLayers: null,
     mapUnitLayers: null,
     mapUnitLayersData: null
   },
