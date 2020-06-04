@@ -12,7 +12,7 @@ const getMapContextualLayers = state => state.toolLayers.data.mapContextualLayer
 const getMapDimensions = state => state.toolLayers.data.mapDimensions;
 const getMapDimensionGroups = state => state.toolLayers.data.mapDimensionsGroups;
 const getSelectedMapContextualLayers = state => state.toolLayers.selectedMapContextualLayers;
-const getSelectedMapLogisticLayers = state => state.toolLayers.selectedMapLogisticLayers;
+const getSelectedMapLogisticLayers = state => state.toolLayers.selectedLogisticLayers;
 
 export const getLogisticLayers = createSelector(
   [getSelectedContext],
