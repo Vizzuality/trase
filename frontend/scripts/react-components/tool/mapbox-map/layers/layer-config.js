@@ -23,6 +23,7 @@ export const getLayerOrder = (baseLayerInfoId, unitLayerIds) => {
     paraguay_indigenous_areas_2018_11_14: 40,
     brazil_indigenous_areas: 40,
     brazil_water_scarcity: 10,
+    landtenure: 10,
     [baseLayerInfoId]: 1
   };
   if (unitLayerIds) {
