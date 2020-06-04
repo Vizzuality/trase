@@ -18,6 +18,7 @@ const getToolMapDimensions = state => state.toolLayers.data.mapDimensions;
 const getMapContextualLayers = state => state.toolLayers.data.mapContextualLayers;
 const getToolSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
 const getSelectedMapContextualLayers = state => state.toolLayers.selectedMapContextualLayers;
+const getSelectedLogisticLayers = state => state.toolLayers.selectedLogisticLayers;
 const getToolMapView = state => state.toolLayers.mapView;
 const getToolLayout = state => state.toolLayers.toolLayout;
 const getSelectedBasemap = state => state.toolLayers.selectedBasemap;
@@ -244,5 +245,6 @@ export const getToolLayersUrlProps = createStructuredSelector({
   toolLayout: getToolLayout,
   selectedBasemap: getSelectedBasemap,
   selectedMapDimensions: getToolSelectedMapDimensions,
-  selectedMapContextualLayers: getSelectedMapContextualLayers
+  selectedMapContextualLayers: getSelectedMapContextualLayers,
+  selectedLogisticLayers: getSelectedLogisticLayers
 });
