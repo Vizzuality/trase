@@ -9,6 +9,7 @@ export const getRasterLayerTemplate = (identifier, url) => (
     version: '0.0.1',
     source: {
       type: 'raster',
+      scheme: "tms",
       tiles: [url],
       minzoom: 2,
       maxzoom: 11 // TODO: add this to layer configuration
