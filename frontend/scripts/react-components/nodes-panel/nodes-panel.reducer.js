@@ -141,7 +141,7 @@ const nodesPanelReducer = {
         // this means we navigated internally with hopes of expanding some nodes once we had the columns
         state.__temporaryExpandedNodes.forEach(node => {
           const { id, nodeType } = node;
-          // with the columns we fing the role
+          // with the columns we find the role
           const { role } = columns.find(col => col.name === nodeType);
           const name = pluralize(role);
           const moduleOptions = modules[name];
@@ -158,7 +158,6 @@ const nodesPanelReducer = {
             draft[name].data.nodes[id] = node;
           }
         });
-
         // finally we clear the temporary state.
         draft.__temporaryExpandedNodes = [];
       }
@@ -507,6 +506,8 @@ const nodesPanelReducer = {
           if (moduleOptions.hasTabs) {
             draft[name].savedActiveTab = state[name].activeTab;
             draft[name].savedTabs = state[name].tabs;
+            console.log('s', name, state[name].activeTab, state);
+            // selectColumn(columnIndex, columnId, columnRole);
           }
         }
       });
