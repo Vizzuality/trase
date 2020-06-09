@@ -274,7 +274,7 @@ module Api
               other[:count] += 1
             end
           end
-          result
+          [result, other]
         end
 
         def flows_totals_per_node(position)
