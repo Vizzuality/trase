@@ -126,7 +126,7 @@ FeaturedCards.propTypes = {
   commodityName: PropTypes.string,
   countryName: PropTypes.string,
   step: PropTypes.number,
-  cards: PropTypes.object,
+  cards: PropTypes.array,
   openModal: PropTypes.func.isRequired
 };
 
