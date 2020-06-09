@@ -166,7 +166,8 @@ const toolLinksReducer = {
       linksMeta.nodeHeights.forEach(nodeHeight => {
         draft.data.nodeHeights[nodeHeight.id] = nodeHeight;
       });
-      linksMeta.otherNodes.forEach(otherNode => {
+      // TODO: otherNodes could have a null item. Remove filter Boolean when this is fixed
+      linksMeta.otherNodes.filter(Boolean).forEach(otherNode => {
         draft.data.otherNodes[otherNode.id] = otherNode;
       });
       draft.data.links = links;
