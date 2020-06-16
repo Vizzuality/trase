@@ -52,7 +52,7 @@ gem 'oj'
 gem 'paperclip', '~> 6.1.0'
 gem 'pg_csv'
 gem 'pg_search'
-gem 'rack', '~> 2.2.2' # issue with sidekiq web in version 2.1.1, still doesn't work on sandbox in version 2.1.2
+gem 'rack', '~> 2.2.3' # issue with sidekiq web in version 2.1.1, still doesn't work on sandbox in version 2.1.2
 gem 'rack-cors', '~> 1.1'
 gem 'scenic'
 gem 'sidekiq', '~> 6.0.7'
