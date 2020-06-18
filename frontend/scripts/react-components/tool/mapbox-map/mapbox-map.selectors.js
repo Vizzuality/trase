@@ -12,6 +12,9 @@ import {
   getSelectedResizeBy
 } from 'react-components/tool-links/tool-links.selectors';
 import { getContextualLayersTemplates, getRasterLayerTemplate } from './layers/contextual-layers';
+import { getLogisticMapLayerTemplates } from './layers/logistic-map-layers';
+
+const getSelectedLogisticLayers = state => state.toolLayers.selectedLogisticLayers;
 
 export const getContexts = state => state.app.contexts || null;
 export const getUnitLayersData = state => state.toolLayers.data.mapUnitLayersData || null;
@@ -132,4 +135,14 @@ export const getContextualLayers = createSelector(
     });
     return layers;
 }
+);
+
+export const getLogisticLayers = createSelector(
+  [getSelectedLogisticLayers], (selectedLogisticLayers) => {
+    if (!selectedLogisticLayers) return [];
+    const cartoLayerTemplates = getLogisticMapLayerTemplates().flat();
+    return selectedLogisticLayers
+      .map(l => cartoLayerTemplates.find(i => i.id === l))
+      .filter(Boolean);
+  }
 );

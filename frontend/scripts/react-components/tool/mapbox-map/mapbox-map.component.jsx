@@ -28,6 +28,7 @@ function MapBoxMap(props) {
     toolLayout,
     basemapId,
     contextualLayers,
+    logisticLayers,
     selectedMapDimensionsWarnings,
     onPolygonHighlighted,
     onPolygonClicked,
@@ -102,7 +103,9 @@ function MapBoxMap(props) {
         source: selectedGeoNode.layerId,
         sourceLayer
       }));
-      lastSelectedGeos.forEach(geo => map.setFeatureState({ ...geo }, { selected: true }));
+      lastSelectedGeos.forEach(geo =>
+        layerIds.includes(geo.source) && map.setFeatureState({ ...geo }, { selected: true })
+      );
     }
     return undefined;
   }, [selectedGeoNodes, map, loaded, sourceLayer, layerIds]);
@@ -116,7 +119,7 @@ function MapBoxMap(props) {
         if (lastHoveredGeo.id && layerIds.includes(lastHoveredGeo.source)) {
           map.removeFeatureState(lastHoveredGeo, 'hover');
         }
-        if (id && layerIds && layerIds[0]) {
+        if (id && layerIds && layerIds[0] && layerIds.includes(source)) {
           lastHoveredGeo = {
             id,
             source,
@@ -153,7 +156,7 @@ function MapBoxMap(props) {
   };
 
   // Get Layers
-  let layers = [baseLayer].concat(contextualLayers);
+  let layers = [baseLayer].concat(contextualLayers).concat(logisticLayers);
   if (unitLayers) {
     layers = layers.concat(flatMap(unitLayers, u => getUnitLayerStyle(u, sourceLayer, darkBasemap))
     );
@@ -214,13 +217,14 @@ MapBoxMap.propTypes = {
   toolLayout: PropTypes.number,
   basemapId: PropTypes.string,
   contextualLayers: PropTypes.array,
+  logisticLayers: PropTypes.array,
+  unitLayers: PropTypes.array,
   selectedMapDimensionsWarnings: PropTypes.array,
   selectedGeoNodes: PropTypes.array,
   onPolygonHighlighted: PropTypes.func,
   onPolygonClicked: PropTypes.func,
   bounds: PropTypes.object,
   tooltipValues: PropTypes.object,
-  unitLayers: PropTypes.object,
   countryName: PropTypes.string,
   highlightedNodesData: PropTypes.array,
   choropleth: PropTypes.object,

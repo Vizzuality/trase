@@ -14,7 +14,8 @@ import {
 import {
   getTooltipValues,
   getCountryName,
-  getContextualLayers
+  getContextualLayers,
+  getLogisticLayers
 } from 'react-components/tool/mapbox-map/mapbox-map.selectors';
 import {
   getMapView,
@@ -57,7 +58,8 @@ const mapStateToProps = state => {
     tooltipValues: getTooltipValues(state),
     unitLayers: getSelectedUnitLayers(state),
     countryName: getCountryName(state),
-    contextualLayers: getContextualLayers(state)
+    contextualLayers: getContextualLayers(state),
+    logisticLayers: getLogisticLayers(state)
   };
 };
 

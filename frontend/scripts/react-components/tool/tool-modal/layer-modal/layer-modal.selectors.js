@@ -6,7 +6,7 @@ import {
   getSelectedGeoColumn
 } from 'react-components/tool-layers/tool-layers.selectors';
 import { getSelectedContext } from 'app/app.selectors';
-import logisticMapLayers from './logistics-map-layers';
+import { logisticLayerTemplates } from 'react-components/tool/mapbox-map/layers/logistic-map-layers';
 
 const getMapContextualLayers = state => state.toolLayers.data.mapContextualLayers;
 const getMapDimensions = state => state.toolLayers.data.mapDimensions;
@@ -17,8 +17,8 @@ const getSelectedMapLogisticLayers = state => state.toolLayers.selectedLogisticL
 export const getLogisticLayers = createSelector(
   [getSelectedContext],
   (selectedContext) => {
-    if (!selectedContext || !logisticMapLayers[selectedContext.countryName]) return null;
-    return logisticMapLayers[selectedContext.countryName].filter(l => l.commodityName === selectedContext.commodityName);
+    if (!selectedContext || !logisticLayerTemplates[selectedContext.countryName]) return null;
+    return logisticLayerTemplates[selectedContext.countryName].filter(l => l.commodityName === selectedContext.commodityName);
   }
 );
 
