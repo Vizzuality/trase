@@ -491,12 +491,11 @@ const nodesPanelReducer = {
     });
   },
   [NODES_PANEL__SAVE](state) {
-    // Copies the panel selectedIds to draftSelectedIds on panel edit start
     return immer(state, draft => {
       Object.keys(state).forEach(name => {
         const moduleOptions = modules[name];
         if (moduleOptions) {
-          const panelData = draft[name];
+          const panelData = state[name];
           if (moduleOptions.hasMultipleSelection) {
             draft[name].selectedNodesIds = panelData.draftSelectedNodesIds;
           } else {
@@ -504,10 +503,8 @@ const nodesPanelReducer = {
           }
 
           if (moduleOptions.hasTabs) {
-            draft[name].savedActiveTab = state[name].activeTab;
-            draft[name].savedTabs = state[name].tabs;
-            console.log('s', name, state[name].activeTab, state);
-            // selectColumn(columnIndex, columnId, columnRole);
+            draft[name].savedActiveTab = panelData.activeTab;
+            draft[name].savedTabs = panelData.tabs;
           }
         }
       });
