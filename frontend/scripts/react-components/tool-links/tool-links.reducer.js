@@ -125,7 +125,19 @@ const toolLinksReducer = {
   [NODES_PANEL__SAVE](state, action) {
     // payload only on new context
     if (action.payload) {
-      return onContextChange(state);
+      return immer(state, draft => {
+        // Don't delete data and selectedNodesIds as we need the columns and selection for tab selected columns
+        Object.assign(draft, {
+          selectedRecolorBy: toolLinksInitialState.selectedRecolorBy,
+          selectedResizeBy: toolLinksInitialState.selectedResizeBy,
+          selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
+          extraColumn: toolLinksInitialState.extraColumn,
+          extraColumnNodeId: toolLinksInitialState.extraColumnNodeId,
+          detailedView: toolLinksInitialState.detailedView,
+          highlightedNodeId: toolLinksInitialState.highlightedNodeId,
+          selectedColumnsIds: toolLinksInitialState.selectedColumnsIds
+        });
+      });
     }
     return state;
   },
