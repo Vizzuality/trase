@@ -17,13 +17,19 @@ import {
   loadMapChoropleth,
   SET_NODE_ATTRIBUTES,
   TOGGLE_MAP_DIMENSION,
-  SELECT_UNIT_LAYERS
+  SELECT_UNIT_LAYERS,
+  selectContextualLayers,
+  selectUnitLayers,
+  selectLogisticLayers
 } from 'react-components/tool/tool.actions';
 import {
   getSelectedGeoColumn,
   getSelectedMapDimensionsUids
 } from 'react-components/tool-layers/tool-layers.selectors';
 import { getSelectedYears, getSelectedContext } from 'app/app.selectors';
+import {
+  NODES_PANEL__FINISH_SELECTION,
+} from 'react-components/nodes-panel/nodes-panel.actions';
 import { getLinkedGeoIds, getMapDimensions, getUnitLayerData } from './tool-layers.fetch.saga';
 
 function* fetchLinkedGeoIds() {
@@ -114,7 +120,40 @@ function* fetchUnitLayerData() {
   );
 }
 
+function* resetContextLayers() {
+  const previousContext = { countryId: null, commodityId: null };
+
+  function* performReset() {
+    const { contexts } = yield select(state => state.app);
+    const { countries, commodities } = yield select(state => state.nodesPanel);
+    const context = contexts.find(
+      ctx =>
+      ctx.countryId === countries.draftSelectedNodeId &&
+      ctx.commodityId === commodities.draftSelectedNodeId
+    );
+
+    if (
+      countries.draftSelectedNodeId !== previousContext.countryId ||
+      commodities.draftSelectedNodeId !== previousContext.commodityId
+    ) {
+        yield put(selectContextualLayers([]));
+        yield put(selectLogisticLayers([]));
+        yield put(selectUnitLayers([]));
+      }
+    // we update the previous context
+    previousContext.countryId = context.countryId;
+    previousContext.commodityId = context.commodityId;
+  }
+
+  yield takeLatest(
+    [
+      NODES_PANEL__FINISH_SELECTION
+    ],
+    performReset
+  );
+}
+
 export default function* toolLayersSaga() {
-  const sagas = [fetchMapDimensions, fetchLinkedGeoIds, fetchUnitLayerData];
+  const sagas = [fetchMapDimensions, fetchLinkedGeoIds, fetchUnitLayerData, resetContextLayers];
   yield all(sagas.map(saga => fork(saga)));
 }
