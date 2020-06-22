@@ -12,7 +12,7 @@ import {
   getSelectedResizeBy
 } from 'react-components/tool-links/tool-links.selectors';
 import { getContextualLayersTemplates, getRasterLayerTemplate } from './layers/contextual-layers';
-import { getLogisticMapLayerTemplates } from './layers/logistic-map-layers';
+import { getLogisticMapLayerTemplates } from './layers/logistic-layers';
 
 const getSelectedLogisticLayers = state => state.toolLayers.selectedLogisticLayers;
 

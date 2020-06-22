@@ -6,6 +6,7 @@ import './legend.scss';
 import Text from 'react-components/shared/text/text.component';
 import Icon from 'react-components/shared/icon/icon.component';
 import ChoroplethLegend from './choropleth-legend.component';
+import LogisticLegend from './logistic-legend';
 
 function Legend(props) {
   const {
@@ -14,7 +15,8 @@ function Legend(props) {
     highlightedChoroplethBucket,
     contextualLayers,
     isHidden,
-    hasLayers
+    hasLayers,
+    logisticLayers
   } = props;
   if (isHidden) return null;
   return (
@@ -39,6 +41,7 @@ function Legend(props) {
             )
           }}
         />
+        {logisticLayers && <LogisticLegend layers={logisticLayers}/>}
         {choroplethLegend && (
           <ChoroplethLegend
             bucket={choroplethLegend.bucket}
@@ -55,6 +58,7 @@ function Legend(props) {
 
 Legend.propTypes = {
   contextualLayers: PropTypes.array,
+  logisticLayers: PropTypes.array,
   choroplethLegend: PropTypes.object,
   openLayerModal: PropTypes.func.isRequired,
   highlightedChoroplethBucket: PropTypes.string,

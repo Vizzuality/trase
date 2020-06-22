@@ -1,0 +1,15 @@
+@import 'styles/settings';
+
+.c-logistic-legend {
+  margin: 5px;
+
+  .bullets {
+    color: rgba(52,68,76,.5);
+    font-family: DecimaMonoPro,Courier New,sans-serif;
+    font-size: 11px;
+    line-height: normal;
+    letter-spacing: -1.1px;
+    text-transform: uppercase;
+    text-align: left;
+  }
+}
