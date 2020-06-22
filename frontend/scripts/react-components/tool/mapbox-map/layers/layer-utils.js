@@ -45,7 +45,7 @@ export const conditionalRenderLayers = ({
 );
 
 export const layer = ({
-  name, bounds, center, minzoom, maxzoom, type, source, sourceLayer, provider, sql, renderLayers, id, variables=['name'], unitLayer
+  name, bounds, center, minzoom, maxzoom, type, source, sourceLayer, provider, sql, renderLayers, id, variables=['name'], unitLayer, images
 }) => {
   const baseSource = {
     ...(bounds && { bounds }),
@@ -57,6 +57,7 @@ export const layer = ({
     id: name,
     version: '0.0.1',
     type,
+    ...(images && { images }),
     source: {...baseSource, ...(source || baseSource)}
   };
 

@@ -11,6 +11,7 @@ import Legend from 'react-components/tool/legend';
 import { easeCubic } from 'd3-ease';
 import capitalize from 'lodash/capitalize';
 import flatMap from 'lodash/flatMap';
+import upperCase from 'lodash/upperCase';
 import getUnitLayerStyle from './layers/unit-layers';
 import Warnings from './mapbox-map-warnings';
 import Tooltip from './mapbox-map-tooltip';
@@ -129,12 +130,13 @@ function MapBoxMap(props) {
           map.removeFeatureState(lastHoveredGeo, 'hover');
         }
         lastHoveredGeo = {
-          id,
+          id: id || properties.id,
           source,
           sourceLayer: logisticsSourceLayer
         };
         map.setFeatureState({ ...lastHoveredGeo }, { hover: true });
         const logisticsTooltipValues = [];
+
         [
           { name: 'company' },
           { name: 'state' },
@@ -146,7 +148,11 @@ function MapBoxMap(props) {
           }
         });
         updateTooltipValues(logisticsTooltipValues);
-        setTooltip({ x: center.x, y: center.y, name: properties?.subclass });
+        setTooltip({
+          x: center.x,
+          y: center.y,
+          name: properties?.subclass || upperCase(logisticsFeature.source)
+        });
         return;
       }
       const geoFeature = features.find(f => f.sourceLayer === sourceLayer);

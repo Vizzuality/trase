@@ -3,7 +3,7 @@ import chroma from 'chroma-js';
 import { layer } from './layer-utils';
 
 const MARKERS_URL = NODE_ENV_DEV
-  ? 'https://raw.githubusercontent.com/Vizzuality/trase/54cf8892915d11f1401e9bb9dd98ff6590a477c5/frontend/public/images/logistics-map'
+  ? '/images/logistics-map'
   : `https://${window.location.hostname}/images/logistics-map`;
 
 export const logisticLayerTemplates = {
@@ -131,6 +131,15 @@ export const getLogisticMapLayerTemplates = () => Object.keys(logisticLayerTempl
       name: l.id,
       type: 'vector',
       provider: 'carto',
+      images: [
+        {
+          id: l.marker,
+          src: l.marker,
+          options: {
+            sdf: true
+          }
+        }
+      ],
       sql: `SELECT * FROM ${l.sqlTable} ${sqlParamsString}`,
       renderLayers: [
         {
@@ -164,34 +173,17 @@ export const getLogisticMapLayerTemplates = () => Object.keys(logisticLayerTempl
         },
         {
           type: 'symbol',
-          minzoom: 7,
+          minzoom: 6,
           paint: {
             'icon-color': lightColor,
-            'icon-image': l.marker,
-            'icon-allow-overlap': true,
-            // Transition from heatmap to symbol layer by zoom level
             'icon-opacity': ['interpolate', ['linear'], ['zoom'], 7, 0, 8, 1]
-          }
-        },
-        {
-          type: 'circle',
-          minzoom: 7,
-          paint: {
-            'circle-stroke-color': lightColor,
-            'circle-color': [
-              'case',
-              ['any', ['to-boolean', ['feature-state', 'hover']]],
-              'white',
-              '#000'
-            ],
-            'circle-stroke-width': [
-              'case',
-              ['any', ['to-boolean', ['feature-state', 'hover']]],
-              3,
-              1
-            ],
-            // Transition from heatmap to circle layer by zoom level
-            'circle-opacity': ['interpolate', ['linear'], ['zoom'], 7, 0, 8, 1]
+          },
+          layout: {
+            'icon-image': l.marker,
+            'icon-allow-overlap': true
+          },
+          metadata: {
+            position: 'top'
           }
         }
       ]
