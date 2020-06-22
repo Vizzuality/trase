@@ -46,6 +46,7 @@ function MapBoxMap(props) {
   const mapContainerRef = useRef();
   const [viewport, setViewport] = useState({ ...defaultMapView });
   const [loaded, setLoaded] = useState(false);
+  const [updatedTooltipValues, updateTooltipValues] = useState(tooltipValues);
   const [mapAttribution, setMapAttribution] = useState(null);
   const [tooltipData, setTooltip] = useState(null);
 
@@ -90,6 +91,13 @@ function MapBoxMap(props) {
     darkBasemap
   );
 
+  useEffect(() => {
+    if (tooltipValues) {
+      updateTooltipValues(tooltipValues)
+    }
+    return undefined;
+  }, [tooltipValues, updateTooltipValues]);
+
   // Set and remove selected feature-state
   useEffect(() => {
     if (map && loaded && selectedGeoNodes.length) {
@@ -113,6 +121,34 @@ function MapBoxMap(props) {
   const onHover = e => {
     const { features, center } = e;
     if (features?.length) {
+      const logisticSources = logisticLayers.map(l => l.id);
+      const logisticsFeature = features.find(f => logisticSources.includes(f.source));
+      if (logisticsFeature) {
+        const { id, source, sourceLayer: logisticsSourceLayer, properties } = logisticsFeature;
+        if (lastHoveredGeo.id && layerIds.includes(lastHoveredGeo.source)) {
+          map.removeFeatureState(lastHoveredGeo, 'hover');
+        }
+        lastHoveredGeo = {
+          id,
+          source,
+          sourceLayer: logisticsSourceLayer
+        };
+        map.setFeatureState({ ...lastHoveredGeo }, { hover: true });
+        const logisticsTooltipValues = [];
+        [
+          { name: 'company' },
+          { name: 'state' },
+          { name: 'municipality' },
+          { name: 'capacity', unit: 't' }
+        ].forEach(l => {
+          if (properties[l.name]) {
+            logisticsTooltipValues.push({ title: l.name, unit: l.unit, value: properties[l.name] });
+          }
+        });
+        updateTooltipValues(logisticsTooltipValues);
+        setTooltip({ x: center.x, y: center.y, name: properties?.subclass });
+        return;
+      }
       const geoFeature = features.find(f => f.sourceLayer === sourceLayer);
       if (geoFeature) {
         const { properties, id, source } = geoFeature;
@@ -167,7 +203,11 @@ function MapBoxMap(props) {
   return (
     <div
       ref={mapContainerRef}
-      className={cx('c-map', { '-fullscreen': toolLayout === TOOL_LAYOUT.left }, { '-minimized': minimized })}
+      className={cx(
+        'c-map',
+        { '-fullscreen': toolLayout === TOOL_LAYOUT.left },
+        { '-minimized': minimized }
+      )}
     >
       <ReactMapGL
         ref={mapRef}
@@ -207,7 +247,7 @@ function MapBoxMap(props) {
         <span dangerouslySetInnerHTML={{ __html: mapAttribution }} />
       </div>
       <Legend />
-      <Tooltip data={tooltipData} values={tooltipValues} />
+      <Tooltip data={tooltipData} values={updatedTooltipValues} />
     </div>
   );
 };

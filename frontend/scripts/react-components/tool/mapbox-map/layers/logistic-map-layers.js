@@ -125,7 +125,8 @@ export const getLogisticMapLayerTemplates = () => Object.keys(logisticLayerTempl
       return `${w.key} = ${value}`;
     });
     const sqlParamsString = sqlParams?.length ? `WHERE ${sqlParams.join(' AND ')}` : '';
-    const colors = [4, 3, 2, 1, 0].map(d => l.color ? chroma(l.color).darken(d).alpha(0.5).css() : '#000');
+    const lightColor = l.color ? chroma(l.color).alpha(0.5).css() : '#000';
+    const darkColor = l.color ? chroma(l.color).darken(4).alpha(0.5).css() : '#000';
     return layer({
       name: l.id,
       type: 'vector',
@@ -150,20 +151,14 @@ export const getLogisticMapLayerTemplates = () => Object.keys(logisticLayerTempl
               ['heatmap-density'],
               0,
               'rgba(0,0,0,0)',
-              0.2,
-              colors[0],
-              0.4,
-              colors[1],
-              0.6,
-              colors[2],
-              0.8,
-              colors[3],
+              0.1,
+              darkColor,
               1,
-              colors[4]
+              lightColor
             ],
             // Adjust the heatmap radius by zoom level
             'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 2, 9, 20],
-            // Transition from heatmap to circle layer by zoom level
+            // Transition from heatmap to symbol layer by zoom level
             'heatmap-opacity': ['interpolate', ['linear'], ['zoom'], 7, 1, 9, 0]
           }
         },
@@ -171,10 +166,10 @@ export const getLogisticMapLayerTemplates = () => Object.keys(logisticLayerTempl
           type: 'symbol',
           minzoom: 7,
           paint: {
-            'icon-color': colors[4],
+            'icon-color': lightColor,
             'icon-image': l.marker,
             'icon-allow-overlap': true,
-            // Transition from heatmap to circle layer by zoom level
+            // Transition from heatmap to symbol layer by zoom level
             'icon-opacity': ['interpolate', ['linear'], ['zoom'], 7, 0, 8, 1]
           }
         },
@@ -182,9 +177,19 @@ export const getLogisticMapLayerTemplates = () => Object.keys(logisticLayerTempl
           type: 'circle',
           minzoom: 7,
           paint: {
-            'circle-color': colors[4],
-            'circle-stroke-color': 'white',
-            'circle-stroke-width': 1,
+            'circle-stroke-color': lightColor,
+            'circle-color': [
+              'case',
+              ['any', ['to-boolean', ['feature-state', 'hover']]],
+              'white',
+              '#000'
+            ],
+            'circle-stroke-width': [
+              'case',
+              ['any', ['to-boolean', ['feature-state', 'hover']]],
+              3,
+              1
+            ],
             // Transition from heatmap to circle layer by zoom level
             'circle-opacity': ['interpolate', ['linear'], ['zoom'], 7, 0, 8, 1]
           }
