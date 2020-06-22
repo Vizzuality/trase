@@ -5095,7 +5095,7 @@
             <column ascending="true" name="country_id"/>
          </index>
       </table>
-      <table name="schema_migrations" numRows="117" remarks="" schema="public" type="TABLE">
+      <table name="schema_migrations" numRows="118" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="version" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
          <primaryKey column="version" sequenceNumberInPK="1"/>
          <index name="schema_migrations_pkey" unique="true">
