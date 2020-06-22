@@ -16651,7 +16651,7 @@ ALTER TABLE ONLY public.download_versions
 --
 
 ALTER TABLE ONLY public.context_node_type_properties
-    ADD CONSTRAINT fk_rails_40673dee59 FOREIGN KEY (geometry_context_node_type_id) REFERENCES public.context_node_types(id);
+    ADD CONSTRAINT fk_rails_40673dee59 FOREIGN KEY (geometry_context_node_type_id) REFERENCES public.context_node_types(id) ON DELETE SET NULL;
 
 
 --
@@ -17289,6 +17289,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200430115447'),
 ('20200501152755'),
 ('20200505120049'),
-('20200522153602');
+('20200522153602'),
+('20200618100150');
 
 

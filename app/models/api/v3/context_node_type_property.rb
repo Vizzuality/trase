@@ -21,7 +21,7 @@
 # Foreign Keys
 #
 #  fk_rails_...  (context_node_type_id => context_node_types.id) ON DELETE => cascade
-#  fk_rails_...  (geometry_context_node_type_id => context_node_types.id)
+#  fk_rails_...  (geometry_context_node_type_id => context_node_types.id) ON DELETE => nullify
 #
 
 module Api
