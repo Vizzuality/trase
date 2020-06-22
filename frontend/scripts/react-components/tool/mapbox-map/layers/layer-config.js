@@ -1,5 +1,5 @@
 // z-index from 1-100
-export const getLayerOrder = (baseLayerInfoId, unitLayerIds) => {
+export const getLayerOrder = (baseLayerInfoId, unitLayerIds, logisticLayerIds) => {
   const layerOrder = {
     brazil_biomes: 100,
     'brazil_biomes-labels': 100,
@@ -29,6 +29,11 @@ export const getLayerOrder = (baseLayerInfoId, unitLayerIds) => {
   if (unitLayerIds) {
     unitLayerIds.forEach(id => {
       layerOrder[id] = 2;
+    });
+  }
+  if (logisticLayerIds) {
+    logisticLayerIds.forEach(id => {
+      layerOrder[id] = 3;
     });
   }
   return layerOrder;
