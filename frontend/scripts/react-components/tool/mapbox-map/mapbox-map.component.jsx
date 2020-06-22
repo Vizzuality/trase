@@ -56,7 +56,11 @@ function MapBoxMap(props) {
   const baseLayerInfo = BASEMAPS[basemapId];
   const baseLayer = getBaseLayer(baseLayerInfo);
   const darkBasemap = baseLayerInfo.dark;
-  const layerOrder = getLayerOrder(baseLayerInfo.id, unitLayers && unitLayers.map(u => u.id));
+  const layerOrder = getLayerOrder(
+    baseLayerInfo.id,
+    unitLayers && unitLayers.map(u => u.id),
+    logisticLayers && logisticLayers.map(u => u.id)
+  );
   // Set map when loaded
   useEffect(() => {
     if (loaded && mapRef.current) {
