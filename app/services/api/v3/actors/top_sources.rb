@@ -5,7 +5,7 @@ module Api
         include Api::V3::Profiles::AttributesInitializer
 
         # @param context [Api::V3::Context]
-        # @param node [Api::V3::Node]
+        # @param node [Api::V3::Readonly::NodeWithFlows]
         # @year [Integer]
         def initialize(context, node, year)
           @context = context
@@ -39,7 +39,7 @@ module Api
         # Top nodes (sources) linked to this actor node across years
         def call
           @top_nodes_summary.call(
-            @source_node_types.map(&:name),
+            @source_node_types,
             @commodity_production_attribute
           ).merge(
             legend_title: @commodity_production_chart_attribute.legend_name

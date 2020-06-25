@@ -47,4 +47,8 @@ shared_context 'api v3 node types' do
     Api::V3::NodeType.find_by_name(NodeTypeName::CUSTOMS_DEPARTMENT) ||
       FactoryBot.create(:api_v3_node_type, name: NodeTypeName::CUSTOMS_DEPARTMENT)
   end
+  let(:api_v3_economic_bloc_node_type) do
+    Api::V3::NodeType.find_by_name(NodeTypeName::ECONOMIC_BLOC) ||
+      FactoryBot.create(:api_v3_node_type, name: NodeTypeName::ECONOMIC_BLOC)
+  end
 end

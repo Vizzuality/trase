@@ -2,19 +2,25 @@
 #
 # Table name: nodes_with_flows
 #
-#  id                     :integer          not null, primary key
-#  context_id             :integer          not null
-#  main_id                :integer
-#  column_position        :integer
-#  is_subnational         :boolean
-#  name                   :text
-#  node_type              :text
-#  profile                :text
-#  geo_id                 :text
-#  role                   :text
-#  name_tsvector          :tsvector
-#  years                  :integer          is an Array
-#  actor_basic_attributes :json
+#  id                      :integer          not null, primary key
+#  context_id              :integer          not null
+#  country_id              :integer
+#  commodity_id            :integer
+#  node_type_id            :integer
+#  context_node_type_id    :integer
+#  main_id                 :integer
+#  column_position         :integer
+#  is_subnational          :boolean
+#  is_unknown              :boolean
+#  is_domestic_consumption :boolean
+#  name                    :text
+#  node_type               :text
+#  profile                 :text
+#  geo_id                  :text
+#  role                    :text
+#  name_tsvector           :tsvector
+#  years                   :integer          is an Array
+#  actor_basic_attributes  :json
 #
 # Indexes
 #
@@ -38,6 +44,22 @@ module Api
         belongs_to :readonly_context,
                    class_name: 'Api::V3::Readonly::Context',
                    foreign_key: 'context_id'
+        belongs_to :commodity,
+                   class_name: 'Api::V3::Commodity',
+                   foreign_key: 'commodity_id'
+        has_many :node_inds,
+                 class_name: 'Api::V3::NodeInd',
+                 foreign_key: 'node_id'
+        has_many :node_quals,
+                 class_name: 'Api::V3::NodeQual',
+                 foreign_key: 'node_id'
+        has_many :node_quants,
+                 class_name: 'Api::V3::NodeQuant',
+                 foreign_key: 'node_id'
+
+        scope :with_profile, -> { where(profile: Api::V3::Profile::NAMES) }
+        scope :without_unknowns, -> { where(is_unknown: false) }
+        scope :without_domestic, -> { where(is_unknown: false) }
 
         include PgSearch::Model
         pg_search_scope :search_by_name, lambda { |query|
@@ -75,7 +97,7 @@ module Api
           raise ActiveRecord::RecordNotFound unless year
 
           actor_basic_attributes_for_year =
-            Api::V3::Actors::BasicAttributes.new(context, node, year).call
+            Api::V3::Actors::BasicAttributes.new(context, self, year).call
 
           update_attribute(
             :actor_basic_attributes,

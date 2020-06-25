@@ -174,7 +174,7 @@ export const getToolBar = createSelector(
               type: 'button',
               show: true,
               noHover: true,
-              noPadding: true,
+              noPaddingRight: true,
               children: 'Browse Companies'
             },
             {

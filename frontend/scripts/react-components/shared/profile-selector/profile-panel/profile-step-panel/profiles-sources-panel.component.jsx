@@ -39,6 +39,10 @@ function ProfilesSourcesPanel(props) {
 
   const showJurisdictions = activeCountryItems && tabs.length > 0;
   const activeCountryName = activeCountryItems && capitalize(activeCountryItems[0].name);
+  // eslint-disable-next-line camelcase
+  const selectedProfileType = tabs.find(t => t.id === sourcesActiveTab)?.profile_type;
+  const isCountryOfProductionSelected = selectedProfileType === 'country';
+
   return (
     <ResizeListener>
       {({ windowWidth }) => {
@@ -60,7 +64,7 @@ function ProfilesSourcesPanel(props) {
                 <GridListItem
                   {...itemProps}
                   isActive={
-                    activeCountryItems && activeCountryItems.find(i => i.id === itemProps.item?.id)
+                    !!(activeCountryItems && activeCountryItems.find(i => i.id === itemProps.item?.id))
                   }
                   enableItem={onSelectCountry}
                   disableItem={() => onSelectCountry(null)}
@@ -92,28 +96,31 @@ function ProfilesSourcesPanel(props) {
                   itemTabRenderer={i => i.name}
                   getTabId={item => item.id}
                 >
-                  <GridList
-                    className="profile-sources-panel-pill-list"
-                    items={sources}
-                    height={sources.length > columnsCount ? 200 : 50}
-                    width={width}
-                    rowHeight={50}
-                    columnWidth={190}
-                    columnCount={columnsCount}
-                    page={page}
-                    getMoreItems={getMoreItems}
-                    loading={loading}
-                    itemToScrollTo={itemToScrollTo}
-                  >
-                    {itemProps => (
-                      <GridListItem
-                        {...itemProps}
-                        isActive={activeSourceItem.includes(itemProps.item?.id)}
-                        enableItem={onSelectSourceValue}
-                        disableItem={onSelectSourceValue}
-                      />
-                    )}
-                  </GridList>
+                  {isCountryOfProductionSelected ?
+                    null :
+                    <GridList
+                      className="profile-sources-panel-pill-list"
+                      items={sources}
+                      height={sources.length > columnsCount ? 200 : 50}
+                      width={width}
+                      rowHeight={50}
+                      columnWidth={190}
+                      columnCount={columnsCount}
+                      page={page}
+                      getMoreItems={getMoreItems}
+                      loading={loading}
+                      itemToScrollTo={itemToScrollTo}
+                    >
+                      {itemProps => (
+                        <GridListItem
+                          {...itemProps}
+                          isActive={activeSourceItem.includes(itemProps.item?.id)}
+                          enableItem={onSelectSourceValue}
+                          disableItem={onSelectSourceValue}
+                        />
+                      )}
+                    </GridList>
+                  }
                 </Tabs>
               </Accordion>
             )}

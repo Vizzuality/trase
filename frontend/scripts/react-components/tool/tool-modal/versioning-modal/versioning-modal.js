@@ -12,7 +12,4 @@ const mapStateToProps = state => ({
   tableData: getTableData(state)
 });
 
-export default connect(
-  mapStateToProps,
-  null
-)(VersioningModal);
+export default connect(mapStateToProps, null)(VersioningModal);

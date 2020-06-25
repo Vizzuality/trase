@@ -1,0 +1,69 @@
+@import 'styles/settings';
+
+.mini-sankey {
+  margin-top: 10px;
+
+  .gradient-color-start {
+    stop-color: rgba($medium-pink, .5);
+  }
+
+  .gradient-color-end {
+    stop-color: $medium-pink;
+  }
+
+  rect {
+    &.start {
+      fill: $medium-pink;
+    }
+
+    &.end {
+      fill: $charcoal-grey;
+    }
+
+    &.aggr {
+      fill: $charcoal-grey-faded-a-lot;
+    }
+  }
+
+  text {
+    fill: $charcoal-grey;
+    font-family: $font-family-1;
+    font-size: $font-size-x-regular;
+    text-transform: uppercase;
+
+    &.start {
+      text-anchor: end;
+    }
+
+    &.end {
+      .pct {
+        fill: rgba($charcoal-grey, .5);
+      }
+    }
+
+    @media screen and (max-width: $breakpoint-foundation-small) {
+      font-size: $font-size-regular;
+    }
+  }
+
+  path {
+    fill: none;
+
+    &.link {
+      stroke: url('#gradient');
+    }
+
+    &.link-aggr {
+      stroke: $charcoal-grey;
+      stroke-opacity: .1;
+    }
+  }
+
+  .interactive-node:hover {
+    cursor: pointer;
+
+    text {
+      font-weight: bold;
+    }
+  }
+}

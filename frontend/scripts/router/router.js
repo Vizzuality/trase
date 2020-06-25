@@ -3,7 +3,6 @@ import { connectRoutes, NOT_FOUND, redirect, replace } from 'redux-first-router'
 import restoreScroll from 'redux-first-router-restore-scroll';
 import parseURL from 'utils/parseURL';
 import qs from 'qs';
-import { BREAKPOINTS } from 'constants';
 import withSidebarNavLayout from 'react-components/nav/sidebar-nav/with-sidebar-nav-layout.hoc';
 import getPageTitle from 'scripts/router/page-title';
 
@@ -16,7 +15,7 @@ const getTestimonialsContent = (...args) =>
 const getTweetsContent = (...args) =>
   import('../react-components/home/home.thunks').then(module => module.getTweetsContent(...args));
 const loadTopNodes = (...args) =>
-  import('../react-components/profile-root/profile-root.thunks').then(module =>
+  import('../react-components/profiles/profiles.thunks').then(module =>
     module.loadTopNodes(...args)
   );
 const getPageStaticContent = (...args) =>
@@ -47,12 +46,6 @@ const loadInitialDashboardData = (...args) =>
   import('../react-components/dashboard-element/dashboard-element.thunks').then(module =>
     module.loadInitialDashboardData(...args)
   );
-
-const pagesSupportedLimit = {
-  data: 'small',
-  tool: 'tablet',
-  map: 'tablet'
-};
 
 // We await for all thunks using Promise.all, this makes the result then-able and allows us to
 // add an await solely to the thunks that need it.
@@ -102,11 +95,11 @@ export const routes = {
       className: '-light'
     }
   },
-  profileRoot: {
+  profiles: {
     path: '/profiles',
     Component: lazy(() =>
       import(
-        /* webpackChunkName: "profile-root" */ '../react-components/profile-root/profile-root.container'
+        /* webpackChunkName: "profiles" */ '../react-components/profiles/profiles.container'
       )
     ),
     title: getPageTitle,
@@ -116,16 +109,16 @@ export const routes = {
     },
     thunk: loadPageData(loadTopNodes)
   },
-  profileNode: {
+  profile: {
     path: '/profile-:profileType',
     Component: lazy(() =>
       import(
-        /* webpackChunkName: "profile-node" */ '../react-components/profile-node/profile-node.container'
+        /* webpackChunkName: "profile" */ '../react-components/profile/profile.container'
       )
     ),
     title: getPageTitle,
     nav: {
-      className: '-light',
+      className: '-egg-shell',
       printable: true
     },
     thunk: loadPageData()
@@ -185,19 +178,6 @@ export const routes = {
     thunk: loadPageData(getPageStaticContent),
     layout: withSidebarNavLayout
   },
-  notSupportedOnMobile: {
-    path: '/not-supported',
-    Component: lazy(() =>
-      import(
-        /* webpackChunkName: "not-supported" */ '../react-components/mobile/not-supported.component'
-      )
-    ),
-    title: getPageTitle,
-    nav: {
-      className: '-light'
-    },
-    thunk: loadPageData()
-  },
   logisticsMap: {
     path: '/logistics-map',
     Component: lazy(() =>
@@ -241,14 +221,8 @@ const config = {
 
     return route;
   },
-  onBeforeChange: (dispatch, getState, { action }) => {
-    const supportedLimit = pagesSupportedLimit[action.type];
-    if (supportedLimit && window.innerWidth <= BREAKPOINTS[supportedLimit]) {
-      return dispatch(redirect({ type: 'notSupportedOnMobile' }));
-    }
-
-    return dispatchThunks(redirectToExplore)(dispatch, getState, { action });
-  },
+  onBeforeChange: (dispatch, getState, { action }) =>
+    dispatchThunks(redirectToExplore)(dispatch, getState, { action }),
   onAfterChange: (dispatch, getState, { action }) => {
     const currentLanguage = action.meta.location?.current?.query?.lang;
     const previousLanguage = action.meta.location?.prev?.query?.lang;

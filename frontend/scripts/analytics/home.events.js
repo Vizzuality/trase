@@ -24,7 +24,7 @@ export default [
     getPayload(action) {
       const { payload } = action;
       if (payload.type !== 'tool') {
-        return payload.type === 'profileRoot' ? 'profiles' : payload.type;
+        return payload.type === 'profiles' ? 'profiles' : payload.type;
       }
       if (payload.payload?.serializerParams?.toolLayout === TOOL_LAYOUT.left) {
         return 'Map';

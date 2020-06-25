@@ -11,12 +11,7 @@ const getExtraColumn = state => state.toolLinks.extraColumn;
 const getHighlightedNodeIds = state => state.toolLinks.highlightedNodeId;
 
 export const getSelectedColumnsIds = createSelector(
-  [
-    getSelectedContext,
-    getToolSelectedColumnsIds,
-    getExtraColumn,
-    getToolColumns
-  ],
+  [getSelectedContext, getToolSelectedColumnsIds, getExtraColumn, getToolColumns],
   (selectedContext, selectedColumnsIds, extraColumn, columns) => {
     if (!selectedContext || !columns) {
       return [];

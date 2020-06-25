@@ -11,6 +11,11 @@ module Api
         def filtered_class
           Api::V3::Readonly::Dashboards::Exporter
         end
+
+        def initialize_query
+          super
+          @query = @query.select(:country_id).group(:country_id)
+        end
       end
     end
   end

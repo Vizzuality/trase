@@ -21,6 +21,11 @@ RSpec.describe Api::V3::Chart, type: :model do
     Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
+    Api::V3::Chart.set_callback(:commit, :after, :refresh_dependents)
+  end
+
+  after do
+    Api::V3::Chart.skip_callback(:commit, :after, :refresh_dependents)
   end
 
   describe :validate do
@@ -71,8 +76,8 @@ RSpec.describe Api::V3::Chart, type: :model do
       expect(api_v3_exporter_top_countries.chart_type).to eq(:line_chart_with_map)
     end
 
-    it 'is tabs_table for place_indicators_table' do
-      expect(api_v3_place_indicators_table.chart_type).to eq(:tabs_table)
+    it 'is tabs_table for place_indicators' do
+      expect(api_v3_place_indicators.chart_type).to eq(:tabs_table)
     end
 
     it 'is scatterplot for actor_exporting_companies' do

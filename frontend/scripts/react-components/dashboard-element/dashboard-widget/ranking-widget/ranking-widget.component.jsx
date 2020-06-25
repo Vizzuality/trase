@@ -25,7 +25,7 @@ function RankingWidget(props) {
     setPage(page + pageChange);
   };
 
-  const renderItemName = (item) => {
+  const renderItemName = item => {
     const color = {
       dark: 'white',
       light: 'grey'
@@ -43,14 +43,14 @@ function RankingWidget(props) {
     }
 
     return name;
-  }
+  };
 
   const { context } = config.dashboardMeta;
   const dataWithUrl = data.map((d, i) => {
     const node = meta.yLabelsProfileInfo[i];
     const url = node.profile &&
       !DISABLE_PROFILES && {
-        type: 'profileNode',
+        type: 'profile',
         payload: {
           query: { nodeId: node.id, contextId: context.id },
           profileType: node.profile

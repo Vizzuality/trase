@@ -2,7 +2,7 @@ module Api
   module V3
     module Flows
       class Filter
-        attr_reader :errors, :flows, :active_nodes, :total_height, :other_nodes_ids,
+        attr_reader :errors, :flows, :active_nodes, :total_height, :other_nodes,
                     :cont_attribute, :ncont_attribute
         # params:
         # node_types_ids - list of node type ids
@@ -104,6 +104,7 @@ module Api
             ).
             joins(context_node_types: :context_node_type_property).
             where('context_node_types.context_id' => @context.id).
+            where('context_node_type_properties.is_visible').
             order('context_node_types.column_position ASC')
           @errors << 'No node types for context' unless @node_types.any?
         end
@@ -192,11 +193,11 @@ module Api
         end
 
         def initialize_active_nodes
-          active_nodes_by_position =
+          active_nodes_by_position, @other_nodes =
             if @selected_nodes.none?
-              active_nodes_for_overview # overview mode
+              nodes_for_overview # overview mode
             else
-              active_nodes_for_expand # expanded mode
+              nodes_for_expand # expanded mode
             end
 
           @active_nodes_ids_by_position = Hash[
@@ -215,57 +216,65 @@ module Api
             reduce(:merge)
         end
 
-        def active_nodes_for_overview
+        def nodes_for_overview
           active_nodes = {}
+          other_nodes = []
           @active_node_types_positions.map.with_index do |position, i|
             flows_through_position = flows_totals_per_node(position)
-            active_nodes[position] = active_nodes_for_position(
-              flows_through_position, @other_nodes_ids[i]
-            )
+            active_nodes[position], other_nodes[i] =
+              active_nodes_for_position(
+                flows_through_position, @other_nodes_ids[i]
+              )
           end
-          active_nodes
+          [active_nodes, other_nodes]
         end
 
-        def active_nodes_for_expand
+        def nodes_for_expand
           active_nodes = {}
+          other_nodes = []
           @active_node_types_positions.map.with_index do |position, i|
             flows_through_position = flows_totals_per_node(position)
-            active_nodes[position] =
+            other_node_id = @other_nodes_ids[i]
+            active_nodes[position], other_nodes[i] =
               if @selected_nodes_by_position.key?(position)
                 active_nodes_for_expanded_position(
-                  flows_through_position, @other_nodes_ids[i]
+                  flows_through_position, other_node_id
                 )
               else
                 active_nodes_for_position(
-                  flows_through_position, @other_nodes_ids[i]
+                  flows_through_position, other_node_id
                 )
               end
           end
-          active_nodes
+          [active_nodes, other_nodes]
         end
 
         def active_nodes_for_position(flows_through_position, other_node_id)
           result = {other_node_id => 0}
+          other = {id: other_node_id, count: 0}
           flows_through_position.each.with_index do |flow, i|
             if i < @limit || @locked_nodes_ids.include?(flow['node_id'])
               result[flow['node_id']] = flow['total']
             else
               result[other_node_id] += flow['total']
+              other[:count] += 1
             end
           end
-          result
+          [result, other]
         end
 
         def active_nodes_for_expanded_position(flows_through_position, other_node_id)
           result = {other_node_id => 0}
+          other = {id: other_node_id, count: 0}
           flows_through_position.each do |flow|
             if @selected_nodes_ids.include?(flow['node_id']) || @locked_nodes_ids.include?(flow['node_id'])
               result[flow['node_id']] = flow['total']
             else
               result[other_node_id] += flow['total']
+              other[:count] += 1
             end
           end
-          result
+          [result, other]
         end
 
         def flows_totals_per_node(position)

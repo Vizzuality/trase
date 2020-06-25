@@ -73,7 +73,7 @@ function Explore(props) {
   const clearStep =
     step === EXPLORE_STEPS.selected ? () => setCountry(null) : () => setCommodity(null);
 
-  const renderTitle = (isMobile) => {
+  const renderTitle = isMobile => {
     const titleParts = ['commodity', 'source country', 'supply chain to explore'];
     return (
       <div className="step-title-container">
@@ -83,12 +83,12 @@ function Explore(props) {
         <span>
           {step > EXPLORE_STEPS.selectCommodity && !isMobile && (
             <button
-            onClick={clearStep}
-            className="back-button"
-            data-test="featured-cards-back-button"
+              onClick={clearStep}
+              className="back-button"
+              data-test="featured-cards-back-button"
             >
               <Text variant="mono" size="lg" weight="bold" className="featured-cards-back">
-                <Icon color="pink" icon="icon-arrow" className="arrow-icon"/>
+                <Icon color="pink" icon="icon-arrow" className="arrow-icon" />
                 BACK
               </Text>
             </button>

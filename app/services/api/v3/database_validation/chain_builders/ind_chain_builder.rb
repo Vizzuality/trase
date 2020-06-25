@@ -12,16 +12,6 @@ module Api
           checks :has_exactly_one,
                  association: :ind_property,
                  link: :index
-          checks :declared_temporal_matches_data,
-                 association: :node_inds,
-                 attribute: :is_temporal_on_actor_profile,
-                 on: :ind_property,
-                 link: :edit
-          checks :declared_temporal_matches_data,
-                 association: :node_inds,
-                 attribute: :is_temporal_on_place_profile,
-                 on: :ind_property,
-                 link: :edit
           checks :attribute_present,
                  attribute: :tooltip_text,
                  on: :ind_property,

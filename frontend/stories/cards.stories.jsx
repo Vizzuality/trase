@@ -49,7 +49,7 @@ storiesOf('Card', module).addWithJSX('Animated card', () => (
       linkProps={{
         target: '_self',
         to: {
-          type: 'profileNode',
+          type: 'profile',
           payload: {
             query: {
               nodeId: 1,

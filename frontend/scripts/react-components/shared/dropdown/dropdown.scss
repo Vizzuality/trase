@@ -57,6 +57,9 @@
       &::after {
         top: 50%;
         transform: translateY(calc(-50% - 2px)) rotate(45deg);
+        // transform origin is broken in IE + calc does not work
+        // Negative rotation will fix this bug in IE and rotate it accordingly
+        -ms-transform: rotate(-45deg) translateY(-6px);
       }
     }
   }

@@ -16,10 +16,17 @@ import {
 } from './profile-selector.actions';
 import initialState from './profile-selector.initial-state';
 
-const profileRootReducer = {
+const profilesReducer = {
   [PROFILES__SET_ACTIVE_STEP](state, action) {
     return immer(state, draft => {
       const { activeStep } = action.payload;
+
+      const panelName = getPanelName(state);
+
+      // Reset page on destinations panel to load the first items
+      if (panelName === 'destinations') {
+        draft.panels.destinations.page = initialState.panels.destinations.page;
+      }
 
       draft.activeStep = activeStep;
     });
@@ -41,14 +48,27 @@ const profileRootReducer = {
         const selectedCountry = state.panels.countries.activeItems[0];
         const selectedCountryId =
           typeof selectedCountry !== 'undefined' ? selectedCountry : state.data.countries[0].id;
-        if (!draft.data[panelName][selectedCountryId]) {
-          draft.data[panelName][selectedCountryId] = {};
+        if (!draft.data.companies[selectedCountryId]) {
+          draft.data.companies[selectedCountryId] = {};
         }
-        draft.data[panelName][selectedCountryId][tab] = data;
+        draft.data.companies[selectedCountryId][tab] = data;
+
+        // Add default dropdown country to selection
+        draft.panels.countries.activeItems = [selectedCountryId];
       } else if (tab) {
         draft.data[panelName][tab] = data;
       } else {
         draft.data[panelName] = data || initialData;
+      }
+
+      // Select country of production item (there is only one) when country of production its the first tab
+      if (panelName === 'sources' && data && data[0].nodeType === 'COUNTRY OF PRODUCTION') {
+        draft.panels.sources.activeTab = tab;
+        draft.panels.sources.activeItems = [data[0].id];
+
+        // Clear other profile items too
+        draft.panels.destinations = initialState.panels.destinations;
+        draft.panels.companies = initialState.panels.companies;
       }
     });
   },
@@ -118,12 +138,28 @@ const profileRootReducer = {
         return;
       }
 
+      // Clear other panel's items
       if (panel === 'countries') {
         draft.panels.companies = initialState.panels.companies;
+        draft.panels.destinations = initialState.panels.destinations;
         draft.panels.sources = initialState.panels.sources;
       }
 
-      if (panel === 'sources' || panel === 'companies') {
+      if (panel === 'sources') {
+        draft.panels.destinations = initialState.panels.destinations;
+        draft.panels.companies = initialState.panels.companies;
+        draft.panels.commodities = initialState.panels.commodities;
+      }
+
+      if (panel === 'companies') {
+        draft.panels.destinations = initialState.panels.destinations;
+        draft.panels.sources = initialState.panels.sources;
+        draft.panels.commodities = initialState.panels.commodities;
+      }
+
+      if (panel === 'destinations') {
+        draft.panels.companies = initialState.panels.companies;
+        draft.panels.sources = initialState.panels.sources;
         draft.panels.commodities = initialState.panels.commodities;
       }
 
@@ -144,6 +180,15 @@ const profileRootReducer = {
       let activePanel = panel;
       if (panel === 'profiles') {
         activePanel = state.panels.type;
+      }
+
+      // If a country source is selected set the country item as active
+      if (panel === 'sources') {
+        const { tabs: { sources }, data } = state;
+        const countryTab = sources.find(t => t.profile_type === 'country');
+        if (activeTab === countryTab.id) {
+          draft.panels.sources.activeItems = [data.sources[countryTab.id][0].id];
+        }
       }
 
       draft.panels[activePanel].activeTab = activeTab;
@@ -225,4 +270,4 @@ const profileSelectorReducerTypes = PropTypes => ({
   tabs: PropTypes.object
 });
 
-export default createReducer(initialState, profileRootReducer, profileSelectorReducerTypes);
+export default createReducer(initialState, profilesReducer, profileSelectorReducerTypes);

@@ -10,7 +10,12 @@ const teamReducer = {
     const { data } = action.payload;
     const slugifyName = m => kebabCase(m.name.split(' '));
     const members = data
-      .map(group => keyBy(group.staffMembers.map(m => ({ ...m, group: group.name })), slugifyName))
+      .map(group =>
+        keyBy(
+          group.staffMembers.map(m => ({ ...m, group: group.name })),
+          slugifyName
+        )
+      )
       .reduce((acc, next) => ({ ...acc, ...next }), {});
 
     const groups = sortBy(

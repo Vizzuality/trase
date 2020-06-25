@@ -132,6 +132,7 @@ $entrypoints-stacked-card-size: 360px;
       &::after {
         transform: translate(-50%, -50%) rotate(45deg);
         margin-left: -1px;
+        left: 50%; // IE-FIX
       }
     }
 
@@ -141,6 +142,7 @@ $entrypoints-stacked-card-size: 360px;
       &::after {
         transform: translate(-50%, -50%) rotate(-135deg);
         margin-left: 1px;
+        left: 50%; // IE-FIX
       }
     }
   }

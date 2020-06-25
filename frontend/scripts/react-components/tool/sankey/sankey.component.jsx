@@ -176,6 +176,7 @@ function Sankey(props) {
     maxHeight,
     flowsLoading,
     nodeHeights,
+    otherNodes,
     nodeAttributes,
     selectedMapDimensions,
     sankeyColumnsWidth,
@@ -272,13 +273,10 @@ function Sankey(props) {
   };
 
   const onNodeOver = (e, node) => {
-    if (node.isAggregated) {
-      return;
-    }
-
     const rect = getRect(toolLayout);
 
     const nodeHeight = nodeHeights[node.id];
+    const otherNodeCount = otherNodes && otherNodes[node.id] && otherNodes[node.id].count
     const tooltipPadding = 10;
     const minTooltipWidth = 180;
     const tooltip = {
@@ -315,6 +313,14 @@ function Sankey(props) {
         .filter(Boolean);
 
       tooltip.items.push(...nodeIndicators);
+
+      if (otherNodeCount) {
+        tooltip.items.push({
+          title: pluralize(node.type),
+          unit: null,
+          value: otherNodeCount
+        });
+      }
     }
 
     if (selectedNodesIds.includes(node.id)) {
@@ -325,10 +331,7 @@ function Sankey(props) {
     onNodeHighlighted(node.id);
   };
 
-  const onNodeOut = (e, node) => {
-    if (node.isAggregated) {
-      return;
-    }
+  const onNodeOut = () => {
     setTooltipContent(null);
     onNodeHighlighted(null);
   };
@@ -374,7 +377,7 @@ function Sankey(props) {
             <Defs.GradientAnimation
               candyMode={
                 window._TRASE_CANDY_SANKEY &&
-                (selectedRecolorBy && selectedRecolorBy.name === 'BIOME')
+                selectedRecolorBy && selectedRecolorBy.name === 'BIOME'
               }
             />
           </defs>
@@ -444,6 +447,7 @@ Sankey.propTypes = {
   highlightedNodeId: PropTypes.number,
   gapBetweenColumns: PropTypes.number,
   nodeHeights: PropTypes.object,
+  otherNodes: PropTypes.object,
   nodeAttributes: PropTypes.object,
   selectedMapDimensions: PropTypes.array,
   onClearClick: PropTypes.func.isRequired, // eslint-disable-line

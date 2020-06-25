@@ -8,8 +8,10 @@ import SplittedView from 'react-components/tool/splitted-view';
 import Timeline from 'react-components/tool/timeline';
 import ToolBar from 'react-components/shared/tool-bar';
 import MapLayout from 'react-components/tool/map-layout';
-
 import UrlSerializer from 'react-components/shared/url-serializer';
+import useWindowSize from 'utils/hooks/useWindowSize';
+import NotSupportedComponent from 'react-components/mobile/not-supported.component';
+import { BREAKPOINTS } from 'constants';
 
 import 'styles/components/shared/veil.scss';
 import 'styles/components/shared/dropdown.scss';
@@ -64,6 +66,9 @@ const Tool = props => {
     noLinksFound,
     activeModal
   } = props;
+
+  const { width } = useWindowSize();
+
   useEffect(() => {
     evManager.addEventListener(window, 'resize', resizeSankeyTool);
     const body = document.querySelector('body');
@@ -110,6 +115,10 @@ const Tool = props => {
     ),
     [noLinksFound, mapSidebarOpen, section, toolYearProps, selectYears, activeModal]
   );
+
+  if (width <= BREAKPOINTS.tablet) {
+    return <NotSupportedComponent />;
+  }
 
   return (
     <div>

@@ -261,7 +261,7 @@ paths:
       summary: Top nodes of given node type per contexts or commodity
       parameters:
         - $ref: "#/components/parameters/contexts_ids_query_param"
-        - $ref: "#/components/parameters/commodity_id_query_param"
+        - $ref: "#/components/parameters/commodity_id_opt_query_param"
         - name: column_id
           in: query
           description: Node type id
@@ -305,7 +305,7 @@ paths:
       summary: Data for the sankey card links
       parameters:
         - $ref: "#/components/parameters/country_id_query_param"
-        - $ref: "#/components/parameters/commodity_id_query_param"
+        - $ref: "#/components/parameters/commodity_id_opt_query_param"
         - name: level
           in: query
           description: Level
@@ -380,7 +380,7 @@ paths:
   /top_profiles:
     get:
       tags:
-        - top_profile
+        - profiles
       parameters:
         - name: context_id
           in: query
@@ -483,10 +483,48 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/LinkedNode"
+  /profiles/filter_meta:
+    get:
+      tags:
+        - profiles
+      summary: Meta data to render filter panel sections
+      parameters:
+        - $ref: "#/components/parameters/dashboards_countries_ids"
+        - $ref: "#/components/parameters/dashboards_commodities_ids"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        section:
+                          type: string
+                          example: SOURCES
+                        tabs:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                example: 1
+                              name:
+                                type: string
+                                example: DEPARTMENT
+                              profileType:
+                                type: string
+                                example: place
   "/contexts/{context_id}/nodes/{node_id}/profile_metadata":
     get:
       tags:
-        - node
+        - profiles
       summary: Profile metadata for a node
       parameters:
         - $ref: "#/components/parameters/context_id_path_param"
@@ -508,7 +546,7 @@ paths:
   "/contexts/{context_id}/actors/{id}/basic_attributes":
     get:
       tags:
-        - actor
+        - profiles
       parameters:
         - $ref: "#/components/parameters/context_id_path_param"
         - $ref: "#/components/parameters/node_id_path_param"
@@ -526,7 +564,7 @@ paths:
   "/contexts/{context_id}/actors/{id}/top_countries":
     get:
       tags:
-        - actor
+        - profiles
       parameters:
         - $ref: "#/components/parameters/context_id_path_param"
         - $ref: "#/components/parameters/node_id_path_param"
@@ -544,7 +582,7 @@ paths:
   "/contexts/{context_id}/actors/{id}/top_sources":
     get:
       tags:
-        - actor
+        - profiles
       parameters:
         - $ref: "#/components/parameters/context_id_path_param"
         - $ref: "#/components/parameters/node_id_path_param"
@@ -562,7 +600,7 @@ paths:
   "/contexts/{context_id}/actors/{id}/sustainability":
     get:
       tags:
-        - actor
+        - profiles
       parameters:
         - $ref: "#/components/parameters/context_id_path_param"
         - $ref: "#/components/parameters/node_id_path_param"
@@ -580,7 +618,7 @@ paths:
   "/contexts/{context_id}/actors/{id}/exporting_companies":
     get:
       tags:
-        - actor
+        - profiles
       parameters:
         - $ref: "#/components/parameters/context_id_path_param"
         - $ref: "#/components/parameters/node_id_path_param"
@@ -598,7 +636,7 @@ paths:
   "/contexts/{context_id}/places/{id}/basic_attributes":
     get:
       tags:
-        - place
+        - profiles
       parameters:
         - $ref: "#/components/parameters/context_id_path_param"
         - $ref: "#/components/parameters/node_id_path_param"
@@ -616,7 +654,7 @@ paths:
   "/contexts/{context_id}/places/{id}/top_consumer_actors":
     get:
       tags:
-        - place
+        - profiles
       parameters:
         - $ref: "#/components/parameters/context_id_path_param"
         - $ref: "#/components/parameters/node_id_path_param"
@@ -634,7 +672,7 @@ paths:
   "/contexts/{context_id}/places/{id}/top_consumer_countries":
     get:
       tags:
-        - place
+        - profiles
       parameters:
         - $ref: "#/components/parameters/context_id_path_param"
         - $ref: "#/components/parameters/node_id_path_param"
@@ -652,7 +690,7 @@ paths:
   "/contexts/{context_id}/places/{id}/indicators":
     get:
       tags:
-        - place
+        - profiles
       parameters:
         - $ref: "#/components/parameters/context_id_path_param"
         - $ref: "#/components/parameters/node_id_path_param"
@@ -670,7 +708,7 @@ paths:
   "/contexts/{context_id}/places/{id}/trajectory_deforestation":
     get:
       tags:
-        - place
+        - profiles
       parameters:
         - $ref: "#/components/parameters/context_id_path_param"
         - $ref: "#/components/parameters/node_id_path_param"
@@ -685,6 +723,46 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/PlaceTrajectoryDeforestation"
+  
+  "/country_profiles/{id}/top_consumer_actors":
+    get:
+      tags:
+        - profiles
+      parameters:
+        - $ref: "#/components/parameters/node_id_path_param"
+        - $ref: "#/components/parameters/commodity_id_opt_query_param"
+        - $ref: "#/components/parameters/context_id_opt_query_param"
+        - $ref: "#/components/parameters/year_opt_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/CountryTopConsumerActors"
+  "/country_profiles/{id}/top_consumer_countries":
+    get:
+      tags:
+        - profiles
+      parameters:
+        - $ref: "#/components/parameters/node_id_path_param"
+        - $ref: "#/components/parameters/commodity_id_opt_query_param"
+        - $ref: "#/components/parameters/context_id_opt_query_param"
+        - $ref: "#/components/parameters/year_opt_query_param"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/CountryTopConsumerCountries"
+  
   /newsletter_subscriptions:
     post:
       tags:
@@ -1217,9 +1295,6 @@ paths:
                               name:
                                 type: string
                                 example: DEPARTMENT
-                              profileType:
-                                type: string
-                                example: place
                               prefix:
                                 type: string
                                 example: imported from
@@ -1831,7 +1906,7 @@ components:
       required: false
       schema:
         type: integer
-    commodity_id_query_param:
+    commodity_id_opt_query_param:
       name: commodity_id
       in: query
       description: Commodity id
@@ -1843,6 +1918,13 @@ components:
       in: path
       description: Context id
       required: true
+      schema:
+        type: integer
+    context_id_opt_query_param:
+      name: context_id
+      in: query
+      description: Context id
+      required: false
       schema:
         type: integer
     contexts_ids_query_param:
@@ -2373,6 +2455,9 @@ components:
           type: array
           items:
             type: integer
+        attributeId:
+          type: integer
+          format: integer
     DownloadAttribute:
       type: object
       properties:
@@ -3054,60 +3139,42 @@ components:
                       type: string
                     tooltip:
                       type: string
+                      
+    ProfileTopNodes:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            name:
+              type: string
+            indicators:
+              type: string
+            unit:
+              type: string
+            targetNodes:
+              type: array
+              items:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  height:
+                    type: number
+                  value:
+                    type: number
+                  is_domestic_consumption:
+                    type: boolean
+                  geo_id:
+                    type: string
     PlaceTopConsumerActors:
-      type: object
-      properties:
-        data:
-          type: object
-          properties:
-            name:
-              type: string
-            indicators:
-              type: string
-            unit:
-              type: string
-            targetNodes:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  name:
-                    type: string
-                  height:
-                    type: number
-                  value:
-                    type: number
-                  is_domestic_consumption:
-                    type: boolean
+      allOf:
+        - $ref: "#/components/schemas/ProfileTopNodes"
     PlaceTopConsumerCountries:
-      type: object
-      properties:
-        data:
-          type: object
-          properties:
-            name:
-              type: string
-            indicators:
-              type: string
-            unit:
-              type: string
-            targetNodes:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  name:
-                    type: string
-                  height:
-                    type: number
-                  value:
-                    type: number
-                  is_domestic_consumption:
-                    type: boolean
+      allOf:
+        - $ref: "#/components/schemas/ProfileTopNodes"
     PlaceIndicators:
       type: object
       properties:
@@ -3173,6 +3240,12 @@ components:
                     type: array
                     items:
                       type: number
+    CountryTopConsumerActors:
+      allOf:
+        - $ref: "#/components/schemas/ProfileTopNodes"
+    CountryTopConsumerCountries:
+      allOf:
+        - $ref: "#/components/schemas/ProfileTopNodes"
     DashboardsCommodity:
       type: object
       properties:

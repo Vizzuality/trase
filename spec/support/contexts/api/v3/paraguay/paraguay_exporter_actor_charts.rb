@@ -154,12 +154,12 @@ shared_context 'api v3 paraguay exporter actor charts' do
   let!(:api_v3_paraguay_soy_exporter_sustainability) do
     chart = Api::V3::Chart.where(
       profile_id: api_v3_paraguay_exporter_actor_profile.id,
-      identifier: :actor_sustainability_table
+      identifier: :actor_sustainability
     ).first
     chart || FactoryBot.create(
       :api_v3_chart,
       profile: api_v3_paraguay_exporter_actor_profile,
-      identifier: :actor_sustainability_table,
+      identifier: :actor_sustainability,
       position: 3,
       title: 'Deforestation risk associated with top sourcing regions'
     )

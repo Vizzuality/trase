@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import 'scripts/react-components/profiles/chord/chord.scss';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import includes from 'lodash/includes';
-
 import FilterTooltip from 'react-components/data-portal/filter-tooltip/filter-tooltip.component';
 import RadioButton from 'react-components/shared/radio-button/radio-button.component';
+
+import 'react-components/profile/profile-components/chord/chord.scss';
 
 class DownloadSelector extends Component {
   renderOptions() {
@@ -55,6 +55,7 @@ class DownloadSelector extends Component {
                   className="-red"
                   enabled={this.props.allSelected}
                   onClick={() => this.props.onAllSelected()}
+                  disabled={!this.props.enabled}
                 />
               </li>
             </ul>

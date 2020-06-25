@@ -3,7 +3,7 @@ module Api
     module Places
       class StateRanking
         # @param context [Api::V3::Context]
-        # @param node [Api::V3::Node]
+        # @param node [Api::V3::Readonly::NodeWithFlows]
         # @param year [Integer]
         # @param state_name [String]
         def initialize(context, node, year, state_name)
@@ -25,17 +25,14 @@ module Api
           attribute_type = attribute.class.name.demodulize.downcase
           value_table = "node_#{attribute_type}s"
 
-          # rubocop:disable Layout/LineLength
           query = basic_query(attribute, include_domestic_consumption).
             select(
               'nodes.id AS node_id',
               "DENSE_RANK() OVER (ORDER BY #{value_table}.value DESC) AS rank"
             ).where(
-              "#{value_table}.year = ? \
-OR NOT COALESCE(#{attribute_type}_properties.is_temporal_on_place_profile, FALSE)",
+              "#{value_table}.year = ? OR #{value_table}.year IS NULL",
               @year
             )
-          # rubocop:enable Layout/LineLength
 
           result = Node.from('(' + query.to_sql + ') s').
             select('s.*').

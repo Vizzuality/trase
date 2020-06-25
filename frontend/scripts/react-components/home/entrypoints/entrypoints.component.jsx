@@ -28,7 +28,7 @@ class Entrypoints extends React.PureComponent {
         src: '/images/backgrounds/entrypoint-2@2x.jpg'
       },
       {
-        link: { type: 'profileRoot' },
+        link: { type: 'profiles' },
         subtitle: 'Profile',
         text:
           'View the trade and sustainability profile of a particular' +

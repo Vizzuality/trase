@@ -1,0 +1,60 @@
+// Blue Theme
+
+.tippy-tooltip.blue-theme {
+  border-radius: 0;
+}
+
+.tippy-tooltip.blue-theme .tippy-content{
+  background-color: $charcoal-grey;
+  color: $white;
+  padding: 16px;
+  font-family: $font-family-2;
+  font-size: $font-size-regular;
+  font-weight: $font-weight-light;
+  line-height: $line-height-md;
+
+  a {
+    color: $white;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+
+.tippy-tooltip.blue-theme[data-animatefill] {
+  background-color: transparent
+}
+
+.tippy-tooltip.blue-theme .tippy-backdrop {
+  background-color: $charcoal-grey;
+}
+
+
+.tippy-tooltip[data-placement^=top]>.tippy-arrow {
+  border-top-color: $charcoal-grey !important;
+}
+
+.tippy-tooltip[data-placement^=bottom]>.tippy-arrow {
+  border-bottom-color: $charcoal-grey !important;
+}
+
+.tippy-tooltip[data-placement^=left]>.tippy-arrow {
+  border-left-color: $charcoal-grey !important;
+}
+
+.tippy-tooltip[data-placement^=right]>.tippy-arrow {
+  border-right-color: $charcoal-grey !important;
+}
+
+// Black Theme
+
+.tippy-tooltip.black-theme .tippy-content{
+  background-color: $charcoal-grey;
+  color: $white;
+  border-radius: 0;
+  padding: 0;
+  font-family: $font-family-2;
+  font-size: $font-size-regular;
+  font-weight: $font-weight-light;
+  line-height: $line-height-md;
+}

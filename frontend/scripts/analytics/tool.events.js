@@ -1,4 +1,5 @@
 import { TOGGLE_MAP_LAYERS_MENU, SET_CONTEXT } from 'app/app.actions';
+import { TOOL_LAYOUT } from 'constants';
 import {
   SELECT_CONTEXTUAL_LAYERS,
   SELECT_YEARS,
@@ -94,7 +95,7 @@ export default [
     type: CHANGE_LAYOUT,
     action: 'Change layout',
     category: 'Sankey',
-    getPayload: action => action.payload.toolLayout
+    getPayload: action => Object.keys(TOOL_LAYOUT)[action.payload.toolLayout]
   },
   {
     type: SELECT_BASEMAP,
@@ -111,12 +112,13 @@ export default [
     type: SELECT_CONTEXTUAL_LAYERS,
     action: 'Select contextual layers',
     category: 'Sankey',
-    getPayload: action => action.payload.contextualLayers.join(', ')
+    getPayload: action => action.payload.contextualLayers?.join(', ')
   },
   {
     type: TOOL_LINKS__SWITCH_TOOL,
     action: 'Toggle tool',
     category: 'Sankey',
-    getPayload: action => action.payload.section || 'sankey'
+    getPayload: action =>
+      action.payload.section || 'sankey'
   }
 ];

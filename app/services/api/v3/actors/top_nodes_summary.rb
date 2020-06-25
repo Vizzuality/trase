@@ -3,7 +3,7 @@ module Api
     module Actors
       class TopNodesSummary
         # @param context [Api::V3::Context]
-        # @param node [Api::V3::Node]
+        # @param node [Api::V3::Readonly::NodeWithFlows]
         # @year [Integer]
         def initialize(context, node, year)
           @context = context
@@ -21,7 +21,7 @@ module Api
 
         # Top nodes (destinations and sources) linked to this actor node
         # across years
-        # @param node_type [String or Array<String>]
+        # @param node_type [Api::V3::NodeType or Array<Api::V3::NodeType>]
         # @param attribute [Api::V3::Ind or Api::V3::Qual or Api::V3::Quant]
         def call(node_type, commodity_production_attribute)
           years = @flow_stats.available_years_for_attribute(@volume_attribute)
@@ -38,14 +38,15 @@ module Api
             else
               [node_type]
             end
+          tab_names = node_types.map(&:name).map(&:downcase)
           result = {
             included_years: years,
             buckets: buckets,
-            tabs: node_types.map(&:downcase)
+            tabs: tab_names
           }
 
-          node_types.each do |nt|
-            result[nt.downcase] = nodes_by_year_summary_for_indicator(
+          node_types.each.with_index do |nt, idx|
+            result[tab_names[idx]] = nodes_by_year_summary_for_indicator(
               nt, years, buckets, @volume_attribute
             )
           end
@@ -62,12 +63,12 @@ module Api
         end
 
         def initialize_top_nodes(node_type, attribute)
-          top_nodes_list = Api::V3::Profiles::TopNodesList.new(
+          top_nodes_list = Api::V3::Profiles::SingleContextTopNodesList.new(
             @context,
+            node_type,
             @node,
             year_start: @year,
-            year_end: @year,
-            other_node_type_name: node_type
+            year_end: @year
           )
           @top_nodes = top_nodes_list.sorted_list(
             attribute,
@@ -95,9 +96,11 @@ module Api
           initialize_top_nodes(node_type, attribute)
 
           profile_type = Api::V3::Profile.
-            joins(context_node_type: :node_type).
-            where('node_types.name' => node_type).
-            where('context_node_types.context' => @context).
+            joins(:context_node_type).
+            where(
+              'context_node_types.context_id' => @context.id,
+              'context_node_types.node_type_id' => node_type.id
+            ).
             select('profiles.name').
             first
 

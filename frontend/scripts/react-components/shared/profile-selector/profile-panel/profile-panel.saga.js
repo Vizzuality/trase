@@ -23,18 +23,31 @@ import {
 export function* fetchProfilesInitialData() {
   const profileSelector = yield select(state => state.profileSelector);
   const panelName = getPanelName(profileSelector);
-  if (panelName === 'type') return;
-  if (panelName === 'sources') {
-    yield fork(getProfilesData, 'countries');
-    // Fetch regions
-    if (profileSelector.panels.countries.activeItems.length > 0) {
-      yield fork(getProfilesTabs, 'sources');
+  switch (panelName) {
+    case 'type':
+      break;
+    case 'sources':
+      yield fork(getProfilesData, 'countries');
+      // Fetch regions
+      if (profileSelector.panels.countries.activeItems.length > 0) {
+        yield fork(getProfilesTabs, 'sources');
+      }
+      break;
+    case 'companies':
+      yield call(getProfilesData, 'countries');
+      yield fork(getProfilesTabs, 'companies');
+      break;
+    case 'destinations': {
+      // We don't want to reset the destinations data if we have an active item and no tabs
+      const hasActiveItem = profileSelector.panels.destinations.activeItems.length > 0;
+      if (!hasActiveItem) {
+        yield call(getProfilesData, 'destinations');
+      }
+      break;
     }
-  } else if (panelName === 'companies') {
-    yield call(getProfilesData, 'countries');
-    yield fork(getProfilesTabs, 'companies');
-  } else {
-    yield fork(getProfilesData, panelName);
+    default:
+      yield fork(getProfilesData, panelName);
+      break;
   }
 }
 

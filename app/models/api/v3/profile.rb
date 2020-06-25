@@ -28,19 +28,24 @@ module Api
     class Profile < YellowTable
       ACTOR = 'actor'.freeze
       PLACE = 'place'.freeze
+      COUNTRY = 'country'.freeze
 
-      NAME = [ACTOR, PLACE].freeze
+      NAMES = [ACTOR, PLACE, COUNTRY].freeze
+
+      alias_attribute :profile_type, :name
 
       belongs_to :context_node_type
       has_many :charts, -> { order(:position) }
 
+      delegate :context, to: :context_node_type, allow_nil: false
+      delegate :node_type, to: :context_node_type, allow_nil: false
+
       validates :context_node_type, presence: true
       validates :name,
                 uniqueness: {scope: :context_node_type},
-                inclusion: NAME
+                inclusion: NAMES
 
       after_commit :refresh_dependents
-      after_commit :refresh_actor_basic_attributes
 
       def self.select_options
         Api::V3::Profile.includes(
@@ -68,16 +73,20 @@ module Api
       end
 
       def refresh_dependents
-        Api::V3::Readonly::NodeWithFlows.refresh
-        Api::V3::Readonly::NodeWithFlowsOrGeo.refresh
-        Api::V3::Readonly::Dashboards::Source.refresh(skip_dependencies: true)
-        Api::V3::Readonly::Dashboards::Company.refresh(skip_dependencies: true)
-        Api::V3::Readonly::Dashboards::Exporter.refresh(skip_dependencies: true)
-        Api::V3::Readonly::Dashboards::Importer.refresh(skip_dependencies: true)
-        Api::V3::Readonly::Dashboards::Destination.refresh(skip_dependencies: true)
-        Api::V3::Readonly::Dashboards::Country.refresh(skip_dependencies: true)
-        Api::V3::Readonly::Dashboards::Commodity.refresh(skip_dependencies: true)
-        Api::V3::Readonly::Context.refresh
+        Api::V3::Readonly::Context.refresh(sync: false, skip_dependencies: true)
+        Api::V3::Readonly::NodeWithFlowsOrGeo.refresh(sync: false, skip_dependencies: true)
+        Api::V3::Readonly::Dashboards::Source.refresh(sync: false, skip_dependencies: true)
+        Api::V3::Readonly::Dashboards::Company.refresh(sync: false, skip_dependencies: true)
+        Api::V3::Readonly::Dashboards::Exporter.refresh(sync: false, skip_dependencies: true)
+        Api::V3::Readonly::Dashboards::Importer.refresh(sync: false, skip_dependencies: true)
+        Api::V3::Readonly::Dashboards::Destination.refresh(sync: false, skip_dependencies: true)
+        Api::V3::Readonly::Dashboards::Country.refresh(sync: false, skip_dependencies: true)
+        Api::V3::Readonly::Dashboards::Commodity.refresh(sync: false, skip_dependencies: true)
+
+        # TODO: needs refreshing synchronously, otherwise race condition
+        # with refreshing basic_attributes
+        Api::V3::Readonly::NodeWithFlows.refresh(sync: true, skip_dependencies: true)
+        refresh_actor_basic_attributes
       end
 
       def refresh_actor_basic_attributes
@@ -103,10 +112,10 @@ module Api
         context_node_type = Api::V3::ContextNodeType.find(context_node_type_id)
         context = context_node_type.context
         nodes = context_node_type.node_type.nodes
-        node_with_flows = Api::V3::Readonly::NodeWithFlows.where(
-          context_id: context.id,
-          id: nodes.map(&:id)
-        )
+        node_with_flows = Api::V3::Readonly::NodeWithFlows.
+          without_unknowns.
+          without_domestic.
+          where(context_id: context.id, id: nodes.map(&:id))
         NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
           node_with_flows.map(&:id)
         )

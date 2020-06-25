@@ -3,7 +3,7 @@ module Api
     module Actors
       class CountryRanking
         # @param context [Api::V3::Context]
-        # @param node [Api::V3::Node]
+        # @param node [Api::V3::Readonly::NodeWithFlows]
         # @year [Integer]
         def initialize(context, node, year)
           @context = context

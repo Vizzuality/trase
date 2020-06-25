@@ -48,6 +48,12 @@ module Api
         @readonly_attribute = original_attribute&.readonly_attribute
       end
 
+      def original_chart_attribute
+        return @original_chart_attribute if defined?(@original_chart_attribute)
+
+        @original_chart_attribute = find_original_chart_attribute
+      end
+
       def original_attribute
         return @original_attribute if defined?(@original_attribute)
 
@@ -60,8 +66,19 @@ module Api
         self.class.instance_variable_get(:@associated_attributes)
       end
 
-      # iterates over declared associated attributes
-      # returns the first actual associated attribute found
+      # iterates over declared associated chart attributes
+      # returns the first actual associated chart attribute found
+      def find_original_chart_attribute
+        associated_attributes.map do |attr_name|
+          original_chart_attribute = send(attr_name)
+          break original_chart_attribute if original_chart_attribute.present?
+
+          false
+        end
+      end
+
+      # iterates over declared associated chart attributes
+      # returns the first actual associated original attribute found
       def find_original_attribute
         assoc_attr_names_with_types.detect do |attr_name, attr_type|
           original_attribute = send(attr_name)&.send(attr_type)

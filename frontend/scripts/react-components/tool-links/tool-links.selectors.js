@@ -32,9 +32,8 @@ const getToolExtraColumn = createSelector(
   (hasExtraColumn, extraColumn) => (hasExtraColumn ? extraColumn : null)
 );
 
-const getToolExtraColumnId = createSelector(
-  getToolExtraColumn,
-  extraColumn => (extraColumn ? extraColumn.id : null)
+const getToolExtraColumnId = createSelector(getToolExtraColumn, extraColumn =>
+  extraColumn ? extraColumn.id : null
 );
 
 export const getSelectedResizeBy = createSelector(
@@ -71,7 +70,7 @@ export const getSelectedRecolorBy = createSelector(
       return selectedContext.recolorBy.find(recolorBy => recolorBy.isDefault === true);
     }
 
-    if (isDataView && (recolorByItem && !isIndicatorSupported(recolorByItem.name))) {
+    if (isDataView && recolorByItem && !isIndicatorSupported(recolorByItem.name)) {
       return null;
     }
     return recolorByItem;
@@ -137,20 +136,18 @@ export const getSelectedNodesAtColumns = createSelector(
     getNodesAtColumns(selectedNodesIds, selectedNodesColumnsPos)
 );
 
-export const getNodesColored = createSelector(
-  getSelectedNodesAtColumns,
-  selectedNodesAtColumns => getNodesColoredBySelection(selectedNodesAtColumns)
+export const getNodesColored = createSelector(getSelectedNodesAtColumns, selectedNodesAtColumns =>
+  getNodesColoredBySelection(selectedNodesAtColumns)
 );
 
-export const getToolRecolorGroups = createSelector(
-  getNodesColored,
-  nodesColored => getNextRecolorGroups(nodesColored.nodesColoredBySelection)
+export const getToolRecolorGroups = createSelector(getNodesColored, nodesColored =>
+  getNextRecolorGroups(nodesColored.nodesColoredBySelection)
 );
 
 const getNodesByRole = (columns, nodes, nodesIds) =>
   nodesIds.reduce((acc, nodeId) => {
     const node = nodes[nodeId];
-    const column = columns[(node?.columnId)];
+    const column = columns[node?.columnId];
     if (column) {
       const role = pluralize(column.role);
       if (!acc[role]) {

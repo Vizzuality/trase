@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.4.1'
+gem 'rails', '~> 5.2.4.3'
  # Use pg as the database for Active Record
 gem 'pg', '~> 0.18'
 # Use Puma as the app server
@@ -44,22 +44,23 @@ gem 'best_in_place'
 gem 'ckeditor', '4.3.0'
 gem 'devise', '~> 4.7'
 gem 'dotenv-rails', '~> 2.7'
-gem 'enumerate_it', '~> 3.0.0'
+gem 'enumerate_it', '~> 3.1.0'
 gem 'kaminari'
 gem 'mailchimp-api', require: 'mailchimp'
-gem 'newrelic_rpm'
+# gem 'newrelic_rpm'
 gem 'oj'
 gem 'paperclip', '~> 6.1.0'
 gem 'pg_csv'
 gem 'pg_search'
-gem 'rack', '~> 2.2.2' # issue with sidekiq web in version 2.1.1, still doesn't work on sandbox in version 2.1.2
+gem 'rack', '~> 2.2.3' # issue with sidekiq web in version 2.1.1, still doesn't work on sandbox in version 2.1.2
 gem 'rack-cors', '~> 1.1'
 gem 'scenic'
-gem 'sidekiq', '~> 6.0.5'
+gem 'sidekiq', '~> 6.0.7'
 gem 'sidekiq-unique-jobs'
 gem 'sitemap_generator'
 gem 'twitter', '~> 7.0'
 gem 'zip_tricks'
+gem 'whenever', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -68,7 +69,7 @@ group :development, :test do
   gem 'json-schema'
   gem 'rails-controller-testing'
   gem 'rspec-collection_matchers'
-  gem 'rspec-rails', '~> 3.9'
+  gem 'rspec-rails', '~> 4.0'
   gem 'rubocop-rspec'
 end
 
@@ -81,15 +82,15 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'annotate'
   gem 'bcrypt_pbkdf', '~> 1.0'
-  gem 'capistrano', '~> 3.12', require: false
+  gem 'capistrano', '~> 3.14', require: false
   gem 'capistrano-bundler'
   gem 'capistrano-yarn'
   gem 'capistrano-nvm'
   gem 'capistrano-passenger'
-  gem 'capistrano-rails', '~> 1.4', require: false
+  gem 'capistrano-rails', '~> 1.5', require: false
   gem 'capistrano-rvm'
   gem 'ed25519', '~> 1.2'
-  gem 'rubocop', '~> 0.80.1', require: false
+  gem 'rubocop', '~> 0.86.0', require: false
   gem 'rubocop-performance', require: false
 end
 
@@ -107,6 +108,7 @@ group :test do
   # gem 'chromedriver-helper'
   gem 'database_cleaner'
   gem 'simplecov', require: false
+  gem 'webmock'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

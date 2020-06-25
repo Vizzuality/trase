@@ -1,5 +1,9 @@
 @import 'styles/settings';
 
+.-is-legacy-browser .c-twitter-feed {
+  left: -70px;
+}
+
 .c-twitter-feed {
   position: relative;
   width: 350px;
@@ -80,6 +84,10 @@
   }
 }
 
+.-is-legacy-browser .tweet-box-content {
+  width: 25vw;
+}
+
 .tweet-box-content {
   height: calc(100% - 40px + 20px);
   color: $charcoal-grey;
@@ -87,7 +95,6 @@
   font-size: 14px;
   font-weight: 300;
   line-height: 1.8;
-
 
   > a {
     color: $medium-pink;

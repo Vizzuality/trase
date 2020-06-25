@@ -29,7 +29,6 @@ module Api
       validates :tooltip_text, presence: true
 
       after_commit :refresh_dependents
-      after_commit :refresh_actor_basic_attributes
 
       def self.blue_foreign_keys
         [
@@ -40,6 +39,7 @@ module Api
 
       def refresh_dependents
         Api::V3::Readonly::CommodityAttributeProperty.refresh
+        refresh_actor_basic_attributes
       end
 
       def refresh_actor_basic_attributes
@@ -59,10 +59,10 @@ module Api
         contexts = Api::V3::Context.where(commodity_id: commodity_id)
         node_quals = Api::V3::NodeQual.where(qual_id: qual_id)
         nodes = node_quals.map(&:node)
-        node_with_flows = Api::V3::Readonly::NodeWithFlows.where(
-          context_id: contexts.map(&:id),
-          id: nodes.map(&:id)
-        )
+        node_with_flows = Api::V3::Readonly::NodeWithFlows.
+          without_unknowns.
+          without_domestic.
+          where(context_id: contexts.map(&:id), id: nodes.map(&:id))
         NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
           node_with_flows.map(&:id)
         )

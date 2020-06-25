@@ -16,9 +16,7 @@ shared_context 'minimum complete configuration' do
     FactoryBot.create(
       :api_v3_ind_property,
       ind: ind,
-      tooltip_text: 'ind text',
-      is_temporal_on_actor_profile: true,
-      is_temporal_on_place_profile: true
+      tooltip_text: 'ind text'
     )
   }
   let(:qual) { FactoryBot.create(:api_v3_qual) }
@@ -26,9 +24,7 @@ shared_context 'minimum complete configuration' do
     FactoryBot.create(
       :api_v3_qual_property,
       qual: qual,
-      tooltip_text: 'qual text',
-      is_temporal_on_actor_profile: true,
-      is_temporal_on_place_profile: true
+      tooltip_text: 'qual text'
     )
   }
   let(:quant) { FactoryBot.create(:api_v3_quant) }
@@ -36,9 +32,7 @@ shared_context 'minimum complete configuration' do
     FactoryBot.create(
       :api_v3_quant_property,
       quant: quant,
-      tooltip_text: 'quant text',
-      is_temporal_on_actor_profile: true,
-      is_temporal_on_place_profile: true
+      tooltip_text: 'quant text'
     )
   }
   let(:biome_node_type) {

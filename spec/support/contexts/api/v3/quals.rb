@@ -9,9 +9,7 @@ shared_context 'api v3 quals' do
       FactoryBot.create(
         :api_v3_qual_property,
         qual: q,
-        display_name: 'State',
-        is_visible_on_place_profile: true,
-        is_temporal_on_place_profile: false
+        display_name: 'State'
       )
     end
     q
@@ -26,9 +24,7 @@ shared_context 'api v3 quals' do
       FactoryBot.create(
         :api_v3_qual_property,
         qual: q,
-        display_name: 'Biome',
-        is_visible_on_place_profile: true,
-        is_temporal_on_place_profile: false
+        display_name: 'Biome'
       )
     end
     q
@@ -43,9 +39,7 @@ shared_context 'api v3 quals' do
       FactoryBot.create(
         :api_v3_qual_property,
         qual: q,
-        display_name: 'Zero deforestation commitment (exporters)',
-        is_visible_on_actor_profile: true,
-        is_temporal_on_actor_profile: false
+        display_name: 'Zero deforestation commitment (exporters)'
       )
     end
     q
@@ -60,9 +54,7 @@ shared_context 'api v3 quals' do
       FactoryBot.create(
         :api_v3_qual_property,
         qual: q,
-        display_name: 'Zero deforestation link',
-        is_visible_on_actor_profile: true,
-        is_temporal_on_actor_profile: false
+        display_name: 'Zero deforestation link'
       )
     end
     q
@@ -77,9 +69,7 @@ shared_context 'api v3 quals' do
       FactoryBot.create(
         :api_v3_qual_property,
         qual: q,
-        display_name: 'Supply change',
-        is_visible_on_actor_profile: true,
-        is_temporal_on_actor_profile: false
+        display_name: 'Supply change'
       )
     end
     q
@@ -94,9 +84,7 @@ shared_context 'api v3 quals' do
       FactoryBot.create(
         :api_v3_qual_property,
         qual: q,
-        display_name: 'Supply change link',
-        is_visible_on_actor_profile: true,
-        is_temporal_on_actor_profile: false
+        display_name: 'Supply change link'
       )
     end
     q
@@ -111,9 +99,7 @@ shared_context 'api v3 quals' do
       FactoryBot.create(
         :api_v3_qual_property,
         qual: q,
-        display_name: 'RTRS member',
-        is_visible_on_actor_profile: true,
-        is_temporal_on_actor_profile: false
+        display_name: 'RTRS member'
       )
     end
     q

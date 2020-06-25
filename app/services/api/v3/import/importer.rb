@@ -150,15 +150,24 @@ module Api
         end
 
         def refresh_profiles_later
-          Api::V3::Readonly::NodeWithFlows.where(profile: :actor).select(:id).distinct.each do |node|
-            NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
-              [node.id]
-            )
-          end
+          Api::V3::Readonly::NodeWithFlows.
+            without_unknowns.
+            without_domestic.
+            where(profile: Api::V3::Profile::ACTOR).
+            select(:id).
+            distinct.
+            each do |node|
+              NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
+                [node.id]
+              )
+            end
         end
 
         def refresh_precomputed_downloads_later
           Api::V3::Download::PrecomputedDownload.refresh_later
+          unless Rails.env.development? || Rails.env.test?
+            MapAttributesExportWorker.perform_async
+          end
         end
 
         def refresh_attributes_years

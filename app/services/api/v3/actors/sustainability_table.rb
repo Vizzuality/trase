@@ -10,7 +10,7 @@ module Api
         end
 
         # @param context [Api::V3::Context]
-        # @param node [Api::V3::Node]
+        # @param node [Api::V3::Readonly::NodeWithFlows]
         # @year [Integer]
         def initialize(context, node, year)
           @context = context
@@ -23,7 +23,7 @@ module Api
             raise ActiveRecord::RecordNotFound.new 'Quant Volume not found'
           end
 
-          initialize_chart_config(:actor, nil, :actor_sustainability_table)
+          initialize_chart_config(:actor, nil, :actor_sustainability)
           unless @chart_config.attributes.any?
             raise ActiveRecord::RecordNotFound.new 'No attributes found'
           end
@@ -40,12 +40,10 @@ module Api
 
         def call
           @source_node_types.map do |node_type|
-            node_type_name = node_type.name
             chart_node_type = @chart_config.chart_node_types.
               find { |nta| nta.node_type_id = node_type.id }
             sustainability_for_group(
-              node_type_name.pluralize.upcase,
-              node_type_name,
+              node_type,
               chart_node_type&.is_total
             )
           end
@@ -59,7 +57,8 @@ module Api
           )
         end
 
-        def sustainability_for_group(name, node_type, include_totals)
+        def sustainability_for_group(node_type, include_totals)
+          node_type_name = node_type.name
           top_nodes = get_top_nodes(node_type)
           group_totals_hash = {}
           rows = top_nodes.map do |node|
@@ -70,10 +69,10 @@ module Api
           end
           profile = get_profile(node_type)
           {
-            name: name,
+            name: node_type_name.pluralize.upcase,
             profile: profile.present?,
             included_columns:
-                [{name: node_type.humanize}] +
+                [{name: node_type_name.humanize}] +
                   @chart_config.chart_attributes.map do |ro_chart_attribute|
                     {
                       name: ro_chart_attribute.display_name,
@@ -136,12 +135,12 @@ module Api
         end
 
         def get_top_nodes(node_type)
-          top_nodes_list = Api::V3::Profiles::TopNodesList.new(
+          top_nodes_list = Api::V3::Profiles::SingleContextTopNodesList.new(
             @context,
+            node_type,
             @node,
             year_start: @year,
-            year_end: @year,
-            other_node_type_name: node_type
+            year_end: @year
           )
           top_nodes_list.sorted_list(
             @volume_attribute,
@@ -152,9 +151,8 @@ module Api
 
         def get_profile(node_type)
           @context.context_node_types.
-            joins(:node_type).
             includes(:profile).
-            where('node_types.name' => node_type).
+            where(node_type_id: node_type.id).
             first.
             profile
         end

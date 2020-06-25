@@ -35,23 +35,20 @@ Rails.application.routes.draw do
         resources :map_layers, only: [:index]
         resources :columns, only: [:index], controller: :node_types
         resources :flows, only: [:index]
-        resources :nodes, only: [:index] do
-          get :profile_metadata, on: :member, controller: :profile_metadata, action: :index
-        end
-        resources :actors, only: [] do
-          get :basic_attributes
-          get :top_countries
-          get :top_sources
-          get :sustainability
-          get :exporting_companies
-        end
-        resources :places, only: [] do
-          get :basic_attributes
-          get :top_consumer_actors
-          get :top_consumer_countries
-          get :indicators
-          get :trajectory_deforestation
-        end
+        resources :nodes, only: [:index]
+
+        get 'actors/:id/basic_attributes', to: 'actors#basic_attributes'
+        get 'actors/:id/top_countries', to: 'actors#top_countries'
+        get 'actors/:id/top_sources', to: 'actors#top_sources'
+        get 'actors/:id/sustainability', to: 'actors#sustainability'
+        get 'actors/:id/exporting_companies', to: 'actors#exporting_companies'
+
+        get 'places/:id/basic_attributes', to: 'places#basic_attributes'
+        get 'places/:id/top_consumer_actors', to: 'places#top_consumer_actors'
+        get 'places/:id/top_consumer_countries', to: 'places#top_consumer_countries'
+        get 'places/:id/indicators', to: 'places#indicators'
+        get 'places/:id/trajectory_deforestation', to: 'places#trajectory_deforestation'
+
         resources :download_attributes, only: [:index]
         namespace :nodes do
           resources :attributes, only: [:index], controller: :nodes_attributes
@@ -63,6 +60,17 @@ Rails.application.routes.draw do
       resources :nodes, only: [] do
         get :search, on: :collection, controller: :nodes_search, action: :index
       end
+
+      get 'country_profiles/:id/basic_attributes', to: 'country_profiles#basic_attributes'
+      get 'country_profiles/:id/commodity_exports', to: 'country_profiles#commodity_exports'
+      get 'country_profiles/:id/commodity_imports', to: 'country_profiles#commodity_imports'
+      get 'country_profiles/:id/top_consumer_actors', to: 'country_profiles#top_consumer_actors'
+      get 'country_profiles/:id/top_consumer_countries', to: 'country_profiles#top_consumer_countries'
+      get 'country_profiles/:id/indicators', to: 'country_profiles#indicators'
+      get 'country_profiles/:id/trajectory_deforestation', to: 'country_profiles#trajectory_deforestation'
+      get 'country_profiles/:id/trajectory_import', to: 'country_profiles#trajectory_import'
+      get 'map_layers_data', to: 'map_layers#data'
+
       resources :newsletter_subscriptions, only: [:create]
       resource :database_validation, controller: :database_validation,
                                      only: [:show]
@@ -106,29 +114,16 @@ Rails.application.routes.draw do
         resources :parametrised_charts, only: [:index]
       end
 
+      get '/contexts/:context_id/nodes/:id/profile_metadata', to: redirect('/api/v3/profiles/%{id}/profile_meta?context_id=%{context_id}')
+      namespace :profiles do
+        resources :filter_meta, only: [:index]
+        get ':id/profile_meta', to: 'profile_meta#show'
+      end
+
       resources :commodities, only: [] do
         get :countries_facts, on: :member
       end
       resources :sankey_card_links, only: [:index]
-    end
-    namespace :v2 do
-      resources :geo_id, only: :index
-      resources :download, only: [:index], as: :download
-      resources :indicators, only: [:index]
-      resources :newsletter_subscriptions, only: [:create]
-
-      # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-      resources :download, only: [:index], as: :download
-      resources :indicators, only: [:index]
-
-      get '/get_map_base_data', to: 'map#index'
-      get '/get_linked_geoids', to: 'geo_id#index'
-      get '/get_columns', to: 'structure#columns'
-      get '/get_contexts', to: 'structure#contexts'
-      get '/get_all_nodes', to: 'nodes#all_nodes'
-      get '/get_place_node_attributes', to: 'place_factsheet#place_data'
-      get '/get_actor_node_attributes', to: 'actor_factsheet#actor_data'
-      get '/get_node_attributes', to: 'nodes#node_attributes'
     end
 
     get '/v3/countries', to: 'public/countries#index'

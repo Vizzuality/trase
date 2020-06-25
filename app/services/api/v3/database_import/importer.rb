@@ -34,7 +34,7 @@ module Api
         private
 
         def download_from_s3(options = {})
-          metadata = Api::V3::S3Downloader.instance.call(@s3_filename, @local_filename)
+          metadata = S3::Downloader.instance.call(@s3_filename, @local_filename)
           Rails.logger.debug 'Database downloaded'
           schema_version = ActiveRecord::Migrator.current_version.to_s
           schema_match = (metadata['schema_version'] == schema_version)

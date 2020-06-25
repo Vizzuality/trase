@@ -107,31 +107,62 @@ export const getCountryQuickFacts = createSelector([getQuickFacts], quickFacts =
   return countryQuickFacts;
 });
 
-export const getCards = createSelector([getSankeyCards, getContexts], (cards, contexts) => {
-  if (!cards || contexts.length === 0) {
-    return [];
-  }
-
-  return cards.data.map((options, index) => {
-    const context = contexts.find(
-      ctx => ctx.countryId === options.countryId && ctx.commodityId === options.commodityId
-    );
-    return {
-      index,
-      id: options.id,
-      title: options.title,
-      subtitle: options.subtitle,
-      countryId: options.countryId,
-      commodityId: options.commodityId,
-      countryName: context.countryName,
-      commodityName: context.commodityName,
-      links: {
-        sankey: translateLink(options, cards.meta),
-        dashboard: translateLink(options, cards.meta, 'dashboard')
+const getRecentCard = () => {
+  const recentCard = localStorage.getItem('recentCard');
+  if (!recentCard) return null;
+  const [countryId, commodityId] = recentCard.split('-');
+  return {
+    data: [
+      {
+        id: 0,
+        recentCard: true,
+        title: 'Recently opened supply chain',
+        subtitle: null,
+        countryId: parseInt(countryId, 10),
+        commodityId: parseInt(commodityId, 10)
       }
-    };
-  });
-});
+    ],
+    meta: [{}]
+  };
+}
+
+const getCardsWithRecentCard = createSelector(
+  [getSankeyCards, getRecentCard],
+  (cards, recentCard) => {
+    if (!cards) return recentCard;
+    return recentCard ? { data: [...recentCard.data, ...cards.data], meta: cards.meta } : cards;
+  }
+);
+
+export const getCards = createSelector(
+  [getCardsWithRecentCard, getContexts, getRecentCard],
+  (cards, contexts) => {
+    if (!cards || contexts.length === 0) {
+      return [];
+    }
+
+    return cards.data.map((options, index) => {
+      const context = contexts.find(
+        ctx => ctx.countryId === options.countryId && ctx.commodityId === options.commodityId
+      );
+      return {
+        index,
+        id: options.id,
+        recentCard: options.recentCard,
+        title: options.title,
+        subtitle: options.subtitle,
+        countryId: options.countryId,
+        commodityId: options.commodityId,
+        countryName: context.countryName,
+        commodityName: context.commodityName,
+        links: {
+          sankey: translateLink(options, cards.meta),
+          dashboard: translateLink(options, cards.meta, 'dashboard')
+        }
+      };
+    });
+  }
+);
 
 export const getCardsWithDefault = createSelector(
   [getCards, getSelectedCommodityId, getSelectedCountryId, getContexts, getSankeyCardsLoading],

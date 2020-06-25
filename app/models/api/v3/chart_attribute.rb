@@ -32,6 +32,14 @@ module Api
 
       NORMALIZABLE_ATTRIBUTES = [:identifier].freeze
 
+      AREA = 'area'.freeze
+      LINE = 'line'.freeze
+      DISPLAY_TYPES = [LINE, AREA].freeze
+      LINE_DASHED_BLACK = 'line-dashed-black'.freeze
+      LINE_SOLID_RED = 'line-solid-red'.freeze
+      AREA_DISPLAY_STYLES = ['area-pink', 'area-black'].freeze
+      LINE_DISPLAY_STYLES = [LINE_DASHED_BLACK].freeze
+
       belongs_to :chart, optional: false
       has_one :chart_ind, autosave: true
       has_one :chart_qual, autosave: true
@@ -45,6 +53,14 @@ module Api
                 presence: true,
                 uniqueness: {scope: :chart},
                 if: proc { |chart_attr| chart_attr.position.blank? }
+      validates :display_type,
+                inclusion: {in: DISPLAY_TYPES, allow_blank: true}
+      validates :display_style,
+                inclusion: {in: AREA_DISPLAY_STYLES, allow_blank: true},
+                if: proc { |chart_attr| chart_attr.display_type == AREA }
+      validates :display_style,
+                inclusion: {in: LINE_DISPLAY_STYLES, allow_blank: true},
+                if: proc { |chart_attr| chart_attr.display_type == LINE }
       validates_with OneAssociatedAttributeValidator,
                      attributes: [:chart_ind, :chart_qual, :chart_quant]
       validates_with AttributeAssociatedOnceValidator,
@@ -57,8 +73,7 @@ module Api
                      attribute: :chart_quant, scope: [:chart_id, :state_average],
                      if: :new_chart_quant_given?
 
-      after_commit :refresh_dependencies
-      after_commit :refresh_actor_basic_attributes
+      after_commit :refresh_dependents
 
       stringy_array :years
       manage_associated_attributes [:chart_ind, :chart_qual, :chart_quant]
@@ -69,8 +84,9 @@ module Api
         ]
       end
 
-      def refresh_dependencies
+      def refresh_dependents
         Api::V3::Readonly::ChartAttribute.refresh
+        refresh_actor_basic_attributes
       end
 
       def refresh_actor_basic_attributes
@@ -98,10 +114,10 @@ module Api
         context_node_type = profile.context_node_type
         context = context_node_type.context
         nodes = context_node_type.node_type.nodes
-        node_with_flows = Api::V3::Readonly::NodeWithFlows.where(
-          context_id: context.id,
-          id: nodes.map(&:id)
-        )
+        node_with_flows = Api::V3::Readonly::NodeWithFlows.
+          without_unknowns.
+          without_domestic.
+          where(context_id: context.id, id: nodes.map(&:id))
         NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
           node_with_flows.map(&:id)
         )

@@ -31,7 +31,8 @@ module Api
         private
 
         def initialize_params(params)
-          @node_type_id = initialize_param(params, :node_type_id)
+          node_type_id = initialize_param(params, :node_type_id)
+          @node_type = Api::V3::NodeType.find(node_type_id)
           @year_start = initialize_param(params, :year_start)
           @year_end = initialize_param(params, :year_end)
           @limit = params[:limit]&.to_i || 10
@@ -47,11 +48,11 @@ module Api
         end
 
         def initialize_top_nodes
-          top_nodes_list = Api::V3::Profiles::TopNodesForContextList.new(
-            @context,
+          top_nodes_list = Api::V3::Profiles::TopNodesForContextsList.new(
+            [@context],
+            @node_type,
             year_start: @year_start,
-            year_end: @year_end,
-            other_node_type_id: @node_type_id
+            year_end: @year_end
           )
           @top_nodes = top_nodes_list.
             sorted_list(

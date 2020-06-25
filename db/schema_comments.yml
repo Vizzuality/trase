@@ -208,6 +208,8 @@ tables:
         comment: Zero-based number of sankey column in which to display nodes of this type
       - name: is_default
         comment: When set, show this node type as default (only use for one)
+      - name: is_visible
+        comment: When set, show this node type in sankey & dashboards
       - name: is_geo_column
         comment: When set, show nodes on map
       - name: is_choropleth_disabled
@@ -368,14 +370,6 @@ tables:
         comment: Type of unit, e.g. score. One of restricted set of values.
       - name: tooltip_text
         comment: Generic tooltip text (lowest precedence)
-      - name: is_visible_on_place_profile
-        comment: Whether to display this attribute on place profile
-      - name: is_visible_on_actor_profile
-        comment: Whether to display this attribute on actor profile
-      - name: is_temporal_on_place_profile
-        comment: Whether attribute has temporal data on place profile
-      - name: is_temporal_on_actor_profile
-        comment: Whether attribute has temporal data on actor profile
   - name: map_attribute_groups
     comment: Groups attributes (inds/quals/quants) to display on map
     columns:
@@ -449,7 +443,7 @@ tables:
     comment: Context-specific profiles
     columns:
       - name: name
-        comment: Profile name, either actor or place. One of restricted set of values.
+        comment: Profile name, either actor, place or country.
       - name: main_topojson_path
         comment: Path must be relative to https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers and start with /
       - name: main_topojson_root
@@ -475,12 +469,6 @@ tables:
         comment: Name of attribute for display
       - name: tooltip_text
         comment: Generic tooltip text (lowest precedence)
-      - name: is_visible_on_place_profile
-        comment: Whether to display this attribute on place profile
-      - name: is_visible_on_actor_profile
-        comment: Whether to display this attribute on actor profile
-      - name: is_temporal_on_place_profile
-      - name: is_temporal_on_actor_profile
   - name: quants
     comment: Attributes classified as quants
     columns:
@@ -496,12 +484,6 @@ tables:
         comment: Type of unit, e.g. count. One of restricted set of values.
       - name: tooltip_text
         comment: Generic tooltip text (lowest precedence)
-      - name: is_visible_on_place_profile
-        comment: Whether to display this attribute on place profile
-      - name: is_visible_on_actor_profile
-        comment: Whether to display this attribute on actor profile
-      - name: is_temporal_on_place_profile
-      - name: is_temporal_on_actor_profile
   - name: recolor_by_attributes
     comment: Attributes (inds/quals) available for recoloring.
     columns:

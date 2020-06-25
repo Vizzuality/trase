@@ -163,6 +163,9 @@ $explore-heading: 66px;
     .icon {
       position: relative;
       transform: rotate(90deg) translateX(-2px); // Adjust vertical position after rotate
+      // IE behaved weird when translating multiple properites
+      // This centers the arrow as transform origin is buggy on IE
+      -ms-transform: rotate(135deg) translateX(3px) translateY(-11px);
     }
   }
 }

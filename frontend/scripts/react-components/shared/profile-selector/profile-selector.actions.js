@@ -71,25 +71,48 @@ export const setProfilesLoadingItems = loadingItems => ({
     loadingItems
   }
 });
+
 export const goToProfile = () => (dispatch, getState) => {
   const { profileSelector, app } = getState();
   const { contexts } = app;
-  const hasCompanies = profileSelector.panels.companies.activeItems.length > 0;
-  const profileType = hasCompanies ? 'actor' : 'place';
-  const nodeId = hasCompanies
-    ? profileSelector.panels.companies.activeItems[0]
-    : profileSelector.panels.sources.activeItems[0];
-  const query = { nodeId };
-  const commodity = profileSelector.panels.commodities.activeItems[0];
-  if (commodity) {
-    const country = profileSelector.panels.countries.activeItems[0];
-    const contextId = contexts.find(c => c.countryId === country && c.commodityId === commodity)
+  const { panels, data } = profileSelector;
+  const hasCompanies = panels.companies.activeItems.length > 0;
+  const isDestinationCountryProfile = panels.destinations.activeItems.length > 0;
+  const isProductionCountryProfile =
+    panels.sources.activeItems.length > 0 &&
+    data.sources[panels.sources.activeTab] &&
+    data.sources[panels.sources.activeTab][0] &&
+    data.sources[panels.sources.activeTab][0].nodeType === 'COUNTRY OF PRODUCTION';
+  const isCountryProfile = isDestinationCountryProfile || isProductionCountryProfile;
+  const getProfileType = () => {
+    if (isCountryProfile) return 'country';
+    return hasCompanies ? 'actor' : 'place';
+  };
+  const getNodeId = () => {
+    if (isCountryProfile) {
+      return panels.destinations.activeItems[0] || panels.sources.activeItems[0];
+    }
+    if (hasCompanies) {
+      return panels.companies.activeItems[0];
+    }
+    return panels.sources.activeItems[0];
+  };
+
+  const query = { nodeId: getNodeId() };
+
+  const commodityId = panels.commodities.activeItems[0];
+  if (commodityId) {
+    const country = panels.countries.activeItems[0];
+    const contextId = contexts.find(c => c.countryId === country && c.commodityId === commodityId)
       ?.id;
-    if (contextId) {
+    if (contextId && !isDestinationCountryProfile) {
       query.contextId = contextId;
+    } else {
+      query.commodityId = commodityId; // Destination profiles only have commodityId
     }
   }
-  dispatch({ type: 'profileNode', payload: { profileType, query } });
+
+  dispatch({ type: 'profile', payload: { profileType: getProfileType(), query } });
   dispatch(closeModal());
 };
 

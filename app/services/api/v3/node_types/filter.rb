@@ -31,6 +31,7 @@ module Api
               'profiles.name AS profile_type'
             ]).
             where('context_node_types.context_id = :context_id', context_id: @context.id).
+            where('context_node_type_properties.is_visible').
             order('context_node_types.column_position ASC')
         end
       end

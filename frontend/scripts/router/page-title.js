@@ -13,8 +13,8 @@ export default function(state) {
       return 'TRASE - Team';
     case 'data':
       return 'TRASE - Data Download';
-    case 'profileRoot':
-    case 'profileNode':
+    case 'profiles':
+    case 'profile':
       return 'TRASE - Profiles';
     case 'tool':
       if (!selectedContext) {

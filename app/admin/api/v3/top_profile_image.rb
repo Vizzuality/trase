@@ -20,8 +20,10 @@ ActiveAdmin.register Api::V3::TopProfileImage, as: 'Top Profile Image' do
   form do |f|
     f.semantic_errors
     inputs do
-      input :profile_type, as: :select, required: true,
-                           collection: %w[actor place]
+      input :profile_type,
+            as: :select,
+            required: true,
+            collection: Api::V3::Profile::NAMES
       input :commodity, as: :select, required: true,
                         collection: Api::V3::Commodity.select_options
       input :image, as: :file, required: true
@@ -39,6 +41,8 @@ ActiveAdmin.register Api::V3::TopProfileImage, as: 'Top Profile Image' do
     end
   end
 
-  filter :profile_type, as: :select, collection: -> { %w(actor place) }
+  filter :profile_type, as: :select, collection: -> {
+    Api::V3::Profile::NAMES
+  }
   filter :commodity, collection: -> { Api::V3::Commodity.select_options }
 end

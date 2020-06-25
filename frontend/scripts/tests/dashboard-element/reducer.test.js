@@ -46,7 +46,10 @@ test.skip(DASHBOARD_ELEMENT__SET_PANEL_PAGE, () => {
 });
 
 describe.skip(DASHBOARD_ELEMENT__SET_PANEL_DATA, () => {
-  const someData = [{ id: 0, name: 'name0' }, { id: 1, name: 'name1' }];
+  const someData = [
+    { id: 0, name: 'name0' },
+    { id: 1, name: 'name1' }
+  ];
 
   it('adds data to an entity as an array', () => {
     const action = {
@@ -88,7 +91,10 @@ describe.skip(DASHBOARD_ELEMENT__SET_PANEL_DATA, () => {
 });
 
 describe.skip(DASHBOARD_ELEMENT__SET_MORE_PANEL_DATA, () => {
-  const someData = [{ id: 0, name: 'name0' }, { id: 1, name: 'name1' }];
+  const someData = [
+    { id: 0, name: 'name0' },
+    { id: 1, name: 'name1' }
+  ];
   const moreData = [{ id: 2, name: 'Whatever' }];
 
   it('adds more data to an array entity', () => {
@@ -154,11 +160,17 @@ describe.skip(DASHBOARD_ELEMENT__SET_PANEL_TABS, () => {
   const data = [
     {
       section: 'SOURCES',
-      tabs: [{ id: 3, name: 'MUNICIPALITY', prefix: 'a' }, { id: 1, name: 'BIOME', prefix: 'b' }]
+      tabs: [
+        { id: 3, name: 'MUNICIPALITY', prefix: 'a' },
+        { id: 1, name: 'BIOME', prefix: 'b' }
+      ]
     },
     {
       section: 'COMPANIES',
-      tabs: [{ id: 6, name: 'EXPORTER', prefix: 'c' }, { id: 7, name: 'IMPORTER' }]
+      tabs: [
+        { id: 6, name: 'EXPORTER', prefix: 'c' },
+        { id: 7, name: 'IMPORTER' }
+      ]
     }
   ];
   const expectedTabs = {
@@ -439,8 +451,14 @@ describe.skip(DASHBOARD_ELEMENT__SET_SELECTED_COMMODITY_ID, () => {
 
 test.skip(DASHBOARD_ELEMENT__SET_ACTIVE_ITEMS_WITH_SEARCH, () => {
   const tabs = {
-    sources: [{ id: 3, name: 'MUNICIPALITY', prefix: 'a' }, { id: 1, name: 'BIOME', prefix: 'b' }],
-    companies: [{ id: 6, name: 'EXPORTER', prefix: 'c' }, { id: 7, name: 'IMPORTER' }]
+    sources: [
+      { id: 3, name: 'MUNICIPALITY', prefix: 'a' },
+      { id: 1, name: 'BIOME', prefix: 'b' }
+    ],
+    companies: [
+      { id: 6, name: 'EXPORTER', prefix: 'c' },
+      { id: 7, name: 'IMPORTER' }
+    ]
   };
   const someItem = { id: 1, name: 'some item', nodeTypeId: 6 };
   const action = {

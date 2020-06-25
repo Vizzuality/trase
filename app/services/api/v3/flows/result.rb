@@ -8,10 +8,11 @@ module Api
         def initialize(filter_flows)
           @errors = filter_flows.errors
           return if @errors.any?
+
           @flows = filter_flows.flows
           @active_nodes = filter_flows.active_nodes
           @total_height = filter_flows.total_height
-          @other_nodes_ids = filter_flows.other_nodes_ids
+          @other_nodes = filter_flows.other_nodes
           @cont_attribute = filter_flows.cont_attribute
           @ncont_attribute = filter_flows.ncont_attribute
           initialize_data
@@ -61,14 +62,16 @@ module Api
         end
 
         def initialize_include
+          node_heights = @active_nodes.map do |node_id, value|
+            {
+              id: node_id,
+              height: format('%0.6f', (value / @total_height)).to_f,
+              quant: format('%0.6f', value).to_f
+            }
+          end
           @include = {
-            node_heights: @active_nodes.map do |node_id, value|
-              {
-                id: node_id,
-                height: format('%0.6f', (value / @total_height)).to_f,
-                quant: format('%0.6f', value).to_f
-              }
-            end
+            node_heights: node_heights,
+            other_nodes: @other_nodes
           }
         end
 

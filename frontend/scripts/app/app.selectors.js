@@ -7,16 +7,14 @@ const getAppSelectedContextId = state => state.app.selectedContextId;
 const getNodesPanelCountryId = state => state.nodesPanel.countries.selectedNodeId;
 const getNodesPanelCommodityId = state => state.nodesPanel.commodities.selectedNodeId;
 
-export const getCountryNamesByCountryId = createSelector(
-  [getAppContexts],
-  contexts =>
-    contexts.reduce(
-      (acc, next) => ({
-        ...acc,
-        [next.countryId]: next.countryName
-      }),
-      {}
-    )
+export const getCountryNamesByCountryId = createSelector([getAppContexts], contexts =>
+  contexts.reduce(
+    (acc, next) => ({
+      ...acc,
+      [next.countryId]: next.countryName
+    }),
+    {}
+  )
 );
 
 export const getSelectedContext = createSelector(

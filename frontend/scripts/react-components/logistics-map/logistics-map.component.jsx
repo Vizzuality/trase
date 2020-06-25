@@ -9,7 +9,7 @@ import WRIIcons from 'vizzuality-components/dist/icons';
 
 import { Layer, LayerManager } from 'layer-manager/dist/components';
 import { PluginLeaflet } from 'layer-manager';
-import { BASEMAPS } from 'constants';
+import { BASEMAPS, BREAKPOINTS } from 'constants';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
 import LogisticsMapLegend from 'react-components/logistics-map/logistics-map-legend/logistics-map-legend.component';
@@ -18,6 +18,8 @@ import LogisticsMapDownload from 'react-components/logistics-map/logistics-map-d
 import ToolBar from 'react-components/shared/tool-bar';
 import Timeline from 'react-components/tool/timeline/timeline.component';
 import ListModal from 'react-components/shared/list-modal';
+import useWindowSize from 'utils/hooks/useWindowSize';
+import NotSupportedComponent from 'react-components/mobile/not-supported.component';
 
 import 'vizzuality-components/dist/map.css';
 import 'leaflet/dist/leaflet.css';
@@ -48,6 +50,8 @@ function LogisticsMap(props) {
   } = props;
   const Tooltip = p => <UnitsTooltip {...p.data} />;
 
+  const { width } = useWindowSize();
+
   const onSelectHub = hub => {
     selectHub(hub.value);
     closeModal();
@@ -57,6 +61,10 @@ function LogisticsMap(props) {
     selectInspectionLevel(hub.value);
     closeModal();
   };
+
+  if (width <= BREAKPOINTS.tablet) {
+    return <NotSupportedComponent />;
+  }
 
   return (
     <div className="l-logistics-map">

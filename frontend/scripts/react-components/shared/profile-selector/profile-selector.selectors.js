@@ -2,13 +2,15 @@ import { createSelector } from 'reselect';
 import { PROFILE_STEPS } from 'constants';
 
 const getProfileSelectorTabs = state => state.profileSelector.tabs;
-const getCompaniesPanel = state => state.profileSelector.panels.companies;
-const getSourcesPanel = state => state.profileSelector.panels.sources;
 const getCountriesPanel = state => state.profileSelector.panels.countries;
+const getSourcesPanel = state => state.profileSelector.panels.sources;
+const getCompaniesPanel = state => state.profileSelector.panels.companies;
+const getDestinationsPanel = state => state.profileSelector.panels.destinations;
 
 const getCountriesData = state => state.profileSelector.data.countries;
 const getSourcesData = state => state.profileSelector.data.sources;
 const getCompaniesData = state => state.profileSelector.data.companies;
+const getDestinationsData = state => state.profileSelector.data.destinations;
 
 const getSourcesTab = state => state.profileSelector.panels.sources.activeTab;
 const getCompaniesTab = state => state.profileSelector.panels.companies.activeTab;
@@ -18,25 +20,19 @@ const getPanels = state => state.profileSelector.panels;
 const getProfileType = state => state.profileSelector.panels.type;
 
 export const makeGetPanelActiveTab = (getTab, getTabs, getPanelId) =>
-  createSelector(
-    [getTab, getTabs, getPanelId],
-    (activeTab, tabs, panelId) => {
-      const panelTabs = tabs[panelId];
-      if (activeTab) {
-        return activeTab;
-      }
-      if (panelTabs?.length > 0) {
-        return panelTabs[0].id;
-      }
-      return null;
+  createSelector([getTab, getTabs, getPanelId], (activeTab, tabs, panelId) => {
+    const panelTabs = tabs[panelId];
+    if (activeTab) {
+      return activeTab;
     }
-  );
+    if (panelTabs?.length > 0) {
+      return panelTabs[0].id;
+    }
+    return null;
+  });
 
 export const makeGetPanelTabs = (getTabs, getPanelId) =>
-  createSelector(
-    [getTabs, getPanelId],
-    (tabs, panelId) => tabs[panelId] || []
-  );
+  createSelector([getTabs, getPanelId], (tabs, panelId) => tabs[panelId] || []);
 
 export const getSourcesTabs = makeGetPanelTabs(getProfileSelectorTabs, () => 'sources');
 export const getCompaniesTabs = makeGetPanelTabs(getProfileSelectorTabs, () => 'companies');
@@ -117,6 +113,13 @@ export const getCompaniesActiveItems = createSelector(
   [getCompaniesPanel, getCompaniesCountryData],
   getPanelActiveTabItems
 );
+export const getDestinationsActiveItems = createSelector(
+  [getDestinationsPanel, getDestinationsData],
+  (destinationsPanel, destinationsData) => {
+    if (!destinationsData || !destinationsData.length || !destinationsPanel.activeItems) return null;
+    return destinationsData.find(d => d.id === destinationsPanel.activeItems[0]);
+  }
+);
 
 export const getIsDisabled = createSelector(
   [getActiveStep, getPanels, getProfileType],
@@ -125,7 +128,6 @@ export const getIsDisabled = createSelector(
       case PROFILE_STEPS.type:
         return !profileType;
       case PROFILE_STEPS.profiles: {
-        // As we dont have a country profile page the min requirement is the sourcesPanel selection
         return panels[profileType] && panels[profileType].activeItems.length === 0;
       }
       case PROFILE_STEPS.commodities:
@@ -137,11 +139,12 @@ export const getIsDisabled = createSelector(
 );
 
 export const getDynamicSentence = createSelector(
-  [getSourcesActiveItems, getCompaniesActiveItems, getProfileType],
-  (sourcesActiveItems, companiesActiveItems, profileType) => {
+  [getSourcesActiveItems, getCompaniesActiveItems, getDestinationsActiveItems, getProfileType],
+  (sourcesActiveItems, companiesActiveItems, destinationsActiveItems, profileType) => {
     if (
       (profileType === 'sources' && !sourcesActiveItems) ||
-      (profileType === 'companies' && !companiesActiveItems)
+      (profileType === 'companies' && !companiesActiveItems) ||
+      (profileType === 'destinations' && !destinationsActiveItems)
     ) {
       return [];
     }
@@ -162,8 +165,15 @@ export const getDynamicSentence = createSelector(
         transform: 'capitalize',
         value: companiesActiveItems
       });
+    } else if (profileType === 'destinations') {
+      dynamicParts.push({
+        panel: 'destinations',
+        id: 'destinations',
+        prefix: 'See the',
+        transform: 'capitalize',
+        value: [destinationsActiveItems]
+      });
     }
-
     if (dynamicParts.length > 0) {
       dynamicParts.push({
         prefix: 'profile'

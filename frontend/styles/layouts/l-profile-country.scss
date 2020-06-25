@@ -1,0 +1,157 @@
+@import 'styles/settings';
+
+.l-profile-country {
+  position: relative;
+  min-height: 100vh;
+  padding-top: calc(44px + #{$nav-height});
+  background-color: $egg-shell;
+
+  &.-error {
+    position: relative;
+    min-height: calc(100vh - #{$nav-height});
+  }
+
+  @media print {
+    padding: 0;
+    background-color: $white;
+
+    .c-dropdown-component {
+      .dropdown-selected-item::after {
+        content: none;
+      }
+    }
+
+    .c-tabs {
+      .tab {
+        display: none
+      }
+    }
+  }
+
+  section:nth-of-type(2n-1) {
+    background-color: rgba($white, .3);
+  }
+
+  .top-logo {
+    display: none;
+    margin-bottom: 30px;
+
+    @media print {
+      display: block;
+    }
+  }
+
+  .c-overall-map {
+
+    .map-item {
+      > .row > .columns {
+        padding: 0;
+
+        svg {
+          float: right;
+        }
+
+        @media screen and (min-width: $breakpoint-foundation-medium) {
+          padding-right: 1.25rem;
+          padding-left: 1.25rem;
+        }
+      }
+    }
+  }
+
+  .c-links-widget {
+    padding-top: 40px;
+    padding-bottom: 40px;
+
+    .links-widget-title {
+      margin-bottom: 20px;
+    }
+
+    @media print {
+      display: none;
+    }
+  }
+
+  .title {
+    font-family: $font-family-1;
+    font-weight: $font-weight-bold;
+    letter-spacing: -.6px;
+    text-transform: uppercase;
+  }
+
+  .deforestation, .chords-container, .mini-sankey-container, .gfw-widget-container {
+    padding: 53px 0 51px;
+
+    @media print {
+      padding: 15px 0;
+    }
+  }
+
+  .deforestation {
+    .c-line-container {
+      @media screen and (max-width: $breakpoint-foundation-small) {
+        margin-left: -1.25rem;
+        margin-right: -1.25rem;
+      }
+    }
+
+    .c-line {
+      margin-top: 15px;
+    }
+  }
+
+  .score-table {
+    padding: 54px 0 42px;
+
+    @media print {
+      padding: 27px 0 42px;
+    }
+  }
+
+  .-traders .c-chord {
+    text-align: center;
+  }
+
+  .-consumers .c-chord {
+    text-align: right;
+
+    .c-chord-legend {
+      left: auto;
+      right: 0;
+      padding-right: 39px;
+      padding-left: 0;
+      text-align: right;
+
+      &::before {
+        left: auto;
+        right: 0;
+      }
+    }
+  }
+
+  .tooltip-react {
+    width: 15px;
+    height: 15px;
+
+    .tooltip-react-icon {
+      width: 15px;
+      height: 15px;
+      vertical-align: top;
+    }
+  }
+
+  .map-country-banner {
+    height: 250px;
+  }
+
+  .c-dropdown {
+    align-items: flex-start;
+  }
+
+  .section-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 400px;
+  }
+}

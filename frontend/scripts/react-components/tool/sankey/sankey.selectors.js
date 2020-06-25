@@ -181,9 +181,8 @@ export const getSankeyColumns = createSelector(
   }
 );
 
-export const getSankeyMaxHeight = createSelector(
-  [getSankeyColumns],
-  columns => Math.max(...columns.map(c => Math.ceil(c.y)))
+export const getSankeyMaxHeight = createSelector([getSankeyColumns], columns =>
+  Math.max(...columns.map(c => Math.ceil(c.y)))
 );
 
 // compute links y and y deltas (later used by sankey.link generator)
@@ -298,7 +297,7 @@ export const getLastSelectedNodeLink = createSelector(
     const last = selectedNodesIds.length - 1;
     const lastId = selectedNodesIds[last];
     const node = nodes[lastId];
-    const column = columns[(node?.columnId)];
+    const column = columns[node?.columnId];
 
     if (!node || !column) {
       return null;

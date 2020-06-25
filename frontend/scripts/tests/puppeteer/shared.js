@@ -4,7 +4,7 @@ import qs from 'qs';
 const BASE_URL = 'http://0.0.0.0:8081';
 
 export async function testRootSearch(page, { nodeName, nodeType, profileType }) {
-  const profileSearchInputSelector = '[data-test=profile-root-search-input-field-lg]';
+  const profileSearchInputSelector = '[data-test=profiles-search-input-field-lg]';
   await page.waitForSelector(profileSearchInputSelector);
   await page.click(profileSearchInputSelector);
   await page.type(profileSearchInputSelector, nodeName);

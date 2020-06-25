@@ -42,7 +42,7 @@ $columns-selector-group-height: 50px;
 
     &.-is-aggregated > .sankey-node-rect {
       // the horizontal lines pattern is defined in the <defs> section of the SVG in flows.ejs
-      cursor: zoom-in;
+      cursor: default;
       fill: url('#isAggregatedPattern');
     }
 

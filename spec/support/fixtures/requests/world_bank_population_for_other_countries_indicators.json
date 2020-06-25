@@ -1,0 +1,28 @@
+[
+  {
+    "page": 1,
+    "pages": 1,
+    "per_page": 1000,
+    "total": 1,
+    "sourceid": "2",
+    "lastupdated": "2020-03-18"
+  },
+  [
+    {
+      "indicator": {
+        "id": "SP.POP.TOTL",
+        "value": "Population, total"
+      },
+      "country": {
+        "id": "1A",
+        "value": "World"
+      },
+      "countryiso3code": "ZZ",
+      "date": "2013",
+      "value": 379705719,
+      "unit": "",
+      "obs_status": "",
+      "decimal": 0
+    }
+  ]
+]

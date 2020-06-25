@@ -21,7 +21,7 @@ function TagsGroup(props) {
           as="span"
           size={size}
           align="center"
-          key={part.id}
+          key={part.id || part.prefix}
           color={color}
           className="tag-group-part notranslate"
         >
@@ -40,7 +40,7 @@ TagsGroup.propTypes = {
   showDropdown: PropTypes.bool,
   tags: PropTypes.array.isRequired,
   as: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
-  textAs: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
+  textAs: PropTypes.oneOfType([PropTypes.string, PropTypes.element, PropTypes.func])
 };
 
 TagsGroup.defaultProps = {

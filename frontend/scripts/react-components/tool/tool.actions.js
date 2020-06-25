@@ -227,7 +227,7 @@ export function navigateToProfile(nodeId, contextId) {
   return (dispatch, getState) => {
     const node = getState().toolLinks.data.nodes[nodeId];
     dispatch({
-      type: 'profileNode',
+      type: 'profile',
       payload: { query: { nodeId, contextId }, profileType: node.profileType }
     });
   };

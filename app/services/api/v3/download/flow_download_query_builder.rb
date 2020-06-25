@@ -98,7 +98,9 @@ module Api
             return @context_node_types_by_role
           end
           context_node_types_with_roles = @context.context_node_types.
-            includes(:context_node_type_property)
+            includes(:context_node_type_property).
+            references(:context_node_type_property).
+            where('context_node_type_properties.is_visible')
           roles = context_node_types_with_roles.map do |cnt|
             cnt.context_node_type_property&.role
           end.compact.uniq

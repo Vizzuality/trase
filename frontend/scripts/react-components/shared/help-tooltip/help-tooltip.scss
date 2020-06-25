@@ -1,139 +1,19 @@
-@import '../../../../styles/settings';
+@import 'styles/settings';
 
-.tooltip-react {
-  display: inline;
-  position: relative;
-  margin-left: 4px;
-  cursor: default;
+.tooltip-react-icon {
+  opacity: .3;
+  font-size: 12px;
+}
 
-  &:hover {
+.c-help-tooltip {
+  &.size-rg {
     .tooltip-react-icon {
-      opacity: 1;
+      font-size: initial;
     }
   }
 
   @media print {
     display: none;
   }
-
-  .tooltip-react-icon {
-    opacity: .3;
-    font-size: 12px;
-    margin-left: 0;
-  }
-
-  &.size-rg {
-    display: block;
-    margin: 0;
-    height: 16px;
-    width: 16px;
-    color: $charcoal-grey-faded;
-
-    .tooltip-react-icon {
-      font-size: initial;
-    }
-  }
 }
 
-.tooltip-ios-touch {
-  cursor: pointer !important;
-}
-
-.tooltip-modal .tooltip {
-  z-index: $z-above-veil + 1;
-}
-
-.tooltip-react.recolor-by {
-  position: absolute;
-  top: 34px;
-  right: 34px;
-}
-
-.tooltip {
-  position: absolute;
-  max-width: 400px;
-  z-index: $z-tooltip;
-  background: $charcoal-grey;
-  font-family: $font-family-2;
-  font-size: $font-size-regular;
-  font-weight: 300;
-  line-height: 1.67;
-  color: $white;
-  padding: 16px;
-  box-shadow: 0 10px 20px 0 rgba($charcoal-grey, .2);
-  text-transform: none;
-  text-align: left;
-  pointer-events: none;
-}
-
-.tooltip-arrow {
-  border-color: $charcoal-grey;
-}
-
-.tooltip .tooltip-arrow {
-  width: 0;
-  height: 0;
-  border-style: solid;
-  position: absolute;
-  margin: 5px;
-}
-
-.tooltip[x-placement^="top"] {
-  margin-bottom: 5px;
-}
-
-.tooltip[x-placement^="top"] .tooltip-arrow {
-  border-width: 5px 5px 0 5px;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-  bottom: -5px;
-  left: calc(50% - 5px);
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.tooltip[x-placement^="bottom"] {
-  margin-top: 5px;
-}
-
-.tooltip[x-placement^="bottom"] .tooltip-arrow {
-  border-width: 0 5px 5px 5px;
-  border-left-color: transparent;
-  border-right-color: transparent;
-  border-top-color: transparent;
-  top: -5px;
-  left: calc(50% - 5px);
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.tooltip[x-placement^="right"] {
-  margin-left: 5px;
-}
-
-.tooltip[x-placement^="right"] .tooltip-arrow {
-  border-width: 5px 5px 5px 0;
-  border-left-color: transparent;
-  border-top-color: transparent;
-  border-bottom-color: transparent;
-  left: -5px;
-  top: calc(50% - 5px);
-  margin-left: 0;
-  margin-right: 0;
-}
-
-.tooltip[x-placement^="left"] {
-  margin-right: 5px;
-}
-
-.tooltip[x-placement^="left"] .tooltip-arrow {
-  border-width: 5px 0 5px 5px;
-  border-top-color: transparent;
-  border-right-color: transparent;
-  border-bottom-color: transparent;
-  right: -5px;
-  top: calc(50% - 5px);
-  margin-left: 0;
-  margin-right: 0;
-}
