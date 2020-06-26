@@ -495,7 +495,7 @@ const nodesPanelReducer = {
       Object.keys(state).forEach(name => {
         const moduleOptions = modules[name];
         if (moduleOptions) {
-          const panelData = state[name];
+          const panelData = draft[name];
           if (moduleOptions.hasMultipleSelection) {
             draft[name].selectedNodesIds = panelData.draftSelectedNodesIds;
           } else {
@@ -556,11 +556,15 @@ const nodesPanelReducer = {
     });
   },
   [TOOL_LINKS__SELECT_COLUMN](state, action) {
-    const { columnRole } = action.payload;
+    const { columnRole, retainNodes } = action.payload;
     return immer(state, draft => {
       const name = pluralize(columnRole);
       // groups with multiple columns always allow for multiple selection
-      draft[name].selectedNodesIds = nodesPanelInitialState[name].selectedNodesIds;
+
+      // We don't want to reset the selected nodes if we saved from the panel and updated the tab columns
+      if (!retainNodes) {
+        draft[name].selectedNodesIds = nodesPanelInitialState[name].selectedNodesIds;
+      }
       draft[name].excludingMode = nodesPanelInitialState[name].excludingMode;
     });
   },
