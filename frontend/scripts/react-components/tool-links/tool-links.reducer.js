@@ -126,7 +126,7 @@ const toolLinksReducer = {
     // payload only on new context
     if (action.payload) {
       return immer(state, draft => {
-        // Don't delete data and selectedNodesIds as we need the columns and selection for tab selected columns
+        // Don't reset columns in data as we need the columns and selection for tab selected columns
         Object.assign(draft, {
           selectedRecolorBy: toolLinksInitialState.selectedRecolorBy,
           selectedResizeBy: toolLinksInitialState.selectedResizeBy,
@@ -135,7 +135,8 @@ const toolLinksReducer = {
           extraColumnNodeId: toolLinksInitialState.extraColumnNodeId,
           detailedView: toolLinksInitialState.detailedView,
           highlightedNodeId: toolLinksInitialState.highlightedNodeId,
-          selectedColumnsIds: toolLinksInitialState.selectedColumnsIds
+          selectedColumnsIds: toolLinksInitialState.selectedColumnsIds,
+          data: { ...toolLinksInitialState.data, columns: state.data.columns }
         });
       });
     }

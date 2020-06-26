@@ -501,7 +501,7 @@ const nodesPanelReducer = {
       Object.keys(state).forEach(name => {
         const moduleOptions = modules[name];
         if (moduleOptions) {
-          const panelData = state[name];
+          const panelData = draft[name];
           if (moduleOptions.hasMultipleSelection) {
             draft[name].selectedNodesIds = panelData.draftSelectedNodesIds;
           } else {
