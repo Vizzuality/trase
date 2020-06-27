@@ -217,17 +217,21 @@ function* selectSavedTabColumns() {
   function* performSelect() {
     const state = yield select();
     const { toolLinks, nodesPanel } = state;
-    const { sources } = nodesPanel;
-    // TODO: const { exporters, importers, destinations } = nodesPanel;
-    const { savedTabs, savedActiveTab } = sources;
-    if (savedActiveTab) {
-      const tab = savedTabs.find(t => t.id === savedActiveTab);
-      const tabName = tab?.name;
-      const column = toolLinks.data.columns && Object.values(toolLinks.data.columns).find(c => c.name === tabName);
-      if (column) {
-        yield put(selectColumn(column.group, column.id, column.role, true));
+    const { sources, exporters, importers, destinations } = nodesPanel;
+    const panelsWithTabs = [sources, exporters, importers, destinations];
+
+    yield all(panelsWithTabs.map(panel => {
+      const { savedTabs: panelSavedTabs, savedActiveTab: panelSavedActiveTab } = panel;
+      if (panelSavedActiveTab) {
+        const tab = panelSavedTabs.find(t => t.id === panelSavedActiveTab);
+        const tabName = tab?.name;
+        const column = toolLinks.data.columns && Object.values(toolLinks.data.columns).find(c => c.name === tabName);
+        if (column) {
+          return put(selectColumn(column.group, column.id, column.role, true));
+        }
       }
-    }
+      return null;
+    }));
   }
 
   yield takeLatest([nodesPanelActions.NODES_PANEL__SAVE], performSelect);
