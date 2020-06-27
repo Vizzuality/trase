@@ -441,7 +441,13 @@ const nodesPanelReducer = {
       return immer(state, draft => {
         draft[name].draftSelectedNodesIds = [];
         draft[name].excludingMode = mode;
+
+        if (moduleOptions.hasTabs) {
+          draft[name].activeTab = state[name].activeTab;
+        }
+
         const panelIndex = DASHBOARD_STEPS[name];
+
         Object.entries(DASHBOARD_STEPS).forEach(([currentPanel, step]) => {
           const currentModuleOptions = modules[name];
           if (panelIndex < step) {
