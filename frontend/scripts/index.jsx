@@ -78,7 +78,7 @@ reducerRegistry.register('location', router.reducer);
 const reduxDevTools =
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
   window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-    maxAge: 10,
+    maxAge: 200,
     stateSanitizer: state => ({
       ...state,
       toolLinks: {
