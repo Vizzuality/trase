@@ -48,7 +48,7 @@ namespace :deploy do
   after 'deploy:publishing', 'deploy:restart'
 
   desc 'Update SQL schema comments after running migrations'
-  task schema_comments: do
+  task :schema_comments do
     on roles(:db) do
       within release_path do
         with rails_env: fetch(:rails_env) do
