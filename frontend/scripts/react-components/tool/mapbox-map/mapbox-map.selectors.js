@@ -138,9 +138,9 @@ export const getContextualLayers = createSelector(
 );
 
 export const getLogisticLayers = createSelector(
-  [getSelectedLogisticLayers], (selectedLogisticLayers) => {
+  [getSelectedLogisticLayers, getLogisticMapLayerTemplates], (selectedLogisticLayers, logisticMapLayerTemplates) => {
     if (!selectedLogisticLayers) return [];
-    const cartoLayerTemplates = getLogisticMapLayerTemplates().flat();
+    const cartoLayerTemplates = logisticMapLayerTemplates.flat();
     return selectedLogisticLayers
       .map(l => cartoLayerTemplates.find(i => i.id === l))
       .filter(Boolean);
