@@ -138,7 +138,9 @@ function MapBoxMap(props) {
           source,
           sourceLayer: logisticsSourceLayer
         };
-        map.setFeatureState({ ...lastHoveredGeo }, { hover: true });
+        if (lastHoveredGeo.id) {
+          map.setFeatureState({ ...lastHoveredGeo }, { hover: true });
+        }
         const logisticsTooltipValues = [];
 
         [
