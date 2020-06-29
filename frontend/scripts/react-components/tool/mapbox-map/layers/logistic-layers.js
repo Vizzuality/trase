@@ -1,6 +1,21 @@
+import { createSelector } from 'reselect';
 import template from 'lodash/template';
 import chroma from 'chroma-js';
 import { layer } from './layer-utils';
+
+const getSelectedNodes = state => state.toolLinks.selectedNodesIds || null;
+const getNodes = state => state.toolLinks.data?.nodes || null;
+
+export const getSelectedExporterNames = createSelector(
+  [getSelectedNodes, getNodes],
+  (selectedNodesIds, nodes) => {
+    if (!selectedNodesIds || !nodes) return null;
+    const exporterSelectedNodes = selectedNodesIds
+      .map(n => nodes[n])
+      .filter(n => n.type === 'EXPORTER');
+    return exporterSelectedNodes.length ? exporterSelectedNodes.map(n => n.name) : null;
+  }
+);
 
 const MARKERS_URL = NODE_ENV_DEV
   ? '/images/logistics-map'
@@ -21,10 +36,12 @@ export const logisticLayerTemplates = {
           key: 'year',
           default: 2016,
           template: template(`to_date(<%= year %>::varchar, 'yyyy') as year_date`)
+        },
+        {
+          key: 'company',
         }
       ],
       marker: `${MARKERS_URL}/crushing-icon-v2.svg`,
-      sql_config: [{ type: 'and', key: 'company', name: 'companies' }]
     },
     {
       version: '0.0.1',
@@ -39,10 +56,13 @@ export const logisticLayerTemplates = {
           key: 'year',
           default: 2016,
           template: template(`to_date({<%= year %>::varchar, 'yyyy') as year_date,`)
+        },
+        {
+          key: 'company',
         }
+
       ],
       marker: `${MARKERS_URL}/refining-icon-v2.svg`,
-      sql_config: [{ type: 'and', key: 'company', name: 'companies' }]
     },
     {
       version: '0.0.1',
@@ -53,7 +73,11 @@ export const logisticLayerTemplates = {
       commodityName: 'SOY',
       color: '#F2B800',
       marker: `${MARKERS_URL}/storage-icon-v2.svg`,
-      sql_config: [{ type: 'where', key: 'company', name: 'companies' }]
+      paramsConfig: [
+        {
+          key: 'company',
+        }
+      ],
     },
     {
       version: '0.0.1',
@@ -63,11 +87,13 @@ export const logisticLayerTemplates = {
       description: 'confirmed',
       commodityName: 'BEEF',
       color: '#803C8D',
-      paramsConfig: [{ key: 'subclass', value: `'CONFIRMED SLAUGHTERHOUSE'` }],
+      paramsConfig: [
+        { key: 'subclass', value: `'CONFIRMED SLAUGHTERHOUSE'` },
+        { key: 'company' }
+      ],
       marker: `${MARKERS_URL}/slaughterhouse-icon-v2.svg`,
       sql_config: [
-        { type: 'and', key: 'inspection_level', name: 'inspection' },
-        { type: 'and2', key: 'company', name: 'companies' }
+        { type: 'and', key: 'inspection_level', name: 'inspection' }
       ]
     },
     {
@@ -78,11 +104,13 @@ export const logisticLayerTemplates = {
       description: 'probable',
       commodityName: 'BEEF',
       color: '#13A579',
-      paramsConfig: [{ key: 'subclass', value: `'PROBABLE SLAUGHTERHOUSE'` }],
+      paramsConfig: [
+        { key: 'subclass', value: `'PROBABLE SLAUGHTERHOUSE'` },
+        { key: 'company' }
+     ],
       marker: `${MARKERS_URL}/slaughterhouse-icon-v2.svg`,
       sql_config: [
-        { type: 'and', key: 'inspection_level', name: 'inspection' },
-        { type: 'and2', key: 'company', name: 'companies' }
+        { type: 'and', key: 'inspection_level', name: 'inspection' }
       ]
     },
     {
@@ -93,11 +121,13 @@ export const logisticLayerTemplates = {
       description: 'unconfirmed',
       commodityName: 'BEEF',
       color: '#F2B800',
-      paramsConfig: [{ key: 'subclass', value: `'UNCONFIRMED SLAUGHTERHOUSE'` }],
+      paramsConfig: [
+        { key: 'subclass', value: `'UNCONFIRMED SLAUGHTERHOUSE'` },
+        { key: 'company' }
+      ],
       marker: `${MARKERS_URL}/slaughterhouse-icon-v2.svg`,
       sql_config: [
-        { type: 'and', key: 'inspection_level', name: 'inspection' },
-        { type: 'and2', key: 'company', name: 'companies' }
+        { type: 'and', key: 'inspection_level', name: 'inspection' }
       ]
     },
     {
@@ -108,85 +138,96 @@ export const logisticLayerTemplates = {
       description: 'unconfirmed (multi-functional)',
       commodityName: 'BEEF',
       color: '#888',
-      paramsConfig: [{ key: 'subclass', value: `'UNCONFIRMED SLAUGHTERHOUSE'` }],
+      paramsConfig: [
+        { key: 'subclass', value: `'UNCONFIRMED SLAUGHTERHOUSE'` },
+        { key: 'company' }
+      ],
       marker: `${MARKERS_URL}/slaughterhouse-icon-v2.svg`,
       sql_config: [
-        { type: 'and', key: 'inspection_level', name: 'inspection' },
-        { type: 'and2', key: 'company', name: 'companies' }
+        { type: 'and', key: 'inspection_level', name: 'inspection' }
       ]
     }
   ]
 };
 
-export const getLogisticMapLayerTemplates = () => Object.keys(logisticLayerTemplates).map(country =>
-  logisticLayerTemplates[country].map(l => {
-    const sqlParams = l.paramsConfig?.map(w => {
-      const value = w.value || w.default;
-      return `${w.key} = ${value}`;
-    });
-    const sqlParamsString = sqlParams?.length ? `WHERE ${sqlParams.join(' AND ')}` : '';
-    const lightColor = l.color ? chroma(l.color).alpha(0.5).css() : '#000';
-    const darkColor = l.color ? chroma(l.color).darken(4).alpha(0.5).css() : '#000';
-    return layer({
-      name: l.id,
-      type: 'vector',
-      provider: 'carto',
-      images: [
-        {
-          id: l.marker,
-          src: l.marker,
-          options: {
-            sdf: true
+export const getLogisticMapLayerTemplates = createSelector(
+  [getSelectedExporterNames],
+  (exporterNames) =>
+    Object.keys(logisticLayerTemplates).map(country =>
+      logisticLayerTemplates[country].map(l => {
+        const sqlParams = l.paramsConfig?.map(w => {
+          if (w.key === 'company') {
+            return (exporterNames && exporterNames.length) ?
+              `company IN ('${exporterNames.join("' , '")}') `
+              : null;
           }
-        }
-      ],
-      sql: `SELECT * FROM ${l.sqlTable} ${sqlParamsString}`,
-      renderLayers: [
-        {
-          type: 'heatmap',
-          maxzoom: 9,
-          paint: {
-            // Increase the heatmap weight based on frequency and property magnitude
-            // 'heatmap-weight': ['interpolate', ['linear'], ['get', 'mag'], 0, 0, 6, 1],
-            // Increase the heatmap color weight weight by zoom level
-            // heatmap-intensity is a multiplier on top of heatmap-weight
-            'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 9, 3],
-            // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-            // Begin color ramp at 0-stop with a 0-transparancy color
-            // to create a blur-like effect.
-            'heatmap-color': [
-              'interpolate',
-              ['linear'],
-              ['heatmap-density'],
-              0,
-              'rgba(0,0,0,0)',
-              0.1,
-              darkColor,
-              1,
-              lightColor
-            ],
-            // Adjust the heatmap radius by zoom level
-            'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 2, 9, 20],
-            // Transition from heatmap to symbol layer by zoom level
-            'heatmap-opacity': ['interpolate', ['linear'], ['zoom'], 7, 1, 9, 0]
-          }
-        },
-        {
-          type: 'symbol',
-          minzoom: 6,
-          paint: {
-            'icon-color': lightColor,
-            'icon-opacity': ['interpolate', ['linear'], ['zoom'], 7, 0, 8, 1]
-          },
-          layout: {
-            'icon-image': l.marker,
-            'icon-allow-overlap': true
-          },
-          metadata: {
-            position: 'top'
-          }
-        }
-      ]
-    });
-  }
-)).filter(Boolean);
+          const value = w.value || w.default;
+          return `${w.key} = ${value}`;
+        }).filter(Boolean);
+        const sqlParamsString = sqlParams?.length ? `WHERE ${sqlParams.join(' AND ')}` : '';
+        const lightColor = l.color ? chroma(l.color).alpha(0.5).css() : '#000';
+        const darkColor = l.color ? chroma(l.color).darken(4).alpha(0.5).css() : '#000';
+        return layer({
+          name: l.id,
+          type: 'vector',
+          provider: 'carto',
+          images: [
+            {
+              id: l.marker,
+              src: l.marker,
+              options: {
+                sdf: true
+              }
+            }
+          ],
+          sql: `SELECT * FROM ${l.sqlTable} ${sqlParamsString}`,
+          renderLayers: [
+            {
+              type: 'heatmap',
+              maxzoom: 9,
+              paint: {
+                // Increase the heatmap weight based on frequency and property magnitude
+                // 'heatmap-weight': ['interpolate', ['linear'], ['get', 'mag'], 0, 0, 6, 1],
+                // Increase the heatmap color weight weight by zoom level
+                // heatmap-intensity is a multiplier on top of heatmap-weight
+                'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 9, 3],
+                // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+                // Begin color ramp at 0-stop with a 0-transparancy color
+                // to create a blur-like effect.
+                'heatmap-color': [
+                  'interpolate',
+                  ['linear'],
+                  ['heatmap-density'],
+                  0,
+                  'rgba(0,0,0,0)',
+                  0.1,
+                  darkColor,
+                  1,
+                  lightColor
+                ],
+                // Adjust the heatmap radius by zoom level
+                'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 2, 9, 20],
+                // Transition from heatmap to symbol layer by zoom level
+                'heatmap-opacity': ['interpolate', ['linear'], ['zoom'], 7, 1, 9, 0]
+              }
+            },
+            {
+              type: 'symbol',
+              minzoom: 6,
+              paint: {
+                'icon-color': lightColor,
+                'icon-opacity': ['interpolate', ['linear'], ['zoom'], 7, 0, 8, 1]
+              },
+              layout: {
+                'icon-image': l.marker,
+                'icon-allow-overlap': true
+              },
+              metadata: {
+                position: 'top'
+              }
+            }
+          ]
+        });
+      }
+    )).filter(Boolean)
+  );
