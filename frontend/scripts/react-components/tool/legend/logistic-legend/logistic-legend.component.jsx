@@ -4,11 +4,11 @@ import './logistic-legend.styles.scss';
 
 function LogisticLegend({ layers }) {
   return (
-    <div className='cartodb-legend custom'>
-      <ul className='bullets'>
+    <div className="c-logistic-legend cartodb-legend custom">
+      <ul className="bullets">
         {layers.map(l => (
-          <li className='bkg'>
-            <div className='bullet' style={{ backgroundColor: l.color }}/>
+          <li className="bkg">
+            <div className="bullet" style={{ backgroundColor: l.color }}/>
             {l.name}
           </li>
         ))}
