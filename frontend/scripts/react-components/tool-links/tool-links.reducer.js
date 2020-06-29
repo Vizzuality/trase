@@ -92,18 +92,6 @@ const toolLinksReducer = {
       draft.chartsLoading = loading;
     });
   },
-  [NODES_PANEL__SAVE](state) {
-    return immer(state, draft => {
-      Object.assign(draft, {
-        selectedColumnsIds: toolLinksInitialState.selectedColumnsIds,
-        selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
-        extraColumn: toolLinksInitialState.extraColumn,
-        extraColumnNodeId: toolLinksInitialState.extraColumnNodeId,
-        highlightedNodeId: toolLinksInitialState.highlightedNodeId,
-        selectedNodesIds: toolLinksInitialState.selectedNodesIds
-      });
-    });
-  },
   [TOOL_LINKS_RESET_SANKEY](state) {
     return immer(state, draft => {
       Object.assign(draft, {
@@ -136,7 +124,20 @@ const toolLinksReducer = {
   },
   [NODES_PANEL__SAVE](state, action) {
     if (action.payload) {
-      return onContextChange(state);
+      return immer(state, draft => {
+        // Don't reset columns in data as we need the columns and selection for tab selected columns
+        Object.assign(draft, {
+          selectedRecolorBy: toolLinksInitialState.selectedRecolorBy,
+          selectedResizeBy: toolLinksInitialState.selectedResizeBy,
+          selectedBiomeFilterName: toolLinksInitialState.selectedBiomeFilterName,
+          extraColumn: toolLinksInitialState.extraColumn,
+          extraColumnNodeId: toolLinksInitialState.extraColumnNodeId,
+          detailedView: toolLinksInitialState.detailedView,
+          highlightedNodeId: toolLinksInitialState.highlightedNodeId,
+          selectedColumnsIds: toolLinksInitialState.selectedColumnsIds,
+          data: { ...toolLinksInitialState.data, columns: state.data.columns }
+        });
+      });
     }
     return state;
   },
@@ -218,11 +219,11 @@ const toolLinksReducer = {
   [TOOL_LINKS__SELECT_COLUMN](state, action) {
     return immer(state, draft => {
       const { extraColumn, data, extraColumnNodeId, selectedNodesIds, selectedColumnsIds } = state;
-      const { columnId, columnIndex } = action.payload;
+      const { columnId, columnIndex, retainNodes } = action.payload;
+
       if (!selectedColumnsIds) {
         draft.selectedColumnsIds = [];
       }
-
       const column = data.columns[columnId];
       const isInColumn = nodeId => {
         const node = data.nodes[nodeId];
@@ -259,21 +260,17 @@ const toolLinksReducer = {
         // NODES CHANGES
 
         draft.selectedNodesIds = selectedNodesIds.filter(id => extraColumnNodeId !== id);
-        // draft.expandedNodesIds.filter(id => state.extraColumnNodeId !== id);
         draft.extraColumn = toolLinksInitialState.extraColumn;
         draft.extraColumnNodeId = toolLinksInitialState.extraColumnNodeId;
       }
-
-      draft.selectedNodesIds = selectedNodesIds.filter(isInColumn);
-      // draft.expandedNodesIds = state.expandedNodesIds.filter(isInColumn);
+      if (!retainNodes) {
+        draft.selectedNodesIds = selectedNodesIds.filter(isInColumn);
+      }
     });
   },
   [TOOL_LINKS__CHANGE_EXTRA_COLUMN](state, action) {
     return immer(state, draft => {
-      const { columnId, parentColumnId, nodeId } = action.payload;
-      const extraColumnNode =
-        state.data.nodes && state.data.nodes[state.extraColumnNodeId || nodeId];
-
+      const { columnId, parentColumnId } = action.payload;
       const wasInExtraColumn = id => {
         const node = draft.data.nodes[id];
         const column = draft.data.columns[node.columnId];
@@ -282,11 +279,6 @@ const toolLinksReducer = {
 
       if (columnId) {
         // Open extra column
-        if (extraColumnNode) {
-          // draft.expandedNodesIds = state.expandedNodesIds
-          //   .filter(expandedNodeId => draft.data.nodes[expandedNodeId].columnId !== parentColumnId)
-          //   .concat(extraColumnNode?.id);
-        }
         draft.extraColumnNodeId = action.payload.nodeId;
         draft.extraColumn = { id: columnId, parentId: parentColumnId };
       } else {
