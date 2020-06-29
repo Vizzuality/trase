@@ -17,6 +17,9 @@ export const getSelectedLogisticLayers = createSelector(
   layers => {
     if (!layers) return null;
     const templates = Object.values(logisticLayerTemplates).flat();
-    return layers.map(l => pick(templates.find(t => t.id === l.id),['name', 'color']));
+    return layers.map(l => {
+      const template = templates.find(t => t.id === l.id);
+      return pick(template, ['name', 'color', 'categoryName']);
+    });
   }
 );

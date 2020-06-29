@@ -25,6 +25,7 @@ export const logisticLayerTemplates = {
   BRAZIL: [
     {
       commodityName: 'SOY',
+      categoryName: 'Brazil facilities',
       version: '0.0.1',
       id: 'brazil_crushing_facilities',
       sqlTable: `brazil_crushing_facilities`,
@@ -45,6 +46,7 @@ export const logisticLayerTemplates = {
     },
     {
       version: '0.0.1',
+      categoryName: 'Brazil facilities',
       id: 'brazil_refining_facilities',
       sqlTable: 'brazil_refining_facilities',
       name: 'refining facilities',
@@ -67,6 +69,7 @@ export const logisticLayerTemplates = {
     {
       version: '0.0.1',
       id: 'brazil_storage_facilities',
+      categoryName: 'Brazil facilities',
       sqlTable: 'brazil_storage_facilities',
       name: 'storage facilities',
       description: 'storage facilities',
@@ -82,6 +85,7 @@ export const logisticLayerTemplates = {
     {
       version: '0.0.1',
       id: 'confirmed_slaughterhouse',
+      categoryName: 'Brazil slaughterhouses',
       sqlTable: 'slaughterhouses_2018_09_18',
       name: 'confirmed',
       description: 'confirmed',
@@ -99,6 +103,7 @@ export const logisticLayerTemplates = {
     {
       version: '0.0.1',
       id: 'probable_slaughterhouse',
+      categoryName: 'Brazil slaughterhouses',
       sqlTable: 'slaughterhouses_2018_09_18',
       name: 'probable',
       description: 'probable',
@@ -116,6 +121,7 @@ export const logisticLayerTemplates = {
     {
       version: '0.0.1',
       id: 'unconfirmed_slaughterhouse',
+      categoryName: 'Brazil slaughterhouses',
       sqlTable: 'slaughterhouses_2018_09_18',
       name: 'unconfirmed',
       description: 'unconfirmed',
@@ -133,6 +139,7 @@ export const logisticLayerTemplates = {
     {
       version: '0.0.1',
       id: 'unconfirmed_slaughterhouse_multifunctional_facility',
+      categoryName: 'Brazil slaughterhouses',
       sqlTable: 'slaughterhouses_2018_09_18',
       name: 'unconfirmed (multi-functional)',
       description: 'unconfirmed (multi-functional)',
