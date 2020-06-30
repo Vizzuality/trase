@@ -272,14 +272,18 @@ function DataPortal(props) {
       state.downloadType === 'bulk'
         ? { context_id: state.bulkContext, pivot: 1 }
         : getDownloadURLParams();
-    if (!params.context_id) {
+    if (!params.context_id && state.downloadType !== 'logistics') {
       return;
     }
 
     const file = state.fileExtension;
-    const fileUrl =
-      file === '.json' ? GET_JSON_DATA_DOWNLOAD_FILE_URL : GET_CSV_DATA_DOWNLOAD_FILE_URL;
-    const downloadURL = getURLFromParams(fileUrl, params);
+    const getDownloadURL = () => {
+      if (state.downloadType === 'logistics') {
+        return `https://${CARTO_ACCOUNT}.carto.com/api/v2/sql?filename=crushing_facilities&q=SELECT * FROM "${CARTO_ACCOUNT}".${state.bulkContext}&format=${file.replace('.', '')}`;
+      }
+      const fileUrl = file === '.json' ? GET_JSON_DATA_DOWNLOAD_FILE_URL : GET_CSV_DATA_DOWNLOAD_FILE_URL;
+      return getURLFromParams(fileUrl, params);
+    }
 
     onDownloadTriggered(
       Object.assign(
@@ -291,7 +295,7 @@ function DataPortal(props) {
       )
     );
 
-    window.open(downloadURL);
+    window.open(getDownloadURL());
 
     dataPortalDispatch({ type: 'setDownloaded', payload: true });
   };
@@ -315,8 +319,8 @@ function DataPortal(props) {
           contexts={enabledContexts}
           bulkLogisticsData={bulkLogisticsData}
           enabled={DATA_DOWNLOAD_ENABLED}
-          onButtonClicked={id =>
-            dataPortalDispatch({ type: 'setDownloadType', payload: { type: 'bulk', id } })
+          onButtonClicked={(type, id) =>
+            dataPortalDispatch({ type: 'setDownloadType', payload: { type , id } })
           }
         />
         <div className="c-custom-dataset">

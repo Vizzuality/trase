@@ -17,7 +17,12 @@ export const getBulkLogisticsData = () => {
   const logisticsData = [];
   Object.keys(logisticLayerTemplates).forEach(country => {
     logisticLayerTemplates[country].forEach(l => {
-      logisticsData.push({ countryName: country, commodityName: l.commodityName, name: l.name })
+      logisticsData.push({
+        countryName: country,
+        commodityName: l.commodityName,
+        name: l.name,
+        id: l.sqlTable
+      });
     })
   });
   return logisticsData;
