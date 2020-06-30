@@ -39,6 +39,7 @@ function ToolBar(props) {
   function getListItem(item, ref) {
     return (
       <li
+        key={item.id}
         ref={ref}
         className={cx('slot-item', {
           '-no-hover': item.noHover,
@@ -60,6 +61,7 @@ function ToolBar(props) {
   function renderItemWithTooltip(item) {
     return (
       <Tippy
+        key={item.id}
         content={<ToolbarTooltip>{item.tooltip}</ToolbarTooltip>}
         placement="bottom-start"
         arrow={false}

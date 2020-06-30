@@ -141,7 +141,7 @@ const nodesPanelReducer = {
         // this means we navigated internally with hopes of expanding some nodes once we had the columns
         state.__temporaryExpandedNodes.forEach(node => {
           const { id, nodeType } = node;
-          // with the columns we fing the role
+          // with the columns we find the role
           const { role } = columns.find(col => col.name === nodeType);
           const name = pluralize(role);
           const moduleOptions = modules[name];
@@ -158,7 +158,6 @@ const nodesPanelReducer = {
             draft[name].data.nodes[id] = node;
           }
         });
-
         // finally we clear the temporary state.
         draft.__temporaryExpandedNodes = [];
       }
@@ -442,7 +441,13 @@ const nodesPanelReducer = {
       return immer(state, draft => {
         draft[name].draftSelectedNodesIds = [];
         draft[name].excludingMode = mode;
+
+        if (moduleOptions.hasTabs) {
+          draft[name].activeTab = state[name].activeTab;
+        }
+
         const panelIndex = DASHBOARD_STEPS[name];
+
         Object.entries(DASHBOARD_STEPS).forEach(([currentPanel, step]) => {
           const currentModuleOptions = modules[name];
           if (panelIndex < step) {
@@ -492,7 +497,6 @@ const nodesPanelReducer = {
     });
   },
   [NODES_PANEL__SAVE](state) {
-    // Copies the panel selectedIds to draftSelectedIds on panel edit start
     return immer(state, draft => {
       Object.keys(state).forEach(name => {
         const moduleOptions = modules[name];
@@ -505,8 +509,8 @@ const nodesPanelReducer = {
           }
 
           if (moduleOptions.hasTabs) {
-            draft[name].savedActiveTab = state[name].activeTab;
-            draft[name].savedTabs = state[name].tabs;
+            draft[name].savedActiveTab = panelData.activeTab;
+            draft[name].savedTabs = panelData.tabs;
           }
         }
       });
@@ -558,11 +562,15 @@ const nodesPanelReducer = {
     });
   },
   [TOOL_LINKS__SELECT_COLUMN](state, action) {
-    const { columnRole } = action.payload;
+    const { columnRole, retainNodes } = action.payload;
     return immer(state, draft => {
       const name = pluralize(columnRole);
       // groups with multiple columns always allow for multiple selection
-      draft[name].selectedNodesIds = nodesPanelInitialState[name].selectedNodesIds;
+
+      // We don't want to reset the selected nodes if we saved from the panel and updated the tab columns
+      if (!retainNodes) {
+        draft[name].selectedNodesIds = nodesPanelInitialState[name].selectedNodesIds;
+      }
       draft[name].excludingMode = nodesPanelInitialState[name].excludingMode;
     });
   },
