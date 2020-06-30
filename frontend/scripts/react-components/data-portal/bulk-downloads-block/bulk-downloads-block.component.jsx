@@ -30,9 +30,9 @@ function BulkDownloadsBlock(props) {
   const width = windowWidth > LARGE ? 1040 : 695;
   const rowCount = Math.ceil(contexts.length / columnCount);
 
-  function onBulkDownloadButtonClicked(contextId) {
+  function onBulkDownloadButtonClicked(type, id) {
     if (!enabled) return;
-    onButtonClicked(contextId);
+    onButtonClicked(type, id);
   }
 
   return (
@@ -63,7 +63,7 @@ function BulkDownloadsBlock(props) {
                     disabled={!enabled}
                     className="bulk-download-item"
                     icon="icon-download"
-                    onClick={() => onBulkDownloadButtonClicked(item.id)}
+                    onClick={() => onBulkDownloadButtonClicked(selectedTab === tabs[0] ? 'bulk' : 'logistics', item.id)}
                   >
                     {selectedTab === tabs[0]
                       ? `${item.countryName} - ${item.commodityName} (all years)`

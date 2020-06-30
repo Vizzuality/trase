@@ -41,7 +41,7 @@ export const logisticLayerTemplates = {
         },
         { key: 'company' }
       ],
-      marker: `${MARKERS_URL}/crushing-icon-v2.svg`,
+      marker: `${MARKERS_URL}/crushing-icon-v2.svg`
     },
     {
       version: '0.0.1',
