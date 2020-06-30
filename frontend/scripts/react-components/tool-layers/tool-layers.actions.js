@@ -7,6 +7,14 @@ export const TOOL_LAYERS__SAVE_MAP_VIEW = 'TOOL_LAYERS__SAVE_MAP_VIEW';
 export const TOOL_LAYERS__SET_ACTIVE_MODAL = 'TOOL_LAYERS__SET_ACTIVE_MODAL';
 export const TOOL_LAYERS__SET_UNIT_LAYERS = 'TOOL_LAYERS__SET_UNIT_LAYERS';
 export const TOOL_LAYERS__SET_UNIT_LAYER_DATA = 'TOOL_LAYERS__SET_UNIT_LAYER_DATA';
+export const TOOL_LAYERS__SET_INSPECTION_LEVEL = 'LOGISTIC_LEGEND__SET_INSPECTION_LEVEL';
+
+export function setLogisticInspectionLevel(inspectionLevel) {
+  return {
+    type: TOOL_LAYERS__SET_INSPECTION_LEVEL,
+    payload: { inspectionLevel }
+  };
+}
 
 export function setLinkedGeoIds(nodes) {
   return {

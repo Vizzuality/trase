@@ -90,6 +90,7 @@ export const logisticLayerTemplates = {
       name: 'confirmed',
       description: 'confirmed',
       commodityName: 'BEEF',
+      hasInspectionLevel: true,
       color: '#803C8D',
       paramsConfig: [
         { key: 'subclass', value: `'CONFIRMED SLAUGHTERHOUSE'` },
@@ -108,6 +109,7 @@ export const logisticLayerTemplates = {
       name: 'probable',
       description: 'probable',
       commodityName: 'BEEF',
+      hasInspectionLevel: true,
       color: '#13A579',
       paramsConfig: [
         { key: 'subclass', value: `'PROBABLE SLAUGHTERHOUSE'` },
@@ -126,6 +128,7 @@ export const logisticLayerTemplates = {
       name: 'unconfirmed',
       description: 'unconfirmed',
       commodityName: 'BEEF',
+      hasInspectionLevel: true,
       color: '#F2B800',
       paramsConfig: [
         { key: 'subclass', value: `'UNCONFIRMED SLAUGHTERHOUSE'` },
@@ -144,6 +147,7 @@ export const logisticLayerTemplates = {
       name: 'unconfirmed (multi-functional)',
       description: 'unconfirmed (multi-functional)',
       commodityName: 'BEEF',
+      hasInspectionLevel: true,
       color: '#888',
       paramsConfig: [
         { key: 'subclass', value: `'UNCONFIRMED SLAUGHTERHOUSE'` },
