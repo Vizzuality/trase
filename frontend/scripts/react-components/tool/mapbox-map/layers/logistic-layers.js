@@ -3,6 +3,7 @@ import template from 'lodash/template';
 import chroma from 'chroma-js';
 import { layer } from './layer-utils';
 
+const getSelectedInspectionLevel = state => state.toolLayers.inspectionLevel;
 const getSelectedNodes = state => state.toolLinks.selectedNodesIds || null;
 const getNodes = state => state.toolLinks.data?.nodes || null;
 
@@ -38,9 +39,7 @@ export const logisticLayerTemplates = {
           default: 2016,
           template: template(`to_date(<%= year %>::varchar, 'yyyy') as year_date`)
         },
-        {
-          key: 'company',
-        }
+        { key: 'company' }
       ],
       marker: `${MARKERS_URL}/crushing-icon-v2.svg`,
     },
@@ -59,10 +58,7 @@ export const logisticLayerTemplates = {
           default: 2016,
           template: template(`to_date({<%= year %>::varchar, 'yyyy') as year_date,`)
         },
-        {
-          key: 'company',
-        }
-
+        { key: 'company' }
       ],
       marker: `${MARKERS_URL}/refining-icon-v2.svg`,
     },
@@ -76,11 +72,7 @@ export const logisticLayerTemplates = {
       commodityName: 'SOY',
       color: '#F2B800',
       marker: `${MARKERS_URL}/storage-icon-v2.svg`,
-      paramsConfig: [
-        {
-          key: 'company',
-        }
-      ],
+      paramsConfig: [{ key: 'company' }],
     },
     {
       version: '0.0.1',
@@ -90,16 +82,13 @@ export const logisticLayerTemplates = {
       name: 'confirmed',
       description: 'confirmed',
       commodityName: 'BEEF',
-      hasInspectionLevel: true,
       color: '#803C8D',
       paramsConfig: [
         { key: 'subclass', value: `'CONFIRMED SLAUGHTERHOUSE'` },
-        { key: 'company' }
+        { key: 'company' },
+        { key: 'inspection_level' }
       ],
-      marker: `${MARKERS_URL}/slaughterhouse-icon-v2.svg`,
-      sql_config: [
-        { type: 'and', key: 'inspection_level', name: 'inspection' }
-      ]
+      marker: `${MARKERS_URL}/slaughterhouse-icon-v2.svg`
     },
     {
       version: '0.0.1',
@@ -109,16 +98,13 @@ export const logisticLayerTemplates = {
       name: 'probable',
       description: 'probable',
       commodityName: 'BEEF',
-      hasInspectionLevel: true,
       color: '#13A579',
       paramsConfig: [
         { key: 'subclass', value: `'PROBABLE SLAUGHTERHOUSE'` },
-        { key: 'company' }
+        { key: 'company' },
+        { key: 'inspection_level' }
      ],
-      marker: `${MARKERS_URL}/slaughterhouse-icon-v2.svg`,
-      sql_config: [
-        { type: 'and', key: 'inspection_level', name: 'inspection' }
-      ]
+      marker: `${MARKERS_URL}/slaughterhouse-icon-v2.svg`
     },
     {
       version: '0.0.1',
@@ -128,16 +114,13 @@ export const logisticLayerTemplates = {
       name: 'unconfirmed',
       description: 'unconfirmed',
       commodityName: 'BEEF',
-      hasInspectionLevel: true,
       color: '#F2B800',
       paramsConfig: [
         { key: 'subclass', value: `'UNCONFIRMED SLAUGHTERHOUSE'` },
-        { key: 'company' }
+        { key: 'company' },
+        { key: 'inspection_level' }
       ],
-      marker: `${MARKERS_URL}/slaughterhouse-icon-v2.svg`,
-      sql_config: [
-        { type: 'and', key: 'inspection_level', name: 'inspection' }
-      ]
+      marker: `${MARKERS_URL}/slaughterhouse-icon-v2.svg`
     },
     {
       version: '0.0.1',
@@ -147,33 +130,38 @@ export const logisticLayerTemplates = {
       name: 'unconfirmed (multi-functional)',
       description: 'unconfirmed (multi-functional)',
       commodityName: 'BEEF',
-      hasInspectionLevel: true,
       color: '#888',
       paramsConfig: [
         { key: 'subclass', value: `'UNCONFIRMED SLAUGHTERHOUSE'` },
-        { key: 'company' }
+        { key: 'company' },
+        { key: 'inspection_level' }
       ],
-      marker: `${MARKERS_URL}/slaughterhouse-icon-v2.svg`,
-      sql_config: [
-        { type: 'and', key: 'inspection_level', name: 'inspection' }
-      ]
+      marker: `${MARKERS_URL}/slaughterhouse-icon-v2.svg`
     }
   ]
 };
 
 export const getLogisticMapLayerTemplates = createSelector(
-  [getSelectedExporterNames],
-  (exporterNames) =>
+  [getSelectedExporterNames, getSelectedInspectionLevel],
+  (exporterNames, inspectionLevel) =>
+    console.log('sss', inspectionLevel) ||
     Object.keys(logisticLayerTemplates).map(country =>
       logisticLayerTemplates[country].map(l => {
         const sqlParams = l.paramsConfig?.map(w => {
-          if (w.key === 'company') {
-            return (exporterNames && exporterNames.length) ?
+          switch (w.key) {
+            case 'company':
+              return (exporterNames && exporterNames.length) ?
               `company IN ('${exporterNames.join("' , '")}') `
               : null;
+            case 'inspection_level':
+              return inspectionLevel
+                ? `inspection_level = '${inspectionLevel}' `
+                : null;
+            default: {
+              const value = w.value || w.default;
+              return `${w.key} = ${value}`;
+            }
           }
-          const value = w.value || w.default;
-          return `${w.key} = ${value}`;
         }).filter(Boolean);
         const sqlParamsString = sqlParams?.length ? `WHERE ${sqlParams.join(' AND ')}` : '';
         const lightColor = l.color ? chroma(l.color).alpha(0.5).css() : '#000';
