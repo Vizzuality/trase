@@ -95,7 +95,7 @@ export const logisticLayerTemplates = {
       id: 'probable_slaughterhouse',
       categoryName: 'Brazil slaughterhouses',
       sqlTable: 'slaughterhouses_2018_09_18',
-      name: 'probable',
+      name: 'probable slaughterhouses',
       description: 'probable',
       commodityName: 'BEEF',
       color: '#13A579',
@@ -111,7 +111,7 @@ export const logisticLayerTemplates = {
       id: 'unconfirmed_slaughterhouse',
       categoryName: 'Brazil slaughterhouses',
       sqlTable: 'slaughterhouses_2018_09_18',
-      name: 'unconfirmed',
+      name: 'unconfirmed slaughterhouses',
       description: 'unconfirmed',
       commodityName: 'BEEF',
       color: '#F2B800',
@@ -127,7 +127,7 @@ export const logisticLayerTemplates = {
       id: 'unconfirmed_slaughterhouse_multifunctional_facility',
       categoryName: 'Brazil slaughterhouses',
       sqlTable: 'slaughterhouses_2018_09_18',
-      name: 'unconfirmed (multi-functional)',
+      name: 'unconfirmed slaughterhouses (multi-functional)',
       description: 'unconfirmed (multi-functional)',
       commodityName: 'BEEF',
       color: '#888',
@@ -144,7 +144,6 @@ export const logisticLayerTemplates = {
 export const getLogisticMapLayerTemplates = createSelector(
   [getSelectedExporterNames, getSelectedInspectionLevel],
   (exporterNames, inspectionLevel) =>
-    console.log('sss', inspectionLevel) ||
     Object.keys(logisticLayerTemplates).map(country =>
       logisticLayerTemplates[country].map(l => {
         const sqlParams = l.paramsConfig?.map(w => {
