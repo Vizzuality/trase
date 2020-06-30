@@ -9,14 +9,14 @@ export const getInspectionLevelOptions = createSelector([getLogisticLayers], (lo
   const logisticTemplates = Object.values(logisticLayerTemplates).flat();
   const hasInspectionLevel = logisticLayers.some(l => {
     const templateLayerInfo = logisticTemplates.find(t => t.id === l.id);
-    return templateLayerInfo.hasInspectionLevel;
+    return templateLayerInfo.paramsConfig.some(k => k.key === 'inspection_level');
   });
   return hasInspectionLevel ? [
-    { label: 'All', value: 'all' },
+    { label: 'All', value: null },
     { label: 'SIF', value: 'SIF' },
     { label: 'SIE', value: 'SIE' },
     { label: 'SIM', value: 'SIM' },
-    { label: 'Unknown', value: 'Unknown' }
+    { label: 'UNKNOWN', value: 'UNKNOWN' }
   ] : null;
 });
 
