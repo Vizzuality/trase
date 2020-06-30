@@ -49,7 +49,8 @@ function DataPortal(props) {
     indicators,
     onDataDownloadFormLoaded,
     onDownloadTriggered,
-    selectedContext
+    selectedContext,
+    bulkLogisticsData
   } = props;
 
   function reducer(state, action) {
@@ -312,6 +313,7 @@ function DataPortal(props) {
       <div className="row column">
         <BulkDownloadsBlock
           contexts={enabledContexts}
+          bulkLogisticsData={bulkLogisticsData}
           enabled={DATA_DOWNLOAD_ENABLED}
           onButtonClicked={id =>
             dataPortalDispatch({ type: 'setDownloadType', payload: { type: 'bulk', id } })
@@ -359,6 +361,7 @@ DataPortal.propTypes = {
   loadDataDownloadLists: PropTypes.func.isRequired,
   autoCompleteCountries: PropTypes.string,
   enabledContexts: PropTypes.array.isRequired,
+  bulkLogisticsData: PropTypes.array.isRequired,
   consumptionCountries: PropTypes.array,
   exporters: PropTypes.array,
   indicators: PropTypes.array,
