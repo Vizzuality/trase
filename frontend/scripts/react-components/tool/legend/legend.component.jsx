@@ -41,7 +41,11 @@ function Legend(props) {
             )
           }}
         />
-        {logisticLayers && <LogisticLegend layers={logisticLayers}/>}
+        {logisticLayers && (
+          <LogisticLegend
+            layers={logisticLayers}
+          />
+        )}
         {choroplethLegend && (
           <ChoroplethLegend
             bucket={choroplethLegend.bucket}
