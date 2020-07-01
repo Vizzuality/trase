@@ -52,6 +52,12 @@
     background-color: $white;
     padding: 60px 0;
 
+    &.-banner {
+      @media only screen and (max-width: $breakpoint-foundation-small) {
+        padding: 120px 0;
+      }
+    }
+
     @media only screen and (max-width: $breakpoint-foundation-small) {
       padding: 40px 0;
     }
