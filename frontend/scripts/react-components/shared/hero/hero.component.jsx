@@ -1,7 +1,8 @@
 import React, { Suspense } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import TwitterFeed from 'react-components/home/twitter-feed/twitter-feed.component';
+import Banner from 'react-components/home/banner/banner.component';
+// import TwitterFeed from 'react-components/home/twitter-feed/twitter-feed.component';
 import AnimatedFlows from 'react-components/animated-flows/animated-flows.component';
 import Heading from 'react-components/shared/heading/heading.component';
 import InView from 'react-components/shared/in-view.component';
@@ -93,7 +94,8 @@ class Hero extends React.Component {
               )}
               {inView && (!showStory || !story) && tweets && (
                 <div className="layover">
-                  <TwitterFeed tweets={tweets} />
+                  <Banner />
+                  {/* <TwitterFeed tweets={tweets} /> */}
                 </div>
               )}
             </div>
