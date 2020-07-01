@@ -3,8 +3,7 @@ import { dataPortalActions } from 'react-components/data-portal/data-portal.regi
 import { trackDataDownloadFormLoaded, trackDownload } from 'analytics/analytics.actions';
 import {
   getDataDownloadContext,
-  getEnabledContexts,
-  getBulkLogisticsData
+  getEnabledContexts
 } from 'react-components/data-portal/data-portal.selectors';
 import DataPortal from './data-portal.component';
 
@@ -13,7 +12,6 @@ const mapStateToProps = state => ({
   selectedCommodity: state.data.commodity,
   selectedContext: getDataDownloadContext(state),
   enabledContexts: getEnabledContexts(state),
-  bulkLogisticsData: getBulkLogisticsData(),
   exporters: state.data.exporters,
   consumptionCountries: state.data.consumptionCountries,
   indicators: state.data.indicators

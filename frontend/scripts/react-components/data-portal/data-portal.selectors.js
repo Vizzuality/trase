@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect';
 import uniqBy from 'lodash/uniqBy';
-import { logisticLayerTemplates } from '../tool/mapbox-map/layers/logistic-layers';
 
 const getAppContexts = state => state.app.contexts;
 const getSelectedCountry = state => state.data.country;
@@ -12,21 +11,6 @@ const getDataPortalConsumptionCountries = state => state.data.consumptionCountri
 export const getEnabledContexts = createSelector([getAppContexts], contexts =>
   contexts.filter(elem => elem.isDisabled !== true)
 );
-
-export const getBulkLogisticsData = () => {
-  const logisticsData = [];
-  Object.keys(logisticLayerTemplates).forEach(country => {
-    logisticLayerTemplates[country].forEach(l => {
-      logisticsData.push({
-        countryName: country,
-        commodityName: l.commodityName,
-        name: l.name,
-        id: l.sqlTable
-      });
-    })
-  });
-  return logisticsData;
-}
 
 export const getCountryOptions = createSelector([getEnabledContexts], enabledContexts =>
   uniqBy(enabledContexts, context => context.countryId).map(context => ({

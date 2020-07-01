@@ -55,23 +55,9 @@ const selectedMapContextualLayers = {
   },
   parse(param) {
     return param
-    .toString()
-    .split(',')
-    .map(n => parseInt(n, 10));
-  }
-};
-
-const selectedLogisticLayers = {
-  stringify(prop, DONT_SERIALIZE) {
-    if (!prop || prop.length === 0) {
-      return DONT_SERIALIZE;
-    }
-    return prop.join(',');
-  },
-  parse(param) {
-    return param
       .toString()
       .split(',')
+      .map(n => parseInt(n, 10));
   }
 };
 
@@ -79,15 +65,13 @@ export default {
   urlPropHandlers: {
     mapView,
     selectedMapDimensions,
-    selectedMapContextualLayers,
-    selectedLogisticLayers
+    selectedMapContextualLayers
   },
   props: [
     'mapView',
     'toolLayout',
     'selectedBasemap',
     'selectedMapContextualLayers',
-    'selectedLogisticLayers',
     'selectedMapDimensions'
   ]
 };

@@ -10,7 +10,7 @@ import { fetchWithCancel } from 'utils/saga-utils';
 import { getSelectedColumnsIds } from 'react-components/tool/tool.selectors';
 import { NUM_NODES_DETAILED, NUM_NODES_EXPANDED, NUM_NODES_SUMMARY } from 'constants';
 import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
-import { getAllSelectedGeoColumns } from 'react-components/tool-layers/tool-layers.selectors';
+import { getSelectedGeoColumn } from 'react-components/tool-layers/tool-layers.selectors';
 import {
   getSelectedResizeBy,
   getSelectedRecolorBy,
@@ -183,8 +183,8 @@ export function* getToolNodesByLink(selectedContext, { fetchAllNodes } = {}) {
 }
 
 export function* getToolGeoColumnNodes(selectedContext) {
-  const geoColumns = yield select(getAllSelectedGeoColumns);
-  const params = { context_id: selectedContext.id, node_types_ids: geoColumns.map(c => c.id).join(',') };
+  const geoColumn = yield select(getSelectedGeoColumn);
+  const params = { context_id: selectedContext.id, node_types_ids: geoColumn?.id };
   if (!params.node_types_ids) {
     return;
   }

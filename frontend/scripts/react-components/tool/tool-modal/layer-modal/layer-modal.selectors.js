@@ -5,26 +5,15 @@ import {
   getSelectedMapDimensionsUids,
   getSelectedGeoColumn
 } from 'react-components/tool-layers/tool-layers.selectors';
-import { getSelectedContext } from 'app/app.selectors';
-import { logisticLayerTemplates } from 'react-components/tool/mapbox-map/layers/logistic-layers';
 
 const getMapContextualLayers = state => state.toolLayers.data.mapContextualLayers;
 const getMapDimensions = state => state.toolLayers.data.mapDimensions;
 const getMapDimensionGroups = state => state.toolLayers.data.mapDimensionsGroups;
 const getSelectedMapContextualLayers = state => state.toolLayers.selectedMapContextualLayers;
-const getSelectedMapLogisticLayers = state => state.toolLayers.selectedLogisticLayers;
-
-export const getLogisticLayers = createSelector(
-  [getSelectedContext],
-  (selectedContext) => {
-    if (!selectedContext || !logisticLayerTemplates[selectedContext.countryName]) return null;
-    return logisticLayerTemplates[selectedContext.countryName].filter(l => l.commodityName === selectedContext.commodityName);
-  }
-);
 
 export const getLayers = createSelector(
-  [getMapContextualLayers, getMapDimensions, getMapDimensionGroups, getSelectedGeoColumn, getLogisticLayers],
-  (mapContextualLayers, mapDimensions, mapDimensionsGroups, selectedGeoColumn, logisticLayers) => {
+  [getMapContextualLayers, getMapDimensions, getMapDimensionGroups, getSelectedGeoColumn],
+  (mapContextualLayers, mapDimensions, mapDimensionsGroups, selectedGeoColumn) => {
     const unitLayers = [];
     mapDimensionsGroups.forEach(group => {
       unitLayers.push({
@@ -42,21 +31,15 @@ export const getLayers = createSelector(
         ...layer,
         name: layer.title,
         description: layer.tooltipText
-      })),
-      [LAYER_TAB_NAMES.logistic]: logisticLayers
+      }))
     };
   }
 );
 
 export const getSelectedLayerIds = createSelector(
-  [
-    getSelectedMapDimensionsUids,
-    getSelectedMapContextualLayers,
-    getSelectedMapLogisticLayers
-  ],
-  (selectedMapDimensions, selectedMapContextualLayers, selectedMapLogisticLayers) => ({
+  [getSelectedMapDimensionsUids, getSelectedMapContextualLayers],
+  (selectedMapDimensions, selectedMapContextualLayers) => ({
     [LAYER_TAB_NAMES.unit]: selectedMapDimensions.filter(Boolean),
-    [LAYER_TAB_NAMES.contextual]: selectedMapContextualLayers,
-    [LAYER_TAB_NAMES.logistic]: selectedMapLogisticLayers
+    [LAYER_TAB_NAMES.contextual]: selectedMapContextualLayers
   })
 );
