@@ -7,6 +7,7 @@ import cx from 'classnames';
 import './dropdown.scss';
 import './dropdown-nav.variant.scss';
 import './dropdown-sentence.variant.scss';
+import './dropdown-legend.variant.scss';
 import './dropdown-column.variant.scss';
 import './dropdown-panel.variant.scss';
 import './dropdown-bordered.variant.scss';

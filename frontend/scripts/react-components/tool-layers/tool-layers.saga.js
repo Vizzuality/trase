@@ -1,4 +1,5 @@
 import { all, fork, takeLatest, select, put, call } from 'redux-saga/effects';
+import pick from 'lodash/pick';
 import {
   TOOL_LINKS__GET_COLUMNS,
   TOOL_LINKS__SET_SELECTED_NODES,
@@ -6,16 +7,30 @@ import {
   TOOL_LINKS__SELECT_COLUMN,
   TOOL_LINKS__SET_SELECTED_NODES_BY_SEARCH
 } from 'react-components/tool-links/tool-links.actions';
+import {
+  TOOL_LAYERS__SET_MAP_DIMENSIONS
+} from 'react-components/tool-layers/tool-layers.actions';
 import { nodesPanelActions } from 'react-components/nodes-panel/nodes-panel.register';
 import { appActions } from 'app/app.register';
 import {
   SELECT_YEARS,
   loadMapChoropleth,
   SET_NODE_ATTRIBUTES,
-  TOGGLE_MAP_DIMENSION
+  TOGGLE_MAP_DIMENSION,
+  SELECT_UNIT_LAYERS,
+  selectContextualLayers,
+  selectUnitLayers,
+  selectLogisticLayers
 } from 'react-components/tool/tool.actions';
+import {
+  getSelectedGeoColumn,
+  getSelectedMapDimensionsUids
+} from 'react-components/tool-layers/tool-layers.selectors';
 import { getSelectedYears, getSelectedContext } from 'app/app.selectors';
-import { getLinkedGeoIds, getMapDimensions } from './tool-layers.fetch.saga';
+import {
+  NODES_PANEL__FINISH_SELECTION,
+} from 'react-components/nodes-panel/nodes-panel.actions';
+import { getLinkedGeoIds, getMapDimensions, getUnitLayerData } from './tool-layers.fetch.saga';
 
 function* fetchLinkedGeoIds() {
   function* getGeoIds() {
@@ -67,7 +82,78 @@ function* fetchMapDimensions() {
   );
 }
 
+function* fetchUnitLayerData() {
+  function* performFetch() {
+    const state = yield select();
+    const { toolLayers } = state;
+    const { data } = toolLayers;
+    const selectedMapDimensions = getSelectedMapDimensionsUids(state);
+
+    const unitIndicators = data.mapDimensions;
+    const selectedGeoColumn = yield select(getSelectedGeoColumn);
+
+    if (selectedMapDimensions) {
+      const selectedContext = yield select(getSelectedContext);
+
+      const selectedUnitIndicators = pick(unitIndicators, selectedMapDimensions);
+      const selectedUnitIndicatorIds = Object.values(selectedUnitIndicators).map(
+        value => value.attributeId
+      );
+      if (selectedContext && selectedUnitIndicatorIds && selectedUnitIndicatorIds.length && selectedGeoColumn) {
+        const params = {
+          iso2: selectedContext.worldMap.geoId,
+          selectedUnitIndicatorIds,
+          selectedGeoColumnId: selectedGeoColumn.id
+        };
+        yield call(getUnitLayerData, params);
+      }
+    }
+  }
+
+  yield takeLatest(
+    [
+      TOOL_LINKS__SELECT_COLUMN,
+      TOOL_LAYERS__SET_MAP_DIMENSIONS,
+      SELECT_UNIT_LAYERS
+    ],
+    performFetch
+  );
+}
+
+function* resetContextLayers() {
+  const previousContext = { countryId: null, commodityId: null };
+
+  function* performReset() {
+    const { contexts } = yield select(state => state.app);
+    const { countries, commodities } = yield select(state => state.nodesPanel);
+    const context = contexts.find(
+      ctx =>
+      ctx.countryId === countries.draftSelectedNodeId &&
+      ctx.commodityId === commodities.draftSelectedNodeId
+    );
+
+    if (
+      countries.draftSelectedNodeId !== previousContext.countryId ||
+      commodities.draftSelectedNodeId !== previousContext.commodityId
+    ) {
+        yield put(selectContextualLayers([]));
+        yield put(selectLogisticLayers([]));
+        yield put(selectUnitLayers([]));
+      }
+    // we update the previous context
+    previousContext.countryId = context.countryId;
+    previousContext.commodityId = context.commodityId;
+  }
+
+  yield takeLatest(
+    [
+      NODES_PANEL__FINISH_SELECTION
+    ],
+    performReset
+  );
+}
+
 export default function* toolLayersSaga() {
-  const sagas = [fetchMapDimensions, fetchLinkedGeoIds];
+  const sagas = [fetchMapDimensions, fetchLinkedGeoIds, fetchUnitLayerData, resetContextLayers];
   yield all(sagas.map(saga => fork(saga)));
 }
