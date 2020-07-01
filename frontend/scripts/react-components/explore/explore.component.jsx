@@ -293,7 +293,7 @@ function Explore(props) {
 }
 
 Explore.propTypes = {
-  items: PropTypes.object,
+  items: PropTypes.array,
   commodities: PropTypes.array,
   countries: PropTypes.array,
   commodity: PropTypes.object,

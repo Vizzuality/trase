@@ -129,12 +129,12 @@ shared_context 'api v3 paraguay department place profile' do
   let!(:api_v3_department_indicators_table) do
     chart = Api::V3::Chart.where(
       profile_id: api_v3_paraguay_department_place_profile.id,
-      identifier: :place_indicators_table
+      identifier: :place_indicators
     ).first
     chart || FactoryBot.create(
       :api_v3_chart,
       profile: api_v3_paraguay_department_place_profile,
-      identifier: :place_indicators_table,
+      identifier: :place_indicators,
       position: 1,
       title: 'Sustainability indicators'
     )

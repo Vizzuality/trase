@@ -11,15 +11,17 @@
   <h3>Previous updates:</h3>
   <table class="index_table">
     <thead>
-      <th class="col" style="width:7%">Started</th>
-      <th class="col" style="width:7%">Finished</th>
-      <th class="col" style="width:5%">Status</th>
-      <th class="col" style="width:35%">Stats (for FINISHED updates)</th>
-      <th class="col">Error (for FAILED updates)</th>
+      <th class="col">Filename</th>
+      <th class="col">Started</th>
+      <th class="col">Finished</th>
+      <th class="col">Status</th>
+      <th class="col" style="width:30%">Stats (for FINISHED updates)</th>
+      <th class="col" style="width:30%">Error (for FAILED updates)</th>
     </thead>
     <tbody>
       <% database_updates.each do |du| %>
         <tr>
+          <td><%= du.filename %></td>
           <td><%= du.created_at %></td>
           <td><%= du.finished_at %></td>
           <td><%= du.status %></td>

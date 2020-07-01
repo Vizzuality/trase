@@ -43,6 +43,11 @@ let nav = [
     external: true
   },
   {
+    name: 'Finance',
+    page: 'https://trase.finance',
+    external: true
+  },
+  {
     name: 'Yearbook',
     page: `https://yearbook2018.${
       window.location.hostname === 'staging.trase.earth' ? window.location.hostname : 'trase.earth'

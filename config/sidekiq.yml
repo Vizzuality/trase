@@ -2,3 +2,4 @@
 :concurrency: <%= ENV['RAILS_MAX_THREADS'] || 5 %>
 :queues:
   - database
+  - external_apis

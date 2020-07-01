@@ -9,7 +9,7 @@ module Api
         # @option profile_options [String] profile_type
         # @option profile_options [String] chart_identifier
         def initialize(context, node, year, profile_options)
-          super([context], node, year, profile_options.merge(context: context))
+          super([context], node, year, profile_options)
           @context = context
         end
 

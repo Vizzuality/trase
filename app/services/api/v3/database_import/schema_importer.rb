@@ -18,7 +18,7 @@ module Api
         private
 
         def download_from_s3(_options = {})
-          Api::V3::S3Downloader.instance.call(@s3_filename, @local_filename)
+          S3::Downloader.instance.call(@s3_filename, @local_filename)
           Rails.logger.debug 'Schema downloaded'
         end
 

@@ -54,11 +54,13 @@ module Api
             Api::V3::ContextNodeType.
               joins(:context).
               includes(:context_node_type_property).
+              references(:context_node_type_property).
               where(
                 'contexts.country_id' => card.country_id,
                 'contexts.commodity_id' => card.commodity_id,
                 node_type_id: card.node_types_ids
-              )
+              ).
+              where('context_node_type_properties.is_visible')
           end.flatten.uniq
 
           # sankey_card_link_node_type_ids =

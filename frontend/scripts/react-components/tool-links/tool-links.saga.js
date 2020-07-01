@@ -21,7 +21,8 @@ import {
   TOOL_LINKS_RESET_SANKEY,
   setToolFlowsLoading,
   selectView,
-  setToolChartsLoading
+  setToolChartsLoading,
+  selectColumn
 } from './tool-links.actions';
 import {
   getToolColumnsData,
@@ -209,6 +210,30 @@ function* fetchMissingLockedNodes() {
   yield takeLatest([TOOL_LINKS__SET_NODES], performFetch);
 }
 
+function* selectSavedTabColumns() {
+  function* performSelect() {
+    const state = yield select();
+    const { toolLinks, nodesPanel } = state;
+    const { sources, exporters, importers, destinations } = nodesPanel;
+    const panelsWithTabs = [sources, exporters, importers, destinations];
+
+    yield all(panelsWithTabs.map(panel => {
+      const { savedTabs: panelSavedTabs, savedActiveTab: panelSavedActiveTab } = panel;
+      if (panelSavedActiveTab) {
+        const tab = panelSavedTabs.find(t => t.id === panelSavedActiveTab);
+        const tabName = tab?.name;
+        const column = toolLinks.data.columns && Object.values(toolLinks.data.columns).find(c => c.name === tabName);
+        if (column) {
+          return put(selectColumn(column.group, column.id, column.role, true));
+        }
+      }
+      return null;
+    }));
+  }
+
+  yield takeLatest([nodesPanelActions.NODES_PANEL__SAVE], performSelect);
+}
+
 export default function* toolLinksSaga() {
   const sagas = [
     fetchLinks,
@@ -217,7 +242,8 @@ export default function* toolLinksSaga() {
     fetchMissingLockedNodes,
     fetchToolGeoColumnNodes,
     checkForceOverviewOnCollapse,
-    checkForceOverviewOnExpand
+    checkForceOverviewOnExpand,
+    selectSavedTabColumns
   ];
   yield all(sagas.map(saga => fork(saga)));
 }

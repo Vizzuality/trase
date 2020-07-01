@@ -32,8 +32,6 @@ module Api
 
       def include_countries
         @query = @query.select(
-          :commodity_id,
-          'commodities.name',
           'ARRAY_AGG(contexts.country_id) AS country_ids'
         )
 

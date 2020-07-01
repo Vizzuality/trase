@@ -18,6 +18,11 @@ import Sankey from 'react-components/tool/sankey/sankey.component';
 import { toolLinksActions } from 'react-components/tool-links/tool-links.register';
 import { getSelectedMapDimensionsData } from 'react-components/tool-layers/tool-layers.selectors';
 
+// Links and Nodes flow
+// Links in the sankey are requested on the getToolLinksData fetch saga (flows endpoint)
+// The links are filtered by the selected node which is imported as an expanded node from the nodesPanel (see getExpandedAndExcludedNodes in nodes-panel.selectors)
+// This links contain the nodes on their path attribute and we fetch these nodes information afterwards to be able to show it (getToolNodesByLink)
+
 const mapStateToProps = state => ({
   links: getSankeyLinks(state),
   toolColumns: getToolColumns(state),

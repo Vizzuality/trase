@@ -165,6 +165,9 @@ module Api
 
         def refresh_precomputed_downloads_later
           Api::V3::Download::PrecomputedDownload.refresh_later
+          unless Rails.env.development? || Rails.env.test?
+            MapAttributesExportWorker.perform_async
+          end
         end
 
         def refresh_attributes_years

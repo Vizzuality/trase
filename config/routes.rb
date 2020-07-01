@@ -62,8 +62,14 @@ Rails.application.routes.draw do
       end
 
       get 'country_profiles/:id/basic_attributes', to: 'country_profiles#basic_attributes'
+      get 'country_profiles/:id/commodity_exports', to: 'country_profiles#commodity_exports'
+      get 'country_profiles/:id/commodity_imports', to: 'country_profiles#commodity_imports'
       get 'country_profiles/:id/top_consumer_actors', to: 'country_profiles#top_consumer_actors'
       get 'country_profiles/:id/top_consumer_countries', to: 'country_profiles#top_consumer_countries'
+      get 'country_profiles/:id/indicators', to: 'country_profiles#indicators'
+      get 'country_profiles/:id/trajectory_deforestation', to: 'country_profiles#trajectory_deforestation'
+      get 'country_profiles/:id/trajectory_import', to: 'country_profiles#trajectory_import'
+      get 'map_layers_data', to: 'map_layers#data'
 
       resources :newsletter_subscriptions, only: [:create]
       resource :database_validation, controller: :database_validation,

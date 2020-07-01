@@ -2,7 +2,12 @@ ActiveAdmin.register_page 'Database Export' do
   menu parent: 'Database', priority: 1
 
   content do
-    database_versions = Api::V3::S3ObjectList.instance.call({})
+    database_versions = S3::ObjectList.instance.call(
+      exclude: [
+        Api::V3::DatabaseUpdate::S3_PREFIX,
+        Api::V3::MapAttributesExport::S3_PREFIX
+      ]
+    )
     keys = database_versions.map { |n| n[:key] }.uniq
 
     database_versions.keep_if { |v| v[:key].eql? params[:key] } if params[:key].present?

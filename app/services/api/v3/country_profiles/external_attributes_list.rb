@@ -4,59 +4,41 @@ module Api
       class ExternalAttributesList
         include Singleton
 
-        # @param attribute_refs [Array<Hash>]
-        # e.g. [{source: :wb, id: 'WB SP.POP.TOTL'}]
-        def call(attribute_refs)
-          attribute_refs.map do |ref|
-            if ref[:source] == :wb
-              WB_ATTRIBUTES[ref[:id]]
+        # @param attribute_ref [String]
+        # e.g. wb.population.rank, com_trade.quantity.value
+        # @param substitutions [Hash]
+        # @param substitutions [String] :from
+        # @param substitutions [String] :to
+        def call(attribute_ref, substitutions = {})
+          attribute_ref_parts = attribute_ref.split('.').map(&:to_sym)
+          source = attribute_ref_parts.shift
+          list =
+            if source == :wb
+              wb_attributes
             else
-              COMTRADE_ATTRIBUTES[ref[:id]]
+              com_trade_attributes
+            end
+          short_name = attribute_ref_parts.shift
+          attribute_def = list[short_name]
+          if substitutions.any?
+            substitutions.each do |from, to|
+              re = /%{#{from}}/
+              attribute_def = attribute_def.merge({
+                name: attribute_def[:name].gsub(re, to),
+                tooltip: attribute_def[:tooltip].gsub(re, to)
+              })
             end
           end
+          attribute_def
         end
 
+        def com_trade_attributes
+          Api::V3::CountriesComTradeIndicators::IndicatorsList::ATTRIBUTES
+        end
 
-        WB_ATTRIBUTES = {
-          'SP.POP.TOTL' => {
-            name: 'Population',
-            suffix: 'people',
-            tooltip: 'Population, total'
-          },
-          'NY.GDP.MKTP.CD' => {
-            name: 'GDP',
-            prefix: '$',
-            tooltip: 'GDP (current US$)'
-          },
-          'AG.LND.TOTL.K2' => {
-            name: 'Land area',
-            suffix: 'km2',
-            tooltip: 'Land area (sq. km)'
-          },
-          'AG.LND.AGRI.K2' => {
-            name: 'Agricultural land area',
-            suffix: 'km2',
-            tooltip: 'Agricultural land (sq. km)'
-          },
-          'AG.LND.FRST.K2' => {
-            name: 'Forested land area',
-            suffix: 'km2',
-            tooltip: 'Forest area (sq. km)'
-          }
-        }.freeze
-
-        COMTRADE_ATTRIBUTES = {
-          'trade_value' => {
-            name: 'Value of agricultural #{trade_flow}s',
-            prefix: '$',
-            tooltip: 'TODO'
-          },
-          'netweight' => {
-            name: 'Netweight',
-            suffix: 'kg',
-            tooltip: 'TODO'
-          }
-        }.freeze
+        def wb_attributes
+          Api::V3::CountriesWbIndicators::IndicatorsList::ATTRIBUTES
+        end
       end
     end
   end

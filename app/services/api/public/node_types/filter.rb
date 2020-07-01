@@ -22,20 +22,6 @@ module Api
         end
 
         def initialize_query
-# SELECT
-#   countries.iso2 AS country,
-#   commodities.name AS commodity,
-#   JSONB_AGG(JSONB_BUILD_OBJECT(
-#       'name', node_types.name,
-#       'role', cnt_props.role
-#   ) ORDER BY cnt.column_position)
-# FROM context_node_types cnt
-# JOIN node_types ON cnt.node_type_id = node_types.id
-# JOIN context_node_type_properties cnt_props ON cnt.id = cnt_props.context_node_type_id
-# JOIN contexts ON cnt.context_id = contexts.id
-# JOIN countries ON contexts.country_id = countries.id
-# JOIN commodities ON contexts.commodity_id = commodities.id
-# GROUP BY countries.iso2, commodities.name
           @query = Api::V3::ContextNodeType.
             joins(
               :node_type,
@@ -53,6 +39,7 @@ module Api
                 ORDER BY column_position
               ) AS node_types"
             ]).
+            where('context_node_type_properties.is_visible').
             group('contexts_mv.iso2, contexts_mv.commodity_name')
         end
 

@@ -83,7 +83,7 @@ const Home = props => {
   );
 
   const sliders = (
-    <div className="sliders">
+    <div className="sliders -banner">
       <Suspense fallback={null}>
         <NewsletterForm />
       </Suspense>

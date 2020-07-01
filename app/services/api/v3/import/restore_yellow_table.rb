@@ -45,7 +45,7 @@ module Api
             DELETE FROM #{@backup_table}
             USING (#{subquery_for_delete}) updated_identifiers
             WHERE #{@backup_table}.id = updated_identifiers.id
-            AND #{where_conditions.join(' AND ')}
+            AND #{where_conditions.join(' OR ')}
           SQL
           @table_class.connection.execute stmt
         end
@@ -61,7 +61,7 @@ module Api
               LEFT JOIN #{fk[:table_class].key_backup_table} #{table_alias}
               ON #{table_alias}.id = t.#{fk[:name]}
             SQL
-            delete_where_conditions << "new_#{fk[:name]} IS NULL" # no nullable columns
+            delete_where_conditions << "#{@backup_table}.#{fk[:name]} IS NOT NULL AND new_#{fk[:name]} IS NULL" # no nullable columns
           end
 
           subquery_for_delete = <<~SQL

@@ -104,6 +104,7 @@ module Api
             ).
             joins(context_node_types: :context_node_type_property).
             where('context_node_types.context_id' => @context.id).
+            where('context_node_type_properties.is_visible').
             order('context_node_types.column_position ASC')
           @errors << 'No node types for context' unless @node_types.any?
         end
@@ -273,7 +274,7 @@ module Api
               other[:count] += 1
             end
           end
-          result
+          [result, other]
         end
 
         def flows_totals_per_node(position)

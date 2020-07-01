@@ -3,6 +3,12 @@
 $width-small: 30px;
 $width-large: 60px;
 
+.-is-legacy-browser .c-shrinking-spinner {
+  display: block;
+  margin: 0;
+  transform: translateY(30px);
+}
+
 .c-shrinking-spinner {
   position: relative;
   margin: 0 auto;

@@ -1,6 +1,8 @@
 module Api
   module V3
     class MapLayersController < ApiController
+      skip_before_action :load_context, only: :data
+
       def index
         ensure_required_param_present(:start_year)
         set_start_end_year
@@ -40,6 +42,10 @@ module Api
 
         render json: serialized_layer_groups.merge(serialized_layers).
           merge(serialized_contextual_layers)
+      end
+
+      def data
+        redirect_to Api::V3::MapAttributesExport.new.public_url
       end
 
       private

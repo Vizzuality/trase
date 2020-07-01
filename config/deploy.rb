@@ -1,5 +1,5 @@
 # config valid for current version and patch releases of Capistrano
-lock '~> 3.12.0'
+lock '~> 3.14.0'
 
 set :application, 'trase'
 set :repo_url, 'git@github.com:Vizzuality/trase.git'
@@ -21,7 +21,7 @@ set :deploy_to, '/var/www/trase'
 # set :pty, true
 
 # Default value for :linked_files is []
-append :linked_files, '.env', 'frontend/.env', 'frontend/dist/robots.txt'
+append :linked_files, '.env', 'frontend/.env', 'frontend/dist/robots.txt', 'db/commodity_codes.csv'
 
 # Default value for linked_dirs is []
 append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/system', 'public/downloads', 'vendor/bundle'
@@ -65,7 +65,7 @@ after 'deploy:starting', 'sidekiq:quiet'
 after 'deploy:reverted', 'sidekiq:restart'
 after 'deploy:published', 'sidekiq:restart'
 after 'sidekiq:restart', 'downloads:refresh'
-after 'deploy:updated', 'newrelic:notice_deployment'
+# after 'deploy:updated', 'newrelic:notice_deployment'
 
 namespace :yarn do
   after 'yarn:install', 'yarn:build'

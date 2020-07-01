@@ -1865,6 +1865,7 @@ CREATE TABLE public.context_node_type_properties (
     role character varying NOT NULL,
     prefix text NOT NULL,
     geometry_context_node_type_id integer,
+    is_visible boolean DEFAULT true NOT NULL,
     CONSTRAINT context_node_type_properties_role_check CHECK (((role)::text = ANY (ARRAY[('source'::character varying)::text, ('exporter'::character varying)::text, ('importer'::character varying)::text, ('destination'::character varying)::text])))
 );
 
@@ -1916,6 +1917,13 @@ COMMENT ON COLUMN public.context_node_type_properties.prefix IS 'Used to constru
 --
 
 COMMENT ON COLUMN public.context_node_type_properties.geometry_context_node_type_id IS 'Use for geo columns, when geometry is to be taken from another node type (e.g. logistics hub -> municipality)';
+
+
+--
+-- Name: COLUMN context_node_type_properties.is_visible; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.context_node_type_properties.is_visible IS 'When set, show this node type in sankey & dashboards';
 
 
 --
@@ -2206,7 +2214,7 @@ COMMENT ON TABLE public.profiles IS 'Context-specific profiles';
 -- Name: COLUMN profiles.name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.profiles.name IS 'Profile name, either actor or place. One of restricted set of values.';
+COMMENT ON COLUMN public.profiles.name IS 'Profile name, either actor, place or country.';
 
 
 --
@@ -2392,6 +2400,77 @@ ALTER SEQUENCE public.contextual_layers_id_seq OWNED BY public.contextual_layers
 
 
 --
+-- Name: countries_com_trade_aggregated_indicators; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.countries_com_trade_aggregated_indicators (
+    quantity double precision,
+    value double precision,
+    quantity_rank integer,
+    value_rank integer,
+    commodity_id integer NOT NULL,
+    year smallint NOT NULL,
+    iso2 text NOT NULL,
+    activity text NOT NULL
+);
+
+
+--
+-- Name: countries_com_trade_indicators; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.countries_com_trade_indicators (
+    "false" bigint NOT NULL,
+    raw_quantity double precision,
+    quantity double precision,
+    value double precision,
+    commodity_id integer,
+    year smallint,
+    iso3 text,
+    iso2 text,
+    commodity_code text,
+    activity text,
+    updated_at timestamp with time zone NOT NULL
+);
+
+
+--
+-- Name: countries_com_trade_aggregated_indicators_v; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.countries_com_trade_aggregated_indicators_v AS
+ SELECT sum(countries_com_trade_indicators.quantity) AS quantity,
+    sum(countries_com_trade_indicators.value) AS value,
+    rank() OVER (PARTITION BY countries_com_trade_indicators.year, countries_com_trade_indicators.commodity_id, countries_com_trade_indicators.activity ORDER BY (sum(countries_com_trade_indicators.quantity)) DESC) AS quantity_rank,
+    rank() OVER (PARTITION BY countries_com_trade_indicators.year, countries_com_trade_indicators.commodity_id, countries_com_trade_indicators.activity ORDER BY (sum(countries_com_trade_indicators.value)) DESC) AS value_rank,
+    countries_com_trade_indicators.commodity_id,
+    countries_com_trade_indicators.year,
+    countries_com_trade_indicators.iso2,
+    countries_com_trade_indicators.activity
+   FROM public.countries_com_trade_indicators
+  GROUP BY countries_com_trade_indicators.commodity_id, countries_com_trade_indicators.year, countries_com_trade_indicators.iso2, countries_com_trade_indicators.activity;
+
+
+--
+-- Name: countries_com_trade_indicators_false_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.countries_com_trade_indicators_false_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: countries_com_trade_indicators_false_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.countries_com_trade_indicators_false_seq OWNED BY public.countries_com_trade_indicators."false";
+
+
+--
 -- Name: countries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -2408,6 +2487,42 @@ CREATE SEQUENCE public.countries_id_seq
 --
 
 ALTER SEQUENCE public.countries_id_seq OWNED BY public.countries.id;
+
+
+--
+-- Name: countries_wb_indicators; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.countries_wb_indicators (
+    id bigint NOT NULL,
+    iso3 text NOT NULL,
+    year integer NOT NULL,
+    name text NOT NULL,
+    value double precision NOT NULL,
+    rank integer NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    iso2 text NOT NULL
+);
+
+
+--
+-- Name: countries_wb_indicators_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.countries_wb_indicators_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: countries_wb_indicators_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.countries_wb_indicators_id_seq OWNED BY public.countries_wb_indicators.id;
 
 
 --
@@ -3734,6 +3849,7 @@ CREATE TABLE public.database_updates (
     jid text,
     status text DEFAULT 'STARTED'::text NOT NULL,
     error text,
+    filename text,
     CONSTRAINT database_updates_status_check CHECK ((status = ANY (ARRAY['STARTED'::text, 'FINISHED'::text, 'FAILED'::text])))
 );
 
@@ -4196,6 +4312,37 @@ CREATE SEQUENCE public.download_versions_id_seq
 --
 
 ALTER SEQUENCE public.download_versions_id_seq OWNED BY public.download_versions.id;
+
+
+--
+-- Name: external_api_updates; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.external_api_updates (
+    id bigint NOT NULL,
+    name text NOT NULL,
+    last_update timestamp without time zone NOT NULL,
+    resource_name text
+);
+
+
+--
+-- Name: external_api_updates_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.external_api_updates_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: external_api_updates_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.external_api_updates_id_seq OWNED BY public.external_api_updates.id;
 
 
 --
@@ -5025,6 +5172,92 @@ COMMENT ON COLUMN public.map_attributes_mv.context_id IS 'References the context
 
 
 --
+-- Name: node_quants; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.node_quants (
+    id integer NOT NULL,
+    node_id integer NOT NULL,
+    quant_id integer NOT NULL,
+    year integer,
+    value double precision NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: TABLE node_quants; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.node_quants IS 'Values of quants for node';
+
+
+--
+-- Name: COLUMN node_quants.year; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quants.year IS 'Year; empty (NULL) for all years';
+
+
+--
+-- Name: COLUMN node_quants.value; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.node_quants.value IS 'Numeric value';
+
+
+--
+-- Name: map_attributes_values_v; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.map_attributes_values_v AS
+ WITH nodes AS (
+         SELECT nodes_1.id,
+            nodes_1.node_type_id,
+            nodes_1.geo_id,
+            countries.iso2
+           FROM (public.nodes nodes_1
+             JOIN public.countries ON ((upper(countries.iso2) = upper("substring"(nodes_1.geo_id, 1, 2)))))
+          WHERE ((NOT nodes_1.is_unknown) AND (nodes_1.geo_id IS NOT NULL) AND (split_part(nodes_1.geo_id, '-'::text, 2) <> 'TRADER'::text))
+        UNION
+         SELECT DISTINCT nodes_1.id,
+            nodes_1.node_type_id,
+            nodes_1.geo_id,
+            countries.iso2
+           FROM (((public.nodes nodes_1
+             JOIN ( SELECT DISTINCT flow_nodes.node_id,
+                    flow_nodes.context_id
+                   FROM public.flow_nodes) fn ON ((fn.node_id = nodes_1.id)))
+             JOIN public.contexts ON ((fn.context_id = contexts.id)))
+             JOIN public.countries ON ((countries.id = contexts.country_id)))
+          WHERE ((NOT nodes_1.is_unknown) AND (nodes_1.geo_id IS NOT NULL) AND (split_part(nodes_1.geo_id, '-'::text, 2) <> 'TRADER'::text))
+        ), node_attributes AS (
+         SELECT attributes.id AS attribute_id,
+            node_quants.node_id,
+            node_quants.year,
+            node_quants.value
+           FROM (public.node_quants
+             JOIN public.attributes ON (((attributes.original_id = node_quants.quant_id) AND (attributes.original_type = 'Quant'::text))))
+        UNION ALL
+         SELECT attributes.id AS attribute_id,
+            node_inds.node_id,
+            node_inds.year,
+            node_inds.value
+           FROM (public.node_inds
+             JOIN public.attributes ON (((attributes.original_id = node_inds.ind_id) AND (attributes.original_type = 'Ind'::text))))
+        )
+ SELECT DISTINCT node_attributes.attribute_id,
+    node_attributes.node_id,
+    node_attributes.year,
+    (nodes.node_type_id)::smallint AS node_type_id,
+    node_attributes.value,
+    nodes.geo_id,
+    nodes.iso2
+   FROM (node_attributes
+     JOIN nodes ON ((nodes.id = node_attributes.node_id)));
+
+
+--
 -- Name: map_inds_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -5152,41 +5385,6 @@ CREATE SEQUENCE public.node_quals_id_seq
 --
 
 ALTER SEQUENCE public.node_quals_id_seq OWNED BY public.node_quals.id;
-
-
---
--- Name: node_quants; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.node_quants (
-    id integer NOT NULL,
-    node_id integer NOT NULL,
-    quant_id integer NOT NULL,
-    year integer,
-    value double precision NOT NULL,
-    created_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: TABLE node_quants; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.node_quants IS 'Values of quants for node';
-
-
---
--- Name: COLUMN node_quants.year; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_quants.year IS 'Year; empty (NULL) for all years';
-
-
---
--- Name: COLUMN node_quants.value; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.node_quants.value IS 'Numeric value';
 
 
 --
@@ -5448,6 +5646,1638 @@ PARTITION BY LIST (context_id);
 
 
 --
+-- Name: partitioned_denormalised_flow_inds_1; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_1 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_1 FOR VALUES IN (1);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_19; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_19 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_19 FOR VALUES IN (19);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_2; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_2 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_2 FOR VALUES IN (2);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_35; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_35 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_35 FOR VALUES IN (35);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_37; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_37 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_37 FOR VALUES IN (37);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_38; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_38 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_38 FOR VALUES IN (38);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_39; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_39 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_39 FOR VALUES IN (39);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_4; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_4 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_4 FOR VALUES IN (4);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_40; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_40 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_40 FOR VALUES IN (40);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_42; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_42 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_42 FOR VALUES IN (42);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_43; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_43 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_43 FOR VALUES IN (43);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_44; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_44 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_44 FOR VALUES IN (44);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_45; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_45 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_45 FOR VALUES IN (45);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_46; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_46 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_46 FOR VALUES IN (46);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_47; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_47 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_47 FOR VALUES IN (47);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_48; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_48 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_48 FOR VALUES IN (48);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_49; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_49 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_49 FOR VALUES IN (49);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_5; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_5 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_5 FOR VALUES IN (5);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_50; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_50 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_50 FOR VALUES IN (50);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_51; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_51 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_51 FOR VALUES IN (51);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_52; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_52 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_52 FOR VALUES IN (52);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_53; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_53 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_53 FOR VALUES IN (53);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_54; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_54 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_54 FOR VALUES IN (54);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_55; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_55 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_55 FOR VALUES IN (55);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_56; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_56 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_56 FOR VALUES IN (56);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_57; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_57 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_57 FOR VALUES IN (57);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_58; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_58 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_58 FOR VALUES IN (58);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_59; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_59 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_59 FOR VALUES IN (59);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_6; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_6 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_6 FOR VALUES IN (6);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_60; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_60 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_60 FOR VALUES IN (60);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_61; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_61 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_61 FOR VALUES IN (61);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_7; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_inds_7 (
+    context_id integer,
+    ind_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_inds ATTACH PARTITION public.partitioned_denormalised_flow_inds_7 FOR VALUES IN (7);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_1; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_1 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_1 FOR VALUES IN (1);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_19; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_19 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_19 FOR VALUES IN (19);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_2; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_2 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_2 FOR VALUES IN (2);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_35; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_35 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_35 FOR VALUES IN (35);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_37; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_37 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_37 FOR VALUES IN (37);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_38; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_38 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_38 FOR VALUES IN (38);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_39; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_39 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_39 FOR VALUES IN (39);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_4; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_4 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_4 FOR VALUES IN (4);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_40; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_40 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_40 FOR VALUES IN (40);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_42; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_42 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_42 FOR VALUES IN (42);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_43; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_43 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_43 FOR VALUES IN (43);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_44; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_44 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_44 FOR VALUES IN (44);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_45; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_45 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_45 FOR VALUES IN (45);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_46; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_46 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_46 FOR VALUES IN (46);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_47; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_47 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_47 FOR VALUES IN (47);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_48; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_48 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_48 FOR VALUES IN (48);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_49; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_49 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_49 FOR VALUES IN (49);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_5; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_5 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_5 FOR VALUES IN (5);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_50; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_50 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_50 FOR VALUES IN (50);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_51; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_51 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_51 FOR VALUES IN (51);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_52; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_52 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_52 FOR VALUES IN (52);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_53; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_53 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_53 FOR VALUES IN (53);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_54; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_54 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_54 FOR VALUES IN (54);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_55; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_55 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_55 FOR VALUES IN (55);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_56; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_56 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_56 FOR VALUES IN (56);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_57; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_57 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_57 FOR VALUES IN (57);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_58; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_58 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_58 FOR VALUES IN (58);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_59; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_59 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_59 FOR VALUES IN (59);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_6; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_6 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_6 FOR VALUES IN (6);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_60; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_60 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_60 FOR VALUES IN (60);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_61; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_61 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_61 FOR VALUES IN (61);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_7; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quals_7 (
+    context_id integer,
+    qual_id integer,
+    year smallint,
+    value text,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quals ATTACH PARTITION public.partitioned_denormalised_flow_quals_7 FOR VALUES IN (7);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_1; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_1 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_1 FOR VALUES IN (1);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_19; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_19 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_19 FOR VALUES IN (19);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_2; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_2 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_2 FOR VALUES IN (2);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_35; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_35 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_35 FOR VALUES IN (35);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_37; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_37 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_37 FOR VALUES IN (37);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_38; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_38 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_38 FOR VALUES IN (38);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_39; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_39 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_39 FOR VALUES IN (39);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_4; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_4 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_4 FOR VALUES IN (4);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_40; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_40 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_40 FOR VALUES IN (40);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_42; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_42 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_42 FOR VALUES IN (42);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_43; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_43 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_43 FOR VALUES IN (43);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_44; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_44 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_44 FOR VALUES IN (44);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_45; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_45 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_45 FOR VALUES IN (45);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_46; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_46 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_46 FOR VALUES IN (46);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_47; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_47 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_47 FOR VALUES IN (47);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_48; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_48 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_48 FOR VALUES IN (48);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_49; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_49 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_49 FOR VALUES IN (49);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_5; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_5 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_5 FOR VALUES IN (5);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_50; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_50 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_50 FOR VALUES IN (50);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_51; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_51 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_51 FOR VALUES IN (51);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_52; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_52 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_52 FOR VALUES IN (52);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_53; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_53 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_53 FOR VALUES IN (53);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_54; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_54 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_54 FOR VALUES IN (54);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_55; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_55 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_55 FOR VALUES IN (55);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_56; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_56 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_56 FOR VALUES IN (56);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_57; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_57 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_57 FOR VALUES IN (57);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_58; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_58 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_58 FOR VALUES IN (58);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_59; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_59 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_59 FOR VALUES IN (59);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_6; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_6 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_6 FOR VALUES IN (6);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_60; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_60 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_60 FOR VALUES IN (60);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_61; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_61 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_61 FOR VALUES IN (61);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_7; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_denormalised_flow_quants_7 (
+    context_id integer,
+    quant_id integer,
+    value double precision,
+    year smallint,
+    row_name text,
+    path integer[],
+    names text[],
+    known_path_positions boolean[]
+);
+ALTER TABLE ONLY public.partitioned_denormalised_flow_quants ATTACH PARTITION public.partitioned_denormalised_flow_quants_7 FOR VALUES IN (7);
+
+
+--
 -- Name: partitioned_flow_inds; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -5457,6 +7287,150 @@ CREATE TABLE public.partitioned_flow_inds (
     value double precision
 )
 PARTITION BY LIST (ind_id);
+
+
+--
+-- Name: partitioned_flow_inds_1; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_inds_1 (
+    flow_id integer,
+    ind_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_inds ATTACH PARTITION public.partitioned_flow_inds_1 FOR VALUES IN (1);
+
+
+--
+-- Name: partitioned_flow_inds_2; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_inds_2 (
+    flow_id integer,
+    ind_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_inds ATTACH PARTITION public.partitioned_flow_inds_2 FOR VALUES IN (2);
+
+
+--
+-- Name: partitioned_flow_inds_3; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_inds_3 (
+    flow_id integer,
+    ind_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_inds ATTACH PARTITION public.partitioned_flow_inds_3 FOR VALUES IN (3);
+
+
+--
+-- Name: partitioned_flow_inds_67; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_inds_67 (
+    flow_id integer,
+    ind_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_inds ATTACH PARTITION public.partitioned_flow_inds_67 FOR VALUES IN (67);
+
+
+--
+-- Name: partitioned_flow_inds_71; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_inds_71 (
+    flow_id integer,
+    ind_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_inds ATTACH PARTITION public.partitioned_flow_inds_71 FOR VALUES IN (71);
+
+
+--
+-- Name: partitioned_flow_inds_72; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_inds_72 (
+    flow_id integer,
+    ind_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_inds ATTACH PARTITION public.partitioned_flow_inds_72 FOR VALUES IN (72);
+
+
+--
+-- Name: partitioned_flow_inds_84; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_inds_84 (
+    flow_id integer,
+    ind_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_inds ATTACH PARTITION public.partitioned_flow_inds_84 FOR VALUES IN (84);
+
+
+--
+-- Name: partitioned_flow_inds_85; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_inds_85 (
+    flow_id integer,
+    ind_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_inds ATTACH PARTITION public.partitioned_flow_inds_85 FOR VALUES IN (85);
+
+
+--
+-- Name: partitioned_flow_inds_90; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_inds_90 (
+    flow_id integer,
+    ind_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_inds ATTACH PARTITION public.partitioned_flow_inds_90 FOR VALUES IN (90);
+
+
+--
+-- Name: partitioned_flow_inds_95; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_inds_95 (
+    flow_id integer,
+    ind_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_inds ATTACH PARTITION public.partitioned_flow_inds_95 FOR VALUES IN (95);
+
+
+--
+-- Name: partitioned_flow_inds_96; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_inds_96 (
+    flow_id integer,
+    ind_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_inds ATTACH PARTITION public.partitioned_flow_inds_96 FOR VALUES IN (96);
+
+
+--
+-- Name: partitioned_flow_inds_97; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_inds_97 (
+    flow_id integer,
+    ind_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_inds ATTACH PARTITION public.partitioned_flow_inds_97 FOR VALUES IN (97);
 
 
 --
@@ -5472,6 +7446,126 @@ PARTITION BY LIST (qual_id);
 
 
 --
+-- Name: partitioned_flow_quals_2; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quals_2 (
+    flow_id integer,
+    qual_id integer,
+    value text
+);
+ALTER TABLE ONLY public.partitioned_flow_quals ATTACH PARTITION public.partitioned_flow_quals_2 FOR VALUES IN (2);
+
+
+--
+-- Name: partitioned_flow_quals_3; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quals_3 (
+    flow_id integer,
+    qual_id integer,
+    value text
+);
+ALTER TABLE ONLY public.partitioned_flow_quals ATTACH PARTITION public.partitioned_flow_quals_3 FOR VALUES IN (3);
+
+
+--
+-- Name: partitioned_flow_quals_4; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quals_4 (
+    flow_id integer,
+    qual_id integer,
+    value text
+);
+ALTER TABLE ONLY public.partitioned_flow_quals ATTACH PARTITION public.partitioned_flow_quals_4 FOR VALUES IN (4);
+
+
+--
+-- Name: partitioned_flow_quals_41; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quals_41 (
+    flow_id integer,
+    qual_id integer,
+    value text
+);
+ALTER TABLE ONLY public.partitioned_flow_quals ATTACH PARTITION public.partitioned_flow_quals_41 FOR VALUES IN (41);
+
+
+--
+-- Name: partitioned_flow_quals_43; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quals_43 (
+    flow_id integer,
+    qual_id integer,
+    value text
+);
+ALTER TABLE ONLY public.partitioned_flow_quals ATTACH PARTITION public.partitioned_flow_quals_43 FOR VALUES IN (43);
+
+
+--
+-- Name: partitioned_flow_quals_44; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quals_44 (
+    flow_id integer,
+    qual_id integer,
+    value text
+);
+ALTER TABLE ONLY public.partitioned_flow_quals ATTACH PARTITION public.partitioned_flow_quals_44 FOR VALUES IN (44);
+
+
+--
+-- Name: partitioned_flow_quals_45; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quals_45 (
+    flow_id integer,
+    qual_id integer,
+    value text
+);
+ALTER TABLE ONLY public.partitioned_flow_quals ATTACH PARTITION public.partitioned_flow_quals_45 FOR VALUES IN (45);
+
+
+--
+-- Name: partitioned_flow_quals_48; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quals_48 (
+    flow_id integer,
+    qual_id integer,
+    value text
+);
+ALTER TABLE ONLY public.partitioned_flow_quals ATTACH PARTITION public.partitioned_flow_quals_48 FOR VALUES IN (48);
+
+
+--
+-- Name: partitioned_flow_quals_50; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quals_50 (
+    flow_id integer,
+    qual_id integer,
+    value text
+);
+ALTER TABLE ONLY public.partitioned_flow_quals ATTACH PARTITION public.partitioned_flow_quals_50 FOR VALUES IN (50);
+
+
+--
+-- Name: partitioned_flow_quals_7; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quals_7 (
+    flow_id integer,
+    qual_id integer,
+    value text
+);
+ALTER TABLE ONLY public.partitioned_flow_quals ATTACH PARTITION public.partitioned_flow_quals_7 FOR VALUES IN (7);
+
+
+--
 -- Name: partitioned_flow_quants; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -5481,6 +7575,378 @@ CREATE TABLE public.partitioned_flow_quants (
     value double precision
 )
 PARTITION BY LIST (quant_id);
+
+
+--
+-- Name: partitioned_flow_quants_1; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_1 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_1 FOR VALUES IN (1);
+
+
+--
+-- Name: partitioned_flow_quants_11; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_11 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_11 FOR VALUES IN (11);
+
+
+--
+-- Name: partitioned_flow_quants_12; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_12 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_12 FOR VALUES IN (12);
+
+
+--
+-- Name: partitioned_flow_quants_18; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_18 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_18 FOR VALUES IN (18);
+
+
+--
+-- Name: partitioned_flow_quants_2; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_2 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_2 FOR VALUES IN (2);
+
+
+--
+-- Name: partitioned_flow_quants_28; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_28 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_28 FOR VALUES IN (28);
+
+
+--
+-- Name: partitioned_flow_quants_3; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_3 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_3 FOR VALUES IN (3);
+
+
+--
+-- Name: partitioned_flow_quants_33; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_33 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_33 FOR VALUES IN (33);
+
+
+--
+-- Name: partitioned_flow_quants_34; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_34 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_34 FOR VALUES IN (34);
+
+
+--
+-- Name: partitioned_flow_quants_36; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_36 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_36 FOR VALUES IN (36);
+
+
+--
+-- Name: partitioned_flow_quants_4; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_4 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_4 FOR VALUES IN (4);
+
+
+--
+-- Name: partitioned_flow_quants_41; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_41 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_41 FOR VALUES IN (41);
+
+
+--
+-- Name: partitioned_flow_quants_59; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_59 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_59 FOR VALUES IN (59);
+
+
+--
+-- Name: partitioned_flow_quants_65; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_65 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_65 FOR VALUES IN (65);
+
+
+--
+-- Name: partitioned_flow_quants_67; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_67 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_67 FOR VALUES IN (67);
+
+
+--
+-- Name: partitioned_flow_quants_7; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_7 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_7 FOR VALUES IN (7);
+
+
+--
+-- Name: partitioned_flow_quants_8; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_8 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_8 FOR VALUES IN (8);
+
+
+--
+-- Name: partitioned_flow_quants_80; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_80 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_80 FOR VALUES IN (80);
+
+
+--
+-- Name: partitioned_flow_quants_81; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_81 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_81 FOR VALUES IN (81);
+
+
+--
+-- Name: partitioned_flow_quants_82; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_82 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_82 FOR VALUES IN (82);
+
+
+--
+-- Name: partitioned_flow_quants_83; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_83 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_83 FOR VALUES IN (83);
+
+
+--
+-- Name: partitioned_flow_quants_84; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_84 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_84 FOR VALUES IN (84);
+
+
+--
+-- Name: partitioned_flow_quants_85; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_85 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_85 FOR VALUES IN (85);
+
+
+--
+-- Name: partitioned_flow_quants_86; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_86 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_86 FOR VALUES IN (86);
+
+
+--
+-- Name: partitioned_flow_quants_87; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_87 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_87 FOR VALUES IN (87);
+
+
+--
+-- Name: partitioned_flow_quants_88; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_88 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_88 FOR VALUES IN (88);
+
+
+--
+-- Name: partitioned_flow_quants_89; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_89 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_89 FOR VALUES IN (89);
+
+
+--
+-- Name: partitioned_flow_quants_90; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_90 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_90 FOR VALUES IN (90);
+
+
+--
+-- Name: partitioned_flow_quants_91; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_91 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_91 FOR VALUES IN (91);
+
+
+--
+-- Name: partitioned_flow_quants_93; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_93 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_93 FOR VALUES IN (93);
+
+
+--
+-- Name: partitioned_flow_quants_95; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flow_quants_95 (
+    flow_id integer,
+    quant_id integer,
+    value double precision
+);
+ALTER TABLE ONLY public.partitioned_flow_quants ATTACH PARTITION public.partitioned_flow_quants_95 FOR VALUES IN (95);
 
 
 --
@@ -5496,6 +7962,486 @@ CREATE TABLE public.partitioned_flows (
     names text[]
 )
 PARTITION BY LIST (context_id);
+
+
+--
+-- Name: partitioned_flows_1; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_1 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_1 FOR VALUES IN (1);
+
+
+--
+-- Name: partitioned_flows_19; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_19 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_19 FOR VALUES IN (19);
+
+
+--
+-- Name: partitioned_flows_2; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_2 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_2 FOR VALUES IN (2);
+
+
+--
+-- Name: partitioned_flows_35; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_35 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_35 FOR VALUES IN (35);
+
+
+--
+-- Name: partitioned_flows_37; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_37 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_37 FOR VALUES IN (37);
+
+
+--
+-- Name: partitioned_flows_38; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_38 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_38 FOR VALUES IN (38);
+
+
+--
+-- Name: partitioned_flows_39; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_39 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_39 FOR VALUES IN (39);
+
+
+--
+-- Name: partitioned_flows_4; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_4 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_4 FOR VALUES IN (4);
+
+
+--
+-- Name: partitioned_flows_40; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_40 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_40 FOR VALUES IN (40);
+
+
+--
+-- Name: partitioned_flows_42; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_42 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_42 FOR VALUES IN (42);
+
+
+--
+-- Name: partitioned_flows_43; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_43 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_43 FOR VALUES IN (43);
+
+
+--
+-- Name: partitioned_flows_44; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_44 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_44 FOR VALUES IN (44);
+
+
+--
+-- Name: partitioned_flows_45; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_45 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_45 FOR VALUES IN (45);
+
+
+--
+-- Name: partitioned_flows_46; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_46 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_46 FOR VALUES IN (46);
+
+
+--
+-- Name: partitioned_flows_47; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_47 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_47 FOR VALUES IN (47);
+
+
+--
+-- Name: partitioned_flows_48; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_48 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_48 FOR VALUES IN (48);
+
+
+--
+-- Name: partitioned_flows_49; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_49 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_49 FOR VALUES IN (49);
+
+
+--
+-- Name: partitioned_flows_5; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_5 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_5 FOR VALUES IN (5);
+
+
+--
+-- Name: partitioned_flows_50; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_50 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_50 FOR VALUES IN (50);
+
+
+--
+-- Name: partitioned_flows_51; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_51 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_51 FOR VALUES IN (51);
+
+
+--
+-- Name: partitioned_flows_52; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_52 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_52 FOR VALUES IN (52);
+
+
+--
+-- Name: partitioned_flows_53; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_53 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_53 FOR VALUES IN (53);
+
+
+--
+-- Name: partitioned_flows_54; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_54 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_54 FOR VALUES IN (54);
+
+
+--
+-- Name: partitioned_flows_55; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_55 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_55 FOR VALUES IN (55);
+
+
+--
+-- Name: partitioned_flows_56; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_56 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_56 FOR VALUES IN (56);
+
+
+--
+-- Name: partitioned_flows_57; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_57 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_57 FOR VALUES IN (57);
+
+
+--
+-- Name: partitioned_flows_58; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_58 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_58 FOR VALUES IN (58);
+
+
+--
+-- Name: partitioned_flows_59; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_59 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_59 FOR VALUES IN (59);
+
+
+--
+-- Name: partitioned_flows_6; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_6 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_6 FOR VALUES IN (6);
+
+
+--
+-- Name: partitioned_flows_60; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_60 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_60 FOR VALUES IN (60);
+
+
+--
+-- Name: partitioned_flows_61; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_61 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_61 FOR VALUES IN (61);
+
+
+--
+-- Name: partitioned_flows_7; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.partitioned_flows_7 (
+    id integer,
+    context_id integer,
+    year smallint,
+    path integer[],
+    known_path_positions boolean[],
+    names text[]
+);
+ALTER TABLE ONLY public.partitioned_flows ATTACH PARTITION public.partitioned_flows_7 FOR VALUES IN (7);
 
 
 --
@@ -6579,6 +9525,20 @@ ALTER TABLE ONLY public.countries ALTER COLUMN id SET DEFAULT nextval('public.co
 
 
 --
+-- Name: countries_com_trade_indicators false; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.countries_com_trade_indicators ALTER COLUMN "false" SET DEFAULT nextval('public.countries_com_trade_indicators_false_seq'::regclass);
+
+
+--
+-- Name: countries_wb_indicators id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.countries_wb_indicators ALTER COLUMN id SET DEFAULT nextval('public.countries_wb_indicators_id_seq'::regclass);
+
+
+--
 -- Name: country_properties id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -6702,6 +9662,13 @@ ALTER TABLE ONLY public.download_quants ALTER COLUMN id SET DEFAULT nextval('pub
 --
 
 ALTER TABLE ONLY public.download_versions ALTER COLUMN id SET DEFAULT nextval('public.download_versions_id_seq'::regclass);
+
+
+--
+-- Name: external_api_updates id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.external_api_updates ALTER COLUMN id SET DEFAULT nextval('public.external_api_updates_id_seq'::regclass);
 
 
 --
@@ -7352,6 +10319,22 @@ ALTER TABLE ONLY public.contextual_layers
 
 
 --
+-- Name: countries_com_trade_aggregated_indicators countries_com_trade_aggregated_indicators_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.countries_com_trade_aggregated_indicators
+    ADD CONSTRAINT countries_com_trade_aggregated_indicators_pkey PRIMARY KEY (commodity_id, iso2, year, activity);
+
+
+--
+-- Name: countries_com_trade_indicators countries_com_trade_indicators_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.countries_com_trade_indicators
+    ADD CONSTRAINT countries_com_trade_indicators_pkey PRIMARY KEY ("false");
+
+
+--
 -- Name: countries countries_iso2_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -7365,6 +10348,14 @@ ALTER TABLE ONLY public.countries
 
 ALTER TABLE ONLY public.countries
     ADD CONSTRAINT countries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: countries_wb_indicators countries_wb_indicators_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.countries_wb_indicators
+    ADD CONSTRAINT countries_wb_indicators_pkey PRIMARY KEY (id);
 
 
 --
@@ -7653,6 +10644,14 @@ ALTER TABLE ONLY public.download_versions
 
 ALTER TABLE ONLY public.download_versions
     ADD CONSTRAINT download_versions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: external_api_updates external_api_updates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.external_api_updates
+    ADD CONSTRAINT external_api_updates_pkey PRIMARY KEY (id);
 
 
 --
@@ -8833,10 +11832,10 @@ CREATE UNIQUE INDEX nodes_per_context_ranked_by_volume_per_year_mv_unique_idx ON
 
 
 --
--- Name: nodes_stats_mv_context_id_quant_id_node_id_node_type_id_idx; Type: INDEX; Schema: public; Owner: -
+-- Name: nodes_stats_mv_context_year_quant_node_node_type_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX nodes_stats_mv_context_id_quant_id_node_id_node_type_id_idx ON public.nodes_stats_mv USING btree (context_id, quant_id, node_id, node_type_id);
+CREATE UNIQUE INDEX nodes_stats_mv_context_year_quant_node_node_type_idx ON public.nodes_stats_mv USING btree (context_id, year, quant_id, node_id, node_type_id);
 
 
 --
@@ -8882,10 +11881,458 @@ CREATE INDEX partitioned_denormalised_flow_inds_context_id_year_idx ON ONLY publ
 
 
 --
+-- Name: partitioned_denormalised_flow_inds_19_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_19_context_id_year_idx ON public.partitioned_denormalised_flow_inds_19 USING btree (context_id, year);
+
+
+--
 -- Name: partitioned_denormalised_flow_inds_row_name_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX partitioned_denormalised_flow_inds_row_name_idx ON ONLY public.partitioned_denormalised_flow_inds USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_19_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_19_row_name_idx ON public.partitioned_denormalised_flow_inds_19 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_1_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_1_context_id_year_idx ON public.partitioned_denormalised_flow_inds_1 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_1_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_1_row_name_idx ON public.partitioned_denormalised_flow_inds_1 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_2_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_2_context_id_year_idx ON public.partitioned_denormalised_flow_inds_2 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_2_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_2_row_name_idx ON public.partitioned_denormalised_flow_inds_2 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_35_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_35_context_id_year_idx ON public.partitioned_denormalised_flow_inds_35 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_35_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_35_row_name_idx ON public.partitioned_denormalised_flow_inds_35 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_37_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_37_context_id_year_idx ON public.partitioned_denormalised_flow_inds_37 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_37_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_37_row_name_idx ON public.partitioned_denormalised_flow_inds_37 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_38_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_38_context_id_year_idx ON public.partitioned_denormalised_flow_inds_38 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_38_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_38_row_name_idx ON public.partitioned_denormalised_flow_inds_38 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_39_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_39_context_id_year_idx ON public.partitioned_denormalised_flow_inds_39 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_39_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_39_row_name_idx ON public.partitioned_denormalised_flow_inds_39 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_40_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_40_context_id_year_idx ON public.partitioned_denormalised_flow_inds_40 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_40_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_40_row_name_idx ON public.partitioned_denormalised_flow_inds_40 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_42_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_42_context_id_year_idx ON public.partitioned_denormalised_flow_inds_42 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_42_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_42_row_name_idx ON public.partitioned_denormalised_flow_inds_42 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_43_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_43_context_id_year_idx ON public.partitioned_denormalised_flow_inds_43 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_43_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_43_row_name_idx ON public.partitioned_denormalised_flow_inds_43 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_44_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_44_context_id_year_idx ON public.partitioned_denormalised_flow_inds_44 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_44_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_44_row_name_idx ON public.partitioned_denormalised_flow_inds_44 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_45_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_45_context_id_year_idx ON public.partitioned_denormalised_flow_inds_45 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_45_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_45_row_name_idx ON public.partitioned_denormalised_flow_inds_45 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_46_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_46_context_id_year_idx ON public.partitioned_denormalised_flow_inds_46 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_46_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_46_row_name_idx ON public.partitioned_denormalised_flow_inds_46 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_47_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_47_context_id_year_idx ON public.partitioned_denormalised_flow_inds_47 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_47_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_47_row_name_idx ON public.partitioned_denormalised_flow_inds_47 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_48_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_48_context_id_year_idx ON public.partitioned_denormalised_flow_inds_48 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_48_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_48_row_name_idx ON public.partitioned_denormalised_flow_inds_48 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_49_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_49_context_id_year_idx ON public.partitioned_denormalised_flow_inds_49 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_49_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_49_row_name_idx ON public.partitioned_denormalised_flow_inds_49 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_4_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_4_context_id_year_idx ON public.partitioned_denormalised_flow_inds_4 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_4_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_4_row_name_idx ON public.partitioned_denormalised_flow_inds_4 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_50_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_50_context_id_year_idx ON public.partitioned_denormalised_flow_inds_50 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_50_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_50_row_name_idx ON public.partitioned_denormalised_flow_inds_50 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_51_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_51_context_id_year_idx ON public.partitioned_denormalised_flow_inds_51 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_51_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_51_row_name_idx ON public.partitioned_denormalised_flow_inds_51 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_52_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_52_context_id_year_idx ON public.partitioned_denormalised_flow_inds_52 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_52_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_52_row_name_idx ON public.partitioned_denormalised_flow_inds_52 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_53_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_53_context_id_year_idx ON public.partitioned_denormalised_flow_inds_53 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_53_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_53_row_name_idx ON public.partitioned_denormalised_flow_inds_53 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_54_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_54_context_id_year_idx ON public.partitioned_denormalised_flow_inds_54 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_54_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_54_row_name_idx ON public.partitioned_denormalised_flow_inds_54 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_55_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_55_context_id_year_idx ON public.partitioned_denormalised_flow_inds_55 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_55_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_55_row_name_idx ON public.partitioned_denormalised_flow_inds_55 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_56_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_56_context_id_year_idx ON public.partitioned_denormalised_flow_inds_56 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_56_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_56_row_name_idx ON public.partitioned_denormalised_flow_inds_56 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_57_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_57_context_id_year_idx ON public.partitioned_denormalised_flow_inds_57 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_57_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_57_row_name_idx ON public.partitioned_denormalised_flow_inds_57 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_58_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_58_context_id_year_idx ON public.partitioned_denormalised_flow_inds_58 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_58_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_58_row_name_idx ON public.partitioned_denormalised_flow_inds_58 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_59_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_59_context_id_year_idx ON public.partitioned_denormalised_flow_inds_59 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_59_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_59_row_name_idx ON public.partitioned_denormalised_flow_inds_59 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_5_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_5_context_id_year_idx ON public.partitioned_denormalised_flow_inds_5 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_5_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_5_row_name_idx ON public.partitioned_denormalised_flow_inds_5 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_60_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_60_context_id_year_idx ON public.partitioned_denormalised_flow_inds_60 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_60_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_60_row_name_idx ON public.partitioned_denormalised_flow_inds_60 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_61_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_61_context_id_year_idx ON public.partitioned_denormalised_flow_inds_61 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_61_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_61_row_name_idx ON public.partitioned_denormalised_flow_inds_61 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_6_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_6_context_id_year_idx ON public.partitioned_denormalised_flow_inds_6 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_6_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_6_row_name_idx ON public.partitioned_denormalised_flow_inds_6 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_7_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_7_context_id_year_idx ON public.partitioned_denormalised_flow_inds_7 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_7_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_inds_7_row_name_idx ON public.partitioned_denormalised_flow_inds_7 USING btree (row_name);
 
 
 --
@@ -8896,10 +12343,458 @@ CREATE INDEX partitioned_denormalised_flow_quals_context_id_year_idx ON ONLY pub
 
 
 --
+-- Name: partitioned_denormalised_flow_quals_19_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_19_context_id_year_idx ON public.partitioned_denormalised_flow_quals_19 USING btree (context_id, year);
+
+
+--
 -- Name: partitioned_denormalised_flow_quals_row_name_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX partitioned_denormalised_flow_quals_row_name_idx ON ONLY public.partitioned_denormalised_flow_quals USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_19_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_19_row_name_idx ON public.partitioned_denormalised_flow_quals_19 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_1_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_1_context_id_year_idx ON public.partitioned_denormalised_flow_quals_1 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_1_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_1_row_name_idx ON public.partitioned_denormalised_flow_quals_1 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_2_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_2_context_id_year_idx ON public.partitioned_denormalised_flow_quals_2 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_2_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_2_row_name_idx ON public.partitioned_denormalised_flow_quals_2 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_35_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_35_context_id_year_idx ON public.partitioned_denormalised_flow_quals_35 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_35_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_35_row_name_idx ON public.partitioned_denormalised_flow_quals_35 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_37_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_37_context_id_year_idx ON public.partitioned_denormalised_flow_quals_37 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_37_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_37_row_name_idx ON public.partitioned_denormalised_flow_quals_37 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_38_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_38_context_id_year_idx ON public.partitioned_denormalised_flow_quals_38 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_38_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_38_row_name_idx ON public.partitioned_denormalised_flow_quals_38 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_39_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_39_context_id_year_idx ON public.partitioned_denormalised_flow_quals_39 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_39_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_39_row_name_idx ON public.partitioned_denormalised_flow_quals_39 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_40_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_40_context_id_year_idx ON public.partitioned_denormalised_flow_quals_40 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_40_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_40_row_name_idx ON public.partitioned_denormalised_flow_quals_40 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_42_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_42_context_id_year_idx ON public.partitioned_denormalised_flow_quals_42 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_42_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_42_row_name_idx ON public.partitioned_denormalised_flow_quals_42 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_43_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_43_context_id_year_idx ON public.partitioned_denormalised_flow_quals_43 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_43_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_43_row_name_idx ON public.partitioned_denormalised_flow_quals_43 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_44_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_44_context_id_year_idx ON public.partitioned_denormalised_flow_quals_44 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_44_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_44_row_name_idx ON public.partitioned_denormalised_flow_quals_44 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_45_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_45_context_id_year_idx ON public.partitioned_denormalised_flow_quals_45 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_45_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_45_row_name_idx ON public.partitioned_denormalised_flow_quals_45 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_46_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_46_context_id_year_idx ON public.partitioned_denormalised_flow_quals_46 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_46_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_46_row_name_idx ON public.partitioned_denormalised_flow_quals_46 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_47_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_47_context_id_year_idx ON public.partitioned_denormalised_flow_quals_47 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_47_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_47_row_name_idx ON public.partitioned_denormalised_flow_quals_47 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_48_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_48_context_id_year_idx ON public.partitioned_denormalised_flow_quals_48 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_48_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_48_row_name_idx ON public.partitioned_denormalised_flow_quals_48 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_49_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_49_context_id_year_idx ON public.partitioned_denormalised_flow_quals_49 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_49_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_49_row_name_idx ON public.partitioned_denormalised_flow_quals_49 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_4_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_4_context_id_year_idx ON public.partitioned_denormalised_flow_quals_4 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_4_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_4_row_name_idx ON public.partitioned_denormalised_flow_quals_4 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_50_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_50_context_id_year_idx ON public.partitioned_denormalised_flow_quals_50 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_50_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_50_row_name_idx ON public.partitioned_denormalised_flow_quals_50 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_51_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_51_context_id_year_idx ON public.partitioned_denormalised_flow_quals_51 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_51_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_51_row_name_idx ON public.partitioned_denormalised_flow_quals_51 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_52_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_52_context_id_year_idx ON public.partitioned_denormalised_flow_quals_52 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_52_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_52_row_name_idx ON public.partitioned_denormalised_flow_quals_52 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_53_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_53_context_id_year_idx ON public.partitioned_denormalised_flow_quals_53 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_53_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_53_row_name_idx ON public.partitioned_denormalised_flow_quals_53 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_54_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_54_context_id_year_idx ON public.partitioned_denormalised_flow_quals_54 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_54_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_54_row_name_idx ON public.partitioned_denormalised_flow_quals_54 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_55_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_55_context_id_year_idx ON public.partitioned_denormalised_flow_quals_55 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_55_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_55_row_name_idx ON public.partitioned_denormalised_flow_quals_55 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_56_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_56_context_id_year_idx ON public.partitioned_denormalised_flow_quals_56 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_56_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_56_row_name_idx ON public.partitioned_denormalised_flow_quals_56 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_57_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_57_context_id_year_idx ON public.partitioned_denormalised_flow_quals_57 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_57_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_57_row_name_idx ON public.partitioned_denormalised_flow_quals_57 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_58_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_58_context_id_year_idx ON public.partitioned_denormalised_flow_quals_58 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_58_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_58_row_name_idx ON public.partitioned_denormalised_flow_quals_58 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_59_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_59_context_id_year_idx ON public.partitioned_denormalised_flow_quals_59 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_59_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_59_row_name_idx ON public.partitioned_denormalised_flow_quals_59 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_5_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_5_context_id_year_idx ON public.partitioned_denormalised_flow_quals_5 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_5_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_5_row_name_idx ON public.partitioned_denormalised_flow_quals_5 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_60_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_60_context_id_year_idx ON public.partitioned_denormalised_flow_quals_60 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_60_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_60_row_name_idx ON public.partitioned_denormalised_flow_quals_60 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_61_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_61_context_id_year_idx ON public.partitioned_denormalised_flow_quals_61 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_61_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_61_row_name_idx ON public.partitioned_denormalised_flow_quals_61 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_6_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_6_context_id_year_idx ON public.partitioned_denormalised_flow_quals_6 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_6_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_6_row_name_idx ON public.partitioned_denormalised_flow_quals_6 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_7_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_7_context_id_year_idx ON public.partitioned_denormalised_flow_quals_7 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_7_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quals_7_row_name_idx ON public.partitioned_denormalised_flow_quals_7 USING btree (row_name);
 
 
 --
@@ -8910,10 +12805,458 @@ CREATE INDEX partitioned_denormalised_flow_quants_context_id_year_idx ON ONLY pu
 
 
 --
+-- Name: partitioned_denormalised_flow_quants_19_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_19_context_id_year_idx ON public.partitioned_denormalised_flow_quants_19 USING btree (context_id, year);
+
+
+--
 -- Name: partitioned_denormalised_flow_quants_row_name_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX partitioned_denormalised_flow_quants_row_name_idx ON ONLY public.partitioned_denormalised_flow_quants USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_19_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_19_row_name_idx ON public.partitioned_denormalised_flow_quants_19 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_1_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_1_context_id_year_idx ON public.partitioned_denormalised_flow_quants_1 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_1_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_1_row_name_idx ON public.partitioned_denormalised_flow_quants_1 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_2_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_2_context_id_year_idx ON public.partitioned_denormalised_flow_quants_2 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_2_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_2_row_name_idx ON public.partitioned_denormalised_flow_quants_2 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_35_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_35_context_id_year_idx ON public.partitioned_denormalised_flow_quants_35 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_35_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_35_row_name_idx ON public.partitioned_denormalised_flow_quants_35 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_37_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_37_context_id_year_idx ON public.partitioned_denormalised_flow_quants_37 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_37_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_37_row_name_idx ON public.partitioned_denormalised_flow_quants_37 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_38_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_38_context_id_year_idx ON public.partitioned_denormalised_flow_quants_38 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_38_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_38_row_name_idx ON public.partitioned_denormalised_flow_quants_38 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_39_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_39_context_id_year_idx ON public.partitioned_denormalised_flow_quants_39 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_39_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_39_row_name_idx ON public.partitioned_denormalised_flow_quants_39 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_40_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_40_context_id_year_idx ON public.partitioned_denormalised_flow_quants_40 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_40_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_40_row_name_idx ON public.partitioned_denormalised_flow_quants_40 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_42_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_42_context_id_year_idx ON public.partitioned_denormalised_flow_quants_42 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_42_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_42_row_name_idx ON public.partitioned_denormalised_flow_quants_42 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_43_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_43_context_id_year_idx ON public.partitioned_denormalised_flow_quants_43 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_43_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_43_row_name_idx ON public.partitioned_denormalised_flow_quants_43 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_44_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_44_context_id_year_idx ON public.partitioned_denormalised_flow_quants_44 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_44_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_44_row_name_idx ON public.partitioned_denormalised_flow_quants_44 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_45_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_45_context_id_year_idx ON public.partitioned_denormalised_flow_quants_45 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_45_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_45_row_name_idx ON public.partitioned_denormalised_flow_quants_45 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_46_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_46_context_id_year_idx ON public.partitioned_denormalised_flow_quants_46 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_46_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_46_row_name_idx ON public.partitioned_denormalised_flow_quants_46 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_47_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_47_context_id_year_idx ON public.partitioned_denormalised_flow_quants_47 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_47_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_47_row_name_idx ON public.partitioned_denormalised_flow_quants_47 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_48_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_48_context_id_year_idx ON public.partitioned_denormalised_flow_quants_48 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_48_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_48_row_name_idx ON public.partitioned_denormalised_flow_quants_48 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_49_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_49_context_id_year_idx ON public.partitioned_denormalised_flow_quants_49 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_49_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_49_row_name_idx ON public.partitioned_denormalised_flow_quants_49 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_4_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_4_context_id_year_idx ON public.partitioned_denormalised_flow_quants_4 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_4_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_4_row_name_idx ON public.partitioned_denormalised_flow_quants_4 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_50_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_50_context_id_year_idx ON public.partitioned_denormalised_flow_quants_50 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_50_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_50_row_name_idx ON public.partitioned_denormalised_flow_quants_50 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_51_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_51_context_id_year_idx ON public.partitioned_denormalised_flow_quants_51 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_51_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_51_row_name_idx ON public.partitioned_denormalised_flow_quants_51 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_52_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_52_context_id_year_idx ON public.partitioned_denormalised_flow_quants_52 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_52_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_52_row_name_idx ON public.partitioned_denormalised_flow_quants_52 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_53_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_53_context_id_year_idx ON public.partitioned_denormalised_flow_quants_53 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_53_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_53_row_name_idx ON public.partitioned_denormalised_flow_quants_53 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_54_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_54_context_id_year_idx ON public.partitioned_denormalised_flow_quants_54 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_54_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_54_row_name_idx ON public.partitioned_denormalised_flow_quants_54 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_55_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_55_context_id_year_idx ON public.partitioned_denormalised_flow_quants_55 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_55_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_55_row_name_idx ON public.partitioned_denormalised_flow_quants_55 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_56_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_56_context_id_year_idx ON public.partitioned_denormalised_flow_quants_56 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_56_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_56_row_name_idx ON public.partitioned_denormalised_flow_quants_56 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_57_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_57_context_id_year_idx ON public.partitioned_denormalised_flow_quants_57 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_57_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_57_row_name_idx ON public.partitioned_denormalised_flow_quants_57 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_58_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_58_context_id_year_idx ON public.partitioned_denormalised_flow_quants_58 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_58_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_58_row_name_idx ON public.partitioned_denormalised_flow_quants_58 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_59_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_59_context_id_year_idx ON public.partitioned_denormalised_flow_quants_59 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_59_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_59_row_name_idx ON public.partitioned_denormalised_flow_quants_59 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_5_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_5_context_id_year_idx ON public.partitioned_denormalised_flow_quants_5 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_5_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_5_row_name_idx ON public.partitioned_denormalised_flow_quants_5 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_60_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_60_context_id_year_idx ON public.partitioned_denormalised_flow_quants_60 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_60_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_60_row_name_idx ON public.partitioned_denormalised_flow_quants_60 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_61_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_61_context_id_year_idx ON public.partitioned_denormalised_flow_quants_61 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_61_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_61_row_name_idx ON public.partitioned_denormalised_flow_quants_61 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_6_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_6_context_id_year_idx ON public.partitioned_denormalised_flow_quants_6 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_6_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_6_row_name_idx ON public.partitioned_denormalised_flow_quants_6 USING btree (row_name);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_7_context_id_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_7_context_id_year_idx ON public.partitioned_denormalised_flow_quants_7 USING btree (context_id, year);
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_7_row_name_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_denormalised_flow_quants_7_row_name_idx ON public.partitioned_denormalised_flow_quants_7 USING btree (row_name);
 
 
 --
@@ -8924,10 +13267,164 @@ CREATE UNIQUE INDEX partitioned_flow_inds_ind_id_flow_id_idx ON ONLY public.part
 
 
 --
+-- Name: partitioned_flow_inds_1_ind_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_inds_1_ind_id_flow_id_idx ON public.partitioned_flow_inds_1 USING btree (ind_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_inds_2_ind_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_inds_2_ind_id_flow_id_idx ON public.partitioned_flow_inds_2 USING btree (ind_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_inds_3_ind_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_inds_3_ind_id_flow_id_idx ON public.partitioned_flow_inds_3 USING btree (ind_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_inds_67_ind_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_inds_67_ind_id_flow_id_idx ON public.partitioned_flow_inds_67 USING btree (ind_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_inds_71_ind_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_inds_71_ind_id_flow_id_idx ON public.partitioned_flow_inds_71 USING btree (ind_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_inds_72_ind_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_inds_72_ind_id_flow_id_idx ON public.partitioned_flow_inds_72 USING btree (ind_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_inds_84_ind_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_inds_84_ind_id_flow_id_idx ON public.partitioned_flow_inds_84 USING btree (ind_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_inds_85_ind_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_inds_85_ind_id_flow_id_idx ON public.partitioned_flow_inds_85 USING btree (ind_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_inds_90_ind_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_inds_90_ind_id_flow_id_idx ON public.partitioned_flow_inds_90 USING btree (ind_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_inds_95_ind_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_inds_95_ind_id_flow_id_idx ON public.partitioned_flow_inds_95 USING btree (ind_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_inds_96_ind_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_inds_96_ind_id_flow_id_idx ON public.partitioned_flow_inds_96 USING btree (ind_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_inds_97_ind_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_inds_97_ind_id_flow_id_idx ON public.partitioned_flow_inds_97 USING btree (ind_id, flow_id);
+
+
+--
 -- Name: partitioned_flow_quals_qual_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX partitioned_flow_quals_qual_id_flow_id_idx ON ONLY public.partitioned_flow_quals USING btree (qual_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quals_2_qual_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quals_2_qual_id_flow_id_idx ON public.partitioned_flow_quals_2 USING btree (qual_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quals_3_qual_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quals_3_qual_id_flow_id_idx ON public.partitioned_flow_quals_3 USING btree (qual_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quals_41_qual_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quals_41_qual_id_flow_id_idx ON public.partitioned_flow_quals_41 USING btree (qual_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quals_43_qual_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quals_43_qual_id_flow_id_idx ON public.partitioned_flow_quals_43 USING btree (qual_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quals_44_qual_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quals_44_qual_id_flow_id_idx ON public.partitioned_flow_quals_44 USING btree (qual_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quals_45_qual_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quals_45_qual_id_flow_id_idx ON public.partitioned_flow_quals_45 USING btree (qual_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quals_48_qual_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quals_48_qual_id_flow_id_idx ON public.partitioned_flow_quals_48 USING btree (qual_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quals_4_qual_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quals_4_qual_id_flow_id_idx ON public.partitioned_flow_quals_4 USING btree (qual_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quals_50_qual_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quals_50_qual_id_flow_id_idx ON public.partitioned_flow_quals_50 USING btree (qual_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quals_7_qual_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quals_7_qual_id_flow_id_idx ON public.partitioned_flow_quals_7 USING btree (qual_id, flow_id);
 
 
 --
@@ -8938,6 +13435,223 @@ CREATE UNIQUE INDEX partitioned_flow_quants_quant_id_flow_id_idx ON ONLY public.
 
 
 --
+-- Name: partitioned_flow_quants_11_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_11_quant_id_flow_id_idx ON public.partitioned_flow_quants_11 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_12_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_12_quant_id_flow_id_idx ON public.partitioned_flow_quants_12 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_18_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_18_quant_id_flow_id_idx ON public.partitioned_flow_quants_18 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_1_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_1_quant_id_flow_id_idx ON public.partitioned_flow_quants_1 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_28_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_28_quant_id_flow_id_idx ON public.partitioned_flow_quants_28 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_2_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_2_quant_id_flow_id_idx ON public.partitioned_flow_quants_2 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_33_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_33_quant_id_flow_id_idx ON public.partitioned_flow_quants_33 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_34_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_34_quant_id_flow_id_idx ON public.partitioned_flow_quants_34 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_36_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_36_quant_id_flow_id_idx ON public.partitioned_flow_quants_36 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_3_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_3_quant_id_flow_id_idx ON public.partitioned_flow_quants_3 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_41_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_41_quant_id_flow_id_idx ON public.partitioned_flow_quants_41 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_4_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_4_quant_id_flow_id_idx ON public.partitioned_flow_quants_4 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_59_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_59_quant_id_flow_id_idx ON public.partitioned_flow_quants_59 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_65_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_65_quant_id_flow_id_idx ON public.partitioned_flow_quants_65 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_67_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_67_quant_id_flow_id_idx ON public.partitioned_flow_quants_67 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_7_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_7_quant_id_flow_id_idx ON public.partitioned_flow_quants_7 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_80_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_80_quant_id_flow_id_idx ON public.partitioned_flow_quants_80 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_81_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_81_quant_id_flow_id_idx ON public.partitioned_flow_quants_81 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_82_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_82_quant_id_flow_id_idx ON public.partitioned_flow_quants_82 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_83_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_83_quant_id_flow_id_idx ON public.partitioned_flow_quants_83 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_84_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_84_quant_id_flow_id_idx ON public.partitioned_flow_quants_84 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_85_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_85_quant_id_flow_id_idx ON public.partitioned_flow_quants_85 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_86_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_86_quant_id_flow_id_idx ON public.partitioned_flow_quants_86 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_87_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_87_quant_id_flow_id_idx ON public.partitioned_flow_quants_87 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_88_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_88_quant_id_flow_id_idx ON public.partitioned_flow_quants_88 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_89_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_89_quant_id_flow_id_idx ON public.partitioned_flow_quants_89 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_8_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_8_quant_id_flow_id_idx ON public.partitioned_flow_quants_8 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_90_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_90_quant_id_flow_id_idx ON public.partitioned_flow_quants_90 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_91_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_91_quant_id_flow_id_idx ON public.partitioned_flow_quants_91 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_93_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_93_quant_id_flow_id_idx ON public.partitioned_flow_quants_93 USING btree (quant_id, flow_id);
+
+
+--
+-- Name: partitioned_flow_quants_95_quant_id_flow_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flow_quants_95_quant_id_flow_id_idx ON public.partitioned_flow_quants_95 USING btree (quant_id, flow_id);
+
+
+--
 -- Name: partitioned_flows_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8945,10 +13659,458 @@ CREATE UNIQUE INDEX partitioned_flows_context_id_id_idx ON ONLY public.partition
 
 
 --
+-- Name: partitioned_flows_19_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_19_context_id_id_idx ON public.partitioned_flows_19 USING btree (context_id, id);
+
+
+--
 -- Name: partitioned_flows_year_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX partitioned_flows_year_idx ON ONLY public.partitioned_flows USING btree (year);
+
+
+--
+-- Name: partitioned_flows_19_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_19_year_idx ON public.partitioned_flows_19 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_1_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_1_context_id_id_idx ON public.partitioned_flows_1 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_1_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_1_year_idx ON public.partitioned_flows_1 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_2_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_2_context_id_id_idx ON public.partitioned_flows_2 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_2_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_2_year_idx ON public.partitioned_flows_2 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_35_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_35_context_id_id_idx ON public.partitioned_flows_35 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_35_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_35_year_idx ON public.partitioned_flows_35 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_37_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_37_context_id_id_idx ON public.partitioned_flows_37 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_37_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_37_year_idx ON public.partitioned_flows_37 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_38_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_38_context_id_id_idx ON public.partitioned_flows_38 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_38_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_38_year_idx ON public.partitioned_flows_38 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_39_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_39_context_id_id_idx ON public.partitioned_flows_39 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_39_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_39_year_idx ON public.partitioned_flows_39 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_40_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_40_context_id_id_idx ON public.partitioned_flows_40 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_40_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_40_year_idx ON public.partitioned_flows_40 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_42_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_42_context_id_id_idx ON public.partitioned_flows_42 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_42_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_42_year_idx ON public.partitioned_flows_42 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_43_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_43_context_id_id_idx ON public.partitioned_flows_43 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_43_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_43_year_idx ON public.partitioned_flows_43 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_44_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_44_context_id_id_idx ON public.partitioned_flows_44 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_44_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_44_year_idx ON public.partitioned_flows_44 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_45_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_45_context_id_id_idx ON public.partitioned_flows_45 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_45_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_45_year_idx ON public.partitioned_flows_45 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_46_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_46_context_id_id_idx ON public.partitioned_flows_46 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_46_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_46_year_idx ON public.partitioned_flows_46 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_47_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_47_context_id_id_idx ON public.partitioned_flows_47 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_47_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_47_year_idx ON public.partitioned_flows_47 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_48_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_48_context_id_id_idx ON public.partitioned_flows_48 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_48_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_48_year_idx ON public.partitioned_flows_48 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_49_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_49_context_id_id_idx ON public.partitioned_flows_49 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_49_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_49_year_idx ON public.partitioned_flows_49 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_4_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_4_context_id_id_idx ON public.partitioned_flows_4 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_4_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_4_year_idx ON public.partitioned_flows_4 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_50_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_50_context_id_id_idx ON public.partitioned_flows_50 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_50_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_50_year_idx ON public.partitioned_flows_50 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_51_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_51_context_id_id_idx ON public.partitioned_flows_51 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_51_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_51_year_idx ON public.partitioned_flows_51 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_52_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_52_context_id_id_idx ON public.partitioned_flows_52 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_52_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_52_year_idx ON public.partitioned_flows_52 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_53_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_53_context_id_id_idx ON public.partitioned_flows_53 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_53_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_53_year_idx ON public.partitioned_flows_53 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_54_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_54_context_id_id_idx ON public.partitioned_flows_54 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_54_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_54_year_idx ON public.partitioned_flows_54 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_55_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_55_context_id_id_idx ON public.partitioned_flows_55 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_55_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_55_year_idx ON public.partitioned_flows_55 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_56_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_56_context_id_id_idx ON public.partitioned_flows_56 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_56_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_56_year_idx ON public.partitioned_flows_56 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_57_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_57_context_id_id_idx ON public.partitioned_flows_57 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_57_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_57_year_idx ON public.partitioned_flows_57 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_58_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_58_context_id_id_idx ON public.partitioned_flows_58 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_58_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_58_year_idx ON public.partitioned_flows_58 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_59_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_59_context_id_id_idx ON public.partitioned_flows_59 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_59_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_59_year_idx ON public.partitioned_flows_59 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_5_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_5_context_id_id_idx ON public.partitioned_flows_5 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_5_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_5_year_idx ON public.partitioned_flows_5 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_60_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_60_context_id_id_idx ON public.partitioned_flows_60 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_60_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_60_year_idx ON public.partitioned_flows_60 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_61_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_61_context_id_id_idx ON public.partitioned_flows_61 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_61_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_61_year_idx ON public.partitioned_flows_61 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_6_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_6_context_id_id_idx ON public.partitioned_flows_6 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_6_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_6_year_idx ON public.partitioned_flows_6 USING btree (year);
+
+
+--
+-- Name: partitioned_flows_7_context_id_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX partitioned_flows_7_context_id_id_idx ON public.partitioned_flows_7 USING btree (context_id, id);
+
+
+--
+-- Name: partitioned_flows_7_year_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX partitioned_flows_7_year_idx ON public.partitioned_flows_7 USING btree (year);
 
 
 --
@@ -9103,6 +14265,2169 @@ CREATE INDEX resize_by_quants_quant_id_idx ON public.resize_by_quants USING btre
 --
 
 CREATE INDEX resize_by_quants_resize_by_attribute_id_idx ON public.resize_by_quants USING btree (resize_by_attribute_id);
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_19_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_19_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_19_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_19_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_1_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_1_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_1_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_1_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_2_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_2_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_2_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_2_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_35_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_35_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_35_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_35_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_37_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_37_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_37_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_37_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_38_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_38_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_38_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_38_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_39_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_39_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_39_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_39_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_40_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_40_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_40_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_40_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_42_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_42_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_42_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_42_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_43_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_43_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_43_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_43_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_44_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_44_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_44_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_44_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_45_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_45_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_45_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_45_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_46_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_46_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_46_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_46_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_47_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_47_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_47_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_47_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_48_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_48_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_48_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_48_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_49_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_49_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_49_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_49_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_4_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_4_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_4_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_4_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_50_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_50_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_50_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_50_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_51_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_51_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_51_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_51_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_52_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_52_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_52_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_52_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_53_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_53_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_53_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_53_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_54_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_54_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_54_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_54_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_55_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_55_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_55_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_55_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_56_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_56_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_56_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_56_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_57_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_57_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_57_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_57_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_58_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_58_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_58_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_58_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_59_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_59_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_59_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_59_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_5_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_5_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_5_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_5_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_60_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_60_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_60_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_60_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_61_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_61_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_61_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_61_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_6_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_6_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_6_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_6_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_7_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_7_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_inds_7_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_inds_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_inds_7_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_19_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_19_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_19_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_19_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_1_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_1_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_1_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_1_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_2_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_2_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_2_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_2_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_35_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_35_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_35_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_35_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_37_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_37_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_37_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_37_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_38_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_38_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_38_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_38_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_39_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_39_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_39_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_39_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_40_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_40_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_40_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_40_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_42_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_42_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_42_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_42_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_43_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_43_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_43_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_43_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_44_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_44_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_44_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_44_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_45_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_45_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_45_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_45_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_46_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_46_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_46_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_46_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_47_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_47_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_47_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_47_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_48_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_48_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_48_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_48_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_49_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_49_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_49_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_49_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_4_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_4_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_4_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_4_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_50_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_50_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_50_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_50_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_51_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_51_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_51_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_51_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_52_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_52_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_52_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_52_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_53_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_53_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_53_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_53_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_54_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_54_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_54_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_54_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_55_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_55_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_55_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_55_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_56_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_56_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_56_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_56_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_57_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_57_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_57_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_57_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_58_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_58_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_58_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_58_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_59_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_59_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_59_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_59_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_5_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_5_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_5_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_5_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_60_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_60_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_60_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_60_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_61_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_61_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_61_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_61_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_6_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_6_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_6_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_6_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_7_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_7_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quals_7_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quals_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quals_7_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_19_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_19_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_19_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_19_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_1_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_1_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_1_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_1_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_2_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_2_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_2_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_2_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_35_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_35_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_35_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_35_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_37_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_37_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_37_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_37_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_38_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_38_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_38_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_38_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_39_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_39_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_39_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_39_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_40_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_40_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_40_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_40_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_42_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_42_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_42_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_42_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_43_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_43_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_43_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_43_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_44_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_44_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_44_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_44_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_45_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_45_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_45_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_45_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_46_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_46_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_46_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_46_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_47_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_47_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_47_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_47_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_48_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_48_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_48_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_48_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_49_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_49_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_49_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_49_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_4_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_4_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_4_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_4_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_50_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_50_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_50_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_50_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_51_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_51_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_51_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_51_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_52_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_52_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_52_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_52_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_53_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_53_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_53_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_53_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_54_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_54_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_54_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_54_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_55_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_55_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_55_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_55_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_56_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_56_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_56_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_56_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_57_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_57_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_57_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_57_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_58_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_58_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_58_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_58_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_59_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_59_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_59_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_59_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_5_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_5_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_5_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_5_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_60_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_60_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_60_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_60_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_61_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_61_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_61_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_61_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_6_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_6_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_6_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_6_row_name_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_7_context_id_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_context_id_year_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_7_context_id_year_idx;
+
+
+--
+-- Name: partitioned_denormalised_flow_quants_7_row_name_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_denormalised_flow_quants_row_name_idx ATTACH PARTITION public.partitioned_denormalised_flow_quants_7_row_name_idx;
+
+
+--
+-- Name: partitioned_flow_inds_1_ind_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_inds_ind_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_inds_1_ind_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_inds_2_ind_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_inds_ind_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_inds_2_ind_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_inds_3_ind_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_inds_ind_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_inds_3_ind_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_inds_67_ind_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_inds_ind_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_inds_67_ind_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_inds_71_ind_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_inds_ind_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_inds_71_ind_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_inds_72_ind_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_inds_ind_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_inds_72_ind_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_inds_84_ind_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_inds_ind_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_inds_84_ind_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_inds_85_ind_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_inds_ind_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_inds_85_ind_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_inds_90_ind_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_inds_ind_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_inds_90_ind_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_inds_95_ind_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_inds_ind_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_inds_95_ind_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_inds_96_ind_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_inds_ind_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_inds_96_ind_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_inds_97_ind_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_inds_ind_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_inds_97_ind_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quals_2_qual_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quals_qual_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quals_2_qual_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quals_3_qual_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quals_qual_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quals_3_qual_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quals_41_qual_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quals_qual_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quals_41_qual_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quals_43_qual_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quals_qual_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quals_43_qual_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quals_44_qual_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quals_qual_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quals_44_qual_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quals_45_qual_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quals_qual_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quals_45_qual_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quals_48_qual_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quals_qual_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quals_48_qual_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quals_4_qual_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quals_qual_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quals_4_qual_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quals_50_qual_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quals_qual_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quals_50_qual_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quals_7_qual_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quals_qual_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quals_7_qual_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_11_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_11_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_12_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_12_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_18_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_18_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_1_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_1_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_28_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_28_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_2_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_2_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_33_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_33_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_34_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_34_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_36_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_36_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_3_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_3_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_41_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_41_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_4_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_4_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_59_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_59_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_65_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_65_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_67_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_67_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_7_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_7_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_80_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_80_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_81_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_81_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_82_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_82_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_83_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_83_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_84_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_84_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_85_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_85_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_86_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_86_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_87_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_87_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_88_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_88_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_89_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_89_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_8_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_8_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_90_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_90_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_91_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_91_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_93_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_93_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flow_quants_95_quant_id_flow_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flow_quants_quant_id_flow_id_idx ATTACH PARTITION public.partitioned_flow_quants_95_quant_id_flow_id_idx;
+
+
+--
+-- Name: partitioned_flows_19_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_19_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_19_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_19_year_idx;
+
+
+--
+-- Name: partitioned_flows_1_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_1_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_1_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_1_year_idx;
+
+
+--
+-- Name: partitioned_flows_2_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_2_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_2_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_2_year_idx;
+
+
+--
+-- Name: partitioned_flows_35_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_35_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_35_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_35_year_idx;
+
+
+--
+-- Name: partitioned_flows_37_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_37_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_37_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_37_year_idx;
+
+
+--
+-- Name: partitioned_flows_38_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_38_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_38_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_38_year_idx;
+
+
+--
+-- Name: partitioned_flows_39_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_39_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_39_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_39_year_idx;
+
+
+--
+-- Name: partitioned_flows_40_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_40_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_40_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_40_year_idx;
+
+
+--
+-- Name: partitioned_flows_42_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_42_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_42_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_42_year_idx;
+
+
+--
+-- Name: partitioned_flows_43_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_43_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_43_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_43_year_idx;
+
+
+--
+-- Name: partitioned_flows_44_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_44_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_44_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_44_year_idx;
+
+
+--
+-- Name: partitioned_flows_45_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_45_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_45_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_45_year_idx;
+
+
+--
+-- Name: partitioned_flows_46_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_46_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_46_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_46_year_idx;
+
+
+--
+-- Name: partitioned_flows_47_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_47_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_47_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_47_year_idx;
+
+
+--
+-- Name: partitioned_flows_48_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_48_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_48_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_48_year_idx;
+
+
+--
+-- Name: partitioned_flows_49_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_49_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_49_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_49_year_idx;
+
+
+--
+-- Name: partitioned_flows_4_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_4_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_4_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_4_year_idx;
+
+
+--
+-- Name: partitioned_flows_50_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_50_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_50_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_50_year_idx;
+
+
+--
+-- Name: partitioned_flows_51_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_51_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_51_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_51_year_idx;
+
+
+--
+-- Name: partitioned_flows_52_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_52_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_52_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_52_year_idx;
+
+
+--
+-- Name: partitioned_flows_53_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_53_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_53_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_53_year_idx;
+
+
+--
+-- Name: partitioned_flows_54_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_54_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_54_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_54_year_idx;
+
+
+--
+-- Name: partitioned_flows_55_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_55_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_55_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_55_year_idx;
+
+
+--
+-- Name: partitioned_flows_56_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_56_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_56_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_56_year_idx;
+
+
+--
+-- Name: partitioned_flows_57_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_57_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_57_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_57_year_idx;
+
+
+--
+-- Name: partitioned_flows_58_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_58_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_58_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_58_year_idx;
+
+
+--
+-- Name: partitioned_flows_59_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_59_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_59_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_59_year_idx;
+
+
+--
+-- Name: partitioned_flows_5_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_5_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_5_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_5_year_idx;
+
+
+--
+-- Name: partitioned_flows_60_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_60_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_60_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_60_year_idx;
+
+
+--
+-- Name: partitioned_flows_61_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_61_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_61_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_61_year_idx;
+
+
+--
+-- Name: partitioned_flows_6_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_6_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_6_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_6_year_idx;
+
+
+--
+-- Name: partitioned_flows_7_context_id_id_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_context_id_id_idx ATTACH PARTITION public.partitioned_flows_7_context_id_id_idx;
+
+
+--
+-- Name: partitioned_flows_7_year_idx; Type: INDEX ATTACH; Schema: public; Owner: -
+--
+
+ALTER INDEX public.partitioned_flows_year_idx ATTACH PARTITION public.partitioned_flows_7_year_idx;
 
 
 --
@@ -9326,7 +16651,7 @@ ALTER TABLE ONLY public.download_versions
 --
 
 ALTER TABLE ONLY public.context_node_type_properties
-    ADD CONSTRAINT fk_rails_40673dee59 FOREIGN KEY (geometry_context_node_type_id) REFERENCES public.context_node_types(id);
+    ADD CONSTRAINT fk_rails_40673dee59 FOREIGN KEY (geometry_context_node_type_id) REFERENCES public.context_node_types(id) ON DELETE SET NULL;
 
 
 --
@@ -9952,6 +17277,19 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200207162026'),
 ('20200302203632'),
 ('20200302214104'),
-('20200317075824');
+('20200317075824'),
+('20200330120605'),
+('20200331175932'),
+('20200409141902'),
+('20200416150928'),
+('20200417094644'),
+('20200425120802'),
+('20200425165029'),
+('20200425173940'),
+('20200430115447'),
+('20200501152755'),
+('20200505120049'),
+('20200522153602'),
+('20200618100150');
 
 

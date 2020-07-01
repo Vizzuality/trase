@@ -19,6 +19,7 @@ module Api
             context_node_types = @context.context_node_types.
               includes(:context_node_type_property, :node_type).
               where.not('node_types.name' => NodeTypeName::COUNTRY_OF_PRODUCTION).
+              where('context_node_type_properties.is_visible').
               order(:column_position)
             node_types_by_name = Hash[
               context_node_types.map { |cnt| nt = cnt.node_type; [nt.name, nt] }

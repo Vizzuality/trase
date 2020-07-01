@@ -13,6 +13,11 @@ module Api
             else
               :importer
             end
+          @external_attribute_value = ExternalAttributeValue.new(
+            @node.geo_id,
+            @year,
+            @activity
+          )
         end
 
         def call
@@ -25,29 +30,81 @@ module Api
         end
 
         def summary
-          'TODO'
+          land_area_rank = @external_attribute_value.call 'wb.land_area.rank'
+          population_rank = @external_attribute_value.call 'wb.population.rank'
+          gdp_rank = @external_attribute_value.call 'wb.gdp.rank'
+          summary = overview(land_area_rank, population_rank, gdp_rank)
+
+          land_area = @external_attribute_value.call 'wb.land_area.value'
+          forested_land_area = @external_attribute_value.call 'wb.forested_land_area.value'
+          agricultural_land_area = @external_attribute_value.call 'wb.agricultural_land_area.value'
+          summary << land_summary(land_area, forested_land_area, agricultural_land_area)
+
+          # TODO: HDI
+          # TODO: signatory to declarations
+          summary
         end
 
         private
 
         HEADER_ATTRIBUTES = [
-          {source: :wb, id: 'SP.POP.TOTL'},
-          {source: :wb, id: 'NY.GDP.MKTP.CD'},
-          {source: :comtrade, id: 'trade_value'},
-          {source: :wb, id: 'AG.LND.TOTL.K2'},
-          {source: :wb, id: 'AG.LND.AGRI.K2'},
-          {source: :wb, id: 'AG.LND.FRST.K2'}
-        ]
+          'wb.population.value',
+          'wb.gdp.value',
+          'com_trade.value.value',
+          'wb.land_area.value',
+          'wb.agricultural_land_area.value',
+          'wb.forested_land_area.value'
+        ].freeze
 
         def header_attributes
           list = ExternalAttributesList.instance
-          attributes = list.call(HEADER_ATTRIBUTES).compact
-          attributes.map.with_index do |attribute, idx|
-            value = ExternalAttributeValue.instance.call(
-              @node.geo_id, @year, @activity, HEADER_ATTRIBUTES[idx]
+          HEADER_ATTRIBUTES.map do |attribute_ref|
+            attribute_def = list.call(attribute_ref, substitutions)
+            attribute_def.
+              except(:short_name, :wb_name).
+              merge(value: @external_attribute_value.call(attribute_ref))
+          end.compact
+        end
+
+        def substitutions
+          {trade_flow: @activity.to_s.sub(/er$/, '')}
+        end
+
+        def overview(land_area_rank, population_rank, gdp_rank)
+          summary = "#{@node.name} is the world's"
+          summary << " #{land_area_rank} largest country by land mass"
+          summary << ", #{population_rank} largest by population size"
+          summary << " and is the world's #{gdp_rank} largest economy (by GDP)."
+        end
+
+        def land_summary(land_area, forested_land_area, agricultural_land_area)
+          return '' unless land_area && (forested_land_area || agricultural_land_area)
+
+          if forested_land_area
+            forested_percent = helper.number_to_percentage(
+              (forested_land_area * 100.0) / land_area,
+              precision: 0
             )
-            attribute.merge(value: value)
           end
+          if agricultural_land_area
+            agricultural_percent = helper.number_to_percentage(
+              (agricultural_land_area * 100.0) / land_area,
+              precision: 0
+            )
+          end
+          if forested_percent && agricultural_percent
+            " Forests make up #{forested_percent} of its land mass and agricultural areas, #{agricultural_percent}."
+          elsif forested_percent
+            " Forests make up #{forested_percent} of its land mass."
+          elsif agricultural_percent
+            " Agricultural areas make up #{agricultural_percent} of its land mass."
+          end
+        end
+
+        def helper
+          @helper ||= Class.new do
+            include ActionView::Helpers::NumberHelper
+          end.new
         end
       end
     end
