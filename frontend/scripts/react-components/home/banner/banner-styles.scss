@@ -25,6 +25,10 @@
     background-size: 104%;
     background-position: 50%;
     will-change: opacity;
+
+    @media only screen and (max-width: '400px') {
+      background-size: 135vw;
+    }
   }
 }
 

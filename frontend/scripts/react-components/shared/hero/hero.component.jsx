@@ -57,7 +57,7 @@ class Hero extends React.Component {
         </figcaption>
       </div>
     );
-
+    // Remove -banner class when we remove the banner
     return (
       <InView>
         {({ ref, inView }) => (
@@ -92,8 +92,9 @@ class Hero extends React.Component {
                   <StoryBox {...story} />
                 </div>
               )}
-              {inView && (!showStory || !story) && tweets && (
-                <div className="layover">
+              {inView && (
+                // (!showStory || !story) && tweets &&
+                <div className="layover -banner">
                   <Banner />
                   {/* <TwitterFeed tweets={tweets} /> */}
                 </div>
