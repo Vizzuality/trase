@@ -37,7 +37,7 @@ module Api
             'Api', 'V3', profile_type.pluralize.capitalize, 'BasicAttributes'
           ].join('::').constantize
           top_profile.summary = service.new(
-            top_profile.context, node, year
+            top_profile.context, readonly_node, year
           ).call[:summary]
         rescue NameError
           top_profile.summary = ''
@@ -45,12 +45,10 @@ module Api
           raise
         end
 
-        def node
-          top_profile.node
-        end
-
         def readonly_node
-          Api::V3::Readonly::NodeWithFlows.find(node.id)
+          Api::V3::Readonly::NodeWithFlows.where(
+            id: top_profile.node_id, context_id: top_profile.context_id
+          ).first
         end
 
         def profile_type
