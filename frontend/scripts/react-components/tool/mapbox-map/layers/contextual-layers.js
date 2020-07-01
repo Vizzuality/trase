@@ -9,8 +9,9 @@ export const getRasterLayerTemplate = (identifier, url) => (
     version: '0.0.1',
     source: {
       type: 'raster',
+      scheme: "tms",
       tiles: [url],
-      minZoom: 2,
+      minzoom: 2,
       maxzoom: 11 // TODO: add this to layer configuration
     }
   }
@@ -41,6 +42,10 @@ export const getContextualLayersTemplates = () => ({
       variables: ['name', 'siglauf3'],
       renderLayers: conditionalRenderLayers({
         type: 'symbol',
+        // symbol layers need metadata position top
+        metadata: {
+          position: 'top'
+        },
         name: 'siglauf3',
         baseLayout: {
           'text-size': 12,
@@ -49,14 +54,14 @@ export const getContextualLayersTemplates = () => ({
         },
         zooms: [
           {
-            minZoom: 3,
-            maxZoom: 4,
+            minzoom: 3,
+            maxzoom: 4,
             layout: {
               'text-field': '{siglauf3}'
             }
           },
           {
-            minZoom: 4,
+            minzoom: 4,
             filters: [
               { condition: '!=', name: 'name', value: ['DISTRITO FEDERAL'] },
               {
@@ -97,6 +102,10 @@ export const getContextualLayersTemplates = () => ({
       type: 'geojson',
       renderLayers: conditionalRenderLayers({
         type: 'symbol',
+        // symbol layers need metadata position top
+        metadata: {
+          position: 'top'
+        },
         name: 'name',
         baseLayout: {
           'text-size': 15,
@@ -106,8 +115,8 @@ export const getContextualLayersTemplates = () => ({
         },
         zooms: [
           {
-            minZoom: 3,
-            maxZoom: 4,
+            minzoom: 3,
+            maxzoom: 4,
             filters: [
               { condition: '!=', value: 'MATA ATLANTICA' },
               {
@@ -118,7 +127,7 @@ export const getContextualLayersTemplates = () => ({
             ]
           },
           {
-            minZoom: 4,
+            minzoom: 4,
             filters: [
               { condition: '!=', value: 'MATA ATLANTICA' },
               {
@@ -150,7 +159,7 @@ export const getContextualLayersTemplates = () => ({
         name: 'cat',
         zooms: [
           {
-            minZoom: 2,
+            minzoom: 2,
             filters: [
               { condition: '<=', value: 7, paint: { 'fill-color': '#d73027' } },
               { condition: '<=', value: 6.5, paint: { 'fill-color': '#fc8d59' } },
@@ -177,9 +186,6 @@ export const getContextualLayersTemplates = () => ({
           paint: {
             'fill-color': '#ECC35F',
             'fill-opacity': 0.5
-          },
-          metadata: {
-            position: 'top'
           }
         },
         {
@@ -188,9 +194,6 @@ export const getContextualLayersTemplates = () => ({
             'line-color': '#ECC35F',
             'line-width': 1,
             'line-opacity': 1
-          },
-          metadata: {
-            position: 'top'
           }
         }
       ]
@@ -208,9 +211,6 @@ export const getContextualLayersTemplates = () => ({
           paint: {
             'fill-color': '#B4D84F',
             'fill-opacity': 0.5
-          },
-          metadata: {
-            position: 'top'
           }
         },
         {
@@ -219,9 +219,6 @@ export const getContextualLayersTemplates = () => ({
             'line-color': '#B4D84F',
             'line-width': 1,
             'line-opacity': 1
-          },
-          metadata: {
-            position: 'top'
           }
         }
       ]
@@ -282,6 +279,10 @@ export const getContextualLayersTemplates = () => ({
       variables: ['simple_name'],
       renderLayers: conditionalRenderLayers({
         type: 'symbol',
+        // symbol layers need metadata position top
+        metadata: {
+          position: 'top'
+        },
         name: 'simple_name',
         baseLayout: {
           'text-letter-spacing': 0.3,
@@ -290,14 +291,14 @@ export const getContextualLayersTemplates = () => ({
         },
         zooms: [
           {
-            minZoom: 4,
-            maxZoom: 5,
+            minzoom: 4,
+            maxzoom: 5,
             layout: {
               'text-size': 15
             }
           },
           {
-            minZoom: 5,
+            minzoom: 5,
             layout: {
               'text-size': 11
             }
@@ -382,7 +383,7 @@ export const getContextualLayersTemplates = () => ({
         name: 'year',
         zooms: [
           {
-            minZoom: 2,
+            minzoom: 2,
             filters: [
               {
                 condition: '==',
@@ -423,13 +424,10 @@ export const getContextualLayersTemplates = () => ({
           paint: {
             'line-opacity': 1
           },
-          metadata: {
-            position: 'top'
-          },
           name: 'year',
           zooms: [
             {
-              minZoom: 2,
+              minzoom: 2,
               filters: [
                 {
                   condition: '==',
@@ -481,9 +479,6 @@ export const getContextualLayersTemplates = () => ({
             'line-color': '#000000',
             'line-width': 1,
             'line-opacity': 1
-          },
-          metadata: {
-            position: 'top'
           }
         }
       ]
@@ -495,13 +490,17 @@ export const getContextualLayersTemplates = () => ({
       variables: ['label'],
       renderLayers: conditionalRenderLayers({
         type: 'symbol',
+        // symbol layers need metadata position top
+        metadata: {
+          position: 'top'
+        },
         name: 'label',
         baseLayout: {
           'text-allow-overlap': true
         },
         zooms: [
           {
-            minZoom: 6,
+            minzoom: 6,
             layout: {
               'text-field': '{label}',
               'text-size': 12
@@ -523,9 +522,6 @@ export const getContextualLayersTemplates = () => ({
           paint: {
             'fill-color': '#B4D84F',
             'fill-opacity': 0.5
-          },
-          metadata: {
-            position: 'top'
           }
         },
         {
@@ -534,9 +530,6 @@ export const getContextualLayersTemplates = () => ({
             'line-color': '#B4D84F',
             'line-width': 1,
             'line-opacity': 1
-          },
-          metadata: {
-            position: 'top'
           }
         }
       ]
@@ -555,9 +548,6 @@ export const getContextualLayersTemplates = () => ({
             'line-color': '#000000',
             'line-width': 1,
             'line-opacity': 1
-          },
-          metadata: {
-            position: 'top'
           }
         }
       ]
@@ -569,13 +559,17 @@ export const getContextualLayersTemplates = () => ({
       variables: ['prov_name'],
       renderLayers: conditionalRenderLayers({
         type: 'symbol',
+        // symbol layers need metadata position top
+        metadata: {
+          position: 'top'
+        },
         name: 'prov_name',
         baseLayout: {
           'text-allow-overlap': false
         },
         zooms: [
           {
-            minZoom: 3,
+            minzoom: 3,
             layout: {
               'text-field': '{prov_name}',
               'text-size': 10
@@ -598,9 +592,6 @@ export const getContextualLayersTemplates = () => ({
             'line-color': '#000000',
             'line-width': 0.5,
             'line-opacity': 1
-          },
-          metadata: {
-            position: 'top'
           }
         }
       ]
@@ -612,6 +603,10 @@ export const getContextualLayersTemplates = () => ({
       variables: ['biome_name'],
       renderLayers: conditionalRenderLayers({
         type: 'symbol',
+        // symbol layers need metadata position top
+        metadata: {
+          position: 'top'
+        },
         name: 'biome_name',
         baseLayout: {
           'text-letter-spacing': 0.3,
@@ -619,8 +614,8 @@ export const getContextualLayersTemplates = () => ({
         },
         zooms: [
           {
-            minZoom: 3,
-            maxZoom: 5,
+            minzoom: 3,
+            maxzoom: 5,
             filters: [
               {
                 condition: '!=',
@@ -640,7 +635,7 @@ export const getContextualLayersTemplates = () => ({
             }
           },
           {
-            minZoom: 5,
+            minzoom: 5,
             layout: {
               'text-size': 10,
               'text-field': '{biome_name}'
@@ -665,7 +660,7 @@ export const getContextualLayersTemplates = () => ({
         name: 'type',
         zooms: [
           {
-            minZoom: 2,
+            minzoom: 2,
             filters: [
               {
                 condition: '!=',
@@ -723,13 +718,10 @@ export const getContextualLayersTemplates = () => ({
         paint: {
           'fill-opacity': 1
         },
-        metadata: {
-          position: 'top'
-        },
         name: 'year',
         zooms: [
           {
-            minZoom: 2,
+            minzoom: 2,
             filters: [
               {
                 condition: '==',
@@ -758,13 +750,10 @@ export const getContextualLayersTemplates = () => ({
           paint: {
             'line-opacity': 1
           },
-          metadata: {
-            position: 'top'
-          },
           name: 'year',
           zooms: [
             {
-              minZoom: 2,
+              minzoom: 2,
               filters: [
                 {
                   condition: '==',
@@ -815,6 +804,10 @@ export const getContextualLayersTemplates = () => ({
       variables: ['prov'],
       renderLayers: conditionalRenderLayers({
         type: 'symbol',
+        // symbol layers need metadata position top
+        metadata: {
+          position: 'top'
+        },
         name: 'prov',
         baseLayout: {
           'text-size': 12,
@@ -822,7 +815,7 @@ export const getContextualLayersTemplates = () => ({
         },
         zooms: [
           {
-            minZoom: 4,
+            minzoom: 4,
             layout: {
               'text-field': '{prov}'
             },

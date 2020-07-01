@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { selectNodeFromGeoId, highlightNodeFromGeoId } from 'react-components/tool/tool.actions';
 import { toolLayersActions } from 'react-components/tool-layers/tool-layers.register';
@@ -12,21 +13,23 @@ import {
 } from 'react-components/tool-links/tool-links.selectors';
 import {
   getTooltipValues,
-  getCountryName
+  getCountryName,
+  getContextualLayers,
+  getLogisticLayers
 } from 'react-components/tool/mapbox-map/mapbox-map.selectors';
 import {
   getMapView,
   getBasemap,
-  getSelectedNodesGeoIds,
-  getHighlightedNodesGeoIds,
+  getSelectedGeoNodes,
+  getHighlightedGeoNodes,
   getChoroplethOptions,
   getSelectedMapContextualLayersData,
   getShouldFitBoundsSelectedPolygons,
   getMapDimensionsWarnings,
-  getSelectedUnitLayer
+  getSelectedUnitLayers
 } from 'react-components/tool-layers/tool-layers.selectors';
 import { getSelectedContext } from 'app/app.selectors';
-import Map from 'react-components/tool/mapbox-map/mapbox-map.component';
+import MapComponent from 'react-components/tool/mapbox-map/mapbox-map.component';
 
 const mapStateToProps = state => {
   const { choropleth } = getChoroplethOptions(state);
@@ -36,10 +39,10 @@ const mapStateToProps = state => {
     mapView: getMapView(state),
     shouldFitBoundsSelectedPolygons: getShouldFitBoundsSelectedPolygons(state),
     mapVectorData: state.toolLayers.data.mapVectorData,
-    selectedNodesGeoIds: getSelectedNodesGeoIds(state),
+    selectedGeoNodes: getSelectedGeoNodes(state),
     recolorByNodeIds: state.toolLinks.recolorByNodeIds,
     linkedGeoIds: state.toolLayers.linkedGeoIds,
-    highlightedGeoIds: getHighlightedNodesGeoIds(state)[0],
+    highlightedGeoNodes: getHighlightedGeoNodes(state)[0],
     defaultMapView: selectedContext ? selectedContext.map : null,
     selectedNodesIdsLength: state.toolLinks.selectedNodesIds.length,
     selectedColumnsIds: getSelectedColumnsIds(state),
@@ -53,8 +56,10 @@ const mapStateToProps = state => {
     columns: state.toolLinks.data.columns,
     extraColumn: (getHasExtraColumn(state) && state.toolLinks.extraColumn) || null,
     tooltipValues: getTooltipValues(state),
-    unitLayer: getSelectedUnitLayer(state),
-    countryName: getCountryName(state)
+    unitLayers: getSelectedUnitLayers(state),
+    countryName: getCountryName(state),
+    contextualLayers: getContextualLayers(state),
+    logisticLayers: getLogisticLayers(state)
   };
 };
 
@@ -64,7 +69,18 @@ const mapDispatchToProps = {
   onMoveEnd: (latlng, zoom) => toolLayersActions.saveMapView(latlng, zoom)
 };
 
+const MapContainer = (props) => {
+  const [map, setMap] = useState(null);
+  return React.createElement(
+    MapComponent,
+    {...props,
+      map,
+      setMap
+    },
+    )
+};
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Map);
+)(MapContainer);

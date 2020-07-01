@@ -4,6 +4,7 @@ import {
   SET_NODE_ATTRIBUTES,
   SELECT_BASEMAP,
   SELECT_CONTEXTUAL_LAYERS,
+  SELECT_LOGISTIC_LAYERS,
   CHANGE_LAYOUT,
   SET_SANKEY_SIZE,
   SELECT_UNIT_LAYERS,
@@ -15,7 +16,8 @@ import {
   TOOL_LAYERS__SET_LINKED_GEOIDS,
   TOOL_LAYERS__SET_MAP_DIMENSIONS,
   TOOL_LAYERS__SET_UNIT_LAYERS,
-  TOOL_LAYERS__SET_UNIT_LAYER_DATA
+  TOOL_LAYERS__SET_UNIT_LAYER_DATA,
+  TOOL_LAYERS__SET_INSPECTION_LEVEL
 } from 'react-components/tool-layers/tool-layers.actions';
 import { TOOL_LINKS__HIGHLIGHT_NODE } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'app/app.actions';
@@ -116,6 +118,11 @@ const toolLayersReducer = {
       draft.selectedMapContextualLayers = action.payload.contextualLayers;
     });
   },
+  [SELECT_LOGISTIC_LAYERS](state, action) {
+    return immer(state, draft => {
+      draft.selectedLogisticLayers = action.payload.logisticLayers;
+    });
+  },
   [SELECT_BASEMAP](state, action) {
     return immer(state, draft => {
       draft.selectedBasemap = action.payload.selectedBasemap;
@@ -161,6 +168,11 @@ const toolLayersReducer = {
   [TOOL_LAYERS__SET_UNIT_LAYER_DATA](state, action) {
     return immer(state, draft => {
       draft.data.mapUnitLayersData = action.payload.data;
+    });
+  },
+  [TOOL_LAYERS__SET_INSPECTION_LEVEL](state, action) {
+    return immer(state, draft => {
+      draft.inspectionLevel = action.payload.inspectionLevel;
     });
   },
   [TOGGLE_MAP_DIMENSION](state, action) {

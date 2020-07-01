@@ -4,7 +4,7 @@ import {
   getCurrentHighlightedChoroplethBucket,
   getSelectedMapContextualLayersData
 } from 'react-components/tool-layers/tool-layers.selectors';
-import { hasLayers } from 'react-components/tool/legend/legend.selectors';
+import { hasLayers, getSelectedLogisticLayers } from 'react-components/tool/legend/legend.selectors';
 import { toolLayersActions } from 'react-components/tool-layers/tool-layers.register';
 import { TOOL_LAYOUT } from 'constants';
 import Legend from './legend.component';
@@ -16,6 +16,7 @@ const mapStateToProps = state => {
     choroplethLegend,
     hasLayers: hasLayers(state),
     contextualLayers: getSelectedMapContextualLayersData(state),
+    logisticLayers: getSelectedLogisticLayers(state),
     highlightedChoroplethBucket: getCurrentHighlightedChoroplethBucket(state)
   };
 };

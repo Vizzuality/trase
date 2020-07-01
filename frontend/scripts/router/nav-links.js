@@ -38,8 +38,9 @@ let nav = [
     page: 'dashboardRoot'
   },
   {
-    name: 'Logistics Map',
-    page: 'logisticsMap'
+    name: 'Finance',
+    page: 'https://trase.finance',
+    external: true
   },
   {
     name: 'Yearbook',
@@ -84,10 +85,6 @@ const sidebarNav = [
       payload: { section: 'faq' }
     }
   },
-  // {
-  //   name: 'Team',
-  //   page: 'team'
-  // },
   {
     name: 'Partners',
     page: {
@@ -135,10 +132,6 @@ if (DISABLE_PROFILES) {
 
 if (!ENABLE_DASHBOARDS) {
   nav = nav.filter(route => route.page !== 'dashboardRoot');
-}
-
-if (!ENABLE_LOGISTICS_MAP) {
-  nav = nav.filter(route => route.page !== 'logisticsMap');
 }
 
 export default {

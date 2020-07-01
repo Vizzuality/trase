@@ -344,5 +344,6 @@ export const SANKEY_OFFSETS = {
 
 export const LAYER_TAB_NAMES = {
   unit: 'unit layers',
-  contextual: 'contextual layers'
+  contextual: 'contextual layers',
+  logistic: 'logistic hubs'
 };

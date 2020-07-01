@@ -1,7 +1,9 @@
 import { createSelector } from 'reselect';
 import formatValue from 'utils/formatValue';
-
-import { getSelectedMapDimensionsData } from 'react-components/tool-layers/tool-layers.selectors';
+import {
+  getSelectedMapDimensionsData,
+  getSelectedMapContextualLayersData
+} from 'react-components/tool-layers/tool-layers.selectors';
 import {
   getHighlightedNodesData
 } from 'react-components/tool/tool.selectors';
@@ -9,6 +11,10 @@ import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
 import {
   getSelectedResizeBy
 } from 'react-components/tool-links/tool-links.selectors';
+import { getContextualLayersTemplates, getRasterLayerTemplate } from './layers/contextual-layers';
+import { getLogisticMapLayerTemplates } from './layers/logistic-layers';
+
+const getSelectedLogisticLayers = state => state.toolLayers.selectedLogisticLayers;
 
 export const getContexts = state => state.app.contexts || null;
 export const getUnitLayersData = state => state.toolLayers.data.mapUnitLayersData || null;
@@ -33,11 +39,13 @@ const getValue = (unitLayerValues, selectedYears, dimension) => {
     }
   }
 
-  if (!value && unitLayerValues.years['0']) { // Non-temporal indicator values are stored in year 0
+  // Non-temporal indicator values are stored in year 0
+  if (!value && unitLayerValues.years['0']) {
     return unitLayerValues.years['0'];
   }
 
-  if (dimension.unit === '%') {
+  if (dimension.unit === '%' || dimension.type === "ind") {
+    // Average of the year range
     value /= (lastYear - firstYear + 1);
   }
 
@@ -66,15 +74,20 @@ export const getTooltipValues = createSelector(
     unitLayersData
   ) => {
     let values = [];
-    if (!coordinates || !unitLayersData) {
+    const node = nodesData && nodesData[0];
+    if (!coordinates || !unitLayersData || !node) {
       return null;
     }
-    const node = nodesData[0];
     const nodeHeight = nodeHeights && nodeHeights[node.id];
     if (nodeAttributes && selectedMapDimensions && selectedMapDimensions.length > 0) {
       values = selectedMapDimensions
         .map(dimension => {
-          const unitLayerValues = unitLayersData.find(d => d.geo_id === node.geoId && d.attribute_id === dimension.attributeId);
+          const unitLayerValues = unitLayersData.find(
+            d =>
+              d.geo_id === node.geoId &&
+              d.attribute_id === dimension.attributeId
+              // && d.node_type_id === nodeTypeId - If we need to find the selected values for a specific nodeTypeId
+          );
           if (!unitLayerValues) {
             return null;
           }
@@ -98,5 +111,38 @@ export const getTooltipValues = createSelector(
     }
 
     return values;
+  }
+);
+
+
+export const getContextualLayers = createSelector(
+  [getSelectedMapContextualLayersData], (selectedMapContextualLayersData) => {
+    let layers = [];
+    const cartoLayerTemplates = getContextualLayersTemplates();
+
+    selectedMapContextualLayersData.forEach(layerData => {
+      const { identifier, cartoLayers } = layerData;
+      const cartoData = cartoLayers[0];
+
+      if (cartoData.rasterUrl) {
+        layers.push(getRasterLayerTemplate(identifier, `${cartoData.rasterUrl}{z}/{x}/{y}.png`));
+      } else {
+        const layerStyle = cartoLayerTemplates[identifier];
+        if (layerStyle) {
+          layers = layers.concat(layerStyle);
+        }
+      }
+    });
+    return layers;
+}
+);
+
+export const getLogisticLayers = createSelector(
+  [getSelectedLogisticLayers, getLogisticMapLayerTemplates], (selectedLogisticLayers, logisticMapLayerTemplates) => {
+    if (!selectedLogisticLayers) return [];
+    const cartoLayerTemplates = logisticMapLayerTemplates.flat();
+    return selectedLogisticLayers
+      .map(l => cartoLayerTemplates.find(i => i.id === l))
+      .filter(Boolean);
   }
 );

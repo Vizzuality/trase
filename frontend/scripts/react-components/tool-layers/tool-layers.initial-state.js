@@ -6,6 +6,7 @@ export default {
     mapVectorData: null,
     mapDimensionsGroups: [],
     mapContextualLayers: {},
+    mapLogisticLayers: null,
     mapUnitLayers: null,
     mapUnitLayersData: null
   },
@@ -21,5 +22,6 @@ export default {
     window.innerWidth - SANKEY_OFFSETS.splittedWidth,
     window.innerHeight - SANKEY_OFFSETS.height
   ],
-  activeModal: null
+  activeModal: null,
+  inspectionLevel: null
 };

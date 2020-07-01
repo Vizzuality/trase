@@ -1,6 +1,14 @@
+import { CHOROPLETH_COLORS } from 'constants';
 import { layer } from './layer-utils';
 
-export default (unitLayer, sourceLayer) => {
+const featureStateConditional = (featureStateVariable, defaultValue) => [
+  'case',
+  ['any', ['to-boolean', ['feature-state', featureStateVariable]]],
+  ['feature-state', featureStateVariable],
+  defaultValue
+];
+
+export default (unitLayer, sourceLayer, darkBasemap) => {
   const { id, tiles, version, bounds, center, maxzoom, minzoom } = unitLayer;
   const styledUnitLayer = {
     name: id,
@@ -23,9 +31,10 @@ export default (unitLayer, sourceLayer) => {
       {
         type: 'fill',
         paint: {
-          'fill-color': '#fff',
-          'fill-opacity': 1
-        }
+          'fill-color': featureStateConditional('color', CHOROPLETH_COLORS.fill_not_linked),
+          'fill-opacity': featureStateConditional('fillOpacity', darkBasemap ? 0 : 1)
+        },
+        filter: ['!=', '$type', 'Point']
       },
       {
         type: 'line',
@@ -48,12 +57,44 @@ export default (unitLayer, sourceLayer) => {
               ['to-boolean', ['feature-state', 'hover']]
             ],
             3,
-            0.2
+            featureStateConditional('lineWidth', 0.5)
+          ],
+          'line-opacity': featureStateConditional('lineOpacity', 1)
+        },
+        filter: ['!=', '$type', 'Point']
+      },
+      {
+        type: 'circle',
+        paint: {
+          'circle-color': '#34444c',
+          'circle-radius': [
+            'case',
+            [
+              'any',
+              ['to-boolean', ['feature-state', 'hover']],
+              ['to-boolean', ['feature-state', 'selected']]
+            ],
+            3.5,
+            3
+          ],
+          'circle-stroke-color': '#fff',
+          'circle-stroke-width': [
+            'case',
+            [
+              'any',
+              ['to-boolean', ['feature-state', 'hover']],
+              ['to-boolean', ['feature-state', 'selected']]
+            ],
+            3,
+            featureStateConditional('lineWidth', 1)
           ]
+        },
+        filter: ['==', '$type', 'Point'],
+        metadata: {
+          position: 'top'
         }
       }
     ]
   };
-
   return [layer(styledUnitLayer)];
 };
