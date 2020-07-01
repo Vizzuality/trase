@@ -17,6 +17,7 @@ const MapTooltip = ({ data, values }) => {
         tooltip.hide();
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tooltip, data]);
 
   return null;
