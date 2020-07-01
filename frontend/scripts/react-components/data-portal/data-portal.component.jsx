@@ -49,8 +49,7 @@ function DataPortal(props) {
     indicators,
     onDataDownloadFormLoaded,
     onDownloadTriggered,
-    selectedContext,
-    bulkLogisticsData
+    selectedContext
   } = props;
 
   function reducer(state, action) {
@@ -272,18 +271,14 @@ function DataPortal(props) {
       state.downloadType === 'bulk'
         ? { context_id: state.bulkContext, pivot: 1 }
         : getDownloadURLParams();
-    if (!params.context_id && state.downloadType !== 'logistics') {
+    if (!params.context_id) {
       return;
     }
 
     const file = state.fileExtension;
-    const getDownloadURL = () => {
-      if (state.downloadType === 'logistics') {
-        return `https://${CARTO_ACCOUNT}.carto.com/api/v2/sql?filename=crushing_facilities&q=SELECT * FROM "${CARTO_ACCOUNT}".${state.bulkContext}&format=${file.replace('.', '')}`;
-      }
-      const fileUrl = file === '.json' ? GET_JSON_DATA_DOWNLOAD_FILE_URL : GET_CSV_DATA_DOWNLOAD_FILE_URL;
-      return getURLFromParams(fileUrl, params);
-    }
+    const fileUrl =
+      file === '.json' ? GET_JSON_DATA_DOWNLOAD_FILE_URL : GET_CSV_DATA_DOWNLOAD_FILE_URL;
+    const downloadURL = getURLFromParams(fileUrl, params);
 
     onDownloadTriggered(
       Object.assign(
@@ -295,7 +290,7 @@ function DataPortal(props) {
       )
     );
 
-    window.open(getDownloadURL());
+    window.open(downloadURL);
 
     dataPortalDispatch({ type: 'setDownloaded', payload: true });
   };
@@ -317,10 +312,9 @@ function DataPortal(props) {
       <div className="row column">
         <BulkDownloadsBlock
           contexts={enabledContexts}
-          bulkLogisticsData={bulkLogisticsData}
           enabled={DATA_DOWNLOAD_ENABLED}
-          onButtonClicked={(type, id) =>
-            dataPortalDispatch({ type: 'setDownloadType', payload: { type , id } })
+          onButtonClicked={id =>
+            dataPortalDispatch({ type: 'setDownloadType', payload: { type: 'bulk', id } })
           }
         />
         <div className="c-custom-dataset">
@@ -365,7 +359,6 @@ DataPortal.propTypes = {
   loadDataDownloadLists: PropTypes.func.isRequired,
   autoCompleteCountries: PropTypes.string,
   enabledContexts: PropTypes.array.isRequired,
-  bulkLogisticsData: PropTypes.array.isRequired,
   consumptionCountries: PropTypes.array,
   exporters: PropTypes.array,
   indicators: PropTypes.array,

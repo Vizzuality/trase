@@ -7,11 +7,10 @@ import {
 import { fetchWithCancel } from 'utils/saga-utils';
 import {
   setMapDimensions,
-  setLinkedGeoIds,
-  setUnitLayerData
+  setLinkedGeoIds
 } from 'react-components/tool-layers/tool-layers.actions';
 import intesection from 'lodash/intersection';
-import { CARTO_BASE_URL, YEARS_DISABLED_UNAVAILABLE, YEARS_INCOMPLETE } from 'constants';
+import { YEARS_DISABLED_UNAVAILABLE, YEARS_INCOMPLETE } from 'constants';
 import { getSingleMapDimensionWarning } from 'app/helpers/getMapDimensionsWarnings';
 import { setMapContextLayers } from 'react-components/tool/tool.actions';
 import { getSelectedContext, getSelectedYears } from 'app/app.selectors';
@@ -107,34 +106,6 @@ export function* getMapDimensions(selectedContext, selectedYears) {
 
     yield put(setMapContextLayers(data.contextualLayers));
     yield put(setMapDimensions(data.dimensions, data.dimensionGroups));
-  } catch (e) {
-    console.error('Error', e);
-  } finally {
-    if (yield cancelled()) {
-      if (NODE_ENV_DEV) {
-        console.error('Cancelled');
-      }
-      if (source) {
-        source.cancel();
-      }
-    }
-  }
-}
-
-export function* getUnitLayerData(params) {
-  const { selectedGeoColumnId, selectedUnitIndicatorIds, iso2 } = params;
-  const url = `${CARTO_BASE_URL}/sql?q=
-    SELECT node_type_id, node_id, geo_id, attribute_id, json_object_agg(COALESCE(year, 0 ), total
-    ORDER BY year) as years FROM (SELECT node_type_id, node_id, geo_id, attribute_id, year,
-    SUM(value) AS total FROM map_attributes_values
-    WHERE node_type_id = ${selectedGeoColumnId} and attribute_id IN (${selectedUnitIndicatorIds.join(',')}) and iso2 = '${iso2}'
-    GROUP BY node_type_id, node_id, geo_id, attribute_id, year) s
-    GROUP BY node_type_id, node_id, geo_id, attribute_id ORDER BY geo_id, node_id, attribute_id
-  `;
-  const { source, fetchPromise } = fetchWithCancel(url);
-  try {
-    const { data } =  yield call(fetchPromise);
-    yield put(setUnitLayerData(data && data.rows));
   } catch (e) {
     console.error('Error', e);
   } finally {

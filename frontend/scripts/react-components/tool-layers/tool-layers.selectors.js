@@ -8,54 +8,38 @@ import {
   getSelectedNodesData
 } from 'react-components/tool/tool.selectors';
 import { getSelectedYears, getSelectedContext } from 'app/app.selectors';
-import snakeCase from 'lodash/snakeCase';
 
 const getToolNodes = state => state.toolLinks.data.nodes;
 const getToolColumns = state => state.toolLinks.data.columns;
-const getUnitLayers = state => state.toolLayers.data.mapUnitLayers || null;
 const getToolNodeAttributes = state => state.toolLinks.data.nodeAttributes;
 const getToolMapDimensions = state => state.toolLayers.data.mapDimensions;
 const getMapContextualLayers = state => state.toolLayers.data.mapContextualLayers;
 const getToolSelectedMapDimensions = state => state.toolLayers.selectedMapDimensions;
 const getSelectedMapContextualLayers = state => state.toolLayers.selectedMapContextualLayers;
-const getSelectedLogisticLayers = state => state.toolLayers.selectedLogisticLayers;
 const getToolMapView = state => state.toolLayers.mapView;
 const getToolLayout = state => state.toolLayers.toolLayout;
 const getSelectedBasemap = state => state.toolLayers.selectedBasemap;
 
-const getGeoNodes = (nodesData, columns, selectedContext) => {
+const getNodesGeoIds = (nodesData, columns) => {
   if (columns) {
     return nodesData
       .filter(node => {
         const column = columns[node.columnId];
         return column.isGeo === true && typeof node.geoId !== 'undefined' && node.geoId !== null;
-      }).map(node => {
-        const column = columns[node.columnId];
-        const layerId = selectedContext && `${snakeCase(selectedContext.countryName)}_${snakeCase(
-          column.name
-        )}`;
-        return { ...node, layerId};
-      });
+      })
+      .map(node => node.geoId);
   }
   return [];
 };
 
-export const getSelectedGeoNodes = createSelector(
-  [getSelectedNodesData, getToolColumns, getSelectedContext],
-  getGeoNodes
+export const getSelectedNodesGeoIds = createSelector(
+  [getSelectedNodesData, getToolColumns],
+  getNodesGeoIds
 );
 
-export const getHighlightedGeoNodes = createSelector(
-  [getHighlightedNodesData, getToolColumns, getSelectedContext],
-  getGeoNodes
-);
-
-export const getSelectedNodesGeoIds = createSelector([getSelectedGeoNodes], geoNodes =>
-  geoNodes ? geoNodes.map(node => node.geoId) : []
-);
-
-export const getHighlightedNodesGeoIds = createSelector([getHighlightedGeoNodes], geoNodes =>
-  geoNodes ? geoNodes.map(n => n.map(node => node.geoId)) : []
+export const getHighlightedNodesGeoIds = createSelector(
+  [getHighlightedNodesData, getToolColumns],
+  getNodesGeoIds
 );
 
 export const getSelectedGeoColumn = createSelector(
@@ -209,42 +193,10 @@ export const getShouldFitBoundsSelectedPolygons = createSelector(
     selectedNodesGeoIds.length === selectedNodesData.length
 );
 
-export const getAllSelectedGeoColumns = createSelector(
-  [getToolColumns, getSelectedColumnsIds],
-  (columns, selectedColumnsIds) => {
-    if (!columns) return null;
-    const selectedGeoColumns = Object.values(columns).filter(
-      column => column.isGeo && selectedColumnsIds.includes(column.id)
-    );
-    return selectedGeoColumns;
-  }
-);
-
-export const getSelectedUnitLayers = createSelector(
-  [getUnitLayers, getToolColumns, getSelectedContext, getAllSelectedGeoColumns],
-  (unitLayers, columns, selectedContext, selectedGeoColumns) => {
-    if (!unitLayers || !selectedContext || !selectedGeoColumns) return null;
-    // Use geometryNodeTypeId column for columns without own geometry e.g. logistic hubs
-    const geoColumns = selectedGeoColumns.map(c => c.geometryNodeTypeId ? columns[c.geometryNodeTypeId] : c);
-
-    const countryName = snakeCase(selectedContext.countryName);
-    const columnName = (c) => snakeCase(c.name);
-    const selectedUnitLayers = [];
-    geoColumns.forEach(geoColumn => {
-      const unitLayer = unitLayers.find(l => l.id === `${countryName}_${columnName(geoColumn)}`);
-      if (unitLayer) {
-        selectedUnitLayers.push({...unitLayer, hasChoropleth: !geoColumn.isChoroplethDisabled } )
-      }
-    });
-    return selectedUnitLayers;
-  }
-);
-
 export const getToolLayersUrlProps = createStructuredSelector({
   mapView: getMapView,
   toolLayout: getToolLayout,
   selectedBasemap: getSelectedBasemap,
   selectedMapDimensions: getToolSelectedMapDimensions,
-  selectedMapContextualLayers: getSelectedMapContextualLayers,
-  selectedLogisticLayers: getSelectedLogisticLayers
+  selectedMapContextualLayers: getSelectedMapContextualLayers
 });

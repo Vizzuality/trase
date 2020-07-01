@@ -62,7 +62,6 @@
     "CONSOLIDATE_INSIGHTS": true,
     "ENABLE_COUNTRY_PROFILES": true,
     "API_V3_URL": true,
-    "UNIT_LAYERS_API_URL": true,
     "ENABLE_DASHBOARDS": true,
     "DISABLE_PROFILES": true,
     "ENABLE_LEGACY_TOOL_SEARCH": true,
@@ -82,7 +81,6 @@
     "NAMED_MAPS_ENV": true,
     "GFW_WIDGETS_BASE_URL": true,
     "CARTO_ACCOUNT": true,
-    "MAPBOX_TOKEN": true,
     "ga": true,
     "fetch": true
   },

@@ -47,8 +47,8 @@ const resizeSankeyTool = (...args) =>
   import('../react-components/tool/tool.thunks').then(module => module.resizeSankeyTool(...args));
 const loadDisclaimerTool = (...args) =>
   import('../react-components/tool/tool.thunks').then(module => module.loadDisclaimerTool(...args));
-const loadUnitLayers = (...args) =>
-  import('../react-components/tool/tool.thunks').then(module => module.loadUnitLayers(...args));
+  const loadUnitLayers = (...args) =>
+    import('../react-components/tool/tool.thunks').then(module => module.loadUnitLayers(...args));
 
 const loadInitialDashboardData = (...args) =>
   import('../react-components/dashboard-element/dashboard-element.thunks').then(module =>

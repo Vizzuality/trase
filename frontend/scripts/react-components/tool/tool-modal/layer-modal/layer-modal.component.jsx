@@ -14,7 +14,6 @@ export default function LayerModal({
   selectedItemIds,
   selectUnitLayers,
   selectContextualLayers,
-  selectLogisticLayers,
   setActiveModal
 }) {
   const tabs = useMemo(() => {
@@ -49,13 +48,11 @@ export default function LayerModal({
         : null;
     selectUnitLayers(unitLayers);
     selectContextualLayers(toArray(currentSelection[LAYER_TAB_NAMES.contextual]));
-    selectLogisticLayers(toArray(currentSelection[LAYER_TAB_NAMES.logistic]));
     setActiveModal(null);
   };
   const infoMessage = {
     [LAYER_TAB_NAMES.unit]: 'Please choose up to two layers (one per indicator set)',
-    [LAYER_TAB_NAMES.contextual]: 'Choose one or more contextual layers',
-    [LAYER_TAB_NAMES.logistic]: 'You can choose one or several logistic hubs'
+    [LAYER_TAB_NAMES.contextual]: 'Choose one or more contextual layers'
   }[selectedTab];
   return (
     <div className="c-layer-modal">
@@ -92,6 +89,5 @@ LayerModal.propTypes = {
   selectedItemIds: PropTypes.object,
   selectUnitLayers: PropTypes.func.isRequired,
   selectContextualLayers: PropTypes.func.isRequired,
-  selectLogisticLayers: PropTypes.func.isRequired,
   setActiveModal: PropTypes.func.isRequired
 };

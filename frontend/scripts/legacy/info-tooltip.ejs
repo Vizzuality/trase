@@ -4,7 +4,7 @@
   <div class="title"><%= values[i].title %></div>
   <div class="data">
     <%= values[i].value %>
-    <% if (values[i].unit && values[i].unit !== 'Number') { %>
+    <% if (values[i].unit) { %>
     <span class="unit">
           <%= values[i].unit %>
         </span>
