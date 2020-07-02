@@ -47,7 +47,7 @@ function Banner() {
           >
             <a
               title="New Trase yearbook 2020"
-              href="https://insights.trase.earth/yearbook/"
+              href="https://insights.trase.earth/yearbook/summary/"
               target="_blank"
               rel="noopener noreferrer"
               className="banner-content"
