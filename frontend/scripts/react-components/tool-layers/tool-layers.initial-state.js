@@ -5,10 +5,7 @@ export default {
     mapDimensions: {},
     mapVectorData: null,
     mapDimensionsGroups: [],
-    mapContextualLayers: {},
-    mapLogisticLayers: null,
-    mapUnitLayers: null,
-    mapUnitLayersData: null
+    mapContextualLayers: {}
   },
   highlightedNodeCoordinates: null, // TODO: this should be local state only used for map tooltip
   toolLayout: TOOL_LAYOUT.splitted,
@@ -22,6 +19,5 @@ export default {
     window.innerWidth - SANKEY_OFFSETS.splittedWidth,
     window.innerHeight - SANKEY_OFFSETS.height
   ],
-  activeModal: null,
-  inspectionLevel: null
+  activeModal: null
 };

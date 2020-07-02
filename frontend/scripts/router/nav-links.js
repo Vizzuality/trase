@@ -38,9 +38,8 @@ let nav = [
     page: 'dashboardRoot'
   },
   {
-    name: 'Finance',
-    page: 'https://trase.finance',
-    external: true
+    name: 'Logistics Map',
+    page: 'logisticsMap'
   },
   {
     name: 'Finance',
@@ -49,9 +48,7 @@ let nav = [
   },
   {
     name: 'Yearbook',
-    page: `https://yearbook2018.${
-      window.location.hostname === 'staging.trase.earth' ? window.location.hostname : 'trase.earth'
-    }`,
+    page: `https://insights.trase.earth/yearbook/summary/`,
     external: true
   },
   {
@@ -90,6 +87,10 @@ const sidebarNav = [
       payload: { section: 'faq' }
     }
   },
+  // {
+  //   name: 'Team',
+  //   page: 'team'
+  // },
   {
     name: 'Partners',
     page: {
@@ -137,6 +138,10 @@ if (DISABLE_PROFILES) {
 
 if (!ENABLE_DASHBOARDS) {
   nav = nav.filter(route => route.page !== 'dashboardRoot');
+}
+
+if (!ENABLE_LOGISTICS_MAP) {
+  nav = nav.filter(route => route.page !== 'logisticsMap');
 }
 
 export default {

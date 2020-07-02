@@ -34,7 +34,8 @@ class Hero extends React.Component {
 
   render() {
     const { showStory } = this.state;
-    const { className, story, tweets, homeVideo } = this.props;
+    const { className, story, homeVideo } = this.props;
+    // tweets,
     const isLegacyBrowser =
       (!window.ActiveXObject && 'ActiveXObject' in window) ||
       /bot|google|baidu|bing|msn|duckduckbot|teoma|slurp|yandex/i.test(navigator.userAgent);
