@@ -124,6 +124,19 @@
     right: 0;
     max-width: 50%;
     z-index: $z-above-hero;
+    display: flex;
+
+    &.-banner {
+      margin-right: 20px;
+
+      @media only screen and (max-width: $breakpoint-foundation-small) {
+        position: relative;
+        right: initial;
+        width: 100%;
+        z-index: 3;
+        max-width: 100%;
+      }
+    }
 
     &.-tweets {
       width: 350px;
