@@ -76,6 +76,7 @@ function MapBoxMap(props) {
       ...updatedViewport
     });
   };
+
   useEffect(() => {
     setViewport({
       ...viewport,
@@ -125,69 +126,71 @@ function MapBoxMap(props) {
 
   const onHover = e => {
     const { features, center } = e;
-    if (features?.length) {
-      const logisticSources = logisticLayers.map(l => l.id);
-      const logisticsFeature = features.find(f => logisticSources.includes(f.source));
-      if (logisticsFeature) {
-        const { id, source, sourceLayer: logisticsSourceLayer, properties } = logisticsFeature;
-        if (lastHoveredGeo.id && layerIds.includes(lastHoveredGeo.source)) {
-          map.removeFeatureState(lastHoveredGeo, 'hover');
+    if (!features || !features.length) return;
+    const logisticSources = logisticLayers.map(l => l.id);
+    const logisticsFeature = features.find(f => logisticSources.includes(f.source));
+
+    if (logisticsFeature) {
+      const { id, source, sourceLayer: logisticsSourceLayer, properties } = logisticsFeature;
+      if (lastHoveredGeo.id && layerIds.includes(lastHoveredGeo.source)) {
+        map.setFeatureState({ ...lastHoveredGeo }, { hover: false });
+      }
+      lastHoveredGeo = {
+        id: id || properties.id,
+        source,
+        sourceLayer: logisticsSourceLayer
+      };
+      if (lastHoveredGeo.id) {
+        map.setFeatureState({ ...lastHoveredGeo }, { hover: true });
+      }
+      const logisticsTooltipValues = [];
+
+      [
+        { name: 'company' },
+        { name: 'state' },
+        { name: 'municipality' },
+        { name: 'capacity', unit: 't' }
+      ].forEach(l => {
+        if (properties[l.name]) {
+          logisticsTooltipValues.push({ title: l.name, unit: l.unit, value: properties[l.name] });
         }
+      });
+      updateTooltipValues(logisticsTooltipValues);
+      setTooltip({
+        x: center.x,
+        y: center.y,
+        name: properties?.subclass || upperCase(logisticsFeature.source)
+      });
+      return;
+    }
+
+    const geoFeature = features.find(f => f.sourceLayer === sourceLayer);
+
+    if (geoFeature) {
+      const { properties, id, source } = geoFeature;
+      if (map && lastHoveredGeo.id && layerIds.includes(lastHoveredGeo.source)) {
+        map.setFeatureState({ ...lastHoveredGeo }, { hover: false });
+      }
+      if (id && layerIds && layerIds[0] && layerIds.includes(source)) {
         lastHoveredGeo = {
-          id: id || properties.id,
+          id,
           source,
-          sourceLayer: logisticsSourceLayer
+          sourceLayer
         };
-        if (lastHoveredGeo.id) {
-          map.setFeatureState({ ...lastHoveredGeo }, { hover: true });
-        }
-        const logisticsTooltipValues = [];
-
-        [
-          { name: 'company' },
-          { name: 'state' },
-          { name: 'municipality' },
-          { name: 'capacity', unit: 't' }
-        ].forEach(l => {
-          if (properties[l.name]) {
-            logisticsTooltipValues.push({ title: l.name, unit: l.unit, value: properties[l.name] });
-          }
-        });
-        updateTooltipValues(logisticsTooltipValues);
-        setTooltip({
-          x: center.x,
-          y: center.y,
-          name: properties?.subclass || upperCase(logisticsFeature.source)
-        });
-        return;
+        map.setFeatureState({ ...lastHoveredGeo }, { hover: true });
       }
-      const geoFeature = features.find(f => f.sourceLayer === sourceLayer);
-      if (geoFeature) {
-        const { properties, id, source } = geoFeature;
-        if (lastHoveredGeo.id && layerIds.includes(lastHoveredGeo.source)) {
-          map.removeFeatureState(lastHoveredGeo, 'hover');
-        }
-        if (id && layerIds && layerIds[0] && layerIds.includes(source)) {
-          lastHoveredGeo = {
-            id,
-            source,
-            sourceLayer
-          };
-          map.setFeatureState({ ...lastHoveredGeo }, { hover: true });
-        }
 
-        onPolygonHighlighted(id, {
-          pageX: center.x,
-          pageY: center.y
-        });
+      onPolygonHighlighted(id, {
+        pageX: center.x,
+        pageY: center.y
+      });
 
-        const node = highlightedNodesData[0];
-        if (node?.name) {
-          setTooltip({ x: center.x, y: center.y, name: node?.name, values: properties });
-        }
-      } else {
-        setTooltip(null);
+      const node = highlightedNodesData[0];
+      if (node?.name) {
+        setTooltip({ x: center.x, y: center.y, name: node?.name, values: properties });
       }
+    } else {
+      setTooltip(null);
     }
   };
 

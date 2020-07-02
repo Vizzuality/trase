@@ -13,7 +13,7 @@ export const getSelectedExporterNames = createSelector(
     if (!selectedNodesIds || !nodes) return null;
     const exporterSelectedNodes = selectedNodesIds
       .map(n => nodes[n])
-      .filter(n => n.type === 'EXPORTER');
+      .filter(n => n && n.type === 'EXPORTER');
     return exporterSelectedNodes.length ? exporterSelectedNodes.map(n => n.name) : null;
   }
 );
