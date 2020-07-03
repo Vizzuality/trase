@@ -223,20 +223,17 @@ function* syncSearchedNodes() {
 }
 
 function* broadcastContextChange() {
-  let previousContext = { countryId: null, commodityId: null };
+  const previousContext = { countryId: null, commodityId: null };
 
   function* onPanelSave() {
-    const { contexts, selectedContextId } = yield select(state => state.app);
+    const { contexts } = yield select(state => state.app);
     const { countries, commodities } = yield select(state => state.nodesPanel);
     const context = contexts.find(
       ctx =>
         ctx.countryId === countries.draftSelectedNodeId &&
         ctx.commodityId === commodities.draftSelectedNodeId
     );
-    const stateContext = contexts.find(ctx => ctx.id === selectedContextId);
-    if (stateContext) {
-      previousContext = stateContext;
-    }
+
     if (
       countries.draftSelectedNodeId !== previousContext.countryId ||
       commodities.draftSelectedNodeId !== previousContext.commodityId
