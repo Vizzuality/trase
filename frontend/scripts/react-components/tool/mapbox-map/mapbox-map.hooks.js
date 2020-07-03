@@ -1,6 +1,7 @@
 import { CHOROPLETH_COLORS } from 'constants';
 import { useEffect } from 'react';
 import bbox from '@turf/bbox';
+import isEmpty from 'lodash/isEmpty';
 
 export function useChoroplethFeatureState(choropleth, map, unitLayers, sourceLayer, linkedGeoIds, baseLayerInfo, darkBasemap) {
   useEffect(() => {
@@ -9,7 +10,6 @@ export function useChoroplethFeatureState(choropleth, map, unitLayers, sourceLay
       const source = choroplethLayerIds && choroplethLayerIds[0]; // Only first choropleth layer is highlighted
       const geoIds = Object.keys(choropleth);
       const hasLinkedIds = linkedGeoIds.length > 0;
-
       let color = CHOROPLETH_COLORS.default_fill;
       let lineWidth = 0.3;
       let fillOpacity = 1;
@@ -17,9 +17,14 @@ export function useChoroplethFeatureState(choropleth, map, unitLayers, sourceLay
       const lineColor = darkBasemap
         ? CHOROPLETH_COLORS.bright_stroke
         : CHOROPLETH_COLORS.dark_stroke;
-
       // When choropleth has nodes
       if (choroplethLayerIds) {
+
+        // remove choropleth when we deselect the layer
+        if (isEmpty(choropleth)) {
+          map.removeFeatureState({ source, sourceLayer });
+        }
+
         geoIds.forEach(geoId => {
           const isLinked = linkedGeoIds.indexOf(geoId) > -1;
           const choroplethFeatureState = {
