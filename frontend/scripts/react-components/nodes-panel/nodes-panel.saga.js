@@ -233,6 +233,7 @@ function* broadcastContextChange() {
         ctx.countryId === countries.draftSelectedNodeId &&
         ctx.commodityId === commodities.draftSelectedNodeId
     );
+
     if (
       countries.draftSelectedNodeId !== previousContext.countryId ||
       commodities.draftSelectedNodeId !== previousContext.commodityId
