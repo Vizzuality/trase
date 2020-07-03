@@ -4,8 +4,14 @@ export default (geoId, nodes, selectedGeoColumnIds) => {
   }
   // node should match geoId obv, but also columnId
   // (needed because municip and logistics hubs have the same geoIds)
+
+  // TODO: Indonesia MILL dont have the correct ID
   const selectedNodeId = Object.keys(nodes).find(
-    nodeId => nodes[nodeId].geoId === geoId && selectedGeoColumnIds.includes(nodes[nodeId].columnId)
+    nodeId =>
+      (nodes[nodeId].geoId === geoId ||
+      (nodes[nodeId].type === 'MILL' &&
+        nodes[nodeId].name === geoId) &&
+        selectedGeoColumnIds.includes(nodes[nodeId].columnId))
   );
   if (selectedNodeId === undefined) return null;
 

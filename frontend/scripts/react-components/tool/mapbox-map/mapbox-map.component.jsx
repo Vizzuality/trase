@@ -127,6 +127,7 @@ function MapBoxMap(props) {
   const onHover = e => {
     const { features, center } = e;
     if (!features || !features.length) return;
+
     const logisticSources = logisticLayers.map(l => l.id);
     const logisticsFeature = features.find(f => logisticSources.includes(f.source));
 
@@ -165,9 +166,9 @@ function MapBoxMap(props) {
     }
 
     const geoFeature = features.find(f => f.sourceLayer === sourceLayer);
-
     if (geoFeature) {
-      const { properties, id, source } = geoFeature;
+      const { properties, source } = geoFeature;
+      const id = geoFeature.id || geoFeature.properties.mill_name; // only for indonesia mills
       if (map && lastHoveredGeo.id && layerIds.includes(lastHoveredGeo.source)) {
         map.setFeatureState({ ...lastHoveredGeo }, { hover: false });
       }
@@ -184,6 +185,22 @@ function MapBoxMap(props) {
         pageX: center.x,
         pageY: center.y
       });
+
+      if (source === 'indonesia_mill') {
+        const logisticsTooltipValues = [];
+
+        [
+          { name: 'company' },
+          { name: 'mill_id' },
+          { name: 'uml_id' },
+        ].forEach(l => {
+          if (properties[l.name]) {
+            logisticsTooltipValues.push({ title: l.name, unit: l.unit, value: properties[l.name] });
+          }
+        });
+        updateTooltipValues(logisticsTooltipValues);
+      }
+
 
       const node = highlightedNodesData[0];
       if (node?.name) {
@@ -227,7 +244,7 @@ function MapBoxMap(props) {
       <ReactMapGL
         ref={mapRef}
         {...viewport}
-        onViewportChange={setViewport}
+        onViewportChange={v => setViewport(v)}
         onLoad={() => setLoaded(true)}
         onResize={updateViewport}
         mapboxApiAccessToken={MAPBOX_TOKEN}
