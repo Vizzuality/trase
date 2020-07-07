@@ -90,7 +90,7 @@ group :development do
   gem 'capistrano-rails', '~> 1.5', require: false
   gem 'capistrano-rvm'
   gem 'ed25519', '~> 1.2'
-  gem 'rubocop', '~> 0.86.0', require: false
+  gem 'rubocop', '~> 0.87.0', require: false
   gem 'rubocop-performance', require: false
 end
 
