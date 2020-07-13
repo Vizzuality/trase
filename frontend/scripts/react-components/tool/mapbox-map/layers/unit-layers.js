@@ -46,7 +46,7 @@ export default (unitLayer, sourceLayer, darkBasemap) => {
               ['to-boolean', ['feature-state', 'selected']],
               ['to-boolean', ['feature-state', 'hover']]
             ],
-            '#000',
+            '#fff',
             '#ccc'
           ],
           'line-width': [
