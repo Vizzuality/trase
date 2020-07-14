@@ -9,7 +9,6 @@ export { default as profileSelector } from 'react-components/shared/profile-sele
 export { default as newsletter } from 'react-components/shared/newsletter/newsletter.initial-state';
 export { default as profiles } from 'react-components/profiles/profiles.initial-state';
 export { default as nodesPanel } from 'react-components/nodes-panel/nodes-panel.initial-state';
-export { default as logisticsMap } from 'react-components/logistics-map/logistics-map.initial-state';
 export { default as legacyExplore } from 'react-components/legacy-explore/legacy-explore.initial-state';
 export { default as explore } from 'react-components/explore/explore.initial-state';
 export { default as data } from 'react-components/data-portal/data-portal.initial-state';

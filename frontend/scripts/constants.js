@@ -237,30 +237,6 @@ export const BREAKPOINTS = {
   laptop: 1024
 };
 
-const buildYears = (start, length = 1) =>
-  Array.from({ length })
-    .fill(start)
-    .map((y, i) => ({ value: y + i, label: `${y + i}` }));
-
-export const LOGISTICS_MAP_YEARS = {
-  palmOil: buildYears(2016),
-  soy: buildYears(2005, 12),
-  cattle: buildYears(2012, 6)
-};
-
-export const LOGISTICS_MAP_HUBS = [
-  { value: 'soy', label: 'Soy' },
-  { value: 'cattle', label: 'Cattle' },
-  { value: 'palmOil', label: 'Palm oil' }
-];
-
-export const LOGISTICS_MAP_INSPECTION_LEVELS = [
-  { value: 'SIF', label: 'SIF' },
-  { value: 'SIE', label: 'SIE' },
-  { value: 'SIM', label: 'SIM' },
-  { value: 'UNKNOWN', label: 'Unknown' }
-];
-
 export const EXPLORE_STEPS = {
   selectCommodity: 1,
   selectCountry: 2,
