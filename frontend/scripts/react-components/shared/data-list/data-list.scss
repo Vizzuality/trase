@@ -1,0 +1,18 @@
+@import 'styles/settings';
+
+.c-data-list {
+  .data-list {
+    margin-top: 40px;
+  }
+
+  .data-list--items {
+    color: $charcoal-grey;
+    font-family: $font-family-1;
+    font-weight: $font-weight-bold;
+  }
+
+  .data-list--value {
+    color: rgba($charcoal-grey, 0.6);
+    font-weight: $font-weight-regular;
+  }
+}

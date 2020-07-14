@@ -11,7 +11,6 @@ import SummaryTitle from 'react-components/profile/profile-components/summary/su
 import Map from 'react-components/profile/profile-components/map.component';
 import Text from 'react-components/shared/text';
 import formatValue from 'utils/formatValue';
-import Icon from 'react-components/shared/icon';
 
 function CountrySummary(props) {
   const {
@@ -42,62 +41,6 @@ function CountrySummary(props) {
           useRobinsonProjection
         />
       </div>
-    </div>
-  );
-
-  const renderForest500 = ({ name, tooltip, value }) => (
-    <div className="stat-item">
-      <div className="legend">
-        <Text transform="uppercase" variant="mono" as="span">
-          {name}
-        </Text>
-        <span id="forest-500-tooltip">
-          <HelpTooltip text={tooltip} />
-        </span>
-      </div>
-      <div className="value forest-500-score">
-        {Array.from({ length: 5 }).map((_, index) => (
-          <Icon
-            key={`circle${index}`}
-            color="grey"
-            className="circle-icon"
-            icon={`icon-circle-${value > index ? 'filled' : 'empty'}`}
-          />
-        ))}
-      </div>
-    </div>
-  );
-
-  const renderZeroDeforestation = ({ name, tooltip, value }) => (
-    <div className="stat-item">
-      <Text transform="uppercase" variant="mono" as="div" className="legend">
-        {name}
-        <span>
-          <HelpTooltip text={tooltip} />
-        </span>
-      </Text>
-      {value.toLowerCase() !== 'none' ? (
-        <div className="value">
-          <Icon color="grey" icon="icon-check-circle" className="icon-check-circle" />
-          <Text
-            transform="uppercase"
-            variant="mono"
-            as="span"
-            weight="bold"
-            size="lg"
-            className="stats-text"
-          >
-            {value}
-          </Text>
-        </div>
-      ) : (
-        <div className="value">
-          <Icon color="grey" icon="icon-no-circle" className="icon-no" />
-          <Text transform="uppercase" variant="mono" as="span" weight="bold" className="stats-text">
-            NONE
-          </Text>
-        </div>
-      )}
     </div>
   );
 
@@ -137,12 +80,6 @@ function CountrySummary(props) {
   ];
 
   const renderIndicator = indicatorKey => {
-    if (indicatorKey === 'forest_500') {
-      return renderForest500(headerAttributes.forest_500);
-    }
-    if (indicatorKey === 'zero_deforestation') {
-      return renderZeroDeforestation(headerAttributes.zero_deforestation);
-    }
     const { name, value, unit, tooltip } = headerAttributes[indicatorKey];
     if (!value) return null;
     return (
