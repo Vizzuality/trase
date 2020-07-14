@@ -1,5 +1,5 @@
 /* eslint-disable react/no-danger */
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { PropTypes } from 'prop-types';
 import { LayerManager, Layer } from 'layer-manager/dist/components';
 import { PluginMapboxGl } from 'layer-manager';
@@ -41,7 +41,8 @@ function MapBoxMap(props) {
     choropleth,
     linkedGeoIds,
     map,
-    setMap
+    setMap,
+    highlightedGeoNodes
   } = props;
   const mapRef = useRef();
   const mapContainerRef = useRef();
@@ -104,14 +105,24 @@ function MapBoxMap(props) {
     return undefined;
   }, [tooltipValues, updateTooltipValues]);
 
+  const clearHoveredFeatureState = useCallback(() => {
+    if (lastHoveredGeo.id && layerIds.includes(lastHoveredGeo.source)) {
+      map.setFeatureState({ ...lastHoveredGeo }, { hover: false });
+      lastHoveredGeo.id = null;
+    }
+  }, [layerIds, map])
+
   // Set and remove selected feature-state
   useEffect(() => {
-    if (map && loaded && selectedGeoNodes.length) {
+    const unselectNodes = () => {
       lastSelectedGeos.forEach(lastSelectedGeo => {
-        if (layerIds.includes(lastSelectedGeo.source)) {
+        if (layerIds && layerIds.includes(lastSelectedGeo.source)) {
           map.removeFeatureState(lastSelectedGeo, 'selected')
         }
       });
+    };
+
+    const selectNodes = () => {
       lastSelectedGeos = selectedGeoNodes.map(selectedGeoNode => ({
         id: selectedGeoNode.geoId,
         source: selectedGeoNode.layerId,
@@ -120,22 +131,47 @@ function MapBoxMap(props) {
       lastSelectedGeos.forEach(geo =>
         layerIds.includes(geo.source) && map.setFeatureState({ ...geo }, { selected: true })
       );
+    };
+
+    if (map && loaded && selectedGeoNodes.length) {
+      unselectNodes();
+      selectNodes();
+    }
+
+    if (map && loaded && !selectedGeoNodes.length && lastSelectedGeos.length) {
+      unselectNodes();
     }
     return undefined;
   }, [selectedGeoNodes, map, loaded, sourceLayer, layerIds]);
 
+  // Highlight nodes hovered on Sankey
+  useEffect(() => {
+    if (map && loaded && highlightedGeoNodes) {
+      clearHoveredFeatureState('hover');
+      lastHoveredGeo = {
+        id: highlightedGeoNodes.geoId,
+        source: highlightedGeoNodes.layerId,
+        sourceLayer
+      };
+      if (lastHoveredGeo.id) {
+        map.setFeatureState({ ...lastHoveredGeo }, { hover: true });
+      }
+    }
+    return undefined;
+  }, [map, loaded, highlightedGeoNodes, layerIds, sourceLayer, clearHoveredFeatureState]);
+
   const onHover = e => {
     const { features, center } = e;
-    if (!features || !features.length) return;
+    if (!features || !features.length) {
+      return undefined;
+    }
 
     const logisticSources = logisticLayers.map(l => l.id);
     const logisticsFeature = features.find(f => logisticSources.includes(f.source));
 
     if (logisticsFeature) {
       const { id, source, sourceLayer: logisticsSourceLayer, properties } = logisticsFeature;
-      if (lastHoveredGeo.id && layerIds.includes(lastHoveredGeo.source)) {
-        map.setFeatureState({ ...lastHoveredGeo }, { hover: false });
-      }
+      clearHoveredFeatureState('hover');
       lastHoveredGeo = {
         id: id || properties.id,
         source,
@@ -162,7 +198,7 @@ function MapBoxMap(props) {
         y: center.y,
         name: properties?.subclass || upperCase(logisticsFeature.source)
       });
-      return;
+      return undefined;
     }
 
     const geoFeature = features.find(f => f.sourceLayer === sourceLayer);
@@ -191,7 +227,6 @@ function MapBoxMap(props) {
 
         [
           { name: 'company' },
-          { name: 'mill_id' },
           { name: 'uml_id' },
         ].forEach(l => {
           if (properties[l.name]) {
@@ -206,9 +241,13 @@ function MapBoxMap(props) {
       if (node?.name) {
         setTooltip({ x: center.x, y: center.y, name: node?.name, values: properties });
       }
-    } else {
-      setTooltip(null);
     }
+
+    if (!logisticsFeature && !geoFeature) {
+      setTooltip(null);
+      clearHoveredFeatureState('hover');
+    }
+    return undefined;
   };
 
   const onClick = e => {
@@ -296,9 +335,10 @@ MapBoxMap.propTypes = {
   onPolygonHighlighted: PropTypes.func,
   onPolygonClicked: PropTypes.func,
   bounds: PropTypes.object,
-  tooltipValues: PropTypes.object,
+  tooltipValues: PropTypes.array,
   countryName: PropTypes.string,
   highlightedNodesData: PropTypes.array,
+  highlightedGeoNodes: PropTypes.object,
   choropleth: PropTypes.object,
   linkedGeoIds: PropTypes.array,
   map: PropTypes.object,
