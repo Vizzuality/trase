@@ -1,8 +1,17 @@
 import { CHOROPLETH_COLORS } from 'constants';
 import { useEffect } from 'react';
 import bbox from '@turf/bbox';
+import isEmpty from 'lodash/isEmpty';
 
-export function useChoroplethFeatureState(choropleth, map, unitLayers, sourceLayer, linkedGeoIds, baseLayerInfo, darkBasemap) {
+export function useChoroplethFeatureState(
+  choropleth,
+  map,
+  unitLayers,
+  sourceLayer,
+  linkedGeoIds,
+  baseLayerInfo,
+  darkBasemap
+) {
   useEffect(() => {
     if (map && choropleth) {
       const choroplethLayerIds = unitLayers?.filter(l => l.hasChoropleth).map(u => u.id);
@@ -13,13 +22,17 @@ export function useChoroplethFeatureState(choropleth, map, unitLayers, sourceLay
       let color = CHOROPLETH_COLORS.default_fill;
       let lineWidth = 0.3;
       let fillOpacity = 1;
-      const lineOpacity = 0.5;
       const lineColor = darkBasemap
         ? CHOROPLETH_COLORS.bright_stroke
         : CHOROPLETH_COLORS.dark_stroke;
 
       // When choropleth has nodes
       if (choroplethLayerIds) {
+        // remove choropleth when we deselect the layer
+        if (isEmpty(choropleth) && !unitLayers.map(i => i.id).includes(source)) {
+          map.removeFeatureState({ source, sourceLayer });
+        }
+
         geoIds.forEach(geoId => {
           const isLinked = linkedGeoIds.indexOf(geoId) > -1;
           const choroplethFeatureState = {
@@ -34,8 +47,7 @@ export function useChoroplethFeatureState(choropleth, map, unitLayers, sourceLay
                 hasLinkedIds && !isLinked ? CHOROPLETH_COLORS.fill_not_linked : choropleth[geoId],
               fillOpacity,
               lineColor,
-              lineWidth: isLinked ? 1.2 : lineWidth,
-              lineOpacity
+              lineWidth: isLinked ? 1.2 : lineWidth
             }
           );
         });
@@ -55,7 +67,7 @@ export function useChoroplethFeatureState(choropleth, map, unitLayers, sourceLay
 
           map.setFeatureState(
             { ...choroplethFeatureState },
-            { color, fillOpacity, lineColor, lineWidth, lineOpacity }
+            { color, fillOpacity, lineColor, lineWidth }
           );
         });
       }
@@ -73,10 +85,10 @@ export function useFitToBounds(map, selectedGeoNodes) {
         // Padding bottom is more because of the legend
         map.fitBounds(bounds, { padding: { top: 10, bottom: 130, left: 10, right: 10 } });
       }
-    }
+    };
 
     if (map && selectedGeoNodes) {
-      fitToBounds()
+      fitToBounds();
     }
   }, [map, selectedGeoNodes]);
 }
