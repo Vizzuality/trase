@@ -44,7 +44,7 @@ function Tabs(props) {
             >
               <Text
                 as="span"
-                color={isSelected(item) ? variantText.color || color : 'grey'}
+                color={isSelected(item) ? variantText?.color || color : 'grey'}
                 weight="bold"
                 size="rg"
                 variant="mono"
