@@ -12,6 +12,66 @@ import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component
 import 'react-components/profile/profile-components/table/profiles-table.scss';
 
 class ProfilesTable extends Component {
+
+  renderTopImportsHeader() {
+    const { data, testId } = this.props;
+    return (
+      <thead>
+        <tr className="table-row">
+          {data.includedColumns.map((elem, index) => (
+            <th
+              key={index}
+              className={cx({
+                'header-cell': true,
+                'header-cell-large': true,
+                '_text-align-left': data.includedColumns.length - 1 !== index,
+                '_text-align-right': data.includedColumns.length - 1 === index
+              })}
+              data-test={`${testId}-header-name`}
+            >
+              {elem.name}
+            </th>
+          ))}
+        </tr>
+      </thead>
+    );
+  }
+
+  renderTopImportsTable() {
+    const { data, testId } = this.props;
+    const columns = data.included_columns || data.includedColumns;
+
+    return (
+      <tbody>
+        {data.rows.map((entry, entryIndex) => (
+          <tr key={`top-imports-table-entry-${entryIndex}`} className="table-row" data-test={`${testId}-row`}>
+            {entry.map((row, rowIndex) => (
+              <td
+              key={`top-imports-table-row-${entryIndex}-${rowIndex}`}
+                className={cx({
+                  'cell-score': true,
+                  '_text-align-left': entry.length - 1 !== rowIndex,
+                  '_text-align-right': entry.length - 1 === rowIndex
+                })}
+              >
+                <span
+                  className="node-name"
+                  data-unit={
+                    !UNITLESS_UNITS.includes(columns[rowIndex].unit)
+                      ? columns[rowIndex].unit
+                      : null
+                  }
+                >
+                  {formatValue(row, columns[rowIndex].name)}
+                </span>
+             </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    );
+  }
+
   renderPlacesTableHeader() {
     const { data, testId } = this.props;
 
@@ -37,7 +97,8 @@ class ProfilesTable extends Component {
 
   renderPlacesTable() {
     const { data, testId } = this.props;
-    const columns = data.included_columns;
+    const columns = data.included_columns || data.includedColumns;
+
     return (
       <tbody>
         {data.rows[0].values.map((value, valueKey) => (
@@ -198,11 +259,13 @@ class ProfilesTable extends Component {
 
     return (
       <table>
+        {type === 't_head_top_imports' && this.renderTopImportsHeader()}
+        {type === 't_head_top_imports' && this.renderTopImportsTable()}
         {type === 't_head_places' && this.renderPlacesTableHeader()}
         {type === 't_head_places' && this.renderPlacesTable()}
         {type === 't_head_actors' && this.renderActorsTableHeader()}
         {type === 't_head_actors' && this.renderActorsTable()}
-        {type !== 't_head_actors' && type !== 't_head_places' && this.renderOtherTable()}
+        {type !== 't_head_actors' && type !== 't_head_places' && type !== 't_head_top_imports' && this.renderOtherTable()}
       </table>
     );
   }

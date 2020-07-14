@@ -32,6 +32,8 @@ const TopDestinationsWidget = React.lazy(() =>
 
 const MapFlowsWidget = React.lazy(() => import('./profile-widgets/map-flows-widget.component'));
 
+const TableWidget = React.lazy(() => import('./profile-widgets/table.component'));
+
 const GfwWidget = React.lazy(() => import('./profile-widgets/gfw-widget.component'));
 
 const Profile = props => {
@@ -85,7 +87,7 @@ const Profile = props => {
     ];
     if (
       profileType === 'country' &&
-      chart.chart_type &&
+      chart.chart_type && chart.chart_type !== 'table' &&
       !readyCountryIdentifiers.includes(chart.identifier)
     ) {
       return null;
@@ -133,6 +135,24 @@ const Profile = props => {
             targetPayload={{ profileType: isActor ? 'place' : 'actor' }}
           />
         );
+      }
+      case 'table': {
+        const type = chart.identifier.split('_')[0];
+        return (
+          <TableWidget
+            key={chart.id}
+            year={year}
+            type={type}
+            nodeId={nodeId}
+            chart={chart}
+            title={chart.title}
+            contextId={context?.id}
+            commodityId={context?.commodityId}
+            onLinkClick={updateQueryParams}
+            commodityName={context?.commodityName}
+            profileType={profileType}
+          />
+        )
       }
       case 'scatterplot':
         return (

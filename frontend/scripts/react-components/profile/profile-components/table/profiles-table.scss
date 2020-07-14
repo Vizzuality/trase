@@ -16,8 +16,12 @@
         border-bottom: 2px solid $charcoal-grey;
       }
 
+
       > .table-row > .header-cell {
-        padding: 0 0 8px;
+        &-large {
+          font-size: $font-size-xx-regular;
+          padding: 0 0 10px 0;
+        }
 
         color: $charcoal-grey;
         font-family: $font-family-1;
@@ -37,7 +41,7 @@
           text-align: right;
         }
 
-        &:not(:first-child) {
+        &:not(:first-child):not(.header-cell-large) {
           padding-left: 10px;
         }
       }
