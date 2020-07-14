@@ -225,17 +225,17 @@ function MapBoxMap(props) {
       if (source === 'indonesia_mill') {
         const logisticsTooltipValues = [];
 
-        [
+        const logisticTooltipFields = [
           { name: 'company' },
           { name: 'uml_id' },
-        ].forEach(l => {
+        ];
+        logisticTooltipFields.forEach(l => {
           if (properties[l.name]) {
             logisticsTooltipValues.push({ title: l.name, unit: l.unit, value: properties[l.name] });
           }
         });
         updateTooltipValues(logisticsTooltipValues);
       }
-
 
       const node = highlightedNodesData[0];
       if (node?.name) {
