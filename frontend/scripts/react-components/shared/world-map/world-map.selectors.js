@@ -103,10 +103,12 @@ export const getWorldMapFlows = createSelector(
       console.warn('World map flows are missing geoids. Check your database.');
     }
 
-    return contextFlowsWithCoordinates.map(flow => ({
+    const out = contextFlowsWithCoordinates.map(flow => ({
       ...flow,
       arc: buildGreatCircleArc(originCoordinates, flow.coordinates, worldMapProjection)
     }));
+
+    return out;
   }
 );
 

@@ -19,18 +19,15 @@ class ProfileContainer extends React.PureComponent {
     const { context, nodeId, selectedYear, commodityId } = this.props;
     const contextProps = {};
     if (context) {
-      contextProps.context_id = context.id
+      contextProps.context_id = context.id;
     } else {
-      contextProps.commodity_id = commodityId
+      contextProps.commodity_id = commodityId;
     }
 
     const params = { node_id: nodeId, selectedYear, ...contextProps };
+
     return (
-      <Widget
-        key={nodeId}
-        query={[GET_PROFILE_METADATA]}
-        params={[params]}
-      >
+      <Widget key={nodeId} query={[GET_PROFILE_METADATA]} params={[params]}>
         {({ data = {}, loading, error }) => {
           const profileMetadata = data[GET_PROFILE_METADATA];
           const { years } = profileMetadata || {};
@@ -70,10 +67,17 @@ function mapStateToProps(state) {
   }
 
   const ctxId = contextId && parseInt(contextId, 10);
+
   if (ctxId) {
     const context = contexts.find(ctx => ctx.id === ctxId) || { id: ctxId };
     props.context = context;
+  } else if (props.profileType === 'country' && commodityId) {
+    const context = contexts.find(ctx => ctx.commodityId === parseInt(commodityId, 10)) || {
+      commodityId
+    };
+    props.context = context;
   }
+
   return props;
 }
 
@@ -85,7 +89,7 @@ const updateQueryParams = (profileType, query) => {
     if (activity === 'exporter') {
       delete updatedQuery.contextId;
     }
-    updatedQuery = { ...updatedQuery, ...activityInfo }
+    updatedQuery = { ...updatedQuery, ...activityInfo };
     delete updatedQuery.activityInfo;
   }
   return {

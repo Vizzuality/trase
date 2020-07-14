@@ -25,7 +25,8 @@ const MapGeographies = ({
   originGeoId,
   projection,
   mouseInteractionProps,
-  highlightedCountriesIso
+  highlightedCountriesIso,
+  fill
 }) =>
   useMemo(
     () =>
@@ -48,7 +49,8 @@ const MapGeographies = ({
                     highlightedCountriesIso?.level2 &&
                     highlightedCountriesIso.level2.includes(geography.properties.iso2)
                 },
-                { '-pink': originGeoId === geography.properties.iso2 }
+                { '-pink': originGeoId === geography.properties.iso2 },
+                { [`-${fill}`]: !!fill }
               )}
               geography={geography}
               projection={projection}
@@ -74,7 +76,8 @@ const WorldMap = ({
   width,
   className,
   scale,
-  id
+  id,
+  fill
 }) => {
   const [tooltipConfig, setTooltipConfig] = useState(null);
   const buildCurves = (start, end, line) => line.arc;
@@ -115,11 +118,10 @@ const WorldMap = ({
 
     return isMobile() ? {} : { onMouseMove, onMouseLeave };
   }, [flows, onHoverGeometry]);
-
   const renderLines = () =>
     flows.map(flow => (
       <Line
-        key={flow.geoId}
+        key={`flow-${flow.geoId}`}
         className="world-map-arc"
         line={{
           ...flow,
@@ -150,6 +152,7 @@ const WorldMap = ({
               {(geographies, projection) => (
                 <MapGeographies
                   worldMapId={id}
+                  fill={fill}
                   geographies={geographies}
                   flows={flows}
                   originGeoId={originGeoId}
@@ -180,13 +183,15 @@ WorldMap.propTypes = {
   center: PropTypes.array,
   width: PropTypes.number,
   scale: PropTypes.number,
-  id: PropTypes.string.isRequired
+  id: PropTypes.string.isRequired,
+  fill: PropTypes.string
 };
 
 WorldMap.defaultProps = {
   center: [20, 0],
   scale: 140,
-  width: 800
+  width: 800,
+  fill: 'flow-widget'
 };
 
 export default WorldMap;
