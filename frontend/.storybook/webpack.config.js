@@ -26,7 +26,6 @@ module.exports = async ({ config }) =>
         DISABLE_PROFILES: process.env.DISABLE_PROFILES === 'true',
         ENABLE_COOKIE_BANNER: process.env.ENABLE_COOKIE_BANNER === 'true',
         GFW_WIDGETS_BASE_URL: JSON.stringify(process.env.GFW_WIDGETS_BASE_URL),
-        ENABLE_LOGISTICS_MAP: process.env.ENABLE_LOGISTICS_MAP === 'true',
         ENABLE_LEGACY_TOOL_SEARCH: process.env.ENABLE_LEGACY_TOOL_SEARCH === 'true',
         NEW_PROFILES_PAGE: process.env.NEW_PROFILES_PAGE === 'true',
         API_V3_URL: JSON.stringify(process.env.API_V3_URL),
