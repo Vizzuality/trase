@@ -21,6 +21,11 @@ function Tabs(props) {
     actionComponent
   } = props;
   const isSelected = item => getTabId(item) === selectedTab;
+  const variantText = {
+    'plain-text': {
+      color: 'grey'
+    }
+  }[variant];
   return (
     <div className={cx('c-tabs', { [`margin-${margin}`]: margin, [`v-${variant}`]: variant })}>
       <div className="tabs-container">
@@ -39,7 +44,7 @@ function Tabs(props) {
             >
               <Text
                 as="span"
-                color={isSelected(item) ? color : 'grey'}
+                color={isSelected(item) ? variantText.color || color : 'grey'}
                 weight="bold"
                 size="rg"
                 variant="mono"

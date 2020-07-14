@@ -37,7 +37,7 @@ function BulkDownloadsBlock(props) {
 
   return (
     <div className="c-bulk-downloads">
-      <Tabs tabs={tabs} onSelectTab={setSelectedTab} selectedTab={selectedTab}>
+      <Tabs tabs={tabs} onSelectTab={setSelectedTab} selectedTab={selectedTab} variant="plain-text" margin="xs">
         <div className="bulk-download-grid">
           <FixedSizeGrid
             height={150}
