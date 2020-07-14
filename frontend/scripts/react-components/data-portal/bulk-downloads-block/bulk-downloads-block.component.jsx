@@ -55,16 +55,16 @@ function BulkDownloadsBlock(props) {
                   style={style}
                   className={cx('bulk-download-item-container', { '-small': columnCount === 2 })}
                 >
-                <Button
-                  color="charcoal-transparent"
-                  size="lg"
-                  disabled={!enabled}
-                  className="bulk-download-item"
-                  icon="icon-download"
-                  onClick={() => onBulkDownloadButtonClicked(item.id)}
-                >
-                  {item.countryName} - {item.commodityName} (all years)
-                </Button>
+                  <Button
+                    color="charcoal-transparent"
+                    size="lg"
+                    disabled={!enabled}
+                    className="bulk-download-item"
+                    icon="icon-download"
+                    onClick={() => onBulkDownloadButtonClicked(item.id)}
+                  >
+                    {item.countryName} - {item.commodityName} (all years)
+                  </Button>
               </div>
             );
           }}
