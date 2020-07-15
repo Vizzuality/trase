@@ -38,8 +38,9 @@ function UnitsTooltip(props) {
       ref={ref}
       className={cx('c-units-tooltip', className)}
       style={{
-        left: position ? position.left : undefined,
-        top: position ? position.top : undefined,
+        transform: `translate(${position ? position.left : undefined}px, ${
+          position ? position.top : undefined
+        }px)`,
         visibility
       }}
     >

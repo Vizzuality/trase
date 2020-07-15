@@ -2,14 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Widget from 'react-components/widgets/widget.component';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
-import Line from 'react-components/profile/profile-components/line/line.component';
+import LineChart from 'react-components/profile/profile-components/line-chart.component';
 
 import Heading from 'react-components/shared/heading/heading.component';
 import ProfileTitle from 'react-components/profile/profile-components/profile-title.component';
 
-import {
-  GET_COUNTRY_NODE_SUMMARY_URL
-} from 'utils/getURLFromParams';
+import { GET_COUNTRY_NODE_SUMMARY_URL } from 'utils/getURLFromParams';
 
 class LineComponent extends React.PureComponent {
   renderSpinner() {
@@ -21,7 +19,16 @@ class LineComponent extends React.PureComponent {
   }
 
   render() {
-    const { testId, nodeId, profileType, chart, title, commodityName, commodityId, year } = this.props;
+    const {
+      testId,
+      nodeId,
+      profileType,
+      chart,
+      title,
+      commodityName,
+      commodityId,
+      year
+    } = this.props;
     const params = { node_id: nodeId, commodity_id: commodityId, year };
     const chartUrl = chart.url;
     return (
@@ -51,30 +58,24 @@ class LineComponent extends React.PureComponent {
             <section className="page-break-inside-avoid c-profiles-table">
               <div className="row">
                 <div className="small-12 columns">
-                <Heading variant="mono" weight="bold" size="md" as="h3">
-                  <ProfileTitle
-                    template={title}
-                    summary={data[GET_COUNTRY_NODE_SUMMARY_URL]}
-                    year={year}
-                    commodityName={commodityName}
-                  />
-                </Heading>
-                <div className="table-container page-break-inside-avoid">
-                  <Line
-                    testId={testId}
-                    lines={lines}
-                    xValues={includedYears}
-                    unit={unit}
-                    settingsHeight={400}
-                    margin={{ top: 0, right: 20, bottom: 30, left: 60 }}
-                    ticks={{
-                      yTicks: 5,
-                      yTickPadding: 10,
-                      yTickFormatType: null,
-                      xTickPadding: 15
-                    }}
-                  />
-                </div>
+                  <Heading variant="mono" weight="bold" size="md" as="h3">
+                    <ProfileTitle
+                      template={title}
+                      summary={data[GET_COUNTRY_NODE_SUMMARY_URL]}
+                      year={year}
+                      commodityName={commodityName}
+                    />
+                  </Heading>
+                  <div className="table-container page-break-inside-avoid">
+                    <LineChart
+                      testId={testId}
+                      lines={lines}
+                      xValues={includedYears}
+                      unit={unit}
+                      year={year}
+                      highlightYear
+                    />
+                  </div>
                 </div>
               </div>
             </section>
