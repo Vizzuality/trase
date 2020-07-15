@@ -50,6 +50,10 @@
     > tbody {
       > .table-row {
 
+        &.-highlight {
+          background: rgba($white, .5);
+        }
+
         &:not(:last-child) {
           border-bottom: 1px solid rgba($charcoal-grey, .2);
         }
