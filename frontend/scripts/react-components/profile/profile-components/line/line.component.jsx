@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import capitalize from 'lodash/capitalize';
+import isEqual from 'lodash/isEqual';
+
 import { event as d3_event, select as d3_select } from 'd3-selection';
 import { axisBottom as d3_axis_bottom, axisLeft as d3_axis_left } from 'd3-axis';
 import { scaleLinear as d3_scale_linear, scaleTime as d3_scale_time } from 'd3-scale';
@@ -31,9 +33,9 @@ class Line extends Component {
     this.build();
   }
 
-  // shouldComponentUpdate(nextProps) {
-  //   return !isEqual(nextProps, this.props);
-  // }
+  shouldComponentUpdate(nextProps) {
+    return !isEqual(nextProps, this.props);
+  }
 
   getLines() {
     const { lines } = this.props;
