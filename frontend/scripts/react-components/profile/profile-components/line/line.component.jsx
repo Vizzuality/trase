@@ -1,10 +1,12 @@
 /* eslint-disable camelcase,import/no-extraneous-dependencies,jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+
 import capitalize from 'lodash/capitalize';
 import { event as d3_event, select as d3_select } from 'd3-selection';
 import { axisBottom as d3_axis_bottom, axisLeft as d3_axis_left } from 'd3-axis';
 import { scaleLinear as d3_scale_linear, scaleTime as d3_scale_time } from 'd3-scale';
+import { mouse, bisector } from 'd3';
 import { timeYear as d3_time_year } from 'd3-time';
 import { extent as d3_extent } from 'd3-array';
 import { area as d3_area, line as d3_line } from 'd3-shape';
@@ -28,6 +30,10 @@ class Line extends Component {
   componentDidUpdate() {
     this.build();
   }
+
+  // shouldComponentUpdate(nextProps) {
+  //   return !isEqual(nextProps, this.props);
+  // }
 
   getLines() {
     const { lines } = this.props;
@@ -54,6 +60,7 @@ class Line extends Component {
     return xValues.map((year, index) => ({
       name: data.name,
       nodeId: data.node_id,
+      year,
       date: new Date(year, 0),
       value: data.values[index],
       value9: data.value9
@@ -64,12 +71,14 @@ class Line extends Component {
     const {
       unit,
       lines,
+      year,
       style,
       testId,
       xValues,
       margin,
       ticks,
       settingsHeight,
+      highlightYear,
       lineClassNameCallback,
       showTooltipCallback,
       hideTooltipCallback
@@ -120,7 +129,19 @@ class Line extends Component {
       const lineStyle = typeof style !== 'undefined' ? style.style : lineData.style;
       let area = null;
       let pathContainers = null;
-      // eslint-disable-next-line default-case
+
+      if (highlightYear) {
+        d3Container
+          .append('g')
+          .attr('class', 'highlight')
+          .append('rect')
+          .attr('width', 50)
+          .attr('height', chartHeight + chartMargin.bottom)
+          .attr('fill', 'rgba(255,255,255,0.5)')
+          .attr('x', x(new Date(year, 0)) - 25)
+          .attr('y', 0);
+      }
+
       switch (type) {
         case 'area':
           area = d3_area()
@@ -146,7 +167,7 @@ class Line extends Component {
           break;
 
         // following styles don't care about discontinuous blocks for now and will only render the first one
-        case 'line':
+        case 'line': {
           pathContainers = d3Container
             .append('path')
             .datum(lineValuesWithFormat)
@@ -154,6 +175,7 @@ class Line extends Component {
             .attr('class', lineStyle)
             .attr('d', line);
           break;
+        }
         case 'line-points': {
           pathContainers = d3Container
             .datum(lineValuesWithFormat)
@@ -210,8 +232,33 @@ class Line extends Component {
                 hideTooltipCallback();
               });
           }
+
           break;
         }
+      }
+
+      function mouseMove() {
+        const bisectDate = bisector(d => d.date).left;
+        const x0 = x.invert(mouse(this)[0]);
+        const pointIndex = bisectDate(lineValuesWithFormat, x0, 1);
+        const d0 = lineValuesWithFormat[pointIndex - 1];
+        const d1 = lineValuesWithFormat[pointIndex];
+        const dxx = x0 - d0.date > d1.date - x0 ? d1 : d0;
+
+        showTooltipCallback(dxx, d3_event.clientX + 10, d3_event.clientY + scrollOffset() + 10);
+      }
+
+      if (showTooltipCallback !== undefined && type === 'line') {
+        d3Container
+          .append('rect')
+          .attr('class', 'd3-hitbox')
+          .attr('fill', 'transparent')
+          .attr('width', width + 20)
+          .attr('height', chartHeight + 20)
+          .attr('x', -10)
+          .attr('y', -10)
+          .on('mousemove', mouseMove)
+          .on('mouseout', hideTooltipCallback);
       }
     });
 
@@ -327,6 +374,7 @@ class Line extends Component {
 
   render() {
     const { testId } = this.props;
+
     return (
       <div className="c-line" data-test={testId}>
         <div
@@ -356,6 +404,7 @@ Line.propTypes = {
   ticks: PropTypes.object,
   settingsHeight: PropTypes.number,
   lineClassNameCallback: PropTypes.func,
+  highlightYear: PropTypes.bool,
   showTooltipCallback: PropTypes.func,
   hideTooltipCallback: PropTypes.func
 };
