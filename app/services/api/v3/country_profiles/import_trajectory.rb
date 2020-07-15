@@ -27,7 +27,7 @@ module Api
             select(:year).
             distinct.
             pluck(:year)
-          @years = (years.min..years.max)
+          @years = (years.min..years.max).to_a
         end
 
         def fetch_lines
