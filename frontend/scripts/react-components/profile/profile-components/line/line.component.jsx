@@ -118,10 +118,8 @@ class Line extends Component {
         .y(d => y(d.value));
       const type = typeof style !== 'undefined' ? style.type : lineData.type;
       const lineStyle = typeof style !== 'undefined' ? style.style : lineData.style;
-
       let area = null;
       let pathContainers = null;
-
       // eslint-disable-next-line default-case
       switch (type) {
         case 'area':
@@ -149,14 +147,13 @@ class Line extends Component {
 
         // following styles don't care about discontinuous blocks for now and will only render the first one
         case 'line':
-          d3Container
+          pathContainers = d3Container
             .append('path')
             .datum(lineValuesWithFormat)
             .attr('data-test', `${testId}-line`)
             .attr('class', lineStyle)
             .attr('d', line);
           break;
-
         case 'line-points': {
           pathContainers = d3Container
             .datum(lineValuesWithFormat)
