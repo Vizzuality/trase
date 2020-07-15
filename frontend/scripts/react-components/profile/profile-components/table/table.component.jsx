@@ -12,7 +12,6 @@ import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component
 import 'react-components/profile/profile-components/table/profiles-table.scss';
 
 class ProfilesTable extends Component {
-
   renderTopImportsHeader() {
     const { data, testId } = this.props;
     return (
@@ -37,6 +36,13 @@ class ProfilesTable extends Component {
     );
   }
 
+  highlightRow(row) {
+    const {
+      data: { highlight = null }
+    } = this.props;
+    return highlight && row[highlight.index] === highlight.value;
+  }
+
   renderTopImportsTable() {
     const { data, testId } = this.props;
     const columns = data.included_columns || data.includedColumns;
@@ -44,10 +50,17 @@ class ProfilesTable extends Component {
     return (
       <tbody>
         {data.rows.map((entry, entryIndex) => (
-          <tr key={`top-imports-table-entry-${entryIndex}`} className="table-row" data-test={`${testId}-row`}>
+          <tr
+            key={`top-imports-table-entry-${entryIndex}`}
+            className={cx({
+              'table-row': true,
+              '-highlight': this.highlightRow(entry)
+            })}
+            data-test={`${testId}-row`}
+          >
             {entry.map((row, rowIndex) => (
               <td
-              key={`top-imports-table-row-${entryIndex}-${rowIndex}`}
+                key={`top-imports-table-row-${entryIndex}-${rowIndex}`}
                 className={cx({
                   'cell-score': true,
                   '_text-align-left': entry.length - 1 !== rowIndex,
@@ -57,14 +70,12 @@ class ProfilesTable extends Component {
                 <span
                   className="node-name"
                   data-unit={
-                    !UNITLESS_UNITS.includes(columns[rowIndex].unit)
-                      ? columns[rowIndex].unit
-                      : null
+                    !UNITLESS_UNITS.includes(columns[rowIndex].unit) ? columns[rowIndex].unit : null
                   }
                 >
                   {formatValue(row, columns[rowIndex].name)}
                 </span>
-             </td>
+              </td>
             ))}
           </tr>
         ))}
@@ -265,7 +276,10 @@ class ProfilesTable extends Component {
         {type === 't_head_places' && this.renderPlacesTable()}
         {type === 't_head_actors' && this.renderActorsTableHeader()}
         {type === 't_head_actors' && this.renderActorsTable()}
-        {type !== 't_head_actors' && type !== 't_head_places' && type !== 't_head_top_imports' && this.renderOtherTable()}
+        {type !== 't_head_actors' &&
+          type !== 't_head_places' &&
+          type !== 't_head_top_imports' &&
+          this.renderOtherTable()}
       </table>
     );
   }
@@ -277,6 +291,7 @@ ProfilesTable.propTypes = {
   target: PropTypes.string,
   testId: PropTypes.string,
   year: PropTypes.number,
+  highlight: PropTypes.object,
   targetPayload: PropTypes.object,
   contextId: PropTypes.number.isRequired
 };
