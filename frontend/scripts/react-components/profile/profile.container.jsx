@@ -71,7 +71,7 @@ function mapStateToProps(state) {
   if (ctxId) {
     const context = contexts.find(ctx => ctx.id === ctxId) || { id: ctxId };
     props.context = context;
-  } else if (props.profileType === 'country' && commodityId) {
+  } else if (props.profileType === 'country') {
     const context = contexts.find(ctx => ctx.commodityId === parseInt(commodityId, 10)) || {
       commodityId
     };

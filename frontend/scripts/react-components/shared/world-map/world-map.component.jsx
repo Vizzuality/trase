@@ -121,7 +121,7 @@ const WorldMap = ({
   const renderLines = () =>
     flows.map(flow => (
       <Line
-        key={`flow-${flow.geoId}`}
+        key={`flow-${flow.id}`}
         className="world-map-arc"
         line={{
           ...flow,

@@ -24,8 +24,8 @@ class MapFlowsWidget extends React.PureComponent {
   }
 
   render() {
-    const { nodeId, profileType, title, year, commodityName, commodityId } = this.props;
-    const params = { node_id: nodeId, commodity_id: commodityId, year };
+    const { nodeId, profileType, title, year, commodityName, contextId } = this.props;
+    const params = { node_id: nodeId, year };
     return (
       <Widget
         query={[GET_COUNTRY_NODE_SUMMARY_URL, GET_COUNTRY_TOP_CONSUMER_COUNTRIES, GET_CONTEXTS_URL]}
@@ -57,8 +57,9 @@ class MapFlowsWidget extends React.PureComponent {
 
           const nodes = data[GET_COUNTRY_TOP_CONSUMER_COUNTRIES].targetNodes; // eslint-disable-line
           const selectedContext = data[GET_CONTEXTS_URL].find(
-            ctx => ctx.countryName === data[GET_COUNTRY_NODE_SUMMARY_URL].name
+            ctx => ctx.id === contextId
           );
+
           const destinationCountries = nodes.map(n => ({
             ...n,
             coordinates: COUNTRIES_COORDINATES[n.geo_id]
@@ -107,11 +108,11 @@ class MapFlowsWidget extends React.PureComponent {
 
 MapFlowsWidget.propTypes = {
   nodeId: PropTypes.number,
+  contextId: PropTypes.number,
   profileType: PropTypes.string,
   title: PropTypes.string,
   year: PropTypes.number,
   commodityName: PropTypes.string,
-  commodityId: PropTypes.number
 };
 
 export default MapFlowsWidget;

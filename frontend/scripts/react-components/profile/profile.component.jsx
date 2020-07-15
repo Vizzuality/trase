@@ -30,6 +30,10 @@ const TopDestinationsWidget = React.lazy(() =>
   import('./profile-widgets/top-destinations-widget.component')
 );
 
+const LineWidget = React.lazy(() =>
+  import('./profile-widgets/line-widget.component')
+);
+
 const MapFlowsWidget = React.lazy(() => import('./profile-widgets/map-flows-widget.component'));
 
 const TableWidget = React.lazy(() => import('./profile-widgets/table.component'));
@@ -80,19 +84,6 @@ const Profile = props => {
   };
 
   const renderSection = chart => {
-    // Temporal: Just until we have everything from the backend
-    const readyCountryIdentifiers = [
-      'country_top_consumer_actors',
-      'country_top_consumer_countries'
-    ];
-    if (
-      profileType === 'country' &&
-      chart.chart_type && chart.chart_type !== 'table' &&
-      !readyCountryIdentifiers.includes(chart.identifier)
-    ) {
-      return null;
-    }
-
     switch (chart.chart_type) {
       case 'line_chart_with_map': {
         const isCountries = chart.identifier === 'actor_top_countries';
@@ -114,6 +105,25 @@ const Profile = props => {
             testId={isCountries ? 'top-destination-countries' : 'top-sourcing-regions'}
           />
         );
+      }
+      case 'line_chart': {
+        const type = chart.identifier.split('_')[0];
+        return (
+          <LineWidget
+            testId="profile-line-chart"
+            key={chart.id}
+            year={year}
+            type={type}
+            nodeId={nodeId}
+            chart={chart}
+            title={chart.title}
+            contextId={context?.id}
+            commodityId={context?.commodityId}
+            onLinkClick={updateQueryParams}
+            commodityName={context?.commodityName}
+            profileType={profileType}
+          />
+        )
       }
       case 'tabs_table': {
         const isActor = profileType === 'actor';
