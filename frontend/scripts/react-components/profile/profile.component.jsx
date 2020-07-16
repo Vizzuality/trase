@@ -129,6 +129,7 @@ const Profile = props => {
         return (
           <SustainabilityTableWidget
             key={chart.id}
+            chart={chart}
             type={isActor ? 'risk' : 'indicators'}
             profileType={profileType}
             className={cx('c-profiles-table', {
