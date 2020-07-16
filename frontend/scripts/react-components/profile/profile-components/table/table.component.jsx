@@ -293,7 +293,7 @@ ProfilesTable.propTypes = {
   year: PropTypes.number,
   highlight: PropTypes.object,
   targetPayload: PropTypes.object,
-  contextId: PropTypes.number.isRequired
+  contextId: PropTypes.number
 };
 
 export default ProfilesTable;

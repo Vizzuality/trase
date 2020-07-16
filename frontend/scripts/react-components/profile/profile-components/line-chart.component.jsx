@@ -5,17 +5,19 @@ import isEqual from 'lodash/isEqual';
 
 import Line from 'react-components/profile/profile-components/line/line.component';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
+import formatValue from 'utils/formatValue';
 
 class LineChartChart extends React.Component {
   state = { tooltipConfig: null };
 
   onMouseMove = (data, x, y) => {
+    const { unit } = this.props;
     const text = data.name;
     const items = [
       {
         title: data.year,
-        value: data.value,
-        unit: 't'
+        value: formatValue(data.value, unit),
+        unit
       }
     ];
 

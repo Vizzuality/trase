@@ -53,7 +53,6 @@ class LineComponent extends React.PureComponent {
           if (!lines) {
             return null;
           }
-
           return (
             <section className="page-break-inside-avoid c-profiles-table">
               <div className="row">

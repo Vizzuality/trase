@@ -148,6 +148,10 @@ const Profile = props => {
       }
       case 'table': {
         const type = chart.identifier.split('_')[0];
+        const commodityName =
+          context?.commodityName ||
+          profileMetadata.commodities.find(comm => comm.id === commodityId)?.name;
+
         return (
           <TableWidget
             key={chart.id}
@@ -159,7 +163,7 @@ const Profile = props => {
             contextId={context?.id}
             commodityId={context?.commodityId}
             onLinkClick={updateQueryParams}
-            commodityName={context?.commodityName}
+            commodityName={commodityName}
             profileType={profileType}
           />
         );

@@ -54,6 +54,7 @@ class TableComponent extends React.PureComponent {
             },
             rows: []
           };
+
           Object.keys(groupByCommodity).forEach(commodity => {
             serializedData.rows.push([
               commodity,
