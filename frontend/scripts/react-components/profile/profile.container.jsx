@@ -18,6 +18,7 @@ class ProfileContainer extends React.PureComponent {
   render() {
     const { context, nodeId, selectedYear, commodityId } = this.props;
     const contextProps = {};
+
     if (context) {
       contextProps.context_id = context.id;
     } else {
@@ -47,11 +48,13 @@ class ProfileContainer extends React.PureComponent {
   }
 }
 
+// TODO: Refactor
 function mapStateToProps(state) {
   const {
     query: { year: selectedYear, nodeId, print, contextId, commodityId } = {},
     payload: { profileType }
   } = state.location;
+
   const { contexts } = state.app;
   const { type: panelType } = state.profileSelector.panels;
 
@@ -67,10 +70,29 @@ function mapStateToProps(state) {
   }
 
   const ctxId = contextId && parseInt(contextId, 10);
+  let context;
 
-  if (ctxId) {
-    const context = contexts.find(ctx => ctx.id === ctxId) || { id: ctxId };
+  if (ctxId && !commodityId) {
+    context = contexts.find(ctx => ctx.id === ctxId) || { id: ctxId };
+
     props.context = context;
+  } else if (ctxId && commodityId) {
+    context = contexts.find(ctx => ctx.id === ctxId && ctx.commodityId === commodityId);
+
+    // If we don't have a context (commodity changed)
+    // Find old context then get context with old countryId and new commodityId
+    if (!context) {
+      const oldContext = contexts.find(ctx => ctx.id === ctxId);
+      context = contexts.find(
+        ctx => ctx.countryId === oldContext.countryId && ctx.commodityId === commodityId
+      );
+    }
+
+    props.context = context;
+  }
+
+  if (commodityId) {
+    props.commodityId = commodityId;
   }
 
   return props;

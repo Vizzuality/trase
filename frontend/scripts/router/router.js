@@ -24,20 +24,25 @@ const getPageStaticContent = (...args) =>
   );
 const loadBaseAppData = (...args) =>
   import('../app/app.thunks').then(module => module.default(...args));
+
 const getTeam = (...args) =>
   import('../react-components/team/team.thunks').then(module => module.default(...args));
+
 const loadDashboardTemplates = (...args) =>
   import('../react-components/dashboard-root/dashboard-root.thunks').then(module =>
     module.loadDashboardTemplates(...args)
   );
+
 const redirectToExplore = (...args) =>
   import('../react-components/legacy-explore/explore.thunks').then(module =>
     module.redirectToExplore(...args)
   );
+
 const loadToolInitialData = (...args) =>
   import('../react-components/tool/tool.thunks').then(module =>
     module.loadToolInitialData(...args)
   );
+
 const resizeSankeyTool = (...args) =>
   import('../react-components/tool/tool.thunks').then(module => module.resizeSankeyTool(...args));
 const loadDisclaimerTool = (...args) =>
@@ -98,9 +103,7 @@ export const routes = {
   profiles: {
     path: '/profiles',
     Component: lazy(() =>
-      import(
-        /* webpackChunkName: "profiles" */ '../react-components/profiles/profiles.container'
-      )
+      import(/* webpackChunkName: "profiles" */ '../react-components/profiles/profiles.container')
     ),
     title: getPageTitle,
     extension: 'jsx',
@@ -112,9 +115,7 @@ export const routes = {
   profile: {
     path: '/profile-:profileType',
     Component: lazy(() =>
-      import(
-        /* webpackChunkName: "profile" */ '../react-components/profile/profile.container'
-      )
+      import(/* webpackChunkName: "profile" */ '../react-components/profile/profile.container')
     ),
     title: getPageTitle,
     nav: {
