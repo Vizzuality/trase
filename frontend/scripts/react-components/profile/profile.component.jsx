@@ -30,9 +30,7 @@ const TopDestinationsWidget = React.lazy(() =>
   import('./profile-widgets/top-destinations-widget.component')
 );
 
-const LineWidget = React.lazy(() =>
-  import('./profile-widgets/line-widget.component')
-);
+const LineWidget = React.lazy(() => import('./profile-widgets/line-widget.component'));
 
 const MapFlowsWidget = React.lazy(() => import('./profile-widgets/map-flows-widget.component'));
 
@@ -54,6 +52,7 @@ const Profile = props => {
     updateQueryParams,
     openModal
   } = props;
+
   // if requestIdleCallback is not supported (Edge, IE) we render the iframe immediately
   const [renderIframes, setRenderIframes] = useState(
     typeof window.requestIdleCallback === 'undefined'
@@ -123,7 +122,7 @@ const Profile = props => {
             commodityName={context?.commodityName}
             profileType={profileType}
           />
-        )
+        );
       }
       case 'tabs_table': {
         const isActor = profileType === 'actor';
@@ -162,7 +161,7 @@ const Profile = props => {
             commodityName={context?.commodityName}
             profileType={profileType}
           />
-        )
+        );
       }
       case 'scatterplot':
         return (
@@ -216,8 +215,8 @@ const Profile = props => {
             nodeId={nodeId}
             chart={chart}
             title={chart.title}
-            contextId={context?.id}
-            commodityId={context?.commodityId}
+            contextId={context?.id || profileMetadata?.contextId}
+            commodityId={context?.commodityId || profileMetadata?.commodityId}
             onLinkClick={updateQueryParams}
             commodityName={context?.commodityName}
             profileType={profileType}

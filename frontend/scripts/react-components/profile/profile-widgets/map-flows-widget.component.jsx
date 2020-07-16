@@ -13,8 +13,7 @@ import { COUNTRIES_COORDINATES } from 'scripts/countries';
 
 import {
   GET_COUNTRY_NODE_SUMMARY_URL,
-  GET_COUNTRY_TOP_CONSUMER_COUNTRIES,
-  GET_CONTEXTS_URL
+  GET_COUNTRY_TOP_CONSUMER_COUNTRIES
 } from 'utils/getURLFromParams';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 
@@ -24,12 +23,13 @@ class MapFlowsWidget extends React.PureComponent {
   }
 
   render() {
-    const { nodeId, profileType, title, year, commodityName, contextId } = this.props;
+    const { nodeId, profileType, title, year, commodityName } = this.props;
     const params = { node_id: nodeId, year };
+    // context_id: contextId
+
     return (
       <Widget
-        query={[GET_COUNTRY_NODE_SUMMARY_URL, GET_COUNTRY_TOP_CONSUMER_COUNTRIES, GET_CONTEXTS_URL]}
-        isRawDataUri
+        query={[GET_COUNTRY_NODE_SUMMARY_URL, GET_COUNTRY_TOP_CONSUMER_COUNTRIES]}
         params={[params, { ...params, profile_type: profileType }]}
       >
         {({ data, loading, error }) => {
@@ -40,7 +40,6 @@ class MapFlowsWidget extends React.PureComponent {
               </div>
             );
           }
-
           if (error) {
             // TODO: display a proper error message to the user
             console.error('Error loading sustainability table data for profile page', error);
@@ -56,14 +55,23 @@ class MapFlowsWidget extends React.PureComponent {
           }
 
           const nodes = data[GET_COUNTRY_TOP_CONSUMER_COUNTRIES].targetNodes; // eslint-disable-line
-          const selectedContext = data[GET_CONTEXTS_URL].find(
-            ctx => ctx.id === contextId
-          );
 
-          const destinationCountries = nodes.map(n => ({
-            ...n,
-            coordinates: COUNTRIES_COORDINATES[n.geo_id]
-          }));
+          const selectedContext = {
+            worldMap: {
+              geoId: data[GET_COUNTRY_NODE_SUMMARY_URL].geoId
+            }
+          };
+
+          const destinationCountries = nodes
+            .sort((nodeA, nodeB) => nodeB.height - nodeA.height)
+            .map(node => {
+              const percent = 100 * node.height;
+              return {
+                ...node,
+                pct: `${percent * 10 >= 1 ? formatValue(percent, 'percentage') : '< 0.1'}%`,
+                coordinates: COUNTRIES_COORDINATES[node.geo_id]
+              };
+            });
 
           const highlightedCountriesIso = {
             level2: destinationCountries.map(n => n.geo_id)
@@ -71,7 +79,7 @@ class MapFlowsWidget extends React.PureComponent {
 
           const dataList = destinationCountries.map(n => ({
             label: n.name,
-            value: `${formatValue(n.value, 'percentage')}%`
+            value: n.pct
           }));
 
           return (
@@ -89,8 +97,8 @@ class MapFlowsWidget extends React.PureComponent {
                   <WorldMap
                     id="explore"
                     selectedContext={selectedContext}
-                    highlightedCountriesIso={highlightedCountriesIso}
                     context={selectedContext}
+                    highlightedCountriesIso={highlightedCountriesIso}
                     destinationCountries={destinationCountries}
                   />
                 </div>
@@ -108,11 +116,10 @@ class MapFlowsWidget extends React.PureComponent {
 
 MapFlowsWidget.propTypes = {
   nodeId: PropTypes.number,
-  contextId: PropTypes.number,
   profileType: PropTypes.string,
   title: PropTypes.string,
   year: PropTypes.number,
-  commodityName: PropTypes.string,
+  commodityName: PropTypes.string
 };
 
 export default MapFlowsWidget;
