@@ -95,7 +95,7 @@ module Api
           :scatterplot
         when
           'place_trajectory_deforestation',
-          'country_trajectory_defofestation'
+          'country_trajectory_deforestation'
           :stacked_line_chart
         when 'country_trajectory_import'
           :line_chart
