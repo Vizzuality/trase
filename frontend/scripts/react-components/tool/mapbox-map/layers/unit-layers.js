@@ -46,7 +46,7 @@ export default (unitLayer, sourceLayer, darkBasemap) => {
               ['to-boolean', ['feature-state', 'selected']],
               ['to-boolean', ['feature-state', 'hover']]
             ],
-            '#000',
+            '#fff',
             '#ccc'
           ],
           'line-width': [
@@ -58,8 +58,7 @@ export default (unitLayer, sourceLayer, darkBasemap) => {
             ],
             3,
             featureStateConditional('lineWidth', 0.5)
-          ],
-          'line-opacity': featureStateConditional('lineOpacity', 1)
+          ]
         },
         filter: ['!=', '$type', 'Point']
       },

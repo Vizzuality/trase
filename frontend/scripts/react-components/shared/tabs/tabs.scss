@@ -48,6 +48,12 @@
     }
   }
 
+  &.margin-xs {
+    .tabs-container {
+      margin: 0 0 20px 0;
+    }
+  }
+
   &.v-toolbar {
     .tab {
       border: 0;
@@ -57,8 +63,25 @@
       &.-selected {
         background-color: $strong-pink;
         border: 0;
-        box-shadow: inset 0 0 6px 0 #C60006;
+        box-shadow: inset 0 0 6px 0 $tab-red;
         color: white;
+      }
+    }
+  }
+
+  &.v-plain-text {
+    .tab {
+      border: 0;
+      background-color: transparent;
+      padding: 6px 0;
+
+      &:first-child {
+        padding-right: 20px;
+      }
+
+      &.-selected {
+        border: 0;
+        text-decoration: underline;
       }
     }
   }
