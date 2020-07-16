@@ -5,7 +5,8 @@ import Widget from 'react-components/widgets/widget.component';
 import {
   GET_PLACE_INDICATORS,
   GET_ACTOR_SUSTAINABILITY,
-  GET_NODE_SUMMARY_URL
+  GET_NODE_SUMMARY_URL,
+  GET_COUNTRY_NODE_SUMMARY_URL
 } from 'utils/getURLFromParams';
 import flatMap from 'lodash/flatMap';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
@@ -14,6 +15,26 @@ import ProfileTitle from 'react-components/profile/profile-components/profile-ti
 class SustainabilityTableWidget extends React.PureComponent {
   showLink(item) {
     return item.profile ? 'profile' : null;
+  }
+
+  resolveMainQuery() {
+    const { chart, profileType, type } = this.props;
+
+    if (profileType === 'country') {
+      return chart.url;
+    }
+
+    return (
+      {
+        indicators: GET_PLACE_INDICATORS,
+        places: GET_ACTOR_SUSTAINABILITY
+      }[type] || GET_ACTOR_SUSTAINABILITY
+    );
+  }
+
+  resolveSummaryQuery() {
+    const { profileType } = this.props;
+    return profileType === 'country' ? GET_COUNTRY_NODE_SUMMARY_URL : GET_NODE_SUMMARY_URL;
   }
 
   render() {
@@ -30,13 +51,14 @@ class SustainabilityTableWidget extends React.PureComponent {
       targetPayload
     } = this.props;
     const params = { node_id: nodeId, context_id: contextId, year };
-    const mainQuery = {
-      'indicators': GET_PLACE_INDICATORS,
-      'places': GET_ACTOR_SUSTAINABILITY
-    }[type] || GET_ACTOR_SUSTAINABILITY;
+
+    const mainQuery = this.resolveMainQuery();
+    const summaryQuery = this.resolveSummaryQuery();
+
     return (
       <Widget
-        query={[mainQuery, GET_NODE_SUMMARY_URL]}
+        query={[mainQuery, summaryQuery]}
+        raw={[profileType === 'country', false]}
         params={[params, { ...params, profile_type: profileType }]}
       >
         {({ data, loading, error }) => {
@@ -73,8 +95,8 @@ class SustainabilityTableWidget extends React.PureComponent {
           if (values.length === 0) {
             return null;
           }
+          const summary = data[summaryQuery];
 
-          const summary = data[GET_NODE_SUMMARY_URL];
           return (
             <section className={className} data-test={testId}>
               <div className="row">
@@ -107,6 +129,7 @@ class SustainabilityTableWidget extends React.PureComponent {
 }
 
 SustainabilityTableWidget.propTypes = {
+  chart: PropTypes.object,
   testId: PropTypes.string,
   className: PropTypes.string,
   type: PropTypes.string.isRequired,
