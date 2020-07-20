@@ -185,6 +185,8 @@ const Profile = props => {
         return (
           <DeforestationWidget
             key={chart.id}
+            chart={chart}
+            profileType={profileType}
             year={year}
             nodeId={nodeId}
             title={chart.title}
