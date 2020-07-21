@@ -69,11 +69,26 @@ class Line extends Component {
     }));
   }
 
+  highlightYear(d3Container, xAxis) {
+    const { year, margin, settingsHeight } = this.props;
+    const chartHeight = settingsHeight - margin.top - margin.bottom;
+    const HIGHLIGHT_BAR_WIDTH = 50;
+
+    d3Container
+      .append('g')
+      .attr('class', 'highlight')
+      .append('rect')
+      .attr('width', HIGHLIGHT_BAR_WIDTH)
+      .attr('height', chartHeight + margin.bottom)
+      .attr('fill', 'rgba(255,255,255,0.5)')
+      .attr('x', xAxis(new Date(year, 0)) - HIGHLIGHT_BAR_WIDTH / 2)
+      .attr('y', 0);
+  }
+
   build() {
     const {
       unit,
       lines,
-      year,
       style,
       testId,
       xValues,
@@ -133,16 +148,7 @@ class Line extends Component {
       let pathContainers = null;
 
       if (highlightYear) {
-        const HIGHLIGHT_BAR_WIDTH = 50;
-        d3Container
-          .append('g')
-          .attr('class', 'highlight')
-          .append('rect')
-          .attr('width', HIGHLIGHT_BAR_WIDTH)
-          .attr('height', chartHeight + chartMargin.bottom)
-          .attr('fill', 'rgba(255,255,255,0.5)')
-          .attr('x', x(new Date(year, 0)) - HIGHLIGHT_BAR_WIDTH / 2)
-          .attr('y', 0);
+        this.highlightYear(d3Container, x);
       }
 
       switch (type) {
