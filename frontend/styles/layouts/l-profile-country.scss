@@ -41,6 +41,28 @@
     }
   }
 
+  .c-top-map, .c-profiles-table {
+    padding: 52px 0;
+
+    .c-heading {
+      margin-bottom: 30px;
+    }
+
+    @media print {
+      padding: 20px 0;
+
+      > .row:first-child {
+        align-items: center;
+      }
+    }
+
+    @media (min-width: $breakpoint-foundation-small) and (max-width: $breakpoint-foundation-medium) {
+      > .row .columns:not(:last-child) {
+        padding-right: 0;
+      }
+    }
+  }
+
   .c-overall-map {
 
     .map-item {

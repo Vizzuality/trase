@@ -1,19 +1,23 @@
 /* eslint-disable camelcase,import/no-extraneous-dependencies,jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+
 import capitalize from 'lodash/capitalize';
+import isEqual from 'lodash/isEqual';
+
 import { event as d3_event, select as d3_select } from 'd3-selection';
 import { axisBottom as d3_axis_bottom, axisLeft as d3_axis_left } from 'd3-axis';
 import { scaleLinear as d3_scale_linear, scaleTime as d3_scale_time } from 'd3-scale';
+import { mouse, bisector } from 'd3';
 import { timeYear as d3_time_year } from 'd3-time';
 import { extent as d3_extent } from 'd3-array';
 import { area as d3_area, line as d3_line } from 'd3-shape';
-import { format as d3_format } from 'd3-format';
 import { timeFormat as d3_timeFormat } from 'd3-time-format';
 
 import { BREAKPOINTS } from 'constants';
 import abbreviateNumber from 'utils/abbreviateNumber';
 import { translateText } from 'utils/transifex';
+
 import scrollOffset from 'utils/scroll-offset';
 
 import Responsive from 'react-components/shared/responsive.hoc';
@@ -27,6 +31,10 @@ class Line extends Component {
 
   componentDidUpdate() {
     this.build();
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return !isEqual(nextProps, this.props);
   }
 
   getLines() {
@@ -54,10 +62,27 @@ class Line extends Component {
     return xValues.map((year, index) => ({
       name: data.name,
       nodeId: data.node_id,
+      year,
       date: new Date(year, 0),
       value: data.values[index],
       value9: data.value9
     }));
+  }
+
+  highlightYear(d3Container, xAxis) {
+    const { year, margin, settingsHeight } = this.props;
+    const chartHeight = settingsHeight - margin.top - margin.bottom;
+    const HIGHLIGHT_BAR_WIDTH = 50;
+
+    d3Container
+      .append('g')
+      .attr('class', 'highlight')
+      .append('rect')
+      .attr('width', HIGHLIGHT_BAR_WIDTH)
+      .attr('height', chartHeight + margin.bottom)
+      .attr('fill', 'rgba(255,255,255,0.5)')
+      .attr('x', xAxis(new Date(year, 0)) - HIGHLIGHT_BAR_WIDTH / 2)
+      .attr('y', 0);
   }
 
   build() {
@@ -70,6 +95,7 @@ class Line extends Component {
       margin,
       ticks,
       settingsHeight,
+      highlightYear,
       lineClassNameCallback,
       showTooltipCallback,
       hideTooltipCallback
@@ -118,11 +144,13 @@ class Line extends Component {
         .y(d => y(d.value));
       const type = typeof style !== 'undefined' ? style.type : lineData.type;
       const lineStyle = typeof style !== 'undefined' ? style.style : lineData.style;
-
       let area = null;
       let pathContainers = null;
 
-      // eslint-disable-next-line default-case
+      if (highlightYear) {
+        this.highlightYear(d3Container, x);
+      }
+
       switch (type) {
         case 'area':
           area = d3_area()
@@ -148,15 +176,15 @@ class Line extends Component {
           break;
 
         // following styles don't care about discontinuous blocks for now and will only render the first one
-        case 'line':
-          d3Container
+        case 'line': {
+          pathContainers = d3Container
             .append('path')
             .datum(lineValuesWithFormat)
             .attr('data-test', `${testId}-line`)
             .attr('class', lineStyle)
             .attr('d', line);
           break;
-
+        }
         case 'line-points': {
           pathContainers = d3Container
             .datum(lineValuesWithFormat)
@@ -213,8 +241,33 @@ class Line extends Component {
                 hideTooltipCallback();
               });
           }
+
           break;
         }
+      }
+
+      function mouseMove() {
+        const bisectDate = bisector(d => d.date).left;
+        const x0 = x.invert(mouse(this)[0]);
+        const pointIndex = bisectDate(lineValuesWithFormat, x0, 1);
+        const d0 = lineValuesWithFormat[pointIndex - 1];
+        const d1 = lineValuesWithFormat[pointIndex];
+        const dxx = x0 - d0.date > d1.date - x0 ? d1 : d0;
+
+        showTooltipCallback(dxx, d3_event.clientX + 10, d3_event.clientY + scrollOffset() + 10);
+      }
+
+      if (showTooltipCallback !== undefined && type === 'line') {
+        d3Container
+          .append('rect')
+          .attr('class', 'd3-hitbox')
+          .attr('fill', 'transparent')
+          .attr('width', width + 20)
+          .attr('height', chartHeight + 20)
+          .attr('x', -10)
+          .attr('y', -10)
+          .on('mousemove', mouseMove)
+          .on('mouseout', hideTooltipCallback);
       }
     });
 
@@ -233,9 +286,8 @@ class Line extends Component {
       xTickFormat = getXTickFormat;
     } else {
       yTickFormat = (value, idx, arr) => {
-        const format = d3_format('0');
         const isLast = idx === arr.length - 1;
-        return `${format(value)}${isLast ? unit : ''}`;
+        return `${abbreviateNumber(value, 0)}${isLast ? ` ${unit}` : ''}`;
       };
       xTickFormat = getXTickFormat;
     }
@@ -330,6 +382,7 @@ class Line extends Component {
 
   render() {
     const { testId } = this.props;
+
     return (
       <div className="c-line" data-test={testId}>
         <div
@@ -359,6 +412,7 @@ Line.propTypes = {
   ticks: PropTypes.object,
   settingsHeight: PropTypes.number,
   lineClassNameCallback: PropTypes.func,
+  highlightYear: PropTypes.bool,
   showTooltipCallback: PropTypes.func,
   hideTooltipCallback: PropTypes.func
 };

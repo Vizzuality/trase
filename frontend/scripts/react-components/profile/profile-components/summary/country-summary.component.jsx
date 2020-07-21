@@ -5,18 +5,30 @@ import cx from 'classnames';
 
 import PropTypes from 'prop-types';
 import capitalize from 'lodash/capitalize';
+import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import TitleGroup from 'react-components/profile/profile-components/title-group';
 import SummaryTitle from 'react-components/profile/profile-components/summary/summary-title.component';
 import Map from 'react-components/profile/profile-components/map.component';
 import Text from 'react-components/shared/text';
+import formatValue from 'utils/formatValue';
 
 function CountrySummary(props) {
   const {
     year,
     onChange,
+    printMode,
     openModal,
-    profileMetadata: { years, activity, commodities, activities, commodityId, name: countryName } = {}
+    profileMetadata: {
+      years,
+      activity,
+      commodities,
+      activities,
+      commodityId,
+      name: countryName
+    } = {},
+    data: { summary, headerAttributes } = {}
   } = props;
+
   const renderCountryMap = () => (
     <div className="c-overall-info page-break-inside-avoid">
       <div className="c-locator-map map-country-banner">
@@ -24,9 +36,7 @@ function CountrySummary(props) {
           topoJSONPath="./vector_layers/WORLD.topo.json"
           topoJSONRoot="world"
           getPolygonClassName={d =>
-            d.properties.name.toLowerCase() === countryName.toLowerCase()
-              ? '-isCurrent'
-              : ''
+            d.properties.name.toLowerCase() === countryName.toLowerCase() ? '-isCurrent' : ''
           }
           useRobinsonProjection
         />
@@ -56,7 +66,7 @@ function CountrySummary(props) {
       options: commodities
         .map(c => ({ label: capitalize(c.name.toLowerCase()), value: c.id }))
         .sort((a, b) => b.value - a.value),
-      onChange: newCommodityId => onChange('commodity', newCommodityId)
+      onChange: newCommodityId => onChange('commodityId', newCommodityId)
     },
     {
       dropdown: true,
@@ -68,6 +78,26 @@ function CountrySummary(props) {
       onChange: newYear => onChange('year', newYear)
     }
   ];
+
+  const renderIndicator = indicatorKey => {
+    const { name, value, unit, tooltip } = headerAttributes[indicatorKey];
+    if (!value) return null;
+    return (
+      <div className="stat-item" key={`${indicatorKey}${name}`}>
+        <Text transform="uppercase" variant="mono" as="div" className="legend">
+          {name}
+          {tooltip && <HelpTooltip text={tooltip} />}
+        </Text>
+        <Text as="span" variant="mono" size="lg" weight="bold">
+          {formatValue(value, indicatorKey)}
+        </Text>
+        <Text as="span" variant="mono" size="lg" weight="bold">
+          {' '}
+          {unit === 'km2' ? 'km²' : unit}
+        </Text>
+      </div>
+    );
+  };
 
   return (
     <div
@@ -97,6 +127,16 @@ function CountrySummary(props) {
                   titles={titles}
                   on={newYear => onChange('year', newYear)}
                 />
+                {status !== Sticky.STATUS_FIXED &&
+                  headerAttributes &&
+                  Object.keys(headerAttributes).length > 0 &&
+                  Object.keys(headerAttributes).some(k => headerAttributes[k].value !== null) && (
+                    <div className="small-12">
+                      {Object.keys(headerAttributes).map(indicatorKey =>
+                        renderIndicator(indicatorKey)
+                      )}
+                    </div>
+                  )}
               </div>
             )}
           </Sticky>
@@ -105,7 +145,9 @@ function CountrySummary(props) {
       </div>
 
       <div className="row">
-        <div className="small-12 columns">
+        <div
+          className={cx('small-12', 'columns', { 'large-12': printMode, 'large-10': !printMode })}
+        >
           <Text
             variant="serif"
             size="md"
@@ -113,7 +155,7 @@ function CountrySummary(props) {
             lineHeight="lg"
             color="grey"
             className="summary"
-            dangerouslySetInnerHTML={{ __html: 'summary' }}
+            dangerouslySetInnerHTML={{ __html: summary }}
           />
         </div>
       </div>
@@ -123,6 +165,8 @@ function CountrySummary(props) {
 
 CountrySummary.propTypes = {
   year: PropTypes.number,
+  data: PropTypes.object,
+  printMode: PropTypes.bool,
   onChange: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
   profileMetadata: PropTypes.object.isRequired

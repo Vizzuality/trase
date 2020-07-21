@@ -18,19 +18,17 @@ class ProfileContainer extends React.PureComponent {
   render() {
     const { context, nodeId, selectedYear, commodityId } = this.props;
     const contextProps = {};
+
     if (context) {
-      contextProps.context_id = context.id
+      contextProps.context_id = context.id;
     } else {
-      contextProps.commodity_id = commodityId
+      contextProps.commodity_id = commodityId;
     }
 
     const params = { node_id: nodeId, selectedYear, ...contextProps };
+
     return (
-      <Widget
-        key={nodeId}
-        query={[GET_PROFILE_METADATA]}
-        params={[params]}
-      >
+      <Widget key={nodeId} query={[GET_PROFILE_METADATA]} params={[params]}>
         {({ data = {}, loading, error }) => {
           const profileMetadata = data[GET_PROFILE_METADATA];
           const { years } = profileMetadata || {};
@@ -50,11 +48,13 @@ class ProfileContainer extends React.PureComponent {
   }
 }
 
+// TODO: Refactor
 function mapStateToProps(state) {
   const {
     query: { year: selectedYear, nodeId, print, contextId, commodityId } = {},
     payload: { profileType }
   } = state.location;
+
   const { contexts } = state.app;
   const { type: panelType } = state.profileSelector.panels;
 
@@ -70,10 +70,31 @@ function mapStateToProps(state) {
   }
 
   const ctxId = contextId && parseInt(contextId, 10);
-  if (ctxId) {
-    const context = contexts.find(ctx => ctx.id === ctxId) || { id: ctxId };
+  let context;
+
+  if (ctxId && !commodityId) {
+    context = contexts.find(ctx => ctx.id === ctxId) || { id: ctxId };
+
+    props.context = context;
+  } else if (ctxId && commodityId) {
+    context = contexts.find(ctx => ctx.id === ctxId && ctx.commodityId === commodityId);
+
+    // If we don't have a context (commodity changed)
+    // Find old context then get context with old countryId and new commodityId
+    if (!context) {
+      const oldContext = contexts.find(ctx => ctx.id === ctxId);
+      context = contexts.find(
+        ctx => ctx.countryId === oldContext.countryId && ctx.commodityId === commodityId
+      );
+    }
+
     props.context = context;
   }
+
+  if (commodityId) {
+    props.commodityId = commodityId;
+  }
+
   return props;
 }
 
@@ -85,7 +106,7 @@ const updateQueryParams = (profileType, query) => {
     if (activity === 'exporter') {
       delete updatedQuery.contextId;
     }
-    updatedQuery = { ...updatedQuery, ...activityInfo }
+    updatedQuery = { ...updatedQuery, ...activityInfo };
     delete updatedQuery.activityInfo;
   }
   return {

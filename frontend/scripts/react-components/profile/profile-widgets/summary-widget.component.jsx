@@ -55,7 +55,7 @@ function SummaryWidget(props) {
             year={year}
             printMode={printMode}
             onChange={onChange}
-            data={profileType === 'country' ? null : data[summaryEndpoint]}
+            data={data[summaryEndpoint]}
             context={context}
             profileMetadata={profileMetadata}
             openModal={openModal}

@@ -29,9 +29,16 @@ const ImportingCompaniesWidget = React.lazy(() =>
 const TopDestinationsWidget = React.lazy(() =>
   import('./profile-widgets/top-destinations-widget.component')
 );
+
+const LineWidget = React.lazy(() => import('./profile-widgets/line-widget.component'));
+
+const MapFlowsWidget = React.lazy(() => import('./profile-widgets/map-flows-widget.component'));
+
+const TableWidget = React.lazy(() => import('./profile-widgets/table.component'));
+
 const GfwWidget = React.lazy(() => import('./profile-widgets/gfw-widget.component'));
 
-const Profile = (props) => {
+const Profile = props => {
   const {
     year,
     nodeId,
@@ -47,9 +54,11 @@ const Profile = (props) => {
   } = props;
 
   // if requestIdleCallback is not supported (Edge, IE) we render the iframe immediately
-  const [renderIframes, setRenderIframes] = useState(typeof window.requestIdleCallback === 'undefined');
+  const [renderIframes, setRenderIframes] = useState(
+    typeof window.requestIdleCallback === 'undefined'
+  );
 
-  const allowRenderIframes = () => setRenderIframes(true)
+  const allowRenderIframes = () => setRenderIframes(true);
   useEffect(() => {
     if (window.requestIdleCallback) {
       // http://www.aaronpeters.nl/blog/iframe-loading-techniques-performance
@@ -63,8 +72,6 @@ const Profile = (props) => {
   }, []);
   const anchorRef = useRef(null);
 
-
-
   const updateQuery = (key, value) => {
     updateQueryParams(profileType, {
       nodeId,
@@ -73,15 +80,9 @@ const Profile = (props) => {
       commodityId,
       [key]: value
     });
-  }
+  };
 
   const renderSection = chart => {
-    // Temporal: Just until we have everything from the backend
-    const readyCountryIdentifiers = ['country_top_consumer_actors', 'country_top_consumer_countries']
-    if (profileType === 'country' && chart.chart_type && !readyCountryIdentifiers.includes(chart.identifier)) {
-      return null;
-    }
-
     switch (chart.chart_type) {
       case 'line_chart_with_map': {
         const isCountries = chart.identifier === 'actor_top_countries';
@@ -104,11 +105,31 @@ const Profile = (props) => {
           />
         );
       }
+      case 'line_chart': {
+        const type = chart.identifier.split('_')[0];
+        return (
+          <LineWidget
+            testId="profile-line-chart"
+            key={chart.id}
+            year={year}
+            type={type}
+            nodeId={nodeId}
+            chart={chart}
+            title={chart.title}
+            contextId={context?.id}
+            commodityId={context?.commodityId}
+            onLinkClick={updateQueryParams}
+            commodityName={context?.commodityName}
+            profileType={profileType}
+          />
+        );
+      }
       case 'tabs_table': {
         const isActor = profileType === 'actor';
         return (
           <SustainabilityTableWidget
             key={chart.id}
+            chart={chart}
             type={isActor ? 'risk' : 'indicators'}
             profileType={profileType}
             className={cx('c-profiles-table', {
@@ -122,6 +143,28 @@ const Profile = (props) => {
             commodityName={context?.commodityName}
             testId={isActor ? 'deforestation-risk' : 'sustainability-indicators'}
             targetPayload={{ profileType: isActor ? 'place' : 'actor' }}
+          />
+        );
+      }
+      case 'table': {
+        const type = chart.identifier.split('_')[0];
+        const commodityName =
+          context?.commodityName ||
+          profileMetadata.commodities.find(comm => comm.id === commodityId)?.name;
+
+        return (
+          <TableWidget
+            key={chart.id}
+            year={year}
+            type={type}
+            nodeId={nodeId}
+            chart={chart}
+            title={chart.title}
+            contextId={context?.id}
+            commodityId={context?.commodityId}
+            onLinkClick={updateQueryParams}
+            commodityName={commodityName}
+            profileType={profileType}
           />
         );
       }
@@ -142,6 +185,8 @@ const Profile = (props) => {
         return (
           <DeforestationWidget
             key={chart.id}
+            chart={chart}
+            profileType={profileType}
             year={year}
             nodeId={nodeId}
             title={chart.title}
@@ -168,7 +213,22 @@ const Profile = (props) => {
         );
       }
       case 'map_with_flows': {
-        return 'Map with flows widget'
+        const type = chart.identifier.split('_')[0];
+        return (
+          <MapFlowsWidget
+            key={chart.id}
+            year={year}
+            type={type}
+            nodeId={nodeId}
+            chart={chart}
+            title={chart.title}
+            contextId={context?.id || profileMetadata?.contextId}
+            commodityId={context?.commodityId || profileMetadata?.commodityId}
+            onLinkClick={updateQueryParams}
+            commodityName={context?.commodityName}
+            profileType={profileType}
+          />
+        );
       }
       default:
         return (
@@ -207,7 +267,9 @@ const Profile = (props) => {
       {ready &&
         sortBy(profileMetadata.charts, 'position').map(chart => (
           <ErrorCatch
-            key={`${year}_${context ? context.id : commodityId}_${profileType}_${chart.identifier}_${chart.id}`}
+            key={`${year}_${context ? context.id : commodityId}_${profileType}_${
+              chart.identifier
+            }_${chart.id}`}
             renderFallback={() => (
               <section className="section-placeholder">
                 <Text variant="mono" size="md" weight="bold">
@@ -245,7 +307,7 @@ const Profile = (props) => {
       )}
     </div>
   );
-}
+};
 
 Profile.propTypes = {
   printMode: PropTypes.bool,
