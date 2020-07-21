@@ -12,12 +12,12 @@ import { mouse, bisector } from 'd3';
 import { timeYear as d3_time_year } from 'd3-time';
 import { extent as d3_extent } from 'd3-array';
 import { area as d3_area, line as d3_line } from 'd3-shape';
-import { format as d3_format } from 'd3-format';
 import { timeFormat as d3_timeFormat } from 'd3-time-format';
 
 import { BREAKPOINTS } from 'constants';
 import abbreviateNumber from 'utils/abbreviateNumber';
 import { translateText } from 'utils/transifex';
+
 import scrollOffset from 'utils/scroll-offset';
 
 import Responsive from 'react-components/shared/responsive.hoc';
@@ -279,9 +279,8 @@ class Line extends Component {
       xTickFormat = getXTickFormat;
     } else {
       yTickFormat = (value, idx, arr) => {
-        const format = d3_format('0');
         const isLast = idx === arr.length - 1;
-        return `${format(value)}${isLast ? unit : ''}`;
+        return `${abbreviateNumber(value, 0)}${isLast ? ` ${unit}` : ''}`;
       };
       xTickFormat = getXTickFormat;
     }
