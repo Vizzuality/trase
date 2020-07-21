@@ -133,14 +133,15 @@ class Line extends Component {
       let pathContainers = null;
 
       if (highlightYear) {
+        const HIGHLIGHT_BAR_WIDTH = 50;
         d3Container
           .append('g')
           .attr('class', 'highlight')
           .append('rect')
-          .attr('width', 50)
+          .attr('width', HIGHLIGHT_BAR_WIDTH)
           .attr('height', chartHeight + chartMargin.bottom)
           .attr('fill', 'rgba(255,255,255,0.5)')
-          .attr('x', x(new Date(year, 0)) - 25)
+          .attr('x', x(new Date(year, 0)) - HIGHLIGHT_BAR_WIDTH / 2)
           .attr('y', 0);
       }
 
