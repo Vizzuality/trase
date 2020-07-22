@@ -10,7 +10,7 @@ import { TOOL_LAYOUT } from 'constants';
 
 import './button-links.scss';
 
-const links = [
+const DEFAULT_LINKS = [
   {
     heading: 'DATA',
     section: 'data-view',
@@ -32,13 +32,42 @@ const links = [
     layout: TOOL_LAYOUT.right
   }
 ];
+
+const COUNTRY_PROFILE_LINKS = [
+  {
+    heading: 'WORLD IMPACT',
+    section: 'data-view',
+    subtitle: 'GO TO DATA VIEW',
+    img: '/images/profiles/profile-main-option-4.svg',
+    layout: TOOL_LAYOUT.right,
+    className: 'data-view-image'
+  },
+  {
+    heading: 'LOCATION',
+    subtitle: 'GO TO MAP',
+    img: '/images/profiles/profile-main-option-2.svg',
+    layout: TOOL_LAYOUT.left
+  },
+  {
+    heading: 'CONNECTIONS',
+    subtitle: 'GO TO SUPPLY CHAIN',
+    img: '/images/profiles/profile-main-option-3.svg',
+    layout: TOOL_LAYOUT.right
+  }
+];
+
 function ButtonLinks(props) {
-  const { year, nodeId, countryId, commodityId, nodeType, name } = props;
+  const { profileType, year, nodeId, countryId, commodityId, nodeType, name } = props;
+  const links = profileType === 'country' ? COUNTRY_PROFILE_LINKS : DEFAULT_LINKS;
+
   return (
     <div className="c-button-links">
       <div className="row button-links-row">
         {links.map(link => (
-          <div className="columns small-12 medium-4 link-container" key={`${link.section}${link.heading}`}>
+          <div
+            className="columns small-12 medium-4 link-container"
+            key={`${link.section}${link.heading}`}
+          >
             <Link
               className="link-button"
               to={{
@@ -77,10 +106,11 @@ function ButtonLinks(props) {
 }
 
 ButtonLinks.propTypes = {
+  profileType: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  countryId: PropTypes.number.isRequired,
+  countryId: PropTypes.number,
   commodityId: PropTypes.number.isRequired,
-  nodeType: PropTypes.string.isRequired,
+  nodeType: PropTypes.string,
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired
 };

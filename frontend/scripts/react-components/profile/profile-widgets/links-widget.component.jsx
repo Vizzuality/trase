@@ -7,9 +7,19 @@ import { getSummaryEndpoint } from 'utils/getURLFromParams';
 import { translateText } from 'utils/transifex';
 
 function LinksWidget(props) {
-  const { year, nodeId, countryId, commodityId, profileType, contextId } = props;
+  const {
+    contexts,
+    activity,
+    year,
+    nodeId,
+    countryId: propCountryId,
+    commodityId,
+    profileType,
+    contextId
+  } = props;
   const params = { node_id: nodeId, context_id: contextId, profile_type: profileType, year };
   const summaryEndpoint = getSummaryEndpoint(profileType);
+
   return (
     <Widget params={[params]} query={[summaryEndpoint]}>
       {({ data, loading, error }) => {
@@ -22,9 +32,18 @@ function LinksWidget(props) {
         if (loading) return null;
 
         const name =
-          data[summaryEndpoint].nodeName || data[summaryEndpoint].jurisdictionName;
+          data[summaryEndpoint].nodeName ||
+          data[summaryEndpoint].jurisdictionName ||
+          data[summaryEndpoint].name;
 
-        const nodeType = data[summaryEndpoint].columnName;
+        // If we don't have a context we need to find it based on commodityId
+        // This is for country profiles (importer, exporter)
+        const countryId = !propCountryId
+          ? contexts.find(ctx => ctx.commodityId === commodityId && ctx.countryName === name)
+              ?.countryId
+          : propCountryId;
+
+        const nodeType = profileType === 'country' ? activity : data[summaryEndpoint].columnName;
 
         return (
           <section className="c-links-widget">
@@ -34,6 +53,7 @@ function LinksWidget(props) {
               </Heading>
             </div>
             <ButtonLinks
+              profileType={profileType}
               year={year}
               name={name}
               nodeId={nodeId}
@@ -49,6 +69,8 @@ function LinksWidget(props) {
 }
 
 LinksWidget.propTypes = {
+  activity: PropTypes.string,
+  contexts: PropTypes.array,
   contextId: PropTypes.number,
   countryId: PropTypes.number,
   commodityId: PropTypes.number,

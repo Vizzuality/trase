@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { useTransition, animated, config } from 'react-spring';
 
 import './banner-styles.scss';
@@ -25,20 +25,27 @@ function Banner() {
   });
 
   useEffect(() => {
-    setBackgroundInterval(setInterval(() => set(state => (state + 1) % 2), 6000));
+    let mounted = true; // React state update on an unmounted component error
+    setBackgroundInterval(
+      setInterval(() => {
+        if (mounted) {
+          set(state => (state + 1) % 2);
+        }
+      }, 6000)
+    );
     return function cleanup() {
+      mounted = false;
       clearInterval(backgroundInterval);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className="c-banner">
       {transitions.map(({ item, props, key }) => (
-        <>
+        <Fragment key={key}>
           <div className="background-white" />
           <animated.div
-            key={key}
             className="background-image"
             style={{
               ...props,
@@ -56,10 +63,10 @@ function Banner() {
               <div className="banner-link">Open yearbook</div>
             </a>
           </animated.div>
-        </>
+        </Fragment>
       ))}
     </div>
   );
-};
+}
 
 export default Banner;
