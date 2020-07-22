@@ -10,30 +10,7 @@ import { TOOL_LAYOUT } from 'constants';
 
 import './button-links.scss';
 
-const DEFAULT_LINKS = [
-  {
-    heading: 'DATA',
-    section: 'data-view',
-    subtitle: 'GO TO DATA VIEW',
-    img: '/images/profiles/profile-main-option-1.svg',
-    layout: TOOL_LAYOUT.right,
-    className: 'data-view-image'
-  },
-  {
-    heading: 'LOCATION IMPACT',
-    subtitle: 'GO TO MAP',
-    img: '/images/profiles/profile-main-option-2.svg',
-    layout: TOOL_LAYOUT.left
-  },
-  {
-    heading: 'CONNECTIONS',
-    subtitle: 'GO TO SUPPLY CHAIN',
-    img: '/images/profiles/profile-main-option-3.svg',
-    layout: TOOL_LAYOUT.right
-  }
-];
-
-const COUNTRY_PROFILE_LINKS = [
+const links = [
   {
     heading: 'WORLD IMPACT',
     section: 'data-view',
@@ -57,8 +34,7 @@ const COUNTRY_PROFILE_LINKS = [
 ];
 
 function ButtonLinks(props) {
-  const { profileType, year, nodeId, countryId, commodityId, nodeType, name } = props;
-  const links = profileType === 'country' ? COUNTRY_PROFILE_LINKS : DEFAULT_LINKS;
+  const { year, nodeId, countryId, commodityId, nodeType, name } = props;
 
   return (
     <div className="c-button-links">
@@ -106,7 +82,6 @@ function ButtonLinks(props) {
 }
 
 ButtonLinks.propTypes = {
-  profileType: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   countryId: PropTypes.number,
   commodityId: PropTypes.number.isRequired,
