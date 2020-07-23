@@ -252,6 +252,9 @@ const Profile = props => {
   };
 
   const ready = !loadingMetadata && !errorMetadata;
+  // We only want to show the links if we have a context
+  const showLinks = ready && context;
+
   return (
     <div className={`l-profile-${profileType}`}>
       {printMode && (
@@ -294,7 +297,7 @@ const Profile = props => {
             />
           </Suspense>
         )}
-      {ready && (
+      {showLinks && (
         <LinksWidget
           year={year}
           nodeId={nodeId}
