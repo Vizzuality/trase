@@ -200,6 +200,7 @@ const Profile = props => {
         return (
           <TopConsumersWidget
             key={chart.id}
+            chart={chart}
             year={year}
             type={type}
             nodeId={nodeId}
