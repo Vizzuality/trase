@@ -4,6 +4,7 @@ import SimpleModal from 'react-components/shared/simple-modal/simple-modal.compo
 import { PROFILE_STEPS } from 'constants';
 import StepsTracker from 'react-components/shared/steps-tracker';
 import ProfilePanelFooter from 'react-components/shared/profile-selector/profile-panel-footer';
+import cx from 'classnames';
 
 import 'react-components/shared/profile-selector/profile-selector.scss';
 
@@ -19,7 +20,7 @@ function ProfilesSelectorModal(props) {
     <SimpleModal isOpen={isOpen} onRequestClose={onClose}>
       {isOpen && (
         <div className="c-profile-selector">
-          <div className="profile-content">
+          <div className={cx('profile-content', { '-with-sentence': dynamicSentenceParts.length })}>
             <StepsTracker
               steps={['Type', 'Profile', 'Commodity'].map(label => ({ label }))}
               activeStep={activeStep || 0}
