@@ -17,7 +17,11 @@ import Warnings from './mapbox-map-warnings';
 import Tooltip from './mapbox-map-tooltip';
 import { getLayerOrder } from './layers/layer-config';
 import { getBaseLayer } from './layers/base-layer';
-import { useChoroplethFeatureState, useFitToBounds, useSetMapAttribution } from './mapbox-map.hooks';
+import {
+  useChoroplethFeatureState,
+  useFitToBounds,
+  useSetMapAttribution
+} from './mapbox-map.hooks';
 import 'react-components/tool/mapbox-map/mapbox-map.scss';
 
 let lastHoveredGeo = {};
@@ -86,7 +90,7 @@ function MapBoxMap(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultMapView]);
 
-  useSetMapAttribution(loaded, setMapAttribution)
+  useSetMapAttribution(loaded, setMapAttribution);
   useFitToBounds(map, selectedGeoNodes);
   useChoroplethFeatureState(
     choropleth,
@@ -100,24 +104,24 @@ function MapBoxMap(props) {
 
   useEffect(() => {
     if (tooltipValues) {
-      updateTooltipValues(tooltipValues)
+      updateTooltipValues(tooltipValues);
     }
     return undefined;
   }, [tooltipValues, updateTooltipValues]);
 
   const clearHoveredFeatureState = useCallback(() => {
-    if (lastHoveredGeo.id && layerIds.includes(lastHoveredGeo.source)) {
+    if (lastHoveredGeo.id && layerIds && layerIds.includes(lastHoveredGeo.source)) {
       map.setFeatureState({ ...lastHoveredGeo }, { hover: false });
       lastHoveredGeo.id = null;
     }
-  }, [layerIds, map])
+  }, [layerIds, map]);
 
   // Set and remove selected feature-state
   useEffect(() => {
     const unselectNodes = () => {
       lastSelectedGeos.forEach(lastSelectedGeo => {
         if (layerIds && layerIds.includes(lastSelectedGeo.source)) {
-          map.removeFeatureState(lastSelectedGeo, 'selected')
+          map.removeFeatureState(lastSelectedGeo, 'selected');
         }
       });
     };
@@ -128,8 +132,8 @@ function MapBoxMap(props) {
         source: selectedGeoNode.layerId,
         sourceLayer
       }));
-      lastSelectedGeos.forEach(geo =>
-        layerIds.includes(geo.source) && map.setFeatureState({ ...geo }, { selected: true })
+      lastSelectedGeos.forEach(
+        geo => layerIds.includes(geo.source) && map.setFeatureState({ ...geo }, { selected: true })
       );
     };
 
@@ -225,10 +229,7 @@ function MapBoxMap(props) {
       if (source === 'indonesia_mill') {
         const logisticsTooltipValues = [];
 
-        const logisticTooltipFields = [
-          { name: 'company' },
-          { name: 'uml_id' },
-        ];
+        const logisticTooltipFields = [{ name: 'company' }, { name: 'uml_id' }];
         logisticTooltipFields.forEach(l => {
           if (properties[l.name]) {
             logisticsTooltipValues.push({ title: l.name, unit: l.unit, value: properties[l.name] });
@@ -265,7 +266,8 @@ function MapBoxMap(props) {
   // Get Layers
   let layers = [baseLayer].concat(contextualLayers).concat(logisticLayers);
   if (unitLayers) {
-    layers = layers.concat(flatMap(unitLayers, u => getUnitLayerStyle(u, sourceLayer, darkBasemap))
+    layers = layers.concat(
+      flatMap(unitLayers, u => getUnitLayerStyle(u, sourceLayer, darkBasemap))
     );
   }
 
@@ -321,7 +323,7 @@ function MapBoxMap(props) {
       <Tooltip data={tooltipData} values={updatedTooltipValues} />
     </div>
   );
-};
+}
 
 MapBoxMap.propTypes = {
   defaultMapView: PropTypes.object,
