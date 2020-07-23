@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<database name="trase_test" schema="public" type="PostgreSQL - 11.7 (Ubuntu 11.7-2.pgdg18.04+1)">
+<database name="trase_test" schema="public" type="PostgreSQL - 11.8 (Ubuntu 11.8-1.pgdg18.04+1)">
    <sequences>
       <sequence increment="1" name="attributes_id_seq" startValue="1"/>
       <sequence increment="1" name="carto_layers_id_seq" startValue="1"/>
