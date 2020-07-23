@@ -13,7 +13,7 @@ export const getSelectedExporterNames = createSelector(
     if (!selectedNodesIds || !nodes) return null;
     const exporterSelectedNodes = selectedNodesIds
       .map(n => nodes[n])
-      .filter(n => n.type === 'EXPORTER');
+      .filter(n => n && n.type === 'EXPORTER');
     return exporterSelectedNodes.length ? exporterSelectedNodes.map(n => n.name) : null;
   }
 );
@@ -60,7 +60,7 @@ export const logisticLayerTemplates = {
         },
         { key: 'company' }
       ],
-      marker: `${MARKERS_URL}/refining-icon-v2.svg`,
+      marker: `${MARKERS_URL}/refining-icon-v2.svg`
     },
     {
       version: '0.0.1',
@@ -72,7 +72,7 @@ export const logisticLayerTemplates = {
       commodityName: 'SOY',
       color: '#F2B800',
       marker: `${MARKERS_URL}/storage-icon-v2.svg`,
-      paramsConfig: [{ key: 'company' }],
+      paramsConfig: [{ key: 'company' }]
     },
     {
       version: '0.0.1',
@@ -103,7 +103,7 @@ export const logisticLayerTemplates = {
         { key: 'subclass', value: `'PROBABLE SLAUGHTERHOUSE'` },
         { key: 'company' },
         { key: 'inspection_level' }
-     ],
+      ],
       marker: `${MARKERS_URL}/slaughterhouse-icon-v2.svg`
     },
     {
@@ -144,88 +144,99 @@ export const logisticLayerTemplates = {
 export const getLogisticMapLayerTemplates = createSelector(
   [getSelectedExporterNames, getSelectedInspectionLevel],
   (exporterNames, inspectionLevel) =>
-    Object.keys(logisticLayerTemplates).map(country =>
-      logisticLayerTemplates[country].map(l => {
-        const sqlParams = l.paramsConfig?.map(w => {
-          switch (w.key) {
-            case 'company':
-              return (exporterNames && exporterNames.length) ?
-              `company IN ('${exporterNames.join("' , '")}') `
-              : null;
-            case 'inspection_level':
-              return inspectionLevel
-                ? `inspection_level = '${inspectionLevel}' `
-                : null;
-            default: {
-              const value = w.value || w.default;
-              return `${w.key} = ${value}`;
-            }
-          }
-        }).filter(Boolean);
-        const sqlParamsString = sqlParams?.length ? `WHERE ${sqlParams.join(' AND ')}` : '';
-        const lightColor = l.color ? chroma(l.color).alpha(0.5).css() : '#000';
-        const darkColor = l.color ? chroma(l.color).darken(4).alpha(0.5).css() : '#000';
-        return layer({
-          name: l.id,
-          type: 'vector',
-          provider: 'carto',
-          images: [
-            {
-              id: l.marker,
-              src: l.marker,
-              options: {
-                sdf: true
+    Object.keys(logisticLayerTemplates)
+      .map(country =>
+        logisticLayerTemplates[country].map(l => {
+          const sqlParams = l.paramsConfig
+            ?.map(w => {
+              switch (w.key) {
+                case 'company':
+                  return exporterNames && exporterNames.length
+                    ? `company IN ('${exporterNames.join("' , '")}') `
+                    : null;
+                case 'inspection_level':
+                  return inspectionLevel ? `inspection_level = '${inspectionLevel}' ` : null;
+                default: {
+                  const value = w.value || w.default;
+                  return `${w.key} = ${value}`;
+                }
               }
-            }
-          ],
-          sql: `SELECT * FROM ${l.sqlTable} ${sqlParamsString}`,
-          renderLayers: [
-            {
-              type: 'heatmap',
-              maxzoom: 9,
-              paint: {
-                // Increase the heatmap weight based on frequency and property magnitude
-                // 'heatmap-weight': ['interpolate', ['linear'], ['get', 'mag'], 0, 0, 6, 1],
-                // Increase the heatmap color weight weight by zoom level
-                // heatmap-intensity is a multiplier on top of heatmap-weight
-                'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 9, 3],
-                // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
-                // Begin color ramp at 0-stop with a 0-transparancy color
-                // to create a blur-like effect.
-                'heatmap-color': [
-                  'interpolate',
-                  ['linear'],
-                  ['heatmap-density'],
-                  0,
-                  'rgba(0,0,0,0)',
-                  0.1,
-                  darkColor,
-                  1,
-                  lightColor
-                ],
-                // Adjust the heatmap radius by zoom level
-                'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 2, 9, 20],
-                // Transition from heatmap to symbol layer by zoom level
-                'heatmap-opacity': ['interpolate', ['linear'], ['zoom'], 7, 1, 9, 0]
+            })
+            .filter(Boolean);
+          const sqlParamsString = sqlParams?.length ? `WHERE ${sqlParams.join(' AND ')}` : '';
+          const lightColor = l.color
+            ? chroma(l.color)
+                .alpha(0.5)
+                .css()
+            : '#000';
+          const darkColor = l.color
+            ? chroma(l.color)
+                .darken(4)
+                .alpha(0.5)
+                .css()
+            : '#000';
+          return layer({
+            name: l.id,
+            type: 'vector',
+            provider: 'carto',
+            images: [
+              {
+                id: l.marker,
+                src: l.marker,
+                options: {
+                  sdf: true
+                }
               }
-            },
-            {
-              type: 'symbol',
-              minzoom: 6,
-              paint: {
-                'icon-color': lightColor,
-                'icon-opacity': ['interpolate', ['linear'], ['zoom'], 7, 0, 8, 1]
+            ],
+            sql: `SELECT * FROM ${l.sqlTable} ${sqlParamsString}`,
+            renderLayers: [
+              {
+                type: 'heatmap',
+                maxzoom: 9,
+                paint: {
+                  // Increase the heatmap weight based on frequency and property magnitude
+                  // 'heatmap-weight': ['interpolate', ['linear'], ['get', 'mag'], 0, 0, 6, 1],
+                  // Increase the heatmap color weight weight by zoom level
+                  // heatmap-intensity is a multiplier on top of heatmap-weight
+                  'heatmap-intensity': ['interpolate', ['linear'], ['zoom'], 0, 1, 9, 3],
+                  // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
+                  // Begin color ramp at 0-stop with a 0-transparancy color
+                  // to create a blur-like effect.
+                  'heatmap-color': [
+                    'interpolate',
+                    ['linear'],
+                    ['heatmap-density'],
+                    0,
+                    'rgba(0,0,0,0)',
+                    0.1,
+                    darkColor,
+                    1,
+                    lightColor
+                  ],
+                  // Adjust the heatmap radius by zoom level
+                  'heatmap-radius': ['interpolate', ['linear'], ['zoom'], 0, 2, 9, 20],
+                  // Transition from heatmap to symbol layer by zoom level
+                  'heatmap-opacity': ['interpolate', ['linear'], ['zoom'], 7, 1, 9, 0]
+                }
               },
-              layout: {
-                'icon-image': l.marker,
-                'icon-allow-overlap': true
-              },
-              metadata: {
-                position: 'top'
+              {
+                type: 'symbol',
+                minzoom: 6,
+                paint: {
+                  'icon-color': lightColor,
+                  'icon-opacity': ['interpolate', ['linear'], ['zoom'], 7, 0, 8, 1]
+                },
+                layout: {
+                  'icon-image': l.marker,
+                  'icon-allow-overlap': true
+                },
+                metadata: {
+                  position: 'top'
+                }
               }
-            }
-          ]
-        });
-      }
-    )).filter(Boolean)
-  );
+            ]
+          });
+        })
+      )
+      .filter(Boolean)
+);
