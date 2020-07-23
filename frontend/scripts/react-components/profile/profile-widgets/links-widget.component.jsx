@@ -7,16 +7,7 @@ import { getSummaryEndpoint } from 'utils/getURLFromParams';
 import { translateText } from 'utils/transifex';
 
 function LinksWidget(props) {
-  const {
-    contexts,
-    activity,
-    year,
-    nodeId,
-    countryId: propCountryId,
-    commodityId,
-    profileType,
-    contextId
-  } = props;
+  const { activity, year, nodeId, countryId, commodityId, profileType, contextId } = props;
   const params = { node_id: nodeId, context_id: contextId, profile_type: profileType, year };
   const summaryEndpoint = getSummaryEndpoint(profileType);
 
@@ -35,13 +26,6 @@ function LinksWidget(props) {
           data[summaryEndpoint].nodeName ||
           data[summaryEndpoint].jurisdictionName ||
           data[summaryEndpoint].name;
-
-        // If we don't have a context we need to find it based on commodityId
-        // This is for country profiles (importer, exporter)
-        const countryId = !propCountryId
-          ? contexts.find(ctx => ctx.commodityId === commodityId && ctx.countryName === name)
-              ?.countryId
-          : propCountryId;
 
         const nodeType = profileType === 'country' ? activity : data[summaryEndpoint].columnName;
 
@@ -70,7 +54,6 @@ function LinksWidget(props) {
 
 LinksWidget.propTypes = {
   activity: PropTypes.string,
-  contexts: PropTypes.array,
   contextId: PropTypes.number,
   countryId: PropTypes.number,
   commodityId: PropTypes.number,

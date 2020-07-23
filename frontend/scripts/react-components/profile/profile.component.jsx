@@ -42,7 +42,6 @@ const Profile = props => {
   const {
     year,
     nodeId,
-    contexts,
     context,
     commodityId,
     printMode,
@@ -297,12 +296,11 @@ const Profile = props => {
         )}
       {ready && (
         <LinksWidget
-          contexts={contexts}
           year={year}
           nodeId={nodeId}
           profileType={profileType}
           activity={profileMetadata?.activity}
-          contextId={context?.id || profileMetadata?.contextId}
+          contextId={context?.id}
           countryId={context?.countryId}
           commodityId={context?.commodityId || commodityId}
         />
@@ -313,7 +311,6 @@ const Profile = props => {
 
 Profile.propTypes = {
   printMode: PropTypes.bool,
-  contexts: PropTypes.array,
   context: PropTypes.object,
   commodityId: PropTypes.number,
   errorMetadata: PropTypes.any,

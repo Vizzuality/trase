@@ -29,7 +29,7 @@ const links = [
     heading: 'CONNECTIONS',
     subtitle: 'GO TO SUPPLY CHAIN',
     img: '/images/profiles/profile-main-option-3.svg',
-    layout: TOOL_LAYOUT.right
+    layout: TOOL_LAYOUT.splitted
   }
 ];
 

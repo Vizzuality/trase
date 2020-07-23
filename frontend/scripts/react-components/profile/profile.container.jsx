@@ -62,8 +62,7 @@ function mapStateToProps(state) {
     selectedYear,
     profileType,
     printMode: print && JSON.parse(print),
-    nodeId: parseInt(nodeId, 10),
-    contexts
+    nodeId: parseInt(nodeId, 10)
   };
 
   if (panelType === 'destinations') {
