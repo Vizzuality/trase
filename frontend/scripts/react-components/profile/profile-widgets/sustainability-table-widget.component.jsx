@@ -138,7 +138,7 @@ SustainabilityTableWidget.propTypes = {
   nodeId: PropTypes.number.isRequired,
   contextId: PropTypes.number.isRequired,
   profileType: PropTypes.string.isRequired,
-  commodityName: PropTypes.string.isRequired,
+  commodityName: PropTypes.string,
   targetPayload: PropTypes.object.isRequired
 };
 
