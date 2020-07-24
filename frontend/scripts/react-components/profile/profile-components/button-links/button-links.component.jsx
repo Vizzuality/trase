@@ -38,7 +38,10 @@ function ButtonLinks(props) {
     <div className="c-button-links">
       <div className="row button-links-row">
         {links.map(link => (
-          <div className="columns small-12 medium-4 link-container" key={`${link.section}${link.heading}`}>
+          <div
+            className="columns small-12 medium-4 link-container"
+            key={`${link.section}${link.heading}`}
+          >
             <Link
               className="link-button"
               to={{
@@ -78,8 +81,8 @@ function ButtonLinks(props) {
 
 ButtonLinks.propTypes = {
   name: PropTypes.string.isRequired,
-  countryId: PropTypes.number.isRequired,
-  commodityId: PropTypes.number.isRequired,
+  countryId: PropTypes.number,
+  commodityId: PropTypes.number,
   nodeType: PropTypes.string.isRequired,
   year: PropTypes.number.isRequired,
   nodeId: PropTypes.number.isRequired

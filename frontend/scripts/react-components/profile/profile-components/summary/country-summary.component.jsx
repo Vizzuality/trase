@@ -1,5 +1,5 @@
 /* eslint-disable camelcase,react/no-danger */
-import React from 'react';
+import React, { Fragment } from 'react';
 import Sticky from 'react-stickynode';
 import cx from 'classnames';
 
@@ -132,9 +132,9 @@ function CountrySummary(props) {
                   Object.keys(headerAttributes).length > 0 &&
                   Object.keys(headerAttributes).some(k => headerAttributes[k].value !== null) && (
                     <div className="small-12">
-                      {Object.keys(headerAttributes).map(indicatorKey =>
-                        renderIndicator(indicatorKey)
-                      )}
+                      {Object.keys(headerAttributes).map(indicatorKey => (
+                        <Fragment key={indicatorKey}>{renderIndicator(indicatorKey)}</Fragment>
+                      ))}
                     </div>
                   )}
               </div>

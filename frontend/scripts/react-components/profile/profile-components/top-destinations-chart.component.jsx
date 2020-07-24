@@ -143,7 +143,7 @@ TopDestinationsChart.propTypes = {
   title: PropTypes.string.isRequired,
   height: PropTypes.number.isRequired,
   summary: PropTypes.object.isRequired,
-  contextId: PropTypes.number.isRequired,
+  contextId: PropTypes.number,
   includedYears: PropTypes.array.isRequired,
   commodityName: PropTypes.string.isRequired
 };

@@ -131,7 +131,7 @@ ImportingCompaniesWidget.propTypes = {
   title: PropTypes.string.isRequired,
   nodeId: PropTypes.number.isRequired,
   contextId: PropTypes.number.isRequired,
-  commodityName: PropTypes.string.isRequired
+  commodityName: PropTypes.string
 };
 
 export default ImportingCompaniesWidget;

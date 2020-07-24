@@ -176,7 +176,7 @@ const Profile = props => {
             nodeId={nodeId}
             title={chart.title}
             printMode={printMode}
-            contextId={context.id}
+            contextId={context?.id}
             commodityName={context?.commodityName}
             testId="company-compare"
           />
@@ -200,6 +200,7 @@ const Profile = props => {
         return (
           <TopConsumersWidget
             key={chart.id}
+            chart={chart}
             year={year}
             type={type}
             nodeId={nodeId}
@@ -233,18 +234,20 @@ const Profile = props => {
       default:
         return (
           <React.Fragment key={chart.id}>
-            <SummaryWidget
-              key={chart.id}
-              year={year}
-              nodeId={nodeId}
-              context={context}
-              title={chart.title}
-              printMode={printMode}
-              profileType={profileType}
-              profileMetadata={profileMetadata}
-              onChange={updateQuery}
-              openModal={openModal}
-            />
+            {context && (
+              <SummaryWidget
+                key={chart.id}
+                year={year}
+                nodeId={nodeId}
+                context={context}
+                title={chart.title}
+                printMode={printMode}
+                profileType={profileType}
+                profileMetadata={profileMetadata}
+                onChange={updateQuery}
+                openModal={openModal}
+              />
+            )}
             <div className="profile-content-anchor" ref={anchorRef} />
             <ProfileSelector />
           </React.Fragment>
@@ -282,6 +285,7 @@ const Profile = props => {
           </ErrorCatch>
         ))}
       {ready &&
+        context &&
         profileType === 'place' &&
         GFW_WIDGETS_BASE_URL &&
         context.countryName === 'BRAZIL' && (
