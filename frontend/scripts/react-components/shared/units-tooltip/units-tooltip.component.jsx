@@ -38,8 +38,9 @@ function UnitsTooltip(props) {
       ref={ref}
       className={cx('c-units-tooltip', className)}
       style={{
-        left: position ? position.left : undefined,
-        top: position ? position.top : undefined,
+        transform: `translate(${position ? position.left : undefined}px, ${
+          position ? position.top : undefined
+        }px)`,
         visibility
       }}
     >
@@ -47,7 +48,7 @@ function UnitsTooltip(props) {
         {text}
       </Text>
       {items.map(item => (
-        <div key={item.title} className="units-tooltip-value">
+        <div key={`units-tooltip-${item.title}`} className="units-tooltip-value">
           <Text variant="mono" size="sm" color="grey-faded" transform="uppercase">
             {item.title}
           </Text>

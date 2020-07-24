@@ -1,5 +1,7 @@
 @import 'styles/settings';
 
+$profile-footer-max-height: 165px;
+
 .c-profile-selector {
   margin-top: 20px;
   position: relative;
@@ -16,8 +18,13 @@
   background-color: $light-gray;
 
   .profile-content {
+    height: calc(90vh - #{$profile-footer-max-height});
     flex: 1;
     overflow: auto;
     margin: 20px 0;
+
+    &.-with-sentence {
+      height: calc(90vh - #{$profile-footer-max-height + 35});
+    }
   }
 }

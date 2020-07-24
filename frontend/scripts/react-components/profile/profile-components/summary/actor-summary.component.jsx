@@ -1,7 +1,8 @@
 /* eslint-disable camelcase,react/no-danger */
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import Sticky from 'react-stickynode';
 import SummaryTitle from 'react-components/profile/profile-components/summary/summary-title.component';
 import HelpTooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
 import TitleGroup from 'react-components/profile/profile-components/title-group';
@@ -33,7 +34,7 @@ class ActorSummary extends React.PureComponent {
         options: (years ? years.map(_year => ({ label: `${_year}`, value: _year })) : []).sort(
           (a, b) => b.value - a.value
         ),
-        onChange: (newYear) => onChange('year', newYear)
+        onChange: newYear => onChange('year', newYear)
       }
     ];
 
@@ -128,21 +129,42 @@ class ActorSummary extends React.PureComponent {
     return (
       <div className="c-overall-info" data-test="actor-summary">
         <div className="row">
-          <div className="small-12 columns">
-            <SummaryTitle name={nodeName} openModal={openModal} />
+          <div className="small-12 medium-7 columns">
+            <Sticky top={60} innerZ={85} activeClass="profile-sticky-group">
+              {({ status }) => (
+                <div
+                  className={cx({
+                    'summary-sticky-group': true,
+                    sticky: status === Sticky.STATUS_FIXED
+                  })}
+                >
+                  <SummaryTitle
+                    sticky={status === Sticky.STATUS_FIXED}
+                    name={nodeName}
+                    openModal={openModal}
+                  />
+                  <TitleGroup
+                    sticky={status === Sticky.STATUS_FIXED}
+                    titles={titles}
+                    on={onChange}
+                  />
+
+                  {status !== Sticky.STATUS_FIXED &&
+                    headerAttributes &&
+                    Object.keys(headerAttributes).length > 0 &&
+                    Object.keys(headerAttributes).some(k => headerAttributes[k].value !== null) && (
+                      <div className="small-12">
+                        {Object.keys(headerAttributes).map(indicatorKey => (
+                          <Fragment key={indicatorKey}>{renderIndicator(indicatorKey)}</Fragment>
+                        ))}
+                      </div>
+                    )}
+                </div>
+              )}
+            </Sticky>
           </div>
         </div>
         <div className="row">
-          <div className="small-12 columns">
-            <TitleGroup titles={titles} on={onChange} />
-          </div>
-          {headerAttributes &&
-            Object.keys(headerAttributes).length > 0 &&
-            Object.keys(headerAttributes).some(k => headerAttributes[k].value !== null) && (
-              <div className="small-12 columns">
-                {Object.keys(headerAttributes).map(indicatorKey => renderIndicator(indicatorKey))}
-              </div>
-            )}
           <div
             className={cx('small-12', 'columns', { 'large-12': printMode, 'large-10': !printMode })}
           >

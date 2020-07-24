@@ -34,6 +34,10 @@
         fill: $yet-another-gray;
       }
 
+      &.-flow-widget {
+        fill: rgba($black, 0.2)
+      }
+
       &.-darker {
         fill: rgba($charcoal-grey, 0.7);
       }

@@ -59,7 +59,6 @@ function Explore(props) {
   const [highlightedContext, setHoveredCountry] = useHighlightedContext(props);
   const destinationCountries = highlightedContext?.id && topNodes[highlightedContext.id];
   const [highlightedCountryIds, setHoveredCommodity] = useHighlightedCountries(props);
-
   const openModal = card => {
     setModalOpen(true);
     setActiveCard(card);
