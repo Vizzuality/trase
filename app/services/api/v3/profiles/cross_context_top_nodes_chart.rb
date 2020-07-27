@@ -97,6 +97,7 @@ module Api
             @volume_attribute,
             include_domestic_consumption: true
           )
+          @target_nodes_total = @top_nodes.inject(0) { |sum, node| sum + node[:value] }
         end
       end
     end
