@@ -13,6 +13,21 @@ module Api
           @context = context
         end
 
+        def call
+          result = super
+          other_value = @all_nodes_total - @target_nodes_total
+          other_node = {
+            id: 0,
+            geo_id: 'XX',
+            name: 'OTHER',
+            height: @all_nodes_total.zero? ? 0 : other_value / @all_nodes_total,
+            is_domestic_consumption: nil,
+            value: other_value
+          }
+          result[:targetNodes] << other_node
+          result
+        end
+
         private
 
         def top_nodes_list
