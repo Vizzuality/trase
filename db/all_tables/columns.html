@@ -144,16 +144,16 @@
         "comments": "<p>Reference to qual<\/p>"
     },
     {
-        "tableName": "chart_node_types",
+        "tableName": "chart_quals",
         "tableType": "Table",
         "keyClass": "primaryKey",
         "keyTitle": "Primary Key",
         "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>id",
-        "type": "bigserial",
-        "length": 19,
+        "type": "serial",
+        "length": 10,
         "nullable": "",
         "autoUpdated": "√",
-        "defaultValue": "nextval('chart_node_types_id_seq'::regclass)",
+        "defaultValue": "nextval('chart_quals_id_seq'::regclass)",
         "comments": ""
     },
     {
@@ -2653,6 +2653,19 @@
         "comments": ""
     },
     {
+        "tableName": "sankey_card_links",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "subtitle",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": "<p>subtitle of the quick sankey card<\/p>"
+    },
+    {
         "tableName": "map_attributes_mv",
         "tableType": "View",
         "keyClass": "",
@@ -3875,19 +3888,6 @@
         "comments": ""
     },
     {
-        "tableName": "sankey_card_links",
-        "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "subtitle",
-        "type": "text",
-        "length": 2147483647,
-        "nullable": "√",
-        "autoUpdated": "",
-        "defaultValue": "null",
-        "comments": "<p>subtitle of the quick sankey card<\/p>"
-    },
-    {
         "tableName": "partitioned_denormalised_flow_quants_39",
         "tableType": "Table",
         "keyClass": "indexedColumn",
@@ -4042,6 +4042,19 @@
         "autoUpdated": "",
         "defaultValue": "null",
         "comments": ""
+    },
+    {
+        "tableName": "sankey_card_links",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "query_params",
+        "type": "json",
+        "length": 2147483647,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": "<p>query params included on the link of the quick sankey card<\/p>"
     },
     {
         "tableName": "chart_attributes_mv",
@@ -4421,6 +4434,19 @@
         "comments": ""
     },
     {
+        "tableName": "sankey_card_links",
+        "tableType": "Table",
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>commodity_id",
+        "type": "int8",
+        "length": 19,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
         "tableName": "partitioned_denormalised_flow_quants_51",
         "tableType": "Table",
         "keyClass": "",
@@ -4538,6 +4564,19 @@
         "comments": ""
     },
     {
+        "tableName": "sankey_card_links",
+        "tableType": "Table",
+        "keyClass": "primaryKey",
+        "keyTitle": "Primary Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>id",
+        "type": "bigserial",
+        "length": 19,
+        "nullable": "",
+        "autoUpdated": "√",
+        "defaultValue": "nextval('sankey_card_links_id_seq'::regclass)",
+        "comments": ""
+    },
+    {
         "tableName": "partitioned_denormalised_flow_quals_58",
         "tableType": "Table",
         "keyClass": "",
@@ -4601,6 +4640,19 @@
         "autoUpdated": "",
         "defaultValue": "null",
         "comments": ""
+    },
+    {
+        "tableName": "chart_node_types",
+        "tableType": "Table",
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>chart_id",
+        "type": "int8",
+        "length": 19,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": "<p>Refence to chart<\/p>"
     },
     {
         "tableName": "partitioned_denormalised_flow_quals_7",
@@ -5073,15 +5125,15 @@
     {
         "tableName": "chart_node_types",
         "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "updated_at",
-        "type": "timestamp",
-        "length": 29,
-        "nullable": "",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>identifier",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "√",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": ""
+        "comments": "<p>Identifier used to map this chart node type to a part of code which contains calculation logic<\/p>"
     },
     {
         "tableName": "partitioned_denormalised_flow_inds_44",
@@ -6639,6 +6691,19 @@
         "type": "int4",
         "length": 10,
         "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "sankey_card_links",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
         "comments": ""
@@ -8932,16 +8997,16 @@
         "comments": "<p>Path must be relative to <a href=\"https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers\">https://github.com/Vizzuality/trase/tree/develop/frontend/public/vector_layers<\/a> and start with /<\/p>"
     },
     {
-        "tableName": "sankey_card_links",
+        "tableName": "schema_migrations",
         "tableType": "Table",
         "keyClass": "primaryKey",
         "keyTitle": "Primary Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>id",
-        "type": "bigserial",
-        "length": 19,
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>version",
+        "type": "varchar",
+        "length": 2147483647,
         "nullable": "",
-        "autoUpdated": "√",
-        "defaultValue": "nextval('sankey_card_links_id_seq'::regclass)",
+        "autoUpdated": "",
+        "defaultValue": "null",
         "comments": ""
     },
     {
@@ -9196,7 +9261,7 @@
         "tableType": "Table",
         "keyClass": "foreignKey",
         "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>commodity_id",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>country_id",
         "type": "int8",
         "length": 19,
         "nullable": "√",
@@ -9218,17 +9283,17 @@
         "comments": ""
     },
     {
-        "tableName": "chart_node_types",
+        "tableName": "chart_quals",
         "tableType": "Table",
         "keyClass": "foreignKey",
         "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>chart_id",
-        "type": "int8",
-        "length": 19,
-        "nullable": "√",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>chart_attribute_id",
+        "type": "int4",
+        "length": 10,
+        "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>Refence to chart<\/p>"
+        "comments": ""
     },
     {
         "tableName": "partitioned_denormalised_flow_quants_19",
@@ -9803,19 +9868,6 @@
         "comments": ""
     },
     {
-        "tableName": "sankey_card_links",
-        "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "link",
-        "type": "text",
-        "length": 2147483647,
-        "nullable": "√",
-        "autoUpdated": "",
-        "defaultValue": "null",
-        "comments": ""
-    },
-    {
         "tableName": "partitioned_flows_37",
         "tableType": "Table",
         "keyClass": "",
@@ -9946,6 +9998,19 @@
         "comments": ""
     },
     {
+        "tableName": "chart_quals",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "updated_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
         "tableName": "partitioned_denormalised_flow_inds_50",
         "tableType": "Table",
         "keyClass": "",
@@ -9959,17 +10024,17 @@
         "comments": ""
     },
     {
-        "tableName": "chart_quals",
+        "tableName": "chart_node_types",
         "tableType": "Table",
-        "keyClass": "primaryKey",
-        "keyTitle": "Primary Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>id",
-        "type": "serial",
+        "keyClass": "indexedColumn",
+        "keyTitle": "Indexed",
+        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>position",
+        "type": "int4",
         "length": 10,
-        "nullable": "",
-        "autoUpdated": "√",
-        "defaultValue": "nextval('chart_quals_id_seq'::regclass)",
-        "comments": ""
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": "<p>Display order in scope of chart; required when more than one<\/p>"
     },
     {
         "tableName": "partitioned_denormalised_flow_inds_49",
@@ -10973,16 +11038,16 @@
         "comments": ""
     },
     {
-        "tableName": "chart_quals",
+        "tableName": "chart_node_types",
         "tableType": "Table",
-        "keyClass": "foreignKey",
-        "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>qual_id",
-        "type": "int4",
-        "length": 10,
-        "nullable": "",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "is_total",
+        "type": "bool",
+        "length": 1,
+        "nullable": "√",
         "autoUpdated": "",
-        "defaultValue": "null",
+        "defaultValue": "false",
         "comments": ""
     },
     {
@@ -13612,19 +13677,6 @@
         "comments": ""
     },
     {
-        "tableName": "chart_node_types",
-        "tableType": "Table",
-        "keyClass": "foreignKey",
-        "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>node_type_id",
-        "type": "int8",
-        "length": 19,
-        "nullable": "√",
-        "autoUpdated": "",
-        "defaultValue": "null",
-        "comments": "<p>Refence to node type<\/p>"
-    },
-    {
         "tableName": "partitioned_denormalised_flow_quals_6",
         "tableType": "Table",
         "keyClass": "indexedColumn",
@@ -13989,17 +14041,17 @@
         "comments": ""
     },
     {
-        "tableName": "chart_node_types",
+        "tableName": "chart_quals",
         "tableType": "Table",
-        "keyClass": "indexedColumn",
-        "keyTitle": "Indexed",
-        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>identifier",
-        "type": "text",
-        "length": 2147483647,
-        "nullable": "√",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
-        "comments": "<p>Identifier used to map this chart node type to a part of code which contains calculation logic<\/p>"
+        "comments": ""
     },
     {
         "tableName": "partitioned_denormalised_flow_quals_43",
@@ -14184,7 +14236,7 @@
         "comments": ""
     },
     {
-        "tableName": "chart_quals",
+        "tableName": "chart_node_types",
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
@@ -14338,19 +14390,6 @@
         "autoUpdated": "",
         "defaultValue": "null",
         "comments": ""
-    },
-    {
-        "tableName": "sankey_card_links",
-        "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "level2",
-        "type": "bool",
-        "length": 1,
-        "nullable": "",
-        "autoUpdated": "",
-        "defaultValue": "false",
-        "comments": "<p>level used when commodity is selected<\/p>"
     },
     {
         "tableName": "partitioned_flows_40",
@@ -14546,19 +14585,6 @@
         "autoUpdated": "",
         "defaultValue": "null",
         "comments": ""
-    },
-    {
-        "tableName": "chart_node_types",
-        "tableType": "Table",
-        "keyClass": "indexedColumn",
-        "keyTitle": "Indexed",
-        "name": "<i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'><\/i>position",
-        "type": "int4",
-        "length": 10,
-        "nullable": "√",
-        "autoUpdated": "",
-        "defaultValue": "null",
-        "comments": "<p>Display order in scope of chart; required when more than one<\/p>"
     },
     {
         "tableName": "countries_com_trade_aggregated_indicators",
@@ -15339,6 +15365,19 @@
         "autoUpdated": "",
         "defaultValue": "null",
         "comments": ""
+    },
+    {
+        "tableName": "sankey_card_links",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "level2",
+        "type": "bool",
+        "length": 1,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "false",
+        "comments": "<p>level used when commodity is selected<\/p>"
     },
     {
         "tableName": "dashboards_exporters_v",
@@ -17213,14 +17252,14 @@
         "comments": ""
     },
     {
-        "tableName": "schema_migrations",
+        "tableName": "sankey_card_links",
         "tableType": "Table",
-        "keyClass": "primaryKey",
-        "keyTitle": "Primary Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>version",
-        "type": "varchar",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "link",
+        "type": "text",
         "length": 2147483647,
-        "nullable": "",
+        "nullable": "√",
         "autoUpdated": "",
         "defaultValue": "null",
         "comments": ""
@@ -17468,19 +17507,6 @@
         "type": "int4",
         "length": 10,
         "nullable": "√",
-        "autoUpdated": "",
-        "defaultValue": "null",
-        "comments": ""
-    },
-    {
-        "tableName": "chart_quals",
-        "tableType": "Table",
-        "keyClass": "foreignKey",
-        "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>chart_attribute_id",
-        "type": "int4",
-        "length": 10,
-        "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
         "comments": ""
@@ -18747,6 +18773,19 @@
         "comments": ""
     },
     {
+        "tableName": "chart_quals",
+        "tableType": "Table",
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>qual_id",
+        "type": "int4",
+        "length": 10,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
         "tableName": "partitioned_denormalised_flow_inds_52",
         "tableType": "Table",
         "keyClass": "",
@@ -19291,19 +19330,6 @@
         "autoUpdated": "",
         "defaultValue": "null",
         "comments": "<p>Choropleth colour scale, e.g. blue<\/p>"
-    },
-    {
-        "tableName": "sankey_card_links",
-        "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "query_params",
-        "type": "json",
-        "length": 2147483647,
-        "nullable": "",
-        "autoUpdated": "",
-        "defaultValue": "null",
-        "comments": "<p>query params included on the link of the quick sankey card<\/p>"
     },
     {
         "tableName": "recolor_by_inds",
@@ -19891,6 +19917,19 @@
         "comments": ""
     },
     {
+        "tableName": "sankey_card_links",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "level1",
+        "type": "bool",
+        "length": 1,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "false",
+        "comments": "<p>level used when commodity and country are not selected<\/p>"
+    },
+    {
         "tableName": "ind_properties",
         "tableType": "Table",
         "keyClass": "",
@@ -20385,7 +20424,7 @@
         "comments": ""
     },
     {
-        "tableName": "chart_quals",
+        "tableName": "chart_node_types",
         "tableType": "Table",
         "keyClass": "",
         "keyTitle": "",
@@ -20699,14 +20738,14 @@
     {
         "tableName": "chart_node_types",
         "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "is_total",
-        "type": "bool",
-        "length": 1,
-        "nullable": "√",
-        "autoUpdated": "",
-        "defaultValue": "false",
+        "keyClass": "primaryKey",
+        "keyTitle": "Primary Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>id",
+        "type": "bigserial",
+        "length": 19,
+        "nullable": "",
+        "autoUpdated": "√",
+        "defaultValue": "nextval('chart_node_types_id_seq'::regclass)",
         "comments": ""
     },
     {
@@ -21243,19 +21282,6 @@
         "comments": ""
     },
     {
-        "tableName": "sankey_card_links",
-        "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "level3",
-        "type": "bool",
-        "length": 1,
-        "nullable": "",
-        "autoUpdated": "",
-        "defaultValue": "false",
-        "comments": "<p>level used when commodity and country are selected<\/p>"
-    },
-    {
         "tableName": "partitioned_denormalised_flow_quants",
         "tableType": "Table",
         "keyClass": "",
@@ -21615,6 +21641,19 @@
         "type": "int2",
         "length": 5,
         "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": ""
+    },
+    {
+        "tableName": "sankey_card_links",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "created_at",
+        "type": "timestamp",
+        "length": 29,
+        "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
         "comments": ""
@@ -22337,15 +22376,15 @@
     {
         "tableName": "sankey_card_links",
         "tableType": "Table",
-        "keyClass": "foreignKey",
-        "keyTitle": "Foreign Key",
-        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>country_id",
-        "type": "int8",
-        "length": 19,
-        "nullable": "√",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "level3",
+        "type": "bool",
+        "length": 1,
+        "nullable": "",
         "autoUpdated": "",
-        "defaultValue": "null",
-        "comments": ""
+        "defaultValue": "false",
+        "comments": "<p>level used when commodity and country are selected<\/p>"
     },
     {
         "tableName": "qual_values_meta_mv",
@@ -22699,19 +22738,6 @@
         "comments": ""
     },
     {
-        "tableName": "sankey_card_links",
-        "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "title",
-        "type": "text",
-        "length": 2147483647,
-        "nullable": "",
-        "autoUpdated": "",
-        "defaultValue": "null",
-        "comments": "<p>title of the quick sankey card<\/p>"
-    },
-    {
         "tableName": "node_quants",
         "tableType": "Table",
         "keyClass": "foreignKey",
@@ -22749,6 +22775,19 @@
         "autoUpdated": "",
         "defaultValue": "null",
         "comments": ""
+    },
+    {
+        "tableName": "chart_node_types",
+        "tableType": "Table",
+        "keyClass": "foreignKey",
+        "keyTitle": "Foreign Key",
+        "name": "<i class='icon ion-key iconkey' style='padding-left: 5px;'><\/i>node_type_id",
+        "type": "int8",
+        "length": 19,
+        "nullable": "√",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": "<p>Refence to node type<\/p>"
     },
     {
         "tableName": "database_updates",
@@ -23414,19 +23453,6 @@
         "comments": ""
     },
     {
-        "tableName": "sankey_card_links",
-        "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "level1",
-        "type": "bool",
-        "length": 1,
-        "nullable": "",
-        "autoUpdated": "",
-        "defaultValue": "false",
-        "comments": "<p>level used when commodity and country are not selected<\/p>"
-    },
-    {
         "tableName": "nodes_per_context_ranked_by_volume_per_year_mv",
         "tableType": "View",
         "keyClass": "",
@@ -23815,6 +23841,19 @@
         "autoUpdated": "",
         "defaultValue": "null",
         "comments": ""
+    },
+    {
+        "tableName": "sankey_card_links",
+        "tableType": "Table",
+        "keyClass": "",
+        "keyTitle": "",
+        "name": "title",
+        "type": "text",
+        "length": 2147483647,
+        "nullable": "",
+        "autoUpdated": "",
+        "defaultValue": "null",
+        "comments": "<p>title of the quick sankey card<\/p>"
     },
     {
         "tableName": "quant_properties",
@@ -24324,19 +24363,6 @@
         "comments": ""
     },
     {
-        "tableName": "chart_node_types",
-        "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "created_at",
-        "type": "timestamp",
-        "length": 29,
-        "nullable": "",
-        "autoUpdated": "",
-        "defaultValue": "null",
-        "comments": ""
-    },
-    {
         "tableName": "download_flows_v",
         "tableType": "View",
         "keyClass": "",
@@ -24412,19 +24438,6 @@
         "nullable": "",
         "autoUpdated": "√",
         "defaultValue": "nextval('context_node_types_id_seq'::regclass)",
-        "comments": ""
-    },
-    {
-        "tableName": "sankey_card_links",
-        "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "updated_at",
-        "type": "timestamp",
-        "length": 29,
-        "nullable": "",
-        "autoUpdated": "",
-        "defaultValue": "null",
         "comments": ""
     },
     {
@@ -24943,19 +24956,6 @@
         "type": "_text",
         "length": 2147483647,
         "nullable": "√",
-        "autoUpdated": "",
-        "defaultValue": "null",
-        "comments": ""
-    },
-    {
-        "tableName": "sankey_card_links",
-        "tableType": "Table",
-        "keyClass": "",
-        "keyTitle": "",
-        "name": "created_at",
-        "type": "timestamp",
-        "length": 29,
-        "nullable": "",
         "autoUpdated": "",
         "defaultValue": "null",
         "comments": ""
