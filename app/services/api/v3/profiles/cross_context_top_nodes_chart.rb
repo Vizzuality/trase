@@ -48,32 +48,52 @@ module Api
           unless @volume_attribute.present?
             raise ActiveRecord::RecordNotFound.new 'Quant Volume not found'
           end
+          @include_other = profile_options[:include_other]
         end
 
         def call
           initialize_top_nodes
+          target_nodes = target_nodes_formatted
+
+          target_nodes << other_node_formatted if @include_other
 
           {
             name: @node.name,
             indicator: @volume_attribute.display_name,
             unit: @volume_attribute.unit,
-            targetNodes: @top_nodes.map do |top_node|
-              top_node_id = top_node['node_id']
-              value = top_node['value']
-              {
-                id: top_node_id,
-                geo_id: top_node['geo_id'],
-                name: top_node['name'],
-                height: value / @all_nodes_total,
-                is_domestic_consumption: top_node['is_domestic_consumption'].
-                  present?,
-                value: value
-              }
-            end
+            targetNodes: target_nodes
           }
         end
 
         private
+
+        def target_nodes_formatted
+          @top_nodes.map do |top_node|
+            top_node_id = top_node['node_id']
+            value = top_node['value']
+            {
+              id: top_node_id,
+              geo_id: top_node['geo_id'],
+              name: top_node['name'],
+              height: value / @all_nodes_total,
+              is_domestic_consumption: top_node['is_domestic_consumption'].
+                present?,
+              value: value
+            }
+          end
+        end
+
+        def other_node_formatted
+          other_value = @all_nodes_total - @target_nodes_total
+          {
+            id: 0,
+            geo_id: 'XX',
+            name: 'OTHER',
+            height: @all_nodes_total.zero? ? 0 : other_value / @all_nodes_total,
+            is_domestic_consumption: nil,
+            value: other_value
+          }
+        end
 
         def top_nodes_list
           return @top_nodes_list if defined? @top_nodes_list
