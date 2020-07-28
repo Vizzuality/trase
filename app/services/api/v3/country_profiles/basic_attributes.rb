@@ -50,7 +50,7 @@ module Api
         HEADER_ATTRIBUTES = [
           'wb.population.value',
           'wb.gdp.value',
-          'com_trade.value.value',
+          # TODO: value of agricultural exports / imports
           'wb.land_area.value',
           'wb.agricultural_land_area.value',
           'wb.forested_land_area.value'
