@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Widget from 'react-components/widgets/widget.component';
 import { getSummaryEndpoint } from 'utils/getURLFromParams';
-import camelCase from 'lodash/camelCase';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import ReactIframeResizer from 'react-iframe-resizer-super';
 import COUNTRIES_ISO3 from './data/COUNTRIES_ISO3.json';
@@ -62,7 +61,7 @@ class GfwWidget extends React.PureComponent {
           }
 
           const { jurisdictionGeoId } = data[getSummaryEndpoint(profileType)];
-          const { path, match } = BRAZIL_GADM_GEOID[camelCase(jurisdictionGeoId)];
+          const { path, match } = BRAZIL_GADM_GEOID.data[jurisdictionGeoId];
 
           return match < 0.9 ? null : renderIframe(path);
         }}

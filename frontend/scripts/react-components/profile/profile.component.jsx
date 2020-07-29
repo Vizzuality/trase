@@ -69,7 +69,8 @@ const Profile = props => {
       return window.removeEventListener('load', allowRenderIframes);
     }
     return undefined;
-  }, []);
+  }, [document.readyState]);
+
   const anchorRef = useRef(null);
 
   const updateQuery = (key, value) => {
