@@ -11,19 +11,6 @@ $transition: all 0.2s;
 }
 
 .profiles-title-container {
-  &.-sticky {
-    display: flex;
-    align-items: center;
-    padding: 10px 0;
-    .profiles-title {
-      transition: $transition;
-      font-size: $font-size-medium;
-    }
-    .profiles-selector-button {
-      margin-top: initial;
-    }
-  }
-
   .profiles-title {
     font-family: $font-family-2;
     font-size: $font-size-huge;
@@ -35,6 +22,26 @@ $transition: all 0.2s;
 
     .profiles-activity {
       font-size: $font-size-x-big;
+    }
+  }
+
+  &.-sticky {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+
+    .profiles-title {
+      transition: $transition;
+      font-size: $font-size-big;
+    }
+
+    .profiles-activity {
+      transition: $transition;
+      font-size: $font-size-medium;
+    }
+
+    .profiles-selector-button {
+      margin-top: initial;
     }
   }
 
