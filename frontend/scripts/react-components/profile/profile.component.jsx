@@ -297,7 +297,7 @@ const Profile = props => {
               renderIframes={renderIframes}
               profileType={profileType}
               countryName={
-                profileType === 'country' && (context?.countryName || profileMetadata.name)
+                profileType === 'country' ? context?.countryName || profileMetadata.name : null
               }
             />
           </Suspense>
