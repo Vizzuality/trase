@@ -235,20 +235,18 @@ const Profile = props => {
       default:
         return (
           <React.Fragment key={chart.id}>
-            {context && (
-              <SummaryWidget
-                key={chart.id}
-                year={year}
-                nodeId={nodeId}
-                context={context}
-                title={chart.title}
-                printMode={printMode}
-                profileType={profileType}
-                profileMetadata={profileMetadata}
-                onChange={updateQuery}
-                openModal={openModal}
-              />
-            )}
+            <SummaryWidget
+              key={chart.id}
+              year={year}
+              nodeId={nodeId}
+              context={context}
+              title={chart.title}
+              printMode={printMode}
+              profileType={profileType}
+              profileMetadata={profileMetadata}
+              onChange={updateQuery}
+              openModal={openModal}
+            />
             <div className="profile-content-anchor" ref={anchorRef} />
             <ProfileSelector />
           </React.Fragment>
@@ -287,7 +285,7 @@ const Profile = props => {
         ))}
       {ready &&
         GFW_WIDGETS_BASE_URL &&
-        ((profileType === 'place' && context.countryName === 'BRAZIL') ||
+        ((profileType === 'place' && context?.countryName === 'BRAZIL') ||
           profileType === 'country') && (
           <Suspense fallback={null}>
             <GfwWidget
