@@ -285,17 +285,19 @@ const Profile = props => {
           </ErrorCatch>
         ))}
       {ready &&
-        context &&
-        profileType === 'place' &&
         GFW_WIDGETS_BASE_URL &&
-        context.countryName === 'BRAZIL' && (
+        ((profileType === 'place' && context.countryName === 'BRAZIL') ||
+          profileType === 'country') && (
           <Suspense fallback={null}>
             <GfwWidget
               year={year}
               nodeId={nodeId}
-              contextId={context.id}
+              contextId={context?.id}
               renderIframes={renderIframes}
               profileType={profileType}
+              countryName={
+                profileType === 'country' && (context?.countryName || profileMetadata.name)
+              }
             />
           </Suspense>
         )}
