@@ -25,7 +25,6 @@ class MapFlowsWidget extends React.PureComponent {
   render() {
     const { nodeId, profileType, title, year, commodityName } = this.props;
     const params = { node_id: nodeId, year };
-    // context_id: contextId
 
     return (
       <Widget
