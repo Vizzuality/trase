@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { interpolateNumber as d3InterpolateNumber } from 'd3-interpolate';
+import find from 'lodash/find';
 
 import formatValue from 'utils/formatValue';
 import wrapSVGText from 'utils/wrapSVGText';
@@ -80,35 +81,42 @@ class MiniSankey extends Component {
 
     let currentStartNodeY = startY;
     let currentEndNodeY = 0;
-    const nodes = [...data.targetNodes]
-      .sort((nodeA, nodeB) => nodeB.height - nodeA.height)
-      .map(node => {
-        const renderedHeight = MiniSankey.roundHeight(node.height);
+    const nodes = [...data.targetNodes].map(node => {
+      const renderedHeight = MiniSankey.roundHeight(node.height);
 
-        const lines = wrapSVGText(
-          translateText(node.name),
-          Math.max(TEXT_LINE_HEIGHT, renderedHeight),
-          TEXT_LINE_HEIGHT,
-          isSmallResolution ? 11 : 18,
-          3
-        );
-        const percent = 100 * node.height;
-        const n = {
-          id: node.id,
-          name: node.name,
-          isDomesticConsumption: node.is_domestic_consumption,
-          lines,
-          renderedHeight,
-          pct: `${percent * 10 >= 1 ? formatValue(percent, 'percentage') : '< 0.1'}%`,
-          sy: currentStartNodeY,
-          ty: currentEndNodeY,
-          value: node.value
-        };
+      const lines = wrapSVGText(
+        translateText(node.name),
+        Math.max(TEXT_LINE_HEIGHT, renderedHeight),
+        TEXT_LINE_HEIGHT,
+        isSmallResolution ? 11 : 18,
+        3
+      );
+      const percent = 100 * node.height;
+      const n = {
+        id: node.id,
+        name: node.name,
+        isDomesticConsumption: node.is_domestic_consumption,
+        lines,
+        renderedHeight,
+        pct: `${percent * 10 >= 1 ? formatValue(percent, 'percentage') : '< 0.1'}%`,
+        sy: currentStartNodeY,
+        ty: currentEndNodeY,
+        value: node.value
+      };
 
-        currentStartNodeY += n.renderedHeight;
-        currentEndNodeY += n.renderedHeight + NODE_V_SPACE;
-        return n;
-      });
+      currentStartNodeY += n.renderedHeight;
+      currentEndNodeY += n.renderedHeight + NODE_V_SPACE;
+      return n;
+    });
+
+    const sortedNodes = [
+      ...nodes.filter(n => n.name !== 'OTHER'),
+      find(nodes, { name: 'OTHER' })
+    ].sort((nodeA, nodeB) => {
+      if (nodeA.name === 'OTHER') return -1;
+      if (nodeB.name === 'OTHER') return 1;
+      return nodeB.height - nodeA.height;
+    });
 
     return (
       <div className="mini-sankey" data-test={testId}>
@@ -130,7 +138,7 @@ class MiniSankey extends Component {
           </g>
 
           <g transform={`translate(${sankeyXEnd}, 0)`}>
-            {nodes.map((node, index) => (
+            {sortedNodes.map((node, index) => (
               <g
                 key={index}
                 transform={`translate(0, ${node.ty})`}
@@ -165,7 +173,7 @@ class MiniSankey extends Component {
           </g>
 
           <g transform={`translate(${sankeyXStart}, 0)`}>
-            {nodes.map((node, index) => {
+            {sortedNodes.map((node, index) => {
               const x0 = nodeWidth;
               const x1 = sankeyXEnd - sankeyXStart;
               const xi = d3InterpolateNumber(x0, x1);
