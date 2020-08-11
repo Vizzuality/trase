@@ -38,7 +38,8 @@ module Api
           @year,
           {
             profile_type: profile_type,
-            chart_identifier: :country_top_consumer_actors
+            chart_identifier: :country_top_consumer_actors,
+            include_other: true
           }
         ).call
 
@@ -52,7 +53,8 @@ module Api
           @year,
           {
             profile_type: profile_type,
-            chart_identifier: :country_top_consumer_countries
+            chart_identifier: :country_top_consumer_countries,
+            include_other: false
           }
         ).call
 

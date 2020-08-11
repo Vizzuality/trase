@@ -1,5 +1,5 @@
 /* eslint-disable camelcase,react/no-danger */
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import Sticky from 'react-stickynode';
@@ -154,9 +154,9 @@ class ActorSummary extends React.PureComponent {
                     Object.keys(headerAttributes).length > 0 &&
                     Object.keys(headerAttributes).some(k => headerAttributes[k].value !== null) && (
                       <div className="small-12">
-                        {Object.keys(headerAttributes).map(indicatorKey =>
-                          renderIndicator(indicatorKey)
-                        )}
+                        {Object.keys(headerAttributes).map(indicatorKey => (
+                          <Fragment key={indicatorKey}>{renderIndicator(indicatorKey)}</Fragment>
+                        ))}
                       </div>
                     )}
                 </div>

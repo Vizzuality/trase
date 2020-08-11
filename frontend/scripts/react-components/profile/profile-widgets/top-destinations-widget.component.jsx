@@ -62,7 +62,10 @@ class TopDestinationsWidget extends React.PureComponent {
     return (
       <Widget
         query={[mainQuery, GET_NODE_SUMMARY_URL]}
-        params={[{ ...params, year }, { ...params, profile_type: 'actor' }]}
+        params={[
+          { ...params, year },
+          { ...params, profile_type: 'actor' }
+        ]}
       >
         {({ data, loading, error }) => {
           if (loading) {
@@ -155,7 +158,7 @@ TopDestinationsWidget.propTypes = {
   year: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   nodeId: PropTypes.number.isRequired,
-  contextId: PropTypes.number.isRequired,
+  contextId: PropTypes.number,
   onLinkClick: PropTypes.func.isRequired
 };
 

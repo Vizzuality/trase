@@ -65,7 +65,7 @@ module Api
                 @external_attribute_value.call('com_trade.value.value')
               ]
             }
-          end
+          end.sort { |a, b| b[:values][2].to_f <=> a[:values][2].to_f }
         end
 
         def production_value(commodity_id)

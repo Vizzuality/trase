@@ -76,7 +76,7 @@ function PlaceSummary(props) {
           const { name, value, unit, tooltip } = headerAttributes[indicatorKey];
           if (!value) return null;
           return (
-            <div className="stat-item">
+            <div className="stat-item" key={indicatorKey}>
               <Text variant="mono" color="grey-faded" transform="uppercase" className="legend">
                 {name}
                 {tooltip && <HelpTooltip text={tooltip} />}
@@ -116,11 +116,7 @@ function PlaceSummary(props) {
                   name={jurisdictionName}
                   openModal={openModal}
                 />
-                <TitleGroup
-                  sticky={status === Sticky.STATUS_FIXED}
-                  titles={titles}
-                  on={onChange}
-                />
+                <TitleGroup sticky={status === Sticky.STATUS_FIXED} titles={titles} on={onChange} />
               </div>
             )}
           </Sticky>

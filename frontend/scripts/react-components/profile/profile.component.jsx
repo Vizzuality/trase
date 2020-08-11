@@ -68,7 +68,8 @@ const Profile = props => {
       return window.removeEventListener('load', allowRenderIframes);
     }
     return undefined;
-  }, []);
+  }, [document.readyState]);
+
   const anchorRef = useRef(null);
 
   const updateQuery = (key, value) => {
@@ -175,7 +176,7 @@ const Profile = props => {
             nodeId={nodeId}
             title={chart.title}
             printMode={printMode}
-            contextId={context.id}
+            contextId={context?.id}
             commodityName={context?.commodityName}
             testId="company-compare"
           />
@@ -199,6 +200,7 @@ const Profile = props => {
         return (
           <TopConsumersWidget
             key={chart.id}
+            chart={chart}
             year={year}
             type={type}
             nodeId={nodeId}
@@ -284,16 +286,19 @@ const Profile = props => {
           </ErrorCatch>
         ))}
       {ready &&
-        profileType === 'place' &&
         GFW_WIDGETS_BASE_URL &&
-        context.countryName === 'BRAZIL' && (
+        ((profileType === 'place' && context?.countryName === 'BRAZIL') ||
+          profileType === 'country') && (
           <Suspense fallback={null}>
             <GfwWidget
               year={year}
               nodeId={nodeId}
-              contextId={context.id}
+              contextId={context?.id}
               renderIframes={renderIframes}
               profileType={profileType}
+              countryName={
+                profileType === 'country' ? context?.countryName || profileMetadata.name : null
+              }
             />
           </Suspense>
         )}
