@@ -80,7 +80,7 @@ function CountrySummary(props) {
   ];
 
   const renderIndicator = indicatorKey => {
-    const { name, value, unit, tooltip } = headerAttributes[indicatorKey];
+    const { name, value, prefix, suffix, tooltip } = headerAttributes[indicatorKey];
     if (!value) return null;
     return (
       <div className="stat-item" key={`${indicatorKey}${name}`}>
@@ -88,13 +88,20 @@ function CountrySummary(props) {
           {name}
           {tooltip && <HelpTooltip text={tooltip} />}
         </Text>
+        {prefix && (
+          <Text as="span" variant="mono" size="lg" weight="bold">
+            {prefix}
+          </Text>
+        )}
         <Text as="span" variant="mono" size="lg" weight="bold">
           {formatValue(value, indicatorKey)}
         </Text>
-        <Text as="span" variant="mono" size="lg" weight="bold">
-          {' '}
-          {unit === 'km2' ? 'km²' : unit}
-        </Text>
+        {suffix && suffix !== 'people' && (
+          <Text as="span" variant="mono" size="lg" weight="bold">
+            {' '}
+            {suffix === 'km2' ? 'km²' : suffix}
+          </Text>
+        )}
       </div>
     );
   };
