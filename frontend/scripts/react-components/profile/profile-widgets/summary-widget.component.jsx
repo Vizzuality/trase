@@ -57,7 +57,7 @@ function SummaryWidget(props) {
         return (
           <>
             <Helmet>
-              <title>{`TRASE - Profile - ${countryName}`}</title>
+              <title>{`TRASE - Profile - ${profileName}`}</title>
             </Helmet>
             <SummaryComponent
               year={year}
