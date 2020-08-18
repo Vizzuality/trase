@@ -156,6 +156,7 @@
     "rangetouch": "^2.0.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-helmet": "^6.1.0",
     "react-iframe-resizer-super": "^0.2.2",
     "react-input-autosize": "^2.2.2",
     "react-intersection-observer": "^8.25.2",

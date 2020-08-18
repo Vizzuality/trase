@@ -7,6 +7,8 @@ import Footer from 'react-components/shared/footer/footer.component';
 
 import isIe from 'utils/isIe';
 
+import SeoHandler from './seo-handler.component.jsx';
+
 import 'styles/_layouts.scss';
 
 const pageContent = {
@@ -28,9 +30,9 @@ function App() {
       document.body.classList.add('-is-legacy-browser');
     }
   }, []);
-
   return (
     <Suspense fallback={null}>
+      <SeoHandler />
       <nav>
         <TopNav />
       </nav>
