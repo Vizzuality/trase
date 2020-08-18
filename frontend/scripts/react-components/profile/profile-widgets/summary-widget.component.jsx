@@ -52,7 +52,7 @@ function SummaryWidget(props) {
         };
 
         const SummaryComponent = summaryComponents[profileType];
-        const countryName = data[summaryEndpoint].name || data[summaryEndpoint].nodeName;
+        const profileName = data[summaryEndpoint].name || data[summaryEndpoint].nodeName;
 
         return (
           <>
