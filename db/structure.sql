@@ -2276,11 +2276,13 @@ CREATE MATERIALIZED VIEW public.contexts_mv AS
            FROM ((public.context_node_types
              JOIN public.context_node_type_properties ON ((context_node_types.id = context_node_type_properties.context_node_type_id)))
              JOIN public.node_types ON ((context_node_types.node_type_id = node_types.id)))
+          WHERE context_node_type_properties.is_visible
         )
  SELECT contexts.id,
     contexts.country_id,
     contexts.commodity_id,
     contexts.years,
+    contexts.subnational_years,
     contexts.default_year,
     commodities.name AS commodity_name,
     countries.name AS country_name,
@@ -2288,7 +2290,10 @@ CREATE MATERIALIZED VIEW public.contexts_mv AS
     context_properties.default_basemap,
     context_properties.is_disabled,
     context_properties.is_default,
-    context_properties.is_subnational,
+        CASE
+            WHEN ((contexts.subnational_years IS NOT NULL) AND (public.icount(contexts.subnational_years) > 0)) THEN true
+            ELSE false
+        END AS is_subnational,
     context_properties.is_highlighted,
     COALESCE((contexts_with_profiles.id IS NOT NULL), false) AS has_profiles,
     node_types_by_role.node_types_by_role,
@@ -17292,7 +17297,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200505120049'),
 ('20200521074053'),
 ('20200522153602'),
-('20200618100150');
-
+('20200618100150'),
+('20200818104523');
 
 

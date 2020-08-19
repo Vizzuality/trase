@@ -7,6 +7,7 @@
 #  commodity_id                                                                         :integer          not null
 #  years(Years for which country-commodity data is present; empty (NULL) for all years) :integer          is an Array
 #  default_year(Default year for this context)                                          :integer
+#  subnational_years                                                                    :integer          is an Array
 #
 # Indexes
 #

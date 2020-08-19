@@ -6,6 +6,7 @@
 #  country_id         :integer
 #  commodity_id       :integer
 #  years              :integer          is an Array
+#  subnational_years  :integer          is an Array
 #  default_year       :integer
 #  commodity_name     :text
 #  country_name       :text
