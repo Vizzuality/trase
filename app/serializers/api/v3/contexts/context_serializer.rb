@@ -6,6 +6,7 @@ module Api
                    :is_default,
                    :is_disabled,
                    :years,
+                   :subnational_years,
                    :default_year,
                    :country_id,
                    :country_name,
