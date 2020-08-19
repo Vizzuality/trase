@@ -236,8 +236,6 @@ tables:
         comment: When set, do not show this context
       - name: is_default
         comment: When set, show this context as default (only use for one)
-      - name: is_subnational
-        comment: When set, show indication that sub-national level data is available
       - name: is_highlighted
         comment: When set, shows the context on the context picker suggestions
   - name: contextual_layers

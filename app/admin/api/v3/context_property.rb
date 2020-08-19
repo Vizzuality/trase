@@ -2,7 +2,7 @@ ActiveAdmin.register Api::V3::ContextProperty, as: 'ContextProperty' do
   menu parent: 'General', priority: 2
 
   permit_params :context_id, :default_basemap, :is_disabled, :is_default,
-                :is_subnational, :is_highlighted
+                :is_highlighted
 
   after_action :clear_cache, only: [:create, :update, :destroy]
 
@@ -24,8 +24,6 @@ ActiveAdmin.register Api::V3::ContextProperty, as: 'ContextProperty' do
                           hint: object.class.column_comment('is_disabled')
       input :is_default, as: :boolean, required: true,
                          hint: object.class.column_comment('is_default')
-      input :is_subnational, as: :boolean, required: true,
-                             hint: object.class.column_comment('is_subnational')
       input :is_highlighted, as: :boolean, required: true,
                              hint: object.class.column_comment('is_highlighted')
     end
@@ -37,7 +35,6 @@ ActiveAdmin.register Api::V3::ContextProperty, as: 'ContextProperty' do
     column('Commodity') { |property| property.context&.commodity&.name }
     column :is_disabled
     column :is_default
-    column :is_subnational
     column :is_highlighted
     actions
   end

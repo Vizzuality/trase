@@ -49,7 +49,6 @@ module Api
 
       delegate :is_default, to: :context_property
       delegate :is_disabled, to: :context_property
-      delegate :is_subnational, to: :context_property
       delegate :is_highlighted, to: :context_property
       delegate :default_basemap, to: :context_property
 
@@ -76,6 +75,10 @@ module Api
           {name: :country_id, table_class: Api::V3::Country},
           {name: :commodity_id, table_class: Api::V3::Commodity}
         ]
+      end
+
+      def is_subnational
+        subnational_years && subnational_years.any?
       end
     end
   end

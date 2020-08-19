@@ -2066,7 +2066,6 @@ CREATE TABLE public.context_properties (
     is_default boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    is_subnational boolean DEFAULT false NOT NULL,
     is_highlighted boolean
 );
 
@@ -2097,13 +2096,6 @@ COMMENT ON COLUMN public.context_properties.is_disabled IS 'When set, do not sho
 --
 
 COMMENT ON COLUMN public.context_properties.is_default IS 'When set, show this context as default (only use for one)';
-
-
---
--- Name: COLUMN context_properties.is_subnational; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.context_properties.is_subnational IS 'When set, show indication that sub-national level data is available';
 
 
 --
@@ -5482,7 +5474,10 @@ CREATE VIEW public.nodes_with_flows_v AS
     nodes.context_node_type_id,
     nodes.main_id,
     nodes.column_position,
-    context_properties.is_subnational,
+        CASE
+            WHEN ((contexts.subnational_years IS NOT NULL) AND (public.icount(contexts.subnational_years) > 0)) THEN true
+            ELSE false
+        END AS is_subnational,
     nodes.is_unknown,
     node_properties.is_domestic_consumption,
     btrim(nodes.name) AS name,
@@ -5493,13 +5488,14 @@ CREATE VIEW public.nodes_with_flows_v AS
     nodes.name_tsvector,
     array_agg(DISTINCT nodes.year ORDER BY nodes.year) AS array_agg,
     NULL::json AS actor_basic_attributes
-   FROM ((((public.nodes_with_flows_per_year nodes
+   FROM (((((public.nodes_with_flows_per_year nodes
      JOIN public.node_properties ON ((nodes.id = node_properties.node_id)))
+     JOIN public.contexts ON ((nodes.context_id = contexts.id)))
      JOIN public.context_properties ON ((nodes.context_id = context_properties.context_id)))
      JOIN public.context_node_type_properties ON ((nodes.context_node_type_id = context_node_type_properties.context_node_type_id)))
      LEFT JOIN public.profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))
   WHERE (NOT context_properties.is_disabled)
-  GROUP BY nodes.id, nodes.context_id, nodes.country_id, nodes.commodity_id, nodes.node_type_id, nodes.context_node_type_id, nodes.main_id, nodes.column_position, context_properties.is_subnational, nodes.is_unknown, node_properties.is_domestic_consumption, (btrim(nodes.name)), nodes.node_type, profiles.name, nodes.geo_id, context_node_type_properties.role, nodes.name_tsvector;
+  GROUP BY nodes.id, nodes.context_id, nodes.country_id, nodes.commodity_id, nodes.node_type_id, nodes.context_node_type_id, nodes.main_id, nodes.column_position, contexts.subnational_years, nodes.is_unknown, node_properties.is_domestic_consumption, (btrim(nodes.name)), nodes.node_type, profiles.name, nodes.geo_id, context_node_type_properties.role, nodes.name_tsvector;
 
 
 --
@@ -10016,6 +10012,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200522153602'),
 ('20200618100150'),
 ('20200626101727'),
-('20200818104523');
+('20200818104523'),
+('20200819083051');
 
 
