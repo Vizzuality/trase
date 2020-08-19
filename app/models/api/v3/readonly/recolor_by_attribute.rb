@@ -23,8 +23,6 @@ module Api
   module V3
     module Readonly
       class RecolorByAttribute < Api::Readonly::BaseModel
-        include Api::V3::Readonly::MaterialisedTable
-
         self.table_name = 'recolor_by_attributes_v'
 
         belongs_to :context
