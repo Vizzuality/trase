@@ -87,7 +87,7 @@ group :development do
   gem 'capistrano-yarn'
   gem 'capistrano-nvm'
   gem 'capistrano-passenger'
-  gem 'capistrano-rails', '~> 1.5', require: false
+  gem 'capistrano-rails', '~> 1.6', require: false
   gem 'capistrano-rvm'
   gem 'ed25519', '~> 1.2'
   gem 'rubocop', '~> 0.89.1', require: false
