@@ -30,6 +30,7 @@ shared_context 'api v3 indonesia context' do
         country: api_v3_indonesia,
         commodity: api_v3_palm_oil,
         years: [2014, 2015, 2016], # 2015 is subnational
+        subnational_years: [2015],
         default_year: 2015
       )
   end
@@ -40,7 +41,6 @@ shared_context 'api v3 indonesia context' do
         :api_v3_context_property,
         context: api_v3_indonesia_context,
         is_disabled: false,
-        is_subnational: true,
         is_default: false
       )
   end
