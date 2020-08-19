@@ -128,6 +128,7 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="years" nullable="true" remarks="Years for which country-commodity data is present; empty (NULL) for all years" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="default_year" nullable="true" remarks="Default year for this context" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="6" id="5" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="subnational_years" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <primaryKey column="id" sequenceNumberInPK="1"/>
          <index name="contexts_pkey" unique="true">
             <column ascending="true" name="id"/>
