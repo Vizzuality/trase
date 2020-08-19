@@ -109,7 +109,7 @@ GEM
       actionpack (>= 3.2)
       railties (>= 3.2)
     bigdecimal (2.0.0)
-    bootsnap (1.4.7)
+    bootsnap (1.4.8)
       msgpack (~> 1.0)
     buftok (0.2.0)
     builder (3.2.4)
