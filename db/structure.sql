@@ -2347,6 +2347,7 @@ CREATE VIEW public.contexts_v AS
     contexts.country_id,
     contexts.commodity_id,
     contexts.years,
+    contexts.subnational_years,
     contexts.default_year,
     commodities.name AS commodity_name,
     countries.name AS country_name,
@@ -2354,7 +2355,10 @@ CREATE VIEW public.contexts_v AS
     context_properties.default_basemap,
     context_properties.is_disabled,
     context_properties.is_default,
-    context_properties.is_subnational,
+        CASE
+            WHEN ((contexts.subnational_years IS NOT NULL) AND (public.icount(contexts.subnational_years) > 0)) THEN true
+            ELSE false
+        END AS is_subnational,
     context_properties.is_highlighted,
     COALESCE((contexts_with_profiles.id IS NOT NULL), false) AS has_profiles,
     node_types_by_role.node_types_by_role,
@@ -10011,7 +10015,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200521074053'),
 ('20200522153602'),
 ('20200618100150'),
-('20200626101727');
-
+('20200626101727'),
+('20200818104523');
 
 
