@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Widget from 'react-components/widgets/widget.component';
 import { getSummaryEndpoint } from 'utils/getURLFromParams';
-import camelCase from 'lodash/camelCase';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 import ReactIframeResizer from 'react-iframe-resizer-super';
+import COUNTRIES_ISO3 from './data/COUNTRIES_ISO3.json';
+import BRAZIL_GADM_GEOID from './data/BRAZIL_GADM_GEOID.json';
 
 class GfwWidget extends React.PureComponent {
   renderSpinner() {
@@ -16,15 +17,38 @@ class GfwWidget extends React.PureComponent {
   }
 
   render() {
-    const { year, nodeId, contextId, profileType, renderIframes } = this.props;
+    const { year, nodeId, contextId, profileType, renderIframes, countryName } = this.props;
     const params = { node_id: nodeId, context_id: contextId, profile_type: profileType, year };
-    const GADM_DICTIONARY_URL = '/BRAZIL_GADM_GEOID.json';
+
+    const renderIframe = path => (
+      <React.Fragment>
+        <section className="gfw-widget-container">
+          <div className="row align-center">
+            <div className="column small-10">
+              <ReactIframeResizer
+                title={() => 'Glad alerts'}
+                src={`//${GFW_WIDGETS_BASE_URL}/embed/dashboards/country/${path}?widget=gladAlerts&trase=true`}
+                style={{
+                  width: '100%',
+                  minHeight: 520
+                }}
+                iframeResizerOptions={{
+                  checkOrigin: false,
+                  log: false
+                }}
+              />
+            </div>
+          </div>
+        </section>
+      </React.Fragment>
+    );
+
+    if (profileType === 'country') {
+      return renderIframe(COUNTRIES_ISO3[countryName]);
+    }
+
     return (
-      <Widget
-        params={[params]}
-        query={[getSummaryEndpoint(profileType), GADM_DICTIONARY_URL]}
-        raw={[false, true]}
-      >
+      <Widget params={[params]} query={[getSummaryEndpoint(profileType)]} raw={[false]}>
         {({ data, error, loading }) => {
           if (error) {
             // TODO: display a proper error message to the user
@@ -37,34 +61,9 @@ class GfwWidget extends React.PureComponent {
           }
 
           const { jurisdictionGeoId } = data[getSummaryEndpoint(profileType)];
-          const gadm = data[GADM_DICTIONARY_URL];
-          const { path, match } = gadm[camelCase(jurisdictionGeoId)];
+          const { path, match } = BRAZIL_GADM_GEOID.data[jurisdictionGeoId];
 
-          if (match < 0.9) {
-            return null;
-          }
-          return (
-            <React.Fragment>
-              <section className="gfw-widget-container">
-                <div className="row align-center">
-                  <div className="column small-10">
-                    <ReactIframeResizer
-                      title={() => 'Glad alerts'}
-                      src={`//${GFW_WIDGETS_BASE_URL}/embed/dashboards/country/${path}?widget=gladAlerts&trase=true`}
-                      style={{
-                        width: '100%',
-                        minHeight: 520
-                      }}
-                      iframeResizerOptions={{
-                        checkOrigin: false,
-                        log: false
-                      }}
-                    />
-                  </div>
-                </div>
-              </section>
-            </React.Fragment>
-          );
+          return match < 0.9 ? null : renderIframe(path);
         }}
       </Widget>
     );
@@ -76,7 +75,8 @@ GfwWidget.propTypes = {
   nodeId: PropTypes.number,
   contextId: PropTypes.number,
   renderIframes: PropTypes.bool,
-  profileType: PropTypes.string
+  profileType: PropTypes.string,
+  countryName: PropTypes.string
 };
 
 export default GfwWidget;

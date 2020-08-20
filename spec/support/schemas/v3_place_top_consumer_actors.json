@@ -71,11 +71,11 @@
               },
               "is_domestic_consumption": {
                 "$id": "/properties/data/properties/targetNodes/items/properties/is_domestic_consumption",
-                "type": "boolean",
+                "type": ["boolean", "null"],
                 "title": "The Is_domestic_consumption Schema ",
                 "default": false,
                 "examples": [
-                  true
+                  false
                 ]
               },
               "value": {

@@ -100,6 +100,8 @@ class DeforestationWidget extends React.PureComponent {
                           yTickFormatType: 'deforestation-trajectory',
                           xTickPadding: 15
                         }}
+                        year={year}
+                        highlightYear
                       />
                     </div>
                     <div className="c-line-legend">

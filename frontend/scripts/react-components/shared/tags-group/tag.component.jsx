@@ -47,9 +47,9 @@ function Tag(props) {
 
   const renderName = () => {
     if (part.value.length > 1) {
-      return part.name ? translateText(`${part.value.length} ${part.name || part.panel}`).toLowerCase() : null;
+      return part.name ? translateText(`${part.value.length} ${part.name || part.panel}`) : null;
     }
-    return part.value[0].name ? translateText(part.value[0].name).toLowerCase() : null;
+    return part.value[0].name ? translateText(part.value[0].name) : null;
   };
 
   return (

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { GET_PROFILE_METADATA } from 'utils/getURLFromParams';
 import { profileSelectorActions } from 'react-components/shared/profile-selector/profile-selector.register';
+import { getProfileProps } from 'react-components/profile/profile.selectors';
 import Widget from 'react-components/widgets/widget.component';
 import Profile from 'react-components/profile/profile.component';
 
@@ -32,7 +33,9 @@ class ProfileContainer extends React.PureComponent {
         {({ data = {}, loading, error }) => {
           const profileMetadata = data[GET_PROFILE_METADATA];
           const { years } = profileMetadata || {};
-          const year = selectedYear || (years && years[years.length - 1]);
+          const year =
+            (years && years.includes(selectedYear) && selectedYear) ||
+            (years && years[years.length - 1]);
           return (
             <Profile
               {...this.props}
@@ -48,54 +51,8 @@ class ProfileContainer extends React.PureComponent {
   }
 }
 
-// TODO: Refactor
 function mapStateToProps(state) {
-  const {
-    query: { year: selectedYear, nodeId, print, contextId, commodityId } = {},
-    payload: { profileType }
-  } = state.location;
-
-  const { contexts } = state.app;
-  const { type: panelType } = state.profileSelector.panels;
-
-  const props = {
-    selectedYear,
-    profileType,
-    printMode: print && JSON.parse(print),
-    nodeId: parseInt(nodeId, 10)
-  };
-
-  if (panelType === 'destinations') {
-    return { ...props, isImporterCountry: true, commodityId };
-  }
-
-  const ctxId = contextId && parseInt(contextId, 10);
-  let context;
-
-  if (ctxId && !commodityId) {
-    context = contexts.find(ctx => ctx.id === ctxId) || { id: ctxId };
-
-    props.context = context;
-  } else if (ctxId && commodityId) {
-    context = contexts.find(ctx => ctx.id === ctxId && ctx.commodityId === commodityId);
-
-    // If we don't have a context (commodity changed)
-    // Find old context then get context with old countryId and new commodityId
-    if (!context) {
-      const oldContext = contexts.find(ctx => ctx.id === ctxId);
-      context = contexts.find(
-        ctx => ctx.countryId === oldContext.countryId && ctx.commodityId === commodityId
-      );
-    }
-
-    props.context = context;
-  }
-
-  if (commodityId) {
-    props.commodityId = commodityId;
-  }
-
-  return props;
+  return getProfileProps(state);
 }
 
 const updateQueryParams = (profileType, query) => {

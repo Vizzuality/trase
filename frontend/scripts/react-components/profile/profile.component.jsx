@@ -69,7 +69,8 @@ const Profile = props => {
       return window.removeEventListener('load', allowRenderIframes);
     }
     return undefined;
-  }, []);
+  }, [document.readyState]);
+
   const anchorRef = useRef(null);
 
   const updateQuery = (key, value) => {
@@ -234,20 +235,18 @@ const Profile = props => {
       default:
         return (
           <React.Fragment key={chart.id}>
-            {context && (
-              <SummaryWidget
-                key={chart.id}
-                year={year}
-                nodeId={nodeId}
-                context={context}
-                title={chart.title}
-                printMode={printMode}
-                profileType={profileType}
-                profileMetadata={profileMetadata}
-                onChange={updateQuery}
-                openModal={openModal}
-              />
-            )}
+            <SummaryWidget
+              key={chart.id}
+              year={year}
+              nodeId={nodeId}
+              context={context}
+              title={chart.title}
+              printMode={printMode}
+              profileType={profileType}
+              profileMetadata={profileMetadata}
+              onChange={updateQuery}
+              openModal={openModal}
+            />
             <div className="profile-content-anchor" ref={anchorRef} />
             <ProfileSelector />
           </React.Fragment>
@@ -285,17 +284,19 @@ const Profile = props => {
           </ErrorCatch>
         ))}
       {ready &&
-        context &&
-        profileType === 'place' &&
         GFW_WIDGETS_BASE_URL &&
-        context.countryName === 'BRAZIL' && (
+        ((profileType === 'place' && context?.countryName === 'BRAZIL') ||
+          profileType === 'country') && (
           <Suspense fallback={null}>
             <GfwWidget
               year={year}
               nodeId={nodeId}
-              contextId={context.id}
+              contextId={context?.id}
               renderIframes={renderIframes}
               profileType={profileType}
+              countryName={
+                profileType === 'country' ? context?.countryName || profileMetadata.name : null
+              }
             />
           </Suspense>
         )}
