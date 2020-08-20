@@ -14,8 +14,9 @@ export default function(state) {
     case 'data':
       return 'TRASE - Data Download';
     case 'profiles':
-    case 'profile':
       return 'TRASE - Profiles';
+    case 'profile':
+      return 'TRASE - Profile';
     case 'tool':
       if (!selectedContext) {
         if (state.toolLayers.toolLayout === TOOL_LAYOUT.left) {

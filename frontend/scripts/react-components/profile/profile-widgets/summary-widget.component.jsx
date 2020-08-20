@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
+
 import ActorSummary from 'react-components/profile/profile-components/summary/actor-summary.component';
 import PlaceSummary from 'react-components/profile/profile-components/summary/place-summary.component';
 import CountrySummary from 'react-components/profile/profile-components/summary/country-summary.component';
@@ -50,16 +52,23 @@ function SummaryWidget(props) {
         };
 
         const SummaryComponent = summaryComponents[profileType];
+        const profileName = data[summaryEndpoint].name || data[summaryEndpoint].nodeName;
+
         return (
-          <SummaryComponent
-            year={year}
-            printMode={printMode}
-            onChange={onChange}
-            data={data[summaryEndpoint]}
-            context={context}
-            profileMetadata={profileMetadata}
-            openModal={openModal}
-          />
+          <>
+            <Helmet>
+              <title>{`TRASE - Profile - ${profileName}`}</title>
+            </Helmet>
+            <SummaryComponent
+              year={year}
+              printMode={printMode}
+              onChange={onChange}
+              data={data[summaryEndpoint]}
+              context={context}
+              profileMetadata={profileMetadata}
+              openModal={openModal}
+            />
+          </>
         );
       }}
     </Widget>
