@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect';
-import { format } from 'd3-format';
-import { DEFAULT_DASHBOARD_UNIT_FORMAT } from 'constants';
+import formatDynamicSentenceValue from 'utils/formatDynamicSentenceValue';
 
 const getData = (state, props) => props.data || null;
 const getMeta = (state, props) => props.meta || null;
@@ -39,9 +38,7 @@ export const makeGetNodeIndicatorSentenceParts = () =>
         prefix: temporal ? 'was' : 'equals',
         value: [
           {
-            name: data[0].y0
-              ? `${format(DEFAULT_DASHBOARD_UNIT_FORMAT)(data[0].y0)} ${indicatorValueSuffix}`
-              : 'N/A'
+            name: formatDynamicSentenceValue(data[0].y0, indicatorValueSuffix)
           }
         ]
       };
