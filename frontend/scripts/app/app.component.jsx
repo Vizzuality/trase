@@ -7,7 +7,7 @@ import Footer from 'react-components/shared/footer/footer.component';
 
 import isIe from 'utils/isIe';
 
-import SeoHandler from './seo-handler.component.jsx';
+import SeoHandler from './seo-handler.component';
 
 import 'styles/_layouts.scss';
 
