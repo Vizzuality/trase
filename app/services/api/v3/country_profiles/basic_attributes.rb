@@ -2,10 +2,18 @@ module Api
   module V3
     module CountryProfiles
       class BasicAttributes
-        # @param node [Api::V3::Node]
+        include ActiveSupport::Configurable
+        include Api::V3::Profiles::AttributesInitializer
+
+        config_accessor :get_tooltip do
+          Api::V3::Profiles::GetTooltipPerAttribute
+        end
+
+        # @param node [Api::V3::Readonly::Node]
         # @param year [Integer]
         def initialize(node, year)
           @node = node
+          @context = node.context
           @year = year
           @activity =
             if @node.node_type == NodeTypeName::COUNTRY_OF_PRODUCTION
@@ -18,9 +26,12 @@ module Api
             @year,
             @activity
           )
+          @values = Api::V3::NodeAttributeValuesPreloader.new(@node, @year)
+          initialize_chart_config(:country, nil, :country_basic_attributes)
         end
 
         def call
+          @named_attributes = initialize_named_attributes
           {
             name: @node.name,
             geo_id: @node.geo_id,
@@ -40,7 +51,7 @@ module Api
           agricultural_land_area = @external_attribute_value.call 'wb.agricultural_land_area.value'
           summary << land_summary(land_area, forested_land_area, agricultural_land_area)
 
-          # TODO: HDI
+          summary << hdi
           # TODO: signatory to declarations
           summary
         end
@@ -64,6 +75,41 @@ module Api
               except(:short_name, :wb_name).
               merge(value: @external_attribute_value.call(attribute_ref))
           end.compact
+        end
+
+        NAMED_SUMMARY_ATTRIBUTES = %w(hdi).freeze
+
+        def initialize_named_attributes
+          values = {header_attributes: {}, summary_attributes: {}}
+
+          NAMED_SUMMARY_ATTRIBUTES.map do |name|
+            original_attribute = @chart_config.named_attribute(name)
+            next nil unless original_attribute
+
+            value = @values.get(
+              original_attribute.simple_type, original_attribute.id
+            )
+            next nil unless value
+
+            values[name.to_sym] = value
+
+            chart_attribute = @chart_config.named_chart_attribute(name)
+            values[:summary_attributes][chart_attribute.identifier.to_sym] =
+              formatted_header_attribute(original_attribute, chart_attribute)
+          end
+          values
+        end
+
+        def formatted_header_attribute(attribute, chart_attribute)
+          {
+            value: @values.get(attribute.simple_type, attribute.id),
+            name: chart_attribute.display_name,
+            unit: chart_attribute.unit,
+            tooltip: get_tooltip.call(
+              ro_chart_attribute: chart_attribute,
+              context: @context
+            )
+          }
         end
 
         def substitutions
@@ -99,6 +145,13 @@ module Api
           elsif agricultural_percent
             " Agricultural areas make up #{agricultural_percent} of its land mass."
           end
+        end
+
+        def hdi
+          value = @named_attributes[:hdi]
+          return '' unless value
+
+          " It's placement in the Human Development Index is #{value}."
         end
 
         def helper
