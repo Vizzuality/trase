@@ -31,7 +31,8 @@ module Api
         end
 
         def call
-          @named_attributes = initialize_named_attributes
+          @named_summary_attributes = initialize_named_attributes NAMED_SUMMARY_ATTRIBUTES
+          @named_header_attributes = initialize_named_attributes NAMED_HEADER_ATTRIBUTES
           {
             name: @node.name,
             geo_id: @node.geo_id,
@@ -50,9 +51,8 @@ module Api
           forested_land_area = @external_attribute_value.call 'wb.forested_land_area.value'
           agricultural_land_area = @external_attribute_value.call 'wb.agricultural_land_area.value'
           summary << land_summary(land_area, forested_land_area, agricultural_land_area)
-
           summary << hdi
-          # TODO: signatory to declarations
+          summary << declarations
           summary
         end
 
@@ -61,7 +61,6 @@ module Api
         HEADER_ATTRIBUTES = [
           'wb.population.value',
           'wb.gdp.value',
-          # TODO: value of agricultural exports / imports
           'wb.land_area.value',
           'wb.agricultural_land_area.value',
           'wb.forested_land_area.value'
@@ -69,20 +68,22 @@ module Api
 
         def header_attributes
           list = ExternalAttributesList.instance
-          HEADER_ATTRIBUTES.map do |attribute_ref|
+          external = HEADER_ATTRIBUTES.map do |attribute_ref|
             attribute_def = list.call(attribute_ref, substitutions)
             attribute_def.
               except(:short_name, :wb_name).
               merge(value: @external_attribute_value.call(attribute_ref))
           end.compact
+
+          external + @named_header_attributes.values
         end
 
-        NAMED_SUMMARY_ATTRIBUTES = %w(hdi).freeze
+        NAMED_SUMMARY_ATTRIBUTES = %w(hdi nydf amsterdam).freeze
+        NAMED_HEADER_ATTRIBUTES = %w(agricultural_exports agricultural_imports).freeze
 
-        def initialize_named_attributes
-          values = {header_attributes: {}, summary_attributes: {}}
-
-          NAMED_SUMMARY_ATTRIBUTES.map do |name|
+        def initialize_named_attributes(collection)
+          values = {}
+          collection.map do |name|
             original_attribute = @chart_config.named_attribute(name)
             next nil unless original_attribute
 
@@ -91,10 +92,8 @@ module Api
             )
             next nil unless value
 
-            values[name.to_sym] = value
-
             chart_attribute = @chart_config.named_chart_attribute(name)
-            values[:summary_attributes][chart_attribute.identifier.to_sym] =
+            values[chart_attribute.identifier.to_sym] =
               formatted_header_attribute(original_attribute, chart_attribute)
           end
           values
@@ -148,10 +147,21 @@ module Api
         end
 
         def hdi
-          value = @named_attributes[:hdi]
-          return '' unless value
+          hdi = @named_summary_attributes[:hdi]
+          return '' unless hdi && hdi[:value]
 
-          " It's placement in the Human Development Index is #{value}."
+          " It's placement in the #{hdi[:name]} is #{hdi[:value]}."
+        end
+
+        def declarations
+          declarations = []
+          nydf = @named_summary_attributes[:nydf]
+          declarations << nydf[:name] if nydf && nydf[:value]
+          amsterdam = @named_summary_attributes[:amsterdam]
+          declarations << amsterdam[:name] if amsterdam && amsterdam[:value]
+          return '' unless declarations.any?
+
+          " #{@node.name} is a signatory to " + declarations.join(' and ') + '.'
         end
 
         def helper
