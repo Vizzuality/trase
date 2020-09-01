@@ -46,7 +46,6 @@ function AnimatedCard(props) {
                 color="grey"
                 size="md"
                 weight="light"
-                transform="capitalize"
                 className="card-title"
                 lineHeight="lg"
               >
