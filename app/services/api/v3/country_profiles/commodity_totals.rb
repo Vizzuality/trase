@@ -22,7 +22,6 @@ module Api
             select('nodes_with_flows.*, commodities.name AS commodity').
             joins(:commodity).
             where(id: node.id)
-          quant_dictionary = Dictionary::Quant.instance
           # Assumption: Volume is a special quant which always exists
           @volume_attribute = quant_dictionary.get('Volume')
           unless @volume_attribute.present?
@@ -44,8 +43,31 @@ module Api
 
         private
 
+        def quant_dictionary
+          Dictionary::Quant.instance
+        end
+
         def included_columns
-          []
+          trade_volume_ranking = Api::V3::CountryProfiles::ExternalAttributesList.instance.call('com_trade.quantity.rank', substitutions).
+            except(:short_name).
+            merge(name: "World #{trade_flow} ranking")
+          trade_volume_value = Api::V3::CountryProfiles::ExternalAttributesList.instance.call('com_trade.quantity.value', substitutions).
+            except(:short_name).
+            merge(name: "#{trade_flow}s".capitalize)
+          trade_value = Api::V3::CountryProfiles::ExternalAttributesList.instance.call('com_trade.value.value', substitutions).
+            except(:short_name).
+            merge(name: 'Value')
+
+          [
+            trade_volume_ranking,
+            {
+              name: 'Production',
+              unit: @volume_attribute.unit, # hmm
+              unit_position: 'suffix'
+            },
+            trade_volume_value,
+            trade_value
+          ]
         end
 
         def rows
@@ -60,7 +82,7 @@ module Api
               name: node_with_flows['commodity'],
               values: [
                 @external_attribute_value.call('com_trade.quantity.rank'),
-                production_value(node_with_flows.commodity_id),
+                production_values[node_with_flows['commodity']],
                 @external_attribute_value.call('com_trade.quantity.value'),
                 @external_attribute_value.call('com_trade.value.value')
               ]
@@ -68,35 +90,47 @@ module Api
           end.sort { |a, b| b[:values][2].to_f <=> a[:values][2].to_f }
         end
 
-        def production_value(commodity_id)
-          production_values[commodity_id]
-        end
-
         def production_values
           return @production_values if defined? @production_values
 
-          path_conditions = @nodes_with_flows.map do |node_with_flows|
-            ApplicationRecord.sanitize_sql_for_conditions(
-              [
-                'flows.context_id = ? AND flows.path[?] = ?',
-                node_with_flows.context_id,
-                node_with_flows.column_position + 1,
-                node_with_flows.id
-              ]
-            )
-          end.join(' OR ')
+          @production_values = {}
+          preloaded_values = Api::V3::NodeAttributeValuesPreloader.new(@node, @year)
+          @nodes_with_flows.each do |node_with_flows|
+            commodity_name = node_with_flows['commodity']
 
-          data = Api::V3::FlowQuant.
-            select('contexts.commodity_id, SUM(value) AS total').
-            from('partitioned_flow_quants flow_quants').
-            joins(flow: :context).
-            where(path_conditions).
-            where('flows.year' => @year).
-            group('contexts.commodity_id')
+            # find quant based on commodity name
+            production_quant = production_quants[commodity_name]
+            next unless production_quant.present?
 
-          @production_values = Hash[
-            data.map { |fq| [fq['commodity_id'], fq['total']] }
-          ]
+            preloaded_value = preloaded_values.get(production_quant.simple_type, production_quant.id)
+            @production_values[commodity_name] = preloaded_value
+          end
+          @production_values
+        end
+
+        def production_quants
+          return @production_quants if defined? @production_quants
+
+          commodity_names = @nodes_with_flows.map { |node| node['commodity'] }
+          quant_names = commodity_names.map do |commodity_name|
+            "#{commodity_name.upcase}_TN"
+          end
+          @production_quants = {}
+          quant_names.each.with_index do |quant_name, idx|
+            quant = quant_dictionary.get(quant_name)
+            next if quant.nil?
+
+            @production_quants[commodity_names[idx]] = quant
+          end
+          @production_quants
+        end
+
+        def substitutions
+          {trade_flow: trade_flow}
+        end
+
+        def trade_flow
+          @activity.to_s.sub(/er$/, '')
         end
       end
     end

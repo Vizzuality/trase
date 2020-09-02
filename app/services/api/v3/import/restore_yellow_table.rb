@@ -101,8 +101,14 @@ module Api
           @table_class.blue_foreign_keys.each.with_index do |fk, idx|
             table_alias = "t_#{idx}"
             select_list << "#{table_alias}.new_id AS new_#{fk[:name]}"
+            join_type =
+              if fk[:nullable]
+                'LEFT JOIN'
+              else
+                'JOIN'
+              end
             joins << <<~SQL
-              JOIN #{fk[:table_class].key_backup_table} #{table_alias}
+              #{join_type} #{fk[:table_class].key_backup_table} #{table_alias}
               ON #{table_alias}.id = t.#{fk[:name]}
             SQL
             update_set_expressions << "#{fk[:name]} = updated_identifiers.new_#{fk[:name]}"

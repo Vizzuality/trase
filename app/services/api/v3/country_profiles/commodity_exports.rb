@@ -14,26 +14,6 @@ module Api
             }
           )
         end
-
-        private
-
-        def included_columns
-          [
-            {
-              name: 'World export ranking'
-            },
-            {
-              name: 'Production',
-              unit: @volume_attribute.unit
-            },
-            {
-              name: 'Exports'
-            },
-            {
-              name: 'Value'
-            }
-          ]
-        end
       end
     end
   end

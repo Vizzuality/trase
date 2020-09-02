@@ -33,7 +33,7 @@ module Api
 
       validates :quant, presence: true, uniqueness: true
       validates :display_name, presence: true
-      validates :unit_type, inclusion: {in: UNIT_TYPE, allow_blank: true}
+      validates :unit_type, presence: true, inclusion: {in: UNIT_TYPE}
 
       after_commit :refresh_dependents
 
