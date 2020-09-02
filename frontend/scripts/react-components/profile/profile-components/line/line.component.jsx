@@ -6,7 +6,11 @@ import capitalize from 'lodash/capitalize';
 import isEqual from 'lodash/isEqual';
 
 import { event as d3_event, select as d3_select } from 'd3-selection';
-import { axisBottom as d3_axis_bottom, axisLeft as d3_axis_left } from 'd3-axis';
+import {
+  axisBottom as d3_axis_bottom,
+  axisLeft as d3_axis_left,
+  axisRight as d3_axis_right
+} from 'd3-axis';
 import { scaleLinear as d3_scale_linear, scaleTime as d3_scale_time } from 'd3-scale';
 import { mouse, bisector } from 'd3';
 import { timeYear as d3_time_year } from 'd3-time';
@@ -85,15 +89,55 @@ class Line extends Component {
       .attr('y', 0);
   }
 
+  tickFormats() {
+    const { multiUnit, lines, ticks, unit } = this.props;
+    let yTickFormat = null;
+    let y2TickFormat = null;
+    let xTickFormat = null;
+    const yUnit = multiUnit ? lines.find(l => l.type !== 'line').unit : unit;
+    const y2Unit = multiUnit ? lines.find(l => l.type === 'line').unit : null;
+
+    const getXTickFormat = value => {
+      const format = d3_timeFormat('%Y');
+      const formatValue = format(value);
+      return this.getTicksStyle() === 'normal'
+        ? formatValue
+        : `'${formatValue.toString().slice(2)}`;
+    };
+
+    if (ticks.yTickFormatType === 'top-location') {
+      yTickFormat = value => abbreviateNumber(value, 3);
+      xTickFormat = getXTickFormat;
+    } else {
+      yTickFormat = (value, idx, arr) => {
+        const isLast = idx === arr.length - 1;
+        return `${abbreviateNumber(value, 0)}${isLast ? ` ${yUnit}` : ''}`;
+      };
+      xTickFormat = getXTickFormat;
+    }
+
+    if (multiUnit) {
+      y2TickFormat =
+        ticks.yTickFormatType === 'top-location'
+          ? value => abbreviateNumber(value, 3)
+          : (value, idx, arr) => {
+              const isLast = idx === arr.length - 1;
+              return `${abbreviateNumber(value, 0)}${isLast ? ` ${y2Unit}` : ''}`;
+            };
+    }
+
+    return [xTickFormat, yTickFormat, y2TickFormat];
+  }
+
   build() {
     const {
-      unit,
       lines,
       style,
       testId,
       xValues,
       margin,
       ticks,
+      multiUnit,
       settingsHeight,
       highlightYear,
       lineClassNameCallback,
@@ -112,7 +156,13 @@ class Line extends Component {
 
     const width = this.props.width - chartMargin.left - chartMargin.right;
     const chartHeight = settingsHeight - chartMargin.top - chartMargin.bottom;
-    const allYValues = [].concat(...lines.map(line => line.values));
+
+    let allYValues;
+    if (multiUnit) {
+      allYValues = [].concat(...lines.filter(l => l.type !== 'line').map(line => line.values));
+    } else {
+      allYValues = [].concat(...lines.map(line => line.values));
+    }
 
     this.chart.innerHTML = '';
     const d3Container = d3_select(this.chart)
@@ -131,6 +181,13 @@ class Line extends Component {
       .rangeRound([chartHeight, 0])
       .domain(d3_extent([0, ...allYValues]));
 
+    let y2;
+    if (multiUnit) {
+      y2 = d3_scale_linear()
+        .rangeRound([chartHeight, 0])
+        .domain(d3_extent([0, ...lines.find(line => line.type === 'line').values]));
+    }
+
     const sanitizedLines = this.getLines().sort((a, b) => {
       const last = xValues.length - 1;
       return a.values[last] - b.values[last];
@@ -138,10 +195,11 @@ class Line extends Component {
 
     sanitizedLines.forEach((lineData, i) => {
       const lineValuesWithFormat = this.prepareData(xValues, lineData);
+      const isY2Axis = multiUnit && lineData.type === 'line';
       const line = d3_line()
         .defined(d => d.value)
         .x(d => x(d.date))
-        .y(d => y(d.value));
+        .y(d => (isY2Axis ? y2(d.value) : y(d.value)));
       const type = typeof style !== 'undefined' ? style.type : lineData.type;
       const lineStyle = typeof style !== 'undefined' ? style.style : lineData.style;
       let area = null;
@@ -211,21 +269,21 @@ class Line extends Component {
             .append('circle')
             .attr('class', 'small-circle')
             .attr('cx', d => x(d.date))
-            .attr('cy', d => y(d.value))
+            .attr('cy', d => (isY2Axis ? y2(d.value) : y(d.value)))
             .attr('r', 2);
 
           circles
             .append('circle')
             .attr('class', 'hover-circle')
             .attr('cx', d => x(d.date))
-            .attr('cy', d => y(d.value))
+            .attr('cy', d => (isY2Axis ? y2(d.value) : y(d.value)))
             .attr('r', 4);
 
           this.hitboxCircles = circles
             .append('circle')
             .attr('class', 'hitbox-circle')
             .attr('cx', d => x(d.date))
-            .attr('cy', d => y(d.value))
+            .attr('cy', d => (isY2Axis ? y2(d.value) : y(d.value)))
             .attr('r', isTouchDevice ? 15 : 4);
 
           if (showTooltipCallback !== undefined) {
@@ -271,27 +329,7 @@ class Line extends Component {
       }
     });
 
-    let yTickFormat = null;
-    let xTickFormat = null;
-    const getXTickFormat = value => {
-      const format = d3_timeFormat('%Y');
-      const formatValue = format(value);
-      return this.getTicksStyle() === 'normal'
-        ? formatValue
-        : `'${formatValue.toString().slice(2)}`;
-    };
-
-    if (ticks.yTickFormatType === 'top-location') {
-      yTickFormat = value => abbreviateNumber(value, 3);
-      xTickFormat = getXTickFormat;
-    } else {
-      yTickFormat = (value, idx, arr) => {
-        const isLast = idx === arr.length - 1;
-        return `${abbreviateNumber(value, 0)}${isLast ? ` ${unit}` : ''}`;
-      };
-      xTickFormat = getXTickFormat;
-    }
-
+    const [xTickFormat, yTickFormat, y2TickFormat] = this.tickFormats();
     const xTicks = this.getTicksStyle() === 'small' ? d3_time_year.every(2) : xValues.length;
 
     const xAxis = d3_axis_bottom(x)
@@ -299,11 +337,21 @@ class Line extends Component {
       .tickSize(0)
       .tickPadding(ticks.xTickPadding)
       .tickFormat(xTickFormat);
+
     const yAxis = d3_axis_left(y)
       .ticks(ticks.yTicks)
       .tickSize(-width, 0)
       .tickPadding(ticks.yTickPadding)
       .tickFormat(yTickFormat);
+
+    let y2Axis;
+    if (multiUnit) {
+      y2Axis = d3_axis_right(y2)
+        .ticks(ticks.yTicks)
+        .tickSize(width + ticks.yTickPadding * 2, 0)
+        .tickPadding(ticks.yTickPadding)
+        .tickFormat(y2TickFormat);
+    }
 
     d3Container
       .append('g')
@@ -315,6 +363,13 @@ class Line extends Component {
       .append('g')
       .attr('class', 'axis axis--y axis--deforestation')
       .call(yAxis);
+
+    if (y2Axis) {
+      d3Container
+        .append('g')
+        .attr('class', 'axis axis--y2 axis--deforestation')
+        .call(y2Axis);
+    }
   }
 
   renderLegend() {
@@ -400,6 +455,7 @@ Line.propTypes = {
   testId: PropTypes.string,
   profileType: PropTypes.string,
   lines: PropTypes.array,
+  multiUnit: PropTypes.bool,
   unit: PropTypes.string,
   style: PropTypes.object,
   onLinkClick: PropTypes.func,

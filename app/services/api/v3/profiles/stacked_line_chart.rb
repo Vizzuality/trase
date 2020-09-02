@@ -28,61 +28,26 @@ module Api
         end
 
         def call
-          @years = fetch_years
-          lines = fetch_lines
-          {
+          values = fetch_values
+          years = extract_years(values)
+          formatted_values = format_values(values, years)
+          result = {
             included_years: years,
-            unit: 'ha',
-            lines: lines
+            # unit: 'ha',
+            lines: formatted_values
           }
+          units = @chart_config.attributes.map(&:unit).uniq
+          if units.size > 1
+            result[:multi_unit] = true
+            result[:unit] = nil
+          else
+            result[:multi_unit] = false
+            result[:unit] = units.first
+          end
+          result
         end
 
         private
-
-        attr_reader :years
-
-        def fetch_lines
-          @chart_config.chart_attributes.map.with_index do |chart_attribute, idx|
-            {
-              name: chart_attribute.display_name,
-              legend_name: chart_attribute.legend_name,
-              legend_tooltip: get_tooltip.call(
-                ro_chart_attribute: chart_attribute,
-                context: @context
-              ),
-              type: chart_attribute.display_type,
-              style: chart_attribute.display_style,
-              values: values_getter(get_values(chart_attribute, idx))
-            }
-          end
-        end
-
-        def fetch_years
-          min_years = []
-          max_years = []
-          @chart_config.attributes.each do |attribute|
-            min_max =
-              if attribute.is_a? Api::V3::Quant
-                @node.node_quants.where(quant_id: attribute.id)
-              elsif attribute.is_a? Api::V3::Ind
-                @node.node_inds.where(ind_id: attribute.id)
-              end
-            min_max = min_max.
-              except(:select).
-              select('MIN(year), MAX(year)').
-              order(nil).
-              first
-            next unless min_max
-
-            min_years << min_max['min']
-            max_years << min_max['max']
-          end
-          min_year = min_years.compact.min
-          max_year = max_years.compact.max
-          return [] unless min_year && max_year
-
-          (min_year..max_year).to_a
-        end
 
         def initialize_state_ranking
           # This remains hardcoded, because it only makes sense
@@ -97,12 +62,15 @@ module Api
           @state_ranking = Api::V3::Places::StateRanking.new(@context, @node, @year, state_name)
         end
 
-        def get_values(chart_attribute, idx)
-          data = get_data(chart_attribute, @chart_config.attributes[idx])
-          Hash[data.map { |element| [element['year'], element] }]
+        def fetch_values
+          @chart_config.chart_attributes.map.with_index do |chart_attribute, idx|
+            attribute = @chart_config.attributes[idx]
+            data = fetch_values_for_attribute(chart_attribute, attribute)
+            Hash[data.map { |element| [element['year'], element] }]
+          end
         end
 
-        def get_data(chart_attribute, attribute)
+        def fetch_values_for_attribute(chart_attribute, attribute)
           attribute_id = attribute.id
           if chart_attribute.state_average && @state_ranking
             @state_ranking.average_for_attribute(
@@ -115,7 +83,34 @@ module Api
           end
         end
 
-        def values_getter(values)
+        def extract_years(values)
+          all_years = values.map { |v| v.keys }.flatten.uniq.sort
+          min_year = all_years.first
+          max_year = all_years.last
+          return [] unless min_year && max_year
+
+          (min_year..max_year).to_a
+        end
+
+        def format_values(values, years)
+          @chart_config.chart_attributes.map.with_index do |chart_attribute, idx|
+            attribute = @chart_config.attributes[idx]
+            {
+              name: chart_attribute.display_name,
+              legend_name: chart_attribute.legend_name,
+              legend_tooltip: get_tooltip.call(
+                ro_chart_attribute: chart_attribute,
+                context: @context
+              ),
+              unit: attribute.unit,
+              type: chart_attribute.display_type,
+              style: chart_attribute.display_style,
+              values: inject_missing_values(values[idx], years)
+            }
+          end
+        end
+
+        def inject_missing_values(values, years)
           years.map do |year|
             values_of_year = values[year]
             values_of_year['value'] unless values_of_year.blank?
