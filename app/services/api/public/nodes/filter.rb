@@ -40,7 +40,7 @@ module Api
               :node_type,
               :geo_id,
               'JSON_AGG(' \
-                'JSON_BUILD_OBJECT(' \
+                'DISTINCT JSONB_BUILD_OBJECT(' \
                   '\'country\', contexts_mv.iso2, ' \
                   '\'commodity\', contexts_mv.commodity_name, ' \
                   '\'years\', nodes_with_flows.years' \
