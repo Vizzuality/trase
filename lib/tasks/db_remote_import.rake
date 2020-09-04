@@ -12,7 +12,7 @@ namespace :db do
     desc 'Restores data from S3 and imports from local schema'
     task import: :environment do
       unless ENV['SCHEMA_VERSION'].present?
-        abort('Please provide database version as env var e.g. SCHEMA_VERSION=MAIN/tool_tables_20181128.dump.gz')
+        abort('Please provide database version as env var e.g. SCHEMA_VERSION=MAIN/trase_earth_20181128.dump.gz')
       end
       with_update_lock do |database_update|
         Api::V3::Import::MirrorImport.new.call(database_update, ENV['SCHEMA_VERSION'])

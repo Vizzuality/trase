@@ -25,7 +25,7 @@ matrix:
         - ./cc-test-reporter before-build
 
       script:
-        - TRASE_LOCAL_MIRROR_SCHEMA=tool_tables TRASE_LOCAL_SCHEMA=public bundle exec rspec spec --fail-fast
+        - TRASE_LOCAL_MIRROR_SCHEMA=trase_earth TRASE_LOCAL_SCHEMA=public bundle exec rspec spec --fail-fast
 
       after_script:
         - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
