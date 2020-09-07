@@ -1,5 +1,19 @@
 namespace :db do
   namespace :country_profiles do
+    desc 'Clear & populate country profiles configuration'
+    task clear_and_populate: :environment do
+      without_chart_callbacks do
+        delete_profiles
+        populate_exporters
+        populate_importers
+      end
+
+      Api::V3::Profile.new.refresh_dependents
+
+      # dependencies of chart attribute
+      Api::V3::Readonly::ChartAttribute.refresh(sync: false, skip_dependencies: true)
+    end
+
     desc 'Populate country profiles configuration'
     task populate: :environment do
       without_chart_callbacks do
@@ -29,6 +43,10 @@ namespace :db do
       country_top_consumer_actors: 3,
       country_top_consumer_countries: 4
     }.freeze
+
+    def delete_profiles
+      Api::V3::Profile.where(name: Api::V3::Profile::COUNTRY).each(&:delete)
+    end
 
     def delete_charts_in_wrong_running_order
       charts = Api::V3::Chart.
@@ -218,7 +236,7 @@ namespace :db do
         profile, nil, identifier, position, title
       )
       find_or_create_chart_node_type(
-        top_countries_chart, country_of_export_node_type, 'destination'
+        top_countries_chart, country_of_export_node_type, 'source'
       )
     end
 
