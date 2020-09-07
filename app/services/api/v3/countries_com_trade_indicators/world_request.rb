@@ -1,7 +1,7 @@
 module Api
   module V3
     module CountriesComTradeIndicators
-      class ComTradeRequest
+      class WorldRequest
         class ComTradeError < StandardError; end
 
         RG_TO_ACTIVITY = {
@@ -29,27 +29,30 @@ module Api
             attributes = parse_attributes(element)
             next unless attributes
 
-            Api::V3::CountriesComTradeIndicator.create!(
-              attributes.merge(updated_at: Time.now)
-            )
+            save(attributes)
           end
         end
 
         private
 
+        def save(attributes)
+          Api::V3::CountriesComTradeWorldIndicator.create!(
+            attributes.merge(updated_at: Time.now)
+          )
+        end
+
         def ensure_valid_response(validation)
           status = validation['status']
-          if status['name'] != 'Ok'
-            error = ComTradeError.new(
-              validation['message'] + ' (' +
-              status['name'] + ' ' +
-              status['description'] + ')'
-            )
-            Rails.logger.error error
-            Appsignal.send_error(error)
-            return false
-          end
-          true
+          return true if status['name'] == 'Ok'
+
+          error = ComTradeError.new(
+            validation['message'] + ' (' +
+            status['name'] + ' ' +
+            status['description'] + ')'
+          )
+          Rails.logger.error error
+          Appsignal.send_error(error)
+          return false
         end
 
         def parse_attributes(element)
