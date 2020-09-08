@@ -54,7 +54,10 @@ module Api
           select_list = []
           joins = []
           delete_where_conditions = []
-          @table_class.blue_foreign_keys.each.with_index do |fk, idx|
+          non_nullable_foreign_keys = @table_class.blue_foreign_keys.reject { |fk| fk[:nullable] }
+          return unless non_nullable_foreign_keys.any?
+
+          non_nullable_foreign_keys.each.with_index do |fk, idx|
             table_alias = "t_#{idx}"
             select_list << "#{table_alias}.new_id AS new_#{fk[:name]}"
             joins << <<~SQL
