@@ -329,7 +329,7 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
-    redis (4.2.1)
+    redis (4.2.2)
     regexp_parser (1.7.1)
     require_all (1.5.0)
     responders (3.0.1)
@@ -390,7 +390,7 @@ GEM
       railties (>= 4.0.0)
     select2-rails (4.0.3)
       thor (~> 0.14)
-    sidekiq (6.1.1)
+    sidekiq (6.1.2)
       connection_pool (>= 2.2.2)
       rack (~> 2.0)
       redis (>= 4.2.0)
@@ -517,7 +517,7 @@ DEPENDENCIES
   rubocop-rspec
   sassc-rails (~> 2.1.2)
   scenic
-  sidekiq (~> 6.1.1)
+  sidekiq (~> 6.1.2)
   sidekiq-unique-jobs
   simplecov
   sitemap_generator
