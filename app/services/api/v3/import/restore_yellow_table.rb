@@ -61,7 +61,7 @@ module Api
               LEFT JOIN #{fk[:table_class].key_backup_table} #{table_alias}
               ON #{table_alias}.id = t.#{fk[:name]}
             SQL
-            delete_where_conditions << "#{@backup_table}.#{fk[:name]} IS NOT NULL AND new_#{fk[:name]} IS NULL" # no nullable columns
+            delete_where_conditions << "new_#{fk[:name]} IS NULL" # no nullable columns
           end
 
           subquery_for_delete = <<~SQL
