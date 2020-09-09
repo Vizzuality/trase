@@ -587,6 +587,70 @@
             <column ascending="true" name="false"/>
          </index>
       </table>
+      <table name="countries_com_trade_partner_aggregated_indicators" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="17" id="0" name="quantity" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="17" id="1" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="commodity_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="year" nullable="true" remarks="" size="5" type="int2" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="iso2" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="partner_iso2" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="activity" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+      </table>
+      <table name="countries_com_trade_partner_aggregated_indicators_v" numRows="0" remarks="" schema="public" type="VIEW" viewSql=" SELECT sum(countries_com_trade_partner_indicators.quantity) AS quantity,&#10;    sum(countries_com_trade_partner_indicators.value) AS value,&#10;    countries_com_trade_partner_indicators.commodity_id,&#10;    countries_com_trade_partner_indicators.year,&#10;    countries_com_trade_partner_indicators.iso2,&#10;    countries_com_trade_partner_indicators.partner_iso2,&#10;    countries_com_trade_partner_indicators.activity&#10;   FROM countries_com_trade_partner_indicators&#10;  GROUP BY ROLLUP(countries_com_trade_partner_indicators.commodity_id), countries_com_trade_partner_indicators.year, countries_com_trade_partner_indicators.iso2, countries_com_trade_partner_indicators.partner_iso2, countries_com_trade_partner_indicators.activity;">
+         <column autoUpdated="false" defaultValue="null" digits="17" id="0" name="quantity" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="17" id="1" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="commodity_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="year" nullable="true" remarks="" size="5" type="int2" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="iso2" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="partner_iso2" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="activity" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+      </table>
+      <table name="countries_com_trade_partner_indicators" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="17" id="0" name="raw_quantity" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="17" id="1" name="quantity" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="commodity_id" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="year" nullable="false" remarks="" size="5" type="int2" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="iso3" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="iso2" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="partner_iso3" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="partner_iso2" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="commodity_code" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="activity" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="11" name="updated_at" nullable="true" remarks="" size="35" type="timestamptz" typeCode="93"/>
+      </table>
+      <table name="countries_com_trade_world_aggregated_indicators" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="17" id="0" name="quantity" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="17" id="1" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="quantity_rank" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="value_rank" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="commodity_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="year" nullable="true" remarks="" size="5" type="int2" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="iso2" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="activity" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+      </table>
+      <table name="countries_com_trade_world_aggregated_indicators_v" numRows="0" remarks="" schema="public" type="VIEW" viewSql=" SELECT sum(countries_com_trade_world_indicators.quantity) AS quantity,&#10;    sum(countries_com_trade_world_indicators.value) AS value,&#10;    rank() OVER (PARTITION BY countries_com_trade_world_indicators.year, countries_com_trade_world_indicators.commodity_id, countries_com_trade_world_indicators.activity ORDER BY (sum(countries_com_trade_world_indicators.quantity)) DESC) AS quantity_rank,&#10;    rank() OVER (PARTITION BY countries_com_trade_world_indicators.year, countries_com_trade_world_indicators.commodity_id, countries_com_trade_world_indicators.activity ORDER BY (sum(countries_com_trade_world_indicators.value)) DESC) AS value_rank,&#10;    countries_com_trade_world_indicators.commodity_id,&#10;    countries_com_trade_world_indicators.year,&#10;    countries_com_trade_world_indicators.iso2,&#10;    countries_com_trade_world_indicators.activity&#10;   FROM countries_com_trade_world_indicators&#10;  GROUP BY ROLLUP(countries_com_trade_world_indicators.commodity_id), countries_com_trade_world_indicators.year, countries_com_trade_world_indicators.iso2, countries_com_trade_world_indicators.activity;">
+         <column autoUpdated="false" defaultValue="null" digits="17" id="0" name="quantity" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="17" id="1" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="quantity_rank" nullable="true" remarks="" size="19" type="int8" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="value_rank" nullable="true" remarks="" size="19" type="int8" typeCode="-5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="commodity_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="year" nullable="true" remarks="" size="5" type="int2" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="iso2" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="activity" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+      </table>
+      <table name="countries_com_trade_world_indicators" numRows="0" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="17" id="0" name="raw_quantity" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="17" id="1" name="quantity" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="commodity_id" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="year" nullable="false" remarks="" size="5" type="int2" typeCode="5"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="iso3" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="iso2" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="commodity_code" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="activity" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="9" name="updated_at" nullable="true" remarks="" size="35" type="timestamptz" typeCode="93"/>
+      </table>
       <table name="countries_wb_indicators" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="true" defaultValue="nextval('countries_wb_indicators_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="19" type="bigserial" typeCode="-5"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="iso3" nullable="false" remarks="" size="2147483647" type="text" typeCode="12"/>
@@ -5096,7 +5160,7 @@
             <column ascending="true" name="country_id"/>
          </index>
       </table>
-      <table name="schema_migrations" numRows="121" remarks="" schema="public" type="TABLE">
+      <table name="schema_migrations" numRows="122" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="version" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
          <primaryKey column="version" sequenceNumberInPK="1"/>
          <index name="schema_migrations_pkey" unique="true">
