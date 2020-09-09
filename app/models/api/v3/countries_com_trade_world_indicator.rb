@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: countries_com_trade_indicators
+# Table name: countries_com_trade_world_indicators
 #
 #  raw_quantity   :float
 #  quantity       :float
@@ -14,7 +14,7 @@
 #
 module Api
   module V3
-    class CountriesComTradeIndicator < YellowTable
+    class CountriesComTradeWorldIndicator < YellowTable
       belongs_to :commodity, optional: false
 
       validates :iso3, presence: true

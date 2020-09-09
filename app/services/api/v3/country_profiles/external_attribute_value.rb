@@ -61,7 +61,7 @@ module Api
             return nil
           end
 
-          row = Api::V3::Readonly::CountriesComTradeAggregatedIndicator.find_by(
+          row = Api::V3::Readonly::CountriesComTradeWorldAggregatedIndicator.find_by(
             commodity_id: @commodity_id,
             iso2: @iso2,
             year: @year,

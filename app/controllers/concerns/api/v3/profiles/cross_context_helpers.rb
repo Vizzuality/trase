@@ -47,6 +47,12 @@ module Api
               node_years.last
             end
         end
+
+        def ensure_commodity_or_context_given
+          return if params[:commodity_id].present? || params[:context_id].present?
+          raise ActionController::ParameterMissing,
+                "Required param commodity_id or context_id missing"
+        end
       end
     end
   end

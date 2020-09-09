@@ -22,17 +22,18 @@ module Api
 
         private
 
-        def top_nodes_list
-          return @top_nodes_list if defined? @top_nodes_list
+        # TODO: is this used?
+        # def top_nodes_list
+        #   return @top_nodes_list if defined? @top_nodes_list
 
-          @top_nodes_list = Api::V3::Profiles::SingleContextTopNodesList.new(
-            @context,
-            @top_node_type,
-            @node,
-            year_start: @year,
-            year_end: @year
-          )
-        end
+        #   @top_nodes_list = Api::V3::Profiles::SingleContextTopNodesList.new(
+        #     @context,
+        #     @top_node_type,
+        #     @node,
+        #     year_start: @year,
+        #     year_end: @year
+        #   )
+        # end
 
         # attribute is either a Quant or an Ind
         def query_all_years(attribute, options)

@@ -4,6 +4,7 @@ module Api
       include Api::V3::Profiles::CrossContextHelpers
 
       skip_before_action :load_context
+      before_action :ensure_commodity_or_context_given, only: [:top_consumer_actors, :top_consumer_countries]
       before_action :load_node
       before_action :set_year
 
@@ -47,16 +48,26 @@ module Api
       end
 
       def top_consumer_countries
-        @result = Api::V3::Profiles::CrossContextTopNodesChart.new(
-          @contexts,
-          @node,
-          @year,
-          {
-            profile_type: profile_type,
-            chart_identifier: :country_top_consumer_countries,
-            include_other: false
-          }
-        ).call
+        @result =
+          if @node.node_type == NodeTypeName::COUNTRY_OF_PRODUCTION
+            Api::V3::Profiles::CrossContextTopNodesChart.new(
+              @contexts,
+              @node,
+              @year,
+              {
+                profile_type: profile_type,
+                chart_identifier: :country_top_consumer_countries,
+                include_other: false
+              }
+            ).call
+          else
+            Api::V3::CountryProfiles::TopSourceCountriesChart.new(
+              @contexts,
+              @node,
+              @year,
+              {}
+            ).call
+          end
 
         render json: {data: @result}
       end
