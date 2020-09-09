@@ -13,9 +13,8 @@ module Api
 
           if response.code != '200'
             error = WbRequest::WBError.new(response)
-            Rails.logger.error error
-            Appsignal.send_error(error)
-            return nil
+            # this is to force a retry on the job
+            raise error
           end
 
           formatted_indicators(wb_name, JSON.parse(response.body))
