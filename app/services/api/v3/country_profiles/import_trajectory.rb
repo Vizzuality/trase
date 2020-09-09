@@ -19,15 +19,26 @@ module Api
             end
         end
 
+        def call
+          indicator_attributes = Api::V3::CountriesComTradeIndicators::IndicatorsList::ATTRIBUTES[:value]
+          @years = fetch_years
+          lines = fetch_lines
+          {
+            included_years: @years,
+            lines: lines,
+            multi_unit: false,
+          }.merge(indicator_attributes)
+        end
+
         private
 
         def fetch_years
-          years = Api::V3::Readonly::CountriesComTradeAggregatedIndicator.
+          years = Api::V3::Readonly::CountriesComTradeWorldAggregatedIndicator.
             where(iso2: @node.geo_id).
             select(:year).
             distinct.
             pluck(:year)
-          @years = (years.min..years.max).to_a
+          (years.min..years.max).to_a
         end
 
         def fetch_lines
@@ -44,7 +55,7 @@ module Api
         end
 
         def import_values
-          years.map do |year|
+          @years.map do |year|
             external_attribute_value = ExternalAttributeValue.new(
               @node.geo_id,
               year,
