@@ -11,7 +11,11 @@ module Api
             request_uri(wb_name, iso3, [start_year,end_year].compact.join(':').presence)
           )
 
-          return [] if response.code != '200'
+          if response.code != '200'
+            error = WbRequest::WBError.new(response)
+            # this is to force a retry on the job
+            raise error
+          end
 
           formatted_indicators(wb_name, JSON.parse(response.body))
         end

@@ -17,9 +17,8 @@ module Api
           response = Net::HTTP.get_response(@uri)
           if response.code != '200'
             error = ComTradeError.new(response)
-            Rails.logger.error error
-            Appsignal.send_error(error)
-            return
+            # this is to force a retry on the job
+            raise error
           end
           body = response.body
           data = JSON.parse(body)
