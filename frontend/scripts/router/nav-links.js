@@ -47,8 +47,8 @@ let nav = [
     external: true
   },
   {
-    name: 'Yearbook',
-    page: `https://insights.trase.earth/yearbook/summary/`,
+    name: 'Insights',
+    page: 'https://insights.trase.earth/insights',
     external: true
   },
   {
