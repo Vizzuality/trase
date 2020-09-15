@@ -2469,6 +2469,108 @@ ALTER SEQUENCE public.countries_com_trade_indicators_false_seq OWNED BY public.c
 
 
 --
+-- Name: countries_com_trade_partner_aggregated_indicators; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.countries_com_trade_partner_aggregated_indicators (
+    quantity double precision,
+    value double precision,
+    commodity_id integer,
+    year smallint,
+    iso2 text,
+    partner_iso2 text,
+    activity text
+);
+
+
+--
+-- Name: countries_com_trade_partner_indicators; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.countries_com_trade_partner_indicators (
+    raw_quantity double precision,
+    quantity double precision,
+    value double precision,
+    commodity_id integer NOT NULL,
+    year smallint NOT NULL,
+    iso3 text NOT NULL,
+    iso2 text NOT NULL,
+    partner_iso3 text NOT NULL,
+    partner_iso2 text NOT NULL,
+    commodity_code text NOT NULL,
+    activity text NOT NULL,
+    updated_at timestamp with time zone
+);
+
+
+--
+-- Name: countries_com_trade_partner_aggregated_indicators_v; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.countries_com_trade_partner_aggregated_indicators_v AS
+ SELECT sum(countries_com_trade_partner_indicators.quantity) AS quantity,
+    sum(countries_com_trade_partner_indicators.value) AS value,
+    countries_com_trade_partner_indicators.commodity_id,
+    countries_com_trade_partner_indicators.year,
+    countries_com_trade_partner_indicators.iso2,
+    countries_com_trade_partner_indicators.partner_iso2,
+    countries_com_trade_partner_indicators.activity
+   FROM public.countries_com_trade_partner_indicators
+  GROUP BY ROLLUP(countries_com_trade_partner_indicators.commodity_id), countries_com_trade_partner_indicators.year, countries_com_trade_partner_indicators.iso2, countries_com_trade_partner_indicators.partner_iso2, countries_com_trade_partner_indicators.activity;
+
+
+--
+-- Name: countries_com_trade_world_aggregated_indicators; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.countries_com_trade_world_aggregated_indicators (
+    quantity double precision,
+    value double precision,
+    quantity_rank integer,
+    value_rank integer,
+    commodity_id integer,
+    year smallint,
+    iso2 text,
+    activity text
+);
+
+
+--
+-- Name: countries_com_trade_world_indicators; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.countries_com_trade_world_indicators (
+    raw_quantity double precision,
+    quantity double precision,
+    value double precision,
+    commodity_id integer NOT NULL,
+    year smallint NOT NULL,
+    iso3 text NOT NULL,
+    iso2 text NOT NULL,
+    commodity_code text NOT NULL,
+    activity text NOT NULL,
+    updated_at timestamp with time zone
+);
+
+
+--
+-- Name: countries_com_trade_world_aggregated_indicators_v; Type: VIEW; Schema: public; Owner: -
+--
+
+CREATE VIEW public.countries_com_trade_world_aggregated_indicators_v AS
+ SELECT sum(countries_com_trade_world_indicators.quantity) AS quantity,
+    sum(countries_com_trade_world_indicators.value) AS value,
+    rank() OVER (PARTITION BY countries_com_trade_world_indicators.year, countries_com_trade_world_indicators.commodity_id, countries_com_trade_world_indicators.activity ORDER BY (sum(countries_com_trade_world_indicators.quantity)) DESC) AS quantity_rank,
+    rank() OVER (PARTITION BY countries_com_trade_world_indicators.year, countries_com_trade_world_indicators.commodity_id, countries_com_trade_world_indicators.activity ORDER BY (sum(countries_com_trade_world_indicators.value)) DESC) AS value_rank,
+    countries_com_trade_world_indicators.commodity_id,
+    countries_com_trade_world_indicators.year,
+    countries_com_trade_world_indicators.iso2,
+    countries_com_trade_world_indicators.activity
+   FROM public.countries_com_trade_world_indicators
+  GROUP BY ROLLUP(countries_com_trade_world_indicators.commodity_id), countries_com_trade_world_indicators.year, countries_com_trade_world_indicators.iso2, countries_com_trade_world_indicators.activity;
+
+
+--
 -- Name: countries_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -17295,6 +17397,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200522153602'),
 ('20200618100150'),
 ('20200818104523'),
-('20200819083051');
+('20200819083051'),
+('20200903085354');
 
 

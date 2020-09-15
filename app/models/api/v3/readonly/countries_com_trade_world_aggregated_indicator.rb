@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: countries_com_trade_aggregated_indicators
+# Table name: countries_com_trade_world_aggregated_indicators
 #
 #  quantity      :float
 #  value         :float
@@ -14,10 +14,10 @@
 module Api
   module V3
     module Readonly
-      class CountriesComTradeAggregatedIndicator < Api::Readonly::BaseModel
+      class CountriesComTradeWorldAggregatedIndicator < Api::Readonly::BaseModel
         include Api::V3::Readonly::MaterialisedTable
 
-        self.table_name = 'countries_com_trade_aggregated_indicators'
+        self.table_name = 'countries_com_trade_world_aggregated_indicators'
 
         INDEXES = [].freeze
       end

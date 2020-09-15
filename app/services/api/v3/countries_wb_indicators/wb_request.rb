@@ -14,6 +14,8 @@ module Api
           indicators_response = api_indicators(
             @indicator_name, @start_year, @end_year
           )
+          return unless indicators_response
+
           last_updated = indicators_response[:last_updated]
           return unless need_refreshing?(@indicator_name, last_updated)
 

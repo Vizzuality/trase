@@ -34,7 +34,7 @@
 
 .banner-content {
   display: block;
-  padding: 35px 75px 20px 30px;
+  padding: 25px 75px 20px 20px;
 
   .banner-title {
     font-family: $font-family-2;
@@ -42,13 +42,13 @@
     letter-spacing: -0.5px;
     line-height: 1.2;
     font-weight: $font-weight-bold;
-    color: $charcoal-grey;
+    color: $white;
   }
 
   .banner-link {
     font-family: $font-family-1;
     font-size: $font-size-regular;
-    color: $medium-pink !important;
+    color: $white !important;
     text-transform: uppercase;
     font-weight: $font-weight-bold;
     margin-top: 40px;

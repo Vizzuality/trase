@@ -54,14 +54,17 @@ module Api
           select_list = []
           joins = []
           delete_where_conditions = []
-          @table_class.blue_foreign_keys.each.with_index do |fk, idx|
+          non_nullable_foreign_keys = @table_class.blue_foreign_keys.reject { |fk| fk[:nullable] }
+          return unless non_nullable_foreign_keys.any?
+
+          non_nullable_foreign_keys.each.with_index do |fk, idx|
             table_alias = "t_#{idx}"
             select_list << "#{table_alias}.new_id AS new_#{fk[:name]}"
             joins << <<~SQL
               LEFT JOIN #{fk[:table_class].key_backup_table} #{table_alias}
               ON #{table_alias}.id = t.#{fk[:name]}
             SQL
-            delete_where_conditions << "#{@backup_table}.#{fk[:name]} IS NOT NULL AND new_#{fk[:name]} IS NULL" # no nullable columns
+            delete_where_conditions << "new_#{fk[:name]} IS NULL" # no nullable columns
           end
 
           subquery_for_delete = <<~SQL

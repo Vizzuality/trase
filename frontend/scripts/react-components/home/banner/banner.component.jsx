@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { useTransition, animated, config } from 'react-spring';
 
 import './banner-styles.scss';
@@ -6,11 +6,9 @@ import './banner-styles.scss';
 const slides = [
   {
     id: 0,
-    imageName: 'banner2x_01.png'
-  },
-  {
-    id: 1,
-    imageName: 'banner2x_02.png'
+    text: 'Trase is featured in the BBC documentary \'Extinction: The Facts\'',
+    link: 'https://medium.com/trase/extinction-the-facts-trase-featured-in-new-bbc-documentary-788073206fa9',
+    imageName: 'banner2x_bbc.png'
   }
 ];
 
@@ -25,7 +23,9 @@ function Banner() {
   });
 
   useEffect(() => {
-    setBackgroundInterval(setInterval(() => set(state => (state + 1) % 2), 6000));
+    if (slides.length > 1) {
+      setBackgroundInterval(setInterval(() => set(state => (state + 1) % 2), 6000));
+    }
     return function cleanup() {
       clearInterval(backgroundInterval);
     };
@@ -35,10 +35,9 @@ function Banner() {
   return (
     <div className="c-banner">
       {transitions.map(({ item, props, key }) => (
-        <>
+        <Fragment key={key}>
           <div className="background-white" />
           <animated.div
-            key={key}
             className="background-image"
             style={{
               ...props,
@@ -46,17 +45,17 @@ function Banner() {
             }}
           >
             <a
-              title="New Trase yearbook 2020"
-              href="https://insights.trase.earth/yearbook/summary/"
+              title={item.text}
+              href={item.link}
               target="_blank"
               rel="noopener noreferrer"
               className="banner-content"
             >
-              <div className="banner-title">The new Trase Yearbook 2020 is now available</div>
-              <div className="banner-link">Open yearbook</div>
+              <div className="banner-title">{item.text}</div>
+              <div className="banner-link">See more</div>
             </a>
           </animated.div>
-        </>
+        </Fragment>
       ))}
     </div>
   );

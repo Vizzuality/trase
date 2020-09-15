@@ -9,9 +9,9 @@ module Api
         # @param context [Api::V3::Context]
         # @param node [Api::V3::Readonly::NodeWithFlows]
         # @param chart_options [Hash]
-        # @option chart_options [symbol] :profile_type
-        # @option chart_options [symbol] :parent_identifier
-        # @option chart_options [symbol] :identifier
+        # @option chart_options [Symbol] :profile_type
+        # @option chart_options [Symbol] :parent_identifier
+        # @option chart_options [Symbol] :identifier
         def initialize(context, node, chart_options)
           @context = context
           @node = node
