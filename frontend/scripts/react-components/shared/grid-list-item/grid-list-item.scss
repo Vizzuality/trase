@@ -26,6 +26,25 @@
     }
   }
 
+  &.color-strong-pink {
+    .grid-list-item-button {
+      background-color: transparent;
+      border: 2px solid $strong-pink;
+
+      .grid-list-item-text {
+        color: $charcoal-grey;
+      }
+
+      &:hover {
+        background-color: $strong-pink;
+
+        .grid-list-item-text {
+          color: $white;
+        }
+      }
+    }
+  }
+
   &.color-white {
     .grid-list-item-button {
       background-color: $white;

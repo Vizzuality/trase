@@ -72,13 +72,31 @@ function Explore(props) {
   const clearStep =
     step === EXPLORE_STEPS.selected ? () => setCountry(null) : () => setCommodity(null);
 
+  const renderHighlighted = txt => (
+    <Text as="span" size="sm" weight="bold">
+       {translateText(txt)}
+    </Text>
+  );
+
   const renderTitle = isMobile => {
     const titleParts = ['commodity', 'source country', 'supply chain to explore'];
     return (
       <div className="step-title-container">
-        <Heading size="lg" align="center" data-test="step-title" className="notranslate">
-          {translateText(`${step}. Choose a ${titleParts[step - 1]}`)}
-        </Heading>
+        {step === 1 && (
+          <div className="row column">
+            <Heading size="lg" align="center" data-test="step-title" className="notranslate">
+              {translateText(`${step}. Choose a ${titleParts[step - 1]}`)}
+            </Heading>
+            <Heading size="sm" align="center">
+              {translateText('Options marked in')} {renderHighlighted('gray')} {translateText('provide')} {renderHighlighted('national-scale')} {translateText('data only')}
+            </Heading>
+          </div>
+        )}
+        {step !== 1 && (
+          <Heading size="lg" align="center" data-test="step-title" className="notranslate">
+            {translateText(`${step}. Choose a ${titleParts[step - 1]}`)}
+          </Heading>
+        )}
         <span>
           {step > EXPLORE_STEPS.selectCommodity && !isMobile && (
             <button
@@ -172,12 +190,12 @@ function Explore(props) {
                       <div className={cx('explore-grid', { [`rows${rowsNumber}`]: rowsNumber })}>
                         {step < EXPLORE_STEPS.selected &&
                           items.map(item => (
-                            <GridListItem
-                              item={item}
-                              enableItem={i => setItemFunction(i.id)}
-                              onHover={onItemHover}
-                              color="transparent"
-                            />
+                           <GridListItem
+                             item={item}
+                             enableItem={i => setItemFunction(i.id)}
+                             onHover={onItemHover}
+                             color={step !== 1 || item.isSubnational ? 'transparent' : 'strong-pink'}
+                           />
                           ))}
                       </div>
                     )}
