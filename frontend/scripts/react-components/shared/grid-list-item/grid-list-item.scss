@@ -73,12 +73,18 @@
     justify-content: flex-start;
     height: 40px;
     width: 100%;
+    span {
+      display: block;
+      width: inherit;
+      height: inherit;
+    }
   }
 
   .grid-list-item-button {
     background-color: $medium-gray;
     border-radius: 4px;
     height: 100%;
+    width: 100%;
     flex: 1;
     padding: 0 20px;
     cursor: pointer;

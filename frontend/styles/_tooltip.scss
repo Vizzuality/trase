@@ -4,7 +4,7 @@
   border-radius: 0;
 }
 
-.tippy-tooltip.blue-theme .tippy-content{
+.tippy-tooltip.blue-theme .tippy-content {
   background-color: $charcoal-grey;
   color: $white;
   padding: 16px;
@@ -19,7 +19,6 @@
     cursor: pointer;
   }
 }
-
 
 .tippy-tooltip.blue-theme[data-animatefill] {
   background-color: transparent
@@ -58,3 +57,16 @@
   font-weight: $font-weight-light;
   line-height: $line-height-md;
 }
+
+// Black Theme with padding
+.tippy-tooltip.black-padding-theme .tippy-content {
+  background-color: $charcoal-grey;
+  color: $white;
+  border-radius: 0;
+  padding: 7px;
+  font-family: $font-family-2;
+  font-size: $font-size-regular;
+  font-weight: $font-weight-light;
+  line-height: $line-height-md;
+}
+

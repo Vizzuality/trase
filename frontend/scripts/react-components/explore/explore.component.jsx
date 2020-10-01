@@ -78,39 +78,46 @@ function Explore(props) {
     </Text>
   );
 
+  const renderBackButton = isMobile => (
+    <span>
+      {step > EXPLORE_STEPS.selectCommodity && !isMobile && (
+        <button
+          onClick={clearStep}
+          className="back-button"
+          data-test="featured-cards-back-button"
+        >
+          <Text variant="mono" size="lg" weight="bold" className="featured-cards-back">
+            <Icon color="pink" icon="icon-arrow" className="arrow-icon" />
+            BACK
+          </Text>
+        </button>
+      )}
+    </span>
+  )
+
   const renderTitle = isMobile => {
     const titleParts = ['commodity', 'source country', 'supply chain to explore'];
     return (
       <div className="step-title-container">
-        {step === 1 && (
+        {(step === 1 || step === 2) && (
           <div className="row column">
             <Heading size="lg" align="center" data-test="step-title" className="notranslate">
               {translateText(`${step}. Choose a ${titleParts[step - 1]}`)}
+              {renderBackButton(isMobile)}
             </Heading>
             <Heading size="sm" align="center">
               {translateText('Options marked in')} {renderHighlighted('gray')} {translateText('provide')} {renderHighlighted('national-scale')} {translateText('data only')}
             </Heading>
           </div>
         )}
-        {step !== 1 && (
-          <Heading size="lg" align="center" data-test="step-title" className="notranslate">
-            {translateText(`${step}. Choose a ${titleParts[step - 1]}`)}
-          </Heading>
+        {step === 3 && (
+          <>
+            <Heading size="lg" align="center" data-test="step-title" className="notranslate">
+              {translateText(`${step}. Choose a ${titleParts[step - 1]}`)}
+            </Heading>
+            {renderBackButton(isMobile)}
+          </>
         )}
-        <span>
-          {step > EXPLORE_STEPS.selectCommodity && !isMobile && (
-            <button
-              onClick={clearStep}
-              className="back-button"
-              data-test="featured-cards-back-button"
-            >
-              <Text variant="mono" size="lg" weight="bold" className="featured-cards-back">
-                <Icon color="pink" icon="icon-arrow" className="arrow-icon" />
-                BACK
-              </Text>
-            </button>
-          )}
-        </span>
       </div>
     );
   };
@@ -192,9 +199,11 @@ function Explore(props) {
                           items.map(item => (
                            <GridListItem
                              item={item}
+                             tooltip={item.isSubnational ? null : 'This data is currently only available at a national scale.'}
+                             tooltipCover
                              enableItem={i => setItemFunction(i.id)}
                              onHover={onItemHover}
-                             color={step !== 1 || item.isSubnational ? 'transparent' : 'strong-pink'}
+                             color={!item.isSubnational ? 'transparent' : 'strong-pink'}
                            />
                           ))}
                       </div>

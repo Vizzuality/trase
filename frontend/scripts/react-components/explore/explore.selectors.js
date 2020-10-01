@@ -54,7 +54,8 @@ export const getCountries = createSelector(
       .filter(c => c.commodityId === commodityId)
       .map(c => ({
         name: c.countryName,
-        id: c.countryId
+        id: c.countryId,
+        isSubnational: !!c.subnationalYears
       }));
   }
 );

@@ -21,7 +21,7 @@ function tooltipContent(children, showInfoIcon, ReferenceComponent) {
 }
 
 function HelpTooltipComponent(props) {
-  const { showInfoIcon, children, referenceComponent: ReferenceComponent, position, text, interactive } = props;
+  const { theme, showInfoIcon, children, referenceComponent: ReferenceComponent, position, text, interactive } = props;
   const parsedText = interactive ? <div dangerouslySetInnerHTML={{ __html: text }} /> : text;
 
   return (
@@ -31,7 +31,7 @@ function HelpTooltipComponent(props) {
         animation="none"
         placement={position}
         arrow
-        theme="blue"
+        theme={theme}
         duration={0}
         offset={20}
         zIndex={102}
@@ -46,6 +46,7 @@ function HelpTooltipComponent(props) {
 }
 
 HelpTooltipComponent.propTypes = {
+  theme: PropTypes.string,
   text: PropTypes.string,
   showInfoIcon: PropTypes.bool,
   children: PropTypes.any,
@@ -56,6 +57,7 @@ HelpTooltipComponent.propTypes = {
 
 HelpTooltipComponent.defaultProps = {
   position: 'bottom',
+  theme: 'blue',
   showInfoIcon: true
 };
 
