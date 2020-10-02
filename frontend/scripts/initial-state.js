@@ -14,3 +14,4 @@ export { default as explore } from 'react-components/explore/explore.initial-sta
 export { default as data } from 'react-components/data-portal/data-portal.initial-state';
 export { default as dashboardRoot } from 'react-components/dashboard-root/dashboard-root.initial-state';
 export { default as dashboardElement } from 'react-components/dashboard-element/dashboard-element.initial-state';
+export { default as logisticsMap } from 'react-components/logistics-map/logistics-map.initial-state';

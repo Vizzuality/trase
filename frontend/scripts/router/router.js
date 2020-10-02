@@ -182,6 +182,20 @@ export const routes = {
     thunk: loadPageData(getPageStaticContent),
     layout: withSidebarNavLayout
   },
+  logisticsMap: {
+    path: '/logistics-map',
+    Component: lazy(() =>
+      import(
+        /* webpackChunkName: "logistics-map" */ '../react-components/logistics-map/logistics-map.container'
+      )
+    ),
+    thunk: loadPageData(),
+    title: getPageTitle,
+    footer: false,
+    nav: {
+      className: '-light'
+    }
+  },
   [NOT_FOUND]: {
     path: '/404',
     Component: StaticContent,
