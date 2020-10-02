@@ -229,8 +229,8 @@ function Explore(props) {
                             ))
                           ) : (
                             <div className="bubble">
-                              {(highlightedCountryIds.level1.length > 0 ||
-                                highlightedCountryIds.level2.length > 0 ||
+                              {(highlightedCountryIds?.level1.length > 0 ||
+                                highlightedCountryIds?.level2.length > 0 ||
                                 highlightedCommodityIds.length > 0) && (
                                 <>
                                   <Text
