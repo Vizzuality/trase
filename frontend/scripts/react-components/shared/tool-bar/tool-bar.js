@@ -12,6 +12,11 @@ const getSetActiveModal = () =>
     module => module.toolLayersActions.setActiveModal
   );
 
+const getSetLogisticsMapActiveModal = () =>
+  import('../../logistics-map/logistics-map.register').then(
+    module => module.logisticsMapActions.setLogisticsMapActiveModal
+  );
+
 const mapStateToProps = state => {
   const { left, right } = getToolBar(state);
   return {
@@ -38,6 +43,26 @@ const mapDispatchToProps = dispatch => ({
   },
   indicator_onClick: id => {
     getSetActiveModal().then(setActiveModal => dispatch(setActiveModal(id)));
+  },
+  companies_onClick: id => {
+    getSetLogisticsMapActiveModal().then(setLogisticsMapActiveModal =>
+      dispatch(setLogisticsMapActiveModal(id))
+    );
+  },
+  download_onClick: id => {
+    getSetLogisticsMapActiveModal().then(setLogisticsMapActiveModal =>
+      dispatch(setLogisticsMapActiveModal(id))
+    );
+  },
+  hubs_onClick: id => {
+    getSetLogisticsMapActiveModal().then(setLogisticsMapActiveModal =>
+      dispatch(setLogisticsMapActiveModal(id))
+    );
+  },
+  inspectionLevels_onClick: id => {
+    getSetLogisticsMapActiveModal().then(setLogisticsMapActiveModal =>
+      dispatch(setLogisticsMapActiveModal(id))
+    );
   }
 });
 

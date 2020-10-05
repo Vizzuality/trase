@@ -66,6 +66,9 @@ function MapBoxMap(props) {
     unitLayers && unitLayers.map(u => u.id),
     logisticLayers && logisticLayers.map(u => u.id)
   );
+
+  const geoIdName = (layerId) => layerId === 'indonesia_mill' ? 'mill_name' : 'geoid';
+
   // Set map when loaded
   useEffect(() => {
     if (loaded && mapRef.current) {
@@ -169,7 +172,6 @@ function MapBoxMap(props) {
     if (!features || !features.length) {
       return undefined;
     }
-
     const logisticSources = logisticLayers.map(l => l.id);
     const logisticsFeature = features.find(f => logisticSources.includes(f.source));
 
@@ -185,13 +187,13 @@ function MapBoxMap(props) {
         map.setFeatureState({ ...lastHoveredGeo }, { hover: true });
       }
       const logisticsTooltipValues = [];
-
-      [
+      const logisticValuesTemplate = [
         { name: 'company' },
         { name: 'state' },
         { name: 'municipality' },
         { name: 'capacity', unit: 't' }
-      ].forEach(l => {
+      ];
+      logisticValuesTemplate.forEach(l => {
         if (properties[l.name]) {
           logisticsTooltipValues.push({ title: l.name, unit: l.unit, value: properties[l.name] });
         }
@@ -207,8 +209,7 @@ function MapBoxMap(props) {
 
     const geoFeature = features.find(f => f.sourceLayer === sourceLayer);
     if (geoFeature) {
-      const { properties, source } = geoFeature;
-      const id = geoFeature.id || geoFeature.properties.mill_name; // only for indonesia mills
+      const { properties, source, id } = geoFeature;
       if (map && lastHoveredGeo.id && layerIds.includes(lastHoveredGeo.source)) {
         map.setFeatureState({ ...lastHoveredGeo }, { hover: false });
       }
@@ -235,7 +236,9 @@ function MapBoxMap(props) {
             logisticsTooltipValues.push({ title: l.name, unit: l.unit, value: properties[l.name] });
           }
         });
+
         updateTooltipValues(logisticsTooltipValues);
+        setTooltip({ x: center.x, y: center.y, name: id, values: properties });
       }
 
       const node = highlightedNodesData[0];
@@ -267,7 +270,14 @@ function MapBoxMap(props) {
   let layers = [baseLayer].concat(contextualLayers).concat(logisticLayers);
   if (unitLayers) {
     layers = layers.concat(
-      flatMap(unitLayers, u => getUnitLayerStyle(u, sourceLayer, darkBasemap))
+      flatMap(unitLayers, u =>
+        getUnitLayerStyle(
+          u,
+          sourceLayer,
+          darkBasemap,
+          geoIdName(u.id)
+        )
+      )
     );
   }
 

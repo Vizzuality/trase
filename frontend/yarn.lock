@@ -9859,6 +9859,17 @@ latest-version@^3.0.0:
   dependencies:
     package-json "^4.0.0"
 
+"layer-manager-legacy@npm:layer-manager@1.14.7":
+  version "1.14.7"
+  resolved "https://registry.yarnpkg.com/layer-manager/-/layer-manager-1.14.7.tgz#5e423bb0a9cd36f2f28c0c4f1a44116b5bef1ab4"
+  integrity sha512-vFPL+Gy/6HtX81XZndgwhG0J3kdcgSkYE52AWziTcWjpiUr2KZ89qMVuhTQmc6EDutE1U6p/a0pmOaZtbstqMg==
+  dependencies:
+    axios "^0.18.0"
+    lodash "^4.17.11"
+    prop-types "^15.6.2"
+    supercluster "^4.1.1"
+    wri-json-api-serializer "^1.0.1"
+
 layer-manager@^1.10.0:
   version "1.15.3"
   resolved "https://registry.yarnpkg.com/layer-manager/-/layer-manager-1.15.3.tgz#0ea11a46f5cf2250b1b69558ca5e9c886bc71fc9"

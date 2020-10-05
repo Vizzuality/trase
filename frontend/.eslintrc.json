@@ -61,6 +61,7 @@
     "ENABLE_TOOL_PANEL": true,
     "CONSOLIDATE_INSIGHTS": true,
     "ENABLE_COUNTRY_PROFILES": true,
+    "ENABLE_LOGISTIC_LAYERS_TAB": true,
     "API_V3_URL": true,
     "UNIT_LAYERS_API_URL": true,
     "ENABLE_DASHBOARDS": true,

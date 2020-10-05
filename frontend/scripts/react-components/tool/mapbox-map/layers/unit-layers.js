@@ -8,7 +8,7 @@ const featureStateConditional = (featureStateVariable, defaultValue) => [
   defaultValue
 ];
 
-export default (unitLayer, sourceLayer, darkBasemap) => {
+export default (unitLayer, sourceLayer, darkBasemap, geoId='geoid') => {
   const { id, tiles, version, bounds, center, maxzoom, minzoom } = unitLayer;
   const styledUnitLayer = {
     name: id,
@@ -21,11 +21,11 @@ export default (unitLayer, sourceLayer, darkBasemap) => {
     type: 'vector',
     source: {
       type: 'vector',
-      promoteId: 'geoid',
+      promoteId: geoId,
       tiles
     },
     sourceLayer,
-    variables: ['geoid'],
+    variables: geoId,
     unitLayer: true,
     renderLayers: [
       {
@@ -73,7 +73,7 @@ export default (unitLayer, sourceLayer, darkBasemap) => {
               ['to-boolean', ['feature-state', 'hover']],
               ['to-boolean', ['feature-state', 'selected']]
             ],
-            3.5,
+            4,
             3
           ],
           'circle-stroke-color': '#fff',

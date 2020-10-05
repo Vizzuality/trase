@@ -10,6 +10,8 @@ import { getDirtyBlocks } from 'react-components/nodes-panel/nodes-panel.selecto
 import { getDynamicSentence } from 'react-components/dashboard-element/dashboard-element.selectors';
 import capitalize from 'lodash/capitalize';
 import { getVersionData } from 'react-components/tool/tool-modal/versioning-modal/versioning-modal.selectors';
+import { getActiveParams } from 'react-components/logistics-map/logistics-map.selectors';
+import { LOGISTICS_MAP_HUBS, LOGISTICS_MAP_INSPECTION_LEVELS } from 'constants';
 
 const getCurrentPage = state => state.location.type;
 const getCurrentSection = state => state.location.payload?.section;
@@ -99,6 +101,32 @@ export const getViewModeFilter = createSelector(
   })
 );
 
+const getLogisticsMapHubsFilter = createSelector([getActiveParams], activeParams => {
+  const activeHub = LOGISTICS_MAP_HUBS.find(
+    commodity => commodity.value === activeParams.commodity
+  );
+
+  return {
+    id: 'hubs',
+    type: 'edit',
+    title: capitalize(activeHub.value),
+    show: true
+  };
+});
+
+const getLogisticsMapInspectionLevelFilter = createSelector([getActiveParams], activeParams => {
+  const all = { label: 'All', value: null };
+  return {
+    id: 'inspectionLevels',
+    label: 'Inspection Level',
+    type: 'optionsMenu',
+    show: activeParams.commodity === 'cattle',
+    value: (
+      LOGISTICS_MAP_INSPECTION_LEVELS.find(level => level.value === activeParams.inspection) || all
+    ).label
+  };
+});
+
 export const getToolBar = createSelector(
   [
     getCurrentPage,
@@ -106,6 +134,8 @@ export const getToolBar = createSelector(
     getViewModeFilter,
     getRecolorByFilter,
     getResizeByFilter,
+    getLogisticsMapHubsFilter,
+    getLogisticsMapInspectionLevelFilter,
     getVersioningSelected
   ],
   (
@@ -114,6 +144,8 @@ export const getToolBar = createSelector(
     viewModeFilter,
     recolorByFilter,
     resizeByFilter,
+    logisticsMapHubs,
+    logisticsMapInspectionLevel,
     versionFilter
   ) => {
     switch (page) {
@@ -130,6 +162,30 @@ export const getToolBar = createSelector(
         return {
           left: [panelFilter],
           right
+        };
+      }
+      case 'logisticsMap': {
+        return {
+          left: [logisticsMapHubs],
+          right: [
+            logisticsMapInspectionLevel,
+            {
+              id: 'companies',
+              type: 'button',
+              show: true,
+              noHover: true,
+              noPaddingRight: true,
+              children: 'Browse Companies'
+            },
+            {
+              id: 'download',
+              type: 'button',
+              show: true,
+              noHover: true,
+              noBorder: true,
+              children: 'Download'
+            }
+          ]
         };
       }
       default:
