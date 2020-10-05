@@ -36,15 +36,18 @@ export const getLayers = createSelector(
         unitLayers.push({ ...mapDimensions[dimension], groupId: group.id });
       });
     });
-    return {
+    const layers = {
       [LAYER_TAB_NAMES.unit]: selectedGeoColumn?.isChoroplethDisabled === false && unitLayers,
       [LAYER_TAB_NAMES.contextual]: Object.values(mapContextualLayers).map(layer => ({
         ...layer,
         name: layer.title,
         description: layer.tooltipText
       })),
-      [LAYER_TAB_NAMES.logistic]: logisticLayers
     };
+    if (ENABLE_LOGISTIC_LAYERS_TAB) {
+      layers[LAYER_TAB_NAMES.logistic] = logisticLayers;
+    }
+    return layers;
   }
 );
 
@@ -57,6 +60,6 @@ export const getSelectedLayerIds = createSelector(
   (selectedMapDimensions, selectedMapContextualLayers, selectedMapLogisticLayers) => ({
     [LAYER_TAB_NAMES.unit]: selectedMapDimensions.filter(Boolean),
     [LAYER_TAB_NAMES.contextual]: selectedMapContextualLayers,
-    [LAYER_TAB_NAMES.logistic]: selectedMapLogisticLayers
+    ...(ENABLE_LOGISTIC_LAYERS_TAB ? {[LAYER_TAB_NAMES.logistic]: selectedMapLogisticLayers} : {})
   })
 );
