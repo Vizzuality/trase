@@ -46,6 +46,10 @@ let nav = [
     page: 'dashboardRoot'
   },
   {
+    name: 'Logistics Map',
+    page: 'logisticsMap'
+  },
+  {
     name: 'Finance',
     page: 'https://trase.finance',
     external: true
