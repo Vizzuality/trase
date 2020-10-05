@@ -169,7 +169,6 @@ function MapBoxMap(props) {
     if (!features || !features.length) {
       return undefined;
     }
-
     const logisticSources = logisticLayers.map(l => l.id);
     const logisticsFeature = features.find(f => logisticSources.includes(f.source));
 
@@ -235,7 +234,9 @@ function MapBoxMap(props) {
             logisticsTooltipValues.push({ title: l.name, unit: l.unit, value: properties[l.name] });
           }
         });
+
         updateTooltipValues(logisticsTooltipValues);
+        setTooltip({ x: center.x, y: center.y, name: id });
       }
 
       const node = highlightedNodesData[0];
