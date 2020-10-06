@@ -29,7 +29,7 @@ export function useChoroplethFeatureState(
       // When choropleth has nodes
       if (choroplethLayerIds) {
         // remove choropleth when we deselect the layer
-        if (isEmpty(choropleth) && !unitLayers.map(i => i.id).includes(source)) {
+        if (isEmpty(choropleth) && map.querySourceFeatures(source, { sourceLayer }).length) {
           map.removeFeatureState({ source, sourceLayer });
         }
 
