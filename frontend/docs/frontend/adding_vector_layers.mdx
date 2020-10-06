@@ -1,11 +1,9 @@
 ---
-name: Tools to generate CARTO maps
+name: Add new vector layers to service
 menu: Frontend
 ---
 
-# Tools to generate CARTO maps
-
-## Add new vector maps to the tool map
+# Add new vector layers to service
 
 This is needed when an update is needed on the map's vector layers. We have a service on the backend to serve this layers for the mapbox tool page map. See mbtileserver backend documentation.
 
@@ -22,12 +20,3 @@ sudo systemctl restart mbtileserver
 ```
 
 The most up to date version of the tiles is stored on the mapbox-map folder but this is not used on the app directly. Is just to have a back-up
-
-### Generate municipalities by state TopoJSON files (only for Brazil for now)
-
-Those are the maps used by D3 in place profile pages.
-
-```
-cd frontend
-./gis/vector_maps/main.sh
-```
