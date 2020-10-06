@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { useTransition, animated, config } from 'react-spring';
-
+import { COLORS } from 'constants';
 import './banner-styles.scss';
 
 const slides = [
@@ -8,17 +8,18 @@ const slides = [
     id: 0,
     text: 'Trace finance is now live',
     link: 'https://trase.finance/',
-    textColor: '#34444c',
+    textColor: COLORS.charcoalGrey,
     textWidth: '70%',
-    linkColor: '#f65e6e',
+    linkColor: COLORS.strongPink,
     imageName: 'trase_finance_banner.gif'
   },
   {
     id: 1,
-    text: 'Trase is featured in the BBC documentary \'Extinction: The Facts\'',
-    link: 'https://medium.com/trase/extinction-the-facts-trase-featured-in-new-bbc-documentary-788073206fa9',
-    textColor: '#FFF',
-    linkColor: '#FFF',
+    text: "Trase is featured in the BBC documentary 'Extinction: The Facts'",
+    link:
+      'https://medium.com/trase/extinction-the-facts-trase-featured-in-new-bbc-documentary-788073206fa9',
+    textColor: COLORS.white,
+    linkColor: COLORS.white,
     imageName: 'banner2x_bbc.png'
   }
 ];
@@ -62,8 +63,8 @@ function Banner() {
               rel="noopener noreferrer"
               className="banner-content"
             >
-              <div 
-                style={{ 
+              <div
+                style={{
                   color: item.textColor,
                   maxWidth: item.textWidth || null
                 }}
