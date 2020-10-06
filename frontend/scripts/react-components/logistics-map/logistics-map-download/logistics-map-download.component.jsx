@@ -82,7 +82,6 @@ const renderLayers = layers => {
     </>
   );
 };
-
 function LogisticsMapDownload(props) {
   const { close, layers } = props;
   return (
@@ -99,10 +98,8 @@ function LogisticsMapDownload(props) {
     />
   );
 }
-
 LogisticsMapDownload.propTypes = {
   close: PropTypes.func.isRequired,
   layers: PropTypes.shape({ soy: PropTypes.array, cattle: PropTypes.array }).isRequired
 };
-
 export default LogisticsMapDownload;

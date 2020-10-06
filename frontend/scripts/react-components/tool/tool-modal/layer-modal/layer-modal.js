@@ -1,6 +1,10 @@
 import { connect } from 'react-redux';
 import LayerModal from 'react-components/tool/tool-modal/layer-modal/layer-modal.component';
-import { selectContextualLayers, selectUnitLayers } from 'react-components/tool/tool.actions';
+import {
+  selectContextualLayers,
+  selectUnitLayers,
+  selectLogisticLayers
+} from 'react-components/tool/tool.actions';
 import { toolLayersActions } from 'react-components/tool-layers/tool-layers.register';
 import {
   getLayers,
@@ -15,6 +19,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   selectUnitLayers,
   selectContextualLayers,
+  selectLogisticLayers,
   setActiveModal: toolLayersActions.setActiveModal
 };
 

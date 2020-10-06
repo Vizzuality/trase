@@ -47,6 +47,9 @@ const resizeSankeyTool = (...args) =>
   import('../react-components/tool/tool.thunks').then(module => module.resizeSankeyTool(...args));
 const loadDisclaimerTool = (...args) =>
   import('../react-components/tool/tool.thunks').then(module => module.loadDisclaimerTool(...args));
+const loadUnitLayers = (...args) =>
+  import('../react-components/tool/tool.thunks').then(module => module.loadUnitLayers(...args));
+
 const loadInitialDashboardData = (...args) =>
   import('../react-components/dashboard-element/dashboard-element.thunks').then(module =>
     module.loadInitialDashboardData(...args)
@@ -93,7 +96,7 @@ export const routes = {
       import(/* webpackChunkName: "tool" */ '../react-components/tool/tool.js')
     ),
     title: getPageTitle,
-    thunk: loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool),
+    thunk: loadPageData(loadToolInitialData, resizeSankeyTool, loadDisclaimerTool, loadUnitLayers),
     footer: false,
     feedback: false,
     nav: {

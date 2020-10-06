@@ -14,14 +14,22 @@ if (ENABLE_TOOL_PANEL) {
       name: 'Supply Chain',
       page: {
         type: 'tool',
-        payload: { serializerParams: { toolLayout: TOOL_LAYOUT.splitted } }
+        payload: {
+          serializerParams: {
+            toolLayout: TOOL_LAYOUT.splitted
+          }
+        }
       }
     },
     {
       name: 'Map',
       page: {
         type: 'tool',
-        payload: { serializerParams: { toolLayout: TOOL_LAYOUT.left } }
+        payload: {
+          serializerParams: {
+            toolLayout: TOOL_LAYOUT.left
+          }
+        }
       }
     }
   );
@@ -70,46 +78,54 @@ const sidebarNav = [
     name: 'Who is Trase for?',
     page: {
       type: 'about',
-      payload: { section: 'who-is-trase-for' }
+      payload: {
+        section: 'who-is-trase-for'
+      }
     }
   },
   {
     name: 'Methods and data',
     page: {
       type: 'about',
-      payload: { section: 'methods-and-data' }
+      payload: {
+        section: 'methods-and-data'
+      }
     }
   },
   {
     name: 'FAQ',
     page: {
       type: 'about',
-      payload: { section: 'faq' }
+      payload: {
+        section: 'faq'
+      }
     }
   },
-  // {
-  //   name: 'Team',
-  //   page: 'team'
-  // },
   {
     name: 'Partners',
     page: {
       type: 'about',
-      payload: { section: 'partners' }
+      payload: {
+        section: 'partners'
+      }
     }
   },
   {
     name: 'Funders',
     page: {
       type: 'about',
-      payload: { section: 'funders' }
+      payload: {
+        section: 'funders'
+      }
     }
   },
   {
     name: 'Terms of Use',
     page: {
       type: 'about',
-      payload: { section: 'terms-of-use' }
+      payload: {
+        section: 'terms-of-use'
+      }
     }
   },
   {
@@ -138,10 +154,6 @@ if (DISABLE_PROFILES) {
 
 if (!ENABLE_DASHBOARDS) {
   nav = nav.filter(route => route.page !== 'dashboardRoot');
-}
-
-if (!ENABLE_LOGISTICS_MAP) {
-  nav = nav.filter(route => route.page !== 'logisticsMap');
 }
 
 export default {

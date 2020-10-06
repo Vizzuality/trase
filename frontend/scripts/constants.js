@@ -125,7 +125,7 @@ export const ACTORS_TOP_SOURCES_SWITCHERS_BLACKLIST = ['included_years', 'bucket
 export const LINE_LABEL_HEIGHT = 12;
 
 // map
-export const CARTO_BASE_URL = 'https://p2cs-sei.carto.com/api/v1/map/';
+export const CARTO_BASE_URL = 'https://p2cs-sei.carto.com/api/v2';
 export const CARTO_NAMED_MAPS_BASE_URL = 'https://p2cs-sei.carto.com/api/v1/map/named/';
 export const YEARS_DISABLED_WARNINGS = {
   NO_AGGR_REASON: "can't be displayed over multiple years.",
@@ -191,7 +191,7 @@ export const BASEMAPS = {
   topo: {
     id: 'topo',
     title: 'Topography',
-    url: '//{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+    url: '//a.tile.opentopomap.org/{z}/{x}/{y}.png', // {s} subdomain was replaced with a (random subdomain)
     attribution:
       '&copy;<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy;<a href="http://opentopomap.org">opentopomap.org</a>',
     thumbnail: '/images/maps/thumb-basemap-topo.png'
@@ -199,7 +199,7 @@ export const BASEMAPS = {
   streets: {
     id: 'streets',
     title: 'Streets (OSM)',
-    url: '//{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+    url: '//a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
     attribution:
       '&copy;<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>',
     thumbnail: '/images/maps/thumb-basemap-streets.png'
@@ -237,30 +237,6 @@ export const BREAKPOINTS = {
   tablet: 768,
   laptop: 1024
 };
-
-const buildYears = (start, length = 1) =>
-  Array.from({ length })
-    .fill(start)
-    .map((y, i) => ({ value: y + i, label: `${y + i}` }));
-
-export const LOGISTICS_MAP_YEARS = {
-  palmOil: buildYears(2016),
-  soy: buildYears(2005, 12),
-  cattle: buildYears(2012, 6)
-};
-
-export const LOGISTICS_MAP_HUBS = [
-  { value: 'soy', label: 'Soy' },
-  { value: 'cattle', label: 'Cattle' },
-  { value: 'palmOil', label: 'Palm oil' }
-];
-
-export const LOGISTICS_MAP_INSPECTION_LEVELS = [
-  { value: 'SIF', label: 'SIF' },
-  { value: 'SIE', label: 'SIE' },
-  { value: 'SIM', label: 'SIM' },
-  { value: 'UNKNOWN', label: 'Unknown' }
-];
 
 export const EXPLORE_STEPS = {
   selectCommodity: 1,
@@ -345,5 +321,30 @@ export const SANKEY_OFFSETS = {
 
 export const LAYER_TAB_NAMES = {
   unit: 'unit layers',
-  contextual: 'contextual layers'
+  contextual: 'contextual layers',
+  logistic: 'logistic hubs'
 };
+
+const buildYears = (start, length = 1) =>
+  Array.from({ length })
+    .fill(start)
+    .map((y, i) => ({ value: y + i, label: `${y + i}` }));
+
+export const LOGISTICS_MAP_YEARS = {
+  palmOil: buildYears(2016),
+  soy: buildYears(2005, 12),
+  cattle: buildYears(2012, 6)
+};
+
+export const LOGISTICS_MAP_HUBS = [
+  { value: 'soy', label: 'Soy' },
+  { value: 'cattle', label: 'Cattle' },
+  { value: 'palmOil', label: 'Palm oil' }
+];
+
+export const LOGISTICS_MAP_INSPECTION_LEVELS = [
+  { value: 'SIF', label: 'SIF' },
+  { value: 'SIE', label: 'SIE' },
+  { value: 'SIM', label: 'SIM' },
+  { value: 'UNKNOWN', label: 'Unknown' }
+];
