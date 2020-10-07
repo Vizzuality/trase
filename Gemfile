@@ -2,11 +2,11 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.4.3'
+gem 'rails', '~> 5.2.4.4'
  # Use pg as the database for Active Record
 gem 'pg', '~> 0.18'
 # Use Puma as the app server
-gem 'puma', '~> 4.3'
+gem 'puma', '~> 5.0'
 # Use SCSS for stylesheets
 gem 'sassc-rails', '~> 2.1.2'
 gem 'sprockets', '< 4'
@@ -90,7 +90,7 @@ group :development do
   gem 'capistrano-rails', '~> 1.6', require: false
   gem 'capistrano-rvm'
   gem 'ed25519', '~> 1.2'
-  gem 'rubocop', '~> 0.90.0', require: false
+  gem 'rubocop', '~> 0.91.1', require: false
   gem 'rubocop-performance', require: false
 end
 

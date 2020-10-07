@@ -53,7 +53,8 @@ export const COLORS = {
   charcoalGrey: '#34444C',
   charcoalGreyTonedDown: '#536269',
   charcoalGreyFadedALot: '#D6DADB',
-  manilla: '#FFEB8B'
+  manilla: '#FFEB8B',
+  strongPink: '#f65e6e'
 };
 
 export const CHOROPLETH_CLASS_ZERO = '#FFFFFF';

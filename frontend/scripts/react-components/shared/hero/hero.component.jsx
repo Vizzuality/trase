@@ -73,7 +73,7 @@ class Hero extends React.Component {
                     alt="TRASE"
                   />
                 </div>
-                <h1 className="hero-title">Transparency for Sustainable Economies.</h1>
+                <h1 className="hero-title">Transparency for Sustainable Economies</h1>
                 <Suspense fallback={null}>
                   {!isLegacyBrowser && (
                     <div className="hero-play-container">
