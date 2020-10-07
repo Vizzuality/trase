@@ -2047,13 +2047,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_1_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_1_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_19" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2064,13 +2057,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_19_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_19_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_2" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2081,13 +2067,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_2_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_2_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_35" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2098,13 +2077,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_35_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_35_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_37" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2115,13 +2087,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_37_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_37_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_38" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2132,13 +2097,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_38_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_38_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_39" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2149,13 +2107,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_39_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_39_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_4" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2166,13 +2117,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_4_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_4_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_40" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2183,13 +2127,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_40_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_40_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_42" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2200,13 +2137,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_42_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_42_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_43" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2217,13 +2147,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_43_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_43_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_44" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2234,13 +2157,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_44_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_44_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_45" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2251,13 +2167,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_45_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_45_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_46" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2268,13 +2177,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_46_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_46_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_47" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2285,13 +2187,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_47_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_47_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_48" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2302,13 +2197,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_48_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_48_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_49" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2319,13 +2207,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_49_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_49_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_5" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2336,13 +2217,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_5_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_5_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_50" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2353,13 +2227,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_50_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_50_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_51" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2370,13 +2237,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_51_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_51_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_52" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2387,13 +2247,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_52_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_52_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_53" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2404,13 +2257,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_53_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_53_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_54" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2421,13 +2267,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_54_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_54_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_55" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2438,13 +2277,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_55_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_55_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_56" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2455,13 +2287,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_56_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_56_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_57" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2472,13 +2297,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_57_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_57_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_58" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2489,13 +2307,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_58_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_58_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_59" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2506,13 +2317,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_59_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_59_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_6" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2523,13 +2327,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_6_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_6_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_60" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2540,13 +2337,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_60_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_60_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_61" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2557,13 +2347,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_61_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_61_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_inds_7" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2574,13 +2357,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_inds_7_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_inds_7_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2608,13 +2384,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_1_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_1_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_19" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2625,13 +2394,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_19_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_19_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_2" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2642,13 +2404,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_2_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_2_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_35" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2659,13 +2414,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_35_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_35_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_37" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2676,13 +2424,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_37_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_37_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_38" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2693,13 +2434,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_38_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_38_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_39" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2710,13 +2444,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_39_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_39_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_4" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2727,13 +2454,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_4_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_4_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_40" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2744,13 +2464,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_40_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_40_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_42" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2761,13 +2474,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_42_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_42_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_43" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2778,13 +2484,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_43_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_43_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_44" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2795,13 +2494,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_44_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_44_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_45" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2812,13 +2504,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_45_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_45_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_46" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2829,13 +2514,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_46_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_46_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_47" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2846,13 +2524,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_47_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_47_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_48" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2863,13 +2534,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_48_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_48_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_49" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2880,13 +2544,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_49_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_49_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_5" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2897,13 +2554,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_5_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_5_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_50" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2914,13 +2564,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_50_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_50_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_51" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2931,13 +2574,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_51_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_51_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_52" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2948,13 +2584,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_52_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_52_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_53" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2965,13 +2594,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_53_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_53_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_54" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2982,13 +2604,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_54_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_54_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_55" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -2999,13 +2614,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_55_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_55_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_56" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3016,13 +2624,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_56_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_56_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_57" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3033,13 +2634,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_57_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_57_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_58" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3050,13 +2644,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_58_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_58_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_59" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3067,13 +2654,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_59_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_59_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_6" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3084,13 +2664,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_6_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_6_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_60" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3101,13 +2674,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_60_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_60_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_61" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3118,13 +2684,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_61_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_61_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quals_7" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3135,13 +2694,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quals_7_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quals_7_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3169,13 +2721,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_1_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_1_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_19" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3186,13 +2731,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_19_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_19_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_2" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3203,13 +2741,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_2_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_2_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_35" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3220,13 +2751,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_35_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_35_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_37" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3237,13 +2761,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_37_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_37_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_38" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3254,13 +2771,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_38_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_38_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_39" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3271,13 +2781,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_39_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_39_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_4" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3288,13 +2791,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_4_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_4_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_40" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3305,13 +2801,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_40_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_40_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_42" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3322,13 +2811,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_42_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_42_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_43" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3339,13 +2821,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_43_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_43_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_44" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3356,13 +2831,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_44_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_44_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_45" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3373,13 +2841,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_45_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_45_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_46" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3390,13 +2851,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_46_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_46_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_47" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3407,13 +2861,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_47_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_47_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_48" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3424,13 +2871,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_48_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_48_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_49" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3441,13 +2881,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_49_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_49_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_5" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3458,13 +2891,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_5_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_5_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_50" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3475,13 +2901,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_50_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_50_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_51" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3492,13 +2911,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_51_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_51_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_52" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3509,13 +2921,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_52_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_52_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_53" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3526,13 +2931,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_53_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_53_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_54" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3543,13 +2941,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_54_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_54_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_55" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3560,13 +2951,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_55_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_55_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_56" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3577,13 +2961,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_56_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_56_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_57" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3594,13 +2971,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_57_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_57_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_58" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3611,13 +2981,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_58_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_58_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_59" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3628,13 +2991,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_59_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_59_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_6" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3645,13 +3001,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_6_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_6_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_60" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3662,13 +3011,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_60_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_60_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_61" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3679,13 +3021,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_61_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_61_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_denormalised_flow_quants_7" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="context_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3696,13 +3031,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
-         <index name="partitioned_denormalised_flow_quants_7_context_id_year_idx" unique="false">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="year"/>
-         </index>
-         <index name="partitioned_denormalised_flow_quants_7_row_name_idx" unique="false">
-            <column ascending="true" name="row_name"/>
-         </index>
       </table>
       <table name="partitioned_flow_inds" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3717,109 +3045,61 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="ind_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_inds_1_ind_id_flow_id_idx" unique="true">
-            <column ascending="true" name="ind_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_inds_2" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="ind_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_inds_2_ind_id_flow_id_idx" unique="true">
-            <column ascending="true" name="ind_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_inds_3" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="ind_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_inds_3_ind_id_flow_id_idx" unique="true">
-            <column ascending="true" name="ind_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_inds_67" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="ind_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_inds_67_ind_id_flow_id_idx" unique="true">
-            <column ascending="true" name="ind_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_inds_71" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="ind_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_inds_71_ind_id_flow_id_idx" unique="true">
-            <column ascending="true" name="ind_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_inds_72" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="ind_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_inds_72_ind_id_flow_id_idx" unique="true">
-            <column ascending="true" name="ind_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_inds_84" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="ind_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_inds_84_ind_id_flow_id_idx" unique="true">
-            <column ascending="true" name="ind_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_inds_85" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="ind_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_inds_85_ind_id_flow_id_idx" unique="true">
-            <column ascending="true" name="ind_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_inds_90" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="ind_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_inds_90_ind_id_flow_id_idx" unique="true">
-            <column ascending="true" name="ind_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_inds_95" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="ind_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_inds_95_ind_id_flow_id_idx" unique="true">
-            <column ascending="true" name="ind_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_inds_96" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="ind_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_inds_96_ind_id_flow_id_idx" unique="true">
-            <column ascending="true" name="ind_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_inds_97" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="ind_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_inds_97_ind_id_flow_id_idx" unique="true">
-            <column ascending="true" name="ind_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quals" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3834,91 +3114,51 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="qual_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="value" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
-         <index name="partitioned_flow_quals_2_qual_id_flow_id_idx" unique="true">
-            <column ascending="true" name="qual_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quals_3" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="qual_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="value" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
-         <index name="partitioned_flow_quals_3_qual_id_flow_id_idx" unique="true">
-            <column ascending="true" name="qual_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quals_4" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="qual_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="value" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
-         <index name="partitioned_flow_quals_4_qual_id_flow_id_idx" unique="true">
-            <column ascending="true" name="qual_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quals_41" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="qual_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="value" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
-         <index name="partitioned_flow_quals_41_qual_id_flow_id_idx" unique="true">
-            <column ascending="true" name="qual_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quals_43" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="qual_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="value" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
-         <index name="partitioned_flow_quals_43_qual_id_flow_id_idx" unique="true">
-            <column ascending="true" name="qual_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quals_44" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="qual_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="value" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
-         <index name="partitioned_flow_quals_44_qual_id_flow_id_idx" unique="true">
-            <column ascending="true" name="qual_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quals_45" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="qual_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="value" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
-         <index name="partitioned_flow_quals_45_qual_id_flow_id_idx" unique="true">
-            <column ascending="true" name="qual_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quals_48" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="qual_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="value" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
-         <index name="partitioned_flow_quals_48_qual_id_flow_id_idx" unique="true">
-            <column ascending="true" name="qual_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quals_50" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="qual_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="value" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
-         <index name="partitioned_flow_quals_50_qual_id_flow_id_idx" unique="true">
-            <column ascending="true" name="qual_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quals_7" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="qual_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="value" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
-         <index name="partitioned_flow_quals_7_qual_id_flow_id_idx" unique="true">
-            <column ascending="true" name="qual_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -3933,280 +3173,156 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_1_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_11" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_11_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_12" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_12_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_18" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_18_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_2" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_2_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_28" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_28_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_3" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_3_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_33" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_33_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_34" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_34_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_36" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_36_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_4" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_4_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_41" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_41_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_59" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_59_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_65" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_65_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_67" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_67_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_7" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_7_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_8" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_8_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_80" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_80_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_81" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_81_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_82" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_82_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_83" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_83_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_84" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_84_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_85" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_85_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_86" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_86_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_87" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_87_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_88" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_88_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_89" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_89_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_90" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_90_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_91" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_91_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_93" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_93_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flow_quants_95" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="flow_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quant_id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
          <column autoUpdated="false" defaultValue="null" digits="17" id="2" name="value" nullable="true" remarks="" size="17" type="float8" typeCode="8"/>
-         <index name="partitioned_flow_quants_95_quant_id_flow_id_idx" unique="true">
-            <column ascending="true" name="quant_id"/>
-            <column ascending="true" name="flow_id"/>
-         </index>
       </table>
       <table name="partitioned_flows" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4230,13 +3346,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_1_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_1_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_19" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4245,13 +3354,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_19_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_19_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_2" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4260,13 +3362,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_2_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_2_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_35" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4275,13 +3370,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_35_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_35_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_37" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4290,13 +3378,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_37_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_37_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_38" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4305,13 +3386,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_38_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_38_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_39" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4320,13 +3394,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_39_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_39_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_4" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4335,13 +3402,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_4_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_4_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_40" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4350,13 +3410,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_40_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_40_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_42" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4365,13 +3418,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_42_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_42_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_43" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4380,13 +3426,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_43_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_43_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_44" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4395,13 +3434,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_44_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_44_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_45" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4410,13 +3442,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_45_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_45_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_46" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4425,13 +3450,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_46_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_46_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_47" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4440,13 +3458,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_47_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_47_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_48" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4455,13 +3466,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_48_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_48_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_49" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4470,13 +3474,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_49_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_49_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_5" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4485,13 +3482,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_5_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_5_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_50" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4500,13 +3490,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_50_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_50_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_51" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4515,13 +3498,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_51_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_51_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_52" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4530,13 +3506,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_52_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_52_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_53" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4545,13 +3514,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_53_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_53_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_54" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4560,13 +3522,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_54_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_54_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_55" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4575,13 +3530,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_55_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_55_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_56" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4590,13 +3538,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_56_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_56_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_57" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4605,13 +3546,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_57_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_57_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_58" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4620,13 +3554,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_58_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_58_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_59" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4635,13 +3562,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_59_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_59_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_6" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4650,13 +3570,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_6_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_6_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_60" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4665,13 +3578,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_60_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_60_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_61" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4680,13 +3586,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_61_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_61_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="partitioned_flows_7" numRows="0" remarks="" schema="public" type="TABLE">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="true" remarks="" size="10" type="int4" typeCode="4"/>
@@ -4695,13 +3594,6 @@
          <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="path" nullable="true" remarks="" size="10" type="_int4" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="known_path_positions" nullable="true" remarks="" size="1" type="_bool" typeCode="2003"/>
          <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="names" nullable="true" remarks="" size="2147483647" type="_text" typeCode="2003"/>
-         <index name="partitioned_flows_7_context_id_id_idx" unique="true">
-            <column ascending="true" name="context_id"/>
-            <column ascending="true" name="id"/>
-         </index>
-         <index name="partitioned_flows_7_year_idx" unique="false">
-            <column ascending="true" name="year"/>
-         </index>
       </table>
       <table name="pg_stat_statements" numRows="0" remarks="" schema="public" type="VIEW" viewSql=" SELECT pg_stat_statements.userid,&#10;    pg_stat_statements.dbid,&#10;    pg_stat_statements.queryid,&#10;    pg_stat_statements.query,&#10;    pg_stat_statements.calls,&#10;    pg_stat_statements.total_time,&#10;    pg_stat_statements.min_time,&#10;    pg_stat_statements.max_time,&#10;    pg_stat_statements.mean_time,&#10;    pg_stat_statements.stddev_time,&#10;    pg_stat_statements.rows,&#10;    pg_stat_statements.shared_blks_hit,&#10;    pg_stat_statements.shared_blks_read,&#10;    pg_stat_statements.shared_blks_dirtied,&#10;    pg_stat_statements.shared_blks_written,&#10;    pg_stat_statements.local_blks_hit,&#10;    pg_stat_statements.local_blks_read,&#10;    pg_stat_statements.local_blks_dirtied,&#10;    pg_stat_statements.local_blks_written,&#10;    pg_stat_statements.temp_blks_read,&#10;    pg_stat_statements.temp_blks_written,&#10;    pg_stat_statements.blk_read_time,&#10;    pg_stat_statements.blk_write_time&#10;   FROM pg_stat_statements(true) pg_stat_statements(userid, dbid, queryid, query, calls, total_time, min_time, max_time, mean_time, stddev_time, rows, shared_blks_hit, shared_blks_read, shared_blks_dirtied, shared_blks_written, local_blks_hit, local_blks_read, local_blks_dirtied, local_blks_written, temp_blks_read, temp_blks_written, blk_read_time, blk_write_time);">
          <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="userid" nullable="true" remarks="" size="10" type="oid" typeCode="-5"/>

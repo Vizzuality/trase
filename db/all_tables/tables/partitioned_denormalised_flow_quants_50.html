@@ -103,7 +103,7 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i><span id="context_id">context_id</span></td>
+                                    <td><span id="context_id">context_id</span></td>
                                     <td>int4</td>
                                     <td>10</td>
                                     <td title='nullable'>√</td>
@@ -154,7 +154,7 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i><span id="year">year</span></td>
+                                    <td><span id="year">year</span></td>
                                     <td>int2</td>
                                     <td>5</td>
                                     <td title='nullable'>√</td>
@@ -171,7 +171,7 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i><span id="row_name">row_name</span></td>
+                                    <td><span id="row_name">row_name</span></td>
                                     <td>text</td>
                                     <td>2147483647</td>
                                     <td title='nullable'>√</td>
@@ -241,42 +241,6 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <i class="fa fa-sitemap"></i>
-                            <h3 id="Indexes" class="box-title">Indexes</h3>
-                            <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                            </div>
-                        </div>
-                        <div class="box-body">
-                            <table id="indexes_table" class="table table-bordered table-striped dataTable" role="grid">
-                                <thead>
-                                <tr>
-                                    <th>Constraint Name</th>
-                                    <th>Type</th>
-                                    <th>Sort</th>
-                                    <th>Column(s)</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td title='Indexed'>partitioned_denormalised_flow_quants_50_context_id_year_idx</td>
-                                    <td>Performance</td>
-                                    <td><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
-                                    <td>context_id + year</td>
-                                </tr>
-                                <tr>
-                                    <td title='Indexed'>partitioned_denormalised_flow_quants_50_row_name_idx</td>
-                                    <td>Performance</td>
-                                    <td><span title='Ascending'>Asc</span></td>
-                                    <td>row_name</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div><!-- /.box-body -->
                     </div>
                     <div class="alert alert-warning alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
