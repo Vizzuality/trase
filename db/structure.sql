@@ -11425,6 +11425,13 @@ CREATE INDEX contextual_layers_context_id_idx ON public.contextual_layers USING 
 
 
 --
+-- Name: countries_com_trade_aggregated_indicators_commodity_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX countries_com_trade_aggregated_indicators_commodity_id_idx ON public.countries_com_trade_aggregated_indicators USING btree (commodity_id);
+
+
+--
 -- Name: country_attribute_properties_mv_idx; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -17398,6 +17405,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20200618100150'),
 ('20200818104523'),
 ('20200819083051'),
-('20200903085354');
+('20200903085354'),
+('20201007085611');
 
 
