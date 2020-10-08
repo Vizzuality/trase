@@ -6,7 +6,7 @@ import './banner-styles.scss';
 const slides = [
   {
     id: 0,
-    text: 'Trace finance is now live',
+    text: 'Trase finance is now live',
     link: 'https://trase.finance/',
     textColor: COLORS.charcoalGrey,
     textWidth: '70%',
