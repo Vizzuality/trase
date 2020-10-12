@@ -10,13 +10,12 @@ info:
   license:
     name: MIT License
   description: >-
-    This is a first version of the public API for [Trase](https://trase.earth/).
-
+    This is a DRAFT version 1.1 of the public API for [Trase](http://trase.earth).
 
     # Introduction
 
 
-    The Trase Public API allows to access trade flows data of forest risk commodities.
+    The Trase Public API allows access to trade flow data of the forest risk commodities hosted in Trase’s database. For a list of available commodities and country contexts please refer to the documentation on the Trase homepage: https://www.trase.earth/about
 
 
     # Entities
@@ -24,19 +23,19 @@ info:
 
     The API will expose the following entities present in Trase:
 
-    1. attributes: quantitative and qualitative attributes (indicators)
+    1. attributes: quantitative and qualitative attributes associated with Trase data. These include, for example our flagship indicators for deforestation risk, along with other metrics relevant to social and environmental risk
 
-    2. commodities: forest risk commodities
+    2. commodities: the forest risk commodities covered by the Trase database
 
-    3. countries: source countries for commodities
+    3. countries: source countries for commodities covered by the Trase database
 
-    4. flows: models the list of nodes in a supply chain (path) from source to destination
+    4. flows: provides the list of nodes in a supply chain (path) from source to destination
 
-    5. nodes: entities participating in the supply chain. Each has a "node type", e.g. MUNICIPALITY, EXPORTER, but they are also grouped in the system by a more generic "role":
+    5. nodes: provides entities participating in the supply chain. Each has a "node type" (see below), e.g. MUNICIPALITY, EXPORTER, but they are also grouped in the system by a more generic "role" as follows:
 
         a. sources: source nodes, such as municipalities in Brazil or departments in Paraguay
 
-        b. traders: exporters / importers of commodities
+        b. traders: exporters or importers of commodities
 
         c. destinations: destination nodes, such as importing countries
     6. node types: the types of nodes at particular positions in supply chains per country / commodity combination
@@ -45,43 +44,46 @@ info:
     # Discovering node identifiers
 
 
-    We assume one of the typical scenarios is one where the point of entry into the data will be a source, an exporter, an importer or a destination. All of these entities are nodes, but int Trase we group them by "role" in the supply chain.
+    A typical scenario for API use is likely to be one where the point of entry into the data will be a commodity source, an exporter, an importer or a destination. All of these entities are nodes, but in Trase we group them by "role" in the supply chain.
 
 
-    In the first step, users would use the sources / exporters / importers / destinations endpoints, which allow to discover the identifiers of entities by searching by name and existing natural identifiers (e.g. iso code). For now we need to work around the fact that nodes in the system don't have standardised identifiers, which would allow to skip this step.
+    As a first step, users would therefore use the sources / exporters / importers / destinations endpoints, which allow discovery of the identifiers of entities by searching by name and existing natural identifiers (e.g. ISO code). At this stage, nodes in the Trase system do not have standardised identifiers, so this first step is necessary to allow cross-referencing of nodes against the points of interest from a user-perspective.
 
 
-    Those endpoints will also allow to discover the availability of indicators. Then in the next step users can use those identifiers to pull data for a particular node.
+    Accessing information via these endpoints will also allow the user to discover the availability of indicators associated with these nodes. In the following step, users can use those identifiers to pull data for a particular node.
 
 
     # Retrieving attribute values
 
 
-    It is possible to retrieve full flows data using the flows endpoint.
+    It is possible to retrieve full flow data using the flows endpoint.
 
 
-    It is also possible to retrieve data filtered by a particular node, which includes both values of attributes for flows in which the node participates (flow attributes), as well as values of some attributes which are not calculated from flows (node attributes).
+    It is also possible to retrieve data filtered by a particular node, which includes both values of attributes for flows in which the node participates (flow attributes), as well as values of some attributes which are not calculated from flows but are specific to the nodes themselves (node attributes).
 
 
     # Sample usage - retrieving flow data for country / commodity
 
 
-    Use the commodities endpoint to discover identifiers of available commodities. You can also at the same time retrieve ids of countries from which the commodities are sourced.
+    Use the commodities endpoint to discover identifiers of available commodities. At the same time, you can also retrieve ids of countries from which the commodities are sourced.
 
 
     /api/public/commodities?include=countries
 
 
-    Countries can be retireved using the countries endpoint.
+    Countries can be retrieved using the countries endpoint.
+    
+    
+    /api/public/countries?include=commodities
 
 
-    Now using the attributes endpoint, find out what sttributes are available for Brazil beef:
+    Now by using the attributes endpoint, it is possible to find out what attributes are available for Brazil beef:
 
 
     /api/public/attributes?commodity=BEEF&country=BR
 
 
-    Volume data is available for years 2015-2017. Request flows data for 2016-2017:
+    Volume data is available for years 2015-2017 and it is possible to select particular years using the API. For example, to request data for 2016-2017:
 
 
     /api/public/flows?commodity=BEEF&country=BR&start_year=2016&end_year=2017&page=1
@@ -99,10 +101,13 @@ info:
     /api/public/nodes/sources?country=BR&commodity=BEEF&name=SORRISO
 
 
-    Data is available for years 2003-2017. Request data for 2017:
+    Data is available for years 2003-2017. Request data for 2017 using the id number of the node of interest (e.g. the id of SORRISO is 11113):
 
 
-    /api/public/nodes/{id of SORRISO}/data?year=2017
+    /api/public/nodes/11113/data?year=2017
+
+servers:
+  - url: https://trase.earth/api/public
 paths:
   /countries:
     get:
@@ -781,7 +786,7 @@ paths:
   /top_nodes:
     get:
       tags:
-        - NEW
+        - PROPOSED - NOT IMPLEMENTED YET
       responses:
         "200":
           description: ""
@@ -838,7 +843,7 @@ paths:
   /nodes/data:
     get:
       tags:
-        - NEW
+        - PROPOSED - NOT IMPLEMENTED YET
       responses:
         "200":
           description: ""
@@ -896,8 +901,6 @@ paths:
       description: "Values of requested attribute for requested nodes (nodes_ids) in requested year range. It is possible to filter down values by nodes which should appear on same path (path_nodes_ids), which allows for example to retrieve value for a sourcing region filtered by an exporter."
       summary: Values of flow attributes for selected nodes.
 
-servers:
-  - url: https://staging.trase.earth/api/public
 components:
   parameters:
     page:
