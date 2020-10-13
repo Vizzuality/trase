@@ -30,6 +30,7 @@ export const SELECT_BASEMAP = 'SELECT_BASEMAP';
 export const CHANGE_LAYOUT = 'CHANGE_LAYOUT';
 export const SET_SANKEY_SIZE = 'SET_SANKEY_SIZE';
 export const TOGGLE_MAP_DIMENSION = 'TOGGLE_MAP_DIMENSION';
+export const RESET_MAP_DIMENSIONS = 'RESET_MAP_DIMENSIONS';
 
 export function setMapContextLayers(contextualLayers) {
   return (dispatch, getState) => {
@@ -153,6 +154,14 @@ export function toggleMapDimension(uid) {
         uid,
         selectedMapDimensions
       }
+    });
+  };
+}
+
+export function resetSelectedMapDimensions() {
+  return (dispatch) => {
+    dispatch({
+      type: RESET_MAP_DIMENSIONS
     });
   };
 }
