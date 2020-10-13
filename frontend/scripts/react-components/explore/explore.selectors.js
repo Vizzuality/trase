@@ -107,7 +107,7 @@ export const getCountryQuickFacts = createSelector([getQuickFacts], quickFacts =
   return countryQuickFacts;
 });
 
-const getRecentCard = () => {
+export const getRecentCard = () => {
   const recentCard = localStorage.getItem('recentCard');
   if (!recentCard) return null;
   const [countryId, commodityId] = recentCard.split('-');
@@ -122,13 +122,17 @@ const getRecentCard = () => {
         commodityId: parseInt(commodityId, 10)
       }
     ],
-    meta: [{}]
+    meta: []
   };
 }
 
-const getCardsWithRecentCard = createSelector(
-  [getSankeyCards, getRecentCard],
-  (cards, recentCard) => {
+export const getCardsWithRecentCard = createSelector(
+  [getSankeyCards, getRecentCard, getContexts],
+  (cards, recentCard, contexts) => {
+    const { countryId: recentCountryId, commodityId: recentCommodityId } = recentCard.data[0];
+    console.log('c,', recentCountryId, recentCommodityId)
+    const recentValidContext = contexts.find(context => recentCountryId === context.countryId && recentCommodityId === context.commodityId);
+    if (!recentValidContext) return cards;
     if (!cards) return recentCard;
     return recentCard ? { data: [...recentCard.data, ...cards.data], meta: cards.meta } : cards;
   }
