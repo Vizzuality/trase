@@ -1,6 +1,6 @@
 class WbRequestWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :external_apis,
+  sidekiq_options queue: :high,
                   retry: 3,
                   backtrace: true
 

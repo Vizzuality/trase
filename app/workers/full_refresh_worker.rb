@@ -1,7 +1,7 @@
 # To refresh materialized views or tables in full
 class FullRefreshWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :database,
+  sidekiq_options queue: :default,
                   retry: false,
                   backtrace: true,
                   unique: :until_and_while_executing,

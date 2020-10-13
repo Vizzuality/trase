@@ -1,6 +1,6 @@
 class ComTradeWorldRequestWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :external_apis,
+  sidekiq_options queue: :high,
                   retry: 5,
                   backtrace: true
 

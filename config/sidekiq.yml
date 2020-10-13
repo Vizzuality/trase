@@ -1,5 +1,16 @@
 :verbose: true
 :concurrency: <%= ENV['RAILS_MAX_THREADS'] || 5 %>
 :queues:
-  - database
-  - external_apis
+  - ['critical', 6]
+  - ['high', 4]
+  - ['default', 2]
+  - ['low', 1]
+
+# please assign jobs to queues based on task priority AND execution time:
+
+# critical under 30 seconds
+# high under 5 minutes
+# default is less than 10
+# low is less than who cares
+
+# good explanation here: https://phil.tech/2016/tips-on-sidekiq-queues/
