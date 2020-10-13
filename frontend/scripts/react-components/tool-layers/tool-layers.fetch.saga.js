@@ -126,8 +126,10 @@ export function* getUnitLayerData(params) {
   const url = `${CARTO_BASE_URL}/sql?q=
     SELECT node_type_id, node_id, geo_id, attribute_id, json_object_agg(COALESCE(year, 0 ), total
     ORDER BY year) as years FROM (SELECT node_type_id, node_id, geo_id, attribute_id, year,
-    SUM(value) AS total FROM map_attributes_values
-    WHERE node_type_id = ${selectedGeoColumnId} and attribute_id IN (${selectedUnitIndicatorIds.join(',')}) and iso2 = '${iso2}'
+    SUM(value) AS total FROM map_attributes_values_${UNIT_LAYERS_DATA_ENV}
+    WHERE node_type_id = ${selectedGeoColumnId} and attribute_id IN (${selectedUnitIndicatorIds.join(
+    ','
+  )}) and iso2 = '${iso2}'
     GROUP BY node_type_id, node_id, geo_id, attribute_id, year) s
     GROUP BY node_type_id, node_id, geo_id, attribute_id ORDER BY geo_id, node_id, attribute_id
   `;
