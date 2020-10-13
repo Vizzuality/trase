@@ -20,7 +20,8 @@ import {
   SELECT_UNIT_LAYERS,
   selectContextualLayers,
   selectUnitLayers,
-  selectLogisticLayers
+  selectLogisticLayers,
+  resetSelectedMapDimensions
 } from 'react-components/tool/tool.actions';
 import {
   getSelectedGeoColumn,
@@ -139,6 +140,7 @@ function* resetContextLayers() {
         yield put(selectContextualLayers([]));
         yield put(selectLogisticLayers([]));
         yield put(selectUnitLayers([]));
+        yield put(resetSelectedMapDimensions());
       }
     // we update the previous context
     previousContext.countryId = context.countryId;

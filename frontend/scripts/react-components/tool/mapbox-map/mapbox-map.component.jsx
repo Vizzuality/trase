@@ -210,6 +210,7 @@ function MapBoxMap(props) {
     const geoFeature = features.find(f => f.sourceLayer === sourceLayer);
     if (geoFeature) {
       const { properties, source, id } = geoFeature;
+
       if (map && lastHoveredGeo.id && layerIds.includes(lastHoveredGeo.source)) {
         map.setFeatureState({ ...lastHoveredGeo }, { hover: false });
       }
@@ -242,8 +243,15 @@ function MapBoxMap(props) {
       }
 
       const node = highlightedNodesData[0];
+
       if (node?.name) {
         setTooltip({ x: center.x, y: center.y, name: node?.name, values: properties });
+      } else {
+        // Reset last and current tooltip
+        lastHoveredGeo = {};
+        setTooltip(null);
+        updateTooltipValues(null);
+        clearHoveredFeatureState('hover');
       }
     }
 

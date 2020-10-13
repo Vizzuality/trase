@@ -8,7 +8,8 @@ import {
   CHANGE_LAYOUT,
   SET_SANKEY_SIZE,
   SELECT_UNIT_LAYERS,
-  TOGGLE_MAP_DIMENSION
+  TOGGLE_MAP_DIMENSION,
+  RESET_MAP_DIMENSIONS
 } from 'react-components/tool/tool.actions';
 import {
   TOOL_LAYERS__SET_ACTIVE_MODAL,
@@ -194,6 +195,11 @@ const toolLayersReducer = {
         // dimension was found: remove it from selection
         draft.selectedMapDimensions[uidIndex] = null;
       }
+    });
+  },
+  [RESET_MAP_DIMENSIONS](state) {
+    return immer(state, draft => {
+      draft.selectedMapDimensions = toolLayersInitialState.selectedMapDimensions;
     });
   }
 };

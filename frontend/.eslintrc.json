@@ -64,6 +64,7 @@
     "ENABLE_LOGISTIC_LAYERS_TAB": true,
     "API_V3_URL": true,
     "UNIT_LAYERS_API_URL": true,
+    "UNIT_LAYERS_DATA_ENV": true,
     "ENABLE_DASHBOARDS": true,
     "DISABLE_PROFILES": true,
     "ENABLE_LEGACY_TOOL_SEARCH": true,
