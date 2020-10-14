@@ -1,6 +1,6 @@
 module Api
   module Public
-    class NodeTypesController < ApiController
+    class NodeTypesController < BaseController
       skip_before_action :load_context
 
       def index

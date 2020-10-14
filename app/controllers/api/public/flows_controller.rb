@@ -1,6 +1,6 @@
 module Api
   module Public
-    class FlowsController < ApiController
+    class FlowsController < BaseController
       include PaginationHeaders
       include PaginatedCollection
 
@@ -23,6 +23,16 @@ module Api
           country: params[:country],
           commodity: params[:commodity],
           attribute_id: params[:attribute_id],
+          start_year: params[:start_year],
+          end_year: params[:end_year]
+        }
+      end
+
+      def tracking_params
+        {
+          country: params[:country],
+          commodity: params[:commodity],
+          attributes_ids: [params[:attribute_id]],
           start_year: params[:start_year],
           end_year: params[:end_year]
         }

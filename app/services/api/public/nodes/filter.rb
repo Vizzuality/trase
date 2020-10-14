@@ -49,6 +49,7 @@ module Api
             ).
             group(:id, :name, :node_type, :geo_id)
           apply_country_filter
+          apply_commodity_filter
           apply_node_type_filter
           apply_geo_id_filter
           apply_name_filter

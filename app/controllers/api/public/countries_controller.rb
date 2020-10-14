@@ -1,6 +1,6 @@
 module Api
   module Public
-    class CountriesController < ApiController
+    class CountriesController < BaseController
       include Api::V3::ParamHelpers
 
       skip_before_action :load_context
@@ -23,6 +23,10 @@ module Api
           commodities_ids: cs_string_to_int_array(params[:commodities_ids]),
           include: params[:include]
         }
+      end
+
+      def tracking_params
+        filter_params.slice(:commodities_ids, :countries_ids)
       end
     end
   end
