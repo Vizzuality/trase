@@ -3,14 +3,17 @@ class NodeWithFlowsRefreshActorBasicAttributesWorker
 
   sidekiq_options queue: :default,
                   retry: 0,
-                  backtrace: true,
-                  unique: :until_executed,
-                  run_lock_expiration: 60 * 60 * 2, # 2 hrs
-                  log_duplicate_payload: true
+                  backtrace: true
 
-  def perform(node_with_flows_ids = [])
-    Api::V3::Readonly::NodeWithFlows.
-      where(id: node_with_flows_ids).
-      each(&:refresh_actor_basic_attributes)
+  def perform(node_id, context_id)
+    node_with_flows = Api::V3::Readonly::NodeWithFlows.
+      without_unknowns.
+      without_domestic.
+      find_by(
+        id: node_id, context_id: context_id
+      )
+    return unless node_with_flows
+
+    node_with_flows.refresh_actor_basic_attributes
   end
 end
