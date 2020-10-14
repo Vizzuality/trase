@@ -24,7 +24,8 @@ export const getCommodities = createSelector([getContexts], contexts => {
   return uniqBy(
     contexts.map(c => ({
       name: c.commodityName,
-      id: c.commodityId
+      id: c.commodityId,
+      isSubnational: !!c.subnationalYears
     })),
     'name'
   );
@@ -53,7 +54,8 @@ export const getCountries = createSelector(
       .filter(c => c.commodityId === commodityId)
       .map(c => ({
         name: c.countryName,
-        id: c.countryId
+        id: c.countryId,
+        isSubnational: !!c.subnationalYears
       }));
   }
 );

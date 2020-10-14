@@ -12,6 +12,10 @@
     }
   }
 
+  &.size-sm {
+    font-size: $font-size-regular;
+  }
+
   @media print {
     display: none;
   }

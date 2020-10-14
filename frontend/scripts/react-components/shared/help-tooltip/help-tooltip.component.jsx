@@ -6,18 +6,32 @@ import Tippy from '@tippy.js/react';
 import 'tippy.js/dist/tippy.css';
 import './help-tooltip.scss';
 
+function tooltipContent(children, showInfoIcon, ReferenceComponent) {
+  if (!showInfoIcon) {
+    return <span>{children}</span>;
+  }
+  if (showInfoIcon && ReferenceComponent) {
+    return <ReferenceComponent />;
+  }
+  return (
+    <svg className="icon tooltip-react-icon">
+      <use xlinkHref="#icon-layer-info" />
+    </svg>
+  )
+}
+
 function HelpTooltipComponent(props) {
-  const { children, referenceComponent: ReferenceComponent, position, text, interactive } = props;
+  const { theme, showInfoIcon, children, referenceComponent: ReferenceComponent, position, text, interactive } = props;
   const parsedText = interactive ? <div dangerouslySetInnerHTML={{ __html: text }} /> : text;
 
   return (
     <span className="c-help-tooltip">
       <Tippy
-        content={children || parsedText}
+        content={parsedText}
         animation="none"
         placement={position}
         arrow
-        theme="blue"
+        theme={theme}
         duration={0}
         offset={20}
         zIndex={102}
@@ -25,20 +39,16 @@ function HelpTooltipComponent(props) {
         boundary="window"
         appendTo={document.body}
       >
-        {ReferenceComponent ? (
-          <ReferenceComponent />
-        ) : (
-          <svg className="icon tooltip-react-icon">
-            <use xlinkHref="#icon-layer-info" />
-          </svg>
-        )}
+        {tooltipContent(children, showInfoIcon, ReferenceComponent)}
       </Tippy>
     </span>
   );
 }
 
 HelpTooltipComponent.propTypes = {
+  theme: PropTypes.string,
   text: PropTypes.string,
+  showInfoIcon: PropTypes.bool,
   children: PropTypes.any,
   position: PropTypes.string,
   referenceComponent: PropTypes.node,
@@ -46,7 +56,9 @@ HelpTooltipComponent.propTypes = {
 };
 
 HelpTooltipComponent.defaultProps = {
-  position: 'bottom'
+  position: 'bottom',
+  theme: 'blue',
+  showInfoIcon: true
 };
 
 export default HelpTooltipComponent;
