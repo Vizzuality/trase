@@ -129,6 +129,7 @@ export const getRecentCard = () => {
 export const getCardsWithRecentCard = createSelector(
   [getSankeyCards, getRecentCard, getContexts],
   (cards, recentCard, contexts) => {
+    if (!recentCard) return cards;
     const { countryId: recentCountryId, commodityId: recentCommodityId } = recentCard.data[0];
     const recentValidContext = contexts.find(context => recentCountryId === context.countryId && recentCommodityId === context.commodityId);
     if (!recentValidContext) return cards;
