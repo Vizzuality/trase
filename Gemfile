@@ -58,6 +58,7 @@ gem 'scenic'
 gem 'sidekiq', '~> 6.1.2'
 gem 'sidekiq-unique-jobs'
 gem 'sitemap_generator'
+gem 'staccato'
 gem 'twitter', '~> 7.0'
 gem 'zip_tricks'
 gem 'whenever', require: false
