@@ -5,6 +5,8 @@
   - ['high', 4]
   - ['default', 2]
   - ['low', 1]
+  - ['database', 1] # TODO remove once old jobs processed
+  - ['external_apis', 1] # TODO remove once old jobs processed
 
 # please assign jobs to queues based on task priority AND execution time:
 
