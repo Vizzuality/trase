@@ -1,21 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe Api::V3::Dashboards::ExportersController, type: :controller do
-  include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil soy flow quants'
   include_context 'api v3 paraguay flows quants'
   include_context 'api v3 brazil soy profiles'
 
   before(:each) do
     Api::V3::Readonly::FlowNode.refresh(
-      sync: true, skip_dependencies: true, skip_dependents: true
-    )
-    Api::V3::Readonly::NodesPerContextRankedByVolumePerYear.refresh(
-      sync: true, skip_dependencies: true, skip_dependents: true
+      sync: true, skip_dependents: true
     )
     Api::V3::Readonly::NodeWithFlowsPerYear.refresh(
-      sync: true, skip_dependencies: true, skip_dependents: true
+      sync: true, skip_dependents: true
     )
-    Api::V3::Readonly::Dashboards::Exporter.refresh(sync: true, skip_dependencies: true)
+    Api::V3::Readonly::NodesPerContextRankedByVolumePerYear.refresh(
+      sync: true, skip_dependents: true
+    )
+    Api::V3::Readonly::Dashboards::Exporter.refresh(sync: true)
   end
 
   describe 'GET search' do

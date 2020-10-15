@@ -7,11 +7,8 @@ RSpec.describe 'Get contexts', type: :request do
   include_context 'api v3 brazil recolor by attributes'
 
   before(:each) do
-    Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::DownloadAttribute.refresh(sync: true, skip_dependencies: true)
-    Api::V3::Readonly::ResizeByAttribute.refresh(sync: true, skip_dependencies: true)
-    Api::V3::Readonly::RecolorByAttribute.refresh(sync: true, skip_dependencies: true)
-    Api::V3::Readonly::Context.refresh(sync: true)
+    Api::V3::Readonly::FlowQualDistinctValues.refresh(sync: true, skip_dependents: true)
+    Api::V3::Readonly::Attribute.refresh(sync: true)
     Api::V3::Readonly::FlowNode.refresh(sync: true)
     Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
     Api::V3::Readonly::NodeWithFlows.refresh(sync: true)

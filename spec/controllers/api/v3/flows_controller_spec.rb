@@ -3,14 +3,13 @@ require 'rails_helper'
 RSpec.describe Api::V3::FlowsController, type: :controller do
   include_context 'api v3 brazil resize by attributes'
   include_context 'api v3 brazil recolor by attributes'
-  include_context 'api v3 brazil flows quants'
-  include_context 'api v3 brazil flows quals'
-  include_context 'api v3 brazil flows inds'
+  include_context 'api v3 brazil soy flow quants'
+  include_context 'api v3 brazil soy flow quals'
+  include_context 'api v3 brazil soy flow inds'
 
   before(:each) do
+    Api::V3::Readonly::FlowQualDistinctValues.refresh(sync: true, skip_dependents: true)
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::ResizeByAttribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::RecolorByAttribute.refresh(sync: true, skip_dependents: true)
     Api::V3::TablePartitions::CreatePartitionsForFlows.new.call
     Api::V3::TablePartitions::CreatePartitionsForFlowQuants.new.call
   end
@@ -52,7 +51,7 @@ RSpec.describe Api::V3::FlowsController, type: :controller do
       context 'when ncont_attribute_id is a qual' do
         it 'returns filtered flows' do
           get :index, params: {
-            context_id: api_v3_context.id,
+            context_id: api_v3_brazil_soy_context.id,
             ncont_attribute_id: ncont_attribute_qual.id,
           }.merge(filter_params)
 
@@ -67,7 +66,7 @@ RSpec.describe Api::V3::FlowsController, type: :controller do
       context 'when ncont_attribute_id is a ind' do
         it 'returns filtered flows' do
           get :index, params: {
-            context_id: api_v3_context.id,
+            context_id: api_v3_brazil_soy_context.id,
             ncont_attribute_id: ncont_attribute_ind.id,
           }.merge(filter_params)
 

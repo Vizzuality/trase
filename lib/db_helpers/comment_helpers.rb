@@ -7,6 +7,10 @@ module CommentHelpers
     ActiveRecord::Base.connection.execute "COMMENT ON MATERIALIZED VIEW #{table} IS '#{comment}'"
   end
 
+  def comment_on_view(table, comment)
+    ActiveRecord::Base.connection.execute "COMMENT ON VIEW #{table} IS '#{comment}'"
+  end
+
   def comment_on_column(table, column, comment)
     ActiveRecord::Base.connection.execute "COMMENT ON COLUMN #{table}.#{column} IS '#{comment}'"
   end

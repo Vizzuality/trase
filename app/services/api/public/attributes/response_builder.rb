@@ -43,7 +43,7 @@ module Api
           Api::Public::Readonly::FlowAttribute.
             select(*flow_attributes_select_clause).
             joins('INNER JOIN contexts ON ' \
-                  'contexts.id = flow_attributes_mv.context_id').
+                  'contexts.id = flow_attributes.context_id').
             joins('INNER JOIN countries ON ' \
                   'countries.id = contexts.country_id').
             joins('INNER JOIN commodities ON ' \
@@ -62,7 +62,7 @@ module Api
               'json_build_object(' \
                 '\'country\', countries.iso2, ' \
                 '\'commodity\', commodities.name, ' \
-                '\'years\', flow_attributes_mv.years' \
+                '\'years\', flow_attributes.years' \
               ')' \
             ') AS availability'
           ]

@@ -45,7 +45,7 @@ RSpec.describe Api::V3::Profiles::TopNodesForContextsList do
   let(:brazil_flow) {
     FactoryBot.create(
       :api_v3_flow,
-      context: api_v3_context,
+      context: api_v3_brazil_soy_context,
       path: [
         FactoryBot.create(:api_v3_node, node_type: api_v3_biome_node_type),
         FactoryBot.create(:api_v3_node, node_type: api_v3_state_node_type),
@@ -102,7 +102,7 @@ RSpec.describe Api::V3::Profiles::TopNodesForContextsList do
 
   let(:top_nodes_single_context) {
     Api::V3::Profiles::TopNodesForContextsList.new(
-      [api_v3_context],
+      [api_v3_brazil_soy_context],
       api_v3_exporter_node_type,
       {year_start: 2015, year_end: 2015}
     )
@@ -110,7 +110,7 @@ RSpec.describe Api::V3::Profiles::TopNodesForContextsList do
 
   let(:top_nodes_multiple_contexts) {
     Api::V3::Profiles::TopNodesForContextsList.new(
-      [api_v3_context, api_v3_paraguay_context],
+      [api_v3_brazil_soy_context, api_v3_paraguay_context],
       api_v3_exporter_node_type,
       {year_start: 2015, year_end: 2015}
     )

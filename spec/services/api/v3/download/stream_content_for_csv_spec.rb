@@ -20,17 +20,16 @@ RSpec.describe Api::V3::Download::StreamContentForCsv do
     )
 
     Api::V3::Readonly::Attribute.refresh(skip_dependencies: true, skip_dependents: true)
-    Api::V3::Readonly::DownloadAttribute.refresh(skip_dependencies: true, skip_dependents: true)
     Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowQuants.new.call
     Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowQuals.new.call
     Api::V3::Readonly::DownloadFlowsStats.refresh(skip_dependencies: true, skip_dependents: true)
   }
 
   let(:flat_download) {
-    Api::V3::Download::FlowDownload.new(api_v3_context, pivot: false)
+    Api::V3::Download::FlowDownload.new(api_v3_brazil_soy_context, pivot: false)
   }
   let(:pivot_download) {
-    Api::V3::Download::FlowDownload.new(api_v3_context, pivot: true)
+    Api::V3::Download::FlowDownload.new(api_v3_brazil_soy_context, pivot: true)
   }
 
   let(:flat_zip_file_path) {

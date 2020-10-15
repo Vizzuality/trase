@@ -11,7 +11,7 @@ module Api
               readonly_resize_by_attributes: :readonly_attribute
             ).where(
               "node_types_by_role->'exporter' IS NOT NULL AND node_types_by_role->'destination' IS NOT NULL"
-            )
+            ).where(is_disabled: false)
         end
       end
     end

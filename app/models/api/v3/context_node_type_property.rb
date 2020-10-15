@@ -11,11 +11,10 @@
 #  role(A grouping which defines in which filtering panel to display nodes)                                                                     :string           not null
 #  prefix(Used to construct the summary sentence of selection criteria)                                                                         :text             not null
 #  geometry_context_node_type_id(Use for geo columns, when geometry is to be taken from another node type (e.g. logistics hub -> municipality)) :integer
-#  is_visible                                                                                                                                   :boolean          default(TRUE), not null
+#  is_visible(When set, show this node type in sankey & dashboards)                                                                             :boolean          default(TRUE), not null
 #
 # Indexes
 #
-#  context_node_type_properties_context_node_type_id_idx  (context_node_type_id)
 #  context_node_type_properties_context_node_type_id_key  (context_node_type_id) UNIQUE
 #
 # Foreign Keys
@@ -23,7 +22,6 @@
 #  fk_rails_...  (context_node_type_id => context_node_types.id) ON DELETE => cascade
 #  fk_rails_...  (geometry_context_node_type_id => context_node_types.id) ON DELETE => nullify
 #
-
 module Api
   module V3
     class ContextNodeTypeProperty < YellowTable
@@ -60,47 +58,11 @@ module Api
       validate :geometry_context_node_type_from_same_context
       validate :geometry_context_node_type_is_geo_column
 
-      after_commit :refresh_dependents
-
       def self.blue_foreign_keys
         [
           {name: :context_node_type_id, table_class: Api::V3::ContextNodeType},
           {name: :geometry_context_node_type_id, table_class: Api::V3::ContextNodeType, nullable: true}
         ]
-      end
-
-      def refresh_dependents
-        Api::V3::Readonly::Context.refresh
-        if previous_changes.key?('is_geo_column')
-          Api::V3::Readonly::NodeWithFlowsOrGeo.refresh_later
-        end
-        return unless previous_changes.key?('role')
-
-        refresh_role_dependents(previous_changes['role'])
-      end
-
-      def refresh_role_dependents(roles = [])
-        return unless roles.any?
-
-        Api::V3::Readonly::NodeWithFlows.refresh_later
-
-        if roles.include?(SOURCE_ROLE)
-          Api::V3::Readonly::Dashboards::Source.refresh_later
-        end
-        # TODO: remove once dashboards_companies_mv retired
-        if (roles & [EXPORTER_ROLE, IMPORTER_ROLE]).any?
-          Api::V3::Readonly::Dashboards::Company.refresh_later
-        end
-        # END TODO
-        if roles.include?(EXPORTER_ROLE)
-          Api::V3::Readonly::Dashboards::Exporter.refresh_later
-        end
-        if roles.include?(IMPORTER_ROLE)
-          Api::V3::Readonly::Dashboards::Importer.refresh_later
-        end
-        if roles.include?(DESTINATION_ROLE)
-          Api::V3::Readonly::Dashboards::Destination.refresh_later
-        end
       end
 
       def self.roles

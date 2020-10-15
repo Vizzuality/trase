@@ -18,7 +18,6 @@
 #  fk_rails_...  (context_id => contexts.id) ON DELETE => cascade
 #  fk_rails_...  (node_type_id => node_types.id) ON DELETE => cascade
 #
-
 module Api
   module V3
     class ContextNodeType < BlueTable

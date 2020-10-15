@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Search', type: :request do
-  include_context 'api v3 brazil flows'
+  include_context 'api v3 brazil soy flows'
 
   describe 'GET /api/v3/nodes/search' do
     before(:each) do

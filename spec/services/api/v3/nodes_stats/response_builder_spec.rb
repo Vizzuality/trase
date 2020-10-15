@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Api::V3::NodesStats::ResponseBuilder do
-  include_context 'api v3 brazil flows quals'
-  include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil soy flow quals'
+  include_context 'api v3 brazil soy flow quants'
 
   before(:each) do
     Api::V3::Readonly::Attribute.refresh
-    Api::V3::Readonly::NodesStats.refresh
+    Api::V3::Readonly::NodeStats.refresh
   end
 
   describe :nodes_stats do
@@ -14,7 +14,7 @@ RSpec.describe Api::V3::NodesStats::ResponseBuilder do
       it 'should return top countries' do
         builder = Api::V3::NodesStats::ResponseBuilder.new(
           nil,
-          [api_v3_context.id],
+          [api_v3_brazil_soy_context.id],
           node_type_id: api_v3_country_node_type.id,
           attribute_id: api_v3_volume.readonly_attribute.id,
           other_attributes_ids: [],
@@ -35,7 +35,7 @@ RSpec.describe Api::V3::NodesStats::ResponseBuilder do
         expect {
           Api::V3::NodesStats::ResponseBuilder.new(
             nil,
-            [api_v3_context.id],
+            [api_v3_brazil_soy_context.id],
             node_type_id: api_v3_country_node_type.id,
             attribute_id: api_v3_volume.readonly_attribute.id,
             other_attributes_ids: [],
@@ -53,7 +53,7 @@ RSpec.describe Api::V3::NodesStats::ResponseBuilder do
         expect {
           Api::V3::NodesStats::ResponseBuilder.new(
             api_v3_soy.id,
-            [api_v3_context.id],
+            [api_v3_brazil_soy_context.id],
             node_type_id: api_v3_country_node_type.id,
             attribute_id: api_v3_volume.readonly_attribute.id,
             other_attributes_ids: [],
@@ -71,7 +71,7 @@ RSpec.describe Api::V3::NodesStats::ResponseBuilder do
         expect {
           Api::V3::NodesStats::ResponseBuilder.new(
             nil,
-            [api_v3_context.id],
+            [api_v3_brazil_soy_context.id],
             node_type_id: api_v3_country_node_type.id,
             attribute_id: api_v3_biome.readonly_attribute.id,
             year_start: 2015,
@@ -88,7 +88,7 @@ RSpec.describe Api::V3::NodesStats::ResponseBuilder do
         expect {
           Api::V3::NodesStats::ResponseBuilder.new(
             nil,
-            [api_v3_context.id],
+            [api_v3_brazil_soy_context.id],
             node_type_id: api_v3_country_node_type.id,
             attribute_id: api_v3_volume.readonly_attribute.id,
             other_attributes_ids: [api_v3_biome.readonly_attribute.id],

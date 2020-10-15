@@ -1,5 +1,4 @@
 # See the README file for info on what's a blue table
-
 module Api
   module V3
     class BlueTable < BaseModel

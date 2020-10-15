@@ -5,16 +5,12 @@ RSpec.describe Api::V3::MapLayers::MapAttributeFilter do
 
   before(:each) do
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::MapAttribute.refresh(sync: true, skip_dependencies: true)
-    Api::V3::Readonly::ContextAttributeProperty.refresh(sync: true, skip_dependencies: true)
-    Api::V3::Readonly::CountryAttributeProperty.refresh(sync: true, skip_dependencies: true)
-    Api::V3::Readonly::CommodityAttributeProperty.refresh(sync: true, skip_dependencies: true)
   end
 
   context 'when single year' do
     it 'returns dual layer buckets as is' do
       filter = Api::V3::MapLayers::MapAttributeFilter.new(
-        api_v3_context, 2015, 2015
+        api_v3_brazil_soy_context, 2015, 2015
       )
       map_attributes = filter.call
       land_conflicts = map_attributes.find { |attr| attr['id'] == api_v3_land_conflicts_map_attribute.id }
@@ -22,7 +18,7 @@ RSpec.describe Api::V3::MapLayers::MapAttributeFilter do
     end
     it 'returns single layer buckets as is' do
       filter = Api::V3::MapLayers::MapAttributeFilter.new(
-        api_v3_context, 2015, 2015
+        api_v3_brazil_soy_context, 2015, 2015
       )
       map_attributes = filter.call
       land_conflicts = map_attributes.find { |attr| attr['id'] == api_v3_land_conflicts_map_attribute.id }
@@ -37,7 +33,7 @@ RSpec.describe Api::V3::MapLayers::MapAttributeFilter do
     }
     it 'returns dual layer buckets as is' do
       filter = Api::V3::MapLayers::MapAttributeFilter.new(
-        api_v3_context, 2014, 2015
+        api_v3_brazil_soy_context, 2014, 2015
       )
       map_attributes = filter.call
       land_conflicts = map_attributes.find { |attr| attr['id'] == api_v3_land_conflicts_map_attribute.id }
@@ -45,7 +41,7 @@ RSpec.describe Api::V3::MapLayers::MapAttributeFilter do
     end
     it 'returns single layer buckets as is' do
       filter = Api::V3::MapLayers::MapAttributeFilter.new(
-        api_v3_context, 2014, 2015
+        api_v3_brazil_soy_context, 2014, 2015
       )
       map_attributes = filter.call
       land_conflicts = map_attributes.find { |attr| attr['id'] == api_v3_land_conflicts_map_attribute.id }

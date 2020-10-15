@@ -7,24 +7,20 @@ RSpec.describe Api::V3::Readonly::NodeWithFlows, type: :model do
   include_context 'api v3 brazil exporter qual values'
   include_context 'api v3 brazil exporter ind values'
   include_context 'api v3 brazil importer quant values'
-  include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil soy flow quants'
 
   before(:each) do
-    Api::V3::Readonly::CommodityAttributeProperty.refresh
-    Api::V3::Readonly::CountryAttributeProperty.refresh
-    Api::V3::Readonly::ContextAttributeProperty.refresh
     Api::V3::Readonly::FlowNode.refresh(sync: true)
     Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
     Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::ChartAttribute.refresh(sync: true, skip_dependencies: true)
   end
 
   describe 'Methods' do
     describe '#refresh_actor_basic_attributes' do
       context 'when there is not associated profile' do
         let!(:node_with_flows) do
-          profile = api_v3_context.profiles.find_by(name: :place)
+          profile = api_v3_brazil_soy_context.profiles.find_by(name: :place)
           Api::V3::Readonly::NodeWithFlows.find_by(profile: profile.name)
         end
 
@@ -45,7 +41,7 @@ RSpec.describe Api::V3::Readonly::NodeWithFlows, type: :model do
 
         let!(:node_with_flows) do
           invalid_profile =
-            api_v3_context.profiles.where(name: :actor).reject do |profile|
+            api_v3_brazil_soy_context.profiles.where(name: :actor).reject do |profile|
               profile.charts.where(identifier: :actor_basic_attributes).any?
             end.first
           Api::V3::Readonly::NodeWithFlows.
@@ -69,7 +65,7 @@ RSpec.describe Api::V3::Readonly::NodeWithFlows, type: :model do
 
         let!(:node_with_flows) do
           invalid_profile =
-            api_v3_context.profiles.where(name: :actor).find do |profile|
+            api_v3_brazil_soy_context.profiles.where(name: :actor).find do |profile|
               unless profile.charts.where(identifier: :actor_basic_attributes).any?
                 return false
               end
@@ -99,7 +95,7 @@ RSpec.describe Api::V3::Readonly::NodeWithFlows, type: :model do
 
         let!(:node_with_flows) do
           invalid_profile =
-            api_v3_context.profiles.where(name: :actor).find do |profile|
+            api_v3_brazil_soy_context.profiles.where(name: :actor).find do |profile|
               unless profile.charts.where(identifier: :actor_basic_attributes).any?
                 return false
               end
@@ -126,7 +122,7 @@ RSpec.describe Api::V3::Readonly::NodeWithFlows, type: :model do
       context 'when it is possible to update actor_basic_attributes' do
         let!(:node_with_flows) do
           valid_profile =
-            api_v3_context.profiles.where(name: :actor).find do |profile|
+            api_v3_brazil_soy_context.profiles.where(name: :actor).find do |profile|
               unless profile.charts.where(identifier: :actor_basic_attributes).any?
                 return false
               end

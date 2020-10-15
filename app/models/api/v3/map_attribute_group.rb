@@ -15,7 +15,6 @@
 #
 #  fk_rails_...  (context_id => contexts.id) ON DELETE => cascade
 #
-
 module Api
   module V3
     class MapAttributeGroup < YellowTable
@@ -25,8 +24,6 @@ module Api
       validates :context, presence: true
       validates :name, presence: true
       validates :position, presence: true, uniqueness: {scope: :context}
-
-      after_commit :refresh_dependents
 
       def self.select_options
         Api::V3::MapAttributeGroup.includes(
@@ -47,10 +44,6 @@ module Api
         [
           {name: :context_id, table_class: Api::V3::Context}
         ]
-      end
-
-      def refresh_dependents
-        Api::V3::Readonly::MapAttribute.refresh
       end
     end
   end

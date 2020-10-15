@@ -10,11 +10,12 @@
 #
 #  quant_values_meta_mv_quant_id_idx  (quant_id) UNIQUE
 #
-
 module Api
   module V3
     module Readonly
       class QuantValuesMeta < Api::Readonly::BaseModel
+        include Api::V3::Readonly::MaterialisedView
+
         self.table_name = 'quant_values_meta_mv'
 
         belongs_to :quant

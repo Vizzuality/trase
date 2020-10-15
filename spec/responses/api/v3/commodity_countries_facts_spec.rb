@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Get commodity countries facts', type: :request do
-  include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil soy flow quants'
   include_context 'api v3 paraguay flows quants'
 
   before(:each) do

@@ -19,7 +19,6 @@
 #  fk_rails_...  (ind_id => inds.id) ON DELETE => cascade ON UPDATE => cascade
 #  fk_rails_...  (node_id => nodes.id) ON DELETE => cascade
 #
-
 module Api
   module V3
     class NodeInd < BlueTable

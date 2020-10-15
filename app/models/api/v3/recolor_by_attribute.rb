@@ -25,7 +25,6 @@
 #
 #  fk_rails_...  (context_id => contexts.id) ON DELETE => cascade
 #
-
 module Api
   module V3
     class RecolorByAttribute < YellowTable
@@ -87,7 +86,6 @@ module Api
                      if: :new_recolor_by_qual_given?
 
       after_create :set_years
-      after_commit :refresh_dependents
 
       stringy_array :years
       manage_associated_attributes [:recolor_by_ind, :recolor_by_qual]
@@ -100,10 +98,6 @@ module Api
       end
 
       private
-
-      def refresh_dependents
-        Api::V3::Readonly::RecolorByAttribute.refresh(skip_dependencies: true)
-      end
 
       def set_years
         FlowAttributeAvailableYearsUpdateWorker.perform_async(
