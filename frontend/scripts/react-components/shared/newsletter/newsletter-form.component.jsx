@@ -12,7 +12,10 @@ class NewsletterForm extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      email: ''
+      email: '',
+      firstname: '',
+      lastname: '',
+      organisation: ''
     };
     this.onClickSubmit = this.onClickSubmit.bind(this);
     this.onFormInput = this.onFormInput.bind(this);
@@ -26,13 +29,12 @@ class NewsletterForm extends React.PureComponent {
   onClickSubmit(e) {
     e.preventDefault();
     if (this.form.checkValidity()) {
-      this.props.submitForm(this.state.email);
+      this.props.submitForm(this.state);
     }
   }
 
-  onFormInput(e) {
-    const email = e.target.value;
-    this.setState({ email });
+  onFormInput(e, type) {
+    this.setState({ [type]: e.target.value });
   }
 
   getFormRef(ref) {
@@ -41,7 +43,7 @@ class NewsletterForm extends React.PureComponent {
 
   render() {
     const { message } = this.props;
-    const { email } = this.state;
+    const { email, firstname, lastname, organisation } = this.state;
     return (
       <div className={cx('c-newsletter row align-middle align-right', { sent: message })}>
         <form ref={this.getFormRef} className="column small-12 medium-6 large-4">
@@ -50,13 +52,45 @@ class NewsletterForm extends React.PureComponent {
           </label>
           <div className="newsletter-input-container">
             <input
-              onInput={this.onFormInput}
+              onInput={e => this.onFormInput(e, 'firstname')}
+              type="text"
+              name="firstname"
+              placeholder="firstname"
+              id="newsletter-firstname"
+              required
+              className="newsletter-input"
+            />
+          </div>
+          <div className="newsletter-input-container">
+            <input
+              onInput={e => this.onFormInput(e, 'lastname')}
+              type="text"
+              name="lastname"
+              placeholder="lastname"
+              id="newsletter-lastname"
+              required
+              className="newsletter-input"
+            />
+          </div>
+          <div className="newsletter-input-container">
+            <input
+              onInput={e => this.onFormInput(e, 'organisation')}
+              type="text"
+              name="organisation"
+              placeholder="(organisation)"
+              id="newsletter-organisation"
+              className="newsletter-input"
+            />
+          </div>
+          <div className="newsletter-input-container">
+            <input
+              onInput={e => this.onFormInput(e, 'email')}
               type="email"
               name="email"
               placeholder="Sign up here to receive updates"
               id="newsletter-email"
               required
-              className="newsletter-email"
+              className="newsletter-input"
             />
             <Button onClick={this.onClickSubmit} color="charcoal" weight="bold">
               Subscribe

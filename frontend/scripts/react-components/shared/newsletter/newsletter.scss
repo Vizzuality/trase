@@ -6,7 +6,6 @@
 
   @media only screen and (min-width: $breakpoint-foundation-small) {
     &.sent {
-      transform: translateY(calc(50% - 8px));
       margin-bottom: 0px;
     }
   }
@@ -30,7 +29,6 @@
 
   .newsletter-label {
     position: absolute;
-    top: 0;
     font-family: $font-family-2;
     font-size: $font-size-xx-regular;
     color: $charcoal-grey;
@@ -46,8 +44,9 @@
     align-items: center;
     justify-content: space-between;
     height: 40px;
+    margin-bottom: 5px;
 
-    > .newsletter-email {
+    .newsletter-input {
       flex: auto;
       height: 100%;
       font-family: $font-family-1;
