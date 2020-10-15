@@ -12,9 +12,6 @@ import cx from 'classnames';
 import 'scripts/react-components/home/homepage.scss';
 
 const WorldMap = React.lazy(() => import('../shared/world-map/world-map.container'));
-const NewsletterForm = React.lazy(() =>
-  import('react-components/shared/newsletter/newsletter.container')
-);
 
 const getConsolidatedInsights = (insights, blogs) =>
   sortBy([...insights, ...blogs], post => -new Date(post.date).getTime());
@@ -84,9 +81,6 @@ const Home = props => {
 
   const sliders = (
     <div className="sliders -banner">
-      <Suspense fallback={null}>
-        <NewsletterForm />
-      </Suspense>
       {CONSOLIDATE_INSIGHTS === false && (
         <>
           <SliderSection name="News and Blogs" slides={blogPosts} />

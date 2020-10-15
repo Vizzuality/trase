@@ -19,6 +19,10 @@ const pageContent = {
   )
 };
 
+const NewsletterForm = React.lazy(() =>
+  import('react-components/shared/newsletter/newsletter.container')
+);
+
 function App() {
   const { routesMap, type, query } = useSelector(state => state.location);
   const { Component, layout, footer = true, feedback = true } = routesMap[type];
@@ -41,6 +45,11 @@ function App() {
         <CookieBanner />
         {feedback && <Feedback />}
       </main>
+
+      <Suspense fallback={null}>
+        <NewsletterForm />
+      </Suspense>
+
       {footer && (
         <footer>
           <Footer />
