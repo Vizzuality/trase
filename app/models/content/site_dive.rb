@@ -7,7 +7,6 @@
 #  page_url    :text             not null
 #  description :text             not null
 #
-
 module Content
   class SiteDive < Content::Base
     validates :title, presence: true

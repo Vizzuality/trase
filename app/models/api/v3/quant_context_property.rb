@@ -17,7 +17,6 @@
 #  fk_rails_...  (context_id => contexts.id) ON DELETE => cascade ON UPDATE => cascade
 #  fk_rails_...  (quant_id => quants.id) ON DELETE => cascade ON UPDATE => cascade
 #
-
 module Api
   module V3
     class QuantContextProperty < YellowTable
@@ -28,17 +27,11 @@ module Api
       validates :quant, presence: true, uniqueness: {scope: :context}
       validates :tooltip_text, presence: true
 
-      after_commit :refresh_dependents
-
       def self.blue_foreign_keys
         [
           {name: :quant_id, table_class: Api::V3::Quant},
           {name: :context_id, table_class: Api::V3::Context}
         ]
-      end
-
-      def refresh_dependents
-        Api::V3::Readonly::ContextAttributeProperty.refresh
       end
     end
   end

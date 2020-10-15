@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe 'Nodes stats', type: :request do
-  include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil soy flow quants'
 
   before(:each) do
     Api::V3::Readonly::Attribute.refresh
-    Api::V3::Readonly::NodesStats.refresh
+    Api::V3::Readonly::NodeStats.refresh
   end
 
   describe 'GET /api/v3/nodes_stats' do
@@ -16,7 +16,7 @@ RSpec.describe 'Nodes stats', type: :request do
           end_year: 2019,
           other_attributes_ids: api_v3_deforestation_v2.readonly_attribute.id,
           column_id: api_v3_country_node_type.id,
-          contexts_ids: api_v3_context.id.to_s
+          contexts_ids: api_v3_brazil_soy_context.id.to_s
         }
 
         expect(@response).to have_http_status(:ok)
@@ -40,7 +40,7 @@ RSpec.describe 'Nodes stats', type: :request do
           attribute_id: api_v3_volume.readonly_attribute.id,
           other_attributes_ids: api_v3_deforestation_v2.readonly_attribute.id,
           column_id: api_v3_country_node_type.id,
-          contexts_ids: api_v3_context.id.to_s
+          contexts_ids: api_v3_brazil_soy_context.id.to_s
         }
 
         expect(@response).to have_http_status(:ok)

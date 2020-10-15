@@ -6,7 +6,6 @@
 #  dashboard_template_id :integer
 #  country_id            :integer
 #
-
 module Api
   module V3
     class DashboardTemplateCountry < YellowTable

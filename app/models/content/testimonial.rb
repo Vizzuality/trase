@@ -11,7 +11,6 @@
 #  image_file_size    :integer
 #  image_updated_at   :datetime
 #
-
 module Content
   class Testimonial < Content::Base
     validates :quote, presence: true

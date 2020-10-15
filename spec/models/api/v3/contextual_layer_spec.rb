@@ -10,7 +10,7 @@ RSpec.describe Api::V3::ContextualLayer, type: :model do
     let(:duplicate) {
       FactoryBot.build(
         :api_v3_contextual_layer,
-        context: api_v3_context,
+        context: api_v3_brazil_soy_context,
         identifier: 'landcover'
       )
     }

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Api::Public::CommoditiesController, type: :controller do
-  include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil soy flow quants'
   include_context 'api v3 brazil beef flows'
 
   describe 'GET index' do

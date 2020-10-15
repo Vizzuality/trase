@@ -1,10 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe 'Nodes sources', type: :request do
-  include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil soy flow quants'
 
   before(:each) do
-    Api::V3::Readonly::Context.refresh(sync: true)
     Api::V3::Readonly::FlowNode.refresh(sync: true)
     Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
     Api::V3::Readonly::NodeWithFlows.refresh(sync: true)

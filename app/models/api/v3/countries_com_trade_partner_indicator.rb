@@ -16,7 +16,7 @@
 #
 module Api
   module V3
-    class CountriesComTradePartnerIndicator < YellowTable
+    class CountriesComTradePartnerIndicator < Api::V3::BaseModel
       belongs_to :commodity, optional: false
 
       validates :iso3, presence: true

@@ -17,7 +17,6 @@
 #  fk_rails_...  (context_id => contexts.id) ON DELETE => cascade ON UPDATE => cascade
 #  fk_rails_...  (ind_id => inds.id) ON DELETE => cascade ON UPDATE => cascade
 #
-
 module Api
   module V3
     class IndContextProperty < YellowTable
@@ -38,7 +37,6 @@ module Api
       end
 
       def refresh_dependents
-        Api::V3::Readonly::ContextAttributeProperty.refresh
         refresh_actor_basic_attributes
       end
 
@@ -55,16 +53,14 @@ module Api
         update_node_with_flows_actor_basic_attributes(context_id, ind_id)
       end
 
-      def update_node_with_flows_actor_basic_attributes(context_id, ind_id)
-        context = Api::V3::Context.find(context_id)
-        node_inds = Api::V3::NodeInd.where(ind_id: ind_id)
-        nodes = node_inds.map(&:node)
-        node_with_flows = Api::V3::Readonly::NodeWithFlows.
+      def update_node_with_flows_actor_basic_attributes(context_id, _ind_id)
+        nodes_ids = Api::V3::Readonly::NodeWithFlows.
+          where(context_id: context_id).
           without_unknowns.
           without_domestic.
-          where(context_id: context.id, id: nodes.map(&:id))
-        NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
-          node_with_flows.map(&:id)
+          pluck(:id)
+        NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
+          nodes_ids.uniq
         )
       end
     end

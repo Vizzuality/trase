@@ -134,9 +134,9 @@ export const getToolBar = createSelector(
     getViewModeFilter,
     getRecolorByFilter,
     getResizeByFilter,
-    getVersioningSelected,
     getLogisticsMapHubsFilter,
-    getLogisticsMapInspectionLevelFilter
+    getLogisticsMapInspectionLevelFilter,
+    getVersioningSelected
   ],
   (
     page,
@@ -144,9 +144,9 @@ export const getToolBar = createSelector(
     viewModeFilter,
     recolorByFilter,
     resizeByFilter,
-    versionFilter,
     logisticsMapHubs,
-    logisticsMapInspectionLevel
+    logisticsMapInspectionLevel,
+    versionFilter
   ) => {
     switch (page) {
       case 'tool': {

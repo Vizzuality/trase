@@ -4,6 +4,10 @@ import cx from 'classnames';
 import Tabs from 'react-components/shared/tabs';
 import Text from 'react-components/shared/text/text.component';
 import _range from 'lodash/range';
+import Tooltip from 'react-components/shared/help-tooltip/help-tooltip.component';
+
+import { translateText } from 'utils/transifex';
+
 import {
   useTimelineReducer,
   useSelectedYearsPropsState,
@@ -52,8 +56,7 @@ function getClassName(year, state) {
 }
 
 function Timeline(props) {
-  const { years, showBackground, visibleTabs, disabled } = props;
-
+  const { years, subNationalYears, showBackground, visibleTabs, disabled } = props;
   const [state, dispatch] = useTimelineReducer(props);
   useSelectedYearsPropsState(props, state, dispatch);
   useUpdateSelectedYears(props, state);
@@ -134,11 +137,16 @@ function Timeline(props) {
           {years.map((year, i) => {
             const isActive = year === state.start || year === state.end;
             const statusClassName = getClassName(year, state);
+            const isSubNational = subNationalYears.indexOf(year) > -1;
             return (
               <li
                 ref={i === 0 ? refs.item : undefined}
                 key={year}
-                className={cx('timeline-year-item', statusClassName)}
+                className={cx({
+                  'timeline-year-item': true,
+                  '-sub-national': isSubNational,
+                  [statusClassName]: true
+                })}
               >
                 <button
                   disabled={disabled || (!state.range && isActive)}
@@ -148,9 +156,20 @@ function Timeline(props) {
                   onClick={() => dispatch({ type: 'select', payload: year })}
                   data-test={`timeline-year-button-${year}`}
                 >
-                  <Text as="span" weight="bold" color={statusClassName ? 'white' : 'grey'}>
-                    {year}
-                  </Text>
+                  {!isSubNational && <Tooltip
+                    showInfoIcon={false}
+                    text={translateText('This data is currently only available at a national scale.')}
+                    className="size-sm"
+                  >
+                    <Text as="span" weight="bold" color={statusClassName ? 'white' : 'grey'}>
+                      {year}
+                    </Text>
+                  </Tooltip>}
+                  {isSubNational && (
+                    <Text as="span" weight="bold" color={statusClassName ? 'white' : 'grey'}>
+                      {year}
+                    </Text>
+                  )}
                 </button>
               </li>
             );
@@ -170,6 +189,7 @@ Timeline.propTypes = {
   visibleTabs: PropTypes.array,
   showBackground: PropTypes.bool,
   years: PropTypes.array.isRequired,
+  subNationalYears: PropTypes.array.isRequired,
   disabled: PropTypes.bool,
   selectYears: PropTypes.func.isRequired, // eslint-disable-line
   selectedYears: PropTypes.array.isRequired // eslint-disable-line

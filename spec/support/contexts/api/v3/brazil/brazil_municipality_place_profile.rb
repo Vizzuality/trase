@@ -43,13 +43,13 @@ shared_context 'api v3 brazil municipality place profile' do
   let!(:api_v3_place_basic_attributes_area_property) do
     quant_context_property = Api::V3::QuantContextProperty.
       where(
-        context_id: api_v3_context.id,
+        context_id: api_v3_brazil_soy_context.id,
         quant_id: api_v3_area.id
       ).first
     unless quant_context_property
       quant_context_property = FactoryBot.create(
         :api_v3_quant_context_property,
-        context: api_v3_context,
+        context: api_v3_brazil_soy_context,
         quant: api_v3_area,
         tooltip_text: 'Tooltip context quant translation'
       )
@@ -106,13 +106,13 @@ shared_context 'api v3 brazil municipality place profile' do
   let!(:api_v3_place_basic_attributes_commodity_production_property) do
     quant_context_property = Api::V3::QuantContextProperty.
       where(
-        context_id: api_v3_context.id,
+        context_id: api_v3_brazil_soy_context.id,
         quant_id: api_v3_soy_tn.id
       ).first
     unless quant_context_property
       quant_context_property = FactoryBot.create(
         :api_v3_quant_context_property,
-        context: api_v3_context,
+        context: api_v3_brazil_soy_context,
         quant: api_v3_soy_tn,
         tooltip_text: 'Tooltip context quant translation'
       )

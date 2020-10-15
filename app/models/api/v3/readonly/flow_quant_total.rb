@@ -13,13 +13,14 @@
 #
 #  flow_quant_totals_mv_commodity_id_country_id_quant_id_idx  (commodity_id,country_id,quant_id) UNIQUE
 #
-
 # This materialised view does not depend on any yellow tables.
 # It should only be refreshed once per data import.
 module Api
   module V3
     module Readonly
       class FlowQuantTotal < Api::Readonly::BaseModel
+        include Api::V3::Readonly::MaterialisedView
+
         self.table_name = 'flow_quant_totals_mv'
 
         scope :with_attribute_id, -> {

@@ -4,16 +4,21 @@ import {
   SET_NODE_ATTRIBUTES,
   SELECT_BASEMAP,
   SELECT_CONTEXTUAL_LAYERS,
+  SELECT_LOGISTIC_LAYERS,
   CHANGE_LAYOUT,
   SET_SANKEY_SIZE,
   SELECT_UNIT_LAYERS,
-  TOGGLE_MAP_DIMENSION
+  TOGGLE_MAP_DIMENSION,
+  RESET_MAP_DIMENSIONS
 } from 'react-components/tool/tool.actions';
 import {
   TOOL_LAYERS__SET_ACTIVE_MODAL,
   TOOL_LAYERS__SAVE_MAP_VIEW,
   TOOL_LAYERS__SET_LINKED_GEOIDS,
-  TOOL_LAYERS__SET_MAP_DIMENSIONS
+  TOOL_LAYERS__SET_MAP_DIMENSIONS,
+  TOOL_LAYERS__SET_UNIT_LAYERS,
+  TOOL_LAYERS__SET_UNIT_LAYER_DATA,
+  TOOL_LAYERS__SET_INSPECTION_LEVEL
 } from 'react-components/tool-layers/tool-layers.actions';
 import { TOOL_LINKS__HIGHLIGHT_NODE } from 'react-components/tool-links/tool-links.actions';
 import { SET_CONTEXT } from 'app/app.actions';
@@ -114,6 +119,11 @@ const toolLayersReducer = {
       draft.selectedMapContextualLayers = action.payload.contextualLayers;
     });
   },
+  [SELECT_LOGISTIC_LAYERS](state, action) {
+    return immer(state, draft => {
+      draft.selectedLogisticLayers = action.payload.logisticLayers;
+    });
+  },
   [SELECT_BASEMAP](state, action) {
     return immer(state, draft => {
       draft.selectedBasemap = action.payload.selectedBasemap;
@@ -151,6 +161,21 @@ const toolLayersReducer = {
       draft.activeModal = action.payload.activeModal;
     });
   },
+  [TOOL_LAYERS__SET_UNIT_LAYERS](state, action) {
+    return immer(state, draft => {
+      draft.data.mapUnitLayers = action.payload.layers;
+    });
+  },
+  [TOOL_LAYERS__SET_UNIT_LAYER_DATA](state, action) {
+    return immer(state, draft => {
+      draft.data.mapUnitLayersData = action.payload.data;
+    });
+  },
+  [TOOL_LAYERS__SET_INSPECTION_LEVEL](state, action) {
+    return immer(state, draft => {
+      draft.inspectionLevel = action.payload.inspectionLevel;
+    });
+  },
   [TOGGLE_MAP_DIMENSION](state, action) {
     return immer(state, draft => {
       if (!draft.selectedMapDimensions) {
@@ -171,6 +196,11 @@ const toolLayersReducer = {
         draft.selectedMapDimensions[uidIndex] = null;
       }
     });
+  },
+  [RESET_MAP_DIMENSIONS](state) {
+    return immer(state, draft => {
+      draft.selectedMapDimensions = toolLayersInitialState.selectedMapDimensions;
+    });
   }
 };
 
@@ -179,7 +209,8 @@ const toolLayersReducerTypes = PropTypes => ({
     mapDimensions: PropTypes.object.isRequired,
     mapVectorData: PropTypes.array,
     mapDimensionsGroups: PropTypes.array.isRequired,
-    mapContextualLayers: PropTypes.object.isRequired
+    mapContextualLayers: PropTypes.object.isRequired,
+    mapUnitLayers: PropTypes.arrayOf(PropTypes.object)
   }).isRequired,
   highlightedNodeCoordinates: PropTypes.object,
   toolLayout: PropTypes.number,

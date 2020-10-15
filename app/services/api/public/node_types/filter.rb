@@ -27,10 +27,10 @@ module Api
               :node_type,
               :context_node_type_property
             ).
-            joins('JOIN contexts_mv ON context_id = contexts_mv.id').
+            joins('JOIN contexts_v ON context_id = contexts_v.id').
             select([
-              'contexts_mv.iso2 AS country',
-              'contexts_mv.commodity_name AS commodity',
+              'contexts_v.iso2 AS country',
+              'contexts_v.commodity_name AS commodity',
               "JSONB_AGG(
                 JSONB_BUILD_OBJECT(
                   'name', node_types.name,
@@ -40,7 +40,7 @@ module Api
               ) AS node_types"
             ]).
             where('context_node_type_properties.is_visible').
-            group('contexts_mv.iso2, contexts_mv.commodity_name')
+            group('contexts_v.iso2, contexts_v.commodity_name')
         end
 
         def apply_filters
@@ -51,13 +51,13 @@ module Api
         def apply_country_filter
           return unless @country
 
-          @query = @query.where('contexts_mv.iso2' => @country)
+          @query = @query.where('contexts_v.iso2' => @country)
         end
 
         def apply_commodity_filter
           return unless @commodity
 
-          @query = @query.where('contexts_mv.commodity_name' => @commodity)
+          @query = @query.where('contexts_v.commodity_name' => @commodity)
         end
       end
     end

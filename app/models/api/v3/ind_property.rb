@@ -16,7 +16,6 @@
 #
 #  fk_rails_...  (ind_id => inds.id) ON DELETE => cascade ON UPDATE => cascade
 #
-
 module Api
   module V3
     class IndProperty < YellowTable
@@ -33,16 +32,10 @@ module Api
       validates :display_name, presence: true
       validates :unit_type, presence: true, inclusion: {in: UNIT_TYPE}
 
-      after_commit :refresh_dependents
-
       def self.blue_foreign_keys
         [
           {name: :ind_id, table_class: Api::V3::Ind}
         ]
-      end
-
-      def refresh_dependents
-        Api::V3::Readonly::Attribute.refresh
       end
     end
   end

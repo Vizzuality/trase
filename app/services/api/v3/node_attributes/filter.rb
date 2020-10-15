@@ -35,7 +35,7 @@ module Api
 cnt.node_type_id = nodes.node_type_id").
             joins("JOIN map_#{attribute_type}s maa ON \
 maa.#{attribute_type}_id = #{node_values}.#{attribute_type}_id").
-            joins('JOIN map_attributes_mv ma ON maa.map_attribute_id = ma.id').
+            joins('JOIN map_attributes_v ma ON maa.map_attribute_id = ma.id').
             where('cnt.context_id' => @context.id).
             where(
               "#{node_values}.year IN (?) OR #{node_values}.year IS NULL",

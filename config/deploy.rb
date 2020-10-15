@@ -33,7 +33,7 @@ append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'public/syst
 # set :local_user, -> { `git config user.name`.chomp }
 
 # Default value for keep_releases is 5
-# set :keep_releases, 5
+set :keep_releases, 3
 
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
@@ -46,6 +46,17 @@ set :init_system, :systemd
 namespace :deploy do
   after :finishing, 'deploy:cleanup'
   after 'deploy:publishing', 'deploy:restart'
+
+  desc 'Update SQL schema comments after running migrations'
+  task :schema_comments do
+    on roles(:db) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, 'db:doc:sql'
+        end
+      end
+    end
+  end
 end
 
 namespace :sidekiq do
@@ -64,6 +75,7 @@ end
 after 'deploy:starting', 'sidekiq:quiet'
 after 'deploy:reverted', 'sidekiq:restart'
 after 'deploy:published', 'sidekiq:restart'
+after 'deploy:migrate', 'deploy:schema_comments'
 after 'sidekiq:restart', 'downloads:refresh'
 # after 'deploy:updated', 'newrelic:notice_deployment'
 

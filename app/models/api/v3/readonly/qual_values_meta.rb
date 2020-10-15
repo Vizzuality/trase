@@ -10,11 +10,12 @@
 #
 #  qual_values_meta_mv_qual_id_idx  (qual_id) UNIQUE
 #
-
 module Api
   module V3
     module Readonly
       class QualValuesMeta < Api::Readonly::BaseModel
+        include Api::V3::Readonly::MaterialisedView
+
         self.table_name = 'qual_values_meta_mv'
 
         belongs_to :qual

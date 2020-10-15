@@ -7,8 +7,8 @@ import 'leaflet-utfgrid/L.UTFGrid-min';
 import MapComponent, { MapControls, ZoomControl, MapPopup } from 'vizzuality-components/dist/map';
 import WRIIcons from 'vizzuality-components/dist/icons';
 
-import { Layer, LayerManager } from 'layer-manager/dist/components';
-import { PluginLeaflet } from 'layer-manager';
+import { Layer, LayerManager } from 'layer-manager-legacy/dist/components';
+import { PluginLeaflet } from 'layer-manager-legacy';
 import { BASEMAPS, BREAKPOINTS } from 'constants';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
 import SimpleModal from 'react-components/shared/simple-modal/simple-modal.component';
@@ -122,7 +122,6 @@ function LogisticsMap(props) {
     </div>
   );
 }
-
 LogisticsMap.propTypes = {
   layers: PropTypes.array,
   tooltips: PropTypes.object,
@@ -145,5 +144,4 @@ LogisticsMap.propTypes = {
   setLayerActive: PropTypes.func.isRequired,
   mapPopUp: PropTypes.object
 };
-
 export default LogisticsMap;

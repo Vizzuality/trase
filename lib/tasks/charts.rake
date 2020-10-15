@@ -1,14 +1,18 @@
 namespace :charts do
   def without_chart_callbacks
-    Api::V3::Profile.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::Chart.skip_callback(:commit, :after, :refresh_dependents)
-    Api::V3::ChartAttribute.skip_callback(:commit, :after, :refresh_dependents)
+    Api::V3::RefreshDependencies.instance.classes_with_dependents.each do |class_with_dependents|
+      class_with_dependents.skip_callback(:create, :after, :refresh_dependents_after_create)
+      class_with_dependents.skip_callback(:update, :after, :refresh_dependents_after_update)
+      class_with_dependents.skip_callback(:destroy, :after, :refresh_dependents_after_destroy)
+    end
 
     yield
 
-    Api::V3::Profile.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::Chart.set_callback(:commit, :after, :refresh_dependents)
-    Api::V3::ChartAttribute.set_callback(:commit, :after, :refresh_dependents)
+    Api::V3::RefreshDependencies.instance.classes_with_dependents.each do |class_with_dependents|
+      class_with_dependents.set_callback(:create, :after, :refresh_dependents_after_create)
+      class_with_dependents.set_callback(:update, :after, :refresh_dependents_after_update)
+      class_with_dependents.set_callback(:destroy, :after, :refresh_dependents_after_destroy)
+    end
   end
 
   task reload: :environment do
@@ -97,7 +101,6 @@ namespace :charts do
           )
         end
       end
-      Api::V3::Readonly::ChartAttribute.refresh
     end
   end
 

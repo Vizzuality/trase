@@ -8,7 +8,8 @@ import {
   SET_SANKEY_SIZE,
   SELECT_UNIT_LAYERS,
   selectContextualLayers,
-  TOGGLE_MAP_DIMENSION
+  TOGGLE_MAP_DIMENSION,
+  RESET_MAP_DIMENSIONS
 } from 'react-components/tool/tool.actions';
 import {
   saveMapView,
@@ -235,5 +236,15 @@ describe(TOGGLE_MAP_DIMENSION, () => {
     };
     const newState = reducer(initialState, action);
     expect(newState).toMatchSnapshot();
+  });
+});
+
+describe(RESET_MAP_DIMENSIONS, () => {
+  it('Resets map dimensions', () => {
+    const action = {
+      type: RESET_MAP_DIMENSIONS
+    };
+    const newState = reducer(initialState, action);
+    expect(newState.selectedMapDimensions).toBe(null);
   });
 });

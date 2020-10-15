@@ -2,12 +2,11 @@ require 'rails_helper'
 
 RSpec.describe 'Flows', type: :request do
   include_context 'api v3 brazil resize by attributes'
-  include_context 'api v3 brazil flows'
-  include_context 'api v3 brazil flows quants'
+  include_context 'api v3 brazil soy flows'
+  include_context 'api v3 brazil soy flow quants'
 
   before(:each) do
     Api::V3::Readonly::Attribute.refresh(sync: true, skip_dependents: true)
-    Api::V3::Readonly::ResizeByAttribute.refresh(sync: true, skip_dependents: true)
     Api::V3::TablePartitions::CreatePartitionsForFlows.new.call
     Api::V3::TablePartitions::CreatePartitionsForFlowQuants.new.call
   end
@@ -31,7 +30,7 @@ RSpec.describe 'Flows', type: :request do
       }
     }
     it 'requires include_columns' do
-      get "/api/v3/contexts/#{api_v3_context.id}/flows",
+      get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/flows",
           params: filter_params.except(:include_columns)
       expect(@response).to have_http_status(:bad_request)
       expect(JSON.parse(@response.body)).to eq(
@@ -39,7 +38,7 @@ RSpec.describe 'Flows', type: :request do
       )
     end
     it 'requires flow_quant' do
-      get "/api/v3/contexts/#{api_v3_context.id}/flows",
+      get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/flows",
           params: filter_params.except(:cont_attribute_id)
       expect(@response).to have_http_status(:bad_request)
       expect(JSON.parse(@response.body)).to eq(
@@ -47,7 +46,7 @@ RSpec.describe 'Flows', type: :request do
       )
     end
     it 'requires start_year' do
-      get "/api/v3/contexts/#{api_v3_context.id}/flows",
+      get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/flows",
           params: filter_params.except(:start_year)
       expect(@response).to have_http_status(:bad_request)
       expect(JSON.parse(@response.body)).to eq(
@@ -55,7 +54,7 @@ RSpec.describe 'Flows', type: :request do
       )
     end
     it 'has the correct response structure' do
-      get "/api/v3/contexts/#{api_v3_context.id}/flows",
+      get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/flows",
           params: filter_params
       expect(@response).to have_http_status(:ok)
       expect(@response).to match_response_schema('flows')

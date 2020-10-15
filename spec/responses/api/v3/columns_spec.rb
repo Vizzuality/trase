@@ -6,7 +6,7 @@ RSpec.describe 'Columns', type: :request do
 
   describe 'GET /api/v3/contexts/:context_id/columns' do
     it 'has the correct response structure' do
-      get "/api/v3/contexts/#{api_v3_context.id}/columns"
+      get "/api/v3/contexts/#{api_v3_brazil_soy_context.id}/columns"
 
       expect(@response).to have_http_status(:ok)
       expect(@response).to match_response_schema('v3_columns')

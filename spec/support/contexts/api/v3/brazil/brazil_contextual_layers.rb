@@ -1,12 +1,12 @@
 shared_context 'api v3 brazil contextual layers' do
-  include_context 'api v3 brazil contexts'
+  include_context 'api v3 brazil soy context'
 
   let!(:api_v3_contextual_layer_landcover) do
     contextual_layer = Api::V3::ContextualLayer.find_by_identifier('landcover')
     unless contextual_layer
       contextual_layer = FactoryBot.create(
         :api_v3_contextual_layer,
-        context_id: api_v3_context.id,
+        context_id: api_v3_brazil_soy_context.id,
         title: 'Land cover',
         identifier: 'landcover',
         tooltip_text: 'Land cover',
@@ -28,7 +28,7 @@ shared_context 'api v3 brazil contextual layers' do
     unless contextual_layer
       contextual_layer = FactoryBot.create(
         :api_v3_contextual_layer,
-        context_id: api_v3_context.id,
+        context_id: api_v3_brazil_soy_context.id,
         title: 'Brazil biomes',
         identifier: 'brazil_biomes',
         tooltip_text: 'Brazil biomes',

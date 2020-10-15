@@ -11,14 +11,13 @@ RSpec.describe Api::V3::Download::FlowDownloadFlatQuery do
 
   before(:each) do
     Api::V3::Readonly::Attribute.refresh(skip_dependencies: true, skip_dependents: true)
-    Api::V3::Readonly::DownloadAttribute.refresh(skip_dependencies: true, skip_dependents: true)
     Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowQuants.new.call
     Api::V3::TablePartitions::CreatePartitionsForDenormalisedFlowQuals.new.call
     Api::V3::Readonly::DownloadFlowsStats.refresh(skip_dependencies: true, skip_dependents: true)
   end
 
   let(:query_builder) {
-    Api::V3::Download::FlowDownloadQueryBuilder.new(api_v3_context, {})
+    Api::V3::Download::FlowDownloadQueryBuilder.new(api_v3_brazil_soy_context, {})
   }
 
   let(:flat_query) {

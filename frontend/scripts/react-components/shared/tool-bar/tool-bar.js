@@ -11,6 +11,7 @@ const getSetActiveModal = () =>
   import('../../tool-layers/tool-layers.register').then(
     module => module.toolLayersActions.setActiveModal
   );
+
 const getSetLogisticsMapActiveModal = () =>
   import('../../logistics-map/logistics-map.register').then(
     module => module.logisticsMapActions.setLogisticsMapActiveModal
