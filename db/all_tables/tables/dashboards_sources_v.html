@@ -188,6 +188,23 @@
                                     <td></td>
                                 </tr>
                                 <tr>
+                                    <td><span id="context_node_type_id">context_node_type_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
                                     <td><span id="year">year</span></td>
                                     <td>int2</td>
                                     <td>5</td>
@@ -303,7 +320,7 @@
                             </div>
                         </div>
                         <div class="box-body">
-                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT nodes.id,&#10;    nodes.node_type_id,&#10;    nodes.context_id,&#10;    nodes.country_id,&#10;    nodes.commodity_id,&#10;    nodes.year,&#10;    nodes.name,&#10;    nodes.name_tsvector,&#10;    nodes.node_type,&#10;    profiles.name AS profile,&#10;    ranked_nodes.rank_by_year&#10;   FROM ((((nodes_with_flows_per_year nodes&#10;     JOIN node_properties node_props ON ((nodes.id = node_props.node_id)))&#10;     JOIN context_node_type_properties cnt_props ON ((nodes.context_node_type_id = cnt_props.context_node_type_id)))&#10;     LEFT JOIN profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))&#10;     JOIN nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((nodes.context_id = ranked_nodes.context_id) AND (nodes.id = ranked_nodes.node_id))))&#10;  WHERE (((cnt_props.role)::text = &#39;source&#39;::text) AND (NOT nodes.is_unknown) AND (NOT node_props.is_domestic_consumption) AND (upper(nodes.name) &lt;&gt; &#39;OTHER&#39;::text));</textarea>
+                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT nodes.id,&#10;    nodes.node_type_id,&#10;    nodes.context_id,&#10;    nodes.country_id,&#10;    nodes.commodity_id,&#10;    nodes.context_node_type_id,&#10;    nodes.year,&#10;    nodes.name,&#10;    nodes.name_tsvector,&#10;    nodes.node_type,&#10;    profiles.name AS profile,&#10;    ranked_nodes.rank_by_year&#10;   FROM ((((nodes_with_flows_per_year nodes&#10;     JOIN node_properties node_props ON ((nodes.id = node_props.node_id)))&#10;     JOIN context_node_type_properties cnt_props ON ((nodes.context_node_type_id = cnt_props.context_node_type_id)))&#10;     LEFT JOIN profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))&#10;     JOIN nodes_per_context_ranked_by_volume_per_year_mv ranked_nodes ON (((nodes.context_id = ranked_nodes.context_id) AND (nodes.id = ranked_nodes.node_id))))&#10;  WHERE (((cnt_props.role)::text = &#39;source&#39;::text) AND cnt_props.is_visible AND (NOT nodes.is_unknown) AND (NOT node_props.is_domestic_consumption) AND (upper(nodes.name) &lt;&gt; &#39;OTHER&#39;::text));</textarea>
                             <div style="padding-top: 5px;"><hr></div>
                             <div class="box box-solid">
                                 <div class="box-header with-border">

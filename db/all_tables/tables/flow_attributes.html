@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>country_attribute_properties_mv - trase_test Database</title>
+        <title>flow_attributes - trase_test Database</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
@@ -73,20 +73,7 @@
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
-                    <h1>country_attribute_properties_mv</h1><p><span id="recordNumber">0</span> rows</p><br />
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <i class="fa fa-file-text-o"></i>
-                            <h3 id="Description" class="box-title">Description</h3>
-                            <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                            </div>
-                        </div><!-- /.box-header -->
-                        <div class="box-body clearfix">
-                            <p>Materialized view combining country specific properties for inds, quals and quants.</p>
-                        </div><!-- /.box-body -->
-                    </div>
+                    <h1>flow_attributes</h1><p><span id="recordNumber">0</span> rows</p><br />
                 </section>
                 <!-- Main content -->
                 <section class="content">
@@ -116,9 +103,43 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td><span id="id">id</span></td>
-                                    <td>int8</td>
-                                    <td>19</td>
+                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="attribute_id">attribute_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="context_id">context_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="years">years</span></td>
+                                    <td>_int2</td>
+                                    <td>5</td>
                                     <td title='nullable'>√</td>
                                     <td title=''></td>
                                     <td>null</td>
@@ -133,24 +154,7 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="country_id">country_id</span></td>
-                                    <td>int8</td>
-                                    <td>19</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td><p>Reference to country</p></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="tooltip_text">tooltip_text</span></td>
+                                    <td><span id="name">name</span></td>
                                     <td>text</td>
                                     <td>2147483647</td>
                                     <td title='nullable'>√</td>
@@ -164,12 +168,12 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td><p>Tooltip text</p></td>
+                                    <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="qual_id">qual_id</span></td>
-                                    <td>int8</td>
-                                    <td>19</td>
+                                    <td><span id="display_name">display_name</span></td>
+                                    <td>text</td>
+                                    <td>2147483647</td>
                                     <td title='nullable'>√</td>
                                     <td title=''></td>
                                     <td>null</td>
@@ -181,12 +185,12 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td><p>Reference to qual</p></td>
+                                    <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="ind_id">ind_id</span></td>
-                                    <td>int8</td>
-                                    <td>19</td>
+                                    <td><span id="unit">unit</span></td>
+                                    <td>text</td>
+                                    <td>2147483647</td>
                                     <td title='nullable'>√</td>
                                     <td title=''></td>
                                     <td>null</td>
@@ -198,12 +202,12 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td><p>Reference to ind</p></td>
+                                    <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="quant_id">quant_id</span></td>
-                                    <td>int8</td>
-                                    <td>19</td>
+                                    <td><span id="unit_type">unit_type</span></td>
+                                    <td>text</td>
+                                    <td>2147483647</td>
                                     <td title='nullable'>√</td>
                                     <td title=''></td>
                                     <td>null</td>
@@ -215,7 +219,24 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td><p>Reference to quant</p></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="distinct_values">distinct_values</span></td>
+                                    <td>_text</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -223,31 +244,38 @@
                     </div>
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <i class="fa fa-file-code-o"></i>
-                            <h3 id="ViewDefinition" class="box-title">View Definition</h3>
+                            <i class="fa fa-sitemap"></i>
+                            <h3 id="Indexes" class="box-title">Indexes</h3>
                             <div class="box-tools pull-right">
                                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
                             </div>
                         </div>
                         <div class="box-body">
-                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT qual_country_properties.id,&#10;    qual_country_properties.country_id,&#10;    qual_country_properties.tooltip_text,&#10;    qual_country_properties.qual_id,&#10;    &#39;-1&#39;::integer AS ind_id,&#10;    &#39;-1&#39;::integer AS quant_id&#10;   FROM qual_country_properties&#10;UNION ALL&#10; SELECT quant_country_properties.id,&#10;    quant_country_properties.country_id,&#10;    quant_country_properties.tooltip_text,&#10;    &#39;-1&#39;::integer AS qual_id,&#10;    &#39;-1&#39;::integer AS ind_id,&#10;    quant_country_properties.quant_id&#10;   FROM quant_country_properties&#10;UNION ALL&#10; SELECT ind_country_properties.id,&#10;    ind_country_properties.country_id,&#10;    ind_country_properties.tooltip_text,&#10;    &#39;-1&#39;::integer AS qual_id,&#10;    ind_country_properties.ind_id,&#10;    &#39;-1&#39;::integer AS quant_id&#10;   FROM ind_country_properties;</textarea>
-                            <div style="padding-top: 5px;"><hr></div>
-                            <div class="box box-solid">
-                                <div class="box-header with-border">
-                                    <i class="fa fa-puzzle-piece"></i>
-                                    <h3 class="box-title">Possibly Referenced Tables/Views</h3>
-                                </div>
-                                <!-- /.box-header -->
-                                <div class="box-body">
-                                    <ul class="list-unstyled">
-                                        <li><a href="qual_country_properties.html">qual_country_properties</a></li>
-                                        <li><a href="quant_country_properties.html">quant_country_properties</a></li>
-                                        <li><a href="ind_country_properties.html">ind_country_properties</a></li>
-                                    </ul>
-                                </div><!-- /.box-body -->
-                            </div>
+                            <table id="indexes_table" class="table table-bordered table-striped dataTable" role="grid">
+                                <thead>
+                                <tr>
+                                    <th>Constraint Name</th>
+                                    <th>Type</th>
+                                    <th>Sort</th>
+                                    <th>Column(s)</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey'></i> flow_attributes_pkey</td>
+                                    <td>Primary key</td>
+                                    <td><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
+                                    <td>attribute_id + context_id</td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div><!-- /.box-body -->
+                    </div>
+                    <div class="alert alert-warning alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h4><i class="icon fa fa-warning"></i>Diagram producer might be missing</h4>
+                        <p>No diagrams were produced please see application output for any errors</p>
                     </div>
                 </section>
                 <script>

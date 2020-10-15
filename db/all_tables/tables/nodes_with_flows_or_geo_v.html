@@ -154,6 +154,23 @@
                                     <td></td>
                                 </tr>
                                 <tr>
+                                    <td><span id="context_node_type_id">context_node_type_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
                                     <td><span id="main_id">main_id</span></td>
                                     <td>int4</td>
                                     <td>10</td>
@@ -320,7 +337,7 @@
                             </div>
                         </div>
                         <div class="box-body">
-                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT nodes.id,&#10;    contexts.id AS context_id,&#10;    nodes.node_type_id,&#10;    nodes.main_id,&#10;    nodes.is_unknown,&#10;    node_properties.is_domestic_consumption,&#10;    (upper(btrim(nodes.name)) = &#39;OTHER&#39;::text) AS is_aggregated,&#10;        CASE&#10;            WHEN ((flow_nodes.node_id IS NOT NULL) OR (upper(btrim(nodes.name)) = &#39;OTHER&#39;::text)) THEN true&#10;            ELSE false&#10;        END AS has_flows,&#10;    nodes.name,&#10;    node_types.name AS node_type,&#10;    nodes.geo_id,&#10;    profiles.name AS profile&#10;   FROM ((((((((nodes&#10;     JOIN node_properties ON ((node_properties.node_id = nodes.id)))&#10;     JOIN node_types ON ((node_types.id = nodes.node_type_id)))&#10;     JOIN context_node_types ON ((context_node_types.node_type_id = node_types.id)))&#10;     JOIN contexts ON ((context_node_types.context_id = contexts.id)))&#10;     JOIN countries ON ((contexts.country_id = countries.id)))&#10;     JOIN context_node_type_properties ON ((context_node_type_properties.context_node_type_id = context_node_types.id)))&#10;     LEFT JOIN profiles ON ((profiles.context_node_type_id = context_node_types.id)))&#10;     LEFT JOIN ( SELECT DISTINCT flow_nodes_1.node_id,&#10;            flow_nodes_1.context_id&#10;           FROM flow_nodes flow_nodes_1) flow_nodes ON (((flow_nodes.node_id = nodes.id) AND (flow_nodes.context_id = context_node_types.context_id) AND (flow_nodes.context_id = contexts.id))))&#10;  WHERE (((flow_nodes.context_id IS NOT NULL) AND (flow_nodes.context_id = contexts.id)) OR (context_node_type_properties.is_geo_column AND (upper(countries.iso2) = upper(&quot;substring&quot;(nodes.geo_id, 1, 2)))) OR (upper(btrim(nodes.name)) = &#39;OTHER&#39;::text));</textarea>
+                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT nodes.id,&#10;    contexts.id AS context_id,&#10;    nodes.node_type_id,&#10;    context_node_types.id AS context_node_type_id,&#10;    nodes.main_id,&#10;    nodes.is_unknown,&#10;    node_properties.is_domestic_consumption,&#10;    (upper(btrim(nodes.name)) = &#39;OTHER&#39;::text) AS is_aggregated,&#10;        CASE&#10;            WHEN ((flow_nodes.node_id IS NOT NULL) OR (upper(btrim(nodes.name)) = &#39;OTHER&#39;::text)) THEN true&#10;            ELSE false&#10;        END AS has_flows,&#10;    nodes.name,&#10;    node_types.name AS node_type,&#10;    nodes.geo_id,&#10;    profiles.name AS profile&#10;   FROM ((((((((nodes&#10;     JOIN node_properties ON ((node_properties.node_id = nodes.id)))&#10;     JOIN node_types ON ((node_types.id = nodes.node_type_id)))&#10;     JOIN context_node_types ON ((context_node_types.node_type_id = node_types.id)))&#10;     JOIN contexts ON ((context_node_types.context_id = contexts.id)))&#10;     JOIN countries ON ((contexts.country_id = countries.id)))&#10;     JOIN context_node_type_properties ON ((context_node_type_properties.context_node_type_id = context_node_types.id)))&#10;     LEFT JOIN profiles ON ((profiles.context_node_type_id = context_node_types.id)))&#10;     LEFT JOIN ( SELECT DISTINCT flow_nodes_1.node_id,&#10;            flow_nodes_1.context_id&#10;           FROM flow_nodes flow_nodes_1) flow_nodes ON (((flow_nodes.node_id = nodes.id) AND (flow_nodes.context_id = context_node_types.context_id) AND (flow_nodes.context_id = contexts.id))))&#10;  WHERE (context_node_type_properties.is_visible AND (((flow_nodes.context_id IS NOT NULL) AND (flow_nodes.context_id = contexts.id)) OR (context_node_type_properties.is_geo_column AND (upper(countries.iso2) = upper(&quot;substring&quot;(nodes.geo_id, 1, 2)))) OR (upper(btrim(nodes.name)) = &#39;OTHER&#39;::text)));</textarea>
                             <div style="padding-top: 5px;"><hr></div>
                             <div class="box box-solid">
                                 <div class="box-header with-border">
@@ -332,11 +349,11 @@
                                     <ul class="list-unstyled">
                                         <li><a href="nodes.html">nodes</a></li>
                                         <li><a href="contexts.html">contexts</a></li>
+                                        <li><a href="context_node_types.html">context_node_types</a></li>
                                         <li><a href="node_properties.html">node_properties</a></li>
                                         <li><a href="flow_nodes.html">flow_nodes</a></li>
                                         <li><a href="node_types.html">node_types</a></li>
                                         <li><a href="profiles.html">profiles</a></li>
-                                        <li><a href="context_node_types.html">context_node_types</a></li>
                                         <li><a href="countries.html">countries</a></li>
                                         <li><a href="context_node_type_properties.html">context_node_type_properties</a></li>
                                     </ul>

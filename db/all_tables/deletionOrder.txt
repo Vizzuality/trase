@@ -191,6 +191,7 @@ nodes_with_flows_per_year
 nodes_with_flows_or_geo
 nodes_with_flows
 flow_nodes
+flow_attributes
 external_api_updates
 database_validation_reports
 database_updates

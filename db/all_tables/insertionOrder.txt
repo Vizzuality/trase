@@ -85,6 +85,7 @@ dashboards_sources
 database_updates
 database_validation_reports
 external_api_updates
+flow_attributes
 flow_nodes
 nodes_with_flows
 nodes_with_flows_or_geo

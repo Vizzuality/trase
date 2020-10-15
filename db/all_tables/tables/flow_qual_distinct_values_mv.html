@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>nodes_stats_mv - trase_test Database</title>
+        <title>flow_qual_distinct_values_mv - trase_test Database</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
@@ -73,7 +73,7 @@
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
-                    <h1>nodes_stats_mv</h1><p><span id="recordNumber">0</span> rows</p><br />
+                    <h1>flow_qual_distinct_values_mv</h1><p><span id="recordNumber">0</span> rows</p><br />
                 </section>
                 <!-- Main content -->
                 <section class="content">
@@ -103,6 +103,40 @@
                                 </thead>
                                 <tbody>
                                 <tr>
+                                    <td><span id="commodity_id">commodity_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="country_id">country_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
                                     <td><span id="context_id">context_id</span></td>
                                     <td>int4</td>
                                     <td>10</td>
@@ -120,24 +154,7 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="year">year</span></td>
-                                    <td>int2</td>
-                                    <td>5</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="quant_id">quant_id</span></td>
+                                    <td><span id="qual_id">qual_id</span></td>
                                     <td>int4</td>
                                     <td>10</td>
                                     <td title='nullable'>√</td>
@@ -154,94 +171,9 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="node_type_id">node_type_id</span></td>
-                                    <td>int4</td>
-                                    <td>10</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="node_id">node_id</span></td>
-                                    <td>int4</td>
-                                    <td>10</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="name">name</span></td>
-                                    <td>text</td>
+                                    <td><span id="distinct_values">distinct_values</span></td>
+                                    <td>_text</td>
                                     <td>2147483647</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="geo_id">geo_id</span></td>
-                                    <td>text</td>
-                                    <td>2147483647</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="value">value</span></td>
-                                    <td>float8</td>
-                                    <td>17,17</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="height">height</span></td>
-                                    <td>float8</td>
-                                    <td>17,17</td>
                                     <td title='nullable'>√</td>
                                     <td title=''></td>
                                     <td>null</td>
@@ -269,7 +201,7 @@
                             </div>
                         </div>
                         <div class="box-body">
-                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">WITH top_destinations_totals AS (&#10;         SELECT flows_1.context_id,&#10;            flows_1.year,&#10;            flow_quants_1.quant_id,&#10;            context_node_types_1.node_type_id,&#10;            sum(flow_quants_1.value) AS value&#10;           FROM ((((flows flows_1&#10;             JOIN context_node_types context_node_types_1 ON ((context_node_types_1.context_id = flows_1.context_id)))&#10;             JOIN flow_quants flow_quants_1 ON ((flows_1.id = flow_quants_1.flow_id)))&#10;             JOIN nodes nodes_1 ON ((nodes_1.id = flows_1.path[(context_node_types_1.column_position + 1)])))&#10;             JOIN node_properties node_properties_1 ON ((nodes_1.id = node_properties_1.node_id)))&#10;          WHERE ((NOT nodes_1.is_unknown) AND (NOT node_properties_1.is_domestic_consumption))&#10;          GROUP BY flows_1.context_id, flows_1.year, flow_quants_1.quant_id, context_node_types_1.node_type_id&#10;        )&#10; SELECT flows.context_id,&#10;    flows.year,&#10;    flow_quants.quant_id,&#10;    context_node_types.node_type_id,&#10;    flows.path[(context_node_types.column_position + 1)] AS node_id,&#10;    nodes.name,&#10;    nodes.geo_id,&#10;    sum(flow_quants.value) AS value,&#10;    (sum(flow_quants.value) / NULLIF(( SELECT top_destinations_totals.value&#10;           FROM top_destinations_totals&#10;          WHERE ((top_destinations_totals.context_id = flows.context_id) AND (top_destinations_totals.year = flows.year) AND (top_destinations_totals.quant_id = flow_quants.quant_id) AND (top_destinations_totals.node_type_id = context_node_types.node_type_id))), (0)::double precision)) AS height&#10;   FROM ((((flows&#10;     JOIN context_node_types ON ((context_node_types.context_id = flows.context_id)))&#10;     JOIN flow_quants ON ((flows.id = flow_quants.flow_id)))&#10;     JOIN nodes ON ((nodes.id = flows.path[(context_node_types.column_position + 1)])))&#10;     JOIN node_properties ON ((nodes.id = node_properties.node_id)))&#10;  WHERE ((NOT nodes.is_unknown) AND (NOT node_properties.is_domestic_consumption))&#10;  GROUP BY flows.context_id, flows.year, flow_quants.quant_id, context_node_types.node_type_id, flows.path[(context_node_types.column_position + 1)], nodes.name, nodes.geo_id;</textarea>
+                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT contexts.commodity_id,&#10;    contexts.country_id,&#10;    flows.context_id,&#10;    flow_quals.qual_id,&#10;    array_agg(DISTINCT flow_quals.value ORDER BY flow_quals.value) AS distinct_values&#10;   FROM ((flow_quals&#10;     JOIN flows ON ((flow_quals.flow_id = flows.id)))&#10;     JOIN contexts ON ((flows.context_id = contexts.id)))&#10;  WHERE (flow_quals.value !~~ &#39;UNKNOWN%&#39;::text)&#10;  GROUP BY contexts.commodity_id, contexts.country_id, flows.context_id, flow_quals.qual_id;</textarea>
                             <div style="padding-top: 5px;"><hr></div>
                             <div class="box box-solid">
                                 <div class="box-header with-border">
@@ -279,11 +211,9 @@
                                 <!-- /.box-header -->
                                 <div class="box-body">
                                     <ul class="list-unstyled">
+                                        <li><a href="contexts.html">contexts</a></li>
                                         <li><a href="flows.html">flows</a></li>
-                                        <li><a href="context_node_types.html">context_node_types</a></li>
-                                        <li><a href="flow_quants.html">flow_quants</a></li>
-                                        <li><a href="nodes.html">nodes</a></li>
-                                        <li><a href="node_properties.html">node_properties</a></li>
+                                        <li><a href="flow_quals.html">flow_quals</a></li>
                                     </ul>
                                 </div><!-- /.box-body -->
                             </div>

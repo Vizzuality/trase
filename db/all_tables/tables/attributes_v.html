@@ -221,6 +221,57 @@
                                     </td>
                                     <td></td>
                                 </tr>
+                                <tr>
+                                    <td><span id="tooltip_text_by_context_id">tooltip_text_by_context_id</span></td>
+                                    <td>jsonb</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="tooltip_text_by_country_id">tooltip_text_by_country_id</span></td>
+                                    <td>jsonb</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="tooltip_text_by_commodity_id">tooltip_text_by_commodity_id</span></td>
+                                    <td>jsonb</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -235,7 +286,7 @@
                             </div>
                         </div>
                         <div class="box-body">
-                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT s.original_id,&#10;    s.original_type,&#10;    s.name,&#10;    s.display_name,&#10;    s.unit,&#10;    s.unit_type,&#10;    s.tooltip_text&#10;   FROM ( SELECT quants.id AS original_id,&#10;            &#39;Quant&#39;::text AS original_type,&#10;            quants.name,&#10;            qp.display_name,&#10;            quants.unit,&#10;            qp.unit_type,&#10;            qp.tooltip_text&#10;           FROM (quants&#10;             LEFT JOIN quant_properties qp ON ((qp.quant_id = quants.id)))&#10;        UNION ALL&#10;         SELECT inds.id,&#10;            &#39;Ind&#39;::text AS text,&#10;            inds.name,&#10;            ip.display_name,&#10;            inds.unit,&#10;            ip.unit_type,&#10;            ip.tooltip_text&#10;           FROM (inds&#10;             LEFT JOIN ind_properties ip ON ((ip.ind_id = inds.id)))&#10;        UNION ALL&#10;         SELECT quals.id,&#10;            &#39;Qual&#39;::text AS text,&#10;            quals.name,&#10;            qp.display_name,&#10;            NULL::text AS text,&#10;            NULL::text AS text,&#10;            qp.tooltip_text&#10;           FROM (quals&#10;             LEFT JOIN qual_properties qp ON ((qp.qual_id = quals.id)))) s;</textarea>
+                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT s.original_id,&#10;    s.original_type,&#10;    s.name,&#10;    s.display_name,&#10;    s.unit,&#10;    s.unit_type,&#10;    s.tooltip_text,&#10;    s.tooltip_text_by_context_id,&#10;    s.tooltip_text_by_country_id,&#10;    s.tooltip_text_by_commodity_id&#10;   FROM ( SELECT quants.id AS original_id,&#10;            &#39;Quant&#39;::text AS original_type,&#10;            quants.name,&#10;            qp.display_name,&#10;            quants.unit,&#10;            qp.unit_type,&#10;            qp.tooltip_text,&#10;            context_p.tooltip_text_by_context_id,&#10;            country_p.tooltip_text_by_country_id,&#10;            commodity_p.tooltip_text_by_commodity_id&#10;           FROM ((((quants&#10;             LEFT JOIN quant_properties qp ON ((qp.quant_id = quants.id)))&#10;             LEFT JOIN ( SELECT quant_context_properties.quant_id,&#10;                    jsonb_object_agg(quant_context_properties.context_id, quant_context_properties.tooltip_text) AS tooltip_text_by_context_id&#10;                   FROM quant_context_properties&#10;                  GROUP BY quant_context_properties.quant_id) context_p ON ((quants.id = context_p.quant_id)))&#10;             LEFT JOIN ( SELECT quant_country_properties.quant_id,&#10;                    jsonb_object_agg(quant_country_properties.country_id, quant_country_properties.tooltip_text) AS tooltip_text_by_country_id&#10;                   FROM quant_country_properties&#10;                  GROUP BY quant_country_properties.quant_id) country_p ON ((quants.id = country_p.quant_id)))&#10;             LEFT JOIN ( SELECT quant_commodity_properties.quant_id,&#10;                    jsonb_object_agg(quant_commodity_properties.commodity_id, quant_commodity_properties.tooltip_text) AS tooltip_text_by_commodity_id&#10;                   FROM quant_commodity_properties&#10;                  GROUP BY quant_commodity_properties.quant_id) commodity_p ON ((quants.id = commodity_p.quant_id)))&#10;        UNION ALL&#10;         SELECT inds.id,&#10;            &#39;Ind&#39;::text AS text,&#10;            inds.name,&#10;            ip.display_name,&#10;            inds.unit,&#10;            ip.unit_type,&#10;            ip.tooltip_text,&#10;            context_p.tooltip_text_by_context_id,&#10;            country_p.tooltip_text_by_country_id,&#10;            commodity_p.tooltip_text_by_commodity_id&#10;           FROM ((((inds&#10;             LEFT JOIN ind_properties ip ON ((ip.ind_id = inds.id)))&#10;             LEFT JOIN ( SELECT ind_context_properties.ind_id,&#10;                    jsonb_object_agg(ind_context_properties.context_id, ind_context_properties.tooltip_text) AS tooltip_text_by_context_id&#10;                   FROM ind_context_properties&#10;                  GROUP BY ind_context_properties.ind_id) context_p ON ((inds.id = context_p.ind_id)))&#10;             LEFT JOIN ( SELECT ind_country_properties.ind_id,&#10;                    jsonb_object_agg(ind_country_properties.country_id, ind_country_properties.tooltip_text) AS tooltip_text_by_country_id&#10;                   FROM ind_country_properties&#10;                  GROUP BY ind_country_properties.ind_id) country_p ON ((inds.id = country_p.ind_id)))&#10;             LEFT JOIN ( SELECT ind_commodity_properties.ind_id,&#10;                    jsonb_object_agg(ind_commodity_properties.commodity_id, ind_commodity_properties.tooltip_text) AS tooltip_text_by_commodity_id&#10;                   FROM ind_commodity_properties&#10;                  GROUP BY ind_commodity_properties.ind_id) commodity_p ON ((inds.id = commodity_p.ind_id)))&#10;        UNION ALL&#10;         SELECT quals.id,&#10;            &#39;Qual&#39;::text AS text,&#10;            quals.name,&#10;            qp.display_name,&#10;            NULL::text AS text,&#10;            NULL::text AS text,&#10;            qp.tooltip_text,&#10;            context_p.tooltip_text_by_context_id,&#10;            country_p.tooltip_text_by_country_id,&#10;            commodity_p.tooltip_text_by_commodity_id&#10;           FROM ((((quals&#10;             LEFT JOIN qual_properties qp ON ((qp.qual_id = quals.id)))&#10;             LEFT JOIN ( SELECT qual_context_properties.qual_id,&#10;                    jsonb_object_agg(qual_context_properties.context_id, qual_context_properties.tooltip_text) AS tooltip_text_by_context_id&#10;                   FROM qual_context_properties&#10;                  GROUP BY qual_context_properties.qual_id) context_p ON ((quals.id = context_p.qual_id)))&#10;             LEFT JOIN ( SELECT qual_country_properties.qual_id,&#10;                    jsonb_object_agg(qual_country_properties.country_id, qual_country_properties.tooltip_text) AS tooltip_text_by_country_id&#10;                   FROM qual_country_properties&#10;                  GROUP BY qual_country_properties.qual_id) country_p ON ((quals.id = country_p.qual_id)))&#10;             LEFT JOIN ( SELECT qual_commodity_properties.qual_id,&#10;                    jsonb_object_agg(qual_commodity_properties.commodity_id, qual_commodity_properties.tooltip_text) AS tooltip_text_by_commodity_id&#10;                   FROM qual_commodity_properties&#10;                  GROUP BY qual_commodity_properties.qual_id) commodity_p ON ((quals.id = commodity_p.qual_id)))) s;</textarea>
                             <div style="padding-top: 5px;"><hr></div>
                             <div class="box box-solid">
                                 <div class="box-header with-border">
@@ -247,10 +298,19 @@
                                     <ul class="list-unstyled">
                                         <li><a href="quants.html">quants</a></li>
                                         <li><a href="quant_properties.html">quant_properties</a></li>
+                                        <li><a href="quant_context_properties.html">quant_context_properties</a></li>
+                                        <li><a href="quant_country_properties.html">quant_country_properties</a></li>
+                                        <li><a href="quant_commodity_properties.html">quant_commodity_properties</a></li>
                                         <li><a href="inds.html">inds</a></li>
                                         <li><a href="ind_properties.html">ind_properties</a></li>
+                                        <li><a href="ind_context_properties.html">ind_context_properties</a></li>
+                                        <li><a href="ind_country_properties.html">ind_country_properties</a></li>
+                                        <li><a href="ind_commodity_properties.html">ind_commodity_properties</a></li>
                                         <li><a href="quals.html">quals</a></li>
                                         <li><a href="qual_properties.html">qual_properties</a></li>
+                                        <li><a href="qual_context_properties.html">qual_context_properties</a></li>
+                                        <li><a href="qual_country_properties.html">qual_country_properties</a></li>
+                                        <li><a href="qual_commodity_properties.html">qual_commodity_properties</a></li>
                                     </ul>
                                 </div><!-- /.box-body -->
                             </div>

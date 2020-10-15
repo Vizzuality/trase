@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>download_attributes_mv - trase_test Database</title>
+        <title>map_attributes_v - trase_test Database</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
@@ -73,7 +73,7 @@
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
-                    <h1>download_attributes_mv</h1><p><span id="recordNumber">0</span> rows</p><br />
+                    <h1>map_attributes_v</h1><p><span id="recordNumber">0</span> rows</p><br />
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <i class="fa fa-file-text-o"></i>
@@ -84,7 +84,7 @@
                             </div>
                         </div><!-- /.box-header -->
                         <div class="box-body clearfix">
-                            <p>Materialized view which merges download_quals and download_quants with download_attributes.</p>
+                            <p>View which merges map_inds and map_quants with map_attributes.</p>
                         </div><!-- /.box-body -->
                     </div>
                 </section>
@@ -133,6 +133,23 @@
                                     <td></td>
                                 </tr>
                                 <tr>
+                                    <td><span id="attribute_id">attribute_id</span></td>
+                                    <td>int8</td>
+                                    <td>19</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>References the unique id in attributes.</p></td>
+                                </tr>
+                                <tr>
                                     <td><span id="context_id">context_id</span></td>
                                     <td>int4</td>
                                     <td>10</td>
@@ -147,10 +164,10 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>References the context</p></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="position">position</span></td>
+                                    <td><span id="map_attribute_group_id">map_attribute_group_id</span></td>
                                     <td>int4</td>
                                     <td>10</td>
                                     <td title='nullable'>√</td>
@@ -167,9 +184,60 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="display_name">display_name</span></td>
-                                    <td>text</td>
-                                    <td>2147483647</td>
+                                    <td><span id="original_attribute_id">original_attribute_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>The attribute&rsquo;s original id</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="position">position</span></td>
+                                    <td>int2</td>
+                                    <td>5</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="is_disabled">is_disabled</span></td>
+                                    <td>bool</td>
+                                    <td>1</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="is_default">is_default</span></td>
+                                    <td>bool</td>
+                                    <td>1</td>
                                     <td title='nullable'>√</td>
                                     <td title=''></td>
                                     <td>null</td>
@@ -201,9 +269,9 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="created_at">created_at</span></td>
-                                    <td>timestamp</td>
-                                    <td>29,6</td>
+                                    <td><span id="dual_layer_buckets">dual_layer_buckets</span></td>
+                                    <td>_float8</td>
+                                    <td>17,17</td>
                                     <td title='nullable'>√</td>
                                     <td title=''></td>
                                     <td>null</td>
@@ -218,9 +286,9 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="updated_at">updated_at</span></td>
-                                    <td>timestamp</td>
-                                    <td>29,6</td>
+                                    <td><span id="single_layer_buckets">single_layer_buckets</span></td>
+                                    <td>_float8</td>
+                                    <td>17,17</td>
                                     <td title='nullable'>√</td>
                                     <td title=''></td>
                                     <td>null</td>
@@ -235,24 +303,7 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="attribute_id">attribute_id</span></td>
-                                    <td>int8</td>
-                                    <td>19</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td><p>References the unique id in attributes.</p></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="original_type">original_type</span></td>
+                                    <td><span id="color_scale">color_scale</span></td>
                                     <td>text</td>
                                     <td>2147483647</td>
                                     <td title='nullable'>√</td>
@@ -269,9 +320,9 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="original_id">original_id</span></td>
-                                    <td>int4</td>
-                                    <td>10</td>
+                                    <td><span id="name">name</span></td>
+                                    <td>text</td>
+                                    <td>2147483647</td>
                                     <td title='nullable'>√</td>
                                     <td title=''></td>
                                     <td>null</td>
@@ -283,7 +334,58 @@
                                         <table border='0' cellspacing='0' cellpadding='0'>
                                         </table>
                                     </td>
-                                    <td></td>
+                                    <td><p>Display name of the ind/quant</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="attribute_type">attribute_type</span></td>
+                                    <td>text</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>Type of the attribute (ind/quant)</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="unit">unit</span></td>
+                                    <td>text</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>Name of the attribute&rsquo;s unit</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="description">description</span></td>
+                                    <td>text</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>Attribute&rsquo;s description</p></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -299,7 +401,7 @@
                             </div>
                         </div>
                         <div class="box-body">
-                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT da.id,&#10;    da.context_id,&#10;    da.&quot;position&quot;,&#10;    da.display_name,&#10;    da.years,&#10;    da.created_at,&#10;    da.updated_at,&#10;    a.id AS attribute_id,&#10;    a.original_type,&#10;    a.original_id&#10;   FROM ((download_quants daq&#10;     JOIN download_attributes da ON ((da.id = daq.download_attribute_id)))&#10;     JOIN attributes a ON (((a.original_id = daq.quant_id) AND (a.original_type = &#39;Quant&#39;::text))))&#10;UNION ALL&#10; SELECT da.id,&#10;    da.context_id,&#10;    da.&quot;position&quot;,&#10;    da.display_name,&#10;    da.years,&#10;    da.created_at,&#10;    da.updated_at,&#10;    a.id AS attribute_id,&#10;    a.original_type,&#10;    a.original_id&#10;   FROM ((download_quals daq&#10;     JOIN download_attributes da ON ((da.id = daq.download_attribute_id)))&#10;     JOIN attributes a ON (((a.original_id = daq.qual_id) AND (a.original_type = &#39;Qual&#39;::text))));</textarea>
+                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT ma.id,&#10;    a.id AS attribute_id,&#10;    mag.context_id,&#10;    ma.map_attribute_group_id,&#10;    a.original_id AS original_attribute_id,&#10;    (ma.&quot;position&quot;)::smallint AS &quot;position&quot;,&#10;    ma.is_disabled,&#10;    ma.is_default,&#10;    ma.years,&#10;    ma.dual_layer_buckets,&#10;    ma.single_layer_buckets,&#10;    ma.color_scale,&#10;    a.display_name AS name,&#10;    &#39;quant&#39;::text AS attribute_type,&#10;    a.unit,&#10;    a.tooltip_text AS description&#10;   FROM (((map_quants maq&#10;     JOIN map_attributes ma ON ((ma.id = maq.map_attribute_id)))&#10;     JOIN map_attribute_groups mag ON ((mag.id = ma.map_attribute_group_id)))&#10;     JOIN attributes a ON (((a.original_id = maq.quant_id) AND (a.original_type = &#39;Quant&#39;::text))))&#10;UNION ALL&#10; SELECT ma.id,&#10;    a.id AS attribute_id,&#10;    mag.context_id,&#10;    ma.map_attribute_group_id,&#10;    a.original_id AS original_attribute_id,&#10;    (ma.&quot;position&quot;)::smallint AS &quot;position&quot;,&#10;    ma.is_disabled,&#10;    ma.is_default,&#10;    ma.years,&#10;    ma.dual_layer_buckets,&#10;    ma.single_layer_buckets,&#10;    ma.color_scale,&#10;    a.display_name AS name,&#10;    &#39;ind&#39;::text AS attribute_type,&#10;    a.unit,&#10;    a.tooltip_text AS description&#10;   FROM (((map_inds mai&#10;     JOIN map_attributes ma ON ((ma.id = mai.map_attribute_id)))&#10;     JOIN map_attribute_groups mag ON ((mag.id = ma.map_attribute_group_id)))&#10;     JOIN attributes a ON (((a.original_id = mai.ind_id) AND (a.original_type = &#39;Ind&#39;::text))));</textarea>
                             <div style="padding-top: 5px;"><hr></div>
                             <div class="box box-solid">
                                 <div class="box-header with-border">
@@ -309,10 +411,11 @@
                                 <!-- /.box-header -->
                                 <div class="box-body">
                                     <ul class="list-unstyled">
-                                        <li><a href="download_quants.html">download_quants</a></li>
-                                        <li><a href="download_attributes.html">download_attributes</a></li>
+                                        <li><a href="map_quants.html">map_quants</a></li>
+                                        <li><a href="map_attributes.html">map_attributes</a></li>
+                                        <li><a href="map_attribute_groups.html">map_attribute_groups</a></li>
                                         <li><a href="attributes.html">attributes</a></li>
-                                        <li><a href="download_quals.html">download_quals</a></li>
+                                        <li><a href="map_inds.html">map_inds</a></li>
                                     </ul>
                                 </div><!-- /.box-body -->
                             </div>

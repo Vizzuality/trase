@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>dashboards_attributes_mv - trase_test Database</title>
+        <title>resize_by_attributes_v - trase_test Database</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
@@ -73,7 +73,7 @@
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
-                    <h1>dashboards_attributes_mv</h1><p><span id="recordNumber">0</span> rows</p><br />
+                    <h1>resize_by_attributes_v</h1><p><span id="recordNumber">0</span> rows</p><br />
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <i class="fa fa-file-text-o"></i>
@@ -84,7 +84,7 @@
                             </div>
                         </div><!-- /.box-header -->
                         <div class="box-body clearfix">
-                            <p>Materialized view which merges dashboards_inds, dashboards_quals and dashboards_quants with dashboards_attributes.</p>
+                            <p>View which merges resize_by_quants with resize_by_attributes.</p>
                         </div><!-- /.box-body -->
                     </div>
                 </section>
@@ -117,40 +117,6 @@
                                 <tbody>
                                 <tr>
                                     <td><span id="id">id</span></td>
-                                    <td>int8</td>
-                                    <td>19</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="dashboards_attribute_group_id">dashboards_attribute_group_id</span></td>
-                                    <td>int8</td>
-                                    <td>19</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="position">position</span></td>
                                     <td>int4</td>
                                     <td>10</td>
                                     <td title='nullable'>√</td>
@@ -183,6 +149,142 @@
                                     </td>
                                     <td><p>References the unique id in attributes.</p></td>
                                 </tr>
+                                <tr>
+                                    <td><span id="context_id">context_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="group_number">group_number</span></td>
+                                    <td>int2</td>
+                                    <td>5</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="position">position</span></td>
+                                    <td>int2</td>
+                                    <td>5</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="years">years</span></td>
+                                    <td>_int2</td>
+                                    <td>5</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="is_disabled">is_disabled</span></td>
+                                    <td>bool</td>
+                                    <td>1</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="is_default">is_default</span></td>
+                                    <td>bool</td>
+                                    <td>1</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="is_quick_fact">is_quick_fact</span></td>
+                                    <td>bool</td>
+                                    <td>1</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="tooltip_text">tooltip_text</span></td>
+                                    <td>text</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -197,7 +299,7 @@
                             </div>
                         </div>
                         <div class="box-body">
-                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT da.id,&#10;    da.dashboards_attribute_group_id,&#10;    da.&quot;position&quot;,&#10;    a.id AS attribute_id&#10;   FROM ((dashboards_inds di&#10;     JOIN dashboards_attributes da ON ((da.id = di.dashboards_attribute_id)))&#10;     JOIN attributes a ON (((a.original_id = di.ind_id) AND (a.original_type = &#39;Ind&#39;::text))))&#10;UNION ALL&#10; SELECT da.id,&#10;    da.dashboards_attribute_group_id,&#10;    da.&quot;position&quot;,&#10;    a.id AS attribute_id&#10;   FROM ((dashboards_quals dq&#10;     JOIN dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))&#10;     JOIN attributes a ON (((a.original_id = dq.qual_id) AND (a.original_type = &#39;Qual&#39;::text))))&#10;UNION ALL&#10; SELECT da.id,&#10;    da.dashboards_attribute_group_id,&#10;    da.&quot;position&quot;,&#10;    a.id AS attribute_id&#10;   FROM ((dashboards_quants dq&#10;     JOIN dashboards_attributes da ON ((da.id = dq.dashboards_attribute_id)))&#10;     JOIN attributes a ON (((a.original_id = dq.quant_id) AND (a.original_type = &#39;Quant&#39;::text))));</textarea>
+                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT ra.id,&#10;    a.id AS attribute_id,&#10;    ra.context_id,&#10;    (ra.group_number)::smallint AS group_number,&#10;    (ra.&quot;position&quot;)::smallint AS &quot;position&quot;,&#10;    (ra.years)::smallint[] AS years,&#10;    ra.is_disabled,&#10;    ra.is_default,&#10;    ra.is_quick_fact,&#10;    ra.tooltip_text&#10;   FROM ((resize_by_quants raq&#10;     JOIN resize_by_attributes ra ON ((ra.id = raq.resize_by_attribute_id)))&#10;     JOIN attributes a ON (((a.original_id = raq.quant_id) AND (a.original_type = &#39;Quant&#39;::text))));</textarea>
                             <div style="padding-top: 5px;"><hr></div>
                             <div class="box box-solid">
                                 <div class="box-header with-border">
@@ -207,11 +309,9 @@
                                 <!-- /.box-header -->
                                 <div class="box-body">
                                     <ul class="list-unstyled">
-                                        <li><a href="dashboards_inds.html">dashboards_inds</a></li>
-                                        <li><a href="dashboards_attributes.html">dashboards_attributes</a></li>
+                                        <li><a href="resize_by_quants.html">resize_by_quants</a></li>
+                                        <li><a href="resize_by_attributes.html">resize_by_attributes</a></li>
                                         <li><a href="attributes.html">attributes</a></li>
-                                        <li><a href="dashboards_quals.html">dashboards_quals</a></li>
-                                        <li><a href="dashboards_quants.html">dashboards_quants</a></li>
                                     </ul>
                                 </div><!-- /.box-body -->
                             </div>

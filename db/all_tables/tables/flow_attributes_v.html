@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>chart_attributes_mv - trase_test Database</title>
+        <title>flow_attributes_v - trase_test Database</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
@@ -73,20 +73,7 @@
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
-                    <h1>chart_attributes_mv</h1><p><span id="recordNumber">0</span> rows</p><br />
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <i class="fa fa-file-text-o"></i>
-                            <h3 id="Description" class="box-title">Description</h3>
-                            <div class="box-tools pull-right">
-                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-                            </div>
-                        </div><!-- /.box-header -->
-                        <div class="box-body clearfix">
-                            <p>Materialized view which merges chart_inds, chart_quals and chart_quants with chart_attributes.</p>
-                        </div><!-- /.box-body -->
-                    </div>
+                    <h1>flow_attributes_v</h1><p><span id="recordNumber">0</span> rows</p><br />
                 </section>
                 <!-- Main content -->
                 <section class="content">
@@ -116,9 +103,9 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td><span id="id">id</span></td>
-                                    <td>int4</td>
-                                    <td>10</td>
+                                    <td><span id="attribute_id">attribute_id</span></td>
+                                    <td>int8</td>
+                                    <td>19</td>
                                     <td title='nullable'>√</td>
                                     <td title=''></td>
                                     <td>null</td>
@@ -133,24 +120,7 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="chart_id">chart_id</span></td>
-                                    <td>int4</td>
-                                    <td>10</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="position">position</span></td>
+                                    <td><span id="context_id">context_id</span></td>
                                     <td>int4</td>
                                     <td>10</td>
                                     <td title='nullable'>√</td>
@@ -168,110 +138,8 @@
                                 </tr>
                                 <tr>
                                     <td><span id="years">years</span></td>
-                                    <td>_int4</td>
-                                    <td>10</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="display_name">display_name</span></td>
-                                    <td>text</td>
-                                    <td>2147483647</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td><p>If absent in chart_attributes this is pulled from attributes.</p></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="legend_name">legend_name</span></td>
-                                    <td>text</td>
-                                    <td>2147483647</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="display_type">display_type</span></td>
-                                    <td>text</td>
-                                    <td>2147483647</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="display_style">display_style</span></td>
-                                    <td>text</td>
-                                    <td>2147483647</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="state_average">state_average</span></td>
-                                    <td>bool</td>
-                                    <td>1</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="identifier">identifier</span></td>
-                                    <td>text</td>
-                                    <td>2147483647</td>
+                                    <td>_int2</td>
+                                    <td>5</td>
                                     <td title='nullable'>√</td>
                                     <td title=''></td>
                                     <td>null</td>
@@ -287,6 +155,23 @@
                                 </tr>
                                 <tr>
                                     <td><span id="name">name</span></td>
+                                    <td>text</td>
+                                    <td>2147483647</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="display_name">display_name</span></td>
                                     <td>text</td>
                                     <td>2147483647</td>
                                     <td title='nullable'>√</td>
@@ -320,94 +205,9 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="tooltip_text">tooltip_text</span></td>
+                                    <td><span id="unit_type">unit_type</span></td>
                                     <td>text</td>
                                     <td>2147483647</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="attribute_id">attribute_id</span></td>
-                                    <td>int8</td>
-                                    <td>19</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="original_id">original_id</span></td>
-                                    <td>int4</td>
-                                    <td>10</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="original_type">original_type</span></td>
-                                    <td>text</td>
-                                    <td>2147483647</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="created_at">created_at</span></td>
-                                    <td>timestamp</td>
-                                    <td>29,6</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="updated_at">updated_at</span></td>
-                                    <td>timestamp</td>
-                                    <td>29,6</td>
                                     <td title='nullable'>√</td>
                                     <td title=''></td>
                                     <td>null</td>
@@ -435,7 +235,7 @@
                             </div>
                         </div>
                         <div class="box-body">
-                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT cha.id,&#10;    cha.chart_id,&#10;    cha.&quot;position&quot;,&#10;    cha.years,&#10;    COALESCE(NULLIF(cha.display_name, &#39;&#39;::text), NULLIF(a.display_name, &#39;&#39;::text)) AS display_name,&#10;    cha.legend_name,&#10;    cha.display_type,&#10;    cha.display_style,&#10;    cha.state_average,&#10;    cha.identifier,&#10;    a.name,&#10;    a.unit,&#10;    a.tooltip_text,&#10;    a.id AS attribute_id,&#10;    a.original_id,&#10;    a.original_type,&#10;    cha.created_at,&#10;    cha.updated_at&#10;   FROM ((chart_quals chq&#10;     JOIN chart_attributes cha ON ((cha.id = chq.chart_attribute_id)))&#10;     JOIN attributes a ON (((a.original_id = chq.qual_id) AND (a.original_type = &#39;Qual&#39;::text))))&#10;UNION ALL&#10; SELECT cha.id,&#10;    cha.chart_id,&#10;    cha.&quot;position&quot;,&#10;    cha.years,&#10;    COALESCE(NULLIF(cha.display_name, &#39;&#39;::text), NULLIF(a.display_name, &#39;&#39;::text)) AS display_name,&#10;    cha.legend_name,&#10;    cha.display_type,&#10;    cha.display_style,&#10;    cha.state_average,&#10;    cha.identifier,&#10;    a.name,&#10;    a.unit,&#10;    a.tooltip_text,&#10;    a.id AS attribute_id,&#10;    a.original_id,&#10;    a.original_type,&#10;    cha.created_at,&#10;    cha.updated_at&#10;   FROM ((chart_quants chq&#10;     JOIN chart_attributes cha ON ((cha.id = chq.chart_attribute_id)))&#10;     JOIN attributes a ON (((a.original_id = chq.quant_id) AND (a.original_type = &#39;Quant&#39;::text))))&#10;UNION ALL&#10; SELECT cha.id,&#10;    cha.chart_id,&#10;    cha.&quot;position&quot;,&#10;    cha.years,&#10;    COALESCE(NULLIF(cha.display_name, &#39;&#39;::text), NULLIF(a.display_name, &#39;&#39;::text)) AS display_name,&#10;    cha.legend_name,&#10;    cha.display_type,&#10;    cha.display_style,&#10;    cha.state_average,&#10;    cha.identifier,&#10;    a.name,&#10;    a.unit,&#10;    a.tooltip_text,&#10;    a.id AS attribute_id,&#10;    a.original_id,&#10;    a.original_type,&#10;    cha.created_at,&#10;    cha.updated_at&#10;   FROM ((chart_inds chi&#10;     JOIN chart_attributes cha ON ((cha.id = chi.chart_attribute_id)))&#10;     JOIN attributes a ON (((a.original_id = chi.ind_id) AND (a.original_type = &#39;Ind&#39;::text))));</textarea>
+                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT attributes.id AS attribute_id,&#10;    flows.context_id,&#10;    array_agg(DISTINCT flows.year) AS years,&#10;    attributes.name,&#10;    attributes.display_name,&#10;    attributes.unit,&#10;    attributes.unit_type&#10;   FROM ((flows&#10;     JOIN flow_quants ON ((flow_quants.flow_id = flows.id)))&#10;     JOIN attributes ON (((attributes.original_type = &#39;Quant&#39;::text) AND (attributes.original_id = flow_quants.quant_id))))&#10;  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, attributes.unit_type, flows.context_id&#10;UNION ALL&#10; SELECT attributes.id AS attribute_id,&#10;    flows.context_id,&#10;    array_agg(DISTINCT flows.year) AS years,&#10;    attributes.name,&#10;    attributes.display_name,&#10;    attributes.unit,&#10;    attributes.unit_type&#10;   FROM ((flows&#10;     JOIN flow_quals ON ((flow_quals.flow_id = flows.id)))&#10;     JOIN attributes ON (((attributes.original_type = &#39;Qual&#39;::text) AND (attributes.original_id = flow_quals.qual_id))))&#10;  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, attributes.unit_type, flows.context_id&#10;UNION ALL&#10; SELECT attributes.id AS attribute_id,&#10;    flows.context_id,&#10;    array_agg(DISTINCT flows.year) AS years,&#10;    attributes.name,&#10;    attributes.display_name,&#10;    attributes.unit,&#10;    attributes.unit_type&#10;   FROM ((flows&#10;     JOIN flow_inds ON ((flow_inds.flow_id = flows.id)))&#10;     JOIN attributes ON (((attributes.original_type = &#39;Ind&#39;::text) AND (attributes.original_id = flow_inds.ind_id))))&#10;  GROUP BY attributes.id, attributes.name, attributes.display_name, attributes.unit, attributes.unit_type, flows.context_id;</textarea>
                             <div style="padding-top: 5px;"><hr></div>
                             <div class="box box-solid">
                                 <div class="box-header with-border">
@@ -445,11 +245,11 @@
                                 <!-- /.box-header -->
                                 <div class="box-body">
                                     <ul class="list-unstyled">
-                                        <li><a href="chart_quals.html">chart_quals</a></li>
-                                        <li><a href="chart_attributes.html">chart_attributes</a></li>
                                         <li><a href="attributes.html">attributes</a></li>
-                                        <li><a href="chart_quants.html">chart_quants</a></li>
-                                        <li><a href="chart_inds.html">chart_inds</a></li>
+                                        <li><a href="flows.html">flows</a></li>
+                                        <li><a href="flow_quants.html">flow_quants</a></li>
+                                        <li><a href="flow_quals.html">flow_quals</a></li>
+                                        <li><a href="flow_inds.html">flow_inds</a></li>
                                     </ul>
                                 </div><!-- /.box-body -->
                             </div>

@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>contexts_mv - trase_test Database</title>
+        <title>node_stats_mv - trase_test Database</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
         <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
@@ -73,7 +73,7 @@
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
                 <section class="content-header">
-                    <h1>contexts_mv</h1><p><span id="recordNumber">0</span> rows</p><br />
+                    <h1>node_stats_mv</h1><p><span id="recordNumber">0</span> rows</p><br />
                 </section>
                 <!-- Main content -->
                 <section class="content">
@@ -103,7 +103,7 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td><span id="id">id</span></td>
+                                    <td><span id="context_id">context_id</span></td>
                                     <td>int4</td>
                                     <td>10</td>
                                     <td title='nullable'>√</td>
@@ -120,7 +120,7 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="country_id">country_id</span></td>
+                                    <td><span id="quant_id">quant_id</span></td>
                                     <td>int4</td>
                                     <td>10</td>
                                     <td title='nullable'>√</td>
@@ -137,7 +137,7 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="commodity_id">commodity_id</span></td>
+                                    <td><span id="node_type_id">node_type_id</span></td>
                                     <td>int4</td>
                                     <td>10</td>
                                     <td title='nullable'>√</td>
@@ -154,41 +154,7 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="years">years</span></td>
-                                    <td>_int4</td>
-                                    <td>10</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="subnational_years">subnational_years</span></td>
-                                    <td>_int4</td>
-                                    <td>10</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="default_year">default_year</span></td>
+                                    <td><span id="node_id">node_id</span></td>
                                     <td>int4</td>
                                     <td>10</td>
                                     <td title='nullable'>√</td>
@@ -205,7 +171,24 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="commodity_name">commodity_name</span></td>
+                                    <td><span id="year">year</span></td>
+                                    <td>int2</td>
+                                    <td>5</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="geo_id">geo_id</span></td>
                                     <td>text</td>
                                     <td>2147483647</td>
                                     <td title='nullable'>√</td>
@@ -222,7 +205,7 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="country_name">country_name</span></td>
+                                    <td><span id="name">name</span></td>
                                     <td>text</td>
                                     <td>2147483647</td>
                                     <td title='nullable'>√</td>
@@ -239,9 +222,9 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="iso2">iso2</span></td>
-                                    <td>text</td>
-                                    <td>2147483647</td>
+                                    <td><span id="value">value</span></td>
+                                    <td>float8</td>
+                                    <td>17,17</td>
                                     <td title='nullable'>√</td>
                                     <td title=''></td>
                                     <td>null</td>
@@ -256,145 +239,9 @@
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td><span id="default_basemap">default_basemap</span></td>
-                                    <td>text</td>
-                                    <td>2147483647</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="is_disabled">is_disabled</span></td>
-                                    <td>bool</td>
-                                    <td>1</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="is_default">is_default</span></td>
-                                    <td>bool</td>
-                                    <td>1</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="is_subnational">is_subnational</span></td>
-                                    <td>bool</td>
-                                    <td>1</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="is_highlighted">is_highlighted</span></td>
-                                    <td>bool</td>
-                                    <td>1</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="has_profiles">has_profiles</span></td>
-                                    <td>bool</td>
-                                    <td>1</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="node_types_by_role">node_types_by_role</span></td>
-                                    <td>jsonb</td>
-                                    <td>2147483647</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="node_types_by_name">node_types_by_name</span></td>
-                                    <td>jsonb</td>
-                                    <td>2147483647</td>
-                                    <td title='nullable'>√</td>
-                                    <td title=''></td>
-                                    <td>null</td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td>
-                                        <table border='0' cellspacing='0' cellpadding='0'>
-                                        </table>
-                                    </td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td><span id="node_types">node_types</span></td>
-                                    <td>jsonb</td>
-                                    <td>2147483647</td>
+                                    <td><span id="height">height</span></td>
+                                    <td>float8</td>
+                                    <td>17,17</td>
                                     <td title='nullable'>√</td>
                                     <td title=''></td>
                                     <td>null</td>
@@ -422,7 +269,7 @@
                             </div>
                         </div>
                         <div class="box-body">
-                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">WITH context_node_types_with_props AS (&#10;         SELECT context_node_types.context_id,&#10;            context_node_types.node_type_id,&#10;            context_node_types.column_position,&#10;            node_types.name AS node_type,&#10;            context_node_type_properties.role,&#10;            context_node_type_properties.column_group,&#10;            context_node_type_properties.is_default&#10;           FROM ((context_node_types&#10;             JOIN context_node_type_properties ON ((context_node_types.id = context_node_type_properties.context_node_type_id)))&#10;             JOIN node_types ON ((context_node_types.node_type_id = node_types.id)))&#10;          WHERE context_node_type_properties.is_visible&#10;        )&#10; SELECT contexts.id,&#10;    contexts.country_id,&#10;    contexts.commodity_id,&#10;    contexts.years,&#10;    contexts.subnational_years,&#10;    contexts.default_year,&#10;    commodities.name AS commodity_name,&#10;    countries.name AS country_name,&#10;    countries.iso2,&#10;    context_properties.default_basemap,&#10;    context_properties.is_disabled,&#10;    context_properties.is_default,&#10;        CASE&#10;            WHEN ((contexts.subnational_years IS NOT NULL) AND (icount(contexts.subnational_years) &gt; 0)) THEN true&#10;            ELSE false&#10;        END AS is_subnational,&#10;    context_properties.is_highlighted,&#10;    COALESCE((contexts_with_profiles.id IS NOT NULL), false) AS has_profiles,&#10;    node_types_by_role.node_types_by_role,&#10;    context_node_types_agg.node_types_by_name,&#10;    context_node_types_agg.node_types&#10;   FROM ((((((contexts&#10;     JOIN commodities ON ((contexts.commodity_id = commodities.id)))&#10;     JOIN countries ON ((contexts.country_id = countries.id)))&#10;     JOIN context_properties ON ((context_properties.context_id = contexts.id)))&#10;     JOIN ( SELECT context_node_types_with_props.context_id,&#10;            jsonb_object_agg(context_node_types_with_props.role, context_node_types_with_props.node_type_id) AS node_types_by_role&#10;           FROM context_node_types_with_props&#10;          WHERE (context_node_types_with_props.role IS NOT NULL)&#10;          GROUP BY context_node_types_with_props.context_id) node_types_by_role ON ((node_types_by_role.context_id = contexts.id)))&#10;     JOIN ( SELECT context_node_types_with_props.context_id,&#10;            jsonb_object_agg(context_node_types_with_props.node_type, context_node_types_with_props.node_type_id) AS node_types_by_name,&#10;            jsonb_agg(jsonb_build_object(&#39;node_type_id&#39;::text, context_node_types_with_props.node_type_id, &#39;is_default&#39;::text, context_node_types_with_props.is_default, &#39;column_group&#39;::text, context_node_types_with_props.column_group, &#39;role&#39;::text, context_node_types_with_props.role, &#39;node_type&#39;::text, context_node_types_with_props.node_type) ORDER BY context_node_types_with_props.column_position) AS node_types&#10;           FROM context_node_types_with_props&#10;          GROUP BY context_node_types_with_props.context_id) context_node_types_agg ON ((context_node_types_agg.context_id = contexts.id)))&#10;     LEFT JOIN ( SELECT DISTINCT context_node_types.context_id AS id&#10;           FROM (context_node_types&#10;             JOIN profiles ON ((context_node_types.id = profiles.context_node_type_id)))) contexts_with_profiles ON ((contexts_with_profiles.id = contexts.id)));</textarea>
+                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT flows.context_id,&#10;    flow_quants.quant_id,&#10;    context_node_types.node_type_id,&#10;    nodes.id AS node_id,&#10;    flows.year,&#10;    nodes.geo_id,&#10;    nodes.name,&#10;    sum(flow_quants.value) AS value,&#10;    (sum(flow_quants.value) / NULLIF(sum(sum(flow_quants.value)) OVER (PARTITION BY flows.context_id, flow_quants.quant_id, context_node_types.node_type_id, flows.year), (0)::double precision)) AS height&#10;   FROM ((((flow_quants&#10;     JOIN flows ON ((flow_quants.flow_id = flows.id)))&#10;     JOIN context_node_types ON ((context_node_types.context_id = flows.context_id)))&#10;     JOIN nodes ON ((nodes.id = flows.path[(context_node_types.column_position + 1)])))&#10;     JOIN node_properties ON ((nodes.id = node_properties.node_id)))&#10;  WHERE ((NOT nodes.is_unknown) AND (NOT node_properties.is_domestic_consumption))&#10;  GROUP BY flows.context_id, flow_quants.quant_id, context_node_types.node_type_id, nodes.id, flows.year;</textarea>
                             <div style="padding-top: 5px;"><hr></div>
                             <div class="box box-solid">
                                 <div class="box-header with-border">
@@ -432,14 +279,11 @@
                                 <!-- /.box-header -->
                                 <div class="box-body">
                                     <ul class="list-unstyled">
+                                        <li><a href="flows.html">flows</a></li>
+                                        <li><a href="flow_quants.html">flow_quants</a></li>
                                         <li><a href="context_node_types.html">context_node_types</a></li>
-                                        <li><a href="node_types.html">node_types</a></li>
-                                        <li><a href="context_node_type_properties.html">context_node_type_properties</a></li>
-                                        <li><a href="contexts.html">contexts</a></li>
-                                        <li><a href="commodities.html">commodities</a></li>
-                                        <li><a href="countries.html">countries</a></li>
-                                        <li><a href="context_properties.html">context_properties</a></li>
-                                        <li><a href="profiles.html">profiles</a></li>
+                                        <li><a href="nodes.html">nodes</a></li>
+                                        <li><a href="node_properties.html">node_properties</a></li>
                                     </ul>
                                 </div><!-- /.box-body -->
                             </div>

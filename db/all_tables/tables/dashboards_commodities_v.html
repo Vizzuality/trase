@@ -154,6 +154,23 @@
                                     <td></td>
                                 </tr>
                                 <tr>
+                                    <td><span id="context_node_type_id">context_node_type_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
                                     <td><span id="year">year</span></td>
                                     <td>int2</td>
                                     <td>5</td>
@@ -235,7 +252,7 @@
                             </div>
                         </div>
                         <div class="box-body">
-                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT DISTINCT nodes.commodity_id AS id,&#10;    nodes.country_id,&#10;    nodes.id AS node_id,&#10;    nodes.year,&#10;    btrim(commodities.name) AS name,&#10;    to_tsvector(&#39;simple&#39;::regconfig, COALESCE(btrim(commodities.name), &#39;&#39;::text)) AS name_tsvector,&#10;    profiles.name AS profile&#10;   FROM ((nodes_with_flows_per_year nodes&#10;     JOIN commodities ON ((commodities.id = nodes.commodity_id)))&#10;     LEFT JOIN profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))&#10;  WHERE (NOT nodes.is_unknown);</textarea>
+                            <textarea id="sql-script-codemirror" name="sql-script-codemirror" rows="" style="display: none;">SELECT DISTINCT nodes.commodity_id AS id,&#10;    nodes.country_id,&#10;    nodes.id AS node_id,&#10;    nodes.context_node_type_id,&#10;    nodes.year,&#10;    btrim(commodities.name) AS name,&#10;    to_tsvector(&#39;simple&#39;::regconfig, COALESCE(btrim(commodities.name), &#39;&#39;::text)) AS name_tsvector,&#10;    profiles.name AS profile&#10;   FROM (((nodes_with_flows_per_year nodes&#10;     JOIN commodities ON ((commodities.id = nodes.commodity_id)))&#10;     JOIN context_properties ON ((context_properties.context_id = nodes.context_id)))&#10;     LEFT JOIN profiles ON ((nodes.context_node_type_id = profiles.context_node_type_id)))&#10;  WHERE ((NOT nodes.is_unknown) AND (NOT context_properties.is_disabled));</textarea>
                             <div style="padding-top: 5px;"><hr></div>
                             <div class="box box-solid">
                                 <div class="box-header with-border">
@@ -249,6 +266,7 @@
                                         <li><a href="commodities.html">commodities</a></li>
                                         <li><a href="profiles.html">profiles</a></li>
                                         <li><a href="nodes_with_flows_per_year.html">nodes_with_flows_per_year</a></li>
+                                        <li><a href="context_properties.html">context_properties</a></li>
                                     </ul>
                                 </div><!-- /.box-body -->
                             </div>
