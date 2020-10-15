@@ -84,8 +84,9 @@ class NewsletterForm extends React.PureComponent {
                 onInput={e => this.onFormInput(e, 'organisation')}
                 type="text"
                 name="organisation"
-                placeholder="(organisation)"
+                placeholder="organisation"
                 id="newsletter-organisation"
+                required
                 className="newsletter-input"
               />
             </div>
