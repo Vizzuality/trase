@@ -137,7 +137,7 @@ function Timeline(props) {
           {years.map((year, i) => {
             const isActive = year === state.start || year === state.end;
             const statusClassName = getClassName(year, state);
-            const isSubNational = subNationalYears.indexOf(year) > -1;
+            const isSubNational = subNationalYears?.indexOf(year) > -1;
             return (
               <li
                 ref={i === 0 ? refs.item : undefined}
