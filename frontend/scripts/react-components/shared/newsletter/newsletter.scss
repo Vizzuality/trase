@@ -11,6 +11,14 @@
     }
   }
 
+  .error-message {
+    font-family: $font-family-2;
+    color: $strong-pink;
+    font-size: $font-size-regular;
+    margin: 0 0 10px 10px;
+    font-weight: 500;
+  }
+
   .conditions {
     max-height: 0;
     overflow: hidden;
@@ -38,6 +46,15 @@
 
   .-pink {
     color: $medium-pink;
+  }
+
+  .subscription-success {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-family-2;
+    font-size: $font-size-xx-regular;
+    color: $charcoal-grey;
   }
 
   .newsletter-text {
@@ -73,6 +90,9 @@
       color: $charcoal-grey-faded;
       text-transform: uppercase;
       padding: 1px 10px 0;
+      &.error {
+        border: 1px solid $strong-pink;
+      }
       &::placeholder {
         text-transform: uppercase;
       }
