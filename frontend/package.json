@@ -50,7 +50,7 @@
     "@babel/plugin-transform-exponentiation-operator": "^7.8.3",
     "@babel/plugin-transform-modules-commonjs": "^7.8.3",
     "@babel/plugin-transform-react-jsx": "^7.8.3",
-    "@babel/preset-env": "^7.8.3",
+    "@babel/preset-env": "^7.9.0",
     "@babel/preset-react": "^7.8.3",
     "@pollyjs/adapter-puppeteer": "^2.6.3",
     "@pollyjs/core": "^2.6.3",
