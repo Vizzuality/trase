@@ -13,6 +13,10 @@ import 'scripts/react-components/home/homepage.scss';
 
 const WorldMap = React.lazy(() => import('../shared/world-map/world-map.container'));
 
+const NewsletterForm = React.lazy(() =>
+  import('react-components/shared/newsletter/newsletter.container')
+);
+
 const getConsolidatedInsights = (insights, blogs) =>
   sortBy([...insights, ...blogs], post => -new Date(post.date).getTime());
 
@@ -42,6 +46,12 @@ const Home = props => {
     <div className={cx('homepage-entrypoints', { '-hide-profiles': DISABLE_PROFILES })}>
       <Entrypoints onClickNext={clickNextEntrypoint} onClick={clickEntrypoint} />
     </div>
+  );
+
+  const subscriptionForm = (
+    <Suspense fallback={null}>
+      <NewsletterForm />
+    </Suspense>
   );
 
   const map = (
@@ -94,10 +104,10 @@ const Home = props => {
     </div>
   );
 
-  let content = CONSOLIDATE_INSIGHTS ? [sliders, entryPoints] : [entryPoints, sliders];
+  let content = CONSOLIDATE_INSIGHTS ? [sliders, entryPoints, subscriptionForm] : [entryPoints, subscriptionForm, sliders];
 
   if (!ENABLE_TOOL_PANEL) {
-    content = CONSOLIDATE_INSIGHTS ? [sliders, entryPoints, map] : [entryPoints, map, sliders];
+    content = CONSOLIDATE_INSIGHTS ? [sliders, entryPoints, subscriptionForm, map] : [entryPoints, map, sliders];
   }
 
   return (
