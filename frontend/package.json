@@ -7,7 +7,7 @@
     "start:staging": "webpack-dev-server --config config/webpack.config.staging.js",
     "build": "yarn webpack:prod && cp -a public/. dist/",
     "ci": "start-server-and-test start:staging http-get://localhost:8081 test",
-    "test": "yarn unit && yarn e2e",
+    "test": "yarn unit",
     "unit": "jest --config ./jest.config.js --colors --runInBand",
     "e2e": "jest --config ./jest.e2e.config.js --colors --runInBand --testMatch='**/?(*.)+(spec|test).e2e.js?(x)'",
     "webpack:prod": "NODE_ENV='production' webpack --config config/webpack.config.prod.js",
