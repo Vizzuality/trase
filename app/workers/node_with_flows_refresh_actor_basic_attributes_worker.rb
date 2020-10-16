@@ -1,5 +1,6 @@
 class NodeWithFlowsRefreshActorBasicAttributesWorker
   include Sidekiq::Worker
+
   sidekiq_options queue: :default,
                   retry: 0,
                   backtrace: true,

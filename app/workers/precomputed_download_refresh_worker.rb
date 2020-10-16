@@ -1,5 +1,6 @@
 class PrecomputedDownloadRefreshWorker
   include Sidekiq::Worker
+
   sidekiq_options queue: :low,
                   retry: false,
                   backtrace: true,

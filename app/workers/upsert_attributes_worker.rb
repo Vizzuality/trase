@@ -1,5 +1,6 @@
 class UpsertAttributesWorker
   include Sidekiq::Worker
+
   sidekiq_options queue: :critical,
                   retry: false,
                   backtrace: true,
