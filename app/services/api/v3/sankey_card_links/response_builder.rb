@@ -18,14 +18,14 @@ module Api
         private
 
         def initialize_params(params)
-          @level = (params[:level] || '').split(',')
+          @levels = params[:levels] & Api::V3::SankeyCardLink::LEVELS
           @country_id = params[:country_id]
           @commodity_id = params[:commodity_id]
         end
 
         def initialize_sankey_card_links
           query = Api::V3::SankeyCardLink.all
-          @level.each { |level| query = query.where("level#{level}": true) }
+          @levels.each { |level| query = query.where("level#{level}": true) }
           query = query.where(country_id: @country_id) if @country_id
           query = query.where(commodity_id: @commodity_id) if @commodity_id
           @sankey_card_links = query
