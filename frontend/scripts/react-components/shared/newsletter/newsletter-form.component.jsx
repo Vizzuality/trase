@@ -82,7 +82,7 @@ class NewsletterForm extends React.PureComponent {
                 onInput={e => this.onFormInput(e, 'firstname')}
                 type="text"
                 name="firstname"
-                placeholder="firstname"
+                placeholder="first name"
                 id="newsletter-firstname"
                 required
                 className={cx({
@@ -92,14 +92,14 @@ class NewsletterForm extends React.PureComponent {
               />
             </div>
 
-            {this.elementHasError('firstname') && <p className="error-message">Firstname is required</p>}
+            {this.elementHasError('firstname') && <p className="error-message">First name is required</p>}
 
             <div className="newsletter-input-container">
               <input
                 onInput={e => this.onFormInput(e, 'lastname')}
                 type="text"
                 name="lastname"
-                placeholder="lastname"
+                placeholder="last name"
                 id="newsletter-lastname"
                 required
                 className={cx({
@@ -109,7 +109,7 @@ class NewsletterForm extends React.PureComponent {
               />
             </div>
 
-            {this.elementHasError('lastname') && <p className="error-message">Lastname is required</p>}
+            {this.elementHasError('lastname') && <p className="error-message">Last name is required</p>}
 
             <div className="newsletter-input-container">
               <input
