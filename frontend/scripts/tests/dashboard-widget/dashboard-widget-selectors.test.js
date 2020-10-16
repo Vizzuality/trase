@@ -54,6 +54,16 @@ const defaultState = {
       data: { byId: [commodity.id], nodes: { [commodity.id]: commodity } },
       selectedNodeId: commodity.id
     }
+  },
+  location: {
+    type: 'tool',
+    payload: {
+      section: null
+    }
+  },
+  toolLinks: {
+    selectedRecolorBy: 1,
+    extraColumnNodeId: null
   }
 };
 
@@ -95,10 +105,18 @@ const notSelectedRecolorBy = { value: null, name: 'none' };
 describe('Widget config parse selectors', () => {
   describe('getDefaultConfig', () => {
     it('returns the default bar config if the chartType is not found', () => {
-      expect(getDefaultConfig(null, { chartType: 'notFoundChartype' })).toEqual(CHART_CONFIG.bar);
+      const conf = getDefaultConfig(null, { chartType: 'notFoundChartype' });
+      expect(conf.colors).toEqual(CHART_CONFIG.bar.colors);
+      expect(conf.type).toBe('bar');
+      expect(conf.xKey).toBe('x');
+      expect(conf.tooltip).toBeDefined();
     });
     it('returns the default chart config of a specific chart', () => {
-      expect(getDefaultConfig(null, { chartType: 'donut_chart' })).toEqual(CHART_CONFIG.pie);
+      const conf = getDefaultConfig(null, { chartType: 'donut_chart' });
+      expect(conf.colors).toEqual(CHART_CONFIG.pie.colors);
+      expect(conf.type).toBe('pie');
+      expect(conf.xKey).toBe('x');
+      expect(conf.tooltip).toBeDefined();
     });
   });
 
@@ -193,9 +211,11 @@ describe('Widget config parse selectors', () => {
   // makeGetConfig is a function that returns the selector just to be able to memoize the selector result
   describe('makeGetConfig', () => {
     it('returns the defaultConfig if there is no meta', () => {
-      expect(makeGetConfig()(defaultState, { meta: null, selectedRecolorBy: null })).toEqual(
-        CHART_CONFIG.bar
-      );
+      const conf = makeGetConfig()(defaultState, { meta: null, selectedRecolorBy: null });
+      expect(conf.colors).toEqual(CHART_CONFIG.bar.colors);
+      expect(conf.type).toBe('bar');
+      expect(conf.xKey).toBe('x');
+      expect(conf.tooltip).toBeDefined();
     });
 
     it('Parses the config with recolor by', () => {

@@ -1,6 +1,6 @@
-import reducer, {
-  initialState
-} from 'react-components/shared/profile-selector/profile-selector.reducer';
+import reducer from 'react-components/shared/profile-selector/profile-selector.reducer';
+import initialState from 'react-components/shared/profile-selector/profile-selector.initial-state';
+
 import { PROFILE_STEPS } from 'constants';
 import {
   PROFILES__SET_ACTIVE_STEP,
