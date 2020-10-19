@@ -37,8 +37,9 @@ const snapshotOptions = {
 describe('Prints the actor profile PDF correctly', () => {
   it('Prints actor profile - Full data', async () => {
     await page.goto(
-      `${BASE_URL}/profile-actor?lang=en&nodeId=33624&contextId=1&year=2015&print=true`
+      `${BASE_URL}/profile-actor?lang=en&nodeId=14600&contextId=4&year=2017&print=true`
     );
+
     const promises = [
       page.waitForSelector('[data-test=company-compare]'),
       page.waitForSelector('[data-test=top-destination-countries]'),
@@ -58,7 +59,7 @@ describe('Prints the actor profile PDF correctly', () => {
 
   it('Prints place profile PDF', async () => {
     await page.goto(
-      `${BASE_URL}/profile-place?lang=en&nodeId=10902&contextId=1&year=2015&print=true`
+      `${BASE_URL}/profile-place?lang=en&nodeId=14600&contextId=4&year=2017&print=true`
     );
     const promises = [
       page.waitForSelector('[data-test=sustainability-indicators]'),
