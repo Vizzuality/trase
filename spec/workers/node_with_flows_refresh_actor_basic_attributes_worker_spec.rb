@@ -19,8 +19,8 @@ RSpec.describe NodeWithFlowsRefreshActorBasicAttributesWorker, type: :worker do
       find(api_v3_exporter1_node.id)
     expect(actor_with_flows.actor_basic_attributes).to be_nil
 
-    NodeWithFlowsRefreshActorBasicAttributesWorker.new.perform(
-      [api_v3_exporter1_node.id]
+    NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
+      actor_with_flows.id, actor_with_flows.context_id
     )
 
     actor_with_flows.reload

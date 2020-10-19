@@ -97,14 +97,16 @@ module Api
       end
 
       def update_node_with_flows_actor_basic_attributes(context_node_type_id)
-        nodes_ids = Api::V3::Readonly::NodeWithFlows.
-          where(context_node_type_id: context_node_type_id).
+        nodes_with_flows = Api::V3::Readonly::NodeWithFlows.
+          select(:id, :context_id).
           without_unknowns.
           without_domestic.
-          pluck(:id)
-        NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
-          nodes_ids.uniq
-        )
+          where(context_node_type_id: context_node_type_id)
+        nodes_with_flows.each do |node|
+          NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
+            node.id, node.context_id
+          )
+        end
       end
     end
   end
