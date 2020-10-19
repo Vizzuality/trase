@@ -1,6 +1,8 @@
 module Api
   module V3
     class SankeyCardLinksController < ApiController
+      include Api::V3::ParamHelpers
+
       skip_before_action :load_context
 
       before_action :set_filter_params, only: :index
@@ -30,7 +32,7 @@ module Api
         @filter_params = {
           country_id: params[:country_id],
           commodity_id: params[:commodity_id],
-          level: params[:level]
+          levels: cs_string_to_int_array(params[:level])
         }
       end
     end
