@@ -5,7 +5,6 @@ module Api
 
       def create
         mailchimp = Mailchimp::API.new(ENV['MAILCHIMP_API_KEY'])
-
         response = mailchimp.lists.subscribe(
           ENV['MAILCHIMP_LIST_ID'],
           { email: params[:email] },
@@ -13,9 +12,10 @@ module Api
             'FNAME' => params[:firstname],
             'LNAME' => params[:lastname],
             'MMERGE3' => params[:organisation],
-            'MMERGE4' => ""
+            'MMERGE4' => "-"
           }
         )
+        p response
         render json: response and return
       rescue Mailchimp::ListAlreadySubscribedError
         # noop
