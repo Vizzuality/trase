@@ -12,7 +12,8 @@ module Api
           {
             'FNAME' => params[:firstname],
             'LNAME' => params[:lastname],
-            'MMERGE3' => params[:organisation]
+            'MMERGE3' => params[:organisation],
+            'MMERGE4' => ""
           }
         )
         render json: response and return
