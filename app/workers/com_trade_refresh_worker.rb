@@ -1,6 +1,7 @@
 class ComTradeRefreshWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :external_apis,
+
+  sidekiq_options queue: :low,
                   retry: 3,
                   backtrace: true
 

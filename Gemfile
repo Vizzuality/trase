@@ -58,6 +58,7 @@ gem 'scenic'
 gem 'sidekiq', '~> 6.1.2'
 gem 'sidekiq-unique-jobs'
 gem 'sitemap_generator'
+gem 'staccato'
 gem 'twitter', '~> 7.0'
 gem 'zip_tricks'
 gem 'whenever', require: false
@@ -90,7 +91,7 @@ group :development do
   gem 'capistrano-rails', '~> 1.6', require: false
   gem 'capistrano-rvm'
   gem 'ed25519', '~> 1.2'
-  gem 'rubocop', '~> 0.91.1', require: false
+  gem 'rubocop', '~> 0.93.1', require: false
   gem 'rubocop-performance', require: false
 end
 
