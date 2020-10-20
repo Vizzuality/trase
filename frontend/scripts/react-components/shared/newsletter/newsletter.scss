@@ -2,13 +2,21 @@
 
 .c-newsletter {
   width: 100%;
-  margin-bottom: 40px;
+  padding: 40px 0;
+  background: $metal-grey;
 
   @media only screen and (min-width: $breakpoint-foundation-small) {
     &.sent {
-      transform: translateY(calc(50% - 8px));
       margin-bottom: 0px;
     }
+  }
+
+  .error-message {
+    font-family: $font-family-2;
+    color: $strong-pink;
+    font-size: $font-size-regular;
+    margin: 0 0 10px 10px;
+    font-weight: 500;
   }
 
   .conditions {
@@ -30,7 +38,6 @@
 
   .newsletter-label {
     position: absolute;
-    top: 0;
     font-family: $font-family-2;
     font-size: $font-size-xx-regular;
     color: $charcoal-grey;
@@ -41,13 +48,36 @@
     color: $medium-pink;
   }
 
+  .subscription-success {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: $font-family-2;
+    font-size: $font-size-xx-regular;
+    color: $charcoal-grey;
+  }
+
+  .newsletter-text {
+    margin: 20px 0 0 0;
+    font-family: $font-family-2;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.75;
+    color: $charcoal-grey;
+
+    @media only screen and (min-width: 800px) {
+      font-size: 24px;
+    }
+  }
+
   .newsletter-input-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
     height: 40px;
+    margin-bottom: 10px;
 
-    > .newsletter-email {
+    .newsletter-input {
       flex: auto;
       height: 100%;
       font-family: $font-family-1;
@@ -60,6 +90,9 @@
       color: $charcoal-grey-faded;
       text-transform: uppercase;
       padding: 1px 10px 0;
+      &.error {
+        border: 1px solid $strong-pink;
+      }
       &::placeholder {
         text-transform: uppercase;
       }
