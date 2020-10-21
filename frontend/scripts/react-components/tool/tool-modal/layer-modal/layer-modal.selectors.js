@@ -6,7 +6,7 @@ import {
   getSelectedGeoColumn
 } from 'react-components/tool-layers/tool-layers.selectors';
 import { getSelectedContext } from 'app/app.selectors';
-import { logisticLayerTemplates } from 'react-components/tool/mapbox-map/layers/logistic-layers';
+import { logisticLayerTemplates } from 'react-components/tool/map/layers/logistic-layers';
 
 const getMapContextualLayers = state => state.toolLayers.data.mapContextualLayers;
 const getMapDimensions = state => state.toolLayers.data.mapDimensions;

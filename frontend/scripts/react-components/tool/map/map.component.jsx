@@ -13,17 +13,18 @@ import capitalize from 'lodash/capitalize';
 import flatMap from 'lodash/flatMap';
 import upperCase from 'lodash/upperCase';
 import getUnitLayerStyle from './layers/unit-layers';
-import Warnings from './mapbox-map-warnings';
-import Tooltip from './mapbox-map-tooltip';
+import Warnings from './map-warnings';
+import Tooltip from './map-tooltip';
 import { getLayerOrder } from './layers/layer-config';
 import { getBaseLayer } from './layers/base-layer';
 import {
   useChoroplethFeatureState,
   useFitToBounds,
   useSetMapAttribution
-} from './mapbox-map.hooks';
-import 'react-components/tool/mapbox-map/mapbox-map.scss';
+} from './map.hooks';
+import 'react-components/tool/map/map.scss';
 
+const INDONESIA_MILL_LAYER_ID = 'indonesia_mill';
 let lastHoveredGeo = {};
 let lastSelectedGeos = [];
 
@@ -66,8 +67,7 @@ function MapBoxMap(props) {
     unitLayers && unitLayers.map(u => u.id),
     logisticLayers && logisticLayers.map(u => u.id)
   );
-
-  const geoIdName = (layerId) => layerId === 'indonesia_mill' ? 'mill_name' : 'geoid';
+  const geoIdName = layerId => (layerId === INDONESIA_MILL_LAYER_ID ? 'mill_name' : 'geoid');
 
   // Set map when loaded
   useEffect(() => {
@@ -228,7 +228,7 @@ function MapBoxMap(props) {
         pageY: center.y
       });
 
-      if (source === 'indonesia_mill') {
+      if (source === INDONESIA_MILL_LAYER_ID) {
         const logisticsTooltipValues = [];
 
         const logisticTooltipFields = [{ name: 'company' }, { name: 'uml_id' }];
@@ -291,6 +291,7 @@ function MapBoxMap(props) {
 
   const orderedLayers = layers.map(l => ({ ...l, zIndex: layerOrder[l.id] }));
   const minimized = toolLayout === TOOL_LAYOUT.right;
+
   return (
     <div
       ref={mapContainerRef}
