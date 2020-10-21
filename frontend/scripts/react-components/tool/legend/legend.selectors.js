@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { getLayers } from 'react-components/tool/tool-modal/layer-modal/layer-modal.selectors';
-import { getLogisticLayers } from 'react-components/tool/mapbox-map/mapbox-map.selectors';
-import { logisticLayerTemplates } from 'react-components/tool/mapbox-map/layers/logistic-layers';
+import { getLogisticLayers } from 'react-components/tool/map/map.selectors';
+import { logisticLayerTemplates } from 'react-components/tool/map/layers/logistic-layers';
 import pick from 'lodash/pick';
 
 export const hasLayers = createSelector(

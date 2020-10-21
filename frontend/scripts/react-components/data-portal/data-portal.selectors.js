@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import uniqBy from 'lodash/uniqBy';
-import { logisticLayerTemplates } from '../tool/mapbox-map/layers/logistic-layers';
+import { logisticLayerTemplates } from '../tool/map/layers/logistic-layers';
 
 const getAppContexts = state => state.app.contexts;
 const getSelectedCountry = state => state.data.country;
