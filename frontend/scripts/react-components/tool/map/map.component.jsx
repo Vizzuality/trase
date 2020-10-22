@@ -20,19 +20,26 @@ import { INDONESIA_MILL_LAYER_ID, getGeoIdName } from './map-constants';
 import {
   useChoroplethFeatureState,
   useFitToBounds,
-  useSetMapAttribution
+  useSetMapAttribution,
+  useSetSelectedFeatureState,
+  useHighlightHoveredSankeyNodes
 } from './map.hooks';
 import { handleHover, handleClick } from './map-interaction.utils'
 import 'react-components/tool/map/map.scss';
 
-let lastSelectedGeos = [];
+const selectedGeos = {
+  last: [],
+  set: function set(value) {
+    this.last = value;
+  }
+};
 
 const hoveredGeo = {
   last: {},
   set: function set(value) {
     this.last = value;
   }
-}
+};
 
 function MapBoxMap(props) {
   const {
@@ -55,6 +62,7 @@ function MapBoxMap(props) {
     setMap,
     highlightedGeoNodes
   } = props;
+
   const mapRef = useRef();
   const mapContainerRef = useRef();
   const [viewport, setViewport] = useState({ ...defaultMapView });
@@ -89,7 +97,6 @@ function MapBoxMap(props) {
       ...updatedViewport
     });
   };
-
   useEffect(() => {
     setViewport({
       ...viewport,
@@ -130,54 +137,20 @@ function MapBoxMap(props) {
     }
   }, [layerIds, map, hoveredGeo]);
 
-  // Set and remove selected feature-state
-  useEffect(() => {
-    const unselectNodes = () => {
-      lastSelectedGeos.forEach(lastSelectedGeo => {
-        if (layerIds && layerIds.includes(lastSelectedGeo.source)) {
-          map.removeFeatureState(lastSelectedGeo, 'selected');
-        }
-      });
-    };
-
-    const selectNodes = () => {
-      lastSelectedGeos = selectedGeoNodes.map(selectedGeoNode => ({
-        id: selectedGeoNode.geoId,
-        source: selectedGeoNode.layerId,
-        sourceLayer
-      }));
-      lastSelectedGeos.forEach(
-        geo => layerIds.includes(geo.source) && map.setFeatureState({ ...geo }, { selected: true })
-      );
-    };
-
-    if (map && loaded && selectedGeoNodes.length) {
-      unselectNodes();
-      selectNodes();
-    }
-
-    if (map && loaded && !selectedGeoNodes.length && lastSelectedGeos.length) {
-      unselectNodes();
-    }
-    return undefined;
-  }, [selectedGeoNodes, map, loaded, sourceLayer, layerIds]);
-
   // Highlight nodes hovered on Sankey
-  useEffect(() => {
-    if (map && loaded && highlightedGeoNodes) {
-      clearHoveredFeatureState('hover');
-      hoveredGeo.set({
-        id: highlightedGeoNodes.geoId,
-        source: highlightedGeoNodes.layerId,
-        sourceLayer
-      });
-      if (hoveredGeo.last.id) {
-        map.setFeatureState({ ...hoveredGeo.last }, { hover: true });
-      }
-    }
-    return undefined;
-  }, [map, loaded, highlightedGeoNodes, layerIds, sourceLayer, clearHoveredFeatureState]);
+  useHighlightHoveredSankeyNodes({map, loaded, hoveredGeo, highlightedGeoNodes, layerIds, sourceLayer, clearHoveredFeatureState});
 
+  // Set and remove selected feature-state
+  useSetSelectedFeatureState({
+    selectedGeoNodes,
+    map,
+    loaded,
+    sourceLayer,
+    layerIds,
+    selectedGeos
+  });
+
+  // Interactions
   const onHover = event =>
     handleHover({
       event,
@@ -194,7 +167,6 @@ function MapBoxMap(props) {
       INDONESIA_MILL_LAYER_ID
     }
   );
-
   const onClick = event => handleClick({ event, onPolygonClicked, sourceLayer });
 
   // Get Layers
