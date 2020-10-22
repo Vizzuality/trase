@@ -25,6 +25,14 @@ module Api
         }
       end
 
+      def tracking_params
+        super.merge(
+          node_types: [params[:node_type]],
+          nodes: [params[:name]],
+          geo_ids: [params[:geo_id]]
+        )
+      end
+
       def default_per_page
         100
       end

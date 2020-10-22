@@ -1,10 +1,11 @@
 class MirrorDatabaseUpdateWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :database,
+
+  sidekiq_options queue: :low,
                   retry: false,
                   backtrace: true,
                   unique: :until_executed,
-                  run_lock_expiration: 60 * 60 * 2, # 2 hrs
+                  run_lock_expiration: 60 * 60 * 3, # 3 hrs
                   log_duplicate_payload: true
 
   def perform(database_update_id, s3_filename)

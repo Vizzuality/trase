@@ -1,7 +1,7 @@
 module Api
   module Public
     module Nodes
-      class ExportersController < ApiController
+      class ExportersController < BaseController
         include PaginationHeaders
         include PaginatedCollection
         include Nodes

@@ -145,11 +145,11 @@ module Api
             without_unknowns.
             without_domestic.
             where(profile: Api::V3::Profile::ACTOR).
-            select(:id).
+            select(:id, :context_id).
             distinct.
             each do |node|
               NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
-                [node.id]
+                node.id, node.context_id
               )
             end
         end

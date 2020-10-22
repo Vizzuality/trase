@@ -37,7 +37,7 @@ RSpec.describe Api::V3::SankeyCardLinks::ResponseBuilder do
         link: "http://localhost:8081/flows?#{@query_params.to_query}"
       )
 
-      @builder = Api::V3::SankeyCardLinks::ResponseBuilder.new(level: '1')
+      @builder = Api::V3::SankeyCardLinks::ResponseBuilder.new(levels: [1])
       @builder.call
     end
 

@@ -1,6 +1,7 @@
 class MapAttributesExportWorker
   include Sidekiq::Worker
-  sidekiq_options queue: :database,
+
+  sidekiq_options queue: :low,
                   retry: 3,
                   backtrace: true
 

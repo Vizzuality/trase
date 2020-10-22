@@ -41,6 +41,7 @@ function App() {
         <CookieBanner />
         {feedback && <Feedback />}
       </main>
+
       {footer && (
         <footer>
           <Footer />

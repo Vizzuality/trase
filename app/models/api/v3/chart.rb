@@ -161,15 +161,18 @@ module Api
       end
 
       def update_node_with_flows_actor_basic_attributes(profile_id)
-        profile = Api::V3::Profile.find(profile_id)
-        nodes_ids = Api::V3::Readonly::NodeWithFlows.
-          where(context_node_type_id: profile.context_node_type_id).
+        nodes_with_flows = Api::V3::Readonly::NodeWithFlows.
+          select(:id, :context_id).
           without_unknowns.
           without_domestic.
-          pluck(:id)
-        NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
-          nodes_ids.uniq
-        )
+          where(
+            context_node_type_id: Api::V3::Profile.select(:context_node_type_id).where(id: profile_id)
+          )
+        nodes_with_flows.each do |node|
+          NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
+            node.id, node.context_id
+          )
+        end
       end
 
       protected

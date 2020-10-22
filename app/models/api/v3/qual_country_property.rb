@@ -53,15 +53,20 @@ module Api
         update_node_with_flows_actor_basic_attributes(country_id, qual_id)
       end
 
-      def update_node_with_flows_actor_basic_attributes(country_id, _qual_id)
-        nodes_ids = Api::V3::Readonly::NodeWithFlows.
-          where(country_id: country_id).
+      def update_node_with_flows_actor_basic_attributes(country_id, qual_id)
+        nodes_with_flows = Api::V3::Readonly::NodeWithFlows.
+          select(:id, :context_id).
           without_unknowns.
           without_domestic.
-          pluck(:id)
-        NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
-          nodes_ids.uniq
-        )
+          where(
+            country_id: country_id,
+            id: Api::V3::NodeQual.select(:node_id).where(qual_id: qual_id).distinct
+          )
+        nodes_with_flows.each do |node|
+          NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
+            node.id, node.context_id
+          )
+        end
       end
     end
   end

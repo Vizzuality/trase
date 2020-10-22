@@ -76,6 +76,8 @@ after 'deploy:starting', 'sidekiq:quiet'
 after 'deploy:reverted', 'sidekiq:restart'
 after 'deploy:published', 'sidekiq:restart'
 after 'deploy:migrate', 'deploy:schema_comments'
+after 'sidekiq:restart', 'downloads:clear'
+after 'sidekiq:restart', 'map_attributes:refresh'
 after 'sidekiq:restart', 'downloads:refresh'
 # after 'deploy:updated', 'newrelic:notice_deployment'
 
@@ -110,6 +112,19 @@ namespace :downloads do
       within release_path do
         with rails_env: fetch(:rails_env) do
           execute :rake, 'downloads:refresh_later'
+        end
+      end
+    end
+  end
+end
+
+namespace :map_attributes do
+  desc 'Refresh map attributes csv export in a background job'
+  task :refresh do
+    on roles(:db) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          execute :rake, 'map_attributes:refresh_later'
         end
       end
     end
