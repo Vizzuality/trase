@@ -104,3 +104,57 @@ export function useSetMapAttribution(loaded, setMapAttribution) {
     }
   }, [loaded, setMapAttribution]);
 }
+
+// Highlight nodes hovered on Sankey
+export function useHighlightHoveredSankeyNodes({map, loaded, hoveredGeo, highlightedGeoNodes, layerIds, sourceLayer, clearHoveredFeatureState}) {
+  useEffect(() => {
+    if (map && loaded && highlightedGeoNodes) {
+      clearHoveredFeatureState('hover');
+      hoveredGeo.set({
+        id: highlightedGeoNodes.geoId,
+        source: highlightedGeoNodes.layerId,
+        sourceLayer
+      });
+      if (hoveredGeo.last.id) {
+        map.setFeatureState({ ...hoveredGeo.last }, { hover: true });
+      }
+    }
+    return undefined;
+  }, [map, loaded, highlightedGeoNodes, layerIds, sourceLayer, clearHoveredFeatureState]);
+}
+
+// Set selected feature state
+export function useSetSelectedFeatureState({ selectedGeoNodes, map, loaded, sourceLayer, layerIds, selectedGeos }) {
+  useEffect(() => {
+    const unselectNodes = () => {
+      selectedGeos.last.forEach(lastSelectedGeo => {
+        if (layerIds && layerIds.includes(lastSelectedGeo.source)) {
+          map.removeFeatureState(lastSelectedGeo, 'selected');
+        }
+      });
+    };
+
+    const selectNodes = () => {
+      selectedGeos.set(
+        selectedGeoNodes.map(selectedGeoNode => ({
+          id: selectedGeoNode.geoId,
+          source: selectedGeoNode.layerId,
+          sourceLayer
+        }))
+      );
+      selectedGeos.last.forEach(
+        geo => layerIds.includes(geo.source) && map.setFeatureState({ ...geo }, { selected: true })
+      );
+    };
+
+    if (map && loaded && selectedGeoNodes.length) {
+      unselectNodes();
+      selectNodes();
+    }
+
+    if (map && loaded && !selectedGeoNodes.length && selectedGeos.last.length) {
+      unselectNodes();
+    }
+    return undefined;
+  }, [selectedGeoNodes, map, loaded, sourceLayer, layerIds]);
+}
