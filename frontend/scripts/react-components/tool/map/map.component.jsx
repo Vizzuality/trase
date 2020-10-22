@@ -195,6 +195,10 @@ function MapBoxMap(props) {
         { '-fullscreen': toolLayout === TOOL_LAYOUT.left },
         { '-minimized': minimized }
       )}
+      onMouseLeave={() => {
+        setTooltip(null);
+        updateTooltipValues(null);
+      }}
     >
       <ReactMapGL
         ref={mapRef}

@@ -96,7 +96,7 @@ export function selectNodeFromGeoId(geoId) {
   };
 }
 
-export function selectExpandedNode(param) {
+function selectExpandedNode(param) {
   const ids = Array.isArray(param) ? param : [param];
   return (dispatch, getState) => {
     const state = getState();
