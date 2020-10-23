@@ -7,6 +7,7 @@ import PlaceSummary from 'react-components/profile/profile-components/summary/pl
 import CountrySummary from 'react-components/profile/profile-components/summary/country-summary.component';
 import Widget from 'react-components/widgets/widget.component';
 import { getSummaryEndpoint } from 'utils/getURLFromParams';
+import stripHtml from 'utils/stripHtml';
 import ShrinkingSpinner from 'react-components/shared/shrinking-spinner/shrinking-spinner.component';
 
 function SummaryWidget(props) {
@@ -52,14 +53,32 @@ function SummaryWidget(props) {
         };
 
         const SummaryComponent = summaryComponents[profileType];
-        const profileName = data[summaryEndpoint].name ||
+        const profileName =
+          data[summaryEndpoint].name ||
           data[summaryEndpoint].nodeName ||
           data[summaryEndpoint].countryName;
+
+        const juristiction = data[summaryEndpoint].jurisdictionName;
+
+        const description = data[summaryEndpoint]?.summary;
 
         return (
           <>
             <Helmet>
-              <title>{`TRASE - Profile - ${profileName}`}</title>
+              <title>{`TRASE Profile - ${profileName}`}</title>
+              <meta
+                property="twitter:title"
+                content={`TRASE Profile in ${juristiction} ${profileName}`}
+              />
+              {description && (
+                <meta property="twitter:description" content={stripHtml(description)} />
+              )}
+              <meta
+                property="og:title"
+                content={`TRASE Profile in ${juristiction} - ${profileName}`}
+              />
+              {description && <meta property="og:description" content={stripHtml(description)} />}
+              {description && <meta property="description" content={stripHtml(description)} />}
             </Helmet>
             <SummaryComponent
               year={year}
