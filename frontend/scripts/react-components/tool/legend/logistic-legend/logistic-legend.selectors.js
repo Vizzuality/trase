@@ -1,8 +1,8 @@
 import { createSelector } from 'reselect';
 import {
   getLogisticLayers
-} from 'react-components/tool/mapbox-map/mapbox-map.selectors';
-import { logisticLayerTemplates } from 'react-components/tool/mapbox-map/layers/logistic-layers';
+} from 'react-components/tool/map/map.selectors';
+import { logisticLayerTemplates } from 'react-components/tool/map/layers/logistic-layers';
 
 export const getInspectionLevelOptions = createSelector([getLogisticLayers], (logisticLayers) => {
   if (!logisticLayers) return null;
