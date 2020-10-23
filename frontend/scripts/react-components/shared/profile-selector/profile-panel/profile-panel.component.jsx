@@ -24,11 +24,13 @@ function ProfilePanel(props) {
     traders: 'Trader',
     destinations: 'Importer country'
   };
+
+  // key for the headings is mandatory due to the an unmounting crash (transifex)
   switch (step) {
     case PROFILE_STEPS.type:
       return (
         <div className="c-profile-panel">
-          <Heading align="center" size="md" weight="light">
+          <Heading key={`panel-heading${step}`} align="center" size="md" weight="light">
             Choose the{' '}
             <Heading as="span" size="md" weight="bold">
               type of profile
@@ -46,7 +48,7 @@ function ProfilePanel(props) {
     case PROFILE_STEPS.profiles: {
       return (
         <div className="c-profile-panel">
-          <Heading align="center" size="md" weight="light">
+          <Heading key={`panel-heading${step}`} align="center" size="md" weight="light">
             Choose the{' '}
             <Heading as="span" size="md" weight="bold">
               {singularTypes[profileType]} profile
@@ -63,7 +65,7 @@ function ProfilePanel(props) {
         <div className="c-profile-panel">
           <Heading align="center" size="md" weight="light">
             Choose one
-            <Heading as="span" size="md" weight="bold">
+            <Heading key={`panel-heading${step}`} as="span" size="md" weight="bold">
               {' '}
               commodity
             </Heading>
