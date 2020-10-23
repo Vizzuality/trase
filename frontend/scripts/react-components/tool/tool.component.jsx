@@ -4,7 +4,7 @@ import EventManager from 'utils/eventManager';
 import ColumnsSelectorGroupContainer from 'react-components/tool/columns-selector-group/columns-selector-group.container';
 import ModalContainer from 'react-components/tool/story-modal/story-modal.container';
 import SplittedView from 'react-components/tool/splitted-view';
-import MapBoxMap from 'react-components/tool/mapbox-map/mapbox-map';
+import MapBoxMap from 'react-components/tool/map/map';
 import Timeline from 'react-components/tool/timeline';
 import ToolBar from 'react-components/shared/tool-bar';
 import UrlSerializer from 'react-components/shared/url-serializer';

@@ -1,9 +1,14 @@
 ---
-name: Add new vector layers to service
+name: Map
 menu: Frontend
 ---
 
-# Add new vector layers to service
+# Map
+
+The maps on the application are based on react-simple-maps (Explore page - WorldMap component) and mapbox + layer manager (Tool - Map component), leaflet + layer manager (Logistics map).
+Two different versions of Layer Manager (an open-sourced vizzuality tool) coexist to allow leaflet to be used on the Logistics map.
+
+## Add new vector layers to service
 
 This is needed when an update is needed on the map's vector layers. We have a service on the backend to serve this layers for the mapbox tool page map. See mbtileserver backend documentation.
 
@@ -19,4 +24,4 @@ scp ./ecuador_cantons.mbtiles ubuntu@sandbox-data.trase.earth:/var/www/tilesets
 sudo systemctl restart mbtileserver
 ```
 
-The most up to date version of the tiles is stored on the mapbox-map folder but this is not used on the app directly. Is just to have a back-up
+The most up to date version of the tiles is stored on the map folder but this is not used on the app directly. Is just to have a back-up
