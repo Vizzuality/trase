@@ -7,6 +7,8 @@ RSpec.describe 'Nodes importers', type: :request do
     Api::V3::Readonly::FlowNode.refresh(sync: true)
     Api::V3::Readonly::NodeWithFlowsPerYear.refresh(sync: true)
     Api::V3::Readonly::NodeWithFlows.refresh(sync: true)
+    stub_request(:post, 'https://www.google-analytics.com/collect').
+      to_return(status: 200, body: '', headers: {})
   end
 
   describe 'GET /api/public/nodes/importers' do
