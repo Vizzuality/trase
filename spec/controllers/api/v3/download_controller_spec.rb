@@ -124,5 +124,27 @@ RSpec.describe Api::V3::DownloadController, type: :controller do
         ).to eq('attachment; filename="BRAZIL_SOY_v1.0_tc.zip"')
       end
     end
+
+    context 'when country / commodity params' do
+      before(:each) do
+        allow_any_instance_of(
+          Api::V3::Download::RetrievePrecomputedDownload
+        ).to receive(:exists?).and_return(false)
+        allow_any_instance_of(
+          Api::V3::Download::StreamContentForCsv
+        ).to receive(:call)
+      end
+
+      it 'returns a zipped csv file' do
+        get :index, params: {
+          country_id: api_v3_brazil_soy_context.country_id, commodity_id: api_v3_brazil_soy_context.commodity_id
+        }, format: :csv
+        expect(assigns(:context)).to eq(api_v3_brazil_soy_context)
+        expect(response.content_type).to eq('application/zip')
+        expect(
+          response.headers['Content-Disposition']
+        ).to eq('attachment; filename="BRAZIL_SOY_v1.0_tc.zip"')
+      end
+    end
   end
 end

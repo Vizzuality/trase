@@ -60,6 +60,7 @@ Rails.application.routes.draw do
       resources :nodes, only: [] do
         get :search, on: :collection, controller: :nodes_search, action: :index
       end
+      resources :download, only: [:index]
 
       get 'country_profiles/:id/basic_attributes', to: 'country_profiles#basic_attributes'
       get 'country_profiles/:id/commodity_exports', to: 'country_profiles#commodity_exports'
