@@ -56,6 +56,22 @@ module Api
         response.headers['X-Accel-Buffering'] = 'no'
       end
       # rubocop:enable Naming/AccessorMethodName
+
+      # override to allow parametrisation be either context_id
+      # or country_is & commodity_id
+      def load_context
+        if params[:context_id]
+          @context = Api::V3::Context.find(params[:context_id])
+          return
+        end
+        if params[:country_id] && params[:commodity_id]
+          @context = Api::V3::Context.find_by(
+            country_id: params[:country_id], commodity_id: params[:commodity_id]
+          )
+          return
+        end
+        ensure_required_param_present(:context_id)
+      end
     end
   end
 end
