@@ -1,16 +1,28 @@
 @import 'styles/settings';
 
 .c-full-screen-button {
-  .button {
-    position: absolute;
-    left: 10px;
-    right: 0;
-    bottom: 10px;
-    height: 100px;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  background-color: $medium-pink;
 
-    padding: 20px;
-    background-color: $charcoal-grey;
+  z-index: $z-above-veil;
+  box-shadow: $box-shadow;
 
-    z-index: $z-above-veil;
+  .button-full-screen {
+    position: relative;
+    display: block;
+    padding: 0;
+    margin: 5px;
+    border: none;
+  }
+
+  .icon {
+    margin: 1px 0 0 0;
+    height: 26px;
+    width: 26px;
+    max-height: 26px;
   }
 }
