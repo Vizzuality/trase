@@ -1,7 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import Button from 'react-components/shared/button';
-import Icon from 'react-components/shared/icon';
 import 'react-components/shared/full-screen-button/full-screen-button.scss';
 
 function FullScreenButton({ setFullScreen, isFullScreen }) {
@@ -20,7 +19,8 @@ function FullScreenButton({ setFullScreen, isFullScreen }) {
 }
 
 FullScreenButton.propTypes = {
-  setFullScreen: PropTypes.func.isRequired
+  setFullScreen: PropTypes.func.isRequired,
+  isFullScreen: PropTypes.bool
 };
 
 export default FullScreenButton;
