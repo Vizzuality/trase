@@ -1,4 +1,4 @@
-import { createElement, useState, useEffect } from 'react';
+import { createElement, useState } from 'react';
 import FullScreenButtonComponent from 'react-components/shared/full-screen-button/full-screen-button.component';
 
 function launchIntoFullscreen(element) {
