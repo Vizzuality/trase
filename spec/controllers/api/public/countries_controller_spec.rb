@@ -4,6 +4,11 @@ RSpec.describe Api::Public::CountriesController, type: :controller do
   include_context 'api v3 brazil soy flow quants'
   include_context 'api v3 paraguay flows quants'
 
+  before(:each) do
+    stub_request(:post, 'https://www.google-analytics.com/collect').
+      to_return(status: 200, body: '', headers: {})
+  end
+
   describe 'GET index' do
     it 'returns list in alphabetical order' do
       get :index, params: {commodities_ids: api_v3_soy.id}
