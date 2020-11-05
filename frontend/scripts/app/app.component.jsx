@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import TopNav from 'react-components/nav/top-nav/top-nav.container';
 import CookieBanner from 'react-components/shared/cookie-banner';
+import FullScreenButton from 'react-components/shared/full-screen-button';
 import Feedback from 'react-components/shared/feedback';
 import Footer from 'react-components/shared/footer/footer.component';
 
@@ -42,6 +43,7 @@ function App() {
         <Component key={pageKey} content={layout && layout(pageContent[type])} />
 
         {!isInIframe && <CookieBanner />}
+        {isInIframe && <FullScreenButton />}
         {feedback && <Feedback />}
       </main>
 
