@@ -13,6 +13,7 @@ Two different versions of Layer Manager (an open-sourced vizzuality tool) coexis
 This is needed when an update is needed on the map's vector layers. We have a service on the backend to serve this layers for the mapbox tool page map. See mbtileserver backend documentation.
 
 - Generate tiles from carto into a mbtiles file
+- IMPORTANT: layers should be named like [COUNTRY]_[SINGULAR_NODE_TYPE].mbtiles e.g ecuador_cantons.mbtiles This will help to automatically select the unit layer on the map component. It won't be loaded if it doesn't have the correct name. Also the source layer should be the capitalised country e.g. Ecuador
 - Generated tiles should be in /var/www/tilesets
 - Use scp to upload the generated *.mbtiles into this folder of sandbox-data or production:
 ```
