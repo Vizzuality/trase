@@ -121,7 +121,7 @@ class TopNavRedesign extends React.PureComponent {
               <div style={props}>
                 {activeTab
                   ? React.cloneElement(activeTab.component, {
-                      styles: props
+                      springStyles: props
                     })
                   : null}
               </div>

@@ -106,7 +106,7 @@ Card.propTypes = {
   className: PropTypes.string,
   translateUrl: PropTypes.bool,
   title: PropTypes.string.isRequired,
-  subtitle: PropTypes.string.isRequired,
+  subtitle: PropTypes.string,
   actionName: PropTypes.string.isRequired,
   testId: PropTypes.string,
   variant: PropTypes.oneOf(['new', 'dashed', 'header-card'])

@@ -2,9 +2,9 @@ import React from 'react';
 
 import Card from 'react-components/shared/card/card.component';
 
-const Resources = ({ styles }) => (
+const Resources = ({ springStyles }) => (
   <div className="nav-tab-container -insights">
-    <div style={styles} className="-navigation-block">
+    <div style={springStyles} className="-navigation-block">
       <h5>Resources</h5>
       <ul>
         <li>
@@ -24,7 +24,7 @@ const Resources = ({ styles }) => (
         </li>
       </ul>
     </div>
-    <div style={styles} className="-tab-contents">
+    <div style={springStyles} className="-tab-contents">
       <div className="tab-contents-cards">
         <Card title="Supply chain" variant="header-card" />
         <Card title="Finance" variant="header-card" />
@@ -35,7 +35,7 @@ const Resources = ({ styles }) => (
 );
 
 Resources.propTypes = {
-  styles: {}
+  springStyles: null
 };
 
 export default Resources;
