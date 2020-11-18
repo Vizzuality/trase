@@ -1,5 +1,5 @@
-import React, { Suspense } from 'react';
-import { Spring, Transition } from 'react-spring/renderprops';
+import React from 'react';
+import { Transition } from 'react-spring/renderprops';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import throttle from 'lodash/throttle';
@@ -13,6 +13,8 @@ import Img from 'react-components/shared/img';
 import 'scripts/react-components/nav/top-nav-redesign/top-nav-redesign.scss';
 
 import ToolsInsights from './tabs/tools-insights.component';
+import Resources from './tabs/resources.component';
+import About from './tabs/about.component';
 
 const DownloadPdfLink = React.lazy(() => import('./download-pdf-link.component'));
 
@@ -22,8 +24,8 @@ class TopNavRedesign extends React.PureComponent {
     menuOpen: false,
     tabs: [
       { title: 'Tools & Insights', component: <ToolsInsights /> },
-      { title: 'Resources', component: <ToolsInsights /> },
-      { title: 'About', component: <ToolsInsights /> }
+      { title: 'Resources', component: <Resources /> },
+      { title: 'About', component: <About /> }
     ],
     activeTab: null
   };
@@ -114,7 +116,16 @@ class TopNavRedesign extends React.PureComponent {
           enter={{ opacity: 1, transform: 'translateY(0%)' }}
         >
           {show =>
-            show && (props => <div style={props}>{activeTab ? activeTab.component : null}</div>)
+            show &&
+            (props => (
+              <div style={props}>
+                {activeTab
+                  ? React.cloneElement(activeTab.component, {
+                      styles: props
+                    })
+                  : null}
+              </div>
+            ))
           }
         </Transition>
 

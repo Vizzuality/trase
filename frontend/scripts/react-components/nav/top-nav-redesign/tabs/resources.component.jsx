@@ -2,13 +2,27 @@ import React from 'react';
 
 import Card from 'react-components/shared/card/card.component';
 
-const ToolsInsights = ({ styles }) => (
+const Resources = ({ styles }) => (
   <div className="nav-tab-container -insights">
     <div style={styles} className="-navigation-block">
-      <p className="nav-tab-hero">
-        <span>Reveal.</span> <span>Target.</span> <span>Enable.</span> <span>Transform.</span>
-      </p>
-      <span className="scroll-indicator">scroll</span>
+      <h5>Resources</h5>
+      <ul>
+        <li>
+          <a href="#">Publications</a>
+        </li>
+        <li>
+          <a href="#">Presentations</a>
+        </li>
+        <li>
+          <a href="#">Tutorials</a>
+        </li>
+        <li>
+          <a href="#">Methods</a>
+        </li>
+        <li>
+          <a href="#">FAQs</a>
+        </li>
+      </ul>
     </div>
     <div style={styles} className="-tab-contents">
       <div className="tab-contents-cards">
@@ -20,8 +34,8 @@ const ToolsInsights = ({ styles }) => (
   </div>
 );
 
-ToolsInsights.propTypes = {
+Resources.propTypes = {
   styles: {}
 };
 
-export default ToolsInsights;
+export default Resources;
