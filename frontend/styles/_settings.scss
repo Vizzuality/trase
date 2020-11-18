@@ -22,6 +22,7 @@ $padding-wrap-desktop: 120px;
 // typography
 $font-family-1: 'DecimaMonoPro', 'Courier New', sans-serif;
 $font-family-2: 'Merriweather', serif;
+$font-family-3: 'DM Sans', sans-serif;
 
 $font-weight-light: 300;
 $font-weight-regular: 400;
@@ -120,7 +121,9 @@ $carbon-gray: #333; // barely used
 
 // Redesign colors
 $orange-500: #ff615f;
+$gray-700: #12282e;
 $gray-500: #1f434e;
+$gray-200: #dadada;
 
 // Miscellaneous
 $box-shadow: 0 1px 3px 0 rgba($black, 0.1), 0 1px 2px 0 rgba($black, 0.2);

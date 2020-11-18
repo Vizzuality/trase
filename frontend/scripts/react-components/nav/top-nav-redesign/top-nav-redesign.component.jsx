@@ -13,6 +13,8 @@ import 'scripts/react-components/nav/top-nav-redesign/top-nav-redesign.scss';
 
 const DownloadPdfLink = React.lazy(() => import('./download-pdf-link.component'));
 
+const ToolsInsights = React.lazy(() => import('./tabs/tools-insights.component'));
+
 class TopNavRedesign extends React.PureComponent {
   state = {
     backgroundVisible: false,
@@ -21,7 +23,8 @@ class TopNavRedesign extends React.PureComponent {
       { title: 'Tools & Insights', id: 0 },
       { title: 'Resources', id: 1 },
       { title: 'About', id: 2 }
-    ]
+    ],
+    activeTab: null
   };
 
   navLinkProps = {
@@ -69,7 +72,7 @@ class TopNavRedesign extends React.PureComponent {
 
   handleToggleClick = () => this.setState(state => ({ menuOpen: !state.menuOpen }));
 
-  renderTabs() {
+  renderTabMenu() {
     const { tabs } = this.state;
     return (
       <ul className="nav-tabs">
@@ -79,6 +82,16 @@ class TopNavRedesign extends React.PureComponent {
           </li>
         ))}
       </ul>
+    );
+  }
+
+  renderTab() {
+    const { activeTab } = this.state;
+    return (
+      <div className="nav-tabs-container">
+        <ToolsInsights />
+        <div className="-backdrop" />
+      </div>
     );
   }
 
@@ -99,7 +112,7 @@ class TopNavRedesign extends React.PureComponent {
     allLinks.push(...links);
 
     return (
-      <div className="-desktop-menu">
+      <div className="nav-menu -desktop-menu">
         <div className="left-section">
           <button className="top-nav-toggle-btn" onClick={this.handleToggleClick}>
             <svg className="icon icon-menu">
@@ -115,7 +128,7 @@ class TopNavRedesign extends React.PureComponent {
             />
           </NavLink>
         </div>
-        {this.renderTabs()}
+        {this.renderTabMenu()}
       </div>
     );
   }
@@ -189,6 +202,7 @@ class TopNavRedesign extends React.PureComponent {
         )}
       >
         {this.renderDesktopMenu()}
+        {this.renderTab()}
       </div>
     );
   }

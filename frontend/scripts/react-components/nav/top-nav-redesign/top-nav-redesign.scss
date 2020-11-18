@@ -7,12 +7,31 @@ $desktop-nav-sides-margin: 20px;
   position: fixed;
   top: 0;
   width: 100vw;
-  padding: 0 20px;
   height: $nav-height;
-  font-family: $font-family-1;
+  font-family: $font-family-3;
   background-color: $white;
   z-index: $z-nav;
   transition: all 150ms ease-in;
+
+  .nav-menu {
+    padding: 0 20px;
+    border-bottom: 1px solid $gray-200;
+  }
+
+  .nav-tabs-container {
+    position: relative;
+    background-color: $white;
+    max-height: calc(100vh - 60px);
+    .-backdrop {
+      background: rgba($black, 0.3);
+      position: absolute;
+      height: 100vh;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      z-index: -1;
+    }
+  }
 
   .-desktop-menu {
     display: flex;
@@ -65,6 +84,31 @@ $desktop-nav-sides-margin: 20px;
       &:hover {
         color: rgba($gray-500, 1);
         border-bottom: 4px solid $orange-500;
+      }
+    }
+  }
+
+  .nav-tab-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 40px 20px;
+
+    .-navigation-block {
+      flex: 1;
+    }
+
+    .-tab-contents {
+      flex: 0 0 70%;
+      background: rgba(00, 00, 00, 0.1);
+    }
+
+    .nav-tab-hero {
+      color: $gray-700;
+      font-weight: $font-weight-bold;
+      font-size: 48px;
+      line-height: 1.1em;
+      > span {
+        display: block;
       }
     }
   }
