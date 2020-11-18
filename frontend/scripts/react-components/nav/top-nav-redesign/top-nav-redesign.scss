@@ -1,0 +1,71 @@
+@import 'styles/settings';
+
+$desktop-nav-min-width: 1060px;
+$desktop-nav-sides-margin: 20px;
+
+.c-nav {
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  padding: 0 20px;
+  height: $nav-height;
+  font-family: $font-family-1;
+  background-color: $white;
+  z-index: $z-nav;
+  transition: all 150ms ease-in;
+
+  .-desktop-menu {
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row;
+    height: 100%;
+  }
+
+  .left-section {
+    display: flex;
+    justify-content: space-between;
+    flex-flow: row;
+    align-items: center;
+    > :first-child {
+      margin-right: 24px;
+    }
+  }
+
+  .top-nav-toggle-btn {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    > svg {
+      width: inherit;
+      height: inherit;
+      margin: 0;
+      max-height: none;
+    }
+  }
+
+  .top-nav-logo {
+    width: 113px;
+  }
+
+  .nav-tabs {
+    display: flex;
+    align-items: center;
+    li,
+    button {
+      height: 100%;
+    }
+    button {
+      padding: 0 27px;
+      cursor: pointer;
+      font-size: $font-size-xx-regular;
+      color: rgba($gray-500, 0.5);
+      font-weight: $font-weight-bold;
+      border-bottom: 4px solid transparent;
+      transition: all 150ms ease-in;
+      &:hover {
+        color: rgba($gray-500, 1);
+        border-bottom: 4px solid $orange-500;
+      }
+    }
+  }
+}

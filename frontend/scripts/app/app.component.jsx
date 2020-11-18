@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import TopNav from 'react-components/nav/top-nav/top-nav.container';
+
 import CookieBanner from 'react-components/shared/cookie-banner';
 import FullScreenButton from 'react-components/shared/full-screen-button';
 import Feedback from 'react-components/shared/feedback';
@@ -21,6 +21,14 @@ const pageContent = {
   )
 };
 
+const TopNav = lazy(() =>
+  import(
+    ENABLE_TOP_NAV_REDESIGN
+      ? 'react-components/nav/top-nav-redesign/top-nav-redesign.container'
+      : 'react-components/nav/top-nav/top-nav.container'
+  )
+);
+
 function App() {
   const { routesMap, type, query } = useSelector(state => state.location);
   const { Component, layout, footer = true, feedback = true } = routesMap[type];
@@ -33,6 +41,7 @@ function App() {
     }
     if (isIframe()) setIsInIframe(true);
   }, []);
+
   return (
     <Suspense fallback={null}>
       <SeoHandler />
