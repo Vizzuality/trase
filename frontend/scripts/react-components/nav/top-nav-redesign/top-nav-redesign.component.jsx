@@ -143,6 +143,7 @@ class TopNavRedesign extends React.PureComponent {
 
   renderDesktopMenu() {
     const { links, printable, showLogo, className, page } = this.props;
+    const { tabOpen } = this.state;
     const allLinks = [];
 
     if (showLogo && !ENABLE_TOOL_PANEL) {
@@ -161,8 +162,8 @@ class TopNavRedesign extends React.PureComponent {
       <div className="nav-menu -desktop-menu">
         <div className="left-section">
           <button className="top-nav-toggle-btn" onClick={this.handleToggleClick}>
-            <svg className="icon icon-menu">
-              <use xlinkHref="#icon-menu" />
+            <svg className={`icon icon-${tabOpen ? 'close' : 'menu'}`}>
+              <use xlinkHref={`#icon-${tabOpen ? 'close' : 'menu'}`} />
             </svg>
           </button>
           <NavLink exact strict to={{ type: 'home' }} className={cx('top-nav-logo')}>
