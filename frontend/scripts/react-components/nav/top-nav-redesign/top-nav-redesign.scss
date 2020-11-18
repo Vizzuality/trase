@@ -20,7 +20,6 @@ $desktop-nav-sides-margin: 20px;
 
   .nav-tabs-container {
     position: relative;
-    background-color: $white;
     max-height: calc(100vh - 60px);
     .-backdrop {
       background: rgba($black, 0.3);
@@ -34,9 +33,12 @@ $desktop-nav-sides-margin: 20px;
   }
 
   .-desktop-menu {
+    position: relative;
     display: flex;
     justify-content: space-between;
     flex-flow: row;
+    background: $white;
+    z-index: 1;
     height: 100%;
   }
 
@@ -81,7 +83,8 @@ $desktop-nav-sides-margin: 20px;
       font-weight: $font-weight-bold;
       border-bottom: 4px solid transparent;
       transition: all 150ms ease-in;
-      &:hover {
+      &:hover,
+      &.-active {
         color: rgba($gray-500, 1);
         border-bottom: 4px solid $orange-500;
       }
@@ -92,14 +95,37 @@ $desktop-nav-sides-margin: 20px;
     display: flex;
     justify-content: space-between;
     padding: 40px 20px;
+    background-color: $white;
 
     .-navigation-block {
       flex: 1;
+      .scroll-indicator {
+        display: inline-block;
+        position: relative;
+        margin: 30px 0 0 0;
+        color: $orange-500;
+        font-weight: $font-weight-bold;
+        text-transform: uppercase;
+        font-size: 12px;
+      }
     }
 
     .-tab-contents {
       flex: 0 0 70%;
-      background: rgba(00, 00, 00, 0.1);
+      overflow-y: scroll;
+      -ms-overflow-style: none; /* Internet Explorer 10+ */
+      scrollbar-width: none; /* Firefox */
+      &::-webkit-scrollbar {
+        display: none; /* Safari and Chrome */
+      }
+      .tab-contents-cards {
+        display: flex;
+        flex-flow: row;
+        > * {
+          flex: 0 0 330px;
+          margin-right: 30px;
+        }
+      }
     }
 
     .nav-tab-hero {

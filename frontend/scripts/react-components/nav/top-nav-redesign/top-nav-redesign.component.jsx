@@ -1,4 +1,5 @@
 import React, { Suspense } from 'react';
+import { Spring, Transition } from 'react-spring/renderprops';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import throttle from 'lodash/throttle';
@@ -11,18 +12,18 @@ import Img from 'react-components/shared/img';
 
 import 'scripts/react-components/nav/top-nav-redesign/top-nav-redesign.scss';
 
-const DownloadPdfLink = React.lazy(() => import('./download-pdf-link.component'));
+import ToolsInsights from './tabs/tools-insights.component';
 
-const ToolsInsights = React.lazy(() => import('./tabs/tools-insights.component'));
+const DownloadPdfLink = React.lazy(() => import('./download-pdf-link.component'));
 
 class TopNavRedesign extends React.PureComponent {
   state = {
     backgroundVisible: false,
     menuOpen: false,
     tabs: [
-      { title: 'Tools & Insights', id: 0 },
-      { title: 'Resources', id: 1 },
-      { title: 'About', id: 2 }
+      { title: 'Tools & Insights', component: <ToolsInsights /> },
+      { title: 'Resources', component: <ToolsInsights /> },
+      { title: 'About', component: <ToolsInsights /> }
     ],
     activeTab: null
   };
@@ -30,13 +31,14 @@ class TopNavRedesign extends React.PureComponent {
   navLinkProps = {
     exact: false,
     strict: false,
-    isActive: null
+    isActive: null,
+    tabOpen: null
   };
 
   mobileMenuRef = React.createRef(null);
 
   componentDidMount() {
-    window.addEventListener('click', this.handleClickOutside);
+    // window.addEventListener('click', this.handleClickOutside);
     window.addEventListener('scroll', this.setBackground, { passive: true });
   }
 
@@ -70,15 +72,31 @@ class TopNavRedesign extends React.PureComponent {
     }
   };
 
-  handleToggleClick = () => this.setState(state => ({ menuOpen: !state.menuOpen }));
+  handleToggleClick = () => {
+    const { tabOpen, activeTab, tabs } = this.state;
+    this.setState({
+      tabOpen: !tabOpen,
+      ...(!tabOpen &&
+        !activeTab && {
+          activeTab: tabs[0]
+        })
+    });
+  };
+
+  handleSetTab = tab => this.setState({ tabOpen: true, activeTab: tab });
 
   renderTabMenu() {
-    const { tabs } = this.state;
+    const { tabs, tabOpen, activeTab } = this.state;
     return (
       <ul className="nav-tabs">
         {tabs.map(t => (
-          <li key={`nav-tab-${t.id}`}>
-            <button>{t.title}</button>
+          <li key={`nav-tab-${t.title}`}>
+            <button
+              className={cx(activeTab && tabOpen && t.title === activeTab.title ? '-active' : null)}
+              onClick={() => this.handleSetTab(t)}
+            >
+              {t.title}
+            </button>
           </li>
         ))}
       </ul>
@@ -86,11 +104,39 @@ class TopNavRedesign extends React.PureComponent {
   }
 
   renderTab() {
-    const { activeTab } = this.state;
+    const { activeTab, tabOpen } = this.state;
     return (
       <div className="nav-tabs-container">
-        <ToolsInsights />
-        <div className="-backdrop" />
+        <Transition
+          items={tabOpen}
+          from={{ opacity: 0, transform: 'translateY(-110%)' }}
+          leave={{ opacity: 0, transform: 'translateY(-110%)' }}
+          enter={{ opacity: 1, transform: 'translateY(0%)' }}
+        >
+          {show =>
+            show && (props => <div style={props}>{activeTab ? activeTab.component : null}</div>)
+          }
+        </Transition>
+
+        <Transition
+          items={tabOpen}
+          from={{ opacity: 0 }}
+          leave={{ opacity: 0 }}
+          enter={{ opacity: 1 }}
+        >
+          {show =>
+            show &&
+            (props => (
+              <div
+                role="button"
+                tabIndex={0}
+                style={props}
+                onClick={() => this.setState({ tabOpen: false, activeTab: null })}
+                className="-backdrop"
+              />
+            ))
+          }
+        </Transition>
       </div>
     );
   }

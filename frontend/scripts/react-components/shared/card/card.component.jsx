@@ -69,9 +69,11 @@ class Card extends Component {
         </Link>
         <figcaption className="card-content">
           <div className="card-details-container">
-            <Heading as="h4" variant="mono" color="pink" size="sm">
-              {subtitle}
-            </Heading>
+            {subtitle && (
+              <Heading as="h4" variant="mono" color="pink" size="sm">
+                {subtitle}
+              </Heading>
+            )}
             <p className="card-title">{title}</p>
           </div>
           <Heading variant="mono" color="grey-faded" size="sm">
@@ -107,7 +109,7 @@ Card.propTypes = {
   subtitle: PropTypes.string.isRequired,
   actionName: PropTypes.string.isRequired,
   testId: PropTypes.string,
-  variant: PropTypes.oneOf(['new', 'dashed'])
+  variant: PropTypes.oneOf(['new', 'dashed', 'header-card'])
 };
 
 export default Card;
