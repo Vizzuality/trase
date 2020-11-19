@@ -13,8 +13,6 @@ import Img from 'react-components/shared/img';
 import 'scripts/react-components/nav/top-nav-redesign/top-nav-redesign.scss';
 
 import ToolsInsights from './tabs/tools-insights.component';
-import Resources from './tabs/resources.component';
-import About from './tabs/about.component';
 
 const DownloadPdfLink = React.lazy(() => import('./download-pdf-link.component'));
 

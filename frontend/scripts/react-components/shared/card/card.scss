@@ -143,35 +143,4 @@ $slide-height: 430px;
       }
     }
   }
-
-  &.header-card {
-    height: initial;
-    background: linear-gradient(#b9fde7, #fff);
-    border-bottom: 6px solid $gray-400;
-    transform: none;
-    overflow: hidden;
-
-    .card-details-container {
-      height: initial;
-    }
-
-    .card-image {
-      background-color: transparent;
-      width: 90%;
-      margin-left: auto;
-      transform: translate(30%, 10%);
-    }
-
-    .card-content {
-      height: initial;
-      background-color: transparent;
-    }
-
-    .card-title {
-      margin: 0;
-      font-family: $font-family-3;
-      color: $charcoal-grey;
-      font-weight: $font-weight-medium;
-    }
-  }
 }

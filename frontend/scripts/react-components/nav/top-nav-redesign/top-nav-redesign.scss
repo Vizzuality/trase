@@ -71,29 +71,6 @@ $menuOffset: 15vh;
     width: 113px;
   }
 
-  .nav-tabs {
-    display: flex;
-    align-items: center;
-    li,
-    button {
-      height: 100%;
-    }
-    button {
-      padding: 0 27px;
-      cursor: pointer;
-      font-size: $font-size-xx-regular;
-      color: rgba($gray-500, 0.5);
-      font-weight: $font-weight-bold;
-      border-bottom: 4px solid transparent;
-      transition: all 150ms ease-in;
-      &:hover,
-      &.-active {
-        color: rgba($gray-500, 1);
-        border-bottom: 4px solid $orange-500;
-      }
-    }
-  }
-
   .nav-tab-container {
     display: flex;
     justify-content: space-between;
@@ -129,23 +106,70 @@ $menuOffset: 15vh;
 
     .-tab-contents {
       flex: 0 0 70%;
+      padding: 15px 0;
       overflow-y: scroll;
       -ms-overflow-style: none; /* Internet Explorer 10+ */
       scrollbar-width: none; /* Firefox */
       &::-webkit-scrollbar {
         display: none; /* Safari and Chrome */
       }
+
       .tab-contents-cards {
         display: flex;
         flex-flow: row;
-        > * {
-          display: flex;
-          justify-content: space-between;
-          flex: 0 0 330px;
-          margin-right: 30px;
-          height: calc(100vh - (#{$nav-height} + #{$navMenuPadding} * 2) - #{$menuOffset});
-        }
+        justify-content: space-between;
       }
+    }
+  }
+
+  .top-nav-card {
+    flex: 0 0 260px;
+    height: calc(100vh - 190px);
+    max-height: 400px; // set max height so on larger screens cards don't go crazy long
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    overflow: hidden;
+    box-shadow: 0px 5px 9px 0 rgba(0, 0, 0, 0.23);
+    background: linear-gradient(#b9fde7, #fff 80%);
+    border-bottom: 4px solid $gray-400;
+
+    &:nth-child(even) {
+      margin: 0 25px;
+    }
+
+    .card-image {
+      flex: 1;
+      height: 240px;
+      width: 100%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      transform: translateX(90px);
+    }
+
+    .card-contents {
+      display: flex;
+      justify-content: center;
+      flex-flow: column;
+      padding: 15px;
+      background: $white;
+    }
+
+    .card-summary {
+      font-family: $font-family-1;
+      font-size: $font-size-xx-regular;
+      color: $gray-400;
+      font-size: 12px;
+      height: 46px;
+      text-overflow: ellipsis;
+    }
+
+    // For now, just override our heading class with this value
+    // As we migrate things forward we need a designer to review font sizes
+    .c-heading {
+      font-size: 30px;
+      margin: 0 0 10px 0;
     }
   }
 }
