@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Trail } from 'react-spring/renderprops';
+import { NavLink } from 'redux-first-router-link';
+import NavLinks from 'react-components/nav/nav-links.component';
 
 import InsightsCard from '../cards/insights-card.component';
 
@@ -41,7 +43,9 @@ const ToolsInsights = () => {
       <div className="-navigation-block">
         <ul>
           <li>
-            <a href="#">Home</a>
+            <NavLink exact strict to={{ type: 'home' }}>
+              Home
+            </NavLink>
           </li>
           <li>
             <a

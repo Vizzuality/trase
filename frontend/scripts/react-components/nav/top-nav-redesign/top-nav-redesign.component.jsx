@@ -144,6 +144,17 @@ class TopNavRedesign extends React.PureComponent {
             />
           </NavLink>
         </div>
+        <div className="right-section">
+          <ul className="nav-menu-main-navigation">
+            <NavLinks
+              links={allLinks}
+              itemClassName="top-nav-item"
+              linkClassName="top-nav-link"
+              linkActiveClassName="top-nav-link -active"
+              navLinkProps={this.navLinkProps}
+            />
+          </ul>
+        </div>
       </div>
     );
   }

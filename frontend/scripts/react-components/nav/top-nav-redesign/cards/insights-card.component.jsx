@@ -30,14 +30,20 @@ const InsightsCard = ({ title, summary, imageUrl, active, trailStyles }) => {
           items={cardActive}
           from={{
             height: 0,
+            marginTop: 0,
+            marginBottom: 0,
             opacity: 0
           }}
           leave={{
             height: 0,
+            marginTop: 0,
+            marginBottom: 0,
             opacity: 0
           }}
           enter={{
             height: 46,
+            marginTop: 10,
+            marginBottom: 20,
             opacity: 1
           }}
         >
@@ -61,7 +67,8 @@ InsightsCard.propTypes = {
   title: PropTypes.string.isRequired,
   summary: PropTypes.string.isRequired,
   imageUrl: PropTypes.string.isRequired,
-  active: PropTypes.bool.isRequired
+  active: PropTypes.bool.isRequired,
+  trailStyles: PropTypes.object.isRequired
 };
 
 export default InsightsCard;

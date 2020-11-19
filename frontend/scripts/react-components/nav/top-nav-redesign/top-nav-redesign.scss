@@ -21,6 +21,26 @@ $menuOffset: 15vh;
     border-bottom: 1px solid $gray-200;
   }
 
+  .nav-menu-main-navigation {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    .top-nav-item {
+      padding: 0 10px;
+    }
+
+    .top-nav-link {
+      font-size: $font-size-xx-regular;
+      color: $gray-500;
+      font-weight: $font-weight-medium;
+      opacity: 0.5;
+      transform: opacity 150ms ease-in;
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
   .nav-tabs-container {
     position: relative;
     max-height: calc(100vh - 60px);
@@ -99,7 +119,7 @@ $menuOffset: 15vh;
         font-size: 27px;
         line-height: 1.1em;
         &:hover {
-          text-decoration: underline;
+          color: $orange-500;
         }
       }
     }
@@ -108,11 +128,11 @@ $menuOffset: 15vh;
       flex: 0 0 70%;
       padding: 15px 0;
       overflow-y: scroll;
-      -ms-overflow-style: none; /* Internet Explorer 10+ */
-      scrollbar-width: none; /* Firefox */
-      &::-webkit-scrollbar {
-        display: none; /* Safari and Chrome */
-      }
+      // -ms-overflow-style: none; /* Internet Explorer 10+ */
+      // scrollbar-width: none; /* Firefox */
+      // &::-webkit-scrollbar {
+      //   display: none; /* Safari and Chrome */
+      // }
 
       .tab-contents-cards {
         display: flex;
