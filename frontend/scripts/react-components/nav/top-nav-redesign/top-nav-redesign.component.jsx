@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Transition } from 'react-spring/renderprops';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -153,6 +153,21 @@ class TopNavRedesign extends React.PureComponent {
               linkActiveClassName="top-nav-link -active"
               navLinkProps={this.navLinkProps}
             />
+          </ul>
+          <ul className="top-nav-item-list">
+            <li className="top-nav-item">
+              <LocaleSelector />
+            </li>
+            <li className="top-nav-item">
+              {page === 'tool' ? <ToolSearch /> : <Search className="top-nav-search" />}
+            </li>
+            {printable && (
+              <li className="top-nav-item">
+                <Suspense fallback={null}>
+                  <DownloadPdfLink />
+                </Suspense>
+              </li>
+            )}
           </ul>
         </div>
       </div>
