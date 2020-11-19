@@ -21,20 +21,13 @@ const DownloadPdfLink = React.lazy(() => import('./download-pdf-link.component')
 class TopNavRedesign extends React.PureComponent {
   state = {
     backgroundVisible: false,
-    menuOpen: false,
-    tabs: [
-      { title: 'Tools & Insights', component: <ToolsInsights /> },
-      { title: 'Resources', component: <Resources /> },
-      { title: 'About', component: <About /> }
-    ],
-    activeTab: null
+    menuOpen: false
   };
 
   navLinkProps = {
     exact: false,
     strict: false,
-    isActive: null,
-    tabOpen: null
+    isActive: null
   };
 
   mobileMenuRef = React.createRef(null);
@@ -74,43 +67,14 @@ class TopNavRedesign extends React.PureComponent {
     }
   };
 
-  handleToggleClick = () => {
-    const { tabOpen, activeTab, tabs } = this.state;
-    this.setState({
-      tabOpen: !tabOpen,
-      ...(!tabOpen &&
-        !activeTab && {
-          activeTab: tabs[0]
-        })
-    });
-  };
+  handleToggleClick = () => this.setState(state => ({ menuOpen: !state.menuOpen }));
 
-  handleSetTab = tab => this.setState({ tabOpen: true, activeTab: tab });
-
-  renderTabMenu() {
-    const { tabs, tabOpen, activeTab } = this.state;
-    return (
-      <ul className="nav-tabs">
-        {tabs.map(t => (
-          <li key={`nav-tab-${t.title}`}>
-            <button
-              className={cx(activeTab && tabOpen && t.title === activeTab.title ? '-active' : null)}
-              onClick={() => this.handleSetTab(t)}
-            >
-              {t.title}
-            </button>
-          </li>
-        ))}
-      </ul>
-    );
-  }
-
-  renderTab() {
-    const { activeTab, tabOpen } = this.state;
+  renderPopoverMenu() {
+    const { menuOpen } = this.state;
     return (
       <div className="nav-tabs-container">
         <Transition
-          items={tabOpen}
+          items={menuOpen}
           from={{ opacity: 0, transform: 'translateY(-110%)' }}
           leave={{ opacity: 0, transform: 'translateY(-110%)' }}
           enter={{ opacity: 1, transform: 'translateY(0%)' }}
@@ -119,18 +83,14 @@ class TopNavRedesign extends React.PureComponent {
             show &&
             (props => (
               <div style={props}>
-                {activeTab
-                  ? React.cloneElement(activeTab.component, {
-                      springStyles: props
-                    })
-                  : null}
+                <ToolsInsights />
               </div>
             ))
           }
         </Transition>
 
         <Transition
-          items={tabOpen}
+          items={menuOpen}
           from={{ opacity: 0 }}
           leave={{ opacity: 0 }}
           enter={{ opacity: 1 }}
@@ -142,7 +102,7 @@ class TopNavRedesign extends React.PureComponent {
                 role="button"
                 tabIndex={0}
                 style={props}
-                onClick={() => this.setState({ tabOpen: false, activeTab: null })}
+                onClick={() => this.setState({ menuOpen: false })}
                 className="-backdrop"
               />
             ))
@@ -154,7 +114,7 @@ class TopNavRedesign extends React.PureComponent {
 
   renderDesktopMenu() {
     const { links, printable, showLogo, className, page } = this.props;
-    const { tabOpen } = this.state;
+    const { menuOpen } = this.state;
     const allLinks = [];
 
     if (showLogo && !ENABLE_TOOL_PANEL) {
@@ -173,8 +133,8 @@ class TopNavRedesign extends React.PureComponent {
       <div className="nav-menu -desktop-menu">
         <div className="left-section">
           <button className="top-nav-toggle-btn" onClick={this.handleToggleClick}>
-            <svg className={`icon icon-${tabOpen ? 'close' : 'menu'}`}>
-              <use xlinkHref={`#icon-${tabOpen ? 'close' : 'menu'}`} />
+            <svg className={`icon icon-${menuOpen ? 'close' : 'menu'}`}>
+              <use xlinkHref={`#icon-${menuOpen ? 'close' : 'menu'}`} />
             </svg>
           </button>
           <NavLink exact strict to={{ type: 'home' }} className={cx('top-nav-logo')}>
@@ -186,7 +146,6 @@ class TopNavRedesign extends React.PureComponent {
             />
           </NavLink>
         </div>
-        {this.renderTabMenu()}
       </div>
     );
   }
@@ -260,7 +219,7 @@ class TopNavRedesign extends React.PureComponent {
         )}
       >
         {this.renderDesktopMenu()}
-        {this.renderTab()}
+        {this.renderPopoverMenu()}
       </div>
     );
   }

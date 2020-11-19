@@ -29,7 +29,6 @@ $slide-height: 430px;
 
   .card-image {
     height: 240px;
-    width: 100%;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -147,19 +146,25 @@ $slide-height: 430px;
 
   &.header-card {
     height: initial;
+    background: linear-gradient(#b9fde7, #fff);
     border-bottom: 6px solid $gray-400;
     transform: none;
+    overflow: hidden;
 
     .card-details-container {
       height: initial;
     }
 
     .card-image {
-      background: linear-gradient(#b9fde7, #fff);
+      background-color: transparent;
+      width: 90%;
+      margin-left: auto;
+      transform: translate(30%, 10%);
     }
+
     .card-content {
       height: initial;
-      background-color: $white;
+      background-color: transparent;
     }
 
     .card-title {

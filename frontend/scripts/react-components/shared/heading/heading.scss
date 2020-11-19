@@ -9,6 +9,10 @@
     text-transform: uppercase;
   }
 
+  &.dm-sans {
+    font-family: $font-family-3;
+  }
+
   &.serif {
     line-height: 1.75;
     font-family: $font-family-2;
@@ -40,6 +44,10 @@
 
   &.color-grey {
     color: $charcoal-grey;
+  }
+
+  &.color-gray-four {
+    color: $gray-400;
   }
 
   &.color-pink {
