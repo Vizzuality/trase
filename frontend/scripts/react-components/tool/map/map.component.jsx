@@ -9,23 +9,37 @@ import { TOOL_LAYOUT, BASEMAPS } from 'constants';
 import Basemaps from 'react-components/tool/basemaps';
 import Legend from 'react-components/tool/legend';
 import { easeCubic } from 'd3-ease';
-import capitalize from 'lodash/capitalize';
 import flatMap from 'lodash/flatMap';
-import upperCase from 'lodash/upperCase';
-import getUnitLayerStyle from './layers/unit-layers';
-import Warnings from './mapbox-map-warnings';
-import Tooltip from './mapbox-map-tooltip';
+import capitalize from 'lodash/capitalize';
+import Warnings from './map-warnings';
+import Tooltip from './map-tooltip';
 import { getLayerOrder } from './layers/layer-config';
 import { getBaseLayer } from './layers/base-layer';
+import getUnitLayerStyle from './layers/unit-layers';
+import { INDONESIA_MILL_LAYER_ID, getGeoIdName } from './map-constants';
 import {
   useChoroplethFeatureState,
   useFitToBounds,
-  useSetMapAttribution
-} from './mapbox-map.hooks';
-import 'react-components/tool/mapbox-map/mapbox-map.scss';
+  useSetMapAttribution,
+  useSetSelectedFeatureState,
+  useHighlightHoveredSankeyNodes
+} from './map.hooks';
+import { handleHover, handleClick } from './map-interaction.utils'
+import 'react-components/tool/map/map.scss';
 
-let lastHoveredGeo = {};
-let lastSelectedGeos = [];
+const selectedGeos = {
+  last: [],
+  set: function set(value) {
+    this.last = value;
+  }
+};
+
+const hoveredGeo = {
+  last: {},
+  set: function set(value) {
+    this.last = value;
+  }
+};
 
 function MapBoxMap(props) {
   const {
@@ -48,6 +62,7 @@ function MapBoxMap(props) {
     setMap,
     highlightedGeoNodes
   } = props;
+
   const mapRef = useRef();
   const mapContainerRef = useRef();
   const [viewport, setViewport] = useState({ ...defaultMapView });
@@ -67,8 +82,6 @@ function MapBoxMap(props) {
     logisticLayers && logisticLayers.map(u => u.id)
   );
 
-  const geoIdName = (layerId) => layerId === 'indonesia_mill' ? 'mill_name' : 'geoid';
-
   // Set map when loaded
   useEffect(() => {
     if (loaded && mapRef.current) {
@@ -84,7 +97,6 @@ function MapBoxMap(props) {
       ...updatedViewport
     });
   };
-
   useEffect(() => {
     setViewport({
       ...viewport,
@@ -93,8 +105,13 @@ function MapBoxMap(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultMapView]);
 
+  // Set Map Attribution
   useSetMapAttribution(loaded, setMapAttribution);
+
+  // Set Fit To Bounds
   useFitToBounds(map, selectedGeoNodes);
+
+  // Set Choropleth
   useChoroplethFeatureState(
     choropleth,
     map,
@@ -105,6 +122,7 @@ function MapBoxMap(props) {
     darkBasemap
   );
 
+  // Start Tooltip values
   useEffect(() => {
     if (tooltipValues) {
       updateTooltipValues(tooltipValues);
@@ -113,166 +131,43 @@ function MapBoxMap(props) {
   }, [tooltipValues, updateTooltipValues]);
 
   const clearHoveredFeatureState = useCallback(() => {
-    if (lastHoveredGeo.id && layerIds && layerIds.includes(lastHoveredGeo.source)) {
-      map.setFeatureState({ ...lastHoveredGeo }, { hover: false });
-      lastHoveredGeo.id = null;
+    if (hoveredGeo.last.id && layerIds && layerIds.includes(hoveredGeo.last.source)) {
+      map.setFeatureState({ ...hoveredGeo.last }, { hover: false });
+      hoveredGeo.last = {};
     }
-  }, [layerIds, map]);
-
-  // Set and remove selected feature-state
-  useEffect(() => {
-    const unselectNodes = () => {
-      lastSelectedGeos.forEach(lastSelectedGeo => {
-        if (layerIds && layerIds.includes(lastSelectedGeo.source)) {
-          map.removeFeatureState(lastSelectedGeo, 'selected');
-        }
-      });
-    };
-
-    const selectNodes = () => {
-      lastSelectedGeos = selectedGeoNodes.map(selectedGeoNode => ({
-        id: selectedGeoNode.geoId,
-        source: selectedGeoNode.layerId,
-        sourceLayer
-      }));
-      lastSelectedGeos.forEach(
-        geo => layerIds.includes(geo.source) && map.setFeatureState({ ...geo }, { selected: true })
-      );
-    };
-
-    if (map && loaded && selectedGeoNodes.length) {
-      unselectNodes();
-      selectNodes();
-    }
-
-    if (map && loaded && !selectedGeoNodes.length && lastSelectedGeos.length) {
-      unselectNodes();
-    }
-    return undefined;
-  }, [selectedGeoNodes, map, loaded, sourceLayer, layerIds]);
+  }, [layerIds, map, hoveredGeo]);
 
   // Highlight nodes hovered on Sankey
-  useEffect(() => {
-    if (map && loaded && highlightedGeoNodes) {
-      clearHoveredFeatureState('hover');
-      lastHoveredGeo = {
-        id: highlightedGeoNodes.geoId,
-        source: highlightedGeoNodes.layerId,
-        sourceLayer
-      };
-      if (lastHoveredGeo.id) {
-        map.setFeatureState({ ...lastHoveredGeo }, { hover: true });
-      }
+  useHighlightHoveredSankeyNodes({map, loaded, hoveredGeo, highlightedGeoNodes, layerIds, sourceLayer, clearHoveredFeatureState});
+
+  // Set and remove selected feature-state
+  useSetSelectedFeatureState({
+    selectedGeoNodes,
+    map,
+    loaded,
+    sourceLayer,
+    layerIds,
+    selectedGeos
+  });
+
+  // Interactions
+  const onHover = event =>
+    handleHover({
+      event,
+      map,
+      setTooltip,
+      sourceLayer,
+      layerIds,
+      highlightedNodesData,
+      hoveredGeo,
+      clearHoveredFeatureState,
+      updateTooltipValues,
+      logisticLayers,
+      onPolygonHighlighted,
+      INDONESIA_MILL_LAYER_ID
     }
-    return undefined;
-  }, [map, loaded, highlightedGeoNodes, layerIds, sourceLayer, clearHoveredFeatureState]);
-
-  const onHover = e => {
-    const { features, center } = e;
-    if (!features || !features.length) {
-      return undefined;
-    }
-    const logisticSources = logisticLayers.map(l => l.id);
-    const logisticsFeature = features.find(f => logisticSources.includes(f.source));
-
-    if (logisticsFeature) {
-      const { id, source, sourceLayer: logisticsSourceLayer, properties } = logisticsFeature;
-      clearHoveredFeatureState('hover');
-      lastHoveredGeo = {
-        id: id || properties.id,
-        source,
-        sourceLayer: logisticsSourceLayer
-      };
-      if (lastHoveredGeo.id) {
-        map.setFeatureState({ ...lastHoveredGeo }, { hover: true });
-      }
-      const logisticsTooltipValues = [];
-      const logisticValuesTemplate = [
-        { name: 'company' },
-        { name: 'state' },
-        { name: 'municipality' },
-        { name: 'capacity', unit: 't' }
-      ];
-      logisticValuesTemplate.forEach(l => {
-        if (properties[l.name]) {
-          logisticsTooltipValues.push({ title: l.name, unit: l.unit, value: properties[l.name] });
-        }
-      });
-      updateTooltipValues(logisticsTooltipValues);
-      setTooltip({
-        x: center.x,
-        y: center.y,
-        name: properties?.subclass || upperCase(logisticsFeature.source)
-      });
-      return undefined;
-    }
-
-    const geoFeature = features.find(f => f.sourceLayer === sourceLayer);
-    if (geoFeature) {
-      const { properties, source, id } = geoFeature;
-
-      if (map && lastHoveredGeo.id && layerIds.includes(lastHoveredGeo.source)) {
-        map.setFeatureState({ ...lastHoveredGeo }, { hover: false });
-      }
-      if (id && layerIds && layerIds[0] && layerIds.includes(source)) {
-        lastHoveredGeo = {
-          id,
-          source,
-          sourceLayer
-        };
-        map.setFeatureState({ ...lastHoveredGeo }, { hover: true });
-      }
-
-      onPolygonHighlighted(id, {
-        pageX: center.x,
-        pageY: center.y
-      });
-
-      if (source === 'indonesia_mill') {
-        const logisticsTooltipValues = [];
-
-        const logisticTooltipFields = [{ name: 'company' }, { name: 'uml_id' }];
-        logisticTooltipFields.forEach(l => {
-          if (properties[l.name]) {
-            logisticsTooltipValues.push({ title: l.name, unit: l.unit, value: properties[l.name] });
-          }
-        });
-
-        updateTooltipValues(logisticsTooltipValues);
-        setTooltip({ x: center.x, y: center.y, name: id, values: properties });
-      }
-
-      const node = highlightedNodesData[0];
-
-      if (node?.name) {
-        setTooltip({ x: center.x, y: center.y, name: node?.name, values: properties });
-      } else {
-        // Reset last and current tooltip
-        lastHoveredGeo = {};
-        setTooltip(null);
-        updateTooltipValues(null);
-        clearHoveredFeatureState('hover');
-      }
-    }
-
-    if (!logisticsFeature && !geoFeature) {
-      setTooltip(null);
-      clearHoveredFeatureState('hover');
-    }
-    return undefined;
-  };
-
-  const onClick = e => {
-    const { features } = e;
-    const geoFeature = features.find(f => f.sourceLayer === sourceLayer);
-    const notSelectableGeometry = e.target.classList && e.target.classList.contains('-disabled');
-    if (notSelectableGeometry) {
-      return;
-    }
-    if (geoFeature?.properties) {
-      onPolygonClicked(geoFeature.properties.geoid);
-    }
-  };
+  );
+  const onClick = event => handleClick({ event, onPolygonClicked, sourceLayer });
 
   // Get Layers
   let layers = [baseLayer].concat(contextualLayers).concat(logisticLayers);
@@ -283,14 +178,15 @@ function MapBoxMap(props) {
           u,
           sourceLayer,
           darkBasemap,
-          geoIdName(u.id)
+          getGeoIdName(u.id)
         )
       )
     );
-  }
+  };
 
   const orderedLayers = layers.map(l => ({ ...l, zIndex: layerOrder[l.id] }));
   const minimized = toolLayout === TOOL_LAYOUT.right;
+
   return (
     <div
       ref={mapContainerRef}
@@ -299,6 +195,10 @@ function MapBoxMap(props) {
         { '-fullscreen': toolLayout === TOOL_LAYOUT.left },
         { '-minimized': minimized }
       )}
+      onMouseLeave={() => {
+        setTooltip(null);
+        updateTooltipValues(null);
+      }}
     >
       <ReactMapGL
         ref={mapRef}

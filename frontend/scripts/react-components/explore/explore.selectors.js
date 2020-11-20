@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import uniqBy from 'lodash/uniqBy';
+import groupBy from 'lodash/groupBy';
 import { EXPLORE_STEPS } from 'constants';
 import translateLink from 'utils/translate-link';
 
@@ -21,14 +22,12 @@ export const getStep = createSelector(
 
 export const getCommodities = createSelector([getContexts], contexts => {
   if (!contexts) return null;
-  return uniqBy(
-    contexts.map(c => ({
-      name: c.commodityName,
-      id: c.commodityId,
-      isSubnational: !!c.subnationalYears
-    })),
-    'name'
-  );
+  const groupedContexts = groupBy(contexts, 'commodityName');
+  return Object.keys(groupedContexts).map(name => ({
+    name,
+    id: groupedContexts[name][0].commodityId,
+    isSubnational: groupedContexts[name].some(c => !!c.subnationalYears)
+  }));
 });
 
 const getAllCountries = createSelector([getContexts], contexts => {

@@ -16,7 +16,7 @@ import {
   getCountryName,
   getContextualLayers,
   getLogisticLayers
-} from 'react-components/tool/mapbox-map/mapbox-map.selectors';
+} from 'react-components/tool/map/map.selectors';
 import {
   getMapView,
   getBasemap,
@@ -29,7 +29,7 @@ import {
   getSelectedUnitLayers
 } from 'react-components/tool-layers/tool-layers.selectors';
 import { getSelectedContext } from 'app/app.selectors';
-import MapComponent from 'react-components/tool/mapbox-map/mapbox-map.component';
+import MapComponent from 'react-components/tool/map/map.component';
 
 const mapStateToProps = state => {
   const { choropleth } = getChoroplethOptions(state);

@@ -255,6 +255,8 @@ To enable then, simply execute once: `bin/git/init-hooks`
 
 #### Lexicon
 
+- Context: Model based on the association of one country and one commodity. eg. Brazil-Soy
+
 ```
 +-------+             +-------+
 |       |             |       |
@@ -275,6 +277,11 @@ To enable then, simply execute once: `bin/git/init-hooks`
 Links in the sankey are requested on the getToolLinksData fetch saga (flows endpoint)
 The links are filtered by the selected node which is imported as an expanded node from the nodesPanel (see getExpandedAndExcludedNodes in nodes-panel.selectors)
 This links contain the nodes on their path attribute and we fetch these nodes information afterwards to be able to show it (getToolNodesByLink)
+
+### Translation
+
+We are using transifex service imported with a script into the index.ejs template.
+There have been some race conditions and bugs related to the loading of transifex: See transifex utils.
 
 ### Components playground
 
@@ -297,6 +304,7 @@ It will be served on localhost:8081
 #### More
 - [Generating CARTO maps](docs-frontend-generating-carto-maps)
 - [Serializing state to url](docs-frontend-serializing-state-to-url)
+- [Map](docs-frontend-map)
 
 ## LICENSE
 
