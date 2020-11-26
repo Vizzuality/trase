@@ -5,7 +5,7 @@ import formatValue from 'utils/formatValue';
 import getNodeMeta from 'app/helpers/getNodeMeta';
 import Heading from 'react-components/shared/heading';
 import UnitsTooltip from 'react-components/shared/units-tooltip/units-tooltip.component';
-import { TOOL_LAYOUT, MIN_COLUMNS_NUMBER } from 'constants';
+import { TOOL_LAYOUT, MIN_COLUMNS_NUMBER, NODE_TYPES } from 'constants';
 import pluralize from 'utils/pluralize';
 
 import RecolorByLegend from './recolor-by-legend';
@@ -29,10 +29,15 @@ function useMenuOptions(props, hoveredSelectedNode) {
     toolColumns,
     columns,
     extraColumnId,
-    extraColumnNodeId
+    extraColumnNodeId,
+    selectedNodesIds
   } = props;
   return useMemo(() => {
-    const items = [{ id: 'clear', label: 'Clear Selection', onClick: onClearClick }];
+    const items = [];
+
+    if (selectedNodesIds.length > 0) {
+      items.push({ id: 'clear', label: 'Clear Selection', onClick: onClearClick });
+    }
 
     let nodeType = null;
     let link = {};
@@ -57,7 +62,9 @@ function useMenuOptions(props, hoveredSelectedNode) {
     if (link.profileType) {
       items.splice(2, 0, {
         id: 'profile-link',
-        label: `Go To The ${nodeType} Profile`,
+        label: `Go To The ${
+          nodeType === NODE_TYPES.countryOfProduction ? 'Country' : nodeType
+        } Profile`,
         onClick: () => goToProfile(link)
       });
     }
@@ -87,7 +94,7 @@ function useMenuOptions(props, hoveredSelectedNode) {
     }
     const hasExtraColumn = extraColumnId && selectedNode?.id === extraColumnNodeId;
 
-    if ((isReExpand || !hasExpandedNodesIds) && !hasExtraColumn) {
+    if ((isReExpand || !hasExpandedNodesIds) && !hasExtraColumn && selectedNodesIds.length > 0) {
       items.push({
         id: 'expand',
         label: isReExpand ? 'Re-Expand' : 'Expand',
@@ -95,7 +102,7 @@ function useMenuOptions(props, hoveredSelectedNode) {
       });
     }
 
-    if (hasExpandedNodesIds && !hasExtraColumn) {
+    if (hasExpandedNodesIds && !hasExtraColumn && selectedNodesIds.length > 0) {
       items.push({ id: 'collapse', label: 'Collapse', onClick: onCollapseClick });
     }
 
@@ -113,7 +120,8 @@ function useMenuOptions(props, hoveredSelectedNode) {
     extraColumnId,
     onChangeExtraColumn,
     onExpandClick,
-    onCollapseClick
+    onCollapseClick,
+    selectedNodesIds
   ]);
 }
 
@@ -274,7 +282,6 @@ function Sankey(props) {
 
   const onNodeOver = (e, node) => {
     const rect = getRect(toolLayout);
-
     const nodeHeight = nodeHeights[node.id];
     const otherNodeCount = otherNodes && otherNodes[node.id] && otherNodes[node.id].count
     const tooltipPadding = 10;
@@ -323,7 +330,10 @@ function Sankey(props) {
       }
     }
 
-    if (selectedNodesIds.includes(node.id)) {
+    if (
+      selectedNodesIds.includes(node.id) ||
+      (ENABLE_COUNTRY_PROFILES && node.type === NODE_TYPES.countryOfProduction)
+    ) {
       setHoveredSelectedNode(node);
     }
 
@@ -361,7 +371,7 @@ function Sankey(props) {
         {!loading && (
           <NodeMenu
             menuPos={menuPos}
-            isVisible={selectedNodesIds.length > 0}
+            isVisible={selectedNodesIds.length > 0 || hoveredSelectedNode?.type === NODE_TYPES.countryOfProduction}
             options={menuOptions}
             containerRef={scrollContainerRef}
           />
