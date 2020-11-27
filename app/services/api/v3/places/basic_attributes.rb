@@ -201,7 +201,7 @@ module Api
             value: @commodity_area_formatted,
             name: "#{@commodity_name} land",
             unit: 'ha',
-            tooltip: 'Area of land used to grow soybeans'
+            tooltip: "Area of land used to grow #{@commodity_name}"
           }
 
           commodity_attributes
