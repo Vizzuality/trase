@@ -21,10 +21,10 @@ module Api
           yield if block_given?
           refresh_materialized_views_now
           Cache::Cleaner.clear_all
-          refresh_profiles_later
-          refresh_precomputed_downloads_later
           refresh_attributes_years
           refresh_id_references
+          refresh_profiles_later
+          refresh_precomputed_downloads_later
           @database_update.finished_with_success(@stats.to_h)
         rescue => e
           @database_update.finished_with_error(e, @stats.to_h)
@@ -141,17 +141,7 @@ module Api
         end
 
         def refresh_profiles_later
-          Api::V3::Readonly::NodeWithFlows.
-            without_unknowns.
-            without_domestic.
-            where(profile: Api::V3::Profile::ACTOR).
-            select(:id, :context_id).
-            distinct.
-            each do |node|
-              NodeWithFlowsRefreshActorBasicAttributesWorker.perform_async(
-                node.id, node.context_id
-              )
-            end
+          Api::V3::RefreshProfiles.new.call_later
         end
 
         def refresh_precomputed_downloads_later
