@@ -9,8 +9,8 @@ storiesOf('Card', module).addWithJSX('Card', () => (
       title="I'm a default card"
       subtitle="A cool subtitle"
       actionName="An action name"
-      linkUrl="https://trase.earth"
-      imageUrl="https://trase.earth/images/logos/new-logo-trase.svg"
+      linkUrl="https://supplychains.trase.earth"
+      imageUrl="https://supplychains.trase.earth/images/logos/new-logo-trase.svg"
     />
   </div>
 ));
@@ -22,7 +22,7 @@ storiesOf('Card', module).addWithJSX('New variant', () => (
       title="I'm a new card"
       subtitle="A cool subtitle"
       actionName="An action name"
-      linkUrl="https://trase.earth"
+      linkUrl="https://supplychains.trase.earth"
     />
   </div>
 ));
@@ -34,7 +34,7 @@ storiesOf('Card', module).addWithJSX('Dashed variant', () => (
       title="I'm a new card"
       subtitle="A cool subtitle"
       actionName="An action name"
-      linkUrl="https://trase.earth/images/logos/new-logo-trase.svg"
+      linkUrl="https://supplychains.trase.earth/images/logos/new-logo-trase.svg"
     />
   </div>
 ));

@@ -1,7 +1,7 @@
 {
   "name": "trase-frontend",
   "version": "1.2.0",
-  "description": "Frontend for trase.earth",
+  "description": "Frontend for supplychains.trase.earth",
   "scripts": {
     "start": "webpack-dev-server --config config/webpack.config.dev.js",
     "start:staging": "webpack-dev-server --config config/webpack.config.staging.js",
