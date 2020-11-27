@@ -4,18 +4,18 @@ info:
   version: "1.1"
   contact:
     name: Trase Public API
-    url: https://trase.earth/
+    url: https://supplychains.trase.earth/
     email: info@trase.earth
-  termsOfService: https://trase.earth/terms-of-use.html
+  termsOfService: https://supplychains.trase.earth/terms-of-use.html
   license:
     name: MIT License
   description: >-
-    This is a DRAFT version 1.1 of the public API for [Trase](http://trase.earth).
+    This is a DRAFT version 1.1 of the public API for [Trase](http://supplychains.trase.earth).
 
     # Introduction
 
 
-    The Trase Public API allows access to trade flow data of the forest risk commodities hosted in Trase’s database. For a list of available commodities and country contexts please refer to the documentation on the Trase homepage: https://www.trase.earth/about
+    The Trase Public API allows access to trade flow data of the forest risk commodities hosted in Trase’s database. For a list of available commodities and country contexts please refer to the documentation on the Trase homepage: https://supplychains.trase.earth/about
 
 
     # Entities
@@ -107,7 +107,7 @@ info:
     /api/public/nodes/11113/data?year=2017
 
 servers:
-  - url: https://trase.earth/api/public
+  - url: https://supplychains.trase.earth/api/public
 paths:
   /countries:
     get:

@@ -1,4 +1,4 @@
-SitemapGenerator::Sitemap.default_host = "https://trase.earth"
+SitemapGenerator::Sitemap.default_host = "https://supplychains.trase.earth"
 SitemapGenerator::Sitemap.compress = false
 SitemapGenerator::Sitemap.public_path = '/var/www/trase/current/frontend/dist/'
 SitemapGenerator::Sitemap.create do
